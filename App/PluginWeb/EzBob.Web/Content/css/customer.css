@@ -42,6 +42,15 @@ a.ezbob_logo_online { background: url(images/ezbob_logo.png) 0px 0px no-repeat; 
 a.ezbob_logo_offline { background: url(images/ezbob_logo_cartless.png) 0px 0px no-repeat; }
 
 #login_button{position:absolute; top:5px; right:10px;}
+label.soft-label{
+     display: inline-block;
+    width: 90%;
+    vertical-align: top; 
+    font-weight: normal
+}
+.forgotpass {
+    display:none;
+}
 /*-- header navigation --*/
 #nav_container{position:relative;}
 nav{ position:absolute; right:0; top:37px;}

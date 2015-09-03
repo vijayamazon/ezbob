@@ -442,36 +442,37 @@ string formFieldID = "")
 
 @helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
 {
-	var val = new HtmlString(inputProp.Value);
+    var val = new HtmlString(inputProp.Value);
     var name = new HtmlString(inputProp.Name);
-	<input type="@inputProp.Type"
-           @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) {
-               @: name="@name"
-           }  else {
-               if (!string.IsNullOrWhiteSpace(identificator.ToString())) {
-                   @: name="@identificator"
-               }
-           }
+    <input type="@inputProp.Type"
+           @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) { @: name="@name"
+                                                       } else { if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name="@identificator"
+                                                           } }
            @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
-                                            	                                                                                                                        }
-		   class="@inputProp.Cls"
-		   value="@val"
-		   @if (inputProp.IsDisabled) {  @: disabled="disabled"
-                                                                                                                                                                        }
-		   @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
-                                                                                                                                                                        }
-		   @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
-                                                                                                                                                                        }
-		   @if (inputProp.Min.HasValue) { @: min="@inputProp.Min.Value"
-		   		                                                                                                                               }
-		   @if (inputProp.Max.HasValue) { @: max="@inputProp.Max.Value"
-		                                                                                                                                       }
-		   @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
-                                                                                                                                                                        }
-		   @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
-                                                                                                                                                                        }
-		   @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
-                                                                                                                                                                        } />
+                                                                                        	                                                                                                                        }
+           class="@inputProp.Cls"
+           value="@val"
+           @if (inputProp.IsDisabled) {  @: disabled="disabled"
+                                                                                                                                                                                                                    }
+           @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
+                                                                                                                                                                                                                    }
+           @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
+                                                                                                                                                                                                                    }
+           @if (inputProp.Min.HasValue) { @: min="@inputProp.Min.Value"
+                                            		   		                                                                                                                               }
+           @if (inputProp.Max.HasValue) { @: max="@inputProp.Max.Value"
+                                            		                                                                                                                                       }
+           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
+                                                                                                                                                                                                                    }
+           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
+                                                                                                                                                                                                                    }
+           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+                                                                                                                                                                                                                    }
+           @if (inputProp.SpecialAttributes != null)  { 
+               foreach (KeyValuePair<string, string> pair in inputProp.SpecialAttributes) {
+                   var specialAttValue = new HtmlString(pair.Value);
+                   @: @pair.Key = "@specialAttValue"
+               }  } />
 
 
 }
@@ -501,8 +502,8 @@ string formFieldID = "")
     if (origin != CustomerOriginEnum.everline)
     {
         @InputTextTag(inputButton, identificator);
-		<label 
-			   @if (true) { 
+		<label
+			   @if (true) {
 					@: class="@inputButton.LabelClass"
 			   }
 			   @if (true) {
@@ -542,7 +543,7 @@ string formFieldID = "")
 @helper ClickableInputWizard(EzClickInputModel inputProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
 
-    <div class="form_field_container">
+    <div class="form_field_container control-group @inputProp.ContainerClass">
         @if (origin != CustomerOriginEnum.everline)
         {
 
@@ -565,20 +566,30 @@ string formFieldID = "")
         }
         else
         {
-            <label class="input-title" inputprop>@inputProp.Caption</label>
+            <label class="input-title">
+                @if (!string.IsNullOrWhiteSpace(@inputProp.Caption))
+                {
+                    @inputProp.Caption
+                }
+                else
+                {
+                    <span>&nbsp</span>
+                }
+        </label>
 
-            <div class="input-wrapper FormRadioCtrl">
+            <div class="input-wrapper @inputProp.InputWrapperClass">
 
 
 
-                    @foreach (EzInputBuilder inputButton in inputProp.InputButtons) {
-                        @ClickableInputTag(inputButton, origin);
-                    }
+                @foreach (EzInputBuilder inputButton in inputProp.InputButtons)
+                {
+                    @ClickableInputTag(inputButton, origin);
+                }
 
 
                 <label style="display:none;" class="error"></label>
             </div>
-       }
+        }
     </div>
 
 }

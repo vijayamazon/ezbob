@@ -11,6 +11,7 @@ namespace EzBob.Web.Infrastructure.Html
         public string ErrorImgClass { get; set; }
         public string Name { get; set; }
         public string Caption { get; set; }
+        public string ContainerClass { get; set; }
         public bool IsRequired { get; set; }
         public bool StatusIcon { get; set; }
 
@@ -23,6 +24,8 @@ namespace EzBob.Web.Infrastructure.Html
 			string caption = "" , 
             string errorImgClass = "",
 			string inputWrapperClass = "",
+            string containerClass= "",
+           
 			bool   isRequired = false,
             bool   statusIcon = false,
             IEnumerable<EzInputBuilder> inputButtons = null
@@ -30,6 +33,7 @@ namespace EzBob.Web.Infrastructure.Html
 			Name =name  ;
 			Caption = caption  ;
             ErrorImgClass = errorImgClass;
+            ContainerClass = containerClass;
             InputWrapperClass =inputWrapperClass  ;
 			IsRequired = isRequired;
 			StatusIcon = statusIcon;

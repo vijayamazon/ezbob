@@ -2018,10 +2018,11 @@ ul.storelist li span {
     filter: Alpha(Opacity=65);
     opacity: .65;
 }
-.ui-dialog-title {
+.ui-dialog  .ui-dialog-title {
     font-size: 24.5px;
     line-height: 30px;
     margin: 0 !important;
+    color:#67c10b;
 }
 
 .tooltipdiv .label{
@@ -3609,4 +3610,24 @@ iframe[src^='https://finimpact'] {
     float: right; 
     font-family: Titillium Web Semi Bold;
     line-height: 46px;
+}
+.exit-calc {
+        margin: 0 auto;
+    max-width: 960px;
+
+}
+.close.fa-times {
+        font-size: 30px;
+    background:none;
+     color:#4d4d4d;
+     opacity:0.8;
+     margin-right: 20px;
+}
+.close.fa-times:before {
+    color:#4d4d4d;
+    
+    content: "\f00d";
+}
+.close.fa-times:hover {
+    opacity:1;
 }

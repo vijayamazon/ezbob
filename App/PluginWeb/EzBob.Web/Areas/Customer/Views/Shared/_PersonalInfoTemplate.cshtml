@@ -45,142 +45,166 @@
         </div>
 		<h2 class="form_start">Personal details</h2>
 
-		@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "PersonalDetailsForm" })) {
-	  
-			@EzForm.InputTextWizard(new EzInputBuilder("FirstName", "First name", 
-				value:sInitialFirstName,
-				cls: "form_field", 
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:first_name"), 
-				origin: origin)
-			
-			@EzForm.InputTextWizard(new EzInputBuilder("MiddleInitial", "Middle name",
-				cls: "form_field alphaOnly",
-				isRequired: false,
-				statusIcon: true,
-				uiEventControlID: "personal-info:middle_name"),
-				origin: origin)
+		@using (Html.BeginForm("Save", "CustomerDetails", new {
+		    Area = "Customer"
+		}, FormMethod.Post, new {
+		    @class = "PersonalDetailsForm"
+		})) {
 
-			@EzForm.InputTextWizard(new EzInputBuilder("Surname", "Surname",
-				value: sInitialLastName,
-				cls: "form_field",
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:last_name"),
-				origin: origin)
-			
-			<input type="hidden" name="Fullname" />
+		    @EzForm.InputTextWizard(new EzInputBuilder("FirstName", "First name",
+		        value: sInitialFirstName,
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:first_name"),
+		        origin: origin)
 
-			EzInputBuilder radio1 = new EzInputBuilder("FormRadioCtrl_M", "Male",
-                value:"M",
-                type:"radio",
-                cls: "required",
-				isRequired: true,
-				statusIcon: true,
-                name: "Gender",
-				uiEventControlID: "personal-info:gender" );
-            
-			EzInputBuilder radio2 = new EzInputBuilder("FormRadioCtrl_F", "Female",
-				value: "F",
-				type: "radio",
-				cls: "gender-margin",
-				isRequired: true,
-				statusIcon: true,
-				name: "Gender",
-				uiEventControlID: "personal-info:gender");
+		    @EzForm.InputTextWizard(new EzInputBuilder("MiddleInitial", "Middle name",
+		        cls: "form_field alphaOnly",
+		        isRequired: false,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:middle_name"),
+		        origin: origin)
 
-            List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1,radio2 };
-                 var buttonsmodel = new EzClickInputModel(
-					 name: "Gender",
-					 caption: "Gender ",
-					 errorImgClass: "field_status required personal-details-gender-image",
-					 inputWrapperClass: "FormRadioCtrl",
-					 isRequired: true,
-					 statusIcon: true,
-					 inputButtons: radios);
-					 
-            @EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+		    @EzForm.InputTextWizard(new EzInputBuilder("Surname", "Surname",
+		        value: sInitialLastName,
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:last_name"),
+		        origin: origin)
 
-			@EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date",origin:origin)
+		    <input type="hidden" name="Fullname"/>
 
-			@EzForm.SelectWizard(new EzSelectModel("MaritalStatus", "Marital status",
-						MaritalStatus.Divorced.ToTuple<MaritalStatus>(),
-						cls: "form_field",
-						isRequired: true,
-						statusIcon:true,
-						uiEventControlID: "personal-info:marital_status"),
-						origin: origin)
+		    EzInputBuilder radio1 = new EzInputBuilder("FormRadioCtrl_M", "Male",
+		        value: "M",
+		        type: "radio",
+		        cls: "required",
+		        isRequired: true,
+		        statusIcon: true,
+		        name: "Gender",
+		        uiEventControlID: "personal-info:gender");
 
-			<hr class="wizard-hr" />
-			<h2 class="form_section">Home address</h2>
+		    EzInputBuilder radio2 = new EzInputBuilder("FormRadioCtrl_F", "Female",
+		        value: "F",
+		        type: "radio",
+		        cls: "gender-margin",
+		        isRequired: true,
+		        statusIcon: true,
+		        name: "Gender",
+		        uiEventControlID: "personal-info:gender");
 
-			@EzForm.AddressInput(this, "PersonalAddress", "Home address", "personal")
+		    List<EzInputBuilder> radios = new List<EzInputBuilder> {
+		        radio1,
+		        radio2
+		    };
+		    var buttonsmodel = new EzClickInputModel(
+		        name: "Gender",
+		        caption: "Gender ",
+		        errorImgClass: "field_status required personal-details-gender-image",
+		        inputWrapperClass: "FormRadioCtrl",
+		        isRequired: true,
+		        statusIcon: true,
+		        inputButtons: radios);
 
-			@EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long at this address",
-				timeAtAddress,
-				cls: "TimeAtAddress select form_field",
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:time_at_address"),
-				origin: origin)
+		    @EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
 
-			@EzForm.AddressInput(this, "PrevPersonAddresses", "Previous address", "previous-personal", "prevPersonAddress canDisabledAddress")
+		    @EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date", origin: origin)
 
-			@EzForm.SelectWizard(new EzSelectModel("PropertyStatus", "Residential status",
-				propertyStatusGroups,
-				cls: "form_field",
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:residential_status"),
-				origin: origin)
+		    @EzForm.SelectWizard(new EzSelectModel("MaritalStatus", "Marital status",
+		        MaritalStatus.Divorced.ToTuple<MaritalStatus>(),
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:marital_status"),
+		        origin: origin)
 
-			<div id="otherPropertiesSection" class="hide">
-				<h2 class="form_section">Other owned properties</h2>
-				@EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal")
-			</div>
+		    <hr class="wizard-hr"/>
+		    <h2 class="form_section">Home address</h2>
 
-			<hr class="wizard-hr" />
-			<h2 class="form_section">Contact details</h2>
+		    @EzForm.AddressInput(this, "PersonalAddress", "Home address", "personal")
 
-			@EzForm.InputTextWizard(new EzInputBuilder("MobilePhone", "Mobile number",
-				cls: "phonenumber form_field",
-				type: "tel",
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:mobile_phone"),
-				origin: origin)
+		    @EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long at this address",
+		        timeAtAddress,
+		        cls: "TimeAtAddress select form_field",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:time_at_address"),
+		        origin: origin)
 
-			@EzForm.InputTextWizard(new EzInputBuilder("DayTimePhone", "Home phone number",
-				cls: "phonenumber form_field",
-				type: "tel",
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:daytime_phone"),
-				origin: origin)
-               
-			<div class="control-group form_read_and_accept">
-				<div class="controls">
-				   @{ EzInputBuilder checkbox1 = new EzInputBuilder("ConsentToSearch", "I have read and accept the <a href='#' ui-event-control-id='personal-info:terms-and-conditions'>Terms &amp; Conditions</a>",
-						  value: "false",
-						  type: "checkbox",
-						  cls: "required",
-						  isRequired: true,
-						  statusIcon: true,
-						  name: "ConsentToSearch",
-						  labelClass: "editor-label-with-checkbox terms-conditions-checkbox-label",
-						  uiEventControlID: "personal-info:consent_to_search"); }
-					@EzForm.ClickableInputTag(checkbox1, origin)
-				</div>
-			</div>
-	}
+		    @EzForm.AddressInput(this, "PrevPersonAddresses", "Previous address", "previous-personal", "prevPersonAddress canDisabledAddress")
 
-    @EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Next",
-				cls: "button btn-green ev-btn-org btn-continue disabled",
-				uiEventControlID: "personal-info:continue",
-				buttonType: EzButtonType.link,
-				href:"#"),
-				origin: origin)
+		    @EzForm.SelectWizard(new EzSelectModel("PropertyStatus", "Residential status",
+		        propertyStatusGroups,
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:residential_status"),
+		        origin: origin)
+
+		    <div id="otherPropertiesSection" class="hide">
+		        <h2 class="form_section">Other owned properties</h2>
+		        @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal")
+		    </div>
+
+		    <hr class="wizard-hr"/>
+		    <h2 class="form_section">Contact details</h2>
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("MobilePhone", "Mobile number",
+		        cls: "phonenumber form_field",
+		        type: "tel",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:mobile_phone"),
+		        origin: origin)
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("DayTimePhone", "Home phone number",
+		        cls: "phonenumber form_field",
+		        type: "tel",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:daytime_phone"),
+		        origin: origin)
+         
+
+		    EzInputBuilder checkbox1 = new EzInputBuilder("ConsentToSearch", "I have read and accept the <a href='#' ui-event-control-id='personal-info:terms-and-conditions'>Terms &amp; Conditions</a>",
+		        value: "false",
+		        type: "checkbox",
+		       
+		        isRequired: true,
+		        statusIcon: true,
+		        name: "ConsentToSearch",
+		        labelClass: "editor-label-with-checkbox terms-conditions-checkbox-label",
+		        uiEventControlID: "personal-info:consent_to_search");
+
+
+
+            List<EzInputBuilder> checkboxesList = new List<EzInputBuilder> {
+		        checkbox1
+		    };
+
+		    var checkboxes = new EzClickInputModel(
+		        name: "ConsentToSearch",
+		        caption: "",
+		        errorImgClass: "",
+		        inputWrapperClass: "controls",
+		        containerClass: "form_read_and_accept",
+		        isRequired: false,
+		        statusIcon: false,
+		        inputButtons: checkboxesList);
+
+		    @EzForm.ClickableInputWizard(checkboxes, origin: origin)
+
+
+
+
+		    @EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Next",
+		        cls: "button btn-green ev-btn-org btn-continue disabled",
+		        uiEventControlID: "personal-info:continue",
+		        buttonType: EzButtonType.link,
+		        href: "#"),
+		        origin: origin);
+		}
 </div>
 </script>
 
@@ -195,7 +219,7 @@
         </div>
 
     </div>
-    <div class="consent-modal-footer modal-footer" style="margin-top: 20px;">
+    <div class="consent-modal-footer modal-footer" >
         <a href="#" class="pull-right print print-link clean-btn " ui-event-control-id="wizard:print_consent">Print</a>
         <a style="margin-right: 20px;" class="pull-right download pdf-link clean-btn" ui-event-control-id="wizard:download_consent">Download</a>
     </div>

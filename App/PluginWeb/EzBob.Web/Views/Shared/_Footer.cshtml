@@ -3,23 +3,58 @@
 
 @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
 	<footer class="everline_footer">
-		<div id="copyrights">
-			<div class="copyrights-inner">
-				<div class="legal-links col">
-					<p class="col">
-						Everline is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.
-						<br />
-						Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business. Our Interim Permissions Reference Number is 647816.
-						<br />
-						Registered Address: 36 Soho Square, London W1D 3QY
-						<br />
-						&copy;@System.DateTime.Today.Year Orange Money Ltd. All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.
-						<br />
-						All loans are subject to status and approval. 18+ only.
-					</p>
-				</div>
-			</div>
-		</div>
+	    <div class="footer-eif">
+            <div class="footer-eif-inner">
+                <div class="cosme-images">
+                    <div class="cosme-images-wrapper">
+                        <img  width="93" height="62" src="/Content/css/images/cosme-pic.png" />
+                        <img class="eif-img"  width="93" height="62" src="/Content/css/images/eurpe-fund.png" />
+                      
+                    </div>
+                </div>
+                <div class="footer-eif-text">
+                    <div class="about-eif">About the European Investment Fund</div>
+                    <p>
+                        Everline provide financing that benefits from the support of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020). The Loan Guarantee Facility is managed and implemented by the European Investment Fund (EIF). <a href="#">Find out more</a>.
+                    </p>
+                </div>
+            </div>
+	    </div>
+        <div class="subfooter">
+
+
+            <div class="footer-navigator">
+                <div class="footer-navigator-inner">
+                    <ul class="footer-navigator-list">
+                        <li><a href="#">Intermediaries</a></li>
+                        <li class="hide-mobile"><a href="#">Partners</a></li>
+                        <li><a href ="#">Legal</a></li>
+                        <li><a href="#">Terms and Conditions</a></li>
+                        <li><a href="#">Privacy and cookie policy</a></li>
+                        <li><a href="#">Advice</a></li>
+                    </ul>
+                    <div class="social-link-icons">
+                        
+                        <ul>
+                            <li><a class="facebook" href="#face"></a></li>
+                            <li><a class="tweeter" href="#face"></a></li>
+                            <li><a class="linkedin" href="#face" ></a></li> 
+                        </ul>
+                   
+                    </div>
+                </div>
+            </div>
+            <div class="footer-text">
+                <p>
+                    Orange Money Ltd. trading as Everline is authorized and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br />
+                    Orange Money Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
+                    Registered Address: 36 Soho Square, London W1D 3QY<br />
+                    All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
+                    All loans are subject to status and approval. 18+ only.
+                </p>
+                
+            </div>
+        </div>
 	</footer>
 } else {
 	<footer>

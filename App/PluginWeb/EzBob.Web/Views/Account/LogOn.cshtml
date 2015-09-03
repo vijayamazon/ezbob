@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model EzBob.Web.Models.LogOnModel
 
 @{
@@ -18,7 +19,12 @@
 }
 
 @section css{
-	@BundleHelper.RenderLoginCss()
+   @if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline)
+   {
+    @BundleHelper.RenderLoginCss()
+
+    }
+
 }
 
 <div class="row-fluid">
@@ -45,14 +51,15 @@
 				@{
 		var oForgottenAttr = new Dictionary<string, Object>();
 		oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
-
+				 
 		var oSignupRouteValues = new RouteValueDictionary();
 		oSignupRouteValues["Area"] = "Customer";
 
 		var oSignupAttr = new Dictionary<string, Object>();
 		oSignupAttr["ui-event-control-id"] = "login:signup";
 				}
-				<p style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
+               
+				<p class="forgot-signup-wrapper" style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
 
 
 				@EzForm.InputTextWizard(new EzInputBuilder("UserName", "Email address",
@@ -73,19 +80,46 @@
 					statusIcon: true,
 					uiEventControlID: "login:password",
 					tabIndex: 2), origin: origin)
+                @{
+                  
+     var specialAttributes = new Dictionary<string, string>();
+     specialAttributes["data-val"] = "true";
+     specialAttributes["data-val-required"] = "The Remember me? field is required.";
+     EzInputBuilder checkbox1 = new EzInputBuilder("RememberMe", "Remember me",
+                value: @Model.RememberMe.ToString().ToLowerInvariant(),
+                type: "checkbox",
+                cls: "",
+                isRequired: false,
+                statusIcon: false,
+                specialAttributes: specialAttributes,
+                labelClass: "soft-label",
+                uiEventControlID: "login:remember_me");
+                  
+                List<EzInputBuilder> checkboxesList = new List<EzInputBuilder> {
+		        checkbox1
+		         };
+                 
+                var checkboxes = new EzClickInputModel(
+                    name: "RememberMe",
+                    caption: "",
+                    errorImgClass: "",
+                    inputWrapperClass: "",
+                    containerClass: "",
+                    isRequired: false,
+                    statusIcon: false,
+                    inputButtons: checkboxesList);
+                }
 
-
-				<div class="form_field_container">
-					<label class="checkbox" for="RememberMe" style="font-weight: normal">
-						Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe.ToString().ToLowerInvariant()" ui-event-control-id="login:remember_me" />
-					</label>
-				</div>
-				
+                @EzForm.ClickableInputWizard(checkboxes, origin: origin)
+			
 				@EzForm.WizardButton(new EzButtonModel("loginSubmit", "Login", 
 					"button btn-green login-btn disabled ev-btn-org", 
 					"login:submit", 
 					buttonType: EzButtonType.submit),
 					origin: origin)
+                @{ oForgottenAttr["class"] = "forgotpass"; }
+
+                   @Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr)
 			</section>
 		</section>
 		<aside class="customer-sidebar login">

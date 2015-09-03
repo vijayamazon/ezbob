@@ -21,6 +21,7 @@ namespace EzBob.Web.Infrastructure.Html
         public string FormFieldID { get; set; }
         public string InnerMessage { get; set; }
         public string LabelClass { get; set; }
+        public Dictionary<string, string> SpecialAttributes { get; set; }
         public int TabIndex { get; set; }
         public int MaxLength { get; set; }
 		public int? Min { get; set; }
@@ -43,6 +44,7 @@ namespace EzBob.Web.Infrastructure.Html
             string name = "",
             string labelClass ="",
             string innerMessage = "",
+            Dictionary<string, string> specialAttributes = null,
             bool   isDisabled = false,
             bool   isRequired = false,
             bool   statusIcon = false,
@@ -80,6 +82,7 @@ namespace EzBob.Web.Infrastructure.Html
             LabelClass = labelClass;
 	        Min = min;
 	        Max = max;
+            SpecialAttributes = specialAttributes;
         }
 
 	    

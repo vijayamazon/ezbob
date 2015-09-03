@@ -478,6 +478,7 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
+    <Content Include="Content\css\eurpe-fund.png" />
     <Content Include="Content\css\everline.css" />
     <Content Include="Content\css\EverlineBroker.css" />
     <Content Include="Content\css\EverlineCustomerProfileMyInformation.css" />
@@ -553,9 +554,11 @@
     <Content Include="Content\css\images\companies\techcrunch.png" />
     <Content Include="Content\css\images\companies\yahoo.png" />
     <Content Include="Content\css\images\companycheck.png" />
+    <Content Include="Content\css\images\cosme-pic.png" />
     <Content Include="Content\css\images\current_arrow-m.png" />
     <Content Include="Content\css\images\current_arrow.png" />
     <Content Include="Content\css\images\eu.png" />
+    <Content Include="Content\css\images\eurpe-fund.png" />
     <Content Include="Content\css\images\eu_explanation.png" />
     <Content Include="Content\css\images\ezbob_logo.png" />
     <Content Include="Content\css\images\facebook-icon.png" />
@@ -618,6 +621,7 @@
     <Content Include="Content\css\images\sage_on.png" />
     <Content Include="Content\css\images\secure.png" />
     <Content Include="Content\css\images\shopify-logo.png" />
+    <Content Include="Content\css\images\social.png" />
     <Content Include="Content\css\images\source_small_sprite.png" />
     <Content Include="Content\css\images\source_sprite.png" />
     <Content Include="Content\css\images\sprites\contact_sprite.png" />
@@ -626,6 +630,7 @@
     <Content Include="Content\css\images\sprites\social_sprite_round.png" />
     <Content Include="Content\css\images\star.png" />
     <Content Include="Content\css\images\sticky_chat_bg.png" />
+    <Content Include="Content\css\images\terms-corner.png" />
     <Content Include="Content\css\images\tick-m.png" />
     <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\images\verisign_seal.gif" />
