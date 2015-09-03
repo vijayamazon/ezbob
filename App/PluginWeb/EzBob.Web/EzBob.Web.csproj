@@ -638,6 +638,7 @@
     <Content Include="Content\css\images\vip_bg.png" />
     <Content Include="Content\css\images\volusion-logo.png" />
     <Content Include="Content\css\images\whatsnew.png" />
+    <Content Include="Content\css\images\white-corner.png" />
     <Content Include="Content\css\images\xero-logo.png" />
     <Content Include="Content\css\images\yodlee.png" />
     <Content Include="Content\css\images\yodlee\banks_sprite.png" />

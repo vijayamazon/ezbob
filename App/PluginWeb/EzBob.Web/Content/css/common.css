@@ -3483,64 +3483,64 @@ iframe[src^='https://finimpact'] {
      margin:0;
  }
   /*calc bottom part */
-.summary-wrap {
+.sliders-main .summary-wrap {
 	min-height: 80px;
 	width: 100%;
 	background: #383838;
 	color: white;
 }
 
-.summary {
+.sliders-main .summary {
 	margin: 0 auto;
 	padding: 0;
 	float: none;
 }
 
-.overview .form-markup-wrapper, .summary {
+.sliders-main .overview .form-markup-wrapper, .summary {
 	max-width: 780px;
 	margin: 0 auto;
 	box-sizing: border-box;
 }
- .overview .form-markup-wrapper {
+.sliders-main .overview .form-markup-wrapper {
      display:inline-block;
     
  }
- .overview {
+ .sliders-main .overview {
         background: #383838;
             padding-bottom: 25px;
             text-align: center;
  }
- .summary {
+.sliders-main .summary {
          padding-top: 25px;
          text-align: center;
  }
 
-	.summary p, .overview .org {
+	.sliders-main .summary p, .overview .org {
 		display: inline-block;
 		font-family: Titillium Web Semi Bold;
 		font-size: 22px;
 	}
 
-	.summary h3 {
+	.sliders-main .summary h3 {
 		display: inline-block;
 		font-family: 'Titillium Web Light';
 		font-size: 22px;
 	}
 
-	.summary .c_spn_3, .summary .c_spn_1, .summary_total {
+	.sliders-main .summary .c_spn_3, .summary .c_spn_1, .summary_total {
 		display: inline-block;
 	}
 
-	.summary .fa.icon-plus {
+	.sliders-main .summary .fa.icon-plus {
 		display: none;
 	}
 
-.overview .total {
+.sliders-main .overview .total {
 	font-size: 34px;
 	color: #50b20b;
 }
 
-.overview p {
+.sliders-main .overview p {
 	font-size: 34px;
 	color: white;
 }
@@ -3551,7 +3551,9 @@ iframe[src^='https://finimpact'] {
 	color: white;
 }
 
-.summary .amount, .summary .interest, .summary .total {
+.sliders-main .summary .amount, 
+.sliders-main .summary .interest, 
+.sliders-main .summary .total {
 	color: #50b20b;
 	font-size: 22px;
 	margin: 0 2px;

@@ -526,20 +526,43 @@ textarea.invite_friend {
     display: inline-block;
     width: 100%;
 }
-.eu-agreement-header-text {
+
+.eu-agreement-images {
     float: left;
+	display: inline-block;
+	width: 20%
 }
+
+.eu-agreement-text {
+    float: right;
+	display: inline-block;
+	width: 80%
+}
+
 .eu-agreement-image {
     height: 70px;
-    width: 100px;
+    width: 100%;
     display: block;
-    background-image: url(../css/images/eu.png);
+    background: url(../css/images/eurpe-fund.png) no-repeat 0 0;
     -moz-background-size: contain;
     -o-background-size: contain;
     -webkit-background-size: contain;
     background-size: contain;
-    float: right;
+	margin: 20px;
 }
+
+.eu-fund-image{
+    height: 70px;
+    width: 100%;
+    display: block;
+    background: url(../css/images/eu.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+	margin: 20px;
+}
+
 .fb-icon {
     background-image: url(../css/images/facebook-icon.png);
     background-size: contain;
