@@ -21,7 +21,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var that = this;
 
 		var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
-
+	  
 		xhr.done(function(res) {
 			if (that.switchedToCaptcha)
 				that.twilioEnabled = false;
@@ -29,7 +29,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				that.twilioEnabled = res.isSmsValidationActive;
 				that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
 			}
-
+			
 			return false;
 		});
 
@@ -88,7 +88,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.$el.find('.phonenumber').mask('0?9999999999', { placeholder: ' ' });
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.phonenumbercode').numericOnly(6);
-
+		
 		fixSelectValidate(this.$el.find('select'));
 
 		if (this.showOfflineHelp && ($('body').attr('data-offline') === 'yes')) {
@@ -96,7 +96,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 			var oDialog = this.$el.find('#offline_help');
 			if (oDialog.length > 0)
-				$.colorbox({ inline: true, open: true, href: oDialog });
+			    $.colorbox({ inline: true, close: '<i class="pe-7s-close"></i>', open: true, href: oDialog });
 		} // if
 
 		var oEverlineDialog = this.$el.find('#everline_help');

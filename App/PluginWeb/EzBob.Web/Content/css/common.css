@@ -1124,14 +1124,14 @@ table.dashboard_sources {
     }
 
 #cboxClose {
-	background-position: -49px 0px;
+background-position: -48px 0px;
 	border-radius: 0;
     right: 5px;
 	top: 5px;
 }
 
 #cboxClose:hover {
-    background-position: -49px -25px;
+    background-position: -48px -25px;
 }
 
 .cboxSlideshow_on #cboxPrevious, .cboxSlideshow_off #cboxPrevious {
@@ -1156,7 +1156,14 @@ table.dashboard_sources {
         background-position: -75px -25px;
     }
 
+.iframe-popup #cboxLoadedContent {
+    margin-top: 30px;
+}
 
+.iframe-popup #cboxClose {
+    right: 2px;
+    top: 3px;
+}
 select {
     display: inline-block;
     margin-bottom: 10px;

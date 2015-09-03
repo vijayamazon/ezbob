@@ -133,6 +133,8 @@ EzBob.WizardView = EzBob.View.extend({
 		    maxWidth: '100%',
 		    height: '600px',
 		    maxHeight: '100%',
+		    close: '<i class="pe-7s-close"></i>',
+            className : 'iframe-popup'
 	    });
     },
 
@@ -166,9 +168,11 @@ EzBob.WizardView = EzBob.View.extend({
 
         var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
         notifications.render();
-
+        $('.footer-navigator').hide();
         if ($('.broker-finish-wizard-later').length)
             $('#user-menu').hide();
+        $('.find-out-more').hide();
+        
         var that = this;
 
         if (!this.customer.get('IsBrokerFill') && !this.customer.get('IsWhiteLabel')) {

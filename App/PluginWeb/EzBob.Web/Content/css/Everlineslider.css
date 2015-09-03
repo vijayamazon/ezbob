@@ -799,19 +799,7 @@
     padding: 0;
   }
 }
-@media screen and (max-width: 960px) {
-	.marketplace-button-wrapper, 
-	.form_field_container .input-wrapper .clean-btn.btn-showmore {
-		width: 47%;
-	}
 
-	.account-or {
-		width: 100%;
-		margin-left: 20%;
-		margin-top: 0;
-		margin-bottom: 0;
-	}
-}
 
 .lzero .sliders {
   margin: 0;

@@ -164,20 +164,35 @@
 								uiEventControlID: "personal-info:vat-registered") }), 
 						origin: origin)
 	
-    <div class="control-group form_read_and_accept">
-        <div class="controls">
-			@{ EzInputBuilder checkbox1 = new EzInputBuilder("DirectorCheck", "I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.",
-						  value: "false",
-						  type: "checkbox",
-						  cls: "required",
-						  isRequired: true,
-						  statusIcon: true,
-						  name: "DirectorCheck",
-						  labelClass: "editor-label-with-checkbox",
-						  uiEventControlID: "personal-info:director_check"); }
-			@EzForm.ClickableInputTag(checkbox1, origin)
-        </div>
-    </div>
+
+            @{ EzInputBuilder checkbox1 = new EzInputBuilder("DirectorCheck", "I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.",
+                          value: "false",
+                          type: "checkbox",
+                          cls: "required",
+                          isRequired: true,
+                          statusIcon: true,
+                          name: "DirectorCheck",
+                          labelClass: "editor-label-with-checkbox normal-label",
+                          uiEventControlID: "personal-info:director_check"); }
+         
+            @{
+                List<EzInputBuilder> checkboxesList = new List<EzInputBuilder>
+                    {
+                    checkbox1
+                    };
+
+                var checkboxes = new EzClickInputModel(
+                name: "DirectorCheck",
+                caption: "",
+                errorImgClass: "",
+                inputWrapperClass: "controls",
+                containerClass: "form_read_and_accept",
+                isRequired: false,
+                statusIcon: false,
+                inputButtons: checkboxesList);
+            }
+            @EzForm.ClickableInputWizard(checkboxes, origin: origin)
+        
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
