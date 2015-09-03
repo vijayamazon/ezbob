@@ -1,6 +1,33 @@
 ﻿/*
 *******************************************************************************
 *
+* General override bootstrap.
+*
+*******************************************************************************
+*/
+body {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 62.5%;
+}
+
+label, input, button, select, textarea {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 15px;
+}
+
+h2, .ui-dialog .ui-dialog-title {
+    margin: 0;
+    color: #8dc641;
+    text-align: left;
+    line-height: 30px;
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 35px;
+}
+
+/*
+*******************************************************************************
+*
 * Notifications.
 *
 *******************************************************************************

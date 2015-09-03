@@ -644,20 +644,24 @@ string formFieldID = "")
 			 />
 				break;
 			case EzButtonType.link:
-            <a href="@buttonProp.Href"
-			   @if(!string.IsNullOrWhiteSpace(buttonProp.Id)) {
-					@:id ="@identificator"
-																																							   }
-               value="@buttonProp.Caption"
-               class="@buttonProp.Cls"
-			   @( !string.IsNullOrWhiteSpace(buttonProp.Target) ? "target=" + buttonProp.Target : "")
-			   @( !string.IsNullOrWhiteSpace(buttonProp.OnClick) ? "onclick=" + buttonProp.OnClick : "")
-               @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-			   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) {
-				   @:ui-event-control-id="@uiEvent"
-			   }>
-                @buttonProp.Caption
-            </a>
+			var href = new HtmlString(buttonProp.Href);
+			<a 
+			    @if (!string.IsNullOrWhiteSpace(buttonProp.Id)) {
+				   @: id="@identificator"
+			    }
+			    @if(true){
+					@: href="@href"																																							 
+			    }
+			    value="@buttonProp.Caption"
+			    class="@buttonProp.Cls"
+			    @( !string.IsNullOrWhiteSpace(buttonProp.Target) ? "target=" + buttonProp.Target : "")
+			    @( !string.IsNullOrWhiteSpace(buttonProp.OnClick) ? "onclick=" + buttonProp.OnClick : "")
+			    @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+			    @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { 
+					@: ui-event-control-id="@uiEvent"
+			   	}>
+				@buttonProp.Caption
+			</a>
 				break;
 		}//switch
 	}//foreach

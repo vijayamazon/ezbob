@@ -53,15 +53,11 @@
 	@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline)
     {
         @BundleHelper.RenderEverlineCustomerCss()
-		@BundleHelper.RenderEverlineCss()
-        
 	} else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
 		@BundleHelper.RenderAlibabaCss()
 		@BundleHelper.RenderEzbobCustomerCss()
-		@BundleHelper.RenderEzbobCss()
 	} else {
         @BundleHelper.RenderEzbobCustomerCss()
-		@BundleHelper.RenderEzbobCss() 
 	}
 
 	@RenderSection("css", false)

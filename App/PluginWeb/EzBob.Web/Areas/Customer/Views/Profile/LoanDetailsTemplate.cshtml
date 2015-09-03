@@ -110,7 +110,7 @@
 				payButtonName = "Pay Now";
 
 				if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
-				%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green pay-early" style="margin-top: 5px;" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
+				%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early" style="margin-top: 5px;" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
 				}
 				%>
 			</div>

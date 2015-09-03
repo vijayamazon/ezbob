@@ -131,7 +131,6 @@ EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
 	onRender: function () {
 		var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
 		var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
-		var self = this;
 
 		InitAmountPeriodSliders({
 			container: this.$el.find('#calc-slider'),
@@ -152,7 +151,7 @@ EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
 				step: 1,
 				caption: periodCaption,
 				hasbutton: true,
-				hide: this.model.get('isCustomerRepaymentPeriodSelectionAllowed') == false,
+				hide: !this.model.get('isCustomerRepaymentPeriodSelectionAllowed'),
 				uiEvent: 'loan-legal:'
 			},
 			callback: function(ignored, sEvent) {
@@ -163,6 +162,7 @@ EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
 
 		this.$el.find('.wizard-request-loan-section').remove();
 		this.$el.find('.calc-header').remove();
+		EzBob.App.trigger('loanSelectionChanged');
 		EzBob.UiAction.registerView(this);
 		return this;
 	},

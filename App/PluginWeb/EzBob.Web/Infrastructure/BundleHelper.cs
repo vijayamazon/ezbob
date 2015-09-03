@@ -33,8 +33,10 @@
                 .Add("~/Content/css/profile-ny2015scratch.css")
                 .Add("~/Content/css/valentine2015scratch.css")
                 .Add("~/Content/css/easter2015scratch.css")
-                //custom css
-                .Add("~/Content/css/Everlinecustomer.css")
+                
+				//custom css
+				.Add("~/Content/css/everline.css")
+				.Add("~/Content/css/Everlinecustomer.css")
                 .Add("~/Content/css/Everlineslider.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
@@ -60,14 +62,9 @@
 				.Add("~/Content/css/profile-ny2015scratch.css")
 				.Add("~/Content/css/valentine2015scratch.css")
 				.Add("~/Content/css/easter2015scratch.css")
+				.Add("~/Content/css/ezbob.css")
 				.MvcRender("~/Content/css/min/customerezbob_#.css");
 		} // RenderEzbobCustomerCss
-
-		public static MvcHtmlString RenderEzbobCss() {
-			return Bundle.Css()
-			.Add("~/Content/css/ezbob.css")				
-			.MvcRender("~/Content/css/min/ezbob_#.css");
-		} // RenderEzbobCss
 
 		public static MvcHtmlString RenderAlibabaCss() {
 			return Bundle.Css()
@@ -75,17 +72,23 @@
 			.MvcRender("~/Content/css/min/alibaba_#.css");
 		} // RenderAlibabaCss
 
-		public static MvcHtmlString RenderEverlineCss() {
-			return Bundle.Css()
-			.Add("~/Content/css/everline.css")				
-			.MvcRender("~/Content/css/min/everline_#.css");
-		} // RenderEverlineCss
-
-		public static MvcHtmlString RenderProfileCss() {
+		public static MvcHtmlString RenderEzbobProfileCss() {
 			return Bundle.Css()
 				//libs
 				.Add("~/Content/css/lib/jquery.jscrollpane.css")
+				
+				//custom css
+				.Add("~/Content/css/profile.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
+				.MvcRender("~/Content/css/min/profile_combined_#.css");
+		} // RenderEzbobProfileCss
 
+		public static MvcHtmlString RenderEverlineProfileCss() {
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/jquery.jscrollpane.css")
+				
 				//custom css
 				.Add("~/Content/css/profile.css")
 				.Add("~/Content/css/EverlineCustomerProfile.css")
@@ -95,10 +98,9 @@
 				.Add("~/Content/css/EverlineCustomerProfileMyInformation.css")
 				.Add("~/Content/css/EverlineCustomerProfileMainMenu.css")
 				.Add("~/Content/css/EverlineCustomerProfileSettings.css")
-				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
-		} // RenderProfileCss
+		} // RenderEverlineProfileCss
 
 		public static MvcHtmlString RenderWizardCss() {
 			return Bundle.Css()

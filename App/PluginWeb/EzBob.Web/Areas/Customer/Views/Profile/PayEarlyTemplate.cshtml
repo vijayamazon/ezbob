@@ -1,5 +1,10 @@
+@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
 @model dynamic
-@{ Html.RenderPartial("_payEarlyConfirmationModalTemplate"); }
+@{ 
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	Html.RenderPartial("_payEarlyConfirmationModalTemplate"); 
+}
 
 <script id="payEaryly-template" type="text/template">
 	<%
@@ -14,8 +19,7 @@
 	var loansClass = liveLoans.length > 1 ? 'lot-of-loans' : '';
 	%>
 	<div class="row-fluid profile-screen">
-		<div class="span7"><%
-			if (hasLateLoans || !isEarly) {
+		<%	if (hasLateLoans || !isEarly) {
 				%><h1>Make a Payment:</h1>
 				<h2>Always good to pay on time!</h2><%
 			}
@@ -142,13 +146,19 @@
 					</label>
 				</div>
 			</div>
-			<div class="clearfix buttons_container">
-				<a href="<%-url%>" class="button btn-green submit pull-right" ui-event-control-id="pay-early:confirm">Confirm</a>
-				<a href="#" class="button btn-grey back pull-right" ui-event-control-id="pay-early:back">Back</a>
-			</div>
-		</div>
-
-		<div class="span1">&nbsp;</div>
+		
+			@EzForm.WizardButton(new List<EzButtonModel>{
+				new EzButtonModel(null, "Confirm",
+					cls: "button btn-green ev-btn-org submit",
+					uiEventControlID:"pay-early:confirm", 
+					buttonType: EzButtonType.link, 
+					href: "<%-url%>"),
+				new EzButtonModel(null, "Back",
+					cls: "button btn-grey back clean-btn",
+					uiEventControlID:"pay-early:back", 
+					buttonType: EzButtonType.link, 
+					href: "#")
+			}, origin : origin)
 	</div>
 </script>
 

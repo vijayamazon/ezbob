@@ -17,7 +17,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.fixed = this.customer.get('IsLoanDetailsFixed');
 
 		this.currentLoanTypeID = 1; // for backward compatibility
-		this.currentRepaymentPeriod = this.customer.get('LastApprovedRepaymentPeriod');
+		this.currentRepaymentPeriod = this.model.get('repaymentPeriod');
 
 		this.recalculateThrottled = _.debounce(this.recalculateSchedule, 250);
 

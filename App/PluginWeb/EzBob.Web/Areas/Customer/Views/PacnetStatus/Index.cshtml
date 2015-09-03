@@ -2,15 +2,20 @@
 @using EzBob.Web.Infrastructure
 @using ConfigManager
 @using Ezbob.Backend.Models
+@using EZBob.DatabaseLib.Model.Database
 @{
 	UiCustomerOrigin.Set(ViewBag);
-
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
 	ViewBag.Title = "Loan Confirmation: Loan Confirmation |  " + ViewBag.CustomerOrigin.Name;
 	bool ttPixelEnabled = CurrentValues.Instance.TradeTrackerPixelEnabled;
 }
 
 @section css {
-	@BundleHelper.RenderProfileCss()
+	@if (origin == CustomerOriginEnum.everline) {
+		@BundleHelper.RenderEverlineProfileCss()
+	} else {
+		@BundleHelper.RenderEzbobProfileCss()
+	}
 }
 
 <div class="row-fluid inner loan-taken">

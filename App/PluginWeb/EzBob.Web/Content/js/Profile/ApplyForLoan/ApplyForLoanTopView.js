@@ -128,7 +128,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 					_this.model.set("state", "apply");
 				};
 			})(this));
-			EzBob.App.modal.show(view);
+			EzBob.App.jqmodal.show(view);
 			return false;
 		} else {
 			this._submit();

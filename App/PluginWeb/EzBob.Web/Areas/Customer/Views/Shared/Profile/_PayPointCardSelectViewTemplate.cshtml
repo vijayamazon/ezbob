@@ -1,34 +1,44 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <script type="text/template" id="PayPointCardSelectViewTemplate">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Select Card</h3>
-	</div>
 	<div class="modal-body">
 		<div class="control-group">
 			<div class="controls controls-inline">
 				<label class="radio span3">
-				  <input type="radio" name="cardOptions" id="cardOption1" value="useExisting" checked ui-event-control-id="select-debit-card:card-options">
-				  Use debit card ending:
+					<input type="radio" name="cardOptions" id="cardOption1" value="useExisting" checked ui-event-control-id="select-debit-card:card-options">
+					Use debit card ending:
 				</label>
 
 				<select class="span3 selectheight" ui-event-control-id="select-debit-card:existing-card">
 					<% _.each(cards, function(c, i){%>
-						<option <% if (c.IsDefault) { print('selected="selected"'); } %> value="<%- c.Id %>"><%- c.CardNo || 'XXXX' %> Exp <%- EzBob.formatDateShortCard(c.ExpireDate) %></option>
- 					<%});%>
+					<option <% if (c.IsDefault) { print('selected="selected"'); } %> value="<%- c.Id %>"><%- c.CardNo || 'XXXX' %> Exp <%- EzBob.formatDateShortCard(c.ExpireDate) %></option>
+					<%});%>
 				</select>
 			</div>
 			<div class="controls controls-inline">
 				<label class="radio span3">
-				  <input type="radio" name="cardOptions" id="cardOption2" value="useNew" ui-event-control-id="select-debit-card:card-options">
-				  Enter new debit card
+					<input type="radio" name="cardOptions" id="cardOption2" value="useNew" ui-event-control-id="select-debit-card:card-options">
+					Enter new debit card
 				</label>
 			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<button class="btn-back button btn-grey cancel" data-dismiss="modal" aria-hidden="true" ui-event-control-id="select-debit-card:cancel">Cancel</button>
-		<button class="btn-continue button btn-green" ui-event-control-id="select-debit-card:continue">Continue</button>
+
+		@EzForm.WizardButton(new List<EzButtonModel>{
+				new EzButtonModel(null, "Continue",
+					cls: "btn-continue button btn-green ev-btn-org",
+					uiEventControlID:"select-debit-card:continue",
+					buttonType: EzButtonType.button),
+				new EzButtonModel(null, "Cancel",
+					cls: "btn-back button btn-grey cancel clean-btn",
+					uiEventControlID:"select-debit-card:cancel",
+					buttonType: EzButtonType.button)
+			}, 
+			origin: origin)
 	</div>
 </script>

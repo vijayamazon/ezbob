@@ -6,6 +6,8 @@
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	background-image: none;
+    box-shadow: none;
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main {
@@ -19,14 +21,39 @@
 	display: inline-block;
 }
 
+.main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical{
+	display: none;
+}
+
 .main-page-everline .profile-menu .customer-dashboard-main li a {
 	color: white;
 	text-decoration: none;
+	text-shadow: none;
+}
+
+.navbar .nav > li > a, 
+.profile-menu .nav > li > a{
+	font-family: 'Open Sans',sans-serif;
+	font-size: 15px;
+}
+
+.profile-menu .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, 
+.profile-menu.navbar .nav > li > a:focus, 
+.profile-menu.navbar .nav > li > a:hover, 
+.profile-menu.navbar .nav .active a, 
+.profile-menu.navbar .nav .active a:hover {
+    color: #e28023 !important;
+}
+.main-page-everline .profile-menu .customer-dashboard-main li.active a {
+    color: #e28023 !important;
+    text-decoration: none;
+    text-shadow: none;
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main li.active a {
 	color: #e28023;
 	text-decoration: none;
+	text-shadow: none;
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical {

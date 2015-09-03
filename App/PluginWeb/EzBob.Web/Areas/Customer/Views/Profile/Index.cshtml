@@ -11,10 +11,16 @@
     var customer = Model.Customer;
     customer.IsProfile = true;
     var currVals = CurrentValues.Instance;
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
 }
 
 @section css{
-    @BundleHelper.RenderProfileCss()
+	
+	@if (origin == CustomerOriginEnum.everline) {
+		@BundleHelper.RenderEverlineProfileCss()
+	} else {
+		@BundleHelper.RenderEzbobProfileCss()
+	}
 
     @if (Model.WhiteLabel != null) {
         <style>
