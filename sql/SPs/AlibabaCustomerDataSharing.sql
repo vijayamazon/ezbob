@@ -1,24 +1,20 @@
-USE [ezbob]
-GO
-/****** Object:  StoredProcedure [dbo].[AlibabaCustomerDataSharing]    Script Date: 02/06/2015 10:56:12 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-ALTER PROCEDURE [dbo].[AlibabaCustomerDataSharing]
-	@CustomerID int,
---	@CustomerRefNum varchar(8), 
-	@FinalDecision bit
+ALTER PROCEDURE AlibabaCustomerDataSharing
+@CustomerID int,
+-- @CustomerRefNum varchar(8), 
+@FinalDecision bit
 AS
 BEGIN 
-	
 	SET NOCOUNT ON;	
 
 	DECLARE @AlibabaMemberID bigint;
-	--DECLARE @CustomerID int;
 
+	--DECLARE @CustomerID int;
 	--set @CustomerID = (select Id from Customer where [RefNumber] = @CustomerRefNum);
 
 	SET @AlibabaMemberID = (select AliId from AlibabaBuyer where CustomerID = @CustomerID);	
@@ -43,7 +39,9 @@ BEGIN
 	-- NULL -how should be treated?
 	IF @TypeOfBusiness = 'Entrepreneur' OR @TypeOfBusiness = 'SoleTrader' OR @TypeOfBusiness IS NULL
 		RETURN;	
-		
+
+	DECLARE @IncorporationDate DATETIME = dbo.udfGetCustomerIncorporationDate(@CustomerID, NULL)
+
 	SELECT 
 		@AlibabaMemberID as  aliMemberId,		
 		c.[RefNumber] as aId,
@@ -84,8 +82,8 @@ BEGIN
 
 		c.DaytimePhone as compPhone ,	
 
-		analytic.IncorporationDate as compEstablished ,		
-		datediff(YEAR, analytic.IncorporationDate, GETDATE()) as compEstablishedYears, 		
+		@IncorporationDate as compEstablished ,		
+		datediff(YEAR, @IncorporationDate, GETDATE()) as compEstablishedYears, 		
 		(select top 1 EmployeeCount from dbo.CompanyEmployeeCount where CustomerId = @CustomerID order by Id desc) as compEmployees,
 		c.TypeOfBusiness as compEntityType, 
 
@@ -113,7 +111,6 @@ BEGIN
 		LEFT JOIN dbo.CustomerAddress ad on (ad.CustomerId = c.Id and ad.addressType = 1)												-- personal address
 		LEFT JOIN CustomerStatuses st on st.Id = c.CollectionStatus 																						-- customer disabled ?
 		LEFT JOIN dbo.Company co on c.CompanyId = co.Id LEFT JOIN dbo.CustomerAddress adcomp on (adcomp.CompanyId = co.Id and adcomp.addressType in (3,5))	-- company data including company address	
-		LEFT JOIN (select top 1 IncorporationDate, CustomerID from dbo.CustomerAnalyticsCompany where CustomerID = @CustomerID and IsActive = 1 order by AnalyticsDate desc) as analytic on analytic.CustomerID = c.Id -- 	
 		LEFT JOIN (select top 1 			
 			IdCustomer, 		
 			UnderwriterDecision,		 
@@ -133,5 +130,5 @@ BEGIN
 	select * from #customer_data;
 	
 	DROP TABLE #customer_data;
-
 END
+GO
