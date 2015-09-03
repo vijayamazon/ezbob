@@ -538,7 +538,9 @@ a.ev-btn-org,
 .ev-btn-org[disabled], 
 .clean-btn.disabled, 
 .clean-btn[disabled] {
-        cursor: not-allowed;
+	-ms-opacity: 0.3;
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .clean-btn.disabled,
