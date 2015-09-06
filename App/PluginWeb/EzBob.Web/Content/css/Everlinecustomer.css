@@ -128,6 +128,7 @@
         direction: rtl;
     }
 
+
         .wizard-steps-wrapper ul.application_steps li:first-child .step_label {
             margin-right: 1px;
         }
@@ -166,6 +167,12 @@
             margin-left: 0;
             margin-right: -8px;
         }
+
+		.wizard-steps-wrapper .dashboard-steps ul.application_steps li .step_label {
+
+			margin-left: 30px;
+			text-align: center;
+		}
 
 .vip-container {
     height: 200px;
@@ -447,7 +454,7 @@ a.clean-btn:focus,
     text-align: center;
     color: #e28023 !important;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 18px;
+	font-size: 18px !important;
     font-weight: 600;
     -ms-opacity: 1;
    /* line-height:43px;*/
@@ -548,7 +555,12 @@ a.ev-btn-org,
 .ev-btn-org[disabled] {
 	background-color: #e28023;
 }
+
+.button.btn-fix {
+    width: initial;
+}
 /*end buttons*/
+
 
 
 .select {

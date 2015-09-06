@@ -1,7 +1,9 @@
 ﻿@using System
+@using System.Collections.Generic
 @using EzBob.Web.Infrastructure
 @using ConfigManager
 @using Ezbob.Backend.Models
+@using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib.Model.Database
 @{
 	UiCustomerOrigin.Set(ViewBag);
@@ -17,7 +19,7 @@
 		@BundleHelper.RenderEzbobProfileCss()
 	}
 }
-
+<div class="dashboard-steps-container"></div>
 <div class="row-fluid inner loan-taken">
 	<div id="profile-content">
 		<div id="header-container"></div>
@@ -55,7 +57,7 @@
 
 			<dt>
 				Total Repayments:
-				<span style="font-size: 11px;">(inc. interest and fees)</span>
+				<span style="font-size: 11px; display: block;">(inc. interest and fees)</span>
 			</dt>
 			<dd style="height: 40px;">£ @ViewData["Total"]</dd>
 
@@ -73,16 +75,23 @@
 		</div>
 
 		<div class="row-fluid">
-			<div class="span12 buttons_container">
-				<a href="#" class="schedule-print-link pull-left print-link"
-					style="margin-top: 8px;"
-					onclick="window.print();return false;"
-					ui-event-control-id="loan-taken:print">Print for your records</a>
-				<a href='@Url.Action("Index", "Profile", new { Area = "Customer" })'
-					class="btn-continue button btn-green pull-right btn-fix btn-wide"
-					id="pacnet-status-back-to-profile"
-					ui-event-control-id="loan-taken:back-to-profile">Go to my account</a>
-			</div>
+			@EzForm.WizardButton(new List<EzButtonModel>{
+				new EzButtonModel("pacnet-status-back-to-profile", "Go to my account",
+					cls: "btn-continue button btn-green pull-right btn-fix btn-wide ev-btn-org",
+					buttonType: EzButtonType.link,
+					uiEventControlID: "loan-taken:back-to-profile",
+					href: @Url.Action("Index", "Profile", new { Area = "Customer" })),
+
+				new EzButtonModel(null, "Print for your records",
+					cls: "schedule-print-link pull-left print-link",
+					buttonType: EzButtonType.link,
+					uiEventControlID: "loan-taken:print",
+					onClick: "window.print();return false;",
+					href: "#"),
+			},
+			wrapperClass: "show-more-wrapper",
+			origin: origin)
+
 		</div>
 	</div>
 
@@ -149,38 +158,36 @@
 {
 	<script type='text/javascript' src='https://my.nanorep.com/common/API/conversionUpdate.js?account=ezbob&revenue=@ViewData["Amount"]&orderId=@ViewData["loanNo"]'></script>
 	<script type="text/javascript">
-	$(function() {
-		var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({
-			el: $('#schedule'),
-			schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))
+		$(function() {
+			var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({
+				el: $('#schedule'),
+				schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))
 			});
-		scheduleView.render();
+			scheduleView.render();
 
-		$('#header-container').html(_.template($('#wizard-bar-template').html()));
-		$('.sidebarBox').find('li[rel]').setPopover('left');
+			var steps = _.template($('#steps-dashboard-template').html());
+			$('.dashboard-steps-container').html(steps({ current: 2 }));
+			$('.green-line').css("width", '70%');
+			$('.sidebarBox').find('li[rel]').setPopover('left');
 
-		var oView = new EzBob.Profile.LoanTakenView();
-		oView.render();
-		$('.header-info').show();
-		$('.header-info-text').text('MY ACCOUNT');
+			var oView = new EzBob.Profile.LoanTakenView();
+			oView.render();
+			$('.header-info').show();
+			$('.header-info-text').text('MY ACCOUNT');
 
-		EzBob.App.GA.trackPage('/Customer/Profile/LoanConfirmation', 'Loan Confirmation', {
-			Amount: '@ViewData["Amount"]',
-			Length: '@ViewData["Term"]',
-			Gender: '@ViewData["Gender"]',
-			Age: '@ViewData["Age"]',
-			Postcode: '@ViewData["Postcode"]',
-			TypeofBusiness: '@ViewData["TypeOfBusiness"]',
-			IndustryType: '@ViewData["IndustryType"]',
-			LeadID: '@ViewData["LeadID"]',
-			AccountStatus: '@ViewData["Status"]'
+			EzBob.App.GA.trackPage('/Customer/Profile/LoanConfirmation', 'Loan Confirmation', {
+				Amount: '@ViewData["Amount"]',
+				Length: '@ViewData["Term"]',
+				Gender: '@ViewData["Gender"]',
+				Age: '@ViewData["Age"]',
+				Postcode: '@ViewData["Postcode"]',
+				TypeofBusiness: '@ViewData["TypeOfBusiness"]',
+				IndustryType: '@ViewData["IndustryType"]',
+				LeadID: '@ViewData["LeadID"]',
+				AccountStatus: '@ViewData["Status"]'
 			});
 		})
 	</script>
-	<script id="wizard-bar-template" type="text/template">
-		<%var current = 2;%>
-		@{Html.RenderPartial("_StepsDashboard");}
-	</script>
-
+	@{Html.RenderPartial("_StepsDashboard");}
 	@BundleHelper.RenderProfileJs()
 }

@@ -38,6 +38,9 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			el: this.$el.find('.apply-for-loan-div')
 		});
 		region.show(view);
+
+		var steps = _.template($('#steps-dashboard-template').html());
+		$('.dashboard-steps-container').html(steps({ current: 0 }));
 		return false;
 	},
 	createApplyForLoanView: function (_this) {

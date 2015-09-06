@@ -407,7 +407,7 @@ dl.loan-schedule-info  {
 }
 
 .loan-schedule-info dd {
-    margin-left: 140px;
+    margin-left: 150px;
 }
 
 #schedule a {
@@ -871,4 +871,8 @@ span.sign-full-name {
 .agreements-checkboxes label {
 	display: inline-block;
 	width: 90%
+}
+
+.schedule-print-link{
+	margin-top: 8px;
 }

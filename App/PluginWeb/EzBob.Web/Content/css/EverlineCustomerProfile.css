@@ -32,6 +32,11 @@ a, a:visited {
     font-weight: 600;
     font-size: 15px;
 }
+
+a.clean-btn{
+	line-height: 42px;
+}
+
 /*
 *******************************************************************************
 *
@@ -135,6 +140,7 @@ a, a:visited {
 .main-page-everline .d-widgets .ev-btn-org {
 	float: right;
 	margin-top: 7px;
+	width: 22%;
 }
 
 /*

@@ -57,9 +57,10 @@
 <link rel="stylesheet" type="text/css" href="/Content/css/profile-ny2015scratch.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/valentine2015scratch.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/easter2015scratch.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/Everlinecustomer.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/hmrc-upload-ui.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/everline.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/Everlinecustomer.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/Everlineslider.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/hmrc-upload-ui.css" />
 
 	
 	<link rel="stylesheet" type="text/css" href="/Content/css/paypoint-template.css" />
@@ -85,7 +86,7 @@
 
 	
 
-	<input name="__RequestVerificationToken" type="hidden" value="DEIJyzNRFvczLmPV11eKNwTy-YG40EXTxCLNp2lP2asB_cCkhEzTKuJuhAcmWyqNCQ9Q1bOCI2rhOiFa1cwCNUDK1Y5AWMboQJZGP_72p5OmvF7iEd7oDxj-qguRMpzmAKAgDLbhTtAaAt-XYgLif8Co75nbXXbefJLMvaomWGk1" />
+	<input name="__RequestVerificationToken" type="hidden" value="XR40NYmtlGaEHid6iexPkZGrBUANc13U86bZhmiSsqUuERDQFIq-uGpYmnbd-iMm3CFAS1dyOQhnp5Ueb2XoxFSzQjF4zxT4FWbLM1tz1olB6MpivtV685KKAV8z_33FaZf-bJtFT5iHuA-wntnIKyAPFcM60TB4U3X_CPhqNMj3WnpaF17zY2nEBp9iXtyk0" />
 
 	<div id="wrapper">
 
@@ -137,7 +138,7 @@
 						</div>
 						<div class="progress-line"></div>
 						<div class="progress-line-complete"></div>
-						<span class="step_label">Choose Loan Term</span>
+						<span class="step_label step_label_1">Choose Loan Term</span>
 					</li>
 					<li class="current center-circle" data-step-num="1">
 						<div class="progress-circle current">
@@ -147,7 +148,7 @@
 						</div>
 						<div class="progress-line"></div>
 						<div class="progress-line-current"></div>
-						<span class="step_label">Enter Bank & Debit</span>
+						<span class="step_label step_label_2">Enter Bank & Debit</span>
 					</li>
 					<li class="last last-circle" data-step-num="2">
 						<div class="progress-circle ">
@@ -156,7 +157,7 @@
 							</div>
 						</div>
 						<div class="progress-line"></div>
-						<span class="step_label">Get Cash</span>
+						<span class="step_label step_label_3">Get Cash</span>
 					</li>
 				</ul>
 			</div>
@@ -184,13 +185,13 @@
 				   					    for="customer"
 			>${customer_Text:=Name of Cardholder}</label>
 			<div class="input-wrapper">
-					<input type="text"
-                               name="customer"
+				    <input type="text"
+             name="customer"
              id="customer"
-		   class="form_field"
-		   value="${customer}"
-		     tabindex="1"
-		   		   		   		   		   		    />
+           class="form_field"
+           value="${customer}"
+             tabindex="1"
+                                                                              />
 
 				<div class="error-wrap"></div>
 			</div>
@@ -226,14 +227,14 @@
 				   					    for="card_no"
 			>${card_no_Text:=Card Number}</label>
 			<div class="input-wrapper">
-					<input type="text"
-                               name="card_no"
+				    <input type="text"
+             name="card_no"
              id="card_no"
-		   class="form_field"
-		   value="${card_no}"
-		     tabindex="3"
-		     maxlength="16"
-		   		   		   		   		    />
+           class="form_field"
+           value="${card_no}"
+             tabindex="3"
+             maxlength="16"
+                                                                   />
 
 				<div class="error-wrap"></div>
 			</div>
@@ -247,14 +248,14 @@
 				   					    for="expiry"
 			>${expiry_Text:=Expiry Date (MM/YY)}</label>
 			<div class="input-wrapper">
-					<input type="text"
-                               name="expiry"
+				    <input type="text"
+             name="expiry"
              id="expiry"
-		   class="form_field"
-		   value="${expiry}"
-		     tabindex="4"
-		     maxlength="5"
-		   		   		   		   		    />
+           class="form_field"
+           value="${expiry}"
+             tabindex="4"
+             maxlength="5"
+                                                                   />
 
 				<div class="error-wrap"></div>
 			</div>
@@ -268,14 +269,14 @@
 				   					    for="cv2"
 			>${cv2_Text:=CV2 (security code)}</label>
 			<div class="input-wrapper">
-					<input type="password"
-                               name="cv2"
+				    <input type="password"
+             name="cv2"
              id="cv2"
-		   class="form_field"
-		   value="${cv2}"
-		     tabindex="5"
-		     maxlength="4"
-		   		   		   		   		    />
+           class="form_field"
+           value="${cv2}"
+             tabindex="5"
+             maxlength="4"
+                                                                   />
 
 				<div class="error-wrap"></div>
 			</div>
@@ -440,23 +441,58 @@
 		</div>
 
 	<footer class="everline_footer">
-		<div id="copyrights">
-			<div class="copyrights-inner">
-				<div class="legal-links col">
-					<p class="col">
-						Everline is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.
-						<br />
-						Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business. Our Interim Permissions Reference Number is 647816.
-						<br />
-						Registered Address: 36 Soho Square, London W1D 3QY
-						<br />
-						&copy;2015 Orange Money Ltd. All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.
-						<br />
-						All loans are subject to status and approval. 18+ only.
-					</p>
-				</div>
-			</div>
-		</div>
+	    <div class="footer-eif">
+            <div class="footer-eif-inner">
+                <div class="cosme-images">
+                    <div class="cosme-images-wrapper">
+                        <img  width="93" height="62" src="/Content/css/images/cosme-pic.png" />
+                        <img class="eif-img"  width="93" height="62" src="/Content/css/images/eurpe-fund.png" />
+                      
+                    </div>
+                </div>
+                <div class="footer-eif-text">
+                    <div class="about-eif">About the European Investment Fund</div>
+                    <p>
+                        Everline provide financing that benefits from the support of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020). The Loan Guarantee Facility is managed and implemented by the European Investment Fund (EIF) <a class="find-out-more" href="#">Find out more</a>.
+                    </p>
+                </div>
+            </div>
+	    </div>
+        <div class="subfooter">
+
+
+            <div class="footer-navigator">
+                <div class="footer-navigator-inner">
+                    <ul class="footer-navigator-list">
+                        <li><a href="#">Intermediaries</a></li>
+                        <li class="hide-mobile"><a href="#">Partners</a></li>
+                        <li><a href ="#">Legal</a></li>
+                        <li><a href="#">Terms and Conditions</a></li>
+                        <li><a href="#">Privacy and cookie policy</a></li>
+                        <li><a href="#">Advice</a></li>
+                    </ul>
+                    <div class="social-link-icons">
+                        
+                        <ul>
+                            <li><a class="facebook" href="#face"></a></li>
+                            <li><a class="tweeter" href="#face"></a></li>
+                            <li><a class="linkedin" href="#face" ></a></li> 
+                        </ul>
+                   
+                    </div>
+                </div>
+            </div>
+            <div class="footer-text">
+                <p>
+                    Orange Money Ltd. trading as Everline is authorized and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br />
+                    Orange Money Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
+                    Registered Address: 36 Soho Square, London W1D 3QY<br />
+                    All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
+                    All loans are subject to status and approval. 18+ only.
+                </p>
+                
+            </div>
+        </div>
 	</footer>
 
 
@@ -545,15 +581,20 @@
 				cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
 			}
 
+			var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
+			EzBob.Config.Origin = origin;
+
 			var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
 			if (hideSteps != 'True') {
+				if (origin == 'everline') {
+					$('.step_label_1').text('Loan term');
+					$('.step_label_2').text('Bank details');
+					$('.step_label_3').text('Receive funds');
+				}
 				$(".wizard-steps-wrapper").show();
 			} else {
 				$('#amount-group').show();
 			}
-
-			var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
-			EzBob.Config.Origin = origin;
 			var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
 			//set user email in top bar

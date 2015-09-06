@@ -814,7 +814,8 @@
 .sliders .overview .c_spn_4 {
     margin: 0 0 10px;
 }
-.icon-plus, .calc-equal {
+
+.calc-equal {
  display: none;   
 }
 
@@ -849,6 +850,7 @@
     margin-top: 29px;
     font-size: 26px;
     color:#757575;
+	background-image: none;
 }
 .c_spn_3 {
     width: 18.75%;
