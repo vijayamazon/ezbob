@@ -37,6 +37,7 @@
 				//custom css
 				.Add("~/Content/css/everline.css")
 				.Add("~/Content/css/Everlinecustomer.css")
+                .Add("~/Content/css/everline-mobile.css")
                 .Add("~/Content/css/Everlineslider.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
@@ -235,6 +236,7 @@
 
 				// custom css
 				.Add("~/Content/css/Everlinecustomer.css")
+                .Add("~/Content/css/everline-mobile.css")
 				.Add("~/Content/css/everline.css")
 				.Add("~/Content/css/EverlineBroker.css")
 				.Add("~/Content/css/edit-experian-director-data.css")

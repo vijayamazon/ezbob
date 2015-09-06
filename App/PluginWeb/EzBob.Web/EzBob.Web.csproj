@@ -479,6 +479,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\eurpe-fund.png" />
+    <Content Include="Content\css\everline-mobile.css" />
     <Content Include="Content\css\everline.css" />
     <Content Include="Content\css\EverlineBroker.css" />
     <Content Include="Content\css\EverlineCustomerProfileMyInformation.css" />

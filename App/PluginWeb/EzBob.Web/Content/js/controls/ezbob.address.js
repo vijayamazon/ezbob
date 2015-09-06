@@ -40,7 +40,7 @@ EzBob.Popup = Backbone.View.extend({
 		        title: 'Select address',
 		        modal: true,
 		        resizable: true,
-		        width: 570,
+		        width: 572,
 		        height: 630,
 		        closeOnEscape: true,
 		    });

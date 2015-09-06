@@ -1165,6 +1165,7 @@ hr.wizard-hr {
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.
 */
+
 #colorbox, #cboxOverlay, #cboxWrapper {
     position: absolute;
     top: 0;
@@ -1233,7 +1234,7 @@ hr.wizard-hr {
     margin-top: 30px;
 }
 
-.iframe-popup #cboxClose {
+#colorbox #cboxClose {
         background: none;
     text-indent: 0;
        color: #dc6e23;
@@ -1604,7 +1605,39 @@ height:40px !important;
 .consent-modal-footer {
         float: left;
     margin-top: 30px;
-}/*popups*/
+}
+#eBay_help {
+    padding:10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.help_eBay {
+    background: url(images/help/help_ebay.jpg) no-repeat center 0;
+    -ms-background-size: contain;
+    background-size: contain;
+}
+.help_paypal {
+    background: url(images/help/help_paypal.jpg) no-repeat center 0;
+    -ms-background-size: contain;
+    background-size: contain;
+}
+
+.help_image {
+    max-width: 759px;
+    height: 543px;
+}
+.help_FreeAgent {
+    background: url(images/help/help_freeagent.jpg) no-repeat center 0;
+    -ms-background-size: contain;
+    background-size: contain;
+}
+.help_Sage {
+    background: url(images/help/help_sage.jpg) no-repeat center 0;
+    background-size: contain;
+}
+/*popups*/
 
  /*footer*/
  footer {
@@ -1854,210 +1887,3 @@ height:40px !important;
     width:0;
     height:0
 }
-@media screen and (max-width: 960px) {
-	
-}
-/*
-     mobile
-     */
-@media screen and (min-width: 800px) and (max-width: 960px)  {
-    /*
-        footer
-    */
-   .footer-eif-text {
-       width:70%;
-     
-
-   }
-   .footer-navigator-inner ul li a {
-       font-size:12px;
-   }
-   .footer-navigator-inner ul li:last-child {
-     padding-right: 0;
-   }/*end footer*/
-    .broker-finish-inner-text {
-         width: 58%;
-        }
-    .marketplace-button-wrapper, 
-	.form_field_container .input-wrapper .clean-btn.btn-showmore {
-		width: 47%;
-	}
-
-	.account-or {
-		width: 100%;
-		margin-left: 20%;
-		margin-top: 0;
-		margin-bottom: 0;
-	}
-}
-@media screen and (max-width: 800px) {
-    /*
-        footer
-    */
-    .footer-eif-text {
-        width: 100%;
-        float: none;
-    }
-
-    .footer-eif-inner {
-        padding: 50px 20px;
-    }
-
-    .cosme-images {
-        text-align: center;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .social-link-icons {
-        display: none;
-    }
-
-    .footer-navigator-inner ul li {
-        margin-top: 20px;
-    }
-
-    .footer-navigator-inner ul {
-        margin-top: 0;
-    }
-
-        .footer-navigator-inner ul li.hide-mobile {
-            display: none;
-        }
-    /* end footer */
-
-    /*
-        wizard
-    */
-    .form_field_container .input-title, .form_field_container .input-title-address {
-        width: 100%;
-        text-align: left;
-    }
-
-    .form_field_container .input-wrapper {
-        width: 100%;
-        padding-left: 0;
-    }
-
-    .forgotpass {
-        margin-right: 0;
-    }
-
-    .clean-btn, a.clean-btn, a.clean-btn:focus, .clean-btn:focus, .simpleCaptcha a, .ui-widget button.clean-btn, .broker-captcha a {
-        font-size: 14px;
-        width: 100%;
-        margin-top: 20px;
-        margin-left:0;
-    }
-    .form_field_container .simpleCaptcha .captcha-image-margin{
-        width:100%;
-    }
-    .form_field_container .simpleCaptcha {
-        width: 100%;
-        float: left;
-        padding-left: 0;
-    }
-
-    .form_field_container .input-wrapper .form_field_left_side {
-        width: 100% !important;
-    }
-
-    .form_field_container .input-wrapper .clean-btn {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 20px;
-    }
-
-    .wizard-top {
-        padding: 0 20px;
-    }
-
-    .form_buttons_container .input-wrapper .ev-btn-org, .form_buttons_container .input-wrapper a.ev-btn-org {
-        width: 100%;
-        display:block;
-        margin:0;
-        float:none;
-    }
-
-    .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
-        width: 100%;
-    }
-
-    .wizard-steps-wrapper .wizard-steps .progress-time {
-        width: 100%;
-        text-align: center;
-    }
-
-    .ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
-        width: 100%;
-    }
-
-    .ui-dialog {
-        left: 0 !important;
-        width: 100% !important;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-
-    .marketplace-button-wrapper, .form_field_container .input-wrapper .clean-btn.btn-showmore {
-        display: block;
-        width: 100%;
-        margin-top: 15px;
-    }
-
-   .add-director-container.form_field_container .input-wrapper .clean-btn {
-       margin-top: 20px;
-   }
-/*end wizard*/
-
-
-/*progress bar*/
-.wizard-steps-wrapper {
-    height: 210px;
-}
-
-    .wizard-steps-wrapper .wizard-steps .steps-wrap {
-        width: 100%;
-        position: absolute;
-        top: 105px;
-    }
-
-    .wizard-steps-wrapper .wizard-steps .progress-bar {
-        height: 12px;
-        margin-left: 20px;
-        width: 64%;
-        right: 18%;
-        margin-top: 23px;
-        /* right: 0; */
-        position: absolute;
-    }
-
-    .wizard-steps-wrapper .wizard-steps .stripe {
-        display: none;
-    }
-
-    .wizard-steps-wrapper .side-strip {
-        top: 128px;
-    }
-
-.wizard-top h2 {
-    clear: both;
-}
-
-.wizard-steps-wrapper .wizard-steps ul.application_steps {
-    float: none;
-    margin: 0 auto;
-}
-.wizard-steps-wrapper .wizard-steps {
-    padding:0;
-}
-/*end progress bar*/
-.broker-finish-wizard-later button {
-        right: 0;
-    position: static;
-}
-.marketplace-group {
-    text-align: center;
-}
-} 

@@ -118,7 +118,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				this.showEverlineHelp = false;
 
 				if (oEverlineDialog.length > 0)
-					$.colorbox({ inline: true, open: true, href: oEverlineDialog, maxWidth: '840px' });
+				    $.colorbox({ inline: true, open: true, href: oEverlineDialog, close: '<i class="pe-7s-close"></i>', maxWidth: '840px' });
 			}
 		} // if
 

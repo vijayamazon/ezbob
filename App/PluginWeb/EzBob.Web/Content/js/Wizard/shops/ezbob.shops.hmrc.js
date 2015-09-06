@@ -131,7 +131,9 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 				inline: true,
 				open: true,
 				href: oDialog,
-				width: '35%'
+				width: '35%',
+			    close: '<i class="pe-7s-close"></i>'
+
 			});
 		} // if
 	}, // getLinkHelp
