@@ -810,7 +810,7 @@ EzBob.ShowMessageEx = function(args) {
 	});
 
 	//added ezbob style
-	modalpopup.parents('.ui-dialog').find("button").addClass('btn btn-primary');
+	modalpopup.parents('.ui-dialog').find("button").addClass('button btn-green ev-btn-org');
 
 	return modalpopup;
 }; // EzBob.ShowMessageEx

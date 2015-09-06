@@ -121,3 +121,83 @@
     top: -1px;
     content: "";
 }
+
+/*Loan agreements*/
+
+#block-agreement {
+	margin-bottom: 20px;
+}
+
+.agreement .nav {
+	margin-bottom: 0;
+	margin-left: 23px;
+}
+
+.nav-tabs > .active > a {
+	color: #e28023;
+}
+
+	.nav > li > a:hover,
+	.nav-tabs > .active > a:hover {
+		color: #dc6e23;
+		text-decoration: underline;
+	}
+
+.agreement table {
+	border-color: transparent;
+}
+
+	.agreement table td {
+		background-color: transparent;
+	}
+
+.agreement .tab-pane.active {
+	border: 1px solid #28211f;
+	position: relative;
+	padding: 20px;
+}
+
+.overview.loan-agreement:after {
+	background: white url('../css/images/white-corner.png');
+	width: 25px;
+	height: 23px;
+	position: absolute;
+	left: -1px;
+	top: -1px;
+	content: "";
+}
+
+.LoanLegal {
+	margin-top: 20px;
+	background-color: #f1f0f0;
+	padding: 20px 20px 10px 20px;
+}
+
+.confirmationDialog .ui-dialog-titlebar{
+	display: none;
+}
+
+.agreements-checkboxes .click-wrap{
+	display: block;
+	width: 100%;
+	margin-left: 0;
+}
+
+div.sign-full-name {
+    width: 100%;
+}
+
+/*****JspScroll******/
+
+.jspVerticalBar {
+	width: 8px;
+}
+
+.jspTrack {
+	background: transparent;
+}
+
+.jspDrag {
+	background: #28211f;
+	min-height: 40px;
+}

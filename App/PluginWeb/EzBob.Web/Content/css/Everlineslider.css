@@ -814,9 +814,10 @@
 .sliders .overview .c_spn_4 {
     margin: 0 0 10px;
 }
-.calc-equal {
+.icon-plus, .calc-equal {
  display: none;   
 }
+
 @media screen and (max-width: 500px) {
     .sliders .summary .summary_total p {
         margin:0;

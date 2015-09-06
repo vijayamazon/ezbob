@@ -497,26 +497,22 @@ string formFieldID = "")
     </div>
 }
  @helper ClickableInputTag(EzInputBuilder inputButton, CustomerOriginEnum origin = CustomerOriginEnum.ezbob) {
-	var caption = new HtmlString(inputButton.Caption);
-	var identificator = new HtmlString(inputButton.Id);
-    if (origin != CustomerOriginEnum.everline)
-    {
-        @InputTextTag(inputButton, identificator);
-		<label
-			   @if (true) {
-					@: class="@inputButton.LabelClass"
-			   }
-			   @if (true) {
-				   @: for="@identificator"
-			   }
-		>@caption</label>
-    }
-    else
-    {
+	 var caption = new HtmlString(inputButton.Caption);
+	 var identificator = new HtmlString(inputButton.Id);
+	 if (origin != CustomerOriginEnum.everline) {
+		<div class="@inputButton.WrapperCls">
+			@InputTextTag(inputButton, identificator)
+			<label @if (true) { @: class="@inputButton.LabelClass"
+				   			  }
+				   @if (true) { @: for="@identificator"
+				   			  }
+			>@caption</label>
+		</div>
+	 } else {
         <div class="click-wrap ">
             <div class="click-input-wrap ">
                 @{
-					@InputTextTag(inputButton, identificator);
+					@InputTextTag(inputButton, identificator)
                 }
                 <label 
 					   @if (true) {

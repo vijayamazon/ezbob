@@ -540,27 +540,26 @@ textarea.invite_friend {
 }
 
 .eu-agreement-image {
-    height: 70px;
-    width: 100%;
-    display: block;
     background: url(../css/images/eurpe-fund.png) no-repeat 0 0;
-    -moz-background-size: contain;
+	-moz-background-size: contain;
     -o-background-size: contain;
     -webkit-background-size: contain;
     background-size: contain;
-	margin: 20px;
 }
 
 .eu-fund-image{
-    height: 70px;
-    width: 100%;
-    display: block;
     background: url(../css/images/eu.png) no-repeat 0 0;
-    -moz-background-size: contain;
+	-moz-background-size: contain;
     -o-background-size: contain;
     -webkit-background-size: contain;
     background-size: contain;
-	margin: 20px;
+}
+
+.eu-image {
+	height: 70px;
+    width: 100%;
+    display: block;
+	margin: 25px;
 }
 
 .fb-icon {
@@ -867,4 +866,9 @@ span.sign-full-name {
 
 .slider-wrapper{
 	padding-bottom: 30px;
+}
+
+.agreements-checkboxes label {
+	display: inline-block;
+	width: 90%
 }

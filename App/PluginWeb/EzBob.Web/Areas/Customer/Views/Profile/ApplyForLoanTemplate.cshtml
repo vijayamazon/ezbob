@@ -1,5 +1,7 @@
 ﻿@using System.Collections.Generic
+@using System.Diagnostics.Contracts
 @using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
@@ -32,74 +34,104 @@
 
 	<div class="eu-agreement-section corner-border clearfix">
 		<div class="overview loan-agreement simple-well corner-border-inner">
-			<div class="eu-agreement-images">
-				<div class="eu-fund-image"></div>
-				<div class="eu-agreement-image"></div>
-			</div>
-			<div class="eu-agreement-text">
-				<div class="eu-agreement-header">
-					<h3 class="eu-agreement-header-text">Your loan will be included in the EU EPMF program, please confirm:</h3>
+			<div class="clearfix">
+				<div class="eu-agreement-images">
+					<div class="eu-image eu-fund-image"></div>
+					<div class="eu-image eu-agreement-image"></div>
 				</div>
-				<ol>
-					<li>I Employ less than 10 persons.</li>
-					<li>Annual turnover is less then £ 1.5M.</li>
-					<li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
-					<li>Loan is for business purposes.</li>
-					<li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
-				</ol>
+				<div class="eu-agreement-text">
+					<div class="eu-agreement-header">
+						<h3 class="eu-agreement-header-text">Your loan will be included in the EU EPMF program, please confirm:</h3>
+					</div>
+					<ol>
+						<li>I Employ less than 10 persons.</li>
+						<li>Annual turnover is less then £ 1.5M.</li>
+						<li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
+						<li>Loan is for business purposes.</li>
+						<li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
+					</ol>
+				</div>
 			</div>
 		</div>
 	</div>
     
 	<div class="cosme-agreement-section corner-border clearfix">
 		<div class="overview loan-agreement simple-well corner-border-inner">
-			<div class="eu-agreement-images">
-				<div class="eu-fund-image"></div>
-				<div class="eu-agreement-image"></div>
-			</div>
-			<div class="eu-agreement-text">
-				<div class="eu-agreement-header">
-					<h3 class="eu-agreement-header-text">Your loan will be included in the EU COSME program, please confirm:</h3>
+			<div class="clearfix">
+				<div class="eu-agreement-images">
+					<div class="eu-image eu-fund-image"></div>
+					<div class="eu-image eu-agreement-image"></div>
 				</div>
-				<ol>
-					<li>I employ less than 250 people.</li>
-					<li>Annual turnover is less than £ 40M.</li>
-					<li>My company/business does not have a substantial focus on one or more of the following sectors: arms production and trading; human cloning; genetically modified organisms; tobacco or alcohol; gambling, pornography, internet piracy.</li>
-				</ol>
+				<div class="eu-agreement-text">
+					<div class="eu-agreement-header">
+						<h3 class="eu-agreement-header-text">Your loan will be included in the EU COSME program, please confirm:</h3>
+					</div>
+					<ol>
+						<li>I employ less than 250 people.</li>
+						<li>Annual turnover is less than £ 40M.</li>
+						<li>My company/business does not have a substantial focus on one or more of the following sectors: arms production and trading; human cloning; genetically modified organisms; tobacco or alcohol; gambling, pornography, internet piracy.</li>
+					</ol>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
-		<div class="controls">
-			<label class="checkbox">
-				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-pre-agreement" />
-				<span class="company-preAgreement">I have read and agree to the agreement terms</span>
-				<span style="display: none" class="consumer-preAgreement">I have read and agree to the pre-contract terms</span>
-			</label>
-			<label class="checkbox">
-				<input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-agreement" />
-				<span class="company-preAgreement">I have read and agree to the guaranty terms</span>
-				<span style="display: none" class="consumer-preAgreement">I have read and agree to the contract terms</span>
-			</label>
-			<label class="checkbox eu-agreement-section">
-				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-eu-agreement" />
-				I agree to the EU program terms
-			</label>
-            <label class="checkbox cosme-agreement-section">
-                <input type="checkbox" id="cosmeAgreementTermsRead" name="cosmeAgreementTermsRead" class="cosmeAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-cosme-agreement" />
-                I agree to the EU COSME program terms
-            </label>
+		<div class="controls agreements-checkboxes">
+			@EzForm.ClickableInputTag(new EzInputBuilder("preAgreementTermsRead", 
+				"<span class=\"company-preAgreement\">I have read and agree to the agreement terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the pre-contract terms</span>",
+				value: "true",
+				type: "checkbox",
+				cls: "preAgreementTermsRead",
+				isRequired: true,
+				uiEventControlID: "loan-legal:apply-for-loan-pre-agreement"), 
+				origin: origin)
+			
+			@EzForm.ClickableInputTag(new EzInputBuilder("agreementTermsRead", 
+				"<span class=\"company-preAgreement\">I have read and agree to the guaranty terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the contract terms</span>",
+				value: "true",
+				type: "checkbox",
+				cls: "agreementTermsRead",
+				isRequired: true,
+				uiEventControlID: "loan-legal:apply-for-loan-agreement"),
+				origin: origin)
+			
+			@EzForm.ClickableInputTag(new EzInputBuilder("euAgreementTermsRead", "I agree to the EU program terms", 
+				value: "true", 
+				type: "checkbox", 
+				cls: "euAgreementTermsRead", 
+				wrapperCls: "eu-agreement-section",
+				labelClass: "eu-agreement-section",
+				isRequired: true, 
+				uiEventControlID: "loan-legal:apply-for-loan-eu-agreement"), origin: origin)
+
+			@EzForm.ClickableInputTag(new EzInputBuilder("cosmeAgreementTermsRead", "I agree to the EU COSME program terms",
+				value: "true",
+				type: "checkbox",
+				cls: "cosmeAgreementTermsRead",
+				wrapperCls: "cosme-agreement-section",
+				labelClass: "cosme-agreement-section",
+				isRequired: true,
+				uiEventControlID: "loan-legal:apply-for-loan-cosme-agreement"),
+				origin: origin)
+			
+			@EzForm.ClickableInputTag(new EzInputBuilder("notInBankruptcy", "I have read and confirm the solvency representations and warranties",
+				value: "true",
+				type: "checkbox",
+				cls: "notInBankruptcy",
+				wrapperCls: "notInBankruptcyContainer",
+				labelClass: "notInBankruptcyContainer",
+				isRequired: true, specialAttributes: new Dictionary<string, string>{ {
+					"readonly", "readonly"
+				} },
+				uiEventControlID: "loan-legal:not-in-bankruptcy"), 
+				origin: origin)
+			
 			<!-- label class="checkbox quick-offer-section">
 				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-director" />
 				I have read and agree to the directors' consent declaration
 			</label -->
 
-			<label class="checkbox notInBankruptcyContainer">
-				<input type="checkbox" id="notInBankruptcy" class="notInBankruptcy" name="notInBankruptcy" value="true" readonly="readonly" ui-event-control-id="loan-legal:not-in-bankruptcy" />
-				I have read and confirm the solvency representations and warranties
-			</label>
-			
 			<div class="loan-disclosure-text hide">
 				<h3>DISCLOSURE FOR REGULATED LOANS: (LOANS MADE TO INDIVIDUALS)</h3>
 				You hereby represent and warranty that at the date of applying for and accepting this loan, you are not: (i) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (ii) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (iii) bankrupt or considering filing for bankruptcy in the coming 12 month period.
@@ -108,20 +140,20 @@
 			</div>
 
 			<div class="form_field_container"></div>
-			
+
 			<span class="sign-full-name hide">Signature:</span>
-			@EzForm.InputTextWizard(new EzInputBuilder("signedName", "Type your full name", 
-				cls: "form_field", 
-				wrapperCls: "sign-full-name hide", 
-				isRequired: true, 
-				statusIcon: true, 
-				uiEventControlID: "loan-legal:signed-name"), 
+			@EzForm.InputTextWizard(new EzInputBuilder("signedName", "Type your full name",
+				cls: "form_field",
+				wrapperCls: "sign-full-name hide",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "loan-legal:signed-name"),
 				origin: origin)
-			
-            <input type="hidden" name="loanAmount" id="loanAmount" />
-            <input type="hidden" name="repaymentPeriod" id="repaymentPeriod" />
+
+			<input type="hidden" name="loanAmount" id="loanAmount" />
+			<input type="hidden" name="repaymentPeriod" id="repaymentPeriod" />
 		</div>
-		
+
 		@EzForm.WizardButton(new List<EzButtonModel>{
 			new EzButtonModel(null, "Continue",
 				cls: "btn-continue button btn-green ev-btn-org submit",
@@ -234,7 +266,7 @@
 
 @helper PrintDownload() {
 	<div style="padding-top: 25px; padding-right: 25px;">
-		<a href="#" class="pull-right print print-link" ui-event-control-id="loan-legal:print-agreement">Print</a>
-		<a href="#" target="_blank" style="margin-right: 20px;" class="pull-right download pdf-link" ui-event-control-id="loan-legal:download-agreement">Download</a>
+		<a href="#" class="pull-right print print-link clean-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
+		<a href="#" target="_blank" style="margin-right: 20px;" class="pull-right download pdf-link clean-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
 	</div>  
 }

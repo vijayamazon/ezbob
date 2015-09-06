@@ -497,15 +497,12 @@ a.clean-btn:focus,
         margin-bottom: 20px;
     }
 
-
- 
-
 a.ev-btn-org,
 .ev-btn-org,
 .ui-widget button.ev-btn-org {
 	font-family: 'Open Sans', sans-serif;
     line-height: 44px;
-    font-size: 18px;
+    font-size: 18px !important;
     font-weight: 600;
 	height: 50px !important;
     cursor: pointer;
@@ -519,11 +516,11 @@ a.ev-btn-org,
     -ms-transition: all 0.1s ease-out;
     -o-transition: all 0.1s ease-out;
     transition: all 0.1s ease-out;
-    color: #ffffff;
+    color: #ffffff !important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    text-decoration: none;
+    text-decoration: none !important;
 	display: inline-block;
 }
 
