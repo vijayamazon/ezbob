@@ -17,8 +17,10 @@ namespace TeamCityEngine
 
         public void AddJob(string buildRegressionId, string teamcityIncludeParameterName, string includingCases)
         {
-            TeamCityManager.Instance.BuildConfigs.SetConfigurationParameter(BuildTypeLocator.WithId(buildRegressionId), teamcityIncludeParameterName, includingCases);
-            TeamCityManager.Instance.Builds.Add2QueueBuildByBuildConfigId(buildRegressionId);
+            if (!string.IsNullOrEmpty(includingCases)) {
+                TeamCityManager.Instance.BuildConfigs.SetConfigurationParameter(BuildTypeLocator.WithId(buildRegressionId), teamcityIncludeParameterName, includingCases);
+                TeamCityManager.Instance.Builds.Add2QueueBuildByBuildConfigId(buildRegressionId);                
+            }
         }
     }
 }

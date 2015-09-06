@@ -9,6 +9,7 @@
     using TeamCityEngine;
     using TestRailEngine;
     using TestRailModels.Automation;
+    using TestRailModels.TestRail;
 
     public class AutomationFacade 
     {
@@ -74,8 +75,12 @@
         }
 
         internal static void CreateAutomationTestPlan(int id) {
-            AutomationModels.Label plantype = (AutomationModels.Label)id;
+            Label plantype = (Label)id;
             TestRailEngine.CreateAutomationTestPlan(plantype);
+        }
+
+        public Stream GetDependenciesReport() {
+            return TestRailEngine.GetDependenciesReport();
         }
     }
 }

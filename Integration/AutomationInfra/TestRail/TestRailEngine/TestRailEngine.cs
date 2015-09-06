@@ -140,10 +140,9 @@
                     List<ulong> caseIds = TestRailManager.CasesRepository[key].Where(x => x.Labels.Contains(label))
                         .Select(x => x.ID ?? 0)
                         .ToList();
-
-                    if (caseIds.Count > 1) {
+                    if (caseIds.Count > 1) {   
                         Run run = new Run() {
-                            Name = key.ToString(),
+                            Name = TestRailManager.SuiteRepository[key].Name,
                             ConfigIDs = configList,
                             CaseIDs = caseIds.ToHashSet(),
                             IncludeAll = false
@@ -153,7 +152,7 @@
                     }
                 }
 
-                ulong planEntryId = TestRailManager.Instance.AddPlanEntry(planId, key, key.ToString(), 7, null, runList).Value;
+                ulong planEntryId = TestRailManager.Instance.AddPlanEntry(planId, key, TestRailManager.SuiteRepository[key].Name, 7, null, runList).Value;
             }
         }
 
@@ -162,6 +161,10 @@
             if (ezbobProject != null) {
                 BuildTestRailPlan(ezbobProject.ID, label);
             }
+        }
+
+        public static System.IO.Stream GetDependenciesReport() {
+            return TestRailDependencies.GetDependenciesReport();
         }
     }
 }
