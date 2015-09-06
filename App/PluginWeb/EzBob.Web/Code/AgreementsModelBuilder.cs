@@ -169,7 +169,7 @@
             }).ToList();
         }
 
-		/// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref /> is null.</exception>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
 		/// <exception cref="NullReferenceException"><paramref name="name" /> is null. </exception>
 		public void CalculateTotal(decimal fee, List<LoanScheduleItem> schedule, AgreementModel model) {
