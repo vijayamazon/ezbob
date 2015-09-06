@@ -31,20 +31,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	IF @CompanyRefNum IS NOT NULL AND @CompanyRefNum != ''
-	BEGIN
-		SELECT TOP 1
-			@ServiceLogID = l.Id
-		FROM
-			MP_ServiceLog l
-		WHERE
-			l.CompanyRefNum = @CompanyRefNum
-			AND (
-				@Now IS NULL OR l.InsertDate < @Now
-			)
-		ORDER BY
-			l.InsertDate DESC,
-			l.Id DESC
-	END
+		SET @ServiceLogID = dbo.udfGetCompanyHistoricalLogID(@CompanyRefNum, @Now)
 
 	------------------------------------------------------------------------------
 

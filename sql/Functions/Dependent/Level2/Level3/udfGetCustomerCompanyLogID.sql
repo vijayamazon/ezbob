@@ -13,7 +13,7 @@ BEGIN
 		SELECT TOP 1
 			ServiceLogID
 		FROM
-			dbo.udfGetCustomerCompanyLogID(@CustomerID, NULL)
+			dbo.udfGetCustomerHistoricalCompanyLogID(@CustomerID, NULL)
 	)
 
 	------------------------------------------------------------------------------

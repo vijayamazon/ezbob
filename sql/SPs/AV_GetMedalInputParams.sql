@@ -15,6 +15,9 @@ BEGIN
 	DECLARE @RegistrationDate DATETIME
 	DECLARE @MaritalStatus NVARCHAR(100)
 	DECLARE @TypeOfBusiness NVARCHAR(100)
+	DECLARE @CompanyServiceLogID BIGINT
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		@RegistrationDate = GreetingMailSentDate,
@@ -24,6 +27,15 @@ BEGIN
 		Customer 
 	WHERE
 		Id = @CustomerId
+
+	------------------------------------------------------------------------------
+
+	SELECT
+         @CompanyServiceLogID = ServiceLogID
+     FROM
+         dbo.udfGetCustomerHistoricalCompanyLogID(@CustomerID, @Now)
+
+	------------------------------------------------------------------------------
 
 	-- BusinessScore IncorporationDate TangibleEquity CurrentBalanceSum taken from CustomerAnalyticsCompany
 	DECLARE @BusinessScore INT = 0
