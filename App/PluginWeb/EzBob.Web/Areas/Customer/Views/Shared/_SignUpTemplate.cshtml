@@ -8,7 +8,7 @@
 @using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
-    List<Tuple<string, string>> securityQuestions = (ViewData["Questions"] as List<SecurityQuestion>).Select(x => new Tuple<string, string>(x.Id.ToString(), x.Name)).ToList(); ;
+    List<Tuple<string, string>> securityQuestions = (ViewData["Questions"] as List<SecurityQuestion>).Select(x => new Tuple<string, string>(x.Id.ToString(), x.Name)).ToList();
     // var securityQuestions = ViewData["Questions"] as List<Tuple<int, string>>;
 	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
     string captchamode = CurrentValues.Instance.CaptchaMode;

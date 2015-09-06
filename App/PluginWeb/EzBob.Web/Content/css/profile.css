@@ -446,15 +446,6 @@ html body .right {
     color: #0b73b4;
 }
 
-/*.company-info input[type="text"], input[type="password"],
-.personal-info input[type="text"], input[type="password"], .changePassword input[type="text"],
-.personal-info textarea {
-    width: 95%;
-}
-.changePassword select {
-    width: 100%;
-}*/
-
 .dashboard-frame td.caption {
     height: 35px;
     font-size: 16px;

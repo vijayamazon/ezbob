@@ -7,7 +7,6 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
-	using ExperianLib.Ebusiness;
 	using Ezbob.Logger;
 	using Iesi.Collections.Generic;
 	using Infrastructure.Attributes;
@@ -21,25 +20,22 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Linq;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-    using PaymentServices.Calculators;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using PaymentServices.Calculators;
 
 	public class ProfileController : Controller {
 
 		public ProfileController(
 			CustomerModelBuilder oCustomerModelBuilder,
 			IEzbobWorkplaceContext oContext,
-			CashRequestBuilder oCashRequestBuilder,
 			ISession oSession,
-			PayPointAccountRepository payPointAccountRepository
-		) {
+			ISecurityQuestionRepository questions) {
 			m_oCustomerModelBuilder = oCustomerModelBuilder;
 			m_oContext = oContext;
 			m_oServiceClient = new ServiceClient();
-			m_oCashRequestBuilder = oCashRequestBuilder;
 			m_oSession = oSession;
-			this.payPointAccountRepository = payPointAccountRepository;
+			this.questions = questions;
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
@@ -58,7 +54,7 @@
 				hostname,
 				true
 			);
-
+			ViewData["Questions"] = this.questions.GetAll().ToList();
 			ViewData["ShowChangePasswordPage"] = m_oContext.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = m_oSession
@@ -379,10 +375,9 @@
 		private readonly CustomerModelBuilder m_oCustomerModelBuilder;
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly CashRequestBuilder m_oCashRequestBuilder;
 		private readonly ISession m_oSession;
-		private readonly PayPointAccountRepository payPointAccountRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
 		private string hostname;
+		private readonly ISecurityQuestionRepository questions;
 	} // class ProfileController
 } // namespace

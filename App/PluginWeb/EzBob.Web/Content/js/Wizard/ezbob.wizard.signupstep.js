@@ -161,8 +161,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 
 	inputChanged: function(evt) {
-		this.setFieldStatusNotRequired(evt, 'promoCode');
-
 		var enabled = EzBob.Validation.checkForm(this.validator);
 
 		var isInCaptchaMode = !this.$el.find('#captchaDiv').hasClass('hide');
@@ -172,13 +170,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	amountFocused: function() {
 		this.$el.find('#amount').change();
-	},
-
-	setFieldStatusNotRequired: function(evt, el) {
-		if (evt && evt.target.id === el && evt.target.value === '') {
-			var img = $(evt.target).closest('div').find('.field_status');
-			img.field_status('set', 'empty', 2);
-		} // if
 	},
 
 	generateMobileCode: function() {

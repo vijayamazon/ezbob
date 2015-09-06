@@ -100,7 +100,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		} // if
 	}, // businessTypeSelected
 
-	inputChanged: function(evt) {
+	inputChanged: function (evt) {
+		this.setFieldStatusNotRequired(evt, 'promoCode');
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
 			this.typeOfBusinessChanged();
 
@@ -109,6 +110,13 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		$('.btn-continue').toggleClass('disabled', !enabled);
 		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
+
+	setFieldStatusNotRequired: function (evt, el) {
+		if (evt && evt.target.id === el && evt.target.value === '') {
+			var img = $(evt.target).closest('div').find('.field_status');
+			img.field_status('set', 'empty', 2);
+		} // if
+	},//setFieldStatusNotRequired
 
 	isEnabled: function() {
 		var enabled = this.validator.checkForm();

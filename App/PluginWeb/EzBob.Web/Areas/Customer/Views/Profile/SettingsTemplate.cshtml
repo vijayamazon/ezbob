@@ -1,129 +1,161 @@
-﻿@model dynamic
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@using EZBob.DatabaseLib.Model.Database.UserManagement
+@model dynamic
+@{
+	List<Tuple<string, string>> securityQuestions = (ViewData["Questions"] as List<SecurityQuestion>)
+		.Select(x => new Tuple<string, string>(x.Id.ToString(), x.Name))
+		.ToList();
 
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 <script id="settings-main-template" type="text/template">
-	<div class="form-horizontal settings-form">
+	<div class="settings-form">
 		<%
 		var questionName = null;
 		
 		if (settings.SecurityQuestions && settings.SecurityQuestions.get(settings.SecurityQuestionId))
 			 questionName = settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name');
 		%>
-
-		<div class="row form_field_container">
-			<div class="span8 input-wrapper">
-				<div class="control-group">
-					<label class="control-label">Password</label>
-					<div class="controls">
-						<input type="text" readonly="readonly" value="**********" class="form_field" />
-						<a href="#" class="btn-details button btn-green edit-password ev-btn-org" ui-event-control-id="setting:edit-password">Edit</a>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">Security Question</label>
-					<div class="controls">
-						<input type="text" readonly="readonly" class="security-answer form_field" value="<%- questionName %>" />
-						<a href="#" class="btn-details button btn-green edit-question ev-btn-org" ui-event-control-id="settings:edit-question">Edit</a>
-					</div>
-				</div>
-			</div>
-		</div>
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Password", 
+			cls: "form_field_left_side form_field",
+			value: "**********",
+			uiEventControlID: "setting:password",
+			specialAttributes: new Dictionary<string, string> { {"readonly", "readonly"}},
+			button: new EzButtonModel(null, "Edit",
+				"btn-details button btn-green edit-password clean-btn",
+				"setting:edit-password", 
+				buttonType: EzButtonType.link,
+				href:"#")
+		), origin: origin)
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Security Question",
+			cls: "form_field_left_side form_field",
+			value: "<%- questionName %>",
+			uiEventControlID: "settings:question",
+			specialAttributes: new Dictionary<string, string> { { "readonly", "readonly" } },
+			button: new EzButtonModel(null, "Edit",
+				"btn-details button btn-green edit-question clean-btn",
+				"settings:edit-question",
+				buttonType: EzButtonType.link,
+				href: "#")
+		), origin: origin)
 	</div>
 </script>
 
 <script id="settings-password-template" type="text/template">
-	<form id="change-password" action="" method="POST" class="form_field_container">
-		<fieldset class="input-wrapper">
+	<form id="change-password" action="" method="POST">
 			<h2>Select your new password</h2>
-			<div class="span8">
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span class="">Current password</span>
-							<input id="password" type="password" name="password" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:current-password" />
-						</label>
-					</div>
-				</div>
+			
+			@EzForm.InputTextWizard(
+				new EzInputBuilder(
+						"password", "Current password",
+						type: "password",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						specialAttributes: new Dictionary<string, string> { { "autocomplete", "off" } },
+						uiEventControlID: "settings:current-password"),
+				origin: origin)
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span class="">New password</span>
-							<input id="new_password" type="password" name="new_password" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:new-password" />
-						</label>
-					</div>
-				</div>
+			@EzForm.InputTextWizard(
+				new EzInputBuilder(
+						"new_password",
+						"New password",
+						type: "password",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						specialAttributes: new Dictionary<string, string> { { "autocomplete", "off" } },
+						uiEventControlID: "settings:new-password"),
+				origin: origin)
+		
+			@EzForm.InputTextWizard(
+				new EzInputBuilder(
+						"new_password2",
+						"Confirm password",
+						type: "password",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						specialAttributes: new Dictionary<string, string> { { "autocomplete", "off" } },
+						uiEventControlID: "settings:new-password-confirm"),
+				origin: origin)
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span class="">Confirm password</span>
-							<input id="new_password2" type="password" name="new_password2" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:new-password-confirm" />
-						</label>
-					</div>
-				</div>
-
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<a href="#" class="btn-continue button btn-green submit ev-btn-org" ui-event-control-id="settings:submit-password">Submit</a>
-						<a href="#" class="btn-back button btn-grey back ev-btn-org" ui-event-control-id="settings:password-back">Back</a>
-					</div>
-				</div>
-			</div>
-		</fieldset>
+			@EzForm.WizardButton(
+				new List<EzButtonModel>{
+					new EzButtonModel(
+						null,
+						"Submit",
+						cls: "btn-continue button btn-green submit ev-btn-org",
+						uiEventControlID: "settings:submit-password",
+						buttonType: EzButtonType.link,
+						href: "#"),
+					new EzButtonModel(
+						null,
+						"Back",
+						cls: "btn-back button btn-grey back ev-btn-org",
+						uiEventControlID: "settings:password-back",
+						buttonType: EzButtonType.link,
+						href: "#")
+				},
+				origin: origin)
 	</form>
 </script>
 
 <script id="settings-question-template" type="text/template">
-	<form class="changePassword form_field_container">
-		<fieldset class="input-wrapper">
+	<form id="change-question">
 			<h2>Security question</h2>
+				@EzForm.InputTextWizard(
+					new EzInputBuilder(
+							"currentPassword", "Current password",
+							name: "password",
+							type: "password",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							specialAttributes: new Dictionary<string, string> { { "autocomplete", "off" } },
+							uiEventControlID: "settings:question-current-password"),
+					origin: origin)
+		
+				@EzForm.SelectWizard(new EzSelectModel("securityQuestion", "Question", 
+					cls: "form_field", 
+					listItems: securityQuestions,
+					isRequired: true, 
+					statusIcon: true, 
+					hasEmpty: false,
+					uiEventControlID: "settings:question"),
+					origin: origin)
+				
+				@EzForm.InputTextWizard(new EzInputBuilder("SecurityAnswer", "Answer", 
+					cls: "form_field",
+					name: "answer",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "settings:question-answer"), 
+					origin: origin)
 
-			<div class="span8">
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span class="">Current password</span>
-							<input type="password" name="password" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:question-current-password" />
-						</label>
-					</div>
-				</div>
-
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span class="">Question</span>
-
-							<select class="form_field" ui-event-control-id="settings:question"><%
-								_.each(settings.SecurityQuestions.toJSON(), function(question) {
-									if (settings.SecurityQuestionId !== undefined) {
-										%><option value="<%- question.Id %>" <% if (question.Id == settings.SecurityQuestionId) { %>selected="selected"<% } %>><%- question.Name %></option><%
-									}
-									else {
-										%><option value="<%- question.Id %>"><%- question.Name %></option><%
-									}
-								});
-							%></select>
-						</label>
-					</div>
-				</div>
-
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span class="">Answer</span>
-							<input type="text" name="answer" class="form_field" value="" ui-event-control-id="settings:question-answer" />
-						</label>
-					</div>
-				</div>
-
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<a href="#" class="btn-continue button btn-green submit disabled ev-btn-org" ui-event-control-id="settings:submit-question">Submit</a>
-						<a href="#" class="btn-back back button btn-grey ev-btn-org" ui-event-control-id="settings:question-back">Back</a>
-					</div>
-				</div>
-			</div>
-		</fieldset>
+				@EzForm.WizardButton(
+				new List<EzButtonModel>{
+					new EzButtonModel(
+						null,
+						"Submit",
+						cls: "btn-continue button btn-green submit disabled ev-btn-org",
+						uiEventControlID: "settings:submit-question",
+						buttonType: EzButtonType.link,
+						href: "#"),
+					new EzButtonModel(
+						null,
+						"Back",
+						cls: "btn-back back button btn-grey ev-btn-org",
+						uiEventControlID: "settings:question-back",
+						buttonType: EzButtonType.link,
+						href: "#")
+				},
+				origin: origin)
 	</form>
 </script>
