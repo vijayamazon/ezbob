@@ -246,8 +246,7 @@ string hiddenFieldAuxClass = "",
                 <label class="input-title" >@title</label>
                 <div class="input-wrapper ">
                     <div class="attardi-input select @labelCss">
-
-                        @SelectTag(dayselect, new HtmlString(dayIdentificator), origin)
+						@SelectTag(dayselect, new HtmlString(dayIdentificator), origin)
                     </div>
                     <div class="select attardi-input @labelCss">
                         @SelectTag(monthselect, new HtmlString(monthIdentificator), origin)
@@ -269,26 +268,18 @@ string hiddenFieldAuxClass = "",
             <div class="controls ezDateTime">
                 <label class="attardi-input @labelCss">
                     <span>Day</span>
-               
-                    
-
                     @SelectTag(dayselect, new HtmlString(dayIdentificator))
-
                 </label>
 
                 <label class="attardi-input @labelCss">
                     <span>Month</span>
-                 
                     @SelectTag(monthselect, new HtmlString(monthIdentificator))
-                  
                 </label>
 
                 <label class="attardi-input @labelCss">
                     <span>Year</span>
-                
                     @SelectTag(yearselect, new HtmlString(yearIdentificator))
                    </label>
-
               
                 @{ page.WriteLiteral(hidden); }
                 @if (statusIcon)
@@ -296,12 +287,9 @@ string hiddenFieldAuxClass = "",
                     var sReq = required ? "required" : "";
                     var sId = new HtmlString(name + "Image");
                     page.WriteLiteral(string.Format("<img id='{0}' class='field_status {1}'/>", sId, sReq));
-
                 }
             </div>
         }
-
-      
     </div>
 }
 
@@ -500,7 +488,7 @@ string formFieldID = "")
 	 var caption = new HtmlString(inputButton.Caption);
 	 var identificator = new HtmlString(inputButton.Id);
 	 if (origin != CustomerOriginEnum.everline) {
-		<div class="@inputButton.WrapperCls">
+		<div class="input-tag-wrap @inputButton.WrapperCls">
 			@InputTextTag(inputButton, identificator)
 			<label @if (true) { @: class="@inputButton.LabelClass"
 				   			  }

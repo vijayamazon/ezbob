@@ -13,26 +13,26 @@
 	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
 }
 <script id="settings-main-template" type="text/template">
-	<div class="settings-form">
+	<div class="settings-form ev-form">
 		<%
 		var questionName = null;
-		
+
 		if (settings.SecurityQuestions && settings.SecurityQuestions.get(settings.SecurityQuestionId))
-			 questionName = settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name');
+		questionName = settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name');
 		%>
-		
-		@EzForm.InputTextWizard(new EzInputBuilder(null, "Password", 
+
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Password",
 			cls: "form_field_left_side form_field",
 			value: "**********",
 			uiEventControlID: "setting:password",
-			specialAttributes: new Dictionary<string, string> { {"readonly", "readonly"}},
+			specialAttributes: new Dictionary<string, string> { { "readonly", "readonly" } },
 			button: new EzButtonModel(null, "Edit",
 				"btn-details button btn-green edit-password clean-btn",
-				"setting:edit-password", 
+				"setting:edit-password",
 				buttonType: EzButtonType.link,
-				href:"#")
+				href: "#")
 		), origin: origin)
-		
+
 		@EzForm.InputTextWizard(new EzInputBuilder(null, "Security Question",
 			cls: "form_field_left_side form_field",
 			value: "<%- questionName %>",
@@ -48,10 +48,10 @@
 </script>
 
 <script id="settings-password-template" type="text/template">
-	<form id="change-password" action="" method="POST">
-			<h2>Select your new password</h2>
-			
-			@EzForm.InputTextWizard(
+	<form id="change-password" class="ev-form" action="" method="POST">
+		<h2>Select your new password</h2>
+
+		@EzForm.InputTextWizard(
 				new EzInputBuilder(
 						"password", "Current password",
 						type: "password",
@@ -62,7 +62,7 @@
 						uiEventControlID: "settings:current-password"),
 				origin: origin)
 
-			@EzForm.InputTextWizard(
+		@EzForm.InputTextWizard(
 				new EzInputBuilder(
 						"new_password",
 						"New password",
@@ -73,8 +73,8 @@
 						specialAttributes: new Dictionary<string, string> { { "autocomplete", "off" } },
 						uiEventControlID: "settings:new-password"),
 				origin: origin)
-		
-			@EzForm.InputTextWizard(
+
+		@EzForm.InputTextWizard(
 				new EzInputBuilder(
 						"new_password2",
 						"Confirm password",
@@ -86,7 +86,7 @@
 						uiEventControlID: "settings:new-password-confirm"),
 				origin: origin)
 
-			@EzForm.WizardButton(
+		@EzForm.WizardButton(
 				new List<EzButtonModel>{
 					new EzButtonModel(
 						null,
@@ -108,7 +108,7 @@
 </script>
 
 <script id="settings-question-template" type="text/template">
-	<form id="change-question">
+	<form id="change-question" class="ev-form">
 			<h2>Security question</h2>
 				@EzForm.InputTextWizard(
 					new EzInputBuilder(

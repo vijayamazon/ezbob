@@ -7,6 +7,7 @@
 		{ caption: 'Enter Bank & Debit', title: EzBob.Config.Origin == 'everline' ? 'Bank details' : 'Enter Bank & Debit' },
 		{ caption: 'Receive funds', title: EzBob.Config.Origin == 'everline' ? 'Receive funds' : 'Get Cash' }
 		];
+		var greenWidth = 23 * (current + 1);
 		%>
 		<div class="side-strip"></div>
 		<div class="dashboard-steps wizard-steps">
@@ -14,12 +15,8 @@
 			<div class="steps-wrap">
 				<div class="stripe"></div>
 				<div class="progress-bar">
-					<div class="green-line" style="width: 23%;">
-
-					</div>
-					<div class="grey-line">
-
-					</div>
+					<div class="green-line" style="width: <%-greenWidth%>%;"></div>
+					<div class="grey-line"></div>
 				</div>
 
 				<ul class="application_steps">

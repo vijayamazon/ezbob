@@ -1789,13 +1789,17 @@ input.form_field_left_side { max-width: 60%; }
 button.form_field_right_side,
 input.form_field_right_side {
     float: right;
-    margin-right: 9px; 
+    margin-right: 20px; 
     width: 32%;
     max-width: 180px;
     height: 36px;
 }
 
-.form_field_right_side_signup_phone { float: right; margin-right: 10px; width: 26%;height: 36px; }
+.form_field_right_side_signup_phone { float: right; margin-right: 20px; width: 26%; height: 36px; }
+
+.input-tag-wrap {
+    display: inline;
+}
 
 .address_input_form_field {
     white-space: pre;

@@ -139,7 +139,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		});
 	}, // recalculateSchedule
 
-	renderSchedule: function(schedule) {
+	renderSchedule: function (schedule) {
+		if (!schedule || !schedule.Schedule) {
+			return false;
+		}
+
 		this.lastPaymentDate = moment(schedule.Schedule[schedule.Schedule.length - 1].Date);
 
 		var scheduleView = new EzBob.LoanScheduleView({

@@ -60,7 +60,10 @@ EzBob.Validation.errorPlacement = function (error, element) {
     EzBob.Validation.unhighlight(element);
     if (EzBob.Config.Origin === 'everline') {
         if (error.text()) {
-            error.appendTo(element.siblings(".error-wrap"));
+        	error.appendTo(element.siblings(".error-wrap"));
+        	if ($(element).hasClass('SortCodeSplit')) {
+        		error.appendTo(element.parent().siblings(".error-wrap"));
+        	}
         }
     } else {
         if (error.text()) {
@@ -127,8 +130,10 @@ EzBob.Validation.unhighlightFS = function (element) {
         else if ($(element).attr('class') === 'address-field') {
             $(element).find('.form_field_left_side:not(.addAddressInput)').css('border-bottom', '2px solid #7ac143');
         }
-        else
-        {
+        else if ($(element).hasClass('SortCodeSplit')) {
+        	$('.form_field_look').css('border-bottom', '2px solid #7ac143');
+        }
+        else {
             $(element).css('border-bottom', '2px solid #7ac143');
         }
     } else {
@@ -152,9 +157,11 @@ EzBob.Validation.highlightFS = function (element) {
             $('.form_field_date').css('border-bottom', '2px solid red');
         } else if ($(element).attr('class') === 'address-field') {
             $(element).find('.form_field_left_side').css('border-bottom', '2px solid red');
-        } else {
-        $(element).css('border-bottom', '2px solid red');
-        }
+        } else if ($(element).hasClass('SortCodeSplit')) {
+        	$('.form_field_look').css('border-bottom', '2px solid red');
+	    } else {
+		    $(element).css('border-bottom', '2px solid red');
+	    }
 
     } else {
       

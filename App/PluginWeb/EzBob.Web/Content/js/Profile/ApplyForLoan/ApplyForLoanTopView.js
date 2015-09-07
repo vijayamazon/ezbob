@@ -26,21 +26,21 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			isLoanTypeSelectionAllowed: this.customer.get('IsLoanTypeSelectionAllowed')
 		});
 		this.states = {
-			apply: this.createApplyForLoanView,
-			bank: this.createAddBankAccountView
+			apply: { view: this.createApplyForLoanView, step: 0 },
+			bank: { view: this.createAddBankAccountView, step: 1 }
 		};
 		return this.model.on("change", this.render, this);
 	},
 	onRender: function () {
 		var region, view;
-		view = this.states[this.model.get("state")](this);
+		view = this.states[this.model.get("state")].view(this);
 		region = new Backbone.Marionette.Region({
 			el: this.$el.find('.apply-for-loan-div')
 		});
 		region.show(view);
 
 		var steps = _.template($('#steps-dashboard-template').html());
-		$('.dashboard-steps-container').html(steps({ current: 0 }));
+		$('.dashboard-steps-container').html(steps({ current: this.states[this.model.get("state")].step }));
 		return false;
 	},
 	createApplyForLoanView: function (_this) {

@@ -1,4 +1,10 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <script id="bank-account-instructions" type="text/template">
 	<div class="row-fluid">
@@ -6,49 +12,106 @@
 		<div class="wizard-top-notification">
 			<h2>Your Bank Details</h2>
 		</div>
-		<form id="bankAccount">
+		<form id="bankAccount" class="ev-form">
 			<div class="bank-account-instructions clearfix">
 				<div class="bank-account">
-					<div class="control-group form_field_container">
-						<div class="controls">
-							<label class="attardi-input">
-								<span>Account number</span>
-								<input id="AccountNumber" name="AccountNumber" type="text" value="" autofocus="autofocus" class="AccountNumber form_field" maxlength="8" ui-event-control-id="bank-details:account-number" />
-								<img class="field_status required" id="AccountNumberImage" />
-							</label>
+					
+					@EzForm.InputTextWizard(new EzInputBuilder("AccountNumber", "Account number",
+							cls: "AccountNumber form_field", 
+							isRequired: true, 
+							statusIcon: true,
+							uiEventControlID: "bank-details:account-number",
+							maxLength:8,
+							tabIndex: 1, 
+							specialAttributes: new Dictionary<string, string> { { "autofocus", "autofocus" } }), 
+						origin: origin)
+					
+						@if (origin == CustomerOriginEnum.everline) {
+							<div class="control-group form_field_container" id="SortCode">
+								<label class="input-title">Sort Code</label>
+								<div class="input-wrapper ezSortCode">
+									<div class="attardi-input ezSortCode1">
+										<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-1" tabindex="2"/>
+									</div>
+									<div class="attardi-input ezSortCode2">
+										<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-2" tabindex="3"/>
+									</div>
+									<div class="attardi-input ezSortCode3">
+										<input class="form_field_look" id="SortCode3" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-3" tabindex="4"/>
+										<input type="hidden" class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit"/>
+									</div>
+									<div class="error-wrap"></div>
+								</div>
+							</div>
+						 } else {
+							<div class="control-group form_field_container" id="SortCode">
+								<div class="controls ezSortCode">
+									<label class="attardi-input">
+										<span>Sort Code</span>
+										<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="bank-details:sort-code-1" tabindex="2" />
+										<span></span>
+										<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="bank-details:sort-code-2" tabindex="3" />
+										<span></span>
+										<input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="bank-details:sort-code-3" tabindex="4" />
+										<img class="field_status required" id="SortCodeImage" />
+									</label>
+									<input type="hidden" class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" />
+								</div>
+							</div>
+						}
+						
+						@EzForm.ClickableInputWizard(new EzClickInputModel(
+							caption: "Account type ",
+							errorImgClass: "field_status required personal-details-gender-image",
+							inputWrapperClass: "",
+							isRequired: true,
+							statusIcon: true,
+							inputButtons: new List<EzInputBuilder> {
+					   			new EzInputBuilder("baPersonal", "Personal",
+					   				value: "Personal",
+					   				type: "radio",
+					   				cls: "required",
+					   				isRequired: true,
+					   				statusIcon: true,
+					   				name: "bankAccountType",
+					   				uiEventControlID: "bank-details:account-type",
+									specialAttributes: new Dictionary<string, string>{ { "checked", "checked" } },
+									tabIndex: 5),
+					   			new EzInputBuilder("baBusiness", "Business",
+					   				value: "Business",
+					   				type: "radio",
+					   				cls: "gender-margin",
+					   				isRequired: true,
+					   				statusIcon: true,
+					   				name: "bankAccountType",
+					   				uiEventControlID: "bank-details:account-type",
+									tabIndex: 6)
+							}),
+							origin: origin)
+
+							@EzForm.WizardButton(
+								new List<EzButtonModel>{
+									new EzButtonModel(
+										null,
+										"Continue",
+										cls: "button btn-green connect-bank disabled ev-btn-org",
+										uiEventControlID: "bank-details:continue",
+										buttonType: EzButtonType.link,
+										href: "#",
+										tabIndex: 7),
+									new EzButtonModel(
+										null,
+										"Back",
+										cls: "back button btn-grey ev-btn-org",
+										uiEventControlID: "bank-details:back",
+										buttonType: EzButtonType.link,
+										href: "#",
+										tabIndex: 8)
+								},
+								origin: origin)
 						</div>
 					</div>
 
-					<div class="control-group form_field_container" id="SortCode">
-						<div class="controls ezSortCode">
-							<label class="attardi-input">
-								<span>Sort Code</span>
-								<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="bank-details:sort-code-1" />
-								<span></span>
-								<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="bank-details:sort-code-2" />
-								<span></span>
-								<input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="bank-details:sort-code-3" />
-								<img class="field_status required" id="SortCodeImage" />
-							</label>
-							<input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<div class="controls">
-							<input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
-							<input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
-						</div>
-					</div>
-
-					<div class="form_buttons_container">
-						<div class="attardi-button">
-							<a href="#" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="bank-details:continue">Continue</a>
-							<a href="#" class="back button btn-grey pull-right" ui-event-control-id="bank-details:back">Back</a>
-						</div>
-					</div>
-				</div>
-			</div>
 		</form>
 		<hr>
 		<div class="help_security"></div>

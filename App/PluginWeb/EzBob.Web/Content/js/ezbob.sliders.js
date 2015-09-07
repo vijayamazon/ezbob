@@ -138,7 +138,7 @@ EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
 			amount: {
 				min: this.model.get('minCash'),
 				max: this.model.get('maxCash'),
-				start: this.model.get('maxCash'),
+				start: this.model.get('neededCash'),
 				step: 100,
 				caption: amountCaption,
 				hasbutton: true,

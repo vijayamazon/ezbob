@@ -19,21 +19,23 @@ EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
 		isLoanTypeSelectionAllowed: 0 
 	}, // defaults
 
-	validate: function(attrs) {
+	validate: function (attrs) {
+		
 		if (typeof attrs.neededCash === "undefined")
 			return false;
 
 		var val = attrs.neededCash;
 
 		if (isNaN(val))
-			attrs.neededCash = this.get("minCash");
+			this.set({ neededCash: this.get("minCash") });
 
 		if (val > this.get("maxCash"))
-			attrs.neededCash = this.get("maxCash");
+			this.set({ neededCash: this.get("maxCash") });
 
 		if (val < this.get("minCash"))
-			attrs.neededCash = this.get("minCash");
+			this.set({ neededCash: this.get("minCash") });
 
+		console.log('validate', isNaN(val), val, 'n', this.get('neededCash'), this.get("maxCash"), this.get("minCash"));
 		return false;
 	}, // validate
 

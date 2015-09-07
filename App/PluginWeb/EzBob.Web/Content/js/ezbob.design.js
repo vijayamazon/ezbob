@@ -792,12 +792,13 @@ EzBob.ShowMessageEx = function(args) {
 		};
 	} // if
 
+	var isUW = document.location.href.indexOf("Underwriter") > -1;
 	modalpopup.dialog({
 		title: args.title,
 		width: args.dialogWidth || 350,
 		modal: true,
-		draggable: document.location.href.indexOf("Underwriter") > -1, // enable for underwriter
-		resizable: document.location.href.indexOf("Underwriter") > -1, // -"-
+		draggable: isUW, // enable for underwriter
+		resizable: isUW, // -"-
 		buttons: buttonModel,
 		dialogClass: "confirmationDialog",
 		zIndex: 3999,
@@ -810,8 +811,11 @@ EzBob.ShowMessageEx = function(args) {
 	});
 
 	//added ezbob style
-	modalpopup.parents('.ui-dialog').find("button").addClass('button btn-green ev-btn-org');
-
+	if (isUW) {
+		modalpopup.parents('.ui-dialog').find("button").addClass('btn btn-primary');
+	} else {
+		modalpopup.parents('.ui-dialog').find("button").addClass('button btn-green ev-btn-org');
+	}
 	return modalpopup;
 }; // EzBob.ShowMessageEx
 

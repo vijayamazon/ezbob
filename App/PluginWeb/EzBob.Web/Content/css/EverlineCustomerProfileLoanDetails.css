@@ -22,6 +22,7 @@
 	border: 1px solid #28211f;
 	padding: 10px;
     margin-bottom: 20px;
+	box-sizing: border-box;
 }
 
 .main-page-everline .early-payment-form label.radio, .early-payment-form label.checkbox {

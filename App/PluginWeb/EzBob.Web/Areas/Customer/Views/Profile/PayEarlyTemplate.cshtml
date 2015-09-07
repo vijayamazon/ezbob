@@ -29,7 +29,7 @@
 			}
 			%>
 
-			<div class="form-horizontal early-payment-form simple-well">
+			<div class="form-horizontal early-payment-form simple-well ev-form">
 				<div class="row-fluid">
 					<div class="span12">
 						<h3 class="apply-header-approved total-balance-pay pull-right">Today's Total Balance: <b><%- EzBob.formatPounds(total) %></b></h3>
@@ -145,20 +145,20 @@
 						Use default card
 					</label>
 				</div>
-			</div>
-		
-			@EzForm.WizardButton(new List<EzButtonModel>{
+				
+				@EzForm.WizardButton(new List<EzButtonModel>{
 				new EzButtonModel(null, "Confirm",
 					cls: "button btn-green ev-btn-org submit",
-					uiEventControlID:"pay-early:confirm", 
-					buttonType: EzButtonType.link, 
+					uiEventControlID:"pay-early:confirm",
+					buttonType: EzButtonType.link,
 					href: "<%-url%>"),
 				new EzButtonModel(null, "Back",
 					cls: "button btn-grey back clean-btn",
-					uiEventControlID:"pay-early:back", 
-					buttonType: EzButtonType.link, 
+					uiEventControlID:"pay-early:back",
+					buttonType: EzButtonType.link,
 					href: "#")
-			}, origin : origin)
+				}, origin: origin)
+			</div>
 	</div>
 </script>
 

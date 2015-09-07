@@ -15,21 +15,6 @@ EzBob.BankAccounts = Backbone.Collection.extend({
     url: window.gRootPath + 'Customer/PaymentAccounts/BankAccountsListFormatted'
 });
 
-EzBob.BankAccountButtonView = EzBob.StoreButtonView.extend({
-    initialize: function () {
-        EzBob.CT.bindShopToCT(this, 'bank');
-        this.bankAccounts = new EzBob.BankAccounts();
-        var accountNumber = this.model.get('bankAccount');
-        if (accountNumber) {
-            this.bankAccounts.add({ displayName: 'XXXX' + accountNumber.substring(4) });
-        }
-        this.constructor.__super__.initialize.apply(this, [{ name: "bank-account", logoText: "Add account for cash transfer" }]);
-    },
-    update: function () {
-        this.bankAccounts.fetch();
-    }
-});
-
 EzBob.BankAccountInfoView = Backbone.View.extend({
     events: {
         'change input[type="text"]': 'inputsChanged',
@@ -56,13 +41,6 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
         this.$el.find("#SortCode #SortCode3").on("keyup change focusout", function () { that.$el.find("#SortCode #SortCode1").trigger("change"); });
         
         this.$el.find('input[nextSerial]').serialFill();
-
-        $(".dashboard-steps li[data-step-num=0]").addClass("complete").removeClass("current");
-        $(".dashboard-steps li[data-step-num=0] .inner-circle").addClass("complete");
-        $(".dashboard-steps li[data-step-num=0] .progress-line-current").addClass("progress-line-complete");
-        $(".dashboard-steps li[data-step-num=1]").addClass("current");
-        $(".dashboard-steps li[data-step-num=1] .inner-circle").addClass("current");
-        $(".dashboard-steps li[data-step-num=1] .progress-line-").addClass("progress-line-current");
 
         if (this.model.get('bankAccountAdded'))
             this.ready();
