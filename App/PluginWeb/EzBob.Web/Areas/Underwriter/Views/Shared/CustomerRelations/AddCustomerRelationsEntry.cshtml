@@ -1,4 +1,9 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
+}
 
 @* This file is used in Underwriter and Broker. *@
 
@@ -10,13 +15,47 @@
                     <span>Type</span>
                 </div>
                 <div class="FormRadioCtrl">
-                    <input type="radio" name="Type" value="In" id="Type_In" class="required" data-value="In"><label for="Incoming_In">Incoming</label><br />
+					
+					@{ EzInputBuilder radio1 = new EzInputBuilder(
+									"Type_In",
+									"Incoming",
+									value: "In",
+									type: "radio",
+									cls: "required",
+									isRequired: true,
+									statusIcon: true,
+									name: "Type"); }
+					
+					@EzForm.ClickableInputTag(radio1, origin: origin)					
+					
                 </div>
                 <div class="FormRadioCtrl">
-                    <input type="radio" name="Type" value="Out" id="Type_Out" data-value="Out"><label for="Incoming_Out">Outgoing</label><br />
+					
+					@{ EzInputBuilder radio2 = new EzInputBuilder(
+									"Type_Out",
+									"Outgoing",
+									value: "Out",
+									type: "radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "Type"); }
+
+					@EzForm.ClickableInputTag(radio2, origin: origin)					
+
                 </div>
                 <div class="FormRadioCtrl">
-                    <input type="radio" name="Type" value="Internal" id="Type_Internal" data-value="Internal"><label for="Incoming_Internal">Internal</label><br />
+					
+					@{ EzInputBuilder radio3 = new EzInputBuilder(
+									"Type_Internal",
+									"Internal",
+									value: "Internal",
+									type: "radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "Type"); }
+
+					@EzForm.ClickableInputTag(radio3, origin: origin)					
+					
                 </div>
             </div>
             <br />
@@ -26,9 +65,6 @@
                         <span class="active attardi-has-data">Action</span>
                         <select class="form_field selectheight" id="Action" name="Action">
                             <option></option>
-                            <% _.each(actions, function(action){ %>
-                                <option value="<%- action.Id %>"><%- action.Name %></option>
-                            <%});%>
                         </select>
                     </label>
                 </div>
@@ -76,11 +112,21 @@
                     </label>
                 </div>
             </div>
-            <label>Comment</label>
-            <textarea id="Comment" class="add-customer-entry-comment-size" />
+           
+@if (origin != CustomerOriginEnum.everline) {
+	<label>Comment</label>
+	<textarea id="Comment" class="add-customer-entry-comment-size"/>
+} else {
+	<div class="form_field_container control-group">
+		<label for="Comment" class="input-title">Comment</label>
+		<div class="input-wrapper">
+			<textarea style="resize: vertical; height: 100px" id="Comment" class="add-customer-entry-comment-size"></textarea>
+		</div>
+	</div>
+}
         </form>
     </div>
     <div class="pull-right">
-        <button class="button btn-green btn-primary">OK</button>
+		<button class="button btn-green btn-primary ev-btn-org">OK</button>
     </div>
 </script>

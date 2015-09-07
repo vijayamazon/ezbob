@@ -49,6 +49,10 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         if(this.model.get('isBroker')) {
             this.ui.RankDiv.hide();
         }
+	    var self = this;
+        _.each(EzBob.CrmActions, function(action) {
+		    self.ui.Action.append($('<option value="' + action.Id + '">' + action.Name + '</option>'));
+	    });
     }, // onRender
 
     serializeData: function () {

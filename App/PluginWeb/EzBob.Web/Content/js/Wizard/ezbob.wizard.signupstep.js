@@ -238,7 +238,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 
 	submit: function() {
-		if (this.$el.find(':submit').hasClass('disabled'))
+		if (this.$el.find('#signupSubmitButton').hasClass('disabled'))
 			return false;
 
 		this.blockBtn(true);

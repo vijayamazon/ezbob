@@ -39,11 +39,11 @@ h6{font-size:16px;}
 }
 
 
-.form_read_and_accept_broker {
-	width: 60%;
+/*.form_read_and_accept_broker {
+	width: 100%;
 	vertical-align: top;
 	white-space: inherit;
-}
+}*/
 
 .broker-form {
     width: 100%;
@@ -257,7 +257,8 @@ ul#user-menu li {
 box-sizing: content-box;
 }
 
-.dataTables_top_right .ev-btn-org {
+.dataTables_top_right .ev-btn-org, 
+.delete-selected-files {
 	margin-top: 3px;
     margin-left: 10px;
     float: right;
@@ -505,6 +506,31 @@ div.form_field_container {
 {
 	width: 220px;
 }
+
+.click-wrap {
+    margin-left: 0;
+}
+
+.add-crm-note,
+.delete-selected-files {
+	height: 40px !important;
+	line-height: 34px;
+}
+
+.delete-selected-files {
+	height: 43px !important;
+}
+
+.btn-primary, .btn-primary:hover {
+	background-image: none;
+	border-color: transparent;
+}
+
+.ui-dialog-buttonset button.ok-button {
+	float: left;
+}
+
+
 
 
 
