@@ -1,24 +1,43 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}		   
+
 <script id="your-info-template" type="text/template">
-	@using (Html.BeginForm("Edit", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "editYourInfoForm" })) {
+	@using (Html.BeginForm("Edit", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "editYourInfoForm ev-form" })) {
 		<div class="personal-company-info-container" style="position: relative;">
-			<div class="column personal-info">
-			</div>
-			@*
-			<div class="" style="overflow: hidden; height: 725px; padding-top:9px; ">
-				<img src='@Url.Content("~/Content/img/gradient-line.png")' style='display: block; margin: 0px auto' alt=""/>
-			</div>
-			*@
-			<div class="column company-info" />
+			<div class="column personal-info"></div>
+			<div class="column company-info" ></div>
 		</div>
-	    <div class="form_buttons_container">
-			<div class="attardi-button">
-                <a class="btn-continue button btn-green submit-personal pull-right ev-btn-org" display="none" ui-event-control-id="my-information:submit">Submit</a>
-				<a class="btn-continue edit-personal button btn-green pull-right ev-btn-org" ui-event-control-id="my-information:edit">Edit Information</a>
-                <a class="btn-continue cancel button btn-grey pull-right ev-btn-org" display="none" ui-event-control-id="my-information:cancel">Cancel</a>
-			</div>
-		</div>
-	}
+		
+		@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					null,
+					"Submit",
+					cls: "btn-continue button btn-green submit-personal ev-btn-org",
+					uiEventControlID: "my-information:submit",
+					buttonType: EzButtonType.link,
+					href: "#"),
+				new EzButtonModel(
+					null,
+					"Edit information",
+					cls: "btn-continue edit-personal button btn-green ev-btn-org",
+					uiEventControlID: "my-information:edit",
+					buttonType: EzButtonType.link,
+					href: "#"),
+				new EzButtonModel(
+					null,
+					"Cancel",
+					cls: "btn-continue cancel button btn-grey clean-btn",
+					uiEventControlID: "m-information:cancel",
+					buttonType: EzButtonType.link,
+					href: "#")
+			},
+			origin: origin)
+ }
 	<div class="add-director-container" style="display: none;"></div>
 </script>
 
@@ -35,25 +54,25 @@
 	<fieldset>
 		<legend>Personal Information</legend>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Name</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.FirstName%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:first-name" />
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Middle</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.MiddleInitial%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:middle-name" />
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Surname</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.Surname%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:last-name" />
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Date of birth</label><div class="controls">
 				<input type="text" value="<%-EzBob.formatDateUK(CustomerPersonalInfo.DateOfBirth)%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:birthdate" />
 			</div>
@@ -65,13 +84,13 @@
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Time at address</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.TimeAtAddress%>  years" class="form_field" readonly="readonly" ui-event-control-id="my-information:time-at-address" />
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Property status</label><div class="controls">
 				<input type="text" value="<%-PropertyStatus.Description%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:residential-status" />
 			</div>
@@ -83,46 +102,42 @@
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Daytime phone #</label><div class="controls">
 				<input class="personEditInput phonenumber form_field" id="DayTimePhone" name="DayTimePhone" type="text" value="<%-CustomerPersonalInfo.DaytimePhone%>" readonly="readonly" ui-event-control-id="my-information:daytime-phone" />
+				<div class="error-wrap"></div>
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Mobile phone #</label><div class="controls">
 				<input class="personEditInput phonenumber form_field" id="MobilePhone" name="MobilePhone" type="text" value="<%-CustomerPersonalInfo.MobilePhone%>" readonly="readonly" ui-event-control-id="my-information:mobile-phone" />
+				<div class="error-wrap"></div>
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Type of business</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.TypeOfBusinessName%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:type-of-business" />
 			</div>
 		</div>
 
-		<% if (CustomerPersonalInfo.OverallTurnOver != null) {
-			%><div class="control-group">
-				<label for="OverallTurnOver" class="control-label">Total <b>estimated</b> sales</label><div class="controls cashControlls">
-					<input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput form_field" ui-event-control-id="my-information:overall-trunover" />
-				</div>
-			</div><%
-		}
-
-		if (CustomerPersonalInfo.WebSiteTurnOver != null) {
-			%><div class="control-group">
-				<label for="WebSiteTurnOver" class="control-label">Online estimated sales</label><div class="controls cashControlls">
-					<input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput form_field" ui-event-control-id="my-information:website-turnover" />
-				</div>
-			</div><%
-		} %>
-		@if (false /* DBConfigurationValues.Instance.DisplayEarnedPoints */) {
-			<div class="control-group">
-				<label class="control-label">Earned points</label><div class="controls">
-					<input type="text" value="<%- LoyaltyPoints %>" readonly="readonly" class="form_field" ui-event-control-id="my-information:loyalty-points" />
-				</div>
+		<% if (CustomerPersonalInfo.OverallTurnOver != null) { %>
+		<div class="form_field_container control-group">
+			<label for="OverallTurnOver" class="control-label">Total <b>estimated</b> sales</label><div class="controls cashControlls">
+				<input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput form_field" ui-event-control-id="my-information:overall-trunover" />
+				<div class="error-wrap"></div>
 			</div>
-		}
+		</div>
+		<%}
+
+		if (CustomerPersonalInfo.WebSiteTurnOver != null) {	%>
+		<div class="form_field_container control-group">
+			<label for="WebSiteTurnOver" class="control-label">Online estimated sales</label><div class="controls cashControlls">
+				<input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput form_field" ui-event-control-id="my-information:website-turnover" />
+			</div>
+		</div>
+		<%	} %>
 	</fieldset>
 </script>
 
@@ -130,34 +145,34 @@
 	<fieldset>
 		<legend>Business Information </legend>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Registration #</label>
 			<div class="controls">
 				<input type="text" value="<%-CompanyInfo.CompanyNumber%>" readonly="readonly" class="form_field" ui-event-control-id="my-information:limited-reg-no" />
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Company Name</label>
 			<div class="controls">
 				<input type="text" value="<%-CompanyInfo.CompanyName%>" readonly="readonly" class="form_field" ui-event-control-id="my-information:limited-name" />
 			</div>
 		</div>
 
-		<div class="controls">
+		<div class="form_field_container controls">
 			<div class="addressEdit" style="display: none;">
-				@EzForm.AddressInput(this,"LimitedCompanyAddress", "Address", "limited")
+				@EzForm.AddressInput(this, "LimitedCompanyAddress", "Address", "limited")
 			</div>
 		</div>
 
-		<% if (CompanyInfo.BusinessPhone != null) {
-			%><div class="control-group">
-				<label class="control-label">Business phone #</label>
-				<div class="controls">
-					<input class="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-CompanyInfo.BusinessPhone%>" readonly="readonly" ui-event-control-id="my-information:limited-phone-number" />
-				</div>
-			</div><%
-		} %>
+		<% if (CompanyInfo.BusinessPhone != null) {	%>
+		<div class="form_field_container control-group">
+			<label class="control-label">Business phone #</label>
+			<div class="controls">
+				<input class="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-CompanyInfo.BusinessPhone%>" readonly="readonly" ui-event-control-id="my-information:limited-phone-number" />
+			</div>
+		</div>
+		<% } %>
 		<div class="control-group director-container"></div>
 		<div class="offline">
 			@CompanyCountFields("limited")
@@ -169,7 +184,7 @@
 	<fieldset>
 		<legend>Business Information </legend>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Company Name</label>
 			<div class="controls">
 				<input type="text" value="<%-CompanyInfo.CompanyName%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:nonlimited-name" />
@@ -182,28 +197,28 @@
 			</div>
 		</div>
 
-		<div class="control-group notoffline">
+		<div class="form_field_container control-group notoffline">
 			<label class="control-label">Time at address</label>
 			<div class="controls">
 				<input type="text" value="<%-CompanyInfo.TimeAtAddress%> years" class="form_field" readonly="readonly" ui-event-control-id="my-information:nonlimited-time-at-address" />
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Time in business</label>
 			<div class="controls">
 				<input type="text" value="<%-CompanyInfo.TimeInBusiness%>  years" class="form_field" readonly="readonly" ui-event-control-id="my-information:nonlimited-time-in-business" />
 			</div>
 		</div>
 
-		<% if(CompanyInfo.BusinessPhone != null) {
-			%><div class="control-group">
-				<label class="control-label">Business phone #</label>
-				<div class="controls">
-					<input class="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-CompanyInfo.BusinessPhone%>" readonly="readonly" ui-event-control-id="my-information:nonlimited-phone-number" />
-				</div>
-			</div><%
-		} %>
+		<% if(CompanyInfo.BusinessPhone != null) {%>
+		<div class="form_field_container control-group">
+			<label class="control-label">Business phone #</label>
+			<div class="controls">
+				<input class="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-CompanyInfo.BusinessPhone%>" readonly="readonly" ui-event-control-id="my-information:nonlimited-phone-number" />
+			</div>
+		</div>
+		<% } %>
 
 		<div class="control-group director-container"></div>
 
@@ -248,41 +263,41 @@
 	<fieldset>
 		<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Current number of employees</label>
 			<div class="controls">
 				<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly" ui-event-control-id="my-information:@sPrefix-employee-count" />
 			</div>
 		</div>
 
-		<% if (CompanyEmployeeCountInfo.TopEarningEmployeeCount != null) {
-			%><div class="control-group">
+		<% if (CompanyEmployeeCountInfo.TopEarningEmployeeCount != null) {%>
+			<div class="form_field_container control-group">
 				<label class="control-label">Number of employees earning (gross salary) over £41,450 per annum</label>
 				<div class="controls">
 					<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly" ui-event-control-id="my-information:@sPrefix-top-employee-count" />
 				</div>
-			</div><%
-		}
+			</div>
+		<%}
 
-		if (CompanyEmployeeCountInfo.BottomEarningEmployeeCount != null) {
-			%><div class="control-group">
+		if (CompanyEmployeeCountInfo.BottomEarningEmployeeCount != null) { %>
+			<div class="form_field_container control-group">
 				<label class="control-label">Number of employees earning (gross salary) less than £9,440 per annum</label>
 				<div class="controls">
 					<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly" ui-event-control-id="my-information:@sPrefix-bottom-employee-count" />
 				</div>
-			</div><%
-		}
+			</div>
+		<%}
 
-		if (CompanyEmployeeCountInfo.EmployeeCountChange != null) {
-			%><div class="control-group">
+		if (CompanyEmployeeCountInfo.EmployeeCountChange != null) {%>
+			<div class="form_field_container control-group">
 				<label class="control-label">Change in the number of employees in last 12 months</label>
 				<div class="controls">
 					<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly" ui-event-control-id="my-information:@sPrefix-employee-count-change" />
 				</div>
-			</div><%
-		} %>
+			</div>
+		<% } %>
 
-		<div class="control-group">
+		<div class="form_field_container control-group">
 			<label class="control-label">Total monthly salary expenditure (inc tax & NI)</label>
 			<div class="controls">
 				<input type="text" value="<%- CompanyEmployeeCountInfo.TotalMonthlySalary %>" class="form_field" readonly="readonly" ui-event-control-id="my-information:@sPrefix-total-monthly-salary" />

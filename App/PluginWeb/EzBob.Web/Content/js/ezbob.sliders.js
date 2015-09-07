@@ -7,6 +7,17 @@ EzBob.SlidersModel = Backbone.Model.extend({
 		'Term': 15,
 		'InterestRate' : 0.02
 	},
+	initialize: function(options){
+		if (options.Amount > 0) {
+			this.set('Amount', options.Amount);
+		}
+
+		if (options.Term > 0) {
+			this.set('Term', options.Term);
+		}
+
+		console.log('iunint', this);
+	},
 	urlRoot: window.gRootPath + 'Customer/CustomerRequestedLoan/RequestedLoan'
 });
 

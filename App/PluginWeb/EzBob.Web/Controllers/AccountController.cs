@@ -424,7 +424,6 @@
 			string signupPass1,
 			string signupPass2,
 			string securityQuestion,
-			double? amount,
 			string mobilePhone,
 			string mobileCode,
 			string isInCaptchaMode,
@@ -493,7 +492,6 @@
 						model.EMail,
 						FirstName,
 						Surname,
-						amount,
 						mobilePhone,
 						mobilePhoneVerified,
 						blm.BrokerFillsForCustomer,
@@ -1000,7 +998,6 @@
 			string email,
 			string sFirstName,
 			string sLastName,
-			double? amount,
 			string mobilePhone,
 			bool mobilePhoneVerified,
 			bool brokerFillsForCustomer,
@@ -1100,7 +1097,8 @@
 
 			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
 				CustomerId = customer.Id,
-				Amount = amount,
+				Amount = ToInt(GetAndRemoveCookie("loan_amount"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 24450 : 20000),
+				Term = ToInt(GetAndRemoveCookie("loan_period"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 12 : 9),
 				Created = DateTime.UtcNow,
 			}};
 
@@ -1155,6 +1153,15 @@
 			);
 
 			return bSuccess ? date : (DateTime?)null;
+		} // ToDate
+
+		private int ToInt(string intStr, int intDefault) {
+			if (string.IsNullOrEmpty(intStr))
+				return intDefault;
+			
+			int result;
+			bool bSuccess = int.TryParse(intStr,out result);
+			return bSuccess ? result : intDefault;
 		} // ToDate
 
 		private string GetCookie(string cookieName) {

@@ -1631,12 +1631,12 @@ height:40px !important;
 }
 
 .help_eBay {
-    background: url(images/help/help_ebay.jpg) no-repeat center 0;
-    -ms-background-size: contain;
-    background-size: contain;
+	background: url('../everline/help/help_ebay_everline.jpg') no-repeat center 0;
+	-ms-background-size: contain;
+	background-size: contain;
 }
 .help_paypal {
-    background: url(images/help/help_paypal.jpg) no-repeat center 0;
+    background: url(../everline/help/help_paypal_everline.jpg) no-repeat center 0;
     -ms-background-size: contain;
     background-size: contain;
 }
@@ -1646,14 +1646,35 @@ height:40px !important;
     height: 543px;
 }
 .help_FreeAgent {
-    background: url(images/help/help_freeagent.jpg) no-repeat center 0;
+    background: url(../everline/help/help_freeagent_everline.jpg) no-repeat center 0;
     -ms-background-size: contain;
     background-size: contain;
 }
 .help_Sage {
-    background: url(images/help/help_sage.jpg) no-repeat center 0;
+    background: url(../everline/help/help_sage_everline.jpg) no-repeat center 0;
     background-size: contain;
 }
+
+.help_security {
+    background: url(images/help/help_security.png) no-repeat center 0;
+    background-size: contain;
+    width: 759px;
+    height: 77px;
+}
+
+.help_window {
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.help_window hr{
+	color: #bfbfbf;
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid;
+}
+
 /*popups*/
 
  /*footer*/

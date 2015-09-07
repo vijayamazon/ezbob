@@ -16,15 +16,20 @@
 
 .main-page-everline .editYourInfoForm .personal-info label,
 .main-page-everline .editYourInfoForm .company-info label {
-	text-align: right;
+	text-align: left;
 	display: inline-block;
-	width: 100px;
+	width: 100%;
 	padding-right: 15px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	font-weight: 600;
 	vertical-align: middle;
+}
+
+.main-page-everline .editYourInfoForm .personal-info label.error,
+ .main-page-everline .editYourInfoForm .company-info label.error{
+	font-weight: 400;
 }
 
 .main-page-everline .editYourInfoForm .personal-info div.control-group,
@@ -73,7 +78,6 @@
 
 .main-page-everline .editYourInfoForm .personal-info .addAddressContainer > .form_field_container > .input-wrapper {
 	padding: 0;
-	margin-left: 100px;
 	width: 320px;
 }
 
