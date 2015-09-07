@@ -960,7 +960,7 @@ table.dashboard_sources {
         padding: 5px;
         border-bottom: 1px #e5e5e5 solid;
     }
-
+   
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.
@@ -1463,18 +1463,8 @@ button,
     outline: none;
     margin: 0;
     display: inline-block;
-    -webkit-border-top-left-radius:7px;
-    -moz-border-radius-topleft:7px;
-    border-top-left-radius:7px;
-    -webkit-border-top-right-radius:7px;
-    -moz-border-radius-topright:7px;
-    border-top-right-radius:7px;
-    -webkit-border-bottom-right-radius:7px;
-    -moz-border-radius-bottomright:7px;
-    border-bottom-right-radius:7px;
-    -webkit-border-bottom-left-radius:7px;
-    -moz-border-radius-bottomleft:7px;
-    border-bottom-left-radius:7px;
+    -ms-border-radius:6px;
+    border-radius:6px;
     text-indent:0px;
     color:#ffffff;
     text-decoration:none;
@@ -2233,16 +2223,20 @@ li[stripped="stripped"] {
     min-height: 18px;
 }
 
-.attardi-input span.form_field_checkbox.attardi-has-data {
-    padding: 8px;
-    top: 0;
-    font-size: inherit;
-}
+    .attardi-input span.form_field_checkbox.attardi-has-data {
+        padding: 8px;
+        top: 0;
+        font-size: inherit;
+    }
 
 .profile-widgets .attardi-input span.attardi-has-data,
 .bank-account .attardi-input span.attardi-has-data,
 .paypont-form .attardi-input span.attardi-has-data {
     height: 18px;
+}
+
+.input-tag-wrap {
+    display: inline;
 }
 
 .attardi-input input:not([type='button']), .attardi-input textarea {
@@ -2251,19 +2245,24 @@ li[stripped="stripped"] {
     margin: 0;
 }
 
-.attardi-input input:not([type='button']):focus, .attardi-input select:focus {
-    border: #CCC 1px solid;
-    outline: none;
-}
+    .attardi-input input:not([type='button']):focus, .attardi-input select:focus {
+        border: #CCC 1px solid;
+        outline: none;
+    }
 
-.attardi-input input:not([type='button']):hover, .attardi-input select:hover {
-    border: #CCC 1px solid;
-    outline: none;
-}
+    .attardi-input input:not([type='button']):hover, .attardi-input select:hover {
+        border: #CCC 1px solid;
+        outline: none;
+    }
 
 .attardi-input select {
     z-index: 0;
     margin: 0;
+}
+
+.clickable-title {
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .ezDateTime .attardi-input {
@@ -2271,9 +2270,9 @@ li[stripped="stripped"] {
     margin-right: 0.8%;
 }
 
-.ezDateTime .attardi-input select {
-    width: 100%;
-}
+    .ezDateTime .attardi-input select {
+        width: 100%;
+    }
 
 .field_status {
     vertical-align: top;
@@ -3523,7 +3522,8 @@ iframe[src^='https://finimpact'] {
  }
 .sliders-main .summary {
          padding-top: 25px;
-         text-align: center;
+         text-align: right;
+         
  }
 
 	.sliders-main .summary p, .overview .org {
@@ -3552,14 +3552,20 @@ iframe[src^='https://finimpact'] {
 }
 
 .sliders-main .overview p {
-	font-size: 34px;
-	color: white;
+font-size: 32px;
+    color: white;
+    font-family: Titillium Web Semi Bold;
 }
 
 .calc-equal {
 	font-weight: bold;
 	font-size: 26px;
 	color: white;
+}
+.payments-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: right;
 }
 
 .sliders-main .summary .amount, 
@@ -3571,13 +3577,12 @@ iframe[src^='https://finimpact'] {
 }
 
 .button.change-loan-details-btn {
-	font-size: 34px;
-	padding: 15px;
-	margin-left: 20px;
-	font-size: 29px;
-	font-family: "Titillium Web Regular";
+	    font-size: 34px;
+    padding: 30px;
+    margin-left: 20px;
+    margin-top: -10px;
+    font-size: 29px; 
     line-height: 0px;
-	height: 65px;
 }
 
 .bottom-text {
@@ -3594,6 +3599,11 @@ iframe[src^='https://finimpact'] {
 	}
    
 /**/
+.loan-summary-boxes {
+        display: inline-block;
+    background-color: #e6e6e6;
+
+}
 
 .loan-summary-box {
         display: inline-block;
@@ -3602,7 +3612,11 @@ iframe[src^='https://finimpact'] {
     background-color: #e6e6e6;
         font-size: 22px;
     font-family: 'Titillium Web Regular';
+    padding: 10px 60px 10px 30px;
 
+}
+.loan-summary-box:first-child {
+        padding: 10px 10px 10px 30px;
 }
 .requested-loan-amount ,.requested-loan-period {
         text-align: center;

@@ -530,7 +530,7 @@ string formFieldID = "")
     <div class="form_field_container control-group @inputProp.ContainerClass">
         @if (origin != CustomerOriginEnum.everline)
         {
-
+            <div class="clickable-title">@inputProp.Caption</div>
             <div class="attardi-input @inputProp.InputWrapperClass">
                 @foreach (EzInputBuilder inputButton in inputProp.InputButtons)
                 {

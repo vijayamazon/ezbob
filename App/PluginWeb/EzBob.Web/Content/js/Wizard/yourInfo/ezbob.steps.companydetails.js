@@ -203,7 +203,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			TypeOfBusiness: { required: true },
 			IndustryType: { required: true },
 			DirectorCheck: { required: true },
-			VatRegistered: { required: true },
 		};
 	}, // ownValidationRules
 
@@ -347,8 +346,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		if (this.$el.find('#DirectorCheck').is(":checked"))
 			_.find(data, function (d) { return d.name === 'DirectorCheck'; }).value = true;
-
-		_.find(data, function (d) { return d.name === 'VatRegistered'; }).value = (this.$el.find('[name=VatRegistered]').val() == 'true');
 
 		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)

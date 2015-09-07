@@ -614,6 +614,7 @@ a.ev-btn-org,
 	background-color: #e6e6e6;
 	display: inline-block;
 	padding: 13px; 
+
 }
 
 div.canDisabledAddress {
@@ -1542,32 +1543,30 @@ hr.wizard-hr {
     font-size: 34px;
     font-weight: 300;
 }
-ul.matchingAddressList {
+ul.targets,ul.matchingAddressList {
     padding:0;
     margin:0;
 }
-ul.matchingAddressList:focus {
+ul.targets:focus,ul.matchingAddressList:focus {
     outline:none;
 }
-    ul.matchingAddressList li {
+    ul.targets li,ul.matchingAddressList li {
         font-size: 15px;
         font-family: 'Open Sans', sans-serif;
         color: #3a3a3a;
         list-style: none;
         padding: 10px 20px;
+        cursor: pointer;
     }
 
-
-
-
-ul.matchingAddressList li:nth-child(odd) {
+ul.targets li:nth-child(odd),ul.matchingAddressList li:nth-child(odd) {
     background:white;
 }
-ul.matchingAddressList li:nth-child(even) {
+ul.targets li:nth-child(even),ul.matchingAddressList li:nth-child(even) {
     background:#e3e2e2;
 }
 
-ul.matchingAddressList li[selected="selected"] {
+ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"] {
         background-color: antiquewhite;
 }
 .ui-dialog .ui-dialog-titlebar-close {
@@ -1589,6 +1588,10 @@ ul.matchingAddressList li[selected="selected"] {
     top: 0;
     top: 24px;
 }
+.ui-dialog .ui-dialog-buttonset button.clean-btn {
+        width: auto;
+    padding: 0 35px;
+}
 .ui-dialog .ui-dialog-titlebar-close span {
    
     display:none;
@@ -1602,7 +1605,9 @@ ul.matchingAddressList li[selected="selected"] {
                    box-shadow: none;
     border: none;
                  }
-
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float:none;
+}
 .ui-dialog-buttonset .clean-btn,.ui-dialog-buttonset button.ev-btn-org {
 height:40px !important;  
       float: right;

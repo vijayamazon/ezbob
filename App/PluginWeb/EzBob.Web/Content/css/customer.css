@@ -689,6 +689,7 @@ blockquote {
 .security-icons .item {
 		height: 60px;
 		float: right;
+        margin-right:10px;
 		display: inline-block;
 }
 
