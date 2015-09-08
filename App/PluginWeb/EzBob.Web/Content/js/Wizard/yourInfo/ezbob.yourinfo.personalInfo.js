@@ -57,7 +57,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         });
 	},
 
-	inputChanged: function(event) {
+	inputChanged: function (event) {
 		var el = event ? $(event.currentTarget) : null;
 
 		if (el && el.attr('id') === 'MiddleInitial' && el.val() === '') {

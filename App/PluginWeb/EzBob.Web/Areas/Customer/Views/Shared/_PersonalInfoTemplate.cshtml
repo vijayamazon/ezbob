@@ -115,13 +115,13 @@
 
 		    @EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
 
-		    @EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date", origin: origin)
+		    @EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date", tabIndex:6, origin: origin)
 
 		    @EzForm.SelectWizard(new EzSelectModel("MaritalStatus", "Marital status",
 		        MaritalStatus.Divorced.ToTuple<MaritalStatus>(),
 		        cls: "form_field",
 		        isRequired: true,
-                            tabIndex: 6,
+                            tabIndex: 9,
 		        statusIcon: true,
 		        uiEventControlID: "personal-info:marital_status"),
 		        origin: origin)
@@ -134,6 +134,7 @@
 		    @EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long at this address",
 		        timeAtAddress,
 		        cls: "TimeAtAddress select form_field",
+                               
 		        isRequired: true,
 		        statusIcon: true,
 		        uiEventControlID: "personal-info:time_at_address"),

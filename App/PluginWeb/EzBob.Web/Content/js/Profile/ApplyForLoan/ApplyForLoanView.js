@@ -62,10 +62,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		if (isChecked) {
 			EzBob.ShowMessageEx({
-				message: this.$el.find('.loan-disclosure-text').html(),
+			    message: '<div class="megila-outer"><div class="megila-inner">' + this.$el.find('.loan-disclosure-text').html() + '</div><div>',
 				dialogWidth: 600,
 				hideClose: true,
 				okText: 'Confirm',
+			    customClass : 'megila',
 				closeOnEscape: false,
 				onOk: _.bind(this.onDisclosureClosed, this),
 			});

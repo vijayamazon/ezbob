@@ -181,7 +181,7 @@
 /*
     login
 */
-.loginTemplate h1{
+.loginTemplate h1,.megila-inner h3{
         margin: 0;
     color: #8dc641;
     text-align: left;
@@ -305,7 +305,8 @@ a, a:visited {
 }
 
 .form_field_container .input-title,
-.form_field_container .input-title-address {
+.form_field_container .input-title-address
+ {
         width: 30%;
         float: left;
         font-size: 15px;
@@ -457,14 +458,22 @@ a.clean-btn:focus,
 	font-size: 18px !important;
     font-weight: 600;
     -ms-opacity: 1;
-   /* line-height:43px;*/
+    line-height:43px;
     opacity: 1;
     cursor: pointer;
     background-color: transparent;
     text-decoration: none;
 	display: inline-block;
 }
+.clean-btn:hover,
+a.clean-btn:hover,
 
+ .simpleCaptcha a:hover,
+.ui-widget button.clean-btn:hover, 
+.broker-captcha a:hover {
+     border: 2px solid #d47223;
+     color:#d47223 !important;
+}
 .form_field_container .input-wrapper .clean-btn{
 	float: right;
     width:240px;
@@ -530,7 +539,14 @@ a.ev-btn-org,
     text-decoration: none !important;
 	display: inline-block;
 }
-
+a.ev-btn-org:hover,
+.ev-btn-org:hover,
+.ui-widget button.ev-btn-org :hover {
+    background:#d47223;
+}
+a.button:hover {
+    text-decoration:none;
+}
 .form_buttons_container .input-wrapper .ev-btn-org,
 .form_buttons_container .input-wrapper a.ev-btn-org {
 	width: 42%;
@@ -647,7 +663,7 @@ div.company-full-details{
         width: 35px;
         position: relative;
     }
-
+  
         .click-wrap .click-input-wrap .radio-btn {
             width: 32px;
             height: 32px;
@@ -700,6 +716,76 @@ div.company-full-details{
                 background-position: center;
                 content: "";
             }
+
+
+.click-wrap .click-input-wrap input[type=radio]:checked + label, .click-wrap .click-input-wrap input[type=checkbox]:checked + label {
+    border-bottom: 2px solid #7ac143;
+}
+
+.click-wrap .click-input-wrap input[type=radio], .click-wrap .click-input-wrap input[type=checkbox] {
+    visibility: hidden;
+    position: absolute;
+}
+
+.click-wrap .title {
+    float: left;
+    color: #666666;
+    font-size: 14px;
+    font-weight: 300;
+    display: inline;
+    margin-left: 40px;
+    line-height: 29px;
+}
+
+.click-wrap .fa {
+    position: absolute;
+    color: #ebebeb;
+}
+
+.click-wrap .click-input-wrap input:checked + label .fa{
+    color: #7ac143;
+}
+
+
+.click-wrap .fa-check {
+    left: 9px;
+    top: 8px;
+    font-size: 19px;
+}
+
+
+.click-wrap .fa-circle {
+    left: 10px;
+    top: 8px;
+    font-size: 14px;
+}
+
+.click-wrap .terms-conditions-checkbox-label {
+    width: 50%;
+    color: #494949;
+    font-weight: 600;
+    line-height: 16px;
+    font-size: 13px;
+    margin-left: 45px;
+}
+
+/*radio and checkbox labels*/
+.click-wrap .title.normal-label {
+            line-height: 17px;
+    font-weight: 400;
+    color: #3b3b3b;
+    margin-left: 45px;
+    }
+.click-wrap .soft-label {
+     
+    color: #494949;
+    font-weight: 300;
+   line-height: 34px;
+    font-size: 14px;
+    margin-left: 45px;
+}
+/*end radio & checkbox*/
+
 
 .hmrc-info-button {
     background: url(../everline/help-button.png) no-repeat 0 0;
@@ -764,75 +850,6 @@ div.company-full-details{
 .hmrc-why-question {
     width: 70%;
 }
-
-.click-wrap .click-input-wrap input[type=radio]:checked + label, .click-wrap .click-input-wrap input[type=checkbox]:checked + label {
-    border-bottom: 2px solid #7ac143;
-}
-
-.click-wrap .click-input-wrap input[type=radio], .click-wrap .click-input-wrap input[type=checkbox] {
-    visibility: hidden;
-    position: absolute;
-}
-
-.click-wrap .title {
-    float: left;
-    color: #666666;
-    font-size: 14px;
-    font-weight: 300;
-    display: inline;
-    margin-left: 40px;
-    line-height: 29px;
-}
-
-.click-wrap .fa {
-    position: absolute;
-    color: #ebebeb;
-}
-
-.click-wrap .click-input-wrap input:checked + label .fa {
-    color: #7ac143;
-}
-
-
-.click-wrap .fa-check {
-    left: 9px;
-    top: 8px;
-    font-size: 19px;
-}
-
-
-.click-wrap .fa-circle {
-    left: 10px;
-    top: 8px;
-    font-size: 14px;
-}
-
-.click-wrap .terms-conditions-checkbox-label {
-    width: 50%;
-    color: #494949;
-    font-weight: 600;
-    line-height: 16px;
-    font-size: 13px;
-    margin-left: 45px;
-}
-/*radio and checkbox labels*/
-.click-wrap .title.normal-label {
-            line-height: 17px;
-    font-weight: 400;
-    color: #3b3b3b;
-    margin-left: 45px;
-    }
-.click-wrap .soft-label {
-     
-    color: #494949;
-    font-weight: 300;
-   line-height: 34px;
-    font-size: 14px;
-    margin-left: 45px;
-}
-/*end radio & checkbox*/
-
-
 
 /* Datetime   */
 .form_field_container .ezDateTime select {
@@ -905,10 +922,13 @@ hr.wizard-hr {
     text-shadow: none;
     font-size: 11px;
     font-family: 'Open Sans', sans-serif;
-    padding-left: 50px;
+    padding: 4px 20px 2px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-    .notification_green .close, .notification_yellow .close, .notification_orange .close, .notification_red .close, .notification_pink .close, .notification_darkblue .close, .notification_lightblue .close, .notification_white .close {
+.notification_green .close, .notification_yellow .close, .notification_orange .close, .notification_red .close, .notification_pink .close, .notification_darkblue .close, .notification_lightblue .close, .notification_white .close {
         background: transparent;
         width: 15px;
         height: 15px;
@@ -944,12 +964,15 @@ hr.wizard-hr {
 }
 
 .notification_green i, .notification_yellow i, .notification_orange i, .notification_red i, .notification_pink i, .notification_darkblue i, .notification_lightblue i, .notification_white i {
-    font-size: 25px;
-    position: absolute;
-    left: 5px;
-    top: 0;
+    font-size: 35px;
+   
 }
-
+.alert-msg {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 37px;
+    margin-left: 10px;
+}
 .notification_green {
     background: transparent;
     border: 2px solid #8dc63f;
@@ -1533,19 +1556,36 @@ hr.wizard-hr {
 .ui-dialog .ui-dialog-titlebar {
     border:none;
 }
- .consent-dialog {
+.megila .megila-inner, .consent-dialog {
      position:relative;
     overflow-y: auto;
     height: 390px;
         background: white;
   
-   padding:0 35px;
+   padding:20px 35px;
 }
- .consent-dialog-wrapper {
+.ui-dialog .ui-dialog-buttonpane {
+    background:#f1f0f0;
+    margin: 0;
+    border:none;
+}
+.megila-inner h3 {
+        margin: 5px 0;
+}
+ .megila .ui-dialog-content {
+     padding:0;
+ }
+ .megila .megila-outer ,.consent-dialog-wrapper {
      border: 1px solid black;
      position: relative;
+         padding: 10px;
+    background-color: white;
+     
  }
- .consent-dialog-wrapper:after {
+
+
+
+ .megila .megila-outer:after,  .consent-dialog-wrapper:after {
      background: white  url('../css/images/terms-corner.png');
      width:25px;
      height:23px;
@@ -1869,83 +1909,146 @@ height:40px !important;
       tooltip
 
   */
-  .tooltip{
-    position:absolute;
-    z-index:1020;
-    display:block;
-    visibility:visible;
-    padding:5px;
-    font-size:11px;
-    opacity:0;
+  ..tooltip{
+    position:absolute !important;
+    z-index:1020 !important;
+    display:block !important;
+    visibility:visible !important;
+    padding:5px !important;
+    font-size:11px !important;
+    opacity:0 !important;
     filter:alpha(opacity=0)
 }
 .tooltip.in{
-    opacity:.8;
-    filter:alpha(opacity=80)
+    opacity:1 !important;
+    
 }
 .tooltip.top{
-    margin-top:-2px
+    margin-top:-2px !important;
 }
 .tooltip.right{
-    margin-left:2px
+    margin-left:2px !important;
 }
 .tooltip.bottom{
-    margin-top:2px
+    margin-top:2px !important;
 }
 .tooltip.left{
-    margin-left:-2px
+    margin-left:-2px !important;
 }
     .tooltip.top .tooltip-arrow {
-        bottom: 0;
-        left: 50%;
-        margin-left: -5px;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #8dc63f;
+        bottom: 0  !important;
+        left: 50%  !important;
+        margin-left: -5px  !important;
+        border-left: 5px solid transparent  !important;
+        border-right: 5px solid transparent  !important;
+        border-top: 5px solid #8dc63f  !important;
     }
 .tooltip.left .tooltip-arrow{
-    top:50%;
-    right:0;
-    margin-top:-5px;
-    border-top:5px solid transparent;
-    border-bottom:5px solid transparent;
-    border-left:5px solid #8dc63f;
+    top:50%  !important;
+    right:0 !important;
+    margin-top:-5px !important;
+    border-top:5px solid transparent !important;
+    border-bottom:5px solid transparent !important;
+    border-left:5px solid #8dc63f !important;
 }
 .tooltip.bottom .tooltip-arrow{
-    top:0;
-    left:50%;
-    margin-left:-5px;
-    border-left:5px solid transparent;
-    border-right:5px solid transparent;
-    border-bottom:5px solid #8dc63f;
+    top:0 !important;
+    left:50% !important;
+    margin-left:-5px !important;
+    border-left:5px solid transparent !important;
+    border-right:5px solid transparent !important;
+    border-bottom:5px solid #8dc63f !important;
 }
 .tooltip.right .tooltip-arrow{
-    top:50%;
-    left:0;
-    margin-top:-5px;
-    border-top:5px solid transparent;
-    border-bottom:5px solid transparent;
-    border-right:5px solid #8dc63f;
+    top:50% !important;
+    left:0 !important;
+    margin-top:-5px !important;
+    border-top:5px solid transparent !important;
+    border-bottom:5px solid transparent !important;
+    border-right:5px solid #8dc63f !important;
 }
 .tooltip-inner {
-    max-width: 200px;
-    padding: 15px;
-    color: #fff;
-    font-size:12px;
-    text-align: center;
-    text-decoration: none;
-    background-color: #8dc63f;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -ms-border-radius: 4px;
-    border-radius: 4px;
+    max-width: 200px !important;
+    padding: 15px !important;
+    color: #fff !important;
+    font-size:12px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    background-color: #8dc63f !important;
+    -webkit-border-radius: 4px !important;
+    -moz-border-radius: 4px !important;
+    -ms-border-radius: 4px !important;
+    border-radius: 4px !important;
 }
 
 .tooltip-arrow{
-    position:absolute;
-    width:0;
-    height:0
+    position:absolute !important;
+    width:0 !important !important;
+    height:0 !important;
+}
+/***
+    scrollbare temp css
+***/
+
+/*****JspScroll******/
+
+.jspVerticalBar {
+	width: 8px;
 }
 
+.jspTrack {
+	background: transparent;
+}
 
+.jspDrag {
+	background: #28211f;
+	min-height: 40px;
+}
 
+.megila-inner::-webkit-scrollbar,.consent-dialog::-webkit-scrollbar {
+   	width: 8px;
+}
+ 
+.megila-inner::-webkit-scrollbar-track,.consent-dialog::-webkit-scrollbar-track {
+    background: transparent;
+}
+ 
+.megila-inner::-webkit-scrollbar-thumb,.consent-dialog::-webkit-scrollbar-thumb{
+    background: #28211f;
+	height: 40px;
+ border-radius: 10px;
+  outline: none;
+}
+/****************************************
+    
+    profile css
+
+******************************/
+/*pay early*/
+
+.main-page-everline #get-cash  .form-horizontal.early-payment-form {
+    border:none;
+     -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding:30px;
+}
+.early-payment-form .radio .money.right-input-clickable {
+        display: block;
+    float: left;
+}
+
+ .w100p .input-wrapper{
+       float: left;
+    display: block;
+    margin-top: -5px;
+    padding-left: 0;
+   
+}
+ .w100p .input-wrapper input {
+      height:50px !important;
+ }
+
+ /*
+ solvency representations 
+ */

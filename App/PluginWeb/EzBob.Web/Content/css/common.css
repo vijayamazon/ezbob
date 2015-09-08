@@ -1600,7 +1600,7 @@ td.account-logo {
     overflow: hidden;
 }
 
-.BankContainer .marketplace-button-profile{
+.BankContainer .marketplace-button-profile,.BankContainer .marketplace-button{
 	width: 31%;
     margin-right: 2%;
 }
@@ -1789,6 +1789,7 @@ input.form_field_right_side {
 
 .input-tag-wrap {
     display: inline;
+    font-style: normal;
 }
 
 .agreements-checkboxes .input-tag-wrap{
@@ -3655,4 +3656,15 @@ font-size: 32px;
 }
 .close.fa-times:hover {
     opacity:1;
+}
+
+/*shlomi changes*/
+
+/*pay early*/
+
+.radio-btn {
+    display:none;
+}
+.fa-check {
+    display:none;
 }

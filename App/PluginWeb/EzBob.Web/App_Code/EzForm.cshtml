@@ -99,7 +99,7 @@
 					@if (selectProp.Size > 1) { @: size="@selectProp.Size"
 					}
 			
-
+                  
             @( !string.IsNullOrWhiteSpace(selectProp.CustomAtts) ? selectProp.CustomAtts : "")
 			@if (selectProp.IsDisabled) { @: disabled="disabled"
                                                 }
@@ -147,6 +147,7 @@ bool statusIcon = false, string css = "",
 string uiEventControlID = "", 
 string hiddenFieldAuxClass = "",
     string labelCss = "",
+    int tabIndex = 0,
     CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
     var years = new List<Tuple<string, String>>();
@@ -212,25 +213,28 @@ string hiddenFieldAuxClass = "",
        cls: "selectheight form_field form_field_date" + css,
        listItems: days,
        customAtts: "empty_value=-",
+         tabIndex: tabIndex,
        uiEventControlID: sDayUiEventControlID,
        name: "day",
        placeholder: dayplaceholder);
-
+    tabIndex++;
     var monthselect = new EzSelectModel(
        monthIdentificator,
        "",
        cls: "selectheight form_field form_field_date" + css,
        listItems: months,
+       tabIndex: tabIndex,
        customAtts: "empty_value=-",
        uiEventControlID: sMonthUiEventControlID,
         name: "month",
         placeholder: monthplaceholder);
-
+    tabIndex++;
     var yearselect = new EzSelectModel(
         yearIdentificator,
    "",
    cls: "selectheight form_field form_field_date" + css,
    listItems: years,
+     tabIndex: tabIndex,
    customAtts: "empty_value=-",
    uiEventControlID: sYearUiEventControlID,
     name: "year"
@@ -488,14 +492,14 @@ string formFieldID = "")
 	 var caption = new HtmlString(inputButton.Caption);
 	 var identificator = new HtmlString(inputButton.Id);
 	 if (origin != CustomerOriginEnum.everline) {
-		<div class="input-tag-wrap @inputButton.WrapperCls">
+		<i class="input-tag-wrap @inputButton.WrapperCls">
 			@InputTextTag(inputButton, identificator)
 			<label @if (true) { @: class="@inputButton.LabelClass"
 				   			  }
 				   @if (true) { @: for="@identificator"
 				   			  }
 			>@caption</label>
-		</div>
+		</i>
 	 } else {
         <div class="click-wrap @inputButton.WrapperCls">
             <div class="click-input-wrap ">

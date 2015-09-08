@@ -718,7 +718,7 @@ EzBob.ShowMessageTimeout = function(message, title, timeout, cbOk, okText, cbCan
 
 EzBob.ShowMessageEx = function(args) {
 	args.okText = args.okText || 'OK';
-
+   
 	var modalpopup = $('<div/>');
 	modalpopup.html(args.message);
 
@@ -811,7 +811,7 @@ EzBob.ShowMessageEx = function(args) {
 		draggable: isUW, // enable for underwriter
 		resizable: isUW, // -"-
 		buttons: buttonModel,
-		dialogClass: "confirmationDialog",
+		dialogClass: "confirmationDialog " + args.customClass,
 		zIndex: 3999,
 		open: fOnOpen,
 		close: function() {

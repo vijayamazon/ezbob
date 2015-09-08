@@ -11,15 +11,6 @@ body .agreement-text {
     cursor: text;
 }
 
-.ui-slider {
-    border-radius: 8px;
-    background-color: #e8e8e8;
-    background-image: none;
-
-    behavior: url(CSS3PIE);
-    position:relative\0/
-}
-
 #loanDetailsModal {
     width: 900px;
     left: 40%;
@@ -883,3 +874,5 @@ span.sign-full-name {
 	display: inline;
 	font-weight: normal;
 }
+
+
