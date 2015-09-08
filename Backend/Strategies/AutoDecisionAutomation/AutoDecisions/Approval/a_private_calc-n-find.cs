@@ -145,32 +145,21 @@
 		} // FindOutstandingLoans
 
 		private DateTime GetCustomerIncorporationDate() {
+			if (this.incorporationDate.HasValue)
+				return this.incorporationDate.Value;
+
 			if (this.customer == null)
-				return DateTime.UtcNow;
+				this.incorporationDate = Now;
+			else {
+				this.incorporationDate = this.db.ExecuteScalar<DateTime?>(
+					"GetCustomerIncorporationDate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", this.customer.Id),
+					new QueryParameter("Now", DateTime.UtcNow)
+				) ?? Now;
+			} // if
 
-			bool bIsLimited =
-				(this.customer.Company != null) &&
-					(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
-
-			if (bIsLimited) {
-				CustomerAnalytics oAnalytics = this.customerAnalytics.GetAll()
-					.FirstOrDefault(ca => ca.Id == this.customer.Id);
-
-				DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
-
-				if (oIncorporationDate.Year < 1000)
-					oIncorporationDate = DateTime.UtcNow;
-
-				return oIncorporationDate;
-			} // if ltd
-
-			DateTime? oDate = this.db.ExecuteScalar<DateTime?>(
-				"GetNoLtdIncorporationDate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customer.Id)
-			);
-
-			return oDate ?? DateTime.UtcNow;
+			return this.incorporationDate.Value;
 		} // GetCustomerIncorporationDate
 
 		private IEnumerable<string> FindBadCaisStatuses() {

@@ -114,7 +114,6 @@
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\MedalCalculations.cs" />
     <Compile Include="Model\Database\LandRegistryOwner.cs" />
-    <Compile Include="Model\Database\CustomerAnalytics.cs" />
     <Compile Include="Model\Database\Report\ReportArgumentsNames.cs" />
     <Compile Include="Model\Database\Report\ReportArguments.cs" />
     <Compile Include="Model\Database\Report\ReportUserMap.cs" />
