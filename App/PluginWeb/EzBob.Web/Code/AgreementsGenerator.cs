@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Models.Agreements 
 {
+	using System;
 	using System.IO;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
@@ -29,14 +30,15 @@
 			m_oServiceClient = new ServiceClient();
 		}
 
+		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
 		public void RenderAgreements(Loan loan, bool isRebuld, NL_Model nlModel = null) {
 			var typeOfBusinessReduced = loan.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
 
-			var model = !isRebuld ? this._builder.Build(loan.Customer, loan.LoanAmount, loan) : _builder.ReBuild(loan.Customer, loan);
+			var model = !isRebuld ? this._builder.Build(loan.Customer, loan.LoanAmount, loan) : this._builder.ReBuild(loan.Customer, loan);
 
 			// NL - AgreementModel in json  
 			if (nlModel != null)
-				nlModel.AgreementModel = JsonConvert.SerializeObject(this._builder.NL_BuildAgreementModel(loan.Customer, nlModel));
+				nlModel.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(this._builder.NL_BuildAgreementModel(loan.Customer, nlModel));
 
 			var isAlibaba = loan.Customer.IsAlibaba;
 			var isEverline = loan.Customer.CustomerOrigin.IsEverline();
@@ -54,6 +56,10 @@
 
 			string path1;
 			string path2;
+
+			string nlpath1;
+			string nlpath2;
+
 			TemplateModel template;
 			if (typeOfBusinessReduced == TypeOfBusinessAgreementReduced.Personal) {
 
@@ -70,19 +76,24 @@
 				template = new TemplateModel { Template = preContract };
 				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", template, path1, path2);
 
+				nlpath1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, preContractAgreement.FilePath);
+				nlpath2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, preContractAgreement.FilePath);
+				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", template, nlpath1, nlpath2);
+
 				// NL  - preContract 
 				if (nlModel != null) {
-					nlModel.Agreements.Add(new NLAgreementItem() {
-						Agreement = new NL_LoanAgreements() {
-							LoanAgreementTemplateID = preContractTemplate.Id,
-							FilePath = preContractAgreement.FilePath
-						},
-						TemplateModel = template,
-						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, preContractAgreement.FilePath),
-						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, preContractAgreement.FilePath)
-					});
+					//nlModel.Agreements.Add(new NLAgreementItem() {
+					//	Agreement = new NL_LoanAgreements() {
+					//		LoanAgreementTemplateID = preContractTemplate.Id,
+					//		FilePath = preContractAgreement.FilePath
+					//	},
+					//	TemplateModel = template,
+					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, preContractAgreement.FilePath),
+					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, preContractAgreement.FilePath)
+					//});
+					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {LoanAgreementTemplateID = preContractTemplate.Id, FilePath = preContractAgreement.FilePath});
 				}
-
+				
 				var contract = this._templates.GetTemplateByName(origin + "CreditActAgreement");
 				var contractTemplate = this._helper.GetOrCreateLoanAgreementTemplate(contract, isAlibaba ? LoanAgreementTemplateType.AlibabaCreditActAgreement : LoanAgreementTemplateType.CreditActAgreement);
 				var contractAgreement = new LoanAgreement("Contract", loan, contractTemplate);
@@ -93,17 +104,22 @@
 				template = new TemplateModel { Template = contract };
 				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "Contract", template, path1, path2);
 
+				nlpath1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, contractAgreement.FilePath);
+				nlpath2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, contractAgreement.FilePath);
+				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "Contract", template, nlpath1, nlpath2);
+
 				//  NL - contract
 				if (nlModel != null) {
-					nlModel.Agreements.Add(item: new NLAgreementItem() {
-						Agreement = new NL_LoanAgreements() {
-							LoanAgreementTemplateID = contractTemplate.Id,
-							FilePath = contractAgreement.FilePath
-						},
-						TemplateModel = template,
-						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, contractAgreement.FilePath),
-						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, contractAgreement.FilePath)
-					});
+					//nlModel.Agreements.Add(item: new NLAgreementItem() {
+					//	Agreement = new NL_LoanAgreements() {
+					//		LoanAgreementTemplateID = contractTemplate.Id,
+					//		FilePath = contractAgreement.FilePath
+					//	},
+					//	TemplateModel = template,
+					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, contractAgreement.FilePath),
+					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, contractAgreement.FilePath)
+					//});
+					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = contractTemplate.Id, FilePath = contractAgreement.FilePath });
 				}
 
 			} else {
@@ -117,17 +133,22 @@
 				template = new TemplateModel { Template = guarantee };
 				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", template, path1, path2);
 
+				nlpath1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, guaranteeAgreement.FilePath);
+				nlpath2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, guaranteeAgreement.FilePath);
+				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", template, nlpath1, nlpath2);
+
 				// NL - guarantee 
 				if (nlModel != null) {
-					nlModel.Agreements.Add(item: new NLAgreementItem() {
-						Agreement = new NL_LoanAgreements() {
-							LoanAgreementTemplateID = quaranteeTemplate.Id,
-							FilePath = guaranteeAgreement.FilePath
-						},
-						TemplateModel = template,
-						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, guaranteeAgreement.FilePath),
-						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, guaranteeAgreement.FilePath)
-					});
+					//nlModel.Agreements.Add(item: new NLAgreementItem() {
+					//	Agreement = new NL_LoanAgreements() {
+					//		LoanAgreementTemplateID = quaranteeTemplate.Id,
+					//		FilePath = guaranteeAgreement.FilePath
+					//	},
+					//	TemplateModel = template,
+					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, guaranteeAgreement.FilePath),
+					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, guaranteeAgreement.FilePath)
+					//});
+					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = guaranteeAgreement.Id, FilePath = guaranteeAgreement.FilePath });
 				}
 
 				var agreement = this._templates.GetTemplateByName(origin + "PrivateCompanyLoanAgreement");
@@ -140,17 +161,22 @@
 				template = new TemplateModel { Template = agreement };
 				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", template, path1, path2);
 
+				nlpath1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, agreementAgreement.FilePath);
+				nlpath2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, agreementAgreement.FilePath);
+				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", template, nlpath1, nlpath2);
+
 				// NL - agreement
 				if (nlModel != null) {
-					nlModel.Agreements.Add(item: new NLAgreementItem() {
-						Agreement = new NL_LoanAgreements() {
-							LoanAgreementTemplateID = agreementTemplate.Id,
-							FilePath = agreementAgreement.FilePath
-						},
-						TemplateModel = template,
-						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, agreementAgreement.FilePath),
-						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, agreementAgreement.FilePath)
-					});
+					//nlModel.Agreements.Add(item: new NLAgreementItem() {
+					//	Agreement = new NL_LoanAgreements() {
+					//		LoanAgreementTemplateID = agreementTemplate.Id,
+					//		FilePath = agreementAgreement.FilePath
+					//	},
+					//	TemplateModel = template,
+					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, agreementAgreement.FilePath),
+					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, agreementAgreement.FilePath)
+					//});
+					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = agreementAgreement.Id, FilePath = agreementAgreement.FilePath });
 				}
 			}
 

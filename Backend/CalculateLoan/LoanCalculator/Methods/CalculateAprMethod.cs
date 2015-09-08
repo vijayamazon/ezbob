@@ -16,7 +16,92 @@
 			this.aprDate = (aprDate ?? DateTime.UtcNow).Date;
 		} // constructor
 
+
 		public virtual decimal Execute() {
+			return 35.35m;
+			// TODO: revive
+			/*
+			if (WriteToLog) {
+				Log.Debug(
+					"Calculating APR on {3} with accuracy {0} {1} for loan model\n{2}",
+					CalculationAccuracy,
+					MaxIterationLimit == 0
+						? "without iterations limit"
+						: "using up to " + MaxIterationLimit + " iterations",
+					WorkingModel,
+					this.aprDate.ToString("MMM d yyyy", Library.Instance.Culture)
+				);
+			} // if
+			
+
+			try {
+				this.loanPlan = new CalculatePlanMethod(Calculator, false).Execute()
+					.Select(r => new AmountDueDate(this, r))
+					.ToList();
+			} catch (NegativeLoanAmountException negativeLoanAmountException) {
+				// TODO: revive (do something)
+			}
+
+			this.issuedAmount = (double)WorkingModel.ActualIssuedAmount;
+
+			this.calculationProgress = new ProgressCounter(
+				"{0} iterations performed during APR calculation.",
+				WriteToLog ? Log : null
+			);
+
+			double x = 1;
+
+			bool accuracyReached = false;
+
+			for ( ; ; ) {
+				bool timeToSay = this.calculationProgress.Increment();
+
+				double y = AprFunction(x);
+
+				if (Math.Abs(y) <= CalculationAccuracy) {
+					accuracyReached = true;
+					break;
+				} // if
+
+				double dx = y / AprDerivative(x);
+
+				x -= dx;
+
+				if (TooManyIterations())
+					break;
+
+				if (timeToSay)
+					Log.Debug("Current APR variable value is {0}, last delta was {1}.", x, dx);
+			} // for
+
+			this.calculationProgress.Log();
+
+			decimal apr = (decimal)x * 100m;
+
+			if (WriteToLog) {
+				Log.Debug(
+					"\nOn {4} APR = {0} (after {2}{3})" +
+					"\nAmount due dates:\n\t{5}" +
+					"\nLoan model:\n{1}\n",
+					apr,
+					WorkingModel,
+					Grammar.Number(this.calculationProgress.CurrentPosition, "iteration"),
+					accuracyReached ? " accuracy reached" : " max iterations limit reached",
+					this.aprDate.ToString("MMM d yyyy", Library.Instance.Culture),
+					string.Join("\n\t", this.loanPlan)
+				);
+			} // if
+
+			return apr;
+			*/
+		} // Execute
+
+
+		public virtual decimal bkp_Execute() {
+
+			return 35.35m;
+			// TODO: revive
+
 			if (WriteToLog) {
 				Log.Debug(
 					"Calculating APR on {3} with accuracy {0} {1} for loan model\n{2}",
@@ -29,8 +114,7 @@
 				);
 			} // if
 
-			return 0;
-			// TODO: revive
+			
 
 			/*
 

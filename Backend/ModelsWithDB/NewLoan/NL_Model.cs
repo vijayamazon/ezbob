@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils.Attributes;
 
 	[DataContract]
 	public class NL_Model : AStringable {
@@ -13,7 +14,7 @@
 			DiscountPlan = new List<decimal>();
 			Agreements = new List<NLAgreementItem>();
 			FundTransfer = new NL_FundTransfers();
-			AgreementModel = string.Empty;
+			//AgreementModel = string.Empty;
 			Payment = new NL_Payments();
 
 
@@ -32,10 +33,11 @@
 		public NL_Loans Loan { get; set; }
 
 		[DataMember]
+		[ExcludeFromToString]
 		public List<NLAgreementItem> Agreements { get; set; }
 
-		[DataMember]
-		public string AgreementModel { get; set; }
+		//[DataMember]
+		//public string AgreementModel { get; set; }
 
 		[DataMember]
 		public decimal? BrokerComissions { get; set; }
@@ -92,9 +94,9 @@
 		//[DataMember]
 		//public List<NL_LoanSchedulePayments> PaymentAssignedToScheduleItems { get; set; }
 
-
+/*
 		protected override bool DisplayFieldInToString(string fieldName) {
 			return fieldName != "AgreementModel";
-		} // DisplayFieldInToString
+		} // DisplayFieldInToString*/
 	} // class NL_Model
 } // namespace

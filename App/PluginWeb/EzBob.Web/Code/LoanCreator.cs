@@ -120,7 +120,7 @@
 			nlModel.FundTransfer = new NL_FundTransfers() {
 				Amount = loanAmount, // logic transaction - full amount
 				TransferTime = now,
-				FundTransferStatusID = (int)NLPacnetTransactionStatuses.InProgress,
+				FundTransferStatusID = (int) NLFundTransferStatuses.Pending, //  (int)NLPacnetTransactionStatuses.InProgress,
 				LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 				PacnetTransactions = new List<NL_PacnetTransactions>()
 			};
@@ -205,7 +205,7 @@
 			nlModel.Loan.Histories.Clear();
 			nlModel.Loan.Histories.Add(new NL_LoanHistory() {
 				Amount = loanAmount,
-				EventTime = now // former IssuedTime
+				EventTime = now //  IssuedTime
 			});
 
 			// populate nlModel by agreements data also
@@ -274,15 +274,12 @@
 			nlModel.Loan.OldLoanID = oldloanID;
 			try {
 				log.Debug(nlModel.FundTransfer.ToString());
-				nlModel.FundTransfer.PacnetTransactions.ForEach(t => log.Debug(t));
 				log.Debug(nlModel.Loan.ToString());
-				log.Debug(nlModel.Loan.LastHistory());
-				nlModel.Agreements.ForEach(a => log.Debug(a.Agreement.ToString()));
-				nlModel.Agreements.ForEach(t => log.Debug(t.TemplateModel.ToString()));
 
 				var nlAddLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				nlModel.Loan.LoanID = nlAddLoan.Value;
-				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}", nlAddLoan.Value, oldloanID, nlAddLoan.Error);
+
+				log.Debug(nlAddLoan.Error == "" ? "NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}" : "NewLoan adding: new LoanID {0}, oldLoanID {1}, Error: {2}", nlAddLoan.Value, oldloanID, nlAddLoan.Error);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

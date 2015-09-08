@@ -123,7 +123,7 @@
 			DateTime? aprDate = null,
 			double? calculationAccuracy = null,
 			ulong? maxIterationCount = null
-		) {
+			) {
 			var method = new CalculateAprMethod(this, aprDate, WriteToLog);
 
 			if (calculationAccuracy.HasValue)
@@ -151,6 +151,11 @@
 			return (intervalType == RepaymentIntervalTypes.Month)
 				? issuedTime.AddMonths(periodCount)
 				: issuedTime.AddDays(periodCount * (int)intervalType);
+		} // AddRepaymentIntervals
+
+
+		public DateTime PreviousScheduleDate(DateTime theDate, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
+			return (intervalType == RepaymentIntervalTypes.Month)? theDate.AddMonths(-1): theDate.AddDays(-(int)intervalType);
 		} // AddRepaymentIntervals
 
 		/// <summary>

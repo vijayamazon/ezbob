@@ -1,9 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Text;
-	using System.Threading.Tasks;
 	using System.Web;
 	using ConfigManager;
 	using DbConstants;
@@ -80,13 +78,13 @@
 				this.Error = NL_ExceptionRequiredDataNotFound.HistoryEventTime;
 				return;
 			}
-			
-			if (model.Agreements == null || model.Agreements.Count == 0) {
+
+			if (history.Agreements == null || history.Agreements.Count == 0) {
 				this.Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
 				return;
 			}
 
-			if (model.AgreementModel == null) {
+			if (history.AgreementModel == null) {
 				this.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
 				return;
 			}
@@ -105,7 +103,7 @@
 			}
 
 			if (dataForLoan.AvailableAmount < dataForLoan.LoanLegalAmount) {
-				this.Error = "No available credit for current offer. New loan is not allowed."; // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
+				this.Error = string.Format("No available credit for current offer. New loan is not allowed. dataForLoan: {0} ", dataForLoan); // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
 				return;
 			}
 
@@ -207,7 +205,7 @@
 				history.LoanID = this.LoanID;
 				history.LoanLegalID = dataForLoan.LoanLegalID;
 				history.Description = "adding loan " + this.LoanID + ", old ID: " + model.Loan.OldLoanID;
-				history.AgreementModel = model.AgreementModel;
+				//history.AgreementModel = model.AgreementModel; // already inside
 
 				Log.Debug("Adding history: {0}", history);
 
@@ -216,23 +214,8 @@
 				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", model.Loan.LoanID, history.LoanHistoryID);
 
 				// 8. loan agreements
-				AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(model.AgreementModel);
-
-				foreach (NLAgreementItem aItem in model.Agreements) {
-					// prepare for NL_LoanAgreementsSave
-					aItem.Agreement.LoanHistoryID = history.LoanHistoryID;
-					nlAgreements.Add(aItem.Agreement);
-
-					//item.Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, item.Agreement.FilePath);
-					//item.Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfConsentPath2, item.Agreement.FilePath);
-
-					// saving to FS
-					var item = aItem;
-					//Task task = new Task(() => {
-					new SaveAgreement(model.CustomerID, agreementModel, model.Loan.Refnum, "NLsavingAgreement", item.TemplateModel, item.Path1, item.Path2).Execute();
-					//});
-					//task.Start();
-				}
+				history.Agreements.ForEach(a => nlAgreements.Add(a)); 
+				nlAgreements.ForEach(a=>a.LoanHistoryID = history.LoanHistoryID);
 
 				Log.Debug("Adding agreements:");
 				nlAgreements.ForEach(a => Log.Debug(a));
@@ -287,7 +270,7 @@
 
 					transaction.FundTransferID = model.FundTransfer.FundTransferID;
 
-					transaction.PacnetTransactionID = DB.ExecuteScalar<int>("NL_PacnetTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", transaction));
+					transaction.PacnetTransactionID = DB.ExecuteScalar<long>("NL_PacnetTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", transaction));
 
 					Log.Debug("NL_PacnetTransactionsSave: LoanID: {0}, pacnetTransactionID: {1}", this.LoanID, transaction.PacnetTransactionID);
 				}
@@ -310,30 +293,6 @@
 		}//Execute
 
 
-		//private async Task<int> SaveAgreementsAsync() {
-		//	try {
-		//		// save agreements to file system
-		//		if (model.AgreementModel == null) {
-		//			Log.Alert("AgreementModel not exists on creating Nloan");
-		//			this.Error = "AgreementModel not exists on creating Nloan";
-		//			return 0;
-		//		}
-
-		//		AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(model.AgreementModel);
-		//		foreach (NLAgreementItem  item in model.Agreements) {
-		//			SaveAgreement saveAgreement = new SaveAgreement(customerId: model.CustomerID, model: agreementModel, refNumber: model.Loan.Refnum, name: "savingAgreement", template: item.TemplateModel, path1: item.Path1, path2: item.Path2);
-		//			saveAgreement.Execute();
-		//		}
-
-		//		return await Task.FromResult(1);
-
-		//		// ReSharper disable once CatchAllClause
-		//	} catch (Exception exSaveAgreement) {
-		//		Log.Debug("Failed to save agreements to FS. {0}", exSaveAgreement);
-		//		return 0;
-		//	}
-		//}
-
 		private void SendMail(string sMsg, NL_LoanHistory history = null, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> schedule = null, List<NL_LoanAgreements> agreements = null, 
 			NL_FundTransfers fundTransfer = null, NL_PacnetTransactions  pacnetTransaction = null) {
 
@@ -342,18 +301,6 @@
 			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
 			StringBuilder sb = new StringBuilder();
-			string strSchedule = "no Schedule specified";
-			if (schedule != null) {
-				schedule.ForEach(s => sb.Append(s));
-				strSchedule = sb.ToString();
-			}
-
-			sb = new StringBuilder();
-			string strFees = "no LoanFees specified";
-			if (fees != null) {
-				fees.ForEach(f => sb.Append(f));
-				strFees = sb.ToString();
-			}
 
 			sb = new StringBuilder();
 			string strAgreements = "no LoanAgreements specified";
@@ -375,18 +322,12 @@
 			var message = string.Format(
 						"<h5>{0}</h5>"
 						+ "<h5>Loan</h5> {1}"
-						+ "<h5>History</h5> {2}"
-						+ "<h5>Fees</h5> {3}"
-						+ "<h5>Schedules</h5> {4}"
-						+ "<h5>Agreements</h5> {5}"
-						+ "<h5>Transfer</h5> {6}"
-						+ "<h5>PacnetTransaction</h5> {7}",
+						+ "<h5>Agreements</h5> {2}"
+						+ "<h5>Transfer</h5> {3}"
+						+ "<h5>PacnetTransaction</h5> {4}",
 
 						HttpUtility.HtmlEncode(sMsg)
 					, HttpUtility.HtmlEncode(model.Loan == null ? "no Loan specified" : model.Loan.ToString())
-					, HttpUtility.HtmlEncode(history == null ? "no LoanHistory specified" : history.ToString())
-					, HttpUtility.HtmlEncode(strFees)
-					, HttpUtility.HtmlEncode(strSchedule) 
 					, HttpUtility.HtmlEncode(strAgreements)
 					, HttpUtility.HtmlEncode(fundTransfer == null ? "no FundTransfer specified" : fundTransfer.ToString())
 					, HttpUtility.HtmlEncode(pacnetTransaction == null ? "no PacnetTransaction specified" : pacnetTransaction.ToString()));

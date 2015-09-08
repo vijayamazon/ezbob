@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
+	using DbConstants;
+	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -25,6 +27,7 @@
 
 		[FK("NL_PacnetTransactionStatuses", "PacnetTransactionStatusID")]
 		[DataMember]
+		[EnumName(typeof(NLPacnetTransactionStatuses))]
 		public int PacnetTransactionStatusID { get; set; }
 
 		[DataMember]

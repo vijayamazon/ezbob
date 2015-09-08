@@ -14,7 +14,9 @@ CREATE TYPE NL_FundTransfersList AS TABLE (
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[TransferTime] DATETIME NOT NULL,
 	FundTransferStatusID INT NOT NULL,
-	[LoanTransactionMethodID] INT NOT NULL
+	[LoanTransactionMethodID] INT NOT NULL,
+	[DeletionTime] datetime NULL,
+	[DeletedByUserID] int null
 )
 GO
 
@@ -29,16 +31,20 @@ BEGIN
 		[Amount],
 		[TransferTime],
 		FundTransferStatusID,		
-		[LoanTransactionMethodID]
+		[LoanTransactionMethodID],
+		[DeletionTime],
+		[DeletedByUserID]
 	) SELECT
 		[LoanID],
 		[Amount],
 		[TransferTime],
 		FundTransferStatusID,
-		[LoanTransactionMethodID]
+		[LoanTransactionMethodID],
+		[DeletionTime],
+		[DeletedByUserID]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

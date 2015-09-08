@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
+	using System.Reflection;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
@@ -26,7 +27,7 @@
 
 
 		[Test]
-		public void TestLoader() {
+		public void TestLoanLegals() {
 			//NL_Loans l = new NL_Loans();
 			//l.InterestRate = 3.5m;
 			//l.IssuedTime = DateTime.UtcNow;
@@ -36,7 +37,6 @@
 			//l.Position = 1;
 			//var sss = l.ToString();
 			//Console.WriteLine(sss);
-
 			NL_LoanLegals loanLegals = new NL_LoanLegals {
 				Amount = 20000m,
 				RepaymentPeriod = 5,
@@ -107,6 +107,25 @@
 
 
 		[Test]
+		public void TestScheduleFormat() {
+			var x1 = new NL_LoanSchedules() {
+				AmountDue = 55m,
+				Balance = 22m,
+				FeesAmount = 30.77m,
+				FeesPaid = 20.99m,
+				Interest = 12m,
+				InterestRate = 2.25m,
+				InterestPaid = 1.55m,
+				LoanHistoryID = 1,
+				LoanScheduleID = 0,
+				LoanScheduleStatusID = 3,
+				PlannedDate = new DateTime(2014, 10, 19)
+			};
+			this.m_oLog.Debug(x1.ToString());
+		}
+
+
+		[Test]
 		public void AddOffer() {
 
 			GetLastOffer lastOfferstrategy = new GetLastOffer(374);
@@ -159,20 +178,13 @@
 		[Test]
 		public void AddLoan() {
 			DateTime now = DateTime.UtcNow;
-			AgreementModel agreementModel = new AgreementModel() {
-				CustomerEmail = "elinar+888@ezbob.com",
-				APR = 3.35,
-				FullName = "John brice",
-				CountRepayment = 3
-			};
 			NL_Model model = new NL_Model(374) {
 				UserID = 357,
 				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-				Loan = new NL_Loans() { OldLoanID = 1068, Refnum = "01825919001" },
-				AgreementModel =JsonConvert.SerializeObject(agreementModel),
+				Loan = new NL_Loans() { OldLoanID = 2072, Refnum = "01825919007" },
 				FundTransfer = new NL_FundTransfers() {
 					Amount = 1000,
-					FundTransferStatusID = (int)NLPacnetTransactionStatuses.Done,
+					FundTransferStatusID = (int) NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
 					LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 					TransferTime = now,
 					PacnetTransactions = new List<NL_PacnetTransactions>()
@@ -187,25 +199,34 @@
 				TrackingNumber = "1111",
 				TransactionTime = now
 			});
-			model.Agreements.Add(new NLAgreementItem() {
-				TemplateModel = new TemplateModel() { Template = "aa{A}bb{B}" },
-				Agreement = new NL_LoanAgreements() {
-					LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-					FilePath = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, "preContract/")
-				},
-				Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, "bobka.pdf"),
-				Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, "dobka.pdf")
+			model.Loan.Histories.Add(new NL_LoanHistory() {
+				EventTime = now,
+				AgreementModel = JsonConvert.SerializeObject(
+					new AgreementModel() {
+						CustomerEmail = "elinar+888@ezbob.com",
+						APR = 3.35,
+						FullName = "John brice",
+						CountRepayment = 3
+					})
 			});
-			model.Agreements.Add(new NLAgreementItem() {
-				TemplateModel = new TemplateModel() { Template = "xx{X}yy{Y}" },
-				Agreement = new NL_LoanAgreements() {
-					LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-					FilePath = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, "guarantyAgreement/")
-				},
-				Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, "abobka.pdf"),
-				Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, "adobka.pdf")
+			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
+				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
+				FilePath = "preContract/cc/dd.pdf"
 			});
-			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = now });
+			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
+				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
+				FilePath = "guarantyAgreement/aa/bb.pdf"
+			});
+
+			AgreementModel agreementModel = new AgreementModel() {
+				CustomerEmail = "elinar+888@ezbob.com",
+				APR = 3.35,
+				FullName = "John brice",
+				CountRepayment = 3
+			};
+
+			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
+
 			AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
 			try {
@@ -244,16 +265,20 @@
 		/// <exception cref="UnauthorizedAccessException"><paramref name="path" /> specified a file that is read-only.-or- This operation is not supported on the current platform.-or- <paramref name="path" /> specified a directory.-or- The caller does not have the required permission. </exception>
 		/// <exception cref="FileNotFoundException">The file specified in <paramref name="path" /> was not found. </exception>
 		/// <exception cref="SecurityException">The caller does not have the required permission. </exception>
-		/// <exception cref="AppDomainUnloadedException">The operation is attempted on an unloaded application domain. </exception>
 		public string GetTemplate(string path, string name) {
 			return File.ReadAllText(string.Format("{0}{1}{2}.cshtml", @"D:\ezbob\App\PluginWeb\EzBob.Web\", path, name));
 		}
 
+		/// <exception cref="DirectoryNotFoundException">The specified path is invalid (for example, it is on an unmapped drive). </exception>
+		/// <exception cref="IOException">An I/O error occurred while opening the file. </exception>
+		/// <exception cref="UnauthorizedAccessException"><paramref /> specified a file that is read-only.-or- This operation is not supported on the current platform.-or- <paramref /> specified a directory.-or- The caller does not have the required permission. </exception>
+		/// <exception cref="FileNotFoundException">The file specified in <paramref /> was not found. </exception>
+		/// <exception cref="SecurityException">The caller does not have the required permission. </exception>
 		public string GetTemplateByName(string name) {
 			return GetTemplate("\\Areas\\Customer\\Views\\Agreement\\", name);
 		} // GetTemplateByName
 
-		
+
 
 		[Test]
 		public void AgreementsSave() {
@@ -336,7 +361,7 @@
 		}
 
 		public decimal GetInterestRate(DateTime start, DateTime end) {
-			
+
 			//Console.WriteLine("-start: {0}, end: {1}", start, end);
 
 			var rate = 0m;
@@ -350,7 +375,7 @@
 				}
 
 				rate += GetInterestRateOneMonth(start, start2);
-				this._daysInMonth = MiscUtils. DaysInMonth(start2);
+				this._daysInMonth = MiscUtils.DaysInMonth(start2);
 				start = start2;
 				start2 = start2.AddMonths(1);
 			}
@@ -371,9 +396,9 @@
 			List<NL_LoanInterestFreeze> activeFreezes = new List<NL_LoanInterestFreeze>();  //this._loan.InterestFreeze.Where(f => f.DeactivationDate == null).ToList();
 
 			if (activeFreezes.Count == 0) {
-				nTotalInterest = (this._daysInMonth==0) ? 0: (days * InterestRate / this._daysInMonth);
+				nTotalInterest = (this._daysInMonth == 0) ? 0 : (days * InterestRate / this._daysInMonth);
 				return nTotalInterest;
-			} 
+			}
 
 			decimal nCurrentInterestRate = InterestRate;
 
@@ -381,11 +406,11 @@
 
 			for (DateTime oCurrent = start.Date; oCurrent < end.Date; oCurrent = oCurrent.AddDays(1)) {
 				var relevantFreeze = activeFreezes.FirstOrDefault(f => (f.StartDate >= oCurrent && oCurrent <= f.EndDate));
-				nTotalInterest += (relevantFreeze == null)?nStdOneDayInterest :(relevantFreeze.InterestRate / this._daysInMonth);
-			} 
+				nTotalInterest += (relevantFreeze == null) ? nStdOneDayInterest : (relevantFreeze.InterestRate / this._daysInMonth);
+			}
 
 			return nTotalInterest;
-		} 
+		}
 
 
 	} // class TestNewLoan

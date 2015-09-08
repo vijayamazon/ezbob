@@ -4,7 +4,7 @@
 	using DbConstants;
 
 	[DataContract]
-	public class ReschedulingArgument : AStringable {
+	public class ReschedulingArgument /*: AStringable*/ {
 		[DataMember]
 		public long LoanID { get; set; }  // loan ID to re-schedule
 

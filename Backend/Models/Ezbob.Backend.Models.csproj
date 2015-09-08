@@ -73,7 +73,6 @@
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MpModel.cs" />
-    <Compile Include="NewLoan\AStringable.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />
     <Compile Include="PropertyStatusModel.cs" />

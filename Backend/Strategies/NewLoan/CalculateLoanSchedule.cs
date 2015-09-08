@@ -1,15 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
-	using NHibernate.Linq;
 
 	/// <summary>
 	/// Create loan Schedule and setup/arrangement/servicing Fees
@@ -130,18 +127,14 @@
 				}
 
 				// model should contain Schedule and Fees after this invocation
-				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees
-				nlCalculator.CalculateSchedule(); // completing schedules with amounts due
+				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due.
+				nlCalculator.CalculateSchedule(); // completing schedules with real amounts due (transactions considered) TODO
 			
 				// set APR 
 				model.APR = nlCalculator.CalculateApr(history.EventTime);
 
 				// debug
-				
-				Log.Debug("------------RESULT----------------Loan: {0}, Offer: {1}, APR: {2}\n", model.Loan, model.Offer, model.APR);
-				model.Loan.Histories.ForEach(h => Log.Debug(h));
-				history.Schedule.ForEach(s => Log.Debug(s));
-				model.Loan.Fees.ForEach(f => Log.Debug(f));
+				Log.Debug("------------RESULT----------------Offer: {0}, APR: {1}, Loan: {2}", model.Offer, model.APR, model.Loan);
 				
 			} catch (NoInitialDataException noDataException) {
 				message = noDataException.Message;

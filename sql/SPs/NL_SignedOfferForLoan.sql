@@ -23,7 +23,7 @@ BEGIN
 	order by OfferID desc);
 
 	IF @OfferID IS NULL begin		
-		RETURN ;
+		RETURN  ;
 	end;
 		
 	declare @LoansCount int;
@@ -58,12 +58,14 @@ BEGIN
 			order by ll.LoanLegalID desc; 	
 	
 		set @LoansCount = (select COUNT(LoanID) 
-							from NL_Loans l inner join NL_Offers o on o.OfferID = l.OfferID inner join NL_Decisions d on d.DecisionID=o.DecisionID 
+							from NL_Loans l inner join NL_Offers o on o.OfferID = l.OfferID and o.OfferID = @OfferID inner join NL_Decisions d on d.DecisionID=o.DecisionID 
 							inner join NL_CashRequests cr on cr.CashRequestID = d.CashRequestID 
 							where cr.CustomerID=@CustomerID);	
 
 
 		if @LoansCount > 0 begin
+
+			print ('loanscount=' + cast(@LoansCount as nvarchar(15)));
 						
 			declare @TakenAmount decimal;
 			declare @PaidPrincipal decimal;
@@ -79,6 +81,8 @@ BEGIN
 	
 
 			if @TakenAmount is null set @TakenAmount =0;
+
+			print ('TakenAmount=' + cast(@TakenAmount as nvarchar(150)));
 
 			-- consider use Customer.CreditSum
 
@@ -96,6 +100,8 @@ BEGIN
 					where l.OfferID = @OfferID);
 
 			if @PaidPrincipal is null set @PaidPrincipal = 0;
+
+			print ('PaidPrincipal=' + cast(@PaidPrincipal as nvarchar(150)));
 
 			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (@TakenAmount- @PaidPrincipal), ExistsRefnums = (Select distinct(Refnum )+ ',' AS [text()] From dbo.[NL_Loans] For XML PATH (''));
 

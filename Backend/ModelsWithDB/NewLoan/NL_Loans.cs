@@ -3,7 +3,10 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Text;
+	using DbConstants;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -18,10 +21,12 @@
 
 		[FK("LoanType", "Id")]
 		[DataMember]
+		[EnumName(typeof(NLLoanTypes))]
 		public int LoanTypeID { get; set; }
 
 		[FK("NL_LoanStatuses", "LoanStatusID")]
 		[DataMember]
+		[EnumName(typeof(NLLoanStatuses))]
 		public int LoanStatusID { get; set; }
 
 		[FK("NL_EzbobBankAccounts", "EzbobBankAccountID")]
@@ -30,6 +35,7 @@
 
 		[FK("LoanSource", "LoanSourceID")]
 		[DataMember]
+		[EnumName(typeof(NLLoanSources))]
 		public int LoanSourceID { get; set; }
 
 		[DataMember]
@@ -78,7 +84,22 @@
 			return this._histories.OrderBy(h => h.EventTime).FirstOrDefault();
 		}
 
+		public override string ToString() {
+			// loan
+			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
 
+			// fees
+			sb.Append(HeadersLine(typeof(NL_LoanFees), NL_LoanFees.ColumnTotalWidth));
+			if (Fees.Count>0)
+				Fees.ForEach(s => sb.Append(s.ToString()));
+
+			sb.Append(Environment.NewLine);
+			// histories
+			if(Histories!=null)
+				Histories.ForEach(h => sb.Append(h.ToString()));
+
+			return sb.ToString();
+		}
 
 	} // class NL_Loans
 } // ns

@@ -66,6 +66,12 @@
 		AlibabaLoanType = 3
 	} // enum NLLoanTypes
 
+	public enum NLLoanSources {
+		Standard = 1,
+		EU = 2,
+		COSME = 3
+	}
+
 	public enum NLPacnetTransactionStatuses {
 		Submited = 1, // DB table id
 		ConfigErrorMultipleCandidateChannels = 2,
@@ -121,4 +127,10 @@
 		AlibabaCreditFacility = 9,
 	}
 
+	// logic treansaction statuses
+	public enum NLFundTransferStatuses {
+		Pending = 1, // DB table id
+		Active = 2,
+		Deleted = 3
+	}
 } // namespace

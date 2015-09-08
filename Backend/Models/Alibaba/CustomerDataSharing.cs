@@ -5,7 +5,6 @@
 	using System.Runtime.Serialization;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
-	using EZBob.DatabaseLib.Model.Database;
 
 	public enum AlibabaLocOfferStatus {
 		[Description("Offer Selected")]

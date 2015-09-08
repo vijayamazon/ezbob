@@ -3,7 +3,10 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Text;
+	using DbConstants;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -17,6 +20,7 @@
 		public long LoanID { get; set; }
 
 		[DataMember]
+		[DecimalFormat("C2")]
 		public decimal Amount { get; set; }
 
 		[DataMember]
@@ -28,6 +32,7 @@
 
 		[FK("LoanTransactionMethod", "Id")]
 		[DataMember]
+		[EnumName(typeof(NLLoanTransactionMethods))]
 		public int LoanTransactionMethodID { get; set; }
 
 		[DataMember]
@@ -52,6 +57,16 @@
 		public NL_PacnetTransactions LastPacnetTransactions() {
 			return PacnetTransactions.OrderBy(t => t.TransactionTime)
 				.LastOrDefault();
+		}
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
+
+			// PacnetTransactions
+			if(PacnetTransactions !=null && PacnetTransactions.Count >0)
+				PacnetTransactions.ForEach(t => sb.Append(t.ToString()));
+
+			return sb.ToString();
 		}
 		
 	} // class NL_FundTransfers
