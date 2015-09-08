@@ -27,15 +27,12 @@ BEGIN
 	DECLARE @LastHmrcUpdateDate DATETIME
 	DECLARE @LastBankUpdateDate DATETIME
 	DECLARE @TypeOfBusiness NVARCHAR(30)
-	DECLARE @CompanyRefNum NVARCHAR(30)
-	DECLARE @CompanyServiceLogID BIGINT
 	DECLARE @PersonalScore INT = 0
+	DECLARE @CompanyScore INT = 0
 
 	----------------------------------------------------------------------------
 
 	SELECT
-		@CompanyRefNum = CompanyRefNum,
-		@CompanyServiceLogID = ServiceLogID,
 		@TypeOfBusiness = TypeOfBusiness
 	FROM
 		dbo.udfGetCustomerHistoricalCompanyLogID(@CustomerID, @Now)
@@ -43,15 +40,9 @@ BEGIN
 	----------------------------------------------------------------------------
 
 	SELECT
-		@PersonalScore = MIN(x.ExperianConsumerScore)
-	FROM	(
-		SELECT
-			ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-		FROM
-			ExperianConsumerData d
-			INNER JOIN dbo.udfLoadCustomerAndDirectorsServiceLog(@CustomerId, @Now) l
-				ON d.Id = l.ExperianConsumerDataID
-	) x
+		@PersonalScore = MinScore
+	FROM
+		dbo.udfGetCustomerScoreAnalytics(@CustomerId, @Now)
 
 	----------------------------------------------------------------------------
 
@@ -65,25 +56,12 @@ BEGIN
 
 	----------------------------------------------------------------------------
 
-	DECLARE @CompanyScore INT = 0	
+	SELECT
+		@CompanyScore = Score
+	FROM
+		dbo.udfGetCustomerCompanyAnalytics(@CustomerID, @Now, 0, 0, 0)
 
-	IF @IsLimited = 1
-	BEGIN
-		SELECT
-			@CompanyScore = ISNULL(CommercialDelphiScore, 0)
-		FROM
-			ExperianLtd
-		WHERE
-			ServiceLogID = @CompanyServiceLogID
-	END
-	ELSE BEGIN 
-		SELECT
-			@CompanyScore = nl.CommercialDelphiScore
-		FROM
-			ExperianNonLimitedResults nl
-		WHERE
-			nl.ServiceLogID = @CompanyServiceLogID
-	END
+	----------------------------------------------------------------------------
 
 	IF @CompanyScore > 0
 		SET @HasCompanyScore = 1
