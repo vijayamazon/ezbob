@@ -132,6 +132,54 @@
 			scoreHistory = new List<Tuple<DateTime?, int?>>();
 		}
 
+		public void ParseAndStore(long serviceLogId) {
+			const string queryFormat =
+				"SELECT Id, ServiceType, CompanyRefNum, ResponseData FROM MP_ServiceLog WHERE Id = {0}";
+
+			string query = string.Format(queryFormat, serviceLogId);
+
+			SafeReader sr = this.db.GetFirst(query, CommandSpecies.Text);
+
+			if (sr.IsEmpty) {
+				this.log.Debug("No MP_ServiceLog entry was found by id {0}.", serviceLogId);
+				return;
+			} // if
+
+			long id = sr["Id"];
+
+			if (id != serviceLogId) {
+				this.log.Debug("MP_ServiceLog entry found by id {0} has id {1}.", serviceLogId, id);
+				return;
+			} // if
+
+			string serviceType = sr["ServiceType"];
+
+			if (serviceType != "E-SeriesNonLimitedData") {
+				this.log.Debug(
+					"Unsupported service type '{0}' detected for MP_ServiceLog entry with id {1}.",
+					serviceType,
+					id
+				);
+				return;
+			} // if
+
+			string companyRefNum = sr["CompanyRefNum"];
+
+			if (string.IsNullOrWhiteSpace(companyRefNum)) {
+				this.log.Debug("Empty company reference number detected for MP_ServiceLog entry with id {0}.", id);
+				return;
+			} // if
+
+			string responseData = sr["ResponseData"];
+
+			if (string.IsNullOrWhiteSpace(responseData)) {
+				this.log.Debug("Empty response data detected for MP_ServiceLog entry with id {0}.", id);
+				return;
+			} // if
+
+			ParseAndStore(responseData, companyRefNum, id);
+		} // ParseAndStore
+
 		public void ParseAndStore(string xml, string refNumber, long serviceLogId, DateTime? insertDate = null)
 		{
 			Init();
@@ -162,7 +210,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("RefNumber", refNumber),
 				new QueryParameter("ServiceLogId", serviceLogId),
-				new QueryParameter("Created", insertDate.HasValue ? insertDate.Value : DateTime.UtcNow),
+				new QueryParameter("Created", insertDate ?? DateTime.UtcNow),
 				new QueryParameter("BusinessName", businessName), 
 				new QueryParameter("Address1", address1),
 				new QueryParameter("Address2", address2),
