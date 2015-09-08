@@ -609,6 +609,10 @@ a.ev-btn-org,
 .loan-summary-box-wrapper{
 	margin-bottom: 20px;
 }
+.loan-summary-boxes {
+    display: inline;
+    margin-right: 10px;
+}
 
 .loan-summary-box {
 	background-color: #e6e6e6;
@@ -650,12 +654,29 @@ div.company-full-details{
             -ms-border-radius: 22px;
             border-radius: 22px;
         }
+        .radio-btn .clickable-label-wrapp:focus {
+            display: block;
+    width: 32px;
+    outline: none;
+    height: 32px;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 0px 6px -6px #777;
+            -ms-box-shadow: 0 -6px 6px -6px blue;
+            box-shadow: 0 -6px 6px -6px blue;
+    -ms-border-radius: 22px;
+  
+    border-radius: 22px;    
+        }
 
-        .click-wrap .click-input-wrap .checkbox-btn {
+.click-wrap .click-input-wrap .checkbox-btn {
             width: 36px;
             height: 36px;
         }
-
+        .checkbox-btn .clickable-label-wrapp {
+               display: block;
+          width: 36px;
+              height: 36px;
+        }
         .click-wrap .click-input-wrap label {
             cursor: pointer;
             position: absolute;
@@ -1925,3 +1946,6 @@ height:40px !important;
     width:0;
     height:0
 }
+
+
+

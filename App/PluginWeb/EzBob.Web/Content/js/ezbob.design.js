@@ -31,7 +31,18 @@ $(function() {
 		var b = link.parent().find('b');
 		b.toggleClass('down');
 	});
+	$(document).keydown(function (e) {
+	   var elem = $(this.activeElement);
+	   if (elem.hasClass('clickable-label-wrapp')) {
 
+	        var code = e.which;
+	        // 13 = Return, 32 = Space
+	        if ((code === 13) || (code === 32)) {
+	            console.log('click');
+	            elem.parent().click();
+	        }
+	    }
+	})
 	$(window).resize(function() {
 		var tb = $('.top-buttons'),
             po = $('.top-buttons .popover');

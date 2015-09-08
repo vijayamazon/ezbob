@@ -509,18 +509,18 @@ string formFieldID = "")
 					   @if (true) {
 						   @: for="@identificator"
 					   }>
-                    <i class="fa @( inputButton.Type == "radio" ? "fa-circle" : "fa-check")"> </i>
-                </label>
+                    <span class="clickable-label-wrapp" tabindex=@inputButton.TabIndex>
+                        <i class="fa @( inputButton.Type == "radio" ? "fa-circle" : "fa-check")"> </i>
+                    </span>
+</label>
 
             </div>
-            <label 
-				@if (true) {
-					@: class="title @inputButton.LabelClass"
-	   			}
-				@if (true) {
-					@: for="@identificator"
-				}
-			>@caption</label>
+           
+                <label @if (true) { @: class="title @inputButton.LabelClass"
+                       	   			}
+                       @if (true) { @: for="@identificator"
+                       				}>@caption</label>
+
         </div>
     }
 }

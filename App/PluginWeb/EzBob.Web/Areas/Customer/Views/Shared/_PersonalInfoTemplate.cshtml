@@ -57,6 +57,7 @@
 		        cls: "form_field",
 		        isRequired: true,
 		        statusIcon: true,
+                tabIndex:1,
 		        uiEventControlID: "personal-info:first_name"),
 		        origin: origin)
 
@@ -64,6 +65,7 @@
 		        cls: "form_field alphaOnly",
 		        isRequired: false,
 		        statusIcon: true,
+                            tabIndex: 2,
 		        uiEventControlID: "personal-info:middle_name"),
 		        origin: origin)
 
@@ -72,6 +74,7 @@
 		        cls: "form_field",
 		        isRequired: true,
 		        statusIcon: true,
+                            tabIndex: 3,
 		        uiEventControlID: "personal-info:last_name"),
 		        origin: origin)
 
@@ -83,6 +86,7 @@
 		        cls: "required",
 		        isRequired: true,
 		        statusIcon: true,
+                 tabIndex: 4,
 		        name: "Gender",
 		        uiEventControlID: "personal-info:gender");
 
@@ -90,6 +94,7 @@
 		        value: "F",
 		        type: "radio",
 		        cls: "gender-margin",
+                tabIndex: 5,
 		        isRequired: true,
 		        statusIcon: true,
 		        name: "Gender",
@@ -116,6 +121,7 @@
 		        MaritalStatus.Divorced.ToTuple<MaritalStatus>(),
 		        cls: "form_field",
 		        isRequired: true,
+                            tabIndex: 6,
 		        statusIcon: true,
 		        uiEventControlID: "personal-info:marital_status"),
 		        origin: origin)
