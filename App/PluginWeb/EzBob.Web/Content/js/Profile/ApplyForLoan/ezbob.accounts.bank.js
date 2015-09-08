@@ -1,8 +1,4 @@
-﻿///<reference path="~/Content/js/lib/backbone.js" />
-///<reference path="~/Content/js/lib/underscore.js" />
-/// <reference path="../lib/jquery.maskedinput-1.2.2.js" />
-
-var EzBob = EzBob || {};
+﻿var EzBob = EzBob || {};
 
 EzBob.BankAccountModel = Backbone.Model.extend({
     defaults: {
@@ -19,6 +15,7 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
     events: {
         'change input[type="text"]': 'inputsChanged',
         'keyup input[type="text"]': 'inputsChanged',
+        'change input[type="checkbox"]': 'inputsChanged',
         'click a.connect-bank': 'connect',
         "click a.back": "back"
     },
@@ -51,12 +48,12 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
         notifications.render();
         
 	    EzBob.UiAction.registerView(this);
-
+	    this.inputsChanged();
         return this;
     },
 
     inputsChanged: function () {
-        var enabled = EzBob.Validation.checkForm(this.validator);
+    	var enabled = EzBob.Validation.checkForm(this.validator);
         this.$el.find('a.connect-bank').toggleClass('disabled', !enabled);
     },
 

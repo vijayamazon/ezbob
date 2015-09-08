@@ -498,6 +498,13 @@ h2.header-message a{
 
 select.selectheight { height: 30px; }
 
+.card-options-label{
+	display: inline-block;
+    font-size: 15px;
+    font-weight: normal;
+    margin-right: 10px;
+}
+
 #get-cash .underwriter-only { display: none; }
 #get-cash .print-customer_details { display: none; }
 
@@ -833,6 +840,10 @@ table.directors-list td.l {
 	content: ": ";
 }
 
+.main-page-ezbob .progress-time {
+    display: none;
+}
+
 .dashboard-steps .progress-time{
 	display: none;
 }
@@ -866,4 +877,9 @@ span.sign-full-name {
 
 .schedule-print-link{
 	margin-top: 8px;
+}
+
+.input-tag-wrap label{
+	display: inline;
+	font-weight: normal;
 }

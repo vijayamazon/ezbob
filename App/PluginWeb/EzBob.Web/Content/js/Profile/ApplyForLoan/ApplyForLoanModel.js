@@ -27,15 +27,14 @@ EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
 		var val = attrs.neededCash;
 
 		if (isNaN(val))
-			this.set({ neededCash: this.get("minCash") });
+			this.set({ neededCash: this.get("minCash") }, { silent: true });
 
 		if (val > this.get("maxCash"))
-			this.set({ neededCash: this.get("maxCash") });
+			this.set({ neededCash: this.get("maxCash") }, { silent: true });
 
 		if (val < this.get("minCash"))
-			this.set({ neededCash: this.get("minCash") });
+			this.set({ neededCash: this.get("minCash") }, { silent: true });
 
-		console.log('validate', isNaN(val), val, 'n', this.get('neededCash'), this.get("maxCash"), this.get("minCash"));
 		return false;
 	}, // validate
 

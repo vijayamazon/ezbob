@@ -10,19 +10,19 @@
 	<div class="modal-body">
 		<div class="control-group">
 			<div class="controls controls-inline">
-				<label class="radio span3">
+				<label class="radio card-options-label">
 					<input type="radio" name="cardOptions" id="cardOption1" value="useExisting" checked ui-event-control-id="select-debit-card:card-options">
 					Use debit card ending:
 				</label>
 
-				<select class="span3 selectheight" ui-event-control-id="select-debit-card:existing-card">
+				<select class="selectheight" ui-event-control-id="select-debit-card:existing-card">
 					<% _.each(cards, function(c, i){%>
 					<option <% if (c.IsDefault) { print('selected="selected"'); } %> value="<%- c.Id %>"><%- c.CardNo || 'XXXX' %> Exp <%- EzBob.formatDateShortCard(c.ExpireDate) %></option>
 					<%});%>
 				</select>
 			</div>
 			<div class="controls controls-inline">
-				<label class="radio span3">
+				<label class="radio card-options-label">
 					<input type="radio" name="cardOptions" id="cardOption2" value="useNew" ui-event-control-id="select-debit-card:card-options">
 					Enter new debit card
 				</label>
