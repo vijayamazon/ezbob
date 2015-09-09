@@ -32,9 +32,8 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		return this.model.on("change", this.render, this);
 	},
 	onRender: function () {
-		var region, view;
-		view = this.states[this.model.get("state")].view(this);
-		region = new Backbone.Marionette.Region({
+		var view = this.states[this.model.get("state")].view(this);
+		var region = new Backbone.Marionette.Region({
 			el: this.$el.find('.apply-for-loan-div')
 		});
 		region.show(view);
@@ -44,17 +43,16 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 	createApplyForLoanView: function (_this) {
-		var view;
-		view = new EzBob.Profile.ApplyForLoanView({
+		var view = new EzBob.Profile.ApplyForLoanView({
 			model: _this.applyForLoanViewModel,
 			customer: _this.customer
 		});
 		view.on("submit", _this.amountSelected, _this);
+		view.on("back", _this.backClicked, _this);
 		return view;
 	},
 	createAddBankAccountView: function (_this) {
-		var view;
-		view = new EzBob.BankAccountInfoView({
+		var view = new EzBob.BankAccountInfoView({
 			model: _this.customer
 		});
 		view.on("back", function () {
@@ -65,7 +63,10 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		});
 		return view;
 	},
-	
+	backClicked: function() {
+		$('.wizard-steps-wrapper').remove();
+	},
+
 	amountSelected: function () {
 		var data, enabled, form, pi, xhr;
 		form = this.$el.find('form');

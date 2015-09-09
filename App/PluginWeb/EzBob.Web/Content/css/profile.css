@@ -69,6 +69,10 @@ body .agreement-text {
 .personal-company-info-container:after { display: table; line-height: 0; content: ""; }
 .personal-company-info-container:after { clear: both; }
 
+.personal-company-info-container .form_field_container{
+	margin-bottom: 15px;
+}
+
 .personal-company-info-container .column {
      width: 49%;
      float: left;
@@ -197,7 +201,7 @@ input.white {
 {
     display: block;
     position: absolute;
-    bottom: -20px;
+    bottom: -24px;
     right: 0px;
 
     font-size: 9px;
@@ -205,7 +209,14 @@ input.white {
 }
 
 .lot-of-loans {
-    padding-left: 115px;
+    padding-left: 100px;
+}
+
+.lot-of-loans input[type="radio"]{
+	margin-top: 6px;
+}
+.lot-of-loans #pay-early-other{
+	margin-top: 10px;
 }
 
 .form-horizontal .control-group.less-space {
@@ -423,8 +434,7 @@ html body .right {
 
 .company-info fieldset,
 .personal-info fieldset{
-
-    border-top: 1px solid #EEE;
+	margin-top: 20px;
 }
 
 .company-info fieldset legend,
@@ -472,11 +482,25 @@ h2.header-message a{
     font-size: 12px;
 }
 
+.early-payment-form{
+	padding-left: 30px;
+    padding-right: 30px;
+}
+
 .early-payment-form .radio b { margin-left: 15px;}
+
+.early-payment-form h3 {
+	margin-bottom: 25px; 
+}
+
+.early-payment-form .input-wrapper {
+	display: inline;
+}
+
 .early-payment-form .radio .money { 
     margin: 0;
     margin-left: 15px;
-    width: 50%;
+    width: 250px;
 }
 
 #profile-content .stores-view .next { display: none!important;}
@@ -857,10 +881,6 @@ span.sign-full-name {
 	display: none;
 }
 
-.slider-wrapper{
-	padding-bottom: 30px;
-}
-
 .agreements-checkboxes label {
 	display: inline-block;
 	width: 90%
@@ -875,4 +895,22 @@ span.sign-full-name {
 	font-weight: normal;
 }
 
+.loan-details-well {
+	padding: 15px 15px 0 25px;
+}
 
+.loan-summary-well {
+	margin-bottom: 20px;
+	padding: 15px 15px 15px 25px; 
+}
+
+.loan-summary-well .pay-early{
+	margin-top: 80px;
+    float: right;
+    margin-right: 10px;
+}
+
+.loan-agreements ul{
+	margin: 0;
+    margin-left: 20px;
+}

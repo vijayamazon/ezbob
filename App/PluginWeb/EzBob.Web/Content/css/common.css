@@ -132,10 +132,6 @@ footer {
 	left: 0;
 }
 
-i{
-	font-style: italic;
-}
-
 /*-- Padding for inner sections --*/
 .inner {
     width:1000px; 
@@ -178,7 +174,7 @@ h2 a{font-size:28px; color:#67c10b; text-decoration:none;}
 h3{font-size:24px;}
 h3.qa-faq-title{font-size:20px;}
 h4{font-size:20px;}
-h5{font-size:18px;}
+h5{font-size:18px; margin-top: -15px;}
 h6{font-size:16px;}
 
 
@@ -469,6 +465,7 @@ div.shop-connected {
     height: 75px;
     display: inline-block;
 	margin-right: 2%;
+	margin-bottom: 10px;
 }
 
 .account-or {
@@ -477,7 +474,7 @@ div.shop-connected {
 	height: 40px;
 	z-index: 2;
 	display: inline-block;
-	margin-bottom: 17px;
+	margin-bottom: 28px;
     margin-right: 2%;
 }
 
@@ -489,6 +486,7 @@ div.shop-connected {
 	font-family: 'Titillium Web Regular';
 	font-size: 22px;
 	color: #4d4d4d;
+	margin-top: -1px;
 }
 
 .source_labels {
@@ -887,6 +885,79 @@ select.SubBank {
         background-position: -1098px -1px;
         width: 180px;
     }
+
+
+/*accounts*/
+.marketplace-image {
+    display: inline-block;
+    background: url(images/accounts/account_logos_sprite.png) no-repeat 0 0;
+    height: 40px;
+    vertical-align: middle;
+	margin-bottom: -6px;
+}
+
+.marketplace-image.marketplace-image-Amazon {
+	background-position: -171px -1px;
+    width: 89px;
+}
+.marketplace-image.marketplace-image-paypal {
+	background-position: -616px -1px;
+    width: 111px;
+}
+.marketplace-image.marketplace-image-EKM {
+	background-position: -1057px -1px;
+    width: 112px;
+}
+.marketplace-image.marketplace-image-Play {
+	background-position: 0px -1px;
+    width: 151px;
+}
+.marketplace-image.marketplace-image-Volusion {
+	background-position: -1930px -1px;
+    width: 103px;
+}
+.marketplace-image.marketplace-image-FreeAgent {
+	background-position: -280px -1px;
+    width: 151px;
+}
+.marketplace-image.marketplace-image-KashFlow {
+	background-position: -450px -1px;
+    width: 146px;
+}
+.marketplace-image.marketplace-image-eBay {
+	background-position: -1353px -1px;
+    width: 81px;
+}
+.marketplace-image.marketplace-image-Bigcommerce {
+	background-position: -1189px -1px;
+    width: 144px;
+}
+.marketplace-image.marketplace-image-Magento {
+	background-position: -1455px -1px;
+    width: 140px;
+}
+.marketplace-image.marketplace-image-Shopify {
+	background-position: -934px -1px;
+    width: 103px;
+}
+.marketplace-image.marketplace-image-Xero {
+	background-position: -2053px -1px;
+    width: 37px;
+}
+.marketplace-image.marketplace-image-Sage {
+	background-position: -1770px -1px;
+    width: 139px;
+}
+.marketplace-image.marketplace-image-PayPoint {
+   background-position: -747px -1px;
+   width: 165px;
+}
+.marketplace-image.marketplace-image-PrestaShop {
+	background-position: -1615px -1px;
+    width: 134px;
+}
+/*accounts*/
+
 
 .source_table {
     width: 100%;
@@ -1636,9 +1707,16 @@ td.account-logo {
     vertical-align: middle;
     outline-style: none;
     overflow: hidden;
-    border: 1px solid #dddddd;
+    border: 1px solid #999999;
     border-radius: 5px;
-	padding-top: 5px;
+	padding-top: 10px;
+}
+
+.marketplace-button .link-upload i{
+	font-size: 18px;
+    line-height: 20px;
+    vertical-align: bottom;
+	font-weight: bold;
 }
 
 .marketplace-button .link-upload, .marketplace-button .link-upload:hover {
@@ -1679,7 +1757,7 @@ td.account-logo {
 
 .marketplace-button a div.onhover div.onhover-cell {
 	display: inline-block;
-	vertical-align: middle;
+    margin-top: 0px;
 } 
 
 .hmrc-main-button a div.onhover {
@@ -1877,7 +1955,7 @@ h3.popover-title { margin: 0 !important; }
 
 .early-payment-form label.radio, .early-payment-form label.checkbox {
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 30px;
 }
 
 .early-payment-form .w100p { width: 100%; }
@@ -2222,7 +2300,7 @@ li[stripped="stripped"] {
     margin: 0;
     border: 0;
     outline: 0;
-    top: -18px;
+    top: -20px;
     color: #acacac !important;
     font-size: 14px;
     min-height: 18px;
@@ -2734,18 +2812,8 @@ ul#user-menu {
     margin-top: 90px;
 }
 
-#get-cash .wizard-steps {
-    margin-top: -13px;
-}
-
-.wizard-steps {
-	/*
-    background-color: #E2E3E5;
-    color: #fff;
-    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.35);
-    -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.35);
-    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.35);
-	*/
+.dashboard-steps {
+	margin-top: 40px;
 }
 
     .wizard-steps .progress-time {
@@ -3276,13 +3344,11 @@ iframe[src^='https://finimpact'] {
     display: block;
     font-size:14px;
     color: #565656;
-    height: 30px;
-    padding: 12px 18px 12px 18px;
+    height: 60px;
+    padding: 0 18px 15px 18px;
     background-color: white;
     margin-bottom: 10px;
-
-    behavior: url(CSS3PIE);
-    position:relative\0/;
+	box-sizing: border-box;
 }
 
 .d-widget h3 {
@@ -3292,22 +3358,22 @@ iframe[src^='https://finimpact'] {
     font-size: 16px;
     width: 70px;
     margin-right: 5px;
-    line-height: 23px;
+    line-height: 25px;
     padding-left: 20px;
-    margin-top: 0;
+    margin-top: 16px;
 }
 
 .d-widget dl{
-    margin: 0 0 4px 0;
-    padding: 0;
+	margin-top: 12px;
 }
 
 .d-widget dt, .d-widget dd {
-    height: 25px;
-    line-height: 25px;
-    vertical-align: middle;
+	height: 35px;
+    line-height: 33px;
+	vertical-align: middle;
     display: block;
     float: left;
+    box-sizing: border-box;
 }
 
 .d-widget dt 
@@ -3315,19 +3381,19 @@ iframe[src^='https://finimpact'] {
     font-weight: normal;
     margin-left: 8px;
 	margin-right: 8px;
+	width: 100px;
 }
 
 .d-widget dd {
     border: solid 1px #c5c5c5;
     width: 130px;
     display: block;
-    margin-bottom: 3px;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     -o-border-radius: 4px;
     text-align: right;
-    padding-right: 3px;
+    padding-right: 8px;
     font-weight: bold;
     margin-right: 8px;
     padding-left: 2px;
@@ -3339,20 +3405,29 @@ iframe[src^='https://finimpact'] {
 
 .d-widget button {
     display: block;
-    margin: -7px -10px 0;
+	margin: -1px -3px 0;
     float: right;
     width: 167px;
 }
  /* Get a quote*/
  .sliders-wrapper {
-     position:relative;
+	position: relative;
+	max-width: 1000px;
+    margin: 0 auto;
  }
  .slider-wrapper  {
     background: #4d4d4d;
-    padding-bottom: 24px;
+    padding-bottom: 18px;
     width: 100%;
     box-sizing: border-box;
  }
+
+.profile-screen .slider-wrapper {
+	background: #f9f9f9;
+	padding-bottom: 30px;
+	padding-top: 20px;
+}
+
  .sliders-container {
      border-radius:5px;
      box-sizing: border-box;
@@ -3485,18 +3560,34 @@ iframe[src^='https://finimpact'] {
      margin:10px 0;
  }
  .calc-header {
-     max-width:780px;
-     margin:65px auto;
+    max-width: 780px;
+    margin-top: 70px;
+    padding-top: 25px;
+    padding-left: 50px;
  }
+
+ .calc-header .everline-text{
+	 display: none;
+ }
+
+.calc-header p {    
+	 margin-top: -5px;
+}
+
  .form-markup-wrapper .col, .form-markup-wrapper .span {
      margin:0;
  }
   /*calc bottom part */
+.sliders-main {
+	background-color: #ebebeb;
+}
+
 .sliders-main .summary-wrap {
 	min-height: 80px;
-	width: 100%;
+	width: 90%;
 	background: #383838;
 	color: white;
+	margin: 0 auto;
 }
 
 .sliders-main .summary {
@@ -3515,9 +3606,11 @@ iframe[src^='https://finimpact'] {
     
  }
  .sliders-main .overview {
-        background: #383838;
-            padding-bottom: 25px;
-            text-align: center;
+    background: #383838;
+    padding-bottom: 25px;
+    text-align: center;
+	margin: 0 auto;
+	width: 90%;
  }
 .sliders-main .summary {
          padding-top: 25px;
@@ -3543,6 +3636,10 @@ iframe[src^='https://finimpact'] {
 
 	.sliders-main .summary .fa.icon-plus {
 		display: none;
+	}
+
+	.sliders-main .wizard-request-loan-section{
+		background: #4d4d4d;
 	}
 
 .sliders-main .overview .total {
@@ -3643,12 +3740,14 @@ font-size: 32px;
 
 }
 .close.fa-times {
-        font-size: 30px;
-    background:none;
-     color:#4d4d4d;
-     opacity:0.8;
-     margin-right: 20px;
+    font-size: 25px;
+    background: none;
+    color: #4d4d4d;
+    opacity: 0.8;
+    margin-right: 5px;
+    margin-top: 20px;
 }
+
 .close.fa-times:before {
     color:#4d4d4d;
     
@@ -3662,9 +3761,9 @@ font-size: 32px;
 
 /*pay early*/
 
-.radio-btn {
+.pay-early-wrapper .radio-btn {
     display:none;
 }
-.fa-check {
+.pay-early-wrapper .fa-check {
     display:none;
 }

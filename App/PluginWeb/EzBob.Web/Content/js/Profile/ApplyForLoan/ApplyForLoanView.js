@@ -55,8 +55,12 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		'paste #signedName': 'showSubmit',
 		'click .print': 'print',
 		'change .notInBankruptcy': 'notInBankruptcyChange',
+		'click .btn-back': 'backClicked'
 	}, // events
 
+	backClicked: function() {
+		this.trigger('back');
+	},
 	notInBankruptcyChange: function() {
 		var isChecked = !!this.$el.find('.notInBankruptcy').attr('checked');
 

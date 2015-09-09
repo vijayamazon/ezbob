@@ -64,6 +64,7 @@
 				.Add("~/Content/css/valentine2015scratch.css")
 				.Add("~/Content/css/easter2015scratch.css")
 				.Add("~/Content/css/ezbob.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
 				.MvcRender("~/Content/css/min/customerezbob_#.css");
 		} // RenderEzbobCustomerCss
 
@@ -107,7 +108,6 @@
 			return Bundle.Css()
 				//custom css
 				.Add("~/Content/css/wizard.css")
-				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/mobile.css")
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
 		} // RenderProfileCss

@@ -281,10 +281,13 @@ div.add-director-container { position: relative; width: 96%; }
 
 
 /*----table for payment schedule-----*/
-table.table{width:100%;border-left:1px #ccc solid; border-top:1px #ccc solid;
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
+table.table{
+	width:100%;
+	border-left:1px #ccc solid; 
+	border-top:1px #ccc solid;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     margin:0 0 20px 0;
 }
 table.table th{
@@ -301,12 +304,16 @@ table.table th{
     font-size: 16px;
 }
 table.table th, table.table td {
-    padding:15px 5px; text-align:center; border-right:1px #ccc solid; border-bottom:1px #ccc solid;
+    padding: 15px 20px;
+	text-align:center;
+	border-right:1px #ccc solid; 
+	border-bottom:1px #ccc solid;    
+	line-height: 35px;
 }
 table.table td {
     background:#fff;
     font-size:16px; 
-    font-family: "Titillium Web Light";
+    font-family: "Titillium Web Regular";
 }
 table.table td span.label{color:#666;}
 table.table tbody tr:hover{background:#f1f1f1;}

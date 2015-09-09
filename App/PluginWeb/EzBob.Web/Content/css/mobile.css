@@ -1,4 +1,8 @@
 @media only screen and (min-width : 320px) and (max-width : 800px) {
+	header {
+		height: 65px;
+	}
+
     #header {
         width: 100%;
         -moz-min-width: 100%;
@@ -7,7 +11,19 @@
         -webkit-min-width: 100%;
         min-width: 100%;
         background-color: #fff;
+		height: 65px;
     }
+
+	.header-logo {
+		line-height: 65px;
+		height: 65px;
+		width: 138px;
+		background: url('images/header/header_bg_left.png');
+		background-repeat: no-repeat;
+		display: inline-block;
+		vertical-align: middle;
+		background-position-x: -46px;
+	}
 
     .header-inner {
         width: 100%;
@@ -17,6 +33,23 @@
         -webkit-min-width: 320px;
         min-width: 320px;
     }
+
+	.newlogo {
+		vertical-align: middle;
+		margin-top: -8px;
+		margin-left: 12px;
+		background: url(images/header/ezbob_logo-white.png) no-repeat;
+		width: 100px;
+		height: 26px;
+		background-size: contain;
+		display: inline-block;
+	}
+
+	.header-phone {
+		position: absolute;
+	    bottom: 8px;
+		right: 35px;
+	}
 
     ul#user-menu {
         margin: 0;
@@ -241,18 +274,6 @@
         width: 100%;
     }
 
-    ul.application_steps {
-        margin: 0 0 0 0;
-        overflow: hidden;
-        list-style: none;
-        -moz-min-width: 320px;
-        -ms-min-width: 320px;
-        -o-min-width: 320px;
-        -webkit-min-width: 320px;
-        min-width: 320px;
-        width: 100%;
-    }
-
         ul.application_steps li .step_label {
             width: 100%;
             font-size: 0.8em;
@@ -425,6 +446,18 @@
         left: 0 !important;
         width: auto !important;
     }
+
+	.payments-wrap, .sliders-main .summary{
+		text-align: center;
+	}
+	.sliders-main .summary-wrap{
+		padding-top: 0;
+	}
+
+	.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
+		margin: 0;
+		padding: 0; 
+	}
 }
 
 @media only screen and (min-width : 320px) and (max-width : 500px) {
@@ -473,6 +506,16 @@
         display: block;
         width: 100%;
     }
+
+	.calc-header {
+		padding-top: 10px;
+		padding-left: 0;
+	}
+
+	.button.change-loan-details-btn {
+		padding: 24px;
+		font-size: 24px;
+	}
 
     .summary-wrap {
         display: none;

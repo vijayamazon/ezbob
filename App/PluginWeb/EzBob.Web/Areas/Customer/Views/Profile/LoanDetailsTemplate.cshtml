@@ -2,9 +2,9 @@
 <script id="loan-details-template" type="text/template">
 	<% var rollovers = rollovers || []; %>
 
-	<h1 style="margin-bottom: 30px;">Loan Details</h1>
+	<h2>Loan Details</h2>
 	<div style="padding-left: 0; padding-bottom: 30px;">
-		<div class="dashboard-frame simple-well" style="height: auto;">
+		<div class="dashboard-frame simple-well loan-details-well">
 			<%
 			var address,
 			type = customer.BusinessTypeReduced,
@@ -53,8 +53,8 @@
 		</div>
 	</div>
 
-	<h2 style="margin-bottom: 10px;">Loan Summary</h2>
-	<div class="simple-well" style="margin-bottom: 30px;">
+	<h2>Loan Summary</h2>
+	<div class="simple-well loan-summary-well">
 		<div class="row-fluid form-horizontal loan-details">
 			<div class="span4">
 				<dl>
@@ -110,7 +110,7 @@
 				payButtonName = "Pay Now";
 
 				if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
-				%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early" style="margin-top: 5px;" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
+				%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early ev-btn-org" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
 				}
 				%>
 			</div>
