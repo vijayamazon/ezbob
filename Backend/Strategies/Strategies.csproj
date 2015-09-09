@@ -241,7 +241,6 @@
     <Compile Include="Esign\LoadCustomerEsignatures.cs" />
     <Compile Include="Esign\LoadEsignatureFile.cs" />
     <Compile Include="Esign\LoadEsignatures.cs" />
-    <Compile Include="Backfill\BackfillCustomerAnalyticsCompany.cs" />
     <Compile Include="Backfill\BackfillExperianDirectors.cs" />
     <Compile Include="Backfill\BackfillExperianLtd.cs" />
     <Compile Include="Backfill\BackfillExperianConsumer.cs" />
@@ -255,7 +254,6 @@
     <Compile Include="Experian\ExperianDirector.cs" />
     <Compile Include="Experian\LoadExperianLtd.cs" />
     <Compile Include="Experian\ParseExperianLtd.cs" />
-    <Compile Include="Experian\UpdateCustomerAnalyticsOnCompanyChange.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />

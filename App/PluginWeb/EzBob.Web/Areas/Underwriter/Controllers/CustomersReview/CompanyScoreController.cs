@@ -97,16 +97,6 @@
 				InsertDate = DateTime.UtcNow,
 			});
 
-			try {
-				new ServiceClient().Instance.UpdateCustomerAnalyticsOnCompanyChange(customer.Id);
-			} catch (Exception e) {
-				new SafeILog(this).Warn(
-					e,
-					"Failed to update customer analytics on company change for customer {0}.",
-					customer.Id
-					);
-			} // try
-
 			return Json(new {
 				success = true,
 			});

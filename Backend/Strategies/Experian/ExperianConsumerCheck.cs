@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Globalization;
-	using ConfigManager;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -56,8 +55,6 @@
 				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
 			} // if
 
-			UpdateAnalytics();
-
 			Log.Say(
 				bSuccess ? Severity.Info : Severity.Alert,
 				"Consumer check {2} with parameters: {0} {1}.",
@@ -76,86 +73,6 @@
 				(this.personalData.TimeAtAddress == 1) &&
 				!string.IsNullOrEmpty(this.addressLines[6, AddressCurrency.Previous]);
 		} // CanUsePrevAddress
-
-		private void UpdateAnalytics() {
-			if ((Result == null) || Result.HasExperianError)
-				return;
-
-			if (this.directorId == null)
-				UpdateCustomerAnalytics();
-			else
-				UpdateDirectorAnalytics();
-		} // UpdateAnalytics
-
-		private void UpdateCustomerAnalytics() {
-			int nCii = Result.CII ?? 0;
-
-			int nNumOfAccounts = 0;
-			int nDefaultCount = 0;
-			int nLastDefaultCount = 0;
-
-			var dThen = DateTime.UtcNow.AddYears(-CurrentValues.Instance.CustomerAnalyticsDefaultHistoryYears);
-
-			foreach (var detail in Result.Cais) {
-				nNumOfAccounts++;
-
-				if (detail.AccountStatus != "F")
-					continue;
-
-				nDefaultCount++;
-
-				var settlementDate = detail.SettlementDate ?? detail.LastUpdatedDate;
-
-				if (settlementDate >= dThen)
-					nLastDefaultCount++;
-			} // for each CAIS datum in CAIS data
-
-			Log.Debug(
-				"Updating customer analytics (customer = {0}, " +
-				"score = {1}, " +
-				"indebtedness index = {2}, " +
-				"# accounts = {3}, " +
-				"# defaults = {4}, " +
-				"# defaults = {5} since {6}" +
-				")",
-				this.customerId,
-				Score,
-				nCii,
-				nNumOfAccounts,
-				nDefaultCount,
-				nLastDefaultCount,
-				dThen.ToString("MMMM d yyyy", CultureInfo.InvariantCulture)
-			);
-
-			DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerId),
-				new QueryParameter("Score", Score),
-				new QueryParameter("IndebtednessIndex", nCii),
-				new QueryParameter("NumOfAccounts", nNumOfAccounts),
-				new QueryParameter("NumOfDefaults", nDefaultCount),
-				new QueryParameter("NumOfLastDefaults", nLastDefaultCount),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
-			);
-		} // UpdateCustomerAnalytics
-
-		private void UpdateDirectorAnalytics() {
-			Log.Debug(
-				"Updating customer analytics director score (customer = {0}, director = {1}, score = {2})",
-				this.customerId,
-				this.directorId,
-				Score
-			);
-
-			DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateDirector",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerId),
-				new QueryParameter("Score", Score),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
-			);
-		} // UpdateDirectorAnalytics
 
 		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency) {
 			InputLocationDetailsMultiLineLocation location = this.addressLines.GetLocation(oAddressCurrency);

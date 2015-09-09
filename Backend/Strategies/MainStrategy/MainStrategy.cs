@@ -98,8 +98,6 @@
 
 			UpdateCustomerAndCashRequest();
 
-			UpdateCustomerAnalyticsLocalData();
-
 			SendEmails();
 		} // Execute
 
@@ -274,47 +272,6 @@
 
 			postMaster.SendEmails();
 		} // SendEmails
-
-		private void UpdateCustomerAnalyticsLocalData() {
-			SafeReader scoreCardResults = DB.GetFirst(
-				"GetScoreCardData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", CustomerID),
-				new QueryParameter("Today", DateTime.Today)
-			);
-
-			int ezbobSeniorityMonths = scoreCardResults["EzbobSeniorityMonths"];
-
-			int modelMaxFeedback = scoreCardResults["MaxFeedback", CurrentValues.Instance.DefaultFeedbackValue];
-
-			int numOfEbayAmazonPayPalMps = scoreCardResults["MPsNumber"];
-			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
-			int modelLatePayments = scoreCardResults["LatePayments"];
-			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
-
-			bool firstRepaymentDatePassed = false;
-
-			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
-			if (modelFirstRepaymentDate != default(DateTime))
-				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
-
-			DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateLocalData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", CustomerID),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", this.medal.AnnualTurnover),
-				new QueryParameter("TotalSumOfOrdersForLoanOffer", (decimal)0), // Not used any more, was part of old medal.
-				new QueryParameter("MarketplaceSeniorityYears", (decimal)0), // Not used any more, was part of old medal.
-				new QueryParameter("MaxFeedback", modelMaxFeedback),
-				new QueryParameter("MPsNumber", numOfEbayAmazonPayPalMps),
-				new QueryParameter("FirstRepaymentDatePassed", firstRepaymentDatePassed),
-				new QueryParameter("EzbobSeniorityMonths", ezbobSeniorityMonths),
-				new QueryParameter("OnTimeLoans", modelOnTimeLoans),
-				new QueryParameter("LatePayments", modelLatePayments),
-				new QueryParameter("EarlyPayments", modelEarlyPayments)
-			);
-		} // UpdateCustomerAnalyticsLocalData
 
 		private void AdjustOfferredCreditLine() {
 			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
