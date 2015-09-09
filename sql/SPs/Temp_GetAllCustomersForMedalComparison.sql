@@ -18,8 +18,7 @@ BEGIN
 		@ConsumerScore INT,
 		@CustomerId INT,
 		@EarliestHmrcLastUpdateDate DATETIME,
-		@EarliestYodleeLastUpdateDate DATETIME,
-		@RefNumber NVARCHAR(50)
+		@EarliestYodleeLastUpdateDate DATETIME
 		
 	CREATE TABLE #RelevantData
 	(
@@ -57,7 +56,6 @@ BEGIN
 		SET @NumOfHmrcMps = NULL
 		SET @EarliestHmrcLastUpdateDate = NULL
 		SET @NumOfEbayAmazonPayPalMps = NULL
-		SET @RefNumber = NULL
 		
 		SELECT 
 			@TypeOfBusiness = TypeOfBusiness
@@ -67,35 +65,12 @@ BEGIN
 			Id = @CustomerId
 			
 		SELECT
-			@RefNumber = ExperianRefNum
-		FROM
-			Customer,
-			Company
-		WHERE
-			Customer.Id = @CustomerId AND
-			Customer.CompanyId = Company.Id
-			
-		IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
-		BEGIN
-			SELECT 
-				@CompanyScore = Score 
-			FROM 
-				CustomerAnalyticsCompany 
-			WHERE 
-				CustomerID = @CustomerId AND
-				IsActive = 1
-		END
-		ELSE
-		BEGIN
-			SELECT 
-				@CompanyScore = CommercialDelphiScore
-			FROM 
-				ExperianNonLimitedResults
-			WHERE
-				RefNumber = @RefNumber AND
-				IsActive = 1
-		END
-		
+			@CompanyScore = Score
+		FROM 
+			dbo.udfGetCustomerCompanyAnalytics(@CustomerId, NULL, 0, 0, 0)
+
+		SET @CompanyScore = ISNULL(@CompanyScore, 0)
+
 		SELECT @ConsumerScore = MIN(ExperianConsumerScore)
 		FROM
 		(

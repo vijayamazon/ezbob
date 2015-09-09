@@ -31,7 +31,6 @@ BEGIN
 		@ConsumerScore INT,
 		@EarliestHmrcLastUpdateDate DATETIME,
 		@EarliestYodleeLastUpdateDate DATETIME,
-		@RefNumber NVARCHAR(50),
 		@LastCashRequestID BIGINT
 		
 	------------------------------------------------------------------------------
@@ -45,82 +44,20 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		@RefNumber = ExperianRefNum
-	FROM
-		Customer
-		INNER JOIN Company ON Customer.CompanyId = Company.Id
-	WHERE
-		Customer.Id = @CustomerId
-
-	------------------------------------------------------------------------------
-
-	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
-	BEGIN
-		SELECT TOP 1
-			@CompanyScore = cac.Score
-		FROM 
-			CustomerAnalyticsCompany cac
-		WHERE 
-			cac.CustomerID = @CustomerId
-			AND
-			cac.AnalyticsDate < @Now
-		ORDER BY
-			cac.AnalyticsDate DESC
-	END
-	ELSE BEGIN
-		SELECT TOP 1
-			@CompanyScore = r.CommercialDelphiScore
-		FROM 
-			ExperianNonLimitedResults r
-			INNER JOIN MP_ServiceLog l ON r.ServiceLogId = l.Id
-		WHERE
-			r.RefNumber = @RefNumber
-			AND
-			l.InsertDate < @Now
-		ORDER BY
-			l.InsertDate DESC
-	END
-
-	SET @CompanyScore = ISNULL(@CompanyScore, 0)
+	SET @CompanyScore = ISNULL((
+		SELECT Score
+		FROM dbo.udfGetCustomerCompanyAnalytics(@CustomerId, @Now, 0, 0, 0)
+	), 0)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	DECLARE @ServiceLogId BIGINT
-
-	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @Now
-
-	------------------------------------------------------------------------------
-
-	DECLARE @ExperianConsumerDataID BIGINT
-
-	SELECT
-		@ExperianConsumerDataID = e.Id
-	FROM
-		ExperianConsumerData e
-	WHERE
-		e.ServiceLogId = @ServiceLogId
-
-	------------------------------------------------------------------------------
-
-	SELECT
-		@ConsumerScore = MIN(x.ExperianConsumerScore)
-	FROM	(
-		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-		FROM ExperianConsumerData d
-		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
-		WHERE d.Id = @ExperianConsumerDataID
-
-		UNION
-
-		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
-		FROM CustomerAnalyticsDirector d
-		WHERE d.CustomerID = @CustomerID
-		AND d.AnalyticsDate < @Now
-	) x
-
-	SET @ConsumerScore = ISNULL(@ConsumerScore, 0)
+	SET @ConsumerScore = ISNULL((
+		SELECT
+			MinScore
+		FROM	
+			dbo.udfGetCustomerScoreAnalytics(@CustomerID, @Now)
+	), 0)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------

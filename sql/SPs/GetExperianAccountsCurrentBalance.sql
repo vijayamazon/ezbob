@@ -14,10 +14,6 @@ BEGIN
 	SELECT
 		CurrentBalanceSum AS CurrentBalance
 	FROM 
-		CustomerAnalyticsCompany 
-	WHERE
-		CustomerAnalyticsCompany.CustomerID = @CustomerId
-		AND
-		CustomerAnalyticsCompany.IsActive = 1
+		dbo.udfGetCustomerCompanyAnalytics(@CustomerId, NULL, 1, 0, 0)
 END
 GO
