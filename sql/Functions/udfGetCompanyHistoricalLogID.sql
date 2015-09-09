@@ -17,9 +17,11 @@ BEGIN
 		MP_ServiceLog l
 	WHERE
 		l.CompanyRefNum = @CompanyRefNum
-	AND (
-		@Now IS NULL OR l.InsertDate < @Now
-	)
+		AND (
+			@Now IS NULL OR l.InsertDate < @Now
+		)
+		AND
+		l.ServiceType IN ('E-SeriesLimitedData', 'E-SeriesNonLimitedData')
 	ORDER BY
 		l.InsertDate DESC,
 		l.Id DESC
