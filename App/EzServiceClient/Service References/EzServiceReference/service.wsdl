@@ -563,12 +563,6 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_MarkSessionEnded_InputMessage">
     <wsdl:part name="parameters" element="tns:MarkSessionEnded" />
   </wsdl:message>
@@ -785,12 +779,6 @@
   <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateCustomerAnalyticsOnCompanyChange_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateCustomerAnalyticsOnCompanyChange" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateCustomerAnalyticsOnCompanyChange_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateCustomerAnalyticsOnCompanyChangeResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UpdateExperianDirectorDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateExperianDirectorDetails" />
   </wsdl:message>
@@ -982,12 +970,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillAml_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillAmlResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_InputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompany" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompanyResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackFillExperianNonLtdScoreText_InputMessage">
     <wsdl:part name="parameters" element="tns:BackFillExperianNonLtdScoreText" />
@@ -1475,6 +1457,12 @@
   <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1794,10 +1782,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarkSessionEndedResponse" message="tns:IEzService_MarkSessionEnded_OutputMessage" />
@@ -1942,10 +1926,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateCustomerAnalyticsOnCompanyChange">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange" message="tns:IEzService_UpdateCustomerAnalyticsOnCompanyChange_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChangeResponse" message="tns:IEzService_UpdateCustomerAnalyticsOnCompanyChange_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="UpdateExperianDirectorDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" message="tns:IEzService_UpdateExperianDirectorDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse" message="tns:IEzService_UpdateExperianDirectorDetails_OutputMessage" />
@@ -2073,10 +2053,6 @@
     <wsdl:operation name="BackfillAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAml" message="tns:IEzService_BackfillAml_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAmlResponse" message="tns:IEzService_BackfillAml_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BackfillCustomerAnalyticsCompany">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" message="tns:IEzService_BackfillCustomerAnalyticsCompany_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompanyResponse" message="tns:IEzService_BackfillCustomerAnalyticsCompany_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackFillExperianNonLtdScoreText">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackFillExperianNonLtdScoreText" message="tns:IEzService_BackFillExperianNonLtdScoreText_InputMessage" />
@@ -2401,6 +2377,10 @@
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -3123,15 +3103,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MarkSessionEnded" style="document" />
       <wsdl:input>
@@ -3456,15 +3427,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UpdateCustomerAnalyticsOnCompanyChange">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="UpdateExperianDirectorDetails">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" style="document" />
       <wsdl:input>
@@ -3746,15 +3708,6 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillAml">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAml" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BackfillCustomerAnalyticsCompany">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4484,6 +4437,15 @@
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoanStatusAfterPayment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
