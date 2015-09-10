@@ -194,9 +194,8 @@
 					theMaxPreOffer,
 					medal.CapOfferByCustomerScoresValue.ToString("P6")
 				);
-			} // if
-
-			Log.Debug("Secondary medal - all the offer amounts are not valid.");
+			} else
+				Log.Debug("Secondary medal - all the offer amounts are not valid.");
 		} // GetOfferedAmount
 
 		private static bool AccountIsTooOld(DateTime today, bool hasAccounts, DateTime? lastUpdated, int threshold) {
