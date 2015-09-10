@@ -10,7 +10,9 @@
 
 <script id="store-info" type="text/template">
     <div>
-		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
+		@if (origin == CustomerOriginEnum.everline) {
+			Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");
+		}
 
         @{ Html.RenderPartial("~/Areas/Customer/Views/Shared/QuickOffer.cshtml"); }
 
@@ -38,16 +40,9 @@
 				<h2>Optional</h2>
 				<p>If you use any of these services, please link them.</p>
 			</div>
-            
-            @*<div class="marketplace-button show-more" style="width: 100% !important">
-                <a class="btn-showmore hide" ui-event-control-id="link-account:showmore" data-current="more">
-                    <span class="caption">Show more account types</span><div class="rotate90">&laquo;</div>
-                    <div class="onhover"><div class="onhover-cell">Show more data source connectors</div></div>
-                </a>
-            </div>*@
-			
-			@EzForm.WizardButton(new List<EzButtonModel>{
-    	new EzButtonModel("link_account_see_more_less", "See more",
+           
+			@EzForm.WizardButton(new List<EzButtonModel> {
+    			new EzButtonModel("link_account_see_more_less", "See more",
 					cls: "btn-showmore button btn-green clean-btn",
 					buttonType: EzButtonType.link,
 					uiEventControlID: "link-account:showmore",
@@ -71,7 +66,6 @@
 					buttonType: EzButtonType.button,
 					uiEventControlID: "link-account:back",
 					href: "#"),
-			
 			}, 
 			wrapperClass: "show-more-wrapper",
 			origin: origin)

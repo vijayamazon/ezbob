@@ -719,3 +719,7 @@ blockquote {
 	.security-icons .item .lock-icon {
 		display: none;
 	}
+
+.underwriter-only{
+	display: none;
+}

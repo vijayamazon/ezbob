@@ -31,7 +31,9 @@
 
 <script id="personinfo-template" type="text/template">
 	<div class="row-fluid">
-		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");}
+		@if (origin == CustomerOriginEnum.everline) {
+			Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");
+		}
         <div class="loan-summery-box-container">
 			<h2>Requested loan summary</h2>
 			<div class="loan-summary-box-wrapper">
@@ -134,7 +136,7 @@
 		    @EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long at this address",
 		        timeAtAddress,
 		        cls: "TimeAtAddress select form_field",
-                               
+                tabIndex: 12,               
 		        isRequired: true,
 		        statusIcon: true,
 		        uiEventControlID: "personal-info:time_at_address"),
@@ -147,6 +149,7 @@
 		        cls: "form_field",
 		        isRequired: true,
 		        statusIcon: true,
+				tabIndex: 15,
 		        uiEventControlID: "personal-info:residential_status"),
 		        origin: origin)
 
@@ -163,6 +166,7 @@
 		        type: "tel",
 		        isRequired: true,
 		        statusIcon: true,
+				tabIndex: 18,
 		        uiEventControlID: "personal-info:mobile_phone"),
 		        origin: origin)
 
@@ -171,6 +175,7 @@
 		        type: "tel",
 		        isRequired: true,
 		        statusIcon: true,
+				tabIndex: 19,
 		        uiEventControlID: "personal-info:daytime_phone"),
 		        origin: origin)
          
@@ -178,7 +183,7 @@
 		    EzInputBuilder checkbox1 = new EzInputBuilder("ConsentToSearch", "I have read and accept the <a href='#' ui-event-control-id='personal-info:terms-and-conditions'>Terms &amp; Conditions</a>",
 		        value: "false",
 		        type: "checkbox",
-		       
+				tabIndex: 20,
 		        isRequired: true,
 		        statusIcon: true,
 		        name: "ConsentToSearch",
@@ -209,6 +214,7 @@
 		    @EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Next",
 		        cls: "button btn-green ev-btn-org btn-continue disabled",
 		        uiEventControlID: "personal-info:continue",
+				tabIndex: 21,
 		        buttonType: EzButtonType.link,
 		        href: "#"),
 		        origin: origin);

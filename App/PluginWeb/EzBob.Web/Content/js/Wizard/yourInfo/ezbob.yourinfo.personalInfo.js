@@ -44,19 +44,24 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 	showSlidersClicked: function () {
 		var self = this;
-        var slidersView = new EzBob.SlidersView({ model: this.slidersModel, el: $('.sliders-wrapper') });
+        this.slidersView = new EzBob.SlidersView({ model: this.slidersModel, el: $('.sliders-wrapper') });
         this.slidersModel.fetch().done(function () {
         	$('.inner').hide();
-	        slidersView.render();
+	        self.slidersView.render();
         });
 
-        slidersView.on('requested-amount-changed', function () {
+        this.slidersView.on('requested-amount-changed', function () {
         	$('.inner').show();
-        	slidersView.remove();
-	        self.render();
+	        self.updateSliders();
         });
 	},
-
+	updateSliders: function(){
+		var self = this;
+		this.slidersModel.fetch().done(function () {
+			self.$el.find('.requested-loan-amount').text(EzBob.formatPounds(self.slidersModel.get('Amount')));
+			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
+		});
+	},
 	inputChanged: function (event) {
 		var el = event ? $(event.currentTarget) : null;
 
@@ -145,6 +150,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			model: this.model.get('PersonalAddress'),
 			name: 'PersonalAddress',
 			max: 1,
+			tabindex: 10,
 			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		});
 		this.personalAddressView.render().$el.appendTo(oAddressContainer);
@@ -156,7 +162,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			name: 'PrevPersonAddresses',
 			max: 3,
 			title: 'Enter previous postcode',
-		    required: "empty",
+			required: "empty",
+			tabindex: 13,
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		    cls: 'prevPersonAddress canDisabledAddress'
 		});
@@ -169,6 +176,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		    name: 'OtherPropertiesAddresses',
 		    max: 3,
 		    required: "empty",
+		    tabindex: 16,
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		    cls: 'otherPropertiesAddress canDisabledAddress'
 		});

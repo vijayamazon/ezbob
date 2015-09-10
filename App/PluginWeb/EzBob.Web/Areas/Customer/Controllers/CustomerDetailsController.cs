@@ -53,7 +53,7 @@
 
 		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
 			if (customer.Company == null)
-				return new { error = "Customer doesn't have a company." };
+				return new { error = "Customer doesn't have a company." + customer.Id };
 
 			ms_oLog.Debug("Adding a director {0} to customer {1}.", director, customer.Stringify());
 

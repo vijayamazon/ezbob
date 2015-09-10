@@ -1996,14 +1996,14 @@ input[type='radio'], input[type='checkbox'] { box-shadow: none; }
         background-size: 30px;
         color: #333;
         cursor: pointer;
-        padding: 0 0 0 4em;
+        padding: 0 0 0 4.5em;
         margin-bottom: 0;
         vertical-align: middle;
         line-height: 40px;
     }
     .targets li[selected="selected"],
     .targets li:hover {
-        background-color: antiquewhite;
+        background-color: #b3e085;
     }
 
 .btnOk:disabled, .btnCancel:disabled { opacity: 0.5; }

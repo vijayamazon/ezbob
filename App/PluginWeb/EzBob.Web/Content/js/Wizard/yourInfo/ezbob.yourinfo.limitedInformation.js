@@ -31,6 +31,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             name: "LimitedCompanyAddress",
             max: 1,
             title: "Business postcode",
+			tabindex: 6,
             uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
         });
         limitedAddressView.render().$el.appendTo(oAddressContainer);

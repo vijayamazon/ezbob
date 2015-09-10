@@ -2,7 +2,6 @@
 @using System.Collections.Generic
 @using EzBob.CommonLib
 @using EZBob.DatabaseLib.Model.Database
-@using EzBob.Web
 @using EzBob.Web.Infrastructure.Html
 @model dynamic
 
@@ -40,7 +39,9 @@
 
 <script id="company-data-template" type="text/template">
     <div class="row-fluid">
-		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");}
+		@if (origin == CustomerOriginEnum.everline) {
+			Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");
+		}
         <h2 class="form_start">Business details</h2>
 		
         @using (Html.BeginForm("SaveCompany", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
@@ -54,6 +55,7 @@
 					uiEventControlID: "personal-info:type_of_business",
 					autoFocus: true,
 					size: 6,
+					tabIndex: 1,
 					hasEmpty: false),
 					origin: origin)
 			</div>
@@ -63,6 +65,7 @@
 							cls: "form_field",
 							isRequired: true,
 							statusIcon: true,
+							tabIndex: 2,
 							uiEventControlID: "personal-info:industry_type"),
 							origin: origin)
 			</div>
@@ -72,6 +75,7 @@
 					cls: "cashInput form_field",
 					isRequired: true,
 					statusIcon: true,
+					tabIndex: 8,
 					uiEventControlID: "personal-info:overall_turnover"),
 					origin: origin)
             </div>
@@ -82,6 +86,7 @@
 					cls: "form_field",
 					isRequired: false,
 					statusIcon: true,
+					tabIndex: 16,
 					uiEventControlID: "personal-info:promo-code"),
 					origin: origin)
 		}
@@ -91,6 +96,7 @@
 				cls: "btn-continue next button btn-green disabled ev-btn-org",
 				uiEventControlID: "personal-info:company_continue",
 				buttonType: EzButtonType.link,
+				tabIndex: 17,
 				href: "#"),
 				origin: origin)
 </script>
@@ -127,6 +133,7 @@
 						statusIcon: true,
 						uiEventControlID: "personal-info:employee_count", 
 						min : 1,
+						tabIndex: 11,
 						max: 1000),
 						origin: origin)
 	
@@ -135,6 +142,7 @@
 						cls: "form_field cashInput",
 						isRequired: true,
 						statusIcon: true,
+						tabIndex: 12,
 						uiEventControlID: "personal-info:total_monthly_salary"),
 						origin: origin)
     				 
@@ -153,6 +161,7 @@
 								isRequired: true,
 								statusIcon: true,
 								name: "VatRegistered",
+								tabIndex: 13,
 								uiEventControlID: "personal-info:vat-registered" ), 
 							new EzInputBuilder("FormRadioCtrl_No", "No",
 								value: "false",
@@ -161,47 +170,42 @@
 								isRequired: true,
 								statusIcon: true,
 								name: "VatRegistered",
+								tabIndex: 14,
 								uiEventControlID: "personal-info:vat-registered") }), 
 						origin: origin)
 	
-
-            @{ EzInputBuilder checkbox1 = new EzInputBuilder("DirectorCheck", "I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.",
+            @EzForm.ClickableInputWizard(new EzClickInputModel(
+				name: "DirectorCheck",
+				caption: "",
+				errorImgClass: "",
+				inputWrapperClass: "controls",
+				containerClass: "form_read_and_accept",
+				isRequired: false,
+				statusIcon: false,
+				inputButtons: new List<EzInputBuilder> { 
+				   new EzInputBuilder("DirectorCheck", "I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.",
                           value: "false",
                           type: "checkbox",
                           cls: "required",
                           isRequired: true,
                           statusIcon: true,
                           name: "DirectorCheck",
+						  tabIndex: 15,
                           labelClass: "editor-label-with-checkbox normal-label",
-                          uiEventControlID: "personal-info:director_check"); }
-         
-            @{
-                List<EzInputBuilder> checkboxesList = new List<EzInputBuilder>
-                    {
-                    checkbox1
-                    };
-
-                var checkboxes = new EzClickInputModel(
-                name: "DirectorCheck",
-                caption: "",
-                errorImgClass: "",
-                inputWrapperClass: "controls",
-                containerClass: "form_read_and_accept",
-                isRequired: false,
-                statusIcon: false,
-                inputButtons: checkboxesList);
-            }
-            @EzForm.ClickableInputWizard(checkboxes, origin: origin)
+                          uiEventControlID: "personal-info:director_check")
+			   }), 
+			   origin: origin)
         
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
 	@EzForm.InputTextWizard(new EzInputBuilder("NonLimitedCompanyName", "Business name",
-						cls: "form_field",
-						isRequired: true,
-						statusIcon: true,
-						uiEventControlID: "personal-info:nonlimited_company_name"),
-						origin: origin)
+					cls: "form_field",
+					isRequired: true,
+					statusIcon: true,
+					tabIndex: 3,
+					uiEventControlID: "personal-info:nonlimited_company_name"),
+					origin: origin)
 
     @EzForm.AddressInput(this, "NonLimitedCompanyAddress", "Address", "nonlimited")
 
@@ -214,16 +218,18 @@
 					cls: "form_field",
 					isRequired: true,
 					statusIcon: true,
+					tabIndex: 9,
 					uiEventControlID: "personal-info:nonlimited_time_in_business"),
 					origin: origin)
 	
 	@EzForm.InputTextWizard(new EzInputBuilder("NonLimitedBusinessPhone", "Main business phone number",
-						type: "tel",
-						cls: "form_field phonenumber",
-						isRequired: true,
-						statusIcon: true,
-						uiEventControlID: "personal-info:nonlimited_phone"),
-						origin: origin)
+					type: "tel",
+					cls: "form_field phonenumber",
+					isRequired: true,
+					statusIcon: true,
+					tabIndex: 10,
+					uiEventControlID: "personal-info:nonlimited_phone"),
+					origin: origin)
 
     <div class="employee-count"></div>
 
@@ -237,6 +243,7 @@
 						isRequired: true,
 						statusIcon: true,
 						maxLength: 8,
+						tabIndex: 3,
 						uiEventControlID: "personal-info:limited_company_number"),
 						origin: origin)
 
@@ -244,6 +251,7 @@
 						cls: "form_field",
 						isRequired: true,
 						statusIcon: true,
+						tabIndex: 4,
 						uiEventControlID: "personal-info:limited_company_name"),
 						origin: origin)
 	
@@ -252,6 +260,7 @@
 						cls: "form_field phonenumber",
 						isRequired: true,
 						statusIcon: true,
+						tabIndex: 5,
 						uiEventControlID: "personal-info:limited_phone"),
 						origin: origin)
 

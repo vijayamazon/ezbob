@@ -82,14 +82,17 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     	this.model.set({ 'Amount': currentAmount }, { silent: true });
     	this.model.set({ 'Term': currentTerm }, { silent: true });
 
-	    var self = this;
+    	var self = this;
+    	this.model.off('change', this.render, this);
 	    this.model.save().done(function () {
-		    self.trigger('requested-amount-changed');
+	    	self.closeClicked();
 	    });
     },
 
-    closeClicked: function(){
+    closeClicked: function () {
     	this.trigger('requested-amount-changed');
+    	this.model.off('change', this.render, this);
+    	this.close();
     },
 
     loanSelectionChanged: function() {

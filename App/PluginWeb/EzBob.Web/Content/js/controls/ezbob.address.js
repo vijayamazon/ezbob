@@ -526,7 +526,7 @@ EzBob.AddressView = Backbone.View.extend({
 	    this.required = options.required || "required";
 		this.uiEventControlIdPrefix = options.uiEventControlIdPrefix;
 		this.cls = options.cls;
-		
+		this.tabindex = options.tabindex;
 		EzBob.ServerLog.debug('address view initialised');
 	},
 
@@ -549,6 +549,8 @@ EzBob.AddressView = Backbone.View.extend({
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
 		this.$el.find('.form_field_container.control-group').addClass(this.cls);
 
+		
+
 		if (this.max > this.model.length && this.model.length > 0) {
 			this.$el.find('.form_field_container.control-group').removeClass('canDisabledAddress');
 		}
@@ -558,6 +560,12 @@ EzBob.AddressView = Backbone.View.extend({
 		}
 
 		this.postcodeInput = this.$el.find('.addAddressInput');
+
+		if (this.tabindex) {
+			this.postcodeInput.attr('tabindex', this.tabindex);
+			this.$el.find('.addAddress').attr('tabindex', this.tabindex + 1);
+		}
+
 		this.showClear();
 
 		var sInitialStatus = (this.model && this.model.length > 0 && this.required == 'required') ? 'ok' : '';
