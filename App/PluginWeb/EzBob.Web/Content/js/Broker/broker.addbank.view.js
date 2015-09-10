@@ -6,8 +6,8 @@ EzBob.Broker.AddBankView = EzBob.Broker.SubmitView.extend({
 		EzBob.Broker.AddBankView.__super__.initialize.apply(this, arguments);
 
 		this.$el = $('.section-add-bank');
-
-		this.initSubmitBtn('button[type=submit]');
+		
+		this.initSubmitBtn('#broker_bank_details_continue_button');
 
 		this.initValidatorCfg();
 	}, // initialize

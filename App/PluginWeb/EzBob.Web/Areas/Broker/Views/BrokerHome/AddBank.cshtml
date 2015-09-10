@@ -1,4 +1,5 @@
 ﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
@@ -26,20 +27,40 @@
 											 uiEventControlID: "broker:bank-details:account-number"),
 										origin: origin)
 							
-							<div class="control-group form_field_container" id="SortCode">
-								<div class="controls ezSortCode">
-									<label class="attardi-input">
-										<span>Sort Code</span>
-										<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1" />
-										<span></span>
-										<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2" />
-										<span></span>
-										<input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3" />
-										<img class="field_status required" id="SortCodeImage" />
-									</label>
-									<input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
+							
+							@if (origin == CustomerOriginEnum.everline) {
+								<div class="control-group form_field_container" id="SortCode">
+									<label class="input-title">Sort Code</label>
+									<div class="input-wrapper ezSortCode">
+										<div class="attardi-input ezSortCode1">
+											<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-1" tabindex="2"/>
+										</div>
+										<div class="attardi-input ezSortCode2">
+											<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-2" tabindex="3"/>
+										</div>
+										<div class="attardi-input ezSortCode3">
+											<input class="form_field_look" id="SortCode3" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-3" tabindex="4"/>
+											<input type="hidden" class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit"/>
+										</div>
+										<div class="error-wrap"></div>
+									</div>
 								</div>
-							</div>
+							} else {
+								<div class="control-group form_field_container" id="SortCode">
+									<div class="controls ezSortCode">
+										<label class="attardi-input">
+											<span>Sort Code</span>
+											<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1"/>
+											<span></span>
+											<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2"/>
+											<span></span>
+											<input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3"/>
+											<img class="field_status required" id="SortCodeImage"/>
+										</label>
+										<input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;"/>
+									</div>
+								</div>
+							}
 							
 							@{
 								EzInputBuilder radio1 = new EzInputBuilder("baPersonal", "Personal",
@@ -49,7 +70,8 @@
 									isRequired: true,
 									statusIcon: true,
 									name: "bankAccountType",
-									uiEventControlID: "broker:bank-details:account-type");
+									uiEventControlID: "broker:bank-details:account-type",
+									specialAttributes: new Dictionary<string, string>{ { "checked", "checked" } });
 
 								EzInputBuilder radio2 = new EzInputBuilder("baBusiness", "Business",
 									value: "Business",
@@ -63,7 +85,7 @@
 								List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1, radio2 };
 								var buttonsmodel = new EzClickInputModel(
 									name: "bankAccountType",
-									caption: "",
+									caption: "Account type",
 									inputWrapperClass: "FormRadioCtrl",
 									inputButtons: radios);
 

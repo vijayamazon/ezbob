@@ -47,14 +47,30 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         }
         
         if(this.model.get('isBroker')) {
-            this.ui.RankDiv.hide();
+        	this.ui.RankDiv.hide();
+        	this.ui.PhoneNumberDiv.hide();
         }
 	    var self = this;
         _.each(EzBob.CrmActions, function(action) {
 		    self.ui.Action.append($('<option value="' + action.Id + '">' + action.Name + '</option>'));
-	    });
-    }, // onRender
+        });
 
+        _.each(this.model.get("PhoneNumbers"), function(phone) {
+		var phoneVerificationState = phone.IsVerified ? '(Verified)' : '';
+		self.ui.PhoneNumber.append($('<option value="' + phone.Number + '">' + phone.Type + ':' + phone.Number + phoneVerificationState + '</option>'));
+        });
+
+        var bIsBroker = this.isBroker;
+        var statuses = _.filter(EzBob.CrmStatuses, function(s) { return s.IsBroker === bIsBroker; });
+	    
+        _.each(statuses, function(sGroup) {
+        	var optGroup = $('<optgroup label="' + sGroup.Name + '"></optgroup>');
+        	_.each(sGroup.Statuses, function(status) { optGroup.append($('<option value="' + status.Id + '">' + status.Name + '</option>')) });
+        	self.ui.Status.append(optGroup);
+	    });
+	    
+    }, // onRender
+	
     serializeData: function () {
 	    var bIsBroker = this.isBroker;
 
@@ -75,7 +91,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         var actionElement = document.getElementById("Action");
         var isActionCall = actionElement.options[actionElement.selectedIndex].text;
 
-        var phoneNumbersSectionJqElement = $("#phoneNumbersSection");
+        var phoneNumbersSectionJqElement = $(".phoneNumbersSection");
         if (isTypeOutgoing && isActionCall == 'Call') {
             phoneNumbersSectionJqElement.removeClass('hide');
         } else {
@@ -92,6 +108,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         RankDiv: '.rank-div',
         Comment: '#Comment',
         PhoneNumber: '#PhoneNumber',
+        PhoneNumberDiv: '.phoneNumbersSection',
         Form: 'form#customer-relations-form'
     }, // ui
 

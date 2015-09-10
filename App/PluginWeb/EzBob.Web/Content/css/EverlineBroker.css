@@ -152,21 +152,20 @@ font-weight: bold;
 	color: #67c10b;
 }
 
-.btn-wide {
-	width: 220px !important;
-}
-
 .profile-headlines h3 {
 	font-size:24px;
 	color: #565656;
 }
-.not_linked_bank .d-widgets {
-	    border: 1px solid #28211f;
+
+.not_linked_bank .d-widgets, 
+.linked_bank .d-widgets {
+	border: 1px solid #28211f;
     width: 100%;
     padding: 15px;
     margin: 10px auto;
 	margin-top: 14px;
 }
+
 .profile-headlines h5.header-message {
 	 font-weight: bold;
     color: #67c10b;
@@ -507,10 +506,6 @@ div.form_field_container {
 	width: 220px;
 }
 
-.click-wrap {
-    margin-left: 0;
-}
-
 .add-crm-note,
 .delete-selected-files {
 	height: 40px !important;
@@ -530,7 +525,54 @@ div.form_field_container {
 	float: left;
 }
 
+.crm-event-types {
+	float: right;
+	margin-right: 400px;
+	margin-bottom: 20px;
 
+}
+
+.FormRadioCtrl span {
+	font-size: 15px;
+    font-weight: 600;
+    color: #494949;
+    text-align: left;
+    line-height: 42px;
+	margin-left: 5px;
+}
+
+.ezSortCode .attardi-input {
+    display: inline-block;
+    float: left;
+    box-sizing: border-box;
+    width: 30%;
+}
+
+.ezSortCode .attardi-input.ezSortCode2 {
+	margin-left: 29px;
+}
+
+.ezSortCode .attardi-input.ezSortCode3 {
+    float: right;
+}
+
+.click-wrap:first-child {
+    margin-left: 0;
+	margin-right: 25px;
+}
+
+.click-wrap {
+    margin-left: 0;
+}
+
+.bank-account-instructions .back,
+.bank-account-instructions .connect-bank {
+	width: 250px;
+}
+
+.bank-account-instructions .connect-bank {
+	margin-left: 25px;
+}
 
 
 

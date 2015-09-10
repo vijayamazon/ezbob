@@ -3,6 +3,7 @@
 @model dynamic
 @{
 	var origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
+	var crmEmptyOptionsList = new List<Tuple<string, string>> {};
 }
 
 @* This file is used in Underwriter and Broker. *@
@@ -14,9 +15,11 @@
                 <div class="FormRadioCtrl">
                     <span>Type</span>
                 </div>
-                <div class="FormRadioCtrl">
-					
-					@{ EzInputBuilder radio1 = new EzInputBuilder(
+				
+				<div class="crm-event-types">
+					<div class="FormRadioCtrl">
+
+						@{ EzInputBuilder radio1 = new EzInputBuilder(
 									"Type_In",
 									"Incoming",
 									value: "In",
@@ -25,13 +28,13 @@
 									isRequired: true,
 									statusIcon: true,
 									name: "Type"); }
-					
-					@EzForm.ClickableInputTag(radio1, origin: origin)					
-					
-                </div>
-                <div class="FormRadioCtrl">
-					
-					@{ EzInputBuilder radio2 = new EzInputBuilder(
+
+						@EzForm.ClickableInputTag(radio1, origin: origin)
+
+					</div>
+					<div class="FormRadioCtrl">
+
+						@{ EzInputBuilder radio2 = new EzInputBuilder(
 									"Type_Out",
 									"Outgoing",
 									value: "Out",
@@ -40,12 +43,12 @@
 									statusIcon: true,
 									name: "Type"); }
 
-					@EzForm.ClickableInputTag(radio2, origin: origin)					
+						@EzForm.ClickableInputTag(radio2, origin: origin)
 
-                </div>
-                <div class="FormRadioCtrl">
-					
-					@{ EzInputBuilder radio3 = new EzInputBuilder(
+					</div>
+					<div class="FormRadioCtrl">
+
+						@{ EzInputBuilder radio3 = new EzInputBuilder(
 									"Type_Internal",
 									"Internal",
 									value: "Internal",
@@ -54,51 +57,38 @@
 									statusIcon: true,
 									name: "Type"); }
 
-					@EzForm.ClickableInputTag(radio3, origin: origin)					
-					
-                </div>
+						@EzForm.ClickableInputTag(radio3, origin: origin)
+
+					</div>
+				</div>
             </div>
-            <br />
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span class="active attardi-has-data">Action</span>
-                        <select class="form_field selectheight" id="Action" name="Action">
-                            <option></option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div id="phoneNumbersSection" class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span class="active attardi-has-data">Phone #</span>
-                        <select class="form_field selectheight" id="PhoneNumber" name="PhoneNumber">
-                            <option></option>
-                            <% _.each(phoneNumbers, function(phone) { %>
-                                <option value="<%- phone.Number %>"><%- phone.Type %>: <%- phone.Number %><%- phone.IsVerified ? ' (Verified)' : '' %></option>
-                            <%});%>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Status</span>
-                        <select class="form_field selectheight" id="Status" name="Status">
-                            <option></option>
-                            <% _.each(statuses, function(sGroup) { %>
-                            <optgroup label="<%- sGroup.Name%>">
-                                <%_.each(sGroup.Statuses, function(status){%>
-                                    <option value="<%- status.Id %>"><%- status.Name %></option>
-                                <%});%>
-                            </optgroup>
-                            <%});%>
-                        </select>
-                    </label>
-                </div>
-            </div>
+						
+			@EzForm.SelectWizard(
+				new EzSelectModel(
+					"Action", 
+					"Action",
+					crmEmptyOptionsList,
+					cls: "form_field selectheight"),
+				origin: origin)	
+
+			<div class="phoneNumbersSection hide">
+				@EzForm.SelectWizard(
+					new EzSelectModel(
+						"PhoneNumber",
+						"Phone #",
+						crmEmptyOptionsList,
+						cls: "form_field selectheight"),
+				origin: origin)
+			</div>
+
+			@EzForm.SelectWizard(
+				new EzSelectModel(
+				"Status",
+				"Status",
+				crmEmptyOptionsList,
+				cls: "form_field selectheight"),
+				origin: origin)
+
             <div class="control-group form_field_container rank-div">
                 <div class="controls">
                     <label class="control-label attardi-input">

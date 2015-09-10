@@ -3784,3 +3784,7 @@ button#switchToCaptcha {
     color: #39f;
     text-align: right;
 }
+
+.crm-event-types {
+	margin-bottom: 20px;
+}
