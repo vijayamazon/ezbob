@@ -14,6 +14,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	EXECUTE GetCompanyScoreAndIncorporationDate @CustomerID, @TakeMinScore, NULL, @CompanyScore OUTPUT, @IncorporationDate OUTPUT
+	EXECUTE GetCompanyHistoricalScoreAndIncorporationDate @CustomerID, @TakeMinScore, NULL, @CompanyScore OUTPUT, @IncorporationDate OUTPUT
 END
 GO
