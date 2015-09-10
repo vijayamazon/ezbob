@@ -46,7 +46,7 @@
               , statusIcon: true, uiEventControlID: "signup:mobile-phone", tabIndex: 11, innerMessage: "Code sent", button: new EzButtonModel("generateMobileCode", "Send activation code", "button clean-btn btn-green form_field_right_side_signup_phone disabled", "signup:generate-mobile-code", buttonType: EzButtonType.button)), origin: origin)
 
                     @EzForm.InputTextWizard(new EzInputBuilder("mobileCode", "authentication code", cls: "phonenumbercode form_field_left_side form_field", type: "tel", isRequired: true, tohide: true, formFieldID: "mobileCodeDiv",
-                            statusIcon: true, uiEventControlID: "signup:mobile-code", tabIndex: 12, button: new EzButtonModel("switchToCaptcha", "Did not receive code", "button clean-btn btn-green form_field_right_side_signup_phone", "signup:switch-to-captcha", buttonType: EzButtonType.button)
+                            statusIcon: true, uiEventControlID: "signup:mobile-code", tabIndex: 12, button: new EzButtonModel("switchToCaptcha", "Did not receive code", "clean-btn btn-link form_field_right_side_signup_phone", "signup:switch-to-captcha", buttonType: EzButtonType.button)
                                        ), origin: origin)
                 </div>
 

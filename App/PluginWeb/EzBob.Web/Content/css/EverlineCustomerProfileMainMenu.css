@@ -15,10 +15,15 @@
 	padding: 0;
 	list-style-type: none;
 	text-align: left;
+	width: 100%
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main li {
 	display: inline-block;
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main li.settings-li{
+	float: right;
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical{

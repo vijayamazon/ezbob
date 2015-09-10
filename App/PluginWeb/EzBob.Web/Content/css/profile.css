@@ -792,8 +792,8 @@ table.directors-list td.l {
 
 /*Automation wizard complete popup*/
 .automation-popup {
-	
-}
+    background-color: #ffffff;
+}	
 
 .automation-popup-content {
 	margin-left: 42px;

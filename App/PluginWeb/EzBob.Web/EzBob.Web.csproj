@@ -483,12 +483,10 @@
     <Content Include="Content\css\everline.css" />
     <Content Include="Content\css\EverlineBroker.css" />
     <Content Include="Content\css\EverlineCustomerProfileMyInformation.css" />
-    <Content Include="Content\css\EverlineCustomerProfileSettings.css" />
     <Content Include="Content\css\EverlineCustomerProfile.css" />
     <Content Include="Content\css\Everlinecustomer.css" />
     <Content Include="Content\css\EverlineCustomerProfileMainMenu.css" />
     <Content Include="Content\css\EverlineCustomerProfileDirectors.css" />
-    <Content Include="Content\css\EverlineCustomerProfilePaymentAccounts.css" />
     <Content Include="Content\css\EverlineCustomerProfileLoanDetails.css" />
     <Content Include="Content\css\Everlineslider.css" />
     <Content Include="Content\css\ezbob.css" />

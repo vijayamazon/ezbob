@@ -84,6 +84,8 @@ a.clean-btn{
 .main-page-everline table td a.clean-btn {
 	display: table-cell;
 	vertical-align: middle;
+	height: 35px;
+    line-height: 20px;
 }
 
 /*
@@ -143,6 +145,17 @@ a.clean-btn{
 	width: 22%;
 }
 
+.form_buttons_container .input-wrapper .ev-btn-org, 
+.form_buttons_container .input-wrapper a.ev-btn-org, 
+.form_buttons_container .input-wrapper .clean-btn,
+.form_buttons_container .input-wrapper a.clean-btn{
+	width: 30%;
+}
+
+a.clean-btn.pay-early {
+	width: 200px
+}
+
 /*
 *******************************************************************************
 *
@@ -156,3 +169,66 @@ a.clean-btn{
 	margin: 0 auto;
 	padding: 20px 0;
 }
+
+.main-page-everline .account-activity-table {
+	width: 100%;
+}
+
+.ev-form {
+	background-color: #f1f0f0;
+    padding: 20px;
+}
+
+.ezSortCode .attardi-input {
+    display: inline-block;
+    float: left;
+    box-sizing: border-box;
+    width: 30%;
+}
+
+.ezSortCode .attardi-input.ezSortCode3{
+	float: right;
+}
+
+.ezSortCode .attardi-input.ezSortCode2{
+	margin-left: 30px;
+}
+
+/*Automation wizard complete popup*/
+.automation-popup {
+	background-color: #eeeeee;
+	color: #494949;
+}
+.automation-popup hr {
+	border-bottom: 1px solid #494949;
+}
+.automation-header {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 600;
+	line-height: 30px;
+	font-size: 30px;
+}
+
+.automation-secondary-header {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 600;
+}
+
+.automation-text {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 15px;
+}
+
+.automation-label {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+}
+
+.automation-value {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	padding: 20px;
+	margin-top: 10px
+}
+/*End Automation wizard complete popup*/

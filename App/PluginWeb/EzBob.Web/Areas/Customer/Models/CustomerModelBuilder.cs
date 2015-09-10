@@ -320,7 +320,7 @@
 				customer.CollectionStatus != null &&
 				customer.CollectionStatus.IsDefault;
 
-			customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
+			//customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
 
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
 

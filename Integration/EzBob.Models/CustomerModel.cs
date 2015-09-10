@@ -176,7 +176,7 @@ namespace EzBob.Models {
 
 		public PayPointCardModel[] PayPointCards { get; set; }
 
-		public string Perks { get; set; }
+		//public string Perks { get; set; }
 
 		public CustomerAddress[] PersonalAddress { get; set; }
 

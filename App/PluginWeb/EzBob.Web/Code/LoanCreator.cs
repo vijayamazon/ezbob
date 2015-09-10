@@ -183,12 +183,13 @@
 				cus.SetupFee = loan.SetupFee;
 
 			this.agreementsGenerator.RenderAgreements(loan, true);
+
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
 			2. RenderAgreements: loan.Agreements.Add
 			3. RenderAgreements: SaveAgreement (file?) \backend\Strategies\Misc\Agreement.cs strategy
 			*/
-			this.agreementsGenerator.RenderAgreements(loan, true);
+			
 
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
@@ -203,8 +204,6 @@
 					DealCloseType = OpportunityDealCloseReason.Won.ToString()
 				}
 			);
-
-			
 
 			// This is the place where the loan is created and saved to DB
 			log.Info(

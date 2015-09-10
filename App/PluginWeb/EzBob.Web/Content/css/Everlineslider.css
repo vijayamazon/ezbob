@@ -1024,6 +1024,13 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+.org-btn{
+	background-color: #e28023;
+    border-bottom: 2px solid #c86d14;
+    border-top: 2px solid #f39e4b;
+}
+
 .org-btn:hover {
     color: #ffffff !important;
     text-decoration: none;

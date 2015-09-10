@@ -60,23 +60,23 @@
         <div class="navbar profile-menu">
             <div class="navbar-inner">
                 <ul class="nav customer-dashboard-main">
-                    <li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity">Account Activity</a></li>
+                    <li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity">Activity</a></li>
                     <li class="divider-vertical"></li>
-                    <li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts">Accounts</a></li>
+					<li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts">Bank details</a></li>
+					<li class="divider-vertical"></li>
+					<li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts">Link Accounts</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts">Payment Accounts</a></li>
+                    @if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors) {
+						<li class="divider-vertical"></li>
+						<li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
+					}
+					<li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Settings</a></li>
-                    @if (Model.Customer.Perks != null) {
+                    <li class="settings-li"><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Account Settings</a></li>
+                    @*@if (Model.Customer.Perks != null) {
                         <li class="divider-vertical"></li>
                         <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
-                    }
-                    @if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors) {
-                        <li class="divider-vertical"></li>
-                        <li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
-                    }
+                    }*@
                 </ul>
             </div>
         </div>

@@ -554,6 +554,7 @@ a.button:hover {
 	float: right;
 	margin-left: 5%;
 }
+
 .ev-btn-org.disabled, 
 .ev-btn-org[disabled], 
 .clean-btn.disabled, 
@@ -1214,6 +1215,76 @@ hr.wizard-hr {
         width: 180px;
     }
 
+	/*accounts*/
+.marketplace-image {
+    display: inline-block;
+    background: url(images/accounts/account_logos_sprite.png) no-repeat 0 0;
+    height: 40px;
+    vertical-align: middle;
+	margin-bottom: -6px;
+}
+
+.marketplace-image.marketplace-image-Amazon {
+	background-position: -171px -1px;
+    width: 89px;
+}
+.marketplace-image.marketplace-image-paypal {
+	background-position: -616px -1px;
+    width: 111px;
+}
+.marketplace-image.marketplace-image-EKM {
+	background-position: -1057px -1px;
+    width: 112px;
+}
+.marketplace-image.marketplace-image-Play {
+	background-position: 0px -1px;
+    width: 151px;
+}
+.marketplace-image.marketplace-image-Volusion {
+	background-position: -1930px -1px;
+    width: 103px;
+}
+.marketplace-image.marketplace-image-FreeAgent {
+	background-position: -280px -1px;
+    width: 151px;
+}
+.marketplace-image.marketplace-image-KashFlow {
+	background-position: -450px -1px;
+    width: 146px;
+}
+.marketplace-image.marketplace-image-eBay {
+	background-position: -1353px -1px;
+    width: 81px;
+}
+.marketplace-image.marketplace-image-Bigcommerce {
+	background-position: -1189px -1px;
+    width: 144px;
+}
+.marketplace-image.marketplace-image-Magento {
+	background-position: -1455px -1px;
+    width: 140px;
+}
+.marketplace-image.marketplace-image-Shopify {
+	background-position: -934px -1px;
+    width: 103px;
+}
+.marketplace-image.marketplace-image-Xero {
+	background-position: -2053px -1px;
+    width: 37px;
+}
+.marketplace-image.marketplace-image-Sage {
+	background-position: -1770px -1px;
+    width: 139px;
+}
+.marketplace-image.marketplace-image-PayPoint {
+   background-position: -747px -1px;
+   width: 165px;
+}
+.marketplace-image.marketplace-image-PrestaShop {
+	background-position: -1615px -1px;
+    width: 134px;
+}
+/*accounts*/
 /**End MarketPlaces**/
 
 

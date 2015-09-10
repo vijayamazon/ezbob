@@ -2188,10 +2188,10 @@ ul.storelist li span {
 .matchingAddressList li {
     background-image: url('../img/house-icons/house-green.png');
     background-repeat: no-repeat;
-    background-position: 10px 50%;
+    background-position: 32px 50%;
     cursor: pointer;
     color: #333;
-    padding: 0 0 0 4em;
+    padding: 0 0 0 4.5em;
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 40px;
@@ -2206,7 +2206,7 @@ ul.storelist li span {
 
 .matchingAddressList li:hover,
 .matchingAddressList li[selected] {
-    background-color: antiquewhite;
+    background-color: #b3e085;
 }
 
 .matchingAddressList[disabled="disabled"] {
@@ -2273,6 +2273,10 @@ li[stripped="stripped"] {
     height: 100%;
     font-size: 18px;
     white-space: inherit;
+}
+
+.attardi-button {
+	width: 96%;
 }
 
 .attardi-input span {
@@ -3766,4 +3770,17 @@ font-size: 32px;
 }
 .pay-early-wrapper .fa-check {
     display:none;
+}
+
+.security-icons {
+	padding-bottom: 20px;
+}
+
+.wizard-top p {
+	max-width: 86%;
+}
+
+button#switchToCaptcha {
+    color: #39f;
+    text-align: right;
 }
