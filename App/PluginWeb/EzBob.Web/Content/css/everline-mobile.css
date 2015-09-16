@@ -171,17 +171,12 @@
        margin-top: 10px;
            text-align: center;
    }
-   .security-icons .item {
-       float:none;
-           display: inline-block;
-         
-   }
+   
    .security-icons {
            display:block;
   
    }
    .security-icons .item .lock-icon {
-       float:none;
        background:url('');
    }
    .ui-dialog {

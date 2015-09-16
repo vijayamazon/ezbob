@@ -262,6 +262,7 @@ h2, .ui-dialog .ui-dialog-title {
         width: 130px;
         float: right;
         display: inline-block;
+		position: relative;
     }
 
         .security-icons .item .verisign {
@@ -287,6 +288,8 @@ h2, .ui-dialog .ui-dialog-title {
             line-height: 72px;
 			float: right;
             margin-right:4px;
+			position: absolute;
+			right: 0;
         }
 
 a, a:visited {
