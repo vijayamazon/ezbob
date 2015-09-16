@@ -7,7 +7,7 @@
         footer
     */
    .footer-eif-text {
-       width:70%;
+       width:63%;
      
 
    }
@@ -182,7 +182,19 @@
    }
    .security-icons .item .lock-icon {
        float:none;
+       background:url('');
    }
+   .ui-dialog {
+       padding:20px 10px;
+   }
+   .ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
+       float:none;
+   }
+    .loan-summary-boxes {
+        display: block;
+        margin-right: 0;
+        height: auto;
+    }
     /*end wizard*/
 
 
@@ -232,13 +244,15 @@
         width: 100%;
         position: absolute;
         top: 105px;
+
     }
 
     .wizard-steps-wrapper .wizard-steps .progress-bar {
         height: 12px;
         margin-left: 20px;
-        width: 64%;
-        right: 18%;
+               width: 91%;
+    right: 9%;
+
         margin-top: 23px;
         /* right: 0; */
         position: absolute;
@@ -259,9 +273,14 @@
 .wizard-steps-wrapper .wizard-steps ul.application_steps {
     float: none;
     margin: 0 auto;
+    width:100%;
 }
 .wizard-steps-wrapper .wizard-steps {
     padding:0;
+    overflow: visible;
+}
+.wizard-steps-wrapper ul.application_steps li {
+        width: 22.3%;
 }
 /*end progress bar*/
 .broker-finish-wizard-later button {
@@ -270,5 +289,9 @@
 }
 .marketplace-group {
     text-align: center;
+}
+/*header*/
+header.everline_header nav ul.sub-links {
+    right:20px;
 }
 } 

@@ -19,7 +19,7 @@
 
 	<div class="address-input-block hide">
 		@EzForm.InputTextWizard(new EzInputBuilder(null, "Address line 1",
-			cls: "line1 form_field",
+			cls: "line1 form_field add-req",
 			isRequired: true,
 			statusIcon: true,
 			uiEventControlID: "address-form:manual-input-line1"),
@@ -40,7 +40,7 @@
 			origin: origin)
 		
 		@EzForm.InputTextWizard(new EzInputBuilder(null, "Town",
-			cls: "town form_field",
+            cls: "town form_field add-req",
 			isRequired: true,
 			statusIcon: true,
 			uiEventControlID: "address-form:manual-input-town"),

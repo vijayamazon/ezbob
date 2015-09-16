@@ -558,7 +558,7 @@
     <Content Include="Content\css\images\current_arrow-m.png" />
     <Content Include="Content\css\images\current_arrow.png" />
     <Content Include="Content\css\images\eu.png" />
-    <Content Include="Content\css\images\eurpe-fund.png" />
+    <Content Include="Content\css\images\europe-fund.png" />
     <Content Include="Content\css\images\eu_explanation.png" />
     <Content Include="Content\css\images\ezbob_logo.png" />
     <Content Include="Content\css\images\facebook-icon.png" />
@@ -745,6 +745,8 @@
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\businessguardianange.png" />
     <Content Include="Content\img\check-min.png" />
+    <Content Include="Content\img\checkbox-checked.svg" />
+    <Content Include="Content\img\checkbox-default.svg" />
     <Content Include="Content\img\customer-sidebar\award.png" />
     <Content Include="Content\img\customer-sidebar\call.png" />
     <Content Include="Content\img\customer-sidebar\chat.png" />
@@ -858,6 +860,7 @@
     <Content Include="Content\img\ny2015scratch\win_2.png" />
     <Content Include="Content\img\ny2015scratch\win_3.png" />
     <Content Include="Content\img\ny2015scratch\win_4.png" />
+    <Content Include="Content\img\security-padlock.svg" />
     <Content Include="Content\img\valentine2015scratch\headline.png" />
     <Content Include="Content\img\valentine2015scratch\ribbon.png" />
     <Content Include="Content\img\valentine2015scratch\scratch_card.png" />

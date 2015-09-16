@@ -133,10 +133,11 @@
 
 		    @EzForm.AddressInput(this, "PersonalAddress", "Home address", "personal")
 
-		    @EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long at this address",
+		    @EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long have you been at this address?",
 		        timeAtAddress,
 		        cls: "TimeAtAddress select form_field",
-                tabIndex: 12,               
+                tabIndex: 12,      
+                titleClass:"long",
 		        isRequired: true,
 		        statusIcon: true,
 		        uiEventControlID: "personal-info:time_at_address"),
@@ -180,7 +181,7 @@
 		        origin: origin)
          
 
-		    EzInputBuilder checkbox1 = new EzInputBuilder("ConsentToSearch", "I have read and accept the <a href='#' ui-event-control-id='personal-info:terms-and-conditions'>Terms &amp; Conditions</a>",
+		    EzInputBuilder checkbox1 = new EzInputBuilder("ConsentToSearch", "I have read and accept the <a href='#' ui-event-control-id='personal-info:terms-and-conditions'>Terms &amp; Conditions</a>.",
 		        value: "false",
 		        type: "checkbox",
 				tabIndex: 20,

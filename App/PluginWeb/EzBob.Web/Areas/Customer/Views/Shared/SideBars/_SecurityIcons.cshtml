@@ -3,7 +3,8 @@
 @{
 	Layout = null;
 	var origin = @ViewBag.CustomerOrigin.GetOrigin();
-	var verisignUrl = string.Format("https://seal.verisign.com/getseal?at=0&sealid=2&dn=www.{0}.com&lang=en", origin);
+    var verisignUrl = string.Format("https://seal.verisign.com/getseal?at=0&sealid=2&dn=test.{0}.com&lang=en&tpt=transparent", origin);
+  
 }
 
 <div class="security-icons">
@@ -28,7 +29,7 @@
 	</div>
 	<div class="item">
 		<div class="text lock-icon">
-			<i class="pe-7s-lock"></i>
+			<img src="/Content/img/security-padlock.svg"/>
 		</div>
 	</div>
 </div>

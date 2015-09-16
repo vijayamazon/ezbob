@@ -11,6 +11,7 @@
         public List<EzSelectOptionGroup> ListItems { get; set; }
         public string Cls { get; set; }
         public string CustomAtts { get; set; }
+        public string TitleClass { get; set; }
         public bool IsDisabled { get; set; }
         public bool IsRequired { get; set; }
         public bool StatusIcon { get; set; }
@@ -38,7 +39,8 @@
             Tuple<string, string> placeholder = null,
             bool autoFocus = false,
             int size = 1,
-            bool hasEmpty = true)
+            bool hasEmpty = true,
+            string titleClass = "")
         {
             Id = id;
             Caption = caption;
@@ -55,6 +57,7 @@
             AutoFocus = autoFocus;
             Size = size;
             HasEmpty = hasEmpty;
+            TitleClass = titleClass;
         }
 
 
@@ -73,7 +76,8 @@
             Tuple<string, string> placeholder = null,
             bool autoFocus = false,
             int size = 1,
-            bool hasEmpty = true)
+            bool hasEmpty = true,
+            string titleClass = "")
             : this(id,
             caption,
             new List<EzSelectOptionGroup> { 
@@ -92,7 +96,8 @@
             placeholder,
             autoFocus,
             size,
-            hasEmpty) { }
+            hasEmpty,
+            titleClass) { }
     }
 
     public class EzSelectOption

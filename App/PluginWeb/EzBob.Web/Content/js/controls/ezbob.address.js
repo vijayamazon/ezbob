@@ -101,7 +101,7 @@ EzBob.Popup = Backbone.View.extend({
 		    if (sMode === 'selector') {
 				oButtons.push({
 					text: 'Not found',
-					'class': 'button btn-green ev-btn-org',
+					'class': 'button btn-green ev-btn-org not-found',
 					click: function() { self.PostCodeBtnNotFound(); },
 					'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-not-found',
 				});
@@ -166,10 +166,25 @@ EzBob.Popup = Backbone.View.extend({
 
 		var sVal = $.trim(me.val());
 
-		if (sVal)
-			me.closest('label').find('img.field_status').field_status('set', 'ok');
-		else
-			me.closest('label').find('img.field_status').field_status('clear');
+		if (EzBob.Config.Origin === 'everline') {
+		    if (sVal) {
+		        me.css('border-bottom', '2px solid rgb(122, 193, 67)');
+		    } else {
+		        if (me.hasClass('add-req')) {
+		            me.css('border-bottom', '2px solid red');
+		        } else {
+		            me.css('border-bottom', '2px solid #c7c7c7');
+		        }
+		     
+		    }
+		} else {
+		    if (sVal)
+		        me.closest('label').find('img.field_status').field_status('set', 'ok');
+
+		    else
+		        me.closest('label').find('img.field_status').field_status('clear');
+		}
+		
 
 		this.setManualInputOkBtnState();
 
@@ -399,7 +414,8 @@ EzBob.Popup = Backbone.View.extend({
 	}, // showAddressSelector
 
 	initManualInputForm: function() {
-		this.$el.find('.address-input-block').fadeIn('fast').removeClass('hide');
+	    this.$el.find('.address-input-block').fadeIn('fast').removeClass('hide');
+	   
 		this.setDialogueButtons('manual-input');
 		this.$el.dialog('option', 'title', 'Enter address manually');
 
@@ -417,6 +433,7 @@ EzBob.Popup = Backbone.View.extend({
 
 		this.$el.find('.line1').focus();
 		
+	    this.$el.height('auto');
 		EzBob.ServerLog.debug('address popup manual form initialised');
 	}, // initManualInputForm
 
