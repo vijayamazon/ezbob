@@ -227,7 +227,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			} // if
 		} // for
 		this.setStore('YodleeUpload', 'Bank statements', bankGroup, true, 100, '', false, true, false, true);
-		this.setStore('HMRCUpload', 'Vat reports', hmrcGroup, true, 100, '', false, true, false, true);
+		this.setStore('HMRCUpload', 'VAT reports', hmrcGroup, true, 100, '', false, true, false, true);
 		
 		for (var name in this.stores) {
 			if (!this.stores.hasOwnProperty(name)) {
