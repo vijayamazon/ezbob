@@ -1,9 +1,8 @@
 ﻿var EzBob = EzBob || {};
 
 EzBob.QuickSignUpStepView = Backbone.View.extend({
-	initialize: function() {
-		this.template = _.template($('#signup-template').html());
-
+	template: _.template($('#signup-template').html()),
+	initialize: function () {
 		// This post is for Nir's A\B testing
 		//$.post("http://www.ezbob.com/thank-page/", { action: "sptAjaxRecordConversion", sptID: 5765 });
 
@@ -21,19 +20,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var that = this;
 
 		var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
-	  
-		xhr.done(function(res) {
+
+		xhr.done(function (res) {
 			if (that.switchedToCaptcha)
 				that.twilioEnabled = false;
 			else {
 				that.twilioEnabled = res.isSmsValidationActive;
 				that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
 			}
-			
+
 			return false;
 		});
 
-		xhr.always(function() {
+		xhr.always(function () {
 			if (that.twilioEnabled) {
 				that.$el.find('#twilioDiv').removeClass('hide');
 				EzBob.ServerLog.debug('The visible object is mobile code');
@@ -48,7 +47,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 
 	events: {
-		'click :submit': 'submit',
+		'click #signupSubmitButton': 'submit',
 		'click #generateMobileCode': 'generateMobileCode',
 		'click #switchToCaptcha': 'switchToCaptcha',
 
@@ -62,7 +61,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		'change #mobilePhone': 'mobilePhoneChanged',
 	},
 
-	render: function() {
+	render: function () {
 		if (this.model.get('loggedIn')) {
 			this.readyToProceed = false;
 
@@ -88,7 +87,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.$el.find('.phonenumber').mask('0?9999999999', { placeholder: ' ' });
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.phonenumbercode').numericOnly(6);
-		
+
 		fixSelectValidate(this.$el.find('select'));
 
 		if (this.showOfflineHelp && ($('body').attr('data-offline') === 'yes')) {
@@ -96,7 +95,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 			var oDialog = this.$el.find('#offline_help');
 			if (oDialog.length > 0)
-			    $.colorbox({ inline: true, close: '<i class="pe-7s-close"></i>', open: true, href: oDialog });
+				$.colorbox({ inline: true, close: '<i class="pe-7s-close"></i>', open: true, href: oDialog });
 		} // if
 
 		var oEverlineDialog = this.$el.find('#everline_help');
@@ -108,17 +107,17 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 
 		if (this.model.get('IsEverline')) {
-			
+
 			oEverlineDialog.val(email);
 			//currently not showing the explanation popup but saving the email 
 			EzBob.UiAction.saveOne(EzBob.UiAction.evtLinked(), oEverlineDialog, true);
-		
+
 			this.showEverlineHelp = true;
 			if (this.showEverlineHelp) {
 				this.showEverlineHelp = false;
 
 				if (oEverlineDialog.length > 0)
-				    $.colorbox({ inline: true, open: true, href: oEverlineDialog, close: '<i class="pe-7s-close"></i>', maxWidth: '840px' });
+					$.colorbox({ inline: true, open: true, href: oEverlineDialog, close: '<i class="pe-7s-close"></i>', maxWidth: '840px' });
 			}
 		} // if
 
@@ -135,14 +134,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		if (this.alreadyRendered) {
 			EzBob.Validation.element(this.validator, emailObj);
 		} else {
-			if (emailObj.val() != '') {
+			if (emailObj.val() !== '') {
 				EzBob.Validation.element(this.validator, emailObj);
 			}
 			this.alreadyRendered = true;
 		}
 
 		emailObj.change().attardi_labels('toggle');
-		if (emailObj.val() == '') {
+		if (emailObj.val() === '') {
 			setTimeout(this.focusOnEmail, 50);
 		} else {
 			setTimeout(this.focusOnPassword, 50);
@@ -152,29 +151,29 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		return this;
 	},
 
-	focusOnEmail: function() {
+	focusOnEmail: function () {
 		document.getElementById('Email').focus();
 	},
 
-	focusOnPassword: function() {
+	focusOnPassword: function () {
 		document.getElementById('signupPass1').focus();
 	},
 
-	inputChanged: function(evt) {
+	inputChanged: function () {
 		var enabled = EzBob.Validation.checkForm(this.validator);
 
 		var isInCaptchaMode = !this.$el.find('#captchaDiv').hasClass('hide');
 		enabled = enabled && (isInCaptchaMode || this.activatedCode);
-		$('#signupSubmitButton').toggleClass('disabled', !enabled);
+		this.$el.find('#signupSubmitButton').toggleClass('disabled', !enabled);
 	},
 
-	amountFocused: function() {
+	amountFocused: function () {
 		this.$el.find('#amount').change();
 	},
 
-	generateMobileCode: function() {
-		if ($('#generateMobileCode').hasClass('disabled'))
-			return;
+	generateMobileCode: function () {
+		if (this.$el.find('#generateMobileCode').hasClass('disabled'))
+			return false;
 
 		EzBob.App.trigger('clear');
 
@@ -185,11 +184,11 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			EzBob.App.trigger('warning', "Switching to authentication via captcha");
 			this.$el.find('#twilioDiv').addClass('hide');
 			this.$el.find('#captchaDiv').removeClass('hide');
-			return;
+			return false;
 		}
 		var that = this;
 		var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
-		xhr.done(function(isError) {
+		xhr.done(function (isError) {
 			if (isError !== 'False' && (!isError.success || isError.error === 'True')) {
 				EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
 				that.$el.find('#twilioDiv').addClass('hide');
@@ -199,7 +198,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				codeSentObject.animate({ opacity: 1 });
 			}
 
-			
+
 		});
 		xhr.always(function () {
 			that.$el.find('#mobileCodeDiv').show();
@@ -208,9 +207,11 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				document.getElementById('mobileCode').focus();
 			}
 		});
+
+		return false;
 	},
 
-	mobilePhoneChanged: function() {
+	mobilePhoneChanged: function () {
 		var isValidPhone = this.validator.check(this.$el.find('.phonenumber'));
 
 		var generateCodeButton = this.$el.find('#generateMobileCode');
@@ -229,7 +230,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		return false;
 	},
 
-	switchToCaptcha: function() {
+	switchToCaptcha: function () {
 		this.switchedToCaptcha = true;
 		EzBob.App.trigger('clear');
 		this.$el.find('#twilioDiv').addClass('hide');
@@ -237,7 +238,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		return false;
 	},
 
-	submit: function() {
+	submit: function () {
 		if (this.$el.find('#signupSubmitButton').hasClass('disabled'))
 			return false;
 
@@ -247,8 +248,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		var isInCaptchaMode = !this.$el.find('#captchaDiv').hasClass('hide');
 		if (!isInCaptchaMode) {
-			mobilePhone = $('#mobilePhone').val();
-			mobileCode = $('#mobileCode').val();
+			mobilePhone = this.$el.find('#mobilePhone').val();
+			mobileCode = this.$el.find('#mobileCode').val();
 			this.model.set('twilioPhone', mobilePhone);
 		} // if
 
@@ -266,7 +267,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		var data = this.form.serializeArray();
 
-		var amount = _.find(data, function(d) { return d.name === 'amount'; });
+		var amount = _.find(data, function (d) { return d.name === 'amount'; });
 		if (amount)
 			amount.value = this.$el.find('#amount').autoNumericGet();
 
@@ -281,8 +282,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		var that = this;
 
-		xhr.done(function(result) {
-			var sEmail = $('#Email').val();
+		xhr.done(function (result) {
+			var sEmail = that.$el.find('#Email').val();
 
 			if (result.success) {
 				EzBob.Csrf.updateToken(result.antiforgery_token);
@@ -301,7 +302,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'
 
-			    
+
 			}
 			else {
 
@@ -313,13 +314,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				if (isInCaptchaMode)
 					that.captcha.reload();
 
-				that.$el.find(':submit').addClass('disabled');
+				that.$el.find('#signupSubmitButton').addClass('disabled');
 				that.blockBtn(false);
 			}
 		});
 
-		xhr.fail(function() {
-			var sEmail = $('#Email').val();
+		xhr.fail(function () {
+			var sEmail = that.$el.find('#Email').val();
 
 			EzBob.ServerLog.alert('Something went wrong while customer', sEmail, 'tried to sign up.');
 
@@ -334,13 +335,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		return false;
 	}, // submit
 
-	ready: function() {
+	ready: function () {
 		this.setReadOnly();
 	}, // ready
 
-	setReadOnly: function() {
+	setReadOnly: function () {
 		this.readOnly = true;
-		this.$el.find(':input').not(':submit').attr('disabled', 'disabled').attr('readonly', 'readonly').css('disabled');
+		this.$el.find(':input').not('#signupSubmitButton').attr('disabled', 'disabled').attr('readonly', 'readonly').css('disabled');
 		var captchaElement = this.$el.find('#captcha');
 		if (captchaElement)
 			captchaElement.hide();
@@ -349,10 +350,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		if (captchaElement)
 			captchaElement.hide();
 
-		this.$el.find(':submit').val('Continue');
+		this.$el.find('#signupSubmitButton').val('Next');
 		this.$el.find('[name="securityQuestion"]').trigger('liszt:updated');
 	},
-	blockBtn: function(isBlock) {
+	blockBtn: function (isBlock) {
 		BlockUi(isBlock ? 'on' : 'off');
 	},//blockBtn
 });
