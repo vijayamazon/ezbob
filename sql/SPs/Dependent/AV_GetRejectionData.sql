@@ -117,7 +117,7 @@ END
 
 SELECT @CustomerStatus AS CustomerStatus, 
 	   @ExperianScore AS ExperianScore, 
-	   @CompanyScore AS CompanyScore, 
+	   dbo.udfMaxInt(@CompanyScore, @CompanyMaxScore) AS CompanyScore, 
 	   @WasApproved AS WasApproved, 
 	   @IsBrokerClient AS IsBrokerClient,
 	   @HasErrorMp AS HasErrorMp,

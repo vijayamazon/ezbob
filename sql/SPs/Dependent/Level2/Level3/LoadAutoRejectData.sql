@@ -171,22 +171,12 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @Now IS NULL
-	BEGIN
-		EXECUTE GetCompanyScoreAndIncorporationDate
-			@CustomerId,
-			0,
-			@CompanyScore OUTPUT,
-			@IncorporationDate OUTPUT
-	END
-	ELSE BEGIN
-		EXECUTE GetCompanyHistoricalScoreAndIncorporationDate
-			@CustomerId,
-			0,
-			@Now,
-			@CompanyScore OUTPUT,
-			@IncorporationDate OUTPUT
-	END
+	EXECUTE GetCompanyHistoricalScoreAndIncorporationDate
+		@CustomerId,
+		0,
+		@Now,
+		@CompanyScore OUTPUT,
+		@IncorporationDate OUTPUT
 	
 	------------------------------------------------------------------------------
 	--

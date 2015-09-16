@@ -21,6 +21,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
+	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository.Turnover;
 	using StructureMap;
@@ -398,10 +399,15 @@
 		private void FillFromConsumerData() {
 			var lcd = LoadConsumerData();
 
+			var logList = new List<string>();
+
 			this.numOfDefaultConsumerAccounts = lcd.FindNumOfPersonalDefaults(
 				Cfg.Values.Reject_Defaults_Amount,
-				Trail.MyInputData.MonthsNumAgo
+				Trail.MyInputData.MonthsNumAgo,
+				logList
 			);
+
+			logList.ForEach(s => Log.Debug(s));
 
 			FillNumOfLateConsumerAccounts(lcd);
 
@@ -547,36 +553,36 @@
 				)
 				.ToList();
 
-			// Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
+			Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
 			foreach (var cais in lst) {
-				// Log.Debug(
-				// "Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
-				// cais.Id,
-				// cais.LastUpdatedDate.HasValue
-				// ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				// : "-- null --",
-				// cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
-				// cais.AccountStatusCodes,
-				// Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				// );
+				Log.Debug(
+					"Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
+					cais.Id,
+					cais.LastUpdatedDate.HasValue
+					? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					: "-- null --",
+					cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+					cais.AccountStatusCodes,
+					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				);
 
 				int nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length);
 
-				// Log.Debug(
-				// "Fill num of lates cais id {0}: month count is {1}, status count is {2}.",
-				// cais.Id,
-				// nMonthCount,
-				// cais.AccountStatusCodes.Length
-				// );
+				Log.Debug(
+					"Fill num of lates cais id {0}: month count is {1}, status count is {2}.",
+					cais.Id,
+					nMonthCount,
+					cais.AccountStatusCodes.Length
+				);
 
 				for (int i = 1; i <= nMonthCount; i++) {
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-					// Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
+					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
 
 					if (!lateStatuses.Contains(status)) {
-						// Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
+						Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
 						continue;
 					} // if
 
@@ -584,10 +590,10 @@
 
 					int.TryParse(status.ToString(CultureInfo.InvariantCulture), out nStatus);
 
-					// Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
+					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
 
 					if (nStatus > Trail.MyInputData.RejectionLastValidLate) {
-						// Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
+						Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
 						this.numOfLateConsumerAccounts++;
 						break;
 					} // if
