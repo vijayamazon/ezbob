@@ -38,11 +38,7 @@
 					}).ToList();
 		}
 
-		public static DateTime GetMarketplaceOriginationDate(
-			this Customer customer,
-			bool? isPaymentAccount = null,
-			Func<MP_CustomerMarketPlace, bool> oIncludeMp = null
-		) {
+		public static DateTime GetMarketplaceOriginationDate(this Customer customer) {
 			DateTime now = DateTime.UtcNow;
 
 			if (customer == null)
@@ -50,10 +46,11 @@
 
 			IEnumerable<DateTime> dates = customer.CustomerMarketPlaces
 				.Where(m =>
-					!m.Disabled && (
-						isPaymentAccount == null || m.Marketplace.IsPaymentAccount == isPaymentAccount.Value
-					) && (
-						oIncludeMp == null || oIncludeMp(m)
+					!m.Disabled &&
+					m.Marketplace.InternalId != CompanyFiles && (
+						!m.Marketplace.IsPaymentAccount ||
+						m.Marketplace.InternalId == PayPal ||
+						m.Marketplace.InternalId == Hmrc
 					)
 				)
 				.Select(mp => {
@@ -75,5 +72,10 @@
 				return now;
 			} // try
 		} // GetMarketplaceOriginationDate
+
+		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
+		private static readonly Guid CompanyFiles = new Guid("1C077670-6D6C-4CE9-BEBC-C1F9A9723908");
+
 	}
 }

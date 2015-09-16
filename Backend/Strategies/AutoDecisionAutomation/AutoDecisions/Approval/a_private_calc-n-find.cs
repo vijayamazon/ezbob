@@ -6,6 +6,7 @@
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using ConfigManager;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
@@ -14,10 +15,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public partial class Approval {
-		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
-		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
-		private static readonly Guid CompanyFiles = new Guid("1C077670-6D6C-4CE9-BEBC-C1F9A9723908");
-
 		private int CalculateRollovers() {
 			return this.loanRepository.ByCustomer(this.trail.CustomerID)
 				.SelectMany(loan => loan.Schedule)
@@ -25,22 +22,30 @@
 		} // CalculateRollovers
 
 		private int CalculateSeniority() {
-			if (this.customer == null)
+			if (this.customer == null) {
+				this.log.Debug("CalculateSeniority: 0 because customer is null.");
 				return -1;
+			} // if
 
-			DateTime oMpOriginationDate = this.customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
-				mp.Marketplace.InternalId != CompanyFiles && (
-					!mp.Marketplace.IsPaymentAccount ||
-					mp.Marketplace.InternalId == PayPal ||
-					mp.Marketplace.InternalId == Hmrc
-				)
-			);
+			DateTime oMpOriginationDate = this.customer.GetMarketplaceOriginationDate();
+
+			this.log.Debug("CalculateSeniority: mp origination date is {0}.", oMpOriginationDate.MomentStr());
 
 			DateTime oIncorporationDate = GetCustomerIncorporationDate();
 
+			this.log.Debug("CalculateSeniority: incorporation date is {0}.", oIncorporationDate.MomentStr());
+
 			DateTime oDate = (oMpOriginationDate < oIncorporationDate) ? oMpOriginationDate : oIncorporationDate;
 
-			return (int)(DateTime.UtcNow - oDate).TotalDays;
+			this.log.Debug("CalculateSeniority: chosen date is {0}.", oDate.MomentStr());
+
+			this.log.Debug("CalculateSeniority: current date is {0}.", Now.MomentStr());
+
+			int seniority = (int)(Now - oDate).TotalDays;
+
+			this.log.Debug("CalculateSeniority: result is {0} days.", seniority);
+
+			return seniority;
 		} // CalculateSeniority
 
 		private int CalculateTodaysApprovals(DateTime now) {
