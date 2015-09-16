@@ -7,12 +7,12 @@
 <script id="YodleeUploadAccountInfoTemplate" type="text/template">
 	<div class="row-fluid">
 		<div class="wizard-top-notification">
-			<h2 class="form_start">Upload company files</h2>
-			Please upload the company documents like annual financial accounts, bank statements in CSV format or VAT returns.
+			<h2 class="form_start">Upload company bank files</h2>
+			<p>Please upload the last 12 months of bank statements for your company in csv format.</p>
 		</div>
         <div class="control-group form_field_container">
 		    <form id="companyFilesUploadZone" class="dropzone" action="@Url.Action("BankUploadedFiles", "CompanyFilesMarketPlaces", new { Area = "Customer" })" ui-event-control-id="yodleeUpload:dropzone">
-			    <div class="dz-message dz-with-text">Drag or Click to upload the Company’s documents.</div>
+			    <div class="dz-message dz-with-text">Drag or click to upload the bank statements.</div>
 		    </form>
         </div>
 		
@@ -28,7 +28,7 @@
 				new EzButtonModel(
 					"yodlee_upload_back_button",
 					"Cancel",
-					cls: "back button btn-grey ev-btn-org",
+					cls: "back button btn-grey clean-btn",
 					uiEventControlID: "link-account:bank_statements_back",
 					buttonType: EzButtonType.link,
 					href: "#")

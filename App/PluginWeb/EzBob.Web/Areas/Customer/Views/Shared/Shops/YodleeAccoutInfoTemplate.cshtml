@@ -22,8 +22,10 @@
     <div class="row-fluid">
         <div class="wizard-top-notification">
             <h2 class="form_start">Select your bank and account type</h2>
-            You will be directed to a 3rd party site (Yodlee.com), in which you can grant read only access to your online bank account.
-            This will allow @ViewBag.CustomerOrigin.Name to read your bank account transaction and evaluate your business.
+			<p>
+				You will be directed to a 3rd party site (Yodlee.com), in which you can grant read only access to your online bank account.
+				This will allow @ViewBag.CustomerOrigin.Name to read your bank account transaction and evaluate your business.
+			</p>
         </div>
         <form id="yodleeAccount">
 			<div class="control-group">
@@ -70,7 +72,7 @@
 				new EzButtonModel(
 					"yodlee_back_button",
 					"Cancel",
-					cls: "back button btn-grey ev-btn-org",
+					cls: "back button btn-grey clean-btn",
 					uiEventControlID: "link-account:yodlee_back",
 					buttonType: EzButtonType.link,
 					href:"#")

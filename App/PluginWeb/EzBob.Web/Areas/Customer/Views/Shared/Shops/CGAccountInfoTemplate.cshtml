@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using System.Web
 @using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @using Integration.ChannelGrabberConfig
 @model dynamic
 @{
@@ -18,8 +19,13 @@
     <script id="@sTemplateID" type="text/template">
         <div class="row-fluid">
             <div class="wizard-top-notification">
-                <h2 class="form_start">Please Enter @vi.DisplayName Credentials</h2>
+                <h2 class="form_start">Please enter your @vi.DisplayName credentials</h2>
             </div>
+			
+			@if (origin == CustomerOriginEnum.everline) {
+				WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes));
+			}
+			
             <form id="@sFormID" class="cg-link-account-form">
                 <div class="clearfix">
                     @foreach (FieldInfo fi in vi.ClientSide.LinkForm.Fields)
@@ -66,14 +72,16 @@
 							new EzButtonModel(
 								vi.Name.ToLower() + "_back_button", 
 								"Cancel", 
-								cls: "back button btn-grey ev-btn-org", 
+								cls: "back button btn-grey clean-btn", 
 								uiEventControlID: "link-account:cg_back", 
 								buttonType: EzButtonType.link, 
 								href: "#")
 						}, 
 						origin: origin)
 
-                    @{ WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes)); }
+                    @if(origin != CustomerOriginEnum.everline) {
+						WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes)); 
+					}
                 </div>
             </form>
         </div>

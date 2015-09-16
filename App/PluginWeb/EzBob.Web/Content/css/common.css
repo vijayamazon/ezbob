@@ -469,13 +469,21 @@ div.shop-connected {
 }
 
 .account-or {
-	background: url('images/accounts/account-or.png') no-repeat 0 0;
-	width: 40px;
-	height: 40px;
-	z-index: 2;
-	display: inline-block;
-	margin-bottom: 28px;
+    background-color: #4B4B4B;
+    width: 40px;
+    height: 40px;
+    z-index: 2;
+    display: inline-block;
     margin-right: 2%;
+    line-height: 35px;
+    vertical-align: top;
+    margin-top: 18px;
+    background-color: #4B4B4B;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    color: white;
 }
 
 .marketplace-button-wrapper .account-label,
@@ -906,7 +914,7 @@ select.SubBank {
 }
 .marketplace-image.marketplace-image-EKM {
 	background-position: -1057px -1px;
-    width: 112px;
+    width: 113px;
 }
 .marketplace-image.marketplace-image-Play {
 	background-position: 0px -1px;

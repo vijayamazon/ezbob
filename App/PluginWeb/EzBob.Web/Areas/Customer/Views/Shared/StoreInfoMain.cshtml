@@ -19,10 +19,12 @@
         <div class="link-accounts-form hide">
             @if (bIsWizard)
             {
-                <h2 class="form_start">Link accounts</h2>
-            }
-            else
-            {
+				if (origin == CustomerOriginEnum.everline) {
+					<h2 class="form_start">Your business information <span class="h2-sub-title">(complete at least 1)</span></h2>
+				} else {
+					<h2 class="form_start">Link accounts</h2>
+				}
+			} else {
                 <h2 class="form_start">Link more accounts</h2>
             }
             <div style="display: none;" class="entry_message wizard_message">We base our loan decisions on the business information you provide.  Please let us have at least one of the following. The more you link or upload the better your chances of being accepted.</div>

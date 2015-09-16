@@ -9,7 +9,7 @@
 	<div class="row-fluid">
 		<div class="wizard-top-notification">
 			<h2 class="form_start">Upload company files</h2>
-			Please upload the company documents like annual financial accounts, bank statements in CSV format or VAT returns.
+			<p>Please upload the company documents like annual financial accounts, bank statements in CSV format or VAT returns.</p>
 		</div>
         <div class="control-group form_field_container">
 		    <form id="companyFilesUploadZone" class="dropzone" action="@Url.Action("UploadedFiles", "CompanyFilesMarketPlaces", new { Area = "Customer" })" ui-event-control-id="companyFiles:dropzone">
@@ -29,7 +29,7 @@
 				new EzButtonModel(
 					"company_files_back_button",
 					"Cancel",
-					cls: "back button btn-grey ev-btn-org",
+					cls: "back button btn-grey clean-btn",
 					uiEventControlID: "link-account:company_files_back",
 					buttonType: EzButtonType.link,
 					href: "#")

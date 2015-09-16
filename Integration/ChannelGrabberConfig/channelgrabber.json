@@ -87,8 +87,8 @@
 
 	{
 		"Name":        "Play",
-		"DisplayName": "Play",
-		"Description": "play.com",
+		"DisplayName": "Rakuten",
+		"Description": "Rakuten.co.uk",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 		"Behaviour":   "Default",
 
