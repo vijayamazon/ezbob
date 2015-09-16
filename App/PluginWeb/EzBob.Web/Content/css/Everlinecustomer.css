@@ -136,20 +136,38 @@
 
         .wizard-steps-wrapper ul.application_steps li .progress-circle {
             text-align: center;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            padding-top: 13px;
-            color: white;
-            margin-top: 6px;
-            width: 48px;
-            height: 48px;
-            background: url('../everline/circle_gray.png');
-            box-sizing: border-box;
-            padding-top: 13px;
-            color: white;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			padding-top: 13px;
+			color: white;
+			margin-top: 6px;
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			box-sizing: border-box;
+			padding-top: 13px;
+			color: white;
+			background-color: #f1f0f0;
+			position: relative;
         }
 
+		.wizard-steps-wrapper ul.application_steps li .progress-circle .inner-circle{
+			border-radius: 50%;
+			background-color: #6b6862;
+			width: 38px;
+			height: 38px;
+			vertical-align: middle;
+			line-height: 48px;
+			position: absolute;
+			right: 5px;
+			top: 5px;
+		}
+
+		.wizard-steps-wrapper ul.application_steps li .percent {
+		    font-size: 18px;
+			margin-top: -5px;
+		}
         .wizard-steps-wrapper ul.application_steps li.complete .progress-circle {
             background: url('../everline/circle_done.png');
         }
@@ -158,15 +176,20 @@
                 visibility: hidden;
             }
 
-        .wizard-steps-wrapper ul.application_steps li .progress-circle.current {
-            background: url('../everline/circle_green.png');
+        .wizard-steps-wrapper ul.application_steps li .progress-circle.current .inner-circle {
+            background-color: #8dc641;
         }
+
+		.wizard-steps-wrapper ul.application_steps li.complete .progress-circle .inner-circle{
+			display: none;
+		}
 
         .wizard-steps-wrapper ul.application_steps li .step_label {
             display: block;
             float: right;
             margin-left: 0;
             margin-right: -4px;
+			font-weight: 300;
         }
 
 		.wizard-steps-wrapper .dashboard-steps ul.application_steps li .step_label {
