@@ -105,32 +105,28 @@
 @section Js
 {
     <script id="d-payEarly-template" type="text/template">
-        <h3>Loans</h3>
-		<dl>
-			<dt>Total Balance:</dt>
-			<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
-		</dl>
-		<dl>
-			<dt>Next Payment:</dt>
-			<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
-		</dl>
-		
+	<h3>Loans</h3>
+	<dl>
+		<dt>Total Balance:</dt>
+		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+	</dl><dl>
+		<dt>Next Payment:</dt>
+		<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
+	</dl><dl>
 		@if (origin == CustomerOriginEnum.everline) {
-			<dl>
-				<dt>Due:</dt>
-				<dd><%- EzBob.formatDateUK(NextPaymentDate) %></dd>
-			</dl>
+			<dt>Due:</dt>
+			<dd><%- EzBob.formatDateUK(NextPaymentDate) %></dd>
 		}
-        <button class="button btn-green clean-btn" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
-    </script>
+	</dl>
+	<button class="button btn-green clean-btn" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
+</script>
 
     <script id="d-lateLoan-template" type="text/template">
 	<h3>Loans</h3>
 	<dl>
 		<dt>Total Balance:</dt>
 		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
-	</dl>
-	<dl>
+	</dl><dl>
 		<dt style="line-height: 14px;">Amount Past Due:</dt>
 		<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
 	</dl>
@@ -143,8 +139,7 @@
 		<dl>
 			<dt>Available Credit:</dt>
 			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimalsUK(availableCredit) %></dd>
-		</dl>
-		<dl>
+		</dl><dl>
 			<dt>Offer Valid for:</dt>
 			<dd class="offerValidFor"><%- countDown %> hrs</dd>
 		</dl>
@@ -157,8 +152,7 @@
 		<dl>
 			<dt>Available Credit:</dt>
 			<dd class="dashes">---</dd>
-		</dl>
-		<dl>
+		</dl><dl>
 			<dt>Offer Valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
@@ -177,8 +171,7 @@
 		<dl>
 			<dt>Available Credit:</dt>
 			<dd class="dashes">---</dd>
-		</dl>
-		<dl>
+		</dl><dl>
 			<dt>Offer Valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
