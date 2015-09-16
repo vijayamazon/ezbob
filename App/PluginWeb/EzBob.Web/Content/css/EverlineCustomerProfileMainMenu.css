@@ -8,6 +8,7 @@
 	box-sizing: border-box;
 	background-image: none;
     box-shadow: none;
+	border-radius: 0;
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main {
@@ -27,7 +28,8 @@
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical{
-	display: none;
+    visibility: hidden;
+	width: 0;
 }
 
 .main-page-everline .profile-menu .customer-dashboard-main li a {
@@ -42,25 +44,21 @@
 	font-size: 15px;
 }
 
-.profile-menu .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, 
-.profile-menu.navbar .nav > li > a:focus, 
-.profile-menu.navbar .nav > li > a:hover, 
-.profile-menu.navbar .nav .active a, 
-.profile-menu.navbar .nav .active a:hover {
-    color: #e28023 !important;
+.profile-menu .ui-tabs .ui-tabs-nav li.ui-tabs-selected a span, 
+.profile-menu.navbar .nav > li > a:focus span, 
+.profile-menu.navbar .nav > li > a:hover span, 
+.profile-menu.navbar .nav .active a span, 
+.profile-menu.navbar .nav .active a:hover span{
+    border-bottom: 2px #8dc641 solid;
 }
-.main-page-everline .profile-menu .customer-dashboard-main li.active a {
-    color: #e28023 !important;
+.main-page-everline .profile-menu .customer-dashboard-main li.active a span{
+    border-bottom: 2px #8dc641 solid;
     text-decoration: none;
     text-shadow: none;
 }
 
-.main-page-everline .profile-menu .customer-dashboard-main li.active a {
-	color: #e28023;
+.main-page-everline .profile-menu .customer-dashboard-main li.active a span{
+	border-bottom: 2px #8dc641 solid;
 	text-decoration: none;
 	text-shadow: none;
-}
-
-.main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical {
-	width: 30px;
 }

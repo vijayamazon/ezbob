@@ -60,19 +60,19 @@
         <div class="navbar profile-menu">
             <div class="navbar-inner">
                 <ul class="nav customer-dashboard-main">
-                    <li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity">Activity</a></li>
+                    <li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity"><span>Activity</span></a></li>
                     <li class="divider-vertical"></li>
-					<li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts">Bank details</a></li>
+					<li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts"><span>Bank details</span></a></li>
 					<li class="divider-vertical"></li>
-					<li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts">Link Accounts</a></li>
+					<li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts"><span>Link Accounts</span></a></li>
                     <li class="divider-vertical"></li>
                     @if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors) {
 						<li class="divider-vertical"></li>
-						<li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
+						<li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors"><span>Company Directors</span></a></li>
 					}
-					<li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
+					<li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information"><span>My Information</span></a></li>
                     <li class="divider-vertical"></li>
-                    <li class="settings-li"><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Account Settings</a></li>
+                    <li class="settings-li"><a href="#Settings" ui-event-control-id="dashboard:tab-settings"><span>Account Settings</span></a></li>
                     @*@if (Model.Customer.Perks != null) {
                         <li class="divider-vertical"></li>
                         <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
@@ -109,63 +109,80 @@
 		<dl>
 			<dt>Total Balance:</dt>
 			<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
-			<dt>Next Payment:</dt>
-			<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDate(NextPaymentDate) %></i></dd>
 		</dl>
-        <button class="button btn-green ev-btn-org" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
+		<dl>
+			<dt>Next Payment:</dt>
+			<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
+		</dl>
+		
+		@if (origin == CustomerOriginEnum.everline) {
+			<dl>
+				<dt>Due:</dt>
+				<dd><%- EzBob.formatDateUK(NextPaymentDate) %></dd>
+			</dl>
+		}
+        <button class="button btn-green clean-btn" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
     </script>
 
     <script id="d-lateLoan-template" type="text/template">
-        <h3>Loans</h3>
-		<dl>
-			<dt>Total Balance:</dt>
-			<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
-			<dt style="line-height: 14px;">Amount Past Due:</dt>
-			<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
-		</dl>
-        <button class="button btn-green pay-late ev-btn-org" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
+	<h3>Loans</h3>
+	<dl>
+		<dt>Total Balance:</dt>
+		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+	</dl>
+	<dl>
+		<dt style="line-height: 14px;">Amount Past Due:</dt>
+		<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
+	</dl>
+	<button class="button btn-green pay-late clean-btn" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
 
-    </script>
+</script>
 
     <script id="d-getCash-template" type="text/template">
         <h3>Cash</h3>
-        <dl>
-            <dt>Available Credit:</dt>
-            <dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimalsUK(availableCredit) %></dd>
-            <dt>Offer Valid for:</dt>
-            <dd class="offerValidFor"><%- countDown %> hrs</dd>
-        </dl>
+		<dl>
+			<dt>Available Credit:</dt>
+			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimalsUK(availableCredit) %></dd>
+		</dl>
+		<dl>
+			<dt>Offer Valid for:</dt>
+			<dd class="offerValidFor"><%- countDown %> hrs</dd>
+		</dl>
 
-        <button class="button btn-green get-cash ev-btn-org" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
+		<button class="button btn-green get-cash ev-btn-org" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
     </script>
 
     <script id="d-getCash-template-late" type="text/template">
         <h3>Cash</h3>
-        <dl>
-            <dt>Available Credit:</dt>
-            <dd class="dashes">---</dd>
-            <dt>Offer Valid:</dt>
-            <dd class="dashes">---</dd>
-        </dl>
-        <button rel="popover"
-                data-content="To get more cash, please pay your minimum amount due."
-                data-original-title="Get More Cash"
-                class="button btn-green disabled get-cash ev-btn-org"
-                ui-event-control-id="dashboard:get-more-cash">
-            Get More Cash
-        </button>
+		<dl>
+			<dt>Available Credit:</dt>
+			<dd class="dashes">---</dd>
+		</dl>
+		<dl>
+			<dt>Offer Valid:</dt>
+			<dd class="dashes">---</dd>
+		</dl>
+		<button rel="popover"
+				data-content="To get more cash, please pay your minimum amount due."
+				data-original-title="Get More Cash"
+				class="button btn-green disabled get-cash clean-btn"
+				ui-event-control-id="dashboard:get-more-cash">
+			Get More Cash
+		</button>
 
     </script>
 
     <script id="d-getCash-template-apply" type="text/template">
         <h3>Cash</h3>
-        <dl>
-            <dt>Available Credit:</dt>
-            <dd class="dashes">---</dd>
-            <dt>Offer Valid:</dt>
-            <dd class="dashes">---</dd>
-        </dl>
-        <button href="#" class="button btn-green apply-for-loan refresh-account-help ev-btn-org" ui-event-control-id="dashboard:request-cash">Request Cash</button>
+		<dl>
+			<dt>Available Credit:</dt>
+			<dd class="dashes">---</dd>
+		</dl>
+		<dl>
+			<dt>Offer Valid:</dt>
+			<dd class="dashes">---</dd>
+		</dl>
+		<button href="#" class="button btn-green apply-for-loan refresh-account-help clean-btn" ui-event-control-id="dashboard:request-cash">Request Cash</button>
 
         <div class="hide">
             <div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
@@ -274,28 +291,32 @@
 
     <script id="d-getCash-template-wait" type="text/template">
         <h3>Cash</h3>
-        <dl>
-            <dt>Available Credit:</dt>
-            <dd style="font-weight: bold; font-size: 13px; text-align: center;">Under Review</dd>
-            <dt>Offer Valid:</dt>
-            <dd class="dashes">---</dd>
-        </dl>
-        <button class="button btn-green choose-amount-wait disabled ev-btn-org" ui-event-control-id="dashboard:choose-amount-wait">
-            Choose Amount
-        </button>
+		<dl>
+			<dt>Available Credit:</dt>
+			<dd style="font-weight: bold; font-size: 13px; text-align: center;">Under Review</dd>
+		</dl>
+		<dl>
+			<dt>Offer Valid:</dt>
+			<dd class="dashes">---</dd>
+		</dl>
+		<button class="button btn-green choose-amount-wait disabled clean-btn" ui-event-control-id="dashboard:choose-amount-wait">
+			Choose Amount
+		</button>
     </script>
 
     <script id="d-getCash-template-bad" type="text/template">
         <h3>Cash</h3>
-        <dl>
-            <dt>Available Credit:</dt>
-            <dd style="font-weight: bold; font-size: 13px; text-align: center;">None</dd>
-            <dt>Offer Valid:</dt>
-            <dd class="dashes">---</dd>
-        </dl>
-        <button class="button btn-green apply-for-loan disabled ev-btn-org" ui-event-control-id="dashboard:choose-amount-bad">
-            Choose Amount
-        </button>
+		<dl>
+			<dt>Available Credit:</dt>
+			<dd style="font-weight: bold; font-size: 13px; text-align: center;">None</dd>
+		</dl>
+		<dl>
+			<dt>Offer Valid:</dt>
+			<dd class="dashes">---</dd>
+		</dl>
+		<button class="button btn-green apply-for-loan disabled clean-btn" ui-event-control-id="dashboard:choose-amount-bad">
+			Choose Amount
+		</button>
     </script>
 
     <div class="modal" id="payEarly-modal" style="display: none;">

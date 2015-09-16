@@ -1,6 +1,22 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 <script id="loan-details-template" type="text/template">
-	<% var rollovers = rollovers || []; %>
+	<% 
+		var rollovers = rollovers || [];
+		var payButtonName = "Make Payment";
+
+		var hasRolover = rollovers && rollovers.length > 0;
+
+		if (hasRolover)
+			payButtonName = "Pay Roll Over";
+		else if ((loan.Status == 'Live') && loan.IsEarly)
+			payButtonName = "Pay Early";
+		else if ((isLate && !hasRolover) || !loan.IsEarly)
+			payButtonName = "Pay Now";
+	 %>
 
 	<h2>Loan Details</h2>
 	<div style="padding-left: 0; padding-bottom: 30px;">
@@ -95,28 +111,27 @@
 					<dd><%- EzBob.formatPoundsUK(loan.SetupFee) %></dd>
 				</dl>
 			</div>
-
-			<div class="span3">
-				<%
-				var payButtonName = "Make Payment";
-
-				var hasRolover = rollovers && rollovers.length > 0;
-
-				if (hasRolover)
-				payButtonName = "Pay Roll Over";
-				else if ((loan.Status == 'Live') && loan.IsEarly)
-				payButtonName = "Pay Early";
-				else if ((isLate && !hasRolover) || !loan.IsEarly)
-				payButtonName = "Pay Now";
-
-				if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
-				%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early ev-btn-org" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
-				}
-				%>
-			</div>
+			
+			@if (origin != CustomerOriginEnum.everline) {
+				<div class="span3">
+					<%
+					if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
+					%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early clean-btn" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
+					}
+					%>
+				</div>
+			}
 		</div>
 	</div>
 
+	@if (origin == CustomerOriginEnum.everline) {
+		<div class="buttons_container">
+			<% if ((loan.Status == 'Live') || (loan.Status == 'Late')) { %>
+			<a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early clean-btn" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a>
+			<% } %>
+		</div>
+	}
+	
 	<h2 style="margin-bottom: 10px;">Payment Schedule</h2>
 
 	<table class="table payment-schedule-table">
@@ -233,9 +248,14 @@
 				<%
 				_.each(loan.Agreements, function(item, i){
 				%>
-				<li><a href="@Url.Action("Download", "Agreements", new { Area = "" })/<%=item.Id%>" ui-event-control-id="dashboard:download-agreements"><%=item.Name%></a></li><%
-				});
-				%>
+				<li>
+					<a href="@Url.Action("Download", "Agreements", new { Area = "" })/<%=item.Id%>" class="clean-btn" ui-event-control-id="dashboard:download-agreements">
+						<i class="pe-7s-file"></i>
+						<%=item.Name%>
+
+					</a>
+				</li>
+				<% }); %>
 			</ul>
 		</div>
 	</div>

@@ -914,3 +914,7 @@ span.sign-full-name {
 	margin: 0;
     margin-left: 20px;
 }
+
+.loan-agreements ul a i {
+	display: none;
+}

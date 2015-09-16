@@ -1632,13 +1632,20 @@ td.account-logo {
     width: 187px;
 }
 
+.accounts-list {
+    margin-bottom: 20px;
+}
+
 .marketplace-group {
     width: 100%;
     clear: both;
     display: block;
 }
 
-.marketplace-group .group-title { color: #67c10b; }
+.marketplace-group .group-title { 
+	color: #67c10b;    
+	margin-bottom: -5px;
+}
 
 .marketplace-group.following .group-title { padding-top: 1.5em; }
 
@@ -1721,6 +1728,7 @@ td.account-logo {
 
 .marketplace-button .link-upload, .marketplace-button .link-upload:hover {
 	color: #4d4d4d;
+	line-height: normal;
 }
 
 .hmrc-main-button a {

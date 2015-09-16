@@ -10,6 +10,10 @@ body {
 	font-size: 62.5%;
 }
 
+#profile-content{
+	width: 960px;
+}
+
 label, input, button, select, textarea {
 	font-family: 'Open Sans',sans-serif;
 	font-size: 15px;
@@ -97,11 +101,18 @@ a.clean-btn{
 */
 
 .main-page-everline .profile-headlines {
-	width: 960px;
 	margin: 0 auto;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.welcome-sign{
+	margin-bottom: 20px;
+}
+
+.header-message.hm_green {
+	color: #8dc641;
 }
 
 /*
@@ -113,35 +124,47 @@ a.clean-btn{
 */
 
 .main-page-everline .d-widgets {
-	border: 1px solid #28211f;
-	width: 960px;
-	padding: 10px;
-	margin: 10px auto;
+	margin-top: 20px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
-.main-page-everline .d-widgets h3,
-.main-page-everline .d-widgets dl,
-.main-page-everline .d-widgets dl dt,
-.main-page-everline .d-widgets dl dd {
-	display: inline-block;
+.main-page-everline .d-widget {
+	background-color: #f1f0f0;
+	position: relative;
+	margin-top: 40px;
+    margin-bottom: 25px;
+	display: block;
+	padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-page-everline .d-widget h3{
+    position: absolute;
+    top: -45px;
+	left: 0;
+	color: #8dc641;
+	font-weight: normal;
 }
 
 .main-page-everline .d-widgets dl {
-	margin-left: 90px;
 	position: relative;
+    background-color: #e6e6e6;
+    padding: 13px;
+	display: inline-block;
 }
 
 .main-page-everline .d-widgets dl dd {
 	margin-right: 40px;
 	font-weight: bold;
+	margin-left: 0;
 }
 
-.main-page-everline .d-widgets .ev-btn-org {
+.main-page-everline .d-widgets .ev-btn-org,
+.main-page-everline .d-widgets .clean-btn {
 	float: right;
-	margin-top: 7px;
+	margin-top: 25px;
 	width: 22%;
 }
 
@@ -156,6 +179,10 @@ a.clean-btn.pay-early {
 	width: 200px
 }
 
+.next-due-amount i{
+	display: none;
+}
+
 /*
 *******************************************************************************
 *
@@ -165,7 +192,6 @@ a.clean-btn.pay-early {
 */
 
 .main-page-everline .profile-widgets {
-	width: 960px;
 	margin: 0 auto;
 	padding: 20px 0;
 }

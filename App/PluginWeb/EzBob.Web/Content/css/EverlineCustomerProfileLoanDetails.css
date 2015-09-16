@@ -19,10 +19,15 @@
 }
 
 .main-page-everline #get-cash .form-horizontal {
-	border: 1px solid #28211f;
+	background: #f1f0f0;
 	padding: 10px;
     margin-bottom: 20px;
 	box-sizing: border-box;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-agreements{
+	background: none;
+	padding: 0;
 }
 
 .main-page-everline .early-payment-form label.radio, .early-payment-form label.checkbox {
@@ -58,9 +63,8 @@
 
 .main-page-everline #get-cash .form-horizontal.loan-details div dl dd {
 	margin: 0 0 5px 50%;
-	border: 1px solid #28211f;
 	padding: 0 5px;
-	text-align: center;
+	text-align: left;
 }
 
 .main-page-everline #get-cash .payment-schedule-table {
@@ -79,24 +83,28 @@
 .main-page-everline #get-cash .loan-agreements ul li {
 	display: inline-block;
 	margin-right: 28px;
-	height: 28px;
-	line-height: 28px;
 	margin-bottom: 15px;
-    margin-top: 15px;
-    margin-left: 10px;
+    margin-left: 0;
 }
 
 .main-page-everline #get-cash .loan-agreements ul li a {
-	background-image: url(../img/pdf-logo.jpg);
-	background-position: left center;
-	background-repeat: no-repeat;
 	display: block;
 	padding-left: 32px;
 	cursor: pointer;
-	height: 28px;
-	line-height: 28px;
-	color: #e28023;
+	position: relative;
 }
+
+.main-page-everline #get-cash .loan-agreements ul li a:hover {
+	text-decoration: none;
+}
+
+	.main-page-everline #get-cash .loan-agreements ul li a i {
+		position: absolute;
+		left: 10px;
+		font-size: 34px;
+		top: 4px;
+		display: inline-block;
+	}
 
 .main-page-everline #get-cash .buttons_container {
 	margin-top: 14px;
@@ -186,6 +194,19 @@
 
 div.sign-full-name {
     width: 100%;
+}
+
+.loan-details-well{
+	padding: 0;
+}
+
+.loan-details-well table td{
+	background-color: transparent;
+	padding: 0;
+}
+
+.loan-summary-well{
+	padding: 0;
 }
 
 /*****JspScroll******/

@@ -314,6 +314,7 @@ table.table td {
     background:#fff;
     font-size:16px; 
     font-family: "Titillium Web Regular";
+	white-space: nowrap;
 }
 table.table td span.label{color:#666;}
 table.table tbody tr:hover{background:#f1f1f1;}
