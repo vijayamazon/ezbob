@@ -1106,6 +1106,7 @@ hr.wizard-hr {
         vertical-align: middle;
         outline-style: none;
         overflow: hidden;
+		display: inline-block;
     }
 
     .marketplace-button .link-upload {
