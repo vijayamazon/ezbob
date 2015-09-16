@@ -149,6 +149,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		this.personalAddressView = new EzBob.AddressView({
 			model: this.model.get('PersonalAddress'),
 			name: 'PersonalAddress',
+			buttonTitle: 'Find my address',
 			max: 1,
 			tabindex: 10,
 			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
@@ -162,6 +163,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			name: 'PrevPersonAddresses',
 			max: 3,
 			title: 'Enter previous postcode',
+			buttonTitle: 'Find my address',
 			required: "empty",
 			tabindex: 13,
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
@@ -176,6 +178,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		    name: 'OtherPropertiesAddresses',
 		    max: 3,
 		    required: "empty",
+		    buttonTitle: 'Find my address',
 		    tabindex: 16,
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		    cls: 'otherPropertiesAddress canDisabledAddress'

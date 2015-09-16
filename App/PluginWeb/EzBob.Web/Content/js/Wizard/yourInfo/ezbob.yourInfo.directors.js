@@ -79,6 +79,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 				model: val.get('Address'),
 				name: name,
 				max: 1,
+				buttonTitle: 'Find address',
 				uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 			});
 			var dateOfBirthValName = that.preffix + '[' + i + '].' + 'DateOfBirth';

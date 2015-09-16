@@ -536,7 +536,8 @@ EzBob.AddressView = Backbone.View.extend({
 		this.model.on('add change remove', this.render, this);
 		this.name = options.name;
 		this.max = options.max || 3;
-	    this.title = options.title || "Enter postcode";
+		this.title = options.title || "Enter postcode";
+		this.buttonTitle = options.buttonTitle || 'Postcode lookup';
 		this.isShowClear = options.isShowClear;
 		this.directorId = options.directorId || 0;
 		this.customerId = options.customerId || 0;
@@ -562,6 +563,7 @@ EzBob.AddressView = Backbone.View.extend({
 		} // if
 
 		this.$el.find('span, .input-title').text(this.title);
+		this.$el.find('.addAddress').val(this.buttonTitle);
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
 		this.$el.find('.form_field_container.control-group').addClass(this.cls);
