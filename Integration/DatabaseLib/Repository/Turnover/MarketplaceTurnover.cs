@@ -7,15 +7,15 @@
 	using NHibernate.Type;
 
 	public class MarketplaceTurnover {
-        public virtual long AggID { get; set; }
-        public virtual DateTime TheMonth { get; set; }
+		public virtual long AggID { get; set; }
+		public virtual DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
 		public virtual DateTime UpdatingEnd { get; set; }
 		public virtual int CustomerMarketPlaceUpdatingHistoryID { get; set; }
 		public virtual int CustomerMarketPlaceID { get; set; }
 		public virtual int CustomerID { get; set; }
-		public virtual bool? IsMarketplaceDisabled { get; set; }
+		public virtual bool IsMarketplaceDisabled { get; set; }
 		public virtual Guid MarketplaceInternalID { get; set; }
 		public virtual bool IsPaymentAccount { get; set; }
 
@@ -58,7 +58,7 @@
 			return GetAll().Where(x =>
 				x.CustomerID == customerID &&
 				x.UpdatingEnd < calculationDate &&
-				(x.IsMarketplaceDisabled ?? false) == false
+				!x.IsMarketplaceDisabled
 			);
 		} // GetByCustomerAndDate
 	} // class MarketplaceTurnoverRepository

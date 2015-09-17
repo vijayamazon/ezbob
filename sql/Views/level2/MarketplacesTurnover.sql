@@ -18,7 +18,7 @@ CREATE VIEW MarketplaceTurnover AS
 		t.CustomerMarketPlaceId,
 		t.UpdatingEnd,
 		mp.CustomerId,
-		mp.Disabled AS IsMarketplaceDisabled,
+		ISNULL(mp.Disabled, 0) AS IsMarketplaceDisabled,
 		mt.InternalID AS MarketplaceInternalID,
 		mt.IsPaymentAccount
 	FROM
