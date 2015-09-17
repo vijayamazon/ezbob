@@ -12,8 +12,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	SET @IsBeingProcessed = ISNULL(@IsBeingProcessed, 1)
+
 	UPDATE Customer SET
-		CreditResult = CASE ISNULL(@IsBeingProcessed, 1) WHEN 1 THEN NULL ELSE 'WaitingForDecision' END
+		CreditResult = CASE @IsBeingProcessed WHEN 1 THEN NULL   ELSE 'WaitingForDecision' END,
+		Status       = CASE @IsBeingProcessed WHEN 1 THEN Status ELSE 'Manual'             END
 	WHERE
 		Id = @CustomerID
 END
