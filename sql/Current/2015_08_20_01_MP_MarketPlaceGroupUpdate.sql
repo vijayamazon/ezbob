@@ -22,8 +22,11 @@ BEGIN
 		, 1
 		, 'VAT reports'
 		)
-	
-	
+END
+GO	
+
+IF NOT EXISTS (SELECT * FROM MP_MarketplaceGroup WHERE Name='Bank')
+BEGIN
 	INSERT INTO dbo.MP_MarketplaceGroup
 		(
 		Name
@@ -46,7 +49,11 @@ BEGIN
 		, 2
 		, 'Bank statements'
 		)
-	
+END
+GO	
+
+IF NOT EXISTS (SELECT * FROM MP_MarketplaceGroup WHERE Name='Documents')
+BEGIN
 	INSERT INTO dbo.MP_MarketplaceGroup
 		(
 		Name
@@ -101,6 +108,3 @@ UPDATE dbo.MP_MarketplaceType
 SET GroupId = @Vat
 WHERE InternalId = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
 GO
-
-	
-
