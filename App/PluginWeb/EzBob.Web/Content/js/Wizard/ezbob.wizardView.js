@@ -116,7 +116,7 @@ EzBob.WizardView = EzBob.View.extend({
 
     events: {
     	'click .broker-finish-wizard-later button': 'brokerFinishWizardLater',
-    	'click #privacy_policy': 'privacyPolicyClicked'
+    	//'click #privacy_policy': 'privacyPolicyClicked'
     }, // events
 
     brokerFinishWizardLater: function (event) {
@@ -125,6 +125,7 @@ EzBob.WizardView = EzBob.View.extend({
     }, // brokerFinishWizardLater
 
     privacyPolicyClicked: function() {
+		/*
     	var privacyPolicyLink = this.$el.find('#privacy_policy').attr('data-href');
     	$.colorbox({
 		    href: privacyPolicyLink,
@@ -136,6 +137,7 @@ EzBob.WizardView = EzBob.View.extend({
 		    close: '<i class="pe-7s-close"></i>',
             className : 'iframe-popup'
 	    });
+		*/
     },
 
     jumpTo: function (sLastSavedStepName, fCallback) {

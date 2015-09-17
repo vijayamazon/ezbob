@@ -1,7 +1,7 @@
 ﻿/* ReSharper disable once InvalidValue */
 
 
-.hide {
+.hide, .ev-hide {
     display: none;
 }
 /*--------------*/
@@ -237,6 +237,15 @@
     margin: 30px auto 80px;
 }
 
+hr{
+	margin: 20px 0 20px 0;
+	clear: both;
+    color: #bfbfbf;
+    display: block;
+    height: 1px;
+    border: 0 !important;
+    border-top: 1px solid !important;
+}
 h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
@@ -255,6 +264,10 @@ h2, .ui-dialog .ui-dialog-title {
     font-weight: 400;
     font-size: 22px;
     margin-bottom: 35px;
+}
+
+strong {
+	font-weight: 600 !important;
 }
 
 .ui-dialog .ui-dialog-title{
@@ -1043,6 +1056,7 @@ hr.wizard-hr {
     margin-right: 2%;
     display: inline-block;
     height: 75px;
+	margin-bottom: 10px;
 }
 
 .account-or {
@@ -1116,7 +1130,7 @@ h3.group-title {
     .marketplace-button a:hover,
     .marketplace-button a:active,
     .marketplace-button a:visited {
-        color: #106565 !important;
+        color: #3a3a3a !important;
         text-decoration: none;
         font-size: 18px;
         -moz-box-sizing: border-box;
@@ -1161,6 +1175,17 @@ h3.group-title {
         -o-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
         filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     }
+
+.amazonscreenshot {
+	float: right;
+}
+
+.amazon_view_tutorial_label{
+	float: right;
+    height: 30px;
+    vertical-align: middle;
+    line-height: 30px;
+}
 
 .BankContainer .marketplace-button {
 	width: 31%;
@@ -1290,7 +1315,7 @@ h3.group-title {
 
 .marketplace-image.marketplace-image-Amazon {
 	background-position: -171px -1px;
-    width: 89px;
+    width: 91px;
 }
 .marketplace-image.marketplace-image-paypal {
 	background-position: -616px -1px;
@@ -1322,7 +1347,7 @@ h3.group-title {
 }
 .marketplace-image.marketplace-image-Bigcommerce {
 	background-position: -1189px -1px;
-    width: 144px;
+    width: 145px;
 }
 .marketplace-image.marketplace-image-Magento {
 	background-position: -1455px -1px;
@@ -1334,7 +1359,7 @@ h3.group-title {
 }
 .marketplace-image.marketplace-image-Xero {
 	background-position: -2053px -1px;
-    width: 37px;
+    width: 38px;
 }
 .marketplace-image.marketplace-image-Sage {
 	background-position: -1770px -1px;

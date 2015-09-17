@@ -203,6 +203,7 @@ a.clean-btn.pay-early {
 .ev-form {
 	background-color: #f1f0f0;
     padding: 20px;
+	box-sizing: border-box;
 }
 
 .ezSortCode .attardi-input {

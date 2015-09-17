@@ -2,7 +2,7 @@ var EzBob = EzBob || {};
 
 EzBob.StoreInfoView = EzBob.View.extend({
 	attributes: {
-		"class": "stores-view"
+		"class": "stores-view ev-form"
 	}, // attributes
 
 	isOffline: function() { return true; /*todo  remove*/ },

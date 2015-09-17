@@ -25,12 +25,6 @@
 		width: 47%;
 	}
 
-	.account-or {
-		width: 100%;
-		margin-left: 20%;
-		margin-top: 0;
-		margin-bottom: 0;
-	}
        .form_field_container .input-wrapper .clean-btn.form_field_right_side,  .form_field_container .input-wrapper .clean-btn.form_field_right_side_signup_phone  {
        width: 42%;
    }
@@ -74,6 +68,11 @@
     /*
         wizard
     */
+
+	.account-or {
+		margin-top: 0;
+	}
+
     .form_field_container .input-title, .form_field_container .input-title-address {
         width: 100%;
         text-align: left;
