@@ -727,6 +727,7 @@
     <Content Include="Content\everline\help\help_freeagent_everline.jpg" />
     <Content Include="Content\everline\help\help_paypal_everline.jpg" />
     <Content Include="Content\everline\help\help_sage_everline.jpg" />
+    <Content Include="Content\everline\help\help_security.png" />
     <Content Include="Content\everline\or-circle.png" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\calc-amount-sign.png" />

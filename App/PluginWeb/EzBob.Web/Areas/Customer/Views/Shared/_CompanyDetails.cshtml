@@ -14,7 +14,7 @@
 				new EzSelectOption("Limited", "Limited company", ""),
 				new EzSelectOption("LLP", "Limited liability partnership", ""),
 				new EzSelectOption("PShip3P", "Partnership (less than three)", ""),
-				new EzSelectOption("PShip", "Partnership (more than three)", ""),
+				new EzSelectOption("PShip", "Ordinary partnership", ""),
 				new EzSelectOption("Entrepreneur", "Sole trader", "NonAlibabaTypeOfBusiness")
 			}
 		}
@@ -53,7 +53,7 @@
 					statusIcon: true,
 					uiEventControlID: "personal-info:type_of_business",
 					autoFocus: true,
-					size: 6,
+					size: 1,
 					tabIndex: 1,
 					hasEmpty: false),
 					origin: origin)
@@ -285,7 +285,7 @@
 			<h2 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director <%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button btn-green" ui-event-control-id="personal-info:remove_director">Remove</a></h2>
 		</div>
 
-		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Name", "First Name",
+		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Name", "First name",
 						value: "<%- director.Name %>",
 						cls: "form_field director_name_part",
 						isRequired: true,
@@ -293,7 +293,7 @@
 						uiEventControlID: "personal-info:director_first_name"),
 						origin: origin)
 
-		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Middle", "Middle initial",
+		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Middle", "Middle name",
 						value: "<%- director.Middle %>",
 						cls: "form_field director_name_part nonrequired alphaOnly",
 						isRequired: false,
@@ -338,9 +338,9 @@
 			}),
 			origin: origin)
 
-				@EzForm.DateInput(this, "<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date", origin: origin)
+				@EzForm.DateInput(this, "<%-preffix%>[<%=i%>].DateOfBirth", "Date of birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date", origin: origin)
 
-				@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Email", "Email",
+				@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Email", "Email address",
 						value: "<%- director.Email %>",
 						type: "email",
 						cls: "form_field director_email",

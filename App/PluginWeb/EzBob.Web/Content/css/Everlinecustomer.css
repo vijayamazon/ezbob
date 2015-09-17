@@ -436,11 +436,8 @@ a, a:visited {
 }
 
 .form_field_container .input-wrapper select.type-of-business-form_field {
-    height: 148px;
-    overflow-y: auto;
     padding: 10px;
 }
-
 
  .form_field_container .input-wrapper input[readonly="readonly"]:not([type="submit"]):not([type="button"]),
  .form_field_container .input-wrapper textarea[readonly="readonly"]  .form_field_container .input-wrapper input[disabled="disabled"]:not([type="submit"]):not([type="button"]),
@@ -1452,12 +1449,14 @@ h3.group-title {
 }
 
 #colorbox #cboxClose {
-        background: none;
+    background: none;
     text-indent: 0;
-       color: #dc6e23;
-    font-size: 50px;
-    right: 20px;
-    top: -11px;
+    color: #dc6e23;
+    font-size: 75px;
+    right: 38px;
+    top: 18px;
+    width: 75px;
+    height: 75px;
 }
 
 #colorbox, #cboxContent, #cboxLoadedContent {
@@ -1484,6 +1483,7 @@ h3.group-title {
     margin-top: 0;
     overflow: visible;
 	background-color: #eeeeee;
+	padding: 30px 40px 30px 30px;
 }
 
 #cboxError {
@@ -1694,7 +1694,9 @@ h3.group-title {
 .ui-dialog {
     background: #f1f0f0;
     border:none;
-      padding: 30px 40px 30px 30px;
+    padding: 30px 40px 30px 30px;
+	font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
 }
 /*#address-popup{
 	overflow-y: auto;
@@ -1792,28 +1794,26 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
         color:white;
 }
 .ui-dialog .ui-dialog-titlebar-close {
-     
-            font-family: 'Pe-icon-7-stroke';
+    font-family: 'Pe-icon-7-stroke';
     speak: none;
     font-style: normal;
-  
     font-variant: normal;
     text-transform: none;
-       opacity: 0.9;
+    opacity: 0.9;
     -webkit-font-smoothing: antialiased;
-        font-size: 75px;
+    font-size: 75px;
     font-weight: 100;
-  
-    margin-top: 0px;
+    margin-top: 0;
     padding: 0;
-    right: 37px;
-    top: 0;
-    top: 24px;
+    right: -25px;
+    top: 15px;
+    width: 75px;
+    height: 75px;
+    color: #e28023;
 }
 .ui-dialog .ui-dialog-buttonset button.clean-btn {
-        width: auto;
+    width: auto;
     padding: 0 35px;
-   
     line-height:normal;
 }
 .ui-dialog .address-dialog-buttonpane .ui-dialog-buttonset button.clean-btn {
@@ -1839,12 +1839,12 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
     float:none;
 }
-.ui-dialog-buttonset .clean-btn,.ui-dialog-buttonset button.ev-btn-org {
-height:40px !important;  
-      float: right;
-          width: 240px;
-    line-height: 25px;  
-     margin-right: 8px;
+.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
+	height: 40px !important;
+	float: right;
+	width: 240px;
+	line-height: 25px;
+	margin-right: 8px;
 }
 .ui-dialog-buttonset .clean-btn {
     float:right;
@@ -1891,7 +1891,7 @@ height:40px !important;
 }
 
 .help_security {
-    background: url(images/help/help_security.png) no-repeat center 0;
+    background: url(../everline/help/help_security.png) no-repeat center 0;
     background-size: contain;
     width: 759px;
     height: 77px;

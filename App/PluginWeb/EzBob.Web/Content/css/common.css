@@ -3804,3 +3804,82 @@ button#switchToCaptcha {
 .crm-event-types {
 	margin-bottom: 20px;
 }
+
+/*notifications*/
+.notifications {
+	margin-top: 25px;
+}
+
+.notifications .innerText {
+    display: block;
+    vertical-align: middle;
+    padding-right: 25px;
+    padding-left: 5px;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+	.notifications .innerText i {
+		font-size: 20px;
+		position: absolute;
+	}
+
+	.notifications .alert-msg {
+		margin-left: 30px;
+		display: inline-block;
+		width: 90%;
+	}
+
+.notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+    font-size: 16px;
+    font-family: 'Titillium Web Regular';
+    padding: 10px 20px 10px 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+	.notification_green .close, .notification_yellow .close, .notification_orange .close, .notification_red .close, .notification_pink .close, .notification_darkblue .close, .notification_lightblue .close, .notification_white .close {
+		color: white;
+		font-size: 24px;
+		border: none;
+		box-shadow: none;
+		text-shadow: 0 0 0 transparent;
+		background: transparent;
+		opacity: 1;
+		width: 15px;
+		box-sizing: border-box;
+		height: 15px;
+		right: 17px;
+	}
+
+	.notification_green .close:hover, .notification_yellow .close:hover, .notification_orange .close:hover, .notification_red .close:hover, .notification_pink .close:hover, .notification_darkblue .close:hover, .notification_lightblue .close:hover, .notification_white .close:hover {
+		background: none;
+		text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+	}
+
+.notification_green {
+    background: #67c10b;
+    border: none;
+    color: #ffffff;
+}
+
+.notification_yellow {
+    background: #E68A00;
+    border: none;
+    color: #ffffff;
+}
+
+.notification_red {
+    background: rgb(250, 80, 42);
+    border: none;
+    color: #ffffff;
+}
+
+.specular_wrapper{
+	display: none;
+}

@@ -11,7 +11,7 @@
 */
 
 (function ($) {
-    $.fn.notification = function() {
+    $.fn.notification = function(closeText) {
 
         //Define variables
 
@@ -61,7 +61,7 @@
 
 
                 if (!$this.hasClass("effect_fixed")) {
-                    $this.append('<div class="close">x</div>'); //Append a close button if the notification hasn't got a fixed class
+                	$this.append('<div class="close">' + closeText +'</div>'); //Append a close button if the notification hasn't got a fixed class
                 }
 
 
