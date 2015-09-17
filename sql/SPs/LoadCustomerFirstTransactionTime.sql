@@ -35,7 +35,8 @@ BEGIN
 	SELECT
 		MpID = m.Id,
 		MpTypeID = t.InternalId,
-		FirstTransactionTime = CONVERT(DATETIME, NULL)
+		FirstTransactionTime = CONVERT(DATETIME, NULL),
+		m.OriginationDate
 	INTO
 		#mp
 	FROM
@@ -224,11 +225,13 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		FirstTransactionTime = MIN(FirstTransactionTime)
+		FirstTransactionTime = MIN(dbo.udfMinDate(FirstTransactionTime, OriginationDate))
 	FROM
 		#mp
 	WHERE
 		FirstTransactionTime IS NOT NULL
+		OR
+		OriginationDate IS NOT NULL
 
 	------------------------------------------------------------------------------
 	--
