@@ -133,11 +133,11 @@
 				} // if
 
 				// all MP types of selection
-				IEnumerable<Guid> mpTypes = h.Select(x => x.CustomerMarketPlace.Marketplace.InternalId).Distinct();
+				IEnumerable<Guid> mpTypes = h.Select(x => x.MarketplaceInternalID).Distinct();
 
 				SortedSet<Guid> paymentAccounts = new SortedSet<Guid> (h
-					.Where(x => x.CustomerMarketPlace.Marketplace.IsPaymentAccount)
-					.Select(x => x.CustomerMarketPlace.Marketplace.InternalId)
+					.Where(x => x.IsPaymentAccount)
+					.Select(x => x.MarketplaceInternalID)
 					.Distinct()
 				);
 
@@ -151,12 +151,12 @@
 				foreach (var mpType in mpTypes) {
 					if (mpType.Equals(MpType.Hmrc)) {
 						IEnumerable<int> marketplaceIDs = h
-							.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == MpType.Hmrc)
-							.Select(x => x.CustomerMarketPlace.Id)
+							.Where(x => x.MarketplaceInternalID == MpType.Hmrc)
+							.Select(x => x.CustomerMarketPlaceID)
 							.Distinct();
 
 						foreach (int mpID in marketplaceIDs) {
-							List<MarketplaceTurnover> thisMp = h.Where(x => x.CustomerMarketPlace.Id == mpID).ToList();
+							List<MarketplaceTurnover> thisMp = h.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
 
 							hmrc.AddRange(LastUpdatedEndHistoryTurnoversByMpType(
 								thisMp,
@@ -646,7 +646,7 @@
 			);
 
 			List<MarketplaceTurnover> ofcurrentType =
-				inputList.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == type).ToList();
+				inputList.Where(x => x.MarketplaceInternalID == type).ToList();
 
 			if (ofcurrentType.Count < 1) {
 				Log.Debug(
@@ -658,23 +658,7 @@
 				return Enumerable.Empty<FilteredAggregationResult>();
 			} // if
 
-			// check type
-			List<MarketplaceTurnover> lastUpdated = ofcurrentType.Where(z =>
-				(z.CustomerMarketPlaceUpdatingHistory != null) &&
-				z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue
-			).ToList();
-
-			if (lastUpdated.Count < 1) {
-				Log.Debug(
-					"LastUpdatedEndHistoryTurnoversByMpType returns empty result: " +
-					"no entries found in MarketplaceTurnover view with proper value in UpdatingEnd field " +
-					"of CustomerMarketplaceUpdatingHistory linked table."
-				);
-
-				return Enumerable.Empty<FilteredAggregationResult>();
-			} // if
-
-			DateTime lastUpdateDate = lastUpdated.Max(z => z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value);
+			DateTime lastUpdateDate = ofcurrentType.Max(z => z.UpdatingEnd);
 
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
@@ -703,8 +687,8 @@
 				"\tMonth = {0}, turnover = {1}, MpHistoryID = {2}, MpID = {3}.\n",
 				x.TheMonth,
 				x.Turnover,
-				x.CustomerMarketPlaceUpdatingHistory.Id,
-				x.CustomerMarketPlace.Id
+				x.CustomerMarketPlaceUpdatingHistoryID,
+				x.CustomerMarketPlaceID
 			));
 
 			Log.Debug(
@@ -722,7 +706,7 @@
 			} // if
 
 			var groups = histories.GroupBy(ag => new {
-				ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+				ag.CustomerMarketPlaceID,
 				ag.TheMonth
 			});
 
@@ -734,7 +718,7 @@
 				var far = new FilteredAggregationResult {
 					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),
 					TheMonth = first.TheMonth,
-					MpId = first.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+					MpId = first.CustomerMarketPlaceID,
 					Turnover = first.Turnover
 				};
 

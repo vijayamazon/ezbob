@@ -17,7 +17,10 @@ CREATE VIEW MarketplaceTurnover AS
 		t.Turnover,
 		t.CustomerMarketPlaceId,
 		t.UpdatingEnd,
-		mp.CustomerId
+		mp.CustomerId,
+		mp.Disabled AS IsMarketplaceDisabled,
+		mt.InternalID AS MarketplaceInternalID,
+		mt.IsPaymentAccount
 	FROM
 		(
 			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM AmazonAggregationTurnover
@@ -41,4 +44,5 @@ CREATE VIEW MarketplaceTurnover AS
 			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM YodleeAggregationTurnover
 		) t
 		INNER JOIN MP_CustomerMarketPlace mp ON t.CustomerMarketPlaceId = mp.Id
+		INNER JOIN MP_MarketplaceType mt ON mp.MarketplaceId = mt.Id
 GO

@@ -755,21 +755,18 @@
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory,
+						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
+						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
 					}
 				).ToList();
 
 				if (hmrcs.Count > 0) {
 					List<FilteredAggregationResult> hmrcList = new List<FilteredAggregationResult>();
 
-					IEnumerable<int> marketplaceIDs = hmrcs
-						.Select(x => x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id)
-						.Distinct();
+					IEnumerable<int> marketplaceIDs = hmrcs.Select(x => x.CustomerMarketPlaceID).Distinct();
 
 					foreach (int mpID in marketplaceIDs) {
-						List<MarketplaceTurnover> thisMp = hmrcs
-							.Where(x => x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id == mpID)
-							.ToList();
+						List<MarketplaceTurnover> thisMp = hmrcs.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
 
 						List<FilteredAggregationResult> filtered =
 							LastHistoryTurnovers(thisMp, Results.CalculationTime, thisMp.Max(x => x.TheMonth));
@@ -808,7 +805,8 @@
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
+						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
+						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
 					}
 				).ToList();
 
@@ -872,7 +870,8 @@
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
+						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
+						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
 					}
 				).ToList();
 
@@ -907,7 +906,8 @@
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
+						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
+						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
 					}
 				).ToList();
 
@@ -941,7 +941,8 @@
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
+						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
+						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
 					}
 				).ToList();
 
@@ -1074,23 +1075,12 @@
 				"before: {0}, {1}, historyID: {2}, mpID: {3}, updatingEnd: {4}",
 				x.TheMonth.MomentStr(),
 				x.Turnover,
-				x.CustomerMarketPlaceUpdatingHistory.Id,
-				x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-				(x.CustomerMarketPlaceUpdatingHistory != null)
-					? x.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.MomentStr() 
-					: "null"
+				x.CustomerMarketPlaceUpdatingHistoryID,
+				x.CustomerMarketPlaceID,
+				x.UpdatingEnd.MomentStr() 
 			));
 
-			// check type
-			List<MarketplaceTurnover> lastUpdated = inputList.Where(z =>
-				(z.CustomerMarketPlaceUpdatingHistory != null) &&
-				z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue
-			).ToList();
-
-			if (lastUpdated.Count < 1)
-				return null;
-
-			DateTime lastUpdateDate = lastUpdated.Max(z => z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value);
+			DateTime lastUpdateDate = inputList.Max(z => z.UpdatingEnd);
 
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
@@ -1118,8 +1108,8 @@
 				"Relevant month: {0}, {1}, historyID: {2}, mpID: {3}",
 				x.TheMonth.MomentStr(),
 				x.Turnover,
-				x.CustomerMarketPlaceUpdatingHistory.Id,
-				x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id
+				x.CustomerMarketPlaceUpdatingHistoryID,
+				x.CustomerMarketPlaceID
 			));
 
 			if (histories.Count < 1)
@@ -1128,7 +1118,7 @@
 			List<FilteredAggregationResult> result = new List<FilteredAggregationResult>();
 
 			var groups = histories.GroupBy(ag => new {
-				ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+				ag.CustomerMarketPlaceID,
 				ag.TheMonth
 			});
 
@@ -1138,7 +1128,7 @@
 				var far = new FilteredAggregationResult {
 					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),
 					TheMonth = first.TheMonth,
-					MpId = first.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+					MpId = first.CustomerMarketPlaceID,
 					Turnover = first.Turnover
 				};
 
@@ -1157,7 +1147,11 @@
 		/// <param name="monthAfter"></param>
 		/// <param name="extrapolationCoefficient"></param>
 		/// <returns></returns>
-		private decimal CalcAnnualTurnoverBasedOnPartialData(IEnumerable<FilteredAggregationResult> list, int monthAfter, int extrapolationCoefficient) {
+		private decimal CalcAnnualTurnoverBasedOnPartialData(
+			IEnumerable<FilteredAggregationResult> list,
+			int monthAfter,
+			int extrapolationCoefficient
+		) {
 			return list.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover) * extrapolationCoefficient;
 		} // CalcAnnualTurnoverBasedOnPartialData
 

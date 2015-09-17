@@ -2,7 +2,6 @@
 	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
-	using EZBob.DatabaseLib.Model.Database;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 	using NHibernate.Type;
@@ -12,12 +11,13 @@
         public virtual DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
-
-		public virtual MP_CustomerMarketplaceUpdatingHistory CustomerMarketPlaceUpdatingHistory { get; set; }
-
-		public virtual MP_CustomerMarketPlace CustomerMarketPlace { get; set; }
-
-		public virtual Customer Customer { get; set; }
+		public virtual DateTime UpdatingEnd { get; set; }
+		public virtual int CustomerMarketPlaceUpdatingHistoryID { get; set; }
+		public virtual int CustomerMarketPlaceID { get; set; }
+		public virtual int CustomerID { get; set; }
+		public virtual bool? IsMarketplaceDisabled { get; set; }
+		public virtual Guid MarketplaceInternalID { get; set; }
+		public virtual bool IsPaymentAccount { get; set; }
 
 		public override bool Equals(Object obj) {
 			var t = obj as MarketplaceTurnover;
@@ -26,21 +26,21 @@
 				return false;
 
 			return (
-				CustomerMarketPlaceUpdatingHistory.Id == t.CustomerMarketPlaceUpdatingHistory.Id &&
+				CustomerMarketPlaceUpdatingHistoryID == t.CustomerMarketPlaceUpdatingHistoryID &&
 				TheMonth == t.TheMonth
 			);
 		} // Equals
 
 		public override int GetHashCode() {
-			return (CustomerMarketPlaceUpdatingHistory.Id + "|" + TheMonth).GetHashCode();
+			return (CustomerMarketPlaceUpdatingHistoryID + "|" + TheMonth).GetHashCode();
 		} // GetHashCode
 
 		public override string ToString() {
 			return string.Join("|",
 				AggID,
-				CustomerMarketPlaceUpdatingHistory.Id,
-				Customer.Id,
-				CustomerMarketPlace.Id,
+				CustomerMarketPlaceUpdatingHistoryID,
+				CustomerID,
+				CustomerMarketPlaceID,
 				TheMonth,
 				Turnover
 			);
@@ -51,16 +51,14 @@
 		public MarketplaceTurnoverRepository(ISession session) : base(session) { }
 
 		public IQueryable<MarketplaceTurnover> GetByCustomerId(int customerID) {
-			return GetAll().Where(x => x.Customer.Id == customerID);
+			return GetAll().Where(x => x.CustomerID == customerID);
 		} // GetByCustomerId
 
 		public IQueryable<MarketplaceTurnover> GetByCustomerAndDate(int customerID, DateTime calculationDate) {
 			return GetAll().Where(x =>
-				x.Customer.Id == customerID &&
-				x.CustomerMarketPlaceUpdatingHistory != null &&
-				x.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue &&
-				x.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value < calculationDate &&
-				!x.CustomerMarketPlace.Disabled
+				x.CustomerID == customerID &&
+				x.UpdatingEnd < calculationDate &&
+				(x.IsMarketplaceDisabled ?? false) == false
 			);
 		} // GetByCustomerAndDate
 	} // class MarketplaceTurnoverRepository
@@ -74,13 +72,16 @@
 			Map(x => x.Turnover).Precision(18).Scale(2);
 			Map(x => x.TheMonth).CustomType<UtcDateTimeType>();
 			Map(x => x.IsActive);
-
-			References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
-			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId").Cascade.None();
-			References(x => x.Customer, "CustomerId").Cascade.None();
+			Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
+			Map(x => x.CustomerMarketPlaceUpdatingHistoryID);
+			Map(x => x.CustomerMarketPlaceID, "CustomerMarketPlaceId");
+			Map(x => x.CustomerID, "CustomerId");
+			Map(x => x.IsMarketplaceDisabled);
+			Map(x => x.MarketplaceInternalID);
+			Map(x => x.IsPaymentAccount);
 
 			CompositeId()
-				.KeyReference(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID")
+				.KeyProperty(x => x.CustomerMarketPlaceUpdatingHistoryID)
 				.KeyProperty(x => x.TheMonth)
 				.KeyProperty(x => x.AggID);
 		} // constructor
