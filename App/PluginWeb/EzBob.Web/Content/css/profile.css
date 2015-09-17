@@ -500,7 +500,15 @@ h2.header-message a{
 .early-payment-form .radio .money { 
     margin: 0;
     margin-left: 15px;
-    width: 250px;
+    width: 220px;
+}
+
+.early-payment-form #loan-select {
+	width: 405px;
+}
+
+.early-payment-form #rollover-select {
+	width: 374px;
 }
 
 #profile-content .stores-view .next { display: none!important;}

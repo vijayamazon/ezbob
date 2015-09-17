@@ -68,15 +68,15 @@
 	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	
-	@BundleHelper.RenderBrokerJs();
+	@BundleHelper.RenderBrokerJs()
 
 	<script>
 		var EzBob = EzBob || {};
 		EzBob.Config = EzBob.Config || {};
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
 		@{
-				OneUploadLimitation oul = CurrentValues.Instance.GetUploadLimitations("BrokerHome", "HandleUploadFile");
-			}
+			OneUploadLimitation oul = CurrentValues.Instance.GetUploadLimitations("BrokerHome", "HandleUploadFile");
+		}
 		EzBob.LoadedConfig.BrokerMaxFileSize = +(@oul.FileSize / 1048576.0).toFixed(2);
 		EzBob.LoadedConfig.BrokerAcceptedFiles = '@oul.AcceptedFiles';
 		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';

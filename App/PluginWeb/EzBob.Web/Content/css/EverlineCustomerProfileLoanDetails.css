@@ -223,3 +223,75 @@ div.sign-full-name {
 	background: #28211f;
 	min-height: 40px;
 }
+
+.click-input-wrap .early-rollover,
+.click-input-wrap .early-loan {
+	float:right;
+}
+
+.click-area {
+	margin-left: 25px;
+}
+
+#pay-early-other-text,
+#rollover-select,
+#loan-select {
+	margin-left: -30px;
+}
+
+#rollover-other-text {
+	margin-left: 0px;
+	width: 77%;
+}
+
+#cap2 {
+	display: block;
+	width: 183px; 
+	height: 69px; 
+	background-color: #dbdcda; 
+	float: right;
+}
+
+#cap2 h3 {
+	line-height: 22px;
+	font-weight: 600;
+}
+
+.total-balance-pay {
+	padding: 15px;
+	margin: 0;
+}
+
+body .apply-header-approved {
+	float: left;
+	text-align: left;
+	font-size: 15px;
+}
+
+body .apply-header-approved b {
+	font-size: 20px;
+	color:#28211f;
+	font-weight: 600;
+}
+
+#buttons-fields {
+	margin-left: 250px;
+	margin-bottom: 40px;
+}
+
+.lot-of-loans {
+	margin-left: 50px;
+}
+
+.radio, .checkbox {
+    padding-left: 0;
+}
+
+.early-payment-form .form_buttons_container {
+	margin-bottom: 50px;
+	margin-right: 30px;
+}
+
+.main-page-everline #get-cash .form-horizontal.early-payment-form {
+	padding: 25px;
+}
