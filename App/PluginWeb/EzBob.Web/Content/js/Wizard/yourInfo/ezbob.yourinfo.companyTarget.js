@@ -17,43 +17,44 @@ EzBob.companyTargets = Backbone.View.extend({
 		this.targetsList = this.$el.find('ul.targets');
 
 		var that = this;
-
+        
 		var screenWidth = $(document).width();
 
 		if (screenWidth > 920)
 			screenWidth = 920;
 
-		this.$el.dialog({
-			autoOpen: true,
-			title: 'Select company',
-			modal: true,
-			resizable: true,
-			width: screenWidth,
-			height: 500,
-			minHeight: 200,
-			buttons: [
-				{
-					text: 'Cancel',
-					'class': 'button btn-grey',
-					click: function () { that.btnCancelClick(); },
-					'ui-event-control-id': 'company-target:cancel',
-				},
-				{
-					text: 'Skip',
-					'class': 'button btn-green',
-					click: function () { that.btnNotFoundClick(); },
-					'ui-event-control-id': 'company-target:not-found',
-				},
-				{
-					text: 'OK',
-					'class': 'button btn-green btnTargetOk disabled',
-					click: function () { that.btnOkClick(); },
-					'ui-event-control-id': 'company-target:ok',
-				},
-			],
-			close: function(evt, ui) { $('html, body').removeAttr('style'); },
-		});
+            this.$el.dialog({
+                autoOpen: true,
+                title: "Select company",
+                modal: true,
+                resizable: true,
+                minWidth: 600,
+                height: 500,
+                minHeight: 200,
+                buttons: [
+                    {
+                        text: 'Cancel',
+                        'class': 'button btn-grey clean-btn',
+                        click: function () { that.btnCancelClick(); },
+                        'ui-event-control-id': 'company-target:cancel',
+                    },
+                    {
+                        text: 'Skip',
+                        'class': 'button btn-green ev-btn-org',
+                        click: function () { that.btnNotFoundClick(); },
+                        'ui-event-control-id': 'company-target:not-found',
+                    },
 
+                    {
+                        text: 'OK',
+                        'class': 'button btn-green btnTargetOk disabled ev-btn-org',
+                        click: function () { that.btnOkClick(); },
+                        'ui-event-control-id': 'company-target:ok',
+                    }
+                ]
+			close: function(evt, ui) { $('html, body').removeAttr('style'); },
+            });
+       
 		var oWidget = this.$el.dialog('widget');
 
 		oWidget.find('.ui-dialog-title').addClass('address-dialog-title');

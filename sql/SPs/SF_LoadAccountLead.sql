@@ -22,7 +22,7 @@ BEGIN
 IF @CustomerID IS NOT NULL AND @CustomerId <> 0
 BEGIN 
 	DECLARE @NumOfLoans INT = (SELECT count(*) FROM Loan WHERE CustomerId = @CustomerID)
-
+	DECLARE @RequestedAmount DECIMAL(18,0) = (SELECT TOP 1 Amount FROM CustomerRequestedLoan WHERE CustomerId = @CustomerID ORDER BY Created DESC)
     SELECT 
         c.Name AS Email,
         CAST(@CustomerID AS NVARCHAR(10)) AS CustomerID,
@@ -46,7 +46,7 @@ BEGIN
         'Wizard' AS EzbobSource,
         w.WizardStepTypeDescription AS EzbobStatus,
         s.RSource AS LeadSource,
-        r.Amount AS RequestedLoanAmount,
+        @RequestedAmount AS RequestedLoanAmount,
         o.Name AS Origin,
         c.IsTest AS IsTest,
         @NumOfLoans AS NumOfLoans
@@ -55,7 +55,6 @@ BEGIN
     LEFT JOIN Company co ON co.Id = c.CompanyId
     INNER JOIN WizardStepTypes w ON w.WizardStepTypeID = c.WizardStep
     LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
-    LEFT JOIN CustomerRequestedLoan r ON r.CustomerId = c.Id
     LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
     WHERE c.Id=@CustomerID
     

@@ -16,10 +16,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.fixed = this.customer.get('IsLoanDetailsFixed');
 
-		this.isLoanTypeSelectionAllowed = this.customer.get('IsLoanTypeSelectionAllowed');
-
 		this.currentLoanTypeID = 1; // for backward compatibility
-		this.currentRepaymentPeriod = this.customer.get('LastApprovedRepaymentPeriod');
+		this.currentRepaymentPeriod = this.model.get('repaymentPeriod');
 
 		this.recalculateThrottled = _.debounce(this.recalculateSchedule, 250);
 
@@ -57,17 +55,22 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		'paste #signedName': 'showSubmit',
 		'click .print': 'print',
 		'change .notInBankruptcy': 'notInBankruptcyChange',
+		'click .btn-back': 'backClicked'
 	}, // events
 
+	backClicked: function() {
+		this.trigger('back');
+	},
 	notInBankruptcyChange: function() {
 		var isChecked = !!this.$el.find('.notInBankruptcy').attr('checked');
 
 		if (isChecked) {
 			EzBob.ShowMessageEx({
-				message: this.$el.find('.loan-disclosure-text').html(),
+			    message: '<div class="megila-outer"><div class="megila-inner">' + this.$el.find('.loan-disclosure-text').html() + '</div><div>',
 				dialogWidth: 600,
 				hideClose: true,
 				okText: 'Confirm',
+			    customClass : 'megila',
 				closeOnEscape: false,
 				onOk: _.bind(this.onDisclosureClosed, this),
 			});
@@ -105,7 +108,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		return this.showSubmit();
 	}, // preAgreementTermsReadChange
 
-	loanSelectionChanged: function() {
+	loanSelectionChanged: function () {
 		this.currentRepaymentPeriod = this.$('#loan-sliders .period-slider').slider('value');
 
 		var amount = this.$('#loan-sliders .amount-slider').slider('value');
@@ -141,7 +144,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		});
 	}, // recalculateSchedule
 
-	renderSchedule: function(schedule) {
+	renderSchedule: function (schedule) {
+		if (!schedule || !schedule.Schedule) {
+			return false;
+		}
+
 		this.lastPaymentDate = moment(schedule.Schedule[schedule.Schedule.length - 1].Date);
 
 		var scheduleView = new EzBob.LoanScheduleView({
@@ -181,7 +188,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (this.fixed)
 			this.$('.cash-question').hide();
 
-		if (this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceCOSME || this.isLoanSourceEU || this.isAlibaba)
+		if (!this.model.get('isCustomerRepaymentPeriodSelectionAllowed') || this.isAlibaba)
 			this.$('.duration-select-allowed').hide();
 
 		if (!this.isLoanSourceEU)
@@ -200,26 +207,9 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		else {
 			this.$('.quick-offer-section').remove();
 			if (!this.isAlibaba) {
-				InitAmountPeriodSliders({
-					container: this.$('#loan-sliders'),
-					amount: {
-						min: this.model.get('minCash'),
-						max: this.model.get('maxCash'),
-						start: this.model.get('maxCash'),
-						step: 100
-					},
-					period: {
-					    min: this.isLoanSourceCOSME ? 15 : 3,
-						max: this.isLoanSourceCOSME ? 15 : 12,
-						start: this.model.get('repaymentPeriod'),
-						step: 1,
-						hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU
-					},
-					callback: function(ignored, sEvent) {
-						if (sEvent === 'change')
-							self.loanSelectionChanged();
-					} // callback
-				});
+				var view = new EzBob.TakeLoanSlidersView({ el: this.$('#loan-sliders'), model: this.model });
+				view.render();
+				EzBob.App.on('loanSelectionChanged', this.loanSelectionChanged, this);
 			}
 		} // else
 
@@ -238,6 +228,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			return self.submit(evt);
 		});
 
+		this.showSubmit();
 		EzBob.UiAction.registerView(this);
 
 		return this;

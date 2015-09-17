@@ -262,7 +262,7 @@ BEGIN
 						@LastTransactionDate, @PayMentNum, @LateDays, @LoanAmount, @LoanDate, @Principal
 					)
 
-					INSERT INTO #HandledLoans VALUES (@LoanId)
+					INSERT INTO #HandledLoans (LoanId) VALUES (@LoanId)
 
 					SELECT
 						@LastTransactionId = NULL,

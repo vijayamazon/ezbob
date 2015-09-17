@@ -21,6 +21,7 @@
 			uploadSuccess: null,
 			uploadSysError: null,
 			uploadUrl: '',
+			customButtons: false
 		}, // defaults
 
 		init: function(options) {
@@ -180,8 +181,9 @@
 			this.$el.append(this.PeriodsChart);
 
 			this.initUiForm();
-			this.initUiButtons();
-
+			if (!this.options.customButtons) {
+				this.initUiButtons();
+			}
 			this.PeriodsDetails = $('<div />');
 			this.$el.append(this.PeriodsDetails);
 
@@ -236,10 +238,10 @@
 			this.$el.append(oForm);
 		}, // initUiForm
 
-		reloadPeriods: function() {
-			this.BackButton.hide();
-			this.DoneButton.hide();
-
+		reloadPeriods: function () {
+			this.hideButton(this.BackButton, 'Back');
+			this.hideButton(this.DoneButton, 'Done');
+			
 			var oTableOpts = {
 				bDestroy: true,
 				bProcessing: false,
@@ -264,16 +266,17 @@
 
 			oXhr.done(function(oResponse) {
 				if (self.FirstLoad) {
-					self.BackButton.show();
+					self.showButton(self.BackButton, 'Back');
 					self.FirstLoad = false;
 				}
 				else {
 					var bHasRows = oResponse.aaData && oResponse.aaData.length;
 
-					if (self.HasRowBeenRemoved || bHasRows)
-						self.DoneButton.show();
-					else
-						self.BackButton.show();
+					if (self.HasRowBeenRemoved || bHasRows) {
+						self.showButton(self.DoneButton, 'Done');
+					} else {
+						self.showButton(self.BackButton, 'Back');
+					}
 				} // if
 
 				oTableOpts.aaData = self.fillGaps(oResponse.aaData);
@@ -435,5 +438,19 @@
 				oTR.append($('<td />').text(oCurMonth.format(sFormat)).addClass(sClass));
 			} // for
 		}, // drawPeriodsChart
+
+		showButton: function (button, name) {
+			if (!this.options.customButtons) {
+				button.show();
+			}
+			EzBob.App.trigger('showButton', name);
+		},
+
+		hideButton: function (button, name) {
+			if (!this.options.customButtons) {
+				button.hide();
+			}
+			EzBob.App.trigger('hideButton', name);
+		},
 	}); // extend
 })(); // scope

@@ -225,7 +225,7 @@ EzBob.DataTables.Helper = {
                     
                     if ($("#uwNotes").is(":checked") &&
                         aData[uwColumn] &&
-                        !EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) &&
+                        EzBob.DataTables.Helper.isUW(aData[uwColumn].toLowerCase()) &&
                         aData[uwColumn] != "System" &&
                         aData[isCrmColumn]) {
                         return true;
@@ -263,14 +263,30 @@ EzBob.DataTables.Helper = {
                 }
             );
         }
-        
-
     },
     
     isCrm: function (uwName) {
-        if (uwName.indexOf("emma") === 0 || uwName.indexOf("ros") === 0 || uwName.indexOf("travis") === 0 || uwName.indexOf("emanuelle") === 0) {
+    	if (uwName.indexOf("emma")      === 0 ||
+			uwName.indexOf("ros")       === 0 ||
+			uwName.indexOf('clareh')    === 0 ||
+			uwName.indexOf("jamiem")    === 0 ||
+			uwName.indexOf("sarahb")    === 0 ||
+			uwName.indexOf("sarahd")    === 0 ||
+			uwName.indexOf("travis")    === 0 ||
+			uwName.indexOf("emanuelle") === 0) {
             return true;
         }
         return false;
-    }
+    },
+
+    isUW: function (uwName) {
+    	if (uwName.indexOf('vitasd')   === 0 ||
+			uwName.indexOf('songulo')  === 0 ||
+			uwName.indexOf('galitg')   === 0 ||
+			uwName.indexOf('dinusanp') === 0 ||
+			uwName.indexOf('adic')     === 0) {
+			return true;
+		}
+		return false;
+	}
 }; // EzBob.DataTables.Helper

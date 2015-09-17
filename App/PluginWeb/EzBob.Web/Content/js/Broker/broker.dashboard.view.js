@@ -285,7 +285,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
 
 			self.$el.find('.dataTables_top_right').prepend(
-				$('<button type=button class="button btn-green reload-customer-list" title="Reload customer and lead lists">Reload</button>')
+				$('<button type=button class="button btn-green reload-customer-list ev-btn-org" title="Reload customer and lead lists">Reload</button>')
 			);
 		}); // on success
 	}, // reloadCustomerList

@@ -1,58 +1,62 @@
-﻿<script id="HMRCAccountInfoTemplate" type="text/template">
-	<div id="initialDiv" class="row-fluid">
-		<h2>VAT account<div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin" ui-event-control-id="hmrc:upload_and_link_info_button"></div></h2>
-		<div class="wizard-top-notification">
-			<h5>You can upload or link your VAT account, so @ViewBag.CustomerOrigin.Name can evaluate your business by reading the VAT payments and return.</h5>
-		</div>
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
-		<form id="hmrcAccount" class="cg-link-account-form">
-			<div class="hmrc_main_buttons_container">
-				<div id="uploadButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
-					<a href="#" class="hmrcAnimatedButton" ui-event-control-id="hmrc:upload_button">
-						<div class="hmrcUploadButton" />
-						<div class="onhover">Upload</div>
-					</a>
-				</div>
-				<div id="linkButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
-					<a href="#" class="hmrcAnimatedButton" ui-event-control-id="hmrc:link_button">
-						<div class="hmrcLinkButton" />
-						<div class="onhover">Link</div>
-					</a>
-				</div>
-			</div>
-
-			<div class="form_buttons_container">
-				<div class="attardi-button">
-					<a href="#" class="back button btn-grey hmrcBack" ui-event-control-id="hmrc:back">Back</a>
-				</div>
-			</div>
-
-			<div class="hmrc-why-question offline_entry_message wizard_message">
-				<div id="uploadAndLinkHelpButton" class="hmrc-question-button float_left" ui-event-control-id="hmrc:upload_and_link_lower_info_button"></div>
-				<div class="hmrc-why">
-					Why do we need this?<br />We need your company’s HMRC data to properly evaluate your application.
-				</div>
-			</div>
-		</form>
-	</div>
-
-	<div id="linkAccountDiv" class="row-fluid hide">
-		<h2>HMRC link<div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link" ui-event-control-id="hmrc:link_info_button"></div></h2>
+<script id="HMRCAccountInfoTemplate" type="text/template">
+	<div id="linkAccountDiv" class="row-fluid">
+		<h2>
+			HMRC link
+			<div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link" ui-event-control-id="hmrc:link_info_button"></div>
+		</h2>
 		<h5>Please link your HMRC account by entering your HMRC credentials exactly as used on the HMRC website. To upload the HMRC files, press the back button.</h5>
 
 		<form id="hmrcLinkAccountForm" class="cg-link-account-form">
 			<div id="hmrc_fields_link_wrapper">
 				<div id="hmrc_fields" class="hmrc_fields_margin">
-					@EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "hmrc:user_id")
-					@EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "hmrc:password")
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"hmrc_user_id", "User ID",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							uiEventControlID: "hmrc:user_id"),
+						origin: origin)
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"hmrc_password",
+							"Password",
+							type: "password",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							uiEventControlID: "hmrc:password"),
+						origin: origin)
 				</div>
 			</div>
 
 			<div class="clearfix">
 				<div class="form_buttons_container hmrc_margin_from_header">
 					<div class="attardi-button">
-						<a href="#" class="button btn-green disabled connect-account" ui-event-control-id="hmrc:do_link_button">Link Account</a>
-						<a href="#" class="back button btn-grey linkAccountBack" ui-event-control-id="hmrc:link_back">Back</a>
+						@EzForm.WizardButton(
+							new List<EzButtonModel>{
+								new EzButtonModel(
+									"hmrc_link_account_button",
+									"Link Account",
+									cls: "button btn-green disabled connect-account ev-btn-org",
+									uiEventControlID: "hmrc:do_link_button",
+									buttonType: EzButtonType.link,
+									href: "#"),
+								new EzButtonModel(
+									"hmrc_back_button",
+									"Back",
+									cls: "back button btn-grey linkAccountBack ev-btn-org",
+									uiEventControlID: "hmrc:link_back",
+									buttonType: EzButtonType.link,
+									href: "#")
+							},
+							origin: origin)
 					</div>
 				</div>
 			</div>
@@ -64,37 +68,50 @@
 		</form>
 	</div>
 
-	<div id="uploadFilesDiv" class="row-fluid hide">
+	<div class="hide">
+		<div id="hmrcLinkHelpPopup" class="help_window">
+			<img src="@Url.Content("~/Content/img/hmrc_login_sample.png")" />
+		</div>
+	</div>
+</script>
+
+<script id="HMRCUploadAccountInfoTemplate" type="text/template">
+	<div id="uploadFilesDiv" class="row-fluid">
 		<h2>Upload VAT return data<div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload" ui-event-control-id="hmrc:upload_info_button"></div></h2>
 		<h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your records</strong>”.</h5>
 
 		<div class="hmrc-upload-ui"></div>
 
+		@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					"hmrc_upload_done_button",
+					"Done",
+					cls: "button btn-green ev-btn-org",
+					uiEventControlID: "hmrc:do_upload",
+					buttonType: EzButtonType.button),
+				new EzButtonModel(
+					"hmrc_upload_back_button",
+					"Cancel",
+					cls: "button btn-grey back clean-btn",
+					uiEventControlID: "hmrc:upload_back",
+					buttonType: EzButtonType.button)
+			}, origin: origin)
+
+
 		<div class="hmrc-why-question offline_entry_message wizard_message" style="width: 100%;">
 			<div id="uploadHelpButton" class="hmrc-question-button float_left" style="margin-top: 55px;" ui-event-control-id="hmrc:upload_info_button_lower"></div>
 			<div class="hmrc-why">
 				<p>Don’t know where to locate your last 15 months VAT returns?</p>
-				<p>You should have received the files directly from the HMRC for your records.  We suggest you  request from your  filing agent or accountant to email your last 15 months VAT returns.</p>
+				<p>You should have received the files directly from the HMRC for your records. We suggest you request from your filing agent or accountant to email your last 15 months VAT returns.</p>
 				<p>Remember to mention that you need files titled “Printed Copy of Submitted VAT return for your records” </p>
 			</div>
 		</div>
 	</div>
 
 	<div class="hide">
-		<div id="hmrcLinkHelpPopup" class="help_window">
-			<img src="@Url.Content("~/Content/img/hmrc_login_sample.png")" />
-		</div>
-	</div>
-
-	<div class="hide">
 		<div id="hmrcUploadHelpPopup" class="help_window">
 			<img src="@Url.Content("~/Content/img/hmrc_vat_sample.png")" />
-		</div>
-	</div>
-
-	<div class="hide">
-		<div id="hmrcUploadAndLinkHelpPopup" class="help_window">
-			<img src="@Url.Content("~/Content/img/hmrc_vat_and_login_sample.png")" />
 		</div>
 	</div>
 </script>

@@ -4681,10 +4681,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(int userId, string sCompanyRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType, bool isBankStatement);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType, bool isBankStatement);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
         ServiceClientProxy.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
@@ -6410,12 +6410,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CheckLtdCompanyCacheAsync(userId, sCompanyRefNum);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType) {
-            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContent, fileContentType);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType, bool isBankStatement) {
+            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContent, fileContentType, isBankStatement);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType) {
-            return base.Channel.CompanyFilesUploadAsync(customerId, fileName, fileContent, fileContentType);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType, bool isBankStatement) {
+            return base.Channel.CompanyFilesUploadAsync(customerId, fileName, fileContent, fileContentType, isBankStatement);
         }
         
         public ServiceClientProxy.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {

@@ -21,7 +21,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 			try {
 				EnsureTransaction(() => {
 					user = GetAll()
-						.Where(u => u.Name.ToLower() == login.ToLower() && u.IsDeleted == 0)
+						.Where(u => u.Name == login && u.IsDeleted == 0)
 						.Cacheable<User>()
 						.CacheRegion("Longest")
 						.SingleOrDefault();

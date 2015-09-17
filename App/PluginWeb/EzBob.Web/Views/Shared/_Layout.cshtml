@@ -1,5 +1,4 @@
 ﻿@using System
-@using System.Globalization
 @using System.Web.Helpers
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
@@ -16,8 +15,7 @@
 	var context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
 	var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
 	var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
-	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-
+	
 	UiCustomerOrigin.Set(ViewBag);
 
 	string sCustomerLeadFieldName = "{}";
@@ -45,29 +43,28 @@
 	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
 
 	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css" />
 
 	@{ Html.RenderPartial("_FavIcon"); }
 
 	@BundleHelper.RenderPrintCss()
-	@BundleHelper.RenderCustomerCss()
+	@*@BundleHelper.RenderCustomerCss()*@
 
-	@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
-		@BundleHelper.RenderEverlineCss()
+	@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline)
+    {
+        @BundleHelper.RenderEverlineCustomerCss()
 	} else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
 		@BundleHelper.RenderAlibabaCss()
-		@BundleHelper.RenderEzbobCss()
+		@BundleHelper.RenderEzbobCustomerCss()
 	} else {
-		@BundleHelper.RenderEzbobCss()
+        @BundleHelper.RenderEzbobCustomerCss()
 	}
 
 	@RenderSection("css", false)
 
 <!--[if lt IE 9]>
-	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
+	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-
-	@{Html.RenderPartial("security_template");}
 </head>
 
 <body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term">
@@ -90,104 +87,112 @@
 		</div>
 
 		@{ Html.RenderPartial("_Footer", new ViewDataDictionary(ViewData)); }
+		
+		
+		@if (!IsSectionDefined("customJs")) {
+			<div id="valentine2015scratch">
+				<div class="content">
+					<img class="title" src="~/Content/img/valentine2015scratch/headline.png"/>
 
-		<div id="valentine2015scratch">
-			<div class="content">
-				<img class="title" src="~/Content/img/valentine2015scratch/headline.png" />
-
-				<div class="scratch-card">
-					<div class="alpha-scratch-area"></div>
-					<div class="scratch-area"></div>
-					<div class="beta-scratch-area"></div>
-
-					<img class="slogan" src="~/Content/img/valentine2015scratch/ribbon.png" />
-				</div>
-			</div>
-
-			<div class="decline"><a class="decline-game">I don't want to play</a></div>
-			<div class="close-lost"><a class="leave">Close</a></div>
-
-			<div class="won">
-				<div class="popup">
-					<div class="title">Go Pack!</div>
-					<div class="msg">You won 2 tickets to <span class="city"></span></div>
-				</div>
-
-				<div class="close"><a class="leave">Close</a></div>
-			</div>
-		</div>
-
-		<div id="ny2015scratch">
-			<div class="content">
-				<div class="title">New Year's Revolution</div>
-				<div class="slogan">Scratch and win Cash Back up to</div>
-				<div class="slogan-amount">
-					<img src="~/Content/img/ny2015scratch/pound.png" />
-					<img src="~/Content/img/ny2015scratch/2.png" />
-					<img src="~/Content/img/ny2015scratch/0.png" />
-					<img src="~/Content/img/ny2015scratch/1.png" />
-					<img src="~/Content/img/ny2015scratch/5.png" />
-				</div>
-
-				<div class="frame">
 					<div class="scratch-card">
-						<div class="scratch-area"></div>
-
 						<div class="alpha-scratch-area"></div>
+						<div class="scratch-area"></div>
 						<div class="beta-scratch-area"></div>
-						<div class="gamma-scratch-area"></div>
+
+						<img class="slogan" src="~/Content/img/valentine2015scratch/ribbon.png"/>
 					</div>
-					<div class="hoops"></div>
+				</div>
+
+				<div class="decline"><a class="decline-game">I don't want to play</a>
+				</div>
+				<div class="close-lost"><a class="leave">Close</a>
+				</div>
+
+				<div class="won">
+					<div class="popup">
+						<div class="title">Go Pack!</div>
+						<div class="msg">You won 2 tickets to <span class="city"></span></div>
+					</div>
+
+					<div class="close"><a class="leave">Close</a>
+					</div>
 				</div>
 			</div>
 
-			<div class="decline"><a class="decline-game">I don't want to play</a></div>
-			<div class="close-lost"><a class="leave">Close</a></div>
+			<div id="ny2015scratch">
+				<div class="content">
+					<div class="title">New Year's Revolution</div>
+					<div class="slogan">Scratch and win Cash Back up to</div>
+					<div class="slogan-amount">
+						<img src="~/Content/img/ny2015scratch/pound.png"/>
+						<img src="~/Content/img/ny2015scratch/2.png"/>
+						<img src="~/Content/img/ny2015scratch/0.png"/>
+						<img src="~/Content/img/ny2015scratch/1.png"/>
+						<img src="~/Content/img/ny2015scratch/5.png"/>
+					</div>
 
-			<div class="won">
-				<div class="fire">
 					<div class="frame">
-						<div class="title">You won!</div>
+						<div class="scratch-card">
+							<div class="scratch-area"></div>
 
-						<div class="amount-row">
-							<img src="~/Content/img/ny2015scratch/pound.png" />
-							<span class="amount"></span>
+							<div class="alpha-scratch-area"></div>
+							<div class="beta-scratch-area"></div>
+							<div class="gamma-scratch-area"></div>
 						</div>
+						<div class="hoops"></div>
+					</div>
+				</div>
 
-						<div class="close"><a class="leave">Close</a></div>
+				<div class="decline"><a class="decline-game">I don't want to play</a>
+				</div>
+				<div class="close-lost"><a class="leave">Close</a>
+				</div>
+
+				<div class="won">
+					<div class="fire">
+						<div class="frame">
+							<div class="title">You won!</div>
+
+							<div class="amount-row">
+								<img src="~/Content/img/ny2015scratch/pound.png"/>
+								<span class="amount"></span>
+							</div>
+
+							<div class="close"><a class="leave">Close</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div id="modalRegion" class="modal hide fade"></div>
+			<div id="modalRegion" class="modal hide fade"></div>
+		}
 	</div>
-
-	<div id="promotion-pages">
-		<div id="easter2015scratch" class="in-customer">
-			<div class="opening">
-				<div class="leave"></div>
-			</div>
-			<div class="playground">
-				<img class="egg egg-golden" data-has-prize="no" src="~/Content/img/easter2015scratch/golden-egg.png" />
-				<img class="egg egg-magenta" data-has-prize="no" src="~/Content/img/easter2015scratch/magenta-egg.png" />
-				<img class="egg egg-pink" data-has-prize="yes" src="~/Content/img/easter2015scratch/pink-egg.png" />
-
-				<div class="exit-game">
+	
+	@if (!IsSectionDefined("customJs")) {
+		<div id="promotion-pages">
+			<div id="easter2015scratch" class="in-customer">
+				<div class="opening">
 					<div class="leave"></div>
 				</div>
+				<div class="playground">
+					<img class="egg egg-golden" data-has-prize="no" src="~/Content/img/easter2015scratch/golden-egg.png"/>
+					<img class="egg egg-magenta" data-has-prize="no" src="~/Content/img/easter2015scratch/magenta-egg.png"/>
+					<img class="egg egg-pink" data-has-prize="yes" src="~/Content/img/easter2015scratch/pink-egg.png"/>
 
-				<div class="not-yet">
-					<img src="~/Content/img/easter2015scratch/not-yet.png" />
+					<div class="exit-game">
+						<div class="leave"></div>
+					</div>
+
+					<div class="not-yet">
+						<img src="~/Content/img/easter2015scratch/not-yet.png"/>
+					</div>
 				</div>
+				<div class="won"></div>
 			</div>
-			<div class="won"></div>
 		</div>
-	</div>
-
-	@if (!IsSectionDefined("customJs")) {
+	
 		<div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
-		<div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
 		<div style="display: none;" class="hide" id="customer-name"></div>
 	}
 
@@ -207,47 +212,57 @@
 	}
 
 	@RenderSection("Js", false)
-
-	<script type="text/javascript">
-		var EzBob = EzBob || {};
+	
+	@if (!IsSectionDefined("customJs")) {
+		<script type="text/javascript">
+			var EzBob = EzBob || {};
+			EzBob.Config = EzBob.Config || {};
+			EzBob.Config.Origin = '@ViewBag.CustomerOrigin.GetOrigin()';
 
 		var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
 		var serverOffset = moment.utc(serverDate).diff(new Date());
 		EzBob.serverOffset = serverOffset;
 
-		window.ShowHideSignLogOnOff = function () {
-			var sEmail = $('body').attr('data-user-name');
-			if (sEmail) {
-				$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-				$('.login_btn, .signup_btn').hide();
-			}
-			else {
-				$('#logoff-li').hide();
+			window.ShowHideSignLogOnOff = function() {
+				var sEmail = $('body').attr('data-user-name');
+				if (sEmail) {
+					$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
+					$('.login_btn, .signup_btn').hide();
+				} else {
+					$('#logoff-li').hide();
 
-				if ($('.login-form-user-name').length) {
-					$('.login_btn').hide();
-					$('.signup_btn').show();
-				}
-				else {
-					$('.login_btn').show();
-					$('.signup_btn').hide();
+					if ($('.login-form-user-name').length) {
+						$('.login_btn').hide();
+						$('.signup_btn').show();
+					} else {
+						$('.login_btn').show();
+						$('.signup_btn').hide();
+					} // if
 				} // if
-			} // if
-		}; // ShowHideSignLogOnOff
+			}; // ShowHideSignLogOnOff
 
-		$(document).ready(function () {
-			$('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
-			window.ShowHideSignLogOnOff();
-			EzBob_CgVendors_init();
-			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
-		});
+			$(document).ready(function() {
+				$('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
+				window.ShowHideSignLogOnOff();
+				EzBob_CgVendors_init();
+				EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
+				var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
+				var serverOffset = moment.utc(serverDate).diff(new Date());
+				$('#current-server-offset').text(serverOffset);
+			});
 
-		function EzBob_CgVendors_init() {
-			if (EzBob.CgVendors)
-				EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
-		} // EzBob_CgVendors_init
-	</script>
+			function EzBob_CgVendors_init() {
+				if (EzBob.CgVendors)
+					EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
+			} // EzBob_CgVendors_init
 
-	@{ Html.RenderPartial("_Iovation"); }
+		</script>
+
+		Html.RenderPartial("_Iovation");
+		Html.RenderPartial("security_template");
+	
+
+		<script type = "text/plain" src = "//privacy-policy.truste.com/privacy-seal/Orange-Money/asc?rid=05e2e3f7-3f8d-4968-b85e-c0d6ba74d080" ></script>
+	}
 </body>
 </html>

@@ -131,7 +131,7 @@
 		ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
 
 		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType,bool isBankStatement);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();

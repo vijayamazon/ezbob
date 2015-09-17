@@ -5,10 +5,10 @@
 		<thead>
 			<tr>
 				<th>Ref. Number</th>
-				<th width="20%">Origination<br />Date</th>
-				<th width="20%">Loan<br />Amount</th>
+				<th width="20%">Origination Date</th>
+				<th width="20%">Loan Amount</th>
 				<th width="20%">Status</th>
-				<th width="20%">Open<br />Balance</th>
+				<th width="20%">Open Balance</th>
 				<th width="20%"></th>
 			</tr>
 		</thead>
@@ -17,19 +17,19 @@
 				var last = loans.length - 1 == i;
 				%><tr class="<%- last ? 'last' : '' %>">
 					<td class="first"><%- loan.RefNumber  %></td>
-					<td><%- EzBob.formatDate(loan.Date) %></td>
-					<td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
+					<td><%- EzBob.formatDateUK(loan.Date) %></td>
+					<td><%-EzBob.formatPoundsUK(loan.LoanAmount)%></td>
 					<td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
-					<td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
+					<td><%-EzBob.formatPoundsUK(loan.TotalBalance)%></td>
 					<td class="last" width="100">
-						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%>" ui-event-control-id="dashboard:loan-details">Details</a>
+						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%> clean-btn" ui-event-control-id="dashboard:loan-details">Details</a>
 					</td>
 				</tr><%
 			});
 		%></tbody>
 	</table>
-	<div class="clearfix">
-		<a style="margin-right: 25px; margin-top: 5px;" href="#" class="pull-right print-link" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
+	<div class="clearfix right">
+		<a href="#" class="print-link ev-btn-org" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
 	</div>
 	<% } else { %>
 		There is no activity in your account.

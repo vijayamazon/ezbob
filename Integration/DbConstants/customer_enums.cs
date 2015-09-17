@@ -12,6 +12,7 @@
 		Single,
 		Divorced,
 		Widowed,
+		[Description("Living Together")]
 		LivingTogether,
 		Separated,
 		Other

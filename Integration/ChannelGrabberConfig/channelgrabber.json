@@ -58,7 +58,7 @@
 					}
 				],
 				"Notes": [
-					"<strong>* Please notice that only Gold store subscribers and higher can link their Volusion store.</strong>",
+					"<p><span class=\"ev-hide\">*</span> Please notice that only Gold store subscribers and higher can link their Volusion store.</p>",
 					"<br><br>",
 					"You need to enter the Encrypted Password for your Admin Area.",
 					"You can find your encrypted password in the Volusion API section of your store.",
@@ -87,8 +87,8 @@
 
 	{
 		"Name":        "Play",
-		"DisplayName": "Play",
-		"Description": "play.com",
+		"DisplayName": "Rakuten",
+		"Description": "Rakuten.co.uk",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 		"Behaviour":   "Default",
 
@@ -141,7 +141,7 @@
 					}
 				],
 				"Notes": [
-				"<strong>* Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.</strong>",
+				"<p><span class=\"ev-hide\">*</span> Please notice that only ProTrader users (full merchant account) <br>can link their Rakuten.co.uk store.</p>",
 					"<BR><BR>",
 				],
 				"OnBeforeLink": [ 
@@ -481,13 +481,13 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The API username to access Magento account",
+						"Caption": "API username",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Password",
-						"Caption": "The API password to access Magento account",
+						"Caption": "API password",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
@@ -616,19 +616,19 @@
 					{
 						"PropertyName": "URL",
 						"Type": "Text",
-						"Caption": "The API path to access Bigcommerce account",
+						"Caption": "API path",
 						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The API user to access Bigcommerce account",
+						"Caption": "API user",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Text",
-						"Caption": "The API token to access Bigcommerce account",
+						"Caption": "API token",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],

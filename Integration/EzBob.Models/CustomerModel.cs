@@ -33,6 +33,7 @@ namespace EzBob.Models {
 
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public VatReporting? VatReporting { get; set; }
+		public bool VatRegistered { get; set; }
 		public string YearsInCompany { get; set; }
 		public static CompanyInfoMap FromCompany(Company company) {
 			if (company == null)
@@ -52,6 +53,7 @@ namespace EzBob.Models {
 				VatReporting = company.VatReporting,
 				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToList(),
 				ExperianRefNum = company.ExperianRefNum,
+				VatRegistered = company.VatRegistered
 			};
 		} // From Company
 	} // class CompanyInfoMap
@@ -129,6 +131,8 @@ namespace EzBob.Models {
 		public bool IsLoanDetailsFixed { get; set; }
 
 		public int IsLoanTypeSelectionAllowed { get; set; }
+		
+		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		public bool? IsOffline { get; set; }
 
@@ -140,6 +144,8 @@ namespace EzBob.Models {
 		public int LastApprovedLoanTypeID { get; set; }
 
 		public int LastApprovedRepaymentPeriod { get; set; }
+		
+		public int LastRepaymentPeriod { get; set; }
 
 		public decimal LastPaymentFees { get; set; }
 
@@ -170,7 +176,7 @@ namespace EzBob.Models {
 
 		public PayPointCardModel[] PayPointCards { get; set; }
 
-		public string Perks { get; set; }
+		//public string Perks { get; set; }
 
 		public CustomerAddress[] PersonalAddress { get; set; }
 
@@ -182,7 +188,7 @@ namespace EzBob.Models {
 
 		public QuickOfferModel QuickOffer { get; set; }
 
-		public decimal RequestedAmount { get; set; }
+		public CustomerRequestedLoan RequestedLoan { get; set; }
 
 		public string SortCode { get; set; }
 

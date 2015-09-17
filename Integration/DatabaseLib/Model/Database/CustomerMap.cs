@@ -230,6 +230,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
+			HasMany(x => x.CompanyFiles)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
+			
 			Map(x => x.FirstVisitTime).Length(64);
 			Map(x => x.ExperianConsumerScore);
 			References(x => x.PropertyStatus, "PropertyStatusId").Cascade.All();

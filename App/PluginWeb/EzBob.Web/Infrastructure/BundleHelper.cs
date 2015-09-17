@@ -15,17 +15,47 @@
 			.MvcRender("~/Content/css/min/paypoint_#.css");
 		} // RenderPaypointTemplateCss
 
-		public static MvcHtmlString RenderCustomerCss() {
-			return Bundle.Css()
-				//libs
+        public static MvcHtmlString RenderEverlineCustomerCss() {
+            return Bundle.Css()
+                //libs
+                .Add("~/Content/css/lib/normalize.css")
 				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
 				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-				.Add("~/Content/css/lib/bootstrap2.css")
-				.Add("~/Content/css/lib/dropzone.css")
-				.Add("~/Content/css/lib/font-awesome.min.css")
-				.Add("~/Content/css/lib/notifications.css")
-				.Add("~/Content/css/lib/coin-slider-styles.css")
-				.Add("~/Content/css/lib/chosen.css")
+                .Add("~/Content/css/lib/dropzone.css")
+                .Add("~/Content/css/lib/font-awesome.min.css")
+                .Add("~/Content/css/lib/notifications.css")
+                .Add("~/Content/css/lib/coin-slider-styles.css")
+                .Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
+               
+                //common
+                .Add("~/Content/css/profile-ny2015scratch.css")
+                .Add("~/Content/css/valentine2015scratch.css")
+                .Add("~/Content/css/easter2015scratch.css")
+                
+				//custom css
+				.Add("~/Content/css/everline.css")
+				.Add("~/Content/css/Everlinecustomer.css")
+                .Add("~/Content/css/everline-mobile.css")
+                .Add("~/Content/css/Everlineslider.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
+                .MvcRender("~/Content/css/min/customereverline_#.css");
+        }// RenderEverlineCustomerCss
+
+		public static MvcHtmlString RenderEzbobCustomerCss() {
+			return Bundle.Css()
+                //libs
+                .Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+                .Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+                .Add("~/Content/css/lib/bootstrap2.css")
+                .Add("~/Content/css/lib/dropzone.css")
+                .Add("~/Content/css/lib/font-awesome.min.css")
+                .Add("~/Content/css/lib/notifications.css")
+                .Add("~/Content/css/lib/coin-slider-styles.css")
+                .Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
 
 				//custom css
 				.Add("~/Content/css/common.css")
@@ -33,14 +63,10 @@
 				.Add("~/Content/css/profile-ny2015scratch.css")
 				.Add("~/Content/css/valentine2015scratch.css")
 				.Add("~/Content/css/easter2015scratch.css")
-				.MvcRender("~/Content/css/min/customer_#.css");
-		} // RenderCustomerCss
-
-		public static MvcHtmlString RenderEzbobCss() {
-			return Bundle.Css()
-			.Add("~/Content/css/ezbob.css")				
-			.MvcRender("~/Content/css/min/ezbob_#.css");
-		} // RenderEzbobCss
+				.Add("~/Content/css/ezbob.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
+				.MvcRender("~/Content/css/min/customerezbob_#.css");
+		} // RenderEzbobCustomerCss
 
 		public static MvcHtmlString RenderAlibabaCss() {
 			return Bundle.Css()
@@ -48,29 +74,38 @@
 			.MvcRender("~/Content/css/min/alibaba_#.css");
 		} // RenderAlibabaCss
 
-		public static MvcHtmlString RenderEverlineCss() {
-			return Bundle.Css()
-			.Add("~/Content/css/everline.css")				
-			.MvcRender("~/Content/css/min/everline_#.css");
-		} // RenderEverlineCss
-
-		public static MvcHtmlString RenderProfileCss() {
+		public static MvcHtmlString RenderEzbobProfileCss() {
 			return Bundle.Css()
 				//libs
 				.Add("~/Content/css/lib/jquery.jscrollpane.css")
-
+				
 				//custom css
 				.Add("~/Content/css/profile.css")
-				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
-		} // RenderProfileCss
+		} // RenderEzbobProfileCss
+
+		public static MvcHtmlString RenderEverlineProfileCss() {
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/jquery.jscrollpane.css")
+				
+				//custom css
+				.Add("~/Content/css/profile.css")
+				.Add("~/Content/css/EverlineCustomerProfile.css")
+				.Add("~/Content/css/EverlineCustomerProfileDirectors.css")
+				.Add("~/Content/css/EverlineCustomerProfileLoanDetails.css")
+				.Add("~/Content/css/EverlineCustomerProfileMyInformation.css")
+				.Add("~/Content/css/EverlineCustomerProfileMainMenu.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
+				.MvcRender("~/Content/css/min/profile_combined_#.css");
+		} // RenderEverlineProfileCss
 
 		public static MvcHtmlString RenderWizardCss() {
 			return Bundle.Css()
 				//custom css
 				.Add("~/Content/css/wizard.css")
-				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/mobile.css")
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
 		} // RenderProfileCss
@@ -148,7 +183,7 @@
 				.MvcRender("~/Content/css/min/print_combined_#.css");
 		} // RenderPrintCss
 
-		public static MvcHtmlString RenderBrokerCss() {
+		public static MvcHtmlString RenderEzbobBrokerCss() {
 			return Bundle.Css()
 			// libs
 				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
@@ -177,7 +212,38 @@
 				.Add("~/Content/css/easter2015scratch.css")
 
 			.MvcRender("~/Content/css/min/broker_#.css");
-		} // RenderBrokerCss
+		} // RenderEzbobBrokerCss
+
+		public static MvcHtmlString RenderEverlineBrokerCss() {
+			return Bundle.Css()
+				// libs
+				.Add("~/Content/css/lib/normalize.css")
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/bootstrap3.css")
+				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
+				.Add("~/Content/css/lib/dataTables.bootstrap.css")
+				.Add("~/Content/css/lib/DT_bootstrap.css")
+				.Add("~/Content/css/lib/dropzone.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/notifications.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
+
+				// custom css
+				.Add("~/Content/css/Everlinecustomer.css")
+                .Add("~/Content/css/everline-mobile.css")
+				.Add("~/Content/css/everline.css")
+				.Add("~/Content/css/EverlineBroker.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
+				.Add("~/Content/css/profile-ny2015scratch.css")
+				.Add("~/Content/css/valentine2015scratch.css")
+				.Add("~/Content/css/easter2015scratch.css")
+
+			.MvcRender("~/Content/css/min/broker_#.css");
+		} // RenderEverlineBrokerCss
 
 		public static MvcHtmlString RenderCommonJs() {
 			return Bundle.JavaScript()
@@ -248,6 +314,7 @@
 				.Add("~/Content/js/ezbob.cgvendors.js")
 				.Add("~/Content/js/ezbob.serverlog.js")
 				.Add("~/Content/js/ezbob.strengthPassword.js")
+                .Add("~/Content/js/ezbob.sliders.js")
 
 				.AddString(GetDbStrings())
 				//.ForceRelease()
@@ -452,6 +519,7 @@
 				.Add("~/Content/js/lib/date.interval.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.js")
+				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrcUpload.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.js")
@@ -509,6 +577,7 @@
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.js")
+				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrcUpload.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.js")
@@ -538,7 +607,6 @@
 				.Add("~/Content/js/Profile/ezbob.profile.yourInfo.js")
 				.Add("~/Content/js/Profile/ezbob.profile.paypointSchedule.js")
 				.Add("~/Content/js/Profile/ezbob.profile.loanTaken.js")
-				.Add("~/Content/js/Profile/ezbob.profile.inviteFriend.js")
 				.Add("~/Content/js/Profile/ezbob.profile.perks.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")

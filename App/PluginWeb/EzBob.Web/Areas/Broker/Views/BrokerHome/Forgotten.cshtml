@@ -1,34 +1,64 @@
-﻿<div class="page-section hide section-forgotten">
-	<form class="forgotten-form broker-form" novalidate="novalidate">
-		@{ int nForgottenTabIdx = 1; }
-		<h2 class="form-start">Password recovery</h2>
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+<div class="page-section hide section-forgotten">
+	<section id="content">
+		<div class="wizard-wrap">
+			<form class="forgotten-form broker-form" novalidate="novalidate">
+				@{ int nForgottenTabIdx = 1; }
+				<h2 class="form-start">Password recovery</h2>
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<div class="code-sent-style-container">
-					<label id="forgottenSentLabel" class="code-sent-style hide">Code sent</label>
-				</div>
-				<span>Contact person mobile phone</span>
-				<input type="text" name="ForgottenMobile" id="ForgottenMobile" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:forgotten-contact-mobile" maxlength="11" />
-				<img id="ForgottenMobileImage" class="field_status required" />
-				<input id="forgottenGenerateMobileCode" name="forgottenGenerateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:forgotten-generate-mobile-code" />
-			</label>
+				@EzForm.InputTextWizard(
+					new EzInputBuilder(
+						"ForgottenMobile",
+						"Contact person mobile phone",
+						type: "text",
+						cls: "phonenumber form_field form_field_left_side",
+						innerMessage: "Code sent",
+						isRequired: true,
+						statusIcon: true,
+						tabIndex: nForgottenTabIdx++,
+						uiEventControlID: "broker:forgotten-contact-mobile",
+						maxLength: 11,
+						button: new EzButtonModel(
+							"forgottenGenerateMobileCode",
+							"Send activation code",
+							"button btn-green form_field_right_side_signup_phone disabled clean-btn",
+							"broker:forgotten-generate-mobile-code",
+							nForgottenTabIdx++,
+							EzButtonType.input)
+						),
+					origin: origin)
+				
+				@EzForm.InputTextWizard(
+					new EzInputBuilder(
+						"ForgottenMobileCode",
+						"Mobile phone authentication code",
+						type: "text",
+						cls: "phonenumbercode form_field_left_side form_field",
+						isRequired: true,
+						statusIcon: true,
+						tohide: true,
+						tabIndex: nForgottenTabIdx++,
+						uiEventControlID: "broker:forgotten-mobile-code",
+						maxLength: 6,
+						formFieldID: "forgottenMobileCodeDiv"),
+					origin: origin)
+
+				@EzForm.WizardButton(
+				new EzButtonModel(
+					"RestorePassBrokerButton",
+					"Restore password",
+					"button btn-green disabled pull-right ev-btn-org",
+					"broker:login-submit",
+					nForgottenTabIdx++),
+				origin: origin)
+
+			</form>
+
+			<aside class="customer-sidebar broker"></aside>
 		</div>
-
-		<div id="forgottenMobileCodeDiv" class="form_field_container hide">
-			<label class="attardi-input">
-				<span>Mobile phone authentication code</span>
-				<input type="text" class="phonenumbercode form_field_left_side form_field" name="ForgottenMobileCode" id="ForgottenMobileCode" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:forgotten-mobile-code" maxlength="6" data-sent-to="" />
-				<img id="ForgottenMobileCodeImage" class="field_status required" />
-			</label>
-		</div>
-
-		<div class="form_buttons_container">
-			<div class="attardi-button">
-				<button type="submit" id="RestorePassBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:login-submit">Restore password</button>
-			</div>
-		</div>
-	</form>
-
-	<aside class="customer-sidebar broker"></aside>
+	</section>
 </div>

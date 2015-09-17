@@ -52,7 +52,7 @@
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer) {
 			var rl = new CustomerRequestedLoanModel();
-			var requestedLoan = customer.CustomerRequestedLoan.FirstOrDefault();
+			var requestedLoan = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault();
 			if (requestedLoan != null) {
 				rl.Amount = requestedLoan.Amount;
 				rl.Created = requestedLoan.Created;

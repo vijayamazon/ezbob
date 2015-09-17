@@ -1,4 +1,10 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
+	var crmEmptyOptionsList = new List<Tuple<string, string>> {};
+}
 
 @* This file is used in Underwriter and Broker. *@
 
@@ -9,60 +15,80 @@
                 <div class="FormRadioCtrl">
                     <span>Type</span>
                 </div>
-                <div class="FormRadioCtrl">
-                    <input type="radio" name="Type" value="In" id="Type_In" class="required" data-value="In"><label for="Incoming_In">Incoming</label><br />
-                </div>
-                <div class="FormRadioCtrl">
-                    <input type="radio" name="Type" value="Out" id="Type_Out" data-value="Out"><label for="Incoming_Out">Outgoing</label><br />
-                </div>
-                <div class="FormRadioCtrl">
-                    <input type="radio" name="Type" value="Internal" id="Type_Internal" data-value="Internal"><label for="Incoming_Internal">Internal</label><br />
-                </div>
+				
+				<div class="crm-event-types">
+					<div class="FormRadioCtrl">
+
+						@{ EzInputBuilder radio1 = new EzInputBuilder(
+									"Type_In",
+									"Incoming",
+									value: "In",
+									type: "radio",
+									cls: "required",
+									isRequired: true,
+									statusIcon: true,
+									name: "Type"); }
+
+						@EzForm.ClickableInputTag(radio1, origin: origin)
+
+					</div>
+					<div class="FormRadioCtrl">
+
+						@{ EzInputBuilder radio2 = new EzInputBuilder(
+									"Type_Out",
+									"Outgoing",
+									value: "Out",
+									type: "radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "Type"); }
+
+						@EzForm.ClickableInputTag(radio2, origin: origin)
+
+					</div>
+					<div class="FormRadioCtrl">
+
+						@{ EzInputBuilder radio3 = new EzInputBuilder(
+									"Type_Internal",
+									"Internal",
+									value: "Internal",
+									type: "radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "Type"); }
+
+						@EzForm.ClickableInputTag(radio3, origin: origin)
+
+					</div>
+				</div>
             </div>
-            <br />
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span class="active attardi-has-data">Action</span>
-                        <select class="form_field selectheight" id="Action" name="Action">
-                            <option></option>
-                            <% _.each(actions, function(action){ %>
-                                <option value="<%- action.Id %>"><%- action.Name %></option>
-                            <%});%>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div id="phoneNumbersSection" class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span class="active attardi-has-data">Phone #</span>
-                        <select class="form_field selectheight" id="PhoneNumber" name="PhoneNumber">
-                            <option></option>
-                            <% _.each(phoneNumbers, function(phone) { %>
-                                <option value="<%- phone.Number %>"><%- phone.Type %>: <%- phone.Number %><%- phone.IsVerified ? ' (Verified)' : '' %></option>
-                            <%});%>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Status</span>
-                        <select class="form_field selectheight" id="Status" name="Status">
-                            <option></option>
-                            <% _.each(statuses, function(sGroup) { %>
-                            <optgroup label="<%- sGroup.Name%>">
-                                <%_.each(sGroup.Statuses, function(status){%>
-                                    <option value="<%- status.Id %>"><%- status.Name %></option>
-                                <%});%>
-                            </optgroup>
-                            <%});%>
-                        </select>
-                    </label>
-                </div>
-            </div>
+						
+			@EzForm.SelectWizard(
+				new EzSelectModel(
+					"Action", 
+					"Action",
+					crmEmptyOptionsList,
+					cls: "form_field selectheight"),
+				origin: origin)	
+
+			<div class="phoneNumbersSection hide">
+				@EzForm.SelectWizard(
+					new EzSelectModel(
+						"PhoneNumber",
+						"Phone #",
+						crmEmptyOptionsList,
+						cls: "form_field selectheight"),
+				origin: origin)
+			</div>
+
+			@EzForm.SelectWizard(
+				new EzSelectModel(
+				"Status",
+				"Status",
+				crmEmptyOptionsList,
+				cls: "form_field selectheight"),
+				origin: origin)
+
             <div class="control-group form_field_container rank-div">
                 <div class="controls">
                     <label class="control-label attardi-input">
@@ -76,11 +102,21 @@
                     </label>
                 </div>
             </div>
-            <label>Comment</label>
-            <textarea id="Comment" class="add-customer-entry-comment-size" />
+           
+@if (origin != CustomerOriginEnum.everline) {
+	<label>Comment</label>
+	<textarea id="Comment" class="add-customer-entry-comment-size"/>
+} else {
+	<div class="form_field_container control-group">
+		<label for="Comment" class="input-title">Comment</label>
+		<div class="input-wrapper">
+			<textarea style="resize: vertical; height: 100px" id="Comment" class="add-customer-entry-comment-size"></textarea>
+		</div>
+	</div>
+}
         </form>
     </div>
     <div class="pull-right">
-        <button class="button btn-green btn-primary">OK</button>
+		<button class="button btn-green btn-primary ev-btn-org">OK</button>
     </div>
 </script>

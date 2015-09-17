@@ -35,6 +35,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
 		public JsonResult AddDirector(int nCustomerID, DirectorModel director) {
+			ms_oLog.Info("Adding director to customer " + nCustomerID);
 			var customer = this._customerRepository.Get(nCustomerID);
 
 			if (customer == null) {

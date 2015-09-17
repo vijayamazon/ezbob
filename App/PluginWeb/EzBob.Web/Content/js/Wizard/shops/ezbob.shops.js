@@ -2,12 +2,20 @@ var EzBob = EzBob || {};
 
 EzBob.StoreInfoView = EzBob.View.extend({
 	attributes: {
-		"class": "stores-view"
+		"class": "stores-view ev-form"
 	}, // attributes
 
-	isOffline: function() { return this.fromCustomer('IsOffline'); },
+	isOffline: function() { return true; /*todo  remove*/ },
 
-	isProfile: function() { return this.fromCustomer('IsProfile'); },
+	isProfile: function () { return this.fromCustomer('IsProfile'); },
+
+	isVatRegistered: function () {
+		var companyInfo = this.fromCustomer('CompanyInfo');
+		if (!companyInfo) {
+			return false;
+		}
+		return companyInfo.VatRegistered;
+	},
 
 	isWhiteLabel: function() {return this.fromCustomer('IsWhiteLabel'); },
 	
@@ -60,6 +68,13 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			isProfile: this.isProfile(),
 		});
 
+		this.yodleeUploadAccounts = new EzBob.YodleeUploadAccounts();
+		this.yodleeUploadAccountInfoView = new EzBob.CompanyFilesAccountInfoView({
+			model: this.yodleeUploadAccounts,
+			isBank: true,
+			isProfile: this.isProfile(),
+		});
+
 		this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
 		this.PayPalInfoView = new EzBob.PayPalInfoView({
 			model: this.payPalAccounts,
@@ -68,38 +83,29 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.companyFilesAccounts = new EzBob.CompanyFilesAccounts(this.model.get("companyUploadAccounts"));
 		this.companyFilesAccountInfoView = new EzBob.CompanyFilesAccountInfoView({
 			model: this.companyFilesAccounts,
+			isBank: false
 		});
 
 		var oAllCgVendors = EzBob.CgVendors.all();
 		var lc;
 		var accountTypeName;
 
-		if (this.isWhiteLabel() && !this.isProfile()) {
-			this['HMRC'] = new EzBob.HmrcAccountInfoView({
-				model: acc,
-				companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
-			});
-			
-			this.stores = {
-				Yodlee: { view: this.YodleeAccountInfoView },
-				CompanyFiles: { view: this.companyFilesAccountInfoView },
-				HMRC: { view: this['HMRC'] }
-			};
-			
-		} else {
-			this.stores = {
-				eBay: { view: this.EbayStoreView },
-				Amazon: { view: this.AmazonStoreInfoView },
-				paypal: { view: this.PayPalInfoView },
-				EKM: { view: this.EKMAccountInfoView },
-				PayPoint: { view: this.PayPointAccountInfoView },
-				Yodlee: { view: this.YodleeAccountInfoView },
-				FreeAgent: { view: this.FreeAgentAccountInfoView },
-				Sage: { view: this.sageAccountInfoView },
-				CompanyFiles: { view: this.companyFilesAccountInfoView },
-			};
+		this.stores = {
+			eBay: { view: this.EbayStoreView },
+			Amazon: { view: this.AmazonStoreInfoView },
+			paypal: { view: this.PayPalInfoView },
+			EKM: { view: this.EKMAccountInfoView },
+			PayPoint: { view: this.PayPointAccountInfoView },
+			Yodlee: { view: this.YodleeAccountInfoView },
+			FreeAgent: { view: this.FreeAgentAccountInfoView },
+			Sage: { view: this.sageAccountInfoView },
+			CompanyFiles: { view: this.companyFilesAccountInfoView, isUpload: true },
+			YodleeUpload: { view: this.yodleeUploadAccountInfoView }
+				
+		};
 
-			for (accountTypeName in oAllCgVendors) {
+		for (accountTypeName in oAllCgVendors) {
+			if (oAllCgVendors.hasOwnProperty(accountTypeName)) {
 				lc = accountTypeName.toLowerCase();
 
 				var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
@@ -111,6 +117,11 @@ EzBob.StoreInfoView = EzBob.View.extend({
 						model: acc,
 						companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
 					});
+
+					this[lc + 'UploadAccountInfoView'] = new EzBob.HmrcUploadAccountInfoView({
+						model: acc,
+						companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
+					});
 				} else {
 					this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
 						model: acc,
@@ -119,8 +130,13 @@ EzBob.StoreInfoView = EzBob.View.extend({
 				} // if
 
 				this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
-			} // for each account type
-		}
+
+				if (lc === 'hmrc') {
+					this.stores['HMRCUpload'] = { view: this[lc + 'UploadAccountInfoView'] };
+				}
+			}
+		} // for each account type
+		
 		
 		this.storeList = $(_.template($("#store-info").html(), { }));
 
@@ -170,7 +186,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.link-accounts-form').removeClass('hide');
 	}, // showLinkAccountsForm
 
-	render: function() {
+	render: function () {
+
 		var i;
 		var grp;
 
@@ -183,6 +200,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.mpGroups[grp.Id] = grp;
 			grp.ui = null;
 		} // for each group
+		
+		var bankGroup = 0;
+		var hmrcGroup = 0;
 
 		for (i = 0; i < EzBob.Config.MarketPlaces.length; i++) {
 			var oMp = EzBob.Config.MarketPlaces[i];
@@ -190,26 +210,34 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			var storeTypeName = oMp.Name === "Pay Pal" ? "paypal" : oMp.Name;
 
 			if (this.stores[storeTypeName]) {
-				this.stores[storeTypeName].active = this.isProfile() ? (this.isOffline() ? oMp.ActiveDashboardOffline : oMp.ActiveDashboardOnline) : (this.isOffline() ? oMp.ActiveWizardOffline : oMp.ActiveWizardOnline);
-				this.stores[storeTypeName].priority = this.isOffline() ? oMp.PriorityOffline : oMp.PriorityOnline;
-				this.stores[storeTypeName].ribbon = oMp.Ribbon ? oMp.Ribbon : "";
-				this.stores[storeTypeName].button = new EzBob.StoreButtonView({
-					name: storeTypeName,
-					mpAccounts: this.model,
-					description: oMp.Description,
-				});
-				this.stores[storeTypeName].button.ribbon = oMp.Ribbon ? oMp.Ribbon : "";
-				this.stores[storeTypeName].mandatory = this.isOffline() ? oMp.MandatoryOffline : oMp.MandatoryOnline;
-				this.stores[storeTypeName].groupid = oMp.Group ? oMp.Group.Id : 0;
+				this.setStore(storeTypeName, oMp.Description, oMp.Group ? oMp.Group.Id : 0,
+					this.isProfile() ? (this.isOffline() ? oMp.ActiveDashboardOffline : oMp.ActiveDashboardOnline) : (this.isOffline() ? oMp.ActiveWizardOffline : oMp.ActiveWizardOnline),
+					this.isOffline() ? oMp.PriorityOffline : oMp.PriorityOnline,
+					oMp.Ribbon ? oMp.Ribbon : '',
+					this.isOffline() ? oMp.MandatoryOffline : oMp.MandatoryOnline,
+					this.stores[storeTypeName].isUpload || false, oMp.IsImage, false);
+				
+				if (storeTypeName === 'Yodlee') {
+					bankGroup = this.stores[storeTypeName].groupid;
+				}
+
+				if (storeTypeName === 'HMRC') {
+					hmrcGroup = this.stores[storeTypeName].groupid;
+				}
 			} // if
 		} // for
-
+		this.setStore('YodleeUpload', 'Bank statements', bankGroup, true, 100, '', false, true, false, true);
+		this.setStore('HMRCUpload', 'VAT reports', hmrcGroup, true, 100, '', false, true, false, true);
+		
 		for (var name in this.stores) {
+			if (!this.stores.hasOwnProperty(name)) {
+				continue;
+			}
 			var store = this.stores[name];
-			store.button.on("selected", this.connect, this);
-			store.view.on("completed", _.bind(this.completed, this, store.button.name));
-			store.view.on("back", this.back, this);
-			store.button.on("ready", this.ready, this);
+				store.button.on("selected", this.connect, this);
+				store.view.on("completed", _.bind(this.completed, this, store.button.name));
+				store.view.on("back", this.back, this);
+				store.button.on("ready", this.ready, this);
 		} // for
 
 		this.canContinue();
@@ -255,21 +283,32 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		relevantMpGroups = _.sortBy(relevantMpGroups, function(g) { return g[sPriorityField]; });
 
-		var bFirst = true;
-
+		var noVat = !this.isProfile() && !this.isVatRegistered();
 		for (i = 0; i < relevantMpGroups.length; i++) {
 			grp = relevantMpGroups[i];
 
 			var sGroupClass = 'first';
 
-			if (bFirst)
-				bFirst = false;
-			else
+			if (i>2)
 				sGroupClass = 'following';
 
-			var grpui = this.storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').addClass(sGroupClass).appendTo(accountsList);
+			if(noVat && grp.Name == 'VAT') {
+				continue;
+			}
 
-			$('.group-title', grpui).text(grp.DisplayName);
+			var grpui = this.storeList.find('.marketplace-group-template')
+				.clone()
+				.removeClass('marketplace-group-template hide')
+				.addClass(sGroupClass)
+				.addClass('marketplace-group-' + grp.Name)
+				.appendTo(accountsList);
+
+			grpui.find('.group-title').text(grp.DisplayName);
+			grpui.find('.group-description').html(grp.Description);
+
+			if(noVat && grp.Name == 'Bank') {
+				grpui.find('.group-description').html('Securely link your business bank account or upload the last 12 months of bank statements.');
+			}
 			this.mpGroups[grp.Id].ui = grpui;
 		} // for
 
@@ -280,12 +319,22 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 			if (!shop.active)
 				continue;
+			if (noVat && (shop.button.shopClass == 'HMRC' || shop.button.shopClass == "HMRCUpload")) {
+				continue;
+			}
 
 			var oTarget = this.mpGroups[shop.groupid] && this.mpGroups[shop.groupid].ui ? this.mpGroups[shop.groupid].ui : accountsList;
 
 			var sBtnClass = this.isProfile() ? 'marketplace-button-profile' : this.extractBtnClass(oTarget);
+			var button = shop.button.render();
+			
+			if (button.hasOr) {
+				$('<div class="account-or">or</div>').appendTo(oTarget);
+			}
 
-			shop.button.render().$el.addClass('marketplace-button ' + sBtnClass).appendTo(oTarget);
+			button.$el.find('.marketplace-button').addClass(sBtnClass);
+			button.$el.appendTo(oTarget);
+
 		} // for
 
 		if (this.isOffline() && !this.isProfile())
@@ -312,11 +361,28 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		this.$el.find('.btn-showmore').hoverIntent(
 			function() { $('.onhover', this).animate({ top: 0,      opacity: 1, }); },
-			function() { $('.onhover', this).animate({ top: '60px', opacity: 0, }); }
+			function() { $('.onhover', this).animate({ top: '75px', opacity: 0, }); }
 		);
 
 		return this;
 	}, // render
+
+	setStore: function (name, description, group, active, priority, ribbon, mandatory, isUpload, isImage, hasOr) {
+		this.stores[name].active = active;
+		this.stores[name].priority = priority;
+		this.stores[name].ribbon = ribbon;
+		this.stores[name].button = new EzBob.StoreButtonView({
+			name: name,
+			mpAccounts: this.model,
+			description: description,
+			isUpload: isUpload,
+			isImage: isImage,
+			hasOr: hasOr
+	});
+		this.stores[name].button.ribbon = '';
+		this.stores[name].mandatory = mandatory;
+		this.stores[name].groupid = group;
+	},
 
 	renderQuickOfferForm: function() {
 		this.storeList.find('.immediate-offer .amount, .quick-offer-amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
@@ -374,58 +440,37 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		if (!this.quickOffer)
 			return false;
 
-		this.requestedAmount = this.fromCustomer('RequestedAmount');
+		this.requestedLoan = this.fromCustomer('RequestedLoan') || {};
 
-		if (!this.requestedAmount)
+		if (!this.requestedLoan || !this.requestedLoan.Amount)
 			return false;
 
 		return moment.utc().diff(moment.utc(this.quickOffer.ExpirationDate)) < 0;
 	}, // shouldShowQuickOffer
 
-	showOrRemove: function() {
+	showOrRemove: function () {
 		var sRemove, sShow;
 
-		var isOffline = this.isOffline();
 		var isProfile = this.isProfile();
 
 		$(this.storeList).find('.back-store').remove();
-		this.storeList.find('.marketplace-button.show-more').removeClass('hide').show();
+		this.storeList.find('.importantnumber').text('£150,000');
+		var showMoreButton = this.storeList.find('.btn-showmore');
 
-		if (isOffline) {
-			sShow = '.offline_entry_message';
-			sRemove = '.online_entry_message';
-
-			this.storeList.find('.importantnumber').text('£150,000');
-
-			if (isProfile) {
-				this.storeList.find('.marketplace-button.show-more').hide();
-				this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-			} else if (this.isWhiteLabel()) {
-				this.storeList.find('.marketplace-button.show-more').hide();
-			} else {
-				this.storeList.find('.btn-showmore').show();
-			}
-		}
-		else {
-			sShow = '.online_entry_message';
-			sRemove = '.offline_entry_message';
-
-			this.storeList.find('.marketplace-button.show-more').hide();
+		if (isProfile) {
+			showMoreButton.hide();
 			this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-		} // if
-
-		if (this.isWhiteLabel() && !this.isProfile()) {
-			this.storeList.find('.group-title').hide();
+		} else if (this.isWhiteLabel()) {
+			showMoreButton.hide();
+		} else {
+			showMoreButton.show();
+			showMoreButton.attr('data-current', 'more');
 		}
 		
-		this.storeList.find(sShow).show();
-		this.storeList.find(sRemove).remove();
-
 		if (isProfile) {
 			sShow = '.profile_message';
 			sRemove = '.wizard_message';
-		}
-		else {
+		} else {
 			sShow = '.wizard_message';
 			sRemove = '.profile_message';
 		} // if
@@ -437,38 +482,37 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	toggleShowMoreAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		if (oBtn.data('current') === 'more')
+		if (oBtn.attr('data-current') === 'more')
 			this.showMoreAccounts();
 		else
 			this.showLessAccounts();
 	}, // toggleShowMoreAccounts
 
-	tableToBlock: function() { return 'table-to-block-done'; }, // tableToBlock
-
 	showLessAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		oBtn.data('current', 'more');
-		oBtn.find('.caption').text('Show more account types');
-		oBtn.find('.rotate90').html('&laquo;');
-		oBtn.find('.onhover-cell').text('Show more data source connectors');
-
+		oBtn.attr('data-current', 'more');
+		oBtn.text('See more');
+		
 		this.storeList.find('.AddMoreRuleBottom').addClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
-		this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none').data(this.tableToBlock(), '');
+		this.storeList.find('.marketplace-button').not('.marketplace-button-less').css('display', 'none');
+
+		this.storeList.find('.link-accounts-optional').hide();
 	}, // showLessAccounts
 
 	showMoreAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		oBtn.data('current', 'less');
-		oBtn.find('.caption').text('Show less account types');
-		oBtn.find('.rotate90').html('&raquo;');
-		oBtn.find('.onhover-cell').text('Show less data source connectors');
+		oBtn.attr('data-current', 'less');
+		oBtn.text('See less');
 
 		this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
-		this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table').data(this.tableToBlock(), '');
+		this.storeList.find('.marketplace-button').css('display', 'inline-block');
+
+		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
+
 	}, // showMoreAccounts
 
 	canContinue: function() {
@@ -615,7 +659,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	shopConnected: function(name) {
 		var self = this;
 
-		this.model.get('customer').safeFetch().done(function() {
+		this.model.get('customer').safeFetch().done(function () {
 			self.stores[name].button.update(self.fromCustomer('mpAccounts'));
 			// self.updateEarnedPoints();
 			self.render();

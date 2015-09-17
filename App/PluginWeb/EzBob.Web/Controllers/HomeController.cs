@@ -44,7 +44,10 @@
 			string rterm = "",
 			string rcontent = "",
 			string rname = "",
-			string rdate = ""
+			string rdate = "",
+
+			string loan_amount = "",
+			string loan_period = ""
 		) {
 			ms_oLog.Debug("HomeController.Index(sourceref = {0}, sourceref_time = {1})", sourceref, sourceref_time);
 
@@ -84,6 +87,9 @@
 			AddCookie(rcontent, "rcontent", days: week, isDay: true);
 			AddCookie(rname, "rname", days: week, isDay: true);
 			AddCookie(rdate, "rdate", days: week, isDay: true);
+
+			AddCookie(loan_amount, "loan_amount", 6);
+			AddCookie(loan_period, "loan_period", 6);
 
 			ParseLeadData(lead_data);
 

@@ -54,6 +54,7 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			show: true,
 			width: width,
 			scrolling: false,
+			close: '<i class="pe-7s-close"></i>',
 			className: 'automation-popup',
 			onClosed: function() {
 				self.onClose();

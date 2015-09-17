@@ -19,13 +19,13 @@
 			};
 		} // ToModel
 
-		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace, YodleeBanksRepository yodleeBanksRepository) {
+		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace, YodleeBanksRepository yodleeBanksRepository = null) {
 			var securityInfo = Serialized.Deserialize<YodleeSecurityInfo>(marketplace.SecurityData);
 
-			var yodleeBank = yodleeBanksRepository.Search(securityInfo.CsId);
+			var yodleeBank = yodleeBanksRepository != null ? yodleeBanksRepository.Search(securityInfo.CsId) : null;
 			return new YodleeAccountModel {
-				bankId = yodleeBank.Id,
-				displayName = yodleeBank.Name
+				bankId = yodleeBank != null ? yodleeBank.Id : 0,
+				displayName = yodleeBank != null ? yodleeBank.Name : "Uploaded bank"
 			};
 		} // ToModel
 	} // class YodleeAccountModel

@@ -19,11 +19,11 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			'focus select': 'inputChanged',
 			'focusout select': 'inputChanged',
 			'keyup select': 'inputChanged',
-			'click select': 'inputChanged'
+			'click select': 'inputChanged',
+            'click .show-sliders': 'showSlidersClicked'
 		}); // events
 
 		this.readyToProceed = false;
-
 		this.constructor.__super__.initialize.call(this);
 	}, // initialize
 
@@ -36,11 +36,33 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		});
 
 		var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
-		EzBob.App.modal.show(consentAgreement);
+		EzBob.App.jqmodal.show(consentAgreement);
+	   // 	consentAgreement.$el.find('.consent-dialog-wrapper').jScrollPane();
+	
 		return false;
 	}, // showConsent
 
-	inputChanged: function(event) {
+	showSlidersClicked: function () {
+		var self = this;
+        this.slidersView = new EzBob.SlidersView({ model: this.slidersModel, el: $('.sliders-wrapper') });
+        this.slidersModel.fetch().done(function () {
+        	$('.inner').hide();
+	        self.slidersView.render();
+        });
+
+        this.slidersView.on('requested-amount-changed', function () {
+        	$('.inner').show();
+	        self.updateSliders();
+        });
+	},
+	updateSliders: function(){
+		var self = this;
+		this.slidersModel.fetch().done(function () {
+			self.$el.find('.requested-loan-amount').text(EzBob.formatPounds(self.slidersModel.get('Amount')));
+			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
+		});
+	},
+	inputChanged: function (event) {
 		var el = event ? $(event.currentTarget) : null;
 
 		if (el && el.attr('id') === 'MiddleInitial' && el.val() === '') {
@@ -116,7 +138,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		EzBob.UiAction.registerView(this.prevPersonAddressesView);
 	}, // prevModelChange
 
-	render: function() {
+	render: function () {
+		var requestedLoan = this.model.get('RequestedLoan') || {};
+		this.slidersModel = new EzBob.SlidersModel({ Amount: requestedLoan.Amount, Term: requestedLoan.Term });
+
 		UnBlockUi();
 		this.constructor.__super__.render.call(this);
 
@@ -124,7 +149,9 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		this.personalAddressView = new EzBob.AddressView({
 			model: this.model.get('PersonalAddress'),
 			name: 'PersonalAddress',
+			buttonTitle: 'Find my address',
 			max: 1,
+			tabindex: 10,
 			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		});
 		this.personalAddressView.render().$el.appendTo(oAddressContainer);
@@ -136,8 +163,11 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			name: 'PrevPersonAddresses',
 			max: 3,
 			title: 'Enter previous postcode',
-		    required: "empty",
-			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+			buttonTitle: 'Find my address',
+			required: "empty",
+			tabindex: 13,
+		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		    cls: 'prevPersonAddress canDisabledAddress'
 		});
 		this.prevPersonAddressesView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
@@ -148,7 +178,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		    name: 'OtherPropertiesAddresses',
 		    max: 3,
 		    required: "empty",
+		    buttonTitle: 'Find my address',
+		    tabindex: 16,
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		    cls: 'otherPropertiesAddress canDisabledAddress'
 		});
 		this.otherPropertiesAddressesView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.otherPropertiesAddressesView.$el, this.otherPropertiesAddressesView.model);
@@ -160,6 +193,12 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		this.$el.find('.addressCaption').hide();
 
+		var self = this;
+		this.slidersModel.fetch().done(function() {
+			self.$el.find('.requested-loan-amount').text(EzBob.formatPounds(self.slidersModel.get('Amount')));
+			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
+		});
+		
 		var personalInfo = this.model.get('CustomerPersonalInfo');
 		var predefinedPhone = undefined;
 		if (personalInfo != undefined) {

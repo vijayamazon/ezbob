@@ -22,7 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Ribbon { get; set; }
 		public virtual bool MandatoryOnline { get; set; }
 		public virtual bool MandatoryOffline { get; set; }
-
+		public virtual bool IsImage { get; set; }
 		public virtual IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
 			return new List<IAnalysisDataParameterInfo>();
 		}
@@ -60,6 +60,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.MandatoryOnline);
 			Map(x => x.MandatoryOffline);
 			Map(x => x.IsPaymentAccount);
+			Map(x => x.IsImage);
 			References(x => x.Group, "GroupId");
 
 			DiscriminateSubClassesOnColumn("").Formula(

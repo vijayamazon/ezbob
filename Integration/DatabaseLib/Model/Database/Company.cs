@@ -9,6 +9,7 @@
 		public virtual int Id { get; set; }
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
 		public virtual VatReporting? VatReporting { get; set; }
+		public virtual bool VatRegistered { get; set; }
 		public virtual string CompanyNumber { get; set; }
 		public virtual string CompanyName { get; set; }
 		public virtual int? TimeAtAddress { get; set; }
@@ -62,6 +63,7 @@
 			Id(x => x.Id);
 			Map(x => x.TypeOfBusiness).CustomType<TypeOfBusinessType>();
 			Map(x => x.VatReporting).CustomType<VatReportingType>();
+			Map(x => x.VatRegistered);
 			Map(x => x.CompanyNumber).Length(100);
 			Map(x => x.CompanyName).Length(300);
 			Map(x => x.TimeAtAddress);

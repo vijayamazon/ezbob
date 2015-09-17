@@ -2671,6 +2671,7 @@
         <xs:element minOccurs="0" name="fileName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="fileContent" nillable="true" type="xs:base64Binary" />
         <xs:element minOccurs="0" name="fileContentType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isBankStatement" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -82,8 +82,8 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 			if (!EzBob.isNullOrEmpty(data.errorMessage) || !EzBob.isNullOrEmpty(data.error)) {
 				EzBob.App.trigger('error', data.errorMessage || data.error);
 				self.ui.questionArea.hide();
-				self.ui.email.closest('div').show();
-				$('#captcha').show();
+				self.ui.email.closest('div.control-group').show();
+				$('.captcha').show();
 				self.focus = self.focusCaptcha;
 				self.ui.answer.val('');
 				self.ui.getQuestionBtn.addClass('disabled');
@@ -200,9 +200,9 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 			self.captcha.$el.closest('.control-group').insertAfter(self.ui.answer.closest('.control-group'));
 			self.ui.email.data('changed', false);
 			self.answerEnabled = false;
-			self.ui.email.closest('div').hide();
+			self.ui.email.closest('div.control-group').hide();
 
-			$('#captcha').hide();
+			$('.captcha').hide();
 
 			$('#Answer').focus();
 
