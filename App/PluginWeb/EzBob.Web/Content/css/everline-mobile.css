@@ -68,7 +68,12 @@
     /*
         wizard
     */
-
+    .security-icons .item {
+        float:left;
+    }
+    .security-icons .item .lock-icon {
+        left:0;
+    }
 	.account-or {
 		margin-top: 0;
 	}
