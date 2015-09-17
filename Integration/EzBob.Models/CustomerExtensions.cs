@@ -37,45 +37,5 @@
 						MpName = m.Marketplace.Name == "Pay Pal" ? "paypal" : m.Marketplace.Name
 					}).ToList();
 		}
-
-		public static DateTime GetMarketplaceOriginationDate(this Customer customer) {
-			DateTime now = DateTime.UtcNow;
-
-			if (customer == null)
-				return now;
-
-			IEnumerable<DateTime> dates = customer.CustomerMarketPlaces
-				.Where(m =>
-					!m.Disabled &&
-					m.Marketplace.InternalId != CompanyFiles && (
-						!m.Marketplace.IsPaymentAccount ||
-						m.Marketplace.InternalId == PayPal ||
-						m.Marketplace.InternalId == Hmrc
-					)
-				)
-				.Select(mp => {
-					IMarketplaceModelBuilder builder =
-						ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString()) ??
-						ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
-
-					builder.UpdateOriginationDate(mp);
-					return mp.OriginationDate ?? now;
-				});
-
-			try {
-				return dates.Min();
-			}
-			catch (ArgumentNullException) {
-				return now;
-			}
-			catch (InvalidOperationException) {
-				return now;
-			} // try
-		} // GetMarketplaceOriginationDate
-
-		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
-		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
-		private static readonly Guid CompanyFiles = new Guid("1C077670-6D6C-4CE9-BEBC-C1F9A9723908");
-
 	}
 }

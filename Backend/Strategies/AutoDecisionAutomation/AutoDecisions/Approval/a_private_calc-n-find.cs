@@ -10,7 +10,6 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
-	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
@@ -27,7 +26,11 @@
 				return -1;
 			} // if
 
-			DateTime oMpOriginationDate = this.customer.GetMarketplaceOriginationDate();
+			DateTime oMpOriginationDate = this.db.ExecuteScalar<DateTime?>(
+				"LoadCustomerFirstTransactionTime",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customer.Id)
+			) ?? Now;
 
 			this.log.Debug("CalculateSeniority: mp origination date is {0}.", oMpOriginationDate.MomentStr());
 
