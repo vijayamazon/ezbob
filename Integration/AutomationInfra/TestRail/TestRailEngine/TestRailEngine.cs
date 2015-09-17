@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Text.RegularExpressions;
     using Newtonsoft.Json.Linq;
     using TestRailCore;
     using TestRailModels.Automation;
@@ -165,6 +166,29 @@
 
         public static System.IO.Stream GetDependenciesReport() {
             return TestRailDependencies.GetDependenciesReport();
+        }
+
+        public void QuickTextReplaceAll(string fromStr, string toStr) {
+            foreach (var key in TestRailManager.CasesRepository.Keys) {
+                foreach (var caseItem in TestRailManager.CasesRepository[key]) {
+                    bool updateRequired = false;
+                    if (caseItem.CustomPreConds != null && caseItem.CustomPreConds.Contains(fromStr))
+                    {
+                        caseItem.CustomPreConds = caseItem.CustomPreConds.Replace(fromStr, toStr);
+                        updateRequired = true;
+                    }
+
+                    foreach (var stepItem in caseItem.Steps)
+                    {
+                        if (stepItem.Description != null && stepItem.Description.Contains(fromStr)) {
+                            stepItem.Description = stepItem.Description.Replace(fromStr, toStr);
+                            updateRequired = true;
+                        }
+                    }
+                    if (updateRequired)
+                        TestRailManager.Instance.UpdateCase(caseItem);
+                }
+            }
         }
     }
 }

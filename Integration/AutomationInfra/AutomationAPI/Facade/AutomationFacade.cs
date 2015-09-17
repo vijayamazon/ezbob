@@ -82,5 +82,9 @@
         public Stream GetDependenciesReport() {
             return TestRailEngine.GetDependenciesReport();
         }
+
+        public void QuickTextReplaceAll(string fromStr, string toStr) {
+            TestRailEngine.QuickTextReplaceAll(fromStr, toStr);
+        }
     }
 }
