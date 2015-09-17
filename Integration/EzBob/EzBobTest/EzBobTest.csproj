@@ -60,6 +60,7 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
@@ -130,6 +131,7 @@
     <Compile Include="ErrorRetryingFixture.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
+    <Compile Include="TestInvestorRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\App\EzReporting\Reports\Reports.csproj">
@@ -175,6 +177,10 @@
     <ProjectReference Include="..\..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
       <Name>RegistryScanner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\RulesEngine\RulesEngine.csproj">
+      <Project>{08A09446-762E-47D3-B2C1-5EB5084487C6}</Project>
+      <Name>RulesEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
       <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
