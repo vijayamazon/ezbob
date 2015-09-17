@@ -78,8 +78,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // submitForm
 
 	businessTypeSelected: function(evt) {
-		// this.$el.find('.after-business-type *').enable();
-
 		this.$el.find('.oobts').removeClass('oobts-selected');
 
 		this.$el.find('.oobts i').removeClass('fa-square-o fa-check-square-o').addClass('fa-square-o');
@@ -102,7 +100,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		} // if
 	}, // businessTypeSelected
 
-	inputChanged: function(evt) {
+	inputChanged: function (evt) {
+		this.setFieldStatusNotRequired(evt, 'promoCode');
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
 			this.typeOfBusinessChanged();
 
@@ -111,6 +110,13 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		$('.btn-continue').toggleClass('disabled', !enabled);
 		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
+
+	setFieldStatusNotRequired: function (evt, el) {
+		if (evt && evt.target.id === el && evt.target.value === '') {
+			var img = $(evt.target).closest('div').find('.field_status');
+			img.field_status('set', 'empty', 2);
+		} // if
+	},//setFieldStatusNotRequired
 
 	isEnabled: function() {
 		var enabled = this.validator.checkForm();
@@ -127,20 +133,16 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		var companyType = this.companyTypes[name];
 		if (!companyType) {
 			if (this.CompanyView) {
-				this.$el.find('.after-financial-details').html().insertAfter(this.$el.find('.industry-type-div'));
+				this.$el.find('.after-financial-details').insertAfter(this.$el.find('.after-industry-type'));
 				this.CompanyView.$el.remove();
 				this.CompanyView = null;
 			} // if
 
-			this.$el.find('.WebSiteTurnOver, .OverallTurnOver').addClass('hide');
-
 			return false;
 		} // if
 
-		this.$el.find('.WebSiteTurnOver, .OverallTurnOver').removeClass('hide');
-
 		if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
-			this.$el.find('.after-financial-details').insertAfter(this.$el.find('.industry-type-div'));
+			this.$el.find('.after-financial-details').insertAfter(this.$el.find('.after-industry-type'));
 			this.CompanyView.$el.remove();
 			this.CompanyView = null;
 		} // if
@@ -158,8 +160,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		}
 		else
 			this.CompanyView.$el.show();
-
-		// if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 
 		return false;
 	}, // typeOfBusinessChanged
@@ -190,7 +190,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
 		this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 
-	    // if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 	    if (this.model.get('IsAlibaba')) {
 	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();
 	    }
@@ -204,7 +203,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			TypeOfBusiness: { required: true },
 			IndustryType: { required: true },
 			DirectorCheck: { required: true },
-			VatReporting: { required: true },
 		};
 	}, // ownValidationRules
 
@@ -354,7 +352,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			data.push({ name: 'PartBusinessOnline', value: this.curOobts === 'online' });
 
 		if (this.$el.find('#DirectorCheck').is(":checked"))
-			_.find(data, function(d) { return d.name === 'DirectorCheck'; }).value = true;
+			_.find(data, function (d) { return d.name === 'DirectorCheck'; }).value = true;
 
 		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)

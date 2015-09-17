@@ -46,7 +46,24 @@ BEGIN
 	-- Customers who completed wizard during specified period of time.
 	--
 	-----------------------------------------------------------
-
+	;WITH
+	crl_id AS (
+		SELECT
+			CustomerId,
+			MAX(Id) AS Id
+		FROM
+			CustomerRequestedLoan
+		GROUP BY
+			CustomerId
+	),
+	crl AS (
+		SELECT
+			c.CustomerId,
+			c.Amount AS Amount
+		FROM
+			crl_id d
+			INNER JOIN CustomerRequestedLoan c ON d.Id = c.Id
+	)
 	SELECT
 		'CompleteApplication' AS RowType,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
@@ -57,7 +74,7 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN #Cr r ON c.Id = r.CustomerID
-		INNER JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
+		LEFT JOIN crl ON c.Id = crl.CustomerId
 	WHERE
 		@DateStart <= r.CrDate AND r.CrDate < @DateEnd
 	GROUP BY

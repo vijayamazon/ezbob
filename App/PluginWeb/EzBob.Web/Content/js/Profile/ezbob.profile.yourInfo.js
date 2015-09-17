@@ -24,49 +24,51 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 	},
 
 	setInputReadOnly: function (isReadOnly) {
-		var isOwnerOfOtherProperties, otherPropertiesModels;
 		this.$el.find('.personEditInput').attr('readonly', isReadOnly);
 		this.$el.find('#PersonalAddress .addAddressInput');
 		this.$el.find('#OtherPropertiesAddresses .addAddressInput');
-		isOwnerOfOtherProperties = this.model.get('PropertyStatus').IsOwnerOfOtherProperties;
-		otherPropertiesModels = this.model.get('OtherPropertiesAddresses');
+		var isOwnerOfOtherProperties = this.model.get('PropertyStatus').IsOwnerOfOtherProperties;
+		var otherPropertiesModels = this.model.get('OtherPropertiesAddresses') || [];
 		if (isReadOnly) {
 			this.$el.find('.submit-personal, .cancel,#PersonalAddress .addAddressInput,#PersonalAddress .addAddress,#PersonalAddress .removeAddress,#PersonalAddress .attardi-input,#PersonalAddress .required').hide();
-			if (!isOwnerOfOtherProperties || otherPropertiesModels === void 0 || otherPropertiesModels.length < 1) {
+			if (!isOwnerOfOtherProperties || otherPropertiesModels.length < 1) {
 				this.$el.find('#otherPropertiesDiv').hide();
 			} else {
 				this.$el.find('#otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').hide();
 			}
 			this.$el.find('textarea').removeClass('form_field').css('margin-top', 0);
-			return this.$el.find('.edit-personal').show();
+			this.$el.find('.edit-personal').show();
 		} else {
 			this.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show();
-			if (isOwnerOfOtherProperties && (otherPropertiesModels === void 0 || otherPropertiesModels.length < 3)) {
+			if (isOwnerOfOtherProperties && (otherPropertiesModels.length < 3)) {
 				this.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show();
 			}
-			return this.$el.find('.edit-personal').hide();
+			this.$el.find('.edit-personal').hide();
 		}
 	},
+
 	editPersonalViewShow: function () {
-		return this.setInputReadOnly(false);
+		this.setInputReadOnly(false);
+		return false;
 	},
 	onAddingDirector: function () {
 		return this.ui.form.hide();
 	},
 	onDirectorAdded: function () {
 		this.ui.form.hide();
-		return this.reload();
+		this.reload();
+		return false;
 	},
 	onBackFromDirector: function () {
 		return this.ui.form.show();
 	},
 	addressAreValid: function () {
-		var address, dir, directors, typeOfBusinessName, _i, _len;
+		var address, dir, directors, _i, _len;
 		address = this.model.get('PersonalAddress');
 		if (address.length < 1) {
 			return false;
 		}
-		typeOfBusinessName = this.model.get('BusinessTypeReduced');
+		var typeOfBusinessName = this.model.get('BusinessTypeReduced');
 		if (typeOfBusinessName === 'Limited') {
 			address = this.model.get('CompanyAddress');
 			if (address.length < 1) {
@@ -90,32 +92,32 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 		return true;
 	},
 	directorModelChange: function (newModel) {
-		var directors;
-		directors = this.model.get(this.model.get('BusinessTypeReduced') + 'Info').Directors;
+		var directors = this.model.get(this.model.get('BusinessTypeReduced') + 'Info').Directors;
 		_.each(directors, function (dir) {
 			if (dir.Id === newModel.get('Id')) {
 				return dir.DirectorAddress = newModel.get('DirectorAddress').models;
 			}
+			return null;
 		});
 		return this.addressModelChange();
 	},
 	addressModelChange: function () {
-		var directors, self, typeOfBusinessName;
 		this.inputChanged();
 		this.setInvalidAddressLabel(this.model.get('PersonalAddress'), '#PersonalAddress');
-		typeOfBusinessName = this.model.get('BusinessTypeReduced');
+		var typeOfBusinessName = this.model.get('BusinessTypeReduced');
 		if (typeOfBusinessName === 'Limited') {
 			this.setInvalidAddressLabel(this.model.get('CompanyAddress'), '#LimitedCompanyAddress');
 		} else if (typeOfBusinessName === 'NonLimited') {
 			this.setInvalidAddressLabel(this.model.get('CompanyAddress'), '#NonLimitedAddress');
 		}
-		self = this;
+		var self = this;
 		if (this.model.get(typeOfBusinessName + 'Info')) {
-			directors = this.model.get(typeOfBusinessName + 'Info').Directors;
+			var directors = this.model.get(typeOfBusinessName + 'Info').Directors;
 			return _.each(directors, function (dir) {
 				return self.setInvalidAddressLabel(dir.DirectorAddress, '.directorAddress' + dir.Id + ' #DirectorAddress', dir.Id);
 			});
 		}
+		return false;
 	},
 	setInvalidAddressLabel: function (address, element, dirId) {
 		if (address.length < 1) {
@@ -125,24 +127,23 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 		}
 	},
 	saveData: function () {
-		var action, data, directors, request, typeOfBusinessName;
 		if (!this.validator.form() || !this.addressAreValid()) {
 			EzBob.App.trigger('error', 'You must fill in all of the fields.');
 			return false;
 		}
-		typeOfBusinessName = this.model.get('BusinessTypeReduced') + 'Info';
+		var typeOfBusinessName = this.model.get('BusinessTypeReduced') + 'Info';
 		if (this.model.get(typeOfBusinessName)) {
-			directors = this.model.get(typeOfBusinessName).Directors;
+			var directors = this.model.get(typeOfBusinessName).Directors;
 			_.each(directors, function (val) {
 				return _.each(val.DirectorAddress, function (add) {
 					return add['DirectorId'] = val.Id;
 				});
 			});
 		}
-		data = this.ui.form.serializeArray();
-		action = this.ui.form.attr('action');
+		var data = this.ui.form.serializeArray();
+		var action = this.ui.form.attr('action');
 		var self = this;
-		request = $.post(action, data);
+		var request = $.post(action, data);
 		request.done(function () {
 			self.reload();
 			EzBob.App.trigger('info', 'Your information updated successfully');
@@ -154,6 +155,7 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 
 		return false;
 	},
+
 	reload: function () {
 		var self = this;
 		this.model.fetch().done(function () {
@@ -161,14 +163,14 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 			scrollTop();
 			self.setInputReadOnly(true);
 		});
+		return false;
 	},
 	regions: {
 		personal: '.personal-info',
 		company: '.company-info'
 	},
 	inputChanged: function () {
-		var isInvalid;
-		isInvalid = !this.validator.form() || !this.addressAreValid();
+		var isInvalid = !this.validator.form() || !this.addressAreValid();
 		return this.$el.find('.submit-personal').toggleClass('disabled', isInvalid).prop('disabled', isInvalid);
 	},
 	onRender: function () {
@@ -219,8 +221,7 @@ EzBob.Profile.PersonalInfoView = Backbone.Marionette.Layout.extend({
 		otherPropertiesAddresses: '#OtherPropertiesAddresses'
 	},
 	onRender: function () {
-		var address, otherPropertiesAddressesView;
-		address = new EzBob.AddressView({
+		var address = new EzBob.AddressView({
 			model: this.model.get('PersonalAddress'),
 			name: 'PersonalAddress',
 			max: 10,
@@ -228,7 +229,7 @@ EzBob.Profile.PersonalInfoView = Backbone.Marionette.Layout.extend({
 			uiEventControlIdPrefix: this.personAddress.getEl(this.personAddress.el).attr('data-ui-event-control-id-prefix')
 		});
 		this.personAddress.show(address);
-		otherPropertiesAddressesView = new EzBob.AddressView({
+		var otherPropertiesAddressesView = new EzBob.AddressView({
 			model: this.model.get('OtherPropertiesAddresses'),
 			name: 'OtherPropertiesAddresses',
 			max: 3,
@@ -255,8 +256,7 @@ EzBob.Profile.NonLimitedInfoView = Backbone.Marionette.Layout.extend({
 		"click .add-director": "addDirectorClicked"
 	},
 	onRender: function () {
-		var address, directorView, directors;
-		address = new EzBob.AddressView({
+		var address = new EzBob.AddressView({
 			model: this.model.get('CompanyAddress'),
 			name: 'NonLimitedCompanyAddress',
 			max: 10,
@@ -264,9 +264,9 @@ EzBob.Profile.NonLimitedInfoView = Backbone.Marionette.Layout.extend({
 			uiEventControlIdPrefix: this.nonlimitedAddress.getEl(this.nonlimitedAddress.el).attr('data-ui-event-control-id-prefix')
 		});
 		this.nonlimitedAddress.show(address);
-		directors = this.model.get('CompanyInfo').Directors;
-		if (directors !== null && directors.length !== 0) {
-			directorView = new EzBob.Profile.DirectorCompositeView({
+		var directors = this.model.get('CompanyInfo').Directors || [];
+		if (directors.length !== 0) {
+			var directorView = new EzBob.Profile.DirectorCompositeView({
 				collection: new EzBob.Directors(directors)
 			});
 			this.director.show(directorView);
@@ -279,13 +279,12 @@ EzBob.Profile.NonLimitedInfoView = Backbone.Marionette.Layout.extend({
 		return this;
 	},
 	addDirectorClicked: function (event) {
-		var customerInfo, director, directorEl;
 		event.stopPropagation();
 		event.preventDefault();
 		this.parentView.onAddingDirector();
-		director = new EzBob.DirectorModel();
-		directorEl = $('.add-director-container');
-		customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
+		var director = new EzBob.DirectorModel();
+		var directorEl = $('.add-director-container');
+		var customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
 			PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode')
 		}, {
 			Directors: this.model.get('CompanyInfo').Directors
@@ -343,8 +342,8 @@ EzBob.Profile.LimitedInfoView = Backbone.Marionette.Layout.extend({
 		"click .add-director": "addDirectorClicked"
 	},
 	onRender: function () {
-		var address, directorView, directors;
-		address = new EzBob.AddressView({
+		var directorView;
+		var address = new EzBob.AddressView({
 			model: this.model.get('CompanyAddress'),
 			name: 'LimitedCompanyAddress',
 			max: 10,
@@ -352,8 +351,8 @@ EzBob.Profile.LimitedInfoView = Backbone.Marionette.Layout.extend({
 			uiEventControlIdPrefix: this.limitedAddress.getEl(this.limitedAddress.el).attr('data-ui-event-control-id-prefix')
 		});
 		this.limitedAddress.show(address);
-		directors = this.model.get('CompanyInfo').Directors;
-		if (directors !== null && directors.length !== 0) {
+		var directors = this.model.get('CompanyInfo').Directors || [];
+		if (directors.length !== 0) {
 			directors = _.filter(directors, function (director) {
 				return !director.IsExperianDirector && !director.IsExperianShareholder;
 			});
@@ -368,13 +367,12 @@ EzBob.Profile.LimitedInfoView = Backbone.Marionette.Layout.extend({
 		return this;
 	},
 	addDirectorClicked: function (event) {
-		var customerInfo, director, directorEl;
 		event.stopPropagation();
 		event.preventDefault();
 		this.parentView.onAddingDirector();
-		director = new EzBob.DirectorModel();
-		directorEl = $('.add-director-container');
-		customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
+		var director = new EzBob.DirectorModel();
+		var directorEl = $('.add-director-container');
+		var customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
 			PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode')
 		}, {
 			Directors: this.model.get('CompanyInfo').Directors
@@ -427,8 +425,7 @@ EzBob.Profile.DirectorInfoView = Backbone.Marionette.Layout.extend({
 		return EzBob.App.trigger('dash-director-address-change', this.model);
 	},
 	onRender: function () {
-		var address;
-		address = new EzBob.AddressView({
+		var address = new EzBob.AddressView({
 			model: this.model.get('DirectorAddress'),
 			name: "DirectorAddress[" + (this.model.get('Position')) + "]",
 			max: 10,

@@ -1,6 +1,10 @@
 ﻿@model dynamic
+@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
 @helper AmazonInfo()
 {
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	
     <div class="amazon-instructions" style="padding-top: 1px;">
         <div class="amazon-instructions-title">
             <h2>Add Amazon Shop
@@ -40,19 +44,62 @@
 
                 <li>Copy and Paste from Amazon Services:
                     <form class = "AmazonForm">
-                        @EzForm.InputText("amazonMerchantId", "Seller ID", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 30, uiEventControlID: "link-account:amazon_merchant_id")
-                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_marketplace_id")
-                        @EzForm.InputText("amazonMWSAccessToken", "MWS Authorisation Token", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 50, uiEventControlID: "link-account:amazon_token")
+                        @EzForm.InputTextWizard(
+							new EzInputBuilder(
+								"amazonMerchantId", 
+								"Seller ID", 
+								cls: "form_field amazon_field", 
+								isDisabled: true, 
+								isRequired: true, 
+								statusIcon: true, 
+								maxLength: 30, 
+								uiEventControlID: "link-account:amazon_merchant_id"), 
+							origin: origin)
+						@EzForm.InputTextWizard(
+							new EzInputBuilder(
+								"amazonMarketplaceId", 
+								"Marketplace ID", 
+								cls: "form_field amazon_field", 
+								isDisabled: true, 
+								isRequired: true, 
+								statusIcon: true, 
+								maxLength: 15,
+								uiEventControlID: "link-account:amazon_marketplace_id"), 
+							origin: origin)
+                        @EzForm.InputTextWizard(
+							new EzInputBuilder(
+								"amazonMWSAccessToken", 
+								"MWS Authorisation Token", 
+								cls: "form_field amazon_field", 
+								isDisabled: true, 
+								isRequired: true, 
+								statusIcon: true, 
+								maxLength: 50, 
+								uiEventControlID: "link-account:amazon_token"), 
+							origin: origin)
                     </form>
                 </li>
             </ol>
         </div>
-        <div class="control-group clearfix form_buttons_container">
-            <div class="attardi-button">
-                <a href="#Connect/amazon" class="connect-amazon button btn-green disabled" ui-event-control-id="link-account:amazon_connect">Continue</a>
-                <a href="#" class="back button btn-grey" ui-event-control-id="link-account:amazon_back">Back</a>
-            </div>
-        </div>
+
+	    @EzForm.WizardButton(
+			new List<EzButtonModel>{
+			new EzButtonModel(
+				"amazon_continue_button", 
+				"Link account", 
+				cls: "connect-amazon button btn-green disabled ev-btn-org", 
+				uiEventControlID: "link-account:amazon_connect", 
+				buttonType: EzButtonType.link, 
+				href: "#Connect/amazon"), 
+			new EzButtonModel(
+				"amazon_back_button", 
+				"Cancel", 
+				cls: "back button btn-grey clean-btn", 
+				uiEventControlID: "link-account:amazon_back", 
+				buttonType: EzButtonType.link, 
+				href: "#")
+			}, 
+			origin: origin)
     </div>
 }
 

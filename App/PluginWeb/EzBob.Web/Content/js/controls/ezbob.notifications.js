@@ -9,24 +9,25 @@ EzBob.NotificationsView = Backbone.View.extend({
 	},
 
 	info: function(msg) {
-		this.makeAlert(msg, 'notification_green effect_fadein');
+		this.makeAlert(msg, 'notification_green effect_fadein', 'pe-7s-check');
 	},
 
 	error: function(msg) {
-		this.makeAlert(msg, 'notification_red effect_fadein');
+		this.makeAlert(msg, 'notification_red effect_fadein', 'pe-7s-attention');
 	},
 
 	warning: function(msg) {
-		this.makeAlert(msg, 'notification_yellow effect_fadein');
+		this.makeAlert(msg, 'notification_yellow effect_fadein', 'pe-7s-info');
 	},
 
-	makeAlert: function(msg, alertClass) {
+	makeAlert: function(msg, alertClass, icon) {
 		if (!msg) return;
-		var alert = $('<div class="' + alertClass + '"> ' + msg + ' </div>');
+		var alert = $('<div class="' + alertClass + '"><i class="'+ icon +'" /><span class="alert-msg" >' + msg + '</span> </div>');
 		this.scrollTop();
 		this.$el.html(alert);
 		alert.alert();
-		this.$el.notification();
+		var closeText = EzBob.Config.Origin == 'everline' ? 'x' : '<i class="pe-7s-close-circle"></i>';
+		this.$el.notification(closeText);
 	},
 
 	render: function() {

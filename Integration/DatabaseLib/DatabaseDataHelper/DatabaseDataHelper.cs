@@ -94,15 +94,14 @@
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
-			_yodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
+			this.yodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
 			_loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
 			_wizardStepSequenceRepository = new WizardStepSequenceRepository(session);
 
-			_yodleeBanksRepository = new YodleeBanksRepository(session);
-			m_sYodleeBanks = null;
+			this.yodleeBanksRepository = new YodleeBanksRepository(session);
 
 			_wizardStepRepository = new WizardStepRepository(session);
 			_trustPilotStatusRepository = new TrustPilotStatusRepository(session);

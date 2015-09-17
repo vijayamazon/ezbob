@@ -56,7 +56,6 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
 	renderDirector: function() {
 		var that = this;
-
 		this.directorArea.html(this.directorTemplate({ preffix: this.preffix, directors: this.model.toJSON() }));
 		this.directorArea.find('.ezDateTime').splittedDateTime();
 
@@ -75,10 +74,12 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			var addressElem = that.preffix + 'Address' + i;
 			var oAddressContainer = that.directorArea.find('#' + addressElem);
 			var name = that.preffix + '[' + i + '].' + that.name;
+
 			var addressView = new EzBob.AddressView({
 				model: val.get('Address'),
 				name: name,
 				max: 1,
+				buttonTitle: 'Find address',
 				uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 			});
 			var dateOfBirthValName = that.preffix + '[' + i + '].' + 'DateOfBirth';
@@ -89,6 +90,10 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
 			addressView.render().$el.appendTo(oAddressContainer);
 			SetDefaultDate(dateOfBirthValName, val.get('DateOfBirth'));
+
+			var gender = that.preffix + '[' + i + '].' + 'FormRadioCtrl_' + val.get('Gender');
+			that.$el.find('[id="' + gender + '"]').attr('checked', 'checked').change().blur();
+
 			EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model);
 
 			that.$el.find('.phonenumber').numericOnly(11);

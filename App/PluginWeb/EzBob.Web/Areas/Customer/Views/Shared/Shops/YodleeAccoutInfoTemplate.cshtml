@@ -1,56 +1,82 @@
-﻿@model dynamic
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using EzBob.CommonLib
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib
+@using EZBob.DatabaseLib.Model.Marketplaces.Yodlee
+@using StructureMap
+@model dynamic
+
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+	YodleeBanksModel banks = oDBHelper.GetYodleeBanks();
+
+	var ddlBanks = banks.DropDownBanks
+		.Select(x => new Tuple<string, string>(x.csId.ToString(), x.displayName))
+		.ToList();
+}
+
 <script id="YodleeAccoutInfoTemplate" type="text/template">
     <div class="row-fluid">
         <div class="wizard-top-notification">
             <h2 class="form_start">Select your bank and account type</h2>
-            You will be directed to a 3rd party site (Yodlee.com), in which you can grant read only access to your online bank account.
-            This will allow @ViewBag.CustomerOrigin.Name to read your bank account transaction and evaluate your business.
+			<p>
+				You will be directed to a 3rd party site (Yodlee.com), in which you can grant read only access to your online bank account.
+				This will allow @ViewBag.CustomerOrigin.Name to read your bank account transaction and evaluate your business.
+			</p>
         </div>
         <form id="yodleeAccount">
-            <div class="control-group">
-                <% if (YodleeBanks) {%>
-                <div class="form_field_container BankContainer">
-                    <% _.each(YodleeBanks.ImageBanks, function (bank, i) { %>
-                    <div class="marketplace-button-empty marketplace-button float_left" style="margin-bottom: 25px;">
-                        <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
-                        <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
-                            <span class="<%- bank.parentBankName %> on" ui-event-control-id="link-account:yodlee_choose_<%- bank.parentBankName %>"></span>
-                        </a>
-                    </div>
-                    <%});%>
-                </div>
-            </div>
-            <div class="control-group">
-                <h3 id="subTypeHeader" class="hide">Select account type:</h3>
-                <% _.each(YodleeBanks.ImageBanks, function (bank, i) {%>
-                <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3" ui-event-control-id="link-account:yodlee_account_type">
-                    <% _.each(bank.subBanks, function (sub, i) { %>
-                    <option value="<%- sub.csId %>"><%- sub.displayName %></option>
-                    <%});%>
-                </select>
-                <%});%>
-            </div>
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Other banks</span>
-                        <select id="OtherYodleeBanks" class="form_field selectheight" ui-event-control-id="link-account:yodlee_chooser">
-                            <option></option>
-                            <% _.each(YodleeBanks.DropDownBanks, function (bank, i) { %>
-                            <option value="<%-bank.csId%>"><%- bank.displayName %></option>
-                            <%});%>
-                        </select>
-                    </label>
-                </div>
-            </div>
+			<div class="control-group">
 
-            <%}/*if*/%>
-            <div class="form_buttons_container">
-                <div class="attardi-button">
-                    <a href="#yodlee_help" class="button btn-green disabled yodlee_help" id="yodleeLinkAccountBtn" ui-event-control-id="link-account:yodlee_connect">Link account</a>
-                    <a href="#" class="back button btn-grey" ui-event-control-id="link-account:yodlee_back">Back</a>
-                </div>
-            </div>
+				<div class="form_field_container BankContainer">
+					@foreach (var bank in banks.ImageBanks) {
+						<div class="marketplace-button-empty marketplace-button float_left" style="margin-bottom: 25px;">
+							<input type="radio" name="Bank" value="@bank.parentBankName" id="Bank_@bank.parentBankName" class="hide" />
+							<a class="radio-fx @bank.parentBankName" href="#" id="@bank.parentBankName">
+								<span class="@bank.parentBankName on" ui-event-control-id="link-account:yodlee_choose_@bank.parentBankName"></span>
+							</a>
+						</div>
+					}
+				</div>
+			</div>
+			<div class="control-group">
+				<h3 id="subTypeHeader" class="hide">Select account type:</h3>
+				@foreach (var bank in banks.ImageBanks) {
+						string cls = bank.parentBankName + "Container";
+					<select class="form_field_container hide @cls SubBank" size="3" ui-event-control-id="link-account:yodlee_account_type">
+					@foreach (var sub in bank.subBanks) {
+						<option value="@sub.csId">@sub.displayName</option>
+					}
+					</select>
+				}
+			</div>
+				
+			@EzForm.SelectWizard(new EzSelectModel("OtherYodleeBanks", "Other banks",
+				ddlBanks,
+				cls: "form_field",
+				isRequired: false,
+				statusIcon: false,
+				uiEventControlID: "link-account:yodlee_chooser"),
+				origin: origin)
+			
+			@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					"yodleeLinkAccountBtn",
+					"Link account",
+					cls: "button btn-green disabled yodlee_help ev-btn-org",
+					uiEventControlID: "link-account:yodlee_connect",
+					buttonType: EzButtonType.button),
+				new EzButtonModel(
+					"yodlee_back_button",
+					"Cancel",
+					cls: "back button btn-grey clean-btn",
+					uiEventControlID: "link-account:yodlee_back",
+					buttonType: EzButtonType.link,
+					href:"#")
+			}, origin: origin)
 
             <div class="hide">
                 <div id="yodlee_help" class="help_window">
@@ -60,12 +86,19 @@
                         <br />
                         You will be redirected, this will take around 30 seconds.
                     </p>
-                    @*<div class="help_image help_<%- shopClass %>"></div>*@
-                    <br>
-                    <div class="alignright attardi-button" style="padding: 0 10px 0 0;">
-                        <a href="#" target="_blank" class="button btn-green pull-right" id="yodleeContinueBtn" onclick="$.colorbox.close();" ui-event-control-id="link-account:yodlee_continue_to_link">Continue</a>
-                    </div>
-                    <div class="clear"></div>
+					@EzForm.WizardButton(
+						new List<EzButtonModel>{
+							new EzButtonModel(
+								"yodleeContinueBtn",
+								"Continue",
+								cls: "button btn-green ev-btn-org",
+								uiEventControlID: "link-account:yodlee_continue_to_link",
+								buttonType: EzButtonType.link,
+								href:"#yodlee_help",
+								target: "_blank",
+								onClick:"$.colorbox.close();")
+							}, origin: origin)
+                    
                     <hr>
                     <div class="help_security"></div>
                 </div>

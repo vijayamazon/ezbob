@@ -17,38 +17,42 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			maxCash: this.customer.get("CreditSum"),
 			OfferStart: this.customer.get("OfferStart"),
 			loanType: this.customer.get("LastApprovedLoanTypeID"),
-			repaymentPeriod: this.customer.get("LastApprovedRepaymentPeriod"),
+			repaymentPeriod: this.customer.get("LastRepaymentPeriod"),
+			approvedRepaymentPeriod: this.customer.get("LastApprovedRepaymentPeriod"),
 			isLoanSourceEU: this.customer.get("IsLastApprovedLoanSourceEu"),
 			isLoanSourceCOSME: this.customer.get("IsLastApprovedLoanSourceCOSME"),
-			isCurrentCashRequestFromQuickOffer: this.customer.get("IsCurrentCashRequestFromQuickOffer")
+			isCurrentCashRequestFromQuickOffer: this.customer.get("IsCurrentCashRequestFromQuickOffer"),
+			isCustomerRepaymentPeriodSelectionAllowed: this.customer.get('IsCustomerRepaymentPeriodSelectionAllowed'),
+			isLoanTypeSelectionAllowed: this.customer.get('IsLoanTypeSelectionAllowed')
 		});
 		this.states = {
-			apply: this.createApplyForLoanView,
-			bank: this.createAddBankAccountView
+			apply: { view: this.createApplyForLoanView, step: 0 },
+			bank: { view: this.createAddBankAccountView, step: 1 }
 		};
 		return this.model.on("change", this.render, this);
 	},
 	onRender: function () {
-		var region, view;
-		view = this.states[this.model.get("state")](this);
-		region = new Backbone.Marionette.Region({
+		var view = this.states[this.model.get("state")].view(this);
+		var region = new Backbone.Marionette.Region({
 			el: this.$el.find('.apply-for-loan-div')
 		});
 		region.show(view);
+
+		var steps = _.template($('#steps-dashboard-template').html());
+		$('.dashboard-steps-container').html(steps({ current: this.states[this.model.get("state")].step }));
 		return false;
 	},
 	createApplyForLoanView: function (_this) {
-		var view;
-		view = new EzBob.Profile.ApplyForLoanView({
+		var view = new EzBob.Profile.ApplyForLoanView({
 			model: _this.applyForLoanViewModel,
 			customer: _this.customer
 		});
 		view.on("submit", _this.amountSelected, _this);
+		view.on("back", _this.backClicked, _this);
 		return view;
 	},
 	createAddBankAccountView: function (_this) {
-		var view;
-		view = new EzBob.BankAccountInfoView({
+		var view = new EzBob.BankAccountInfoView({
 			model: _this.customer
 		});
 		view.on("back", function () {
@@ -59,7 +63,10 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		});
 		return view;
 	},
-	
+	backClicked: function() {
+		$('.wizard-steps-wrapper').remove();
+	},
+
 	amountSelected: function () {
 		var data, enabled, form, pi, xhr;
 		form = this.$el.find('form');
@@ -125,7 +132,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 					_this.model.set("state", "apply");
 				};
 			})(this));
-			EzBob.App.modal.show(view);
+			EzBob.App.jqmodal.show(view);
 			return false;
 		} else {
 			this._submit();

@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
 	using Ezbob.Utils.Extensions;
@@ -120,6 +119,7 @@
 		public decimal? OverallTurnOver{ get; set; }
 		public string IndustryType { get; set; }
 		public string VatReporting { get; set; }
+		public bool VatRegistered { get; set; }
 		public bool PartBusinessOnline { get; set; }
 		public bool DirectorCheck { get; set; }
 
@@ -584,6 +584,8 @@
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
 		public virtual IList<LandRegistry> LandRegistries { get; set; }
+
+		public virtual IList<MP_CompanyFilesMetaData> CompanyFiles { get; set; }
 
 		public virtual string FirstVisitTime { get; set; }
 

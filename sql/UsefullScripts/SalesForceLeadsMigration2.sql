@@ -1,5 +1,22 @@
 -- customers
-
+;WITH
+	crl_id AS (
+		SELECT
+			CustomerId,
+			MAX(Id) AS Id
+		FROM
+			CustomerRequestedLoan
+		GROUP BY
+			CustomerId
+	),
+	crl AS (
+		SELECT
+			c.CustomerId,
+			c.Amount AS Amount
+		FROM
+			crl_id d
+			INNER JOIN CustomerRequestedLoan c ON d.Id = c.Id
+	)
 SELECT
 isnull(c.Surname, 'NoName') AS 'LASTNAME',
 c.FirstName AS 'FIRSTNAME',
@@ -51,7 +68,7 @@ isnull(c.IndustryType, '') AS 'Industry',
 c.IsTest AS 'IS_TEST__C'
 FROM Customer c
 LEFT JOIN CustomerAddress ca ON c.Id = ca.CustomerId AND ca.addressType=1
-LEFT JOIN CustomerRequestedLoan crl ON crl.CustomerId = c.Id
+LEFT JOIN crl ON crl.CustomerId = c.Id
 LEFT JOIN Company co ON co.Id = ca.CompanyId
 LEFT JOIN CompanyEmployeeCount cec ON cec.CompanyId = co.Id
 LEFT JOIN CampaignSourceRef cs ON cs.CustomerId = c.Id

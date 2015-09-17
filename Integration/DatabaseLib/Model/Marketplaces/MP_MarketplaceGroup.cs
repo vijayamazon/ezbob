@@ -11,6 +11,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces {
 		public virtual int PriorityOnline { get; set; }
 		public virtual int PriorityOffline { get; set; }
 		public virtual string DisplayName { get; set; }
+		public virtual string Description { get; set; }
 	} // class MP_MarketplaceGroup
 
 	public class MP_MarketplaceGroupMap : ClassMap<MP_MarketplaceGroup> {
@@ -26,7 +27,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces {
 			Map(x => x.ActiveDashboardOffline);
 			Map(x => x.PriorityOnline);
 			Map(x => x.PriorityOffline);
-			Map(x => x.DisplayName).Column("DisplayName").Not.Nullable().Length(255);
+			Map(x => x.DisplayName).Not.Nullable().Length(255);
+			Map(x => x.Description).Length(2000);
 		} // constructor
 	} // class MP_MarketplaceGroupMap
 } // namespace

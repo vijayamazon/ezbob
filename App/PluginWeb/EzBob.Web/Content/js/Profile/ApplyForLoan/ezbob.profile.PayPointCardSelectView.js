@@ -88,4 +88,15 @@ EzBob.Profile.PayPointCardSelectView = Backbone.Marionette.ItemView.extend({
 
 		return false;
 	}, // cancel
+
+	jqoptions: function () {
+		return {
+			width: '560px',
+			maxWidth: '100%',
+			modal: true,
+			title: 'Select Card',
+			resizable: false,
+			draggable: false
+		};
+	}, // jqoptions
 }); // EzBob.Profile.PayPointCardSelectView

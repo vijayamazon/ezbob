@@ -1,230 +1,268 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 <script id="loan-details-template" type="text/template">
-    <% var rollovers = rollovers || []; %>
+	<% 
+		var rollovers = rollovers || [];
+		var payButtonName = "Make Payment";
 
-    <h1 style="margin-bottom: 30px;">Loan Details</h1>
-    <div style="padding-left: 0; padding-bottom: 30px;">
-        <div class="dashboard-frame simple-well" style="height: auto;"><%
-            var address,
-                type = customer.BusinessTypeReduced,
-                companyName = '',
-                isLate = loan.Status == 'Late';
-            switch(type){
-            case 'Personal':
-                address = customer.PersonalAddress.toJSON()[0];
-                break;
+		var hasRolover = rollovers && rollovers.length > 0;
 
-            case 'Limited':
-                address = customer.CompanyAddress.toJSON()[0];
-                companyName = 'LIMITED company name<br />'; // customer.LimitedInfo.LimitedCompanyName || '' + "<br />";
-                break;
+		if (hasRolover)
+			payButtonName = "Pay Roll Over";
+		else if ((loan.Status == 'Live') && loan.IsEarly)
+			payButtonName = "Pay Early";
+		else if ((isLate && !hasRolover) || !loan.IsEarly)
+			payButtonName = "Pay Now";
+	 %>
 
-            case 'NonLimited':
-                address =  customer.CompanyAddress.toJSON()[0];
-                companyName = 'NON LIMITED company name<br />'; // customer.NonLimitedInfo.NonLimitedCompanyName  || '' + "<br />";
-                break;
-            }
-            %><table style="width: 100%;">
-                <tr>
-                    <td class="caption">Date:</td>
-                    <td class="value"><%- EzBob.formatDateHumanFull(loan.Date) %> </td>
-                </tr>
-                <tr>
-                    <td class="caption">Name:</td>
-                    <td class="value"><%- customer.CustomerPersonalInfo.FirstName %> <%- customer.CustomerPersonalInfo.Surname %></td>
-                </tr>
-                <%if(address) {%>
-                <tr>
-                    <td class="caption">Address:</td>
-                    <td class="value"><%- address.Line1 || '' %>
-                            <%- address.Line2 || '' %>
-                            <%- address.Town || '' %>
-                            <%- address.Postcode || '' %>
-                    </td>
-                </tr>
-                <%}%>
-                <tr>
-                    <td class="caption">Loan Reference#:</td>
-                    <td class="value"><%- loan.RefNumber || '' %></td>
-                </tr>
-            </table>
-        </div>
-    </div>
+	<h2>Loan Details</h2>
+	<div style="padding-left: 0; padding-bottom: 30px;">
+		<div class="dashboard-frame simple-well loan-details-well">
+			<%
+			var address,
+			type = customer.BusinessTypeReduced,
+			companyName = '',
+			isLate = loan.Status == 'Late';
+			switch(type){
+			case 'Personal':
+			address = customer.PersonalAddress.toJSON()[0];
+			break;
 
-    <h2 style="margin-bottom: 10px;">Loan Summary</h2>
-    <div class="simple-well" style="margin-bottom: 30px;">
-        <div class="row-fluid form-horizontal loan-details">
-            <div class="span4">
-                <dl>
-                    <dt>Loan Amount:</dt>
-                    <dd><%-EzBob.formatPoundsWidhDash(loan.LoanAmount)%></dd>
+			case 'Limited':
+			address = customer.CompanyAddress.toJSON()[0];
+			companyName = 'LIMITED company name<br />'; // customer.LimitedInfo.LimitedCompanyName || '' + "<br />";
+			break;
 
-                    <dt>Origination Date:</dt>
-                    <dd><%- EzBob.formatDate(loan.Date) %> </dd>
+			case 'NonLimited':
+			address =  customer.CompanyAddress.toJSON()[0];
+			companyName = 'NON LIMITED company name<br />'; // customer.NonLimitedInfo.NonLimitedCompanyName  || '' + "<br />";
+			break;
+			}
+			%><table style="width: 100%;">
+				<tr>
+					<td class="caption">Date:</td>
+					<td class="value"><%- EzBob.formatDateHumanFullUK(loan.Date) %> </td>
+				</tr>
+				<tr>
+					<td class="caption">Name:</td>
+					<td class="value"><%- customer.CustomerPersonalInfo.FirstName %> <%- customer.CustomerPersonalInfo.Surname %></td>
+				</tr>
+				<%if(address) {%>
+				<tr>
+					<td class="caption">Address:</td>
+					<td class="value">
+						<%- address.Line1 || '' %>
+						<%- address.Line2 || '' %>
+						<%- address.Town || '' %>
+						<%- address.Postcode || '' %>
+					</td>
+				</tr>
+				<%}%>
+				<tr>
+					<td class="caption">Loan Reference#:</td>
+					<td class="value"><%- loan.RefNumber || '' %></td>
+				</tr>
+			</table>
+		</div>
+	</div>
 
-                    <dt>Interest Rate:</dt>
-                    <dd><%- EzBob.formatPercents(loan.InterestRate) %></dd>
+	<h2>Loan Summary</h2>
+	<div class="simple-well loan-summary-well">
+		<div class="row-fluid form-horizontal loan-details">
+			<div class="span4">
+				<dl>
+					<dt>Loan Amount:</dt>
+					<dd><%-EzBob.formatPoundsWidhDashUK(loan.LoanAmount)%></dd>
 
-                    <% if (isLate) {
-                        %><dt>Late Balance:</dt>
-                        <dd><%- EzBob.formatPounds(loan.Late) %></dd><%
-                    } %>
-                </dl>
-            </div>
+					<dt>Origination Date:</dt>
+					<dd><%- EzBob.formatDateUK(loan.Date) %> </dd>
 
-            <div class="span1">&nbsp;</div>
+					<dt>Interest Rate:</dt>
+					<dd><%- EzBob.formatPercents(loan.InterestRate) %></dd>
 
-            <div class="span4">
-                <dl style="margin-left: -50px;">
-                    <dt>Open Balance:</dt>
-                    <dd><%-EzBob.formatPounds(loan.TotalBalance)%></dd>
+					<% if (isLate) {
+					%>
+					<dt>Late Balance:</dt>
+					<dd><%- EzBob.formatPoundsUK(loan.Late) %></dd><%
+					} %>
+				</dl>
+			</div>
 
-                    <% if (area !='Underwriter') {
-                        %><dt>Loan Status:</dt>
-                        <dd class="status<%-loan.Status%>"><%- loan.Status %></dd><%
-                    } %>
+			<div class="span1">&nbsp;</div>
 
-                    <dt>Total Paid:</dt>
-                    <dd><%- EzBob.formatPounds(loan.Repayments) %></dd>
+			<div class="span4">
+				<dl>
+					<dt>Open Balance:</dt>
+					<dd><%-EzBob.formatPoundsUK(loan.TotalBalance)%></dd>
 
-                    <dt>Setup Fee:</dt>
-                    <dd><%- EzBob.formatPounds(loan.SetupFee) %></dd>
-                </dl>
-            </div>
+					<% if (area !='Underwriter') {
+					%>
+					<dt>Loan Status:</dt>
+					<dd class="status<%-loan.Status%>"><%- loan.Status %></dd><%
+					} %>
 
-            <div class="span3"><% 
-                var payButtonName = "Make Payment";
+					<dt>Total Paid:</dt>
+					<dd><%- EzBob.formatPoundsUK(loan.Repayments) %></dd>
 
-                var hasRolover = rollovers && rollovers.length > 0;
+					<dt>Setup Fee:</dt>
+					<dd><%- EzBob.formatPoundsUK(loan.SetupFee) %></dd>
+				</dl>
+			</div>
+			
+			@if (origin != CustomerOriginEnum.everline) {
+				<div class="span3">
+					<%
+					if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
+					%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early clean-btn" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
+					}
+					%>
+				</div>
+			}
+		</div>
+	</div>
 
-                if (hasRolover)
-                    payButtonName = "Pay Roll Over";
-                else if ((loan.Status == 'Live') && loan.IsEarly)
-                    payButtonName = "Pay Early";
-                else if ((isLate && !hasRolover) || !loan.IsEarly)
-                    payButtonName = "Pay Now";
-            
-                if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
-                    %><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green pay-early" style="margin-top: 5px;" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
-                }
-            %></div>
-        </div>
-    </div>
+	@if (origin == CustomerOriginEnum.everline) {
+		<div class="buttons_container">
+			<% if ((loan.Status == 'Live') || (loan.Status == 'Late')) { %>
+			<a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early clean-btn" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a>
+			<% } %>
+		</div>
+	}
+	
+	<h2 style="margin-bottom: 10px;">Payment Schedule</h2>
 
-    <h2 style="margin-bottom: 10px;">Payment Schedule</h2>
+	<table class="table payment-schedule-table">
+		<thead>
+			<tr>
+				<th style="width: 75px;"></th>
+				<th style="width: 75px;">Date</th>
+				<th style="width: 75px;">Principal</th>
+				<th style="width: 75px;">Interest</th>
+				<th style="width: 75px;">Fees</th>
+				<th style="width: 75px;">Rebate</th>
+				<th style="width: 75px;">Total</th>
+				<th style="width: 110px;">Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			_.each(pacnetTransactions, function(transaction, i) {
+			%>
+			<tr>
+				<td>
+					<img style="width: 24px; height: 24px" src='@Url.Content("~/Content/img/payment-to-customer.png")' alt="" />
+				</td>
+				<td><%- EzBob.formatDateHumanFullUK(transaction.PostDate)  %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Interest) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Fees) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(0) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td><%- transaction.StatusDescription %></td>
+			</tr><%
+			});
 
-    <table class="table payment-schedule-table">
-    <thead>
-        <tr>
-            <th style="width: 75px;"></th>
-            <th style="width: 75px;">Date</th>
-            <th style="width: 75px;">Principal</th>
-            <th style="width: 75px;">Interest</th>
-            <th style="width: 75px;">Fees</th>
-            <th style="width: 75px;">Rebate</th>
-            <th style="width: 75px;">Total</th>
-            <th style="width: 110px;">Status</th>
-        </tr>
-    </thead>
-    <tbody><%
-        _.each(pacnetTransactions, function(transaction, i) {
-            %><tr>
-                <td>
-                    <img  style="width: 24px; height: 24px" src='@Url.Content("~/Content/img/payment-to-customer.png")'  alt=""/></td>
-                <td><%- EzBob.formatDateHumanFull(transaction.PostDate)  %></td>
-                <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                <td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
-                <td><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
-                <td><%- EzBob.formatPoundsWidhDash(0) %></td>
-                <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                <td><%- transaction.StatusDescription %></td>
-            </tr><%
-        });
+			_.each(transactions, function(transaction, i) {
+			if (transaction.StatusDescription != 'Error') {
+			%>
+			<tr>
+				<td><img height="31" src='@Url.Content("~/Content/img/wizard-mark-completed.png")' alt="" /></td>
+				<td><%- EzBob.formatDateHumanFullUK(transaction.PostDate) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.LoanRepayment) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Interest) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Fees + transaction.Rollover) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(0) %></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td><%- transaction.StatusDescription %></td>
+			</tr><%
+			}
+			});
 
-        _.each(transactions, function(transaction, i) {
-            if (transaction.StatusDescription != 'Error') {
-                %><tr>
-                    <td><img  height="31"  src='@Url.Content("~/Content/img/wizard-mark-completed.png")' alt=""/></td>
-                    <td><%- EzBob.formatDateHumanFull(transaction.PostDate) %></td>
-                    <td><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
-                    <td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
-                    <td><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
-                    <td><%- EzBob.formatPoundsWidhDash(0) %></td>
-                    <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                    <td><%- transaction.StatusDescription %></td>
-                </tr><%
-            }
-        });
+			_.each(rollovers, function(rollover, i) {
+			%>
+			<tr>
+				<td><img height="31" src='@Url.Content("~/Content/img/two_arrows.png")' alt="" /></td>
+				<td><%- EzBob.formatDateHumanFullUK(rollover.ExperyDate)  %></td>
+				<td></td>
+				<td></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(rollover.Payment) %></td>
+				<td></td>
+				<td></td>
+				<td>Roll Over</td>
+			</tr><%
+			});
 
-        _.each(rollovers, function(rollover, i) {
-            %><tr>
-                <td><img  height="31"  src='@Url.Content("~/Content/img/two_arrows.png")'  alt=""/></td>
-                <td><%- EzBob.formatDateHumanFull(rollover.ExperyDate)  %></td>
-                <td></td>
-                <td></td>
-                <td><%- EzBob.formatPoundsWidhDash(rollover.Payment) %></td>
-                <td></td>
-                <td></td>
-                <td>Roll Over</td>
-            </tr><%
-        });
+			_.each(charges, function(charge, i) {
+			if ( charge.State !== 'Paid' && charge.State !== 'Expired' && charge.IsServiceFee != 'yes' ) {
+			%>
+			<tr>
+				<td><img height="31" src='@Url.Content("~/Content/img/calendarx32.png")' alt="" /></td>
+				<td><%- EzBob.formatDateHumanFullUK(charge.Date) %></td>
+				<td></td>
+				<td></td>
+				<td><%- EzBob.formatPoundsWidhDashUK(charge.Amount) %></td>
+				<td></td>
+				<td></td>
+				<td><%- charge.State %></td>
+			</tr><%
+			}
+			});
 
-        _.each(charges, function(charge, i) {
-            if ( charge.State !== 'Paid' && charge.State !== 'Expired' && charge.IsServiceFee != 'yes' ) {
-                %><tr>
-                    <td><img  height="31"  src='@Url.Content("~/Content/img/calendarx32.png")'  alt=""/></td>
-                    <td><%- EzBob.formatDateHumanFull(charge.Date) %></td>
-                    <td></td>
-                    <td></td>
-                    <td><%- EzBob.formatPoundsWidhDash(charge.Amount) %></td>
-                    <td></td>
-                    <td></td>
-                    <td><%- charge.State %></td>
-                </tr><%
-            }
-        });
+			_.each(schedule, function(item, i) {
+			if ((item.Status !== 'PaidEarly') && (item.Status !== 'PaidOnTime') && (item.Status !== 'Paid')) {
+			var late = item.Status === 'Late';
+			var styleForLate = late ? "hm_red" : "";
+			var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/img/calendar-late.png")" : "@Url.Content("~/Content/img/calendarx32.png")";
 
-        _.each(schedule, function(item, i) {
-            if ((item.Status !== 'PaidEarly') && (item.Status !== 'PaidOnTime') && (item.Status !== 'Paid')) {
-                var late = item.Status === 'Late';
-                var styleForLate = late ? "hm_red" : "";
-                var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/img/calendar-late.png")" : "@Url.Content("~/Content/img/calendarx32.png")";
+			%>
+			<tr data-scheduleid="<%- item.Id %>">
+				<td><img src="<%-urlImage%>"></td>
+				<td><%- EzBob.formatDateHumanFullUK(item.Date) %></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.LoanRepayment)%></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.Interest)%></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.Fees + item.LateCharges)%></td>
+				<td class='<%-styleForLate%>'><%- EzBob.formatPoundsWidhDashUK(0) %></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.AmountDue)%></td>
+				<td class='<%-styleForLate%>'>
+					<%-item.StatusDescription == 'AlmostPaid' ? 'Open' : item.StatusDescription%>
+					<% if(late) {
+					%><br /><span class="late-installment-tip">See Late Balance above</span><%
+					} %>
+				</td>
+			</tr><%
+			}
+			});
+			%>
+		</tbody>
+	</table>
 
-                %><tr data-scheduleid="<%- item.Id %>">
-                    <td><img src="<%-urlImage%>"></td>
-                    <td><%- EzBob.formatDateHumanFull(item.Date) %></td>
-                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
-                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
-                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Fees + item.LateCharges)%></td>
-                    <td class='<%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
-                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
-                    <td class='<%-styleForLate%>'><%-item.StatusDescription == 'AlmostPaid' ? 'Open' : item.StatusDescription%>
-                        <% if(late) {
-                            %><br /><span class="late-installment-tip">See Late Balance above</span><%
-                        } %>
-                    </td>
-                </tr><%
-            }
-        });
-    %></tbody>
-    </table>
+	<div class="loan_apr_block">Loan APR: <%- loan.APR %> %</div>
 
-    <div class="loan_apr_block">Loan APR: <%- loan.APR %> %</div>
+	<h2>Loan Agreement</h2>
+	<div class="simple-well">
+		<div class="row-fluid form-horizontal loan-agreements">
+			<ul>
+				<%
+				_.each(loan.Agreements, function(item, i){
+				%>
+				<li>
+					<a href="@Url.Action("Download", "Agreements", new { Area = "" })/<%=item.Id%>" class="clean-btn" ui-event-control-id="dashboard:download-agreements">
+						<i class="pe-7s-file"></i>
+						<%=item.Name%>
 
-    <h2 style="margin-bottom: 10px; margin-top: 30px;">Loan Agreement</h2>
-    <div class="simple-well" style="margin-bottom: 30px;">
-        <div class="row-fluid form-horizontal loan-agreements">
-            <ul><%
-                _.each(loan.Agreements, function(item, i){
-                    %><li><a href="@Url.Action("Download", "Agreements", new { Area = "" })/<%=item.Id%>" ui-event-control-id="dashboard:download-agreements"><%=item.Name%></a></li><%
-                });
-            %></ul>
-        </div>
-    </div>
+					</a>
+				</li>
+				<% }); %>
+			</ul>
+		</div>
+	</div>
 
-    <%if (area != 'Underwriter') {%>
-    <div class="buttons_container">
-        <a class="btn-back button btn-grey" style="margin-bottom:10px;" href="#AccountActivity" ui-event-control-id="dashboard:loan-details-back">Back</a>
-    </div>
-    <%}%>
+	<%if (area != 'Underwriter') {%>
+	<div class="buttons_container">
+		<a class="btn-back button btn-grey ev-btn-org" style="margin-bottom:10px;" href="#AccountActivity" ui-event-control-id="dashboard:loan-details-back">Back</a>
+	</div>
+	<%}%>
 </script>

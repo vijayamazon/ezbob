@@ -117,8 +117,7 @@
 		}//InitApplicationInfo
 
 		private static void BuildRequestedLoan(ApplicationInfoModel model, Customer customer) {
-			CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderBy(x => x.Created)
-				.LastOrDefault();
+			CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault();
 
 			if ((oRequest == null) || (oRequest.CustomerReason == null)) {
 				model.CustomerReasonType = -1;

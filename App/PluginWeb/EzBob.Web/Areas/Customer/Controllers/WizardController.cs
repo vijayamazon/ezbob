@@ -30,31 +30,25 @@
 			ISecurityQuestionRepository questions,
 			CustomerModelBuilder customerModelBuilder,
 			ISession session,
-			ICustomerReasonRepository customerReasonRepository,
-			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository,
 			IVipRequestRepository vipRequestRepository
 		) {
-			_context = context;
-			_questions = questions;
-			_customerModelBuilder = customerModelBuilder;
-			_session = session;
-			_reasons = customerReasonRepository;
-			_sourcesOfRepayment = customerSourceOfRepaymentRepository;
-			_vipRequestRepository = vipRequestRepository;
-			m_oDB = DbConnectionGenerator.Get(ms_oLog);
+			this.context = context;
+			this.questions = questions;
+			this.customerModelBuilder = customerModelBuilder;
+			this.session = session;
+			this.vipRequestRepository = vipRequestRepository;
+			this.DB = DbConnectionGenerator.Get(Log);
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
-			hostname = requestContext.HttpContext.Request.Url.Host;
-			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			this.hostname = requestContext.HttpContext.Request.Url.Host;
+			Log.Info("WizardController Initialize {0}", this.hostname);
 			base.Initialize(requestContext);
 		}
 
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult Index(string provider = "") {
-			ViewData["Questions"] = _questions.GetAll().ToList();
-			ViewData["Reasons"] = _reasons.GetAll().OrderBy(x => x.Id).ToList();
-			ViewData["Sources"] = _sourcesOfRepayment.GetAll().OrderBy(x => x.Id).ToList();
+			ViewData["Questions"] = this.questions.GetAll().ToList();
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
 			bool wizardTopNaviagtionEnabled = CurrentValues.Instance.WizardTopNaviagtionEnabled;
 			ViewData["WizardTopNaviagtionEnabled"] = wizardTopNaviagtionEnabled;
@@ -65,21 +59,21 @@
 			bool targetsEnabledEntrepreneur = CurrentValues.Instance.TargetsEnabledEntrepreneur;
 			ViewData["TargetsEnabledEntrepreneur"] = targetsEnabledEntrepreneur;
 
-			ViewData["MarketPlaces"] = _session
+			ViewData["MarketPlaces"] = this.session
 				.Query<MP_MarketplaceType>()
 				.ToArray();
 
-			ViewData["MarketPlaceGroups"] = _session
+			ViewData["MarketPlaceGroups"] = this.session
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
-			ms_oLog.Info("WizardController Index {0}", hostname);
+			Log.Info("WizardController Index {0}", this.hostname);
 
-			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(
-				_context.Customer,
+			WizardModel wizardModel = this.customerModelBuilder.BuildWizardModel(
+				this.context.Customer,
 				Session,
 				provider,
-				hostname,
+				this.hostname,
 				false
 			);
 
@@ -121,22 +115,22 @@
 			if (vipModel.VipEnabled)
 			{
 				vipModel.Ip = Request.ServerVariables["REMOTE_ADDR"];
-				if (_context.Customer != null)
+				if (this.context.Customer != null)
 				{
-					vipModel.VipEmail = _context.Customer.Name;
-					vipModel.RequestedVip = _context.Customer.Vip;
+					vipModel.VipEmail = this.context.Customer.Name;
+					vipModel.RequestedVip = this.context.Customer.Vip;
 
-					if (_context.Customer.PersonalInfo != null)
+					if (this.context.Customer.PersonalInfo != null)
 					{
-						vipModel.VipFullName = _context.Customer.PersonalInfo.Fullname;
-						vipModel.VipPhone = string.IsNullOrEmpty(_context.Customer.PersonalInfo.DaytimePhone)
-							                    ? _context.Customer.PersonalInfo.MobilePhone
-							                    : _context.Customer.PersonalInfo.DaytimePhone;
+						vipModel.VipFullName = this.context.Customer.PersonalInfo.Fullname;
+						vipModel.VipPhone = string.IsNullOrEmpty(this.context.Customer.PersonalInfo.DaytimePhone)
+							                    ? this.context.Customer.PersonalInfo.MobilePhone
+							                    : this.context.Customer.PersonalInfo.DaytimePhone;
 					}
 				}
 				else
 				{
-					var numOfRequests = _vipRequestRepository.CountRequestsPerIp(vipModel.Ip);
+					var numOfRequests = this.vipRequestRepository.CountRequestsPerIp(vipModel.Ip);
 					if (numOfRequests >= CurrentValues.Instance.VipMaxRequests)
 					{
 						vipModel.RequestedVip = true;
@@ -149,10 +143,9 @@
 
 		[Ajax]
 		[HttpPost]
-		
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Vip(VipModel model) {
-			var customer = _context.Customer;
+			var customer = this.context.Customer;
 			Transactional.Execute(() => {
 				var vip = new VipRequest {
 					Customer = customer,
@@ -162,7 +155,7 @@
 					Phone = model.VipPhone,
 					RequestDate = DateTime.UtcNow
 				};
-				_vipRequestRepository.SaveOrUpdate(vip);
+				this.vipRequestRepository.SaveOrUpdate(vip);
 
 
 				if (customer != null) {
@@ -175,15 +168,13 @@
 			return Json(new {});
 		} // Vip
 
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly ISecurityQuestionRepository _questions;
-		private readonly CustomerModelBuilder _customerModelBuilder;
-		private readonly ISession _session;
-		private readonly ICustomerReasonRepository _reasons;
-		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
-		private readonly IVipRequestRepository _vipRequestRepository;
-		private readonly AConnection m_oDB;
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (WizardController));
+		private readonly IEzbobWorkplaceContext context;
+		private readonly ISecurityQuestionRepository questions;
+		private readonly CustomerModelBuilder customerModelBuilder;
+		private readonly ISession session;
+		private readonly IVipRequestRepository vipRequestRepository;
+		private readonly AConnection DB;
+		private static readonly ASafeLog Log = new SafeILog(typeof (WizardController));
 		private string hostname;
 		private string GetCookie(string cookieName) {
 			var reqCookie = Request.Cookies[cookieName];
@@ -228,13 +219,13 @@
 					htmlID = "Customer/Wizard",
 				};
 
-				int nBrowserVersionID = this.GetBrowserVersionID(Request.UserAgent ?? "Unknown browser version", m_oDB, ms_oLog);
+				int nBrowserVersionID = this.GetBrowserVersionID(Request.UserAgent ?? "Unknown browser version", this.DB, Log);
 
 				if (nBrowserVersionID > 0)
-					oPageLoadEvent.Save(m_oDB, nBrowserVersionID, this.GetRemoteIP(), this.GetSessionID());
+					oPageLoadEvent.Save(this.DB, nBrowserVersionID, this.GetRemoteIP(), this.GetSessionID());
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to save page load event.");
+				Log.Warn(e, "Failed to save page load event.");
 			} // try
 		} // SavePageLoadEvent
 

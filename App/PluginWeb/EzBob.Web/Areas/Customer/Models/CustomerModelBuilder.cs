@@ -182,11 +182,9 @@
 
 			customerModel.QuickOffer = BuildQuickOfferModel(customer);
 
-			CustomerRequestedLoan ra = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
+			CustomerRequestedLoan ra = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault();
 
-			customerModel.RequestedAmount = ((ra == null) || (ra.Amount == null))
-				? 0
-				: (decimal)ra.Amount.Value;
+			customerModel.RequestedLoan = ra ?? new CustomerRequestedLoan();
 
 			customerModel.IsBrokerFill = customer.FilledByBroker;
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
@@ -230,12 +228,13 @@
 			customerModel.SignedLegalID = 0;
 			customerModel.LastApprovedAmount = 0;
 			customerModel.HasApprovalChance = customer.HasApprovalChance;
-
+			customerModel.IsLoanTypeSelectionAllowed = customer.IsLoanTypeSelectionAllowed;
 			if (customer.LastCashRequest != null) {
 				customerModel.LastApprovedAmount = (int)(customer.LastCashRequest.ManagerApprovedSum ?? 0);
 
 				customerModel.LastApprovedLoanTypeID = customer.LastCashRequest.LoanType.Id;
-				customerModel.LastApprovedRepaymentPeriod = customer.LastCashRequest.RepaymentPeriod;
+				customerModel.LastRepaymentPeriod = customer.LastCashRequest.RepaymentPeriod;
+				customerModel.LastApprovedRepaymentPeriod = customer.LastCashRequest.ApprovedRepaymentPeriod ?? customer.LastCashRequest.RepaymentPeriod;
 				customerModel.IsLastApprovedLoanSourceEu =
 					customer.LastCashRequest.LoanSource.Name == LoanSourceName.EU.ToString();
 				customerModel.IsLastApprovedLoanSourceCOSME =
@@ -249,13 +248,15 @@
 					((lastll != null) && (lastll.AlibabaCreditFacilityTemplate != null))
 						? lastll.AlibabaCreditFacilityTemplate.Template
 						: string.Empty;
+
+				customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
 			} // if
 
 			customerModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 
 			customerModel.OfferStart = customer.OfferStart;
 			customerModel.OfferValidUntil = customer.OfferValidUntil;
-			customerModel.IsLoanTypeSelectionAllowed = customer.IsLoanTypeSelectionAllowed;
+			
 
 			customerModel.Loans = customer.Loans
 				.OrderBy(l => l.Status)
@@ -319,7 +320,7 @@
 				customer.CollectionStatus != null &&
 				customer.CollectionStatus.IsDefault;
 
-			customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
+			//customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
 
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
 

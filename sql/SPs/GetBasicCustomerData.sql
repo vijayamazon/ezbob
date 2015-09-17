@@ -45,7 +45,18 @@ BEGIN
 	BEGIN
 		SET @IsCampaign = 1
 	END
-
+	
+	DECLARE @RequestedLoanAmount DECIMAL(18,0) = 
+	(
+		SELECT 
+			TOP 1 crl.Amount 
+		FROM 
+			CustomerRequestedLoan crl 
+		WHERE
+			crl.CustomerId = @CustomerId
+		ORDER BY crl.Id DESC
+	) 
+		
 	SELECT
 		c.Id,
 		c.FirstName,
@@ -71,7 +82,7 @@ BEGIN
 		c.IsAlibaba,
 		c.AlibabaId,
 		c.OverallTurnOver AS ReportedAnnualTurnover,
-		ISNULL(crl.Amount, 0) AS RequestedLoanAmount,
+		ISNULL(@RequestedLoanAmount, 0) AS RequestedLoanAmount,
 		o.Name AS Origin,
 		o.CustomerSite,
 		o.PhoneNumber OriginPhone
@@ -80,11 +91,9 @@ BEGIN
 		LEFT JOIN CustomerAddress a
 			ON c.Id = a.CustomerId
 			AND a.addressType = 1
-		LEFT JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
 		LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 	WHERE
 		c.Id = @CustomerId
 END
-
 
 GO

@@ -1,56 +1,79 @@
-﻿<div class="addAddressContainer">
-	<label class="attardi-input">
-		<span><%-title%></span>
-		<input type="text" class="addAddressInput form_field_left_side form_field" ui-event-control-id="address-form:postcode" />
-		<img class="field_status <%-required%>" width="16" height="16"/>
-		<input class="addAddress button btn-green form_field_right_side" type="button" value="Postcode lookup" disabled="disabled" ui-event-control-id="address-form:lookup" />
-	</label>
-</div>
+﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin != null ? ViewBag.CustomerOrigin.GetOrigin() : CustomerOriginEnum.ezbob;
+}
 
-<%
-(function() {
+<script id="address-template" type="text/template">
+	<div class=addAddressContainer>
+		@EzForm.InputTextWizard(new EzInputBuilder(null,null,
+			cls: "addAddressInput form_field_left_side form_field",
+			isRequired: true,
+			statusIcon: true,
+			uiEventControlID: "address-form:postcode",
+			button: new EzButtonModel(null, "Find my address",
+			cls: "addAddress button btn-green form_field_right_side clean-btn",
+			uiEventControlID: "address-form:lookup",
+			buttonType: EzButtonType.input)),
+			origin: origin)
+	</div>
+
+	<%
+	(function() {
 	var i = 0;
 	_.each(addresses, function(address) {
-		var shortAddress = [
-			address.Line1 || '',
-			address.Line2 || '',
-			address.Line3 || '',
-			address.Town || '',
-			address.Country || '',
-			address.Postcode || ''
-		];
+	var shortAddress = [
+	address.Line1 || '',
+	address.Line2 || '',
+	address.Line3 || '',
+	address.Town || '',
+	address.Country || '',
+	address.Postcode || ''
+	];
 
-		shortAddress.clean('');
+	shortAddress.clean('');
 
-		%><div class="address-selected">
-			<!-- Address information -->
+	%>
+	<div class="address-selected">
+		<!-- Address information -->
+		@if (origin == CustomerOriginEnum.everline) {
+			<div class="form_field_container control-group ">
+				<label class="input-title-address" for="">Address</label>
+				<div class="input-wrapper">
+					<input type="text" class="form_field form_field_left_side" id="<%-addresses.addressInput%>" readonly="readonly" name="addressInput" ui-event-control-id="address-form:address" value="<%-shortAddress.join(', ')%>" />
+					<a href="#" class="removeAddress button btn-green form_field_right_side clean-btn" element-number="<%=i%>" ui-event-control-id="address-form:clear">Clear address</a>
+					<div class="error-wrap"></div>
+				</div>
+			</div>
+		} else {
 			<input type="text" class="form_field" id="<%-addresses.addressInput%>" readonly="readonly" name="addressInput" ui-event-control-id="address-form:address" value="<%-shortAddress.join(', ')%>" />
-			<a href="#" class="removeAddress" style="margin-top: 4px;" element-number="<%=i%>" ui-event-control-id="address-form:clear">clear</a>
-			<input type="hidden" name="<%-name%>[<%=i%>].Credits_display_text" value="<%=address.Credits_display_text%>" />
-			<input type="hidden" name="<%=name%>[<%=i%>].Accountadminpage" value="<%=address.Accountadminpage%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Id" value="<%=address.Id%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].AddressId" value="<%=address.AddressId%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Organisation" value="<%=address.Organisation%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Line1" value="<%=address.Line1%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Line2" value="<%=address.Line2%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Line3" value="<%=address.Line3%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Town" value="<%=address.Town%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].County" value="<%=address.County%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Postcode" value="<%=address.Postcode%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Country" value="<%=address.Country%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Rawpostcode" value="<%=address.Rawpostcode%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Deliveryposuffix" value="<%=address.Deliveryposuffix%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Nohouseholds" value="<%=address.Nohouseholds%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Smallorg" value="<%=address.Smallorg%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Pobox" value="<%=address.Pobox%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Mailsortcod" value="<%=address.Mailsortcod%>" />
-			<input type="hidden" name="<%-name%>[<%=i%>].Udprn" value="<%=address.Udprn%>" />
+			<a href="#" class="removeAddress" element-number="<%=i%>" ui-event-control-id="address-form:clear">clear</a>
+		}
+		
+		<input type="hidden" name="<%-name%>[<%=i%>].Credits_display_text" value="<%=address.Credits_display_text%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Accountadminpage" value="<%=address.Accountadminpage%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Id" value="<%=address.Id%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].AddressId" value="<%=address.AddressId%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Organisation" value="<%=address.Organisation%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Line1" value="<%=address.Line1%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Line2" value="<%=address.Line2%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Line3" value="<%=address.Line3%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Town" value="<%=address.Town%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].County" value="<%=address.County%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Postcode" value="<%=address.Postcode%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Country" value="<%=address.Country%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Rawpostcode" value="<%=address.Rawpostcode%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Deliveryposuffix" value="<%=address.Deliveryposuffix%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Nohouseholds" value="<%=address.Nohouseholds%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Smallorg" value="<%=address.Smallorg%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Pobox" value="<%=address.Pobox%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Mailsortcod" value="<%=address.Mailsortcod%>" />
+		<input type="hidden" name="<%-name%>[<%=i%>].Udprn" value="<%=address.Udprn%>" />
 
-			<% if(address.director != undefined && address.director != 0) {
-				%><input type="hidden" name="<%-name%>[<%=i%>].DirectorId" value="<%=address.director%>" /><%
-			}
-		%></div><%
-		i++;
-	});
-})();
-%>
+		<% if(address.director != undefined && address.director != 0) {
+		%><input type="hidden" name="<%-name%>[<%=i%>].DirectorId" value="<%=address.director%>" />
+		<%}%>
+	</div>
+	<% i++;}); })(); %>
+</script>

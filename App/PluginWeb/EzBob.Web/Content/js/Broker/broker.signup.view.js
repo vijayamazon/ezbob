@@ -152,7 +152,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			buttons: {
 				Close: {
 					text: 'Close',
-					'class': 'button btn-green',
+					'class': 'button btn-green ev-btn-org',
 					click: function () {
 						$(this).dialog("close");
 					},

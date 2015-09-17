@@ -41,7 +41,12 @@ EzBob.Profile.SettingsMasterView = Backbone.View.extend({
         this.mainView.render().$el.appendTo(this.$el);
         this.passwordView.render().$el.appendTo(this.$el);
         this.questionView.render().$el.appendTo(this.$el);
-        return this;
+
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
+        this.$el.find('#securityQuestionImage').field_status('set', 'ok');
+		return this;
     },
     resetView: function () {
         this.mainView.$el.show();

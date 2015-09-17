@@ -1,131 +1,115 @@
 ﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
 	UiCustomerOrigin.Set(ViewBag);
 }
 
-<div class="customer-sidebar-content">
-    <div class="item-fully-secured">
-        <a href="javascript:((function(x){if(x.hasClass('hide')){x.slideDown('slow').removeClass('hide');}else{x.slideUp('slow').addClass('hide');}})($('div.customer-sidebar-content div.item-security-seals')))">
-            <div class="item">
-                <div class="icon">
-                    <img src="@Url.Content("~/Content/img/customer-sidebar/secure.png")" alt="Fully secured" class="sb-icon" width="50" height="45" />
-                </div>
-                <div class="text">
-                    <h3>Fully secured</h3>
-                    Certified by Norton and Truste
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="item-security-seals hide">
-        <div class="item">
-            <div class="icon"></div>
-            <div class="text verisign">
-                <a href="javascript:vrsn_splash()">
-                    <img alt="Click to Verify - This site has chosen an SSL Certificate to improve Web site security" width="50" height="45" oncontextmenu="return false;" src="https://seal.verisign.com/getseal?at=0&sealid=2&dn=www.ezbob.com&lang=en" name="seal">
-                </a>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="icon"></div>
-            <div class="text truste">
-                <div id="05e2e3f7-3f8d-4968-b85e-c0d6ba74d080">
-                    <a href="//privacy.truste.com/privacy-seal/Orange-Money/validation?rid=2cd8c34b-8ee6-47c9-8f75-10998cf23ad9" title="TRUSTe online privacy certification" target="_blank">
-                        <img src="//privacy-policy.truste.com/privacy-seal/Orange-Money/seal?rid=2cd8c34b-8ee6-47c9-8f75-10998cf23ad9" alt="TRUSTe online privacy certification" />
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="item item-faster-platform">
-        <div class="icon">
-            <img src="@Url.Content("~/Content/img/customer-sidebar/fast.png")" alt="Faster platform" width="50" height="45" class="sb-icon" />
-        </div>
-        <div class="text">
-            <h3>Fastest platform</h3>
-            @ViewBag.CustomerOrigin.Name is the fastest loan system available
-        </div>
-    </div>
-
-    <div class="item item-award-winning">
-        <div class="icon">
-            <img src="@Url.Content("~/Content/img/customer-sidebar/award.png")" alt="Award winning" width="50" height="45" class="sb-icon" />
-        </div>
-        <div class="text">
-            <h3>EU approved</h3>
-            Supported by the EU funding programme
-        </div>
-    </div>
-    
-    <div class="item item-satisfied-customers last">
-        <div class="icon">
-            <img src="@Url.Content("~/Content/img/customer-sidebar/customer.png")" alt="Satisfied customers" width="50" height="45" class="sb-icon" />
-        </div>
-        <div class="text">
-            <h3>Satisfied customers</h3>
-            Join thousands of returning customers
-        </div>
-    </div>
-    
-    <hr/>
-    @*	<div class="item item-competitive-prices">
-		<div class="icon">
-			<img src="@Url.Content("~/Content/img/customer-sidebar/prices.png")" alt="Competitive prices" width="50" height="45" class="sb-icon" />
-		</div>
-		<div class="text">
-			<h3>Competitive prices</h3>
-			Our rates are<br />
-			very competitive
-		</div>
-	</div>*@
-
-    <div class="item-call-us">
-        <a href="tel:@ViewBag.PhoneNumber">
-            <div class="item">
-                <div class="icon">
-                    <img src="@Url.Content("~/Content/img/customer-sidebar/call.png")" alt="Call now" width="50" height="45" class="sb-icon" />
-                </div>
-                <div class="text">
-                    <h3>Call now</h3>
-                    @ViewBag.PhoneNumber
-                </div>
-            </div>
-        </a>
-    </div>
-	@if (string.IsNullOrEmpty(ViewBag.WhiteLabel)) {
-		<div class="item-email-us">
-            <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">
-                <div class="item">
-                    <div class="icon">
-                        <img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon" />
-                    </div>
-                    <div class="text">
-                        <h3>Email us</h3>
-                        @ViewBag.CustomerOrigin.CustomerCareEmail
-                    </div>
-                </div>
-            </a>
-		</div>
-
-		<div class="item-chat-now">
-			<a href="javascript:$('.LPMimage').click()">
+@if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline) {
+	<div class="customer-sidebar-content">
+		<div class="item-fully-secured">
+			<a href="javascript:((function(x){if(x.hasClass('hide')){x.slideDown('slow').removeClass('hide');}else{x.slideUp('slow').addClass('hide');}})($('div.customer-sidebar-content div.item-security-seals')))">
 				<div class="item">
 					<div class="icon">
-						<img src="@Url.Content("~/Content/img/customer-sidebar/chat.png")" alt="Chat now" width="50" height="45" class="sb-icon" />
+						<img src="@Url.Content("~/Content/img/customer-sidebar/secure.png")" alt="Fully secured" class="sb-icon" width="50" height="45"/>
 					</div>
 					<div class="text">
-						<h3>Chat now</h3>
-						Online help available just click
+						<h3>Fully secured</h3>
+						Certified by Norton and Truste
 					</div>
 				</div>
 			</a>
 		</div>
-	}
-    
-</div>
 
-<script type="text/plain" src="//privacy-policy.truste.com/privacy-seal/Orange-Money/asc?rid=05e2e3f7-3f8d-4968-b85e-c0d6ba74d080"></script>
+		<div class="item-security-seals hide">
+			@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
+		</div>
+
+		<div class="item item-faster-platform">
+			<div class="icon">
+				<img src="@Url.Content("~/Content/img/customer-sidebar/fast.png")" alt="Faster platform" width="50" height="45" class="sb-icon"/>
+			</div>
+			<div class="text">
+				<h3>Fastest platform</h3>
+				@ViewBag.CustomerOrigin.Name is the fastest loan system available
+			</div>
+		</div>
+
+		<div class="item item-award-winning">
+			<div class="icon">
+				<img src="@Url.Content("~/Content/img/customer-sidebar/award.png")" alt="Award winning" width="50" height="45" class="sb-icon"/>
+			</div>
+			<div class="text">
+				<h3>EU approved</h3>
+				Supported by the EU funding programme
+			</div>
+		</div>
+
+		<div class="item item-satisfied-customers last">
+			<div class="icon">
+				<img src="@Url.Content("~/Content/img/customer-sidebar/customer.png")" alt="Satisfied customers" width="50" height="45" class="sb-icon"/>
+			</div>
+			<div class="text">
+				<h3>Satisfied customers</h3>
+				Join thousands of returning customers
+			</div>
+		</div>
+
+		<hr/>
+		@*	
+		<div class="item item-competitive-prices">
+			<div class="icon">
+				<img src="@Url.Content("~/Content/img/customer-sidebar/prices.png")" alt="Competitive prices" width="50" height="45" class="sb-icon" />
+			</div>
+			<div class="text">
+				<h3>Competitive prices</h3>
+				Our rates are<br />
+				very competitive
+			</div>
+		</div>
+		*@
+
+		<div class="item-call-us">
+			<a href="tel:@ViewBag.PhoneNumber">
+				<div class="item">
+					<div class="icon">
+						<img src="@Url.Content("~/Content/img/customer-sidebar/call.png")" alt="Call now" width="50" height="45" class="sb-icon"/>
+					</div>
+					<div class="text">
+						<h3>Call now</h3>
+						@ViewBag.PhoneNumber
+					</div>
+				</div>
+			</a>
+		</div>
+		@if (string.IsNullOrEmpty(ViewBag.WhiteLabel)) {
+			<div class="item-email-us">
+				<a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">
+					<div class="item">
+						<div class="icon">
+							<img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon"/>
+						</div>
+						<div class="text">
+							<h3>Email us</h3>
+							@ViewBag.CustomerOrigin.CustomerCareEmail
+						</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="item-chat-now">
+				<a href="javascript:$('.LPMimage').click()">
+					<div class="item">
+						<div class="icon">
+							<img src="@Url.Content("~/Content/img/customer-sidebar/chat.png")" alt="Chat now" width="50" height="45" class="sb-icon"/>
+						</div>
+						<div class="text">
+							<h3>Chat now</h3>
+							Online help available just click
+						</div>
+					</div>
+				</a>
+			</div>
+		}
+	</div>
+}

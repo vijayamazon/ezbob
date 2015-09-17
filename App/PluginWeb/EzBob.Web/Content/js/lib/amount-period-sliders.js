@@ -33,30 +33,48 @@ function InitAmountPeriodSliders(options)
 	}; // DisplayPeriod
 
 	function CreateSlider(oParent, sAreaName, oDefinitions, oLeftFunc, oTextFunc) {
-		$(oParent).append(
-			$('<div />').addClass(sAreaName + '-area')
-				.append($('<div />').addClass(sAreaName + '-min slider-label'))
-				.append($('<div />').addClass(sAreaName + '-max slider-label'))
-				.append($('<div />').addClass(sAreaName + '-tooltip'))
-				.append($('<div />').addClass(sAreaName + '-slider'))
-				.append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', 'loan-legal:' + sAreaName.toLowerCase()).val(oDefinitions.start))
+		options.el.find(oParent).append(
+	        $('<div />').addClass(sAreaName + '-area')
+	        .append($('<h2 />').addClass(sAreaName + '-caption'))
+	        .append($('<div />').addClass(sAreaName + '-min slider-label'))
+	        .append($('<div />').addClass(sAreaName + '-max slider-label'))
+	        .append($('<div />').addClass(sAreaName + '-tooltip'))
+	        .append($('<div />').addClass(sAreaName + '-slider'))
+	        .append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', oDefinitions.uiEvent + sAreaName.toLowerCase()).val(oDefinitions.start)).attr('type', 'text')
 		);
 
-		var oTooltip = $('.' + sAreaName + '-tooltip', oParent);
-		var oSlider = $('.' + sAreaName + '-slider', oParent);
-		var oTextbox = $('.' + sAreaName + '-textbox', oParent);
+	    var oTooltip = options.el.find('.' + sAreaName + '-tooltip', oParent);
+		var oSlider = options.el.find('.' + sAreaName + '-slider', oParent);
+		var oTextbox = options.el.find('.' + sAreaName + '-textbox', oParent);
+		if (oDefinitions.caption) {
+			options.el.find('.' + sAreaName + '-caption').text(oDefinitions.caption);
+		}
 
+		if (oDefinitions.hasbutton) {
+			options.el.find('.' + sAreaName + '-textbox').wrap("<div class='slider-input'></div>");
+		    options.el.find('.' + sAreaName + '-area').find('.slider-input').prepend(($('<div />').addClass('minus-wrap').append($('<span />').addClass('minus icon-minus'))));
+			if (sAreaName == 'period') {
+				options.el.find('.' + sAreaName + '-area').find('.slider-input').append($('<span />').addClass('period-text').text('months'));
+			}
+			options.el.find('.' + sAreaName + '-area').addClass('clearfix');
+		    options.el.find('.' + sAreaName + '-area').find('.slider-input').append(($('<div />').addClass('plus-wrap').append($('<span />').addClass('plus icon-plus'))));
+		    options.el.find('.' + sAreaName + '-area').find('.' + sAreaName + '-slider').wrap($('<div />').addClass('slider-wrap'));
+		    options.el.find('.' + sAreaName + '-area').find('.slider-input').insertBefore($('.' + sAreaName + '-area').find('.slider-wrap'));
+		  
+		   
+		}
 		if (sAreaName == 'amount')
 			oTextbox.autoNumeric($.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max }));
 		else
-			oTextbox.autoNumeric({ vMin: 1, vMax: 12, mDec: 0 });
+			oTextbox.autoNumeric({ vMin: oDefinitions.min, vMax: oDefinitions.max, mDec: 0 });
 
-		oSlider.slider({
+		var s = oSlider.slider({
 			range: 'min',
 			min:   oDefinitions.min,
 			max:   oDefinitions.max,
 			value: oDefinitions.start,
-			step:  oDefinitions.step,
+			step: oDefinitions.step,
+			
 			animate: 'slow',
 			create: function() {
 				window.setTimeout(
@@ -108,10 +126,16 @@ function InitAmountPeriodSliders(options)
 			} // stop
 		}); // init slider
 
+		options.el.find('.' + sAreaName + '-area').find('.plus').click(function () {
+		    s.slider('value', s.slider('value') + s.slider("option", "step"));
+		});
+		options.el.find('.' + sAreaName + '-area').find('.minus').click(function () {
+		    s.slider('value', s.slider('value') - s.slider("option", "step"));
+		});
 		oTooltip.hide();
-
-		$('.' + sAreaName + '-min', oParent).text(oTextFunc.call(null, oDefinitions.min));
-		$('.' + sAreaName + '-max', oParent).text(oTextFunc.call(null, oDefinitions.max));
+		
+		options.el.find('.' + sAreaName + '-min', oParent).text(oTextFunc.call(null, oDefinitions.min));
+		options.el.find('.' + sAreaName + '-max', oParent).text(oTextFunc.call(null, oDefinitions.max));
 
 		oTextbox.change(function() {
 			oSlider.slider('value', oTextbox.autoNumericGet());
@@ -123,7 +147,7 @@ function InitAmountPeriodSliders(options)
 
 	var oSlidersContainer = $('<div />').data('status', 'loading').addClass('sliders-container');
 
-	var oContainer = $(options.container);
+	var oContainer = options.el.find(options.container);
 	
 	oContainer.empty().addClass('amount-period-sliders').append(oSlidersContainer);
 

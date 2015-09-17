@@ -1,0 +1,64 @@
+﻿.main-page-everline .profile-menu .navbar-inner {
+	padding: 10px 20px;
+	width: 960px;
+	margin: 0 auto;
+	background-color: #28211f;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background-image: none;
+    box-shadow: none;
+	border-radius: 0;
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	text-align: left;
+	width: 100%
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main li {
+	display: inline-block;
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main li.settings-li{
+	float: right;
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical{
+    visibility: hidden;
+	width: 0;
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main li a {
+	color: white;
+	text-decoration: none;
+	text-shadow: none;
+}
+
+.navbar .nav > li > a, 
+.profile-menu .nav > li > a{
+	font-family: 'Open Sans',sans-serif;
+	font-size: 15px;
+}
+
+.profile-menu .ui-tabs .ui-tabs-nav li.ui-tabs-selected a span, 
+.profile-menu.navbar .nav > li > a:focus span, 
+.profile-menu.navbar .nav > li > a:hover span, 
+.profile-menu.navbar .nav .active a span, 
+.profile-menu.navbar .nav .active a:hover span{
+    border-bottom: 2px #8dc641 solid;
+}
+.main-page-everline .profile-menu .customer-dashboard-main li.active a span{
+    border-bottom: 2px #8dc641 solid;
+    text-decoration: none;
+    text-shadow: none;
+}
+
+.main-page-everline .profile-menu .customer-dashboard-main li.active a span{
+	border-bottom: 2px #8dc641 solid;
+	text-decoration: none;
+	text-shadow: none;
+}

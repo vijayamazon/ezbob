@@ -39,8 +39,8 @@ EzBob.WizardStepSequence = function(args) {
 
 	var oSignupStep = {
 		name: 'signup',
-		documentTitle: 'Create an account',
-		title: 'create',
+		documentTitle: 'Register account',
+		title: 'Register',
 		trackPage: '/Customer/Wizard/SignUp',
 		marketingStrKey: 'MarketingWizardStepSignup',
 		showTitleInWizardSteps: true,
@@ -48,8 +48,8 @@ EzBob.WizardStepSequence = function(args) {
 
 	var oShopInfoStep = {
 		name: 'link',
-		documentTitle: 'Link your accounts',
-		title: 'accounts',
+		documentTitle: 'Link accounts',
+		title: 'Accounts',
 		trackPage: '/Customer/Wizard/Shops',
 		marketingStrKey: 'MarketingWizardStepLinkAccounts',
 		showTitleInWizardSteps: true,
@@ -59,8 +59,8 @@ EzBob.WizardStepSequence = function(args) {
 
 	var oYourDetailsStep = {
 		name: 'details',
-		documentTitle: 'Fill personal details',
-		title: 'personal',
+		documentTitle: 'Personal information',
+		title: 'Personal',
 		trackPage: '/Customer/Wizard/PersonalDetails',
 		marketingStrKey: 'MarketingWizardStepPersonalInfo',
 		showTitleInWizardSteps: true,
@@ -68,8 +68,8 @@ EzBob.WizardStepSequence = function(args) {
 
 	var oCompanyDetailsStep = {
 		name: 'companydetails',
-		documentTitle: 'Fill company details',
-		title: 'company',
+		documentTitle: 'Business information',
+		title: 'Business',
 		trackPage: '/Customer/Wizard/CompanyDetails',
 		marketingStrKey: 'MarketingWizardStepPersonalInfo',
 		showTitleInWizardSteps: true,

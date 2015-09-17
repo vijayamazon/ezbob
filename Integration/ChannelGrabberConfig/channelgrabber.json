@@ -47,18 +47,18 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "Email associated with the Volusion account",
+						"Caption": "Email",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Text",
-						"Caption": "Encrypted password for the Volusion account",
+						"Caption": "Encrypted password",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
 				"Notes": [
-					"<strong>* Please notice that only Gold store subscribers and higher can link their Volusion store.</strong>",
+					"<p><span class=\"ev-hide\">*</span> Please notice that only Gold store subscribers and higher can link their Volusion store.</p>",
 					"<br><br>",
 					"You need to enter the Encrypted Password for your Admin Area.",
 					"You can find your encrypted password in the Volusion API section of your store.",
@@ -87,8 +87,8 @@
 
 	{
 		"Name":        "Play",
-		"DisplayName": "Play",
-		"Description": "play.com",
+		"DisplayName": "Rakuten",
+		"Description": "Rakuten.co.uk",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 		"Behaviour":   "Default",
 
@@ -130,18 +130,18 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "Email associated with the PlayTrade account",
+						"Caption": "Email",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Password",
-						"Caption": "The password for the PlayTrade account",
+						"Caption": "Password",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
 				"Notes": [
-				"<strong>* Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.</strong>",
+				"<p><span class=\"ev-hide\">*</span> Please notice that only ProTrader users (full merchant account) <br>can link their Rakuten.co.uk store.</p>",
 					"<BR><BR>",
 				],
 				"OnBeforeLink": [ 
@@ -264,13 +264,13 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The Consumer Key to access Xero API",
+						"Caption": "Consumer API key",
 						"ValidationRules": { "required": true, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Text",
-						"Caption": "The Consumer Secret to access Xero API",
+						"Caption": "Consumer API secret",
 						"ValidationRules": { "required": true, "maxlength": 300 }
 					}
 				],
@@ -344,13 +344,13 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The username to access KashFlow account",
+						"Caption": "Username",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Password",
-						"Caption": "The password to access KashFlow account",
+						"Caption": "Password",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
@@ -399,13 +399,13 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The username to access HMRC account",
+						"Caption": "Username",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Password",
-						"Caption": "The password to access HMRC account",
+						"Caption": "Password",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
@@ -481,13 +481,13 @@
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The API username to access Magento account",
+						"Caption": "API username",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Password",
-						"Caption": "The API password to access Magento account",
+						"Caption": "API password",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
@@ -548,13 +548,13 @@
 					{
 						"PropertyName": "URL",
 						"Type": "Text",
-						"Caption": "The URL to the shop",
+						"Caption": "URL to the shop",
 						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The API key to access Prestashop account",
+						"Caption": "API key",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
@@ -616,19 +616,19 @@
 					{
 						"PropertyName": "URL",
 						"Type": "Text",
-						"Caption": "The API path to access Bigcommerce account",
+						"Caption": "API path",
 						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Login",
 						"Type": "Text",
-						"Caption": "The API user to access Bigcommerce account",
+						"Caption": "API user",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					},
 					{
 						"PropertyName": "Password",
 						"Type": "Text",
-						"Caption": "The API token to access Bigcommerce account",
+						"Caption": "API token",
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],

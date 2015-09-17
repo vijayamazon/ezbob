@@ -105,7 +105,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 		view.on('select', function(cardId) { return self.payFast(cardId); });
 		view.on('existing', function() { document.location.href = self.ui.submit.attr("href"); });
 
-		EzBob.App.modal.show(view);
+		EzBob.App.jqmodal.show(view);
 
 		return false;
 	}, // submit

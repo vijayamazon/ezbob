@@ -42,6 +42,15 @@ a.ezbob_logo_online { background: url(images/ezbob_logo.png) 0px 0px no-repeat; 
 a.ezbob_logo_offline { background: url(images/ezbob_logo_cartless.png) 0px 0px no-repeat; }
 
 #login_button{position:absolute; top:5px; right:10px;}
+label.soft-label{
+     display: inline-block;
+    width: 90%;
+    vertical-align: top; 
+    font-weight: normal
+}
+.forgotpass {
+    display:none;
+}
 /*-- header navigation --*/
 #nav_container{position:relative;}
 nav{ position:absolute; right:0; top:37px;}
@@ -97,7 +106,7 @@ box-shadow: 0 0 10px #ccc;
 
 #content {
     float:left;
-    width:62%;
+    width:90%;
     line-height:1.8em;
 }
 
@@ -272,10 +281,13 @@ div.add-director-container { position: relative; width: 96%; }
 
 
 /*----table for payment schedule-----*/
-table.table{width:100%;border-left:1px #ccc solid; border-top:1px #ccc solid;
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
+table.table{
+	width:100%;
+	border-left:1px #ccc solid; 
+	border-top:1px #ccc solid;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     margin:0 0 20px 0;
 }
 table.table th{
@@ -292,12 +304,17 @@ table.table th{
     font-size: 16px;
 }
 table.table th, table.table td {
-    padding:15px 5px; text-align:center; border-right:1px #ccc solid; border-bottom:1px #ccc solid;
+    padding: 15px 20px;
+	text-align:center;
+	border-right:1px #ccc solid; 
+	border-bottom:1px #ccc solid;    
+	line-height: 35px;
 }
 table.table td {
     background:#fff;
     font-size:16px; 
-    font-family: "Titillium Web Light";
+    font-family: "Titillium Web Regular";
+	white-space: nowrap;
 }
 table.table td span.label{color:#666;}
 table.table tbody tr:hover{background:#f1f1f1;}
@@ -666,4 +683,43 @@ blockquote {
 
 .AmazonForm{
     padding-top: 1.6em;
+}
+
+
+.wizard-top {
+    box-sizing: border-box;
+    max-width: 1000px;
+    padding: 0;
+    background: transparent;
+    margin: 0 auto;
+}
+
+.security-icons .item {
+		height: 72px;
+		float: right;
+        margin-right: 10px;
+		display: inline-block;
+}
+
+	.security-icons .item .verisign {
+		background: url(images/verisign_seal.gif) no-repeat 0 0;
+		width: 100px;
+		height: 72px
+	}
+
+	.security-icons .item .verisign img{
+		height: 72px;
+	}
+
+	.security-icons .item .truste img {
+		height: 40px;
+		margin-top: 17px;
+	}
+
+	.security-icons .item .lock-icon {
+		display: none;
+	}
+
+.underwriter-only{
+	display: none;
 }

@@ -1,0 +1,101 @@
+﻿@using ConfigManager
+@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
+
+@{
+	UiCustomerOrigin.Set(ViewBag);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	@{ Html.RenderPartial("_FrameKiller"); }
+	<script type="text/javascript">
+		window.gRootPath = '@Model.RootUrl';
+	</script>
+
+	<title>@ViewBag.Title</title>
+
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
+	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
+	<meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	@{
+		Html.RenderPartial("_FavIcon");
+
+		if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
+			WriteLiteral(BundleHelper.RenderEverlineBrokerCss());
+		} else {
+			WriteLiteral(BundleHelper.RenderEzbobBrokerCss());
+		}
+	}
+</head>
+
+<body data-auth="@Model.Auth"
+	  data-msg-on-start="@Model.MessageOnStart"
+	  data-msg-on-start-severity="@Model.MessageOnStartSeverity"
+	  data-request-accept-terms="@Model.HasTermsStr"
+	  data-user-name="@Model.Auth">
+	@{ Html.RenderPartial("_GoogleTagManager"); }
+	@AntiForgery.GetHtml()
+
+	<div id="wrapper">
+		@{ Html.RenderPartial("../BrokerHome/Header"); }
+		@RenderBody()
+		@{ Html.RenderPartial("_Footer"); }
+	</div>
+
+	@{ Html.RenderPartial("../BrokerHome/ScratchCards"); }
+
+	<div id="hidden-container" class="hide" style="display: none !important;">
+		@*<div class="common-customer-sidebar">
+			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+		</div>*@
+
+		<div style="display: none;" class="hide" id="broker-sms-count"
+			 data-force-captcha="@Model.ForceCaptcha"
+			 data-max-per-number="@Model.MaxPerNumber"
+			 data-max-per-page="@Model.MaxPerPage"></div>
+
+		<div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
+	</div>
+
+	<!-- scripts - begin -->
+	<!--[if lt IE 9]>
+	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	
+	@BundleHelper.RenderBrokerJs()
+
+	<script>
+		var EzBob = EzBob || {};
+		EzBob.Config = EzBob.Config || {};
+		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
+		@{
+			OneUploadLimitation oul = CurrentValues.Instance.GetUploadLimitations("BrokerHome", "HandleUploadFile");
+		}
+		EzBob.LoadedConfig.BrokerMaxFileSize = +(@oul.FileSize / 1048576.0).toFixed(2);
+		EzBob.LoadedConfig.BrokerAcceptedFiles = '@oul.AcceptedFiles';
+		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
+		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
+		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
+		EzBob.Config.Origin = '@ViewBag.CustomerOrigin.GetOrigin()';
+		function EzBob_CgVendors_init() {
+			if (EzBob.CgVendors)
+				EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
+		} // EzBob_CgVendors_init
+
+		$(document).ready(function() {
+			EzBob_CgVendors_init();
+		});
+	</script>
+	
+	@{
+		Html.RenderPartial("security_template");
+	}
+	<!-- scripts - end -->
+</body>
+</html>

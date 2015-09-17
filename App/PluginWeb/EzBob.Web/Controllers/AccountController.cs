@@ -412,14 +412,6 @@
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
-
-		[Ajax]
-		[HttpGet]
-		public JsonResult GetPropertyStatuses() {
-			PropertyStatusesActionResult propertyStatusesActionResult = m_oServiceClient.Instance.GetPropertyStatuses();
-			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
-		} // GetPropertyStatuses
-
 		
 		[HttpPost]
 		[Ajax]
@@ -432,8 +424,6 @@
 			string signupPass1,
 			string signupPass2,
 			string securityQuestion,
-			string promoCode,
-			double? amount,
 			string mobilePhone,
 			string mobileCode,
 			string isInCaptchaMode,
@@ -502,8 +492,6 @@
 						model.EMail,
 						FirstName,
 						Surname,
-						promoCode,
-						amount,
 						mobilePhone,
 						mobilePhoneVerified,
 						blm.BrokerFillsForCustomer,
@@ -1005,8 +993,6 @@
 			string email,
 			string sFirstName,
 			string sLastName,
-			string promoCode,
-			double? amount,
 			string mobilePhone,
 			bool mobilePhoneVerified,
 			bool brokerFillsForCustomer,
@@ -1045,7 +1031,6 @@
 				CollectionStatus = m_oCustomerStatusesRepository.Get((int)CollectionStatusNames.Enabled),
 				IsTest = isAutomaticTest,
 				IsOffline = null,
-				PromoCode = promoCode,
 				CustomerInviteFriend = new List<CustomerInviteFriend>(),
 				PersonalInfo = new PersonalInfo {
 					MobilePhone = mobilePhone,
@@ -1106,8 +1091,9 @@
 			m_oCustomers.Save(customer);
 
 			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
-				Customer = customer,
-				Amount = amount,
+				CustomerId = customer.Id,
+				Amount = ToInt(GetAndRemoveCookie("loan_amount"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 24450 : 20000),
+				Term = ToInt(GetAndRemoveCookie("loan_period"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 12 : 9),
 				Created = DateTime.UtcNow,
 			}};
 
@@ -1162,6 +1148,15 @@
 			);
 
 			return bSuccess ? date : (DateTime?)null;
+		} // ToDate
+
+		private int ToInt(string intStr, int intDefault) {
+			if (string.IsNullOrEmpty(intStr))
+				return intDefault;
+			
+			int result;
+			bool bSuccess = int.TryParse(intStr,out result);
+			return bSuccess ? result : intDefault;
 		} // ToDate
 
 		private string GetCookie(string cookieName) {

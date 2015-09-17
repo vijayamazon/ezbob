@@ -1,0 +1,45 @@
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
+<script id="HMRCUploadAccountInfoTemplate" type="text/template">
+	<div id="uploadFilesDiv" class="row-fluid">
+		<h2>Upload VAT return data<div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload" ui-event-control-id="hmrc:upload_info_button"></div></h2>
+		<h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your records</strong>”.</h5>
+
+		<div class="hmrc-upload-ui"></div>
+		@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					"hmrc_upload_done_button",
+					"Done",
+					cls: "button btn-green ev-btn-org",
+					uiEventControlID: "hmrc:do_upload",
+					buttonType: EzButtonType.button),
+				new EzButtonModel(
+					"hmrc_upload_back_button",
+					"Cancel",
+					cls: "button btn-grey back clean-btn",
+					uiEventControlID: "hmrc:upload_back",
+					buttonType: EzButtonType.button)
+			}, origin: origin)
+
+
+		<div class="hmrc-why-question offline_entry_message wizard_message" style="width: 100%;">
+			<div id="uploadHelpButton" class="hmrc-question-button float_left" style="margin-top: 55px;" ui-event-control-id="hmrc:upload_info_button_lower"></div>
+			<div class="hmrc-why">
+				<p>Don’t know where to locate your last 15 months VAT returns?</p>
+				<p>You should have received the files directly from the HMRC for your records. We suggest you request from your filing agent or accountant to email your last 15 months VAT returns.</p>
+				<p>Remember to mention that you need files titled “Printed Copy of Submitted VAT return for your records” </p>
+			</div>
+		</div>
+	</div>
+
+	<div class="hide">
+		<div id="hmrcUploadHelpPopup" class="help_window">
+			<img src="@Url.Content("~/Content/img/hmrc_vat_sample.png")" />
+		</div>
+	</div>
+</script>
