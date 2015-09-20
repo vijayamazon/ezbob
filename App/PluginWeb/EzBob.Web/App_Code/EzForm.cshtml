@@ -610,7 +610,7 @@ string formFieldID = "")
 
 		switch (buttonProp.ButtonType) {
 			case EzButtonType.button:
-                <button class="@buttonProp.Cls"
+                <button type="button" class="@buttonProp.Cls"
 						@if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
 																																							   }
                         @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
