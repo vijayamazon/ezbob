@@ -110,10 +110,16 @@
 				UnderwriterID
 			);
 
+			CalculateMedal(false); 
+
 			new SilentAutomation(CustomerID)
 				.PreventMainStrategy()
 				.SetTag(SilentAutomation.Callers.MainSkipEverything)
+				.SetMedal(this.medal)
 				.Execute();
+
+			this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+			this.autoDecisionResponse.UserStatus = Status.Manual;
 
 			Log.Debug(
 				"Main strategy was activated in 'skip everything go to manual decision mode' by underwriter '{1}'. " +

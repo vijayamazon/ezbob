@@ -2328,3 +2328,35 @@ input[type="text"].err-field-red {
      margin-left:10px; 
 }
 
+.new-credit-line-mode-selector {
+	width: 340px;
+	display: table;
+}
+
+.new-credit-line-mode-selector > div {
+	display: table-row;
+}
+
+.new-credit-line-mode-selector > div:hover {
+	background-color: #ececec;
+}
+
+.new-credit-line-mode-selector > div > div,
+.new-credit-line-mode-selector > div > label {
+	display: table-cell;
+	cursor: pointer;
+	padding: 3px;
+}
+
+.new-credit-line-mode-selector > div > div:first-child {
+	text-align: right;
+}
+
+.new-credit-line-mode-selector > div > div:not(:first-child),
+.new-credit-line-mode-selector > div > label {
+	text-align: center;
+}
+
+.new-credit-line-mode-selector > div > label:hover {
+	background-color: #cccccc;
+}
