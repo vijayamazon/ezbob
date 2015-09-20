@@ -91,7 +91,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE MainStrategySetCustomerIsBeingProcessed @CustomerID, 1
+	EXECUTE MainStrategySetCustomerIsBeingProcessed @CustomerID
 
 	------------------------------------------------------------------------------
 
