@@ -3,7 +3,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 (function() {
 	EzBob.Underwriter.LoanInfoView = Backbone.Marionette.ItemView.extend({
-		template: "#profile-loan-info-template",
+		template: '#profile-loan-info-template',
 
 		initialize: function(options) {
 			this.bindTo(this.model, "change reset sync", this.render, this);
@@ -72,28 +72,38 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		},
 
 		runNewCreditLine: function(e) {
-			if ($(e.currentTarget).hasClass("disabled"))
+			if ($(e.currentTarget).hasClass('disabled'))
 				return false;
 
-			var el = $('<select></select>')
-				.css({ height: '30px', width: '270px', })
-				.append('<option value=1>Skip everything, go to manual decision</option>')
-				.append('<option value=2>Skip everything and apply auto rules</option>')
-				.append('<option value=3>Update everything and apply auto rules</option>')
-				.append('<option value=4>Update everything and go to manual decision</option>');
+			var el = this.$el.find('.new-credit-line-mode-selector-template').children().first().clone(true);
+
+			var name = moment().format('X') + '_new-credit-line-mode-selector_' + Math.random();
+
+			el.find('input[type="radio"]').each(function() {
+				var inp = $(this);
+
+				inp.removeAttr('checked');
+
+				if (inp.data('is-default') === 'yes')
+					inp.attr('checked', 'checked');
+
+				var id = inp.data('id') + '_' + name;
+
+				inp.attr('name', name);
+				inp.attr('id', id);
+			});
 
 			var self = this;
 
 			EzBob.ShowMessage(el, 'New Credit Line Option', (function() {
-				self.createNewCreditLine(el.val());
+				var optionID = el.find('input[type="radio"]:checked').data('option-id');
+				self.createNewCreditLine(optionID);
 			}), 'OK', null, 'Cancel');
 
 			return false;
 		}, // runNewCreditLine
 
 		createNewCreditLine: function(newCreditLineOption) {
-			var that = this;
-
 			BlockUi();
 
 			$.post(window.gRootPath + 'Underwriter/ApplicationInfo/RunNewCreditLine', {
@@ -114,7 +124,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 		}, // createNewCreditLine
 
-		
 		validateLoanSourceRelated: function () {
 		    var loanSourceID = this.model.get('LoanSourceID');
 		    var loanSourceModel = _.find(this.model.get("AllLoanSources"), function (l) { return l.Id == loanSourceID; });
@@ -257,7 +266,9 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		showCreditLineDialog: function() {
 			var self = this;
+
 			BlockUi();
+
 			var id = this.model.get('CashRequestId');
 			var amount = this.model.get('OfferedCreditLine');
 			
@@ -267,10 +278,12 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 					amount: amount
 				}).done(function (result) {
 					UnBlockUi();
+
 					var dialog = new EzBob.Underwriter.CreditLineDialog({
 						model: self.model,
 						brokerCommissionDefaultResult: result
 					});
+
 					EzBob.App.jqmodal.show(dialog);
 				});
 			});
