@@ -51,8 +51,8 @@ EzBob.companyTargets = Backbone.View.extend({
                         click: function () { that.btnOkClick(); },
                         'ui-event-control-id': 'company-target:ok',
                     }
-                ]
-			close: function(evt, ui) { $('html, body').removeAttr('style'); },
+                ],
+				close: function(evt, ui) { $('html, body').removeAttr('style'); },
             });
        
 		var oWidget = this.$el.dialog('widget');
