@@ -90,28 +90,14 @@
 
 			this.cashRequestID.Validate(this);
 
-			if (SkipEverything())
-				return;
-
-			if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
-				StandardFlow();
+			if (!SkipEverything())
+				if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
+					StandardFlow();
 
 			UpdateCustomerAndCashRequest();
 
 			SendEmails();
 		} // Execute
-
-		private void SetCustomerIsUnderMainStrategy(bool isBeingProcessed) {
-			if (!this.overrideApprovedRejected)
-				return;
-
-			DB.ExecuteNonQuery(
-				"MainStrategySetCustomerIsBeingProcessed",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", CustomerID),
-				new QueryParameter("@IsBeingProcessed", isBeingProcessed)
-			);
-		} // SetCustomerIsUnderMainStrategy
 
 		private bool SkipEverything() {
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverything)
@@ -128,8 +114,6 @@
 				.PreventMainStrategy()
 				.SetTag(SilentAutomation.Callers.MainSkipEverything)
 				.Execute();
-
-			SetCustomerIsUnderMainStrategy(false);
 
 			Log.Debug(
 				"Main strategy was activated in 'skip everything go to manual decision mode' by underwriter '{1}'. " +
@@ -732,7 +716,11 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
-				SetCustomerIsUnderMainStrategy(true);
+				DB.ExecuteNonQuery(
+					"MainStrategySetCustomerIsBeingProcessed",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", CustomerID)
+				);
 
 				if (this.nlExists) {
 					this.nlCashRequestID = DB.ExecuteScalar<int>(

@@ -6,17 +6,26 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE MainStrategySetCustomerIsBeingProcessed
-@CustomerID INT,
-@IsBeingProcessed BIT
+@CustomerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SET @IsBeingProcessed = ISNULL(@IsBeingProcessed, 1)
-
 	UPDATE Customer SET
-		CreditResult = CASE @IsBeingProcessed WHEN 1 THEN NULL   ELSE 'WaitingForDecision' END,
-		Status       = CASE @IsBeingProcessed WHEN 1 THEN Status ELSE 'Manual'             END
+		CreditResult               = NULL,
+		CreditSum                  = NULL,
+		Status                     = NULL,
+		ApplyForLoan               = NULL,
+		ValidFor                   = NULL,
+		SystemDecision             = NULL,
+		MedalType                  = NULL,
+		SystemCalculatedSum        = 0,
+		ManagerApprovedSum         = 0,
+		DateRejected               = NULL,
+		RejectedReason             = NULL,
+		DateApproved               = NULL,
+		ApprovedReason             = NULL,
+		IsLoanTypeSelectionAllowed = NULL
 	WHERE
 		Id = @CustomerID
 END
