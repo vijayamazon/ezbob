@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{08A09446-762E-47D3-B2C1-5EB5084487C6}</ProjectGuid>
+    <ProjectGuid>{27E70C37-C906-4BDA-8D4C-C595C175DC08}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RulesEngine</RootNamespace>
-    <AssemblyName>RulesEngine</AssemblyName>
+    <RootNamespace>InvestorDAL</RootNamespace>
+    <AssemblyName>InvestorDAL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,16 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\3rdparty\StructureMap\structuremap.3.1.6.186\lib\net40\StructureMap.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap.Net4">
-      <HintPath>..\packages\structuremap.3.1.6.186\lib\net40\StructureMap.Net4.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,15 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL\ExressionBuilder.cs" />
-    <Compile Include="BLL\MatchFactory.cs" />
-    <Compile Include="Contracts\IExressionBuilder.cs" />
-    <Compile Include="Contracts\IRulesEngineDAL.cs" />
-    <Compile Include="Contracts\IMatch.cs" />
-    <Compile Include="DAL\RulesEngineDAL.cs" />
-    <Compile Include="BLL\Match.cs" />
-    <Compile Include="Models\Rule.cs" />
-    <Compile Include="Models\RulesEnums.cs" />
+    <Compile Include="Contract\IInvestorParametersDAL.cs" />
+    <Compile Include="InvestorParametersDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,15 +48,7 @@
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
-      <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
-      <Name>Barrymore</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Packages\packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

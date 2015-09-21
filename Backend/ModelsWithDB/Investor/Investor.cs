@@ -1,19 +1,21 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.Investor {
+﻿namespace Ezbob.Backend.ModelsWithDB.Investor
+{
     using System;
+    using System.Runtime.InteropServices.ComTypes;
     using System.Runtime.Serialization;
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
-    public class Investor
+    public class Investor 
     {
-		[PK(true)]
-		[DataMember]
+        [PK(true)]
+        [DataMember]
         public int ID { get; set; }
 
         [DataMember]
         public InvestorType InvestorType { get; set; }
 
-		[DataMember]
+        [DataMember]
         public String Name { get; set; }
 
         [DataMember]
@@ -28,5 +30,8 @@
         [DataMember]
         public TimeSpan TimeSpan { get; set; }
 
+        public InvestorParameters InvestorParameters { get; set; }
+
+ 
     }//class Investor
 }//ns

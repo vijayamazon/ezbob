@@ -3,6 +3,7 @@
 
     public class InvestorParameters
     {
+        public int investorID { get; set; }
         public int DailyInvestmentAllowed { get; set; }
 
         public int WeeklyInvestmentAllowed { get; set; }

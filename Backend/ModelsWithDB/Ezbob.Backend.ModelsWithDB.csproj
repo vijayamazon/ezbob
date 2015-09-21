@@ -176,7 +176,6 @@
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
     <Compile Include="Investor\LoanParameters.cs" />
-    <Compile Include="Investor\Rule.cs" />
     <Compile Include="Investor\InvestorParameters.cs" />
     <Compile Include="Investor\InvestorEnums.cs" />
     <Compile Include="Investor\Portfolio.cs" />
