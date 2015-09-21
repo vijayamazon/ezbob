@@ -61,11 +61,6 @@
 	vertical-align: top;
 }
 
-.main-page-everline .add-company-director .FormRadioCtrl > span > label:after {
-	content: "\A";
-	white-space: pre;
-}
-
 .main-page-everline .form_field_container .input-wrapper .add-company-director .form_field_left_side {
 	width: 200px!important;
 }
@@ -91,3 +86,7 @@
 	text-align: right;
 }
 
+.main-page-everline .add-company-director .FormRadioCtrl > span > label:after {
+	white-space: pre;
+	content: "\A";
+}
