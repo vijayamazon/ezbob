@@ -25,7 +25,7 @@ function InitAmountPeriodSliders(options)
 			return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 		};
 
-		return '£' + FormatMoney.call(n, '0', '.', ',');
+		return '£' + $.trim(FormatMoney.call(n, '0', '.', ','));
 	}; // DisplayAmount
 
 	function DisplayPeriod(n) {
@@ -64,7 +64,7 @@ function InitAmountPeriodSliders(options)
 		   
 		}
 		if (sAreaName == 'amount')
-			oTextbox.autoNumeric($.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max }));
+			oTextbox.autoNumeric($.extend({}, EzBob.moneyFormatNoDecimalsUK, { vMin: oDefinitions.min, vMax: oDefinitions.max }));
 		else
 			oTextbox.autoNumeric({ vMin: oDefinitions.min, vMax: oDefinitions.max, mDec: 0 });
 
