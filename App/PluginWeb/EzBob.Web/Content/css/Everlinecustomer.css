@@ -302,13 +302,15 @@ strong {
     }
 
         .security-icons .item .verisign {
-			background: url(images/verisign_seal.gif) no-repeat 0 0;
+            /*background: url(images/verisign_seal.gif) no-repeat 0 0;*/
 			width: 100px;
 			height: 72px;
-			background-position-x: 12px;
+            -moz-background-position-x: 12px;
+            -o-background-position-x: 12px;
+            background-position-x: 12px;
         }
 
-        .security-icons .item .truste img {
+.security-icons .item .truste img {
             height: 40px;
             margin-top: 17px;
         }
@@ -592,7 +594,7 @@ a.button:hover {
 }
 .form_buttons_container .input-wrapper .ev-btn-org,
 .form_buttons_container .input-wrapper a.ev-btn-org {
-	width: 42%;
+	width: 240px;
 	display: inline-block;
 	float: right;
 	margin-left: 5%;
@@ -982,6 +984,7 @@ hr.wizard-hr {
         background: transparent;
         width: 15px;
         height: 15px;
+        z-index:1;
         -moz-border-radius: 0;
         -webkit-border-radius: 0;
         -moz-box-shadow: none;

@@ -186,8 +186,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		});
 
 		this.$el.find('.cashInput').moneyFormat();
-
-		this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
+		if (EzBob.Config.Origin !== 'everline') {
+		    this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
+		}
+		
 		this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 
 	    if (this.model.get('IsAlibaba')) {

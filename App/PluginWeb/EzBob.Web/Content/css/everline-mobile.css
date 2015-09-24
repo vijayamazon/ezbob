@@ -28,6 +28,9 @@
        .form_field_container .input-wrapper .clean-btn.form_field_right_side,  .form_field_container .input-wrapper .clean-btn.form_field_right_side_signup_phone  {
        width: 42%;
    }
+       .form_buttons_container .input-wrapper .ev-btn-org, .form_buttons_container .input-wrapper a.ev-btn-org {
+           width:42%;
+       }
 }
 @media screen and (max-width: 800px) {
     /*
