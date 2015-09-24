@@ -1,33 +1,48 @@
 ﻿@using System.Collections.Generic
 @using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
 }
 
 <script type="text/template" id="PayPointCardSelectViewTemplate">
 	<div class="modal-body">
-		<div class="control-group">
-			<div class="controls controls-inline">
-				<label class="radio card-options-label">
-					<input type="radio" name="cardOptions" id="cardOption1" value="useExisting" checked ui-event-control-id="select-debit-card:card-options">
-					Use debit card ending:
-				</label>
+		<div class="control-group select-card-area">
+			
+			<div class="form_field_container control-group less-space">
+				<label class="radio card-options-label w100p click-input-wrap click-wrap" ui-event-control-id="pay-early:loan">
+					<span class="click-input-wrap">
+						<input type="radio" id="cardOption1" name="cardOptions" value="useExisting" checked ui-event-control-id="select-debit-card:card-options">
+						<label class="radio-btn fa" for="cardOption1">
+							<i class="fa fa-circle"></i>
+						</label>
+					</span>
+					<span class="title">Use debit card ending@( isEverline ? "" : ": ")</span>
 
-				<select class="selectheight" ui-event-control-id="select-debit-card:existing-card">
-					<% _.each(cards, function(c, i){%>
-					<option <% if (c.IsDefault) { print('selected="selected"'); } %> value="<%- c.Id %>"><%- c.CardNo || 'XXXX' %> Exp <%- EzBob.formatDateShortCard(c.ExpireDate) %></option>
-					<%});%>
-				</select>
-			</div>
-			<div class="controls controls-inline">
-				<label class="radio card-options-label">
-					<input type="radio" name="cardOptions" id="cardOption2" value="useNew" ui-event-control-id="select-debit-card:card-options">
-					Enter new debit card
+					<div class="input-wrapper">
+						<select class="selectheight" ui-event-control-id=" select-debit-card:existing-card">
+							<% _.each(cards, function(c, i){%>
+							<option <% if (c.IsDefault) { print('selected="selected"'); } %> value="<%- c.Id %>"><%- c.CardNo || 'XXXX' %> Exp <%- EzBob.formatDateShortCard(c.ExpireDate) %></option>
+							<%});%>
+						</select>
+					</div>
 				</label>
 			</div>
-		</div>
+			
+			<div class="form_field_container control-group less-space">
+				<label class="radio card-options-label w100p click-input-wrap click-wrap" ui-event-control-id="pay-early:loan">
+					<span class="click-input-wrap">
+						<input type="radio" id="cardOption2" name="cardOptions" value="useNew" ui-event-control-id="select-debit-card:card-options">
+						<label class="radio-btn fa" for="cardOption2">
+							<i class="fa fa-circle"></i>
+						</label>
+					</span>
+					<span class="title">Enter new debit card@( isEverline ? "" : ": ")</span>
+				</label>
+			</div>
 
 		@EzForm.WizardButton(new List<EzButtonModel>{
 				new EzButtonModel(null, "Continue",

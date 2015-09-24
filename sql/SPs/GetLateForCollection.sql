@@ -21,6 +21,7 @@ BEGIN
 		ls.LoanId LoanID, 
 		ls.Interest Interest,  
 		c.Id CustomerID,
+		c.OriginID OriginID,
 		c.Name AS email, 
 		c.FirstName FirstName, 
 		c.Fullname FullName,
@@ -44,4 +45,3 @@ END
 
 
 GO
-

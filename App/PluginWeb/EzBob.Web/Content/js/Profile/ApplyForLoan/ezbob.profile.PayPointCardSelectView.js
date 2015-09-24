@@ -94,7 +94,7 @@ EzBob.Profile.PayPointCardSelectView = Backbone.Marionette.ItemView.extend({
 			width: '560px',
 			maxWidth: '100%',
 			modal: true,
-			title: 'Select Card',
+			title: 'Select a card',
 			resizable: false,
 			draggable: false
 		};

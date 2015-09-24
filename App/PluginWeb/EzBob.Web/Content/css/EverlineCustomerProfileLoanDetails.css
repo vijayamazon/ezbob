@@ -4,18 +4,18 @@
 	padding: 20px 0;
 }
 
-.main-page-everline #get-cash h1 {
+.main-page-everline #get-cash h1, h3 {
 	font-family: 'Open Sans',sans-serif;
 	font-size: 24px;
 	color: #666666;
-	font-weight: bold;
+	font-weight: 400;
 }
 
 .main-page-everline #get-cash h2 {
 	font-family: 'Open Sans',sans-serif;
 	font-size: 22px;
 	color: #8dc641;
-	font-weight: bold;
+	font-weight: 400;
 }
 
 .main-page-everline #get-cash .form-horizontal {
@@ -229,8 +229,10 @@ div.sign-full-name {
 	float:right;
 }
 
-.click-area {
-	margin-left: 25px;
+.click-area,
+.minimum-payment,
+#single-loan-pay-options {
+	margin-left: 120px;
 }
 
 #pay-early-other-text,
@@ -239,9 +241,10 @@ div.sign-full-name {
 	margin-left: -30px;
 }
 
-#rollover-other-text {
-	margin-left: 0px;
-	width: 77%;
+#rollover-other-text,
+#pay-early-other-text {
+	margin-left: -60px;
+	width: 60%;
 }
 
 #cap2 {
@@ -294,4 +297,81 @@ body .apply-header-approved b {
 
 .main-page-everline #get-cash .form-horizontal.early-payment-form {
 	padding: 25px;
+	padding-left: 40px;
+}
+
+#rollover-select, #loan-select {
+	margin-left: -150px;
+}
+
+.early-payment-form #loan-select,
+.early-payment-form #rollover-select {
+	width: 80%;
+}
+
+#get-cash .radio .title,
+#get-cash .checkbox .title {
+	font-weight: 600;
+}
+
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+   background-color: #eeeeee !important;
+}
+
+.modal-body {
+	padding: 0;
+}
+
+.modal-body .click-wrap .title {
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.card-options-label {
+	width: 100%;
+}
+
+.card-options-label .input-wrapper{
+	width: 60%;
+    float: right;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+	font-weight: 300;
+    font-size: 33px;
+	margin-bottom: 0px;
+}
+
+.early-payment-form .input-wrapper, 
+.card-options-label .input-wrapper{
+	margin-top: -10px;
+}
+
+.ui-widget .ui-widget-content .modal-body button.ev-btn-org,
+.ui-widget .ui-widget-content .modal-body button.clean-btn {
+	height: 38px !important;
+	line-height: normal;
+	padding:0;
+}
+
+.ui-widget .ui-widget-content .modal-body button.ev-btn-org {
+	width: 60%;
+}
+
+.ui-widget .ui-widget-content .modal-body button.clean-btn {
+	width: 25%;
+}
+
+.select-card-area .form_buttons_container div.input-wrapper {
+	width: 70%;
+	min-height: 40px;
+	margin-top: 40px;
+}
+
+.modal-body .form_buttons_container .input-title {
+	height: 40px;
+}
+
+.pay-early-wrapper h1 {
+	border-bottom: 0;
 }

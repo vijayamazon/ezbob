@@ -363,7 +363,7 @@ body .other-amount-label {
 .profile-menu .nav > li > a {
     text-shadow: none;
     font-size: 14px ;
-    padding: 0 18px !important;
+    padding: 0 16px !important;
     color: #a7a6a6;
     font-family: "Titillium Web Semi Bold";
     line-height: 40px !important;
@@ -501,14 +501,6 @@ h2.header-message a{
     margin: 0;
     margin-left: 15px;
     width: 220px;
-}
-
-.early-payment-form #loan-select {
-	width: 405px;
-}
-
-.early-payment-form #rollover-select {
-	width: 374px;
 }
 
 #profile-content .stores-view .next { display: none!important;}

@@ -1260,7 +1260,42 @@
 
 			
 		}
+		[Test]
+		public void TestCollectionSms() {
+			/*
+			SetLateLoanStatus stra = new SetLateLoanStatus();
+			stra.LoadSmsTemplates();
+			var modelEzbob = new SetLateLoanStatus.CollectionDataModel {
+				OriginID = 1,
+				FirstName = "John",
+				AmountDue = 125,
+				DueDate = DateTime.Today.AddDays(-5),
+				SmsSendingAllowed = false,
+				CustomerID = 199
+			};
+			var modelEverline = new SetLateLoanStatus.CollectionDataModel {
+				OriginID = 2,
+				FirstName = "John",
+				AmountDue = 125,
+				DueDate = DateTime.Today.AddDays(-5),
+				SmsSendingAllowed = false,
+				CustomerID = 199
+			};
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay0);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay1to6);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay7);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay8to14);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay15);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay21);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay31);
 
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay0);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay1to6);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay7);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay8to14);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay15);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay21);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay31);
         [Test]
         public void TestDataSharing() {
             DataSharing stra = new DataSharing(16142, AlibabaBusinessType.APPLICATION_WS_3);
@@ -1268,5 +1303,7 @@
             Console.WriteLine(stra.Result);
 
         }
+			*/
+		}
 	}
 }
