@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\ExressionBuilder.cs" />
-    <Compile Include="BLL\MatchFactory.cs" />
     <Compile Include="Contracts\IExressionBuilder.cs" />
     <Compile Include="Contracts\IRulesEngineDAL.cs" />
     <Compile Include="Contracts\IMatch.cs" />

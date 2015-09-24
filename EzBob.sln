@@ -263,6 +263,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobTestDI", "Integration\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobTest", "Integration\Tests\EzBobTest\EzBobTest.csproj", "{16A5A26A-EEC4-4A17-A40B-72A73429921F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobCommon", "EzBobCommon\EzBobCommon.csproj", "{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1710,6 +1712,20 @@ Global
 		{16A5A26A-EEC4-4A17-A40B-72A73429921F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{16A5A26A-EEC4-4A17-A40B-72A73429921F}.Release|x64.ActiveCfg = Release|Any CPU
 		{16A5A26A-EEC4-4A17-A40B-72A73429921F}.Release|x86.ActiveCfg = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|x64.ActiveCfg = Release|Any CPU
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1834,6 +1850,7 @@ Global
 		{27E70C37-C906-4BDA-8D4C-C595C175DC08} = {A38B5A1D-6332-48C4-B2FD-6BDDF30F18D3}
 		{C04CBE39-E161-4166-885B-64C4D08BE744} = {C261C250-B7A7-4DF0-8CA0-5C73AB80D3B5}
 		{16A5A26A-EEC4-4A17-A40B-72A73429921F} = {C261C250-B7A7-4DF0-8CA0-5C73AB80D3B5}
+		{0F9E4B23-FAF9-41AA-9ED8-D21D30A2EFA8} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

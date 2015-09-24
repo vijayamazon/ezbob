@@ -3,8 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using Ezbob.Backend.ModelsWithDB.Investor;
+    using EzBobCommon.Contracts;
     using InvestorBLL.Contracts;
-    using RulesEngine.BLL;
     using RulesEngine.Contracts;
     using RulesEngine.Models;
     using StructureMap.Attributes;

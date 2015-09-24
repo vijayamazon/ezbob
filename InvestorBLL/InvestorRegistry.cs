@@ -1,6 +1,8 @@
 ﻿namespace InvestorBLL
 {
     using Ezbob.Backend.ModelsWithDB.Investor;
+    using EzBobCommon;
+    using EzBobCommon.Contracts;
     using InvestorBLL.Contracts;
     using InvestorDAL;
     using InvestorDAL.Contract;

@@ -33,7 +33,7 @@
                 LeftParamID = -1,
                 RightParamID = -1,
                 Operator = Operator.LessThan,
-                IsRoot = false
+                IsRoot = true
             });
 
 
@@ -57,10 +57,10 @@
             //arge 1 = 1000
             //1000 < 800 ? => false
 
-
             var InvestorId = 1;
 
-            IExressionBuilder exressionBuilder = new ExressionBuilder();
+            var container = this.InitContainer(typeof(InvestorService));
+            var exressionBuilder = container.GetInstance<IExressionBuilder>();
 
             var firstRuleFunc = exressionBuilder.CompileRule<LoanParameters, InvestorParameters>(InvestorId, rulesDict);
             var result = firstRuleFunc(loanParameters, investorParameters);
@@ -145,7 +145,8 @@
             var InvestorId = 1;
             var rootRule = rulesDict.FirstOrDefault(x => x.Value.IsRoot);
 
-            IExressionBuilder exressionBuilder = new ExressionBuilder();
+            var container = this.InitContainer(typeof(InvestorService));
+            var exressionBuilder = container.GetInstance<IExressionBuilder>();
 
             //((Amount < MonthlyInvestmentAllowed)&&(Amount < DailyInvestmentAllowed))
 
