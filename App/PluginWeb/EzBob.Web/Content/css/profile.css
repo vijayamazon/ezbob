@@ -503,14 +503,6 @@ h2.header-message a{
     width: 220px;
 }
 
-.early-payment-form #loan-select {
-	width: 405px;
-}
-
-.early-payment-form #rollover-select {
-	width: 374px;
-}
-
 #profile-content .stores-view .next { display: none!important;}
 
 #profile-content .stores-view { width: 100%; }
