@@ -73,10 +73,6 @@
             investorParameters.DailyInvestmentAllowed = 1200;
             result = firstRuleFunc(loanParameters, investorParameters);
             Assert.IsTrue(result);
-
-
-
-
         }
 
 
@@ -403,7 +399,7 @@
             {
                 Amount = 800,
                 Grade = 4
-            };           
+            };
 
             container.Configure(r => r.ForSingletonOf<IRulesEngineDAL>()
                 .Use(() => ruleEngineDalMock.Object));
