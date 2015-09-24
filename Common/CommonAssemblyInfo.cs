@@ -2,8 +2,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyProduct("Ezbob WEB")]
-[assembly: AssemblyCompany("Orange Money Ezbob Ltd")]
-[assembly: AssemblyCopyright("Copyright (c) Orange Money Ezbob Ltd")]
+[assembly: AssemblyCompany("EZBob Ltd")]
+[assembly: AssemblyCopyright("Copyright (c) EZBob Ltd")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
