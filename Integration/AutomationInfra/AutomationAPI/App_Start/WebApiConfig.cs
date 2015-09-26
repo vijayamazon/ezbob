@@ -18,6 +18,12 @@
             );
 
             config.Routes.MapHttpRoute(
+            name: "QuickTextReplaceAllApi",
+            routeTemplate: "api/{controller}/{action}/{fromStr}/{toStr}",
+            defaults: new {fromStr = string.Empty, toStr = string.Empty }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

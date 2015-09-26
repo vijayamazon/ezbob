@@ -369,6 +369,22 @@
             return _UpdateCase_(caseID, title, typeID, priorityID, estimate, milestoneID, refs, null);
         }
 
+        public CommandResult<ulong> UpdateCase(Case caseItem)
+        {
+            return _UpdateCase_(caseItem);
+        }
+
+        private CommandResult<ulong> _UpdateCase_(Case caseItem)
+        {
+            if (caseItem == null)
+            {
+                return new CommandResult<ulong>(false, 0, new ArgumentNullException("caseItem"));
+            }
+            string uri = _CreateUri_(_CommandType_.update, _NODE_CASE_, caseItem.ID);
+            JObject jsonParams = JsonUtility.Merge(caseItem.GetJsonExtention() , null);
+            return _SendCommand(uri, jsonParams);
+        }
+
 
         /// <summary>update an existing milestone</summary>
         /// <param name="milestoneID">id of the milestone</param>
@@ -1136,5 +1152,7 @@
 
 
         #endregion Private Methods
+
+
     }
 }

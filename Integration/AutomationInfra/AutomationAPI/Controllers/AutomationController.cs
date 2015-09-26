@@ -48,6 +48,13 @@
             return httpResponseMessage;
         }
 
+        [AcceptVerbs("GET", "POST")]
+        public IHttpActionResult QuickTextReplaceAll(string fromStr, string toStr)
+        {
+            AutomationFacade.QuickTextReplaceAll(fromStr, toStr);
+            return Ok();
+        }
+
         //[AcceptVerbs("GET", "POST")]
         //public IHttpActionResult PrintAll(ulong id) {
         //    AutomationFacade.TestRailEngine.PrintAll();

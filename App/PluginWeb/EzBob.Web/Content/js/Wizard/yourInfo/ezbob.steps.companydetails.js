@@ -290,7 +290,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 				if (that.targetingTries === 0 && !isEntrepreneur) {
 					EzBob.App.trigger(
 						'warning',
-						'Company ' + companyName + ' ' + postcode + ' was not found. ' +
+						'Company "' + companyName + '" at postcode "' + postcode + '" was not found. ' +
 						'Please check your input and try again.'
 					);
 					that.targetingTries++;

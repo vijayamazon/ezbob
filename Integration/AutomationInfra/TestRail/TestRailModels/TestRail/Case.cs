@@ -100,14 +100,6 @@
             return c;
         }
 
-        /// <summary>creates a json object with the given parameters</summary>
-        /// <param name="title">title of the case</param>
-        /// <param name="typeID">(optional)the ID of the case type</param>
-        /// <param name="priorityID">(optional)the id of the case priority</param>
-        /// <param name="estimate">(optional)the estimate, e.g. "30s" or "1m 45s"</param>
-        /// <param name="milestoneID">(optional)the ID of the milestone to link to the test case</param>
-        /// <param name="refs">(optional)a comma-separated list of references/requirements</param>
-        /// <returns>json object for case</returns>
         public virtual JObject GetJson()
         {
             dynamic jsonParams = new JObject();
@@ -117,6 +109,30 @@
             if (!string.IsNullOrWhiteSpace(Estimate)) { jsonParams.estimate = Estimate; }
             if (null != MilestoneID) { jsonParams.milestone_id = MilestoneID.Value; }
             if (!string.IsNullOrWhiteSpace(References)) { jsonParams.refs = References; }
+
+            return jsonParams;
+        }
+
+        public virtual JObject GetJsonExtention()
+        {
+            dynamic jsonParams = new JObject();
+            if (!string.IsNullOrWhiteSpace(Title)) { jsonParams.title = Title; }
+            if (null != TypeID) { jsonParams.type_id = TypeID.Value; }
+            if (null != PriorityID) { jsonParams.priority_id = PriorityID.Value; }
+            if (!string.IsNullOrWhiteSpace(Estimate)) { jsonParams.estimate = Estimate; }
+            if (null != MilestoneID) { jsonParams.milestone_id = MilestoneID.Value; }
+            if (!string.IsNullOrWhiteSpace(References)) { jsonParams.refs = References; }
+            if (!string.IsNullOrWhiteSpace(CustomPreConds)) { jsonParams.custom_preconds = CustomPreConds; }
+            if (Steps != null && Steps.Count > 0) {
+                if (null != Steps && 0 < Steps.Count) {
+                    JArray jarray = new JArray();
+                    foreach (var stepItem in Steps) {
+                        jarray.Add(stepItem.GetJsonObject());
+                    }
+                    jsonParams.custom_steps_separated = jarray;
+                }
+            }
+
             return jsonParams;
         }
         #endregion Public Methods
