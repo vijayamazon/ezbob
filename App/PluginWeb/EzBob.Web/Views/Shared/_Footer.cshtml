@@ -8,7 +8,7 @@
                 <div class="cosme-images">
                     <div class="cosme-images-wrapper">
                         Everline and everline.com are trading names of EZBob Ltd. which is authorised and regulated by the Financial Conduct Authority. FRN 647816.
-                        <img class="eif-img"   src="/Content/css/images/europe-fund.png" />
+                        <img class="eif-img" src="/Content/css/images/europe-fund.png" />
                         EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.
                     </div>
                 </div>
@@ -21,10 +21,10 @@
             </div>
 	    </div>
         <div class="subfooter">
-
-
             <div class="footer-navigator">
                 <div class="footer-navigator-inner">
+					<a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank" class="privacy-and-cookie-policy">Privacy and Cookie Policy</a>
+
                     <ul class="footer-navigator-list">
                         <li><a href="#">Intermediaries</a></li>
                         <li class="hide-mobile"><a href="#">Partners</a></li>
@@ -60,6 +60,8 @@
 	<footer>
 		<div id="copyrights">
 			<div class="copyrights-inner">
+				<div class="privacy-and-cookie-policy"><a href="https://www.ezbob.com/privacy-and-cookies" target="_blank">Privacy and Cookie Policy</a></div>
+
 				@if (!string.IsNullOrEmpty(ViewBag.FooterText)) {
 					@Html.Raw(ViewBag.FooterText)
 					@Html.Raw(@"<br>powered by <span class='bold'>ezbob</span>")

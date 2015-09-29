@@ -150,7 +150,7 @@ footer {
     background: linear-gradient(to bottom,  #333333 0%,#1f2022 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
     color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
-    height: 90px;
+    height: 120px;
     min-width: 1000px;
     
 }
@@ -161,6 +161,11 @@ footer {
     padding-bottom: 17px;
     padding-top: 17px;
     font-family: Arial;
+}
+
+.copyrights-inner > .privacy-and-cookie-policy {
+	font-size: 14px;
+	margin-bottom: 10px;
 }
 
 /*-- General Content Classes --*/
