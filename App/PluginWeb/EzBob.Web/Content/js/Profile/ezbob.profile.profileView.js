@@ -83,6 +83,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 			$('.header-info-text').text('MY ACCOUNT');
 		}
 
+		$('footer.location-customer-everline .privacy-and-cookie-policy').hide();
+
 		return this;
 	},
 

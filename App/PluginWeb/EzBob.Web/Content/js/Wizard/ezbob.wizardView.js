@@ -171,6 +171,7 @@ EzBob.WizardView = EzBob.View.extend({
         var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
         notifications.render();
         $('.footer-navigator').hide();
+		$('footer.location-customer-everline .privacy-and-cookie-policy').show();
         if ($('.broker-finish-wizard-later').length)
             $('#user-menu').hide();
         $('.find-out-more').hide();
