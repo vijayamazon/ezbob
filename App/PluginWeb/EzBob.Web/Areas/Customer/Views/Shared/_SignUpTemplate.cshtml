@@ -1,6 +1,4 @@
-﻿@using System
-@using System.Collections.Generic
-@using System.Linq
+﻿@using System.Linq
 @using EZBob.DatabaseLib.Model.Database.UserManagement
 @using EzBob.Web.Infrastructure
 @using ConfigManager
@@ -99,7 +97,7 @@
                             </div>
                             <div class="clear"></div>
                             <hr>
-                            <div class="help_security"></div>
+							<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
                         </div>
                     }
                     <div id="everline_help" class="help_window" ui-event-control-id="signup:everline-help-popup">

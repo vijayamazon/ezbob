@@ -1,7 +1,6 @@
-﻿@using System
-@using System.Collections.Generic
-@using System.Linq
+﻿@using System.Linq
 @using EzBob.CommonLib
+@using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib
 @using EZBob.DatabaseLib.Model.Marketplaces.Yodlee
@@ -98,9 +97,8 @@
 								target: "_blank",
 								onClick:"$.colorbox.close();")
 							}, origin: origin)
-                    
                     <hr>
-                    <div class="help_security"></div>
+					<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
                 </div>
             </div>
         </form>
