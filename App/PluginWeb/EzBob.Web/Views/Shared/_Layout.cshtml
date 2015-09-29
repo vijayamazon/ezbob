@@ -86,7 +86,10 @@
 			@RenderBody()
 		</div>
 
-		@{ Html.RenderPartial("_Footer", new ViewDataDictionary(ViewData)); }
+		@{
+			ViewBag.FooterLocation = "customer";
+			Html.RenderPartial("_Footer", new ViewDataDictionary(ViewData));
+		}
 		
 		
 		@if (!IsSectionDefined("customJs")) {

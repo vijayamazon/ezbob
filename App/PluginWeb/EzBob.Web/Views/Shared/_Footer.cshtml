@@ -2,62 +2,61 @@
 @model dynamic
 
 @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
-	<footer class="everline_footer">
-	    <div class="footer-eif">
-            <div class="footer-eif-inner">
-                <div class="cosme-images">
-                    <div class="cosme-images-wrapper">
-                        Everline and everline.com are trading names of EZBob Ltd. which is authorised and regulated by the Financial Conduct Authority. FRN 647816.
-                        <img class="eif-img" src="/Content/css/images/europe-fund.png" />
-                        EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.
-                    </div>
-                </div>
-                <div class="footer-eif-text">
-                    <div class="about-eif">About the European Investment Fund</div>
-                    <p>
-                        Everline provide financing that benefits from the support of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020). The Loan Guarantee Facility is managed and implemented by the European Investment Fund (EIF) <a class="find-out-more" href="#">Find out more</a>.
-                    </p>
-                </div>
-            </div>
-	    </div>
-        <div class="subfooter">
-            <div class="footer-navigator">
-                <div class="footer-navigator-inner">
-					<a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank" class="privacy-and-cookie-policy">Privacy and Cookie Policy</a>
+	<footer class="everline_footer location-@ViewBag.FooterLocation-@ViewBag.CustomerOrigin.GetOrigin()">
+		<div class="footer-eif">
+			<div class="footer-eif-inner">
+				<div class="cosme-images">
+					<div class="cosme-images-wrapper">
+						<img src="/Content/css/images/cosme-pic.png" />
+						<img class="eif-img" src="/Content/css/images/europe-fund.png" />
+					</div>
+				</div>
+				<div class="footer-eif-text">
+					<div class="about-eif">About the European Investment Fund</div>
+					<p>
+						Everline provide financing that benefits from the support of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020). The Loan Guarantee Facility is managed and implemented by the European Investment Fund (EIF) <a class="find-out-more" href="#">Find out more</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="subfooter">
+			<div class="footer-navigator">
+				<div class="footer-navigator-inner">
+					<div class="privacy-and-cookie-policy">
+						<a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy and Cookie Policy</a>
+					</div>
 
-                    <ul class="footer-navigator-list">
-                        <li><a href="#">Intermediaries</a></li>
-                        <li class="hide-mobile"><a href="#">Partners</a></li>
-                        <li><a href ="#">Legal</a></li>
-                        <li><a href="#">Terms and Conditions</a></li>
-                        <li><a href="#">Privacy and cookie policy</a></li>
-                        <li><a href="#">Advice</a></li>
-                    </ul>
-                    <div class="social-link-icons">
-                        
-                        <ul>
-                            <li><a class="facebook" href="#face"></a></li>
-                            <li><a class="tweeter" href="#face"></a></li>
-                            <li><a class="linkedin" href="#face" ></a></li> 
-                        </ul>
-                   
-                    </div>
-                </div>
-            </div>
-            <div class="footer-text">
-                <p>
-                    EZBob Ltd. trading as Everline is authorized and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br />
-                    EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
-                    Registered Address: 36 Soho Square, London W1D 3QY<br />
-                    All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
-                    All loans are subject to status and approval. 18+ only.
-                </p>
-                
-            </div>
-        </div>
+					<ul class="footer-navigator-list">
+						<li><a href="#">Intermediaries</a></li>
+						<li class="hide-mobile"><a href="#">Partners</a></li>
+						<li><a href="#">Legal</a></li>
+						<li><a href="#">Terms and Conditions</a></li>
+						<li><a href="#">Privacy and cookie policy</a></li>
+						<li><a href="#">Advice</a></li>
+					</ul>
+					<div class="social-link-icons">
+						<ul>
+							<li><a class="facebook" href="#face"></a></li>
+							<li><a class="tweeter" href="#face"></a></li>
+							<li><a class="linkedin" href="#face"></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="footer-text">
+				<p>
+					EZBob Ltd. trading as Everline is authorized and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br />
+					EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
+					Registered Address: 36 Soho Square, London W1D 3QY<br />
+					All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
+					All loans are subject to status and approval. 18+ only.
+				</p>
+
+			</div>
+		</div>
 	</footer>
 } else {
-	<footer>
+	<footer class="location-@ViewBag.FooterLocation-@ViewBag.CustomerOrigin.GetOrigin()">
 		<div id="copyrights">
 			<div class="copyrights-inner">
 				<div class="privacy-and-cookie-policy"><a href="https://www.ezbob.com/privacy-and-cookies" target="_blank">Privacy and Cookie Policy</a></div>

@@ -9,36 +9,34 @@
 	ViewBag.Title = "Brokers |" + ViewBag.CustomerOrigin.GetOrigin();
 }
 
-		<div class="row-fluid broker-page-content main-page main-page-ezbob">
-			<div class="inner">
-				<section class="broker">
-					<div class="notifications"></div>
-					@{
-						Html.RenderPartial("Signup");
-						Html.RenderPartial("Login");
-						Html.RenderPartial("Forgotten");
-						Html.RenderPartial("Dashboard");
-						Html.RenderPartial("AddCustomer");
-						Html.RenderPartial("AddBank");
-						Html.RenderPartial("LeadDetails");
-						Html.RenderPartial("CustomerDetails");
-						Html.RenderPartial("Forbidden");
-						Html.RenderPartial("RequestAcceptTerms");
-					}
-				</section>
-			</div>
-		</div>
+<div class="row-fluid broker-page-content main-page main-page-ezbob">
+	<div class="inner">
+		<section class="broker">
+			<div class="notifications"></div>
+			@{
+				Html.RenderPartial("Signup");
+				Html.RenderPartial("Login");
+				Html.RenderPartial("Forgotten");
+				Html.RenderPartial("Dashboard");
+				Html.RenderPartial("AddCustomer");
+				Html.RenderPartial("AddBank");
+				Html.RenderPartial("LeadDetails");
+				Html.RenderPartial("CustomerDetails");
+				Html.RenderPartial("Forbidden");
+				Html.RenderPartial("RequestAcceptTerms");
+			}
+		</section>
+	</div>
+</div>
 
-		@{ Html.RenderPartial("ScratchCards_Old_Do_NOT_AppendHere"); }
+@{ Html.RenderPartial("ScratchCards_Old_Do_NOT_AppendHere"); }
 
-		<div id="modalRegion" class="modal hide fade"></div>
+<div id="modalRegion" class="modal hide fade"></div>
 
-	@{
-		Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
-		Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
-		Html.RenderPartial("_LoanScheduleTemplate");
-	}
+@{
+	Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
+	Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
+	Html.RenderPartial("_LoanScheduleTemplate");
+}
 
-	@EditExperianDirectorData.Render(this)
-
-	
+@EditExperianDirectorData.Render(this)

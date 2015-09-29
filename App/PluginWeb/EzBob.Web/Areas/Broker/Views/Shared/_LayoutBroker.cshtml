@@ -45,7 +45,10 @@
 	<div id="wrapper">
 		@{ Html.RenderPartial("../BrokerHome/Header"); }
 		@RenderBody()
-		@{ Html.RenderPartial("_Footer"); }
+		@{
+			ViewBag.FooterLocation = "broker";
+			Html.RenderPartial("_Footer");
+		}
 	</div>
 
 	@{ Html.RenderPartial("../BrokerHome/ScratchCards"); }
