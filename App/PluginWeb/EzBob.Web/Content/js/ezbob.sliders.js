@@ -65,7 +65,7 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
                 uiEvent: 'requested-loan:'
             },
             callback: function(ignored, sEvent) {
-                if (sEvent === 'slide')
+                if (sEvent === 'slide' || sEvent === 'change')
                     self.loanSelectionChanged();
             }
         });
@@ -101,9 +101,9 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 	    var interestRate = this.model.get('InterestRate');
 	    var calc = this.calcRepaymentsTable(currentTerm, currentAmount, interestRate);
 
-    	this.ui.amount.text(EzBob.formatPoundsUK(calc.principal));
-    	this.ui.interest.text(EzBob.formatPoundsUK(calc.interest));
-    	this.ui.total.text(EzBob.formatPoundsUK(calc.total));
+    	this.ui.amount.text(EzBob.formatPounds(calc.principal));
+    	this.ui.interest.text(EzBob.formatPounds(calc.interest));
+    	this.ui.total.text(EzBob.formatPounds(calc.total));
     	this.ui.interestRate.text(EzBob.formatPercents(calc.interestRate));
     },
 

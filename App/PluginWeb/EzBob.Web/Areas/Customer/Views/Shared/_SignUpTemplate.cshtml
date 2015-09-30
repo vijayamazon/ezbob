@@ -1,6 +1,4 @@
-﻿@using System
-@using System.Collections.Generic
-@using System.Linq
+﻿@using System.Linq
 @using EZBob.DatabaseLib.Model.Database.UserManagement
 @using EzBob.Web.Infrastructure
 @using ConfigManager
@@ -50,7 +48,7 @@
 						uiEventControlID: "signup:mobile-phone", 
 						tabIndex: 11, 
 						innerMessage: "Code sent", 
-						button: new EzButtonModel("generateMobileCode", "Send activation code", 
+						button: new EzButtonModel("generateMobileCode", "Send authentication code", 
 							"button clean-btn btn-green form_field_right_side_signup_phone disabled", 
 							"signup:generate-mobile-code", 
 							buttonType: EzButtonType.button)), 
@@ -99,7 +97,7 @@
                             </div>
                             <div class="clear"></div>
                             <hr>
-                            <div class="help_security"></div>
+							<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
                         </div>
                     }
                     <div id="everline_help" class="help_window" ui-event-control-id="signup:everline-help-popup">

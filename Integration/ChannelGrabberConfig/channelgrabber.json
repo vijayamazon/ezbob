@@ -1,647 +1,647 @@
 [
-	{
-		"Name":        "Volusion",
-		"DisplayName": "Volusion",
-		"Description": "Volusion",
-		"InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
-		"Behaviour":   "Default",
+    {
+        "Name":        "Volusion",
+        "DisplayName": "Volusion",
+        "Description": "Volusion",
+        "InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",     "NodeName": "name",     "UniqueIDPosition": -1 },
-				{ "PropertyName": "URL",      "NodeName": "endpoint", "UniqueIDPosition":  0 },
-				{ "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  1 },
-				{ "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition":  2 }
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",     "NodeName": "name",     "UniqueIDPosition": -1 },
+                { "PropertyName": "URL",      "NodeName": "endpoint", "UniqueIDPosition":  0 },
+                { "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  1 },
+                { "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition":  2 }
+            ],
 
-			"ToStringArguments": [
-				"{0} ({1} @ {2})", "Name", "Login", "URL"
-			]
-		},
+            "ToStringArguments": [
+                "{0} ({1} @ {2})", "Name", "Login", "URL"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{e512f12d-207c-46f8-8d61-b1199bc34555}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{b28f5acb-7d54-48f9-a7ff-bb2861ad1900}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{b3c96690-c061-42da-bfba-8176137e149d}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C93A575D-F536-456E-8F8F-4D4C745FD868}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C45298CD-CAFF-49B0-BEE6-6E8E3281F63C}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD2F52DA-8CDC-4302-B76F-562A44F3103A}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{98116835-CEC0-451D-9221-BC79882A2409}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{e512f12d-207c-46f8-8d61-b1199bc34555}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{b28f5acb-7d54-48f9-a7ff-bb2861ad1900}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{b3c96690-c061-42da-bfba-8176137e149d}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C93A575D-F536-456E-8F8F-4D4C745FD868}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C45298CD-CAFF-49B0-BEE6-6E8E3281F63C}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD2F52DA-8CDC-4302-B76F-562A44F3103A}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{98116835-CEC0-451D-9221-BC79882A2409}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "volusionShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "URL",
-						"Type": "Text",
-						"Caption": "Volusion Shop URL",
-						"ValidationRules": { "required": true, "url": true, "maxlength": 300 },
-						"ValidationMessages": [
-							{ "PropertyName": "url", "Message": "Please enter a valid URL" }
-						]
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "Email",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Text",
-						"Caption": "Encrypted password",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"Notes": [
-					"<p><span class=\"ev-hide\">*</span> Please notice that only Gold store subscribers and higher can link their Volusion store.</p>",
-					"<br><br>",
-					"You need to enter the Encrypted Password for your Admin Area.",
-					"You can find your encrypted password in the Volusion API section of your store.",
-					"Volusion support direct number: 0800.520.0312.",
-					"<div>",
-						"To retrieve your Encrypted Password:",
-						"<ol>",
-							"<li>Login to your shop admin area.</li>",
-							"<li>Go to <strong>Inventory</strong> &raquo; <strong>Import/Export</strong> &raquo; <strong>Volusion API</strong> &raquo; <strong>Get Help</strong>.</li>",
-							"<li>Scroll the page down and follow the link <strong>Volusion API Integration Help</strong>.</li>",
-							"<li>Open the <strong>URL with Query String and General Information for Importing and Exporting</strong> section.</li>",
-							"<li>Your Encrypted Password is the part of the address between <strong>EncryptedPassword=</strong> and <strong>&amp;</strong>.</li>",
-						"</ol>",
-					"</div>"
-				],
-				"OnBeforeLink": [
-					"var aryDisplayName = /^http[s]?:\\/\\/([^\\/\\?]+)/.exec(accountModel.url);",
-					"accountModel.name = (aryDisplayName && aryDisplayName.length && aryDisplayName.length == 2) ? aryDisplayName[1] : accountModel.url;",
-					"accountModel.name = accountModel.name || accountModel.url;",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
+        "ClientSide": {
+            "StoreInfoStepModelShops": "volusionShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "URL",
+                        "Type": "Text",
+                        "Caption": "Volusion Shop URL",
+                        "ValidationRules": { "required": true, "url": true, "maxlength": 300 },
+                        "ValidationMessages": [
+                            { "PropertyName": "url", "Message": "Please enter a valid URL" }
+                        ]
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "Email associated with the Volusion account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Text",
+                        "Caption": "Encrypted password for the Volusion account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [
+                    "Please notice that only Gold store subscribers and higher can link their Volusion store.",
+                    "<br><br>",
+                    "You need to enter the Encrypted Password for your Admin Area.",
+                    "You can find your encrypted password in the Volusion API section of your store.",
+                    "Volusion support direct number: 0800.520.0312.",
+                    "<div>",
+                        "To retrieve your Encrypted Password:",
+                        "<ol>",
+                            "<li>Login to your shop admin area.</li>",
+                            "<li>Go to <strong>Inventory</strong> &raquo; <strong>Import/Export</strong> &raquo; <strong>Volusion API</strong> &raquo; <strong>Get Help</strong>.</li>",
+                            "<li>Scroll the page down and follow the link <strong>Volusion API Integration Help</strong>.</li>",
+                            "<li>Open the <strong>URL with Query String and General Information for Importing and Exporting</strong> section.</li>",
+                            "<li>Your Encrypted Password is the part of the address between <strong>EncryptedPassword=</strong> and <strong>&amp;</strong>.</li>",
+                        "</ol>",
+                    "</div>"
+                ],
+                "OnBeforeLink": [
+                    "var aryDisplayName = /^http[s]?:\\/\\/([^\\/\\?]+)/.exec(accountModel.url);",
+                    "accountModel.name = (aryDisplayName && aryDisplayName.length && aryDisplayName.length == 2) ? aryDisplayName[1] : accountModel.url;",
+                    "accountModel.name = accountModel.name || accountModel.url;",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
 
-	{
-		"Name":        "Play",
-		"DisplayName": "Rakuten",
-		"Description": "Rakuten.co.uk",
-		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
-		"Behaviour":   "Default",
+    {
+        "Name":        "Rakuten",
+        "DisplayName": "Rakuten",
+        "Description": "Rakuten",
+        "InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Login",     "NodeName": "username",  "UniqueIDPosition":  1                  },
-				{ "PropertyName": "Password",  "NodeName": "password",  "UniqueIDPosition":  2                  },
-				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -1, "Default": "-1" }
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
+                { "PropertyName": "Login",     "NodeName": "username",  "UniqueIDPosition":  1                  },
+                { "PropertyName": "Password",  "NodeName": "password",  "UniqueIDPosition":  2                  },
+                { "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -1, "Default": "-1" }
+            ],
 
-			"ToStringArguments": [
-				"{0} as {1}", "Name", "Login"
-			]
-		},
+            "ToStringArguments": [
+                "{0} as {1}", "Name", "Login"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B85A8CCB-4CC0-4D93-A216-C2B4D06326D1}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BEA6E606-EA64-4903-BF10-82CF16D6220A}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C58BC831-5BDB-414A-9C1E-A1EBB31DAC27}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C1CFA9FD-AEC9-443E-B04D-3C69F416BA7C}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C6FDF05A-022D-4F1C-A0E8-F598A220B7C0}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{81E79DDF-65B1-4E73-B90C-3C4380893B73}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B85A8CCB-4CC0-4D93-A216-C2B4D06326D1}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BEA6E606-EA64-4903-BF10-82CF16D6220A}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C58BC831-5BDB-414A-9C1E-A1EBB31DAC27}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C1CFA9FD-AEC9-443E-B04D-3C69F416BA7C}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C6FDF05A-022D-4F1C-A0E8-F598A220B7C0}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{81E79DDF-65B1-4E73-B90C-3C4380893B73}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "playShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of the account",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "Email",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Password",
-						"Caption": "Password",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"Notes": [
-				"<p><span class=\"ev-hide\">*</span> Please notice that only ProTrader users (full merchant account) <br>can link their Rakuten.co.uk store.</p>",
-					"<BR><BR>",
-				],
-				"OnBeforeLink": [ 
-					"var aryMatch = /^(http:\\/\\/|https:\\/\\/)?(www\\.)?play\\.com\\/stores\\/([^#\\?\\/]+)/.exec(accountModel.name);",
-					"if (aryMatch) accountModel.name = aryMatch[3];",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": [
-				{ "ID": "CannotValidate", "Text": "Cannot validate: invalid credentials or not authorized." }
-			]
-		}
-	},
+        "ClientSide": {
+            "StoreInfoStepModelShops": "playShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Name",
+                        "Type": "Text",
+                        "Caption": "The name of the account",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "Email associated with the RakutenTrade account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Password",
+                        "Caption": "The password for the RakutenTrade account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [
+                "Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.",
+                    "<BR><BR>",
+                ],
+                "OnBeforeLink": [ 
+                    "var aryMatch = /^(http:\\/\\/|https:\\/\\/)?(www\\.)?play\\.com\\/stores\\/([^#\\?\\/]+)/.exec(accountModel.name);",
+                    "if (aryMatch) accountModel.name = aryMatch[3];",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": [
+                { "ID": "CannotValidate", "Text": "Cannot validate: invalid credentials or not authorized." }
+            ]
+        }
+    },
 
-	{
-		"Name":        "Shopify",
-		"DisplayName": "Shopify",
-		"Description": "Shopify",
-		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
-		"Behaviour":   "Default",
+    {
+        "Name":        "Shopify",
+        "DisplayName": "Shopify",
+        "Description": "Shopify",
+        "InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
-				{ "PropertyName": "URL",       "NodeName": "endpoint",  "UniqueIDPosition": -8                  },
-				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "30" }
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
+                { "PropertyName": "URL",       "NodeName": "endpoint",  "UniqueIDPosition": -8                  },
+                { "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "30" }
+            ],
 
-			"ToStringArguments": [
-				"{0} @ {1}", "Name", "URL"
-			]
-		},
+            "ToStringArguments": [
+                "{0} @ {1}", "Name", "URL"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B547E0B7-0C29-4172-8D35-C8D0F2966FA9}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BAF770CD-1A53-49BD-A9BF-087B1BB82F4C}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C2764AC3-B368-454F-872E-FF2B97A61092}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3DBE341-1A0F-4076-B3F9-6C7460D82D37}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD649144-1638-423D-868A-0D7063EF8A7C}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{548392C1-AA45-459B-9E65-EFE2A109070B}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B547E0B7-0C29-4172-8D35-C8D0F2966FA9}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BAF770CD-1A53-49BD-A9BF-087B1BB82F4C}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C2764AC3-B368-454F-872E-FF2B97A61092}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3DBE341-1A0F-4076-B3F9-6C7460D82D37}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD649144-1638-423D-868A-0D7063EF8A7C}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{548392C1-AA45-459B-9E65-EFE2A109070B}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "shopifyShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "URL",
-						"Type": "Text",
-						"Caption": "The URL to the shop",
-						"ValidationRules": { "required": true, "url": true, "minlength": 89, "maxlength": 300 }
-					}
-				],
-				"Notes": [
-					"<p>You should provide URL to a private application connected to your shop. ",
-					"<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank ui-event-control-id=\"link-account:shopify_help_link\">Instructions on creating a private application.</a></p>",
-					"<p>When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:",
-					"<blockquote>https://a5a18488246744828f621d0073eda:b02ffd5b4025af3ed570353c5d56b@test-shop.myshopify.com/admin/orders.xml</blockquote>",
-					"Enter your example URL in the above field.</p>"
-				],
-				"OnBeforeLink": [
-					"var aryMatch = /^(https:\\/\\/[0-9A-Za-z]{32}:[0-9A-Za-z]{32}@(.+)\\.myshopify\\.com)(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
-					"if (!aryMatch) return null;",
-					"accountModel.name = aryMatch[2];",
-					"accountModel.url = aryMatch[1];",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
-	
-	{
-		"Name":        "Xero",
-		"DisplayName": "Xero",
-		"Description": "Xero",
-		"InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
-		"Behaviour":   "Default",
+        "ClientSide": {
+            "StoreInfoStepModelShops": "shopifyShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "URL",
+                        "Type": "Text",
+                        "Caption": "The URL to the shop",
+                        "ValidationRules": { "required": true, "url": true, "minlength": 89, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [
+                    "<p>You should provide URL to a private application connected to your shop. ",
+                    "<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank ui-event-control-id=\"link-account:shopify_help_link\">Instructions on creating a private application.</a></p>",
+                    "<p>When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:",
+                    "<blockquote>https://a5a18488246744828f621d0073eda:b02ffd5b4025af3ed570353c5d56b@test-shop.myshopify.com/admin/orders.xml</blockquote>",
+                    "Enter your example URL in the field below.</p>"
+                ],
+                "OnBeforeLink": [
+                    "var aryMatch = /^(https:\\/\\/[0-9A-Za-z]{32}:[0-9A-Za-z]{32}@(.+)\\.myshopify\\.com)(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
+                    "if (!aryMatch) return null;",
+                    "accountModel.name = aryMatch[2];",
+                    "accountModel.url = aryMatch[1];",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
+    
+    {
+        "Name":        "Xero",
+        "DisplayName": "Xero",
+        "Description": "Xero",
+        "InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": true,
+        "HasExpenses": true,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
-				{ "PropertyName": "Login",       "NodeName": "apikey",     "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Password",    "NodeName": "secret",     "UniqueIDPosition":  1                  },
-				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" },
-				{ "PropertyName": "AuxLogin",    "NodeName": "publicCert", "UniqueIDPosition": -8, "Default": "-----BEGIN CERTIFICATE-----\nMIICaDCCAdGgAwIBAgIJAI88EON8XhSeMA0GCSqGSIb3DQEBBQUAME0xCzAJBgNV\nBAYTAlVLMQ4wDAYDVQQKDAVlemJvYjEOMAwGA1UEAwwFZXpib2IxHjAcBgkqhkiG\n9w0BCQEWD2V6Ym9iQGV6Ym9iLmNvbTAeFw0xNDA3MjExMTQ2NDdaFw0xOTA3MjAx\nMTQ2NDdaME0xCzAJBgNVBAYTAlVLMQ4wDAYDVQQKDAVlemJvYjEOMAwGA1UEAwwF\nZXpib2IxHjAcBgkqhkiG9w0BCQEWD2V6Ym9iQGV6Ym9iLmNvbTCBnzANBgkqhkiG\n9w0BAQEFAAOBjQAwgYkCgYEAx85lHKJsulizOsWLLVW/NdF5fh4WJwXwwbmXRweT\nlvITHkfoJn7Kh6WeFj23QMspLZuN88L55dJdM7PUFgMS8PRO8ul2MegJ3oTOceIk\ne0Ks49RH2kaeXvHt7xY+nAvgKZuqVlz9sjijkcQLUJ/AuNWsMvjkAooxns4kDB4g\nS48CAwEAAaNQME4wHQYDVR0OBBYEFDAtGGKmWyhFxidHpPO0VzWtRi2uMB8GA1Ud\nIwQYMBaAFDAtGGKmWyhFxidHpPO0VzWtRi2uMAwGA1UdEwQFMAMBAf8wDQYJKoZI\nhvcNAQEFBQADgYEARHwqcwcDhiRNrVPWJZmlhMnOmftcfNcP3ak0lyBIe8SrSxLv\nHmWRonZa84G1/S/u5aaa/Kh2LX3LN1ypj1DEQJfsi8lwj7Lk9NiJQLi66azs73Z6\ngdVNAJ0KapVt6S81yV9Hf1xs5qRZU/+Ex/OZ+12QMGpe4X7bF8tOXarBROQ=\n-----END CERTIFICATE-----" },
-				{ "PropertyName": "AuxPassword", "NodeName": "privateKey", "UniqueIDPosition": -8, "Default": "-----BEGIN RSA PRIVATE KEY-----\nMIICXwIBAAKBgQDHzmUcomy6WLM6xYstVb810Xl+HhYnBfDBuZdHB5OW8hMeR+gm\nfsqHpZ4WPbdAyyktm43zwvnl0l0zs9QWAxLw9E7y6XYx6AnehM5x4iR7Qqzj1Efa\nRp5e8e3vFj6cC+Apm6pWXP2yOKORxAtQn8C41awy+OQCijGeziQMHiBLjwIDAQAB\nAoGBAJiVhaHYaC/mjPjU4vQ8B0mSLrWhREmIv9MxZ9VWc99R/kehoifDq+brE07o\n0okonMm3gTAmNbDMdWCGc/BbaJo/8amH3pgbCtEfLUKN7bokiREUQG8rSOxXkjUX\nAesrLUI+5ZVKQzNPKB20xAEF9vmj/+Ew4q/aaOKSKiw8WHgBAkEA79Jah/WpFWka\nu8gSGLsoSu7NHbNPNMxy/zR4Sa8uCfX4jdht3hgVpIeDRfqr3gCyVdmC3c1MvT8m\nVLDinAxOGQJBANVI/JZ+aB5l8L82UwtK1nmwuEgrHS2vwTlxYPtraIn5WHB7DZIW\nEv21XJXKT+sKAxZxwtf1eo/uOvR5Y+jYy+cCQQC8H2VWu5TsL6uB3Bqd/cpIpXSP\nNMYQI8SdfrpRCrLxq1pTYpAkpP3tN0P5k/5XwnIiN+KZPN9SoIPf8XWBdYGZAkEA\nrDvbVcBQXjPd/NtmpljR58Uwm37NekZSmAuZ0I5FBh5oL7T/GXhf76dUU9XjQZ99\nLNPDD1g5mB8+VovshW0FAwJBAKEbR4WNRWgoc0qV2rJ8gUpCXns9yjVEPTkxyDUG\nIMn/qTHAicTdl0G4NVJ6H9AYrIvFa4ICwOninM+6k/AiRg4=\n-----END RSA PRIVATE KEY-----" }
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+                { "PropertyName": "Login",       "NodeName": "apikey",     "UniqueIDPosition":  0                  },
+                { "PropertyName": "Password",    "NodeName": "secret",     "UniqueIDPosition":  1                  },
+                { "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" },
+                { "PropertyName": "AuxLogin",    "NodeName": "publicCert", "UniqueIDPosition": -8, "Default": "-----BEGIN CERTIFICATE-----\nMIICaDCCAdGgAwIBAgIJAI88EON8XhSeMA0GCSqGSIb3DQEBBQUAME0xCzAJBgNV\nBAYTAlVLMQ4wDAYDVQQKDAVlemJvYjEOMAwGA1UEAwwFZXpib2IxHjAcBgkqhkiG\n9w0BCQEWD2V6Ym9iQGV6Ym9iLmNvbTAeFw0xNDA3MjExMTQ2NDdaFw0xOTA3MjAx\nMTQ2NDdaME0xCzAJBgNVBAYTAlVLMQ4wDAYDVQQKDAVlemJvYjEOMAwGA1UEAwwF\nZXpib2IxHjAcBgkqhkiG9w0BCQEWD2V6Ym9iQGV6Ym9iLmNvbTCBnzANBgkqhkiG\n9w0BAQEFAAOBjQAwgYkCgYEAx85lHKJsulizOsWLLVW/NdF5fh4WJwXwwbmXRweT\nlvITHkfoJn7Kh6WeFj23QMspLZuN88L55dJdM7PUFgMS8PRO8ul2MegJ3oTOceIk\ne0Ks49RH2kaeXvHt7xY+nAvgKZuqVlz9sjijkcQLUJ/AuNWsMvjkAooxns4kDB4g\nS48CAwEAAaNQME4wHQYDVR0OBBYEFDAtGGKmWyhFxidHpPO0VzWtRi2uMB8GA1Ud\nIwQYMBaAFDAtGGKmWyhFxidHpPO0VzWtRi2uMAwGA1UdEwQFMAMBAf8wDQYJKoZI\nhvcNAQEFBQADgYEARHwqcwcDhiRNrVPWJZmlhMnOmftcfNcP3ak0lyBIe8SrSxLv\nHmWRonZa84G1/S/u5aaa/Kh2LX3LN1ypj1DEQJfsi8lwj7Lk9NiJQLi66azs73Z6\ngdVNAJ0KapVt6S81yV9Hf1xs5qRZU/+Ex/OZ+12QMGpe4X7bF8tOXarBROQ=\n-----END CERTIFICATE-----" },
+                { "PropertyName": "AuxPassword", "NodeName": "privateKey", "UniqueIDPosition": -8, "Default": "-----BEGIN RSA PRIVATE KEY-----\nMIICXwIBAAKBgQDHzmUcomy6WLM6xYstVb810Xl+HhYnBfDBuZdHB5OW8hMeR+gm\nfsqHpZ4WPbdAyyktm43zwvnl0l0zs9QWAxLw9E7y6XYx6AnehM5x4iR7Qqzj1Efa\nRp5e8e3vFj6cC+Apm6pWXP2yOKORxAtQn8C41awy+OQCijGeziQMHiBLjwIDAQAB\nAoGBAJiVhaHYaC/mjPjU4vQ8B0mSLrWhREmIv9MxZ9VWc99R/kehoifDq+brE07o\n0okonMm3gTAmNbDMdWCGc/BbaJo/8amH3pgbCtEfLUKN7bokiREUQG8rSOxXkjUX\nAesrLUI+5ZVKQzNPKB20xAEF9vmj/+Ew4q/aaOKSKiw8WHgBAkEA79Jah/WpFWka\nu8gSGLsoSu7NHbNPNMxy/zR4Sa8uCfX4jdht3hgVpIeDRfqr3gCyVdmC3c1MvT8m\nVLDinAxOGQJBANVI/JZ+aB5l8L82UwtK1nmwuEgrHS2vwTlxYPtraIn5WHB7DZIW\nEv21XJXKT+sKAxZxwtf1eo/uOvR5Y+jYy+cCQQC8H2VWu5TsL6uB3Bqd/cpIpXSP\nNMYQI8SdfrpRCrLxq1pTYpAkpP3tN0P5k/5XwnIiN+KZPN9SoIPf8XWBdYGZAkEA\nrDvbVcBQXjPd/NtmpljR58Uwm37NekZSmAuZ0I5FBh5oL7T/GXhf76dUU9XjQZ99\nLNPDD1g5mB8+VovshW0FAwJBAKEbR4WNRWgoc0qV2rJ8gUpCXns9yjVEPTkxyDUG\nIMn/qTHAicTdl0G4NVJ6H9AYrIvFa4ICwOninM+6k/AiRg4=\n-----END RSA PRIVATE KEY-----" }
+            ],
 
-			"ToStringArguments": [
-				"{0} @ {1}", "Login", "Name"
-			]
-		},
+            "ToStringArguments": [
+                "{0} @ {1}", "Login", "Name"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B1676D81-160E-4AEA-BCDC-B5CD20812E3B}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BE5D278C-5337-4C25-8EBA-537E67EFD133}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CBC5655B-6CC2-4D86-ABB7-E37057A5F892}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CBA06EBD-E58E-4312-AF61-4AFD07A2C828}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CA17192B-8B1D-4C15-9157-78CBDD318897}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{2AA83171-13F2-4C05-9B91-A5F4B5336403}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B1676D81-160E-4AEA-BCDC-B5CD20812E3B}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BE5D278C-5337-4C25-8EBA-537E67EFD133}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CBC5655B-6CC2-4D86-ABB7-E37057A5F892}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CBA06EBD-E58E-4312-AF61-4AFD07A2C828}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CA17192B-8B1D-4C15-9157-78CBDD318897}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{2AA83171-13F2-4C05-9B91-A5F4B5336403}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "xeroShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of Xero account",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "Consumer API key",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Text",
-						"Caption": "Consumer API secret",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					}
-				],
-				"Notes": [
-					"To retrieve your Consumer Key and Consumer Secret:",
-					"<ol>",
-					"<li>Download <a href=\"/Content/xero/ezbob_xero_public_key.cer\" target=_blank ui-event-control-id=\"link-account:xero_public_key\">this key file</a> to your desktop.</li>",
-					"<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\" ui-event-control-id=\"link-account:xero_api\">this link to your Xero API area</a></li>",
-					"<li>Choose <strong>Private</strong></li>",
-					"<li>Enter application name: <span class='bold'>ezbob</span></li>",
-					"<li>Click <strong>Choose File</strong> and select the file you downloaded on the step 1.</li>",
-					"<li>Press <strong>Save</strong></li>",
-					"<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
-					"</ol>",
-					"<img src=\"/Content/xero/instructions.jpg\" style=\"margin-bottom: 10px;\">"
+        "ClientSide": {
+            "StoreInfoStepModelShops": "xeroShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Name",
+                        "Type": "Text",
+                        "Caption": "The name of Xero account",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "The Consumer Key to access Xero API",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Text",
+                        "Caption": "The Consumer Secret to access Xero API",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [
+                    "To retrieve your Consumer Key and Consumer Secret:",
+                    "<ol>",
+                    "<li>Download <a href=\"/Content/xero/ezbob_xero_public_key.cer\" target=_blank ui-event-control-id=\"link-account:xero_public_key\">this key file</a> to your desktop.</li>",
+                    "<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\" ui-event-control-id=\"link-account:xero_api\">this link to your Xero API area</a></li>",
+                    "<li>Choose <strong>Private</strong></li>",
+                    "<li>Enter application name: <span class='bold'>ezbob</span></li>",
+                    "<li>Click <strong>Choose File</strong> and select the file you downloaded on the step 1.</li>",
+                    "<li>Press <strong>Save</strong></li>",
+                    "<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
+                    "</ol>",
+                    "<img src=\"/Content/xero/instructions.jpg\" style=\"margin-bottom: 10px;\">"
                     
-				],
-				"OnBeforeLink": [
-					"accountModel.auxLogin = accountModel.publicCert;",
-					"accountModel.auxPassword = accountModel.privateKey;",
-					"delete accountModel.publicCert;",
-					"delete accountModel.privateKey;",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
-	{
-		"Name":        "KashFlow",
-		"DisplayName": "KashFlow",
-		"Description": "KashFlow",
-		"InternalID":  "{A755B4F6-D4EC-4D80-96A2-B2849BD800AC}",
-		"Behaviour":   "Default",
+                ],
+                "OnBeforeLink": [
+                    "accountModel.auxLogin = accountModel.publicCert;",
+                    "accountModel.auxPassword = accountModel.privateKey;",
+                    "delete accountModel.publicCert;",
+                    "delete accountModel.privateKey;",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
+    {
+        "Name":        "KashFlow",
+        "DisplayName": "KashFlow",
+        "Description": "KashFlow",
+        "InternalID":  "{A755B4F6-D4EC-4D80-96A2-B2849BD800AC}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": true,
+        "HasExpenses": true,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
-				{ "PropertyName": "Login",       "NodeName": "username",     "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Password",    "NodeName": "password",     "UniqueIDPosition":  1                  },
-				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+                { "PropertyName": "Login",       "NodeName": "username",     "UniqueIDPosition":  0                  },
+                { "PropertyName": "Password",    "NodeName": "password",     "UniqueIDPosition":  1                  },
+                { "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }                
+            ],
 
-			"ToStringArguments": [
-				"{0} @ {1}", "Login", "Name"
-			]
-		},
+            "ToStringArguments": [
+                "{0} @ {1}", "Login", "Name"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B727EF60-0FBB-48EE-90BE-D2E9BB3F2030}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BB11E959-F47B-4D05-80F6-C319BE19CB92}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BBF3F3E8-2317-45E2-9A21-2EFF620936B2}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CC16E1DF-B882-4FC4-BD8D-A533A6A98B78}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CF7DD5EB-1D6D-4D43-ABEF-FC074A19B0FC}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C80F2543-CF30-49B9-90D5-5BB77C608B42}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{D08CD898-ACB6-48F7-B514-4011C00E569F}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B727EF60-0FBB-48EE-90BE-D2E9BB3F2030}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BB11E959-F47B-4D05-80F6-C319BE19CB92}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BBF3F3E8-2317-45E2-9A21-2EFF620936B2}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CC16E1DF-B882-4FC4-BD8D-A533A6A98B78}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CF7DD5EB-1D6D-4D43-ABEF-FC074A19B0FC}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C80F2543-CF30-49B9-90D5-5BB77C608B42}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{D08CD898-ACB6-48F7-B514-4011C00E569F}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "kashflowShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of KashFlow account",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "Username",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Password",
-						"Caption": "Password",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"Notes": [],
-				"OnBeforeLink": [
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
-	{
-		"Name":        "HMRC",
-		"DisplayName": "HMRC",
-		"Description": "VAT Reports",
-		"InternalID":  "{AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA}",
-		"Behaviour":   "HMRC",
+        "ClientSide": {
+            "StoreInfoStepModelShops": "kashflowShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Name",
+                        "Type": "Text",
+                        "Caption": "The name of KashFlow account",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "The username to access KashFlow account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Password",
+                        "Caption": "The password to access KashFlow account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [],
+                "OnBeforeLink": [
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
+    {
+        "Name":        "HMRC",
+        "DisplayName": "HMRC",
+        "Description": "VAT Reports",
+        "InternalID":  "{AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA}",
+        "Behaviour":   "HMRC",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  0 },
-				{ "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition": -1 }
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  0 },
+                { "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition": -1 }
+            ],
 
-			"ToStringArguments": [
-				"{0}", "Login"
-			]
-		},
+            "ToStringArguments": [
+                "{0}", "Login"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{BC9E71F7-55C3-4F92-86A9-18EF000890F0}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B81B7727-BBCF-4731-9975-CE402F94B8B3}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCA489F8-847A-46EC-BE2D-35ABFEDD0D76}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C6847E6E-D4DF-4FD9-B0B4-0BC0235DB428}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CCF67CC1-18F5-4547-86A7-5B159C2462A0}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C206B422-CDB3-4361-89EC-673B5753FA06}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{C3AA2A90-DD3E-407E-9016-A5D12798310D}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{BC9E71F7-55C3-4F92-86A9-18EF000890F0}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B81B7727-BBCF-4731-9975-CE402F94B8B3}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCA489F8-847A-46EC-BE2D-35ABFEDD0D76}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C6847E6E-D4DF-4FD9-B0B4-0BC0235DB428}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CCF67CC1-18F5-4547-86A7-5B159C2462A0}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C206B422-CDB3-4361-89EC-673B5753FA06}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{C3AA2A90-DD3E-407E-9016-A5D12798310D}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "hmrcAccounts",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "Username",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Password",
-						"Caption": "Password",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"HasUploadFiles": true,
-				"UploadFilesHandler": "HandleUploadedHmrcVatReturn",
-				"Notes": [
-					"<h2 class=\"hmrc-or\">or</h2><h2 style=\"padding-left: 0\">Upload VAT files</h2><p style=\"margin-top: -15px;\">Upload a copy of your last 5 VAT returns; only upload files titled <strong>Printed Copy of Submitted VAT return for your records</strong> which you should have received automatically from the HMRC. Files can be uploaded in any order of dates.</p><p>Don\'t have the file? ask your accountant for them, it will take him 5 minutes to send them to you.</p>",
-					"<div><input type=\"button\" class=\"upload-files button btn-green\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
-				],
-				"OnBeforeLink": [
-					"if (bUploadMode) {",
-						"accountModel.name = $.trim($('#logged-in-user-name').text());",
-						"accountModel.login = accountModel.name;",
-						"accountModel.password = 'topsecret';",
-					"}",
-					"else",
-						"accountModel.name = accountModel.login;",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
-	{
-		"Name":        "Magento",
-		"DisplayName": "Magento",
-		"Description": "Magento",
-		"InternalID":  "{A660B9CC-8BB1-4A37-9597-507622AEBF9E}",
-		"Behaviour":   "Default",
+        "ClientSide": {
+            "StoreInfoStepModelShops": "hmrcAccounts",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "The username to access HMRC account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Password",
+                        "Caption": "The password to access HMRC account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "HasUploadFiles": true,
+                "UploadFilesHandler": "HandleUploadedHmrcVatReturn",
+                "Notes": [
+                    "<h2 class=\"hmrc-or\">or</h2><h2 style=\"padding-left: 0\">Upload VAT files</h2><p style=\"margin-top: -15px;\">Upload a copy of your last 5 VAT returns; only upload files titled <strong>Printed Copy of Submitted VAT return for your records</strong> which you should have received automatically from the HMRC. Files can be uploaded in any order of dates.</p><p>Don\'t have the file? ask your accountant for them, it will take him 5 minutes to send them to you.</p>",
+                    "<div><input type=\"button\" class=\"upload-files button btn-green\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
+                ],
+                "OnBeforeLink": [
+                    "if (bUploadMode) {",
+                        "accountModel.name = $.trim($('#logged-in-user-name').text());",
+                        "accountModel.login = accountModel.name;",
+                        "accountModel.password = 'topsecret';",
+                    "}",
+                    "else",
+                        "accountModel.name = accountModel.login;",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
+    {
+        "Name":        "Magento",
+        "DisplayName": "Magento",
+        "Description": "Magento",
+        "InternalID":  "{A660B9CC-8BB1-4A37-9597-507622AEBF9E}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
-				{ "PropertyName": "URL",		 "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Login",       "NodeName": "apiUser",    "UniqueIDPosition":  1                  },
-				{ "PropertyName": "Password",    "NodeName": "apiKey",     "UniqueIDPosition":  2                  },
-				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+                { "PropertyName": "URL",         "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
+                { "PropertyName": "Login",       "NodeName": "apiUser",    "UniqueIDPosition":  1                  },
+                { "PropertyName": "Password",    "NodeName": "apiKey",     "UniqueIDPosition":  2                  },
+                { "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }                
+            ],
 
-			"ToStringArguments": [
-				"{0} @ {1}", "Login", "Name"
-			]
-		},
+            "ToStringArguments": [
+                "{0} @ {1}", "Login", "Name"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B712A57A-816C-46D6-9283-804390D715AC}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B85A6035-59D4-4155-9EE2-AF925A9893D7}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCD30FB2-7C1D-4D50-A0AC-D11FD8477ED0}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C8DF63FC-7DB3-4F75-AD40-97A556225042}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3669B1A-9B21-4C31-B535-C7E542DD8BCC}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C06CCAA8-8946-4B4A-92C3-55AF0FFC2C35}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{307BAEE4-73F2-404A-BDE3-0A407B01CE93}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B712A57A-816C-46D6-9283-804390D715AC}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B85A6035-59D4-4155-9EE2-AF925A9893D7}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCD30FB2-7C1D-4D50-A0AC-D11FD8477ED0}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C8DF63FC-7DB3-4F75-AD40-97A556225042}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3669B1A-9B21-4C31-B535-C7E542DD8BCC}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C06CCAA8-8946-4B4A-92C3-55AF0FFC2C35}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{307BAEE4-73F2-404A-BDE3-0A407B01CE93}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "magentoShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of Magento Shop",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "URL",
-						"Type": "Text",
-						"Caption": "The URL to the shop",
-						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "API username",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Password",
-						"Caption": "API password",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"Notes": [],
-				"OnBeforeLink": [
-					"var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);",
-					"if (!aryMatch) return null;",
-					"accountModel.name = aryMatch[3];",
-					"accountModel.url = aryMatch[1] + '/api/v2_soap?wsdl=1';",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
-	{
-		"Name":        "Prestashop",
-		"DisplayName": "Prestashop",
-		"Description": "PrestaShop",
-		"InternalID":  "{AE0BC89A-9884-4025-9D96-2755A6CD10EE}",
-		"Behaviour":   "Default",
+        "ClientSide": {
+            "StoreInfoStepModelShops": "magentoShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Name",
+                        "Type": "Text",
+                        "Caption": "The name of Magento Shop",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "URL",
+                        "Type": "Text",
+                        "Caption": "The URL to the shop",
+                        "ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "The API username to access Magento account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Password",
+                        "Caption": "The API password to access Magento account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [],
+                "OnBeforeLink": [
+                    "var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);",
+                    "if (!aryMatch) return null;",
+                    "accountModel.name = aryMatch[3];",
+                    "accountModel.url = aryMatch[1] + '/api/v2_soap?wsdl=1';",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
+    {
+        "Name":        "Prestashop",
+        "DisplayName": "Prestashop",
+        "Description": "PrestaShop",
+        "InternalID":  "{AE0BC89A-9884-4025-9D96-2755A6CD10EE}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
-				{ "PropertyName": "URL",		 "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Login",       "NodeName": "apikey",    "UniqueIDPosition":  1                  },
-				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+                { "PropertyName": "URL",         "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
+                { "PropertyName": "Login",       "NodeName": "apikey",    "UniqueIDPosition":  1                  },
+                { "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }                
+            ],
 
-			"ToStringArguments": [
-				"{0} @ {1}", "Login", "Name"
-			]
-		},
+            "ToStringArguments": [
+                "{0} @ {1}", "Login", "Name"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{BA962184-7F24-4C05-81F9-B8E1C9067F6B}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B3ED3FC2-38CF-443B-8EAF-794D7F0FC341}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCADB388-8C7A-47F6-B6D4-348A390635E8}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C64761DB-D075-40A1-ABF7-E07FD07ED11C}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C2D5B62B-43CF-4FA1-9128-3242007401FB}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CCA07C01-88F6-4A53-8CAB-361489DD2E14}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{A3B26621-F007-4AF4-B669-3BADFFA2851C}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{BA962184-7F24-4C05-81F9-B8E1C9067F6B}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B3ED3FC2-38CF-443B-8EAF-794D7F0FC341}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCADB388-8C7A-47F6-B6D4-348A390635E8}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C64761DB-D075-40A1-ABF7-E07FD07ED11C}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C2D5B62B-43CF-4FA1-9128-3242007401FB}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CCA07C01-88F6-4A53-8CAB-361489DD2E14}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{A3B26621-F007-4AF4-B669-3BADFFA2851C}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "prestashopShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of Prestashop Shop",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "URL",
-						"Type": "Text",
-						"Caption": "URL to the shop",
-						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "API key",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"Notes": [],
-				"OnBeforeLink": [
-					"var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);",
-					"if (!aryMatch) return null;",
-					"accountModel.name = aryMatch[3];",
-					"accountModel.url = aryMatch[1];",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	},
-	{
-		"Name":        "Bigcommerce",
-		"DisplayName": "Bigcommerce",
-		"Description": "Bigcommerce",
-		"InternalID":  "{A5FC4B43-EBB7-4C6B-BC23-3C162CB61996}",
-		"Behaviour":   "Default",
+        "ClientSide": {
+            "StoreInfoStepModelShops": "prestashopShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Name",
+                        "Type": "Text",
+                        "Caption": "The name of Prestashop Shop",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "URL",
+                        "Type": "Text",
+                        "Caption": "The URL to the shop",
+                        "ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "The API key to access Prestashop account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [],
+                "OnBeforeLink": [
+                    "var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);",
+                    "if (!aryMatch) return null;",
+                    "accountModel.name = aryMatch[3];",
+                    "accountModel.url = aryMatch[1];",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    },
+    {
+        "Name":        "Bigcommerce",
+        "DisplayName": "Bigcommerce",
+        "Description": "Bigcommerce",
+        "InternalID":  "{A5FC4B43-EBB7-4C6B-BC23-3C162CB61996}",
+        "Behaviour":   "Default",
 
-		"HasExpenses": false,
+        "HasExpenses": false,
 
-		"SecurityData": {
-			"Fields": [
-				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
-				{ "PropertyName": "URL",		 "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Login",       "NodeName": "username",    "UniqueIDPosition":  1                  },
-				{ "PropertyName": "Password",    "NodeName": "apikey",     "UniqueIDPosition":  2                  },
-				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
-			],
+        "SecurityData": {
+            "Fields": [
+                { "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+                { "PropertyName": "URL",         "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
+                { "PropertyName": "Login",       "NodeName": "username",    "UniqueIDPosition":  1                  },
+                { "PropertyName": "Password",    "NodeName": "apikey",     "UniqueIDPosition":  2                  },
+                { "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }                
+            ],
 
-			"ToStringArguments": [
-				"{0} @ {1}", "Login", "Name"
-			]
-		},
+            "ToStringArguments": [
+                "{0} @ {1}", "Login", "Name"
+            ]
+        },
 
-		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B60B03E0-AB11-4952-97BA-D6F751EF795D}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BDF566A9-62D9-4D56-B219-C3A09B3D8DD7}" },
-			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B68A64A4-40DA-45D1-9F70-B9010A97C3E7}" },
-			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C94C7DED-4B3B-4598-8D6F-4C6D75D93BFA}" },
-			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C960B241-D67F-453D-BF04-647A0B9C752B}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C54B4BFD-B5E0-4D0A-8C4E-365EAEB3E584}" },
-			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{06AEBBE3-2856-4CB3-8939-CD8618701E7A}" }
-		],
+        "Aggregators": [
+            { "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B60B03E0-AB11-4952-97BA-D6F751EF795D}" },
+            { "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BDF566A9-62D9-4D56-B219-C3A09B3D8DD7}" },
+            { "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B68A64A4-40DA-45D1-9F70-B9010A97C3E7}" },
+            { "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C94C7DED-4B3B-4598-8D6F-4C6D75D93BFA}" },
+            { "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C960B241-D67F-453D-BF04-647A0B9C752B}" },
+            { "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C54B4BFD-B5E0-4D0A-8C4E-365EAEB3E584}" },
+            { "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{06AEBBE3-2856-4CB3-8939-CD8618701E7A}" }
+        ],
 
-		"ClientSide": {
-			"StoreInfoStepModelShops": "bigcommerceShops",
-			"LinkForm": {
-				"Fields": [
-					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of Bigcommerce Shop",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "URL",
-						"Type": "Text",
-						"Caption": "API path",
-						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Login",
-						"Type": "Text",
-						"Caption": "API user",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					},
-					{
-						"PropertyName": "Password",
-						"Type": "Text",
-						"Caption": "API token",
-						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
-					}
-				],
-				"Notes": [],
-				"OnBeforeLink": [
-					"var aryMatch = /^(http[s]?:\\/\\/([^\\.]+)\\.mybigcommerce\\.com)(\\/api\\/v2\\/)?$/.exec(accountModel.url);",
-					"if (!aryMatch) return null;",
-					"accountModel.name = aryMatch[2];",
-					"accountModel.url = aryMatch[1];",
-					"return accountModel;"
-				]
-			},
-			"ErrorMessages": []
-		}
-	}	
+        "ClientSide": {
+            "StoreInfoStepModelShops": "bigcommerceShops",
+            "LinkForm": {
+                "Fields": [
+                    {
+                        "PropertyName": "Name",
+                        "Type": "Text",
+                        "Caption": "The name of Bigcommerce Shop",
+                        "ValidationRules": { "required": true, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "URL",
+                        "Type": "Text",
+                        "Caption": "The API path to access Bigcommerce account",
+                        "ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Login",
+                        "Type": "Text",
+                        "Caption": "The API user to access Bigcommerce account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    },
+                    {
+                        "PropertyName": "Password",
+                        "Type": "Text",
+                        "Caption": "The API token to access Bigcommerce account",
+                        "ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+                    }
+                ],
+                "Notes": [],
+                "OnBeforeLink": [
+                    "var aryMatch = /^(http[s]?:\\/\\/([^\\.]+)\\.mybigcommerce\\.com)(\\/api\\/v2\\/)?$/.exec(accountModel.url);",
+                    "if (!aryMatch) return null;",
+                    "accountModel.name = aryMatch[2];",
+                    "accountModel.url = aryMatch[1];",
+                    "return accountModel;"
+                ]
+            },
+            "ErrorMessages": []
+        }
+    }    
 ]

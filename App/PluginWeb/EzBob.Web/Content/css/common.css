@@ -150,7 +150,7 @@ footer {
     background: linear-gradient(to bottom,  #333333 0%,#1f2022 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
     color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
-    height: 90px;
+    height: 120px;
     min-width: 1000px;
     
 }
@@ -161,6 +161,11 @@ footer {
     padding-bottom: 17px;
     padding-top: 17px;
     font-family: Arial;
+}
+
+.copyrights-inner > .privacy-and-cookie-policy {
+	font-size: 14px;
+	margin-bottom: 10px;
 }
 
 /*-- General Content Classes --*/
@@ -916,7 +921,7 @@ select.SubBank {
 	background-position: -1057px -1px;
     width: 113px;
 }
-.marketplace-image.marketplace-image-Play {
+.marketplace-image.marketplace-image-Rakuten {
 	background-position: 0px -1px;
     width: 151px;
 }
@@ -1435,10 +1440,20 @@ input[type="color"],
 }
 
 .help_security {
-    background: url(images/help/help_security.png) no-repeat center 0;
-    background-size: contain;
+	background: url(images/help/help_security.png) no-repeat left top;
     width: 759px;
     height: 77px;
+}
+
+.help_security > div {
+	float: right;
+	display: block;
+	margin-right: 16px;
+}
+
+.help_security > a {
+	float: right;
+	display: block;
 }
 
 .help_everline_header {
@@ -3884,4 +3899,8 @@ button#switchToCaptcha {
 
 .specular_wrapper{
 	display: none;
+}
+
+.form-director-is-dir-sha  .input-tag-wrap {
+	display: block;
 }

@@ -21,7 +21,7 @@
 .main-page-everline #get-cash .form-horizontal {
 	background: #f1f0f0;
 	padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 	box-sizing: border-box;
 }
 
@@ -59,6 +59,7 @@
 .main-page-everline #get-cash .form-horizontal.loan-details div dl dt {
 	float: left;
 	width: 50%;
+	font-weight: 600;
 }
 
 .main-page-everline #get-cash .form-horizontal.loan-details div dl dd {
@@ -69,6 +70,9 @@
 
 .main-page-everline #get-cash .payment-schedule-table {
 	width: 100%;
+	margin-top: 22px;
+	margin-bottom: 35px;
+	border-collapse: separate;
 }
 
 .main-page-everline #get-cash .loan_apr_block {
@@ -100,15 +104,15 @@
 
 	.main-page-everline #get-cash .loan-agreements ul li a i {
 		position: absolute;
-		left: 10px;
+		left: 6px;
 		font-size: 34px;
 		top: 4px;
 		display: inline-block;
 	}
 
 .main-page-everline #get-cash .buttons_container {
-	margin-top: 14px;
 	text-align: right;
+	margin-bottom: 20px;
 }
 
 .main-page-everline .dashboard-steps .progress-time{
@@ -375,3 +379,46 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 .pay-early-wrapper h1 {
 	border-bottom: 0;
 }
+
+.payment-schedule-table td:first-child,
+.payment-schedule-table th:first-child{
+	display: none;
+}
+
+.table .green-text{
+	color: #8dc641;
+	font-weight: 600;
+}
+
+#get-cash h2.loan-details-title{
+	font-size: 29px;
+    font-weight: lighter;
+	color: #565656;
+	line-height: 40px;
+	margin-bottom: 25px;
+}
+
+.loan-details-well td.caption {
+	font-size: 15px;
+    font-weight: 600;
+	color: #3a3a3a;
+}
+
+.loan-details-well td.value {
+	font-size: 15px;
+	color: #3a3a3a;
+}
+
+#loan-summary,
+#loan-agreement {
+	margin-bottom: 15px;
+}
+
+.loan-summary-well {
+	margin-bottom: 5px;
+}
+
+.loan_apr_block {
+	display:none;
+}
+

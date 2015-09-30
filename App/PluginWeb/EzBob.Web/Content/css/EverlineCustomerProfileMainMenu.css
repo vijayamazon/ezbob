@@ -49,16 +49,31 @@
 .profile-menu.navbar .nav > li > a:hover span, 
 .profile-menu.navbar .nav .active a span, 
 .profile-menu.navbar .nav .active a:hover span{
-    border-bottom: 2px #8dc641 solid;
+    border-bottom: 1px #8dc641 solid;
+	padding-bottom: 4px;
 }
 .main-page-everline .profile-menu .customer-dashboard-main li.active a span{
-    border-bottom: 2px #8dc641 solid;
+    border-bottom: 1px #8dc641 solid;
     text-decoration: none;
     text-shadow: none;
+	padding-bottom: 4px;
 }
 
-.main-page-everline .profile-menu .customer-dashboard-main li.active a span{
-	border-bottom: 2px #8dc641 solid;
-	text-decoration: none;
-	text-shadow: none;
+.profile-main .profile-menu .navbar-inner {
+	padding: 1px 7px 5px 5px;
+	width: 940px;
+	border: 0;
 }
+
+a, a:visited {
+	font-weight: 300;
+}
+
+.navbar .divider-vertical {
+	margin: 0;
+	border: 0;
+}
+
+
+
+

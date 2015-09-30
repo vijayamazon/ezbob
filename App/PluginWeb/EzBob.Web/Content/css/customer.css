@@ -723,3 +723,41 @@ blockquote {
 .underwriter-only{
 	display: none;
 }
+
+/* commercial */
+.consent-dialog .commercial-wrap .commercial-title {
+    page-break-before: always;
+}
+.consent-dialog .commercial-wrap  h1, .consent-dialog .commercial-wrap  h2{
+    color:black;
+    font-weight:bold !important;
+    margin-top:15px;
+    text-align: center;
+}
+.consent-dialog .commercial-wrap  p.underlined {
+    font: 14pt Calibri;
+     font-weight: bold; 
+     text-decoration:underline
+}
+.consent-dialog .commercial-wrap  h1{
+    font: 18pt Calibri;
+}
+
+.commercial-wrap  .font16{
+    font: 16pt Calibri;
+}
+.consent-dialog .commercial-wrap  h2 {
+    font: 14pt Calibri;
+    margin: 10px 0;
+    text-align:left;
+}
+.commercial-wrap .align-left {
+    text-align: left;
+}
+.commercial-wrap .align-center {
+    text-align: center;
+}
+
+.commercial-wrap .widthbrake {
+    page-break-before: always;
+}

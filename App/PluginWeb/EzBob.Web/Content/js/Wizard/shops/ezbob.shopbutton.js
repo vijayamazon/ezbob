@@ -30,8 +30,24 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 		var btn = this.$el.find('.marketplace-button-account-' + this.shopClass);
 
 		this.$el.find('.marketplace-button').removeClass('marketplace-button-full marketplace-button-empty');
-
-		var sTitle = (this.shops.length ? 'Some' : 'No') + ' accounts linked. Click to link ';
+		var sTitle = ""+ (this.shops.length ? 'Some' : 'No');
+		switch (this.shopClass) {
+		    case 'CompanyFiles':
+		        sTitle += ' document uploaded. Click to upload ';
+		        break;
+		    case 'YodleeUpload':
+		        sTitle += ' statement uploaded. Click to upload ';
+		        break;
+		    case 'VAT':
+		        sTitle += ' report uploaded. Click to upload ';
+		        break;
+	    break;
+		    default:
+		        sTitle += ' accounts linked. Click to link ';
+		        break;
+		}
+	    
+	
 
 		if (this.shops.length) {
 			this.$el.find('.marketplace-button').addClass('marketplace-button-full');
@@ -40,10 +56,11 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 			this.$el.find('.marketplace-button').addClass('marketplace-button-empty');
 			sTitle += 'one.';
 		} // if
-
+		
 		this.$el.find('.marketplace-button').attr('title', sTitle);
 
 		switch (this.shopClass) {
+          
 		case 'eBay':
 		case 'paypal':
 		case 'FreeAgent':

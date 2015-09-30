@@ -132,4 +132,4 @@ Backbone.Model.prototype.safeFetch = function() {
 	return {
 		done: function() { }
 	};
-};
+}; 

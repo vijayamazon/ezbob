@@ -1,4 +1,5 @@
 ﻿@using ConfigManager
+@using EzBob.Web.Infrastructure
 @model dynamic
 
 @{
@@ -55,7 +56,7 @@
 			</div>
 			<div class="clear"></div>
 			<hr>
-			<div class="help_security"></div>
+			<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
 		</div>
 	</div>
 </script>

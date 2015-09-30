@@ -222,7 +222,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		else {
 			generateCodeButton.addClass('disabled');
 			this.$el.find('#mobileCodeDiv').hide();
-			this.$el.find('#generateMobileCode').val('Send activation code');
+			this.$el.find('#generateMobileCode').val('Send authentication code');
 			var codeSentObject = this.$el.find('#codeSentLabel');
 			codeSentObject.animate({ opacity: 0 });
 		}

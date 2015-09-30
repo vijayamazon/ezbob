@@ -382,6 +382,10 @@ footer.everline_footer {
 	margin-top: 200px;
 }
 
+footer.location-broker-everline div.privacy-and-cookie-policy {
+	display: none;
+}
+
 .logo-example > div > div {
     margin-top: 20px;
 }
@@ -573,15 +577,3 @@ div.form_field_container {
 .bank-account-instructions .connect-bank {
 	margin-left: 25px;
 }
-
-
-
-
-
-
-
-
-
-
-
-

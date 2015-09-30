@@ -100,7 +100,7 @@
     </div>
 </div>
 
-@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
+@AddDirectorInfoTemplate.Render(this, ViewBag, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
 
 @section Js
 {
@@ -108,10 +108,10 @@
 	<h3>Loans</h3>
 	<dl>
 		<dt>Total Balance:</dt>
-		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+		<dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
 	</dl><dl>
 		<dt>Next Payment:</dt>
-		<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
+		<dd class="next-due-amount"><%- EzBob.formatPounds(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
 	</dl><dl>
 		@if (origin == CustomerOriginEnum.everline) {
 			<dt>Due:</dt>
@@ -125,10 +125,10 @@
 	<h3>Loans</h3>
 	<dl>
 		<dt>Total Balance:</dt>
-		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+		<dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
 	</dl><dl>
-		<dt style="line-height: 14px;">Amount Past Due:</dt>
-		<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
+		<dt id="amount-past-due">Amount Past Due:</dt>
+		<dd style="color: red;"><%- EzBob.formatPounds(TotalDue) %></dd>
 	</dl>
 	<button class="button btn-green pay-late clean-btn" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
 
@@ -138,7 +138,7 @@
         <h3>Cash</h3>
 		<dl>
 			<dt>Available Credit:</dt>
-			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimalsUK(availableCredit) %></dd>
+			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimals(availableCredit) %></dd>
 		</dl><dl>
 			<dt>Offer Valid for:</dt>
 			<dd class="offerValidFor"><%- countDown %> hrs</dd>
@@ -207,7 +207,7 @@
                 </div>
                 <div class="clear"></div>
                 <hr>
-                <div class="help_security"></div>
+				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
             </div>
 
             <div id="refresh_ekm_help" class="help_window">
@@ -226,7 +226,7 @@
                 </div>
                 <div class="clear"></div>
                 <hr>
-                <div class="help_security"></div>
+				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
             </div>
 
             <div id="refresh_hmrc_help" class="help_window">
@@ -245,7 +245,7 @@
                 </div>
                 <div class="clear"></div>
                 <hr>
-                <div class="help_security"></div>
+				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
             </div>
         </div>
 

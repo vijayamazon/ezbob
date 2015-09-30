@@ -76,6 +76,7 @@ footer {
 
 .section-dashboard {
     margin-top: 20px;
+	height: auto !important;
 }
 
     .section-dashboard .ui-tabs-panel {

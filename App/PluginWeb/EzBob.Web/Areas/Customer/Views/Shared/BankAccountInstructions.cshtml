@@ -1,4 +1,4 @@
-﻿@using System.Collections.Generic
+﻿@using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib.Model.Database
 @model dynamic
@@ -114,6 +114,6 @@
 
 		</form>
 		<hr>
-		<div class="help_security"></div>
+		<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
 	</div>
 </script>

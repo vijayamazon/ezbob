@@ -830,106 +830,69 @@ EzBob.ShowMessageEx = function(args) {
 	return modalpopup;
 }; // EzBob.ShowMessageEx
 
-EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormatUK = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999' };
-EzBob.moneyFormat1UK = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999' };
-EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£ ', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormatNoDecimalsUK = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
+EzBob.formatIntWithCommas = function(val) {
+	return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}; // EzBob.formatIntWithCommas
+
+EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
+EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999' };
+EzBob.formatPoundsNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormatNoDecimalsNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormatNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '', mDec: '2', vMax: '999999999999999' };
-EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£ ', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormatAsThousands = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: "p" };
+EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
+EzBob.moneyFormatAsThousands = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: "p" };
 EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
 EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
 EzBob.monthFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's' };
 EzBob.monthFormatNoDecimals = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's' };
 
-EzBob.formatPoundsNoSign = function(val) {
-	return EzBob.formatPoundsFormat(val, EzBob.moneyFormatNoSign);
-};
-
-EzBob.formatIntWithCommas = function(val) {
-	return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
 EzBob.formatPoundsWidhDash = function(val) {
-	if (!val && val == 0) {
+	if (!val && val == 0)
 		return '-';
-	}
-	return EzBob.formatPounds(val);
-};
 
-EzBob.formatPoundsWidhDashUK = function(val) {
-	if (!val && val == 0) {
-		return '-';
-	}
-	return EzBob.formatPoundsUK(val);
-};
+	return EzBob.formatPounds(val);
+}; // EzBob.formatPoundsWidhDash
 
 EzBob.formatPounds = function(val) {
 	return EzBob.formatPoundsFormat(val, EzBob.moneyFormat);
-};
-
-EzBob.formatPoundsUK = function(val) {
-	return EzBob.formatPoundsFormat(val, EzBob.moneyFormatUK);
-};
-
-EzBob.formatPounds1 = function(val) {
-	return EzBob.formatPoundsFormat(val, EzBob.moneyFormat1);
-};
-
-EzBob.formatPounds1UK = function(val) {
-	return EzBob.formatPoundsFormat(val, EzBob.moneyFormat1UK);
-};
+}; // EzBob.formatPounds
 
 EzBob.formatPoundsNoDecimals = function(val) {
-	return EzBob.formatPoundsFormat(Math.round(val), EzBob.moneyFormatNoDecimals);
-};
-
-EzBob.formatPoundsNoDecimalsUK = function(val) {
-	return EzBob.formatPoundsFormat(Math.round(val), EzBob.moneyFormatNoDecimalsUK);
-};
+	return EzBob.formatPoundsFormat(Math.round(val), EzBob.formatPoundsNoDecimals);
+}; // EzBob.formatPoundsNoDecimals
 
 EzBob.formatPoundsAsInt = function(val) {
 	return EzBob.formatPoundsFormat(Math.round(val), EzBob.moneyFormatAsInt);
-};
+}; // EzBob.formatPoundsAsInt
 
 EzBob.formatPoundsAsThousands = function(val) {
-	if (val < 1000 && val >= 100) {
+	if (val < 1000 && val >= 100)
 		return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
-	}
+
 	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatAsThousands) + 'k';
-};
+}; // EzBob.formatPoundsAsThousands
 
 EzBob.formatPoundsAsThousandsNoDecimals = function(val) {
-	if (val < 1000 && val >= 100) {
+	if (val < 1000 && val >= 100)
 		return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
-	}
-	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatNoDecimals) + 'k';
-};
+
+	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.formatPoundsNoDecimals) + 'k';
+}; // EzBob.formatPoundsAsThousandsNoDecimals
 
 EzBob.formatPoundsAsThousandsNoDecimalsNoSign = function(val) {
-	if (val < 1000 && val >= 100) {
+	if (val < 1000 && val >= 100)
 		return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
-	}
+
 	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatNoDecimalsNoSign) + 'k';
-};
+}; // EzBob.formatPoundsAsThousandsNoDecimalsNoSign
 
 EzBob.formatPoundsFormat = function(val, format) {
-	if (!val && val != 0) {
+	if (!val && val != 0)
 		return '-';
-	}
+
 	var target = $('<input type="text"/>');
 	return $.fn.autoNumeric.Format(target, val, format);
-};
-
-EzBob.formatPoundsWithBrackets = function(val) {
-	if (EzBob.isNullOrEmpty(val)) {
-		return '-';
-	}
-	return "(" + EzBob.formatPounds(val) + ")";
-};
+}; // EzBob.formatPoundsFormat
 
 //parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
 EzBob.parseDate = function(dateString) {
@@ -1015,8 +978,8 @@ EzBob.formatDateUK = function(date) {
 	if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
 		return '';
 
-	return oMoment.format("D MMM YYYY");
-};
+	return EzBob.formatDateHumanFullUK(oMoment);
+}; // EzBob.formatDateUK
 
 EzBob.DMYtoUK = function(date) {
 	if (!date)
@@ -1037,10 +1000,10 @@ EzBob.DMYtoUK = function(date) {
 
 	var oMoment = moment.utc(obj);
 
-	var result = oMoment.format('D MMM YYYY');
+	var result = EzBob.formatDateHumanFullUK(oMoment);
 
 	return result;
-}; // EzBob.formatDateUK
+}; // EzBob.DMYtoUK
 
 //formats date for user from utc asp.net date
 EzBob.formatDate2 = function(date) {
@@ -1075,7 +1038,6 @@ EzBob.formatDateTimeCS = function(date) {
 	return moment.utc(date).format("YYYY-MM-DDTHH:mm:ss");
 };
 
-
 EzBob.datetimeToDate = function(date) {
 	if (!date) return "";
 	return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
@@ -1098,9 +1060,44 @@ EzBob.formatDateHumanFull = function(date) {
 };
 
 EzBob.formatDateHumanFullUK = function(date) {
-	if (!date) return "";
-	return moment.utc(date).format("D MMM YYYY");
-};
+	if (!date)
+		return '';
+
+	var normalDate = moment.utc(date);
+
+	var dayOfMonth = normalDate.date();
+
+	var suffix = 'th';
+
+	switch (dayOfMonth) {
+	case 11:
+	case 12:
+	case 13:
+		// already set
+		break;
+
+	default:
+		switch (dayOfMonth % 10) {
+		case 1:
+			suffix = 'st';
+			break;
+
+		case 2:
+			suffix = 'nd';
+			break;
+
+		case 3:
+			suffix = 'rd';
+			break;
+
+		default:
+			// already set
+			break;
+		} // switch
+	} // switch
+
+	return dayOfMonth + suffix + normalDate.format(' MMM YYYY');
+}; // EzBob.formatDateHumanFullUK
 
 EzBob.formatDateShortCard = function(date) {
 	if (!date) return "";
@@ -1213,7 +1210,7 @@ EzBob.validateSignUpForm = function(el) {
 			securityQuestion: { required: true },
 			SecurityAnswer: { required: true, maxlength: 199 },
 			CaptchaInputText: { required: true, minlength: 6, maxlength: 6 },
-			amount: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
+			amount: { required: true, defaultInvalidPounds: true, regex: "^(?!£0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
 			customerReason: { required: true },
 			customerSourceOfRepayment: { required: true },
 			otherCustomerReason: { required: true },
@@ -1347,7 +1344,7 @@ EzBob.validateLimitedCompanyDetailForm = function(el) {
 			LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
 			LimitedCompanyName: { required: true, minlength: 2, maxlength: 255 },
 			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
+			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
 			LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
 		},
 		messages: {
@@ -1371,7 +1368,7 @@ EzBob.validateNonLimitedCompanyDetailForm = function(el) {
 			NonLimitedCompanyName: { required: true, minlength: 2, maxlength: 255 },
 			NonLimitedTimeInBusiness: { required: true },
 			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
+			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
 			NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
 		},
 		messages: {

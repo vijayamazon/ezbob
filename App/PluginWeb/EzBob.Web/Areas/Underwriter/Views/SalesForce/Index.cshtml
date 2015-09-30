@@ -342,7 +342,7 @@
 	</dl>
 }
 
-@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
+@AddDirectorInfoTemplate.Render(this, ViewBag, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 @EditExperianDirectorData.Render(this)
 
 <script id="address-popup-template" type="text/template">

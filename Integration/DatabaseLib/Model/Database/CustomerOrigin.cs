@@ -28,6 +28,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string MetaDescription { get; set; }
 		public virtual string CustomerCareEmail { get; set; }
 		public virtual string FrontendSite { get; set; }
+		public virtual Guid TrusteSealUniqueID { get; set; }
 
 		public virtual CustomerOriginEnum GetOrigin() { return this.origin; }
 
@@ -64,6 +65,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.CustomerCareEmail).Length(255);
 			Map(x => x.FrontendSite).Length(255);
 			Map(x => x.MetaDescription);
+			Map(x => x.TrusteSealUniqueID);
 		} // constructor
 	} // class CustomerOriginMap
 

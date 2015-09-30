@@ -34,8 +34,15 @@
 }
 @media screen and (max-width: 800px) {
     /*
+        Header
+    */
+    header nav span.svg {
+        margin-left:10px;
+    }
+    /*
         footer
     */
+
     .footer-eif-text {
         width: 100%;
         float: none;
@@ -67,10 +74,18 @@
             display: none;
         }
     /* end footer */
-
+    /*
+        login
+    */
+    .forgotpass {
+        width:100%;
+    }
     /*
         wizard
     */
+    .wizard-wrap{
+            padding: 40px 20px 40px 20px;
+    }
     .security-icons .item {
         float:left;
     }
