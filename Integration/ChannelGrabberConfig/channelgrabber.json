@@ -141,7 +141,7 @@
                     }
                 ],
                 "Notes": [
-                "<strong>* Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.</strong>",
+                "Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.",
                     "<BR><BR>",
                 ],
                 "OnBeforeLink": [ 
