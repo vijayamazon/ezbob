@@ -203,7 +203,7 @@
                     "<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank ui-event-control-id=\"link-account:shopify_help_link\">Instructions on creating a private application.</a></p>",
                     "<p>When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:",
                     "<blockquote>https://a5a18488246744828f621d0073eda:b02ffd5b4025af3ed570353c5d56b@test-shop.myshopify.com/admin/orders.xml</blockquote>",
-                    "Enter your example URL in the above field.</p>"
+                    "Enter your example URL in the field below.</p>"
                 ],
                 "OnBeforeLink": [
                     "var aryMatch = /^(https:\\/\\/[0-9A-Za-z]{32}:[0-9A-Za-z]{32}@(.+)\\.myshopify\\.com)(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
