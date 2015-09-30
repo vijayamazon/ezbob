@@ -1,3 +1,10 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('LoadCollectionSnailMailTemplates') IS NULL
+	EXECUTE('CREATE PROCEDURE LoadCollectionSnailMailTemplates AS SELECT 1')
+GO
+
 ALTER PROCEDURE LoadCollectionSnailMailTemplates
 AS
 BEGIN
