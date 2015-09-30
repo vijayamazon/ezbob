@@ -1,56 +1,150 @@
-﻿@using System.Web.WebPages
-@helper Render(WebPageBase page, string sUrl) {
+﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+
+@helper Render(WebPageBase page, dynamic viewBag, string sUrl) {
+		CustomerOriginEnum origin = viewBag.CustomerOrigin.GetOrigin();
+
 	<script id="add-director-info-template" type="text/template">
 		<div class="director">
-			<form method="post" action="@sUrl" class="addDirectorInfoForm" novalidate="novalidate">
+			<form method="post" action="@sUrl" class="addDirectorInfoForm ev-form" novalidate="novalidate">
 				<input type="hidden" name="nCustomerID" id="nCustomerID" />
 
 				<div class="add-director-container">
 					<h2 class="form_start">Add director/shareholder</h2>
 				</div>
 				
-				<div class="control-group form_field_container form-director-is-dir-sha">
-					<div>
-						<input type="checkbox" checked="checked" id="DirectorIsDirectorShareholder_Dir" class="is-dir-sha" data-target="is-director" ui-event-control-id="dashboard:director_is_director" />
-						<label for="DirectorIsDirectorShareholder_Dir">This person is a company&rsquo;s director.</label>
-					</div>
-					<div>
-						<input type="checkbox" id="DirectorIsDirectorShareholder_Sha" class="is-dir-sha" data-target="is-shareholder" ui-event-control-id="dashboard:director_is_shareholder" />
-						<label for="DirectorIsDirectorShareholder_Sha">This person is a company&rsquo;s shareholder.</label>
-					</div>
-				</div>
+				@{
+					var specialAttributes1 = new Dictionary<string, string>();
+					specialAttributes1["data-target"] = "is-director";
+					specialAttributes1["checked"] = "checked";
+					var specialAttributes2 = new Dictionary<string, string>();
+					specialAttributes2["data-target"] = "is-shareholder";
+		
+					EzInputBuilder checkbox1 = new EzInputBuilder(
+							"DirectorIsDirectorShareholder_Dir",
+							String.Format("This person is a company&rsquo;s director."),
+							specialAttributes: specialAttributes1,
+							type: "checkbox",
+							isRequired: true,
+							statusIcon: true,
+							uiEventControlID: "dashboard:director_is_director",
+							cls: "is-dir-sha");
 
-				@EzForm.InputText("Name", "First name", cls: "form_field alphaOnly", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_first_name")
-				@EzForm.InputText("Middle", "Middle initial", cls: "form_field alphaOnly", isRequired: false, statusIcon: true, uiEventControlID: "dashboard:director_middle_name")
-				@EzForm.InputText("Surname", "Surname", cls: "form_field alphaOnly", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_surname")
+					 EzInputBuilder checkbox2 = new EzInputBuilder(
+						 "DirectorIsDirectorShareholder_Sha",
+						 String.Format("This person is a company&rsquo;s shareholder."),
+						 specialAttributes: specialAttributes2,
+						 type: "checkbox",
+						 isRequired: true,
+						 statusIcon: true,
+						 uiEventControlID: "dashboard:director_is_shareholder",
+						 cls: "is-dir-sha");
 
-				<div class="control-group form_field_container FormRadioCtrl">
-					<span>
-						<input class="male-director-gender-margin" type="radio" name="Gender" value="M" id="DirectorFormRadioCtrl_M" ui-event-control-id="dashboard:director_gender"><label for="DirectorGenderCtrl_M">Male</label>
-						<input class="gender-margin" type="radio" name="Gender" value="F" id="DirectorFormRadioCtrl_F" ui-event-control-id="dashboard:director_gender"><label for="DirectorGenderCtrl_F">Female</label>
-					</span>
-					<img id="GenderImage" class="field_status required director_gender_image" />
-				</div>
+					 List<EzInputBuilder> checkboxesList = new List<EzInputBuilder> { checkbox1, checkbox2 };
 
+					 var checkboxes2 = new EzClickInputModel(
+											 containerClass: "form-director-is-dir-sha",
+											 isRequired: false,
+											 statusIcon: false,
+											 inputButtons: checkboxesList);
+
+					@EzForm.ClickableInputWizard(checkboxes2, origin: origin)
+				}
+				
+				@EzForm.InputTextWizard(new EzInputBuilder(
+											"Name", 
+											"First name",
+											cls: "form_field alphaOnly",
+											isRequired: true,
+											statusIcon: true,
+											uiEventControlID: "dashboard:director_first_name"),
+										origin: origin)
+							
+				@EzForm.InputTextWizard(new EzInputBuilder(
+											"Middle", 
+											"Middle initial",
+											cls: "form_field alphaOnly",
+											isRequired: false,
+											statusIcon: true,
+											uiEventControlID: "dashboard:director_middle_name"),
+										origin: origin)
+				
+				@EzForm.InputTextWizard(new EzInputBuilder(
+											"Surname", 
+											"Surname",
+											cls: "form_field alphaOnly",
+											isRequired: true,
+											statusIcon: true,
+											uiEventControlID: "dashboard:director_surname"),
+										origin: origin)
+
+				@EzForm.ClickableInputWizard(new EzClickInputModel(
+												name: "Gender",
+												caption: "Gender ",
+												errorImgClass: "field_status required director_gender_image",
+												inputWrapperClass: "FormRadioCtrl",
+												isRequired: true,
+												statusIcon: true,
+												inputButtons: new List<EzInputBuilder> {
+													new EzInputBuilder(
+														"DirectorFormRadioCtrl_M", 
+														"Male",
+														value: "M",
+														type: "radio",
+														cls: "male-director-gender-margin",
+														isRequired: true,
+														statusIcon: true,
+														name: "Gender",
+														uiEventControlID: "dashboard:director_gender"),
+													new EzInputBuilder(
+														"DirectorFormRadioCtrl_F", 
+														"Female",
+														value: "F",
+														type: "radio",
+														cls: "gender-margin",
+														isRequired: true,
+														statusIcon: true,
+														name: "Gender",
+														uiEventControlID: "dashboard:director_gender")
+												}),
+											origin: origin)
+				
 				<div class="director_address">
 					@EzForm.AddressInput(page, "DirectorAddress", "Address", "director")
 				</div>
 
-				@EzForm.DateInput(page, "DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "dashboard:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
+				@EzForm.DateInput(page, "DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "dashboard:director_birth_date", hiddenFieldAuxClass: "director_birth_date", origin: origin)
+				
+				@EzForm.InputTextWizard(new EzInputBuilder(	
+											"Email", 
+											"Email",
+											type: "email",
+											cls: "form_field",
+											isRequired: true,
+											statusIcon: true,
+											uiEventControlID: "dashboard:director_email"),
+										origin: origin)
 
-				@EzForm.InputText("Email", "Email", type: "email", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_email")
-				@EzForm.InputText("Phone", "Best contact number", cls: "form_field phonenumber", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_phone")
+				@EzForm.InputTextWizard(new EzInputBuilder(
+											"Phone", 
+											"Best contact number",
+											cls: "form_field phonenumber",
+											isRequired: true,
+											statusIcon: true,
+											uiEventControlID: "dashboard:director_phone"),
+										origin: origin)
 
 				<input type="hidden" class="is-director" name="IsDirector" value="on" />
 				<input type="hidden" class="is-shareholder" name="IsShareholder" value="off" />
-			</form>
+			
 
-			<div class="form_buttons_container">
-				<div class="attardi-button">
-					<button type="button" class="button btn-green addDirector disabled ev-btn-org" ui-event-control-id="dashboard:add_director">Add director</button>
-					<button type="button" class="button btn-grey directorBack ev-btn-org" ui-event-control-id="dashboard:add_director_back">Back</button>
+				<div class="form_buttons_container">
+					<div class="attardi-button">
+						<button type="button" class="button btn-green addDirector disabled ev-btn-org" ui-event-control-id="dashboard:add_director">Add director</button>
+						<button type="button" class="button btn-grey directorBack clean-btn" ui-event-control-id="dashboard:add_director_back">Back</button>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</script>
 }

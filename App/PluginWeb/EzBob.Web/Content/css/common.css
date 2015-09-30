@@ -3900,3 +3900,7 @@ button#switchToCaptcha {
 .specular_wrapper{
 	display: none;
 }
+
+.form-director-is-dir-sha  .input-tag-wrap {
+	display: block;
+}

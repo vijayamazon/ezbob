@@ -2,6 +2,7 @@
 @model dynamic
 @{
 	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
 }
 <script id="loan-details-template" type="text/template">
 	<% 
@@ -18,7 +19,7 @@
 			payButtonName = "Pay Now";
 	 %>
 
-	<h2>Loan Details</h2>
+	<h2 class="loan-details-title">Loan Details</h2>
 	<div style="padding-left: 0; padding-bottom: 30px;">
 		<div class="dashboard-frame simple-well loan-details-well">
 			<%
@@ -69,7 +70,7 @@
 		</div>
 	</div>
 
-	<h2>Loan Summary</h2>
+	<h2 id="loan-summary">Loan Summary</h2>
 	<div class="simple-well loan-summary-well">
 		<div class="row-fluid form-horizontal loan-details">
 			<div class="span4">
@@ -82,6 +83,10 @@
 
 					<dt>Interest Rate:</dt>
 					<dd><%- EzBob.formatPercents(loan.InterestRate) %></dd>
+					@if (isEverline) {
+							<dt>Loan APR:</dt>
+							<dd><%- loan.APR %> %</dd>
+						}
 
 					<% if (isLate) {
 					%>
@@ -138,13 +143,13 @@
 		<thead>
 			<tr>
 				<th style="width: 75px;"></th>
-				<th style="width: 75px;">Date</th>
-				<th style="width: 75px;">Principal</th>
-				<th style="width: 75px;">Interest</th>
-				<th style="width: 75px;">Fees</th>
-				<th style="width: 75px;">Rebate</th>
-				<th style="width: 75px;">Total</th>
-				<th style="width: 110px;">Status</th>
+				<th style="width: 180px;">@( !isEverline ? "Date" : "Due date")</th>
+				<th style="width: 180px;">Principal</th>
+				<th style="width: 160px;">Interest</th>
+				<th style="width: 90px;">Fees</th>
+				<th style="width: 105px;">Rebate</th>
+				<th style="width: 110px;" >Total</th>
+				<th style="width: 115px;">Status</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -160,7 +165,7 @@
 				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Interest) %></td>
 				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Fees) %></td>
 				<td><%- EzBob.formatPoundsWidhDashUK(0) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td class="green-text"><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
 				<td><%- transaction.StatusDescription %></td>
 			</tr><%
 			});
@@ -175,7 +180,7 @@
 				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Interest) %></td>
 				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Fees + transaction.Rollover) %></td>
 				<td><%- EzBob.formatPoundsWidhDashUK(0) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td class="green-text"><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
 				<td><%- transaction.StatusDescription %></td>
 			</tr><%
 			}
@@ -225,7 +230,7 @@
 				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.Interest)%></td>
 				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.Fees + item.LateCharges)%></td>
 				<td class='<%-styleForLate%>'><%- EzBob.formatPoundsWidhDashUK(0) %></td>
-				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.AmountDue)%></td>
+				<td class='<%-styleForLate%> green-text'><%-EzBob.formatPoundsWidhDashUK(item.AmountDue)%></td>
 				<td class='<%-styleForLate%>'>
 					<%-item.StatusDescription == 'AlmostPaid' ? 'Open' : item.StatusDescription%>
 					<% if(late) {
@@ -241,7 +246,7 @@
 
 	<div class="loan_apr_block">Loan APR: <%- loan.APR %> %</div>
 
-	<h2>Loan Agreement</h2>
+	<h2 id="loan-agreement">Loan Agreement</h2>
 	<div class="simple-well">
 		<div class="row-fluid form-horizontal loan-agreements">
 			<ul>

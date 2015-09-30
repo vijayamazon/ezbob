@@ -1,15 +1,20 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
+}
 <script id="account-activity-template" type="text/template">
 	<% if (loans.length) { %>
 		<table class="table">
 		<thead>
 			<tr>
-				<th>Ref. Number</th>
-				<th width="20%">Origination Date</th>
-				<th width="20%">Loan Amount</th>
-				<th width="20%">Status</th>
-				<th width="20%">Open Balance</th>
-				<th width="20%"></th>
+				<th width="180px">@( !isEverline ? "Ref. Number" : "Ref. No.")</th>
+				<th width="179px">Origination Date</th>
+				<th width="159px">Loan Amount</th>
+				<th width="104px">Status</th>
+				<th width="149px">Open Balance</th>
+				<th width="170px"></th>
 			</tr>
 		</thead>
 		<tbody><%
@@ -29,7 +34,7 @@
 		%></tbody>
 	</table>
 	<div class="clearfix right">
-		<a href="#" class="print-link ev-btn-org" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
+		<a href="#" class="print-link clean-btn" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
 	</div>
 	<% } else { %>
 		There is no activity in your account.

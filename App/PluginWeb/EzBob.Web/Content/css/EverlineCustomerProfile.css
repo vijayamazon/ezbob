@@ -13,6 +13,8 @@ body {
 #profile-content{
 
 	width: 960px;
+	box-sizing: border-box;
+	padding: 0 10px;
 }
 
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
@@ -76,8 +78,8 @@ a.clean-btn{
 	background-color: #e0e0e0;
 	color: #666666;
 	border: 1px solid white;
-	padding: 10px;
-	font-size: 14px;
+	padding: 15px;
+	font-size: 15px;
 	text-align: left;
 	font-family: 'Open Sans',sans-serif !important;
 }
@@ -86,17 +88,18 @@ a.clean-btn{
 	background-color: #f1f0f0;
 	color: #666666;
 	border: 1px solid white;
-	padding: 10px;
-	font-size: 14px;
+	padding: 15px;
+	font-size: 15px;
 	text-align: left;
 	font-family: 'Open Sans',sans-serif !important;
 }
 
 .main-page-everline table td a.clean-btn {
-	display: table-cell;
 	vertical-align: middle;
-	height: 35px;
-    line-height: 20px;
+	display: inline-block;
+    line-height: 30px;
+    height: 35px;
+    width: 130px;
 }
 
 /*
@@ -112,10 +115,14 @@ a.clean-btn{
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	margin-bottom: -15px;
 }
 
-.welcome-sign{
+.welcome-sign
+{
 	margin-bottom: 20px;
+	font-size: 29px;
+    font-weight: lighter;
 }
 
 .header-message.hm_green {
@@ -140,7 +147,7 @@ a.clean-btn{
 .main-page-everline .d-widget {
 	background-color: #f1f0f0;
 	position: relative;
-	margin-top: 40px;
+	margin-top: 75px;
     margin-bottom: 25px;
 	display: block;
 	padding-left: 20px;
@@ -149,7 +156,7 @@ a.clean-btn{
 
 .main-page-everline .d-widget h3{
     position: absolute;
-    top: -45px;
+    top: -60px;
 	left: 0;
 	color: #8dc641;
 	font-weight: normal;
@@ -165,6 +172,7 @@ a.clean-btn{
 .main-page-everline .d-widgets dl dd {
 	margin-right: 40px;
 	font-weight: bold;
+	font-size:20px;
 	margin-left: 0;
 }
 
@@ -182,8 +190,9 @@ a.clean-btn{
 	width: 30%;
 }
 
-a.clean-btn.pay-early {
-	width: 200px
+a.clean-btn.pay-early,
+a.ev-btn-org {
+	width: 240px
 }
 
 .next-due-amount i{
@@ -266,3 +275,66 @@ a.clean-btn.pay-early {
 	margin-top: 10px
 }
 /*End Automation wizard complete popup*/
+
+.main-page-everline .d-widgets dl dt,
+.main-page-everline .d-widgets dl dd {
+	color: #3a3a3a;
+	font-weight: 600;
+}
+
+.profile-headlines .proccessing-message .processing-header h2 em {
+	display:block;
+	margin-bottom: 10px;
+	font-size: 22px;
+	color: #8dc641;
+}
+
+.profile-headlines .proccessing-message .processing-header h2 {
+	font-size: 14px;
+	color: #666666;
+	font-weight: normal;
+}
+
+.profile-main .d-widgets {
+	margin-top: 0px;
+}
+
+.profile-main .d-widgets .d-widget .clean-btn,
+.profile-main .d-widgets .d-widget .ev-btn-org {
+	width: 240px;
+}
+
+.profile-main .profile-widgets .clearfix .clean-btn {
+	width: 130px;
+	height: 35px;
+	float: left;
+	line-height: 30px;
+	text-decoration:none;
+}
+
+.profile-widgets .table {
+	border-collapse: separate;
+}
+
+.profile-widgets .table th{
+	padding-left: 20px;
+}
+
+.profile-widgets .table td{
+	vertical-align: middle;
+	padding-left: 20px;
+}
+.profile-widgets .table td:last-child {
+	text-align: center;
+    padding: 10px 0;
+}
+
+button.addDirector.ev-btn-org {
+	float: right;
+	width: 240px;
+	margin-left: 30px;
+}
+
+#amount-past-due {
+	line-height: 20px;
+}

@@ -507,8 +507,8 @@ a.clean-btn:focus,
     text-align: center;
     color: #e28023 !important;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 18px !important;
-    font-weight: 600;
+	font-size: 16px !important;
+    font-weight: bold;
     -ms-opacity: 1;
     line-height:43px;
     opacity: 1;

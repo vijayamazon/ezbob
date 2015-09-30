@@ -100,7 +100,7 @@
     </div>
 </div>
 
-@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
+@AddDirectorInfoTemplate.Render(this, ViewBag, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
 
 @section Js
 {
@@ -127,7 +127,7 @@
 		<dt>Total Balance:</dt>
 		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
 	</dl><dl>
-		<dt style="line-height: 14px;">Amount Past Due:</dt>
+		<dt id="amount-past-due">Amount Past Due:</dt>
 		<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
 	</dl>
 	<button class="button btn-green pay-late clean-btn" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>

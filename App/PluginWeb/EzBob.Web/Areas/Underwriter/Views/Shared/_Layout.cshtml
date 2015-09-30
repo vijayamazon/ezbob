@@ -86,7 +86,7 @@
     @RenderSection("Js", false)
     
 	
-	@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
+	@AddDirectorInfoTemplate.Render(this, ViewBag, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 </body>
 </html>
 
