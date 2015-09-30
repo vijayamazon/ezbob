@@ -978,7 +978,7 @@ EzBob.formatDateUK = function(date) {
 	if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
 		return '';
 
-	return oMoment.format("D MMM YYYY");
+	return EzBob.formatDateHumanFullUK(oMoment);
 }; // EzBob.formatDateUK
 
 EzBob.DMYtoUK = function(date) {
@@ -1000,7 +1000,7 @@ EzBob.DMYtoUK = function(date) {
 
 	var oMoment = moment.utc(obj);
 
-	var result = oMoment.format('D MMM YYYY');
+	var result = EzBob.formatDateHumanFullUK(oMoment);
 
 	return result;
 }; // EzBob.DMYtoUK
@@ -1038,7 +1038,6 @@ EzBob.formatDateTimeCS = function(date) {
 	return moment.utc(date).format("YYYY-MM-DDTHH:mm:ss");
 };
 
-
 EzBob.datetimeToDate = function(date) {
 	if (!date) return "";
 	return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
@@ -1061,9 +1060,44 @@ EzBob.formatDateHumanFull = function(date) {
 };
 
 EzBob.formatDateHumanFullUK = function(date) {
-	if (!date) return "";
-	return moment.utc(date).format("D MMM YYYY");
-};
+	if (!date)
+		return '';
+
+	var normalDate = moment.utc(date);
+
+	var dayOfMonth = normalDate.date();
+
+	var suffix = 'th';
+
+	switch (dayOfMonth) {
+	case 11:
+	case 12:
+	case 13:
+		// already set
+		break;
+
+	default:
+		switch (dayOfMonth % 10) {
+		case 1:
+			suffix = 'st';
+			break;
+
+		case 2:
+			suffix = 'nd';
+			break;
+
+		case 3:
+			suffix = 'rd';
+			break;
+
+		default:
+			// already set
+			break;
+		} // switch
+	} // switch
+
+	return dayOfMonth + suffix + normalDate.format(' MMM YYYY');
+}; // EzBob.formatDateHumanFullUK
 
 EzBob.formatDateShortCard = function(date) {
 	if (!date) return "";
