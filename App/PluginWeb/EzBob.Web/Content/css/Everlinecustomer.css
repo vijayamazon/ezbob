@@ -247,7 +247,7 @@ hr{
     border-top: 1px solid !important;
 }
 h1 {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif !important;
     font-weight: 300;
     font-size: 22px;
     margin: 20px 0;
@@ -272,6 +272,9 @@ strong {
 
 .ui-dialog .ui-dialog-title{
 	margin-bottom: 0;
+    font-size: 34px;
+    font-weight: 300;
+    padding: 0;
 }
 
     h2 .sub-h2 {
@@ -435,6 +438,10 @@ a, a:visited {
     -ms-border-radius: 0;
     -webkit-border-radius: 0px;
     border-radius: 0;
+  /*  -webkit-appearance:none;
+    -moz-appearance:none;
+    -o-appearance:none;
+    appearance:none; */
 }
 
 .form_field_container .input-wrapper select.type-of-business-form_field {
@@ -496,7 +503,7 @@ a.clean-btn:focus,
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 2px solid #e28023;
-	height: 48px;
+	height: 50px;
     text-align: center;
     color: #e28023 !important;
 	font-family: 'Open Sans', sans-serif;
@@ -530,7 +537,9 @@ a.clean-btn:hover,
     display: inline-block;
     margin-left: 20px;
 }
-
+  .form_field_container .input-wrapper a.clean-btn {
+      margin-left:0;
+  }
  .form_field_container .input-wrapper .clean-btn.disabled {
     -ms-opacity: 0.3;
     opacity: 0.3;
@@ -820,6 +829,17 @@ div.company-full-details{
 .terms-conditions-checkbox-label a {
     font-size:13px;
     font-weight:600;
+}
+.commercial-wrap h1 {
+    font-size:18px;
+    color:#494949;
+    font-weight: 600;
+}
+.commercial-wrap h2{
+    font-size:14px;
+    font-weight:600;
+color:#494949;
+    margin:0;
 }
 /*radio and checkbox labels*/
 .click-wrap .title.normal-label {
@@ -1326,7 +1346,7 @@ h3.group-title {
 	background-position: -1057px -1px;
     width: 113px;
 }
-.marketplace-image.marketplace-image-Play {
+.marketplace-image.marketplace-image-Rakuten {
 	background-position: 0px -1px;
     width: 151px;
 }

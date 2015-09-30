@@ -362,7 +362,15 @@ string formFieldID = "")
 
 
 @helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+
 {
+    var labelength = 0;
+    if (inputProp.Caption != null)
+    {
+         labelength = inputProp.Caption.Length;
+    }
+    
+   
 	var identificator = new HtmlString(inputProp.Id);
 	<div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "")
 		 class="form_field_container @(inputProp.WrapperCls == "" ? "control-group" : inputProp.WrapperCls)"
@@ -392,8 +400,8 @@ string formFieldID = "")
 				</label>
 			</div>
 		} else {
-
-			<label class="input-title @inputProp.LabelClass"
+            
+			<label class="input-title @inputProp.LabelClass @(labelength > 33 ? "long" : "" )"
 				   @if (true) {
 					   @: for="@identificator"
 				   }

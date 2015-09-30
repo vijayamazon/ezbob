@@ -84,6 +84,7 @@
 }
 .ui-slider .ui-slider-handle {
   background: #ef7f12;
+  border:none;
   border-bottom: 2px solid #BC6E23;
   position: absolute;
   z-index: 2;
@@ -310,6 +311,7 @@
 .sliders .form-markup-wrapper h2 {
   font-size: 39px;
   margin:0;
+  font-weight:300;
 }
 .sliders .form-markup-wrapper .c_spn_3 {
   margin-left: 4.25%;
@@ -971,7 +973,7 @@
     margin:0;
    font-weight:normal;
     text-align: left;
-   
+   font-weight:300;
     color: #494949;
     font-family: 'Open Sans', sans-serif;
     font-size: 29px;
@@ -1067,6 +1069,7 @@
 .sliders .overview .c_spn_4 {
   font-size:18px;
   font-weight: 600;
+      font-family: 'Open Sans',sans-serif;
   text-decoration: none;
 }
 
