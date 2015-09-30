@@ -108,10 +108,10 @@
 	<h3>Loans</h3>
 	<dl>
 		<dt>Total Balance:</dt>
-		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+		<dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
 	</dl><dl>
 		<dt>Next Payment:</dt>
-		<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
+		<dd class="next-due-amount"><%- EzBob.formatPounds(NextPayment) %> <i><%- EzBob.formatDateUK(NextPaymentDate) %></i></dd>
 	</dl><dl>
 		@if (origin == CustomerOriginEnum.everline) {
 			<dt>Due:</dt>
@@ -125,10 +125,10 @@
 	<h3>Loans</h3>
 	<dl>
 		<dt>Total Balance:</dt>
-		<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+		<dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
 	</dl><dl>
 		<dt id="amount-past-due">Amount Past Due:</dt>
-		<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
+		<dd style="color: red;"><%- EzBob.formatPounds(TotalDue) %></dd>
 	</dl>
 	<button class="button btn-green pay-late clean-btn" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
 
@@ -138,7 +138,7 @@
         <h3>Cash</h3>
 		<dl>
 			<dt>Available Credit:</dt>
-			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimalsUK(availableCredit) %></dd>
+			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimals(availableCredit) %></dd>
 		</dl><dl>
 			<dt>Offer Valid for:</dt>
 			<dd class="offerValidFor"><%- countDown %> hrs</dd>

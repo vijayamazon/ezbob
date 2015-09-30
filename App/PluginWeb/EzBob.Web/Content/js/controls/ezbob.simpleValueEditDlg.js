@@ -195,7 +195,7 @@ EzBob.Dialogs.PercentsEdit = EzBob.Dialogs.AutonumericEdit.extend({
 });
 
 EzBob.Dialogs.PoundsNoDecimalsEdit = EzBob.Dialogs.AutonumericEdit.extend({
-    autonumericFormat: EzBob.moneyFormatNoDecimals
+    autonumericFormat: EzBob.formatPoundsNoDecimals
 });
 
 EzBob.Dialogs.PacentManual = EzBob.Dialogs.PoundsNoDecimalsEdit.extend({

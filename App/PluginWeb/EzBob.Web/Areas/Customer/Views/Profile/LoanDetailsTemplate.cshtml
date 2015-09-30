@@ -76,7 +76,7 @@
 			<div class="span4">
 				<dl>
 					<dt>Loan Amount:</dt>
-					<dd><%-EzBob.formatPoundsWidhDashUK(loan.LoanAmount)%></dd>
+					<dd><%-EzBob.formatPoundsWidhDash(loan.LoanAmount)%></dd>
 
 					<dt>Origination Date:</dt>
 					<dd><%- EzBob.formatDateUK(loan.Date) %> </dd>
@@ -91,7 +91,7 @@
 					<% if (isLate) {
 					%>
 					<dt>Late Balance:</dt>
-					<dd><%- EzBob.formatPoundsUK(loan.Late) %></dd><%
+					<dd><%- EzBob.formatPounds(loan.Late) %></dd><%
 					} %>
 				</dl>
 			</div>
@@ -101,7 +101,7 @@
 			<div class="span4">
 				<dl>
 					<dt>Open Balance:</dt>
-					<dd><%-EzBob.formatPoundsUK(loan.TotalBalance)%></dd>
+					<dd><%-EzBob.formatPounds(loan.TotalBalance)%></dd>
 
 					<% if (area !='Underwriter') {
 					%>
@@ -110,10 +110,10 @@
 					} %>
 
 					<dt>Total Paid:</dt>
-					<dd><%- EzBob.formatPoundsUK(loan.Repayments) %></dd>
+					<dd><%- EzBob.formatPounds(loan.Repayments) %></dd>
 
 					<dt>Setup Fee:</dt>
-					<dd><%- EzBob.formatPoundsUK(loan.SetupFee) %></dd>
+					<dd><%- EzBob.formatPounds(loan.SetupFee) %></dd>
 				</dl>
 			</div>
 			
@@ -161,11 +161,11 @@
 					<img style="width: 24px; height: 24px" src='@Url.Content("~/Content/img/payment-to-customer.png")' alt="" />
 				</td>
 				<td><%- EzBob.formatDateHumanFullUK(transaction.PostDate)  %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Interest) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Fees) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(0) %></td>
-				<td class="green-text"><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(0) %></td>
+				<td class="green-text"><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
 				<td><%- transaction.StatusDescription %></td>
 			</tr><%
 			});
@@ -176,11 +176,11 @@
 			<tr>
 				<td><img height="31" src='@Url.Content("~/Content/img/wizard-mark-completed.png")' alt="" /></td>
 				<td><%- EzBob.formatDateHumanFullUK(transaction.PostDate) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.LoanRepayment) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Interest) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(transaction.Fees + transaction.Rollover) %></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(0) %></td>
-				<td class="green-text"><%- EzBob.formatPoundsWidhDashUK(transaction.Amount) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(0) %></td>
+				<td class="green-text"><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
 				<td><%- transaction.StatusDescription %></td>
 			</tr><%
 			}
@@ -193,7 +193,7 @@
 				<td><%- EzBob.formatDateHumanFullUK(rollover.ExperyDate)  %></td>
 				<td></td>
 				<td></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(rollover.Payment) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(rollover.Payment) %></td>
 				<td></td>
 				<td></td>
 				<td>Roll Over</td>
@@ -208,7 +208,7 @@
 				<td><%- EzBob.formatDateHumanFullUK(charge.Date) %></td>
 				<td></td>
 				<td></td>
-				<td><%- EzBob.formatPoundsWidhDashUK(charge.Amount) %></td>
+				<td><%- EzBob.formatPoundsWidhDash(charge.Amount) %></td>
 				<td></td>
 				<td></td>
 				<td><%- charge.State %></td>
@@ -226,11 +226,11 @@
 			<tr data-scheduleid="<%- item.Id %>">
 				<td><img src="<%-urlImage%>"></td>
 				<td><%- EzBob.formatDateHumanFullUK(item.Date) %></td>
-				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.LoanRepayment)%></td>
-				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.Interest)%></td>
-				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDashUK(item.Fees + item.LateCharges)%></td>
-				<td class='<%-styleForLate%>'><%- EzBob.formatPoundsWidhDashUK(0) %></td>
-				<td class='<%-styleForLate%> green-text'><%-EzBob.formatPoundsWidhDashUK(item.AmountDue)%></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
+				<td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Fees + item.LateCharges)%></td>
+				<td class='<%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
+				<td class='<%-styleForLate%> green-text'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
 				<td class='<%-styleForLate%>'>
 					<%-item.StatusDescription == 'AlmostPaid' ? 'Open' : item.StatusDescription%>
 					<% if(late) {
