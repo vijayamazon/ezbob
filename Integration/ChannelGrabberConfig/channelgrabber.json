@@ -58,7 +58,7 @@
                     }
                 ],
                 "Notes": [
-                    "<strong>* Please notice that only Gold store subscribers and higher can link their Volusion store.</strong>",
+                    "Please notice that only Gold store subscribers and higher can link their Volusion store.",
                     "<br><br>",
                     "You need to enter the Encrypted Password for your Admin Area.",
                     "You can find your encrypted password in the Volusion API section of your store.",

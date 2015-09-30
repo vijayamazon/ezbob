@@ -74,7 +74,12 @@
             display: none;
         }
     /* end footer */
-
+    /*
+        login
+    */
+    .forgotpass {
+        width:100%;
+    }
     /*
         wizard
     */
