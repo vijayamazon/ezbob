@@ -169,7 +169,7 @@
 			margin-top: -5px;
 		}
         .wizard-steps-wrapper ul.application_steps li.complete .progress-circle {
-            background: url('../everline/circle_done.png');
+           
         }
 
             .wizard-steps-wrapper ul.application_steps li.complete .progress-circle .percent {
@@ -180,9 +180,10 @@
             background-color: #8dc641;
         }
 
-		.wizard-steps-wrapper ul.application_steps li.complete .progress-circle .inner-circle{
-			display: none;
-		}
+        .wizard-steps-wrapper ul.application_steps li.complete .progress-circle .inner-circle {
+            background: #8dc641 url('../everline/checked.png') no-repeat;
+            background-position: 9px 12px;
+        }
 
         .wizard-steps-wrapper ul.application_steps li .step_label {
             display: block;
@@ -201,6 +202,10 @@
 .vip-container {
     height: 200px;
     visibility: hidden;
+}
+blockquote {
+        margin-left: 0;
+    font-style: italic;
 }
 /*
     login
@@ -570,13 +575,16 @@ a.clean-btn:hover,
 a.ev-btn-org,
 .ev-btn-org,
 .ui-widget button.ev-btn-org {
-	font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     line-height: 44px;
     font-size: 18px !important;
     font-weight: 600;
 	height: 50px !important;
     cursor: pointer;
     text-align: center;
+    -webkit-box-shadow:none;
+    -ms-box-shadow:none;
+    box-shadow:none;
     padding: 0 28px;
     background-color: #e28023;
     border:none;
@@ -594,6 +602,7 @@ a.ev-btn-org,
     text-decoration: none !important;
 	display: inline-block;
 }
+
 a.ev-btn-org:hover,
 .ev-btn-org:hover,
 .ui-widget button.ev-btn-org:hover {
@@ -607,6 +616,9 @@ a.button:hover {
 	width: 240px;
 	display: inline-block;
 	float: right;
+    -webkit-box-shadow:none;
+    -ms-box-shadow:none;
+    box-shadow:none;
 	margin-left: 5%;
 }
 
@@ -1863,12 +1875,27 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
     float:none;
 }
-.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
+.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org{
 	height: 40px !important;
 	float: right;
 	width: 240px;
 	line-height: 25px;
 	margin-right: 8px;
+}
+.terms-conditions-footer {
+    width:100%;
+}
+.ui-widget button.ev-btn-org.short-btn {
+    height: 40px !important;
+    float:right !important;
+    line-height: 36px !important;
+    width:240px;
+}
+.clean-btn.short-btn {
+    height: 40px !important;
+    width: 115px !important;
+    float:left !important;
+    line-height: 36px !important;
 }
 .ui-dialog-buttonset .clean-btn {
     float:right;
