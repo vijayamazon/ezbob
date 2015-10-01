@@ -2136,6 +2136,7 @@ ul.storelist li span {
     opacity: .65;
 }
 .ui-dialog  .ui-dialog-title {
+	float: none;
     font-size: 24.5px;
     line-height: 30px;
     margin: 0 !important;
