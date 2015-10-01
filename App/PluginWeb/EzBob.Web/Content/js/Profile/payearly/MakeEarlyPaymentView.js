@@ -168,7 +168,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 	}, // backToProfile
 
 	paymentAmountChanged: function() {
-		var amount = this.$el.find("[name='paymentAmount']").autoNumericGet();
+		var amount = this.$el.find("[name='paymentAmount']").autoNumeric('get');
 		var maxAmount = this.model.get("loan").get("TotalEarlyPayment");
 		var minAmount = this.model.get("currentRollover") === null ? 30 : this.model.get("currentRollover").RolloverPayValue;
 
@@ -185,7 +185,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 	}, // paymentAmountChanged
 
 	rolloverAmountChanged: function() {
-		var amount = this.$el.find("[name='rolloverAmount']").autoNumericGet();
+		var amount = this.$el.find("[name='rolloverAmount']").autoNumeric('get');
 		var maxAmount = this.model.get("total");
 		var minAmount = this.model.get("currentRollover").RolloverPayValue;
 

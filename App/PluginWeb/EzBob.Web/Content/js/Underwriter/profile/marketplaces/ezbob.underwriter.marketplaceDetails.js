@@ -212,9 +212,9 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 				case 'Salaries':
 				    var nCalcd = (oSummary.Salaries || 0) * oSummary.SalariesMultiplier;
 				    if (isInit) {
-				        oTR.find('.salaries-multiplier').percentFormat().autoNumericSet(oSummary.SalariesMultiplier*100).blur();
+				        oTR.find('.salaries-multiplier').percentFormat().autoNumeric('set', oSummary.SalariesMultiplier*100).blur();
 				    } else {
-				        oTR.find('.salaries-multiplier').percentFormat().autoNumericSet(oSummary.SalariesMultiplier*100);
+				        oTR.find('.salaries-multiplier').percentFormat().autoNumeric('set', oSummary.SalariesMultiplier*100);
 				    }
 					oTR.find('.total').text(EzBob.formatPoundsAsInt(oSummary.Salaries || 0)).addClass(NegativeNum(oSummary.Salaries));
 					oTR.find('.vrs-total').text(EzBob.formatPoundsAsInt(nCalcd)).addClass(NegativeNum(nCalcd));
@@ -243,7 +243,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 		} // for each summary item
 	}, // renderHmrcSummary
     hmrcSalariesMultiplierChanged : function(e) {
-        var val = $(e.currentTarget).autoNumericGet();
+        var val = $(e.currentTarget).autoNumeric('get');
         if (this.customSalariesMultiplier != val) {
             this.customSalariesMultiplier = val;
             this.render();

@@ -285,7 +285,7 @@ $(function() {
 			el.parent(".cashControlls").find("input:hidden").remove();
 			input.insertAfter(el);
 
-			el.on("change click mouseup keyup", function() { $(input).val(el.autoNumericGet()); })
+			el.on("change click mouseup keyup", function() { $(input).val(el.autoNumeric('get')); })
                 .autoNumeric({ pSign: 's', 'aSep': ',', 'aDec': '.', 'aPad': false, 'mNum': 16 });
 
 			el.removeAttr("name");
@@ -430,43 +430,12 @@ printElement = function(id) {
 };
 
 GBPValues = function(val, showCurrencySign) {
-	if (val == undefined) {
-		return "-";
-	}
+	if (val == undefined)
+		return '-';
 
-	var isNegative = false;
-	val = val.toString();
-	if (val.indexOf('-') == 0) {
-		isNegative = true;
-		val = val.substring(1);
-	}
+	var moneyFormat = showCurrencySign ? EzBob.moneyFormat : EzBob.moneyFormatNoSign;
 
-	val = val.replace(',', '.');
-	var valSplit = val.split('.');
-	val = valSplit[0];
-	var length = val.length;
-
-	if (length > 16) {
-		console.error("Value:", val, " must be less then 16 characters");
-	}
-
-	var retVal = "";
-	for (var i = 0; i < length; i++) {
-		if (i % 3 == 0 && i != 0) retVal = "," + retVal;
-		retVal = val[length - i - 1] + retVal;
-	}
-
-	var result;
-	if (!showCurrencySign) {
-		result = (isNegative ? '-' : '') + (retVal + (valSplit[1] != undefined ? "." + valSplit[1] : ""))
-	} else {
-		result = ($("<input />").autoNumeric(EzBob.moneyFormat).autoNumericSet(retVal + (valSplit[1] != undefined ? "." + valSplit[1] : ""))).val();
-		if (isNegative) {
-			result = result.replace(' ', ' -');
-		}
-	}
-
-	return result;
+	return EzBob.formatPoundsFormat(val, moneyFormat);
 };
 
 NegativeNum = function(val) {
@@ -886,12 +855,18 @@ EzBob.formatPoundsAsThousandsNoDecimalsNoSign = function(val) {
 	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatNoDecimalsNoSign) + 'k';
 }; // EzBob.formatPoundsAsThousandsNoDecimalsNoSign
 
+EzBob.formatPoundsFormatter = null;
+
 EzBob.formatPoundsFormat = function(val, format) {
 	if (!val && val != 0)
 		return '-';
 
-	var target = $('<input type="text"/>');
-	return $.fn.autoNumeric.Format(target, val, format);
+	if (!EzBob.formatPoundsFormatter)
+		EzBob.formatPoundsFormatter = $('<input type="text"/>').autoNumeric('init', format);
+	else
+		EzBob.formatPoundsFormatter.autoNumeric('update', format);
+
+	return EzBob.formatPoundsFormatter.autoNumeric('set', val).val();
 }; // EzBob.formatPoundsFormat
 
 //parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
@@ -928,9 +903,7 @@ EzBob.formatPercents0 = function(num) {
 };
 
 EzBob.formatPercentsWithDecimals = function(num, precision) {
-	if (num == null || num === "") return "";
-	var p = precision || 2;
-	return $.fn.autoNumeric.Format(undefined, EzBob.roundNumber(num * 100, p)) + "%";
+	return EzBob.formatPercents(num);
 };
 
 EzBob.formatLoanTypeSelection = function(num) {

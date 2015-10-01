@@ -878,6 +878,7 @@
     <Content Include="Content\js\ezbob.sliders.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
+    <Content Include="Content\js\lib\autoNumeric.js" />
     <Content Include="Content\js\lib\footer.min.js" />
     <Content Include="Content\js\lib\log.js" />
     <Content Include="Content\js\lib\wScratchPad.min.js" />
@@ -1383,7 +1384,6 @@
     <Content Include="Content\js\lib\jquery.mask.js" />
     <Content Include="Content\js\lib\jquery.mask.min.js" />
     <Content Include="Content\js\lib\jquery.mousewheel.js" />
-    <Content Include="Content\js\lib\autoNumeric-1.7.4.js" />
     <Content Include="Content\js\Calculator.js" />
     <Content Include="Content\css\wizard.css" />
     <Content Include="Content\img\apply-now-gradient.png" />
