@@ -238,6 +238,13 @@
  .store-connect-manual {
      padding:0 20px;
  }
+ .ui-widget a.ev-btn-org.short-btn {
+     width:100%;
+     margin-top:10px;
+ }
+ .clean-btn.short-btn {
+     width:100% !important;
+ }
     /*end wizard*/
 
 
