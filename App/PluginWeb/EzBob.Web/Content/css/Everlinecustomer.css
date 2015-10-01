@@ -1082,6 +1082,10 @@ hr.wizard-hr {
 /**MarketPlaces**/
 .marketplace-group {
     clear: both;
+    padding-bottom: 10px;
+    margin: 20px 0;
+    border-bottom: 1px solid #bfbfbf;
+
 }
 .store-btn-wrap {
     padding-top:10px;

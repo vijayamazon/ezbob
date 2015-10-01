@@ -367,7 +367,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			function() { $('.onhover', this).animate({ top: 0,      opacity: 1, }); },
 			function() { $('.onhover', this).animate({ top: '75px', opacity: 0, }); }
 		);
-		$('<hr/ class="hr-market">').appendTo(this.$el.find('.marketplace-group'));
+		//$('<hr/ class="hr-market">').appendTo(this.$el.find('.marketplace-group'));
 		return this;
 	}, // render
 

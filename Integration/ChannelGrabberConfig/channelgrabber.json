@@ -141,7 +141,7 @@
                     }
                 ],
                 "Notes": [
-                "Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.",
+                "Please notice that only ProTrader users (full merchant account) can link their Play.com store.",
                     "<BR><BR>",
                 ],
                 "OnBeforeLink": [ 
@@ -285,7 +285,7 @@
                     "<li>Press <strong>Save</strong></li>",
                     "<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
                     "</ol>",
-                    "<img src=\"/Content/xero/instructions.jpg\" style=\"margin-bottom: 10px;\">"
+                    "<img class=\"store-img\" src=\"/Content/xero/instructions.jpg\" style=\"margin-bottom: 10px;\">"
                     
                 ],
                 "OnBeforeLink": [
