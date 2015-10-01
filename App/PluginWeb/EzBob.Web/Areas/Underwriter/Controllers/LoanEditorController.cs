@@ -450,7 +450,7 @@
 
                 if (freezeStartDate > freezeEndDate) {
                     
-                    model.Errors.Add("'Until date must be greater then From date");
+                    model.Errors.Add("Until date must be greater then From date");
                     RescheduleSetmodel(model, this._loans.Get(id));
                     return Json(model);
                 }

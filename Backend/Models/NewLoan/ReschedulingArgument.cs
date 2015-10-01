@@ -28,12 +28,15 @@
 		[DataMember]
 		public bool RescheduleIn { get; set; } // type of re-scheduling: for "IN" - true, for "OUT" - false
 
+		[DataMember]
+		public bool StopFutureInterest { get; set; } // freeze interest for "outside", starts from ReschedulingDate
+
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(ReschedulingArgument);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t");
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("\n");
 			}
 			return sb.ToString();
 		}

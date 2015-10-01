@@ -921,7 +921,8 @@
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 78m;
+			reModel.PaymentPerInterval = 800m;
+			reModel.StopFutureInterest = true;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			s1.Context.UserID = 357; //25852;
 			try {
@@ -1256,10 +1257,9 @@
 
 			this.m_oLog.Debug("{0}", loan);
 
-			Console.WriteLine(r);
-
-			
+			Console.WriteLine(r);			
 		}
+
 		[Test]
 		public void TestCollectionSms() {
 			/*
