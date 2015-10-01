@@ -120,6 +120,7 @@ a.clean-btn{
 
 .welcome-sign
 {
+        line-height: normal;
 	margin-bottom: 20px;
 	font-size: 29px;
     font-weight: lighter;
@@ -333,8 +334,53 @@ button.addDirector.ev-btn-org {
 	float: right;
 	width: 240px;
 	margin-left: 30px;
+	margin-right: 2%;
 }
 
 #amount-past-due {
 	line-height: 20px;
+}
+
+.settings-form h2 {
+	display:none;
+}
+
+.settings-form .input-title {
+	color: #A6A6A6;
+}
+
+#change-password input[type="password"],
+#change-question input[type="password"],
+#change-question input[type="text"],
+#change-password .form_buttons_container,
+#change-question .form_buttons_container,
+#change-question select {
+	margin-bottom: 0;
+}
+
+#change-password .control-group,
+#change-question .control-group {
+	margin-bottom: 5px;
+}
+
+#change-password .help-block,
+#change-question .help-block {
+	display: none;
+}
+
+#change-password .ev-btn-org,
+#change-password .clean-btn,
+#change-question .ev-btn-org, 
+#change-question .clean-btn{
+	width: 240px;
+	margin-left: 15px;
+}
+
+.grey-table .Live {
+	font-weight: 500;
+}
+
+.profile-widgets .account-activity-table td:last-child{
+	text-align: left;
+	padding-left: 20px;
 }

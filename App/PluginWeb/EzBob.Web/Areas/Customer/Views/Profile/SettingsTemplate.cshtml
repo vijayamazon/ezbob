@@ -11,6 +11,7 @@
 		.ToList();
 
 	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
 }
 <script id="settings-main-template" type="text/template">
 	<div class="settings-form ev-form">
@@ -98,8 +99,8 @@
 						href: "#"),
 					new EzButtonModel(
 						null,
-						"Back",
-						cls: "btn-back button btn-grey back ev-btn-org",
+						isEverline ? "Cancel" : "Back",
+						cls: "btn-back button btn-grey back clean-btn",
 						uiEventControlID: "settings:password-back",
 						buttonType: EzButtonType.link,
 						href: "#")
@@ -123,7 +124,7 @@
 							uiEventControlID: "settings:question-current-password"),
 					origin: origin)
 		
-				@EzForm.SelectWizard(new EzSelectModel("securityQuestion", "Question", 
+				@EzForm.SelectWizard(new EzSelectModel("securityQuestion", isEverline ? "Security question" : "Question", 
 					cls: "form_field", 
 					listItems: securityQuestions,
 					isRequired: true, 
@@ -151,8 +152,8 @@
 						href: "#"),
 					new EzButtonModel(
 						null,
-						"Back",
-						cls: "btn-back back button btn-grey ev-btn-org",
+						isEverline ? "Cancel" : "Back",
+						cls: "btn-back back button btn-grey clean-btn",
 						uiEventControlID: "settings:question-back",
 						buttonType: EzButtonType.link,
 						href: "#")

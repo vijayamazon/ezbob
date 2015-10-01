@@ -244,7 +244,7 @@ EzBob.Underwriter.ChangeCompanyView = Backbone.Marionette.ItemView.extend({
 						postcode: targetingData.PostCode,
 					})
 					.done(function () {
-						EzBob.ShowMessage("Run new credit line to recalculate medal", "Company changed successfully", function () {
+						EzBob.ShowMessage('Company changed successfully!<br>Run new credit line to recalculate medal.', 'Success', function () {
 							that.trigger('companyChanged');
 							that.close();
 						}, "OK");

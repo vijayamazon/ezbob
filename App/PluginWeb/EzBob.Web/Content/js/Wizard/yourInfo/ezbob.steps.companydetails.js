@@ -186,11 +186,12 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		});
 
 		this.$el.find('.cashInput').moneyFormat();
-		if (EzBob.Config.Origin !== 'everline') {
-		    this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
+	/*	if (EzBob.Config.Origin !== 'everline') {
+		    //   this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
+		  //  this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 		}
-		
-		this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
+		*/
+	
 
 	    if (this.model.get('IsAlibaba')) {
 	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();

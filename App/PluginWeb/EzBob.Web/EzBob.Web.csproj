@@ -708,6 +708,7 @@
     <Content Include="Content\css\alibaba.css" />
     <Content Include="Content\css\easter2015scratch.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
+    <Content Include="Content\everline\checked.png" />
     <Content Include="Content\everline\circle_done.png" />
     <Content Include="Content\everline\circle_gray.png" />
     <Content Include="Content\everline\circle_green.png" />
@@ -858,6 +859,7 @@
     <Content Include="Content\img\ny2015scratch\win_3.png" />
     <Content Include="Content\img\ny2015scratch\win_4.png" />
     <Content Include="Content\img\security-padlock.svg" />
+    <Content Include="Content\img\Tutorial\help-amazon-everline.jpg" />
     <Content Include="Content\img\valentine2015scratch\headline.png" />
     <Content Include="Content\img\valentine2015scratch\ribbon.png" />
     <Content Include="Content\img\valentine2015scratch\scratch_card.png" />

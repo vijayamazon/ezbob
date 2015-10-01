@@ -57,7 +57,7 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 			sTitle += 'one.';
 		} // if
 		
-		this.$el.find('.marketplace-button').attr('title', sTitle);
+	//	this.$el.find('.marketplace-button').attr('title', sTitle);
 
 		switch (this.shopClass) {
           
@@ -109,12 +109,12 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 		else
 			sTop = 0;
 		
-		btn.hoverIntent(
+		/*btn.hoverIntent(
 			function() {
 				$('.onhover', this).animate({ top: sTop, opacity: 1 });
 			},
 			function() { $('.onhover', this).animate({ top: '75px', opacity: 0 }); }
-		);
+		);*/
 		
 	}, // onRender
 

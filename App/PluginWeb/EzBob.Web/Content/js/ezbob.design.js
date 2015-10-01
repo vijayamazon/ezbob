@@ -1027,6 +1027,13 @@ EzBob.formatDateTime = function(date) {
 	return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
 };
 
+EzBob.formatDateTimeUK = function(date) {
+	if (!date)
+		return "";
+
+	return EzBob.formatDateUK(date) + moment.utc(date).format(' HH:mm:ss');
+};
+
 //formats date for user from asp.net date + time as is
 EzBob.formatDateTimeAsIs = function(date) {
 	if (!date) return "";

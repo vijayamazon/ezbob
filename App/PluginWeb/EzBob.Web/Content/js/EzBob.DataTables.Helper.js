@@ -52,7 +52,7 @@ EzBob.DataTables.Helper = {
 		function renderDate(oData, sAction, oFullSource) {
 			switch (sAction) {
 				case 'display':
-					return EzBob.formatDate(oData);
+					return EzBob.formatDateUK(oData);
 
 				case 'filter':
 					return oData + ' ' + EzBob.formatDate(oData);
@@ -74,7 +74,7 @@ EzBob.DataTables.Helper = {
 					return EzBob.formatDateTime(oData);
 
 				case 'filter':
-					return oData + ' ' + EzBob.formatDateTime(oData);
+					return oData + ' ' + EzBob.formatDateTimeUK(oData);
 
 				case 'type':
 					return oData;

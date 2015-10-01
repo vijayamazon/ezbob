@@ -625,7 +625,16 @@ blockquote {
      top: 5px;
      right: 28px;
 }
-
+.close-terms {
+    display:none;
+}
+.tutor-image {
+    display:block;
+    margin:0 auto;
+}
+.hr-market {
+    display:none;
+}
 .screenshots-container .tutorial-arrow {
     background: url(../img/arrow-right.png);
     width: 40px;
@@ -723,7 +732,10 @@ blockquote {
 .underwriter-only{
 	display: none;
 }
-
+.button.form_field_right_side_signup_phone#switchToCaptcha {
+    color:white;
+    text-align: center;
+}
 /* commercial */
 .consent-dialog .commercial-wrap .commercial-title {
     page-break-before: always;
