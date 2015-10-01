@@ -1983,10 +1983,10 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 
  /*footer*/
  footer {
-         position: relative;
-    bottom: 0;
-    left: 0;
-        width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
  }
  .everline_footer * {
         -webkit-box-sizing:border-box;
