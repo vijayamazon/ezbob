@@ -3864,6 +3864,7 @@ button#switchToCaptcha {
 		color: white;
 		font-size: 24px;
 		border: none;
+        z-index:0;
 		box-shadow: none;
 		text-shadow: 0 0 0 transparent;
 		background: transparent;

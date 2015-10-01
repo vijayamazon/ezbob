@@ -20,7 +20,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			'focusout select': 'inputChanged',
 			'keyup select': 'inputChanged',
 			'click select': 'inputChanged',
-            'click .show-sliders': 'showSlidersClicked'
+			'click .show-sliders': 'showSlidersClicked',
+			
 		}); // events
 
 		this.readyToProceed = false;

@@ -212,6 +212,9 @@
         margin-right: 0;
         height: auto;
     }
+    .tutor-image {
+        width:100%;
+    }
     /*end wizard*/
 
 

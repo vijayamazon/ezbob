@@ -42,8 +42,9 @@
 				<h2>Optional</h2>
 				<p>If you use any of these services, please link them.</p>
 			</div>
-           
-			@EzForm.WizardButton(new List<EzButtonModel> {
+            <div class="store-btn-wrap">
+
+                @EzForm.WizardButton(new List<EzButtonModel> {
     			new EzButtonModel("link_account_see_more_less", "See more",
 					cls: "btn-showmore button btn-green clean-btn",
 					buttonType: EzButtonType.link,
@@ -68,14 +69,16 @@
 					buttonType: EzButtonType.button,
 					uiEventControlID: "link-account:back",
 					href: "#"),
-			}, 
-			wrapperClass: "show-more-wrapper",
-			origin: origin)
-            
+			},
+            wrapperClass: "show-more-wrapper",
+            origin: origin)
+            </div>
             <div class="marketplace-group-template marketplace-group hide">
                 <h3 class="group-title"></h3>
 				<p class="group-description"></p>
+                
             </div>
+        
         </div>
     </div>
 </script>

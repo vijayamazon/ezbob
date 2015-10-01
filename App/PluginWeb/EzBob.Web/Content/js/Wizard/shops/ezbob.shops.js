@@ -334,9 +334,13 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 			button.$el.find('.marketplace-button').addClass(sBtnClass);
 			button.$el.appendTo(oTarget);
+			
+		
+			  
+			
 
 		} // for
-
+		
 		if (this.isOffline() && !this.isProfile())
 			this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
 
@@ -350,7 +354,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.showMoreAccounts();
 
 		this.storeList.appendTo(this.$el);
-
+		
 		EzBob.UiAction.registerView(this);
 
 		this.amazonMarketplaces.trigger("reset");
@@ -363,7 +367,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			function() { $('.onhover', this).animate({ top: 0,      opacity: 1, }); },
 			function() { $('.onhover', this).animate({ top: '75px', opacity: 0, }); }
 		);
-
+		$('<hr/ class="hr-market">').appendTo(this.$el.find('.marketplace-group'));
 		return this;
 	}, // render
 
@@ -512,7 +516,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.marketplace-button').css('display', 'inline-block');
 
 		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
-
+	    /// scroll
+		
+		
 	}, // showMoreAccounts
 
 	canContinue: function() {

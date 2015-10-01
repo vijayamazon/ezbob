@@ -288,9 +288,7 @@
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-.sliders .close:hover {
-  border: 1px solid #757575;
-}
+
 .sliders .close:before {
   display: block;
   margin: 4px 7px;
