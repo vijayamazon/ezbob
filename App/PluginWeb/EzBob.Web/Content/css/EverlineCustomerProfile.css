@@ -175,7 +175,7 @@ a.clean-btn{
 .main-page-everline .d-widgets dl dd {
 	margin-right: 40px;
 	font-weight: bold;
-	font-size:20px;
+	font-size:20px !important;
 	margin-left: 0;
 }
 
@@ -385,4 +385,21 @@ button.addDirector.ev-btn-org {
 .profile-widgets .account-activity-table td:last-child{
 	text-align: left;
 	padding-left: 20px;
+}
+
+#profile-content .bank-account {
+	margin-top: 30px;
+}
+
+#profile-content .bank-account .clean-btn,
+#profile-content .bank-account .ev-btn-org{
+	width: 240px;
+}
+
+.profile-widgets .account-activity-table td:first-child{
+	font-weight: normal;
+}
+
+.account-activity-table.table th {
+	font-weight: 600;
 }
