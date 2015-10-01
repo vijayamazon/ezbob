@@ -2058,6 +2058,7 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
     display:inline-block;
     padding-right: 40px;
    }
+   .everline_footer .privacy-and-cookie-policy a,
     .footer-navigator-inner ul li a {
     text-decoration:none;
     color: #dddddd;
