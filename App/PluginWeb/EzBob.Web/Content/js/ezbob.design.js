@@ -805,7 +805,7 @@ EzBob.formatIntWithCommas = function(val) {
 
 EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999' };
-EzBob.formatPoundsNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
+EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormatNoDecimalsNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormatNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '', mDec: '2', vMax: '999999999999999' };
 EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
@@ -827,7 +827,7 @@ EzBob.formatPounds = function(val) {
 }; // EzBob.formatPounds
 
 EzBob.formatPoundsNoDecimals = function(val) {
-	return EzBob.formatPoundsFormat(Math.round(val), EzBob.formatPoundsNoDecimals);
+	return EzBob.formatPoundsFormat(Math.round(val), EzBob.moneyFormatNoDecimals);
 }; // EzBob.formatPoundsNoDecimals
 
 EzBob.formatPoundsAsInt = function(val) {
@@ -845,7 +845,7 @@ EzBob.formatPoundsAsThousandsNoDecimals = function(val) {
 	if (val < 1000 && val >= 100)
 		return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
 
-	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.formatPoundsNoDecimals) + 'k';
+	return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatNoDecimals) + 'k';
 }; // EzBob.formatPoundsAsThousandsNoDecimals
 
 EzBob.formatPoundsAsThousandsNoDecimalsNoSign = function(val) {
