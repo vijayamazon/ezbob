@@ -36,12 +36,16 @@
 			this.Result.LoanID = this.ReschedulingArguments.LoanID;
 			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
 			this.Result.BlockAction = false;
+			this.Result.ReschedulingIntervalStart = this.ReschedulingArguments.ReschedulingDate.Date.AddDays(1);
+			this.Result.ReschedulingIntervalEnd = this.Result.ReschedulingIntervalStart.AddDays(30);
+			this.Result.FirstItemDate = this.ReschedulingArguments.ReschedulingDate.Date.AddDays(1);
 
 			this.cultureInfo = new CultureInfo("en-GB");
 
-		    this.emailToAddress = CurrentValues.Instance.EzbobTechMailTo;
+			this.emailToAddress = "elinar@ezbob.com"; //	CurrentValues.Instance.EzbobTechMailTo;
 			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
-			this.emailFromName = CurrentValues.Instance.MailSenderName;
+			this.emailFromName = CurrentValues.Instance.MailSenderName;			
+
 		}
 
 		public override string Name { get { return "RescheduleLoan"; } }
@@ -130,17 +134,30 @@
 					}
 				}
 
+				// if StopFutureInterest checked - add "freeze inteval" from firstItemDate untill NoLimitDate
+				if (this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest) {
+					
+					this.tLoan.InterestFreeze.Add(new LoanInterestFreeze {
+						Loan = this.tLoan,
+						StartDate = this.Result.FirstItemDate,
+						EndDate = NoLimitDate, // NoLimitDate from LoanEditorController.cs - move to common area
+						InterestRate = 0,
+						ActivationDate = this.Result.FirstItemDate, //DateTime.UtcNow,
+						DeactivationDate = null
+					});
+				}
+
 				calc.GetState(); // reload state after removing unpaid (lates, stilltopays passed) and future schedule items
 
 				decimal I = calc.NextEarlyPayment();
 				decimal P = this.tLoan.Principal;
-				decimal F = (this.tLoan.Charges.Sum(f => f.Amount) - this.tLoan.Charges.Sum(f => f.AmountPaid));
-				decimal r = this.tLoan.InterestRate;
+				decimal F = (this.tLoan.Charges.Sum(f => f.Amount) - this.tLoan.Charges.Sum(f => f.AmountPaid)); // unpaid fees
+				decimal r = ((this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest))?0:this.tLoan.InterestRate;
+
 				// ReSharper disable once TooWideLocalVariableScope
 				decimal x = 0m;
 				this.Result.ReschedulingBalance = (P + I + F);
-				DateTime firstItemDate = this.ReschedulingArguments.ReschedulingDate.Date.AddDays(1);
-
+	
 				Log.Debug("--------------P: {0}, I: {1}, F: {2}, Result.LoanCloseDate: {3}", P, I, F, this.Result.LoanCloseDate.Date);
 
 				// 3. intervals number
@@ -148,23 +165,33 @@
 				// IN
 				if (this.ReschedulingArguments.RescheduleIn) {
 
-					this.Result.IntervalsNum = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? MiscUtils.DateDiffInMonths(firstItemDate.Date, this.Result.LoanCloseDate.Date) : MiscUtils.DateDiffInWeeks(firstItemDate.Date, this.Result.LoanCloseDate.Date);
+					// add "grace" period - 14 days to maturity date
+					DateTime closeDateWithGrace = this.Result.LoanCloseDate.Date.AddDays(14);
+
+					this.Result.IntervalsNum = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? MiscUtils.DateDiffInMonths(this.Result.FirstItemDate, closeDateWithGrace) : MiscUtils.DateDiffInWeeks(this.Result.FirstItemDate, closeDateWithGrace);
 
 					// adjust intervals number +1 if needed
-					DateTime rescheduledCloseDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? firstItemDate.AddMonths(this.Result.IntervalsNum) : firstItemDate.AddDays(this.Result.IntervalsNum * 7);
+					DateTime rescheduledCloseDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ?
+						this.Result.FirstItemDate.AddMonths(this.Result.IntervalsNum) :
+						this.Result.FirstItemDate.AddDays(this.Result.IntervalsNum * 7);
 
-					Log.Debug("rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date);
+					Log.Debug("rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}, closeDateWithGrace: {3}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date, closeDateWithGrace);
 
-					TimeSpan ts = this.Result.LoanCloseDate.Date.Subtract(rescheduledCloseDate.Date);
+					//TimeSpan ts = this.Result.LoanCloseDate.Date.Subtract(rescheduledCloseDate.Date);
+					TimeSpan ts = closeDateWithGrace.Date.Subtract(rescheduledCloseDate.Date);
 
-					if (ts.Days > 0) 
+					if (ts.Days > 0)
 						this.Result.IntervalsNum += 1;
 
-					Log.Debug("rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}, dDays: {3}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date, ts.Days);
+					Log.Debug("rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}, closeDateWithGrace: {3}, dDays: {4}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date, closeDateWithGrace, ts.Days);
 				}
 
 				// OUT
 				if (this.ReschedulingArguments.RescheduleIn == false) {
+
+					if (this.ReschedulingArguments.StopFutureInterest) {
+						r = 0m;
+					}
 
 					// too much payment per interval
 					if (this.ReschedulingArguments.PaymentPerInterval > this.Result.ReschedulingBalance) {
@@ -187,7 +214,7 @@
 
 					var k = (int)Math.Ceiling(this.Result.ReschedulingBalance / kDiv); //(m - this.Result.ReschedulingBalance * r));
 
-					Log.Debug("k: {0}, P: {1}, I: {2}, F: {3}, r: {4}, oustandingBalance: {5}, m: {6}", k, P, I, F, r, this.Result.ReschedulingBalance, m);
+					Log.Debug("k: {0}, P: {1}, I: {2}, F: {3}, r: {4}, oustandingBalance: {5}, m: {6}, StopFutureInterest: {7}", k, P, I, F, r, this.Result.ReschedulingBalance, m, this.ReschedulingArguments.StopFutureInterest);
 
 					// uncovered loan - too small payment per interval
 					if (k < 0) {
@@ -196,7 +223,7 @@
 						return;
 					}
 
-					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? firstItemDate.AddMonths(k) : firstItemDate.AddDays(k * 7);
+					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.Result.FirstItemDate.AddMonths(k) : this.Result.FirstItemDate.AddDays(k * 7);
 
 					this.Result.IntervalsNum = k;
 
@@ -223,7 +250,7 @@
 				//check "first iPrincipal negative" case: if first iPrincipal <= 0, remove this and reduce this.Result.IntervalsNum
 				if (firstPrincipal <= 0) {
 					Log.Debug("AAA Periods: {0}, newInstalment: {1}, close date: {2}, balance: {3}, firstItemDate: {4}, firstPrincipal: {5}, " +
-									"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, firstItemDate, firstPrincipal, P, I, F, r);
+									"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, this.Result.FirstItemDate, firstPrincipal, P, I, F, r);
 					this.Result.IntervalsNum -= 1;
 					firstPrincipal = iPrincipal;
 
@@ -234,13 +261,13 @@
 				}
 
 				Log.Debug("Periods: {0}, newInstalment: {1}, close date: {2}, balance: {3}, firstItemDate: {4}, firstPrincipal: {5}, " +
-					"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, firstItemDate, firstPrincipal, P, I, F, r);
+					"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, this.Result.FirstItemDate, firstPrincipal, P, I, F, r);
 
 				// add new re-scheduled items, both for IN/OUT
 				int position = this.tLoan.Schedule.Count;
 				for (int j = 0; j < this.Result.IntervalsNum; j++) {
 
-					DateTime iStartDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? firstItemDate.AddMonths(j) : firstItemDate.AddDays(7 * j);
+					DateTime iStartDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.Result.FirstItemDate.AddMonths(j) : this.Result.FirstItemDate.AddDays(7 * j);
 
 					decimal iLoanRepayment = (j == 0) ? firstPrincipal : iPrincipal;
 					balance -= iLoanRepayment;
@@ -257,7 +284,7 @@
 					this.tLoan.Schedule.Add(item);
 				}
 
-				//Log.Debug("--------------Loan modified: \n {0}", this.tLoan);
+				Log.Debug("--------------Loan modified: \n {0}", this.tLoan);
 
 				//  after modification
 				if (CheckValidateLoanState(calc) == false) {
@@ -283,14 +310,14 @@
 					return;
 				}
 
-				var firstRescheduledItem = this.tLoan.Schedule.FirstOrDefault(s => s.Date.Date == firstItemDate.Date);
+				var firstRescheduledItem = this.tLoan.Schedule.FirstOrDefault(s => s.Date.Date == this.Result.FirstItemDate);
 				if (firstRescheduledItem != null) {
 					this.Result.FirstPaymentInterest = firstRescheduledItem.Interest;
 				}
 
 				if (this.ReschedulingArguments.RescheduleIn == false) { // OUT
 
-					// IS NOT POSSIBLE WITH OLD CALCULATOR< DON'T DELETE
+					// NOT POSSIBLE WITH CURRENT CALCULATOR < DON'T DELETE
 					//OffsetX(x);
 					//if (CheckValidateLoanState(calc) == false)
 					//	return;
@@ -387,6 +414,18 @@
 
 				if (this.tLoan == null)
 					return;
+
+				//if (this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest) {
+				//	// add "freeze inteval" from firstItemDate untill NoLimitDate
+				//	this.tLoan.InterestFreeze.Add(new LoanInterestFreeze {
+				//		Loan = this.tLoan,
+				//		StartDate = new DateTime(2014, 02, 28), // this.Result.FirstItemDate,
+				//		EndDate = new DateTime(2099, 1, 1), // NoLimitDate from LoanEditorController.cs - move to common area
+				//		InterestRate = 0,
+				//		ActivationDate = DateTime.UtcNow,
+				//		DeactivationDate = null
+				//	});
+				//}
 
 				this.Result.LoanInterestRate = this.tLoan.InterestRate;
 				LoanScheduleItem lastScheduleItem = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
@@ -508,7 +547,7 @@
 			new Mail().Send(
 				this.emailToAddress,
 				null,					// message text
-				this.message,			//html
+				this.message,			// html
 				this.emailFromAddress,	// fromEmail
 				this.emailFromName,		// fromName
 				subject					// subject
@@ -526,6 +565,6 @@
 		private readonly string	emailFromAddress;
 		private readonly string	emailFromName;
 
-
+		public static readonly DateTime NoLimitDate = new DateTime(2099, 1, 1);
 	}
 }

@@ -19,16 +19,16 @@
 			<%_.each(accounts, function(account, i){%>
 			<%if(account.type == 'Bank'){%>
 			<tr>
-				<td>
-					<strong>Bank account</strong>
+				<td class="bold-text-ez">
+				Bank account
 				</td>
 				<td>X - <%-account.displayName.substring(4)%></td>
 				<td class="last Live">Live</td>
 			</tr>
 			<%} else {%>
 			<tr>
-				<td>
-					<strong>Debit card</strong>
+				<td class="bold-text-ez">
+					Debit card
 				</td>
 				<td>X - <%-account.displayName%> <%-account.expire ? '(' + account.expire + ')' : ''%></td>
 				<%if(account.isDefault){%>

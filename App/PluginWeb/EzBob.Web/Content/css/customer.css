@@ -565,7 +565,9 @@ blockquote {
 #wizard .pages .simple-well, #profile-content .simple-well {
     margin-bottom: 20px;
 }
-
+.bold-text-ez {
+	font-weight:bold;
+}
 .thankyou-loan {
     width: 290px; /*456px;*/
     height: 100px; /*191px;*/

@@ -73,6 +73,9 @@
         .footer-navigator-inner ul li.hide-mobile {
             display: none;
         }
+        footer {
+            position:relative;
+        }
     /* end footer */
     /*
         login
@@ -215,6 +218,33 @@
     .tutor-image {
         width:100%;
     }
+    .main-page-everline {
+        padding-bottom:100px;
+    }
+    .store-img {
+        width:100%;
+    }
+    .form_start {
+        clear:both;
+    }
+    .amazon_view_tutorial_label {
+        float:none;
+    }
+    .amazonscreenshot {
+       display: block;
+    float: none;   
+    margin-top:10px;
+    }
+ .store-connect-manual {
+     padding:0 20px;
+ }
+ .ui-widget a.ev-btn-org.short-btn {
+     width:100%;
+     margin-top:10px;
+ }
+ .clean-btn.short-btn {
+     width:100% !important;
+ }
     /*end wizard*/
 
 
@@ -238,9 +268,23 @@
 }
 
     #cboxContent {
-      width: 100% !important;
-}
-#cboxLoadedContent {
+        width: 100% !important;
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box;
+        padding:0px;
+    }
+    #colorbox #cboxClose {
+        top:0;
+        right:0;
+    }
+    .help_security {
+        width:auto;
+        
+                padding-top: 50px;
+      margin-bottom: 80px;
+    }
+    #cboxLoadedContent {
     width: 100% !important;
           overflow: visible !important;
               padding: 10px;

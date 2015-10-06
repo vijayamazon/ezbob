@@ -28,7 +28,7 @@ EzBob.companyTargets = Backbone.View.extend({
                 title: "Select company",
                 modal: true,
                 resizable: true,
-                minWidth: 600,
+                minWidth: 640,
                 height: 500,
                 minHeight: 200,
                 buttons: [
@@ -40,13 +40,14 @@ EzBob.companyTargets = Backbone.View.extend({
                     },
                     {
                         text: 'Skip',
-                        'class': 'button btn-green ev-btn-org',
+                        'class': 'button btn-green clean-btn ',
                         click: function () { that.btnNotFoundClick(); },
                         'ui-event-control-id': 'company-target:not-found',
                     },
 
                     {
-                        text: 'OK',
+                        text: '' +
+                            'Confirm',
                         'class': 'button btn-green btnTargetOk disabled ev-btn-org',
                         click: function () { that.btnOkClick(); },
                         'ui-event-control-id': 'company-target:ok',

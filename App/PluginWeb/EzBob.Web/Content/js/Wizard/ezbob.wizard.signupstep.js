@@ -269,7 +269,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		var amount = _.find(data, function (d) { return d.name === 'amount'; });
 		if (amount)
-			amount.value = this.$el.find('#amount').autoNumericGet();
+			amount.value = this.$el.find('#amount').autoNumeric('get');
 
 		if (isInCaptchaMode)
 			data.push({ name: "isInCaptchaMode", value: "True" });

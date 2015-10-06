@@ -150,7 +150,7 @@
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate), hideSteps = true }, "https");
 			
-			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
+			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5.00m, callback);
 
 			return Redirect(url);
 		}

@@ -367,7 +367,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			function() { $('.onhover', this).animate({ top: 0,      opacity: 1, }); },
 			function() { $('.onhover', this).animate({ top: '75px', opacity: 0, }); }
 		);
-		$('<hr/ class="hr-market">').appendTo(this.$el.find('.marketplace-group'));
+		//$('<hr/ class="hr-market">').appendTo(this.$el.find('.marketplace-group'));
 		return this;
 	}, // render
 
@@ -503,6 +503,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.marketplace-button').not('.marketplace-button-less').css('display', 'none');
 
 		this.storeList.find('.link-accounts-optional').hide();
+
+		$(document).scrollTop(0);
+
 	}, // showLessAccounts
 
 	showMoreAccounts: function() {
@@ -517,6 +520,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
 	    /// scroll
+		var posY = $(".link-accounts-optional").position().top;
+	    var optionalHeight = $(".link-accounts-optional").height();
+	    $(document).scrollTop(posY - (optionalHeight + 60));
 		
 		
 	}, // showMoreAccounts

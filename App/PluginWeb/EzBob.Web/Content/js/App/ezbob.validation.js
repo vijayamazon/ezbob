@@ -198,21 +198,38 @@ $.validator.addMethod(
 );
 
 $.validator.addMethod(
-        "autonumericMin",
-        function (value, element, minVal) {
-            var amount = parseFloat($(element).autoNumericGet());
-            return amount >= minVal;
-        },
-        "Amount is below limit."
+	'autonumericMin',
+	function (value, element, minVal) {
+		var amount;
+
+		try {
+			amount = $(element).autoNumeric('get');
+		} catch (e) {
+			amount = $(element).val();
+		}
+
+		amount = parseFloat(amount);
+		return amount >= minVal;
+	},
+	'Amount is below limit.'
 );
 
 $.validator.addMethod(
-        "autonumericMax",
-        function (value, element, maxVal) {
-            var amount = parseFloat($(element).autoNumericGet());
-            return amount <= maxVal;
-        },
-        "Amount is above limit."
+	'autonumericMax',
+	function (value, element, maxVal) {
+		var amount;
+
+		try {
+			amount = $(element).autoNumeric('get');
+		} catch (e) {
+			amount = $(element).val();
+		}
+
+		amount = parseFloat(amount);
+
+		return amount <= maxVal;
+	},
+	'Amount is above limit.'
 );
 
 

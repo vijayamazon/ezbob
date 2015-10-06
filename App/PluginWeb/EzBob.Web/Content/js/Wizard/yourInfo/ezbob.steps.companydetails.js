@@ -346,7 +346,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		var that = this;
 
 		if (this.$el.find('#OverallTurnOver').is(":visible"))
-			_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
+			_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumeric('get');
 
 		var pbo = _.find(data, function(d) { return d.name === 'PartBusinessOnline'; });
 		if (pbo)
@@ -359,11 +359,11 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)
-			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumeric('get');
 
 		var capitalExpenditure = _.find(data, function(d) { return d.name === 'CapitalExpenditure'; });
 		if (capitalExpenditure)
-			capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumericGet();
+			capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumeric('get');
 
 		var request = $.post(action, data);
 

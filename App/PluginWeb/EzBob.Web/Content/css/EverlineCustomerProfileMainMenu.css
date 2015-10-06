@@ -66,7 +66,7 @@
 }
 
 a, a:visited {
-	font-weight: 300;
+	font-weight: 600;
 }
 
 .navbar .divider-vertical {
@@ -74,6 +74,9 @@ a, a:visited {
 	border: 0;
 }
 
+a.profile-menu-link {
+	font-weight: 300;
+}
 
 
 

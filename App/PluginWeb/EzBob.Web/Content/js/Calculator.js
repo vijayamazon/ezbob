@@ -71,8 +71,8 @@ EzBob.HowMuchView = Backbone.View.extend({
     callYouCanGet: function (e) {
 
         if (e) $(e.target).val($(e.target).val().replace(".", ""));
-        var amount = parseFloat(this.$el.find('input#RequiredAmount').autoNumericGet());
-        var sales = parseFloat(this.$el.find('input#TotalAmount').autoNumericGet());
+        var amount = parseFloat(this.$el.find('input#RequiredAmount').autoNumeric('get'));
+        var sales = parseFloat(this.$el.find('input#TotalAmount').autoNumeric('get'));
         this.model.youCanGet(amount, sales);
 
     },
@@ -80,7 +80,7 @@ EzBob.HowMuchView = Backbone.View.extend({
     render: function () {
         var options = { 'aSep': ',', 'aDec': '.', 'aPad': false, 'mNum': 16, 'mRound': 'F' };
 
-        this.$el.find('#Credit').text($.fn.autoNumeric.Format('Credit', this.model.get('Credit'), options));
+        this.$el.find('#Credit').text(EzBob.formatPoundsFormat(this.model.get('Credit'), options));
         return this;
     }
 });
