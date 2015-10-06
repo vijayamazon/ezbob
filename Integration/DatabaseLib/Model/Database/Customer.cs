@@ -20,37 +20,9 @@
 
 	public class PendingStatusType : EnumStringType<PendingStatus> { }
 
-	public enum SystemDecision {
-		Approve,
-		Reject,
-		Manual
-	} // enum SystemDecision
-
 	public class SystemDecisionType : EnumStringType<SystemDecision> { }
 
-	public enum Status {
-		Registered,
-		Approved,
-		Rejected,
-		Manual
-	} // enum Status
-
 	public class StatusType : EnumStringType<Status> { }
-
-	public enum CreditResultStatus {
-		WaitingForDecision,
-		Escalated,
-		Rejected,
-		Approved,
-		CustomerRefused,
-		ApprovedPending,
-		Active,
-		Collection,
-		Legal,
-		PaidOff,
-		WrittenOff,
-		Late
-	} // CreditResultStatus
 
 	public class CreditResultStatusType : EnumStringType<CreditResultStatus> { }
 

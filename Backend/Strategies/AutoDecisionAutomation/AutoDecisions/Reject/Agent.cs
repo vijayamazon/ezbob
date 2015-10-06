@@ -24,8 +24,6 @@
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Repository.Turnover;
-	using StructureMap;
 
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
@@ -117,12 +115,16 @@
 		/// <param name="calculationTime"></param>
 		public virtual void CalculateTurnoverForReject(int customerId, DateTime calculationTime) {
 			try {
-				MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
 				this.annualTurnover = 0;
 				this.quarterTurnover = 0;
 
 				// all histories of customer that updateEnd is relevant
-				List<MarketplaceTurnover> h = mpTurnoverRep.GetByCustomerAndDate(customerId, calculationTime).ToList();
+				List<MarketplaceTurnoverModel> h = DB.Fill<MarketplaceTurnoverModel>(
+					"GetMarketplaceTurnoverByCustomerAndDate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", customerId),
+					new QueryParameter("Now", calculationTime)
+				);
 
 				if (h.Count < 1) {
 					Log.Info(
@@ -157,7 +159,7 @@
 							.Distinct();
 
 						foreach (int mpID in marketplaceIDs) {
-							List<MarketplaceTurnover> thisMp = h.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
+							List<MarketplaceTurnoverModel> thisMp = h.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
 
 							hmrc.AddRange(LastUpdatedEndHistoryTurnoversByMpType(
 								thisMp,
@@ -633,7 +635,7 @@
 		} // MaxQuarterTurnover
 
 		private IEnumerable<FilteredAggregationResult> LastUpdatedEndHistoryTurnoversByMpType(
-			List<MarketplaceTurnover> inputList,
+			List<MarketplaceTurnoverModel> inputList,
 			Guid type,
 			DateTime calculationTime,
 			DateTime? lastExistingDataTime = null
@@ -646,7 +648,7 @@
 				lastExistingDataTime.MomentStr()
 			);
 
-			List<MarketplaceTurnover> ofcurrentType =
+			List<MarketplaceTurnoverModel> ofcurrentType =
 				inputList.Where(x => x.MarketplaceInternalID == type).ToList();
 
 			if (ofcurrentType.Count < 1) {
@@ -679,7 +681,7 @@
 				periodEnd.MomentStr()
 			);
 
-			List<MarketplaceTurnover> histories =
+			List<MarketplaceTurnoverModel> histories =
 				ofcurrentType.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
 
 			var os = new StringBuilder();
@@ -714,7 +716,7 @@
 			var result = new List<FilteredAggregationResult>();
 
 			foreach (var grp in groups) {
-				MarketplaceTurnover first = grp.OrderByDescending(p => p.AggID).First();
+				MarketplaceTurnoverModel first = grp.OrderByDescending(p => p.AggID).First();
 
 				var far = new FilteredAggregationResult {
 					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),

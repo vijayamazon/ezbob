@@ -2,12 +2,17 @@
 	using System;
 
 	public class MarketplaceTurnoverModel {
-		public virtual long AggID { get; set; }
-		public virtual DateTime TheMonth { get; set; }
-		public virtual decimal Turnover { get; set; }
-		public virtual DateTime UpdatingEnd { get; set; }
-		public virtual int CustomerMarketPlaceUpdatingHistoryID { get; set; }
-		public virtual int CustomerMarketPlaceID { get; set; }
+		public long AggID { get; set; }
+		public DateTime TheMonth { get; set; }
+		public bool IsActive { get; set; }
+		public decimal Turnover { get; set; }
+		public DateTime UpdatingEnd { get; set; }
+		public int CustomerMarketPlaceUpdatingHistoryID { get; set; }
+		public int CustomerMarketPlaceID { get; set; }
+		public int CustomerID { get; set; }
+		public bool IsMarketplaceDisabled { get; set; }
+		public Guid MarketplaceInternalID { get; set; }
+		public bool IsPaymentAccount { get; set; }
 
 		public override bool Equals(Object obj) {
 			var t = obj as MarketplaceTurnoverModel;
