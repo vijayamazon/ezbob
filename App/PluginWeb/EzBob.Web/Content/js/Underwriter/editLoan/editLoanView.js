@@ -520,6 +520,22 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        this.$el.find('#fees-calendar-from,#fees-calendar-to,#intrest-calendar-from,#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
 	        this.$el.find('#fees-calendar-from,#intrest-calendar-from').datepicker('setDate', new Date());
 
+	        var reschedulingIntervalStartIn = new Date(moment(this.model.get('ReResultIn').ReschedulingIntervalStart).utc());
+	        var reschedulingIntervalEndIn = new Date(moment(this.model.get('ReResultIn').ReschedulingIntervalEnd).utc());
+
+	        var reschedulingIntervalStartOut = new Date(moment(this.model.get('ReResultOut').ReschedulingIntervalStart).utc());
+
+	        this.$el.find('#within-calendar-from').datepicker({
+	            format: 'dd/mm/yyyy',
+	            startDate: reschedulingIntervalStartIn,
+	            endDate: reschedulingIntervalEndIn
+	        });
+
+	        this.$el.find('#outside-calendar-from').datepicker({
+	            format: 'dd/mm/yyyy',
+	            startDate: reschedulingIntervalStartOut
+	        });
+
 	        var within = this.model.get('ReResultIn');
 	        if (within.Error != null) {
 	            if (within.BlockAction === true) {
