@@ -239,7 +239,7 @@
 
 			
             
-			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
+			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5.00m, callback);
 
 			return Redirect(url);
 		} // AddPayPoint
