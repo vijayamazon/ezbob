@@ -936,19 +936,19 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			const int loanID = 1050; //3946; //4192; // 4439; // 3534; //1846; //2662;
+			const int loanID = 2072; //3946; //4192; // 4439; // 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.SaveToDB = false;
-			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(18);
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
 				s.Context.UserID = 357;// 25852;
-				//s.Execute();
+				s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
