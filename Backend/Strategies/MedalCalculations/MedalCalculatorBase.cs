@@ -5,16 +5,14 @@
 	using System.Globalization;
 	using System.Linq;
 	using ConfigManager;
-	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Extensions;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Logger;
 	using Ezbob.Matrices;
 	using Ezbob.Utils;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository.Turnover;
-	using StructureMap;
 
 	/// <summary>
 	/// The medal calculator base.
@@ -728,20 +726,31 @@
 		/// Turnover for medal: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
 		/// </summary>
 		protected virtual void CalculateTurnoverForMedal() {
-			this.updatingHistoryRep = ObjectFactory.GetInstance<CustomerMarketPlaceUpdatingHistoryRepository>();
-
 			try {
 				Results.AnnualTurnover = 0;
 				Results.HmrcAnnualTurnover = 0;
 				Results.BankAnnualTurnover = 0;
 				Results.OnlineAnnualTurnover = 0;
 
-				List<MP_CustomerMarketplaceUpdatingHistory> h = this.updatingHistoryRep
-					.GetByCustomerId(Results.CustomerId)
-					.Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim().Length == 0))
-					.ToList();
+				var historyRecordIDs = new List<int>();
 
-				if (h.Count < 1) {
+				this.db.ForEachRowSafe(
+					sr => { historyRecordIDs.Add(sr["Id"]); },
+					"GetMarketplaceUpdatingHistoryByCustomerAndTime",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", Results.CustomerId),
+					new QueryParameter("Now", Results.CalculationTime)
+				);
+
+				this.log.Debug(
+					"{0} history records loaded for customer {1} and calculation time {2}: '{3}'.",
+					historyRecordIDs.Count,
+					Results.CustomerId,
+					Results.CalculationTime.MomentStr(),
+					string.Join(", ", historyRecordIDs)
+				);
+
+				if (historyRecordIDs.Count < 1) {
 					this.log.Info(
 						"Updating history for customer {0}, calculationDate {1} not found",
 						Results.CustomerId,
@@ -750,15 +759,30 @@
 					return;
 				} // if
 
-				List<MarketplaceTurnover> hmrcs = (
-					from row in h.SelectMany(y => y.HmrcAggregations).Where(y => y.IsActive)
-					select new MarketplaceTurnover {
-						TheMonth = row.TheMonth,
-						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
-						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					}
-				).ToList();
+				var hmrcs = new List<MarketplaceTurnoverModel>();
+				this.db.ForEachRowSafe(
+					row => {
+						hmrcs.Add(new MarketplaceTurnoverModel {
+							TheMonth = row["TheMonth"],
+							Turnover = row["Turnover"],
+							CustomerMarketPlaceUpdatingHistoryID = row["CustomerMarketPlaceUpdatingHistoryId"],
+							CustomerMarketPlaceID = row["CustomerMarketPlaceId"],
+							UpdatingEnd = row["UpdatingEnd"],
+						});
+					},
+					"GetActiveHmrcAggregationsByMpHistory",
+					CommandSpecies.StoredProcedure,
+					this.db.CreateTableParameter("HistoryRecordIDs", (IEnumerable<int>)historyRecordIDs)
+				);
+
+				this.log.Debug(
+					"{0} HMRC records loaded for customer {1}, calculation time {2} and history records '{3}':\n{4}",
+					hmrcs.Count,
+					Results.CustomerId,
+					Results.CalculationTime.MomentStr(),
+					string.Join(", ", historyRecordIDs),
+					string.Join("\n", hmrcs)
+				);
 
 				if (hmrcs.Count > 0) {
 					List<FilteredAggregationResult> hmrcList = new List<FilteredAggregationResult>();
@@ -766,7 +790,7 @@
 					IEnumerable<int> marketplaceIDs = hmrcs.Select(x => x.CustomerMarketPlaceID).Distinct();
 
 					foreach (int mpID in marketplaceIDs) {
-						List<MarketplaceTurnover> thisMp = hmrcs.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
+						List<MarketplaceTurnoverModel> thisMp = hmrcs.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
 
 						List<FilteredAggregationResult> filtered =
 							LastHistoryTurnovers(thisMp, Results.CalculationTime, thisMp.Max(x => x.TheMonth));
@@ -800,15 +824,30 @@
 					} // if
 				} // if
 
-				List<MarketplaceTurnover> yodlees = (
-					from row in h.SelectMany(y => y.YodleeAggregations).Where(y => y.IsActive)
-					select new MarketplaceTurnover {
-						TheMonth = row.TheMonth,
-						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
-						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					}
-				).ToList();
+				var yodlees = new List<MarketplaceTurnoverModel>();
+				this.db.ForEachRowSafe(
+					row => {
+						yodlees.Add(new MarketplaceTurnoverModel {
+							TheMonth = row["TheMonth"],
+							Turnover = row["Turnover"],
+							CustomerMarketPlaceUpdatingHistoryID = row["CustomerMarketPlaceUpdatingHistoryId"],
+							CustomerMarketPlaceID = row["CustomerMarketPlaceId"],
+							UpdatingEnd = row["UpdatingEnd"],
+						});
+					},
+					"GetActiveYodleeAggregationsByMpHistory",
+					CommandSpecies.StoredProcedure,
+					this.db.CreateTableParameter("HistoryRecordIDs", (IEnumerable<int>)historyRecordIDs)
+				);
+
+				this.log.Debug(
+					"{0} Yodlee records loaded for customer {1}, calculation time {2} and history records '{3}':\n{4}",
+					yodlees.Count,
+					Results.CustomerId,
+					Results.CalculationTime.MomentStr(),
+					string.Join(", ", historyRecordIDs),
+					string.Join("\n", yodlees)
+				);
 
 				if (yodlees.Count > 0) {
 					List<FilteredAggregationResult> yodleeList =
@@ -865,15 +904,30 @@
 				List<decimal> list_t6 = new List<decimal>(filltt);
 				List<decimal> list_t12 = new List<decimal>(filltt);
 
-				List<MarketplaceTurnover> amazons = (
-					from row in h.SelectMany(y => y.AmazonAggregations).Where(y => y.IsActive)
-					select new MarketplaceTurnover {
-						TheMonth = row.TheMonth,
-						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
-						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					}
-				).ToList();
+				var amazons = new List<MarketplaceTurnoverModel>();
+				this.db.ForEachRowSafe(
+					row => {
+						amazons.Add(new MarketplaceTurnoverModel {
+							TheMonth = row["TheMonth"],
+							Turnover = row["Turnover"],
+							CustomerMarketPlaceUpdatingHistoryID = row["CustomerMarketPlaceUpdatingHistoryId"],
+							CustomerMarketPlaceID = row["CustomerMarketPlaceId"],
+							UpdatingEnd = row["UpdatingEnd"],
+						});
+					},
+					"GetActiveAmazonAggregationsByMpHistory",
+					CommandSpecies.StoredProcedure,
+					this.db.CreateTableParameter("HistoryRecordIDs", (IEnumerable<int>)historyRecordIDs)
+				);
+
+				this.log.Debug(
+					"{0} Amazon records loaded for customer {1}, calculation time {2} and history records '{3}':\n{4}",
+					amazons.Count,
+					Results.CustomerId,
+					Results.CalculationTime.MomentStr(),
+					string.Join(", ", historyRecordIDs),
+					string.Join("\n", amazons)
+				);
 
 				List<FilteredAggregationResult> amazonList = LastHistoryTurnovers(amazons, Results.CalculationTime);
 
@@ -901,15 +955,30 @@
 					);
 				} // if
 
-				List<MarketplaceTurnover> ebays = (
-					from row in h.SelectMany(y => y.EbayAggregations).Where(y => y.IsActive)
-					select new MarketplaceTurnover {
-						TheMonth = row.TheMonth,
-						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
-						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					}
-				).ToList();
+				var ebays = new List<MarketplaceTurnoverModel>();
+				this.db.ForEachRowSafe(
+					row => {
+						ebays.Add(new MarketplaceTurnoverModel {
+							TheMonth = row["TheMonth"],
+							Turnover = row["Turnover"],
+							CustomerMarketPlaceUpdatingHistoryID = row["CustomerMarketPlaceUpdatingHistoryId"],
+							CustomerMarketPlaceID = row["CustomerMarketPlaceId"],
+							UpdatingEnd = row["UpdatingEnd"],
+						});
+					},
+					"GetActiveEbayAggregationsByMpHistory",
+					CommandSpecies.StoredProcedure,
+					this.db.CreateTableParameter("HistoryRecordIDs", (IEnumerable<int>)historyRecordIDs)
+				);
+
+				this.log.Debug(
+					"{0} eBay records loaded for customer {1}, calculation time {2} and history records '{3}':\n{4}",
+					ebays.Count,
+					Results.CustomerId,
+					Results.CalculationTime.MomentStr(),
+					string.Join(", ", historyRecordIDs),
+					string.Join("\n", ebays)
+				);
 
 				List<FilteredAggregationResult> ebayList = LastHistoryTurnovers(ebays, Results.CalculationTime);
 
@@ -936,15 +1005,30 @@
 					);
 				} // if
 
-				List<MarketplaceTurnover> paypals = (
-					from row in h.SelectMany(y => y.PayPalAggregations).Where(y => y.IsActive)
-					select new MarketplaceTurnover {
-						TheMonth = row.TheMonth,
-						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistoryID = row.CustomerMarketPlaceUpdatingHistory.Id,
-						CustomerMarketPlaceID = row.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					}
-				).ToList();
+				var paypals = new List<MarketplaceTurnoverModel>();
+				this.db.ForEachRowSafe(
+					row => {
+						paypals.Add(new MarketplaceTurnoverModel {
+							TheMonth = row["TheMonth"],
+							Turnover = row["Turnover"],
+							CustomerMarketPlaceUpdatingHistoryID = row["CustomerMarketPlaceUpdatingHistoryId"],
+							CustomerMarketPlaceID = row["CustomerMarketPlaceId"],
+							UpdatingEnd = row["UpdatingEnd"],
+						});
+					},
+					"GetActivePayPalAggregationsByMpHistory",
+					CommandSpecies.StoredProcedure,
+					this.db.CreateTableParameter("HistoryRecordIDs", (IEnumerable<int>)historyRecordIDs)
+				);
+
+				this.log.Debug(
+					"{0} Pay Pal records loaded for customer {1}, calculation time {2} and history records '{3}':\n{4}",
+					paypals.Count,
+					Results.CustomerId,
+					Results.CalculationTime.MomentStr(),
+					string.Join(", ", historyRecordIDs),
+					string.Join("\n", paypals)
+				);
 
 				List<FilteredAggregationResult> paypalList = LastHistoryTurnovers(paypals, Results.CalculationTime);
 
@@ -1064,7 +1148,7 @@
 		} // IsOnlineMedalNotViaHmrcInnerFlow
 
 		private List<FilteredAggregationResult> LastHistoryTurnovers(
-			List<MarketplaceTurnover> inputList,
+			List<MarketplaceTurnoverModel> inputList,
 			DateTime calculationTime,
 			DateTime? lastExistingDataMonth = null
 		) {
@@ -1100,7 +1184,7 @@
 				lastExistingDataMonth.MomentStr()
 			);
 
-			List<MarketplaceTurnover> histories = inputList.Where(
+			List<MarketplaceTurnoverModel> histories = inputList.Where(
 				z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd
 			).ToList();
 
@@ -1123,7 +1207,7 @@
 			});
 
 			foreach (var grp in groups) {
-				MarketplaceTurnover first = grp.OrderByDescending(p => p.AggID).First();
+				MarketplaceTurnoverModel first = grp.OrderByDescending(p => p.AggID).First();
 
 				var far = new FilteredAggregationResult {
 					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),
@@ -1155,7 +1239,6 @@
 			return list.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover) * extrapolationCoefficient;
 		} // CalcAnnualTurnoverBasedOnPartialData
 
-		private EZBob.DatabaseLib.Model.Database.Repository.CustomerMarketPlaceUpdatingHistoryRepository updatingHistoryRep;
 		private bool isInitialized;
 		private bool isCalculated;
 	} // class MedalCalculatorBase

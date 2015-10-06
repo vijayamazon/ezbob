@@ -14,6 +14,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Extensions;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Experian;

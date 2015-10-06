@@ -420,7 +420,6 @@
     <Compile Include="Repository\Turnover\PayPalAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Repository\Turnover\FilteredAggregationResult.cs" />
     <Compile Include="Repository\Turnover\YodleeAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
