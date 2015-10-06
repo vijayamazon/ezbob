@@ -11,7 +11,7 @@ EzBob.ConsentAgreementModel = Backbone.Model.extend({
 }); // EzBob.ConsentAgreementModel
 
 EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
-	template: '#consent-agreement-temlate',
+	template: '#consent-agreement-template',
 
 	events: {
 		'click .print': 'onPrint',
@@ -40,15 +40,15 @@ EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
 	}, // onRender
 
 	onDownload: function() {
-		var id = this.model.get('id');
-		var firstName = this.model.get('firstName');
-		var middleInitial = this.model.get('middleInitial');
-		var surname = this.model.get('surname');
-		location.href = window.gRootPath + "Customer/Consent/Download?id=" + id + "&firstName=" + firstName + "&middleInitial=" + middleInitial + "&surname=" + surname;
+		location.href =
+			window.gRootPath + 'Customer/Consent/Download?id=' + this.model.get('id') +
+			'&firstName=' + this.model.get('firstName') +
+			'&middleInitial=' + this.model.get('middleInitial') +
+			'&surname=' + this.model.get('surname');
 	}, // onDownload
 
 	onPrint: function() {
-		printElement("consent-conent");
-	}//onPrint
+		printElement('consent-conent');
+	}, // onPrint
 }); // EzBob.ConsentAgreement
 

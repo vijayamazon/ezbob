@@ -519,12 +519,12 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.marketplace-button').css('display', 'inline-block');
 
 		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
-	    /// scroll
+
+		/// scroll
 		var posY = $(".link-accounts-optional").position().top;
-	    var optionalHeight = $(".link-accounts-optional").height();
-	    $(document).scrollTop(posY - (optionalHeight + 60));
-		
-		
+		var optionalHeight = $(".link-accounts-optional").height();
+		$(document).scrollTop(posY - (optionalHeight + 60));
+
 	}, // showMoreAccounts
 
 	canContinue: function() {

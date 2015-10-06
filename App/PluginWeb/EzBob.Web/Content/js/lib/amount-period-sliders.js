@@ -70,7 +70,7 @@ function InitAmountPeriodSliders(options) {
 		var autoNumericCtrlOptions;
 
 		if (sAreaName === 'amount')
-			autoNumericCtrlOptions = $.extend({}, EzBob.formatPoundsNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max });
+			autoNumericCtrlOptions = $.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max });
 		else
 			autoNumericCtrlOptions = { vMin: oDefinitions.min, vMax: oDefinitions.max, mDec: 0 };
 
