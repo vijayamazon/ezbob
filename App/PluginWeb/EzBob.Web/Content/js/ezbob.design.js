@@ -1074,6 +1074,7 @@ EzBob.formatDateHumanFullUK = function(date) {
 			// already set
 			break;
 		} // switch
+		break;
 	} // switch
 
 	return dayOfMonth + suffix + normalDate.format(' MMM YYYY');

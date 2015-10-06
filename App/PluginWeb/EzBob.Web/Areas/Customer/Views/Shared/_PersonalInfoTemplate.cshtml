@@ -223,14 +223,14 @@
 </div>
 </script>
 
-<script id="consent-agreement-temlate" type="text/template">
+<script id="consent-agreement-template" type="text/template">
     <div class="consent-dialog-wrapper">
 
         <div id="consent-conent" class="modal-body consent-dialog">
             @{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
 
             <p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
-            <p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
+            <p><b>Agreed on:</b> <%-EzBob.formatDateUK(date)%></p>
         </div>
 
     </div>
