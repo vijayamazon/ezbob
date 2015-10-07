@@ -174,14 +174,14 @@
 
 				decimal I = calc.NextEarlyPayment();
 				decimal P = this.tLoan.Principal;
-				decimal F = (this.tLoan.Charges.Sum(f => f.Amount) - this.tLoan.Charges.Sum(f => f.AmountPaid)); // unpaid fees
+				decimal F = calc.FeesToPay;			//(this.tLoan.Charges.Sum(f => f.Amount) - this.tLoan.Charges.Sum(f => f.AmountPaid)); // unpaid fees
 				decimal r = ((this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest))?0:this.tLoan.InterestRate;
 
 				// ReSharper disable once TooWideLocalVariableScope
 				decimal x = 0m;
 				this.Result.ReschedulingBalance = (P + I + F);
-	
-				Log.Debug("--------------P: {0}, I: {1}, F: {2}, Result.LoanCloseDate: {3}", P, I, F, this.Result.LoanCloseDate.Date);
+
+				Log.Debug("--------------P: {0}, I: {1}, F (calc.FeesToPay): {2}, (fees.amount-fees.paid): {3}, Result.LoanCloseDate: {4}", P, I, F, (this.tLoan.Charges.Sum(f => f.Amount) - this.tLoan.Charges.Sum(f => f.AmountPaid)), this.Result.LoanCloseDate.Date);
 
 				// 3. intervals number
 
@@ -392,6 +392,7 @@
 		///  distribute/offset X - the difference between earned interest for n(P) and k(P+I+F)
 		/// </summary>
 		/// <param name="X"></param>
+		// ReSharper disable once UnusedMember.Local
 		private void OffsetX(decimal X) {
 			if (this.ReschedulingArguments.RescheduleIn == false && X > 0) {
 				Log.Debug("X: {0}", 0);
@@ -507,6 +508,7 @@
 
 					// ReSharper disable once CatchAllClause
 				} catch (Exception transactionEx) {
+
 					this.loanRep.RollbackTransaction();
 					this.message = string.Format("Re-schedule rolled back. Arguments {0}, err: {1}", this.ReschedulingArguments, transactionEx);
 					Log.Alert(this.message);
