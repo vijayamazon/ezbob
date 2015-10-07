@@ -37,7 +37,6 @@
 				//custom css
 				.Add("~/Content/css/everline.css")
 				.Add("~/Content/css/Everlinecustomer.css")
-                .Add("~/Content/css/everline-mobile.css")
                 .Add("~/Content/css/Everlineslider.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
@@ -108,8 +107,15 @@
 				.Add("~/Content/css/wizard.css")
 				.Add("~/Content/css/mobile.css")
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
-		} // RenderProfileCss
+		} // RenderWizardCss
 
+		public static MvcHtmlString RenderEverlineWizardCss() {
+			return Bundle.Css()
+				//custom css
+				.Add("~/Content/css/everline-mobile.css")
+				.MvcRender("~/Content/css/min/wizard_combined_#.css");
+		} // RenderEverlineWizardCss
+		
 		public static MvcHtmlString RenderLoginCss() {
 			return Bundle.Css()
 				//custom css

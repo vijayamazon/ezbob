@@ -1,7 +1,8 @@
 ﻿.main-page-everline #get-cash {
-	width: 960px;
+	width: 940px;
 	margin: 0 auto;
-	padding: 20px 0;
+	padding: 20px 0px;
+	box-sizing: border-box;
 }
 
 .main-page-everline #get-cash h1, h3 {
@@ -70,7 +71,7 @@
 
 .main-page-everline #get-cash .payment-schedule-table {
 	width: 100%;
-	margin-top: 22px;
+	margin-top: 10px;
 	margin-bottom: 35px;
 	border-collapse: separate;
 }
@@ -167,7 +168,7 @@
 .agreement .tab-pane.active {
 	border: 1px solid #28211f;
 	position: relative;
-	padding: 20px;
+	padding: 20px 10px 70px 40px;
 }
 
 .overview.loan-agreement:after {
@@ -183,7 +184,7 @@
 .LoanLegal {
 	margin-top: 20px;
 	background-color: #f1f0f0;
-	padding: 20px 20px 10px 20px;
+	padding: 20px 20px 10px 40px;
 }
 
 .confirmationDialog .ui-dialog-titlebar{
@@ -247,8 +248,17 @@ div.sign-full-name {
 
 #rollover-other-text,
 #pay-early-other-text {
-	margin-left: -60px;
-	width: 60%;
+	margin-left: -73px;
+	width: 293px;
+}
+
+#single-loan-pay-options #rollover-other-text,
+#single-loan-pay-options #pay-early-other-text {
+	margin-left: -38px;
+}
+
+.click-area #rollover-other-text {
+	margin-left: -30px;
 }
 
 #cap2 {
@@ -380,11 +390,6 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 	border-bottom: 0;
 }
 
-.payment-schedule-table td:first-child,
-.payment-schedule-table th:first-child{
-	display: none;
-}
-
 .table .green-text{
 	color: #8dc641;
 	font-weight: 600;
@@ -422,3 +427,54 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 	display:none;
 }
 
+h2 span.loan-amount-header-start,
+h2 span.duration-select-allowed,
+#profile-content h1 {
+	display: none;
+}
+
+.loan-schedule-header h2 {
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+h2.agreement-header {
+	margin-bottom: 20px;
+	margin-top: 15px;
+}
+
+h2.accept-agreement-header {
+	margin-bottom: 0px;
+	margin-top: 5px;
+}
+
+.controls.agreements-checkboxes .click-wrap {
+	margin-bottom: 0px;
+	margin-top: 25px;
+	font-weight: 500;
+}
+
+.controls.agreements-checkboxes .click-wrap .title{
+	margin-left: 55px;
+	font-weight: 500;
+}
+
+.LoanLegal .form_buttons_container .input-wrapper .clean-btn,
+.LoanLegal .form_buttons_container .input-wrapper .ev-btn-org,
+.LoanLegal .form_buttons_container .input-wrapper a.ev-btn-org {
+	width: 240px;
+	margin-left: 10px;
+}
+
+.LoanLegal .form_buttons_container {
+	margin-top: 30px;
+}
+
+#companies-agreement-template .simple-well.clearfix,
+#consumers-agreement-template .simple-well.clearfix{
+	padding-right: 0;
+}
+
+.apply-for-loan-div .cosme-agreement-section.corner-border.clearfix {
+	margin: 45px 0;
+}

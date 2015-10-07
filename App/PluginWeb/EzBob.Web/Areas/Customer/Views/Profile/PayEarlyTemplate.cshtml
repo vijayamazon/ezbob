@@ -43,12 +43,12 @@
 				<div class="control-group form_field_container">
 					<label class="radio w100p click-wrap" ui-event-control-id="pay-early:total">
 						<span class="click-input-wrap">
-							<input type="radio" id="pay-early-total" name="paymentType" value="total"><%- paymentType =='total' ? 'checked="checked"' : '' %> />
+							<input type="radio" id="pay-early-total" name="paymentType" value="total"<%- paymentType =='total' ? 'checked="checked"' : '' %> />
 							<label class="radio-btn fa" for="pay-early-total">
 								<i class="fa fa-circle"></i>
 							</label>
 						</span>
-						<span class="title"> Pay Total Balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(total) %></b></span>
+						<span class="title"> Pay total balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(total) %></b></span>
 					</label>
 				</div>
 
@@ -56,13 +56,13 @@
 				<div class="control-group form_field_container ">
 					<label class="radio w100p click-wrap" ui-event-control-id="pay-early:totalLate">
 						<span class="click-input-wrap">
-							<input type="radio" id="pay-early-totalLate" name="paymentType" value="totalLate"><%- isPayTotalLate ? 'checked="checked"' : '' %> />
+							<input type="radio" id="pay-early-totalLate" name="paymentType" value="totalLate"<%- isPayTotalLate ? 'checked="checked"' : '' %> />
 							<label class="radio-btn fa" for="pay-early-totalLate">
 								<i class="fa fa-circle"></i>
 							</label>
 
 						</span>
-						<span class="title">	Pay Late Balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(totalLatePayment) %></b></span>
+						<span class="title">	Pay late balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(totalLatePayment) %></b></span>
 					</label>
 				</div>
 				<% } %>
@@ -71,7 +71,7 @@
 				<div class="form_field_container control-group less-space">
 					<label class="radio inline-block-margin w100p click-input-wrap click-wrap" ui-event-control-id="pay-early:loan">
 						<span class="click-input-wrap">
-							<input type="radio" id="choose-loan" name="paymentType" value="loan"><%- isPayLoan ? 'checked="checked"' : '' %> />
+							<input type="radio" id="choose-loan" name="paymentType" value="loan"<%- isPayLoan ? 'checked="checked"' : '' %> />
 							<label class="radio-btn fa" for="choose-loan">
 								<i class="fa fa-circle"></i>
 							</label>
@@ -116,7 +116,7 @@
                                     <i class="fa fa-circle"></i>
                                 </label>
 							</span>
-                            <span class="title">Pay Total Balance: <b><%-EzBob.formatPounds(loan.get('TotalEarlyPayment'))%></b></span>
+                            <span class="title">Pay total balance: <b><%-EzBob.formatPounds(loan.get('TotalEarlyPayment'))%></b></span>
 						</label>
 					</div>
 
@@ -129,7 +129,7 @@
                                           <i class="fa fa-circle"></i>
                                       </label>
                                   </span>
-                                  <span class="title">Next Installment: &nbsp;&nbsp;<b><%- EzBob.formatPounds(loan.get('NextEarlyPayment')) %></b></span>
+                                  <span class="title">Next instalment: &nbsp;&nbsp;<b><%- EzBob.formatPounds(loan.get('NextEarlyPayment')) %></b></span>
                              </label>
 					</div>
 
@@ -149,7 +149,7 @@
                                 <label class="radio-btn fa" for="pay-early-other">
                                     <i class="fa fa-circle"></i>
                                 </label>
-                                <span class="title">Another Amount:</span>
+                                <span class="title">Another amount:</span>
 								<div class="input-wrapper early-rollover">
 									<input type="text" id="pay-early-other-text" class="right-input-clickable money s84 bold form_field" <%= loanPaymentTypeHidden %> name="paymentAmount" <%- loanPaymentType != 'other' ? 'readonly="readonly"' : '' %> value="<%- EzBob.formatPounds(amount) %>" ui-event-control-id="pay-early:other-value" />
 								</div>
@@ -204,7 +204,7 @@
 										<label class="radio-btn fa" for="rollover-other">
 											<i class="fa fa-circle"></i>
 										</label>
-										<span class="title">Another Amount:</span>
+										<span class="title">Another amount:</span>
 										<div class="input-wrapper early-rollover">
 											<input id="rollover-other-text" type="text" <%= rolloverAnotherAmountDisabled %> class="right-input-clickable money s84 bold form_field" name="rolloverAmount" value="<%- EzBob.formatPounds(amount) %>" ui-event-control-id="pay-early:rollover-other-value" />
 										</div>

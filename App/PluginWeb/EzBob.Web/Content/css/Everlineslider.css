@@ -978,6 +978,10 @@
     line-height: 30px;
 }
 
+.main-page-everline #get-cash .sliders h2 {
+	margin-left: 30px;
+}
+
 .form-markup-wrapper h2 {
     font-size: 39px;
     color: #7cbe31;
@@ -1145,6 +1149,7 @@
 	padding: 20px;
 	margin-bottom: 20px;
 	font-size: 11px;
+	font-weight: 600;
 }
 
 .loan-schedule .rlc .apr{
@@ -1154,7 +1159,7 @@
 .loan-schedule .rlc .real-cost{
 	display: inline-block;
     float: left;
-    margin-right: 10px;
+    margin-right: 3px;
 }
 
 .form-markup-wrapper.sliders {

@@ -27,10 +27,14 @@
 		<h1>Congratulations</h1>
 
 		@if (!(bool)ViewData["IsAlibaba"]) {
-			<h2 style="font-size: 22px; margin-bottom: 20px;">Funds are being transferred to your account.</h2>
-		}
+			if (origin == CustomerOriginEnum.everline) {
+				<p id="funds-transferred">Funds are being transferred to your account.</p>
+			} else {
+				<h2 class="funds-transferred">Funds are being transferred to your account.</h2>
+			}
+		} 
 
-		<h2 style="margin-bottom: 15px;">Loan Summary:</h2>
+		<h2 style="margin-bottom: 15px;">Loan Summary</h2>
 
 		<input type="hidden" id="loanid" value="@ViewData["LoanId"]" />
 
@@ -69,7 +73,7 @@
 
 		<div class="row-fluid">
 			<div class="span12">
-				<h2 style="font-size: 22px; margin-bottom: 20px;" class="repayments-table-header">Payment schedule:</h2>
+				<h2 style="font-size: 22px; margin-bottom: 20px;" class="repayments-table-header">Payment schedule</h2>
 				<div id="schedule"></div>
 			</div>
 		</div>
@@ -83,7 +87,7 @@
 					href: @Url.Action("Index", "Profile", new { Area = "Customer" })),
 
 				new EzButtonModel(null, "Print for your records",
-					cls: "schedule-print-link pull-left print-link",
+					cls: "schedule-print-link pull-left print-link clean-btn",
 					buttonType: EzButtonType.link,
 					uiEventControlID: "loan-taken:print",
 					onClick: "window.print();return false;",
@@ -116,7 +120,7 @@
 </div>
 
 <script id="paypoint-schedule-template" type="text/template">
-	<table class="table table-bordered table-striped payment-schedule-table">
+	<table class="table payment-schedule-table">
 		<thead>
 			<tr>
 				<th>Due Date</th>
@@ -140,15 +144,13 @@
 					<td><%-EzBob.formatPoundsNoDecimals(line.LoanRepayment)%></td>
 					<td><%-EzBob.formatPounds(line.Interest)%></td>
 					<td><%-EzBob.formatPounds(line.Fees)%></td>
-					<td>
-						<b class="apply-loan-total"><%- EzBob.formatPounds(line.AmountDue) %></b>
-					</td>
+					<td class="apply-loan-total"><%- EzBob.formatPounds(line.AmountDue) %></td>
 				</tr><%
 			});
 			%>
 		</tbody>
 	</table>
-	<p style="margin-top: 25px; color: #767676;">
+	<p id="loan-confirmation-email-address">
 		A confirmation email will be sent
 		to your email address: @ViewData["email"]
 	</p>

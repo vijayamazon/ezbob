@@ -25,9 +25,10 @@
 }
 
 @section css{
-@if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline)
-{
-    @BundleHelper.RenderWizardCss()
+@if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline) {
+	@BundleHelper.RenderWizardCss()
+} else {
+	@BundleHelper.RenderEverlineWizardCss()
 }
  
 

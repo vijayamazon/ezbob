@@ -775,3 +775,8 @@ blockquote {
 .commercial-wrap .widthbrake {
     page-break-before: always;
 }
+
+.select-card-area .fa.fa-circle,
+.select-card-area .fa.fa-circle {
+	display: none;
+}
