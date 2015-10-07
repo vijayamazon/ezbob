@@ -60,7 +60,7 @@
 					? UnderwriterSite + "/Underwriter/Customers#profile/" + CustomerData.Id
 					: UnderwriterSite + "/Underwriter/Customers#broker/" + nBrokerID;
 
-				TemplateName = "Mandrill - EZBOB password was restored - to staff";
+				TemplateName = "Mandrill - password restored - staff";
 			} // if
 		} // SetTemplateAndVariables
 
