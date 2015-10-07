@@ -265,5 +265,9 @@
 		public ActionMetaData BackfillBrokerCommissionInvoice() {
 			return Execute<BackFillBrokerCommissionInvoice>(null, null);
 		}
+
+		public ActionMetaData BackfillDailyLoanStats() {
+			return Execute<BackfillDailyLoanStats>(null, null);
+		} // BackfillDailyLoanStats
 	} // class EzServiceImplementation
 } // namespace EzService

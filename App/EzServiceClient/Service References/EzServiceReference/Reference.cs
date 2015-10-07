@@ -4518,6 +4518,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PacnetDelivery", ReplyAction="http://tempuri.org/IEzService/PacnetDeliveryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PacnetDeliveryAsync(int underwriterId, decimal amount);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillDailyLoanStats", ReplyAction="http://tempuri.org/IEzService/BackfillDailyLoanStatsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillDailyLoanStats();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillDailyLoanStats", ReplyAction="http://tempuri.org/IEzService/BackfillDailyLoanStatsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillDailyLoanStatsAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -6192,6 +6198,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PacnetDeliveryAsync(int underwriterId, decimal amount) {
             return base.Channel.PacnetDeliveryAsync(underwriterId, amount);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillDailyLoanStats() {
+            return base.Channel.BackfillDailyLoanStats();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillDailyLoanStatsAsync() {
+            return base.Channel.BackfillDailyLoanStatsAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
