@@ -60,8 +60,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click #fees-delete-btn': 'feesDeleteBtn',
         'click #intrest-save-btn': 'intrestSaveBtn',
         'click .remove-freeze-interval': 'onRemoveFreezeInterval',
-        'blur #outsidePrincipal': 'onChangeAmount' +
-            '',
+        'blur #outsidePrincipal': 'onChangeAmount',
         'change #withinSelect': 'withinSelectChange',
         'change #outsideSelect': 'outsideSelectChange',
         'click .edit-schedule-item': 'editScheduleItem',
