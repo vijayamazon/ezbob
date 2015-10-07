@@ -1466,6 +1466,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.serviceClient.BackfillMedalForAll();
 		} // BackfillMedalForAll
 
+		[Activation]
+		private void BackfillDailyLoanStats() {
+			this.serviceClient.BackfillDailyLoanStats();
+		} // BackfillDailyLoanStats
+
 		//[Activation]
 		//private void ExampleMethod() {
 		//	int customerID;

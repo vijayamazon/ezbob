@@ -556,5 +556,8 @@
 
 		[OperationContract]
 		ActionMetaData PacnetDelivery(int underwriterId, decimal amount);
+
+		[OperationContract]
+		ActionMetaData BackfillDailyLoanStats();
 	} // interface IEzService
 } // namespace EzService

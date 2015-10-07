@@ -148,6 +148,7 @@
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="Backfill\BackFillBrokerCommissionInvoice.cs" />
+    <Compile Include="Backfill\BackfillDailyLoanStats.cs" />
     <Compile Include="Backfill\BackfillMedalForAll.cs" />
     <Compile Include="Broker\BrokerAddBank.cs" />
     <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="NewLoan\NL_ExceptionOfferNotValid.cs" />
     <Compile Include="NewLoan\NL_Loader.cs" />
     <Compile Include="NewLoan\NL_ExceptionLoanExists.cs" />
+    <Compile Include="Tasks\UpdateDailyLoanStats.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
