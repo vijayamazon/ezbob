@@ -51,6 +51,9 @@
 			this.emailToAddress = CurrentValues.Instance.EzbobTechMailTo; 
 			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 			this.emailFromName = CurrentValues.Instance.MailSenderName;
+
+			this.sendDebugMail = CurrentValues.Instance.ReschedulingDebugMail;
+			this.toAddressDebugMail = CurrentValues.Instance.ReschedulingDebugMailAddress;
 		}
 
 		public override string Name { get { return "RescheduleLoan"; } }
@@ -652,7 +655,7 @@
 		private readonly DateTime noLimitDate = new DateTime(2099, 1, 1);
 
 		private readonly StringBuilder sbBeforeLoanState = new StringBuilder();
-		private const bool sendDebugMail = true;
-		private const string toAddressDebugMail = "elinar@ezbob.com";
+		private readonly bool sendDebugMail; 
+		private readonly string toAddressDebugMail;
 	}
 }

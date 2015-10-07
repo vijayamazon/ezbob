@@ -912,12 +912,12 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			const int loanID = 3651; //4182; // 1718; // 4439; //3534;
+			const int loanID = 89; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(5); //new DateTime(2015, 10, 02); 
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(8); //new DateTime(2015, 10, 02); 
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
