@@ -63,6 +63,7 @@ EzBob.Popup = Backbone.View.extend({
 
 		oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
 		oWidget.find('.ui-dialog-titlebar').addClass('address-dialog-titlebar');
+		
 
 		this.addressList = this.$el.find('.matchingAddressList');
 
