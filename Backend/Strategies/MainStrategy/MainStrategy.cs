@@ -817,10 +817,10 @@
 				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
 			} // if
 
-			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
+			int cashRequestCount = sr["CashRequestCount"];
+			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard && this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion && cashRequestCount > 1) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
-				int cashRequestCount = sr["CashRequestCount"];
-
+				
 				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
