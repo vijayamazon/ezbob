@@ -35,8 +35,8 @@
 				return;
 			}
 
-			if (string.IsNullOrEmpty(this.content)) {
-				Log.Info("Empty content message is not sent");
+			if (string.IsNullOrEmpty(this.content) || string.IsNullOrEmpty(this.mobilePhone) || this.mobilePhone.Length < 1) {
+				Log.Info("Empty content / wrong phone number, message is not sent");
 				return;
 			}
 
