@@ -912,17 +912,17 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			const int loanID = 16; //4182; // 1718; // 4439; //3534;
+			const int loanID = 3651; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.ReschedulingDate = new DateTime(2014, 12, 02); //DateTime.UtcNow;
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(5); //new DateTime(2015, 10, 02); 
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 380m;
-			reModel.StopFutureInterest = true;
+			reModel.PaymentPerInterval = 655m;
+			reModel.StopFutureInterest = false;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			s1.Context.UserID = 357; //25852;
 			try {
@@ -936,19 +936,19 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			const int loanID = 2069;
+			const int loanID = 3651;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(30);
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(5);
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = true;
 			reModel.SaveToDB = false;
 			reModel.StopFutureInterest = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
-				s.Context.UserID = 357;// 25852;
+				s.Context.UserID = 25852;// 357; 
 				s.Execute();
 				this.m_oLog.Debug("RESULT FOR IN" + s.Result.ToString());
 				// ReSharper disable once CatchAllClause
