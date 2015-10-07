@@ -319,26 +319,20 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 			if (!shop.active)
 				continue;
-			if (noVat && (shop.button.shopClass == 'HMRC' || shop.button.shopClass == "HMRCUpload")) {
+
+			if (noVat && (shop.button.shopClass == 'HMRC' || shop.button.shopClass == "HMRCUpload"))
 				continue;
-			}
 
 			var oTarget = this.mpGroups[shop.groupid] && this.mpGroups[shop.groupid].ui ? this.mpGroups[shop.groupid].ui : accountsList;
 
 			var sBtnClass = this.isProfile() ? 'marketplace-button-profile' : this.extractBtnClass(oTarget);
 			var button = shop.button.render();
 			
-			if (button.hasOr) {
+			if (button.hasOr)
 				$('<div class="account-or">or</div>').appendTo(oTarget);
-			}
 
 			button.$el.find('.marketplace-button').addClass(sBtnClass);
 			button.$el.appendTo(oTarget);
-			
-		
-			  
-			
-
 		} // for
 		
 		if (this.isOffline() && !this.isProfile())
@@ -351,7 +345,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			);
 
 		if (bShowMore)
-			this.showMoreAccounts();
+			this.showMoreAccounts(false);
 
 		this.storeList.appendTo(this.$el);
 		
@@ -487,7 +481,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var oBtn = this.storeList.find('.btn-showmore');
 
 		if (oBtn.attr('data-current') === 'more')
-			this.showMoreAccounts();
+			this.showMoreAccounts(true);
 		else
 			this.showLessAccounts();
 	}, // toggleShowMoreAccounts
@@ -505,10 +499,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.link-accounts-optional').hide();
 
 		$(document).scrollTop(0);
-
 	}, // showLessAccounts
 
-	showMoreAccounts: function() {
+	showMoreAccounts: function(scrollIntoView) {
 		var oBtn = this.storeList.find('.btn-showmore');
 
 		oBtn.attr('data-current', 'less');
@@ -518,13 +511,15 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
 		this.storeList.find('.marketplace-button').css('display', 'inline-block');
 
-		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
+		var linkAccountsOptional = this.storeList.find('.link-accounts-optional');
+		
+		linkAccountsOptional.show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
 
-		/// scroll
-		var posY = $(".link-accounts-optional").position().top;
-		var optionalHeight = $(".link-accounts-optional").height();
-		$(document).scrollTop(posY - (optionalHeight + 60));
-
+		if (scrollIntoView) { // scroll
+			var posY = linkAccountsOptional.position().top;
+			var optionalHeight = linkAccountsOptional.height();
+			$(document).scrollTop(posY - (optionalHeight + 60));
+		} // if
 	}, // showMoreAccounts
 
 	canContinue: function() {
