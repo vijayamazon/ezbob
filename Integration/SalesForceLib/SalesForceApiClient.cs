@@ -218,7 +218,7 @@
 				return new GetActivityResultModel(activities, res.Error);
 			} catch (Exception) {
 				Error = "Failed parsing activity model\n" + result;
-				Log.Error(Error);
+				Log.Warn(Error);
 			}
 
 			return new GetActivityResultModel { Error = Error };
@@ -229,7 +229,7 @@
 				var res = string.IsNullOrEmpty(result) ? new ApiResponse(null, "result is null") : result.JsonStringToObject<ApiResponse>();
 				if (!res.IsSuccess) {
 					string message = "SalesForce " + serviceName + " failed for customer " + email + ", request \n" + Model + "\n error: " + res.Error + "";
-					Log.Error(message);
+					Log.Warn(message);
 					Error = res.Error;
 				} else {
 					Error = String.Empty;
@@ -239,7 +239,7 @@
 			} catch (Exception ex) {
 				Error = "Failed parsing result to object " + result;
 				string message = "SalesForce " + serviceName + " failed for customer " + email + ", request \n" + Model + "\n error: failed parsing response:\n" + result + "";
-				Log.Error(message);
+				Log.Warn(message);
 			}
 		}
 
