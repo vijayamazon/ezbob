@@ -1,8 +1,10 @@
 ﻿@using System.Collections.Generic
 @using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
 }
 
 <script id="apply-forloan-template" type="text/template">
@@ -23,7 +25,11 @@
 		</div>
 	</div>
 
-	<h2 style="margin-top: 40px;">Review and accept the agreement</h2>
+	<h2 class="agreement-header">
+		<span>Review@(isEverline ? "" : " and accept") the agreement</span>
+	</h2>
+	@if (isEverline) {
+		<p>Read this section very carefully, it will vary from lander to lender.</p>}
 
 	<div id="block-agreement">
 		<div class="agreement">
@@ -62,7 +68,7 @@
 				</div>
 				<div class="eu-agreement-text">
 					<div class="eu-agreement-header">
-						<h3 class="eu-agreement-header-text">Your loan will be included in the EU COSME program, please confirm:</h3>
+						<h3 class="eu-agreement-header-text">Your loan will be included in the EU COSME program, please confirm</h3>
 					</div>
 					<ol>
 						<li>I employ less than 250 people.</li>
@@ -77,6 +83,10 @@
 	</div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
+		<h2 class="accept-agreement-header">
+			<span>Accept the agreement</span>
+		</h2>
+		
 		<div class="controls agreements-checkboxes">
 			@EzForm.ClickableInputTag(new EzInputBuilder("preAgreementTermsRead", 
 				"<span class=\"company-preAgreement\">I have read and agree to the agreement terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the pre-contract terms</span>",
@@ -132,12 +142,25 @@
 				I have read and agree to the directors' consent declaration
 			</label -->
 
-			<div class="loan-disclosure-text hide">
-                    <h3>DISCLOSURE FOR REGULATED LOANS: (LOANS MADE TO INDIVIDUALS)</h3>
-                    You hereby represent and warranty that at the date of applying for and accepting this loan, you are not: (i) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (ii) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (iii) bankrupt or considering filing for bankruptcy in the coming 12 month period.
-                    <h3>DISCLOSURE FOR NON-REGULATED LOANS (LOANS MADE TO COMPANIES)</h3>
-                    You hereby represent and warranty that at the date of applying for and accepting this loan that with respect to the Borrower: (i) no resolution has been passed, petition presented, proceedings commenced or other procedure or step for its liquidation; (ii) no procedure has been used against the Borrower to attach or take possession of any property for payment of a debt; (iii) no receiver or other similar official has been appointed in respect of any of the property of the Borrower;  (iv) no application or petition for an administration order has been made; and none of the foregoing is pending or contemplated; and (v) no director of the Company or proposed guarantor of the loan is: (A) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (B) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (C) bankrupt or considering filing for bankruptcy in the coming 12 month period.
-                </div>
+			<div class="loan-disclosure-text1 hide">
+				@if (isEverline) {
+					<h3>Disclosure for regular loans:</h3> 
+					<h4>(loans made to individuals)</h4>
+				} else {
+					<h3>DISCLOSURE FOR REGULATED LOANS: (LOANS MADE TO INDIVIDUALS)</h3>
+				}				
+				You hereby represent and warranty that at the date of applying for and accepting this loan, you are not: (i) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (ii) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (iii) bankrupt or considering filing for bankruptcy in the coming 12 month period.
+			</div>
+
+			<div class="loan-disclosure-text2 hide">
+				@if (isEverline) {
+					<h3>Disclosure for non-regular loans:</h3>
+					<h4>(loans made to companiess)</h4>
+				} else {
+					<h3>DISCLOSURE FOR NON-REGULATED LOANS: (LOANS MADE TO COMPANIES)</h3>
+				}	    
+				You hereby represent and warranty that at the date of applying for and accepting this loan that with respect to the Borrower: (i) no resolution has been passed, petition presented, proceedings commenced or other procedure or step for its liquidation; (ii) no procedure has been used against the Borrower to attach or take possession of any property for payment of a debt; (iii) no receiver or other similar official has been appointed in respect of any of the property of the Borrower;  (iv) no application or petition for an administration order has been made; and none of the foregoing is pending or contemplated; and (v) no director of the Company or proposed guarantor of the loan is: (A) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (B) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (C) bankrupt or considering filing for bankruptcy in the coming 12 month period.
+            </div>
 
 			<div class="form_field_container"></div>
 
@@ -155,12 +178,12 @@
 		</div>
 
 		@EzForm.WizardButton(new List<EzButtonModel>{
-			new EzButtonModel(null, "Continue",
+			new EzButtonModel(null, isEverline ? "Next" : "Continue",
 				cls: "btn-continue button btn-green ev-btn-org submit",
 				uiEventControlID: "loan-legal:continue",
 				buttonType: EzButtonType.link,
 				href:"link"),
-			new EzButtonModel(null, "Back",
+			new EzButtonModel(null, isEverline ? "Cancel" : "Back",
 				cls: "btn-back button btn-grey clean-btn",
 				uiEventControlID: "loan-legal:back",
 				buttonType: EzButtonType.link,
@@ -171,7 +194,7 @@
 </script>
 
 <script id="consumers-agreement-template" type="text/template">
-	<div style="padding-right: 15px;" class="simple-well clearfix">
+	<div class="simple-well clearfix">
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
 				<li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Contract</a></li>
@@ -179,7 +202,7 @@
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab3">
-					<div class="overview loan-agreement" id="Pre-Contract-Agreement">
+					<div class="overview loan-agreement" id="Pre-Contract-Agreement">						
                         <%if(agreementType == 'ezbob') {%>
 						    @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Pre-Contract-Agreement.cshtml");}
                         <%}%>
@@ -188,11 +211,12 @@
                         <%}%>
                         <%if(agreementType == 'everline') {%>
                             @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLPre-Contract-Agreement.cshtml");}
-                        <%}%>
+                        <%}%>						
                         <%if(agreementType == 'everlineRefinance') {%>
                             @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinancePre-Contract-Agreement.cshtml");}
-                        <%}%>
+                        <%}%>						
 					</div>
+					@PrintDownload()
 				</div>
 				<div class="tab-pane" id="tab4">
 					<div class="overview loan-agreement" id="CreditActAgreement">
@@ -207,13 +231,12 @@
                         <%}%>
                         <%if(agreementType == 'everlineRefinance') {%>
                             @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinanceCreditActAgreement.cshtml");}
-                        <%}%>
-						
+                        <%}%>						
 					</div>
+					@PrintDownload()
 				</div>
 			</div>
 		</div>
-		@PrintDownload()
 	</div>
 </script>
 
@@ -238,9 +261,9 @@
                         <%}%>
                         <%if(agreementType == 'everlineRefinance') {%>
                             @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinancePrivateCompanyLoanAgreement.cshtml");}
-                        <%}%>
-						
+                        <%}%>						
 					</div>
+					@PrintDownload()
 				</div>
 				<div class="tab-pane" id="tab2">
 					<div class="overview loan-agreement" id="GuarantyAgreement">
@@ -257,16 +280,16 @@
                             @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinanceGuarantyAgreement.cshtml");}
                         <%}%>
 					</div>
+					@PrintDownload()
 				</div>
 			</div>
-		</div>
-		@PrintDownload()
+		</div>		
 	</div>
 </script>
 
 @helper PrintDownload() {
-	<div style="padding-top: 25px; padding-right: 25px;">
-		<a href="#" class="pull-right print print-link clean-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
-		<a href="#" target="_blank" style="margin-right: 20px;" class="pull-right download pdf-link clean-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
+	<div class="print-download">
+		<a href="#" target="_blank"  class="pull-left download pdf-link clean-btn short-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
+		<a href="#" style="margin-left: 10px;" class="pull-left print print-link clean-btn short-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
 	</div>  
 }

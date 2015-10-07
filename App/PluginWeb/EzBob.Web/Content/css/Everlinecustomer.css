@@ -524,12 +524,12 @@ a.clean-btn:focus,
 }
 .clean-btn:hover,
 a.clean-btn:hover,
-
  .simpleCaptcha a:hover,
 .ui-widget button.clean-btn:hover, 
 .broker-captcha a:hover {
      border: 2px solid #d47223;
      color:#d47223 !important;
+	 text-decoration: none !important;
 }
 .form_field_container .input-wrapper .clean-btn{
 	float: right;
@@ -1765,17 +1765,26 @@ h3.group-title {
 }
 .megila .megila-inner, .consent-dialog {
      position:relative;
-    overflow-y: auto;
-    height: 390px;
-        background: white;
-  
-   padding:20px 35px;
+     overflow-y: auto;
+     background: white;
+     padding:20px 35px;
 }
+
+.consent-dialog {
+	height: 390px;
+}
+
 .ui-dialog .ui-dialog-buttonpane {
     background:#f1f0f0;
     margin: 0;
     border:none;
+	box-shadow: none;
 }
+
+.ui-dialog .ui-dialog-buttonpane .ev-btn-org {
+	margin-right: -15px;
+}
+
 .megila-inner h3 {
         margin: 5px 0;
 }
@@ -1790,7 +1799,27 @@ h3.group-title {
      
  }
 
+.megila-outer-solvency1 {
+	height: 205px;
+	margin-bottom: 25px;
+	box-sizing: border-box;
+}
 
+.megila-outer-solvency2 {
+	height: 275px;
+	margin-bottom: 25px;
+	box-sizing: border-box;
+}
+
+.megila-inner-solvency1 {
+	height: 145px;
+	overflow: auto;
+}
+
+.megila-inner-solvency2 {
+	height: 215px;
+	overflow: auto;
+}
 
  .megila .megila-outer:after,  .consent-dialog-wrapper:after {
      background: white  url('../css/images/terms-corner.png');

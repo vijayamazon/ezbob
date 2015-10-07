@@ -273,6 +273,7 @@ body .other-amount-label {
     vertical-align: top;
     font-size: 16px;
     color: #67c10b;
+	font-weight: bold;
 }
 
 .profile-screen .SecurityStatement {
@@ -551,19 +552,21 @@ textarea.invite_friend {
 }
 
 .eu-agreement-image {
-    background: url(../css/images/eurpe-fund.png) no-repeat 0 0;
+	background: url(../css/images/europe-fund.png) no-repeat 0 0;
 	-moz-background-size: contain;
     -o-background-size: contain;
     -webkit-background-size: contain;
-    background-size: contain;
+	-ms-background-size: contain;
+	background-size: contain;
 }
 
-.eu-fund-image{
-    background: url(../css/images/eu.png) no-repeat 0 0;
+.eu-fund-image {
+	background: url(../css/images/eu.png) no-repeat 0 0;
 	-moz-background-size: contain;
     -o-background-size: contain;
     -webkit-background-size: contain;
-    background-size: contain;
+	-ms-background-size: contain;
+	background-size: contain;
 }
 
 .eu-image {
@@ -574,8 +577,9 @@ textarea.invite_friend {
 }
 
 .fb-icon {
-    background-image: url(../css/images/facebook-icon.png);
-    background-size: contain;
+	background-image: url(../css/images/facebook-icon.png);
+	-ms-background-size: contain;
+	background-size: contain;
     width: 32px;
     height: 32px;
     position: absolute;
@@ -929,4 +933,27 @@ span.sign-full-name {
 
 .form-director-is-dir-sha  .input-tag-wrap {
 	display: block;
+}
+
+.agreement-header {
+	margin-top: 40px;
+}
+
+.funds-transferred {
+	font-size: 22px; 
+	margin-bottom: 20px;
+}
+
+#companies-agreement-template .simple-well.clearfix,
+#consumers-agreement-template .simple-well.clearfix{
+	padding-right: 15px;
+}
+
+.payment-schedule-fees {
+	text-align: center;
+}
+
+.print-download {
+	padding-top: 25px; 
+	padding-left: 20px;	
 }

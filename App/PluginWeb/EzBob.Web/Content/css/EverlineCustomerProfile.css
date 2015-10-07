@@ -76,27 +76,27 @@ a.clean-btn{
 *******************************************************************************
 */
 
-.main-page-everline table th {
+.main-page-everline table.table th {
 	background-color: #e0e0e0;
 	color: #666666;
-	border: 1px solid white;
+	border: 3px solid white;
 	padding: 15px;
-	font-size: 15px;
+	font-size: 16px;
 	text-align: left;
 	font-family: 'Open Sans',sans-serif !important;
 }
 
-.main-page-everline table td {
+.main-page-everline table.table td {
 	background-color: #f1f0f0;
 	color: #666666;
-	border: 1px solid white;
+	border: 3px solid white;
 	padding: 15px;
-	font-size: 15px;
+	font-size: 16px;
 	text-align: left;
 	font-family: 'Open Sans',sans-serif !important;
 }
 
-.main-page-everline table td a.clean-btn {
+.main-page-everline table.table td a.clean-btn {
 	vertical-align: middle;
 	display: inline-block;
     line-height: 30px;
@@ -181,8 +181,9 @@ a.clean-btn{
 
 .main-page-everline .d-widgets .ev-btn-org,
 .main-page-everline .d-widgets .clean-btn {
-	float: right;
-	margin-top: 25px;
+	position: absolute;
+	top: 25px;
+	right: 20px;
 	width: 22%;
 }
 
@@ -344,11 +345,15 @@ margin-right:0;
 	border-collapse: separate;
 }
 
-.profile-widgets .table th{
+.profile-widgets .table th,
+.loan-schedule .table th,
+#schedule .table th{
 	padding-left: 20px;
 }
 
-.profile-widgets .table td{
+.profile-widgets .table td,
+.loan-schedule .table td,
+#schedule .table td{
 	vertical-align: middle;
 	padding-left: 20px;
 }
@@ -366,6 +371,10 @@ button.addDirector.ev-btn-org {
 
 #amount-past-due {
 	line-height: 20px;
+}
+
+.wizard-steps-wrapper .wizard-steps .progress-time {
+	font-weight: 400;
 }
 
 .settings-form h2 {
@@ -410,6 +419,7 @@ button.addDirector.ev-btn-org {
 .profile-widgets .account-activity-table td:last-child{
 	text-align: left;
 	padding-left: 20px;
+	color: #67c10b;
 }
 
 #profile-content .bank-account {
@@ -417,14 +427,146 @@ button.addDirector.ev-btn-org {
 }
 
 #profile-content .bank-account .clean-btn,
-#profile-content .bank-account .ev-btn-org{
+#profile-content .bank-account .ev-btn-org,
+#profile-content .row-fluid .clean-btn,
+#profile-content .row-fluid .ev-btn-org{
 	width: 240px;
+	margin-left: 20px;
 }
 
 .profile-widgets .account-activity-table td:first-child{
 	font-weight: normal;
 }
 
-.account-activity-table.table th {
+.account-activity-table.table th,
+#schedule p {
 	font-weight: 600;
+}
+
+#funds-transferred{
+	margin-top: 45px;
+	font-weight: 600;
+}
+
+.schedule-print-link {
+	margin-top: 0;
+}
+
+.form_field_container .show-more-wrapper.input-wrapper {
+	width: 70%
+}
+
+#loan-confirmation-email-address {
+	margin-top: 25px; 
+	margin-bottom: 20px; 
+	color: #767676;
+}
+
+.apply-loan-total {
+	font-weight: normal;
+}
+
+table.payment-schedule-table td:last-child {
+	color: #67c10b;
+}
+
+.apply-for-loan-div p {
+	margin-bottom: 30px;
+}
+
+.loan-schedule .sliders .summary {
+	margin: 0;
+}
+
+.loan-schedule-info dd {
+    margin-left: 165px;
+}
+
+#schedule .table-bordered {
+	border-radius: 0;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement {
+	padding-top: 7px;
+    padding-left: 15px;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement .eu-image.eu-fund-image{
+	height: 55px;
+}
+
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement .eu-image.eu-agreement-image{
+	height: 75px;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement h3.eu-agreement-header-text{
+    font-size: 22px;
+    font-weight: lighter;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement .eu-agreement-header{
+	padding-top: 10px;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement ol{
+	font-size: 13px;
+	padding: 0 90px 30px 40px;
+}
+
+.megila-inner.megila-inner-solvency1 h3,
+.megila-inner.megila-inner-solvency2 h3 {
+	color: #666666;
+}
+
+.megila-inner.megila-inner-solvency1 h4,
+.megila-inner.megila-inner-solvency2 h4 {
+	margin: -5px 0 15px 0;
+	font-weight: normal;
+}
+
+.megila .megila-inner {
+	padding: 10px 25px 20px 15px;
+}
+
+#Pre-Contract-Agreement .jspPane table.table-contract-agreement td {
+	font-size: 15px;
+}
+
+#Pre-Contract-Agreement .jspPane table.table-contract-agreement td:first-child {
+	font-weight: 600;
+}
+
+#Pre-Contract-Agreement .jspPane p,
+#CreditActAgreement .jspPane p {
+	margin-bottom: 10px;
+	font-size: 15px;
+} 
+
+#Pre-Contract-Agreement .jspPane table {
+	width: 100%;
+}
+
+#Pre-Contract-Agreement .jspPane h3 {
+	font-size: 22px;
+	margin-top: 0;
+} 
+
+#Pre-Contract-Agreement .jspPane h4 {
+	margin-bottom: 35px;
+	font-weight: 400;
+	font-size: 16.5px;
+} 
+
+.early-payment-form .click-wrap .title {
+	margin-left: 45px;
+}
+
+.early-payment-form .click-wrap .title b {
+	font-weight: 600;
+}
+
+.print-download {
+	margin-left: -20px;
+	padding-left: 0;	
 }
