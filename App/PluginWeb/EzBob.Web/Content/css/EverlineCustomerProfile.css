@@ -181,8 +181,9 @@ a.clean-btn{
 
 .main-page-everline .d-widgets .ev-btn-org,
 .main-page-everline .d-widgets .clean-btn {
-	float: right;
-	margin-top: 25px;
+	position: absolute;
+	top: 25px;
+	right: 20px;
 	width: 22%;
 }
 
