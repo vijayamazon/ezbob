@@ -474,7 +474,7 @@
 					int EmailOriginID = createuserresult.OriginID;
 
 					if (uiOrigin.CustomerOriginID != EmailOriginID)
-						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<br/><strong><a href=\"tel:{0}\">{0}</a></strong>", UiCustomerOrigin.Get().PhoneNumber));
+						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));
 					else {
 						throw new Exception(DbStrings.EmailAddressAlreadyExists);
 					}
