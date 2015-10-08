@@ -573,6 +573,9 @@ table.payment-schedule-table td:last-child {
 	padding-left: 0;	
 }
 
+.click-input-wrap span.title {
+	line-height: 29px;
+}
 /*table borders*/
 .main-page-everline table.table td:first-child {
     border-left: 0;
@@ -596,3 +599,8 @@ table.payment-schedule-table td:last-child {
  #colorbox #cboxClose {
      right:7px;
  }
+
+ .agreements-checkboxes span.sign-full-name {
+	display:inline-block;
+	margin-top: 20px;
+}
