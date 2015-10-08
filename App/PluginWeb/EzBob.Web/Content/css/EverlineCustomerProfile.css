@@ -247,6 +247,7 @@ a.ev-btn-org {
 }
 .automation-popup-content {
 margin-right:0;    
+margin-left:0;
 }
 .automation-button {
            margin-bottom: 40px;
@@ -290,6 +291,7 @@ margin-right:0;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 15px;
+    margin-top: 60px;
 }
 
 .automation-label {
@@ -584,3 +586,13 @@ table.payment-schedule-table td:last-child {
 .main-page-everline table.table th:last-child {
     border-right:0;
 }
+
+ .marketplace-group:last-child {
+    border:none;
+}
+ .store-btn-wrap {
+     display:none;
+ }
+ #colorbox #cboxClose {
+     right:7px;
+ }

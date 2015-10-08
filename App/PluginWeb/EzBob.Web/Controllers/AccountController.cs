@@ -1092,7 +1092,7 @@
 
 			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
 				CustomerId = customer.Id,
-				Amount = ToInt(GetAndRemoveCookie("loan_amount"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 24450 : 20000),
+				Amount = ToInt(GetAndRemoveCookie("loan_amount"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 24000 : 20000),
 				Term = ToInt(GetAndRemoveCookie("loan_period"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 12 : 9),
 				Created = DateTime.UtcNow,
 			}};
