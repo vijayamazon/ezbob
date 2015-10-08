@@ -2,12 +2,12 @@
 @model dynamic
 <script type="text/template" id="loan_editor_template">
 
-    <div class="row Container" style="width:1200px;">
+    <div class="row Container" style="width:1200px; margin-top:40px; margin-left:40px">
         <div class="col-sm-8">
             <form class="form-inline" role="form" id="form-reschedule" onsubmit="return false;">
 
                 <div class="row">
-                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1">Within loan period</label></h5>
+                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1" style="margin-left:15px;">Within loan period</label></h5>
                 </div>
 
                 <div class="row" id="within-div">
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="row">
-                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2">Outside loan payment arangment</label></h5>
+                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2" style="margin-left: 15px;">Outside loan payment arangment</label></h5>
                 </div>
 
                 <div class="row" style="margin-bottom: 15px;" id="outside-div">
