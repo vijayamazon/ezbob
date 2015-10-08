@@ -86,7 +86,7 @@
 
 	
 
-	<input name="__RequestVerificationToken" type="hidden" value="XR40NYmtlGaEHid6iexPkZGrBUANc13U86bZhmiSsqUuERDQFIq-uGpYmnbd-iMm3CFAS1dyOQhnp5Ueb2XoxFSzQjF4zxT4FWbLM1tz1olB6MpivtV685KKAV8z_33FaZf-bJtFT5iHuA-wntnIKyAPFcM60TB4U3X_CPhqNMj3WnpaF17zY2nEBp9iXtyk0" />
+	<input name="__RequestVerificationToken" type="hidden" value="2pUNLzYA-wNslWWOGxQIB8-e3kWNGdSZxEH5X_EbEREe0NAhD3yivFvLyCgJhuqRo-VnD6XxIOsUCfYzUSjT9ScPyW9-MEYkQ9ZIAGc7bgAoZeGTJkHxT7G_9xSXA_bmXqUF20z6uUkQ6qb5N_HkBWLnNkfifMW1QBYpSOp1o6mCurXYr7YfC_-gHM_tYAnq0" />
 
 	<div id="wrapper">
 
@@ -181,7 +181,7 @@
 									<div 
 		 class="form_field_container control-group"
 >
-			<label class="input-title"
+			<label class="input-title  long"
 				   					    for="customer"
 			>${customer_Text:=Name of Cardholder}</label>
 			<div class="input-wrapper">
@@ -223,7 +223,7 @@
 									<div 
 		 class="form_field_container control-group"
 >
-			<label class="input-title"
+			<label class="input-title  "
 				   					    for="card_no"
 			>${card_no_Text:=Card Number}</label>
 			<div class="input-wrapper">
@@ -244,7 +244,7 @@
 									<div 
 		 class="form_field_container control-group"
 >
-			<label class="input-title"
+			<label class="input-title  long"
 				   					    for="expiry"
 			>${expiry_Text:=Expiry Date (MM/YY)}</label>
 			<div class="input-wrapper">
@@ -265,7 +265,7 @@
 									<div 
 		 class="form_field_container control-group"
 >
-			<label class="input-title"
+			<label class="input-title  "
 				   					    for="cv2"
 			>${cv2_Text:=CV2 (security code)}</label>
 			<div class="input-wrapper">
@@ -399,35 +399,35 @@
 								</table>
 								<hr id="paypal_line">
 								}
-								<div id="secure">
-									<table border="0" width="100%" class="secure_table">
-										<tbody>
-											<tr>
-												<td style="text-align: center; width: 150px;">
-													<a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
-														<img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
-													</a>
-												</td>
-												<td valign="top" rowspan="2">
-													${wait_Text:=You have now entered a secure transaction environment. Your personal
-													information will be encrypted before transmission. Please check that the address
-													bar of your browser is visible and that the address begins with <b>https://</b>.
-													For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
-													incorporates the SECPay service.}
-												</td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">
-													Secure Payment<br>
-													<img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+								
 							</div>
-				</div>
+						</div>
 					</div>
+				</div>
+				<div id="secure" class="wizard-top">
+					<table border="0" width="100%" class="secure_table">
+						<tbody>
+							<tr>
+								<td style="text-align: center; width: 150px;">
+									<a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+										<img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
+									</a>
+								</td>
+								<td valign="top" rowspan="2">
+									${wait_Text:=You have now entered a secure transaction environment. Your personal
+									information will be encrypted before transmission. Please check that the address
+									bar of your browser is visible and that the address begins with <b>https://</b>.
+									For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+									incorporates the SECPay service.}
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;">
+									Secure Payment&nbsp;<img src="/Content/img/security-padlock.svg" alt="The secure padlock" width="20" height="25" style="vertical-align: bottom;height: 25px;">
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -440,59 +440,58 @@
 
 		</div>
 
-	<footer class="everline_footer">
-	    <div class="footer-eif">
-            <div class="footer-eif-inner">
-                <div class="cosme-images">
-                    <div class="cosme-images-wrapper">
-                        <img  width="93" height="62" src="/Content/css/images/cosme-pic.png" />
-                        <img class="eif-img"  width="93" height="62" src="/Content/css/images/eurpe-fund.png" />
-                      
-                    </div>
-                </div>
-                <div class="footer-eif-text">
-                    <div class="about-eif">About the European Investment Fund</div>
-                    <p>
-                        Everline provide financing that benefits from the support of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020). The Loan Guarantee Facility is managed and implemented by the European Investment Fund (EIF) <a class="find-out-more" href="#">Find out more</a>.
-                    </p>
-                </div>
-            </div>
-	    </div>
-        <div class="subfooter">
+	<footer class="everline_footer location-customer-everline">
+		<div class="footer-eif">
+			<div class="footer-eif-inner">
+				<div class="cosme-images">
+					<div class="cosme-images-wrapper">
+						<img src="/Content/css/images/cosme-pic.png" />
+						<img class="eif-img" src="/Content/css/images/europe-fund.png" />
+					</div>
+				</div>
+				<div class="footer-eif-text">
+					<div class="about-eif">About the European Investment Fund</div>
+					<p>
+						Everline provide financing that benefits from the support of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020). The Loan Guarantee Facility is managed and implemented by the European Investment Fund (EIF) <a class="find-out-more" href="#">Find out more</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="subfooter">
+			<div class="footer-navigator">
+				<div class="footer-navigator-inner">
+					<ul class="footer-navigator-list">
+						<li><a href="https://www.everline.com/intermediaries/" target="_blank">Intermediaries</a></li>
+                        <li class="hide-mobile" ><a href="https://www.everline.com/partners/" target="_blank" >Partners</a></li>
+						<li><a href="https://www.everline.com/legal/" target="_blank">Legal</a></li>
+						<li><a href="https://www.everline.com/terms-and-conditions/" target="_blank">Terms and Conditions</a></li>
+						<li><a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy and cookie policy</a></li>
+						<li><a href="https://www.everline.com/advice/" target="_blank">Advice</a></li>
+					</ul>
+					<div class="social-link-icons">
+						<ul>
+							<li><a class="facebook" href="https://www.facebook.com/everlineuk" target="_blank"></a></li>
+							<li><a class="tweeter" href="https://twitter.com/everline" target="_blank"></a></li>
+							<li><a class="linkedin" href="https://www.linkedin.com/company/everline" target="_blank"></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="footer-text">
+				<div class="privacy-and-cookie-policy">
+					<a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy and Cookie Policy</a>
+				</div>
 
+				<p>
+					EZBob Ltd. trading as Everline is authorized and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br />
+					EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
+					Registered Address: 36 Soho Square, London W1D 3QY<br />
+					All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
+					All loans are subject to status and approval. 18+ only.
+				</p>
 
-            <div class="footer-navigator">
-                <div class="footer-navigator-inner">
-                    <ul class="footer-navigator-list">
-                        <li><a href="#">Intermediaries</a></li>
-                        <li class="hide-mobile"><a href="#">Partners</a></li>
-                        <li><a href ="#">Legal</a></li>
-                        <li><a href="#">Terms and Conditions</a></li>
-                        <li><a href="#">Privacy and cookie policy</a></li>
-                        <li><a href="#">Advice</a></li>
-                    </ul>
-                    <div class="social-link-icons">
-                        
-                        <ul>
-                            <li><a class="facebook" href="#face"></a></li>
-                            <li><a class="tweeter" href="#face"></a></li>
-                            <li><a class="linkedin" href="#face" ></a></li> 
-                        </ul>
-                   
-                    </div>
-                </div>
-            </div>
-            <div class="footer-text">
-                <p>
-                    Orange Money Ltd. trading as Everline is authorized and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br />
-                    Orange Money Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
-                    Registered Address: 36 Soho Square, London W1D 3QY<br />
-                    All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
-                    All loans are subject to status and approval. 18+ only.
-                </p>
-                
-            </div>
-        </div>
+			</div>
+		</div>
 	</footer>
 
 

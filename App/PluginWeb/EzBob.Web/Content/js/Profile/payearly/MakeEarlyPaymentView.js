@@ -58,7 +58,8 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 	}, // serializeData
 
 	onRender: function() {
-		this.$el.find("li[rel]").setPopover('left');
+		this.$el.find('[name="paymentAmount"],[name="rolloverAmount"]').autoNumeric('init', EzBob.moneyFormat);
+		this.$el.find('li[rel]').setPopover('left');
 		EzBob.UiAction.registerView(this);
 		return this;
 	}, // onRender

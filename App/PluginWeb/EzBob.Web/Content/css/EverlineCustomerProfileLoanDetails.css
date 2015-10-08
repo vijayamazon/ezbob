@@ -73,7 +73,7 @@
 	width: 100%;
 	margin-top: 10px;
 	margin-bottom: 35px;
-	border-collapse: separate;
+	border-collapse: collapse;
 }
 
 .main-page-everline #get-cash .loan_apr_block {
@@ -416,6 +416,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 .loan-details-well td.value {
 	font-size: 15px;
 	color: #3a3a3a;
+    font-family: 'Open Sans',sans-serif;
 }
 
 #loan-summary,

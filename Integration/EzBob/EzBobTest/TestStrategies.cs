@@ -912,7 +912,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			const int loanID = 5519; //4182; // 1718; // 4439; //3534;
+			const int loanID = 5482; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -921,8 +921,8 @@
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 655m;
-			reModel.StopFutureInterest = false;
+			reModel.PaymentPerInterval = 0m;
+			reModel.StopFutureInterest = true;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			s1.Context.UserID = 357; //25852;
 			try {

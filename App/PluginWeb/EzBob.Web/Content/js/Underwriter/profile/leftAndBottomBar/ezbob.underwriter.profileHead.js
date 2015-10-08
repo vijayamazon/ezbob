@@ -2,17 +2,20 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
-	template: "#profile-head-template",
+	template: '#profile-head-template',
+
 	initialize: function(options) {
 		this.loanModel = options.loanModel;
 		this.personalModel = options.personalModel;
 		this.medalModel = options.medalModel;
 		this.parentView = options.parentView;
+
 		this.bindTo(this.model, "change sync", this.render, this);
 		this.bindTo(this.loanModel, "change sync", this.render, this);
 		this.bindTo(this.medalModel, "change sync", this.render, this);
 		this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
 	},
+
 	serializeData: function() {
 		return {
 			m: this.model.toJSON(),
@@ -20,14 +23,16 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			medal: this.medalModel.get('Score'),
 		};
 	},
+
 	events: {
 		'click a.collapseall': "collapseAll",
 		'click #OfferEditBtn': 'editOfferClick',
 		'click #RecalculateMedalBtn': 'recalculateMedalClick'
 	},
+
 	ui: {
-	    editOfferDiv: '.editOfferDiv',
-        automationOffer: '.ez-automation-offer'
+		editOfferDiv: '.editOfferDiv',
+		automationOffer: '.ez-automation-offer'
 	},
 
 	recalculateMedalClick: function() {
@@ -45,15 +50,12 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	},
 
 	editOfferClick: function() {
-	    var isHidden = this.ui.editOfferDiv.hasClass('hide');
-	    if (isHidden) {
-	        this.ui.editOfferDiv.removeClass('hide');
-	    } else {
-	        this.ui.editOfferDiv.addClass('hide');
-	    }
-	    
-	    $.cookie('editOfferVisible', isHidden);
-		$(".profile-content").css({ "margin-top": (this.$el.height() + 10) + "px" });
+		var isHidden = this.ui.editOfferDiv.hasClass('hide');
+
+		this.ui.editOfferDiv.toggleClass('hide', !isHidden);
+
+		$.cookie('editOfferVisible', isHidden);
+		$('.profile-content').css({ 'margin-top': (this.$el.height() + 10) + 'px', });
 	},
 
 	collapseAll: function() {
@@ -89,15 +91,33 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	},
 
 	onRender: function() {
-		var loanInfo = this.ui.editOfferDiv;
+		if (this.loanInfoView) {
+			this.loanInfoView.undelegateEvents();
+
+			var el = $(this.loanInfoView.el);
+			
+			el.removeData().unbind();
+
+			this.loanInfoView.remove();
+			Backbone.Marionette.ItemView.prototype.remove.call(this.loanInfoView);
+
+			el.empty();
+		}
 
 		this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
-			el: loanInfo,
+			el: this.ui.editOfferDiv,
 			model: this.loanModel,
 			personalInfo: this.personalModel,
 			parentView: this.parentView
 		});
+
+		// if (!this.loanInfoView.$el.hasClass('editOfferDiv')) {
+			// this.loanInfoView.$el = this.ui.editOfferDiv; // this.$el.find('.editOfferDiv');
+			// this.loanInfoView.delegateEvents();
+		// } // if
+
 		this.loanInfoView.render();
+
 		var controlButtons = this.$el.find("#controlButtons");
 		this.controlButtonsView = new EzBob.Underwriter.ControlButtonsView(
             {

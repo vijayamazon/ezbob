@@ -160,7 +160,7 @@ EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
 			},
 			period: {
 				min: this.model.get('isLoanSourceCOSME') ? 15 : 3,
-				max: this.model.get('isLoanSourceCOSME') ? this.model.get('approvedRepaymentPeriod') : 12,
+				max: this.model.get('approvedRepaymentPeriod'),
 				start: this.model.get('repaymentPeriod'),
 				step: 1,
 				caption: periodCaption,
