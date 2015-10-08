@@ -147,7 +147,7 @@
 				.Add("~/Content/css/lib/dropzone.css")
 
 				//custom css
-                .Add("~/Content/css/commonUnderwriter.css")
+                .Add("~/Content/css/common.css")
 				.Add("~/Content/css/underwriter.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/hmrc-manual-ui.css")
