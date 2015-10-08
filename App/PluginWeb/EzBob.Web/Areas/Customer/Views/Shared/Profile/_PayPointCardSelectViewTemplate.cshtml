@@ -20,9 +20,9 @@
 							<i class="fa fa-circle"></i>
 						</label>
 					</span>
-					<span class="title">Use debit card ending@( isEverline ? "" : ": ")</span>
+					<span class="title">Use debit card ending</span>
 
-					<div class="input-wrapper">
+					<div class="input-wrapper existing-card-data">
 						<select class="selectheight" ui-event-control-id=" select-debit-card:existing-card">
 							<% _.each(cards, function(c, i){%>
 							<option <% if (c.IsDefault) { print('selected="selected"'); } %> value="<%- c.Id %>"><%- c.CardNo || 'XXXX' %> Exp <%- EzBob.formatDateShortCard(c.ExpireDate) %></option>
@@ -40,7 +40,7 @@
 							<i class="fa fa-circle"></i>
 						</label>
 					</span>
-					<span class="title">Enter new debit card@( isEverline ? "" : ": ")</span>
+					<span class="title">Enter new debit card</span>
 				</label>
 			</div>
 

@@ -47,7 +47,7 @@
 			<%if(isPersonal) {%>
 			<div class="apr">APR = <%- apr %>%</div>
 			<%}%>
-			<div class="real-cost">@(isEverline ? "*Real loan cost" : "Real Loan Cost") = <%- EzBob.formatPercents(realInterestCost) %>@(isEverline?".":"")</div>
+			<div class="real-cost">*Real loan cost = <%- EzBob.formatPercents(realInterestCost) %>.</div>
 		</div>
 	</div>
 	

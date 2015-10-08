@@ -237,28 +237,32 @@ div.sign-full-name {
 .click-area,
 .minimum-payment,
 #single-loan-pay-options {
-	margin-left: 120px;
+	margin-left: 112px;
 }
 
-#pay-early-other-text,
 #rollover-select,
 #loan-select {
 	margin-left: -30px;
 }
 
-#rollover-other-text,
-#pay-early-other-text {
-	margin-left: -73px;
+#rollover-other-text{
+	margin-left: -78px;
 	width: 293px;
 }
 
+#pay-early-other-text {
+	margin-left: -78px;
+	width: 306px;
+}
+
+
 #single-loan-pay-options #rollover-other-text,
 #single-loan-pay-options #pay-early-other-text {
-	margin-left: -38px;
+	margin-left: -44px;
 }
 
 .click-area #rollover-other-text {
-	margin-left: -30px;
+	margin-left: -31px;
 }
 
 #cap2 {

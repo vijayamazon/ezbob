@@ -26,7 +26,7 @@
 	</div>
 
 	<h2 class="agreement-header">
-		<span>Review@(isEverline ? "" : " and accept") the agreement</span>
+		<span>Review the agreement</span>
 	</h2>
 	@if (isEverline) {
 		<p>Read this section very carefully, it will vary from lander to lender.</p>}
@@ -49,7 +49,7 @@
 					</div>
 					<ol>
 						<li>I Employ less than 10 persons.</li>
-						<li>Annual turnover is less then £ 1.5M.</li>
+						<li>Annual turnover is less then £1.5M.</li>
 						<li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
 						<li>Loan is for business purposes.</li>
 						<li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
@@ -72,7 +72,7 @@
 					</div>
 					<ol>
 						<li>I employ less than 250 people.</li>
-						<li>Annual turnover is less than £ 40M.</li>
+						<li>Annual turnover is less than £40M.</li>
 						<li>My company/business does not have a substantial focus on one or more of the following sectors: arms production and trading; human cloning; genetically modified organisms; tobacco or alcohol; gambling, pornography, internet piracy.</li>
 				<li>I acknowledge that this financing is made possible through the support of the EU guarantee for Debt Financing with the financial backing of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020).</li>
 				<li>The loan will be used for funding (A) investment in tangible and/or intangible assets; and/or (B) working capital.</li>
@@ -178,12 +178,12 @@
 		</div>
 
 		@EzForm.WizardButton(new List<EzButtonModel>{
-			new EzButtonModel(null, isEverline ? "Next" : "Continue",
+			new EzButtonModel(null, "Next",
 				cls: "btn-continue button btn-green ev-btn-org submit",
 				uiEventControlID: "loan-legal:continue",
 				buttonType: EzButtonType.link,
 				href:"link"),
-			new EzButtonModel(null, isEverline ? "Cancel" : "Back",
+			new EzButtonModel(null, "Cancel",
 				cls: "btn-back button btn-grey clean-btn",
 				uiEventControlID: "loan-legal:back",
 				buttonType: EzButtonType.link,
@@ -290,6 +290,6 @@
 @helper PrintDownload() {
 	<div class="print-download">
 		<a href="#" target="_blank"  class="pull-left download pdf-link clean-btn short-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
-		<a href="#" style="margin-left: 10px;" class="pull-left print print-link clean-btn short-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
+		<a href="#" style="margin-left: 10px;" class="pull-right print print-link clean-btn short-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
 	</div>  
 }

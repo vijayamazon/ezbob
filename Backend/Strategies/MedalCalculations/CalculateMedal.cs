@@ -193,8 +193,8 @@
 
 			string msg = string.Format(
 				"calculation time (UTC): {12}\n\n" +
-				"main:         medal:{0} medal type:{1} score:{2} normalized score:{3} offered amount:£ {4} error:{5} \n" +
-				"verification: medal:{6} medal type:{7} score:{8} normalized score:{9} offered amount:£ {10} error:{11}",
+				"main:         medal:{0} medal type:{1} score:{2} normalized score:{3} offered amount:£{4} error:{5} \n" +
+				"verification: medal:{6} medal type:{7} score:{8} normalized score:{9} offered amount:£{10} error:{11}",
 
 				result1.MedalClassification.Stringify(10),
 				result1.MedalType.ToString().PadRight(30),
