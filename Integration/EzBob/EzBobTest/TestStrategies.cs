@@ -921,8 +921,8 @@
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 655m;
-			reModel.StopFutureInterest = false;
+			reModel.PaymentPerInterval = 0m;
+			reModel.StopFutureInterest = true;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			s1.Context.UserID = 357; //25852;
 			try {
