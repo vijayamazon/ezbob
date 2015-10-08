@@ -209,6 +209,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		        AmountPerInterval: amount,
 		        rescheduleIn: 'false',
 		        reschedulingDate: this.$el.find('#within-calendar-from').val(),
+		        stopFutureInterest : $('#outside-stop-future-interest').attr('checked') === 'checked',
 		        save: 'false'
 		    }
 		    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParams);
@@ -605,7 +606,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        var options = this.model.get('Options');
 	        if (options.AutoPayment === false) {
 	            if (options.StopAutoChargeDate != null) {
-	                this.$el.find('#stop-charges-date').text("stopped from " + EzBob.formatDateWithoutTime(options.StopAutoChargeDate));
+	                this.$el.find('#stop-charges-date').text("stopped from " + EzBob.formatDateWithoutTime(options.StopAutoChargeDate)).css({"margin-left":"5px"});
 	            } else {
 	                this.$el.find('#stop-charges-date').text("permanently stoped.");
 	            }
