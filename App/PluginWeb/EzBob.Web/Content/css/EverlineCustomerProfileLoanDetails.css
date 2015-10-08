@@ -310,12 +310,12 @@ body .apply-header-approved b {
 
 .early-payment-form .form_buttons_container {
 	margin-bottom: 50px;
-	margin-right: 30px;
+	
 }
 
 .main-page-everline #get-cash .form-horizontal.early-payment-form {
-	padding: 25px;
-	padding-left: 40px;
+	padding: 25px 40px;
+	
 }
 
 #rollover-select, #loan-select {
@@ -326,12 +326,16 @@ body .apply-header-approved b {
 .early-payment-form #rollover-select {
 	width: 80%;
 }
-
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+    cursor:default;
+}
 #get-cash .radio .title,
 #get-cash .checkbox .title {
-	font-weight: 600;
+	font-weight: normal;
 }
-
+.early-payment-form .radio b {
+    margin-left:33px;
+}
 input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
    background-color: #eeeeee !important;
 }
