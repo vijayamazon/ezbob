@@ -30,7 +30,11 @@
 		} // GetTrusteSeal
 
 		public static string GetVeriSignSeal(dynamic viewBag) {
-			return string.Format(VeriSignSealFormat, GetOriginFromViewBag(viewBag).GetOrigin());
+			string customerSite = GetOriginFromViewBag(viewBag).CustomerSite;
+			if (customerSite != null) {
+				customerSite = customerSite.Replace("https://", "").Replace(":44300", "");
+			}
+			return string.Format(VeriSignSealFormat, customerSite);
 		} // GetVeriSignSeal
 
 		public static string GetSecuritySeals(dynamic viewBag) {
@@ -67,7 +71,7 @@
 		alt=""Click to Verify - This site has chosen an SSL Certificate to improve Web site security""
 		width=""100""
 		height=""72""
-		src=""https://seal.verisign.com/getseal?at=0&sealid=2&dn=test.{0}.com&lang=en&tpt=transparent""
+		src=""https://seal.verisign.com/getseal?at=0&sealid=2&dn={0}&lang=en&tpt=transparent""
 		name=""seal""
 	>
 </a>";
