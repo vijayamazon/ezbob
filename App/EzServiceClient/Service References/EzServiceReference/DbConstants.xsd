@@ -24,6 +24,7 @@
   <xs:element name="RepaymentIntervalTypes" nillable="true" type="tns:RepaymentIntervalTypes" />
   <xs:simpleType name="AlibabaBusinessType">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="APPLICATION_WS_3" />
       <xs:enumeration value="APPLICATION" />
       <xs:enumeration value="APPLICATION_REVIEW" />
       <xs:enumeration value="DRAW_REQUEST" />

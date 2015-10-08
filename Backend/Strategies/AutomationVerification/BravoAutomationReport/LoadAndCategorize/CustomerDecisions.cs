@@ -62,6 +62,8 @@
 				this.cd = cd;
 			} // constructor
 
+			public bool Exists { get { return this.cd.AutoDecisions.Count > 0; } }
+
 			public AutoDecision First { get { return this.cd.AutoDecisions[0]; } }
 
 			public AutoDecision Current { get { return this.cd.CurrentAutoDecision; } }
@@ -142,7 +144,7 @@
 			if (doNext) { // Medal area
 				var verification = new AutomationCalculator.MedalCalculation.MedalChooser(DB, Log);
 				medal = verification.GetMedal(CustomerID, decisionTime);
-				medal.SaveToDb(this.tag, DB, Log);
+				medal.SaveToDb(cashRequestID, this.tag, DB, Log);
 			} // if; Medal area
 
 			int offeredCreditLine = medal == null

@@ -8,7 +8,9 @@ using SalesForceLib;
 using SalesForceLib.Models;
 
 namespace SalesForceMigrationTool {
-    class Program {
+	using System.Collections.Generic;
+
+	class Program {
         public static ISalesForceAppClient SfClient = new SalesForceApiClient("techapi@ezbob.com", "Ezca$h123", "qCgy7jIz8PwQtIn3bwxuBv9h", "Production");
         private static ILog Log = LogManager.GetLogger(typeof (Program));
         public static AConnection DB = new SqlConnection(new SafeILog(Log));
@@ -23,14 +25,17 @@ namespace SalesForceMigrationTool {
             //MigrateContact(1189);
             //MigrateContact(1227);
 
-			SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
-			sfReruner.Rerun();
+			//SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
+			//sfReruner.Rerun();
 
 			//SalesForceAddMissingLeadsAccounts addMissingLeadsAccounts = new SalesForceAddMissingLeadsAccounts(SfClient, DB);
 			//foreach (var customerID in SalesForceAddMissingLeadsAccounts.missingCustomers) {
 			//	addMissingLeadsAccounts.AddLead(customerID);
 			//	Thread.Sleep(200);
 			//}
+
+			SalesReport salesReport = new SalesReport(DB, SfClient);
+			salesReport.Execute(new DateTime(2015, 07, 01), new DateTime(2015, 08, 01));
 			Log.Info("End SF Migration tool");
         }
 

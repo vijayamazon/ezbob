@@ -1,97 +1,144 @@
 ﻿@using System
 @using System.Collections.Generic
 @using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model EzBob.Web.Models.LogOnModel
 
 @{
 	UiCustomerOrigin.Set(ViewBag);
 
 	ViewBag.Title = " Login to your " + ViewBag.CustomerOrigin.Name + " Account";
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
 }
 
 @section head
 {
-    <meta name="description" content="@string.Format("Login to your " + ViewBag.CustomerOrigin.Name + " online business loan account.")" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="@string.Format("Login to your " + ViewBag.CustomerOrigin.Name + " online business loan account.")" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 }
 
 @section css{
+   @if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline)
+   {
     @BundleHelper.RenderLoginCss()
+
+    }
+
 }
 
 <div class="row-fluid">
-    <div class="inner">
-        <div class="loginTemplate"></div>
-    </div>
+	<div class="inner">
+		<div class="wizard-wrap">
+			<div class="wizard-inner-wrap">
+				<div class="loginTemplate"></div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script id="customerlogin-template" type="text/template">
-    @using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
-    {
-        <section id="content">
-            <div class="notifications"></div>
-            <section class="pages">
-                <h1>Login</h1>
+	@using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" })) {
+		<section id="content">
+			<div class="notifications"></div>
+			<section class="pages">
+				<h1>Login</h1>
                 <h2>Welcome back!</h2>
-                @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
-                @Html.TextBoxFor(x => x.PromotionName, new { type = "hidden" })
-                @Html.TextBoxFor(x => x.PromotionPageVisitTime, new { type = "hidden" })
+				@Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
+				@Html.TextBoxFor(x => x.PromotionName, new { type = "hidden" })
+				@Html.TextBoxFor(x => x.PromotionPageVisitTime, new { type = "hidden" })
 
+				@{
+		var oForgottenAttr = new Dictionary<string, Object>();
+		oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
+				 
+		var oSignupRouteValues = new RouteValueDictionary();
+		oSignupRouteValues["Area"] = "Customer";
+
+		var oSignupAttr = new Dictionary<string, Object>();
+		oSignupAttr["ui-event-control-id"] = "login:signup";
+				}
+               
+				<p class="forgot-signup-wrapper" style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
+
+
+				@EzForm.InputTextWizard(new EzInputBuilder("UserName", "Email address",
+					type: "email",
+					cls: "form_field login-form-user-name",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "login:user_name",
+					tabIndex: 1,
+					autoCorrect: "off",
+					autoCapitalize: "off",
+					maxLength: 128), origin: origin)
+
+				@EzForm.InputTextWizard(new EzInputBuilder("Password", "Password",
+					type: "password",
+					cls: "form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "login:password",
+					tabIndex: 2), origin: origin)
                 @{
-                    var oForgottenAttr = new Dictionary<string, Object>();
-                    oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
-
-                    var oSignupRouteValues = new RouteValueDictionary();
-                    oSignupRouteValues["Area"] = "Customer";
-
-                    var oSignupAttr = new Dictionary<string, Object>();
-                    oSignupAttr["ui-event-control-id"] = "login:signup";
+                  
+     var specialAttributes = new Dictionary<string, string>();
+     specialAttributes["data-val"] = "true";
+     specialAttributes["data-val-required"] = "The Remember me? field is required.";
+     EzInputBuilder checkbox1 = new EzInputBuilder("RememberMe", "Remember me",
+                value: @Model.RememberMe.ToString().ToLowerInvariant(),
+                type: "checkbox",
+                cls: "",
+                isRequired: false,
+                statusIcon: false,
+                specialAttributes: specialAttributes,
+                labelClass: "soft-label",
+                uiEventControlID: "login:remember_me");
+                  
+                List<EzInputBuilder> checkboxesList = new List<EzInputBuilder> {
+		        checkbox1
+		         };
+                 
+                var checkboxes = new EzClickInputModel(
+                    name: "RememberMe",
+                    caption: "",
+                    errorImgClass: "",
+                    inputWrapperClass: "",
+                    containerClass: "",
+                    isRequired: false,
+                    statusIcon: false,
+                    inputButtons: checkboxesList);
                 }
-                <p style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
 
-                <div class="form_field_container control-group">
-                    <div class="controls">
-                        <label class="attardi-input">
-                            <span>Email address</span>
-                            <input type="email" name="UserName" id="UserName" class="form_field login-form-user-name" autocorrect="off" autocapitalize="off" value="" ui-event-control-id="login:user_name" maxlength="128" />
-                            <img id="UserNameImage" class="field_status required"/>
-                        </label>
-                    </div>
-                </div>
+                @EzForm.ClickableInputWizard(checkboxes, origin: origin)
+			
+				@EzForm.WizardButton(new EzButtonModel("loginSubmit", "Login", 
+					"button btn-green login-btn disabled ev-btn-org", 
+					"login:submit", 
+					buttonType: EzButtonType.submit),
+					origin: origin)
+                @{ oForgottenAttr["class"] = "forgotpass"; }
 
-                @EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:password")
-
-                <div class="form_field_container">
-                    <label class="checkbox" for="RememberMe" style="font-weight: normal">
-                        Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe.ToString().ToLowerInvariant()" ui-event-control-id="login:remember_me" />
-                    </label>
-                </div>
-                <div class="form_buttons_container">
-                    <div class="attardi-button">
-                        <input type="submit" value="Login" class="button btn-green login-btn disabled" id="loginSubmit" ui-event-control-id="login:submit" />
-                    </div>
-                </div>
-            </section>
-        </section>
-        <aside class="customer-sidebar login">
-            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData));}
-        </aside>
-        <div class="clear"></div>
-        <div id="DontHaveAccount">
-        </div>
-    }
+                   @Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr)
+			</section>
+		</section>
+		<aside class="customer-sidebar login">
+			@*@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData));}*@
+		</aside>
+		<div class="clear"></div>
+	}
 
 </script>
 
 @section Js{
-    @BundleHelper.RenderLoginJs()
+	@BundleHelper.RenderLoginJs()
 
 	<script type="text/javascript">
-	    $(function () {
-	        var loginPage = new EzBob.CustomerLoginView({ el: $('.loginTemplate') });
-	        loginPage.render();
+		$(function () {
+			var loginPage = new EzBob.CustomerLoginView({ el: $('.loginTemplate') });
+			loginPage.render();
 
-	        var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-	    });
-    </script>
+			var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+		});
+	</script>
 }

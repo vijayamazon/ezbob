@@ -60,7 +60,7 @@ EzBob.BindingConverters.autonumericFormat = function(format) {
 		if (direction === 'ModelToView')
 			return EzBob.formatPoundsFormat(value, format);
 		else
-			return $.autoNumeric.Strip($("<input/>").val(value), format);
+			return $('<input/>').val(value).autoNumeric('init', format).autoNumeric('get');
 	};
 };
 
@@ -132,4 +132,4 @@ Backbone.Model.prototype.safeFetch = function() {
 	return {
 		done: function() { }
 	};
-};
+}; 

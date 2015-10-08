@@ -49,6 +49,11 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Alibaba\AlibabaBuyer.cs" />
+    <Compile Include="Alibaba\AlibabaContract.cs" />
+    <Compile Include="Alibaba\AlibabaContractItem.cs" />
+    <Compile Include="Alibaba\AlibabaSeller.cs" />
+    <Compile Include="Alibaba\AlibabaSellerBank.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
@@ -97,6 +102,8 @@
     <Compile Include="CallCredit\CallCreditData\CallCreditEmail.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditTelephone.cs" />
     <Compile Include="CampaignSourceRef.cs" />
+    <Compile Include="CollectionSnailMailTemplate.cs" />
+    <Compile Include="CollectionSmsTemplate.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
     <Compile Include="CreditSafe\CreditSafeBaseData.cs" />
@@ -198,6 +205,7 @@
     <Compile Include="NewLoan\NL_LoanSchedules.cs" />
     <Compile Include="NewLoan\NL_LoanScheduleStatuses.cs" />
     <Compile Include="NewLoan\NL_LoanStatuses.cs" />
+    <Compile Include="NewLoan\NL_OfferFees.cs" />
     <Compile Include="NewLoan\NL_PaymentStatuses.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />

@@ -198,12 +198,16 @@
 						experianError = oExperianData.Error;
 
 				    if (!oExperianData.CacheHit) {
-				        if (this.isLimited) {
-                            ServiceLogCreditSafeLtd LtdStra = new ServiceLogCreditSafeLtd(this.experianRefNum,this.customerId);
-                            LtdStra.Execute();
-				        } else {
-				            ServiceLogCreditSafeNonLtd NonLtdStra = new ServiceLogCreditSafeNonLtd(this.customerId);
-                            NonLtdStra.Execute();
+				        try {
+				            if (this.isLimited) {
+				                ServiceLogCreditSafeLtd LtdStra = new ServiceLogCreditSafeLtd(this.experianRefNum, this.customerId);
+				                LtdStra.Execute();
+				            } else {
+				                ServiceLogCreditSafeNonLtd NonLtdStra = new ServiceLogCreditSafeNonLtd(this.customerId);
+				                NonLtdStra.Execute();
+				            }
+				        } catch (Exception e) {
+				            Log.Error("CreditSafeLtd/NonLtd NonCachHit failed for unexpected reason", e);
 				        }
 				    }
 				} // if

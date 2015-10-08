@@ -563,11 +563,11 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateLoanSchedule_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateLoanSchedule" />
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateLoanSchedule_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateLoanScheduleResponse" />
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MarkSessionEnded_InputMessage">
     <wsdl:part name="parameters" element="tns:MarkSessionEnded" />
@@ -899,6 +899,12 @@
   <wsdl:message name="IEzService_RequalifyCustomer_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequalifyCustomerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SaleContract_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaleContract" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaleContract_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaleContractResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_DataSharing_InputMessage">
     <wsdl:part name="parameters" element="tns:DataSharing" />
   </wsdl:message>
@@ -958,6 +964,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_PacnetDelivery_OutputMessage">
     <wsdl:part name="parameters" element="tns:PacnetDeliveryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillDailyLoanStats_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillDailyLoanStats" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillDailyLoanStats_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillDailyLoanStatsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1024,6 +1036,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLinkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillMedalForAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillMedalForAll" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillMedalForAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillMedalForAllResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillNonLimitedCompanies_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillNonLimitedCompanies" />
@@ -1463,12 +1481,6 @@
   <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1788,9 +1800,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CalculateLoanSchedule">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule" message="tns:IEzService_CalculateLoanSchedule_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse" message="tns:IEzService_CalculateLoanSchedule_OutputMessage" />
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
@@ -2012,6 +2024,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomer" message="tns:IEzService_RequalifyCustomer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomerResponse" message="tns:IEzService_RequalifyCustomer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SaleContract">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaleContract" message="tns:IEzService_SaleContract_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaleContractResponse" message="tns:IEzService_SaleContract_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DataSharing" message="tns:IEzService_DataSharing_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/DataSharingResponse" message="tns:IEzService_DataSharing_OutputMessage" />
@@ -2051,6 +2067,10 @@
     <wsdl:operation name="PacnetDelivery">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PacnetDelivery" message="tns:IEzService_PacnetDelivery_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PacnetDeliveryResponse" message="tns:IEzService_PacnetDelivery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillDailyLoanStats">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillDailyLoanStats" message="tns:IEzService_BackfillDailyLoanStats_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillDailyLoanStatsResponse" message="tns:IEzService_BackfillDailyLoanStats_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -2095,6 +2115,10 @@
     <wsdl:operation name="BackfillLandRegistry2PropertyLink">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" message="tns:IEzService_BackfillLandRegistry2PropertyLink_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLinkResponse" message="tns:IEzService_BackfillLandRegistry2PropertyLink_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillMedalForAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillMedalForAll" message="tns:IEzService_BackfillMedalForAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillMedalForAllResponse" message="tns:IEzService_BackfillMedalForAll_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillNonLimitedCompanies">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillNonLimitedCompanies" message="tns:IEzService_BackfillNonLimitedCompanies_InputMessage" />
@@ -2387,10 +2411,6 @@
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -3113,8 +3133,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CalculateLoanSchedule">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule" style="document" />
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3617,6 +3637,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SaleContract">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaleContract" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <soap12:operation soapAction="http://tempuri.org/IEzService/DataSharing" style="document" />
       <wsdl:input>
@@ -3700,6 +3729,15 @@
     </wsdl:operation>
     <wsdl:operation name="PacnetDelivery">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PacnetDelivery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillDailyLoanStats">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillDailyLoanStats" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3799,6 +3837,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillLandRegistry2PropertyLink">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillMedalForAll">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillMedalForAll" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4463,32 +4510,23 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://elinar-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ELINAR-PC\elinar</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://elinar-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ELINAR-PC\elinar</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

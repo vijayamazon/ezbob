@@ -64,6 +64,9 @@
 			var sp = new SpSaveResults(this.tag, DB, Log);
 
 			foreach (CustomerDecisions cd in this.customerDecisions.Values) {
+				if (!cd.Auto.Exists)
+					continue;
+
 				sp.ItemsToStore.Add(new SpSaveResults.Item {
 					AutoApproveTrailUniqueID = cd.Auto.First.TrailUniqueID,
 					AutoDecisionID = cd.Auto.First.AutoDecisionID,
@@ -106,7 +109,12 @@
 			this.pc = new ProgressCounter("{0} customers processed.", Log, 10);
 
 			foreach (CustomerDecisions cd in this.customerDecisions.Values) {
-				cd.RunAutomation(EndTime, this.allNonAffirmativeTraces);
+				try {
+					cd.RunAutomation(EndTime, this.allNonAffirmativeTraces);
+				} catch (Exception e) {
+					Log.Alert(e, "Auto decision process failed for customer {0}.", cd.CustomerID);
+				} // try
+
 				this.pc++;
 			} // for each
 
@@ -123,6 +131,9 @@
 			var prc = new ProgressCounter("{0} customers processed.", Log, 25);
 
 			foreach (CustomerDecisions cd in this.customerDecisions.Values) {
+				if (!cd.Auto.Exists)
+					continue;
+
 				int column = 1;
 
 				column = sheet.SetCellValue(row, column, cd.CustomerID);

@@ -1,0 +1,21 @@
+namespace TeamCityData
+{
+    using TeamCityModels.ActionTypes;
+
+    public interface ITeamCityData
+    {
+        void Connect(string userName, string password);
+        void ConnectAsGuest();
+        bool Authenticate();
+
+        IBuilds Builds { get; }
+        IBuildConfigs BuildConfigs { get; }
+        IProjects Projects { get; }
+        IServerInformation ServerInformation { get; }
+        IUsers Users { get; }
+        IAgents Agents { get; }
+        IVcsRoots VcsRoots { get; }
+        IChanges Changes { get; }
+        IBuildArtifacts Artifacts { get; }
+    }
+}

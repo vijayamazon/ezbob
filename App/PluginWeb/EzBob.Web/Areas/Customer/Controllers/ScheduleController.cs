@@ -52,7 +52,7 @@
                 amount = (int)Math.Floor(_customer.CreditSum.Value);
 
             if (amount > _customer.CreditSum.Value) {
-                Log.WarnFormat("Attempt to calculate schedule for ammount({0}) bigger than credit sum value({1})", amount, _customer.CreditSum);
+                Log.WarnFormat("Attempt to calculate schedule for amount({0}) bigger than credit sum value({1})", amount, _customer.CreditSum);
                 amount = (int)Math.Floor(_customer.CreditSum.Value);
             } // if
 
@@ -62,10 +62,14 @@
                 var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
                 if (oDBHelper != null) {
-                    cr.RepaymentPeriod = repaymentPeriod;
+                
                     cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
                 } // if
             } // if
+
+			if (cr.IsCustomerRepaymentPeriodSelectionAllowed) {
+				cr.RepaymentPeriod = repaymentPeriod;
+			}
 
             var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
 

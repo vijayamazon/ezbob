@@ -42,6 +42,15 @@ a.ezbob_logo_online { background: url(images/ezbob_logo.png) 0px 0px no-repeat; 
 a.ezbob_logo_offline { background: url(images/ezbob_logo_cartless.png) 0px 0px no-repeat; }
 
 #login_button{position:absolute; top:5px; right:10px;}
+label.soft-label{
+     display: inline-block;
+    width: 90%;
+    vertical-align: top; 
+    font-weight: normal
+}
+.forgotpass {
+    display:none;
+}
 /*-- header navigation --*/
 #nav_container{position:relative;}
 nav{ position:absolute; right:0; top:37px;}
@@ -97,7 +106,7 @@ box-shadow: 0 0 10px #ccc;
 
 #content {
     float:left;
-    width:62%;
+    width:90%;
     line-height:1.8em;
 }
 
@@ -272,10 +281,13 @@ div.add-director-container { position: relative; width: 96%; }
 
 
 /*----table for payment schedule-----*/
-table.table{width:100%;border-left:1px #ccc solid; border-top:1px #ccc solid;
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
+table.table{
+	width:100%;
+	border-left:1px #ccc solid; 
+	border-top:1px #ccc solid;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     margin:0 0 20px 0;
 }
 table.table th{
@@ -292,12 +304,17 @@ table.table th{
     font-size: 16px;
 }
 table.table th, table.table td {
-    padding:15px 5px; text-align:center; border-right:1px #ccc solid; border-bottom:1px #ccc solid;
+    padding: 15px 20px;
+	text-align:center;
+	border-right:1px #ccc solid; 
+	border-bottom:1px #ccc solid;    
+	line-height: 35px;
 }
 table.table td {
     background:#fff;
     font-size:16px; 
-    font-family: "Titillium Web Light";
+    font-family: "Titillium Web Regular";
+	white-space: nowrap;
 }
 table.table td span.label{color:#666;}
 table.table tbody tr:hover{background:#f1f1f1;}
@@ -548,7 +565,9 @@ blockquote {
 #wizard .pages .simple-well, #profile-content .simple-well {
     margin-bottom: 20px;
 }
-
+.bold-text-ez {
+	font-weight:bold;
+}
 .thankyou-loan {
     width: 290px; /*456px;*/
     height: 100px; /*191px;*/
@@ -608,7 +627,16 @@ blockquote {
      top: 5px;
      right: 28px;
 }
-
+.close-terms {
+    display:none;
+}
+.tutor-image {
+    display:block;
+    margin:0 auto;
+}
+.hr-market {
+    display:none;
+}
 .screenshots-container .tutorial-arrow {
     background: url(../img/arrow-right.png);
     width: 40px;
@@ -666,4 +694,88 @@ blockquote {
 
 .AmazonForm{
     padding-top: 1.6em;
+}
+
+
+.wizard-top {
+    box-sizing: border-box;
+    max-width: 1000px;
+    padding: 0;
+    background: transparent;
+    margin: 0 auto;
+}
+
+.security-icons .item {
+		height: 72px;
+		float: right;
+        margin-right: 10px;
+		display: inline-block;
+}
+
+	.security-icons .item .verisign {
+		width: 100px;
+		height: 72px
+	}
+
+	.security-icons .item .verisign img{
+		height: 72px;
+	}
+
+	.security-icons .item .truste img {
+		height: 40px;
+		margin-top: 17px;
+	}
+
+	.security-icons .item .lock-icon {
+		display: none;
+	}
+
+.underwriter-only{
+	display: none;
+}
+.button.form_field_right_side_signup_phone#switchToCaptcha {
+    color:white;
+    text-align: center;
+}
+/* commercial */
+.consent-dialog .commercial-wrap .commercial-title {
+    page-break-before: always;
+}
+.consent-dialog .commercial-wrap  h1, .consent-dialog .commercial-wrap  h2{
+    color:black;
+    font-weight:bold !important;
+    margin-top:15px;
+    text-align: center;
+}
+.consent-dialog .commercial-wrap  p.underlined {
+    font: 14pt Calibri;
+     font-weight: bold; 
+     text-decoration:underline
+}
+.consent-dialog .commercial-wrap  h1{
+    font: 18pt Calibri;
+}
+
+.commercial-wrap  .font16{
+    font: 16pt Calibri;
+}
+.consent-dialog .commercial-wrap  h2 {
+    font: 14pt Calibri;
+    margin: 10px 0;
+    text-align:left;
+}
+.commercial-wrap .align-left {
+    text-align: left;
+}
+.commercial-wrap .align-center {
+    text-align: center;
+}
+
+.commercial-wrap .widthbrake {
+    page-break-before: always;
+}
+
+.select-card-area .fa.fa-circle,
+.select-card-area .fa.fa-circle {
+	display: none;
 }

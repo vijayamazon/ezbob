@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
@@ -39,6 +42,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesForceAddMissingLeadsAccounts.cs" />
     <Compile Include="SalesForceReruner.cs" />
+    <Compile Include="SalesReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -69,6 +74,10 @@
     <ProjectReference Include="..\..\DbConnection\DbConnection.csproj">
       <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
       <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ExcelExt\ExcelExt.csproj">
+      <Project>{a6cc0a11-823d-4193-b135-7b8e9f8796c1}</Project>
+      <Name>ExcelExt</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EzEnvironment\EzEnvironment.csproj">
       <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>

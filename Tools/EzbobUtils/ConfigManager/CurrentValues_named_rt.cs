@@ -100,6 +100,14 @@
 			get { return this[Variables.ReportsSite]; }
 		}
 
+		public virtual VariableValue ReschedulingDebugMail {
+			get { return this[Variables.ReschedulingDebugMail]; }
+		}
+
+		public virtual VariableValue ReschedulingDebugMailAddress {
+			get { return this[Variables.ReschedulingDebugMailAddress]; }
+		}
+
 		public virtual VariableValue RolloverCharge {
 			get { return this[Variables.RolloverCharge]; }
 		}

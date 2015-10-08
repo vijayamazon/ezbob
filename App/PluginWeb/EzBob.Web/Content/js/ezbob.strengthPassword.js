@@ -156,9 +156,15 @@ EzBob.StrengthPasswordView = Backbone.View.extend({
 			this.$el.find('#message').hide();
 		}
 		else {
-			this.$el.find('#message').css({ color: color });
-			this.$el.find('#message').text((this.model.get('showTitle') ? this.model.get('message') : '') + status);
-			this.$el.find('#message').show();
+		    if (EzBob.Config.Origin === 'everline') {
+		        this.$el.find('.error-wrap').html('<label id="message" class="error" >'+(this.model.get('showTitle') ? this.model.get('message') : '') + status + "</label>");
+
+		    } else {
+		        this.$el.find('#message').css({ color: color });
+		        this.$el.find('#message').text((this.model.get('showTitle') ? this.model.get('message') : '') + status);
+		        this.$el.find('#message').show();
+		    }
+		
 		}
 
 		return this;

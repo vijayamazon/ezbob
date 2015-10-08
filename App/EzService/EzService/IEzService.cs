@@ -55,6 +55,9 @@
 		ActionMetaData BackfillLandRegistry2PropertyLink();
 
 		[OperationContract]
+		ActionMetaData BackfillMedalForAll();
+
+		[OperationContract]
 		ActionMetaData BackfillNonLimitedCompanies();
 
 		[OperationContract]
@@ -73,7 +76,7 @@
 		ActionMetaData CaisUpdate(int userId, int caisId);
 
 		[OperationContract]
-		ActionMetaData CalculateMedal(int underwriterId, int customerId);
+		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID);
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
@@ -128,7 +131,7 @@
 		ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
 
 		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType,bool isBankStatement);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
@@ -523,16 +526,19 @@
 		ActionMetaData EnlistLottery(int customerID);
 
 		[OperationContract]
-		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID);
+		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(string customerRefNum, long aliMemberID);
 
 		[OperationContract]
-		ActionMetaData RequalifyCustomer(int customerID, long aliMemberID);
+		ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID);
 
-		[OperationContract]
-		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+	    [OperationContract]
+        AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto);
 
-		[OperationContract]
-		ActionMetaData SaveApiCall(ApiCallData data);
+        [OperationContract]
+        ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+
+        [OperationContract]
+        ActionMetaData SaveApiCall(ApiCallData data);
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
@@ -556,5 +562,8 @@
 
 		[OperationContract]
 		ActionMetaData PacnetDelivery(int underwriterId, decimal amount);
+
+		[OperationContract]
+		ActionMetaData BackfillDailyLoanStats();
 	} // interface IEzService
 } // namespace EzService

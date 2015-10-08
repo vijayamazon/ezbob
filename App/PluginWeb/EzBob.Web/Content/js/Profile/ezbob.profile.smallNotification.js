@@ -58,12 +58,12 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         }
 
         if (state == 'apply' && hasLoans && !wasSetAccordingToApplyState) {
-            message = '<em>Note:</em> Our previous offer to you has expired. Click Request Cash.';
+            message = '<em>Note</em> Our previous offer to you has expired. Click Request Cash.';
             cls = 'green';
         }
 
         if (state == 'apply' && !hasLoans) {
-            message = '<em>Note:</em> Our previous offer to you expired.  Click Request Cash.';
+            message = '<em>Note</em> Our previous offer to you expired.  Click Request Cash.';
             cls = 'green';
         }
 
@@ -98,7 +98,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         }
         
         if (state == 'bad' && !hasLoans && !hasChance) {
-        	message = '&nbsp;';
+        	message = 'You are welcome to check with us in the future when your credit status improves.';
             cls = 'blue';
         }
 

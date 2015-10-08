@@ -194,6 +194,7 @@
 			if (loan.SetupFee > 0)
 				cus.SetupFee = loan.SetupFee;
 
+
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
 			2. RenderAgreements: loan.Agreements.Add
@@ -221,6 +222,7 @@
 					Email = cus.Name,
 					CloseDate = now,
 					TookAmount = (int)loan.LoanAmount,
+					ApprovedAmount = (int)(cus.CreditSum ?? 0) + (int)loanAmount,
 					DealCloseType = OpportunityDealCloseReason.Won.ToString()
 				}
 			);

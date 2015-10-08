@@ -178,7 +178,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     
     setTotalSetupFee: function (percents, pounds) {
         this.$el.find('#totalSetupFeePercents').text(percents + '%');
-        this.$el.find('#totalSetupFeePounds').text('£ ' + pounds);
+        this.$el.find('#totalSetupFeePounds').text('£' + pounds);
     },
 
     setupFeePoundsChanged: function () {

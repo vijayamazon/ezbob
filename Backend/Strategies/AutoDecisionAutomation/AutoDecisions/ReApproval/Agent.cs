@@ -49,7 +49,7 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision(string tag = null) {
+		public virtual bool MakeAndVerifyDecision(string tag) {
 			Trail.SetTag(tag);
 			RunPrimary();
 

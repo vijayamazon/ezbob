@@ -228,7 +228,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			$.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
 
 		EzBob.App.Iovation.callIovation('getcash');
-	    
+
 		var oRequest = $.post(window.gRootPath + 'Customer/Profile/ApplyForALoan');
 
 		oRequest.done(function(oResponse) {
@@ -576,7 +576,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 								companyTargets.render();
 
-								companyTargets.on('BusRefNumGetted', function(targetingData) {
+								companyTargets.on('BusRefNumGot', function(targetingData) {
 									that.saveTargeting(targetingData);
 								});
 
@@ -585,11 +585,9 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 						} // if
 					}); // on done
 
-					req.always(function() {
-						UnBlockUi();
-					});
+					req.error(function() { UnBlockUi(); });
 				} // if
-			}
+			} // if company targeting
 		});
 	}, // makeTargeting
 

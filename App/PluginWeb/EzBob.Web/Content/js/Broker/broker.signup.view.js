@@ -76,7 +76,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 		var amt = _.find(oData, function (d) { return d.name === 'EstimatedMonthlyClientAmount'; });
 		if (amt)
-			amt.value = this.$el.find('#EstimatedMonthlyClientAmount').autoNumericGet();
+			amt.value = this.$el.find('#EstimatedMonthlyClientAmount').autoNumeric('get');
 
 		var fws = _.find(oData, function (d) { return d.name === 'FirmWebSite'; });
 		if (fws && !/^https?:\/\//.test(fws.value))
@@ -152,7 +152,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			buttons: {
 				Close: {
 					text: 'Close',
-					'class': 'button btn-green',
+					'class': 'button btn-green ev-btn-org',
 					click: function () {
 						$(this).dialog("close");
 					},

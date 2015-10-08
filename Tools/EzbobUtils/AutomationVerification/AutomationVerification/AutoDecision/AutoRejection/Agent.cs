@@ -395,9 +395,9 @@
 
 		private void CheckLowTurnover() {
 			var data = new Turnover.DataModel {
-				AnnualTurnover = (int)Trail.MyInputData.AnnualTurnover,
+				AnnualTurnover = Trail.MyInputData.AnnualTurnover,
 				AnnualTurnoverThreshhold = Trail.MyInputData.TotalAnnualTurnover,
-				QuarterTurnover = (int)Trail.MyInputData.QuarterTurnover,
+				QuarterTurnover = Trail.MyInputData.QuarterTurnover,
 				QuarterTurnoverThreshhold = Trail.MyInputData.TotalThreeMonthTurnover,
 				HasCompanyFiles = Trail.MyInputData.HasCompanyFiles
 			};

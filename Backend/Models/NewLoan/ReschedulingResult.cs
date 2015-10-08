@@ -12,6 +12,9 @@
 		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
 
 		[DataMember]
+		public decimal OpenPrincipal { get; set; } // open principal for rescheduling
+
+		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type 
 
 		[DataMember] // for info only
@@ -24,12 +27,27 @@
 		public decimal? FirstPaymentInterest { get; set; } // calculated interest to be paid in the first new payment 
 
 		[DataMember]
-		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date
+		public decimal DefaultPaymentPerInterval { get; set; } // default "payment per interval" (if args.PaymentPerInterval == 0, fill DefaultPaymentPerInterval)		
 
 		[DataMember]
-		public decimal DefaultPaymentPerInterval { get; set; } // default "payment per interval" (if args.PaymentPerInterval == 0, fill DefaultPaymentPerInterval)
+		public DateTime ReschedulingIntervalStart { get; set; } // ReschedulingIntervalStart: for "within"/"outside" - tomorrow
+
+		[DataMember]
+		public DateTime? ReschedulingIntervalEnd { get; set; } // ReschedulingIntervalEnd: for "within" - ReschedulingDateStart + 30 days, for "outside" - not relevant
 
 		[DataMember]
 		public string Error { get; set; }
 	} // class ReschedulingResult
-} // namespace
+		[DataMember(EmitDefaultValue = true)]
+		public bool BlockAction { get; set; } // re-scheduling allowed or not
+
+		private DateTime _firstItemDate;
+		// new schedule first payment date
+		public DateTime FirstItemDate {
+			get { return this._firstItemDate.Date; }
+			set { this._firstItemDate = value; }
+		}
+
+		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planned close date
+
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("\n");

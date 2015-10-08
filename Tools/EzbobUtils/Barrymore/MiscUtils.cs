@@ -260,6 +260,8 @@
 			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
 		} // DateDiffInMonths
 
+	
+
 		/// <summary>
 		/// Calculates difference between to DateTime dates in weeks
 		/// </summary>
@@ -267,7 +269,7 @@
 		/// <param name="end"></param>
 		/// <returns></returns>
 		public static int DateDiffInWeeks(DateTime start, DateTime end) {
-			return (end.Subtract(start)).Days / 7;
+			return (int)Math.Ceiling(end.Subtract(start).Days / 7d);
 		} // DateDiffInWeeks
 
 		public static int DaysInMonth(DateTime date) {

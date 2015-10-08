@@ -52,7 +52,7 @@
 			}
 
 			var customerContext = _context.Customer;
-			PayPointFacade payPointFacade = new PayPointFacade(customerContext.MinOpenLoanDate());
+			PayPointFacade payPointFacade = new PayPointFacade(customerContext.MinOpenLoanDate(), customerContext.CustomerOrigin.Name);
 			if (!payPointFacade.CheckHash(hash, Request.Url)) {
 				Log.ErrorFormat("Paypoint callback is not authenticated for user {0}", customerContext.Id);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint callback is not authenticated for user {0}", customerContext.Id));
@@ -185,7 +185,7 @@
                     return View("Error");
 
                 var oCustomer = _context.Customer;
-                PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate());
+				PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
 				
                 int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
 				DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);

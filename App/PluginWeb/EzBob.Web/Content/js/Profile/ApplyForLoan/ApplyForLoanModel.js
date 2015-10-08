@@ -14,22 +14,26 @@ EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
 		loanType: 0,
 		repaymentPeriod: 0,
 		isLoanSourceEU: false,
+		approvedRepaymentPeriod: 0,
+		isCustomerRepaymentPeriodSelectionAllowed: false,
+		isLoanTypeSelectionAllowed: 0 
 	}, // defaults
 
-	validate: function(attrs) {
+	validate: function (attrs) {
+		
 		if (typeof attrs.neededCash === "undefined")
 			return false;
 
 		var val = attrs.neededCash;
 
 		if (isNaN(val))
-			attrs.neededCash = this.get("minCash");
+			this.set({ neededCash: this.get("minCash") }, { silent: true });
 
 		if (val > this.get("maxCash"))
-			attrs.neededCash = this.get("maxCash");
+			this.set({ neededCash: this.get("maxCash") }, { silent: true });
 
 		if (val < this.get("minCash"))
-			attrs.neededCash = this.get("minCash");
+			this.set({ neededCash: this.get("minCash") }, { silent: true });
 
 		return false;
 	}, // validate

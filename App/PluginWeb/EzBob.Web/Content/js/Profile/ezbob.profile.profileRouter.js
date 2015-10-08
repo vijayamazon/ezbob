@@ -15,8 +15,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
 
         this.accountActivityView = new EzBob.Profile.AccountActivityView({ model: options });
         
-        this.inviteFriendView = new EzBob.Profile.InviteFriendView({ model: options });
-
         this.perksView = new EzBob.Profile.PerksView();
         
         this.companyDirectorsView = new EzBob.Profile.CompanyDirectorsView({ model: options });
@@ -32,7 +30,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.widgets.AccountActivity = this.accountActivityView;
         this.widgets.Settings = this.accountSettingsView;
         this.widgets.YourDetails = this.YourDetails;
-        this.widgets.InviteFriend = this.inviteFriendView;
         this.widgets.Perks = this.perksView;
         this.widgets.CompanyDirectors = this.companyDirectorsView;
 
@@ -101,7 +98,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         "PayEarly/:id": "payEarly",
         "PayEarly": "payEarly",
         "LoanDetails/:id": "loanDetails",
-        "InviteFriend": "inviteFriend",
         "Perks": "perks",
         "CompanyDirectors": "companyDirectors"
     },
@@ -134,9 +130,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     settings: function () {
         this.activate("Settings");
         this.marketing("Settings");
-    },
-    inviteFriend: function() {
-        this.activate("InviteFriend");
     },
     perks: function() {
         this.activate("Perks");

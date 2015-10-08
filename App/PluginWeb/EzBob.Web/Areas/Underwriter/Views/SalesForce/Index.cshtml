@@ -342,16 +342,14 @@
 	</dl>
 }
 
-@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
+@AddDirectorInfoTemplate.Render(this, ViewBag, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 @EditExperianDirectorData.Render(this)
 
 <script id="address-popup-template" type="text/template">
 	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}
 </script>
 
-<script id="address-template" type="text/template">
-	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
-</script>
+@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
 
 @section Js
 {

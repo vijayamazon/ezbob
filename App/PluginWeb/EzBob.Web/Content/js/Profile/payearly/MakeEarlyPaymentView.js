@@ -105,7 +105,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 		view.on('select', function(cardId) { return self.payFast(cardId); });
 		view.on('existing', function() { document.location.href = self.ui.submit.attr("href"); });
 
-		EzBob.App.modal.show(view);
+		EzBob.App.jqmodal.show(view);
 
 		return false;
 	}, // submit
@@ -168,7 +168,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 	}, // backToProfile
 
 	paymentAmountChanged: function() {
-		var amount = this.$el.find("[name='paymentAmount']").autoNumericGet();
+		var amount = this.$el.find("[name='paymentAmount']").autoNumeric('get');
 		var maxAmount = this.model.get("loan").get("TotalEarlyPayment");
 		var minAmount = this.model.get("currentRollover") === null ? 30 : this.model.get("currentRollover").RolloverPayValue;
 
@@ -185,7 +185,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 	}, // paymentAmountChanged
 
 	rolloverAmountChanged: function() {
-		var amount = this.$el.find("[name='rolloverAmount']").autoNumericGet();
+		var amount = this.$el.find("[name='rolloverAmount']").autoNumeric('get');
 		var maxAmount = this.model.get("total");
 		var minAmount = this.model.get("currentRollover").RolloverPayValue;
 

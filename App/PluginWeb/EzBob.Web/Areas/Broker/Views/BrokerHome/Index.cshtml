@@ -1,139 +1,42 @@
-﻿@using System.Web.Helpers
-@using ConfigManager
-@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Infrastructure
 @model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
 @{
-	Layout = null;
-
 	Model.RootUrl = Url.Content("~/");
-
 	Model.MarketingFileUrlTemplate = Url.Action("DownloadFile", "BrokerHome", new { Area = "Broker", fid = "__FILE_ID__", });
-
 	Model.LogoUrl = Url.Content("~/Content/css/images/header/ezbob_logo-white.png");
 	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
-
 	UiCustomerOrigin.Set(ViewBag);
+	ViewBag.Title = "Brokers |" + ViewBag.CustomerOrigin.GetOrigin();
 }
-<!DOCTYPE html>
-<html>
-<head>
-	@{ Html.RenderPartial("_FrameKiller"); }
-	<script type="text/javascript">
-		window.gRootPath = '@Model.RootUrl';
-	</script>
 
-	<title>Broker's home | EZBOB</title>
-
-	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
-	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
-
-	<meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	@{
-		Html.RenderPartial("_FavIcon");
-		WriteLiteral(BundleHelper.RenderBrokerCss());
-	}
-</head>
-
-<body
-	data-auth="@Model.Auth"
-	data-msg-on-start="@Model.MessageOnStart"
-	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
-	data-request-accept-terms="@Model.HasTermsStr"
-	data-user-name="@Model.Auth"
->
-	@AntiForgery.GetHtml()
-
-	<div id="wrapper">
-		@{ Html.RenderPartial("Header"); }
-
-		<div class="row-fluid broker-page-content main-page main-page-ezbob">
-			<div class="inner">
-				<div class="inner">
-					<section class="broker">
-						<div class="notifications"></div>
-
-						@{
-							Html.RenderPartial("Signup");
-							Html.RenderPartial("Login");
-							Html.RenderPartial("Forgotten");
-							Html.RenderPartial("Dashboard");
-							Html.RenderPartial("AddCustomer");
-							Html.RenderPartial("AddBank");
-							Html.RenderPartial("LeadDetails");
-							Html.RenderPartial("CustomerDetails");
-							Html.RenderPartial("Forbidden");
-							Html.RenderPartial("RequestAcceptTerms");
-						}
-					</section>
-				</div>
-			</div>
-		</div>
-
-		@{ Html.RenderPartial("ScratchCards_Old_Do_NOT_AppendHere"); }
-
-		<div id="modalRegion" class="modal hide fade"></div>
-
-		<div id="broker-footer-placeholder"></div>
-
-		@{ Html.RenderPartial("_Footer"); }
+<div class="row-fluid broker-page-content main-page main-page-ezbob">
+	<div class="inner">
+		<section class="broker">
+			<div class="notifications"></div>
+			@{
+				Html.RenderPartial("Signup");
+				Html.RenderPartial("Login");
+				Html.RenderPartial("Forgotten");
+				Html.RenderPartial("Dashboard");
+				Html.RenderPartial("AddCustomer");
+				Html.RenderPartial("AddBank");
+				Html.RenderPartial("LeadDetails");
+				Html.RenderPartial("CustomerDetails");
+				Html.RenderPartial("Forbidden");
+				Html.RenderPartial("RequestAcceptTerms");
+			}
+		</section>
 	</div>
+</div>
 
-	@{ Html.RenderPartial("ScratchCards"); }
+@{ Html.RenderPartial("ScratchCards_Old_Do_NOT_AppendHere"); }
 
-	<div id="hidden-container" class="hide" style="display: none !important;">
-		<div class="common-customer-sidebar">
-			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
-		</div>
+<div id="modalRegion" class="modal hide fade"></div>
 
-		<div style="display: none;" class="hide" id="broker-sms-count"
-			 data-force-captcha="@Model.ForceCaptcha"
-			 data-max-per-number="@Model.MaxPerNumber"
-			 data-max-per-page="@Model.MaxPerPage"></div>
+@{
+	Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
+	Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
+	Html.RenderPartial("_LoanScheduleTemplate");
+}
 
-		<div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
-	</div>
-
-	<!-- scripts - begin -->
-	<!--[if lt IE 9]>
-	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	@{
-		Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
-
-		Html.RenderPartial("_GoogleTagManager");
-		Html.RenderPartial("security_template");
-		Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
-		Html.RenderPartial("_LoanScheduleTemplate");
-
-		WriteLiteral(BundleHelper.RenderBrokerJs());
-	}
-	@EditExperianDirectorData.Render(this)
-
-	<script>
-		var EzBob = EzBob || {};
-		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
-		@{
-			OneUploadLimitation oul = CurrentValues.Instance.GetUploadLimitations("BrokerHome", "HandleUploadFile");
-		}
-		EzBob.LoadedConfig.BrokerMaxFileSize = +(@oul.FileSize / 1048576.0).toFixed(2);
-		EzBob.LoadedConfig.BrokerAcceptedFiles = '@oul.AcceptedFiles';
-		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
-		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
-		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
-
-		function EzBob_CgVendors_init() {
-			if (EzBob.CgVendors)
-				EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
-		} // EzBob_CgVendors_init
-
-		$(document).ready(function() {
-			EzBob_CgVendors_init();
-		});
-	</script>
-	<!-- scripts - end -->
-</body>
-</html>
+@EditExperianDirectorData.Render(this)

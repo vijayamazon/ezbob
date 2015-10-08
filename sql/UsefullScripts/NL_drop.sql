@@ -462,3 +462,35 @@ GO
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'PRIMARY_KEY_CONSTRAINT' AND name = 'PK_PaypointCard')
 	ALTER TABLE PaypointCard DROP CONSTRAINT PK_PaypointCard
 GO
+
+IF object_id('NL_OfferStatuses') IS NOT NULL BEGIN
+	DROP TABLE [dbo].[NL_OfferStatuses];
+END;
+
+-- if object_id('nl_exists') is not null begin
+	-- drop procedure [dbo].[nl_exists];
+-- end;
+
+IF OBJECT_ID('NL_CancelledSchedulesLoad') IS NOT NULL BEGIN
+	DROP PROCEDURE NL_CancelledSchedulesLoad;
+END;
+
+IF OBJECT_ID('NL_CancelledSchedulesLoad') IS NOT NULL BEGIN
+	DROP PROCEDURE [dbo].[NL_DiscountPlanEntriesGet];
+END;
+
+IF OBJECT_ID('NL_LoanPaidSchedulesLoad') IS NOT NULL BEGIN
+	DROP PROCEDURE [dbo].[NL_LoanPaidSchedulesLoad];
+END;
+
+IF OBJECT_ID('NL_NonPaidSchedulesLoad') IS NOT NULL BEGIN
+	DROP PROCEDURE [dbo].[NL_NonPaidSchedulesLoad];
+END;
+
+IF OBJECT_ID('NL_NotPaidSchedulesLoad') IS NOT NULL BEGIN
+	DROP PROCEDURE [dbo].[NL_NotPaidSchedulesLoad];
+END;
+
+IF OBJECT_ID('NL_PaidSchedulesLoad') IS NOT NULL BEGIN
+	DROP PROCEDURE [dbo].[NL_PaidSchedulesLoad];
+END;

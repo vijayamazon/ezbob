@@ -163,7 +163,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.BankAccountValidationInvalidAttempts);
 			Map(x => x.ABTesting).Length(512);
 
-			Map(x => x.CollectionDescription);
+			Map(x => x.CollectionDescription).Length(500);
 			References(x => x.CollectionStatus, "CollectionStatus");
 			
 			References(x => x.WizardStep, "WizardStep");
@@ -230,6 +230,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
+			HasMany(x => x.CompanyFiles)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
+			
 			Map(x => x.FirstVisitTime).Length(64);
 			Map(x => x.ExperianConsumerScore);
 			References(x => x.PropertyStatus, "PropertyStatusId").Cascade.All();

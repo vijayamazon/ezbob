@@ -78,8 +78,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // submitForm
 
 	businessTypeSelected: function(evt) {
-		// this.$el.find('.after-business-type *').enable();
-
 		this.$el.find('.oobts').removeClass('oobts-selected');
 
 		this.$el.find('.oobts i').removeClass('fa-square-o fa-check-square-o').addClass('fa-square-o');
@@ -102,7 +100,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		} // if
 	}, // businessTypeSelected
 
-	inputChanged: function(evt) {
+	inputChanged: function (evt) {
+		this.setFieldStatusNotRequired(evt, 'promoCode');
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
 			this.typeOfBusinessChanged();
 
@@ -111,6 +110,13 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		$('.btn-continue').toggleClass('disabled', !enabled);
 		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
+
+	setFieldStatusNotRequired: function (evt, el) {
+		if (evt && evt.target.id === el && evt.target.value === '') {
+			var img = $(evt.target).closest('div').find('.field_status');
+			img.field_status('set', 'empty', 2);
+		} // if
+	},//setFieldStatusNotRequired
 
 	isEnabled: function() {
 		var enabled = this.validator.checkForm();
@@ -127,20 +133,16 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		var companyType = this.companyTypes[name];
 		if (!companyType) {
 			if (this.CompanyView) {
-				this.$el.find('.after-financial-details').html().insertAfter(this.$el.find('.industry-type-div'));
+				this.$el.find('.after-financial-details').insertAfter(this.$el.find('.after-industry-type'));
 				this.CompanyView.$el.remove();
 				this.CompanyView = null;
 			} // if
 
-			this.$el.find('.WebSiteTurnOver, .OverallTurnOver').addClass('hide');
-
 			return false;
 		} // if
 
-		this.$el.find('.WebSiteTurnOver, .OverallTurnOver').removeClass('hide');
-
 		if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
-			this.$el.find('.after-financial-details').insertAfter(this.$el.find('.industry-type-div'));
+			this.$el.find('.after-financial-details').insertAfter(this.$el.find('.after-industry-type'));
 			this.CompanyView.$el.remove();
 			this.CompanyView = null;
 		} // if
@@ -158,8 +160,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		}
 		else
 			this.CompanyView.$el.show();
-
-		// if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 
 		return false;
 	}, // typeOfBusinessChanged
@@ -186,11 +186,13 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		});
 
 		this.$el.find('.cashInput').moneyFormat();
+	/*	if (EzBob.Config.Origin !== 'everline') {
+		    //   this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
+		  //  this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
+		}
+		*/
+	
 
-		this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
-		this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
-
-	    // if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 	    if (this.model.get('IsAlibaba')) {
 	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();
 	    }
@@ -204,7 +206,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			TypeOfBusiness: { required: true },
 			IndustryType: { required: true },
 			DirectorCheck: { required: true },
-			VatReporting: { required: true },
 		};
 	}, // ownValidationRules
 
@@ -280,36 +281,43 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		scrollTop();
 		req.done(function(reqData) {
-			if (!reqData)
+			if (!reqData) {
 				that.saveDataRequest(action, data);
-			else {
-				switch (reqData.length) {
-					case 0:
-					    if (that.targetingTries === 0 && !isEntrepreneur) {
-							EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode + ' was not found. Please check your input and try again.');
-							that.targetingTries++;
-							UnBlockUi();
-						}
-						else
-							that.saveTargeting(null, action, form);
-
-						break;
-
-					case 1:
-						that.saveTargeting(reqData[0], action, form);
-						break;
-
-					default:
-						var companyTargets = new EzBob.companyTargets({ model: reqData });
-						companyTargets.render();
-						UnBlockUi();
-						companyTargets.on('BusRefNumGetted', function(targetingData) {
-							BlockUi();
-							that.saveTargeting(targetingData, action, form);
-						});
-						break;
-				} // switch reqData.length
+				return;
 			} // if
+
+			switch (reqData.length) {
+			case 0:
+				if (that.targetingTries === 0 && !isEntrepreneur) {
+					EzBob.App.trigger(
+						'warning',
+						'Company "' + companyName + '" at postcode "' + postcode + '" was not found. ' +
+						'Please check your input and try again.'
+					);
+					that.targetingTries++;
+					UnBlockUi();
+				} else
+					that.saveTargeting(null, action, form);
+
+				break;
+
+			case 1:
+				that.saveTargeting(reqData[0], action, form);
+				break;
+
+			default:
+				var companyTargets = new EzBob.companyTargets({ model: reqData });
+
+				UnBlockUi();
+				companyTargets.render();
+
+				companyTargets.on('BusRefNumGot', function(targetingData) {
+					BlockUi();
+					that.saveTargeting(targetingData, action, form);
+				});
+
+				break;
+			} // switch reqData.length
 		}); // on done
 
 		req.error(function() {
@@ -338,7 +346,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		var that = this;
 
 		if (this.$el.find('#OverallTurnOver').is(":visible"))
-			_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
+			_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumeric('get');
 
 		var pbo = _.find(data, function(d) { return d.name === 'PartBusinessOnline'; });
 		if (pbo)
@@ -347,15 +355,15 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			data.push({ name: 'PartBusinessOnline', value: this.curOobts === 'online' });
 
 		if (this.$el.find('#DirectorCheck').is(":checked"))
-			_.find(data, function(d) { return d.name === 'DirectorCheck'; }).value = true;
+			_.find(data, function (d) { return d.name === 'DirectorCheck'; }).value = true;
 
 		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)
-			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumeric('get');
 
 		var capitalExpenditure = _.find(data, function(d) { return d.name === 'CapitalExpenditure'; });
 		if (capitalExpenditure)
-			capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumericGet();
+			capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumeric('get');
 
 		var request = $.post(action, data);
 

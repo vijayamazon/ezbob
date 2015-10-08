@@ -1,14 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies.Broker {
-	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 
 	public class BrokerCommissionInvoice : ABrokerMailToo {
-
-		public BrokerCommissionInvoice(BrokerInvoiceCommissionModel model)
-			: base(model.BrokerID, true) {
+		public BrokerCommissionInvoice(BrokerInvoiceCommissionModel model) : base(model.BrokerID, true) {
 			this.model = model;
 		} // constructor
 
@@ -19,18 +16,18 @@
 
 			var ecg = new EmailConfirmationGenerate(BrokerData.UserID);
 			ecg.Execute();
-			var today = DateTime.Today;
+
 			Variables = new Dictionary<string, string> {
 				{ "BrokerCompanyName", BrokerData.FirmName },
 				{ "BrokerContactName", BrokerData.FullName },
 				{ "Phone", BrokerData.MobilePhone },
 				{ "Email", BrokerData.Email },
-				{ "Date", today.ToString("dd/MM/yyyy") },
+				{ "Date", this.model.CommissionTime.ToString("dd/MM/yyyy") },
 				{ "CustomerName", this.model.CustomerName },
 				{ "CommissionAmount", FormattingUtils.NumericFormats(this.model.CommissionAmount) },
 				{ "BankAccount", this.model.BankAccount },
 				{ "Sortcode", this.model.SortCode },
-				{ "Invoice", string.Format("OMLTD{0:yyyy}/{0:MM}/{0:dd}/{1}", today, this.model.InvoiceID ) }
+				{ "Invoice", string.Format("OMLTD{0:yyyy}/{0:MM}/{0:dd}/{1}", this.model.CommissionTime, this.model.InvoiceID ) }
 			};
 		} // SetTemplateAndVariables
 

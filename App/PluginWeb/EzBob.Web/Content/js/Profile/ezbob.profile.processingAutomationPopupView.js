@@ -21,17 +21,30 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 	render: function () {
 		var self = this;
 		var width = 600;
+		var timeoutSeconds = EzBob.Config.WizardAutomationTimeout || 20;
 		var availableWidth = window.screen.availWidth || document.documentElement.clientWidth;
 		if (availableWidth < width) {
 			width = availableWidth;
 		}
-		var timeoutSeconds = EzBob.Config.WizardAutomationTimeout || 20;
-		this.$el.html(this.templates['processingTemplate']({
+
+		//only if customer has one of those mps there is a chance of automatic decision and customer should wait for 20 seconds for it.
+		//in any other way should be manual decision and no reason for customer to wait
+		var hasAutomationMps = _.some(this.model.customer.get('mpAccounts'), function (mp) {
+			return _.contains(['paypal', 'Amazon', 'eBay', 'Yodlee', 'HMRC'], mp.MpName);
+		});
+
+		var templateName = 'noDecisionTemplate';
+		if (hasAutomationMps) {
+			templateName = 'processingTemplate';
+		}
+		
+		this.$el.html(this.templates[templateName]({
 			name: this.model.customer.get('FirstName'),
 			automationTimeout: timeoutSeconds,
 			offerValid: this.model.customer.offerValidFormatted(),
 			amount: this.model.customer.get('CreditSum')
 		}));
+
 		this.popup = this.$el;
 		this.colorboxPopup = $.colorbox({
 			inline: true,
@@ -41,52 +54,53 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			show: true,
 			width: width,
 			scrolling: false,
+			close: '<i class="pe-7s-close"></i>',
 			className: 'automation-popup',
 			onClosed: function() {
 				self.onClose();
 			}
 		});
-		
-		var progress = 0;
-		
-		var time = timeoutSeconds * 1000 / 100;
-		this.progressTimeout = setInterval(function () {
-			self.$el.find('.automation-processing-bar').width((++progress) + '%');
-			if (progress >= 95) {
-				self.model.customer.fetch().done(function () {
-					var state = self.model.customer.get('state');
-					var hasChance = self.model.customer.get('HasApprovalChance');
-					var template = '';
-					switch (state) {
+
+		if (hasAutomationMps) {
+			var progress = 0;
+			var time = timeoutSeconds * 1000 / 100;
+			this.progressTimeout = setInterval(function() {
+				self.$el.find('.automation-processing-bar').width((++progress) + '%');
+				if (progress >= 95) {
+					self.model.customer.fetch().done(function() {
+						var state = self.model.customer.get('state');
+						var hasChance = self.model.customer.get('HasApprovalChance');
+						switch (state) {
 						case 'bad':
-							template = hasChance ? 'rejectHasChanceTemplate' : 'rejectNoChanceTemplate';
+							templateName = hasChance ? 'rejectHasChanceTemplate' : 'rejectNoChanceTemplate';
 							break;
 						case 'get':
-							template = 'approvedTemplate';
+							templateName = 'approvedTemplate';
 							break;
 						default:
-							template = 'noDecisionTemplate';
+							templateName = 'noDecisionTemplate';
 							break;
-					}
+						}
 
-					self.$el.html(self.templates[template]({
-						name: self.model.customer.get('FirstName'),
-						automationTimeout: timeoutSeconds,
-						offerValid: self.model.customer.offerValidFormatted(),
-						amount: self.model.customer.get('CreditSum')
-					}));
-					$.colorbox.resize();
-					if (self.progressTimeout) {
-						clearInterval(self.progressTimeout);
-					}
-				});
-			}
+						self.$el.html(self.templates[templateName]({
+							name: self.model.customer.get('FirstName'),
+							automationTimeout: timeoutSeconds,
+							offerValid: self.model.customer.offerValidFormatted(),
+							amount: self.model.customer.get('CreditSum')
+						}));
 
-			if (progress >= 100 && self.progressTimeout) {
-				clearInterval(self.progressTimeout);
-			}
-		}, time);
+						$.colorbox.resize();
+						if (self.progressTimeout) {
+							clearInterval(self.progressTimeout);
+						}
+					});
+				}
 
+				if (progress >= 100 && self.progressTimeout) {
+					clearInterval(self.progressTimeout);
+				}
+			}, time);
+		}
 		EzBob.UiAction.registerView(this);
 		return this;
 	},
@@ -98,6 +112,7 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 		if (this.refreshTimerInterval) {
 			clearTimeout(this.refreshTimerInterval);
 		}
+		EzBob.UiAction.saveOne('click', this.$el.find('button'));
 	},
 
 	refreshTimer: function () {

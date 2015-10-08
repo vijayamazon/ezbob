@@ -91,10 +91,14 @@ EzBob.CustomerModel = Backbone.Model.extend({
 
         var now = EzBob.currentServerDate();
 
-        if (start > now && start < end) return { S: 0, H: 0, M: 0, TotalSeconds: 0, NotStarted: true};
-        if (now > end) return { S: 0, H: 0, M: 0, TotalSeconds: 0, Expired : true };
+	    if (start.isAfter(now) && end.isAfter(start)) {
+		    return { S: 0, H: 0, M: 0, TotalSeconds: 0, NotStarted: true };
+	    }
+	    if (now.isAfter(end)) {
+		    return { S: 0, H: 0, M: 0, TotalSeconds: 0, Expired: true };
+	    }
 
-        var seconds = Math.max(0, end.diff(now, 'seconds')),
+	    var seconds = Math.max(0, end.diff(now, 'seconds')),
             H = Math.max(0, Math.floor(seconds / (60 * 60))),
             M = Math.max(0, Math.floor((seconds / (60)) % (60))),
             S = Math.max(0, seconds % 60);

@@ -171,7 +171,7 @@
 			return this;
 		} // Init
 
-		public bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
+		public bool MakeAndVerifyDecision(string tag, bool quiet = false) {
 			this.trail.SetTag(tag);
 
 			using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {

@@ -234,7 +234,7 @@
 			return !notIdentical;
 		} // IsIdentical
 
-		public void SaveToDb(string tag, AConnection db, ASafeLog log) {
+		public void SaveToDb(long? cashRequestID, string tag, AConnection db) {
 			try {
 				db.ExecuteNonQuery("StoreMedal", CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", CustomerId),
@@ -320,10 +320,11 @@
 					new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
 					new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.SafeToFormattedString()),
 					new QueryParameter("Tag", tag),
-					new QueryParameter("MaxOfferedLoanAmount", MaxOfferedLoanAmount)
+					new QueryParameter("MaxOfferedLoanAmount", MaxOfferedLoanAmount),
+					new QueryParameter("CashRequestID", cashRequestID)
 				);
 			} catch (Exception e) {
-				log.Alert(e, "Failed to save primary medal result to DB.");
+				this.log.Alert(e, "Failed to save primary medal result to DB.");
 			} // try
 		} // SaveToDb
 

@@ -1,70 +1,153 @@
 var EzBob = EzBob || {};
 
 EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
-	template: '#loan_editor_template',
+    template: '#loan_editor_template',
 
-	scheduleTemplate: $('#loan_editor_schedule_template').length > 0 ? _.template($('#loan_editor_schedule_template').html()) : null,
+    scheduleTemplate: $('#loan_editor_schedule_template').length > 0 ? _.template($('#loan_editor_schedule_template').html()) : null,
 
-	initialize: function() {
-		this.bindTo(this.model, 'change sync', this.render, this);
-		this.modelBinder = new Backbone.ModelBinder();
-		this.editItemIndex = -1;
-	}, // initialize
-	bindings: {
-	},//bindings
-	serializeData: function() {
-		var data = this.model.toJSON();
-		data.editItemIndex = this.editItemIndex;
-		data.hasFreezInterest = this.hasFreeIntrest();
-		return data;
-	}, // serializeData
+    initialize: function() {
+        this.bindTo(this.model, 'change sync', this.render, this);
+        this.modelBinder = new Backbone.ModelBinder();
+        this.editItemIndex = -1;
+    }, // initialize
+    bindings: {
+	
+    }, //bindings
+    serializeData: function() {
+        var data = this.model.toJSON();
+        data.editItemIndex = this.editItemIndex;
+        data.hasFreezInterest = this.hasFreeIntrest();
+        return data;
+    }, // serializeData
 
-	hasFreeIntrest: function() {
-		var freezArray = this.model.get('SInterestFreeze');
+    hasFreeIntrest: function() {
+        var freezArray = this.model.get('SInterestFreeze');
 
-		if (freezArray === null)
-			return false;
-		var flag = false;
-		for (var i = 0; i < freezArray.length; i++) {
-			var item = freezArray[i].split('|');
-			if (item[4] === '') {
-				flag = true;
-				break;
-			}
-		}
-		return flag;
-	},//hasFreeIntrest
+        if (freezArray === null)
+            return false;
+        var flag = false;
+        for (var i = 0; i < freezArray.length; i++) {
+            var item = freezArray[i].split('|');
+            if (item[4] === '') {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }, //hasFreeIntrest
 
-	ui: {
-		scheduleEl: '.editloan-schedule-region',
-		freezeEl: '.editloan-freeze-intervals-region',
-		ok: '.save',
-		buttons: '.buttons',
-		err_head: '#err-head',
-		err_body: '#err-body',
-		err_footer: '#err-footer',
-		err_region: '#err-region'
-	}, // ui
+    ui: {
+        scheduleEl: '.editloan-schedule-region',
+        freezeEl: '.editloan-freeze-intervals-region',
+        ok: '.save',
+        buttons: '.buttons',
+        err_head: '#err-head',
+        err_body: '#err-body',
+        err_footer: '#err-footer',
+        err_region: '#err-region'
+    }, // ui
 
-	editors: {
-		'Installment': EzBob.InstallmentEditor,
-		'Fee': EzBob.FeeEditor,
-	}, // editors
+    editors: {
+        'Installment': EzBob.InstallmentEditor,
+        'Fee': EzBob.FeeEditor,
+    }, // editors
 
-	events: {
-		'click #resch-submit-btn': 'reschSubmitForm',
-		'blur #outsidePrincipal': 'onChangeAmount',
-		'change #withinSelect': 'withinSelectChange',
-		'change #outsideSelect': 'outsideSelectChange',
-		'click .edit-schedule-item': 'editScheduleItem',
-		'click .remove-schedule-item': 'removeScheduleItem',
-		//   'click .add-installment': 'addInstallment',
-		'click .add-fee': 'addFee',
-		'click .save': 'onOk',
-		'click .cancel': 'onCancel',
-		'click .add-freeze-interval': 'onAddFreezeInterval',
-		'click .remove-freeze-interval': 'onRemoveFreezeInterval'
-	}, // events
+    events: {
+        'click .remove-auto-charges': 'chargesDeleteBtn',
+        'click #resch-submit-btn': 'reschSubmitForm',
+        'click #charges-save-btn': 'chargesSaveBtn',
+        'click #fees-save-btn': 'feesSaveBtn',
+        'click #fees-delete-btn': 'feesDeleteBtn',
+        'click #intrest-save-btn': 'intrestSaveBtn',
+        'click .remove-freeze-interval': 'onRemoveFreezeInterval',
+        'blur #outsidePrincipal': 'onChangeAmount',
+        'change #withinSelect': 'withinSelectChange',
+        'change #outsideSelect': 'outsideSelectChange',
+        'click .edit-schedule-item': 'editScheduleItem',
+        'click .remove-schedule-item': 'removeScheduleItem',
+        //   'click .add-installment': 'addInstallment',
+        'click .add-fee': 'addFee',
+        'click .save': 'onOk',
+        'click .cancel': 'onCancel',
+        'click #outside-stop-future-interest': 'outsideSelectChange',
+        'change #outside-calendar-from': 'outsideSelectChange',
+        'change #within-calendar-from': 'withinSelectChange'
+    }, // events
+
+    chargesSaveBtn: function () {
+        var schedultItemId = this.$el.find("#LoanFutureScheduleItemsDDL :selected").val();
+        if (schedultItemId < -1)
+        {
+            var params = { head: 'Please fix the marked field', body: 'Unvalid charge selected', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#charges-payments')], timeout: '7000' };
+            this.fillErrorPopup(params);
+            return false;
+        }
+        BlockUi('on');
+        this.model.saveAutoChargeOptions(schedultItemId);
+    },
+
+    chargesDeleteBtn: function () {
+        BlockUi('on');
+        this.model.removeAutoChargeOptions();
+    },
+
+    feesSaveBtn: function () {
+        var startDate = $('#fees-calendar-from').val();
+        var endDate = $('#fees-calendar-to').val();
+	    var params;
+        //Check that both input are not empty
+        if (startDate === '' ) {
+            params = { head: 'Please fix the marked fields', body: 'From dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+            this.fillErrorPopup(params);
+            return false;
+        }
+        var star = moment(startDate, "DD/MM/YYYY");
+        var end = moment(endDate, "DD/MM/YYYY");
+
+        if (end !== null) {
+            if (star > end) {
+                params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }            
+        }
+
+        //Validation work.
+        BlockUi('on');
+
+        this.model.SaveLateFeeOption(startDate, endDate);
+    },
+
+	feesDeleteBtn: function () {
+	    BlockUi('on');
+	    this.model.RemoveLateFeeOption();
+	},
+
+	intrestSaveBtn: function () {
+        var interestFrom = $('#intrest-calendar-from').val();
+        var interestTo = $('#intrest-calendar-to').val();
+	    var params;
+	    if (interestFrom === "") {
+            params = { head: 'Please fix the marked fields', body: 'From date must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+            this.fillErrorPopup(params);
+            return false;
+        }
+
+        var star = moment(interestFrom, "DD/MM/YYYY");
+        var end = moment(interestTo, "DD/MM/YYYY");
+
+        if (end !== null)
+        {
+            if (star > end) {
+                params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }
+        }
+
+        BlockUi('on');
+        this.model.saveFreezeInterval(interestFrom, interestTo);
+    },
 
 	fillErrorPopup: function(params) {
 		var self = this;
@@ -84,13 +167,20 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	},
 
 	withinSelectChange: function() {
-		var duration = $('#withinSelect option:selected').text();
-		var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, rescheduleIn: 'true', save: 'false' });
+	    var duration = $('#withinSelect option:selected').text();
+	    var requestParams = {
+	        loanID: this.model.get('Id'),
+	        intervalType: duration,
+	        rescheduleIn: 'true',
+	        reschedulingDate: this.$el.find('#within-calendar-from').val(),
+	        save: 'false'
+	    };
+	    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParams);
 		var self = this;
 		BlockUi('on');
 		request.success(function(res) {
 			$('#withinPayments').text(res.IntervalsNum);
-			$('#withinPrincipal').text(EzBob.formatPounds(res.ReschedulingBalance));
+			$('#withinPrincipal').text(EzBob.formatPounds(res.OpenPrincipal));
 			$('#withinIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
 		}); //on success
 
@@ -103,7 +193,8 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 			BlockUi('off');
 		});
 	},
-	outsideSelectChange: function() {
+
+	outsideSelectChange: function () {
 		this.ui.err_region.fadeOut();
 		$('#outsidePrincipal').removeClass('err-field-red');
 		var amount = $("#outsidePrincipal").val();
@@ -112,7 +203,16 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 			var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
 			this.fillErrorPopup(params);
 		} else {
-			var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
+		    var requestParams = {
+		        loanID: this.model.get('Id'),
+		        intervalType: duration,
+		        AmountPerInterval: amount,
+		        rescheduleIn: 'false',
+		        reschedulingDate: this.$el.find('#within-calendar-from').val(),
+		        stopFutureInterest : $('#outside-stop-future-interest').attr('checked') === 'checked',
+		        save: 'false'
+		    }
+		    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParams);
 			var self = this;
 			BlockUi('on');
 			request.success(function(res) {
@@ -134,84 +234,88 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 			});
 		}
 	},
-	reschSubmitForm: function() {
 
+	/*reschSubmitForm: function() {
 		var requestParam = { loanID: this.model.get('Id'), save: 'true' };
-		var submitBlank = true;
 		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
+		if (checkedRadio == null) {
+			var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+			this.fillErrorPopup(params);
+			return false;
+		}
 		if (checkedRadio === 'true') {
 			requestParam.intervalType = $('#withinSelect option:selected').text();
 			requestParam.rescheduleIn = 'true';
-			submitBlank = false;
+			//this.RescheduleSave(requestParam);
 		}
 		if (checkedRadio === 'false') {
 			requestParam.intervalType = $('#outsideSelect option:selected').text();
 			requestParam.AmountPerInterval = $('#outsidePrincipal').val();
 			requestParam.rescheduleIn = 'false';
-			submitBlank = false;
+			//this.rescheduleSave(requestParam);
 		}
+        //else{
+	    //	var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+	    //	this.fillErrorPopup(params);
+	    //	return false;
+		//}
 
-		var isStopCharges = $('#automatic-charges').is(':checked');
-		var isStopIntrest = $("#intrest-checkbox").is(':checked');
-		var isStopFees = $('#fees-calculation').is(':checked');
+		requestParam.save = 'true';
 
-		var chargesVal = $('#charges-payments').val();
-		var interestFrom = $('#intrest-calendar-from').val(); 
-		var interestTo = $('#intrest-calendar-to').val();
-		var feesFrom = $('#fees-calendar-from').val();
-		var feesTo = $('#fees-calendar-to').val();
+		var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam
+			//{ loanID: this.model.get('Id'), intervalType: requestParam.intervalType, AmountPerInterval: amount, rescheduleIn: 'false', save: 'true' }
+			);
+		var self = this;
+		BlockUi('on');
 
+		request.success(function(res) {
+			if (res.Error == null || res.Error === "") {
+				$(divName).hide();
+			} else {
+				var params = { head: 'Unexpected error occured', body: res.Error, footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+				self.fillErrorPopup(params);
+			}
+			return false;
+		}); //on success
 
-		if (isStopCharges) {
-			if (chargesVal < 0 || chargesVal === "") {
-				var params = { head: 'Please fix the marked field', body: 'Number of payments must be 0 or greater', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#charges-payments')], timeout: '7000' };
-				this.fillErrorPopup(params);
-				return false;
-			}
-			requestParam.stopAutoCharge = 'true';
-			requestParam.stopAutoChargePayment = chargesVal;
-			submitBlank = false;
-		}
-		if (isStopFees) {
-			if (feesTo === "" || feesFrom === "") {
-				var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
-				this.fillErrorPopup(params);
-				return false;
-			}
-			if (new Date(feesFrom).getTime() > new Date(feesTo).getTime()) {
-				var params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
-				this.fillErrorPopup(params);
-				return false;
-			}
-			requestParam.stopLateFee = 'true';
-			requestParam.lateFeeStartDate = feesFrom;
-			requestParam.lateFeeEndDate = feesTo;
-			submitBlank = false;
-		}
-		if (isStopIntrest) {
-			if (interestTo === "" || interestFrom === "") {
-				var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
-				this.fillErrorPopup(params);
-				return false;
-			}
-			if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
-				var params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
-				this.fillErrorPopup(params);
-				return false;
-			}
-			requestParam.freezeInterest = 'true';
-			requestParam.freezeStartDate = interestFrom;
-			requestParam.freezeEndDate = interestTo;
-			submitBlank = false;
-		}
-		if (submitBlank) {
-			var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
-			this.fillErrorPopup(params);
+		request.fail(function() {
+			var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+			self.fillErrorPopup(params);
+			return false;
+		});//on fail
+
+		request.always(function() {
+			BlockUi('off');
+		});
+
+		return true;
+	},*/
+
+    reschSubmitForm: function() {
+		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
+		var requestParam;
+
+		if (checkedRadio == null) {
+			requestParam = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+			this.fillErrorPopup(requestParam);
 			return false;
 		}
 
-		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
+		requestParam = { loanID: this.model.get('Id'), save: 'true' };
+		if (checkedRadio === 'true') {
+			requestParam.intervalType = $('#withinSelect option:selected').text();
+			requestParam.rescheduleIn = 'true';
+			requestParam.reschedulingDate = this.$el.find('#within-calendar-from').val();
+		}
+		if (checkedRadio === 'false') {
+			requestParam.intervalType = $('#outsideSelect option:selected').text();
+			requestParam.AmountPerInterval = $('#outsidePrincipal').val();
+			requestParam.rescheduleIn = 'false';
+			requestParam.reschedulingDate = this.$el.find('#outside-calendar-from').val();
+			requestParam.stopFutureInterest = $('#outside-stop-future-interest').attr('checked') === 'checked';
+		}
 
+		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
 		var self = this;
 		BlockUi('on');
 
@@ -233,21 +337,33 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 			self.fillErrorPopup(params);
 			return false;
 		});//on fail
+
 		oRequest.always(function() {
 			BlockUi('off');
 		});
-	},
 
-	onChangeAmount: function() {
+		return true;
+	},
+	
+	onChangeAmount: function () {
 		this.ui.err_region.fadeOut();
 		$('#outsidePrincipal').removeClass('err-field-red');
 		var amount = $("#outsidePrincipal").val();
 		var duration = $('#outsideSelect option:selected').text();
 		if (typeof amount === 'undefined' || amount <= 0) {
-			var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
+		    var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
 			this.fillErrorPopup(params);
 		} else {
-			var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
+		    var requestParam = {
+		        loanID: this.model.get('Id'),
+		        intervalType: duration,
+		        AmountPerInterval: amount,
+		        rescheduleIn: 'false',
+		        reschedulingDate : this.$el.find('#outside-calendar-from').val(),
+		        save: 'false',
+		        stopFutureInterest : $('#outside-stop-future-interest').attr('checked') === 'checked'
+		    };
+		    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
 			var self = this;
 			BlockUi('on');
 			request.success(function(res) {
@@ -416,59 +532,100 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.renderRegions();
 		this.setUpView();
+	    this.SetLoanOptionsDDL();
 	}, // onRender
 
-	setUpView: function() {
-		this.$el.find('#fees-calendar-from,#fees-calendar-to,#intrest-calendar-from,#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
-		this.$el.find('#fees-calendar-from,#intrest-calendar-from').datepicker('setDate', new Date());
 
-		var within = this.model.get('ReResultIn');
-		if (within.Error != null) {
-			if (within.Error === "Within loan arrangement is impossible") {
-				this.$el.find('#within-div').css('opacity', '0.5');
-				this.$el.find('#radio-1,#withinSelect').attr('disabled', true);
-			}
-			if (within.Error.indexOf("paid off. Loan balance: ") !== -1) {
-				this.$el.find('#within-div,#outside-div').css('opacity', '0.5');
-				this.$el.find('#radio-1,#withinSelect,#radio-2,#outsideSelect,#outsidePrincipal').attr('disabled', true);
-			}
-		}
-		this.$el.find('#withinPayments').text(within.IntervalsNum);
-		this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.ReschedulingBalance));
-		this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
+	SetLoanOptionsDDL: function () {
+        var LoanFutureScheduleItems = this.model.get('LoanFutureScheduleItems');
+        var ddl = this.$el.find("#LoanFutureScheduleItemsDDL");
+        $.each(LoanFutureScheduleItems, function (key, value) {
+            ddl.append("<option value='" + value + "'>" + key + "</option>");
+        });
+        
 
-		var outside = this.model.get('ReResultOut');
-		if (outside != null) {
-			if (outside.Error != null) {
-				if (outside.Error.length > 0) {
-					var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
-					this.fillErrorPopup(params);
-				}
-			}
-			this.$el.find('#outsidePayments').text(outside.IntervalsNum);
-			this.$el.find('#outsidePrincipal').val(outside.DefaultPaymentPerInterval);
-			this.$el.find('#outsideIntrest').text(EzBob.formatPounds(outside.FirstPaymentInterest));
-		} else {
-			this.$el.find('#outsidePayments').text('0');
-			this.$el.find('#outsidePrincipal').val('0');
-			this.$el.find('#outsideIntrest').text(EzBob.formatPounds('0'));
-		}
-		var options = this.model.get('Options');
-		if (options.AutoPayment === false) {
-			this.$el.find('#automatic-charges').prop('checked', true);
-			if (options.StopAutoChargeDate != null) {
-				this.$el.find('#stop-charges-date').text("stopped from " + EzBob.formatDateWithoutTime(options.StopAutoChargeDate));
-			} else {
-				this.$el.find('#stop-charges-date').text("permanently stoped.");
-			}
-			this.$el.find('#stop-charges').show();
-		}
-		if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
-			this.$el.find('#fees-calculation').prop('checked', true);
-			this.$el.find('#fees-calendar-from').val(EzBob.formatDateWithoutTime(options.StopLateFeeFromDate));
-			this.$el.find('#fees-calendar-to').val(EzBob.formatDateWithoutTime(options.StopLateFeeToDate));
-		}
+    },
+
+	setUpView: function () {
+	        this.$el.find('#fees-calendar-from,#fees-calendar-to,#intrest-calendar-from,#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
+	        this.$el.find('#fees-calendar-from,#intrest-calendar-from').datepicker('setDate', new Date());
+
+	        var reschedulingIntervalStartIn = new Date(moment(this.model.get('ReResultIn').ReschedulingIntervalStart).utc());
+	        var reschedulingIntervalEndIn = new Date(moment(this.model.get('ReResultIn').ReschedulingIntervalEnd).utc());
+
+	        var reschedulingIntervalStartOut = new Date(moment(this.model.get('ReResultOut').ReschedulingIntervalStart).utc());
+
+	        this.$el.find('#within-calendar-from').datepicker({
+	            format: 'dd/mm/yyyy',
+	            startDate: reschedulingIntervalStartIn,
+	            endDate: reschedulingIntervalEndIn,
+	        });
+
+	        this.$el.find('#within-calendar-from').datepicker("setDate", reschedulingIntervalStartIn);
+
+	        this.$el.find('#outside-calendar-from').datepicker({
+	            format: 'dd/mm/yyyy',
+	            startDate: reschedulingIntervalStartOut,
+	        });
+
+
+
+	        this.$el.find('#outside-calendar-from').datepicker("setDate", reschedulingIntervalStartOut);
+
+	        var within = this.model.get('ReResultIn');
+	        if (within.Error != null) {
+	            if (within.BlockAction === true) {
+	                this.$el.find('#within-div').css('opacity', '0.5');
+	                this.$el.find('#radio-1,#withinSelect').attr('disabled', true);
+	            }
+	        }
+	        this.$el.find('#withinPayments').text(within.IntervalsNum);
+	        this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.OpenPrincipal));
+	        this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
+
+	        var outside = this.model.get('ReResultOut');
+	        if (outside != null) {
+	            if (outside.Error != null) {
+	                if (outside.Error.length > 0) {
+	                    var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
+	                    this.fillErrorPopup(params);
+	                }
+	                if (outside.BlockAction === true) {
+	                    this.$el.find('#outside-div').css('opacity', '0.5');
+	                    this.$el.find('#radio-2,#outsideSelect,#outsidePrincipal').attr('disabled', true);
+	                }
+	            }
+	            this.$el.find('#outsidePayments').text(outside.IntervalsNum);
+	            this.$el.find('#outsidePrincipal').val(outside.DefaultPaymentPerInterval);
+	            this.$el.find('#outsideIntrest').text(EzBob.formatPounds(outside.FirstPaymentInterest));
+	        } else {
+	            this.$el.find('#outsidePayments').text('0');
+	            this.$el.find('#outsidePrincipal').val('0');
+	            this.$el.find('#outsideIntrest').text(EzBob.formatPounds('0'));
+	        }
+	        var options = this.model.get('Options');
+	        if (options.AutoPayment === false) {
+	            if (options.StopAutoChargeDate != null) {
+	                this.$el.find('#stop-charges-date').text("stopped from " + EzBob.formatDateWithoutTime(options.StopAutoChargeDate)).css({"margin-left":"5px"});
+	            } else {
+	                this.$el.find('#stop-charges-date').text("permanently stoped.");
+	            }
+	            this.$el.find('#stop-charges').show();
+	        }
+	        if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
+	            this.$el.find('#fees-date-from').text(EzBob.formatDate3(options.StopLateFeeFromDate));
+	            if (EzBob.formatDate3(options.StopLateFeeToDate) !== "01/01/2099") {
+	                this.$el.find('#fees-delete-btn-until-text').show();
+	                this.$el.find('#fees-date-to').text(EzBob.formatDate3(options.StopLateFeeToDate));
+	            }
+	            this.$el.find('#fees-dates').show();
+	        }
+
+	    if (this.model.get('LoanStatus') == "PaidOff") {
+	        this.$el.find('#editloan-actions-region').hide();
+	    }
 	},
+
 	renderRegions: function() {
 		var data = this.serializeData();
 		this.renderSchedule(data);

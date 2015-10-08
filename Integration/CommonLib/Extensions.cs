@@ -2,7 +2,10 @@
 
 namespace EzBob.CommonLib
 {
+	using System.Collections.Generic;
 	using System.ComponentModel;
+	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 
 	public static class Extensions
 	{
@@ -92,6 +95,33 @@ namespace EzBob.CommonLib
 			return attributes.Length == 0
 				? value.ToString()
 				: ((DescriptionAttribute)attributes[0]).Description;
+		}
+
+		public static List<Tuple<string, string>> ToTuple<T>(this Enum value) where T : struct {
+			List<Tuple<string, string>> list = new List<Tuple<string, string>>();
+			foreach (var element in Enum.GetValues(typeof(T))) {
+				var enumType = element.GetType();
+				var field = enumType.GetField(element.ToString());
+				var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+				var description =  attributes.Length == 0 ? element.ToString() : ((DescriptionAttribute)attributes[0]).Description;
+				list.Add(new Tuple<string, string>(element.ToString(), description));
+			}
+
+			return list;
+		}
+
+		public static List<Tuple<string, string>> ToTupleInt<T>(this Enum value) where T : struct {
+			List<Tuple<string, string>> list = new List<Tuple<string, string>>();
+			foreach (var element in Enum.GetValues(typeof(T))) {
+				var enumType = element.GetType();
+				var field = enumType.GetField(element.ToString());
+				var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+				var description = attributes.Length == 0 ? element.ToString() : ((DescriptionAttribute)attributes[0]).Description;
+				int elementValue = (int)element;
+				list.Add(new Tuple<string, string>(elementValue.ToString(), description));
+			}
+
+			return list;
 		}
 	}
 }

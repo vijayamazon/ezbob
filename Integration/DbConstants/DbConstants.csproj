@@ -49,7 +49,7 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="NewLoanEnums.cs" />
+    <Compile Include="RepaymentIntervalTypes.cs" />
     <Compile Include="WizardStepType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

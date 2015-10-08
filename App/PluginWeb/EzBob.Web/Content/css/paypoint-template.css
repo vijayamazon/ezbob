@@ -4,9 +4,6 @@
 	color: red;
 }
 
-.paypont-form .control-label {
-	font-weight: normal;
-}
 
 body header + .inner {
 	margin: 0 auto !important;
@@ -42,4 +39,30 @@ body header + .inner {
 
 .wizard-steps {
 	margin-bottom: -60px;
+}
+
+.main-page.main-page-everline .PayPointHeader{
+	margin-top: 0;
+}
+
+.main-page.main-page-everline #amount{     
+	line-height: 40px;
+    vertical-align: middle;
+}
+
+.main-page.main-page-ezbob #amount-group .input-title {
+	display: inline-block;
+    font-weight: normal;
+}
+
+.main-page.main-page-ezbob #amount-group .controls{
+	 width: 50%;
+}
+
+.main-page.main-page-ezbob #amount {
+	font-weight: normal;
+}
+
+.PayPointHeader h3{
+	font-weight: normal;
 }

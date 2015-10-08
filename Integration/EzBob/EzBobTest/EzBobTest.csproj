@@ -103,6 +103,8 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="TestUpdateDailyLoanStats.cs" />
+    <Compile Include="TestIMail.cs" />
     <Compile Include="TestNewLoan.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
@@ -288,9 +290,17 @@
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\FraudChecker\FraudChecker.csproj">
+      <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IMailLib\IMailLib.csproj">
+      <Project>{18bd5614-c801-4869-b5e5-d993f6754671}</Project>
+      <Name>IMailLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IovationLib\IovationLib.csproj">
       <Project>{19ec11bc-48ae-4bfb-bf8e-7aa6a90ac484}</Project>
@@ -339,6 +349,9 @@
       <Link>connection-strings.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

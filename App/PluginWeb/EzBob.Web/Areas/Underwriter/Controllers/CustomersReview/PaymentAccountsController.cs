@@ -145,12 +145,12 @@
 		public RedirectResult AddPayPoint(int id)
 		{
 			var oCustomer = _customers.Get(id);
-            PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate());
+			PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
 			int payPointCardExpiryMonths =payPointFacade.PayPointAccount.CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate), hideSteps = true }, "https");
 			
-			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
+			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5.00m, callback);
 
 			return Redirect(url);
 		}
@@ -177,8 +177,8 @@
 				TempData["message"] = message;
 				return View("Error");
 			}
-			
-            PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
+
+			PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate(), cus.CustomerOrigin.Name);
 			if (!payPointFacade.CheckHash(hash, Request.Url))
 			{
 				throw new Exception("check hash failed");
@@ -195,7 +195,7 @@
 		{
 			var customer = _customers.GetChecked(customerId);
 			var expiry = expiredate.ToString("MMyy");
-            PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
+			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
 			AddPayPointCardToCustomer(transactionid, cardno, customer, expiry, 0, payPointFacade.PayPointAccount);
 
 			return Json(new { });

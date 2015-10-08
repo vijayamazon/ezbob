@@ -16,6 +16,23 @@ BEGIN
 
 	-- customers
 	WITH 
+	crl_id AS (
+		SELECT
+			CustomerId,
+			MAX(Id) AS Id
+		FROM
+			CustomerRequestedLoan
+		GROUP BY
+			CustomerId
+	),
+	crl AS (
+		SELECT
+			c.CustomerId,
+			c.Amount AS Amount
+		FROM
+			crl_id d
+			INNER JOIN CustomerRequestedLoan c ON d.Id = c.Id
+	),
 	CustomerDecisions AS 
 	(
 	 SELECT c.Id CustomerID, 
@@ -49,7 +66,7 @@ BEGIN
 		#temp1
 	FROM
 		Customer c
-		INNER JOIN CustomerRequestedLoan crl ON crl.CustomerId = c.Id
+		INNER JOIN crl ON crl.CustomerId = c.Id
 		LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
 		LEFT JOIN Loan l ON l.CustomerId = c.Id
 		LEFT JOIN CustomerApprovesRejects car ON car.CustomerID = c.Id

@@ -14,6 +14,7 @@ namespace IMailLib {
 		public string CompanyName { get; set; }
 		public Address CustomerAddress { get; set; }
 		public int CustomerId { get; set; }
+		public int OriginId { get; set; }
 		public string CustomerName { get; set; }
 		public DateTime Date { get; set; }
 		public Address GuarantorAddress { get; set; }

@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Models {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Runtime.Serialization;
 	using Ezbob.Backend.Models;
 
@@ -72,6 +73,38 @@
 
 		[DataMember]
 		public DateTime CurrentDate { get; set; }
+
+		public string CurrentDateUK {
+			get {
+				string suffix = "th";
+
+				switch (CurrentDate.Day) {
+				case 11:
+				case 12:
+				case 13:
+					// already set
+					break;
+
+				default:
+					switch (CurrentDate.Day % 10) {
+					case 1:
+						suffix = "st";
+						break;
+
+					case 2:
+						suffix = "nd";
+						break;
+
+					case 3:
+						suffix = "rd";
+						break;
+					} // switch
+					break;
+				} // switch
+
+				return CurrentDate.Day + suffix + CurrentDate.ToString(" MMM yyyy", new CultureInfo("en-GB", false));
+			} // get
+		} // CurrentDateUK
 
 		[DataMember]
 		public string LoanType { get; set; }

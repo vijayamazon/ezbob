@@ -64,9 +64,9 @@
 		[Range(1, long.MaxValue, ErrorMessage = "AliMemberId is invalid")]
 		public long aliMemberId { get; set; }
 
-		[Required(AllowEmptyStrings = false)]
-		[Range(1, Int32.MaxValue, ErrorMessage = "ezbob customer ID is invalid")]
-		public int aId { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(8, ErrorMessage = "Ezbob customer ID is invalid")]
+        public string aId { get; set; }
 
 		[Required]
 		[Range(Int32.MinValue, Int32.MaxValue, ErrorMessage = "loanId is invalid")]

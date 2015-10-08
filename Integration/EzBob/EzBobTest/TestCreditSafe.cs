@@ -1,6 +1,8 @@
 ﻿namespace EzBobTest
 {
+    using System;
     using ExperianLib.Tests.Integration;
+    using Ezbob.Backend.Models.ExternalAPI;
     using Ezbob.Backend.Strategies.CreditSafe;
     using Ezbob.Backend.Strategies;
     using Ezbob.Backend.Strategies.Experian;
@@ -10,6 +12,7 @@
     using EzServiceShortcut;
     using StructureMap;
     using Ezbob.Backend.Strategies.CreditSafe;
+    using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 
     [TestFixture]
     public class TestCreditSafe : BaseTest
@@ -48,7 +51,6 @@
             //test.LtdGetData("asd");
 			//var test = new ServiceLogCreditSafeNonLtd(12614);
 			//test.Execute();
-
         }
 
         [SetUp]
@@ -74,8 +76,8 @@
             data.LatestAccountsDate = data.LatestAccountsDate ?? DateTime.UtcNow;
             data.CCJDateFrom = data.CCJDateFrom ?? DateTime.UtcNow;
             data.CCJDateTo = data.CCJDateTo ?? DateTime.UtcNow;*/
-            ParseCreditSafeLtd test = new ParseCreditSafeLtd(1);
-            test.Execute();
+            //ParseCreditSafeLtd test = new ParseCreditSafeLtd(1);
+            //test.Execute();
             //ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
             //saveTest.Execute();
 
@@ -101,6 +103,8 @@
                     );
             }
             con.Commit();*/
+            var test = new SaleContract(model);
+            test.Execute();
         }
 
         [Test]
@@ -120,13 +124,64 @@
         {
             //var serviceLogTest = new CreditSafeLtdService();
             //serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
-            var test = new BackfillExperianLtdScoreText();
-            test.Execute();
+            //var test = new BackfillExperianLtdScoreText();
+            //test.Execute();
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());
             // ser.DownloadOneLimitedFromExperian("X9999999", 27);
         }
-
+        		private readonly AlibabaContractDto model = new AlibabaContractDto {
+                requestId = "142857",
+                responseId = "543",
+                loanId = 24314474,
+                orderNumber = "23456780",
+                sellerBusinessName = "Dabao Trading Ltd.",
+                sellerAliMemberId = "41523",
+                sellerStreet1 = "128 Xihu Road",
+                sellerCity = "Hangzhou",
+                sellerState = "Zhejiang",
+                sellerCountry = "China",
+                sellerPostalCode = "310016",
+                sellerAuthRepFname = "Hong",
+                sellerAuthRepLname = "Zhang",
+                sellerPhone = "865218526",
+                sellerFax = "865218526",
+                sellerEmail = "zhang.hong@163.com",
+                buyerBusinessName = "A PLAZA DRIVING SCHOOL",
+                aliMemberId = 131,
+                aId = "01703638",
+                buyerStreet1 = "926 E LEWELLING BLVD",
+                buyerCity = "HAYWARD",
+                buyerState = "CA",
+                buyerCountry = "U.S.A",
+                buyerZip = "94541",
+                buyerAuthRepFname = "MICHAEL",
+                buyerAuthRepLname = "ARTE",
+                buyerPhone = "415222444",
+                buyerEmail = "marte@aplaza.net",
+                shippingMark = "WT12345678",
+                totalOrderAmount = 88000,
+                deviationQuantityAllowed = 20,
+                orderAddtlDetails = "",
+                shippingTerms = "asd",
+                shippingDate = new DateTime(2015,03,01),
+                loadingPort = "Shanghai",
+                destinationPort = "Oakland,CA",
+                orderDeposit = 1000,
+                beneficiaryBank = "Bank of China",
+                bankAccountNumber = 1234567890,
+                bankStreetAddr1 = "108 Ganjiang Road",
+                bankCity = "Hangzhou",
+                bankState = "Zhejiang",
+                bankCountry = "China",
+                bankPostalCode = "310020",
+                swiftcode = "ADBNCNBJCD1",
+                orderCurrency = "gbp",
+                orderItems = new OrderItems[] {
+                    new OrderItems(){orderProdNumber = 0105, productName = "Battery", productSpecs = "AAA", productQuantity = 20000, productUnit = 6, productUnitPrice = 2, productTotalAmount = 48000},
+                    new OrderItems(){orderProdNumber = 0106, productName = "Screw", productSpecs = "Phillips", productQuantity = 50000, productUnit = 100, productUnitPrice = 8, productTotalAmount = 40000}
+                }
+			};
         private const string response = @"<?xml version=""1.0""?>
 <xmlresponse>
   <header>

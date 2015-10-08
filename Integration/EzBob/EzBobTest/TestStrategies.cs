@@ -39,8 +39,10 @@
 	using EZBob.DatabaseLib.Model.Alibaba;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Fraud;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using FraudChecker;
 	using NHibernate;
 	using NHibernate.Linq;
 	using NHibernate.Util;
@@ -295,8 +297,34 @@
 
 		[Test]
 		public void testFraud() {
-			var s = new FraudChecker(21394, FraudMode.FullCheck);
-			s.Execute();
+			// var s = new FraudChecker(21394, FraudMode.FullCheck);
+			// s.Execute();
+
+			var chk = new InternalChecker(126, FraudMode.FullCheck);
+			List<FraudDetection> lst = chk.Decide();
+
+			m_oLog.Debug("{0} collisions found.", lst.Count);
+
+			foreach (FraudDetection fd in lst) {
+				m_oLog.Debug(
+					"\n\nCollision:" +
+					"\n\tCurrent customer: {0}" +
+					"\n\tOther customer: {1}" +
+					"\n\tExternal user: {2}" +
+					"\n\tCurrent field: {3}" +
+					"\n\tCompare field: {4}" +
+					"\n\tValue: {5}" +
+					"\n\tConcurrence: {6}" +
+					"\n",
+					fd.CurrentCustomer.Id,
+					fd.InternalCustomer == null ? "null" : fd.InternalCustomer.Id.ToString(),
+					fd.ExternalUser == null ? "null" : fd.ExternalUser.FirstName,
+					fd.CurrentField,
+					fd.CompareField,
+					fd.Value,
+					fd.Concurrence
+				);
+			} // for each
 		}
 
 		[Test]
@@ -423,7 +451,7 @@
 
 			this.m_oDB.ForEachRowSafe((sr) => {
 				int customerId = sr["Id"];
-				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
+				new CalculateMedal(customerId, null, DateTime.UtcNow, false, true).Execute();
 			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 		}
 
@@ -644,7 +672,7 @@
 		[Test]
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
-			int customerID = 24322; //  23504; // 24319;  //24321 ; 
+            int customerID = 16134; //  23504; // 24319;  //24321 ; 
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
@@ -788,22 +816,23 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 16; //4182; // 1718; // 4439; //3534;
+			const int loanID = 5482; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(8); //new DateTime(2015, 10, 02); 
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 938m;
+			reModel.PaymentPerInterval = 0m;
+			reModel.StopFutureInterest = true;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
-			s1.Context.UserID = 25852;
+			s1.Context.UserID = 357; //25852;
 			try {
 				s1.Execute();
-				m_oLog.Debug("RESULT FOR OUT");
-				m_oLog.Debug(s1.Result.ToString());
+				this.m_oLog.Debug("RESULT FOR OUT" + s1.Result.ToString());
+				// ReSharper disable once CatchAllClause
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
@@ -811,21 +840,22 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 16; //3946; //4192; // 4439; // 3534; //1846; //2662;
+			const int loanID = 5519;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = false;
-			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(5);
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = true;
+			reModel.SaveToDB = false;
+			reModel.StopFutureInterest = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
-				s.Context.UserID = 25852;
-				//s.Execute();
-				m_oLog.Debug("RESULT FOR IN");
-				m_oLog.Debug(s.Result.ToString());
+				s.Context.UserID = 25852;// 357; 
+				s.Execute();
+				this.m_oLog.Debug("RESULT FOR IN" + s.Result.ToString());
+				// ReSharper disable once CatchAllClause
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
@@ -838,7 +868,7 @@
 				3456,3462,3476,3478,3509,3510,3513,3521,3533,3535,3538,3539,3547,3583,3593,3607,3651,3670,3700,3710,3711,3714,3754,3827,3860,3917,3946,4081,4139,4174,4183,4192,
 				2990,2996,3003,3007,3032,3038,3083,3084,3094,3096,3113,3118,3141,3142,3166,3196,3208,3236,3275,3285,3302
 			};
-			// select * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id
+			// select top 10 *  from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null
 			foreach (var loanID in loans) {
 				try {
 					ReschedulingArgument reModel = new ReschedulingArgument();
@@ -861,46 +891,50 @@
 				}
 			}
 
+
+            Loan loan = new Loan();
+
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
 					int loanid = sr["Id"];
-					ReschedulingArgument reModel = new ReschedulingArgument();
-					Loan loan = new Loan();
+
+					// IN
+				    ReschedulingArgument reModel = new ReschedulingArgument();
 					reModel.LoanID = loanid;
 					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 					reModel.RescheduleIn = true;
 					reModel.SaveToDB = false;
-					reModel.ReschedulingDate = DateTime.UtcNow;
+					reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(15);
 					reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-					if (reModel.RescheduleIn == false) {
-						reModel.PaymentPerInterval = 900m;
-					}
-					var s = new RescheduleLoan<Loan>(loan, reModel);
-					s.Context.UserID = 25852;
+                    var s = new RescheduleLoan<Loan>(loan, reModel);
+					s.Context.UserID = 357; //25852;
 					s.Execute();
-					m_oLog.Debug(s.Result.ToString());
+					this.m_oLog.Debug(s.Result.ToString());
+					this.m_oLog.Debug("IN_RESULT: {0}", s.Result.ToString());
 
-					// OUT
+					/*// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
 					Loan loan1 = new Loan();
 					reModel1.LoanID = loanid;
 					reModel1.LoanType = loan1.GetType().AssemblyQualifiedName;
 					reModel1.RescheduleIn = false;
 					reModel1.SaveToDB = false;
-					reModel1.ReschedulingDate = DateTime.UtcNow;
+					reModel1.ReschedulingDate = DateTime.UtcNow.Date.AddDays(44);
 					reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-					if (reModel1.RescheduleIn == false) {
-						reModel1.PaymentPerInterval = 900m;
-					}
+					reModel1.PaymentPerInterval = 90m;
+					reModel1.StopFutureInterest = true;
 					var s1 = new RescheduleLoan<Loan>(loan1, reModel1);
-					s1.Context.UserID = 25852;
+					s1.Context.UserID = 357; //25852;
 					s1.Execute();
-					m_oLog.Debug(s1.Result.ToString());
+					this.m_oLog.Debug("OUT_RESULT: {0}", s1.Result.ToString());*/
 
 				} catch (Exception e) {
 					Console.WriteLine(e);
 				}
-			}, "select l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL", CommandSpecies.Text);
+			},
+			"select top 10 l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and DateClosed is null order by l.Id desc", 
+		//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null",
+			CommandSpecies.Text); //top 100 
 		}
 
 		[Test]
@@ -914,6 +948,8 @@
 			//build reschedule model
 			EditLoanDetailsModel model = changeLoanModelBuilder.BuildModel(tLoan);
 			//edit it (remove schedules and add new ones)
+            Loan loan = new Loan();
+
 			//Choose schedules you want to delete
 			var removeInstallment = model.Items.First(x => x.Id == 129 && x.Type == "Installment");
 			var principal = removeInstallment.Principal;
@@ -946,7 +982,7 @@
 				return; // model;
 			}
 			//Create modified loan from the reschedule model
-			var loan = changeLoanModelBuilder.CreateLoan(model);
+			loan = changeLoanModelBuilder.CreateLoan(model);
 			loan.LoanType = lt;
 			loan.CashRequest = cr;
 			//Recalculate the loan 
@@ -1089,6 +1125,79 @@
 				Type = OpportunityType.FinishLoan.DescriptionAttr()
 			});
 			add.Execute();
+		}
+
+
+		[Test]
+		public void TestLoanInterestRate() {
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(12);
+
+			var firstSchedule = loan.Schedule.OrderBy(s => s.Date)
+				.FirstOrDefault();
+
+			var lastSchedule = loan.Schedule.OrderBy(s => s.Date)
+				.LastOrDefault();
+
+			Console.WriteLine(firstSchedule);
+			Console.WriteLine(lastSchedule);
+
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+
+			decimal r = 5;
+			if (firstSchedule != null && lastSchedule!=null)
+				//r = calc.GetInterestRate(firstSchedule.Date, lastSchedule.Date);
+			r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01,01));
+
+			this.m_oLog.Debug("{0}", loan);
+
+			Console.WriteLine(r);			
+		}
+
+		[Test]
+		public void TestCollectionSms() {
+			/*
+			SetLateLoanStatus stra = new SetLateLoanStatus();
+			stra.LoadSmsTemplates();
+			var modelEzbob = new SetLateLoanStatus.CollectionDataModel {
+				OriginID = 1,
+				FirstName = "John",
+				AmountDue = 125,
+				DueDate = DateTime.Today.AddDays(-5),
+				SmsSendingAllowed = false,
+				CustomerID = 199
+			};
+			var modelEverline = new SetLateLoanStatus.CollectionDataModel {
+				OriginID = 2,
+				FirstName = "John",
+				AmountDue = 125,
+				DueDate = DateTime.Today.AddDays(-5),
+				SmsSendingAllowed = false,
+				CustomerID = 199
+			};
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay0);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay1to6);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay7);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay8to14);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay15);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay21);
+			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay31);
+
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay0);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay1to6);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay7);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay8to14);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay15);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay21);
+			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay31);
+        [Test]
+        public void TestDataSharing() {
+            DataSharing stra = new DataSharing(16142, AlibabaBusinessType.APPLICATION_WS_3);
+            stra.Execute();
+            Console.WriteLine(stra.Result);
+
+        }
+			*/
 		}
 
 		

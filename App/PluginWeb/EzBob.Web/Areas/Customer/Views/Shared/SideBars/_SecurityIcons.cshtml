@@ -1,0 +1,24 @@
+﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+
+@{
+	Layout = null;
+}
+
+<div class="security-icons">
+	<div class="item">
+		<div class="icon"></div>
+		<div class="text truste">@Html.Raw(UiCustomerOrigin.GetTrusteSeal(ViewBag))</div>
+	</div>
+	<div class="item">
+		<div class="icon"></div>
+		<div class="text verisign">@Html.Raw(UiCustomerOrigin.GetVeriSignSeal(ViewBag))</div>
+	</div>
+	<div class="item">
+		<div class="text lock-icon">
+			<img src="/Content/img/security-padlock.svg" />
+		</div>
+	</div>
+</div>
+

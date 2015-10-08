@@ -14,11 +14,19 @@
 		protected override decimal Epsilon { get { return Precision; } }
 
 		protected override bool IsValueEqualTo(AIntervalEdge<decimal> other) {
-			return Math.Abs(Value - other.Value) < Epsilon;
+			return IsValueEqualTo(other.Value);
+		} // IsValueEqualTo
+
+		protected override bool IsValueEqualTo(decimal other) {
+			return Math.Abs(Value - other) < Epsilon;
 		} // IsValueEqualTo
 
 		protected override bool IsValueLessThan(AIntervalEdge<decimal> other) {
-			return Value < other.Value - Epsilon;
+			return IsValueEqualTo(other.Value);
+		} // IsValueLessThan
+
+		protected override bool IsValueLessThan(decimal other) {
+			return Value < other - Epsilon;
 		} // IsValueLessThan
 	} // class DecimalIntervalMatrixIntervalEdge
 } // namespace

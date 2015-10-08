@@ -1,29 +1,26 @@
-﻿namespace AutomationCalculator.AutoDecision.AutoRejection
-{
+﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
 	using System.Collections.Generic;
 	using Common;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 
-	public class CaisStatusesCalculation
-	{
-		public CaisStatusesCalculation(AConnection db, ASafeLog log)
-		{
+	public class CaisStatusesCalculation {
+		public CaisStatusesCalculation(AConnection db, ASafeLog log) {
 			Log = log;
 			DB = db;
-		}
+		} // constructor
 
 		public List<CaisStatus> GetConsumerCaisStatuses(int customerId) {
 			var dbHelper = new DbHelper(DB, Log);
 			return dbHelper.GetCustomerCaisStatuses(customerId);
-		}
+		} // GetConsumerCaisStatuses
 
-		public List<CaisStatus> GetBusinessCaisStatuses(int customerId)
-		{
+		public List<CaisStatus> GetBusinessCaisStatuses(int customerId) {
 			var dbHelper = new DbHelper(DB, Log);
 			return dbHelper.GetBusinessCaisStatuses(customerId);
-		}
+		} // GetBusinessCaisStatuses
 
 		public ConsumerLatesModel GetLates(
 			int customerId,
@@ -32,9 +29,8 @@
 			int lastMonthStatuses,
 			List<CaisStatus> caisStatuses = null
 		) {
-			if (caisStatuses == null) {
+			if (caisStatuses == null)
 				caisStatuses = GetConsumerCaisStatuses(customerId);
-			}
 
 			var numOfLates = 0;
 			var lateDays = 0;
@@ -49,112 +45,114 @@
 				bool isLateInAccount = false;
 
 				for (int i = 0; i < lastMonthStatuses; ++i) {
-					if (caisStatus.AccountStatusCodes.Length - i > 0) {
-						string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
+					if (caisStatus.AccountStatusCodes.Length - i <= 0)
+						continue;
 
-						var accountStatus = AccountStatusDictionary.GetAccountStatus(status);
+					string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
 
-						if (accountStatus.IsLate && accountStatus.LateStatus > minLateStatus) {
-							isLateInAccount = true;
-							lateDays = lateDays < accountStatus.LateDays ? accountStatus.LateDays : lateDays;
-						}
-					}
-				}
+					var accountStatus = AccountStatusDictionary.GetAccountStatus(status);
 
-				if (isLateInAccount) {
+					if (accountStatus.IsLate && accountStatus.LateStatus > minLateStatus) {
+						isLateInAccount = true;
+						lateDays = lateDays < accountStatus.LateDays ? accountStatus.LateDays : lateDays;
+					} // if
+				} // for
+
+				if (isLateInAccount)
 					numOfLates++;
-				}
-			}
+			} // for each CAIS status
 
-			return new ConsumerLatesModel
-			{
+			return new ConsumerLatesModel {
 				LateDays = lateDays,
 				NumOfLates = numOfLates
 			};
-		}
+		} // GetLates
 
-		public DefaultsModel GetDefaults(int customerId, DateTime asOfDate, int minAmount, int lastMonthStatuses, List<CaisStatus> caisStatuses = null)
-		{
+		public DefaultsModel GetDefaults(
+			int customerId,
+			DateTime asOfDate,
+			int minAmount,
+			int lastMonthStatuses,
+			List<CaisStatus> caisStatuses = null
+		) {
 			if (caisStatuses == null)
-			{
 				caisStatuses = GetConsumerCaisStatuses(customerId);
-			}
-			const decimal monthDays = 365.0M / 12.0M;
+
+			DateTime asOfMonth = new DateTime(asOfDate.Year, asOfDate.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			DateTime lastRelevantMonth = asOfMonth.AddMonths(-lastMonthStatuses + 1);
 
 			var numOfDefaults = 0;
 			var defaultsAmount = 0;
 
-			foreach (var caisStatus in caisStatuses)
-			{
-				var monthSinceUpdate = (decimal)(asOfDate - caisStatus.LastUpdatedDate).TotalDays / monthDays;
-				int useLastStatusMonths = 0;
-				if (monthSinceUpdate > lastMonthStatuses)
-				{
-					useLastStatusMonths = 0;
-				}
-				else {
-					useLastStatusMonths = lastMonthStatuses - (int)monthSinceUpdate;
-				}
+			foreach (CaisStatus caisStatus in caisStatuses) {
+				DateTime thisMonth = new DateTime(
+					caisStatus.LastUpdatedDate.Year,
+					caisStatus.LastUpdatedDate.Month,
+					1,
+					0,
+					0,
+					0,
+					DateTimeKind.Utc
+				);
+
+				if (thisMonth < lastRelevantMonth)
+					continue;
+
+				int monthSinceUpdate = 1 + MiscUtils.DateDiffInMonths(thisMonth, asOfMonth);
+
+				int useLastStatusMonths = lastMonthStatuses - monthSinceUpdate + 1;
+
 				bool isDefaultInAccount = false;
 
-				for (int i = 0; i < useLastStatusMonths; ++i)
-				{
-					if (caisStatus.AccountStatusCodes.Length - i > 0)
-					{
-						string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
-						var accountStatus = AccountStatusDictionary.GetAccountStatus(status);
-						var balance = Math.Max(caisStatus.Balance, caisStatus.CurrentDefBalance);
-						if (accountStatus.IsDefault && balance > minAmount)
-						{
-							isDefaultInAccount = true;
-						}
-					}
-				}
+				for (int i = 0; i < useLastStatusMonths; ++i) {
+					if (caisStatus.AccountStatusCodes.Length - i <= 0)
+						continue;
 
-				if (isDefaultInAccount)
-				{
+					string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
+					CaisAccountStatus accountStatus = AccountStatusDictionary.GetAccountStatus(status);
+					int balance = Math.Max(caisStatus.Balance, caisStatus.CurrentDefBalance);
+
+					if (accountStatus.IsDefault && balance > minAmount)
+						isDefaultInAccount = true;
+				} // for
+
+				if (isDefaultInAccount) {
 					numOfDefaults++;
 					defaultsAmount += caisStatus.Balance;
-				}
-			}
+				} // if
+			} // for each CAIS status
 
-			return new DefaultsModel
-			{
+			return new DefaultsModel {
 				DefaultsAmount = defaultsAmount,
 				NumOfDefaults = numOfDefaults
 			};
-
-		}
+		} // GetDefaults
 
 		protected readonly ASafeLog Log;
 		protected readonly AConnection DB;
-	}
+	} // class CaisStatusesCalculation
 
-	public class ConsumerLatesModel
-	{
+	public class ConsumerLatesModel {
 		public int NumOfLates { get; set; }
 		public int LateDays { get; set; }
-	}
+	} // class ConsumerLatesModel
 
-	public class DefaultsModel
-	{
+	public class DefaultsModel {
 		public int NumOfDefaults { get; set; }
 		public int DefaultsAmount { get; set; }
-	}
+	} // class DefaultsModel
 
-	public class CaisAccountStatus
-	{
+	public class CaisAccountStatus {
 		public string ShortDescription { get; set; }
 		public int LateStatus { get; set; }
 		public int LateDays { get; set; }
 		public bool IsLate { get; set; }
 		public bool IsDefault { get; set; }
-	}
+	} // class CaisAccountStatus
 
-	public static class AccountStatusDictionary
-	{
-		static AccountStatusDictionary()
-		{
+	public static class AccountStatusDictionary {
+		static AccountStatusDictionary() {
 			ms_oAccountStatuses = new SortedDictionary<string, CaisAccountStatus> {
 				{" ", new CaisAccountStatus{ShortDescription = "&nbsp;", }},
 				{"0", new CaisAccountStatus{ShortDescription = "OK", } },
@@ -173,21 +171,19 @@
 			};
 		} // static constructor
 
-		public static CaisAccountStatus GetAccountStatus(string accStatusIndicator)
-		{
+		public static CaisAccountStatus GetAccountStatus(string accStatusIndicator) {
 			return LookFor(accStatusIndicator, ms_oAccountStatuses);
 		} // GetAccountStatusString
 
-		private static CaisAccountStatus LookFor(string sNeedle, SortedDictionary<string, CaisAccountStatus> oHaystack)
-		{
+		private static CaisAccountStatus LookFor(string sNeedle, SortedDictionary<string, CaisAccountStatus> oHaystack) {
 			if (string.IsNullOrEmpty(sNeedle))
-			{
 				return new CaisAccountStatus { ShortDescription = string.Format("Status: ({0}) not found", sNeedle) };
-			}
-			return oHaystack.ContainsKey(sNeedle) ? oHaystack[sNeedle] : new CaisAccountStatus { ShortDescription = string.Format("Status: ({0}) not found", sNeedle) };
+
+			return oHaystack.ContainsKey(sNeedle)
+				? oHaystack[sNeedle]
+				: new CaisAccountStatus { ShortDescription = string.Format("Status: ({0}) not found", sNeedle) };
 		} // LookFor
 
 		private static readonly SortedDictionary<string, CaisAccountStatus> ms_oAccountStatuses;
-
 	} // class AccountStatusDictionary
-}
+} // namespace

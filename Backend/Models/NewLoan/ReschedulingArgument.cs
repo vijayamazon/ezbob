@@ -26,4 +26,7 @@
 		[DataMember]
 		public bool RescheduleIn { get; set; } // type of re-scheduling: for "IN" - true, for "OUT" - false
 	} // class ReschedulingArgument
-} // namespace
+		[DataMember]
+		public bool StopFutureInterest { get; set; } // freeze interest for "outside", starts from ReschedulingDate
+
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("\n");

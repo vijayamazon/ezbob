@@ -22,13 +22,39 @@
 	using Infrastructure.csrf;
 	using Iesi.Collections.Generic;
 	using NHibernate;
+	using Reports.Alibaba.DataSharing;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
 	public class CustomerDetailsController : Controller {
+		public CustomerDetailsController(
+			IEzbobWorkplaceContext oContext,
+			DatabaseDataHelper oDatabaseHelper,
+			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
+			ISession oSession,
+			CashRequestBuilder oCashRequestBuilder,
+			DirectorRepository oDirectorRepository,
+			PropertyStatusRepository propertyStatusRepository,
+			CustomerPhoneRepository customerPhoneRepository,
+			CustomerAddressRepository customerAddressRepository,
+			CustomerRepository customerRepository
+		) {
+			this.context = oContext;
+			this.databaseHelper = oDatabaseHelper;
+			this.personalInfoHistoryRepository = oPersonalInfoHistoryRepository;
+			this.serviceClient = new ServiceClient();
+			this.session = oSession;
+			this.cashRequestBuilder = oCashRequestBuilder;
+			this.directorRepository = oDirectorRepository;
+			this.propertyStatusRepository = propertyStatusRepository;
+			this.customerPhoneRepository = customerPhoneRepository;
+			this.customerAddressRepository = customerAddressRepository;
+			this.customerRepository = customerRepository;
+		} // constructor
+
 		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
 			if (customer.Company == null)
-				return new { error = "Customer doesn't have a company." };
+				return new { error = "Customer doesn't have a company." + customer.Id };
 
 			ms_oLog.Debug("Adding a director {0} to customer {1}.", director, customer.Stringify());
 
@@ -69,31 +95,6 @@
 
 			return new { success = true };
 		} // AddDirectorToCustomer
-
-		public CustomerDetailsController(
-			IEzbobWorkplaceContext oContext,
-			DatabaseDataHelper oDatabaseHelper,
-			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
-			ISession oSession,
-			CashRequestBuilder oCashRequestBuilder,
-			DirectorRepository oDirectorRepository,
-			PropertyStatusRepository propertyStatusRepository,
-			CustomerPhoneRepository customerPhoneRepository,
-			CustomerAddressRepository customerAddressRepository,
-			CustomerRepository customerRepository
-		) {
-			this.context = oContext;
-			this.databaseHelper = oDatabaseHelper;
-			this.personalInfoHistoryRepository = oPersonalInfoHistoryRepository;
-			this.serviceClient = new ServiceClient();
-			this.session = oSession;
-			this.cashRequestBuilder = oCashRequestBuilder;
-			this.directorRepository = oDirectorRepository;
-			this.propertyStatusRepository = propertyStatusRepository;
-			this.customerPhoneRepository = customerPhoneRepository;
-			this.customerAddressRepository = customerAddressRepository;
-			this.customerRepository = customerRepository;
-		} // constructor
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult Dashboard() {
@@ -152,7 +153,7 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+			this.m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 
 			ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
@@ -171,9 +172,11 @@
 			List<DirectorModel> limitedDirectors,
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCountInfo,
-			CompanyInfo experianInfo
+			CompanyInfo experianInfo,
+			string promoCode
 		) {
 			var customer = this.context.Customer;
+			customer.PromoCode = promoCode;
 
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
@@ -189,7 +192,7 @@
 			new Transactional(() => {
 				sErrorMsg = ProcessCompanyInfoTemporary(
 					nBusinessType,
-					companyAdditionalInfo.VatReporting,
+					companyAdditionalInfo.VatRegistered,
 					limitedInfo,
 					nonLimitedInfo,
 					companyAdditionalInfo,
@@ -241,9 +244,12 @@
 				this.session.Refresh(customer);
 			} // if
 
-			// TODO: Alibaba 001 - end of step 3
+            // Data Sharing with Alibaba 0001 - end of step 3
+		    if (customer.IsAlibaba) {
+		        this.serviceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_WS_3, null);
+		    }
 
-			return Json(new { });
+		    return Json(new { });
 		}
 
 		[Ajax]
@@ -361,7 +367,7 @@
 					{
 						otherPropertyAddress.AddressType = CustomerAddressType.OtherPropertyAddress;
 						otherPropertyAddress.Customer = customer;
-						customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
+						this.customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
 						customer.AddressInfo.OtherPropertiesAddresses.Add(otherPropertyAddress);
 					}
 				}
@@ -592,7 +598,7 @@
 
 		private string ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
-			string vat,
+			bool vatRegistered,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo,
@@ -675,7 +681,7 @@
 					}
 				};
 
-				companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof(VatReporting), vat) : null;
+				companyData.VatRegistered = vatRegistered;
 
 				string sErrorMsg = ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
 
@@ -717,6 +723,7 @@
 				RentMonthLeft = companyData.RentMonthLeft,
 				CapitalExpenditure = companyData.CapitalExpenditure,
 				VatReporting = companyData.VatReporting,
+				VatRegistered = companyData.VatRegistered
 			};
 
 			customer.Company = company;
@@ -816,7 +823,7 @@
 				this.session.Flush();
 				ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-				m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+				this.m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
 				customer.AddAlibabaDefaultBankAccount();
@@ -854,6 +861,7 @@
 		/// <param name="personalInfo">Customer's personal info.</param>
 		/// <param name="personalAddress">Customer's current address.</param>
 		/// <param name="prevPersonAddresses">Customer's previous address(es).</param>
+		/// <param name="otherPropertiesAddresses">Customer's other properties addresses</param>
 		/// <param name="dateOfBirth">Customer's date of birth in format d/M/yyyy.</param>
 		/// <remarks>
 		/// Passing a date is kinda tricky therefore external string parameter is used for
@@ -897,7 +905,7 @@
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 				personalInfo.MobilePhoneVerified = customer.PersonalInfo.MobilePhoneVerified;
 			}
-			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatus);
+			customer.PropertyStatus = this.propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatus);
 
 			customer.PersonalInfo = personalInfo;
 
@@ -929,8 +937,6 @@
 			customer.WizardStep = this.databaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 			this.session.Flush();
 
-			// TODO: Alibaba 001 - end of step 2
-
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 		}
 
@@ -941,7 +947,7 @@
 				Phone = mobilePhone,
 				IsCurrent = true
 			};
-			customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
+			this.customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
 
 			var customerDaytimePhoneEntry = new CustomerPhone {
 				CustomerId = customerId,
@@ -949,7 +955,7 @@
 				Phone = daytimePhone,
 				IsCurrent = true
 			};
-			customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
+			this.customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
 		} // SavePhones
 
 		private void MakeAddress(

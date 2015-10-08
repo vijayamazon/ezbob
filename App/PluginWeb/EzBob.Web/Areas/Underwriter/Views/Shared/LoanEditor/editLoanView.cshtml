@@ -1,24 +1,24 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@model dynamic
 <script type="text/template" id="loan_editor_template">
 
-    <div class="row Container" style="width:1200px;">
+    <div class="row Container" style="width:1200px; margin-top:40px; margin-left:40px">
         <div class="col-sm-8">
             <form class="form-inline" role="form" id="form-reschedule" onsubmit="return false;">
 
                 <div class="row">
-                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1">Within loan period</label></h5>
+                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1" style="margin-left:15px;">Within loan period</label></h5>
                 </div>
 
                 <div class="row" id="within-div">
                     <div class="col-sm-11 col-sm-offset-1">
-                        <span class="float_left" style="vertical-align: top;">
-                            Re-schedule
+                        <span class="float_left" style="vertical-align: top;">                            
                             <span style="width: 150px; margin-top: -10px; display: inline-block">
                                 <select class="form-control" id="withinSelect" style="width: 150px; border-color: black;">
                                     <option value="month">Month</option>
                                     <option value="weeks">Week</option>
                                 </select>
-                                <span style="margin-left: 50px;">interval</span>
+                                <span style="margin-left: 10px;">Re-schedule interval</span>
                             </span>
                         </span>
                         <span class="float_left" style="vertical-align: top;">
@@ -40,23 +40,29 @@
                                 <span style="margin-left: 50px;">£Interest</span>
                             </span>
                         </span>
+                        <span class="float_left" style="margin-left: 10px; margin-top: 15px;">
+                            <div class="input-group">
+                                <span style="margin-left: 270px;">Strat reschedule from:</span>
+                                <span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="within-calendar-from">
+                            </div>
+                        </span>                      
                     </div>
                 </div>
 
                 <div class="row">
-                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2">Outside loan payment arangment</label></h5>
+                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2" style="margin-left: 15px;">Outside loan payment arangment</label></h5>
                 </div>
 
-                <div class="row" style="margin-bottom: 20px;" id="outside-div">
+                <div class="row" style="margin-bottom: 15px;" id="outside-div">
                     <div class="col-sm-11 col-sm-offset-1">
-                        <span class="float_left" style="vertical-align: top;">
-                            Re-schedule
+                        <span class="float_left" style="vertical-align: top;">                            
                             <span style="width: 150px; margin-top: -10px; display: inline-block">
                                 <select class="form-control" id="outsideSelect" style="width: 150px; border-color: black;">
                                     <option value="month">Month</option>
                                     <option value="weeks">Week</option>
                                 </select>
-                                <span style="margin-left: 50px;">interval</span>
+                                <span style="margin-left: 10px;">Re-schedule interval</span>
                             </span>
                         </span>
                         <span class="float_left" style="vertical-align: top;">
@@ -78,82 +84,101 @@
                                 <span style="margin-left: 50px;">£Interest</span>
                             </span>
                         </span>
+                        <span class="float_left" style="margin-left: 10px; margin-top: 15px;">
+                            <div class="input-group">
+                                <span style="margin-top: -10px;"><input type="checkbox" name="StopFutureInterest" id="outside-stop-future-interest"><span style="margin-left:10px; vertical-align: sub;">Stop future interest</span></span>
+                                <span style="margin-left: 120px;">Strat reschedule from:</span>
+                                <span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="outside-calendar-from">
+                            </div>
+                        </span>
                     </div>
                 </div>
-
-                <div class="row">
-                    <span class="float_left">
-                        <label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after&nbsp;</label>
-                    </span>
-                    <input class="form-control input-width float_left" type="text" value="0" id="charges-payments" name="charges-payments" style="margin-top: -7px;margin-left: 9px;">
-                    <span class="float_left">
-                        &nbsp;payments.&nbsp;
-                    </span>
-                </div>
-                <div class="row" style="margin-bottom: 14px;">
-                    <span style="display: none; font-weight: bold; margin-left: 22px;" id="stop-charges">Auto charges are <span id="stop-charges-date"></span></span>
-                </div>
-
-                <div class="row" style="margin-bottom: 20px;">
-                    <span class="float_left">
-                        <label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from&nbsp;</label>
-                    </span>
-                    <span class="float_left" style="margin-top: -5px;">
-                        <div class="input-group">
-                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control input-width" type="text" id="fees-calendar-from">
-                        </div>
-                    </span>
-                    <span class="float_left">
-                        &nbsp;until&nbsp;
-                    </span>
-                    <span class="float_left">
-                        <div class="input-group" style="margin-top: -5px;">
-                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control input-width" type="text" id="fees-calendar-to">
-                        </div>
-                    </span>
-                </div>
-
-                <div class="row" style="margin-bottom: 20px;">
-                    <span class="float_left">
-                        <label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from&nbsp;</label>
-                    </span>
-                    <span class="float_left" style="margin-left: 13px;">
-                        <div class="input-group" style="margin-top: -5px;">
-                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control input-width" type="text" id="intrest-calendar-from">
-                        </div>
-                    </span>
-                    <span class="float_left">
-                        &nbsp;until&nbsp;
-                    </span>
-                    <span class="float_left">
-                        <div class="input-group" style="margin-top: -5px;">
-                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control input-width" type="text" id="intrest-calendar-to"><br />
-                        </div>
-                    </span>
-                </div>
-
-                <div class="row" style="margin-top: -39px; margin-left: 20px;">
-                    <%if(hasFreezInterest===true){ %>
-                    <br />
-                    <%
-                    _.each(SInterestFreeze, function(item, idx) {
-                    var ary = item.split('|');
-                    if (ary[4] === ''){
-                    %>
+                <div class="editloan-actions-region" id="editloan-actions-region">
                     <div class="row">
-                        <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                        This loan's intrest is stoped from
-                        <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
-                        until
-                        <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+                        <span class="float_left">
+                            Stop automatic charges after
+                        </span>
+                        <select id="LoanFutureScheduleItemsDDL" name="LoanFutureScheduleItemsDDL" class="LoanFutureScheduleItemsDDL form-control selectheight pull-left" data-placeholder=""></select>
+                        <span class="float_left">
+                            &nbsp;payments.&nbsp;
+                        </span>
+                        <button class="btn btn-primary pull-left" id="charges-save-btn" style="  margin-right: 10px;">Save</button>
                     </div>
-                    <%	}});}	%>
+                    <div class="row" style="margin-bottom: 15px;">
+                        <span style="display: none; font-weight: bold;" id="stop-charges"><button class="btn btn-primary btn-mini remove-auto-charges"><i class="fa fa-trash-o"></i></button><span class="bin-text">Auto charges are</span><span id="stop-charges-date"></span></span>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px;">
+                        <span class="float_left">
+                            Stop late fees calculation from
+                        </span>
+                        <span class="float_left">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="fees-calendar-from">
+                            </div>
+                        </span>
+                        <span class="float_left">
+                            &nbsp;until&nbsp;
+                        </span>
+                        <span class="float_left">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="fees-calendar-to">
+                            </div>
+                        </span>
+                        <button class="btn btn-primary pull-left" id="fees-save-btn" style="  margin-right: 10px;">Save</button>
+                    </div>
+                    <div class="row" id="fees-dates" style="margin-bottom: 20px; display: none;">
+                        <div class="row">
+                            <button class="btn btn-primary btn-mini" id="fees-delete-btn"><i class="fa fa-trash-o"></i></button>
+                            <span class="bin-text">This loan's fee is stoped from</span>
+                            <span style="font-weight: bold" id="fees-date-from"></span>
+                            <span id="fees-delete-btn-until-text" style="display:none;">until</span>
+                            <span style="font-weight: bold" id="fees-date-to"></span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 20px;">
+                        <span class="float_left">
+                            Stop intrest calculation from
+                        </span>
+                        <span class="float_left" style="margin-left: 13px;">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="intrest-calendar-from">
+                            </div>
+                        </span>
+                        <span class="float_left">
+                            &nbsp;until&nbsp;
+                        </span>
+                        <span class="float_left">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="intrest-calendar-to"><br />
+                            </div>
+                        </span>
+                        <button class="btn btn-primary pull-left" id="intrest-save-btn" style="  margin-right: 10px;">Save</button>
+                    </div>
+                    <div class="row" style="margin-top: -39px;">
+                        <%if(hasFreezInterest===true){ %>
+                        <br />
+                        <%
+                        _.each(SInterestFreeze, function(item, idx) {
+                        var ary = item.split('|');
+                        if (ary[4] === ''){
+                        %>
+                        <div class="row">
+                            <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
+                            <span class="bin-text">This loan's intrest is stoped from</span>
+                            <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
+                            <% if (ary[1] !=="2099-01-01"){%>
+                            <span>until</span>
+                            <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+                            <%}%>
+                        </div>
+                        <%	}});}	%>
+                    </div>
                 </div>
-
                 <div class="row">
                     <button class="btn btn-primary pull-right cancel" id="resch-cancel-btn">Cancel</button>
                     <button class="btn btn-primary pull-right" id="resch-submit-btn" style="  margin-right: 10px;">Submit</button>

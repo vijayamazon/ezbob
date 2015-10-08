@@ -1,78 +1,46 @@
 ﻿namespace Reports.EarnedInterest {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.ValueIntervals;
 
-	public class InterestFreezePeriods {
+	// Alex, August 31 2015: according to sudden change in interest freeze implementation, interest freeze interval cannot
+	// specify any interest rate (as it was until now) and frozen interest rate is always 0. Therefore interest freeze
+	// intervals are allowed to intersect now.
 
+	public class InterestFreezePeriods {
 		public InterestFreezePeriods() {
-			m_oPeriods = null;
+			this.zeroInterestIntervals = null;
 		} // constructor
 
-		public void Add(DateTime? oStart, DateTime? oEnd, decimal nInterestRate) {
-			var fi = new FreezeInterval(oStart, oEnd, nInterestRate);
+		public void Add(DateTime? oStart, DateTime? oEnd) {
+			if (this.zeroInterestIntervals == null)
+				this.zeroInterestIntervals = new List<DateInterval>();
 
-			if (m_oPeriods == null) {
-				m_oPeriods = new TDisjointIntervals<DateTime>(fi);
-				return;
-			} // if
-
-			var oNew = new TDisjointIntervals<DateTime>();
-			var oDiff = new TDisjointIntervals<DateTime>(fi);
-
-			foreach (TInterval<DateTime> i in m_oPeriods) {
-				var oCurrent = i as FreezeInterval;
-
-				if (null == i)
-					continue; // should never happen
-
-				oNew += oCurrent - fi;
-				oNew += fi * oCurrent;
-
-				var oNewDiff = new TDisjointIntervals<DateTime>();
-
-				foreach (TInterval<DateTime> j in oDiff) {
-					var oCurDiff = j as FreezeInterval;
-					oNewDiff += oCurDiff - oCurrent;
-				} // for each interval in difference
-
-				oDiff = oNewDiff;
-			} // foreach
-
-			m_oPeriods = oNew + oDiff;
+			this.zeroInterestIntervals.Add(new DateInterval(oStart, oEnd));
 		} // Add
 
-		public void ForEach(Action<FreezeInterval> it) {
+		public void ForEach(Action<DateInterval> it) {
 			if (it == null)
 				return;
 
-			if (m_oPeriods == null)
+			if (this.zeroInterestIntervals == null)
 				return;
 
-			foreach (TInterval<DateTime> i in m_oPeriods)
+			foreach (DateInterval i in this.zeroInterestIntervals)
 				it.Invoke(i as FreezeInterval);
 		} // ForEach
 
 		public decimal? GetInterest(DateTime oDate) {
-			var d = new DateIntervalEdge(oDate, AIntervalEdge<DateTime>.EdgeType.Finite);
-
-			foreach (TInterval<DateTime> i in m_oPeriods) {
-				if (i.Contains(d)) {
-					var fi = i as FreezeInterval;
-
-					return fi == null ? null : fi.InterestRate;
-				} // if
-			} // foreach
-
-			return null;
+			return this.zeroInterestIntervals.Any(i => i.Contains(oDate)) ? 0 : (decimal?)null;
 		} // GetInterest
 
 		public override string ToString() {
-			return m_oPeriods.ToString();
+			return this.zeroInterestIntervals.ToString();
 		} // ToString
 
-		public int Count { get { return m_oPeriods.Count; } } // Count
+		public int Count { get { return this.zeroInterestIntervals.Count; } } // Count
 
-		private TDisjointIntervals<DateTime> m_oPeriods;
-
+		private List<DateInterval> zeroInterestIntervals;
 	} // class InterestFreezePeriods
 } // namespace

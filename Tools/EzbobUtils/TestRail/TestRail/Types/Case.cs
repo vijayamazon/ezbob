@@ -4,8 +4,9 @@ using System;
 namespace TestRail.Types
 {
 	using System.Collections.Generic;
+	using System.Web.Script.Serialization;
 
-	/// <summary>stores information about a case</summary>
+    /// <summary>stores information about a case</summary>
     public class Case
     {
         #region Public Properties
@@ -46,7 +47,12 @@ namespace TestRail.Types
         public ulong? SuiteID { get; set; }
 
 		public List<Label> Labels { get; set; }
-        #endregion Public Properties
+
+	    public String CustomPreConds { get; set; }
+
+	    public List<Step> Steps { get; set; }
+
+	    #endregion Public Properties
 
         #region Public Methods
         /// <summary>string representation of the object</summary>
@@ -74,6 +80,20 @@ namespace TestRail.Types
             c.Estimate = (string)json["estimate"];
             c.EstimateForecast = (string)json["estimate_forecast"];
             c.SuiteID = (ulong)json["suite_id"];
+            c.CustomPreConds = (string)json["custom_preconds"];
+
+            JavaScriptSerializer  jss = new JavaScriptSerializer();
+            var jsonSteps = json["custom_steps_separated"];
+            var steps = new List<Step>();
+
+            foreach (var jsonStep in jsonSteps) {
+                steps.Add(Step.Parse((JObject)jsonStep));
+            }
+
+            c.Steps = steps;
+            //var steps = jss.Deserialize<List<Step>>();
+            
+            //c.Steps = Step.Parse();
 
 			JArray jarray = json["custom_label"] as JArray;
 	        c.Labels = null != jarray ? jarray.ToObject<List<Label>>() : new List<Label>();

@@ -1,21 +1,25 @@
 namespace EzBob.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using Ezbob.Backend.Models.NewLoan;
-    using EZBob.DatabaseLib.Model.Database;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using Ezbob.Backend.Models.NewLoan;
+	using EZBob.DatabaseLib.Model.Database;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Converters;
 
-    public class EditLoanDetailsModel
+	public class EditLoanDetailsModel
     {
         private readonly List<string> _errors = new List<string>();
 
         public int Id { get; set; }
 
+        public string LoanStatus { get; set; }
+
         public List<SchedultItemModel> Items { get; set; }
+
+        public Dictionary<string, string> LoanFutureScheduleItems { get; set; }
 
         public decimal InterestRate { get; set; }
 

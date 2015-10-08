@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
-	using System.Threading.Tasks;
-	using MailApi;
+	using Ezbob.Database;
 	using Ezbob.Backend.Models;
+	using MailApi;
 
 	public class PacnetDelivery  : AStrategy {
 		/// <summary>
@@ -19,7 +19,6 @@
 			this.topUpSendingEmail = ConfigManager.CurrentValues.Instance.TopUpSendingEmail;
 		} // constructor
 		
-
 		public override string Name {
 			get {return "Send email to pacnet"; }
 		} // Name
@@ -57,7 +56,15 @@
 			string subject = String.Format("Money Transfer Confirmation Request {0} UTC", now);
 			mail.Send(emails, null, content, this.topUpSendingEmail, "Orange Money underwriter ", subject);
 
-			var pacnet = new PacnetTopUpMailProcessor(underwriterId, amount, subject);
+			DB.ExecuteNonQuery(
+				"SavePacnetTopUpConfirmationRequest",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UnderwriterId", underwriterId),
+				new QueryParameter("Amount", amount),
+				new QueryParameter("DateSent", now)
+			);
+
+			var pacnet = new PacnetTopUpMailProcessor(underwriterId, amount, subject, now);
 
 			pacnet.Execute();
 		}
@@ -68,5 +75,4 @@
 		private readonly string candianEmails;
 		private readonly string topUpSendingEmail;
 	}
-
 }

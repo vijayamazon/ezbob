@@ -15,16 +15,26 @@
 
 		public MedalResult Result { get; private set; }
 
-		public CalculateMedal(int customerId, DateTime calculationTime, bool primaryOnly, bool doStoreMedal) {
+		public CalculateMedal(
+			int customerId,
+			long? cashRequestID,
+			DateTime calculationTime,
+			bool primaryOnly,
+			bool doStoreMedal
+		) {
 			this.doStoreMedal = doStoreMedal;
 			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
 			this.quietMode = false;
 			WasMismatch = true;
+
+			CashRequestID = cashRequestID;
 		} // constructor
 
 		public virtual string Tag { get; set; }
+
+		public virtual long? CashRequestID { get; private set; }
 
 		public virtual bool QuietMode {
 			get { return this.quietMode; }
@@ -58,10 +68,14 @@
 					this.numOfEbayAmazonPayPalMps = sr["NumOfEbayAmazonPayPalMps"];
 					this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
 					this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+
+					if (CashRequestID == null)
+						CashRequestID = sr["LastCashRequestID"];
 				} // if
 
 				Log.Debug(
-					"customerId = {0}, " +
+					"customer id = {0}, " +
+					"cash request id = {12}, " +
 					"calc time = {1}, " +
 					"sr.IsEmpty = {2}, " +
 					"type of business = {3}, " +
@@ -84,7 +98,8 @@
 					this.numOfEbayAmazonPayPalMps,
 					this.earliestHmrcLastUpdateDate,
 					this.earliestYodleeLastUpdateDate,
-					Tag
+					Tag,
+					CashRequestID
 				);
 
 				// The first scenario (1) for checking medal type and getting medal value
@@ -115,12 +130,12 @@
 					Log.Debug("\n\nSecondary medal:\n{0}", result2.ToString());
 
 					if (this.doStoreMedal)
-						result2.SaveToDb(Tag, DB, Log);
+						result2.SaveToDb(CashRequestID, Tag, DB, Log);
 				} // if
 
 				if ((result1 != null) && result1.IsLike(result2)) {
 					if (this.doStoreMedal)
-						result1.SaveToDb(Tag, DB, Log);
+						result1.SaveToDb(CashRequestID, Tag, DB);
 
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
 
@@ -139,7 +154,7 @@
 				result1.Error = (result1.Error ?? string.Empty) + " Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
-					result1.SaveToDb(Tag, DB, Log);
+					result1.SaveToDb(CashRequestID, Tag, DB);
 
 				SendExplanationMail(result1, result2);
 
@@ -178,8 +193,8 @@
 
 			string msg = string.Format(
 				"calculation time (UTC): {12}\n\n" +
-				"main:         medal:{0} medal type:{1} score:{2} normalized score:{3} offered amount:£ {4} error:{5} \n" +
-				"verification: medal:{6} medal type:{7} score:{8} normalized score:{9} offered amount:£ {10} error:{11}",
+				"main:         medal:{0} medal type:{1} score:{2} normalized score:{3} offered amount:£{4} error:{5} \n" +
+				"verification: medal:{6} medal type:{7} score:{8} normalized score:{9} offered amount:£{10} error:{11}",
 
 				result1.MedalClassification.Stringify(10),
 				result1.MedalType.ToString().PadRight(30),

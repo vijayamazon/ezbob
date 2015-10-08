@@ -46,6 +46,8 @@
 			if (this.finishWizardArgs != null) {
 				this.cashRequestOriginator = this.finishWizardArgs.CashRequestOriginator;
 				this.finishWizardArgs.DoMain = false;
+				this.overrideApprovedRejected =
+					this.finishWizardArgs.CashRequestOriginator != CashRequestOriginator.Approved;
 			} // if
 
 			this.wasMismatch = false;
@@ -77,12 +79,7 @@
 			get { return this.customerDetails.ID; }
 		} // CustomerID
 
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
-			this.overrideApprovedRejected = bOverrideApprovedRejected;
-			return this;
-		} // SetOverrideApprovedRejected
-
-		
+		/// <exception cref="StrategyAlert">Should never happen.</exception>
 		public override void Execute() {
 			ValidateInput();
 
@@ -91,13 +88,11 @@
 
 			CreateCashRequest();
 
-			if (SkipEverything())
-				return;
-
 			this.cashRequestID.Validate(this);
 
-			if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
-				StandardFlow();
+			if (!SkipEverything())
+				if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
+					StandardFlow();
 
 			UpdateCustomerAndCashRequest();
 
@@ -117,10 +112,16 @@
 				UnderwriterID
 			);
 
+			CalculateMedal(false); 
+
 			new SilentAutomation(CustomerID)
 				.PreventMainStrategy()
 				.SetTag(SilentAutomation.Callers.MainSkipEverything)
+				.SetMedal(this.medal)
 				.Execute();
+
+			this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+			this.autoDecisionResponse.UserStatus = Status.Manual;
 
 			Log.Debug(
 				"Main strategy was activated in 'skip everything go to manual decision mode' by underwriter '{1}'. " +
@@ -148,7 +149,7 @@
 				fraudChecker.Execute();
 			} // if
 
-			ForceNhibernateResync.Do(CustomerID);
+			ForceNhibernateResync.ForCustomer(CustomerID);
 
 			ProcessRejections();
 
@@ -211,9 +212,14 @@
 		} // BackdoorSimpleFlow
 
 		private bool UseBackdoorSimpleFlow() {
+			if (!CurrentValues.Instance.BackdoorSimpleAutoDecisionEnabled) {
+				Log.Debug("Not using back door simple flow: disabled by configuration (BackdoorSimpleAutoDecisionEnabled).");
+				return false;
+			} // if
+
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
 				Log.Debug(
-					"Not using back door simple flow for customer '{0}': originator is '{1}'.",
+					"Not using back door simple flow for customer '{0}': cash request originator is '{1}'.",
 					CustomerID,
 					this.cashRequestOriginator == null ? "-- null --" : this.cashRequestOriginator.Value.ToString()
 				);
@@ -222,7 +228,7 @@
 
 			if (!this.customerDetails.IsTest) {
 				Log.Debug(
-					"Not using back door simple flow for customer '{0}': not a text customer.",
+					"Not using back door simple flow for customer '{0}': not a test customer.",
 					CustomerID
 				);
 				return false;
@@ -234,7 +240,9 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, DateTime.UtcNow, false, true);
+			var instance = new CalculateMedal(CustomerID, this.cashRequestID, DateTime.UtcNow, false, true) {
+				Tag = this.tag,
+			};
 			instance.Execute();
 
 			if (instance.WasMismatch && updateWasMismatch)
@@ -551,19 +559,17 @@
 			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
-			long decisionID = addDecisionStra.DecisionID;
+			int decisionID = addDecisionStra.DecisionID;
 
-			Log.Debug("Added NL decision: {0}, Error: {1}", decisionID, addDecisionStra.Error);
+			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
 				List<NL_OfferFees> offerFees = new List<NL_OfferFees>();
 
-				if (this.autoDecisionResponse.SetupFee > 0) {
-					offerFees.Add(new NL_OfferFees {
-						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
-						Percent = this.autoDecisionResponse.SetupFee,
-					});
-				} // if
+				offerFees.Add(new NL_OfferFees {
+					LoanFeeTypeID = (int)FeeTypes.SetupFee,
+					Percent = this.autoDecisionResponse.SetupFee,
+				});
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
 					DecisionID = decisionID,
@@ -574,7 +580,7 @@
 					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
 					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
 					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month, 
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,
@@ -587,7 +593,7 @@
 
 				addOfferStrategy.Execute();
 				
-				Log.Debug("Added NL offer: {0}, Error: {1}", addOfferStrategy.OfferID, addOfferStrategy.Error);
+				Log.Debug("Added NL offer: {0}", addOfferStrategy.OfferID);
 			} // if
 		} // AddNLDecisionOffer
 
@@ -759,6 +765,12 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
+				DB.ExecuteNonQuery(
+					"MainStrategySetCustomerIsBeingProcessed",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", CustomerID)
+				);
+
 				if (this.nlExists) {
 					this.nlCashRequestID = DB.ExecuteScalar<int>(
 						"NL_CashRequestGetByOldID",
@@ -792,23 +804,23 @@
 			this.cashRequestID.Value = sr["CashRequestID"];
 
 			if (this.nlExists) {
-				AddCashRequest nlCashRequest = new AddCashRequest(new NL_CashRequests {
+				AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
 					CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 					CustomerID = CustomerID,
 					OldCashRequestID = this.cashRequestID,
 					RequestTime = now,
 					UserID = UnderwriterID,
 				});
-				nlCashRequest.Execute();
-				this.nlCashRequestID = nlCashRequest.CashRequestID;
+				cashRequestStrategy.Execute();
+				this.nlCashRequestID = cashRequestStrategy.CashRequestID;
 
-				Log.Debug("Added NL CashRequest: {0}, OldCashRequestID: {1}, Error: {2}", this.nlCashRequestID, this.cashRequestID, nlCashRequest.Error);
+				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
 			} // if
 
-			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
+			int cashRequestCount = sr["CashRequestCount"];
+			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard && this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion && cashRequestCount > 1) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
-				int cashRequestCount = sr["CashRequestCount"];
-
+				
 				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
@@ -900,7 +912,7 @@
 		private int offeredCreditLine;
 
 		private readonly InternalCashRequestID cashRequestID;
-		private long nlCashRequestID;
+		private int nlCashRequestID;
 
 		private readonly StrategiesMailer mailer;
 
@@ -909,7 +921,7 @@
 		/// Finish Wizard strategy and customer is already approved/rejected
 		/// then customer's status should not change.
 		/// </summary>
-		private bool overrideApprovedRejected;
+		private readonly bool overrideApprovedRejected;
 
 		private readonly CashRequestOriginator? cashRequestOriginator;
 

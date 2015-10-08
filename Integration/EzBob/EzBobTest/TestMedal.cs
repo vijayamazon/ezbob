@@ -25,7 +25,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestOneMedal() {
-			new CalculateMedal(24195, DateTime.UtcNow, false, true).Execute();
+			new CalculateMedal(24195, null, DateTime.UtcNow, false, true).Execute();
 		} // TestOneMedal
 
 		[Test]
@@ -57,7 +57,7 @@ namespace EzBobTest {
 	
 		[Test]
 		public void TestMedalDiscrepancy() {
-			new CalculateMedal(3977, new DateTime(2015, 2, 1, 0, 0, 0, DateTimeKind.Utc), false, true).Execute();
+			new CalculateMedal(3977, null, new DateTime(2015, 2, 1, 0, 0, 0, DateTimeKind.Utc), false, true).Execute();
 		} // TestMedalDiscrepancy
 	} // class TestMedal
 } // namespace

@@ -65,6 +65,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		if (this.customer.isFinishedWizard) {
 			this.processingPopup.render();
 			this.finishedWizard();
+			this.customer.isFinishedWizard = false;
 		}
 
 		/*
@@ -81,6 +82,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 			$('.header-info').show();
 			$('.header-info-text').text('MY ACCOUNT');
 		}
+
+		$('footer.location-customer-everline .privacy-and-cookie-policy').hide();
 
 		return this;
 	},

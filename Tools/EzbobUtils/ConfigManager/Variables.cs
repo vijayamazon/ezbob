@@ -91,6 +91,7 @@ namespace ConfigManager {
 		AutomaticTestCustomerMark,
 		AvailableFundsRefreshInterval,
 
+		BackdoorSimpleAutoDecisionEnabled,
 		BWABusinessCheck,
 		BankBasedApprovalBelowAverageRiskMaxBusinessScore,
 		BankBasedApprovalBelowAverageRiskMaxPersonalScore,
@@ -408,6 +409,8 @@ namespace ConfigManager {
 		ReportDaemonDropboxCredentials,
 		ReportDaemonDropboxRootPath,
 		ReportsSite,
+		ReschedulingDebugMail,
+		ReschedulingDebugMailAddress,
 		RolloverCharge,
 
 		SageExpendituresRequest,

@@ -1,6 +1,10 @@
 ﻿@{
-    Layout = null;
+Layout = null;
 }
 <script type="text/template" id="CompanyTargets">
-    <ul class="targets"></ul>
+	<ul class="targets"><%
+		_.each(jsonModel, function (val, i) {
+			%><li data="<%-i%>"><%-val.BusName%>, <%-val.BusRefNum%><%-(val.PostCode  ? (", " + val.PostCode)  : "")%><%-(val.AddrLine1 ? (", " + val.AddrLine1) : "")%><%-(val.AddrLine2 ? (", " + val.AddrLine2) : "")%><%-(val.AddrLine3 ? (", " + val.AddrLine3) : "")%><%-(val.AddrLine4 ? (", " + val.AddrLine4) : "")%></li><%
+		});
+	%></ul>
 </script>

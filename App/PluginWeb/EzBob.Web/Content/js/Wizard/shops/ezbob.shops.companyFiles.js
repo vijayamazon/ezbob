@@ -10,9 +10,9 @@ EzBob.CompanyFilesAccounts = Backbone.Collection.extend({
 }); // EzBob.CompanyFilesAccounts
 
 EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
-	initialize: function() {
-		this.accountType = 'CompanyFiles';
-		this.template = '#' + this.accountType + 'AccountInfoTemplate';
+	initialize: function (options) {
+		this.isBank = options.isBank;
+		this.template = this.isBank ? "#YodleeUploadAccountInfoTemplate" : "#CompanyFilesAccountInfoTemplate";
 		this.Dropzone = null;
 	}, // initialize
 

@@ -43,8 +43,7 @@
 			DateTime oDateOne,
 			DateTime oDateTwo,
 			ASafeLog oLog = null
-			)
-			: base(oLog) {
+		) : base(oLog) {
 			VerboseLogging = false;
 
 			this.m_oDB = oDB;
@@ -97,7 +96,6 @@
 					int nLoanID = sr["LoanId"];
 					DateTime? oStart = sr["StartDate"];
 					DateTime? oEnd = sr["EndDate"];
-					decimal nRate = sr["InterestRate"];
 					DateTime? oDeactivation = sr["DeactivationDate"];
 
 					DateTime? oTo = oDeactivation.HasValue
@@ -107,7 +105,7 @@
 					if (!this.m_oFreezePeriods.ContainsKey(nLoanID))
 						this.m_oFreezePeriods[nLoanID] = new InterestFreezePeriods();
 
-					this.m_oFreezePeriods[nLoanID].Add(oStart, oTo, nRate);
+					this.m_oFreezePeriods[nLoanID].Add(oStart, oTo);
 
 					return ActionResult.Continue;
 				},

@@ -48,7 +48,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
 		var balance = this.customerModel.get('TotalBalance');
 		var state = this.customerModel.get('state');
 		var hasLoans = this.customerModel.get('hasLoans');
-		var isNew = hasLoans === 0;
+		var isNew = !hasLoans;
 		var hasRollOver = this.customerModel.get('HasRollovers');
 		var name = this.customerModel.get('CustomerPersonalInfo') != null ? this.customerModel.get('CustomerPersonalInfo').FirstName : '';
 		var isEarly = this.customerModel.get('IsEarly');

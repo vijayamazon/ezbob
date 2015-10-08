@@ -56,7 +56,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var self = this;
 		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
 			id: this.cloneModel.get('CashRequestId'),
-			amount: self.ui.offeredCreditLine.autoNumericGet()
+			amount: self.ui.offeredCreditLine.autoNumeric('get')
 		}).done(function(result) {
 			self.cloneModel.set('BrokerSetupFeePercent', result.brokerCommission);
 			self.cloneModel.set('ManualSetupFeePercent', result.setupFeePercent);
@@ -183,14 +183,14 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			format: 'dd/mm/yyyy'
 		});
 
-		this.$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat);
+		this.$el.find("#offeredCreditLine").autoNumeric('init', EzBob.moneyFormat);
 
 		if (this.$el.find("#offeredCreditLine").val() === "-")
 			this.$el.find("#offeredCreditLine").val("");
 
-		this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
-		this.$el.find("#manualSetupFeePercent").autoNumeric(EzBob.percentFormat);
-		this.$el.find("#brokerSetupFeePercent").autoNumeric(EzBob.percentFormat);
+		this.$el.find("#interestRate").autoNumeric('init', EzBob.percentFormat);
+		this.$el.find("#manualSetupFeePercent").autoNumeric('init', EzBob.percentFormat);
+		this.$el.find("#brokerSetupFeePercent").autoNumeric('init', EzBob.percentFormat);
 		
 		this.$el.find("#repaymentPeriod").numericOnly();
 

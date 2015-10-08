@@ -35,7 +35,7 @@
 			Map(x => x.ApplyForJudgmentDate).CustomType<UtcDateTimeType>();
 			Map(x => x.Type).Length(20);
 			Map(x => x.Feedback).Length(300);
-			Map(x => x.Description).Length(300);
+			Map(x => x.Description).Length(500);
 		}
 	}
 

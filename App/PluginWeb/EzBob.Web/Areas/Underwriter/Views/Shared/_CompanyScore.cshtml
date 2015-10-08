@@ -1037,7 +1037,7 @@
 									yaxis: {
 										show: true,
 										pad: 1.05,
-										tickOptions: { formatString: "£ %'d" }
+										tickOptions: { formatString: "£%'d" }
 									}
 								},
 								highlighter: {
@@ -1049,7 +1049,7 @@
 									showMarker: false,
 									bringSeriesToFront: true,
 									useAxesFormatters: true,
-									tooltipFormatString: "£ %'d",
+									tooltipFormatString: "£%'d",
 									tooltipContentEditor: function(str, seriesIndex, pointIndex, plot) {
 										return aryLabels[seriesIndex].label + ': ' + str;
 									},
@@ -1186,9 +1186,8 @@
 						<option value="Limited">Limited company</option>
 						<option value="LLP">Limited liability partnership</option>
 						<option value="PShip3P">Partnership (less than three)</option>
-						<option value="PShip">Partnership (more than three)</option>
-						<option value="SoleTrader">Sole trader (Inc.)</option>
-						<option value="Entrepreneur">Sole trader (not Inc.)</option>
+						<option value="PShip">Ordinary partnership</option>
+						<option value="Entrepreneur">Sole trader</option>
 					</select>
 					<img id="TypeOfBusinessImage" class="field_status required" />
 				</div>

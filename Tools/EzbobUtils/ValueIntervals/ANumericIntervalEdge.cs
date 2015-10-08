@@ -39,11 +39,19 @@
 		protected abstract decimal Epsilon { get; }
 
 		protected override bool IsValueEqualTo(AIntervalEdge<decimal> other) {
-			return Value.CompareTo(other.Value) == 0;
+			return IsValueEqualTo(other.Value);
+		} // IsValueEqualTo
+
+		protected override bool IsValueEqualTo(decimal other) {
+			return Value.CompareTo(other) == 0;
 		} // IsValueEqualTo
 
 		protected override bool IsValueLessThan(AIntervalEdge<decimal> other) {
-			return Value.CompareTo(other.Value) < 0;
+			return IsValueLessThan(other.Value);
+		} // IsValueLessThan
+
+		protected override bool IsValueLessThan(decimal other) {
+			return Value.CompareTo(other) < 0;
 		} // IsValueLessThan
 
 		protected override string ValueToString() {

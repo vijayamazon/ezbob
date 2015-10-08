@@ -6,12 +6,13 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		public virtual int Id { get; set; }
 		public virtual DateTime Created { get; set; }
-		public virtual Customer Customer { get; set; }
+		public virtual int CustomerId { get; set; }
 		public virtual CustomerReason CustomerReason { get; set; }
 		public virtual CustomerSourceOfRepayment CustomerSourceOfRepayment { get; set; }
 		public virtual double? Amount { get; set; }
 		public virtual string OtherReason { get; set; }
 		public virtual string OtherSourceOfRepayment { get; set; }
+		public virtual int? Term { get; set; }
 	}
 }
 
@@ -30,8 +31,8 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Amount);
 			Map(x => x.OtherReason).Length(300);
 			Map(x => x.OtherSourceOfRepayment).Length(300);
-
-			References(x => x.Customer, "CustomerId");
+			Map(x => x.Term);
+			Map(x => x.CustomerId);
 			References(x => x.CustomerReason, "ReasonId");
 			References(x => x.CustomerSourceOfRepayment, "SourceOfRepaymentId");
 		}

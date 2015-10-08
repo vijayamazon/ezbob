@@ -1,0 +1,244 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using EzBob.CommonLib
+@using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@using ServiceClientProxy
+@model dynamic
+
+@{
+	var bml = new WizardBrokerLeadModel(Session);
+	var sInitialFirstName = bml.IsSet ? bml.FirstName : string.Empty;
+	var sInitialLastName = bml.IsSet ? bml.LastName : string.Empty;
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+
+	var timeAtAddress = new List<Tuple<string, string>>  {
+		new Tuple<string, string>("1", "1 year"),
+		new Tuple<string, string>("2", "2 years"),
+		new Tuple<string, string>("3", "3 years or more"),
+	};
+	var serviceClient = new ServiceClient();
+	var propertyStatuses = serviceClient.Instance.GetPropertyStatuses();
+	List<EzSelectOptionGroup> propertyStatusGroups = propertyStatuses.Groups.Select(x => new EzSelectOptionGroup{
+		GroupTitle = x.Title,
+		Options = x.Statuses
+			.Select(y => new EzSelectOption(y.Id.ToString(), y.Description, y.IsOwnerOfOtherProperties ? "OtherPropertyOwner" : ""))
+			.ToList()
+	}).ToList();
+}
+
+<script id="personinfo-template" type="text/template">
+	<div class="row-fluid">
+		@if (origin == CustomerOriginEnum.everline) {
+			Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");
+		}
+        <div class="loan-summery-box-container">
+			<h2>Requested loan summary</h2>
+			<div class="loan-summary-box-wrapper">
+                <div class="loan-summary-boxes">
+                    <div class="loan-summary-box"><div>Borrowing</div><div class="requested-loan-amount"></div></div>
+                    <div class="loan-summary-box"><div>Duration</div><div class="requested-loan-period"></div></div>
+                </div>
+                    <button class="button btn-green clean-btn show-sliders">Change loan details</button>
+               
+			</div>
+			<hr class="wizard-hr" />
+        </div>
+		<h2 class="form_start">Personal details</h2>
+
+		@using (Html.BeginForm("Save", "CustomerDetails", new {
+		    Area = "Customer"
+		}, FormMethod.Post, new {
+		    @class = "PersonalDetailsForm"
+		})) {
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("FirstName", "First name",
+		        value: sInitialFirstName,
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+                tabIndex:1,
+		        uiEventControlID: "personal-info:first_name"),
+		        origin: origin)
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("MiddleInitial", "Middle name",
+		        cls: "form_field alphaOnly",
+		        isRequired: false,
+		        statusIcon: true,
+                            tabIndex: 2,
+		        uiEventControlID: "personal-info:middle_name"),
+		        origin: origin)
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("Surname", "Surname",
+		        value: sInitialLastName,
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+                            tabIndex: 3,
+		        uiEventControlID: "personal-info:last_name"),
+		        origin: origin)
+
+		    <input type="hidden" name="Fullname"/>
+
+		    EzInputBuilder radio1 = new EzInputBuilder("FormRadioCtrl_M", "Male",
+		        value: "M",
+		        type: "radio",
+		        cls: "required",
+		        isRequired: true,
+		        statusIcon: true,
+                 tabIndex: 4,
+		        name: "Gender",
+		        uiEventControlID: "personal-info:gender");
+
+		    EzInputBuilder radio2 = new EzInputBuilder("FormRadioCtrl_F", "Female",
+		        value: "F",
+		        type: "radio",
+		        cls: "gender-margin",
+                tabIndex: 5,
+		        isRequired: true,
+		        statusIcon: true,
+		        name: "Gender",
+		        uiEventControlID: "personal-info:gender");
+
+		    List<EzInputBuilder> radios = new List<EzInputBuilder> {
+		        radio1,
+		        radio2
+		    };
+		    var buttonsmodel = new EzClickInputModel(
+		        name: "Gender",
+		        caption: "Gender ",
+		        errorImgClass: "field_status required personal-details-gender-image",
+		        inputWrapperClass: "FormRadioCtrl",
+		        isRequired: true,
+		        statusIcon: true,
+		        inputButtons: radios);
+
+		    @EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+
+		    @EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date", tabIndex:6, origin: origin)
+
+		    @EzForm.SelectWizard(new EzSelectModel("MaritalStatus", "Marital status",
+		        MaritalStatus.Divorced.ToTuple<MaritalStatus>(),
+		        cls: "form_field",
+		        isRequired: true,
+                            tabIndex: 9,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:marital_status"),
+		        origin: origin)
+
+		    <hr class="wizard-hr"/>
+		    <h2 class="form_section">Home address</h2>
+
+		    @EzForm.AddressInput(this, "PersonalAddress", "Home address", "personal")
+
+		    @EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long have you been at this address?",
+		        timeAtAddress,
+		        cls: "TimeAtAddress select form_field",
+                tabIndex: 12,      
+                titleClass:"long",
+		        isRequired: true,
+		        statusIcon: true,
+		        uiEventControlID: "personal-info:time_at_address"),
+		        origin: origin)
+
+		    @EzForm.AddressInput(this, "PrevPersonAddresses", "Previous address", "previous-personal", "prevPersonAddress canDisabledAddress")
+
+		    @EzForm.SelectWizard(new EzSelectModel("PropertyStatus", "Residential status",
+		        propertyStatusGroups,
+		        cls: "form_field",
+		        isRequired: true,
+		        statusIcon: true,
+				tabIndex: 15,
+		        uiEventControlID: "personal-info:residential_status"),
+		        origin: origin)
+
+		    <div id="otherPropertiesSection" class="hide">
+		        <h2 class="form_section">Other owned properties</h2>
+		        @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal")
+		    </div>
+
+		    <hr class="wizard-hr"/>
+		    <h2 class="form_section">Contact details</h2>
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("MobilePhone", "Mobile number",
+		        cls: "phonenumber form_field",
+		        type: "tel",
+		        isRequired: true,
+		        statusIcon: true,
+				tabIndex: 18,
+		        uiEventControlID: "personal-info:mobile_phone"),
+		        origin: origin)
+
+		    @EzForm.InputTextWizard(new EzInputBuilder("DayTimePhone", "Home phone number",
+		        cls: "phonenumber form_field",
+		        type: "tel",
+		        isRequired: true,
+		        statusIcon: true,
+				tabIndex: 19,
+		        uiEventControlID: "personal-info:daytime_phone"),
+		        origin: origin)
+         
+
+		    EzInputBuilder checkbox1 = new EzInputBuilder("ConsentToSearch", "I have read and accept the <a href='#' ui-event-control-id='personal-info:terms-and-conditions'>Terms &amp; Conditions</a>.",
+		        value: "false",
+		        type: "checkbox",
+				tabIndex: 20,
+		        isRequired: true,
+		        statusIcon: true,
+		        name: "ConsentToSearch",
+		        labelClass: "editor-label-with-checkbox terms-conditions-checkbox-label",
+		        uiEventControlID: "personal-info:consent_to_search");
+
+
+
+            List<EzInputBuilder> checkboxesList = new List<EzInputBuilder> {
+		        checkbox1
+		    };
+
+		    var checkboxes = new EzClickInputModel(
+		        name: "ConsentToSearch",
+		        caption: "",
+		        errorImgClass: "",
+		        inputWrapperClass: "controls",
+		        containerClass: "form_read_and_accept",
+		        isRequired: false,
+		        statusIcon: false,
+		        inputButtons: checkboxesList);
+
+		    @EzForm.ClickableInputWizard(checkboxes, origin: origin)
+
+
+
+
+		    @EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Next",
+		        cls: "button btn-green ev-btn-org btn-continue disabled",
+		        uiEventControlID: "personal-info:continue",
+				tabIndex: 21,
+		        buttonType: EzButtonType.link,
+		        href: "#"),
+		        origin: origin);
+		}
+</div>
+</script>
+
+<script id="consent-agreement-template" type="text/template">
+    <div class="consent-dialog-wrapper">
+
+        <div id="consent-conent" class="modal-body consent-dialog">
+            @{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+
+            <p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
+            <p><b>Agreed on:</b> <%-EzBob.formatDateUK(date)%></p>
+        </div>
+
+    </div>
+    <div class="consent-modal-footer modal-footer terms-conditions-footer " >
+        <a style="margin-right: 10px;" class="pull-right download pdf-link clean-btn short-btn " ui-event-control-id="wizard:download_consent">Download</a>
+        <a style="margin-right: 15px;" href="#" class="pull-right print print-link clean-btn short-btn" ui-event-control-id="wizard:print_consent">Print</a>
+      
+        <a href="#" class="button btn-grey ev-btn-org  short-btn close-terms">Close</a>
+        
+    </div>
+</script>

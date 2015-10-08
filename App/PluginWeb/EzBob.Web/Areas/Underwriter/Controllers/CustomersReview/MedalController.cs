@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using Code;
 	using System.Web.Mvc;
 	using Infrastructure;
@@ -8,41 +7,36 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
 
-	public class MedalController : Controller
-	{
-		private readonly CustomerRepository _customerRepository;
-		private readonly ServiceClient serviceClient;
-		private readonly IWorkplaceContext context;
-
-		public MedalController(CustomerRepository customersRepository, IWorkplaceContext context)
-		{
-			_customerRepository = customersRepository;
-			serviceClient = new ServiceClient();
+	public class MedalController : Controller {
+		public MedalController(CustomerRepository customersRepository, IWorkplaceContext context) {
+			this.customerRepository = customersRepository;
+			this.serviceClient = new ServiceClient();
 			this.context = context;
-		}
+		} // constructor
 
 		[Ajax]
 		[HttpGet]
-		public ActionResult Index(int id)
-		{
-			var customer = _customerRepository.Get(id);
+		public ActionResult Index(int id) {
+			var customer = this.customerRepository.Get(id);
 			var medalCalculator = new MedalCalculators(customer);
 			return Json(medalCalculator, JsonRequestBehavior.AllowGet);
-		}
+		} // Index
 
 		[Ajax]
 		[HttpGet]
-		public ActionResult ExportToExel(int id)
-		{
-			var customer = _customerRepository.Get(id);
+		public ActionResult ExportToExel(int id) {
+			var customer = this.customerRepository.Get(id);
 			return new MedalExcelReportResult(customer);
-		}
+		} // exportToExcel
 
 		[Ajax]
 		[HttpPost]
-		public void RecalculateMedal(int customerId)
-		{
-			serviceClient.Instance.CalculateMedal(context.UserId, customerId);
-		}
-	}
-}
+		public void RecalculateMedal(int customerId) {
+			this.serviceClient.Instance.CalculateMedal(this.context.UserId, customerId, null);
+		} // RecalculateMedal
+
+		private readonly CustomerRepository customerRepository;
+		private readonly ServiceClient serviceClient;
+		private readonly IWorkplaceContext context;
+	} // class MedalController
+} // namespace

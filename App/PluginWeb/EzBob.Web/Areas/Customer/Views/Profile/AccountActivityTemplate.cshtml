@@ -1,15 +1,20 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
+}
 <script id="account-activity-template" type="text/template">
 	<% if (loans.length) { %>
 		<table class="table">
 		<thead>
 			<tr>
-				<th>Ref. Number</th>
-				<th width="20%">Origination<br />Date</th>
-				<th width="20%">Loan<br />Amount</th>
-				<th width="20%">Status</th>
-				<th width="20%">Open<br />Balance</th>
-				<th width="20%"></th>
+				<th width="180px">Ref. No.</th>
+				<th width="179px">Origination Date</th>
+				<th width="159px">Loan Amount</th>
+				<th width="104px">Status</th>
+				<th width="149px">Open Balance</th>
+				<th width="170px"></th>
 			</tr>
 		</thead>
 		<tbody><%
@@ -17,19 +22,19 @@
 				var last = loans.length - 1 == i;
 				%><tr class="<%- last ? 'last' : '' %>">
 					<td class="first"><%- loan.RefNumber  %></td>
-					<td><%- EzBob.formatDate(loan.Date) %></td>
+					<td><%- EzBob.formatDateUK(loan.Date) %></td>
 					<td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
 					<td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
 					<td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
 					<td class="last" width="100">
-						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%>" ui-event-control-id="dashboard:loan-details">Details</a>
+						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%> clean-btn" ui-event-control-id="dashboard:loan-details">Details</a>
 					</td>
 				</tr><%
 			});
 		%></tbody>
 	</table>
-	<div class="clearfix">
-		<a style="margin-right: 25px; margin-top: 5px;" href="#" class="pull-right print-link" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
+	<div class="clearfix right">
+		<a href="#" class="print-link clean-btn" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
 	</div>
 	<% } else { %>
 		There is no activity in your account.

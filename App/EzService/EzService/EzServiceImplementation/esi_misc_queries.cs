@@ -21,6 +21,10 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData BackfillMedalForAll() {
+			return Execute<BackfillMedalForAll>(null, null);
+		} // BackfillMedalForAll
+
 		public ActionMetaData BackfillNonLimitedCompanies() {
 			BackfillNonLimitedCompanies instance;
 			return ExecuteSync(out instance, 0, 0);
@@ -39,9 +43,9 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateMedal(int underwriterId, int customerId) {
+		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID) {
 			CalculateMedal instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, DateTime.UtcNow, false, true);
+			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, DateTime.UtcNow, false, true);
 		}
 
 		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification) {
@@ -261,5 +265,9 @@
 		public ActionMetaData BackfillBrokerCommissionInvoice() {
 			return Execute<BackFillBrokerCommissionInvoice>(null, null);
 		}
+
+		public ActionMetaData BackfillDailyLoanStats() {
+			return Execute<BackfillDailyLoanStats>(null, null);
+		} // BackfillDailyLoanStats
 	} // class EzServiceImplementation
 } // namespace EzService

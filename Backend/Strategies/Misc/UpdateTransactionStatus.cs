@@ -105,15 +105,15 @@
 
             if (string.IsNullOrEmpty(result.Status)) {
                 newStatus = "Error";
-                description = result.Error;
+                description = "Status is empty, " + result.Error;
             } else if (result.Status.ToLower().Contains("inprogress")) {
                 newStatus = "InProgress";
             } else if (result.Status.ToLower().Contains("submitted")) {
                 newStatus = "Done";
-                description = "Done";
+				description = result.Status;
             } else if (result.Status.ToLower().Contains("cleared")) {
                 newStatus = "Done";
-                description = "Cleared";
+				description = result.Status;
             } else {
                 newStatus = "Error";
                 description = "Status: '" + result.Status + "' Error: " + result.Error;

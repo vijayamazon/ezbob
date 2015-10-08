@@ -137,6 +137,11 @@
 
 		private ISalesForceAppClient GetSandboxDevClient() {
 			//Sandbox dev
+			/*
+			  yarons@ezbob.com.devsandbox
+			  yaron 1234
+			  xJ9i4J5ehbTLnKfFPglPkeU5J
+			 */
 			return ObjectFactory
 				.With("userName").EqualTo("techapi@ezbob.com.devsandbox")
 				.With("password").EqualTo("Ezca$h123")
@@ -149,8 +154,8 @@
 			//Sandbox
 			return ObjectFactory
 				.With("userName").EqualTo("yarons@ezbob.com.sandbox")
-				.With("password").EqualTo("Ezca$h123")
-				.With("token").EqualTo("H3pfFEE09tKxp0vTCoK0mfiS")
+				.With("password").EqualTo("yaron1357")
+				.With("token").EqualTo("9bliHbTtvOpiwN5TB2Ap0UBH2")
 				.With("environment").EqualTo("Sandbox")
 				.GetInstance<ISalesForceAppClient>();
 		}
@@ -164,12 +169,18 @@
                 .With("environment").EqualTo("Production")
                 .GetInstance<ISalesForceAppClient>();
 		}
-
+		
 		private ISalesForceAppClient GetFakeClient() {
 			ObjectFactory.Configure(x => {
 				x.For<ISalesForceAppClient>().Use<FakeApiClient>();
 			});
 			return new FakeApiClient();
+		}
+
+		[Test]
+		public void TestSandbox() {
+			var c = GetSandboxClient();
+			Assert.IsFalse(c.HasError);
 		}
 
 		[Test]

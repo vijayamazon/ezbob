@@ -6869,7 +6869,7 @@ $.extend($.ui.dialog.overlay, {
 			}
 		// handle "good" browsers
 		} else {
-			return $(document).width() + 'px';
+			return '100%';
 		}
 	},
 

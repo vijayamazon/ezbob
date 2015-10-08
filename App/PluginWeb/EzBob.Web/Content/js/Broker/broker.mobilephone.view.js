@@ -108,7 +108,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 					(this.currentCount(sPhoneNumber) < this.maxSendToCurrentCount()) &&
 					(this.sendAttemptsCount < this.maxSendAttemptsCount());
 
-				this.setSomethingEnabled('#' + this.GenerateCodeBtnID, bEnabled).val('Resend activation code');
+				this.setSomethingEnabled('#' + this.GenerateCodeBtnID, bEnabled).val('Resend authentication code');
 
 				if (event && event.keyCode && this.specialKeys[event.keyCode])
 					this.$el.find('#' + this.MobileCodeFieldID).val('');
@@ -266,7 +266,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 				if (bShowMobileCode) {
 					self.$el.find('#' + self.MobileCodeSectionID).removeClass('hide').show();
-					self.$el.find('#' + self.GenerateCodeBtnID).val('Resend activation code');
+					self.$el.find('#' + self.GenerateCodeBtnID).val('Resend authentication code');
 
 					if (document.activeElement && ($(document.activeElement).attr('id') === self.GenerateCodeBtnID))
 						self.$el.find('#' + self.MobileCodeFieldID).focus();

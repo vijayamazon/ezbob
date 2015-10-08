@@ -1,53 +1,122 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <div class="page-section hide section-add-bank">
-    <div class="row-fluid">
-        <h2>Your Bank Details</h2>
-        <form id="bankAccount">
-            <div class="bank-account-instructions clearfix">
-                <div class="bank-account">
-                    <div class="control-group form_field_container">
-                        <div class="controls">
-                            <label class="attardi-input">
-                                <span>Account number</span>
-                                <input id="AccountNumber" name="AccountNumber" type="text" value="" autofocus="autofocus" class="AccountNumber form_field" maxlength="8" ui-event-control-id="broker:bank-details:account-number" />
-                                <img class="field_status required" id="AccountNumberImage" />
-                            </label>
-                        </div>
-                    </div>
+	<div class="row-fluid">
+		<section id="content">
+			<div class="wizard-wrap">
+				<h2>Your Bank Details</h2>
+				<form id="bankAccount">
+					<div class="bank-account-instructions clearfix">
+						<div class="bank-account">
 
-                    <div class="control-group form_field_container" id="SortCode">
-                        <div class="controls ezSortCode">
-                            <label class="attardi-input">
-                                <span>Sort Code</span>
-                                <input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1" />
-                                <span></span>
-                                <input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2" />
-                                <span></span>
-                                <input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3" />
-                                <img class="field_status required" id="SortCodeImage" />
-                            </label>
-                            <input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
-                        </div>
-                    </div>
+							@EzForm.InputTextWizard(
+										new EzInputBuilder(
+											"AccountNumber",
+											"Account number",
+											type: "text",
+											 cls: "AccountNumber form_field",
+											isRequired: true,
+											statusIcon: true,
+											tabIndex: 1,
+											maxLength: 8,
+											 uiEventControlID: "broker:bank-details:account-number"),
+										origin: origin)
+							
+							
+							@if (origin == CustomerOriginEnum.everline) {
+								<div class="control-group form_field_container" id="SortCode">
+									<label class="input-title">Sort Code</label>
+									<div class="input-wrapper ezSortCode">
+										<div class="attardi-input ezSortCode1">
+											<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-1" tabindex="2"/>
+										</div>
+										<div class="attardi-input ezSortCode2">
+											<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-2" tabindex="3"/>
+										</div>
+										<div class="attardi-input ezSortCode3">
+											<input class="form_field_look" id="SortCode3" type="text" maxlength="2" ui-event-control-id="bank-details:sort-code-3" tabindex="4"/>
+											<input type="hidden" class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit"/>
+										</div>
+										<div class="error-wrap"></div>
+									</div>
+								</div>
+							} else {
+								<div class="control-group form_field_container" id="SortCode">
+									<div class="controls ezSortCode">
+										<label class="attardi-input">
+											<span>Sort Code</span>
+											<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1"/>
+											<span></span>
+											<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2"/>
+											<span></span>
+											<input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3"/>
+											<img class="field_status required" id="SortCodeImage"/>
+										</label>
+										<input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;"/>
+									</div>
+								</div>
+							}
+							
+							@{
+								EzInputBuilder radio1 = new EzInputBuilder("baPersonal", "Personal",
+									value: "Personal",
+									type: "radio",
+									labelClass: "for-radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "bankAccountType",
+									uiEventControlID: "broker:bank-details:account-type",
+									specialAttributes: new Dictionary<string, string>{ { "checked", "checked" } });
 
-                    <div class="control-group">
-                        <div class="controls">
-                            <input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
-                            <input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
-                        </div>
-                    </div>
+								EzInputBuilder radio2 = new EzInputBuilder("baBusiness", "Business",
+									value: "Business",
+									type: "radio",
+									labelClass: "for-radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "bankAccountType",
+									uiEventControlID: "broker:bank-details:account-type");
 
-                    <div class="form_buttons_container">
-                        <div class="attardi-button">
-                            <button type="submit" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="broker:bank-details:continue">Continue</button>
-                            <button class="back button btn-grey pull-right" ui-event-control-id="broker:bank-details:back">Back</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <hr>
-        <div class="help_security"></div>
-    </div>
+								List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1, radio2 };
+								var buttonsmodel = new EzClickInputModel(
+									name: "bankAccountType",
+									caption: "Account type",
+									inputWrapperClass: "FormRadioCtrl",
+									inputButtons: radios);
+
+								@EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+							}
+							
+							@EzForm.WizardButton(
+								new List<EzButtonModel>{
+								new EzButtonModel(
+									"broker_bank_details_continue_button",
+									"Continue",
+									cls: "button btn-green connect-bank disabled pull-right ev-btn-org",
+									uiEventControlID: "broker:bank-details:continue",
+									buttonType: EzButtonType.submit),
+								new EzButtonModel(
+									"broker_bank_details_back_button",
+									"Back",
+									cls: "back button btn-grey pull-right clean-btn",
+									uiEventControlID: "broker:bank-details:back",
+									buttonType: EzButtonType.link,
+									href: "#")
+								},
+								origin: origin)
+
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+		<hr>
+		<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
+	</div>
 </div>

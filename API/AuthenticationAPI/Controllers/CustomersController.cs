@@ -8,8 +8,6 @@
 	using System.Web.Http;
 	using System.Web.Http.Description;
 	using Ezbob.API.AuthenticationAPI.Models;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Utils.Extensions;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
@@ -28,13 +26,13 @@
 		[Authorize(Roles = "PartnerAlibaba")]
 		[CacheOutput(ClientTimeSpan = 60, ServerTimeSpan = 60, ExcludeQueryStringFromCacheKey = true)] // client cache length in seconds
 		public async Task<IHttpActionResult> GetAlibabaCustomerAvailableCredit([FromBody]AlibabaDto data) {
-
+            
 			var cache = Configuration.CacheOutputConfiguration().GetCacheOutputProvider(Request);
 			string cachKey = CacheKeyCustomerAliMember(data);
 			var cachedResponse = (AlibabaDto)cache.Get(cachKey);
 
 			if (cachedResponse != null && cachedResponse.aId == data.aId && cachedResponse.aliMemberId == data.aliMemberId) {
-				SaveApiLog(data, cachedResponse, "200", "from cache");
+                Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, cachedResponse, data.requestId, data.aId, "200", "from cache", cachedResponse.errCode.DescriptionAttr(), cachedResponse.errMsg, cachedResponse.url, ActionContext.Request.Headers);
 				return Ok(cachedResponse);
 			}
 
@@ -58,7 +56,7 @@
 
 					response.errCode = AlibabaErrorCode.SYSTEM_CUSTOMER_ID_ALI_MEMBER_ID_MISMATCH;
 					response.errMsg = AlibabaErrorCode.SYSTEM_CUSTOMER_ID_ALI_MEMBER_ID_MISMATCH.DescriptionAttr();
-					SaveApiLog(data, response, "400");
+                    Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, response, data.requestId, data.aId, "400", "", response.errCode.DescriptionAttr(), response.errMsg, response.url, ActionContext.Request.Headers);
 					return BadRequest(response.errMsg);
 				}
 
@@ -67,7 +65,7 @@
 
 					response.errCode = AlibabaErrorCode.SYSTEM_CUSTOMER_ID_NOT_FOUND;
 					response.errMsg = AlibabaErrorCode.SYSTEM_CUSTOMER_ID_NOT_FOUND.DescriptionAttr();
-					SaveApiLog(data, response, "400");
+                    Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, response, data.requestId, data.aId, "400", "", response.errCode.DescriptionAttr(), response.errMsg, response.url, ActionContext.Request.Headers);
 					return BadRequest(response.errMsg);
 				}
 
@@ -76,7 +74,7 @@
 
 					response.errCode = AlibabaErrorCode.SYSTEM_ALI_MEMBER_ID_NOT_FOUND;
 					response.errMsg = AlibabaErrorCode.SYSTEM_ALI_MEMBER_ID_NOT_FOUND.DescriptionAttr();
-					SaveApiLog(data, response, "400");
+                    Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, response, data.requestId, data.aId, "400", "", response.errCode.DescriptionAttr(), response.errMsg, response.url, ActionContext.Request.Headers);
 					return BadRequest(response.errMsg);
 				}
 
@@ -85,8 +83,8 @@
 					response.errMsg = AlibabaErrorCode.SYSTEM_NO_VALID_CREDITLINE_FOR_CUSTOMER.DescriptionAttr();
 				}
 
-				SaveApiLog(data, response, "200");
-
+                Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, response, data.requestId, data.aId, "200", "", response.errCode.DescriptionAttr(), response.errMsg, response.url, ActionContext.Request.Headers);
+				
 				// set cache for 1 minute
 				cache.Add(cachKey, response, DateTime.Now.AddSeconds(60), null);
 
@@ -100,38 +98,7 @@
 
 		
 
-		/// <summary>
-		/// save to DB
-		/// </summary>
-		/// <param name="request"></param>
-		/// <param name="response"></param>
-		/// <param name="statusCode"></param>
-		/// <param name="comments"></param>
-		private void SaveApiLog(AlibabaDto request, AlibabaDto response, string statusCode = null, string comments = "" ) {
-	
-			StringBuilder req = new StringBuilder(JsonConvert.SerializeObject(request, Helper.JsonReferenceLoopHandling())).Append("; HEADERS: ").Append(JsonConvert.SerializeObject(ActionContext.Request.Headers, Helper.JsonReferenceLoopHandling()));
-
-			try {
-				var datatosave = new ApiCallData() {
-					Request = req.ToString(), 
-					RequestId = request.requestId,
-					Response = JsonConvert.SerializeObject(response, Helper.JsonReferenceLoopHandling()),
-					CustomerID = request.aId,
-					StatusCode = statusCode, 
-					ErrorCode = response.errCode.DescriptionAttr(),
-					ErrorMessage = response.errMsg,
-					Source = ExternalAPISource.Alibaba.DescriptionAttr(),
-					Comments = comments ,  
-					Url = response.url
-				};
-
-				ServiceClient client = new ServiceClient();
-				client.Instance.SaveApiCall(datatosave);
-
-			} catch (Exception logex) {
-				Trace.TraceError(DateTime.UtcNow + ": " + logex);
-			}
-		} //SaveApiLog
+		
 
 		// but not https://api.ezbob.com/Alibaba/Service/qualify/{aId}/{aliMemberId}
 		[Route("qualify", Name = "RequalifyCustomerPost")]
@@ -147,7 +114,7 @@
 			var cachedResponse = (AlibabaDto)cache.Get(cachKey);
 
 			if (cachedResponse != null && cachedResponse.aId == data.aId && cachedResponse.aliMemberId == data.aliMemberId) {
-				SaveApiLog(data, cachedResponse, "200", "from cache");
+                Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, cachedResponse, data.requestId, data.aId, "200", "from cache", cachedResponse.errCode.DescriptionAttr(), cachedResponse.errMsg, cachedResponse.url, ActionContext.Request.Headers);
 				return Ok(cachedResponse);
 			}
 
@@ -166,8 +133,8 @@
 					url = url
 				};
 
-				SaveApiLog(data, response, "200");
-
+                Helper.SaveApiLog<AlibabaDto, AlibabaDto>(data, response, data.requestId, data.aId, "200", "", response.errCode.DescriptionAttr(), response.errMsg, response.url, ActionContext.Request.Headers);
+                
 				// set cache for 1 minute
 				cache.Add(cachKey, response, DateTime.Now.AddHours(2), null);
 

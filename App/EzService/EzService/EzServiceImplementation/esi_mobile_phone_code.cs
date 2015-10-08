@@ -17,7 +17,7 @@
 		public BoolActionResult SendSms(int userId, int underwriterId, string phone, string content)
 		{
 			SendSms strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, underwriterId, userId, underwriterId, phone, content);
+			var result = ExecuteSync(out strategyInstance, null, underwriterId, userId, underwriterId, phone, content, false);
 			return new BoolActionResult { MetaData = result, Value = strategyInstance.Result };
 		} // SendSms
 

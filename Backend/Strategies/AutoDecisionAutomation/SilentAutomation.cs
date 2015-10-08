@@ -93,7 +93,7 @@
 
 			this.cashRequestID = sr["CashRequestID"];
 
-			ForceNhibernateResync.Do(this.customerID);
+			ForceNhibernateResync.ForCustomer(this.customerID);
 
 			Log.Debug(
 				"Executing silent reject for customer '{0}' using cash request '{1}'...",
@@ -291,7 +291,7 @@
 
 			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
 
-			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(this.customerID, this.cashRequestID, DateTime.UtcNow, false, true) {
 				Tag = Tag,
 				QuietMode = true,
 			};
