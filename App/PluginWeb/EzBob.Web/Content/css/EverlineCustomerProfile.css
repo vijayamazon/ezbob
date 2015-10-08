@@ -255,7 +255,7 @@ margin-right:0;
     font-family: 'Open Sans',sans-serif;
     line-height: normal;
 }
-}
+
 .automation-popup.automation-popup-complete {
        margin-top: 5px;
 }
@@ -342,7 +342,7 @@ margin-right:0;
 }
 
 .profile-widgets .table {
-	border-collapse: separate;
+	border-collapse: collapse;
 }
 
 .profile-widgets .table th,
@@ -569,4 +569,18 @@ table.payment-schedule-table td:last-child {
 .print-download {
 	margin-left: -20px;
 	padding-left: 0;	
+}
+
+/*table borders*/
+.main-page-everline table.table td:first-child {
+    border-left: 0;
+}
+.main-page-everline table.table td:last-child {
+    border-right:0;
+}
+.main-page-everline table.table th:first-child {
+    border-left: 0;
+}
+.main-page-everline table.table th:last-child {
+    border-right:0;
 }
