@@ -426,17 +426,22 @@
 
         [Ajax]
         [HttpPost]
-        [Transactional]
         public JsonResult RemoveFreezeInterval(int id, int intervalid)
         {
             Loan loan = this._loans.Get(id);
             LoanInterestFreeze lif = loan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
+			
+			new Transactional(() => {
 
-            if (lif != null)
-                lif.DeactivationDate = DateTime.UtcNow;
-            this._loans.SaveOrUpdate(loan);
+				if (lif != null)
+					lif.DeactivationDate = DateTime.UtcNow;
+				this._loans.SaveOrUpdate(loan);
+
+		   }).Execute();
 
             Log.DebugFormat("remove freeze interest for customer {0}", loan.Customer.Id);
+
+			loan = this._loans.Get(id);
 
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
