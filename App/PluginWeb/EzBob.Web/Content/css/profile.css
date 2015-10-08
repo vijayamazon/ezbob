@@ -69,7 +69,8 @@ body .agreement-text {
 .personal-company-info-container:after { display: table; line-height: 0; content: ""; }
 .personal-company-info-container:after { clear: both; }
 
-.personal-company-info-container .form_field_container{
+.personal-company-info-container .form_field_container,
+#profile-content h2.loan-summary-title {
 	margin-bottom: 15px;
 }
 
@@ -323,7 +324,8 @@ body .other-amount-label {
 
 #profile-content .repayments-table-header {
     margin-top: 8px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+	font-size: 22px;
 }
 
 #profile-content {
@@ -493,7 +495,8 @@ h2.header-message a{
 }
 
 .early-payment-form .input-wrapper {
-	display: inline;
+	display: inline-block;
+	margin-top: -5px;
 }
 
 .early-payment-form .radio .money { 
@@ -956,4 +959,41 @@ span.sign-full-name {
 .print-download {
 	padding-top: 25px; 
 	padding-left: 20px;	
+}
+
+#tab3 a.pdf-link {
+	 margin-left: 775px;
+}
+
+.card-options-label span.title {
+	vertical-align: top;
+	line-height: 20px;
+}
+
+div.existing-card-data {
+	display: inline-block;
+	margin-left: 15px;
+	margin-top: -5px;
+}
+
+#profile-content .loan-schedule-info dd span.loan-amount {
+	color: #b7b7b7; 
+	font-size: 11px;
+}
+
+#profile-content .loan-schedule-info dt span.total-repayments {
+	font-size: 11px;
+	display: block;
+}
+
+#profile-content .loan-schedule-info dd span.total-amount {
+	height: 40px;
+}
+
+.early-payment-form #loan-select {
+	width: 405px;
+}
+
+.early-payment-form #rollover-select {
+	width: 374px;
 }

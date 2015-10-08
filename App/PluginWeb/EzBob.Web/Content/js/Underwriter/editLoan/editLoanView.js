@@ -69,6 +69,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click .add-fee': 'addFee',
         'click .save': 'onOk',
         'click .cancel': 'onCancel',
+        'click #outside-stop-future-interest': 'outsideSelectChange',
+        'change #outside-calendar-from': 'outsideSelectChange',
+        'change #within-calendar-from': 'withinSelectChange'
     }, // events
 
     chargesSaveBtn: function () {
@@ -177,7 +180,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		BlockUi('on');
 		request.success(function(res) {
 			$('#withinPayments').text(res.IntervalsNum);
-			$('#withinPrincipal').text(EzBob.formatPounds(res.ReschedulingBalance));
+			$('#withinPrincipal').text(EzBob.formatPounds(res.OpenPrincipal));
 			$('#withinIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
 		}); //on success
 
@@ -191,7 +194,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		});
 	},
 
-	outsideSelectChange: function() {
+	outsideSelectChange: function () {
 		this.ui.err_region.fadeOut();
 		$('#outsidePrincipal').removeClass('err-field-red');
 		var amount = $("#outsidePrincipal").val();
@@ -554,15 +557,17 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        this.$el.find('#within-calendar-from').datepicker({
 	            format: 'dd/mm/yyyy',
 	            startDate: reschedulingIntervalStartIn,
-	            endDate: reschedulingIntervalEndIn
+	            endDate: reschedulingIntervalEndIn,
 	        });
 
 	        this.$el.find('#within-calendar-from').datepicker("setDate", reschedulingIntervalStartIn);
 
 	        this.$el.find('#outside-calendar-from').datepicker({
 	            format: 'dd/mm/yyyy',
-	            startDate: reschedulingIntervalStartOut
+	            startDate: reschedulingIntervalStartOut,
 	        });
+
+
 
 	        this.$el.find('#outside-calendar-from').datepicker("setDate", reschedulingIntervalStartOut);
 
@@ -574,7 +579,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	            }
 	        }
 	        this.$el.find('#withinPayments').text(within.IntervalsNum);
-	        this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.ReschedulingBalance));
+	        this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.OpenPrincipal));
 	        this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
 
 	        var outside = this.model.get('ReResultOut');

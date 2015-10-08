@@ -99,7 +99,7 @@
 						href: "#"),
 					new EzButtonModel(
 						null,
-						isEverline ? "Cancel" : "Back",
+						"Cancel",
 						cls: "btn-back button btn-grey back clean-btn",
 						uiEventControlID: "settings:password-back",
 						buttonType: EzButtonType.link,
@@ -124,7 +124,7 @@
 							uiEventControlID: "settings:question-current-password"),
 					origin: origin)
 		
-				@EzForm.SelectWizard(new EzSelectModel("securityQuestion", isEverline ? "Security question" : "Question", 
+				@EzForm.SelectWizard(new EzSelectModel("securityQuestion", "Security question", 
 					cls: "form_field", 
 					listItems: securityQuestions,
 					isRequired: true, 
@@ -152,7 +152,7 @@
 						href: "#"),
 					new EzButtonModel(
 						null,
-						isEverline ? "Cancel" : "Back",
+						"Cancel",
 						cls: "btn-back back button btn-grey clean-btn",
 						uiEventControlID: "settings:question-back",
 						buttonType: EzButtonType.link,

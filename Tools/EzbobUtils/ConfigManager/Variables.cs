@@ -404,6 +404,8 @@ namespace ConfigManager {
 		ReportDaemonDropboxCredentials,
 		ReportDaemonDropboxRootPath,
 		ReportsSite,
+		ReschedulingDebugMail,
+		ReschedulingDebugMailAddress,
 		RolloverCharge,
 
 		SageExpendituresRequest,

@@ -34,7 +34,7 @@
 			}
 		} 
 
-		<h2 style="margin-bottom: 15px;">Loan Summary</h2>
+		<h2 class="loan-summary-title">Loan Summary</h2>
 
 		<input type="hidden" id="loanid" value="@ViewData["LoanId"]" />
 
@@ -50,20 +50,20 @@
 
 			<dt>Loan Amount:</dt>
 			<dd>
-				£ @ViewData["Amount"]
+				£@ViewData["Amount"]
 				@if (!String.IsNullOrEmpty((string)ViewData["SetupFee"])) {
-					<span style="color: #b7b7b7; font-size: 11px;">
+					<span class="loan-amount">
 						An origination fee of
-						£ @ViewData["SetupFee"] was deducted from the transfer
+						£@ViewData["SetupFee"] was deducted from the transfer
 					</span>
 				}
 			</dd>
 
 			<dt>
 				Total Repayments:
-				<span style="font-size: 11px; display: block;">(inc. interest and fees)</span>
+				<span class="total-repayments">(inc. interest and fees)</span>
 			</dt>
-			<dd style="height: 40px;">£ @ViewData["Total"]</dd>
+			<dd class="total-amount">£@ViewData["Total"]</dd>
 
 			@if (!(bool)ViewData["IsAlibaba"]) {
 				<dt>Bank Account:</dt>
@@ -73,7 +73,7 @@
 
 		<div class="row-fluid">
 			<div class="span12">
-				<h2 style="font-size: 22px; margin-bottom: 20px;" class="repayments-table-header">Payment schedule</h2>
+				<h2 class="repayments-table-header">Payment schedule</h2>
 				<div id="schedule"></div>
 			</div>
 		</div>

@@ -310,7 +310,6 @@ strong {
     }
 
         .security-icons .item .verisign {
-            /*background: url(images/verisign_seal.gif) no-repeat 0 0;*/
 			width: 100px;
 			height: 72px;
             -moz-background-position-x: 12px;
@@ -1753,6 +1752,8 @@ h3.group-title {
 }
 .ui-dialog .ui-dialog-content {
        padding-right: 0;
+           padding-top: 0;
+    padding-bottom: 0;
 }
 .ui-dialog-titlebar  {
     border:none;
@@ -1875,11 +1876,11 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
     text-transform: none;
     opacity: 0.9;
     -webkit-font-smoothing: antialiased;
-    font-size: 75px;
+    font-size: 65px;
     font-weight: 100;
     margin-top: 0;
     padding: 0;
-    right: -25px;
+    right: -34px;
     top: 15px;
     width: 75px;
     height: 75px;
@@ -1896,7 +1897,7 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 }
 .ui-dialog .address-dialog-buttonpane.ui-dialog-buttonpane .ui-dialog-buttonset {
     float: right;
-    width: 100%;
+    display: inline-block;
     padding-left: 15px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -2293,15 +2294,15 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 	min-height: 40px;
 }
 
-.address-dialog-widget::-webkit-scrollbar,.megila-inner::-webkit-scrollbar,.consent-dialog::-webkit-scrollbar {
+.address-dialog-widget::-webkit-scrollbar,.megila-inner::-webkit-scrollbar,.consent-dialog::-webkit-scrollbar,.companyaddress  .ui-dialog-content::-webkit-scrollbar {
    	width: 8px;
 }
  
-.address-dialog-widget::-webkit-scrollbar-track,.megila-inner::-webkit-scrollbar-track,.consent-dialog::-webkit-scrollbar-track {
+.address-dialog-widget::-webkit-scrollbar-track,.megila-inner::-webkit-scrollbar-track,.consent-dialog::-webkit-scrollbar-track,.companyaddress  .ui-dialog-content::-webkit-scrollbar-track {
     background: transparent;
 }
  
-.address-dialog-widget::-webkit-scrollbar-thumb,.megila-inner::-webkit-scrollbar-thumb,.consent-dialog::-webkit-scrollbar-thumb{
+.address-dialog-widget::-webkit-scrollbar-thumb,.megila-inner::-webkit-scrollbar-thumb,.consent-dialog::-webkit-scrollbar-thumb,.companyaddress  .ui-dialog-content::-webkit-scrollbar-thumb{
     background: #28211f;
 	height: 40px;
  border-radius: 10px;
