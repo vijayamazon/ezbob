@@ -32,14 +32,14 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			resizable: false,
 			title: "Credit Line",
 			position: "center",
-			draggable: false,
+			draggable: true,
 			dialogClass: "creditline-popup",
 			width: 840
 		};
 	}, // jqoptions
 
 	closeDialog: function() {
-		return this.model.fetch();
+		this.model.fetch();
 	}, // closeDialog
 
 	onChangeStartingDate: function() {
@@ -135,11 +135,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	}, // getPostData
 
 	bindings: {
-	    OfferedCreditLine: {
-	        selector: "#offeredCreditLine",
-	        converter: EzBob.BindingConverters.moneyFormat
-	    },
-	    InterestRate: {
+		OfferedCreditLine: {
+			selector: "#offeredCreditLine",
+			converter: EzBob.BindingConverters.moneyFormat
+		},
+		InterestRate: {
 			selector: "input[name='interestRate']",
 			converter: EzBob.BindingConverters.percentsFormat
 		},
