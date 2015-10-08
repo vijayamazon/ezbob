@@ -13,6 +13,9 @@
 		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
 
 		[DataMember]
+		public decimal OpenPrincipal { get; set; } // open principal for rescheduling
+
+		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type 
 
 		[DataMember] // for info only
