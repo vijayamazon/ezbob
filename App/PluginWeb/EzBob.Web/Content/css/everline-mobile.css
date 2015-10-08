@@ -164,6 +164,9 @@
     .wizard-steps-wrapper .wizard-steps .progress-time {
         width: 100%;
         text-align: center;
+        line-height:normal;
+            height: 86px;
+    padding-top: 35px;
     }
 
     .ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
@@ -324,8 +327,8 @@
 
     .wizard-steps-wrapper .wizard-steps .steps-wrap {
         width: 100%;
-        position: absolute;
-        top: 105px;
+      
+        top: 19px;
 
     }
 
