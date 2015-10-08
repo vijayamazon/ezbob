@@ -70,9 +70,9 @@ function InitAmountPeriodSliders(options) {
 		var autoNumericCtrlOptions;
 
 		if (sAreaName === 'amount')
-			autoNumericCtrlOptions = $.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max });
+			autoNumericCtrlOptions = $.extend({}, EzBob.moneyFormatNoDecimals, { vMin: 0, vMax: 1000000 });
 		else
-			autoNumericCtrlOptions = { vMin: oDefinitions.min, vMax: oDefinitions.max, mDec: 0 };
+			autoNumericCtrlOptions = { vMin: 0, vMax: 1000000, mDec: 0 };
 
 		oTextbox.autoNumeric('init', autoNumericCtrlOptions);
 
