@@ -21,3 +21,8 @@ SET DisplayName = 'Accounting services',
     Description='Link your accounting service if you use one of these.'
 WHERE Name='Accounting'
 GO
+
+UPDATE dbo.MP_MarketplaceType
+SET Description = 'VAT account'
+WHERE InternalId = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+GO
