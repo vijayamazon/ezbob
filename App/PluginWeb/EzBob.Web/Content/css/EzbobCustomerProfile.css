@@ -1,0 +1,18 @@
+﻿.other-amount-label span.title {
+    vertical-align: top;
+}
+
+#single-loan-pay-options .other-amount-label span.title {
+    vertical-align: baseline;
+}
+
+.early-payment-form .input-wrapper.early-loan,
+.other-amount-label .input-wrapper.early-rollover {
+	margin-top: -5px;
+}
+
+#single-loan-pay-options .other-amount-label .input-wrapper.early-rollover {
+	margin-top: 0;
+}
+
+

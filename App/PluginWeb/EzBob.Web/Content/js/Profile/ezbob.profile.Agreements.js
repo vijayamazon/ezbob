@@ -43,7 +43,7 @@ EzBob.Profile.AgreementViewBase = Backbone.Marionette.ItemView.extend({
     }, // render
 
     addScroll: function () {
-        return this.$el.find(".overview").jScrollPane();
+    	return this.$el.find(".overview").jScrollPane({ verticalDragMinHeight: 40 });
     }, // addScroll
 }); // EzBob.Profile.AgreementViewBase
 

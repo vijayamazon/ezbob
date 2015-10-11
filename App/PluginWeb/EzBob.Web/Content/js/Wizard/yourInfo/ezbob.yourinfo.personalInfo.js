@@ -38,7 +38,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
 		EzBob.App.jqmodal.show(consentAgreement);
-	   // 	consentAgreement.$el.find('.consent-dialog-wrapper').jScrollPane();
+		// 	consentAgreement.$el.find('.consent-dialog-wrapper').jScrollPane({ verticalDragMinHeight: 40 });
 	
 		return false;
 	}, // showConsent

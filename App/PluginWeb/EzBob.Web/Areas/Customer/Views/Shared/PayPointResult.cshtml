@@ -1,36 +1,32 @@
 ﻿@model dynamic
 
 <script type="text/template" id="infoPageTemplate">
-	<div class="row-fluid " style="padding-top: 20px;">
-		<div class="span2">&nbsp;</div>
-		<div class="span8">
-			<h1>Confirmation</h1>
+	<div class="row-fluid">
+		<h1>Confirmation</h1>
 
-			<% if (hasLateLoans) { %>
-				<h2 style="margin-bottom: 35px">Thank You for Your Payment</h2>
-			<% } else { var paymentPrefix = (this.model && this.model.get('isEarly')) ? "an early" : "a"; %>
-				<h2 style="margin-bottom: 35px">Thank you for making <%= paymentPrefix %> payment</h2>
-			<% } %>
+		<% if (hasLateLoans) { %>
+		<h3>Thank you for your payment</h3>
+		<% } else { var paymentPrefix = (this.model && this.model.get('isEarly')) ? "Early payment" : "Payment"; %>
+		<h3><%= paymentPrefix %> complete</h3>
+		<% } %>
+		<% if (isRolloverPaid) { %>
+		<h3>Your loan has been rolled over</h3>
+		<% } %>
 
-			<% if (isRolloverPaid) { %>
-				<h3>Your loan has been rolled over</h3>
-			<% } %>
+		<p>
+			<div><strong class="pay-early-details">Payment amount:</strong> <%- EzBob.formatPounds(amount) %></div>
+			<div><strong class="pay-early-details">Payment date:</strong> <%- EzBob.currentDateFormatted() %></div>
+			<div><strong class="pay-early-details">Payment ref:</strong> <%- transRefnums %></div>
+			<div><strong class="pay-early-details">Loan ref. number:</strong> <%- refnum %></div>
+			<div><strong class="pay-early-details">Payment made by:</strong> xxxx-<%- card_no %></div>
+		</p>
 
-			<p>	
-				<div><strong style="font-size:18px">Payment amount:</strong> <%- EzBob.formatPounds(amount) %></div>
-				<div><strong style="font-size:18px">Payment date:</strong> <%- EzBob.currentDateFormatted() %></div>
-				<div><strong style="font-size:18px">Payment ref:</strong> <%- transRefnums %></div>
-				<div><strong style="font-size:18px">Loan ref. number:</strong> <%- refnum %></div>
-				<div><strong style="font-size:18px">Payment made by:</strong> xxxx-<%- card_no %> debit card</div>
-			</p>
+		<p style="margin-top: 25px">A confirmation email is being sent to <strong class="orange-text"><%- email %></strong></p>
 
-			<p style="margin-top: 25px">A confirmation email is being sent to <%- email %></p>
+		<% if (savedPounds > 0 && !hasLateLoans && this.model && this.model.get('isEarly')) { %>
+		<p align="left" class="by-paying-early"><strong>By paying early you saved <%= EzBob.formatPounds(savedPounds) %></strong></p>
+		<% } %>
 
-			<% if (savedPounds > 0 && !hasLateLoans && this.model && this.model.get('isEarly')) { %>
-				<p align="left" class="by-paying-early"><strong>By paying early you saved <%= EzBob.formatPounds(savedPounds) %></strong></p>
-			<% } %>
-
-			<a href="@Url.Action("Index", "Profile", new { Area = "Customer" })" ui-event-control-id="payment-info:back-to-profile" class="btn-continue button btn-green ev-btn-org back-to-profile btn-wide pull-right" >Go to my account</a>
-		</div>
+		<a href="@Url.Action("Index", "Profile", new { Area = "Customer" })" ui-event-control-id="payment-info:back-to-profile" class="btn-continue button btn-green ev-btn-org back-to-profile btn-wide pull-right">Continue to account</a>
 	</div>
 </script>

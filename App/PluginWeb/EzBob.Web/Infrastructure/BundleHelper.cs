@@ -80,6 +80,7 @@
 				
 				//custom css
 				.Add("~/Content/css/profile.css")
+				.Add("~/Content/css/EzbobCustomerProfile.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
 		} // RenderEzbobProfileCss

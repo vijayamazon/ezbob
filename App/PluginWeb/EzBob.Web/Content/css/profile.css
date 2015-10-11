@@ -462,6 +462,10 @@ html body .right {
     font-family: 'Titillium Web Semi Bold';
 }
 
+.pay-early-details{
+	font-size: 18px;
+}
+
 .by-paying-early {
     font-size: 22px;
     color: #0B73B4;

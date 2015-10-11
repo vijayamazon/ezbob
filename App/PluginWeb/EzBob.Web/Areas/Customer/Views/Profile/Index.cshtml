@@ -118,7 +118,7 @@
 			<dd><%- EzBob.formatDateUK(NextPaymentDate) %></dd>
 		}
 	</dl>
-	<button class="button btn-green clean-btn" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
+	<button class="button btn-green clean-btn" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'early' : 'Now') %></button>
 </script>
 
     <script id="d-lateLoan-template" type="text/template">
@@ -137,10 +137,10 @@
     <script id="d-getCash-template" type="text/template">
         <h3>Cash</h3>
 		<dl>
-			<dt>Available Credit:</dt>
+			<dt>Available credit:</dt>
 			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimals(availableCredit) %></dd>
 		</dl><dl>
-			<dt>Offer Valid for:</dt>
+			<dt>Offer valid for:</dt>
 			<dd class="offerValidFor"><%- countDown %> hrs</dd>
 		</dl>
 
@@ -150,10 +150,10 @@
     <script id="d-getCash-template-late" type="text/template">
         <h3>Cash</h3>
 		<dl>
-			<dt>Available Credit:</dt>
+			<dt>Available credit:</dt>
 			<dd class="dashes">---</dd>
 		</dl><dl>
-			<dt>Offer Valid:</dt>
+			<dt>Offer valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
 		<button rel="popover"
@@ -161,7 +161,7 @@
 				data-original-title="Get More Cash"
 				class="button btn-green disabled get-cash clean-btn"
 				ui-event-control-id="dashboard:get-more-cash">
-			Get More Cash
+			Get more cash
 		</button>
 
     </script>
@@ -169,13 +169,13 @@
     <script id="d-getCash-template-apply" type="text/template">
         <h3>Cash</h3>
 		<dl>
-			<dt>Available Credit:</dt>
+			<dt>Available credit:</dt>
 			<dd class="dashes">---</dd>
 		</dl><dl>
-			<dt>Offer Valid:</dt>
+			<dt>Offer valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
-		<button href="#" class="button btn-green apply-for-loan refresh-account-help clean-btn" ui-event-control-id="dashboard:request-cash">Request Cash</button>
+		<button href="#" class="button btn-green apply-for-loan refresh-account-help clean-btn" ui-event-control-id="dashboard:request-cash">Request cash</button>
 
         <div class="hide">
             <div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
@@ -285,11 +285,11 @@
     <script id="d-getCash-template-wait" type="text/template">
         <h3>Cash</h3>
 		<dl>
-			<dt>Available Credit:</dt>
+			<dt>Available credit:</dt>
 			<dd style="font-weight: bold; font-size: 13px; text-align: center;">Under Review</dd>
 		</dl>
 		<dl>
-			<dt>Offer Valid:</dt>
+			<dt>Offer valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
 		<button class="button btn-green choose-amount-wait disabled clean-btn" ui-event-control-id="dashboard:choose-amount-wait">
@@ -300,11 +300,11 @@
     <script id="d-getCash-template-bad" type="text/template">
         <h3>Cash</h3>
 		<dl>
-			<dt>Available Credit:</dt>
+			<dt>Available credit:</dt>
 			<dd style="font-weight: bold; font-size: 13px; text-align: center;">None</dd>
 		</dl>
 		<dl>
-			<dt>Offer Valid:</dt>
+			<dt>Offer valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
 		<button class="button btn-green apply-for-loan disabled clean-btn" ui-event-control-id="dashboard:choose-amount-bad">

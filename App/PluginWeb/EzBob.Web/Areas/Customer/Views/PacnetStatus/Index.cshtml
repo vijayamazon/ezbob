@@ -66,8 +66,8 @@
 			<dd class="total-amount">£@ViewData["Total"]</dd>
 
 			@if (!(bool)ViewData["IsAlibaba"]) {
-				<dt>Bank Account:</dt>
-				<dd>@ViewData["bankNumber"]</dd>
+				<dt class="bankacount-title">Bank Account:</dt>
+				<dd class="bankacount-data">@ViewData["bankNumber"]</dd>
 			}
 		</dl>
 
