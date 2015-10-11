@@ -49,12 +49,12 @@
 		[DataMember]
 		public string Notes { get; set; }
 
-		public static int ColumnTotalWidth = 26;
+		public new static int ColumnTotalWidth = 26;
 
 		public override string ToString() {
 			Type t = typeof(NL_LoanFees);
 			var props = FilterPrintable(t);
-				
+
 			string lineSeparator = lineSeparatorChar.PadRight(ColumnTotalWidth * props.Count, '-') + Environment.NewLine;
 			StringBuilder sb = new StringBuilder(propertyDelimiter);
 

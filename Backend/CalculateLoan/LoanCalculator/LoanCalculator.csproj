@@ -56,16 +56,9 @@
     <Compile Include="Exceptions\NoPeriodEndDateException.cs" />
     <Compile Include="LegacyLoanCalculator.cs" />
     <Compile Include="Library.cs" />
-    <Compile Include="Methods\AGetAmountToChargeMethod.cs" />
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\CalculateAprMethod.cs" />
-    <Compile Include="Methods\AWithActualDailyLoanStatusMethod.cs" />
-    <Compile Include="Methods\CalculateBalanceMethod.cs" />
-    <Compile Include="Methods\CalculateEarnedInterestMethod.cs" />
-    <Compile Include="Methods\CalculateScheduleMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
-    <Compile Include="Methods\GetAmountToChargeForAutoChargerMethod.cs" />
-    <Compile Include="Methods\GetAmountToChargeForDashboardMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,8 @@ CREATE TYPE NL_PaymentsList AS TABLE (
 	[CreatedByUserID] INT NULL,
 	[DeletionTime] DATETIME NULL,
 	[DeletedByUserID] INT NULL,
-	[Notes] NVARCHAR(MAX) NULL
+	[Notes] NVARCHAR(MAX) NULL,
+	[LoanID] INT NOT NULL
 )
 GO
 
@@ -37,7 +38,8 @@ BEGIN
 		[CreatedByUserID],
 		[DeletionTime],
 		[DeletedByUserID],
-		[Notes]
+		[Notes],
+		[LoanID]
 	) SELECT
 		[PaymentMethodID],	
 		[PaymentTime],
@@ -47,7 +49,8 @@ BEGIN
 		[CreatedByUserID],
 		[DeletionTime],
 		[DeletedByUserID],
-		[Notes]
+		[Notes],
+		[LoanID]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

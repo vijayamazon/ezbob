@@ -6,12 +6,9 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
-	using EzBob.Backend.Models;
 	using MailApi;
-	using Newtonsoft.Json;
 
 	public class AddLoan : AStrategy {
 

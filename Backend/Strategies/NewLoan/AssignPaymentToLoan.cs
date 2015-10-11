@@ -64,13 +64,16 @@
 		/// by the payment (in NL_Model).
 		/// </summary>
 		public override void Execute() {
-			var stateStrategy = new LoanState(
+			/*
+			 * TODO
+			 * 
+			 * var stateStrategy = new LoanState(
 				new NL_Model(NLModel.CustomerID),
 				NLModel.Loan.LoanID,
 		NLModel.CustomerID,
 				DateTime.UtcNow
 			);
-			stateStrategy.Execute();
+			stateStrategy.Execute();*/
 
 			// TODO: choose proper calculator
 			// ALoanCalculator calculator = new LegacyLoanCalculator(stateStrategy.CalcModel);

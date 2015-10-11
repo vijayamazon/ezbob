@@ -30,7 +30,10 @@
 				return ActionResult.Continue;
 			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 
-            DB.ForEachRowSafe((sr, bRowsetStart) =>
+          /* 
+		   * TODO
+		   * 
+		   * DB.ForEachRowSafe((sr, bRowsetStart) =>
             {
                 NL_SendMailAndMarkDB("Mandrill - 5 days notice", sr, "NL_UpdateFiveDaysDueMailSent", 5);
                 return ActionResult.Continue;
@@ -40,7 +43,7 @@
             {
                 NL_SendMailAndMarkDB("Mandrill - 2 days notice", sr, "NL_UpdateTwoDaysDueMailSent", 2);
                 return ActionResult.Continue;
-            }, "NL_GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
+            }, "NL_GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);*/
 		} // Execute
 
         private void SendMailAndMarkDB(string templateName, SafeReader sr, string spName, string fieldName) {
@@ -83,7 +86,7 @@
             int customerId = sr["customerId"];
             //int loanScheduleId = sr["id"];
 
-			var loanState = new LoanState(new NL_Model(customerId), loanId, customerId, DateTime.UtcNow);
+			var loanState = new LoanState(new NL_Model(customerId), loanId, DateTime.UtcNow);
             loanState.Execute();
 
 			// TODO: revive

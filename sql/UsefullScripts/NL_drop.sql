@@ -33,7 +33,9 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
  ALTER TABLE [WriteOffReasons] DROP CONSTRAINT FK_WriteOffReasons_Payments ;
 GO
 
-
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_Payments_Loan')
+	ALTER TABLE NL_Payments DROP CONSTRAINT FK_NL_Payments_Loan;	
+GO
 
 
 -------------------------------------------------------------------------------

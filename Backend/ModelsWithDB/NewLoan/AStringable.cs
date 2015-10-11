@@ -16,6 +16,8 @@
 		public const string propertyDelimiter = "|";
 		public const string propertyTab = "\t";
 
+		public static int ColumnTotalWidth = 26;
+
 		public static ExcludeFromToStringAttribute NonPrintableInstance = new ExcludeFromToStringAttribute(false);
 		public static CultureInfo NLCultureInfo = new CultureInfo("en-GB");
 

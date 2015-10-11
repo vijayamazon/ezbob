@@ -22,16 +22,16 @@
 		public virtual NL_Model WorkingModel { get; private set; }
 
 		/// <summary>
-		/// Create shcedule by amount/issue date/schedules number (+interest only)/interval type
+		/// Create schedule by amount/issue date/schedules number (+interest only)/interval type
 		/// If input model contains offer-fee data and contains the ony one history - creates setup/servicing loan fees. 
 		/// On fees 2.0 full support - complete logic accordingly
 		/// 
 		/// Expected model structure: 
-		/// 1. loanModel.Histories (List<NL_LoanHistory>) includes at least one history
+		/// 1. loanModel.Histories (List<NL_LoanHistory/>) includes at least one history
 		/// 2. history with: EventTime, Amount, InterestRate, RepaymentCount, RepaymentIntervalTypeID
 		/// 3. optional: Loan.InterestOnlyRepaymentCount
-		/// 4. optional: DiscountPlan (List<decimal>)
-		/// 5. optional: model.Fees (List<NLFeeItem>) with list of NL_OfferFees
+		/// 4. optional: DiscountPlan (List<decimal/>)
+		/// 5. optional: model.Fees (List<NLFeeItem/>) with list of NL_OfferFees
 		/// 6. optional: model.Offer.BrokerSetupFeePercent (decimal?)
 		/// 
 		/// </summary>
@@ -44,14 +44,14 @@
 			new CreateScheduleMethod(this, WorkingModel).Execute();
 		} // CreateScheduleAndPlan
 
-		/// <summary>
+		/*/// <summary>
 		/// </summary>
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
-		public virtual void CalculateSchedule() {
-			new CalculateScheduleMethod(this, WorkingModel).Execute();
-		} // CreateScheduleAndPlan
+		//public virtual void CalculateSchedule() {
+		//	new CalculateScheduleMethod(this, WorkingModel).Execute();
+		//} // CreateScheduleAndPlan*/
 
 		/// <summary>
 		/// Calculates current loan balance.
@@ -63,7 +63,7 @@
 			// new CalculateBalanceMethod(this, today, WriteToLog).Execute();
 		} // CalculateBalance
 
-		/// <summary>
+		/*/// <summary>
 		/// Calculates payment options (late/current/next installment/full balance) for requested date.
 		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
 		/// This method is used to calculate charge options that should be displayed to customer in the dashboard.
@@ -72,14 +72,12 @@
 		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
 		/// or leave it as is.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual void /* CurrentPaymentModel */ GetAmountToChargeForDashboard(
-			DateTime today,
-			bool setClosedDateFromPayments = false) {
+		public virtual void GetAmountToChargeForDashboard(DateTime today,bool setClosedDateFromPayments = false) {
 			// TODO: revive
 			// new GetAmountToChargeForDashboardMethod(this, today, setClosedDateFromPayments, WriteToLog).Execute();
-		} // GetAmountToChargeForDashboard
+		} // GetAmountToChargeForDashboard*/
 
-		/// <summary>
+		/*/// <summary>
 		/// Calculates payment options (late/current installment) for requested date.
 		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
 		/// This method is used to determine what amount should be charged automatically by charger.
@@ -88,15 +86,12 @@
 		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
 		/// or leave it as is.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual void /* CurrentPaymentModel */ GetAmountToChargeForAutoCharger(
-			DateTime today,
-			bool setClosedDateFromPayments = false
-		) {
+		public virtual void GetAmountToChargeForAutoCharger(DateTime today,bool setClosedDateFromPayments = false) {
 			// TODO: revive
 			// new GetAmountToChargeForAutoChargerMethod(this, today, setClosedDateFromPayments, WriteToLog).Execute();
-		} // GetAmountToChargeForAutoCharger
+		} // GetAmountToChargeForAutoCharger*/
 
-		/// <summary>
+		/*/// <summary>
 		/// Calculates loan earned interest between two dates including both dates.
 		/// </summary>
 		/// <param name="startDate">First day of the calculation period; loan issue date is used if omitted.</param>
@@ -104,7 +99,7 @@
 		/// <returns>Loan earned interest during specific date range.</returns>
 		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate) {
 			return new CalculateEarnedInterestMethod(this, startDate, endDate, WriteToLog).Execute();
-		} // CalculateEarnedInterest
+		} // CalculateEarnedInterest*/
 
 		/// <summary>
 		/// Calculates loan APR relative to specific date.
@@ -166,10 +161,10 @@
 		/// <returns></returns>
 		public abstract decimal CalculateDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null);
 
-		// TODO
+	/*	// TODO
 		protected decimal CalculateDailyInterestForOpenPrincipal() {
 			return 0m;
-		} // GetDailyInterestForOpenPrincipal
+		} // GetDailyInterestForOpenPrincipal*/
 
 		protected static ASafeLog Log { get { return Library.Instance.Log; } }
 

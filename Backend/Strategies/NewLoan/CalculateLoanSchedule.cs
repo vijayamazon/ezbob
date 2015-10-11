@@ -127,8 +127,8 @@
 				}
 
 				// model should contain Schedule and Fees after this invocation
-				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due.
-				nlCalculator.CalculateSchedule(); // completing schedules with real amounts due (transactions considered) TODO
+				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
+				//nlCalculator.CalculateSchedule(); // completing schedules with real amounts due (transactions considered) TODO
 			
 				// set APR 
 				model.APR = nlCalculator.CalculateApr(history.EventTime);

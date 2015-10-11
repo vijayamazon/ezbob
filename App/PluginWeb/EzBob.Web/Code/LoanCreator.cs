@@ -431,7 +431,6 @@
 		} // ValidateRepaymentPeriodAndInterestRate
 
 
-		//private NL_Model nlModel ;
 		private readonly IPacnetService pacnetService;
 		private readonly ServiceClient serviceClient;
 		private readonly IAgreementsGenerator agreementsGenerator;

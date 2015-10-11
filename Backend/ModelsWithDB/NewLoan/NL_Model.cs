@@ -7,6 +7,7 @@
 	public class NL_Model : AStringable {
 	
 		public NL_Model(int customerID) {
+
 			CustomerID = customerID;
 
 			Offer = new NL_Offers();
@@ -14,8 +15,6 @@
 			DiscountPlan = new List<decimal>();
 			Agreements = new List<NLAgreementItem>();
 			FundTransfer = new NL_FundTransfers();
-			//AgreementModel = string.Empty;
-			Payment = new NL_Payments();
 
 
 		} // constructor
@@ -35,9 +34,6 @@
 		[DataMember]
 		[ExcludeFromToString]
 		public List<NLAgreementItem> Agreements { get; set; }
-
-		//[DataMember]
-		//public string AgreementModel { get; set; }
 
 		[DataMember]
 		public decimal? BrokerComissions { get; set; }
@@ -62,8 +58,8 @@
 	
 
 
-		[DataMember]
-		public NL_Payments Payment { get; set; }
+		//[DataMember]
+		//public NL_Payments Payment { get; set; }
 		//[DataMember]
 		//public NL_PaypointTransactions PaypointTransaction { get; set; }
 		//[DataMember]

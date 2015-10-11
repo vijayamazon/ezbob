@@ -761,12 +761,14 @@ BEGIN
 		DeletionNotificationTime DATETIME NULL,
 		DeletedByUserID INT NULL,
 		Notes NVARCHAR(MAX) NULL,
+		LoanID BIGINT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Payment PRIMARY KEY (PaymentID),
 		CONSTRAINT FK_NL_Payments_Method FOREIGN KEY (PaymentMethodID) REFERENCES LoanTransactionMethod (Id),
 		CONSTRAINT FK_NL_Payments_Status FOREIGN KEY (PaymentStatusID) REFERENCES NL_PaymentStatuses (PaymentStatusID),
 		CONSTRAINT FK_NL_Payments_Creator FOREIGN KEY (CreatedByUserID) REFERENCES Security_User (UserId),
 		CONSTRAINT FK_NL_Payments_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId),
+		CONSTRAINT FK_NL_Payments_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT CHK_NL_Payments CHECK (
 			(DeletionTime IS NULL AND DeletionNotificationTime IS NULL AND DeletedByUserID IS NULL)
 			OR

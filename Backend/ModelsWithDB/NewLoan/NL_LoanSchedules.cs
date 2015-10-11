@@ -17,7 +17,6 @@
 
 		[FK("NL_LoanHistory", "LoanHistoryID")]
 		[DataMember]
-	//	[ExcludeFromToString]
 		public long LoanHistoryID { get; set; }
 
 		[FK("NL_LoanScheduleStatuses", "LoanScheduleStatusID")]
@@ -99,7 +98,7 @@
 			set { this._balance = value; }
 		}
 
-		public static int ColumnTotalWidth = 20;
+		public new static int ColumnTotalWidth = 20;
 
 		public override string ToString() {
 			Type t = typeof(NL_LoanSchedules);

@@ -60,6 +60,8 @@
 		// additions
 		private List<NL_LoanHistory> _histories = new List<NL_LoanHistory>();
 		private List<NL_LoanFees> _fees = new List<NL_LoanFees>();
+		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
+		private List<NL_LoanOptions> _loanOptions = new List<NL_LoanOptions>();
 
 		[DataMember]
 		[NonTraversable]
@@ -73,6 +75,20 @@
 		public List<NL_LoanFees> Fees {
 			get { return this._fees; }
 			set { this._fees = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanInterestFreeze> FreezeInterestIntervals {
+			get { return this._freezeInterestIntervals; }
+			set { this._freezeInterestIntervals = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanOptions> LoanOptions {
+			get { return this._loanOptions; }
+			set { this._loanOptions = value; }
 		}
 
 		// helpers
@@ -93,10 +109,19 @@
 			if (Fees.Count>0)
 				Fees.ForEach(s => sb.Append(s.ToString()));
 
+			// freeze interest intervals
+			sb.Append(HeadersLine(typeof(NL_LoanInterestFreeze), NL_LoanInterestFreeze.ColumnTotalWidth));
+			if (FreezeInterestIntervals.Count > 0)
+				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
+
 			sb.Append(Environment.NewLine);
 			// histories
 			if(Histories!=null)
 				Histories.ForEach(h => sb.Append(h.ToString()));
+
+			sb.Append(HeadersLine(typeof(NL_LoanOptions), ColumnTotalWidth));
+			if (LoanOptions.Count > 0)
+				LoanOptions.ForEach(s => sb.Append(s.ToString()));
 
 			return sb.ToString();
 		}

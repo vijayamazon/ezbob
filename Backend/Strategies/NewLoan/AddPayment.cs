@@ -43,11 +43,12 @@
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
 
-			if (NLModel.Payment == null) {
+			// TODO
+		/*	if (NLModel.Payment == null) {
 				message = string.Format("Expected input data not found (NL_Model initialized by: Payment). Customer {0}", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionInputDataInvalid(message);
-			}
+			}*/
 
 			//if (NLModel.PaypointTransaction != null) {
 
@@ -161,7 +162,7 @@
 				, NLModel.UserID
 				, HttpUtility.HtmlEncode(NLModel.ToString())
 				, HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
-				, HttpUtility.HtmlEncode(NLModel.Payment == null ? "no Payment specified" : NLModel.Payment.ToString())
+		//		, HttpUtility.HtmlEncode(NLModel.Payment == null ? "no Payment specified" : NLModel.Payment.ToString())
 				//, HttpUtility.HtmlEncode(NLModel.PaypointTransaction == null ? "no PaypointTransaction specified" : NLModel.PaypointTransaction.ToString())
 				
 			);
