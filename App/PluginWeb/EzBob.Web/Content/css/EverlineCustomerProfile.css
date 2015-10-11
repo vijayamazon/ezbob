@@ -479,7 +479,9 @@ table.payment-schedule-table td:last-child {
 .loan-schedule .sliders .summary {
 	margin: 0;
 }
-
+.ui-slider-horizontal {
+    top:5px;
+}
 .loan-schedule-info dd {
     margin-left: 165px;
 }

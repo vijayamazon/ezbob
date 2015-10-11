@@ -38,7 +38,18 @@
 .main-page-everline .early-payment-form .w100p {
     width: 100%;
 }
-
+.table th {
+    font-weight: 600;
+}
+.bankacount-title {
+ clear:both;   
+}
+.bankacount-data {
+    margin-top:20px;
+}
+dt {
+    font-weight:600;
+}
 .main-page-everline #get-cash .form-horizontal.loan-details div {
 	vertical-align: top;
 	display: inline-block;
@@ -486,4 +497,8 @@ h2.accept-agreement-header {
 
 .apply-for-loan-div .cosme-agreement-section.corner-border.clearfix {
 	margin: 45px 0;
+}
+.agreement .overview {
+    height:500px;
+       
 }
