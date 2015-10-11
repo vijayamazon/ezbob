@@ -155,17 +155,22 @@ dt {
 
 .agreement .nav {
 	margin-bottom: 0;
-	margin-left: 23px;
-}
+    margin-left: 24px;
+    border-bottom: 0;}
 
 .nav-tabs > .active > a {
 	color: #e28023;
+	border: 1px solid #28211f;
+    border-radius: 0;
 }
 
 	.nav > li > a:hover,
 	.nav-tabs > .active > a:hover {
 		color: #dc6e23;
 		text-decoration: underline;
+		background-color: transparent;
+		border-radius: 0;
+		border: 1px solid #28211f;
 	}
 
 .agreement table {
