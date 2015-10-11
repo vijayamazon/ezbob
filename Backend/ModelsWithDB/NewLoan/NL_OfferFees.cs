@@ -8,11 +8,11 @@
 	public class NL_OfferFees {
 		[PK(true)]
 		[DataMember]
-		public int OfferFeeID { get; set; }
+		public long OfferFeeID { get; set; }
 
 		[FK("NL_Offers", "OfferID")]
 		[DataMember]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
 
 		[FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
 		[DataMember]
@@ -22,7 +22,7 @@
 		public decimal? Percent { get; set; }
 
 		[DataMember]
-		public decimal? Amount { get; set; }
+		public decimal? AbsoluteAmount { get; set; }
 
 		[DataMember]
 		public decimal? OneTimePartPercent { get; set; }
@@ -31,7 +31,7 @@
 		public decimal? DistributedPartPercent { get; set; }
 
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
 			Type t = typeof(NL_OfferFees);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)

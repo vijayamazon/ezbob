@@ -4,8 +4,6 @@
 	using System.Web.Mvc;
 	using ConfigManager;
 	using Ezbob.Backend.Models.NewLoan;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Database;
 	using EzBob.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
@@ -27,16 +25,16 @@
 		private readonly ChangeLoanDetailsModelBuilder _loanModelBuilder;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly ILoanChangesHistoryRepository _history;
-        private readonly ILoanOptionsRepository loanOptionsRepository;
+		private readonly ILoanOptionsRepository loanOptionsRepository;
 		private readonly IWorkplaceContext _context;
 		private readonly ServiceClient serviceClient;
 		private readonly ISession session;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
-        public static readonly DateTime NoLimitDate = new DateTime(2099, 1, 1);
+		public static readonly DateTime NoLimitDate = new DateTime(2099, 1, 1);
 
 		public LoanEditorController(
 			ILoanRepository loans,
-            ILoanOptionsRepository loanOptions,
+			ILoanOptionsRepository loanOptions,
 			ChangeLoanDetailsModelBuilder builder,
 			ICashRequestRepository cashRequests,
 			ChangeLoanDetailsModelBuilder loanModelBuilder,
@@ -45,7 +43,6 @@
 			IWorkplaceContext context,
 			ILoanOptionsRepository loanOptionsRepository,
 			ISession session) {
-        {
 			this._loans = loans;
 			this._cashRequests = cashRequests;
 			this._loanModelBuilder = loanModelBuilder;
@@ -61,16 +58,14 @@
 		[HttpGet]
 		[NoCache]
 		public JsonResult Loan(int id) {
-        {
 			var loan = this._loans.Get(id);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            var model = this._loanModelBuilder.BuildModel(loan);
+			var model = this._loanModelBuilder.BuildModel(loan);
 
-			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
-            RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(model, loan);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -78,8 +73,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-        public JsonResult RecalculateCR(EditLoanDetailsModel model)
-        {
+		public JsonResult RecalculateCR(EditLoanDetailsModel model) {
 			var cr = this._cashRequests.Get(model.CashRequestId);
 			return Json(RecalculateModel(model, cr, model.Date));
 		}
@@ -93,8 +87,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-        public JsonResult Recalculate(int id, EditLoanDetailsModel model)
-        {
+		public JsonResult Recalculate(int id, EditLoanDetailsModel model) {
 			var cr = this._loans.Get(id).CashRequest;
 			return Json(RecalculateModel(model, cr, DateTime.UtcNow));
 		}
@@ -102,20 +95,18 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-        public JsonResult LoanCR(long id)
-        {
+		public JsonResult LoanCR(long id) {
 			var cr = this._cashRequests.Get(id);
 			var amount = cr.ApprovedSum();
 			var loan = this._loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
-            var model = this._loanModelBuilder.BuildModel(loan);
+			var model = this._loanModelBuilder.BuildModel(loan);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-        public JsonResult LoanCR(EditLoanDetailsModel model)
-        {
+		public JsonResult LoanCR(EditLoanDetailsModel model) {
 			var cr = this._cashRequests.Get(model.CashRequestId);
 
 			model = RecalculateModel(model, cr, model.Date);
@@ -133,12 +124,10 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-        public JsonResult Loan(EditLoanDetailsModel model)
-        {
+		public JsonResult Loan(EditLoanDetailsModel model) {
 			var loan = this._loans.Get(model.Id);
 
-            var historyItem = new LoanChangesHistory
-            {
+			var historyItem = new LoanChangesHistory {
 				Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
 				Date = DateTime.UtcNow,
 				Loan = loan,
@@ -154,48 +143,41 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(model, loan);
 
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
 
-        private void RescheduleSetmodel(EditLoanDetailsModel model, Loan loan)
-        {
-            model.Options = this.loanOptionsRepository.GetByLoanId(model.Id) ?? LoanOptions.GetDefault(model.Id);
+		private void RescheduleSetmodel(EditLoanDetailsModel model, Loan loan) {
+			model.Options = this.loanOptionsRepository.GetByLoanId(model.Id) ?? LoanOptions.GetDefault(model.Id);
 
-            ReschedulingArgument renewModel = new ReschedulingArgument();
-            renewModel.LoanType = loan.GetType().AssemblyQualifiedName;
-            renewModel.LoanID = model.Id;
-            renewModel.SaveToDB = false;
-            renewModel.ReschedulingDate = DateTime.UtcNow;
-            renewModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-            renewModel.RescheduleIn = true;
+			ReschedulingArgument renewModel = new ReschedulingArgument();
+			renewModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			renewModel.LoanID = model.Id;
+			renewModel.SaveToDB = false;
+			renewModel.ReschedulingDate = DateTime.UtcNow;
+			renewModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+			renewModel.RescheduleIn = true;
 
-            try
-            {
-                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
-                model.ReResultIn = result.Value;
-                Log.Debug(string.Format("IN=={0}, {1}", renewModel, result.Value));
-                // ReSharper disable once CatchAllClause
-            }
-            catch (Exception editex)
-            {
-                Log.Error(editex);
-            }
+			try {
+				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
+				model.ReResultIn = result.Value;
+				Log.Debug(string.Format("IN=={0}, {1}", renewModel, result.Value));
+				// ReSharper disable once CatchAllClause
+			} catch (Exception editex) {
+				Log.Error(editex);
+			}
 
-            renewModel.RescheduleIn = false;
-            renewModel.PaymentPerInterval = 0m;
-            try
-            {
-                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
-                model.ReResultOut = result.Value;
-                Log.Debug(string.Format("OUT=={0}, {1}", renewModel, result.Value));
-                // ReSharper disable once CatchAllClause
-            }
-            catch (Exception editex)
-            {
-                Log.Error(editex);
-            }
+			renewModel.RescheduleIn = false;
+			renewModel.PaymentPerInterval = 0m;
+			try {
+				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
+				model.ReResultOut = result.Value;
+				Log.Debug(string.Format("OUT=={0}, {1}", renewModel, result.Value));
+				// ReSharper disable once CatchAllClause
+			} catch (Exception editex) {
+				Log.Error(editex);
+			}
 		}
 
 		private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now) {
@@ -224,31 +206,27 @@
 
 		[Ajax]
 		[HttpPost]
-        public JsonResult RescheduleLoan(int loanID,
+		public JsonResult RescheduleLoan(int loanID,
 			DbConstants.RepaymentIntervalTypes? intervalType,  // month/week
 			decimal? AmountPerInterval, // for "out" reschedule
 			bool? rescheduleIn,
-            DateTime reschedulingDate,
-            bool save = false,
-            bool stopFutureInterest = false)
-        {
+			DateTime reschedulingDate,
+			bool save = false,
+			bool stopFutureInterest = false) {
 			ReschedulingActionResult result = null;
-            try
-            {
+			try {
 				Loan loan = this._loans.Get(loanID);
 				DateTime now = DateTime.UtcNow;
 
-                if (rescheduleIn != null)
-                {
+				if (rescheduleIn != null) {
 					ReschedulingArgument reModel = new ReschedulingArgument();
-					reModel.LoanType = loan.GetType()
-						.AssemblyQualifiedName;
+					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 					reModel.LoanID = loanID;
 					reModel.SaveToDB = save;
-                    reModel.ReschedulingDate = reschedulingDate;
+					reModel.ReschedulingDate = reschedulingDate;
 					reModel.ReschedulingRepaymentIntervalType = (DbConstants.RepaymentIntervalTypes)intervalType;
 					reModel.RescheduleIn = (bool)rescheduleIn;
-                    reModel.StopFutureInterest = stopFutureInterest;
+					reModel.StopFutureInterest = stopFutureInterest;
 
 					if (reModel.RescheduleIn == false) // "out"
 						reModel.PaymentPerInterval = AmountPerInterval;
@@ -256,220 +234,181 @@
 					// re strategy
 					result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
-                    Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
+					Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
 				}
 			} catch (Exception editex) {
-            catch (Exception editex)
-            {
 				Log.Error("rescheduling editor EXCEPTION: " + editex);
 			}
 			return result == null ? null : Json(result.Value);
 		}
 
 
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult SaveLateFeeOption(int id)
-        {
-            DateTime? lateFeeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeStartDate"]);
-            DateTime? lateFeeEndDate;
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult SaveLateFeeOption(int id) {
+			DateTime? lateFeeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeStartDate"]);
+			DateTime? lateFeeEndDate;
 
-            string lateFeeEndDateStr = HttpContext.Request.QueryString["lateFeeEndDate"];
+			string lateFeeEndDateStr = HttpContext.Request.QueryString["lateFeeEndDate"];
 
-            lateFeeEndDate = string.IsNullOrEmpty(lateFeeEndDateStr) ? NoLimitDate : Convert.ToDateTime(lateFeeEndDateStr);
+			lateFeeEndDate = string.IsNullOrEmpty(lateFeeEndDateStr) ? NoLimitDate : Convert.ToDateTime(lateFeeEndDateStr);
 
-            LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 
-            if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null)
-            {
-                // to.Subtract(from)
-                if (options.StopLateFeeToDate.Value.Subtract(options.StopLateFeeFromDate.Value).Days < 0)
-                {
-                    model.Errors.Add("'Until date must be greater then From date");
-                    RescheduleSetmodel(model, this._loans.Get(id));
-                    return Json(model);
-                }
-            }
+			if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
+				// to.Subtract(from)
+				if (options.StopLateFeeToDate.Value.Subtract(options.StopLateFeeFromDate.Value).Days < 0) {
+					model.Errors.Add("'Until date must be greater then From date");
+					RescheduleSetmodel(model, this._loans.Get(id));
+					return Json(model);
+				}
+			}
 
-            options.AutoLateFees = true;
-            options.StopLateFeeFromDate = lateFeeStartDate;
-            options.StopLateFeeToDate = lateFeeEndDate;
+			options.AutoLateFees = true;
+			options.StopLateFeeFromDate = lateFeeStartDate;
+			options.StopLateFeeToDate = lateFeeEndDate;
 
-            this.loanOptionsRepository.SaveOrUpdate(options);
+			this.loanOptionsRepository.SaveOrUpdate(options);
 
-            model.Options = this.loanOptionsRepository.GetByLoanId(id);
-            RescheduleSetmodel(model, this._loans.Get(id));
-            return Json(model);
-        } // SaveLateFeeOption
+			model.Options = this.loanOptionsRepository.GetByLoanId(id);
+			RescheduleSetmodel(model, this._loans.Get(id));
+			return Json(model);
+		} // SaveLateFeeOption
 
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult RemoveLateFeeOption(int id)
-        {
-            LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult RemoveLateFeeOption(int id) {
+			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-            options.AutoLateFees = false;
-            options.StopLateFeeFromDate = null;
-            options.StopLateFeeToDate = null;
+			options.AutoLateFees = false;
+			options.StopLateFeeFromDate = null;
+			options.StopLateFeeToDate = null;
 
-            this.loanOptionsRepository.SaveOrUpdate(options);
+			this.loanOptionsRepository.SaveOrUpdate(options);
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
-            model.Options = this.loanOptionsRepository.GetByLoanId(id);
-            RescheduleSetmodel(model, this._loans.Get(id));
-            return Json(model);
-        } // RemoveLateFeeOption
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+			model.Options = this.loanOptionsRepository.GetByLoanId(id);
+			RescheduleSetmodel(model, this._loans.Get(id));
+			return Json(model);
+		} // RemoveLateFeeOption
 
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult SaveAutoChargesOption(int id, int schedultItemId)
-        {
-            DateTime now = DateTime.UtcNow;
-            LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
-            var loan = this._loans.Get(id);
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult SaveAutoChargesOption(int id, int schedultItemId) {
+			DateTime now = DateTime.UtcNow;
+			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+			var loan = this._loans.Get(id);
 
-            options.AutoPayment = false;
-            options.StopAutoChargeDate = null;
+			options.AutoPayment = false;
+			options.StopAutoChargeDate = null;
 
-            if (schedultItemId > -1)
-            {
-                var loanScheduleItem = loan.Schedule.Where(x => x.Date > now).FirstOrDefault(x => x.Id == schedultItemId);
-                if (loanScheduleItem != null)
-                {
-                    options.StopAutoChargeDate = loanScheduleItem.Date;
-                }
-                else
-                {
-                    Log.ErrorFormat("The date selected from DDL is not valid");
-                }
-            }
+			if (schedultItemId > -1) {
+				var loanScheduleItem = loan.Schedule.Where(x => x.Date > now).FirstOrDefault(x => x.Id == schedultItemId);
+				if (loanScheduleItem != null) {
+					options.StopAutoChargeDate = loanScheduleItem.Date;
+				} else {
+					Log.ErrorFormat("The date selected from DDL is not valid");
+				}
+			}
 
-            this.loanOptionsRepository.SaveOrUpdate(options);
+			this.loanOptionsRepository.SaveOrUpdate(options);
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
-            model.Options = this.loanOptionsRepository.GetByLoanId(id);
-            RescheduleSetmodel(model, this._loans.Get(id));
-            return Json(model);
-        } // SaveAutoChargesOption
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+			model.Options = this.loanOptionsRepository.GetByLoanId(id);
+			RescheduleSetmodel(model, this._loans.Get(id));
+			return Json(model);
+		} // SaveAutoChargesOption
 
 
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult RemoveAutoChargesOption(int id)
-        {
-            LoanOptions loanOptions = this.loanOptionsRepository.GetByLoanId(id);
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult RemoveAutoChargesOption(int id) {
+			LoanOptions loanOptions = this.loanOptionsRepository.GetByLoanId(id);
 
-            loanOptions.AutoPayment = true;
-            loanOptions.StopAutoChargeDate = null;
-            this.loanOptionsRepository.SaveOrUpdate(loanOptions);
+			loanOptions.AutoPayment = true;
+			loanOptions.StopAutoChargeDate = null;
+			this.loanOptionsRepository.SaveOrUpdate(loanOptions);
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
-            model.Options = this.loanOptionsRepository.GetByLoanId(id);
-            RescheduleSetmodel(model, this._loans.Get(id));
-            return Json(model);
-        } // RemoveAutoChargesOption
-                    AutoCharge = options.AutoPayment,
-                    StopAutoChargeDate = options.StopAutoChargeDate,
-                    AutoLateFees = options.AutoLateFees,
-                    StopAutoLateFeesDate = options.StopLateFeeFromDate,
-                    AutoInterest = false,
-                    StopAutoInterestDate = null,
-                    ReductionFee = options.ReductionFee,
-                    LatePaymentNotification = options.LatePaymentNotification,
-                    CaisAccountStatus = options.CaisAccountStatus,
-                    ManualCaisFlag = options.ManualCaisFlag,
-                    EmailSendingAllowed = options.EmailSendingAllowed,
-                    SmsSendingAllowed = options.SmsSendingAllowed,
-                    MailSendingAllowed = options.MailSendingAllowed,
-                    UserID = this._context.UserId,
-                    InsertDate = DateTime.UtcNow,
-                    IsActive = true,
-                    Notes = null
-                };
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+			model.Options = this.loanOptionsRepository.GetByLoanId(id);
+			RescheduleSetmodel(model, this._loans.Get(id));
+			return Json(model);
+		} // RemoveAutoChargesOption
 
-				var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
+		/// <exception cref="NotImplementedException">Always.</exception>
+		[Ajax]
+		[HttpPost]
+		public JsonResult SaveFreezeInterval(int id) {
 
-				//Log.Debug("NL_LoanOptions update/save: ID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+			DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
+			DateTime? freezeEndDate;
 
+			string freezeEndDateStr = HttpContext.Request.QueryString["enddate"];
+			freezeEndDate = string.IsNullOrEmpty(freezeEndDateStr) ? NoLimitDate : Convert.ToDateTime(freezeEndDateStr);
 
-        /// <exception cref="NotImplementedException">Always.</exception>
-        [Ajax]
-        [HttpPost]
-        public JsonResult SaveFreezeInterval(int id)
-        {
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 
-            DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
-            DateTime? freezeEndDate;
+			if (freezeStartDate > freezeEndDate) {
 
-            string freezeEndDateStr = HttpContext.Request.QueryString["enddate"];
-            freezeEndDate = string.IsNullOrEmpty(freezeEndDateStr) ? NoLimitDate : Convert.ToDateTime(freezeEndDateStr);
+				model.Errors.Add("Until date must be greater then From date");
+				RescheduleSetmodel(model, this._loans.Get(id));
+				return Json(model);
+			}
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+			Loan loan = this._loans.Get(id);
+			new Transactional(() => {
+				loan.InterestFreeze.Add(new LoanInterestFreeze {
+					Loan = loan,
+					StartDate = freezeStartDate,
+					EndDate = freezeEndDate,
+					InterestRate = 0,
+					ActivationDate = DateTime.UtcNow,
+					DeactivationDate = null
+				});
 
-            if (freezeStartDate > freezeEndDate)
-            {
+				this._loans.SaveOrUpdate(loan);
+			}).Execute();
 
-                model.Errors.Add("Until date must be greater then From date");
-                RescheduleSetmodel(model, this._loans.Get(id));
-                return Json(model);
-            }
+			loan = this._loans.Get(id);
+			model = this._loanModelBuilder.BuildModel(loan);
+			model.Options = this.loanOptionsRepository.GetByLoanId(id);
 
-            Loan loan = this._loans.Get(id);
-            new Transactional(() =>
-            {
-                loan.InterestFreeze.Add(new LoanInterestFreeze
-                {
-                    Loan = loan,
-                    StartDate = freezeStartDate,
-                    EndDate = freezeEndDate,
-                    InterestRate = 0,
-                    ActivationDate = DateTime.UtcNow,
-                    DeactivationDate = null
-                });
+			RescheduleSetmodel(model, loan);
 
-                this._loans.SaveOrUpdate(loan);
-            }).Execute();
-
-            loan = this._loans.Get(id);
-            model = this._loanModelBuilder.BuildModel(loan);
-            model.Options = this.loanOptionsRepository.GetByLoanId(id);
-
-            RescheduleSetmodel(model, loan);
-
-            return Json(model);
-        } //SaveFreezeInterval
+			return Json(model);
+		} //SaveFreezeInterval
 
 		[Ajax]
 		[HttpPost]
 		public JsonResult RemoveFreezeInterval(int id, int intervalid) {
-            Loan loan = this._loans.Get(id);
-            LoanInterestFreeze lif = loan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
-			
+			Loan loan = this._loans.Get(id);
+			LoanInterestFreeze lif = loan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
+
 			new Transactional(() => {
 
 				if (lif != null)
 					lif.DeactivationDate = DateTime.UtcNow;
 				this._loans.SaveOrUpdate(loan);
 
-		   }).Execute();
+			}).Execute();
 
-            Log.DebugFormat("remove freeze interest for customer {0}", loan.Customer.Id);
+			Log.DebugFormat("remove freeze interest for customer {0}", loan.Customer.Id);
 
 			loan = this._loans.Get(id);
 
-            var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-            calc.GetState();
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
-            model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
+			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-            RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(model, loan);
 
 			return Json(model);
 		} // RemoveFreezeInterval

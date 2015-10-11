@@ -4,12 +4,10 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Reflection;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
@@ -17,9 +15,11 @@
 	using EzBob.Backend.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
+	using PaymentServices.Calculators;
 	using StructureMap;
 
 	[TestFixture]
@@ -335,18 +335,18 @@
 			}
 		}
 
-		[Test]
+		/*[Test]
 		public void TestLoanState() {
 			int loanID = 2151; // cust 329;   
-			//var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
+			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
 			try {
-				//s.Execute();
-				//LoanCalculatorModel calculatorModel = s.CalcModel;
+				s.Execute();
+				LoanCalculatorModel calculatorModel = s.CalcModel;
 				//Console.WriteLine(calculatorModel.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
-		}
+		}*/
 
 
 		private int _daysInMonth = 0;
@@ -410,6 +410,15 @@
 			}
 
 			return nTotalInterest;
+		}
+
+		[Test]
+		public void OldCalc() {
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(2);
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			this.m_oLog.Debug("---------------------------------------: \n {0}", loan);
 		}
 
 

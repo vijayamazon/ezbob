@@ -559,7 +559,7 @@
 			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
-			int decisionID = addDecisionStra.DecisionID;
+			long decisionID = addDecisionStra.DecisionID;
 
 			Log.Debug("Added NL decision: {0}", decisionID);
 
@@ -567,7 +567,7 @@
 				List<NL_OfferFees> offerFees = new List<NL_OfferFees>();
 
 				offerFees.Add(new NL_OfferFees {
-					LoanFeeTypeID = (int)FeeTypes.SetupFee,
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
 					Percent = this.autoDecisionResponse.SetupFee,
 				});
 
@@ -580,7 +580,7 @@
 					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
 					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
 					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
+					RepaymentIntervalTypeID = Convert.ToInt32(RepaymentIntervalTypes.Month.DescriptionAttr()), // TODO some day...
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,
@@ -912,7 +912,7 @@
 		private int offeredCreditLine;
 
 		private readonly InternalCashRequestID cashRequestID;
-		private int nlCashRequestID;
+		private long nlCashRequestID;
 
 		private readonly StrategiesMailer mailer;
 

@@ -186,7 +186,6 @@
     <Compile Include="NewLoan\NL_DiscountPlans.cs" />
     <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
-    <Compile Include="NewLoan\NL_OfferFees.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
       <SubType>Code</SubType>
@@ -205,7 +204,9 @@
     <Compile Include="NewLoan\NL_LoanSchedules.cs" />
     <Compile Include="NewLoan\NL_LoanScheduleStatuses.cs" />
     <Compile Include="NewLoan\NL_LoanStatuses.cs" />
-    <Compile Include="NewLoan\NL_OfferFees.cs" />
+    <Compile Include="NewLoan\NL_OfferFees.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewLoan\NL_PaymentStatuses.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />

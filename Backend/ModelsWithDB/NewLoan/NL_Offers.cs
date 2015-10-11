@@ -6,7 +6,7 @@
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_Offers {
+	public class NL_Offers : AStringable {
 		[PK(true)]
 		public long OfferID { get; set; }
 
@@ -63,12 +63,6 @@
 
 		[DataMember]
 		public bool IsLoanTypeSelectionAllowed { get; set; }
-		
-		[DataMember]
-		public bool SendEmailNotification { get; set; }
-
-		[DataMember]
-		public bool IsAmountSelectionAllowed { get; set; }
 
 		[DataMember]
 		public bool SendEmailNotification { get; set; }
@@ -80,7 +74,6 @@
 		public bool IsAmountSelectionAllowed { get; set; }
 
 
-		public override string ToString() {
 
 		// additions 
 		private List<NL_OfferFees> _offerFees = new List<NL_OfferFees>();
@@ -92,5 +85,5 @@
 			set { this._offerFees = value; }
 		}
 
-	}//class NL_Offers
+	} // class NL_Offers
 } // ns

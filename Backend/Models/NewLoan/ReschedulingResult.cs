@@ -1,12 +1,13 @@
 ﻿namespace Ezbob.Backend.Models.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
+	using System.Text;
 	using DbConstants;
 
 	[DataContract]
-	public class ReschedulingResult /*: AStringable*/ {
+	public class ReschedulingResult {
 		[DataMember]
-		public long LoanID { get; set; } // loan ID to re-schedule
+		public int LoanID { get; set; }  // loan ID to re-schedule
 
 		[DataMember]
 		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
@@ -37,7 +38,7 @@
 
 		[DataMember]
 		public string Error { get; set; }
-	} // class ReschedulingResult
+
 		[DataMember(EmitDefaultValue = true)]
 		public bool BlockAction { get; set; } // re-scheduling allowed or not
 
@@ -50,4 +51,15 @@
 
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planned close date
 
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			Type t = typeof(ReschedulingResult);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
 					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("\n");
+			}
+			return sb.ToString();
+		}
+
+	} //ReschedulingResult
+}

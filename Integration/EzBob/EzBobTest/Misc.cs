@@ -287,6 +287,7 @@
 				var val = (int)Enum.Parse(typeof(NLPacnetTransactionStatuses), nlStatus);
 				Console.WriteLine(val);
 			} catch (OverflowException overflowException) {
+				Console.WriteLine(overflowException);
 			}
 		}
 

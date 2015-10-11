@@ -269,7 +269,7 @@
 		private void Recalculate() {
 			Init();
 			foreach (var e in _events) {
-				Console.WriteLine("=={0}", e);
+				//Console.WriteLine("=={0}", e);
 
 				UpdateState(e.Date);
 
