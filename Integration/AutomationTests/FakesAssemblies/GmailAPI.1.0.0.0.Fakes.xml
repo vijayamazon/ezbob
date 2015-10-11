@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GmailAPI.1.0.0.0.Fakes</name>
+    </assembly>
+    <members>
+        <member name="T:GmailAPI.Fakes.ShimGmailOps">
+            <summary>Shim type of GmailAPI.GmailOps</summary>
+        </member>
+        <member name="M:GmailAPI.Fakes.ShimGmailOps.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:GmailAPI.Fakes.ShimGmailOps.#ctor(GmailAPI.GmailOps)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:GmailAPI.Fakes.ShimGmailOps.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:GmailAPI.Fakes.ShimGmailOps.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.CheckIncomingMessagesStringString">
+            <summary>Sets the shim of GmailOps.CheckIncomingMessages(String mailTitle, String contactEmail)</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.Constructor">
+            <summary>Sets the shim of GmailOps.GmailOps()</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.ExtactLinkFromMessageStringStringString">
+            <summary>Sets the shim of GmailOps.ExtactLinkFromMessage(String mailTitle, String contactEmail, String enviorment)</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.GetMessageGmailServiceStringString">
+            <summary>Sets the shim of GmailOps.GetMessage(GmailService service, String userId, String messageId)</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.ListMessagesGmailServiceStringString">
+            <summary>Sets the shim of GmailOps.ListMessages(GmailService service, String userId, String query)</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.StaticConstructor">
+            <summary>Sets the shim of GmailOps.GmailOps()</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps._CheckIncomingMessagesb__4MessagePartHeader">
+            <summary>Sets the shim of GmailOps.&lt;CheckIncomingMessages&gt;b__4(MessagePartHeader x)</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps._ExtactLinkFromMessageb__1MessagePartHeader">
+            <summary>Sets the shim of GmailOps.&lt;ExtactLinkFromMessage&gt;b__1(MessagePartHeader x)</summary>
+        </member>
+        <member name="T:GmailAPI.Fakes.ShimGmailOps.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.AllInstances.CheckIncomingMessagesStringString">
+            <summary>Sets the shim of GmailOps.CheckIncomingMessages(String mailTitle, String contactEmail)</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.ShimGmailOps.AllInstances.ExtactLinkFromMessageStringStringString">
+            <summary>Sets the shim of GmailOps.ExtactLinkFromMessage(String mailTitle, String contactEmail, String enviorment)</summary>
+        </member>
+        <member name="T:GmailAPI.Fakes.StubGmailOps">
+            <summary>Stub type of GmailAPI.GmailOps</summary>
+        </member>
+        <member name="M:GmailAPI.Fakes.StubGmailOps.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:GmailAPI.Fakes.StubGmailOps.InitializeStub">
+            <summary>Initializes a new instance of type StubGmailOps</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.StubGmailOps.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.StubGmailOps.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:GmailAPI.Fakes.StubGmailOps.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+    </members>
+</doc>
