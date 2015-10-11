@@ -538,6 +538,7 @@
     <Content Include="Content\css\images\apply_now.png" />
     <Content Include="Content\css\images\arrow-m.png" />
     <Content Include="Content\css\images\arrow.png" />
+    <Content Include="Content\css\images\automation-stripe.png" />
     <Content Include="Content\css\images\bank_details.png" />
     <Content Include="Content\css\images\beta_ribbon.png" />
     <Content Include="Content\css\images\body_bg.jpg" />
