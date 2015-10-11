@@ -38,6 +38,10 @@
 			get { return Time.ToString("yyyy-MM", CultureInfo.InvariantCulture); }
 		} // Month
 
+		public string Day {
+			get { return Time.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture); }
+		} // Day
+
 		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
