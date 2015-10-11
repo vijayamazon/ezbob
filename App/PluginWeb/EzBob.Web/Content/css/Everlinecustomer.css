@@ -2295,7 +2295,6 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 
 .jspDrag {
 	background: #28211f;
-	min-height: 40px;
 }
 
 .address-dialog-widget::-webkit-scrollbar,.megila-inner::-webkit-scrollbar,.consent-dialog::-webkit-scrollbar,.companyaddress  .ui-dialog-content::-webkit-scrollbar {

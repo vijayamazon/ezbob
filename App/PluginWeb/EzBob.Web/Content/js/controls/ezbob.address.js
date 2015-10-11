@@ -407,7 +407,7 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.find('.address-list-loading-block').fadeOut('fast', function() {
 		    self.$el.find('.address-selector-block').fadeIn('fast').removeClass('hide');
 		// if (EzBob.Config.Origin === 'everline') {#1#
-		  //  $('.address-dialog-widget').jScrollPane();
+			//  $('.address-dialog-widget').jScrollPane({ verticalDragMinHeight: 40 });
 		//    }
 		   
 			EzBob.ServerLog.debug('address popup "loading" hidden, selector is shown');
