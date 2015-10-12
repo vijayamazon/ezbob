@@ -210,7 +210,6 @@
 			// custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/ezbob.css")
-				.Add("~/Content/css/everline.css")
 				.Add("~/Content/css/broker.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.Add("~/Content/css/mobile.css")

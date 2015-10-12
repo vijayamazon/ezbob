@@ -48,9 +48,16 @@
 				oModel.maritalstatus = MaritalStatus;
 				oModel.mobilephone = MobilePhone;
 				oModel.daytimephone = DaytimePhone;
-				oModel.address = string.Join("\n",
-					Organisation, Line1, Line2, Line3,
-					Pobox, Town, Postcode, County, Country
+				oModel.address = string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}",
+					string.IsNullOrEmpty(Organisation) ? "" : Organisation + "\n",
+					string.IsNullOrEmpty(Line1) ? "" : Line1 + "\n",
+					string.IsNullOrEmpty(Line2) ? "" : Line2 + "\n",
+					string.IsNullOrEmpty(Line3) ? "" : Line3 + "\n",
+					string.IsNullOrEmpty(Pobox) ? "" : Pobox + "\n",
+					string.IsNullOrEmpty(Town) ? "" : Town + "\n",
+					string.IsNullOrEmpty(Postcode) ? "" : Postcode + "\n",
+					string.IsNullOrEmpty(County) ? "" : County + "\n",
+					string.IsNullOrEmpty(Country) ? "" : Country + "\n"
 				);
 			    oModel.leadID = LeadID;
 			    oModel.finishedWizard = FinishedWizard;
