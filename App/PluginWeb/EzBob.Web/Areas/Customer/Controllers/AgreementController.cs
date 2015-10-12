@@ -8,8 +8,9 @@
 	using Infrastructure;
 	using EzBob.Models.Agreements;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Loans;
 
-	public class AgreementController : Controller {
+    public class AgreementController : Controller {
 		public AgreementController(
 			AgreementRenderer agreementRenderer,
 			IEzbobWorkplaceContext context,
@@ -47,19 +48,9 @@
 			var model = _builder.Build(_customer, amount, loan);
 
             try {
-                var name = viewName;
-                if (isEverline) {
-                    name = "EVL" + viewName;
-                }
-
-                if (model.IsEverlineRefinanceLoan) {
-                    name = "EVLRefinance" + viewName;
-                }
-                
-                if (isAlibaba) {
-                    name = "Alibaba" + viewName;
-                }
-                file = _templates.GetTemplateByName(name);
+                LoanAgreementTemplateType loanAgreementTemplateType = (LoanAgreementTemplateType)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Loans.LoanAgreementTemplateType), viewName);
+                var path = _templates.GetTemplatePath(loanAgreementTemplateType, isEverline, isAlibaba, model.IsEverlineRefinanceLoan);
+                file = _templates.GetTemplateByName(path);
             } catch (Exception e) {
                 oLog.Debug(e, "Agreement template not found: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);
                 return RedirectToAction("NotFound", "Error", new { Area = "" });
