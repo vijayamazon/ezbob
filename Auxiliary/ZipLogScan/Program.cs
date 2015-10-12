@@ -33,7 +33,8 @@
 
 		private Program(string sourcePath) {
 			this.requests = new List<Request>();
-			this.results = new SortedTable<string, RequestTypes, int>();
+			this.monthlyResults = new SortedTable<string, RequestTypes, int>();
+			this.dailyResults = new SortedTable<string, RequestTypes, int>();
 			this.sourcePath = sourcePath;
 		} // constructor
 
@@ -45,13 +46,26 @@
 					ScanMonth(year, month);
 
 			foreach (Request rq in this.requests) {
-				if (!this.results.Contains(rq.Month, rq.RequestType))
-					this.results[rq.Month, rq.RequestType] = 1;
+				if (!this.monthlyResults.Contains(rq.Month, rq.RequestType))
+					this.monthlyResults[rq.Month, rq.RequestType] = 1;
 				else
-					this.results[rq.Month, rq.RequestType]++;
+					this.monthlyResults[rq.Month, rq.RequestType]++;
+
+				if (!this.dailyResults.Contains(rq.Day, rq.RequestType))
+					this.dailyResults[rq.Day, rq.RequestType] = 1;
+				else
+					this.dailyResults[rq.Day, rq.RequestType]++;
 			} // for each
 
-			log.Debug("Results are:\n\n{0}\n\n", this.results.ToFormattedString("Experian requests per months"));
+			log.Msg(
+				"Monthly results are:\n\n{0}\n\n",
+				this.monthlyResults.ToFormattedString("Experian requests per months")
+			);
+
+			log.Msg(
+				"Daily results are:\n\n{0}\n\n",
+				this.dailyResults.ToFormattedString("Experian requests per days")
+			);
 
 			log.Debug("Scan complete for path '{0}'.", this.sourcePath);
 		} // Run
@@ -179,7 +193,8 @@
 
 		private readonly List<Request> requests;
 
-		private readonly SortedTable<string, RequestTypes, int> results; 
+		private readonly SortedTable<string, RequestTypes, int> monthlyResults; 
+		private readonly SortedTable<string, RequestTypes, int> dailyResults; 
 
 		private const string FileNamePattern = "EzService.log{0}-{1}-{2}*.zip";
 		private static readonly Regex fileNameRe = new Regex(@"EzService.log\d\d\d\d-\d\d-\d\d(\.\d+)*.zip$");
