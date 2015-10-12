@@ -33,12 +33,18 @@
 			set { this.date = value.Date; }
 		} // Date
 
+		/// <summary>
+		/// This open principal customer has at the beginning (i.e. 0:00:00) of the day.
+		/// </summary>
 		public decimal RawOpenPrincipalForInterest { get; private set; }
 
+		/// <summary>
+		/// This open principal customer has at the end (i.e. 23:59:59) of the day.
+		/// </summary>
 		public decimal RawOpenPrincipalAfterRepayments { get; private set; }
 
 		/// <summary>
-		/// This is loan open principal at the beginning of the day. This amount is used to calculate daily earned interest.
+		/// This is open principal is used to calculate daily earned interest for this day.
 		/// </summary>
 		public decimal OpenPrincipalForInterest {
 			get { return IsBetweenLastPaymentAndReschedulingDay ? 0 : RawOpenPrincipalForInterest; }
@@ -46,19 +52,28 @@
 		} // OpenPrincipalForInterest
 
 		/// <summary>
-		/// This is loan open principal at the end of the day. This amount is used to calculate daily current balance.
+		/// This is open principal is used to calculate daily current balance.
 		/// </summary>
 		public decimal OpenPrincipalAfterRepayments {
 			get { return IsBetweenLastPaymentAndReschedulingDay ? 0 : RawOpenPrincipalAfterRepayments; }
 			set { RawOpenPrincipalAfterRepayments = value; }
 		} // OpenPrincipalAfterRepayments
 
+		/// <summary>
+		/// Interest earned on that day.
+		/// </summary>
 		public decimal DailyInterest {
 			get { return OpenPrincipalForInterest * DailyInterestRate; }
 		} // DailyInterest
 
+		/// <summary>
+		/// Fees assigned on that day.
+		/// </summary>
 		public decimal AssignedFees { get; set; }
 
+		/// <summary>
+		/// Interest rate on that day. This interest rate is for one day only.
+		/// </summary>
 		public decimal DailyInterestRate { get; set; }
 
 		public decimal RepaidPrincipal { get; set; }
