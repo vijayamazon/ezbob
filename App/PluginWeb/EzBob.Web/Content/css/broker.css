@@ -437,6 +437,12 @@ div#broker-footer-placeholder {
 	background-color: #ffffff;
 }
 
+input[type="button"].form_field_right_side_signup_phone {
+	float: right; 
+	margin-right: 20px; 
+	width: 26%; 
+	height: 36px;
+}
 
 
 

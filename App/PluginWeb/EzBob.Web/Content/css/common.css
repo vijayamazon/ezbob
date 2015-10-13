@@ -1896,7 +1896,12 @@ input.form_field_right_side {
     height: 36px;
 }
 
-.form_field_right_side_signup_phone { float: right; margin-right: 20px; width: 26%; height: 36px; }
+.form_field_right_side_signup_phone {
+	float: right; 
+	margin-right: 20px; 
+	width: 26%; 
+	height: 36px;
+}
 
 .input-tag-wrap {
     display: inline;
