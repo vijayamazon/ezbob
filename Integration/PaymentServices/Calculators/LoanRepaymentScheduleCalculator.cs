@@ -344,7 +344,7 @@
 
 		/// <summary>
 		/// Возвращает процентную ставку, для конкретного периода.
-		/// Returns interest for specific period
+		/// Returns interest rate for specific period
 		///  </summary>
 		/// <param name="start"></param>
 		/// <param name="end"></param>
@@ -367,7 +367,13 @@
 			rate += GetInterestRateOneMonth(start, end);
 			return rate;
 		}
-
+		/// <summary>
+		/// Returns interest rate for defined period with freeze intervals consideration
+		/// </summary>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// InterestRate - for lastActionDate
+		/// <returns></returns>
 		private decimal GetInterestRateOneMonth(DateTime start, DateTime end) {
 
 			TimeSpan span = (end.Date - start.Date);

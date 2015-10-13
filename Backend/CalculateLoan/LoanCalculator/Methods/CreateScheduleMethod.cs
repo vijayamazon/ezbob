@@ -83,7 +83,7 @@
 					new NL_LoanSchedules() {
 						InterestRate = r,
 						PlannedDate = plannedDate,
-						Principal = principal,
+						Principal = principal, //open principal
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i,
 						Balance = balance,

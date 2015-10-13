@@ -899,7 +899,7 @@
 					int loanid = sr["Id"];
 
 					// IN
-				    ReschedulingArgument reModel = new ReschedulingArgument();
+				  /*  ReschedulingArgument reModel = new ReschedulingArgument();
 					reModel.LoanID = loanid;
 					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 					reModel.RescheduleIn = true;
@@ -910,9 +910,9 @@
 					s.Context.UserID = 357; //25852;
 					s.Execute();
 					this.m_oLog.Debug(s.Result.ToString());
-					this.m_oLog.Debug("IN_RESULT: {0}", s.Result.ToString());
+					this.m_oLog.Debug("IN_RESULT: {0}", s.Result.ToString());*/
 
-					/*// OUT
+					// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
 					Loan loan1 = new Loan();
 					reModel1.LoanID = loanid;
@@ -926,14 +926,14 @@
 					var s1 = new RescheduleLoan<Loan>(loan1, reModel1);
 					s1.Context.UserID = 357; //25852;
 					s1.Execute();
-					this.m_oLog.Debug("OUT_RESULT: {0}", s1.Result.ToString());*/
+					this.m_oLog.Debug("OUT_RESULT: {0}", s1.Result.ToString());
 
 				} catch (Exception e) {
 					Console.WriteLine(e);
 				}
 			},
-			"select top 10 l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and DateClosed is null order by l.Id desc", 
-		//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null",
+			"select top 100 l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and DateClosed is null", // order by l.Id desc", 
+		//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null order ",
 			CommandSpecies.Text); //top 100 
 		}
 
