@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
-	using System.Reflection;
 	using System.ServiceModel;
 	using System.Text;
 	using EZBob.DatabaseLib;
@@ -16,12 +15,13 @@
 	using com.paypal.service;
 	using StructureMap;
 	using ConfigManager;
+	using Ezbob.Utils;
 
 	internal class PayPalServicePaymentsProHelper {
-		private readonly string Version = "117";
+		private const string Version = "117";
 
 		private readonly ServiceUrlsInfo _ConnectionInfo;
-		private static string[] _CommonInternalErrors;
+		private static readonly string[] _CommonInternalErrors;
 
 		static PayPalServicePaymentsProHelper() {
 			// https://cms.paypal.com/es/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_soap_errorcodes
@@ -149,7 +149,11 @@
 					var service = CreateService(reqInfo);
 					TransactionSearchResponseType resp = service.TransactionSearch(ref cred, request);
 
-					WriteLog(string.Format("PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}", GetLogFor(request.TransactionSearchRequest), GetLogFor(resp)));
+					WriteLog(string.Format(
+						"PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}",
+						GetLogFor(request.TransactionSearchRequest),
+						GetLogFor(resp)
+					));
 
 					requestsCounter.IncrementRequests("TransactionSearch");
 					if (resp.Ack == AckCodeType.Failure) {
@@ -225,33 +229,43 @@
 			};
 		}
 
-		public static string GetLogFor(object target) {
+		private static string GetLogFor(object target, int level = 0) {
+			// If by any chance operator '==' was overridden for the type then not-null reference
+			// can point to a "null" object.
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
+			if (ReferenceEquals(target, null) || (target == null))
+				return "-- null --";
+
+			if (TypeUtils.IsPlainType(target.GetType()))
+				return target.ToString();
+
+			if (level > 10)
+				return string.Format("Not expanding type {0}: nesting level exceeded.", target.GetType());
+
 			var builder = new StringBuilder();
-			try {
-				var properties =
-                from property in target.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				select new {
-					Name = property.Name,
-					Value = property.GetValue(target, null)
-				};
-			
-				foreach (var property in properties) {
-					string value = property.Value.ToString();
-					if (property.Value is IEnumerable) {
-						value = string.Join("\n", property.Value);
-					}
-					builder
-						.Append(property.Name)
-						.Append(" = ")
-						.Append(value)
-						.AppendLine();
-				}
-			} catch (Exception) {
-				return "Was unable to serialize object" + target.ToString();
-			}
+
+			if (TypeUtils.IsEnumerable(target.GetType())) {
+				int counter = 1;
+
+				foreach (var item in (IEnumerable)target) {
+					builder.AppendFormat("Item #{0}: {1}\n", counter, GetLogFor(item, level + 1));
+					counter++;
+				} // for each
+
+				return string.Format("Enumerable with {0} items.\n{1}-- End of enumeration.\n", counter - 1, builder);
+			} // if
+
+			target.TraverseReadable((ignored, propInfo) => {
+				builder.AppendFormat(
+					"{0} = '{1}' (of type {2})\n",
+					propInfo.Name,
+					GetLogFor(propInfo.GetValue(target), level + 1),
+					propInfo.PropertyType
+				);
+			});
 
 			return builder.ToString();
-		}
+		} // GetLogFor
 	}
 
 	internal class PayPalServiceResponceExceptionWrapper : ServiceResponceExceptionWrapperBase {
