@@ -365,9 +365,8 @@ table td {
     font-family: 'Open Sans',sans-serif;
 }
 
-footer.everline_footer {
-	position: static;
-	margin-top: 200px;
+div.broker-page-content {
+	padding-bottom: 400px;
 }
 
 footer.location-broker-everline div.privacy-and-cookie-policy {
