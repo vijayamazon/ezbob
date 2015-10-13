@@ -66,7 +66,7 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 	}, // isSubmitEnabled
 
 	setSubmitEnabled: function(bEnabled) {
-		return this.setSomethingEnabled(this.submitSelector(), bEnabled).toggleClass('btn-green ev-btn-org', bEnabled);
+		return this.setSomethingEnabled(this.submitSelector(), bEnabled).toggleClass('btn-green', bEnabled);
 	}, // setSubmitEnabled
 
 	inputChanged: function(evt) {
