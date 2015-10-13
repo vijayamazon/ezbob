@@ -1,5 +1,6 @@
 ﻿namespace EzBob.PayPalServiceLib {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
@@ -225,21 +226,28 @@
 		}
 
 		public static string GetLogFor(object target) {
-			var properties =
+			var builder = new StringBuilder();
+			try {
+				var properties =
                 from property in target.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				select new {
 					Name = property.Name,
 					Value = property.GetValue(target, null)
 				};
-
-			var builder = new StringBuilder();
-
-			foreach (var property in properties) {
-				builder
-					.Append(property.Name)
-					.Append(" = ")
-					.Append(property.Value)
-					.AppendLine();
+			
+				foreach (var property in properties) {
+					string value = property.Value.ToString();
+					if (property.Value is IEnumerable) {
+						value = string.Join("\n", property.Value);
+					}
+					builder
+						.Append(property.Name)
+						.Append(" = ")
+						.Append(value)
+						.AppendLine();
+				}
+			} catch (Exception) {
+				return "Was unable to serialize object" + target.ToString();
 			}
 
 			return builder.ToString();
