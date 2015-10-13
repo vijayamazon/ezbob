@@ -59,6 +59,8 @@
 			public decimal IssuedAmount { get; set; }
 			public decimal SetupFee { get; set; }
 			public string LoanStatus { get; set; }
+			public string CustomerRefNum { get; set; }
+			public string LoanRefNum { get; set; }
 		} // class AccountingLoanBalanceRawData
 
 		private class AccountingLoanBalanceRow {
@@ -82,6 +84,9 @@
 				TotalBalance = 0;
 
 				IsTotal = true;
+
+				CustomerRefNum = string.Empty;
+				LoanRefNum = string.Empty;
 			} // constructor
 
 			public AccountingLoanBalanceRow(
@@ -111,6 +116,8 @@
 				LoanStatus = raw.LoanStatus;
 				CurrentCustomerStatus = oCurrent.NewStatus;
 				EarnedInterest = nEarnedInterest;
+				CustomerRefNum = raw.CustomerRefNum;
+				LoanRefNum = raw.LoanRefNum;
 
 				RepaidPrincipal = 0;
 				RepaidInterest = 0;
@@ -157,6 +164,8 @@
 				oOutput.Columns.Add("LastInPeriodCustomerStatus", typeof(string));
 				oOutput.Columns.Add("LastStatusChangeDate", typeof(DateTime));
 				oOutput.Columns.Add("CurrentCustomerStatus", typeof(string));
+				oOutput.Columns.Add("CustomerRefNum", typeof(string));
+				oOutput.Columns.Add("LoanRefNum", typeof(string));
 				oOutput.Columns.Add("Css", typeof(string));
 
 				return oOutput;
@@ -253,6 +262,8 @@
 						DBNull.Value,
 						DBNull.Value,
 						DBNull.Value,
+						DBNull.Value,
+						DBNull.Value,
 						"total"
 					);
 				} else {
@@ -277,6 +288,8 @@
 						LastInPeriodCustomerStatus.ToString(),
 						LastStatusChangeDate,
 						CurrentCustomerStatus.ToString(),
+						CustomerRefNum,
+						LoanRefNum,
 						string.Empty
 					);
 				} // if
@@ -330,6 +343,8 @@
 			private DateTime LastStatusChangeDate { get; set; }
 			private DateTime WriteOffDate { get; set; }
 			private bool IsTotal { get; set; }
+			private string CustomerRefNum { get; set; }
+			private string LoanRefNum { get; set; }
 		} // class AccountingLoanBalanceRow
 
 		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(

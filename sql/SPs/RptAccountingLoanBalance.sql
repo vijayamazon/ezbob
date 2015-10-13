@@ -31,7 +31,9 @@ BEGIN
 		t.Id AS TransactionID,
 		ISNULL(lc.Amount, 0) AS FeesEarned,
 		lc.Id AS FeesEarnedID,
-		lc.Date AS LoanChargeDate
+		lc.Date AS LoanChargeDate,
+		c.RefNumber AS CustomerRefNum,
+		l.RefNum AS LoanRefNum
 	FROM
 		Loan l
 		INNER JOIN Customer c
