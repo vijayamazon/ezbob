@@ -7,15 +7,15 @@
 
 	public enum LoanAgreementTemplateType {
 		GuarantyAgreement = 1,
-		PreContractAgreement = 2,
-		CreditActAgreement = 3,
+		PreContract = 2,
+		RegulatedLoanAgreement = 3,
 		PrivateCompanyLoanAgreement = 4,
 
-		AlibabaGuarantyAgreement = 5,
-		AlibabaPreContractAgreement = 6,
-		AlibabaCreditActAgreement = 7,
-		AlibabaPrivateCompanyLoanAgreement = 8,
-		AlibabaCreditFacility = 9,
+		EzbobAlibabaGuarantyAgreement = 5,
+		EzbobAlibabaPreContract = 6,
+		EzbobAlibabaRegulatedLoanAgreement = 7,
+		EzbobAlibabaPrivateCompanyLoanAgreement = 8,
+		CreditFacility = 9,
 	}
 
 	public class LoanAgreementTemplate

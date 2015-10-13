@@ -285,7 +285,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
 
 			self.$el.find('.dataTables_top_right').prepend(
-				$('<button type=button class="button btn-green reload-customer-list ev-btn-org" title="Reload customer and lead lists">Reload</button>')
+				$('<button type=button class="button btn-green reload-customer-list clean-btn" title="Reload customer and lead lists">Reload</button>')
 			);
 		}); // on success
 	}, // reloadCustomerList
@@ -338,7 +338,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			bJQueryUI: false,
 
 			bAutoWidth: true,
-			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"f><"dataTables_top_left"i>>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',
+			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"><"dataTables_top_left">>>>rt<"clear">',
 
 			bStateSave: true,
 

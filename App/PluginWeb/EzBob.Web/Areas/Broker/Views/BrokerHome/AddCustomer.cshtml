@@ -6,12 +6,16 @@
 <div class="page-section hide section-add-customer">
 	<section id="content">
 		<div class="wizard-wrap">
-			<button type="button" class="back-to-list button btn-green pull-right btn-wide ev-btn-org">Back to client list</button>
-			<h2 class="form-start">Add a new client</h2>
+
 
 			<form class="new-lead-form broker-form" novalidate="novalidate">
+				<div class="form_buttons_container">
+					<button type="button" class="back-to-list button btn-green pull-right btn-wide clean-btn">Back to client list</button>
+					<h2 class="form-start">Add a new client</h2>
+				</div>
+
 				@{ int nLeadTabIdx = 1; }
-				
+
 				@EzForm.InputTextWizard(
 					new EzInputBuilder(
 						"LeadFirstName",
@@ -35,7 +39,7 @@
 						tabIndex: nLeadTabIdx++,
 						uiEventControlID: "broker:lead-last-name"),
 					origin: origin)
-				
+
 				@EzForm.InputTextWizard(
 					new EzInputBuilder(
 						"LeadEmail",

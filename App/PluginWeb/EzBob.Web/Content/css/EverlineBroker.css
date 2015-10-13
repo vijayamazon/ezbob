@@ -38,13 +38,6 @@ h6{font-size:16px;}
 	font-family:'Open Sans', sans-serif;
 }
 
-
-/*.form_read_and_accept_broker {
-	width: 100%;
-	vertical-align: top;
-	white-space: inherit;
-}*/
-
 .broker-form {
     width: 100%;
     line-height: 1.8em;
@@ -78,7 +71,6 @@ h6{font-size:16px;}
     color: white;
     margin: 0;
 	line-height: normal;
-	/*font-weight: bold;*/
 }
 .ui-tabs .ui-tabs-nav li.divider-vertical {
 	    width: 0;
@@ -92,9 +84,9 @@ h6{font-size:16px;}
     border-left: 1px solid #f2f2f2 !important;
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a{
-	    background: #28211f;
+	background: #28211f;
     border: none;
-    color: #e28023;
+    color: #ffffff;
 	cursor:pointer;
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected:hover {
@@ -103,9 +95,6 @@ h6{font-size:16px;}
 
 .profile-headlines h3 {
 	font-size: 24px;
-/*	margin: 20px 0 20px 0;
-    line-height: 28px;*/
-    /*font-family: 'Titillium Web Semi Bold';*/
 	font: inherit;
     vertical-align: baseline;
 }
@@ -134,27 +123,10 @@ font-weight: bold;
 	display: inline-block;
 }
 
-.d-widget dd {
-	border: solid 1px #c5c5c5;
-	width: 130px;
-	margin-bottom: 3px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-o-border-radius: 4px;
-	text-align: right;
-	padding-right: 3px;
-	font-weight: bold;
-	margin-right: 8px;
-	padding-left: 2px;
-	font-size: 16px;
-	position: relative;
-	font-family: 'Titillium Web Semi Bold';
-	color: #67c10b;
-}
-
 .profile-headlines h3 {
 	font-size:24px;
 	color: #565656;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .not_linked_bank .d-widgets, 
@@ -167,7 +139,7 @@ font-weight: bold;
 }
 
 .profile-headlines h5.header-message {
-	 font-weight: bold;
+	font-family: 'Open Sans', sans-serif;
     color: #67c10b;
 }
 
@@ -227,26 +199,30 @@ header.everline_header_broker nav #user-menu {
 
 ul#user-menu {
     position: absolute;
-    right: 5px;
+    right: 15px;
     top: 0;
     height: 77px;
     line-height: 77px;
     vertical-align: middle;
 }
 
-.header-phone {
+header.everline_header_broker nav #user-menu a.button {
+	font-weight: bold;
+}
+
+header.everline_header nav a.telephone {
     color: #fff;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 ul#user-menu li {
 	display: inline-block;
 	list-style: none;
-	margin: 0 7px;
+	margin-top: 0;
 	font-weight: bold;
 	font-size: 14px;
 	line-height: 30px;
-	padding: 5px 12px;
+	padding: 5px 0 5px 30px;
 }
 
 .everline_header, 
@@ -257,6 +233,7 @@ box-sizing: content-box;
 }
 
 .dataTables_top_right .ev-btn-org, 
+.dataTables_top_right .clean-btn, 
 .delete-selected-files {
 	margin-top: 3px;
     margin-left: 10px;
@@ -291,12 +268,13 @@ div.dataTables_info {
 table th, 
 table.table thead .sorting_asc, 
 table.table thead .sorting_desc,
-table.table thead .sorting {
+table.table thead .sorting,
+.table > thead > tr > th {
     background-color: #e0e0e0;
     color: #666666;
-    border: 1px solid white;
-    padding: 10px;
-    font-size: 14px;
+    border: 3px solid white;
+    padding: 15px;
+    font-size: 16px;
     text-align: left;
     font-family: 'Open Sans',sans-serif !important;
 }
@@ -304,9 +282,9 @@ table.table thead .sorting {
 table td {
     background-color: #f1f0f0;
     color: #666666;
-    border: 1px solid white;
-    padding: 10px;
-    font-size: 14px;
+    border: 3px solid white;
+    padding: 15px;
+    font-size: 15px;
     text-align: left;
     font-family: 'Open Sans',sans-serif !important;
 }
@@ -321,7 +299,7 @@ table td {
     width: 100%;
     overflow-y: hidden;
     overflow-x: auto;
-	border: 1px solid #ddd;
+	/*border: 1px solid #ddd;*/
 }
 
 .aka-table {
@@ -333,12 +311,17 @@ table td {
 }
 
 .box > .box-title {
-    background-color: #E2E3E5;
-    text-shadow: 0 1px 0 #E2E3E5;
-    padding: 0 10px;
+    background-color: #ffffff;
+    padding: 0;
     height: 48px;
     vertical-align: middle;
     line-height: 48px;
+	text-shadow: none;
+}
+
+#section-dashboard-customers {
+	padding-right: 0;
+	padding-left: 0;
 }
 
 #section-dashboard-customers .box > .box-title {
@@ -367,6 +350,11 @@ table td {
  .aka-row > .value {
     display: table-cell;
 }
+#customerFilesUploader {
+	padding-top: 0;
+    padding-bottom: 0;
+	width: 20%;
+}
 
 .value-title {
     font-weight: bold;
@@ -374,12 +362,11 @@ table td {
     padding-bottom: 0.5em;
     width: 1px !important;
     white-space: nowrap !important;
-    font-family: 'Titillium Web Semi Bold';
+    font-family: 'Open Sans',sans-serif;
 }
 
-footer.everline_footer {
-	position: static;
-	margin-top: 200px;
+div.broker-page-content {
+	padding-bottom: 400px;
 }
 
 footer.location-broker-everline div.privacy-and-cookie-policy {
@@ -436,18 +423,6 @@ footer.location-broker-everline div.privacy-and-cookie-policy {
 .ui-widget {
 	font-size: 15px;
 }
-/*
-div.form_buttons_container{
-    float: right;
-    margin-left: 5px;
-
-	position: relative;
-	height: 70px;
-	width: 588px;
-	margin-bottom: 10px;
-	font-size: 16px;
-}
-*/
 
 div.form_buttons_container button,
 div.form_buttons_container input {
@@ -463,8 +438,8 @@ div.form_field_container {
     position: relative;
 }
 
-.wizard-wrap .back-to-list .button {
-	padding-right: 40px;
+.section-add-customer button.back-to-list {
+	width: 220px;
 }
 
 .broker-login-fields {
@@ -484,7 +459,7 @@ div.form_field_container {
 .ForgottenPassword {
 	float: right;
     /*margin-top: 0;*/
-    margin-right: 105px;
+    margin-right: 99px;
 }
 
 .add_client_button
@@ -531,7 +506,8 @@ div.form_field_container {
 
 .crm-event-types {
 	float: right;
-	margin-right: 400px;
+	margin-top: -43px;
+	margin-right: 215px;
 	margin-bottom: 20px;
 
 }
@@ -542,7 +518,7 @@ div.form_field_container {
     color: #494949;
     text-align: left;
     line-height: 42px;
-	margin-left: 5px;
+	margin-left: 120px;
 }
 
 .ezSortCode .attardi-input {
@@ -576,4 +552,249 @@ div.form_field_container {
 
 .bank-account-instructions .connect-bank {
 	margin-left: 25px;
+}
+
+.broker {
+	width: 960px;
+	box-sizing: border-box;
+    padding: 0 10px;
+	color: #565656;
+    margin: 0 auto;
+}
+
+.broker .d-widgets {
+	border:0;
+	padding: 0;
+}
+
+.broker .d-widgets .d-widget{
+	background-color: #f1f0f0;
+    position: relative;
+    margin-top: 75px;
+    margin-bottom: 25px;
+    display: block;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.broker .d-widgets .d-widget h3{
+    position: absolute;
+    top: -60px;
+    left: 0;
+    color: #8dc641;
+    font-weight: normal;
+    font-size: 24px;
+	display: block;
+	border-right: 0;
+}
+
+.broker .d-widgets .d-widget dl{
+    position: relative;
+    background-color: #e6e6e6;
+    padding: 13px;
+    display: inline-block;
+	margin: 15px 0 20px 0;
+}
+
+.broker .d-widgets .d-widget dl dt {
+	font-weight: 600;
+	display: block;
+	color: #3a3a3a;
+}
+
+.broker .d-widgets .d-widget dl dd {
+	color: #3a3a3a;
+    font-weight: 600;
+    margin-right: 40px;
+    font-size: 20px !important;
+    margin-left: 0;
+}
+
+.broker .d-widgets .d-widget .clean-btn,
+.broker .d-widgets .d-widget .ev-btn-org {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+}
+
+.broker dt,
+.broker dd {
+	line-height: 20px;
+}
+
+.broker .navbar-inner {
+	padding: 1px 7px 5px 5px;
+	border: 0;
+}
+
+.broker .ui-tabs .ui-tabs-panel {
+	padding: 0;
+}
+
+.broker #content .wizard-wrap {
+	margin: 0;
+}
+
+.broker #section-dashboard-account-info .value-group {
+	padding: 0;
+}
+
+.ui-widget-content {
+	border: 0;
+}
+
+.ui-tabs {
+	padding: 0;
+}
+
+.navbar {
+	border: 0;
+}
+
+.broker .nav {
+	height: 40px;
+}
+
+.broker .navbar .nav > li > a {
+	text-shadow: none;
+}
+
+.broker li a:hover {
+	color: #ffffff !important;
+}
+
+.broker .navbar .nav li.ui-tabs-selected a span,
+.broker .navbar .nav li.ui-state-hover a span {
+	border-bottom: 1px #8dc641 solid;
+    padding-bottom: 4px;
+}
+
+.back-to-list-container .ev-btn-org {
+	width: 240px;
+	margin-right: 20px;
+	float: left;
+}
+
+.broker .table > thead > tr > th {
+	vertical-align: middle;
+}
+
+.broker table.table td {
+	padding-left: 15px;
+}
+
+.broker table.table a,
+.broker table.table a:visited {
+	font-weight: normal;
+	
+}
+
+table.table th:first-child,
+table.table td:first-child {
+    border-left: 0;
+}
+
+table.table th:last-child,
+table.table td:last-child {
+    border-right: 0;
+}
+
+table.table tr:last-child,
+table.table tr:last-child > td {
+    border-bottom: 0;
+}
+
+
+.box > .box-title.aka-caption {
+	font-family: 'Open Sans',sans-serif;
+    font-size: 22px;
+    color: #8dc641;
+    font-weight: 400;
+}
+
+.box > .box-title.aka-caption span {
+	position: relative;
+    top: 17px;
+    left: 10px;
+}
+
+.update-password-form div.form_field_container {
+    margin-bottom: 5px;
+}
+
+.update-password-form .help-block {
+    display: none;
+}
+
+.broker .aka-column .wizard-wrap {
+	padding-top: 50px;
+	padding-bottom: 1px;
+}
+
+
+.broker .aka-column .wizard-wrap input[type="password"] {
+	margin-bottom: 0;
+}
+
+.broker h2 {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.broker .update-password {
+	background-color: #f1f0f0;
+	padding: 0 10px;
+}
+
+.broker .section-customer-details .box > .box-title.aka-caption .dataTables_filter {
+	color:#404040;
+}
+
+.broker .dataTables_filter input[type="text"] {
+	margin-bottom: 0;
+}
+
+#customerFilesUploader .dz-message span {
+	color: #8dc641;
+}
+
+.section-customer-details .value-group {
+	padding: 0;
+}
+
+.broker .aka-row span a {
+	font-weight: normal;
+}
+
+.reload-customer-list.clean-btn {
+	padding: 0 28px;
+	height: 50px !important;
+}
+
+#DataTables_Table_0_wrapper .clean-btn {
+	width: auto;
+}
+
+.ui-dialog-buttonset .ev-btn-org {
+	width: 100px !important;
+}
+
+#content {
+	margin-top: 30px;
+}
+
+.aka-column #content {
+	margin-top: 0;
+}
+
+.table-responsive .dataTables_wrapper .table.table{
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+#section-dashboard-account-info .value-group {
+	font-size: 14px;
+}
+
+.client-files {
+	margin-bottom: 6px;
 }

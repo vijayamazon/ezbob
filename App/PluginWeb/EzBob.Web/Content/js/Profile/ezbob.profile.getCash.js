@@ -332,7 +332,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		var self = this;
 
 		var oBtn = $('<button>Update</button>')
-			.addClass('button btn-green')
+			.addClass('button btn-green ev-btn-org')
 			.attr(
 				'ui-event-control-id', 'refresh-account:' + sUiEventControlID
 			).click(function(e) {
@@ -413,8 +413,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				doneBtn: 'hmrc-cash-request:do_upload',
 			},
 			classes: {
-			    backBtn: 'button btn-grey back',
-				doneBtn: 'button btn-green',
+			    backBtn: 'button btn-grey back clean-btn',
+				doneBtn: 'button btn-green ev-btn-org',
 			},
 			clickBack: _.bind(this.backFromUploadFiles, this, false),
 			clickDone: _.bind(this.backFromUploadFiles, this, true),

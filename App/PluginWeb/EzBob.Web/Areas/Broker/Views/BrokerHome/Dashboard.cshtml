@@ -8,19 +8,19 @@
 <div class="page-section hide section-dashboard">
 	<div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
 
-	<div class="profile-menu">
+	<div class="navbar profile-menu">
 		<div class="navbar-inner">
 			<ul class="nav">
-				<li class="active"><a href="#section-dashboard-customers">Clients</a></li>
+				<li><a href="#section-dashboard-customers"><span>Clients</span></a></li>
 				<li class="divider-vertical"></li>
-				<li><a href="#section-dashboard-marketing">Marketing materials</a></li>
+				<li><a href="#section-dashboard-marketing"><span>Marketing materials</span></a></li>
 				<li class="divider-vertical"></li>
-				<li><a href="#section-dashboard-account-info">Account information</a></li>
+				<li><a href="#section-dashboard-account-info"><span>Account information</span></a></li>
 				<li class="divider-vertical"></li>
-				<li><a href="#section-dashboard-terms-and-conditions">Terms and conditions</a></li>
+				<li><a href="#section-dashboard-terms-and-conditions"><span>Terms and conditions</span></a></li>
 				@if (CurrentValues.Instance.BrokerInstantOfferEnabled) {
 					<li class="divider-vertical"></li>
-					<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
+					<li><a href="#section-dashboard-instant-offer"><span>Instant offer</span></a></li>
 				}
 			</ul>
 		</div>
@@ -132,7 +132,7 @@
 		<h2 class="form_start">Account information</h2>
 
 		<div class="value-group aka-table table-big box">
-			<div class="box-title aka-caption">Account details</div>
+			<div class="box-title aka-caption account-details">Account details</div>
 
 			<div class="aka-row">
 				<div class="aka-column">
@@ -210,7 +210,7 @@
 		</div>
 
 		<div class="value-group aka-table table-big box">
-			<div class="box-title aka-caption">Update password</div>
+			<div class="box-title aka-caption update-password"><span>Update password</span></div>
 				<div class="aka-row">
 					<div class="aka-column">
 						<section id="content">

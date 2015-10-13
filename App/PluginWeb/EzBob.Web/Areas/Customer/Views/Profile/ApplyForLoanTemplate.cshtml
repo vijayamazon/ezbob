@@ -143,22 +143,11 @@
 			</label -->
 
 			<div class="loan-disclosure-text1 hide">
-				@if (isEverline) {
-					<h3>Disclosure for regular loans:</h3> 
-					<h4>(loans made to individuals)</h4>
-				} else {
-					<h3>DISCLOSURE FOR REGULATED LOANS: (LOANS MADE TO INDIVIDUALS)</h3>
-				}				
+				<h3>Disclosure for Borrowers under Consumer Credit Act regulated Loan Agreements:</h3>				
 				You hereby represent and warranty that at the date of applying for and accepting this loan, you are not: (i) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (ii) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (iii) bankrupt or considering filing for bankruptcy in the coming 12 month period.
 			</div>
-
 			<div class="loan-disclosure-text2 hide">
-				@if (isEverline) {
-					<h3>Disclosure for non-regular loans:</h3>
-					<h4>(loans made to companiess)</h4>
-				} else {
-					<h3>DISCLOSURE FOR NON-REGULATED LOANS: (LOANS MADE TO COMPANIES)</h3>
-				}	    
+				<h3>Disclosure for Borrowers under non-regulated Loan Agreements:</h3>	    
 				You hereby represent and warranty that at the date of applying for and accepting this loan that with respect to the Borrower: (i) no resolution has been passed, petition presented, proceedings commenced or other procedure or step for its liquidation; (ii) no procedure has been used against the Borrower to attach or take possession of any property for payment of a debt; (iii) no receiver or other similar official has been appointed in respect of any of the property of the Borrower;  (iv) no application or petition for an administration order has been made; and none of the foregoing is pending or contemplated; and (v) no director of the Company or proposed guarantor of the loan is: (A) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (B) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (C) bankrupt or considering filing for bankruptcy in the coming 12 month period.
             </div>
 
@@ -197,23 +186,23 @@
 	<div class="simple-well clearfix">
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
-				<li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Contract</a></li>
-				<li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="CreditActAgreement">Contract</a></li>
+				<li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="PreContract">Pre-Contract</a></li>
+				<li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="RegulatedLoanAgreement">Contract</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab3">
 					<div class="overview loan-agreement" id="Pre-Contract-Agreement">						
                         <%if(agreementType == 'ezbob') {%>
-						    @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Pre-Contract-Agreement.cshtml");}
+						    @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobPreContract.cshtml");} 
                         <%}%>
                         <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/AlibabaPre-Contract-Agreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobAlibabaPreContract.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLPre-Contract-Agreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLPreContract.cshtml");}
                         <%}%>						
                         <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinancePre-Contract-Agreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinancePreContract.cshtml");}
                         <%}%>						
 					</div>
 					@PrintDownload()
@@ -221,16 +210,16 @@
 				<div class="tab-pane" id="tab4">
 					<div class="overview loan-agreement" id="CreditActAgreement">
                         <%if(agreementType == 'ezbob') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/CreditActAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobRegulatedLoanAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/AlibabaCreditActAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/AlibabaCreditActAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLCreditActAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLRegulatedLoanAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinanceCreditActAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinanceRegulatedLoanAgreement.cshtml");}
                         <%}%>						
 					</div>
 					@PrintDownload()
@@ -251,16 +240,16 @@
 				<div class="tab-pane active" id="tab1">
 					<div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
                         <%if(agreementType == 'ezbob') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/PrivateCompanyLoanAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobPrivateCompanyLoanAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/AlibabaPrivateCompanyLoanAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/AlibabaPrivateCompanyLoanAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLPrivateCompanyLoanAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLPrivateCompanyLoanAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinancePrivateCompanyLoanAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinancePrivateCompanyLoanAgreement.cshtml");}
                         <%}%>						
 					</div>
 					@PrintDownload()
@@ -268,16 +257,16 @@
 				<div class="tab-pane" id="tab2">
 					<div class="overview loan-agreement" id="GuarantyAgreement">
                         <%if(agreementType == 'ezbob') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/GuarantyAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobGuarantyAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/AlibabaGuarantyAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobAlibabaGuarantyAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLGuarantyAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLGuarantyAgreement.cshtml");}
                         <%}%>
                         <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLRefinanceGuarantyAgreement.cshtml");}
+                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinanceGuarantyAgreement.cshtml");}
                         <%}%>
 					</div>
 					@PrintDownload()
@@ -289,7 +278,7 @@
 
 @helper PrintDownload() {
 	<div class="print-download">
-		<a href="#" target="_blank"  class="pull-left download pdf-link clean-btn short-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
+		<a href="#" target="_blank"  class="pull-right download pdf-link clean-btn short-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
 		<a href="#" style="margin-left: 10px;" class="pull-right print print-link clean-btn short-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
 	</div>  
 }
