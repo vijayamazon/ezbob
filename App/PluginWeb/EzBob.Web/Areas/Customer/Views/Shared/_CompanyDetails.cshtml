@@ -41,7 +41,7 @@
 		@if (origin == CustomerOriginEnum.everline) {
 			Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");
 		}
-        <h2 class="form_start">Business details</h2>
+        <h2 class="form_start" id="page-rendered-bussines-information">Business details</h2>
 		
         @using (Html.BeginForm("SaveCompany", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
 
