@@ -14,6 +14,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 
 		this.marketplaceId.withoutSpaces();
 		this.merchantId.withoutSpaces();
+		$('body').scrollTop(0);
 		EzBob.UiAction.registerView(this);
 		return this;
 	},
