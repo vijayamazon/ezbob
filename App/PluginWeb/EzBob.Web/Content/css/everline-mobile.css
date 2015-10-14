@@ -179,8 +179,11 @@
 	.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
 		width: 100%;
 	}
-
+    .ui-dialog .address-dialog-widget {
+        height:280px !important;
+    }
 	.ui-dialog {
+        top:0 !important;
 		left: 0 !important;
 		width: 100% !important;
 		-webkit-box-sizing: border-box;

@@ -779,3 +779,6 @@ blockquote {
 .select-card-area .fa.fa-circle {
 	display: none;
 }
+.address-dialog-buttonpane .ui-dialog-buttonset {
+    direction:rtl;
+}

@@ -2,7 +2,9 @@
 	header {
 		height: 65px;
 	}
-
+    select {
+        background:white !important;
+    }
 	#header {
 		width: 100%;
 		-moz-min-width: 100%;
@@ -365,6 +367,7 @@
 
 	.pages {
 		padding: 20px;
+        padding-top:0;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
@@ -377,12 +380,20 @@
 
 	.wizard-top {
 		padding: 20px;
+        padding-bottom:0;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
+    .sliders-wrapper {
+        margin-top: -65px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        position: static;
+    }
 
-	.loan-summary-boxes {
+    .loan-summary-boxes {
 		background: none;
 		display: block;
 	}
@@ -460,6 +471,8 @@
 	.ui-dialog.ui-widget.ui-widget-content.ui-corner-all {
 		left: 0 !important;
 		width: auto !important;
+        padding:15px;
+        top:0 !important;
 	}
 
 	.payments-wrap, .sliders-main .summary {
@@ -469,7 +482,13 @@
 	.sliders-main .summary-wrap {
 		padding-top: 0;
 	}
+    .address-dialog-widget {
+            height: 300px !important;
 
+    }
+    .ui-dialog-buttonset button {
+        width:100%;
+    }
 		.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
 			margin: 0;
 			padding: 0;
