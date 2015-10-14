@@ -29,7 +29,7 @@ EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
 	onRender: function() {
 	    EzBob.UiAction.registerView(this);
 		this.initDropzone();
-
+		$('body').scrollTop(0);
 		return this;
 	}, // render
 

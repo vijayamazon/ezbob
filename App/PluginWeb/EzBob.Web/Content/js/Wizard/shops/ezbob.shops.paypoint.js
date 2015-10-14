@@ -68,6 +68,7 @@ EzBob.PayPointAccountInfoView = Backbone.Marionette.ItemView.extend({
 	},
 	onRender: function () {
 		this.validator = EzBob.validatePayPointShopForm(this.ui.form);
+		$('body').scrollTop(0);
 		return this;
 	},
 	back: function () {

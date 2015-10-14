@@ -2,8 +2,7 @@
 
 EzBob.SageAccountInfoView = Backbone.View.extend({
 	initialize: function (options) {
-		var that;
-		that = this;
+		var that = this;
 		window.SageAccountAdded = function (result) {
 			if (result.error) {
 				EzBob.App.trigger('error', result.error);
@@ -15,6 +14,10 @@ EzBob.SageAccountInfoView = Backbone.View.extend({
 			return that.trigger('ready');
 		};
 		return false;
+	},
+	render: function () {
+		$('body').scrollTop(0);
+		return this;
 	}
 });
 

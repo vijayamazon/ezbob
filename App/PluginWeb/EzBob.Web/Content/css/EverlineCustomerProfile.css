@@ -223,12 +223,16 @@ a.ev-btn-org {
 .ev-form {
 	background-color: #f1f0f0;
     padding: 20px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .ezSortCode .attardi-input {
     display: inline-block;
     float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 30%;
 }
@@ -327,7 +331,7 @@ margin-left:0;
 }
 
 .profile-main .d-widgets {
-	margin-top: 0px;
+	margin-top: 0;
 }
 
 .profile-main .d-widgets .d-widget .clean-btn,

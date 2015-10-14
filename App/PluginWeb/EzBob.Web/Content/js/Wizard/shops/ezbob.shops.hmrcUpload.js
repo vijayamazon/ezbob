@@ -22,6 +22,7 @@ EzBob.HmrcUploadAccountInfoView = Backbone.Marionette.ItemView.extend({
 	onRender: function() {
 		this.uploadUi.$el = this.$el.find('.hmrc-upload-ui');
 		this.uploadUi.render();
+		$('body').scrollTop(0);
 	},
 
 	events: {

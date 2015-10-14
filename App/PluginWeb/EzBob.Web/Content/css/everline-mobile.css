@@ -33,7 +33,81 @@
 	}
 }
 
+
 @media screen and (max-width: 800px) {
+	body{
+		width: auto;
+	}
+
+	optgroup.fixiphone{
+		display: block;
+	}
+
+	header.everline_header {
+	  background: #28211f;
+	  border-top: 18px solid #f0f0f0;
+	  padding-top: 11px;
+	  margin: 0;
+	  left: auto;
+	  padding: 0;
+	  position: static;
+	  text-align: center;
+	  top: 0;
+	  position: static;
+	}
+
+	.everline-header-placeholder {
+		height: 0;
+	}
+
+	header:before {
+	  border-top: 11px solid #8dc641;
+	  content: "";
+	  display: block;
+	  position: absolute;
+	  top: 14px;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  height: 10px;
+	}
+
+	header nav {
+	  float: left;
+	  display: inline;
+	  width: 100%;
+	  position: relative;
+	  height: 100px;
+	}
+
+	header.everline_header nav ul.sub-links a,
+	header nav ul.sub-links a,
+	header nav .sub-links a{
+		padding: 7px 0 !important;
+		margin-right: 0 !important;
+		margin-top: 13px;
+		width: 81px;
+	}
+
+	header nav .sub-links .telephone {
+	  height: 32px;
+	  margin: 28px 40px;
+	  position: absolute;
+	  right: -15px;
+	  top: 0;
+	  font-size: 1em;
+	  width: 32px;
+	}
+	header nav .sub-links .telephone span{
+		display: none;
+	}
+
+	header.everline_header nav ul.sub-links li:first-child a {
+		font-weight: 600;
+		font-size: 3em;
+		margin-right:25px;
+	}
+
 	/*
         Header
     */
@@ -86,6 +160,11 @@
 		position: relative;
 	}
 	/* end footer */
+
+	input, textarea, img {
+		max-width: 100%
+	}
+
 	/*
         login
     */
@@ -308,7 +387,7 @@
 
 	#cboxWrapper {
 		width: 100% !important;
-		padding: 0px 10px !important;
+		padding: 0 10px !important;
 		-webkit-box-sizing: border-box !important;
 		-moz-box-sizing: border-box !important;
 		box-sizing: border-box !important;
@@ -319,7 +398,7 @@
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
-		padding: 0px;
+		padding: 0;
 	}
 
 	#colorbox #cboxClose {
@@ -348,8 +427,7 @@
 	}
 	/*
     progress bar
-
-*/
+	*/
 	.wizard-steps-wrapper {
 		height: 210px;
 	}
@@ -406,6 +484,11 @@
 	}
 	/*header*/
 	header.everline_header nav ul.sub-links {
-		right: 20px;
+		right: 10px;
 	}
+
+	.select_form_field_container span {
+		color: #494949;
+	}
+		
 }
