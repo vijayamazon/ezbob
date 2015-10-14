@@ -13,6 +13,8 @@ EzBob.CustomerCreatePasswordView = EzBob.View.extend({
 	}, // events
 
 	render: function() {
+		$('footer.location-customer-everline .privacy-and-cookie-policy').hide();
+
 		this.$el.html(this.template());
 
 		this.form = this.$el.find('.simple-create-password');
