@@ -6,6 +6,7 @@
 	using System.Text.RegularExpressions;
 	using ConfigManager;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 	using Model;
 	using Newtonsoft.Json;
 	using RestSharp;
@@ -124,7 +125,7 @@
 			try {
 				log.Debug("ServicePointManager.SecurityProtocol = {0}", ServicePointManager.SecurityProtocol);
 
-				log.Debug("Starting SendRequest. Path: {0} Model: {1}", path, model);
+				log.Debug("Starting SendRequest. Path: {0} Model: {1}", path, model.ToLogStr());
 
 				var client = new RestClient(BaseSecureUrl);
 				client.AddHandler("application/json", new JsonDeserializer());
@@ -139,7 +140,11 @@
 
 				IRestResponse response = client.Post(request);
 
-				log.Debug("Posted RestRequest: Mandrill service call; response length: {0}.", response.Content.Length);
+				log.Debug(
+					"Posted RestRequest: Mandrill service call; response status code: {1}; response length: {0}.",
+					response.Content.Length,
+					response.StatusCode
+				);
 
 				if (response.StatusCode == HttpStatusCode.InternalServerError) {
 					log.Debug("InternalServerError status code in RestRequest's response");

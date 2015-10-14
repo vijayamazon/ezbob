@@ -1,11 +1,9 @@
 ﻿namespace EzBob.PayPalServiceLib {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.ServiceModel;
-	using System.Text;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
@@ -15,7 +13,7 @@
 	using com.paypal.service;
 	using StructureMap;
 	using ConfigManager;
-	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 
 	internal class PayPalServicePaymentsProHelper {
 		private const string Version = "117";
@@ -151,8 +149,8 @@
 
 					WriteLog(string.Format(
 						"PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}",
-						GetLogFor(request.TransactionSearchRequest),
-						GetLogFor(resp)
+						request.TransactionSearchRequest.ToLogStr(),
+						resp.ToLogStr()
 					));
 
 					requestsCounter.IncrementRequests("TransactionSearch");
@@ -228,44 +226,6 @@
 				}
 			};
 		}
-
-		private static string GetLogFor(object target, int level = 0) {
-			// If by any chance operator '==' was overridden for the type then not-null reference
-			// can point to a "null" object.
-			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
-			if (ReferenceEquals(target, null) || (target == null))
-				return "-- null --";
-
-			if (TypeUtils.IsPlainType(target.GetType()))
-				return target.ToString();
-
-			if (level > 10)
-				return string.Format("Not expanding type {0}: nesting level exceeded.", target.GetType());
-
-			var builder = new StringBuilder();
-
-			if (TypeUtils.IsEnumerable(target.GetType())) {
-				int counter = 1;
-
-				foreach (var item in (IEnumerable)target) {
-					builder.AppendFormat("Item #{0}: {1}\n", counter, GetLogFor(item, level + 1));
-					counter++;
-				} // for each
-
-				return string.Format("Enumerable with {0} items.\n{1}-- End of enumeration.\n", counter - 1, builder);
-			} // if
-
-			target.TraverseReadable((ignored, propInfo) => {
-				builder.AppendFormat(
-					"{0} = '{1}' (of type {2})\n",
-					propInfo.Name,
-					GetLogFor(propInfo.GetValue(target), level + 1),
-					propInfo.PropertyType
-				);
-			});
-
-			return builder.ToString();
-		} // GetLogFor
 	}
 
 	internal class PayPalServiceResponceExceptionWrapper : ServiceResponceExceptionWrapperBase {

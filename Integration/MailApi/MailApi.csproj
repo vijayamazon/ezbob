@@ -73,6 +73,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
       <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
       <Name>ConfigManager</Name>
