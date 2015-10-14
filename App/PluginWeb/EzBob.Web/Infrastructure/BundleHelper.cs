@@ -264,6 +264,7 @@
 				.Add("~/Content/js/lib/jquery.jscrollpane.js")
 				.Add("~/Content/js/lib/jquery.validate.js")
 				.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+				.Add("~/Content/js/lib/jquery.ui.touch-punch.min.js")
 				.Add("~/Content/js/lib/jsuri-1.1.1.js")
 				.Add("~/Content/js/lib/jquery.cookie.js")
 				.Add("~/Content/js/lib/underscore.js")

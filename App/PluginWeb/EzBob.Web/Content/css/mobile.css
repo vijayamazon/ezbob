@@ -5,6 +5,11 @@
     select {
         background:white !important;
     }
+
+	optgroup.fixiphone {
+		display: block;
+	}
+
 	#header {
 		width: 100%;
 		-moz-min-width: 100%;
@@ -125,6 +130,10 @@
 		background: -moz-linear-gradient(top,#f7f7f7 0,#e5e5e5 90%);
 	}
 
+	.select_form_field_container .attardi-input span {
+		color: #585858;
+	}
+
 	.code-sent-style-container,
 	input.form_field_left_side,
 	input.form_field, textarea.form_field {
@@ -136,6 +145,10 @@
 		float: none;
 		margin-top: 10px;
 		width: 170px;
+	}
+
+	button.btn-link.form_field_right_side_signup_phone {
+		width: 100%;
 	}
 
 	div.form_read_and_accept {
@@ -482,10 +495,16 @@
 	.sliders-main .summary-wrap {
 		padding-top: 0;
 	}
-    .address-dialog-widget {
-            height: 300px !important;
 
+    .address-dialog-widget {
+        height: 250px !important;
+		border: 1px solid #ddd !important;
     }
+
+	.matchingAddressList li{
+		line-height: 28px;	
+	}
+
     .ui-dialog-buttonset button {
         width:100%;
     }

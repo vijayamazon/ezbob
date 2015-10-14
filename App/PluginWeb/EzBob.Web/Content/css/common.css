@@ -139,6 +139,10 @@ footer {
 	font-size: 16px;
 }
 
+optgroup.fixiphone {
+    display: none;
+}
+
 /*-- copyrights, right at the bottom of the site --*/
 #copyrights{
     background: #333333;

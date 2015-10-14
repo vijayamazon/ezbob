@@ -882,6 +882,7 @@
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\autoNumeric.js" />
     <Content Include="Content\js\lib\footer.min.js" />
+    <Content Include="Content\js\lib\jquery.ui.touch-punch.min.js" />
     <Content Include="Content\js\lib\log.js" />
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
