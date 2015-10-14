@@ -346,8 +346,11 @@
 	}
 
 	.clear {
-		display: none;
+		display: none !important;
 		visibility: hidden;
+	}
+	.form_buttons_container .attardi-button{
+		display: block;
 	}
 
 	td.account-logo {
