@@ -2005,6 +2005,7 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 	float: right;
 	display: block;
 	margin-right: 16px;
+	margin-top: 14px;
 }
 
 .help_security > a {

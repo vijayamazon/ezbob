@@ -1449,6 +1449,7 @@ input[type="color"],
 	float: right;
 	display: block;
 	margin-right: 16px;
+	margin-top: 14px;
 }
 
 .help_security > a {
