@@ -963,12 +963,8 @@ span.sign-full-name {
 }
 
 .print-download {
-	padding-top: 25px; 
-	padding-left: 20px;	
-}
-
-#tab3 a.pdf-link {
-	 margin-left: 775px;
+	padding: 25px 20px 0 20px;
+	text-align: right;
 }
 
 .card-options-label span.title {

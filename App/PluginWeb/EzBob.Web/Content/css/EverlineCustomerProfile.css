@@ -576,6 +576,7 @@ table.payment-schedule-table td:last-child {
 .print-download {
 	margin-left: -20px;
 	padding-left: 0;	
+	text-align: left;
 }
 
 .click-input-wrap span.title {
