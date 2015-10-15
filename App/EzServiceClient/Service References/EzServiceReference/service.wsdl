@@ -395,6 +395,12 @@
   <wsdl:message name="IEzService_IsBroker_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerUpdateEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerUpdateEmail" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerUpdateEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerUpdateEmailResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategyAsync_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategyAsync" />
   </wsdl:message>
@@ -1676,6 +1682,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerUpdateEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmail" message="tns:IEzService_BrokerUpdateEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmailResponse" message="tns:IEzService_BrokerUpdateEmail_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MainStrategyAsync">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync" message="tns:IEzService_MainStrategyAsync_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse" message="tns:IEzService_MainStrategyAsync_OutputMessage" />
@@ -2854,6 +2864,15 @@
     </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceBroker/IsBroker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerUpdateEmail">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmail" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

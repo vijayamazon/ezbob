@@ -13,7 +13,6 @@
 	using StructureMap;
 
 	public class BrokersController : Controller {
-
 		public BrokersController(IEzbobWorkplaceContext context) {
 			m_oServiceClient = new ServiceClient();
 			m_oContext = context;
@@ -29,8 +28,7 @@
 
 			try {
 				oResult = m_oServiceClient.Instance.BrokerLoadCustomersByID(nBrokerID);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Alert(e, "Loading broker customers request for broker {0} failed.", nBrokerID);
 				return Json(new { aaData = new BrokerCustomerEntry[0], }, JsonRequestBehavior.AllowGet);
 			} // try
@@ -49,8 +47,7 @@
 
 			try {
 				oResult = m_oServiceClient.Instance.BrokerLoadPropertiesByID(nBrokerID);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Alert(e, "Load broker properties request for broker {0} failed.", nBrokerID);
 				return Json(new BrokerProperties(), JsonRequestBehavior.AllowGet);
 			} // try
@@ -64,13 +61,33 @@
 		public JsonResult ResetPassword123456(int nBrokerID) {
 			try {
 				new ServiceClient().Instance.ResetPassword123456(m_oContext.User.Id, nBrokerID, PasswordResetTarget.Broker);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to reset broker {0}'s password to 123456.", nBrokerID);
 			} // try
 
 			return Json(true);
 		} // ResetPassword123456
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonResult UpdateEmail(int brokerID, string newEmail) {
+			if (string.IsNullOrWhiteSpace(newEmail))
+				return Json(new { success = false, error = "email address is empty", });
+			try {
+				StringActionResult res = new ServiceClient().Instance.BrokerUpdateEmail(
+					m_oContext.User.Id,
+					brokerID,
+					newEmail
+				);
+
+				return Json(new { success = string.IsNullOrWhiteSpace(res.Value), error = res.Value, });
+			} catch (Exception e) {
+				string error = string.Format("failed to update broker {0}'s email to '{1}'", brokerID, newEmail);
+
+				ms_oLog.Alert(e, "Not good: {0}.", error);
+
+				return Json(new { success = false, error = error, });
+			} // try
+		} // UpdateEmail
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult AttachCustomer(int nCustomerID, int nBrokerID) {
@@ -92,9 +109,8 @@
 
 			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
 			var broker = brokerRepo.Get(nBrokerID);
-			if (broker != null) {
+			if (broker != null)
 				return Json(new { WhiteLabel = broker.WhiteLabel ?? new WhiteLabelProvider() }, JsonRequestBehavior.AllowGet);
-			}
 
 			return Json(new { error = "broker not found" });
 		} // LoadCustomers
@@ -108,23 +124,22 @@
 
 			var whiteLabelRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
 
-			if (whiteLabelRepo.GetByName(whiteLabel.Name) != null) {
+			if (whiteLabelRepo.GetByName(whiteLabel.Name) != null)
 				return Json(new { error = "white label with such name already exists" });
-			}
 
 			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
 
 			var broker = brokerRepo.Get(brokerId);
-			if (broker != null) {
 
+			if (broker != null) {
 				whiteLabel.LogoWidthPx = 128;
 				whiteLabel.LogoHeightPx = 34;
 				broker.WhiteLabel = whiteLabel;
 				return Json(new { broker.WhiteLabel }, JsonRequestBehavior.AllowGet);
-			}
+			} // if
 
 			return Json(new { error = "broker not found" });
-		} 
+		} // SaveWhiteLabel 
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -135,9 +150,9 @@
 
 			var whiteLabelRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
 			var wl = whiteLabelRepo.Get(whiteLabelId);
-			if (wl == null) {
+
+			if (wl == null)
 				return Json(new { error = "white label not found" });
-			}
 
 			wl.Logo = whiteLabel.Logo ?? wl.Logo;
 			wl.LogoImageType = whiteLabel.LogoImageType ?? wl.LogoImageType;
@@ -152,29 +167,27 @@
 
 			whiteLabelRepo.Update(wl);
 			return Json(new { success = true });
-		} 
+		} // UpdateWhiteLabel 
 
 		[HttpPost]
 		public JsonResult UploadLogo() {
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 
-			if (Request.Files.Count != 1) {
+			if (Request.Files.Count != 1)
 				return Json(new { error = "Only one logo upload supported" });
-			}
 
 			HttpPostedFileBase file = Request.Files[0];
 			if (file != null) {
 				var content = new byte[file.ContentLength];
 				file.InputStream.Read(content, 0, file.ContentLength);
 				return Json(new { Logo = Convert.ToBase64String(content), LogoType = file.ContentType });
-			}
+			} // if
 
 			return Json(new { error = "broker not found" });
-		} 
+		} // UploadLogo
 
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(BrokersController));
-
 	} // class BrokersController
 } // namespace

@@ -3944,6 +3944,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/IsBroker", ReplyAction="http://tempuri.org/IEzServiceBroker/IsBrokerResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> IsBrokerAsync(string sContactEmail, int uiOrigin);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmail", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmailResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult BrokerUpdateEmail(int underwriterID, int brokerID, string newEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmail", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmailResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> BrokerUpdateEmailAsync(int underwriterID, int brokerID, string newEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync", ReplyAction="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategyAsync(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, System.Nullable<ServiceClientProxy.EzServiceReference.CashRequestOriginator> cashRequestOriginator);
         
@@ -5426,6 +5432,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> IsBrokerAsync(string sContactEmail, int uiOrigin) {
             return base.Channel.IsBrokerAsync(sContactEmail, uiOrigin);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult BrokerUpdateEmail(int underwriterID, int brokerID, string newEmail) {
+            return base.Channel.BrokerUpdateEmail(underwriterID, brokerID, newEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> BrokerUpdateEmailAsync(int underwriterID, int brokerID, string newEmail) {
+            return base.Channel.BrokerUpdateEmailAsync(underwriterID, brokerID, newEmail);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategyAsync(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, System.Nullable<ServiceClientProxy.EzServiceReference.CashRequestOriginator> cashRequestOriginator) {

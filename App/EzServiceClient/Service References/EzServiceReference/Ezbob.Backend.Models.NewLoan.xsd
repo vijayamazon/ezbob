@@ -75,6 +75,7 @@
       <xs:element minOccurs="0" name="IntervalsNum" type="xs:int" />
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OpenPrincipal" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingIntervalEnd" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ReschedulingIntervalStart" type="xs:dateTime" />

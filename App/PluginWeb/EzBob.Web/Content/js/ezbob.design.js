@@ -1437,14 +1437,14 @@ EzBob.validateRollover = function(el) {
 	});
 };
 
-EzBob.validateChangeEmailForm = function(el) {
+EzBob.validateChangeEmailForm = function(el, emailFieldID) {
 	var e = el || $('form');
+	emailFieldID = emailFieldID || 'edit-email';
 
-	return e.validate({
-		rules: {
-			'edit-email': { required: true, email: true }
-		}
-	});
+	var rules = {};
+	rules[emailFieldID] = { required: true, email: true, };
+
+	return e.validate({ rules: rules, });
 };
 
 EzBob.validatemanualPaymentForm = function(el) {

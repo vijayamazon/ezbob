@@ -172,5 +172,8 @@
 
 		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail, int uiOrigin);
+
+		[OperationContract]
+		StringActionResult BrokerUpdateEmail(int underwriterID, int brokerID, string newEmail);
 	} // interface IEzServiceBroker
 } // namespace

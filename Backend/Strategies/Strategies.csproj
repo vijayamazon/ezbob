@@ -153,6 +153,7 @@
     <Compile Include="Broker\BrokerAddBank.cs" />
     <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
     <Compile Include="Broker\BrokerTransferCommission.cs" />
+    <Compile Include="Broker\BrokerUpdateEmail.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
