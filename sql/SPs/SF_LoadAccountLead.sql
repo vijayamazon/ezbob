@@ -49,13 +49,18 @@ BEGIN
         @RequestedAmount AS RequestedLoanAmount,
         o.Name AS Origin,
         c.IsTest AS IsTest,
-        @NumOfLoans AS NumOfLoans
+        @NumOfLoans AS NumOfLoans,
+        b.ContactName AS BrokerName,
+        b.FirmName AS BrokerFirmName,
+        b.ContactEmail AS BrokerEmail,
+        b.ContactMobile AS BrokerPhoneNumber
     FROM Customer c 
     LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
     LEFT JOIN Company co ON co.Id = c.CompanyId
     INNER JOIN WizardStepTypes w ON w.WizardStepTypeID = c.WizardStep
     LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
     LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
+    LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
     WHERE c.Id=@CustomerID
     
     RETURN
@@ -84,9 +89,14 @@ BEGIN
         isnull(l.FirstName, '') + ' ' + isnull(l.LastName, '') AS Name,
         l.DateCreated AS RegistrationDate,
         'Broker lead' AS EzbobSource,
-        CAST(1 AS BIT) IsBroker
-    FROM BrokerLeads l
-    WHERE Email = @Email
+        CAST(1 AS BIT) IsBroker,
+        b.ContactName AS BrokerName,
+        b.FirmName AS BrokerFirmName,
+        b.ContactEmail AS BrokerEmail,
+        b.ContactMobile AS BrokerPhoneNumber
+    FROM BrokerLeads l 
+    INNER JOIN Broker b ON b.BrokerID = l.BrokerID
+    WHERE l.Email = @Email
    RETURN    
 END
 
