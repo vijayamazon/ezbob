@@ -239,9 +239,8 @@
             try
             {
                 Loan loan = this._loans.Get(loanID);
-                DateTime now = DateTime.UtcNow;
 
-                if (rescheduleIn != null)
+	            if (rescheduleIn != null)
                 {
                     ReschedulingArgument reModel = new ReschedulingArgument();
                     reModel.LoanType = loan.GetType().AssemblyQualifiedName;

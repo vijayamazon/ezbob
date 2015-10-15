@@ -97,6 +97,7 @@ EzBob.Popup = Backbone.View.extend({
 		        'class': 'button btn-grey clean-btn',
 		        click: function () { self.PostCodeBtnCancel(); },
 		        'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-cancelled',
+                sortnum:3
 		    });
 
 		    if (sMode === 'selector') {
@@ -105,6 +106,7 @@ EzBob.Popup = Backbone.View.extend({
 					'class': 'button btn-green ev-btn-org not-found',
 					click: function() { self.PostCodeBtnNotFound(); },
 					'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-not-found',
+					sortnum: 2
 				});
 			} // if
 
@@ -116,6 +118,7 @@ EzBob.Popup = Backbone.View.extend({
 				'class': 'postCodeBtnOk button btn-green disabled ev-btn-org',
 				click: function() { self.PostCodeBtnOk(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-selected',
+				sortnum: 1
 			});
 
 			break;
@@ -126,6 +129,7 @@ EzBob.Popup = Backbone.View.extend({
 				'class': 'button btn-grey clean-btn',
 				click: function() { self.PostCodeBtnCancel(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-manual-input-cancelled',
+				sortnum: 2
 			});
 
 			oButtons.push({
@@ -134,12 +138,13 @@ EzBob.Popup = Backbone.View.extend({
 				disabled: 'disabled',
 				click: function() { self.PostCodeBtnManualInputOk(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-manual-input-selected',
+				sortnum: 1
 			});
 
 			break;
 		} // switch
-
-		this.$el.dialog('option', 'buttons', oButtons);
+		var sortedButtons = _.sortBy(oButtons, 'sortnum');
+		this.$el.dialog('option', 'buttons', sortedButtons);
 
 		var oWidget = this.$el.dialog('widget');
 

@@ -98,7 +98,7 @@
 				origin: origin)
 			
 			@EzForm.ClickableInputTag(new EzInputBuilder("agreementTermsRead", 
-				"<span class=\"company-preAgreement\">I have read and agree to the guaranty terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the contract terms</span>",
+				"<span class=\"company-preAgreement\">I have read and agree to the guarantee terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the contract terms</span>",
 				value: "true",
 				type: "checkbox",
 				cls: "agreementTermsRead",
@@ -191,7 +191,7 @@
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab3">
-					<div class="overview loan-agreement" id="Pre-Contract-Agreement">						
+					<div class="overview loan-agreement" id="PreContract">
                         <%if(agreementType == 'ezbob') {%>
 						    @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobPreContract.cshtml");} 
                         <%}%>
@@ -208,7 +208,7 @@
 					@PrintDownload()
 				</div>
 				<div class="tab-pane" id="tab4">
-					<div class="overview loan-agreement" id="CreditActAgreement">
+					<div class="overview loan-agreement" id="RegulatedLoanAgreement">
                         <%if(agreementType == 'ezbob') {%>
                             @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobRegulatedLoanAgreement.cshtml");}
                         <%}%>
@@ -234,7 +234,7 @@
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
 				<li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
-				<li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guaranty</a></li>
+				<li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guarantee</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab1">
@@ -278,7 +278,7 @@
 
 @helper PrintDownload() {
 	<div class="print-download">
-		<a href="#" target="_blank"  class="pull-right download pdf-link clean-btn short-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
-		<a href="#" style="margin-left: 10px;" class="pull-right print print-link clean-btn short-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
-	</div>  
+		<a href="#" target="_blank" class="download pdf-link clean-btn short-btn" ui-event-control-id="loan-legal:download-agreement">Download</a>
+		<a href="#" style="margin-left: 10px;" class="print print-link clean-btn short-btn" ui-event-control-id="loan-legal:print-agreement">Print</a>
+	</div>
 }

@@ -63,6 +63,8 @@
 		style=""border:none;""
 		src=""//privacy-policy.truste.com/privacy-seal/seal?rid={0}""
 		alt=""TRUSTe Privacy Certification""
+		onerror=""this.src='/Content/img/logo-truste.png';""
+		class=""truste-privacy-certification""
 	/></a>
 </div>";
 

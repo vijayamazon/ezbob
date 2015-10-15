@@ -861,11 +861,13 @@ table.directors-list td.l {
 }
 
 .automation-button {
-	width: 160px;
+	min-width: 160px;
 	height: 47px;
 	font-family: 'Titillium Web Semi Bold';
 	font-size: 24px;
-	margin-bottom: 40px
+	margin-bottom: 40px;
+	padding-left: 15px;
+    padding-right: 15px;
 }
 .main-page-ezbob .director-field-name:after {
 	content: ": ";
@@ -961,12 +963,8 @@ span.sign-full-name {
 }
 
 .print-download {
-	padding-top: 25px; 
-	padding-left: 20px;	
-}
-
-#tab3 a.pdf-link {
-	 margin-left: 775px;
+	padding: 25px 20px 0 20px;
+	text-align: right;
 }
 
 .card-options-label span.title {

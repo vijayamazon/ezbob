@@ -38,6 +38,7 @@
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
+	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using EzBob.Models;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -912,7 +913,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			const int loanID = 5482; //4182; // 1718; // 4439; //3534;
+			const int loanID = 5211; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -936,7 +937,7 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			const int loanID = 5519;
+			const int loanID = 11;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -948,7 +949,7 @@
 			reModel.StopFutureInterest = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
-				s.Context.UserID = 25852;// 357; 
+				s.Context.UserID =  357; // 25852
 				s.Execute();
 				this.m_oLog.Debug("RESULT FOR IN" + s.Result.ToString());
 				// ReSharper disable once CatchAllClause
@@ -1033,84 +1034,10 @@
 			CommandSpecies.Text); //top 100 
 		}
 
-		[Test]
-		public void TestRescheduleOutLoanSimple() {
-			int loanID = 27;
-
-			LoanRepository loanRepository = ObjectFactory.GetInstance<LoanRepository>();
-			ChangeLoanDetailsModelBuilder changeLoanModelBuilder = new ChangeLoanDetailsModelBuilder();
-
-			Loan tLoan = loanRepository.Get(loanID);
-			CashRequest cr = tLoan.CashRequest;
-			LoanType lt = tLoan.LoanType;
-
-			//build reschedule model
-			EditLoanDetailsModel model = changeLoanModelBuilder.BuildModel(tLoan);
-
-			//edit it (remove schedules and add new ones)
-
-            Loan loan = new Loan();
-
-			//Choose schedules you want to delete
-			var removeInstallment = model.Items.First(x => x.Id == 129 && x.Type == "Installment");
-			var principal = removeInstallment.Principal;
-			var newPrincipal = principal / 2;
-			model.Items.Remove(removeInstallment);
-
-			DateTime now = DateTime.Today;
-			//Add new schedules Date,Principal,InterestRate,Balance,Type are required
-			model.Items.Add(new SchedultItemModel() {
-				Date = now.AddMonths(1),
-				Principal = newPrincipal,
-				InterestRate = model.InterestRate,
-				Interest = newPrincipal * model.InterestRate,
-				Total = newPrincipal + newPrincipal * model.InterestRate,
-				Balance = newPrincipal,
-				Type = "Installment"
-			});
-
-			model.Items.Add(new SchedultItemModel() {
-				Date = now.AddMonths(2),
-				Principal = newPrincipal,
-				InterestRate = model.InterestRate,
-				Interest = newPrincipal * model.InterestRate,
-				Total = newPrincipal + newPrincipal * model.InterestRate,
-				Balance = 0,
-				Type = "Installment"
-			});
-
-			//Validate the reschedule model
-			model.Validate();
-
-			if (model.HasErrors) {
-				Console.WriteLine("Has Errors");
-				return; // model;
-			}
-
-			//Create modified loan from the reschedule model
-			loan = changeLoanModelBuilder.CreateLoan(model);
-			loan.LoanType = lt;
-			loan.CashRequest = cr;
-
-			//Recalculate the loan 
-			try {
-				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
-				calc.GetState();
-			} catch (Exception e) {
-				model.Errors.Add(e.Message);
-				return;// model;
-			}
-
-			//Return the model to UW
-			EditLoanDetailsModel rescheduledLoanModel = changeLoanModelBuilder.BuildModel(loan);
-
-			m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", rescheduledLoanModel);
-		}
 
 		[Test]
-		public void TestLoanOldCalculator(int loanID = 0) {
-			if (loanID == 0)
-				loanID = 4018;
+		public void TestLoanOldCalculator() {
+			int	loanID = 5211;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRep.Get(loanID);
 
@@ -1239,13 +1166,10 @@
 		[Test]
 		public void TestLoanInterestRate() {
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			Loan loan = loanRep.Get(12);
+			Loan loan = loanRep.Get(5211);
 
-			var firstSchedule = loan.Schedule.OrderBy(s => s.Date)
-				.FirstOrDefault();
-
-			var lastSchedule = loan.Schedule.OrderBy(s => s.Date)
-				.LastOrDefault();
+			var firstSchedule = loan.Schedule.OrderBy(s => s.Date).FirstOrDefault();
+			var lastSchedule = loan.Schedule.OrderBy(s => s.Date).LastOrDefault();
 
 			Console.WriteLine(firstSchedule);
 			Console.WriteLine(lastSchedule);
@@ -1255,11 +1179,39 @@
 			decimal r = 5;
 			if (firstSchedule != null && lastSchedule!=null)
 				//r = calc.GetInterestRate(firstSchedule.Date, lastSchedule.Date);
-			r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01,01));
+			r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01, 01));
 
 			this.m_oLog.Debug("{0}", loan);
 
 			Console.WriteLine(r);			
+		}
+
+		[Test]
+		public void TestLoanInterestRateBetweenDates() {
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(5211);
+			DateTime start = new DateTime(2015, 07, 08);
+			DateTime end = new DateTime(2015, 10, 21);
+			Console.WriteLine(start);
+			Console.WriteLine(end);
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			//this.m_oLog.Debug("{0}",loan);
+			decimal I = 0m;
+			decimal P = 57024.55m;
+			TimeSpan ts = end.Date.Subtract(start.Date);
+			Console.WriteLine(ts);
+			int dcounter = 1;
+			while (dcounter < ts.Days) {
+				DateTime s = start.Date.AddDays(dcounter);
+				DateTime e = s.Date.AddDays(1);
+				Console.WriteLine("{0}, {1}", s, e);
+				decimal r = calc.GetInterestRate(s, e);
+				dcounter++;
+				Console.WriteLine("{0}, {1}", dcounter, r);
+				I += P * r;
+			}
+			Console.WriteLine(I);
 		}
 
 		[Test]

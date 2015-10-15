@@ -139,6 +139,10 @@ footer {
 	font-size: 16px;
 }
 
+optgroup.fixiphone {
+    display: none;
+}
+
 /*-- copyrights, right at the bottom of the site --*/
 #copyrights{
     background: #333333;
@@ -1449,6 +1453,7 @@ input[type="color"],
 	float: right;
 	display: block;
 	margin-right: 16px;
+	margin-top: 14px;
 }
 
 .help_security > a {
@@ -1896,7 +1901,12 @@ input.form_field_right_side {
     height: 36px;
 }
 
-.form_field_right_side_signup_phone { float: right; margin-right: 20px; width: 26%; height: 36px; }
+.form_field_right_side_signup_phone {
+	float: right; 
+	margin-right: 20px; 
+	width: 26%; 
+	height: 36px;
+}
 
 .input-tag-wrap {
     display: inline;
@@ -2065,7 +2075,7 @@ a.pdf-link {
     background-image: url(../img/pdf-logo.jpg);
     background-position: left center;
     background-repeat: no-repeat;
-    display: block;
+    display: inline-block;
     height: 28px;
     line-height: 28px;
     padding-left: 32px;
@@ -2076,11 +2086,11 @@ button.print-link, a.print-link {
     background-image: url(../img/printer.png);
     background-position: left center;
     background-repeat: no-repeat;
-    display: block;
+    display: inline-block;
     height: 28px;
     line-height: 28px;
     padding-left: 32px;
-	float: right;
+	cursor: pointer;
 }
 
 button.print-link {
@@ -2307,10 +2317,6 @@ li[stripped="stripped"] {
     height: 100%;
     font-size: 18px;
     white-space: inherit;
-}
-
-.attardi-button {
-	width: 96%;
 }
 
 .attardi-input span {

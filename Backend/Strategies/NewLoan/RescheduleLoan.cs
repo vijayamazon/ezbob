@@ -74,8 +74,6 @@
 
 				GetCurrentLoanState();
 
-				this.Result.OpenPrincipal = this.tLoan.Principal;
-
 				if (this.tLoan == null) {
 					this.Result.Error = string.Format("Loan ID {0} not found", this.ReschedulingArguments.LoanID);
 					this.Result.BlockAction = true;
@@ -115,6 +113,8 @@
 					return;
 				}
 
+				this.Result.OpenPrincipal = this.tLoan.Principal;
+
 				// if sent "default" value (0), replace by default calculated
 				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
 					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
@@ -136,11 +136,13 @@
 					Log.Info("LoanRepaymentScheduleCalculator NextEarlyPayment EXCEPTION: {0}", calcEx.Message);
 				}
 
+				var lastPaidSchedule = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault(s => (s.Status == LoanScheduleStatus.Paid || s.Status == LoanScheduleStatus.PaidOnTime || s.Status == LoanScheduleStatus.PaidEarly));
+
 				// if StopFutureInterest checked - add active "freeze inteval" from FirstItemDate untill NoLimitDate
 				if (this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest) {
 					LoanInterestFreeze freeze = new LoanInterestFreeze {
 						Loan = this.tLoan,
-						StartDate = this.Result.FirstItemDate,
+						StartDate = lastPaidSchedule != null ? lastPaidSchedule.Date : this.tLoan.Date.Date, //this.Result.FirstItemDate,
 						EndDate = this.noLimitDate, // NoLimitDate from LoanEditorController.cs - move to common area
 						InterestRate = 0,
 						ActivationDate = this.Result.FirstItemDate,
@@ -152,15 +154,24 @@
 					calc.GetState(); // reload state with freeze consideration
 				}
 
-				decimal totalEarlyPayment = calc.TotalEarlyPayment();
+				decimal totalEarlyPayment =  calc.TotalEarlyPayment();
 				decimal P = this.Result.OpenPrincipal;
-				decimal F = calc.FeesToPay;				// unpaid fees
-				decimal I = totalEarlyPayment - P - F;	// period from loan take till first new payment date
+				decimal F = calc.FeesToPay;	// unpaid fees
+				//decimal I = lastPaidSchedule != null ? (calc.GetInterestRate(lastPaidSchedule.Date.AddDays(1), this.Result.FirstItemDate) *P) : (calc.GetInterestRate(this.tLoan.Date.Date.AddDays(1), this.Result.FirstItemDate) * P); // unpaid interest till rescheduling start date
+				decimal I = (totalEarlyPayment - P - F);	// unpaid interest till first rescheduled item
 				decimal r = ((this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest)) ? 0 : this.tLoan.InterestRate;
 
 				this.Result.ReschedulingBalance = (P + I + F); // not final - add to I period from rescheduling date untill new maturity date
 
-				Log.Debug("--------------P: {0}, I: {1}, F: {2}, LoanCloseDate: {3}, totalEarlyPayment: {4}, r: {5}, ReschedulingBalance: {6}", P, I, F, this.Result.LoanCloseDate.Date, totalEarlyPayment, r, this.Result.ReschedulingBalance);
+				Log.Debug("--------------P: {0}, I: {1}, F: {2}, LoanCloseDate: {3}, totalEarlyPayment: {4}, r: {5}, ReschedulingBalance: {6}, \n lastPaidSchedule: {7}", 
+					P, 
+					I, 
+					F, 
+					this.Result.LoanCloseDate.Date,
+					totalEarlyPayment, 
+					r,
+					this.Result.ReschedulingBalance,
+					lastPaidSchedule);
 
 				// 3. intervals number
 
@@ -185,7 +196,7 @@
 
 					Log.Debug("Adjusted intervals: rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}, closeDateWithGrace: {3}, dDays: {4}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date, closeDateWithGrace, ts.Days);
 				}
-				
+
 				// OUT - real intervals (k) calculation
 				if (this.ReschedulingArguments.RescheduleIn == false) {
 
@@ -204,7 +215,7 @@
 
 					// System.DivideByZeroException: Attempted to divide by zero prevent
 					decimal kDiv = (m - this.Result.ReschedulingBalance * r);
-					if (kDiv == 0) 
+					if (kDiv == 0)
 						kDiv = 1;
 
 					var k = (int)Math.Ceiling(this.Result.ReschedulingBalance / kDiv);
@@ -265,7 +276,7 @@
 				decimal firstPrincipal = (P - iPrincipal * (this.Result.IntervalsNum - 1));
 
 				//check "first iPrincipal negative" case: if first iPrincipal <= 0, remove this and reduce this.Result.IntervalsNum
-				if (firstPrincipal <= 0) {
+				if (firstPrincipal < 0) {
 					Log.Debug("AAA Periods: {0}, newInstalment: {1}, close date: {2}, balance: {3}, firstItemDate: {4}, firstPrincipal: {5}, " +
 									"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, this.Result.FirstItemDate, firstPrincipal, P, I, F, r);
 					this.Result.IntervalsNum -= 1;

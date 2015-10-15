@@ -32,7 +32,10 @@ namespace EzBob.Models {
 		public string TimeInBusiness { get; set; }
 
 		public TypeOfBusiness TypeOfBusiness { get; set; }
-		public VatReporting? VatReporting { get; set; }
+
+        public TypeOfBusinessReduced TypeOfBusinessReduced { get; set; }
+
+	    public VatReporting? VatReporting { get; set; }
 		public bool VatRegistered { get; set; }
 		public string YearsInCompany { get; set; }
 		public static CompanyInfoMap FromCompany(Company company) {
@@ -45,6 +48,7 @@ namespace EzBob.Models {
 				TimeAtAddress = company.TimeAtAddress,
 				BusinessPhone = company.BusinessPhone,
 				TypeOfBusiness = company.TypeOfBusiness,
+                TypeOfBusinessReduced = company.TypeOfBusiness.Reduce(),
 				TimeInBusiness = company.TimeInBusiness,
 				PropertyOwnedByCompany = company.PropertyOwnedByCompany,
 				YearsInCompany = company.YearsInCompany,

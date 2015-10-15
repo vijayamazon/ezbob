@@ -132,13 +132,13 @@
 			switch (business)
 			{
 				case TypeOfBusiness.Entrepreneur:
+                case TypeOfBusiness.PShip:
 					return TypeOfBusinessReduced.Personal;
 
 				case TypeOfBusiness.LLP:
 				case TypeOfBusiness.Limited:
 					return TypeOfBusinessReduced.Limited;
-
-				case TypeOfBusiness.PShip:
+				
 				case TypeOfBusiness.PShip3P:
 				case TypeOfBusiness.SoleTrader:
 					return TypeOfBusinessReduced.NonLimited;
@@ -152,11 +152,11 @@
 			case TypeOfBusiness.Entrepreneur:
 			case TypeOfBusiness.PShip3P:
 			case TypeOfBusiness.SoleTrader:
+            case TypeOfBusiness.PShip:
 				return TypeOfBusinessAgreementReduced.Personal;
 
 			case TypeOfBusiness.LLP:
 			case TypeOfBusiness.Limited:
-			case TypeOfBusiness.PShip:
 				return TypeOfBusinessAgreementReduced.Business;
 			}
 

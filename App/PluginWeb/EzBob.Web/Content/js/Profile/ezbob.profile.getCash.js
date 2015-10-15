@@ -237,6 +237,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				return;
 			} // if
 
+			console.log(oResponse);
+
 			if (!oResponse.good_to_go) {
 				var oDlg = that.$el.find('#refresh-accounts-dlg');
 
@@ -312,6 +314,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 						onClosed: function() {
 							that.refreshAccount();
 						},
+						close: '<i class="pe-7s-close"></i>',
 					});
 				} else {
 					that.directApplyForLoan();
@@ -432,6 +435,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			inline: true,
 			open: true,
 			onClosed: function() { $.colorbox.remove(); },
+			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshVatReturn
 
@@ -449,6 +453,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			inline: true,
 			open: true,
 			onClosed: function() { $.colorbox.remove(); },
+			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshYodlee
 
@@ -467,6 +472,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			inline: true,
 			open: true,
 			onClosed: function() { $.colorbox.remove(); },
+			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshEkm
 
@@ -485,6 +491,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			inline: true,
 			open: true,
 			onClosed: function() { $.colorbox.remove(); },
+			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshLinkedHmrc
 

@@ -223,12 +223,16 @@ a.ev-btn-org {
 .ev-form {
 	background-color: #f1f0f0;
     padding: 20px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .ezSortCode .attardi-input {
     display: inline-block;
     float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 30%;
 }
@@ -327,7 +331,7 @@ margin-left:0;
 }
 
 .profile-main .d-widgets {
-	margin-top: 0px;
+	margin-top: 0;
 }
 
 .profile-main .d-widgets .d-widget .clean-btn,
@@ -572,6 +576,7 @@ table.payment-schedule-table td:last-child {
 .print-download {
 	margin-left: -20px;
 	padding-left: 0;	
+	text-align: left;
 }
 
 .click-input-wrap span.title {
@@ -606,4 +611,46 @@ table.payment-schedule-table td:last-child {
 	margin-top: 20px;
 }
 
+/*
+*******************************************************************************
+*
+* Update marketplaces dialogues when Request Cash was pressed.
+*
+*******************************************************************************
+*/
 
+#refresh-accounts-dlg.help_window .skip-refresh-accounts-container {
+	text-align: right;
+}
+
+#refresh-accounts-dlg.help_window ul {
+	list-style-type: none;
+	margin: 0;
+}
+
+#refresh-accounts-dlg.help_window ul > li {
+	margin-bottom: 7px;
+}
+
+#refresh-accounts-dlg.help_window ul > li > span {
+	margin-left: 5px;
+	white-space: nowrap;
+}
+
+#refresh_hmrc_help.help_window .form_buttons_container #refreshHmrcBtn {
+	margin-left: 5%;
+}
+
+#refresh_ekm_help.help_window .form_buttons_container #refreshEkmBtn {
+	margin-left: 5%;
+}
+
+#refresh_yodlee_help.help_window .dialogue_buttons_container {
+	padding: 0 10px 0 0;
+	width: 100%;
+	text-align: right;
+}
+
+#refresh_yodlee_help.help_window .dialogue_buttons_container #refreshYodleeBtn {
+	margin-left: 5%;
+}

@@ -522,3 +522,7 @@ h2.accept-agreement-header {
     margin-bottom: 15px;
     min-width: 200px;
 }
+
+.nav.customer-dashboard-main > li > a:hover {
+	border: 0;
+}

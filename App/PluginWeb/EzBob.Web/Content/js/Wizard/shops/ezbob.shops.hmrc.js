@@ -16,7 +16,8 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 		'click #linkInfoButton': 'getLinkHelp',
 	}, // events
 
-	onRender: function() {
+	onRender: function () {
+		$('body').scrollTop(0);
 		return this;
 	}, // onRender
 

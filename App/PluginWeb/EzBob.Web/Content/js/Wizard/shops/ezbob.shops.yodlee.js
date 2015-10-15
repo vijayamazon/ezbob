@@ -46,7 +46,7 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 		if (this.isProfile) {
 			this.$el.find('.marketplace-button').addClass('marketplace-button-profile');
 		}
-
+		$('body').scrollTop(0);
 		return this;
 	},
 	

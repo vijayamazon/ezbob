@@ -200,18 +200,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
 		});
 		
-		var personalInfo = this.model.get('CustomerPersonalInfo');
-		var predefinedPhone = undefined;
-		if (personalInfo != undefined) {
-			predefinedPhone = personalInfo.MobilePhone;
-		} else {
-			var twilioPhone = this.model.get('twilioPhone');
-			if (twilioPhone != undefined) {
-				predefinedPhone = twilioPhone;
-			}
-		}
+		var personalInfo = this.model.get('CustomerPersonalInfo') || {};
+		var predefinedPhone = personalInfo.MobilePhone || this.model.get('twilioPhone') || '';
 
-		if (predefinedPhone) {
+		if (predefinedPhone != '') {
 			var mobileObj = this.$el.find('#MobilePhone');
 			mobileObj.addClass('disabled');
 			mobileObj.attr("disabled", "disabled");

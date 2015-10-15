@@ -30,6 +30,8 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 	}, // ui
 
 	onRender: function() {
+		$('footer.location-customer-everline .privacy-and-cookie-policy').hide();
+
 		this.captcha = new EzBob.Captcha({
 			elementId: 'captcha',
 			tabindex: 11,

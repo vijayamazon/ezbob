@@ -19,12 +19,11 @@
 }
 
 @section css{
-   @if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline)
-   {
-    @BundleHelper.RenderLoginCss()
-
-    }
-
+   @if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline) {
+		@BundleHelper.RenderLoginCss()
+   } else {
+	   @BundleHelper.RenderEverlineWizardCss()
+   }
 }
 
 <div class="row-fluid">

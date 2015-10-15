@@ -21,7 +21,7 @@
 			<div><strong class="pay-early-details">Payment made by:</strong> xxxx-<%- card_no %></div>
 		</p>
 
-		<p style="margin-top: 25px">A confirmation email is being sent to <strong class="orange-text"><%- email %></strong></p>
+		<p style="margin-top: 25px">A confirmation email is being sent to <strong class="orange-text"><%- email %></strong>.</p>
 
 		<% if (savedPounds > 0 && !hasLateLoans && this.model && this.model.get('isEarly')) { %>
 		<p align="left" class="by-paying-early"><strong>By paying early you saved <%= EzBob.formatPounds(savedPounds) %></strong></p>
