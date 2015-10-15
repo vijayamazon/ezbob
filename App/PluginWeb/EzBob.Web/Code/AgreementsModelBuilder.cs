@@ -69,8 +69,13 @@
 						goto case TypeOfBusinessReduced.NonLimited;
 					case TypeOfBusinessReduced.NonLimited:
 						model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-						companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
-						break;
+				        var experianCompanyAddress = company.ExperianCompanyAddress.LastOrDefault();
+				        if (experianCompanyAddress != null && !String.IsNullOrEmpty(experianCompanyAddress.Postcode)) {
+				            companyAddress = company.ExperianCompanyAddress.LastOrDefault();
+				        } else {
+				            companyAddress = company.CompanyAddress.LastOrDefault();
+				        }
+				    break;
 				}
 			}
 
