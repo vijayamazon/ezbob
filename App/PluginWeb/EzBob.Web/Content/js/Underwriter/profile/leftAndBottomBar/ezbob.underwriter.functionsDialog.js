@@ -269,7 +269,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 
 			var typeOfBusinessReduced = that.model.get('TypeOfBusinessReduced');
 		    var _isPersonal = "";
-		    if (typeOfBusinessReduced === 'Limited')
+		    if (typeOfBusinessReduced === 1)
 		        _isPersonal = false;
 		    else
 		        _isPersonal = true;
