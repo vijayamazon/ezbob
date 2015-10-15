@@ -1,17 +1,20 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	public abstract class AThresholdTrace : ATrace {
 		protected AThresholdTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
+			Accuracy = 0;
 		} // constructor
 
 		public virtual ATrace Init(decimal value, decimal threshold, bool isPlural = false, string units = "") {
 			Value = value;
 			Threshold = threshold;
 
+			string numFormat = "N" + Accuracy;
+
 			Comment = string.Format(
-				"{0} {3} {1:N0} {4}, threshold is {2:N0} {4}",
+				"{0} {3} {1} {4}, threshold is {2} {4}",
 				ValueName,
-				Value,
-				Threshold,
+				Value.ToString(numFormat),
+				Threshold.ToString(numFormat),
 				isPlural ? "are" : "is",
 				units
 			);
@@ -23,5 +26,7 @@
 		public virtual decimal Threshold { get; private set; }
 
 		protected abstract string ValueName { get; } // ValueName
+
+		protected int Accuracy { get; set; }
 	}  // class AThresholdTrace
 } // namespace
