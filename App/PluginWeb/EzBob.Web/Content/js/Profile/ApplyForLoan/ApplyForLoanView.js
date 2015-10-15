@@ -294,7 +294,6 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		};
 
 		var typeOfBusinessReduced = this.customer.get('CustomerPersonalInfo').TypeOfBusinessReduced;
-	    debugger;
 	    if (typeOfBusinessReduced === 1)
 	        this.agreementView = new EzBob.Profile.CompaniesAgreementView(oViewArgs);
 	    else
