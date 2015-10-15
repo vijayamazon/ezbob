@@ -463,6 +463,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		} else {
 			showMoreButton.show();
 			showMoreButton.attr('data-current', 'more');
+			showMoreButton.text('See more');
 		}
 		
 		if (isProfile) {
