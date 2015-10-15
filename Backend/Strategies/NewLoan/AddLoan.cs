@@ -141,7 +141,7 @@
 
 			try {
 
-				// set default RepaymentDate
+				// set default RepaymentDate +month|+7 days
 				model.Loan.SetDefaultRepaymentDate();
 
 				// 2. Init Schedule and Fees
@@ -224,7 +224,6 @@
 
 				//int agreementSaveFS = await SaveAgreementsAsync();
 				//Log.Debug("agreementSave to FS: {0}", agreementSaveFS);
-
 				// 9. schedules 
 				nlSchedule.ForEach(s => s.LoanHistoryID = history.LoanHistoryID);
 
