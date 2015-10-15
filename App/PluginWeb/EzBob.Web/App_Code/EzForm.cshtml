@@ -46,7 +46,7 @@
 @helper SelectWizard(EzSelectModel selectProp, CustomerOriginEnum origin)
 {
     var identificator = new HtmlString(selectProp.Id);
-    <div class="form_field_container">
+    <div class="form_field_container select_form_field_container">
         @if (origin != CustomerOriginEnum.everline)
         {
             <label class="attardi-input">
@@ -137,6 +137,7 @@
                 </optgroup>
             }
         }
+		<optgroup class="fixiphone" label=""></optgroup>
     </select>
 }
 @helper DateInput(WebPageBase page, 

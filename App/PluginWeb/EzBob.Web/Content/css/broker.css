@@ -9,6 +9,10 @@
     background-color: inherit !important;
     border: none !important;
 }
+.navbar .nav > li > a, .navbar .nav > li > a:hover, .navbar .nav > li > a:focus {
+font-size: 14px;
+
+}
 
 input[type="button"],
 input[type="submit"],
@@ -425,6 +429,20 @@ div#broker-footer-placeholder {
 	display:block;
 }
 
+.broker .broker-form .form_buttons_container {
+	width: 96%;
+}
+
+.broker .navbar {
+	background-color: #ffffff;
+}
+
+input[type="button"].form_field_right_side_signup_phone {
+	float: right; 
+	margin-right: 20px; 
+	width: 26%; 
+	height: 36px;
+}
 
 
 

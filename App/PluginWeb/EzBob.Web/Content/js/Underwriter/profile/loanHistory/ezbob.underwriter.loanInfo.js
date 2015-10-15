@@ -7,13 +7,16 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		initialize: function(options) {
 			this.bindTo(this.model, "change reset sync", this.render, this);
+
 			this.personalInfo = options.personalInfo;
 			this.bindTo(this.personalInfo, "change", this.UpdateNewCreditLineState, this);
 			this.bindTo(this.personalInfo, "change:CreditResult", this.changeCreditResult, this);
+
 			EzBob.App.vent.on('newCreditLine:done', this.showCreditLineDialog, this);
 			EzBob.App.vent.on('newCreditLine:error', this.showErrorDialog, this);
 			EzBob.App.vent.on('newCreditLine:pass', this.showNothing, this);
-			return this.parentView = options.parentView;
+
+			this.parentView = options.parentView;
 		},
 
 		events: {

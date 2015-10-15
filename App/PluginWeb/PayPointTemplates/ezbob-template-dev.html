@@ -61,6 +61,7 @@
 <link rel="stylesheet" type="text/css" href="/Content/css/valentine2015scratch.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/easter2015scratch.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/ezbob.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/hmrc-upload-ui.css" />
 
 	
 	<link rel="stylesheet" type="text/css" href="/Content/css/paypoint-template.css" />
@@ -89,7 +90,7 @@
 
 	
 
-	<input name="__RequestVerificationToken" type="hidden" value="yMgtVr5fRHi3E0lPFPSQa3riJhVQupyzTuDLTS49_WfxpWcYwjP3B_I_Gt3VSEdqHR6gxelCRsEzdtfJPEztoMr3Ikx7pFleql56HYls6vIz4LWYOtivcP-1-BQ7iEIpaONS50tgyjv-CFQd6PbWFrJdT6hgJ79yv77D9PZh1Zs1" />
+	<input name="__RequestVerificationToken" type="hidden" value="jSb_hvZCGuvluIxun0szJ0fSzHSGX9TN5ApkuIXJs8i6PtukZMQy0ip7TZbR3PwAbJuvcF9UieDauaiAEUekjwZCMptEFGdIHJAJH5-CuiKmh32AS-RTimmAJcrR3JVCKuOGkNkvP95DCtJcTvn4ST0wlPAvVuVzxObQdycFKjo1" />
 
 	<div id="wrapper">
 
@@ -151,7 +152,7 @@
 						</div>
 						<div class="progress-line"></div>
 						<div class="progress-line-complete"></div>
-						<span class="step_label">Choose Loan Term</span>
+						<span class="step_label step_label_1">Choose Loan Term</span>
 					</li>
 					<li class="current center-circle" data-step-num="1">
 						<div class="progress-circle current">
@@ -161,7 +162,7 @@
 						</div>
 						<div class="progress-line"></div>
 						<div class="progress-line-current"></div>
-						<span class="step_label">Enter Bank & Debit</span>
+						<span class="step_label step_label_2">Enter Bank & Debit</span>
 					</li>
 					<li class="last last-circle" data-step-num="2">
 						<div class="progress-circle ">
@@ -170,7 +171,7 @@
 							</div>
 						</div>
 						<div class="progress-line"></div>
-						<span class="step_label">Get Cash</span>
+						<span class="step_label step_label_3">Get Cash</span>
 					</li>
 				</ul>
 			</div>
@@ -197,13 +198,13 @@
 			<div class="controls">
 				<label class="attardi-input">
 					<span>${customer_Text:=Name of Cardholder}</span>
-						<input type="text"
-                               name="customer"
+					    <input type="text"
+             name="customer"
              id="customer"
-		   class="form_field"
-		   value="${customer}"
-		     tabindex="1"
-		   		   		   		   		   		    />
+           class="form_field"
+           value="${customer}"
+             tabindex="1"
+                                                                              />
 
 						<img id="customerImage" class="field_status required" width="16" height="16" />
 									</label>
@@ -237,14 +238,14 @@
 			<div class="controls">
 				<label class="attardi-input">
 					<span>${card_no_Text:=Card Number}</span>
-						<input type="text"
-                               name="card_no"
+					    <input type="text"
+             name="card_no"
              id="card_no"
-		   class="form_field"
-		   value="${card_no}"
-		     tabindex="3"
-		     maxlength="16"
-		   		   		   		   		    />
+           class="form_field"
+           value="${card_no}"
+             tabindex="3"
+             maxlength="16"
+                                                                   />
 
 						<img id="card_noImage" class="field_status required" width="16" height="16" />
 									</label>
@@ -258,14 +259,14 @@
 			<div class="controls">
 				<label class="attardi-input">
 					<span>${expiry_Text:=Expiry Date (MM/YY)}</span>
-						<input type="text"
-                               name="expiry"
+					    <input type="text"
+             name="expiry"
              id="expiry"
-		   class="form_field"
-		   value="${expiry}"
-		     tabindex="4"
-		     maxlength="5"
-		   		   		   		   		    />
+           class="form_field"
+           value="${expiry}"
+             tabindex="4"
+             maxlength="5"
+                                                                   />
 
 						<img id="expiryImage" class="field_status required" width="16" height="16" />
 									</label>
@@ -279,14 +280,14 @@
 			<div class="controls">
 				<label class="attardi-input">
 					<span>${cv2_Text:=CV2 (security code)}</span>
-						<input type="password"
-                               name="cv2"
+					    <input type="password"
+             name="cv2"
              id="cv2"
-		   class="form_field"
-		   value="${cv2}"
-		     tabindex="5"
-		     maxlength="4"
-		   		   		   		   		    />
+           class="form_field"
+           value="${cv2}"
+             tabindex="5"
+             maxlength="4"
+                                                                   />
 
 						<img id="cv2Image" class="field_status required" width="16" height="16" />
 									</label>
@@ -409,35 +410,35 @@
 								</table>
 								<hr id="paypal_line">
 								}
-								<div id="secure">
-									<table border="0" width="100%" class="secure_table">
-										<tbody>
-											<tr>
-												<td style="text-align: center; width: 150px;">
-													<a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
-														<img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
-													</a>
-												</td>
-												<td valign="top" rowspan="2">
-													${wait_Text:=You have now entered a secure transaction environment. Your personal
-													information will be encrypted before transmission. Please check that the address
-													bar of your browser is visible and that the address begins with <b>https://</b>.
-													For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
-													incorporates the SECPay service.}
-												</td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">
-													Secure Payment<br>
-													<img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+								
 							</div>
-				</div>
+						</div>
 					</div>
+				</div>
+				<div id="secure" class="wizard-top">
+					<table border="0" width="100%" class="secure_table">
+						<tbody>
+							<tr>
+								<td style="text-align: center; width: 150px;">
+									<a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+										<img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
+									</a>
+								</td>
+								<td valign="top" rowspan="2">
+									${wait_Text:=You have now entered a secure transaction environment. Your personal
+									information will be encrypted before transmission. Please check that the address
+									bar of your browser is visible and that the address begins with <b>https://</b>.
+									For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+									incorporates the SECPay service.}
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;">
+									Secure Payment&nbsp;<img src="/Content/img/security-padlock.svg" alt="The secure padlock" width="20" height="25" style="vertical-align: bottom;height: 25px;">
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -450,14 +451,16 @@
 
 		</div>
 
-	<footer>
+	<footer class="location-customer-ezbob">
 		<div id="copyrights">
 			<div class="copyrights-inner">
+				<div class="privacy-and-cookie-policy"><a href="https://www.ezbob.com/privacy-and-cookies" target="_blank">Privacy and Cookie Policy</a></div>
 
-				<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br/>
-				<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
+
+				ezbob and ezbob.com are trading names of EZBob Ltd. which is authorised and regulated by the Financial Conduct Authority. FRN 647816.<br/>
+				EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br/>
 				Registered Address: 36 Soho Square, London W1D 3QY<br/>
-				&copy;2015 Orange Money Ltd. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.			</div>
+				&copy;2015 EZBob Ltd. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.			</div>
 		</div>
 	</footer>
 
@@ -547,15 +550,20 @@
 				cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
 			}
 
+			var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
+			EzBob.Config.Origin = origin;
+
 			var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
 			if (hideSteps != 'True') {
+				if (origin == 'everline') {
+					$('.step_label_1').text('Loan term');
+					$('.step_label_2').text('Bank details');
+					$('.step_label_3').text('Receive funds');
+				}
 				$(".wizard-steps-wrapper").show();
 			} else {
 				$('#amount-group').show();
 			}
-
-			var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
-			EzBob.Config.Origin = origin;
 			var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
 			//set user email in top bar

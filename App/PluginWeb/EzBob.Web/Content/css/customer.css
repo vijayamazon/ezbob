@@ -779,3 +779,10 @@ blockquote {
 .select-card-area .fa.fa-circle {
 	display: none;
 }
+
+.create-password .form_buttons_container.form_field_container,
+.restorePasswordArea .form_buttons_container.form_field_container{
+	width: 96%;
+}.address-dialog-buttonpane .ui-dialog-buttonset {
+    direction:rtl;
+}

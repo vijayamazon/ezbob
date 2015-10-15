@@ -7,6 +7,7 @@ EzBob.JqModalRegion = Backbone.Marionette.Region.extend({
 	}, // initialize
 
 	isUnderwriter: document.location.href.indexOf("Underwriter") > -1,
+	isWizard: document.location.href.indexOf("Wizard") > -1,
 
 	el: 'fake',
 
@@ -35,6 +36,10 @@ EzBob.JqModalRegion = Backbone.Marionette.Region.extend({
 
 		if (view.onAfterShow)
 			view.onAfterShow.call(view);
+
+		if (this.isWizard) {
+			$('body').scrollTo(0);
+		}
 	}, // showModal
 
 	hideModal: function() {

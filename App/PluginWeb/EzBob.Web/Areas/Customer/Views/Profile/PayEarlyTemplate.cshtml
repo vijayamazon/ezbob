@@ -151,7 +151,7 @@
                                 </label>
                                 <span class="title">Another amount:</span>
 								<div class="input-wrapper early-rollover">
-									<input type="text" id="pay-early-other-text" class="right-input-clickable money s84 bold form_field" <%= loanPaymentTypeHidden %> name="paymentAmount" <%- loanPaymentType != 'other' ? 'readonly="readonly"' : '' %> value="<%- EzBob.formatPounds(amount) %>" ui-event-control-id="pay-early:other-value" />
+									<input type="text" id="pay-early-other-text" class="right-input-clickable money s84 form_field" <%= loanPaymentTypeHidden %> name="paymentAmount" <%- loanPaymentType != 'other' ? 'readonly="readonly"' : '' %> value="<%- amount %>" ui-event-control-id="pay-early:other-value" />
 								</div>
                             </span>
 						</label>
@@ -206,7 +206,7 @@
 										</label>
 										<span class="title">Another amount:</span>
 										<div class="input-wrapper early-rollover">
-											<input id="rollover-other-text" type="text" <%= rolloverAnotherAmountDisabled %> class="right-input-clickable money s84 bold form_field" name="rolloverAmount" value="<%- EzBob.formatPounds(amount) %>" ui-event-control-id="pay-early:rollover-other-value" />
+											<input id="rollover-other-text" type="text" <%= rolloverAnotherAmountDisabled %> class="right-input-clickable money s84 form_field" name="rolloverAmount" value="<%- amount %>" ui-event-control-id="pay-early:rollover-other-value" />
 										</div>
 									</span>
 								</label>
@@ -233,7 +233,7 @@
 						uiEventControlID:"pay-early:confirm",
 						buttonType: EzButtonType.link,
 						href: "<%-url%>"),
-					new EzButtonModel(null, "Back",
+					new EzButtonModel(null, "Cancel",
 						cls: "button btn-grey back clean-btn",
 						uiEventControlID:"pay-early:back",
 						buttonType: EzButtonType.link,

@@ -145,7 +145,6 @@
 			width: 48px;
 			height: 48px;
 			border-radius: 50%;
-			box-sizing: border-box;
 			padding-top: 13px;
 			color: white;
 			background-color: #f1f0f0;
@@ -168,10 +167,7 @@
 		    font-size: 18px;
 			margin-top: -5px;
 		}
-        .wizard-steps-wrapper ul.application_steps li.complete .progress-circle {
-           
-        }
-
+        
             .wizard-steps-wrapper ul.application_steps li.complete .progress-circle .percent {
                 visibility: hidden;
             }
@@ -411,6 +407,10 @@ a, a:visited {
         position: relative;
     }
 
+optgroup.fixiphone{
+	display: none;
+}
+
 .form_field_container .input-wrapper select,
 .form_field_container .input-wrapper input:not([type="button"]):not([type="submit"]),
 .form_field_container .input-wrapper textarea {
@@ -440,7 +440,7 @@ a, a:visited {
     -o-transition: none;
     transition: none;
     -ms-border-radius: 0;
-    -webkit-border-radius: 0px;
+    -webkit-border-radius: 0;
     border-radius: 0;
   /*  -webkit-appearance:none;
     -moz-appearance:none;
@@ -745,7 +745,7 @@ div.company-full-details{
     outline: none;
     height: 32px;
     -webkit-box-shadow: 0 10px 6px -6px #777;
-    -moz-box-shadow: 0 0px 6px -6px #777;
+    -moz-box-shadow: 0 0 6px -6px #777;
             -ms-box-shadow: 0 -6px 6px -6px blue;
             box-shadow: 0 -6px 6px -6px blue;
     -ms-border-radius: 22px;
@@ -1355,7 +1355,6 @@ h3.group-title {
     height: 40px;
     vertical-align: middle;
 	margin-bottom: -6px;
-	zoom: 1;
     margin-top: 0;
 }
 
@@ -1372,7 +1371,7 @@ h3.group-title {
     width: 113px;
 }
 .marketplace-image.marketplace-image-Rakuten {
-	background-position: 0px -1px;
+	background-position: 0 -1px;
     width: 151px;
 }
 .marketplace-image.marketplace-image-Volusion {
@@ -1435,10 +1434,10 @@ h3.group-title {
     left: 0;
     z-index: 9999;
     overflow: hidden;
-    -moz-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
-    -webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
-    -ms-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
-    box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 0 0 8px 0 rgba(0,0,0,0.35);
+    -webkit-box-shadow: 0 0 8px 0 rgba(0,0,0,0.35);
+    -ms-box-shadow: 0 0 8px 0 rgba(0,0,0,0.35);
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.35);
 }
 
 .modal-backdrop,
@@ -1588,16 +1587,16 @@ h3.group-title {
     }
 
 #cboxPrevious {
-    background-position: 0px 0px;
+    background-position: 0 0;
     right: 44px;
 }
 
     #cboxPrevious:hover {
-        background-position: 0px -25px;
+        background-position: 0 -25px;
     }
 
 #cboxNext {
-    background-position: -25px 0px;
+    background-position: -25px 0;
     right: 22px;
 }
 
@@ -1606,7 +1605,7 @@ h3.group-title {
     }
 
 #cboxClose {
-	background-position: -48px 0px;
+	background-position: -48px 0;
     border-radius: 0;
     right: 5px;
     top: 5px;
@@ -1630,7 +1629,7 @@ h3.group-title {
     }
 
 .cboxSlideshow_off #cboxSlideshow {
-    background-position: -100px 0px;
+    background-position: -100px 0;
     right: 44px;
 }
 
@@ -1808,13 +1807,17 @@ h3.group-title {
 .megila-outer-solvency1 {
 	height: 205px;
 	margin-bottom: 25px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .megila-outer-solvency2 {
 	height: 275px;
 	margin-bottom: 25px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .megila-inner-solvency1 {
@@ -2006,6 +2009,7 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 	float: right;
 	display: block;
 	margin-right: 16px;
+	margin-top: 14px;
 }
 
 .help_security > a {
@@ -2015,7 +2019,9 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 
 .help_window {
 	padding: 20px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .help_window hr{
@@ -2203,7 +2209,7 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
       tooltip
 
   */
-  ..tooltip{
+  .tooltip{
     position:absolute !important;
     z-index:1020 !important;
     display:block !important;
@@ -2277,7 +2283,7 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 
 .tooltip-arrow{
     position:absolute !important;
-    width:0 !important !important;
+    width:0 !important;
     height:0 !important;
 }
 /***
@@ -2296,7 +2302,6 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 
 .jspDrag {
 	background: #28211f;
-	min-height: 40px;
 }
 
 .address-dialog-widget::-webkit-scrollbar,.megila-inner::-webkit-scrollbar,.consent-dialog::-webkit-scrollbar,.companyaddress  .ui-dialog-content::-webkit-scrollbar {

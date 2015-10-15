@@ -1,4 +1,6 @@
-﻿@using System.Linq
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
 @using EZBob.DatabaseLib.Model.Database.UserManagement
 @using EzBob.Web.Infrastructure
 @using ConfigManager
@@ -34,9 +36,9 @@
  , isRequired: true, statusIcon: true, uiEventControlID: "signup:password1", tabIndex: 2, formFieldID: "strength-password-view"), origin: origin)
                 @EzForm.InputTextWizard(new EzInputBuilder("signupPass2", "Confirm password", type: "password"
  , cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "signup:password2", tabIndex: 3), origin: origin)
-                @EzForm.SelectWizard(new EzSelectModel("securityQuestion", "Secret question", cls: "form_field", listItems: securityQuestions, isRequired: true
-               , tabIndex: 4, statusIcon: true, uiEventControlID: "signup:security_question"), origin: origin)
-                @EzForm.InputTextWizard(new EzInputBuilder("SecurityAnswer", "Secret answer", cls: "form_field", isRequired: true
+                @EzForm.SelectWizard(new EzSelectModel("securityQuestion", "Secret question", cls: "form_field", listItems: securityQuestions, 
+			   isRequired: true, tabIndex: 4, statusIcon: true, uiEventControlID: "signup:security_question"), origin: origin)
+                @EzForm.InputTextWizard(new EzInputBuilder("SecurityAnswer", "Secret answer", cls: "form_field"		, isRequired: true
  , statusIcon: true, uiEventControlID: "signup:security-answer", tabIndex: 5), origin: origin)
 
                 <div id="twilioDiv" class="hide">
@@ -64,7 +66,7 @@
 					   uiEventControlID: "signup:mobile-code", 
 					   tabIndex: 12, 
 					   button: new EzButtonModel("switchToCaptcha", "Did not receive code",
-             "button clean-btn btn-green form_field_right_side_signup_phone", 
+             "clean-btn btn-link form_field_right_side_signup_phone", 
 						   "signup:switch-to-captcha", 
 						   buttonType: EzButtonType.button)), 
 						origin: origin)

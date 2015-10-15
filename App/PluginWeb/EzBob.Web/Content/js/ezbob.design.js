@@ -236,7 +236,7 @@ $(function() {
 
 	$.fn.moneyFormat = function() {
 		this.each(function() {
-			$(this).autoNumeric(EzBob.moneyFormat);
+			$(this).autoNumeric('init', EzBob.moneyFormat);
 		});
 		return this;
 	};
@@ -803,17 +803,17 @@ EzBob.formatIntWithCommas = function(val) {
 	return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }; // EzBob.formatIntWithCommas
 
-EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999' };
-EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormatNoDecimalsNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormatNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '', mDec: '2', vMax: '999999999999999' };
-EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
-EzBob.moneyFormatAsThousands = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: "p" };
-EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
+EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: 'p', };
+EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999', pSign: 'p', };
+EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: 'p', };
+EzBob.moneyFormatNoDecimalsNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: 'p', };
+EzBob.moneyFormatNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '', mDec: '2', vMax: '999999999999999', pSign: 'p', };
+EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: 'p', };
+EzBob.moneyFormatAsThousands = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: 'p', };
+EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's', };
 EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
-EzBob.monthFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's' };
-EzBob.monthFormatNoDecimals = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's' };
+EzBob.monthFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's', };
+EzBob.monthFormatNoDecimals = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's', };
 
 EzBob.formatPoundsWidhDash = function(val) {
 	if (!val && val == 0)

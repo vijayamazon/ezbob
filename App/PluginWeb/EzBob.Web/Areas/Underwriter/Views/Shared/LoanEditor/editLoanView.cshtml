@@ -42,7 +42,7 @@
                         </span>
                         <span class="float_left" style="margin-left: 10px; margin-top: 15px;">
                             <div class="input-group">
-                                <span style="margin-left: 270px;">Strat reschedule from:</span>
+                                <span style="margin-left: 270px;">Start reschedule from:</span>
                                 <span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
                                 <input class="form-control input-width" type="text" id="within-calendar-from">
                             </div>
@@ -83,15 +83,20 @@
                                 <span id="outsideIntrest" class="border-span"></span>
                                 <span style="margin-left: 50px;">£Interest</span>
                             </span>
-                        </span>
-                        <span class="float_left" style="margin-left: 10px; margin-top: 15px;">
-                            <div class="input-group">
-                                <span style="margin-top: -10px;"><input type="checkbox" name="StopFutureInterest" id="outside-stop-future-interest"><span style="margin-left:10px; vertical-align: sub;">Stop future interest</span></span>
-                                <span style="margin-left: 120px;">Strat reschedule from:</span>
-                                <span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
-                                <input class="form-control input-width" type="text" id="outside-calendar-from">
-                            </div>
-                        </span>
+                        </span>					
+						<span class="float_left" style="margin-left: 10px; margin-top: 15px;">							
+								<span style="margin-left: 120px;">
+									<input type="checkbox" name="StopFutureInterest" id="outside-stop-future-interest">
+									<span style="margin-left:10px; vertical-align: sub;">Stops all future interest accumulation since the last made payment</span>
+								</span>	
+						</span>						
+						<span class="float_left" style="margin-left: 10px; margin-top: 15px;">
+							<div class="input-group">
+								<span style="margin-left: 270px;">Start reschedule from:</span>
+								<span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
+								<input class="form-control input-width" type="text" id="outside-calendar-from">
+							</div>
+						</span>  				
                     </div>
                 </div>
                 <div class="editloan-actions-region" id="editloan-actions-region">

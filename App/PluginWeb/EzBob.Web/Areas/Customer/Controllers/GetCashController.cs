@@ -409,10 +409,12 @@
 
 			IAgreementsTemplatesProvider templateProvider = ObjectFactory.GetInstance<IAgreementsTemplatesProvider>();
 
-			string templateText = templateProvider.GetTemplate(LoanAgreementTemplateType.AlibabaCreditFacility);
+            var ezbobAlibabaCreditFacilityTemplatePath = templateProvider.GetTemplatePath(LoanAgreementTemplateType.CreditFacility, false, true, false);
+
+            string templateText = templateProvider.GetTemplateByName(ezbobAlibabaCreditFacilityTemplatePath);
 
 			var template = ObjectFactory.GetInstance<DatabaseDataHelper>()
-				.LoadOrCreateLoanAgreementTemplate(templateText, LoanAgreementTemplateType.AlibabaCreditFacility);
+				.LoadOrCreateLoanAgreementTemplate(templateText, LoanAgreementTemplateType.CreditFacility);
 
 			customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
 				CashRequest = cashRequest,

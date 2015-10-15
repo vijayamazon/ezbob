@@ -80,6 +80,7 @@
 				
 				//custom css
 				.Add("~/Content/css/profile.css")
+				.Add("~/Content/css/EzbobCustomerProfile.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
 		} // RenderEzbobProfileCss
@@ -209,7 +210,6 @@
 			// custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/ezbob.css")
-				.Add("~/Content/css/everline.css")
 				.Add("~/Content/css/broker.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.Add("~/Content/css/mobile.css")
@@ -264,6 +264,7 @@
 				.Add("~/Content/js/lib/jquery.jscrollpane.js")
 				.Add("~/Content/js/lib/jquery.validate.js")
 				.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+				.Add("~/Content/js/lib/jquery.ui.touch-punch.min.js")
 				.Add("~/Content/js/lib/jsuri-1.1.1.js")
 				.Add("~/Content/js/lib/jquery.cookie.js")
 				.Add("~/Content/js/lib/underscore.js")

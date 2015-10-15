@@ -42,17 +42,14 @@
 <script type="text/template" id="request-processing-nodecision-template">
 	<div class="automation-popup automation-popup-complete ">
 		<div class="automation-popup-content">
-			<div class="automation-header">Your business loan application is complete.</div>
+			<div class="automation-header">Your application is complete</div>
 			<hr class="automation-hr"/>
-			<div class="automation-secondary-header">Hi <%-name%>,</div>
+			@*<div class="automation-secondary-header">Hi <%-name%>,</div>*@
 			<div class="automation-text">
-				<p>Thank you. Your application is now complete.</p>
-				<p>You will receive further correspondence within the next business day. If you do not receive a decision from us, this may be because it has dropped in to your spam filter and we suggest to double check.</p>
-				<p>Please contact your business account manager on @ViewBag.PhoneNumber or contact <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a> if you do not receive.</p>
-				<p>Do you need more?</p>
-				<p>We may be able to offer you more funds. Please link any additional accounts you may have to @ViewBag.CustomerOrigin.Name as this will provide us with a clearer understanding of your business and increased amount.</p>
-				<p>Best regards</p>
-				<p>The <span class="bold">@ViewBag.CustomerOrigin.Name</span> team</p>
+				<p>Thank you. Your application is now being processed and we will provide you with an update in less than an hour. Please note in certain circumstances where additional information is required it may take a little longer.</p>
+				<p>If you don’t receive correspondence within the next hour, please check your spam or junk folder. If you have not received an email, please contact us on <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a> or telephone Customer Care on <a href="tel:@ViewBag.PhoneNumber">@ViewBag.PhoneNumber</a>.</p>
+				<p>We may be able to offer you more funds. Please link any additional accounts you may have to Everline as this will provide us with a clearer understanding of your business and increase your amount.</p>
+				
 			</div>
 			@ContinueButton("nodecision")
 		</div>
@@ -76,7 +73,7 @@
 
 @helper ContinueButton(string popup) {
 	<div class="alignright">
-		<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right automation-button ev-btn-org" ui-event-control-id="profile:request-processing-continue-popup-@popup">Next</button>
+		<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right automation-button ev-btn-org" ui-event-control-id="profile:request-processing-continue-popup-@popup">Continue to account</button>
 	</div>
 	<div class="clear"></div>
 }

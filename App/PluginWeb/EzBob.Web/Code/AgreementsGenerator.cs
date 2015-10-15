@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.IO;
-	using ConfigManager;
+    using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Code;
@@ -43,16 +43,15 @@
 			var isAlibaba = loan.Customer.IsAlibaba;
 			var isEverline = loan.Customer.CustomerOrigin.IsEverline();
 
-			var origin = isAlibaba ? "Alibaba" : string.Empty;
-			origin = isEverline ? "EVL" : origin;
-
+            
 			if (isEverline) {
 				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
 				var status = checker.GetLoginStatus(loan.Customer.Name);
 				if (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan) {
-					origin = origin + "Refinance";
+				    IsEverlineRefinanceLoan = true;
 				}
 			}
+            
 
 			string path1;
 			string path2;

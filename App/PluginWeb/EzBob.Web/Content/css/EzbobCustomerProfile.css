@@ -1,0 +1,23 @@
+﻿.other-amount-label span.title {
+    vertical-align: top;
+}
+
+#single-loan-pay-options .other-amount-label span.title {
+    vertical-align: baseline;
+}
+
+.early-payment-form .input-wrapper.early-loan,
+.other-amount-label .input-wrapper.early-rollover {
+	margin-top: -5px;
+}
+
+#single-loan-pay-options .other-amount-label .input-wrapper.early-rollover {
+	margin-top: 0;
+}
+
+#refresh_yodlee_help.help_window .dialogue_buttons_container {
+	padding: 0 10px 0 0;
+	width: 100%;
+	text-align: right;
+}
+

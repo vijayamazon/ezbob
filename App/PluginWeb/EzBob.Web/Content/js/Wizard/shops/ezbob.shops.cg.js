@@ -120,6 +120,7 @@ EzBob.CgAccountInfoView = Backbone.Marionette.ItemView.extend({
 		});
 		this.validator = EzBob.validateCGShopForm(this.$el.find('form'), this.accountType);
 		EzBob.UiAction.registerView(this);
+		$('body').scrollTop(0);
 		return this;
 	},
 	

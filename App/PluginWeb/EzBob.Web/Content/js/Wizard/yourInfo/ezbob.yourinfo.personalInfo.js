@@ -38,7 +38,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
 		EzBob.App.jqmodal.show(consentAgreement);
-	   // 	consentAgreement.$el.find('.consent-dialog-wrapper').jScrollPane();
+		// 	consentAgreement.$el.find('.consent-dialog-wrapper').jScrollPane({ verticalDragMinHeight: 40 });
 	
 		return false;
 	}, // showConsent
@@ -200,18 +200,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
 		});
 		
-		var personalInfo = this.model.get('CustomerPersonalInfo');
-		var predefinedPhone = undefined;
-		if (personalInfo != undefined) {
-			predefinedPhone = personalInfo.MobilePhone;
-		} else {
-			var twilioPhone = this.model.get('twilioPhone');
-			if (twilioPhone != undefined) {
-				predefinedPhone = twilioPhone;
-			}
-		}
+		var personalInfo = this.model.get('CustomerPersonalInfo') || {};
+		var predefinedPhone = personalInfo.MobilePhone || this.model.get('twilioPhone') || '';
 
-		if (predefinedPhone) {
+		if (predefinedPhone != '') {
 			var mobileObj = this.$el.find('#MobilePhone');
 			mobileObj.addClass('disabled');
 			mobileObj.attr("disabled", "disabled");
