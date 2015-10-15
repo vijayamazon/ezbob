@@ -266,6 +266,14 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 				that.$el.dialog('close');
 				return false;
 			}
+
+			var typeOfBusinessReduced = that.model.get('TypeOfBusinessReduced');
+		    var _isPersonal = "";
+		    if (typeOfBusinessReduced === 'Limited')
+		        _isPersonal = false;
+		    else
+		        _isPersonal = true;
+
 			var scheduleView = new EzBob.LoanScheduleView({
 				el: that.$el.find(".loan-schedule"),
 				schedule: data,
@@ -275,7 +283,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 				ManualAddressWarning: data.ManualAddressWarning,
 				customer: that.model.get('CustomerName'),
 				refNum: that.model.get('CustomerRefNum'),
-				isPersonal: _.contains([0, 4, 2], that.model.get('TypeOfBusiness'))
+				isPersonal: _isPersonal
 			});
 			scheduleView.render();
 			return that.$el.find("#loan-schedule .simple-well").hide();
