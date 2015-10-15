@@ -113,9 +113,11 @@
 		}
 
 		public DateTime SetDefaultRepaymentDate() {
-			if (RepaymentDate == DateTime.MinValue) 
-				RepaymentDate = (LastHistory().RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(7);
-			
+			if (RepaymentDate == DateTime.MinValue) {
+				NL_LoanHistory lastHistory = LastHistory();
+				RepaymentDate = (lastHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? lastHistory.EventTime.Date.AddMonths(1) : lastHistory.EventTime.Date.AddDays(7);
+			}
+
 			return RepaymentDate;
 		}
 
