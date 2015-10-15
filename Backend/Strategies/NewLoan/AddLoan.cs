@@ -141,6 +141,9 @@
 
 			try {
 
+				// set default RepaymentDate
+				model.Loan.SetDefaultRepaymentDate();
+
 				// 2. Init Schedule and Fees
 				CalculateLoanSchedule scheduleStrategy = new CalculateLoanSchedule(model);
 				scheduleStrategy.Context.UserID = model.UserID;

@@ -127,10 +127,16 @@
 		AlibabaCreditFacility = 9,
 	}
 
-	// logic treansaction statuses
+	// logic transaction statuses
 	public enum NLFundTransferStatuses {
 		Pending = 1, // DB table id
 		Active = 2,
 		Deleted = 3
 	}
+
+	public enum NLLoanFormulas {
+		EqualPrincipal = 1,	// DB table id
+		FixedPayment = 2 // used for "out of loan agreement" rescheduling
+	}
+
 } // namespace

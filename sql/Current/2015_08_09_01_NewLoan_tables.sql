@@ -4,6 +4,26 @@ GO
 SET ANSI_NULLS ON
 GO
 
+
+-------------------------------------------------------------------------------
+
+IF OBJECT_ID('NL_LoanFormulas') IS NULL
+BEGIN
+	CREATE TABLE NL_LoanFormulas (
+		LoanFormulaID INT NOT NULL,
+		FormulaName NVARCHAR(50) NOT NULL,
+		IsActive BIT NOT NULL,
+		Notes NVARCHAR(255) NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_NL_LoanFormulas PRIMARY KEY (LoanFormulaID)
+	);
+	
+	INSERT INTO NL_LoanFormulas (LoanFormulaID, FormulaName, IsActive, Notes) VALUES
+		( 1, 'EqualPrincipal', 1, 'keren shava'),
+		( 2, 'FixedPayment', 0, 'Fixed Payment, shpitzer');
+END
+GO
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
@@ -165,8 +185,7 @@ BEGIN
 		IsDefault BIT NOT NULL,
 		IsActive BIT NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_NL_DiscountPlans PRIMARY KEY (DiscountPlanID)
-		
+		CONSTRAINT PK_NL_DiscountPlans PRIMARY KEY (DiscountPlanID)		
 	)
 END
 GO
@@ -429,23 +448,29 @@ BEGIN
 		OfferID BIGINT NOT NULL,
 		LoanTypeID INT NOT NULL,
 		LoanStatusID INT NOT NULL,
+		LoanFormulaID INT NOT NULL DEFAULT (1),		
+		LoanSourceID INT NOT NULL,		
 		EzbobBankAccountID INT NULL,
-		LoanSourceID INT NOT NULL,
-		Position INT NOT NULL,
 		CreationTime DATETIME NOT NULL,
-		Refnum NVARCHAR(50) NOT NULL,
-		DateClosed DATETIME NULL,		
+		Refnum NVARCHAR(50) NOT NULL,		
+		RepaymentDate DATETIME NOT NULL,
+		Position INT NOT NULL,
+		DateClosed DATETIME NULL,	
+		PrimaryLoanID BIGINT NULL,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)
+		PaymentPerInterval DECIMAL(18, 6) NULL,	-- in "fixed payment" formula
 		OldLoanID INT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Loans PRIMARY KEY (LoanID),
 		CONSTRAINT FK_NL_Loans_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
 		CONSTRAINT FK_NL_Loans_LoanType FOREIGN KEY (LoanTypeID) REFERENCES LoanType (Id),
 		CONSTRAINT FK_NL_Loans_Status FOREIGN KEY (LoanStatusID) REFERENCES NL_LoanStatuses (LoanStatusID),
+		CONSTRAINT FK_NL_Loans_Formula FOREIGN KEY (LoanFormulaID) REFERENCES NL_LoanFormulas (LoanFormulaID),
 		CONSTRAINT FK_NL_Loans_Account FOREIGN KEY (EzbobBankAccountID) REFERENCES NL_EzbobBankAccounts (EzbobBankAccountID),
 		CONSTRAINT FK_NL_Loans_Source FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID),
 		CONSTRAINT FK_NL_Loans_Old FOREIGN KEY (OldLoanID) REFERENCES Loan (Id),
-		CONSTRAINT CHK_NL_Loans CHECK (Position >= 1)
-	)
+		CONSTRAINT CHK_NL_Loans CHECK (Position >= 1),
+		CONSTRAINT CHK_NL_Loans_Formula CHECK (LoanFormulaID = 2 AND PaymentPerInterval IS NOT NULL)
+	);
 END
 GO
 
@@ -926,6 +951,10 @@ BEGIN
 		CONSTRAINT PK_NL_LoanOptions PRIMARY KEY (LoanOptionsID),
 		CONSTRAINT FK_NL_LoanOptions_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT FK_NL_LoanOptions_User FOREIGN KEY (UserID) REFERENCES Security_User (UserId)
-	)
+	);
 END
 GO
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+

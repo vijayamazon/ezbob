@@ -72,6 +72,9 @@
 
 			try {
 
+				// set default RepaymentDate
+				model.Loan.SetDefaultRepaymentDate();
+
 				// from offer => Loan
 				model.Loan.OfferID = dataForLoan.OfferID;
 				model.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum

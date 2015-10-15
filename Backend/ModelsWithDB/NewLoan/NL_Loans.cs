@@ -29,17 +29,19 @@
 		[EnumName(typeof(NLLoanStatuses))]
 		public int LoanStatusID { get; set; }
 
-		[FK("NL_EzbobBankAccounts", "EzbobBankAccountID")]
+		[FK("NL_LoanFormulas", "FormulaID")]
 		[DataMember]
-		public int? EzbobBankAccountID { get; set; }
+		[EnumName(typeof(NLLoanFormulas))]
+		public int LoanFormulaID { get; set; }
 
 		[FK("LoanSource", "LoanSourceID")]
 		[DataMember]
 		[EnumName(typeof(NLLoanSources))]
 		public int LoanSourceID { get; set; }
 
+		[FK("NL_EzbobBankAccounts", "EzbobBankAccountID")]
 		[DataMember]
-		public int Position { get; set; }
+		public int? EzbobBankAccountID { get; set; }
 
 		[DataMember]
 		public DateTime CreationTime { get; set; }
@@ -49,13 +51,23 @@
 		public string Refnum { get; set; }
 
 		[DataMember]
+		public DateTime RepaymentDate { get; set; }
+
+		[DataMember]
+		public int Position { get; set; }
+
+		[DataMember]
 		public DateTime? DateClosed { get; set; }
+
+		[DataMember]
+		public long PrimaryLoanID { get; set; }
+
+		[DataMember]
+		public decimal? PaymentPerInterval { get; set; }
 
 		[FK("Loan", "Id")]
 		[DataMember]
 		public int? OldLoanID { get; set; }
-
-
 
 		// additions
 		private List<NL_LoanHistory> _histories = new List<NL_LoanHistory>();
@@ -98,6 +110,13 @@
 
 		public NL_LoanHistory FirstHistory() {
 			return this._histories.OrderBy(h => h.EventTime).FirstOrDefault();
+		}
+
+		public DateTime SetDefaultRepaymentDate() {
+			if (RepaymentDate == DateTime.MinValue) 
+				RepaymentDate = (LastHistory().RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(7);
+			
+			return RepaymentDate;
 		}
 
 		public override string ToString() {

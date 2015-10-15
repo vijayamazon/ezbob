@@ -10,16 +10,20 @@ IF TYPE_ID('NL_LoansList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoansList AS TABLE (
-	[OfferID] BIGINT NOT NULL,
-	[LoanTypeID] INT NOT NULL,
-	[LoanStatusID] INT NULL,
-	[EzbobBankAccountID] INT NULL,
-	[LoanSourceID] INT NULL,
-	[Position] INT NOT NULL,	
-	[CreationTime] DATETIME NOT NULL,	
-	[Refnum] NVARCHAR(50) NULL,
-	[DateClosed] DATETIME NULL,		
-	[OldLoanID] INT NULL
+	OfferID BIGINT NOT NULL,
+	LoanTypeID INT NOT NULL,
+	LoanStatusID INT NOT NULL,
+	LoanFormulaID INT NOT NULL,		
+	LoanSourceID INT NOT NULL,		
+	EzbobBankAccountID INT NULL,
+	CreationTime DATETIME NOT NULL,
+	Refnum NVARCHAR(50) NOT NULL,		
+	RepaymentDate DATETIME NOT NULL,
+	Position INT NOT NULL,
+	DateClosed DATETIME NULL,	
+	PrimaryLoanID BIGINT NULL,	
+	PaymentPerInterval DECIMAL(18, 6) NULL,
+	OldLoanID INT NULL
 )
 GO
 	
@@ -30,27 +34,35 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO NL_Loans (
-		[OfferID],
-		[LoanTypeID],
-		[LoanStatusID],
-		[EzbobBankAccountID],
-		[LoanSourceID],
-		[Position],
-		[CreationTime],
-		[Refnum],
-		[DateClosed],
-		[OldLoanID]
+		OfferID ,
+		LoanTypeID ,
+		LoanStatusID ,
+		LoanFormulaID ,		
+		LoanSourceID ,		
+		EzbobBankAccountID,
+		CreationTime,
+		Refnum ,		
+		RepaymentDate,
+		Position,
+		DateClosed,	
+		PrimaryLoanID,	
+		PaymentPerInterval,
+		OldLoanID  
 	) SELECT
-		[OfferID],
-		[LoanTypeID],
-		[LoanStatusID],
-		[EzbobBankAccountID],
-		[LoanSourceID],
-		[Position],
-		[CreationTime],
-		[Refnum],
-		[DateClosed],
-		[OldLoanID]
+		OfferID ,
+		LoanTypeID ,
+		LoanStatusID ,
+		LoanFormulaID ,		
+		LoanSourceID ,		
+		EzbobBankAccountID,
+		CreationTime,
+		Refnum ,		
+		RepaymentDate,
+		Position,
+		DateClosed,	
+		PrimaryLoanID,	
+		PaymentPerInterval,
+		OldLoanID  
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

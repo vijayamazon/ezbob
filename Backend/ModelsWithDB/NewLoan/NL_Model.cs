@@ -53,8 +53,8 @@
 		[DataMember]
 		public string CalculatorImplementation { get; set; }  // AloanCalculator BankLikeLoanCalculator/BankLikeLoanCalculator
 
-	
 
+	
 	
 
 

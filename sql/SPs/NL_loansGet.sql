@@ -6,35 +6,34 @@ IF OBJECT_ID('NL_LoansGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoansGet
-@LoanID BIGINT,
-@Now DATETIME
+@LoanID BIGINT
+--,@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	--SELECT
-	--	l.LoanID,
-	--	l.OfferID,
-	--	l.LoanTypeID,
-	--	l.RepaymentIntervalTypeID,
-	--	l.LoanStatusID,
-	--	l.EzbobBankAccountID,
-	--	l.LoanSourceID,
-	--	l.Position,
-	--	l.InitialLoanAmount,
-	--	l.CreationTime,
-	--	l.IssuedTime,
-	--	l.RepaymentCount,
-	--	l.Refnum,
-	--	l.DateClosed,
-	--	l.InterestRate,
-	--	l.InterestOnlyRepaymentCount,
-	--	l.OldLoanID
-	--FROM
-	--	NL_Loans l
-	--WHERE
-	--	l.LoanID = @LoanID
-	--	AND
-	--	(@Now IS NULL OR l.IssuedTime < @Now)
+	SELECT
+		l.LoanID,
+		l.OfferID,
+		l.LoanTypeID,
+		l.LoanStatusID,
+		l.LoanFormulaID,		
+		l.LoanSourceID,		
+		l.EzbobBankAccountID,
+		l.CreationTime,
+		l.Refnum,		
+		l.RepaymentDate,
+		l.Position,
+		l.DateClosed,	
+		l.PrimaryLoanID,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)	
+		l.PaymentPerInterval,
+		l.OldLoanID  
+	FROM
+		NL_Loans l 
+	WHERE
+		LoanID = @LoanID
+		--AND
+		--(@Now IS NULL OR l.IssuedTime < @Now)
+		
 END
 GO
