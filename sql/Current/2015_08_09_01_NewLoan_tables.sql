@@ -468,9 +468,15 @@ BEGIN
 		CONSTRAINT FK_NL_Loans_Account FOREIGN KEY (EzbobBankAccountID) REFERENCES NL_EzbobBankAccounts (EzbobBankAccountID),
 		CONSTRAINT FK_NL_Loans_Source FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID),
 		CONSTRAINT FK_NL_Loans_Old FOREIGN KEY (OldLoanID) REFERENCES Loan (Id),
-		CONSTRAINT CHK_NL_Loans CHECK (Position >= 1),
-		CONSTRAINT CHK_NL_Loans_Formula CHECK (LoanFormulaID = 2 AND PaymentPerInterval IS NOT NULL)
+		CONSTRAINT CHK_NL_Loans CHECK (		
+			(Position >= 1)
+			AND 
+			(LoanFormulaID in (1,2) )
+			AND
+			((LoanFormulaID = 1 AND PaymentPerInterval IS NULL) OR (LoanFormulaID = 2 AND PaymentPerInterval IS NOT NULL))
+		)		
 	);
+	
 END
 GO
 

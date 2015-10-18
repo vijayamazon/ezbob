@@ -52,28 +52,28 @@
 			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)lastHistory.RepaymentIntervalTypeID;
 
 			int principalPayments = lastHistory.RepaymentCount - interestOnlyRepaymentCount;
-			decimal otherPayments = Math.Floor(lastHistory.Amount / principalPayments);
-			decimal firstPayment = lastHistory.Amount - otherPayments * (principalPayments - 1);
-			int discountPayments = this.loanModel.DiscountPlan.Count;
+			decimal iPrincipal = Math.Floor(lastHistory.Amount / principalPayments);
+			decimal iFirstPrincipal = lastHistory.Amount - iPrincipal * (principalPayments - 1);
+			int discounts = this.loanModel.DiscountPlan.Count;
 			decimal balance = lastHistory.Amount;
 
 			// create Schedule - by initial or re-scheduling data (last history)
 			for (int i = 1; i <= lastHistory.RepaymentCount; i++) {
 
-				decimal principal = otherPayments;
+				decimal principal = iPrincipal;
 
 				if (i <= interestOnlyRepaymentCount)
 					principal = 0;
 				else if (i == interestOnlyRepaymentCount + 1)
-					principal = firstPayment;
+					principal = iFirstPrincipal;
 
 				balance -= principal;
 
-				decimal r = (i <= discountPayments) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i]) : lastHistory.InterestRate;
+				decimal r = (i <= discounts) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i]) : lastHistory.InterestRate;
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, lastHistory.EventTime, intervalType).Date;
 
-				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // r'
+				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // dr'
 
 				int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
 
@@ -83,11 +83,11 @@
 					new NL_LoanSchedules() {
 						InterestRate = r,
 						PlannedDate = plannedDate,
-						Principal = principal, //open principal
+						Principal = principal, // intervals' principal
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i,
-						Balance = balance,
-						Interest = interest,
+						Balance = balance, //open principal
+						Interest = interest, //ei
 						AmountDue = (interest + principal)
 					});
 			} // for

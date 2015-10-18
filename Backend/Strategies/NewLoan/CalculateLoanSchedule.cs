@@ -72,8 +72,8 @@
 
 			try {
 
-				// set default RepaymentDate
-				model.Loan.SetDefaultRepaymentDate();
+				model.Loan.SetDefaultRepaymentDate(); // +month|+7 days
+				model.Loan.SetDefaultFormula();
 
 				// from offer => Loan
 				model.Loan.OfferID = dataForLoan.OfferID;

@@ -178,10 +178,18 @@
 		[Test]
 		public void AddLoan() {
 			DateTime now = DateTime.UtcNow;
-			NL_Model model = new NL_Model(374) {
+
+			AgreementModel agreementModel = new AgreementModel() {
+				CustomerEmail = "alexbo+003@ezbob.com.test.test.test",
+				APR = 35.35,
+				FullName = "Jane Doe",
+				CountRepayment = 3
+			};
+
+			NL_Model model = new NL_Model(56) {
 				UserID = 357,
 				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-				Loan = new NL_Loans() { OldLoanID = 2072, Refnum = "01825919007" },
+				Loan = new NL_Loans() { OldLoanID = 2074, Refnum = "01574390005" },
 				FundTransfer = new NL_FundTransfers() {
 					Amount = 1000,
 					FundTransferStatusID = (int) NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
@@ -201,13 +209,7 @@
 			});
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = now,
-				AgreementModel = JsonConvert.SerializeObject(
-					new AgreementModel() {
-						CustomerEmail = "elinar+888@ezbob.com",
-						APR = 3.35,
-						FullName = "John brice",
-						CountRepayment = 3
-					})
+				AgreementModel = JsonConvert.SerializeObject(agreementModel)
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
@@ -217,14 +219,7 @@
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
 				FilePath = "guarantyAgreement/aa/bb.pdf"
 			});
-
-			AgreementModel agreementModel = new AgreementModel() {
-				CustomerEmail = "elinar+888@ezbob.com",
-				APR = 3.35,
-				FullName = "John brice",
-				CountRepayment = 3
-			};
-
+			
 			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
 
 			AddLoan strategy = new AddLoan(model);
@@ -288,7 +283,7 @@
 			Console.WriteLine(preContract);
 			// 2
 			// specific LoanAgreementTemplate for current type: 
-			var preContractTemplate = _helper.GetOrCreateLoanAgreementTemplate(preContract, false ? LoanAgreementTemplateType.AlibabaPreContractAgreement : LoanAgreementTemplateType.PreContractAgreement);
+			var preContractTemplate = _helper.GetOrCreateLoanAgreementTemplate(preContract, false ? LoanAgreementTemplateType.EzbobAlibabaPreContract : LoanAgreementTemplateType.PreContract);
 			Console.WriteLine(preContractTemplate.TemplateType);
 			// 3
 			//var preContractAgreement = new LoanAgreement("precontract", new Loan(), preContractTemplate);

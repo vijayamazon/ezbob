@@ -790,7 +790,7 @@
 
 				DateTime oDate = DateTime.ParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-				lc.CreateLoan(oCustomer, nAmount, null, oDate);
+				lc.CreateLoan(oCustomer, nAmount, null, oDate, new NL_Model(nCustomerID));
 
 				return Json(new { success = true, error = false, });
 			} catch (Exception e) {

@@ -31,7 +31,9 @@
 		}
 
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
+		/// <exception cref="Exception">Alibaba can't be a Personal customer</exception>
 		public void RenderAgreements(Loan loan, bool isRebuld, NL_Model nlModel = null) {
+
 			var typeOfBusinessReduced = loan.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
 
 			var model = !isRebuld ? this._builder.Build(loan.Customer, loan.LoanAmount, loan) : this._builder.ReBuild(loan.Customer, loan);
@@ -42,30 +44,31 @@
 
 			var isAlibaba = loan.Customer.IsAlibaba;
 			var isEverline = loan.Customer.CustomerOrigin.IsEverline();
+			var IsEverlineRefinanceLoan = false;
 
-            
 			if (isEverline) {
 				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
 				var status = checker.GetLoginStatus(loan.Customer.Name);
 				if (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan) {
-				    IsEverlineRefinanceLoan = true;
+					IsEverlineRefinanceLoan = true;
 				}
 			}
-            
 
 			string path1;
 			string path2;
-
 			string nlpath1;
 			string nlpath2;
-
 			TemplateModel template;
+
 			if (typeOfBusinessReduced == TypeOfBusinessAgreementReduced.Personal) {
 
+				//Alibaba can't be a Personal customer
+				if (isAlibaba)
+					throw new Exception("Alibaba can't be a Personal customer");
+
 				// string - content of file D:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement\Pre-Contract-Agreement.cshtml
-				var preContract = this._templates.GetTemplateByName(origin + "Pre-Contract-Agreement");
-				// specific LoanAgreementTemplate for current type: 
-				var preContractTemplate = this._helper.GetOrCreateLoanAgreementTemplate(preContract, isAlibaba ? LoanAgreementTemplateType.AlibabaPreContractAgreement : LoanAgreementTemplateType.PreContractAgreement);
+				var preContract = this._templates.GetTemplateByName(this._templates.GetTemplatePath(LoanAgreementTemplateType.PreContract, isEverline, false, IsEverlineRefinanceLoan));
+				var preContractTemplate = this._helper.GetOrCreateLoanAgreementTemplate(preContract, LoanAgreementTemplateType.PreContract);
 				// LoanAgreement (table) instance by preContract string == table LoanAgreementTemplate.Template && LoanAgreementTemplate.TemplateType== Enum.LoanAgreementTemplateType ID
 				var preContractAgreement = new LoanAgreement("precontract", loan, preContractTemplate);
 				loan.Agreements.Add(preContractAgreement);
@@ -81,20 +84,11 @@
 
 				// NL  - preContract 
 				if (nlModel != null) {
-					//nlModel.Agreements.Add(new NLAgreementItem() {
-					//	Agreement = new NL_LoanAgreements() {
-					//		LoanAgreementTemplateID = preContractTemplate.Id,
-					//		FilePath = preContractAgreement.FilePath
-					//	},
-					//	TemplateModel = template,
-					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, preContractAgreement.FilePath),
-					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, preContractAgreement.FilePath)
-					//});
 					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {LoanAgreementTemplateID = preContractTemplate.Id, FilePath = preContractAgreement.FilePath});
 				}
 				
-				var contract = this._templates.GetTemplateByName(origin + "CreditActAgreement");
-				var contractTemplate = this._helper.GetOrCreateLoanAgreementTemplate(contract, isAlibaba ? LoanAgreementTemplateType.AlibabaCreditActAgreement : LoanAgreementTemplateType.CreditActAgreement);
+				var contract = this._templates.GetTemplateByName(this._templates.GetTemplatePath(LoanAgreementTemplateType.RegulatedLoanAgreement, isEverline, false, IsEverlineRefinanceLoan));
+				var contractTemplate = this._helper.GetOrCreateLoanAgreementTemplate(contract, LoanAgreementTemplateType.RegulatedLoanAgreement);
 				var contractAgreement = new LoanAgreement("Contract", loan, contractTemplate);
 				loan.Agreements.Add(contractAgreement);
 
@@ -109,21 +103,12 @@
 
 				//  NL - contract
 				if (nlModel != null) {
-					//nlModel.Agreements.Add(item: new NLAgreementItem() {
-					//	Agreement = new NL_LoanAgreements() {
-					//		LoanAgreementTemplateID = contractTemplate.Id,
-					//		FilePath = contractAgreement.FilePath
-					//	},
-					//	TemplateModel = template,
-					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, contractAgreement.FilePath),
-					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, contractAgreement.FilePath)
-					//});
 					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = contractTemplate.Id, FilePath = contractAgreement.FilePath });
 				}
 
 			} else {
-				var guarantee = this._templates.GetTemplateByName(origin + "GuarantyAgreement");
-				var quaranteeTemplate = this._helper.GetOrCreateLoanAgreementTemplate(guarantee, isAlibaba ? LoanAgreementTemplateType.AlibabaGuarantyAgreement : LoanAgreementTemplateType.GuarantyAgreement);
+				var guarantee = this._templates.GetTemplateByName(this._templates.GetTemplatePath(LoanAgreementTemplateType.GuarantyAgreement, isEverline, isAlibaba, IsEverlineRefinanceLoan));
+				var quaranteeTemplate = this._helper.GetOrCreateLoanAgreementTemplate(guarantee, isAlibaba ? LoanAgreementTemplateType.EzbobAlibabaGuarantyAgreement : LoanAgreementTemplateType.GuarantyAgreement);
 				var guaranteeAgreement = new LoanAgreement("guarantee", loan, quaranteeTemplate);
 				loan.Agreements.Add(guaranteeAgreement);
 
@@ -138,20 +123,11 @@
 
 				// NL - guarantee 
 				if (nlModel != null) {
-					//nlModel.Agreements.Add(item: new NLAgreementItem() {
-					//	Agreement = new NL_LoanAgreements() {
-					//		LoanAgreementTemplateID = quaranteeTemplate.Id,
-					//		FilePath = guaranteeAgreement.FilePath
-					//	},
-					//	TemplateModel = template,
-					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, guaranteeAgreement.FilePath),
-					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, guaranteeAgreement.FilePath)
-					//});
 					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = guaranteeAgreement.Id, FilePath = guaranteeAgreement.FilePath });
 				}
-
-				var agreement = this._templates.GetTemplateByName(origin + "PrivateCompanyLoanAgreement");
-				var agreementTemplate = this._helper.GetOrCreateLoanAgreementTemplate(agreement, isAlibaba ? LoanAgreementTemplateType.AlibabaPrivateCompanyLoanAgreement : LoanAgreementTemplateType.PrivateCompanyLoanAgreement);
+				
+				var agreement = this._templates.GetTemplateByName(this._templates.GetTemplatePath(LoanAgreementTemplateType.PrivateCompanyLoanAgreement, isEverline, isAlibaba, IsEverlineRefinanceLoan));
+				var agreementTemplate = this._helper.GetOrCreateLoanAgreementTemplate(agreement, isAlibaba ? LoanAgreementTemplateType.EzbobAlibabaPrivateCompanyLoanAgreement : LoanAgreementTemplateType.PrivateCompanyLoanAgreement);
 				var agreementAgreement = new LoanAgreement("agreement", loan, agreementTemplate);
 				loan.Agreements.Add(agreementAgreement);
 
@@ -166,15 +142,6 @@
 
 				// NL - agreement
 				if (nlModel != null) {
-					//nlModel.Agreements.Add(item: new NLAgreementItem() {
-					//	Agreement = new NL_LoanAgreements() {
-					//		LoanAgreementTemplateID = agreementTemplate.Id,
-					//		FilePath = agreementAgreement.FilePath
-					//	},
-					//	TemplateModel = template,
-					//	Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, agreementAgreement.FilePath),
-					//	Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, agreementAgreement.FilePath)
-					//});
 					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = agreementAgreement.Id, FilePath = agreementAgreement.FilePath });
 				}
 			}

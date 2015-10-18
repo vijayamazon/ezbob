@@ -81,7 +81,7 @@
 			get { return this._histories; }
 			set { this._histories = value; }
 		}
-		
+
 		[DataMember]
 		[NonTraversable]
 		public List<NL_LoanFees> Fees {
@@ -112,13 +112,16 @@
 			return this._histories.OrderBy(h => h.EventTime).FirstOrDefault();
 		}
 
-		public DateTime SetDefaultRepaymentDate() {
+		public void SetDefaultRepaymentDate() {
 			if (RepaymentDate == DateTime.MinValue) {
 				NL_LoanHistory lastHistory = LastHistory();
 				RepaymentDate = (lastHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? lastHistory.EventTime.Date.AddMonths(1) : lastHistory.EventTime.Date.AddDays(7);
 			}
+		}
 
-			return RepaymentDate;
+		public void SetDefaultFormula() {
+			if (LoanFormulaID == 0) 
+				LoanFormulaID = (int)NLLoanFormulas.EqualPrincipal;
 		}
 
 		public override string ToString() {
@@ -126,23 +129,29 @@
 			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
 
 			// fees
-			sb.Append(HeadersLine(typeof(NL_LoanFees), NL_LoanFees.ColumnTotalWidth));
-			if (Fees.Count>0)
+			if (Fees.Count > 0) {
+				sb.Append(HeadersLine(typeof(NL_LoanFees), NL_LoanFees.ColumnTotalWidth));
 				Fees.ForEach(s => sb.Append(s.ToString()));
+			} else
+				sb.Append("No fees");
 
 			// freeze interest intervals
-			sb.Append(HeadersLine(typeof(NL_LoanInterestFreeze), NL_LoanInterestFreeze.ColumnTotalWidth));
-			if (FreezeInterestIntervals.Count > 0)
+			if (FreezeInterestIntervals.Count > 0) {
+				sb.Append(HeadersLine(typeof(NL_LoanInterestFreeze), NL_LoanInterestFreeze.ColumnTotalWidth));
 				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
+			} else
+				sb.Append("No freeze interest");
 
 			sb.Append(Environment.NewLine);
 			// histories
-			if(Histories!=null)
+			if (Histories != null)
 				Histories.ForEach(h => sb.Append(h.ToString()));
-
-			sb.Append(HeadersLine(typeof(NL_LoanOptions), ColumnTotalWidth));
-			if (LoanOptions.Count > 0)
+			
+			if (LoanOptions.Count > 0) {
+				sb.Append(HeadersLine(typeof(NL_LoanOptions), ColumnTotalWidth));
 				LoanOptions.ForEach(s => sb.Append(s.ToString()));
+			} else
+				sb.Append("No loan options");
 
 			return sb.ToString();
 		}

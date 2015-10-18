@@ -187,12 +187,13 @@
 		}
 
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
+		/// <exception cref="NullReferenceException"><paramref name="name" /> is null. </exception>
 		public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
-			
-			var history = nlModel.Loan.LastHistory();
 
 			var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
+			var history = result.Loan.LastHistory();
+			
 			// faile to create Schedule
 			if (history.Schedule.Count == 0) {
 				// TODO log error - result.Error
@@ -243,21 +244,22 @@
 			model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
 
 			// collect all setup/servicing "spreaded" fees
-			List<NL_LoanFees> loanSetupFees = nlModel.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee || f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).ToList();
+			List<NL_LoanFees> loanSetupFees = result.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee || f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).ToList();
 			// get fees sum
 			decimal totalFees = 0m;
 			loanSetupFees.ForEach(f => totalFees += f.Amount);
 
+			decimal totalPrincipal = model.Schedule.Sum(a => a.LoanRepayment);
+
 			// formatted totals
 			model.TotalAmount = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.AmountDue));
-			model.TotalPrincipal = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.LoanRepayment));
+			model.TotalPrincipal = FormattingUtils.NumericFormats(totalPrincipal);
 			model.TotalInterest = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.Interest));
 			model.TotalAmoutOfCredit = model.TotalPrincipal; //FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.LoanRepayment));
 			model.TotalFees = FormattingUtils.NumericFormats(totalFees);
 
 			decimal currencyRate = GetUSDCurrencyRate();
-			////TODO - check culture info 
-			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate * model.Schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.GetCultureInfo("en-USD"));
+			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate * totalPrincipal).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 
 			model.CurentDate = FormattingUtils.FormatDateTimeToString(DateTime.UtcNow);
 			model.CurrentDate = DateTime.UtcNow;
@@ -306,7 +308,7 @@
 			model.CountRepayment = model.Schedule.Count;
 			model.Term = model.Schedule.Count;
 
-			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.LoanRepayment) - totalFees);
+			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(totalPrincipal - totalFees);
 
 			return model;
 		}

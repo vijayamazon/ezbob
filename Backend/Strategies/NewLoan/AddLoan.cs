@@ -16,6 +16,7 @@
 		/// Create new loan
 		/// Expected input:
 		///		NL_Model with:
+		///			- CustomerID
 		///			- Loan.OldLoanID
 		///			- Loan.Refnum
 		///			- Histories => history: EventTime (former IssuedTime)
@@ -86,6 +87,13 @@
 				return;
 			}
 
+		/*	
+			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
+			ValidateAmount(loanAmount, cus); // continue (loanAmount > customer.CreditSum)
+			ValidateOffer(cus); // check offer validity dates - in AddLoan strategy
+			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1)); // checks if last loan was taken a minute before "now" - ?? to prevent multiple clicking on "create loan" button?
+			ValidateRepaymentPeriodAndInterestRate(cus);
+		*/
 			// valid offer
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 				"NL_SignedOfferForLoan",
@@ -141,8 +149,8 @@
 
 			try {
 
-				// set default RepaymentDate +month|+7 days
-				model.Loan.SetDefaultRepaymentDate();
+				model.Loan.SetDefaultRepaymentDate(); // +month|+7 days
+				model.Loan.SetDefaultFormula();
 
 				// 2. Init Schedule and Fees
 				CalculateLoanSchedule scheduleStrategy = new CalculateLoanSchedule(model);

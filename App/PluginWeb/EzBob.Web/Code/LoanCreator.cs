@@ -7,7 +7,6 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Customer.Controllers;
@@ -26,7 +25,6 @@
 	using StructureMap;
 
 	public interface ILoanCreator {
-
 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
 	} // interface ILoanCreator
 
@@ -319,7 +317,7 @@
 			if (cus == null || cus.PersonalInfo == null || cus.BankAccount == null)
 				throw new CustomerIsNotFullyRegisteredException();
 
-			if (cus.Status != Status.Approved)
+			if (cus.Status != Status.Approved) 
 				throw new CustomerIsNotApprovedException();
 
 			if (!cus.WizardStep.TheLastOne)

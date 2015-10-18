@@ -135,8 +135,10 @@
 	}
 
 	public enum NLLoanFormulas {
+		[Description("1")] // IsActive
 		EqualPrincipal = 1,	// DB table id
-		FixedPayment = 2 // used for "out of loan agreement" rescheduling
+		[Description("0")] // 
+		FixedPayment = 2 // used for "out of loan agreement" rescheduling, disabled so far (15 October 2015)
 	}
 
 } // namespace
