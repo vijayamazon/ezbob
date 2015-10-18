@@ -311,6 +311,7 @@ namespace ConfigManager {
 		MaxLoan,
 		MaxPerDay,
 		MaxPerNumber,
+		MaxSeniorityYears,
 		MaxTimeToWaitForPacnetrConfirmation,
 		MaxYodleeOtherCategoryAmount,
 		MedalDaysOfMpRelevancy,

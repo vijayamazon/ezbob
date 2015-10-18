@@ -72,6 +72,8 @@ BEGIN
 				) 
 		)AND
 		c.ExternalCollectionStatusID IS NULL
+		AND
+		DATEDIFF(DAY, ls.Date, @Now)<=30
 		
 	SELECT 
 		LoanScheduleId,

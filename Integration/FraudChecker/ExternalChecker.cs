@@ -31,7 +31,7 @@
 			Phone();
 			Shop();
 
-			log.Info("Finish fraud internal system check for customerId {0}.", customerID);
+			log.Info("Finish fraud external system check for customerId {0}.", customerID);
 			return this.fraudDetections;
 		} // Decide
 

@@ -72,6 +72,10 @@ namespace ConfigManager {
 			get { return this[Variables.MaxPerNumber]; }
 		}
 
+		public virtual VariableValue MaxSeniorityYears {
+			get { return this[Variables.MaxSeniorityYears]; }
+		}
+
 		public virtual VariableValue MaxTimeToWaitForPacnetrConfirmation {
 			get { return this[Variables.MaxTimeToWaitForPacnetrConfirmation]; }
 		}

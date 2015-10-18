@@ -77,6 +77,13 @@
 			new EmailHmrcParsingErrors(nCustomerID, nCustomerMarketplaceID, oErrorsToEmail).Execute();
 		} // EmailHmrcParsingErrors
 
+		public CompanyData GetNonLimitedData(int underwriterId, string refNumber) {
+			GetCompanyDataForCompanyScore strategyInstance = new GetCompanyDataForCompanyScore(refNumber);
+			
+			strategyInstance.Execute();
+			return strategyInstance.Data;
+		}
+		
 		public CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
 			GetCompanyDataForCreditBureau strategyInstance = new GetCompanyDataForCreditBureau(refNumber);
 
