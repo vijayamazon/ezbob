@@ -23,17 +23,23 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
 
-		fixSelectValidate(this.$el.find('select'));
-
 		return this;
 	}, // render
 
 	events: {
-		'click .btn-continue': 'next'
+		'click .btn-continue': 'next',
+		'change select': 'fixSelectValidate'
 	}, // events
 
 	clearAddressError: function(el) {
 		EzBob.Validation.unhighlight(this.$el.find(el));
 		EzBob.Validation.unhighlightFS(this.$el.find(el));
 	}, // clearAddressError
+
+	fixSelectValidate: function (el) {
+		if ($.browser.mozilla) {
+			$(el.currentTarget).trigger("click");
+			
+		}
+	}
 });
