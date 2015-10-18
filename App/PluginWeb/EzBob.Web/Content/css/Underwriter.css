@@ -2360,3 +2360,7 @@ input[type="text"].err-field-red {
 .new-credit-line-mode-selector > div > label:hover {
 	background-color: #cccccc;
 }
+
+#broker-main-content .new-email {
+	margin: 0;
+}

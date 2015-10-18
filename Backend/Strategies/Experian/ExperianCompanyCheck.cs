@@ -1,12 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
-	using System.Linq;
 	using ExperianLib.Ebusiness;
-	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class ExperianCompanyCheck : AStrategy {
 		public ExperianCompanyCheck(int customerId, bool forceCheck) {
@@ -47,93 +44,6 @@
 		public decimal MaxScore { get; private set; }
 
 		public decimal Score { get; private set; }
-
-		public static void UpdateAnalyticsForNonLimited(decimal maxScore, string experianRefNum, int customerID) {
-			Library.Instance.DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateNonLimitedCompany",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerID),
-				new QueryParameter("RefNumber", experianRefNum),
-				new QueryParameter("MaxScore", maxScore)
-			);
-		} // UpdateAnalyticsForNonLimited
-
-		public static void UpdateAnalyticsForLimited(
-			LimitedResults oExperianData,
-			int nCustomerID
-		) {
-			AConnection oDB = Library.Instance.DB;
-			ASafeLog oLog = Library.Instance.Log;
-
-			ExperianLtd oExperianLtd = oExperianData.RawExperianLtd;
-
-			oLog.Debug(
-				"Updating limited customer analytics for customer {0} and company '{1}'...",
-				nCustomerID,
-				oExperianLtd.RegisteredNumber
-				);
-
-			decimal tangibleEquity = 0;
-			decimal adjustedProfit = 0;
-
-			ExperianLtdDL99[] ary = oExperianLtd.GetChildren<ExperianLtdDL99>()
-				.Where(x => x.Date.HasValue)
-				.ToArray();
-
-			// ReSharper disable PossibleInvalidOperationException
-			Array.Sort(ary, (a, b) => b.Date.Value.CompareTo(a.Date.Value));
-			// ReSharper restore PossibleInvalidOperationException
-
-			if (ary.Length > 0) {
-				decimal totalShareFund = ary[0].TotalShareFund ?? 0;
-				decimal inTngblAssets = ary[0].InTngblAssets ?? 0;
-				decimal debtorsDirLoans = ary[0].DebtorsDirLoans ?? 0;
-				decimal credDirLoans = ary[0].CredDirLoans ?? 0;
-				decimal onClDirLoans = ary[0].OnClDirLoans ?? 0;
-
-				tangibleEquity = totalShareFund - inTngblAssets - debtorsDirLoans + credDirLoans + onClDirLoans;
-
-				if (ary.Length > 1) {
-					decimal retainedEarnings = ary[0].RetainedEarnings ?? 0;
-					decimal retainedEarningsPrev = ary[1].RetainedEarnings ?? 0;
-					decimal fixedAssetsPrev = ary[1].TngblAssets ?? 0;
-
-					adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev / 5;
-				} // if
-			} // if
-
-			oLog.Info(
-				"Inserting to analytics Experian Score: {0} MaxScore: {1}.",
-				oExperianLtd.GetCommercialDelphiScore(),
-				oExperianData.MaxBureauScore
-			);
-
-			oDB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateCompany",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", nCustomerID),
-				new QueryParameter("Score", oExperianLtd.GetCommercialDelphiScore()),
-				new QueryParameter("MaxScore", (int)oExperianData.MaxBureauScore),
-				new QueryParameter("SuggestedAmount", oExperianLtd.GetCommercialDelphiCreditLimit()),
-				new QueryParameter("IncorporationDate", oExperianLtd.IncorporationDate),
-				new QueryParameter("TangibleEquity", tangibleEquity),
-				new QueryParameter("AdjustedProfit", adjustedProfit),
-				new QueryParameter("Sic1980Code1", oExperianLtd.First1980SICCode),
-				new QueryParameter("Sic1980Desc1", oExperianLtd.First1980SICCodeDescription),
-				new QueryParameter("Sic1992Code1", oExperianLtd.First1992SICCode),
-				new QueryParameter("Sic1992Desc1", oExperianLtd.First1992SICCodeDescription),
-				new QueryParameter("AgeOfMostRecentCcj", oExperianLtd.GetAgeOfMostRecentCCJDecreeMonths()),
-				new QueryParameter("NumOfCcjsInLast24Months", oExperianLtd.GetNumberOfCcjsInLast24Months()),
-				new QueryParameter("SumOfCcjsInLast24Months", oExperianLtd.GetSumOfCcjsInLast24Months()),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
-			);
-
-			oLog.Debug(
-				"Updating limited customer analytics for customer {0} and company '{1}' complete.",
-				nCustomerID,
-				oExperianLtd.RegisteredNumber
-			);
-		} // UpdateAnalyticsDataForLimited
 
 		public static BusinessReturnData GetBusinessData(
 			bool isLimited,
@@ -207,7 +117,7 @@
 				                NonLtdStra.Execute();
 				            }
 				        } catch (Exception e) {
-				            Log.Error("CreditSafeLtd/NonLtd NonCachHit failed for unexpected reason", e);
+				            Log.Error(e, "CreditSafeLtd/NonLtd NonCachHit failed for unexpected reason");
 				        }
 				    }
 				} // if
@@ -237,29 +147,9 @@
 			if (oExperianData.IsLimited)
 				new UpdateLimitedExperianDirectors(this.customerId, oExperianData.ServiceLogID).Execute();
 
-			if (oExperianData.CacheHit) {
-				// This check is required to allow multiple customers have the same company
-				// While the cache works with RefNumber the analytics table works with customer
-				if (IsCustomerAlreadyInAnalytics())
-					return;
-			} // if
-
-			if (oExperianData.IsLimited)
-				UpdateAnalyticsForLimited((LimitedResults)oExperianData, this.customerId);
-			else
-				UpdateAnalyticsForNonLimited(MaxScore, this.experianRefNum, this.customerId);
-
 			if (this.doSilentAutomation)
 				new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Company).Execute();
 		} // Execute
-
-		private bool IsCustomerAlreadyInAnalytics() {
-			return DB.ExecuteScalar<bool>(
-				"CustomerHasCompanyAnalytics",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
-			);
-		} // IsCustomerAlreadyInAnalytics
 
 		private readonly int customerId;
 		private readonly bool forceCheck;

@@ -12,12 +12,62 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 	events: {
 		'click .reset-password-123456': 'resetPassword123456',
+		'click .save-new-email': 'saveNewEmail',
 	}, // events
+
+	saveNewEmail: function() {
+		event.preventDefault();
+		event.stopPropagation();
+
+		this.emailFormValidator = this.emailFormValidator || EzBob.validateChangeEmailForm(
+			this.$el.find('.new-email-form'),
+			'new-broker-email-address'
+		);
+
+		if (!this.emailFormValidator.form())
+			return false;
+
+		var newEmail = this.$el.find('.new-email').val();
+
+		var oldEmail = this.$el.find('[data-field-name="ContactEmail"]').find('a').text();
+
+		if (oldEmail === newEmail) {
+			EzBob.ShowMessage('Old and new emails are the same.', 'Error');
+			return false;
+		} // if
+
+		var self = this;
+
+		BlockUi();
+
+		$.post('' + window.gRootPath + 'Underwriter/Brokers/UpdateEmail', {
+			brokerID: this.brokerID,
+			newEmail: newEmail,
+		}).done(function(response) {
+			UnBlockUi();
+
+			if (response.success) {
+				self.$el.find('.new-email').val('');
+				EzBob.ShowMessageTimeout('Broker email was updated.', 'Success', 3);
+				self.redrawCurrentTab();
+				return;
+			} // if
+
+			var errorMsg = 'Could not update broker email' + (response.error ? ': ' + response.error : '') + '.';
+
+			EzBob.ShowMessage(errorMsg, 'Error');
+		}).fail(function() {
+			UnBlockUi();
+			EzBob.ShowMessage('Failed to update broker email.', 'Error');
+		});
+
+		return false;
+	}, // saveNewEmail
 
 	resetPassword123456: function() {
 		event.preventDefault();
 		event.stopPropagation();
-		
+
 		var self = this;
 
 		EzBob.ShowMessage(
@@ -40,6 +90,8 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 	render: function() {
 		var self = this;
+
+		this.$el.find('.new-email-form').submit(false);
 
 		this.myTabHeaders().on('shown.bs.tab', function(e) {
 			var sSection = $(e.target).attr('href').substr(1);

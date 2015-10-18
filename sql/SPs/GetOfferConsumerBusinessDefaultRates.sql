@@ -9,43 +9,30 @@ ALTER PROCEDURE GetOfferConsumerBusinessDefaultRates
 @CustomerId INT
 AS
 BEGIN
-	
-	DECLARE @TypeOfBusiness NVARCHAR(20)
-	DECLARE @ConsumerScore INT 
-	DECLARE @BusinessScore INT 
-	SELECT  @TypeOfBusiness = TypeOfBusiness FROM Customer WHERE Id=@CustomerId
-	
-	SELECT @ConsumerScore = isnull(min(x.ExperianConsumerScore),0) FROM
-	(
-		SELECT ExperianConsumerScore FROM Customer WHERE Id=@CustomerId AND ExperianConsumerScore IS NOT NULL
-		UNION
-		SELECT ExperianConsumerScore FROM Director WHERE CustomerId=@CustomerId AND ExperianConsumerScore IS NOT NULL
-	) x
-	
-	IF(@TypeOfBusiness = 'Limited' OR @TypeOfBusiness = 'LLP')
-	BEGIN
-		SELECT @BusinessScore = isnull(Score,0) FROM CustomerAnalyticsCompany WHERE CustomerID=@CustomerId AND IsActive=1
-	END 
-	ELSE
-	BEGIN
-		SELECT @BusinessScore = isnull(e.RiskScore,0) FROM Customer c INNER JOIN Company co ON c.CompanyId=co.Id 
-		INNER JOIN ExperianNonLimitedResults e ON co.ExperianRefNum=e.RefNumber
-		WHERE c.Id=@CustomerId AND e.IsActive=1
-	END
-	
-	IF @ConsumerScore IS NULL SET @ConsumerScore=0
-	IF @BusinessScore IS NULL SET @BusinessScore=0
-	
-	DECLARE @ConsumerDefaultRate DECIMAL(18,6) = 0
-	DECLARE @BusinessDefaultRate DECIMAL(18,6) = 0
-	
-	SELECT @BusinessDefaultRate = Value FROM DefaultRateCompany d WHERE @BusinessScore >= d.Start AND @BusinessScore <= d.[End]
-	SELECT @ConsumerDefaultRate = Value FROM DefaultRateCustomer d WHERE @ConsumerScore >= d.Start AND @ConsumerScore <= d.[End]
-	
-	SELECT @ConsumerScore AS ConsumerScore,
-		   @BusinessScore AS BusinessScore,
-		   @ConsumerDefaultRate AS ConsumerDefaultRate, 
-		   @BusinessDefaultRate AS BusinessDefaultRate
-END
+	SET NOCOUNT ON;
 
+	DECLARE @ConsumerScore INT = ISNULL((
+		SELECT
+			MinScore
+		FROM
+			dbo.udfGetCustomerScoreAnalytics(@CustomerId, NULL)
+	), 0)
+
+	DECLARE @BusinessScore INT = ISNULL((
+		SELECT
+			Score
+		FROM
+			dbo.udfGetCustomerCompanyAnalytics(@CustomerId, NULL, 0, 0, 0)
+	), 0)
+
+	DECLARE @ConsumerDefaultRate DECIMAL(18, 6) = (SELECT Value FROM DefaultRateCustomer d WHERE @ConsumerScore >= d.Start AND @ConsumerScore <= d.[End])
+
+	DECLARE @BusinessDefaultRate DECIMAL(18, 6) = (SELECT Value FROM DefaultRateCompany  d WHERE @BusinessScore >= d.Start AND @BusinessScore <= d.[End])
+
+	SELECT
+		@ConsumerScore AS ConsumerScore,
+		@BusinessScore AS BusinessScore,
+		@ConsumerDefaultRate AS ConsumerDefaultRate,
+		@BusinessDefaultRate AS BusinessDefaultRate
+END
 GO

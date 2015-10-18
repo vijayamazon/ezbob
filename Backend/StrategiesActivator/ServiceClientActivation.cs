@@ -143,11 +143,6 @@
 		} // BackfillLinkedHmrc
 
 		[Activation]
-		private void BackfillCustomerAnalyticsCompany() {
-			this.serviceClient.BackfillCustomerAnalyticsCompany();
-		}
-
-		[Activation]
 		private void BackfillExperianConsumer() {
 			this.serviceClient.BackfillExperianConsumer();
 		}

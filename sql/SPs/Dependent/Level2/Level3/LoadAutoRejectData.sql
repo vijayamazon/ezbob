@@ -171,22 +171,12 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @Now IS NULL
-	BEGIN
-		EXECUTE GetCompanyScoreAndIncorporationDate
-			@CustomerId,
-			0,
-			@CompanyScore OUTPUT,
-			@IncorporationDate OUTPUT
-	END
-	ELSE BEGIN
-		EXECUTE GetCompanyHistoricalScoreAndIncorporationDate
-			@CustomerId,
-			0,
-			@Now,
-			@CompanyScore OUTPUT,
-			@IncorporationDate OUTPUT
-	END
+	EXECUTE GetCompanyHistoricalScoreAndIncorporationDate
+		@CustomerId,
+		0,
+		@Now,
+		@CompanyScore OUTPUT,
+		@IncorporationDate OUTPUT
 	
 	------------------------------------------------------------------------------
 	--
@@ -194,29 +184,12 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	DECLARE @ConsumerScore INT
-
-	IF @Now IS NULL
-	BEGIN
+	DECLARE @ConsumerScore INT = ISNULL((
 		SELECT
-			@ConsumerScore = MAX(ISNULL(ExperianConsumerScore, 0))
+			MaxScore
 		FROM
-			Director
-		WHERE
-			CustomerId = @CustomerID
-			AND
-			ExperianConsumerScore IS NOT NULL
-	END
-	ELSE BEGIN
-		SELECT
-			@ConsumerScore = MAX(ISNULL(d.MaxScore, 0))
-		FROM
-			CustomerAnalyticsDirector d
-		WHERE
-			d.CustomerID = @CustomerID
-			AND
-			d.AnalyticsDate < @Now
-	END
+			dbo.udfGetCustomerScoreAnalytics(@CustomerID, @Now)
+	), 0)
 
 	------------------------------------------------------------------------------
 	--

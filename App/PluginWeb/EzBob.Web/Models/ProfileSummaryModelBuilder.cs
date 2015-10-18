@@ -678,13 +678,6 @@
 			return repaymentAmount;
 		}
 
-		private double GetSeniority(Customer customer, bool isPaymentAccountOnly) {
-			var marketplacesSeniority = customer.GetMarketplaceOriginationDate(isPaymentAccountOnly);
-			var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
-			var minAccountAgeTotalMonth = minAccountAge.TotalDays / 30;
-			return minAccountAgeTotalMonth;
-		}
-
 		private LightsState ObtainAmlState(Customer customer) {
 			if (customer.AMLResult == "Rejected" || customer.BWAResult == "Rejected")
 				return LightsState.Reject;

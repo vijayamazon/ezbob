@@ -85,43 +85,5 @@
 
 			return simpleMps;
 		}
-
-		public static DateTime GetMarketplaceOriginationDate(
-			this Customer customer,
-			bool? isPaymentAccount = null,
-			Func<MP_CustomerMarketPlace, bool> oIncludeMp = null
-		) {
-			DateTime now = DateTime.UtcNow;
-
-			if (customer == null)
-				return now;
-
-			IEnumerable<DateTime> dates = customer.CustomerMarketPlaces
-				.Where(m =>
-					!m.Disabled && (
-						isPaymentAccount == null || m.Marketplace.IsPaymentAccount == isPaymentAccount.Value
-					) && (
-						oIncludeMp == null || oIncludeMp(m)
-					)
-				)
-				.Select(mp => {
-					IMarketplaceModelBuilder builder =
-						ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString()) ??
-						ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
-
-					builder.UpdateOriginationDate(mp);
-					return mp.OriginationDate ?? now;
-				});
-
-			try {
-				return dates.Min();
-			}
-			catch (ArgumentNullException) {
-				return now;
-			}
-			catch (InvalidOperationException) {
-				return now;
-			} // try
-		} // GetMarketplaceOriginationDate
 	}
 }

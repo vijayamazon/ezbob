@@ -31,9 +31,6 @@
 		ActionMetaData BackfillAml();
 
 		[OperationContract]
-		ActionMetaData BackfillCustomerAnalyticsCompany();
-
-		[OperationContract]
 		ActionMetaData BackFillExperianNonLtdScoreText();
 		
 		[OperationContract]
@@ -456,9 +453,6 @@
 
 		[OperationContract]
 		ActionMetaData UpdateCurrencyRates();
-
-		[OperationContract]
-		ActionMetaData UpdateCustomerAnalyticsOnCompanyChange(int customerID);
 
 		[OperationContract]
 		ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails);

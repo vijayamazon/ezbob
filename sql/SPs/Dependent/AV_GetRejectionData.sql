@@ -67,24 +67,12 @@ DECLARE @CompanyMaxScore INT = 0
 --incorporation date
 DECLARE @IncorporationDate DATETIME
 
-IF @IsLimited = 1
-BEGIN
-	
-	SELECT @CompanyMaxScore = isnull(MaxScore,0), @CompanyScore = isnull(Score,0), @IncorporationDate = IncorporationDate 
-	FROM CustomerAnalyticsCompany 
-	WHERE CustomerID=@CustomerId AND IsActive=1
-
-	IF @CompanyScore < @CompanyMaxScore
-		SET @CompanyScore = @CompanyMaxScore
-END  
-ELSE
-BEGIN
-	SELECT @CompanyScore = isnull(e.RiskScore, 0), @IncorporationDate = e.IncorporationDate 
-	FROM Customer c 
-	LEFT JOIN Company co ON c.CompanyId = co.Id 
-	LEFT JOIN ExperianNonLimitedResults e ON e.RefNumber = co.ExperianRefNum 
-	WHERE e.IsActive=1 AND c.Id = @CustomerId
-END	
+SELECT
+	@CompanyMaxScore = ISNULL(MaxScore, 0),
+	@CompanyScore = ISNULL(Score, 0),
+	@IncorporationDate = IncorporationDate 
+FROM
+	dbo.udfGetCustomerCompanyAnalytics(@CustomerId, NULL, 0, 0, 1)
 
 -- Has Company Files
 DECLARE @HasCompanyFiles BIT = 0
@@ -129,7 +117,7 @@ END
 
 SELECT @CustomerStatus AS CustomerStatus, 
 	   @ExperianScore AS ExperianScore, 
-	   @CompanyScore AS CompanyScore, 
+	   dbo.udfMaxInt(@CompanyScore, @CompanyMaxScore) AS CompanyScore, 
 	   @WasApproved AS WasApproved, 
 	   @IsBrokerClient AS IsBrokerClient,
 	   @HasErrorMp AS HasErrorMp,

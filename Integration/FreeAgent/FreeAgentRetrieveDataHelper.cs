@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
-	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
@@ -17,34 +16,56 @@
 		public FreeAgentRetrieveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBaseBase marketplace
-		)
-			: base(helper, marketplace) {
+		) : base(helper, marketplace) {
 			expenseCategories = Helper.GetExpenseCategories();
 		} // constructor
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return null;
-		}
+		} // RetrieveCustomerSecurityInfo
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			log.Info("Starting to update FreeAgent marketplace. Id:{0} Name:{1}", databaseCustomerMarketPlace.Id, databaseCustomerMarketPlace.DisplayName);
+			log.Info(
+				"Starting to update FreeAgent marketplace id: {0} name: '{1}'...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName
+			);
 
-			var freeAgentSecurityInfo = (Serialized.Deserialize<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData));
+			FreeAgentSecurityInfo freeAgentSecurityInfo = Serialized.Deserialize<FreeAgentSecurityInfo>(
+				databaseCustomerMarketPlace.SecurityData
+			);
 
 			string accessToken = freeAgentSecurityInfo.AccessToken;
 
 			if (DateTime.UtcNow > freeAgentSecurityInfo.ValidUntil) {
-				log.Info("Starting to refresh access token");
+				log.Info(
+					"FreeAgent marketplace id: {0} name: '{1}': starting to refresh access token...",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				);
 
 				var tokenContainer = FreeAgentConnector.RefreshToken(freeAgentSecurityInfo.RefreshToken);
 
-				if (tokenContainer == null)
-					throw new Exception("Failed refreshing the access token");
+				if (tokenContainer == null) {
+					string err = string.Format(
+						"FreeAgent marketplace id: {0} name: '{1}': failed to refresh access token.",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
 
-				log.Info("Received new access token, will save it to DB");
+					log.Warn(err);
+
+					throw new Exception(err);
+				} // if
+
+				log.Info(
+					"FreeAgent marketplace id: {0} name: '{1}': received new access token, will save it to DB.",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				);
 
 				var securityData = new FreeAgentSecurityInfo {
 					ApprovalToken = freeAgentSecurityInfo.ApprovalToken,
@@ -66,44 +87,91 @@
 					databaseCustomerMarketPlace.Customer
 				);
 
-				log.Info("New access token was saved in DB");
+				log.Info(
+					"FreeAgent marketplace id: {0} name: '{1}': new access token was saved to DB.",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				);
 			} // if
 
-			log.Info("Getting invoices...");
+			int invoicesDeltaPeriod =
+				Helper.GetFreeAgentInvoiceDeltaPeriod(databaseCustomerMarketPlace);
 
-			var freeAgentInvoices = FreeAgentConnector.GetInvoices(
-				accessToken,
-				Helper.GetFreeAgentInvoiceDeltaPeriod(databaseCustomerMarketPlace)
+			log.Info(
+				"FreeAgent marketplace id: {0} name: '{1}': getting invoices with delta period = '{2}'...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName,
+				invoicesDeltaPeriod
 			);
 
-			log.Info("Getting expenses...");
+			var freeAgentInvoices = FreeAgentConnector.GetInvoices(accessToken, invoicesDeltaPeriod);
+
+			log.Info(
+				"FreeAgent marketplace id: {0} name: '{1}': getting expenses...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName
+			);
+
 			var freeAgentExpenses = FreeAgentConnector.GetExpenses(
 				accessToken,
 				Helper.GetFreeAgentExpenseDeltaPeriod(databaseCustomerMarketPlace)
 			);
 
-			log.Info("Filling expenses category...");
+			log.Info(
+				"FreeAgent marketplace id: {0} name: '{1}': filling expenses category...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName
+			);
+
 			FillExpensesCategory(freeAgentExpenses, accessToken);
 
-			log.Info("Getting company...");
+			log.Info(
+				"FreeAgent marketplace id: {0} name: '{1}': getting company...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName
+			);
+
 			FreeAgentCompany freeAgentCompany = FreeAgentConnector.GetCompany(accessToken);
 
-			log.Info("Getting users...");
+			log.Info(
+				"FreeAgent marketplace id: {0} name: '{1}': getting users...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName
+			);
+
 			List<FreeAgentUsers> freeAgentUsers = FreeAgentConnector.GetUsers(accessToken);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
-			log.Info("Saving request, {0} invoices & {1} expenses in DB...", freeAgentInvoices.Count, freeAgentExpenses.Count);
+			log.Info(
+				"FreeAgent marketplace id: {0} name: '{1}': saving request, {2} invoices & {3} expenses in DB...",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName,
+				freeAgentInvoices.Count,
+				freeAgentExpenses.Count
+			);
+
 			var mpRequest = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreFreeAgentRequestAndInvoicesAndExpensesData(databaseCustomerMarketPlace, freeAgentInvoices, freeAgentExpenses, historyRecord)
+				() => Helper.StoreFreeAgentRequestAndInvoicesAndExpensesData(
+					databaseCustomerMarketPlace,
+					freeAgentInvoices,
+					freeAgentExpenses,
+					historyRecord
+				)
 			);
 
 			StoreCompanyData(mpRequest, freeAgentCompany, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 
 			StoreUsersData(mpRequest, freeAgentUsers, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
+
+			log.Info(
+				"Finished to update FreeAgent marketplace id: {0} name: '{1}'.",
+				databaseCustomerMarketPlace.Id,
+				databaseCustomerMarketPlace.DisplayName
+			);
 
 			return elapsedTimeInfo;
 		} // RetrieveAndAggregate
@@ -134,7 +202,7 @@
 			if (mpRequest == null)
 				return;
 
-			log.Info("Saving company in DB...");
+			log.Info("Saving company to DB...");
 
 			var mpFreeAgentCompany = new MP_FreeAgentCompany {
 				Request = mpRequest,

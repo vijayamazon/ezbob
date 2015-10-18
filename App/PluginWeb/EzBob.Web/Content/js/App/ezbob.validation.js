@@ -124,7 +124,7 @@ EzBob.Validation.unhighlight = function (element) {
 
 EzBob.Validation.unhighlightFS = function (element) {
     if (EzBob.Config.Origin === 'everline') {
-        if ($(element).attr('id') === 'DateOfBirth') {
+    	if ($(element).attr('id') === 'DateOfBirth' || $(element).hasClass('director_birth_date')) {
             $('.form_field_date').css('border-bottom', '2px solid #7ac143');
         }
         else if ($(element).attr('class') === 'address-field') {
@@ -153,7 +153,7 @@ EzBob.Validation.unhighlightFS = function (element) {
 
 EzBob.Validation.highlightFS = function (element) {
     if (EzBob.Config.Origin == 'everline') {
-        if ($(element).attr('id') === 'DateOfBirth') {
+    	if ($(element).attr('id') === 'DateOfBirth' || $(element).hasClass('director_birth_date')) {
             $('.form_field_date').css('border-bottom', '2px solid red');
         } else if ($(element).attr('class') === 'address-field') {
             $(element).find('.form_field_left_side').css('border-bottom', '2px solid red');

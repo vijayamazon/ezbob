@@ -13,6 +13,8 @@
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database.Request;
 	using PaymentServices.Calculators;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using Web.Models;
 
 	public class ApplicationInfoModelBuilder {
@@ -22,7 +24,6 @@
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IOfferCalculationsRepository offerCalculationsRepository;
 		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
-		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly APRCalculator _aprCalc;
 
@@ -32,16 +33,15 @@
 			ILoanTypeRepository loanTypes,
 			ILoanSourceRepository loanSources,
 			VatReturnSummaryRepository vatReturnSummaryRepository,
-			CustomerAnalyticsRepository customerAnalyticsRepository,
 			LoanBuilder loanBuilder,
 			APRCalculator aprCalc,
-			IOfferCalculationsRepository offerCalculationsRepository) {
+			IOfferCalculationsRepository offerCalculationsRepository
+		) {
 			this._discounts = discounts;
 			this._loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this._loanSources = loanSources;
 			this._vatReturnSummaryRepository = vatReturnSummaryRepository;
-			this._customerAnalyticsRepository = customerAnalyticsRepository;
 			this._loanBuilder = loanBuilder;
 			this._aprCalc = aprCalc;
 			this.offerCalculationsRepository = offerCalculationsRepository;
@@ -221,9 +221,10 @@
 					model.FreeCashFlow = summary.FreeCashFlow;
 				}
 			}
-			var analytics = this._customerAnalyticsRepository.Get(customer.Id);
-			if (analytics != null)
-				model.Turnover = analytics.AnnualTurnover;
+
+			DecimalActionResult dar = new ServiceClient().Instance.GetCurrentCustomerAnnualTurnover(customer.Id);
+			model.Turnover = dar.Value;
+
 			model.SuggestedAmounts = new[] {
 	            new SuggestedAmountModel {
 	                Method = CalculationMethod.Turnover.DescriptionAttr(),
