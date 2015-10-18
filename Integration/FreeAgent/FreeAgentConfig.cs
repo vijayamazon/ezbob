@@ -13,17 +13,17 @@
 			UsersRequest = CurrentValues.Instance.FreeAgentUsersRequest;
 			ExpensesRequest = CurrentValues.Instance.FreeAgentExpensesRequest;
 			ExpensesRequestDatePart = CurrentValues.Instance.FreeAgentExpensesRequestDatePart;
-		}
+		} // constructor
 
-		public string OAuthIdentifier { get; set; }
-		public string OAuthSecret { get; set; }
-		public string OAuthAuthorizationEndpoint { get; set; }
-		public string OAuthTokenEndpoint { get; set; }
-		public string InvoicesRequest { get; set; }
-		public string InvoicesRequestMonthPart { get; set; }
-		public string CompanyRequest { get; set; }
-		public string UsersRequest { get; set; }
-		public string ExpensesRequest { get; set; }
-		public string ExpensesRequestDatePart { get; set; }
-	}
-}
+		public string OAuthIdentifier { get; private set; }
+		public string OAuthSecret { get; private set; }
+		public string OAuthAuthorizationEndpoint { get; private set; }
+		public string OAuthTokenEndpoint { get; private set; }
+		public string InvoicesRequest { get; private set; }
+		public string InvoicesRequestMonthPart { get; private set; }
+		public string CompanyRequest { get; private set; }
+		public string UsersRequest { get; private set; }
+		public string ExpensesRequest { get; private set; }
+		public string ExpensesRequestDatePart { get; private set; }
+	} // class FreeAgentConfig
+} // namespace

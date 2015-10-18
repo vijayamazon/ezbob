@@ -38,6 +38,8 @@
 				databaseCustomerMarketPlace.SecurityData
 			);
 
+			var connector = new FreeAgentConnector();
+
 			string accessToken = freeAgentSecurityInfo.AccessToken;
 
 			if (DateTime.UtcNow > freeAgentSecurityInfo.ValidUntil) {
@@ -47,7 +49,7 @@
 					databaseCustomerMarketPlace.DisplayName
 				);
 
-				var tokenContainer = FreeAgentConnector.RefreshToken(freeAgentSecurityInfo.RefreshToken);
+				var tokenContainer = connector.RefreshToken(freeAgentSecurityInfo.RefreshToken);
 
 				if (tokenContainer == null) {
 					string err = string.Format(
@@ -104,7 +106,7 @@
 				invoicesDeltaPeriod
 			);
 
-			var freeAgentInvoices = FreeAgentConnector.GetInvoices(accessToken, invoicesDeltaPeriod);
+			var freeAgentInvoices = connector.GetInvoices(accessToken, invoicesDeltaPeriod);
 
 			log.Info(
 				"FreeAgent marketplace id: {0} name: '{1}': getting expenses...",
@@ -112,7 +114,7 @@
 				databaseCustomerMarketPlace.DisplayName
 			);
 
-			var freeAgentExpenses = FreeAgentConnector.GetExpenses(
+			var freeAgentExpenses = connector.GetExpenses(
 				accessToken,
 				Helper.GetFreeAgentExpenseDeltaPeriod(databaseCustomerMarketPlace)
 			);
@@ -123,7 +125,7 @@
 				databaseCustomerMarketPlace.DisplayName
 			);
 
-			FillExpensesCategory(freeAgentExpenses, accessToken);
+			FillExpensesCategory(connector, freeAgentExpenses, accessToken);
 
 			log.Info(
 				"FreeAgent marketplace id: {0} name: '{1}': getting company...",
@@ -131,7 +133,7 @@
 				databaseCustomerMarketPlace.DisplayName
 			);
 
-			FreeAgentCompany freeAgentCompany = FreeAgentConnector.GetCompany(accessToken);
+			FreeAgentCompany freeAgentCompany = connector.GetCompany(accessToken);
 
 			log.Info(
 				"FreeAgent marketplace id: {0} name: '{1}': getting users...",
@@ -139,7 +141,7 @@
 				databaseCustomerMarketPlace.DisplayName
 			);
 
-			List<FreeAgentUsers> freeAgentUsers = FreeAgentConnector.GetUsers(accessToken);
+			List<FreeAgentUsers> freeAgentUsers = connector.GetUsers(accessToken);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
@@ -176,14 +178,18 @@
 			return elapsedTimeInfo;
 		} // RetrieveAndAggregate
 
-		private void FillExpensesCategory(IEnumerable<FreeAgentExpense> freeAgentExpenses, string accessToken) {
+		private void FillExpensesCategory(
+			FreeAgentConnector connector,
+			IEnumerable<FreeAgentExpense> freeAgentExpenses,
+			string accessToken
+		) {
 			foreach (var expense in freeAgentExpenses) {
 				if (expenseCategories.ContainsKey(expense.category))
 					expense.categoryItem = expenseCategories[expense.category];
 				else {
 					log.Info("Getting expenses category: {0}", expense.category);
 
-					expense.categoryItem = FreeAgentConnector.GetExpenseCategory(accessToken, expense.category);
+					expense.categoryItem = connector.GetExpenseCategory(accessToken, expense.category);
 
 					expense.categoryItem.Id = Helper.AddExpenseCategory(expense.categoryItem);
 
