@@ -108,6 +108,10 @@ namespace ConfigManager {
 			get { return this[Variables.MinLoan]; }
 		}
 
+		public virtual VariableValue MinLoanLifetimeMonths {
+			get { return this[Variables.MinLoanLifetimeMonths]; }
+		}
+
 		public virtual VariableValue NHibernateEnableProfiler {
 			get { return this[Variables.NHibernateEnableProfiler]; }
 		}
@@ -122,6 +126,10 @@ namespace ConfigManager {
 
 		public virtual VariableValue NumberOfMobileCodeAttempts {
 			get { return this[Variables.NumberOfMobileCodeAttempts]; }
+		}
+
+		public virtual VariableValue NumofAllowedActiveLoans {
+			get { return this[Variables.NumofAllowedActiveLoans]; }
 		}
 
 		public virtual VariableValue NumOfInvalidPasswordAttempts {
