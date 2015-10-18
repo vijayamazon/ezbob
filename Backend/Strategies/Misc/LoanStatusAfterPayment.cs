@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
+	using ConfigManager;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
@@ -8,8 +9,8 @@
 
 	/// <summary>
 	/// If loan fully paid - send mail to customer
-	/// If loan fully paid and wasn't late/default - add sf opportunity - finish loan
-	/// If loan 50% repaid and wasn't late/default - add sf opportunity - 50% paid
+	/// If loan fully paid and wasn't late/default and has less than 2 (conf) loans and loan more than 5 months old - add sf opportunity - finish loan
+	/// If loan 50% repaid and wasn't late/default and has less than 2 (conf) loans and loan more than 5 months old - add sf opportunity - 50% paid
 	/// </summary>
 	public class LoanStatusAfterPayment : AStrategy {
 		public LoanStatusAfterPayment(int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
@@ -34,12 +35,18 @@
 			bool wasLate = sr["WasLate"];
 			decimal loanAmount = sr["LoanAmount"];
 			string loanRefNum = sr["RefNum"];
+			int numOfActiveLoans = sr["NumOfActiveLoans"];
+			DateTime loanDate = sr["LoanDate"];
+			DateTime now = DateTime.UtcNow;
+			double monthsSinceLoanWasTaken = (now - loanDate).TotalDays / (365.0 / 12.0);
 
 			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, is paid off {2}, loan amount {3}, balance {4}, paid {5}, was late {6}",
 				this.customerID, this.loanID, this.isPaidOff, loanAmount, this.balance, this.paymentAmount, wasLate);
 
 			if (this.isPaidOff) {
-				if (!wasLate) {
+				if (!wasLate && 
+					numOfActiveLoans < CurrentValues.Instance.NumofAllowedActiveLoans && 
+					monthsSinceLoanWasTaken > CurrentValues.Instance.MinLoanLifetimeMonths) {
 					SalesForce.AddOpportunity addOpportunity = new AddOpportunity(this.customerID, new OpportunityModel {
 						CreateDate = DateTime.UtcNow,
 						Email = this.customerEmail,
@@ -58,7 +65,11 @@
 				decimal repaidPercent = loanAmount == 0 ? 0 : (loanAmount - this.balance) / loanAmount;
 				decimal repaidPercentBeforePayment = loanAmount == 0 ? 0 : (loanAmount - this.balance - this.paymentAmount) / loanAmount;
 				const decimal fiftyPercent = 0.5M;
-				if (repaidPercent >= fiftyPercent && repaidPercentBeforePayment < fiftyPercent && !wasLate) {
+				if (repaidPercent >= fiftyPercent && 
+					repaidPercentBeforePayment < fiftyPercent && 
+					!wasLate &&
+					numOfActiveLoans < CurrentValues.Instance.NumofAllowedActiveLoans && 
+					monthsSinceLoanWasTaken > CurrentValues.Instance.MinLoanLifetimeMonths) {
 					AddSalesForceFiftyPercentOpportunity();
 				}//if
 			}//if

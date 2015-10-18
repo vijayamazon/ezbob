@@ -319,10 +319,12 @@ namespace ConfigManager {
 		MinDectForDefault,
 		MinInterestRateToReuse,
 		MinLoan,
+		MinLoanLifetimeMonths,
 
 		NHibernateEnableProfiler,
 		NotEnoughFundsTemplateName,
 		NotEnoughFundsToAddress,
+		NumofAllowedActiveLoans,
 		NumOfInvalidPasswordAttempts,
 		NumberOfMobileCodeAttempts,
 

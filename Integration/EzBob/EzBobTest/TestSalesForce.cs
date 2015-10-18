@@ -55,7 +55,11 @@
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
 				IsTest = false,
-				Origin = "ezbob"
+				Origin = "ezbob",
+				BrokerEmail = "broker@email.com",
+				BrokerFirmName = "Broker Firm Name",
+				BrokerName = "Broker Name",
+				BrokerPhoneNumber = "01234567890"
 			};
 			Log.Debug(model.ToJsonExtension());
 			Log.Debug("call CreateOpportunity/UpdateOpportunity");
