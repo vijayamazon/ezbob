@@ -226,16 +226,20 @@ namespace ConfigManager {
 
 		[Description("Spare")]
 		FinancialAccounts_Spare,
+
 		FinishWizardForApproved,
 		FirstOfMonthEnableCustomerMail,
 		FirstOfMonthStatusMailCopyTo,
 		FirstOfMonthStatusMailEnabled,
 		FirstOfMonthStatusMailMandrillTemplateName,
+		FreeAgentApiBase,
+		FreeAgentExpensesCategoriesRequest,
 		FreeAgentCompanyRequest,
 		FreeAgentExpensesRequest,
 		FreeAgentExpensesRequestDatePart,
 		FreeAgentInvoicesRequest,
 		FreeAgentInvoicesRequestMonthPart,
+		FreeAgentInvoicesRequestNestedPart,
 		FreeAgentOAuthAuthorizationEndpoint,
 		FreeAgentOAuthIdentifier,
 		FreeAgentOAuthSecret,

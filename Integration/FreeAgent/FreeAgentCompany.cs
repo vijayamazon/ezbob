@@ -1,10 +1,9 @@
-﻿namespace FreeAgent
-{
+﻿namespace FreeAgent {
 	using System;
+	using EzBob.CommonLib;
 
 	[Serializable]
-	public class FreeAgentCompany
-	{
+	public class FreeAgentCompany {
 		public string url { get; set; }
 		public string name { get; set; }
 		public string subdomain { get; set; }
@@ -17,11 +16,18 @@
 		public string company_registration_number { get; set; }
 		public string sales_tax_registration_status { get; set; }
 		public string sales_tax_registration_number { get; set; }
-	}
+	} // class FreeAgentCompany
 
 	[Serializable]
-	public class FreeAgentCompanyList
-	{
+	public class FreeAgentCompanyList : IFreeAgentItemContainer {
 		public FreeAgentCompany Company { get; set; }
-	}
-}
+
+		public bool HasItems() {
+			return (Company != null);
+		} // HasItems
+
+		public int GetItemCount() {
+			return HasItems() ? 1 : 0;
+		} // GetItemCount
+	} // class FreeAgentCompanyList
+} // namespace

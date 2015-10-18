@@ -8,14 +8,20 @@
 	using System.Net.Http.Headers;
 	using System.Web.Script.Serialization;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Lingvo;
+	using EzBob.CommonLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
-	using RestSharp;
 
 	public class FreeAgentConnector : IDisposable {
+		public const string NotFoundCompanyName = "Can't get company's name";
+
 		public FreeAgentConnector() {
+			this.expenseCategories = null;
+
 			this.serializer = new JavaScriptSerializer();
 			this.config = new FreeAgentConfig();
-			this.client = new HttpClient { BaseAddress = new Uri("https://api.freeagent.com") };
+
+			this.client = new HttpClient { BaseAddress = new Uri(this.config.ApiBase), };
 		} // constructor
 
 		public FreeAgentInvoicesList GetInvoices(string accessToken, int numOfMonths) {
@@ -23,279 +29,112 @@
 				? string.Empty
 				: string.Format(this.config.InvoicesRequestMonthPart, numOfMonths);
 
-			string timedInvoicesRequest = string.Format(
-				"{0}{1}",
-				"/v2/invoices?nested_invoice_items=true"/* this.config.InvoicesRequest */,
-				monthPart
-			);
-
-			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, timedInvoicesRequest);
-
-			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-			request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-			request.Headers.UserAgent.Add(new ProductInfoHeaderValue("EzbobFreeAgentConnector", "2.0"));
-
-			int batchNo = 1;
-
-			log.Debug(
-				"Executing invoices batch #{0} {1} request:\nURL: {2}\nHeaders:\n\t{3}",
-				batchNo,
-				request.Method,
-				request.RequestUri,
-				string.Join("\n\t", request.Headers.Select(pair => string.Format(
-					"{0}: {1}",
-					pair.Key,
-					string.Join(", ", pair.Value)
-				)))
-			);
-
-			HttpResponseMessage response = this.client.SendAsync(request).Result;
-
-			string responseContent = response.Content.ReadAsStringAsync().Result;
-
-			log.Debug(
-				"Invoices batch #{0} response status code is {1}, content:\n{2}",
-				batchNo,
-				response.StatusCode,
-				responseContent
-			);
-
 			var invoices = new List<FreeAgentInvoice>();
 
-			InvoicesListHelper deserializedResponse = DeserializeResponse<InvoicesListHelper>(responseContent);
-
-			if ((deserializedResponse != null) && (deserializedResponse.Invoices != null)) {
-				log.Debug("{0} invoices fetched from batch #{1}.", deserializedResponse.Invoices.Count, batchNo);
-				invoices.AddRange(deserializedResponse.Invoices);
-			} else
-				log.Error("Failed to parse invoices from batch #{0}.", batchNo);
-
-			log.Debug("Batch #{0} response headers - begin", batchNo);
-			foreach (var header in response.Headers)
-				log.Debug("Batch #{0} response header {1}: {2}", batchNo, header.Key, string.Join(" ;;; ", header.Value));
-			log.Debug("Batch #{0} response headers - end", batchNo);
+			FetchRemoteData<InvoicesListHelper>(
+				"invoices",
+				accessToken,
+				this.config.InvoicesRequest,
+				new [] { this.config.InvoicesRequestNestedPart, monthPart, },
+				deserializedInvoiceList => invoices.AddRange(deserializedInvoiceList.Invoices)
+			);
 
 			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoices);
 
-			return freeAgentInvoicesList;
-		} // GetInvoices
-
-		public FreeAgentInvoicesList GetInvoicesOld(string accessToken, int numOfMonths) {
-			string monthPart = numOfMonths == -1
-				? string.Empty
-				: string.Format(this.config.InvoicesRequestMonthPart, numOfMonths);
-
-			Dictionary<string, string> headers = new Dictionary<string, string> {
-				{ "Authorization", "Bearer " + accessToken },
-			};
-
-			string timedInvoicesRequest = string.Format("{0}{1}", this.config.InvoicesRequest, monthPart);
-
-			var request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
-
-			foreach (var pair in headers)
-				request.AddHeader(pair.Key, pair.Value);
-
-			var client = new RestClient();
-
-			int batchNo = 1;
-
-			log.Debug(
-				"Executing invoices batch #{0} {1} request:\nURL: {2}\nHeaders:\n\t{3}",
-				batchNo,
-				request.Method,
-				timedInvoicesRequest,
-				string.Join("\n\t", headers.Select(pair => string.Format("{0}: {1}", pair.Key, pair.Value)))
-			);
-
-			IRestResponse response = client.Execute(request);
-
-			log.Debug(
-				"Invoices batch #{0} response:\n" +
-				"Content length is {1};\n" +
-				"Status code is {2};\n" +
-				"Response status is {3}.",
-				batchNo,
-				response.Content.Length,
-				response.StatusCode,
-				response.ResponseStatus
-			);
-
-			var invoices = new List<FreeAgentInvoice>();
-
-			InvoicesListHelper deserializedResponse = DeserializeResponse<InvoicesListHelper>(response.Content);
-
-			if ((deserializedResponse != null) && (deserializedResponse.Invoices != null)) {
-				log.Debug("{0} invoices fetched from batch #{1}.", deserializedResponse.Invoices.Count, batchNo);
-				invoices.AddRange(deserializedResponse.Invoices);
-			} else
-				log.Error("Failed to parse invoices from batch #{0}.", batchNo);
-
-			string nextUrl = GetNextUrl(response);
-
-			while (nextUrl != null) {
-				batchNo++;
-
-				if (!nextUrl.Contains("nested_invoice_items")) {
-					// This is done to workaround an issue in FreeAgent's API (The pagination removes this parameter).
-					nextUrl = nextUrl.Replace("?", "?nested_invoice_items=true&");
-				} // if
-
-				request = new RestRequest(Method.GET) { Resource = nextUrl };
-
-				foreach (var pair in headers)
-					request.AddHeader(pair.Key, pair.Value);
-
-				log.Debug(
-					"Executing invoices batch #{0} {1} request:\nURL: {2}\nHeaders:\n\t{3}",
-					batchNo,
-					request.Method,
-					timedInvoicesRequest,
-					string.Join("\n\t", headers.Select(pair => string.Format("{0}: {1}", pair.Key, pair.Value)))
-				);
-
-				response = client.Execute(request);
-
-				log.Debug("Invoices batch #{0} response content length is {1}.", batchNo, response.Content.Length);
-
-				deserializedResponse = DeserializeResponse<InvoicesListHelper>(response.Content);
-
-				if ((deserializedResponse != null) && (deserializedResponse.Invoices != null)) {
-					log.Debug("{0} invoices fetched from batch #{1}.", deserializedResponse.Invoices.Count, batchNo);
-					invoices.AddRange(deserializedResponse.Invoices);
-				} else
-					log.Error("Failed to parse invoices from batch #{0}.", batchNo);
-
-				nextUrl = GetNextUrl(response);
-			} // while
-
-			log.Debug("{0} invoices fetched in total from {1} batch(es).", invoices.Count, batchNo);
-
-			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoices);
+			log.Debug("Total {0} fetched from Free Agent.", Grammar.Number(freeAgentInvoicesList.Count, "invoice"));
 
 			return freeAgentInvoicesList;
 		} // GetInvoices
 
 		public FreeAgentCompany GetCompany(string accessToken) {
-			var request = new RestRequest(Method.GET) { Resource = this.config.CompanyRequest };
-			request.AddHeader("Authorization", "Bearer " + accessToken);
+			FreeAgentCompanyList company = null;
 
-			var client = new RestClient();
+			FetchRemoteData<FreeAgentCompanyList>(
+				"company",
+				accessToken,
+				this.config.CompanyRequest,
+				null,
+				deserializedCompanyList => { company = deserializedCompanyList; }
+			);
 
-			IRestResponse response = client.Execute(request);
-			FreeAgentCompanyList deserializedResponse = DeserializeResponse<FreeAgentCompanyList>(response.Content);
-
-			if (deserializedResponse != null && deserializedResponse.Company != null)
-				return deserializedResponse.Company;
-
-			log.Error("Failed parsing company. Request:{0} Response:{1}", request.Resource, response.Content);
-
-			return new FreeAgentCompany {
+			return company != null ? company.Company : new FreeAgentCompany {
 				company_start_date = new DateTime(1900, 1, 1),
 				freeagent_start_date = new DateTime(1900, 1, 1),
 				first_accounting_year_end = new DateTime(1900, 1, 1),
-				name = "Can't get company's name"
+				name = NotFoundCompanyName,
 			};
-		}
+		} // GetCompany
 
 		public List<FreeAgentUsers> GetUsers(string accessToken) {
-			var request = new RestRequest(Method.GET) { Resource = this.config.UsersRequest };
-			request.AddHeader("Authorization", "Bearer " + accessToken);
+			FreeAgentUsersList users = null;
 
-			var client = new RestClient();
-
-			IRestResponse response = client.Execute(request);
-
-			FreeAgentUsersList deserializedResponse = DeserializeResponse<FreeAgentUsersList>(response.Content);
-			if (deserializedResponse != null && deserializedResponse.Users != null)
-				return deserializedResponse.Users;
-
-			log.Error("Failed parsing users. Request:{0} Response:{1}", request.Resource, response.Content);
-			return new List<FreeAgentUsers>();
-		}
-
-		public FreeAgentExpensesList GetExpenses(string accessToken, DateTime? fromDate) {
-			string fromDatePart = fromDate == null ? string.Empty : string.Format(this.config.ExpensesRequestDatePart, fromDate.Value.Year, fromDate.Value.Month, fromDate.Value.Day);
-			string expensesRequest = string.Format("{0}{1}", this.config.ExpensesRequest, fromDatePart);
-			var request = new RestRequest(Method.GET) { Resource = expensesRequest };
-			request.AddHeader("Authorization", "Bearer " + accessToken);
-
-			var client = new RestClient();
-
-			IRestResponse response = client.Execute(request);
-			var expenses = new List<FreeAgentExpense>();
-
-			ExpensesListHelper deserializedResponse = DeserializeResponse<ExpensesListHelper>(response.Content);
-
-			if (deserializedResponse != null && deserializedResponse.Expenses != null)
-				expenses.AddRange(deserializedResponse.Expenses);
-			else
-				log.Error("Failed parsing expenses. Request:{0} Response:{1}", request.Resource, response.Content);
-
-			string nextUrl = GetNextUrl(response);
-
-			while (nextUrl != null) {
-				request = new RestRequest(Method.GET) { Resource = nextUrl };
-				request.AddHeader("Authorization", "Bearer " + accessToken);
-				response = client.Execute(request);
-
-				deserializedResponse = DeserializeResponse<ExpensesListHelper>(response.Content);
-
-				if (deserializedResponse != null && deserializedResponse.Expenses != null)
-					expenses.AddRange(deserializedResponse.Expenses);
-				else
-					log.Error("Failed parsing expenses. Request:{0} Response:{1}", request.Resource, response.Content);
-
-				nextUrl = GetNextUrl(response);
-			}
-
-			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expenses);
-			return freeAgentExpenesList;
-		}
-
-		public FreeAgentExpenseCategory GetExpenseCategory(string accessToken, string categoryUrl) {
-			var request = new RestRequest(Method.GET) { Resource = categoryUrl };
-			request.AddHeader("Authorization", "Bearer " + accessToken);
-
-			var client = new RestClient();
-
-			IRestResponse response = client.Execute(request);
-
-			ExpenseCategoriesListHelper deserializedResponse = DeserializeResponse<ExpenseCategoriesListHelper>(
-				response.Content
+			FetchRemoteData<FreeAgentUsersList>(
+				"users",
+				accessToken,
+				this.config.UsersRequest,
+				null,
+				deserializedUsersList => { users = deserializedUsersList; }
 			);
 
-			if (deserializedResponse != null && deserializedResponse.Category != null)
-				return deserializedResponse.Category;
+			return (users != null) ? users.Users : new List<FreeAgentUsers>();
+		} // GetUsers
 
-			log.Error("Failed parsing category. Request:{0} Response:{1}", request.Resource, response.Content);
-			return new FreeAgentExpenseCategory { url = string.Empty };
-		}
+		public FreeAgentExpensesList GetExpenses(string accessToken, DateTime? fromDate) {
+			string fromDatePart = (fromDate == null) ? string.Empty : string.Format(
+				this.config.ExpensesRequestDatePart,
+				fromDate.Value.Year,
+				fromDate.Value.Month,
+				fromDate.Value.Day
+			);
 
-		private string GetNextUrl(IRestResponse response) {
-			try {
-				foreach (var header in response.Headers) {
-					if (header.Name == "Link") {
-						var paginationParts = header.Value.ToString().Split(',');
-						foreach (var paginationPart in paginationParts) {
-							if (paginationPart.Contains("rel='next'")) {
-								var nextUrlPart = paginationPart.Split(';')[0];
-								return nextUrlPart.Substring(1, nextUrlPart.Length - 2);
-							}
-						}
-					}
-				}
-			} catch (Exception) {
-				return null;
-			}
-			return null;
-		} // GetNextUrl
+			var expenses = new List<FreeAgentExpense>();
+
+			FetchRemoteData<ExpensesListHelper>(
+				"expenses",
+				accessToken,
+				this.config.ExpensesRequest,
+				new [] { fromDatePart, },
+				deserializedExpenseList => expenses.AddRange(deserializedExpenseList.Expenses)
+			);
+
+			var freeAgentExpensesList = new FreeAgentExpensesList(DateTime.UtcNow, expenses);
+
+			log.Debug("Total {0} fetched from Free Agent.", Grammar.Number(freeAgentExpensesList.Count, "expense"));
+
+			return freeAgentExpensesList;
+		} // GetExpenses
+
+		public FreeAgentExpenseCategory GetExpenseCategory(string accessToken, string categoryUrl) {
+			if (this.expenseCategories == null) {
+				FetchRemoteData<ExpenseCategoriesListHelper>(
+					"expense categories",
+					accessToken,
+					this.config.ExpensesCategoriesRequest,
+					null,
+					deserializedExpenseList => { this.expenseCategories = deserializedExpenseList; }
+				);
+
+				this.expenseCategories.UpdateSearchTree();
+			} // if
+
+			if (this.expenseCategories == null) {
+				this.expenseCategories = new ExpenseCategoriesListHelper();
+				this.expenseCategories.UpdateSearchTree();
+			} // if
+
+			FreeAgentExpenseCategory cat = this.expenseCategories[categoryUrl];
+
+			log.Debug("Expense category '{0}' was mapped to '{1}'.", categoryUrl, cat.description);
+
+			return cat;
+		} // GetExpenseCategory
 
 		public AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage) {
 			errorMessage = null;
 
 			string getTokenRequestUrl = string.Format(
-				"{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}", this.config.OAuthTokenEndpoint,
+				"{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",
+				this.config.OAuthTokenEndpoint,
 				code,
 				redirectVal, this.config.OAuthSecret, this.config.OAuthIdentifier
 			);
@@ -345,7 +184,8 @@
 
 		public AccessTokenContainer RefreshToken(string refreshToken) {
 			string refreshTokenRequestUrl = string.Format(
-				"{0}?grant_type=refresh_token&refresh_token={1}&client_secret={2}&client_id={3}", this.config.OAuthTokenEndpoint,
+				"{0}?grant_type=refresh_token&refresh_token={1}&client_secret={2}&client_id={3}",
+				this.config.OAuthTokenEndpoint,
 				refreshToken, this.config.OAuthSecret, this.config.OAuthIdentifier
 			);
 
@@ -412,9 +252,18 @@
 			this.client.Dispose();
 		} // Dispose
 
-		private T DeserializeResponse<T>(string responseContent) where T : class {
+		private T DeserializeResponse<T>(string responseContent) where T : class, IFreeAgentItemContainer {
+			T result;
+
 			try {
-				return this.serializer.Deserialize<T>(responseContent);
+				result = this.serializer.Deserialize<T>(responseContent);
+
+				if (result == null)
+					log.Warn("Parsing result is null.");
+				else if (!result.HasItems()) {
+					log.Warn("No items received.");
+					result = null;
+				} // if
 			} catch (Exception e) {
 				log.Error(
 					e,
@@ -422,13 +271,114 @@
 					typeof(T),
 					responseContent
 				);
-				return null;
+
+				result = null;
 			} // try
+
+			return result;
 		} // DeserializeResponse
+
+		private void FetchRemoteData<TDeserialize>(
+			string jobName,
+			string accessToken,
+			string path,
+			IEnumerable<string> queryParts,
+			Action<TDeserialize> handleDeserialized
+		) where TDeserialize: class, IFreeAgentItemContainer {
+			int pageNo = 0;
+			bool hasNextPage;
+
+			string queryBase = queryParts == null
+				? null
+				: string.Join("&", queryParts.Where(s => !string.IsNullOrWhiteSpace(s)));
+
+			do {
+				pageNo++;
+
+				string pageArg = "page=" + pageNo;
+
+				string query = string.IsNullOrWhiteSpace(queryBase)
+					? pageArg
+					: string.Format("{0}&{1}", queryBase, pageArg);
+
+				string requestUri = string.Format("{0}?{1}", path, query);
+
+				HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+
+				request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+				request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+				request.Headers.UserAgent.Add(new ProductInfoHeaderValue("EzbobFreeAgentConnector", "2.0"));
+
+				log.Debug(
+					"Executing '{0}' page #{1} {2} request:\nURL: {3}\nHeaders:\n\t{4}",
+					jobName,
+					pageNo,
+					request.Method,
+					request.RequestUri,
+					string.Join("\n\t", request.Headers.Select(pair => string.Format(
+						"{0}: {1}",
+						pair.Key,
+						string.Join(", ", pair.Value)
+					)))
+				);
+
+				HttpResponseMessage response = this.client.SendAsync(request).Result;
+
+				string responseContent = response.Content.ReadAsStringAsync().Result;
+
+				log.Debug(
+					"Page #{0} of {1} response status code is {2}, content:\n{3}",
+					pageNo,
+					jobName,
+					response.StatusCode,
+					responseContent
+				);
+
+				TDeserialize deserializedResponse = DeserializeResponse<TDeserialize>(responseContent);
+
+				if (deserializedResponse != null) {
+					log.Debug(
+						"{0} items fetched from page #{1} for {2}.",
+						deserializedResponse.GetItemCount(),
+						pageNo,
+						jobName
+					);
+					handleDeserialized(deserializedResponse);
+				} else
+					log.Error("Failed to parse page #{0} data while fetching {1}.", pageNo, jobName);
+
+				hasNextPage = false;
+
+				foreach (KeyValuePair<string, IEnumerable<string>> header in response.Headers) {
+					if (header.Key != "Link")
+						continue;
+
+					foreach (string headerValue in header.Value) {
+						string[] links = headerValue.Split(',');
+
+						foreach (string link in links) {
+							if (!link.Contains("rel='next'"))
+								continue;
+
+							hasNextPage = true;
+							break;
+						} // for each link
+
+						if (hasNextPage)
+							break;
+					} // for each
+
+					if (hasNextPage)
+						break;
+				} // for each response header
+			} while (hasNextPage);
+		} // FetchRemoteData
 
 		private readonly JavaScriptSerializer serializer;
 		private readonly FreeAgentConfig config;
 		private readonly HttpClient client;
+
+		private ExpenseCategoriesListHelper expenseCategories;
 
 		private static readonly ASafeLog log = new SafeILog(typeof(FreeAgentConnector));
 	} // class FreeAgentConnector

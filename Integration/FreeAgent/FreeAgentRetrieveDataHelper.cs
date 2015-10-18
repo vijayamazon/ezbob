@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -17,7 +16,6 @@
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBaseBase marketplace
 		) : base(helper, marketplace) {
-			expenseCategories = Helper.GetExpenseCategories();
 		} // constructor
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
@@ -125,7 +123,10 @@
 				databaseCustomerMarketPlace.DisplayName
 			);
 
-			FillExpensesCategory(connector, freeAgentExpenses, accessToken);
+			foreach (var expense in freeAgentExpenses) {
+				expense.categoryItem = connector.GetExpenseCategory(accessToken, expense.category);
+				expense.categoryItem.Id = Helper.AddFreeAgentExpenseCategory(expense.categoryItem);
+			} // for each
 
 			log.Info(
 				"FreeAgent marketplace id: {0} name: '{1}': getting company...",
@@ -178,27 +179,6 @@
 			return elapsedTimeInfo;
 		} // RetrieveAndAggregate
 
-		private void FillExpensesCategory(
-			FreeAgentConnector connector,
-			IEnumerable<FreeAgentExpense> freeAgentExpenses,
-			string accessToken
-		) {
-			foreach (var expense in freeAgentExpenses) {
-				if (expenseCategories.ContainsKey(expense.category))
-					expense.categoryItem = expenseCategories[expense.category];
-				else {
-					log.Info("Getting expenses category: {0}", expense.category);
-
-					expense.categoryItem = connector.GetExpenseCategory(accessToken, expense.category);
-
-					expense.categoryItem.Id = Helper.AddExpenseCategory(expense.categoryItem);
-
-					if (!expenseCategories.ContainsKey(expense.categoryItem.url))
-						expenseCategories.Add(expense.categoryItem.url, expense.categoryItem);
-				} // if
-			} // for
-		} // FillExpensesCategory
-
 		private void StoreCompanyData(
 			MP_FreeAgentRequest mpRequest,
 			FreeAgentCompany freeAgentCompany,
@@ -230,7 +210,10 @@
 				elapsedTimeInfo,
 				mpId,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreFreeAgentCompanyData(mpFreeAgentCompany)
+				() => {
+					Helper.StoreFreeAgentCompanyData(mpFreeAgentCompany);
+					Helper.UpdateMarketplaceDisplayName(mpRequest.CustomerMarketPlace, freeAgentCompany.name);
+				}
 			);
 		} // StoreCompanyData
 
@@ -273,6 +256,5 @@
 		} // StoreUsersData
 
 		private static readonly ASafeLog log = new SafeILog(typeof(FreeAgentRetrieveDataHelper));
-		private readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories;
 	} // class FreeAgentRetrieveDataHelper
 } // namespace
