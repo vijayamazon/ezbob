@@ -126,6 +126,9 @@
   <data name="Check_Incoming_Messages" xml:space="preserve">
     <value>A message from your finance broker</value>
   </data>
+  <data name="CustomerLogIn" xml:space="preserve">
+    <value>https://test.everline.com/Account/LogOn</value>
+  </data>
   <data name="Enviorment_url" xml:space="preserve">
     <value>test.everline.com</value>
   </data>

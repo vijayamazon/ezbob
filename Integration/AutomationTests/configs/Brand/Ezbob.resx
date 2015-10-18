@@ -126,6 +126,9 @@
   <data name="Check_Incoming_Messages" xml:space="preserve">
     <value>You were invited to register with ezbob!</value>
   </data>
+  <data name="CustomerLogIn" xml:space="preserve">
+    <value>https://test.ezbob.com/Account/LogOn</value>
+  </data>
   <data name="Enviorment_url" xml:space="preserve">
     <value>test.ezbob.com</value>
   </data>

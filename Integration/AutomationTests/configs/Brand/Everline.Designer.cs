@@ -88,6 +88,15 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://test.everline.com/Account/LogOn.
+        /// </summary>
+        internal static string CustomerLogIn {
+            get {
+                return ResourceManager.GetString("CustomerLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to test.everline.com.
         /// </summary>
         internal static string Enviorment_url {

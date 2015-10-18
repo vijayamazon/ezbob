@@ -83,6 +83,7 @@
             signupBrokerButton.Click();
 
             Thread.Sleep(5000);
+            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
             Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
             IWebElement logOff = this._Driver.FindElement(By.ClassName("log-off"));
             logOff.Click();
@@ -104,6 +105,7 @@
             loginBrokerButton.Click();
 
             Thread.Sleep(2000);
+            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
             if (this._Driver.FindElement(By.ClassName("section-requestacceptterms")).Displayed == true) {//In case new terms screen appears.
                 IWebElement acceptButon = this._Driver.FindElement(By.Id("AcceptTermsButton"));
                 acceptButon.Click();
@@ -117,12 +119,14 @@
         public void BrokerLeedEnrolment(string fName, string lName, string leadEmail) {
 
             Thread.Sleep(7000);
+            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
             Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")) != null);
 
             IWebElement addNewCustomer = this._Driver.FindElement(By.Id("AddNewCustomer"));
             addNewCustomer.Click();
 
             Thread.Sleep(2000);
+            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
             Assert.IsTrue(this._Driver.FindElement(By.Id("LeadFirstName")) != null);
 
             IWebElement leadFirstName = this._Driver.FindElement(By.Id("LeadFirstName"));
