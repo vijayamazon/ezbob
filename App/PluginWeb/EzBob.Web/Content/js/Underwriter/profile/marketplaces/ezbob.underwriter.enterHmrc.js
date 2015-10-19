@@ -364,7 +364,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		packData: function() {
 			var oPackage = {
 				CustomerID: this.CustomerID,
-				RegNo: this.$el.find('.RegNo').autoNumeric('get'),
+				RegNo: this.$el.find('.RegNo').val(),
 				BusinessName: $.trim(this.$el.find('.BusinessName').val()),
 				BusinessAddress: $.trim(this.$el.find('.BusinessAddress').val()),
 
