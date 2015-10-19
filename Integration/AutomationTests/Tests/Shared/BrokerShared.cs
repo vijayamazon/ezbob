@@ -88,11 +88,10 @@
             signupBrokerButton.Click();
 
             Thread.Sleep(5000);
-            //IWebElement myDynamicElement = this.wait.Until<IWebElement>((d) => d.FindElement(By.LinkText("log-off")));
-            //IWebElement ads = this._Driver.FindElement(By.Id("AddNewCustomer"));
-            //Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
-            //Assert.IsTrue(true);
-            IWebElement logOff = this._Driver.FindElement(By.LinkText("Log off"));
+
+            Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
+
+            IWebElement logOff = this._Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off"));
             logOff.Click();
         }
 

@@ -16,7 +16,6 @@
                   BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
                   string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
                   newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
-
                   return null;
               });
               Assert.IsTrue(result);
