@@ -1,9 +1,16 @@
-﻿@using EzBob.Web.Infrastructure.Html
+﻿@using System
+@using System.Collections.Generic
+@using System.Web.WebPages
+@using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib.Model.Database
 
 @helper Render(WebPageBase page, dynamic viewBag, string sUrl) {
-		CustomerOriginEnum origin = viewBag.CustomerOrigin.GetOrigin();
-
+	CustomerOriginEnum origin = CustomerOriginEnum.ezbob;
+	
+	if (viewBag != null && viewBag.CustomerOrigin != null) {
+		origin = viewBag.CustomerOrigin.GetOrigin();
+	}
+		
 	<script id="add-director-info-template" type="text/template">
 		<div class="director">
 			<form method="post" action="@sUrl" class="addDirectorInfoForm ev-form" novalidate="novalidate">
