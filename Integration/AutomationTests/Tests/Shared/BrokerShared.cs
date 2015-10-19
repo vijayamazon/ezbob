@@ -4,6 +4,7 @@
     using System.Threading;
     using NUnit.Framework;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Support.UI;
     using UIAutomationTests.Core;
 
     class BrokerShared : WebTestBase {
@@ -11,11 +12,13 @@
         private IWebDriver _Driver;
         private ResourceManager _EnvironmentConfig;
         private ResourceManager _BrandConfig;
+        private WebDriverWait wait;
 
         public BrokerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
             this._Driver = Driver;
             this._EnvironmentConfig = EnvironmentConfig;
             this._BrandConfig = BrandConfig;
+            this.wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(120));
         }
         /// <summary>
         /// This procedure is to replace broker test case 'C1202'
@@ -33,6 +36,7 @@
             bool iAgreeToTerms,
             bool iAgreeToPrivacyPolicy
             ) {
+            
 
             string url = this._BrandConfig.GetString("BrokerSignupHost");
 
@@ -79,11 +83,13 @@
                 agreeToPrivacyPolicy.Click();
             }
 
+            Thread.Sleep(1000);
             IWebElement signupBrokerButton = this._Driver.FindElement(By.Id("SignupBrokerButton"));
             signupBrokerButton.Click();
 
             Thread.Sleep(5000);
-            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
+            //IWebElement myDynamicElement = this.wait.Until<IWebElement>((d) => d.FindElement(By.LinkText("log-off")));
+
             Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
             IWebElement logOff = this._Driver.FindElement(By.ClassName("log-off"));
             logOff.Click();
@@ -105,7 +111,7 @@
             loginBrokerButton.Click();
 
             Thread.Sleep(2000);
-            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
+            //IWebElement myDynamicElement = this.wait.Until<IWebElement>((d) => d.FindElement(By.LinkText("log-off")));
             if (this._Driver.FindElement(By.ClassName("section-requestacceptterms")).Displayed == true) {//In case new terms screen appears.
                 IWebElement acceptButon = this._Driver.FindElement(By.Id("AcceptTermsButton"));
                 acceptButon.Click();
@@ -119,14 +125,14 @@
         public void BrokerLeedEnrolment(string fName, string lName, string leadEmail) {
 
             Thread.Sleep(7000);
-            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
+            //IWebElement myDynamicElement = this.wait.Until<IWebElement>((d) => d.FindElement(By.Id("AddNewCustomer")));
             Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")) != null);
 
             IWebElement addNewCustomer = this._Driver.FindElement(By.Id("AddNewCustomer"));
             addNewCustomer.Click();
 
             Thread.Sleep(2000);
-            //this._Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("10"));
+            //IWebElement myDynamicElement1 = this.wait.Until<IWebElement>((d) => d.FindElement(By.Id("LeadFirstName")));
             Assert.IsTrue(this._Driver.FindElement(By.Id("LeadFirstName")) != null);
 
             IWebElement leadFirstName = this._Driver.FindElement(By.Id("LeadFirstName"));
