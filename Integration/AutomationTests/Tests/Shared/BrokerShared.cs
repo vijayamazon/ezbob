@@ -92,8 +92,7 @@
             //IWebElement ads = this._Driver.FindElement(By.Id("AddNewCustomer"));
             //Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
             //Assert.IsTrue(true);
-            IWebElement logOff = this._Driver.FindElement(By.CssSelector("li.log-off"));
-            
+            IWebElement logOff = this._Driver.FindElement(By.LinkText("Log off"));
             logOff.Click();
         }
 
