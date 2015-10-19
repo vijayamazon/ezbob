@@ -837,6 +837,18 @@ div#DecisionNotes {
     background-color: #ffffff !important;
 }
 
+.ui-dialog .ui-dialog-titlebar {
+    height: auto;
+}
+
+.ui-dialog .ui-dialog-content{
+	padding: .5em 1em;
+}
+
+.ui-corner-all {
+	height: auto;
+}
+
 .ddl-inlign {
     display: inline-block;
 }
