@@ -20,7 +20,7 @@
 			this.templates = snailMailTemplates;
 		}
 
-		public void SendDefaultNoticeComm14Borrower(CollectionMailModel model) {
+		public FileMetadata SendDefaultNoticeComm14Borrower(CollectionMailModel model) {
 			var variables = new Dictionary<string, string> {
 				{ "CustomerName", model.CustomerName }, 
 				{ "CompanyName", model.CompanyName }, 
@@ -41,14 +41,14 @@
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaultnoticeComm14BorrowerTemplateName && model.OriginId == x.OriginID && x.IsActive);
 			if (templateModel == null) {
 				Log.Warn("template " + DefaultnoticeComm14BorrowerTemplateName + " was not found for origin" + model.OriginId);
-				return;
+				return null;
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData, model.CustomerId, DefaultnoticeComm14BorrowerTemplateName);
+			return SendMail(pdfData, model.CustomerId, DefaultnoticeComm14BorrowerTemplateName);
 		}
 
-		public void SendDefaultTemplateComm7(CollectionMailModel model) {
+		public void SendDefaultTemplateComm7(CollectionMailModel model, out FileMetadata personalFileMetadata, out FileMetadata businessFileMetadata) {
 			var variables = new Dictionary<string, string> {
 				{ "CustomerName", model.CustomerName }, 
 				{ "CompanyName", model.CompanyName }, 
@@ -63,11 +63,11 @@
 				{ "OutstandingBalance", model.OutstandingBalance.ToNumeric2Decimals() },
 			};
 
-			SendDefaultTemplateComm7Personal(model.CustomerId, variables, model.CustomerAddress, model.OriginId);
-			SendDefaultTemplateComm7Business(model.CustomerId, variables, model.CompanyAddress, model.OriginId);
+			personalFileMetadata = SendDefaultTemplateComm7Personal(model.CustomerId, variables, model.CustomerAddress, model.OriginId);
+			businessFileMetadata = SendDefaultTemplateComm7Business(model.CustomerId, variables, model.CompanyAddress, model.OriginId);
 		}
 
-		public void SendDefaultTemplateConsumer14(CollectionMailModel model) {
+		public FileMetadata SendDefaultTemplateConsumer14(CollectionMailModel model) {
 			var variables = new Dictionary<string, string> {
 				{ "CustomerName", model.CustomerName }, 
 				{ "Date", model.Date.ToLongDateWithDayOfWeek() }, 
@@ -87,7 +87,7 @@
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaulttemplateConsumer14TemplateName && model.OriginId == x.OriginID && x.IsActive);
 			if (templateModel == null) {
 				Log.Warn("template " + DefaulttemplateConsumer14TemplateName + " was not found for origin" + model.OriginId);
-				return;
+				return null;
 			}
 
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
@@ -104,10 +104,10 @@
 				Log.Warn("template " + DefaulttemplateConsumer14Attachment + " was not found for origin" + model.OriginId);
 			}
 
-			SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer14TemplateName);
+			return SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer14TemplateName);
 		}
 
-		public void SendDefaultTemplateConsumer31(CollectionMailModel model) {
+		public FileMetadata SendDefaultTemplateConsumer31(CollectionMailModel model) {
 			var variables = new Dictionary<string, string> {
 				{ "CustomerName", model.CustomerName }, 
 				{ "Date", model.Date.ToLongDateWithDayOfWeek() }, 
@@ -132,7 +132,7 @@
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaulttemplateConsumer31TemplateName && model.OriginId == x.OriginID && x.IsActive);
 			if (templateModel == null) {
 				Log.Warn("template " + DefaulttemplateConsumer31TemplateName + " was not found for origin" + model.OriginId);
-				return;
+				return null;
 			}
 
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
@@ -149,10 +149,10 @@
 				Log.Warn("template " + DefaulttemplateConsumer31Attachment + " was not found for origin" + model.OriginId);
 			}
 
-			SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer31TemplateName);
+			return SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer31TemplateName);
 		}
 
-		public void SendDefaultWarningComm7Guarantor(CollectionMailModel model) {
+		public FileMetadata SendDefaultWarningComm7Guarantor(CollectionMailModel model) {
 			var variables = new Dictionary<string, string> {
 				{ "CustomerName", model.CustomerName },
 				{ "CompanyName", model.CompanyName }, 
@@ -173,44 +173,44 @@
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaultwarningComm7GuarantorTemplateName && model.OriginId == x.OriginID && x.IsActive);
 			if (templateModel == null) {
 				Log.Warn("template " + DefaultwarningComm7GuarantorTemplateName + " was not found for origin" + model.OriginId);
-				return;
+				return null;
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName);
+			return SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName);
 		}
 
-		private void SendDefaultTemplateComm7Business(int customerID, Dictionary<string, string> variables, Address companyAddress, int originId) {
+		private FileMetadata SendDefaultTemplateComm7Business(int customerID, Dictionary<string, string> variables, Address companyAddress, int originId) {
 			SetAddress(companyAddress, ref variables);
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaulttemplateComm7BusinessTemplateName && originId == x.OriginID && x.IsActive);
 			if (templateModel == null) {
 				Log.Warn("template " + DefaulttemplateComm7BusinessTemplateName + " was not found for origin" + originId);
-				return;
+				return null;
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData, customerID, DefaulttemplateComm7BusinessTemplateName);
+			return SendMail(pdfData, customerID, DefaulttemplateComm7BusinessTemplateName);
 		}
 
-		private void SendDefaultTemplateComm7Personal(int customerID, Dictionary<string, string> variables, Address customerAddress, int originId) {
+		private FileMetadata SendDefaultTemplateComm7Personal(int customerID, Dictionary<string, string> variables, Address customerAddress, int originId) {
 			SetAddress(customerAddress, ref variables);
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaulttemplateComm7PersonalTemplateName && originId == x.OriginID && x.IsActive);
 			if (templateModel == null) {
 				Log.Warn("template " + DefaulttemplateComm7PersonalTemplateName + " was not found for origin" + originId);
-				return;
+				return null;
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData, customerID, DefaulttemplateComm7PersonalTemplateName);
+			return SendMail(pdfData, customerID, DefaulttemplateComm7PersonalTemplateName);
 		}
 
-		private void SendMail(byte[] pdfData, int customerID, string templateName) {
+		private FileMetadata SendMail(byte[] pdfData, int customerID, string templateName) {
 			Log.InfoFormat("Sending mail to customer {0} template {1}", customerID, templateName);
 			bool success = false;
 			success = this.api.Authenticate(this.userName, this.password);
 			if (!success) {
 				Log.ErrorFormat("Imail authentication failed\n{0}", this.api.GetErrorMessage());
-				return;
+				return null;
 			}
 			if (this.isDebugMode) {
 				Log.InfoFormat("Sending mail to customer {0} template {1} in debug mode to email {2}", customerID, templateName, this.debugModeEmail);
@@ -218,26 +218,28 @@
 					success = this.api.SetEmailPreview(this.debugModeEmail);
 					if (!success) {
 						Log.ErrorFormat("Imail authentication failed\n{0}", this.api.GetErrorMessage());
-						return;
+						return null;
 					}
 				} else {
 					Log.ErrorFormat("Imail Debug mode and email is not provided");
-					return;
+					return null;
 				}
 			}
 
 			success = this.api.ProcessPrintReadyPDF(pdfData, null, false);
 			if (!success) {
 				Log.ErrorFormat("Imail ProcessPrintReadyPDF failed\n{0}", this.api.GetErrorMessage());
-				return;
+				return null;
 			}
 			if (!string.IsNullOrEmpty(this.savePath)) {
 				try {
-					PrepareMail.SaveFile(pdfData, this.savePath, customerID, templateName);
+					return PrepareMail.SaveFile(pdfData, this.savePath, customerID, templateName);
 				} catch(Exception ex) {
 					Log.WarnFormat("Failed to save mail copy for {0} for customer {1}\n{2}", templateName, customerID, ex);
 				}
 			}
+
+			return null;
 		}
 
 		private void SetAddress(Address address, ref Dictionary<string, string> variables) {
