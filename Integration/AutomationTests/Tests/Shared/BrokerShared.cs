@@ -91,7 +91,7 @@
             //IWebElement myDynamicElement = this.wait.Until<IWebElement>((d) => d.FindElement(By.LinkText("log-off")));
             //IWebElement ads = this._Driver.FindElement(By.Id("AddNewCustomer"));
             //Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
-            Assert.IsTrue(true);
+            //Assert.IsTrue(true);
             IWebElement logOff = this._Driver.FindElement(By.CssSelector("li.log-off"));
             
             logOff.Click();
