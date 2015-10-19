@@ -10,6 +10,7 @@
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
+	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -265,6 +266,9 @@
 
 		[OperationContract]
 		WizardConfigsActionResult GetWizardConfigs();
+
+		[OperationContract]
+		CollectionSnailMailActionResult GetCollectionSnailMail(int userID, int collectionSnailMailID);
 
 		[OperationContract]
 		ActionMetaData GetZooplaData(int customerId, bool reCheck);

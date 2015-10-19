@@ -53,6 +53,11 @@
 		public DateTime? CloseDate { get; set; }
 	}
 
+	public class SnailMailModel {
+		public string Name { get; set; }
+		public int Id { get; set; }
+	}
+
 	public class CustomerRelationsModel
 	{
 		public DateTime DateTime { get; set; }
@@ -63,6 +68,7 @@
 		public string Comment { get; set; }
 		public string Type { get; set; }
 		public string PhoneNumber { get; set; }
+		public List<SnailMailModel> CollectionSnailMails { get; set; }
 
 		public static CustomerRelationsModel Create(CustomerRelations customerRelations)
 		{
@@ -140,6 +146,12 @@
                     collectionLog.LoanID),
                 DateTime = collectionLog.TimeStamp,
                 Type = collectionLog.Type,
+				CollectionSnailMails = collectionLog
+										.SnailMailMetadata
+										.Select(x => new SnailMailModel { 
+											Id = x.CollectionSnailMailMetadataID, 
+											Name = x.Name })
+										.ToList()
             };
 	    }
 	}

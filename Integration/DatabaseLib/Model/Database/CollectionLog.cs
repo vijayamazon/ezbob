@@ -14,6 +14,7 @@
 		public virtual DateTime TimeStamp { get; set; }
 		public virtual string Type { get; set; }
 		public virtual string Method { get; set; }
+		public virtual IList<CollectionSnailMailMetadata> SnailMailMetadata { get; set; } 
 	}
 
 	public sealed class CollectionLogMap : ClassMap<CollectionLog> {
@@ -25,6 +26,12 @@
 			Map(x => x.TimeStamp).CustomType<UtcDateTimeType>();
 			Map(x => x.Type);
 			Map(x => x.Method);
+
+			HasMany(x => x.SnailMailMetadata)
+				.AsBag()
+				.KeyColumn("CollectionLogID")
+				.Cascade.All()
+				.Inverse();
 		}
 	}
 
