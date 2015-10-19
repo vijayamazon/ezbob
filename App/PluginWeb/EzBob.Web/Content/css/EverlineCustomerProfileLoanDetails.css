@@ -509,6 +509,12 @@ h2.accept-agreement-header {
 
 .by-paying-early{
 	color: #8dc641;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.by-paying-early strong {
+	font-weight: normal !important;
 }
 
 .orange-text{
@@ -516,11 +522,22 @@ h2.accept-agreement-header {
 }
 
 .pay-early-details {
-	font-size: 18px;
-    width: 25%;
+	font-size: 15px;
+    width: 18.55%;
     display: inline-block;
-    margin-bottom: 15px;
-    min-width: 200px;
+    margin-bottom: 10px;
+    min-width: 170px;
+}
+.confirmation-email-notification {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+h3.confirmation-header {
+	font-size: 29px;
+    font-weight: lighter;
+	padding-bottom: 20px;
+	margin-top: 0;
 }
 
 .nav.customer-dashboard-main > li > a:hover {

@@ -2351,3 +2351,13 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
  /*
  solvency representations 
  */
+
+ .notifications .close .pe-7s-close {
+	font-size: 32px;
+}
+
+ .notifications .close{
+	top: -3px;
+	right: 18px;
+	opacity: 1.0;
+}

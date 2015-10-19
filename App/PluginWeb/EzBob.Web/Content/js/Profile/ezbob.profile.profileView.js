@@ -48,7 +48,6 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	render: function() {
 		this.profileMain.show();
-		this.getCashView.render();
 		
 		this.payEarlyView.render();
 		this.signWidget.render();
@@ -56,6 +55,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 		this.payEarlyView.$el.appendTo(this.widgetsContainer);
 		this.getCashView.$el.appendTo(this.widgetsContainer);
+		this.getCashView.render();
 		this.signWidget.$el.appendTo(this.signContainer);
 		this.processingMessageView.$el.appendTo(this.processingMessageContainer);
 

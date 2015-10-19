@@ -21,3 +21,12 @@
 	text-align: right;
 }
 
+.confirmation-email-notification {
+	margin-top: 25px;
+}
+
+.under-review {
+	font-weight: bold; 
+	font-size: 13px; 
+	text-align: center
+}

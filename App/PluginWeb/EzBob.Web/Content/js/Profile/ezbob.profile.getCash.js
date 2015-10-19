@@ -633,6 +633,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 		this.$el.find('.trustpilot-ezbob').hide();
 
+		if (!(this.customer.get('ActiveLoans').length > 0)) {
+			$('.apply-for-loan').removeClass('clean-btn').addClass('ev-btn-org');
+			$('.choose-amount-wait').removeClass('clean-btn').addClass('ev-btn-org');
+		}
+
 		return this;
 	}, // render
 
