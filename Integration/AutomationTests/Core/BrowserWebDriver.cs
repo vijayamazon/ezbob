@@ -35,9 +35,10 @@
                 case AutomationModels.Browser.Firefox:
                     if (FirefoxDriver == null)
                     {
-                        FirefoxProfile profile = new FirefoxProfile();
-                        profile.SetPreference("webdriver.firefox.bin", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
-                        FirefoxDriver = new FirefoxDriver(profile);
+                        //FirefoxProfile profile = new FirefoxProfile();
+                        //profile.SetPreference("webdriver.firefox.bin", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+                        //FirefoxDriver = new FirefoxDriver(profile);
+                        FirefoxDriver = new FirefoxDriver();
                     }
                 driver = FirefoxDriver;
                     break;
