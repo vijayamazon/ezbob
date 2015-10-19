@@ -43,6 +43,8 @@
             this._Driver.Navigate()
                 .GoToUrl(url);
 
+            Thread.Sleep(5000);
+
             IWebElement firmName = this._Driver.FindElement(By.Id("FirmName"));
             firmName.SendKeys(iFirmName); 
 
@@ -87,12 +89,12 @@
             IWebElement signupBrokerButton = this._Driver.FindElement(By.Id("SignupBrokerButton"));
             signupBrokerButton.Click();
 
-            //Thread.Sleep(5000);
+            Thread.Sleep(5000);
 
             //Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
 
-            //IWebElement logOff = this._Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off"));
-            //logOff.Click();
+            IWebElement logOff = this._Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off"));
+            logOff.Click();
         }
 
         public void BrokerLogIn(string brokerMail) {
