@@ -5,20 +5,24 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
 	using Infrastructure.Hmrc;
-	using NHibernate;
 
 	public class UploadHmrcController : Controller {
-
 		public UploadHmrcController(
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session,
-			CustomerRepository customers, IWorkplaceContext context) {
-			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session, context);
-		}
-
-		// constructor
+			CustomerRepository customers,
+			IWorkplaceContext context
+		) {
+			m_oAccountManager = new HmrcManualAccountManager(
+				false,
+				customers,
+				helper,
+				mpTypes,
+				mpChecker,
+				context
+			);
+		} // constructor
 
 		[HttpPost]
 		public JsonResult SaveFile() {
@@ -46,6 +50,5 @@
 		} // RemovePeriod
 
 		private readonly HmrcManualAccountManager m_oAccountManager;
-
 	} // class UploadHmrcController
 } // namespace

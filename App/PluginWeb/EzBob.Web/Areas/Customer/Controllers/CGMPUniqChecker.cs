@@ -29,6 +29,11 @@
 			if (oMp == null)
 				return;
 
+			if (marketplaceType == Configuration.Instance.Hmrc.Guid()) {
+				CheckHmrc(oMp.Id, customer, token);
+				return;
+			} // if
+
 			var oMpList = _customerMarketPlaceRepository.GetAll()
 				.Where(mp => mp.Marketplace.Id == oMp.Id)
 				.Select(mp => new { mp_id = mp.Id, customer_id = mp.Customer.Id, secdata = mp.SecurityData });
@@ -43,6 +48,20 @@
 				throw new MarketPlaceIsAlreadyAddedException();
 			} // for each marketplace
 		} // Check
+
+		private void CheckHmrc(int hmrcID, Customer customer, string token) {
+			MP_CustomerMarketPlace existing = this._customerMarketPlaceRepository
+				.GetAll()
+				.FirstOrDefault(mp => mp.Marketplace.Id == hmrcID && mp.DisplayName == token);
+
+			if (existing == null)
+				return;
+
+			if (existing.Customer.Id == customer.Id)
+				throw new MarketPlaceAddedByThisCustomerException();
+
+			throw new MarketPlaceIsAlreadyAddedException();
+		} // CheckHmrc
 
 		private bool IsSameMarketPlace(int nMpID, byte[] oSecData, MP_MarketplaceType oMp, string sShopID) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(oMp.Name);

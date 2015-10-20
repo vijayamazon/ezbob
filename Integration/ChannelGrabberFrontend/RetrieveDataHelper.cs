@@ -9,7 +9,6 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -128,8 +127,6 @@
 			throw new ApiException("Failed to initialise CG connector.");
 		} // RetrieveAndAggregate
 
-		// AddAnalysisValues
-
 		private RtiTaxMonthRawData[] HmrcRtiTaxMonthConversion(IHarvester oHarvester) {
 			var oOutput = new List<RtiTaxMonthRawData>();
 
@@ -147,7 +144,7 @@
 			} // for each file
 
 			return oOutput.ToArray();
-		}
+		} // HmrcRtiTaxMonthConversion
 
 		private VatReturnRawData[] HmrcVatReturnConversion(IHarvester oHarvester) {
 			var oVatRecords = new List<VatReturnRawData>();
@@ -176,7 +173,7 @@
 			} // for each file
 
 			return oVatRecords.ToArray();
-		}
+		} // HmrcVatReturnConversion
 
 		private ElapsedTimeInfo ProcessRetrieved(
 			IHarvester oHarvester,
@@ -216,10 +213,6 @@
 
 			return elapsedTimeInfo;
 		} // ProcessRetrieved
-
-		// HmrcVatReturnConversion
-
-		// HmrcRtiTaxMonthConversion
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(RetrieveDataHelper));
 	} // class RetrieveDataHelper
