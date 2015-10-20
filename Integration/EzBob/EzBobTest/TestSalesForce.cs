@@ -188,6 +188,11 @@
 		}
 
 		[Test]
+		public void TestClient() {
+			Assert.IsFalse(this.client.HasError);
+		}
+
+		[Test]
 		public void TestLead() {
 			LeadAccountModel model = new LeadAccountModel {
 				Email = "testdev1@b.c",
@@ -306,15 +311,16 @@
 			
 			this.client.CreateOpportunity(new OpportunityModel() {
 				Name = "NewOpportunity",
-				Email = "testdev1@b.c",
+				Email = "testpdf@ezbob.com",
 				CreateDate = now,
 				ExpectedEndDate = now.AddDays(7),
 				RequestedAmount = 1000,
 				Stage = OpportunityStage.s5.DescriptionAttr(),
-				Type = OpportunityType.Resell.DescriptionAttr()
+				Type = OpportunityType.New.DescriptionAttr()
 			});
 
 			Assert.IsNullOrEmpty(this.client.Error);
+
 		}
 
 		[Test]
