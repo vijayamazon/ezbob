@@ -24,14 +24,15 @@
 		private readonly ServiceClient m_oServiceClient;
 
 		public AgreementsGenerator(AgreementsModelBuilder builder, IAgreementsTemplatesProvider templates, DatabaseDataHelper helper) {
-			_builder = builder;
-			_templates = templates;
-			_helper = helper;
-			m_oServiceClient = new ServiceClient();
+			this._builder = builder;
+			this._templates = templates;
+			this._helper = helper;
+			this.m_oServiceClient = new ServiceClient();
 		}
 
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
 		/// <exception cref="Exception">Alibaba can't be a Personal customer</exception>
+		/// <exception cref="NullReferenceException"><paramref /> is null. </exception>
 		public void RenderAgreements(Loan loan, bool isRebuld, NL_Model nlModel = null) {
 
 			var typeOfBusinessReduced = loan.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();

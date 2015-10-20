@@ -1,10 +1,13 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Text;
 	using System.Web;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
@@ -72,11 +75,6 @@
 				return;
 			}
 
-			if (history.EventTime == DateTime.MinValue) {
-				this.Error = NL_ExceptionRequiredDataNotFound.HistoryEventTime;
-				return;
-			}
-
 			if (history.Agreements == null || history.Agreements.Count == 0) {
 				this.Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
 				return;
@@ -86,50 +84,21 @@
 				this.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
 				return;
 			}
+			
+			// LoanType, LoanFormulaID, RepaymentDate
+			model.Loan.SetDefaults();
 
-		/*	
-			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
-			ValidateAmount(loanAmount, cus); // continue (loanAmount > customer.CreditSum)
-			ValidateOffer(cus); // check offer validity dates - in AddLoan strategy
-			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1)); // checks if last loan was taken a minute before "now" - ?? to prevent multiple clicking on "create loan" button?
-			ValidateRepaymentPeriodAndInterestRate(cus);
-		*/
-			// valid offer
-			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
-				"NL_SignedOfferForLoan",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", model.CustomerID),
-				new QueryParameter("@Now", history.EventTime)
-			);
+			// RepaymentCount,  EventTime, InterestRate
+			model.Loan.LastHistory().SetDefaults();
 
-			if (dataForLoan.OfferID == 0) {
-				this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
+			BuildLoanFromOffer dataForLoan = new BuildLoanFromOffer(model);
+			if (dataForLoan.Error != string.Empty) {
+				this.Error = dataForLoan.Error;
 				return;
 			}
 
-			if (dataForLoan.AvailableAmount < dataForLoan.LoanLegalAmount) {
-				this.Error = string.Format("No available credit for current offer. New loan is not allowed. dataForLoan: {0} ", dataForLoan); // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
-				return;
-			}
-
-			if (dataForLoan.ExistsRefnums!=string.Empty && dataForLoan.ExistsRefnums.Contains(model.Loan.Refnum)) {
-				this.Error = NL_ExceptionLoanExists.DefaultMessage;
-				return;
-			}
-
-			Log.Debug(dataForLoan.ToString());
-
-			// complete other validations here
-
-			/*** 
-			//CHECK "Enough Funds" (uncomment WHEN old BE REMOVED from \App\PluginWeb\EzBob.Web\Code\LoanCreator.cs, method CreateLoan method)                    
-			VerifyEnoughAvailableFunds enoughAvailableFunds = new VerifyEnoughAvailableFunds(model.Loan.InitialLoanAmount);
-			enoughAvailableFunds.Execute();
-			if (!enoughAvailableFunds.HasEnoughFunds) {
-				  Log.Alert("No enough funds for loan: customer {0}; offer {1}", model.CustomerID, dataForLoan.Offer.OfferID);
-			}
-			****/
-
+			model = dataForLoan.Result;
+			
 			/**
 			- loan
 			- fees
@@ -141,6 +110,40 @@
 			- agreements
 			*/
 		
+			// init calculator
+			ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
+
+			// 2. Init Schedule and Fees
+			try {
+				
+				if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator)) {
+					nlCalculator = new BankLikeLoanCalculator(model);
+				}
+
+				// 2. Init Schedule and Fees
+				// model should contain Schedule and Fees after this invocation
+				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
+
+			} catch (NoInitialDataException noDataException) {
+				this.Error = noDataException.Message;
+			} catch (InvalidInitialAmountException amountException) {
+				this.Error = amountException.Message;
+			} catch (InvalidInitialInterestRateException interestRateException) {
+				this.Error = interestRateException.Message;
+			} catch (InvalidInitialRepaymentCountException paymentsException) {
+				this.Error = paymentsException.Message;
+			} catch (InvalidInitialInterestOnlyRepaymentCountException xxException) {
+				this.Error = xxException.Message;
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				this.Error = string.Format("Failed to calculate Schedule for customer {0}, err: {1}", model.CustomerID, ex.Message);
+			}
+
+			if (this.Error != string.Empty) {
+				Log.Alert("Failed to calculate Schedule for customer {0}, err: {1}", model.CustomerID, this.Error);
+				return;
+			}
+
 			List<NL_LoanSchedules> nlSchedule = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> nlFees = new List<NL_LoanFees>();
 			List<NL_LoanAgreements> nlAgreements = new List<NL_LoanAgreements>();
@@ -149,30 +152,22 @@
 
 			try {
 
-				model.Loan.SetDefaultRepaymentDate(); // +month|+7 days
-				model.Loan.SetDefaultFormula();
-
-				// 2. Init Schedule and Fees
-				CalculateLoanSchedule scheduleStrategy = new CalculateLoanSchedule(model);
-				scheduleStrategy.Context.UserID = model.UserID;
-				scheduleStrategy.Execute();
-
 				// get updated history filled with Schedule
-				history = scheduleStrategy.Result.Loan.LastHistory();
+				history = model.Loan.LastHistory();
 
 				// copy to local schedules list
 				history.Schedule.ForEach(s => nlSchedule.Add(s));
 
-				if (nlSchedule.Count == 0 || scheduleStrategy.Result.Error != "") {
-					this.Error = "Failed to generate Schedule or error occured during schedule/fees creation. " + scheduleStrategy.Result.Error;
+				if (nlSchedule.Count == 0) {
+					this.Error += "Failed to generate Schedule or error occured during schedule/fees creation";
 					return;
 				}
 
 				// 3. complete NL_Loans object data
-				model.Loan = scheduleStrategy.Result.Loan;
+				model.Loan = dataForLoan.Result.Loan;
 				model.Loan.CreationTime = nowTime;
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
-				model.Loan.Position = ++dataForLoan.LoansCount;
+				model.Loan.Position += 1;
 
 				Log.Debug("Adding loan: {0}", model.Loan);
 
@@ -187,34 +182,34 @@
 				// 5. fees
 
 				// copy to local fees list
-				scheduleStrategy.Result.Loan.Fees.ForEach(f => nlFees.Add(f));
+				model.Loan.Fees.ForEach(f => nlFees.Add(f));
 
+				// insert fees
 				if (nlFees.Count > 0) {
 					foreach (NL_LoanFees f in nlFees) {
 						if (f != null) {
-							f.LoanID = model.Loan.LoanID; // set newly created LoanID
+							f.LoanID = this.LoanID; // set newly created LoanID
 							f.CreatedTime = nowTime; // from calc-r
 							f.AssignedByUserID = 1; //  from calc-r
 						}
 					}
-					Log.Debug("Adding fees: ");
-					nlFees.ForEach(f => Log.Debug(f));
+
+					nlFees.ForEach(f => Log.Debug("Adding fee: {0}", f));
 
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", nlFees));
 				}
 
 				// 6. broker commissions
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
-				if (scheduleStrategy.Result.BrokerComissions > 0) {
+				if (model.Offer.BrokerSetupFeePercent > 0) {
 					DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
 				}
 
 				// 7. history
 				history.LoanID = this.LoanID;
-				history.LoanLegalID = dataForLoan.LoanLegalID;
+				history.LoanLegalID = model.Offer.LoanLegalID;
 				history.Description = "adding loan " + this.LoanID + ", old ID: " + model.Loan.OldLoanID;
-				//history.AgreementModel = model.AgreementModel; // already inside
-
+				
 				Log.Debug("Adding history: {0}", history);
 
 				history.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
@@ -223,20 +218,16 @@
 
 				// 8. loan agreements
 				history.Agreements.ForEach(a => nlAgreements.Add(a)); 
-				nlAgreements.ForEach(a=>a.LoanHistoryID = history.LoanHistoryID);
+				nlAgreements.ForEach(a=> a.LoanHistoryID = history.LoanHistoryID);
 
-				Log.Debug("Adding agreements:");
-				nlAgreements.ForEach(a => Log.Debug(a));
+				nlAgreements.ForEach(a => Log.Debug("Adding agreement: {0}", a));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanAgreementsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanAgreements>("Tbl", nlAgreements));
 
-				//int agreementSaveFS = await SaveAgreementsAsync();
-				//Log.Debug("agreementSave to FS: {0}", agreementSaveFS);
 				// 9. schedules 
 				nlSchedule.ForEach(s => s.LoanHistoryID = history.LoanHistoryID);
 
-				Log.Debug("Adding schedule:");
-				nlSchedule.ForEach(s => Log.Debug(s));
+				nlSchedule.ForEach(s => Log.Debug("Adding schedule: {0}", s));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", nlSchedule));
 

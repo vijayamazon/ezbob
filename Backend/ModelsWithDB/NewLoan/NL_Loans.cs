@@ -74,6 +74,7 @@
 		private List<NL_LoanFees> _fees = new List<NL_LoanFees>();
 		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
 		private List<NL_LoanOptions> _loanOptions = new List<NL_LoanOptions>();
+		private List<NL_Payments> _payments = new List<NL_Payments>();
 
 		[DataMember]
 		[NonTraversable]
@@ -103,6 +104,14 @@
 			set { this._loanOptions = value; }
 		}
 
+		[DataMember]
+		[NonTraversable]
+		public List<NL_Payments> Payments {
+			get { return this._payments; }
+			set { this._payments = value; }
+		}
+
+
 		// helpers
 		public NL_LoanHistory LastHistory() {
 			return this._histories.OrderBy(h => h.EventTime).LastOrDefault();
@@ -112,9 +121,10 @@
 			return this._histories.OrderBy(h => h.EventTime).FirstOrDefault();
 		}
 
+		// +month|+7 days
 		public void SetDefaultRepaymentDate() {
 			if (RepaymentDate == DateTime.MinValue) {
-				NL_LoanHistory lastHistory = LastHistory();
+				NL_LoanHistory lastHistory = LastHistory() ?? new NL_LoanHistory();
 				RepaymentDate = (lastHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? lastHistory.EventTime.Date.AddMonths(1) : lastHistory.EventTime.Date.AddDays(7);
 			}
 		}
@@ -124,6 +134,17 @@
 				LoanFormulaID = (int)NLLoanFormulas.EqualPrincipal;
 		}
 
+		public void SetDefaultLoanType() {
+			if (LoanTypeID == 0)
+				LoanTypeID = (int)NLLoanTypes.StandardLoanType;
+		}
+
+		public void SetDefaults() {
+			SetDefaultRepaymentDate();
+			SetDefaultFormula();
+			SetDefaultLoanType();
+		}
+		
 		public override string ToString() {
 			// loan
 			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
@@ -135,6 +156,8 @@
 			} else
 				sb.Append("No fees");
 
+			sb.Append(Environment.NewLine);
+
 			// freeze interest intervals
 			if (FreezeInterestIntervals.Count > 0) {
 				sb.Append(HeadersLine(typeof(NL_LoanInterestFreeze), NL_LoanInterestFreeze.ColumnTotalWidth));
@@ -143,15 +166,28 @@
 				sb.Append("No freeze interest");
 
 			sb.Append(Environment.NewLine);
+
 			// histories
 			if (Histories != null)
 				Histories.ForEach(h => sb.Append(h.ToString()));
-			
+
+			sb.Append(Environment.NewLine);
+
 			if (LoanOptions.Count > 0) {
 				sb.Append(HeadersLine(typeof(NL_LoanOptions), ColumnTotalWidth));
 				LoanOptions.ForEach(s => sb.Append(s.ToString()));
 			} else
 				sb.Append("No loan options");
+
+			sb.Append(Environment.NewLine);
+
+			if (Payments.Count > 0) {
+				sb.Append(HeadersLine(typeof(NL_Payments), ColumnTotalWidth));
+				Payments.ForEach(s => sb.Append(s.ToString()));
+			} else
+				sb.Append("No Payments");
+
+			sb.Append(Environment.NewLine);
 
 			return sb.ToString();
 		}

@@ -563,11 +563,11 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateLoanSchedule_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateLoanSchedule" />
+  <wsdl:message name="IEzService_BuildLoanFromOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:BuildLoanFromOffer" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateLoanSchedule_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateLoanScheduleResponse" />
+  <wsdl:message name="IEzService_BuildLoanFromOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BuildLoanFromOfferResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
@@ -1806,9 +1806,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CalculateLoanSchedule">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule" message="tns:IEzService_CalculateLoanSchedule_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse" message="tns:IEzService_CalculateLoanSchedule_OutputMessage" />
+    <wsdl:operation name="BuildLoanFromOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" message="tns:IEzService_BuildLoanFromOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse" message="tns:IEzService_BuildLoanFromOffer_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarketplaceInstantUpdate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
@@ -3143,8 +3143,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CalculateLoanSchedule">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule" style="document" />
+    <wsdl:operation name="BuildLoanFromOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

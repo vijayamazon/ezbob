@@ -78,10 +78,35 @@
 		}
 
 		// helpers
-		public List<NL_LoanSchedules> ActiveSchedule () {
+		public List<NL_LoanSchedules> ActiveSchedule() {
 			return this._schedule.Where(s => (s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)).ToList();
 		}
 
+		//set default to 3? \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 11-14, 143
+		public void SetDefaultRepaymentCount() {
+			RepaymentCount = RepaymentCount == 0 ? 3 : RepaymentCount;
+		}
+
+		//	\ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 144
+		public void SetDefaultInterestRate() {
+			InterestRate = InterestRate == 0m ? 0.06M : InterestRate;
+		}
+
+		// startDate \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 40-41 set default to DateTime.UtcNow;
+		public void SetDefaultEventTime() {
+			if (EventTime == DateTime.MinValue)
+				EventTime = DateTime.UtcNow;
+		}
+
+		public void SetDefaultRepaymentIntervalType() {
+			RepaymentIntervalTypeID = RepaymentIntervalTypeID == 0 ? (int)RepaymentIntervalTypes.Month : RepaymentIntervalTypeID;
+		}
+
+		public void SetDefaults() {
+			SetDefaultEventTime();
+			SetDefaultInterestRate();
+			SetDefaultRepaymentCount();
+		}
 
 		public override string ToString() {
 
@@ -96,7 +121,7 @@
 			if (Agreements.Count > 0) {
 				sb.Append("Agreements:");
 				Agreements.ForEach(a => sb.Append(a.ToString()));
-			} else 
+			} else
 				sb.Append("Agreements not loaded/found");
 
 			return sb.ToString();

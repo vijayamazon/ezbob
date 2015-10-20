@@ -187,11 +187,13 @@
     <Compile Include="Exceptions\PacnetMailProcessorException.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
-    <Compile Include="NewLoan\CalculateLoanSchedule.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
+    <Compile Include="NewLoan\AddLoan.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\BuildLoanFromOffer.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
-    <Compile Include="NewLoan\AddLoan.cs" />
     <Compile Include="NewLoan\AddLoanOptions.cs" />
     <Compile Include="NewLoan\AddLoanState.cs" />
     <Compile Include="NewLoan\AddRollover.cs" />

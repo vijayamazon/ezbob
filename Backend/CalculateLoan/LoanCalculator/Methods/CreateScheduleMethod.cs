@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -15,63 +16,68 @@
 			if (loanModel == null)
 				throw new NoInitialDataException();
 
+			if (loanModel.Loan == null)
+				throw new NoInitialDataException();
+
 			this.loanModel = loanModel;
 
 		} // constructor
 
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
-		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
-		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
 		/// <exception cref="InvalidInitialInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual void Execute() {
 
-			NL_LoanHistory lastHistory = this.loanModel.Loan.LastHistory();
+			NL_LoanHistory history = this.loanModel.Loan.LastHistory();
 
-			if (lastHistory == null) {
+			if (history == null) {
 				throw new NoInitialDataException();
 			}
 
-			if (lastHistory.Amount <= 0)
-				throw new InvalidInitialAmountException(lastHistory.Amount);
-
-			if (lastHistory.InterestRate <= 0)
-				throw new InvalidInitialInterestRateException(lastHistory.InterestRate);
-
-			if (lastHistory.RepaymentCount < 1)
-				throw new InvalidInitialRepaymentCountException(lastHistory.RepaymentCount);
-
-			int interestOnlyRepaymentCount = lastHistory.InterestOnlyRepaymentCount;
-			if ((interestOnlyRepaymentCount < 0) || (interestOnlyRepaymentCount >= lastHistory.RepaymentCount)) {
-				throw new InvalidInitialInterestOnlyRepaymentCountException(interestOnlyRepaymentCount, lastHistory.RepaymentCount);
+			if (history.Amount <= 0) {
+				throw new InvalidInitialAmountException(history.Amount);
 			}
 
-			DateTime nowTime = DateTime.UtcNow;
-			lastHistory.Schedule.Clear();
+			int interestOnlyRepayments = history.InterestOnlyRepaymentCount; //  default is 0 \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 35
+			if ((interestOnlyRepayments < 0) || (interestOnlyRepayments >= history.RepaymentCount)) {
+				throw new InvalidInitialInterestOnlyRepaymentCountException(interestOnlyRepayments, history.RepaymentCount);
+			}
 
-			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)lastHistory.RepaymentIntervalTypeID;
+			// RepaymentCount,  EventTime, InterestRate
+			history.SetDefaults();
 
-			int principalPayments = lastHistory.RepaymentCount - interestOnlyRepaymentCount;
-			decimal iPrincipal = Math.Floor(lastHistory.Amount / principalPayments);
-			decimal iFirstPrincipal = lastHistory.Amount - iPrincipal * (principalPayments - 1);
-			int discounts = this.loanModel.DiscountPlan.Count;
-			decimal balance = lastHistory.Amount;
+			// LoanType, LoanFormulaID, RepaymentDate
+			this.loanModel.Loan.SetDefaults();
 
-			// create Schedule - by initial or re-scheduling data (last history)
-			for (int i = 1; i <= lastHistory.RepaymentCount; i++) {
+			// TODO: LoanType balances \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 44, 66, 68
+			// decimal[] balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray(); ???
+
+			history.Schedule.Clear();
+
+			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)history.RepaymentIntervalTypeID;
+
+			int principalPayments = history.RepaymentCount - interestOnlyRepayments;
+			decimal iPrincipal = Math.Floor(history.Amount / principalPayments);
+			decimal iFirstPrincipal = history.Amount - iPrincipal * (principalPayments - 1);
+			List<decimal> discounts = this.loanModel.Offer.DiscountPlan;
+			int discountCount = discounts.Count;
+			decimal balance = history.Amount;
+
+			// create Schedule 
+			for (int i = 1; i <= history.RepaymentCount; i++) {
 
 				decimal principal = iPrincipal;
 
-				if (i <= interestOnlyRepaymentCount)
+				if (i <= interestOnlyRepayments)
 					principal = 0;
-				else if (i == interestOnlyRepaymentCount + 1)
+				else if (i == interestOnlyRepayments + 1)
 					principal = iFirstPrincipal;
 
 				balance -= principal;
 
-				decimal r = (i <= discounts) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i]) : lastHistory.InterestRate;
+				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i])) : history.InterestRate;
 
-				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, lastHistory.EventTime, intervalType).Date;
+				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
 
 				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // dr'
 
@@ -79,7 +85,7 @@
 
 				decimal interest = balance * dailyInterestRate * daysDiff;
 
-				lastHistory.Schedule.Add(
+				history.Schedule.Add(
 					new NL_LoanSchedules() {
 						InterestRate = r,
 						PlannedDate = plannedDate,
@@ -92,12 +98,12 @@
 					});
 			} // for
 
-			if (lastHistory.Schedule == null) {
+			if (history.Schedule == null) {
 				Log.Debug("No schedules defined");
 				return;
 			}
 
-			int schedulesCount = lastHistory.Schedule.Count;
+			int schedulesCount = history.Schedule.Count;
 
 			// no fees defined
 			if (this.loanModel.Offer.OfferFees == null || this.loanModel.Offer.OfferFees.Count == 0) {
@@ -105,14 +111,17 @@
 				return;
 			}
 
+			DateTime nowTime = DateTime.UtcNow;
+
 			// extract offer-fees
 			var offerFees = this.loanModel.Offer.OfferFees;
 
 			// for now: only one-time or "spreaded" setup fees supported
 			// add full fees 2.0 support later
 
-			var setupFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee);
-			var servicingFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee); // equal to "setup spreaded"
+			// don't create LoanFees if OfferFees Percent == 0 or AbsoluteAmount == 0
+			var setupFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee && (f.Percent > 0 || f.AbsoluteAmount > 0));
+			var servicingFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee && (f.Percent > 0 || f.AbsoluteAmount > 0)); // equal to "setup spreaded"
 			decimal? brokerFeePercent = this.loanModel.Offer.BrokerSetupFeePercent;
 
 			// setup fee - add one NL_LoanFees entry 
@@ -120,8 +129,8 @@
 
 				var feeCalculator = new SetupFeeCalculator(setupFee.Percent, brokerFeePercent);
 
-				decimal setupFeeAmount = feeCalculator.Calculate(lastHistory.Amount);
-				this.loanModel.BrokerComissions = feeCalculator.CalculateBrokerFee(lastHistory.Amount);
+				decimal setupFeeAmount = feeCalculator.Calculate(history.Amount);
+				this.loanModel.BrokerComissions = feeCalculator.CalculateBrokerFee(history.Amount);
 
 				//Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
 				Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
@@ -129,7 +138,7 @@
 				this.loanModel.Loan.Fees.Add(
 					new NL_LoanFees() {
 						Amount = setupFeeAmount,
-						AssignTime = lastHistory.EventTime,
+						AssignTime = history.EventTime,
 						Notes = "setup fee one-part",
 						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
 						CreatedTime = nowTime,
@@ -142,15 +151,15 @@
 
 				var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, brokerFeePercent);
 
-				decimal servicingFeeAmount = feeCalculator.Calculate(lastHistory.Amount);
-				this.loanModel.BrokerComissions = feeCalculator.CalculateBrokerFee(lastHistory.Amount);
+				decimal servicingFeeAmount = feeCalculator.Calculate(history.Amount);
+				this.loanModel.BrokerComissions = feeCalculator.CalculateBrokerFee(history.Amount);
 
 				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 
 				decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
 				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
-				foreach (NL_LoanSchedules s in lastHistory.Schedule) {
+				foreach (NL_LoanSchedules s in history.Schedule) {
 					decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
 					this.loanModel.Loan.Fees.Add(
 						new NL_LoanFees() {

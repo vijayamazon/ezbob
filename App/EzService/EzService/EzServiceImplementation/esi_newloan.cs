@@ -50,7 +50,7 @@
 
 		public NL_Offers GetLastOffer(int userID, int customerID) {
 			GetLastOffer stra;
-			var amd = ExecuteSync(out stra, customerID, userID, customerID);
+			ExecuteSync(out stra, customerID, userID, customerID);
 			return stra.Offer;
 		} // GetLastOffer
 
@@ -66,7 +66,7 @@
 
 		public NL_Model AddPayment(NL_Model loanModel) {
 			AddPayment strategy;
-			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
+			ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
 			return strategy.NLModel;
 		} // AddPayment
 
@@ -122,7 +122,7 @@
 			};
 		} // RescheduleLoan
 
-		public NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model) {
+		/*public NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model) {
 			ActionMetaData amd = null;
 			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
 
@@ -138,6 +138,23 @@
 				MetaData = amd,
 				Value = strategy.Result
 			};
-		} // CalculateLoanSchedule
+		}*/ // CalculateLoanSchedule
+
+		public NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
+			ActionMetaData amd = null;
+			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
+			try {
+				amd = ExecuteSync(out strategy, customerID, userID, model);
+				// ReSharper disable once CatchAllClause
+			} catch (Exception e) {
+				Log.Alert("BuildLoanFromOffer failed: {0}", e);
+				strategy.Result.Error = "InternalServerError";
+			}
+			return new NewLoanModelActionResult() {
+				MetaData = amd,
+				Value = strategy.Result
+			};
+		}
+
 	} // class EzServiceImplementation
 } // namespace

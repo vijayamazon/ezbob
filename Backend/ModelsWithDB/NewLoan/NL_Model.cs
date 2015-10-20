@@ -12,7 +12,7 @@
 
 			Offer = new NL_Offers();
 			Loan = new NL_Loans();
-			DiscountPlan = new List<decimal>();
+			//DiscountPlan = new List<decimal>();
 			Agreements = new List<NLAgreementItem>();
 			FundTransfer = new NL_FundTransfers();
 
@@ -38,8 +38,8 @@
 		[DataMember]
 		public decimal? BrokerComissions { get; set; }
 
-		[DataMember]
-		public List<decimal> DiscountPlan { get; set; }
+		//[DataMember]
+		//public List<decimal> DiscountPlan { get; set; }
 
 		[DataMember]
 		public NL_Offers Offer { get; set; }

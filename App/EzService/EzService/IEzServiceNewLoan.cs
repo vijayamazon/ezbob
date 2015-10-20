@@ -34,8 +34,11 @@
 		[OperationContract]
 		ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
 
+		//[OperationContract]
+		//NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model);
+
 		[OperationContract]
-		NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model);
+		NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
 
     } // interface IEzServiceNewLoan
 

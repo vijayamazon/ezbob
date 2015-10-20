@@ -1,13 +1,15 @@
 ﻿namespace EzBob.Web.Code {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Globalization;
 	using System.Linq;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using EzBob.Backend.Models;
 	using EzBob.Models;
@@ -26,14 +28,16 @@
 	    private readonly RepaymentCalculator _repaymentCalculator;
 	    protected readonly ServiceClient serviceClient;
         private readonly IEzbobWorkplaceContext _context;
-
+		private readonly SafeILog oLog  ;
 
 		public AgreementsModelBuilder(IEzbobWorkplaceContext context = null) {
-			_aprCalc = new APRCalculator();
+			this._aprCalc = new APRCalculator();
 
-			serviceClient = new ServiceClient();
-			_repaymentCalculator = new RepaymentCalculator();
-			_context = context;
+			this.serviceClient = new ServiceClient();
+			this._repaymentCalculator = new RepaymentCalculator();
+			this._context = context;
+
+			this.oLog = new SafeILog(log4net.LogManager.GetLogger(GetType()));
 		}
 
 		/// <summary>
@@ -187,16 +191,45 @@
 		}
 
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
-		/// <exception cref="NullReferenceException"><paramref name="name" /> is null. </exception>
+		/// <exception cref="NullReferenceException"><paramref /> is null. </exception>
 		public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
 
-			var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
+			// fill in loan+history with offer data
+			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
-			var history = result.Loan.LastHistory();
+			// init calculator
+			ALoanCalculator nlCalculator = new LegacyLoanCalculator(nlModel);
+
+			// 2. Init Schedule and Fees
+			try {
+
+				if (nlModel.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator)) 
+					nlCalculator = new BankLikeLoanCalculator(nlModel);
+
+				// 2. get Schedule and Fees
+				// model should contain Schedule and Fees after this invocation
+				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
+
+			} catch (NoInitialDataException noDataException) {
+				this.oLog.Alert("CreateSchedule failed: {0}", noDataException.Message);
+			} catch (InvalidInitialAmountException amountException) {
+				this.oLog.Alert("CreateSchedule failed: {0}", amountException.Message);
+			} catch (InvalidInitialInterestRateException interestRateException) {
+				this.oLog.Alert("CreateSchedule failed: {0}", interestRateException.Message);
+			} catch (InvalidInitialRepaymentCountException paymentsException) {
+				this.oLog.Alert("CreateSchedule failed: {0}", paymentsException.Message);
+			} catch (InvalidInitialInterestOnlyRepaymentCountException xxException) {
+				this.oLog.Alert("CreateSchedule failed: {0}", xxException.Message);
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				this.oLog.Alert("CreateSchedule: Failed to calculate Schedule for customer {0}, err: {1}", nlModel.CustomerID, ex);
+			}
+
+			var history = nlModel.Loan.LastHistory();
 			
-			// faile to create Schedule
+			// no Schedule
 			if (history.Schedule.Count == 0) {
-				// TODO log error - result.Error
+				this.oLog.Alert("no Schedule: customer: {0}, err: {1}", nlModel.CustomerID);
 				return null;
 			}
 
@@ -244,7 +277,7 @@
 			model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
 
 			// collect all setup/servicing "spreaded" fees
-			List<NL_LoanFees> loanSetupFees = result.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee || f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).ToList();
+			List<NL_LoanFees> loanSetupFees = nlModel.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee || f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).ToList();
 			// get fees sum
 			decimal totalFees = 0m;
 			loanSetupFees.ForEach(f => totalFees += f.Amount);
@@ -284,8 +317,8 @@
 
 			//// FEES TODO
 			////According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed  ????
-			if ((totalFees > 0) || (result.Offer.BrokerSetupFeePercent.HasValue && result.Offer.BrokerSetupFeePercent.Value > 0)) {
-				decimal setupFeePercent = totalFees + result.Offer.BrokerSetupFeePercent ?? 0M;
+			if ((totalFees > 0) || (nlModel.Offer.BrokerSetupFeePercent.HasValue && nlModel.Offer.BrokerSetupFeePercent.Value > 0)) {
+				decimal setupFeePercent = totalFees + nlModel.Offer.BrokerSetupFeePercent ?? 0M;
 				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
 			}
 
@@ -293,18 +326,18 @@
 			model.IsBrokerFee = false;
 			model.IsManualSetupFee = false;
 
-			model.APR = result.APR == null ? 0 : (double)result.APR;
+			model.APR = (double)nlCalculator.CalculateApr(history.EventTime);
 
 			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
 			model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
 			model.InterestRatePerYearFormatted = string.Format("{0:0.00}", model.InterestRate * 12);
 
-			model.LoanType = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID);
+			model.LoanType = Enum.GetName(typeof(NLLoanTypes), nlModel.Loan.LoanTypeID);
 			model.TermOnlyInterest = model.Schedule.Count(s => s.LoanRepayment == 0);
 			model.TermOnlyInterestWords = FormattingUtils.ConvertToWord(model.TermOnlyInterest).ToLower();
 			model.TermInterestAndPrincipal = model.Schedule.Count(s => s.LoanRepayment != 0 && s.Interest != 0);
 			model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
-			model.isHalwayLoan = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID) == NLLoanTypes.HalfWayLoanType.ToString();
+			model.isHalwayLoan = Enum.GetName(typeof(NLLoanTypes), nlModel.Loan.LoanTypeID) == NLLoanTypes.HalfWayLoanType.ToString();
 			model.CountRepayment = model.Schedule.Count;
 			model.Term = model.Schedule.Count;
 

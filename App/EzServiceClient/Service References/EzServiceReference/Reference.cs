@@ -4180,11 +4180,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse")]
-        ServiceClientProxy.EzServiceReference.NewLoanModelActionResult CalculateLoanSchedule(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse")]
+        ServiceClientProxy.EzServiceReference.NewLoanModelActionResult BuildLoanFromOffer(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> CalculateLoanScheduleAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> BuildLoanFromOfferAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
@@ -5734,12 +5734,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
         }
         
-        public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult CalculateLoanSchedule(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
-            return base.Channel.CalculateLoanSchedule(userID, customerID, model);
+        public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult BuildLoanFromOffer(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
+            return base.Channel.BuildLoanFromOffer(userID, customerID, model);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> CalculateLoanScheduleAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
-            return base.Channel.CalculateLoanScheduleAsync(userID, customerID, model);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> BuildLoanFromOfferAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
+            return base.Channel.BuildLoanFromOfferAsync(userID, customerID, model);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {

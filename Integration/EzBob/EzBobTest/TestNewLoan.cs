@@ -88,14 +88,14 @@
 
 
 		[Test]
-		public void CalculateLoanSchedule() {
+		public void BuildLoanFromOffer() {
 			NL_Model model = new NL_Model(374) {
 				UserID = 357,
 				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
 				Loan = new NL_Loans()
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
-			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
+			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
@@ -249,9 +249,9 @@
 				discounts.ForEach(d => this.m_oLog.Debug(d));
 				NL_Model model = new NL_Model(374);
 				foreach (NL_DiscountPlanEntries dpe in discounts) {
-					model.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+					model.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 				}
-				model.DiscountPlan.ForEach(d => Console.WriteLine(d));
+				model.Offer.DiscountPlan.ForEach(d => Console.WriteLine(d));
 			}
 		}
 

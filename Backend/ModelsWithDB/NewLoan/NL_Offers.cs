@@ -72,12 +72,12 @@
 
 		[DataMember]
 		public bool IsAmountSelectionAllowed { get; set; }
-
-
+		
 
 		// additions 
 		private List<NL_OfferFees> _offerFees = new List<NL_OfferFees>();
-
+		private List<decimal> _discountPlan =  new List<decimal>();
+	
 		[DataMember]
 		[NonTraversable]
 		public List<NL_OfferFees> OfferFees {
@@ -85,5 +85,17 @@
 			set { this._offerFees = value; }
 		}
 
+		[DataMember]
+		[NonTraversable]
+		public List<decimal> DiscountPlan {
+			get { return this._discountPlan; }
+			set { this._discountPlan = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public long LoanLegalID { get; set; }
+
+	
 	} // class NL_Offers
 } // ns

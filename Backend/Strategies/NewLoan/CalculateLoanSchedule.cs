@@ -117,7 +117,7 @@
 					);
 
 					foreach (NL_DiscountPlanEntries dpe in discounts) {
-						model.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+						model.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 					}
 
 					//Log.Debug("Discounts"); model.DiscountPlan.ForEach(d=>Log.Debug(d));

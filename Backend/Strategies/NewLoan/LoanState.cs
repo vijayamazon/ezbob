@@ -21,7 +21,6 @@
 
 		public override string Name { get { return "LoanState"; } }
 
-
 		public NL_Model model { get; private set; }
 		private readonly long loanID;
 		public DateTime StateDate { get; set; }
@@ -79,8 +78,13 @@
 				);
 
 				// payments (loan transactions)
+				model.Loan.Payments.Clear();
+				model.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@LoanID", this.loanID),
+					new QueryParameter("@Now", StateDate)
+				);
 
-				
 				SetBadPeriods(); // TODO
 
 				// ReSharper disable once CatchAllClause
@@ -90,8 +94,6 @@
 		} // Execute
 
 		private void LoadNewLoanStructure() {
-
-
 
 			// Init loan's properties.
 			//this.CalcModel = new LoanCalculatorModel {
