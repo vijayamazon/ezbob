@@ -11,10 +11,11 @@ ALTER PROCEDURE AddCollectionSnailMailMetadata
 @Name NVARCHAR(255),
 @ContentType NVARCHAR(255),
 @Path NVARCHAR(500),
-@Now DATETIME
+@Now DATETIME,
+@CollectionSnailMailTemplateID INT 
 AS
 BEGIN
-	INSERT INTO CollectionSnailMailMetadata (CollectionLogID, Name, ContentType, Path, CreateDate) 
-	VALUES 	                                (@CollectionLogID, @Name, @ContentType, @Path, @Now)
+	INSERT INTO CollectionSnailMailMetadata (CollectionLogID, Name, ContentType, Path, CreateDate,CollectionSnailMailTemplateID) 
+	VALUES 	                                (@CollectionLogID, @Name, @ContentType, @Path, @Now, @CollectionSnailMailTemplateID)
 END
 GO

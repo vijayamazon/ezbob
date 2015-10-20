@@ -45,7 +45,7 @@
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			return SendMail(pdfData, model.CustomerId, DefaultnoticeComm14BorrowerTemplateName);
+			return SendMail(pdfData, model.CustomerId, DefaultnoticeComm14BorrowerTemplateName, templateModel.ID);
 		}
 
 		public void SendDefaultTemplateComm7(CollectionMailModel model, out FileMetadata personalFileMetadata, out FileMetadata businessFileMetadata) {
@@ -104,7 +104,7 @@
 				Log.Warn("template " + DefaulttemplateConsumer14Attachment + " was not found for origin" + model.OriginId);
 			}
 
-			return SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer14TemplateName);
+			return SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer14TemplateName, templateModel.ID);
 		}
 
 		public FileMetadata SendDefaultTemplateConsumer31(CollectionMailModel model) {
@@ -149,7 +149,7 @@
 				Log.Warn("template " + DefaulttemplateConsumer31Attachment + " was not found for origin" + model.OriginId);
 			}
 
-			return SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer31TemplateName);
+			return SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer31TemplateName, templateModel.ID);
 		}
 
 		public FileMetadata SendDefaultWarningComm7Guarantor(CollectionMailModel model) {
@@ -177,7 +177,7 @@
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			return SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName);
+			return SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName, templateModel.ID);
 		}
 
 		private FileMetadata SendDefaultTemplateComm7Business(int customerID, Dictionary<string, string> variables, Address companyAddress, int originId) {
@@ -189,7 +189,7 @@
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			return SendMail(pdfData, customerID, DefaulttemplateComm7BusinessTemplateName);
+			return SendMail(pdfData, customerID, DefaulttemplateComm7BusinessTemplateName, templateModel.ID);
 		}
 
 		private FileMetadata SendDefaultTemplateComm7Personal(int customerID, Dictionary<string, string> variables, Address customerAddress, int originId) {
@@ -201,10 +201,10 @@
 			}
 			Stream template = PrepareMail.ByteArrayToStream(templateModel.Template);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			return SendMail(pdfData, customerID, DefaulttemplateComm7PersonalTemplateName);
+			return SendMail(pdfData, customerID, DefaulttemplateComm7PersonalTemplateName, templateModel.ID);
 		}
 
-		private FileMetadata SendMail(byte[] pdfData, int customerID, string templateName) {
+		private FileMetadata SendMail(byte[] pdfData, int customerID, string templateName, int templateID) {
 			Log.InfoFormat("Sending mail to customer {0} template {1}", customerID, templateName);
 			bool success = false;
 			success = this.api.Authenticate(this.userName, this.password);
@@ -233,7 +233,7 @@
 			}
 			if (!string.IsNullOrEmpty(this.savePath)) {
 				try {
-					return PrepareMail.SaveFile(pdfData, this.savePath, customerID, templateName);
+					return PrepareMail.SaveFile(pdfData, this.savePath, customerID, templateName, templateID);
 				} catch(Exception ex) {
 					Log.WarnFormat("Failed to save mail copy for {0} for customer {1}\n{2}", templateName, customerID, ex);
 				}

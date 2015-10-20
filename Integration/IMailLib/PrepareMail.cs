@@ -140,12 +140,13 @@
 			return ms.ToArray();
 		}
 
-		public static FileMetadata SaveFile(byte[] data, string filePath, int customerID, string templateName) {
+		public static FileMetadata SaveFile(byte[] data, string filePath, int customerID, string templateName, int templateID) {
 			var mainDirectory = Directory.CreateDirectory(filePath);
 			var customerDirectory = mainDirectory.CreateSubdirectory(customerID.ToString());
 			string fileName = Path.Combine(customerDirectory.FullName, templateName + "." + customerID +"."+ DateTime.Today.ToString("yyyyMMdd") + ".pdf");
 			File.WriteAllBytes(fileName, data);
 			return new FileMetadata {
+				TemplateID = templateID,
 				Name = templateName,
 				Path = fileName,
 				ContentType = "application/pdf"

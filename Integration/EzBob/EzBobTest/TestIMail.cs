@@ -180,7 +180,8 @@
 				new QueryParameter("Name", fileMetadata.Name),
 				new QueryParameter("ContentType", fileMetadata.ContentType),
 				new QueryParameter("Path", fileMetadata.Path),
-				new QueryParameter("Now", DateTime.UtcNow));
+				new QueryParameter("Now", DateTime.UtcNow),
+				new QueryParameter("CollectionSnailMailTemplateID", 29));
 		}
 
 		[Test]

@@ -71,6 +71,7 @@
 		private void LoadImailTemplates() {
 			List<CollectionSnailMailTemplate> templates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
 			this.collectionIMailer.SetTemplates(templates.Select(x => new SnailMailTemplate {
+				ID = x.CollectionSnailMailTemplateID,
 				Type = x.Type,
 				OriginID = x.OriginID,
 				Template = x.Template,
@@ -112,7 +113,8 @@
 				new QueryParameter("Name", fileMetadata.Name),
 				new QueryParameter("ContentType", fileMetadata.ContentType),
 				new QueryParameter("Path", fileMetadata.Path),
-				new QueryParameter("Now", this.now));
+				new QueryParameter("Now", this.now),
+				new QueryParameter("CollectionSnailMailTemplateID", fileMetadata.TemplateID));
 		}//SaveCollectionSnailMailMetadata
 
 		private void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out int feeType) {
