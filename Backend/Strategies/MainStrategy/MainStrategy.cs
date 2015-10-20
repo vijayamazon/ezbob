@@ -784,7 +784,7 @@
 						CreateDate = now,
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
-						Type = OpportunityType.Resell.DescriptionAttr(),
+						Type = this.customerDetails.NumOfLoans == 0 ? OpportunityType.New.DescriptionAttr() : OpportunityType.Resell.DescriptionAttr(),
 						Stage = OpportunityStage.s5.DescriptionAttr(),
 						Name = this.customerDetails.FullName + cashRequestCount
 					}

@@ -37,7 +37,7 @@
 		Lost
 	}
 	public enum OpportunityType {
-		[Description("Finished wizard")] //created when lead converted to account
+		[Description("New Deal")] //created when lead converted to account or requested cash and has 0 loans
 		New, 
 		[Description("Top up")] // created when took amount is less then approved amount
 		Partial,
