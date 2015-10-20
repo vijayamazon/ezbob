@@ -396,7 +396,7 @@ BEGIN
 		CONSTRAINT CHK_NL_OfferFees CHECK (
 			([Percent] IS NOT NULL OR AbsoluteAmount IS NOT NULL)
 			AND
-			([Percent] IS NULL OR (0 < [Percent] AND [Percent] <= 1))
+			([Percent] IS NULL OR (0 <= [Percent] AND [Percent] <= 1))
 			AND
 			(AbsoluteAmount IS NULL OR AbsoluteAmount > 0)
 			AND
