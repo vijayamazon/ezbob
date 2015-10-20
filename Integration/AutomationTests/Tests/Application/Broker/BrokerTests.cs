@@ -62,6 +62,9 @@
                   IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
 
                   Assert.IsTrue(string.Equals(stsausList.FindElement(By.ClassName("grid-item-Status")).Text, "Application not started"));//Verify that leed status is "Application not started"
+
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
                   return null;
               });
               Assert.IsTrue(result);
@@ -87,6 +90,9 @@
                   IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
                   Assert.IsTrue(string.Equals(stsausList.FindElement(By.ClassName("grid-item-Status")).Text, "Application not started"));//Verify that leed status is "Application not started".
 
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
+
                   GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9
                   Assert.IsTrue(newApi.CheckIncomingMessages(BrandConfig.GetString("Check_Incoming_Messages"), leadMail));
                   return null;
@@ -111,7 +117,7 @@
                   leadSendInvitation.Click();
 
                   Thread.Sleep(40000);
-                  IWebElement logOff = Driver.FindElement(By.ClassName("log-off"));//Step 8
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));//Strep 8
                   logOff.Click();
 
                   GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9 
@@ -183,6 +189,9 @@
                   IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
 
                   Assert.IsTrue(string.Equals(stsausList.FindElement(By.ClassName("grid-item-Status")).Text, "Application not started"));//Verify that we've returned to the Broker dashboard
+
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
                   return null;
               });
               Assert.IsTrue(result);
@@ -219,6 +228,9 @@
 
                   //Wizard Step 4 - add EKM account
                   newWizard.ImplementWizardStepFour("BrokerFillLeed", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 11 (C788)
+
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
                   return null;
               });
               Assert.IsTrue(result);
@@ -257,6 +269,9 @@
                   Thread.Sleep(5000);
                   IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
                   Assert.AreEqual("Personal Details", stsausList.FindElement(By.ClassName("grid-item-Status")).Text);
+
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
 
                   return null;
               });
@@ -326,6 +341,9 @@
                   IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
                   Assert.AreEqual("£0.00", widgetIssued.Text);
 
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
+
                   return null;
               });
               Assert.IsTrue(result);
@@ -384,6 +402,9 @@
 
                   IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
                   Assert.IsTrue(decimal.Parse(widgetIssued.Text.Substring(1)) != 0.0m);
+
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  logOff.Click();
 
                   return null;
               });
