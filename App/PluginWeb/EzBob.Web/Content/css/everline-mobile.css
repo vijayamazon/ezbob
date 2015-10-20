@@ -490,5 +490,8 @@
 	.select_form_field_container span {
 		color: #494949;
 	}
-		
+
+	.form_field_container.control-group.customer-logon-remember-me .input-title {
+		display: none;
+	}
 }

@@ -27,7 +27,7 @@
 				{ "CommissionAmount", FormattingUtils.NumericFormats(this.model.CommissionAmount) },
 				{ "BankAccount", this.model.BankAccount },
 				{ "Sortcode", this.model.SortCode },
-				{ "Invoice", string.Format("OMLTD{0:yyyy}/{0:MM}/{0:dd}/{1}", this.model.CommissionTime, this.model.InvoiceID ) }
+				{ "Invoice", string.Format("EZBobLTD{0:yyyy}/{0:MM}/{0:dd}/{1}", this.model.CommissionTime, this.model.InvoiceID ) }
 			};
 		} // SetTemplateAndVariables
 

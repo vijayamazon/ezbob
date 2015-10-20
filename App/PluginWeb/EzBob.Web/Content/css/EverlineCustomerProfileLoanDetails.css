@@ -98,7 +98,7 @@ dt {
 
 .main-page-everline #get-cash .loan-agreements ul li {
 	display: inline-block;
-	margin-right: 28px;
+	margin-right: 20px;
 	margin-bottom: 15px;
     margin-left: 0;
 }
@@ -542,4 +542,8 @@ h3.confirmation-header {
 
 .nav.customer-dashboard-main > li > a:hover {
 	border: 0;
+}
+
+.main-page-everline #get-cash .loan-agreements .clean-btn {
+	margin-left: 0;
 }
