@@ -91,8 +91,7 @@
 
             Thread.Sleep(5000);
 
-            //Assert.IsTrue(this._Driver.FindElement(By.CssSelector("AddNewCustomer")).Displayed);
-            Assert.IsTrue(true);
+            Assert.IsTrue(this._Driver.FindElement(By.Id("AddNewCustomer")).Displayed);
 
             IWebElement logOff = this._Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off"));
             logOff.Click();
