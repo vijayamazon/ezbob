@@ -13,7 +13,7 @@
 
 			var oImgLogo = new Img()
 				.Add<Class>("Logo")
-				.Add<Src>("http://www.ezbob.com/wp-content/themes/ezbob-desktop/images/sign/logo_sig2.png");
+				.Add<Src>("http://www.ezbob.com/app/themes/ezbob/images/header/ezbob_logo.png");
 
 			var oLogoLink = new A()
 				.Add<Href>("http://www.ezbob.com/")
