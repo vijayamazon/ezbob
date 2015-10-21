@@ -1,8 +1,9 @@
-SET QUOTED_IDENTIFIER ON
+USE [ezbob]
 GO
-
-IF OBJECT_ID('NL_SignedOfferForLoan') IS NULL
-	EXECUTE('CREATE PROCEDURE NL_SignedOfferForLoan AS SELECT 1')
+/****** Object:  StoredProcedure [dbo].[NL_SignedOfferForLoan]    Script Date: 21/10/2015 13:36:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE [dbo].[NL_SignedOfferForLoan]	
@@ -48,12 +49,11 @@ BEGIN
 			o.InterestOnlyRepaymentCount,			
 			0 as LoansCount	,
 			o.Amount as AvailableAmount,
-			cast(dp.DiscountPlan as nvarchar(max)) as ExistsRefnums
+			cast('' as nvarchar(max))  as ExistsRefnums			
 		into #offerforloan
 			FROM 
-				NL_LoanLegals ll 
-				INNER JOIN NL_Offers o on ll.OfferID = o.OfferID					
-				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID -- and dp.IsActive = 1 				
+				NL_LoanLegals ll INNER JOIN NL_Offers o on ll.OfferID = o.OfferID					
+				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID --and dp.IsActive = 1 				
 			WHERE o.OfferID = @OfferID
 			order by ll.LoanLegalID desc; 	
 	
@@ -65,7 +65,7 @@ BEGIN
 
 		if @LoansCount > 0 begin
 
-			print ('loanscount=' + cast(@LoansCount as nvarchar(15)));
+			--print ('loanscount=' + cast(@LoansCount as nvarchar(15)));
 						
 			declare @TakenAmount decimal;
 			declare @PaidPrincipal decimal;
@@ -82,7 +82,7 @@ BEGIN
 
 			if @TakenAmount is null set @TakenAmount =0;
 
-			print ('TakenAmount=' + cast(@TakenAmount as nvarchar(150)));
+			--print ('TakenAmount=' + cast(@TakenAmount as nvarchar(150)));
 
 			-- consider use Customer.CreditSum
 
@@ -101,7 +101,7 @@ BEGIN
 
 			if @PaidPrincipal is null set @PaidPrincipal = 0;
 
-			print ('PaidPrincipal=' + cast(@PaidPrincipal as nvarchar(150)));
+			--print ('PaidPrincipal=' + cast(@PaidPrincipal as nvarchar(150)));
 
 			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (@TakenAmount- @PaidPrincipal), ExistsRefnums = (Select distinct(Refnum )+ ',' AS [text()] From dbo.[NL_Loans] For XML PATH (''));
 
