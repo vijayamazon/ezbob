@@ -563,5 +563,12 @@
 
 		[OperationContract]
 		ActionMetaData BackfillDailyLoanStats();
+
+		[OperationContract]
+		LoanCommissionDefaultsActionResult GetLoanCommissionDefaults(
+			int underwriterID,
+			long cashRequestID,
+			decimal loanAmount
+		);
 	} // interface IEzService
 } // namespace EzService

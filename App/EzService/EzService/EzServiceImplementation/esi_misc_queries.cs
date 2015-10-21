@@ -269,5 +269,21 @@
 		public ActionMetaData BackfillDailyLoanStats() {
 			return Execute<BackfillDailyLoanStats>(null, null);
 		} // BackfillDailyLoanStats
+
+		public LoanCommissionDefaultsActionResult GetLoanCommissionDefaults(
+			int underwriterID,
+			long cashRequestID,
+			decimal loanAmount
+		) {
+			GetLoanCommissionDefaults instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, underwriterID, cashRequestID, loanAmount);
+
+			return new LoanCommissionDefaultsActionResult {
+				MetaData = amd,
+				BrokerCommission = instance.Result.BrokerCommission,
+				ManualSetupFee = instance.Result.ManualSetupFee,
+			};
+		} // GetLoanCommissionDefaults
 	} // class EzServiceImplementation
 } // namespace EzService

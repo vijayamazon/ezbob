@@ -206,6 +206,15 @@
 			this.medal.TotalScoreNormalized = 1m;
 			this.medal.AnnualTurnover = bsa.ApprovedAmount;
 
+			var glcd = new GetLoanCommissionDefaults(this.cashRequestID, bsa.ApprovedAmount);
+			glcd.Execute();
+
+			if (!glcd.IsBrokerCustomer)
+				return true;
+
+			this.autoDecisionResponse.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
+			this.autoDecisionResponse.SetupFee = glcd.Result.ManualSetupFee;
+
 			return true;
 		} // BackdoorSimpleFlow
 
@@ -775,7 +784,13 @@
 			} // if
 
 			int cashRequestCount = sr["CashRequestCount"];
-			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard && this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion && cashRequestCount > 1) {
+
+			bool addOpportunity = 
+				(this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) &&
+				(this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion) &&
+				(cashRequestCount > 1);
+
+			if (addOpportunity) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
 				
 				new AddOpportunity(CustomerID,
@@ -784,7 +799,9 @@
 						CreateDate = now,
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
-						Type = this.customerDetails.NumOfLoans == 0 ? OpportunityType.New.DescriptionAttr() : OpportunityType.Resell.DescriptionAttr(),
+						Type = this.customerDetails.NumOfLoans == 0
+							? OpportunityType.New.DescriptionAttr()
+							: OpportunityType.Resell.DescriptionAttr(),
 						Stage = OpportunityStage.s5.DescriptionAttr(),
 						Name = this.customerDetails.FullName + cashRequestCount
 					}

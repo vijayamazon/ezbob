@@ -208,6 +208,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MarketplacesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult))]
@@ -1140,6 +1141,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.CompanyInfosField, value) != true)) {
                     this.CompanyInfosField = value;
                     this.RaisePropertyChanged("CompanyInfos");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoanCommissionDefaultsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class LoanCommissionDefaultsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal BrokerCommissionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ManualSetupFeeField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal BrokerCommission {
+            get {
+                return this.BrokerCommissionField;
+            }
+            set {
+                if ((this.BrokerCommissionField.Equals(value) != true)) {
+                    this.BrokerCommissionField = value;
+                    this.RaisePropertyChanged("BrokerCommission");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ManualSetupFee {
+            get {
+                return this.ManualSetupFeeField;
+            }
+            set {
+                if ((this.ManualSetupFeeField.Equals(value) != true)) {
+                    this.ManualSetupFeeField = value;
+                    this.RaisePropertyChanged("ManualSetupFee");
                 }
             }
         }
@@ -4548,6 +4588,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillDailyLoanStats", ReplyAction="http://tempuri.org/IEzService/BackfillDailyLoanStatsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillDailyLoanStatsAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetLoanCommissionDefaults", ReplyAction="http://tempuri.org/IEzService/GetLoanCommissionDefaultsResponse")]
+        ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult GetLoanCommissionDefaults(int underwriterID, long cashRequestID, decimal loanAmount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetLoanCommissionDefaults", ReplyAction="http://tempuri.org/IEzService/GetLoanCommissionDefaultsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult> GetLoanCommissionDefaultsAsync(int underwriterID, long cashRequestID, decimal loanAmount);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -6230,6 +6276,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillDailyLoanStatsAsync() {
             return base.Channel.BackfillDailyLoanStatsAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult GetLoanCommissionDefaults(int underwriterID, long cashRequestID, decimal loanAmount) {
+            return base.Channel.GetLoanCommissionDefaults(underwriterID, cashRequestID, loanAmount);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult> GetLoanCommissionDefaultsAsync(int underwriterID, long cashRequestID, decimal loanAmount) {
+            return base.Channel.GetLoanCommissionDefaultsAsync(underwriterID, cashRequestID, loanAmount);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

@@ -96,24 +96,33 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult UpdateBrokerCommissionDefaults(long id, decimal amount){
-			var cr = this._cashRequestsRepository.Get(id);
-			if (cr == null) {
-				return Json(new { brokerCommission = 0, setupFeePercent = 0 }, JsonRequestBehavior.AllowGet);
-			}
-			var brokerCommissionPercent = cr.BrokerSetupFeePercent;
-			var setupFeePercent = cr.ManualSetupFeePercent;
+		public JsonResult UpdateBrokerCommissionDefaults(long id, decimal amount) {
+			decimal brokerCommission;
+			decimal setupFeePercent;
 
-			if (cr.Customer.Broker != null) {
-                BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
-                bool hasLoans = cr.Customer.Loans.Any();
-                DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
-				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(amount, hasLoans, firstLoanDate);
-				brokerCommissionPercent = commission.Item1;
-				setupFeePercent = commission.Item2;
-            }
-			return Json(new { brokerCommission = brokerCommissionPercent, setupFeePercent = setupFeePercent }, JsonRequestBehavior.AllowGet);
-		}
+			try {
+				LoanCommissionDefaultsActionResult lcdar = this.serviceClient.Instance.GetLoanCommissionDefaults(
+					this._context.User.Id,
+					id,
+					amount
+				);
+
+				brokerCommission = lcdar.BrokerCommission;
+				setupFeePercent = lcdar.ManualSetupFee;
+			} catch (Exception e) {
+				log.Alert(
+					e,
+					"Failed to calculate loan default commission for cash request {0} and loan amount {1}.",
+					id,
+					amount
+				);
+
+				brokerCommission = 0;
+				setupFeePercent = 0;
+			} // try
+
+			return Json(new { brokerCommission, setupFeePercent }, JsonRequestBehavior.AllowGet);
+		} // UpdateBrokerCommissionDefaults
 
 		[Ajax]
 		[HttpPost]
@@ -157,9 +166,9 @@
 				BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
 				bool hasLoans = cr.Customer.Loans.Any();
 				DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
-				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(sum, hasLoans, firstLoanDate);
-				cr.BrokerSetupFeePercent = commission.Item1;
-				cr.ManualSetupFeePercent = commission.Item2;
+				BrokerCommissionDefaultCalculator.Result commission = brokerCommissionDefaultCalculator.Calculate(sum, firstLoanDate);
+				cr.BrokerSetupFeePercent = commission.BrokerCommission;
+				cr.ManualSetupFeePercent = commission.ManualSetupFee;
 			}
 
 			_cashRequestsRepository.SaveOrUpdate(cr);
