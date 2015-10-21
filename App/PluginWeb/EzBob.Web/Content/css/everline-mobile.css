@@ -229,6 +229,7 @@
 		width: 100%;
 		margin-left: 0;
 		margin-top: 20px;
+		border-radius: 0;
 	}
 
 	.wizard-top {
@@ -241,6 +242,7 @@
 		margin: 0;
 		margin-top: 20px;
 		float: none;
+		border-radius: 0;
 	}
 
 	.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
@@ -307,7 +309,7 @@
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
-		width: 100%;
+		width: 49%;
 		margin-top: 10px;
 		text-align: center;
 	}
@@ -494,4 +496,13 @@
 	.form_field_container.control-group.customer-logon-remember-me .input-title {
 		display: none;
 	}
+
+	.form_field_container .input-title.long {
+		padding-bottom: 11px;
+	}
+
+	.right-box {
+		float: right;
+	}
+
 }
