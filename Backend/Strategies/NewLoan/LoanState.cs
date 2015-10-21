@@ -1,7 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
-	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
@@ -10,12 +8,11 @@
 	/// </summary>
 	public class LoanState : AStrategy {
 
-		public LoanState(NL_Model t, long loanID, DateTime? stateDate) {
+		public LoanState(NL_Model nlModel, long loanID, DateTime? stateDate) {
 
-			model = t;
+			model = nlModel;
 			this.loanID = loanID;
-			this.customerID = model.CustomerID;
-
+			
 			StateDate = stateDate ?? DateTime.UtcNow;
 		} // constructor
 
@@ -25,8 +22,7 @@
 		private readonly long loanID;
 		public DateTime StateDate { get; set; }
 		public string Error;
-		private readonly int customerID;
-
+		
 		public override void Execute() {
 			try {
 
@@ -77,13 +73,30 @@
 					new QueryParameter("@LoanID", this.loanID)
 				);
 
-				// payments (loan transactions)
+				// payments (logical loan transactions)
 				model.Loan.Payments.Clear();
 				model.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID),
 					new QueryParameter("@Now", StateDate)
 				);
+
+				if (model.Loan.Payments.Count > 0) {
+
+					model.Loan.SchedulePayments.Clear();
+					model.Loan.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoansSchedulePaymentsGet",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@LoanID", this.loanID)
+					);
+
+					model.Loan.FeePayments.Clear();
+					model.Loan.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@LoanID", this.loanID)
+					);
+				}
+
+				
 
 				SetBadPeriods(); // TODO
 

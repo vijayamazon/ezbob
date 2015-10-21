@@ -56,7 +56,7 @@
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
     <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
     <Compile Include="Library.cs" />
-    <Compile Include="OneDayLoanStatus.cs" />
+    <Compile Include="OneDayState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

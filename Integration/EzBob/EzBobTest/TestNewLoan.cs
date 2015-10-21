@@ -89,7 +89,7 @@
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(374) {
+			NL_Model model = new NL_Model(56) {
 				UserID = 357,
 				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
 				Loan = new NL_Loans()
@@ -100,6 +100,7 @@
 			try {
 				strategy.Execute();
 				Console.WriteLine(strategy.Result.Error);
+				m_oLog.Debug(strategy.Result);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}

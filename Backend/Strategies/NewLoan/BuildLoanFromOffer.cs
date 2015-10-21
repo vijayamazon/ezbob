@@ -13,6 +13,7 @@
 
 		public BuildLoanFromOffer(NL_Model model) {
 			this.model = model;
+			Result = this.model;
 		} // constructor
 
 		public override string Name { get { return "BuildLoanFromOffer"; } }
@@ -40,7 +41,12 @@
 				new QueryParameter("@Now", this.model.Loan.LastHistory().EventTime)
 			);
 
-			Log.Debug(Result.ToString());
+			if (dataForLoan == null) {
+				this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
+				return;
+			}
+
+			Log.Debug(dataForLoan.ToString());
 
 			if (dataForLoan.OfferID == 0) {
 				this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
@@ -52,7 +58,7 @@
 				return;
 			}
 
-			if (dataForLoan.ExistsRefnums != string.Empty && dataForLoan.ExistsRefnums.Contains(this.model.Loan.Refnum)) {
+			if (!string.IsNullOrEmpty(this.model.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(this.model.Loan.Refnum)) {
 				this.Error = NL_ExceptionLoanExists.DefaultMessage;
 			}
 
@@ -93,8 +99,9 @@
 			};
 
 			// replace last history with updated one
-			int lastHistoryIndex = this.model.Loan.Histories.LastIndexOf(history);
-			this.model.Loan.Histories.RemoveAt(lastHistoryIndex);
+			//int lastHistoryIndex = this.model.Loan.Histories.IndexOf(history);
+			//this.model.Loan.Histories.RemoveAt(lastHistoryIndex);
+			//this.model.Loan.Histories.Insert(lastHistoryIndex, history);
 
 			// offer-fees
 			this.model.Offer.OfferFees = DB.Fill<NL_OfferFees>(

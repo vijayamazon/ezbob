@@ -58,6 +58,7 @@
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\CalculateAprMethod.cs" />
+    <Compile Include="Methods\CalculatePlanMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

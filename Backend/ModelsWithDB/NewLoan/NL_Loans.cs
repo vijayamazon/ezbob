@@ -75,6 +75,8 @@
 		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
 		private List<NL_LoanOptions> _loanOptions = new List<NL_LoanOptions>();
 		private List<NL_Payments> _payments = new List<NL_Payments>();
+		private List<NL_LoanSchedulePayments> _schedulePayments = new List<NL_LoanSchedulePayments>();
+		private List<NL_LoanFeePayments> _feePayments = new List<NL_LoanFeePayments>();
 
 		[DataMember]
 		[NonTraversable]
@@ -143,6 +145,20 @@
 			SetDefaultRepaymentDate();
 			SetDefaultFormula();
 			SetDefaultLoanType();
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanSchedulePayments> SchedulePayments {
+			get { return this._schedulePayments; }
+			set { this._schedulePayments = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanFeePayments> FeePayments {
+			get { return this._feePayments; }
+			set { this._feePayments = value; }
 		}
 		
 		public override string ToString() {

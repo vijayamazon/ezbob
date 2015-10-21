@@ -148,28 +148,28 @@
 			List<NL_LoanFees> nlFees = new List<NL_LoanFees>();
 			List<NL_LoanAgreements> nlAgreements = new List<NL_LoanAgreements>();
 
+			// get updated history filled with Schedule
+			history = model.Loan.LastHistory();
+
+			// copy to local schedules list
+			history.Schedule.ForEach(s => nlSchedule.Add(s));
+
+			if (nlSchedule.Count == 0) {
+				this.Error += "Failed to generate Schedule or error occured during schedule/fees creation";
+				return;
+			}
+
+			// 3. complete NL_Loans object data
+			model.Loan = dataForLoan.Result.Loan;
+			model.Loan.CreationTime = nowTime;
+			model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
+			model.Loan.Position += 1;
+
+			Log.Debug("Adding loan: {0}", model.Loan);
+
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
-
-				// get updated history filled with Schedule
-				history = model.Loan.LastHistory();
-
-				// copy to local schedules list
-				history.Schedule.ForEach(s => nlSchedule.Add(s));
-
-				if (nlSchedule.Count == 0) {
-					this.Error += "Failed to generate Schedule or error occured during schedule/fees creation";
-					return;
-				}
-
-				// 3. complete NL_Loans object data
-				model.Loan = dataForLoan.Result.Loan;
-				model.Loan.CreationTime = nowTime;
-				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
-				model.Loan.Position += 1;
-
-				Log.Debug("Adding loan: {0}", model.Loan);
 
 				pconn.BeginTransaction();
 

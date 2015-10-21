@@ -6,9 +6,54 @@
 
 	public class DailyLoanStatus {
 		public DailyLoanStatus() {
-			Dates = new SortedDictionary<DateTime, OneDayLoanStatus>();
+			Dates = new SortedDictionary<DateTime, OneDayState>();
 			this.notes = new SortedDictionary<DateTime, string>();
 		} // constructor
+
+		public SortedDictionary<DateTime, OneDayState> Dates { get; private set; }
+
+		public IEnumerable<OneDayState> Days {
+			get { return Dates.Values; }
+		}
+
+		public DateTime LastKnownDate {
+			get { return IsEmpty ? DateTime.UtcNow.Date : Dates.Keys.Max(); }
+		}
+
+		public OneDayState LastDailyLoanStatus {
+			get { return Days.LastOrDefault(); }
+		}
+
+		public void Add(OneDayState odls) {
+			if ((odls == null) || (this[odls.Date] != null))
+				return;
+
+			Dates[odls.Date] = odls;
+		}
+
+		public bool Contains(DateTime dt) {
+			return Dates.ContainsKey(dt.Date);
+		}
+
+		public bool IsEmpty {
+			get { return Dates.Count == 0; }
+		}
+
+		public OneDayState this[DateTime idx] {
+			get {
+				OneDayState value;
+				return Dates.TryGetValue(idx.Date, out value) ? value : null;
+			}
+		} // indexer
+
+		public IEnumerable<OneDayState> Where(Func<OneDayState, bool> filter) {
+			return Days.Where(filter);
+		}
+
+		public string GetNote(DateTime dd) {
+			string value;
+			return this.notes.TryGetValue(dd.Date, out value) ? value : string.Empty;
+		}
 
 		public void AddNote(DateTime dt, string note) {
 			if (string.IsNullOrWhiteSpace(note))
@@ -20,52 +65,49 @@
 				this.notes[dt.Date] += " " + note;
 			else
 				this.notes[dt.Date] = note;
-		} // AddNote
+		}
 
-		public OneDayLoanStatus LastDailyLoanStatus {
-			get { return Days.LastOrDefault(); }
-		} // LastDailyLoanStatus
-
-		public void Add(OneDayLoanStatus odls) {
-			if ((odls == null) || (this[odls.Date] != null))
+		public void AddScheduleNotes(NL_Model model) {
+			if (model == null)
 				return;
 
-			Dates[odls.Date] = odls;
-		} // Add
+			List<NL_LoanSchedules> activeSchedule = new List<NL_LoanSchedules>();
+			model.Loan.Histories.ForEach(h => activeSchedule.AddRange(h.ActiveSchedule()));
+			int activeScheduleCount = activeSchedule.Count;
+			int i = 0;
 
-		public bool Contains(DateTime dt) {
-			return Dates.ContainsKey(dt.Date);
-		} // Contains
+			foreach (NL_LoanSchedules s in activeSchedule) {
+				AddNote(s.PlannedDate, i == activeScheduleCount - 1 ? "Last schedule." : "Schedule.");
+				i++;
+			}
+		}
 
-		public IEnumerable<OneDayLoanStatus> Days {
-			get { return Dates.Values; }
-		} // Days
+		public void AddPaymentNotes(NL_Model model) {
+			if (model == null)
+				return;
 
-		public bool IsEmpty {
-			get { return Dates.Count == 0; }
-		} // IsEmpty
+			//for(int i = 0; i < workingModel.Repayments.Count; i++) {
+			//	var rp = workingModel.Repayments[i];
 
-		public DateTime LastKnownDate {
-			get { return IsEmpty ? DateTime.UtcNow.Date : Dates.Keys.Max(); }
-		} // LastKnownDate
+			//	AddNote(
+			//		rp.Date,
+			//		"Repaid: " + rp.Amount.ToString("C2", Library.Instance.Culture)
+			//	);
+			//} // for each
+		}
 
-		public OneDayLoanStatus this[DateTime idx] {
-			get { return Dates.ContainsKey(idx.Date) ? Dates[idx.Date] : null; }
-		} // indexer
+		public void AddFeeNotes(NL_Model model) {
+			if (model == null)
+				return;
 
-		public SortedDictionary<DateTime, OneDayLoanStatus> Dates { get; private set; }
-
-		public IEnumerable<OneDayLoanStatus> Where(Func<OneDayLoanStatus, bool> filter) {
-			return Days.Where(filter);
-		} // Where
-
-		public string GetNote(DateTime dd) {
-			return this.notes.ContainsKey(dd.Date) ? this.notes[dd.Date] : string.Empty;
-		} // GetNote
+			foreach (NL_LoanFees fee in model.Loan.Fees) {
+				AddNote(fee.AssignTime, "Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture));
+			}
+		}
 
 		public override string ToString() {
 			return string.Join("\n\t\t", Days);
-		} // ToString
+		}
 
 		public string ToFormattedString(string rowPrefix) {
 			const string date = "Date";
@@ -95,7 +137,7 @@
 			int ignoredDayLen = ignoredDay.Length;
 			int notesLen = notesTitle.Length;
 
-			foreach (OneDayLoanStatus dd in Days) {
+			foreach (OneDayState dd in Days) {
 				dateLen = Math.Max(dateLen, dd.Str.Date.Length);
 				openPrincipalLen = Math.Max(openPrincipalLen, dd.Str.OpenPrincipalForInterest.Length);
 				openPrincipalLen = Math.Max(openPrincipalLen, dd.Str.OpenPrincipalAfterRepayments.Length);
@@ -117,34 +159,34 @@
 
 			result.Add(string.Format("{0}{1}{2}{1}", rowPrefix, separator, string.Join(
 				separator,
-				OneDayLoanStatus.FormatField(string.Empty, dateLen),
-				OneDayLoanStatus.FormatField("Open principal", -openPrincipalHeaderLen),
-				OneDayLoanStatus.FormatField(string.Empty, dailyInterestLen),
-				OneDayLoanStatus.FormatField(string.Empty, assignedFeeLen),
-				OneDayLoanStatus.FormatField(string.Empty, dailyInterestRateLen),
-				OneDayLoanStatus.FormatField(string.Empty, currentBalanceLen),
-				OneDayLoanStatus.FormatField("Repaid", -repaidLen),
-				OneDayLoanStatus.FormatField(string.Empty, ignoredDayLen),
-				OneDayLoanStatus.FormatField(string.Empty, notesLen)
+				OneDayState.FormatField(string.Empty, dateLen),
+				OneDayState.FormatField("Open principal", -openPrincipalHeaderLen),
+				OneDayState.FormatField(string.Empty, dailyInterestLen),
+				OneDayState.FormatField(string.Empty, assignedFeeLen),
+				OneDayState.FormatField(string.Empty, dailyInterestRateLen),
+				OneDayState.FormatField(string.Empty, currentBalanceLen),
+				OneDayState.FormatField("Repaid", -repaidLen),
+				OneDayState.FormatField(string.Empty, ignoredDayLen),
+				OneDayState.FormatField(string.Empty, notesLen)
 			)));
 
 			result.Add(string.Format("{0}{1}{2}{1}", rowPrefix, separator, string.Join(
 				separator,
-				OneDayLoanStatus.FormatField(date, -dateLen),
-				OneDayLoanStatus.FormatField(openPrincipalForInterest, -openPrincipalLen),
-				OneDayLoanStatus.FormatField(openPrincipalAfterRepayments, -openPrincipalLen),
-				OneDayLoanStatus.FormatField(dailyInterest, -dailyInterestLen),
-				OneDayLoanStatus.FormatField(assignedFees, -assignedFeeLen),
-				OneDayLoanStatus.FormatField(dailyInterestRate, -dailyInterestRateLen),
-				OneDayLoanStatus.FormatField(currentBalance, -currentBalanceLen),
-				OneDayLoanStatus.FormatField(repaidPrincipal, -repaidPrincipalLen),
-				OneDayLoanStatus.FormatField(repaidInterest, -repaidInterestLen),
-				OneDayLoanStatus.FormatField(repaidFees, -repaidFeeLen),
-				OneDayLoanStatus.FormatField(ignoredDay, -ignoredDayLen),
-				OneDayLoanStatus.FormatField(notesTitle, -notesLen)
+				OneDayState.FormatField(date, -dateLen),
+				OneDayState.FormatField(openPrincipalForInterest, -openPrincipalLen),
+				OneDayState.FormatField(openPrincipalAfterRepayments, -openPrincipalLen),
+				OneDayState.FormatField(dailyInterest, -dailyInterestLen),
+				OneDayState.FormatField(assignedFees, -assignedFeeLen),
+				OneDayState.FormatField(dailyInterestRate, -dailyInterestRateLen),
+				OneDayState.FormatField(currentBalance, -currentBalanceLen),
+				OneDayState.FormatField(repaidPrincipal, -repaidPrincipalLen),
+				OneDayState.FormatField(repaidInterest, -repaidInterestLen),
+				OneDayState.FormatField(repaidFees, -repaidFeeLen),
+				OneDayState.FormatField(ignoredDay, -ignoredDayLen),
+				OneDayState.FormatField(notesTitle, -notesLen)
 			)));
 
-			foreach (OneDayLoanStatus dd in Days) {
+			foreach (OneDayState dd in Days) {
 				result.Add(dd.ToFormattedString(
 					rowPrefix,
 					separator,
@@ -166,99 +208,62 @@
 			return string.Join("\n", result);
 		} // ToFormattedString
 
-		public void AddScheduleNotes(NL_Model model) {
-			if (model == null)
-				return;
 
-			List<NL_LoanSchedules> activeSchedule = new List<NL_LoanSchedules>();
-			model.Loan.Histories.ForEach(h => activeSchedule.AddRange(h.ActiveSchedule()));
-			int activeScheduleCount = activeSchedule.Count;
-			int i = 0;
-
-			foreach (NL_LoanSchedules s in activeSchedule) {
-				AddNote(s.PlannedDate,i == activeScheduleCount - 1 ? "Last schedule." : "Schedule.");
-				i++;
-			}
-		} // AddScheduleNotes
-
-		public void AddPaymentNotes(NL_Model model) {
-			if (model == null)
-				return;
-
-			//for(int i = 0; i < workingModel.Repayments.Count; i++) {
-			//	var rp = workingModel.Repayments[i];
-
-			//	AddNote(
-			//		rp.Date,
-			//		"Repaid: " + rp.Amount.ToString("C2", Library.Instance.Culture)
-			//	);
-			//} // for each
-		} // AddPaymentNotes
-
-		public void AddFeeNotes(NL_Model model) {
-			if (model == null)
-				return;
-			
-			foreach (NL_LoanFees fee in model.Loan.Fees) {
-				AddNote(fee.AssignTime, "Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture));
-			}
-
-		} // AddFeeNotes
 
 		/// <summary>
 		/// Finite state machine with logic explanation: https://drive.google.com/open?id=0B1Io_qu9i44SYVZDMUVzX2NiVmc
 		/// </summary>
-		public void SetIgnoredDueToRescheduleDays() {
-			if (IsEmpty)
-				return;
+		//public void SetIgnoredDueToRescheduleDays() {
+		//	if (IsEmpty)
+		//		return;
 
-			var days = new List<OneDayLoanStatus>(Dates.Values);
+		//	var days = new List<OneDayState>(Dates.Values);
 
-			foreach (OneDayLoanStatus day in days)
-				day.IsBetweenLastPaymentAndReschedulingDay = false;
+		//	foreach (OneDayState day in days)
+		//		day.IsBetweenLastPaymentAndReschedulingDay = false;
 
-			int currentIdx = days.Count - 1;
+		//	int currentIdx = days.Count - 1;
 
-			char state = 'A';
+		//	char state = 'A';
 
-			for ( ; ; ) {
-				if (currentIdx < 0)
-					break;
+		//	for ( ; ; ) {
+		//		if (currentIdx < 0)
+		//			break;
 
-				var current = days[currentIdx];
+		//		var current = days[currentIdx];
 
-				switch (state) {
-				case 'A':
-					state = current.IsReschedulingDay ? 'C' : 'B';
-					break;
+		//		switch (state) {
+		//		case 'A':
+		//			state = current.IsReschedulingDay ? 'C' : 'B';
+		//			break;
 
-				case 'B':
-					currentIdx--;
-					state = 'A';
-					break;
+		//		case 'B':
+		//			currentIdx--;
+		//			state = 'A';
+		//			break;
 
-				case 'C':
-					currentIdx--;
-					state = 'D';
-					break;
+		//		case 'C':
+		//			currentIdx--;
+		//			state = 'D';
+		//			break;
 
-				case 'D':
-					if (current.IsReschedulingDay)
-						state = 'C';
-					else if (current.IsPaymentDay)
-						state = 'B';
-					else
-						state = 'E';
+		//		case 'D':
+		//			if (current.IsReschedulingDay)
+		//				state = 'C';
+		//			else if (current.IsPaymentDay)
+		//				state = 'B';
+		//			else
+		//				state = 'E';
 
-					break;
+		//			break;
 
-				case 'E':
-					current.IsBetweenLastPaymentAndReschedulingDay = true;
-					state = 'C';
-					break;
-				} // switch
-			} // forever
-		} // SetIgnoredDueToRescheduleDays
+		//		case 'E':
+		//			current.IsBetweenLastPaymentAndReschedulingDay = true;
+		//			state = 'C';
+		//			break;
+		//		} // switch
+		//	} // forever
+		//} // SetIgnoredDueToRescheduleDays
 
 		private readonly SortedDictionary<DateTime, string> notes;
 	} // class DailyLoanStatus

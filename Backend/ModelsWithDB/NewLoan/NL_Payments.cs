@@ -52,12 +52,15 @@
 
 		// additions
 		private List<NL_PaypointTransactions> _paypointTransactionses = new List<NL_PaypointTransactions>();
+
 		[DataMember]
 		[NonTraversable]
 		public List<NL_PaypointTransactions> PaypointTransactionses {
 			get { return this._paypointTransactionses; }
 			set { this._paypointTransactionses = value; }
 		}
+
+		
 
 	} // class NL_Payments
 } // ns
