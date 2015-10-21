@@ -206,6 +206,8 @@
     <Compile Include="Code\EverlineLoginLoanChecker.cs" />
     <Compile Include="Code\ForceNhibernateResync.cs" />
     <Compile Include="Code\MainStrategyClient.cs" />
+    <Compile Include="Code\MpUniq\BankAccountUniqChecker.cs" />
+    <Compile Include="Code\MpUniq\BankAccountIsAlreadyAddedException.cs" />
     <Compile Include="Code\ScratchHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionNames.cs" />
     <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />

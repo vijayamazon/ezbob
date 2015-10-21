@@ -2,7 +2,12 @@
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    public class CardInfo
+	using System.Collections.Generic;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public class CardInfo
     {
         public CardInfo()
         {
@@ -91,5 +96,22 @@ namespace EZBob.DatabaseLib.Model.Database
             References(x => x.Broker, "BrokerID");
         }
     }
+
+	public interface ICardInfoRepository : IRepository<CardInfo> {
+		bool Exists(CardInfo cardInfo, int customerID);
+	}
+
+	public class CardInfoRepository : NHibernateRepositoryBase<CardInfo>, ICardInfoRepository {
+		public CardInfoRepository(ISession session)
+			: base(session) {
+		}
+
+		public bool Exists(CardInfo cardInfo, int customerID) {
+			return GetAll()
+				.Any(x => x.BankAccount == cardInfo.BankAccount && 
+					      x.SortCode == cardInfo.SortCode && 
+						  x.Customer.Id != customerID);
+		}
+	}
 
 }

@@ -46,6 +46,8 @@ namespace EzBob.Web.Infrastructure
 			For<IPacnetPaypointServiceLogRepository>().Use<PacnetPaypointServiceLogRepository>();
 			For<ICustomerMarketPlaceRepository>().Use<CustomerMarketPlaceRepository>();
 			For<IMP_WhiteListRepository>().Use<MP_WhiteListRepository>();
+			For<IBankAccountWhiteListRepository>().Use<BankAccountWhiteListRepository>();
+			For<ICardInfoRepository>().Use<CardInfoRepository>();
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanTransactionRepository>().Use<LoanTransactionRepository>();
