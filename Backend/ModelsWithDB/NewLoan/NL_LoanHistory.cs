@@ -98,13 +98,15 @@
 		}
 
 		public void SetDefaultRepaymentIntervalType() {
-			RepaymentIntervalTypeID = RepaymentIntervalTypeID == 0 ? (int)RepaymentIntervalTypes.Month : RepaymentIntervalTypeID;
+			Console.WriteLine("==={0}" , RepaymentIntervalTypeID);
+			RepaymentIntervalTypeID = (RepaymentIntervalTypeID == 0) ? (int)RepaymentIntervalTypes.Month : RepaymentIntervalTypeID;
 		}
 
 		public void SetDefaults() {
 			SetDefaultEventTime();
 			SetDefaultInterestRate();
 			SetDefaultRepaymentCount();
+			SetDefaultRepaymentIntervalType();
 		}
 
 		public override string ToString() {

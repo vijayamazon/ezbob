@@ -2,10 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	internal class CalculatePlanMethod : AMethod {

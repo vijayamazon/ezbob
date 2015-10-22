@@ -1,13 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
 	using System.Runtime.Serialization;
 	using ConfigManager;
-	using Ezbob.Utils.Attributes;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
+	using Ezbob.Utils.Attributes;
 
 	[DataContract]
 	public class NL_Model : AStringable {
@@ -66,9 +63,9 @@
 					ALoanCalculator calc = (ALoanCalculator)Activator.CreateInstance(myType, this);
 
 					if (CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
-						calc = new BankLikeLoanCalculator(this);
+						calc = (BankLikeLoanCalculator)Activator.CreateInstance(myType, this); // new BankLikeLoanCalculator(this);
 					else if (CalculatorImplementation.GetType() == typeof(LegacyLoanCalculator))
-						calc = new LegacyLoanCalculator(this);
+						calc = (LegacyLoanCalculator)Activator.CreateInstance(myType, this); // calc = new LegacyLoanCalculator(this);
 
 					Console.WriteLine(calc);
 					

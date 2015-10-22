@@ -3,7 +3,6 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 
@@ -142,16 +141,17 @@
 
 
 
-		public DateTime AddRepaymentIntervals(int periodCount, DateTime issuedTime, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
+		public DateTime AddRepaymentIntervals(int intervals, DateTime issuedTime, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
+			Log.Debug(intervalType);
 			return (intervalType == RepaymentIntervalTypes.Month)
-				? issuedTime.AddMonths(periodCount)
-				: issuedTime.AddDays(periodCount * (int)intervalType);
+				? issuedTime.AddMonths(intervals)
+				: issuedTime.AddDays(intervals * (int)intervalType);
 		} // AddRepaymentIntervals
 
 
 		public DateTime PreviousScheduleDate(DateTime theDate, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
 			return (intervalType == RepaymentIntervalTypes.Month)? theDate.AddMonths(-1): theDate.AddDays(-(int)intervalType);
-		} // AddRepaymentIntervals
+		} // PreviousScheduleDate
 
 		/// <summary>
 		/// Calculates average daily interest rate (r'), based on monthlyInterestRate (r) and periodEndDate (for example, scheduleItem.PlannedDate)

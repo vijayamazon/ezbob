@@ -185,7 +185,8 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = new DateTime(2015, 10, 15), //DateTime.UtcNow,
 				Amount = 1000,
-				RepaymentCount = 3
+				RepaymentCount = 3,
+				InterestRate = 0.0225m,
 			});
 			var discounts= DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet",CommandSpecies.StoredProcedure,new QueryParameter("@DiscountPlanID", 2));
 			foreach (NL_DiscountPlanEntries dpe in discounts) {

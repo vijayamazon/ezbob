@@ -1,10 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Utils;
-	using Ezbob.Utils.Lingvo;
 
 	internal class CalculateAprMethod : AMethod {
 		public CalculateAprMethod(ALoanCalculator calculator, DateTime? aprDate, bool writeToLog)

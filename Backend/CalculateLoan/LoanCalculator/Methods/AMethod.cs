@@ -1,7 +1,4 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
-	using System;
-	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 

@@ -72,9 +72,7 @@
 					principal = 0;
 				else if (i == interestOnlyRepayments + 1)
 					principal = iFirstPrincipal;
-
-				balance -= principal;
-		
+				
 				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i-1])) : history.InterestRate;
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
@@ -83,7 +81,9 @@
 
 				int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
 
-				decimal interest = balance * dailyInterestRate * daysDiff;
+				decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents=> /100; dr' = r/daysDiff
+
+				balance -= principal;
 
 				history.Schedule.Add(
 					new NL_LoanSchedules() {
