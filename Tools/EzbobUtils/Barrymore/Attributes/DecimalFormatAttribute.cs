@@ -6,10 +6,12 @@
 	public class DecimalFormatAttribute : Attribute {
 
 		public string FormattedString { get; set; }
-		protected string format;
+		public string format;
 		public CultureInfo culture = new CultureInfo("en-GB");
 
 		public DecimalFormatAttribute(string format) {
+			if (format == "percent")
+				format = "F4";
 			this.format = format;
 		}
 

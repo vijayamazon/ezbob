@@ -46,7 +46,6 @@
 			{
 				//NL_Model nlModel = new NL_Model(loan.Customer.Id);
 				//nlModel.UserID = this._context.UserId;
-				//nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
 				////TODO if relevant history exists use it
 				//nlModel.Histories.Add(new NL_LoanHistory() {
 				//	Amount = loan.LoanAmount,

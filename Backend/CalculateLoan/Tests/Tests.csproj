@@ -88,6 +88,14 @@
       <Project>{EF300F8A-F973-4BB8-987B-A9775E121AF7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
+      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
+      <Name>CalculateLoanExceptions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LoanCalculator\LoanCalculator.csproj">
       <Project>{d7a03efe-b175-49eb-9b22-3315c1124091}</Project>
       <Name>LoanCalculator</Name>

@@ -18,6 +18,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Newtonsoft.Json;
+	using NHibernate.Linq;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
 	using StructureMap;
@@ -91,7 +92,7 @@
 		public void BuildLoanFromOffer() {
 			NL_Model model = new NL_Model(56) {
 				UserID = 357,
-				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
+				//CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
 				Loan = new NL_Loans()
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
@@ -100,7 +101,10 @@
 			try {
 				strategy.Execute();
 				Console.WriteLine(strategy.Result.Error);
-				m_oLog.Debug(strategy.Result);
+
+				m_oLog.Debug(strategy.Result.Loan);
+				m_oLog.Debug(strategy.Result.Offer);
+
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}
@@ -175,24 +179,38 @@
 			Console.WriteLine(offerStrategy.Error);
 		}
 
-
+		public void Discounts() {
+			int oldLoanID = 2076;
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan oldLoan = loanRep.Get(oldLoanID);
+			var cr = oldLoan.Customer.CashRequests.OrderBy(c => c.CreationDate)
+				.LastOrDefault();
+			if (cr != null) {
+				for (int i = 0; i < oldLoan.CashRequest.DiscountPlan.Discounts.Length; i++) {
+					Console.WriteLine(oldLoan.CashRequest.DiscountPlan.Discounts[i]);
+				} 
+				//Console.WriteLine(cr.ToString());
+				cr.DiscountPlan.Discounts.ForEach(d => this.m_oLog.Debug("=====" + d.ToString(CultureInfo.InvariantCulture)));
+			}
+		}
 		[Test]
 		public void AddLoan() {
-			DateTime now = DateTime.UtcNow;
-
+			int userID = 357;
+			int oldLoanID = 2076;
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan oldLoan = loanRep.Get(oldLoanID);
+			DateTime now = oldLoan.Date; // DateTime.UtcNow;
 			AgreementModel agreementModel = new AgreementModel() {
-				CustomerEmail = "alexbo+003@ezbob.com.test.test.test",
+				CustomerEmail = oldLoan.Customer.Name, // "alexbo+003@ezbob.com.test.test.test",
 				APR = 35.35,
 				FullName = "Jane Doe",
-				CountRepayment = 3
+				CountRepayment = oldLoan.RepaymentsNum
 			};
-
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-				Loan = new NL_Loans() { OldLoanID = 2074, Refnum = "01574390005" },
+			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
+				UserID = userID,
+				Loan = new NL_Loans() { OldLoanID = oldLoan.Id, Refnum = oldLoan.RefNumber },
 				FundTransfer = new NL_FundTransfers() {
-					Amount = 1000,
+					Amount = oldLoan.LoanAmount,
 					FundTransferStatusID = (int) NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
 					LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 					TransferTime = now,
@@ -201,7 +219,7 @@
 			};
 			model.FundTransfer.PacnetTransactions.Clear();
 			model.FundTransfer.PacnetTransactions.Add(new NL_PacnetTransactions() {
-				Amount = 1000,
+				Amount = oldLoan.LoanAmount,
 				Notes = "addloan utest",
 				PacnetTransactionStatusID = (int)NLPacnetTransactionStatuses.Done,
 				StatusUpdatedTime = now,
@@ -214,11 +232,11 @@
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath = "preContract/cc/dd.pdf"
+				FilePath = "preContract/cc/dd"+oldLoan.RefNumber+".pdf"
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-				FilePath = "guarantyAgreement/aa/bb.pdf"
+				FilePath = "guarantyAgreement/aa/bb"+oldLoan.RefNumber+".pdf"
 			});
 			
 			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);

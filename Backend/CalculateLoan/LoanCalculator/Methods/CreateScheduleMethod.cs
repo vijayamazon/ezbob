@@ -62,7 +62,7 @@
 			List<decimal> discounts = this.loanModel.Offer.DiscountPlan;
 			int discountCount = discounts.Count;
 			decimal balance = history.Amount;
-
+	
 			// create Schedule 
 			for (int i = 1; i <= history.RepaymentCount; i++) {
 
@@ -74,8 +74,8 @@
 					principal = iFirstPrincipal;
 
 				balance -= principal;
-
-				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i])) : history.InterestRate;
+		
+				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i-1])) : history.InterestRate;
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
 
@@ -88,7 +88,7 @@
 				history.Schedule.Add(
 					new NL_LoanSchedules() {
 						InterestRate = r,
-						PlannedDate = plannedDate,
+						PlannedDate = plannedDate.Date,
 						Principal = principal, // intervals' principal
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i,

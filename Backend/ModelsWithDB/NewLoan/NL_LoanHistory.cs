@@ -28,7 +28,6 @@
 		public long? LoanLegalID { get; set; }
 
 		[DataMember]
-		[DecimalFormat("C2")]
 		public decimal Amount { get; set; }
 
 		[FK("NL_RepaymentIntervalTypes", "RepaymentIntervalTypeID")]
@@ -40,7 +39,7 @@
 		public int RepaymentCount { get; set; }
 
 		[DataMember]
-		[DecimalFormat("P4")]
+		[DecimalFormat("percent")]
 		public decimal InterestRate { get; set; }
 
 		[DataMember]
@@ -110,11 +109,16 @@
 
 		public override string ToString() {
 
-			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
+			StringBuilder sb = new StringBuilder().Append(base.ToString())
+				.Append(Environment.NewLine);
 
 			// schedule
-			sb.Append(HeadersLine(typeof(NL_LoanSchedules), NL_LoanSchedules.ColumnTotalWidth));
-			Schedule.ForEach(s => sb.Append(s.ToString()));
+			if (Schedule.Count > 0) {
+				//sb.Append(HeadersLine(typeof(NL_LoanSchedules), NL_LoanSchedules.ColumnTotalWidth));
+				Schedule.ForEach(s => sb.Append(s.ToString()));
+			} else {
+				sb.Append("No schedule");
+			}
 
 			// agreements
 			sb.Append(Environment.NewLine);

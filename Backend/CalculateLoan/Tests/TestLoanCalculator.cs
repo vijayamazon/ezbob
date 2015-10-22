@@ -1,10 +1,18 @@
 namespace Ezbob.Backend.CalculateLoan.Tests {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Reflection;
+	using System.Xml;
+	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Extensions;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
+	using Ezbob.Utils;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -143,5 +151,68 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			Log.Info("{1} earned interest on 10/02/2015 - 19/03/2015 is {0}.", earnedInterest, lc.Name);
 			*/
 		} // TestSpecificLoanCalculator
+
+		[Test]
+		public void CreateCalcInstance() {
+			NL_Model m = new NL_Model(56);
+			try {
+				Type myType = Type.GetType(CurrentValues.Instance.DefaultLoanCalculator.Value);
+				// "Ezbob.Backend.CalculateLoan.LoanCalculator.LegacyLoanCalculator, Ezbob.Backend.CalculateLoan.LoanCalculator, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null");
+				if (myType != null) {
+					ALoanCalculator calc = (ALoanCalculator)Activator.CreateInstance(myType, m);
+					Console.WriteLine(calc);
+					calc.CreateSchedule();
+				}
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+		[Test]
+		public void Formatting() {
+			DateTime d = new DateTime(2015, 12, 28, 13, 25, 59);
+			object[] zz = {"LoanScheduleID", "LoanHistoryID", "LoanScheduleStatusID", "Position", "PlannedDate", "Principal", "InterestRate", "Interest", "FeesAmount", "AmountDue", "InterestPaid", "FeesPaid", "Balance"};
+			Console.WriteLine("{0,-2} {1,-2} {2,-2} {3,-2} {4,-2} {6,-2} {7,-2} {8,-2} {9,-2} {10,-2} {11,-2} {12,-2} {13,-2} ", zz);
+			Console.WriteLine("{0,-16}{1,-15}{2,-22}{3,-10}{4,-13:MM/dd/yy} {6,-11:C2} {7,-14:F4} {8,-10:C2} {9,-12:C2} {10,-11:C2} {11,-14:C2} {12,-10:C2} {13,-9:C2} ",5, 44, 1, 3, d, 333m, 444, 0.06000000000m, 0m, 0m, 33m, 366m, 0m, 0m);
+		}
+
+		/// <exception cref="Exception">Condition. </exception>
+		[Test]
+		public void CreateSchedule() {
+			NL_Model model = new NL_Model(56) {
+				UserID = 357,
+				Loan = new NL_Loans()
+			};
+			model.Loan.Histories.Add(new NL_LoanHistory() {
+				EventTime = new DateTime(2015, 10, 15), //DateTime.UtcNow,
+				Amount = 1000,
+				RepaymentCount = 3
+			});
+			var discounts= DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet",CommandSpecies.StoredProcedure,new QueryParameter("@DiscountPlanID", 2));
+			foreach (NL_DiscountPlanEntries dpe in discounts) {
+				model.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+			}
+			//model.Offer.DiscountPlan.ForEach(d => Log.Info("discount entry: {0}", d));
+			model.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", 3));
+			model.Offer.OfferFees.ForEach(f => Log.Info("fee: {0}", f));
+			ALoanCalculator calc = model.GetCalculatorInstance();
+			try {
+				calc.CreateSchedule();
+			} catch (NoInitialDataException noInitialDataException) {
+				Log.Debug(noInitialDataException);
+			} catch (InvalidInitialInterestOnlyRepaymentCountException invalidInitialInterestOnlyRepaymentCountException) {
+				Log.Debug(invalidInitialInterestOnlyRepaymentCountException);
+			} catch (InvalidInitialRepaymentCountException invalidInitialRepaymentCountException) {
+				Log.Debug(invalidInitialRepaymentCountException);
+			} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
+				Log.Debug(invalidInitialInterestRateException);
+			} catch (InvalidInitialAmountException invalidInitialAmountException) {
+				Log.Debug(invalidInitialAmountException);
+			}
+
+			model.Loan.LastHistory().Schedule.ForEach(s => Log.Info(s.ToString()));
+		}
+
+		
+
 	} // class TestLoanCalculator
 } // namespace

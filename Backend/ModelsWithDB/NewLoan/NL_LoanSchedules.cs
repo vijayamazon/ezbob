@@ -34,11 +34,10 @@
 		public DateTime? ClosedTime { get; set; }
 
 		[DataMember]
-		[DecimalFormat("C2")]
 		public decimal Principal { get; set; }
 
 		[DataMember]
-		[DecimalFormat("P4")]
+		[DecimalFormat("percent")]
 		public decimal InterestRate { get; set; }
 
 
@@ -52,7 +51,6 @@
 
 		[DataMember] // p*r
 		[NonTraversable]
-		[DecimalFormat("C2")]
 		public decimal Interest {
 			get { return this._interest; }
 			set { this._interest = value; }
@@ -60,7 +58,6 @@
 
 		[DataMember]
 		[NonTraversable]
-		[DecimalFormat("C2")]
 		public decimal FeesAmount {
 			get { return this._feesAmount; }
 			set { this._feesAmount = value; }
@@ -68,7 +65,6 @@
 
 		[DataMember]
 		[NonTraversable]
-		[DecimalFormat("C2")]
 		public decimal AmountDue {
 			get { return this._amountDue; }
 			set { this._amountDue = value; }
@@ -76,7 +72,6 @@
 
 		[DataMember]
 		[NonTraversable]
-		[DecimalFormat("C2")]
 		public decimal InterestPaid {
 			get { return this._interestPaid; }
 			set { this._interestPaid = value; }
@@ -84,7 +79,6 @@
 
 		[DataMember]
 		[NonTraversable]
-		[DecimalFormat("C2")]
 		public decimal FeesPaid {
 			get { return this._feesPaid; }
 			set { this._feesPaid = value; }
@@ -92,7 +86,6 @@
 
 		[DataMember]
 		[NonTraversable]
-		[DecimalFormat("C2")]
 		public decimal Balance {
 			get { return this._balance; }
 			set { this._balance = value; }
@@ -101,6 +94,15 @@
 		public new static int ColumnTotalWidth = 20;
 
 		public override string ToString() {
+			try {
+				return ToStringTable();
+			} catch (InvalidCastException invalidCastException) {
+				Console.WriteLine(invalidCastException);
+			}
+			return string.Empty;
+		}
+
+		/*	public override string ToString() {
 			Type t = typeof(NL_LoanSchedules);
 			var props = FilterPrintable(t);
 
@@ -130,7 +132,7 @@
 			}
 
 			return sb.ToString();
-		}
+		}*/
 
 	} // class NL_LoanSchedules
 } // ns

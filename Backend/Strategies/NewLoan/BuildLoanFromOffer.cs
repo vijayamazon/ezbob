@@ -12,13 +12,11 @@
 	public class BuildLoanFromOffer : AStrategy {
 
 		public BuildLoanFromOffer(NL_Model model) {
-			this.model = model;
-			Result = this.model;
+			Result = model;
 		} // constructor
 
 		public override string Name { get { return "BuildLoanFromOffer"; } }
 		public NL_Model Result { get; private set; }
-		private readonly NL_Model model;
 		public string Error;
 
 		/*	
@@ -34,11 +32,16 @@
 		/// <exception cref="OverflowException"><paramref /> represents a number less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
 		public override void Execute() {
 
+			if (Result.CustomerID == 0) {
+				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				return;
+			}
+
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 				"NL_SignedOfferForLoan",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.model.CustomerID),
-				new QueryParameter("@Now", this.model.Loan.LastHistory().EventTime)
+				new QueryParameter("CustomerID", Result.CustomerID),
+				new QueryParameter("@Now", Result.Loan.LastHistory().EventTime)
 			);
 
 			if (dataForLoan == null) {
@@ -58,7 +61,7 @@
 				return;
 			}
 
-			if (!string.IsNullOrEmpty(this.model.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(this.model.Loan.Refnum)) {
+			if (!string.IsNullOrEmpty(Result.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(Result.Loan.Refnum)) {
 				this.Error = NL_ExceptionLoanExists.DefaultMessage;
 			}
 
@@ -72,15 +75,13 @@
 			****/
 
 			// from offer => Loan
-			this.model.Loan.OfferID = dataForLoan.OfferID;
-			this.model.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
-			this.model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
-			this.model.Loan.LoanSourceID = dataForLoan.LoanSourceID;
+			Result.Loan.OfferID = dataForLoan.OfferID;
+			Result.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
+			Result.Loan.LoanSourceID = dataForLoan.LoanSourceID;
 			// EzbobBankAccountID - TODO
-			this.model.Loan.Position = dataForLoan.LoansCount;
-			this.model.Loan.CreationTime = DateTime.UtcNow;
+			Result.Loan.Position = dataForLoan.LoansCount;
 
-			NL_LoanHistory history = this.model.Loan.LastHistory();
+			NL_LoanHistory history = Result.Loan.LastHistory();
 
 			// from offer => history initial/re-scheduling data
 			history.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
@@ -88,48 +89,33 @@
 			history.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
 			history.RepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
 			history.InterestRate = dataForLoan.MonthlyInterestRate;
-			history.EventTime = DateTime.UtcNow;
+			history.LoanLegalID = dataForLoan.LoanLegalID;
 
 			// from offer => Offer
-			this.model.Offer = new NL_Offers {
+			Result.Offer = new NL_Offers {
 				BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent,
 				SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan,
-				OfferID = dataForLoan.OfferID,
-				LoanLegalID = dataForLoan.LoanLegalID
+				OfferID = dataForLoan.OfferID
 			};
 
-			// replace last history with updated one
-			//int lastHistoryIndex = this.model.Loan.Histories.IndexOf(history);
-			//this.model.Loan.Histories.RemoveAt(lastHistoryIndex);
-			//this.model.Loan.Histories.Insert(lastHistoryIndex, history);
-
 			// offer-fees
-			this.model.Offer.OfferFees = DB.Fill<NL_OfferFees>(
-				"NL_OfferFeesGet",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@OfferID", dataForLoan.OfferID)
-				);
+			Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet",CommandSpecies.StoredProcedure,new QueryParameter("@OfferID", dataForLoan.OfferID));
 
-			this.model.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
+			Result.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
 
 			// discounts
 			if (dataForLoan.DiscountPlanID > 0) {
-				var discounts = DB.Fill<NL_DiscountPlanEntries>(
-					"NL_DiscountPlanEntriesGet",
+				var discounts = DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@DiscountPlanID", dataForLoan.DiscountPlanID)
 				);
 				foreach (NL_DiscountPlanEntries dpe in discounts) {
-					this.model.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+					Result.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 				}
 				Log.Debug("Discounts");
-				this.model.Offer.DiscountPlan.ForEach(d => Log.Debug(d));
+				Result.Offer.DiscountPlan.ForEach(d => Log.Debug(d));
 			}
-
-			Result = this.model;
-
 		} // Execute
-
 
 	} // class BuildLoanFromOffer
 } // ns

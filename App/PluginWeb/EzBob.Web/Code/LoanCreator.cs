@@ -200,7 +200,6 @@
 			*/
 
 			// NL model - loan. Create history here for agreements processing 
-			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
 			nlModel.Loan.Histories.Clear();
 			nlModel.Loan.Histories.Add(new NL_LoanHistory() {
 				Amount = loanAmount,

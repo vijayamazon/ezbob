@@ -25,10 +25,10 @@
 
 	public class AgreementsModelBuilder {
 		private readonly APRCalculator _aprCalc;
-	    private readonly RepaymentCalculator _repaymentCalculator;
-	    protected readonly ServiceClient serviceClient;
-        private readonly IEzbobWorkplaceContext _context;
-		private readonly SafeILog oLog  ;
+		private readonly RepaymentCalculator _repaymentCalculator;
+		protected readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly SafeILog oLog;
 
 		public AgreementsModelBuilder(IEzbobWorkplaceContext context = null) {
 			this._aprCalc = new APRCalculator();
@@ -50,18 +50,18 @@
 		public virtual AgreementModel Build(Customer customer, decimal amount, Loan loan) {
 			var now = DateTime.UtcNow;
 
-			if (customer.LastCashRequest == null && loan == null) throw new ArgumentException("LastCashRequest or Loan is required");
-			
+			if (customer.LastCashRequest == null && loan == null)
+				throw new ArgumentException("LastCashRequest or Loan is required");
+
 			var apr = _aprCalc.Calculate(amount, loan.Schedule, loan.SetupFee, loan.Date);
 			return GenerateAgreementModel(customer, loan, now, apr);
 		}
 
-		public virtual AgreementModel ReBuild(Customer customer, Loan loan){
+		public virtual AgreementModel ReBuild(Customer customer, Loan loan) {
 			return GenerateAgreementModel(customer, loan, loan.Date, (double)loan.APR);
 		}
 
-		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr)
-		{
+		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr) {
 			var model = new AgreementModel();
 			model.Schedule = loan.Schedule.Select(LoanScheduleExtention.FromLoanScheduleItem).ToList();
 			model.CustomerEmail = customer.Name;
@@ -71,15 +71,15 @@
 			var businessType = customer.PersonalInfo.TypeOfBusiness;
 			var company = customer.Company;
 			CustomerAddress companyAddress = null;
-			if (company != null){
-				switch (businessType.Reduce()){
-					case TypeOfBusinessReduced.Limited:
-						model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
-						goto case TypeOfBusinessReduced.NonLimited;
-					case TypeOfBusinessReduced.NonLimited:
-						model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-						companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
-						break;
+			if (company != null) {
+				switch (businessType.Reduce()) {
+				case TypeOfBusinessReduced.Limited:
+					model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+					goto case TypeOfBusinessReduced.NonLimited;
+				case TypeOfBusinessReduced.NonLimited:
+					model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+					companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+					break;
 				}
 			}
 
@@ -95,26 +95,26 @@
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
-			
+
 			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
 			model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
 
-            //According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
-            if((loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) || 
-               (loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0)) {
-                decimal setupFeePercent = (loan.CashRequest.ManualSetupFeePercent ?? 0M) +  (loan.CashRequest.BrokerSetupFeePercent ?? 0M);
-                model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
-            }
-            model.IsBrokerFee = false;
-            model.IsManualSetupFee = false;
-			
-            model.APR = apr;
+			//According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
+			if ((loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) ||
+			   (loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0)) {
+				decimal setupFeePercent = (loan.CashRequest.ManualSetupFeePercent ?? 0M) + (loan.CashRequest.BrokerSetupFeePercent ?? 0M);
+				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
+			}
+			model.IsBrokerFee = false;
+			model.IsManualSetupFee = false;
+
+			model.APR = apr;
 
 			var start = loan.Schedule.First().Date.AddMonths(-1);
 			var end = loan.Schedule.Last().Date;
 			var days = (end - start).TotalDays;
 
-			
+
 
 			//model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
 			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
@@ -130,48 +130,48 @@
 			model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
 			model.isHalwayLoan = loanType.IsHalwayLoan;
 			model.CountRepayment = _repaymentCalculator.CalculateCountRepayment(loan);
-            model.Term = _repaymentCalculator.CalculateCountRepayment(loan);
+			model.Term = _repaymentCalculator.CalculateCountRepayment(loan);
 
 			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(loan.Schedule.Sum(a => a.LoanRepayment) - loan.SetupFee);
 
-            if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()) {
-                CreateEverlineRefinance(model, customer.Name);
-            }
+			if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()) {
+				CreateEverlineRefinance(model, customer.Name);
+			}
 			return model;
 		}
 
-        /// <summary>
-        /// TODO This method should be removed after refinansing of everline customers will be complete
-        /// executes everline api each time the agreement is generated
-        /// </summary>
-	    private void CreateEverlineRefinance(AgreementModel model, string email) {
-            try {
-                EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
-                var details = checker.GetLoanDetails(email);
-                var evlOpenLoan = details.LoanApplications.FirstOrDefault(x => !x.ClosedOn.HasValue && x.BalanceDetails.TotalOutstandingBalance.HasValue && x.BalanceDetails.TotalOutstandingBalance > 0);
-                if (evlOpenLoan != null) {
-                    model.IsEverlineRefinanceLoan = true;
-                    model.EverlineRefinanceLoanRef = evlOpenLoan.LoanId.ToString();
-                    model.EverlineRefinanceLoanDate = FormattingUtils.FormatDateToString(evlOpenLoan.FundedOn);
-                    model.EverlineRefinanceLoanOutstandingAmount = FormattingUtils.NumericFormats(evlOpenLoan.BalanceDetails.TotalOutstandingBalance.Value);
-                }
-            } catch {
-                //failed to build everline refinance 
-            }
-        }
+		/// <summary>
+		/// TODO This method should be removed after refinansing of everline customers will be complete
+		/// executes everline api each time the agreement is generated
+		/// </summary>
+		private void CreateEverlineRefinance(AgreementModel model, string email) {
+			try {
+				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
+				var details = checker.GetLoanDetails(email);
+				var evlOpenLoan = details.LoanApplications.FirstOrDefault(x => !x.ClosedOn.HasValue && x.BalanceDetails.TotalOutstandingBalance.HasValue && x.BalanceDetails.TotalOutstandingBalance > 0);
+				if (evlOpenLoan != null) {
+					model.IsEverlineRefinanceLoan = true;
+					model.EverlineRefinanceLoanRef = evlOpenLoan.LoanId.ToString();
+					model.EverlineRefinanceLoanDate = FormattingUtils.FormatDateToString(evlOpenLoan.FundedOn);
+					model.EverlineRefinanceLoanOutstandingAmount = FormattingUtils.NumericFormats(evlOpenLoan.BalanceDetails.TotalOutstandingBalance.Value);
+				}
+			} catch {
+				//failed to build everline refinance 
+			}
+		}
 
-        private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule) {
-            return schedule.Select((installment, i) => new FormattedSchedule {
-                AmountDue = FormattingUtils.NumericFormats(installment.AmountDue),
-                Principal = FormattingUtils.NumericFormats(installment.LoanRepayment),
-                Interest = FormattingUtils.NumericFormats(installment.Interest),
-                Fees = "0",
-                Date = FormattingUtils.FormatDateToString(installment.Date),
-                StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
-                InterestRate = string.Format("{0:0.00}", installment.InterestRate * 100),
-                Iterration = i + 1,
-            }).ToList();
-        }
+		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule) {
+			return schedule.Select((installment, i) => new FormattedSchedule {
+				AmountDue = FormattingUtils.NumericFormats(installment.AmountDue),
+				Principal = FormattingUtils.NumericFormats(installment.LoanRepayment),
+				Interest = FormattingUtils.NumericFormats(installment.Interest),
+				Fees = "0",
+				Date = FormattingUtils.FormatDateToString(installment.Date),
+				StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
+				InterestRate = string.Format("{0:0.00}", installment.InterestRate * 100),
+				Iterration = i + 1,
+			}).ToList();
+		}
 
 		/// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref /> is null.</exception>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
@@ -186,8 +186,8 @@
 			//var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			//decimal currencyRate = (decimal)currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
 			decimal currencyRate = GetUSDCurrencyRate();
-			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient*currencyRate*
-			                           schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
+			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate *
+									   schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
 
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
@@ -198,18 +198,26 @@
 			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
 			// init calculator
-			ALoanCalculator nlCalculator = new LegacyLoanCalculator(nlModel);
+			//ALoanCalculator nlCalculator = new LegacyLoanCalculator(nlModel);
+			//if (nlModel.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
+			//	nlCalculator = new BankLikeLoanCalculator(nlModel);
 
-			// 2. Init Schedule and Fees
+			ALoanCalculator nlCalculator=null;
 			try {
+				nlCalculator = nlModel.GetCalculatorInstance();
+			} catch (Exception calcInstanceEx) {
+				//this.Error = calcInstanceEx.Message;
+				this.oLog.Alert("customer: {0}, err: {1}", nlModel.CustomerID, calcInstanceEx);
+			}
 
-				if (nlModel.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator)) 
-					nlCalculator = new BankLikeLoanCalculator(nlModel);
+			if (nlCalculator == null) {
+				return null;
+			}
 
-				// 2. get Schedule and Fees
+			// 2. get Schedule and Fees
+			try {
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
-
 			} catch (NoInitialDataException noDataException) {
 				this.oLog.Alert("CreateSchedule failed: {0}", noDataException.Message);
 			} catch (InvalidInitialAmountException amountException) {
@@ -226,7 +234,7 @@
 			}
 
 			var history = nlModel.Loan.LastHistory();
-			
+
 			// no Schedule
 			if (history.Schedule.Count == 0) {
 				this.oLog.Alert("no Schedule: customer: {0}, err: {1}", nlModel.CustomerID);
@@ -241,13 +249,13 @@
 			foreach (NL_LoanSchedules s in history.Schedule) {
 				var item = new LoanScheduleItemModel {
 					Id = s.LoanScheduleID,
-					AmountDue = s.AmountDue, 
+					AmountDue = s.AmountDue,
 					Date = s.PlannedDate,
-					Interest = s.Interest, 
+					Interest = s.Interest,
 					Status = Enum.GetName(typeof(NLScheduleStatuses), s.LoanScheduleStatusID).DescriptionAttr(),
 					LoanRepayment = s.Principal,
 					Balance = s.Balance,
-					Fees = s.FeesAmount, 
+					Fees = s.FeesAmount,
 					InterestRate = s.InterestRate
 				};
 				item.StatusDescription = item.Status;
@@ -346,7 +354,7 @@
 			return model;
 		}
 
-		
+
 
 		public decimal GetUSDCurrencyRate() {
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();

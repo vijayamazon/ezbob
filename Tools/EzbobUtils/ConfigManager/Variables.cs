@@ -156,6 +156,7 @@ namespace ConfigManager {
 
 		DEBUG_SaveVatReturnData,
 		DefaultFeedbackValue,
+		DefaultLoanCalculator,
 		DirectorDetailsNonLimitedParserConfiguration,
 		DirectorDetailsParserConfiguration,
 		DirectorInfoNonLimitedParserConfiguration,

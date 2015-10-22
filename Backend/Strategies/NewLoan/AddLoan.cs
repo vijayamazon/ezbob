@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Text;
 	using System.Web;
 	using ConfigManager;
@@ -44,8 +43,6 @@
 
 		public override void Execute() {
 
-			DateTime nowTime = DateTime.UtcNow;
-
 			// TODO check if "credit available" is enough for this loan amount
 
 			if (model.CustomerID == 0) {
@@ -71,7 +68,7 @@
 			var history = model.Loan.LastHistory();
 
 			if (history == null) {
-				this.Error = NL_ExceptionRequiredDataNotFound.LastHistory; 
+				this.Error = NL_ExceptionRequiredDataNotFound.LastHistory;
 				return;
 			}
 
@@ -84,21 +81,27 @@
 				this.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
 				return;
 			}
-			
-			// LoanType, LoanFormulaID, RepaymentDate
-			model.Loan.SetDefaults();
 
 			// RepaymentCount,  EventTime, InterestRate
 			model.Loan.LastHistory().SetDefaults();
 
+			// LoanType, LoanFormulaID, RepaymentDate
+			model.Loan.SetDefaults();
+
 			BuildLoanFromOffer dataForLoan = new BuildLoanFromOffer(model);
-			if (dataForLoan.Error != string.Empty) {
+			try {
+				dataForLoan.Execute();
+			} catch (Exception ex) {
+				Log.Alert(ex.Message);
+			}
+
+			if (!string.IsNullOrEmpty(dataForLoan.Error)) {
 				this.Error = dataForLoan.Error;
 				return;
 			}
 
 			model = dataForLoan.Result;
-			
+
 			/**
 			- loan
 			- fees
@@ -109,21 +112,26 @@
 			- pacnet transaction
 			- agreements
 			*/
-		
-			// init calculator
-			ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
 
+			// init calculator
+			//ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
+			//if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
+			//	nlCalculator = new BankLikeLoanCalculator(model);
+
+			ALoanCalculator nlCalculator=null;
+			try {
+				nlCalculator = model.GetCalculatorInstance();
+			} catch (Exception calcInstanceEx) {
+				this.Error = calcInstanceEx.Message;
+			}
+
+			if (nlCalculator == null) {
+				return;
+			}
 			// 2. Init Schedule and Fees
 			try {
-				
-				if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator)) {
-					nlCalculator = new BankLikeLoanCalculator(model);
-				}
-
-				// 2. Init Schedule and Fees
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
-
 			} catch (NoInitialDataException noDataException) {
 				this.Error = noDataException.Message;
 			} catch (InvalidInitialAmountException amountException) {
@@ -139,7 +147,7 @@
 				this.Error = string.Format("Failed to calculate Schedule for customer {0}, err: {1}", model.CustomerID, ex.Message);
 			}
 
-			if (this.Error != string.Empty) {
+			if (!string.IsNullOrEmpty(this.Error)) {
 				Log.Alert("Failed to calculate Schedule for customer {0}, err: {1}", model.CustomerID, this.Error);
 				return;
 			}
@@ -147,9 +155,12 @@
 			List<NL_LoanSchedules> nlSchedule = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> nlFees = new List<NL_LoanFees>();
 			List<NL_LoanAgreements> nlAgreements = new List<NL_LoanAgreements>();
+			DateTime nowTime = DateTime.UtcNow;
 
 			// get updated history filled with Schedule
 			history = model.Loan.LastHistory();
+
+			Log.Debug(history);
 
 			// copy to local schedules list
 			history.Schedule.ForEach(s => nlSchedule.Add(s));
@@ -207,9 +218,8 @@
 
 				// 7. history
 				history.LoanID = this.LoanID;
-				history.LoanLegalID = model.Offer.LoanLegalID;
 				history.Description = "adding loan " + this.LoanID + ", old ID: " + model.Loan.OldLoanID;
-				
+
 				Log.Debug("Adding history: {0}", history);
 
 				history.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
@@ -217,8 +227,8 @@
 				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", model.Loan.LoanID, history.LoanHistoryID);
 
 				// 8. loan agreements
-				history.Agreements.ForEach(a => nlAgreements.Add(a)); 
-				nlAgreements.ForEach(a=> a.LoanHistoryID = history.LoanHistoryID);
+				history.Agreements.ForEach(a => nlAgreements.Add(a));
+				nlAgreements.ForEach(a => a.LoanHistoryID = history.LoanHistoryID);
 
 				nlAgreements.ForEach(a => Log.Debug("Adding agreement: {0}", a));
 
@@ -282,7 +292,7 @@
 				SendMail(this.Error, history, nlFees, nlSchedule, nlAgreements, model.FundTransfer);
 
 				Log.Error(this.Error);
-				
+
 			}
 
 			// OK
@@ -291,8 +301,8 @@
 		}//Execute
 
 
-		private void SendMail(string sMsg, NL_LoanHistory history = null, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> schedule = null, List<NL_LoanAgreements> agreements = null, 
-			NL_FundTransfers fundTransfer = null, NL_PacnetTransactions  pacnetTransaction = null) {
+		private void SendMail(string sMsg, NL_LoanHistory history = null, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> schedule = null, List<NL_LoanAgreements> agreements = null,
+			NL_FundTransfers fundTransfer = null, NL_PacnetTransactions pacnetTransaction = null) {
 
 			string emailToAddress = CurrentValues.Instance.Environment.Value.Contains("Dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
 			string emailFromName = CurrentValues.Instance.MailSenderName;

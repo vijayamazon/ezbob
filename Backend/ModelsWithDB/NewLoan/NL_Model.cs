@@ -1,7 +1,13 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
+	using System;
 	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
 	using System.Runtime.Serialization;
+	using ConfigManager;
 	using Ezbob.Utils.Attributes;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 
 	[DataContract]
 	public class NL_Model : AStringable {
@@ -12,13 +18,12 @@
 
 			Offer = new NL_Offers();
 			Loan = new NL_Loans();
-			//DiscountPlan = new List<decimal>();
 			Agreements = new List<NLAgreementItem>();
 			FundTransfer = new NL_FundTransfers();
-
+			CalculatorImplementation = CurrentValues.Instance.DefaultLoanCalculator.Value;
 
 		} // constructor
-
+		
 		[DataMember]
 		public int CustomerID { get; set; }
 
@@ -38,9 +43,6 @@
 		[DataMember]
 		public decimal? BrokerComissions { get; set; }
 
-		//[DataMember]
-		//public List<decimal> DiscountPlan { get; set; }
-
 		[DataMember]
 		public NL_Offers Offer { get; set; }
 
@@ -49,14 +51,37 @@
 
 		[DataMember]
 		public decimal? APR { get; set; }
-
+		
 		[DataMember]
-		public string CalculatorImplementation { get; set; }  // AloanCalculator BankLikeLoanCalculator/BankLikeLoanCalculator
+		public string CalculatorImplementation { get; set; } // AloanCalculator LegacyLoanCalculator/BankLikeLoanCalculator
 
+		/// <exception cref="Exception">Condition. </exception>
+		public ALoanCalculator GetCalculatorInstance() {
+			try {
+				Type myType = Type.GetType(CurrentValues.Instance.DefaultLoanCalculator.Value);
+				
+				if (myType != null) {
 
-	
-	
+					//default type from configurations
+					ALoanCalculator calc = (ALoanCalculator)Activator.CreateInstance(myType, this);
 
+					if (CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
+						calc = new BankLikeLoanCalculator(this);
+					else if (CalculatorImplementation.GetType() == typeof(LegacyLoanCalculator))
+						calc = new LegacyLoanCalculator(this);
+
+					Console.WriteLine(calc);
+					
+					return calc;
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception e) {
+				Console.WriteLine(e);
+				// ReSharper disable once ThrowingSystemException
+				throw new Exception(string.Format("Failed to create calculator instance for {0}", CalculatorImplementation), e);
+			}
+			return null;
+		}
 
 		//[DataMember]
 		//public NL_Payments Payment { get; set; }
@@ -64,9 +89,6 @@
 		//public NL_PaypointTransactions PaypointTransaction { get; set; }
 		//[DataMember]
 		//public string PaypointTransactionStatus { get; set; }
-
-
-
 
 		// lookup objects
 		//[DataMember]
