@@ -371,6 +371,7 @@
 
 		public virtual CustomerStatuses CollectionStatus { get; set; }
 		public virtual string CollectionDescription { get; set; }
+		public virtual bool BlockTakingLoan { get; set; }
 
 		/// <summary>
 		/// Количество неудачных проверок банковского счета

@@ -272,6 +272,8 @@
             </tr>
         </tbody>
         <tbody class="box-content">
+			
+			<%if(data.PromoCode) {%>
             <tr>
                 <td>
                     <span class="<%= data.PromoCodeCss %> customer-details-title">Promo</span>
@@ -280,8 +282,11 @@
                     </span>
                 </td>
             </tr>
+			<%}%>
+			
+			<%if(data.ActiveCampaign) {%>
             @RowCell("Campaigns", "<%- data.ActiveCampaign %>")
-
+			<%}%>
             <tr>
                 <td>
                     <span class="customer-details-title">Ref Source</span>
@@ -329,7 +334,8 @@
                     </span>
                 </td>
             </tr>
-			
+			@RowCellWithSlider("Block taking loan", "blockTakingLoanSwitch", "No", "Yes", "<%= data.BlockTakingLoan ? 'red_cell' : '' %> block-taking-loan-td customer-details-switch-height")
+
             @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td customer-details-switch-height")
 
             @RowCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td customer-details-switch-height")

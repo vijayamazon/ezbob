@@ -114,7 +114,8 @@ EzBob.CustomerModel = Backbone.Model.extend({
             status = this.get('Status'),
             offerValid = this.offerValid(),
             hasFunds = availableCredit >= EzBob.Config.XMinLoan,
-            isDisabled = this.get('IsDisabled');
+            isDisabled = this.get('IsDisabled'),
+            blockTakingLoan = this.get('BlockTakingLoan');
         
         if (isDisabled) {
             this.set('state', 'disabled');
@@ -126,7 +127,7 @@ EzBob.CustomerModel = Backbone.Model.extend({
             return;
         }
 
-        if (!creditResult || creditResult == 'WaitingForDecision') {
+        if (!creditResult || creditResult == 'WaitingForDecision' || blockTakingLoan) {
             this.set('state', 'wait');
             return;
         }

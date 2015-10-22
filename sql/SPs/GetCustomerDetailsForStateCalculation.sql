@@ -1,11 +1,13 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetCustomerDetailsForStateCalculation]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetCustomerDetailsForStateCalculation]
+IF OBJECT_ID('GetCustomerDetailsForStateCalculation') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCustomerDetailsForStateCalculation AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCustomerDetailsForStateCalculation] 
+
+ALTER PROCEDURE [dbo].[GetCustomerDetailsForStateCalculation] 
 	(@CustomerId INT)
 AS
 BEGIN
@@ -29,18 +31,22 @@ BEGIN
 		Name = 'MinLoanAmount'
 	
 	SELECT
-		CreditResult,
-		Status,
-		ApplyForLoan,
-		ValidFor,
+		c.CreditResult,
+		c.Status,
+		c.ApplyForLoan,
+		c.ValidFor,
 		@MinLoanAmount AS MinLoanAmount,
 		CAST(CASE WHEN @NumOfLateLoans = 0 THEN 0 ELSE 1 END AS BIT) AS HasLateLoans,
-		IsEnabled
+		cs.IsEnabled, 
+		c.BlockTakingLoan
 	FROM
-		Customer,
-		CustomerStatuses
+		Customer c 
+	INNER JOIN 
+		CustomerStatuses cs 
+	ON 
+		c.CollectionStatus = cs.Id
 	WHERE
-		Customer.Id = @CustomerId AND 
-		Customer.CollectionStatus = CustomerStatuses.Id
+		c.Id = @CustomerId
+
 END
 GO

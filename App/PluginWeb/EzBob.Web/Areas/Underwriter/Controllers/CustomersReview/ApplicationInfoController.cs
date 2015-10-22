@@ -379,6 +379,25 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		public JsonResult ToggleBlockTakingLoan(int id) {
+			Customer oCustomer = _customerRepository.Get(id);
+
+			if (oCustomer == null) {
+				log.Debug("Customer({0}) not found", id);
+				return Json(new { error = "Customer not found.", id = id });
+			} // if
+
+			oCustomer.BlockTakingLoan = !oCustomer.BlockTakingLoan;
+
+			log.Debug("Customer({0}).BlockTakingLoan set to {1}", id, oCustomer.BlockTakingLoan);
+
+			return Json(new { error = (string)null, id = id, mark = oCustomer.BlockTakingLoan });
+		} // ToggleBlockTakingLoan
+
+		[HttpPost]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
 		public JsonResult ToggleIsTest(int id) {
 			Customer oCustomer = _customerRepository.Get(id);
 
