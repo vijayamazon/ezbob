@@ -40,8 +40,8 @@
 			DateTime now = DateTime.UtcNow;
 			double monthsSinceLoanWasTaken = (now - loanDate).TotalDays / (365.0 / 12.0);
 
-			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, is paid off {2}, loan amount {3}, balance {4}, paid {5}, was late {6}",
-				this.customerID, this.loanID, this.isPaidOff, loanAmount, this.balance, this.paymentAmount, wasLate);
+			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, is paid off {2}, loan amount {3}, balance {4}, paid {5}, was late {6}, numOfActiveLoans {7}, monthsSinceLoanWasTaken {8}",
+				this.customerID, this.loanID, this.isPaidOff, loanAmount, this.balance, this.paymentAmount, wasLate, numOfActiveLoans, monthsSinceLoanWasTaken);
 
 			if (this.isPaidOff) {
 				if (!wasLate && 

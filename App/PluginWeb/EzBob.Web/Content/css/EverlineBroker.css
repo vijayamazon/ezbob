@@ -194,7 +194,7 @@ header.everline_header nav a.svg, header nav span.svg {
 }
    
 header.everline_header_broker nav #user-menu {
-    margin-top: 2.6em;
+    margin-top: 3.6em;
 }
 
 ul#user-menu {
@@ -801,4 +801,8 @@ table.table tr:last-child > td {
 
 .broker-login-fields .help-block {
 	display: none;
+}
+
+header.everline_header_broker nav .for-brokers {
+	margin-top: 3em;
 }

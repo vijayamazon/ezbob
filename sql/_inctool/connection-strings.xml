@@ -1,6 +1,6 @@
 <connectionStrings>
 	<add name="dev-alexbo" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
-	<add name="dev-alexbo-prod-auto" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=automation_report_echo;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-alexbo-prod-auto" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=automation_report_foxtrot;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="production-alexbo" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-elinar" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-elinar-prod-auto" connectionString="Server=localhost;Database=prod_auto;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>

@@ -29,7 +29,7 @@
 		background-repeat: no-repeat;
 		display: inline-block;
 		vertical-align: middle;
-		background-position-x: -46px;
+		background-position-x: -20px;
 	}
 
 	.header-inner {
@@ -497,10 +497,24 @@
     .ui-dialog-buttonset button {
         width:100%;
     }
-		.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
-			margin: 0;
-			padding: 0;
-		}
+
+	.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
+		margin: 0;
+		padding: 0;
+	}
+
+	.header-info-left,
+	.header-info-right,
+	.header-info-text {
+		height: 65px;
+	}
+
+	.header-info {
+		line-height: 65px;
+		margin-left: -25px;
+	}
+
+
 }
 
 @media only screen and (min-width : 320px) and (max-width : 500px) {

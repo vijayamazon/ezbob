@@ -320,6 +320,7 @@
 				customer.CollectionStatus != null &&
 				customer.CollectionStatus.IsDefault;
 
+			customerModel.BlockTakingLoan = customer.BlockTakingLoan;
 			//customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
 
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
