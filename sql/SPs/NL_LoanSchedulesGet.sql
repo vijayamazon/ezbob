@@ -22,11 +22,8 @@ BEGIN
 		s.Principal,
 		s.InterestRate
 	FROM
-		NL_LoanShedule s
-		INNER JOIN NL_LoanHistory h ON s.LoanHistoryID = h.LoanHistoryID
+		NL_LoanSchedules s INNER JOIN NL_LoanHistory h ON s.LoanHistoryID = h.LoanHistoryID
 	WHERE
-		h.LoanID = @LoanID
-		AND
-		(@Now IS NULL OR h.EventTime < @Now)
+		h.LoanID = @LoanID --AND (@Now IS NULL OR h.EventTime < @Now)
 END
 GO

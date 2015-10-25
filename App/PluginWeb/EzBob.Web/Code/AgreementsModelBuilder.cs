@@ -6,7 +6,6 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
@@ -19,6 +18,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using log4net;
 	using PaymentServices.Calculators;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -37,7 +37,7 @@
 			this._repaymentCalculator = new RepaymentCalculator();
 			this._context = context;
 
-			this.oLog = new SafeILog(log4net.LogManager.GetLogger(GetType()));
+			this.oLog = new SafeILog(LogManager.GetLogger(GetType()));
 		}
 
 		/// <summary>
@@ -196,26 +196,13 @@
 
 			// fill in loan+history with offer data
 			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
-
-			// init calculator
-			//ALoanCalculator nlCalculator = new LegacyLoanCalculator(nlModel);
-			//if (nlModel.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
-			//	nlCalculator = new BankLikeLoanCalculator(nlModel);
-
-			ALoanCalculator nlCalculator=null;
-			try {
-				nlCalculator = nlModel.GetCalculatorInstance();
-			} catch (Exception calcInstanceEx) {
-				//this.Error = calcInstanceEx.Message;
-				this.oLog.Alert("customer: {0}, err: {1}", nlModel.CustomerID, calcInstanceEx);
-			}
-
-			if (nlCalculator == null) {
-				return null;
-			}
-
+			
+			ALoanCalculator nlCalculator = null;
+		
 			// 2. get Schedule and Fees
 			try {
+				// init calculator
+				nlCalculator = nlModel.CalculatorInstance();
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {
@@ -226,18 +213,19 @@
 				this.oLog.Alert("CreateSchedule failed: {0}", interestRateException.Message);
 			} catch (InvalidInitialRepaymentCountException paymentsException) {
 				this.oLog.Alert("CreateSchedule failed: {0}", paymentsException.Message);
-			} catch (InvalidInitialInterestOnlyRepaymentCountException xxException) {
-				this.oLog.Alert("CreateSchedule failed: {0}", xxException.Message);
-				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.oLog.Alert("CreateSchedule: Failed to calculate Schedule for customer {0}, err: {1}", nlModel.CustomerID, ex);
+				this.oLog.Alert("Failed to create Schedule for customer {0}, err: {1}", nlModel.CustomerID, ex);
+			} finally {
+				if (nlCalculator == null) {
+					this.oLog.Alert("failed to get nlCalculator for customer: {0}", nlModel.CustomerID);
+				}
 			}
 
 			var history = nlModel.Loan.LastHistory();
 
 			// no Schedule
 			if (history.Schedule.Count == 0) {
-				this.oLog.Alert("no Schedule: customer: {0}, err: {1}", nlModel.CustomerID);
+				this.oLog.Alert("Failed to create Schedule for customer: {0}", nlModel.CustomerID);
 				return null;
 			}
 

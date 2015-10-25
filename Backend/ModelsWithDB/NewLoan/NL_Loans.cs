@@ -163,47 +163,64 @@
 		
 		public override string ToString() {
 			// loan
-			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
+			StringBuilder sb = new StringBuilder().Append(base.ToString()); //.Append(Environment.NewLine);
 
 			// fees
 			if (Fees.Count > 0) {
-				sb.Append(HeadersLine(typeof(NL_LoanFees), NL_LoanFees.ColumnTotalWidth));
+				sb.Append("Fees:").Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFees)));
 				Fees.ForEach(s => sb.Append(s.ToString()));
+			}  else sb.Append("No fees.");
+
+			sb.Append(Environment.NewLine);
+
+			// histories
+			if (Histories != null) {
+				sb.Append("Histories:");
+				Histories.ForEach(h => sb.Append(h.ToString()));
 			} else
-				sb.Append("No fees");
+				sb.Append("No histories.");
+
+			sb.Append(Environment.NewLine);
+
+			if (Payments.Count > 0) {
+				sb.Append("Payments:").Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Payments)));
+				Payments.ForEach(s => sb.Append(s.ToString()));
+			} else sb.Append("No Payments.");
 
 			sb.Append(Environment.NewLine);
 
 			// freeze interest intervals
 			if (FreezeInterestIntervals.Count > 0) {
-				sb.Append(HeadersLine(typeof(NL_LoanInterestFreeze), NL_LoanInterestFreeze.ColumnTotalWidth));
+				sb.Append("LoanInterestFreeze:").Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanInterestFreeze)));
 				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
-			} else
-				sb.Append("No freeze interest");
+			} else sb.Append("No freeze interest.");
 
 			sb.Append(Environment.NewLine);
 
-			// histories
-			if (Histories != null)
-				Histories.ForEach(h => sb.Append(h.ToString()));
+			if (SchedulePayments.Count > 0) {
+				sb.Append("SchedulePayments:").Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedulePayments)));
+				SchedulePayments.ForEach(s => sb.Append(s.ToString()));
+			} else
+				sb.Append("No SchedulePayments.");
+
+			sb.Append(Environment.NewLine);
+
+			if (FeePayments.Count > 0) {
+				sb.Append("FeePayments:").Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFeePayments)));
+				FeePayments.ForEach(s => sb.Append(s.ToString()));
+			} else
+				sb.Append("No FeePayments.");
 
 			sb.Append(Environment.NewLine);
 
 			if (LoanOptions.Count > 0) {
-				sb.Append(HeadersLine(typeof(NL_LoanOptions), ColumnTotalWidth));
+				sb.Append("loan options:").Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanOptions)));
 				LoanOptions.ForEach(s => sb.Append(s.ToString()));
 			} else
-				sb.Append("No loan options");
+				sb.Append("No loan options.");
 
 			sb.Append(Environment.NewLine);
 
-			if (Payments.Count > 0) {
-				sb.Append(HeadersLine(typeof(NL_Payments), ColumnTotalWidth));
-				Payments.ForEach(s => sb.Append(s.ToString()));
-			} else
-				sb.Append("No Payments");
-
-			sb.Append(Environment.NewLine);
 
 			return sb.ToString();
 		}

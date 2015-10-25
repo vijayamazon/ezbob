@@ -188,7 +188,7 @@
 			if (cr != null) {
 				for (int i = 0; i < oldLoan.CashRequest.DiscountPlan.Discounts.Length; i++) {
 					Console.WriteLine(oldLoan.CashRequest.DiscountPlan.Discounts[i]);
-				} 
+				}
 				//Console.WriteLine(cr.ToString());
 				cr.DiscountPlan.Discounts.ForEach(d => this.m_oLog.Debug("=====" + d.ToString(CultureInfo.InvariantCulture)));
 			}
@@ -196,7 +196,7 @@
 		[Test]
 		public void AddLoan() {
 			int userID = 357;
-			int oldLoanID = 2076;
+			int oldLoanID = 2080;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			DateTime now = oldLoan.Date; // DateTime.UtcNow;
@@ -211,7 +211,7 @@
 				Loan = new NL_Loans() { OldLoanID = oldLoan.Id, Refnum = oldLoan.RefNumber },
 				FundTransfer = new NL_FundTransfers() {
 					Amount = oldLoan.LoanAmount,
-					FundTransferStatusID = (int) NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
+					FundTransferStatusID = (int)NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
 					LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 					TransferTime = now,
 					PacnetTransactions = new List<NL_PacnetTransactions>()
@@ -232,13 +232,13 @@
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath = "preContract/cc/dd"+oldLoan.RefNumber+".pdf"
+				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-				FilePath = "guarantyAgreement/aa/bb"+oldLoan.RefNumber+".pdf"
+				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
 			});
-			
+
 			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
 
 			AddLoan strategy = new AddLoan(model);
@@ -429,12 +429,199 @@
 		[Test]
 		public void OldCalc() {
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			Loan loan = loanRep.Get(2);
+			Loan loan = loanRep.Get(5);
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+			Console.WriteLine(loan.ToString());
+			Console.WriteLine();
+			Console.WriteLine(calc.ToString());
 			this.m_oLog.Debug("---------------------------------------: \n {0}", loan);
 		}
 
+
+		[Test]
+		public void TestMultipleLoanState() {
+			var loans = new[] {
+				1, 2, 3, 4, 5
+			};
+			foreach (var lID in loans) {
+				try {
+					//var s = new LoanState<Loan>(new Loan(), lID, DateTime.UtcNow);
+					//s.Execute();
+				} catch (Exception e) {
+					Console.WriteLine(e);
+				}
+			}
+		}
+
+		[Test]
+		public void TestLoanOldCalculator() {
+			int	loanID = 5211;
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(2);
+			/*ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
+			EditLoanDetailsModel model = new EditLoanDetailsModel();
+			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
+			// 1. build model from DB loan
+			model = loanModelBuilder.BuildModel(loaan);
+			//m_oLog.Debug("===========================" + model.InterestFreeze.Count);
+			// 2. create DB loan from the model
+			Loan loan1 = loanModelBuilder.CreateLoan(model);
+			//m_oLog.Debug("----------------------" + loan1.InterestFreeze.Count);*/
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan);
+		}
+
+		[Test]
+		public void TestLoanCalculator() {
+			// new instance of loan calculator - for new schedules list
+			/*LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = 6000m,
+				RepaymentCount = 7,
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+			// new schedules
+			try {
+				//var shedules = calculator.CreateSchedule();
+			} catch (InterestOnlyMonthsCountException interestOnlyMonthsCountException) {
+				Console.WriteLine(interestOnlyMonthsCountException);
+			} catch (NegativeMonthlyInterestRateException negativeMonthlyInterestRateException) {
+				Console.WriteLine(negativeMonthlyInterestRateException);
+			} catch (NegativeLoanAmountException negativeLoanAmountException) {
+				Console.WriteLine(negativeLoanAmountException);
+			} catch (NegativeRepaymentCountException negativeRepaymentCountException) {
+				Console.WriteLine(negativeRepaymentCountException);
+			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
+				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
+			}
+			Console.WriteLine();
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+
+			decimal A = 6000m;
+			decimal m = 600m;
+			decimal r = 0.06m;
+			decimal F = 100m;
+
+			decimal n = Math.Ceiling(A / (m - A * r));
+			Console.WriteLine("n=" + n);
+			decimal total1 = A + A * r * ((n + 1) / 2);
+			Console.WriteLine(total1);
+			decimal B = (A + F);
+
+			//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
+			//	Console.WriteLine(total2);
+
+			decimal k = Math.Ceiling(n + 2 * F / (A * r));
+
+			/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+					LoanIssueTime = DateTime.UtcNow,
+					LoanAmount = A,
+					RepaymentCount = (int)n,
+					MonthlyInterestRate = 0.06m,
+					InterestOnlyRepayments = 0,
+					RepaymentIntervalType = RepaymentIntervalTypes.Month
+				};
+				Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+				Console.WriteLine();
+				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+			// TODO: revive (Test)
+			/*
+		LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
+			LoanIssueTime = DateTime.UtcNow,
+			LoanAmount = B,
+			RepaymentCount = (int)(k),
+			MonthlyInterestRate = 0.06m,
+			InterestOnlyRepayments = 0,
+			RepaymentIntervalType = RepaymentIntervalTypes.Month
+		};
+		Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
+		ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);
+		Console.WriteLine();
+		List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
+		Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));			*/
+		}
+
+
+		[Test]
+		public void TestLoanInterestRate() {
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(5211);
+
+			var firstSchedule = loan.Schedule.OrderBy(s => s.Date).FirstOrDefault();
+			var lastSchedule = loan.Schedule.OrderBy(s => s.Date).LastOrDefault();
+
+			Console.WriteLine(firstSchedule);
+			Console.WriteLine(lastSchedule);
+
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+
+			decimal r = 5;
+			if (firstSchedule != null && lastSchedule != null)
+				//r = calc.GetInterestRate(firstSchedule.Date, lastSchedule.Date);
+				r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01, 01));
+
+			this.m_oLog.Debug("{0}", loan);
+			Console.WriteLine(r);
+		}
+
+		[Test]
+		public void TestLoanInterestRateBetweenDates() {
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(5211);
+			DateTime start = new DateTime(2015, 07, 08);
+			DateTime end = new DateTime(2015, 10, 21);
+			Console.WriteLine(start);
+			Console.WriteLine(end);
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			//this.m_oLog.Debug("{0}",loan);
+			decimal I = 0m;
+			decimal P = 57024.55m;
+			TimeSpan ts = end.Date.Subtract(start.Date);
+			Console.WriteLine(ts);
+			int dcounter = 1;
+			while (dcounter < ts.Days) {
+				DateTime s = start.Date.AddDays(dcounter);
+				DateTime e = s.Date.AddDays(1);
+				Console.WriteLine("{0}, {1}", s, e);
+				decimal r = calc.GetInterestRate(s, e);
+				dcounter++;
+				Console.WriteLine("{0}, {1}", dcounter, r);
+				I += P * r;
+			}
+			Console.WriteLine(I);
+		}
+
+		[Test]
+		public void LoanStateStrategy() {
+			const long loanID = 13;
+			var strategy = new LoanState(new NL_Model(56), loanID, DateTime.UtcNow);
+			strategy.Execute();
+			this.m_oLog.Debug(strategy.Result.Loan);
+		}
+
+		[Test]
+		public void CalculatorEvents() {
+			const long loanID = 13;
+			NL_Model model = new NL_Model(56);
+			var strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			strategy.Execute();
+			this.m_oLog.Debug(strategy.Result.Loan);
+
+			model = strategy.Result;
+
+			ALoanCalculator calc = model.CalculatorInstance();
+
+			calc.events.ForEach(e=>this.m_oLog.Debug(e));
+
+		}
 
 	} // class TestNewLoan
 } // namespace

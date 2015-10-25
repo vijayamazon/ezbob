@@ -621,7 +621,7 @@ BEGIN
 	CREATE TABLE NL_LoanAgreements (
 		LoanAgreementID BIGINT IDENTITY(1, 1) NOT NULL,
 		LoanHistoryID BIGINT NOT NULL,
-		LoanAgreementTemplateID INT NULL,
+		LoanAgreementTemplateID INT NOT NULL,
 		FilePath NVARCHAR(255) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanAgreements PRIMARY KEY (LoanAgreementID),

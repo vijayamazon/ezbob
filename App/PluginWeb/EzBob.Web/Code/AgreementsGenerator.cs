@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.IO;
-    using ConfigManager;
+	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Code;
@@ -124,7 +124,7 @@
 
 				// NL - guarantee 
 				if (nlModel != null) {
-					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = guaranteeAgreement.Id, FilePath = guaranteeAgreement.FilePath });
+					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = quaranteeTemplate.Id, FilePath = guaranteeAgreement.FilePath });
 				}
 				
 				var agreement = this._templates.GetTemplateByName(this._templates.GetTemplatePath(LoanAgreementTemplateType.PrivateCompanyLoanAgreement, isEverline, isAlibaba, IsEverlineRefinanceLoan));
@@ -143,7 +143,7 @@
 
 				// NL - agreement
 				if (nlModel != null) {
-					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = agreementAgreement.Id, FilePath = agreementAgreement.FilePath });
+					nlModel.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() { LoanAgreementTemplateID = agreementTemplate.Id, FilePath = agreementAgreement.FilePath });
 				}
 			}
 

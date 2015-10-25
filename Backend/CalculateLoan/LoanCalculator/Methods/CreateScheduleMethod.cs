@@ -3,21 +3,19 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using PaymentServices.Calculators;
 
 	internal class CreateScheduleMethod : AMethod {
 
-		/// <exception cref="NoInitialDataException">Condition. </exception>
-		public CreateScheduleMethod(ALoanCalculator calculator, NL_Model loanModel)
-			: base(calculator, false) {
+		
+		public CreateScheduleMethod(ALoanCalculator calculator, NL_Model loanModel): base(calculator, false) {
 
-			if (loanModel == null)
-				throw new NoInitialDataException();
+			//if (loanModel == null)
+			//	throw new NoInitialDataException();
 
-			if (loanModel.Loan == null)
-				throw new NoInitialDataException();
+			//if (loanModel.Loan == null)
+			//	throw new NoInitialDataException();
 
 			this.loanModel = loanModel;
 
@@ -25,7 +23,8 @@
 
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
-		/// <exception cref="InvalidInitialInterestOnlyRepaymentCountException">Condition. </exception>
+		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
+		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
 		public virtual void Execute() {
 
 			NL_LoanHistory history = this.loanModel.Loan.LastHistory();
@@ -38,12 +37,17 @@
 				throw new InvalidInitialAmountException(history.Amount);
 			}
 
-			int interestOnlyRepayments = history.InterestOnlyRepaymentCount; //  default is 0 \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 35
-			if ((interestOnlyRepayments < 0) || (interestOnlyRepayments >= history.RepaymentCount)) {
-				throw new InvalidInitialInterestOnlyRepaymentCountException(interestOnlyRepayments, history.RepaymentCount);
+			if (history.InterestRate == 0) {
+				throw new InvalidInitialInterestRateException(history.InterestRate);
 			}
 
-			// RepaymentCount,  EventTime, InterestRate
+			if (history.RepaymentCount == 0) {
+				throw new InvalidInitialRepaymentCountException(history.RepaymentCount);
+			}
+
+			int interestOnlyRepayments = history.InterestOnlyRepaymentCount; //  default is 0 \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 35
+			
+			// RepaymentCount,  EventTime, InterestRate, RepaymentIntervalType 
 			history.SetDefaults();
 
 			// LoanType, LoanFormulaID, RepaymentDate
@@ -77,11 +81,11 @@
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
 
-				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // dr'
+				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // dr' = r/daysDiff
 
 				int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
 
-				decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents=> /100; dr' = r/daysDiff
+				decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents => /100; 
 
 				balance -= principal;
 

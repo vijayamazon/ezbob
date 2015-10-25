@@ -1,12 +1,7 @@
-﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions {
-	public class InvalidInitialInterestOnlyRepaymentCountException : InvalidInitialDataException {
-		public InvalidInitialInterestOnlyRepaymentCountException(int interestOnlyRepaymentCount, int repaymentCount)
-			: base(
-				"Invalid initial interest only repayment count of {0} was specified (expected between 0 and {1}).",
-				interestOnlyRepaymentCount,
-				repaymentCount
-			)
-		{
+﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
+	public class InvalidInitialRepaymentCountException : InvalidInitialDataException {
+		public InvalidInitialRepaymentCountException(int repaymentCount)
+			: base("Invalid initial repayment count of {0} was specified.", repaymentCount) {
 		} // constructor
-	} // class InvalidInitialInterestOnlyRepaymentCountException
-} // namespace
+	}
+} // class InvalidInitialRepaymentCountException

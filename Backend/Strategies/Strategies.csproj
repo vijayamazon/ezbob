@@ -730,17 +730,9 @@
       <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
       <Name>ValueIntervals</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CalculateLoan\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
-      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
-      <Name>CalculateLoanExceptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
       <Project>{d7a03efe-b175-49eb-9b22-3315c1124091}</Project>
       <Name>LoanCalculator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CalculateLoan\Models\Models.csproj">
-      <Project>{ddaf0e80-8e9d-49f4-aa8c-30a69489361e}</Project>
-      <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>

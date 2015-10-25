@@ -10,40 +10,40 @@
 
 		public LoanState(NL_Model nlModel, long loanID, DateTime? stateDate) {
 
-			model = nlModel;
+			Result = nlModel;
 			this.loanID = loanID;
-			
+
 			StateDate = stateDate ?? DateTime.UtcNow;
 		} // constructor
 
 		public override string Name { get { return "LoanState"; } }
 
-		public NL_Model model { get; private set; }
+		public NL_Model Result { get; private set; }
 		private readonly long loanID;
 		public DateTime StateDate { get; set; }
 		public string Error;
-		
+
 		public override void Execute() {
 			try {
 
 				// loan
-				model.Loan = new NL_Loans();
-				model.Loan = DB.FillFirst<NL_Loans>("NL_LoansGet",
+				Result.Loan = new NL_Loans();
+				Result.Loan = DB.FillFirst<NL_Loans>("NL_LoansGet",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@loanID", this.loanID),
-					new QueryParameter("@Now", StateDate)
+					new QueryParameter("@loanID", this.loanID)
+					//,new QueryParameter("@Now", StateDate)
 				);
 
 				// histories
-				model.Loan.Histories.Clear();
-				model.Loan.Histories = DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
+				Result.Loan.Histories.Clear();
+				Result.Loan.Histories = DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID),
 					new QueryParameter("@Now", StateDate)
 				);
 
 				// schedules
-				foreach (NL_LoanHistory h in model.Loan.Histories) {
+				foreach (NL_LoanHistory h in Result.Loan.Histories) {
 					h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID),
@@ -52,51 +52,51 @@
 				}
 
 				// loan fees
-				model.Loan.Fees.Clear();
-				model.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
+				Result.Loan.Fees.Clear();
+				Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID", this.loanID),
-					new QueryParameter("@Now", StateDate)
+					new QueryParameter("@LoanID", this.loanID)
+					//,new QueryParameter("@Now", StateDate)
 				);
 
 				// interest freezes
-				model.Loan.FreezeInterestIntervals.Clear();
-				model.Loan.FreezeInterestIntervals = DB.Fill<NL_LoanInterestFreeze>("NL_InterestFreezeGet",
+				Result.Loan.FreezeInterestIntervals.Clear();
+				Result.Loan.FreezeInterestIntervals = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID)
 				);
 
 				// loan options
-				model.Loan.LoanOptions.Clear();
-				model.Loan.LoanOptions = DB.Fill<NL_LoanOptions>("NL_LoanOptionsGet",
+				Result.Loan.LoanOptions.Clear();
+				Result.Loan.LoanOptions = DB.Fill<NL_LoanOptions>("NL_LoanOptionsGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID)
 				);
 
 				// payments (logical loan transactions)
-				model.Loan.Payments.Clear();
-				model.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",
+				Result.Loan.Payments.Clear();
+				Result.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID),
 					new QueryParameter("@Now", StateDate)
 				);
 
-				if (model.Loan.Payments.Count > 0) {
+				if (Result.Loan.Payments.Count > 0) {
 
-					model.Loan.SchedulePayments.Clear();
-					model.Loan.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoansSchedulePaymentsGet",
+					Result.Loan.SchedulePayments.Clear();
+					Result.Loan.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoansSchedulePaymentsGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID)
 					);
 
-					model.Loan.FeePayments.Clear();
-					model.Loan.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",
+					Result.Loan.FeePayments.Clear();
+					Result.Loan.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID)
 					);
 				}
 
-				
+
 
 				SetBadPeriods(); // TODO
 

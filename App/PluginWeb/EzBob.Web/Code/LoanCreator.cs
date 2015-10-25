@@ -4,7 +4,6 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
@@ -46,7 +45,7 @@
 		} // constructor
 
 		/// <exception cref="Exception">PacnetSafeGuard stopped money transfer</exception>
-		/// <exception cref="OverflowException"><paramref name="value" /> is less than <see cref="F:System.TimeSpan.MinValue" /> or greater than <see cref="F:System.TimeSpan.MaxValue" />.-or-<paramref name="value" /> is <see cref="F:System.Double.PositiveInfinity" />.-or-<paramref name="value" /> is <see cref="F:System.Double.NegativeInfinity" />. </exception>
+		/// <exception cref="OverflowException"><paramref /> is less than <see cref="F:System.TimeSpan.MinValue" /> or greater than <see cref="F:System.TimeSpan.MaxValue" />.-or-<paramref /> is <see cref="F:System.Double.PositiveInfinity" />.-or-<paramref name="value" /> is <see cref="F:System.Double.NegativeInfinity" />. </exception>
 		/// <exception cref="LoanDelayViolationException">Condition. </exception>
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
 

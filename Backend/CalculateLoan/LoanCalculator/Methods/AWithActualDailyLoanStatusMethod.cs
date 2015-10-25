@@ -2,6 +2,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Models;
 
 	internal abstract class AWithActualDailyLoanStatusMethod : AMethod {
 		protected AWithActualDailyLoanStatusMethod(ALoanCalculator calculator, bool writeToLog)
@@ -13,7 +14,7 @@
 		protected virtual void /* DailyLoanStatus */ CreateActualDailyLoanStatus(DateTime now) {
 			// TODO: revive
 
-			/*
+			
 
 			WorkingModel.ValidateSchedule();
 
@@ -30,6 +31,7 @@
 
 			days.Add(new OneDayLoanStatus(WorkingModel.LoanIssueTime, 0, null));
 
+			// create daily timeline for loan
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
 				days.Add(new OneDayLoanStatus(d, 0, days.LastDailyLoanStatus));
 
@@ -135,7 +137,7 @@
 			days.SetIgnoredDueToRescheduleDays();
 
 			return days;
-			*/
+			
 		} // CreateActualDailyLoanStatus
 	} // class AWithActualDailyLoanStatusMethod
 } // namespace

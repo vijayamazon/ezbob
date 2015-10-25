@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
 	using System.Linq;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Models;
 	using Ezbob.Backend.Extensions;
 
 	internal class CalculateEarnedInterestMethod : AWithActualDailyLoanStatusMethod {
@@ -9,7 +10,8 @@
 			DateTime? startDate,
 			DateTime? endDate,
 			bool writeToLog
-		) : base(calculator, writeToLog) {
+		) : base(calculator//, writeToLog
+			) {
 			this.startDate = startDate;
 			this.endDate = endDate;
 		} // constructor
@@ -18,8 +20,6 @@
 			return 0;
 
 			// TODO: revive
-
-			/*
 
 			WorkingModel.ValidateSchedule();
 
@@ -56,7 +56,7 @@
 			} // if
 
 			return earnedInterest;
-			*/
+			
 		} // Execute
 
 		private readonly DateTime? startDate;

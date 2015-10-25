@@ -39,7 +39,7 @@
 		public int RepaymentCount { get; set; }
 
 		[DataMember]
-		[DecimalFormat("percent")]
+		[DecimalFormat("F6")]
 		public decimal InterestRate { get; set; }
 
 		[DataMember]
@@ -98,37 +98,37 @@
 		}
 
 		public void SetDefaultRepaymentIntervalType() {
-			Console.WriteLine("==={0}" , RepaymentIntervalTypeID);
+			//Console.WriteLine("==={0}" , RepaymentIntervalTypeID);
 			RepaymentIntervalTypeID = (RepaymentIntervalTypeID == 0) ? (int)RepaymentIntervalTypes.Month : RepaymentIntervalTypeID;
 		}
 
 		public void SetDefaults() {
 			SetDefaultEventTime();
-			SetDefaultInterestRate();
-			SetDefaultRepaymentCount();
 			SetDefaultRepaymentIntervalType();
+			//SetDefaultInterestRate();
+			//SetDefaultRepaymentCount();
 		}
 
 		public override string ToString() {
-
-			StringBuilder sb = new StringBuilder().Append(base.ToString())
-				.Append(Environment.NewLine);
+			// history
+			StringBuilder sb = new StringBuilder().Append(base.ToString()); //.Append(Environment.NewLine);
 
 			// schedule
 			if (Schedule.Count > 0) {
-				//sb.Append(HeadersLine(typeof(NL_LoanSchedules), NL_LoanSchedules.ColumnTotalWidth));
+				sb.Append("Schedule:").Append(Environment.NewLine);
+				sb.Append(GetHeadersLine(typeof(NL_LoanSchedules)));
 				Schedule.ForEach(s => sb.Append(s.ToString()));
-			} else {
-				sb.Append("No schedule");
-			}
+			} else
+				sb.Append("No Schedule found");
 
-			// agreements
 			sb.Append(Environment.NewLine);
+			// agreements
 			if (Agreements.Count > 0) {
-				sb.Append("Agreements:");
+				sb.Append("Agreements:").Append(Environment.NewLine);
+				sb.Append(GetHeadersLine(typeof(NL_LoanAgreements)));
 				Agreements.ForEach(a => sb.Append(a.ToString()));
 			} else
-				sb.Append("Agreements not loaded/found");
+				sb.Append("No Agreements found");
 
 			return sb.ToString();
 		}

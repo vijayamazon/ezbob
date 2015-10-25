@@ -6,12 +6,12 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
@@ -33,8 +33,6 @@
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
-	using EzBob.Models;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using EZBob.DatabaseLib.Model.Alibaba;
@@ -42,11 +40,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Fraud;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EZBob.DatabaseLib.Repository;
 	using FraudChecker;
-	using NHibernate;
-	using NHibernate.Linq;
-	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
 	using SalesForceLib;
@@ -118,7 +112,7 @@
 
 			});
 
-			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
+			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
 		[Test]
@@ -596,7 +590,6 @@
 		public void Test_RejectTurnover() {
 			var turnover = new AutoRejectTurnover();
 			turnover.Init();
-
 			this.m_oDB.ForEachResult<TurnoverDbRow>(
 				row => turnover.Add(row),
 				"GetCustomerTurnoverForAutoDecision",
@@ -797,21 +790,7 @@
 
 		
 
-		[Test]
-		public void TestMultipleLoanState() {
-			var loans = new[] {
-				1, 2, 3, 4, 5
-			};
-			foreach (var lID in loans) {
-				try {
-					//var s = new LoanState<Loan>(new Loan(), lID, DateTime.UtcNow);
-					//s.Execute();
-				} catch (Exception e) {
-					Console.WriteLine(e);
-				}
-			}
-		}
-
+		
 
 	
 
@@ -891,8 +870,7 @@
 					Console.WriteLine(e);
 				}
 			}*/
-
-
+			
             Loan loan = new Loan();
 
 			this.m_oDB.ForEachRowSafe((sr) => {
@@ -939,118 +917,9 @@
 		}
 
 
-		[Test]
-		public void TestLoanOldCalculator() {
-			int	loanID = 5211;
-			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			Loan loan = loanRep.Get(2);
+	
 
-			/*ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
-			EditLoanDetailsModel model = new EditLoanDetailsModel();
-			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
-
-			// 1. build model from DB loan
-			model = loanModelBuilder.BuildModel(loaan);
-			//m_oLog.Debug("===========================" + model.InterestFreeze.Count);
-
-			// 2. create DB loan from the model
-			Loan loan1 = loanModelBuilder.CreateLoan(model);
-			//m_oLog.Debug("----------------------" + loan1.InterestFreeze.Count);*/
-
-			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-			calc.GetState();
-			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan);
-		}
-
-		[Test]
-		public void TestLoanCalculator() {
-
-			// new instance of loan calculator - for new schedules list
-			/*LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
-				LoanIssueTime = DateTime.UtcNow,
-				LoanAmount = 6000m,
-				RepaymentCount = 7,
-				MonthlyInterestRate = 0.06m,
-				InterestOnlyRepayments = 0,
-				RepaymentIntervalType = RepaymentIntervalTypes.Month
-			};
-
-			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
-
-			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
-
-			// new schedules
-			try {
-				//var shedules = calculator.CreateSchedule();
-			} catch (InterestOnlyMonthsCountException interestOnlyMonthsCountException) {
-				Console.WriteLine(interestOnlyMonthsCountException);
-			} catch (NegativeMonthlyInterestRateException negativeMonthlyInterestRateException) {
-				Console.WriteLine(negativeMonthlyInterestRateException);
-			} catch (NegativeLoanAmountException negativeLoanAmountException) {
-				Console.WriteLine(negativeLoanAmountException);
-			} catch (NegativeRepaymentCountException negativeRepaymentCountException) {
-				Console.WriteLine(negativeRepaymentCountException);
-			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
-				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
-			}
-
-			Console.WriteLine();
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
-
-			decimal A = 6000m;
-			decimal m = 600m;
-			decimal r = 0.06m;
-			decimal F = 100m;
-
-			decimal n = Math.Ceiling(A / (m - A * r));
-			Console.WriteLine("n=" + n);
-			decimal total1 = A + A * r * ((n + 1) / 2);
-			Console.WriteLine(total1);
-			decimal B = (A + F);
-
-			//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
-			//	Console.WriteLine(total2);
-
-			decimal k = Math.Ceiling(n + 2 * F / (A * r));
-
-			/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
-					LoanIssueTime = DateTime.UtcNow,
-					LoanAmount = A,
-					RepaymentCount = (int)n,
-					MonthlyInterestRate = 0.06m,
-					InterestOnlyRepayments = 0,
-					RepaymentIntervalType = RepaymentIntervalTypes.Month
-				};
-
-				Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
-
-				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
-
-				Console.WriteLine();
-				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
-
-				// TODO: revive (Test)
-				/*
-			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
-				LoanIssueTime = DateTime.UtcNow,
-				LoanAmount = B,
-				RepaymentCount = (int)(k),
-				MonthlyInterestRate = 0.06m,
-				InterestOnlyRepayments = 0,
-				RepaymentIntervalType = RepaymentIntervalTypes.Month
-			};
-
-			Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
-
-			ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);
-
-			Console.WriteLine();
-			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
-
-			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
-				*/
-		}
-
+		
 	
 
 		[Test]
@@ -1069,56 +938,7 @@
 		}
 
 
-		[Test]
-		public void TestLoanInterestRate() {
-			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			Loan loan = loanRep.Get(5211);
-
-			var firstSchedule = loan.Schedule.OrderBy(s => s.Date).FirstOrDefault();
-			var lastSchedule = loan.Schedule.OrderBy(s => s.Date).LastOrDefault();
-
-			Console.WriteLine(firstSchedule);
-			Console.WriteLine(lastSchedule);
-
-			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-
-			decimal r = 5;
-			if (firstSchedule != null && lastSchedule!=null)
-				//r = calc.GetInterestRate(firstSchedule.Date, lastSchedule.Date);
-			r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01, 01));
-
-			this.m_oLog.Debug("{0}", loan);
-
-			Console.WriteLine(r);			
-		}
-
-		[Test]
-		public void TestLoanInterestRateBetweenDates() {
-			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			Loan loan = loanRep.Get(5211);
-			DateTime start = new DateTime(2015, 07, 08);
-			DateTime end = new DateTime(2015, 10, 21);
-			Console.WriteLine(start);
-			Console.WriteLine(end);
-			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-			calc.GetState();
-			//this.m_oLog.Debug("{0}",loan);
-			decimal I = 0m;
-			decimal P = 57024.55m;
-			TimeSpan ts = end.Date.Subtract(start.Date);
-			Console.WriteLine(ts);
-			int dcounter = 1;
-			while (dcounter < ts.Days) {
-				DateTime s = start.Date.AddDays(dcounter);
-				DateTime e = s.Date.AddDays(1);
-				Console.WriteLine("{0}, {1}", s, e);
-				decimal r = calc.GetInterestRate(s, e);
-				dcounter++;
-				Console.WriteLine("{0}, {1}", dcounter, r);
-				I += P * r;
-			}
-			Console.WriteLine(I);
-		}
+	
 
 		[Test]
 		public void TestCollectionSms() {

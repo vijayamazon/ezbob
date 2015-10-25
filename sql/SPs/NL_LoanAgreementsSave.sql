@@ -12,7 +12,7 @@ GO
 CREATE TYPE NL_LoanAgreementsList AS TABLE (
 	[LoanHistoryID] BIGINT NOT NULL,
 	[FilePath] NVARCHAR(250) NULL,
-	[LoanAgreementTemplateID] INT NULL
+	[LoanAgreementTemplateID] INT NOT NULL
 )
 GO
 

@@ -79,7 +79,21 @@
 			return LoanID.GetHashCode() ^ StartDate.GetHashCode() ^ EndDate.GetHashCode() ^ ActivationDate.GetHashCode() ^ DeactivationDate.GetHashCode();
 		}
 
+		/// <summary>
+		/// prints data only
+		/// to print headers line call base static GetHeadersLine 
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString() {
+			try {
+				return ToStringTable();
+			} catch (InvalidCastException invalidCastException) {
+				Console.WriteLine(invalidCastException);
+			}
+			return string.Empty;
+		}
+
+		/*public override string ToString() {
 			Type t = typeof(NL_LoanInterestFreeze);
 			var props = FilterPrintable(t);
 
@@ -109,7 +123,7 @@
 			}
 
 			return sb.ToString();
-		}
+		}*/
 		
 	} // class NL_LoanInterestFreeze
 } // ns

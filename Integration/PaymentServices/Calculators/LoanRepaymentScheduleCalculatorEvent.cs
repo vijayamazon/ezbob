@@ -49,6 +49,7 @@ namespace PaymentServices.Calculators
         public LoanRepaymentScheduleCalculatorEvent(DateTime date, Action action, int priority = 0)
             : this(date, priority)
         {
+	        Console.WriteLine("Action:  {0}==={1}; {2}", date, action, priority);
             Action = action;
         }
 
@@ -75,7 +76,8 @@ namespace PaymentServices.Calculators
 
         public string GetTypeString()
         {
-            if (Installment != null)
+
+	      if (Installment != null)
             {
                 return "Installment";
             }

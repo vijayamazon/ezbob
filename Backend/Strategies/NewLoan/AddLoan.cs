@@ -1,12 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Text;
 	using System.Web;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
@@ -41,6 +41,16 @@
 		public long LoanID;
 		public NL_Model model { get; private set; }
 
+		/**
+			- loan
+			- fees
+			- history
+			- schedules
+			- broker comissions ? - update NLLoanID
+			- fund transfer
+			- pacnet transaction
+			- agreements
+			*/
 		public override void Execute() {
 
 			// TODO check if "credit available" is enough for this loan amount
@@ -82,15 +92,15 @@
 				return;
 			}
 
-			// RepaymentCount,  EventTime, InterestRate
+			// RepaymentCount, EventTime, InterestRate
 			model.Loan.LastHistory().SetDefaults();
-
 			// LoanType, LoanFormulaID, RepaymentDate
 			model.Loan.SetDefaults();
 
 			BuildLoanFromOffer dataForLoan = new BuildLoanFromOffer(model);
 			try {
 				dataForLoan.Execute();
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				Log.Alert(ex.Message);
 			}
@@ -102,34 +112,14 @@
 
 			model = dataForLoan.Result;
 
-			/**
-			- loan
-			- fees
-			- history
-			- schedules
-			- broker comissions ? - update NLLoanID
-			- fund transfer
-			- pacnet transaction
-			- agreements
-			*/
-
-			// init calculator
 			//ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
 			//if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
 			//	nlCalculator = new BankLikeLoanCalculator(model);
 
-			ALoanCalculator nlCalculator=null;
-			try {
-				nlCalculator = model.GetCalculatorInstance();
-			} catch (Exception calcInstanceEx) {
-				this.Error = calcInstanceEx.Message;
-			}
-
-			if (nlCalculator == null) {
-				return;
-			}
+			ALoanCalculator nlCalculator = null;
 			// 2. Init Schedule and Fees
 			try {
+				nlCalculator = model.CalculatorInstance();
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {
@@ -140,21 +130,24 @@
 				this.Error = interestRateException.Message;
 			} catch (InvalidInitialRepaymentCountException paymentsException) {
 				this.Error = paymentsException.Message;
-			} catch (InvalidInitialInterestOnlyRepaymentCountException xxException) {
-				this.Error = xxException.Message;
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.Error = string.Format("Failed to calculate Schedule for customer {0}, err: {1}", model.CustomerID, ex.Message);
+				this.Error = string.Format("Failed to get calculator instance/Schedule. customer {0}, err: {1}", model.CustomerID, ex.Message);
+			} finally {
+				if (nlCalculator == null) {
+					this.Error = string.Format("Failed to get calculator instance. customer {0}, err: {1}", model.CustomerID);
+				}
 			}
 
 			if (!string.IsNullOrEmpty(this.Error)) {
-				Log.Alert("Failed to calculate Schedule for customer {0}, err: {1}", model.CustomerID, this.Error);
+				Log.Alert("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, this.Error);
 				return;
 			}
 
 			List<NL_LoanSchedules> nlSchedule = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> nlFees = new List<NL_LoanFees>();
 			List<NL_LoanAgreements> nlAgreements = new List<NL_LoanAgreements>();
+			NL_PacnetTransactions pacnetTransaction = null;
 			DateTime nowTime = DateTime.UtcNow;
 
 			// get updated history filled with Schedule
@@ -198,11 +191,11 @@
 				// insert fees
 				if (nlFees.Count > 0) {
 					foreach (NL_LoanFees f in nlFees) {
-						if (f != null) {
+						//if (f != null) {
 							f.LoanID = this.LoanID; // set newly created LoanID
 							f.CreatedTime = nowTime; // from calc-r
 							f.AssignedByUserID = 1; //  from calc-r
-						}
+						//}
 					}
 
 					nlFees.ForEach(f => Log.Debug("Adding fee: {0}", f));
@@ -245,7 +238,6 @@
 				if (model.FundTransfer != null) {
 
 					model.FundTransfer.LoanID = this.LoanID;
-
 					model.FundTransfer.FundTransferID = DB.ExecuteScalar<long>(pconn, "NL_FundTransfersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.FundTransfer));
 
 					Log.Debug("NL_FundTransfersSave: LoanID: {0}, fundTransferID: {1}", this.LoanID, model.FundTransfer.FundTransferID);
@@ -256,99 +248,84 @@
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 
-				this.Error = string.Format("Failed to save new loan: {0}", ex);
-
-				this.LoanID = 0;
-
-				// general error
-				SendMail(this.Error, history, nlFees, nlSchedule, nlAgreements, model.FundTransfer);
-
-				Log.Error(this.Error);
-
 				pconn.Rollback();
+				this.LoanID = 0;
+				this.Error = ex.Message;
+				Log.Error("Failed to add new loan: {0}", this.Error);
+				
+				SendMail("NL: loan rolled back", history, nlFees, nlSchedule, nlAgreements);
+				
+				return;
 			}
-
+			
 
 			// 7. Pacnet transaction
 			try {
 
 				if (model.FundTransfer != null && (model.FundTransfer.PacnetTransactions != null && model.FundTransfer.FundTransferID > 0)) {
 
-					NL_PacnetTransactions transaction = model.FundTransfer.LastPacnetTransactions();
+					pacnetTransaction = model.FundTransfer.LastPacnetTransactions();
+					pacnetTransaction.FundTransferID = model.FundTransfer.FundTransferID;
+					pacnetTransaction.PacnetTransactionID = DB.ExecuteScalar<long>("NL_PacnetTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", pacnetTransaction));
 
-					transaction.FundTransferID = model.FundTransfer.FundTransferID;
-
-					transaction.PacnetTransactionID = DB.ExecuteScalar<long>("NL_PacnetTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", transaction));
-
-					Log.Debug("NL_PacnetTransactionsSave: LoanID: {0}, pacnetTransactionID: {1}", this.LoanID, transaction.PacnetTransactionID);
+					Log.Debug("NL_PacnetTransactionsSave: LoanID: {0}, pacnetTransactionID: {1}", this.LoanID, pacnetTransaction.PacnetTransactionID);
 				}
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception e1) {
 
-				this.Error = string.Format("Failed to save NL PacnetTransaction: {0}", e1);
+				this.Error = e1.Message;
+				Log.Error("Failed to save PacnetTransaction: {0}", this.Error);
 
 				// PacnetTransaction error
-				SendMail(this.Error, history, nlFees, nlSchedule, nlAgreements, model.FundTransfer);
-
-				Log.Error(this.Error);
-
+				SendMail("NL: Failed to save PacnetTransaction", history, nlFees, nlSchedule, nlAgreements);
 			}
 
 			// OK
-			SendMail("Saved successfully", history, nlFees, nlSchedule, nlAgreements, model.FundTransfer);
+			SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements);
 
 		}//Execute
 
-
-		private void SendMail(string sMsg, NL_LoanHistory history = null, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> schedule = null, List<NL_LoanAgreements> agreements = null,
-			NL_FundTransfers fundTransfer = null, NL_PacnetTransactions pacnetTransaction = null) {
+			
+		private void SendMail(string subject, NL_LoanHistory history, List<NL_LoanFees> fees, List<NL_LoanSchedules> schedule, List<NL_LoanAgreements> agreements) {
 
 			string emailToAddress = CurrentValues.Instance.Environment.Value.Contains("Dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
 			string emailFromName = CurrentValues.Instance.MailSenderName;
 			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
-			StringBuilder sb = new StringBuilder();
+			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, this.LoanID, this.Error);
 
-			sb = new StringBuilder();
-			string strAgreements = "no LoanAgreements specified";
-			if (agreements != null) {
-				agreements.ForEach(a => sb.Append(a));
-				strAgreements = sb.ToString();
-			}
-
-			string subject = string.Format("New loan adding: CustomerID: {0}, UserID: {1}, old loanID: {2}, LoanID: {3}", model.CustomerID, model.UserID, model.Loan.OldLoanID, this.LoanID);
-
-			//- loan
-			//- fees
-			//- history
-			//- schedules
-			//- broker comissions ? - update NLLoanID
-			//- fund transfer
-			//- pacnet transaction
-
+			history.Schedule.Clear();
+			history.Schedule = schedule;
+			history.Agreements.Clear();
+			history.Agreements = agreements;
+			
+			model.Loan.Histories.Clear();
+			model.Loan.Histories.Add( history);
+			model.Loan.Fees.Clear();
+			model.Loan.Fees = fees;
+			
 			var message = string.Format(
-						"<h5>{0}</h5>"
-						+ "<h5>Loan</h5> {1}"
-						+ "<h5>Agreements</h5> {2}"
-						+ "<h5>Transfer</h5> {3}"
-						+ "<h5>PacnetTransaction</h5> {4}",
+				"<h5>{0}</h5>"
+					+ "<h5>Loan</h5> <pre>{1}</pre>"
+					+ "<h5>FundTransfer</h5> <pre>{2}</pre>"
+					+ "<h5>PacnetTransaction</h5> <pre>{3}</pre>",
 
-						HttpUtility.HtmlEncode(sMsg)
-					, HttpUtility.HtmlEncode(model.Loan == null ? "no Loan specified" : model.Loan.ToString())
-					, HttpUtility.HtmlEncode(strAgreements)
-					, HttpUtility.HtmlEncode(fundTransfer == null ? "no FundTransfer specified" : fundTransfer.ToString())
-					, HttpUtility.HtmlEncode(pacnetTransaction == null ? "no PacnetTransaction specified" : pacnetTransaction.ToString()));
+				HttpUtility.HtmlEncode(sMsg) 
+				, HttpUtility.HtmlEncode(model.Loan.ToString())
+				, HttpUtility.HtmlEncode(model.FundTransfer == null ? "no FundTransfer specified" : model.FundTransfer.ToString())
+				//, HttpUtility.HtmlEncode(pacnetTransaction == null ? "no PacnetTransaction specified" : pacnetTransaction.ToString())
+				);
 
 			new Mail().Send(
-				  emailToAddress,
-				  null, // message text
-				  message, //html
-				  emailFromAddress, // fromEmail
-				  emailFromName, // fromName
-				  subject
-			);
-
+				emailToAddress,
+				null,				// message text
+				message,			//html
+				emailFromAddress,	// fromEmail
+				emailFromName,		// fromName
+				subject
+				);
+			
 		} // SendMail
 
 

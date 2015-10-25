@@ -56,7 +56,6 @@
     <Compile Include="Exceptions\NegativeRepaymentAmountException.cs" />
     <Compile Include="Exceptions\NegativeRepaymentCountException.cs" />
     <Compile Include="Exceptions\NoLoanHistoryException.cs" />
-    <Compile Include="Exceptions\InvalidInitialInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\InvalidInitialRepaymentCountException.cs" />
     <Compile Include="Exceptions\InvalidInitialInterestRateException.cs" />
     <Compile Include="Exceptions\InvalidInitialDataException.cs" />
@@ -67,11 +66,11 @@
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
     <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
+    <Compile Include="Models\LoanEvent.cs" />
     <Compile Include="LegacyLoanCalculator.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\CalculateAprMethod.cs" />
-    <Compile Include="Methods\CalculatePlanMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
     <Compile Include="Models\DailyLoanStatus.cs" />
     <Compile Include="Models\OneDayState.cs" />

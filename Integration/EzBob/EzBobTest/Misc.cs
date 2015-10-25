@@ -2,17 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Security.AccessControl;
 	using System.Security.Cryptography;
 	using System.Text;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Utils;
-	using Ezbob.Utils.Extensions;
 	using Ezbob.ValueIntervals;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using NHibernate.Linq;
 	using NUnit.Framework;
 	using Reports;
@@ -138,7 +133,6 @@
 		// total = A+A*r*((n+1)/2)
 		[Test]
 		public void TestLoanCalculator() {
-
 			decimal A = 6000m;
 			decimal m = 600m;
 			decimal r = 0.06m;
@@ -238,34 +232,23 @@
 
 		[Test]
 		public void DateDiffs() {
-
 			// 2/11/2016
 			DateTime to = new DateTime(2015, 8, 9);
-
 			// 31/10/2016
 			DateTime  from = new DateTime(2015, 8, 13);
-
 			Console.WriteLine(from);
 			Console.WriteLine(to);
-
 			TimeSpan ts = to.Subtract(from);
-
 			double totalDays = ts.TotalDays;
 			int dDays = ts.Days;
-
 			Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
-
 			return;
-
 			// 12/10/2016
 			//end = new DateTime(2016, 10, 12);
 			//Console.WriteLine(end);
-
 			//ts = start.Subtract(end);
-
 			// totalDays = ts.TotalDays;
 			// dDays = ts.Days;
-
 			// Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
 		}
 

@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
+	using System;
 	using System.Runtime.Serialization;
 	using Ezbob.Utils.dbutils;
 
@@ -18,6 +19,21 @@
 
 		[FK("LoanAgreementTemplate", "Id")]
 		[DataMember]
-		public int? LoanAgreementTemplateID { get; set; }
+		public int LoanAgreementTemplateID { get; set; }
+
+		/// <summary>
+		/// prints data only
+		/// to print headers line call base static GetHeadersLine 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString() {
+			try {
+				return ToStringTable();
+			} catch (InvalidCastException invalidCastException) {
+				Console.WriteLine(invalidCastException);
+			}
+			return string.Empty;
+		}
+
 	} // class NL_LoanAgreements
 } // ns

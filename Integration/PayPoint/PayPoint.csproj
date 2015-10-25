@@ -35,9 +35,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Log4NetCustomAppenders">
-      <HintPath>..\..\App\PluginWeb\Log4NetCustomAppenders\bin\Debug\Log4NetCustomAppenders.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>

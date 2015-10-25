@@ -1,13 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.Tests {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
-	using EZBob.DatabaseLib.Model.Database.Loans;
 	using NUnit.Framework;
-	using PaymentServices.Calculators;
 
 	[TestFixture]
 	class TestAprCalculator : TestFoundation {

@@ -10,8 +10,8 @@
 		public CultureInfo culture = new CultureInfo("en-GB");
 
 		public DecimalFormatAttribute(string format) {
-			if (format == "percent")
-				format = "F4";
+			//if (format == "percent")
+			//	format = "F4";
 			this.format = format;
 		}
 

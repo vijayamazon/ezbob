@@ -17,7 +17,7 @@ BEGIN
       ,[ActivationDate]
       ,[DeactivationDate]
 	FROM
-		[ezbob].[dbo].[NL_LoanInterestFreeze]
+		[dbo].[NL_LoanInterestFreeze]
 	WHERE
 		[LoanID]=@loanID
 END

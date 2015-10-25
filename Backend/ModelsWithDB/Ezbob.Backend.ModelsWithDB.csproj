@@ -180,11 +180,8 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
-    <Compile Include="NewLoan\AStringable.cs" />
+    <Compile Include="AStringable.cs" />
     <Compile Include="NewLoan\NLAgreementItem.cs" />
-    <Compile Include="NewLoan\NLFeeItem.cs" />
-    <Compile Include="NewLoan\NLHistoryItem.cs" />
-    <Compile Include="NewLoan\NLScheduleItem.cs" />
     <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
     <Compile Include="NewLoan\NL_DiscountPlans.cs" />
     <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />

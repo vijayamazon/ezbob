@@ -83,6 +83,7 @@
 		}
 
 		public void AddPaymentNotes(NL_Model model) {
+
 			if (model == null)
 				return;
 

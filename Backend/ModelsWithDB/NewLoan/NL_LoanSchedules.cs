@@ -1,13 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
-	using System.Reflection;
 	using System.Runtime.Serialization;
-	using System.Text;
 	using DbConstants;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
-	using Ezbob.Utils.Extensions;
 
 	[DataContract(IsReference = true)]
 	public class NL_LoanSchedules : AStringable {
@@ -37,7 +34,7 @@
 		public decimal Principal { get; set; }
 
 		[DataMember]
-		[DecimalFormat("percent")]
+		[DecimalFormat("F6")]
 		public decimal InterestRate { get; set; }
 
 
@@ -48,6 +45,13 @@
 		private decimal _amountDue;
 		private decimal _interestPaid;
 		private decimal _feesPaid;
+
+		[DataMember]
+		[NonTraversable]
+		public decimal Balance {
+			get { return this._balance; }
+			set { this._balance = value; }
+		}
 
 		[DataMember] // p*r
 		[NonTraversable]
@@ -84,15 +88,12 @@
 			set { this._feesPaid = value; }
 		}
 
-		[DataMember]
-		[NonTraversable]
-		public decimal Balance {
-			get { return this._balance; }
-			set { this._balance = value; }
-		}
-
-		public new static int ColumnTotalWidth = 20;
-
+	
+		/// <summary>
+		/// prints data only
+		/// to print headers line call base static GetHeadersLine 
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString() {
 			try {
 				return ToStringTable();

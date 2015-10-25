@@ -16,6 +16,7 @@
 		public const string lineSeparatorChar = "";//  "-";
 		public const string propertyDelimiter = ""; //"|";
 		public const string propertyTab = "\n";
+		public const string novalue = "--";
 
 		public const string pad = " ";
 
@@ -27,73 +28,101 @@
 		/// <exception><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public string ToStringTable() {
-
 			Type t = GetType();
 			var props = FilterPrintable(t);
+			int propsCount = props.Count;
 
 			StringBuilder format = new StringBuilder();
-			StringBuilder header = new StringBuilder();
-
-			object[] values = new object[props.Count];
-			object[] headers = new object[props.Count];
+			object[] values = new object[propsCount];
 
 			foreach (var x in ForeachExt.WithIndex(props)) {
-
 				PropertyInfo prop = x.Value;
 				var val = prop.GetValue(this);
 				var headerLen = prop.Name.Length;
-				var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
+
+				// append value placeholder "{index"
+				format.Append("{").Append(x.Index);
 
 				if (val != null) {
 
 					var formatattr = prop.GetCustomAttribute(typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
 
-					// append header placeholder "{0, -2}"
-					header.Append("{").Append(x.Index).Append(",-4} ");
-
-					// append value placeholder "{index"
-					format.Append("{").Append(x.Index);
-
-					//var formattedLen = 0;
-					if (prop.PropertyType.Name == "Decimal") {
-
-						if (formatattr != null) {
-
+					switch (prop.PropertyType.Name) {
+					case "Decimal":
+						if (formatattr != null)
 							format.Append(",-")
 								.Append(headerLen)
 								.Append(":")
 								.Append(formatattr.format)
-								.Append("} ");// percent
-
-						} else {
-
+								.Append("} "); // percent or other decimal formatting
+						else
 							format.Append(",-")
-							.Append(headerLen)
-							.Append(":C2} ");	// other decimals
-						}
-					} else if (prop.PropertyType.Name == "DateTime") {
-
-
+								.Append(headerLen)
+								.Append(":C2} "); // other decimals
+						break;
+					case "DateTime":
 						format.Append(",-")
 							.Append(headerLen)
-							.Append(":MM/dd/yy} ");//date
-					} else
+							.Append(":dd/MM/yy} "); //date
+						break;
+					default:
 						format.Append(",-")
 							.Append(headerLen)
 							.Append("} "); // int/string
-				} else
-					val = "";
+						break;
+					}
 
-				// enum name
-				val = (enumattr != null) ? enumattr.GetName((int)val) : val;
+					var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
+					// display enum name
+					val = (enumattr != null) ? enumattr.GetName((int)val) : val;
 
-				headers.SetValue(prop.Name, x.Index);
+				} else {
+					val = novalue;
+					format.Append(",-")
+							.Append(headerLen)
+							.Append("} "); // null value
+				}
+
 				values.SetValue(val, x.Index);
 			}
 
+			if (!values.Any()) 
+				return "No " + t.Name + " found.";
 
+			//Console.WriteLine(format);
+			//Console.WriteLine(values);
 
-			return Environment.NewLine + string.Format(header.ToString(), headers) + Environment.NewLine + string.Format(format.ToString(), values);
+			return string.Format(format.ToString(), values) + Environment.NewLine;
+		}
+		/// <summary>
+		/// returns string of headers line-printable properties
+		/// </summary>
+		/// <returns></returns>
+		//public string ToStringHeadersLine() {
+		public static string GetHeadersLine(Type t) {
+			var props = FilterPrintable(t);
+			int propsCount = props.Count;
+
+			//	headers line
+			StringBuilder header = new StringBuilder();
+			object[] headers = new object[propsCount];
+			bool fillHeadersline = true;
+
+			//	build headers line
+			foreach (var x in ForeachExt.WithIndex(props)) {
+				if (!fillHeadersline)
+					continue;
+				if (x.Index < propsCount && fillHeadersline) {
+					// append header placeholder "{0, -4}"
+					header.Append("{").Append(x.Index).Append(",-4} ");
+					// set property name
+					headers.SetValue(x.Value.Name, x.Index);
+					if (x.IsLast)
+						fillHeadersline = false;
+				}
+			}
+
+			return string.Format(header.ToString(), headers) + Environment.NewLine;
 		}
 
 		public override string ToString() {
@@ -102,22 +131,18 @@
 			string strVal = "";
 			this.Traverse((instance, prop) => {
 
-				bool toPrint = (prop.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)) == null || (prop.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)) != null && prop.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance)));
+				bool toPrint = (CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)) == null || (CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)) != null && CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance)));
 				object val = prop.GetValue(this);
 
 				if (val != null && toPrint) {
-
 					strVal = val.ToString();
-
-					var formatattr = prop.GetCustomAttribute(typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
+					var formatattr = CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
 					if (formatattr != null)
 						strVal = formatattr.Formatted((decimal)val);
-
-					var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
+					var enumattr = CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(EnumNameAttribute)) as EnumNameAttribute;
 					if (enumattr != null)
 						strVal = enumattr.GetName((int)val);
-
-					sb.Append(prop.Name).Append(": ").Append(strVal).Append(Environment.NewLine);
+					sb.Append("\t").Append(prop.Name).Append(": ").Append(strVal).Append(Environment.NewLine);
 				}
 			});
 
@@ -138,6 +163,8 @@
 			sb.Append(lineSeparator);
 			return sb.ToString();
 		}
+
+		
 
 	} // class AStringable
 } // namespace

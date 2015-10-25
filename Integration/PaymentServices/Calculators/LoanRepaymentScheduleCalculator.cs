@@ -269,7 +269,8 @@
 		private void Recalculate() {
 			Init();
 			foreach (var e in _events) {
-				//Console.WriteLine("=={0}", e);
+
+				Console.WriteLine("event=={0}", e);
 
 				UpdateState(e.Date);
 
@@ -322,12 +323,19 @@
 			_chargesToPay.Add(charge);
 		}
 
+		
+		// In common: calculate total interest to pay at specific event date, during looping of ordered events list
+		// calculate interest rate btwn 2 nearby events in the list; add interest calculated to _totalInterestToPay; 
+		// also removing expired rollovers from _currentRollover list
 		private void UpdateState(DateTime date) {
 			//interest for period
 			var interest = _principal * GetInterestRate(_lastActionDate, date);
 			_totalInterestToPay += interest;
 
-			//time from last calculation
+			Console.WriteLine("lastActionDate: {0} date: {1} interest: {2} totalInterestToPay: {3} totalPrincipalToPay: {4} principal: {5}",
+				 _lastActionDate, date, interest, _totalInterestToPay, _totalPrincipalToPay, _principal);
+
+			//	last event datetime
 			_lastActionDate = date;
 
 			//marking expired rollovers and removing them from the list

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using System.Text;
 	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
@@ -51,16 +52,36 @@
 		public long LoanID { get; set; }
 
 		// additions
-		private List<NL_PaypointTransactions> _paypointTransactionses = new List<NL_PaypointTransactions>();
+		private List<NL_PaypointTransactions> _paypointTransactions = new List<NL_PaypointTransactions>();
 
 		[DataMember]
 		[NonTraversable]
-		public List<NL_PaypointTransactions> PaypointTransactionses {
-			get { return this._paypointTransactionses; }
-			set { this._paypointTransactionses = value; }
+		public List<NL_PaypointTransactions> PaypointTransactions {
+			get { return this._paypointTransactions; }
+			set { this._paypointTransactions = value; }
 		}
 
-		
+		/// <summary>
+		/// prints data only
+		/// to print headers line call base static GetHeadersLine 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString() {
+			// payment
+			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
+
+			sb.Append(Environment.NewLine);
+
+			if (PaypointTransactions.Count > 0) {
+				sb.Append(GetHeadersLine(typeof(NL_PaypointTransactions)));
+				PaypointTransactions.ForEach(s => sb.Append(s.ToString()));
+			} else {
+				sb.Append("No paypoint transactions found");
+			}
+
+			return sb.ToString();
+
+		}
 
 	} // class NL_Payments
 } // ns

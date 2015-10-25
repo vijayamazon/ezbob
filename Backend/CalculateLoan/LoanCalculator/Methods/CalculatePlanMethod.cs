@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
@@ -33,8 +32,8 @@
 		// TODO: revive
 		public DailyLoanStatus DailyLoanStatus { get; private set; }
 
-
-		public virtual void Execute() {
+		// new version, with NL model
+		/*public virtual void Execute() {
 
 			NL_LoanHistory history = this.loanModel.Loan.LastHistory();
 
@@ -92,7 +91,7 @@
 			//	prevTime = scheduleItem.PlannedDate;
 			//} // for each scheduled payment
 
-		} // Execute
+		} */// Execute
 
 		public virtual void /* List<Repayment> */ _Execute() {
 			// TODO: revive

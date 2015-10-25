@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions {
+﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using Ezbob.Backend.Extensions;
 

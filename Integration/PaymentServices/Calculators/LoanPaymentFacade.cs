@@ -3,8 +3,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using DbConstants;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;

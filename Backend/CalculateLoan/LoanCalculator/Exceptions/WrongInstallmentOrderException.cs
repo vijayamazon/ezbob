@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions {
+﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	// TODO: revive
 	/*
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
