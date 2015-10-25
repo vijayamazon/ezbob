@@ -251,6 +251,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIAutomationTests", "Integr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LogicalGlue", "LogicalGlue", "{C70A4E16-0374-4E64-B03F-DDCAE554614D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Integration\LogicalGlue\Models\Models.csproj", "{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1240,6 +1242,16 @@ Global
 		{5D1AEA30-CD91-41E7-8E08-BCACE4610331}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5D1AEA30-CD91-41E7-8E08-BCACE4610331}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5D1AEA30-CD91-41E7-8E08-BCACE4610331}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1358,6 +1370,7 @@ Global
 		{C261C250-B7A7-4DF0-8CA0-5C73AB80D3B5} = {DCBC1A64-44B4-47D5-9B12-C963FBA9C24C}
 		{5D1AEA30-CD91-41E7-8E08-BCACE4610331} = {C261C250-B7A7-4DF0-8CA0-5C73AB80D3B5}
 		{C70A4E16-0374-4E64-B03F-DDCAE554614D} = {DCBC1A64-44B4-47D5-9B12-C963FBA9C24C}
+		{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B} = {C70A4E16-0374-4E64-B03F-DDCAE554614D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
