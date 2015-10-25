@@ -14,20 +14,19 @@ CREATE TYPE NL_LoanOptionsList AS TABLE (
 	[AutoCharge] BIT NOT NULL,
 	[StopAutoChargeDate] DATETIME NULL,
 	[AutoLateFees] BIT NOT NULL,
-	[StopAutoLateFeesDate] DATETIME NULL,
-	[AutoInterest] BIT NOT NULL,
-	[StopAutoInterestDate] DATETIME NULL,
 	[ReductionFee] BIT NOT NULL,
 	[LatePaymentNotification] BIT NOT NULL,
 	[CaisAccountStatus] NVARCHAR(50) NULL,
 	[ManualCaisFlag] NVARCHAR(20) NULL,
 	[EmailSendingAllowed] BIT NOT NULL,
-	[SmsSendingAllowed] BIT NOT NULL,
 	[MailSendingAllowed] BIT NOT NULL,
+	[SmsSendingAllowed] BIT NOT NULL,
 	[UserID] INT NULL,
 	[InsertDate] DATETIME NOT NULL,
 	[IsActive] BIT NOT NULL,
-	[Notes] NVARCHAR(MAX) NULL
+	[Notes] NVARCHAR(MAX) NULL,
+	[StopLateFeeFromDate] DATETIME NULL,
+	[StopLateFeeToDate] DATETIME NULL
 )
 GO
 
@@ -41,48 +40,44 @@ BEGIN
 	UPDATE NL_LoanOptions SET IsActive=0 WHERE LoanID=@LoanID
 
 	INSERT INTO NL_LoanOptions (
-		[LoanID],
-		[AutoCharge],
-		[StopAutoChargeDate],
-		[AutoLateFees],
-		[StopAutoLateFeesDate],
-		[AutoInterest],
-		[StopAutoInterestDate],
-		[ReductionFee],
-		[LatePaymentNotification],
-		[CaisAccountStatus],
-		[ManualCaisFlag],
-		[EmailSendingAllowed],
-		[SmsSendingAllowed],
-		[MailSendingAllowed],
-		[UserID],
-		[InsertDate],
-		[IsActive],
-		[Notes]
+       [LoanID]
+      ,[AutoCharge]
+      ,[StopAutoChargeDate]
+      ,[AutoLateFees]
+      ,[ReductionFee]
+      ,[LatePaymentNotification]
+      ,[CaisAccountStatus]
+      ,[ManualCaisFlag]
+      ,[EmailSendingAllowed]
+      ,[MailSendingAllowed]
+      ,[SmsSendingAllowed]
+      ,[UserID]
+      ,[InsertDate]
+      ,[IsActive]
+      ,[Notes]
+	  ,[StopLateFeeFromDate]
+	  ,[StopLateFeeToDate]
 	) SELECT
-		[LoanID],
-		[AutoCharge],
-		[StopAutoChargeDate],
-		[AutoLateFees],
-		[StopAutoLateFeesDate],
-		[AutoInterest],
-		[StopAutoInterestDate],
-		[ReductionFee],
-		[LatePaymentNotification],
-		[CaisAccountStatus],
-		[ManualCaisFlag],
-		[EmailSendingAllowed],
-		[SmsSendingAllowed],
-		[MailSendingAllowed],
-		[UserID],
-		[InsertDate],
-		[IsActive],
-		[Notes]
+       [LoanID]
+      ,[AutoCharge]
+      ,[StopAutoChargeDate]
+      ,[AutoLateFees]
+      ,[ReductionFee]
+      ,[LatePaymentNotification]
+      ,[CaisAccountStatus]
+      ,[ManualCaisFlag]
+      ,[EmailSendingAllowed]
+      ,[MailSendingAllowed]
+      ,[SmsSendingAllowed]
+      ,[UserID]
+      ,[InsertDate]
+      ,[IsActive]
+      ,[Notes]
+	  ,[StopLateFeeFromDate]
+	  ,[StopLateFeeToDate]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO
-
-

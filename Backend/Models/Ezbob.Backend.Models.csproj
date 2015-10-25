@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ezbob.Backend.CalculateLoan.LoanCalculator">
-      <HintPath>..\CalculateLoan\Models\bin\Debug\Ezbob.Backend.CalculateLoan.LoanCalculator.dll</HintPath>
-    </Reference>
     <Reference Include="Ezbob.Backend.ModelsWithDB">
       <HintPath>..\CalculateLoan\Models\bin\Debug\Ezbob.Backend.ModelsWithDB.dll</HintPath>
     </Reference>

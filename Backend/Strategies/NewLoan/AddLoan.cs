@@ -116,10 +116,10 @@
 			//if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
 			//	nlCalculator = new BankLikeLoanCalculator(model);
 
-			ALoanCalculator nlCalculator = null;
+		    ALoanCalculator nlCalculator = null;
 			// 2. Init Schedule and Fees
 			try {
-				nlCalculator = model.CalculatorInstance();
+                nlCalculator = new LegacyLoanCalculator(model);
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {

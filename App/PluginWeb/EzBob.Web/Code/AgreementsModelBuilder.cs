@@ -1,29 +1,29 @@
 ﻿namespace EzBob.Web.Code {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Linq;
-	using ConfigManager;
-	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Logger;
-	using Ezbob.Utils.Extensions;
-	using EzBob.Backend.Models;
-	using EzBob.Models;
-	using EzBob.Web.Infrastructure;
-	using EzBob.Web.Models;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
-	using EZBob.DatabaseLib.Repository;
-	using log4net;
-	using PaymentServices.Calculators;
-	using ServiceClientProxy;
-	using StructureMap;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using ConfigManager;
+    using DbConstants;
+    using Ezbob.Backend.CalculateLoan.LoanCalculator;
+    using Ezbob.Backend.Models;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Logger;
+    using Ezbob.Utils.Extensions;
+    using EzBob.Backend.Models;
+    using EzBob.Models;
+    using EzBob.Web.Infrastructure;
+    using EzBob.Web.Models;
+    using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Loans;
+    using EZBob.DatabaseLib.Model.Loans;
+    using EZBob.DatabaseLib.Repository;
+    using log4net;
+    using PaymentServices.Calculators;
+    using ServiceClientProxy;
+    using StructureMap;
 
-	public class AgreementsModelBuilder {
+    public class AgreementsModelBuilder {
 		private readonly APRCalculator _aprCalc;
 		private readonly RepaymentCalculator _repaymentCalculator;
 		protected readonly ServiceClient serviceClient;
@@ -196,13 +196,12 @@
 
 			// fill in loan+history with offer data
 			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
-			
-			ALoanCalculator nlCalculator = null;
-		
+
+		    ALoanCalculator nlCalculator = null;
 			// 2. get Schedule and Fees
 			try {
 				// init calculator
-				nlCalculator = nlModel.CalculatorInstance();
+                nlCalculator = new LegacyLoanCalculator(nlModel);
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {
@@ -225,7 +224,7 @@
 
 			// no Schedule
 			if (history.Schedule.Count == 0) {
-				this.oLog.Alert("Failed to create Schedule for customer: {0}", nlModel.CustomerID);
+				this.oLog.Alert("no Schedule: customer: {0}, err: {1}", nlModel.CustomerID);
 				return null;
 			}
 

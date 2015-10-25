@@ -3,7 +3,9 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
+	using EchoSignLib.EchoSignService;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
@@ -17,8 +19,9 @@
 	using PaymentServices.Calculators;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 
-	[RestfullErrorHandling]
+    [RestfullErrorHandling]
 	public class LoanEditorController : Controller {
 		private readonly ILoanRepository _loans;
 		private readonly ICashRequestRepository _cashRequests;
@@ -272,10 +275,45 @@
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
 
-			model.Options = this.loanOptionsRepository.GetByLoanId(id);
+		    SaveNewLoanOptions(options);
+
+		    model.Options = this.loanOptionsRepository.GetByLoanId(id);
 			RescheduleSetmodel(model, this._loans.Get(id));
 			return Json(model);
 		} // SaveLateFeeOption
+
+        private void SaveNewLoanOptions(LoanOptions options) {
+
+            var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+            int customerId = this._loans.Get(options.LoanId).Customer.Id;
+            
+            //NL Loan Options
+            NL_LoanOptions nlOptions = new NL_LoanOptions()
+            {
+                LoanID = options.LoanId,
+                AutoCharge = options.AutoPayment,
+                AutoLateFees = options.AutoLateFees,
+                CaisAccountStatus = options.CaisAccountStatus,
+                EmailSendingAllowed = options.EmailSendingAllowed,
+                LatePaymentNotification = options.LatePaymentNotification,
+                LoanOptionsID = options.Id,
+                MailSendingAllowed = options.MailSendingAllowed,
+                ManualCaisFlag = options.ManualCaisFlag,
+                ReductionFee = options.ReductionFee,
+                SmsSendingAllowed = options.SmsSendingAllowed,
+                StopAutoChargeDate = options.StopAutoChargeDate,
+                StopLateFeeFromDate = options.StopLateFeeFromDate,
+                StopLateFeeToDate = options.StopLateFeeToDate,
+                UserID = context.UserId,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                Notes = "Late fee option saved From Edit Loan page",
+            };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
+            Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+        }
+
 
 		[Ajax]
 		[HttpPost]
@@ -288,6 +326,8 @@
 			options.StopLateFeeToDate = null;
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
+		    SaveNewLoanOptions(options);
+            
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -316,6 +356,8 @@
 			}
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
+
+		    SaveNewLoanOptions(options);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);

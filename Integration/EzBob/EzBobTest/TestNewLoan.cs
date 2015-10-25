@@ -68,9 +68,6 @@
 				AutoCharge = true,
 				StopAutoChargeDate = DateTime.UtcNow,
 				AutoLateFees = true,
-				StopAutoLateFeesDate = DateTime.UtcNow,
-				AutoInterest = true,
-				StopAutoInterestDate = DateTime.UtcNow,
 				ReductionFee = true,
 				LatePaymentNotification = true,
 				CaisAccountStatus = "asd",
@@ -83,8 +80,8 @@
 				IsActive = true,
 				Notes = null
 			};
-			//var stra = new AddLoanOptions(NL_options, null);
-			//stra.Execute();
+			var stra = new AddLoanOptions(NL_options, null);
+			stra.Execute();
 		}
 
 
@@ -617,7 +614,7 @@
 
 			model = strategy.Result;
 
-			ALoanCalculator calc = model.CalculatorInstance();
+			ALoanCalculator calc = new LegacyLoanCalculator(model);
 
 			calc.events.ForEach(e=>this.m_oLog.Debug(e));
 

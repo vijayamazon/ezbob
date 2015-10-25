@@ -187,7 +187,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			//model.Offer.DiscountPlan.ForEach(d => Log.Info("discount entry: {0}", d));
 			model.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", 3));
 			model.Offer.OfferFees.ForEach(f => Log.Info("fee: {0}", f));
-			ALoanCalculator calc = model.CalculatorInstance();
+			ALoanCalculator calc = new LegacyLoanCalculator(model);
 			try {
 				calc.CreateSchedule();
 			} catch (NoInitialDataException noInitialDataException) {

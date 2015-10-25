@@ -10,14 +10,11 @@ ALTER PROCEDURE [dbo].[NL_LoanOptionsGet]
 AS
 BEGIN
 	SELECT
-		[LoanOptionsID]
+	   [LoanOptionsID]
       ,[LoanID]
       ,[AutoCharge]
       ,[StopAutoChargeDate]
       ,[AutoLateFees]
-      ,[StopAutoLateFeesDate]
-      ,[AutoInterest]
-      ,[StopAutoInterestDate]
       ,[ReductionFee]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]
@@ -29,6 +26,8 @@ BEGIN
       ,[InsertDate]
       ,[IsActive]
       ,[Notes]
+	  ,[StopLateFeeFromDate]
+	  ,[StopLateFeeToDate]
 	FROM [dbo].[NL_LoanOptions]
 	WHERE
 		LoanID=@LoanID AND 

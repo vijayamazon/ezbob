@@ -27,15 +27,6 @@
 		public bool AutoLateFees { get; set; }
 
 		[DataMember]
-		public DateTime? StopAutoLateFeesDate { get; set; }
-
-		[DataMember]
-		public bool AutoInterest { get; set; }
-
-		[DataMember]
-		public DateTime? StopAutoInterestDate { get; set; }
-
-		[DataMember]
 		public bool ReductionFee { get; set; }
 
 		[DataMember]
@@ -70,6 +61,12 @@
 		[Length(LengthType.MAX)]
 		[DataMember]
 		public string Notes { get; set; }
+        
+        [DataMember]
+        public virtual DateTime? StopLateFeeFromDate { get; set; }
+        
+        [DataMember]
+        public virtual DateTime? StopLateFeeToDate { get; set; }
 
 		/// <summary>
 		/// prints data only

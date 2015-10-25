@@ -14,6 +14,7 @@
 	using Infrastructure.csrf;
 	using log4net;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public class LoanOptionsController : Controller {
@@ -91,6 +92,8 @@
 
 					currentOptions.CaisAccountStatus = "8";
 					this._loanOptionsRepository.SaveOrUpdate(currentOptions);
+
+          	
 				}
 
 				// Update customer status
@@ -112,29 +115,30 @@
             //TODO update new loan options table
 			Log.DebugFormat("update loan options for loan {0}", options.LoanId);
 
-            //oldloan id => nl loanid
-            NL_LoanOptions nlOptions = new NL_LoanOptions {
-                        AutoCharge=options.AutoPayment,
-                        StopAutoChargeDate=options.StopAutoChargeDate,
-                        AutoLateFees=options.AutoLateFees,
-                        StopAutoLateFeesDate=options.StopLateFeeFromDate,
-                        AutoInterest=false,
-                        StopAutoInterestDate=null,
-                        ReductionFee=options.ReductionFee,
-                        LatePaymentNotification=options.LatePaymentNotification,
-                        CaisAccountStatus=options.CaisAccountStatus,
-                        ManualCaisFlag=options.ManualCaisFlag,
-                        EmailSendingAllowed=options.EmailSendingAllowed,
-                        SmsSendingAllowed=options.SmsSendingAllowed,
-                        MailSendingAllowed=options.MailSendingAllowed,
-                        UserID=this.context.UserId,
-                        InsertDate=DateTime.UtcNow,
-                        IsActive=true,
-                        Notes=null
+            //NL Loan Options
+            NL_LoanOptions nlOptions = new NL_LoanOptions()
+            {
+                LoanID = options.LoanId,
+                AutoCharge = options.AutoPayment,
+                AutoLateFees = options.AutoLateFees,
+                CaisAccountStatus = options.CaisAccountStatus,
+                EmailSendingAllowed = options.EmailSendingAllowed,
+                LatePaymentNotification = options.LatePaymentNotification,
+                LoanOptionsID = options.Id,
+                MailSendingAllowed = options.MailSendingAllowed,
+                ManualCaisFlag = options.ManualCaisFlag,
+                ReductionFee = options.ReductionFee,
+                SmsSendingAllowed = options.SmsSendingAllowed,
+                StopAutoChargeDate = options.StopAutoChargeDate,
+                StopLateFeeFromDate = options.StopLateFeeFromDate,
+                StopLateFeeToDate = options.StopLateFeeToDate,
+                UserID = this.context.UserId,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                Notes = "From loan option popup",
             };
 
-			var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions,  options.LoanId);
-
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId);;
 			Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
             
 			return Json(new { });
