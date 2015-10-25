@@ -33,11 +33,6 @@
 				} else if (event.button == 2) { vrsn_splash(); return false; }
 			} else { return true; }
 		}
-		document.write("<img name=\"seal\" src=\"" + u2 + "\" oncontextmenu=\"return false;\" border=\"0\" usemap=\"#sealmap_large\" alt=\"\" /> "); document.write("<map name=\"sealmap_large\" id=\"sealmap_large\" >"); document.write("<area  alt=\"Click to Verify - This site has chosen an SSL Certificate to improve Web site security\" title=\"\" href=\"javascript:vrsn_splash()\" shape=\"rect\" coords=\"0,0,130,65\" tabindex=\"-1\" style=\"outline:none;\"  />"); document.write("<area  alt=\"Click to Verify - This site has chosen an SSL Certificate to improve Web site security\" title=\"\" href=\"javascript:vrsn_splash()\" shape=\"rect\" coords=\"0,65,71,88\" tabindex=\"-1\" style=\"outline:none;\"  />"); document.write("<area  alt=\"\" title=\"\" href=\"javascript:symcBuySSL()\" shape=\"rect\" coords=\"71,65,130,88\" style=\"outline:none;\" />"); document.write("</map>"); if ((v_ua.indexOf("msie") != -1) && (ver >= 7)) {
-			var plat = -1
-			var re = new RegExp("windows nt ([0-9]{1,}[\.0-9]{0,})"); if (re.exec(v_ua) !== null) { plat = parseFloat(RegExp.$1); }
-			if ((plat >= 5.1) && (plat != 5.2)) { document.write("<div style='display:none'>"); document.write("<img src='https://extended-validation-ssl.websecurity.symantec.com/dot_clear.gif'/>"); document.write("</div>"); }
-		}
 		if (document.addEventListener) { document.addEventListener('mouseup', v_mact, true); }
 		else { if (document.layers) { document.captureEvents(Event.MOUSEDOWN); document.onmousedown = v_mact; } }
 		function v_resized() { if (pageWidth != innerWidth || pageHeight != innerHeight) { self.history.go(0); } }
