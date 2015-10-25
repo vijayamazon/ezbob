@@ -516,11 +516,19 @@
 		float: right;
 	}
 
+	.alert-msg {
+		width: 85%;
+	}
+
 }
 
 @media screen and (max-width: 500px) {
 
 	header.everline_header_broker nav span.for-brokers {
 		display: none;
+	}
+
+	.alert-msg {
+		width: 73%;
 	}
 }
