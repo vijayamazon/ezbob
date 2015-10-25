@@ -33,7 +33,8 @@ BEGIN
 		lc.Id AS FeesEarnedID,
 		lc.Date AS LoanChargeDate,
 		c.RefNumber AS CustomerRefNum,
-		l.RefNum AS LoanRefNum
+		l.RefNum AS LoanRefNum,
+		CONVERT(BIT, CASE l.Position WHEN 0 THEN 1 ELSE 0 END) AS IsFirstLoan
 	FROM
 		Loan l
 		INNER JOIN Customer c
