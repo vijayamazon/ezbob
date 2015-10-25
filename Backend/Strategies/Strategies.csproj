@@ -172,6 +172,7 @@
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
+    <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="MainStrategy\ABackdoorSimpleDetails.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleManual.cs" />

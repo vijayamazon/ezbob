@@ -108,6 +108,10 @@
 			get { return this[Variables.FreeAgentUsersRequest]; }
 		}
 
+		public virtual VariableValue FraudAlertMailReciever {
+			get { return this[Variables.FraudAlertMailReciever]; }
+		}
+
 		public virtual VariableValue GetCashSliderStep {
 			get { return this[Variables.GetCashSliderStep]; }
 		}

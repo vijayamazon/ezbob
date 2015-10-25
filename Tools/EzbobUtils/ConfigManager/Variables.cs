@@ -245,6 +245,7 @@ namespace ConfigManager {
 		FreeAgentOAuthSecret,
 		FreeAgentOAuthTokenEndpoint,
 		FreeAgentUsersRequest,
+		FraudAlertMailReciever,
 
 		GetCashSliderStep,
 		GetSatisfactionEnabled,

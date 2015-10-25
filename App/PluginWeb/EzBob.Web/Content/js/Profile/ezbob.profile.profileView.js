@@ -106,8 +106,6 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 	getCash: function() {
 		$(document).attr("title", "Get Cash: Select Loan Amount");
 
-		
-
 		EzBob.App.GA.trackPage('/Customer/Profile/GetCash', 'Get Cash: Select Loan Amount', this.getGTMVariables());
 
 		var applyForLoanView = new EzBob.Profile.ApplyForLoanTopView({ customer: this.customer, model: new EzBob.Profile.ApplyForLoanTopViewModel() });
@@ -172,6 +170,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	applyForLoanBack: function() {
 		this.router.navigate("");
+		this.getCashModel.refresh();
 		this.menuWidgetShown();
 	},
 

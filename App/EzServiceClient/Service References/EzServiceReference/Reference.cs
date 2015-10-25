@@ -4186,6 +4186,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
         
@@ -4768,6 +4774,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzService/CustomerChangePasswordResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmail", ReplyAction="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmailResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmail", ReplyAction="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmailResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CustomerBankAccountIsAlreadyAddedEmailAsync(int customerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerSignup", ReplyAction="http://tempuri.org/IEzService/CustomerSignupResponse")]
         ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
         
@@ -5097,12 +5109,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -5740,6 +5746,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
+            return base.Channel.LoanStatusAfterPayment(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
+            return base.Channel.LoanStatusAfterPaymentAsync(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
@@ -6518,6 +6532,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CustomerChangePasswordAsync(sEmail, oOldPassword, oNewPassword);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID) {
+            return base.Channel.CustomerBankAccountIsAlreadyAddedEmail(customerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CustomerBankAccountIsAlreadyAddedEmailAsync(int customerID) {
+            return base.Channel.CustomerBankAccountIsAlreadyAddedEmailAsync(customerID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
             return base.Channel.CustomerSignup(sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
         }
@@ -6956,14 +6978,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum) {
             return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
-            return base.Channel.LoanStatusAfterPayment(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
-            return base.Channel.LoanStatusAfterPaymentAsync(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
         }
     }
 }

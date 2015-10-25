@@ -33,6 +33,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 	},
 	onRender: function () {
 		var view = this.states[this.model.get("state")].view(this);
+		view.on('back', this.stateBack, this);
 		var region = new Backbone.Marionette.Region({
 			el: this.$el.find('.apply-for-loan-div')
 		});
@@ -65,6 +66,12 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 	},
 	backClicked: function() {
 		$('.wizard-steps-wrapper').remove();
+	},
+
+	stateBack: function() {
+		this.customer.fetch();
+		this.backClicked();
+		this.trigger('back');
 	},
 
 	amountSelected: function () {

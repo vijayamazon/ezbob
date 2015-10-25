@@ -15,6 +15,7 @@
 	using PayPalDbLib.Models;
 	using PayPalServiceLib;
 	using Code.MpUniq;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
@@ -26,36 +27,32 @@
 
 	public class PaymentAccountsController : Controller
 	{
-		private readonly DatabaseDataHelper _helper;
-		private readonly CustomerRepository _customers;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IMPUniqChecker _mpChecker;
-		private readonly ISortCodeChecker _sortCodeChecker;
-		private readonly IYodleeAccountChecker _yodleeAccountChecker;
+		private readonly DatabaseDataHelper dbHelper;
+		private readonly CustomerRepository customersRepository;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly ServiceClient serviceClient;
+		private readonly IMPUniqChecker mpChecker;
+		private readonly ISortCodeChecker sortCodeChecker;
+		private readonly IYodleeAccountChecker yodleeAccountChecker;
+		private readonly BankAccountUniqChecker bankAccountUniqChecker;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PaymentAccountsController));
 
 		public PaymentAccountsController(
-			DatabaseDataHelper helper,
-			CustomerRepository customers,
+			DatabaseDataHelper dbHelper,
+			CustomerRepository customersRepository,
 			IEzbobWorkplaceContext context,
 			IMPUniqChecker mpChecker,
-			IYodleeAccountChecker yodleeAccountChecker
-		) {
-			_helper = helper;
-			_customers = customers;
-			_context = context;
-			m_oServiceClient = new ServiceClient();
-			_mpChecker = mpChecker;
-			_yodleeAccountChecker = yodleeAccountChecker;
-			if (CurrentValues.Instance.PostcodeAnywhereEnabled)
-			{
-				_sortCodeChecker = new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
-			}
-			else
-			{
-				_sortCodeChecker = new FakeSortCodeChecker();
-			}
+			IYodleeAccountChecker yodleeAccountChecker, 
+			BankAccountUniqChecker bankAccountUniqChecker,
+			ISortCodeChecker sortCodeChecker) {
+			this.dbHelper = dbHelper;
+			this.customersRepository = customersRepository;
+			this.context = context;
+			this.serviceClient = new ServiceClient();
+			this.mpChecker = mpChecker;
+			this.yodleeAccountChecker = yodleeAccountChecker;
+			this.bankAccountUniqChecker = bankAccountUniqChecker;
+			this.sortCodeChecker = sortCodeChecker;
 		}
 
 		[Transactional]
@@ -70,7 +67,7 @@
 
 			var paypal = ObjectFactory.GetInstance<PayPalDatabaseMarketPlace>();
 
-			var customer = _context.Customer;
+			var customer = this.context.Customer;
 
 			PayPalPermissionsGranted permissionsGranted;
 			PayPalPersonalData personalData;
@@ -78,7 +75,7 @@
 			{
 				permissionsGranted = PayPalServiceHelper.GetAccessToken(request_token, verification_code);
 				personalData = PayPalServiceHelper.GetAccountInfo(permissionsGranted);
-				_mpChecker.Check(paypal.InternalId, customer, personalData.Email);
+				this.mpChecker.Check(paypal.InternalId, customer, personalData.Email);
 			}
 			catch (PayPalException e)
 			{
@@ -101,7 +98,7 @@
 			});
 
 			if (mpId > 0)
-				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true, _context.UserId);
+				this.serviceClient.Instance.UpdateMarketplace(customer.Id, mpId, true, this.context.UserId);
 
 			return View(permissionsGranted);
 		}
@@ -114,8 +111,8 @@
 				UserId = personalData.Email
 			};
 
-			var mp = _helper.SaveOrUpdateCustomerMarketplace(personalData.Email, paypal, securityData, customer);
-			_helper.SaveOrUpdateAcctountInfo(mp, personalData);
+			var mp = this.dbHelper.SaveOrUpdateCustomerMarketplace(personalData.Email, paypal, securityData, customer);
+			this.dbHelper.SaveOrUpdateAcctountInfo(mp, personalData);
 			return mp.Id;
 		}
 
@@ -158,7 +155,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult PayPalList()
 		{
-			var customer = _context.Customer;
+			var customer = this.context.Customer;
 			var paypal = new PayPalDatabaseMarketPlace();
 
 			return Json(customer.CustomerMarketPlaces
@@ -174,7 +171,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult BankAccountsListFormatted()
 		{
-			var customer = _context.Customer;
+			var customer = this.context.Customer;
 
 			if (!customer.HasBankAccount)
 			{
@@ -190,14 +187,13 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddBankAccount(string accountNumber, string sortCode, string BankAccountType)
 		{
+			var customer = this.context.Customer;
+			if (customer == null) {
+				return Json(new { error = "Unknown customer" });
+			}
+
 			try
 			{
-				var customer = _context.Customer;
-				if (customer == null)
-				{
-					return Json(new { error = "Unknown customer" });
-				}
-
 				if (string.IsNullOrEmpty(accountNumber) || !Regex.IsMatch(accountNumber, @"^\d{8}$"))
 				{
 					return Json(new { error = "Invalid account number" });
@@ -208,9 +204,9 @@
 					return Json(new { error = "Invalid sort code" });
 				}
 
-				var card = _sortCodeChecker.Check(customer, accountNumber, sortCode, BankAccountType);
+				var card = this.sortCodeChecker.Check(customer, accountNumber, sortCode, BankAccountType);
 
-				_yodleeAccountChecker.Check(customer, accountNumber, sortCode, BankAccountType);
+				this.yodleeAccountChecker.Check(customer, accountNumber, sortCode, BankAccountType);
 
 				customer.BankAccount = new BankAccount
 					{
@@ -220,7 +216,11 @@
 					};
 
 				customer.CurrentCard = card;
-				_customers.Update(customer);
+				this.customersRepository.Update(customer);
+
+				if (card != null) {
+					this.bankAccountUniqChecker.Check(customer.Id, card);
+				}
 
 				return Json(new { msg = "Well done! You've added your bank account!" });
 			}
@@ -244,6 +244,11 @@
 			{
 				return
 					Json(new { error = "Account number doesn't match your linked bank account. Please use the same bank account number you linked before or go back and link a bank account that match the account number you have entered." });
+			} catch (BankAccountIsAlreadyAddedException) {
+				customer.BlockTakingLoan = true;
+				this.serviceClient.Instance.FraudChecker(customer.Id, FraudMode.FullCheck);
+				this.serviceClient.Instance.CustomerBankAccountIsAlreadyAddedEmail(customer.Id);
+				return Json(new { blockBank = true, msg = "Funds transfer is in process." }, JsonRequestBehavior.AllowGet);
 			}
 		}
 	}
