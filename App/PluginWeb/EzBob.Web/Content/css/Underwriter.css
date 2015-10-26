@@ -229,6 +229,12 @@ p.yodlee-cashflow-graph-labels {
     background-color: #E5E5E5;
 }
 
+.report-table-wrap {
+	width: 100%;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
 .left-underwriter-pane {
     width: 400px;
 }

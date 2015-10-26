@@ -97,5 +97,9 @@
 		public ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount) {
 			return Execute<SendEverlineRefinanceMails>(customerId, customerId, customerId, customerName, now, loanAmount, transferedAmount);
 		}
+
+		public ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID) {
+			return Execute<CustomerBankAccountIsAlreadyAddedEmail>(customerID, customerID, customerID);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

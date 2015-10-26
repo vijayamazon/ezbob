@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using System.Web.Script.Serialization;
 	using Code.ReportGenerator;
 	using EZBob.DatabaseLib.Model.Database.Report;
 	using Ezbob.Database;
@@ -35,7 +36,7 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult GetReportDates(int reportId, DateTime from, DateTime to, string customer, bool? nonCash) {
+		public ContentResult GetReportDates(int reportId, DateTime from, DateTime to, string customer, bool? nonCash) {
 			var report = GetReport(reportId);
 			from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
 			to = DateTime.SpecifyKind(to, DateTimeKind.Utc);
@@ -47,13 +48,19 @@
 
 			ATag data = reportHandler.GetReportData(report, rptDef, oColumnTypes, out isError);
 
-			return Json(new { report = data.ToString(), columns = oColumnTypes });
+			var serializer = new JavaScriptSerializer {
+				MaxJsonLength = Int32.MaxValue
+			};
 
+			return new ContentResult {
+				Content = serializer.Serialize(new { report = data.ToString(), columns = oColumnTypes }),
+				ContentType = "application/json",
+			};
 		}
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult GetReport(int reportId, ReportDate reportDate, string customer, bool? nonCash) {
+		public ContentResult GetReport(int reportId, ReportDate reportDate, string customer, bool? nonCash) {
 			var dates = ReporDateRanges.GetDates(reportDate);
 			dates.From = DateTime.SpecifyKind(dates.From, DateTimeKind.Utc);
 			dates.To = DateTime.SpecifyKind(dates.To, DateTimeKind.Utc);

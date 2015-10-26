@@ -138,6 +138,9 @@
 		StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword);
 
 		[OperationContract]
+		ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID);
+
+		[OperationContract]
 		UserLoginActionResult CustomerSignup(
 			string sEmail,
 			Password oPassword,

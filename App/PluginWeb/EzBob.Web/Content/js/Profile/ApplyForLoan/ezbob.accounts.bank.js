@@ -86,6 +86,12 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 			        EzBob.App.trigger('error', result.error);
 			        return;
 			    }
+			    if (result.blockBank) {
+			    	that.trigger('back');
+			    	EzBob.App.trigger('info', result.msg);
+				    return;
+			    }
+
 			    that.model.set('bankAccount', accNum);
 			    that.model.set('sortCode', sortCode);
 
@@ -107,7 +113,7 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 
     ready: function () {
         var accountNumber = this.model.get('bankAccount');
-        var sortCode = this.model.get('sortCode');
+        var sortCode = this.model.get('sortCode') || '';
         this.$el.find("#SortCode #SortCode1").val(sortCode.substring(0, 2));
         this.$el.find("#SortCode #SortCode2").val(sortCode.substring(2, 4));
         this.$el.find("#SortCode #SortCode3").val(sortCode.substring(4, 6));
