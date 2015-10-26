@@ -62,7 +62,7 @@
 			string refNum = sr["RefNum"];
 			bool lastInstallment = sr["LastInstallment"];
 
-			bool isLimited = typeOfBusiness == "Limited" || typeOfBusiness == "LLP";
+			bool isNonRegulated = typeOfBusiness == "Limited" || typeOfBusiness == "LLP" || typeOfBusiness == "PShip";
 
 			DateTime now = DateTime.UtcNow;
 
@@ -82,7 +82,7 @@
 
 			decimal initialAmountDue = amountDue;
 
-			if ((!isLimited && daysLate > 3) || !this.dueChargingDays.Contains(daysLate)) {
+			if ((!isNonRegulated && daysLate > 3) || !this.dueChargingDays.Contains(daysLate)) {
 				Log.Info("Will not charge loan schedule id {0} (amount {1}): the charging is not scheduled today",
 						 loanScheduleId, amountDue);
 				return;
@@ -95,7 +95,7 @@
 				customerMail,
 				fullname,
 				reductionFee,
-				isLimited
+				isNonRegulated
 				);
 
 			if (autoPaymentResult.IsException || autoPaymentResult.PaymentFailed) {
@@ -109,7 +109,7 @@
 			}//if
 		}//HandleOnePayment
 
-		private AutoPaymentResult TryToMakeAutoPayment(int loanScheduleId, decimal initialAmountDue, int customerId, string customerMail, string fullname, bool reductionFee, bool isLimited) {
+		private AutoPaymentResult TryToMakeAutoPayment(int loanScheduleId, decimal initialAmountDue, int customerId, string customerMail, string fullname, bool reductionFee, bool isNonRegulated) {
 			var result = new AutoPaymentResult();
 			decimal actualAmountCharged = initialAmountDue;
 
@@ -119,7 +119,7 @@
 				PayPointReturnData payPointReturnData;
 
 				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData)) {
-					if (isLimited && IsNotEnoughMoney(payPointReturnData)) {
+					if (isNonRegulated && IsNotEnoughMoney(payPointReturnData)) {
 						if (!reductionFee) {
 							result.PaymentFailed = true;
 							return result;
