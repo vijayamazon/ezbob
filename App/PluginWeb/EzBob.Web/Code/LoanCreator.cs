@@ -191,7 +191,6 @@
 			if (loan.SetupFee > 0)
 				cus.SetupFee = loan.SetupFee;
 
-
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
 			2. RenderAgreements: loan.Agreements.Add
@@ -234,6 +233,24 @@
 			// actually this is the place where the loan saved to DB
 			this.session.Flush();
 
+			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
+			nlModel.Loan.Refnum = loan.RefNumber;
+			nlModel.Loan.OldLoanID = oldloanID;
+			try {
+				//log.Debug(nlModel.FundTransfer.ToString());
+				//log.Debug(nlModel.Loan.ToString());
+
+				var nlAddLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
+				nlModel.Loan.LoanID = nlAddLoan.Value;
+
+				log.Debug(nlAddLoan.Error == "" ? "NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}" : "NewLoan adding: new LoanID {0}, oldLoanID {1}, Error: {2}", nlAddLoan.Value, oldloanID, nlAddLoan.Error);
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				log.Debug("Failed to save new loan {0}", ex);
+			} // try
+
+
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
@@ -266,23 +283,6 @@
 			// save loan via new LoanHistory (139)
 			// SF
 			// flush
-
-			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-			nlModel.Loan.Refnum = loan.RefNumber;
-			nlModel.Loan.OldLoanID = oldloanID;
-			try {
-				log.Debug(nlModel.FundTransfer.ToString());
-				log.Debug(nlModel.Loan.ToString());
-
-				var nlAddLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
-				nlModel.Loan.LoanID = nlAddLoan.Value;
-
-				log.Debug(nlAddLoan.Error == "" ? "NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}" : "NewLoan adding: new LoanID {0}, oldLoanID {1}, Error: {2}", nlAddLoan.Value, oldloanID, nlAddLoan.Error);
-
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				log.Debug("Failed to save new loan {0}", ex);
-			} // try
 
 			return loan;
 		} // CreateLoan

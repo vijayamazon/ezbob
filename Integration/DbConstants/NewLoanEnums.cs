@@ -105,10 +105,11 @@
 		BankTransfer = 7,
 		Other = 8,
 		CustomerAuto = 9,
-		WriteOff = 11,
-		ChargeBack = 12,
-		WrongPayment = 13,
-		SystemRepay = 14
+		WriteOff = 10,
+		ChargeBack = 11,
+		WrongPayment = 12,
+		SystemRepay = 13,
+		SetupFeeOffset = 14 // used to offsetting setup fee
 	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
 
 

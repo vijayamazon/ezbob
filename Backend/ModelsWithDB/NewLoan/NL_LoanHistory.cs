@@ -113,22 +113,20 @@
 			// history
 			StringBuilder sb = new StringBuilder().Append(base.ToString()); //.Append(Environment.NewLine);
 
+			sb.Append("Schedule:");
 			// schedule
 			if (Schedule.Count > 0) {
-				sb.Append("Schedule:").Append(Environment.NewLine);
-				sb.Append(GetHeadersLine(typeof(NL_LoanSchedules)));
+				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedules)));
 				Schedule.ForEach(s => sb.Append(s.ToString()));
-			} else
-				sb.Append("No Schedule found");
+			} 
 
-			sb.Append(Environment.NewLine);
+			sb.Append("Agreements:");
+
 			// agreements
 			if (Agreements.Count > 0) {
-				sb.Append("Agreements:").Append(Environment.NewLine);
-				sb.Append(GetHeadersLine(typeof(NL_LoanAgreements)));
+				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanAgreements)));
 				Agreements.ForEach(a => sb.Append(a.ToString()));
-			} else
-				sb.Append("No Agreements found");
+			} 
 
 			return sb.ToString();
 		}

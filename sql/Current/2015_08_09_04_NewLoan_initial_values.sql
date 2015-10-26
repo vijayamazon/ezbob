@@ -32,7 +32,14 @@ BEGIN
 	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
 	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SystemRepay', 0)
 END
+
+IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'SetupFeeOffset')
+BEGIN
+	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SetupFeeOffset', 0)
+END
 GO
+
 
 IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'DefaultLoanCalculator')
 	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('DefaultLoanCalculator', 

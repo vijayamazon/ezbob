@@ -92,6 +92,10 @@
       <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Strategies\Strategies.csproj">
+      <Project>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</Project>
+      <Name>Strategies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LoanCalculator\LoanCalculator.csproj">
       <Project>{d7a03efe-b175-49eb-9b22-3315c1124091}</Project>
       <Name>LoanCalculator</Name>

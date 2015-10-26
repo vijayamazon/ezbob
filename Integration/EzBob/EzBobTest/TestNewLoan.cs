@@ -7,11 +7,11 @@
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 	using EzBob.Backend.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -193,14 +193,14 @@
 		[Test]
 		public void AddLoan() {
 			int userID = 357;
-			int oldLoanID = 2080;
+			int oldLoanID = 3080;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			DateTime now = oldLoan.Date; // DateTime.UtcNow;
 			AgreementModel agreementModel = new AgreementModel() {
 				CustomerEmail = oldLoan.Customer.Name, // "alexbo+003@ezbob.com.test.test.test",
 				APR = 35.35,
-				FullName = "Jane Doe",
+				FullName = oldLoan.Customer.Name,
 				CountRepayment = oldLoan.RepaymentsNum
 			};
 			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
@@ -214,15 +214,15 @@
 					PacnetTransactions = new List<NL_PacnetTransactions>()
 				}
 			};
-			model.FundTransfer.PacnetTransactions.Clear();
-			model.FundTransfer.PacnetTransactions.Add(new NL_PacnetTransactions() {
-				Amount = oldLoan.LoanAmount,
-				Notes = "addloan utest",
-				PacnetTransactionStatusID = (int)NLPacnetTransactionStatuses.Done,
-				StatusUpdatedTime = now,
-				TrackingNumber = "1111",
-				TransactionTime = now
-			});
+			//model.FundTransfer.PacnetTransactions.Clear();
+			//model.FundTransfer.PacnetTransactions.Add(new NL_PacnetTransactions() {
+			//	Amount = oldLoan.LoanAmount,
+			//	Notes = "addloan utest",
+			//	PacnetTransactionStatusID = (int)NLPacnetTransactionStatuses.Done,
+			//	StatusUpdatedTime = now,
+			//	TrackingNumber = "1111",
+			//	TransactionTime = now
+			//});
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = now,
 				AgreementModel = JsonConvert.SerializeObject(agreementModel)
@@ -605,20 +605,14 @@
 		}
 
 		[Test]
-		public void CalculatorEvents() {
-			const long loanID = 13;
-			NL_Model model = new NL_Model(56);
-			var strategy = new LoanState(model, loanID, DateTime.UtcNow);
-			strategy.Execute();
-			this.m_oLog.Debug(strategy.Result.Loan);
-
-			model = strategy.Result;
-
-			ALoanCalculator calc = new LegacyLoanCalculator(model);
-
-			calc.events.ForEach(e=>this.m_oLog.Debug(e));
-
+		public void GetLoanFees() {
+			long loanid = 15;
+			var loanFees = this.m_oDB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanid));
+			m_oLog.Debug(AStringable.GetHeadersLine(typeof(NL_LoanFees)));
+			loanFees.ForEach(f => m_oLog.Debug(f));
 		}
+
+	
 
 	} // class TestNewLoan
 } // namespace

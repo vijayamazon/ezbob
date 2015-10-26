@@ -96,8 +96,6 @@
 					);
 				}
 
-
-
 				SetBadPeriods(); // TODO
 
 				// ReSharper disable once CatchAllClause

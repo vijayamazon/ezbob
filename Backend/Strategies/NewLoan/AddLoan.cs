@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text;
 	using System.Web;
 	using ConfigManager;
 	using DbConstants;
@@ -34,7 +33,7 @@
 		/// <param name="nlModel"></param>
 		public AddLoan(NL_Model nlModel) {
 			model = nlModel;
-		}//constructor
+		}
 
 		public override string Name { get { return "AddLoan"; } }
 		public string Error;
@@ -52,8 +51,6 @@
 			- agreements
 			*/
 		public override void Execute() {
-
-			// TODO check if "credit available" is enough for this loan amount
 
 			if (model.CustomerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
@@ -92,7 +89,7 @@
 				return;
 			}
 
-			// RepaymentCount, EventTime, InterestRate
+			// RepaymentIntervalType, EventTime 
 			model.Loan.LastHistory().SetDefaults();
 			// LoanType, LoanFormulaID, RepaymentDate
 			model.Loan.SetDefaults();
@@ -112,14 +109,10 @@
 
 			model = dataForLoan.Result;
 
-			//ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
-			//if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator))
-			//	nlCalculator = new BankLikeLoanCalculator(model);
-
 		    ALoanCalculator nlCalculator = null;
 			// 2. Init Schedule and Fees
 			try {
-                nlCalculator = new LegacyLoanCalculator(model);
+				nlCalculator = new LegacyLoanCalculator(model);
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {
@@ -135,7 +128,7 @@
 				this.Error = string.Format("Failed to get calculator instance/Schedule. customer {0}, err: {1}", model.CustomerID, ex.Message);
 			} finally {
 				if (nlCalculator == null) {
-					this.Error = string.Format("Failed to get calculator instance. customer {0}, err: {1}", model.CustomerID);
+					this.Error = string.Format("Failed to get calculator instance. customer {0}, err: {1}", model.CustomerID, this.Error);
 				}
 			}
 
@@ -147,19 +140,18 @@
 			List<NL_LoanSchedules> nlSchedule = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> nlFees = new List<NL_LoanFees>();
 			List<NL_LoanAgreements> nlAgreements = new List<NL_LoanAgreements>();
-			NL_PacnetTransactions pacnetTransaction = null;
 			DateTime nowTime = DateTime.UtcNow;
+			NL_Payments setupfeeOffsetpayment = null;
+			NL_LoanFeePayments feePayment = null;
 
 			// get updated history filled with Schedule
 			history = model.Loan.LastHistory();
-
-			Log.Debug(history);
 
 			// copy to local schedules list
 			history.Schedule.ForEach(s => nlSchedule.Add(s));
 
 			if (nlSchedule.Count == 0) {
-				this.Error += "Failed to generate Schedule or error occured during schedule/fees creation";
+				this.Error += "Failed to generate Schedule/fees";
 				return;
 			}
 
@@ -169,7 +161,29 @@
 			model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
 			model.Loan.Position += 1;
 
-			Log.Debug("Adding loan: {0}", model.Loan);
+			// copy to local fees list
+			model.Loan.Fees.ForEach(f => nlFees.Add(f));
+
+			foreach (NL_LoanFees f in nlFees) {
+				f.CreatedTime = nowTime; // from calc-r
+				f.AssignedByUserID = 1; //  from calc-r
+
+				// setup fee inserted in NL_LoanFees table; to prevent charging of the fee, NL_Payment inserted with type SetupFeeOffset
+				if (f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee) {
+					setupfeeOffsetpayment = new NL_Payments() {
+						PaymentMethodID = (int)NLLoanTransactionMethods.SetupFeeOffset,
+						Amount = f.Amount,
+						CreatedByUserID = 1,
+						CreationTime = f.CreatedTime,
+						Notes = "setup fee offsetting",
+						PaymentTime = nowTime,
+						PaymentStatusID = (int)NLPaymentStatuses.Active
+					};
+					model.Loan.Payments.Add(setupfeeOffsetpayment);
+
+					//Log.Debug("Created setup offset payment: {0}", setupfeeOffsetpayment);
+				}
+			}
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 
@@ -181,27 +195,15 @@
 				this.LoanID = DB.ExecuteScalar<long>(pconn, "NL_LoansSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.Loan));
 				model.Loan.LoanID = this.LoanID;
 
-				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
+				//Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
 
 				// 5. fees
+				nlFees.ForEach(f => f.LoanID = this.LoanID);
 
-				// copy to local fees list
-				model.Loan.Fees.ForEach(f => nlFees.Add(f));
+				//nlFees.ForEach(f => Log.Debug("Adding fees: {0}", f));
 
 				// insert fees
-				if (nlFees.Count > 0) {
-					foreach (NL_LoanFees f in nlFees) {
-						//if (f != null) {
-							f.LoanID = this.LoanID; // set newly created LoanID
-							f.CreatedTime = nowTime; // from calc-r
-							f.AssignedByUserID = 1; //  from calc-r
-						//}
-					}
-
-					nlFees.ForEach(f => Log.Debug("Adding fee: {0}", f));
-
-					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", nlFees));
-				}
+				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", nlFees));
 
 				// 6. broker commissions
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
@@ -211,26 +213,26 @@
 
 				// 7. history
 				history.LoanID = this.LoanID;
-				history.Description = "adding loan " + this.LoanID + ", old ID: " + model.Loan.OldLoanID;
+				history.Description = "adding loan. oldID: " + model.Loan.OldLoanID;
 
-				Log.Debug("Adding history: {0}", history);
+				//Log.Debug("Adding history: {0}", history);
 
 				history.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
 
-				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", model.Loan.LoanID, history.LoanHistoryID);
+				//Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", model.Loan.LoanID, history.LoanHistoryID);
 
 				// 8. loan agreements
 				history.Agreements.ForEach(a => nlAgreements.Add(a));
 				nlAgreements.ForEach(a => a.LoanHistoryID = history.LoanHistoryID);
 
-				nlAgreements.ForEach(a => Log.Debug("Adding agreement: {0}", a));
+				//nlAgreements.ForEach(a => Log.Debug("Adding agreement: {0}", a));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanAgreementsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanAgreements>("Tbl", nlAgreements));
 
 				// 9. schedules 
 				nlSchedule.ForEach(s => s.LoanHistoryID = history.LoanHistoryID);
 
-				nlSchedule.ForEach(s => Log.Debug("Adding schedule: {0}", s));
+				//nlSchedule.ForEach(s => Log.Debug("Adding schedule: {0}", s));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", nlSchedule));
 
@@ -240,7 +242,7 @@
 					model.FundTransfer.LoanID = this.LoanID;
 					model.FundTransfer.FundTransferID = DB.ExecuteScalar<long>(pconn, "NL_FundTransfersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.FundTransfer));
 
-					Log.Debug("NL_FundTransfersSave: LoanID: {0}, fundTransferID: {1}", this.LoanID, model.FundTransfer.FundTransferID);
+					//Log.Debug("NL_FundTransfersSave: LoanID: {0}, fundTransferID: {1}", this.LoanID, model.FundTransfer.FundTransferID);
 				}
 
 				pconn.Commit();
@@ -249,28 +251,27 @@
 			} catch (Exception ex) {
 
 				pconn.Rollback();
+
 				this.LoanID = 0;
 				this.Error = ex.Message;
 				Log.Error("Failed to add new loan: {0}", this.Error);
-				
-				SendMail("NL: loan rolled back", history, nlFees, nlSchedule, nlAgreements);
-				
+
+				SendMail("NL: loan rolled back", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
+
 				return;
 			}
-			
+
 
 			// 7. Pacnet transaction
 			try {
+				if (model.FundTransfer != null && (model.FundTransfer.PacnetTransactions.Count > 0 && model.FundTransfer.FundTransferID > 0)) {
 
-				if (model.FundTransfer != null && (model.FundTransfer.PacnetTransactions != null && model.FundTransfer.FundTransferID > 0)) {
-
-					pacnetTransaction = model.FundTransfer.LastPacnetTransactions();
+					var pacnetTransaction = model.FundTransfer.LastPacnetTransactions();
 					pacnetTransaction.FundTransferID = model.FundTransfer.FundTransferID;
 					pacnetTransaction.PacnetTransactionID = DB.ExecuteScalar<long>("NL_PacnetTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", pacnetTransaction));
 
-					Log.Debug("NL_PacnetTransactionsSave: LoanID: {0}, pacnetTransactionID: {1}", this.LoanID, pacnetTransaction.PacnetTransactionID);
+					//Log.Debug("NL_PacnetTransactionsSave: LoanID: {0}, pacnetTransactionID: {1}", this.LoanID, pacnetTransaction.PacnetTransactionID);
 				}
-
 				// ReSharper disable once CatchAllClause
 			} catch (Exception e1) {
 
@@ -278,16 +279,48 @@
 				Log.Error("Failed to save PacnetTransaction: {0}", this.Error);
 
 				// PacnetTransaction error
-				SendMail("NL: Failed to save PacnetTransaction", history, nlFees, nlSchedule, nlAgreements);
+				SendMail("NL: Failed to save PacnetTransaction", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
+			}
+
+			// 11. if setup fee - add payment to offset it
+			if (setupfeeOffsetpayment != null && this.LoanID > 0) {
+
+				setupfeeOffsetpayment.LoanID = this.LoanID;
+				setupfeeOffsetpayment.PaymentID = DB.ExecuteScalar<long>("NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", setupfeeOffsetpayment));
+
+				//Log.Debug("Added setup offset payment: {0}", setupfeeOffsetpayment);
+
+				var loanFees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.LoanID));
+
+				if (loanFees != null) {
+					// must be the only of this type
+					var setupFee = loanFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee);
+
+					//	register NL_LoanFeePayments record
+					if (setupFee != null) {
+
+						feePayment = new NL_LoanFeePayments() {
+							Amount = setupfeeOffsetpayment.Amount,
+							PaymentID = setupfeeOffsetpayment.PaymentID,
+							LoanFeeID = setupFee.LoanFeeID
+						};
+
+						feePayment.LoanFeePaymentID = DB.ExecuteScalar<long>("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", feePayment));
+
+						//Log.Debug("Added NL_LoanFeePayments for setup offset payment: {0}", feePayment);
+					}
+				}
 			}
 
 			// OK
-			SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements);
+			SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
 
 		}//Execute
 
-			
-		private void SendMail(string subject, NL_LoanHistory history, List<NL_LoanFees> fees, List<NL_LoanSchedules> schedule, List<NL_LoanAgreements> agreements) {
+
+		private void SendMail(string subject, NL_LoanHistory history, List<NL_LoanFees> fees,
+			List<NL_LoanSchedules> schedule, List<NL_LoanAgreements> agreements,
+			NL_Payments setupfeeOffsetpayment = null, NL_LoanFeePayments feePayment = null) {
 
 			string emailToAddress = CurrentValues.Instance.Environment.Value.Contains("Dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
 			string emailFromName = CurrentValues.Instance.MailSenderName;
@@ -299,23 +332,24 @@
 			history.Schedule = schedule;
 			history.Agreements.Clear();
 			history.Agreements = agreements;
-			
+
 			model.Loan.Histories.Clear();
-			model.Loan.Histories.Add( history);
+			model.Loan.Histories.Add(history);
 			model.Loan.Fees.Clear();
 			model.Loan.Fees = fees;
-			
+
 			var message = string.Format(
-				"<h5>{0}</h5>"
+					"<h5>{0}</h5>"
 					+ "<h5>Loan</h5> <pre>{1}</pre>"
 					+ "<h5>FundTransfer</h5> <pre>{2}</pre>"
-					+ "<h5>PacnetTransaction</h5> <pre>{3}</pre>",
+					+ "<h5>Setup fee offset payment</h5> <pre>{3}</pre>"
+					+ "<h5>Setup fee offset loan-payment</h5> <pre>{4}</pre>",
 
-				HttpUtility.HtmlEncode(sMsg) 
+				HttpUtility.HtmlEncode(sMsg)
 				, HttpUtility.HtmlEncode(model.Loan.ToString())
 				, HttpUtility.HtmlEncode(model.FundTransfer == null ? "no FundTransfer specified" : model.FundTransfer.ToString())
-				//, HttpUtility.HtmlEncode(pacnetTransaction == null ? "no PacnetTransaction specified" : pacnetTransaction.ToString())
-				);
+				, HttpUtility.HtmlEncode(setupfeeOffsetpayment == null ? "" : setupfeeOffsetpayment.ToString())
+				, HttpUtility.HtmlEncode(feePayment == null ? "" : feePayment.ToString()));
 
 			new Mail().Send(
 				emailToAddress,
@@ -325,7 +359,7 @@
 				emailFromName,		// fromName
 				subject
 				);
-			
+
 		} // SendMail
 
 

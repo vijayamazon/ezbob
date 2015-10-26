@@ -17,6 +17,7 @@ CREATE TYPE NL_PaymentsList AS TABLE (
 	[CreationTime] DATETIME NOT NULL,
 	[CreatedByUserID] INT NULL,
 	[DeletionTime] DATETIME NULL,
+	[DeletionNotificationTime] DATETIME NULL,
 	[DeletedByUserID] INT NULL,
 	[Notes] NVARCHAR(MAX) NULL,
 	[LoanID] INT NOT NULL
@@ -37,6 +38,7 @@ BEGIN
 		[CreationTime],
 		[CreatedByUserID],
 		[DeletionTime],
+		[DeletionNotificationTime],
 		[DeletedByUserID],
 		[Notes],
 		[LoanID]
@@ -48,6 +50,7 @@ BEGIN
 		[CreationTime],
 		[CreatedByUserID],
 		[DeletionTime],
+		[DeletionNotificationTime],
 		[DeletedByUserID],
 		[Notes],
 		[LoanID]

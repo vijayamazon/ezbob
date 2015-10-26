@@ -201,7 +201,7 @@
 			// 2. get Schedule and Fees
 			try {
 				// init calculator
-                nlCalculator = new LegacyLoanCalculator(nlModel);
+				nlCalculator = new LegacyLoanCalculator(nlModel);
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {

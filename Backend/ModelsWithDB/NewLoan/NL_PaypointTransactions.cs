@@ -38,5 +38,16 @@
 		[Length(32)]
 		[DataMember]
 		public string IP { get; set; }
+
+
+		public override string ToString() {
+			try {
+				return ToStringTable();
+			} catch (InvalidCastException invalidCastException) {
+				Console.WriteLine(invalidCastException);
+			}
+			return string.Empty;
+		}
+
 	} // class NL_PaypointTransactions
 } // ns

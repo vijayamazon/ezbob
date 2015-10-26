@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Globalization;
-	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
@@ -26,6 +25,7 @@
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1)); // checks if last loan was taken a minute before "now" - ?? to prevent multiple clicking on "create loan" button?
 			ValidateRepaymentPeriodAndInterestRate(cus);
 		*/
+		// TODO check if "credit available" is enough for this loan amount
 
 		/// <exception cref="ArgumentNullException"><paramref /> is null. </exception>
 		/// <exception cref="FormatException"><paramref /> is not in the correct format. </exception>
@@ -101,7 +101,7 @@
 			// offer-fees
 			Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet",CommandSpecies.StoredProcedure,new QueryParameter("@OfferID", dataForLoan.OfferID));
 
-			Result.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
+			//Result.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
 
 			// discounts
 			if (dataForLoan.DiscountPlanID > 0) {
@@ -112,8 +112,8 @@
 				foreach (NL_DiscountPlanEntries dpe in discounts) {
 					Result.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 				}
-				Log.Debug("Discounts");
-				Result.Offer.DiscountPlan.ForEach(d => Log.Debug(d));
+				//Log.Debug("Discounts");
+				//Result.Offer.DiscountPlan.ForEach(d => Log.Debug(d));
 			}
 		} // Execute
 

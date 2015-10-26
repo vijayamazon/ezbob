@@ -4,6 +4,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using ConfigManager;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
 	using NUnit.Framework;
 
@@ -162,12 +163,12 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 		[Test]
 		public void Formatting() {
 			DateTime d = new DateTime(2015, 12, 28, 13, 25, 59);
-			object[] zz = {"LoanScheduleID", "LoanHistoryID", "LoanScheduleStatusID", "Position", "PlannedDate", "Principal", "InterestRate", "Interest", "FeesAmount", "AmountDue", "InterestPaid", "FeesPaid", "Balance"};
+			object[] zz = { "LoanScheduleID", "LoanHistoryID", "LoanScheduleStatusID", "Position", "PlannedDate", "Principal", "InterestRate", "Interest", "FeesAmount", "AmountDue", "InterestPaid", "FeesPaid", "Balance" };
 			Console.WriteLine("{0,-2} {1,-2} {2,-2} {3,-2} {4,-2} {6,-2} {7,-2} {8,-2} {9,-2} {10,-2} {11,-2} {12,-2} {13,-2} ", zz);
-			Console.WriteLine("{0,-16}{1,-15}{2,-22}{3,-10}{4,-13:MM/dd/yy} {6,-11:C2} {7,-14:F4} {8,-10:C2} {9,-12:C2} {10,-11:C2} {11,-14:C2} {12,-10:C2} {13,-9:C2} ",5, 44, 1, 3, d, 333m, 444, 0.06000000000m, 0m, 0m, 33m, 366m, 0m, 0m);
+			Console.WriteLine("{0,-16}{1,-15}{2,-22}{3,-10}{4,-13:MM/dd/yy} {6,-11:C2} {7,-14:F4} {8,-10:C2} {9,-12:C2} {10,-11:C2} {11,-14:C2} {12,-10:C2} {13,-9:C2} ", 5, 44, 1, 3, d, 333m, 444, 0.06000000000m, 0m, 0m, 33m, 366m, 0m, 0m);
 		}
 
-	
+
 		[Test]
 		public void CreateSchedule() {
 			NL_Model model = new NL_Model(56) {
@@ -180,15 +181,16 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 				RepaymentCount = 4,
 				InterestRate = 0.0225m,
 			});
-			var discounts= DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet",CommandSpecies.StoredProcedure,new QueryParameter("@DiscountPlanID", 2));
+			var discounts= DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet", CommandSpecies.StoredProcedure, new QueryParameter("@DiscountPlanID", 2));
 			foreach (NL_DiscountPlanEntries dpe in discounts) {
 				model.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 			}
 			//model.Offer.DiscountPlan.ForEach(d => Log.Info("discount entry: {0}", d));
 			model.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", 3));
 			model.Offer.OfferFees.ForEach(f => Log.Info("fee: {0}", f));
-			ALoanCalculator calc = new LegacyLoanCalculator(model);
+			
 			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
 				calc.CreateSchedule();
 			} catch (NoInitialDataException noInitialDataException) {
 				Log.Debug(noInitialDataException);
@@ -198,13 +200,39 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 				Log.Debug(invalidInitialInterestRateException);
 			} catch (InvalidInitialAmountException invalidInitialAmountException) {
 				Log.Debug(invalidInitialAmountException);
+			} catch (Exception exception) {
+				Log.Error("No calculator instance {0}", exception);
 			}
 
 			Log.Info(model.Loan);
 			//model.Loan.LastHistory().Schedule.ForEach(s => Log.Info(s.ToString()));
 		}
 
-		
+
+		[Test]
+		public void CalculatorEvents() {
+			const long loanID = 13;
+
+			GetLastOffer s = new GetLastOffer(56);
+			s.Execute();
+			Console.WriteLine(s.Offer);
+			
+			return;
+
+			NL_Model model = new NL_Model(56);
+			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			strategy.Execute();
+
+			model = strategy.Result;
+			Log.Debug(model);
+
+			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				calc.events.ForEach(e => Log.Debug(e));
+			} catch (Exception exception) {
+				Log.Error("No calculator instance {0}", exception);
+			}
+		}
 
 	} // class TestLoanCalculator
 } // namespace

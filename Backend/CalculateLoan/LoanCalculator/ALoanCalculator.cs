@@ -7,14 +7,14 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
-	
+	using MoreLinq;
+
 	/// <summary>
-	/// This class is implemented as Facade pattern.
-	/// https://en.wikipedia.org/wiki/Facade_pattern
+	/// This class is implemented as Facade pattern. https://en.wikipedia.org/wiki/Facade_pattern
 	/// </summary>
 	public abstract partial class ALoanCalculator {
 		/// <exception cref="NoInitialDataException">Condition. </exception>
-		protected ALoanCalculator(NL_Model model) {
+		protected ALoanCalculator(NL_Model model, DateTime? calculationDate = null) {
 			//if (model == null)
 			//	Log.Msg("No model specified for loan calculator, using a new empty model.");
 
@@ -27,23 +27,36 @@
 			WorkingModel = model;
 			this.writeToLog = true;
 
+			// use now as default 
+			if (calculationDate == DateTime.MinValue)
+				CalculationDate = DateTime.UtcNow;
+
 			// reset internal vars
 			initialLoanAmount = 0;
-			openPrincipal = 0;
-			totalFees = 0;
-			totalPrincipal = 0;
-			totalInterest = 0;
-			paidFees = 0;
-			paidInterest = 0;
-			paidPrincipal = 0;
+			//openPrincipal = 0;
+			//totalFees = 0;
+			//totalPrincipal = 0;
+			//totalInterest = 0;
+			//paidFees = 0;
+			//paidInterest = 0;
+			//paidPrincipal = 0;
 
+			List<LoanEvent> historiesEvents = new List<LoanEvent>();
 			List<LoanEvent> feesEvents = new List<LoanEvent>();
 			List<LoanEvent> paymentEvents = new List<LoanEvent>();
 			List<LoanEvent> schedulesEvents = new List<LoanEvent>();
 
+			if (model.Loan.Histories.Count > 0) {
+				model.Loan.Histories.ForEach(e => historiesEvents.Add(new LoanEvent(new DateTime(e.EventTime.Year, e.EventTime.Month, e.EventTime.Day), e)));
+			}
+
 			if (model.Loan.Fees.Count > 0) {
 				model.Loan.Fees.ForEach(e => feesEvents.Add(new LoanEvent(new DateTime(e.AssignTime.Year, e.AssignTime.Month, e.AssignTime.Day), e)));
-				feesEvents.RemoveAll(e => e.Fee.LoanFeeTypeID == (int)NLFeeTypes.SetupFee); // TODO: mark setup fees that not for charge, somehow, or place in other table
+				// handled in AddLoan strategy 
+				//feesEvents.RemoveAll(e => e.Fee.LoanFeeTypeID == (int)NLFeeTypes.SetupFee); // TODO: mark setup fees that not for charge, somehow, or place in other table
+
+				totalFees = 0;
+				model.Loan.Fees.Where(f => f.DisabledTime == null).ForEach(f => totalFees += f.Amount);
 			}
 
 			if (model.Loan.Payments.Count > 0)
@@ -51,70 +64,63 @@
 
 			if (model.Loan.Histories.Count > 0) {
 				model.Loan.Histories.ForEach(h => h.Schedule.ForEach(e => schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e))));
-				initialLoanAmount = model.Loan.FirstHistory()
-					.Amount;
+
+				initialLoanAmount = model.Loan.FirstHistory().Amount;
+				totalPrincipal = initialLoanAmount;
 			}
 
 			// TODO adust to all cases
-			if (model.Loan.FirstHistory() != null) {
-				eventDayStart = new LoanEvent(model.Loan.FirstHistory().EventTime.Date); // _term
-				eventDayEnd = new LoanEvent(eventDayStart.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
-			}
+			//if (model.Loan.FirstHistory() != null) {
+			//	eventDayStart = new LoanEvent(model.Loan.FirstHistory().EventTime.Date); // _term
+			//	eventDayEnd = new LoanEvent(eventDayStart.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
+			//}
 
-			this.events = schedulesEvents.Union(paymentEvents)
-								 .Union(feesEvents)
+			this.events = historiesEvents
+				.Union(schedulesEvents)
+				.Union(paymentEvents)
+				.Union(feesEvents)
 				// .Union(rollOverEvents) TODO add rolovers
 				// .Union(reschedules) TODO add reschedules
-								 .Union(new[] { eventDayStart, eventDayEnd })
-								 .OrderBy(e => e.Date)
-								 .ThenBy(e => e.Priority)
-								 .ToList();
+				// .Union(reschedules) TODO add reschedules
+				//.Union(new[] { eventDayStart, eventDayEnd })
+				.OrderBy(e => e.Date)
+				.ThenBy(e => e.Priority)
+				.ToList();
+
+			//this.events.ForEach(e => Log.Debug(e));
 
 		} // constructor
 
-
 		public abstract string Name { get; }
+
+		// date of loan state calculation
+		public DateTime CalculationDate { get; set; }
 
 		// initial amount, amount taken
 		protected decimal initialLoanAmount { get; set; }
 
-		/// <summary>
-		///деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee
-		///money, that really have customer. loan balance without interest and fees
-		/// </summary>
-		// open principal
-		protected decimal openPrincipal { get; set; }
-		//private decimal _principal;
-
-		//schedules count
+		//	schedules count
 		protected int n { get; set; }
 
+		// A, i.e. total principal of loan == initialAmount
+		protected decimal totalPrincipal { get; set; }
 		// total fees assigned to loan
 		protected decimal totalFees { get; set; }
-		// A, i.e. total principal of loan
-		protected decimal totalPrincipal { get; set; }
 		// total loan interest (earned interest). Доход банка за все время заема
 		protected decimal totalInterest { get; set; } // _totalInterestToPay
-
-		// paid fees
-		protected decimal paidFees { get; set; }
-		// paid interest
-		protected decimal paidInterest { get; set; }
-		// paid principal
-		protected decimal paidPrincipal { get; set; }
 
 		/// <summary>
 		/// последовательность событий, относящихся к кредиту
 		/// events sequence related to loan
 		/// </summary>
-		public List<LoanEvent> events = new List<LoanEvent>(); // protected TODO for tests only public
+		public List<LoanEvent> events; // protected TODO for tests only public
 
 		// date of last action (event). Needed for interest calculation дата последнего действия. нужна для расчета процентов
 		protected DateTime lastEventDate { get; set; }
 
 		// TODO check usage
-		protected LoanEvent eventDayStart { get; set; }
-		protected LoanEvent eventDayEnd { get; set; }
+		//protected LoanEvent eventDayStart { get; set; }
+		//protected LoanEvent eventDayEnd { get; set; }
 
 		protected static ASafeLog Log { get { return Library.Instance.Log; } }
 		private bool writeToLog;
@@ -249,14 +255,6 @@
 		/// <returns></returns>
 		public abstract decimal CalculateDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null);
 
-		/*	// TODO
-			protected decimal CalculateDailyInterestForOpenPrincipal() {
-				return 0m;
-			} // GetDailyInterestForOpenPrincipal*/
-
-
-
-
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.
@@ -265,7 +263,7 @@
 		/// <param name="monthlyInterestRate">Monthly interest rate.</param>
 		/// <returns>Daily interest rate with bad status/freeze interest check.</returns>
 		internal decimal InterestRateForDate(DateTime currentDate, decimal monthlyInterestRate) {
-			// TODO: check freeze/bad status and reset interest if need
+			// TODO: check freeze and reset interest if need. "bad status" phase 2
 			//if (WorkingModel.BadPeriods.Any(bp => bp.Contains(currentDate)))
 			//	return 0;
 			decimal dr = CalculateDailyInterestRate(monthlyInterestRate, currentDate);
@@ -279,27 +277,27 @@
 		/// </summary>
 		/// <param name="currentEvent"></param>
 		/// <param name="monthlyInterestrate"></param>
-		public virtual void InterestBtwnEvents(DateTime currentEvent, decimal monthlyInterestrate) {
+		//public virtual void InterestBtwnEvents(DateTime currentEvent, decimal monthlyInterestrate) {
 
-			int daysDiff = currentEvent.Date.Subtract(lastEventDate).Days;
-			DateTime start = lastEventDate;
+		//	int daysDiff = currentEvent.Date.Subtract(lastEventDate).Days;
+		//	DateTime start = lastEventDate;
 
-			Log.Info("daysDiff: {0}, lastEventDate: {1}, currentEvent: {2}", daysDiff, initialLoanAmount, currentEvent);
+		//	Log.Info("daysDiff: {0}, lastEventDate: {1}, currentEvent: {2}", daysDiff, initialLoanAmount, currentEvent);
 
-			//	interest for period
-			for (int i = 0; i < daysDiff; i++) {
+		//	//	interest for period
+		//	for (int i = 0; i < daysDiff; i++) {
 
-				DateTime rateDate = start.AddDays(i);
-				decimal dailyInterestRate = InterestRateForDate(rateDate, monthlyInterestrate); // dr' = r/daysDiff
-				decimal interest = openPrincipal * dailyInterestRate; //daily interest
-				totalInterest += interest;
+		//		DateTime rateDate = start.AddDays(i);
+		//		decimal dailyInterestRate = InterestRateForDate(rateDate, monthlyInterestrate); // dr' = r/daysDiff
+		//		decimal interest = openPrincipal * dailyInterestRate; //daily interest
+		//		totalInterest += interest;
 
-				Log.Info("rateDate: {0} interest: {1} totalInterest: {2} openPrincipal: {3}, i={4}", rateDate, interest, totalInterest, openPrincipal, i);
-			}
+		//		Log.Info("rateDate: {0} interest: {1} totalInterest: {2} openPrincipal: {3}, i={4}", rateDate, interest, totalInterest, openPrincipal, i);
+		//	}
 
-			//	last event datetime
-			lastEventDate = currentEvent;
-		}
+		//	//	last event datetime
+		//	lastEventDate = currentEvent;
+		//}
 
 
 

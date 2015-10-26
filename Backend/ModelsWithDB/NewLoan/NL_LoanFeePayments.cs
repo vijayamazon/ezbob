@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
+	using System;
 	using System.Runtime.Serialization;
 	using Ezbob.Utils.dbutils;
 
@@ -18,5 +19,14 @@
 
 		[DataMember]
 		public decimal Amount { get; set; }
+
+		public override string ToString() {
+			try {
+				return ToStringTable();
+			} catch (InvalidCastException invalidCastException) {
+				Console.WriteLine(invalidCastException);
+			}
+			return string.Empty;
+		}
 	} // class NL_LoanFeePayments
 } // ns

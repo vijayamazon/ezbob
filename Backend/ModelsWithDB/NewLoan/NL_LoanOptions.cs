@@ -1,11 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
-	using System.Reflection;
 	using System.Runtime.Serialization;
-	using System.Text;
-	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
-	using Ezbob.Utils.Extensions;
 
 	[DataContract(IsReference = true)]
 	public class NL_LoanOptions : AStringable {

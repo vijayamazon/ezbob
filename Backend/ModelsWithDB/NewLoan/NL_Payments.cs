@@ -68,19 +68,16 @@
 		/// <returns></returns>
 		public override string ToString() {
 			// payment
-			StringBuilder sb = new StringBuilder().Append(base.ToString()).Append(Environment.NewLine);
+			StringBuilder sb = new StringBuilder().Append(base.ToString());
 
-			sb.Append(Environment.NewLine);
+			sb.Append("Paypoint Transactions:");
 
 			if (PaypointTransactions.Count > 0) {
-				sb.Append(GetHeadersLine(typeof(NL_PaypointTransactions)));
+				sb.Append(GetHeadersLine(typeof(NL_PaypointTransactions))).Append(Environment.NewLine);
 				PaypointTransactions.ForEach(s => sb.Append(s.ToString()));
-			} else {
-				sb.Append("No paypoint transactions found");
-			}
+			} // else sb.Append("No paypoint transactions found");
 
 			return sb.ToString();
-
 		}
 
 	} // class NL_Payments

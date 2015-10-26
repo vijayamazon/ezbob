@@ -1,11 +1,10 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan
-{
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using ConfigManager;
-    using Ezbob.Utils.Attributes;
+﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan{
+	using System.Collections.Generic;
+	using System.Runtime.Serialization;
+	using ConfigManager;
+	using Ezbob.Utils.Attributes;
 
-    [DataContract]
+	[DataContract]
     public class NL_Model : AStringable
     {
 
@@ -54,7 +53,7 @@
         [DataMember]
         public string CalculatorImplementation { get; private set; } // AloanCalculator LegacyLoanCalculator/BankLikeLoanCalculator
 
-
+		/*/// <exception cref="Exception">Condition. </exception>
      /*   public ALoanCalculator CalculatorInstance()
         {
             // set default
@@ -90,7 +89,7 @@
                 throw new Exception(string.Format("Failed to create calculator instance for {0}", CalculatorImplementation), e);
             }
             return null;
-        }*/
+		}*/
 
 
 
