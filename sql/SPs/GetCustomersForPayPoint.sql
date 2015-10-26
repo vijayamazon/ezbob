@@ -20,6 +20,8 @@ BEGIN
 		c.Fullname,
 		c.Id AS CustomerId,
 		c.Name AS Email,
+		c.TypeOfBusiness,
+		ls.Date AS DueDate,
 		ISNULL(lo.ReductionFee, 1) AS ReductionFee,
 		l.RefNum,
 		CAST(
@@ -81,7 +83,9 @@ BEGIN
 		FirstName,
 		Fullname,
 		CustomerId,
-		Email,
+		Email,		
+		TypeOfBusiness,
+		DueDate,
 		ReductionFee,
 		RefNum,
 		LastInstallment
