@@ -14,7 +14,7 @@ CREATE TYPE NL_LoanOptionsList AS TABLE (
 	[AutoCharge] BIT NOT NULL,
 	[StopAutoChargeDate] DATETIME NULL,
 	[AutoLateFees] BIT NOT NULL,
-	[ReductionFee] BIT NOT NULL,
+	[PartialAutoCharging] BIT NOT NULL,
 	[LatePaymentNotification] BIT NOT NULL,
 	[CaisAccountStatus] NVARCHAR(50) NULL,
 	[ManualCaisFlag] NVARCHAR(20) NULL,
@@ -44,7 +44,7 @@ BEGIN
       ,[AutoCharge]
       ,[StopAutoChargeDate]
       ,[AutoLateFees]
-      ,[ReductionFee]
+      ,[PartialAutoCharging]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]
       ,[ManualCaisFlag]
@@ -62,7 +62,7 @@ BEGIN
       ,[AutoCharge]
       ,[StopAutoChargeDate]
       ,[AutoLateFees]
-      ,[ReductionFee]
+      ,[PartialAutoCharging]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]
       ,[ManualCaisFlag]

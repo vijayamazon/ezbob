@@ -127,7 +127,7 @@
                 LoanOptionsID = options.Id,
                 MailSendingAllowed = options.MailSendingAllowed,
                 ManualCaisFlag = options.ManualCaisFlag,
-                ReductionFee = options.ReductionFee,
+                PartialAutoCharging = options.ReductionFee,
                 SmsSendingAllowed = options.SmsSendingAllowed,
                 StopAutoChargeDate = options.StopAutoChargeDate,
                 StopLateFeeFromDate = options.StopLateFeeFromDate,
@@ -138,7 +138,7 @@
                 Notes = "From loan option popup",
             };
 
-            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId);;
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId, null);;
 			Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
             
 			return Json(new { });

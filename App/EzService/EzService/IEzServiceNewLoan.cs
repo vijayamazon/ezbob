@@ -1,5 +1,6 @@
 ﻿namespace EzService {
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 	using System.ServiceModel;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -23,7 +24,7 @@
 		NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
 
 		[OperationContract]
-		NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId);
+        NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null);
 
 		[OperationContract]
 		NLLongActionResult AddLoan(int? userID, int? customerID, NL_Model model);

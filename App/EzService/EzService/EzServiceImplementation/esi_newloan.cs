@@ -71,9 +71,10 @@
 			return strategy.NLModel;
 		} // AddPayment
 
-		public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId) {
+        public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null)
+        {
 			AddLoanOptions stra;
-			var amd = ExecuteSync(out stra, customerID, userID, loanOptions, oldLoanId);
+            var amd = ExecuteSync(out stra, customerID, userID, loanOptions, oldLoanId, PropertiesUpdateList);
 			return new NLLongActionResult {
 				MetaData = amd,
 				Value = stra.LoanOptionsID

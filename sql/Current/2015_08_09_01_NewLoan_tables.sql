@@ -939,7 +939,7 @@ BEGIN
 		AutoCharge BIT NOT NULL,
 		StopAutoChargeDate DATETIME NULL,
 		AutoLateFees BIT NOT NULL,				
-		ReductionFee BIT NOT NULL,
+		PartialAutoCharging BIT NOT NULL,
 		LatePaymentNotification BIT NOT NULL,
 		CaisAccountStatus NVARCHAR(50) NULL,
 		ManualCaisFlag NVARCHAR(20) NULL,

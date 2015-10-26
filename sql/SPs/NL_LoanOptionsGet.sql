@@ -15,7 +15,7 @@ BEGIN
       ,[AutoCharge]
       ,[StopAutoChargeDate]
       ,[AutoLateFees]
-      ,[ReductionFee]
+      ,[PartialAutoCharging]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]
       ,[ManualCaisFlag]

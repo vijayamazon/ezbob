@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
@@ -275,7 +276,12 @@
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
 
-		    SaveNewLoanOptions(options);
+            var PropertiesUpdateList = new List<String>() {
+		        "StopLateFeeFromDate",
+		        "StopLateFeeToDate"
+		    };
+
+            SaveNewLoanOptions(options, PropertiesUpdateList);
 
 		    model.Options = this.loanOptionsRepository.GetByLoanId(id);
 			RescheduleSetmodel(model, this._loans.Get(id));
@@ -293,7 +299,12 @@
 			options.StopLateFeeToDate = null;
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
-		    SaveNewLoanOptions(options);
+
+            var PropertiesUpdateList = new List<String>() {
+		        "StopLateFeeFromDate",
+		        "StopLateFeeToDate"
+		    };
+            SaveNewLoanOptions(options, PropertiesUpdateList);
             
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
@@ -324,7 +335,11 @@
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
 
-		    SaveNewLoanOptions(options);
+
+            var PropertiesUpdateList = new List<String>() {
+		        "StopAutoChargeDate",
+		    };
+            SaveNewLoanOptions(options, PropertiesUpdateList);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -342,7 +357,11 @@
 			options.StopAutoChargeDate = null;
 			this.loanOptionsRepository.SaveOrUpdate(options);
 
-            SaveNewLoanOptions(options);
+            var PropertiesUpdateList = new List<String>() {
+		        "StopAutoChargeDate",
+		    };
+
+            SaveNewLoanOptions(options, PropertiesUpdateList);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -422,7 +441,8 @@
 			return Json(model);
 		} // RemoveFreezeInterval
 
-        private void SaveNewLoanOptions(LoanOptions options)
+        private void SaveNewLoanOptions(LoanOptions options,
+                                        List<String> PropertiesUpdateList)
         {
 
             var context = ObjectFactory.GetInstance<IWorkplaceContext>();
@@ -440,7 +460,7 @@
                 LoanOptionsID = options.Id,
                 MailSendingAllowed = options.MailSendingAllowed,
                 ManualCaisFlag = options.ManualCaisFlag,
-                ReductionFee = options.ReductionFee,
+                PartialAutoCharging = options.ReductionFee,
                 SmsSendingAllowed = options.SmsSendingAllowed,
                 StopAutoChargeDate = options.StopAutoChargeDate,
                 StopLateFeeFromDate = options.StopLateFeeFromDate,
@@ -451,7 +471,7 @@
                 Notes = "Late fee option saved From Edit Loan page",
             };
 
-            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId, PropertiesUpdateList.ToArray());
             Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
         }
 	}

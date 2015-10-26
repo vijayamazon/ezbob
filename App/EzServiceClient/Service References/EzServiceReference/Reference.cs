@@ -4157,10 +4157,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanOptions", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanOptionsResponse")]
-        ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanOptions(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId);
+        ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanOptions(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId, string[] PropertiesUpdateList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanOptions", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanOptionsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanOptionsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanOptionsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId, string[] PropertiesUpdateList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
         ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoan(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
@@ -5702,12 +5702,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddLoanLegalsAsync(userID, customerID, loanLegals);
         }
         
-        public ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanOptions(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId) {
-            return base.Channel.AddLoanOptions(userID, customerID, loanOptions, oldLoanId);
+        public ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanOptions(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId, string[] PropertiesUpdateList) {
+            return base.Channel.AddLoanOptions(userID, customerID, loanOptions, oldLoanId, PropertiesUpdateList);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanOptionsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId) {
-            return base.Channel.AddLoanOptionsAsync(userID, customerID, loanOptions, oldLoanId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanOptionsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId, string[] PropertiesUpdateList) {
+            return base.Channel.AddLoanOptionsAsync(userID, customerID, loanOptions, oldLoanId, PropertiesUpdateList);
         }
         
         public ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoan(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {

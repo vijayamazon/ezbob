@@ -71,7 +71,7 @@
 				AutoCharge = true,
 				StopAutoChargeDate = DateTime.UtcNow,
 				AutoLateFees = true,
-				ReductionFee = true,
+                PartialAutoCharging = true,
 				LatePaymentNotification = true,
 				CaisAccountStatus = "asd",
 				ManualCaisFlag = "qwe",

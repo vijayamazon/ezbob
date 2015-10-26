@@ -23,7 +23,7 @@
 		public bool AutoLateFees { get; set; }
 
 		[DataMember]
-		public bool ReductionFee { get; set; }
+        public bool PartialAutoCharging { get; set; }
 
 		[DataMember]
 		public bool LatePaymentNotification { get; set; }
