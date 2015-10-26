@@ -7,6 +7,7 @@
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
@@ -25,6 +26,8 @@
 
 	[TestFixture]
 	class TestNewLoan : BaseTestFixtue {
+
+		
 
 
 		[Test]
@@ -612,7 +615,28 @@
 			loanFees.ForEach(f => m_oLog.Debug(f));
 		}
 
-	
+
+		[Test]
+		public void CalculatorEvents() {
+			const long loanID = 17;
+			NL_Model model = new NL_Model(56) {
+				UserID = 357,
+				Loan = new NL_Loans()
+			};
+
+			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			strategy.Execute();
+
+			model = strategy.Result;
+			m_oLog.Debug(model);
+
+			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				calc.events.ForEach(e => m_oLog.Debug(e));
+			} catch (Exception exception) {
+				m_oLog.Error("{0}", exception);
+			}
+		}
 
 	} // class TestNewLoan
 } // namespace

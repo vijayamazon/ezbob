@@ -1,12 +1,9 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
-	using System.Reflection;
 	using System.Runtime.Serialization;
-	using System.Text;
 	using DbConstants;
 	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
-	using Ezbob.Utils.Extensions;
 
 	[DataContract(IsReference = true)]
 	public class NL_LoanFees : AStringable {
@@ -49,7 +46,6 @@
 		[DataMember]
 		public string Notes { get; set; }
 
-		public new static int ColumnTotalWidth = 26;
 
 		public override string ToString() {
 			try {

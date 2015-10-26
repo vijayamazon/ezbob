@@ -251,6 +251,7 @@
 		public LoanScheduleItem GetState() {
 			var item = new LoanScheduleItem() { Loan = _loan, Date = _term };
 
+
 			_eventDayEnd.Action = () => {
 				item.Interest = Math.Round(InterestToPay, 2);
 				item.Fees = Math.Round(FeesToPay, 2);
@@ -303,12 +304,18 @@
 			_totalRollOversToPay += rollover.Payment;
 		}
 
+		/// <summary>
+		/// el: 1. cumulate _totalFeesToPay;  2. add fee amount to first unpaid schedule item all non paid fees; 2. cumulate _chargesToPay list
+		/// </summary>
+		/// <param name="charge"></param>
 		private void ProcessCharge(LoanCharge charge) {
+			// el: if loan PaidOff, mark the charge as Expired
 			if (_loan.Status == LoanStatus.PaidOff) {
 				charge.State = "Expired";
 				return;
 			}
 
+			// el: attach fee amount to the first unpaid schedule item. will be last item from processed schedules list
 			var lastInstallment = _processed.Where(i => i.Status == LoanScheduleStatus.Late || i.Status == LoanScheduleStatus.StillToPay).LastOrDefault();
 			if (lastInstallment != null) {
 				if (lastInstallment.Status == LoanScheduleStatus.Late || (lastInstallment.Status == LoanScheduleStatus.StillToPay && _schedule.Count == _processed.Count)) {
@@ -317,9 +324,12 @@
 				}
 			}
 
+			// el: add amount to totalFees 
 			_totalFeesToPay += charge.Amount;
 
+			// el: reset AmountPaid of the charge
 			charge.AmountPaid = 0;
+			// el: add to list of _chargesToPay - handles in RecordFeesPayment
 			_chargesToPay.Add(charge);
 		}
 
@@ -601,9 +611,14 @@
 			}
 		}
 
+		// set LoanRepayment (p), AmountDue (f+i+p), change Status if need; add the item to _processed list etc.
 		private void ProcessInstallment(LoanScheduleItem installment) {
+
+			// el: set by previous schedule item date or DateTime.MinVaue
 			installment.PrevInstallmentDate = _prevInstallmentDate;
+			// el: swap
 			_prevInstallmentDate = installment.Date;
+			// el: current open principal
 			installment.BalanceBeforeRepayment = _principal;
 			installment.LoanRepayment = _expectedPrincipal - installment.Balance;
 

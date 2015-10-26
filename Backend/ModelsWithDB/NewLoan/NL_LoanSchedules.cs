@@ -88,6 +88,7 @@
 			set { this._feesPaid = value; }
 		}
 
+		public new const string propertyTab = "\t";
 	
 		/// <summary>
 		/// prints data only
@@ -101,6 +102,10 @@
 				Console.WriteLine(invalidCastException);
 			}
 			return string.Empty;
+		}
+
+		public string ToBaseString() {
+			return base.ToString();
 		}
 
 	} // class NL_LoanSchedules

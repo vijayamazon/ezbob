@@ -73,7 +73,7 @@
 		private List<NL_LoanHistory> _histories = new List<NL_LoanHistory>();
 		private List<NL_LoanFees> _fees = new List<NL_LoanFees>();
 		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
-		private List<NL_LoanOptions> _loanOptions = new List<NL_LoanOptions>();
+		private NL_LoanOptions _loanOptions = new NL_LoanOptions();
 		private List<NL_Payments> _payments = new List<NL_Payments>();
 		private List<NL_LoanSchedulePayments> _schedulePayments = new List<NL_LoanSchedulePayments>();
 		private List<NL_LoanFeePayments> _feePayments = new List<NL_LoanFeePayments>();
@@ -101,7 +101,7 @@
 
 		[DataMember]
 		[NonTraversable]
-		public List<NL_LoanOptions> LoanOptions {
+		public NL_LoanOptions LoanOptions {
 			get { return this._loanOptions; }
 			set { this._loanOptions = value; }
 		}
@@ -211,9 +211,9 @@
 
 			sb.Append(Environment.NewLine).Append("Loan options:");
 
-			if (LoanOptions.Count > 0) {
+			if (LoanOptions.LoanOptionsID > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanOptions)));
-				LoanOptions.ForEach(s => sb.Append(s.ToString()));
+				sb.Append(LoanOptions);
 			} // else sb.Append("No loan options.");
 		
 			return sb.ToString();

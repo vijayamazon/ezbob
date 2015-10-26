@@ -209,30 +209,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 		}
 
 
-		[Test]
-		public void CalculatorEvents() {
-			const long loanID = 13;
-
-			GetLastOffer s = new GetLastOffer(56);
-			s.Execute();
-			Console.WriteLine(s.Offer);
-			
-			return;
-
-			NL_Model model = new NL_Model(56);
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
-			strategy.Execute();
-
-			model = strategy.Result;
-			Log.Debug(model);
-
-			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				calc.events.ForEach(e => Log.Debug(e));
-			} catch (Exception exception) {
-				Log.Error("No calculator instance {0}", exception);
-			}
-		}
+		
 
 	} // class TestLoanCalculator
 } // namespace

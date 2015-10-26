@@ -41,7 +41,6 @@
 
 		[DataMember]
 		public bool SmsSendingAllowed { get; set; }
-
 		[DataMember]
 		public bool MailSendingAllowed { get; set; }
 
@@ -57,12 +56,12 @@
 		[Length(LengthType.MAX)]
 		[DataMember]
 		public string Notes { get; set; }
-        
-        [DataMember]
-        public virtual DateTime? StopLateFeeFromDate { get; set; }
-        
-        [DataMember]
-        public virtual DateTime? StopLateFeeToDate { get; set; }
+
+		[DataMember]
+		public virtual DateTime? StopLateFeeFromDate { get; set; }
+
+		[DataMember]
+		public virtual DateTime? StopLateFeeToDate { get; set; }
 
 		/// <summary>
 		/// prints data only

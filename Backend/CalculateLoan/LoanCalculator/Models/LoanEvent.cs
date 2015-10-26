@@ -89,27 +89,30 @@
 		public string GetTypeString() {
 			StringBuilder sb = new StringBuilder();
 			if (History != null) {
-				sb.Append("History").Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanHistory))).Append(History);
+				sb.Append("History:\t")
+					.Append(string.Format("Amount: {0}, RepaymentCount: {1}, InterestRate: {2}, Description: {3}",
+						History.Amount, History.RepaymentCount, History.InterestRate, History.Description)); //.Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanHistory))).Append(History);
 				return sb.ToString();
 			}
 			if (Installment != null) {
-				sb.Append("Installment").Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanSchedules))).Append(Installment);
+				sb.Append("Installment:\t").Append(Installment.ToBaseString()); //.Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanSchedules))).Append(Installment);
 				return sb.ToString();
 			}
 			if (Payment != null) {
-				sb.Append("Payment").Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_Payments))).Append(Payment);
+				sb.Append("Payment:\t").Append(string.Format("Amount: {0}, PaymentMethodID: {1}, PaymentTime: {2}, PaymentStatusID: {3}", 
+					Payment.Amount, Payment.PaymentMethodID, Payment.PaymentTime, Payment.PaymentStatusID)); //.Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_Payments))).Append(Payment);
 				return sb.ToString();
 			}
 			if (Fee != null) {
-				sb.Append("Fee").Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanFees))).Append(Fee);
+				sb.Append("Fee:\t").Append(string.Format("Type: {0}, AssignTime: {1}, Amount: {2}", Fee.LoanFeeTypeID, Fee.AssignTime, Fee.Amount)); //.Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanFees))).Append(Fee);
 				return sb.ToString();
 			}
 			if (Rollover != null) {
-				sb.Append("Rollover").Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanRollovers))).Append(Rollover);
+				sb.Append("Rollover:\t"); //.Append(Environment.NewLine).Append(AStringable.GetHeadersLine(typeof(NL_LoanRollovers))).Append(Rollover);
 				return sb.ToString();
 			}
 			if (Action != null) {
-				sb.Append("Action").Append(Environment.NewLine).Append(Environment.NewLine).Append(Action);
+				sb.Append("Action:\t"); //.Append(Environment.NewLine).Append(Environment.NewLine).Append(Action);
 				return sb.ToString();
 			}
 			return "Unknown";

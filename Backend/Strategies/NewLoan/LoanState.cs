@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.DAL;
 	using Ezbob.Database;
+	using StructureMap.Attributes;
 
 	/// <summary>
 	/// Load NL Loan from DB into NL_Model 
@@ -23,24 +25,28 @@
 		public DateTime StateDate { get; set; }
 		public string Error;
 
+		//[SetterProperty]
+		//public ILoanDAL LoanDAL { get; set; }
+
 		public override void Execute() {
 			try {
+				// TODO replace with DAL calls
 
 				// loan
 				Result.Loan = new NL_Loans();
-				Result.Loan = DB.FillFirst<NL_Loans>("NL_LoansGet",
+				Result.Loan = LoanDAL.GetLoan(this.loanID);
+				/*Result.Loan = DB.FillFirst<NL_Loans>("NL_LoansGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@loanID", this.loanID)
-					//,new QueryParameter("@Now", StateDate)
-				);
+				);*/
 
 				// histories
 				Result.Loan.Histories.Clear();
-				Result.Loan.Histories = DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
+				Result.Loan.Histories = LoanDAL.GetLoanHistories(this.loanID, StateDate); /*DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID),
 					new QueryParameter("@Now", StateDate)
-				);
+				);*/
 
 				// schedules
 				foreach (NL_LoanHistory h in Result.Loan.Histories) {
@@ -67,8 +73,7 @@
 				);
 
 				// loan options
-				Result.Loan.LoanOptions.Clear();
-				Result.Loan.LoanOptions = DB.Fill<NL_LoanOptions>("NL_LoanOptionsGet",
+				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID)
 				);
@@ -84,7 +89,7 @@
 				if (Result.Loan.Payments.Count > 0) {
 
 					Result.Loan.SchedulePayments.Clear();
-					Result.Loan.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoansSchedulePaymentsGet",
+					Result.Loan.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID)
 					);

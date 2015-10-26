@@ -15,7 +15,7 @@
 
 		public const string lineSeparatorChar = "";//  "-";
 		public const string propertyDelimiter = ""; //"|";
-		public const string propertyTab = "\n";
+		public string propertyTab = "\n";
 		public const string novalue = "--";
 
 		public const string pad = " ";

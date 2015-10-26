@@ -109,6 +109,10 @@
 		// total loan interest (earned interest). Доход банка за все время заема
 		protected decimal totalInterest { get; set; } // _totalInterestToPay
 
+		protected List<NL_LoanSchedules> processedInstallments = new List<NL_LoanSchedules>();
+		protected List<NL_LoanFees> feesToPay = new List<NL_LoanFees>();
+		protected List<NL_LoanSchedules> schedule = new List<NL_LoanSchedules>();
+
 		/// <summary>
 		/// последовательность событий, относящихся к кредиту
 		/// events sequence related to loan
@@ -299,7 +303,33 @@
 		//	lastEventDate = currentEvent;
 		//}
 
+		private void ProcessFeeEvent(NL_LoanFees fee) {
+			if (fee == null)
+				return;
+			// el: if loan PaidOff, mark the charge as Expired
+			// el: Arrangement and servicing fees should be treated different
+			//if (_loan.Status == LoanStatus.PaidOff) {
+			//	charge.State = "Expired";
+			//	return;
+			//}
 
+			// el: attach fee amount to first unpaid schedule item all non paid fees
+			var unpaidScheduleItem = this.processedInstallments.LastOrDefault(s => s.LoanScheduleStatusID == (int)NLScheduleStatuses.Late || s.LoanScheduleStatusID == (int)NLScheduleStatuses.StillToPay);
+			if (unpaidScheduleItem != null) {
+				if (unpaidScheduleItem.LoanScheduleStatusID == (int)NLScheduleStatuses.Late || (unpaidScheduleItem.LoanScheduleStatusID == (int)NLScheduleStatuses.StillToPay && this.schedule.Count == this.processedInstallments.Count)) {
+					unpaidScheduleItem.AmountDue += fee.Amount;
+					//unpaidScheduleItem.Fees += fee.Amount;
+				}
+			}
+
+			// el: add amount to totalFees 
+			totalFees += fee.Amount;
+
+			// el: reset AmountPaid of the charge
+			//fee.AmountPaid = 0;
+			// el: add to list of _chargesToPay - handles in RecordFeesPayment
+			this.feesToPay.Add(fee);
+		}
 
 		/*
 		 * internal decimal GetDailyInterestRate(

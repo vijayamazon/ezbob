@@ -68,7 +68,8 @@
 		/// <returns></returns>
 		public override string ToString() {
 			// payment
-			StringBuilder sb = new StringBuilder().Append(base.ToString());
+			StringBuilder sb = new StringBuilder().Append(ToStringTable())
+				.Append(Environment.NewLine);
 
 			sb.Append("Paypoint Transactions:");
 

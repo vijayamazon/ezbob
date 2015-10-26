@@ -209,19 +209,7 @@
 
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
-
-			this.serviceClient.Instance.SalesForceUpdateOpportunity(
-				cus.Id,
-				cus.Id,
-				new ServiceClientProxy.EzServiceReference.OpportunityModel {
-					Email = cus.Name,
-					CloseDate = now,
-					TookAmount = (int)loan.LoanAmount,
-					ApprovedAmount = (int)(cus.CreditSum ?? 0) + (int)loanAmount,
-					DealCloseType = OpportunityDealCloseReason.Won.ToString()
-				}
-			);
-
+			
 			// This is the place where the loan is created and saved to DB
 			log.Info(
 				"Create loan for customer {0} cash request {1} amount {2}",
@@ -249,9 +237,8 @@
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
 			} // try
-
-
-			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans
+			
+			//this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans moved below
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
@@ -283,6 +270,20 @@
 			// save loan via new LoanHistory (139)
 			// SF
 			// flush
+
+			this.serviceClient.Instance.SalesForceUpdateOpportunity(
+				cus.Id,
+				cus.Id,
+				new ServiceClientProxy.EzServiceReference.OpportunityModel {
+					Email = cus.Name,
+					CloseDate = now,
+					TookAmount = (int)loan.LoanAmount,
+					ApprovedAmount = (int)(cus.CreditSum ?? 0) + (int)loanAmount,
+					DealCloseType = OpportunityDealCloseReason.Won.ToString()
+				}
+			);
+
+			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans
 
 			return loan;
 		} // CreateLoan

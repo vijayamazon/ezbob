@@ -1,8 +1,11 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan{
+	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using System.Text;
 	using ConfigManager;
 	using Ezbob.Utils.Attributes;
+	using EZBob.DatabaseLib.Model.Database;
 
 	[DataContract]
     public class NL_Model : AStringable
@@ -52,6 +55,29 @@
         // use default from configuration
         [DataMember]
         public string CalculatorImplementation { get; private set; } // AloanCalculator LegacyLoanCalculator/BankLikeLoanCalculator
+
+		
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(); //.Append(base.ToString());
+
+			sb.Append(Environment.NewLine).Append("Offer:");
+			if (Offer.Amount >0) {
+				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Offers)));
+				sb.Append(Offer);
+			}
+			sb.Append(Environment.NewLine).Append("Loan:");
+			if (Loan.LoanID > 0) {
+				//sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Loans)));
+				sb.Append(Loan);
+			}
+			sb.Append(Environment.NewLine).Append("FundTransfer:");
+			if (FundTransfer.FundTransferStatusID > 0) {
+				//sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_FundTransfers)));
+				sb.Append(FundTransfer);
+			}
+
+			return sb.ToString();
+		}
 
 		/*/// <exception cref="Exception">Condition. </exception>
      /*   public ALoanCalculator CalculatorInstance()
