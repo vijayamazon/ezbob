@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Models {
+﻿namespace Ezbob.Integration.LogicalGlue.Interface {
 	using System.ComponentModel;
 
 	public enum RequestType {

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}</ProjectGuid>
+    <ProjectGuid>{870D1EF2-5DDC-4621-BA1C-8D1FBBE05ED5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ezbob.Integration.LogicalGlue.Models</RootNamespace>
-    <AssemblyName>Ezbob.Integration.LogicalGlue.Models</AssemblyName>
+    <RootNamespace>Ezbob.Integration.LogicalGlue.Driver</RootNamespace>
+    <AssemblyName>Ezbob.Integration.LogicalGlue.Driver</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,24 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Category.cs" />
-    <Compile Include="EncodingFailure.cs" />
-    <Compile Include="Feature.cs" />
-    <Compile Include="FeatureName.cs" />
-    <Compile Include="FeatureType.cs" />
-    <Compile Include="InferenceResult.cs" />
-    <Compile Include="InferenceScore.cs" />
-    <Compile Include="OutputRatio.cs" />
+    <Compile Include="Driver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request.cs" />
-    <Compile Include="RequestItem.cs" />
-    <Compile Include="Response.cs" />
-    <Compile Include="Warning.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interface\Interface.csproj">
-      <Project>{E6C3E303-ADFE-49B2-BD90-8DF69CF17786}</Project>
+      <Project>{e6c3e303-adfe-49b2-bd90-8df69cf17786}</Project>
       <Name>Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{3D8DD221-85DB-4E1F-B864-69EEAD9D3D9B}</Project>
+      <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

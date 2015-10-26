@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Models {
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Integration.LogicalGlue.Interface;
 
 	public class Request {
 		public long ID { get; set; }
@@ -12,7 +13,5 @@
 		public string Content { get; set; }
 
 		public List<RequestItem> Items { get; set; }
-
-		public Response Response { get; set; }
 	} // class Request
 } // namespace

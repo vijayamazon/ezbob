@@ -138,6 +138,7 @@ BEGIN
 		Score DECIMAL(18, 16) NULL,
 		Status NVARCHAR(255) NOT NULL,
 		Exception NVARCHAR(MAX) NULL,
+		ErrorCode NVARCHAR(MAX) NULL,
 		Uuid UNIQUEIDENTIFIER NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogcialGlueResponses PRIMARY KEY (ResponseID),

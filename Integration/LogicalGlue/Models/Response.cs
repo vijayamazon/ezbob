@@ -5,14 +5,12 @@
 	public class Response {
 		public long ID { get; set; }
 
-		public Request Request { get; set; }
-
 		public DateTime ReceivingTime { get; set; }
-		public InferenceResult InferenceResult { get; set; }
 
-		public decimal? Score { get; set; }
+		public InferenceScore ModelOutput { get; set; }
 
 		public string Status { get; set; }
+		public string ErrorCode { get; set; }
 		public string Exception { get; set; }
 		public Guid? Uuid { get; set; }
 
