@@ -136,7 +136,6 @@
       <xs:extension base="tns:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="AutoCharge" type="xs:boolean" />
-          <xs:element minOccurs="0" name="AutoInterest" type="xs:boolean" />
           <xs:element minOccurs="0" name="AutoLateFees" type="xs:boolean" />
           <xs:element minOccurs="0" name="CaisAccountStatus" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="EmailSendingAllowed" type="xs:boolean" />
@@ -151,8 +150,8 @@
           <xs:element minOccurs="0" name="ReductionFee" type="xs:boolean" />
           <xs:element minOccurs="0" name="SmsSendingAllowed" type="xs:boolean" />
           <xs:element minOccurs="0" name="StopAutoChargeDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="StopAutoInterestDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="StopAutoLateFeesDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StopLateFeeFromDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StopLateFeeToDate" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
         </xs:sequence>
       </xs:extension>
@@ -203,7 +202,7 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="FilePath" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="LoanAgreementID" type="xs:long" />
-          <xs:element minOccurs="0" name="LoanAgreementTemplateID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanAgreementTemplateID" type="xs:int" />
           <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
         </xs:sequence>
       </xs:extension>
@@ -442,7 +441,7 @@
           <xs:element minOccurs="0" name="PaymentMethodID" type="xs:int" />
           <xs:element minOccurs="0" name="PaymentStatusID" type="xs:int" />
           <xs:element minOccurs="0" name="PaymentTime" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="PaypointTransactionses" nillable="true" type="tns:ArrayOfNL_PaypointTransactions" />
+          <xs:element minOccurs="0" name="PaypointTransactions" nillable="true" type="tns:ArrayOfNL_PaypointTransactions" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
