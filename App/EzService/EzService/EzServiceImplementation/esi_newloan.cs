@@ -73,7 +73,7 @@
 
 		public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId) {
 			AddLoanOptions stra;
-			var amd = ExecuteSync(out stra, customerID, userID, customerID, loanOptions, oldLoanId);
+			var amd = ExecuteSync(out stra, customerID, userID, loanOptions, oldLoanId);
 			return new NLLongActionResult {
 				MetaData = amd,
 				Value = stra.LoanOptionsID

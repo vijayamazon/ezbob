@@ -282,39 +282,6 @@
 			return Json(model);
 		} // SaveLateFeeOption
 
-        private void SaveNewLoanOptions(LoanOptions options) {
-
-            var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-            int customerId = this._loans.Get(options.LoanId).Customer.Id;
-            
-            //NL Loan Options
-            NL_LoanOptions nlOptions = new NL_LoanOptions()
-            {
-                LoanID = options.LoanId,
-                AutoCharge = options.AutoPayment,
-                AutoLateFees = options.AutoLateFees,
-                CaisAccountStatus = options.CaisAccountStatus,
-                EmailSendingAllowed = options.EmailSendingAllowed,
-                LatePaymentNotification = options.LatePaymentNotification,
-                LoanOptionsID = options.Id,
-                MailSendingAllowed = options.MailSendingAllowed,
-                ManualCaisFlag = options.ManualCaisFlag,
-                ReductionFee = options.ReductionFee,
-                SmsSendingAllowed = options.SmsSendingAllowed,
-                StopAutoChargeDate = options.StopAutoChargeDate,
-                StopLateFeeFromDate = options.StopLateFeeFromDate,
-                StopLateFeeToDate = options.StopLateFeeToDate,
-                UserID = context.UserId,
-                InsertDate = DateTime.Now,
-                IsActive = true,
-                Notes = "Late fee option saved From Edit Loan page",
-            };
-
-            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
-            Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
-        }
-
-
 		[Ajax]
 		[HttpPost]
 		[Transactional]
@@ -365,16 +332,17 @@
 			return Json(model);
 		} // SaveAutoChargesOption
 
-
 		[Ajax]
 		[HttpPost]
 		[Transactional]
 		public JsonResult RemoveAutoChargesOption(int id) {
-			LoanOptions loanOptions = this.loanOptionsRepository.GetByLoanId(id);
+			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id);
 
-			loanOptions.AutoPayment = true;
-			loanOptions.StopAutoChargeDate = null;
-			this.loanOptionsRepository.SaveOrUpdate(loanOptions);
+			options.AutoPayment = true;
+			options.StopAutoChargeDate = null;
+			this.loanOptionsRepository.SaveOrUpdate(options);
+
+            SaveNewLoanOptions(options);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -453,5 +421,38 @@
 
 			return Json(model);
 		} // RemoveFreezeInterval
+
+        private void SaveNewLoanOptions(LoanOptions options)
+        {
+
+            var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+            int customerId = this._loans.Get(options.LoanId).Customer.Id;
+
+            //NL Loan Options
+            NL_LoanOptions nlOptions = new NL_LoanOptions()
+            {
+                LoanID = options.LoanId,
+                AutoCharge = options.AutoPayment,
+                AutoLateFees = options.AutoLateFees,
+                CaisAccountStatus = options.CaisAccountStatus,
+                EmailSendingAllowed = options.EmailSendingAllowed,
+                LatePaymentNotification = options.LatePaymentNotification,
+                LoanOptionsID = options.Id,
+                MailSendingAllowed = options.MailSendingAllowed,
+                ManualCaisFlag = options.ManualCaisFlag,
+                ReductionFee = options.ReductionFee,
+                SmsSendingAllowed = options.SmsSendingAllowed,
+                StopAutoChargeDate = options.StopAutoChargeDate,
+                StopLateFeeFromDate = options.StopLateFeeFromDate,
+                StopLateFeeToDate = options.StopLateFeeToDate,
+                UserID = context.UserId,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                Notes = "Late fee option saved From Edit Loan page",
+            };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
+            Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+        }
 	}
 }
