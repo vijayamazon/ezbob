@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Models {
 	public class EncodingFailure {
-		public long ID { get; set; }
-
+		public int RowIndex { get; set; }
 		public string ColumnName { get; set; }
 		public string UnencodedValue { get; set; }
 		public string Reason { get; set; }

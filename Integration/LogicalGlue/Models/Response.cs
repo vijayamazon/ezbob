@@ -3,11 +3,7 @@
 	using System.Collections.Generic;
 
 	public class Response {
-		public long ID { get; set; }
-
 		public DateTime ReceivingTime { get; set; }
-
-		public InferenceScore ModelOutput { get; set; }
 
 		public string Status { get; set; }
 		public string ErrorCode { get; set; }

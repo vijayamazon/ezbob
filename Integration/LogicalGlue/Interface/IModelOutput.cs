@@ -2,6 +2,7 @@
 	using System.Collections.Generic;
 
 	public interface IModelOutput {
+		string Status { get; set; }
 		decimal? Score { get; set; }
 		long EncodedResult { get; set; }
 		string DecodedResult { get; set; }
