@@ -218,6 +218,14 @@
     <Compile Include="NewLoan\NL_CashRequests.cs" />
     <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
     <Compile Include="NewLoan\OfferForLoan.cs" />
+    <Compile Include="OpenPlatform\InvestorOverallStatistics.cs" />
+    <Compile Include="OpenPlatform\InvestorSystemBalance.cs" />
+    <Compile Include="OpenPlatform\InvestorBankAccountTransaction.cs" />
+    <Compile Include="OpenPlatform\InvestorBankAccount.cs" />
+    <Compile Include="OpenPlatform\InvestorAccountType.cs" />
+    <Compile Include="OpenPlatform\InvestorContact.cs" />
+    <Compile Include="OpenPlatform\InvestorType.cs" />
+    <Compile Include="OpenPlatform\Investor.cs" />
     <Compile Include="ServiceLog.cs" />
     <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
