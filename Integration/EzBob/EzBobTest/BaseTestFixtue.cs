@@ -23,6 +23,7 @@
 	using YodleeLib.connector;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
 
 	[TestFixture]
 	public class BaseTestFixtue {
@@ -52,6 +53,7 @@
 				x.For<ILoanTypeRepository>().Use<LoanTypeRepository>();
 				x.For<ILoanSourceRepository>().Use<LoanSourceRepository>();
 				x.For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
+				x.For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
 			});
 
 			var oLog4NetCfg = new Log4Net().Init();
