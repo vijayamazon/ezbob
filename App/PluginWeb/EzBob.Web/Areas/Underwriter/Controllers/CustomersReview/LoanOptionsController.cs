@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
+	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using ConfigManager;
 	using DbConstants;
@@ -138,7 +139,13 @@
                 Notes = "From loan option popup",
             };
 
-            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId, null);;
+            var PropertiesUpdateList = new List<String>() {
+		        "StopAutoChargeDate",
+                "StopLateFeeFromDate",
+		        "StopLateFeeToDate",
+		    };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId, PropertiesUpdateList.ToArray()); ;
 			Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
             
 			return Json(new { });
