@@ -1,4 +1,4 @@
-﻿namespace Tests {
+﻿namespace Ezbob.Integration.LogicalGlue.Tests {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Integration.LogicalGlue.Interface;
