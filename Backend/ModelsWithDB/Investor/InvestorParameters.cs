@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.Investor {
-    using System;
-
     public class InvestorParameters
     {
-        public int investorID { get; set; }
+        public int InvestorID { get; set; }
+
         public int DailyInvestmentAllowed { get; set; }
 
         public int WeeklyInvestmentAllowed { get; set; }
@@ -13,6 +12,5 @@
         public int GradeMin { get; set; }
 
         public int GradeMax { get; set; }
-
     }//class InvestorParameters
 }//ns

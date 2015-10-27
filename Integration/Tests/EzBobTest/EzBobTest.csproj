@@ -110,6 +110,8 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="OpenPlatformTests\Core\TestBase.cs" />
+    <Compile Include="OpenPlatformTests\Investor\TestInvestorRules.cs" />
     <Compile Include="TestNewLoan.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
@@ -179,21 +181,9 @@
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\InvestorBLL\InvestorBLL.csproj">
-      <Project>{0593d709-a515-4951-9c08-b4f5ca55b65a}</Project>
-      <Name>InvestorBLL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\InvestorDAL\InvestorDAL.csproj">
-      <Project>{27E70C37-C906-4BDA-8D4C-C595C175DC08}</Project>
-      <Name>InvestorDAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
       <Name>RegistryScanner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RulesEngine\RulesEngine.csproj">
-      <Project>{08A09446-762E-47D3-B2C1-5EB5084487C6}</Project>
-      <Name>RulesEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
       <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
