@@ -178,18 +178,10 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
-    <Compile Include="Investor\LoanParameters.cs" />
-    <Compile Include="Investor\InvestorParameters.cs" />
-    <Compile Include="Investor\InvestorEnums.cs" />
-    <Compile Include="Investor\Portfolio.cs" />
-    <Compile Include="Investor\InvestorOverallStatistics.cs" />
-    <Compile Include="Investor\InvestorSystemBalance.cs" />
-    <Compile Include="Investor\InvestorBankAccountTransaction.cs" />
-    <Compile Include="Investor\InvestorBankAccount.cs" />
-    <Compile Include="Investor\InvestorContact.cs" />
-    <Compile Include="Investor\Investor.cs" />
-    <Compile Include="Investor\InvestorAccountType.cs" />
-    <Compile Include="Investor\InvestorType.cs" />
+    <Compile Include="OpenPlatform\LoanParameters.cs" />
+    <Compile Include="OpenPlatform\InvestorParameters.cs" />
+    <Compile Include="OpenPlatform\InvestorEnums.cs" />
+    <Compile Include="OpenPlatform\Portfolio.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
       <SubType>Code</SubType>
