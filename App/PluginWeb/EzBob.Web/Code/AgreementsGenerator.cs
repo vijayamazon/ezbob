@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Code.Agreements
 {
-	using ConfigManager;
+    using System;
+    using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -42,26 +43,29 @@
 
 			var isAlibaba = loan.Customer.IsAlibaba;
 			var isEverline = loan.Customer.CustomerOrigin.IsEverline();
-			
-			var origin = isAlibaba ? "Alibaba" : string.Empty;
-			origin = isEverline ? "EVL" : origin;
-
+		    var IsEverlineRefinanceLoan = false;
+            
 			if (isEverline) {
 				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
 				var status = checker.GetLoginStatus(loan.Customer.Name);
 				if (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan) {
-					origin = origin + "Refinance";
+				    IsEverlineRefinanceLoan = true;
 				}
 			}
+            
 
 			string path1;
 			string path2;
 			TemplateModel template;
-			if (typeOfBusinessReduced == TypeOfBusinessAgreementReduced.Personal)
-			{
-				var preContract = _templates.GetTemplateByName(origin + "Pre-Contract-Agreement");
+			if (typeOfBusinessReduced == TypeOfBusinessAgreementReduced.Personal) {
+                
+                //Alibaba can't be a Personal customer
+                if (isAlibaba)
+                    throw new Exception("Alibaba can't be a Personal customer");
+
+                var preContract = _templates.GetTemplateByName(_templates.GetTemplatePath(LoanAgreementTemplateType.PreContract, isEverline, false, IsEverlineRefinanceLoan));
 				var preContractAgreement = new LoanAgreement("precontract", loan, 
-					_helper.GetOrCreateLoanAgreementTemplate(preContract, isAlibaba ? LoanAgreementTemplateType.AlibabaPreContractAgreement : LoanAgreementTemplateType.PreContractAgreement ));
+					_helper.GetOrCreateLoanAgreementTemplate(preContract,  LoanAgreementTemplateType.PreContract ));
 				loan.Agreements.Add(preContractAgreement);
 
 				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, preContractAgreement.FilePath);
@@ -69,9 +73,9 @@
 				template = new TemplateModel {Template = preContract};
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", template, path1, path2);
 
-				var contract = _templates.GetTemplateByName(origin + "CreditActAgreement");
+                var contract = _templates.GetTemplateByName(_templates.GetTemplatePath(LoanAgreementTemplateType.RegulatedLoanAgreement, isEverline, false, IsEverlineRefinanceLoan));
 				var contractAgreement = new LoanAgreement("Contract", loan, 
-					_helper.GetOrCreateLoanAgreementTemplate(contract, isAlibaba ? LoanAgreementTemplateType.AlibabaCreditActAgreement : LoanAgreementTemplateType.CreditActAgreement ));
+					_helper.GetOrCreateLoanAgreementTemplate(contract, LoanAgreementTemplateType.RegulatedLoanAgreement));
 				loan.Agreements.Add(contractAgreement);
 
 				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, contractAgreement.FilePath);
@@ -81,9 +85,9 @@
 			}
 			else
 			{
-				var guarantee = _templates.GetTemplateByName(origin + "GuarantyAgreement");
+                var guarantee = _templates.GetTemplateByName(_templates.GetTemplatePath(LoanAgreementTemplateType.GuarantyAgreement, isEverline, isAlibaba, IsEverlineRefinanceLoan));
 				var guaranteeAgreement = new LoanAgreement("guarantee", loan, 
-					_helper.GetOrCreateLoanAgreementTemplate(guarantee, isAlibaba ? LoanAgreementTemplateType.AlibabaGuarantyAgreement : LoanAgreementTemplateType.GuarantyAgreement ));
+					_helper.GetOrCreateLoanAgreementTemplate(guarantee, isAlibaba ? LoanAgreementTemplateType.EzbobAlibabaGuarantyAgreement : LoanAgreementTemplateType.GuarantyAgreement ));
 				loan.Agreements.Add(guaranteeAgreement);
 
 				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, guaranteeAgreement.FilePath);
@@ -91,9 +95,9 @@
 				template = new TemplateModel { Template = guarantee };
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", template, path1, path2);
 
-				var agreement = _templates.GetTemplateByName(origin + "PrivateCompanyLoanAgreement");
+                var agreement = _templates.GetTemplateByName(_templates.GetTemplatePath(LoanAgreementTemplateType.PrivateCompanyLoanAgreement, isEverline, isAlibaba, IsEverlineRefinanceLoan));
 				var agreementAgreement = new LoanAgreement("agreement", loan,
-					_helper.GetOrCreateLoanAgreementTemplate(agreement, isAlibaba ? LoanAgreementTemplateType.AlibabaPrivateCompanyLoanAgreement : LoanAgreementTemplateType.PrivateCompanyLoanAgreement));
+					_helper.GetOrCreateLoanAgreementTemplate(agreement, isAlibaba ? LoanAgreementTemplateType.EzbobAlibabaPrivateCompanyLoanAgreement : LoanAgreementTemplateType.PrivateCompanyLoanAgreement));
 				loan.Agreements.Add(agreementAgreement);
 
 				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, agreementAgreement.FilePath);

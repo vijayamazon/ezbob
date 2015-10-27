@@ -6,19 +6,24 @@
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Hmrc;
-	using NHibernate;
 
 	public class HmrcController : Controller {
-
 		public HmrcController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session,
 			CustomerRepository customers
 		) {
-			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session, context);
+			m_oAccountManager = new HmrcManualAccountManager(
+				true,
+				customers,
+				helper,
+				mpTypes,
+				mpChecker,
+				context
+			);
+
 			m_oContext = context;
 		} // constructor
 
@@ -37,11 +42,6 @@
 			return m_oAccountManager.LoadPeriods(DetectCustomer());
 		} // LoadPeriods
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcController));
-
-		private readonly HmrcManualAccountManager m_oAccountManager;
-		private readonly IEzbobWorkplaceContext m_oContext;
-
 		private int DetectCustomer() {
 			int nCustomerID;
 
@@ -56,5 +56,9 @@
 			return nCustomerID;
 		} // DetectCustomer
 
+		private readonly HmrcManualAccountManager m_oAccountManager;
+		private readonly IEzbobWorkplaceContext m_oContext;
+
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcController));
 	} // class HmrcController
 } // namespace

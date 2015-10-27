@@ -52,7 +52,7 @@
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer) {
 			var rl = new CustomerRequestedLoanModel();
-			var requestedLoan = customer.CustomerRequestedLoan.FirstOrDefault();
+			var requestedLoan = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault();
 			if (requestedLoan != null) {
 				rl.Amount = requestedLoan.Amount;
 				rl.Created = requestedLoan.Created;
@@ -676,13 +676,6 @@
 			var count = customerSchedule.Count();
 			var repaymentAmount = count != 0 ? monthlyRepaymentSum / count : 0;
 			return repaymentAmount;
-		}
-
-		private double GetSeniority(Customer customer, bool isPaymentAccountOnly) {
-			var marketplacesSeniority = customer.GetMarketplaceOriginationDate(isPaymentAccountOnly);
-			var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
-			var minAccountAgeTotalMonth = minAccountAge.TotalDays / 30;
-			return minAccountAgeTotalMonth;
 		}
 
 		private LightsState ObtainAmlState(Customer customer) {

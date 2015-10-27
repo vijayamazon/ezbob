@@ -167,10 +167,11 @@ EzBob.Dialogs.AutonumericEdit = EzBob.Dialogs.SimpleValueEdit.extend({
         return el;
     },
     setEditValue: function (val) {
-        this.editField.autoNumericSet(EzBob.roundNumber(val, 2));
+	    val = val || 0;
+        this.editField.autoNumeric('set', EzBob.roundNumber(val, 2));
     },
     getEditValue: function () {
-        return this.editField.autoNumericGet();
+        return this.editField.autoNumeric('get');
     }
 });
 

@@ -23,8 +23,9 @@ namespace EzBob.Web.Infrastructure
 	using StructureMap.Configuration.DSL;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Request;
+	using PostcodeAnywhere;
 
-    public class PluginWebRegistry : Registry
+	public class PluginWebRegistry : Registry
 	{
 		public PluginWebRegistry()
 		{
@@ -46,6 +47,8 @@ namespace EzBob.Web.Infrastructure
 			For<IPacnetPaypointServiceLogRepository>().Use<PacnetPaypointServiceLogRepository>();
 			For<ICustomerMarketPlaceRepository>().Use<CustomerMarketPlaceRepository>();
 			For<IMP_WhiteListRepository>().Use<MP_WhiteListRepository>();
+			For<IBankAccountWhiteListRepository>().Use<BankAccountWhiteListRepository>();
+			For<ICardInfoRepository>().Use<CardInfoRepository>();
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanTransactionRepository>().Use<LoanTransactionRepository>();
@@ -114,6 +117,12 @@ namespace EzBob.Web.Infrastructure
 			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
 			For<IBugRepository>().Use<BugRepository>();
 			For<IExternalCollectionStatusesRepository>().Use<ExternalCollectionStatusesRepository>();
+
+			if (CurrentValues.Instance.PostcodeAnywhereEnabled) {
+				For<ISortCodeChecker>().Use<SortCodeChecker>().Ctor<int>("maxBankAccountValidationAttempts").Is(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
+			} else {
+				For<ISortCodeChecker>().Use<FakeSortCodeChecker>().Ctor<int>("maxBankAccountValidationAttempts").Is(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
+			}
 		}
 	}
 }

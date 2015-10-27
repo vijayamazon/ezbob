@@ -1,15 +1,22 @@
 ﻿@model dynamic
+@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @helper AmazonInfo()
 {
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	
     <div class="amazon-instructions" style="padding-top: 1px;">
         <div class="amazon-instructions-title">
-            <h2>Add Amazon Shop
-                <a class="amazonscreenshot" rel="group" href="#">
-                    <img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" ui-event-control-id="link-account:amazon_tutorial" />
-                </a>
-                <label class="amazon_view_tutorial_label">View Tutorial&nbsp;</label>
-            </h2>
-            
+            <h2>Add Amazon Shop</h2>
+@if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline)
+{
+    <a class="amazonscreenshot" rel="group" href="#">
+        <img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" ui-event-control-id="link-account:amazon_tutorial" />
+    </a>
+    <label class="amazon_view_tutorial_label">View Tutorial&nbsp;</label>
+}
+           
         </div>
 
         <div style="padding-top: 10px;">
@@ -40,19 +47,62 @@
 
                 <li>Copy and Paste from Amazon Services:
                     <form class = "AmazonForm">
-                        @EzForm.InputText("amazonMerchantId", "Seller ID", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 30, uiEventControlID: "link-account:amazon_merchant_id")
-                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_marketplace_id")
-                        @EzForm.InputText("amazonMWSAccessToken", "MWS Authorisation Token", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 50, uiEventControlID: "link-account:amazon_token")
+                        @EzForm.InputTextWizard(
+							new EzInputBuilder(
+								"amazonMerchantId", 
+								"Seller ID", 
+								cls: "form_field amazon_field", 
+								isDisabled: true, 
+								isRequired: true, 
+								statusIcon: true, 
+								maxLength: 30, 
+								uiEventControlID: "link-account:amazon_merchant_id"), 
+							origin: origin)
+						@EzForm.InputTextWizard(
+							new EzInputBuilder(
+								"amazonMarketplaceId", 
+								"Marketplace ID", 
+								cls: "form_field amazon_field", 
+								isDisabled: true, 
+								isRequired: true, 
+								statusIcon: true, 
+								maxLength: 15,
+								uiEventControlID: "link-account:amazon_marketplace_id"), 
+							origin: origin)
+                        @EzForm.InputTextWizard(
+							new EzInputBuilder(
+								"amazonMWSAccessToken", 
+								"MWS Authorisation Token", 
+								cls: "form_field amazon_field", 
+								isDisabled: true, 
+								isRequired: true, 
+								statusIcon: true, 
+								maxLength: 50, 
+								uiEventControlID: "link-account:amazon_token"), 
+							origin: origin)
                     </form>
                 </li>
             </ol>
         </div>
-        <div class="control-group clearfix form_buttons_container">
-            <div class="attardi-button">
-                <a href="#Connect/amazon" class="connect-amazon button btn-green disabled" ui-event-control-id="link-account:amazon_connect">Continue</a>
-                <a href="#" class="back button btn-grey" ui-event-control-id="link-account:amazon_back">Back</a>
-            </div>
-        </div>
+
+	    @EzForm.WizardButton(
+			new List<EzButtonModel>{
+			new EzButtonModel(
+				"amazon_continue_button", 
+				"Link account", 
+				cls: "connect-amazon button btn-green disabled ev-btn-org", 
+				uiEventControlID: "link-account:amazon_connect", 
+				buttonType: EzButtonType.link, 
+				href: "#Connect/amazon"), 
+			new EzButtonModel(
+				"amazon_back_button", 
+				"Cancel", 
+				cls: "back button btn-grey clean-btn", 
+				uiEventControlID: "link-account:amazon_back", 
+				buttonType: EzButtonType.link, 
+				href: "#")
+			}, 
+			origin: origin)
     </div>
 }
 
@@ -63,22 +113,29 @@
 
 <script id="amazon-tutorial" type="text/template">
     <div id="amazon-gallery-container">
+       
+    @if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline) {
         <div class="amazon-tutorial-slider">
             <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' alt="" />
+                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' alt=""/>
             </a>
 
             <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon2.jpg")' alt="" />
+                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon2.jpg")' alt=""/>
             </a>
 
             <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon3.jpg")' alt="" />
+                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon3.jpg")' alt=""/>
             </a>
 
             <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon4.jpg")' alt="" />
+                <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon4.jpg")' alt=""/>
             </a>
         </div>
+    }
+    else
+    {
+        <img class="tutor-image" src='@Url.Content("~/Content/img/Tutorial/help-amazon-everline.jpg")' />
+    }
     </div>
 </script>

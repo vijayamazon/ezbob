@@ -12,6 +12,32 @@
 	public class NonTraversableAttribute : Attribute { } // NonTraversableAttribute
 
 	public static class PropertyTraverser {
+		public static void TraverseReadable(Type oType, Action<object, PropertyInfo> oCallback) {
+			if (oType == null)
+				throw new ArgumentNullException("oType", "Type to traverse not specified.");
+
+			if (oCallback == null)
+				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + oType + ".");
+
+			Traverse(null, oType, true, oCallback);
+		} // TraverseReadable
+
+		public static void TraverseReadable<T>(Action<object, PropertyInfo> oCallback) {
+			if (oCallback == null)
+				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + typeof(T) + ".");
+
+			Traverse(null, typeof(T), true, oCallback);
+		} // TraverseReadable
+
+		public static void TraverseReadable(this object oInstance, Action<object, PropertyInfo> oCallback) {
+			if (oInstance == null)
+				throw new ArgumentNullException("oInstance", "Object to traverse not specified.");
+
+			if (oCallback == null)
+				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + oInstance.GetType() + ".");
+
+			Traverse(oInstance, oInstance.GetType(), true, oCallback);
+		} // TraverseReadable
 
 		public static void Traverse(Type oType, Action<object, PropertyInfo> oCallback) {
 			if (oType == null)
@@ -20,14 +46,14 @@
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + oType + ".");
 
-			Traverse(null, oType, oCallback);
+			Traverse(null, oType, false, oCallback);
 		} // Traverse
 
 		public static void Traverse<T>(Action<object, PropertyInfo> oCallback) {
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + typeof(T) + ".");
 
-			Traverse(null, typeof(T), oCallback);
+			Traverse(null, typeof(T), false, oCallback);
 		} // Traverse
 
 		public static void Traverse(this object oInstance, Action<object, PropertyInfo> oCallback) {
@@ -37,33 +63,56 @@
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + oInstance.GetType() + ".");
 
-			Traverse(oInstance, oInstance.GetType(), oCallback);
+			Traverse(oInstance, oInstance.GetType(), false, oCallback);
 		} // Traverse
+
+		public static IEnumerable<PropertyInfo> EnumerateReadableProperties(Type oType) {
+			if (oType == null)
+				throw new ArgumentNullException("oType", "Type to traverse not specified.");
+
+			return Traverse(null, oType, true, null);
+		} // EnumerateReadableProperties
+
+		public static IEnumerable<PropertyInfo> EnumerateReadableProperties<T>() {
+			return Traverse(null, typeof(T), true, null);
+		} // EnumerateReadableProperties
+
+		public static IEnumerable<PropertyInfo> EnumerateReadableProperties(this object oInstance) {
+			if (oInstance == null)
+				throw new ArgumentNullException("oInstance", "Object to traverse not specified.");
+
+			return Traverse(oInstance, oInstance.GetType(), true, null);
+		} // EnumerateReadableProperties
 
 		public static IEnumerable<PropertyInfo> EnumerateProperties(Type oType) {
 			if (oType == null)
 				throw new ArgumentNullException("oType", "Type to traverse not specified.");
 
-			return Traverse(null, oType, null);
+			return Traverse(null, oType, false, null);
 		} // EnumerateProperties
 
 		public static IEnumerable<PropertyInfo> EnumerateProperties<T>() {
-			return Traverse(null, typeof(T), null);
+			return Traverse(null, typeof(T), false, null);
 		} // EnumerateProperties
 
 		public static IEnumerable<PropertyInfo> EnumerateProperties(this object oInstance) {
 			if (oInstance == null)
 				throw new ArgumentNullException("oInstance", "Object to traverse not specified.");
 
-			return Traverse(oInstance, oInstance.GetType(), null);
+			return Traverse(oInstance, oInstance.GetType(), false, null);
 		} // EnumerateProperties
 
-		private static IEnumerable<PropertyInfo> Traverse(object oInstance, Type oRealType, Action<object, PropertyInfo> oCallback) {
+		private static IEnumerable<PropertyInfo> Traverse(
+			object oInstance,
+			Type oRealType,
+			bool checkForGetter,
+			Action<object, PropertyInfo> oCallback
+		) {
 			List<PropertyInfo> oResult = (oCallback == null) ? new List<PropertyInfo>() : null;
 
 			PropertyInfo[] oPropertyList = oRealType
 				.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-				.Where(p => p.GetSetMethod() != null)
+				.Where(p => (checkForGetter ? p.GetGetMethod() : p.GetSetMethod()) != null)
 				.ToArray();
 
 			var oSelected = new List<PropertyInfo>();
@@ -91,7 +140,6 @@
 
 			return oResult;
 		} // Traverse
-
 	} // class PropertyTraverser
 
 	public static class TraversableExt {
@@ -122,5 +170,4 @@
 			return oResult.ToArray();
 		} // ToObjectArray
 	} // class TraversableExt
-
 } // namespace

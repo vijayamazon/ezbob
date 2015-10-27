@@ -2,24 +2,23 @@
 @model dynamic
 <script type="text/template" id="loan_editor_template">
 
-    <div class="row Container" style="width:1200px;">
+    <div class="row Container" style="width:1200px; margin-top:40px; margin-left:40px">
         <div class="col-sm-8">
             <form class="form-inline" role="form" id="form-reschedule" onsubmit="return false;">
 
                 <div class="row">
-                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1">Within loan period</label></h5>
+                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1" style="margin-left:15px;">Within loan period</label></h5>
                 </div>
 
                 <div class="row" id="within-div">
                     <div class="col-sm-11 col-sm-offset-1">
-                        <span class="float_left" style="vertical-align: top;">
-                            Re-schedule
+                        <span class="float_left" style="vertical-align: top;">                            
                             <span style="width: 150px; margin-top: -10px; display: inline-block">
                                 <select class="form-control" id="withinSelect" style="width: 150px; border-color: black;">
                                     <option value="month">Month</option>
                                     <option value="weeks">Week</option>
                                 </select>
-                                <span style="margin-left: 50px;">interval</span>
+                                <span style="margin-left: 10px;">Re-schedule interval</span>
                             </span>
                         </span>
                         <span class="float_left" style="vertical-align: top;">
@@ -41,23 +40,29 @@
                                 <span style="margin-left: 50px;">£Interest</span>
                             </span>
                         </span>
+                        <span class="float_left" style="margin-left: 10px; margin-top: 15px;">
+                            <div class="input-group">
+                                <span style="margin-left: 270px;">Start reschedule from:</span>
+                                <span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control input-width" type="text" id="within-calendar-from">
+                            </div>
+                        </span>                      
                     </div>
                 </div>
 
                 <div class="row">
-                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2">Outside loan payment arangment</label></h5>
+                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2" style="margin-left: 15px;">Outside loan payment arangment</label></h5>
                 </div>
 
                 <div class="row" style="margin-bottom: 15px;" id="outside-div">
                     <div class="col-sm-11 col-sm-offset-1">
-                        <span class="float_left" style="vertical-align: top;">
-                            Re-schedule
+                        <span class="float_left" style="vertical-align: top;">                            
                             <span style="width: 150px; margin-top: -10px; display: inline-block">
                                 <select class="form-control" id="outsideSelect" style="width: 150px; border-color: black;">
                                     <option value="month">Month</option>
                                     <option value="weeks">Week</option>
                                 </select>
-                                <span style="margin-left: 50px;">interval</span>
+                                <span style="margin-left: 10px;">Re-schedule interval</span>
                             </span>
                         </span>
                         <span class="float_left" style="vertical-align: top;">
@@ -78,7 +83,20 @@
                                 <span id="outsideIntrest" class="border-span"></span>
                                 <span style="margin-left: 50px;">£Interest</span>
                             </span>
-                        </span>
+                        </span>					
+						<span class="float_left" style="margin-left: 10px; margin-top: 15px;">							
+								<span style="margin-left: 120px;">
+									<input type="checkbox" name="StopFutureInterest" id="outside-stop-future-interest">
+									<span style="margin-left:10px; vertical-align: sub;">Stops all future interest accumulation since the last made payment</span>
+								</span>	
+						</span>						
+						<span class="float_left" style="margin-left: 10px; margin-top: 15px;">
+							<div class="input-group">
+								<span style="margin-left: 270px;">Start reschedule from:</span>
+								<span class="input-group-addon" style="display: inline; margin-left: 20px;"><i class="fa fa-calendar"></i></span>
+								<input class="form-control input-width" type="text" id="outside-calendar-from">
+							</div>
+						</span>  				
                     </div>
                 </div>
                 <div class="editloan-actions-region" id="editloan-actions-region">
@@ -109,7 +127,7 @@
                             &nbsp;until&nbsp;
                         </span>
                         <span class="float_left">
-                            <div class="input-group" >
+                            <div class="input-group">
                                 <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
                                 <input class="form-control input-width" type="text" id="fees-calendar-to">
                             </div>
@@ -139,7 +157,7 @@
                             &nbsp;until&nbsp;
                         </span>
                         <span class="float_left">
-                            <div class="input-group" >
+                            <div class="input-group">
                                 <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
                                 <input class="form-control input-width" type="text" id="intrest-calendar-to"><br />
                             </div>
@@ -159,8 +177,8 @@
                             <span class="bin-text">This loan's intrest is stoped from</span>
                             <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
                             <% if (ary[1] !=="2099-01-01"){%>
-                                <span>until</span>
-                                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+                            <span>until</span>
+                            <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
                             <%}%>
                         </div>
                         <%	}});}	%>

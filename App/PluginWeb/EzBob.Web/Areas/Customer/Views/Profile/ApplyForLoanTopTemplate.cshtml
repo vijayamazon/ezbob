@@ -2,14 +2,16 @@
 
 <script id="apply-forloan-top-template" type="text/template">
     <div class="row-fluid profile-screen">
-        <%var current = 0;%>
-        @{Html.RenderPartial("_StepsDashboard");}
-
         <div class="row-fluid">
             <div class="apply-for-loan-div"></div>
         </div>
     </div>
 </script>
 
-@{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
-@{Html.RenderPartial("ApplyForLoanTemplate"); }
+@{
+	Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");
+	Html.RenderPartial("ApplyForLoanTemplate"); 
+	Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml");
+	Html.RenderPartial("_Sliders");
+	Html.RenderPartial("_StepsDashboard");
+}

@@ -1,0 +1,549 @@
+﻿.main-page-everline #get-cash {
+	width: 940px;
+	margin: 0 auto;
+	padding: 20px 0px;
+	box-sizing: border-box;
+}
+
+.main-page-everline #get-cash h1, h3 {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 24px;
+	color: #666666;
+	font-weight: 400;
+}
+
+.main-page-everline #get-cash h2 {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 22px;
+	color: #8dc641;
+	font-weight: 400;
+}
+
+.main-page-everline #get-cash .form-horizontal {
+	background: #f1f0f0;
+	padding: 10px;
+    margin-bottom: 5px;
+	box-sizing: border-box;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-agreements{
+	background: none;
+	padding: 0;
+}
+
+.main-page-everline .early-payment-form label.radio, .early-payment-form label.checkbox {
+    display: inline-block;
+    margin-right: 10px;
+}
+.main-page-everline .early-payment-form .w100p {
+    width: 100%;
+}
+.table th {
+    font-weight: 600;
+}
+.bankacount-title {
+ clear:both;   
+}
+.bankacount-data {
+    margin-top:20px;
+}
+dt {
+    font-weight:600;
+}
+.main-page-everline #get-cash .form-horizontal.loan-details div {
+	vertical-align: top;
+	display: inline-block;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div.span4 {
+	width: 33%;
+	margin-left: 2%;
+}
+
+.main-page-everline .pay-early {
+	margin-top: 15px;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div.span1 {
+	width: 1%;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div dl dt {
+	float: left;
+	width: 50%;
+	font-weight: 600;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div dl dd {
+	margin: 0 0 5px 50%;
+	padding: 0 5px;
+	text-align: left;
+}
+
+.main-page-everline #get-cash .payment-schedule-table {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 35px;
+	border-collapse: collapse;
+}
+
+.main-page-everline #get-cash .loan_apr_block {
+	font-weight: bold;
+	margin: 30px 0;
+}
+
+.main-page-everline #get-cash .loan-agreements ul{
+	margin: 0;
+}
+
+.main-page-everline #get-cash .loan-agreements ul li {
+	display: inline-block;
+	margin-right: 20px;
+	margin-bottom: 15px;
+    margin-left: 0;
+}
+
+.main-page-everline #get-cash .loan-agreements ul li a {
+	display: block;
+	padding-left: 32px;
+	cursor: pointer;
+	position: relative;
+}
+
+.main-page-everline #get-cash .loan-agreements ul li a:hover {
+	text-decoration: none;
+}
+
+	.main-page-everline #get-cash .loan-agreements ul li a i {
+		position: absolute;
+		left: 6px;
+		font-size: 34px;
+		top: 4px;
+		display: inline-block;
+	}
+
+.main-page-everline #get-cash .buttons_container {
+	text-align: right;
+	margin-bottom: 20px;
+}
+
+.main-page-everline .dashboard-steps .progress-time{
+	display: block;
+}
+
+.corner-border {
+    border: 1px solid black;
+    position: relative;
+}
+
+
+.corner-border .corner-border-inner:after {
+    background: white url('../css/images/white-corner.png');
+    width: 25px;
+    height: 23px;
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    content: "";
+}
+
+/*Loan agreements*/
+
+#block-agreement {
+	margin-bottom: 20px;
+}
+
+.agreement .nav {
+	margin-bottom: 0;
+    margin-left: 24px;
+    border-bottom: 0;}
+
+.nav-tabs > .active > a {
+	color: #e28023;
+	border: 1px solid #28211f;
+    border-radius: 0;
+}
+
+	.nav > li > a:hover,
+	.nav-tabs > .active > a:hover {
+		color: #dc6e23;
+		text-decoration: underline;
+		background-color: transparent;
+		border-radius: 0;
+		border: 1px solid #28211f;
+	}
+
+.agreement table {
+	border-color: transparent;
+}
+
+	.agreement table td {
+		background-color: transparent;
+	}
+
+.agreement .tab-pane.active {
+	border: 1px solid #28211f;
+	position: relative;
+	padding: 20px 10px 70px 40px;
+}
+
+.overview.loan-agreement:after {
+	background: white url('../css/images/white-corner.png');
+	width: 25px;
+	height: 23px;
+	position: absolute;
+	left: -1px;
+	top: -1px;
+	content: "";
+}
+
+.LoanLegal {
+	margin-top: 20px;
+	background-color: #f1f0f0;
+	padding: 20px 20px 10px 40px;
+}
+
+.confirmationDialog .ui-dialog-titlebar{
+	display: none;
+}
+
+.agreements-checkboxes .click-wrap{
+	display: block;
+	width: 100%;
+	margin-left: 0;
+}
+
+div.sign-full-name {
+    width: 100%;
+}
+
+.loan-details-well{
+	padding: 0;
+}
+
+.loan-details-well table td{
+	background-color: transparent;
+	padding: 0;
+}
+
+.loan-summary-well{
+	padding: 0;
+}
+
+/*****JspScroll******/
+
+.jspVerticalBar {
+	width: 8px;
+}
+
+.jspTrack {
+	background: transparent;
+}
+
+.jspDrag {
+	background: #28211f;
+}
+
+.click-input-wrap .early-rollover,
+.click-input-wrap .early-loan {
+	float:right;
+}
+
+.click-area,
+.minimum-payment,
+#single-loan-pay-options {
+	margin-left: 112px;
+}
+
+#rollover-select,
+#loan-select {
+	margin-left: -30px;
+}
+
+#rollover-other-text{
+	margin-left: -78px;
+	width: 293px;
+}
+
+#pay-early-other-text {
+	margin-left: -78px;
+	width: 306px;
+}
+
+
+#single-loan-pay-options #rollover-other-text,
+#single-loan-pay-options #pay-early-other-text {
+	margin-left: -44px;
+}
+
+.click-area #rollover-other-text {
+	margin-left: -31px;
+}
+
+#cap2 {
+	display: block;
+	width: 183px; 
+	height: 69px; 
+	background-color: #dbdcda; 
+	float: right;
+}
+
+#cap2 h3 {
+	line-height: 22px;
+	font-weight: 600;
+}
+
+.total-balance-pay {
+	padding: 15px;
+	margin: 0;
+}
+
+body .apply-header-approved {
+	float: left;
+	text-align: left;
+	font-size: 15px;
+}
+
+body .apply-header-approved b {
+	font-size: 20px;
+	color:#28211f;
+	font-weight: 600;
+}
+
+#buttons-fields {
+	margin-left: 250px;
+	margin-bottom: 40px;
+}
+
+.lot-of-loans {
+	margin-left: 50px;
+}
+
+.radio, .checkbox {
+    padding-left: 0;
+}
+
+.early-payment-form .form_buttons_container {
+	margin-bottom: 50px;
+	
+}
+
+.main-page-everline #get-cash .form-horizontal.early-payment-form {
+	padding: 25px 40px;
+	
+}
+
+#rollover-select, #loan-select {
+	margin-left: -150px;
+}
+
+.early-payment-form #loan-select,
+.early-payment-form #rollover-select {
+	width: 80%;
+}
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+    cursor:default;
+}
+#get-cash .radio .title,
+#get-cash .checkbox .title {
+	font-weight: normal;
+}
+.early-payment-form .radio b {
+    margin-left:33px;
+}
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+   background-color: #eeeeee !important;
+}
+
+.modal-body {
+	padding: 0;
+}
+
+.modal-body .click-wrap .title {
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.card-options-label {
+	width: 100%;
+}
+
+.card-options-label .input-wrapper{
+	width: 60%;
+    float: right;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+	font-weight: 300;
+    font-size: 33px;
+	margin-bottom: 0px;
+}
+
+.early-payment-form .input-wrapper, 
+.card-options-label .input-wrapper{
+	margin-top: -10px;
+}
+
+.ui-widget .ui-widget-content .modal-body button.ev-btn-org,
+.ui-widget .ui-widget-content .modal-body button.clean-btn {
+	height: 38px !important;
+	line-height: normal;
+	padding:0;
+}
+
+.ui-widget .ui-widget-content .modal-body button.ev-btn-org {
+	width: 60%;
+}
+
+.ui-widget .ui-widget-content .modal-body button.clean-btn {
+	width: 25%;
+}
+
+.select-card-area .form_buttons_container div.input-wrapper {
+	width: 70%;
+	min-height: 40px;
+	margin-top: 40px;
+}
+
+.modal-body .form_buttons_container .input-title {
+	height: 40px;
+}
+
+.pay-early-wrapper h1 {
+	border-bottom: 0;
+}
+
+.table .green-text{
+	color: #8dc641;
+	font-weight: 600;
+}
+
+#get-cash h2.loan-details-title{
+	font-size: 29px;
+    font-weight: lighter;
+	color: #565656;
+	line-height: 40px;
+	margin-bottom: 25px;
+}
+
+.loan-details-well td.caption {
+	font-size: 15px;
+    font-weight: 600;
+	color: #3a3a3a;
+}
+
+.loan-details-well td.value {
+	font-size: 15px;
+	color: #3a3a3a;
+    font-family: 'Open Sans',sans-serif;
+}
+
+#loan-summary,
+#loan-agreement {
+	margin-bottom: 15px;
+}
+
+.loan-summary-well {
+	margin-bottom: 5px;
+}
+
+.loan_apr_block {
+	display:none;
+}
+
+h2 span.loan-amount-header-start,
+h2 span.duration-select-allowed,
+#profile-content h1 {
+	display: none;
+}
+
+.loan-schedule-header h2 {
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+h2.agreement-header {
+	margin-bottom: 20px;
+	margin-top: 15px;
+}
+
+h2.accept-agreement-header {
+	margin-bottom: 0px;
+	margin-top: 5px;
+}
+
+.controls.agreements-checkboxes .click-wrap {
+	margin-bottom: 0px;
+	margin-top: 25px;
+	font-weight: 500;
+}
+
+.controls.agreements-checkboxes .click-wrap .title{
+	margin-left: 55px;
+	font-weight: 500;
+}
+
+.LoanLegal .form_buttons_container .input-wrapper .clean-btn,
+.LoanLegal .form_buttons_container .input-wrapper .ev-btn-org,
+.LoanLegal .form_buttons_container .input-wrapper a.ev-btn-org {
+	width: 240px;
+	margin-left: 10px;
+}
+
+.LoanLegal .form_buttons_container {
+	margin-top: 30px;
+}
+
+#companies-agreement-template .simple-well.clearfix,
+#consumers-agreement-template .simple-well.clearfix{
+	padding-right: 0;
+}
+
+.apply-for-loan-div .cosme-agreement-section.corner-border.clearfix {
+	margin: 45px 0;
+}
+.agreement .overview {
+    height:500px;
+       
+}
+
+.by-paying-early{
+	color: #8dc641;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.by-paying-early strong {
+	font-weight: normal !important;
+}
+
+.orange-text{
+	color: #e28023;
+}
+
+.pay-early-details {
+	font-size: 15px;
+    width: 18.55%;
+    display: inline-block;
+    margin-bottom: 10px;
+    min-width: 170px;
+}
+.confirmation-email-notification {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+h3.confirmation-header {
+	font-size: 29px;
+    font-weight: lighter;
+	padding-bottom: 20px;
+	margin-top: 0;
+}
+
+.nav.customer-dashboard-main > li > a:hover {
+	border: 0;
+}
+
+.main-page-everline #get-cash .loan-agreements .clean-btn {
+	margin-left: 0;
+}

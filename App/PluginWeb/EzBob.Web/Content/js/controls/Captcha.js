@@ -19,33 +19,8 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 			that.$el.find('br').remove();
 			that.$el.find('a').html('Refresh');
 			that.$el.find('input').attr('tabindex', that.tabindex);
-
-			that.$el.find('input#CaptchaInputText').replaceWith(
-				$('<div />').append(
-					$('<label />')
-						.addClass('attardi-input')
-						.append(
-							$('<span />').text('Enter characters shown above')
-						)
-						.append(
-							$('<input />')
-								.attr({
-									tabindex: that.tabindex,
-									id: 'CaptchaInputText',
-									name: 'CaptchaInputText',
-									type: 'text',
-									'ui-event-control-id': 'signup:captcha',
-									maxlength: 6,
-								}) // attr
-								.addClass('form_field')
-						) // append to label
-						.append(
-							$('<img />').addClass('field_status required').attr('id', 'CaptchaInputTextImage')
-						)// append img
-				) // append to div
-					.append('<span>&nbsp;</span>')
-			); // replaceWith
-
+		    that.$el.find('input#CaptchaInputText').remove();
+		
 		    that.$el.find('img.field_status').field_status({ required: true });
 		    that.$el.find('#CaptchaImage').addClass('captcha-image-margin');
 

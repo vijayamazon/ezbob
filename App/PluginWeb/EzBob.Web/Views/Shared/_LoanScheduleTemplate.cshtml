@@ -1,24 +1,60 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
+}
+
 <script id="loan-schedule-template" type="text/template">
 <% (function() {
 	var bAtLeastOneExceeds = false; %>
     <div class="print-ezboblogo"></div>
     <div class="print-customer_details">Loan offer (<%-customer%>, <%-refNum%>, <%-moment().format('DD/MM/YYYY')%>)</div>
 	<div class="simple-well clearfix apply-for-loan-total-block">
-		<div class="formula">
-			<div class="total">Loan: <span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
-			<div class="plus"></div>
-			<div class="cost">Cost: <span class="gelt"><%-EzBob.formatPounds(totalInterest)%></span></div>
-			<div class="eq"></div>
-			<div class="due">Total: <span class="gelt"><%-EzBob.formatPounds(total)%></span></div>
-		</div>
-
+		@if (isEverline) {
+			<div class="sliders">
+				<div class="form-markup-wrapper clearfix summary-wrap">
+					<div class="c_col c_spn_16 summary">
+						<div class="c_col c_spn_3 ">
+							<h3>Borrowing</h3>
+							<p><span class="amount"><%-EzBob.formatPounds(totalPrincipal)%></span></p>
+						</div>
+						<span class="c_col c_spn_1"><span class="calc-equal"> + </span><i class="fa icon-plus"></i></span>
+						<div class="c_col c_spn_3">
+							<h3>Interest cost</h3>
+							<p><span class="interest"><%-EzBob.formatPounds(totalInterest)%></span></p>
+						</div>
+						<div class="c_col c_spn_7 summary_total">
+							<h3 class="c_col c_spn9">
+								<span class="calc-equal"> = </span>Total to repay
+							</h3>
+							<p class="c_col c_spn_7"><span class="total"><%-EzBob.formatPounds(total)%></span></p>
+						</div>
+						<br class="clearfix">
+					</div>
+				</div>
+			</div>
+		} else {
+			<div class="formula">
+				<div class="total">Loan: <span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
+				<div class="plus"></div>
+				<div class="cost">Cost: <span class="gelt"><%-EzBob.formatPounds(totalInterest)%></span></div>
+				<div class="eq"></div>
+				<div class="due">Total: <span class="gelt"><%-EzBob.formatPounds(total)%></span></div>
+			</div>
+		}
 		<div class="rlc">
-            <%if(isPersonal) {%>
+			<%if(isPersonal) {%>
 			<div class="apr">APR = <%- apr %>%</div>
-            <%}%>
-			<div class="real-cost">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %></div>
+			<%}%>
+			<div class="real-cost">*Real loan cost = <%- EzBob.formatPercents(realInterestCost) %>.</div>
 		</div>
+	</div>
+	
+	<div class="loan-schedule-header">
+		<h2>
+			<span>Payment schedule</span>
+		</h2>
 	</div>
 
 	<table class="table table-striped payment-schedule-table">
@@ -49,15 +85,13 @@
 					<td><%-EzBob.formatPounds(line.Interest)%></td>
 					<td<% if (bExceeds) { print(' class=red title="Interest rate for this month exceeds max rate for loan source."'); } %>><%-EzBob.formatPercentsWithDecimals(line.InterestRate)%></td>
 
-					<td style="text-align: center"><%
+					<td class="payment-schedule-fees"><%
 						var fee = setupFee > 0 && i == 0 ? setupFee : 0;
 						if (line.Fees) fee += line.Fees; %>
 							<%-fee !=0 ? EzBob.formatPounds(fee) : '-' %><%- setupFee && i == 0 ? '*' : '' %>
 					</td>
 
-					<td>
-						<b class="apply-loan-total"><%-EzBob.formatPounds(line.AmountDue)%></b>
-					</td>
+					<td class="apply-loan-total"><%-EzBob.formatPounds(line.AmountDue)%></td>
 				</tr>
 			<%});%>
 		</tbody>

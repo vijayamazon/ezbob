@@ -10,6 +10,7 @@
 			public virtual string FileName { get; set; }
 			public virtual string FilePath { get; set; }
 			public virtual string FileContentType { get; set; }
+			public virtual bool? IsBankStatement { get; set; }
 		}
 	}
 
@@ -28,6 +29,7 @@
 				Map(x => x.FileName).Length(300);
 				Map(x => x.FilePath);
 				Map(x => x.FileContentType).Length(300);
+				Map(x => x.IsBankStatement);
 				References(x => x.Customer, "CustomerId");
 
 			}
@@ -44,6 +46,8 @@
 		public interface ICompanyFilesMetaDataRepository : IRepository<MP_CompanyFilesMetaData>
 		{
 			IEnumerable<MP_CompanyFilesMetaData> GetByCustomerId(int customerId);
+			IEnumerable<string> GetBankStatementFiles(int customerId);
+			IEnumerable<string> GetFinancialDocumentFiles(int customerId);
 		}
 
 		public class CompanyFilesMetaDataRepository : NHibernateRepositoryBase<MP_CompanyFilesMetaData>, ICompanyFilesMetaDataRepository
@@ -56,6 +60,18 @@
 			public IEnumerable<MP_CompanyFilesMetaData> GetByCustomerId(int customerId)
 			{
 				return GetAll().Where(x => x.Customer.Id == customerId);
+			}
+
+			public IEnumerable<string> GetBankStatementFiles(int customerId) {
+				return GetAll()
+					.Where(x => x.Customer.Id == customerId && x.IsBankStatement.HasValue && x.IsBankStatement.Value == true)
+					.Select(x => x.FileName);
+			}
+
+			public IEnumerable<string> GetFinancialDocumentFiles(int customerId) {
+				return GetAll()
+					.Where(x => x.Customer.Id == customerId && x.IsBankStatement.HasValue && x.IsBankStatement.Value == true)
+					.Select(x => x.FileName);
 			}
 		}
 	}

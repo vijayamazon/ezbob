@@ -1,0 +1,134 @@
+﻿.main-page-everline .directors-list,
+.main-page-everline .director {
+	width: 100%;
+	max-width: 100%;
+}
+
+.main-page-everline .add-company-director-container .form_field_container .input-wrapper {
+	width: 100%;
+	min-height: 50px;
+	display: block;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.form_field_container .input-wrapper.directors-wrapper {
+	width: 940px;
+}
+
+.main-page-everline .add-director.ev-btn-org {
+	float: right;
+}
+
+.main-page-everline .add-company-director .field_status {
+	display: none;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director input,
+.main-page-everline .form_field_container .input-wrapper .add-company-director select {
+	display: inline;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="checkbox"],
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="radio"] {
+	width: 32px;
+	height: 32px;
+	margin: 0 12px 10px 178px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="text"],
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="email"] {
+	width: 70%;
+	margin-bottom: 0;
+}
+
+.main-page-everline .form_field_container .add-company-director .input-title {
+	width: 27%;
+	margin-right: 10px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director div:not(.ezDateTime) > .attardi-input > span,
+.main-page-everline .form_field_container .add-company-director .fs16 {
+	width: 210px;
+	text-align: right;
+	display: inline-block;
+}
+
+.main-page-everline .form_field_container .add-company-director .fs16 {
+	vertical-align: top;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .form_field_left_side {
+	width: 38%!important;
+}
+
+/*
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime {
+	display: inline-block;
+}
+*/
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime > label {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime > label > span {
+	display: block;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime select {
+	float: none;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .form_buttons_container {
+	text-align: right;
+}
+
+/*.main-page-everline .add-company-director .FormRadioCtrl > span > label:after {
+	white-space: pre;
+	content: "\A";
+}*/
+
+#DirectorAddress .addAddress {
+	float: none;
+}
+
+.director .ev-form {
+	padding-bottom: 70px;
+}
+
+.form-director-is-dir-sha .click-wrap {
+	display:block;
+	float: none;
+	margin: 0;
+	clear: both;
+    margin-left: 28%;
+    position: static;
+    min-height: 50px;
+}
+
+.form-director-is-dir-sha .input-title {
+	margin: 0;
+    display: none;
+}
+
+.directors-list td:last-child,
+.directors-list th:last-child{
+	display: none;
+}
+
+.director .control-group {
+	margin-bottom: 5px;
+}
+
+.ezDateTime .input-wrapper select {
+	margin-bottom: 0;
+}

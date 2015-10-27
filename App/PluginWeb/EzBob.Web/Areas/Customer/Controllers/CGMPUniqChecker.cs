@@ -12,23 +12,27 @@
 	using Ezbob.Utils.Serialization;
 
 	public class CGMPUniqChecker : MPUniqChecker {
-
 		public CGMPUniqChecker(
 			ICustomerMarketPlaceRepository customerMarketPlaceRepository,
 			IMP_WhiteListRepository whiteList,
 			MarketPlaceRepository mpTypes
 		) : base(customerMarketPlaceRepository, whiteList) {
-			m_oMpTypes = mpTypes;
+			this.mpTypes = mpTypes;
 		} // constructor
 
 		public override void Check(Guid marketplaceType, Customer customer, string token) {
 			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
 				return;
 
-			var oMp = m_oMpTypes.Get(marketplaceType);
+			var oMp = this.mpTypes.Get(marketplaceType);
 
 			if (oMp == null)
 				return;
+
+			if (marketplaceType == Configuration.Instance.Hmrc.Guid()) {
+				CheckHmrc(oMp.Id, customer, token);
+				return;
+			} // if
 
 			var oMpList = _customerMarketPlaceRepository.GetAll()
 				.Where(mp => mp.Marketplace.Id == oMp.Id)
@@ -45,6 +49,20 @@
 			} // for each marketplace
 		} // Check
 
+		private void CheckHmrc(int hmrcID, Customer customer, string token) {
+			MP_CustomerMarketPlace existing = this._customerMarketPlaceRepository
+				.GetAll()
+				.FirstOrDefault(mp => mp.Marketplace.Id == hmrcID && mp.DisplayName == token);
+
+			if (existing == null)
+				return;
+
+			if (existing.Customer.Id == customer.Id)
+				throw new MarketPlaceAddedByThisCustomerException();
+
+			throw new MarketPlaceIsAlreadyAddedException();
+		} // CheckHmrc
+
 		private bool IsSameMarketPlace(int nMpID, byte[] oSecData, MP_MarketplaceType oMp, string sShopID) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(oMp.Name);
 
@@ -54,14 +72,20 @@
 			try {
 				var am = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(oSecData));
 				return am.Fill().UniqueID() == sShopID;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				string sXml = System.Text.Encoding.Default.GetString(oSecData);
-				new SafeILog(this).Warn(e, "Failed to de-serialise security data. Marketplace ID = {0}, Security data: {1}", nMpID, sXml);
+
+				new SafeILog(this).Warn(
+					e,
+					"Failed to de-serialize security data. Marketplace ID = {0}, Security data: {1}",
+					nMpID,
+					sXml
+				);
+
 				return false;
-			}
+			} // try
 		} // IsSameMarketPlace
 
-		private readonly MarketPlaceRepository m_oMpTypes;
+		private readonly MarketPlaceRepository mpTypes;
 	} // class CGMPUniqChecker
 } // namespace

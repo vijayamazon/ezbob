@@ -1,152 +1,292 @@
-﻿@using EZBob.DatabaseLib.Model.Database
+﻿@using ConfigManager
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+
 @{
-	CustomerOrigin origin = ViewBag.CustomerOrigin;
-	string privacyUrl = (origin.FrontendSite + "/privacy-and-cookie") + (origin.IsEverline() ? "-policy" : "s");
+	var originModel = ViewBag.CustomerOrigin;
+	var origin = originModel.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
+	string privacyUrl = (originModel.FrontendSite + "/privacy-and-cookie") + (isEverline ? "-policy" : "s");
+	string captchamode = CurrentValues.Instance.CaptchaMode;
 }
+
 <div class="page-section hide section-signup">
-	<form class="signup-form broker-form" novalidate="novalidate">
-		@{ int nSignupTabIdx = 1; }
-		<h2 class="form-start">Create broker account</h2>
+	<section id="content">
+		<div class="wizard-wrap">
+			<div class="wizard-inner-wrap">
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Company name</span>
-				<input type="text" name="FirmName" id="FirmName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-name" />
-				<img id="FirmNameImage" class="field_status required" />
-			</label>
-		</div>
+				<form class="signup-form broker-form" novalidate="novalidate">
+					@{ int nSignupTabIdx = 1; }
 
-		<div class="form_field_container hide-mobile">
-			<label class="attardi-input">
-				<span>Company registration number</span>
-				<input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
-				<img id="FirmRegNumImage" class="field_status" />
-			</label>
-		</div>
+					<h2 class="form-start">Create broker account</h2>
 
-		<div class="form_field_container hide-mobile">
-			<label class="attardi-input">
-				<span>Company web site</span>
-				<input type="url" name="FirmWebSite" id="FirmWebSite" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-web-site" />
-				<img id="FirmWebSiteImage" class="field_status" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"FirmName",
+							"Company Name",
+							type: "text",
+							cls: "form_field",
+							isRequired: true,
+							tabIndex: nSignupTabIdx++,
+							statusIcon: true,
+							uiEventControlID: "broker:signup-firm-name"),
+						origin: origin)
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Contact person full name</span>
-				<input type="text" name="ContactName" id="ContactName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-contact-name" />
-				<img id="ContactNameImage" class="field_status required" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"FirmRegNum",
+							"Company registration number",
+							type: "text",
+							cls: "form_field",
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-firm-regnum"),
+						origin: origin)
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Contact person email</span>
-				<input type="email" name="ContactEmail" id="ContactEmail" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" autocorrect="off" autocapitalize="off" ui-event-control-id="broker:signup-contact-email" />
-				<img id="ContactEmailImage" class="field_status required" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"FirmWebSite",
+							"Company web site",
+							type: "url",
+							cls: "form_field",
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-firm-web-site"),
+						origin: origin)
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<div class="code-sent-style-container">
-					<label id="codeSentLabel" class="code-sent-style hide">Code sent</label>
-				</div>
-				<span>Contact person mobile phone</span>
-				<input type="tel" name="ContactMobile" id="ContactMobile" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:signup-contact-mobile" maxlength="11" />
-				<img id="ContactMobileImage" class="field_status required" />
-				<input id="generateMobileCode" name="generateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:signup-generate-mobile-code" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"ContactName",
+							"Contact person full name",
+							type: "text",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-contact-name"),
+						origin: origin)
 
-		<div id="mobileCodeDiv" class="form_field_container hide">
-			<label class="attardi-input">
-				<span>Mobile phone authentication code</span>
-				<input type="tel" class="phonenumbercode form_field_left_side form_field" name="MobileCode" id="MobileCode" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-mobile-code" maxlength="6" data-sent-to="" />
-				<img id="mobileCodeImage" class="field_status required" />
-				<input id="switchToCaptcha" class="button btn-green form_field_right_side_signup_phone" type="button" value="Did not receive code" ui-event-control-id="broker:switch-to-captcha" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"ContactEmail",
+							"Contact person email",
+							type: "email",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							autoCorrect: "off",
+							autoCapitalize: "off",
+							uiEventControlID: "broker:signup-contact-email"),
+						origin: origin)
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Contact person other phone number</span>
-				<input type="tel" name="ContactOtherPhone" id="ContactOtherPhone" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field" ui-event-control-id="broker:signup-contact-other-phone" />
-				<img id="ContactOtherPhoneImage" class="field_status" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"ContactMobile",
+							"Contact person mobile phone",
+							type: "tel",
+							cls: "phonenumber form_field form_field_left_side",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							maxLength: 11,
+							uiEventControlID: "broker:signup-contact-mobile",
+							innerMessage: "Code sent",
+							button: new EzButtonModel(
+										"generateMobileCode",
+                                                                "Send authentication code",
+										"button btn-green form_field_right_side_signup_phone disabled clean-btn",
+										"broker:signup-generate-mobile-code",
+										nSignupTabIdx++,
+										EzButtonType.input)),
+						origin: origin)
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Number of applications per month</span>
-				<input type="tel" name="EstimatedMonthlyAppCount" id="EstimatedMonthlyAppCount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" max-length="6" ui-event-control-id="broker:signup-esitmated-monthly-application-count" />
-				<img id="EstimatedMonthlyAppCountImage" class="field_status required" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"MobileCode",
+							"Mobile phone authentication code",
+							type: "tel",
+							cls: "phonenumbercode form_field_left_side form_field",
+							isRequired: true,
+							statusIcon: true,
+							tohide: true,
+							tabIndex: nSignupTabIdx++,
+							maxLength: 6,
+							uiEventControlID: "broker:signup-mobile-code",
+							formFieldID: "mobileCodeDiv",
+							button: new EzButtonModel(
+										"switchToCaptcha",
+										"Did not receive code",
+										"button btn-green form_field_right_side_signup_phone clean-btn",
+										"broker:switch-to-captcha",
+										0,
+										EzButtonType.input)),
+						origin: origin)
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Value of credit per month (&pound;)</span>
-				<input type="tel" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
-				<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
-			</label>
-		</div>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"ContactOtherPhone",
+							"Contact person other phone number",
+							type: "tel",
+							cls: "phonenumber form_field",
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-contact-other-phone"),
+						origin: origin)
 
-		<div class="form_field_container">
-			<div class="form_read_and_accept">
-				<input type="checkbox" name="FCARegistered" id="FCARegistered" value="false" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:fca-registered" />
-				<label for="FCARegistered">FCA Registered</label>
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"EstimatedMonthlyAppCount",
+							"Number of applications per month",
+							type: "tel",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							maxLength: 6,
+							uiEventControlID: "broker:signup-esitmated-monthly-application-count"),
+						origin: origin)
+
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"EstimatedMonthlyClientAmount",
+							"Value of credit per month",
+							type: "tel",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
+						origin: origin)
+
+					<div class="control-group form_read_and_accept">
+						<div class="controls">
+
+							@{ EzInputBuilder checkbox1 = new EzInputBuilder(
+								"FCARegistered",
+								"FCA Registered",
+								value: "false",
+								type: "checkbox",
+								tabIndex: nSignupTabIdx++,
+								name: "FCARegistered",
+								uiEventControlID: "broker:fca-registered");
+
+							 List<EzInputBuilder> checkboxesList1 = new List<EzInputBuilder> {checkbox1};
+
+							 var checkboxes1 = new EzClickInputModel(
+												name: "FCARegistered",
+												caption: "",
+												errorImgClass: "",
+												inputWrapperClass: "controls",
+												containerClass: "form_read_and_accept",
+												isRequired: false,
+												statusIcon: false,
+												inputButtons: checkboxesList1);
+												
+							@EzForm.ClickableInputWizard(checkboxes1, origin: origin)
+							}
+						</div>
+					</div>
+
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"LicenseNumber",
+							"Licence number",
+							type: "text",
+							cls: "form_field",
+							wrapperCls: "license_number_field_container",
+							isRequired: true,
+							statusIcon: true,
+							tohide: true,
+							tabIndex: nSignupTabIdx++,
+							maxLength: 50,
+							uiEventControlID: "broker:signup-license-number"),
+						origin: origin)
+
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"Password",
+							"Create password",
+							type: "password",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-password"),
+						origin: origin)
+
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"Password2",
+							"Confirm password",
+							type: "password",
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							uiEventControlID: "broker:signup-confirm-password"),
+						origin: origin)
+
+					<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0" />
+					<div id="CaptchaSection" class="form_field_container hide broker-captcha" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
+						@EzForm.Captcha(captchamode, uiEventControlID: "broker:captcha", tabIndex: nSignupTabIdx++, origin: origin, sId: "broker-captcha")
+					</div>
+
+					@{ EzInputBuilder checkbox2 = new EzInputBuilder(
+							"AgreeToTerms",
+							String.Format("I have read and accept the {0} <a href='#' class='show-terms-and-conditions'>Terms &amp; Conditions</a>", origin),
+							value: "accepted-terms",
+							type: "checkbox",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							name: "AgreeToTerms",
+							uiEventControlID: "broker:signup-agree-to-terms",
+							wrapperCls: "broker-terms"); 
+							
+						EzInputBuilder checkbox3 = new EzInputBuilder(
+							"AgreeToPrivacyPolicy",
+							String.Format("I have read and accept the {0} <a target='_blank' href='{1}'>Privacy Policy</a>", origin, privacyUrl),
+							value: "accepted-privacy-policy",
+							type: "checkbox",
+							isRequired: true,
+							statusIcon: true,
+							tabIndex: nSignupTabIdx++,
+							name: "AgreeToPrivacyPolicy",
+							uiEventControlID: "broker:signup-agree-to-privacy-policy",
+							wrapperCls: "broker-terms"); 
+
+							
+
+						List<EzInputBuilder> checkboxesList2 = new List<EzInputBuilder> { checkbox2, checkbox3 };
+
+						var checkboxes2 = new EzClickInputModel(
+												name: "ConsentToTermsAndPolicy",
+												caption: "",
+												errorImgClass: "",
+												inputWrapperClass: "controls",
+												containerClass: "form_read_and_accept",
+												isRequired: false,
+												statusIcon: false,
+												inputButtons: checkboxesList2);
+
+						@EzForm.ClickableInputWizard(checkboxes2, origin: origin)
+					}
+
+					@EzForm.WizardButton(
+						new EzButtonModel(
+							"SignupBrokerButton",
+							"Sign up",
+							"button btn-green disabled pull-right ev-btn-org",
+							"broker:signup-submit",
+							nSignupTabIdx++,
+							EzButtonType.submit),
+						origin: origin)
+
+				</form>
+
+				<aside class="customer-sidebar broker"></aside>
 			</div>
 		</div>
-
-		<div class="form_field_container license_number_field_container" style="display: none">
-			<label class="attardi-input">
-				<span>Licence number</span>
-				<input type="text" name="LicenseNumber" id="LicenseNumber" maxlength="50" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-license-number" />
-				<img id="LicenseNumberImage" class="field_status required" />
-			</label>
-		</div>
-
-		<div id="strength-password-view" class="form_field_container">
-			<label class="attardi-input">
-				<span>Create password</span>
-				<input type="password" name="Password" id="Password" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-password" />
-				<img id="PasswordImage" class="field_status required" />
-			</label>
-			<p id="message" class="help-block"></p>
-		</div>
-
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Confirm password</span>
-				<input type="password" name="Password2" id="Password2" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-confirm-password" />
-				<img id="Password2Image" class="field_status required" />
-			</label>
-		</div>
-
-		<div id="CaptchaSection" class="form_field_container hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
-			<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0" />
-			@EzForm.Captcha(Model.CaptchaMode, sId: "broker-captcha")
-		</div>
-
-		<div class="form_field_container">
-			<div class="form_read_and_accept">
-				<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="accepted-terms" ui-event-control-id="broker:signup-agree-to-terms" />
-				<label for="AgreeToTerms">I have read and accept the @origin.Name <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
-			</div>
-
-			<div class="form_read_and_accept">
-				<input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="accepted-privacy-policy" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
-				<label for="AgreeToPrivacyPolicy">I have read and accept the @origin.Name <a target="_blank" href="@privacyUrl">privacy policy</a></label>
-			</div>
-		</div>
-
-		<div class="form_buttons_container">
-			<div class="attardi-button">
-				<button type="submit" id="SignupBrokerButton" class="button btn-green disabled pull-right" disabled="disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Sign up</button>
-			</div>
-		</div>
-	</form>
-	<aside class="customer-sidebar broker"></aside>
+	</section>
 </div>
+
+
+

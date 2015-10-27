@@ -1,12 +1,35 @@
-@media only screen and (min-width : 320px) and (max-width : 1000px) {
-    #header {
+@media only screen and (min-width : 320px) and (max-width : 800px) {
+	header {
+		height: 65px;
+	}
+    select {
+        background:white !important;
+    }
+
+	optgroup.fixiphone {
+		display: block;
+	}
+
+	#header {
 		width: 100%;
 		-moz-min-width: 100%;
 		-ms-min-width: 100%;
 		-o-min-width: 100%;
 		-webkit-min-width: 100%;
 		min-width: 100%;
-        background-color: #fff;
+		background-color: #fff;
+		height: 65px;
+	}
+
+	.header-logo {
+		line-height: 65px;
+		height: 65px;
+		width: 138px;
+		background: url('images/header/header_bg_left.png');
+		background-repeat: no-repeat;
+		display: inline-block;
+		vertical-align: middle;
+		background-position-x: -20px;
 	}
 
 	.header-inner {
@@ -18,30 +41,47 @@
 		min-width: 320px;
 	}
 
+	.newlogo {
+		vertical-align: middle;
+		margin-top: -8px;
+		margin-left: 12px;
+		background: url(images/header/ezbob_logo-white.png) no-repeat;
+		width: 100px;
+		height: 26px;
+		background-size: contain;
+		display: inline-block;
+	}
+
+	.header-phone {
+		position: absolute;
+		bottom: 8px;
+		right: 35px;
+	}
+
 	ul#user-menu {
-        margin: 0;
-        width: 180px;
-        top: 0;
-        right: -10px;
-        line-height: inherit;
-    }
+		margin: 0;
+		width: 180px;
+		top: 0;
+		right: -10px;
+		line-height: inherit;
+	}
 
-    ul#user-menu li {
-        margin: 0 0 0 15px; 
-    }
-    
-    footer {
-        display: none;
-    }
+		ul#user-menu li {
+			margin: 0 0 0 15px;
+		}
 
-    .inner {
+	footer {
+		display: none;
+	}
+
+	.inner {
 		-moz-min-width: 320px;
 		-ms-min-width: 320px;
 		-o-min-width: 320px;
 		-webkit-min-width: 320px;
 		min-width: 320px;
-        width: 100%;
-        margin: 0 auto;
+		width: 100%;
+		margin: 0 auto;
 	}
 
 	.broker-finish-wizard-later {
@@ -51,121 +91,146 @@
 		-o-min-width: 320px;
 		-webkit-min-width: 320px;
 		min-width: 320px;
-        width: 100%;
-        margin: 0;
-        border: none;
+		width: 100%;
+		margin: 0;
+		border: none;
 	}
 
 	.broker-finish-inner {
-        border: 1px solid #E2E3E5;
-        padding: 0;
-    }
+		border: 1px solid #E2E3E5;
+		padding: 0;
+	}
 
-    .broker-finish-wizard-later .button-container button {
-        position: relative;
-        margin-top: 5px;
-    }
+	.broker-finish-wizard-later .button-container button {
+		position: relative;
+		margin-top: 5px;
+	}
 
-    div.wizard-director-text {
-        width: 100%;
-        font-size: 11pt;
-        color: #585858;
-    }
+	div.wizard-director-text {
+		width: 100%;
+		font-size: 11pt;
+		color: #585858;
+	}
 
-    #content {
-        float: left;
-        width: 100%;
-        line-height: 1.8em;
-    }
+	hr {
+		width: 100%;
+	}
 
-    .ez_progress_bar {
-        width: 100%;
-        height: 30px;
-        padding: 0;
-        background: #f7f7f7;
-        background: -moz-linear-gradient(top,#f7f7f7 0,#e5e5e5 90%);
-    }
+	#content {
+		float: left;
+		width: 100%;
+		line-height: 1.8em;
+	}
 
-    .code-sent-style-container,
-    input.form_field_left_side,
-    input.form_field, textarea.form_field {
-        width: 92%;
-        max-width: 92%;
-    }
+	.ez_progress_bar {
+		width: 100%;
+		height: 30px;
+		padding: 0;
+		background: #f7f7f7;
+		background: -moz-linear-gradient(top,#f7f7f7 0,#e5e5e5 90%);
+	}
 
-    input.form_field_right_side_signup_phone {
-        float: none;
-        margin-top: 10px;
-        width: 170px;
-    }
+	.select_form_field_container .attardi-input span {
+		color: #585858;
+	}
 
-    div.form_read_and_accept {
-        width: 100%;
-    }
+	.code-sent-style-container,
+	input.form_field_left_side,
+	input.form_field, textarea.form_field {
+		width: 92%;
+		max-width: 92%;
+	}
 
-    select.form_field {
-        width: 92%;
-        height: 30px;
-        padding: 0;
-    }
+	input.form_field_right_side_signup_phone {
+		float: none;
+		margin-top: 10px;
+		width: 170px;
+	}
 
-    .btn.addAddress {
-        width: 40% !important;
-    }
+	button.btn-link.form_field_right_side_signup_phone {
+		width: 100%;
+	}
 
-    .addAddressInput {
-        width: 50% !important;
-    }
+	div.form_read_and_accept {
+		width: 100%;
+	}
 
-    .ezDateTime .fs16 {
-        display: block !important;
-        width: 100% !important;
-    }
+	select.form_field {
+		width: 92%;
+		height: 30px;
+		padding: 0;
+	}
 
-    .ezDateTime .attardi-input {
-        width: 30% !important;
-    }
+	.btn.addAddress {
+		width: 40% !important;
+	}
 
-    .BankContainer .marketplace-button {
-        width: 92%;
-    }
+	.addAddressInput {
+		width: 100% !important;
+	}
+	/*   input[type='radio'], input[type='checkbox'] {
+        height: 50px;
+        width: 40px;
+    }*/
+	.ezDateTime .fs16 {
+		display: block !important;
+		width: 100% !important;
+	}
 
-    .hmrc-why {
-        width: 100%;
-        margin-left: 30px;
-        padding-left: 50px;
-    }
+	.ezDateTime .attardi-input {
+		width: 30% !important;
+	}
 
-    .FormRadioCtrl > span {
-        width: 100%;
-        display: inline-block;
-    }
+	.BankContainer .marketplace-button {
+		width: 92%;
+	}
 
-        .FormRadioCtrl > span.error {
-            width: 100%;
-            display: inline-block;
-        }
-    
-    .marketplace-button {
-        width: 47%;
-    }
+	.hmrc-why {
+		width: 100%;
+		margin-left: 30px;
+		padding-left: 50px;
+	}
 
-    .hmrc-main-button {
-        margin: 5px;
-    }
-    .help_window {
-        width: 316px;
-        padding: 0;
-    }
-    .help_image {
-        width: 320px;
-        height: 229px;
-     }
+	.FormRadioCtrl > span {
+		width: 100%;
+		display: inline-block;
+	}
 
-    .help_security {
-        width: 320px;
-        height: 25px;
-    }
+		.FormRadioCtrl > span.error {
+			width: 100%;
+			display: inline-block;
+		}
+
+	.marketplace-button-wrapper {
+		width: 100%;
+	}
+
+	.account-or {
+		margin-bottom: 10px;
+		margin-left: 45%;
+		margin-top: -5px;
+	}
+
+	.hmrc-main-button {
+		margin: 5px;
+	}
+
+	.help_window {
+		width: 316px;
+		padding: 0;
+	}
+
+	.help_image {
+		width: 320px;
+		height: 229px;
+	}
+
+	.help_security {
+		width: auto;
+		padding-top: 50px;
+		margin-bottom: 80px;
+		background-size: contain;
+	}
 
 	.help_everline_header {
 		width: 320px;
@@ -178,200 +243,361 @@
 		margin-right: 15px;
 	}
 
-    .SubBank {
-        width: 92%;
-    }
-
-    a.amazonscreenshot,
-    .amazon_view_tutorial_label {
-        margin-top: 10px;
-    }
-
-    .dropzone {
-        min-height: 220px;
-    }
-
-    .dropzone .dz-with-text {
-        width: 100%;
-        height: inherit;
-        margin: 0;
-        top: 0;
-        left: 0;
-    }
-
-    div.form_buttons_container {
-        position: relative;
-        height: 30px;
-        margin-bottom: 10px;
-    }
-
-        div.form_buttons_container input.confirm {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        div.form_buttons_container input.continue, div.form_buttons_container a.continue {
-            position: relative;
-            clear: both;
-        }
-
-        div.form_buttons_container input.back, div.form_buttons_container a.back {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-    .wizard-steps {
-		-moz-min-width: 320px;
-		-ms-min-width: 320px;
-		-o-min-width: 320px;
-		-webkit-min-width: 320px;
-		min-width: 320px;
-        width: 100%;
+	.SubBank {
+		width: 92%;
 	}
 
-	ul.application_steps {
-		margin: 0 0 0 0;
-        overflow: hidden;
-        list-style: none;
+	a.amazonscreenshot,
+	.amazon_view_tutorial_label {
+		margin-top: 10px;
+	}
+
+	.dropzone {
+		min-height: 220px;
+	}
+
+		.dropzone .dz-with-text {
+			width: 100%;
+			height: inherit;
+			margin: 0;
+			top: 0;
+			left: 0;
+		}
+
+	div.form_buttons_container {
+		position: relative;
+		height: 30px;
+		margin-bottom: 10px;
+	}
+
+		div.form_buttons_container input.confirm {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		div.form_buttons_container input.continue, div.form_buttons_container a.continue {
+			position: relative;
+		}
+
+		div.form_buttons_container input.back, div.form_buttons_container a.back {
+			top: 0;
+			left: 0;
+		}
+
+	.wizard-steps {
 		-moz-min-width: 320px;
 		-ms-min-width: 320px;
 		-o-min-width: 320px;
 		-webkit-min-width: 320px;
 		min-width: 320px;
-        width: 100%;
+		width: 100%;
+	}
+
+	ul.application_steps li .step_label {
+		width: 100%;
+		font-size: 0.8em;
+		text-align: left;
 	}
 
 	.progress-line {
-        margin-left: 20px;
-        top: 18px;
-    }
+		margin-left: 20px;
+		top: 18px;
+	}
 
-    .progress-circle {
-        width: 47px;
-        height: 47px;
-    }
+	.progress-circle {
+		width: 47px;
+		height: 47px;
+	}
 
-    .progress-circle .inner-circle {
-        left: 3px;
-        top: 3px;
-        width: 40px;
-        height: 40px;
-    }
+		.progress-circle .inner-circle {
+			left: 3px;
+			top: 3px;
+			width: 40px;
+			height: 40px;
+		}
 
-    .progress-circle .percent {
-        vertical-align: middle;
-        line-height: 40px;
-        font-size: 25px;
-    }
+		.progress-circle .percent {
+			vertical-align: middle;
+			line-height: 40px;
+			font-size: 25px;
+		}
 
-    .progress-line-current, .progress-line-complete {
-        top: 21px;
-    }
+	.progress-line-current, .progress-line-complete {
+		top: 21px;
+	}
 
-    .first .progress-line-current, .first .progress-line-complete {
-        margin-left: 20px;
-    }
+	.first .progress-line-current, .first .progress-line-complete {
+		margin-left: 20px;
+	}
 
-    ul.application_steps li.current .progress-line-current {
-        left: -20px;
-    }
-    
-    input[disabled], 
-    select[disabled], 
-    textarea[disabled], 
-    input[readonly], 
-    select[readonly], 
-    textarea[readonly] {
-        background-color: #eee;
-        border: 1px #ccc solid;
-        cursor: default;
-    }
+	ul.application_steps li.current .progress-line-current {
+		left: 0px;
+	}
 
-    .modal {
-        width: 100%;
-    }
+	ul.application_steps li.last .progress-circle {
+		right: inherit;
+	}
 
-    .clear {
-        display: none;
-        visibility: hidden;
-    }
+	ul.application_steps li.last .step_label {
+		top: 47px;
+		right: 0;
+		margin-left: 0;
+	}
 
-    td.account-logo {
-        width: 90px;
-        overflow: hidden;
-        padding-right: 10px;
-    }
+	input[disabled],
+	select[disabled],
+	textarea[disabled],
+	input[readonly],
+	select[readonly],
+	textarea[readonly] {
+		background-color: #eee;
+		border: 1px #ccc solid;
+		cursor: default;
+	}
 
-    .pages, .stores-view {
-        width: 100%;
-    }
+	.modal {
+		width: 100%;
+	}
 
-    .bar_step30 {
-        width: 40%;
-    }
+	.clear {
+		display: none !important;
+		visibility: hidden;
+	}
+	.form_buttons_container .attardi-button{
+		display: block;
+	}
 
-    .btn {
-        padding: 8px 6px;
-    }
+	td.account-logo {
+		width: 90px;
+		overflow: hidden;
+		padding-right: 10px;
+	}
 
-    .source {
-        font-size: 11px;
-    }
+	.pages, .stores-view {
+		width: 100%;
+	}
 
-    .lpchat-container {
-        display: none !important;
-        visibility: hidden;
-    }
+	.pages {
+		padding: 20px;
+        padding-top:0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
 
-    aside.customer-sidebar {
-        display: none !important;
-        visibility: hidden;
-    }
+	.login_btn .button, .signup_btn .button {
+		margin-left: 10px;
+		margin-top: 0;
+	}
 
-    .type-of-business-form_field {
-        -moz-box-sizing: border-box;
+	.wizard-top {
+		padding: 20px;
+        padding-bottom:0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+    .sliders-wrapper {
+        margin-top: -65px;
         -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
         box-sizing: border-box;
-        overflow: hidden;
-        height: auto !important;
-        width: 93%;
-        padding: 4px;
-        font-size: 16px;
+        position: static;
     }
 
-    .vip-container {
-        display: none;
-    }
+    .loan-summary-boxes {
+		background: none;
+		display: block;
+	}
 
-    /***broker****/
-    .broker-form {
-        width: 100%;
-        max-width: 640px;
-    }
+	.loan-summary-box:first-child {
+		padding: 10px 60px 10px 30px;
+	}
 
-    .hide-mobile {
-        display: none;
-    }
+	.loan-summary-box {
+		display: block;
+		margin-top: 10px;
+		text-align: center;
+	}
+
+	.loan-summary-box-wrapper .button, div.form_field_container .button {
+		margin-top: 20px;
+		width: 93%;
+		display: block;
+		float: left;
+		margin: 20px auto;
+	}
+
+	.bar_step30 {
+		width: 40%;
+	}
+
+	.loan-summary-box-wrapper .button {
+		width: 100%;
+	}
+
+	.btn {
+		padding: 8px 6px;
+	}
+
+	.source {
+		font-size: 11px;
+	}
+
+	.lpchat-container {
+		display: none !important;
+		visibility: hidden;
+	}
+
+	aside.customer-sidebar {
+		display: none !important;
+		visibility: hidden;
+	}
+
+	.vip-container {
+		display: none;
+	}
+
+	/***broker****/
+	.broker-form {
+		width: 100%;
+		max-width: 640px;
+	}
+
+	.hide-mobile {
+		display: none;
+	}
 
 
-	.ui-dialog.ui-widget.ui-widget-content.ui-corner-all{
+	.ui-dialog.ui-widget.ui-widget-content.ui-corner-all {
 		left: 0 !important;
 		width: auto !important;
+        padding:15px;
+        top:0 !important;
 	}
+
+	.payments-wrap, .sliders-main .summary {
+		text-align: center;
+	}
+
+	.sliders-main .summary-wrap {
+		padding-top: 0;
+	}
+
+    .address-dialog-widget {
+        height: 250px !important;
+		border: 1px solid #ddd !important;
+    }
+
+	.matchingAddressList li{
+		line-height: 28px;	
+	}
+
+    .ui-dialog-buttonset button {
+        width:100%;
+    }
+
+	.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
+		margin: 0;
+		padding: 0;
+	}
+
+	.header-info-left,
+	.header-info-right,
+	.header-info-text {
+		height: 65px;
+	}
+
+	.header-info {
+		line-height: 65px;
+		margin-left: -25px;
+	}
+
 
 }
 
 @media only screen and (min-width : 320px) and (max-width : 500px) {
-    .header-info {
-        line-height: initial;
-        color: inherit;
-        width: 100%;
-    }
-    .header-info-left,
-    .header-info-text,
-    .header-info-right {
-        background: none;
-    }
+	.header-info {
+		line-height: initial;
+		color: inherit;
+		width: 100%;
+	}
+
+	.header-info-left,
+	.header-info-text,
+	.header-info-right {
+		background: none;
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.amount-caption, .period-caption {
+		top: 6px;
+		font-size: 28px;
+		position: relative;
+		left: 0;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.amount-caption, .period-caption {
+		background-position: 5px 8px;
+		padding-left: 40px;
+		padding-top: 0;
+	}
+
+	.amount-area, .period-area {
+		padding: 10px 20px 30px;
+	}
+
+	.amount-tooltip, .period-tooltip {
+		display: block !important;
+		left: 72px;
+		float: none;
+		font-size: 50px;
+		text-align: center;
+	}
+
+	.slider-wrap {
+		display: block;
+		width: 100%;
+	}
+
+	.calc-header {
+		padding-top: 10px;
+		padding-left: 0;
+	}
+
+	.button.change-loan-details-btn {
+		padding: 24px;
+		font-size: 24px;
+	}
+
+	.summary-wrap {
+		display: none;
+	}
+
+	.sliders-container {
+		padding-bottom: 14px;
+	}
+
+	.slider-wrapper {
+		padding: 15px 10px;
+	}
+
+	.payments-wrap {
+		text-align: center;
+	}
+
+	.calc-header {
+		margin: 20px 20px 0;
+	}
+
+	.t-c .bottom-text-inner a {
+		float: none;
+		display: block;
+		text-align: center;
+		font-size: 33px;
+	}
 }

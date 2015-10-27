@@ -244,7 +244,8 @@
 		private readonly Medal medalClassification;
 		private readonly AutomationCalculator.Common.TurnoverType? turnoverType;
 		private readonly AutomationCalculator.Common.MedalType medalType;
-		private readonly CustomerAnalyticsRepository customerAnalytics;
+
+		private DateTime? incorporationDate;
 
 		private DateTime? companyDissolutionDate;
 		private List<Name> directors;

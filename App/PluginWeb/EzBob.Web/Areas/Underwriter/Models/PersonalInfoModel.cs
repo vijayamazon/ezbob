@@ -49,6 +49,7 @@
 		public bool IsFraudInAlertMode { get; set; }
 		public bool IsTestInAlertMode { get; set; }
 		public bool IsCciMarkInAlertMode { get; set; }
+		public bool BlockTakingLoan { get; set; }
 		public bool IsCustomerStatusInAlertMode { get; set; }
 		public bool IsAmlInAlertMode { get; set; }
 		public string AmlResult { get; set; }
@@ -243,7 +244,7 @@
 				ActiveCampaign = activeCampaigns.Aggregate((i, j) => i + ", " + j);
 
 			IsCciMarkInAlertMode = customer.CciMark;
-
+			BlockTakingLoan = customer.BlockTakingLoan;
 			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
 

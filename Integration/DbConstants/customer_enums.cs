@@ -12,6 +12,7 @@
 		Single,
 		Divorced,
 		Widowed,
+		[Description("Living Together")]
 		LivingTogether,
 		Separated,
 		Other
@@ -165,7 +166,34 @@
 		[Description("Fraud Done")]
 		FraudDone = 4,
 		[Description("Identity/Details Theft")]
-		IdentityOrDetailsTheft = 5
+		IdentityOrDetailsTheft = 5,
 	} // enum FraudStatus
 
+	public enum CreditResultStatus {
+		WaitingForDecision,
+		Escalated,
+		Rejected,
+		Approved,
+		CustomerRefused,
+		ApprovedPending,
+		Active,
+		Collection,
+		Legal,
+		PaidOff,
+		WrittenOff,
+		Late,
+	} // enum CreditResultStatus
+
+	public enum Status {
+		Registered,
+		Approved,
+		Rejected,
+		Manual,
+	} // enum Status
+
+	public enum SystemDecision {
+		Approve,
+		Reject,
+		Manual,
+	} // enum SystemDecision
 } // namespace

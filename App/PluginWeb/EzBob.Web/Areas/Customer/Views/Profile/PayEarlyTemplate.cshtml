@@ -1,154 +1,246 @@
+@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
-@{ Html.RenderPartial("_payEarlyConfirmationModalTemplate"); }
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	Html.RenderPartial("_payEarlyConfirmationModalTemplate");
+	bool isEverline = origin == CustomerOriginEnum.everline;
+}
 
 <script id="payEaryly-template" type="text/template">
 	<%
 	var loanPaymentTypeDisabled = !isPayLoan && liveLoans.length > 1 ? 'disabled="disabled"' : '';
 	var loanPaymentTypeHidden   = !isPayLoan && liveLoans.length > 1 ? 'style="display: none;"' : '';
 
+	var hasRollover = isPayRollover && rollovers.length > 0;
 	var rolloverDisabled        = !isPayRollover && rollovers.length > 0 ? 'disabled="disabled"' : '';
-	var rolloverIsHidden        = !isPayRollover && rollovers.length > 0  ? 'style="display: none;"' : '';
-	var rolloverVisible         = rollovers.length == 0 ? 'style="display: none;"' : '';
 	var rolloverAnotherAmountDisabled = rolloverPaymentType != 'other' ? 'disabled="disabled"' : '';
 
 	var loansClass = liveLoans.length > 1 ? 'lot-of-loans' : '';
 	%>
-	<div class="row-fluid profile-screen">
-		<div class="span7"><%
-			if (hasLateLoans || !isEarly) {
-				%><h1>Make a Payment:</h1>
-				<h2>Always good to pay on time!</h2><%
-			}
-			else {
-				%><h1>Pay Early:</h1>
-				<h2>Save &amp; Increase Your Rating!</h2><%
-			}
-			%>
+	<div class="row-fluid profile-screen pay-early-wrapper">
+		<%	if (hasLateLoans || !isEarly) { %>
+		<h1>Make a payment:</h1>
+		<h2>Always good to pay on time!</h2>
+		<% } else { %>
+		<h1>Pay Early:</h1>
+		<h2>Save &amp; increase your rating!</h2>
+		<% } %>
 
-			<div class="form-horizontal early-payment-form simple-well">
-				<div class="row-fluid">
-					<div class="span12">
-						<h3 class="apply-header-approved total-balance-pay pull-right">Today's Total Balance: <b><%- EzBob.formatPounds(total) %></b></h3>
-					</div>
+		<div class="form-horizontal early-payment-form simple-well ev-form">
+			<div class="row-fluid" id="early-payment-form-row-fluid">
+				<div class="span6" id="cap1">
+					<h3>Choose an option:</h3>
 				</div>
-				<div class="row-fluid">
-					<div class="span6">
-						<h3 style="margin-bottom: 25px; font-weight: bold;">Choose an Option:</h3>
-					</div>
+				<div class="span6" id="cap2">
+					<h3 class="apply-header-approved total-balance-pay pull-right">Today's total balance <b><%- EzBob.formatPounds(total) %></b></h3>
 				</div>
+			</div>
 
-				<div><%
-					if (liveLoans.length > 1) {
-						%><div class="control-group">
-							<label class="radio w100p" ui-event-control-id="pay-early:total">
-								<input type="radio" name="paymentType" value="total" <%- paymentType =='total' ? 'checked="checked"' : '' %> />
-								Pay Total Balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(total) %></b>
+			<div>
+				<%if (liveLoans.length > 1) {%>
+				<div class="control-group form_field_container">
+					<label class="radio w100p click-wrap" ui-event-control-id="pay-early:total">
+						<span class="click-input-wrap">
+							<input type="radio" id="pay-early-total" name="paymentType" value="total"<%- paymentType =='total' ? 'checked="checked"' : '' %> />
+							<label class="radio-btn fa" for="pay-early-total">
+								<i class="fa fa-circle"></i>
 							</label>
-						</div>
-
-						<% if (hasLateLoans) { %>
-							<div class="control-group">
-								<label class="radio w100p" ui-event-control-id="pay-early:totalLate">
-									<input type="radio" name="paymentType" value="totalLate" <%- isPayTotalLate ? 'checked="checked"' : '' %> />
-									Pay Late Balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(totalLatePayment) %></b>
-								</label>
-							</div><%
-						} %>
-
-						<div class="control-group">
-							<label class="radio inline-block-margin" style="width: 64px;" ui-event-control-id="pay-early:loan">
-								<input type="radio" name="paymentType" value="loan" <%- isPayLoan ? 'checked="checked"' : '' %> />
-								Pay
-							</label>
-							<select class="w220 selectheight" <%= loanPaymentTypeDisabled %> name="loanSelect" ui-event-control-id="pay-early:loanSelect"><%
-								_.each(liveLoans, function(l) {
-									%><option value="<%- l.get('Id') %>" <%- l.get('Id') == loan.get('Id') ? 'selected="selected"' : ''%>>Loan Ref. # <%- l.get('RefNumber') %></option><%
-								});
-							%></select>
-						</div><%
-					}
-
-					if (loan.get('Status') == "Late") {
-						%><div class="control-group less-space">
-							<label class="radio <%-loansClass%> w100p" <%- loanPaymentTypeDisabled %> <%= loanPaymentTypeHidden %> ui-event-control-id="pay-early:late">
-								<input type="radio" <%- loanPaymentTypeDisabled %> name="loanPaymentType" value="late" <%- loanPaymentType == 'late' && isPayLoan ? 'checked="checked"' : '' %> />Late: <b style="color:red"><%- EzBob.formatPounds(loan.get('Late')) %></b>
-							</label>
-						</div><%
-					} %>
-
-					<div class="control-group less-space">
-						<label class="radio <%-loansClass%> w100p" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> ui-event-control-id="pay-early:full">
-							<input type="radio" <%-loanPaymentTypeDisabled%> name="loanPaymentType" value="full"  <%-loanPaymentType=='full' && isPayLoan ? 'checked="checked"' : ''%> />Pay Total Balance: <b><%-EzBob.formatPounds(loan.get('TotalEarlyPayment'))%></b>
-						</label>
-					</div>
-
-					<% if (loan.get('Status') != "Late") {
-						%><div class="control-group less-space">
-							<label class="radio <%-loansClass%> w100p" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> ui-event-control-id="pay-early:next" >
-								<input type="radio" <%- loanPaymentTypeDisabled %> name="loanPaymentType" value="next" <%- loanPaymentType=='next' && isPayLoan ? 'checked="checked"' : '' %> />Next Installment: &nbsp;&nbsp;<b><%- EzBob.formatPounds(loan.get('NextEarlyPayment')) %></b>
-							 </label>
-						</div>
-					
-						<% if(loan.get('NextInterestPayment')) {
-							%><div class="control-group less-space">
-								<label class="radio <%-loansClass%> w100p" <%- loanPaymentTypeDisabled %> <%= loanPaymentTypeHidden %> ui-event-control-id="pay-early:next-interest" >
-									<input type="radio" <%- loanPaymentTypeDisabled %> name="loanPaymentType" value="nextInterest" <%- loanPaymentType == 'nextInterest' && isPayLoan ? 'checked="checked"' : '' %> />Next Interest: &nbsp;&nbsp;<b><%- EzBob.formatPounds(loan.get('NextInterestPayment')) %></b>
-								 </label>
-							</div><%
-						}
-					} %>
-
-					<div class="control-group less-space" style="margin-bottom: 20px;">
-						<label class="radio inline-block-margin input-medium <%- loansClass %> other-amount-label w100p" <%- loanPaymentTypeDisabled %> <%= loanPaymentTypeHidden %> ui-event-control-id="pay-early:other">
-							<input <%- loanPaymentTypeDisabled %> type="radio" name="loanPaymentType" value="other" <%- loanPaymentType == 'other' && isPayLoan ? 'checked="checked"' : '' %> />
-							Another Amount:
-							<input type="text" class="money s84 bold" <%= loanPaymentTypeHidden %> name="paymentAmount" <%- loanPaymentType != 'other' ? 'readonly="readonly"' : '' %> value="<%- EzBob.formatPounds(amount) %>" ui-event-control-id="pay-early:other-value" />
-						</label>
-					</div>
-
-					 <div class="control-group" <%= rolloverVisible %>>
-						<label class="radio inline-block-margin" style="width: 64px;" ui-event-control-id="pay-early:rollover">
-							<input type="radio" name="paymentType" value="rollover" <%- paymentType == 'rollover' ? 'checked="checked"' : '' %> />
-							Rollover
-						</label>
-						<select class="rolloverLoan selectheight" <%= rolloverDisabled %> name="rolloverSelect" ui-event-control-id="pay-early:rollover-select"><%
-							_.each(liveLoans, function(l) {
-								if (_.any(rollovers.toJSON(), function(r){ return r.LoanId == l.get('Id'); }) ) {
-									%><option value="<%- l.get('Id') %>" >Loan Ref. # <%- l.get('RefNumber') %></option><%
-								}
-							});
-						%></select>
-					</div>
-
-					<div class="control-group less-space" <%= rolloverIsHidden %> <%= rolloverVisible %>>
-						<label class="radio lot-of-loans w100p" ui-event-control-id="pay-early:minimum">
-							<input type="radio" name="rolloverPaymentType" value="minimum" <%- rolloverPaymentType == 'minimum' ? 'checked="checked"' : '' %> />Minimum payment: </b><%- EzBob.formatPounds(currentRollover && currentRollover.RolloverPayValue) %></b>
-						</label>
-					</div>
-
-					<div class="control-group less-space" <%= rolloverIsHidden %> <%= rolloverVisible %>>
-						<label class="radio inline-block-margin input-medium lot-of-loans other-amount-label w100p" <%- rolloverDisabled %> <%= rolloverIsHidden %> ui-event-control-id="pay-early:rollover-other">
-							<input <%- rolloverDisabled %> type="radio" name="rolloverPaymentType" value="other" <%- rolloverPaymentType == 'other' ? 'checked="checked"' : ''%> />
-							Another Amount:
-							<input type="text" <%= rolloverAnotherAmountDisabled %> class="money s84 bold" <%= rolloverIsHidden %> name="rolloverAmount" value="<%- EzBob.formatPounds(amount) %>" ui-event-control-id="pay-early:rollover-other-value" />
-						</label>
-					</div>
-				</div>
-
-				<div class="clearfix" style="margin-top: 20px;">
-					<label class="checkbox" style="width: 125px" ui-event-control-id="pay-early:use-default-card">
-						<input type="checkbox" name="defaultCard" <%- defaultCard ? 'checked="checked"' : ''%> />
-						Use default card
+						</span>
+						<span class="title"> Pay total balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(total) %></b></span>
 					</label>
 				</div>
-			</div>
-			<div class="clearfix buttons_container">
-				<a href="<%-url%>" class="button btn-green submit pull-right" ui-event-control-id="pay-early:confirm">Confirm</a>
-				<a href="#" class="button btn-grey back pull-right" ui-event-control-id="pay-early:back">Back</a>
+
+				<% if (hasLateLoans) { %>
+				<div class="control-group form_field_container ">
+					<label class="radio w100p click-wrap" ui-event-control-id="pay-early:totalLate">
+						<span class="click-input-wrap">
+							<input type="radio" id="pay-early-totalLate" name="paymentType" value="totalLate"<%- isPayTotalLate ? 'checked="checked"' : '' %> />
+							<label class="radio-btn fa" for="pay-early-totalLate">
+								<i class="fa fa-circle"></i>
+							</label>
+
+						</span>
+						<span class="title">	Pay late balance: <b style="margin-left: 25px;"><%- EzBob.formatPounds(totalLatePayment) %></b></span>
+					</label>
+				</div>
+				<% } %>
+
+
+				<div class="form_field_container control-group less-space">
+					<label class="radio inline-block-margin w100p click-input-wrap click-wrap" ui-event-control-id="pay-early:loan">
+						<span class="click-input-wrap">
+							<input type="radio" id="choose-loan" name="paymentType" value="loan"<%- isPayLoan ? 'checked="checked"' : '' %> />
+							<label class="radio-btn fa" for="choose-loan">
+								<i class="fa fa-circle"></i>
+							</label>
+						</span>
+						<span class="title">Pay</span>
+
+						<div class="input-wrapper early-loan">
+							<select id="loan-select" class="form_field" <%= loanPaymentTypeDisabled %> name="loanSelect" ui-event-control-id="pay-early:loanSelect">
+									<%_.each(liveLoans, function(l) {
+									%><option value="<%- l.get('Id') %>" <%- l.get('Id') == loan.get('Id') ? 'selected="selected"' : ''%>>Loan Ref. # <%- l.get('RefNumber') %></option><%
+								});
+							%>
+							</select>
+						</div>
+					</label>
+				</div>
+
+				<div id="single-loan-pay-options">
+					<% }
+
+					if (loan.get('Status') == "Late") {	%>
+					<div class="form_field_container control-group less-space">
+						<label class="radio <%-loansClass%> w100p click-input-wrap click-wrap" <%- loanPaymentTypeDisabled %> <%= loanPaymentTypeHidden %> ui-event-control-id="pay-early:late">
+								<span class="click-input-wrap">
+
+									<input id="pay-early-next" type="radio" <%- loanPaymentTypeDisabled %> name="loanPaymentType" value="late" <%- loanPaymentType == 'late' && isPayLoan ? 'checked="checked"' : '' %> />
+									<label class="radio-btn fa" for="pay-early-next">
+										<i class="fa fa-circle"></i>
+									</label>
+								</span>
+								<span class="title">Late: <b style="color:red"><%- EzBob.formatPounds(loan.get('Late')) %></b></span>
+							</label>
+					</div>
+					<% } %>
+
+
+					<div class="form_field_container control-group less-space">
+						<label class="radio <%-loansClass%> w100p click-wrap" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> ui-event-control-id="pay-early:full">
+                            <span class="click-input-wrap">
+                                <input type="radio" id="pay-early-full" <%-loanPaymentTypeDisabled%> name="loanPaymentType" value="full"  <%-loanPaymentType=='full' && isPayLoan ? 'checked="checked"' : ''%> />
+                                <label class="radio-btn fa" for="pay-early-full">
+                                    <i class="fa fa-circle"></i>
+                                </label>
+							</span>
+                            <span class="title">Pay total balance: <b><%-EzBob.formatPounds(loan.get('TotalEarlyPayment'))%></b></span>
+						</label>
+					</div>
+
+					<% if (loan.get('Status') != "Late") { %>
+					<div class="form_field_container control-group less-space ">
+						<label class="radio <%-loansClass%> w100p click-wrap" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> ui-event-control-id="pay-early:next" >
+                                  <span class="click-input-wrap">
+                                      <input id="pay-early-next" type="radio" <%- loanPaymentTypeDisabled %> name="loanPaymentType" value="next" <%- loanPaymentType=='next' && isPayLoan ? 'checked="checked"' : '' %> />
+                                      <label class="radio-btn fa" for="pay-early-next">
+                                          <i class="fa fa-circle"></i>
+                                      </label>
+                                  </span>
+                                  <span class="title">Next instalment: &nbsp;&nbsp;<b><%- EzBob.formatPounds(loan.get('NextEarlyPayment')) %></b></span>
+                             </label>
+					</div>
+
+					<% if(loan.get('NextInterestPayment')) { %>
+					<div class="form_field_container control-group less-space">
+						<label class="radio <%-loansClass%> w100p" <%- loanPaymentTypeDisabled %> <%= loanPaymentTypeHidden %> ui-event-control-id="pay-early:next-interest" >
+									<input type="radio" <%- loanPaymentTypeDisabled %> name="loanPaymentType" value="nextInterest" <%- loanPaymentType == 'nextInterest' && isPayLoan ? 'checked="checked"' : '' %> />Next Interest: &nbsp;&nbsp;<b><%- EzBob.formatPounds(loan.get('NextInterestPayment')) %></b>
+								</label>
+					</div>
+					<% }
+					} %>
+
+					<div class="form_field_container control-group less-space" style="margin-bottom: 20px;">
+						<label class="radio inline-block-margin input-medium other-amount-label <%- loansClass %> w100p click-wrap" <%- loanPaymentTypeDisabled %> <%= loanPaymentTypeHidden %> ui-event-control-id="pay-early:other">
+                            <span class="click-input-wrap">
+                                <input id="pay-early-other" <%- loanPaymentTypeDisabled %> type="radio" name="loanPaymentType" value="other" <%- loanPaymentType == 'other' && isPayLoan ? 'checked="checked"' : '' %> />
+                                <label class="radio-btn fa" for="pay-early-other">
+                                    <i class="fa fa-circle"></i>
+                                </label>
+                                <span class="title">Another amount:</span>
+								<div class="input-wrapper early-rollover">
+									<input type="text" id="pay-early-other-text" class="right-input-clickable money s84 form_field" <%= loanPaymentTypeHidden %> name="paymentAmount" <%- loanPaymentType != 'other' ? 'readonly="readonly"' : '' %> value="<%- amount %>" ui-event-control-id="pay-early:other-value" />
+								</div>
+                            </span>
+						</label>
+					</div>
+				</div>
+
+				<%if (hasRollover) { %>
+				<div class="form_field_container control-group less-space">
+					<label class="radio inline-block-margin w100p click-input-wrap click-wrap" ui-event-control-id="pay-early:rollover" <%- rolloverDisabled %> >
+								<span class="click-input-wrap">
+									<input type="radio" id="rollover-radio" <%= rolloverDisabled %> name="paymentType" value="rollover" <%- paymentType == 'rollover' ? 'checked="checked"' : '' %> />
+
+									<label class="radio-btn fa" for="rollover-radio">
+										<i class="fa fa-circle"></i>
+									</label>
+								</span>
+								<span class="title">Rollover</span>
+
+								<div class="input-wrapper early-rollover">
+									<select id="rollover-select" class="rolloverLoan form_field" <%= rolloverDisabled %> name="rolloverSelect" ui-event-control-id="pay-early:rollover-select"><%
+										_.each(liveLoans, function(l) {
+											if (_.any(rollovers.toJSON(), function(r){ return r.LoanId == l.get('Id'); }) ) {
+												%><option value="<%- l.get('Id') %>" >Loan Ref. # <%- l.get('RefNumber') %></option><%
+											}
+										});	%>
+									</select>
+								</div>
+
+							</label>
+				</div>
+
+				<div class="form_field_container control-group less-space click-wrap minimum-payment">
+					<label class="radio lot-of-loans <%-loansClass%> w100p click-input-wrap click-wrap" <%- rolloverDisabled %> ui-event-control-id="pay-early:minimum">
+									<span class="click-input-wrap">
+
+										<input type="radio" id="pay-rollover-minimum-payment" <%= rolloverDisabled %> name="rolloverPaymentType" value="minimum" <%- rolloverPaymentType == 'minimum' ? 'checked="checked"' : '' %> />
+										<label class="radio-btn fa" for="pay-rollover-minimum-payment">
+											<i class="fa fa-circle"></i>
+										</label>
+									</span>
+									<span class="title">Minimum payment: <b><%- EzBob.formatPounds(currentRollover && currentRollover.RolloverPayValue) %></b></span>
+								</label>
+				</div>
+
+
+				<div class="form_field_container control-group less-space click-area">
+					<label class="radio inline-block-margin <%-loansClass%> input-medium lot-of-loans other-amount-label w100p click-input-wrap click-wrap" <%- rolloverDisabled %> ui-event-control-id="pay-early:rollover-other">
+									<span class="click-input-wrap">
+										<input id="rollover-other" <%- rolloverDisabled %> type="radio" name="rolloverPaymentType" value="other" <%- rolloverPaymentType == 'other' ? 'checked="checked"' : ''%> />
+										<label class="radio-btn fa" for="rollover-other">
+											<i class="fa fa-circle"></i>
+										</label>
+										<span class="title">Another amount:</span>
+										<div class="input-wrapper early-rollover">
+											<input id="rollover-other-text" type="text" <%= rolloverAnotherAmountDisabled %> class="right-input-clickable money s84 form_field" name="rolloverAmount" value="<%- amount %>" ui-event-control-id="pay-early:rollover-other-value" />
+										</div>
+									</span>
+								</label>
+				</div>
+				<% } %>
+
+
+				<div class="form_field_container clearfix" style="margin-top: 20px;">
+					<label class="checkbox click-wrap" ui-event-control-id="pay-early:use-default-card">
+						<span class="click-input-wrap">
+							<input id="pay-early-use-default-card" type="checkbox" name="defaultCard" <%- defaultCard ? 'checked="checked"' : ''%> />
+							<label class="checkbox-btn fa" for="pay-early-use-default-card">
+								<i class="fa fa-check"></i>
+							</label>
+						</span>
+						<span class="title">Use default card</span>
+
+					</label>
+				</div>
+
+				@EzForm.WizardButton(new List<EzButtonModel>{
+					new EzButtonModel(null, "Confirm",
+						cls: "button btn-green ev-btn-org submit",
+						uiEventControlID:"pay-early:confirm",
+						buttonType: EzButtonType.link,
+						href: "<%-url%>"),
+					new EzButtonModel(null, "Cancel",
+						cls: "button btn-grey back clean-btn",
+						uiEventControlID:"pay-early:back",
+						buttonType: EzButtonType.link,
+						href: "#")
+					}, origin: origin)
 			</div>
 		</div>
-
-		<div class="span1">&nbsp;</div>
 	</div>
 </script>
 

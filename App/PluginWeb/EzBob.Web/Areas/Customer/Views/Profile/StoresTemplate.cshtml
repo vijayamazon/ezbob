@@ -1,4 +1,5 @@
 ﻿@using ConfigManager
+@using EzBob.Web.Infrastructure
 @model dynamic
 
 @{
@@ -27,7 +28,7 @@
 						@if (refreshYodleeEnabled) {
 							<div>
 								<%if (store.type == 'Yodlee'){%>
-								<button class="button btn-green updateYodlee refresh_yodlee_help1" data-bank="<%= store.displayName %>">Update</button>
+								<button class="button btn-green updateYodlee refresh_yodlee_help1 ev-btn-org" data-bank="<%= store.displayName %>">Update</button>
 								<%}%>
 							</div>
 						}
@@ -37,7 +38,7 @@
 		%></tbody>
 	</table>
 	<div style="padding-left: 260px;">
-		<a href="#" style="margin-left: 80px;" class="btn-continue button btn-green add-store">Add Account</a><br />
+		<a href="#" style="margin-left: 80px;" class="btn-continue button btn-green add-store ev-btn-org">Add Account</a><br />
 		<span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
 	</div>
 
@@ -50,12 +51,12 @@
 			</p>
 			<br>
 			<div class="alignright" style="padding: 0 10px 0 0;">
-				<a href="#" target="_blank" class="button btn-green pull-right" id="refreshYodleeBtn1" onclick="$.colorbox.close();">Continue</a>
-				<a href="#" class="button btn-grey pull-right" id="cancelYodleeBtn1" onclick="$.colorbox.close();">Cancel</a>
+				<a href="#" target="_blank" class="button btn-green pull-right ev-btn-org" id="refreshYodleeBtn1" onclick="$.colorbox.close();">Continue</a>
+				<a href="#" class="button btn-grey pull-right clean-btn" id="cancelYodleeBtn1" onclick="$.colorbox.close();">Cancel</a>
 			</div>
 			<div class="clear"></div>
 			<hr>
-			<div class="help_security"></div>
+			<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
 		</div>
 	</div>
 </script>

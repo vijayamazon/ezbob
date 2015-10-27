@@ -10,6 +10,7 @@
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
+	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -29,9 +30,6 @@
 
 		[OperationContract]
 		ActionMetaData BackfillAml();
-
-		[OperationContract]
-		ActionMetaData BackfillCustomerAnalyticsCompany();
 
 		[OperationContract]
 		ActionMetaData BackFillExperianNonLtdScoreText();
@@ -131,13 +129,16 @@
 		ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
 
 		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType,bool isBankStatement);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
 
 		[OperationContract]
 		StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword);
+
+		[OperationContract]
+		ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID);
 
 		[OperationContract]
 		UserLoginActionResult CustomerSignup(
@@ -268,6 +269,9 @@
 
 		[OperationContract]
 		WizardConfigsActionResult GetWizardConfigs();
+
+		[OperationContract]
+		CollectionSnailMailActionResult GetCollectionSnailMail(int userID, int collectionSnailMailID);
 
 		[OperationContract]
 		ActionMetaData GetZooplaData(int customerId, bool reCheck);
@@ -458,9 +462,6 @@
 		ActionMetaData UpdateCurrencyRates();
 
 		[OperationContract]
-		ActionMetaData UpdateCustomerAnalyticsOnCompanyChange(int customerID);
-
-		[OperationContract]
 		ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails);
 
 		[OperationContract]
@@ -562,5 +563,15 @@
 
 		[OperationContract]
 		ActionMetaData PacnetDelivery(int underwriterId, decimal amount);
+
+		[OperationContract]
+		ActionMetaData BackfillDailyLoanStats();
+
+		[OperationContract]
+		LoanCommissionDefaultsActionResult GetLoanCommissionDefaults(
+			int underwriterID,
+			long cashRequestID,
+			decimal loanAmount
+		);
 	} // interface IEzService
 } // namespace EzService

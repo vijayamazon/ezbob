@@ -380,21 +380,9 @@ BEGIN
 
 	DECLARE @ConsumerScore INT = ISNULL((
 		SELECT
-			MIN(x.ExperianConsumerScore)
-		FROM	(
-			SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-			FROM ExperianConsumerData d
-			INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
-			WHERE d.Id = @ExperianConsumerDataID
-			AND l.InsertDate < @Now
-
-			UNION
-
-			SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
-			FROM CustomerAnalyticsDirector d
-			WHERE d.CustomerID = @CustomerID
-			AND d.AnalyticsDate < @Now
-		) x
+			MinScore
+		FROM
+			dbo.udfGetCustomerScoreAnalytics(@CustomerID, @Now)
 	), 0)
 
 	------------------------------------------------------------------------------

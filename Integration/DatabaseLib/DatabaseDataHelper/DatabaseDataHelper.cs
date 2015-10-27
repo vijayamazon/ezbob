@@ -94,15 +94,14 @@
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
-			_yodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
+			this.yodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
 			_loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
 			_wizardStepSequenceRepository = new WizardStepSequenceRepository(session);
 
-			_yodleeBanksRepository = new YodleeBanksRepository(session);
-			m_sYodleeBanks = null;
+			this.yodleeBanksRepository = new YodleeBanksRepository(session);
 
 			_wizardStepRepository = new WizardStepRepository(session);
 			_trustPilotStatusRepository = new TrustPilotStatusRepository(session);
@@ -112,12 +111,11 @@
 			m_oExperianDirectorRepository = new ExperianDirectorRepository(session);
 		}
 
-		public int AddExpenseCategory(FreeAgentExpenseCategory category) {
+		public int AddFreeAgentExpenseCategory(FreeAgentExpenseCategory category) {
 			MP_FreeAgentExpenseCategory dbCategory = _FreeAgentExpenseCategoryRepository.GetSimilarCategory(category);
 
-			if (dbCategory != null) {
+			if (dbCategory != null)
 				return dbCategory.Id;
-			}
 
 			dbCategory = new MP_FreeAgentExpenseCategory {
 				category_group = category.category_group,
@@ -128,8 +126,9 @@
 				tax_reporting_name = category.tax_reporting_name,
 				auto_sales_tax_rate = category.auto_sales_tax_rate
 			};
+
 			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
-		}
+		} // AddFreeAgentExpenseCategory
 
 		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IMarketplaceType databaseMarketplace, Customer databaseCustomer) {
 			MP_CustomerMarketPlace mpCustomerMarketPlace = _CustomerMarketplaceRepository.Get(databaseCustomer.Id, databaseMarketplace.InternalId, marketPlaceName);
@@ -422,26 +421,6 @@
 			return _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, marketPlaceName);
 		}
 
-		public Dictionary<string, FreeAgentExpenseCategory> GetExpenseCategories() {
-			var categoriesMap = new Dictionary<string, FreeAgentExpenseCategory>();
-			foreach (MP_FreeAgentExpenseCategory dbCategory in _FreeAgentExpenseCategoryRepository.GetAll()) {
-				var category = new FreeAgentExpenseCategory {
-					Id = dbCategory.Id,
-					category_group = dbCategory.category_group,
-					url = dbCategory.url,
-					description = dbCategory.description,
-					nominal_code = dbCategory.nominal_code,
-					allowable_for_tax = dbCategory.allowable_for_tax,
-					tax_reporting_name = dbCategory.tax_reporting_name,
-					auto_sales_tax_rate = dbCategory.auto_sales_tax_rate
-				};
-
-				categoriesMap.Add(category.url, category);
-			}
-
-			return categoriesMap;
-		}
-
 		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
@@ -632,7 +611,17 @@
 			_FreeAgentCompanyRepository.SaveOrUpdate(company);
 		}
 
-		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesAndExpensesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentInvoicesList invoices, FreeAgentExpensesList expenses, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+		public void UpdateMarketplaceDisplayName(MP_CustomerMarketPlace customerMarketPlace, string newName) {
+			customerMarketPlace.DisplayName = newName;
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		} // UpdateMarketplaceDisplayName
+
+		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesAndExpensesData(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			FreeAgentInvoicesList invoices,
+			FreeAgentExpensesList expenses,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Invoices Data", customerMarketPlace, invoices);
@@ -702,8 +691,8 @@
 						manual_sales_tax_amount = dataItem.manual_sales_tax_amount,
 						updated_at = dataItem.updated_at,
 						created_at = dataItem.created_at,
-
 					};
+
 					if (dataItem.attachment != null) {
 						expense.attachment_url = dataItem.attachment.url;
 						expense.attachment_content_src = dataItem.attachment.content_src;
@@ -711,7 +700,8 @@
 						expense.attachment_file_name = dataItem.attachment.file_name;
 						expense.attachment_file_size = dataItem.attachment.file_size;
 						expense.attachment_description = dataItem.attachment.description;
-					}
+					} // if
+
 					expense.Category = _FreeAgentExpenseCategoryRepository.Get(dataItem.categoryItem.Id);
 
 					mpRequest.Expenses.Add(expense);

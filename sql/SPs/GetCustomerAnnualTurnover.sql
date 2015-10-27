@@ -14,50 +14,21 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		m.Id,
-		CurrentMonth = dbo.udfMonthEnd(dbo.udfGetLatestTotalsMonth(m.Id, @Now)),
-		YearAgo = CONVERT(DATETIME, NULL)
-	INTO
-		#mp
-	FROM
-		MP_CustomerMarketPlace m
-	WHERE
-		m.CustomerId = @CustomerID
-		AND
-		m.UpdatingEnd IS NOT NULL
-		AND
-		ISNULL(m.Disabled, 0) = 0
-		AND
-		LTRIM(RTRIM(ISNULL(m.UpdateError, ''))) = ''
-
-	------------------------------------------------------------------------------
-
-	UPDATE #mp SET
-		YearAgo = dbo.udfMonthStart(DATEADD(month, -11, CurrentMonth))
-
-	------------------------------------------------------------------------------
-
 	DECLARE @Turnover NUMERIC(18, 2)
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		@Turnover = SUM(t.Turnover)
+	SELECT TOP 1
+		@Turnover = m.AnnualTurnover
 	FROM
-		MarketplaceTurnover t
-		INNER JOIN #mp
-			ON t.CustomerMarketPlaceId = #mp.Id
-			AND t.TheMonth BETWEEN #mp.YearAgo AND #mp.CurrentMonth
+		MedalCalculations m
 	WHERE
-		t.IsActive = 1
+		m.CustomerId = @CustomerID
+		AND
+		m.CalculationTime < @Now
 
 	------------------------------------------------------------------------------
 
 	SELECT Turnover = ISNULL(@Turnover, 0)
-
-	------------------------------------------------------------------------------
-
-	DROP TABLE #mp
 END
 GO

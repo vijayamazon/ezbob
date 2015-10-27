@@ -32,7 +32,11 @@ namespace EzBob.Models {
 		public string TimeInBusiness { get; set; }
 
 		public TypeOfBusiness TypeOfBusiness { get; set; }
-		public VatReporting? VatReporting { get; set; }
+
+        public TypeOfBusinessReduced TypeOfBusinessReduced { get; set; }
+
+	    public VatReporting? VatReporting { get; set; }
+		public bool VatRegistered { get; set; }
 		public string YearsInCompany { get; set; }
 		public static CompanyInfoMap FromCompany(Company company) {
 			if (company == null)
@@ -44,6 +48,7 @@ namespace EzBob.Models {
 				TimeAtAddress = company.TimeAtAddress,
 				BusinessPhone = company.BusinessPhone,
 				TypeOfBusiness = company.TypeOfBusiness,
+                TypeOfBusinessReduced = company.TypeOfBusiness.Reduce(),
 				TimeInBusiness = company.TimeInBusiness,
 				PropertyOwnedByCompany = company.PropertyOwnedByCompany,
 				YearsInCompany = company.YearsInCompany,
@@ -52,6 +57,7 @@ namespace EzBob.Models {
 				VatReporting = company.VatReporting,
 				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToList(),
 				ExperianRefNum = company.ExperianRefNum,
+				VatRegistered = company.VatRegistered
 			};
 		} // From Company
 	} // class CompanyInfoMap
@@ -129,6 +135,8 @@ namespace EzBob.Models {
 		public bool IsLoanDetailsFixed { get; set; }
 
 		public int IsLoanTypeSelectionAllowed { get; set; }
+		
+		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		public bool? IsOffline { get; set; }
 
@@ -140,6 +148,8 @@ namespace EzBob.Models {
 		public int LastApprovedLoanTypeID { get; set; }
 
 		public int LastApprovedRepaymentPeriod { get; set; }
+		
+		public int LastRepaymentPeriod { get; set; }
 
 		public decimal LastPaymentFees { get; set; }
 
@@ -170,7 +180,7 @@ namespace EzBob.Models {
 
 		public PayPointCardModel[] PayPointCards { get; set; }
 
-		public string Perks { get; set; }
+		//public string Perks { get; set; }
 
 		public CustomerAddress[] PersonalAddress { get; set; }
 
@@ -182,7 +192,7 @@ namespace EzBob.Models {
 
 		public QuickOfferModel QuickOffer { get; set; }
 
-		public decimal RequestedAmount { get; set; }
+		public CustomerRequestedLoan RequestedLoan { get; set; }
 
 		public string SortCode { get; set; }
 
@@ -203,6 +213,8 @@ namespace EzBob.Models {
 		public string userName { get; set; }
 
 		public int WhiteLabelId { get; set; }
+
+		public bool BlockTakingLoan { get; set; }
 
 		public string LotteryPlayerID { get; set; }
 		public string LotteryCode { get; set; }

@@ -190,6 +190,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\TeamCityEzTvDashboard.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -235,9 +236,9 @@
   <ItemGroup>
     <Content Include="Views\Dashboard\Footer.cshtml" />
   </ItemGroup>
-  <ItemGroup>
+ <ItemGroup>
     <None Include="Properties\PublishProfiles\TeamCityEzTvDashboard.pubxml" />
-  </ItemGroup>
+ </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

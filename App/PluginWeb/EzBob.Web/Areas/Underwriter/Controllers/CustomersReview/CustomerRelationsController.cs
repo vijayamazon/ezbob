@@ -296,6 +296,21 @@
 			}
 		}
 
+		public FileResult DownloadSnailMail(int id) {
+			var result = this._serviceClient.Instance.GetCollectionSnailMail(this._context.UserId, id);
+			FileResult fs = File(result.SnailMail.Content, result.SnailMail.ContentType);
+			
+			//	fs.FileDownloadName = fileName;
+			var cd = new System.Net.Mime.ContentDisposition {
+				FileName = result.SnailMail.Name,
+				Inline = true,
+			};
+
+			Response.AppendHeader("Content-Disposition", cd.ToString());
+			
+			return fs;
+		}
+
 		// TODO: improve the way this is done - pass list or model or use binding
 		private List<int> GetCheckedActionItemIds(string actionItemsIds) {
 			string[] idsStr = actionItemsIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);

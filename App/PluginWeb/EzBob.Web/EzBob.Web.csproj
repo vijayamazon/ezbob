@@ -184,6 +184,7 @@
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Broker\Models\GetInstantOfferModel.cs" />
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustomerRequestedLoanController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerStatusController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
@@ -205,6 +206,8 @@
     <Compile Include="Code\EverlineLoginLoanChecker.cs" />
     <Compile Include="Code\ForceNhibernateResync.cs" />
     <Compile Include="Code\MainStrategyClient.cs" />
+    <Compile Include="Code\MpUniq\BankAccountUniqChecker.cs" />
+    <Compile Include="Code\MpUniq\BankAccountIsAlreadyAddedException.cs" />
     <Compile Include="Code\ScratchHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionNames.cs" />
     <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />
@@ -230,6 +233,10 @@
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
+    <Compile Include="Infrastructure\Html\EzButtonModel.cs" />
+    <Compile Include="Infrastructure\Html\EzClickInputModel.cs" />
+    <Compile Include="Infrastructure\Html\EzInputBuilder.cs" />
+    <Compile Include="Infrastructure\Html\EzSelectModel.cs" />
     <Compile Include="Infrastructure\UiCustomerOrigin.cs" />
     <Compile Include="Models\CompanyScoreModelBuilder.cs" />
     <Compile Include="Models\CreatePasswordModel.cs" />
@@ -469,8 +476,19 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
+    <Content Include="Content\css\eurpe-fund.png" />
+    <Content Include="Content\css\everline-mobile.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\EverlineBroker.css" />
+    <Content Include="Content\css\EverlineCustomerProfileMyInformation.css" />
+    <Content Include="Content\css\EverlineCustomerProfile.css" />
+    <Content Include="Content\css\Everlinecustomer.css" />
+    <Content Include="Content\css\EverlineCustomerProfileMainMenu.css" />
+    <Content Include="Content\css\EverlineCustomerProfileDirectors.css" />
+    <Content Include="Content\css\EverlineCustomerProfileLoanDetails.css" />
+    <Content Include="Content\css\Everlineslider.css" />
     <Content Include="Content\css\ezbob.css" />
+    <Content Include="Content\css\EzbobCustomerProfile.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.svg" />
@@ -485,6 +503,8 @@
     <Content Include="Content\css\hmrc-manual-ui.css" />
     <Content Include="Content\css\hmrc-upload-ui.css" />
     <Content Include="Content\css\images\300x250.jpg" />
+    <Content Include="Content\css\images\accounts\account-or.png" />
+    <Content Include="Content\css\images\accounts\account_logos_sprite.png" />
     <Content Include="Content\css\images\accounts\amazon.png" />
     <Content Include="Content\css\images\accounts\bank.png" />
     <Content Include="Content\css\images\accounts\bigcommerce.png" />
@@ -520,6 +540,7 @@
     <Content Include="Content\css\images\apply_now.png" />
     <Content Include="Content\css\images\arrow-m.png" />
     <Content Include="Content\css\images\arrow.png" />
+    <Content Include="Content\css\images\automation-stripe.png" />
     <Content Include="Content\css\images\bank_details.png" />
     <Content Include="Content\css\images\beta_ribbon.png" />
     <Content Include="Content\css\images\body_bg.jpg" />
@@ -533,9 +554,11 @@
     <Content Include="Content\css\images\companies\techcrunch.png" />
     <Content Include="Content\css\images\companies\yahoo.png" />
     <Content Include="Content\css\images\companycheck.png" />
+    <Content Include="Content\css\images\cosme-pic.png" />
     <Content Include="Content\css\images\current_arrow-m.png" />
     <Content Include="Content\css\images\current_arrow.png" />
     <Content Include="Content\css\images\eu.png" />
+    <Content Include="Content\css\images\europe-fund.png" />
     <Content Include="Content\css\images\eu_explanation.png" />
     <Content Include="Content\css\images\ezbob_logo.png" />
     <Content Include="Content\css\images\facebook-icon.png" />
@@ -598,6 +621,7 @@
     <Content Include="Content\css\images\sage_on.png" />
     <Content Include="Content\css\images\secure.png" />
     <Content Include="Content\css\images\shopify-logo.png" />
+    <Content Include="Content\css\images\social.png" />
     <Content Include="Content\css\images\source_small_sprite.png" />
     <Content Include="Content\css\images\source_sprite.png" />
     <Content Include="Content\css\images\sprites\contact_sprite.png" />
@@ -606,6 +630,7 @@
     <Content Include="Content\css\images\sprites\social_sprite_round.png" />
     <Content Include="Content\css\images\star.png" />
     <Content Include="Content\css\images\sticky_chat_bg.png" />
+    <Content Include="Content\css\images\terms-corner.png" />
     <Content Include="Content\css\images\tick-m.png" />
     <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\images\verisign_seal.gif" />
@@ -613,6 +638,7 @@
     <Content Include="Content\css\images\vip_bg.png" />
     <Content Include="Content\css\images\volusion-logo.png" />
     <Content Include="Content\css\images\whatsnew.png" />
+    <Content Include="Content\css\images\white-corner.png" />
     <Content Include="Content\css\images\xero-logo.png" />
     <Content Include="Content\css\images\yodlee.png" />
     <Content Include="Content\css\images\yodlee\banks_sprite.png" />
@@ -636,6 +662,8 @@
     <Content Include="Content\css\lib\flaty.css" />
     <Content Include="Content\css\lib\font-awesome.min.css" />
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.svg" />
+    <Content Include="Content\css\lib\pe-icon-7-helper.css" />
     <Content Include="Content\css\lib\images\chosen-sprite.png" />
     <Content Include="Content\css\lib\images\dataTables\back_disabled.png" />
     <Content Include="Content\css\lib\images\dataTables\back_enabled.png" />
@@ -674,7 +702,9 @@
     <Content Include="Content\css\lib\jquery.jqplot.css" />
     <Content Include="Content\css\lib\jquery.jscrollpane.css" />
     <Content Include="Content\css\lib\jquery.ui.1.8.16.ie.css" />
+    <Content Include="Content\css\lib\normalize.css" />
     <Content Include="Content\css\lib\notifications.css" />
+    <Content Include="Content\css\lib\pe-icon-7-stroke.css" />
     <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\paypoint-template.css" />
     <Content Include="Content\css\Permission.css" />
@@ -682,6 +712,10 @@
     <Content Include="Content\css\alibaba.css" />
     <Content Include="Content\css\easter2015scratch.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
+    <Content Include="Content\everline\checked.png" />
+    <Content Include="Content\everline\circle_done.png" />
+    <Content Include="Content\everline\circle_gray.png" />
+    <Content Include="Content\everline\circle_green.png" />
     <Content Include="Content\everline\EverlineLogo.png" />
     <Content Include="Content\everline\EverlineLogo.svg" />
     <Content Include="Content\everline\favicons\120x120.png" />
@@ -689,11 +723,15 @@
     <Content Include="Content\everline\favicons\60x60.png" />
     <Content Include="Content\everline\favicons\76x76.png" />
     <Content Include="Content\everline\favicons\faviconeverline.ico" />
+    <Content Include="Content\everline\help-button.png" />
     <Content Include="Content\everline\help\help_ebay_everline.jpg" />
     <Content Include="Content\everline\help\help_freeagent_everline.jpg" />
     <Content Include="Content\everline\help\help_paypal_everline.jpg" />
     <Content Include="Content\everline\help\help_sage_everline.jpg" />
+    <Content Include="Content\everline\help\help_security.png" />
+    <Content Include="Content\everline\or-circle.png" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
+    <Content Include="Content\img\calc-amount-sign.png" />
     <Content Include="Content\img\basket-diamond-32.png" />
     <Content Include="Content\img\basket-gold-32.png" />
     <Content Include="Content\img\basket-platinum-32.png" />
@@ -702,10 +740,15 @@
     <Content Include="Content\img\button_question_icon.png" />
     <Content Include="Content\img\button_question_icon_active.png" />
     <Content Include="Content\img\button_question_icon_hover.png" />
+    <Content Include="Content\img\calc-calander-sign.png" />
+    <Content Include="Content\img\calc-handle-press.png" />
+    <Content Include="Content\img\calc-handle-up.png" />
     <Content Include="Content\img\calendar-late.png" />
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\businessguardianange.png" />
     <Content Include="Content\img\check-min.png" />
+    <Content Include="Content\img\checkbox-checked.svg" />
+    <Content Include="Content\img\checkbox-default.svg" />
     <Content Include="Content\img\customer-sidebar\award.png" />
     <Content Include="Content\img\customer-sidebar\call.png" />
     <Content Include="Content\img\customer-sidebar\chat.png" />
@@ -819,6 +862,8 @@
     <Content Include="Content\img\ny2015scratch\win_2.png" />
     <Content Include="Content\img\ny2015scratch\win_3.png" />
     <Content Include="Content\img\ny2015scratch\win_4.png" />
+    <Content Include="Content\img\security-padlock.svg" />
+    <Content Include="Content\img\Tutorial\help-amazon-everline.jpg" />
     <Content Include="Content\img\valentine2015scratch\headline.png" />
     <Content Include="Content\img\valentine2015scratch\ribbon.png" />
     <Content Include="Content\img\valentine2015scratch\scratch_card.png" />
@@ -834,9 +879,12 @@
     <Content Include="Content\js\App\ezbob.iovation.js" />
     <Content Include="Content\js\Broker\broker.commission.view.js" />
     <Content Include="Content\js\Broker\broker.leaddetails.view.js" />
+    <Content Include="Content\js\ezbob.sliders.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
+    <Content Include="Content\js\lib\autoNumeric.js" />
     <Content Include="Content\js\lib\footer.min.js" />
+    <Content Include="Content\js\lib\jquery.ui.touch-punch.min.js" />
     <Content Include="Content\js\lib\log.js" />
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
@@ -879,27 +927,28 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrcUpload.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\MarkAsPending.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditActAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\AlibabaGuarantyAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\AlibabaPre-Contract-Agreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\AlibabaPrivateCompanyLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\AlibabaCreditActAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaPreContract.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\AlibabaPrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CollectionStatus.cshtml" />
     <Content Include="Areas\Underwriter\Views\SalesForce\Index.cshtml" />
     <Content Include="Content\css\profile-ny2015scratch.css" />
     <Content Include="Areas\Underwriter\Views\Shared\_LayoutSalesForce.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_LayoutLogin.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLPrivateCompanyLoanAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLPre-Contract-Agreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLGuarantyAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLCreditActAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLRefinanceCreditActAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLRefinanceGuarantyAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditFacility.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLPrivateCompanyLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLPreContract.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLRegulatedLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinanceRegulatedLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinanceGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaCreditFacility.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ReviewSignCreditLine.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePre-Contract-Agreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinancePreContract.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
     <Content Include="App_Code\ChangeAddress.cshtml" />
@@ -923,6 +972,22 @@
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SalesForceActivity.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\ProcessingAutomationPopupTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\SalesForce\SalesForce.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_PersonalInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityIcons.cshtml" />
+    <Content Include="Areas\Broker\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Broker\Views\Shared\_LayoutBroker.cshtml" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.eot" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.ttf" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Areas\Customer\Views\Shared\QuickOffer.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\HMRCUploadAccountInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\YodleeUploadAccountInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_Sliders.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLAlibabaBoardResolution.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLAlibabaCreditFacility.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLAlibabaGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Everline\EVLBoardResolution.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaBoardResolution.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1329,7 +1394,6 @@
     <Content Include="Content\js\lib\jquery.mask.js" />
     <Content Include="Content\js\lib\jquery.mask.min.js" />
     <Content Include="Content\js\lib\jquery.mousewheel.js" />
-    <Content Include="Content\js\lib\autoNumeric-1.7.4.js" />
     <Content Include="Content\js\Calculator.js" />
     <Content Include="Content\css\wizard.css" />
     <Content Include="Content\img\apply-now-gradient.png" />
@@ -1374,7 +1438,6 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ezbob.profile.PayPointCardSelectView.js" />
     <Content Include="Content\js\Profile\ezbob.profile.companyDirectorsView.js" />
     <Content Include="Content\js\Profile\ezbob.profile.Agreements.js" />
-    <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.js" />
     <Content Include="Content\js\Profile\ezbob.profile.loanTaken.js" />
     <Content Include="Content\js\Profile\ezbob.profile.profileRouter.js" />
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js" />
@@ -1413,7 +1476,7 @@
     <Content Include="Areas\Customer\Views\Profile\PerksTemplate.cshtml" />
     <Content Include="Content\js\Profile\ezbob.profile.perks.js" />
     <Content Include="Areas\Customer\Views\Shared\Shops\HMRCAccountInfoTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\DirectorsConsentDeclaration.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobBoardresolution.cshtml" />
     <Content Include="Areas\Broker\Views\Web.config" />
     <Content Include="Areas\Broker\Views\BrokerHome\Index.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\LandRegistryEnquiry.cshtml" />
@@ -1425,7 +1488,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_StepsDashboard.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTopTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CGAccountInfoTemplate.cshtml" />
@@ -1467,8 +1529,6 @@
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RefreshYodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RecheckYodleeCallback.cshtml" />
     <Content Include="Areas\Customer\Views\PacnetStatus\TradeTrackerConversion.cshtml" />
-    <Content Include="Areas\Customer\Views\Profile\InviteFriendTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\EU.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
@@ -1864,7 +1924,6 @@
     <Content Include="Areas\Customer\Views\Wizard\Index.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_CompanyDetails.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityStatement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_ProfileTemplateMain.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\Error.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\BankAccountInstructions.cshtml" />
@@ -1893,12 +1952,12 @@
     <Content Include="Areas\Underwriter\Views\Reports\ExposureReportPerMedal.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\ExposureReportPerUnderwriter.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\PPAttachError.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\BetaTesterCompanyLoan.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\BetaTesterPreContract.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\CreditActAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\GuarantyAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\Pre-Contract-Agreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\PrivateCompanyLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\BetaTesterCompanyLoan.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\NA\BetaTesterPreContract.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobRegulatedLoanAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobPreContract.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobPrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\MedalStatisticReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ProfileLoanInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\Index.cshtml" />
@@ -1911,7 +1970,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_LoanhistoryViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\_PaymentAccountsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />
@@ -1965,16 +2023,13 @@
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Shared\_Truste.cshtml" />
     <Content Include="Views\Shared\_FavIcon.cshtml" />
     <Content Include="Views\PaypointTemplate\Index.cshtml" />
     <Content Include="Views\PaypointTemplate\DownloadPage.cshtml" />
     <Content Include="Views\Shared\_FrameKiller.cshtml" />
     <Content Include="Views\Account\Recaptcha.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\Broker\Views\Shared\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

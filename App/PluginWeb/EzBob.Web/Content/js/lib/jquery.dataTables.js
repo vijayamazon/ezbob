@@ -3003,6 +3003,7 @@
 				for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 				{
 					an[i].style.visibility = bShow ? "visible" : "hidden";
+					an[i].style.display = bShow ? "block" : "none";
 				}
 			}
 		

@@ -69,6 +69,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click .add-fee': 'addFee',
         'click .save': 'onOk',
         'click .cancel': 'onCancel',
+        'click #outside-stop-future-interest': 'outsideSelectChange',
+        'change #outside-calendar-from': 'outsideSelectChange',
+        'change #within-calendar-from': 'withinSelectChange'
     }, // events
 
     chargesSaveBtn: function () {
@@ -164,13 +167,20 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	},
 
 	withinSelectChange: function() {
-		var duration = $('#withinSelect option:selected').text();
-		var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, rescheduleIn: 'true', save: 'false' });
+	    var duration = $('#withinSelect option:selected').text();
+	    var requestParams = {
+	        loanID: this.model.get('Id'),
+	        intervalType: duration,
+	        rescheduleIn: 'true',
+	        reschedulingDate: this.$el.find('#within-calendar-from').val(),
+	        save: 'false'
+	    };
+	    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParams);
 		var self = this;
 		BlockUi('on');
 		request.success(function(res) {
 			$('#withinPayments').text(res.IntervalsNum);
-			$('#withinPrincipal').text(EzBob.formatPounds(res.ReschedulingBalance));
+			$('#withinPrincipal').text(EzBob.formatPounds(res.OpenPrincipal));
 			$('#withinIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
 		}); //on success
 
@@ -184,7 +194,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		});
 	},
 
-	outsideSelectChange: function() {
+	outsideSelectChange: function () {
 		this.ui.err_region.fadeOut();
 		$('#outsidePrincipal').removeClass('err-field-red');
 		var amount = $("#outsidePrincipal").val();
@@ -193,7 +203,16 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 			var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
 			this.fillErrorPopup(params);
 		} else {
-			var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
+		    var requestParams = {
+		        loanID: this.model.get('Id'),
+		        intervalType: duration,
+		        AmountPerInterval: amount,
+		        rescheduleIn: 'false',
+		        reschedulingDate: this.$el.find('#within-calendar-from').val(),
+		        stopFutureInterest : $('#outside-stop-future-interest').attr('checked') === 'checked',
+		        save: 'false'
+		    }
+		    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParams);
 			var self = this;
 			BlockUi('on');
 			request.success(function(res) {
@@ -272,7 +291,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		return true;
 	},*/
 
-	reschSubmitForm: function() {
+    reschSubmitForm: function() {
 		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
 		var requestParam;
 
@@ -283,15 +302,17 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		}
 
 		requestParam = { loanID: this.model.get('Id'), save: 'true' };
-
 		if (checkedRadio === 'true') {
 			requestParam.intervalType = $('#withinSelect option:selected').text();
 			requestParam.rescheduleIn = 'true';
+			requestParam.reschedulingDate = this.$el.find('#within-calendar-from').val();
 		}
 		if (checkedRadio === 'false') {
 			requestParam.intervalType = $('#outsideSelect option:selected').text();
 			requestParam.AmountPerInterval = $('#outsidePrincipal').val();
 			requestParam.rescheduleIn = 'false';
+			requestParam.reschedulingDate = this.$el.find('#outside-calendar-from').val();
+			requestParam.stopFutureInterest = $('#outside-stop-future-interest').attr('checked') === 'checked';
 		}
 
 		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
@@ -324,16 +345,25 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		return true;
 	},
 	
-	onChangeAmount: function() {
+	onChangeAmount: function () {
 		this.ui.err_region.fadeOut();
 		$('#outsidePrincipal').removeClass('err-field-red');
 		var amount = $("#outsidePrincipal").val();
 		var duration = $('#outsideSelect option:selected').text();
 		if (typeof amount === 'undefined' || amount <= 0) {
-			var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
+		    var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
 			this.fillErrorPopup(params);
 		} else {
-			var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
+		    var requestParam = {
+		        loanID: this.model.get('Id'),
+		        intervalType: duration,
+		        AmountPerInterval: amount,
+		        rescheduleIn: 'false',
+		        reschedulingDate : this.$el.find('#outside-calendar-from').val(),
+		        save: 'false',
+		        stopFutureInterest : $('#outside-stop-future-interest').attr('checked') === 'checked'
+		    };
+		    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
 			var self = this;
 			BlockUi('on');
 			request.success(function(res) {
@@ -520,6 +550,28 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        this.$el.find('#fees-calendar-from,#fees-calendar-to,#intrest-calendar-from,#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
 	        this.$el.find('#fees-calendar-from,#intrest-calendar-from').datepicker('setDate', new Date());
 
+	        var reschedulingIntervalStartIn = new Date(moment(this.model.get('ReResultIn').ReschedulingIntervalStart).utc());
+	        var reschedulingIntervalEndIn = new Date(moment(this.model.get('ReResultIn').ReschedulingIntervalEnd).utc());
+
+	        var reschedulingIntervalStartOut = new Date(moment(this.model.get('ReResultOut').ReschedulingIntervalStart).utc());
+
+	        this.$el.find('#within-calendar-from').datepicker({
+	            format: 'dd/mm/yyyy',
+	            startDate: reschedulingIntervalStartIn,
+	            endDate: reschedulingIntervalEndIn,
+	        });
+
+	        this.$el.find('#within-calendar-from').datepicker("setDate", reschedulingIntervalStartIn);
+
+	        this.$el.find('#outside-calendar-from').datepicker({
+	            format: 'dd/mm/yyyy',
+	            startDate: reschedulingIntervalStartOut,
+	        });
+
+
+
+	        this.$el.find('#outside-calendar-from').datepicker("setDate", reschedulingIntervalStartOut);
+
 	        var within = this.model.get('ReResultIn');
 	        if (within.Error != null) {
 	            if (within.BlockAction === true) {
@@ -528,7 +580,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	            }
 	        }
 	        this.$el.find('#withinPayments').text(within.IntervalsNum);
-	        this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.ReschedulingBalance));
+	        this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.OpenPrincipal));
 	        this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
 
 	        var outside = this.model.get('ReResultOut');
@@ -554,7 +606,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        var options = this.model.get('Options');
 	        if (options.AutoPayment === false) {
 	            if (options.StopAutoChargeDate != null) {
-	                this.$el.find('#stop-charges-date').text("stopped from " + EzBob.formatDateWithoutTime(options.StopAutoChargeDate));
+	                this.$el.find('#stop-charges-date').text("stopped from " + EzBob.formatDateWithoutTime(options.StopAutoChargeDate)).css({"margin-left":"5px"});
 	            } else {
 	                this.$el.find('#stop-charges-date').text("permanently stoped.");
 	            }

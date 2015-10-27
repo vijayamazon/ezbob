@@ -16,6 +16,8 @@ BEGIN
 	DECLARE @MaritalStatus NVARCHAR(100)
 	DECLARE @TypeOfBusiness NVARCHAR(100)
 
+	------------------------------------------------------------------------------
+
 	SELECT
 		@RegistrationDate = GreetingMailSentDate,
 		@MaritalStatus = MaritalStatus,
@@ -25,44 +27,21 @@ BEGIN
 	WHERE
 		Id = @CustomerId
 
-	-- BusinessScore IncorporationDate TangibleEquity CurrentBalanceSum taken from CustomerAnalyticsCompany
+	------------------------------------------------------------------------------
+
+	-- BusinessScore IncorporationDate TangibleEquity CurrentBalanceSum taken from customer analytics
 	DECLARE @BusinessScore INT = 0
 	DECLARE @IncorporationDate DATETIME = NULL
 	DECLARE @TangibleEquity DECIMAL(18,4) = 0
 	DECLARE @CurrentBalanceSum DECIMAL(18,4) = 0
 	
-	IF @TypeOfBusiness IN ('Limited', 'LLP')
-	BEGIN
-		SELECT TOP 1
-			@BusinessScore = cac.Score,
-			@IncorporationDate = cac.IncorporationDate,
-			@TangibleEquity = cac.TangibleEquity,
-			@CurrentBalanceSum = cac.CurrentBalanceSum  
-		FROM
-			CustomerAnalyticsCompany cac
-		WHERE
-			cac.CustomerID = @CustomerId
-			AND
-			cac.AnalyticsDate < @Now
-		ORDER BY
-			cac.AnalyticsDate DESC
-	END
-	ELSE BEGIN
-		SELECT TOP 1
-			@IncorporationDate = nl.IncorporationDate,
-			@BusinessScore = nl.CommercialDelphiScore
-		FROM
-			Customer c
-			INNER JOIN Company co ON c.CompanyId = co.Id
-			INNER JOIN ExperianNonLimitedResults nl ON co.ExperianRefNum = nl.RefNumber
-			INNER JOIN MP_ServiceLog l ON nl.ServiceLogId = l.Id
-		WHERE
-			c.Id = @CustomerId
-			AND
-			l.InsertDate < @Now
-		ORDER BY
-			l.InsertDate DESC
-	END
+	SELECT
+		@BusinessScore = cac.Score,
+		@IncorporationDate = cac.IncorporationDate,
+		@TangibleEquity = cac.TangibleEquity,
+		@CurrentBalanceSum = cac.CurrentBalanceSum  
+	FROM
+		dbo.udfGetCustomerCompanyAnalytics(@CustomerId, @Now, 1, 1, 0) cac
 
 	-- IncorporationDate if not exist in experian
 	
@@ -263,36 +242,12 @@ BEGIN
 
 	-- Minimal Consumer/Directors score
 
-	DECLARE @ExperianConsumerDataID BIGINT
-
-	SELECT
-		@ExperianConsumerDataID = e.Id
-	FROM
-		ExperianConsumerData e
-	WHERE
-		e.ServiceLogId = @ServiceLogId
-
-	------------------------------------------------------------------------------
-
-	DECLARE @ConsumerScore INT
-
-	SELECT
-		@ConsumerScore = MIN(x.ExperianConsumerScore)
-	FROM	(
-		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-		FROM ExperianConsumerData d
-		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
-		WHERE d.Id = @ExperianConsumerDataID
-
-		UNION
-
-		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
-		FROM CustomerAnalyticsDirector d
-		WHERE d.CustomerID = @CustomerId
-		AND d.IsActive = 1
-	) x
-
-	SET @ConsumerScore = ISNULL(@ConsumerScore, 0)
+	DECLARE @ConsumerScore INT = ISNULL((
+		SELECT
+			MinScore
+		FROM
+			dbo.udfGetCustomerScoreAnalytics(@CustomerId, @Now)
+	), 0)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------

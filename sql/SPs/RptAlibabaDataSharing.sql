@@ -191,7 +191,7 @@ BEGIN
 		CompanyDetails_CompanyRegistrationNumber = b.CompanyNumber,
 		CompanyDetails_CompanyName               = b.CompanyName,
 		CompanyDetails_MonthsOfOperation          = CASE
-			WHEN b.TypeOfBusiness IN ('Limited', 'LLP') THEN dbo.udfAgeInYM(cac.IncorporationDate)
+			WHEN b.TypeOfBusiness IN ('Limited', 'LLP') THEN dbo.udfAgeInYM((SELECT IncorporationDate FROM dbo.udfGetCustomerCompanyAnalytics(c.Id, NULL, 0, 0, 0)))
 			WHEN b.TypeOfBusiness NOT IN ('Limited', 'LLP') THEN dbo.udfAgeInYM(nl.IncorporationDate)
 			ELSE ''
 		END,
@@ -228,7 +228,7 @@ BEGIN
 		END,
 		ApprovalPhaseVerify_BusinessPhoneNumber    = b.BusinessPhone,
 		ApprovalPhaseVerify_NumberOfEmployees      = cec_data.EmployeeCount,
-		ApprovalPhaseVerify_MainIndustry           = cac.Sic1992Desc1,
+		ApprovalPhaseVerify_MainIndustry           = (SELECT Sic1992Desc1 FROM dbo.udfGetCustomerCompanyAnalytics(c.Id, NULL, 0, 0, 0)),
 		ApprovalPhaseVerify_TotalAnnualizedRevenue = muw.AnnualizedRevenue,
 		--
 		--
@@ -282,9 +282,6 @@ BEGIN
 			ON c.Id = cai.CustomerID
 		LEFT JOIN CustomerAddress ba
 			ON cai.AddressID = ba.addressId
-		LEFT JOIN CustomerAnalyticsCompany cac
-			ON c.Id = cac.CustomerID
-			AND cac.IsActive = 1
 		LEFT JOIN CustomerManualUwData muw
 			ON c.Id = muw.CustomerID
 			AND muw.IsActive = 1

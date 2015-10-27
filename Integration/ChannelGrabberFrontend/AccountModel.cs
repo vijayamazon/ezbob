@@ -12,16 +12,21 @@
 	/// This class is used to communicate with UI using json.
 	/// </summary>
 	public class AccountModel : IMarketPlaceSecurityInfo {
-
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
 			try {
 				var m = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(account.SecurityData));
 				m.id = account.Id;
 				return m;
-			}
-			catch (Exception e) {
-				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
-			}
+			} catch (Exception e) {
+				throw new ApiException(
+					string.Format(
+						"Failed to de-serialize security data for marketplace {0} ({1})",
+						account.DisplayName,
+						account.Id
+					),
+					e
+				);
+			} // try
 		} // ToModel
 
 		public static AccountModel ToModel(IDatabaseCustomerMarketPlace account) {
@@ -29,10 +34,16 @@
 				var m = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(account.SecurityData));
 				m.id = account.Id;
 				return m;
-			}
-			catch (Exception e) {
-				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
-			}
+			} catch (Exception e) {
+				throw new ApiException(
+					string.Format(
+						"Failed to de-serialize security data for marketplace {0} ({1})",
+						account.DisplayName,
+						account.Id
+					),
+					e
+				);
+			} // try
 		} // ToModel
 
 		public int id { get; set; }
@@ -62,6 +73,5 @@
 
 			return oData;
 		} // FillIn
-
 	} // class AccountModel
 } //aadd namespace Integration.ChannelGrabberFrontend

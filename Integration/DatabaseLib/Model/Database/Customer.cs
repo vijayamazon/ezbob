@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
 	using Ezbob.Utils.Extensions;
@@ -21,37 +20,9 @@
 
 	public class PendingStatusType : EnumStringType<PendingStatus> { }
 
-	public enum SystemDecision {
-		Approve,
-		Reject,
-		Manual
-	} // enum SystemDecision
-
 	public class SystemDecisionType : EnumStringType<SystemDecision> { }
 
-	public enum Status {
-		Registered,
-		Approved,
-		Rejected,
-		Manual
-	} // enum Status
-
 	public class StatusType : EnumStringType<Status> { }
-
-	public enum CreditResultStatus {
-		WaitingForDecision,
-		Escalated,
-		Rejected,
-		Approved,
-		CustomerRefused,
-		ApprovedPending,
-		Active,
-		Collection,
-		Legal,
-		PaidOff,
-		WrittenOff,
-		Late
-	} // CreditResultStatus
 
 	public class CreditResultStatusType : EnumStringType<CreditResultStatus> { }
 
@@ -120,6 +91,7 @@
 		public decimal? OverallTurnOver{ get; set; }
 		public string IndustryType { get; set; }
 		public string VatReporting { get; set; }
+		public bool VatRegistered { get; set; }
 		public bool PartBusinessOnline { get; set; }
 		public bool DirectorCheck { get; set; }
 
@@ -152,6 +124,7 @@
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
 		public virtual string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
 		public virtual string TypeOfBusinessDescription { get { return TypeOfBusiness.DescriptionAttr(); } }
+        public virtual TypeOfBusinessReduced TypeOfBusinessReduced { get { return TypeOfBusiness.Reduce(); } }
 		public virtual IndustryType? IndustryType { get; set; }
 		public virtual string IndustryTypeDescription { get { return IndustryType == null ? null : IndustryType.Value.ToString(); }}
 		public virtual string DaytimePhone { get; set; }
@@ -398,6 +371,7 @@
 
 		public virtual CustomerStatuses CollectionStatus { get; set; }
 		public virtual string CollectionDescription { get; set; }
+		public virtual bool BlockTakingLoan { get; set; }
 
 		/// <summary>
 		/// Количество неудачных проверок банковского счета
@@ -584,6 +558,8 @@
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
 		public virtual IList<LandRegistry> LandRegistries { get; set; }
+
+		public virtual IList<MP_CompanyFilesMetaData> CompanyFiles { get; set; }
 
 		public virtual string FirstVisitTime { get; set; }
 

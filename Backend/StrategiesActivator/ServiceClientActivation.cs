@@ -143,11 +143,6 @@
 		} // BackfillLinkedHmrc
 
 		[Activation]
-		private void BackfillCustomerAnalyticsCompany() {
-			this.serviceClient.BackfillCustomerAnalyticsCompany();
-		}
-
-		[Activation]
 		private void BackfillExperianConsumer() {
 			this.serviceClient.BackfillExperianConsumer();
 		}
@@ -1470,6 +1465,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void BackfillMedalForAll() {
 			this.serviceClient.BackfillMedalForAll();
 		} // BackfillMedalForAll
+
+		[Activation]
+		private void BackfillDailyLoanStats() {
+			this.serviceClient.BackfillDailyLoanStats();
+		} // BackfillDailyLoanStats
 
 		//[Activation]
 		//private void ExampleMethod() {

@@ -4,18 +4,22 @@ using System.Web.Mvc;
 
 namespace EzBob.Web.Controllers
 {
-    public class PaypointTemplateController : Controller
+	using EzBob.Web.Infrastructure;
+
+	public class PaypointTemplateController : Controller
     {
         //
         // GET: /PaypointTemplate/
 
         public ActionResult Index(string type = "Prod")
         {
+			UiCustomerOrigin.Set(ViewBag);
             return View(model: type);
         }
 
         public ViewResult DownloadPage()
         {
+			UiCustomerOrigin.Set(ViewBag);
             return View();
         }
 
@@ -34,16 +38,20 @@ namespace EzBob.Web.Controllers
 
 	    public ActionResult DownloadTemplate(string type)
 	    {
+			UiCustomerOrigin.Set(ViewBag);
+			var origin = ViewBag.CustomerOrigin.GetOrigin();
 			var html = RenderRazorViewToString(@"Index", type);
 			var bytes = Encoding.UTF8.GetBytes(html);
 		    switch (type)
 		    {
 				case "Prod":
-					return File(bytes, "text/plain", "ezbob-template.html");
+					return File(bytes, "text/plain", origin + "-template.html");
 				case "Dev":
-					return File(bytes, "text/plain", "ezbob-template-dev.html");
+					return File(bytes, "text/plain", origin + "-template-dev.html");
+				case "Qa":
+					return File(bytes, "text/plain", origin + "-template-test.html");
 				default:
-					return File(bytes, "text/plain", "ezbob-template-test.html");
+					return File(bytes, "text/plain", origin + "-template.html");
 		    }
 			
 	    }

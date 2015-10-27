@@ -211,7 +211,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				var oCtrl = $(this);
 
 				if (oCtrl.val() === '')
-					oCtrl.autoNumericSet(0).blur();
+					oCtrl.autoNumeric('set', 0).blur();
 			});
 
 			if (nErrorCount > 0)
@@ -275,7 +275,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				oCurDate = oCurDate.add('days', 1);
 
 				for (var j = 0; j < oIds.boxes.length; j++)
-					this.$el.find('.' + this.boxId(oIds.boxes[j], sPeriodID)).autoNumericSet(100 * i + 10 * j + 10).blur();
+					this.$el.find('.' + this.boxId(oIds.boxes[j], sPeriodID)).autoNumeric('set', 100 * i + 10 * j + 10).blur();
 			} // for
 		}, // fillTestData
 
@@ -364,7 +364,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		packData: function() {
 			var oPackage = {
 				CustomerID: this.CustomerID,
-				RegNo: this.$el.find('.RegNo').autoNumericGet(),
+				RegNo: this.$el.find('.RegNo').val(),
 				BusinessName: $.trim(this.$el.find('.BusinessName').val()),
 				BusinessAddress: $.trim(this.$el.find('.BusinessAddress').val()),
 
@@ -404,7 +404,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				oVat.DueDate = moment(oToDate).add('month', 1).add('week', 1).toDate();
 
 				_.each(oPackage.BoxNames, function(sNameIgnored, sBoxNum) {
-					oVat.BoxData[sBoxNum] = parseFloat(self.$el.find('.' + self.boxId(sBoxNum, sPeriodID)).autoNumericGet());
+					oVat.BoxData[sBoxNum] = parseFloat(self.$el.find('.' + self.boxId(sBoxNum, sPeriodID)).autoNumeric('get'));
 				}); // for each box
 
 				oPackage.VatPeriods.push(oVat);

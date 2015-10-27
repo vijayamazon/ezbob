@@ -7,9 +7,7 @@
 	using NHibernate.Type;
 
 	public class ChannelGrabberAggregation {
-
 		public virtual long ChannelGrabberAggregationID { get; set; }
-		//public virtual byte[] TimestampCounter { get; set; }
 		public virtual DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }

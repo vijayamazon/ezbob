@@ -417,3 +417,14 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .notification_red a {
 	color: white;	
 }
+
+.alert-msg a {
+    display: block;
+    color: black;
+    font-weight: bold;
+}
+
+hr.wizard-hr {
+	display: none;
+	visibility: hidden;
+}

@@ -88,31 +88,16 @@
 
 			CreateCashRequest();
 
-			if (SkipEverything())
-				return;
-
 			this.cashRequestID.Validate(this);
 
-			if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
-				StandardFlow();
+			if (!SkipEverything())
+				if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
+					StandardFlow();
 
 			UpdateCustomerAndCashRequest();
 
-			UpdateCustomerAnalyticsLocalData();
-
 			SendEmails();
 		} // Execute
-
-		private void SetCustomerIsUnderMainStrategy() {
-			if (!this.overrideApprovedRejected)
-				return;
-
-			DB.ExecuteNonQuery(
-				"MainStrategySetCustomerIsBeingProcessed",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", CustomerID)
-			);
-		} // SetCustomerIsUnderMainStrategy
 
 		private bool SkipEverything() {
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverything)
@@ -125,10 +110,16 @@
 				UnderwriterID
 			);
 
+			CalculateMedal(false); 
+
 			new SilentAutomation(CustomerID)
 				.PreventMainStrategy()
 				.SetTag(SilentAutomation.Callers.MainSkipEverything)
+				.SetMedal(this.medal)
 				.Execute();
+
+			this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+			this.autoDecisionResponse.UserStatus = Status.Manual;
 
 			Log.Debug(
 				"Main strategy was activated in 'skip everything go to manual decision mode' by underwriter '{1}'. " +
@@ -215,6 +206,15 @@
 			this.medal.TotalScoreNormalized = 1m;
 			this.medal.AnnualTurnover = bsa.ApprovedAmount;
 
+			var glcd = new GetLoanCommissionDefaults(this.cashRequestID, bsa.ApprovedAmount);
+			glcd.Execute();
+
+			if (!glcd.IsBrokerCustomer)
+				return true;
+
+			this.autoDecisionResponse.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
+			this.autoDecisionResponse.SetupFee = glcd.Result.ManualSetupFee;
+
 			return true;
 		} // BackdoorSimpleFlow
 
@@ -274,47 +274,6 @@
 
 			postMaster.SendEmails();
 		} // SendEmails
-
-		private void UpdateCustomerAnalyticsLocalData() {
-			SafeReader scoreCardResults = DB.GetFirst(
-				"GetScoreCardData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", CustomerID),
-				new QueryParameter("Today", DateTime.Today)
-			);
-
-			int ezbobSeniorityMonths = scoreCardResults["EzbobSeniorityMonths"];
-
-			int modelMaxFeedback = scoreCardResults["MaxFeedback", CurrentValues.Instance.DefaultFeedbackValue];
-
-			int numOfEbayAmazonPayPalMps = scoreCardResults["MPsNumber"];
-			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
-			int modelLatePayments = scoreCardResults["LatePayments"];
-			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
-
-			bool firstRepaymentDatePassed = false;
-
-			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
-			if (modelFirstRepaymentDate != default(DateTime))
-				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
-
-			DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateLocalData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", CustomerID),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", this.medal.AnnualTurnover),
-				new QueryParameter("TotalSumOfOrdersForLoanOffer", (decimal)0), // Not used any more, was part of old medal.
-				new QueryParameter("MarketplaceSeniorityYears", (decimal)0), // Not used any more, was part of old medal.
-				new QueryParameter("MaxFeedback", modelMaxFeedback),
-				new QueryParameter("MPsNumber", numOfEbayAmazonPayPalMps),
-				new QueryParameter("FirstRepaymentDatePassed", firstRepaymentDatePassed),
-				new QueryParameter("EzbobSeniorityMonths", ezbobSeniorityMonths),
-				new QueryParameter("OnTimeLoans", modelOnTimeLoans),
-				new QueryParameter("LatePayments", modelLatePayments),
-				new QueryParameter("EarlyPayments", modelEarlyPayments)
-			);
-		} // UpdateCustomerAnalyticsLocalData
 
 		private void AdjustOfferredCreditLine() {
 			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
@@ -772,7 +731,11 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
-				SetCustomerIsUnderMainStrategy();
+				DB.ExecuteNonQuery(
+					"MainStrategySetCustomerIsBeingProcessed",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", CustomerID)
+				);
 
 				if (this.nlExists) {
 					this.nlCashRequestID = DB.ExecuteScalar<int>(
@@ -820,17 +783,25 @@
 				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
 			} // if
 
-			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
-				decimal? lastLoanAmount = sr["LastLoanAmount"];
-				int cashRequestCount = sr["CashRequestCount"];
+			int cashRequestCount = sr["CashRequestCount"];
 
+			bool addOpportunity = 
+				(this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) &&
+				(this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion) &&
+				(cashRequestCount > 1);
+
+			if (addOpportunity) {
+				decimal? lastLoanAmount = sr["LastLoanAmount"];
+				
 				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
 						CreateDate = now,
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
-						Type = OpportunityType.Resell.DescriptionAttr(),
+						Type = this.customerDetails.NumOfLoans == 0
+							? OpportunityType.New.DescriptionAttr()
+							: OpportunityType.Resell.DescriptionAttr(),
 						Stage = OpportunityStage.s5.DescriptionAttr(),
 						Name = this.customerDetails.FullName + cashRequestCount
 					}

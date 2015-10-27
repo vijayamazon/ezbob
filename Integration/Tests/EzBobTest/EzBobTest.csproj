@@ -305,6 +305,14 @@
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IMailLib\IMailLib.csproj">
+      <Project>{18bd5614-c801-4869-b5e5-d993f6754671}</Project>
+      <Name>IMailLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IMailLib\IMailLib.csproj">
+      <Project>{18bd5614-c801-4869-b5e5-d993f6754671}</Project>
+      <Name>IMailLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IovationLib\IovationLib.csproj">
       <Project>{19ec11bc-48ae-4bfb-bf8e-7aa6a90ac484}</Project>
       <Name>IovationLib</Name>

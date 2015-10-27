@@ -33,6 +33,7 @@
 			var amd = ExecuteSync<GetActivity>(out stra, customerID, userID, customerID, email);
 
 			return new SalesForceActivityActionResult {
+				MetaData = amd,
 				Value = stra.Result
 			};
 		}

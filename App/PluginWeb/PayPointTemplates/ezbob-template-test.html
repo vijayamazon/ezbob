@@ -1,392 +1,476 @@
-﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script>
+    function CTIsPlayback() {
+        try { return parent && parent.WebPlayer; }
+        catch (e) { return false; }
+    }
+    if (!CTIsPlayback())
+        if (top != self)
+            top.location = location;
+</script>
 
-	<!-- <base href="https://localhost:44300" /> -->
-    <base href="https://192.168.120.11"/>
-	<!-- <base href="https://app.ezbob.com" /> -->
+	
 
-	<script>
-		function CTIsPlayback() {
-			try { return parent && parent.WebPlayer; }
-			catch (e) { return false; }
-		}
+	<base href="https://test.ezbob.com" />
 
-		if (!CTIsPlayback())
-			if (top != self)
-				top.location = location;
-
+	<script type="text/javascript">
 		var EzBob = EzBob || {};
 		EzBob.Config = EzBob.Config || {};
 	</script>
+
+
 
 	<title>PayPoint: Fill Debit Card Details</title>
 
 	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
 
 	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css" />
+
+    <link rel="icon shortcut" type="image/png" href="/Content/img/favicon/favicon_57x57.png"/>
+    <!-- for mobile -->
+    <link rel="apple-touch-icon" href="/Content/img/favicon/favicon_57x57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/img/favicon/favicon_72x72.png"/>
+    <!-- todo
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/img/favicon114x114.png"/>
+    -->
+
+
+
 	<link rel="stylesheet" type="text/css" media="print" href="/Content/css/print.css" />
+
+	
+
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery.ui.1.8.16.ie.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/bootstrap2.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/dropzone.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/notifications.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/coin-slider-styles.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/chosen.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/pe-icon-7-stroke.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/lib/pe-icon-7-helper.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/customer.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/profile-ny2015scratch.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/valentine2015scratch.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/easter2015scratch.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/ezbob.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/hmrc-upload-ui.css" />
+
+	
 	<link rel="stylesheet" type="text/css" href="/Content/css/paypoint-template.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery-ui-1.8.16.custom.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery.ui.1.8.16.ie.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/lib/bootstrap2.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/lib/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/lib/notifications.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/customer.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/ezbob.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/everline.css" />
-	<link rel="stylesheet" type="text/css" href="/Content/css/alibaba.css" />
+
+
 
 <!--[if lt IE 9]>
-	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
+	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 </head>
 
-<body>
+<body auth="" data-user-name="" data-ref="" data-term="">
+		<!-- Google Tag Manager Test ezbob-->
+		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NZXBD6"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<script>(function (w, d, s, l, i) {
+		w[l] = w[l] || []; w[l].push({
+		'gtm.start':
+		new Date().getTime(), event: 'gtm.js'
+		}); var f = d.getElementsByTagName(s)[0],
+		j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+		'//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+		})(window, document, 'script', 'dataLayer', 'GTM-NZXBD6');</script>
+		<!-- End Google Tag Manager -->
+
+
+	
+
+	<input name="__RequestVerificationToken" type="hidden" value="SXeT87ZBqGR548WIKtvI2wIL7_Nfp5cawVUr5oSgj6WcciyxhteZChxo08u8RUXzAdLYEPz5xABvsttQ7WR5zA1k1d24seZIlSbe5WU2etJ1epIgrwfFzksFRWuqvAvjUP0i9cMyCMmhxtpJaLKs-dqmueWA_v6wosaer2gbVNo1" />
+
 	<div id="wrapper">
-		<header class="common-header" style="display: none;">
-			<div id="header-alibaba" style="display: none;">
-				<div class="header-content">
-					<a href="mailto:info@ezbob.com">info@ezbob.com</a>
-					<img class="right-line" src="/Content/alibaba/line.png">
-					<img class="ezbob-in-alibaba-logo" src="/Content/alibaba/ezbob-logo.png">
-					<span>in partnership with</span>
 
-					<img class="alibaba-logo" src="/Content/alibaba/alibaba_logo.png">
-					<img class="left-line" src="/Content/alibaba/line.png">
-					<img class="e-credit-line-logo" src="/Content/alibaba/e-credit-line-logo.png">
-				</div>
+	<header class="common-header">
+			<div id="header">
+		<div class="header-bg-strip"></div>
+		<div class="header-inner">
+			<div class="header-logo">
+				<a href="http://www.ezbob.com">
+					<div class="newlogo"></div>
+				</a>
 			</div>
 
-			<div id="header" class="ezbob_header" style="display: none;">
-				<div class="header-bg-strip"></div>
-				<div class="header-inner">
-					<div class="header-logo">
-						<a href="http://www.ezbob.com">
-							<div class="newlogo"></div>
-						</a>
-					</div>
-
-					<div class="header-info" style="display: none;">
-						<div class="header-info-left"></div>
-						<div class="header-info-text"></div>
-						<div class="header-info-right"></div>
-					</div>
-
-					<ul id="user-menu">
-						<li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
-					</ul>
-				</div>
+			<div class="header-info" style="display: none;">
+				<div class="header-info-left"></div>
+				<div class="header-info-text"></div>
+				<div class="header-info-right"></div>
 			</div>
-		</header>
-		<div class="ezbob-header-placeholder" style="display: none;"></div>
-		<div class="alibaba-header-placeholder" style="display: none;"></div>
 
-		<header class="everline_header" style="display: none;">
-			<nav>
-				<div class="pin"><span></span></div>
-				<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
-				<ul class="flt-r sub-links">
-					<li><a href="tel:02033710322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
-				</ul>
-			</nav>
-		</header>
-		<div class="everline-header-placeholder" style="display:none;"></div>
+			<ul id="user-menu">
+				<li id="logoff-li" class="login" style="display: none;">
+					<a href="/Account/LogOff" class="button btn-grey">Log Off</a>
+				</li>
+				<li class="login login_btn" style="display: none;"><a href="/Account/LogOn" class="button btn-grey">Login</a></li>
+				<li class="sign-up signup_btn" style="display: none"><a href="https://dev.ezbob.com:44300/Customer/Wizard#SignUp" class="button btn-green">Sign Up</a></li>
+				<li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
+			</ul>
+		</div>
+	</div>
 
-		<div class="main-page">
-			<div class="row-fluid">
-				<div class="dashboard-header">
-					<div class="dashboard-steps wizard-steps" style="display: none;">
-						<div class="progress-time"></div>
-						<ul class="application_steps">
-							<li class="complete first-circle" data-step-num="0">
-								<div class="progress-circle">
-									<div class="inner-circle complete">
-										<div class="percent">1</div>
-									</div>
-								</div>
-								<div class="progress-line"></div>
-								<div class="progress-line-complete"></div>
-								<span class="step_label">Choose Loan Term</span>
-							</li>
-							<li class="current center-circle" data-step-num="1">
-								<div class="progress-circle">
-									<div class="inner-circle current">
-										<div class="percent">2</div>
-									</div>
-								</div>
-								<div class="progress-line"></div>
-								<div class="progress-line-current"></div>
-								<span class="step_label">Enter Bank & Debit</span>
-							</li>
-							<li class="last last-circle" data-step-num="2">
-								<div class="progress-circle ">
-									<div class="inner-circle">
-										<div class="percent">3</div>
-									</div>
-								</div>
-								<div class="progress-line"></div>
-								<span class="step_label">Get Cash</span>
-							</li>
-						</ul>
-					</div>
+	</header>
+	<div class="ezbob-header-placeholder"></div>
+
+
+
+
+		<div class="main-page main-page-ezbob">
+			
+
+
+
+<div class="row-fluid">
+	<div class="dashboard-header wizard-steps-wrapper" style="display: none;">
+		<div class="side-strip"></div>
+		<div class="dashboard-steps wizard-steps">
+			<div class="progress-time">Debit card details</div>
+			<div class="steps-wrap">
+				<div class="stripe"></div>
+				<div class="progress-bar">
+					<div class="green-line" style="width: 46%;"></div>
+					<div class="grey-line"></div>
 				</div>
-				<div class="inner">
-					<div class="row-fluid">
-						<div class="pages">
-							<div class="row-fluid">
-								<div class="pages">
-									<div class="PayPointHeader">
-										<h2>Enter your debit card details</h2>
-										<h3>For automatic loan repayment</h3>
-									</div>
-									<div class="error">
-										${error_table}
-									</div>
-									<div class="bank-account">
-										<form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
-											<div class="form_field_container control-group">
-												<div class="controls">
-													<label class="attardi-input">
-														<span>${customer_Text:=Name of Cardholder}</span>
-														<input type="text"
-															   name="customer"
-															   id="customer"
-															   class="form_field"
-															   value="${customer}"
-															   tabindex="1" />
-														<img id="customerImage" class="field_status required" />
-													</label>
-												</div>
-											</div>
-
-											${start_card_type}
-											<div class="form_field_container control-group controls">
-												<label class="attardi-input">
-													<span>${card_type_Text:=Card Type}</span>
-													<select name="card_type" class="selectheight form_field" tabindex="2">
-														<option value></option>
-														<option value="Visa" ${card_type="Visa" }>${Visa_Text:=Visa}</option>
-														<option value="Debit Master Card" ${card_type="Debit" master="" card="" }>${Debit_Master_Card_Text:=Debit Master Card}</option>
-														<option value="Delta" ${card_type="Delta" }>${Delta_Text:=Visa Debit Delta or Connect}</option>
-														${StartIssue}
-														<option value="Maestro" ${card_type="Maestro" }>${Maestro_Text:=Maestro}</option>
-														<option value="Solo" ${card_type="Solo" }>${Solo_Text:=Solo}</option>
-														${EndIssue}
-														${card_types}
-													</select>
-													<img id="card_typeImage" class="field_status required" />
-												</label>
-											</div>
-											${end_card_type}
-
-											<div class="form_field_container control-group">
-												<div class="controls">
-													<label class="attardi-input">
-														<span>${card_no_Text:=Card Number}</span>
-														<input type="text"
-															   name="card_no"
-															   id="card_no"
-															   class="form_field"
-															   value="${card_no}"
-															   tabindex="3"
-															   maxlength="16" />
-														<img id="card_noImage" class="field_status required" />
-													</label>
-												</div>
-											</div>
-
-											<div class="form_field_container control-group">
-												<div class="controls">
-													<label class="attardi-input">
-														<span>${expiry_Text:=Expiry Date (MM/YY)}</span>
-														<input type="text"
-															   name="expiry"
-															   id="expiry"
-															   class="form_field"
-															   value="${expiry}"
-															   tabindex="4"
-															   maxlength="5" />
-														<img id="expiryImage" class="field_status required" />
-													</label>
-												</div>
-											</div>
-
-											<div class="form_field_container control-group">
-												<div class="controls">
-													<label class="attardi-input">
-														<span>${cv2_Text:=CV2 (security code)}</span>
-														<input type="password"
-															   name="cv2"
-															   id="cv2"
-															   class="form_field"
-															   value="${cv2}"
-															   tabindex="5"
-															   maxlength="4" />
-														<img id="cv2Image" class="field_status required" />
-													</label>
-												</div>
-											</div>
-
-											<div id="amount-group" class="control-group" style="display: none">
-												<label class="control-label" for="amount">Amount</label>
-												<div class="controls">
-													<label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
-												</div>
-											</div>
-
-											<div class="form_buttons_container">
-												<input type="submit"
-													   name="accept"
-													   value="Confirm"
-													   id="paypoint-submit"
-													   class="submit pull-right button btn-green disabled confirm" tabindex="6" />
-
-												<input action="action"
-													   type="button"
-													   value="Back"
-													   class="button btn-grey pull-right back"
-													   onclick="window.history.back(); window.close(); return false;" />
-											</div>
-
-											<input type="hidden" name="merchant" value="${merchant}">
-											<input type="hidden" name="trans_id" value="${trans_id}">
-											<input type="hidden" name="callback" value="${callback}">
-											<input type="hidden" name="backcallback" value="${backcallback}">
-											<input type="hidden" name="order" value="${order}">
-											<input type="hidden" name="shipping" value="${shipping}">
-											<input type="hidden" name="billing" value="${billing}">
-											<input type="hidden" name="template" value="${template}">
-											<input type="hidden" name="err_template" value="${err_template}">
-											<input type="hidden" name="options" value="${options}">
-											<input type="hidden" class="amount" name="amount" value="${amount}">
-											<input type="hidden" name="currency" value="${currency}">
-											<input type="hidden" name="cb_list" value="${cb_list}">
-											<input type="hidden" name="cb_flds" value="${cb_flds}">
-											<input type="hidden" name="map_flds" value="${map_flds}">
-											<input type="hidden" name="md_flds" value="${md_flds}">
-											<input type="hidden" name="background" value="${background}">
-											<input type="hidden" name="bgcolor" value="${bgcolor}">
-											<input type="hidden" name="font_face" value="${font_face}">
-											<input type="hidden" name="font_color" value="${font_color}">
-											<input type="hidden" name="font_size" value="${font_size}">
-											<input type="hidden" name="branding" value="${branding}">
-											<input type="hidden" name="mail_message" value="${mail_message}">
-											<input type="hidden" name="cb_message" value="${cb_message}">
-											<input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
-											<input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
-											<input type="hidden" name="customer_Text" value="${customer_Text}">
-											<input type="hidden" name="card_type_Text" value="${card_type_Text}">
-											<input type="hidden" name="card_no_Text" value="${card_no_Text}">
-											<input type="hidden" name="expiry_Text" value="${expiry_Text}">
-											<input type="hidden" name="issue_Text" value="${issue_Text}">
-											<input type="hidden" name="start_date_Text" value="${start_date_Text}">
-											<input type="hidden" name="authorise_Text" value="${authorise_Text}">
-											<input type="hidden" name="wait_Text" value="${wait_Text}">
-											<input type="hidden" name="error_table_Text" value="${error_table_Text}">
-											<input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
-											<input type="hidden" name="Delta_Text" value="${Delta_Text}">
-											<input type="hidden" name="Visa_Text" value="${Visa_Text}">
-											<input type="hidden" name="JCB_Text" value="${JCB_Text}">
-											<input type="hidden" name="Solo_Text" value="${Solo_Text}">
-											<input type="hidden" name="Switch_Text" value="${Switch_Text}">
-											<input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
-											<input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
-											<input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
-											<input type="hidden" name="cv2_Text" value="${cv2_Text}">
-											<input type="hidden" name="start_date_Error" value="${start_date_Error}">
-											<input type="hidden" name="card_no_Error" value="${card_no_Error}">
-											<input type="hidden" name="card_type_Error" value="${card_type_Error}">
-											<input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
-											<input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
-											<input type="hidden" name="issue_Error" value="${issue_Error}">
-											<input type="hidden" name="email_Error" value="${email_Error}">
-											<input type="hidden" name="cv2_Error" value="${cv2_Error}">
-											<input type="hidden" name="save_other_pay" value="${save_other_pay}">
-											<input type="hidden" name="usercallback" value="${usercallback}">
-											<input type="hidden" name="token" value="${token}">
-											<input type="hidden" name="error_table">
-											<input type="hidden" name="error_list">
-										</form>
-									</div>
-									<div id="buttons" align="center" class="span7">
-										${other_pay}<br>
-									</div>
-									<div class="row">
-										<div class="span7" align="center">
-											${3ds}
-											<br>
-										</div>
-									</div>
-								</div>
+				<ul class="application_steps">
+					<li class="complete first-circle" data-step-num="0">
+						<div class="progress-circle">
+							<div class="inner-circle complete">
+								<div class="percent">1</div>
 							</div>
+						</div>
+						<div class="progress-line"></div>
+						<div class="progress-line-complete"></div>
+						<span class="step_label step_label_1">Choose Loan Term</span>
+					</li>
+					<li class="current center-circle" data-step-num="1">
+						<div class="progress-circle current">
+							<div class="inner-circle current">
+								<div class="percent">2</div>
+							</div>
+						</div>
+						<div class="progress-line"></div>
+						<div class="progress-line-current"></div>
+						<span class="step_label step_label_2">Enter Bank & Debit</span>
+					</li>
+					<li class="last last-circle" data-step-num="2">
+						<div class="progress-circle ">
+							<div class="inner-circle">
+								<div class="percent">3</div>
+							</div>
+						</div>
+						<div class="progress-line"></div>
+						<span class="step_label step_label_3">Get Cash</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="inner">
+		<div class="row-fluid">
+			<div class="pages">
+				<div class="wizard-wrap">
+					<div class="wizard-inner-wrap">
+						<div class="PayPointHeader">
+							<h2>Enter your debit card details</h2>
+							<h3>For automatic loan repayment</h3>
+						</div>
+						<div class="error">
+							${error_table}
+						</div>
+						<div class="bank-account">
+							<form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
 
-							<div class="row-fluid">
-								<div class="span12">
-									<hr>
-									${paypal:=<table id="paypal_table">
-										<tr>
-											<td id="paypal_text">
-												<p>Pay with PayPal</p>
-											</td>
-											<td id="paypal_link">
-												<a href="javascript:PPHelp()">What is PayPal?</a>
-											</td>
-											<td id="paypal_button">
-												<input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
-											</td>
-										</tr>
-									</table>
-									<hr id="paypal_line">
-									}
-									<div id="secure">
-										<table border="0" width="100%" class="secure_table">
-											<tbody>
-												<tr>
-													<td style="text-align: center; width: 150px;">
-														<a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
-															<img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
-														</a>
-													</td>
-													<td valign="top" rowspan="2">
-														${wait_Text:=You have now entered a secure transaction environment. Your personal
-														information will be encrypted before transmission. Please check that the address
-														bar of your browser is visible and that the address begins with <b>https://</b>.
-														For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
-														incorporates the SECPay service.}
-													</td>
-												</tr>
-												<tr>
-													<td style="text-align: center;">
-														Secure Payment<br>
-														<img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
-													</td>
-												</tr>
-											</tbody>
-										</table>
+									<div 
+		 class="form_field_container control-group"
+>
+			<div class="controls">
+				<label class="attardi-input">
+					<span>${customer_Text:=Name of Cardholder}</span>
+					    <input type="text"
+             name="customer"
+             id="customer"
+           class="form_field"
+           value="${customer}"
+             tabindex="1"
+                                                                              />
+
+						<img id="customerImage" class="field_status required" width="16" height="16" />
+									</label>
+			</div>
+			</div>
+
+
+								${start_card_type}
+									<div class="form_field_container control-group controls">
+										<label class="attardi-input">
+											<span>${card_type_Text:=Card Type}</span>
+											<select name="card_type" class="selectheight form_field" tabindex="2">
+												<option></option>
+												<option value="Visa" ${card_type="Visa" }>${Visa_Text:=Visa}</option>
+												<option value="Debit Master Card" ${card_type="Debit" master="" card="" }>${Debit_Master_Card_Text:=Debit Master Card}</option>
+												<option value="Delta" ${card_type="Delta" }>${Delta_Text:=Visa Debit Delta or Connect}</option>
+												${StartIssue}
+												<option value="Maestro" ${card_type="Maestro" }>${Maestro_Text:=Maestro}</option>
+												<option value="Solo" ${card_type="Solo" }>${Solo_Text:=Solo}</option>
+												${EndIssue}
+												${card_types}
+											</select>
+											<img id="card_typeImage" class="field_status required" />
+										</label>
+									</div>
+								${end_card_type}
+
+									<div 
+		 class="form_field_container control-group"
+>
+			<div class="controls">
+				<label class="attardi-input">
+					<span>${card_no_Text:=Card Number}</span>
+					    <input type="text"
+             name="card_no"
+             id="card_no"
+           class="form_field"
+           value="${card_no}"
+             tabindex="3"
+             maxlength="16"
+                                                                   />
+
+						<img id="card_noImage" class="field_status required" width="16" height="16" />
+									</label>
+			</div>
+			</div>
+
+
+									<div 
+		 class="form_field_container control-group"
+>
+			<div class="controls">
+				<label class="attardi-input">
+					<span>${expiry_Text:=Expiry Date (MM/YY)}</span>
+					    <input type="text"
+             name="expiry"
+             id="expiry"
+           class="form_field"
+           value="${expiry}"
+             tabindex="4"
+             maxlength="5"
+                                                                   />
+
+						<img id="expiryImage" class="field_status required" width="16" height="16" />
+									</label>
+			</div>
+			</div>
+
+
+									<div 
+		 class="form_field_container control-group"
+>
+			<div class="controls">
+				<label class="attardi-input">
+					<span>${cv2_Text:=CV2 (security code)}</span>
+					    <input type="password"
+             name="cv2"
+             id="cv2"
+           class="form_field"
+           value="${cv2}"
+             tabindex="5"
+             maxlength="4"
+                                                                   />
+
+						<img id="cv2Image" class="field_status required" width="16" height="16" />
+									</label>
+			</div>
+					<p id="message" class="help-block"></p>
+	</div>
+
+
+								<div id="amount-group" class="control-group form_field_container" style="display: none">
+									<label class="input-title control-label" for="amount">Amount</label>
+									<div class="controls input-wrapper attardi-input">
+										<label class="control-label" id="amount">&pound;${amount}</label>
 									</div>
 								</div>
+
+								<div class="form_buttons_container form_field_container">
+									<div class="attardi-button input-wrapper">
+										<input type="submit"
+											   name="accept"
+											   value="Confirm"
+											   id="paypoint-submit"
+											   class="submit pull-right button btn-green disabled confirm ev-btn-org" tabindex="6" />
+										<input action="action"
+											   type="button"
+											   value="Back"
+											   class="button btn-grey pull-right back clean-btn"
+											   onclick="window.history.back(); window.close(); return false;" />
+									</div>
+								</div>
+
+									<input type="hidden" name="merchant" value="${merchant}">
+		<input type="hidden" name="trans_id" value="${trans_id}">
+		<input type="hidden" name="callback" value="${callback}">
+		<input type="hidden" name="backcallback" value="${backcallback}">
+		<input type="hidden" name="order" value="${order}">
+		<input type="hidden" name="shipping" value="${shipping}">
+		<input type="hidden" name="billing" value="${billing}">
+		<input type="hidden" name="template" value="${template}">
+		<input type="hidden" name="err_template" value="${err_template}">
+		<input type="hidden" name="options" value="${options}">
+		<input type="hidden" class="amount" name="amount" value="${amount}">
+		<input type="hidden" name="currency" value="${currency}">
+		<input type="hidden" name="cb_list" value="${cb_list}">
+		<input type="hidden" name="cb_flds" value="${cb_flds}">
+		<input type="hidden" name="map_flds" value="${map_flds}">
+		<input type="hidden" name="md_flds" value="${md_flds}">
+		<input type="hidden" name="background" value="${background}">
+		<input type="hidden" name="bgcolor" value="${bgcolor}">
+		<input type="hidden" name="font_face" value="${font_face}">
+		<input type="hidden" name="font_color" value="${font_color}">
+		<input type="hidden" name="font_size" value="${font_size}">
+		<input type="hidden" name="branding" value="${branding}">
+		<input type="hidden" name="mail_message" value="${mail_message}">
+		<input type="hidden" name="cb_message" value="${cb_message}">
+		<input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
+		<input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
+		<input type="hidden" name="customer_Text" value="${customer_Text}">
+		<input type="hidden" name="card_type_Text" value="${card_type_Text}">
+		<input type="hidden" name="card_no_Text" value="${card_no_Text}">
+		<input type="hidden" name="expiry_Text" value="${expiry_Text}">
+		<input type="hidden" name="issue_Text" value="${issue_Text}">
+		<input type="hidden" name="start_date_Text" value="${start_date_Text}">
+		<input type="hidden" name="authorise_Text" value="${authorise_Text}">
+		<input type="hidden" name="wait_Text" value="${wait_Text}">
+		<input type="hidden" name="error_table_Text" value="${error_table_Text}">
+		<input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
+		<input type="hidden" name="Delta_Text" value="${Delta_Text}">
+		<input type="hidden" name="Visa_Text" value="${Visa_Text}">
+		<input type="hidden" name="JCB_Text" value="${JCB_Text}">
+		<input type="hidden" name="Solo_Text" value="${Solo_Text}">
+		<input type="hidden" name="Switch_Text" value="${Switch_Text}">
+		<input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
+		<input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
+		<input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
+		<input type="hidden" name="cv2_Text" value="${cv2_Text}">
+		<input type="hidden" name="start_date_Error" value="${start_date_Error}">
+		<input type="hidden" name="card_no_Error" value="${card_no_Error}">
+		<input type="hidden" name="card_type_Error" value="${card_type_Error}">
+		<input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
+		<input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
+		<input type="hidden" name="issue_Error" value="${issue_Error}">
+		<input type="hidden" name="email_Error" value="${email_Error}">
+		<input type="hidden" name="cv2_Error" value="${cv2_Error}">
+		<input type="hidden" name="save_other_pay" value="${save_other_pay}">
+		<input type="hidden" name="usercallback" value="${usercallback}">
+		<input type="hidden" name="token" value="${token}">
+		<input type="hidden" name="error_table">
+		<input type="hidden" name="error_list">
+	
+
+
+</form>
+						</div>
+						<div id="buttons" align="center" class="span7">
+							${other_pay}<br>
+						</div>
+						<div class="row">
+							<div class="span7" align="center">
+								${3ds}
+								<br>
+							</div>
+						</div>
+					
+
+						<div class="row-fluid">
+							<div class="span12">
+								<hr>
+								${paypal:=<table id="paypal_table">
+									<tr>
+										<td id="paypal_text">
+											<p>Pay with PayPal</p>
+										</td>
+										<td id="paypal_link">
+											<a href="javascript:PPHelp()">What is PayPal?</a>
+										</td>
+										<td id="paypal_button">
+											<input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
+										</td>
+									</tr>
+								</table>
+								<hr id="paypal_line">
+								}
+								
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<footer>
-			<div id="copyrights">
-				<div class="copyrights-inner">
-					<span class=bold></span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br />
-					<span class=bold></span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br />
-					Registered Address: 36 Soho Square, London W1D 3QY<br />
-					&copy;2013 <span class=bold></span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+				<div id="secure" class="wizard-top">
+					<table border="0" width="100%" class="secure_table">
+						<tbody>
+							<tr>
+								<td style="text-align: center; width: 150px;">
+									<a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+										<img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
+									</a>
+								</td>
+								<td valign="top" rowspan="2">
+									${wait_Text:=You have now entered a secure transaction environment. Your personal
+									information will be encrypted before transmission. Please check that the address
+									bar of your browser is visible and that the address begins with <b>https://</b>.
+									For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+									incorporates the SECPay service.}
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;">
+									Secure Payment&nbsp;<img src="/Content/img/security-padlock.svg" alt="The secure padlock" width="20" height="25" style="vertical-align: bottom;height: 25px;">
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
-		</footer>
+		</div>
 	</div>
+</div>
+
+
+
+
+
+		</div>
+
+	<footer class="location-customer-ezbob">
+		<div id="copyrights">
+			<div class="copyrights-inner">
+				<div class="privacy-and-cookie-policy"><a href="https://www.ezbob.com/privacy-and-cookies" target="_blank">Privacy and Cookie Policy</a></div>
+
+
+				ezbob and ezbob.com are trading names of EZBob Ltd. which is authorised and regulated by the Financial Conduct Authority. FRN 7852687.<br/>
+				EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br/>
+				Registered Address: 36 Soho Square, London W1D 3QY<br/>
+				&copy;2015 EZBob Ltd. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.			</div>
+		</div>
+	</footer>
+
+
+		
+		
+	</div>
+	
+
+	<div style="display: none;" class="hide" id="customer-lead-field-names">{&quot;personal-info:first_name&quot;:&quot;first name&quot;,&quot;personal-info:last_name&quot;:&quot;last name&quot;,&quot;signup:email&quot;:&quot;email&quot;,&quot;signup:mobile-phone&quot;:&quot;mobile phone&quot;}</div>
 
 	<script type="text/javascript">
 		window.gRootPath = '/';
@@ -394,30 +478,28 @@
 		Drupal.behaviors = Drupal.behaviors || {};
 	</script>
 
-	<script type="text/javascript" src="/Content/js/lib/jquery-1.8.3.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.browser.min.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.scrollTo.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.mask.min.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.validate.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/moment.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jsuri-1.1.1.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/bootstrap.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.cookie.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/underscore.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/backbone.js"></script>
-	<script type="text/javascript" src="/Content/js/App/ezbob.validation.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/jquery.field_status.js"></script>
-	<script type="text/javascript" src="/Content/js/lib/attardi.labels.js"></script>
 
+	<script type="text/javascript" src="/Content/js/lib/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.browser.min.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.scrollTo.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.mask.min.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.validate.js"></script>
+<script type="text/javascript" src="/Content/js/lib/moment.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jsuri-1.1.1.js"></script>
+<script type="text/javascript" src="/Content/js/lib/bootstrap.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="/Content/js/lib/underscore.js"></script>
+<script type="text/javascript" src="/Content/js/lib/backbone.js"></script>
+<script type="text/javascript" src="/Content/js/App/ezbob.validation.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.field_status.js"></script>
+<script type="text/javascript" src="/Content/js/lib/attardi.labels.js"></script>
+
+
+	
 	<script type="text/javascript">
 		function PPHelp() {
-			window.open(
-				'https://www.paypal.com/uk/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside',
-				'olcwhatispaypal',
-				'toolbar=no, location=no, directories=no, status=no, ' +
-				'menubar=no, scrollbars=yes, resizable=yes, width=400, height=350'
-			);
+			helpwindow = window.open('https://www.paypal.com/uk/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside', 'olcwhatispaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');
 		}
 
 		$(document).ready(function () {
@@ -430,7 +512,7 @@
 		EzBob.Config.SessionTimeout = -1;
 
 		function submitPaypointForm() {
-			$('form').data('validator').cancelSubmit = true;
+			$('form').data("validator").cancelSubmit = true;
 			$('form').submit();
 		}
 
@@ -451,7 +533,7 @@
 			return $('.submit').toggleClass('disabled', !isValid);
 		}
 
-		function onLoad() {
+		$(function () {
 			$('.header-info').show();
 			$('.header-info-text').text("MY ACCOUNT");
 			$('form').attr('action', document.location.href);
@@ -464,52 +546,37 @@
 				$('.PayPointHeader h3').hide();
 			}
 			else {
-				var param = decodeURIComponent(getCallbackValue('cardMinExpiryDate') || '');
+				var param = decodeURIComponent(getCallbackValue('cardMinExpiryDate') || "");
 				cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
 			}
 
-			var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || '');
-			if (hideSteps !== 'True')
-				$('.dashboard-steps').show();
-			else
+			var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
+			EzBob.Config.Origin = origin;
+
+			var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
+			if (hideSteps != 'True') {
+				if (origin == 'everline') {
+					$('.step_label_1').text('Loan term');
+					$('.step_label_2').text('Bank details');
+					$('.step_label_3').text('Receive funds');
+				}
+				$(".wizard-steps-wrapper").show();
+			} else {
 				$('#amount-group').show();
+			}
+			var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
-			var isTest = getOptionsValue().indexOf('test_status=true') !== -1;
+			//set user email in top bar
+			$('#logoff-li').show().tooltip({ placement: 'bottom', title: decodeURIComponent(getCallbackValue('username') || "") }).tooltip("enable").tooltip('fixTitle');
+			$('#user-menu .login_btn, .signup_btn').hide();
 
-			if (!isTest)
+			if (!isTest) {
 				$("select option[value='Visa']").remove();
-
+			}
 			$("#expiry").mask("99/99");
 			$("#card_no").mask("9999999999999999");
 
 			$('li[rel]').popover({ placement: 'left' });
-
-			$.validator.addMethod(
-				'validateCardMinExpiryDate',
-				function (value, element, date) {
-					date = $.browser.msie ? date._d : date;
-					var expirydate = moment(value, "MM/YY");
-					var res = expirydate >= date;
-					return res;
-				},
-				"Debit card expires too soon. Please use another card."
-			);
-
-			var validator = $('.paypont-form').validate({
-				rules: {
-					customer: { required: true, minlength: 2 },
-					card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
-					cv2: { required: true, minlength: 3 },
-					expiry: { required: true, validateCardMinExpiryDate: cardMinExpiryDate, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
-					card_type: { required: true }
-				},
-				messages: {
-					card_no: { digits: "Please enter a valid credit card number" }
-				},
-				errorPlacement: EzBob.Validation.errorPlacement,
-				unhighlight: EzBob.Validation.unhighlightFS,
-				highlight: EzBob.Validation.highlightFS
-			});
 
 			$('input[type="submit"]').click(function (e) {
 				if ($('#paypoint-submit').hasClass('disabled')) {
@@ -517,10 +584,12 @@
 				}
 				$('#paypoint-submit').attr('disabled', 'disabled').addClass('disabled');
 
-				if (EzBob.Validation.checkForm(validator))
+				if (EzBob.Validation.checkForm(validator)) {
 					submitPaypointForm();
-				else
+				}
+				else {
 					validator.form();
+				}
 
 				setTimeout(function () {
 					$('#paypoint-submit').prop('disabled', false).removeClass('disabled');
@@ -528,47 +597,57 @@
 
 				return false;
 			});
+			
+			var validator = $('.paypont-form').validate({
+				rules: {
+					customer: { required: true, minlength: 2 },
+					card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
+					cv2: { required: true, minlength: 3 },
+					expiry: { required: true, regex: "^(0[1-9]|1[012])/\([0-9]{2})", validateCardMinExpiryDate: cardMinExpiryDate},
+					card_type: { required: true }
+				},
+				messages: {
+					card_no: { digits: "Please enter a valid credit card number" },
+					expiry: { regex: "Please check your input" }
+				},
+				errorPlacement: EzBob.Validation.errorPlacement,
+				unhighlight: EzBob.Validation.unhighlightFS,
+				highlight: EzBob.Validation.highlightFS
+			});
 
-			$('input[type="text"], input[type="password"], select').on(
-				'change keyup',
-				function (e) { return inputChanged(validator); }
-			);
+			$('input[type="text"]').change(function (e) {
+				return inputChanged(validator);
+			});
+			$('input[type="text"]').keyup(function (e) {
+				return inputChanged(validator);
+			});
+			$('input[type="password"]').change(function (e) {
+				return inputChanged(validator);
+			});
+			$('input[type="password"]').keyup(function (e) {
+				return inputChanged(validator);
+			});
+			$('select').change(function (e) {
+				return inputChanged(validator);
+			});
+			$('select').keyup(function (e) {
+				return inputChanged(validator);
+			});
+			$('select').click(function (e) {
+				return inputChanged(validator);
+			});
 
-			$('select').click(function (e) { return inputChanged(validator); });
-		}
-
-		$(document).ready(function () {
-			var origin = decodeURIComponent(getCallbackValue('origin') || 'ezbob');
-
-			var controls;
-
-			var displayName;
-
-			switch (origin) {
-			case 'alibaba':
-				controls = '.common-header, #header-alibaba, .ezbob_header, .alibaba-header-placeholder';
-				displayName = 'Ezbob';
-				break;
-
-			case 'everline':
-				controls = '.everline_header, .everline-header-placeholder';
-				displayName = 'Everline';
-				break;
-
-			default:
-				controls = '.common-header, .ezbob_header, .ezbob-header-placeholder';
-				displayName = 'Ezbob';
-				break;
-			}
-
-			$(controls).show();
-
-			$('.main-page').addClass('main-page-' + origin);
-
-			$('span.bold', 'footer').text(displayName);
-
-			onLoad();
+			$.validator.addMethod(
+                "validateCardMinExpiryDate", function (value, element, date) {
+                	date = $.browser.msie ? date._d : date;
+                	var expirydate = moment(value, "MM/YY");
+                	var res = expirydate >= date;
+                	return res;
+                }, "Debit card expires too soon. Please use another card."
+            );
 		});
 	</script>
+
+	
 </body>
 </html>

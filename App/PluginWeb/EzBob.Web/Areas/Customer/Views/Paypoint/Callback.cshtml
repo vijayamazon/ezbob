@@ -1,24 +1,39 @@
 ﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @model EzBob.Web.Models.PaymentConfirmationModel
 
 @{
 	UiCustomerOrigin.Set(ViewBag);
-    Html.RenderPartial("PayPointResult");
-    ViewBag.Title = "Payment Confirm: Payment Confirmation " + ViewBag.CustomerOrigin.Name;
+	Html.RenderPartial("PayPointResult");
+	ViewBag.Title = "Payment Confirm: Payment Confirmation " + ViewBag.CustomerOrigin.Name;
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
 }
 
 @section css {
-    @BundleHelper.RenderProfileCss()
+	@if (origin == CustomerOriginEnum.everline) {
+		@BundleHelper.RenderEverlineProfileCss()
+	} else {
+		@BundleHelper.RenderEzbobProfileCss()
+	}
 }
 
-<div id="paypoint-message"></div>
+<div class="row-fluid profile-main">
+	<div class="inner">
+		<div id="profile-content">
+			<div id="profile-main-to-be-replaced">
+				<div id="paypoint-message"></div>
+			</div>
+		</div>
+	</div>
+</div>
+			
 
-@section Js
+			@section Js
 {
-    <script type="text/javascript">
-        $(function () {
-            var infoPage = _.template($('#infoPageTemplate').html());
-            $('#paypoint-message').html(infoPage(@Model.ToJSON()));
-        });
-    </script>
-}
+				<script type="text/javascript">
+					$(function () {
+						var infoPage = _.template($('#infoPageTemplate').html());
+						$('#paypoint-message').html(infoPage(@Model.ToJSON()));
+					});
+				</script>
+			}

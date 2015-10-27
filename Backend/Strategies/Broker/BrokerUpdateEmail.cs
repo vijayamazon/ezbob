@@ -1,0 +1,47 @@
+﻿namespace Ezbob.Backend.Strategies.Broker {
+	using Ezbob.Backend.Strategies.UserManagement;
+	using Ezbob.Database;
+
+	public class BrokerUpdateEmail : AStrategy {
+		public BrokerUpdateEmail(int brokerID, string newEmail) {
+			this.brokerID = brokerID;
+			this.newEmail = newEmail;
+			Result = string.Empty;
+		} // constructor
+
+		public override string Name {
+			get { return "Broker update email"; }
+		} // Name
+
+		public string Result { get; private set; }
+
+		public override void Execute() {
+			Log.Debug("Updating password for broker {0} to '{1}...", this.brokerID, this.newEmail);
+
+			if (string.IsNullOrWhiteSpace(this.newEmail))
+				Result = "no email address provided";
+
+			if (string.IsNullOrWhiteSpace(Result)) {
+				Result = DB.ExecuteScalar<string>(
+					"BrokerUpdateEmail",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("BrokerID", this.brokerID),
+					new QueryParameter("NewEmail", this.newEmail)
+				);
+			} // if
+
+			if (string.IsNullOrWhiteSpace(Result))
+				new ResetPassword123456(this.brokerID, PasswordResetTarget.Broker).Execute();
+
+			Log.Debug(
+				"Updating password for broker {0} to '{1}' completed {2}.",
+				this.brokerID,
+				this.newEmail,
+				string.IsNullOrWhiteSpace(Result) ? "successfully" : "with error: " + Result
+			);
+		} // Execute
+
+		private readonly int brokerID;
+		private readonly string newEmail;
+	} // class BrokerUpdateEmail
+} // namespace

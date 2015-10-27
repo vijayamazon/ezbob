@@ -1,120 +1,37 @@
 var EzBob = EzBob || {};
 
 EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
+	template: '#HMRCAccountInfoTemplate',
 	initialize: function() {
-		this.template = '#HMRCAccountInfoTemplate';
-		this.activeForm = null;
-
-		this.uploadUi = new EzBob.HmrcUploadUi({
-			chartMonths: this.options.chartMonths,
-			formID: 'hmrcAccountUpload',
-			uploadUrl: '/Customer/Hmrc/SaveFile',
-			loadPeriodsUrl: '/Customer/Hmrc/LoadPeriods',
-			isUnderwriter: false,
-			uiEventControlIDs: {
-				form: 'hmrc:dropzone',
-				backBtn: 'hmrc:upload_back',
-				doneBtn: 'hmrc:do_upload',
-			},
-			classes: {
-				backBtn: 'button btn-grey back',
-				doneBtn: 'button btn-green',
-			},
-			clickBack: _.bind(this.uploadFilesBack, this),
-			clickDone: _.bind(this.doUploadFiles, this),
-		});
+		
 	}, // initialize
 
 	events: {
 		'change input': 'inputChanged',
 		'keyup input': 'inputChanged',
 		'click a.hmrcBack': 'back',
-		'click #uploadButton': 'uploadFiles',
-		'click a.linkAccountBack': 'linkAccountBack',
+		'click a.linkAccountBack': 'back',
 		'click a.connect-account': 'connect',
-		'click a.connect-account-help': 'connect',
 		'click #linkHelpButton': 'getLinkHelp',
-		'click #uploadHelpButton': 'getUploadHelp',
-		'click #linkButton': 'linkAccount',
-		'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp',
-		'click #uploadAndLinkInfoButton': 'getUploadAndLinkHelp',
 		'click #linkInfoButton': 'getLinkHelp',
-		'click #uploadInfoButton': 'getUploadHelp',
-
-		'click a.uploadFilesBack': 'uploadFilesBack',
-		'click a.newVatFilesUploadButton': 'doUploadFiles',
 	}, // events
 
-	onRender: function() {
-		this.uploadUi.$el = this.$el.find('.hmrc-upload-ui');
-		this.uploadUi.render();
-
-		var btn = this.$el.find('.hmrcAnimatedButton');
-
-		btn.hoverIntent(
-			function() { $('.onhover', this).animate({ top:      0, opacity: 1 }); },
-			function() { $('.onhover', this).animate({ top: '80px', opacity: 0 }); }
-		);
-
+	onRender: function () {
+		$('body').scrollTop(0);
 		return this;
 	}, // onRender
 
 	inputChanged: function() {
-		if (this.activeForm === null) {
-			this.activeForm = this.$el.find('#hmrcLinkAccountForm');
-			this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
-		} // if
-
-		var enabled = EzBob.Validation.checkForm(this.validator);
-
-		this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
-
-		this.$el.find('a.connect-account-help').toggleClass('disabled', !enabled);
-	}, // inputChanged
-
-	linkAccount: function() {
 		this.activeForm = this.$el.find('#hmrcLinkAccountForm');
 		this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
-		this.$el.find('#linkAccountDiv').show();
-		this.$el.find('#initialDiv').hide();
-	}, // linkAccount
-
-	uploadFiles: function() {
-		this.$el.find('#uploadFilesDiv').show();
-		this.$el.find('#initialDiv').hide();
-	}, // uploadFiles
-
-	doUploadFiles: function() {
-		this.trigger('completed');
-		this.trigger('back');
-
-		this.$el.find('#uploadFilesDiv').hide();
-		this.$el.find('#initialDiv').show();
-
-		return false;
-	}, // doUploadFiles
+		var enabled = EzBob.Validation.checkForm(this.validator);
+		this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
+	}, // inputChanged
 
 	back: function() {
 		this.trigger('back');
 		return false;
 	}, // back
-
-	linkAccountBack: function() {
-		this.$el.find('#linkAccountDiv').hide();
-		this.$el.find('#initialDiv').show();
-		return false;
-	}, // linkAccountBack
-
-	uploadFilesBack: function() {
-		this.$el.find('#uploadFilesDiv').hide();
-		this.$el.find('#initialDiv').show();
-		return false;
-	}, // uploadFilesBack
-
-	getDocumentTitle: function() {
-		EzBob.App.trigger('clear');
-		return 'Link HMRC Account';
-	}, // getDocumentTitle
 
 	connect: function() {
 		if (this.activeForm === null) {
@@ -171,8 +88,8 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 
 			EzBob.App.trigger('info', 'HMRC Account Added Successfully');
 
-			self.$el.find('#hmrc_user_id').val("");
-			self.$el.find('#hmrc_password').val("");
+			self.$el.find('#hmrc_user_id').val('');
+			self.$el.find('#hmrc_password').val('');
 			self.$el.find('#linkAccountDiv').hide();
 
 			self.$el.find('#initialDiv').show();
@@ -202,6 +119,11 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 		return accountModel;
 	}, // buildModel
 
+	getDocumentTitle: function () {
+		EzBob.App.trigger('clear');
+		return 'Link VAT Account';
+	}, // getDocumentTitle
+
 	getLinkHelp: function() {
 		var oDialog = $('#hmrcLinkHelpPopup');
 
@@ -210,34 +132,10 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 				inline: true,
 				open: true,
 				href: oDialog,
-				width: '35%'
+				width: '35%',
+			    close: '<i class="pe-7s-close"></i>'
+
 			});
 		} // if
 	}, // getLinkHelp
-
-	getUploadHelp: function() {
-		var oDialog = $('#hmrcUploadHelpPopup');
-
-		if (oDialog.length > 0) {
-			$.colorbox({
-				inline: true,
-				open: true,
-				href: oDialog,
-				width: '35%'
-			});
-		} // if
-	}, // getUploadHelp
-
-	getUploadAndLinkHelp: function() {
-		var oDialog = $('#hmrcUploadAndLinkHelpPopup');
-
-		if (oDialog.length > 0) {
-			$.colorbox({
-				inline: true,
-				open: true,
-				href: oDialog,
-				width: '65%'
-			});
-		} // if
-	}, // getUploadAndLinkHelp
 }); // EzBob.HmrcAccountInfoView

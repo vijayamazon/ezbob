@@ -63,9 +63,7 @@
 			} // if
 
 			if (sortCodeChecker == null) {
-				sortCodeChecker = CurrentValues.Instance.PostcodeAnywhereEnabled
-					? (ISortCodeChecker)new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts)
-					: (ISortCodeChecker)new FakeSortCodeChecker();
+				sortCodeChecker = ObjectFactory.GetInstance<ISortCodeChecker>();
 			} // if
 
 			var card = new CardInfo {

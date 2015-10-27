@@ -63,5 +63,15 @@
 		public int RequestedLoanAmount { get; set; }
 		[DataMember]
 		public int? NumOfLoans { get; set; }
+
+		//broker data
+		[DataMember]
+		public string BrokerName { get; set; }
+		[DataMember]
+		public string BrokerFirmName { get; set; }
+		[DataMember]
+		public string BrokerPhoneNumber { get; set; }
+		[DataMember]
+		public string BrokerEmail { get; set; }
 	}
 }

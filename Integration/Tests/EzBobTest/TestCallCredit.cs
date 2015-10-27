@@ -124,13 +124,19 @@
 
 		private readonly AConnection db;
 		private readonly SafeILog log;
+
 		[Test]
 		[Ignore]
 		public void TestNonLimitedParser() {
-
-
 			NonLimitedParser test = new NonLimitedParser(new SqlConnection(), new SafeILog(log));
 			test.ParseAndStore(response, "01820769", 556, null);
+		}
+
+		[Test]
+		[Ignore]
+		public void TestNonLimitedParserAnother() {
+			NonLimitedParser test = new NonLimitedParser(new SqlConnection(), new SafeILog(log));
+			test.ParseAndStore(14832);
 		}
 
 		[Test]

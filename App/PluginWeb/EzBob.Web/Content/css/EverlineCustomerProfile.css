@@ -1,0 +1,656 @@
+﻿/*
+*******************************************************************************
+*
+* General override bootstrap.
+*
+*******************************************************************************
+*/
+body {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 62.5%;
+}
+
+#profile-content {
+    margin-bottom:40px;
+    width: 960px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+	padding: 0 10px;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 15px;
+	-ms-border-radius: 0;
+	border-radius: 0;
+}
+
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+	margin-left: 0;
+}
+
+h2, .ui-dialog .ui-dialog-title {
+    margin: 0;
+    color: #8dc641;
+    text-align: left;
+    line-height: 30px;
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 35px;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: #e28023;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+a.clean-btn{
+	line-height: 42px;
+}
+
+/*
+*******************************************************************************
+*
+* Notifications.
+*
+*******************************************************************************
+*/
+
+.main-page-everline .notifications {
+	width: 960px;
+	margin: 0 auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/*
+*******************************************************************************
+*
+* Table (common profile elements).
+*
+*******************************************************************************
+*/
+
+.main-page-everline table.table th {
+	background-color: #e0e0e0;
+	color: #666666;
+	border: 3px solid white;
+	padding: 15px;
+	font-size: 16px;
+	text-align: left;
+	font-family: 'Open Sans',sans-serif !important;
+}
+
+.main-page-everline table.table td {
+	background-color: #f1f0f0;
+	color: #666666;
+	border: 3px solid white;
+	padding: 15px;
+	font-size: 16px;
+	text-align: left;
+	font-family: 'Open Sans',sans-serif !important;
+}
+
+.main-page-everline table.table td a.clean-btn {
+	vertical-align: middle;
+	display: inline-block;
+    line-height: 30px;
+    height: 35px;
+    width: 130px;
+}
+
+/*
+*******************************************************************************
+*
+* Page title (above widgets row).
+*
+*******************************************************************************
+*/
+
+.main-page-everline .profile-headlines {
+	margin: 0 auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin-bottom: -15px;
+}
+
+.welcome-sign
+{
+        line-height: normal;
+	margin-bottom: 20px;
+	font-size: 29px;
+    font-weight: lighter;
+}
+
+.header-message.hm_green {
+	color: #8dc641;
+}
+
+/*
+*******************************************************************************
+*
+* Widgets row (above main menu).
+*
+*******************************************************************************
+*/
+
+.main-page-everline .d-widgets {
+	margin-top: 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.main-page-everline .d-widget {
+	background-color: #f1f0f0;
+	position: relative;
+	margin-top: 75px;
+    margin-bottom: 25px;
+	display: block;
+	padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-page-everline .d-widget h3{
+    position: absolute;
+    top: -60px;
+	left: 0;
+	color: #8dc641;
+	font-weight: normal;
+}
+
+.main-page-everline .d-widgets dl {
+	position: relative;
+    background-color: #e6e6e6;
+    padding: 13px;
+	display: inline-block;
+}
+
+.main-page-everline .d-widgets dl dd {
+	margin-right: 40px;
+	font-weight: bold;
+	font-size:20px !important;
+	margin-left: 0;
+}
+
+.main-page-everline .d-widgets .ev-btn-org,
+.main-page-everline .d-widgets .clean-btn {
+	position: absolute;
+	top: 25px;
+	right: 20px;
+	width: 22%;
+}
+
+.form_buttons_container .input-wrapper .ev-btn-org, 
+.form_buttons_container .input-wrapper a.ev-btn-org, 
+.form_buttons_container .input-wrapper .clean-btn,
+.form_buttons_container .input-wrapper a.clean-btn{
+	width: 30%;
+}
+
+a.clean-btn.pay-early,
+a.ev-btn-org {
+	width: 240px
+}
+
+.next-due-amount i{
+	display: none;
+}
+
+/*
+*******************************************************************************
+*
+* Main page content.
+*
+*******************************************************************************
+*/
+
+.main-page-everline .profile-widgets {
+	margin: 0 auto;
+	padding: 20px 0;
+}
+
+.main-page-everline .account-activity-table {
+	width: 100%;
+}
+
+.ev-form {
+	background-color: #f1f0f0;
+    padding: 20px;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.ezSortCode .attardi-input {
+    display: inline-block;
+    float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 30%;
+}
+
+.ezSortCode .attardi-input.ezSortCode3{
+	float: right;
+}
+
+.ezSortCode .attardi-input.ezSortCode2{
+	margin-left: 30px;
+}
+
+/*Automation wizard complete popup*/
+.automation-hr {
+    display:none;
+}
+.automation-popup-content {
+margin-right:0;    
+margin-left:0;
+}
+.automation-button {
+           margin-bottom: 40px;
+    height: 40px !important;
+    width: 240px;
+    font-family: 'Open Sans',sans-serif;
+    line-height: normal;
+}
+
+.automation-popup.automation-popup-complete {
+       margin-top: 5px;
+}
+.automation-popup {
+	background-color: #eeeeee;
+	color: #494949;
+    margin-top:20px;
+}
+.automation-popup hr {
+	border-bottom: 1px solid #494949;
+}
+.automation-header {
+	    font-family: 'Open Sans', sans-serif;
+   
+    margin: 0;
+    color: #8dc641;
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 34px;
+    font-weight: 300;
+    padding: 0;
+    line-height: 30px;
+        margin-right: 42px;
+}
+
+.automation-secondary-header {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 600;
+}
+
+.automation-text {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 15px;
+    margin-top: 60px;
+}
+
+.automation-label {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+}
+
+.automation-value {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	padding: 20px;
+	margin-top: 10px
+}
+/*End Automation wizard complete popup*/
+
+.main-page-everline .d-widgets dl dt,
+.main-page-everline .d-widgets dl dd {
+	color: #3a3a3a;
+	font-weight: 600;
+}
+
+.profile-headlines .proccessing-message .processing-header h2 em {
+	display:block;
+	margin-bottom: 10px;
+	font-size: 22px;
+	color: #8dc641;
+}
+
+.profile-headlines .proccessing-message .processing-header h2 {
+	font-size: 14px;
+	color: #666666;
+	font-weight: normal;
+}
+
+.profile-main .d-widgets {
+	margin-top: 0;
+}
+
+.profile-main .d-widgets .d-widget .clean-btn,
+.profile-main .d-widgets .d-widget .ev-btn-org {
+	width: 240px;
+}
+
+.profile-main .profile-widgets .clearfix .clean-btn {
+	width: 130px;
+	height: 35px;
+	float: left;
+	line-height: 30px;
+	text-decoration:none;
+}
+
+.profile-widgets .table {
+	border-collapse: collapse;
+}
+
+.profile-widgets .table th,
+.loan-schedule .table th,
+#schedule .table th{
+	padding-left: 20px;
+}
+
+.profile-widgets .table td,
+.loan-schedule .table td,
+#schedule .table td{
+	vertical-align: middle;
+	padding-left: 20px;
+}
+.profile-widgets .table td:last-child {
+	text-align: center;
+    padding: 10px 0;
+}
+
+button.addDirector.ev-btn-org {
+	float: right;
+	width: 240px;
+	margin-left: 30px;
+	margin-right: 2%;
+}
+
+#amount-past-due {
+	line-height: 20px;
+}
+
+.wizard-steps-wrapper .wizard-steps .progress-time {
+	font-weight: 400;
+}
+
+.settings-form h2 {
+	display:none;
+}
+
+.settings-form .input-title {
+	color: #A6A6A6;
+}
+
+#change-password input[type="password"],
+#change-question input[type="password"],
+#change-question input[type="text"],
+#change-password .form_buttons_container,
+#change-question .form_buttons_container,
+#change-question select {
+	margin-bottom: 0;
+}
+
+#change-password .control-group,
+#change-question .control-group {
+	margin-bottom: 5px;
+}
+
+#change-password .help-block,
+#change-question .help-block {
+	display: none;
+}
+
+#change-password .ev-btn-org,
+#change-password .clean-btn,
+#change-question .ev-btn-org, 
+#change-question .clean-btn{
+	width: 240px;
+	margin-left: 15px;
+}
+
+.grey-table .Live {
+	font-weight: 500;
+}
+
+.profile-widgets .account-activity-table td:last-child{
+	text-align: left;
+	padding-left: 20px;
+	color: #67c10b;
+}
+
+#profile-content .bank-account {
+	margin-top: 30px;
+}
+
+#profile-content .bank-account .clean-btn,
+#profile-content .bank-account .ev-btn-org,
+#profile-content .row-fluid .clean-btn,
+#profile-content .row-fluid .ev-btn-org{
+	width: 240px;
+	margin-left: 20px;
+}
+
+.profile-widgets .account-activity-table td:first-child{
+	font-weight: normal;
+}
+
+.account-activity-table.table th,
+#schedule p {
+	font-weight: 600;
+}
+
+#funds-transferred{
+	margin-top: 45px;
+	font-weight: 600;
+}
+
+.schedule-print-link {
+	margin-top: 0;
+}
+
+.form_field_container .show-more-wrapper.input-wrapper {
+	width: 70%
+}
+
+#loan-confirmation-email-address {
+	margin-top: 25px; 
+	margin-bottom: 20px; 
+	color: #767676;
+}
+
+.apply-loan-total {
+	font-weight: normal;
+}
+
+table.payment-schedule-table td:last-child {
+	color: #67c10b;
+}
+
+.apply-for-loan-div p {
+	margin-bottom: 30px;
+}
+
+.loan-schedule .sliders .summary {
+	margin: 0;
+}
+.ui-slider-horizontal {
+    top:5px;
+}
+.loan-schedule-info dd {
+    margin-left: 165px;
+}
+
+#schedule .table-bordered {
+	border-radius: 0;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement {
+	padding-top: 7px;
+    padding-left: 15px;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement .eu-image.eu-fund-image{
+	height: 55px;
+}
+
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement .eu-image.eu-agreement-image{
+	height: 75px;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement h3.eu-agreement-header-text{
+    font-size: 22px;
+    font-weight: lighter;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement .eu-agreement-header{
+	padding-top: 10px;
+}
+
+.apply-for-loan-div .cosme-agreement-section .overview.loan-agreement ol{
+	font-size: 13px;
+	padding: 0 90px 30px 40px;
+}
+
+.megila-inner.megila-inner-solvency1 h3,
+.megila-inner.megila-inner-solvency2 h3 {
+	color: #666666;
+}
+
+.megila-inner.megila-inner-solvency1 h4,
+.megila-inner.megila-inner-solvency2 h4 {
+	margin: -5px 0 15px 0;
+	font-weight: normal;
+}
+
+.megila .megila-inner {
+	padding: 10px 25px 20px 15px;
+}
+
+/*#Pre-Contract-Agreement .jspPane table.table-contract-agreement td {
+	font-size: 15px;
+}
+
+#Pre-Contract-Agreement .jspPane table.table-contract-agreement td:first-child {
+	font-weight: 600;
+}
+
+#Pre-Contract-Agreement .jspPane p {
+	margin-bottom: 10px;
+	font-size: 15px;
+} 
+
+#Pre-Contract-Agreement .jspPane table {
+	width: 100%;
+}
+
+#Pre-Contract-Agreement .jspPane h3 {
+	font-size: 22px;
+	margin-top: 0;
+} 
+
+#Pre-Contract-Agreement .jspPane h4 {
+	margin-bottom: 35px;
+	font-weight: 400;
+	font-size: 16.5px;
+} */
+
+.early-payment-form .click-wrap .title {
+	margin-left: 45px;
+}
+
+.early-payment-form .click-wrap .title b {
+	font-weight: 600;
+}
+
+.print-download {
+	margin-left: -20px;
+	padding-left: 0;	
+	text-align: left;
+}
+
+.click-input-wrap span.title {
+	line-height: 29px;
+}
+/*table borders*/
+.main-page-everline table.table td:first-child {
+    border-left: 0;
+}
+.main-page-everline table.table td:last-child {
+    border-right:0;
+}
+.main-page-everline table.table th:first-child {
+    border-left: 0;
+}
+.main-page-everline table.table th:last-child {
+    border-right:0;
+}
+
+ .marketplace-group:last-child {
+    border:none;
+}
+ .store-btn-wrap {
+     display:none;
+ }
+ #colorbox #cboxClose {
+     right:7px;
+ }
+
+ .agreements-checkboxes span.sign-full-name {
+	display:inline-block;
+	margin-top: 20px;
+}
+
+/*
+*******************************************************************************
+*
+* Update marketplaces dialogues when Request Cash was pressed.
+*
+*******************************************************************************
+*/
+
+#refresh-accounts-dlg.help_window .skip-refresh-accounts-container {
+	text-align: right;
+}
+
+#refresh-accounts-dlg.help_window ul {
+	list-style-type: none;
+	margin: 0;
+}
+
+#refresh-accounts-dlg.help_window ul > li {
+	margin-bottom: 7px;
+}
+
+#refresh-accounts-dlg.help_window ul > li > span {
+	margin-left: 5px;
+	white-space: nowrap;
+}
+
+#refresh_hmrc_help.help_window .form_buttons_container #refreshHmrcBtn {
+	margin-left: 5%;
+}
+
+#refresh_ekm_help.help_window .form_buttons_container #refreshEkmBtn {
+	margin-left: 5%;
+}
+
+#refresh_yodlee_help.help_window .dialogue_buttons_container {
+	padding: 0 10px 0 0;
+	width: 100%;
+	text-align: right;
+}
+
+#refresh_yodlee_help.help_window .dialogue_buttons_container #refreshYodleeBtn {
+	margin-left: 5%;
+}

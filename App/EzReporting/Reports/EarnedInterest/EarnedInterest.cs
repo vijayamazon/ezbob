@@ -43,8 +43,7 @@
 			DateTime oDateOne,
 			DateTime oDateTwo,
 			ASafeLog oLog = null
-			)
-			: base(oLog) {
+		) : base(oLog) {
 			VerboseLogging = false;
 
 			this.m_oDB = oDB;

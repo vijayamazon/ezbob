@@ -1,58 +1,86 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <script id="payment-accounts-template" type="text/template">
-    <table class="table grey-table account-activity-table">
-        <thead>
-            <tr>
-                <th style="width: 250px;">Payment Account</th>
-                <th style="width: 250px;">Account</th>
-                <th style="width: 250px;">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(accounts, function(account, i){%>
-                <%if(account.type == 'Bank'){%>
-                <tr>
-                    <td>
-                        <strong>Bank account</strong>
-                    </td>
-                    <td>X - <%-account.displayName.substring(4)%></td>
-                    <td class="last Live">Live</td>
-                </tr>
-                <%} else {%>
-                <tr>
-                    <td>
-                        <strong>Debit card</strong>
-                    </td>
-                    <td>X - <%-account.displayName%> <%-account.expire ? '(' + account.expire + ')' : ''%></td>
-                    <%if(account.isDefault){%>
-                    <td class="last Live">Default</td>
-                    <%}else{%>
-                    <td class="last">
-                        <%if(selectionAllowed){%>
-                        <button class="button btn-green setDefaultCard" data-card-id="<%-account.cardId%>" ui-event-control-id="profile:set-default-debit-card">Set as default</button></td>
-                        <%}%>
-                    <%}%>
-                </tr>
-                <%}%>
-            <%});%>
-        </tbody>
-    </table>
-    <button class="button btn-green addDebitCardHelp">Add debit card</button>
-    <div class="hide">
-        <div id="add_debit_card_help" class="help_window">
-            <h2>Add debit card</h2>
-            <p>
-                Adding a new card will be tested and a £5 will be charged.
-            </p>
-            <br>
-            <div class="form_buttons_container" style="padding: 0 10px 0 0;">
-                <a href="@Url.Action("AddPayPoint", "Profile", new { Area = "Customer"})" target="_blank" class="button btn-green pull-right" id="addDebitCardBtn" onclick="$.colorbox.close();" ui-event-control-id="profile:add-debit-card">Continue</a>
-                <a href="#" class="button btn-grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="profile:cancel-add-debit-card">Cancel</a>
-            </div>
-            <div class="clear"></div>
-            <hr>
-            <div class="help_security"></div>
-        </div>
-    </div>
+	<table class="table grey-table account-activity-table">
+		<thead>
+			<tr>
+				<th style="width: 250px;">Payment Account</th>
+				<th style="width: 250px;">Account</th>
+				<th style="width: 250px;">Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%_.each(accounts, function(account, i){%>
+			<%if(account.type == 'Bank'){%>
+			<tr>
+				<td class="bold-text-ez">
+				Bank account
+				</td>
+				<td>X - <%-account.displayName.substring(4)%></td>
+				<td class="last Live">Live</td>
+			</tr>
+			<%} else {%>
+			<tr>
+				<td class="bold-text-ez">
+					Debit card
+				</td>
+				<td>X - <%-account.displayName%> <%-account.expire ? '(' + account.expire + ')' : ''%></td>
+				<%if(account.isDefault){%>
+				<td class="last Live">Default</td>
+				<%}else{%>
+				<td class="last">
+					<%if(selectionAllowed){%>
+					<button class="button btn-green setDefaultCard" data-card-id="<%-account.cardId%>" ui-event-control-id="profile:set-default-debit-card">Set as default</button>
+				</td>
+				<%}%>
+				<%}%>
+			</tr>
+			<%}%>
+			<%});%>
+		</tbody>
+	</table>
+	
+	@EzForm.WizardButton(new List<EzButtonModel> {
+		new EzButtonModel(null, "Add debit card",
+			cls: "button btn-green addDebitCardHelp ev-btn-org",
+			uiEventControlID: "profile:add-debit-card",
+			buttonType: EzButtonType.button)
+		}, origin: origin)
+
+		<div class="hide">
+			<div id="add_debit_card_help" class="help_window">
+				<h2>Add debit card</h2>
+				<p>Adding a new card will be tested and a £5 will be charged.</p>
+
+				@EzForm.WizardButton(
+				new List<EzButtonModel>{
+					new EzButtonModel(
+						"addDebitCardBtn",
+						"Continue",
+						cls: "button btn-green pull-right ev-btn-org",
+						uiEventControlID: "profile:add-debit-card-continue",
+						buttonType: EzButtonType.link,
+						href: Url.Action("AddPayPoint", "Profile", new { Area = "Customer"}),
+						target: "_blank",
+						onClick: "$.colorbox.close();"),
+					new EzButtonModel(
+						"cancelAddDebitCardBtn",
+						"Cancel",
+						cls: "button btn-grey pull-right clean-btn",
+						uiEventControlID: "profile:cancel-add-debit-card",
+						buttonType: EzButtonType.link,
+						href:"#PaymentAccounts",
+						onClick: "$.colorbox.close(); return false;")
+					}, origin: origin)
+
+				<hr />
+				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
+			</div>
+		</div>
 </script>

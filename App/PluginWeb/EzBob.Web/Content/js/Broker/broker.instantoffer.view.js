@@ -50,7 +50,7 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 				obj.value = self.$el.find('#IsHomeOwner').is(":checked");
 			
 			if (obj.name == "AnnualTurnover" || obj.name == "AnnualProfit")
-				obj.value = self.$el.find('#' + obj.name).autoNumericGet();
+				obj.value = self.$el.find('#' + obj.name).autoNumeric('get');
 			
 			return obj;
 		});

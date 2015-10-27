@@ -148,10 +148,12 @@
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="Backfill\BackFillBrokerCommissionInvoice.cs" />
+    <Compile Include="Backfill\BackfillDailyLoanStats.cs" />
     <Compile Include="Backfill\BackfillMedalForAll.cs" />
     <Compile Include="Broker\BrokerAddBank.cs" />
     <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
     <Compile Include="Broker\BrokerTransferCommission.cs" />
+    <Compile Include="Broker\BrokerUpdateEmail.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
+    <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="MainStrategy\ABackdoorSimpleDetails.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleManual.cs" />
@@ -180,6 +183,8 @@
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
+    <Compile Include="Misc\GetCollectionSnailMail.cs" />
+    <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
     <Compile Include="Misc\PacnetTopUpMailProcessor.cs" />
@@ -232,6 +237,7 @@
     <Compile Include="NewLoan\NL_ExceptionOfferNotValid.cs" />
     <Compile Include="NewLoan\NL_Loader.cs" />
     <Compile Include="NewLoan\NL_ExceptionLoanExists.cs" />
+    <Compile Include="Tasks\UpdateDailyLoanStats.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
@@ -258,7 +264,6 @@
     <Compile Include="Esign\LoadCustomerEsignatures.cs" />
     <Compile Include="Esign\LoadEsignatureFile.cs" />
     <Compile Include="Esign\LoadEsignatures.cs" />
-    <Compile Include="Backfill\BackfillCustomerAnalyticsCompany.cs" />
     <Compile Include="Backfill\BackfillExperianDirectors.cs" />
     <Compile Include="Backfill\BackfillExperianLtd.cs" />
     <Compile Include="Backfill\BackfillExperianConsumer.cs" />
@@ -272,7 +277,6 @@
     <Compile Include="Experian\ExperianDirector.cs" />
     <Compile Include="Experian\LoadExperianLtd.cs" />
     <Compile Include="Experian\ParseExperianLtd.cs" />
-    <Compile Include="Experian\UpdateCustomerAnalyticsOnCompanyChange.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />

@@ -60,7 +60,7 @@ EzBob.BindingConverters.autonumericFormat = function(format) {
 		if (direction === 'ModelToView')
 			return EzBob.formatPoundsFormat(value, format);
 		else
-			return $.autoNumeric.Strip($("<input/>").val(value), format);
+			return $('<input/>').val(value).autoNumeric('init', format).autoNumeric('get');
 	};
 };
 
@@ -114,7 +114,9 @@ EzBob.BindingConverters.monthsFormatNoDecimals = function(direction, value) {
 	}
 };
 
-EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat);
+EzBob.BindingConverters.moneyFormat = function(direction, value) {
+	return EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat)(direction, value);
+};
 
 Backbone.Collection.prototype.safeFetch = function() {
 	if (document.body.getAttribute('auth') === 'auth')
@@ -132,4 +134,4 @@ Backbone.Model.prototype.safeFetch = function() {
 	return {
 		done: function() { }
 	};
-};
+}; 

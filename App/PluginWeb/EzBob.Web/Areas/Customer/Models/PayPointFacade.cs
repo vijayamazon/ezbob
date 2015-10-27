@@ -31,13 +31,13 @@
 	public class PayPointFacade : IPayPointFacade {
 		public PayPointAccount PayPointAccount { get; private set; }
 
-		public PayPointFacade(DateTime? firstOpenLoanDate = null) {
+		public PayPointFacade(DateTime? firstOpenLoanDate = null, string origin = "ezbob") {
 			var payPointAccountRepository = ObjectFactory.GetInstance<PayPointAccountRepository>();
 			PayPointAccount = payPointAccountRepository.GetAccount(firstOpenLoanDate);
 
 			this.remotePassword = PayPointAccount.RemotePassword;
 			this.mid = PayPointAccount.Mid;
-			this.templateUrl = PayPointAccount.TemplateUrl;
+			this.templateUrl = string.Format(PayPointAccount.TemplateUrl, origin);
 			this.paypointOptions = PayPointAccount.Options;
 		} // constructor
 

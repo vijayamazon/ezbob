@@ -107,14 +107,14 @@
 				bool hasLateLoans = sr["HasLateLoans"];
 				DateTime offerStart = sr["ApplyForLoan"];
 				DateTime offerValidUntil = sr["ValidFor"];
-
 				bool hasFunds = availableFunds >= minLoanAmount;
+				bool blockTakingLoan = sr["BlockTakingLoan"];
 
 				if (!isEnabled)
 					res = "disabled";
 				else if (hasLateLoans)
 					res = "late";
-				else if (string.IsNullOrEmpty(creditResult) || creditResult == "WaitingForDecision")
+				else if (string.IsNullOrEmpty(creditResult) || creditResult == "WaitingForDecision" || blockTakingLoan)
 					res = "wait";
 				else if (status == "Rejected")
 					res = "bad";
@@ -265,5 +265,25 @@
 		public ActionMetaData BackfillBrokerCommissionInvoice() {
 			return Execute<BackFillBrokerCommissionInvoice>(null, null);
 		}
+
+		public ActionMetaData BackfillDailyLoanStats() {
+			return Execute<BackfillDailyLoanStats>(null, null);
+		} // BackfillDailyLoanStats
+
+		public LoanCommissionDefaultsActionResult GetLoanCommissionDefaults(
+			int underwriterID,
+			long cashRequestID,
+			decimal loanAmount
+		) {
+			GetLoanCommissionDefaults instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, underwriterID, cashRequestID, loanAmount);
+
+			return new LoanCommissionDefaultsActionResult {
+				MetaData = amd,
+				BrokerCommission = instance.Result.BrokerCommission,
+				ManualSetupFee = instance.Result.ManualSetupFee,
+			};
+		} // GetLoanCommissionDefaults
 	} // class EzServiceImplementation
 } // namespace EzService

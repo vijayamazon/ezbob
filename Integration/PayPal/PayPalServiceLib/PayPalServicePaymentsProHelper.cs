@@ -3,9 +3,7 @@
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
-	using System.Reflection;
 	using System.ServiceModel;
-	using System.Text;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
@@ -15,12 +13,13 @@
 	using com.paypal.service;
 	using StructureMap;
 	using ConfigManager;
+	using Ezbob.Utils.Extensions;
 
 	internal class PayPalServicePaymentsProHelper {
-		private readonly string Version = "117";
+		private const string Version = "117";
 
 		private readonly ServiceUrlsInfo _ConnectionInfo;
-		private static string[] _CommonInternalErrors;
+		private static readonly string[] _CommonInternalErrors;
 
 		static PayPalServicePaymentsProHelper() {
 			// https://cms.paypal.com/es/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_soap_errorcodes
@@ -148,7 +147,11 @@
 					var service = CreateService(reqInfo);
 					TransactionSearchResponseType resp = service.TransactionSearch(ref cred, request);
 
-					WriteLog(string.Format("PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}", GetLogFor(request.TransactionSearchRequest), GetLogFor(resp)));
+					WriteLog(string.Format(
+						"PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}",
+						request.TransactionSearchRequest.ToLogStr(),
+						resp.ToLogStr()
+					));
 
 					requestsCounter.IncrementRequests("TransactionSearch");
 					if (resp.Ack == AckCodeType.Failure) {
@@ -222,27 +225,6 @@
 					AppId = CurrentValues.Instance.PayPalPpApplicationId
 				}
 			};
-		}
-
-		public static string GetLogFor(object target) {
-			var properties =
-                from property in target.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				select new {
-					Name = property.Name,
-					Value = property.GetValue(target, null)
-				};
-
-			var builder = new StringBuilder();
-
-			foreach (var property in properties) {
-				builder
-					.Append(property.Name)
-					.Append(" = ")
-					.Append(property.Value)
-					.AppendLine();
-			}
-
-			return builder.ToString();
 		}
 	}
 

@@ -72,7 +72,12 @@
 								<td><%-val.Type%></td>
 								<td><%-val.Status%></td>
 								<td><%-val.Rank%></td>
-								<td style="word-wrap: break-word;"><%-val.Comment%></td>
+								<td style="word-wrap: break-word;"><%-val.Comment%> 
+									<% if(val.CollectionSnailMails && val.CollectionSnailMails.length > 0) { 
+										_.each(val.CollectionSnailMails, function(mail) { %>
+									<a target="_blank" href="@Url.Action("DownloadSnailMail", "CustomerRelations", new { Area = "Underwriter"})/<%-mail.Id%>"><%-mail.Name%></a>
+									<%});}%>
+								</td>
 							</tr>
 							<%})%>
 							<tr>

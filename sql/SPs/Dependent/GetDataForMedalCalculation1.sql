@@ -49,7 +49,6 @@ BEGIN
 		@EbayPositiveFeedbacks INT,
 		@NumOfPaypalTransactions INT,
 		@TypeOfBusiness NVARCHAR(50),
-		@RefNumber NVARCHAR(50),
 		@FirstHmrcDate DATETIME,
 		@FirstYodleeDate DATETIME,
 		@FirstYodleePostDate DATETIME,
@@ -73,43 +72,10 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@RefNumber = ExperianRefNum
+		@TangibleEquity = cac.TangibleEquity,
+		@BusinessSeniority = cac.IncorporationDate
 	FROM
-		Customer
-		INNER JOIN Company ON Customer.CompanyId = Company.Id
-	WHERE
-		Customer.Id = @CustomerId
-
-	------------------------------------------------------------------------------
-
-	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
-	BEGIN
-		SELECT TOP 1
-			@TangibleEquity = cac.TangibleEquity,
-			@BusinessSeniority = cac.IncorporationDate
-		FROM
-			CustomerAnalyticsCompany cac
-		WHERE
-			cac.CustomerID = @CustomerId
-			AND
-			cac.AnalyticsDate < @CalculationTime
-		ORDER BY
-			cac.AnalyticsDate DESC
-	END
-	ELSE BEGIN	
-		SELECT TOP 1 
-			@BusinessSeniority = r.IncorporationDate 
-		FROM 
-			ExperianNonLimitedResults r
-			INNER JOIN MP_ServiceLog l ON r.ServiceLogId = l.Id
-		WHERE
-			r.RefNumber = @RefNumber
-			AND
-			l.InsertDate < @CalculationTime
-		ORDER BY
-			l.InsertDate DESC,
-			l.Id DESC
-	END
+		 dbo.udfGetCustomerCompanyAnalytics(@CustomerId, @CalculationTime, 0, 1, 0) cac
 
 	------------------------------------------------------------------------------
 

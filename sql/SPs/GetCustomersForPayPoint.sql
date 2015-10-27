@@ -20,6 +20,8 @@ BEGIN
 		c.Fullname,
 		c.Id AS CustomerId,
 		c.Name AS Email,
+		c.TypeOfBusiness,
+		ls.Date AS DueDate,
 		ISNULL(lo.ReductionFee, 1) AS ReductionFee,
 		l.RefNum,
 		CAST(
@@ -72,6 +74,8 @@ BEGIN
 				) 
 		)AND
 		c.ExternalCollectionStatusID IS NULL
+		AND
+		DATEDIFF(DAY, ls.Date, @Now)<=30
 		
 	SELECT 
 		LoanScheduleId,
@@ -79,7 +83,9 @@ BEGIN
 		FirstName,
 		Fullname,
 		CustomerId,
-		Email,
+		Email,		
+		TypeOfBusiness,
+		DueDate,
 		ReductionFee,
 		RefNum,
 		LastInstallment

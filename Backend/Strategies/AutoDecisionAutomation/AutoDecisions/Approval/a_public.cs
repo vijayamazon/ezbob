@@ -32,6 +32,8 @@
 			AConnection db,
 			ASafeLog log
 		) {
+			this.incorporationDate = null;
+
 			this.trail = new ApprovalTrail(
 				customerId,
 				cashRequestID,
@@ -54,7 +56,6 @@
 				var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 				this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 				this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
-				this.customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
 
 				this.medalClassification = medalClassification;
 				this.medalType = medalType;

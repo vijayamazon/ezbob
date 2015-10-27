@@ -98,6 +98,10 @@
     <Compile Include="ServiceResponceException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
       <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
       <Name>ConfigManager</Name>

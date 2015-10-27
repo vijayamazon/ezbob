@@ -168,6 +168,20 @@
 			return (oType != null) && ms_oSimpleTypes.Contains(oType.ToString());
 		} // IsSimpleType
 
+		public static bool IsPlainType(Type oType) {
+			if (oType == null)
+				return false;
+
+			if (oType.IsEnum)
+				return true;
+
+			if (IsNullable(oType))
+				if (Nullable.GetUnderlyingType(oType).IsEnum)
+					return true;
+
+			return IsSimpleType(oType);
+		} // IsPlainType
+
 		private static readonly SortedSet<string> ms_oSimpleTypes;
 
 		// ReSharper disable PossibleNullReferenceException

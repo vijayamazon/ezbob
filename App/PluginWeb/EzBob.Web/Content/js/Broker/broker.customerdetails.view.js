@@ -369,7 +369,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				oCaption.append($('.dataTables_filter', oGroup));
 
 				oCaption.prepend(self.setSomethingEnabled(
-					$('<button type=button class="button btn-green delete-selected-files" title="Delete selected files">Delete</button>'),
+					$('<button type=button class="button btn-green delete-selected-files ev-btn-org" title="Delete selected files">Delete</button>'),
 					false
 				));
 			} // on success loading customer details
@@ -390,8 +390,18 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		var self = this;
 
-		EzBob.ShowMessage(sMsg, 'Please confirm', function() { self.doDeleteSelectedFiles(); }, 'Yes', null, 'No');
-	}, // deleteSelectedFiles
+		EzBob.ShowMessageEx({
+				message: sMsg,
+				title: 'Please confirm',
+				timeout: 0,
+				onOk: function() { self.doDeleteSelectedFiles(); },
+				okText: 'Yes',
+				onCancel: null,
+				cancelText: 'No',
+				closeOnEscape: true,
+				dialogWidth: '500px'
+			});
+		}, // deleteSelectedFiles
 
 	doDeleteSelectedFiles: function() {
 		var arySelected = [];
@@ -461,7 +471,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			aaSorting: [[0, 'desc']],
 
 			bAutoWidth: true,
-			sDom: 'ftr<"bottom"<"col-md-6"il><"col-md-6 dataTables_bottom_right"p>><"clear">',
+			sDom: 'rt<"clear">',
 
 			bStateSave: true,
 

@@ -1,80 +1,129 @@
 ﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
+		   
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	var privacyPolicy = origin == CustomerOriginEnum.everline ? "/privacy-and-cookie-policy/" : "/privacy-and-cookies/";
+	var privacyPolicyLink = ViewBag.CustomerOrigin.FrontendSite + privacyPolicy;
+}
 <script type="text/template" id="wizard-template">
     <div class="wizard-progress"></div>
-    <div class="vip-container"></div>
     <div class="inner">
-        <section id="content">
-            <div class="row-fluid notifications"></div>
-            <div class='pages'></div>
-        </section>
+		<section id="content">
+			<div class="wizard-wrap">
+				<div class="wizard-inner-wrap">
+					<div class="row-fluid notifications"></div>
+					<div class='pages'></div>
+				</div>
+			</div>
+		</section>
+        
         <aside class="customer-sidebar wizard">
-            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData));}
+            @*@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData)); }*@
         </aside>
+        
     </div>
-    <div class="clear" />
+    <div class="clear" ></div>
 </script>
 
 <script type="text/template" id="progress-indicator">
-    <div class="wizard-steps">
-        <div class="progress-time">
-            <span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span>
-        </div>
-        <ul class="application_steps">
-            <%(function() {
-                    var last = steps.length - 1;
+	<div class="wizard-steps-wrapper">
+		<div class="side-strip"></div>
+		<div class="wizard-steps">
+			@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
+				<div class="progress-time">
+					<%-caption%>
+				</div>
+			} else {
+				<div class="progress-time">
+					<span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span>
+				</div>
+			}
+			<div class="steps-wrap">
+				<div class="stripe"></div>
+				<div class="progress-bar">
+					<div class="green-line">
 
-                    _.each(steps, function(step, i) {
-                        var css = '';
-                        var lastcss = '';
-                        var circleType = 'center-circle';
-                        if (i == current) css += 'current';
+					</div>
+					<div class="grey-line">
 
-                        if (i < current) css += 'complete';
+					</div>
+				</div>
+				<ul class="application_steps">
+					<%(function() {
+					var last = steps.length - 1;
 
-                        if (i == last) {
-                            lastcss = 'last';
-                            circleType = 'last-circle';
-                        }
-                        if ( i == 0 ) {
-                            lastcss='first';
-                            circleType = 'first-circle';
-                        }
-            %>
-            <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
-                <div class="progress-circle">
-                    <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
-                    
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-line-<%-css%>"></div>
-                <span class="step_label"><% print(step.title) %></span>
-            </li>
-            <%}); // for each step
-                })(); // inline function - local scope
-            %>
-        </ul>
-    </div>
+					_.each(steps, function(step, i) {
+					var css = '';
+					var lastcss = '';
+					var circleType = 'center-circle';
+					if (i == current) css += 'current';
 
-    @{
-        var blm = new WizardBrokerLeadModel(Session);
+					if (i < current) css += 'complete';
 
-        if (blm.BrokerFillsForCustomer)
-        {
-        <div class="broker-finish-wizard-later">
-            <div class="broker-finish-inner">
-                <div>Dear Broker,</div>
-                <div>
-                    You are filling the loan application forms for your customer, @blm.FirstName @blm.LastName.
-                </div>
-                <div class="button-container">
-                    For any assistance, please contact us.
-                    <button class="button btn-green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
-                </div>
-            </div>
-        </div>
-        }
-    }
+					if (i == last) {
+					lastcss = 'last';
+					circleType = 'last-circle';
+					}
+					if ( i == 0 ) {
+					lastcss='first';
+					circleType = 'first-circle';
+					}
+					%>
+					<li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
+						<div class="progress-circle">
+							<div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
+
+						</div>
+						<div class="progress-line"></div>
+						<div class="progress-line-<%-css%>"></div>
+						<span class="step_label"><% print(step.title) %></span>
+					</li>
+					<%}); // for each step
+					})(); // inline function - local scope
+					%>
+				</ul>
+			</div>
+		</div>
+	</div>
+	@{
+		var blm = new WizardBrokerLeadModel(Session);
+
+		if (blm.BrokerFillsForCustomer) {
+			<div class="broker-finish-wizard-later">
+				<div class="broker-finish-inner">
+
+					<div>Dear Broker,</div>
+					<div class="broker-finish-inner-text">
+						You are filling the loan application forms for your customer, @blm.FirstName @blm.LastName.
+					</div>
+					<div class="button-container">
+						For any assistance, please contact us.
+						<button class="button btn-green clean-btn" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
+					</div>
+				</div>
+			</div>
+		}
+	}
+	
+	<div class="wizard-top">
+		<%if(current == 0) {%>
+			@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
+			<h2>Apply in just 10 minutes</h2>
+			<p>It's quick and easy to apply for a business loan. We just need a few details before we can make a loan decision.</p>
+			<p>
+				To start the process we need you to first register to create a Customer Account. If you would like to know more about how we collect and use your data, please see our
+				<a id="privacy_policy" href="@privacyPolicyLink" target="_blank">Privacy Policy</a>.
+			</p>
+
+		<%} else {%>
+			@if (origin != CustomerOriginEnum.everline) {
+				Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");
+			}
+		<%}%>
+	</div>
+	<div class="sliders-wrapper"></div>
 </script>
 
 <script type="text/template" id="vip-template">

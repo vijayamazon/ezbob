@@ -13,29 +13,10 @@ ALTER PROCEDURE GetCompanySeniority
 AS
 BEGIN
 	SET NOCOUNT ON;
-	IF @IsLimited = 1
-	BEGIN
-		SELECT
-			IncorporationDate
-		FROM
-			CustomerAnalyticsCompany
-		WHERE
-			CustomerID = @CustomerID
-			AND
-			IsActive = 1
-	END		
-	ELSE
-	BEGIN
-		SELECT 
-			e.IncorporationDate
-		FROM 
-			Customer c
-			INNER JOIN Company co ON c.CompanyId = co.Id
-			INNER JOIN ExperianNonLimitedResults e ON e.RefNumber = co.ExperianRefNum
-		WHERE 
-			c.Id = @CustomerID AND
-			e.IsActive = 1
-	END		
-END
 
+	SELECT
+		IncorporationDate
+	FROM
+		dbo.udfGetCustomerCompanyAnalytics(@CustomerID, NULL, 0, 0, 0)
+END
 GO

@@ -38,8 +38,10 @@ EzBob.Validation.addressErrorPlacement = function(el, model, nDirectorID, sTypeO
 	$el.on('focusout', function() {
 		if (addressListLength(model, nDirectorID, sTypeOfBusiness) === 0) {
 			var oButton = $el.find('.addAddress');
-
-			oButton.tooltip({ title: 'Please lookup your post code' });
+			if (EzBob.Config.Origin !== 'everline') {
+			    oButton.tooltip({ title: 'Please lookup your post code' });
+			}
+			
 
 			$el.hover(
 				function() { oButton.tooltip('show'); },
@@ -56,41 +58,51 @@ EzBob.Validation.addressErrorPlacement = function(el, model, nDirectorID, sTypeO
 
 EzBob.Validation.errorPlacement = function (error, element) {
     EzBob.Validation.unhighlight(element);
-    if (error.text()) {
-        //fix for hidden
-        if (element.hasClass("hidden-field")) {
-            //fix for empty date validation
-            if ((element.closest('.ezDateTime').find("select[value=-]")).length > 0) {
-                element = element.closest('.ezDateTime').find("select[value=-]");
-            } else {
-                //fix for incorrect date validation
-                if ((element.closest('.ezDateTime').find("select[name='day']")).length > 0) {
-                    element = element.closest('.ezDateTime').find("select[name='day'],select[name='month'],select[name='year']");
+    if (EzBob.Config.Origin === 'everline') {
+        if (error.text()) {
+        	error.appendTo(element.siblings(".error-wrap"));
+        	if ($(element).hasClass('SortCodeSplit')) {
+        		error.appendTo(element.parent().siblings(".error-wrap"));
+        	}
+        }
+    } else {
+        if (error.text()) {
+            //fix for hidden
+            if (element.hasClass("hidden-field")) {
+                //fix for empty date validation
+                if ((element.closest('.ezDateTime').find("select[value=-]")).length > 0) {
+                    element = element.closest('.ezDateTime').find("select[value=-]");
+                } else {
+                    //fix for incorrect date validation
+                    if ((element.closest('.ezDateTime').find("select[name='day']")).length > 0) {
+                        element = element.closest('.ezDateTime').find("select[name='day'],select[name='month'],select[name='year']");
+                    }
+                }
+                //fix for SortCode
+                if ((element.closest('.ezSortCode').find("input:text")).length > 0) {
+                    element = element.closest('.ezSortCode').find("input:text");
+                }
+                //fix for number
+                if (element.closest("div").find(".cashInput").length > 0) {
+                    element = element.closest("div").find(".cashInput");
                 }
             }
-            //fix for SortCode
-            if ((element.closest('.ezSortCode').find("input:text")).length > 0) {
-                element = element.closest('.ezSortCode').find("input:text");
+            //fix for radio input
+            if (element.attr('type') == 'radio') {
+                element = element.closest("span");
             }
-            //fix for number
-            if (element.closest("div").find(".cashInput").length > 0) {
-                element = element.closest("div").find(".cashInput");
-            }
-        }
-        //fix for radio input
-        if (element.attr('type') == 'radio') {
-            element = element.closest("span");
-        }
 
-        element.attr('data-original-title', error.text());
-        element.tooltip({
-            'trigger': 'hover',
-            'title': error.text()
-        });
+            element.attr('data-original-title', error.text());
+            element.tooltip({
+                'trigger': 'hover',
+                'title': error.text()
+            });
 
-        element.tooltip("enable").tooltip('fixTitle');
-        element.addClass('error');
+            element.tooltip("enable").tooltip('fixTitle');
+            element.addClass('error');
+        }
     }
+   
 };
 
 //-----------------------------------------------------------------
@@ -111,36 +123,68 @@ EzBob.Validation.unhighlight = function (element) {
 
 
 EzBob.Validation.unhighlightFS = function (element) {
-    EzBob.Validation.unhighlight(element);
-    var $el = $(element),
-        val = $el.val(),
-        img = $el.closest('div').find('.field_status');
-    if (img.hasClass("required") && !val) {
-        img.field_status('set', 'required', 2);
+    if (EzBob.Config.Origin === 'everline') {
+    	if ($(element).attr('id') === 'DateOfBirth' || $(element).hasClass('director_birth_date')) {
+            $('.form_field_date').css('border-bottom', '2px solid #7ac143');
+        }
+        else if ($(element).attr('class') === 'address-field') {
+            $(element).find('.form_field_left_side:not(.addAddressInput)').css('border-bottom', '2px solid #7ac143');
+        }
+        else if ($(element).hasClass('SortCodeSplit')) {
+        	$('.form_field_look').css('border-bottom', '2px solid #7ac143');
+        }
+        else {
+            $(element).css('border-bottom', '2px solid #7ac143');
+        }
     } else {
-        img.field_status('set', 'ok');
+       
+        EzBob.Validation.unhighlight(element);
+        var $el = $(element),
+            val = $el.val(),
+            img = $el.closest('div').find('.field_status');
+        if (img.hasClass("required") && !val) {
+            img.field_status('set', 'required', 2);
+        } else {
+            img.field_status('set', 'ok');
+        }
     }
+ 
 };
 
 EzBob.Validation.highlightFS = function (element) {
-    var $el = $(element),
-        val = $el.val(),
-        img = $el.closest('div').find('.field_status');
-    
-    if ($el.hasClass('cashInput') && val == '£ ') {
-        img.field_status('set', 'required', 2);
-        return;
-    }
+    if (EzBob.Config.Origin == 'everline') {
+    	if ($(element).attr('id') === 'DateOfBirth' || $(element).hasClass('director_birth_date')) {
+            $('.form_field_date').css('border-bottom', '2px solid red');
+        } else if ($(element).attr('class') === 'address-field') {
+            $(element).find('.form_field_left_side').css('border-bottom', '2px solid red');
+        } else if ($(element).hasClass('SortCodeSplit')) {
+        	$('.form_field_look').css('border-bottom', '2px solid red');
+	    } else {
+		    $(element).css('border-bottom', '2px solid red');
+	    }
 
-    if (img.hasClass("required") && !val) {
-        img.field_status('set', 'required', 2);
-    } else if ($el.hasClass('SortCodeSplit')) {
-        img.field_status('set', 'required', 2);
-    } else if ($el.hasClass('requiredDate') && $el.val().indexOf('-') !== -1) {
-        img.field_status('set', 'required', 2);
     } else {
-        img.field_status('set', 'fail');
+      
+        var $el = $(element),
+            val = $el.val(),
+            img = $el.closest('div').find('.field_status');
+
+        if ($el.hasClass('cashInput') && val == '£ ') {
+            img.field_status('set', 'required', 2);
+            return;
+        }
+
+        if (img.hasClass("required") && !val) {
+            img.field_status('set', 'required', 2);
+        } else if ($el.hasClass('SortCodeSplit')) {
+            img.field_status('set', 'required', 2);
+        } else if ($el.hasClass('requiredDate') && $el.val().indexOf('-') !== -1) {
+            img.field_status('set', 'required', 2);
+        } else {
+            img.field_status('set', 'fail');
+        }
     }
+    
 };
 
 //Extends validator method 
@@ -154,21 +198,38 @@ $.validator.addMethod(
 );
 
 $.validator.addMethod(
-        "autonumericMin",
-        function (value, element, minVal) {
-            var amount = parseFloat($(element).autoNumericGet());
-            return amount >= minVal;
-        },
-        "Amount is below limit."
+	'autonumericMin',
+	function (value, element, minVal) {
+		var amount;
+
+		try {
+			amount = $(element).autoNumeric('get');
+		} catch (e) {
+			amount = $(element).val();
+		}
+
+		amount = parseFloat(amount);
+		return amount >= minVal;
+	},
+	'Amount is below limit.'
 );
 
 $.validator.addMethod(
-        "autonumericMax",
-        function (value, element, maxVal) {
-            var amount = parseFloat($(element).autoNumericGet());
-            return amount <= maxVal;
-        },
-        "Amount is above limit."
+	'autonumericMax',
+	function (value, element, maxVal) {
+		var amount;
+
+		try {
+			amount = $(element).autoNumeric('get');
+		} catch (e) {
+			amount = $(element).val();
+		}
+
+		amount = parseFloat(amount);
+
+		return amount <= maxVal;
+	},
+	'Amount is above limit.'
 );
 
 

@@ -395,6 +395,12 @@
   <wsdl:message name="IEzService_IsBroker_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerUpdateEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerUpdateEmail" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerUpdateEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerUpdateEmailResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategyAsync_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategyAsync" />
   </wsdl:message>
@@ -562,6 +568,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
@@ -785,12 +797,6 @@
   <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateCustomerAnalyticsOnCompanyChange_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateCustomerAnalyticsOnCompanyChange" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateCustomerAnalyticsOnCompanyChange_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateCustomerAnalyticsOnCompanyChangeResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UpdateExperianDirectorDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateExperianDirectorDetails" />
   </wsdl:message>
@@ -965,6 +971,18 @@
   <wsdl:message name="IEzService_PacnetDelivery_OutputMessage">
     <wsdl:part name="parameters" element="tns:PacnetDeliveryResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackfillDailyLoanStats_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillDailyLoanStats" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillDailyLoanStats_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillDailyLoanStatsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLoanCommissionDefaults_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanCommissionDefaults" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLoanCommissionDefaults_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanCommissionDefaultsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -982,12 +1000,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillAml_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillAmlResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_InputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompany" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompanyResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackFillExperianNonLtdScoreText_InputMessage">
     <wsdl:part name="parameters" element="tns:BackFillExperianNonLtdScoreText" />
@@ -1144,6 +1156,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_CustomerChangePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:CustomerChangePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CustomerBankAccountIsAlreadyAddedEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:CustomerBankAccountIsAlreadyAddedEmail" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CustomerBankAccountIsAlreadyAddedEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CustomerBankAccountIsAlreadyAddedEmailResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CustomerSignup_InputMessage">
     <wsdl:part name="parameters" element="tns:CustomerSignup" />
@@ -1385,6 +1403,12 @@
   <wsdl:message name="IEzService_GetWizardConfigs_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetWizardConfigsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCollectionSnailMail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCollectionSnailMail" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCollectionSnailMail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCollectionSnailMailResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetZooplaData_InputMessage">
     <wsdl:part name="parameters" element="tns:GetZooplaData" />
   </wsdl:message>
@@ -1468,12 +1492,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -1682,6 +1700,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerUpdateEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmail" message="tns:IEzService_BrokerUpdateEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmailResponse" message="tns:IEzService_BrokerUpdateEmail_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MainStrategyAsync">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync" message="tns:IEzService_MainStrategyAsync_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse" message="tns:IEzService_MainStrategyAsync_OutputMessage" />
@@ -1793,6 +1815,10 @@
     <wsdl:operation name="RescheduleLoan">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoanStatusAfterPayment">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarketplaceInstantUpdate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
@@ -1942,10 +1968,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateCustomerAnalyticsOnCompanyChange">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange" message="tns:IEzService_UpdateCustomerAnalyticsOnCompanyChange_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChangeResponse" message="tns:IEzService_UpdateCustomerAnalyticsOnCompanyChange_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="UpdateExperianDirectorDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" message="tns:IEzService_UpdateExperianDirectorDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse" message="tns:IEzService_UpdateExperianDirectorDetails_OutputMessage" />
@@ -2062,6 +2084,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PacnetDelivery" message="tns:IEzService_PacnetDelivery_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PacnetDeliveryResponse" message="tns:IEzService_PacnetDelivery_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BackfillDailyLoanStats">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillDailyLoanStats" message="tns:IEzService_BackfillDailyLoanStats_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillDailyLoanStatsResponse" message="tns:IEzService_BackfillDailyLoanStats_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanCommissionDefaults">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetLoanCommissionDefaults" message="tns:IEzService_GetLoanCommissionDefaults_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetLoanCommissionDefaultsResponse" message="tns:IEzService_GetLoanCommissionDefaults_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
@@ -2073,10 +2103,6 @@
     <wsdl:operation name="BackfillAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAml" message="tns:IEzService_BackfillAml_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAmlResponse" message="tns:IEzService_BackfillAml_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BackfillCustomerAnalyticsCompany">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" message="tns:IEzService_BackfillCustomerAnalyticsCompany_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompanyResponse" message="tns:IEzService_BackfillCustomerAnalyticsCompany_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackFillExperianNonLtdScoreText">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackFillExperianNonLtdScoreText" message="tns:IEzService_BackFillExperianNonLtdScoreText_InputMessage" />
@@ -2181,6 +2207,10 @@
     <wsdl:operation name="CustomerChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CustomerChangePassword" message="tns:IEzService_CustomerChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CustomerChangePasswordResponse" message="tns:IEzService_CustomerChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CustomerBankAccountIsAlreadyAddedEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmail" message="tns:IEzService_CustomerBankAccountIsAlreadyAddedEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmailResponse" message="tns:IEzService_CustomerBankAccountIsAlreadyAddedEmail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CustomerSignup">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CustomerSignup" message="tns:IEzService_CustomerSignup_InputMessage" />
@@ -2342,6 +2372,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetCollectionSnailMail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCollectionSnailMail" message="tns:IEzService_GetCollectionSnailMail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCollectionSnailMailResponse" message="tns:IEzService_GetCollectionSnailMail_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetZooplaData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetZooplaData" message="tns:IEzService_GetZooplaData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetZooplaDataResponse" message="tns:IEzService_GetZooplaData_OutputMessage" />
@@ -2397,10 +2431,6 @@
     <wsdl:operation name="LoanFullyPaid">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoanStatusAfterPayment">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -2871,6 +2901,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerUpdateEmail">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceBroker/BrokerUpdateEmail" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="MainStrategyAsync">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync" style="document" />
       <wsdl:input>
@@ -3116,6 +3155,15 @@
     </wsdl:operation>
     <wsdl:operation name="RescheduleLoan">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoanStatusAfterPayment">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanStatusAfterPayment" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3456,15 +3504,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UpdateCustomerAnalyticsOnCompanyChange">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="UpdateExperianDirectorDetails">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" style="document" />
       <wsdl:input>
@@ -3726,6 +3765,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BackfillDailyLoanStats">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillDailyLoanStats" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanCommissionDefaults">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetLoanCommissionDefaults" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
@@ -3746,15 +3803,6 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillAml">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAml" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BackfillCustomerAnalyticsCompany">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3989,6 +4037,15 @@
     </wsdl:operation>
     <wsdl:operation name="CustomerChangePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CustomerChangePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerBankAccountIsAlreadyAddedEmail">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CustomerBankAccountIsAlreadyAddedEmail" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4356,6 +4413,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetCollectionSnailMail">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCollectionSnailMail" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetZooplaData">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetZooplaData" style="document" />
       <wsdl:input>
@@ -4482,32 +4548,23 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="LoanStatusAfterPayment">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanStatusAfterPayment" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

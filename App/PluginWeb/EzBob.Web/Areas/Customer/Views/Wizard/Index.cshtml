@@ -3,6 +3,7 @@
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
 @{
@@ -24,7 +25,12 @@
 }
 
 @section css{
-    @BundleHelper.RenderWizardCss()
+@if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline) {
+	@BundleHelper.RenderWizardCss()
+} else {
+	@BundleHelper.RenderEverlineWizardCss()
+}
+ 
 
 	@if (Model.WhiteLabel != null) {
 		<style>
@@ -63,18 +69,25 @@
 <div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
 
 @section Js{
-    @{Html.RenderPartial("_Wizard", new ViewDataDictionary(ViewData));}
-    @{Html.RenderPartial("_SignUpTemplate");}
-    @{Html.RenderPartial("_CompanyDetails");}
-    @{Html.RenderPartial("StoreInfoMain");}
-    @{Html.RenderPartial("StoreButton");}
-    @{Html.RenderPartial("AmazonStoreInfo");}
-    @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/CGAccountInfoTemplate");}
-    @{Html.RenderPartial("Shops/HMRCAccountInfoTemplate");}
-    @{Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");}
+    @{
+		Html.RenderPartial("_Wizard", new ViewDataDictionary(ViewData));
+		Html.RenderPartial("_SignUpTemplate");
+        Html.RenderPartial("_Sliders");
+		Html.RenderPartial("_PersonalInfoTemplate");
+		Html.RenderPartial("_CompanyDetails");
+		Html.RenderPartial("StoreInfoMain");
+		Html.RenderPartial("StoreButton");
+		Html.RenderPartial("AmazonStoreInfo");
+		Html.RenderPartial("Shops/EKMAccoutInfoTemplate");
+		Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");
+		Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");
+		Html.RenderPartial("Shops/CGAccountInfoTemplate");
+		Html.RenderPartial("Shops/HMRCAccountInfoTemplate");
+		Html.RenderPartial("Shops/HMRCUploadAccountInfoTemplate");
+		Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");
+		Html.RenderPartial("Shops/YodleeUploadAccountInfoTemplate");
+	}
+
     @BundleHelper.RenderWizardJs()
     <script type="text/javascript">
         EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
@@ -94,7 +107,6 @@
 
         EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower(CultureInfo.InvariantCulture);
         EzBob.Config.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value.ToLower(CultureInfo.InvariantCulture)';
-
 		@{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
 			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
@@ -112,31 +124,15 @@
             var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
             options.el = $('#wizard');
 
-            if (!EzBob.PropertyStatusesData) {
-                var req = $.get(window.gRootPath + "Account/GetPropertyStatuses");
-                req.done(function(data) {
-                    EzBob.PropertyStatusesData = data;
-                    var customer = new EzBob.CustomerModel(options);
-                    options.customer = customer;
+            var customer = new EzBob.CustomerModel(options);
+            options.customer = customer;
 
-                    var signupWizard = new EzBob.WizardView(options);
-                    signupWizard.render();
+            var signupWizard = new EzBob.WizardView(options);
+            signupWizard.render();
 
-                    var strengthPasswordModel = new EzBob.StrengthPassword();
-                    var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
-                    strengthPasswordView.render();
-                });
-            } else {
-                var customer = new EzBob.CustomerModel(options);
-                options.customer = customer;
-
-                var signupWizard = new EzBob.WizardView(options);
-                signupWizard.render();
-
-                var strengthPasswordModel = new EzBob.StrengthPassword();
-                var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
-                strengthPasswordView.render();
-            }
+            var strengthPasswordModel = new EzBob.StrengthPassword();
+            var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
+            strengthPasswordView.render();
         });
     </script>
 }

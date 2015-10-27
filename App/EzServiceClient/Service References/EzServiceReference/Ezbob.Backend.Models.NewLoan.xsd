@@ -62,6 +62,7 @@
       <xs:element minOccurs="0" name="ReschedulingDate" type="xs:dateTime" />
       <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q19:RepaymentIntervalTypes" />
       <xs:element minOccurs="0" name="SaveToDB" type="xs:boolean" />
+      <xs:element minOccurs="0" name="StopFutureInterest" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ReschedulingArgument" nillable="true" type="tns:ReschedulingArgument" />
@@ -72,10 +73,12 @@
       <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstPaymentInterest" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="IntervalsNum" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanCloseDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OpenPrincipal" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ReschedulingIntervalEnd" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReschedulingIntervalStart" type="xs:dateTime" />
       <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q20:RepaymentIntervalTypes" />
     </xs:sequence>
   </xs:complexType>

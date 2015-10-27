@@ -1,34 +1,82 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
 <script id="store-button-template" type="text/template">
-    <a href="#" class="marketplace-button-account-<%- shopClass %>" ui-event-control-id="link-account:add_name_link_<%- shopClass %>">
-        <img alt="<%- shopClass %>" src="/Content/css/images/accounts/<%- shopClass %>.png" />
-        <div class="onhover"><div class="onhover-cell">Add <%- shopDescription %></div></div>
-    </a>
+	<div class="marketplace-button">
+		<a href="#" class="marketplace-button-account-<%- shopClass %>" ui-event-control-id="link-account:add_name_link_<%- shopClass %>">
+
+			@if (origin == CustomerOriginEnum.everline) {
+				<div>
+					<% if(isUpload) { %>
+					<div class="link-upload"><i class="pe-7s-upload"></i> upload</div>
+					<% } else { %>
+					<div class="link-upload"><i class="pe-7s-link"></i> link</div>
+					<% } %>
+				</div>
+			}
+			
+			<%if(isImage) {%>
+			<span class="marketplace-image marketplace-image-<%- shopClass %>"></span>
+			<%} else {%>
+			<div class="account-label"><%- shopDescription %></div>
+			<%}%>
+
+			@if (origin != CustomerOriginEnum.everline) {
+				<div>
+					<% if(isUpload) { %>
+					<div class="link-upload"><i class="pe-7s-upload"></i> upload</div>
+					<% } else { %>
+					<div class="link-upload"><i class="pe-7s-link"></i> link</div>
+					<% } %>
+				</div>
+			}
+		@*	<div class="onhover"><div class="onhover-cell">Add <%- shopDescription %></div></div>*@
+		</a>
+	</div>
 </script>
 
 <script id="store-button-help-window-links" type="text/template">
-{
-    "eBay": "@Url.Action("AttachEbay", "EbayMarketPlaces", new { Area = "Customer" })",
-    "paypal": "@Url.Action("AttachPayPal", "PaymentAccounts", new { Area = "Customer" })",
-    "FreeAgent": "@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })",
-    "Sage": "@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })"
-}
+	{
+	"eBay": "@Url.Action("AttachEbay", "EbayMarketPlaces", new { Area = "Customer" })",
+	"paypal": "@Url.Action("AttachPayPal", "PaymentAccounts", new { Area = "Customer" })",
+	"FreeAgent": "@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })",
+	"Sage": "@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })"
+	}
 </script>
 
 <script id="store-button-help-window-template" type="text/template">
-    <div class="hide">
-        <div id="<%- shopClass %>_help" class="help_window">
-            <h2>Link <%- shopClass %> Account</h2>
-            <p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
-            
-            <div class="help_image help_<%- shopClass %> help_<%- origin %>"></div>
-            <br>
-            <div class="buttons_container">
-                <a href="#" target="_blank" class="help-window-continue-link button btn-green pull-right" ui-event-control-id="link-account:help_popup_continue_<%- shopClass %>">Continue</a>
-            </div>
-            <div class="clear"></div>
-            <hr>
-            <div class="help_security"></div>
-        </div>
-    </div>
+	<div class="hide">
+		<div id="<%- shopClass %>_help" class="help_window">
+			<h2>Link <%- shopClass %> Account</h2>
+			<p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
+
+			<div class="help_image help_<%- shopClass %> help_<%- origin %>"></div>
+			
+			@EzForm.WizardButton(
+				new List<EzButtonModel>{
+					new EzButtonModel(
+						"<%-shopClass%>ContinueBtn",
+						"Next",
+						cls: "help-window-continue-link button btn-green ev-btn-org",
+						uiEventControlID: "link-account:help_popup_continue_<%-shopClass%>",
+						buttonType: EzButtonType.link,
+						href:"#",
+						target: "_blank"),
+					new EzButtonModel(
+						"<%-shopClass%>CancelBtn",
+						"Cancel",
+						cls: "help-window-cancel-link button btn-grey clean-btn",
+						uiEventControlID: "link-account:help_popup_cancel_<%-shopClass%>",
+						buttonType: EzButtonType.link,
+						href:"#", onClick: "$.colorbox.close(); return false;")
+					}, origin: origin)
+			<hr>
+			<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
+		</div>
+	</div>
 </script>

@@ -115,7 +115,8 @@ EzBob.WizardView = EzBob.View.extend({
     }, // initialize
 
     events: {
-        'click .broker-finish-wizard-later button': 'brokerFinishWizardLater',
+    	'click .broker-finish-wizard-later button': 'brokerFinishWizardLater',
+    	//'click #privacy_policy': 'privacyPolicyClicked'
     }, // events
 
     brokerFinishWizardLater: function (event) {
@@ -123,7 +124,21 @@ EzBob.WizardView = EzBob.View.extend({
         location.assign(window.gRootPath + 'Broker/BrokerHome/FinishWizardLater');
     }, // brokerFinishWizardLater
 
-    
+    privacyPolicyClicked: function() {
+		/*
+    	var privacyPolicyLink = this.$el.find('#privacy_policy').attr('data-href');
+    	$.colorbox({
+		    href: privacyPolicyLink,
+		    iframe: true,
+		    width: '600px',
+		    maxWidth: '100%',
+		    height: '600px',
+		    maxHeight: '100%',
+		    close: '<i class="pe-7s-close"></i>',
+            className : 'iframe-popup'
+	    });
+		*/
+    },
 
     jumpTo: function (sLastSavedStepName, fCallback) {
         if (!this.stepsOrderByName.hasOwnProperty(sLastSavedStepName))
@@ -155,9 +170,14 @@ EzBob.WizardView = EzBob.View.extend({
 
         var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
         notifications.render();
-
-        if ($('.broker-finish-wizard-later').length)
-            $('#user-menu').hide();
+        $('.footer-navigator').hide();
+		$('footer.location-customer-everline .privacy-and-cookie-policy').show();
+	    if ($('.broker-finish-wizard-later').length) {
+		    $('#user-menu').hide();
+		    $('.flt-r.sub-links').hide();
+	    }
+	    $('.find-out-more').hide();
+        
         var that = this;
 
         if (!this.customer.get('IsBrokerFill') && !this.customer.get('IsWhiteLabel')) {
@@ -233,85 +253,107 @@ EzBob.WizardView = EzBob.View.extend({
     }, // renderStep
 
     stepChanged: function () {
-        var current = this.model.get('current');
+        
+            var current = this.model.get('current');
+            if (!this.renderStep(current))
+                return;
 
-        if (!this.renderStep(current))
-            return;
+            var currStep = this.steps[current];
+            var address = this.customer.get('PersonalAddress');
+            var postcode = '';
+            if (address && address.models && address.models.length > 0) {
+                postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
+            }
 
-        var currStep = this.steps[current];
+            var personalInfo = this.customer.get('CustomerPersonalInfo');
+			var requestedLoan = this.customer.get('RequestedLoan') || {};
+            EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle,
+            {
+            	Amount: requestedLoan.Amount || '',
+            	Length: requestedLoan.Term || '',
+                Gender: personalInfo ? personalInfo.GenderName || '' : '',
+                Age: personalInfo ? personalInfo.Age || '' : '',
+                Postcode: postcode,
+                TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
+                IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
+                LeadID: this.customer.get('RefNumber') || ''
+            });
+            $(document).attr('title', currStep.documentTitle);
+            EzBob.App.trigger('wizard:progress', currStep.progress);
 
-        var address = this.customer.get('PersonalAddress');
-	    var postcode = '';
-	    if (address && address.models && address.models.length > 0) {
-		    postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
-	    }
+            var marketing = EzBob.dbStrings.MarketingDefault;
+            var isWizard = false;
 
-	    var personalInfo = this.customer.get('CustomerPersonalInfo');
+            if (this.progress === 100) {
+                isWizard = true;
+                marketing = EzBob.dbStrings.MarketingWizardStepDone;
+            }
+            else if (this.steps[current]) {
+                isWizard = true;
+                marketing = EzBob.dbStrings[this.steps[current].marketingStrKey] || marketing;
+            } // if
 
-	    EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle,
-	    {
-	    	Amount: this.customer.get('RequestedAmount') || '',
-	    	Length: '',
-	    	Gender: personalInfo ? personalInfo.GenderName || '' : '',
-	    	Age: personalInfo ? personalInfo.Age || '' : '',
-	    	Postcode: postcode,
-	    	TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
-	    	IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
-	    	LeadID: this.customer.get('RefNumber') || ''
-	    });
-        $(document).attr('title', currStep.documentTitle);
-        EzBob.App.trigger('wizard:progress', currStep.progress);
+            if (isWizard) {
+                this.$el.find('#defaultMarketing').hide();
+                this.$el.find('#marketingProggress').show().html(marketing);
+            }
+            else {
+                this.$el.find('#defaultMarketing').show();
+                this.$el.find('#marketingProggress').hide().html(marketing);
+            } // if
 
-        var marketing = EzBob.dbStrings.MarketingDefault;
-        var isWizard = false;
+            this.$el.find('.wizard-progress').html(this.progressTemplate({
+                steps: this.steps,
+                current: current,
+                progress: this.progress,
+                caption: currStep.documentTitle
+            }));
 
-        if (this.progress === 100) {
-            isWizard = true;
-            marketing = EzBob.dbStrings.MarketingWizardStepDone;
-        }
-        else if (this.steps[current]) {
-            isWizard = true;
-            marketing = EzBob.dbStrings[this.steps[current].marketingStrKey] || marketing;
-        } // if
+            if (this.topNavigationEnabled)
+                this.$el.find('li[data-step-num]').click($.proxy(this.handleTopNavigation, this));
+            else
+                this.$el.find('li[data-step-num]').css('cursor', 'default');
 
-        if (isWizard) {
-            this.$el.find('#defaultMarketing').hide();
-            this.$el.find('#marketingProggress').show().html(marketing);
-        }
-        else {
-            this.$el.find('#defaultMarketing').show();
-            this.$el.find('#marketingProggress').hide().html(marketing);
-        } // if
+            this.$el.find('.pages > div').hide().filter('[data-wizard-page-rendered="' + current + '"]').show();
 
-        this.$el.find('.wizard-progress').html(this.progressTemplate({
-            steps: this.steps,
-            current: current,
-            progress: this.progress
-        }));
+            if (this.steps[current])
+                this.$el.find('.wizard-header').text(this.steps[current].header);
+            var $numofsteps = $('ul.application_steps li').size();
+            var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete");
+            var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
+            var $circleCurrent = this.$el.find("ul.application_steps li.current .inner-circle");
+            var $circleCurrentev = this.$el.find("ul.application_steps li.current .progress-circle");
+            $circleCurrent.removeClass('current');
+            $circleCurrentev.removeClass('current');
+            if (EzBob.Config.Origin === 'everline') {
+                var sterpval= ((100 / $numofsteps) - 2) ;
+                var movepercentage = (sterpval) * (current + 1);
+                if (current != 0) {
+                    $('.progress-bar .green-line').css("width", (movepercentage - sterpval) + '%');
+                } else {
+                    $circleCurrentev.addClass('current');
+                }
+             
+                $('.progress-bar .green-line').show().animate({ width: movepercentage + '%' }, 800, function() {
+                    $circleCurrentev.addClass('current');
+                });
+             
 
-        if (this.topNavigationEnabled)
-            this.$el.find('li[data-step-num]').click($.proxy(this.handleTopNavigation, this));
-        else
-            this.$el.find('li[data-step-num]').css('cursor', 'default');
 
-        this.$el.find('.pages > div').hide().filter('[data-wizard-page-rendered="' + current + '"]').show();
+            } else {
+               
+                $proggressLine.last().css("width", "35%");
+                $proggresLineCurrent.hide().css("width", "0");
 
-        if (this.steps[current])
-            this.$el.find('.wizard-header').text(this.steps[current].header);
+                if (this.$el.find("ul.application_steps li:first").hasClass("current"))
+                    $proggresLineCurrent.show().css("width", "35%");
 
-        var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete").last().css("width", "35%");
-        var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
-        var $circleCurrent = this.$el.find("ul.application_steps li.current .inner-circle");
-        $circleCurrent.removeClass('current');
-        $proggresLineCurrent.hide().css("width", "0");
-
-        if (this.$el.find("ul.application_steps li:first").hasClass("current"))
-            $proggresLineCurrent.show().css("width", "35%");
-
-        $proggressLine.show().animate({ width: "110%" }, 1000, function () {
-            $circleCurrent.addClass('current');
-            $proggresLineCurrent.show().animate({ width: "35%" }, 800, function () { });
-        });
+                $proggressLine.show().animate({ width: "110%" }, 1000, function () {
+                    $circleCurrent.addClass('current');
+                    $proggresLineCurrent.show().animate({ width: "35%" }, 800, function () { });
+                });
+            }
+      
     }, // stepChanged
 
     progressChanged: function (progress) {

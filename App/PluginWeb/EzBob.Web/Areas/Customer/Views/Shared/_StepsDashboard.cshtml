@@ -1,44 +1,58 @@
 ﻿@model dynamic
-<div>
-    <div class="dashboard-steps wizard-steps">
-        <div class="progress-time"></div>
-        <ul class="application_steps">
-            <%(function() {
-        var steps = [
-        { title: "Choose Loan Term" },
-        { title: "Enter Bank & Debit" },
-        { title: "Get Cash" }
-        ];
-        var last = steps.length - 1;
+<script type="text/template" id="steps-dashboard-template">
+	<div class="wizard-steps-wrapper">
+		<%
+		var steps = [
+		{ caption: 'Choose loan amount', title: EzBob.Config.Origin == 'everline' ? 'Loan term' : 'Choose Loan Term' },
+		{ caption: 'Enter Bank & Debit', title: EzBob.Config.Origin == 'everline' ? 'Bank details' : 'Enter Bank & Debit' },
+		{ caption: 'Congratulations', title: EzBob.Config.Origin == 'everline' ? 'Receive funds' : 'Get Cash' }
+		];
+		var greenWidth = 23 * (current + 1);
+		%>
+		<div class="side-strip"></div>
+		<div class="dashboard-steps wizard-steps">
+			<div class="progress-time"><%-steps[current].caption%></div>
+			<div class="steps-wrap">
+				<div class="stripe"></div>
+				<div class="progress-bar">
+					<div class="green-line" style="width: <%-greenWidth%>%;"></div>
+					<div class="grey-line"></div>
+				</div>
 
-        _.each(steps, function(step, i) {
-        var css = '';
-        var lastcss = '';
-        var circleType = 'center-circle';
-        if (i == current) css = 'current';
+				<ul class="application_steps">
+					<%(function() {
+					var last = steps.length - 1;
 
-        if (i < current) css = 'complete';
+					_.each(steps, function(step, i) {
+					var css = '';
+					var lastcss = '';
+					var circleType = 'center-circle';
+					if (i == current) css = 'current';
 
-        if (i == last) {
-        lastcss = 'last';
-        circleType = 'last-circle';
-        }
-        if ( i == 0 ) circleType = 'first-circle'
-        %>
-        <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= i %>">
-                <div class="progress-circle">
-                    <div class="inner-circle <%-css%>">
-                        <div class="percent"><%=(i+1)%></div>
-                    </div>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-line-<%-css%>"></div>
+					if (i < current) css = 'complete';
 
-            <span class="step_label"><% print(step.title) %></span>
-        </li>
-            <%}); // for each step
-        })(); // inline function - local scope
-        %>
-        </ul>
-    </div>
-</div>
+					if (i == last) {
+					lastcss = 'last';
+					circleType = 'last-circle';
+					}
+					if ( i == 0 ) circleType = 'first-circle'
+					%>
+					<li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= i %>">
+						<div class="progress-circle <%- css %>">
+							<div class="inner-circle <%-css%>">
+								<div class="percent"><%=(i+1)%></div>
+							</div>
+						</div>
+						<div class="progress-line"></div>
+						<div class="progress-line-<%-css%>"></div>
+
+						<span class="step_label"><% print(step.title) %></span>
+					</li>
+					<%}); // for each step
+					})(); // inline function - local scope
+					%>
+				</ul>
+			</div>
+		</div>
+	</div>
+</script>

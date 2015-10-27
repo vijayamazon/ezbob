@@ -432,5 +432,16 @@
 		public ActionMetaData BrokerTransferCommission() {
 			return Execute<BrokerTransferCommission>(null, null);
 		} // BrokerTransferCommission
+
+		public StringActionResult BrokerUpdateEmail(int underwriterID, int brokerID, string newEmail) {
+			BrokerUpdateEmail instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, underwriterID, brokerID, newEmail);
+
+			return new StringActionResult {
+				MetaData = amd,
+				Value = instance.Result,
+			};
+		} // BrokerUpdateEmail
 	} // class EzServiceImplementation
 } // namespace EzService

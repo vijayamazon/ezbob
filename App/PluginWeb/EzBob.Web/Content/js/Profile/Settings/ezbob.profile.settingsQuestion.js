@@ -8,7 +8,12 @@ EzBob.Profile.SettingsQuestionView = Backbone.View.extend({
 
 	render: function() {
 		this.$el.html(this.template({ settings: this.model.toJSON() }));
+		this.form = this.$el.find('#change-question');
+		this.validator = EzBob.validateChangeSecurityQuestion(this.form);
 
+		this.$el.find('#securityQuestion').val(this.model.get('SecurityQuestionId')).change().attardi_labels('toggle');
+		
+		//this.inputKeyuped();
 		EzBob.UiAction.registerView(this);
 
 		return this;
@@ -17,7 +22,9 @@ EzBob.Profile.SettingsQuestionView = Backbone.View.extend({
 	events: {
 		'click .back': 'back',
 		'click .submit': 'submit',
-		'keyup input': 'inputKeyuped'
+		'keyup input': 'inputKeyuped',
+		'change input': 'inputKeyuped',
+		'change select': 'inputKeyuped'
 	}, // events
 
 	back: function() {
@@ -29,6 +36,9 @@ EzBob.Profile.SettingsQuestionView = Backbone.View.extend({
 		var isDisable = $(e.currentTarget).hasClass("disabled");
 
 		if (isDisable)
+			return false;
+
+		if (!this.validator.checkForm())
 			return false;
 
 		var questionId = this.$el.find('select option:selected').val();
@@ -69,17 +79,7 @@ EzBob.Profile.SettingsQuestionView = Backbone.View.extend({
 	}, // submit
 
 	inputKeyuped: function() {
-		var $inputs = this.$el.find('input');
-		var isEmpty = false;
-		var $submitButton = this.$el.find('.submit');
-
-		_.each($inputs, function(value) {
-			isEmpty = $(value).val().toString().isNullOrEmpty();
-
-			if (isEmpty)
-				return;
-		});
-
-		$submitButton.toggleClass("disabled", isEmpty);
+		var enabled = this.validator.checkForm();
+		this.$el.find('.submit').toggleClass("disabled", !enabled);
 	}, // inputKeyuped
 });

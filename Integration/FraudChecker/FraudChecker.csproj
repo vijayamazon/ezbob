@@ -64,6 +64,14 @@
     <Compile Include="SessionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
@@ -71,6 +79,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
       <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
@@ -88,6 +100,9 @@
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

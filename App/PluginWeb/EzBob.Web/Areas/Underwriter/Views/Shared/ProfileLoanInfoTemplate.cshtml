@@ -272,6 +272,8 @@
             </tr>
         </tbody>
         <tbody class="box-content">
+			
+			<%if(data.PromoCode) {%>
             <tr>
                 <td>
                     <span class="<%= data.PromoCodeCss %> customer-details-title">Promo</span>
@@ -280,8 +282,11 @@
                     </span>
                 </td>
             </tr>
+			<%}%>
+			
+			<%if(data.ActiveCampaign) {%>
             @RowCell("Campaigns", "<%- data.ActiveCampaign %>")
-
+			<%}%>
             <tr>
                 <td>
                     <span class="customer-details-title">Ref Source</span>
@@ -329,7 +334,8 @@
                     </span>
                 </td>
             </tr>
-			
+			@RowCellWithSlider("Block taking loan", "blockTakingLoanSwitch", "No", "Yes", "<%= data.BlockTakingLoan ? 'red_cell' : '' %> block-taking-loan-td customer-details-switch-height")
+
             @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td customer-details-switch-height")
 
             @RowCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td customer-details-switch-height")
@@ -459,6 +465,25 @@
         <button id="newCreditLineButtonId" class="btn btn-dashboard" name="newCreditLineBtn">New Credit Line</button>
     </div>
     <% })(m); %>
+	<div class="hide new-credit-line-mode-selector-template">
+		<div class="new-credit-line-mode-selector">
+			<div>
+				<div>Customer data</div>
+				<div>Use current</div>
+				<div>Update</div>
+			</div>
+			<div>
+				<div>Let me to decide</div>
+				<label><input type="radio" data-option-id="1" data-id="sm" data-is-default="yes"></label>
+				<label><input type="radio" data-option-id="4" data-id="um"></label>
+			</div>
+			<div>
+				<div>Apply auto rules</div>
+				<label><input type="radio" data-option-id="2" data-id="sa"></label>
+				<label><input type="radio" data-option-id="3" data-id="ua"></label>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script id="email-edit-template" type="text/template">

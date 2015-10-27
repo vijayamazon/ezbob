@@ -39,7 +39,7 @@
                 }
                 else
                 {
-                    sortCodeChecker = new FakeSortCodeChecker();
+					sortCodeChecker = new FakeSortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
                 }
 
                 var brokerRepository = ObjectFactory.GetInstance<BrokerRepository>();

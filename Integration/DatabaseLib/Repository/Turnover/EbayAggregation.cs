@@ -5,9 +5,6 @@
 	using NHibernate;
 
 	public class EbayAggregation {
-
-		public EbayAggregation() { }
-
 		public virtual long EbayAggregationID { get; set; }
 		
 		public virtual System.DateTime TheMonth { get; set; }

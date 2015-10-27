@@ -14,6 +14,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 
 		this.marketplaceId.withoutSpaces();
 		this.merchantId.withoutSpaces();
+		$('body').scrollTop(0);
 		EzBob.UiAction.registerView(this);
 		return this;
 	},
@@ -40,31 +41,15 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 		}
 	},
 	inputChanged: function () {
-		var enabled;
-		enabled = EzBob.Validation.checkForm(this.validator);
+		var enabled = EzBob.Validation.checkForm(this.validator);
 		return this.$el.find('a.connect-amazon').toggleClass('disabled', !enabled);
 	},
 	runTutorial: function () {
-		var content, div, tutorial;
-		div = $('<div/>');
-		tutorial = new EzBob.AmazonTutorialView();
+		var tutorial = new EzBob.AmazonTutorialView();
 		tutorial.render();
-		content = tutorial.$el;
-		div.html(content.html());
-		div.find('.amazon-tutorial-slider').attr('id', 'amazon-tutorial-slider' + (new Date().getTime())).show();
-		div.dialog({
-			width: '960',
-			height: '573',
-			modal: true,
-			draggable: false,
-			resizable: false,
-			close: function () {
-				return div.empty();
-			},
-			dialogClass: 'amazon-tutor-dlg',
-			title: 'Link Your Amazon Shop'
-		});
-		div.find('.amazon-tutorial-slider').coinslider({
+		EzBob.App.jqmodal.show(tutorial);
+
+		tutorial.$el.find('.amazon-tutorial-slider').coinslider({
 			width: 930,
 			height: 471,
 			delay: 1000000,
@@ -133,7 +118,23 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 });
 
 EzBob.AmazonTutorialView = Backbone.Marionette.ItemView.extend({
-	template: "#amazon-tutorial"
+	template: '#amazon-tutorial',
+
+	onRender: function (){
+		this.$el.find('.amazon-tutorial-slider').attr('id', 'amazon-tutorial-slider' + (new Date().getTime())).show();
+	},
+	jqoptions: function() {
+		return {
+			autoOpen: true,
+			title: 'Amazon tutorial',
+			modal: true,
+			resizable: false,
+			draggable: false,
+			width: 960,
+			height: 'auto',
+			closeOnEscape: true,
+		}
+	}
 });
 
 EzBob.AmazonStoreModel = Backbone.Model.extend({

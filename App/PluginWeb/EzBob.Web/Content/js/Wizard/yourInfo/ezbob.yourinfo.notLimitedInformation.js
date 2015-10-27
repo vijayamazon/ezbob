@@ -49,7 +49,9 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             model: this.model.get('CompanyAddress').reset(),
             name: "NonLimitedCompanyAddress",
             max: 1,
-            title: "Enter company postcode",
+            title: "Business postcode",
+            buttonTitle: 'Find business address',
+			tabindex: 4,
             uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
         });
         nonLimitedAddressView.render().$el.appendTo(oAddressContainer);
@@ -63,12 +65,18 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         });
         this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
 
+        var personalPostcode = '';
+        var personalAddress = this.model.get('PersonalAddress');
+        if (personalAddress && personalAddress.models && personalAddress.models.length > 0) {
+        	personalPostcode = personalAddress.models[0].get('Rawpostcode');
+        }
+
 	    this.directorsView = new EzBob.DirectorMainView({
 	    	model: this.model.get('NonLimitedDirectors'),
 	    	name: "nonlimitedDirectors",
         	customerInfo: _.extend({},
 				this.model.get('CustomerPersonalInfo'),
-				{ PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode'), }
+				{ PostCode: personalPostcode, }
 			),
 	    });
         this.directorsView.on("director:change", this.inputChanged, this);

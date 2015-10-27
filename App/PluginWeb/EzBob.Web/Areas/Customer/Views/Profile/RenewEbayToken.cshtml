@@ -1,11 +1,17 @@
 ﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @{
     ViewBag.Title = "Renew eBay token";
     Layout = "~/Views/Shared/_Layout.cshtml";
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
 }
 
 @section css {
-    @BundleHelper.RenderProfileCss()
+    @if (origin == CustomerOriginEnum.everline) {
+		@BundleHelper.RenderEverlineProfileCss()
+	} else {
+		@BundleHelper.RenderEzbobProfileCss()
+	}
 }
 <div class="inner">
 	<div class="well">

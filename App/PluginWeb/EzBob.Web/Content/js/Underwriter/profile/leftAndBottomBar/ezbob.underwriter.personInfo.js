@@ -21,6 +21,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 		this.initSwitch(".cciMarkSwitch", this.model.get('IsCciMarkInAlertMode'), this.toggleCciMark);
 
+		this.initSwitch(".blockTakingLoanSwitch", this.model.get('BlockTakingLoan'), this.toggleBlockTakingLoan);
+
 		this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
 
 		this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
@@ -63,6 +65,27 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 			UnBlockUi();
 		});
 	}, // toggleCciMark
+
+	toggleBlockTakingLoan: function(event, state){
+		var self = this;
+
+		var id = this.model.get('Id');
+
+		BlockUi();
+
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleBlockTakingLoan', {
+			id: id
+		}).done(function (result) {
+			if (result.error)
+				EzBob.App.trigger('error', result.error);
+			else {
+				self.setAlertStatus(result.mark, '.block-taking-loan-td');
+				self.model.set('BlockTakingLoan', result.mark);
+			} // if
+		}).always(function () {
+			UnBlockUi();
+		});
+	},
 
 	toggleIsTest: function(event, state) {
 		var self = this;

@@ -1,8 +1,4 @@
-﻿///<reference path="~/Content/js/lib/backbone.js" />
-///<reference path="~/Content/js/lib/underscore.js" />
-/// <reference path="../lib/jquery.maskedinput-1.2.2.js" />
-
-var EzBob = EzBob || {};
+﻿var EzBob = EzBob || {};
 
 EzBob.BankAccountModel = Backbone.Model.extend({
     defaults: {
@@ -15,25 +11,11 @@ EzBob.BankAccounts = Backbone.Collection.extend({
     url: window.gRootPath + 'Customer/PaymentAccounts/BankAccountsListFormatted'
 });
 
-EzBob.BankAccountButtonView = EzBob.StoreButtonView.extend({
-    initialize: function () {
-        EzBob.CT.bindShopToCT(this, 'bank');
-        this.bankAccounts = new EzBob.BankAccounts();
-        var accountNumber = this.model.get('bankAccount');
-        if (accountNumber) {
-            this.bankAccounts.add({ displayName: 'XXXX' + accountNumber.substring(4) });
-        }
-        this.constructor.__super__.initialize.apply(this, [{ name: "bank-account", logoText: "Add account for cash transfer" }]);
-    },
-    update: function () {
-        this.bankAccounts.fetch();
-    }
-});
-
 EzBob.BankAccountInfoView = Backbone.View.extend({
     events: {
         'change input[type="text"]': 'inputsChanged',
         'keyup input[type="text"]': 'inputsChanged',
+        'change input[type="checkbox"]': 'inputsChanged',
         'click a.connect-bank': 'connect',
         "click a.back": "back"
     },
@@ -57,13 +39,6 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
         
         this.$el.find('input[nextSerial]').serialFill();
 
-        $(".dashboard-steps li[data-step-num=0]").addClass("complete").removeClass("current");
-        $(".dashboard-steps li[data-step-num=0] .inner-circle").addClass("complete");
-        $(".dashboard-steps li[data-step-num=0] .progress-line-current").addClass("progress-line-complete");
-        $(".dashboard-steps li[data-step-num=1]").addClass("current");
-        $(".dashboard-steps li[data-step-num=1] .inner-circle").addClass("current");
-        $(".dashboard-steps li[data-step-num=1] .progress-line-").addClass("progress-line-current");
-
         if (this.model.get('bankAccountAdded'))
             this.ready();
 
@@ -73,12 +48,12 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
         notifications.render();
         
 	    EzBob.UiAction.registerView(this);
-
+	    this.inputsChanged();
         return this;
     },
 
     inputsChanged: function () {
-        var enabled = EzBob.Validation.checkForm(this.validator);
+    	var enabled = EzBob.Validation.checkForm(this.validator);
         this.$el.find('a.connect-bank').toggleClass('disabled', !enabled);
     },
 
@@ -111,6 +86,12 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 			        EzBob.App.trigger('error', result.error);
 			        return;
 			    }
+			    if (result.blockBank) {
+			    	that.trigger('back');
+			    	EzBob.App.trigger('info', result.msg);
+				    return;
+			    }
+
 			    that.model.set('bankAccount', accNum);
 			    that.model.set('sortCode', sortCode);
 
@@ -132,7 +113,7 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 
     ready: function () {
         var accountNumber = this.model.get('bankAccount');
-        var sortCode = this.model.get('sortCode');
+        var sortCode = this.model.get('sortCode') || '';
         this.$el.find("#SortCode #SortCode1").val(sortCode.substring(0, 2));
         this.$el.find("#SortCode #SortCode2").val(sortCode.substring(2, 4));
         this.$el.find("#SortCode #SortCode3").val(sortCode.substring(4, 6));
