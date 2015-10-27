@@ -36,6 +36,7 @@
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
 			}
+            // TODO : Remove validations for NL_SignedOfferForLoan to separate SP's and call them from relevant strategies + Refactoring??? -> separate @PaidPrincipal
 
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 				"NL_SignedOfferForLoan",

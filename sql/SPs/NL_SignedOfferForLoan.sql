@@ -103,7 +103,7 @@ BEGIN
 
 			--print ('PaidPrincipal=' + cast(@PaidPrincipal as nvarchar(150)));
 
-			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (@TakenAmount- @PaidPrincipal), ExistsRefnums = (Select distinct(Refnum )+ ',' AS [text()] From dbo.[NL_Loans] For XML PATH (''));
+			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (#offerforloan.OfferAmount + @PaidPrincipal - @TakenAmount), ExistsRefnums = (Select distinct(Refnum )+ ',' AS [text()] From dbo.[NL_Loans] For XML PATH (''));
 
 		end; -- @LoansCount
 

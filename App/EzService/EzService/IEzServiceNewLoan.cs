@@ -27,7 +27,7 @@
         NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null);
 
 		[OperationContract]
-		NLLongActionResult AddLoan(int? userID, int? customerID, NL_Model model);
+		ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
 		NL_Model AddPayment(NL_Model loanModel);
