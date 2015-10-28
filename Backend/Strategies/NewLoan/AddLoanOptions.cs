@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 
-    public class AddLoanOptions : AStrategy {
+	public class AddLoanOptions : AStrategy {
         public AddLoanOptions(NL_LoanOptions loanOptions) {
             this.loanOptions = loanOptions;
         }//constructor

@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 
-    public class AddRollover : AStrategy {
+	public class AddRollover : AStrategy {
         public AddRollover(NL_LoanRollovers rollover) {
             this.rollover = rollover;
         }//constructor

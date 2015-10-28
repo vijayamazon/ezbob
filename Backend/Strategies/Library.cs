@@ -35,7 +35,7 @@
 			Ezbob.Backend.Extensions.Library.Initialize(env, db, log);
 			Ezbob.Models.Library.Initialize(env, db, log);
 			AutomationCalculator.Library.Initialize(env, db, log);
-			Ezbob.Backend.CalculateLoan.Models.Library.Initialize(env, db, log);
+			//Ezbob.Backend.CalculateLoan.Models.Library.Initialize(env, db, log);
 			Ezbob.Backend.CalculateLoan.LoanCalculator.Library.Initialize(env, db, log);
 		} // Initialize
 

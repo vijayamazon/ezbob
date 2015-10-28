@@ -73,8 +73,8 @@
 			AddLoan strategy;
 			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
 			return new IntActionResult {
-				MetaData = amd,
-				Value = strategy.LoanID
+				MetaData = amd//,
+				//Value = strategy.LoanID
 			};
 		}
 

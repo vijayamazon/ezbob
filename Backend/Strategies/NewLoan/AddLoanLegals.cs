@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-	using System.Web.UI.WebControls;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
+	using Ezbob.Database;
 
-    public class AddLoanLegals : AStrategy {
+	public class AddLoanLegals : AStrategy {
         public AddLoanLegals(int customerID, NL_LoanLegals loanLegals) {
             this.customerID = customerID;
             this.loanLegals = loanLegals;
