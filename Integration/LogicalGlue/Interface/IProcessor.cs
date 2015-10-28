@@ -2,7 +2,28 @@
 	using System;
 
 	public interface IProcessor {
-		Inference EvaluateCustomer(int customerID);
-		Inference GetHistoricalEvaluation(int customerID, DateTime date);
+		/// <summary>
+		/// Infers customer using current customer details.
+		/// <para>Collects customer name, address, etc by customer ID and executes three calls to Logical Glue API:
+		/// <list type="number">
+		/// <item><description>Gets inference input data by customer name, address, etc.</description></item>
+		/// <item><description>With inference input data executes fuzzy logic model call.</description></item>
+		/// <item><description>With inference input data executes neural network model call.</description></item>
+		/// </list>
+		/// Model outputs are stored in DB and returned to caller.
+		/// </para>
+		/// </summary>
+		/// <param name="customerID">ID of customer to infer.</param>
+		/// <returns>Customer inference from fuzzy logic and neural network models.</returns>
+		Inference Infer(int customerID);
+
+		/// <summary>
+		/// Loads the latest customer inference results that were available on specific date.
+		/// Logical Glue API is not queried.
+		/// </summary>
+		/// <param name="customerID">ID of customer to infer.</param>
+		/// <param name="date">Date of interest.</param>
+		/// <returns>The latest customer inference results that were available on requested date.</returns>
+		Inference GetHistoricalInference(int customerID, DateTime date);
 	} // interface IProcessor
 } // namespace
