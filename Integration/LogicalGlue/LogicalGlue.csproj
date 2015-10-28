@@ -48,9 +48,11 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="HarvesterInterface\EvaluateeDetails.cs" />
+    <Compile Include="HarvesterInterface\InferenceInput.cs" />
     <Compile Include="HarvesterInterface\EncodingFailure.cs" />
     <Compile Include="HarvesterInterface\IHarvester.cs" />
-    <Compile Include="HarvesterInterface\Reply.cs" />
+    <Compile Include="HarvesterInterface\InferenceOutput.cs" />
     <Compile Include="HarvesterInterface\Response.cs" />
     <Compile Include="HarvesterInterface\Warning.cs" />
     <Compile Include="Harvester\Harvester.cs" />

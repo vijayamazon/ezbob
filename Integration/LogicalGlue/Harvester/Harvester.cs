@@ -2,10 +2,16 @@
 	using Ezbob.Integration.LogicalGlue.HarvesterInterface;
 
 	public class Harvester : IHarvester {
-		public Response EvaluateCustomer(int customerID) {
+		public Response<InferenceInput> GetInferenceInputData(EvaluateeDetails evaluateeDetails) {
 			// 1. Send REST API request to Logical Glue endpoint.
-			// 2. Load API call into Reply object.
-			return new Response(""); // TODO
-		} // EvaluateCustomer
+			// 2. Load API call into InferenceInput object.
+			return new Response<InferenceInput>(""); // TODO
+		} // GetInferenceInputData
+
+		public Response<InferenceOutput> Infer(InferenceInput inputData) {
+			// 1. Send REST API request to Logical Glue endpoint.
+			// 2. Load API call into InferenceOutput object.
+			return new Response<InferenceOutput>(""); // TODO
+		} // Infer
 	} // class Harvester
 } // namespace

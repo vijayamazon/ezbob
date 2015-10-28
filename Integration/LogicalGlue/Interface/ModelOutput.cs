@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Interface {
-
 	public class ModelOutput {
 		public string Status { get; set; }
 

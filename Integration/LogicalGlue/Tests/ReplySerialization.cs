@@ -18,7 +18,7 @@
 
 		[Test]
 		public void Deserialize() {
-			Reply deserialized = JsonConvert.DeserializeObject<Reply>(serializedPattern);
+			InferenceOutput deserialized = JsonConvert.DeserializeObject<InferenceOutput>(serializedPattern);
 
 			string serialized = JsonConvert.SerializeObject(deserialized, Formatting.Indented);
 
@@ -29,7 +29,7 @@
 
 		private static readonly Guid uuid = new Guid("2626f582-bd52-4d92-95fc-c2ec2ee1b73c");
 
-		private static readonly Reply pattern = new Reply {
+		private static readonly InferenceOutput pattern = new InferenceOutput {
 			Score = 0.5927377710432571m,
 			InferenceResultDecoded = "BAD",
 			InferenceResultEncoded = -2147483446,

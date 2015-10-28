@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.HarvesterInterface {
 	public interface IHarvester {
-		Response EvaluateCustomer(int customerID);
+		Response<InferenceInput> GetInferenceInputData(EvaluateeDetails evaluateeDetails);
+		Response<InferenceOutput> Infer(InferenceInput inputData);
 	} // interface ILogicalGlueHarvester
 } // namespace

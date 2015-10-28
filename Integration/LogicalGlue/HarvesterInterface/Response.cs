@@ -1,15 +1,15 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.HarvesterInterface {
 	using Newtonsoft.Json;
 
-	public class Response {
+	public class Response<T> where T: class {
 		public Response() {} // constructor
 
 		public Response(string rawReply) {
 			RawReply = rawReply;
-			Reply = JsonConvert.DeserializeObject<Reply>(RawReply);
+			Parsed = JsonConvert.DeserializeObject<T>(RawReply);
 		} // constructor
 
 		public string RawReply { get; set; }
-		public Reply Reply { get; set; }
+		public T Parsed { get; set; }
 	} // class Response
 } // namespace

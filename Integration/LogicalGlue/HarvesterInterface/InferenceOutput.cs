@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
-	public class Reply {
+	public class InferenceOutput {
 		[JsonProperty(PropertyName = "score")]
 		public decimal Score { get; set; }
 
@@ -36,5 +36,5 @@
 
 		[JsonProperty(PropertyName = "uuid")]
 		public Guid? Uuid { get; set; }
-	} // class Reply
+	} // class InferenceOutput
 } // namespace
