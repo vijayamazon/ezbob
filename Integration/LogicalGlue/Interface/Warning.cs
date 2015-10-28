@@ -1,7 +1,5 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Models {
-	using Ezbob.Integration.LogicalGlue.Interface;
-
-	public class Warning : IWarning {
+﻿namespace Ezbob.Integration.LogicalGlue.Interface {
+	public class Warning : ICanBeEmpty {
 		public string Value { get; set; }
 		public string FeatureName { get; set; }
 		public string MinValue { get; set; }
@@ -13,7 +11,7 @@
 	} // class Warning
 
 	public static class WarningExt {
-		public static Warning CloneFrom(this Warning target, IWarning source) {
+		public static Warning CloneFrom(this Warning target, Warning source) {
 			if (source == null)
 				return new Warning();
 

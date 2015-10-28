@@ -48,24 +48,25 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="HarvesterInterface\IHarvester.cs" />
+    <Compile Include="HarvesterInterface\Reply.cs" />
     <Compile Include="Harvester\Harvester.cs" />
     <Compile Include="Interface\ICanBeEmpty.cs" />
-    <Compile Include="Interface\IEncodingFailure.cs" />
-    <Compile Include="Interface\IInference.cs" />
-    <Compile Include="Interface\ILogicalGlue.cs" />
-    <Compile Include="Interface\IError.cs" />
-    <Compile Include="Interface\IModelOutput.cs" />
-    <Compile Include="Interface\IGrade.cs" />
-    <Compile Include="Interface\IWarning.cs" />
     <Compile Include="Interface\RequestType.cs" />
-    <Compile Include="Models\EncodingFailure.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\Inference.cs" />
-    <Compile Include="Models\Grade.cs" />
-    <Compile Include="Models\ModelOutput.cs" />
-    <Compile Include="Models\Warning.cs" />
+    <Compile Include="Interface\EncodingFailure.cs" />
+    <Compile Include="Interface\Error.cs" />
+    <Compile Include="Interface\Inference.cs" />
+    <Compile Include="Interface\Grade.cs" />
+    <Compile Include="Interface\ModelOutput.cs" />
+    <Compile Include="Interface\Warning.cs" />
+    <Compile Include="Interface\IProcessor.cs" />
+    <Compile Include="Processor\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\TestSerialization.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Keeper\" />
+    <Folder Include="PersistanceInterface\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

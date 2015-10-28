@@ -1,7 +1,5 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Models {
-	using Ezbob.Integration.LogicalGlue.Interface;
-
-	public class EncodingFailure : IEncodingFailure {
+﻿namespace Ezbob.Integration.LogicalGlue.Interface {
+	public class EncodingFailure : ICanBeEmpty {
 		public int RowIndex { get; set; }
 		public string ColumnName { get; set; }
 		public string UnencodedValue { get; set; }
@@ -14,7 +12,7 @@
 	} // class EncodingFailure
 
 	public static class EncodingFailureExe {
-		public static EncodingFailure CloneFrom(this EncodingFailure target, IEncodingFailure source) {
+		public static EncodingFailure CloneFrom(this EncodingFailure target, EncodingFailure source) {
 			if (source == null)
 				return new EncodingFailure();
 

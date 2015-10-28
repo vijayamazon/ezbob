@@ -1,18 +1,12 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Models {
+﻿namespace Ezbob.Integration.LogicalGlue.Interface {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Integration.LogicalGlue.Interface;
 
-	public class Error : IError {
+	public class Error {
 		public string Exception { get; set; }
 		public string ErrorCode { get; set; }
 		public Guid? Uuid { get; set; }
-
-		List<IWarning> IError.Warnings {
-			get { return Warnings.Select(w => (IWarning)w).ToList(); }
-			set { Warnings = SetList(Warnings, value); }
-		} // IError.Warnings
 
 		public List<Warning> Warnings{
 			get {
@@ -23,11 +17,6 @@
 			} // get
 			set { this.warnings = SetList(this.warnings, value); }
 		} // Warnings
-
-		List<IEncodingFailure> IError.EncodingFailures {
-			get { return EncodingFailures.Select(e => (IEncodingFailure)e).ToList(); }
-			set { EncodingFailures = SetList(EncodingFailures, value); }
-		} // IError.IEncodingFailure
 
 		public List<EncodingFailure> EncodingFailures {
 			get {
@@ -67,10 +56,7 @@
 			} // get
 		} // IsEmpty
 
-		internal static List<T> SetList<T, I>(List<T> target, IEnumerable<I> source)
-			where T : class, I
-			where I : class, ICanBeEmpty
-		{
+		internal static List<T> SetList<T>(List<T> target, IEnumerable<T> source) where T : class, ICanBeEmpty {
 			if (ReferenceEquals(source, target))
 				return target;
 
@@ -82,10 +68,7 @@
 			if (source == null)
 				return target;
 
-			target.AddRange(
-				source.Where(w => (w != null) && !w.IsEmpty)
-				.Select(v => (T)v)
-			);
+			target.AddRange(source.Where(w => (w != null) && !w.IsEmpty));
 
 			return target;
 		} // SetList
@@ -96,7 +79,7 @@
 	} // class Error
 
 	public static class ErrorExt {
-		public static Error CloneFrom(this Error target, IError source) {
+		public static Error CloneFrom(this Error target, Error source) {
 			if (source == null)
 				return new Error();
 

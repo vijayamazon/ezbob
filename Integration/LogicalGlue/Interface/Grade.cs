@@ -1,37 +1,13 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Models {
+﻿namespace Ezbob.Integration.LogicalGlue.Interface {
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Integration.LogicalGlue.Interface;
 
-	public class Grade : IGrade {
+	public class Grade {
 		public decimal? Score { get; set; }
 
 		public long EncodedResult { get; set; }
 
 		public string DecodedResult { get; set; }
-
-		IReadOnlyDictionary<string, decimal> IGrade.MapOutputRatios {
-			get { return MapOutputRatios; }
-			set {
-				MapOutputRatios = MapOutputRatios ?? new Dictionary<string, decimal>();
-				MapOutputRatios.Clear();
-
-				foreach (var pair in value)
-					MapOutputRatios[pair.Key] = pair.Value;
-			} // set
-		} // IModelOutput.MapOutputRatios
-
-		IReadOnlyCollection<string> IGrade.ListRangeErrors {
-			get { return ListRangeErrors.AsReadOnly(); }
-			set {
-				if (ListRangeErrors == null)
-					ListRangeErrors = new List<string>(value);
-				else {
-					ListRangeErrors.Clear();
-					ListRangeErrors.AddRange(value);
-				} // if
-			} // set
-		} // IModelOutput.ListRangeErrors
 
 		public List<string> ListRangeErrors { get; set; }
 
@@ -39,7 +15,7 @@
 	} // class Grade
 
 	public static class GradeExt {
-		public static Grade CloneFrom(this Grade target, IGrade source) {
+		public static Grade CloneFrom(this Grade target, Grade source) {
 			if (source == null)
 				return new Grade();
 

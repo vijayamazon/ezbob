@@ -1,14 +1,11 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Models {
+﻿namespace Ezbob.Integration.LogicalGlue.Interface {
 	using System.Collections;
 	using System.Collections.Generic;
-	using Ezbob.Integration.LogicalGlue.Interface;
 
-	public class Inference : IInference {
+	public class Inference : IReadOnlyDictionary<RequestType, ModelOutput> {
 		public Inference() {
-			Data = new Dictionary<RequestType, IModelOutput>();
+			this.data = new Dictionary<RequestType, ModelOutput>();
 		} // constructor
-
-		public Dictionary<RequestType, IModelOutput> Data { get; set; }
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
@@ -16,8 +13,8 @@
 		/// <returns>
 		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
 		/// </returns>
-		public IEnumerator<KeyValuePair<RequestType, IModelOutput>> GetEnumerator() {
-			return Data.GetEnumerator();
+		public IEnumerator<KeyValuePair<RequestType, ModelOutput>> GetEnumerator() {
+			return this.data.GetEnumerator();
 		} // GetEnumerator
 
 		/// <summary>
@@ -37,7 +34,7 @@
 		/// The number of elements in the collection. 
 		/// </returns>
 		public int Count {
-			get { return Data.Count; }
+			get { return this.data.Count; }
 		} // Count
 
 		/// <summary>
@@ -49,7 +46,7 @@
 		/// <param name="key">The key to locate.</param>
 		/// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
 		public bool ContainsKey(RequestType key) {
-			return Data.ContainsKey(key);
+			return this.data.ContainsKey(key);
 		} // ContainsKey
 
 		/// <summary>
@@ -64,8 +61,8 @@
 		/// otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed
 		/// uninitialized.</param>
 		/// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
-		public bool TryGetValue(RequestType key, out IModelOutput value) {
-			return Data.TryGetValue(key, out value);
+		public bool TryGetValue(RequestType key, out ModelOutput value) {
+			return this.data.TryGetValue(key, out value);
 		} // TryGetValue
 
 		/// <summary>
@@ -79,8 +76,8 @@
 		/// <exception cref="T:System.Collections.Generic.KeyNotFoundException">
 		/// The property is retrieved and <paramref name="key"/> is not found.
 		/// </exception>
-		public IModelOutput this[RequestType key] {
-			get { return Data[key]; }
+		public ModelOutput this[RequestType key] {
+			get { return this.data[key]; }
 		} // indexer
 
 		/// <summary>
@@ -90,7 +87,7 @@
 		/// An enumerable collection that contains the keys in the read-only dictionary.
 		/// </returns>
 		public IEnumerable<RequestType> Keys {
-			get { return Data.Keys; }
+			get { return this.data.Keys; }
 		} // Keys
 
 		/// <summary>
@@ -99,8 +96,10 @@
 		/// <returns>
 		/// An enumerable collection that contains the values in the read-only dictionary.
 		/// </returns>
-		public IEnumerable<IModelOutput> Values {
-			get { return Data.Values; }
+		public IEnumerable<ModelOutput> Values {
+			get { return this.data.Values; }
 		} // Values
+
+		private readonly Dictionary<RequestType, ModelOutput> data;
 	} // class Inference
 } // namespace
