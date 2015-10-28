@@ -2,7 +2,7 @@
 
 EzBob.StrengthPassword = Backbone.Model.extend({
 	defaults: {
-		message: "password strength: ",
+		message: "Password strength: ",
 		status: "none",
 		color: "white"
 	},

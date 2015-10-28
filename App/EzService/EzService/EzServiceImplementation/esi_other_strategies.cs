@@ -7,6 +7,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
+	using EzService.ActionResults;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {
@@ -152,6 +153,17 @@
 		public ActionMetaData UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate) {
 			return Execute<UpdateGoogleAnalytics>(null, null, oBackfillStartDate, oBackfillEndDate);
 		} // UpdateGoogleAnalytics
+
+		public CollectionSnailMailActionResult GetCollectionSnailMail(int userID, int collectionSnailMailID) {
+			GetCollectionSnailMail instance;
+
+			ActionMetaData oMetaData = ExecuteSync(out instance, userID, null, collectionSnailMailID);
+
+			return new CollectionSnailMailActionResult {
+				MetaData = oMetaData,
+				SnailMail = instance.Result,
+			};
+		}//GetCollectionSnailMail
 
 	} // class EzServiceImplementation
 } // namespace EzService

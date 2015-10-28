@@ -376,7 +376,7 @@ a, a:visited {
     }
 
 .form_field_container .error {
-        color: #d20002;
+        color: #ef7b7c;
         font-size: 13px;
         line-height: 25px;
         font-weight: 400;
@@ -862,7 +862,7 @@ color:#494949;
 .click-wrap .soft-label {
      
     color: #494949;
-    font-weight: 300;
+    font-weight: normal;
    line-height: 34px;
     font-size: 14px;
     margin-left: 45px;
@@ -2351,3 +2351,30 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
  /*
  solvency representations 
  */
+
+ .notifications .close .pe-7s-close {
+	font-size: 32px;
+}
+
+ .notifications .close{
+	top: -3px;
+	right: 18px;
+	opacity: 1.0;
+}
+
+ .simple-login .help-block {
+	display: none;
+}
+
+ #loginSubmit,
+ .simple-login .forgotpass {
+	margin-top: -52px;
+}
+
+ .customer-logon-remember-me {
+	margin-top: -8px;
+}
+
+ .logon-wrap {
+	padding-bottom: 0px;
+}

@@ -7,10 +7,6 @@
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
-		public ActionMetaData BackfillCustomerAnalyticsCompany() {
-			return Execute<BackfillCustomerAnalyticsCompany>(null, null);
-		} // BackfillCustomerAnalyticsCompany
-
 		public ActionMetaData BackFillExperianNonLtdScoreText() {
 			return Execute<BackFillExperianNonLtdScoreText>(null, null);
 		} // BackFillExperianNonLtdScoreText
@@ -182,10 +178,6 @@
 				NumOfSettledDefaultAccounts = strategyInstance.NumOfSettledDefaultAccounts
 			};
 		}
-
-		public ActionMetaData UpdateCustomerAnalyticsOnCompanyChange(int customerID) {
-			return Execute<UpdateCustomerAnalyticsOnCompanyChange>(customerID, null, customerID);
-		} // UpdateCustomerAnalyticsOnCompanyChange
 
 	    public ExperianTargetingActionResult ExperianTarget(int customerID, int userID, ExperianTargetingRequest request) {
             ExperianTargeting strategyInstance;

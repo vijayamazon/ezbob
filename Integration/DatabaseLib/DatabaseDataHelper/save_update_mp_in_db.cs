@@ -64,7 +64,11 @@
 			int customerMarketPlaceId;
 			var now = DateTime.UtcNow;
 
-			var customerMarketPlace = _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, displayName);
+			var customerMarketPlace = _CustomerMarketplaceRepository.Get(
+				customer.Id,
+				marketplaceType.InternalId,
+				displayName
+			);
 
 			if (customerMarketPlace != null) {
 				customerMarketPlaceId = customerMarketPlace.Id;
@@ -78,7 +82,9 @@
 					Marketplace = _MarketPlaceRepository.Get(marketplaceType.InternalId),
 					DisplayName = displayName,
 					Created = now,
-					AmazonMarketPlace = amazonMarketPlaceId != null ? _amazonMarketPlaceTypeRepository.GetByMarketPlaceId(amazonMarketPlaceId) : null
+					AmazonMarketPlace = amazonMarketPlaceId != null
+						? _amazonMarketPlaceTypeRepository.GetByMarketPlaceId(amazonMarketPlaceId)
+						: null
 				};
 
 				customerMarketPlaceId = (int)_CustomerMarketplaceRepository.Save(customerMarketPlace);

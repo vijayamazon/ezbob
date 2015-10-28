@@ -82,29 +82,39 @@
 
 	header.everline_header nav ul.sub-links a,
 	header nav ul.sub-links a,
-	header nav .sub-links a{
+	header nav .sub-links a,
+	header.everline_header nav ul#user-menu a,
+	header nav ul#user-menu a,
+	header nav #user-menu a{
 		padding: 7px 0 !important;
 		margin-right: 0 !important;
 		margin-top: 13px;
 		width: 81px;
 	}
 
-	header nav .sub-links .telephone {
+	header nav .sub-links .telephone,
+	header nav #user-menu .telephone {
 	  height: 32px;
 	  margin: 28px 40px;
-	  position: absolute;
 	  right: -15px;
 	  top: 0;
 	  font-size: 1em;
 	  width: 32px;
 	}
-	header nav .sub-links .telephone span{
+	header nav .sub-links .telephone span,
+	header nav #user-menu .telephone span{
 		display: none;
 	}
 
 	header.everline_header nav ul.sub-links li:first-child a {
 		font-weight: 600;
 		font-size: 3em;
+		margin-right:25px;
+	}
+
+	header.everline_header nav #user-menu li:first-child a {
+		font-weight: 600;
+		font-size: 2em;
 		margin-right:25px;
 	}
 
@@ -229,6 +239,7 @@
 		width: 100%;
 		margin-left: 0;
 		margin-top: 20px;
+		border-radius: 0;
 	}
 
 	.wizard-top {
@@ -241,6 +252,7 @@
 		margin: 0;
 		margin-top: 20px;
 		float: none;
+		border-radius: 0;
 	}
 
 	.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
@@ -307,7 +319,7 @@
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
-		width: 100%;
+		width: 49%;
 		margin-top: 10px;
 		text-align: center;
 	}
@@ -483,12 +495,32 @@
 		text-align: center;
 	}
 	/*header*/
-	header.everline_header nav ul.sub-links {
+	header.everline_header nav ul.sub-links,
+	header.everline_header nav #user-menu {
 		right: 10px;
 	}
-
+	
 	.select_form_field_container span {
 		color: #494949;
 	}
-		
+
+	.form_field_container.control-group.customer-logon-remember-me .input-title {
+		display: none;
+	}
+
+	.form_field_container .input-title.long {
+		padding-bottom: 11px;
+	}
+
+	.right-box {
+		float: right;
+	}
+
+}
+
+@media screen and (max-width: 500px) {
+
+	header.everline_header_broker nav span.for-brokers {
+		display: none;
+	}
 }

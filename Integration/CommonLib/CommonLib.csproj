@@ -52,6 +52,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IDatabaseDataHelper.cs" />
     <Compile Include="IDatabaseEnumTypeConverter.cs" />
+    <Compile Include="IFreeAgentItemContainer.cs" />
     <Compile Include="MarketplaceSpecificTypes\TeraPeakOrdersData\TeraPeakDatabaseSellerData.cs" />
     <Compile Include="MarketplaceSpecificTypes\TeraPeakOrdersData\TeraPeakDatabaseSellerDataItem.cs" />
     <Compile Include="ReceivedDataListLogic\IReceivedDataList.cs" />

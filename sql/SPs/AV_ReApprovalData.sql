@@ -82,6 +82,7 @@ BEGIN
 		INNER JOIN ConfigurationVariables cv ON lc.ConfigurationVariableId = cv.Id AND cv.Name != 'SpreadSetupFeeCharge'
 		WHERE l.CustomerId = @CustomerId
 		AND lc.[Date] > @ManualApproveDate
+		AND lc.Amount > 0
 	)
 	BEGIN
 		SET @HasLoanCharges = 1

@@ -76,8 +76,10 @@
     <Compile Include="ExternalAPI\AlibabaContractDto.cs" />
     <Compile Include="ExternalAPI\AlibabaSaleContractResult.cs" />
     <Compile Include="ExternalAPI\ApiCallData.cs" />
+    <Compile Include="FilteredAggregationResult.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
+    <Compile Include="MarketplaceTurnoverModel.cs" />
     <Compile Include="MpModel.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />

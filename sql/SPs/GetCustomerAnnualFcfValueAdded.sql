@@ -105,16 +105,10 @@ BEGIN
 
 	IF @Factor IS NOT NULL AND @Factor != 0
 	BEGIN
-		SELECT TOP 1
+		SELECT
 			@CurrentBalance = cac.CurrentBalanceSum
-		FROM 
-			CustomerAnalyticsCompany cac
-		WHERE
-			cac.CustomerID = @CustomerId
-			AND
-			cac.AnalyticsDate < @Now
-		ORDER BY
-			cac.AnalyticsDate DESC
+		FROM
+			dbo.udfGetCustomerCompanyAnalytics(@CustomerId, @Now, 1, 0, 0) cac
 
 		IF @CurrentBalance IS NULL
 			SET @CurrentBalance = 0

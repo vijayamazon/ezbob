@@ -71,6 +71,7 @@
 		private void LoadImailTemplates() {
 			List<CollectionSnailMailTemplate> templates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
 			this.collectionIMailer.SetTemplates(templates.Select(x => new SnailMailTemplate {
+				ID = x.CollectionSnailMailTemplateID,
 				Type = x.Type,
 				OriginID = x.OriginID,
 				Template = x.Template,
@@ -89,9 +90,9 @@
 	        ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured);
 	    }//HandleCuredLoan
 
-		private void AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
+		private int AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
 			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", customerID, loanID, type, method);
-			DB.ExecuteNonQuery("AddCollectionLog",
+			return DB.ExecuteScalar<int>("AddCollectionLog",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),
 				new QueryParameter("LoanID", loanID),
@@ -99,6 +100,22 @@
 				new QueryParameter("Method", method.ToString()),
                 new QueryParameter("Now", this.now));
 		}//AddCollectionLog
+
+		private void SaveCollectionSnailMailMetadata(int collectionLogID, FileMetadata fileMetadata) {
+			if (fileMetadata == null) {
+				return;
+			}
+
+			Log.Info("Adding collection snail mail metadata collection log id {0} file {1}", collectionLogID, fileMetadata.Name);
+			DB.ExecuteNonQuery("AddCollectionSnailMailMetadata",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CollectionLogID", collectionLogID),
+				new QueryParameter("Name", fileMetadata.Name),
+				new QueryParameter("ContentType", fileMetadata.ContentType),
+				new QueryParameter("Path", fileMetadata.Path),
+				new QueryParameter("Now", this.now),
+				new QueryParameter("CollectionSnailMailTemplateID", fileMetadata.TemplateID));
+		}//SaveCollectionSnailMailMetadata
 
 		private void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out int feeType) {
 			feeAmount = 0;
@@ -415,27 +432,34 @@
 					case CollectionType.CollectionDay7:
 						if (mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-                            this.collectionIMailer.SendDefaultTemplateComm7(mailModel);
-							AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+							FileMetadata personal;
+							FileMetadata business;
+                            this.collectionIMailer.SendDefaultTemplateComm7(mailModel, out personal, out business);
+							int collection7LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+							SaveCollectionSnailMailMetadata(collection7LogID, personal);
+							SaveCollectionSnailMailMetadata(collection7LogID, business);
 						}
 						break;
 					case CollectionType.CollectionDay15:
+						FileMetadata day15Metadata;
 						if (mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-                            this.collectionIMailer.SendDefaultNoticeComm14Borrower(mailModel);
+							day15Metadata = this.collectionIMailer.SendDefaultNoticeComm14Borrower(mailModel);
 							//TODO uncomment when guarantor is implemented: 
 							//collectionIMailer.SendDefaultWarningComm7Guarantor(mailModel);
 						} else {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-                            this.collectionIMailer.SendDefaultTemplateConsumer14(mailModel);
+							day15Metadata = this.collectionIMailer.SendDefaultTemplateConsumer14(mailModel);
 						}
-						AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+						int collection15LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+						SaveCollectionSnailMailMetadata(collection15LogID, day15Metadata);
 						break;
 					case CollectionType.CollectionDay31:
 						if (!mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-                            this.collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
-							AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+                            FileMetadata consumer = this.collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
+							int collection31LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+							SaveCollectionSnailMailMetadata(collection31LogID, consumer);
 						}
 						break;
 					}

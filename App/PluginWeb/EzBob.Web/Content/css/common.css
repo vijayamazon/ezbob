@@ -2075,7 +2075,7 @@ a.pdf-link {
     background-image: url(../img/pdf-logo.jpg);
     background-position: left center;
     background-repeat: no-repeat;
-    display: block;
+    display: inline-block;
     height: 28px;
     line-height: 28px;
     padding-left: 32px;
@@ -2086,11 +2086,11 @@ button.print-link, a.print-link {
     background-image: url(../img/printer.png);
     background-position: left center;
     background-repeat: no-repeat;
-    display: block;
+    display: inline-block;
     height: 28px;
     line-height: 28px;
     padding-left: 32px;
-	float: right;
+	cursor: pointer;
 }
 
 button.print-link {

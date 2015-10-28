@@ -22,6 +22,30 @@ namespace EzBob.Web.Infrastructure
     using EZBob.DatabaseLib.Repository;
     using ServiceClientProxy;
     using StructureMap.Configuration.DSL;
+	using Code.Bank;
+	using CommonLib;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using EZBob.DatabaseLib.Model.Experian;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using EzBob.Models.Agreements;
+	using EzServiceAccessor;
+	using PayPalServiceLib.Common;
+	using Areas.Customer.Controllers;
+	using Areas.Customer.Models;
+	using Code;
+	using Code.Agreements;
+	using Code.MpUniq;
+	using Models.Repository;
+	using ServiceClientProxy;
+	using StructureMap.Configuration.DSL;
+	using ConfigManager;
+	using EZBob.DatabaseLib.Model.Database.Request;
+	using PostcodeAnywhere;
 
 	public class PluginWebRegistry : Registry
 	{
@@ -45,6 +69,8 @@ namespace EzBob.Web.Infrastructure
 			For<IPacnetPaypointServiceLogRepository>().Use<PacnetPaypointServiceLogRepository>();
 			For<ICustomerMarketPlaceRepository>().Use<CustomerMarketPlaceRepository>();
 			For<IMP_WhiteListRepository>().Use<MP_WhiteListRepository>();
+			For<IBankAccountWhiteListRepository>().Use<BankAccountWhiteListRepository>();
+			For<ICardInfoRepository>().Use<CardInfoRepository>();
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanTransactionRepository>().Use<LoanTransactionRepository>();
@@ -113,6 +139,12 @@ namespace EzBob.Web.Infrastructure
 			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
 			For<IBugRepository>().Use<BugRepository>();
 			For<IExternalCollectionStatusesRepository>().Use<ExternalCollectionStatusesRepository>();
+
+			if (CurrentValues.Instance.PostcodeAnywhereEnabled) {
+				For<ISortCodeChecker>().Use<SortCodeChecker>().Ctor<int>("maxBankAccountValidationAttempts").Is(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
+			} else {
+				For<ISortCodeChecker>().Use<FakeSortCodeChecker>().Ctor<int>("maxBankAccountValidationAttempts").Is(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
+			}
 		}
 	}
 }

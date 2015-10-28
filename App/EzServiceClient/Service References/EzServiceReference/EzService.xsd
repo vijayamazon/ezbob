@@ -364,6 +364,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianTargetingActionResult" nillable="true" type="tns:ExperianTargetingActionResult" />
+  <xs:complexType name="LoanCommissionDefaultsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BrokerCommission" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ManualSetupFee" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LoanCommissionDefaultsActionResult" nillable="true" type="tns:LoanCommissionDefaultsActionResult" />
   <xs:complexType name="MarketplacesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

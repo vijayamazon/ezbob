@@ -140,15 +140,26 @@
 			return ms.ToArray();
 		}
 
-		public static void SaveFile(byte[] data, string filePath, int customerID, string templateName) {
+		public static FileMetadata SaveFile(byte[] data, string filePath, int customerID, string templateName, int templateID) {
 			var mainDirectory = Directory.CreateDirectory(filePath);
 			var customerDirectory = mainDirectory.CreateSubdirectory(customerID.ToString());
 			string fileName = Path.Combine(customerDirectory.FullName, templateName + "." + customerID +"."+ DateTime.Today.ToString("yyyyMMdd") + ".pdf");
 			File.WriteAllBytes(fileName, data);
+			return new FileMetadata {
+				TemplateID = templateID,
+				Name = templateName,
+				Path = fileName,
+				ContentType = "application/pdf"
+			};
 		}
 
-		public static void SaveFile(byte[] data, string filePath) {
+		public static FileMetadata SaveFile(byte[] data, string filePath, string templateName) {
 			File.WriteAllBytes(filePath, data);
+			return new FileMetadata {
+				Name = templateName,
+				Path = filePath,
+				ContentType = "application/pdf"
+			};
 		}
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PrepareMail));

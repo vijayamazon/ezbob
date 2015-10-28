@@ -1,5 +1,6 @@
 ﻿namespace EzTvDashboard.Code
 {
+	using System;
 	using System.Collections.Generic;
 
 	public static class StringExtension
@@ -37,6 +38,10 @@
 		public static string ToInt(this decimal num)
 		{
 			return num.ToString("N0");
+		}
+
+		public static int ToRoundIntPercent(this decimal num, decimal value) {
+			return value == 0 ? 0 : (int)Math.Round(num / value * 100);
 		}
 
 		public static decimal GetSafe(this Dictionary<string, decimal> dict, string key)

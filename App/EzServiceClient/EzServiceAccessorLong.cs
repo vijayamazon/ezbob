@@ -70,7 +70,13 @@
 				arg[pair.Key] = pair.Value;
 
 			m_oServiceClient.Instance.EmailHmrcParsingErrors(nCustomerID, nCustomerMarketplaceID, arg);
-		} // EmailHmrcParsingErrors
+		}// EmailHmrcParsingErrors
+
+		public CompanyData GetNonLimitedData(int underwriterId, string refNumber) {
+		
+			CompanyData data = null;
+			return data;//nothing will be returned since the function is never called this way
+		}
 
 		public CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
 			return m_oServiceClient.Instance.GetCompanyDataForCreditBureau(underwriterId, refNumber).Result;

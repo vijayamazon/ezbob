@@ -25,7 +25,7 @@ BEGIN
 		RejectedReason             = NULL,
 		DateApproved               = NULL,
 		ApprovedReason             = NULL,
-		IsLoanTypeSelectionAllowed = NULL
+		IsLoanTypeSelectionAllowed = 0
 	WHERE
 		Id = @CustomerID
 END

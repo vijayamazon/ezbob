@@ -60,7 +60,7 @@ BEGIN
 		DateApproved = CASE WHEN @DecidedToApprove = 1 THEN @Now ELSE NULL END,
 		ApprovedReason = CASE WHEN @DecidedToApprove = 1 THEN @Reason ELSE NULL END,
 		NumApproves = NumApproves + CONVERT(INT, @DecidedToApprove),
-		IsLoanTypeSelectionAllowed = CASE WHEN @DecidedToApprove = 1 THEN @IsLoanTypeSelectionAllowed ELSE NULL END,
+		IsLoanTypeSelectionAllowed = CASE WHEN @DecidedToApprove = 1 THEN ISNULL(@IsLoanTypeSelectionAllowed, 0) ELSE 0 END,
 		LastStartedMainStrategyEndTime = @Now,
 		HasApprovalChance = @HasApprovalChance
 	WHERE

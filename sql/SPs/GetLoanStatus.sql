@@ -11,19 +11,22 @@ ALTER PROCEDURE GetLoanStatus
 	@LoanId INT
 AS
 BEGIN
+    -- get customer id
 	DECLARE @CustomerID INT = (SELECT 
 								 CustomerId 
 							   FROM 
 							     Loan 
 							   WHERE Id = @LoanId)
 	
+	-- get customer was ever late
 	DECLARE @WasLate BIT = (SELECT 
 							  IsWasLate 
 							FROM 
 							  Customer 
 							WHERE 
 							  Id=@CustomerID)	   
-							  					   
+	
+	-- get num of bad statuses for customer 						  					   
 	DECLARE @BadStatuses INT = (SELECT count(*) 
 								FROM 
 									CustomerStatusHistory h 
@@ -46,13 +49,26 @@ BEGIN
 								 	 OR 
 								 	 cs2.IsDefault = 1)
 							   )
-
+	--get num of active loans							   
+	DECLARE @NumOfActiveLoans INT = (SELECT COUNT(*) 
+								 FROM Loan l
+								 WHERE l.CustomerId = @CustomerID
+								 AND l.Status != 'PaidOff')
+	
+	--final select						 
 	SELECT 
-		l.Status, l.Balance, l.LoanAmount, l.RefNum, CAST (CASE WHEN @BadStatuses>0 THEN 1 WHEN @WasLate = 1 THEN 1 ELSE 0 END AS BIT) WasLate
+		l.Status, 
+		l.Balance, 
+		l.LoanAmount, 
+		l.RefNum, 
+		CAST (CASE WHEN @BadStatuses>0 THEN 1 WHEN @WasLate = 1 THEN 1 ELSE 0 END AS BIT) WasLate, 
+		l.[Date] LoanDate, 
+		@NumOfActiveLoans AS NumOfActiveLoans
 	FROM 
 		loan l
 	WHERE
 		l.Id = @LoanId
 END
-
 GO
+
+

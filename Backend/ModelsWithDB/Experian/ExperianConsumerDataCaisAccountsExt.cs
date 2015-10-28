@@ -8,10 +8,15 @@
 		public static bool IsPersonalDefault(
 			this ExperianConsumerDataCaisAccounts cais,
 			decimal minDefaultBalance,
-			DateTime defaultAccountMinDate
+			DateTime defaultAccountMinDate,
+			List<string> logList = null
 		) {
-			if (cais == null)
+			const string rowTag = "Personal default detector: ";
+
+			if (cais == null) {
+				LogToList(logList, "{0} not a default, data to check is null.", rowTag);
 				return false;
+			} // if
 
 			decimal nBalance = Math.Max(cais.CurrentDefBalance ?? 0, cais.Balance ?? 0);
 
@@ -21,22 +26,100 @@
 				cais.LastUpdatedDate.HasValue &&
 				!string.IsNullOrWhiteSpace(cais.AccountStatusCodes);
 
-			if (!isRelevant)
-				return false;
+			LogToList(
+				logList,
+				"{0} CAIS id {1}: " +
+				"balance = {2}, min balance = {3}; " +
+				"match to = {4}; last updated = {5}; status codes = '{6}'.",
+				rowTag,
+				cais.Id,
+				nBalance,
+				minDefaultBalance,
+				cais.MatchTo,
+				cais.LastUpdatedDate.MomentStr(),
+				cais.AccountStatusCodes
+			);
 
-			DateTime cur = cais.LastUpdatedDate.Value;
+			if (!isRelevant) {
+				LogToList(logList, "{0} not a default, CAIS id {1} is not relevant.", rowTag, cais.Id);
+				return false;
+			} // if
+
+			DateTime defaultAccountMinMonth = new DateTime(
+				defaultAccountMinDate.Year,
+				defaultAccountMinDate.Month,
+				1,
+				0,
+				0,
+				0,
+				DateTimeKind.Utc
+			).AddMonths(1);
+
+			DateTime cur = new DateTime(
+				cais.LastUpdatedDate.Value.Year,
+				cais.LastUpdatedDate.Value.Month,
+				1,
+				0,
+				0,
+				0,
+				DateTimeKind.Utc
+			);
+
+			LogToList(
+				logList,
+				"{0} CAIS id {1}, current date = {2}, default account min date = {3}, " +
+				"default account min month = {4}, status code length = {5}.",
+				rowTag,
+				cais.Id,
+				cur.MomentStr(),
+				defaultAccountMinDate.MomentStr(),
+				defaultAccountMinMonth.MomentStr(),
+				cais.AccountStatusCodes.Length
+			);
 
 			for (int i = 1; i <= cais.AccountStatusCodes.Length; i++) {
-				if (cur < defaultAccountMinDate)
+				if (cur < defaultAccountMinMonth) {
+					LogToList(
+						logList,
+						"{0} CAIS id {1}, current date = {2} is less than default account min date = {3}.",
+						rowTag,
+						cais.Id,
+						cur.MomentStr(),
+						defaultAccountMinMonth.MomentStr()
+					);
+
 					break;
+				} // if
 
 				char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-				if ((status == '8') || (status == '9'))
+				LogToList(
+					logList,
+					"{0} CAIS id {1}, current date = {2}, status code length = {3}, i = {4}, status = {5}.",
+					rowTag,
+					cais.Id,
+					cur.MomentStr(),
+					cais.AccountStatusCodes.Length,
+					i,
+					status.ToString()
+				);
+
+				if ((status == '8') || (status == '9')) {
+					LogToList(
+						logList,
+						"{0} CAIS id {1} is default, status = {2}.",
+						rowTag,
+						cais.Id,
+						status.ToString()
+					);
+
 					return true;
+				} // if
 
 				cur = cur.AddMonths(-1);
 			} // for
+
+			LogToList(logList, "{0} not a default, CAIS id {1} ain't no contains default status.", rowTag, cais.Id);
 
 			return false;
 		} // IsPersonalDefault
@@ -174,6 +257,10 @@
 
 			logList.Add(string.Format(format, args));
 		} // LogToList
+
+		private static string MomentStr(this DateTime? dt) {
+			return dt == null ? "NOT SPECIFIED" : dt.Value.ToString("MMM dd yyyy H:mm:ss", CultureInfo.InvariantCulture);
+		} // MomentStr
 
 		private static string MomentStr(this DateTime dt) {
 			return dt.ToString("MMM dd yyyy H:mm:ss", CultureInfo.InvariantCulture);

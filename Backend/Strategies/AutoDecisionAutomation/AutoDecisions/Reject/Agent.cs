@@ -14,6 +14,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Extensions;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Experian;
@@ -21,9 +22,8 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
+	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Repository.Turnover;
-	using StructureMap;
 
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
@@ -115,12 +115,16 @@
 		/// <param name="calculationTime"></param>
 		public virtual void CalculateTurnoverForReject(int customerId, DateTime calculationTime) {
 			try {
-				MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
 				this.annualTurnover = 0;
 				this.quarterTurnover = 0;
 
 				// all histories of customer that updateEnd is relevant
-				List<MarketplaceTurnover> h = mpTurnoverRep.GetByCustomerAndDate(customerId, calculationTime).ToList();
+				List<MarketplaceTurnoverModel> h = DB.Fill<MarketplaceTurnoverModel>(
+					"GetMarketplaceTurnoverByCustomerAndDate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", customerId),
+					new QueryParameter("Now", calculationTime)
+				);
 
 				if (h.Count < 1) {
 					Log.Info(
@@ -132,11 +136,11 @@
 				} // if
 
 				// all MP types of selection
-				IEnumerable<Guid> mpTypes = h.Select(x => x.CustomerMarketPlace.Marketplace.InternalId).Distinct();
+				IEnumerable<Guid> mpTypes = h.Select(x => x.MarketplaceInternalID).Distinct();
 
 				SortedSet<Guid> paymentAccounts = new SortedSet<Guid> (h
-					.Where(x => x.CustomerMarketPlace.Marketplace.IsPaymentAccount)
-					.Select(x => x.CustomerMarketPlace.Marketplace.InternalId)
+					.Where(x => x.IsPaymentAccount)
+					.Select(x => x.MarketplaceInternalID)
 					.Distinct()
 				);
 
@@ -150,12 +154,12 @@
 				foreach (var mpType in mpTypes) {
 					if (mpType.Equals(MpType.Hmrc)) {
 						IEnumerable<int> marketplaceIDs = h
-							.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == MpType.Hmrc)
-							.Select(x => x.CustomerMarketPlace.Id)
+							.Where(x => x.MarketplaceInternalID == MpType.Hmrc)
+							.Select(x => x.CustomerMarketPlaceID)
 							.Distinct();
 
 						foreach (int mpID in marketplaceIDs) {
-							List<MarketplaceTurnover> thisMp = h.Where(x => x.CustomerMarketPlace.Id == mpID).ToList();
+							List<MarketplaceTurnoverModel> thisMp = h.Where(x => x.CustomerMarketPlaceID == mpID).ToList();
 
 							hmrc.AddRange(LastUpdatedEndHistoryTurnoversByMpType(
 								thisMp,
@@ -398,10 +402,15 @@
 		private void FillFromConsumerData() {
 			var lcd = LoadConsumerData();
 
+			var logList = new List<string>();
+
 			this.numOfDefaultConsumerAccounts = lcd.FindNumOfPersonalDefaults(
 				Cfg.Values.Reject_Defaults_Amount,
-				Trail.MyInputData.MonthsNumAgo
+				Trail.MyInputData.MonthsNumAgo,
+				logList
 			);
+
+			logList.ForEach(s => Log.Debug(s));
 
 			FillNumOfLateConsumerAccounts(lcd);
 
@@ -547,36 +556,36 @@
 				)
 				.ToList();
 
-			// Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
+			Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
 			foreach (var cais in lst) {
-				// Log.Debug(
-				// "Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
-				// cais.Id,
-				// cais.LastUpdatedDate.HasValue
-				// ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				// : "-- null --",
-				// cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
-				// cais.AccountStatusCodes,
-				// Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				// );
+				Log.Debug(
+					"Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
+					cais.Id,
+					cais.LastUpdatedDate.HasValue
+					? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					: "-- null --",
+					cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+					cais.AccountStatusCodes,
+					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				);
 
 				int nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length);
 
-				// Log.Debug(
-				// "Fill num of lates cais id {0}: month count is {1}, status count is {2}.",
-				// cais.Id,
-				// nMonthCount,
-				// cais.AccountStatusCodes.Length
-				// );
+				Log.Debug(
+					"Fill num of lates cais id {0}: month count is {1}, status count is {2}.",
+					cais.Id,
+					nMonthCount,
+					cais.AccountStatusCodes.Length
+				);
 
 				for (int i = 1; i <= nMonthCount; i++) {
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-					// Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
+					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
 
 					if (!lateStatuses.Contains(status)) {
-						// Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
+						Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
 						continue;
 					} // if
 
@@ -584,10 +593,10 @@
 
 					int.TryParse(status.ToString(CultureInfo.InvariantCulture), out nStatus);
 
-					// Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
+					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
 
 					if (nStatus > Trail.MyInputData.RejectionLastValidLate) {
-						// Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
+						Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
 						this.numOfLateConsumerAccounts++;
 						break;
 					} // if
@@ -626,7 +635,7 @@
 		} // MaxQuarterTurnover
 
 		private IEnumerable<FilteredAggregationResult> LastUpdatedEndHistoryTurnoversByMpType(
-			List<MarketplaceTurnover> inputList,
+			List<MarketplaceTurnoverModel> inputList,
 			Guid type,
 			DateTime calculationTime,
 			DateTime? lastExistingDataTime = null
@@ -639,8 +648,8 @@
 				lastExistingDataTime.MomentStr()
 			);
 
-			List<MarketplaceTurnover> ofcurrentType =
-				inputList.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == type).ToList();
+			List<MarketplaceTurnoverModel> ofcurrentType =
+				inputList.Where(x => x.MarketplaceInternalID == type).ToList();
 
 			if (ofcurrentType.Count < 1) {
 				Log.Debug(
@@ -652,23 +661,7 @@
 				return Enumerable.Empty<FilteredAggregationResult>();
 			} // if
 
-			// check type
-			List<MarketplaceTurnover> lastUpdated = ofcurrentType.Where(z =>
-				(z.CustomerMarketPlaceUpdatingHistory != null) &&
-				z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue
-			).ToList();
-
-			if (lastUpdated.Count < 1) {
-				Log.Debug(
-					"LastUpdatedEndHistoryTurnoversByMpType returns empty result: " +
-					"no entries found in MarketplaceTurnover view with proper value in UpdatingEnd field " +
-					"of CustomerMarketplaceUpdatingHistory linked table."
-				);
-
-				return Enumerable.Empty<FilteredAggregationResult>();
-			} // if
-
-			DateTime lastUpdateDate = lastUpdated.Max(z => z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value);
+			DateTime lastUpdateDate = ofcurrentType.Max(z => z.UpdatingEnd);
 
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
@@ -688,7 +681,7 @@
 				periodEnd.MomentStr()
 			);
 
-			List<MarketplaceTurnover> histories =
+			List<MarketplaceTurnoverModel> histories =
 				ofcurrentType.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
 
 			var os = new StringBuilder();
@@ -697,8 +690,8 @@
 				"\tMonth = {0}, turnover = {1}, MpHistoryID = {2}, MpID = {3}.\n",
 				x.TheMonth,
 				x.Turnover,
-				x.CustomerMarketPlaceUpdatingHistory.Id,
-				x.CustomerMarketPlace.Id
+				x.CustomerMarketPlaceUpdatingHistoryID,
+				x.CustomerMarketPlaceID
 			));
 
 			Log.Debug(
@@ -716,19 +709,19 @@
 			} // if
 
 			var groups = histories.GroupBy(ag => new {
-				ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+				ag.CustomerMarketPlaceID,
 				ag.TheMonth
 			});
 
 			var result = new List<FilteredAggregationResult>();
 
 			foreach (var grp in groups) {
-				MarketplaceTurnover first = grp.OrderByDescending(p => p.AggID).First();
+				MarketplaceTurnoverModel first = grp.OrderByDescending(p => p.AggID).First();
 
 				var far = new FilteredAggregationResult {
 					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),
 					TheMonth = first.TheMonth,
-					MpId = first.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+					MpId = first.CustomerMarketPlaceID,
 					Turnover = first.Turnover
 				};
 

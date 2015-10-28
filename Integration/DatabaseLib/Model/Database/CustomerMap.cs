@@ -243,7 +243,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.IsWaitingForSignature);
 
 			Map(x => x.CostumeActionItem).Length(1000);
-
+			Map(x => x.BlockTakingLoan);
 			Map(x => x.IsAlibaba);
 			Map(x => x.AlibabaId).Length(300);
 

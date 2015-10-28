@@ -1,183 +1,83 @@
 ﻿@using EzTvDashboard.Code
 
 @model EzTvDashboard.Models.DashboardModel
+
+@{
+	const string green = "tile-ezgreen";
+	const string grey = "tile-ezgrey";
+}
+
 <div class="box">
-    <div class="box-title text-center">
-        <h3>Today</h3>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Visitors
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("T_UkVisitors").ToInt()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Registration
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("T_Registration").ToInt()</p>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Applications
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("T_Application").ToInt()</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Approved
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("T_Approved").ToK0()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Loans out
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("T_LoansOut").ToK0()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Repayments
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("T_Repayments").ToK0()</p>
-            </div>
-        </div>
-    </div>
-
+	<div class="box-title text-center">
+		<h3>Today</h3>
+	</div>
+	<div class="row">
+		@Box("Visitors", Model.Stats.GetSafe("T_UkVisitors").ToInt(), grey,
+			Model.Stats.GetSafe("T_UkVisitorsEverline").ToRoundIntPercent(Model.Stats.GetSafe("T_UkVisitors")))
+		@Box("Registration", Model.Stats.GetSafe("T_Registration").ToInt(), green,
+			Model.Stats.GetSafe("T_RegistrationEverline").ToRoundIntPercent(Model.Stats.GetSafe("T_Registration")))
+		@Box("Applications", Model.Stats.GetSafe("T_Application").ToInt(), grey,
+			Model.Stats.GetSafe("T_ApplicationEverline").ToRoundIntPercent(Model.Stats.GetSafe("T_Application")))
+	</div>
+	<div class="row">
+		@Box("Approved", Model.Stats.GetSafe("T_Approved").ToK0(), grey,
+			Model.Stats.GetSafe("T_ApprovedEverline").ToRoundIntPercent(Model.Stats.GetSafe("T_Approved")))
+		@Box("Loans out", Model.Stats.GetSafe("T_LoansOut").ToK0(), green,
+			Model.Stats.GetSafe("T_LoansOutEverline").ToRoundIntPercent(Model.Stats.GetSafe("T_LoansOut")))
+		@Box("Repayments", Model.Stats.GetSafe("T_Repayments").ToK0(), grey,
+			Model.Stats.GetSafe("T_RepaymentsEverline").ToRoundIntPercent(Model.Stats.GetSafe("T_Repayments")))
+	</div>
 </div>
 
 <div class="box">
-    <div class="box-title text-center">
-        <h3>Month to date</h3>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Visitors
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_UkVisitors").ToInt()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Registration
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_Registration").ToInt()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Applications
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_Application").ToInt()</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Approved
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_Approved").ToK0()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Loans out
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_LoansOut").ToK0()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Repayments
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_Repayments").ToK0()</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Avg loan size
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_AvgLoanSize").ToK1()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Avg daily loans
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_AvgDailyLoans").ToK1()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Avg interest
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("M_AvgInterest").ToPercent()</p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="box">
-    <div class="box-title text-center">
-        <h3>General</h3>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Total loans
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("G_TotalLoans").ToM()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Book size
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("G_BookSize").ToM()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgrey">
-                <div class="caption">
-                    Avg interest
-                </div>
-                <p class="title text-center">@Model.Stats.GetSafe("G_AvgInterest").ToPercent()</p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="box">
-    <div class="box-title text-center">
-        <h3></h3>
-    </div>
+	<div class="box-title text-center">
+		<h3>Month to date</h3>
+	</div>
+	<div class="row">
+		@Box("Visitors", Model.Stats.GetSafe("M_UkVisitors").ToInt(), grey,
+			Model.Stats.GetSafe("M_UkVisitorsEverline").ToRoundIntPercent(Model.Stats.GetSafe("M_UkVisitors")))
+		@Box("Registration", Model.Stats.GetSafe("M_Registration").ToInt(), green,
+			Model.Stats.GetSafe("M_RegistrationEverline").ToRoundIntPercent(Model.Stats.GetSafe("M_Registration")))
+		@Box("Applications", Model.Stats.GetSafe("M_Application").ToInt(), grey,
+			Model.Stats.GetSafe("M_ApplicationEverline").ToRoundIntPercent(Model.Stats.GetSafe("M_Application")))
+	</div>
+	<div class="row">
+		@Box("Approved", Model.Stats.GetSafe("M_Approved").ToK0(), grey,
+			Model.Stats.GetSafe("M_ApprovedEverline").ToRoundIntPercent(Model.Stats.GetSafe("M_Approved")))
+		@Box("Loans out", Model.Stats.GetSafe("M_LoansOut").ToK0(), green,
+			Model.Stats.GetSafe("M_LoansOutEverline").ToRoundIntPercent(Model.Stats.GetSafe("M_LoansOut")))
+		@Box("Repayments", Model.Stats.GetSafe("M_Repayments").ToK0(), grey,
+			Model.Stats.GetSafe("M_RepaymentsEverline").ToRoundIntPercent(Model.Stats.GetSafe("M_Repayments")))
+	</div>
+	<div class="row">
+		@Box("Avg loan size", Model.Stats.GetSafe("M_AvgLoanSize").ToK1(), grey)
+		@Box("Avg daily loans", Model.Stats.GetSafe("M_AvgDailyLoans").ToK1(), green)
+		@Box("Avg interest", Model.Stats.GetSafe("M_AvgInterest").ToPercent(), grey)
+	</div>
 </div>
 
+<div class="box">
+	<div class="box-title text-center">
+		<h3>General</h3>
+	</div>
+	<div class="row">
+		@Box("Total loans", Model.Stats.GetSafe("G_TotalLoans").ToM(), grey)
+		@Box("Book size", Model.Stats.GetSafe("G_BookSize").ToM(), green)
+		@Box("Avg interest", Model.Stats.GetSafe("G_AvgInterest").ToPercent(), grey)
+	</div>
+</div>
+<div class="box">
+	<div class="box-title text-center">
+		<h3></h3>
+	</div>
+</div>
+
+@helper Box(string title, string value, string color, decimal everlinePercent = 0) {
+	<div class="col-md-4">
+		<div class="tile @color">
+			<div class="ez-ev-stat" style="width: @everlinePercent%;"></div>
+			<div class="caption">@title</div>
+			<p class="title text-center">@value</p>
+		</div>
+	</div>
+} 

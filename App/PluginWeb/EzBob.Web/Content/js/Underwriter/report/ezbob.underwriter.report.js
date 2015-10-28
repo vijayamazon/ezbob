@@ -42,9 +42,8 @@ EzBob.Underwriter.ReportView = Backbone.Marionette.ItemView.extend({
 		return this;
 	},
 	reportChanged: function () {
-		var rep, reportId;
-		reportId = parseInt(this.ui.reportsDdl.val());
-		rep = _.find(this.model.toJSON().reports, (function (_this) {
+		var reportId = parseInt(this.ui.reportsDdl.val());
+		var rep = _.find(this.model.toJSON().reports, (function (_this) {
 			return function (report) {
 				return report.Id === reportId;
 			};
@@ -125,13 +124,13 @@ EzBob.Underwriter.ReportView = Backbone.Marionette.ItemView.extend({
 		});
 	},
 	formatTable: function (columns) {
-		var oDataTableArgs;
 		$("#tableReportData").addClass("table table-bordered table-striped blue-header centered");
-		oDataTableArgs = {
+		var oDataTableArgs = {
 			aLengthMenu: [[10, 20, 50, 100, 200, -1], [10, 20, 50, 100, 200, "All"]],
 			iDisplayLength: 20,
 			aaSorting: [],
-			aoColumns: columns
+			aoColumns: columns,
+			sDom: '<"top"if><"report-table-wrap"rt><"bottom"lp><"clear">'
 		};
 		return $("#tableReportData").dataTable(oDataTableArgs);
 	},

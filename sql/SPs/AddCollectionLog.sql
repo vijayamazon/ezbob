@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -16,5 +17,7 @@ AS
 BEGIN
 	INSERT INTO CollectionLog (CustomerID, LoanID, TimeStamp, Type, Method) VALUES
 	(@CustomerID, @LoanID, @Now, @Type, @Method)
+	
+	SELECT CAST(SCOPE_IDENTITY() AS INT) AS CollectionLogID
 END
 GO

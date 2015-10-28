@@ -194,7 +194,7 @@ header.everline_header nav a.svg, header nav span.svg {
 }
    
 header.everline_header_broker nav #user-menu {
-    margin-top: 2.6em;
+    margin-top: 3.6em;
 }
 
 ul#user-menu {
@@ -444,11 +444,6 @@ div.form_field_container {
 
 .broker-login-fields {
 	margin-top: 50px;
-}
-
-.header-wrapper {
-	width: 960px;
-    margin: 0 auto;
 }
 
 .back-to-list-container {
@@ -797,4 +792,17 @@ table.table tr:last-child > td {
 
 .client-files {
 	margin-bottom: 6px;
+}
+
+#LoginEmail,
+#LoginPassword {
+	margin-bottom: 0;
+}
+
+.broker-login-fields .help-block {
+	display: none;
+}
+
+header.everline_header_broker nav .for-brokers {
+	margin-top: 3em;
 }

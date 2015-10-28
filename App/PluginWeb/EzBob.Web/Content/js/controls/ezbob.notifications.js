@@ -26,7 +26,7 @@ EzBob.NotificationsView = Backbone.View.extend({
 		this.scrollTop();
 		this.$el.html(alert);
 		alert.alert();
-		var closeText = EzBob.Config.Origin == 'everline' ? 'x' : '<i class="pe-7s-close-circle"></i>';
+		var closeText = EzBob.Config.Origin == 'everline' ? '<i class="pe-7s-close"></i>' : '<i class="pe-7s-close-circle"></i>';
 		this.$el.notification(closeText);
 	},
 

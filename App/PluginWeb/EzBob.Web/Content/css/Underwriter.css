@@ -229,6 +229,12 @@ p.yodlee-cashflow-graph-labels {
     background-color: #E5E5E5;
 }
 
+.report-table-wrap {
+	width: 100%;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
 .left-underwriter-pane {
     width: 400px;
 }
@@ -835,6 +841,18 @@ div#DecisionNotes {
 
 .ui-dialog .ui-dialog-buttonpane {
     background-color: #ffffff !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    height: auto;
+}
+
+.ui-dialog .ui-dialog-content{
+	padding: .5em 1em;
+}
+
+.ui-corner-all {
+	height: auto;
 }
 
 .ddl-inlign {
@@ -2359,4 +2377,8 @@ input[type="text"].err-field-red {
 
 .new-credit-line-mode-selector > div > label:hover {
 	background-color: #cccccc;
+}
+
+#broker-main-content .new-email {
+	margin: 0;
 }

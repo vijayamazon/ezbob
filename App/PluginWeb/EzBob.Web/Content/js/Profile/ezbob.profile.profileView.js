@@ -48,7 +48,6 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	render: function() {
 		this.profileMain.show();
-		this.getCashView.render();
 		
 		this.payEarlyView.render();
 		this.signWidget.render();
@@ -56,6 +55,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 		this.payEarlyView.$el.appendTo(this.widgetsContainer);
 		this.getCashView.$el.appendTo(this.widgetsContainer);
+		this.getCashView.render();
 		this.signWidget.$el.appendTo(this.signContainer);
 		this.processingMessageView.$el.appendTo(this.processingMessageContainer);
 
@@ -105,8 +105,6 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	getCash: function() {
 		$(document).attr("title", "Get Cash: Select Loan Amount");
-
-		
 
 		EzBob.App.GA.trackPage('/Customer/Profile/GetCash', 'Get Cash: Select Loan Amount', this.getGTMVariables());
 
@@ -172,6 +170,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	applyForLoanBack: function() {
 		this.router.navigate("");
+		this.getCashModel.refresh();
 		this.menuWidgetShown();
 	},
 

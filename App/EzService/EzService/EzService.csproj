@@ -72,8 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
-    <Compile Include="ActionResults\NLLongActionResult.cs" />
-    <Compile Include="ActionResults\LongActionResult.cs" />
+    <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
+    <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />
     <Compile Include="ActionResults\ReschedulingActionResult.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
@@ -214,6 +214,10 @@
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
       <Name>FraudChecker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
+      <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
+      <Name>PaymentServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\SalesForceLib\SalesForceLib.csproj">
       <Project>{198579CB-CD05-46F6-AFAC-75A982B3216A}</Project>

@@ -8,7 +8,7 @@
 
 	public class AmazonAggregation {
 		public virtual long AmazonAggregationID { get; set; }
-		public virtual System.DateTime TheMonth { get; set; }
+		public virtual DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
 		public virtual int AverageItemsPerOrderDenominator { get; set; }

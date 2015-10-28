@@ -1,6 +1,7 @@
 ﻿namespace IMailLib {
 	
 	public class SnailMailTemplate {
+		public int ID { get; set; }
 		public string Type { get; set; }
 		public bool IsLimited { get; set; }
 		public bool IsActive { get; set; }

@@ -116,23 +116,29 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         }
     },
     accountActivity: function () {
-        this.activate("AccountActivity");
+    	this.activate("AccountActivity");
+    	this.removeSteps('accountActivity');
     },
     YourDetails: function () {
-        this.activate("YourDetails");
+    	this.activate("YourDetails");
+    	this.removeSteps('YourDetails');
     },
     yourStores: function () {
-        this.activate("YourStores");
+    	this.activate("YourStores");
+    	this.removeSteps('YourStores');
     },
     paymentAccounts: function () {
-        this.activate("PaymentAccounts");
+    	this.activate("PaymentAccounts");
+    	this.removeSteps('PaymentAccounts');
     },
     settings: function () {
         this.activate("Settings");
         this.marketing("Settings");
+        this.removeSteps('Settings');
     },
     perks: function() {
-        this.activate("Perks");
+    	this.activate("Perks");
+    	this.removeSteps('Perks');
     },
     getCash: function () {
         EzBob.CT.recordEvent('ct:profile:getCash');
@@ -143,16 +149,21 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         EzBob.CT.recordEvent('ct:profile:payEarly', id);
         this.trigger('payEarly', id);
         this.marketing("PayEarly");
+        this.removeSteps('PayEarly');
     },
     loanDetails: function (id) {
         EzBob.CT.recordEvent('ct:profile:loanDetails', id);
         this.trigger('details', id);
         this.marketing("LoanDetails");
+        this.removeSteps('LoanDetails');
     },
     companyDirectors: function() {
-        this.activate("CompanyDirectors");
+    	this.activate("CompanyDirectors");
+    	this.removeSteps('CompanyDirectors');
     },
-
+    removeSteps: function(caller) {
+		$('.dashboard-steps-container').empty();
+	},
     marketing: function (page) {
         var marketing;
         var isDashboard = true;

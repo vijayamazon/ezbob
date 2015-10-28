@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using Code;
-	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -21,37 +20,31 @@
 
 	public class PaymentAccountsController : Controller
 	{
-		private readonly CustomerRepository _customers;
-		private readonly ICustomerMarketPlaceRepository _customerMarketplaces;
-		private readonly ISortCodeChecker _sortCodeChecker;
-		private readonly IWorkplaceContext _context;
-		private readonly ServiceClient m_oServiceClient;
-		private readonly PayPointAccountRepository payPointAccountRepository;
-
+		private readonly CustomerRepository customersRepository;
+		private readonly ICustomerMarketPlaceRepository customerMarketplacesReporsitory;
+		private readonly ISortCodeChecker sortCodeChecker;
+		private readonly IWorkplaceContext context;
+		private readonly ServiceClient serviceClient;
+		
 		public PaymentAccountsController(
-			CustomerRepository customers,
-			ICustomerMarketPlaceRepository customerMarketplaces,
+			CustomerRepository customersRepository,
+			ICustomerMarketPlaceRepository customerMarketplacesReporsitory,
 			IWorkplaceContext context,
-			PayPointAccountRepository payPointAccountRepository
-		)
+			ISortCodeChecker sortCodeChecker)
 		{
-			_customers = customers;
-			m_oServiceClient = new ServiceClient();
-			_customerMarketplaces = customerMarketplaces;
+			this.customersRepository = customersRepository;
+			this.serviceClient = new ServiceClient();
+			this.customerMarketplacesReporsitory = customerMarketplacesReporsitory;
 
-			_sortCodeChecker = CurrentValues.Instance.PostcodeAnywhereEnabled
-				? (ISortCodeChecker)new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts)
-				: (ISortCodeChecker)new FakeSortCodeChecker();
-
-			_context = context;
-			this.payPointAccountRepository = payPointAccountRepository;
+			this.context = context;
+			this.sortCodeChecker = sortCodeChecker;
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult Index(int id)
 		{
-			var customer = _customers.Get(id);
+			var customer = this.customersRepository.Get(id);
 			var model = new PaymentsAccountModel(customer);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -60,7 +53,7 @@
 		[Transactional]
 		public JsonResult SetDefaultCard(int customerId, int cardId)
 		{
-			var customer = _customers.Get(customerId);
+			var customer = this.customersRepository.Get(customerId);
 			var card = customer.BankAccounts.SingleOrDefault(c => c.Id == cardId);
 			customer.SetDefaultCard(card);
 			return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -70,7 +63,7 @@
 		[Transactional]
 		public JsonResult PerformCheckBankAccount(int id, int cardid)
 		{
-			var customer = _customers.Get(id);
+			var customer = this.customersRepository.Get(id);
 			var card = customer.BankAccounts.Single(b => b.Id == cardid);
 			return CheckBankAccount(card);
 		}
@@ -88,7 +81,7 @@
 			string error = null;
 			try
 			{
-				_sortCodeChecker.Check(card);
+				this.sortCodeChecker.Check(card);
 			}
 			catch (UnknownSortCodeException)
 			{
@@ -115,9 +108,9 @@
 		[Ajax]
 		[Transactional]
 		public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType) {
-			var customer = _customers.Get(customerId);
+			var customer = this.customersRepository.Get(customerId);
 
-			int nCardID = customer.AddBankAccount(bankAccount, sortCode, accountType, _sortCodeChecker);
+			int nCardID = customer.AddBankAccount(bankAccount, sortCode, accountType, this.sortCodeChecker);
 
 			if (nCardID < 0) {
 				switch (nCardID) {
@@ -139,12 +132,12 @@
 		[HttpGet]
 		public JsonResult CheckForUpdatedStatus(int mpId)
 		{
-			return Json(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
+			return Json(new { status = this.customerMarketplacesReporsitory.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
 		}
 
 		public RedirectResult AddPayPoint(int id)
 		{
-			var oCustomer = _customers.Get(id);
+			var oCustomer = this.customersRepository.Get(id);
 			PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
 			int payPointCardExpiryMonths =payPointFacade.PayPointAccount.CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
@@ -159,7 +152,7 @@
 		[HttpGet]
 		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
 		{
-			var cus = _customers.GetChecked(customerId);
+			var cus = this.customersRepository.GetChecked(customerId);
 			if (test_status == "true")
 			{
 				// Use last 4 random digits as card number (to enable useful tests)
@@ -193,7 +186,7 @@
 		[HttpPost]
 		public JsonResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
 		{
-			var customer = _customers.GetChecked(customerId);
+			var customer = this.customersRepository.GetChecked(customerId);
 			var expiry = expiredate.ToString("MMyy");
 			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
 			AddPayPointCardToCustomer(transactionid, cardno, customer, expiry, 0, payPointFacade.PayPointAccount);
@@ -214,11 +207,11 @@
             }
 
             if (amount > 0 && !hasOpenLoans) {
-                this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(customer.Id, _context.UserId, amount.Value, transactionid);
+                this.serviceClient.Instance.PayPointAddedWithoutOpenLoan(customer.Id, this.context.UserId, amount.Value, transactionid);
             }
 
 
-			m_oServiceClient.Instance.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
+			this.serviceClient.Instance.PayPointAddedByUnderwriter(customer.Id, cardno, this.context.User.FullName, this.context.User.Id);
 
 		    return paymentAdded;
 		}
@@ -228,7 +221,7 @@
 		[HttpPost]
 		public void SetPaypointDefaultCard(string transactionid, int customerId, string cardNo)
 		{
-			var customer = _customers.GetChecked(customerId);
+			var customer = this.customersRepository.GetChecked(customerId);
 			var defaultCard = customer.PayPointCards.FirstOrDefault(x => x.TransactionId == transactionid);
 			if(defaultCard == null){
 				throw new Exception("Paypoint card not found");
@@ -245,7 +238,7 @@
 		[HttpPost]
 		public void ChangeCustomerDefaultCardSelection(int customerId, bool state)
 		{
-			var customer = _customers.GetChecked(customerId);
+			var customer = this.customersRepository.GetChecked(customerId);
 			customer.DefaultCardSelectionAllowed = state;
 		}
 	}

@@ -72,4 +72,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="WriteToLogPackage.InputData" nillable="true" type="tns:WriteToLogPackage.InputData" />
+  <xs:complexType name="CollectionSnailMailMetadataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CollectionSnailMailMetadataID" type="xs:int" />
+      <xs:element minOccurs="0" name="Content" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="ContentType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CollectionSnailMailMetadataModel" nillable="true" type="tns:CollectionSnailMailMetadataModel" />
 </xs:schema>

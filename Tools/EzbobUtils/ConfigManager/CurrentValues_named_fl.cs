@@ -56,6 +56,14 @@
 			get { return this[Variables.FirstOfMonthStatusMailMandrillTemplateName]; }
 		}
 
+		public virtual VariableValue FreeAgentApiBase {
+			get { return this[Variables.FreeAgentApiBase]; }
+		}
+
+		public virtual VariableValue FreeAgentExpensesCategoriesRequest {
+			get { return this[Variables.FreeAgentExpensesCategoriesRequest]; }
+		}
+
 		public virtual VariableValue FreeAgentCompanyRequest {
 			get { return this[Variables.FreeAgentCompanyRequest]; }
 		}
@@ -76,6 +84,10 @@
 			get { return this[Variables.FreeAgentInvoicesRequestMonthPart]; }
 		}
 
+		public virtual VariableValue FreeAgentInvoicesRequestNestedPart {
+			get { return this[Variables.FreeAgentInvoicesRequestNestedPart]; }
+		}
+
 		public virtual VariableValue FreeAgentOAuthAuthorizationEndpoint {
 			get { return this[Variables.FreeAgentOAuthAuthorizationEndpoint]; }
 		}
@@ -94,6 +106,10 @@
 
 		public virtual VariableValue FreeAgentUsersRequest {
 			get { return this[Variables.FreeAgentUsersRequest]; }
+		}
+
+		public virtual VariableValue FraudAlertMailReciever {
+			get { return this[Variables.FraudAlertMailReciever]; }
 		}
 
 		public virtual VariableValue GetCashSliderStep {

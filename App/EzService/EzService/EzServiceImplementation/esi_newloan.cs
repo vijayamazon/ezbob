@@ -58,6 +58,8 @@
         {
             return Execute<AddLoan>(model.CustomerID, model.UserID, model);
 		} // AddLoan
+				MetaData = amd//,
+				//Value = strategy.LoanID
 
 		public NL_Model AddPayment(NL_Model loanModel) {
 			AddPayment strategy;

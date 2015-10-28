@@ -38,7 +38,7 @@
 		public void Concatinate2Pdfs() {
 			var fileData = PrepareMail.GetPdfData(@"c:\ezbob\test-data\imail\output.pdf");
 			var concatData = PrepareMail.ConcatinatePdfFiles(new List<byte[]> { fileData, fileData });
-			PrepareMail.SaveFile(concatData, @"c:\ezbob\test-data\imail\concatoutput.pdf");
+			PrepareMail.SaveFile(concatData, @"c:\ezbob\test-data\imail\concatoutput.pdf", "concatoutput");
 		}
 
 		[Test]
@@ -74,7 +74,8 @@
 				Log.InfoFormat(ex.ToString());
 			}
 			try {
-				cm.SendDefaultTemplateComm7(model);
+				FileMetadata meta1, meta2;
+				cm.SendDefaultTemplateComm7(model, out meta1, out meta1);
 			} catch (Exception ex) {
 				Log.InfoFormat(ex.ToString());
 			}
@@ -151,7 +152,7 @@
 		}
 
 		[Test]
-		public void TestPrepareMail() {
+		public void TestPrepareMailAndSaveMetadata() {
 			Dictionary<string, string> varibalesDict = new Dictionary<string, string>();
 			varibalesDict.Add("Name", "Stas");
 			varibalesDict.Add("Address1", "Flat 1");
@@ -163,7 +164,24 @@
 			varibalesDict.Add("Date", "22/12/2014");
 
 			byte[] data = PrepareMail.ReplaceParametersAndConvertToPdf(@"c:\ezbob\test-data\imail\test1.docx", varibalesDict);
-			PrepareMail.SaveFile(data, @"c:\ezbob\test-data\imail\output.pdf");
+			var fileMetadata = PrepareMail.SaveFile(data, @"c:\ezbob\test-data\imail\output.pdf", "output.pdf");
+
+			int collectionLogID = DB.ExecuteScalar<int>("AddCollectionLog",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", 47),
+				new QueryParameter("LoanID", 1),
+				new QueryParameter("Type", "CollectionDay7"),
+				new QueryParameter("Method", "Mail"),
+				new QueryParameter("Now", DateTime.UtcNow));
+
+			DB.ExecuteNonQuery("AddCollectionSnailMailMetadata",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CollectionLogID", collectionLogID),
+				new QueryParameter("Name", fileMetadata.Name),
+				new QueryParameter("ContentType", fileMetadata.ContentType),
+				new QueryParameter("Path", fileMetadata.Path),
+				new QueryParameter("Now", DateTime.UtcNow),
+				new QueryParameter("CollectionSnailMailTemplateID", 29));
 		}
 
 		[Test]
@@ -205,7 +223,8 @@
 		[Test]
 		public void TestResource() {
 			byte[] data = PrepareMail.ExtractResource("IMailLib.CollectionTemplates.default-notice-to-borrowers.docx");
-			PrepareMail.SaveFile(data, @"c:\ezbob\test-data\imail\output.docx");
+			PrepareMail.SaveFile(data, @"c:\ezbob\test-data\imail\output.docx", "output.docx");
+
 		}
 
 		[Test]

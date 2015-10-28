@@ -15,8 +15,6 @@ EzBob.SlidersModel = Backbone.Model.extend({
 		if (options.Term > 0) {
 			this.set('Term', options.Term);
 		}
-
-		console.log('iunint', this);
 	},
 	urlRoot: window.gRootPath + 'Customer/CustomerRequestedLoan/RequestedLoan'
 });
@@ -84,9 +82,14 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 
     	var self = this;
     	this.model.off('change', this.render, this);
-	    this.model.save().done(function () {
-	    	self.closeClicked();
-	    });
+    	this.model
+			.save()
+			.done(function () {
+	    		self.closeClicked();
+			})
+			.fail(function () {
+				self.closeClicked();
+			});
     },
 
     closeClicked: function () {

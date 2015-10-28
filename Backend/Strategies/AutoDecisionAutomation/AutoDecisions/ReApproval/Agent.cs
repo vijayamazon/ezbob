@@ -318,7 +318,7 @@
 
 		private void SetApprovedAmount() {
 			if (Trail.HasDecided)
-				ApprovedAmount = MetaData.ApprovedAmount;
+				ApprovedAmount = Math.Truncate(MetaData.ApprovedAmount);
 
 			if (ApprovedAmount > 0)
 				StepDone<ApprovedAmount>().Init(ApprovedAmount);

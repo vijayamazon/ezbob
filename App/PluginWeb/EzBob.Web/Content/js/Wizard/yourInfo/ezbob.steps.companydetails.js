@@ -24,7 +24,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		}; // companyTypes
 		this.targetingTries = 0;
 		this.validatorRules = this.ownValidationRules();
-		this.validatorMessages = this.ownValidationRules();
+		this.validatorMessages = this.ownValidationMessages();
 
 		for (var ct in this.companyTypes) {
 			var oView = this.companyTypes[ct].View;
@@ -35,7 +35,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			this.validatorRules = _.extend({}, this.validatorRules, oView.prototype.ownValidationRules());
 			this.validatorMessages = _.extend({}, this.validatorMessages, oView.prototype.ownValidationMessages());
 		} // for
-
 		this.companyTypes.pship3p = this.companyTypes.soletrader;
 		this.companyTypes.pship = this.companyTypes.soletrader;
 		this.companyTypes.limited = this.companyTypes.llp;
@@ -44,8 +43,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			'submit .CompanyDetailForm': 'submitForm',
 
 			'click .btn-continue': 'next',
-
-			'click .oobts': 'businessTypeSelected',
 
 			'focus #OverallTurnOver': 'overallTurnOverFocus',
 			'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
@@ -76,34 +73,15 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		return false;
 	}, // submitForm
-
-	businessTypeSelected: function(evt) {
-		this.$el.find('.oobts').removeClass('oobts-selected');
-
-		this.$el.find('.oobts i').removeClass('fa-square-o fa-check-square-o').addClass('fa-square-o');
-
-		var oBtn = $(evt.currentTarget);
-
-		oBtn.addClass('oobts-selected').find('i').removeClass('fa-square-o').addClass('fa-check-square-o');
-
-		this.curOobts = oBtn.attr('data-oobts');
-
-		var sEmail = this.model.get('Email');
-		if (sEmail && sEmail.match && sEmail.match(/@ezbob\.com$/)) {
-			this.$el.find('.oobts-common').removeClass('oobts-common').addClass('oobts-test-user');
-
-			var self = this;
-
-			window.setTimeout(function() {
-				self.$el.find('.oobts-test-user').removeClass('oobts-test-user').addClass('oobts-common');
-			}, 100);
-		} // if
-	}, // businessTypeSelected
-
+	
 	inputChanged: function (evt) {
 		this.setFieldStatusNotRequired(evt, 'promoCode');
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
 			this.typeOfBusinessChanged();
+
+		if ($.browser.mozilla && evt && evt.type === 'change' && evt.target.localName === 'select') {
+			$(evt.currentTarget).trigger('click');
+		}
 
 		var enabled = this.isEnabled();
 
@@ -191,7 +169,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		  //  this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 		}
 		*/
-	
 
 	    if (this.model.get('IsAlibaba')) {
 	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();
@@ -210,7 +187,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // ownValidationRules
 
 	ownValidationMessages: function() {
-		return {};
+		return {
+			TypeOfBusiness: { required: 'This field is required' },
+			IndustryType: { required: 'This field is required' },
+		};
 	}, // ownValidationMessages
 
 	next: function() {

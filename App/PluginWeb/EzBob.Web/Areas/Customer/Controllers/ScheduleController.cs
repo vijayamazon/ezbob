@@ -13,19 +13,15 @@
     using Web.Models;
 
     public class ScheduleController : Controller {
-        public static readonly int[] LoanPeriods = { 6, 10 };
-
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly APRCalculator _aprCalc;
-        private readonly Customer _customer;
-        private readonly LoanBuilder _loanBuilder;
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ScheduleController));
+	    private readonly APRCalculator aprCalc;
+        private readonly Customer customer;
+        private readonly LoanBuilder loanBuilder;
+        protected static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ScheduleController));
 
         public ScheduleController(IEzbobWorkplaceContext context, LoanBuilder loanBuilder) {
-            _context = context;
-            _loanBuilder = loanBuilder;
-            _customer = _context.Customer;
-            _aprCalc = new APRCalculator();
+	        this.loanBuilder = loanBuilder;
+            this.customer = context.Customer;
+            this.aprCalc = new APRCalculator();
         } // constructor
 
         [Ajax]
@@ -43,22 +39,24 @@
         } // Calculate
 
         private LoanOffer CalculateLoan(int amount, int loanType, int repaymentPeriod) {
-            if (!_customer.CreditSum.HasValue || !_customer.Status.HasValue || _customer.Status.Value != Status.Approved)
+	        if (!this.customer.CreditSum.HasValue || !this.customer.Status.HasValue || this.customer.Status.Value != Status.Approved)
                 return null;
+	
+			var creditSum = this.customer.CreditSum.Value;
 
-            _customer.ValidateOfferDate();
+	        this.customer.ValidateOfferDate();
 
             if (amount < 0)
-                amount = (int)Math.Floor(_customer.CreditSum.Value);
+				amount = (int)Math.Floor(creditSum);
 
-            if (amount > _customer.CreditSum.Value) {
-                Log.WarnFormat("Attempt to calculate schedule for amount({0}) bigger than credit sum value({1})", amount, _customer.CreditSum);
-                amount = (int)Math.Floor(_customer.CreditSum.Value);
+			if (amount > creditSum) {
+				Log.WarnFormat("Attempt to calculate schedule for amount({0}) bigger than credit sum value({1})", amount, creditSum);
+				amount = (int)Math.Floor(creditSum);
             } // if
 
-            var cr = _customer.LastCashRequest;
+            var cr = this.customer.LastCashRequest;
 
-            if (_customer.IsLoanTypeSelectionAllowed == 1) {
+            if (this.customer.IsLoanTypeSelectionAllowed == 1) {
                 var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
                 if (oDBHelper != null) {
@@ -71,16 +69,16 @@
 				cr.RepaymentPeriod = repaymentPeriod;
 			}
 
-            var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
+            var loan = this.loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
 
             var schedule = loan.Schedule;
-            var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
+            var apr = this.aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
 
             var b = new AgreementsModelBuilder(_context);
-            var agreement = b.Build(_customer, amount, loan);
+            var agreement = b.Build(this.customer, amount, loan);
 
             //TODO calculate offer
-            Log.DebugFormat("calculate offer for customer {0}", _customer.Id);
+            Log.DebugFormat("calculate offer for customer {0}", this.customer.Id);
 
             return LoanOffer.InitFromLoan(loan, apr, agreement, cr);
         } // CalculateLoan

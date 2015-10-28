@@ -29,7 +29,7 @@
 		background-repeat: no-repeat;
 		display: inline-block;
 		vertical-align: middle;
-		background-position-x: -46px;
+		background-position-x: -20px;
 	}
 
 	.header-inner {
@@ -455,17 +455,6 @@
 		visibility: hidden;
 	}
 
-	.type-of-business-form_field {
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-		overflow: hidden;
-		height: auto !important;
-		width: 93%;
-		padding: 4px;
-		font-size: 16px;
-	}
-
 	.vip-container {
 		display: none;
 	}
@@ -508,10 +497,24 @@
     .ui-dialog-buttonset button {
         width:100%;
     }
-		.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
-			margin: 0;
-			padding: 0;
-		}
+
+	.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
+		margin: 0;
+		padding: 0;
+	}
+
+	.header-info-left,
+	.header-info-right,
+	.header-info-text {
+		height: 65px;
+	}
+
+	.header-info {
+		line-height: 65px;
+		margin-left: -25px;
+	}
+
+
 }
 
 @media only screen and (min-width : 320px) and (max-width : 500px) {

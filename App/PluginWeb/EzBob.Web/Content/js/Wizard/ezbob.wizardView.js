@@ -172,9 +172,11 @@ EzBob.WizardView = EzBob.View.extend({
         notifications.render();
         $('.footer-navigator').hide();
 		$('footer.location-customer-everline .privacy-and-cookie-policy').show();
-        if ($('.broker-finish-wizard-later').length)
-            $('#user-menu').hide();
-        $('.find-out-more').hide();
+	    if ($('.broker-finish-wizard-later').length) {
+		    $('#user-menu').hide();
+		    $('.flt-r.sub-links').hide();
+	    }
+	    $('.find-out-more').hide();
         
         var that = this;
 

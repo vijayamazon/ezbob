@@ -44,6 +44,8 @@
 
 		void EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail);
 
+		CompanyData GetNonLimitedData(int underwriterId, string refNumber);
+
 		CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
 		WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);

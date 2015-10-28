@@ -12,19 +12,20 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
 	using Models.Strings;
-	using NHibernate;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using Coin = Ezbob.HmrcHarvester.Coin;
 
 	public class HmrcManualAccountManager {
-
 		public static JsonResult CreateJsonNoError() {
 			return CreateJsonError(null);
 		} // CreateJsonNoError
@@ -35,7 +36,7 @@
 			bool bSuccess = string.IsNullOrWhiteSpace(sErrorMessage);
 
 			if (!bSuccess)
-				ms_oLog.Warn("Returning error from HMRC manual account manager to web UI: {0}", sErrorMessage);
+				log.Warn("Returning error from HMRC manual account manager to web UI: {0}", sErrorMessage);
 
 			return new JsonResult {
 				Data = new { success = bSuccess, error = sErrorMessage, },
@@ -55,38 +56,50 @@
 		} // CreateJsonError
 
 		public HmrcManualAccountManager(
+			bool hideRealError,
 			CustomerRepository customers,
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session, 
-			IWorkplaceContext context) {
-			if (ms_oVendorInfo == null) {
-				lock (ms_oLockVendorInfo) {
-					if (ms_oVendorInfo == null)
-						ms_oVendorInfo = Configuration.Instance.GetVendorInfo("HMRC");
+			IWorkplaceContext context
+		) {
+			if (hmrcVendorInfo == null) {
+				lock (lockVendorInfo) {
+					if (hmrcVendorInfo == null)
+						hmrcVendorInfo = Configuration.Instance.GetVendorInfo("HMRC");
 				} // lock
 			} // if
 
-			lock (ms_oLockVendorInfo) {
-				m_oVendorInfo = ms_oVendorInfo;
+			lock (lockVendorInfo) {
+				this.vendorInfo = hmrcVendorInfo;
 			} // lock
 
-			m_oCustomers = customers;
-			m_oDatabaseHelper = helper;
-			m_oMpTypes = mpTypes;
-			m_oUniquenessChecker = mpChecker;
-			m_oSession = session;
-			m_oContext = context;
+			this.hideRealError = hideRealError;
+			this.customers = customers;
+			this.databaseHelper = helper;
+			this.mpTypes = mpTypes;
+			this.uniquenessChecker = mpChecker;
+			this.context = context;
 
-			m_oServiceClient = new ServiceClient();
+			this.serviceClient = new ServiceClient();
 		} // constructor
 
-		public JsonResult SaveUploadedFiles(HttpFileCollectionBase oFiles, int nCustomerID, string sControllerName, string sActionName) {
-			Customer oCustomer = m_oCustomers.ReallyTryGet(nCustomerID);
+		public JsonResult SaveUploadedFiles(
+			HttpFileCollectionBase oFiles,
+			int nCustomerID,
+			string sControllerName,
+			string sActionName
+		) {
+			Customer oCustomer = this.customers.ReallyTryGet(nCustomerID);
 
-			if (oCustomer == null)
+			if (oCustomer == null) {
+				if (this.hideRealError) {
+					log.Warn("Could not retrieve customer by id {0}.", nCustomerID);
+					return CreateJsonError("Could not retrieve customer by requested id.");
+				} // if
+
 				return CreateJsonError("Could not retrieve customer by id {0}.", nCustomerID);
+			} // if
 
 			var oProcessor = new HmrcFileProcessor(nCustomerID, oFiles, sControllerName, sActionName);
 			oProcessor.Run();
@@ -112,15 +125,14 @@
 
 			try {
 				oData = JsonConvert.DeserializeObject<HmrcManualDataModel>(sData);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				return CreateJsonError("Failed to parse input data: " + e.Message);
 			} // try
 
 			if (!oData.IsValid())
 				return CreateJsonError(string.Join("\n", oData.Errors));
 
-			Customer oCustomer = m_oCustomers.ReallyTryGet(oData.CustomerID);
+			Customer oCustomer = this.customers.ReallyTryGet(oData.CustomerID);
 
 			if (oCustomer == null)
 				return CreateJsonError("Could not retrieve customer by id {0}.", oData.CustomerID);
@@ -136,22 +148,20 @@
 
 		public JsonResult LoadPeriods(int nCustomerID) {
 			try {
-				VatReturnPeriodsActionResult vrpar = m_oServiceClient.Instance.LoadManualVatReturnPeriods(nCustomerID);
+				VatReturnPeriodsActionResult vrpar = this.serviceClient.Instance.LoadManualVatReturnPeriods(nCustomerID);
 				return CreateJson(vrpar.Periods);
-			}
-			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to load manual VAT return periods for customer {0}.", nCustomerID);
+			} catch (Exception e) {
+				log.Warn(e, "Failed to load manual VAT return periods for customer {0}.", nCustomerID);
 				return CreateJson(new VatReturnPeriod[0]);
 			} // try
 		} // LoadPeriods
 
 		public JsonResult RemovePeriod(string sPeriod) {
 			try {
-				m_oServiceClient.Instance.RemoveManualVatReturnPeriod(Guid.Parse(sPeriod));
+				this.serviceClient.Instance.RemoveManualVatReturnPeriod(Guid.Parse(sPeriod));
 				return CreateJsonNoError();
-			}
-			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to remove manual VAT return period for period id '{0}'.", sPeriod);
+			} catch (Exception e) {
+				log.Warn(e, "Failed to remove manual VAT return period for period id '{0}'.", sPeriod);
 				return CreateJsonError("Failed to remove period.");
 			} // try
 		} // RemovePeriod
@@ -169,12 +179,12 @@
 					Thrasher = null,
 				};
 
-				var oSeeds = new VatReturnSeeds(ms_oLog);
+				var oSeeds = new VatReturnSeeds(log);
 
-				oSeeds.Set(VatReturnSeeds.Field.Period, oPeriod.Period, ms_oLog);
-				oSeeds.Set(VatReturnSeeds.Field.DateFrom, oPeriod.FromDate, ms_oLog);
-				oSeeds.Set(VatReturnSeeds.Field.DateTo, oPeriod.ToDate, ms_oLog);
-				oSeeds.Set(VatReturnSeeds.Field.DateDue, oPeriod.DueDate, ms_oLog);
+				oSeeds.Set(VatReturnSeeds.Field.Period, oPeriod.Period, log);
+				oSeeds.Set(VatReturnSeeds.Field.DateFrom, oPeriod.FromDate, log);
+				oSeeds.Set(VatReturnSeeds.Field.DateTo, oPeriod.ToDate, log);
+				oSeeds.Set(VatReturnSeeds.Field.DateDue, oPeriod.DueDate, log);
 
 				if (!oSeeds.IsPeriodValid()) {
 					sStateError = "Invalid period detected: " + oSeeds.FatalError;
@@ -182,10 +192,10 @@
 				} // if
 
 				if (oData.RegNo > 0)
-					oSeeds.Set(VatReturnSeeds.Field.RegistrationNo, oData.RegNo, ms_oLog);
+					oSeeds.Set(VatReturnSeeds.Field.RegistrationNo, oData.RegNo, log);
 
-				oSeeds.Set(VatReturnSeeds.Field.BusinessName, oData.BusinessName, ms_oLog);
-				oSeeds.Set(VatReturnSeeds.Field.BusinessAddress, oData.BusinessAddress.Split('\n'), ms_oLog);
+				oSeeds.Set(VatReturnSeeds.Field.BusinessName, oData.BusinessName, log);
+				oSeeds.Set(VatReturnSeeds.Field.BusinessAddress, oData.BusinessAddress.Split('\n'), log);
 
 				if (!oSeeds.AreBusinessDetailsValid()) {
 					sStateError = "Invalid business details detected: " + oSeeds.FatalError;
@@ -196,11 +206,13 @@
 					int nBoxNum = pair.Key;
 					decimal nAmount = pair.Value;
 
-					string sFieldName = oData.BoxNames.ContainsKey(nBoxNum) ? oData.BoxNames[nBoxNum] : " (Box " + nBoxNum + ")";
+					string sFieldName = oData.BoxNames.ContainsKey(nBoxNum)
+						? oData.BoxNames[nBoxNum]
+						: " (Box " + nBoxNum + ")";
 
 					oSeeds.ReturnDetails[sFieldName] = new Coin(nAmount, "GBP");
 
-					ms_oLog.Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", sFieldName, nAmount);
+					log.Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", sFieldName, nAmount);
 				} // for each box
 
 				oResult.Add(smd, oSeeds);
@@ -210,29 +222,37 @@
 		} // ThrashManualData
 
 		private JsonResult DoSave(Hopper oHopper, string sNoAccountError, Customer oCustomer) {
-			IDatabaseCustomerMarketPlace mp = FindOrCreateMarketplace(oCustomer);
+			int mpID = FindOrCreateMarketplace(oCustomer);
 
-			if (mp == null) {
-				ms_oLog.Alert("Marketplace neither found nor created.");
+			if (mpID <= 0) {
+				log.Alert("Marketplace neither found nor created for customer {0}.", oCustomer.Stringify());
 				return CreateJsonError(sNoAccountError);
 			} // if
 
-			Connector.SetBackdoorData(m_oVendorInfo.Name, mp.Id, oHopper);
+			Connector.SetBackdoorData(this.vendorInfo.Name, mpID, oHopper);
 
 			try {
-				m_oServiceClient.Instance.MarketplaceInstantUpdate(mp.Id);
-				mp.Marketplace.GetRetrieveDataHelper(m_oDatabaseHelper).CustomerMarketplaceUpdateAction(mp.Id);
-			}
-			catch (Exception e) {
-				return CreateJsonError("Account has been linked but error occurred while storing the data: " + e.Message);
+				this.serviceClient.Instance.MarketplaceInstantUpdate(mpID);
+
+				new RetrieveDataHelper(
+					this.databaseHelper,
+					new DatabaseMarketPlace(hmrcVendorInfo.Name)
+				).CustomerMarketplaceUpdateAction(mpID);
+			} catch (Exception e) {
+				log.Error(e, "Account has been linked but error occurred while storing the data.");
+
+				return CreateJsonError(this.hideRealError
+					? "Internal error occurred while storing VAT return data."
+					: "Account has been linked but error occurred while storing the data: " + e.Message
+				);
 			} // try
 
 			return CreateJsonNoError();
 		} // DoSave
 
-		private IDatabaseCustomerMarketPlace FindMarketplace(Customer oCustomer) {
+		private int FindMarketplace(Customer oCustomer) {
 			MP_CustomerMarketPlace oMp = oCustomer.CustomerMarketPlaces.FirstOrDefault(mp => {
-				if (mp.Marketplace.InternalId != m_oVendorInfo.Guid())
+				if (mp.Marketplace.InternalId != this.vendorInfo.Guid())
 					return false;
 
 				if (mp.DisplayName != oCustomer.Name)
@@ -241,95 +261,196 @@
 				return AccountModel.ToModel(mp).password == VendorInfo.TopSecret;
 			});
 
-			if (oMp != null) {
-				oMp.SetIMarketplaceType(new DatabaseMarketPlace(m_oVendorInfo.Name));
-				return oMp;
-			} // if
-
-			return null;
+			return oMp != null ? oMp.Id : 0;
 		} // FindMarketplace
 
-		private IDatabaseCustomerMarketPlace FindOrCreateMarketplace(Customer oCustomer) {
-			IDatabaseCustomerMarketPlace oMp = FindMarketplace(oCustomer);
+		private int FindOrCreateMarketplace(Customer oCustomer) {
+			log.Debug("FindOrCreateMarketplace for customer {0} started...", oCustomer.Stringify());
 
-			if (oMp != null)
-				return oMp;
+			int mpID = FindMarketplace(oCustomer);
 
-			lock (ms_oLockCreateMarketplace) {
-				oMp = FindMarketplace(oCustomer);
+			if (mpID > 0) {
+				log.Debug(
+					"FindOrCreateMarketplace for customer {0} complete: found {1} on the first check.",
+					oCustomer.Stringify(),
+					mpID
+				);
 
-				if (oMp != null)
-					return oMp;
+				return mpID;
+			} // if
+
+			log.Debug(
+				"FindOrCreateMarketplace for customer {0}: not found on the first check, locking...",
+				oCustomer.Stringify()
+			);
+
+			lock (lockCreateMarketplace) {
+				log.Debug(
+					"FindOrCreateMarketplace for customer {0}: locked.",
+					oCustomer.Stringify()
+				);
+
+				mpID = FindMarketplace(oCustomer);
+
+				if (mpID > 0) {
+					log.Debug(
+						"FindOrCreateMarketplace for customer {0} complete: found {1} on the second check.",
+						oCustomer.Stringify(),
+						mpID
+					);
+
+					return mpID;
+				} // if
+
+				log.Debug(
+					"FindOrCreateMarketplace for customer {0}: not found on the second check, creating model...",
+					oCustomer.Stringify()
+				);
 
 				var model = new AccountModel {
-					accountTypeName = m_oVendorInfo.Name,
+					accountTypeName = this.vendorInfo.Name,
 					displayName = oCustomer.Name,
 					name = oCustomer.Name,
 					login = oCustomer.Name,
 					password = VendorInfo.TopSecret,
 				};
 
+				log.Debug(
+					"FindOrCreateMarketplace for customer {0}: model is ready for uniqueness check.",
+					oCustomer.Stringify()
+				);
+
 				AddAccountState oState = ValidateMpUniqueness(model, oCustomer);
 
-				if (oState.Error != null)
-					return null;
+				if (oState.Error != null) {
+					log.Debug(
+						"FindOrCreateMarketplace for customer {0} complete: model is not unique.",
+						oCustomer.Stringify()
+					);
+
+					return 0;
+				} // if
+
+				log.Debug(
+					"FindOrCreateMarketplace for customer {0}: creating a new marketplace.",
+					oCustomer.Stringify()
+				);
 
 				SaveMarketplace(oState, model, oCustomer);
 
-				return oState.CustomerMarketPlace;
+				log.Debug(
+					"FindOrCreateMarketplace for customer {0} complete: created {1}.",
+					oCustomer.Stringify(),
+					oState.CustomerMarketPlaceID
+				);
+
+				return oState.CustomerMarketPlaceID;
 			} // lock
 		} // FindOrCreateMarketplace
 
 		private class AddAccountState {
 			public IMarketplaceType Marketplace;
 			public HmrcManualAccountManagerException Error;
-			public IDatabaseCustomerMarketPlace CustomerMarketPlace;
+			public int CustomerMarketPlaceID;
 
 			public AddAccountState() {
 				Marketplace = null;
 				Error = null;
-				CustomerMarketPlace = null;
+				CustomerMarketPlaceID = 0;
 			} // constructor
 		} // class AddAccountState
 
 		private AddAccountState ValidateMpUniqueness(AccountModel model, Customer oCustomer) {
+			log.Debug("ValidateMpUniqueness started...");
+
 			var oResult = new AddAccountState();
 
+			log.Debug("ValidateMpUniqueness: result holder created.");
+
 			try {
+				log.Debug("ValidateMpUniqueness: going for it...");
+
 				oResult.Marketplace = new DatabaseMarketPlace(model.accountTypeName);
-				m_oUniquenessChecker.Check(oResult.Marketplace.InternalId, oCustomer, model.Fill().UniqueID());
-			}
-			catch (MarketPlaceAddedByThisCustomerException) {
+
+				string uniqueID = model.Fill().UniqueID();
+
+				log.Debug("ValidateMpUniqueness: result marketplace is set, unique id is '{0}'.", uniqueID);
+
+				this.uniquenessChecker.Check(oResult.Marketplace.InternalId, oCustomer, uniqueID);
+
+				log.Debug("ValidateMpUniqueness: congrats! It's unique.");
+			} catch (MarketPlaceAddedByThisCustomerException) {
+				log.Error("ValidateMpUniqueness: oops! The same customer already has this.");
 				oResult.Error = new HmrcManualAccountManagerException(DbStrings.StoreAddedByYou);
-			}
-			catch (MarketPlaceIsAlreadyAddedException) {
+			} catch (MarketPlaceIsAlreadyAddedException) {
+				log.Error("ValidateMpUniqueness: oops! Someone else already has this.");
 				oResult.Error = new HmrcManualAccountManagerException(DbStrings.StoreAlreadyExistsInDb);
-			}
-			catch (Exception e) {
-				ms_oLog.Error(e);
+			} catch (Exception e) {
+				log.Error(e, "ValidateMpUniqueness: something went wrong while checking for uniqueness.");
 				oResult.Error = new HmrcManualAccountManagerException(e);
 			} // try
+
+			log.Debug("ValidateMpUniqueness complete with{0} error.", oResult.Error == null ? "out" : string.Empty);
 
 			return oResult;
 		} // ValidateMpUniqueness
 
 		private void SaveMarketplace(AddAccountState oState, AccountModel model, Customer oCustomer) {
 			try {
-				model.id = m_oMpTypes.GetAll().First(a => a.InternalId == m_oVendorInfo.Guid()).Id;
+				model.id = this.mpTypes.GetAll().First(a => a.InternalId == this.vendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				IDatabaseCustomerMarketPlace mp = m_oDatabaseHelper.SaveOrUpdateEncryptedCustomerMarketplace(
-					model.name,
-					oState.Marketplace,
-					model,
-					oCustomer
+				SafeReader sr = DbConnectionGenerator.Get(log).GetFirst(
+					"CreateOrLoadUploadedHmrcMarketplace",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", oCustomer.Id),
+					new QueryParameter("@SecurityData", new Encrypted(new Serialized(model))),
+					new QueryParameter("@Now", DateTime.UtcNow)
 				);
-				m_oSession.Flush();
 
-				oState.CustomerMarketPlace = mp;
-			}
-			catch (Exception e) {
-				ms_oLog.Error(e);
+				int spExitCode = sr["ExitCode"];
+				oState.CustomerMarketPlaceID = 0;
+
+				switch (spExitCode) {
+				case 0:
+					oState.CustomerMarketPlaceID = sr["MpID"];
+					log.Alert(
+						"Successfully created uploaded/manual HMRC marketplace {0} for customer {1}.",
+						oState.CustomerMarketPlaceID,
+						oCustomer.Stringify()
+					);
+					break;
+
+				case -1:
+					log.Alert(
+						"Failed to create uploaded/manual HMRC marketplace for customer {0}.",
+						oCustomer.Stringify()
+					);
+					break;
+
+				case -2:
+					log.Alert(
+						"Uploaded/manual HMRC marketplace with email '{0}' that should belong to customer {1}" +
+						"already exists with id {2} and belongs to customer {3}.",
+						oCustomer.Name,
+						oCustomer.Stringify(),
+						sr["MpID"],
+						sr["OtherCustomerID"]
+					);
+					break;
+
+				default:
+					log.Alert(
+						"Other error while creating uploaded/manual HMRC marketplace for customer {0}.",
+						oCustomer.Stringify()
+					);
+					break;
+				} // switch
+
+				if (spExitCode < 0)
+					throw new Exception("Failed to save VAT return data.");
+			} catch (Exception e) {
+				log.Error(e);
 				oState.Error = new HmrcManualAccountManagerException(e);
 			} // try
 
@@ -340,34 +461,38 @@
 				// This is done to for two reasons:
 				// 1. update Customer.WizardStep to WizardStepType.Marketplace
 				// 2. insert entries into EzServiceActionHistory
-				m_oServiceClient.Instance.UpdateMarketplace(oCustomer.Id, oState.CustomerMarketPlace.Id, true, m_oContext.UserId);
+				this.serviceClient.Instance.UpdateMarketplace(
+					oCustomer.Id,
+					oState.CustomerMarketPlaceID,
+					true,
+					this.context.UserId
+				);
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e,
+				log.Warn(e,
 					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
 					" if this is the only customer marketplace underwriter should run this strategy manually" +
 					" (otherwise Main strategy will be stuck).",
 					oCustomer.Id,
 					oCustomer.Name,
-					oState.CustomerMarketPlace.Id
+					oState.CustomerMarketPlaceID
 				);
 			} // try
 		} // SaveMarketplace
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcManualAccountManager));
+		private readonly bool hideRealError;
+		private readonly MarketPlaceRepository mpTypes;
+		private readonly CGMPUniqChecker uniquenessChecker;
+		private readonly DatabaseDataHelper databaseHelper;
+		private readonly ServiceClient serviceClient;
+		private readonly VendorInfo vendorInfo;
+		private readonly CustomerRepository customers;
+		private readonly IWorkplaceContext context;
 
-		private readonly MarketPlaceRepository m_oMpTypes;
-		private readonly CGMPUniqChecker m_oUniquenessChecker;
-		private readonly DatabaseDataHelper m_oDatabaseHelper;
-		private readonly ServiceClient m_oServiceClient;
-		private readonly ISession m_oSession;
-		private readonly VendorInfo m_oVendorInfo;
-		private readonly CustomerRepository m_oCustomers;
-		private readonly IWorkplaceContext m_oContext;
-		private static volatile VendorInfo ms_oVendorInfo;
-		private static readonly object ms_oLockVendorInfo = new object();
+		private static volatile VendorInfo hmrcVendorInfo;
+		private static readonly object lockVendorInfo = new object();
+		private static readonly object lockCreateMarketplace = new object();
 
-		private static readonly object ms_oLockCreateMarketplace = new object();
-
+		private static readonly ASafeLog log = new SafeILog(typeof(HmrcManualAccountManager));
 	} // class HmrcManualAccountManager
 } // namespace

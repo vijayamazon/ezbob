@@ -24,14 +24,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
-  <xs:complexType name="NewLoanModelActionResult">
+  <xs:complexType name="CollectionSnailMailActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Value" nillable="true" type="q6:NL_Model" />
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q6:CollectionSnailMailMetadataModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="NewLoanModelActionResult" nillable="true" type="tns:NewLoanModelActionResult" />
+  <xs:element name="CollectionSnailMailActionResult" nillable="true" type="tns:CollectionSnailMailActionResult" />
 </xs:schema>

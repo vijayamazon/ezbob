@@ -9,16 +9,16 @@
 	/// Contains time of the first transaction for calculating customer business seniority.
 	/// </summary>
 	public class OriginationTime {
-		public OriginationTime(ASafeLog oLog) {
-			m_oRow = null;
-			m_oLog = oLog.Safe();
+		public OriginationTime(ASafeLog log) {
+			this.row = null;
+			this.log = log.Safe();
 		} // constructor
 
 		/// <summary>
 		/// Time of the first transaction across all customer marketplaces.
 		/// </summary>
 		public DateTime? Since {
-			get { return m_oRow == null ? null : m_oRow.Time; }
+			get { return this.row == null ? null : this.row.Time; }
 		} // Since
 
 		/// <summary>
@@ -35,20 +35,20 @@
 		public void Process(SafeReader sr) {
 			Row r = sr.Fill<Row>().SetTime();
 
-			m_oLog.Debug("Origination time: processing row {0}", r);
+			this.log.Debug("Origination time: processing row {0}", r);
 
 			if (r.Time == null)
 				return;
 
 			if (Since == null) {
-				m_oLog.Debug("Marketplace origination time set from {0}.", r);
-				m_oRow = r;
+				this.log.Debug("Marketplace origination time set from {0}.", r);
+				this.row = r;
 				return;
 			} // if
 
 			if (r.Time < Since.Value) {
-				m_oRow = r;
-				m_oLog.Debug("Marketplace origination time updated from {0}.", r);
+				this.row = r;
+				this.log.Debug("Marketplace origination time updated from {0}.", r);
 			} // if
 		} // Process
 
@@ -61,16 +61,16 @@
 				return;
 
 			if ((Since == null) || (oIncorporationDate.Value < Since.Value)) {
-				m_oRow = new Row {
+				this.row = new Row {
 					OneTime = oIncorporationDate,
 					IsPaymentAccount = false,
 					MarketplaceID = 0,
 					MarketplaceType = "Experian",
 				};
 
-				m_oRow.SetTime();
+				this.row.SetTime();
 
-				m_oLog.Debug("Marketplace origination time updated from {0}.", m_oRow);
+				this.log.Debug("Marketplace origination time updated from {0}.", this.row);
 			} // if
 		} // FromExperian
 
@@ -157,27 +157,32 @@
 			/// Detects whether this marketplace should be included into business seniority calculation.
 			/// </summary>
 			private bool IsIncluded {
-				get { return !IsPaymentAccount || (InternalID == PayPal) || (InternalID == Hmrc); }
+				get {
+					if (InternalID == companyFiles)
+						return false;
+
+					return !IsPaymentAccount || (InternalID == payPal) || (InternalID == hmrc);
+				} // get
 			} // IsIncluded
 
 			public override string ToString() {
 				return string.Format("time: {0}, mp id: {1}, mp type: {2}", Time, MarketplaceID, MarketplaceType);
 			} // ToString
 
-			private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
-			private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+			private static readonly Guid payPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
+			private static readonly Guid hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+			private static readonly Guid companyFiles = new Guid("1C077670-6D6C-4CE9-BEBC-C1F9A9723908");
 		} // class Row
 
 		private string MarketplaceType {
-			get { return m_oRow == null ? "not set" : m_oRow.MarketplaceType; }
+			get { return this.row == null ? "not set" : this.row.MarketplaceType; }
 		} // MarketplaceType
 
 		private int MarketplaceID {
-			get { return m_oRow == null ? 0 : m_oRow.MarketplaceID; }
+			get { return this.row == null ? 0 : this.row.MarketplaceID; }
 		} // MarketplaceID
 
-		private Row m_oRow;
-		private readonly ASafeLog m_oLog;
-
+		private Row row;
+		private readonly ASafeLog log;
 	} // class OriginationTime
 } // namespace

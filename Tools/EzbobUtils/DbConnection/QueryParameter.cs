@@ -3,16 +3,34 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
+	using Ezbob.Utils.Security;
 	using Utils;
 
 	public class QueryParameter {
 		public string Name { get; set; }
-		public object Value { get; set; }
 		public int? Size { get; set; }
 		public DbType? Type { get; set; }
 		public ParameterDirection Direction { get; set; }
 		public DbParameter UnderlyingParameter { get; set; }
 		public string UnderlyingTypeName { get; set; }
+
+		public object Value {
+			get { return this.parameterValue; }
+			set {
+				// ReSharper disable once ConditionIsAlwaysTrueOrFalse
+				if (ReferenceEquals(value, null) || (value == null)) {
+					this.parameterValue = DBNull.Value;
+					return;
+				} // if
+
+				if (value.GetType() == typeof(Encrypted)) {
+					this.parameterValue = (byte[])((Encrypted)value);
+					return;
+				} // if
+
+				this.parameterValue = value;
+			} // if
+		} // Value
 
 		public QueryParameter(DbParameter oUnderlyingParameter) {
 			if (ReferenceEquals(oUnderlyingParameter, null))
@@ -102,5 +120,7 @@
 		public string SafeReturnedValue {
 			get { return (ReturnedValue ?? string.Empty).ToString(); } // get
 		} // SafeReturnedValue
+
+		private object parameterValue;
 	} // class QueryParameter
 } // namespace Ezbob.Database

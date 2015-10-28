@@ -227,21 +227,26 @@ namespace ConfigManager {
 
 		[Description("Spare")]
 		FinancialAccounts_Spare,
+
 		FinishWizardForApproved,
 		FirstOfMonthEnableCustomerMail,
 		FirstOfMonthStatusMailCopyTo,
 		FirstOfMonthStatusMailEnabled,
 		FirstOfMonthStatusMailMandrillTemplateName,
+		FreeAgentApiBase,
+		FreeAgentExpensesCategoriesRequest,
 		FreeAgentCompanyRequest,
 		FreeAgentExpensesRequest,
 		FreeAgentExpensesRequestDatePart,
 		FreeAgentInvoicesRequest,
 		FreeAgentInvoicesRequestMonthPart,
+		FreeAgentInvoicesRequestNestedPart,
 		FreeAgentOAuthAuthorizationEndpoint,
 		FreeAgentOAuthIdentifier,
 		FreeAgentOAuthSecret,
 		FreeAgentOAuthTokenEndpoint,
 		FreeAgentUsersRequest,
+		FraudAlertMailReciever,
 
 		GetCashSliderStep,
 		GetSatisfactionEnabled,
@@ -312,6 +317,7 @@ namespace ConfigManager {
 		MaxLoan,
 		MaxPerDay,
 		MaxPerNumber,
+		MaxSeniorityYears,
 		MaxTimeToWaitForPacnetrConfirmation,
 		MaxYodleeOtherCategoryAmount,
 		MedalDaysOfMpRelevancy,
@@ -320,10 +326,12 @@ namespace ConfigManager {
 		MinDectForDefault,
 		MinInterestRateToReuse,
 		MinLoan,
+		MinLoanLifetimeMonths,
 
 		NHibernateEnableProfiler,
 		NotEnoughFundsTemplateName,
 		NotEnoughFundsToAddress,
+		NumofAllowedActiveLoans,
 		NumOfInvalidPasswordAttempts,
 		NumberOfMobileCodeAttempts,
 

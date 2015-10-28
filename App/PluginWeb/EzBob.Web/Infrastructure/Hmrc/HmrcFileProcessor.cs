@@ -11,8 +11,12 @@
 	using Ezbob.ValueIntervals;
 
 	internal class HmrcFileProcessor {
-
-		public HmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles, string sControllerName, string sActionName) {
+		public HmrcFileProcessor(
+			int nCustomerID,
+			HttpFileCollectionBase oFiles,
+			string sControllerName,
+			string sActionName
+		) {
 			CustomerID = nCustomerID;
 			FileList = oFiles;
 			FileCache = new HmrcFileCache();
@@ -138,7 +142,10 @@
 					} // try
 
 					if (Directory.Exists(sPath)) {
-						string sFileName = Path.Combine(sPath, Guid.NewGuid().ToString("N") + "." + nCustomerID + "." + sFileOriginalName);
+						string sFileName = Path.Combine(
+							sPath,
+							Guid.NewGuid().ToString("N") + "." + nCustomerID + "." + sFileOriginalName
+						);
 
 						ms_oLog.Debug("Saving file {0} as {1}...", sFileOriginalName, sFileName);
 
@@ -226,8 +233,6 @@
 			} // ToString
 
 			private readonly SortedDictionary<long, List<DateInterval>> m_oDateIntervals;
-
 		} // HmrcFileCache
-
 	} // class HmrcFileProcessor
 } // namespace EzBob.Web.Areas.Customer.Controllers
