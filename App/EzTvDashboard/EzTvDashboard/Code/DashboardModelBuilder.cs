@@ -110,6 +110,9 @@
 
 				model.Stats["T_UkVisitors"] = ezbobVisitors.Item1 + everlineVisitors.Item1;
 				model.Stats["M_UkVisitors"] = ezbobVisitors.Item2 + everlineVisitors.Item2;
+
+				model.Stats["T_UkVisitorsEverline"] = everlineVisitors.Item1;
+				model.Stats["M_UkVisitorsEverline"] = everlineVisitors.Item2;
 			} catch (Exception ex) {
 				Log.ErrorFormat("Failed to load google analytics values \n{0}", ex);
 			}
@@ -144,7 +147,7 @@
 					{"T_UkVisitors", 30}, //-api
 					{"T_Registration", 5},
 					{"T_Application", 3},
-					{"T_Approved", 1},
+					{"T_Approved", 2},
 					{"T_LoansOut", 10000},
 					{"T_Repayments", 12000},
 
@@ -154,6 +157,21 @@
 					{"M_Approved", 5},
 					{"M_LoansOut", 283600},
 					{"M_Repayments", 55000},
+
+					{"T_UkVisitorsEverline", 20}, //-api
+					{"T_RegistrationEverline", 4},
+					{"T_ApplicationEverline", 1},
+					{"T_ApprovedEverline", 1},
+					{"T_LoansOutEverline", 4000},
+					{"T_RepaymentsEverline", 5000},
+
+					{"M_UkVisitorsEverline", 400}, //-api
+					{"M_RegistrationEverline", 10},
+					{"M_ApplicationEverline", 4},
+					{"M_ApprovedEverline", 3},
+					{"M_LoansOutEverline", 183600},
+					{"M_RepaymentsEverline", 15000},
+
 					{"M_AvgLoanSize", 5000},
 					{"M_AvgDailyLoans", 57720},
 					{"M_AvgInterest", 0.0423M},

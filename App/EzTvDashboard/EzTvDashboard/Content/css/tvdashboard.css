@@ -173,6 +173,13 @@ strong {
     background-color: #00ced1;
 }
 
+.ez-ev-stat {
+    position: absolute;
+    width: 0;
+    height: 5px;
+    background: #333;
+}
+
 @media (max-width: 1200px){
 	 .tvdashboard {
         display: none;
