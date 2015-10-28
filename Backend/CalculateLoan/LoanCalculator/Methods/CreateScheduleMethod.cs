@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using PaymentServices.Calculators;
 
@@ -81,7 +82,7 @@
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
 
-				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // dr' = r/daysDiff
+				decimal dailyInterestRate = Calculator.AverageDailyInterestRate(r, plannedDate); // dr' = r/daysDiff
 
 				int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
 

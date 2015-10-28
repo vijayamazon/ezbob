@@ -1,8 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.DAL;
 	using Ezbob.Database;
+	using NHibernate.Linq;
 	using StructureMap.Attributes;
 
 	/// <summary>
@@ -59,24 +62,31 @@
 
 				// loan fees
 				Result.Loan.Fees.Clear();
-				Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
+				List<NL_LoanFees> fees=  DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID", this.loanID)
-					//,new QueryParameter("@Now", StateDate)
-				);
+					new QueryParameter("@LoanID", this.loanID));
+
+				// filter cnacelled/deleted fees on LoanState strategy
+				fees.Where(f => f.DisabledTime != null || f.DeletedByUserID >0).ForEach(f => Result.Loan.Fees.Add(f));;
 
 				// interest freezes
 				Result.Loan.FreezeInterestIntervals.Clear();
-				Result.Loan.FreezeInterestIntervals = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet",
+				List<NL_LoanInterestFreeze> freezes= DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID", this.loanID)
-				);
+					new QueryParameter("@LoanID", this.loanID));
+
+				// filter cancelled (deactivated) periods
+				// TODO: take in consideration stateDate
+				// freezes.Where(fr => fr.DeactivationDate != null).ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
+				freezes.ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
 
 				// loan options
 				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID)
 				);
+
+				// TODO combine all payments+ transactions to one SP
 
 				// payments (logical loan transactions)
 				Result.Loan.Payments.Clear();
@@ -85,23 +95,21 @@
 					new QueryParameter("@LoanID", this.loanID),
 					new QueryParameter("@Now", StateDate)
 				);
+				
+				foreach (NL_Payments p in Result.Loan.Payments) {
 
-				if (Result.Loan.Payments.Count > 0) {
-
-					Result.Loan.SchedulePayments.Clear();
-					Result.Loan.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet",
+					p.SchedulePayments.Clear();
+					p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID)
 					);
 
-					Result.Loan.FeePayments.Clear();
-					Result.Loan.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",
+					p.FeePayments.Clear();
+					p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID)
 					);
 				}
-
-				SetBadPeriods(); // TODO
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception loanStateEx) {

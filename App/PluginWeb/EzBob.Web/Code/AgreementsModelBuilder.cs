@@ -6,6 +6,7 @@
     using ConfigManager;
     using DbConstants;
     using Ezbob.Backend.CalculateLoan.LoanCalculator;
+    using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
     using Ezbob.Backend.Models;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Logger;

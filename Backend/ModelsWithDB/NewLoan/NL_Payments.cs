@@ -53,6 +53,9 @@
 
 		// additions
 		private List<NL_PaypointTransactions> _paypointTransactions = new List<NL_PaypointTransactions>();
+		private List<NL_LoanSchedulePayments> _schedulePayments = new List<NL_LoanSchedulePayments>();
+		private List<NL_LoanFeePayments> _feePayments = new List<NL_LoanFeePayments>();
+
 
 		[DataMember]
 		[NonTraversable]
@@ -61,22 +64,50 @@
 			set { this._paypointTransactions = value; }
 		}
 
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanSchedulePayments> SchedulePayments {
+			get { return this._schedulePayments; }
+			set { this._schedulePayments = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanFeePayments> FeePayments {
+			get { return this._feePayments; }
+			set { this._feePayments = value; }
+		}
+
 		/// <summary>
 		/// prints data only
 		/// to print headers line call base static GetHeadersLine 
 		/// </summary>
 		/// <returns></returns>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// payment
-			StringBuilder sb = new StringBuilder().Append(ToStringTable())
-				.Append(Environment.NewLine);
+			StringBuilder sb = new StringBuilder().Append(ToStringTable());
 
-			sb.Append("Paypoint Transactions:");
+			sb.Append(Environment.NewLine).Append("SchedulePayments:");
+
+			if (SchedulePayments.Count > 0) {
+				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedulePayments)));
+				SchedulePayments.ForEach(s => sb.Append(s.ToString()));
+			} 
+
+			sb.Append(Environment.NewLine).Append("FeePayments:");
+
+			if (FeePayments.Count > 0) {
+				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFeePayments)));
+				FeePayments.ForEach(s => sb.Append(s.ToString()));
+			} 
+
+			sb.Append(Environment.NewLine).Append("Paypoint Transactions:");
 
 			if (PaypointTransactions.Count > 0) {
 				sb.Append(GetHeadersLine(typeof(NL_PaypointTransactions))).Append(Environment.NewLine);
 				PaypointTransactions.ForEach(s => sb.Append(s.ToString()));
-			} // else sb.Append("No paypoint transactions found");
+			}
 
 			return sb.ToString();
 		}

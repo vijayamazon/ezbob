@@ -250,8 +250,6 @@
 
 		public LoanScheduleItem GetState() {
 			var item = new LoanScheduleItem() { Loan = _loan, Date = _term };
-
-
 			_eventDayEnd.Action = () => {
 				item.Interest = Math.Round(InterestToPay, 2);
 				item.Fees = Math.Round(FeesToPay, 2);

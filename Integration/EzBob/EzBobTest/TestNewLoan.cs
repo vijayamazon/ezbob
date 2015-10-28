@@ -632,7 +632,8 @@
 
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				calc.events.ForEach(e => m_oLog.Debug(e));
+				//calc.events.ForEach(e => m_oLog.Debug(e));
+				m_oLog.Debug(calc);
 			} catch (Exception exception) {
 				m_oLog.Error("{0}", exception);
 			}

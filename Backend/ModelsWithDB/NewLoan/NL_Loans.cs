@@ -75,9 +75,7 @@
 		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
 		private NL_LoanOptions _loanOptions = new NL_LoanOptions();
 		private List<NL_Payments> _payments = new List<NL_Payments>();
-		private List<NL_LoanSchedulePayments> _schedulePayments = new List<NL_LoanSchedulePayments>();
-		private List<NL_LoanFeePayments> _feePayments = new List<NL_LoanFeePayments>();
-
+	
 		[DataMember]
 		[NonTraversable]
 		public List<NL_LoanHistory> Histories {
@@ -147,19 +145,7 @@
 			SetDefaultLoanType();
 		}
 
-		[DataMember]
-		[NonTraversable]
-		public List<NL_LoanSchedulePayments> SchedulePayments {
-			get { return this._schedulePayments; }
-			set { this._schedulePayments = value; }
-		}
-
-		[DataMember]
-		[NonTraversable]
-		public List<NL_LoanFeePayments> FeePayments {
-			get { return this._feePayments; }
-			set { this._feePayments = value; }
-		}
+		
 		
 		public override string ToString() {
 			// loan
@@ -195,20 +181,7 @@
 				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
 			}// else sb.Append("No freeze interest.");
 
-			sb.Append(Environment.NewLine).Append("SchedulePayments:");
-
-			if (SchedulePayments.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedulePayments)));
-				SchedulePayments.ForEach(s => sb.Append(s.ToString()));
-			} //else sb.Append("No SchedulePayments.");
-
-			sb.Append(Environment.NewLine).Append("FeePayments:");
-
-			if (FeePayments.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFeePayments)));
-				FeePayments.ForEach(s => sb.Append(s.ToString()));
-			} // else sb.Append("No FeePayments.");
-
+			
 			sb.Append(Environment.NewLine).Append("Loan options:");
 
 			if (LoanOptions.LoanOptionsID > 0) {

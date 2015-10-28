@@ -160,16 +160,17 @@
 				decimal F = calc.FeesToPay;	// unpaid fees
 				//decimal I = lastPaidSchedule != null ? (calc.GetInterestRate(lastPaidSchedule.Date.AddDays(1), this.Result.FirstItemDate) *P) : (calc.GetInterestRate(this.tLoan.Date.Date.AddDays(1), this.Result.FirstItemDate) * P); // unpaid interest till rescheduling start date
 				decimal I = (totalEarlyPayment - P - F);	// unpaid interest till first rescheduled item
+				I = I < 0 ? 0 : I; // bugfix EZ-4236
 				decimal r = ((this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest)) ? 0 : this.tLoan.InterestRate;
 
 				this.Result.ReschedulingBalance = (P + I + F); // not final - add to I period from rescheduling date untill new maturity date
 
-				Log.Debug("--------------P: {0}, I: {1}, F: {2}, LoanCloseDate: {3}, totalEarlyPayment: {4}, r: {5}, ReschedulingBalance: {6}, \n lastPaidSchedule: {7}", 
-					P, 
-					I, 
-					F, 
+				Log.Debug("--------------P: {0}, I: {1}, F: {2}, LoanCloseDate: {3}, totalEarlyPayment: {4}, r: {5}, ReschedulingBalance: {6}, \n lastPaidSchedule: {7}",
+					P,
+					I,
+					F,
 					this.Result.LoanCloseDate.Date,
-					totalEarlyPayment, 
+					totalEarlyPayment,
 					r,
 					this.Result.ReschedulingBalance,
 					lastPaidSchedule);

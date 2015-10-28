@@ -42,9 +42,17 @@
 		public NL_LoanHistory History { get; set; }
 		public NL_LoanRollovers Rollover { get; set; } // not supported yet
 		public Action Action { get; set; } // not supported yet (re-scheduling, etc)
+		
+		public NL_LoanHistory CurrentHistory { get; set; }
 
+		// used to hold data of the current history
+		//public decimal LoanAmount { get; set; }
+		//public decimal RepaymentIntervalTypeID { get; set; }
+		//public decimal RepaymentCount { get; set; }
+		//public decimal InterestRate { get; set; }
+		//public int InterestOnlyRepaymentCount { get; set; }
 
-		//// A, i.e. total principal of loan == initialAmount
+		/*//// A, i.e. total principal of loan == initialAmount
 		//protected decimal totalPrincipal { get; set; }
 		//	Money that really have customer. Loan balance without interest and fees. деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee. 
 		protected decimal openPrincipal { get; set; } //private decimal _principal;
@@ -63,7 +71,7 @@
 		// to be paid
 		protected decimal openInterest { get; set; }
 		// interest paid on the date of event
-		protected decimal paidInterest { get; set; }
+		protected decimal paidInterest { get; set; }*/
 		
 
 		private readonly int priority;

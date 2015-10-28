@@ -3,6 +3,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using System.Globalization;
 	using ConfigManager;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
