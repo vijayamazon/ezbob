@@ -65,8 +65,6 @@ BEGIN
 		ExperianNonLimitedResults nltd
 	WHERE
 		nltd.ServiceLogID = @ServiceLogID
-		AND
-		nltd.IsActive = 1
 
 	------------------------------------------------------------------------------
 
