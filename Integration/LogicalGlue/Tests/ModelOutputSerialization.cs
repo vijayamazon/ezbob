@@ -6,9 +6,9 @@
 	using NUnit.Framework;
 
 	[TestFixture]
-	class TestSerialization {
+	class ModelOutputSerialization {
 		[Test]
-		public void TestModelOutput() {
+		public void DoTest() {
 			ModelOutput mo = CreateModelOutput();
 
 			string serializedClass = JsonConvert.SerializeObject(mo);
@@ -18,7 +18,7 @@
 			ModelOutput dcc = JsonConvert.DeserializeObject<ModelOutput>(serializedClass);
 
 			Assert.AreEqual(serializedClass, JsonConvert.SerializeObject(dcc));
-		} // TestModelOutput
+		} // DoTest
 
 		private ModelOutput CreateModelOutput() {
 			var mo = new ModelOutput {
@@ -27,8 +27,12 @@
 					Score = 28,
 					EncodedResult = -1,
 					DecodedResult = "Goooooooooooood",
-					ListRangeErrors = new List<string>(new [] { "err 0", "err 1", }),
 					MapOutputRatios = new Dictionary<string, decimal>(),
+					Warnings = new List<Warning> {
+						new Warning { FeatureName = "feature", MaxValue = "100", MinValue = "0", Value = "ab", },
+						new Warning { FeatureName = null, MaxValue = null, MinValue = null, Value = null, },
+						new Warning { FeatureName = "FEATURE", MaxValue = "900", MinValue = "1", Value = "-1", },
+					},
 				},
 				Error = new Error {
 					ErrorCode = "error code",
@@ -58,11 +62,6 @@
 						},
 					},
 					MissingColumns = new List<string> { "missing 0", "", "missing 1", null, "  ", "missing 2", },
-					Warnings = new List<Warning> {
-						new Warning { FeatureName = "feature", MaxValue = "100", MinValue = "0", Value = "ab", },
-						new Warning { FeatureName = null, MaxValue = null, MinValue = null, Value = null, },
-						new Warning { FeatureName = "FEATURE", MaxValue = "900", MinValue = "1", Value = "-1", },
-					},
 				},
 			};
 
@@ -73,5 +72,5 @@
 		} // CreateModelOutput
 
 		private static readonly Guid uuid = Guid.NewGuid();
-	} // class TestSerialization
+	} // class ModelOutputSerialization
 } // namespace

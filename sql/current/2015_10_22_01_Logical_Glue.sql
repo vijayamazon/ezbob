@@ -96,19 +96,6 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('LogicalGlueResponseListRangeErrors') IS NULL
-BEGIN
-	CREATE TABLE LogicalGlueResponseListRangeErrors (
-		ListRangeErrorID BIGINT IDENTITY(1, 1) NOT NULL,
-		ResponseID BIGINT NOT NULL,
-		ColumnName NVARCHAR(255) NULL,
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogicalGlueResponseListRangeErrors PRIMARY KEY (ListRangeErrorID),
-		CONSTRAINT FK_LogicalGlueResponseListRangeErrors_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
-	)
-END
-GO
-
 IF OBJECT_ID('LogicalGlueResponseMissingColumns') IS NULL
 BEGIN
 	CREATE TABLE LogicalGlueResponseMissingColumns (

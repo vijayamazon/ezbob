@@ -11,7 +11,7 @@
 		} // IsEmpty
 	} // class EncodingFailure
 
-	public static class EncodingFailureExe {
+	public static class EncodingFailureExt {
 		public static EncodingFailure CloneFrom(this EncodingFailure target, EncodingFailure source) {
 			if (source == null)
 				return new EncodingFailure();

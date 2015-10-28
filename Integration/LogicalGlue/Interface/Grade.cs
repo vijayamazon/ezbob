@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Interface {
 	using System.Collections.Generic;
-	using System.Linq;
 
 	public class Grade {
 		public decimal? Score { get; set; }
@@ -9,9 +8,37 @@
 
 		public string DecodedResult { get; set; }
 
-		public List<string> ListRangeErrors { get; set; }
+		public List<Warning> Warnings{
+			get {
+				if (this.warnings == null)
+					this.warnings = new List<Warning>();
 
-		public Dictionary<string, decimal> MapOutputRatios { get; set; }
+				return this.warnings;
+			} // get
+			set { this.warnings = Utility.SetList(this.warnings, value); }
+		} // Warnings
+
+		public Dictionary<string, decimal> MapOutputRatios {
+			get {
+				if (this.mapOutputRatios == null)
+					this.mapOutputRatios = new Dictionary<string, decimal>();
+
+				return this.mapOutputRatios;
+			} // get
+			set {
+				if (this.mapOutputRatios == null)
+					this.mapOutputRatios = new Dictionary<string, decimal>();
+				else
+					this.mapOutputRatios.Clear();
+
+				if (value != null)
+					foreach (KeyValuePair<string, decimal> pair in value)
+						this.mapOutputRatios[pair.Key] = pair.Value;
+			} // set
+		} // MapOutputRatios
+
+		private List<Warning> warnings;
+		private Dictionary<string, decimal> mapOutputRatios;
 	} // class Grade
 
 	public static class GradeExt {
@@ -24,23 +51,8 @@
 			target.Score = source.Score;
 			target.EncodedResult = source.EncodedResult;
 			target.DecodedResult = source.DecodedResult;
-
-			if (target.MapOutputRatios == null)
-				target.MapOutputRatios = new Dictionary<string, decimal>();
-			else
-				target.MapOutputRatios.Clear();
-
-			if (source.MapOutputRatios != null)
-				foreach (var pair in source.MapOutputRatios)
-					target.MapOutputRatios[pair.Key] = pair.Value;
-
-			if (target.ListRangeErrors == null)
-				target.ListRangeErrors = new List<string>();
-			else
-				target.ListRangeErrors.Clear();
-
-			if (source.ListRangeErrors != null)
-				target.ListRangeErrors.AddRange(source.ListRangeErrors.Where(s => !string.IsNullOrWhiteSpace(s)));
+			target.MapOutputRatios = source.MapOutputRatios;
+			target.Warnings = Utility.SetList(target.Warnings, source.Warnings);
 
 			return target;
 		} // CloneFrom

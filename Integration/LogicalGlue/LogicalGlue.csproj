@@ -48,8 +48,11 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="HarvesterInterface\EncodingFailure.cs" />
     <Compile Include="HarvesterInterface\IHarvester.cs" />
     <Compile Include="HarvesterInterface\Reply.cs" />
+    <Compile Include="HarvesterInterface\Response.cs" />
+    <Compile Include="HarvesterInterface\Warning.cs" />
     <Compile Include="Harvester\Harvester.cs" />
     <Compile Include="Interface\ICanBeEmpty.cs" />
     <Compile Include="Interface\RequestType.cs" />
@@ -58,11 +61,13 @@
     <Compile Include="Interface\Inference.cs" />
     <Compile Include="Interface\Grade.cs" />
     <Compile Include="Interface\ModelOutput.cs" />
+    <Compile Include="Interface\Utility.cs" />
     <Compile Include="Interface\Warning.cs" />
     <Compile Include="Interface\IProcessor.cs" />
     <Compile Include="Processor\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\TestSerialization.cs" />
+    <Compile Include="Tests\ModelOutputSerialization.cs" />
+    <Compile Include="Tests\ReplySerialization.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Keeper\" />

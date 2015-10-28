@@ -8,10 +8,6 @@ IF OBJECT_ID('LogicalGlueResponseMissingColumns') IS NOT NULL
 	DROP TABLE LogicalGlueResponseMissingColumns
 GO
 
-IF OBJECT_ID('LogicalGlueResponseListRangeErrors') IS NOT NULL
-	DROP TABLE LogicalGlueResponseListRangeErrors
-GO
-
 IF OBJECT_ID('LogicalGlueResponseEncodingFailures') IS NOT NULL
 	DROP TABLE LogicalGlueResponseEncodingFailures
 GO
