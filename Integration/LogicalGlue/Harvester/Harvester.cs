@@ -7,12 +7,12 @@
 		public Harvester() {
 		} // constructor
 
-		public IInferenceResult EvaluateCustomer(int customerID) {
-			return new InferenceResult(); // TODO
+		public IInference EvaluateCustomer(int customerID) {
+			return new Inference(); // TODO
 		} // EvaluateCustomer
 
-		public IInferenceResult GetHistoricalEvaluation(int customerID, DateTime date) {
-			return new InferenceResult(); // TODO
+		public IInference GetHistoricalEvaluation(int customerID, DateTime date) {
+			return new Inference(); // TODO
 		} // GetHistoricalEvaluation
 	} // class Harvester
 } // namespace

@@ -3,8 +3,8 @@
 	using System.Collections.Generic;
 	using Ezbob.Integration.LogicalGlue.Interface;
 
-	public class InferenceResult : IInferenceResult {
-		public InferenceResult() {
+	public class Inference : IInference {
+		public Inference() {
 			Data = new Dictionary<RequestType, IModelOutput>();
 		} // constructor
 
@@ -102,5 +102,5 @@
 		public IEnumerable<IModelOutput> Values {
 			get { return Data.Values; }
 		} // Values
-	} // class InferenceResult
+	} // class Inference
 } // namespace

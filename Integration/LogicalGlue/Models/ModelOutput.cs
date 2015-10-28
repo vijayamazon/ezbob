@@ -1,41 +1,48 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Models {
-	using System.Collections.Generic;
 	using Ezbob.Integration.LogicalGlue.Interface;
 
 	public class ModelOutput : IModelOutput {
 		public string Status { get; set; }
 
-		public decimal? Score { get; set; }
+		IGrade IModelOutput.Grade {
+			get { return Grade; }
+			set { SetGrade(value); }
+		} // IModelOutput.Grade
 
-		public long EncodedResult { get; set; }
+		public Grade Grade {
+			get {
+				if (this.grade == null)
+					this.grade = new Grade();
 
-		public string DecodedResult { get; set; }
+				return this.grade;
+			} // get
+			set { SetGrade(value); }
+		} // Grade
 
-		IReadOnlyDictionary<string, decimal> IModelOutput.MapOutputRatios {
-			get { return MapOutputRatios; }
-			set {
-				MapOutputRatios = MapOutputRatios ?? new Dictionary<string, decimal>();
-				MapOutputRatios.Clear();
+		IError IModelOutput.Error {
+			get { return Error; }
+			set { SetError(value); }
+		} // IModelOutput.Error
 
-				foreach (var pair in value)
-					MapOutputRatios[pair.Key] = pair.Value;
-			} // set
-		} // IModelOutput.MapOutputRatios
+		public Error Error {
+			get {
+				if (this.error == null)
+					this.error = new Error();
 
-		IReadOnlyCollection<string> IModelOutput.ListRangeErrors {
-			get { return ListRangeErrors.AsReadOnly(); }
-			set {
-				if (ListRangeErrors == null)
-					ListRangeErrors = new List<string>(value);
-				else {
-					ListRangeErrors.Clear();
-					ListRangeErrors.AddRange(value);
-				} // if
-			} // set
-		} // IModelOutput.ListRangeErrors
+				return this.error;
+			} // get
+			set { SetError(value); }
+		} // Set
 
-		public List<string> ListRangeErrors { get; set; }
+		private void SetGrade(IGrade grd) {
+			this.grade = this.grade.CloneFrom(grd);
+		} // SetGrade
 
-		public Dictionary<string, decimal> MapOutputRatios { get; set; }
+		private void SetError(IError err) {
+			this.error = this.error.CloneFrom(err);
+		} // SetError
+
+		private Grade grade;
+		private Error error;
 	} // class ModelOutput
 } // namespace

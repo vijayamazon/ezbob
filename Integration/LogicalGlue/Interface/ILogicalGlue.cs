@@ -2,7 +2,7 @@
 	using System;
 
 	public interface ILogicalGlue {
-		IInferenceResult EvaluateCustomer(int customerID);
-		IInferenceResult GetHistoricalEvaluation(int customerID, DateTime date);
+		IInference EvaluateCustomer(int customerID);
+		IInference GetHistoricalEvaluation(int customerID, DateTime date);
 	} // interface ILogicalGlue
 } // namespace
