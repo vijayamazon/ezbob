@@ -75,6 +75,7 @@
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />
+    <Compile Include="ActionResults\NLLongActionResult.cs" />
     <Compile Include="ActionResults\ReschedulingActionResult.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
     <Compile Include="ActionResults\AlibabaSaleContractActionResult.cs" />
@@ -242,6 +243,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EzServiceClient\EzServiceClient.csproj">
+      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
+      <Name>EzServiceClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzServiceConfiguration\EzServiceConfiguration.csproj">
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>

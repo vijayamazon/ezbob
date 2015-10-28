@@ -12,7 +12,6 @@
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
 	using Ezbob.Utils;
-	using Ezbob.Utils.Extensions;
 	using EzBob.Backend.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -83,31 +82,31 @@
 				IsActive = true,
 				Notes = null
 			};
-			var stra = new AddLoanOptions(NL_options, null);
-			stra.Execute();
+			//var stra = new AddLoanOptions(NL_options, null);
+			//stra.Execute();
 		}
 
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				//CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-				Loan = new NL_Loans()
-			};
-			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
-			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
-			strategy.Context.UserID = model.UserID;
-			try {
-				strategy.Execute();
-				Console.WriteLine(strategy.Result.Error);
+			//NL_Model model = new NL_Model(56) {
+			//	UserID = 357,
+			//	//CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
+			//	Loan = new NL_Loans()
+			//};
+			//model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
+			//BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
+			//strategy.Context.UserID = model.UserID;
+			//try {
+			//	strategy.Execute();
+			//	Console.WriteLine(strategy.Result.Error);
 
-				m_oLog.Debug(strategy.Result.Loan);
-				m_oLog.Debug(strategy.Result.Offer);
+			//	m_oLog.Debug(strategy.Result.Loan);
+			//	m_oLog.Debug(strategy.Result.Offer);
 
-			} catch (Exception ex) {
-				Console.WriteLine(ex);
-			}
+			//} catch (Exception ex) {
+			//	Console.WriteLine(ex);
+			//}
 		}
 
 
@@ -133,7 +132,7 @@
 		[Test]
 		public void AddOffer() {
 
-			GetLastOffer lastOfferstrategy = new GetLastOffer(374);
+		/*	GetLastOffer lastOfferstrategy = new GetLastOffer(374);
 			lastOfferstrategy.Execute();
 			NL_Offers lastOffer = lastOfferstrategy.Offer;
 			long crID = 337;
@@ -176,7 +175,7 @@
 			AddOffer offerStrategy = new AddOffer(lastOffer, offerFees);
 			offerStrategy.Execute();
 			Console.WriteLine(offerStrategy.OfferID);
-			Console.WriteLine(offerStrategy.Error);
+			Console.WriteLine(offerStrategy.Error);*/
 		}
 
 		public void Discounts() {
@@ -241,7 +240,7 @@
 
 			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
 
-			AddLoan strategy = new AddLoan(model);
+			/*AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
@@ -252,7 +251,7 @@
 				Console.WriteLine("LoanID: {0}, Error: {1}", strategy.LoanID, strategy.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
-			}
+			}*/
 		}
 
 
@@ -341,12 +340,12 @@
 			//	PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done
 			//};
 
-			var s = new AddPayment(nlModel);
+			/*var s = new AddPayment(nlModel);
 			try {
 				s.Execute();
 			} catch (Exception e) {
 				Console.WriteLine(e);
-			}
+			}*/
 		}
 
 		/*[Test]
@@ -601,10 +600,10 @@
 
 		[Test]
 		public void LoanStateStrategy() {
-			const long loanID = 13;
+		/*	const long loanID = 13;
 			var strategy = new LoanState(new NL_Model(56), loanID, DateTime.UtcNow);
 			strategy.Execute();
-			this.m_oLog.Debug(strategy.Result.Loan);
+			this.m_oLog.Debug(strategy.Result.Loan);*/
 		}
 
 		[Test]
@@ -624,7 +623,7 @@
 				Loan = new NL_Loans()
 			};
 
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			/*LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
 			strategy.Execute();
 
 			model = strategy.Result;
@@ -636,8 +635,12 @@
 				m_oLog.Debug(calc);
 			} catch (Exception exception) {
 				m_oLog.Error("{0}", exception);
-			}
+			}*/
 		}
+
+		// n = A/(m-Ar);
+		// total = A+A*r*((n+1)/2)
+		
 
 	} // class TestNewLoan
 } // namespace

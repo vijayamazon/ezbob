@@ -37,8 +37,7 @@ namespace EzBob.Web.Infrastructure
 	using PayPalServiceLib.Common;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Models;
-	using Code;
-	using Code.Agreements;
+	using Code;	
 	using Code.MpUniq;
 	using Models.Repository;
 	using ServiceClientProxy;

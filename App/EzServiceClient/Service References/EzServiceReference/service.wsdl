@@ -569,19 +569,17 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
-<<<<<<< HEAD
   <wsdl:message name="IEzService_BuildLoanFromOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:BuildLoanFromOffer" />
   </wsdl:message>
   <wsdl:message name="IEzService_BuildLoanFromOffer_OutputMessage">
     <wsdl:part name="parameters" element="tns:BuildLoanFromOfferResponse" />
-=======
+  </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
->>>>>>> master
   </wsdl:message>
   <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
@@ -1824,15 +1822,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
-<<<<<<< HEAD
     <wsdl:operation name="BuildLoanFromOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" message="tns:IEzService_BuildLoanFromOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse" message="tns:IEzService_BuildLoanFromOffer_OutputMessage" />
-=======
+    </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
->>>>>>> master
     </wsdl:operation>
     <wsdl:operation name="MarketplaceInstantUpdate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
@@ -3176,13 +3172,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-<<<<<<< HEAD
     <wsdl:operation name="BuildLoanFromOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" style="document" />
-=======
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoanStatusAfterPayment" style="document" />
->>>>>>> master
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4570,36 +4570,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-<<<<<<< HEAD
-      <soap12:address location="net.tcp://dor-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://dor-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DOR-PC\Dor</Upn>
-=======
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
->>>>>>> master
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-<<<<<<< HEAD
-      <soap12:address location="net.tcp://dor-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://dor-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DOR-PC\Dor</Upn>
-=======
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
->>>>>>> master
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

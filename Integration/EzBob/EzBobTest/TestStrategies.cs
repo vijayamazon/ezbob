@@ -784,15 +784,7 @@
 		public void Test1() {
 			Console.WriteLine("AAA");
 		}
-
-	
-
-
 		
-
-		
-
-		/*[Test]
 	
 
 		[Test]
@@ -803,7 +795,7 @@
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(8); //new DateTime(2015, 10, 02); 
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
 			reModel.PaymentPerInterval = 0m;
@@ -827,7 +819,7 @@
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(5);
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = true;
 			reModel.SaveToDB = false;
 			reModel.StopFutureInterest = true;
@@ -920,78 +912,11 @@
 
 	
 
-		/*[Test]
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();#1#
-				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
-		}*/
-		
-	
-
-		[Test]
-		public void TestSFRetrier() {
-			DateTime now = DateTime.UtcNow;
-			AddOpportunity add = new AddOpportunity(28, new OpportunityModel {
-				Name = "NewOpportunity",
-				Email = "alexbo+off02@ezbob.com",
-				CreateDate = now,
-				ExpectedEndDate = now.AddDays(7),
-				RequestedAmount = 1000,
-				Stage = OpportunityStage.s5.DescriptionAttr(),
-				Type = OpportunityType.FinishLoan.DescriptionAttr()
-			});
-			add.Execute();
-		}
 
 
 	
 
-		[Test]
-		public void TestCollectionSms() {
-			/*
-			SetLateLoanStatus stra = new SetLateLoanStatus();
-			stra.LoadSmsTemplates();
-			var modelEzbob = new SetLateLoanStatus.CollectionDataModel {
-				OriginID = 1,
-				FirstName = "John",
-				AmountDue = 125,
-				DueDate = DateTime.Today.AddDays(-5),
-				SmsSendingAllowed = false,
-				CustomerID = 199
-			};
-			var modelEverline = new SetLateLoanStatus.CollectionDataModel {
-				OriginID = 2,
-				FirstName = "John",
-				AmountDue = 125,
-				DueDate = DateTime.Today.AddDays(-5),
-				SmsSendingAllowed = false,
-				CustomerID = 199
-			};
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay0);
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay1to6);
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay7);
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay8to14);
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay15);
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay21);
-			stra.SendCollectionSms(modelEzbob, SetLateLoanStatus.CollectionType.CollectionDay31);
 
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay0);
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay1to6);
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay7);
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay8to14);
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay15);
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay21);
-			stra.SendCollectionSms(modelEverline, SetLateLoanStatus.CollectionType.CollectionDay31);
-        [Test]
-        public void TestDataSharing() {
-            DataSharing stra = new DataSharing(16142, AlibabaBusinessType.APPLICATION_WS_3);
-            stra.Execute();
-            Console.WriteLine(stra.Result);
 
-        }
-			*/
-		}
-
-		
-
-	}
+}
 }
