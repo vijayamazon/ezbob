@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq.Expressions;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Models;
 
 	public interface IExressionBuilder

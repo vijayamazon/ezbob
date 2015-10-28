@@ -2,7 +2,7 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
 	using Ezbob.Backend.Strategies.OpenPlatform.Provider.Contracts;
 	using RulesEngine.Contracts;

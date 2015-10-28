@@ -5,7 +5,7 @@
 	using System.Linq;
 	using System.Linq.Expressions;
 	using System.Reflection;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Contracts;
 	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Models;
 
@@ -17,8 +17,8 @@
                                                                 ParameterExpression parameterExpressionLeft,
                                                                 ParameterExpression parameterExpressionRight)
         {
-            var leftOperand = MemberExpression.Property(parameterExpressionLeft, leftPropertyName);
-            var rightOperand = MemberExpression.Property(parameterExpressionRight, rightPropertyName);
+            var leftOperand = Expression.Property(parameterExpressionLeft, leftPropertyName);
+            var rightOperand = Expression.Property(parameterExpressionRight, rightPropertyName);
 
             return BuildSubExpression(ruleOperator, leftOperand, rightOperand);
         }

@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL
 {
 	using System.Collections.Generic;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
 	using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
 	using StructureMap.Attributes;

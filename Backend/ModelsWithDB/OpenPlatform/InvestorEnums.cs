@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ezbob.Backend.ModelsWithDB.Investor
+﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform
 {
-    public enum Operator
+	public enum Operator
     {
         Or = 0,
         And = 1,

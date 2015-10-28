@@ -1,6 +1,6 @@
 ﻿namespace EzBobTest.OpenPlatformTests.Investor {
 	using System.Collections.Generic;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.BLL;
 	using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
 	using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;

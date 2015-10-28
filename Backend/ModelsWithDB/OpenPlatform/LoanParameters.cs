@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.Investor
+﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform
 {
     public class OfferParameters
     {
