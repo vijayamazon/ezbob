@@ -1,0 +1,2 @@
+ALTER TABLE AlibabaSentData ALTER COLUMN ErrorMessage NVARCHAR(2000)
+GO
