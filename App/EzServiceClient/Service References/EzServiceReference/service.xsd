@@ -1300,6 +1300,41 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="DeactivateLoanInterestFreeze">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="customerID" type="xs:int" />
+        <xs:element minOccurs="0" name="oldLoanId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="oldLoanInterestFreezeID" type="xs:int" />
+        <xs:element minOccurs="0" name="deactivationDate" nillable="true" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeactivateLoanInterestFreezeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="DeactivateLoanInterestFreezeResult" nillable="true" type="q112:NLLongActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddLoanInterestFreeze">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="customerID" type="xs:int" />
+        <xs:element minOccurs="0" name="oldLoanId" nillable="true" type="xs:int" />
+        <xs:element xmlns:q113="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanInterestFreeze" nillable="true" type="q113:NL_LoanInterestFreeze" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddLoanInterestFreezeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q114="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanInterestFreezeResult" nillable="true" type="q114:NLLongActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="MarketplaceInstantUpdate">
     <xs:complexType>
       <xs:sequence>

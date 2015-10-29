@@ -195,6 +195,8 @@
     <Compile Include="NewLoan\AddLoan.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NewLoan\DeactivateLoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\AddLoanInterestFreeze.cs" />
     <Compile Include="NewLoan\BuildLoanFromOffer.cs" />
     <Compile Include="NewLoan\DAL\ILoanDAL.cs" />
     <Compile Include="NewLoan\DAL\LoanDAL.cs" />

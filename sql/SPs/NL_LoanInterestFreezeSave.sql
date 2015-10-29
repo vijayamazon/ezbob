@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoanInterestFreezeList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanInterestFreezeList AS TABLE (
-	[LoanInterestFreezeID] BIGINT NOT NULL,
+	[OldLoanInterestFreezeID] INT,
 	[LoanID] BIGINT NOT NULL,
 	[StartDate] DATETIME NULL,
 	[EndDate] DATETIME NULL,
@@ -30,7 +30,7 @@ BEGIN
 	SET NOCOUNT ON;	
 
 	INSERT INTO NL_LoanInterestFreeze (
-		[LoanInterestFreezeID] ,
+		[OldLoanInterestFreezeID],
 		[LoanID] ,
 		[StartDate] ,
 		[EndDate] ,
@@ -40,8 +40,8 @@ BEGIN
 		[AssignedByUserID] ,
 		[DeletedByUserID]
 	) SELECT
-		[LoanInterestFreezeID] ,
-		[LoanID] ,
+		[OldLoanInterestFreezeID],
+		[LoanID] ,		
 		[StartDate] ,
 		[EndDate] ,
 		[InterestRate],

@@ -141,6 +141,7 @@
 
 				// if StopFutureInterest checked - add active "freeze inteval" from FirstItemDate untill NoLimitDate
 				if (this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest) {
+                    //TODO : also add it to NL_InterestFreeze && deactivating.
 					LoanInterestFreeze freeze = new LoanInterestFreeze {
 						Loan = this.tLoan,
 						StartDate = lastPaidSchedule != null ? lastPaidSchedule.Date : this.tLoan.Date.Date, //this.Result.FirstItemDate,

@@ -41,6 +41,17 @@
 		[OperationContract]
 		NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
 
+        [OperationContract]
+        NLLongActionResult DeactivateLoanInterestFreeze(int userID,
+            int customerID,
+            int? oldLoanId,
+            int oldLoanInterestFreezeID,
+            DateTime? deactivationDate);
+        
+        [OperationContract]
+        NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, int? oldLoanId, NL_LoanInterestFreeze loanInterestFreeze);
+
+
     } // interface IEzServiceNewLoan
 
 } // namespace EzService

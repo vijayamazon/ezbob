@@ -9,7 +9,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		[LoanInterestFreezeID]
+	   [LoanInterestFreezeID]
+	  ,[OldLoanInterestFreezeID]
       ,[LoanID]
       ,[StartDate]
       ,[EndDate]

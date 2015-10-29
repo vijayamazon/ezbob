@@ -1,23 +1,23 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
-	using System;
-	using System.Globalization;
-	using System.Linq;
-	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models;
-	using Infrastructure;
-	using Infrastructure.Attributes;
-	using NHibernate;
-	using PaymentServices.Calculators;
-	using System.Web.Mvc;
-	using DbConstants;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Models;
-	using ServiceClientProxy;
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Web.Mvc;
+    using ConfigManager;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using EzBob.Models;
+    using EzBob.Web.Areas.Underwriter.Models;
+    using EzBob.Web.Infrastructure;
+    using EzBob.Web.Infrastructure.Attributes;
+    using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Loans;
+    using EZBob.DatabaseLib.Model.Database.Repository;
+    using EZBob.DatabaseLib.Repository;
+    using NHibernate;
+    using PaymentServices.Calculators;
+    using ServiceClientProxy;
 
-	public class CollectionStatusController : Controller {
+    public class CollectionStatusController : Controller {
 		private readonly ICustomerRepository customerRepository;
 		private readonly CustomerStatusesRepository customerStatusesRepository;
 		private readonly LoanOptionsRepository loanOptionsRepository;
@@ -129,6 +129,7 @@
 						});
 
 						this.loanRepository.SaveOrUpdate(loan);
+					    SaveLoanInterestFreeze(loan.InterestFreeze.Last(), customerId, loan.Id);
 					}
 
 					//collection and external status is ok
@@ -143,6 +144,7 @@
 						if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
 							foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
 								interestFreeze.DeactivationDate = now;
+                                DeactivateLoanInterestFreeze(interestFreeze, customerId, loan.Id);
 							}
 
 							this.loanRepository.SaveOrUpdate(loan);
@@ -177,5 +179,38 @@
 			}
 			return Json(new { });
 		}
+
+        private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze,
+                                                    int customerId
+                                                    , int loanID)
+        {
+            var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this.context.UserId,
+                                                                                        customerId,
+                                                                                        loanID,
+                                                                                        loanInterestFreeze.Id,
+                                                                                        loanInterestFreeze.DeactivationDate);
+        }
+
+        private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze,
+                                            int customerId,
+                                            int loanID)
+        {
+
+            //NL Loan Options
+            NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze()
+            {
+                StartDate = loanInterestFreeze.StartDate,
+                OldLoanInterestFreezeID = loanInterestFreeze.Id,
+                ActivationDate = loanInterestFreeze.ActivationDate,
+                DeactivationDate = loanInterestFreeze.DeactivationDate,
+                EndDate = loanInterestFreeze.EndDate,
+                InterestRate = loanInterestFreeze.InterestRate,
+                LoanID = loanInterestFreeze.Loan.Id,
+                AssignedByUserID = this.context.UserId,
+                DeletedByUserID = null,
+            };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this.context.UserId, customerId, loanID, nlLoanInterestFreeze);
+        }
 	}
 }

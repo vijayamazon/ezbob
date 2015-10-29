@@ -403,6 +403,8 @@
 				this._loans.SaveOrUpdate(loan);
 			}).Execute();
 
+		    SaveLoanInterestFreeze(loan.InterestFreeze.Last(), id);
+
 			loan = this._loans.Get(id);
 			model = this._loanModelBuilder.BuildModel(loan);
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -426,6 +428,8 @@
 
 			}).Execute();
 
+            DeactivateLoanInterestFreeze(lif);
+
 			Log.DebugFormat("remove freeze interest for customer {0}", loan.Customer.Id);
 
 			loan = this._loans.Get(id);
@@ -441,11 +445,47 @@
 			return Json(model);
 		} // RemoveFreezeInterval
 
-        private void SaveNewLoanOptions(LoanOptions options,
-                                        List<String> PropertiesUpdateList)
+
+        private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze)
         {
 
             var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+            int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id;
+
+            var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId, 
+                                                                                        customerId,
+                                                                                        loanInterestFreeze.Loan.Id,
+                                                                                        loanInterestFreeze.Id,
+                                                                                        loanInterestFreeze.DeactivationDate);
+            Log.DebugFormat("NL DeactivateLoanInterestFreeze LoanInterestFreezeID : {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+        }
+        private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze,
+                                            int loanID) {
+            
+            int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id; 
+
+            //NL Loan Options
+            NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze()
+            {
+                StartDate = loanInterestFreeze.StartDate,
+                OldLoanInterestFreezeID = loanInterestFreeze.Id,
+                ActivationDate = loanInterestFreeze.ActivationDate,
+                DeactivationDate = loanInterestFreeze.DeactivationDate,
+                EndDate =  loanInterestFreeze.EndDate,
+                InterestRate =  loanInterestFreeze.InterestRate,
+                LoanID = loanInterestFreeze.Loan.Id,
+                AssignedByUserID = this._context.UserId,
+                DeletedByUserID = null,
+            };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, loanID, nlLoanInterestFreeze);
+            Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+        }
+
+        private void SaveNewLoanOptions(LoanOptions options,
+                                List<String> PropertiesUpdateList)
+        {
+
             int customerId = this._loans.Get(options.LoanId).Customer.Id;
 
             //NL Loan Options
@@ -465,7 +505,7 @@
                 StopAutoChargeDate = options.StopAutoChargeDate,
                 StopLateFeeFromDate = options.StopLateFeeFromDate,
                 StopLateFeeToDate = options.StopLateFeeToDate,
-                UserID = context.UserId,
+                UserID = this._context.UserId,
                 InsertDate = DateTime.Now,
                 IsActive = true,
                 Notes = "Late fee option saved From Edit Loan page",

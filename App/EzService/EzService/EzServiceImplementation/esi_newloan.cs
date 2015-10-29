@@ -1,4 +1,4 @@
-﻿﻿namespace EzService.EzServiceImplementation {
+﻿namespace EzService.EzServiceImplementation {
 	 using System;
 	 using System.Collections.Generic;
 	 using Ezbob.Backend.Models.NewLoan;
@@ -73,6 +73,35 @@
 			 };
 		 } // AddLoanOptions
 
+        public NLLongActionResult AddLoanInterestFreeze(int userID,
+                                                        int customerID,
+                                                        int? oldLoanId,
+                                                        NL_LoanInterestFreeze loanInterestFreeze)
+        {
+            AddLoanInterestFreeze stra;
+            var amd = ExecuteSync(out stra, customerID, userID, oldLoanId, loanInterestFreeze);
+            return new NLLongActionResult
+            {
+                MetaData = amd,
+                Value = stra.LoanInterestFreezeID
+            };
+        } // AddLoanOptions
+
+        public NLLongActionResult DeactivateLoanInterestFreeze(int userID,
+                                                                int customerID,
+                                                                int? oldLoanId,
+                                                                int oldLoanInterestFreezeID,
+                                                                DateTime? deactivationDate)
+        {
+            DeactivateLoanInterestFreeze stra;
+            var amd = ExecuteSync(out stra, customerID, userID, oldLoanId, oldLoanInterestFreezeID, deactivationDate);
+            return new NLLongActionResult
+            {
+                MetaData = amd,
+                Value = stra.OldLoanInterestFreezeID
+            };
+        } // AddLoanOptions
+
 		 public ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reAgrs) {
 			 Type t;
 
@@ -128,12 +157,11 @@
 				 strategy.Result.Error = "InternalServerError";
 			 }
 
-			 return new NewLoanModelActionResult() {
-				 MetaData = amd,
-				 Value = strategy.Result
-			 };
-		 }*/
-		 // CalculateLoanSchedule
+			return new NewLoanModelActionResult() {
+				MetaData = amd,
+				Value = strategy.Result
+			};
+		}*/ // CalculateLoanSchedule
 
 		 public NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
 			 ActionMetaData amd = null;

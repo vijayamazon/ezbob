@@ -581,6 +581,12 @@
   <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_AddLoanInterestFreeze_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddLoanInterestFreeze" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddLoanInterestFreeze_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddLoanInterestFreezeResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
   </wsdl:message>
@@ -1829,6 +1835,10 @@
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddLoanInterestFreeze">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze" message="tns:IEzService_AddLoanInterestFreeze_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreezeResponse" message="tns:IEzService_AddLoanInterestFreeze_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarketplaceInstantUpdate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
@@ -3174,6 +3184,24 @@
     </wsdl:operation>
     <wsdl:operation name="BuildLoanFromOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeactivateLoanInterestFreeze">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreeze" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddLoanInterestFreeze">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

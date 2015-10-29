@@ -561,6 +561,7 @@ IF OBJECT_ID('NL_LoanInterestFreeze') IS NULL
 BEGIN
 	CREATE TABLE NL_LoanInterestFreeze (
 		LoanInterestFreezeID BIGINT IDENTITY(1, 1) NOT NULL,
+		OldLoanInterestFreezeID BIGINT,
 		LoanID BIGINT NOT NULL,
 		StartDate DATETIME NULL,
 		EndDate DATETIME NULL,
