@@ -27,12 +27,13 @@ EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
 			resizable: true,
 			width: 600,
 			height: 'auto',
-			closeOnEscape: true,
+			closeOnEscape: true
 		};
 	}, // jqoptions
 
 	closeSelf: function() {
 		this.trigger('close');
+		$('body').removeClass('stop-scroll');
 	}, // closeSelf
 
 	onRender: function(){

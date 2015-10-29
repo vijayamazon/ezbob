@@ -56,7 +56,11 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			scrolling: false,
 			close: '<i class="pe-7s-close"></i>',
 			className: 'automation-popup',
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
 			onClosed: function() {
+				$('body').removeClass('stop-scroll');
 				self.onClose();
 			}
 		});

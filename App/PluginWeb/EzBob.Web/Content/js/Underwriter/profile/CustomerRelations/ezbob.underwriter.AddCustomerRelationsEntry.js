@@ -112,7 +112,9 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         Form: 'form#customer-relations-form'
     }, // ui
 
-    onSave: function () {
+    onSave: function() {
+    	$('body').removeClass('stop-scroll');
+
         if (this.ui.Status[0].selectedIndex === 0)
             return false;
 

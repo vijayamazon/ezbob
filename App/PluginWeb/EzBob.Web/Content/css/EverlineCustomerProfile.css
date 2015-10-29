@@ -654,3 +654,12 @@ table.payment-schedule-table td:last-child {
 #refresh_yodlee_help.help_window .dialogue_buttons_container #refreshYodleeBtn {
 	margin-left: 5%;
 }
+
+/* Overlays */
+#cboxOverlay,
+div.ui-widget-overlay {
+  width: 100%;
+  height: 10000px !important;
+  opacity: 0.8;
+  background-color: #28211f;
+}

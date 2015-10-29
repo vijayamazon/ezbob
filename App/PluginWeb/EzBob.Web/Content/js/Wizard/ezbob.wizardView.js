@@ -135,7 +135,13 @@ EzBob.WizardView = EzBob.View.extend({
 		    height: '600px',
 		    maxHeight: '100%',
 		    close: '<i class="pe-7s-close"></i>',
-            className : 'iframe-popup'
+            className : 'iframe-popup',
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
+			onClosed: function() {
+			    $('body').removeClass('stop-scroll');
+		    }
 	    });
 		*/
     },

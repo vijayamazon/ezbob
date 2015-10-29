@@ -1521,7 +1521,8 @@ h3.group-title {
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay {
-    background: #fff;
+    opacity: 0.8;
+	background-color: #28211f;
 }
 
 #colorbox {
@@ -2386,4 +2387,8 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
  .notifications .pe-7s-info {
 	vertical-align: middle;
     padding-bottom: 5px;
+}
+
+ .stop-scroll {
+	overflow: hidden;
 }

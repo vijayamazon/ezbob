@@ -732,6 +732,7 @@ EzBob.ShowMessageEx = function(args) {
 		fOnOpen = function() {
 			if (args.hideClose)
 				$(".ui-dialog-titlebar-close", $(this).parent()).hide();
+			$('body').addClass('stop-scroll');
 		};
 	} else {
 		modalpopup.attr('data-time-to-close', nTimeout - 1);
@@ -769,6 +770,7 @@ EzBob.ShowMessageEx = function(args) {
 
 			$('.ok-button', modalpopup.dialog('widget')).text(args.okText + ' (' + nTimeout + ')');
 			setTimeout(fTimeoutFunc, 1000);
+			$('body').addClass('stop-scroll');
 		};
 	} // if
 
@@ -786,6 +788,7 @@ EzBob.ShowMessageEx = function(args) {
 		close: function() {
 			modalpopup.remove();
 			$(this).remove();
+			$('body').removeClass('stop-scroll');
 		}, // close
 		closeOnEscape: !!args.closeOnEscape,
 	});
