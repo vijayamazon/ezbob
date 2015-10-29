@@ -322,7 +322,7 @@
           <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanInterestFreezeID" type="xs:long" />
-          <xs:element minOccurs="0" name="OldLoanInterestFreezeID" type="xs:long" />
+          <xs:element minOccurs="0" name="OldLoanInterestFreezeID" type="xs:int" />
           <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
         </xs:sequence>
       </xs:extension>

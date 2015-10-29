@@ -575,17 +575,23 @@
   <wsdl:message name="IEzService_BuildLoanFromOffer_OutputMessage">
     <wsdl:part name="parameters" element="tns:BuildLoanFromOfferResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
+  <wsdl:message name="IEzService_DeactivateLoanInterestFreeze_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeactivateLoanInterestFreeze" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
+  <wsdl:message name="IEzService_DeactivateLoanInterestFreeze_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeactivateLoanInterestFreezeResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddLoanInterestFreeze_InputMessage">
     <wsdl:part name="parameters" element="tns:AddLoanInterestFreeze" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddLoanInterestFreeze_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddLoanInterestFreezeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
     <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
@@ -1832,13 +1838,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" message="tns:IEzService_BuildLoanFromOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse" message="tns:IEzService_BuildLoanFromOffer_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="LoanStatusAfterPayment">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
+    <wsdl:operation name="DeactivateLoanInterestFreeze">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreeze" message="tns:IEzService_DeactivateLoanInterestFreeze_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreezeResponse" message="tns:IEzService_DeactivateLoanInterestFreeze_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddLoanInterestFreeze">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze" message="tns:IEzService_AddLoanInterestFreeze_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreezeResponse" message="tns:IEzService_AddLoanInterestFreeze_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoanStatusAfterPayment">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarketplaceInstantUpdate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
@@ -4598,20 +4608,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://elinar-pc:7081/" />
+      <soap12:address location="net.tcp://dor-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dor-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ELINAR-PC\elinar</Upn>
+          <Upn>DOR-PC\Dor</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://elinar-pc:7081/" />
+      <soap12:address location="net.tcp://dor-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dor-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ELINAR-PC\elinar</Upn>
+          <Upn>DOR-PC\Dor</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
