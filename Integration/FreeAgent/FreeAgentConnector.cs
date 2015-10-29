@@ -6,11 +6,11 @@
 	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
-	using System.Web.Script.Serialization;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
 	using EzBob.CommonLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using Newtonsoft.Json;
 
 	public class FreeAgentConnector : IDisposable {
 		public const string NotFoundCompanyName = "Can't get company's name";
@@ -18,7 +18,6 @@
 		public FreeAgentConnector() {
 			this.expenseCategories = null;
 
-			this.serializer = new JavaScriptSerializer();
 			this.config = new FreeAgentConfig();
 
 			this.client = new HttpClient { BaseAddress = new Uri(this.config.ApiBase), };
@@ -154,9 +153,8 @@
 						using (var reader = new StreamReader(response)) {
 							string objText = reader.ReadToEnd();
 
-							AccessTokenContainer deserializedResponse = (AccessTokenContainer)this.serializer.Deserialize(
-								objText,
-								typeof(AccessTokenContainer)
+							AccessTokenContainer deserializedResponse = JsonConvert.DeserializeObject<AccessTokenContainer>(
+								objText
 							);
 
 							if ((deserializedResponse != null) && (deserializedResponse.access_token != null))
@@ -204,9 +202,8 @@
 						using (var reader = new StreamReader(response)) {
 							string objText = reader.ReadToEnd();
 
-							AccessTokenContainer deserializedResponse = (AccessTokenContainer)this.serializer.Deserialize(
-								objText,
-								typeof(AccessTokenContainer)
+							AccessTokenContainer deserializedResponse = JsonConvert.DeserializeObject<AccessTokenContainer>(
+								objText
 							);
 
 							if ((deserializedResponse != null) && (deserializedResponse.access_token != null)) {
@@ -256,7 +253,7 @@
 			T result;
 
 			try {
-				result = this.serializer.Deserialize<T>(responseContent);
+				result = JsonConvert.DeserializeObject<T>(responseContent);
 
 				if (result == null)
 					log.Warn("Parsing result is null.");
@@ -334,6 +331,8 @@
 					responseContent
 				);
 
+				CheckForError(responseContent);
+
 				TDeserialize deserializedResponse = DeserializeResponse<TDeserialize>(responseContent);
 
 				if (deserializedResponse != null) {
@@ -374,7 +373,52 @@
 			} while (hasNextPage);
 		} // FetchRemoteData
 
-		private readonly JavaScriptSerializer serializer;
+		private void CheckForError(string responseContent) {
+			if (string.IsNullOrWhiteSpace(responseContent))
+				return;
+
+			FreeAgentErrorList errorList;
+
+			try {
+				errorList = JsonConvert.DeserializeObject<FreeAgentErrorList>(responseContent);
+			} catch (Exception e) {
+				log.Debug(e, "Failed to deserialize FreeAgent output as an error object.");
+				return;
+			} // try
+
+			if ((errorList == null) || (errorList.Error == null))
+				return;
+
+			if (errorList.Error.Details == null)
+				throw new Exception("FreeAgent returned an error without details: " + responseContent);
+
+			var os = new List<string>();
+
+			foreach (KeyValuePair<string, string> error in errorList.Error.Details)
+				os.Add(string.Format("{0}: {1}", error.Key, error.Value));
+
+			if (os.Count < 1)
+				throw new Exception("FreeAgent returned an error with empty list of details: " + responseContent);
+
+			throw new Exception(string.Join("; ", os) + ".");
+		} // CheckForError
+
+		// Used implicitly during API response parsing.
+		// ReSharper disable once ClassNeverInstantiated.Local
+		// ReSharper disable once UnusedAutoPropertyAccessor.Local
+		private class FreeAgentError {
+			[JsonProperty(PropertyName = "error")]
+			public Dictionary<string, string> Details { get; set; }
+		} // class FreeAgentError
+
+		// Used implicitly during API response parsing.
+		// ReSharper disable once ClassNeverInstantiated.Local
+		// ReSharper disable once UnusedAutoPropertyAccessor.Local
+		private class FreeAgentErrorList {
+			[JsonProperty(PropertyName = "errors")]
+			public FreeAgentError Error { get; set; }
+		} // class FreeAgentErrorList
+
 		private readonly FreeAgentConfig config;
 		private readonly HttpClient client;
 
