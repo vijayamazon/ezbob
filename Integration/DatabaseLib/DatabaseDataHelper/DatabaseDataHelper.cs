@@ -112,10 +112,19 @@
 		}
 
 		public int AddFreeAgentExpenseCategory(FreeAgentExpenseCategory category) {
-			MP_FreeAgentExpenseCategory dbCategory = _FreeAgentExpenseCategoryRepository.GetSimilarCategory(category);
+			MP_FreeAgentExpenseCategory dbCategory = _FreeAgentExpenseCategoryRepository.Find(category);
 
-			if (dbCategory != null)
+			if (dbCategory != null) {
+				dbCategory.category_group = category.category_group;
+				dbCategory.description = category.description;
+				dbCategory.nominal_code = category.nominal_code;
+				dbCategory.allowable_for_tax = category.allowable_for_tax;
+				dbCategory.tax_reporting_name = category.tax_reporting_name;
+				dbCategory.auto_sales_tax_rate = category.auto_sales_tax_rate;
+				_FreeAgentExpenseCategoryRepository.SaveOrUpdate(dbCategory);
+
 				return dbCategory.Id;
+			} // if
 
 			dbCategory = new MP_FreeAgentExpenseCategory {
 				category_group = category.category_group,
