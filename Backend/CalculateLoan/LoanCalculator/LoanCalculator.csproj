@@ -51,18 +51,9 @@
     <Compile Include="Exceptions\NullLoanCalculatorModelException.cs" />
     <Compile Include="LegacyLoanCalculator.cs" />
     <Compile Include="Library.cs" />
-    <Compile Include="Methods\AGetAmountToChargeMethod.cs" />
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\APRCalculateMethod.cs" />
-    <Compile Include="Methods\AWithActualDailyLoanStatusMethod.cs" />
-    <Compile Include="Methods\CalculateBalanceMethod.cs" />
-    <Compile Include="Methods\CalculateEarnedInterestMethod.cs" />
-    <Compile Include="Methods\CalculatePlanMethod.cs" />
-    <Compile Include="Methods\RescheduleToIntervalsMethod.cs" />
-    <Compile Include="Methods\CreateScheduleAndPlanMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
-    <Compile Include="Methods\GetAmountToChargeForAutoChargerMethod.cs" />
-    <Compile Include="Methods\GetAmountToChargeForDashboardMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,14 +92,6 @@
     <ProjectReference Include="..\..\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
-      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
-      <Name>CalculateLoanExceptions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Models\Models.csproj">
-      <Project>{ddaf0e80-8e9d-49f4-aa8c-30a69489361e}</Project>
-      <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

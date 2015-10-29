@@ -217,8 +217,12 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			            self.affordability.fetch().done(function() {
 			                BlockUi('off', $content);
 			                BlockUi('off', affordability);
+			                self.dashboardInfoView.drawSparklineGraphs();
 			            });
-			        } else { BlockUi('off', $content); }
+			        } else {
+			        	BlockUi('off', $content);
+			        	self.dashboardInfoView.drawSparklineGraphs();
+			        }
 					break;
 				case '#company-score':
 					self.companyScoreView.redisplayAccordion();

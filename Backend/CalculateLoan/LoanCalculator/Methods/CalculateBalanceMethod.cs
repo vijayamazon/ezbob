@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 
 	internal class CalculateBalanceMethod : AWithActualDailyLoanStatusMethod {

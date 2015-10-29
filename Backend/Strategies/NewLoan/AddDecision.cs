@@ -1,10 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-    using System.Collections.Generic;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
-    using NHibernate.Util;
+	using System.Collections.Generic;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
+	using NHibernate.Util;
 
-    public class AddDecision : AStrategy {
+	public class AddDecision : AStrategy {
         public AddDecision(NL_Decisions decision, long? oldCashRequestID, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
             this.decision = decision;
             this.oldCashRequestID = oldCashRequestID;

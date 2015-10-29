@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Backend.Strategies;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

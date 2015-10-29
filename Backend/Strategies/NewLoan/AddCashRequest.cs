@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 
-    public class AddCashRequest : AStrategy {
+	public class AddCashRequest : AStrategy {
         public AddCashRequest(NL_CashRequests cashRequest) {
             this.cashRequest = cashRequest;
         }//constructor
