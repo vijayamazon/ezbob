@@ -186,6 +186,7 @@
     */
 	.wizard-wrap {
 		padding: 40px 20px 40px 20px;
+		margin-bottom: 0;
 	}
 
 	.security-icons .item {
@@ -504,8 +505,13 @@
 		color: #494949;
 	}
 
-	.form_field_container.control-group.customer-logon-remember-me .input-title {
+	.form_field_container.control-group.customer-logon-remember-me .input-title,
+	.wizard-inner-wrap .clearfix .form_buttons_container .input-title{
 		display: none;
+	}
+
+	.wizard-inner-wrap .clearfix .form_buttons_container #signupSubmitButton {
+		margin-top: 0;
 	}
 
 	.form_field_container .input-title.long {
