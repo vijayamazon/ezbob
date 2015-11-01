@@ -111,21 +111,22 @@
 
 		public override string ToString() {
 			// history
-			StringBuilder sb = new StringBuilder().Append(base.ToString()); //.Append(Environment.NewLine);
+			StringBuilder sb = new StringBuilder().Append(base.ToString()); 
 
 			sb.Append("Schedule:");
 			// schedule
 			if (Schedule.Count > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedules)));
-				Schedule.ForEach(s => sb.Append(s.ToString()));
-			} 
+				Schedule.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append(Environment.NewLine);
 
 			sb.Append("Agreements:");
 
 			// agreements
 			if (Agreements.Count > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanAgreements)));
-				Agreements.ForEach(a => sb.Append(a.ToString()));
+				Agreements.ForEach(a => sb.Append(a.ToStringAsTable()));
 			} 
 
 			return sb.ToString();

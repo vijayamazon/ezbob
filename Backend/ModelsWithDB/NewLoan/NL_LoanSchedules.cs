@@ -90,7 +90,7 @@
 
 		public new const string propertyTab = "\t";
 	
-		/// <summary>
+		/*/// <summary>
 		/// prints data only
 		/// to print headers line call base static GetHeadersLine 
 		/// </summary>
@@ -106,7 +106,7 @@
 
 		public string ToBaseString() {
 			return base.ToString();
-		}
+		}*/
 
 	} // class NL_LoanSchedules
 } // ns

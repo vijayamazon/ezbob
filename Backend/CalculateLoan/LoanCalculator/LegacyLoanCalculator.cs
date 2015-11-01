@@ -5,6 +5,8 @@
 
 	public class LegacyLoanCalculator : ALoanCalculator {
 		/// <exception cref="NoInitialDataException">Condition. </exception>
+		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
+		/// <exception cref="NoLoanHistoryException">Condition. </exception>
 		public LegacyLoanCalculator(NL_Model model) : base(model) {
 		} // constructor
 

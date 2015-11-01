@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
+	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -20,13 +22,21 @@
 		[DataMember]
 		public decimal Amount { get; set; }
 
-		public override string ToString() {
+		
+		[DataMember]
+		[NonTraversable]
+		[ExcludeFromToString]
+		public bool NewFeePayment { get; set; }
+
+		/*public override string ToString() {
 			try {
 				return ToStringTable();
 			} catch (InvalidCastException invalidCastException) {
 				Console.WriteLine(invalidCastException);
 			}
 			return string.Empty;
-		}
+		}*/
+
+		
 	} // class NL_LoanFeePayments
 } // ns

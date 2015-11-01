@@ -21,7 +21,7 @@
 		[DataMember]
 		public int LoanAgreementTemplateID { get; set; }
 
-		/// <summary>
+		/*/// <summary>
 		/// prints data only
 		/// to print headers line call base static GetHeadersLine 
 		/// </summary>
@@ -33,7 +33,7 @@
 				Console.WriteLine(invalidCastException);
 			}
 			return string.Empty;
-		}
+		}*/
 
 	} // class NL_LoanAgreements
 } // ns

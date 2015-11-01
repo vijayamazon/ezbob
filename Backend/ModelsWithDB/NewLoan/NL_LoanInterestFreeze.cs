@@ -77,7 +77,7 @@
 			return LoanID.GetHashCode() ^ StartDate.GetHashCode() ^ EndDate.GetHashCode() ^ ActivationDate.GetHashCode() ^ DeactivationDate.GetHashCode();
 		}
 
-		/// <summary>
+		/*/// <summary>
 		/// prints data only
 		/// to print headers line call base static GetHeadersLine 
 		/// </summary>
@@ -89,7 +89,7 @@
 				Console.WriteLine(invalidCastException);
 			}
 			return string.Empty;
-		}
+		}*/
 		
 		
 	} // class NL_LoanInterestFreeze

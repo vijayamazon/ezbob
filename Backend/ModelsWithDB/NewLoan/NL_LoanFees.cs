@@ -47,14 +47,16 @@
 		public string Notes { get; set; }
 
 
-		public override string ToString() {
+	/*	public override string ToString() {
 			try {
 				return ToStringTable();
 			} catch (InvalidCastException invalidCastException) {
 				Console.WriteLine(invalidCastException);
 			}
 			return string.Empty;
-		}
+		}*/
+
+
 
 	} // class NL_LoanFees
 } // ns

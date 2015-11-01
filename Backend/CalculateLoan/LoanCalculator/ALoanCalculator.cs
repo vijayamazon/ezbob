@@ -8,6 +8,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 
 	/// <summary>
 	/// This class is implemented as Facade pattern. https://en.wikipedia.org/wiki/Facade_pattern
@@ -46,14 +47,32 @@
 			Init();
 		}
 
+		public abstract string Name { get; }
+
+		// date of loan state calculation - input
+		public DateTime CalculationDate { get; set; }
+
+		protected static ASafeLog Log { get { return Library.Instance.Log; } }
+		private bool writeToLog;
+
+		public virtual bool WriteToLog {
+			get { return this.writeToLog; }
+			set { this.writeToLog = value; }
+		} // WriteToLog
+
+		public virtual NL_Model WorkingModel { get; private set; }
+
+		/// <summary>
+		/// Set common loan defaults: last history as a default current history
+		/// InterestCalculationDateStart: first history +1 day
+		/// InterestCalculationDateEnd: last history's schedule item date
+		/// totalPrincipal: first history amount
+		/// openPrincipal: first history amount
+		/// </summary>
 		private void SetCalculatorDefaults() {
 
 			// set definitions from the last history
 			currentHistory = WorkingModel.Loan.LastHistory();
-
-			// init common data
-			//LoanInterestrate = currentHistory.InterestRate;
-			//InitialLoanAmount = currentHistory.Amount;
 
 			// start to cumulate interest one day after LoanIssueDate 
 			InterestCalculationDateStart = WorkingModel.Loan.FirstHistory().EventTime.AddDays(1);
@@ -66,38 +85,34 @@
 			totalPrincipal = WorkingModel.Loan.FirstHistory().Amount;
 
 			openPrincipal = totalPrincipal;
+
+			lastEventDate = InterestCalculationDateStart;
 		}
 
-		public abstract string Name { get; }
 
-		// date of loan state calculation
-		public DateTime CalculationDate { get; set; }
-
-		// Common loan data
-		//protected decimal InitialLoanAmount { get; set; }
-		// from history
-		//public decimal LoanInterestrate { get; set; }
 		//	schedules count
-		protected int n { get; set; }
+		//protected int n { get; set; }
 
-
-		// Loan State helpers data
+		// Loan State helpers
 
 		/// <summary>
-		/// последовательность событий, относящихся к кредиту. events sequence related to loan
+		/// events sequence related to loan. последовательность событий, относящихся к кредиту.
 		/// </summary>
 		public List<LoanEvent> events; // protected TODO for tests only public
 
-		// period for interest calculation
+		/// <summary>
+		/// period for interest calculation
+		/// </summary>
 		public DateTime InterestCalculationDateStart { get; set; }
 		public DateTime InterestCalculationDateEnd { get; set; }
 
-		// date of last action (event). Needed for interest calculation дата последнего действия. нужна для расчета процентов
+		/// <summary>
+		/// date of last action (event). Needed for interest calculation дата последнего действия. нужна для расчета процентов
+		/// </summary>
 		protected DateTime lastEventDate { get; set; }
 
 		protected List<NL_LoanSchedules> schedule = new List<NL_LoanSchedules>();
 
-		protected List<NL_LoanSchedules> processedInstallments = new List<NL_LoanSchedules>();
 		protected List<NL_LoanFees> feesToPay = new List<NL_LoanFees>();
 
 		private NL_LoanHistory currentHistory { get; set; }
@@ -106,39 +121,78 @@
 		protected decimal totalPrincipal { get; set; }
 		// total fees assigned to loan
 		protected decimal totalFees { get; set; }
-		// total loan interest (earned interest). Доход банка за все время заема
-		protected decimal totalInterest { get; set; } // _totalInterestToPay
+
+		// earned interest till current event including
+		protected decimal earnedInterest { get; set; }
 
 		// Loan state public data
 
-		//	Money that really have customer. Loan balance without interest and fees. деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee. 
-		protected decimal openPrincipal { get; set; } //private decimal _principal;
-		// interest to paid
+		/// <summary>
+		/// Money that really have customer. Loan balance without interest and fees. деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee. 
+		/// </summary>
+		protected decimal openPrincipal { get; set; }
+
+		/// <summary>
+		/// interest to paid
+		/// </summary>
 		protected decimal openInterest { get; set; }
-		// fees to paid
+
+		/// <summary>
+		/// fees to paid
+		/// </summary>
 		protected decimal openFees { get; set; }
 
 		// ### Loan state public data
 
-		// interest paid on CalculationDate
+		/// <summary>
+		/// interest paid on CalculationDate
+		/// </summary>
 		protected decimal paidInterest { get; set; }
-		// principal paid on CalculationDate
+		/// <summary>
+		/// principal paid on CalculationDate
+		/// </summary>
 		protected decimal paidPrincipal { get; set; }
-		// fees paid on CalculationDate
+		/// <summary>
+		/// fees paid on CalculationDate
+		/// </summary>
 		protected decimal paidFees { get; set; }
 
-		// ### Loan State helpers data
+		/// <summary>
+		/// helper holds principal paid until t (some event time)
+		/// </summary>
+		protected decimal currentPaidPrincipal { get; set; }
+		/// <summary>
+		/// helper holds fees paid until t (some event time)
+		/// </summary>
+		protected decimal currentPaidFees { get; set; }
 
-		protected static ASafeLog Log { get { return Library.Instance.Log; } }
-		private bool writeToLog;
 
-		public virtual bool WriteToLog {
-			get { return this.writeToLog; }
-			set { this.writeToLog = value; }
-		} // WriteToLog
+		/// <summary>
+		/// holds interest paid until t (some event time)
+		/// </summary>
+		protected decimal currentPaidInterest { get; set; }
 
-		public virtual NL_Model WorkingModel { get; private set; }
+		/// <summary>
+		/// hold payments registered for fees, updated during events looping
+		/// </summary>
+		protected List<NL_LoanFeePayments> feesPaymentsList = new List<NL_LoanFeePayments>();
 
+		/// <summary>
+		/// hold payments registered for schedules, updated during events looping
+		/// </summary>
+		protected List<NL_LoanSchedulePayments> schedulesPaymentsList = new List<NL_LoanSchedulePayments>();
+
+		/// <summary>
+		/// all late fees (not servicing/not arrangement) 
+		/// </summary>
+		protected List<NL_LoanFees> lateFeesList = new List<NL_LoanFees>();
+
+		/// <summary>
+		/// all distributed on time fees (servicing|arrangement) 
+		/// </summary>
+		protected List<NL_LoanFees> distributedFeesList = new List<NL_LoanFees>();
+
+		// ### Loan State helpers
 
 		/// <summary>
 		/// Create schedule by amount/issue date/schedules number (+interest only)/interval type
@@ -160,8 +214,7 @@
 			new CreateScheduleMethod(this, WorkingModel).Execute();
 		} // CreateScheduleAndPlan
 
-		/*/// <summary>
-		/// </summary>
+		/*
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
@@ -228,11 +281,7 @@
 		/// If not specified default (100k) is used.
 		/// </param>
 		/// <returns>Loan APR.</returns>
-		public virtual decimal CalculateApr(
-			DateTime? aprDate = null,
-			double? calculationAccuracy = null,
-			ulong? maxIterationCount = null
-			) {
+		public virtual decimal CalculateApr(DateTime? aprDate = null, double? calculationAccuracy = null, ulong? maxIterationCount = null) {
 			var method = new CalculateAprMethod(this, aprDate, WriteToLog);
 
 			if (calculationAccuracy.HasValue)
@@ -244,10 +293,9 @@
 			return method.Execute();
 		} // CalculateApr
 
+
 		public DateTime AddRepaymentIntervals(int intervals, DateTime issuedTime, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
-			return (intervalType == RepaymentIntervalTypes.Month)
-				? issuedTime.AddMonths(intervals)
-				: issuedTime.AddDays(intervals * (int)intervalType);
+			return (intervalType == RepaymentIntervalTypes.Month) ? issuedTime.AddMonths(intervals) : issuedTime.AddDays(intervals * (int)intervalType);
 		} // AddRepaymentIntervals
 
 
@@ -263,41 +311,31 @@
 		/// <returns></returns>
 		public abstract decimal AverageDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null);
 
-
 		/// <summary>
 		/// Calculates interest rate for specific day based on loan data: 
 		/// 1. Check freeze intervals
 		/// 2. Find relevant schedule item
 		/// 3. If schedule not found - use rate defined in the last history
+		/// During changing customer's status to "bad", new freeze interest interval create, so "bad statuses" included to freezes
 		/// </summary>
 		/// <param name="theDate"></param>
+		/// <exception cref="NoInstallmentFoundException"></exception>
 		/// <returns>Daily interest rate with freeze interest check.</returns>
 		public decimal DailyInterestRateForDate(DateTime theDate) {
-
-			// During changing customer's status to "bad", new freeze interest interval create, so "bad statuses" included to freezes
-
 			// the date is between?
 			var freezePeriod = WorkingModel.Loan.FreezeInterestIntervals.FirstOrDefault(fr => fr.StartDate >= theDate.Date && theDate.Date <= fr.EndDate && fr.ActivationDate <= theDate.Date);
-
-			Log.Debug("freezePeriod: {0}, theDate: {1}", freezePeriod, theDate);
-
-			if (freezePeriod != null)
+			if (freezePeriod != null) {
+				Log.Debug("freezePeriod: {0}, theDate: {1}", freezePeriod, theDate);
 				return 0;
-
+			}
 			// find relevant schedule (theDate inside it)
 			var scheduleItem = this.schedule.FirstOrDefault(s => PreviousScheduleDate(s.PlannedDate.Date, (RepaymentIntervalTypes)currentHistory.RepaymentIntervalTypeID) >= theDate.Date && theDate.Date <= s.PlannedDate.Date);
-
-			Log.Debug("theDate: {0}, scheduleItem {1}", theDate, scheduleItem);
+			if (scheduleItem == null)
+				throw new NoInstallmentFoundException(theDate);
 
 			// dr' = r/daysDiff
-
-			decimal dr = AverageDailyInterestRate(currentHistory.InterestRate); 
-
-			if (scheduleItem != null) 
-				dr = AverageDailyInterestRate(scheduleItem.Interest, scheduleItem.PlannedDate);
-
-			Log.Debug("theDate: {0}, dailyRate {1}", theDate, dr);
-
+			decimal dr = AverageDailyInterestRate(scheduleItem.InterestRate, scheduleItem.PlannedDate);
+			//Log.Debug("DailyInterestRateForDate: theDate: {0}, dailyRate {1}", theDate, dr);
 			return dr;
 		}
 
@@ -307,304 +345,387 @@
 		/// <returns></returns>
 		/// <summary>
 		/// common: Calculate total interest to pay at specific event date, during looping through ordered events list
-		/// calculate interest rate btwn 2 nearby events in the list day by day; add interest calculated to totalInterest; set currentEvent date as lastEventDate
+		/// calculate interest rate btwn 2 nearby events in the list day by day; add interest calculated to earnedInterest; set currentEvent date as lastEventDate
 		/// </summary>
 		/// <param name="currentEvent"></param>
+		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
 		public virtual decimal GetInterestBtwnEvents(LoanEvent currentEvent) {
 
-			int daysDiff = currentEvent.Date.Subtract(lastEventDate).Days;
-			DateTime start = lastEventDate; // actually could be found in the list of events
+			int daysDiff = currentEvent.Date.Subtract(lastEventDate.Date).Days;
+			if (daysDiff <= 0)
+				return 0;
+
 			decimal interestForPeriod = 0;
+			DateTime start = lastEventDate.Date; // lastEventAdjusted.Date;
+			DateTime rateDate = start.Date;
 
-			Log.Debug("lastEventDate: {0}, currentEvent: {1}, days: {2}", lastEventDate, currentEvent, daysDiff);
+			Log.Debug("==========lastEventDate: {0}, currentEvent: {1},  days: {2}, rateDate: {3}", lastEventDate, currentEvent, daysDiff, rateDate);
 
-			//	interest for period  dr'(t)*p'(t)
-			DateTime rateDate = start;
+			//	interest for period = dr'(t)*p'(t)
 
-			for (int i = 0; i < daysDiff; i++) {
-
-				decimal dailyInterestRate = DailyInterestRateForDate(rateDate); 
-				decimal interest = openPrincipal * dailyInterestRate; //	daily interest dr'(t)*pP(t)
+			for (int i = 1; i <= daysDiff; i++) {
+				decimal dailyInterestRate = DailyInterestRateForDate(rateDate); //	daily interest  dr' 
+				decimal interest = openPrincipal * dailyInterestRate; //openPrincipal for t'
 				interestForPeriod += interest;
 				rateDate = start.AddDays(i);
-				//totalInterest += interest;
 
-				Log.Info("rateDate: {0} interest: {1} totalInterest: {2} openPrincipal: {3}, i={4}", rateDate, interest, totalInterest, openPrincipal, i);
+				Log.Info("---------------------rateDate: {0} interest: {1} openPrincipal: {2}, i={3}", rateDate, interest, openPrincipal, i);
 			}
 
 			return interestForPeriod;
 		}
 
-		
+
 
 		/// <summary>
-		/// Initialize loan events list
+		/// Initialize loan events list and common loan data vars
 		/// </summary>
 		private void Init() {
-
-			totalFees = 0;
-
-			paidFees = 0;
-			paidInterest = 0;
-			paidPrincipal = 0;
 
 			List<LoanEvent> historiesEvents = new List<LoanEvent>();
 			List<LoanEvent> feesEvents = new List<LoanEvent>();
 			List<LoanEvent> paymentEvents = new List<LoanEvent>();
 			List<LoanEvent> schedulesEvents = new List<LoanEvent>();
 
-			if (WorkingModel.Loan.Histories.Count > 0) {
-				WorkingModel.Loan.Histories.ForEach(e => historiesEvents.Add(new LoanEvent(new DateTime(e.EventTime.Year, e.EventTime.Month, e.EventTime.Day), e)));
+			foreach (var h in WorkingModel.Loan.Histories) {
+				historiesEvents.Add(new LoanEvent(new DateTime(h.EventTime.Year, h.EventTime.Month, h.EventTime.Day), h));
+				h.Schedule.ForEach(e => schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
+				h.Schedule.ForEach(s => this.schedule.Add(s));
 			}
 
-			if (WorkingModel.Loan.Fees.Count > 0) {
-				foreach (var e in WorkingModel.Loan.Fees) {
-					feesEvents.Add(new LoanEvent(new DateTime(e.AssignTime.Year, e.AssignTime.Month, e.AssignTime.Day), e));
-					totalFees += e.Amount;
-				}
+			foreach (var e in WorkingModel.Loan.Fees) {
+				feesEvents.Add(new LoanEvent(new DateTime(e.AssignTime.Year, e.AssignTime.Month, e.AssignTime.Day), e));
+				totalFees += e.Amount;
+
+				if (e.LoanFeeTypeID != (int)NLFeeTypes.ServicingFee && e.LoanFeeTypeID != (int)NLFeeTypes.ArrangementFee && (e.DisabledTime == null && e.DeletedByUserID == null))
+					this.lateFeesList.Add(e);
+
+				if ((e.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee || e.LoanFeeTypeID == (int)NLFeeTypes.ArrangementFee) && (e.DisabledTime == null && e.DeletedByUserID == null))
+					this.distributedFeesList.Add(e);
 			}
 
-			if (WorkingModel.Loan.Payments.Count > 0) {
-				foreach (var e in WorkingModel.Loan.Payments) {
-					// events
-					paymentEvents.Add(new LoanEvent(new DateTime(e.PaymentTime.Year, e.PaymentTime.Month, e.PaymentTime.Day)));
+			foreach (var e in WorkingModel.Loan.Payments) {
+				// events
+				paymentEvents.Add(new LoanEvent(new DateTime(e.PaymentTime.Year, e.PaymentTime.Month, e.PaymentTime.Day), e));
 
-					// paid schedules - interest
-					paidInterest += e.SchedulePayments.Sum(p => p.InterestPaid);
+				// paid schedules - interest
+				paidInterest += e.SchedulePayments.Sum(p => p.InterestPaid);
 
-					// paid schedules - principal
-					paidPrincipal += e.SchedulePayments.Sum(p => p.PrincipalPaid);
+				// paid schedules - principal
+				paidPrincipal += e.SchedulePayments.Sum(p => p.PrincipalPaid);
 
-					// paif fees
-					paidFees +=e.FeePayments.Sum(p => p.Amount);
-				}
-			}
+				// paif fees
+				paidFees += e.FeePayments.Sum(p => p.Amount);
 
-			if (WorkingModel.Loan.Histories.Count > 0) {
-				foreach (var h in WorkingModel.Loan.Histories) {
-					h.Schedule.ForEach(e=> schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
-					h.Schedule.ForEach(s => this.schedule.Add(s));
-				}
+				// fees payments list
+				e.FeePayments.ForEach(fp => this.feesPaymentsList.Add(fp));
+
+				// schedules payments list
+				e.SchedulePayments.ForEach(sp => this.schedulesPaymentsList.Add(sp));
 			}
 
 			// combine ordered events list
-			this.events = historiesEvents
-				.Union(schedulesEvents)
-				.Union(paymentEvents)
-				.Union(feesEvents)
-				// .Union(rollOverEvents) TODO add rolovers
-				// .Union(reschedules) TODO add reschedules
-				.OrderBy(e => e.Date)
-				.ThenBy(e => e.Priority)
-				.ToList();
+			this.events = historiesEvents.Union(schedulesEvents).Union(paymentEvents).Union(feesEvents)
+				// .Union(rollOverEvents) TODO add rolovers // .Union(reschedules) TODO add reschedules
+				.OrderBy(e => e.Date).ThenBy(e => e.Priority).ToList();
 
-			// clear null events
+			// clear null events - nulls should not exists in partial events lists
 			this.events.RemoveAll(e => e == null);
-			
+
+			this.events.ForEach(e => Log.Debug(e));
+
+			lastEventDate = InterestCalculationDateStart;
+
+			HandleEvents();
+		}
+
+
+		private void HandleEvents() {
+
+			lastEventDate = InterestCalculationDateStart;
+
+			Log.Debug("---------------------HandleEvents------------------------");
+
 			foreach (var e in this.events) {
-				Log.Debug("{0}", e);
 
-				HandleEvent(e);
+				Log.Debug("=={0}", e);
 
-				decimal interestBtwnEvents = GetInterestBtwnEvents(e);
-				Log.Debug("accruedInterest: {0}", interestBtwnEvents);
+				e.InterestForPeriod = GetInterestBtwnEvents(e);
+				earnedInterest += e.InterestForPeriod;
 
 				lastEventDate = e.Date;
+
+				Log.Debug("======{0} lastEventDate: {1}, earnedInterest: {2}, e.InterestForPeriod {3}", e, lastEventDate, earnedInterest, e.InterestForPeriod);
+
+				switch (e.GetTypeString()) {
+
+				case "History":
+					currentHistory = e.History;
+					e.CurrentHistory = currentHistory;
+					HandleHistoryEvent(e.History);
+					//Log.Debug("HistoryEvent lastEventDate {0}, earnedInterest: {1}", lastEventDate, earnedInterest);
+					break;
+
+				case "Installment":
+					e.CurrentHistory = currentHistory;
+					HandleInstallmentEvent(e.Installment);
+					//Log.Debug("InstallmentEvent lastEventDate: {0}, earnedInterest: {1}", lastEventDate, earnedInterest);
+					break;
+
+				case "Fee":
+					e.CurrentHistory = currentHistory;
+					HandleFeeEvent(e.Fee);
+					//Log.Debug("FeeEvent lastEventDate: {0}, earnedInterest: {1}", lastEventDate, earnedInterest);
+					break;
+
+				case "Payment":
+					e.CurrentHistory = currentHistory;
+					HandlePaymentEvent(e.Payment);
+					//Log.Debug("PaymentEvent lastEventDate: {0}, earnedInterest: {1}", lastEventDate, earnedInterest);
+					break;
+
+				case "Rollover":
+					e.CurrentHistory = currentHistory;
+					HandleRolloverEvent(e.Rollover);
+					//Log.Debug("RolloverEvent lastEventDate: {0}, earnedInterest: {1}", lastEventDate, earnedInterest);
+					break;
+
+				case "Action":
+					e.CurrentHistory = currentHistory;
+					HandleActionEvent(e.Action);
+					//Log.Debug("ActionEvent lastEventDate: {0}, earnedInterest: {1}", lastEventDate, earnedInterest);
+					break;
+
+				default:
+					Log.Debug("Unknown event type: {0}", e);
+					break;
+				}
 			}
+		} // HandleEvents
+
+
+
+		/// <summary>
+		/// 1. cumulate paid fees into currentPaidFees
+		/// 2. update openFees
+		/// 1. cumulate paid principal into currentPaidPrincipal
+		/// 2. update openPrincipal (p'(t) = A - sum(p(t')) where p'(t) - current open principal; A - initial amount taken, paid(t') - principal paid at this event; sum(p(t')) - principal paid untill this event 
+		///
+		/// Payments:
+		/// 1. paying fees 
+		/// 2. paying interest 
+		/// 3. paying rollover TODO phase 2
+		/// 4. paying principal
+		/// </summary>
+		/// <param name="payment"></param>
+		private void HandlePaymentEvent(NL_Payments payment) {
+
+			// cumulate fees paid on the payment to currentPaidFees
+			currentPaidFees += payment.FeePayments.Sum(p => p.Amount);
+			// update openFees (fees to pay)
+			openFees = totalFees - currentPaidFees;
+
+			// cumulate principal paid on the payment to currentPaidPrincipal
+			currentPaidPrincipal += payment.SchedulePayments.Sum(p => p.PrincipalPaid); // TODO change to use this.schedulesPaymentsList
+			// update openPrincipal (principal to pay)
+			openPrincipal = totalPrincipal - currentPaidPrincipal;
+
+			Log.Debug("totalPrincipal: {0}, openPrincipal: {1}, currentPaidPrincipal: {2}", totalPrincipal, openPrincipal, currentPaidPrincipal);
+
+			// rest of money that can be distributed to pay loan
+			decimal assignAmount = payment.Amount - payment.FeePayments.Sum(p => p.Amount) - payment.SchedulePayments.Sum(p => p.InterestPaid) - payment.SchedulePayments.Sum(p => p.PrincipalPaid);
+
+			// 1. pay fees
+			assignAmount = PayFees(payment, assignAmount);
+
+			Log.Debug("payment balance after 'pay fees' {0}", assignAmount);
+
+			// 2. pay interest
+
+			// cumulate interest paid on the payment to currentPaidInterest
+			//currentPaidInterest += payment.SchedulePayments.Sum(p => p.InterestPaid);
+
+			assignAmount = PaySchedules(payment, assignAmount);
+
+			// pay principal
+
 		}
 
-		private void HandleEvent(LoanEvent e) {
+		private decimal PaySchedules(NL_Payments payment, decimal assignAmount) {
 
-			string etype = e.GetTypeString();
-
-			switch (etype) {
-
-			case "History":
-
-				currentHistory = e.History;
-				e.CurrentHistory = currentHistory;
-				HandleHistoryEvent(e.History);
-				break;
-
-			case "Installment":
-
-				e.CurrentHistory = currentHistory;
-				HandleInstallmentEvent(e.Installment);
-
-				Log.Debug("InstallmentEvent lastEventDate: {0}", lastEventDate);
-				break;
-
-			case "Fee":
-
-				e.CurrentHistory = currentHistory;
-				HandleFeeEvent(e.Fee);
-				//	lastEventDate = e.Fee.AssignTime;
-
-				Log.Debug("FeeEvent lastEventDate: {0}", lastEventDate);
-
-				break;
-
-			case "Payment":
-
-				e.CurrentHistory = currentHistory;
-				HandlePaymentEvent(e.Payment);
-				lastEventDate = e.Payment.PaymentTime;
-				Log.Debug("PaymentEvent lastEventDate: {0}", lastEventDate);
-				break;
-
-			case "Rollover":
-				e.CurrentHistory = currentHistory;
-				HandleRolloverEvent(e.Rollover);
-				Log.Debug("RolloverEvent lastEventDate: {0}", lastEventDate);
-				break;
-
-			case "Action":
-				e.CurrentHistory = currentHistory;
-				HandleActionEvent(e.Action);
-				lastEventDate = e.Date;
-				Log.Debug("ActionEvent lastEventDate: {0}", lastEventDate);
-				break;
-
-			default:
-				Log.Debug("Unknown event type: {0}", e);
-				break;
+			if (assignAmount == 0) {
+				Log.Info("====Amount to assign: {0}", assignAmount);
+				return assignAmount;
 			}
+
+			// interest paid till this event time
+			var schedulesPaidTillEvent = this.schedulesPaymentsList.Where(sp => sp.PaymentDate <= lastEventDate);
+
+			// paid interest
+			decimal interestPaidTillEvent = schedulesPaidTillEvent.Sum(sp => sp.InterestPaid);
+
+			Log.Debug("interestPaidTillEvent: {0}, earnedInterest: {1}, assignAmount: {2}", interestPaidTillEvent, earnedInterest, assignAmount);
+
+			// openInterest  = earned interest - paid interest (till event)
+
+			// sch(planned-paid >0)
+			IEnumerable<NL_LoanSchedules> unpaidSchedules = from s in this.schedule
+															join p in this.schedulesPaymentsList on s.LoanScheduleID equals p.LoanScheduleID into g
+															from x in g.DefaultIfEmpty()
+															where x == null || s.Principal < x.PrincipalPaid // not paid at all or completely
+															orderby s.PlannedDate
+															select s;
+
+			// interest to pay till event - interest paid till event
+			decimal currentOpenInterest = earnedInterest - interestPaidTillEvent;
+
+			// loop throught unpaid ir partial paid schedules
+			foreach (var x in ForeachExt.WithIndex(unpaidSchedules)) {
+
+				if (assignAmount <= 0) {
+					Log.Debug("Payment {0} assigned to loan completely", payment);
+					return 0;
+				}
+
+				NL_LoanSchedules s = x.Value;
+
+				Log.Debug("unpaid schedule :{0}", s);
+
+				decimal iAmount = Math.Min(assignAmount, currentOpenInterest);
+
+				assignAmount -= iAmount;
+
+				decimal principalbalance =  s.Principal - this.schedulesPaymentsList.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
+
+				decimal pAmount = Math.Min(assignAmount, principalbalance);
+
+				assignAmount -= pAmount;
+
+				// first unpaid or partially paid schedule item, add all interest to it
+				if (x.Index == 0 && currentOpenInterest > 0) {
+					currentOpenInterest = 0;
+				}
+
+				NL_LoanSchedulePayments schpayment = new NL_LoanSchedulePayments() {
+					InterestPaid = iAmount, // TODO caclulate something real
+					LoanScheduleID = s.LoanScheduleID,
+					PaymentID = payment.PaymentID,
+					NewSchedulePayment = true,
+					PaymentDate = payment.PaymentTime,
+					PrincipalPaid = pAmount
+				};
+
+				this.schedulesPaymentsList.Add(schpayment);
+			} // foreach
+
+			// unpaid schedules untill LastEventDate including
+			return assignAmount;
 		}
-		
+
+		/// <summary>
+		/// pay fees
+		/// </summary>
+		/// <param name="payment"></param>
+		/// <param name="assignAmount"></param>
+		/// <returns>available money of the payment</returns>
+		private decimal PayFees(NL_Payments payment, decimal assignAmount) {
+
+			if (assignAmount == 0) {
+				Log.Info("----No amount to assign: {0}", assignAmount);
+				return assignAmount;
+			}
+
+			if (payment == null) {
+				Log.Info("----No payment defined");
+				return assignAmount;
+			}
+
+			// all unpaid late fees (not setup|servicing|arrangement), not related to calculation date
+			assignAmount = AssignPaymentToFees(this.lateFeesList, payment, assignAmount);
+
+			// unpaid servicing|arrangement untill LastEventDate including
+			var distributedfeesUntillThisEvent = this.distributedFeesList.Where(f => f.AssignTime <= payment.PaymentTime);
+
+			assignAmount = AssignPaymentToFees(distributedfeesUntillThisEvent.ToList(), payment, assignAmount);
+
+			return assignAmount;
+		}
+
+		/// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
+		public decimal AssignPaymentToFees(List<NL_LoanFees> feesList, NL_Payments payment, decimal assignAmount) {
+
+			if (feesList.Count == 0) {
+				Log.Info("No fees to pay on payment {0}", payment);
+				return assignAmount;
+			}
+
+			if (payment == null) {
+				Log.Info("+++No payment defined");
+				return assignAmount;
+			}
+
+			foreach (NL_LoanFees f in feesList) {
+
+				if (assignAmount == 0) {
+					Log.Info("+++No amount to assign: {0}", assignAmount);
+					return assignAmount;
+				}
+
+				decimal paidAmount = this.feesPaymentsList.Where(fp => fp.LoanFeeID == f.LoanFeeID).Sum(fp => fp.Amount);
+				decimal paymentbalance = f.Amount - paidAmount;
+
+				// fees not paid completely
+				if (paymentbalance > 0) {
+
+					decimal amount = Math.Min(assignAmount, paymentbalance);
+
+					this.feesPaymentsList.Add(new NL_LoanFeePayments() {
+						Amount = amount, // maximal possible money to pay the fee
+						LoanFeeID = f.LoanFeeID,
+						LoanFeePaymentID = payment.PaymentID,
+						NewFeePayment = true // mark as "new" - for DB
+					});
+
+					// decrease paid amount from available payment amount
+					assignAmount -= amount;
+					var nlLoanFeePayments = this.feesPaymentsList.LastOrDefault();
+					Log.Debug("fee to pay: {0}, feepayment: {1}", f, nlLoanFeePayments != null ? nlLoanFeePayments.ToString() : "");
+				}
+			}
+
+			return assignAmount;
+		}
+
+
+
+		private void HandleInstallmentEvent(NL_LoanSchedules item) {
+			//this.processedInstallments.Add(item);
+			Log.Debug("HandleInstallmentEvent NotImplementedException");
+		}
 
 		private void HandleHistoryEvent(NL_LoanHistory history) {
 			Log.Debug("HandleHistoryEvent NotImplementedException");
 		}
 
-		/// <summary>
-		/// Payments:
-		/// 1. paying fees (update openFees) 
-		/// 2. paying interest (update openInterest) 
-		/// 3. paying rollover
-		/// 4. paying principal  (update openPrincipal) 
-		/// </summary>
-		/// <param name="payment"></param>
-		private void HandlePaymentEvent(NL_Payments payment) {
-
-			decimal paidPrincipalOnEvent = payment.SchedulePayments.Sum(p => p.PrincipalPaid);
-
-			Log.Debug("totalPrincipal: {0}, openPrincipal: {1}, paidPrincipalOnEvent: {2}", totalPrincipal, openPrincipal, paidPrincipalOnEvent);
-
-			openPrincipal = totalPrincipal - paidPrincipalOnEvent;
-			
-			Log.Debug("HandlePaymentEvent NotImplementedException");
-		}
-
-		private void HandleInstallmentEvent(NL_LoanSchedules item) {
-
-			this.processedInstallments.Add(item);
-
-			//lastEventDate = item.PlannedDate;
-			//Log.Debug("InstallmentEvent lastEventDate: {0}", lastEventDate);
-		}
-
 		private void HandleFeeEvent(NL_LoanFees fee) {
-	
 			// el: if loan PaidOff, mark the charge as Expired
 			// el: Arrangement and servicing fees should be treated different
 			//if (_loan.Status == LoanStatus.PaidOff) {
 			//	charge.State = "Expired";
 			//	return;
 			//}
-
-			// el: add fee to the first unpaid schedule item
-			var unpaidScheduleItem = this.processedInstallments.LastOrDefault(s => s.LoanScheduleStatusID == (int)NLScheduleStatuses.Late || s.LoanScheduleStatusID == (int)NLScheduleStatuses.StillToPay);
-			if (unpaidScheduleItem != null) {
-				if (unpaidScheduleItem.LoanScheduleStatusID == (int)NLScheduleStatuses.Late || (unpaidScheduleItem.LoanScheduleStatusID == (int)NLScheduleStatuses.StillToPay && this.schedule.Count == this.processedInstallments.Count)) {
-					unpaidScheduleItem.AmountDue += fee.Amount;
-					//unpaidScheduleItem.Fees += fee.Amount;
-				}
-			}
-
-			// el: reset AmountPaid of the charge
-			//fee.AmountPaid = 0;
-			// el: add to list of _chargesToPay - handles in RecordFeesPayment
-			this.feesToPay.Add(fee);
+			Log.Debug("HandleFeeEvent not implemented {0}", fee);
 		}
 
 		private void HandleRolloverEvent(NL_LoanRollovers rollover) {
-			//if (rollover == null) return;
-
 			Log.Debug("HandleRolloverEvent not implemented {0}", rollover);
 		}
-
 
 		private void HandleActionEvent(object p) {
 			Log.Debug("ActionEven NotImplementedException");
 		}
 
-
-		/*/// <summary> 
-/// Interest rate for a specific date, defined in schedule. If Schedule exist, returns scheduled rate, otherwise returns history defined rate
-/// </summary>
-/// <returns></returns>
-/// <summary>
-/// common: Calculate total interest to pay at specific event date, during looping through ordered events list
-/// calculate interest rate btwn 2 nearby events in the list day by day; add interest calculated to totalInterest; set currentEvent date as lastEventDate
-/// </summary>
-/// <param name="currentEvent"></param>
-/// <param name="monthlyInterestrate"></param>
-public virtual decimal InterestBtwnEvents(DateTime currentEvent, decimal monthlyInterestrate = 0) {
-
-	int daysDiff = currentEvent.Date.Subtract(lastEventDate).Days;
-	DateTime start = lastEventDate;
-	decimal interestForPeriod = 0;
-
-	Log.Info("lastEventDate: {0}, currentEvent: {1}, days: {2}", lastEventDate, currentEvent, daysDiff);
-
-	//	interest for period  dr'(t)*p'(t)
-
-	for (int i = 0; i < daysDiff; i++) {
-
-		DateTime rateDate = start.AddDays(i);
-		//decimal dailyInterestRate = InterestRateForDate(rateDate, monthlyInterestrate); // dr' = r/daysDiff
-		decimal dailyInterestRate = InterestRateForDate(rateDate); // dr' = r/daysDiff
-		decimal interest = openPrincipal * dailyInterestRate; //daily interest
-		//totalInterest += interest;
-		interestForPeriod += interest;
-
-		Log.Info("rateDate: {0} interest: {1} totalInterest: {2} openPrincipal: {3}, i={4}", rateDate, interest, totalInterest, openPrincipal, i);
-	}
-
-	//	last event datetime
-	//lastEventDate = currentEvent;
-
-	return interestForPeriod;
-}*/
-		/*
-		 * internal decimal GetDailyInterestRate(
-		DateTime currentDate,
-		decimal monthlyInterestRate,
-		bool considerBadPeriods,
-		bool considerFreezeInterestPeriods,
-		DateTime? periodStartDate = null,
-		DateTime? periodEndDate = null	) {
-		// TODO: revive
-		return 0;
-			
-		if (considerBadPeriods && WorkingModel.BadPeriods.Any(bp => bp.Contains(currentDate)))
-			return 0;
-
-		if (considerFreezeInterestPeriods && (WorkingModel.FreezePeriods.Count > 0)) {
-			InterestFreeze interval = WorkingModel.FreezePeriods.First(i => i.Contains(currentDate));
-
-			var interest = (interval == null)
-				? AverageDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate)
-				: interval.GetInterest(currentDate);
-
-			if (interest != null)
-				return (decimal)interest;
-		} // if
-
-		return AverageDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
-		
-	} */
-		// GetDailyInterestRate
 
 
 	} // class ALoanCalculator

@@ -4,10 +4,9 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
-	// TODO remove static, add :ILoanDAL, add as dependancy injection onn bus refactoring
-	public static class LoanDAL {
-		
-		public static NL_Loans GetLoan(long loanID) {
+	public class LoanDAL :ILoanDAL {
+
+		NL_Loans ILoanDAL.GetLoan(long loanID) {
 			try {
 				return Library.Instance.DB.FillFirst<NL_Loans>("NL_LoansGet", CommandSpecies.StoredProcedure, new QueryParameter("@loanID", loanID));
 				// ReSharper disable once CatchAllClause
@@ -17,11 +16,11 @@
 			return null;
 		}
 
-		public static List<NL_LoanHistory> GetLoanHistories(long loanID, DateTime stateDate) {
+		public List<NL_LoanHistory> GetLoanHistories(long loanID, DateTime stateDate) {
 			try {
 				return Library.Instance.DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID",loanID),
+					new QueryParameter("@LoanID", loanID),
 					new QueryParameter("@Now", stateDate)
 				);
 				// ReSharper disable once CatchAllClause

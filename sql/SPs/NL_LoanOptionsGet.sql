@@ -11,7 +11,6 @@ AS
 BEGIN
 	SELECT
 	   [LoanOptionsID]
-      ,[LoanID]
       ,[AutoCharge]
       ,[StopAutoChargeDate]
       ,[AutoLateFees]
@@ -30,7 +29,6 @@ BEGIN
 	  ,[StopLateFeeToDate]
 	FROM [dbo].[NL_LoanOptions]
 	WHERE
-		LoanID=@LoanID AND 
-		IsActive=1
+		LoanID=@LoanID AND IsActive = 1
 END
 GO

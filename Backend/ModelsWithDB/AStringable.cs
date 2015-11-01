@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
+﻿namespace Ezbob.Backend.ModelsWithDB {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -27,7 +27,7 @@
 
 		/// <exception><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
-		public string ToStringTable() {
+		public string ToStringAsTable() {
 			Type t = GetType();
 			var props = FilterPrintable(t);
 			int propsCount = props.Count;
@@ -130,19 +130,20 @@
 			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
 			string strVal = "";
 			this.Traverse((instance, prop) => {
-
 				bool toPrint = (CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)) == null || (CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)) != null && CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance)));
 				object val = prop.GetValue(this);
-
+				// display enum name
 				if (val != null && toPrint) {
 					strVal = val.ToString();
 					var formatattr = CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
 					if (formatattr != null)
 						strVal = formatattr.Formatted((decimal)val);
-					var enumattr = CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(EnumNameAttribute)) as EnumNameAttribute;
-					if (enumattr != null)
-						strVal = enumattr.GetName((int)val);
-					sb.Append("\t").Append(prop.Name).Append(": ").Append(strVal).Append(Environment.NewLine);
+
+					var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
+					strVal = (enumattr != null) ? enumattr.GetName((int)val) : strVal;
+
+					sb //.Append("\t")
+						.Append(prop.Name).Append(": ").Append(strVal).Append(", "); //.Append(Environment.NewLine);
 				}
 			});
 
@@ -155,16 +156,20 @@
 				|| (p.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)) != null && p.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance))).ToList();
 		}
 
-		public static string HeadersLine(Type t, int totalWidth) {
+		/*public static string HeadersLine(Type t, int totalWidth) {
 			var props = FilterPrintable(t);
 			string lineSeparator =  Environment.NewLine + lineSeparatorChar.PadRight(totalWidth * props.Count, '-') + Environment.NewLine;
 			StringBuilder sb = new StringBuilder(t.Name).Append(lineSeparator);
 			props.ForEach(c => sb.Append(propertyDelimiter).Append(c.Name.PadRight(totalWidth)));
 			sb.Append(lineSeparator);
 			return sb.ToString();
-		}
+		}*/
+
+
+		/*public string ToBaseString() {
+			return this.ToString();
+		}*/
 
 		
-
 	} // class AStringable
 } // namespace

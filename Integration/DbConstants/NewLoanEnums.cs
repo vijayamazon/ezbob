@@ -26,11 +26,11 @@
 	} // enum NLLoanStatuses
 
 	public enum NLFeeTypes {
-		SetupFee = 1, // DB table id
+		SetupFee = 1,		// DB table id
 		RolloverFee = 2,
 		AdminFee = 3,
-		ServicingFee = 4,
-		ArrangementFee = 5,
+		ServicingFee = 4,	// distributed - requires different consideration in loan calculator (other types should be paif in the nearby installment)
+		ArrangementFee = 5, // distributed - requires different consideration in loan calculator (other types should be paif in the nearby installment)
 		LatePeriod1 = 6,
 		LatePeriod2 = 7,
 		LatePeriod3 = 8,

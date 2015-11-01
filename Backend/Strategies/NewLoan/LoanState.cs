@@ -19,6 +19,8 @@
 			this.loanID = loanID;
 
 			StateDate = stateDate ?? DateTime.UtcNow;
+
+			LoanDAL = new LoanDAL();
 		} // constructor
 
 		public override string Name { get { return "LoanState"; } }
@@ -29,7 +31,7 @@
 		public string Error;
 
 		//[SetterProperty]
-		//public ILoanDAL LoanDAL { get; set; }
+		public ILoanDAL LoanDAL { get; set; }
 
 		public override void Execute() {
 			try {
@@ -38,18 +40,10 @@
 				// loan
 				Result.Loan = new NL_Loans();
 				Result.Loan = LoanDAL.GetLoan(this.loanID);
-				/*Result.Loan = DB.FillFirst<NL_Loans>("NL_LoansGet",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@loanID", this.loanID)
-				);*/
 
 				// histories
 				Result.Loan.Histories.Clear();
-				Result.Loan.Histories = LoanDAL.GetLoanHistories(this.loanID, StateDate); /*DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID", this.loanID),
-					new QueryParameter("@Now", StateDate)
-				);*/
+				Result.Loan.Histories = LoanDAL.GetLoanHistories(this.loanID, StateDate); 
 
 				// schedules
 				foreach (NL_LoanHistory h in Result.Loan.Histories) {
@@ -62,12 +56,13 @@
 
 				// loan fees
 				Result.Loan.Fees.Clear();
-				List<NL_LoanFees> fees=  DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
+				Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@LoanID", this.loanID));
 
 				// filter cnacelled/deleted fees on LoanState strategy
-				fees.Where(f => f.DisabledTime != null || f.DeletedByUserID >0).ForEach(f => Result.Loan.Fees.Add(f));;
+				// filter in Calculator according to CalculationDate
+				//fees.Where(f => f.DisabledTime == null || f.DeletedByUserID ==0).ForEach(f => Result.Loan.Fees.Add(f));;
 
 				// interest freezes
 				Result.Loan.FreezeInterestIntervals.Clear();
@@ -103,6 +98,9 @@
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@LoanID", this.loanID)
 					);
+
+					// mark payment time for each schedule payment 
+					p.SchedulePayments.ForEach(sp => sp.PaymentDate = p.PaymentTime);
 
 					p.FeePayments.Clear();
 					p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",

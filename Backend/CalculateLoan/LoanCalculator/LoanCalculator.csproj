@@ -52,6 +52,8 @@
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
     <Compile Include="Exceptions\ANegativeDecimalException.cs" />
+    <Compile Include="Exceptions\InvalidPaymentAmountToAssignException.cs" />
+    <Compile Include="Exceptions\NoInstallmentFoundException.cs" />
     <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\NegativeLoanAmountException.cs" />
     <Compile Include="Exceptions\NegativeMonthlyInterestRateException.cs" />

@@ -8,6 +8,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
@@ -291,8 +292,11 @@
 			return GetTemplate("\\Areas\\Customer\\Views\\Agreement\\", name);
 		} // GetTemplateByName
 
-
-
+		/// <exception cref="DirectoryNotFoundException">The specified path is invalid (for example, it is on an unmapped drive). </exception>
+		/// <exception cref="IOException">An I/O error occurred while opening the file. </exception>
+		/// <exception cref="UnauthorizedAccessException"><paramref /> specified a file that is read-only.-or- This operation is not supported on the current platform.-or- <paramref /> specified a directory.-or- The caller does not have the required permission. </exception>
+		/// <exception cref="FileNotFoundException">The file specified in <paramref /> was not found. </exception>
+		/// <exception cref="SecurityException">The caller does not have the required permission. </exception>
 		[Test]
 		public void AgreementsSave() {
 			DatabaseDataHelper _helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
@@ -623,19 +627,34 @@
 				Loan = new NL_Loans()
 			};
 
-			/*LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
 			strategy.Execute();
-
 			model = strategy.Result;
-			m_oLog.Debug(model);
+
+			// dummy payment for test - between issue date and the first schedule item
+			model.Loan.Payments.Add(new NL_Payments() {
+				Amount = 150,
+				CreatedByUserID = 1,
+				CreationTime = DateTime.UtcNow,
+				LoanID = model.Loan.LoanID,
+				PaymentTime = new DateTime(2015, 10, 31),
+				Notes = "dummy payment for test",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+			});
+		
+			this.m_oLog.Debug("=================Calculator start================={0}\n", model.Loan);
 
 			try {
+
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				//calc.events.ForEach(e => m_oLog.Debug(e));
-				m_oLog.Debug(calc);
+				this.m_oLog.Debug(calc);
+
+				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
+
 			} catch (Exception exception) {
-				m_oLog.Error("{0}", exception);
-			}*/
+				this.m_oLog.Error("{0}", exception.Message);
+			}
 		}
 
 		// n = A/(m-Ar);

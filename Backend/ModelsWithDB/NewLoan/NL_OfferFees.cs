@@ -5,7 +5,7 @@
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_OfferFees {
+	public class NL_OfferFees :AStringable {
 		[PK(true)]
 		[DataMember]
 		public long OfferFeeID { get; set; }
@@ -30,7 +30,7 @@
 		[DataMember]
 		public decimal? DistributedPartPercent { get; set; }
 
-		public override string ToString() {
+	/*	public override string ToString() {
 			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
 			Type t = typeof(NL_OfferFees);
 			foreach (var prop in t.GetProperties()) {
@@ -38,6 +38,6 @@
 					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
 			}
 			return sb.ToString();
-		}
+		}*/
 	}//class NL_OfferFees
 }//ns

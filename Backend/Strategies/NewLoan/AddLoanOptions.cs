@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Reflection;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
@@ -9,20 +8,20 @@
 
 	public class AddLoanOptions : AStrategy {
 
+		public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId, List<String> PropertiesUpdateList = null) {
+			this.loanOptions = loanOptions;
+			oldLoanId = OldLoanId;
+			this.PropertiesUpdateList = PropertiesUpdateList;
+		}//constructor
+
+		public override string Name { get { return "AddLoanOptions"; } }
+
 		public long LoanOptionsID { get; set; }
 		public string Error { get; set; }
 		private int? oldLoanId { get; set; }
 		public List<String> PropertiesUpdateList { get; set; }
 
 		private readonly NL_LoanOptions loanOptions;
-
-		public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId, List<String> PropertiesUpdateList = null) {
-			this.loanOptions = loanOptions;
-			this.oldLoanId = OldLoanId;
-			this.PropertiesUpdateList = PropertiesUpdateList;
-		}//constructor
-
-		public override string Name { get { return "AddLoanOptions"; } }
 
 		public override void Execute() {
 			try {
@@ -55,9 +54,6 @@
 				Error = string.Format("Failed to save NL_LoanOptions, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.loanOptions.LoanID, ex.Message);
 			}
 		}//Execute
-
-
-
 
 	}//class AddLoanOptions
 }//ns

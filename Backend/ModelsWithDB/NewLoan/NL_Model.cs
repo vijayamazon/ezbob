@@ -5,21 +5,19 @@
 	using System.Text;
 	using ConfigManager;
 	using Ezbob.Utils.Attributes;
-	using EZBob.DatabaseLib.Model.Database;
 
 	[DataContract]
     public class NL_Model : AStringable
     {
 
-        public NL_Model(int customerID)
-        {
-
+        public NL_Model(int customerID){
             CustomerID = customerID;
 
             Offer = new NL_Offers();
             Loan = new NL_Loans();
             Agreements = new List<NLAgreementItem>();
             FundTransfer = new NL_FundTransfers();
+
             CalculatorImplementation = CurrentValues.Instance.DefaultLoanCalculator.Value;
 
         } // constructor
@@ -72,8 +70,8 @@
 			}
 			sb.Append(Environment.NewLine).Append("FundTransfer:");
 			if (FundTransfer.FundTransferStatusID > 0) {
-				//sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_FundTransfers)));
-				sb.Append(FundTransfer);
+				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_FundTransfers)));
+				sb.Append(FundTransfer.ToStringAsTable());
 			}
 
 			return sb.ToString();

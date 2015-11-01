@@ -3,7 +3,9 @@
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 	using System.Text;
+	using DbConstants;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -14,6 +16,7 @@
 
 		[FK("LoanTransactionMethod", "Id")]
 		[DataMember]
+		[EnumName(typeof(NLLoanTransactionMethods))]
 		public int PaymentMethodID { get; set; }
 
 		[DataMember]
@@ -24,6 +27,7 @@
 
 		[FK("NL_PaymentStatuses", "PaymentStatusID")]
 		[DataMember]
+		[EnumName(typeof(NLPaymentStatuses))]
 		public int PaymentStatusID { get; set; }
 
 		[DataMember]
@@ -59,6 +63,7 @@
 
 		[DataMember]
 		[NonTraversable]
+		[ExcludeFromToString]
 		public List<NL_PaypointTransactions> PaypointTransactions {
 			get { return this._paypointTransactions; }
 			set { this._paypointTransactions = value; }
@@ -66,6 +71,7 @@
 
 		[DataMember]
 		[NonTraversable]
+		[ExcludeFromToString]
 		public List<NL_LoanSchedulePayments> SchedulePayments {
 			get { return this._schedulePayments; }
 			set { this._schedulePayments = value; }
@@ -73,40 +79,38 @@
 
 		[DataMember]
 		[NonTraversable]
+		[ExcludeFromToString]
 		public List<NL_LoanFeePayments> FeePayments {
 			get { return this._feePayments; }
 			set { this._feePayments = value; }
 		}
 
-		/// <summary>
-		/// prints data only
-		/// to print headers line call base static GetHeadersLine 
-		/// </summary>
-		/// <returns></returns>
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// payment
-			StringBuilder sb = new StringBuilder().Append(ToStringTable());
+			StringBuilder sb = new StringBuilder().Append(ToStringAsTable());
 
 			sb.Append(Environment.NewLine).Append("SchedulePayments:");
 
 			if (SchedulePayments.Count > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedulePayments)));
-				SchedulePayments.ForEach(s => sb.Append(s.ToString()));
-			} 
+				SchedulePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append(Environment.NewLine);
 
-			sb.Append(Environment.NewLine).Append("FeePayments:");
+			sb.Append("FeePayments:");
 
 			if (FeePayments.Count > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFeePayments)));
-				FeePayments.ForEach(s => sb.Append(s.ToString()));
-			} 
+				FeePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append(Environment.NewLine);
 
-			sb.Append(Environment.NewLine).Append("Paypoint Transactions:");
+			sb.Append("Paypoint Transactions:");
 
 			if (PaypointTransactions.Count > 0) {
 				sb.Append(GetHeadersLine(typeof(NL_PaypointTransactions))).Append(Environment.NewLine);
-				PaypointTransactions.ForEach(s => sb.Append(s.ToString()));
+				PaypointTransactions.ForEach(s => sb.Append(s.ToStringAsTable()));
 			}
 
 			return sb.ToString();

@@ -157,21 +157,22 @@
 			if (Fees.Count > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFees)));
 				Fees.ForEach(s => sb.Append(s.ToString()));
-			}  //else sb.Append("No fees.");
+			}  
 
 			sb.Append("Histories:");
 
 			// histories
 			if (Histories != null) {
+				sb.Append(Environment.NewLine);
 				Histories.ForEach(h => sb.Append(h.ToString()));
-			} //else sb.Append("No histories.");
+			}
 
-			sb.Append("Payments:");
+			sb.Append(Environment.NewLine).Append("Payments:");
 
 			if (Payments.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Payments)));
-				Payments.ForEach(s => sb.Append(s.ToString()));
-			}// else sb.Append("No Payments.");
+				//sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Payments)));
+				Payments.ForEach(s => sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Payments))).Append(s.ToString()));
+			}
 
 			sb.Append(Environment.NewLine).Append("LoanInterestFreeze:");
 
@@ -179,15 +180,14 @@
 			if (FreezeInterestIntervals.Count > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanInterestFreeze)));
 				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
-			}// else sb.Append("No freeze interest.");
-
+			}
 			
 			sb.Append(Environment.NewLine).Append("Loan options:");
 
 			if (LoanOptions.LoanOptionsID > 0) {
 				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanOptions)));
 				sb.Append(LoanOptions);
-			} // else sb.Append("No loan options.");
+			} 
 		
 			return sb.ToString();
 		}
