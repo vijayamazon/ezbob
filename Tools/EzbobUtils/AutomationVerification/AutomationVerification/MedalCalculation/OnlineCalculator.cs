@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.MedalCalculation {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using AutomationCalculator.Common;
@@ -19,18 +18,23 @@
 		} // constructor
 
 		/// <summary>
-		///		Online turnover for medal: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
-		///		Set also FreeCashFlow, TangibleEquity, NumOfStores, PositiveFeedbacks, UseHmrc
+		/// Online turnover for medal: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
+		/// Also sets FreeCashFlow, TangibleEquity, NumOfStores, PositiveFeedbacks, UseHmrc.
 		/// </summary>
 		/// <param name="customerId"></param>
 		/// <param name="intputModel"></param>
 		/// <returns></returns>
 		protected MedalInputModel GetOnlineInputParameters(int customerId, MedalInputModel intputModel) {
-			intputModel = this.GetOnlineTurnover(intputModel.Turnovers, intputModel);
+			intputModel = GetOnlineTurnover(intputModel);
 
-			intputModel.FreeCashFlow = intputModel.AnnualTurnover == 0 || !intputModel.HasHmrc ? 0 : intputModel.FreeCashFlowValue / intputModel.AnnualTurnover;
+			intputModel.FreeCashFlow = ((intputModel.AnnualTurnover == 0) || !intputModel.HasHmrc)
+				? 0
+				: intputModel.FreeCashFlowValue / intputModel.AnnualTurnover;
 
-			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
+			intputModel.TangibleEquity = (intputModel.AnnualTurnover == 0)
+				? 0
+				: intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
+
 			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
 
 			intputModel.PositiveFeedbacks = LoadFeedbacks(customerId);
@@ -40,117 +44,94 @@
 		} // GetOnlineInputParameters
 
 		/// <summary>
-		/// 	Online turnover for medal: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
+		/// Online turnover for medal: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
 		/// </summary>
-		/// <param name="turnovers"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		private MedalInputModel GetOnlineTurnover(List<TurnoverDbRow> turnovers, MedalInputModel model) {
+		private MedalInputModel GetOnlineTurnover(MedalInputModel model) {
 			try {
-				const int T1 = 1;
-				const int T3 = 3;
-				const int T6 = 6;
-				const int T12 = 12;
+				decimal[] months = new decimal[3];
+				decimal[] quarters = new decimal[3];
+				decimal[] halves = new decimal[3];
+				decimal[] fulls = new decimal[3];
 
-				const int Ec1 = 12;
-				const int Ec3 = 4;
-				const int Ec6 = 2;
-				const int Ec12 = 1;
+				model.FilterTurnoversTo(MpType.Amazon, months, quarters, halves, fulls);
+				model.FilterTurnoversTo(MpType.Ebay, months, quarters, halves, fulls);
+				model.FilterTurnoversTo(MpType.PayPal, months, quarters, halves, fulls);
 
-				List<decimal> list_t1 = new List<decimal>();
-				List<decimal> list_t3 = new List<decimal>();
-				List<decimal> list_t6 = new List<decimal>();
-				List<decimal> list_t12 = new List<decimal>();
-
-				// extact amazon data
-				var amazonList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(MpType.Amazon) select r).AsQueryable();
-
-				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for amazon
-				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T1, Ec1));
-				list_t3.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T3, Ec3));
-				list_t6.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T6, Ec6));
-				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T12, Ec12));
-
-				// extact ebay data
-				var ebayList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(MpType.Ebay) select r).AsQueryable();
-
-				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for ebay
-				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T1, Ec1));
-				list_t3.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T3, Ec3));
-				list_t6.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T6, Ec6));
-				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T12, Ec12));
-
-				// extact paypal data
-				var paypalList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(MpType.PayPal) select r).AsQueryable();
-	
-				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for paypal
-				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T1, Ec1));
-				list_t3.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T3, Ec3));
-				list_t6.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T6, Ec6));
-				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T12, Ec12));
+				LogMarketplaceTurnovers("month", months);
+				LogMarketplaceTurnovers("quarter", quarters);
+				LogMarketplaceTurnovers("half year", halves);
+				LogMarketplaceTurnovers("year", fulls);
 
 				// Online turnover: Amazon + MAX(eBay, Pay Pal)
 
-				// amazon: index 0
-				// ebay: index 1
-				// paypal: index 2
+				var onlineList = new List<decimal> {
+					MaxTurnover(months),
+					MaxTurnover(quarters),
+					MaxTurnover(halves),
+					MaxTurnover(fulls),
+				};
 
-				var onlineList = new ArrayList();
+				this.Log.Debug("Online turnover list: {0}", string.Join("; ", onlineList));
 
-				onlineList.Add(list_t1.ElementAt(0) + Math.Max(list_t1.ElementAt(1), list_t1.ElementAt(2)));
-				onlineList.Add(list_t3.ElementAt(0) + Math.Max(list_t3.ElementAt(1), list_t3.ElementAt(2)));
-				onlineList.Add(list_t6.ElementAt(0) + Math.Max(list_t6.ElementAt(1), list_t6.ElementAt(2)));
-				onlineList.Add(list_t12.ElementAt(0) + Math.Max(list_t12.ElementAt(1), list_t12.ElementAt(2)));
+				model.OnlineAnnualTurnover = onlineList.Where(r => r > 0).DefaultIfEmpty(0).Min();
 
-				model.OnlineAnnualTurnover = (from decimal r in onlineList where r > 0 select r).AsQueryable().DefaultIfEmpty(0).Min();
 				model.OnlineAnnualTurnover = (model.OnlineAnnualTurnover < 0) ? 0 : model.OnlineAnnualTurnover;
 
-				if (model.HmrcAnnualTurnover > model.OnlineAnnualTurnover * model.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
-					//usingHmrc = true;
+				decimal onlineTurnoverEdge = model.OnlineAnnualTurnover * model.MedalInputModelDb.OnlineMedalTurnoverCutoff;
+
+				string medalTypeMsg;
+
+				if (model.HmrcAnnualTurnover > onlineTurnoverEdge) {
 					model.AnnualTurnover = model.HmrcAnnualTurnover;
 					model.TurnoverType = TurnoverType.HMRC;
-
-					Log.Info("AV: (HmrcAnnualTurnover-><-onlineMedalTurnoverCutoff): AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
-
-					return model;
-				} // if
-
-				if (model.YodleeAnnualTurnover > model.OnlineAnnualTurnover * model.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
+					medalTypeMsg = "HmrcAnnualTurnover-><-onlineMedalTurnoverCutoff";
+				} else if (model.YodleeAnnualTurnover > onlineTurnoverEdge) {
 					model.AnnualTurnover = model.YodleeAnnualTurnover;
 					model.TurnoverType = TurnoverType.Bank;
-
-					Log.Info("AV: (BankAnnualTurnover-><-onlineMedalTurnoverCutoff): AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
-
-					return model;
+					medalTypeMsg = "BankAnnualTurnover-><-onlineMedalTurnoverCutoff";
+				} else {
+					model.AnnualTurnover = model.OnlineAnnualTurnover;
+					model.TurnoverType = TurnoverType.Online;
+					medalTypeMsg = "Online";
 				} // if
 
-				model.AnnualTurnover = model.OnlineAnnualTurnover;
-				model.TurnoverType = TurnoverType.Online;
-
-				this.Log.Info("AV finally: AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, YodleeAnnualTurnover:{2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
+				this.Log.Info(
+					"AV finally: ({5}) " +
+					"AnnualTurnover: {0}, " +
+					"HmrcAnnualTurnover: {1}, " +
+					"YodleeAnnualTurnover: {2}, " +
+					"OnlineAnnualTurnover: {3}, " +
+					"Type: {4}",
+					model.AnnualTurnover,
+					model.HmrcAnnualTurnover,
+					model.YodleeAnnualTurnover,
+					model.OnlineAnnualTurnover,
+					model.TurnoverType,
+					medalTypeMsg
+				);
 
 				return model;
 			} catch (Exception ex) {
-				this.Log.Error(ex, "Failed to calculate online annual turnover for medal");
+				this.Log.Error(ex, "Failed to calculate online annual turnover for medal.");
 			} // try
 
 			return model;
 		} // GetOnlineTurnover
 
-		/// <summary>
-		///     Calculates for "last month", "last three months", "last six months", and "last twelve months".
-		///     Annualize the figures and take the minimum among them.
-		/// </summary>
-		/// <param name="list"></param>
-		/// <param name="monthsBefore"></param>
-		/// <param name="extrapolationCoefficient"></param>
-		/// <returns></returns>
-		private decimal CalcAnnualTurnoverBasedOnPartialData(IQueryable<TurnoverDbRow> list, int monthAfter, int extrapolationCoefficient) {
-			return list.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover) * extrapolationCoefficient;
-		} // CalcAnnualTurnoverBasedOnPartialData
+		private void LogMarketplaceTurnovers(string periodName, decimal[] data) {
+			this.Log.Debug(
+				"Turnovers for {0}: Amazon: {1}, eBay: {2}, Pay Pal: {3}",
+				periodName,
+				data[Amazon],
+				data[Ebay],
+				data[PayPal]
+			);
+		} // LogMarketplaceTurnovers
 
 		private int LoadFeedbacks(int customerId) {
-			var feedbacksDb = DB.FillFirst<PositiveFeedbacksModelDb>(
+			var feedbacksDb = this.DB.FillFirst<PositiveFeedbacksModelDb>(
 				"AV_GetFeedbacks",
 				new QueryParameter("@CustomerId", customerId)
 			);
@@ -163,7 +144,7 @@
 			if (feedbacks == 0)
 				feedbacks = feedbacksDb.DefaultFeedbacks;
 
-			Log.Debug(
+			this.Log.Debug(
 				"Secondary medal - positive feedbacks:\n" +
 				"\tAmazon: {0}\n\teBay: {1}\n\tPay Pal: {2}\n\tDefault: {3}\n\tFinal: {4}",
 				feedbacksDb.AmazonFeedbacks,
@@ -175,5 +156,62 @@
 
 			return feedbacks;
 		} // LoadFeedbacks
+
+		private static decimal MaxTurnover(decimal[] list) {
+			return list[Amazon] + Math.Max(list[Ebay], list[PayPal]);
+		} // MaxTurnover
+
+		private static int Amazon { get { return OnlineCalculatorExt.Amazon; } }
+		private static int Ebay { get { return OnlineCalculatorExt.Ebay; } }
+		private static int PayPal { get { return OnlineCalculatorExt.PayPal; } }
 	} // class OnlineCalculator
+
+	internal static class OnlineCalculatorExt {
+		internal const int Amazon = 0;
+		internal const int Ebay = 1;
+		internal const int PayPal = 2;
+
+		internal static void FilterTurnoversTo(
+			this MedalInputModel model,
+			Guid mpTypeID,
+			decimal[] months,
+			decimal[] quarters,
+			decimal[] halves,
+			decimal[] fulls
+		) {
+			int idx = mpIndices[mpTypeID];
+
+			List<TurnoverDbRow> sourceList = model.Turnovers.Where(r => r.MpTypeID == mpTypeID).ToList();
+
+			months.Add(idx, sourceList, PartOfYear.Month);
+			quarters.Add(idx, sourceList, PartOfYear.Quarter);
+			halves.Add(idx, sourceList, PartOfYear.Half);
+			fulls.Add(idx, sourceList, PartOfYear.Full);
+		} // FilterTurnoversTo
+
+		private enum PartOfYear { 
+			Month = 1,
+			Quarter = 3,
+			Half = 6,
+			Full = 12,
+		} // enum PartOfYear
+
+		private static void Add(
+			this decimal[] targetList,
+			int idx,
+			IEnumerable<TurnoverDbRow> sourceList,
+			PartOfYear partOfYear
+		) {
+			int monthAfter = (int)partOfYear;
+			int coef = 12 / monthAfter;
+
+			targetList[idx] = coef * sourceList.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover);
+		} // Add
+
+		private static readonly Dictionary<Guid, int> mpIndices = new Dictionary<Guid, int> {
+			{ MpType.Amazon, Amazon },
+			{ MpType.Ebay, Ebay },
+			{ MpType.PayPal, PayPal },
+		};
+	} // class OnlineCalculatorExt
 } // namespace
