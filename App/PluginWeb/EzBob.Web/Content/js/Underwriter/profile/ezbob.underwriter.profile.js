@@ -102,6 +102,9 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 
 		this.paymentAccountsView.on('rechecked', this.mpRechecked, this.paymentAccountsModel);
+		this.paymentAccountsView.on('added', function() {
+			self.personalInfoModel.fetch();
+		}, this);
 
 		this.medalCalculationModel = new EzBob.Underwriter.MedalCalculationModel();
 		this.medalCalculationView = new EzBob.Underwriter.MedalCalculationView({
