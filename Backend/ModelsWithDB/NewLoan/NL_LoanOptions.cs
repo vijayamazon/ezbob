@@ -65,7 +65,7 @@
 
 		/*/// <summary>
 		/// prints data only
-		/// to print headers line call base static GetHeadersLine 
+		/// to print headers line call base static PrintHeadersLine 
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString() {

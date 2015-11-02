@@ -60,17 +60,17 @@
 
 			sb.Append(Environment.NewLine).Append("Offer:");
 			if (Offer.Amount >0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Offers)));
+				sb.Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_Offers)));
 				sb.Append(Offer);
 			}
 			sb.Append(Environment.NewLine).Append("Loan:");
 			if (Loan.LoanID > 0) {
-				//sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Loans)));
+				//sb.Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_Loans)));
 				sb.Append(Loan);
 			}
 			sb.Append(Environment.NewLine).Append("FundTransfer:");
 			if (FundTransfer.FundTransferStatusID > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_FundTransfers)));
+				sb.Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_FundTransfers)));
 				sb.Append(FundTransfer.ToStringAsTable());
 			}
 

@@ -145,49 +145,52 @@
 			SetDefaultLoanType();
 		}
 
-		
-		
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// loan
 			StringBuilder sb = new StringBuilder().Append(base.ToString()); //.Append(Environment.NewLine);
 
-			sb.Append("Fees:");
-
-			// fees
-			if (Fees.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFees)));
-				Fees.ForEach(s => sb.Append(s.ToString()));
-			}  
-
-			sb.Append("Histories:");
-
-			// histories
-			if (Histories != null) {
-				sb.Append(Environment.NewLine);
-				Histories.ForEach(h => sb.Append(h.ToString()));
-			}
-
-			sb.Append(Environment.NewLine).Append("Payments:");
-
-			if (Payments.Count > 0) {
-				//sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Payments)));
-				Payments.ForEach(s => sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_Payments))).Append(s.ToString()));
-			}
-
-			sb.Append(Environment.NewLine).Append("LoanInterestFreeze:");
+			sb.Append(Environment.NewLine);
 
 			// freeze interest intervals
 			if (FreezeInterestIntervals.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanInterestFreeze)));
+				sb.Append("LoanInterestFreeze:")
+					.Append(Environment.NewLine)
+					.Append(PrintHeadersLine(typeof(NL_LoanInterestFreeze)));
 				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
-			}
-			
-			sb.Append(Environment.NewLine).Append("Loan options:");
+			} else
+				sb.Append("No LoanInterestFreeze").Append(Environment.NewLine);
 
 			if (LoanOptions.LoanOptionsID > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanOptions)));
-				sb.Append(LoanOptions);
-			} 
+				sb.Append("Loan options:")
+					.Append(Environment.NewLine)
+					.Append(LoanOptions);
+			} else
+				sb.Append("No Loan options").Append(Environment.NewLine);
+
+			// fees
+			if (Fees.Count > 0) {
+				sb.Append(Environment.NewLine)
+					.Append("Fees:").Append(Environment.NewLine)
+					.Append(PrintHeadersLine(typeof(NL_LoanFees)));
+				Fees.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append("No Fees").Append(Environment.NewLine);
+
+			// histories
+			if (Histories != null) {
+				sb.Append(Environment.NewLine)
+					.Append("Histories:");
+				Histories.ForEach(h => sb.Append(h.ToString()));
+			} else
+				sb.Append("No Histories").Append(Environment.NewLine);
+
+			// payments
+			if (Payments.Count > 0) {
+				sb.Append("Payments:");
+				Payments.ForEach(p => sb.Append(p.ToString()));
+			} else
+				sb.Append("No Payments").Append(Environment.NewLine);
 		
 			return sb.ToString();
 		}

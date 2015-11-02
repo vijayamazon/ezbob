@@ -27,9 +27,6 @@
 	[TestFixture]
 	class TestNewLoan : BaseTestFixtue {
 
-		
-
-
 		[Test]
 		public void TestLoanLegals() {
 			//NL_Loans l = new NL_Loans();
@@ -83,31 +80,29 @@
 				IsActive = true,
 				Notes = null
 			};
-			//var stra = new AddLoanOptions(NL_options, null);
-			//stra.Execute();
+			var stra = new AddLoanOptions(NL_options, null);
+			stra.Execute();
 		}
 
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			//NL_Model model = new NL_Model(56) {
-			//	UserID = 357,
-			//	//CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-			//	Loan = new NL_Loans()
-			//};
-			//model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
-			//BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
-			//strategy.Context.UserID = model.UserID;
-			//try {
-			//	strategy.Execute();
-			//	Console.WriteLine(strategy.Result.Error);
+			NL_Model model = new NL_Model(56) {
+				UserID = 357,
+				Loan = new NL_Loans()
+			};
+			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
+			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
+			strategy.Context.UserID = model.UserID;
+			try {
+				strategy.Execute();
+				Console.WriteLine(strategy.Result.Error);
 
-			//	m_oLog.Debug(strategy.Result.Loan);
-			//	m_oLog.Debug(strategy.Result.Offer);
-
-			//} catch (Exception ex) {
-			//	Console.WriteLine(ex);
-			//}
+				this.m_oLog.Debug(strategy.Result.Loan);
+				this.m_oLog.Debug(strategy.Result.Offer);
+			} catch (Exception ex) {
+				Console.WriteLine(ex);
+			}
 		}
 
 
@@ -132,8 +127,7 @@
 
 		[Test]
 		public void AddOffer() {
-
-		/*	GetLastOffer lastOfferstrategy = new GetLastOffer(374);
+			GetLastOffer lastOfferstrategy = new GetLastOffer(374);
 			lastOfferstrategy.Execute();
 			NL_Offers lastOffer = lastOfferstrategy.Offer;
 			long crID = 337;
@@ -176,7 +170,7 @@
 			AddOffer offerStrategy = new AddOffer(lastOffer, offerFees);
 			offerStrategy.Execute();
 			Console.WriteLine(offerStrategy.OfferID);
-			Console.WriteLine(offerStrategy.Error);*/
+			Console.WriteLine(offerStrategy.Error);
 		}
 
 		public void Discounts() {
@@ -352,23 +346,9 @@
 			}*/
 		}
 
-		/*[Test]
-		public void TestLoanState() {
-			int loanID = 2151; // cust 329;   
-			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
-			try {
-				s.Execute();
-				LoanCalculatorModel calculatorModel = s.CalcModel;
-				//Console.WriteLine(calculatorModel.ToString());
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
-		}*/
-
 
 		private int _daysInMonth = 0;
 		private const decimal InterestRate = 0.6m;
-
 
 		[Test]
 		public void CalcInterestRate() {
@@ -604,17 +584,18 @@
 
 		[Test]
 		public void LoanStateStrategy() {
-		/*	const long loanID = 13;
+			const long loanID = 17;
 			var strategy = new LoanState(new NL_Model(56), loanID, DateTime.UtcNow);
 			strategy.Execute();
-			this.m_oLog.Debug(strategy.Result.Loan);*/
+			this.m_oLog.Debug(strategy.Result.Loan);
 		}
 
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[Test]
 		public void GetLoanFees() {
 			long loanid = 15;
 			var loanFees = this.m_oDB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanid));
-			m_oLog.Debug(AStringable.GetHeadersLine(typeof(NL_LoanFees)));
+			this.m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFees)));
 			loanFees.ForEach(f => m_oLog.Debug(f));
 		}
 
@@ -631,6 +612,15 @@
 			strategy.Execute();
 			model = strategy.Result;
 
+			// dummy: reset fee payment, check calculator's adding this
+			//var firstOrDefault = model.Loan.Payments.FirstOrDefault();
+			//if (firstOrDefault != null) {
+			//	firstOrDefault.FeePayments = new List<NL_LoanFeePayments>();
+			//}
+
+			// dummy: remove all exists payment
+			//model.Loan.Payments.Clear();
+
 			// dummy payment for test - between issue date and the first schedule item
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 150,
@@ -640,18 +630,28 @@
 				PaymentTime = new DateTime(2015, 10, 31),
 				Notes = "dummy payment for test",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
+				PaymentID = 13
+			});
+
+
+			// dummy payment for test - between issue date and the first schedule item
+			model.Loan.Payments.Add(new NL_Payments() {
+				Amount = 300,
+				CreatedByUserID = 1,
+				CreationTime = DateTime.UtcNow,
+				LoanID = model.Loan.LoanID,
+				PaymentTime = new DateTime(2015, 12, 15),
+				Notes = "dummy payment 2 for test",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
+				PaymentID = 14
 			});
 		
-			this.m_oLog.Debug("=================Calculator start================={0}\n", model.Loan);
-
+			this.m_oLog.Debug("{0}\n=================Calculator start=================\n", model.Loan);
 			try {
-
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				this.m_oLog.Debug(calc);
-
 				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
-
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}

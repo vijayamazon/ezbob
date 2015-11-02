@@ -109,25 +109,24 @@
 			//SetDefaultRepaymentCount();
 		}
 
+		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// history
-			StringBuilder sb = new StringBuilder().Append(base.ToString()); 
+			StringBuilder sb = new StringBuilder().Append(base.ToString());
 
-			sb.Append("Schedule:");
 			// schedule
 			if (Schedule.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedules)));
+				sb.Append("Schedules:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanSchedules)));
 				Schedule.ForEach(s => sb.Append(s.ToStringAsTable()));
 			} else
-				sb.Append(Environment.NewLine);
-
-			sb.Append("Agreements:");
+				sb.Append("No Schedule.").Append(Environment.NewLine);
 
 			// agreements
 			if (Agreements.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanAgreements)));
+				sb.Append("Agreements:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanAgreements)));
 				Agreements.ForEach(a => sb.Append(a.ToStringAsTable()));
-			} 
+			} else
+				sb.Append("No Agreements.").Append(Environment.NewLine);
 
 			return sb.ToString();
 		}

@@ -15,7 +15,7 @@
 
 		public const string lineSeparatorChar = "";//  "-";
 		public const string propertyDelimiter = ""; //"|";
-		public string propertyTab = "\n";
+		public string propertyTab = Environment.NewLine;
 		public const string novalue = "--";
 
 		public const string pad = " ";
@@ -46,7 +46,6 @@
 				if (val != null) {
 
 					var formatattr = prop.GetCustomAttribute(typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
-
 					switch (prop.PropertyType.Name) {
 					case "Decimal":
 						if (formatattr != null)
@@ -89,25 +88,21 @@
 			if (!values.Any()) 
 				return "No " + t.Name + " found.";
 
-			//Console.WriteLine(format);
-			//Console.WriteLine(values);
-
 			return string.Format(format.ToString(), values) + Environment.NewLine;
 		}
+
 		/// <summary>
 		/// returns string of headers line-printable properties
 		/// </summary>
 		/// <returns></returns>
-		//public string ToStringHeadersLine() {
-		public static string GetHeadersLine(Type t) {
+		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
+		public static string PrintHeadersLine(Type t) {
 			var props = FilterPrintable(t);
 			int propsCount = props.Count;
-
 			//	headers line
 			StringBuilder header = new StringBuilder();
 			object[] headers = new object[propsCount];
 			bool fillHeadersline = true;
-
 			//	build headers line
 			foreach (var x in ForeachExt.WithIndex(props)) {
 				if (!fillHeadersline)
@@ -121,32 +116,30 @@
 						fillHeadersline = false;
 				}
 			}
-
 			return string.Format(header.ToString(), headers) + Environment.NewLine;
 		}
 
 		public override string ToString() {
-
 			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
 			string strVal = "";
 			this.Traverse((instance, prop) => {
-				bool toPrint = (CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)) == null || (CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)) != null && CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance)));
+				bool toPrint = (prop.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)) == null || (prop.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)) != null && prop.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance)));
 				object val = prop.GetValue(this);
 				// display enum name
 				if (val != null && toPrint) {
 					strVal = val.ToString();
-					var formatattr = CustomAttributeExtensions.GetCustomAttribute((MemberInfo)prop, typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
+					var formatattr = prop.GetCustomAttribute(typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
 					if (formatattr != null)
 						strVal = formatattr.Formatted((decimal)val);
 
 					var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
 					strVal = (enumattr != null) ? enumattr.GetName((int)val) : strVal;
 
-					sb //.Append("\t")
-						.Append(prop.Name).Append(": ").Append(strVal).Append(", "); //.Append(Environment.NewLine);
+					sb.Append(prop.Name).Append(": ").Append(strVal).Append(this.propertyTab); 
+
+					if(this.propertyTab != Environment.NewLine) sb.Append(Environment.NewLine);
 				}
 			});
-
 			return sb.ToString();
 		} // ToString
 
@@ -156,20 +149,8 @@
 				|| (p.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)) != null && p.GetCustomAttribute(typeof(ExcludeFromToStringAttribute)).Equals(NonPrintableInstance))).ToList();
 		}
 
-		/*public static string HeadersLine(Type t, int totalWidth) {
-			var props = FilterPrintable(t);
-			string lineSeparator =  Environment.NewLine + lineSeparatorChar.PadRight(totalWidth * props.Count, '-') + Environment.NewLine;
-			StringBuilder sb = new StringBuilder(t.Name).Append(lineSeparator);
-			props.ForEach(c => sb.Append(propertyDelimiter).Append(c.Name.PadRight(totalWidth)));
-			sb.Append(lineSeparator);
-			return sb.ToString();
-		}*/
-
-
-		/*public string ToBaseString() {
+		public string BaseString() {
 			return this.ToString();
-		}*/
-
-		
+		}
 	} // class AStringable
 } // namespace

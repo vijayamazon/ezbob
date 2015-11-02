@@ -123,6 +123,6 @@
                 Log.Alert(ex, "Failed to load loan state.");
             } // try
         } // Execute
-
+	
     } // class LoanState
 } // namespace

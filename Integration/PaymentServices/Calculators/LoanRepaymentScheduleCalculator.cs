@@ -269,7 +269,7 @@
 			Init();
 			foreach (var e in _events) {
 
-				Console.WriteLine("event=={0}", e);
+				//Console.WriteLine("event=={0}", e);
 
 				UpdateState(e.Date);
 

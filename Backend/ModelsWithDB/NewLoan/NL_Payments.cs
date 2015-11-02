@@ -88,30 +88,25 @@
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// payment
-			StringBuilder sb = new StringBuilder().Append(ToStringAsTable());
-
-			sb.Append(Environment.NewLine).Append("SchedulePayments:");
-
-			if (SchedulePayments.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanSchedulePayments)));
-				SchedulePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append(Environment.NewLine);
-
-			sb.Append("FeePayments:");
-
-			if (FeePayments.Count > 0) {
-				sb.Append(Environment.NewLine).Append(GetHeadersLine(typeof(NL_LoanFeePayments)));
-				FeePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append(Environment.NewLine);
-
-			sb.Append("Paypoint Transactions:");
+			StringBuilder sb = new StringBuilder().Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_Payments))).Append(ToStringAsTable());
 
 			if (PaypointTransactions.Count > 0) {
-				sb.Append(GetHeadersLine(typeof(NL_PaypointTransactions))).Append(Environment.NewLine);
+				sb.Append("Paypoint transactions:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_PaypointTransactions)));
 				PaypointTransactions.ForEach(s => sb.Append(s.ToStringAsTable()));
-			}
+			} else
+				sb.Append("No paypoint transactions.").Append(Environment.NewLine);
+
+			if (FeePayments.Count > 0) {
+				sb.Append("Fees payments:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanFeePayments)));
+				FeePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append("No Fees payments.").Append(Environment.NewLine);
+			
+			if (SchedulePayments.Count > 0) {
+				sb.Append("Schedule payments:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanSchedulePayments)));
+				SchedulePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append("No Schedule payments.").Append(Environment.NewLine);
 
 			return sb.ToString();
 		}
