@@ -10,6 +10,11 @@
     public class AddLoanOptions : AStrategy
     {
 
+        public List<string> PropertiesUpdateList { get; set; }
+        public int? oldLoanId { get; set; }
+        public string Error { get; set; }
+
+        public long LoanOptionsID { get; set; }
 
         private readonly NL_LoanOptions nlLoanOptions;
         public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId, List<String> PropertiesUpdateList = null)
@@ -17,7 +22,9 @@
             this.nlLoanOptions = loanOptions;
             this.oldLoanId = OldLoanId;
             this.PropertiesUpdateList = PropertiesUpdateList;
-        }//constructor
+        }
+
+//constructor
 
         public override string Name { get { return "AddLoanOptions"; } }
 
@@ -53,10 +60,10 @@
                         pi.SetValue(existsOptions, fromClient, null);
                     }
 
-                    LoanOptionsID = DB.ExecuteScalar<long>("NL_LoanOptionsSave",
+                    this.LoanOptionsID = DB.ExecuteScalar<long>("NL_LoanOptionsSave",
                         CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanOptions>("Tbl", existsOptions),
                         new QueryParameter("@LoanID", this.nlLoanOptions.LoanID));
-                    NL_AddLog(LogType.Info, "Strategy End",this.nlLoanOptions, LoanOptionsID, null, null);
+                    NL_AddLog(LogType.Info, "Strategy End", this.nlLoanOptions, this.LoanOptionsID, null, null);
                 }
                 else
                 {
@@ -72,6 +79,7 @@
                 NL_AddLog(LogType.Error, "Strategy Faild", this.nlLoanOptions, null, ex.ToString(), ex.StackTrace);
             }
         }//Execute
+
 
     }//class AddLoanOptions
 }//ns
