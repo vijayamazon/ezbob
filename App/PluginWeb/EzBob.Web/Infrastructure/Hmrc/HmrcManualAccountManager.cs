@@ -166,7 +166,7 @@
 			} // try
 		} // RemovePeriod
 
-		private Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
+		private static Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
 			sStateError = null;
 
 			var oResult = new Hopper(VatReturnSourceType.Manual);

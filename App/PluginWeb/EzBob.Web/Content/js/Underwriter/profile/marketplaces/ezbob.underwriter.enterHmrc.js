@@ -156,8 +156,11 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		createDateField: function(sPeriodID, sFieldName, sCaption) {
 			var oContainer = $('<div class=date-holder>' + sCaption + ': </div>');
 
-			var oFld = $('<input type=date />')
-				.addClass('form-control validatable date data' + sPeriodID + ' ' + this.dateId(sFieldName, sPeriodID))
+			var oFld = $(
+				'<input type=date min="' + this.displayDate(this.longTimeAgo()) + '" max="' + this.displayDate() + '" />'
+			);
+
+			oFld.addClass('form-control validatable date data' + sPeriodID + ' ' + this.dateId(sFieldName, sPeriodID))
 				.attr({
 					'data-period-id': sPeriodID,
 					'data-field-name': sFieldName,
@@ -165,6 +168,14 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			return oContainer.append(oFld);
 		}, // createDateField
+
+		longTimeAgo: function() {
+			return moment.utc('1976-07-01', 'YYYY-MM-DD');
+		}, // longTimeAgo
+
+		displayDate: function(aDate) {
+			return (aDate || moment.utc()).format('YYYY-MM-DD');
+		}, // displayDate
 
 		validate: function() {
 			this.$el.find('.validation-result').removeClass('good bad').empty();
@@ -196,9 +207,51 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			this.$el.find('.date').each(function() {
 				var oDateCtrl = $(this);
 
-				if (oDateCtrl.val() === '') {
+				var sDate = oDateCtrl.val() || '';
+
+				if (sDate === '') {
+					console.log(oDateCtrl.data('field-name'), 'of period', oDateCtrl.data('period-id'), 'has empty value');
 					oDateCtrl.addClass('invalid');
 					nErrorCount++;
+					return;
+				} // if
+
+				var date = moment.utc(sDate, 'YYYY-MM-DD');
+
+				var minDate = moment.utc(oDateCtrl.attr('min'), 'YYYY-MM-DD');
+
+				if (date.isBefore(minDate)) {
+					console.log(
+						date.format('YYYY-MM-DD'),
+						'in',
+						oDateCtrl.data('field-name'),
+						'of period',
+						oDateCtrl.data('period-id'),
+						'is less than min allowed',
+						minDate.format('YYYY-MM-DD')
+					);
+
+					oDateCtrl.addClass('invalid');
+					nErrorCount++;
+					return;
+				} // if
+
+				var maxDate = moment.utc(oDateCtrl.attr('max'), 'YYYY-MM-DD');
+
+				if (date.isAfter(maxDate)) {
+					console.log(
+						date.format('YYYY-MM-DD'),
+						'in',
+						oDateCtrl.data('field-name'),
+						'of period',
+						oDateCtrl.data('period-id'),
+						'is greater than max allowed',
+						maxDate.format('YYYY-MM-DD')
+					);
+
+					oDateCtrl.addClass('invalid');
+					nErrorCount++;
+					return;
 				} // if
 			});
 
