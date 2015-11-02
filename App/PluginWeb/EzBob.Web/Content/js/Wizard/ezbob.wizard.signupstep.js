@@ -95,7 +95,18 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 			var oDialog = this.$el.find('#offline_help');
 			if (oDialog.length > 0)
-				$.colorbox({ inline: true, close: '<i class="pe-7s-close"></i>', open: true, href: oDialog });
+				$.colorbox({
+					inline: true,
+					close: '<i class="pe-7s-close"></i>',
+					open: true,
+					href: oDialog,
+					onOpen: function() {
+						$('body').addClass('stop-scroll');
+					},
+					onClosed: function() {
+						$('body').removeClass('stop-scroll');
+					}
+				});
 		} // if
 
 		var oEverlineDialog = this.$el.find('#everline_help');
@@ -117,7 +128,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				this.showEverlineHelp = false;
 
 				if (oEverlineDialog.length > 0)
-					$.colorbox({ inline: true, open: true, href: oEverlineDialog, close: '<i class="pe-7s-close"></i>', maxWidth: '840px' });
+					$.colorbox({
+						inline: true,
+						open: true,
+						href: oEverlineDialog,
+						close: '<i class="pe-7s-close"></i>',
+						maxWidth: '840px',
+						onOpen: function() {
+							$('body').addClass('stop-scroll');
+						},
+						onClosed: function() {
+							$('body').removeClass('stop-scroll');
+						}
+					});
 			}
 		} // if
 

@@ -65,12 +65,18 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
     },
     
     addDebitCardHelp: function() {
-    	this.$el.find('.addDebitCardHelp').colorbox({
-    		href: "#add_debit_card_help",
-    		inline: true,
-    		open: true,
-    		close: '<i class="pe-7s-close"></i>',
-			maxWidth: '100%'
+	    this.$el.find('.addDebitCardHelp').colorbox({
+	    	href: "#add_debit_card_help",
+	    	inline: true,
+	    	open: true,
+	    	close: '<i class="pe-7s-close"></i>',
+		    maxWidth: '100%',
+		    onOpen: function() {
+			    $('body').addClass('stop-scroll');
+		    },
+    		onClosed: function() {
+			    $('body').removeClass('stop-scroll');
+		    }
     	});
     }
 });

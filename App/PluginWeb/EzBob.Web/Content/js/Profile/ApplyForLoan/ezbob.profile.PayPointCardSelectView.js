@@ -77,7 +77,7 @@ EzBob.Profile.PayPointCardSelectView = Backbone.Marionette.ItemView.extend({
 			this.trigger('existing');
 
 		this.close();
-
+		$('body').removeClass('stop-scroll');
 		return false;
 	}, // next
 
@@ -85,7 +85,7 @@ EzBob.Profile.PayPointCardSelectView = Backbone.Marionette.ItemView.extend({
 		this.trigger('cancel');
 
 		this.close();
-
+		$('body').removeClass('stop-scroll');
 		return false;
 	}, // cancel
 
