@@ -422,7 +422,8 @@ EzBob.Popup = Backbone.View.extend({
 		var self = this;
 
 		this.$el.find('.address-list-loading-block').fadeOut('fast', function() {
-		    self.$el.find('.address-selector-block').fadeIn('fast').removeClass('hide');
+			self.$el.find('.address-selector-block').fadeIn('fast').removeClass('hide');
+			$('.ui-dialog-buttonpane').addClass('buttons-footer');
 		// if (EzBob.Config.Origin === 'everline') {#1#
 			//  $('.address-dialog-widget').jScrollPane({ verticalDragMinHeight: 40 });
 		//    }
@@ -433,8 +434,10 @@ EzBob.Popup = Backbone.View.extend({
 
 	initManualInputForm: function() {
 	    this.$el.find('.address-input-block').fadeIn('fast').removeClass('hide');
-	   
-		this.setDialogueButtons('manual-input');
+	    $('.ui-dialog').addClass('add-scroll');
+	    $('.address-dialog-widget').addClass('disable-scroll');
+	    this.setDialogueButtons('manual-input');
+	    $('.ui-dialog-buttonpane').removeClass('buttons-footer');
 		this.$el.dialog('option', 'title', 'Enter address manually');
 
 		this.$el.find('.zipcode').val(this.$el.find('.postCode').val().toUpperCase()).change();

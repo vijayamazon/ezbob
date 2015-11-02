@@ -27,7 +27,8 @@ EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
 			resizable: true,
 			width: 600,
 			height: 'auto',
-			closeOnEscape: true
+			closeOnEscape: true,
+			dialogClass: 'consent-class'
 		};
 	}, // jqoptions
 
