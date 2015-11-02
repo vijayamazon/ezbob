@@ -1,59 +1,77 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Database;
-	using Ezbob.Utils;
+﻿namespace Ezbob.Backend.Strategies.NewLoan
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Database;
+    using Ezbob.Utils;
 
-	public class AddLoanOptions : AStrategy {
+    public class AddLoanOptions : AStrategy
+    {
 
-		public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId, List<String> PropertiesUpdateList = null) {
-			this.loanOptions = loanOptions;
-			oldLoanId = OldLoanId;
-			this.PropertiesUpdateList = PropertiesUpdateList;
-		}//constructor
 
-		public override string Name { get { return "AddLoanOptions"; } }
+        private readonly NL_LoanOptions nlLoanOptions;
+        public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId, List<String> PropertiesUpdateList = null)
+        {
+            this.nlLoanOptions = loanOptions;
+            this.oldLoanId = OldLoanId;
+            this.PropertiesUpdateList = PropertiesUpdateList;
+        }//constructor
 
-		public long LoanOptionsID { get; set; }
-		public string Error { get; set; }
-		private int? oldLoanId { get; set; }
-		public List<String> PropertiesUpdateList { get; set; }
+        public override string Name { get { return "AddLoanOptions"; } }
 
-		private readonly NL_LoanOptions loanOptions;
+        public override void Execute()
+        {
+            NL_AddLog(LogType.Info, "Strategy Start", this.nlLoanOptions, null, null, null);
+            try
+            {
 
-		public override void Execute() {
-			try {
+                long newLoanId = -1;
 
-				if (oldLoanId != null)
-					this.loanOptions.LoanID = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
+                if (oldLoanId != null)
+                    newLoanId = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
 
-				NL_LoanOptions existsOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.loanOptions.LoanID));
+                if (newLoanId > -1)
+                {
+                    this.nlLoanOptions.LoanID = newLoanId;
 
-				PropertyInfo[] props = typeof(NL_LoanOptions).GetProperties();
+                    NL_LoanOptions existsOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.nlLoanOptions.LoanID));
 
-				existsOptions.Traverse((ignored, pi) => {
-					if (pi.GetValue(this.loanOptions) != null)
-						pi.SetValue(existsOptions, pi.GetValue(this.loanOptions));
-				});
+                    PropertyInfo[] props = typeof(NL_LoanOptions).GetProperties();
 
-				foreach (var updateProperty in PropertiesUpdateList) {
-					PropertyInfo pi = this.loanOptions.GetType().GetProperty(updateProperty);
-					var fromClient = pi.GetValue(this.loanOptions);
-					pi.SetValue(existsOptions, fromClient, null);
-				}
+                    existsOptions.Traverse((ignored, pi) =>
+                    {
+                        if (pi.GetValue(this.nlLoanOptions) != null)
+                            pi.SetValue(existsOptions, pi.GetValue(this.nlLoanOptions));
+                    });
 
-				LoanOptionsID = DB.ExecuteScalar<long>("NL_LoanOptionsSave",
-					CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanOptions>("Tbl", existsOptions),
-					new QueryParameter("@LoanID", this.loanOptions.LoanID));
+                    foreach (var updateProperty in PropertiesUpdateList)
+                    {
+                        PropertyInfo pi = this.nlLoanOptions.GetType().GetProperty(updateProperty);
+                        var fromClient = pi.GetValue(this.nlLoanOptions);
+                        pi.SetValue(existsOptions, fromClient, null);
+                    }
 
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				Log.Alert("Failed to save NL_LoanOptions, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.loanOptions.LoanID, ex);
-				Error = string.Format("Failed to save NL_LoanOptions, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.loanOptions.LoanID, ex.Message);
-			}
-		}//Execute
+                    LoanOptionsID = DB.ExecuteScalar<long>("NL_LoanOptionsSave",
+                        CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanOptions>("Tbl", existsOptions),
+                        new QueryParameter("@LoanID", this.nlLoanOptions.LoanID));
+                    NL_AddLog(LogType.Info, "Strategy End",this.nlLoanOptions, LoanOptionsID, null, null);
+                }
+                else
+                {
+                    NL_AddLog(LogType.DataExsistense, "Strategy Faild", this.nlLoanOptions,null, null, null);
+                }
 
-	}//class AddLoanOptions
+                // ReSharper disable once CatchAllClause
+            }
+            catch (Exception ex)
+            {
+                Log.Alert("Failed to save NL_LoanOptions, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.nlLoanOptions.LoanID, ex);
+                Error = string.Format("Failed to save NL_LoanOptions, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.nlLoanOptions.LoanID, ex.Message);
+                NL_AddLog(LogType.Error, "Strategy Faild", this.nlLoanOptions, null, ex.ToString(), ex.StackTrace);
+            }
+        }//Execute
+
+    }//class AddLoanOptions
 }//ns

@@ -64,6 +64,8 @@
 		/// by the payment (in NL_Model).
 		/// </summary>
 		public override void Execute() {
+            NL_AddLog(LogType.Info, "Strategy Start", this.NLModel, null, null, null);
+            try {
 			/*
 			 * TODO
 			 * 
@@ -87,6 +89,13 @@
 
 			// into catch
 			//pconn.Rollback();
-		} // Execute
+            NL_AddLog(LogType.Info, "Strategy End",null,this.NLModel, null, null);
+            }
+            catch (Exception ex)
+            {
+                NL_AddLog(LogType.Error, "Strategy Faild", this.NLModel,null, ex.ToString(), ex.StackTrace);
+            }
+		} 
+            // Execute
 	} // class AssignPaymentToLoan
 } // namespace

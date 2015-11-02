@@ -1,9 +1,14 @@
 ﻿namespace Ezbob.Utils {
 	using System;
 	using System.Globalization;
+	using Newtonsoft.Json;
 
-	public static class MiscUtils {
+    public static class MiscUtils {
 
+        public static JsonSerializerSettings GetJsonDBFormat()
+        {
+            return new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+        }
 		public static string MD5(string input) {
 			return Security.SecurityUtils.MD5(input);
 		} // MD5

@@ -1,16 +1,30 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan {
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Database;
+﻿namespace Ezbob.Backend.Strategies.NewLoan
+{
+    using System;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Database;
 
-	public class AddLoanState : AStrategy {
-        public AddLoanState(NL_LoanStates loanState) {
+    public class AddLoanState : AStrategy
+    {
+        public AddLoanState(NL_LoanStates loanState)
+        {
             this.loanState = loanState;
         }//constructor
 
         public override string Name { get { return "AddLoanState"; } }
 
-        public override void Execute() {
-            StateID = DB.ExecuteScalar<int>("NL_LoanStatesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanStates>("Tbl", this.loanState)); 
+        public override void Execute()
+        {
+            try
+            {
+                NL_AddLog(LogType.Info, "Strategy Start", this.loanState, null, null, null);
+                StateID = DB.ExecuteScalar<int>("NL_LoanStatesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanStates>("Tbl", this.loanState));
+                NL_AddLog(LogType.Info, "Strategy End",this.loanState, StateID, null, null);
+            }
+            catch (Exception ex)
+            {
+                NL_AddLog(LogType.Error, "Strategy Faild", this.loanState, null, ex.ToString(), ex.StackTrace);
+            }
         }//Execute
 
 

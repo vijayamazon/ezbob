@@ -183,6 +183,7 @@
     <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
     <Compile Include="NewLoan\NL_DiscountPlans.cs" />
     <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\NL_Log.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanFeeTypes.cs">

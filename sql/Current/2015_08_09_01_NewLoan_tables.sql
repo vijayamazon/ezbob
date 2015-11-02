@@ -963,4 +963,20 @@ GO
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-
+IF OBJECT_ID('NL_Log') IS NULL
+BEGIN
+	create TABLE NL_Log (
+		LogID BIGINT IDENTITY(1, 1) NOT NULL,
+		UserID INT NULL,
+		CustomerID INT NULL,
+		Args NVARCHAR(MAX) NULL,
+		Result NVARCHAR(MAX) NULL,
+		Sevirity NVARCHAR(MAX) NOT NULL,
+		Referrer NVARCHAR(MAX) NOT NULL,
+		Description NVARCHAR(MAX) NOT NULL,
+		Exception NVARCHAR(MAX) NULL,
+		Stacktrace NVARCHAR(MAX) NULL,
+		TimeStamp DATETIME NOT NULL		
+	)
+END
+GO

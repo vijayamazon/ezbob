@@ -16,7 +16,7 @@
 
         public AddLoanInterestFreeze(int? OldLoanId, NL_LoanInterestFreeze loanInterestFreeze)
         {
-            this.oldLoanId = OldLoanId;            
+            this.oldLoanId = OldLoanId;
             this.loanInterestFreeze = loanInterestFreeze;
         }//constructor
 
@@ -24,14 +24,27 @@
 
         public override void Execute()
         {
+            NL_AddLog(LogType.Info, "Strategy Start", this.loanInterestFreeze, null, null, null);
             try
             {
+                long newLoanId = -1;
 
                 if (oldLoanId != null)
-                    this.loanInterestFreeze.LoanID = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
+                    newLoanId = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
 
-                nlLoanInterestFreezeID = DB.ExecuteScalar<long>("NL_LoanInterestFreezeSave",
-                CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanInterestFreeze>("Tbl", this.loanInterestFreeze));
+                if (newLoanId > 0)
+                {
+                    this.loanInterestFreeze.LoanID = newLoanId;
+                    nlLoanInterestFreezeID = DB.ExecuteScalar<long>("NL_LoanInterestFreezeSave",
+                    CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanInterestFreeze>("Tbl", this.loanInterestFreeze));
+                    NL_AddLog(LogType.Info, "Strategy End", this.loanInterestFreeze, nlLoanInterestFreezeID, null, null);
+                }
+                else
+                {
+                    NL_AddLog(LogType.DataExsistense ,"Strategy Faild",this.loanInterestFreeze,null ,null,null);
+                }
+
+
 
                 // ReSharper disable once CatchAllClause
             }
@@ -39,6 +52,8 @@
             {
                 Log.Alert("Failed to save NL_InterestFreeze, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.loanInterestFreeze.LoanID, ex);
                 Error = string.Format("Failed to save NL_InterestFreeze, oldLoanID: {0}, LoanID: {1}, ex: {2}", oldLoanId, this.loanInterestFreeze.LoanID, ex.Message);
+                NL_AddLog(LogType.Error, "Strategy Faild", this.loanInterestFreeze, null, ex.ToString(), ex.StackTrace);
+
             }
         }//Execute
 
