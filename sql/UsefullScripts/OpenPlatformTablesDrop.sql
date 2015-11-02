@@ -1,33 +1,57 @@
 
-IF NOT object_id('InvestorContact') IS NULL
-	DROP TABLE InvestorContact
+IF NOT object_id('I_InvestorContact') IS NULL
+	DROP TABLE I_InvestorContact
 GO
 
-IF NOT object_id('InvestorBankAccountTransaction') IS NULL
-	DROP TABLE InvestorBankAccountTransaction
+IF NOT object_id('I_InvestorBankAccountTransaction') IS NULL
+	DROP TABLE I_InvestorBankAccountTransaction
 GO
 
-IF NOT object_id('InvestorSystemBalance') IS NULL
-	DROP TABLE InvestorSystemBalance 
+IF NOT object_id('I_InvestorSystemBalance') IS NULL
+	DROP TABLE I_InvestorSystemBalance 
 GO
 
-IF NOT object_id('InvestorOverallStatistics') IS NULL
-	DROP TABLE InvestorOverallStatistics
+IF NOT object_id('I_InvestorOverallStatistics') IS NULL
+	DROP TABLE I_InvestorOverallStatistics
 GO
 
-IF NOT object_id('InvestorBankAccount') IS NULL
-	DROP TABLE InvestorBankAccount
-GO
-
-IF NOT object_id('Investor') IS NULL
-	DROP TABLE Investor
-GO
-
-IF NOT object_id('InvestorType') IS NULL
-	DROP TABLE InvestorType
+IF NOT object_id('I_InvestorBankAccount') IS NULL
+	DROP TABLE I_InvestorBankAccount
 GO
 
 
-IF NOT object_id('InvestorAccountType') IS NULL
-	DROP TABLE InvestorAccountType
+IF NOT object_id('I_InvestorAccountType') IS NULL
+	DROP TABLE I_InvestorAccountType
 GO
+
+IF NOT object_id('I_ProductSubType') IS NULL
+	DROP TABLE I_ProductSubType
+GO
+
+IF NOT object_id('I_Portfolio') IS NULL
+	DROP TABLE I_Portfolio
+GO
+
+IF NOT object_id('I_ProductTerm') IS NULL
+	DROP TABLE I_ProductTerm
+GO
+
+IF NOT object_id('I_ProductType') IS NULL
+	DROP TABLE I_ProductType
+GO
+
+IF NOT object_id('I_Product') IS NULL
+	DROP TABLE I_Product
+GO
+
+IF NOT object_id('I_Investor') IS NULL
+	DROP TABLE I_Investor
+GO
+
+IF NOT object_id('I_InvestorType') IS NULL
+	DROP TABLE I_InvestorType
+GO
+
+
+
+

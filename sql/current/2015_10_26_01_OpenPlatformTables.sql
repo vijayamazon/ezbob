@@ -1,47 +1,45 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF object_id('InvestorType') IS NULL
+IF object_id('I_InvestorType') IS NULL
 BEGIN
-	CREATE TABLE InvestorType (
+	CREATE TABLE I_InvestorType (
 		InvestorTypeID INT NOT NULL IDENTITY(1,1),
 		Name NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorType PRIMARY KEY (InvestorTypeID)
+		CONSTRAINT PK_I_InvestorType PRIMARY KEY (InvestorTypeID)
 	)
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM InvestorType)
+IF NOT EXISTS (SELECT * FROM I_InvestorType)
 BEGIN
-	INSERT INTO InvestorType (Name) VALUES ('Institutional')
-	INSERT INTO InvestorType (Name) VALUES ('Private')
-	INSERT INTO InvestorType (Name) VALUES ('Hedge Fund')
+	INSERT INTO I_InvestorType (Name) VALUES ('Institutional')
+	INSERT INTO I_InvestorType (Name) VALUES ('Private')
+	INSERT INTO I_InvestorType (Name) VALUES ('Hedge Fund')
 END
 GO
 
 
-IF object_id('Investor') IS NULL
+IF object_id('I_Investor') IS NULL
 BEGIN
-	CREATE TABLE Investor (
+	CREATE TABLE I_Investor (
 		InvestorID INT NOT NULL IDENTITY(1,1),
 		InvestorTypeID INT NOT NULL,
 		Name NVARCHAR(255),
-		Email NVARCHAR(255),
-		Password NVARCHAR(255),
 		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_Investor PRIMARY KEY (InvestorID),
-		CONSTRAINT FK_Investor_InvestorType FOREIGN KEY (InvestorTypeID) REFERENCES InvestorType(InvestorTypeID)
+		CONSTRAINT PK_I_Investor PRIMARY KEY (InvestorID),
+		CONSTRAINT FK_I_Investor_I_InvestorType FOREIGN KEY (InvestorTypeID) REFERENCES I_InvestorType(InvestorTypeID)
 	)
 END
 GO
 
-IF object_id('InvestorContact') IS NULL
+IF object_id('I_InvestorContact') IS NULL
 BEGIN
-	CREATE TABLE InvestorContact (
-		InvestorContactID INT NOT NULL IDENTITY(1,1),
+	CREATE TABLE I_InvestorContact (
+		InvestorContactID INT NOT NULL, -- =Security_User.UserId
 		InvestorID INT NOT NULL,
 		PersonalName NVARCHAR(255),
 		LastName NVARCHAR(255),
@@ -54,36 +52,36 @@ BEGIN
 		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorContact PRIMARY KEY (InvestorContactID),
-		CONSTRAINT FK_InvestorContact_Investor FOREIGN KEY (InvestorID) REFERENCES Investor(InvestorID)
+		CONSTRAINT PK_I_InvestorContact PRIMARY KEY (InvestorContactID),
+		CONSTRAINT FK_I_InvestorContact_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID)
 	)
 END
 GO
 
 
-IF object_id('InvestorAccountType') IS NULL
+IF object_id('I_InvestorAccountType') IS NULL
 BEGIN
-	CREATE TABLE InvestorAccountType (
+	CREATE TABLE I_InvestorAccountType (
 		InvestorAccountTypeID INT NOT NULL IDENTITY(1,1),
 		Name NVARCHAR(255),
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorAccountType PRIMARY KEY (InvestorAccountTypeID)
+		CONSTRAINT PK_I_InvestorAccountType PRIMARY KEY (InvestorAccountTypeID)
 	)
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM InvestorAccountType)
+IF NOT EXISTS (SELECT * FROM I_InvestorAccountType)
 BEGIN
-	INSERT INTO InvestorAccountType (Name) VALUES ('Funding')
-	INSERT INTO InvestorAccountType (Name) VALUES ('Repayments')
-	INSERT INTO InvestorAccountType (Name) VALUES ('Bridging')
+	INSERT INTO I_InvestorAccountType (Name) VALUES ('Funding')
+	INSERT INTO I_InvestorAccountType (Name) VALUES ('Repayments')
+	INSERT INTO I_InvestorAccountType (Name) VALUES ('Bridging')
 END
 GO
 
 
-IF object_id('InvestorBankAccount') IS NULL
+IF object_id('I_InvestorBankAccount') IS NULL
 BEGIN
-	CREATE TABLE InvestorBankAccount (
+	CREATE TABLE I_InvestorBankAccount (
 		InvestorBankAccountID INT NOT NULL IDENTITY(1,1),
 		InvestorID INT NOT NULL,
 		InvestorAccountTypeID INT NOT NULL,
@@ -98,16 +96,16 @@ BEGIN
 		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorBankAccount PRIMARY KEY (InvestorBankAccountID),
-		CONSTRAINT FK_InvestorBankAccount_Investor FOREIGN KEY (InvestorID) REFERENCES Investor(InvestorID),
-		CONSTRAINT FK_InvestorBankAccount_InvestorAccountType FOREIGN KEY (InvestorAccountTypeID) REFERENCES InvestorAccountType(InvestorAccountTypeID)
+		CONSTRAINT PK_I_InvestorBankAccount PRIMARY KEY (InvestorBankAccountID),
+		CONSTRAINT FK_I_InvestorBankAccount_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_InvestorBankAccount_I_InvestorAccountType FOREIGN KEY (InvestorAccountTypeID) REFERENCES I_InvestorAccountType(InvestorAccountTypeID)
 	)
 END
 GO
 
-IF object_id('InvestorBankAccountTransaction') IS NULL
+IF object_id('I_InvestorBankAccountTransaction') IS NULL
 BEGIN
-	CREATE TABLE InvestorBankAccountTransaction (
+	CREATE TABLE I_InvestorBankAccountTransaction (
 		InvestorBankAccountTransactionID INT NOT NULL IDENTITY(1,1),
 		InvestorBankAccountID INT NOT NULL,
 		PreviousBalance DECIMAL(18,6),
@@ -115,15 +113,15 @@ BEGIN
 		TransactionAmount DECIMAL(18,6),
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorBankAccountTransaction PRIMARY KEY (InvestorBankAccountTransactionID),
-		CONSTRAINT FK_InvestorBankAccountTransaction_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES InvestorBankAccount(InvestorBankAccountID)
+		CONSTRAINT PK_I_InvestorBankAccountTransaction PRIMARY KEY (InvestorBankAccountTransactionID),
+		CONSTRAINT FK_I_InvestorBankAccountTransaction_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID)
 	)
 END
 GO
 
-IF object_id('InvestorSystemBalance') IS NULL
+IF object_id('I_InvestorSystemBalance') IS NULL
 BEGIN
-	CREATE TABLE InvestorSystemBalance (
+	CREATE TABLE I_InvestorSystemBalance (
 		InvestorSystemBalanceID INT NOT NULL IDENTITY(1,1),
 		InvestorBankAccountID INT NOT NULL,
 		PreviousBalance DECIMAL(18,6),
@@ -131,15 +129,15 @@ BEGIN
 		TransactionAmount DECIMAL(18,6),
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorSystemBalance PRIMARY KEY (InvestorSystemBalanceID),
-		CONSTRAINT FK_InvestorSystemBalance_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES InvestorBankAccount(InvestorBankAccountID),
+		CONSTRAINT PK_I_InvestorSystemBalance PRIMARY KEY (InvestorSystemBalanceID),
+		CONSTRAINT FK_I_InvestorSystemBalance_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID),
 	)
 END
 GO
 
-IF object_id('InvestorOverallStatistics') IS NULL
+IF object_id('I_InvestorOverallStatistics') IS NULL
 BEGIN
-	CREATE TABLE InvestorOverallStatistics (
+	CREATE TABLE I_InvestorOverallStatistics (
 		InvestorOverallStatisticsID INT NOT NULL IDENTITY(1,1),
 		InvestorID INT NOT NULL,
 		InvestorAccountTypeID INT NOT NULL,		
@@ -149,9 +147,89 @@ BEGIN
 		Recoveries DECIMAL(18,6),
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_InvestorOverallStatistics PRIMARY KEY (InvestorOverallStatisticsID),
-		CONSTRAINT FK_InvestorOverallStatistics_Investor FOREIGN KEY (InvestorID) REFERENCES Investor(InvestorID),
-		CONSTRAINT FK_InvestorOverallStatistics_InvestorAccountType FOREIGN KEY (InvestorAccountTypeID) REFERENCES InvestorAccountType(InvestorAccountTypeID)
+		CONSTRAINT PK_I_InvestorOverallStatistics PRIMARY KEY (InvestorOverallStatisticsID),
+		CONSTRAINT FK_I_InvestorOverallStatistics_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_InvestorOverallStatistics_I_InvestorAccountType FOREIGN KEY (InvestorAccountTypeID) REFERENCES I_InvestorAccountType(InvestorAccountTypeID)
 	)
 END
 GO
+
+IF object_id('I_Product') IS NULL
+BEGIN
+	CREATE TABLE I_Product (
+		ProductID INT NOT NULL IDENTITY(1,1),
+	   	Name NVARCHAR(255),
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Product PRIMARY KEY (ProductID)
+	)
+END
+GO
+
+IF object_id('I_ProductType') IS NULL
+BEGIN
+	CREATE TABLE I_ProductType (
+		ProductTypeID INT NOT NULL IDENTITY(1,1),
+	   	ProductID INT NOT NULL,
+	   	Name NVARCHAR(255),
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_ProductType PRIMARY KEY (ProductTypeID),
+		CONSTRAINT FK_I_ProductType_I_Product FOREIGN KEY (ProductID) REFERENCES I_Product(ProductID)
+	)
+END
+GO
+
+
+IF object_id('I_ProductTerm') IS NULL
+BEGIN
+	CREATE TABLE I_ProductTerm (
+		ProductTermID INT NOT NULL IDENTITY(1,1),
+	   	Name NVARCHAR(255),
+	   	FromMonths INT NOT NULL,
+	   	ToMonths INT NOT NULL,
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_ProductTerm PRIMARY KEY (ProductTermID)
+	)
+END
+GO
+
+
+IF object_id('I_ProductSubType') IS NULL
+BEGIN
+	CREATE TABLE I_ProductSubType (
+		ProductSubTypeID INT NOT NULL IDENTITY(1,1),
+	   	ProductTypeID INT NOT NULL,
+	   	ProductTermID INT NOT NULL,
+	   	Name NVARCHAR(255),
+	   	AllowedForExternalInvestor BIT NOT NULL,
+	   	PulledLoans BIT NOT NULL,
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_ProductSubType PRIMARY KEY (ProductSubTypeID),
+		CONSTRAINT FK_I_ProductSubType_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
+		CONSTRAINT FK_I_ProductSubType_I_ProductTerm FOREIGN KEY (ProductTermID) REFERENCES I_ProductTerm(ProductTermID)
+	)
+END
+GO
+
+IF object_id('I_Portfolio') IS NULL
+BEGIN
+	CREATE TABLE I_Portfolio (
+		PortfolioID INT NOT NULL IDENTITY(1,1),
+		InvestorID INT NOT NULL,
+		ProductTypeID INT NOT NULL,		
+		LoanID INT NOT NULL,
+		LoanPercentage DECIMAL(18,6) NOT NULL,
+		InitialTerm INT NOT NULL,
+		GradeID INT NOT NULL,
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Portfolio PRIMARY KEY (PortfolioID),
+		CONSTRAINT FK_I_Portfolio_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_Portfolio_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID)
+	)
+END
+GO
+
+
