@@ -520,7 +520,6 @@ hr.margin-0  {margin: 0;}
 
 #sidebar-dashboard {
     width: 275px;
-    overflow-y: auto !important;
 }
 
 #sidebar+#sidebar-dashboard+#main-content {
