@@ -334,7 +334,7 @@
                     </span>
                 </td>
             </tr>
-			@RowCellWithSlider("Block taking loan", "blockTakingLoanSwitch", "No", "Yes", "<%= data.BlockTakingLoan ? 'red_cell' : '' %> block-taking-loan-td customer-details-switch-height tltp", tooltip: "<%= data.BlockTakingLoan ? 'Blocked for funds transfer, uncheck to resume.' : '' %>")
+			@RowCellWithSlider("Block taking loan", "blockTakingLoanSwitch", "No", "Yes", "<%= data.BlockTakingLoan ? 'red_cell' : '' %> block-taking-loan-td customer-details-switch-height tltp", tooltip: "<%= data.BlockTakingLoan ? 'Blocked for funds transfer,<br> uncheck to resume.' : '' %>")
 
             @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td customer-details-switch-height")
 
