@@ -17,14 +17,14 @@
 		} // enum Field
 
 		public VatReturnSeeds(ASafeLog oLog) {
-			m_oLog = oLog.Safe();
+			this.log = oLog.Safe();
 
-			m_oProperties = new SortedDictionary<Field, dynamic>();
+			this.properties = new SortedDictionary<Field, dynamic>();
 
 			Period = null;
-			DateFrom = ms_oLongTimeAgo;
-			DateTo = ms_oLongTimeAgo;
-			DateDue = ms_oLongTimeAgo;
+			DateFrom = longTimeAgo;
+			DateTo = longTimeAgo;
+			DateDue = longTimeAgo;
 
 			RegistrationNo = 0;
 			BusinessName = null;
@@ -76,17 +76,17 @@
 
 			InterpolateDatesFromPeriod();
 
-			if (DateFrom.Equals(ms_oLongTimeAgo)) {
+			if (DateFrom <= longTimeAgo) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Date From' not specified.");
 			} // if
 
-			if (DateTo.Equals(ms_oLongTimeAgo)) {
+			if (DateTo <= longTimeAgo) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Date To' not specified.");
 			} // if
 
-			if (DateDue.Equals(ms_oLongTimeAgo)) {
+			if (DateDue <= longTimeAgo) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Date Due' not specified.");
 			} // if
@@ -98,15 +98,15 @@
 		/// Interpolate dates from period if needed & possible.
 		/// </summary>
 		private void InterpolateDatesFromPeriod() {
-			if (!DateFrom.Equals(ms_oLongTimeAgo) && !DateTo.Equals(ms_oLongTimeAgo)) {
-				m_oLog.Debug("Not interpolating dates from period: dates have already been set.");
+			if ((DateFrom > longTimeAgo) && (DateTo > longTimeAgo)) {
+				this.log.Debug("Not interpolating dates from period: dates have already been set.");
 				return;
 			} // if
 
 			string[] monthYear = Period.Split(' ');
 
 			if (monthYear.Length != 2) {
-				m_oLog.Debug("Not interpolating dates from period: period '{0}' is not in expected format.", Period);
+				this.log.Debug("Not interpolating dates from period: period '{0}' is not in expected format.", Period);
 				return;
 			} // if
 
@@ -120,7 +120,7 @@
 			int year;
 
 			if (!int.TryParse(monthYear[0], out month)) {
-				m_oLog.Debug(
+				this.log.Debug(
 					"Not interpolating dates from period: period's month '{0}' is not in expected format.",
 					monthYear[0]
 				);
@@ -128,7 +128,7 @@
 			} // if
 
 			if ((month < 1) || (month > 12)) {
-				m_oLog.Debug(
+				this.log.Debug(
 					"Not interpolating dates from period: period's month '{0}' is not in range 1..12.",
 					month
 				);
@@ -137,7 +137,7 @@
 			} // if
 
 			if (!int.TryParse(monthYear[1], out year)) {
-				m_oLog.Debug(
+				this.log.Debug(
 					"Not interpolating dates from period: period's year '{0}' is not in expected format.",
 					monthYear[1]
 				);
@@ -151,7 +151,7 @@
 			DateTo = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(1).AddSeconds(-1).Date;
 			DateDue = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(2).AddDays(7).Date;
 
-			m_oLog.Debug(
+			this.log.Debug(
 				"Dates have been interpolated from period:\n\tperiod: {0}\n\tfrom: {1}\n\tto: {2}\n\tdue: {3}",
 				Period,
 				DateFrom.ToString("M d yyyy H:mm:ss", CultureInfo.InvariantCulture),
@@ -200,30 +200,30 @@
 		} // AreBusinessDetailsValid
 
 		public SortedDictionary<string, Coin> ReturnDetails {
-			get { return m_oProperties[Field.ReturnDetails]; }
-			private set { m_oProperties[Field.ReturnDetails] = value; }
+			get { return this.properties[Field.ReturnDetails]; }
+			private set { this.properties[Field.ReturnDetails] = value; }
 		} // ReturnDetails
 
 		public void Set(Field f, dynamic oValue, ASafeLog oLog = null) {
-			m_oProperties[f] = oValue;
+			this.properties[f] = oValue;
 
 			if (oLog != null)
 				oLog.Debug("VatReturnSeeds.{0} := {1}", f.ToString(), oValue.ToString());
 		} // Set
 
 		public dynamic Get(Field f) {
-			return m_oProperties[f];
+			return this.properties[f];
 		} // Get
 
 		private void AddFatalError(string sError) {
 			FatalErrors.Add(sError);
-			m_oLog.Debug(sError);
+			this.log.Debug(sError);
 		} // AddFatalError
 
-		private readonly SortedDictionary<Field, dynamic> m_oProperties;
+		private readonly SortedDictionary<Field, dynamic> properties;
 
-		private readonly ASafeLog m_oLog;
+		private readonly ASafeLog log;
 
-		private static readonly DateTime ms_oLongTimeAgo = new DateTime(1976, 7, 1, 9, 30, 0, DateTimeKind.Utc);
+		private static readonly DateTime longTimeAgo = new DateTime(1976, 7, 1, 9, 30, 0, DateTimeKind.Utc);
 	} // class VatReturnSeeds
 } // namespace Ezbob.HmrcHarvester

@@ -14,7 +14,7 @@
 			CustomerRepository customers,
 			IWorkplaceContext context
 		) {
-			m_oAccountManager = new HmrcManualAccountManager(
+			this.vatAccountManager = new HmrcManualAccountManager(
 				false,
 				customers,
 				helper,
@@ -31,24 +31,24 @@
 			if (!int.TryParse(Request.Headers["ezbob-underwriter-customer-id"], out nCustomerID))
 				return HmrcManualAccountManager.CreateJsonError("Failed to upload files: customer id header is missing.");
 
-			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID, "UploadHmrcController", "SaveFile");
+			return this.vatAccountManager.SaveUploadedFiles(Request.Files, nCustomerID, "UploadHmrcController", "SaveFile");
 		} // SaveFile
 
 		[HttpPost]
 		public JsonResult SaveNewManuallyEntered(string sData) {
-			return m_oAccountManager.SaveNewManuallyEntered(sData);
+			return this.vatAccountManager.SaveNewManuallyEntered(sData);
 		} // SaveNewManuallyEntered
 
 		[HttpGet]
 		public JsonResult LoadPeriods([Bind(Prefix = "customerId")] int nCustomerID) {
-			return m_oAccountManager.LoadPeriods(nCustomerID);
+			return this.vatAccountManager.LoadPeriods(nCustomerID);
 		} // LoadPeriods
 
 		[HttpPost]
 		public JsonResult RemovePeriod(string period) {
-			return m_oAccountManager.RemovePeriod(period);
+			return this.vatAccountManager.RemovePeriod(period);
 		} // RemovePeriod
 
-		private readonly HmrcManualAccountManager m_oAccountManager;
+		private readonly HmrcManualAccountManager vatAccountManager;
 	} // class UploadHmrcController
 } // namespace
