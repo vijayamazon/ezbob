@@ -3,13 +3,9 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
-	using Ezbob.Utils.Extensions;
 	using PaymentServices.PayPoint;
-	using SalesForceLib.Models;
 
 	public class AutoPaymentResult {
 		public decimal ActualAmountCharged { get; set; }
