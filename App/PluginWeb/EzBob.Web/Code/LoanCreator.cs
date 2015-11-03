@@ -322,7 +322,7 @@
 			if (!cus.WizardStep.TheLastOne)
 				throw new CustomerIsNotFullyRegisteredException();
 
-			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.IsEnabled)
+			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.IsEnabled || cus.BlockTakingLoan)
 				throw new Exception("Invalid customer state");
 		} // ValidateCustomer
 

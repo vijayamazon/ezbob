@@ -830,7 +830,7 @@ div.company-full-details{
 }
 
 .click-wrap .terms-conditions-checkbox-label {
-    width: 50%;
+    width: 55%;
     color: #494949;
     font-weight: 400;
     line-height: 16px;
@@ -1058,9 +1058,11 @@ hr.wizard-hr {
 
 .alert-msg {
 	display: inline-block;
-	vertical-align: top;
-	line-height: 37px;
+	vertical-align: middle;
+	line-height: normal;
 	margin-left: 10px;
+	margin-bottom: 5px;
+	width: 90%;
 }
 
 .notification_green {
@@ -1078,7 +1080,7 @@ hr.wizard-hr {
 .notification_red {
 	background: transparent;
 	border: 2px solid #d20002;
-	color: #d20002;
+	color: #ef7b7c;
 }
 /**End Notifications**/
 
@@ -1519,7 +1521,8 @@ h3.group-title {
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay {
-    background: #fff;
+    opacity: 0.8;
+	background-color: #28211f;
 }
 
 #colorbox {
@@ -2377,4 +2380,15 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 
  .logon-wrap {
 	padding-bottom: 0px;
+}
+
+ .notifications .pe-7s-check,
+ .notifications .pe-7s-attention,
+ .notifications .pe-7s-info {
+	vertical-align: middle;
+    padding-bottom: 5px;
+}
+
+ .stop-scroll {
+	overflow: hidden;
 }

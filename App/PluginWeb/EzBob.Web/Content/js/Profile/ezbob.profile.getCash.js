@@ -193,10 +193,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			close: function() {
 				$(this).dialog('destroy');
 				self.$el.append(this);
+				$('body').removeClass('stop-scroll');
 			}, // on close
 			open: function() {
 				var me = $(this);
-
+				$('body').addClass('stop-scroll');
 				$('.ui-dialog-titlebar', me.parent()).hide();
 
 				$('a.trustpilot-rate', me).click(function() {
@@ -311,8 +312,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 						href: '#refresh-accounts-dlg',
 						inline: true,
 						open: true,
+						onOpen: function() {
+							$('body').addClass('stop-scroll');
+						},
 						onClosed: function() {
 							that.refreshAccount();
+							$('body').removeClass('stop-scroll');
 						},
 						close: '<i class="pe-7s-close"></i>',
 					});
@@ -434,7 +439,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh-vat-return',
 			inline: true,
 			open: true,
-			onClosed: function() { $.colorbox.remove(); },
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
+			onClosed: function() {
+				$.colorbox.remove();
+				$('body').removeClass('stop-scroll');
+			},
 			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshVatReturn
@@ -452,7 +463,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh_yodlee_help',
 			inline: true,
 			open: true,
-			onClosed: function() { $.colorbox.remove(); },
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
+			onClosed: function() {
+				$.colorbox.remove(); 
+				$('body').removeClass('stop-scroll');
+			},
 			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshYodlee
@@ -471,7 +488,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh_ekm_help',
 			inline: true,
 			open: true,
-			onClosed: function() { $.colorbox.remove(); },
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
+			onClosed: function() {
+				$.colorbox.remove(); 
+				$('body').removeClass('stop-scroll');
+			},
 			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshEkm
@@ -490,7 +513,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh_hmrc_help',
 			inline: true,
 			open: true,
-			onClosed: function() { $.colorbox.remove(); },
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
+			onClosed: function() {
+				$.colorbox.remove(); 
+				$('body').removeClass('stop-scroll');
+			},
 			close: '<i class="pe-7s-close"></i>',
 		});
 	}, // refreshLinkedHmrc

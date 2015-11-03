@@ -24,6 +24,18 @@ EzBob.JqModalRegion = Backbone.Marionette.Region.extend({
 			option['resizable'] = true;
 			option['draggable'] = true;
 		} // if
+		else {
+			if (!option['open']) {
+				option['open'] = function() {
+					$('body').addClass('stop-scroll');
+				};
+			}
+			if (!option['close']) {
+				option['close'] = function() {
+					$('body').removeClass('stop-scroll');
+				}
+			}
+		}
 
 		if (this.isWizard) {
 			$('body').scrollTo(0);
