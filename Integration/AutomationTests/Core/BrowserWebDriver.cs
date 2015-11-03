@@ -62,6 +62,7 @@
             if (driver != null)
             {
                 driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(DriverTimeOut));
+                driver.Manage().Window.Maximize();
             }
 
             return driver;

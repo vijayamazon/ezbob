@@ -5,6 +5,8 @@
       using UIAutomationTests.Core;
       using UIAutomationTests.Tests.Shared;
       using OpenQA.Selenium;
+      using OpenQA.Selenium.Firefox;
+      using OpenQA.Selenium.Interactions;
       using OpenQA.Selenium.Support.UI;
 
  ﻿    class BrokerTests : WebTestBase {
@@ -50,20 +52,16 @@
                   newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
                   IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
                   leadSendInvitation.Click();
 
-                  Thread.Sleep(40000);
-                  //WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(120));
-                  //IWebElement myDynamicElement = wait.Until<IWebElement>((d) => { return d.FindElement(By.ClassName("odd")); });
-                  //Driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.Parse("40"));
-                  IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
+                  IWebElement statusList = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("tr.odd > td.grid-item-Status"));
 
-                  Assert.IsTrue(string.Equals(stsausList.FindElement(By.ClassName("grid-item-Status")).Text, "Application not started"));//Verify that leed status is "Application not started"
+                  Assert.AreEqual(statusList.Text, "Application not started");//Verify that lead status is "Application not started"
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off > a"));
                   logOff.Click();
                   return null;
               });
@@ -81,16 +79,15 @@
                   newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
                   IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
                   leadSendInvitation.Click();
 
-                  Thread.Sleep(80000);
-                  IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
-                  Assert.IsTrue(string.Equals(stsausList.FindElement(By.ClassName("grid-item-Status")).Text, "Application not started"));//Verify that leed status is "Application not started".
+                  IWebElement statusList = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("tr.odd > td.grid-item-Status"));
+                  Assert.AreEqual(statusList.Text, "Application not started");//Verify that lead status is "Application not started".
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off > a"));
                   logOff.Click();
 
                   GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9
@@ -111,21 +108,21 @@
                   newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
                   IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
                   leadSendInvitation.Click();
 
-                  Thread.Sleep(40000);
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));//Strep 8
+                  SharedServiceClass.WaitForBlockUiOff(Driver);
+                  //Driver.Manage().Cookies.DeleteAllCookies();
+                  IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));//Strep 8
                   logOff.Click();
 
                   GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9 
                   string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, BrandConfig.GetString("Enviorment_url"));
-                  Driver.Navigate()
-                      .GoToUrl(sentLink);
+                  Driver.Navigate().GoToUrl(sentLink);
 
-                  IWebElement email = Driver.FindElement(By.Id("Email"));
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
                   Assert.AreEqual(email.GetAttribute("Value"), leadMail);
                   return null;
               });
@@ -143,13 +140,13 @@
                   newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
                   IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));//Step 7
                   leadFillWizard.Click();
 
-                  Thread.Sleep(10000);
-                  Assert.AreEqual(Driver.FindElement(By.Id("Email")).GetAttribute("value"), leadMail);//Verify that leed's email is displayed in the Email address field.
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                  Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
                   return null;
               });
               Assert.IsTrue(result);
@@ -166,31 +163,28 @@
                   newBroker.BrokerLogIn(brokerMail);//Step 1
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);//Preconditions
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Preconditions
 
                   IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Preconditions
                   leadSendInvitation.Click();
 
-                  Thread.Sleep(40000);
-                  IWebElement statusList = Driver.FindElement(By.ClassName("odd"));//Step 3
-                  IWebElement profileLink = statusList.FindElement(By.ClassName("grid-item-FirstName"));
-                  profileLink.FindElement(By.ClassName("profileLink")).Click();
+                  IWebElement statusList = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("tr.odd td.grid-item-FirstName a.profileLink"));//Step 3
+                  statusList.Click();
 
-                  IWebElement leadFillWizard = Driver.FindElement(By.ClassName("lead-fill-wizard"));
+                  IWebElement leadFillWizard = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.section-lead-details > div.back-to-list-container > button.lead-fill-wizard.button"));
                   leadFillWizard.Click();
 
-                  Thread.Sleep(10000);
-                  Assert.IsTrue(string.Equals(Driver.FindElement(By.Id("Email")).GetAttribute("value"), leadMail));//Verify that leed's email is displayed in the Email address field.
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                  Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
 
-                  IWebElement buttonContainer = Driver.FindElement(By.ClassName("button-container"));
-                  buttonContainer.FindElement(By.ClassName("button"))
-                      .Click();
+                  IWebElement buttonContainer = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.button-container > button"));
+                  buttonContainer.Click();
 
-                  IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
+                  statusList = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("tr.odd td.grid-item-Status"));
 
-                  Assert.IsTrue(string.Equals(stsausList.FindElement(By.ClassName("grid-item-Status")).Text, "Application not started"));//Verify that we've returned to the Broker dashboard
+                  Assert.AreEqual(statusList.Text, "Application not started");//Verify that we've returned to the Broker dashboard
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off > a"));
                   logOff.Click();
                   return null;
               });
@@ -209,27 +203,27 @@
                   newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
                   IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));//Step 7
                   leadFillWizard.Click();
 
-                  Thread.Sleep(10000);
-                  Assert.IsTrue(string.Equals(Driver.FindElement(By.Id("Email")).GetAttribute("value"), leadMail));//Verify that leed's email is displayed in the Email address field.
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                  Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
 
                   WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
 
                   //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newWizard.ImplementWizardStepOne("BrokerFillLeed", "", "123123", 2, "asd", "1000");//Step 8 (C3)
+                  newWizard.PerformWizardStepOne(false,"BrokerFillLead", "", "123123", 2, "asd", "1000");//Step 8 (C3)
 
-                  newWizard.ImplementWizardStepTwo("BrokerFillLeed", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);//Step 9 (C1380)
+                  newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);//Step 9 (C1380)
 
-                  newWizard.ImplementWizardStepThree("Entrepreneur", false, "15", "123");//Step 10 (C91)
+                  newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");//Step 10 (C91)
 
                   //Wizard Step 4 - add EKM account
-                  newWizard.ImplementWizardStepFour("BrokerFillLeed", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 11 (C788)
+                  newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 11 (C788)
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));
                   logOff.Click();
                   return null;
               });
@@ -248,29 +242,30 @@
                   newBroker.BrokerLogIn(brokerMail);
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);
 
-                  IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));
+                  IWebElement leadFillWizard = SharedServiceClass.ElementIsVisible(Driver, By.Id("LeadFillWizard"));
                   leadFillWizard.Click();
 
-                  Thread.Sleep(10000);
-                  Assert.IsTrue(string.Equals(Driver.FindElement(By.Id("Email")).GetAttribute("value"), leadMail));//Verify that leed's email is displayed in the Email address field.
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                  Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
 
                   WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);//Preconditions
 
                   //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newWizard.ImplementWizardStepOne("BrokerFillLeed", "", "123123", 2, "asd", "1000");//Step 1 (C3)
+                  newWizard.PerformWizardStepOne(false,"BrokerFillLead", "", "123123", 2, "asd", "1000");//Step 1 (C3)
 
-                  newWizard.ImplementWizardStepTwo("BrokerFillLeed", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);//Step 2 (C1380)
+                  newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);//Step 2 (C1380)
 
-                  IWebElement finishLater = Driver.FindElement(By.Id("wizard")).FindElement(By.CssSelector("button.button.btn-green.clean-btn"));//Step 3
-                  finishLater.Click();
+                  SharedServiceClass.WaitForBlockUiOff(Driver);
 
-                  Thread.Sleep(5000);
-                  IWebElement stsausList = Driver.FindElement(By.ClassName("odd"));
-                  Assert.AreEqual("Personal Details", stsausList.FindElement(By.ClassName("grid-item-Status")).Text);
+                  IWebElement finishLater = SharedServiceClass.ElementIsVisible(Driver, By.Id("wizard"));//Step 3
+                  finishLater.FindElement(By.CssSelector("button.button.btn-green.clean-btn")).Click();
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement statusList = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("tr.odd > td.grid-item-Status"));
+                  Assert.AreEqual("Personal Details", statusList.Text);
+
+                  IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));
                   logOff.Click();
 
                   return null;
@@ -313,27 +308,27 @@
                   newBroker.BrokerLogIn(brokerMail);
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-afD10@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);
 
-                  IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));
+                  IWebElement leadFillWizard = SharedServiceClass.ElementToBeClickable(Driver, By.Id("LeadFillWizard"));
                   leadFillWizard.Click();
 
-                  Thread.Sleep(10000);
-                  Assert.IsTrue(string.Equals(Driver.FindElement(By.Id("Email")).GetAttribute("value"), leadMail));//Verify that leed's email is displayed in the Email address field.
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                  Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
 
                   WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
 
                   //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newWizard.ImplementWizardStepOne("BrokerFillLeed", "", "123123", 2, "asd", "1000");
+                  newWizard.PerformWizardStepOne(false,"BrokerFillLead", "", "123123", 2, "asd", "1000");
 
-                  newWizard.ImplementWizardStepTwo("BrokerFillLeed", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
+                  newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
 
-                  newWizard.ImplementWizardStepThree("Entrepreneur", false, "15", "123");
+                  newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
 
                   //Wizard Step 4 - add paypal account
-                  newWizard.ImplementWizardStepFour("BrokerFillLeed", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                  newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
 
-                  IWebElement widget = Driver.FindElement(By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 1
+                  IWebElement widget = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
 
                   IWebElement widgetComission = widget.FindElement(By.CssSelector("dd.dashes"));//Step 2.1
                   Assert.AreEqual("---", widgetComission.Text);
@@ -341,7 +336,7 @@
                   IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
                   Assert.AreEqual("£0.00", widgetIssued.Text);
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));
                   logOff.Click();
 
                   return null;
@@ -360,42 +355,45 @@
                   newBroker.BrokerLogIn(brokerMail);
 
                   string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afd10@ezbob.com";
-                  newBroker.BrokerLeedEnrolment("LeadFName", "LeadLName", leadMail);
+                  newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);
 
-                  IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));
+                  IWebElement leadFillWizard = SharedServiceClass.ElementToBeClickable(Driver, By.Id("LeadFillWizard"));
                   leadFillWizard.Click();
 
-                  Thread.Sleep(10000);
-                  Assert.IsTrue(string.Equals(Driver.FindElement(By.Id("Email")).GetAttribute("value"), leadMail));//Verify that leed's email is displayed in the Email address field.
+                  IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                  Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
 
                   WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
 
                   //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-                  newWizard.ImplementWizardStepOne("BrokerFillLeed", "", "123123", 2, "asd", "1000");
+                  newWizard.PerformWizardStepOne(false,"BrokerFilllead", "", "123123", 2, "asd", "1000");
 
-                  newWizard.ImplementWizardStepTwo("BrokerFillLeed", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
+                  newWizard.PerformWizardStepTwo("BrokerFilllead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
 
-                  newWizard.ImplementWizardStepThree("Entrepreneur", false, "15", "123");
+                  newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
 
                   //Wizard Step 4 - add paypal account
-                  newWizard.ImplementWizardStepFour("BrokerFillLeed", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                  newWizard.PerformWizardStepFour("BrokerFilllead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
 
-                  IWebElement logOffBroker = Driver.FindElement(By.ClassName("log-off"));
+                  //SharedServiceClass.WaitForAjaxReady(Driver);
+                  //Driver.Manage().Cookies.DeleteAllCookies();
+                  IWebElement logOffBroker = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
+                  SharedServiceClass.WaitForBlockUiOff(Driver);
                   logOffBroker.Click();
-                  Thread.Sleep(1000);
 
                   CustomerShared newCustomer = new CustomerShared(Driver, EnvironmentConfig, BrandConfig);
                   newCustomer.CustomerLogIn(true, leadMail);
                   newCustomer.CustomerTakeLoan("LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
 
-                  Thread.Sleep(4000);
-                  IWebElement logOffCustomer = Driver.FindElement(By.LinkText("Log Off"));//Preconditions
+                  //SharedServiceClass.WaitForAjaxReady(Driver);
+                  //Driver.Manage().Cookies.DeleteAllCookies();
+                  SharedServiceClass.WaitForBlockUiOff(Driver);
+                  IWebElement logOffCustomer = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.login > a"));
                   logOffCustomer.Click();
-                  Thread.Sleep(2000);
 
                   newBroker.BrokerLogIn(brokerMail);//Step 1
 
-                  IWebElement widget = Driver.FindElement(By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));
+                  IWebElement widget = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
 
                   IWebElement widgetComission = widget.FindElement(By.CssSelector("dd.dashes"));//Step 2.1
                   Assert.AreEqual("---", widgetComission.Text);
@@ -403,7 +401,7 @@
                   IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
                   Assert.IsTrue(decimal.Parse(widgetIssued.Text.Substring(1)) != 0.0m);
 
-                  IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off a"));
+                  IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
                   logOff.Click();
 
                   return null;
@@ -412,9 +410,36 @@
           }
 
 
-          [Test]
-          [Category("1357")]
-          public void TestCase1357() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+ ﻿        [Test]
+ ﻿        [Category("1357")]
+ ﻿        public void TestCase1357() {
+ ﻿            bool result = this.ExecuteTest<object>(() => {
+                  BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                  string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                  newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+
+                  newBroker.BrokerLogIn(brokerMail);//Step 1
+
+                  IWebElement widget = Driver.FindElement(By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
+
+                  IWebElement widgetComission = widget.FindElement(By.CssSelector("dd.dashes"));//Step 2.1
+                  Assert.AreEqual("---", widgetComission.Text);
+
+                  IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
+                  Assert.AreEqual("£0.00", widgetIssued.Text);
+
+ ﻿                newBroker.BrokerAddBankAccount("20115636", "62", "10", "00", 'P');//Step 3
+
+                 IWebElement widgetLinkedAccount = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.linked_bank > div.d-widgets > div.d-widget"));//Step 4
+
+                 Assert.AreEqual("£0.00", widgetLinkedAccount.FindElement(By.CssSelector("dd.broker-commission")).Text);//Step 4.1
+
+                 Assert.AreEqual("£0.00", widgetLinkedAccount.FindElement(By.CssSelector("dd.broker-approved")).Text);//Step 4.2
+                 
+                 return null;
+ ﻿            });
+              Assert.IsTrue(result);
+ ﻿        }
 
           [Test]
           [Category("1358")]

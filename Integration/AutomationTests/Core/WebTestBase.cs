@@ -57,6 +57,7 @@
                                     }
                                 }
 
+                                Driver.Manage().Cookies.DeleteAllCookies();
                                 codeToExecute.Invoke();
 
                                 if (!IsDebugMode) {

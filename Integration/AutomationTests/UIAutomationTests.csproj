@@ -219,6 +219,7 @@
     <Compile Include="Tests\Legacy\Everline\EverlineTests.cs" />
     <Compile Include="Tests\Shared\BrokerShared.cs" />
     <Compile Include="Tests\Shared\CustomerShared.cs" />
+    <Compile Include="Tests\Shared\SharedServiceClass.cs" />
     <Compile Include="Tests\Shared\WizardShared.cs" />
     <Compile Include="Tests\WorkFlow\Collection\CollectionTests.cs" />
     <Compile Include="Tests\WorkFlow\Loan\LoanTests.cs" />
