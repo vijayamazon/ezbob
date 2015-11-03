@@ -45,12 +45,6 @@ namespace UIAutomationTests.Tests.Shared {
         public static bool WaitForBlockUiOff(IWebDriver Driver, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForBlockUiOff());
         }
-
-        public static void ScrollIntoView(IWebDriver Driver, IWebElement Element) {
-            IJavaScriptExecutor jsExe = Driver as IJavaScriptExecutor;
-            jsExe.ExecuteScript("arguments[0].scrollIntoView(true);", Element);
-            //jsExe.ExecuteScript("arguments[0].click();", Element);
-        }
     }
 
     public class ExpectedConditionsExtention {
@@ -87,7 +81,7 @@ namespace UIAutomationTests.Tests.Shared {
         }
 
         //public static Func<IWebDriver, bool> WaitForAjaxReady4(IJavaScriptExecutor jsExe) {
-        //    return (driver) => (bool)jsExe.ExecuteScript("$(window).onload = function(){return true;}");
+        //    return (driver) => (bool)jsExe.ExecuteScript("$(window).on('load',function(){return true;}");
         //}
     }
 }
