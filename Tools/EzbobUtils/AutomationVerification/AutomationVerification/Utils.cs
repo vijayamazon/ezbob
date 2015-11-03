@@ -14,10 +14,17 @@
 				.Replace("&amp;", "&")
 				.Replace(".", string.Empty)
 				.Replace("#049;", "'")
+				.Replace('(', ' ')
+				.Replace(')', ' ')
+				.Trim()
 			);
 
 			return string.Join(" ", words.Where(w => w != "the").Select(w => w == "limited" ? "ltd" : w));
 		} // AdjustCompanyName
+
+		public static string SimplifyCompanyName(string companyName) {
+			return companyName.Replace('-', ' ');
+		} // SimplifyCompanyName
 
 		public static string DropStopWords(string companyName) {
 			if (string.IsNullOrWhiteSpace(companyName))
@@ -29,9 +36,9 @@
 			);
 		} // DropStopWords
 
-		public static AlienTokens FindAlienTokens(string firstName, string secondName) {
-			return new AlienTokens(firstName, secondName);
-		} // FindAlienTokens
+		public static TokenIntersection FindTokenIntersection(string firstName, string secondName) {
+			return new TokenIntersection(firstName, secondName);
+		} // FindTokenIntersection
 
 		/// <summary>
 		/// Calculates Levenshtein distance (aka edit distance) between two strings.

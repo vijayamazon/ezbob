@@ -141,6 +141,7 @@
 				set {
 					this.businessName = value;
 					AdjustedBusinessName = AutomationCalculator.Utils.AdjustCompanyName(value);
+					PlainBusinessName = AutomationCalculator.Utils.SimplifyCompanyName(AdjustedBusinessName);
 					NoStopwordsBusinessName = AutomationCalculator.Utils.DropStopWords(AdjustedBusinessName);
 				} // set
 			} // BusinessName
@@ -150,19 +151,28 @@
 				set {
 					this.experianCompanyName = value;
 					AdjustedExperianCompanyName = AutomationCalculator.Utils.AdjustCompanyName(value);
+					PlainExperianCompanyName = AutomationCalculator.Utils.SimplifyCompanyName(AdjustedExperianCompanyName);
 					NoStopwordsExperianCompanyName = AutomationCalculator.Utils.DropStopWords(AdjustedExperianCompanyName);
 				} // set
 			} // ExperianCompanyName
 
 			private string AdjustedBusinessName { get; set; }
+			private string PlainBusinessName { get; set; }
 			private string NoStopwordsBusinessName { get; set; }
 
 			private string AdjustedExperianCompanyName { get; set; }
+			private string PlainExperianCompanyName { get; set; }
 			private string NoStopwordsExperianCompanyName { get; set; }
 
 			private bool NameMatches {
 				get {
 					if (AdjustedBusinessName == AdjustedExperianCompanyName)
+						return true;
+
+					if (PlainBusinessName.IndexOf(PlainExperianCompanyName, StringComparison.InvariantCulture) >= 0)
+						return true;
+
+					if (PlainExperianCompanyName.IndexOf(PlainBusinessName, StringComparison.InvariantCulture) >= 0)
 						return true;
 
 					if (NoStopwordsBusinessName == NoStopwordsExperianCompanyName)
@@ -171,18 +181,12 @@
 					if (NoStopwordsBusinessName.Replace(" ", "") == NoStopwordsExperianCompanyName.Replace(" ", ""))
 						return true;
 
-					AlienTokens alienTokens = AutomationCalculator.Utils.FindAlienTokens(
+					TokenIntersection ti = AutomationCalculator.Utils.FindTokenIntersection(
 						NoStopwordsBusinessName,
 						NoStopwordsExperianCompanyName
 					);
 
-					if ((alienTokens.InFirstOnly.Count == 0) && (alienTokens.InSecondOnly.Count == 0))
-						return true;
-
-					if ((alienTokens.InFirstOnly.Count > 1) || (alienTokens.InSecondOnly.Count > 1))
-						return false;
-
-					return ((alienTokens.First.Count > 1) && (alienTokens.Second.Count > 1));
+					return ((ti.IntersectionLength >= 1) && (ti.FirstOnlyLength <= 1) && (ti.SecondOnlyLength <= 1));
 				} // get
 			} // NameMatches
 
