@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlienTokens.cs" />
+    <Compile Include="TokenIntersection.cs" />
     <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />

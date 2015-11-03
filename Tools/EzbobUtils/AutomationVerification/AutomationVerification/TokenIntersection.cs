@@ -2,32 +2,23 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
-	public class AlienTokens {
-		internal AlienTokens(string firstString, string secondString) {
-			this.inFirst = new List<string>();
-			this.inSecond = new List<string>();
-
+	public class TokenIntersection {
+		internal TokenIntersection(string firstString, string secondString) {
 			this.first = new HashSet<string>(firstString.Split(' '));
 			this.second = new HashSet<string>(secondString.Split(' '));
 
 			var levensteinComparer = new LevenshteinComparer();
 
-			this.inFirst.AddRange(this.first.Except(this.second, levensteinComparer));
-			this.inSecond.AddRange(this.second.Except(this.first, levensteinComparer));
+			this.intersection = this.first.Intersect(this.second, levensteinComparer).ToList();
 		} // constructor
 
-		public IReadOnlyCollection<string> First { get { return this.first.ToList().AsReadOnly(); } }
-		public IReadOnlyCollection<string> Second { get { return this.second.ToList().AsReadOnly(); } }
+		public int FirstOnlyLength { get { return this.first.Count - IntersectionLength; } }
+		public int SecondOnlyLength { get { return this.second.Count - IntersectionLength; } }
+		public int IntersectionLength { get { return this.intersection.Count; } }
 
-		/// <summary>
-		/// Gets tokens that appear in the first string but not in the second.
-		/// </summary>
-		public IReadOnlyCollection<string> InFirstOnly { get { return this.inFirst.AsReadOnly(); } }
-
-		/// <summary>
-		/// Gets tokens that appear in the second string but not in the first.
-		/// </summary>
-		public IReadOnlyCollection<string> InSecondOnly { get { return this.inSecond.AsReadOnly(); } }
+		private readonly ISet<string> first;
+		private readonly ISet<string> second;
+		private readonly List<string> intersection;
 
 		private class LevenshteinComparer : IEqualityComparer<string> {
 			/// <summary>
@@ -40,7 +31,7 @@
 			/// <param name="y">The second object of type <paramref name="string"/> to compare.</param>
 			public bool Equals(string x, string y) {
 				int levenshteinDistance = Utils.CalculateLevenshteinDistance(x, y);
-				return (0 <= levenshteinDistance) && (levenshteinDistance <= 1);
+				return (0 <= levenshteinDistance) && (levenshteinDistance <= 2);
 			} // Equals
 
 			/// <summary>
@@ -59,10 +50,5 @@
 				return obj.GetHashCode();
 			} // GetHashCode
 		} // LevenshteinComparer
-
-		private readonly ISet<string> first;
-		private readonly ISet<string> second;
-		private readonly List<string> inFirst;
-		private readonly List<string> inSecond;
-	} // class AlienTokens
+	} // class TokenIntersection
 } // namespace
