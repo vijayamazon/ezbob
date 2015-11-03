@@ -8,17 +8,17 @@
 
 	internal class LoanData {
 		public LoanData(int nLoanID, ASafeLog oLog) {
-			this.m_nLoanID = nLoanID;
-			this.m_oLog = oLog.Safe();
+			this.loanID = nLoanID;
+			this.log = oLog.Safe();
 
 			this.Schedule = new SortedDictionary<DateTime, InterestData>();
 			this.Repayments = new SortedDictionary<DateTime, TransactionData>();
 		} // constructor
 
 		/// <summary>
-		///     Earned interest is a SUM(Pj * Ij) where the sum is taken on all the days during
-		///     requested period when a loan could produce interest, Pj is a loan principal on
-		///     specific day, Ij is an interest on that day.
+		/// Earned interest is a SUM(Pj * Ij) where the sum is taken on all the days during
+		/// requested period when a loan could produce interest, Pj is a loan principal on
+		/// specific day, Ij is an interest on that day.
 		/// </summary>
 		/// <param name="oDateStart">Requested period start date, inclusive.</param>
 		/// <param name="oDateEnd">Requested period end date, exclusive.</param>
@@ -38,7 +38,7 @@
 			bool bAccountingMode,
 			BadPeriods bp,
 			DateTime? oWriteOffDate
-			) {
+		) {
 			DateTime oFirstIncomeDay = this.IssueDate.AddDays(1);
 
 			// A loan starts to produce interest on the next day.
@@ -66,8 +66,7 @@
 					pri.Update(t);
 			}); // for each day
 
-			PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0)
-				.ToArray();
+			PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0).ToArray();
 
 			if (days.Length == 0) {
 				LogAllDetails(
@@ -79,22 +78,18 @@
 					bVerboseLogging,
 					bAccountingMode,
 					oWriteOffDate
-					);
+				);
 				return 0;
 			} // if
 
 			InterestData[] aryDates = this.Schedule.Values.ToArray();
 
-			int nDayDataPtr = 0;
-			InterestData oCurDayData = aryDates[nDayDataPtr];
-
 			foreach (PrInterest pri in days) {
-				if (pri.Update(oCurDayData, ifp, bp, bAccountingMode, oWriteOffDate)) {
-					nDayDataPtr++;
+				InterestData oCurDayData = pri.Date > aryDates[aryDates.Length - 1].Date
+					? aryDates[aryDates.Length - 1]
+					: aryDates.First(cdd => pri.Date <= cdd.Date);
 
-					if (nDayDataPtr < aryDates.Length)
-						oCurDayData = aryDates[nDayDataPtr];
-				} // if
+				pri.Update(oCurDayData, ifp, bp, bAccountingMode, oWriteOffDate);
 			} // for
 
 			decimal nEarnedInterest = days.Sum(pri => pri.Principal * pri.Interest);
@@ -108,7 +103,7 @@
 				bVerboseLogging,
 				bAccountingMode,
 				oWriteOffDate
-				);
+			);
 
 			return nEarnedInterest;
 		} // Calculate
@@ -119,17 +114,17 @@
 		public decimal Amount;
 		public int CustomerID;
 
-		private string IfpToString(InterestFreezePeriods ifp) {
+		private static string IfpToString(InterestFreezePeriods ifp) {
 			string sIfp = "none";
 
-			if (ifp != null) {
-				var os = new StringBuilder();
+			if (ifp == null)
+				return sIfp;
 
-				ifp.ForEach(i => os.AppendFormat("\n\t{0}", i));
+			var os = new StringBuilder();
 
-				sIfp = os.ToString()
-					.Trim();
-			} // if
+			ifp.ForEach(i => os.AppendFormat("\n\t{0}", i));
+
+			sIfp = os.ToString().Trim();
 
 			return sIfp;
 		} // IfpToString
@@ -143,7 +138,7 @@
 			bool bVerboseLogging,
 			bool bAccountingMode,
 			DateTime? oWriteOffDate
-			) {
+		) {
 			if (!bVerboseLogging)
 				return;
 
@@ -152,42 +147,48 @@
 			else
 				sMsg = " - " + sMsg;
 
-			string sDaysList = (nEarnedInterest == 0) ? "none" : string.Join("\n\t", days.Select(pri => pri.ToString())
-				.ToArray());
+			string sDaysList = (nEarnedInterest == 0)
+				? "none"
+				: string.Join("\n\t", days.Select(pri => pri.ToString()).ToArray());
 
-			this.m_oLog.Debug(
+			string accountingModeName = bAccountingMode
+				? "accounting mode (no interest earned after the first Write Off, other bad statuses are ignored)"
+				: "normal mode (no interest earned during bad periods, Write Off is considered as just another bad status)";
+
+			this.log.Debug(
 				"\n\nLoanID: {0} for customer {14}, {1} issued on {2} earned interest is {6}{11}.\n" +
-					"Working mode: {15}\n" +
-					"Write off date: {16}\n" +
-					"Schedule ({7}):\n" +
-					"\t{3}\n" +
-					"Bad periods ({12}):\n" +
-					"\t{13}\n" +
-					"Freeze periods ({10}):\n" +
-					"\t{9}\n" +
-					"Transactions ({8}):\n" +
-					"\t{4}\n" +
-					"Per day:\n" +
-					"\t{5}\n\n", this.m_nLoanID, this.Amount, this.IssueDate,
-				string.Join("\n\t", this.Schedule.Values.Select(v => v.ToString())
-					.ToArray()),
-				string.Join("\n\t", this.Repayments.Values.Select(v => v.ToString())
-					.ToArray()),
+				"Working mode: {15}\n" +
+				"Write off date: {16}\n" +
+				"Schedule ({7}):\n" +
+				"\t{3}\n" +
+				"Bad periods ({12}):\n" +
+				"\t{13}\n" +
+				"Freeze periods ({10}):\n" +
+				"\t{9}\n" +
+				"Transactions ({8}):\n" +
+				"\t{4}\n" +
+				"Per day:\n" +
+				"\t{5}\n\n",
+				this.loanID,
+				this.Amount,
+				this.IssueDate,
+				string.Join("\n\t", this.Schedule.Values.Select(v => v.ToString()).ToArray()),
+				string.Join("\n\t", this.Repayments.Values.Select(v => v.ToString()).ToArray()),
 				sDaysList,
-				nEarnedInterest, this.Schedule.Count, this.Repayments.Count,
+				nEarnedInterest,
+				this.Schedule.Count,
+				this.Repayments.Count,
 				IfpToString(ifp),
 				ifp == null ? 0 : ifp.Count,
 				sMsg,
 				bp == null ? 0 : bp.Count,
 				bp == null ? "none" : bp.ToString(), this.CustomerID,
-				bAccountingMode
-					? "accounting mode (no interest earned after the first Write Off, other bad statuses are ignored)"
-					: "normal mode (no interest earned during bad periods, Write Off is considered as just another bad status)",
+				accountingModeName,
 				oWriteOffDate.HasValue ? oWriteOffDate.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : "none"
-				);
+			);
 		} // LogAllDetails
 
-		private readonly int m_nLoanID;
-		private readonly ASafeLog m_oLog;
+		private readonly int loanID;
+		private readonly ASafeLog log;
 	} // LoanData
 } // namespace Reports
