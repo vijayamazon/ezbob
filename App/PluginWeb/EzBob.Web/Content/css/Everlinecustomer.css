@@ -719,124 +719,123 @@ div.company-full-details{
 
 /* Radio button & checkbox*/
 .click-wrap {
-    position: relative;
-    float: left;
+	position: relative;
+	float: left;
     margin-left:25px;
-    margin-top: 8px;
+	margin-top: 8px;
 	display: inline-block;
 }
 .click-wrap:first-child {
      margin-left:0;
 }
-    .click-wrap .click-input-wrap {
-        width: 35px;
-        position: relative;
-    }
-  
-        .click-wrap .click-input-wrap .radio-btn {
-            width: 32px;
-            height: 32px;
-            -ms-border-radius: 22px;
-            border-radius: 22px;
-        }
+	.click-wrap .click-input-wrap {
+		width: 35px;
+	}
+
+		.click-wrap .click-input-wrap .radio-btn {
+			width: 32px;
+			height: 32px;
+			-ms-border-radius: 22px;
+			border-radius: 22px;
+		}
         .radio-btn .clickable-label-wrapp:focus {
-            display: block;
-    width: 32px;
-    outline: none;
-    height: 32px;
-    -webkit-box-shadow: 0 10px 6px -6px #777;
-    -moz-box-shadow: 0 0 6px -6px #777;
-            -ms-box-shadow: 0 -6px 6px -6px blue;
-            box-shadow: 0 -6px 6px -6px blue;
-    -ms-border-radius: 22px;
+	display: block;
+	width: 32px;
+	outline: none;
+	height: 32px;
+	-webkit-box-shadow: 0 10px 6px -6px #777;
+	-moz-box-shadow: 0 0 6px -6px #777;
+	-ms-box-shadow: 0 -6px 6px -6px blue;
+	box-shadow: 0 -6px 6px -6px blue;
+	-ms-border-radius: 22px;
   
-    border-radius: 22px;    
+	border-radius: 22px;
         }
 
 .click-wrap .click-input-wrap .checkbox-btn {
-            width: 36px;
-            height: 36px;
+	width: 36px;
+	height: 36px;
         }
         .checkbox-btn .clickable-label-wrapp {
-               display: block;
-          width: 36px;
-              height: 36px;
+	display: block;
+	width: 36px;
+	height: 36px;
         }
         .click-wrap .click-input-wrap label {
-            cursor: pointer;
-            position: absolute;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -ms-box-sizing: border-box;
-            -o-box-sizing: border-box;
-            box-sizing: border-box;
-            background: white;
-            border-bottom: 2px solid #c7c7c7;
+	cursor: pointer;
+	position: absolute;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	background: white;
+	border-bottom: 2px solid #c7c7c7;
             top: 0;
         }
 
 
-            .click-wrap .click-input-wrap label:after {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 35px;
-                height: 35px;
-                background-position: center;
-                content: "";
-            }
+	.click-wrap .click-input-wrap label:after {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 35px;
+		height: 35px;
+		background-position: center;
+		content: "";
+	}
 
 
 .click-wrap .click-input-wrap input[type=radio]:checked + label, .click-wrap .click-input-wrap input[type=checkbox]:checked + label {
-    border-bottom: 2px solid #7ac143;
+	border-bottom: 2px solid #7ac143;
 }
 
 .click-wrap .click-input-wrap input[type=radio], .click-wrap .click-input-wrap input[type=checkbox] {
-    visibility: hidden;
-    position: absolute;
+	visibility: hidden;
+	position: absolute;
 }
 
 .click-wrap .title {
-    float: left;
-    color: #666666;
-    font-size: 14px;
-    font-weight: 300;
-    display: inline;
-    margin-left: 40px;
-    line-height: 29px;
+	float: left;
+	color: #666666;
+	font-size: 14px;
+	font-weight: 300;
+	display: inline;
+	margin-left: 40px;
+	line-height: 29px;
 }
 
 .click-wrap .fa {
-    position: absolute;
-    color: #ebebeb;
+	position: absolute;
+	color: #ebebeb;
 	display: block;
 }
 
 .click-wrap .click-input-wrap input:checked + label .fa{
-    color: #7ac143;
+	color: #7ac143;
 }
 
 
 .click-wrap .fa-check {
-    left: 9px;
-    top: 8px;
-    font-size: 19px;
+	left: 9px;
+	top: 8px;
+	font-size: 19px;
 }
 
 
 .click-wrap .fa-circle {
-    left: 10px;
-    top: 8px;
-    font-size: 14px;
+	left: 10px;
+	top: 8px;
+	font-size: 14px;
 }
 
 .click-wrap .terms-conditions-checkbox-label {
-    width: 55%;
-    color: #494949;
-    font-weight: 400;
-    line-height: 16px;
-    font-size: 13px;
-    margin-left: 45px;
+	width: 55%;
+	color: #494949;
+	font-weight: 400;
+	line-height: 16px;
+	font-size: 13px;
+	margin-left: 45px;
 }
 .terms-conditions-checkbox-label a {
     font-size:13px;
@@ -845,7 +844,7 @@ div.company-full-details{
 .commercial-wrap h1 {
     font-size:18px;
     color:#494949;
-    font-weight: 600;
+	font-weight: 600;
 }
 .commercial-wrap h2{
     font-size:14px;
