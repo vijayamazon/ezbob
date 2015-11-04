@@ -34,41 +34,30 @@ EzBob.Popup = Backbone.View.extend({
 				);
 			});
 		} // if
-		if (EzBob.Config.Origin == 'everline') {
-			this.$el.dialog({
-				autoOpen: true,
-				title: 'Select address',
-				modal: true,
-				resizable: true,
-				width: 572,
-				height: 630,
-				closeOnEscape: true,
-				open: function() {
-					$('body').addClass('stop-scroll');
-				},
-				close: function() {
-					$('body').removeClass('stop-scroll');
-				}
-			});
-		} else {
-		    this.$el.dialog({
-		        autoOpen: true,
-		        title: 'Select address',
-		        modal: true,
-		        resizable: true,
-		        width: 550,
-		        height: 580,
-		        closeOnEscape: true,
-		        open: function() {
-		        	$('body').addClass('stop-scroll');
-		        },
-		        close: function() {
-		        	$('body').removeClass('stop-scroll');
-		        }
-		    });
-		}
-		
 
+		var width = 550;
+		var height = 580;
+		if (EzBob.Config.Origin == 'everline') {
+			width = 572;
+			height = 630;
+		} 
+
+		this.$el.dialog({
+			autoOpen: true,
+			title: 'Select address',
+			modal: true,
+			resizable: false,
+			width: width,
+			height: height,
+			closeOnEscape: true,
+			open: function() {
+				$('body').addClass('stop-scroll');
+			},
+			close: function() {
+				$('body').removeClass('stop-scroll');
+			}
+		});
+		
 		this.setDialogueButtons('init');
 
 		var oWidget = this.$el.dialog('widget');

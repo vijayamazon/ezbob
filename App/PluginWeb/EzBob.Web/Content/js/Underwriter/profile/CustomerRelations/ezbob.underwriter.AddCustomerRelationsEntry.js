@@ -11,10 +11,12 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         'change input[name="Type"]': 'determinePhoneNumbersState'
     }, // events
 
-    jqoptions: function () {
+    isUnderwriter: document.location.href.indexOf("Underwriter") > -1,
+
+    jqoptions: function() {
         return {
             modal: true,
-            resizable: true,
+            resizable: this.isUnderwriter,
             title: 'CRM - add entry',
             position: 'center',
             draggable: true,

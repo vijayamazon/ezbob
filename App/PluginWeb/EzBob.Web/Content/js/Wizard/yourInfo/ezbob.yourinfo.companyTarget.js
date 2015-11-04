@@ -28,7 +28,7 @@ EzBob.companyTargets = Backbone.View.extend({
                 title: "Select company",
                 dialogClass: "companyaddress",
                 modal: true,
-                resizable: true,
+                resizable: false,
                 minWidth: 640,
                 height: 500,
                 minHeight: 200,
@@ -67,7 +67,7 @@ EzBob.companyTargets = Backbone.View.extend({
 
 		oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
 		oWidget.find('.ui-dialog-titlebar').addClass('address-dialog-titlebar');
-		oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane');
+		oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane').addClass('buttons-footer');
 
 		EzBob.UiAction.registerView(this);
 
