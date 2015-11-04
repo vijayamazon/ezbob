@@ -25,7 +25,7 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
             autoOpen: false,
             title: this.options.title,
             modal: true,
-            resizable: true,
+            resizable: this.isUnderwriter,
             draggable: true,
             width: this.options.width ? this.options.width : 350,
             open: function() {
