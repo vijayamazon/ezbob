@@ -195,7 +195,7 @@
     </Compile>
     <Compile Include="Common\Range.cs" />
     <Compile Include="Turnover\TurnoverTargetMetaData.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="NameForComparison.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">

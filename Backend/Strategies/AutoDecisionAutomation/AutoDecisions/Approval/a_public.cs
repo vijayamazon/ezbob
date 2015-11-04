@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
+	using AutomationCalculator;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -117,15 +118,15 @@
 						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
 				} // if
 
-				this.hmrcNames = new List<string>();
+				this.hmrcNames = new List<NameForComparison>();
 
 				this.db.ForEachRowSafe(
 					names => {
 						if (!names["BelongsToCustomer"])
 							return;
 
-						string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
-						if (name != string.Empty)
+						var name = new NameForComparison(names["BusinessName"]);
+						if (name.AdjustedName != string.Empty)
 							this.hmrcNames.Add(name);
 					},
 					"GetHmrcBusinessNames",

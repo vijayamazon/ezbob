@@ -111,12 +111,12 @@
 					NameMatches ? "yes" : "no",
 					Result,
 					BusinessName,
-					AdjustedBusinessName,
+					this.businessNameForComparison.AdjustedName,
 					ExperianCompanyName,
-					AdjustedExperianCompanyName,
+					this.experianCompanyNameForComparison.AdjustedName,
 					CompanyID,
-					NoStopwordsBusinessName,
-					NoStopwordsExperianCompanyName
+					this.businessNameForComparison.NoStopwordsName,
+					this.experianCompanyNameForComparison.NoStopwordsName
 				);
 
 				return this;
@@ -140,9 +140,8 @@
 				get { return this.businessName; }
 				set {
 					this.businessName = value;
-					AdjustedBusinessName = AutomationCalculator.Utils.AdjustCompanyName(value);
-					PlainBusinessName = AutomationCalculator.Utils.SimplifyCompanyName(AdjustedBusinessName);
-					NoStopwordsBusinessName = AutomationCalculator.Utils.DropStopWords(AdjustedBusinessName);
+					this.businessNameForComparison = new NameForComparison(value);
+					this.nameMatches = null;
 				} // set
 			} // BusinessName
 
@@ -150,48 +149,35 @@
 				get { return this.experianCompanyName; }
 				set {
 					this.experianCompanyName = value;
-					AdjustedExperianCompanyName = AutomationCalculator.Utils.AdjustCompanyName(value);
-					PlainExperianCompanyName = AutomationCalculator.Utils.SimplifyCompanyName(AdjustedExperianCompanyName);
-					NoStopwordsExperianCompanyName = AutomationCalculator.Utils.DropStopWords(AdjustedExperianCompanyName);
+					this.experianCompanyNameForComparison = new NameForComparison(value);
+					this.nameMatches = null;
 				} // set
 			} // ExperianCompanyName
 
-			private string AdjustedBusinessName { get; set; }
-			private string PlainBusinessName { get; set; }
-			private string NoStopwordsBusinessName { get; set; }
-
-			private string AdjustedExperianCompanyName { get; set; }
-			private string PlainExperianCompanyName { get; set; }
-			private string NoStopwordsExperianCompanyName { get; set; }
-
 			private bool NameMatches {
 				get {
-					if (AdjustedBusinessName == AdjustedExperianCompanyName)
-						return true;
+					if (this.nameMatches.HasValue)
+						return this.nameMatches.Value;
 
-					if (PlainBusinessName.IndexOf(PlainExperianCompanyName, StringComparison.InvariantCulture) >= 0)
-						return true;
+					if ((this.businessNameForComparison == null) || (this.experianCompanyNameForComparison == null))
+						this.nameMatches = false;
+					else {
+						this.nameMatches = this.businessNameForComparison.SameAsCompany(
+							this.experianCompanyNameForComparison
+						);
+					} // if
 
-					if (PlainExperianCompanyName.IndexOf(PlainBusinessName, StringComparison.InvariantCulture) >= 0)
-						return true;
-
-					if (NoStopwordsBusinessName == NoStopwordsExperianCompanyName)
-						return true;
-
-					if (NoStopwordsBusinessName.Replace(" ", "") == NoStopwordsExperianCompanyName.Replace(" ", ""))
-						return true;
-
-					TokenIntersection ti = AutomationCalculator.Utils.FindTokenIntersection(
-						NoStopwordsBusinessName,
-						NoStopwordsExperianCompanyName
-					);
-
-					return ((ti.IntersectionLength >= 1) && (ti.FirstOnlyLength <= 1) && (ti.SecondOnlyLength <= 1));
+					return this.nameMatches.Value;
 				} // get
 			} // NameMatches
 
 			private string businessName;
 			private string experianCompanyName;
+
+			private NameForComparison businessNameForComparison;
+			private NameForComparison experianCompanyNameForComparison;
+
+			private bool? nameMatches;
 		} // class Row
 	} // class TestAdjustCompanyName
 } // namespace

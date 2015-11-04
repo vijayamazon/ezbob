@@ -8,11 +8,11 @@
 		} // Name
 
 		public override void Execute() {
-			DB.ExecuteNonQuery("Update Business SET BelongsToCustomer = NULL", CommandSpecies.Text);
+			DB.ExecuteNonQuery("UPDATE Business SET BelongsToCustomer = NULL", CommandSpecies.Text);
 
 			DB.ForEachRowSafe(
 				sr => { new UpdateHmrcBusinessRelevance(sr["Id"]).Execute(); },
-				"SELECT Id FROM Customer",
+				"SELECT Id FROM Customer ORDER BY Id",
 				CommandSpecies.Text
 			);
 		} // Execute

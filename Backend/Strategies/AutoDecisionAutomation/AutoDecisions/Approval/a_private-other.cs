@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web;
+	using AutomationCalculator;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Trails;
@@ -38,10 +39,10 @@
 					<pre><h3>{5}</h3></pre><br>
 					<h2><b>Decision data:</b></h2>
 					<pre><h3>{6}</h3></pre>", this.trail.CustomerID,
-					autoApprovedAmount.ToString("C0", Library.Instance.Culture),
+					autoApprovedAmount.ToString("C0", Strategies.Library.Instance.Culture),
 					repaymentPeriod,
-					interestRate.ToString("P2", Library.Instance.Culture),
-					setupFee.ToString("P2", Library.Instance.Culture),
+					interestRate.ToString("P2", Strategies.Library.Instance.Culture),
+					setupFee.ToString("P2", Strategies.Library.Instance.Culture),
 					HttpUtility.HtmlEncode(this.trail.ToString()),
 					HttpUtility.HtmlEncode(this.trail.InputData.Serialize())
 				);
@@ -250,7 +251,7 @@
 		private DateTime? companyDissolutionDate;
 		private List<Name> directors;
 		private bool hasLoans;
-		private List<String> hmrcNames;
+		private List<NameForComparison> hmrcNames;
 		private bool isBrokerCustomer;
 		private ExperianConsumerData experianConsumerData;
 		private int minCompanyScore;
