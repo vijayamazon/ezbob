@@ -189,10 +189,6 @@
 		margin-bottom: 0;
 	}
 
-	.security-icons .item {
-		float: left;
-	}
-
 		.security-icons .item .lock-icon {
 			left: 0;
 		}
@@ -339,7 +335,7 @@
 		position:fixed !important;
 	}
 
-	.ui-dialog .companyaddress{
+	.ui-dialog.companyaddress{
 		overflow: visible;
 	}
 
@@ -399,7 +395,6 @@
     padding: 0 20px 15px 10px;
     width: 100%;
 	}
-
 
 	#address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar,
 	.ui-dialog.add-scroll::-webkit-scrollbar,
@@ -620,6 +615,18 @@
 
 	.consent-modal-footer.modal-footer.terms-conditions-footer {
 		margin-top: 0;
+	}
+
+	.security-icons {
+    padding-bottom: 100px;
+	}
+
+	.security-icons>div:first-child{
+		width: 126px;
+	}
+
+	.security-icons>div:last-child {
+		width: 22px;
 	}
 
 }
