@@ -100,7 +100,7 @@
 				dst.DirectorNames.Clear();
 				dst.DirectorNames.AddRange(DirectorNames.Select(t => new Name(t.Item1, t.Item2)));
 
-				dst.SetHmrcBusinessNames(HmrcBusinessNames);
+				dst.SetHmrcBusinessNames(HmrcBusinessNames.Select(s => new NameForComparison(s)));
 			} // FlushTo
 
 			public SerializationModel InitFrom(ApprovalInputData src) {
@@ -139,7 +139,7 @@
 
 				HmrcBusinessNames = new List<string>();
 				if (src.HmrcBusinessNames != null)
-					HmrcBusinessNames.AddRange(src.HmrcBusinessNames);
+					HmrcBusinessNames.AddRange(src.HmrcBusinessNames.Select(n => n.RawName));
 
 				return this;
 			} // InitFrom

@@ -250,8 +250,8 @@
 				return;
 			} // if
 
-			foreach (string hmrcName in this.trail.MyInputData.HmrcBusinessNames) {
-				if (hmrcName.Equals(this.trail.MyInputData.CompanyName)) {
+			foreach (var hmrcName in this.trail.MyInputData.HmrcBusinessNames) {
+				if (hmrcName.SameAsCompany(this.trail.MyInputData.CompanyName)) {
 					isCompany = true;
 					break;
 				} // if
