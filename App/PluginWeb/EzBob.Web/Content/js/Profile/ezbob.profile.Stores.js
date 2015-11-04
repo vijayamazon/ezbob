@@ -63,6 +63,8 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         	href: "#refresh_yodlee_help1",
         	inline: true,
         	open: true,
+        	maxWidth: '100%',
+        	maxHeight: '100%',
         	onOpen: function() {
 		        $('body').addClass('stop-scroll');
 	        },

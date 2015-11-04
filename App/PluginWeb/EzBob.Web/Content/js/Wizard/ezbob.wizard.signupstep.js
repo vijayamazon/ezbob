@@ -100,6 +100,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 					close: '<i class="pe-7s-close"></i>',
 					open: true,
 					href: oDialog,
+					maxWidth: '100%',
+					maxHeight: '100%',
 					onOpen: function() {
 						$('body').addClass('stop-scroll');
 					},
@@ -133,7 +135,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 						open: true,
 						href: oEverlineDialog,
 						close: '<i class="pe-7s-close"></i>',
-						maxWidth: '840px',
+						maxWidth: '100%',
+						maxHeight: '100%',
 						onOpen: function() {
 							$('body').addClass('stop-scroll');
 						},

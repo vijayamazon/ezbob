@@ -80,6 +80,7 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 				className: 'shop-button-popup',
 		        close: '<i class="pe-7s-close"></i>',
 		        maxWidth: '100%',
+		        maxHeight: '100%',
 		        onOpen: function() {
 		        	$('body').addClass('stop-scroll');
 		        },

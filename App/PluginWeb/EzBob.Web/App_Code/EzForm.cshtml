@@ -660,10 +660,13 @@ string formFieldID = "")
 			    @if(true){
 					@: href="@href"																																							 
 			    }
+				
+				@if (!string.IsNullOrWhiteSpace(buttonProp.OnClick)) {
+					@: onclick = "@buttonProp.OnClick"
+				}
 			    value="@buttonProp.Caption"
 			    class="@buttonProp.Cls"
 			    @( !string.IsNullOrWhiteSpace(buttonProp.Target) ? "target=" + buttonProp.Target : "")
-			    @( !string.IsNullOrWhiteSpace(buttonProp.OnClick) ? "onclick=" + buttonProp.OnClick : "")
 			    @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
 			    @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { 
 					@: ui-event-control-id="@uiEvent"

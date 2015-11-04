@@ -31,6 +31,8 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
 					close: '<i class="pe-7s-close"></i>',
 					returnFocus: true,
 					trapFocus: true,
+					maxWidth: '100%',
+					maxHeight: '100%',
 					onOpen: function() {
 						$('body').addClass('stop-scroll');
 					},

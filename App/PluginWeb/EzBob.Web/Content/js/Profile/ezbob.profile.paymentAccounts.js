@@ -70,7 +70,8 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
 	    	inline: true,
 	    	open: true,
 	    	close: '<i class="pe-7s-close"></i>',
-		    maxWidth: '100%',
+	    	maxWidth: '100%',
+	    	maxHeight: '100%',
 		    onOpen: function() {
 			    $('body').addClass('stop-scroll');
 		    },
