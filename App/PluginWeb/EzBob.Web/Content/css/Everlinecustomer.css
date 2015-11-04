@@ -423,7 +423,7 @@ optgroup.fixiphone{
     font-family: 'Open Sans', sans-serif;
     color: #494949;
     width: 100%;
-	padding: 0 15px;
+	padding: 0 0 0 15px;
     -webkit-box-shadow: none;
     -ms-box-shadow: none;
     box-shadow: none;
@@ -809,6 +809,7 @@ div.company-full-details{
 .click-wrap .fa {
     position: absolute;
     color: #ebebeb;
+	display: block;
 }
 
 .click-wrap .click-input-wrap input:checked + label .fa{
