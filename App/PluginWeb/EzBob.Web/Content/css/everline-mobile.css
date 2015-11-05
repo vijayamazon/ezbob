@@ -189,10 +189,6 @@
 		margin-bottom: 0;
 	}
 
-	.security-icons .item {
-		float: left;
-	}
-
 		.security-icons .item .lock-icon {
 			left: 0;
 		}
@@ -334,10 +330,13 @@
 		}
 
 	.ui-dialog {
-		padding: 20px 10px;
+		padding: 20px 20px 20px 10px;
 		height: 100vh !important;
-		overflow: visible;
 		position:fixed !important;
+	}
+
+	.ui-dialog.target-dialog{
+		overflow: visible;
 	}
 
 	.ui-dialog .ui-dialog-content {
@@ -353,6 +352,11 @@
 
 	.ui-dialog.companyaddress .ui-dialog-content {
 		padding-bottom: 190px;
+	}
+
+	.ui-dialog .address-dialog-titlebar .ui-dialog-titlebar-close,
+	.ui-dialog.consent-class .ui-dialog-titlebar-close {
+		right: -30px;
 	}
 
 	.consent-class .ui-dialog-content>div,
@@ -374,6 +378,7 @@
 	.ui-dialog.add-scroll,
 	ul.targets {
 		overflow-y: auto !important;
+		overflow-x: hidden !important;
 	}
 
 	.ui-dialog .address-dialog-widget.disable-scroll {
@@ -387,10 +392,9 @@
     bottom: 0;
     left: 0;
     box-sizing: border-box;
-    padding: 0 10px;
+    padding: 0 20px 15px 10px;
     width: 100%;
 	}
-
 
 	#address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar,
 	.ui-dialog.add-scroll::-webkit-scrollbar,
@@ -611,6 +615,19 @@
 
 	.consent-modal-footer.modal-footer.terms-conditions-footer {
 		margin-top: 0;
+	}
+
+	.security-icons {
+		float: left;
+		padding-bottom: 40px;	
+	}
+
+	.security-icons>div:first-child{
+		width: 126px;
+	}
+
+	.security-icons>div:last-child {
+		width: 22px;
 	}
 
 }

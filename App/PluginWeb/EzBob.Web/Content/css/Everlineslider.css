@@ -1120,9 +1120,9 @@ input[type="tel"].amount-textbox, input[type="tel"].period-textbox {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     text-align: center;
-	height: initial;
+	height: 54px;
     margin-bottom: 0;
-    line-height: inherit;
+    line-height: 44px;
     vertical-align: middle;
     border-radius: 0;
 }

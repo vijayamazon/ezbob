@@ -312,6 +312,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 						href: '#refresh-accounts-dlg',
 						inline: true,
 						open: true,
+						maxWidth: '100%',
+						maxHeight: '100%',
 						onOpen: function() {
 							$('body').addClass('stop-scroll');
 						},
@@ -439,6 +441,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh-vat-return',
 			inline: true,
 			open: true,
+			maxWidth: '100%',
+			maxHeight: '100%',
 			onOpen: function() {
 				$('body').addClass('stop-scroll');
 			},
@@ -463,6 +467,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh_yodlee_help',
 			inline: true,
 			open: true,
+			maxWidth: '100%',
+			maxHeight: '100%',
 			onOpen: function() {
 				$('body').addClass('stop-scroll');
 			},
@@ -488,6 +494,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh_ekm_help',
 			inline: true,
 			open: true,
+			maxWidth: '100%',
+			maxHeight: '100%',
 			onOpen: function() {
 				$('body').addClass('stop-scroll');
 			},
@@ -513,6 +521,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			href: '#refresh_hmrc_help',
 			inline: true,
 			open: true,
+			maxWidth: '100%',
+			maxHeight: '100%',
 			onOpen: function() {
 				$('body').addClass('stop-scroll');
 			},
