@@ -154,7 +154,11 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		'click #finish-wizard': 'finishWizard',
 	}, // events
 
-	finishWizard: function() {
+	finishWizard: function () {
+		if (!this.canContinue()) {
+			return false;
+		}
+
 		BlockUi();
 		this.$el.find('#finish-wizard').hide();
 		this.setSomethingEnabled('#finish-wizard-placeholder', false).removeClass('hide');
