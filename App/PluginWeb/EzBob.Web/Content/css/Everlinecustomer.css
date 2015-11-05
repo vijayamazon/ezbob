@@ -2307,20 +2307,31 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 	background: #28211f;
 }
 
-.address-dialog-widget::-webkit-scrollbar,.megila-inner::-webkit-scrollbar,.consent-dialog::-webkit-scrollbar,.companyaddress  .ui-dialog-content::-webkit-scrollbar {
+.address-dialog-widget::-webkit-scrollbar,
+.megila-inner::-webkit-scrollbar,
+.consent-dialog::-webkit-scrollbar,
+.target-dialog  .ui-dialog-content::-webkit-scrollbar {
    	width: 8px;
 }
  
-.address-dialog-widget::-webkit-scrollbar-track,.megila-inner::-webkit-scrollbar-track,.consent-dialog::-webkit-scrollbar-track,.companyaddress  .ui-dialog-content::-webkit-scrollbar-track {
+.address-dialog-widget::-webkit-scrollbar-track,
+.megila-inner::-webkit-scrollbar-track,
+.consent-dialog::-webkit-scrollbar-track,
+.target-dialog  .ui-dialog-content::-webkit-scrollbar-track {
     background: transparent;
 }
  
-.address-dialog-widget::-webkit-scrollbar-thumb,.megila-inner::-webkit-scrollbar-thumb,.consent-dialog::-webkit-scrollbar-thumb,.companyaddress  .ui-dialog-content::-webkit-scrollbar-thumb{
-    background: #28211f;
+.address-dialog-widget::-webkit-scrollbar-thumb,
+.megila-inner::-webkit-scrollbar-thumb,
+.consent-dialog::-webkit-scrollbar-thumb,
+.target-dialog  .ui-dialog-content::-webkit-scrollbar-thumb {
+	background: #28211f;
 	height: 40px;
- border-radius: 10px;
-  outline: none;
+	-ms-border-radius: 10px;
+	border-radius: 10px;
+	outline: none;
 }
+
 /****************************************
     
     profile css

@@ -26,7 +26,7 @@ EzBob.companyTargets = Backbone.View.extend({
             this.$el.dialog({
                 autoOpen: true,
                 title: "Select company",
-                dialogClass: "companyaddress",
+                dialogClass: "target-dialog",
                 modal: true,
                 resizable: false,
                 minWidth: 640,
