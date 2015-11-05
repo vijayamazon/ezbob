@@ -618,7 +618,8 @@
 	}
 
 	.security-icons {
-    padding-bottom: 100px;
+		float: left;
+		padding-bottom: 40px;	
 	}
 
 	.security-icons>div:first-child{
