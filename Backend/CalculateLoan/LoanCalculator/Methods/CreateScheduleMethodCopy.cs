@@ -7,10 +7,10 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using PaymentServices.Calculators;
 
-	internal class CreateScheduleMethod : AMethod {
+	internal class CreateScheduleMethodCopy : AMethod {
 
-		
-		public CreateScheduleMethod(ALoanCalculator calculator): base(calculator, false) {
+
+		public CreateScheduleMethodCopy(ALoanCalculator calculator): base(calculator, false) {
 
 			//if (loanModel == null)
 			//	throw new NoInitialDataException();
@@ -24,7 +24,6 @@
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
-		/// <exception cref="NoScheduleException">Condition. </exception>
 		public virtual void Execute() {
 
 			NL_LoanHistory history = WorkingModel.Loan.LastHistory();
@@ -85,7 +84,7 @@
 
 				int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
 
-				decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents => /100;
+				decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents => /100; 
 
 				balance -= principal;
 
@@ -102,10 +101,9 @@
 					});
 			} // for
 
-	
 			if (history.Schedule == null) {
-				Log.Error("No schedules created");
-				throw new NoScheduleException();
+				Log.Debug("No schedules defined");
+				return;
 			}
 
 			int schedulesCount = history.Schedule.Count;

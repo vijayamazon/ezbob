@@ -9,8 +9,7 @@ IF TYPE_ID('NL_LoanInterestFreezeList') IS NOT NULL
 	DROP TYPE NL_LoanInterestFreezeList
 GO
 
-CREATE TYPE NL_LoanInterestFreezeList AS TABLE (
-	[OldLoanInterestFreezeID] INT,
+CREATE TYPE NL_LoanInterestFreezeList AS TABLE (	
 	[LoanID] BIGINT NOT NULL,
 	[StartDate] DATETIME NULL,
 	[EndDate] DATETIME NULL,
@@ -18,7 +17,8 @@ CREATE TYPE NL_LoanInterestFreezeList AS TABLE (
 	[ActivationDate] DATETIME NULL,
 	[DeactivationDate] DATETIME NULL,
 	[AssignedByUserID] INT NOT NULL,
-	[DeletedByUserID] INT NULL
+	[DeletedByUserID] INT NULL,
+	[OldID] INT NULL
 )
 GO
 
@@ -29,8 +29,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;	
 
-	INSERT INTO NL_LoanInterestFreeze (
-		[OldLoanInterestFreezeID],
+	INSERT INTO NL_LoanInterestFreeze (		
 		[LoanID] ,
 		[StartDate] ,
 		[EndDate] ,
@@ -38,9 +37,9 @@ BEGIN
 		[ActivationDate] ,
 		[DeactivationDate] ,
 		[AssignedByUserID] ,
-		[DeletedByUserID]
-	) SELECT
-		[OldLoanInterestFreezeID],
+		[DeletedByUserID],
+		[OldID]
+	) SELECT		
 		[LoanID] ,		
 		[StartDate] ,
 		[EndDate] ,
@@ -48,7 +47,8 @@ BEGIN
 		[ActivationDate] ,
 		[DeactivationDate] ,
 		[AssignedByUserID] ,
-		[DeletedByUserID]
+		[DeletedByUserID],
+		[OldID]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

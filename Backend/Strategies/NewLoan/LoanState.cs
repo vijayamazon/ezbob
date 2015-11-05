@@ -97,7 +97,6 @@
 
                 foreach (NL_Payments p in Result.Loan.Payments)
                 {
-
                     p.SchedulePayments.Clear();
                     p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet",
                            CommandSpecies.StoredProcedure,

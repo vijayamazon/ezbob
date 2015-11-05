@@ -1,8 +1,8 @@
-﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Models {
+﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
-	public class LoanEvent {
+	internal class LoanEvent {
 
 		// default ctor
 		public LoanEvent(DateTime date, int priority = 0) {

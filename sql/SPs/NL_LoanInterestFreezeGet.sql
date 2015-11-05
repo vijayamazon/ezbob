@@ -9,14 +9,14 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-	   [LoanInterestFreezeID]
-	  ,[OldLoanInterestFreezeID]
+	   [LoanInterestFreezeID]	 
       ,[LoanID]
       ,[StartDate]
       ,[EndDate]
       ,[InterestRate]
       ,[ActivationDate]
       ,[DeactivationDate]
+	  ,[OldID]
 	FROM
 		[dbo].[NL_LoanInterestFreeze]
 	WHERE

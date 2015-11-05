@@ -561,7 +561,7 @@ IF OBJECT_ID('NL_LoanInterestFreeze') IS NULL
 BEGIN
 	CREATE TABLE NL_LoanInterestFreeze (
 		LoanInterestFreezeID BIGINT IDENTITY(1, 1) NOT NULL,
-		OldLoanInterestFreezeID BIGINT,
+		
 		LoanID BIGINT NOT NULL,
 		StartDate DATETIME NULL,
 		EndDate DATETIME NULL,
@@ -570,11 +570,13 @@ BEGIN
 		DeactivationDate DATETIME NULL,
 		AssignedByUserID INT NOT NULL,
 		DeletedByUserID INT NULL,
+		OldID INT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanInterestFreeze PRIMARY KEY (LoanInterestFreezeID),
 		CONSTRAINT FK_NL_LoanInterestFreeze_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT FK_NL_LoanInterestFreeze_Assigner FOREIGN KEY (AssignedByUserID) REFERENCES Security_User (UserId),
-		CONSTRAINT FK_NL_LoanInterestFreeze_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId)
+		CONSTRAINT FK_NL_LoanInterestFreeze_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId),
+		CONSTRAINT FK_NL_LoanInterestFreeze_Old FOREIGN KEY (OldID) REFERENCES [LoanInterestFreeze] (Id)
 	)
 END
 GO
@@ -970,11 +972,11 @@ BEGIN
 		UserID INT NULL,
 		CustomerID INT NULL,
 		Args NVARCHAR(MAX) NULL,
-		Result NVARCHAR(MAX) NULL,
+		[Result] NVARCHAR(MAX) NULL,
 		Sevirity NVARCHAR(MAX) NOT NULL,
 		Referrer NVARCHAR(MAX) NOT NULL,
 		Description NVARCHAR(MAX) NOT NULL,
-		Exception NVARCHAR(MAX) NULL,
+		[Exception] NVARCHAR(MAX) NULL,
 		Stacktrace NVARCHAR(MAX) NULL,
 		TimeStamp DATETIME NOT NULL		
 	)

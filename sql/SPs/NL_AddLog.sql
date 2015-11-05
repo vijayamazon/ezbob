@@ -13,9 +13,10 @@ CREATE TYPE NL_LogType AS TABLE (
 		UserID INT NULL,
 		CustomerID INT NULL,
 		Args NVARCHAR(MAX) NULL,
+		[Result] NVARCHAR(MAX) NULL,
 		Referrer NVARCHAR(MAX) NOT NULL,
 		Description NVARCHAR(MAX) NOT NULL,
-		Exception NVARCHAR(MAX) NULL,
+		[Exception] NVARCHAR(MAX) NULL,
 		Stacktrace NVARCHAR(MAX) NULL,
 		TimeStamp DATETIME NOT NULL		
 )

@@ -10,9 +10,6 @@
 		[DataMember]
 		public long LoanInterestFreezeID { get; set; }
 
-        [DataMember]
-        public int OldLoanInterestFreezeID { get; set; }
-
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
 		[ExcludeFromToString]
@@ -41,6 +38,9 @@
 		[FK("Security_User", "UserId")]
 		[DataMember]
 		public int? DeletedByUserID { get; set; }
+
+		[DataMember]
+		public int? OldID { get; set; }
 
 	
 		/// <summary>

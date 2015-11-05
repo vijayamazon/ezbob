@@ -41,16 +41,16 @@
 	public enum NLScheduleStatuses {
 		[Description("Open")]
 		StillToPay = 1, // db ID
-		[Description("Paid on time")]
-		PaidOnTime = 2,
+		//[Description("Paid on time")]
+		//PaidOnTime = 2,
 		[Description("Late")]
 		Late = 3,
-		[Description("Paid early")]
-		PaidEarly = 4,
+		//[Description("Paid early")]
+		//PaidEarly = 4,
 		[Description("Paid")]
 		Paid = 5,
-		[Description("Almost paid")]
-		AlmostPaid = 6,
+		//[Description("Almost paid")]
+		//AlmostPaid = 6,
 		[Description("Deleted on reschedule (nothing was repaid before reschedule)")]
 		DeletedOnReschedule = 7,
 		[Description("Closed on reschedule (was partially repaid before reschedule)")]

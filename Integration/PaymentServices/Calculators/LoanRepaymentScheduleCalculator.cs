@@ -340,8 +340,7 @@
 			var interest = _principal * GetInterestRate(_lastActionDate, date);
 			_totalInterestToPay += interest;
 
-			Console.WriteLine("lastActionDate: {0} date: {1} interest: {2} totalInterestToPay: {3} totalPrincipalToPay: {4} principal: {5}",
-				 _lastActionDate, date, interest, _totalInterestToPay, _totalPrincipalToPay, _principal);
+			//Console.WriteLine("lastActionDate: {0} date: {1} interest: {2} totalInterestToPay: {3} totalPrincipalToPay: {4} principal: {5}", _lastActionDate, date, interest, _totalInterestToPay, _totalPrincipalToPay, _principal);
 
 			//	last event datetime
 			_lastActionDate = date;

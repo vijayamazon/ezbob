@@ -1,13 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
-    using EZBob.DatabaseLib.Model.Database.Loans;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 
-    public class DeactivateLoanInterestFreeze : AStrategy
+	public class DeactivateLoanInterestFreeze : AStrategy
     {
 
         public string Error { get; set; }
@@ -42,7 +41,7 @@
                 }
                 long nlInterestFreezeID = -1;
                 if (FreezeInterestIntervals != null) {
-                    var nlLoanInterestFreeze = FreezeInterestIntervals.FirstOrDefault(x=>x.OldLoanInterestFreezeID == this.OldLoanInterestFreezeID);
+                    var nlLoanInterestFreeze = FreezeInterestIntervals.FirstOrDefault(x=>x.OldID == this.OldLoanInterestFreezeID);
                     if (nlLoanInterestFreeze != null) {
                         var userID = Context.UserID;
                         if (userID != null) {

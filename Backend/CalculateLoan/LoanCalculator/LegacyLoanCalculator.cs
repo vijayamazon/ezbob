@@ -7,7 +7,7 @@
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
-		public LegacyLoanCalculator(NL_Model model) : base(model) {
+		public LegacyLoanCalculator(NL_Model model): base(model) {
 		} // constructor
 
 		public override string Name { get { return "Legacy calculator"; } }

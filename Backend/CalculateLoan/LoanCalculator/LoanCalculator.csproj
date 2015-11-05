@@ -52,6 +52,9 @@
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
     <Compile Include="Exceptions\ANegativeDecimalException.cs" />
+    <Compile Include="Exceptions\LoanWriteOffStatusException.cs" />
+    <Compile Include="Exceptions\LoanPaidOffStatusException.cs" />
+    <Compile Include="Exceptions\LoanPendingStatusException.cs" />
     <Compile Include="Exceptions\InvalidPaymentAmountToAssignException.cs" />
     <Compile Include="Exceptions\NoInstallmentFoundException.cs" />
     <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
@@ -72,14 +75,13 @@
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
     <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
     <Compile Include="ILoanCalculator.cs" />
-    <Compile Include="Models\LoanEvent.cs" />
+    <Compile Include="LoanEvent.cs" />
     <Compile Include="LegacyLoanCalculator.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\CalculateAprMethod.cs" />
+    <Compile Include="Methods\CreateScheduleMethodCopy.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
-    <Compile Include="Models\DailyLoanStatus.cs" />
-    <Compile Include="Models\OneDayState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

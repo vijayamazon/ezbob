@@ -468,7 +468,7 @@
             NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze()
             {
                 StartDate = loanInterestFreeze.StartDate,
-                OldLoanInterestFreezeID = loanInterestFreeze.Id,
+				OldID = loanInterestFreeze.Id,
                 ActivationDate = loanInterestFreeze.ActivationDate,
                 DeactivationDate = loanInterestFreeze.DeactivationDate,
                 EndDate =  loanInterestFreeze.EndDate,
