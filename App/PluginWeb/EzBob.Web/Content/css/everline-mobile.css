@@ -622,11 +622,11 @@
 		padding-bottom: 40px;	
 	}
 
-	.security-icons>div:first-child{
+	.security-icons .truste-item {
 		width: 126px;
 	}
 
-	.security-icons>div:last-child {
+	.security-icons .lock-item {
 		width: 22px;
 	}
 
