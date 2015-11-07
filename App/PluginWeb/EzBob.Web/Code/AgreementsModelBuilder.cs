@@ -91,26 +91,36 @@
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
-			
-			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
-			model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
 
-            //According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
-            if((loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) || 
-               (loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0)) {
-                decimal setupFeePercent = (loan.CashRequest.ManualSetupFeePercent ?? 0M) +  (loan.CashRequest.BrokerSetupFeePercent ?? 0M);
-                model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
-            }
-            model.IsBrokerFee = false;
-            model.IsManualSetupFee = false;
+			// According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
+
+			bool shouldHaveSetupFee =
+				(!loan.CashRequest.SpreadSetupFee.HasValue || !loan.CashRequest.SpreadSetupFee.Value)
+				&& (
+					(loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) ||
+					(loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0)
+				);
+
+			if (shouldHaveSetupFee) {
+				decimal setupFeePercent =
+					(loan.CashRequest.ManualSetupFeePercent ?? 0M) +
+					(loan.CashRequest.BrokerSetupFeePercent ?? 0M);
+
+				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
+				model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
+			} else {
+				model.SetupFeePercent = "0";
+				model.SetupFeeAmount = FormattingUtils.NumericFormats(0);
+			} // if
+
+			model.IsBrokerFee = false;
+			model.IsManualSetupFee = false;
 			
-            model.APR = apr;
+			model.APR = apr;
 
 			var start = loan.Schedule.First().Date.AddMonths(-1);
 			var end = loan.Schedule.Last().Date;
 			var days = (end - start).TotalDays;
-
-			
 
 			//model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
 			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
