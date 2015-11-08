@@ -4,12 +4,12 @@
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
-	public class InvestorContact {
+	public class I_InvestorContact {
         [PK(true)]
         [DataMember]
 		public int InvestorContactID { get; set; }
-		
-		[FK("Investor", "InvestorID")]
+
+		[FK("I_Investor", "InvestorID")]
         [DataMember]
         public int InvestorID { get; set; }
 		

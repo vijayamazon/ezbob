@@ -3,13 +3,13 @@
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
-	public class InvestorAccountType {
+	public class I_Grade {
         [PK(true)]
         [DataMember]
-		public int InvestorAccountTypeID { get; set; }
+		public int GradeID { get; set; }
 		
 		[Length(255)]
 		[DataMember]
 		public string Name { get; set; }
-	}//class InvestorAccountType
+	}//class InvestorType
 }//ns

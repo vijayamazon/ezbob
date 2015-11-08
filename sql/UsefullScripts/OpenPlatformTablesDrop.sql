@@ -15,6 +15,10 @@ IF NOT object_id('I_InvestorOverallStatistics') IS NULL
 	DROP TABLE I_InvestorOverallStatistics
 GO
 
+IF NOT object_id('I_InvestorFundsAllocation') IS NULL
+	DROP TABLE I_InvestorFundsAllocation
+GO
+
 IF NOT object_id('I_InvestorBankAccount') IS NULL
 	DROP TABLE I_InvestorBankAccount
 GO
@@ -36,12 +40,24 @@ IF NOT object_id('I_ProductTerm') IS NULL
 	DROP TABLE I_ProductTerm
 GO
 
+IF NOT object_id('I_Index') IS NULL
+	DROP TABLE I_Index
+GO
+
 IF NOT object_id('I_ProductType') IS NULL
 	DROP TABLE I_ProductType
 GO
 
+IF NOT object_id('I_Grade') IS NULL
+	DROP TABLE I_Grade
+GO
+
 IF NOT object_id('I_Product') IS NULL
 	DROP TABLE I_Product
+GO
+
+IF NOT object_id('I_InvestorConfigurationParam') IS NULL
+	DROP TABLE I_InvestorConfigurationParam
 GO
 
 IF NOT object_id('I_Investor') IS NULL
@@ -52,6 +68,14 @@ IF NOT object_id('I_InvestorType') IS NULL
 	DROP TABLE I_InvestorType
 GO
 
+IF NOT object_id('I_Parameter') IS NULL
+	DROP TABLE I_Parameter
+GO
 
+IF NOT object_id('I_InterestVariable') IS NULL
+	DROP TABLE I_InterestVariable
+GO
 
-
+IF NOT object_id('I_Instrument') IS NULL
+	DROP TABLE I_Instrument
+GO

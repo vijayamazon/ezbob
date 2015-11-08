@@ -4,15 +4,15 @@
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
-	public class InvestorSystemBalance {
+	public class I_InvestorBankAccountTransaction {
         [PK(true)]
         [DataMember]
-		public int InvestorSystemBalanceID { get; set; }
+		public int InvestorBankAccountTransactionID { get; set; }
 
-		[FK("InvestorBankAccount", "InvestorBankAccountID")]
+		[FK("I_InvestorBankAccount", "InvestorBankAccountID")]
         [DataMember]
-		public int InvestorBankAccountID { get; set; }
-
+        public int InvestorBankAccountID { get; set; }
+		
 		[DataMember]
 		public decimal? PreviousBalance { get; set; }
 
@@ -24,5 +24,5 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
-	}//class InvestorSystemBalance
+	}//class I_InvestorBankAccountTransaction
 }//ns

@@ -213,6 +213,28 @@ BEGIN
 END
 GO
 
+IF object_id('I_Grade') IS NULL
+BEGIN
+	CREATE TABLE I_Grade (
+		GradeID INT NOT NULL IDENTITY(1,1),
+	   	Name NVARCHAR(5),
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Grade PRIMARY KEY (GradeID)
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_Grade)
+BEGIN
+	INSERT INTO I_Grade (Name) VALUES ('A')
+	INSERT INTO I_Grade (Name) VALUES ('B')
+	INSERT INTO I_Grade (Name) VALUES ('C')
+	INSERT INTO I_Grade (Name) VALUES ('D')
+	INSERT INTO I_Grade (Name) VALUES ('E')
+	INSERT INTO I_Grade (Name) VALUES ('F')
+END
+GO
+
 IF object_id('I_Portfolio') IS NULL
 BEGIN
 	CREATE TABLE I_Portfolio (
@@ -227,9 +249,110 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_Portfolio PRIMARY KEY (PortfolioID),
 		CONSTRAINT FK_I_Portfolio_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
-		CONSTRAINT FK_I_Portfolio_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID)
+		CONSTRAINT FK_I_Portfolio_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
+		CONSTRAINT FK_I_Portfolio_I_Loan FOREIGN KEY (LoanID) REFERENCES Loan(Id),
+		CONSTRAINT FK_I_Portfolio_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeId)
 	)
 END
 GO
 
+IF object_id('I_InvestorFundsAllocation') IS NULL
+BEGIN
+	CREATE TABLE I_InvestorFundsAllocation (
+		InvestorFundsAllocationID INT NOT NULL IDENTITY(1,1),
+		InvestorBankAccountID INT NOT NULL,
+		Amount DECIMAL(18,6) NOT NULL,		
+		AllocationTimestamp DATETIME NOT NULL,
+		ReleaseTimestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_InvestorFundsAllocation PRIMARY KEY (InvestorFundsAllocationID),
+		CONSTRAINT FK_I_InvestorFundsAllocation_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID)
+	)
+END
+GO
 
+IF object_id('I_Parameter') IS NULL
+BEGIN
+	CREATE TABLE I_Parameter (
+		ParameterID INT NOT NULL IDENTITY(1,1),
+		Name NVARCHAR(255),
+		ValueType NVARCHAR(255) NOT NULL,
+		DefaultValue DECIMAL(18,6) NULL,		
+		MaxLimit DECIMAL(18,6) NULL,		
+		MinLimit DECIMAL(18,6) NULL,		
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Parameter PRIMARY KEY (ParameterID)
+	)
+END
+GO
+
+IF object_id('I_InvestorConfigurationParam') IS NULL
+BEGIN
+	CREATE TABLE I_InvestorConfigurationParam (
+		InvestorConfigurationParamID INT NOT NULL IDENTITY(1,1),
+		InvestorID INT NOT NULL,
+		ParameterID INT NOT NULL,		
+		Value DECIMAL(18,6) NOT NULL,		
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_InvestorConfigurationParam PRIMARY KEY (InvestorConfigurationParamID),
+		CONSTRAINT FK_I_InvestorConfigurationParam_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_InvestorConfigurationParam_I_Parameter FOREIGN KEY (ParameterID) REFERENCES I_Parameter(ParameterID)
+	)
+END
+GO
+
+IF object_id('I_Index') IS NULL
+BEGIN
+	CREATE TABLE I_Index (
+		IndexID INT NOT NULL IDENTITY(1,1),
+		InvestorID INT NOT NULL,
+		ProductTypeID INT NOT NULL,
+		IsActive BIT NOT NULL,
+		GradeA DECIMAL(18,6) NOT NULL,
+		GradeB DECIMAL(18,6) NOT NULL,
+		GradeC DECIMAL(18,6) NOT NULL,
+		GradeD DECIMAL(18,6) NOT NULL,
+		GradeE DECIMAL(18,6) NOT NULL,
+		GradeF DECIMAL(18,6) NOT NULL,
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Index PRIMARY KEY (IndexID),
+		CONSTRAINT FK_I_Index_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_Index_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID)
+	)
+END
+GO
+
+IF object_id('I_Instrument') IS NULL
+BEGIN
+	CREATE TABLE I_Instrument (
+		InstrumentID INT NOT NULL IDENTITY(1,1),
+		Name INT NOT NULL,
+		CurrencyID INT NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Instrument PRIMARY KEY (InstrumentID),
+		CONSTRAINT FK_I_Instrument_MP_Currency FOREIGN KEY (CurrencyID) REFERENCES MP_Currency(Id)
+	)
+END
+GO
+
+IF object_id('I_InterestVariable') IS NULL
+BEGIN
+	CREATE TABLE I_InterestVariable (
+		InterestVariableID INT NOT NULL IDENTITY(1,1),
+		InstrumentID INT NOT NULL,
+		TradeDate DATETIME NOT NULL,
+		OneDay BIT NOT NULL,
+		OneWeek DECIMAL(18,6) NOT NULL,
+		OneMonth DECIMAL(18,6) NOT NULL,
+		TwoMonths DECIMAL(18,6) NOT NULL,
+		ThreeMonths DECIMAL(18,6) NOT NULL,
+		SixMonths DECIMAL(18,6) NOT NULL,
+		TwelveMonths DECIMAL(18,6) NOT NULL,
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_InterestVariable PRIMARY KEY (InterestVariableID),
+		CONSTRAINT FK_I_InterestVariable_I_Instrument FOREIGN KEY (InstrumentID) REFERENCES I_Instrument(InstrumentID)
+	)
+END
+GO

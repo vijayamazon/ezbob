@@ -4,14 +4,18 @@
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
-	public class InvestorBankAccount {
+	public class I_InvestorBankAccount {
         [PK(true)]
         [DataMember]
 		public int InvestorBankAccountID { get; set; }
-		
-		[FK("Investor", "InvestorID")]
+
+		[FK("I_Investor", "InvestorID")]
         [DataMember]
         public int InvestorID { get; set; }
+
+		[FK("I_InvestorAccountType", "InvestorAccountTypeID")]
+		[DataMember]
+		public int InvestorAccountTypeID { get; set; }
 		
 		[Length(255)]
 		[DataMember]
@@ -50,5 +54,5 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
-	}//class InvestorBankAccount
+	}//class I_InvestorBankAccount
 }//ns
