@@ -1,0 +1,1788 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://www.imail.co.uk" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="https://www.imail.co.uk/AbstractTypes" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="https://www.imail.co.uk" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://www.imail.co.uk">
+      <s:element name="GetSessionOptions">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSessionOptionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSessionOptionsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="refID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryDocumentStatusResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecallDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="refID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecallDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecallDocumentResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecallDocumentExtAuth">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="refID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecallDocumentExtAuthResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecallDocumentExtAuthResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReturns">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="startDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endDate" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReturnsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetReturnsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Authenticate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenticateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthenticateResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPrintPreviewEmailAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPrintPreviewEmailAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetPrintPreviewEmailAddressResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListAttachments">
+        <s:complexType />
+      </s:element>
+      <s:element name="ListAttachmentsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListAttachmentsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateAttachment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="attachmentPDFfilename" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="attachmentPDFdata" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateAttachmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateAttachmentResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteAttachment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="attachmentPDFfilename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteAttachmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteAttachmentResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListBackgrounds">
+        <s:complexType />
+      </s:element>
+      <s:element name="ListBackgroundsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListBackgroundsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateBackground">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="backgroundPDFfilename" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="backgroundPDFdata" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateBackgroundResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateBackgroundResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteBackground">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="backgroundPDFfilename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteBackgroundResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteBackgroundResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPostingOptions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Options" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPostingOptionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetPostingOptionsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCreditBalance">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetCreditBalanceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCreditBalanceResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetCardLogo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="logoJpgdata" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetCardLogoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetCardLogoResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeMailshotCardsAuth">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterData" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="CSVdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="sideOneHTML" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sideTwoHTML" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeMailshotCardsAuthResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MailmergeMailshotCardsAuthResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeMailshotCards">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="letterData" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="CSVdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="sideOneHTML" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sideTwoHTML" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeMailshotCardsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MailmergeMailshotCardsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeLetterheadPDFAuth">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PDFdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="CSVdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="bodyHTML" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeLetterheadPDFAuthResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MailmergeLetterheadPDFAuthResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeLetterheadPDF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PDFdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="CSVdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="bodyHTML" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailmergeLetterheadPDFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MailmergeLetterheadPDFResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFExt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="letterData" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsColour" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsDuplex" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="refID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFExtResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessPrintReadyPDFExtResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFExtAuth2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="base64LetterData" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsColour" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsDuplex" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="refID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="includeInsert" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFExtAuth2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessPrintReadyPDFExtAuth2Result">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFExtAuth">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="letterData" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsColour" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsDuplex" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="refID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="includeInsert" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFExtAuthResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessPrintReadyPDFExtAuthResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="letterData" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="backgroundFilename" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessPrintReadyPDFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessPrintReadyPDFResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailMerge">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CSVdata" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="templateName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PDFattachmentFilename" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is2DayService" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MailMergeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MailMergeResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema targetNamespace="https://www.imail.co.uk/AbstractTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="String" type="s:string" />
+            </s:sequence>
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetSessionOptionsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSessionOptions" />
+  </wsdl:message>
+  <wsdl:message name="GetSessionOptionsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSessionOptionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryDocumentStatus" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryDocumentStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:RecallDocument" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:RecallDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentExtAuthSoapIn">
+    <wsdl:part name="parameters" element="tns:RecallDocumentExtAuth" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentExtAuthSoapOut">
+    <wsdl:part name="parameters" element="tns:RecallDocumentExtAuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetReturnsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetReturns" />
+  </wsdl:message>
+  <wsdl:message name="GetReturnsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetReturnsResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapIn">
+    <wsdl:part name="parameters" element="tns:Authenticate" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenticateResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPrintPreviewEmailAddressSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPrintPreviewEmailAddress" />
+  </wsdl:message>
+  <wsdl:message name="SetPrintPreviewEmailAddressSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPrintPreviewEmailAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListAttachmentsSoapIn">
+    <wsdl:part name="parameters" element="tns:ListAttachments" />
+  </wsdl:message>
+  <wsdl:message name="ListAttachmentsSoapOut">
+    <wsdl:part name="parameters" element="tns:ListAttachmentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateAttachmentSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateAttachment" />
+  </wsdl:message>
+  <wsdl:message name="UpdateAttachmentSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateAttachmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteAttachmentSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteAttachment" />
+  </wsdl:message>
+  <wsdl:message name="DeleteAttachmentSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteAttachmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListBackgroundsSoapIn">
+    <wsdl:part name="parameters" element="tns:ListBackgrounds" />
+  </wsdl:message>
+  <wsdl:message name="ListBackgroundsSoapOut">
+    <wsdl:part name="parameters" element="tns:ListBackgroundsResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBackgroundSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateBackground" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBackgroundSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateBackgroundResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBackgroundSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteBackground" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBackgroundSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteBackgroundResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPostingOptionsSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPostingOptions" />
+  </wsdl:message>
+  <wsdl:message name="SetPostingOptionsSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPostingOptionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCreditBalanceSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCreditBalance" />
+  </wsdl:message>
+  <wsdl:message name="GetCreditBalanceSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCreditBalanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetCardLogoSoapIn">
+    <wsdl:part name="parameters" element="tns:SetCardLogo" />
+  </wsdl:message>
+  <wsdl:message name="SetCardLogoSoapOut">
+    <wsdl:part name="parameters" element="tns:SetCardLogoResponse" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsAuthSoapIn">
+    <wsdl:part name="parameters" element="tns:MailmergeMailshotCardsAuth" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsAuthSoapOut">
+    <wsdl:part name="parameters" element="tns:MailmergeMailshotCardsAuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsSoapIn">
+    <wsdl:part name="parameters" element="tns:MailmergeMailshotCards" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsSoapOut">
+    <wsdl:part name="parameters" element="tns:MailmergeMailshotCardsResponse" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFAuthSoapIn">
+    <wsdl:part name="parameters" element="tns:MailmergeLetterheadPDFAuth" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFAuthSoapOut">
+    <wsdl:part name="parameters" element="tns:MailmergeLetterheadPDFAuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFSoapIn">
+    <wsdl:part name="parameters" element="tns:MailmergeLetterheadPDF" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFSoapOut">
+    <wsdl:part name="parameters" element="tns:MailmergeLetterheadPDFResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFExt" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFExtResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuth2SoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFExtAuth2" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuth2SoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFExtAuth2Response" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuthSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFExtAuth" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuthSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFExtAuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDF" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessPrintReadyPDFResponse" />
+  </wsdl:message>
+  <wsdl:message name="MailMergeSoapIn">
+    <wsdl:part name="parameters" element="tns:MailMerge" />
+  </wsdl:message>
+  <wsdl:message name="MailMergeSoapOut">
+    <wsdl:part name="parameters" element="tns:MailMergeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSessionOptionsHttpPostIn" />
+  <wsdl:message name="GetSessionOptionsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentStatusHttpPostIn">
+    <wsdl:part name="refID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentStatusHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentHttpPostIn">
+    <wsdl:part name="refID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentExtAuthHttpPostIn">
+    <wsdl:part name="refID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RecallDocumentExtAuthHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetReturnsHttpPostIn">
+    <wsdl:part name="startDate" type="s:string" />
+    <wsdl:part name="endDate" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetReturnsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="SetPrintPreviewEmailAddressHttpPostIn">
+    <wsdl:part name="EmailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetPrintPreviewEmailAddressHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="ListAttachmentsHttpPostIn" />
+  <wsdl:message name="ListAttachmentsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="UpdateAttachmentHttpPostIn">
+    <wsdl:part name="attachmentPDFfilename" type="s:string" />
+    <wsdl:part name="attachmentPDFdata" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="UpdateAttachmentHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="DeleteAttachmentHttpPostIn">
+    <wsdl:part name="attachmentPDFfilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteAttachmentHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="ListBackgroundsHttpPostIn" />
+  <wsdl:message name="ListBackgroundsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBackgroundHttpPostIn">
+    <wsdl:part name="backgroundPDFfilename" type="s:string" />
+    <wsdl:part name="backgroundPDFdata" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBackgroundHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBackgroundHttpPostIn">
+    <wsdl:part name="backgroundPDFfilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBackgroundHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="SetPostingOptionsHttpPostIn">
+    <wsdl:part name="Options" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetPostingOptionsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetCreditBalanceHttpPostIn" />
+  <wsdl:message name="GetCreditBalanceHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="SetCardLogoHttpPostIn">
+    <wsdl:part name="logoJpgdata" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="SetCardLogoHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsAuthHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="letterData" type="s1:StringArray" />
+    <wsdl:part name="CSVdata" type="s1:StringArray" />
+    <wsdl:part name="sideOneHTML" type="s:string" />
+    <wsdl:part name="sideTwoHTML" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsAuthHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsHttpPostIn">
+    <wsdl:part name="letterData" type="s1:StringArray" />
+    <wsdl:part name="CSVdata" type="s1:StringArray" />
+    <wsdl:part name="sideOneHTML" type="s:string" />
+    <wsdl:part name="sideTwoHTML" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeMailshotCardsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFAuthHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="PDFdata" type="s1:StringArray" />
+    <wsdl:part name="CSVdata" type="s1:StringArray" />
+    <wsdl:part name="bodyHTML" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFAuthHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFHttpPostIn">
+    <wsdl:part name="PDFdata" type="s1:StringArray" />
+    <wsdl:part name="CSVdata" type="s1:StringArray" />
+    <wsdl:part name="bodyHTML" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MailmergeLetterheadPDFHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtHttpPostIn">
+    <wsdl:part name="letterData" type="s1:StringArray" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+    <wsdl:part name="IsColour" type="s:string" />
+    <wsdl:part name="IsDuplex" type="s:string" />
+    <wsdl:part name="refID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuth2HttpPostIn">
+    <wsdl:part name="base64LetterData" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+    <wsdl:part name="IsColour" type="s:string" />
+    <wsdl:part name="IsDuplex" type="s:string" />
+    <wsdl:part name="refID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="includeInsert" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuth2HttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuthHttpPostIn">
+    <wsdl:part name="letterData" type="s1:StringArray" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+    <wsdl:part name="IsColour" type="s:string" />
+    <wsdl:part name="IsDuplex" type="s:string" />
+    <wsdl:part name="refID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="includeInsert" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFExtAuthHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFHttpPostIn">
+    <wsdl:part name="letterData" type="s1:StringArray" />
+    <wsdl:part name="backgroundFilename" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessPrintReadyPDFHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="MailMergeHttpPostIn">
+    <wsdl:part name="CSVdata" type="s1:StringArray" />
+    <wsdl:part name="templateName" type="s:string" />
+    <wsdl:part name="PDFattachmentFilename" type="s:string" />
+    <wsdl:part name="Is2DayService" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MailMergeHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:portType name="imail_apiSoap">
+    <wsdl:operation name="GetSessionOptions">
+      <wsdl:input message="tns:GetSessionOptionsSoapIn" />
+      <wsdl:output message="tns:GetSessionOptionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentStatus">
+      <wsdl:input message="tns:QueryDocumentStatusSoapIn" />
+      <wsdl:output message="tns:QueryDocumentStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocument">
+      <wsdl:input message="tns:RecallDocumentSoapIn" />
+      <wsdl:output message="tns:RecallDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocumentExtAuth">
+      <wsdl:input message="tns:RecallDocumentExtAuthSoapIn" />
+      <wsdl:output message="tns:RecallDocumentExtAuthSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetReturns">
+      <wsdl:input message="tns:GetReturnsSoapIn" />
+      <wsdl:output message="tns:GetReturnsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:AuthenticateSoapIn" />
+      <wsdl:output message="tns:AuthenticateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPrintPreviewEmailAddress">
+      <wsdl:input message="tns:SetPrintPreviewEmailAddressSoapIn" />
+      <wsdl:output message="tns:SetPrintPreviewEmailAddressSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListAttachments">
+      <wsdl:input message="tns:ListAttachmentsSoapIn" />
+      <wsdl:output message="tns:ListAttachmentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAttachment">
+      <wsdl:input message="tns:UpdateAttachmentSoapIn" />
+      <wsdl:output message="tns:UpdateAttachmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAttachment">
+      <wsdl:input message="tns:DeleteAttachmentSoapIn" />
+      <wsdl:output message="tns:DeleteAttachmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListBackgrounds">
+      <wsdl:input message="tns:ListBackgroundsSoapIn" />
+      <wsdl:output message="tns:ListBackgroundsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBackground">
+      <wsdl:input message="tns:UpdateBackgroundSoapIn" />
+      <wsdl:output message="tns:UpdateBackgroundSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBackground">
+      <wsdl:input message="tns:DeleteBackgroundSoapIn" />
+      <wsdl:output message="tns:DeleteBackgroundSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPostingOptions">
+      <wsdl:input message="tns:SetPostingOptionsSoapIn" />
+      <wsdl:output message="tns:SetPostingOptionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditBalance">
+      <wsdl:input message="tns:GetCreditBalanceSoapIn" />
+      <wsdl:output message="tns:GetCreditBalanceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetCardLogo">
+      <wsdl:input message="tns:SetCardLogoSoapIn" />
+      <wsdl:output message="tns:SetCardLogoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCardsAuth">
+      <wsdl:input message="tns:MailmergeMailshotCardsAuthSoapIn" />
+      <wsdl:output message="tns:MailmergeMailshotCardsAuthSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCards">
+      <wsdl:input message="tns:MailmergeMailshotCardsSoapIn" />
+      <wsdl:output message="tns:MailmergeMailshotCardsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDFAuth">
+      <wsdl:input message="tns:MailmergeLetterheadPDFAuthSoapIn" />
+      <wsdl:output message="tns:MailmergeLetterheadPDFAuthSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDF">
+      <wsdl:input message="tns:MailmergeLetterheadPDFSoapIn" />
+      <wsdl:output message="tns:MailmergeLetterheadPDFSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExt">
+      <wsdl:input message="tns:ProcessPrintReadyPDFExtSoapIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFExtSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth2">
+      <wsdl:input message="tns:ProcessPrintReadyPDFExtAuth2SoapIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFExtAuth2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth">
+      <wsdl:input message="tns:ProcessPrintReadyPDFExtAuthSoapIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFExtAuthSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDF">
+      <wsdl:input message="tns:ProcessPrintReadyPDFSoapIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailMerge">
+      <wsdl:input message="tns:MailMergeSoapIn" />
+      <wsdl:output message="tns:MailMergeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="imail_apiHttpPost">
+    <wsdl:operation name="GetSessionOptions">
+      <wsdl:input message="tns:GetSessionOptionsHttpPostIn" />
+      <wsdl:output message="tns:GetSessionOptionsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentStatus">
+      <wsdl:input message="tns:QueryDocumentStatusHttpPostIn" />
+      <wsdl:output message="tns:QueryDocumentStatusHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocument">
+      <wsdl:input message="tns:RecallDocumentHttpPostIn" />
+      <wsdl:output message="tns:RecallDocumentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocumentExtAuth">
+      <wsdl:input message="tns:RecallDocumentExtAuthHttpPostIn" />
+      <wsdl:output message="tns:RecallDocumentExtAuthHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetReturns">
+      <wsdl:input message="tns:GetReturnsHttpPostIn" />
+      <wsdl:output message="tns:GetReturnsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:AuthenticateHttpPostIn" />
+      <wsdl:output message="tns:AuthenticateHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPrintPreviewEmailAddress">
+      <wsdl:input message="tns:SetPrintPreviewEmailAddressHttpPostIn" />
+      <wsdl:output message="tns:SetPrintPreviewEmailAddressHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListAttachments">
+      <wsdl:input message="tns:ListAttachmentsHttpPostIn" />
+      <wsdl:output message="tns:ListAttachmentsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAttachment">
+      <wsdl:input message="tns:UpdateAttachmentHttpPostIn" />
+      <wsdl:output message="tns:UpdateAttachmentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAttachment">
+      <wsdl:input message="tns:DeleteAttachmentHttpPostIn" />
+      <wsdl:output message="tns:DeleteAttachmentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListBackgrounds">
+      <wsdl:input message="tns:ListBackgroundsHttpPostIn" />
+      <wsdl:output message="tns:ListBackgroundsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBackground">
+      <wsdl:input message="tns:UpdateBackgroundHttpPostIn" />
+      <wsdl:output message="tns:UpdateBackgroundHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBackground">
+      <wsdl:input message="tns:DeleteBackgroundHttpPostIn" />
+      <wsdl:output message="tns:DeleteBackgroundHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPostingOptions">
+      <wsdl:input message="tns:SetPostingOptionsHttpPostIn" />
+      <wsdl:output message="tns:SetPostingOptionsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditBalance">
+      <wsdl:input message="tns:GetCreditBalanceHttpPostIn" />
+      <wsdl:output message="tns:GetCreditBalanceHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetCardLogo">
+      <wsdl:input message="tns:SetCardLogoHttpPostIn" />
+      <wsdl:output message="tns:SetCardLogoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCardsAuth">
+      <wsdl:input message="tns:MailmergeMailshotCardsAuthHttpPostIn" />
+      <wsdl:output message="tns:MailmergeMailshotCardsAuthHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCards">
+      <wsdl:input message="tns:MailmergeMailshotCardsHttpPostIn" />
+      <wsdl:output message="tns:MailmergeMailshotCardsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDFAuth">
+      <wsdl:input message="tns:MailmergeLetterheadPDFAuthHttpPostIn" />
+      <wsdl:output message="tns:MailmergeLetterheadPDFAuthHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDF">
+      <wsdl:input message="tns:MailmergeLetterheadPDFHttpPostIn" />
+      <wsdl:output message="tns:MailmergeLetterheadPDFHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExt">
+      <wsdl:input message="tns:ProcessPrintReadyPDFExtHttpPostIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFExtHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth2">
+      <wsdl:input message="tns:ProcessPrintReadyPDFExtAuth2HttpPostIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFExtAuth2HttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth">
+      <wsdl:input message="tns:ProcessPrintReadyPDFExtAuthHttpPostIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFExtAuthHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDF">
+      <wsdl:input message="tns:ProcessPrintReadyPDFHttpPostIn" />
+      <wsdl:output message="tns:ProcessPrintReadyPDFHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MailMerge">
+      <wsdl:input message="tns:MailMergeHttpPostIn" />
+      <wsdl:output message="tns:MailMergeHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="imail_apiSoap" type="tns:imail_apiSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSessionOptions">
+      <soap:operation soapAction="https://www.imail.co.uk/GetSessionOptions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentStatus">
+      <soap:operation soapAction="https://www.imail.co.uk/QueryDocumentStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocument">
+      <soap:operation soapAction="https://www.imail.co.uk/RecallDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocumentExtAuth">
+      <soap:operation soapAction="https://www.imail.co.uk/RecallDocumentExtAuth" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReturns">
+      <soap:operation soapAction="https://www.imail.co.uk/GetReturns" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap:operation soapAction="https://www.imail.co.uk/Authenticate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPrintPreviewEmailAddress">
+      <soap:operation soapAction="https://www.imail.co.uk/SetPrintPreviewEmailAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAttachments">
+      <soap:operation soapAction="https://www.imail.co.uk/ListAttachments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAttachment">
+      <soap:operation soapAction="https://www.imail.co.uk/UpdateAttachment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAttachment">
+      <soap:operation soapAction="https://www.imail.co.uk/DeleteAttachment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListBackgrounds">
+      <soap:operation soapAction="https://www.imail.co.uk/ListBackgrounds" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBackground">
+      <soap:operation soapAction="https://www.imail.co.uk/UpdateBackground" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBackground">
+      <soap:operation soapAction="https://www.imail.co.uk/DeleteBackground" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPostingOptions">
+      <soap:operation soapAction="https://www.imail.co.uk/SetPostingOptions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditBalance">
+      <soap:operation soapAction="https://www.imail.co.uk/GetCreditBalance" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCardLogo">
+      <soap:operation soapAction="https://www.imail.co.uk/SetCardLogo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCardsAuth">
+      <soap:operation soapAction="https://www.imail.co.uk/MailmergeMailshotCardsAuth" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCards">
+      <soap:operation soapAction="https://www.imail.co.uk/MailmergeMailshotCards" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDFAuth">
+      <soap:operation soapAction="https://www.imail.co.uk/MailmergeLetterheadPDFAuth" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDF">
+      <soap:operation soapAction="https://www.imail.co.uk/MailmergeLetterheadPDF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExt">
+      <soap:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDFExt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth2">
+      <soap:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDFExtAuth2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth">
+      <soap:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDFExtAuth" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDF">
+      <soap:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailMerge">
+      <soap:operation soapAction="https://www.imail.co.uk/MailMerge" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="imail_apiSoap12" type="tns:imail_apiSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSessionOptions">
+      <soap12:operation soapAction="https://www.imail.co.uk/GetSessionOptions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentStatus">
+      <soap12:operation soapAction="https://www.imail.co.uk/QueryDocumentStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocument">
+      <soap12:operation soapAction="https://www.imail.co.uk/RecallDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocumentExtAuth">
+      <soap12:operation soapAction="https://www.imail.co.uk/RecallDocumentExtAuth" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReturns">
+      <soap12:operation soapAction="https://www.imail.co.uk/GetReturns" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="https://www.imail.co.uk/Authenticate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPrintPreviewEmailAddress">
+      <soap12:operation soapAction="https://www.imail.co.uk/SetPrintPreviewEmailAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAttachments">
+      <soap12:operation soapAction="https://www.imail.co.uk/ListAttachments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAttachment">
+      <soap12:operation soapAction="https://www.imail.co.uk/UpdateAttachment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAttachment">
+      <soap12:operation soapAction="https://www.imail.co.uk/DeleteAttachment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListBackgrounds">
+      <soap12:operation soapAction="https://www.imail.co.uk/ListBackgrounds" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBackground">
+      <soap12:operation soapAction="https://www.imail.co.uk/UpdateBackground" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBackground">
+      <soap12:operation soapAction="https://www.imail.co.uk/DeleteBackground" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPostingOptions">
+      <soap12:operation soapAction="https://www.imail.co.uk/SetPostingOptions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditBalance">
+      <soap12:operation soapAction="https://www.imail.co.uk/GetCreditBalance" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCardLogo">
+      <soap12:operation soapAction="https://www.imail.co.uk/SetCardLogo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCardsAuth">
+      <soap12:operation soapAction="https://www.imail.co.uk/MailmergeMailshotCardsAuth" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCards">
+      <soap12:operation soapAction="https://www.imail.co.uk/MailmergeMailshotCards" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDFAuth">
+      <soap12:operation soapAction="https://www.imail.co.uk/MailmergeLetterheadPDFAuth" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDF">
+      <soap12:operation soapAction="https://www.imail.co.uk/MailmergeLetterheadPDF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExt">
+      <soap12:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDFExt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth2">
+      <soap12:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDFExtAuth2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth">
+      <soap12:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDFExtAuth" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDF">
+      <soap12:operation soapAction="https://www.imail.co.uk/ProcessPrintReadyPDF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailMerge">
+      <soap12:operation soapAction="https://www.imail.co.uk/MailMerge" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="imail_apiHttpPost" type="tns:imail_apiHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetSessionOptions">
+      <http:operation location="/GetSessionOptions" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentStatus">
+      <http:operation location="/QueryDocumentStatus" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocument">
+      <http:operation location="/RecallDocument" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecallDocumentExtAuth">
+      <http:operation location="/RecallDocumentExtAuth" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReturns">
+      <http:operation location="/GetReturns" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <http:operation location="/Authenticate" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPrintPreviewEmailAddress">
+      <http:operation location="/SetPrintPreviewEmailAddress" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListAttachments">
+      <http:operation location="/ListAttachments" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAttachment">
+      <http:operation location="/UpdateAttachment" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAttachment">
+      <http:operation location="/DeleteAttachment" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListBackgrounds">
+      <http:operation location="/ListBackgrounds" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBackground">
+      <http:operation location="/UpdateBackground" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBackground">
+      <http:operation location="/DeleteBackground" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPostingOptions">
+      <http:operation location="/SetPostingOptions" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditBalance">
+      <http:operation location="/GetCreditBalance" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCardLogo">
+      <http:operation location="/SetCardLogo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCardsAuth">
+      <http:operation location="/MailmergeMailshotCardsAuth" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeMailshotCards">
+      <http:operation location="/MailmergeMailshotCards" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDFAuth">
+      <http:operation location="/MailmergeLetterheadPDFAuth" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailmergeLetterheadPDF">
+      <http:operation location="/MailmergeLetterheadPDF" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExt">
+      <http:operation location="/ProcessPrintReadyPDFExt" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth2">
+      <http:operation location="/ProcessPrintReadyPDFExtAuth2" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDFExtAuth">
+      <http:operation location="/ProcessPrintReadyPDFExtAuth" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessPrintReadyPDF">
+      <http:operation location="/ProcessPrintReadyPDF" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MailMerge">
+      <http:operation location="/MailMerge" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="imail_api">
+    <wsdl:port name="imail_apiSoap" binding="tns:imail_apiSoap">
+      <soap:address location="https://www.imailprint.co.uk/webapistd/imail_api.asmx" />
+    </wsdl:port>
+    <wsdl:port name="imail_apiSoap12" binding="tns:imail_apiSoap12">
+      <soap12:address location="https://www.imailprint.co.uk/webapistd/imail_api.asmx" />
+    </wsdl:port>
+    <wsdl:port name="imail_apiHttpPost" binding="tns:imail_apiHttpPost">
+      <http:address location="https://www.imailprint.co.uk/webapistd/imail_api.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
