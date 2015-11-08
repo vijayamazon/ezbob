@@ -66,7 +66,7 @@
 		} // TryGetValue
 
 		/// <summary>
-		/// Gets the element that has the specified key in the read-only dictionary.
+		/// Gets or sets the element that has the specified key in the read-only dictionary.
 		/// </summary>
 		/// <returns>
 		/// The element that has the specified key in the read-only dictionary.
@@ -78,6 +78,7 @@
 		/// </exception>
 		public ModelOutput this[RequestType key] {
 			get { return this.data[key]; }
+			set { this.data[key] = value; }
 		} // indexer
 
 		/// <summary>

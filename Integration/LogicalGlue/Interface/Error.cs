@@ -2,12 +2,20 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.Serialization;
 
+	[DataContract]
 	public class Error {
+		[DataMember]
 		public string Exception { get; set; }
+
+		[DataMember]
 		public string ErrorCode { get; set; }
+
+		[DataMember]
 		public Guid? Uuid { get; set; }
 
+		[DataMember]
 		public List<EncodingFailure> EncodingFailures {
 			get {
 				if (this.encodingFailures == null)
@@ -18,6 +26,7 @@
 			set { this.encodingFailures = Utility.SetList(this.encodingFailures, value); }
 		} // EncodingFailures
 
+		[DataMember]
 		public List<string> MissingColumns {
 			get {
 				if (this.missingColumns == null)

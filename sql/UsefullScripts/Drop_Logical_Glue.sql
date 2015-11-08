@@ -4,6 +4,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('LogicalGlueLoadInference') IS NOT NULL
+	DROP PROCEDURE LogicalGlueLoadInference
+GO
+
 IF OBJECT_ID('LogicalGlueResponseMissingColumns') IS NOT NULL
 	DROP TABLE LogicalGlueResponseMissingColumns
 GO

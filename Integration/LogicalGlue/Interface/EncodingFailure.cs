@@ -1,9 +1,21 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Interface {
+	using System.Runtime.Serialization;
+
+	[DataContract]
 	public class EncodingFailure : ICanBeEmpty {
+		[DataMember]
 		public int RowIndex { get; set; }
+
+		[DataMember]
 		public string ColumnName { get; set; }
+
+		[DataMember]
 		public string UnencodedValue { get; set; }
+
+		[DataMember]
 		public string Reason { get; set; }
+
+		[DataMember]
 		public string Message { get; set; }
 
 		public bool IsEmpty {

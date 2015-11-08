@@ -1,8 +1,18 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Interface {
+	using System.Runtime.Serialization;
+
+	[DataContract]
 	public class Warning : ICanBeEmpty {
+		[DataMember]
 		public string Value { get; set; }
+
+		[DataMember]
 		public string FeatureName { get; set; }
+
+		[DataMember]
 		public string MinValue { get; set; }
+
+		[DataMember]
 		public string MaxValue { get; set; }
 
 		public bool IsEmpty {

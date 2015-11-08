@@ -1,7 +1,12 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Interface {
+	using System.Runtime.Serialization;
+
+	[DataContract(IsReference = true)]
 	public class ModelOutput {
+		[DataMember]
 		public string Status { get; set; }
 
+		[DataMember]
 		public Grade Grade {
 			get {
 				if (this.grade == null)
@@ -12,6 +17,7 @@
 			set { this.grade = this.grade.CloneFrom(value); }
 		} // Grade
 
+		[DataMember]
 		public Error Error {
 			get {
 				if (this.error == null)

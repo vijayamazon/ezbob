@@ -1,8 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.DBTable {
 	using System;
 
-	class Response {
-		public long ResponseID { get; set; }
+	class Response : AWithResponseID {
 		public long ServiceLogID { get; set; }
 		public DateTime ReceivingTime { get; set; }
 		public long RequestTypeID { get; set; }

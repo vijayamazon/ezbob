@@ -1,13 +1,19 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Interface {
 	using System.Collections.Generic;
+	using System.Runtime.Serialization;
 
+	[DataContract]
 	public class Grade {
+		[DataMember]
 		public decimal? Score { get; set; }
 
-		public long EncodedResult { get; set; }
+		[DataMember]
+		public long? EncodedResult { get; set; }
 
+		[DataMember]
 		public string DecodedResult { get; set; }
 
+		[DataMember]
 		public List<Warning> Warnings{
 			get {
 				if (this.warnings == null)
@@ -18,6 +24,7 @@
 			set { this.warnings = Utility.SetList(this.warnings, value); }
 		} // Warnings
 
+		[DataMember]
 		public Dictionary<string, decimal> MapOutputRatios {
 			get {
 				if (this.mapOutputRatios == null)
