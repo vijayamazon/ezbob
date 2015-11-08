@@ -18,12 +18,20 @@
 		Inference Infer(int customerID);
 
 		/// <summary>
-		/// Loads the latest customer inference results that were available on specific date.
+		/// Loads the latest customer inference results that are available now.
 		/// Logical Glue API is not queried.
 		/// </summary>
 		/// <param name="customerID">ID of customer to infer.</param>
-		/// <param name="date">Date of interest.</param>
-		/// <returns>The latest customer inference results that were available on requested date.</returns>
-		Inference GetHistoricalInference(int customerID, DateTime date);
+		/// <returns>The latest customer inference results that are available now.</returns>
+		Inference GetInference(int customerID);
+
+		/// <summary>
+		/// Loads the latest customer inference results that were available on specific time.
+		/// Logical Glue API is not queried.
+		/// </summary>
+		/// <param name="customerID">ID of customer to infer.</param>
+		/// <param name="time">Time of interest.</param>
+		/// <returns>The latest customer inference results that were available on requested time.</returns>
+		Inference GetHistoricalInference(int customerID, DateTime time);
 	} // interface IProcessor
 } // namespace

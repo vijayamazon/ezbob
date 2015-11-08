@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -56,6 +59,8 @@
     <Compile Include="HarvesterInterface\Response.cs" />
     <Compile Include="HarvesterInterface\Warning.cs" />
     <Compile Include="Harvester\Harvester.cs" />
+    <Compile Include="InjectedAttribute.cs" />
+    <Compile Include="InjectorStub.cs" />
     <Compile Include="Interface\ICanBeEmpty.cs" />
     <Compile Include="Interface\RequestType.cs" />
     <Compile Include="Interface\EncodingFailure.cs" />
@@ -66,14 +71,28 @@
     <Compile Include="Interface\Utility.cs" />
     <Compile Include="Interface\Warning.cs" />
     <Compile Include="Interface\IProcessor.cs" />
+    <Compile Include="KeeperInterface\IKeeper.cs" />
+    <Compile Include="Keeper\DBTable\EncodingFailure.cs" />
+    <Compile Include="Keeper\DBTable\MapOutputRatio.cs" />
+    <Compile Include="Keeper\DBTable\MissingColumn.cs" />
+    <Compile Include="Keeper\DBTable\Response.cs" />
+    <Compile Include="Keeper\DBTable\Warning.cs" />
+    <Compile Include="Keeper\DBKeeper.cs" />
     <Compile Include="Processor\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\ModelOutputSerialization.cs" />
     <Compile Include="Tests\ReplySerialization.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Keeper\" />
-    <Folder Include="PersistanceInterface\" />
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

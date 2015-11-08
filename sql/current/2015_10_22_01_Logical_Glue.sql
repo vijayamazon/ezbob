@@ -55,7 +55,7 @@ BEGIN
 		OutputRatioID BIGINT IDENTITY(1, 1) NOT NULL,
 		ResponseID BIGINT NOT NULL,
 		OutputClass NVARCHAR(255) NOT NULL,
-		Score DECIMAL(18, 16),
+		Score DECIMAL(18, 16) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogcialGlueResponseMapOutputRatios PRIMARY KEY (OutputRatioID),
 		CONSTRAINT FK_LogcialGlueResponseMapOutputRatios_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
