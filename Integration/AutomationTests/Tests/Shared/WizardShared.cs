@@ -177,9 +177,6 @@
             companyContinueBtn.Click();
 
             try {
-                //SharedServiceClass.WaitForAjaxReady(this._Driver);
-                //IJavaScriptExecutor jsExe = this._Driver as IJavaScriptExecutor;
-                //var asd = jsExe.ExecuteScript("var asd =function(){return true;};  $(window).load(asd);");
                 IWebElement targets = SharedServiceClass.ElementToBeClickable(this._Driver, By.CssSelector("div.ui-dialog > div.ui-dialog-content > ul.targets > li"), 25);
                 SharedServiceClass.WaitForBlockUiOff(this._Driver);
                 targets.Click();
