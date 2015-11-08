@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue {
+	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.HarvesterInterface;
 	using Ezbob.Integration.LogicalGlue.Harvester;
 	using Ezbob.Integration.LogicalGlue.Keeper;
@@ -17,5 +18,9 @@
 		public static ILog GetLog() {
 			return LogManager.GetLogger(typeof(InjectorStub));
 		} // GetLog
+
+		public static AConnection GetDBConnection() {
+			return Library.Instance.DB;
+		} // GetDBConnection
 	} // class InjectorStub
 } // namespace

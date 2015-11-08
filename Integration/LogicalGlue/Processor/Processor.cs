@@ -58,6 +58,7 @@
 			Keeper = InjectorStub.GetKeeper();
 			Harvester = InjectorStub.GetHarvester();
 		} // Inject
+
 		private ASafeLog log;
 	} // class Processor
 } // namespace

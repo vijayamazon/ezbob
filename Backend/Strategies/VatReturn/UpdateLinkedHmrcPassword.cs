@@ -5,7 +5,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
-	using Integration.ChannelGrabberFrontend;
+	using global::Integration.ChannelGrabberFrontend;
 	using JetBrains.Annotations;
 	using Misc;
 
@@ -45,7 +45,7 @@
 			var oReader = new LoadCustomerMarketplaceSecurityData(
 				CustomerID,
 				m_sDisplayName,
-				Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc.Guid()
+				global::Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc.Guid()
 			);
 
 			oReader.Execute();

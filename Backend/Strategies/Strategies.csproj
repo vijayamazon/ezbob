@@ -171,6 +171,7 @@
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
@@ -264,7 +265,6 @@
     <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />
     <Compile Include="ExternalAPI\Alibaba\RequalifyCustomer.cs" />
     <Compile Include="ExternalAPI\SaveApiCall.cs" />
-    <Compile Include="Library.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\EnlistLottery.cs" />
     <Compile Include="Lottery\FitConditions\AAmount.cs" />
@@ -646,6 +646,10 @@
     <ProjectReference Include="..\..\Integration\LandRegistryLib\LandRegistryLib.csproj">
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>
       <Name>LandRegistryLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\LogicalGlue\LogicalGlue.csproj">
+      <Project>{8d2c4b94-eb8f-470e-927e-f22b7beec42f}</Project>
+      <Name>LogicalGlue</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>

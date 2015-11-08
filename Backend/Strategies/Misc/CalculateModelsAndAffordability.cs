@@ -13,16 +13,18 @@
 	using YodleeLib.connector;
 
 	public class CalculateModelsAndAffordability : AStrategy {
-
 		public CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory) {
 			this.m_oTimeCounter = new TimeCounter("CalculateModelsAndAffordability elapsed times");
 
-            using (this.m_oTimeCounter.AddStep("Constructor time")) {
-                this.m_nCustomerID = nCustomerID;
-                this.m_oHistory = oHistory;
-                this.m_oMundMs = new List<LocalMp>();
-				MpModel = new MpModel { Affordability = new List<AffordabilityData>(), MarketPlaces = new List<MarketPlaceDataModel>()};
-                this.m_oRepo = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
+			using (this.m_oTimeCounter.AddStep("Constructor time")) {
+				this.m_nCustomerID = nCustomerID;
+				this.m_oHistory = oHistory;
+				this.m_oMundMs = new List<LocalMp>();
+				MpModel = new MpModel {
+					Affordability = new List<AffordabilityData>(),
+					MarketPlaces = new List<MarketPlaceDataModel>()
+				};
+				this.m_oRepo = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 			} // using
 		} // constructor
 
@@ -36,99 +38,99 @@
 				MarketPlaces = new List<MarketPlaceDataModel>()
 			};
 
-            using (this.m_oTimeCounter.AddStep("Total mp and affordability strategy execute time")) {
-                try {
+			using (this.m_oTimeCounter.AddStep("Total mp and affordability strategy execute time")) {
+				try {
 
-                    using (this.m_oTimeCounter.AddStep("All marketplaces build time"))
-                        GetAllModels();
+					using (this.m_oTimeCounter.AddStep("All marketplaces build time"))
+						GetAllModels();
 
-                    var oPaypal = new List<LocalMp>();
-                    var oEcomm = new List<LocalMp>();
-                    var oAccounting = new List<LocalMp>();
+					var oPaypal = new List<LocalMp>();
+					var oEcomm = new List<LocalMp>();
+					var oAccounting = new List<LocalMp>();
 
-                    MarketPlaceDataModel oHmrc = null;
+					MarketPlaceDataModel oHmrc = null;
 
-                    var oYodlee = new List<LocalMp>();
+					var oYodlee = new List<LocalMp>();
 
-                    foreach (LocalMp mm in this.m_oMundMs) {
-                        if (mm.Marketplace.Disabled) {
-                            continue;
-                        }
+					foreach (LocalMp mm in this.m_oMundMs) {
+						if (mm.Marketplace.Disabled) {
+							continue;
+						}
 
-                        if (mm.Marketplace.Marketplace.InternalId == ms_oCompanyFilesID) {
-                            continue;
-                        }
+						if (mm.Marketplace.Marketplace.InternalId == ms_oCompanyFilesID) {
+							continue;
+						}
 
-                        if (mm.Marketplace.Marketplace.InternalId == ms_oYodleeID) {
-                            oYodlee.Add(mm);
-                            continue;
-                        } // if
+						if (mm.Marketplace.Marketplace.InternalId == ms_oYodleeID) {
+							oYodlee.Add(mm);
+							continue;
+						} // if
 
-                        if (mm.Marketplace.Marketplace.InternalId == ms_oHmrcID) {
-                            if (oHmrc == null) {
-                                oHmrc = mm.Model;
-                            }
-                            continue;
-                        } // if
+						if (mm.Marketplace.Marketplace.InternalId == ms_oHmrcID) {
+							if (oHmrc == null) {
+								oHmrc = mm.Model;
+							}
+							continue;
+						} // if
 
-                        if (mm.Marketplace.Marketplace.InternalId == ms_oPaypalID) {
-                            oPaypal.Add(mm);
-                            continue;
-                        } // if
+						if (mm.Marketplace.Marketplace.InternalId == ms_oPaypalID) {
+							oPaypal.Add(mm);
+							continue;
+						} // if
 
-                        if (mm.Marketplace.Marketplace.IsPaymentAccount) {
-                            oAccounting.Add(mm);
-                        } else {
-                            oEcomm.Add(mm);
-                        }
-                    } // for each marketplace
+						if (mm.Marketplace.Marketplace.IsPaymentAccount) {
+							oAccounting.Add(mm);
+						} else {
+							oEcomm.Add(mm);
+						}
+					} // for each marketplace
 
-                    if (oHmrc != null) {
-                        using (this.m_oTimeCounter.AddStep("HMRC affordability build time")) {
-                            HmrcBank(oHmrc);
-                        }
-                    } // if
+					if (oHmrc != null) {
+						using (this.m_oTimeCounter.AddStep("HMRC affordability build time")) {
+							HmrcBank(oHmrc);
+						}
+					} // if
 
-                    if (oYodlee.Any()) {
-                        using (this.m_oTimeCounter.AddStep("Yodlee affordability build time")) {
-                            SaveBankStatement(oYodlee);
-                        }
-                    } // if
+					if (oYodlee.Any()) {
+						using (this.m_oTimeCounter.AddStep("Yodlee affordability build time")) {
+							SaveBankStatement(oYodlee);
+						}
+					} // if
 
-                    using (this.m_oTimeCounter.AddStep("PayPal affordability build time")) {
-                        Psp(oPaypal);
-                    }
+					using (this.m_oTimeCounter.AddStep("PayPal affordability build time")) {
+						Psp(oPaypal);
+					}
 
-                    using (this.m_oTimeCounter.AddStep("Ecomm affordability build time")) {
-                        EcommAccounting(oEcomm, AffordabilityType.Ecomm);
-                    }
+					using (this.m_oTimeCounter.AddStep("Ecomm affordability build time")) {
+						EcommAccounting(oEcomm, AffordabilityType.Ecomm);
+					}
 
-                    using (this.m_oTimeCounter.AddStep("Accounting affordability build time")) {
-                        EcommAccounting(oAccounting, AffordabilityType.Accounting);
-                    }
+					using (this.m_oTimeCounter.AddStep("Accounting affordability build time")) {
+						EcommAccounting(oAccounting, AffordabilityType.Accounting);
+					}
 
-                    using (this.m_oTimeCounter.AddStep("Logging affordability time")) {
-                        Log.Debug("**************************************************************************");
-                        Log.Debug("*");
-                        Log.Debug("* Affordability data for customer {0} - begin:", this.m_nCustomerID);
-                        Log.Debug("*");
-                        Log.Debug("**************************************************************************");
+					using (this.m_oTimeCounter.AddStep("Logging affordability time")) {
+						Log.Debug("**************************************************************************");
+						Log.Debug("*");
+						Log.Debug("* Affordability data for customer {0} - begin:", this.m_nCustomerID);
+						Log.Debug("*");
+						Log.Debug("**************************************************************************");
 
-                        foreach (var a in MpModel.Affordability) {
-                            Log.Debug(a);
-                        }
-                        Log.Debug("**************************************************************************");
-                        Log.Debug("*");
-                        Log.Debug("* Affordability data for customer {0} - end.", this.m_nCustomerID);
-                        Log.Debug("*");
-                        Log.Debug("**************************************************************************");
-                    } // using
-                } catch (Exception ex) {
-                    Log.Error(ex, "Failed calculation models and affordability for customer {0}", this.m_nCustomerID);
-                }//try
-            } // using total timer
+						foreach (var a in MpModel.Affordability) {
+							Log.Debug(a);
+						}
+						Log.Debug("**************************************************************************");
+						Log.Debug("*");
+						Log.Debug("* Affordability data for customer {0} - end.", this.m_nCustomerID);
+						Log.Debug("*");
+						Log.Debug("**************************************************************************");
+					} // using
+				} catch (Exception ex) {
+					Log.Error(ex, "Failed calculation models and affordability for customer {0}", this.m_nCustomerID);
+				}//try
+			} // using total timer
 
-            Log.Info(this.m_oTimeCounter.ToString());
+			Log.Info(this.m_oTimeCounter.ToString());
 		} // Execute
 
 		public MpModel MpModel { get; set; }
@@ -166,7 +168,6 @@
 
 				
 			} // if*/ //todo
-
 
 			MpModel.Affordability.Add(new AffordabilityData {
 				Type = AffordabilityType.Hmrc,
@@ -227,12 +228,20 @@
 			};
 
 			oRes.Fill();
-			oRes.DateFrom = oPayPals.Any(x => x.Model.OriginationDate.HasValue) ? oPayPals.Min(x => x.Model.OriginationDate) : null;
-			oRes.DateTo = oPayPals.Any(x => x.Model.LastTransactionDate.HasValue) ? oPayPals.Max(x => x.Model.LastTransactionDate) : null;
+			oRes.DateFrom = oPayPals.Any(x => x.Model.OriginationDate.HasValue)
+				? oPayPals.Min(x => x.Model.OriginationDate)
+				: null;
+			oRes.DateTo = oPayPals.Any(x => x.Model.LastTransactionDate.HasValue)
+				? oPayPals.Max(x => x.Model.LastTransactionDate)
+				: null;
 			MpModel.Affordability.Add(oRes);
 		} // Psp
 
-		private Tuple<decimal /*value*/, bool /*isAnnualized*/> ExtractValue(Dictionary<string, string> oValues, string sKeyBase, bool isAnnualized = false) {
+		private Tuple<decimal /*value*/, bool /*isAnnualized*/> ExtractValue(
+			Dictionary<string, string> oValues,
+			string sKeyBase,
+			bool isAnnualized = false
+		) {
 			if ((oValues == null) || (oValues.Count < 1))
 				return new Tuple<decimal, bool>(0, false);
 
@@ -307,8 +316,12 @@
 				};
 
 				oRes.Fill();
-				oRes.DateFrom = oModels.Any(x => x.Model.OriginationDate.HasValue) ? oModels.Min(x => x.Model.OriginationDate) : null;
-				oRes.DateTo = oModels.Any(x => x.Model.LastTransactionDate.HasValue) ? oModels.Max(x => x.Model.LastTransactionDate) : null;
+				oRes.DateFrom = oModels.Any(x => x.Model.OriginationDate.HasValue)
+					? oModels.Min(x => x.Model.OriginationDate)
+					: null;
+				oRes.DateTo = oModels.Any(x => x.Model.LastTransactionDate.HasValue)
+					? oModels.Max(x => x.Model.LastTransactionDate)
+					: null;
 				MpModel.Affordability.Add(oRes);
 			} // if
 		} // EcommAccounting
@@ -359,15 +372,21 @@
 		} // SaveBankStatement
 
 		private void GetAllModels() {
-            List<MP_CustomerMarketPlace> marketplaces = this.m_oHistory.HasValue
-                ? this.m_oRepo.GetAllByCustomer(this.m_nCustomerID).Where(mp => mp.Created.HasValue && mp.Created.Value.Date <= this.m_oHistory.Value.Date).ToList()
-                : this.m_oRepo.GetAllByCustomer(this.m_nCustomerID).ToList();
+			List<MP_CustomerMarketPlace> marketplaces = this.m_oHistory.HasValue
+				? this.m_oRepo
+					.GetAllByCustomer(this.m_nCustomerID)
+					.Where(mp => mp.Created.HasValue && mp.Created.Value.Date <= this.m_oHistory.Value.Date)
+					.ToList()
+				: this.m_oRepo.GetAllByCustomer(this.m_nCustomerID).ToList();
 
 			Log.Debug(
 				"Loading mp models for customer {0}{1}: {2} model{3} loaded.",
-                this.m_nCustomerID,
-                this.m_oHistory.HasValue
-                    ? string.Format(" that were created not after {0}", this.m_oHistory.Value.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture))
+				this.m_nCustomerID,
+				this.m_oHistory.HasValue
+					? string.Format(
+						" that were created not after {0}",
+						this.m_oHistory.Value.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					)
 					: string.Empty,
 				marketplaces.Count,
 				marketplaces.Count == 1 ? string.Empty : "s"
@@ -379,7 +398,11 @@
 				try {
 					if (mp.Disabled) {
 						model = GetDefaultModel(mp);
-						Log.Debug("Marketplace {0} of type {1} is disabled, default model is used.", mp.Id, mp.Marketplace.Name);
+						Log.Debug(
+							"Marketplace {0} of type {1} is disabled, default model is used.",
+							mp.Id,
+							mp.Marketplace.Name
+						);
 					}
 					else {
 						var builder = GetMpModelBuilder(mp);
@@ -391,10 +414,10 @@
 							mp.Marketplace.Name
 						);
 
-                        using (this.m_oTimeCounter.AddStep(
+						using (this.m_oTimeCounter.AddStep(
 							"Model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name
 						)) {
-                            model = builder.CreateLightModel(mp, this.m_oHistory);
+							model = builder.CreateLightModel(mp, this.m_oHistory);
 
 							Log.Debug(
 								"Model has been built for marketplace {0} of type {1}.",
@@ -403,9 +426,14 @@
 							);
 						} // using
 					} // if
-				}
-				catch (Exception e) {
-					Log.Warn(e, "Something went wrong while building marketplace model for marketplace id {0} of type {1}, default model is used.", mp.Id, mp.Marketplace.Name);
+				} catch (Exception e) {
+					Log.Warn(
+						e,
+						"Something went wrong while building marketplace model for marketplace id {0} of type {1}, " +
+						"default model is used.",
+						mp.Id,
+						mp.Marketplace.Name
+					);
 					model = GetDefaultModel(mp);
 				} // try
 
@@ -469,10 +497,10 @@
 			new Tuple<string, int>("1M", 12),
 		};
 
-		private static readonly Guid ms_oHmrcID = Integration.ChannelGrabberConfig.Configuration.Instance.Hmrc.Guid();
+		private static readonly Guid ms_oHmrcID =
+			global::Integration.ChannelGrabberConfig.Configuration.Instance.Hmrc.Guid();
 		private static readonly Guid ms_oPaypalID = new PayPalServiceInfo().InternalId;
 		private static readonly Guid ms_oYodleeID = new YodleeServiceInfo().InternalId;
 		private static readonly Guid ms_oCompanyFilesID = new CompanyFilesServiceInfo().InternalId;
-
 	} // class CalculateModelsAndAffordability
 } // namespace
