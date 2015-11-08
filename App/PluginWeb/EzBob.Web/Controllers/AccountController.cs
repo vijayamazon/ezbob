@@ -695,33 +695,19 @@
                 customerId = m_oContext.Customer.Id;
             }
 
-			//ExperianTargetingActionResult response = this.m_oServiceClient.Instance.ExperianTarget(
-			//	customerId.Value, 
-			//	this.m_oContext.UserId,
-			//	new ExperianTargetingRequest {
-			//		CompanyName = companyName,
-			//		CustomerID = customerId.Value,
-			//		Filter = filter,
-			//		Postcode = postcode,
-			//		RefNum = refNum
-			//	});
+		    ExperianTargetingActionResult response = this.m_oServiceClient.Instance.ExperianTarget(
+                customerId.Value, 
+                this.m_oContext.UserId,
+		        new ExperianTargetingRequest {
+		            CompanyName = companyName,
+		            CustomerID = customerId.Value,
+		            Filter = filter,
+		            Postcode = postcode,
+		            RefNum = refNum
+		        });
 
-			return Json(GenerateFakeTargetingData(companyName, postcode), JsonRequestBehavior.AllowGet);
+		    return Json(response.CompanyInfos, JsonRequestBehavior.AllowGet);
 		} // CheckingCompany
-
-		private static List<CompanyInfo> GenerateFakeTargetingData(string companyName, string postcode) {
-			var data = new List<CompanyInfo>();
-
-			for (var i = 0; i < 10; i++) {
-				data.Add(new CompanyInfo {
-					AddrLine1 = "AddrLine1" + " for company " + i,
-					AddrLine2 = "AddrLine2" + " for company " + i
-				});
-			}
-
-			return data;
-		} // GenerateFakeTargetingData
-
 
 		[Ajax]
 		[HttpPost]

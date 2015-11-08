@@ -175,8 +175,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	    }
 
 	    this.readyToProceed = true;
-
-		this.handleTargeting(null, null, null, '', '', '', '', false);
 		return this;
 	}, // render
 
@@ -263,29 +261,29 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		scrollTop();
 		req.done(function(reqData) {
-			//if (!reqData) {
-			//	that.saveDataRequest(action, data);
-			//	return;
-			//} // if
+			if (!reqData) {
+				that.saveDataRequest(action, data);
+				return;
+			} // if
 
 			switch (reqData.length) {
-			//case 0:
-			//	if (that.targetingTries === 0 && !isEntrepreneur) {
-			//		EzBob.App.trigger(
-			//			'warning',
-			//			'Company "' + companyName + '" at postcode "' + postcode + '" was not found. ' +
-			//			'Please check your input and try again.'
-			//		);
-			//		that.targetingTries++;
-			//		UnBlockUi();
-			//	} else
-			//		that.saveTargeting(null, action, form);
+			case 0:
+				if (that.targetingTries === 0 && !isEntrepreneur) {
+					EzBob.App.trigger(
+						'warning',
+						'Company "' + companyName + '" at postcode "' + postcode + '" was not found. ' +
+						'Please check your input and try again.'
+					);
+					that.targetingTries++;
+					UnBlockUi();
+				} else
+					that.saveTargeting(null, action, form);
 
-			//	break;
+				break;
 
-			//case 1:
-			//	that.saveTargeting(reqData[0], action, form);
-			//	break;
+			case 1:
+				that.saveTargeting(reqData[0], action, form);
+				break;
 
 			default:
 				var companyTargets = new EzBob.companyTargets({ model: reqData });
@@ -295,7 +293,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 				companyTargets.on('BusRefNumGot', function(targetingData) {
 					BlockUi();
-					//that.saveTargeting(targetingData, action, form);
+					that.saveTargeting(targetingData, action, form);
 				});
 
 				break;

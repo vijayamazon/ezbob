@@ -411,17 +411,14 @@
 		display: block;
 	}
 
-	.loan-summary-box,
 	.loan-summary-box:first-child {
-		width: 49%;
-		padding: 10px 0;
-		display: inline-block;
-		margin-top: 10px;
-		text-align: center;
+		padding: 10px 60px 10px 30px;
 	}
 
-	.loan-summary-box.right-box {
-		float: right;
+	.loan-summary-box {
+		display: block;
+		margin-top: 10px;
+		text-align: center;
 	}
 
 	.loan-summary-box-wrapper .button, div.form_field_container .button {
@@ -475,11 +472,9 @@
 
 	.ui-dialog.ui-widget.ui-widget-content.ui-corner-all {
 		left: 0 !important;
-		width: 100% !important;
-		height: 100% !important;
+		width: auto !important;
         padding:15px;
         top:0 !important;
-		box-sizing: border-box;
 	}
 
 	.payments-wrap, .sliders-main .summary {
@@ -490,27 +485,18 @@
 		padding-top: 0;
 	}
 
-	.ui-dialog  .address-dialog-widget.ui-dialog-content,
-	.target-dialog .ui-dialog-content{
-		height: 100% !important;
-		box-sizing: border-box;
-		overflow: hidden !important;
-		padding-bottom: 250px;
-	}
+    .address-dialog-widget {
+        height: 250px !important;
+		border: 1px solid #ddd !important;
+    }
 
 	.matchingAddressList li{
 		line-height: 28px;	
 	}
 
-	.ui-dialog-buttonset,
-	.ui-dialog-buttonset button {
+    .ui-dialog-buttonset button {
         width:100%;
     }
-
-	.address-dialog-buttonpane.buttons-footer {
-		position:absolute;
-		bottom: 0;
-	}
 
 	.sliders-main .summary-wrap p, .sliders-main .summary-wrap h3 {
 		margin: 0;
@@ -528,70 +514,7 @@
 		margin-left: -25px;
 	}
 
-	.ui-dialog.consent-class {
-		height: 100vh !important;
-		box-sizing: border-box;
-	}
 
-	.ui-dialog.consent-class .ui-dialog-titlebar-close {
-		top: 40%;
-	}
-
-	.address-dialog-titlebar .ui-dialog-titlebar-close {
-		top: 45%;
-	}
-
-	.ui-dialog.consent-class .ui-dialog-content {
-		height: 100% !important;
-		overflow-y: hidden;
-		box-sizing: border-box;
-		padding-bottom: 130px;
-	}
-
-	.ui-dialog.consent-class .ui-dialog-content>div,
-	.ui-dialog.consent-class .ui-dialog-content .consent-dialog-wrapper,
-	.ui-dialog.consent-class #consent-conent,
-	#address-popup,
-	#address-popup .address-selector-block,
-	#address-popup .address-selector-block ul.matchingAddressList,
-	ul.targets {
-		height: 100% !important;
-	}
-
-	#address-popup .address-selector-block ul.matchingAddressList,
-	.ui-dialog.add-scroll,
-	ul.targets{
-		overflow-y: auto !important;
-	}
-
-	.target-dialog {
-		overflow: visible;
-	}
-
-	.ui-dialog.consent-class .ui-dialog-content .consent-dialog-wrapper {
-		padding: 10px;
-	}
-
-	.ui-dialog.consent-class #consent-conent {
-		padding-top: 0;
-		padding-bottom: 0;
-		overflow-y: auto;
-		max-height: none;
-	}
-
-	.ui-dialog-title.address-dialog-title {
-		padding-left: 0;
-	}
-
-	.ui-dialog .address-dialog-widget.disable-scroll {
-    height: auto !important;
-    padding-bottom: 0;
-
-	}
-
-	.ui-dialog {
-		border-radius: 0;
-	}
 }
 
 @media only screen and (min-width : 320px) and (max-width : 500px) {
