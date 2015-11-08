@@ -37,7 +37,7 @@ BEGIN
 								INNER JOIN 
 									CustomerStatuses cs2 
 								ON 
-									h.NewStatus = cs.Id
+									h.NewStatus = cs2.Id
 								WHERE 
 									CustomerId = @CustomerID 
 									AND 

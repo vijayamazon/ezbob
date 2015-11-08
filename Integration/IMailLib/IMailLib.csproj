@@ -61,6 +61,11 @@
     <Compile Include="CollectionMail.cs" />
     <Compile Include="CollectionMailModel.cs" />
     <Compile Include="FileMetadata.cs" />
+    <Compile Include="Service References\IMailNewApiNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="SnailMailTemplate.cs" />
     <Compile Include="Helpers\FormattingHelper.cs" />
     <Compile Include="Helpers\XmlNodeExtensions.cs" />
@@ -127,9 +132,44 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\IMailApiNS\imail_api.wsdl" />
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.MailmergeLetterheadPDFAuthResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.MailmergeLetterheadPDFResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.MailmergeMailshotCardsAuthResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.MailmergeMailshotCardsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.MailMergeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.ProcessPrintReadyPDFExtAuthResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.ProcessPrintReadyPDFExtResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.ProcessPrintReadyPDFResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.SetCardLogoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.UpdateAttachmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\IMailLib.IMailNewApiNS.UpdateBackgroundResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\IMailNewApiNS\imail_api.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\IMailApiNS\" />
+    <WCFMetadataStorage Include="Service References\IMailNewApiNS\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\IMailApiNS\configuration91.svcinfo" />
@@ -145,6 +185,21 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\IMailNewApiNS\imail_api.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\IMailNewApiNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\IMailNewApiNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\IMailNewApiNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
