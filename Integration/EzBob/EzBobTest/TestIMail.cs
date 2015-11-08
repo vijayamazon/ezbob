@@ -43,7 +43,8 @@
 
 		[Test]
 		public void TestAuthenticate() {
-			bool isAuthenticated = this.api.Authenticate("Emma123456", "Ezbob123");
+			//bool isAuthenticated = this.api.Authenticate("Emma123456", "Ezbob123");
+			bool isAuthenticated = this.api.Authenticate("ezbobapiuser", "Ezbob2014#");
 			Assert.AreEqual(true, isAuthenticated);
 		}
 
@@ -141,7 +142,7 @@
 				string csvStr = sb.ToString();
 				byte[] csvData = System.Text.Encoding.ASCII.GetBytes(csvStr);
 
-				success = this.api.MailMerge(csvData, "tesstattachment3.pdf", false);
+				success = this.api.MailMerge(csvData, "tesstattachment3", "tesstattachment3.pdf", false);
 				if (!success)
 					Log.InfoFormat(this.api.GetErrorMessage());
 				//}
