@@ -1,10 +1,12 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
     using ConfigManager;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Utils;
     using EzBob.Models;
     using EzBob.Web.Areas.Underwriter.Models;
     using EzBob.Web.Infrastructure;
@@ -72,6 +74,39 @@
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 
+        private void NL_SaveLoanOptions(Customer customer,
+                                      LoanOptions options)
+        {
+            //NL Loan Options
+            NL_LoanOptions nlOptions = new NL_LoanOptions()
+            {
+                LoanID = options.LoanId,
+                CaisAccountStatus = options.CaisAccountStatus,
+                EmailSendingAllowed = options.EmailSendingAllowed,
+                LatePaymentNotification = options.LatePaymentNotification,
+                LoanOptionsID = options.Id,
+                MailSendingAllowed = options.MailSendingAllowed,
+                ManualCaisFlag = options.ManualCaisFlag,
+                PartialAutoCharging = options.ReductionFee,
+                SmsSendingAllowed = options.SmsSendingAllowed,
+                StopAutoChargeDate = MiscUtils.NL_GetStopAutoChargeDate(options.AutoPayment, options.StopAutoChargeDate),
+                StopLateFeeFromDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item1,
+                StopLateFeeToDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item2,
+                UserID = this.context.UserId,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                Notes = "From Collection Status",
+            };
+
+            var PropertiesUpdateList = new List<String>() {
+		        "StopAutoChargeDate",
+                "StopLateFeeFromDate",
+		        "StopLateFeeToDate",
+		    };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId, PropertiesUpdateList.ToArray()); ;
+        }
+
 		[Ajax]
 		[HttpPost]
 		[Permission(Name = "CustomerStatus")]
@@ -106,6 +141,7 @@
 						};
 						options.CaisAccountStatus = "8";
 						this.loanOptionsRepository.SaveOrUpdate(options);
+                        NL_SaveLoanOptions(customer, options);
 					}
 				}
 
@@ -118,6 +154,7 @@
 						options.AutoLateFees = false;
 						options.AutoPayment = false;
 						this.loanOptionsRepository.SaveOrUpdate(options);
+                        NL_SaveLoanOptions(customer, options);					 
 
 						loan.InterestFreeze.Add(new LoanInterestFreeze {
 							Loan = loan,
@@ -129,7 +166,7 @@
 						});
 
 						this.loanRepository.SaveOrUpdate(loan);
-					    SaveLoanInterestFreeze(loan.InterestFreeze.Last(), customerId, loan.Id);
+                        SaveLoanInterestFreeze(loan.InterestFreeze.Last(), customerId, loan.Id);
 					}
 
 					//collection and external status is ok
@@ -140,17 +177,16 @@
 						options.AutoLateFees = true;
 						options.AutoPayment = true;
 						this.loanOptionsRepository.SaveOrUpdate(options);
+                        NL_SaveLoanOptions(customer, options);
 
 						if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
 							foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
 								interestFreeze.DeactivationDate = now;
                                 DeactivateLoanInterestFreeze(interestFreeze, customerId, loan.Id);
 							}
-
 							this.loanRepository.SaveOrUpdate(loan);
 						}
 					}
-
 				}
 
 				this.session.Flush();

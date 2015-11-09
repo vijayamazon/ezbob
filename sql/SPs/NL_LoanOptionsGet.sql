@@ -8,9 +8,7 @@ AS
 BEGIN
 	SELECT
 	   [LoanOptionsID]
-      ,[AutoCharge]
       ,[StopAutoChargeDate]
-      ,[AutoLateFees]
       ,[PartialAutoCharging]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]

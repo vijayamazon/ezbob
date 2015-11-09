@@ -553,9 +553,7 @@ CREATE TABLE dbo.NL_LoanOptions
 	(
 	  LoanOptionsID           INT IDENTITY NOT NULL
 	, LoanID                  INT NOT NULL
-	, AutoCharge              BIT
 	, StopAutoChargeDate      DATETIME
-	, AutoLateFees            BIT
 	, StopAutoLateFeesDate    DATETIME
 	, AutoInterest            BIT
 	, StopAutoInterestDate    DATETIME

@@ -1,8 +1,8 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF OBJECT_ID('NL_LoanOptionsSave') IS NOT NULL
-	DROP PROCEDURE NL_LoanOptionsSave
+IF OBJECT_ID('NL_SaveLoanOptions') IS NOT NULL
+	DROP PROCEDURE NL_SaveLoanOptions
 GO
 
 IF TYPE_ID('NL_LoanOptionsList') IS NOT NULL
@@ -11,9 +11,7 @@ GO
 
 CREATE TYPE NL_LoanOptionsList AS TABLE (
 	[LoanID] BIGINT NOT NULL,
-	[AutoCharge] BIT NOT NULL,
 	[StopAutoChargeDate] DATETIME NULL,
-	[AutoLateFees] BIT NOT NULL,
 	[PartialAutoCharging] BIT NOT NULL,
 	[LatePaymentNotification] BIT NOT NULL,
 	[CaisAccountStatus] NVARCHAR(50) NULL,
@@ -30,7 +28,7 @@ CREATE TYPE NL_LoanOptionsList AS TABLE (
 )
 GO
 
-CREATE PROCEDURE NL_LoanOptionsSave
+CREATE PROCEDURE NL_SaveLoanOptions
 @Tbl NL_LoanOptionsList READONLY,
 @LoanID INT
 AS
@@ -41,9 +39,7 @@ BEGIN
 
 	INSERT INTO NL_LoanOptions (
        [LoanID]
-      ,[AutoCharge]
       ,[StopAutoChargeDate]
-      ,[AutoLateFees]
       ,[PartialAutoCharging]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]
@@ -59,9 +55,7 @@ BEGIN
 	  ,[StopLateFeeToDate]
 	) SELECT
        [LoanID]
-      ,[AutoCharge]
       ,[StopAutoChargeDate]
-      ,[AutoLateFees]
       ,[PartialAutoCharging]
       ,[LatePaymentNotification]
       ,[CaisAccountStatus]

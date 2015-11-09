@@ -13,14 +13,11 @@
 		[DataMember]
 		public long LoanID { get; set; }
 
-		[DataMember]
-		public bool AutoCharge { get; set; }
+
 
 		[DataMember]
 		public DateTime? StopAutoChargeDate { get; set; }
 
-		[DataMember]
-		public bool AutoLateFees { get; set; }
 
 		[DataMember]
         public bool PartialAutoCharging { get; set; }

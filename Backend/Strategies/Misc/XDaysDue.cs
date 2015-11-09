@@ -1,16 +1,13 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Linq;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.NewLoan;
-	using Ezbob.Database;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using Ezbob.Backend.Models;
+    using Ezbob.Backend.Strategies.MailStrategies;
+    using Ezbob.Backend.Strategies.NewLoan;
+    using Ezbob.Database;
 
-	public class XDaysDue : AStrategy {
+    public class XDaysDue : AStrategy {
 		public override string Name {
 			get { return "XDays Due"; }
 		} // Name
@@ -29,21 +26,13 @@
                 SendMailAndMarkDB("Mandrill - 2 days notice", sr, "UpdateTwoDaysDueMailSent", "UpdateTwoDaysDueMailSent");
 				return ActionResult.Continue;
 			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
-
-          /* 
-		   * TODO
-		   * 
-		   * DB.ForEachRowSafe((sr, bRowsetStart) =>
-            {
-                NL_SendMailAndMarkDB("Mandrill - 5 days notice", sr, "NL_UpdateFiveDaysDueMailSent", 5);
+              
+            DB.ForEachRowSafe((sr, bRowsetStart) =>{
+                NL_SendMailAndMarkDB(sr);
                 return ActionResult.Continue;
-            }, "NL_GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
+            }, "NL_GetCustomersXDaysDue", CommandSpecies.StoredProcedure,
+            new QueryParameter("Now", DateTime.UtcNow));
 
-            DB.ForEachRowSafe((sr, bRowsetStart) =>
-            {
-                NL_SendMailAndMarkDB("Mandrill - 2 days notice", sr, "NL_UpdateTwoDaysDueMailSent", 2);
-                return ActionResult.Continue;
-            }, "NL_GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);*/
 		} // Execute
 
         private void SendMailAndMarkDB(string templateName, SafeReader sr, string spName, string fieldName) {
@@ -75,49 +64,39 @@
             Log.Info("update loan schedule x days due for customer {0}", customerId);
         }
 
-        private void NL_SendMailAndMarkDB(string templateName, SafeReader sr, string spName, int dayNum) {
+        private void NL_SendMailAndMarkDB( SafeReader sr) {
 
             int loanId = sr["LoanID"];
-            //decimal amountDue = sr["AmountDue"];
             string firstName = sr["FirstName"];
-            //string mail = sr["Email"];
-            //DateTime sceduledDate = sr["SceduledDate"];
+            DateTime plannedDate = sr["PlannedDate"];
             string creditCard = sr["CreditCardNo"];
-            int customerId = sr["customerId"];
-            //int loanScheduleId = sr["id"];
+            int customerId = sr["CustomerId"];
+            int Xdays = sr["Xdays"]; // 2|5 indicate which type of notification to send
+            int loanScheduleId = sr["LoanScheduleID"];
 
-			var loanState = new LoanState(new NL_Model(customerId), loanId, DateTime.UtcNow);
-            loanState.Execute();
+            //TODO : Replace by real value from Calculator (schedule items fully paid via calculator case "amountDue <= 0" skip).
+            //DON"T DELETE - in the futere email will be sent from here.!!! 
+            //var amountDue = 1000;
+            //var variables = new Dictionary<string, string> {
+            //    {"FirstName", firstName},
+            //    {"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
+            //    {"Date", FormattingUtils.FormatDateToString(plannedDate)},
+            //    {"DebitCard", creditCard}
+            //};
+            //var templateName = (Xdays == 2) ? "Mandrill - 2 days notice" : "Mandrill - 5 days notice";
+            //XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, templateName, variables);
+            //xDaysDueMails.Execute();
 
-			// TODO: revive
-            // LegacyLoanCalculator calc = new LegacyLoanCalculator(loanState.CalcModel);
+            var parameterName = (Xdays == 2) ? "TwoDaysDueMailSent" : "FiveDaysDueMailSent"; // new SP
 
-			// TODO: this is wrong usage of CreateScheduleAndPlan method.
-			// It should use GetAmountToChargeForAutoCharger with relevant date.
+            var queryParameteres = new QueryParameter[] {
+                new QueryParameter("LoanScheduleID", loanScheduleId),
+                new QueryParameter(parameterName, true)
+            };
 
-			/*
-            List<ScheduledItemWithAmountDue> schedules = calc.CreateScheduleAndPlan();
+            var strategy = new UpdateLoanSchedules(loanScheduleId, queryParameteres, loanId);
+            strategy.Execute();
 
-            ScheduledItemWithAmountDue schedule = schedules.First(x => x.Date == DateTime.UtcNow.AddDays(dayNum));
-
-            var variables = new Dictionary<string, string> {
-					{"FirstName", firstName},
-					{"AmountDueScalar", schedule.Amount.ToString(CultureInfo.InvariantCulture)},
-					{"Date", FormattingUtils.FormatDateToString(schedule.Date)},
-					{"DebitCard", creditCard}
-				};
-
-            XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, templateName, variables);
-            xDaysDueMails.Execute();
-
-            DB.ExecuteNonQuery(spName,
-                CommandSpecies.StoredProcedure,
-                new QueryParameter("@LoanID", loanId),
-                new QueryParameter("@Date", DateTime.UtcNow.AddDays(dayNum))
-                );
-			*/
-
-            //TODO update loan schedule x days due 
             Log.Info("update loan schedule x days due for customer {0}", customerId);
         }
 	} // class XDaysDue

@@ -939,9 +939,7 @@ BEGIN
 	CREATE TABLE NL_LoanOptions (
 		LoanOptionsID BIGINT IDENTITY(1, 1) NOT NULL,
 		LoanID BIGINT NOT NULL,
-		AutoCharge BIT NOT NULL,
-		StopAutoChargeDate DATETIME NULL,
-		AutoLateFees BIT NOT NULL,				
+		StopAutoChargeDate DATETIME NULL,		
 		PartialAutoCharging BIT NOT NULL,
 		LatePaymentNotification BIT NOT NULL,
 		CaisAccountStatus NVARCHAR(50) NULL,

@@ -65,9 +65,7 @@
 		public void TestLoanOptions1() {
 			NL_LoanOptions NL_options = new NL_LoanOptions {
 				LoanID = 123,
-				AutoCharge = true,
 				StopAutoChargeDate = DateTime.UtcNow,
-				AutoLateFees = true,
 				PartialAutoCharging = true,
 				LatePaymentNotification = true,
 				CaisAccountStatus = "asd",

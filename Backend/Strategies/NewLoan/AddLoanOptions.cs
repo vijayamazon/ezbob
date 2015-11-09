@@ -52,15 +52,17 @@
                         if (pi.GetValue(this.nlLoanOptions) != null)
                             pi.SetValue(existsOptions, pi.GetValue(this.nlLoanOptions));
                     });
-
-                    foreach (var updateProperty in PropertiesUpdateList)
-                    {
-                        PropertyInfo pi = this.nlLoanOptions.GetType().GetProperty(updateProperty);
-                        var fromClient = pi.GetValue(this.nlLoanOptions);
-                        pi.SetValue(existsOptions, fromClient, null);
+                    
+                    if (PropertiesUpdateList != null) {
+                        foreach (var updateProperty in PropertiesUpdateList)
+                        {
+                            PropertyInfo pi = this.nlLoanOptions.GetType().GetProperty(updateProperty);
+                            var fromClient = pi.GetValue(this.nlLoanOptions);
+                            pi.SetValue(existsOptions, fromClient, null);
+                        }   
                     }
-
-                    this.LoanOptionsID = DB.ExecuteScalar<long>("NL_LoanOptionsSave",
+                    
+                    this.LoanOptionsID = DB.ExecuteScalar<long>("NL_SaveLoanOptions",
                         CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanOptions>("Tbl", existsOptions),
                         new QueryParameter("@LoanID", this.nlLoanOptions.LoanID));
                     NL_AddLog(LogType.Info, "Strategy End", this.nlLoanOptions, this.LoanOptionsID, null, null);

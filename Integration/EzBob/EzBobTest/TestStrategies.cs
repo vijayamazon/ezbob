@@ -559,6 +559,13 @@
 			stra.Execute();
 		}
 
+        [Test]
+        public void TestXDaysDue()
+        {
+            var stra = new XDaysDue();
+            stra.Execute();
+        }
+
 		[Test]
 		public void ThreeInvalidAttempts() {
 			var s = new ThreeInvalidAttempts(3060);

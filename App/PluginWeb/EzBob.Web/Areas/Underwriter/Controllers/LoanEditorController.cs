@@ -7,6 +7,7 @@
 	using EchoSignLib.EchoSignService;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Utils;
 	using EzBob.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
@@ -251,11 +252,10 @@
 		[Transactional]
 		public JsonResult SaveLateFeeOption(int id) {
 			DateTime? lateFeeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeStartDate"]);
-			DateTime? lateFeeEndDate;
 
-			string lateFeeEndDateStr = HttpContext.Request.QueryString["lateFeeEndDate"];
+		    string lateFeeEndDateStr = HttpContext.Request.QueryString["lateFeeEndDate"];
 
-			lateFeeEndDate = string.IsNullOrEmpty(lateFeeEndDateStr) ? NoLimitDate : Convert.ToDateTime(lateFeeEndDateStr);
+			DateTime? lateFeeEndDate = string.IsNullOrEmpty(lateFeeEndDateStr) ? NoLimitDate : Convert.ToDateTime(lateFeeEndDateStr);
 
 			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
@@ -281,7 +281,7 @@
 		        "StopLateFeeToDate"
 		    };
 
-            SaveNewLoanOptions(options, PropertiesUpdateList);
+            NL_SaveLoanOptions(options, PropertiesUpdateList);
 
 		    model.Options = this.loanOptionsRepository.GetByLoanId(id);
 			RescheduleSetmodel(model, this._loans.Get(id));
@@ -304,7 +304,7 @@
 		        "StopLateFeeFromDate",
 		        "StopLateFeeToDate"
 		    };
-            SaveNewLoanOptions(options, PropertiesUpdateList);
+            NL_SaveLoanOptions(options, PropertiesUpdateList);
             
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
@@ -335,11 +335,10 @@
 
 			this.loanOptionsRepository.SaveOrUpdate(options);
 
-
             var PropertiesUpdateList = new List<String>() {
 		        "StopAutoChargeDate",
 		    };
-            SaveNewLoanOptions(options, PropertiesUpdateList);
+            NL_SaveLoanOptions(options, PropertiesUpdateList);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -361,7 +360,7 @@
 		        "StopAutoChargeDate",
 		    };
 
-            SaveNewLoanOptions(options, PropertiesUpdateList);
+            NL_SaveLoanOptions(options, PropertiesUpdateList);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
@@ -375,10 +374,9 @@
 		public JsonResult SaveFreezeInterval(int id) {
 
 			DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
-			DateTime? freezeEndDate;
 
-			string freezeEndDateStr = HttpContext.Request.QueryString["enddate"];
-			freezeEndDate = string.IsNullOrEmpty(freezeEndDateStr) ? NoLimitDate : Convert.ToDateTime(freezeEndDateStr);
+		    string freezeEndDateStr = HttpContext.Request.QueryString["enddate"];
+			DateTime? freezeEndDate = string.IsNullOrEmpty(freezeEndDateStr) ? NoLimitDate : Convert.ToDateTime(freezeEndDateStr);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 
@@ -481,19 +479,27 @@
             var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, loanID, nlLoanInterestFreeze);
             Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
         }
-
-        private void SaveNewLoanOptions(LoanOptions options,
-                                List<String> PropertiesUpdateList)
+        private DateTime? NL_GetStopAutoChargeDate(bool AutoCharge,
+                                           DateTime? StopAutoChargeDate)
         {
+            if (AutoCharge)
+            {
+                if (StopAutoChargeDate == null)
+                    return DateTime.Now;
+                else
+                    return StopAutoChargeDate;
+            }
+            return null;
+        }
+
+
+        private void NL_SaveLoanOptions(LoanOptions options, List<String> PropertiesUpdateList){
 
             int customerId = this._loans.Get(options.LoanId).Customer.Id;
 
             //NL Loan Options
-            NL_LoanOptions nlOptions = new NL_LoanOptions()
-            {
+            NL_LoanOptions nlOptions = new NL_LoanOptions(){
                 LoanID = options.LoanId,
-                AutoCharge = options.AutoPayment,
-                AutoLateFees = options.AutoLateFees,
                 CaisAccountStatus = options.CaisAccountStatus,
                 EmailSendingAllowed = options.EmailSendingAllowed,
                 LatePaymentNotification = options.LatePaymentNotification,
@@ -502,13 +508,13 @@
                 ManualCaisFlag = options.ManualCaisFlag,
                 PartialAutoCharging = options.ReductionFee,
                 SmsSendingAllowed = options.SmsSendingAllowed,
-                StopAutoChargeDate = options.StopAutoChargeDate,
-                StopLateFeeFromDate = options.StopLateFeeFromDate,
-                StopLateFeeToDate = options.StopLateFeeToDate,
+                StopAutoChargeDate = MiscUtils.NL_GetStopAutoChargeDate(options.AutoPayment, options.StopAutoChargeDate),
+                StopLateFeeFromDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item1,
+                StopLateFeeToDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item2,
                 UserID = this._context.UserId,
                 InsertDate = DateTime.Now,
                 IsActive = true,
-                Notes = "Late fee option saved From Edit Loan page",
+                Notes = "From Loan Editor Controller",
             };
 
             var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId, PropertiesUpdateList.ToArray());

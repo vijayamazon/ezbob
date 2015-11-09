@@ -112,8 +112,8 @@ IF OBJECT_ID('NL_LoanOptionsGet') IS NOT NULL
 	DROP PROCEDURE NL_LoanOptionsGet
 GO
 
-IF OBJECT_ID('NL_LoanOptionsSave') IS NOT NULL
-	DROP PROCEDURE NL_LoanOptionsSave
+IF OBJECT_ID('NL_SaveLoanOptions') IS NOT NULL
+	DROP PROCEDURE NL_SaveLoanOptions
 GO
 
 IF OBJECT_ID('NL_LoanRolloversSave') IS NOT NULL

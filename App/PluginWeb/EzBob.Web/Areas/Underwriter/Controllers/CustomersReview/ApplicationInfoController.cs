@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -8,6 +9,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Code;
@@ -476,7 +478,8 @@
 			DateTime now = DateTime.UtcNow;
 
 			if (newExternalCollectionStatus != prevExternalCollectionStatus && (newExternalCollectionStatus == null || prevExternalCollectionStatus == null)) {
-				foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
+				foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) 
+                {
 					bool customerInGoodStatus = newExternalCollectionStatus == null && oCustomer.CollectionStatus.IsEnabled;
 					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
 					options.AutoLateFees = customerInGoodStatus;
@@ -485,7 +488,8 @@
 					options.StopAutoChargeDate = customerInGoodStatus ? (DateTime?)null : now;
 
 					this.loanOptionsRepository.SaveOrUpdate(options);
-
+                    NL_SaveLoanOptions(oCustomer, options);
+                    
 					if (!customerInGoodStatus) {
 						loan.InterestFreeze.Add(new LoanInterestFreeze {
 							Loan = loan,
@@ -496,7 +500,7 @@
 							DeactivationDate = null
 						});
 
-					    SaveLoanInterestFreeze(loan.InterestFreeze.Last(), oCustomer.Id, loan.Id);
+					SaveLoanInterestFreeze(loan.InterestFreeze.Last(), oCustomer.Id, loan.Id);
 
 					} else if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
 						foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
@@ -511,6 +515,42 @@
 
 			return Json(new { error = (string)null, id = id, status = externalStatusID });
 		} // ChangeExternalCollectionStatus
+
+
+        private void NL_SaveLoanOptions(Customer customer,
+                                       LoanOptions options)
+        {
+
+            //NL Loan Options
+            NL_LoanOptions nlOptions = new NL_LoanOptions()
+            {
+                LoanID = options.LoanId,
+                CaisAccountStatus = options.CaisAccountStatus,
+                EmailSendingAllowed = options.EmailSendingAllowed,
+                LatePaymentNotification = options.LatePaymentNotification,
+                LoanOptionsID = options.Id,
+                MailSendingAllowed = options.MailSendingAllowed,
+                ManualCaisFlag = options.ManualCaisFlag,
+                PartialAutoCharging = options.ReductionFee,
+                SmsSendingAllowed = options.SmsSendingAllowed,
+                StopAutoChargeDate = MiscUtils.NL_GetStopAutoChargeDate(options.AutoPayment, options.StopAutoChargeDate),
+                StopLateFeeFromDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item1,
+                StopLateFeeToDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item2,
+                UserID = this._context.UserId,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                Notes = "From Application Info",
+            };
+
+            var PropertiesUpdateList = new List<String>() {
+		        "StopAutoChargeDate",
+                "StopLateFeeFromDate",
+		        "StopLateFeeToDate",
+		    };
+
+            var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customer.Id, nlOptions, options.LoanId, PropertiesUpdateList.ToArray()); ;
+        }
+
 
         private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze,
                                                     int customerId
