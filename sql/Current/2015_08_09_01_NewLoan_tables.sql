@@ -939,9 +939,11 @@ BEGIN
 	CREATE TABLE NL_LoanOptions (
 		LoanOptionsID BIGINT IDENTITY(1, 1) NOT NULL,
 		LoanID BIGINT NOT NULL,
+		AutoCharge BIT NOT NULL CONSTRAINT DF_NL_LoanOptions_AutoCharge DEFAULT (1),
 		StopAutoChargeDate DATETIME NULL,		
-		PartialAutoCharging BIT NOT NULL,
-		LatePaymentNotification BIT NOT NULL,
+		AutoLateFees BIT NOT NULL CONSTRAINT DF_NL_LoanOptions_AutoLateFees DEFAULT (1),				
+		PartialAutoCharging BIT NOT NULL CONSTRAINT DF_NL_LoanOptions_PartialAutoCharging DEFAULT (1),
+		LatePaymentNotification BIT NOT NULL CONSTRAINT DF_NL_LoanOptions_LatePaymentNotification DEFAULT (1),
 		CaisAccountStatus NVARCHAR(50) NULL,
 		ManualCaisFlag NVARCHAR(20) NULL,
 		EmailSendingAllowed BIT NOT NULL CONSTRAINT DF_NL_LoanOptions_SendEmail DEFAULT (1),

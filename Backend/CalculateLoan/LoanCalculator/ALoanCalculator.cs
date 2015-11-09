@@ -81,6 +81,8 @@
 		/// </summary>
 		public decimal Principal { get; private set; }
 
+		public bool GetSavedAmount { get; private set; }
+
 		/// <summary>
 		/// for customer dashboards - all king of amount to pay and save at some t date 
 		/// </summary>
@@ -149,6 +151,8 @@
 			get { return openPrincipal; }
 			set { openPrincipal = value; }
 		}*/
+
+		
 
 
 		// ### Loan state public data
@@ -260,7 +264,6 @@
 		/// </summary>
 		/// <param name="theDate"></param>
 		/// <returns>Daily interest rate with freeze interest check.</returns>
-		/// <exception cref="Inv
 		/// alidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
@@ -321,8 +324,8 @@
 
 			//	interest for period = dr'(t)*p'(t)
 			for (int i = 0; i <= daysDiff; i++) {
-				decimal dailyInterestRate = InterestRateForDate(rateDate); //	daily interest  dr' 
-				decimal interest = openPrincipal * dailyInterestRate; //openPrincipal for t'
+				decimal dailyInterestRate = InterestRateForDate(rateDate);	//	daily interest  dr' 
+				decimal interest = openPrincipal * dailyInterestRate;		//	openPrincipal for t'
 				interestForPeriod += interest;
 				rateDate = start.AddDays(i);
 				//Log.Info("InterestBtwnEvents: --------------------rateDate: {0:d} interest: {1:C4} openPrincipal: {2:C0}, i={3:C4}, dr={4:C6}", rateDate, interest, openPrincipal, i, dailyInterestRate);
@@ -335,7 +338,7 @@
 		/// </summary>
 		private void InitStateData() {
 
-			// prevent circular calls
+			// prevent duplicate initializations
 			if (this.events != null)
 				return;
 
@@ -701,6 +704,8 @@
 			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.Pending)
 				throw new LoanPendingStatusException(WorkingModel.Loan.LoanID);
 
+			GetSavedAmount = getSavedAmount;
+
 			// use now as default 
 			//if (calculationDate == DateTime.MinValue || calculationDate == null)
 			//	calculationDate = DateTime.UtcNow;
@@ -753,7 +758,7 @@
 		}
 
 
-		public override string ToString() {
+		/*public override string ToString() {
 
 			string s = string.Format(
 				"currentHistoryTime: {0}, initialAmount={1}, InterestCalculationDateStart: {2}\n" +
@@ -777,7 +782,7 @@
 
 			Log.Debug(s);
 			return s;
-		}
+		}*/
 
 
 		private void HandleInstallmentEvent(NL_LoanSchedules item) {
@@ -896,7 +901,14 @@
 			public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate) {
 				//return new CalculateEarnedInterestMethod(this, startDate, endDate, WriteToLog).Execute();
 				return 0m;
-			} // CalculateEarnedInterest*/
+			} // CalculateEarnedInterest
+		 
+		 
+		 
+		 /// <summary>
+		/// scheduled open principal, i.e. Principal to be paid on schedule item x 
+		/// </summary>
+		public decimal openBalance { get; private set; } */
 
 
 	} // class ALoanCalculator

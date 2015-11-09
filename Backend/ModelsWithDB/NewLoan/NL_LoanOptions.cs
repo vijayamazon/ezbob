@@ -60,19 +60,5 @@
 		[DataMember]
 		public virtual DateTime? StopLateFeeToDate { get; set; }
 
-		/*/// <summary>
-		/// prints data only
-		/// to print headers line call base static PrintHeadersLine 
-		/// </summary>
-		/// <returns></returns>
-		public override string ToString() {
-			try {
-				return ToStringTable();
-			} catch (InvalidCastException invalidCastException) {
-				Console.WriteLine(invalidCastException);
-			}
-			return string.Empty;
-		}*/
-		
 	} // class NL_LoanOptions
 } // ns

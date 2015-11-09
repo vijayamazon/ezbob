@@ -22,9 +22,7 @@
             this.nlLoanOptions = loanOptions;
             this.oldLoanId = OldLoanId;
             this.PropertiesUpdateList = PropertiesUpdateList;
-        }
-
-//constructor
+        } //constructor
 
         public override string Name { get { return "AddLoanOptions"; } }
 
@@ -33,7 +31,6 @@
             NL_AddLog(LogType.Info, "Strategy Start", this.nlLoanOptions, null, null, null);
             try
             {
-
                 long newLoanId = -1;
 
                 if (oldLoanId != null)
