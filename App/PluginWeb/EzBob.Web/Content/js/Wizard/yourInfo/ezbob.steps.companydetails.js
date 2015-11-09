@@ -198,7 +198,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			if (!this.$el.find('input#DirectorCheck').is(":checked"))
 				EzBob.App.trigger('error', 'You must agree to director constraint in order to continue.');
 
-		if ($('.btn-continue').hasClass('disabled'))
+		if (!this.isEnabled())
 			return false;
 
 		BlockUi();

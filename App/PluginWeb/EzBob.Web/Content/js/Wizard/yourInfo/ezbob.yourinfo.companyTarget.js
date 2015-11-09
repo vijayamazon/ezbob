@@ -26,9 +26,9 @@ EzBob.companyTargets = Backbone.View.extend({
             this.$el.dialog({
                 autoOpen: true,
                 title: "Select company",
-                dialogClass: "companyaddress",
+                dialogClass: "target-dialog",
                 modal: true,
-                resizable: true,
+                resizable: false,
                 minWidth: 640,
                 height: 500,
                 minHeight: 200,
@@ -54,14 +54,20 @@ EzBob.companyTargets = Backbone.View.extend({
                         'ui-event-control-id': 'company-target:ok',
                     }
                 ],
-				close: function(evt, ui) { $('html, body').removeAttr('style'); },
+                open: function() {
+	                $('body').addClass('stop-scroll');
+                },
+                close: function(evt, ui) {
+					$('html, body').removeAttr('style');
+					$('body').removeClass('stop-scroll');
+				},
             });
        
 		var oWidget = this.$el.dialog('widget');
 
 		oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
 		oWidget.find('.ui-dialog-titlebar').addClass('address-dialog-titlebar');
-		oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane');
+		oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane').addClass('buttons-footer');
 
 		EzBob.UiAction.registerView(this);
 

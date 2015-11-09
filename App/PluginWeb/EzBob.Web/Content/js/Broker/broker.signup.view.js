@@ -145,7 +145,12 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 		$('#broker-terms-and-conditions').dialog({
 			modal: true,
-
+			open: function() {
+				$('body').addClass('stop-scroll');
+			},
+			close: function() {
+				$('body').removeClass('stop-scroll')
+			},
 			width: 800,
 			height: 600,
 

@@ -158,19 +158,17 @@
 
 				SendExplanationMail(result1, result2);
 
-				if (QuietMode) {
+				if (QuietMode)
 					Log.Warn("Mismatch found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
-				} else {
+				else
 					Log.Error("Mismatch found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
-				}
 
 				Result = result1;
 			} catch (Exception e) {
-				if (QuietMode) {
+				if (QuietMode)
 					Log.Warn(e, "Medal calculation for customer {0} failed with exception. {1}", this.customerId, Tag);
-				} else {
+				else
 					Log.Error(e, "Medal calculation for customer {0} failed with exception. {1}", this.customerId, Tag);
-				}
 
 				Result = new MedalResult(this.customerId, Log) {
 					Error = "Exception thrown: " + e.Message,
@@ -227,7 +225,7 @@
 				HttpUtility.HtmlEncode(msg),
 				HttpUtility.HtmlEncode(result1.ToString()),
 				HttpUtility.HtmlEncode(result2 == null ? string.Empty : result2.ToString()),
-                Tag
+				Tag
 			);
 
 			new Mail().Send(

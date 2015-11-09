@@ -25,19 +25,11 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent {
 		public MP_FreeAgentExpenseCategoryRepository(ISession session) : base(session) {
 		} // constructor
 
-		public MP_FreeAgentExpenseCategory GetSimilarCategory(FreeAgentExpenseCategory category) {
+		public MP_FreeAgentExpenseCategory Find(FreeAgentExpenseCategory category) {
 			return Session
 				.QueryOver<MP_FreeAgentExpenseCategory>()
-				.Where(c =>
-					c.allowable_for_tax == category.allowable_for_tax &&
-					c.auto_sales_tax_rate == category.auto_sales_tax_rate &&
-					c.category_group == category.category_group &&
-					c.description == category.description &&
-					c.nominal_code == category.nominal_code &&
-					c.tax_reporting_name == category.tax_reporting_name &&
-					c.url == category.url
-				)
+				.Where(c => c.url == category.url)
 				.SingleOrDefault();
-		} // GetSimilarCategory
+		} // Find
 	} // class MP_FreeAgentExpenseCategoryRepository
 } // namespace

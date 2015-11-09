@@ -1,4 +1,5 @@
 ﻿namespace EzBobTest {
+	using System;
 	using NUnit.Framework;
 	using Twilio;
 
@@ -34,11 +35,18 @@
 
 		[SetUp]
 		public void Init() {
+			InitProd();
+		//	InitSandbox();
+		}
+
+		public void InitProd(){
 			//prod
-			//this.twilioClient = new TwilioRestClient("ACcc682df6341371ee27ada6858025490b", "fab0b8bd342443ff44497273b4ba2aa1");
-			//this.fromPhone = "+441301272000"; //UK only phone number
+			this.twilioClient = new TwilioRestClient("ACcc682df6341371ee27ada6858025490b", "fab0b8bd342443ff44497273b4ba2aa1");
+			this.fromPhone = "+441301272000"; //UK only phone number
 			//this.fromPhone = "+972526285470"; //Israel only phone number
-			
+		}
+
+		public void InitSandbox() {
 			//sandbox
 			this.twilioClient = new TwilioRestClient("AC763a10874713c9d2f502aad30417073f", "29b8830923bbc679f8a501851916e3b8");
 			this.fromPhone = "+15005550006";
@@ -64,6 +72,20 @@
 			Assert.IsNull(message.RestException);
 			Assert.IsNullOrEmpty(message.ErrorMessage);
 			Assert.AreNotEqual(message.Price, 0M);
+		}
+
+		[Test]
+		public void TestRetrieveSms() {
+			int page = 0, numOfPages = 0;
+			do {
+				var result = this.twilioClient.ListSmsMessages(this.fromPhone, null, null, page, 50);
+				numOfPages = result.NumPages;
+				Assert.Greater(result.SMSMessages.Count, 0);
+				foreach (var msg in result.SMSMessages) {
+					Console.WriteLine("from: {0} to: {1} date: {2} status: {3} body: {4}",msg.From, msg.To, msg.DateSent, msg.Status, msg.Body);
+				}
+				page++;
+			} while (numOfPages > page);
 		}
 	}
 }

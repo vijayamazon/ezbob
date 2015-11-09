@@ -12,6 +12,7 @@
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
+	using EzBob.Web.Code.MpUniq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using ServiceClientProxy;
@@ -25,12 +26,14 @@
 		private readonly ISortCodeChecker sortCodeChecker;
 		private readonly IWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
+		private readonly BankAccountUniqChecker bankAccountUniqChecker;
 		
 		public PaymentAccountsController(
 			CustomerRepository customersRepository,
 			ICustomerMarketPlaceRepository customerMarketplacesReporsitory,
 			IWorkplaceContext context,
-			ISortCodeChecker sortCodeChecker)
+			ISortCodeChecker sortCodeChecker, 
+			BankAccountUniqChecker bankAccountUniqChecker)
 		{
 			this.customersRepository = customersRepository;
 			this.serviceClient = new ServiceClient();
@@ -38,6 +41,7 @@
 
 			this.context = context;
 			this.sortCodeChecker = sortCodeChecker;
+			this.bankAccountUniqChecker = bankAccountUniqChecker;
 		}
 
 		[Ajax]
@@ -110,7 +114,7 @@
 		public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType) {
 			var customer = this.customersRepository.Get(customerId);
 
-			int nCardID = customer.AddBankAccount(bankAccount, sortCode, accountType, this.sortCodeChecker);
+			int nCardID = customer.AddBankAccount(bankAccount, sortCode, accountType, this.bankAccountUniqChecker, this.sortCodeChecker);
 
 			if (nCardID < 0) {
 				switch (nCardID) {
@@ -125,7 +129,7 @@
 				} // switch
 			} // if
 
-			return Json(new { r = nCardID, }, JsonRequestBehavior.AllowGet);
+			return Json(new { r = nCardID, blockBank = customer.BlockTakingLoan }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]

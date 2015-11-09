@@ -6,6 +6,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE RptAllLoansIssued
+@DateStart DATETIME,
+@DateEnd DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -42,7 +44,7 @@ BEGIN
 		INNER JOIN Customer C ON L.CustomerId = C.Id AND C.IsTest = 0
 		INNER JOIN CashRequests R ON R.Id = L.RequestCashId
 	WHERE
-		L.[Date] >= 'September 1 2012'
+		L.[Date] >= @DateStart AND L.[Date] < @DateEnd
 	ORDER BY
 		1,
 		3

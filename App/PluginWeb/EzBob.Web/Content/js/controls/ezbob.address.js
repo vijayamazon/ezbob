@@ -34,29 +34,30 @@ EzBob.Popup = Backbone.View.extend({
 				);
 			});
 		} // if
-		if (EzBob.Config.Origin == 'everline') {
-		    this.$el.dialog({
-		        autoOpen: true,
-		        title: 'Select address',
-		        modal: true,
-		        resizable: true,
-		        width: 572,
-		        height: 630,
-		        closeOnEscape: true,
-		    });
-		} else {
-		    this.$el.dialog({
-		        autoOpen: true,
-		        title: 'Select address',
-		        modal: true,
-		        resizable: true,
-		        width: 550,
-		        height: 580,
-		        closeOnEscape: true,
-		    });
-		}
-		
 
+		var width = 550;
+		var height = 580;
+		if (EzBob.Config.Origin == 'everline') {
+			width = 572;
+			height = 630;
+		} 
+
+		this.$el.dialog({
+			autoOpen: true,
+			title: 'Select address',
+			modal: true,
+			resizable: false,
+			width: width,
+			height: height,
+			closeOnEscape: true,
+			open: function() {
+				$('body').addClass('stop-scroll');
+			},
+			close: function() {
+				$('body').removeClass('stop-scroll');
+			}
+		});
+		
 		this.setDialogueButtons('init');
 
 		var oWidget = this.$el.dialog('widget');
@@ -410,7 +411,8 @@ EzBob.Popup = Backbone.View.extend({
 		var self = this;
 
 		this.$el.find('.address-list-loading-block').fadeOut('fast', function() {
-		    self.$el.find('.address-selector-block').fadeIn('fast').removeClass('hide');
+			self.$el.find('.address-selector-block').fadeIn('fast').removeClass('hide');
+			$('.ui-dialog-buttonpane').addClass('buttons-footer');
 		// if (EzBob.Config.Origin === 'everline') {#1#
 			//  $('.address-dialog-widget').jScrollPane({ verticalDragMinHeight: 40 });
 		//    }
@@ -421,8 +423,10 @@ EzBob.Popup = Backbone.View.extend({
 
 	initManualInputForm: function() {
 	    this.$el.find('.address-input-block').fadeIn('fast').removeClass('hide');
-	   
-		this.setDialogueButtons('manual-input');
+	    $('.ui-dialog').addClass('add-scroll');
+	    $('.address-dialog-widget').addClass('disable-scroll');
+	    this.setDialogueButtons('manual-input');
+	    $('.ui-dialog-buttonpane').removeClass('buttons-footer');
 		this.$el.dialog('option', 'title', 'Enter address manually');
 
 		this.$el.find('.zipcode').val(this.$el.find('.postCode').val().toUpperCase()).change();

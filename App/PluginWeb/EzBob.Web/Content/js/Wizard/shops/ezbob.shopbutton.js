@@ -75,14 +75,18 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 
 			btn.attr('href', '#' + this.shopClass + '_help');
 
-		    btn.colorbox({
-		        inline: true,
-		        className:'shop-button-popup',
+			btn.colorbox({
+				inline: true,
+				className: 'shop-button-popup',
 		        close: '<i class="pe-7s-close"></i>',
 		        maxWidth: '100%',
+		        maxHeight: '100%',
+		        onOpen: function() {
+		        	$('body').addClass('stop-scroll');
+		        },
 				onClosed: function() {
 					var oBackLink = $('#link_account_implicit_back');
-
+					$('body').removeClass('stop-scroll');
 					if (oBackLink.length)
 						EzBob.UiAction.saveOne('click', oBackLink);
 				}, // onClosed

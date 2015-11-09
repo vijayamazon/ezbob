@@ -44,7 +44,7 @@ function InitAmountPeriodSliders(options) {
 					$('<input />')
 						.addClass(sAreaName + '-textbox')
 						.attr('ui-event-control-id', oDefinitions.uiEvent + sAreaName.toLowerCase())
-						.val(oDefinitions.start)
+						.val(oDefinitions.start).attr('type', 'tel')
 				).attr('type', 'text')
 		);
 

@@ -59,7 +59,19 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         var url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/RefreshYodlee/?displayName=" + displayName;
 
         this.$el.find("#refreshYodleeBtn1").attr("href", url);
-        this.$el.find('.refresh_yodlee_help1').colorbox({ href: "#refresh_yodlee_help1", inline: true, open: true });
+        this.$el.find('.refresh_yodlee_help1').colorbox({
+        	href: "#refresh_yodlee_help1",
+        	inline: true,
+        	open: true,
+        	maxWidth: '100%',
+        	maxHeight: '100%',
+        	onOpen: function() {
+		        $('body').addClass('stop-scroll');
+	        },
+        	onClosed: function() {
+		        $('body').removeClass('stop-scroll');
+	        }
+        });
     },
     addStore: function () {
         this.content.hide();

@@ -186,10 +186,7 @@
     */
 	.wizard-wrap {
 		padding: 40px 20px 40px 20px;
-	}
-
-	.security-icons .item {
-		float: left;
+		margin-bottom: 0;
 	}
 
 		.security-icons .item .lock-icon {
@@ -333,7 +330,90 @@
 		}
 
 	.ui-dialog {
-		padding: 20px 10px;
+		padding: 20px 20px 20px 10px;
+		height: 100vh !important;
+		position:fixed !important;
+	}
+
+	.ui-dialog.target-dialog{
+		overflow: visible;
+	}
+
+	.ui-dialog .ui-dialog-content {
+		height: 100% !important;
+		box-sizing: border-box;
+		padding-bottom: 250px;
+		overflow-y: hidden;
+	}
+
+	.ui-dialog .address-dialog-widget {
+		padding-bottom: 170px;
+	}
+
+	.ui-dialog.companyaddress .ui-dialog-content {
+		padding-bottom: 190px;
+	}
+
+	.ui-dialog .address-dialog-titlebar .ui-dialog-titlebar-close,
+	.ui-dialog.consent-class .ui-dialog-titlebar-close {
+		right: -30px;
+	}
+
+	.consent-class .ui-dialog-content>div,
+	.consent-dialog-wrapper,
+	#consent-conent,
+	#address-popup,
+	#address-popup .address-selector-block,
+	#address-popup .address-selector-block ul.matchingAddressList,
+	#address-popup .address-input-block,
+	ul.targets {
+		height: 100% !important;
+	}
+
+	#address-popup .address-input-block .form_field_container.control-group{
+		height: auto !important;
+	}
+	
+	#address-popup .address-selector-block ul.matchingAddressList,
+	.ui-dialog.add-scroll,
+	ul.targets {
+		overflow-y: auto !important;
+		overflow-x: hidden !important;
+	}
+
+	.ui-dialog .address-dialog-widget.disable-scroll {
+		overflow: visible !important;
+		height: auto !important;
+		padding-bottom: 0;
+	}
+	
+	.ui-dialog .ui-dialog-buttonpane.buttons-footer {
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 0 20px 15px 10px;
+    width: 100%;
+	}
+
+	#address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar,
+	.ui-dialog.add-scroll::-webkit-scrollbar,
+	ul.targets::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	#address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar-thumb,
+	.ui-dialog.add-scroll::-webkit-scrollbar-thumb,
+	ul.targets::-webkit-scrollbar-thumb {
+		 background: #28211f;
+		 height: 40px;
+		 border-radius: 10px;
+		 outline: none;
+	}
+
+	.consent-dialog {
+		padding-top: 0;
+		padding-bottom: 0;
 	}
 
 	.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
@@ -504,8 +584,13 @@
 		color: #494949;
 	}
 
-	.form_field_container.control-group.customer-logon-remember-me .input-title {
+	.form_field_container.control-group.customer-logon-remember-me .input-title,
+	.wizard-inner-wrap .clearfix .form_buttons_container .input-title{
 		display: none;
+	}
+
+	.wizard-inner-wrap .clearfix .form_buttons_container #signupSubmitButton {
+		margin-top: 0;
 	}
 
 	.form_field_container .input-title.long {
@@ -516,6 +601,35 @@
 		float: right;
 	}
 
+	.alert-msg {
+		width: 85%;
+	}
+
+	.ui-dialog .ui-dialog-buttonpane.address-dialog-buttonpane {
+		margin-top: 25px;
+	}
+
+	.consent-modal-footer a.clean-btn {
+		margin-top: 10px;
+	}
+
+	.consent-modal-footer.modal-footer.terms-conditions-footer {
+		margin-top: 0;
+	}
+
+	.security-icons {
+		float: left;
+		padding-bottom: 40px;	
+	}
+
+	.security-icons .truste-item {
+		width: 126px;
+	}
+
+	.security-icons .lock-item {
+		width: 22px;
+	}
+
 }
 
 @media screen and (max-width: 500px) {
@@ -523,4 +637,11 @@
 	header.everline_header_broker nav span.for-brokers {
 		display: none;
 	}
+
+	.alert-msg {
+		width: 73%;
+	}
 }
+
+
+

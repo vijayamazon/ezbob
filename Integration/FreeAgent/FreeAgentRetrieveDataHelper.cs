@@ -1,6 +1,9 @@
 ﻿namespace FreeAgent {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
+	using System.Text;
+	using System.Xml.Serialization;
 	using EzBob.CommonLib;
 	using EZBob.DatabaseLib.Model.Marketplaces.FreeAgent;
 	using EZBob.DatabaseLib;
@@ -9,6 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 
 	public class FreeAgentRetrieveDataHelper : MarketplaceRetrieveDataHelperBase {
@@ -32,9 +36,107 @@
 				databaseCustomerMarketPlace.DisplayName
 			);
 
-			FreeAgentSecurityInfo freeAgentSecurityInfo = Serialized.Deserialize<FreeAgentSecurityInfo>(
-				databaseCustomerMarketPlace.SecurityData
-			);
+			FreeAgentSecurityInfo freeAgentSecurityInfo;
+
+			try {
+				log.Debug(
+					"Trying to deserialize (without decrypting) security info for marketplace {0} name: '{1}'...",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				);
+
+				freeAgentSecurityInfo = Serialized.Deserialize<FreeAgentSecurityInfo>(
+					databaseCustomerMarketPlace.SecurityData
+				);
+
+				log.Debug(
+					"Successfully deserialized (without decrypting) security info for marketplace {0} name: '{1}'.",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				);
+			} catch (Exception e) {
+				log.Warn(
+					e,
+					"Failed to deserialize (without decrypting) security info for marketplace {0} name: '{1}'.",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				);
+
+				freeAgentSecurityInfo = null;
+			} // try
+
+			if (freeAgentSecurityInfo == null) {
+				try {
+					log.Debug(
+						"Trying to decrypt (without deserializing) security info for marketplace {0} name: '{1}'...",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
+
+					string decrypted = Encrypted.Decrypt(databaseCustomerMarketPlace.SecurityData);
+
+					log.Debug("Decrypted text: {0}", decrypted);
+
+					MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(
+						decrypted
+					));
+
+					freeAgentSecurityInfo = (FreeAgentSecurityInfo)new XmlSerializer(typeof(FreeAgentSecurityInfo))
+						.Deserialize(memStream);
+
+					log.Debug(
+						"Successfully decrypted (without deserializing) security info for marketplace {0} name: '{1}'.",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
+				} catch (Exception e) {
+					log.Warn(
+						e,
+						"Failed to decrypt (without deserializing) security info for marketplace {0} name: '{1}'.",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
+
+					freeAgentSecurityInfo = null;
+				} // try
+			} // if
+
+			if (freeAgentSecurityInfo == null) {
+				try {
+					log.Debug(
+						"Trying to deserialize and decrypt security info for marketplace {0} name: '{1}'...",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
+
+					freeAgentSecurityInfo = Serialized.Deserialize<FreeAgentSecurityInfo>(Encrypted.Decrypt(
+						databaseCustomerMarketPlace.SecurityData
+					));
+
+					log.Debug(
+						"Successfully deserialized and decrypted security info for marketplace {0} name: '{1}'.",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
+				} catch (Exception e) {
+					log.Warn(
+						e,
+						"Failed to deserialize and decrypt security info for marketplace {0} name: '{1}'.",
+						databaseCustomerMarketPlace.Id,
+						databaseCustomerMarketPlace.DisplayName
+					);
+
+					freeAgentSecurityInfo = null;
+				} // try
+			} // if
+
+			if (freeAgentSecurityInfo == null) {
+				throw new Exception(string.Format(
+					"FreeAgent marketplace id: {0} name: '{1}': failed to decrypt/deserialize security info.",
+					databaseCustomerMarketPlace.Id,
+					databaseCustomerMarketPlace.DisplayName
+				));
+			} // if
 
 			var connector = new FreeAgentConnector();
 

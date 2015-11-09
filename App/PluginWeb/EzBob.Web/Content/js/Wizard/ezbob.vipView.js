@@ -25,7 +25,21 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
 				if (that.model.get('VipEmail')) {
 					that.$el.find('input[name="VipEmail"]').val(that.model.get('VipEmail')).change().attr('readonly', 'readonly');
 				}
-				$.colorbox({ href: '#vip_help', inline: true, open: true, close: '<i class="pe-7s-close"></i>', returnFocus: true, trapFocus: true, });
+				$.colorbox({
+					href: '#vip_help',
+					inline: true, open: true,
+					close: '<i class="pe-7s-close"></i>',
+					returnFocus: true,
+					trapFocus: true,
+					maxWidth: '100%',
+					maxHeight: '100%',
+					onOpen: function() {
+						$('body').addClass('stop-scroll');
+					},
+					onClosed: function() {
+						$('body').removeClass('stop-scroll');
+					}
+				});
 			}
 		});
 	},

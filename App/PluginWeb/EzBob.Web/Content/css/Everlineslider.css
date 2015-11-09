@@ -76,7 +76,9 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 10000px !important;
+  opacity: 0.8;
+  background-color: #28211f;
 }
 .ui-slider {
   position: relative;
@@ -1105,18 +1107,24 @@
     text-align: center;
     width:25%;
 }
-.amount-textbox,.period-textbox {
+
+input[type="tel"].amount-textbox, input[type="tel"].period-textbox {
     border: none;
     border-bottom: 2px solid #c7c7c7;
     display: inline-block;
     margin-top: 0;
     padding: 5px;
-      font-size: 31px;
-  color: #666666;
+    font-size: 31px;
+	color: #666666;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     text-align: center;
+	height: 54px;
+    margin-bottom: 0;
+    line-height: 44px;
+    vertical-align: middle;
+    border-radius: 0;
 }
 .amount-textbox {
     width:50%;

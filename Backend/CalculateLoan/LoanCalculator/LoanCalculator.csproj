@@ -30,9 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ezbob.Backend.CalculateLoan.Exceptions">
+      <HintPath>..\Models\bin\Debug\Ezbob.Backend.CalculateLoan.Exceptions.dll</HintPath>
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\Lib\3rdparty\MoreLinq\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

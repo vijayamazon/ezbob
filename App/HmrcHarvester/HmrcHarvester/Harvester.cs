@@ -948,7 +948,7 @@
 					AmountDue = new Coin(rd.AmountDue, "GBP")
 				});
 
-				if (rd.DayStart == 12)
+				if (rd.MonthStart == 12)
 					nCurYear = nLastYear;
 			} // for each
 

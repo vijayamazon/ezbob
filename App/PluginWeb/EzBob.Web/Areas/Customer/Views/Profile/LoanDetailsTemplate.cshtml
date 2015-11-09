@@ -7,19 +7,19 @@
 <script id="loan-details-template" type="text/template">
 	<% 
 		var rollovers = rollovers || [];
-		var payButtonName = "Make Payment";
+		var payButtonName = "Make payment";
 
 		var hasRolover = rollovers && rollovers.length > 0;
 
 		if (hasRolover)
-			payButtonName = "Pay Roll Over";
+			payButtonName = "Pay roll over";
 		else if ((loan.Status == 'Live') && loan.IsEarly)
-			payButtonName = "Pay Early";
+			payButtonName = "Pay early";
 		else if ((isLate && !hasRolover) || !loan.IsEarly)
-			payButtonName = "Pay Now";
+			payButtonName = "Pay now";
 	 %>
 
-	<h2 class="loan-details-title">Loan Details</h2>
+	<h2 class="loan-details-title">Loan details</h2>
 	<div style="padding-left: 0; padding-bottom: 30px;">
 		<div class="dashboard-frame simple-well loan-details-well">
 			<%
@@ -63,25 +63,25 @@
 				</tr>
 				<%}%>
 				<tr>
-					<td class="caption">Loan Reference#:</td>
+					<td class="caption">Loan reference:</td>
 					<td class="value"><%- loan.RefNumber || '' %></td>
 				</tr>
 			</table>
 		</div>
 	</div>
 
-	<h2 id="loan-summary">Loan Summary</h2>
+	<h2 id="loan-summary">Loan summary</h2>
 	<div class="simple-well loan-summary-well">
 		<div class="row-fluid form-horizontal loan-details">
 			<div class="span4">
 				<dl>
-					<dt>Loan Amount:</dt>
+					<dt>Loan amount:</dt>
 					<dd><%-EzBob.formatPoundsWidhDash(loan.LoanAmount)%></dd>
 
-					<dt>Origination Date:</dt>
+					<dt>Origination date:</dt>
 					<dd><%- EzBob.formatDateUK(loan.Date) %> </dd>
 
-					<dt>Interest Rate:</dt>
+					<dt>Interest rate:</dt>
 					<dd><%- EzBob.formatPercents(loan.InterestRate) %></dd>
 					@if (isEverline) {
 							<dt>Loan APR:</dt>
@@ -90,7 +90,7 @@
 
 					<% if (isLate) {
 					%>
-					<dt>Late Balance:</dt>
+					<dt>Late balance:</dt>
 					<dd><%- EzBob.formatPounds(loan.Late) %></dd><%
 					} %>
 				</dl>
@@ -100,19 +100,19 @@
 
 			<div class="span4">
 				<dl>
-					<dt>Open Balance:</dt>
+					<dt>Open balance:</dt>
 					<dd><%-EzBob.formatPounds(loan.TotalBalance)%></dd>
 
 					<% if (area !='Underwriter') {
 					%>
-					<dt>Loan Status:</dt>
+					<dt>Loan status:</dt>
 					<dd class="status<%-loan.Status%>"><%- loan.Status %></dd><%
 					} %>
 
-					<dt>Total Paid:</dt>
+					<dt>Total paid:</dt>
 					<dd><%- EzBob.formatPounds(loan.Repayments) %></dd>
 
-					<dt>Setup Fee:</dt>
+					<dt>Setup fee:</dt>
 					<dd><%- EzBob.formatPounds(loan.SetupFee) %></dd>
 				</dl>
 			</div>
@@ -137,7 +137,7 @@
 		</div>
 	}
 	
-	<h2 style="margin-bottom: 10px;">Payment Schedule</h2>
+	<h2 style="margin-bottom: 10px;">Payment schedule</h2>
 
 	<table class="table payment-schedule-table">
 		<thead>
@@ -246,7 +246,7 @@
 
 	<div class="loan_apr_block">Loan APR: <%- loan.APR %> %</div>
 
-	<h2 id="loan-agreement">Loan Agreement</h2>
+	<h2 id="loan-agreement">Loan agreement</h2>
 	<div class="simple-well">
 		<div class="row-fluid form-horizontal loan-agreements">
 			<ul>

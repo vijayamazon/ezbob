@@ -24,15 +24,17 @@ EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
 			autoOpen: true,
 			title: 'Terms and conditions',
 			modal: true,
-			resizable: true,
+			resizable: false,
 			width: 600,
 			height: 'auto',
 			closeOnEscape: true,
+			dialogClass: 'consent-class'
 		};
 	}, // jqoptions
 
 	closeSelf: function() {
 		this.trigger('close');
+		$('body').removeClass('stop-scroll');
 	}, // closeSelf
 
 	onRender: function(){
