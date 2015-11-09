@@ -1326,6 +1326,7 @@ td a.edit-loan {
     right: 0;
     background-color: #323232;
     color: #ffffff;
+    overflow-y: auto;
 }
 
     #sidebar-dashboard .tabbable {
