@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="TestEarnedInterest.cs" />
     <Compile Include="TestUpdateDailyLoanStats.cs" />
     <Compile Include="TestIMail.cs" />
     <Compile Include="TestNewLoan.cs" />
