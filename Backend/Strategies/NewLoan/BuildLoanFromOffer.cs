@@ -33,6 +33,7 @@
 
 				if (Result.CustomerID == 0) {
 					this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+                    NL_AddLog(LogType.Info, "Strategy Failed", null, this.Result, NL_ExceptionCustomerNotFound.DefaultMessage, null);
 					return;
 				}
 				// TODO : Remove validations for NL_SignedOfferForLoan to separate SP's and call them from relevant strategies + Refactoring??? -> separate @PaidPrincipal
@@ -46,14 +47,16 @@
 
 				if (dataForLoan == null || dataForLoan.OfferID == 0) {
 					this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
-					return;
+                    NL_AddLog(LogType.Info, "Strategy Failed", null, this.Result, NL_ExceptionOfferNotValid.DefaultMessage, null);
+                    return;
 				}
 
 				Log.Debug(dataForLoan.ToString());
 
 				if (dataForLoan.AvailableAmount < dataForLoan.LoanLegalAmount) {
 					this.Error = string.Format("No available credit for current offer. New loan is not allowed. dataForLoan: {0} ", Result); // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
-					return;
+                    NL_AddLog(LogType.Info, "Strategy Failed - No available credit for current offer. New loan is not allowed", null, this.Result, null, null);
+                    return;
 				}
 
 				if (!string.IsNullOrEmpty(Result.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(Result.Loan.Refnum)) {
@@ -110,6 +113,7 @@
 					//Log.Debug("Discounts");
 					//Result.Offer.DiscountPlan.ForEach(d => Log.Debug(d));
 				}
+
 				NL_AddLog(LogType.Info, "Strategy End", null, this.Result, null, null);
 
 			} catch (Exception ex) {

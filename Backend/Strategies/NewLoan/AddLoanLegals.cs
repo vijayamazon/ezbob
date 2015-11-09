@@ -31,6 +31,7 @@
                 {
                     Log.Alert("Last offer not found");
                     Error = "Last offer not found";
+                    NL_AddLog(LogType.Info, "Strategy Faild - Last offer not found", this.loanLegals, null, null, null);
                     return;
                 }
 
