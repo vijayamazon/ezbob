@@ -60,7 +60,6 @@
     <Compile Include="HarvesterInterface\Response.cs" />
     <Compile Include="HarvesterInterface\Warning.cs" />
     <Compile Include="Harvester\Harvester.cs" />
-    <Compile Include="InjectedAttribute.cs" />
     <Compile Include="InjectorStub.cs" />
     <Compile Include="Interface\ICanBeEmpty.cs" />
     <Compile Include="Interface\RequestType.cs" />

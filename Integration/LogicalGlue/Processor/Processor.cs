@@ -7,8 +7,10 @@
 	using log4net;
 
 	public class Processor : IProcessor {
-		public Processor() {
-			Inject();
+		public Processor(IKeeper keeper, IHarvester harvester, ILog log) {
+			this.keeper = keeper;
+			this.harvester = harvester;
+			this.log = new SafeILog(log);
 		} // constructor
 
 		public Inference Infer(int customerID) {
@@ -31,34 +33,8 @@
 			return new Inference(); // TODO
 		} // GetHistoricalInference
 
-		[Injected]
-		public IKeeper Keeper { get; set; }
-
-		[Injected]
-		public IHarvester Harvester { get; set; }
-
-		[Injected]
-		public ILog LogWriter { get; set; }
-
-		public ASafeLog Log {
-			get {
-				if (this.log == null)
-					this.log = new SafeILog(LogWriter);
-
-				return this.log;
-			} // get
-		} // Log
-
-		/// <summary>
-		/// This is a temporary method that emulates injection.
-		/// Once real injection is in place this method should be removed.
-		/// </summary>
-		private void Inject() {
-			LogWriter = InjectorStub.GetLog();
-			Keeper = InjectorStub.GetKeeper();
-			Harvester = InjectorStub.GetHarvester();
-		} // Inject
-
-		private ASafeLog log;
+		private readonly IKeeper keeper;
+		private readonly IHarvester harvester;
+		private readonly ASafeLog log;
 	} // class Processor
 } // namespace

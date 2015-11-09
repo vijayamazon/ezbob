@@ -7,41 +7,19 @@
 	using log4net;
 
 	class DBKeeper : IKeeper {
-		public DBKeeper() {
-			Inject();
+		public DBKeeper(AConnection db, ILog log) {
+			this.db = db;
+			this.log = new SafeILog(log);
 		} // constructor
-
-		[Injected]
-		public AConnection DB { get; set; }
-
-		[Injected]
-		public ILog LogWriter { get; set; }
-
-		public ASafeLog Log {
-			get {
-				if (this.log == null)
-					this.log = new SafeILog(LogWriter);
-
-				return this.log;
-			} // get
-		} // Log
 
 		/// <summary>
 		/// Loads the latest customer inference results that were available on specific time.
 		/// </summary>
 		public Inference LoadInference(int customerID, DateTime time) {
-			return new InferenceLoader(this, customerID, time).Execute().Result;
+			return new InferenceLoader(this.db, this.log, customerID, time).Execute().Result;
 		} // LoadInference
 
-		/// <summary>
-		/// This is a temporary method that emulates injection.
-		/// Once real injection is in place this method should be removed.
-		/// </summary>
-		private void Inject() {
-			LogWriter = InjectorStub.GetLog();
-			DB = InjectorStub.GetDBConnection();
-		} // Inject
-
-		private ASafeLog log;
+		private readonly AConnection db;
+		private readonly ASafeLog log;
 	} // class DBKeeper
 } // namespace

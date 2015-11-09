@@ -8,18 +8,18 @@
 
 	static class InjectorStub {
 		public static IKeeper GetKeeper() {
-			return new DBKeeper();
+			return new DBKeeper(GetDBConnection(), GetLog());
 		} // GetKeeper
 
 		public static IHarvester GetHarvester() {
 			return new RestHarvester();
 		} // GetHarvester
 
-		public static ILog GetLog() {
+		private static ILog GetLog() {
 			return LogManager.GetLogger(typeof(InjectorStub));
 		} // GetLog
 
-		public static AConnection GetDBConnection() {
+		private static AConnection GetDBConnection() {
 			return Library.Instance.DB;
 		} // GetDBConnection
 	} // class InjectorStub

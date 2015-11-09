@@ -8,9 +8,9 @@
 	using Ezbob.Logger;
 
 	internal class InferenceLoader {
-		public InferenceLoader(DBKeeper keeper, int customerID, DateTime time) {
-			this.db = keeper.DB;
-			this.log = keeper.Log;
+		public InferenceLoader(AConnection db, ASafeLog log, int customerID, DateTime time) {
+			this.db = db;
+			this.log = log;
 			this.customerID = customerID;
 			this.time = time;
 			this.timeStr = this.time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
