@@ -96,7 +96,7 @@
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
-				Console.WriteLine(strategy.Result.Error);
+				Console.WriteLine("error: {0}", strategy.Result.Error);
 
 				this.m_oLog.Debug(strategy.Result.Loan);
 				this.m_oLog.Debug(strategy.Result.Offer);
@@ -597,21 +597,21 @@
 			// dummy: remove all exists payment
 			//model.Loan.Payments.Clear();
 			// dummy payment for test - between issue date and the first schedule item
-			/*model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 150,
+			model.Loan.Payments.Add(new NL_Payments() {
+				Amount = 322.50m,
 				CreatedByUserID = 1,
 				CreationTime = DateTime.UtcNow,
 				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 10, 31),
+				PaymentTime = new DateTime(2015, 11, 25),
 				Notes = "dummy payment for test",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 13
-			});*/
+			});
 
-			// dummy payment for test - between issue date and the first schedule item
-			/*model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 300,
+		/*	// dummy payment for test - between issue date and the first schedule item
+			model.Loan.Payments.Add(new NL_Payments() {
+				Amount = 304.38m,
 				CreatedByUserID = 1,
 				CreationTime = DateTime.UtcNow,
 				LoanID = model.Loan.LoanID,
@@ -620,11 +620,34 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 14
+			});
+
+			model.Loan.Payments.Add(new NL_Payments() {
+				Amount = 286.25m,
+				CreatedByUserID = 1,
+				CreationTime = DateTime.UtcNow,
+				LoanID = model.Loan.LoanID,
+				PaymentTime = new DateTime(2015, 12, 15),
+				Notes = "dummy payment 2 for test",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
+				PaymentID = 15
+			});
+
+			model.Loan.Payments.Add(new NL_Payments() {
+				Amount = 266.31m,
+				CreatedByUserID = 1,
+				CreationTime = DateTime.UtcNow,
+				LoanID = model.Loan.LoanID,
+				PaymentTime = new DateTime(2015, 12, 15),
+				Notes = "dummy payment 2 for test",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
+				PaymentID = 16
 			});*/
 
 			this.m_oLog.Debug("{0}\n=================Calculator start=================\n", model.Loan);
 			try {
-				DateTime calcDate = new DateTime(2015, 11, 3);
 				ALoanCalculator calc = new LegacyLoanCalculator(model );
 				calc.GetState();
 				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
@@ -723,17 +746,17 @@
 
 		[Test]
 		public void CreateSchedule() {
-			const long loanID = 17;
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				Loan = new NL_Loans()
-			};
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			DateTime issueDate =  new DateTime(2015, 10, 25);
+			NL_Model model = new NL_Model(56) {UserID = 357,Loan = new NL_Loans()};
+			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
+			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();
+			if ( !string.IsNullOrEmpty( strategy.Error)) {
+				this.m_oLog.Debug("error: {0}", strategy.Error);
+				return;
+			}
 			model = strategy.Result;
-			model.Loan.LastHistory().Schedule.Clear();
-			model.Loan.Payments.Clear();
-			this.m_oLog.Debug("\n=================Calculator start=================\n");
+			this.m_oLog.Debug("=================================={0}\n", model.Loan);
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
 				calc.CreateSchedule();
