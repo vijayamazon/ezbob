@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Tests {
 	using System;
 	using System.Collections.Generic;
-	using Ezbob.Integration.LogicalGlue.HarvesterInterface;
+	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 
@@ -40,22 +40,22 @@
 			},
 			Exception = "some exception",
 			ErrorCode = "no error code",
-			EncodingFailures = new List<HarvesterInterface.EncodingFailure> {
-				new HarvesterInterface.EncodingFailure {
+			EncodingFailures = new List<EncodingFailure> {
+				new EncodingFailure {
 					ColumnName = "Bad encoded col",
 					Message = "it's bad",
 					Reason = "good reason",
 					RowIndex = 0,
 					UnencodedValue = "a value",
 				},
-				new HarvesterInterface.EncodingFailure {
+				new EncodingFailure {
 					ColumnName = null,
 					Message = null,
 					Reason = null,
 					RowIndex = 0,
 					UnencodedValue = null,
 				},
-				new HarvesterInterface.EncodingFailure {
+				new EncodingFailure {
 					ColumnName = "Another bad encoded col",
 					Message = "it's really bad",
 					Reason = "bad reason",

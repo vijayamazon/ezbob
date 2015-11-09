@@ -1,18 +1,17 @@
 ﻿namespace Ezbob.Integration.LogicalGlue {
 	using Ezbob.Database;
-	using Ezbob.Integration.LogicalGlue.HarvesterInterface;
-	using Ezbob.Integration.LogicalGlue.Harvester;
-	using Ezbob.Integration.LogicalGlue.Keeper;
-	using Ezbob.Integration.LogicalGlue.KeeperInterface;
+	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
+	using Ezbob.Integration.LogicalGlue.Harvester.Implementation;
+	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using log4net;
 
 	static class InjectorStub {
 		public static IKeeper GetKeeper() {
-			return new DBKeeper(GetDBConnection(), GetLog());
+			return new Ezbob.Integration.LogicalGlue.Keeper.Implementation.Keeper(GetDBConnection(), GetLog());
 		} // GetKeeper
 
 		public static IHarvester GetHarvester() {
-			return new RestHarvester();
+			return new RestHarvester(GetLog());
 		} // GetHarvester
 
 		private static ILog GetLog() {

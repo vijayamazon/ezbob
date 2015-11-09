@@ -1,0 +1,25 @@
+﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Implementation {
+	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
+	using Ezbob.Logger;
+	using log4net;
+
+	public class RestHarvester : IHarvester {
+		public RestHarvester(ILog log) {
+			this.log = new SafeILog(log);
+		} // constructor
+
+		public Response<InferenceInput> GetInferenceInputData(EvaluateeDetails evaluateeDetails) {
+			// 1. Send REST API request to Logical Glue endpoint.
+			// 2. Load API call into InferenceInput object.
+			return new Response<InferenceInput>(""); // TODO
+		} // GetInferenceInputData
+
+		public Response<InferenceOutput> Infer(InferenceInput inputData) {
+			// 1. Send REST API request to Logical Glue endpoint.
+			// 2. Load API call into InferenceOutput object.
+			return new Response<InferenceOutput>(""); // TODO
+		} // Infer
+
+		private readonly ASafeLog log;
+	} // class RestHarvester
+} // namespace
