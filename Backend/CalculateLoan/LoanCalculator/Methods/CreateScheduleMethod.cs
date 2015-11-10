@@ -176,8 +176,8 @@
 							AssignedByUserID = 1
 						});
 
-					s.FeesAmount += feeAmount;
-					s.AmountDue += s.FeesAmount;
+					s.Fees += feeAmount;
+					s.AmountDue += s.Fees;
 
 					schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
 				}

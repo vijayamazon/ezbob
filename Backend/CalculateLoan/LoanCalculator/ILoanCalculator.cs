@@ -11,8 +11,8 @@
 
 		void AmountToPay(DateTime calculationDate, bool getSavedAmount = false); // read result in public fields AmountToCharge, SavedAmount
 
-		decimal NextEarlyPayment();
+		decimal NextEarlyPayment(DateTime calculationDate);
 
-		decimal TotalEarlyPayment();
+		decimal TotalEarlyPayment(DateTime calculationDate);
 	}
 }

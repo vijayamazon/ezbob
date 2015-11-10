@@ -62,7 +62,7 @@
 					case "DateTime":
 						format.Append(",-")
 							.Append(headerLen)
-							.Append(":dd/MM/yy} "); //date
+							.Append(":d} "); //date
 						break;
 					default:
 						format.Append(",-")

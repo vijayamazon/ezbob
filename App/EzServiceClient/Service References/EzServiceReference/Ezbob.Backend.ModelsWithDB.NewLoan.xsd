@@ -377,7 +377,7 @@
           <xs:element minOccurs="0" name="AmountDue" type="xs:decimal" />
           <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
           <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="FeesAmount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
           <xs:element minOccurs="0" name="FeesPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />

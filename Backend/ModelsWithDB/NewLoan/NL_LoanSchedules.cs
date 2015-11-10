@@ -39,12 +39,11 @@
 
 
 		// additions
-		private decimal _balance;
+		private decimal _balance;  // global open interest
 		private decimal _interest;
-		private decimal _feesAmount;
+		private decimal _fees;
 		private decimal _amountDue;
-		private decimal _interestPaid;
-		private decimal _feesPaid;
+		private decimal _openPrincipal; // open principal for schedule item
 
 		[DataMember]
 		[NonTraversable]
@@ -62,9 +61,9 @@
 
 		[DataMember]
 		[NonTraversable]
-		public decimal FeesAmount {
-			get { return this._feesAmount; }
-			set { this._feesAmount = value; }
+		public decimal Fees {
+			get { return this._fees; }
+			set { this._fees = value; }
 		}
 
 		[DataMember]
@@ -76,37 +75,20 @@
 
 		[DataMember]
 		[NonTraversable]
-		public decimal InterestPaid {
-			get { return this._interestPaid; }
-			set { this._interestPaid = value; }
+		public decimal OpenPrincipal {
+			get { return this._openPrincipal; }
+			set { this._openPrincipal = value; }
 		}
+
+		//[DataMember]
+		//[NonTraversable]
+		//public decimal FeesPaid {
+		//	get { return this._feesPaid; }
+		//	set { this._feesPaid = value; }
+		//}
 
 		[DataMember]
 		[NonTraversable]
-		public decimal FeesPaid {
-			get { return this._feesPaid; }
-			set { this._feesPaid = value; }
-		}
-
-		public new const string propertyTab = "\t";
-	
-		/*/// <summary>
-		/// prints data only
-		/// to print headers line call base static PrintHeadersLine 
-		/// </summary>
-		/// <returns></returns>
-		public override string ToString() {
-			try {
-				return ToStringTable();
-			} catch (InvalidCastException invalidCastException) {
-				Console.WriteLine(invalidCastException);
-			}
-			return string.Empty;
-		}
-
-		public string ToBaseString() {
-			return base.ToString();
-		}*/
-
+		public bool LateFeesAttached { get; set; }
 	} // class NL_LoanSchedules
 } // ns

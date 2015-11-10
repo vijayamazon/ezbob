@@ -5,6 +5,7 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 
@@ -81,12 +82,17 @@
 		/// </summary>
 		public decimal Principal { get; private set; }
 
-		public bool GetSavedAmount { get; private set; }
+		private bool GetSavedAmount { get; set; }
 
 		/// <summary>
 		/// for customer dashboards - all king of amount to pay and save at some t date 
 		/// </summary>
 		public decimal SavedAmount { get; private set; }
+
+		/// <summary>
+		/// for customer dashboards - all king of amount to pay and save at some t date 
+		/// </summary>
+		private DateTime NowTime { get; set; }
 
 		/// <summary>
 		/// Set common loan defaults: last history as a default current history
@@ -110,6 +116,8 @@
 			initialAmount = WorkingModel.Loan.FirstHistory().Amount;
 
 			openPrincipal = initialAmount;
+
+			NowTime = DateTime.UtcNow;
 
 			//this.calculationDateEventEnd = new LoanEvent(CalculationDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 		}
@@ -152,7 +160,7 @@
 			set { openPrincipal = value; }
 		}*/
 
-		
+
 
 
 		// ### Loan state public data
@@ -427,13 +435,7 @@
 					break;
 
 				case "Installment":
-
-					e.Installment.Interest = earnedInterest - currentPaidInterest;
-					var distributedFee = this.distributedFeesList.FirstOrDefault(f => f.AssignTime == e.Installment.PlannedDate);
-					e.Installment.FeesAmount = distributedFee == null ? 0 : distributedFee.Amount;  //TODO add unpaid late fees to the fisrt installment
-					e.Installment.AmountDue = e.Installment.FeesAmount + e.Installment.Interest + e.Installment.Principal;
-
-					//HandleInstallmentEvent(e.Installment);
+					HandleInstallmentEvent(e.Installment);
 					break;
 
 				case "Fee":
@@ -660,22 +662,31 @@
 
 
 
-		public decimal NextEarlyPayment() {
+		public decimal NextEarlyPayment(DateTime calculationDate) {
+
+			LoanClosedCheck();
+
+			GetSavedAmount = true;
+			CalculationDate = calculationDate;
+
 			Log.Debug("NextEarlyPayment NotImplementedException");
 			return 0;
 		}
 
-		public decimal TotalEarlyPayment() {
+		public decimal TotalEarlyPayment(DateTime calculationDate) {
+
+			LoanClosedCheck();
+
+			GetSavedAmount = true;
+			CalculationDate = calculationDate;
+
 			Log.Debug("TotalEarlyPayment NotImplementedException");
 			return 0;
 		}
 
 
 
-		public decimal RecalculateSchedule() {
-			Log.Debug("RecalculateSchedule NotImplementedException");
-			return 0;
-		}
+
 
 		/// <summary>
 		/// Returns loan status at CalculationDate: F, I, P
@@ -687,29 +698,13 @@
 		/// <summary>
 		///  Amount to charge at CalculationDate (default now). Used for PayPointAutoCharger and customer's dashboards.
 		/// </summary>
-		/// <exception cref="LoanPaidOffStatusException">Condition. </exception>
-		/// <exception cref="LoanPendingStatusException">Condition. </exception>
-		/// <exception cref="LoanWriteOffStatusException">Condition. </exception>
 		public void AmountToPay(DateTime calculationDate, bool getSavedAmount = false) {
 
-			// loan paid off, no need to pay more
-			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.PaidOff)
-				throw new LoanPaidOffStatusException(WorkingModel.Loan.LoanID);
-
-			// loan writed off, no need to pay more
-			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.WriteOff)
-				throw new LoanWriteOffStatusException(WorkingModel.Loan.LoanID);
-
-			// loan is pending, no need to pay yet
-			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.Pending)
-				throw new LoanPendingStatusException(WorkingModel.Loan.LoanID);
+			LoanClosedCheck();
 
 			GetSavedAmount = getSavedAmount;
+			CalculationDate = calculationDate;
 
-			// use now as default 
-			//if (calculationDate == DateTime.MinValue || calculationDate == null)
-			//	calculationDate = DateTime.UtcNow;
-			CalculationDate = (DateTime)calculationDate;
 			Log.Debug("calculationDate: {0}", CalculationDate);
 
 			this.calculationDateEventEnd = new LoanEvent(CalculationDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
@@ -757,6 +752,106 @@
 			GetState();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private void LoanClosedCheck() { 
+			// loan paid off, no need to pay more
+			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.PaidOff)
+				throw new LoanPaidOffStatusException(WorkingModel.Loan.LoanID);
+
+			// loan writed off, no need to pay more
+			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.WriteOff)
+				throw new LoanWriteOffStatusException(WorkingModel.Loan.LoanID);
+
+			// loan is pending, no need to pay yet
+			if (WorkingModel.Loan.LoanStatusID == (int)NLLoanStatuses.Pending)
+				throw new LoanPendingStatusException(WorkingModel.Loan.LoanID);
+		}
+
+		/// <summary>
+		/// Closing schedule item or calculating "AmountDue" (p, i, f)
+		/// </summary>
+		/// <param name="item"></param>
+		private void HandleInstallmentEvent(NL_LoanSchedules item) {
+
+			decimal principalPaid = 0;
+			decimal distributedFeesPaid = 0;
+			decimal lateFeesPaid = 0;
+
+			var distributedFee = this.distributedFeesList.FirstOrDefault(f => f.AssignTime == item.PlannedDate);
+
+			foreach (NL_Payments p in WorkingModel.Loan.Payments) {
+				// paid for item principal
+				principalPaid += p.SchedulePayments.Where(sp => sp.LoanScheduleID == item.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
+				
+				// paid for item distributed fee
+				if (distributedFee != null) {
+					distributedFeesPaid += p.FeePayments.Where(fp => fp.LoanFeeID == distributedFee.LoanID).Sum(fp => fp.Amount);
+				}
+
+				// all "late fees" pays
+				lateFeesPaid += p.FeePayments.Sum(fp => fp.Amount);
+			}
+
+			item.OpenPrincipal = item.Principal - principalPaid;
+			item.Fees = distributedFee == null ? 0 : (distributedFeesPaid - distributedFee.Amount);
+
+			// attached all unpaid late fees to first (nearby) not paid installment
+			var lateFeesItem = WorkingModel.Loan.LastHistory().Schedule.FirstOrDefault(s => s.LateFeesAttached);
+
+			// unpaid late fees?
+			if (lateFeesItem == null && (totalLateFees - lateFeesPaid) > 0) {
+				item.Fees += (totalLateFees - lateFeesPaid);
+				item.LateFeesAttached = true;
+			}
+
+			var closeItem = ((item.OpenPrincipal == 0) && ((distributedFee != null && item.Fees == 0) || distributedFee == null));
+
+			// if principal and relevant fees completely paid, close
+			if (closeItem) {
+				item.LoanScheduleStatusID = (int)NLScheduleStatuses.Paid;
+				item.ClosedTime = NowTime;
+				Log.Info("Marked installment {0}\n{1} as 'Paid' at {2}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable(), NowTime);
+				return;
+			}
+
+			item.Balance = openPrincipal; // dynamic balance, not "scheduled", i.e. global open principal
+
+			item.Interest = earnedInterest - currentPaidInterest;
+
+			item.AmountDue = item.Fees + item.Interest + item.OpenPrincipal;
+
+			Log.Info("HandleInstallmentEvent: {0}\n{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
+
+			if (GetSavedAmount) {
+				
+			}
+		}
+
+		private void HandleHistoryEvent(NL_LoanHistory history) {
+			Log.Debug("HandleHistoryEvent NotImplementedException");
+		}
+
+		private void HandleFeeEvent(NL_LoanFees fee) {
+			// el: if loan PaidOff, mark the charge as Expired
+			// el: Arrangement and servicing fees should be treated different
+			//if (_loan.Status == LoanStatus.PaidOff) {
+			//	charge.State = "Expired";
+			//	return;
+			//}
+			Log.Debug("HandleFeeEvent not implemented {0}", fee);
+		}
+
+		private void HandleRolloverEvent(NL_LoanRollovers rollover) {
+			Log.Debug("HandleRolloverEvent not implemented {0}", rollover);
+		}
+
+		private void HandleActionEvent(object p) {
+			Log.Debug("ActionEven NotImplementedException");
+		}
+
+
 
 		/*public override string ToString() {
 
@@ -783,33 +878,6 @@
 			Log.Debug(s);
 			return s;
 		}*/
-
-
-		private void HandleInstallmentEvent(NL_LoanSchedules item) {
-			Log.Debug("HandleInstallmentEvent NotImplementedException");
-		}
-
-		private void HandleHistoryEvent(NL_LoanHistory history) {
-			Log.Debug("HandleHistoryEvent NotImplementedException");
-		}
-
-		private void HandleFeeEvent(NL_LoanFees fee) {
-			// el: if loan PaidOff, mark the charge as Expired
-			// el: Arrangement and servicing fees should be treated different
-			//if (_loan.Status == LoanStatus.PaidOff) {
-			//	charge.State = "Expired";
-			//	return;
-			//}
-			Log.Debug("HandleFeeEvent not implemented {0}", fee);
-		}
-
-		private void HandleRolloverEvent(NL_LoanRollovers rollover) {
-			Log.Debug("HandleRolloverEvent not implemented {0}", rollover);
-		}
-
-		private void HandleActionEvent(object p) {
-			Log.Debug("ActionEven NotImplementedException");
-		}
 
 
 		/*
@@ -846,9 +914,9 @@
 			Log.Debug("calculationDateEventEnd: {0}, lastEvent: {1}, earnedInterest: {2}, currentPaidFees={3}, openPrincipal={4}", this.calculationDateEventEnd, this.lastEvent, earnedInterest, currentPaidFees, openPrincipal);
 
 			item.Interest = Math.Round(earnedInterest - this.lastEvent.EarnedInterestForPeriod, 2);
-			item.FeesAmount = Math.Round(totalLateFees + totalFeesAtEvent - currentPaidFees, 2); //FeesToPay
+			item.Fees = Math.Round(totalLateFees + totalFeesAtEvent - currentPaidFees, 2); //FeesToPay
 			item.Principal = Math.Max(0, openPrincipal); // _totalPrincipalToPay
-			item.AmountDue = item.Interest + item.FeesAmount + item.Principal;
+			item.AmountDue = item.Interest + item.Fees + item.Principal;
 
 			//var rollover = _totalRollOversToPay - _paidRollOvers;
 			//item.AmountDue += rollover;

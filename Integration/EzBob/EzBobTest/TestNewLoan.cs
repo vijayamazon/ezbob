@@ -109,11 +109,11 @@
 			var x1 = new NL_LoanSchedules() {
 				AmountDue = 55m,
 				Balance = 22m,
-				FeesAmount = 30.77m,
-				FeesPaid = 20.99m,
+				Fees = 30.77m,
+				//FeesPaid = 20.99m,
 				Interest = 12m,
 				InterestRate = 2.25m,
-				InterestPaid = 1.55m,
+				//InterestPaid = 1.55m,
 				LoanHistoryID = 1,
 				LoanScheduleID = 0,
 				LoanScheduleStatusID = 3,
@@ -667,8 +667,20 @@
 			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
 			strategy.Execute();
 			model = strategy.Result;
+			
+			// dummy late fee
+			model.Loan.Fees.Add(new NL_LoanFees() {
+				Amount = 25,
+				AssignTime = DateTime.UtcNow,
+				AssignedByUserID = 1,
+				CreatedTime = DateTime.UtcNow,
+				LoanFeeID = loanID,
+				Notes = "latefee",
+				LoanFeeTypeID = (int)NLFeeTypes.LatePeriod1
+			});
+
 			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 300,
+				Amount = 350,
 				CreatedByUserID = 1,
 				CreationTime = DateTime.UtcNow,
 				LoanID = model.Loan.LoanID,
@@ -678,6 +690,7 @@
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 13
 			});
+
 			// dummy payment for test - between issue date and the first schedule item
 			/*model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 500,
@@ -696,7 +709,7 @@
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
 				calc.AmountToPay(calcDate);
 				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
-				m_oLog.Debug("CalculationDate: {0}, AmountDue: {1}", calc.CalculationDate, calc.AmountToCharge);
+				m_oLog.Debug("CalculationDate: {0}, AmountToCharge: {1}", calc.CalculationDate, calc.AmountToCharge);
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}

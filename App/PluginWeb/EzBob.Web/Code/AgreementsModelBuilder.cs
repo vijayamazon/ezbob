@@ -258,7 +258,7 @@
 					Status = Enum.GetName(typeof(NLScheduleStatuses), s.LoanScheduleStatusID).DescriptionAttr(),
 					LoanRepayment = s.Principal,
 					Balance = s.Balance,
-					Fees = s.FeesAmount,
+					Fees = s.Fees,
 					InterestRate = s.InterestRate
 				};
 				item.StatusDescription = item.Status;
