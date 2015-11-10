@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue {
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
-	using Ezbob.Integration.LogicalGlue.Harvester.Implementation;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using log4net;
 
@@ -11,7 +10,7 @@
 		} // GetKeeper
 
 		public static IHarvester GetHarvester() {
-			return new RestHarvester(GetLog());
+			return new Harvester.Implementation.Harvester(GetLog());
 		} // GetHarvester
 
 		private static ILog GetLog() {

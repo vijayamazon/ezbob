@@ -3,8 +3,8 @@
 	using Ezbob.Logger;
 	using log4net;
 
-	public class RestHarvester : IHarvester {
-		public RestHarvester(ILog log) {
+	public class Harvester : IHarvester {
+		public Harvester(ILog log) {
 			this.log = new SafeILog(log);
 		} // constructor
 
@@ -21,5 +21,5 @@
 		} // Infer
 
 		private readonly ASafeLog log;
-	} // class RestHarvester
+	} // class Harvester
 } // namespace
