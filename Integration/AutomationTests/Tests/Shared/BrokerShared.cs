@@ -40,8 +40,7 @@
             ) {
             string url = this._BrandConfig.GetString("BrokerSignupHost");
 
-            this._Driver.Navigate()
-                .GoToUrl(url);
+            this._Driver.Navigate().GoToUrl(url);
 
             IWebElement firmName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("FirmName"));
             firmName.SendKeys(iFirmName);

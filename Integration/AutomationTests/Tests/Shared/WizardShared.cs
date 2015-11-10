@@ -38,6 +38,9 @@
                 string url = this._BrandConfig.GetString("WizardHost");//Step 1
 
                 this._Driver.Navigate().GoToUrl(url);//Step 2
+
+                IWebElement agreeToTerms = this._Driver.FindElement(By.XPath("//label[@for='AgreeToTerms']"));
+                agreeToTerms.Click();
             }
 
             IWebElement email = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("Email"));//Step 3
