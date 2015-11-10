@@ -414,7 +414,7 @@
 				switch (spExitCode) {
 				case 0:
 					oState.CustomerMarketPlaceID = sr["MpID"];
-					log.Alert(
+					log.Info(
 						"Successfully created uploaded/manual HMRC marketplace {0} for customer {1}.",
 						oState.CustomerMarketPlaceID,
 						oCustomer.Stringify()
