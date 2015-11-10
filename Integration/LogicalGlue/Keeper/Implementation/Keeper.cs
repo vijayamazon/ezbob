@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Integration.LogicalGlue.Processor.Interface;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
 	using log4net;

@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Processor.Interface {
+﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	public interface ICanBeEmpty {
 		bool IsEmpty { get; }
 	} // interface ICanBeEmpty

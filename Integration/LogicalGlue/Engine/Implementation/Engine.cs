@@ -1,13 +1,13 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Processor.Implementation {
+﻿namespace Ezbob.Integration.LogicalGlue.Engine.Implementation {
 	using System;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
-	using Ezbob.Integration.LogicalGlue.Processor.Interface;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
 	using log4net;
 
-	public class Processor : IProcessor {
-		public Processor(IKeeper keeper, IHarvester harvester, ILog log) {
+	public class Engine : IEngine {
+		public Engine(IKeeper keeper, IHarvester harvester, ILog log) {
 			this.keeper = keeper;
 			this.harvester = harvester;
 			this.log = new SafeILog(log);
@@ -36,5 +36,5 @@
 		private readonly IKeeper keeper;
 		private readonly IHarvester harvester;
 		private readonly ASafeLog log;
-	} // class Processor
+	} // class Engine
 } // namespace

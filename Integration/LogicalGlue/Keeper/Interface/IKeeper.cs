@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Interface {
 	using System;
-	using Ezbob.Integration.LogicalGlue.Processor.Interface;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 
 	public interface IKeeper {
 		/// <summary>

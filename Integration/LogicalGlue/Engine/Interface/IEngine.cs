@@ -1,7 +1,7 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Processor.Interface {
+﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System;
 
-	public interface IProcessor {
+	public interface IEngine {
 		/// <summary>
 		/// Infers customer using current customer details.
 		/// <para>Collects customer name, address, etc by customer ID and executes three calls to Logical Glue API:
@@ -33,5 +33,5 @@
 		/// <param name="time">Time of interest.</param>
 		/// <returns>The latest customer inference results that were available on requested time.</returns>
 		Inference GetHistoricalInference(int customerID, DateTime time);
-	} // interface IProcessor
+	} // interface IEngine
 } // namespace

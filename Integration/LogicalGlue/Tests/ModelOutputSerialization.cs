@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Tests {
 	using System;
 	using System.Collections.Generic;
-	using Ezbob.Integration.LogicalGlue.Processor.Interface;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 

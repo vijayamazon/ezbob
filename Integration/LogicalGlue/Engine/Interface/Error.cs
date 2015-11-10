@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Processor.Interface {
+﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;

@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Database;
-	using Ezbob.Integration.LogicalGlue.Processor.Interface;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable;
 	using Ezbob.Logger;
 
@@ -151,7 +151,7 @@
 				DBTable.Warning warning = sr.Fill<DBTable.Warning>();
 
 				if (this.models.ContainsKey(warning.ResponseID)) {
-					this.models[warning.ResponseID].Grade.Warnings.Add(new Processor.Interface.Warning {
+					this.models[warning.ResponseID].Grade.Warnings.Add(new Engine.Interface.Warning {
 						FeatureName = warning.FeatureName,
 						MaxValue = warning.MaxValue,
 						MinValue = warning.MinValue,
@@ -186,7 +186,7 @@
 
 				if (this.models.ContainsKey(encodingFailure.ResponseID)) {
 					this.models[encodingFailure.ResponseID].Error.EncodingFailures.Add(
-						new Processor.Interface.EncodingFailure {
+						new Engine.Interface.EncodingFailure {
 							ColumnName = encodingFailure.ColumnName,
 							Message = encodingFailure.Message,
 							Reason = encodingFailure.Reason,
