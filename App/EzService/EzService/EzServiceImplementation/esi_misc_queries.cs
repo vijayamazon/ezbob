@@ -109,6 +109,7 @@
 				DateTime offerValidUntil = sr["ValidFor"];
 				bool hasFunds = availableFunds >= minLoanAmount;
 				bool blockTakingLoan = sr["BlockTakingLoan"];
+				bool canTakeAnotherLoan = sr["CanTakeAnotherLoan"];
 
 				if (!isEnabled)
 					res = "disabled";
@@ -116,7 +117,7 @@
 					res = "late";
 				else if (string.IsNullOrEmpty(creditResult) || creditResult == "WaitingForDecision" || blockTakingLoan)
 					res = "wait";
-				else if (status == "Rejected")
+				else if (status == "Rejected" || !canTakeAnotherLoan)
 					res = "bad";
 				else if (status == "Manual")
 					res = "wait";

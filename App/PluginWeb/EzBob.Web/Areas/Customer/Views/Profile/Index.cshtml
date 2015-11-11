@@ -419,32 +419,33 @@
 	@EditExperianDirectorData.Render(this)
 
 	<script type="text/javascript">
-		EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
-		EzBob.Config.MinLoan = @currVals.MinLoan.Value;
-		EzBob.Config.XMinLoan = @currVals.XMinLoan.Value;
-		EzBob.Config.PayPalEnabled = @currVals.PayPalEnabled.Value.ToLower();
-		EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
-		EzBob.Config.TargetsEnabledEntrepreneur = @currVals.TargetsEnabledEntrepreneur.Value.ToLower(CultureInfo.InvariantCulture);
-		EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
-		EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
-		EzBob.Config.SessionTimeout = @currVals.SessionTimeout.Value;
-		EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
+	EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
+	EzBob.Config.MinLoan = @currVals.MinLoan.Value;
+	EzBob.Config.XMinLoan = @currVals.XMinLoan.Value;
+	EzBob.Config.NumofAllowedActiveLoans = @currVals.NumofAllowedActiveLoans.Value;
+	EzBob.Config.PayPalEnabled = @currVals.PayPalEnabled.Value.ToLower();
+	EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
+	EzBob.Config.TargetsEnabledEntrepreneur = @currVals.TargetsEnabledEntrepreneur.Value.ToLower(CultureInfo.InvariantCulture);
+	EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
+	EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
+	EzBob.Config.SessionTimeout = @currVals.SessionTimeout.Value;
+	EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
 
-		EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
-		EzBob.Config.WizardAutomationTimeout = @currVals.WizardAutomationTimeout.Value;
-		@{
+	EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
+	EzBob.Config.WizardAutomationTimeout = @currVals.WizardAutomationTimeout.Value;
+	@{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
 			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
 		}
 
-		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
-		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
+	EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
+	EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
 
-		EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
-		EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
+	EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
+	EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
 
-		$(function() {
-			@{
+	$(function() {
+		@{
                 string wizardComplete = "false";
 
                 if (ViewData["WizardComplete"] != null)
@@ -454,25 +455,25 @@
                 }
 			}
 
-			var finishedWizard = @wizardComplete;
+		var finishedWizard = @wizardComplete;
 
-			var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
-			options.createdInProfile = true;
-			options.isFinishedWizard = finishedWizard;
+		var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
+		options.createdInProfile = true;
+		options.isFinishedWizard = finishedWizard;
 
-			var profileView = new EzBob.Profile.ProfileView(options);
-			profileView.render();
+		var profileView = new EzBob.Profile.ProfileView(options);
+		profileView.render();
 
-			var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-			notifications.render();
+		var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+		notifications.render();
 
-			var whatsNew = new EzBob.WhatsNewView({ el: $('.whats-new-main') });
-			whatsNew.render();
+		var whatsNew = new EzBob.WhatsNewView({ el: $('.whats-new-main') });
+		whatsNew.render();
 
-			new EzBob.LiveChat.LiveChatRouter();
+		new EzBob.LiveChat.LiveChatRouter();
 
-			Backbone.history.start();
-		});
+		Backbone.history.start();
+	});
 	</script>
 
 	@BundleHelper.RenderProfileJs()
