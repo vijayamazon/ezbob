@@ -988,9 +988,11 @@ hr.wizard-hr {
     margin-top: 20px;
 }
 
-
-
-
+/**Wizard step 3: breaking line labels**/
+label span.label-first-line,
+label span.label-second-line {
+	display: block;
+}
 
 /**Notifications**/
 .notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {

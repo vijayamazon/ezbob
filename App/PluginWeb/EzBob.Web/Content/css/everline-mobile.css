@@ -36,7 +36,7 @@
 
 @media screen and (max-width: 800px) {
 	body{
-		width: auto;
+		width: 100%;
 	}
 
 	optgroup.fixiphone{
@@ -331,7 +331,7 @@
 
 	.ui-dialog {
 		padding: 20px 20px 20px 10px;
-		height: 100vh !important;
+		height: 100% !important;
 		position:fixed !important;
 	}
 
@@ -630,6 +630,11 @@
 		width: 22px;
 	}
 
+
+	label span.label-first-line,
+	label span.label-second-line {
+		display: inline-block;
+	}
 }
 
 @media screen and (max-width: 500px) {

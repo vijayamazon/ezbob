@@ -55,7 +55,6 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			width: width,
 			maxWidth: '100%',
 			maxHeight: '100%',
-			scrolling: false,
 			close: '<i class="pe-7s-close"></i>',
 			className: 'automation-popup',
 			onOpen: function() {
@@ -66,6 +65,7 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 				self.onClose();
 			}
 		});
+		
 
 		if (hasAutomationMps) {
 			var progress = 0;

@@ -370,7 +370,6 @@ string formFieldID = "")
     {
          labelength = inputProp.Caption.Length;
     }
-    
    
 	var identificator = new HtmlString(inputProp.Id);
 	<div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "")
@@ -386,7 +385,7 @@ string formFieldID = "")
 							<label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
 						</div>
 					}
-					<span>@inputProp.Caption</span>
+					<span>@inputProp.Caption @inputProp.CaptionLine2</span>
 					@InputTextTag(inputProp, identificator)
 					@if (inputProp.StatusIcon) {
 						var sId = identificator + "Image";
@@ -406,7 +405,8 @@ string formFieldID = "")
 				   @if (true) {
 					   @: for="@identificator"
 				   }
-			>@inputProp.Caption</label>
+			><span class="label-first-line">@inputProp.Caption</span>
+			 <span class="label-second-line">@inputProp.CaptionLine2</span></label>
 			<div class="input-wrapper">
 				@InputTextTag(inputProp, identificator)
 				@if (@inputProp.Button != null) {

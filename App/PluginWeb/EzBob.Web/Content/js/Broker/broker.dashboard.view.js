@@ -79,7 +79,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		var oSampleLink = function (sSourceRef, nWidth, nHeight) {
 			var imagePath = oProps.Origin === 'ezbob'
-				? 'https://www.ezbob.com/brokers/logos/ezbob-logo-200x83px.png'
+				? 'https://www.ezbob.com/app/uploads/brokers/logos/ezbob-logo-200x83px.png'
 				: 'https://www.everline.com/app/uploads/brokers/logos/Everline-primary-logo-200x83px.png';
 
 			return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + sSourceRef + '" rel="nofollow">' +
