@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models {
 	using System;
+	using System.Globalization;
 	using System.Linq;
 	using Code;
 	using ConfigManager;
@@ -10,6 +11,7 @@
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database.Request;
 	using PaymentServices.Calculators;
@@ -190,13 +192,52 @@
 
 			var loan = this._loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart ?? DateTime.UtcNow);
 
-			var apr = loan.LoanAmount == 0 ? 0 : this._aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
+			bool accuracyAchieved = false;
+			int iterationCount = 0;
+			double lastHitAccuracy = -1;
+
+			var apr = loan.LoanAmount == 0 ? 0 : this._aprCalc.Calculate(
+				loan.LoanAmount,
+				loan.Schedule,
+				loan.SetupFee,
+				loan.Date,
+				out accuracyAchieved,
+				out iterationCount,
+				out lastHitAccuracy
+			);
+
+			log.Debug("BuildCashRequestModel - loan schedule begins...");
+
+			foreach (var ls in loan.Schedule) {
+				log.Debug(
+					"BuildCashRequestModel - loan schedule: {0} {1}", 
+					ls.Date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
+					ls.AmountDue
+				);
+			} // for each schedule
+
+			log.Debug("BuildCashRequestModel - loan schedule ends.");
+
+			log.Debug(
+				"BuildCashRequestModel - apr({0}, {1}, {2}, {3}) = {4}.\n" +
+				"Accuracy achieved: {5}, iteration count: {6}, last hit accuracy: {7}.",
+				loan.LoanAmount,
+				"above schedule",
+				loan.SetupFee,
+				loan.Date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
+				apr,
+				accuracyAchieved ? "yes" : "no",
+				iterationCount,
+				lastHitAccuracy
+			);
 
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 			model.Apr = apr;
 			model.Air = (model.InterestRate * 100 * 12 + (model.RepaymentPerion == 0 ? 0 : (12 / (decimal)model.RepaymentPerion * model.TotalSetupFee * 100))) / 100;
 			model.RealCost = loanOffer.RealInterestCost;
 		}// BuildCashRequestModel
+
+		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoModelBuilder));
 
 		private void BuildAutomationOfferModel(ApplicationInfoModel model, Customer customer) {
 			OfferCalculations offerCalculations = this.offerCalculationsRepository.GetActiveForCustomer(customer.Id);
