@@ -834,8 +834,8 @@
   }
   .ui-slider-horizontal {
     height: 15px;
-    margin-left: -2px;
-    margin-right: -2px;
+    margin-left: 20px;
+    margin-right: 20px;
   }
   .c_spn_16.summary {
     padding-left: 0;

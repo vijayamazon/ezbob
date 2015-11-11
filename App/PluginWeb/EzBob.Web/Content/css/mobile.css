@@ -529,7 +529,7 @@
 	}
 
 	.ui-dialog.consent-class {
-		height: 100vh !important;
+		height: 100% !important;
 		box-sizing: border-box;
 	}
 
@@ -590,7 +590,9 @@
 	}
 
 	.ui-dialog {
+		-ms-border-radius: 0;
 		border-radius: 0;
+		position:fixed !important;
 	}
 }
 
