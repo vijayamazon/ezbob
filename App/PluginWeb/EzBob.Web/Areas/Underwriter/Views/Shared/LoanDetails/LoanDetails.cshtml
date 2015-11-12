@@ -71,6 +71,9 @@
                     
                     <dt>Setup Fee:</dt>
                     <dd><%- EzBob.formatPounds(loan.SetupFee)%></dd>
+					
+					<dt>Amount due today:</dt>
+					<dd><%- EzBob.formatPounds(loan.TotalEarlyPayment)%></dd>
                 </dl>
             </div>
 
