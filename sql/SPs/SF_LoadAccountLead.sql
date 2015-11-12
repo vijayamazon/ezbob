@@ -27,8 +27,9 @@ BEGIN
         c.Name AS Email,
         CAST(@CustomerID AS NVARCHAR(10)) AS CustomerID,
         isnull(c.Fullname, 'NoName') AS Name,
-         c.Gender AS Gender,
+        c.Gender AS Gender,
         c.DaytimePhone AS PhoneNumber,
+        c.MobilePhone AS MobilePhoneNumber,
         c.DateOfBirth AS DateOfBirth,
         a.Line1 AS AddressLine1,
         a.Line2 AS AddressLine2,
@@ -105,4 +106,6 @@ SELECT @Email AS Email,
        'Unknown' AS EzbobSource
 
 END
+
 GO
+

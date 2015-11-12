@@ -1,6 +1,5 @@
 ﻿namespace SalesForceLib.Models {
 	using System;
-	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
 	[DataContract(IsReference = true)]
@@ -18,6 +17,8 @@
 		public string Gender { get; set; }
 		[DataMember]
 		public string PhoneNumber { get; set; }
+		[DataMember]
+		public string MobilePhoneNumber { get; set; }
 		[DataMember]
 		public DateTime? DateOfBirth { get; set; }
 		[DataMember]

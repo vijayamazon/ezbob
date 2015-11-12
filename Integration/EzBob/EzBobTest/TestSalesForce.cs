@@ -52,6 +52,7 @@
 				IsBroker = false,
 				LeadSource = "LeadSource",
 				PhoneNumber = "0564564654",
+				MobilePhoneNumber = "07401201987",
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
 				IsTest = false,
