@@ -164,6 +164,7 @@
 						.Append(new Th().Append(new Text("Customer email")))
 						.Append(new Th().Append(new Text("Underwriter ID")))
 						.Append(new Th().Append(new Text("Underwriter name")))
+						.Append(new Th().Append(new Text("Note")))
 				)
 			);
 
@@ -171,6 +172,21 @@
 			tbl.Append(tbody);
 
 			foreach (var rcr in this.cashRequestsToAlert) {
+				string note;
+
+				try {
+					this.db.ExecuteNonQuery(
+						"RestoreResetCashRequest",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@CashRequestID", rcr.CashRequestID)
+					);
+
+					note = "Restored.";
+				} catch (Exception e) {
+					this.log.Alert(e, "Failed to restore cash request {0}.", rcr.CashRequestID);
+					note = "Restoring failed: " + e.Message;
+				} // try
+
 				tbody.Append(new Tr()
 					.Append(new Td().Append(new Text(rcr.CashRequestID.ToString())))
 					.Append(new Td().Append(new Text(rcr.DecisionTime.ToString("d/MMM/yyyy H:mm:ss", culture))))
@@ -180,6 +196,7 @@
 					.Append(new Td().Append(new Text(rcr.CustomerEmail)))
 					.Append(new Td().Append(new Text(rcr.UnderwriterID.ToString())))
 					.Append(new Td().Append(new Text(rcr.UnderwriterName)))
+					.Append(new Td().Append(new Text(note)))
 				);
 			} // for each
 
