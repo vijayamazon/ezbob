@@ -9,7 +9,8 @@ IF OBJECT_ID('TR_CashRequests_WriteHistory') IS NOT NULL
 GO
 
 CREATE TRIGGER TR_CashRequests_WriteHistory
-ON CashRequests FOR INSERT, UPDATE
+ON CashRequests
+AFTER INSERT, UPDATE
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -35,6 +36,20 @@ BEGIN
 		ManualSetupFeePercent, QuickOfferID, Originator, ApprovedRepaymentPeriod,
 		AutoDecisionID, BrokerSetupFeePercent, SpreadSetupFee, HasApprovalChance
 	FROM
-		INSERTED
+		inserted
+
+	IF EXISTS (
+		SELECT *
+		FROM inserted i
+		LEFT JOIN deleted d
+			ON i.Id = d.Id
+			AND d.UnderwriterDecision IN ('Approved', 'Rejected')
+			AND ISNULL(i.UnderwriterDecision, '') != d.UnderwriterDecision
+		WHERE
+			d.Id IS NOT NULL
+	)
+	BEGIN
+		ROLLBACK TRANSACTION
+	END
 END
 GO
