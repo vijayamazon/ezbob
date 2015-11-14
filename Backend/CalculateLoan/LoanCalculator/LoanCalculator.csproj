@@ -30,7 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ezbob.Backend.CalculateLoan.Exceptions"/>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,7 +45,6 @@
     <Compile Include="ALoanCalculator_stubs.cs" />
     <Compile Include="ALoanCalculator.cs" />
     <Compile Include="BankLikeLoanCalculator.cs" />
-    <Compile Include="Exceptions\ACalculateLoanException.cs" />
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
     <Compile Include="Exceptions\ANegativeDecimalException.cs" />
@@ -68,6 +66,7 @@
     <Compile Include="Exceptions\InvalidInitialAmountException.cs" />
     <Compile Include="Exceptions\NoInitialDataException.cs" />
     <Compile Include="Exceptions\NoPeriodEndDateException.cs" />
+    <Compile Include="Exceptions\NoLoanEventsException.cs" />
     <Compile Include="Exceptions\NoScheduleException.cs" />
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\CalculateAprMethod.cs" />
-    <Compile Include="Methods\CreateScheduleMethodCopy.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

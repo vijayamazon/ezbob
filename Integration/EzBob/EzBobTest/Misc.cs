@@ -202,5 +202,16 @@ namespace EzBobTest {
             Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2) == NLLoanTypes.HalfWayLoanType.ToString());
 	    }
 
+
+		[Test]
+		public void TestPrintFormat() {
+			DateTime? xxx = null;
+			//Console.WriteLine("{0:G}", NLFeeTypes.SetupFee);
+			Console.WriteLine("{0:d}", DateTime.UtcNow);
+			xxx = DateTime.UtcNow;
+			Console.WriteLine("{0,-11:d}", xxx);
+			Console.WriteLine("{0:F}", 445.6667m);
+		}
+
 	} // class Misc
 } // namespace

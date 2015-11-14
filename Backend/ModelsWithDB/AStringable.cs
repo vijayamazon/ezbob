@@ -44,6 +44,9 @@
 				format.Append("{").Append(x.Index);
 
 				if (val != null) {
+					var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
+					// display enum name
+					val = (enumattr != null) ? enumattr.GetName((int)val) : val;
 
 					var formatattr = prop.GetCustomAttribute(typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
 					switch (prop.PropertyType.Name) {
@@ -57,8 +60,9 @@
 						else
 							format.Append(",-")
 								.Append(headerLen)
-								.Append(":C2} "); // other decimals
+								.Append(":F} "); // other decimals
 						break;
+					case "Nullable`1":
 					case "DateTime":
 						format.Append(",-")
 							.Append(headerLen)
@@ -70,21 +74,14 @@
 							.Append("} "); // int/string
 						break;
 					}
-
-					var enumattr = prop.GetCustomAttribute(typeof(EnumNameAttribute)) as EnumNameAttribute;
-					// display enum name
-					val = (enumattr != null) ? enumattr.GetName((int)val) : val;
-
 				} else {
 					val = novalue;
 					format.Append(",-")
 							.Append(headerLen)
 							.Append("} "); // null value
 				}
-
 				values.SetValue(val, x.Index);
 			}
-
 			if (!values.Any()) 
 				return "No " + t.Name + " found.";
 
@@ -95,7 +92,7 @@
 		/// returns string of headers line-printable properties
 		/// </summary>
 		/// <returns></returns>
-		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public static string PrintHeadersLine(Type t) {
 			var props = FilterPrintable(t);
 			int propsCount = props.Count;

@@ -38,57 +38,54 @@
 		public decimal InterestRate { get; set; }
 
 
+
+
+
 		// additions
-		private decimal _balance;  // global open interest
-		private decimal _interest;
-		private decimal _fees;
-		private decimal _amountDue;
-		private decimal _openPrincipal; // open principal for schedule item
+
+		/// <summary>
+		/// open principal based on planned scheduled p'
+		/// </summary>
+		[DataMember]
+		[NonTraversable]
+		public decimal Balance { get; set; }
+
+		[DataMember] // based on planned scheduled principal (balance)
+		[NonTraversable]
+		public decimal InterestScheduled {get; set; }
 
 		[DataMember]
 		[NonTraversable]
-		public decimal Balance {
-			get { return this._balance; }
-			set { this._balance = value; }
-		}
+		public decimal Fees { get; set; }
 
-		[DataMember] // p*r
-		[NonTraversable]
-		public decimal Interest {
-			get { return this._interest; }
-			set { this._interest = value; }
-		}
-
+		/// <summary>
+		/// current open principal (planned p' - paid p')
+		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal Fees {
-			get { return this._fees; }
-			set { this._fees = value; }
-		}
+		public decimal OpenPrincipal { get; set; }
 
+		[DataMember] // p*r based on real open principal
+		[NonTraversable]
+		public decimal Interest { get; set; }
+
+		/// <summary>
+		/// p' + i' + f' (i' calculation based on planned scheduled principal (balance))
+		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal AmountDue {
-			get { return this._amountDue; }
-			set { this._amountDue = value; }
-		}
+		public decimal AmountDueScheduled { get; set; }
 
+		/// <summary>
+		/// p' + i' + f' (i' calculation based on real open principal)
+		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal OpenPrincipal {
-			get { return this._openPrincipal; }
-			set { this._openPrincipal = value; }
-		}
-
-		//[DataMember]
-		//[NonTraversable]
-		//public decimal FeesPaid {
-		//	get { return this._feesPaid; }
-		//	set { this._feesPaid = value; }
-		//}
+		public decimal AmountDue { get; set; }
 
 		[DataMember]
 		[NonTraversable]
 		public bool LateFeesAttached { get; set; }
+
 	} // class NL_LoanSchedules
 } // ns

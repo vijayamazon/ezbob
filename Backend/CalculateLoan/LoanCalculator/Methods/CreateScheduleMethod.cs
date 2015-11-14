@@ -8,7 +8,6 @@
 	using PaymentServices.Calculators;
 
 	internal class CreateScheduleMethod : AMethod {
-
 		
 		public CreateScheduleMethod(ALoanCalculator calculator): base(calculator, false) {
 
@@ -25,6 +24,8 @@
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public virtual void Execute() {
 
 			NL_LoanHistory history = WorkingModel.Loan.LastHistory();
@@ -81,11 +82,11 @@
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
 
-				decimal dailyInterestRate = Calculator.AverageDailyInterestRate(r, plannedDate); // dr' = r/daysDiff
+				//decimal dailyInterestRate = Calculator.AverageDailyInterestRate(r, plannedDate); // dr' = r/daysDiff
 
-				int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
+				//int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
 
-				decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents => /100;
+				//decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents => /100;
 
 				balance -= principal;
 
@@ -96,9 +97,9 @@
 						Principal = principal, // intervals' principal
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i,
-						Balance = balance, //open principal
-						Interest = interest, //ei
-						AmountDue = (interest + principal)
+						Balance = balance, //open principal, scheduled
+					//	Interest = interest, //ei
+					//	AmountDue = (interest + principal)
 					});
 			} // for
 
@@ -108,6 +109,24 @@
 				throw new NoScheduleException();
 			}
 
+			// set scheduled interests (based on balance) and amountDue
+			Calculator.BalanceBasedInterestCalculation = true;
+			Calculator.schedule = history.Schedule;
+			LoanEvent hEvent = new LoanEvent(new DateTime(history.EventTime.Year, history.EventTime.Month, history.EventTime.Day), history);
+			Calculator.lastEvent = hEvent;
+			int counter = 0;
+			foreach (NL_LoanSchedules s in history.Schedule) {
+				LoanEvent sEvent = new LoanEvent(new DateTime(s.PlannedDate.Year, s.PlannedDate.Month, s.PlannedDate.Day), s);
+				decimal sBalance = s.Balance;
+				s.Balance = counter == 0 ? Calculator.initialAmount : history.Schedule[counter-1].Balance; // use balance of previous item
+				s.InterestScheduled = Calculator.InterestBtwnEvents(sEvent);
+				//s.InterestScheduled = s.Interest;
+				s.AmountDueScheduled = s.InterestScheduled + s.Principal;
+				s.Balance = sBalance; // set balance back
+				Calculator.lastEvent = sEvent;
+				counter++;
+			}
+			
 			int schedulesCount = history.Schedule.Count;
 
 			// no fees defined
@@ -115,9 +134,7 @@
 				Log.Debug("No offer fees defined");
 				return;
 			}
-
-			DateTime nowTime = DateTime.UtcNow;
-
+	
 			// extract offer-fees
 			var offerFees = WorkingModel.Offer.OfferFees;
 
@@ -146,7 +163,7 @@
 						AssignTime = history.EventTime,
 						Notes = "setup fee one-part",
 						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
-						CreatedTime = nowTime,
+						CreatedTime = Calculator.NowTime,
 						AssignedByUserID = 1
 					});
 			}
@@ -172,7 +189,7 @@
 							AssignTime = s.PlannedDate,
 							Notes = "spread (servicing) fee",
 							LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
-							CreatedTime = nowTime,
+							CreatedTime = Calculator.NowTime,
 							AssignedByUserID = 1
 						});
 

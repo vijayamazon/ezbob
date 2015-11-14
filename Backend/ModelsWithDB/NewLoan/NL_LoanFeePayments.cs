@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Runtime.Serialization;
-	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -20,10 +19,6 @@
 		[DataMember]
 		public decimal Amount { get; set; }
 
-		
-		[DataMember]
-		[NonTraversable]
-		public bool NewEntry { get; set; }
 
 
 		

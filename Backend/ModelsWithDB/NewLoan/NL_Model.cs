@@ -54,7 +54,7 @@
         [DataMember]
         public string CalculatorImplementation { get; private set; } // AloanCalculator LegacyLoanCalculator/BankLikeLoanCalculator
 
-		
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(); //.Append(base.ToString());
 

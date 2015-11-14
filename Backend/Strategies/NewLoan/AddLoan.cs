@@ -70,11 +70,11 @@
 					return;
 				}
 
-				if (model.Loan.OldLoanID == null) {
-					this.Error = NL_ExceptionRequiredDataNotFound.OldLoan;
-                    NL_AddLog(LogType.Error, "Strategy Faild ", this.strategyArgs, this.Error, NL_ExceptionRequiredDataNotFound.OldLoan, null);
-					return;
-				}
+				//if (model.Loan.OldLoanID == null) {
+				//	this.Error = NL_ExceptionRequiredDataNotFound.OldLoan;
+				//	NL_AddLog(LogType.Error, "Strategy Faild ", this.strategyArgs, this.Error, NL_ExceptionRequiredDataNotFound.OldLoan, null);
+				//	return;
+				//}
 
 				if (model.Loan.Refnum == null) {
 					this.Error = NL_ExceptionRequiredDataNotFound.LoanRefNum;
@@ -226,12 +226,13 @@
 					// 6. broker commissions
 					// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
 					if (model.Offer.BrokerSetupFeePercent > 0) {
-						DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
+						//DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
+						DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = (select Id from dbo.Loan where [RefNum] = '{1}')", this.LoanID, model.Loan.Refnum));
 					}
 
 					// 7. history
 					history.LoanID = this.LoanID;
-					history.Description = "adding loan. oldID: " + model.Loan.OldLoanID;
+					history.Description = "adding loan refnum: " + model.Loan.Refnum; //.OldLoanID;
 
 					//Log.Debug("Adding history: {0}", history);
 
@@ -359,7 +360,7 @@
 			string emailFromName = CurrentValues.Instance.MailSenderName;
 			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
-			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, this.LoanID, this.Error);
+			string sMsg = string.Format("{0}. cust {1} user {2},  LoanID {3} error: {4}", subject, model.CustomerID, model.UserID, /*model.Loan.OldLoanID,*/ this.LoanID, this.Error);
 
 			history.Schedule.Clear();
 			history.Schedule = schedule;

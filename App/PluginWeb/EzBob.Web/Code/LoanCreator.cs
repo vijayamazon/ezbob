@@ -222,9 +222,9 @@
 			// actually this is the place where the loan saved to DB
 			this.session.Flush();
 
-			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-			nlModel.Loan.Refnum = loan.RefNumber;
-			nlModel.Loan.OldLoanID = oldloanID;
+			//int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
+			//nlModel.Loan.OldLoanID = oldloanID;
+			nlModel.Loan.Refnum = loan.RefNumber; // FK btwn old and new lona tables (from 12 November 2015)
 			try {
 				//log.Debug(nlModel.FundTransfer.ToString());
 				//log.Debug(nlModel.Loan.ToString());

@@ -22,8 +22,7 @@ CREATE TYPE NL_LoansList AS TABLE (
 	Position INT NOT NULL,
 	DateClosed DATETIME NULL,	
 	PrimaryLoanID BIGINT NULL,	
-	PaymentPerInterval DECIMAL(18, 6) NULL,
-	OldLoanID INT NULL
+	PaymentPerInterval DECIMAL(18, 6) NULL
 )
 GO
 	
@@ -46,8 +45,7 @@ BEGIN
 		Position,
 		DateClosed,	
 		PrimaryLoanID,	
-		PaymentPerInterval,
-		OldLoanID  
+		PaymentPerInterval
 	) SELECT
 		OfferID ,
 		LoanTypeID ,
@@ -61,8 +59,7 @@ BEGIN
 		Position,
 		DateClosed,	
 		PrimaryLoanID,	
-		PaymentPerInterval,
-		OldLoanID  
+		PaymentPerInterval
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

@@ -7,7 +7,8 @@
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
-		public BankLikeLoanCalculator(NL_Model model): base(model) {
+		public BankLikeLoanCalculator(NL_Model model, DateTime? calculationDate = null)
+			: base(model, calculationDate) {
 		} // constructor
 
 		public override string Name { get { return "Bank-like calculator"; } }

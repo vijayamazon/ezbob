@@ -53,10 +53,10 @@
 			string customerMail = sr["Email"];
 			string fullname = sr["Fullname"];
 			string typeOfBusiness = sr["TypeOfBusiness"];
-			DateTime dueDate = sr["DueDate"];
+			DateTime dueDate = sr["DueDate"]; // PlannedDate
 			bool reductionFee = sr["ReductionFee"];
-			string refNum = sr["RefNum"];
-			bool lastInstallment = sr["LastInstallment"];
+			string refNum = sr["RefNum"]; // of loan
+			bool lastInstallment = sr["LastInstallment"]; // bit
 
 			bool isNonRegulated = typeOfBusiness == "Limited" || typeOfBusiness == "LLP" || typeOfBusiness == "PShip";
 
@@ -67,6 +67,11 @@
 			int daysLate = (int)span.TotalDays;
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
+
+			/*var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, this.amountToChargeFrom);
+			return payEarlyCalc.GetState();
+			 * return state.AmountDue;
+			 * */
 
 			//el: TODO: call SP NL_LoadLoanForAutomaticPayment - to get all loans to pay today
 

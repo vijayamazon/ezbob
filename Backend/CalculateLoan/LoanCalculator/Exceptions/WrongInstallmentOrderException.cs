@@ -5,7 +5,7 @@
 
 	public class WrongInstallmentOrderException : ALoanCalculatorModelException {
 		public WrongInstallmentOrderException(ScheduledItem previous, ScheduledItem next)
-			: base("Installment '" + previous + "' does not precedes installment '" + next + "'.") {
+			: base("ScheduleItem '" + previous + "' does not precedes installment '" + next + "'.") {
 		} // constructor
 	} // class WrongInstallmentOrderException
 	*/

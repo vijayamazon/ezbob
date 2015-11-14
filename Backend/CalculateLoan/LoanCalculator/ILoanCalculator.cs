@@ -9,10 +9,10 @@
 
 		void GetState(); // result in model updated
 
-		void AmountToPay(DateTime calculationDate, bool getSavedAmount = false); // read result in public fields AmountToCharge, SavedAmount
+		//void AmountToPay(bool showSavedAmount = false); // read result in public fields AmountToCharge, SavedAmount
 
-		decimal NextEarlyPayment(DateTime calculationDate);
+		//decimal NextEarlyPayment();
 
-		decimal TotalEarlyPayment(DateTime calculationDate);
+		//decimal TotalEarlyPayment();
 	}
 }
