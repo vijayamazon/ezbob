@@ -2,11 +2,11 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Database;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository.Turnover;
 	using FluentNHibernate.Mapping;
-	using NHibernate.Linq;
 
 	public class ChannelGrabberMarketPlaceType : MP_MarketplaceType {
 		public override int UWPriority { get { return 4; } } // UWPriority
@@ -26,15 +26,15 @@
 
 			var calculatedAggregations = new List<IAnalysisDataParameterInfo>();
 			if (InternalId == new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA")) {
-				var aggregations = mp.UpdatingHistory
-					.SelectMany(x => x.HmrcAggregations)
-					.Where(ag => ag.IsActive && ag.TheMonth < relevantDate)
-					.OrderByDescending(ag => ag.TheMonth)
-					.ToList();
+				List<HmrcAggregation> aggregations = Library.Instance.DB.Fill<HmrcAggregation>(
+					"LoadActiveHmrcAggregations",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MpID", mp.Id),
+					new QueryParameter("RelevantDate", relevantDate)
+				);
 
-				if (!aggregations.Any()) {
+				if (!aggregations.Any())
 					return calculatedAggregations;
-				}
 				
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, month, firstOfMonth));
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, month3, firstOfMonth));
@@ -45,10 +45,15 @@
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, year2, firstOfMonth));
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, all, firstOfMonth));
 			} else {
-				var aggregations = mp.UpdatingHistory.SelectMany(x => x.CGAggregations).Where(ag => ag.IsActive).OrderByDescending(ag => ag.TheMonth).ToList();
-				if (!aggregations.Any()) {
+				List<ChannelGrabberAggregation> aggregations = Library.Instance.DB.Fill<ChannelGrabberAggregation>(
+					"LoadActiveChanngelGrabberAggregations",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MpID", mp.Id),
+					new QueryParameter("RelevantDate", relevantDate)
+				);
+
+				if (!aggregations.Any())
 					return calculatedAggregations;
-				}
 
 				calculatedAggregations.AddRange(GetAnalysisDataParametersCG(aggregations, month, firstOfMonth));
 				calculatedAggregations.AddRange(GetAnalysisDataParametersCG(aggregations, month3, firstOfMonth));

@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies {
+﻿namespace EZBob.DatabaseLib {
 	using Ezbob.Database;
 	using Ezbob.LibraryGlobals;
 	using Ezbob.Logger;
@@ -31,13 +31,6 @@
 					} // if
 				} // lock
 			} // if
-
-			Ezbob.Backend.Extensions.Library.Initialize(env, db, log);
-			Ezbob.Models.Library.Initialize(env, db, log);
-			AutomationCalculator.Library.Initialize(env, db, log);
-			//Ezbob.Backend.CalculateLoan.Models.Library.Initialize(env, db, log);
-			Ezbob.Backend.CalculateLoan.LoanCalculator.Library.Initialize(env, db, log);
-			EZBob.DatabaseLib.Library.Initialize(env, db, log);
 		} // Initialize
 
 		private Library() {} // constructor
