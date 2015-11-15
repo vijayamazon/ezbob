@@ -10,7 +10,7 @@ ALTER PROCEDURE SaveServiceLogEntry
 @DirectorID INT,
 @InsertDate DATETIME,
 @ServiceType NVARCHAR(500),
-@RequestData NVARCHAR(50),
+@RequestData NVARCHAR(MAX),
 @ResponseData NVARCHAR(MAX),
 @CompanyRefNum NVARCHAR(50),
 @Firstname NVARCHAR(50),
