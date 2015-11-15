@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using System;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.CallCreditStrategy;
 	using Ezbob.Backend.Strategies.CreditSafe;
@@ -34,54 +35,32 @@
 			try {
 				SaveServiceLogEntry();
 
-				if (this.serviceLogID <= 0)
-					throw new Exception("Failed to retrieve ID of new MP_ServiceLog entry.");
-
 				switch (Package.In.ServiceType) {
 				case ExperianServiceType.LimitedData:
-					var parseExperianLtd = new ParseExperianLtd(this.serviceLogID);
-					parseExperianLtd.Execute();
-					Package.Out.ExperianLtd = parseExperianLtd.Result;
+					DoLimited();
 					break;
 
 				case ExperianServiceType.Consumer:
-					var stra = new ParseExperianConsumerData(this.serviceLogID);
-					stra.Execute();
-					Package.Out.ExperianConsumer = stra.Result;
-
-					if (Package.Out.ExperianConsumer != null) {
-						DB.ExecuteNonQuery(
-							"UpdateConsumerScoreByServiceLogID",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("@ServiceLogID", this.serviceLogID),
-							new QueryParameter("@BureauScore", Package.Out.ExperianConsumer.BureauScore)
-						);
-					} // if
-
+					DoConsumer();
 					break;
 
 				case ExperianServiceType.CreditSafeNonLtd:
-					try {
-						var parseCreditSafeNonLtdData = new ParseCreditSafeNonLtd(this.serviceLogID);
-						parseCreditSafeNonLtdData.Execute();
-					} catch (Exception e) {
-						Log.Error(e, "CreditSafeLtd/NonLtd failed for unexpected reason.");
-						throw;
-					} // if
+					DoCreditSafeNonLtd();
 					break;
 
 				case ExperianServiceType.CallCredit:
-					var parseCallCredit = new ParseCallCredit(this.serviceLogID);
-					parseCallCredit.Execute();
+					DoCallCredit();
 					break;
 				} // switch
 
-				var spSaveExperianHistoryEntry = new SpSaveExperianHistory(this);
+				SaveExperianHistory();
 
-				if (spSaveExperianHistoryEntry.HasValidParameters())
-					spSaveExperianHistoryEntry.ExecuteNonQuery();
-
+				// This operation must be done after all the saving SPs are completed
+				// so that nhibernate picks up all the data from the DB.
 				Package.Out.ServiceLog = this.repoLog.GetById(this.serviceLogID);
+
+				if (IsSavedEntryValid())
+				LogNewServiceLogEntry();
 			} catch (Exception e) {
 				Log.Error(
 					e,
@@ -95,6 +74,54 @@
 
 		public WriteToLogPackage Package { get; set; }
 
+		private void DoLimited() {
+			var parseExperianLtd = new ParseExperianLtd(this.serviceLogID);
+
+			parseExperianLtd.Execute();
+
+			Package.Out.ExperianLtd = parseExperianLtd.Result;
+		} // DoLimited
+
+		private void DoConsumer() {
+			var stra = new ParseExperianConsumerData(this.serviceLogID);
+			stra.Execute();
+			Package.Out.ExperianConsumer = stra.Result;
+
+			if (Package.Out.ExperianConsumer != null) {
+				DB.ExecuteNonQuery(
+					"UpdateConsumerScoreByServiceLogID",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@ServiceLogID", this.serviceLogID),
+					new QueryParameter("@BureauScore", Package.Out.ExperianConsumer.BureauScore)
+				);
+			} // if
+		} // DoConsumer
+
+		private void DoCreditSafeNonLtd() {
+			var parser = new ParseCreditSafeNonLtd(this.serviceLogID);
+			parser.Execute();
+		} // DoCreditSafeNonLtd
+
+		private void DoCallCredit() {
+			var parser = new ParseCallCredit(this.serviceLogID);
+			parser.Execute();
+		} // DoCallCredit
+
+		private void SaveExperianHistory() {
+			var spSaveExperianHistoryEntry = new SpSaveExperianHistory(this);
+
+			if (spSaveExperianHistoryEntry.HasValidParameters())
+				spSaveExperianHistoryEntry.ExecuteNonQuery();
+		} // SaveExperianHistory
+
+		private bool IsSavedEntryValid() {
+			if ((Package.Out.ServiceLog != null) && (Package.Out.ServiceLog.Id == this.serviceLogID))
+				return true;
+
+			Log.Alert("Failed to retrieve from DB MP_ServiceLog entry with id {0}.", this.serviceLogID);
+			return false;
+		} // IsSavedEntryValid
+
 		private void SaveServiceLogEntry() {
 			this.spSaveServiceLog = new SpSaveServiceLogEntry(this);
 
@@ -102,7 +129,37 @@
 			Log.Debug("Output data was: {0}", this.spSaveServiceLog.ResponseData);
 
 			this.spSaveServiceLog.Execute();
+
+			if (this.serviceLogID <= 0)
+				throw new Exception("Failed to save/retrieve ID of new MP_ServiceLog entry.");
 		} // SaveServiceLogEntry
+
+		private void LogNewServiceLogEntry() {
+			Log.Debug(
+				"New MP_ServiceLog entry:" +
+				"\n\tid            = {0}" +
+				"\n\ttype          = {1}" +
+				"\n\tinsert time   = {2}" +
+				"\n\tcustomer id   = {3}" +
+				"\n\tfirst name    = {4}" +
+				"\n\tlast name     = {5}" +
+				"\n\tpostcode      = {6}" +
+				"\n\tcompany ref # = {7}" +
+				"\n\trequest       = {8}" +
+				"\n\tresponse      = {9}" +
+				"\n",
+				Package.Out.ServiceLog.Id,
+				Package.Out.ServiceLog.ServiceType,
+				Package.Out.ServiceLog.InsertDate.MomentStr(),
+				Package.Out.ServiceLog.Customer.Id,
+				Package.Out.ServiceLog.Firstname,
+				Package.Out.ServiceLog.Surname,
+				Package.Out.ServiceLog.Postcode,
+				Package.Out.ServiceLog.CompanyRefNum,
+				FormatRequestResponse(Package.Out.ServiceLog.RequestData),
+				FormatRequestResponse(Package.Out.ServiceLog.ResponseData)
+			);
+		} // LogNewServiceLogEntry
 
 		private class SpSaveServiceLogEntry : AStoredProc {
 			public SpSaveServiceLogEntry(ServiceLogWriter writer) : base(writer.DB, writer.Log) {
@@ -253,5 +310,18 @@
 		private SpSaveServiceLogEntry spSaveServiceLog;
 
 		private readonly ServiceLogRepository repoLog;
+
+		private static string FormatRequestResponse(string input) {
+			const int substLen = 50;
+
+			string res = (input ?? string.Empty);
+
+			string dots = (res.Length > substLen) ? "..." : string.Empty;
+
+			return "'" +
+				res.TrimStart().Substring(0, substLen).Replace("\r", string.Empty).Replace("\n", string.Empty) +
+				"'" +
+				dots;
+		} // FormatRequestResponse
 	} // class ServiceLogWriter
 } // namespace
