@@ -16,27 +16,26 @@
 	/// </summary>
 	public abstract partial class ALoanCalculator : ILoanCalculator {
 		/// <exception cref="NoInitialDataException">Condition. </exception>
-		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
-		/// <exception cref="InvalidInitialDataException">Condition. </exception>
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
 		/// <exception cref="OverflowException">The result is outside the range of a <see cref="T:System.Decimal" />.</exception>
+		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		protected ALoanCalculator(NL_Model model, DateTime? calculationDate = null) {
 
 			if (model == null)
-				throw new NoInitialDataException();
+				throw new NoInitialDataException("nl model not found.");
 
 			if (model.Loan == null)
-				throw new NoInitialDataException();
+				throw new NoInitialDataException("Loan in nl model not found.");
 
 			if (model.Loan.LastHistory() == null)
 				throw new NoLoanHistoryException();
 
 			if (model.Loan.FirstHistory().EventTime == DateTime.MinValue)
-				throw new InvalidInitialDataException(string.Format("History EventTime not set {0}", WorkingModel.Loan.FirstHistory()));
+				throw new NoInitialDataException("loan (history) creation date (EventTime) not found");
 
 			if (model.Loan.LastHistory().InterestRate == 0)
-				throw new InvalidInitialInterestRateException(0);
+				throw new InvalidInitialInterestRateException(model.Loan.LastHistory().InterestRate);
 
 			if (Math.Round(model.Loan.LastHistory().Amount) == 0)
 				throw new InvalidInitialAmountException(model.Loan.LastHistory().Amount);
@@ -47,7 +46,7 @@
 			NowTime = DateTime.UtcNow;
 
 			CalculationDate = calculationDate ?? NowTime;
-			//Log.Debug("calculationDate: {0}", CalculationDate);
+			Log.Debug("calculationDate: {0}", CalculationDate);
 
 			currentHistory = WorkingModel.Loan.LastHistory();
 
@@ -206,8 +205,8 @@
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
+		/// <exception cref="OverflowException"><paramref /> represents a number that is less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
 		[ExcludeFromToString]
 		public virtual void CreateSchedule() {
 			new CreateScheduleMethod(this).Execute();
@@ -228,7 +227,7 @@
 		/// <returns>Loan APR.</returns>
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		[ExcludeFromToString]
-		public virtual decimal CalculateApr(DateTime? aprDate = null, double? calculationAccuracy = null, ulong? maxIterationCount = null) {
+		public virtual double CalculateApr(DateTime? aprDate = null, double? calculationAccuracy = null, ulong? maxIterationCount = null) {
 			var method = new CalculateAprMethod(this, aprDate);
 
 			if (calculationAccuracy.HasValue)
@@ -339,6 +338,7 @@
 		/// <param name="currentEvent"></param>
 		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="OverflowException"><paramref /> represents a number that is less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
 		[ExcludeFromToString]
 		internal decimal InterestBtwnEvents(LoanEvent currentEvent) {
 
@@ -363,21 +363,18 @@
 				if (BalanceBasedInterestCalculation) {
 					item = currentEvent.ScheduleItem ?? GetScheduleItemForDate(rateDate);
 				}
-
-				//decimal interest = currentOpenPrincipal * dailyInterestRate;		//	currentOpenPrincipal for t'
-
 				// BalanceBasedInterestCalculation true used from CreateScheduleMethod
 				decimal interest = ((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal) * dailyInterestRate;
 
 				interestForPeriod += interest;
 				rateDate = start.AddDays(i);
 
-				Log.Info("InterestBtwnEvents: --------------------rateDate: {0:d} interest: {1:C4} currentOpenPrincipal: {2:C0}, i={3:C4}, dr={4:C6}", rateDate, interest, currentOpenPrincipal, i, dailyInterestRate);
+				//Log.Info("InterestBtwnEventsaaa: --------------------rateDate: {0:d} interest: {1:F4} currentOpenPrincipal: {2:C2}, i={3}, dr={4:F6}", rateDate, interest, currentOpenPrincipal, i, Math.Round(interestForPeriod, 4));
 			}
 
-			Log.Debug("InterestBtwnEvents: start={0}, currentEvent={1}, days={2}, interestForPeriod={3}", start, currentEvent, daysDiff, interestForPeriod);
+			Log.Debug("InterestBtwnEvents: start={0:d}, currentEvent={1:d}, days={2}, interestForPeriod={3:F4}", start, currentEvent, daysDiff, Math.Round(interestForPeriod, 4));
 
-			return interestForPeriod;
+			return Math.Round(interestForPeriod, 4);
 		}
 
 		/// <summary>
@@ -540,10 +537,10 @@
 			foreach (var s in this.events.Where(e => e.ScheduleItem != null)) {
 				if (s.ScheduleItem.LoanScheduleStatusID != (int)NLScheduleStatuses.Paid) {
 					s.ScheduleItem.Balance = balance;
-					s.ScheduleItem.InterestScheduled = InterestBtwnEvents(s);
+					s.ScheduleItem.Interest = InterestBtwnEvents(s);
 					balance -= s.ScheduleItem.Principal;
 					s.ScheduleItem.Balance = balance;
-					s.ScheduleItem.AmountDueScheduled = s.ScheduleItem.OpenPrincipal + s.ScheduleItem.InterestScheduled + s.ScheduleItem.Fees;
+					s.ScheduleItem.AmountDue = s.ScheduleItem.OpenPrincipal + s.ScheduleItem.Interest + s.ScheduleItem.Fees;
 					this.lastEvent = s;
 				}
 			}
@@ -788,28 +785,10 @@
 				foreach (NL_LoanFees f in this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date))
 					tDistributedFees += f.Amount;
 
-				//decimal tPrincipal = 0;
-				//decimal tPaidPrincipal = 0;
-
-				// principal untill this event included
-				//foreach (NL_LoanSchedules s in WorkingModel.Loan.LastHistory().Schedule.Where(s => s.PlannedDate.Date <= this.calculationDateEventEnd.EventTime.Date))
-				//	tPrincipal += s.Principal;
-
-				// paid principals untill CalculationDate included
-				//foreach (NL_Payments p in WorkingModel.Loan.Payments.Where(p => p.PaymentTime <= this.calculationDateEventEnd.EventTime.Date))
-				//	p.SchedulePayments.ForEach(sp => tPaidPrincipal += sp.PrincipalPaid);
-
-				//Log.Debug("GetState Action: tDistributedFees={0} currentPaidFees={1}, tPrincipal={2} tPaidPrincipal={3} currentOpenPrincipal={4}, totalLateFees={5}, currentEarnedInterest={6}, currentPaidInterest={7}",
-				//	tDistributedFees, currentPaidFees, tPrincipal, tPaidPrincipal, currentOpenPrincipal, totalLateFees, currentEarnedInterest, currentPaidInterest);
-
 				// outstanding balance = Fees + Interest + Principal
 				Fees = (totalLateFees + tDistributedFees - currentPaidFees);
 				Interest = (currentEarnedInterest - currentPaidInterest);
-				Principal = currentOpenPrincipal; //(tPrincipal - tPaidPrincipal);
-
-				// finally should be returned AmountDue = f+i+p for nearby schedule + prev late also
-				//AmountToCharge = Fees + Interest + Principal;
-				//AmountToCharge = AmountToCharge <= 0 ? 0 : AmountToCharge;
+				Principal = currentOpenPrincipal;
 
 				TotalEarlyPayment = Fees + Interest + Principal;
 
@@ -829,23 +808,6 @@
 
 			NextEarlyPayment = item.OpenPrincipal + Interest + Fees;
 		}
-
-
-
-		/*/// <exception cref="LoanPendingStatusException">Condition. </exception>
-		/// <exception cref="LoanPaidOffStatusException">Condition. </exception>
-		/// <exception cref="LoanWriteOffStatusException">Condition. </exception>
-		[ExcludeFromToString]
-		public decimal TotalEarlyPayment() {
-
-			CheckLoanClosed();
-
-			savedAmount = true;
-			//CalculationDate = calculationDate;
-
-			return 55;
-		}*/
-
 
 
 		/// <summary>
@@ -881,9 +843,9 @@
 			ScheduleItemOutstandingData(item);
 
 			// i'- current open interest, payments based (== real open principal)
-			item.Interest = currentEarnedInterest - currentPaidInterest;
+			item.InterestOutstandingPrincipalBased = currentEarnedInterest - currentPaidInterest;
 
-			item.AmountDue = item.Fees + item.Interest + item.OpenPrincipal;
+			item.AmountDueOutstandingPrincipalBased = item.Fees + item.InterestOutstandingPrincipalBased + item.OpenPrincipal;
 
 			Log.Info("ProcessScheduleItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
 		}
@@ -966,135 +928,6 @@
 			}
 			return sb.ToString();
 		}
-
-		/*/// <summary>
-	///  Amount to charge at CalculationDate (default now). Used for PayPointAutoCharger and customer's dashboards.
-	/// </summary>
-	public void AmountToPay(bool showSavedAmount = false) {
-
-		CheckLoanClosed();
-
-		savedAmount = showSavedAmount;
-
-		//CalculationDate = calculationDate;
-		//Log.Debug("calculationDate: {0}", CalculationDate);
-
-		this.calculationDateEventEnd = new LoanEvent(CalculationDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
-
-		IntiEvents();
-
-		// fetch the state at this event 
-		this.calculationDateEventEnd.Action = () => {
-
-			// all local var calculated untill this event included
-			decimal iDistributedFees = 0;
-			foreach (NL_LoanFees f in this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date))
-				iDistributedFees += f.Amount;
-
-			decimal iPrincipal = 0;
-			decimal iPaidPrincipal = 0;
-
-			// principal untill this event included
-			foreach (NL_LoanSchedules s in this.schedule.Where(s => s.PlannedDate.Date <= this.calculationDateEventEnd.EventTime.Date))
-				iPrincipal += s.Principal;
-
-			// paid principals untill CalculationDate included
-			foreach (NL_Payments p in WorkingModel.Loan.Payments.Where(p => p.PaymentTime <= this.calculationDateEventEnd.EventTime.Date))
-				p.SchedulePayments.ForEach(sp => iPaidPrincipal += sp.PrincipalPaid);
-
-			Log.Debug("AmountToPayOnCalculationDate: iDistributedFees={0} currentPaidFees={1}, iPrincipal={2} iPaidPrincipal={3} currentOpenPrincipal={4}, totalLateFees={5}",
-				iDistributedFees, currentPaidFees, iPrincipal, iPaidPrincipal, currentOpenPrincipal, totalLateFees);
-
-			Fees = (totalLateFees + iDistributedFees - currentPaidFees);
-			Interest = (currentEarnedInterest - currentPaidInterest);
-			Principal = (iPrincipal - iPaidPrincipal);
-
-			// finally should be returned AmountDue = f+i+p for nearby schedule + prev late also
-			AmountToCharge = Fees + Interest + Principal;
-
-			AmountToCharge = AmountToCharge <= 0 ? 0 : AmountToCharge;
-	
-			Log.Debug("{0}", ToString());
-
-			Log.Debug("AmountToPayOnCalculationDate: AmountToCharge: {0}, NextEarlyPaymentSavedAmount: {1}, Fees={2}, Interest={3}, Principal={4}", AmountToCharge, NextEarlyPaymentSavedAmount, Fees, Interest, Principal);
-		};
-
-		GetState();
-	}
-		 
-		 
-		 	/// <summary>
-		/// Set common loan defaults: last history as a default current history
-		/// InterestCalculationDateStart: first history +1 day
-		/// InterestCalculationDateEnd: last history's schedule item date
-		/// currentOpenPrincipal: first history amount
-		/// </summary>
-		[ExcludeFromToString]
-		private void SetCalculatorDefaults() {
-
-			// set definitions from the last history
-			currentHistory = WorkingModel.Loan.LastHistory();
-
-			// start to cumulate interest one day after LoanIssueDate 
-			InterestCalculationDateStart = WorkingModel.Loan.FirstHistory().EventTime; //.AddDays(1);
-
-			// default: end to cumulate interest at same date the last schedule planned (loan maturity date)
-			//var lastSchedule = WorkingModel.Loan.LastHistory().Schedule.OrderBy(s => s.PlannedDate).LastOrDefault();
-
-			//InterestCalculationDateEnd = (lastSchedule != null) ? lastSchedule.PlannedDate : InterestCalculationDateEnd;
-
-			initialAmount = WorkingModel.Loan.FirstHistory().Amount;
-
-			currentOpenPrincipal = initialAmount;
-
-			BalanceBasedInterestCalculation = false;
-
-			WriteToLog = true;
-		}
-		 
-		 
-		 /// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="LoanPaidOffStatusException">Condition. </exception>
-		/// <exception cref="LoanWriteOffStatusException">Condition. </exception>
-		/// <exception cref="LoanPendingStatusException">Condition. </exception>
-		/// <exception cref="NoLoanEventsException">Condition. </exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
-		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
-		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
-		/// <exception cref="Exception">A delegate callback throws an exception. </exception>
-		[ExcludeFromToString]
-		public decimal NextEarlyPayment() {
-
-			CheckLoanClosed();
-
-			savedAmount = true;
-
-			GetState();
-
-			// events handling finished
-
-			// Today is a payment day
-			bool isScheduledDate = CalculationDateEqualScheduledDate();
-
-			// All previous installments are paid
-			bool hasLate = HasLateScheduleItemsTillCalculationDate();
-
-			// calc date schedule item
-			NL_LoanSchedules item = GetScheduleItemForDate(CalculationDate);
-
-			//Log.Debug("item: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
-
-			// check status/paid principal
-
-			//	AmountToCharge = item.Principal + Fees + Interest;
-
-			//if (isScheduledDate) {
-			//	if(!hasLate)
-
-			//}
-
-			return AmountToCharge; // TODO put real number
-		}*/
 
 	} // class ALoanCalculator
 } // namespace

@@ -202,7 +202,7 @@
 			nlModel.Loan.Histories.Clear();
 			nlModel.Loan.Histories.Add(new NL_LoanHistory() {
 				Amount = loanAmount,
-				EventTime = now //  IssuedTime
+				EventTime = now
 			});
 
 			// populate nlModel by agreements data also
@@ -222,9 +222,9 @@
 			// actually this is the place where the loan saved to DB
 			this.session.Flush();
 
-			//int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-			//nlModel.Loan.OldLoanID = oldloanID;
-			nlModel.Loan.Refnum = loan.RefNumber; // FK btwn old and new lona tables (from 12 November 2015)
+			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
+			nlModel.Loan.OldLoanID = oldloanID;
+			nlModel.Loan.Refnum = loan.RefNumber; // TODO generate another refnum with new algorithm in addloan strategy
 			try {
 				//log.Debug(nlModel.FundTransfer.ToString());
 				//log.Debug(nlModel.Loan.ToString());

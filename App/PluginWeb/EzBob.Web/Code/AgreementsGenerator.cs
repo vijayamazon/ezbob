@@ -3,6 +3,7 @@
 	using System;
 	using System.IO;
 	using ConfigManager;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Code;
@@ -33,6 +34,7 @@
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
 		/// <exception cref="Exception">Alibaba can't be a Personal customer</exception>
 		/// <exception cref="NullReferenceException"><paramref /> is null. </exception>
+		/// <exception cref="NoScheduleException">Condition. </exception>
 		public void RenderAgreements(Loan loan, bool isRebuld, NL_Model nlModel = null) {
 
 			var typeOfBusinessReduced = loan.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();

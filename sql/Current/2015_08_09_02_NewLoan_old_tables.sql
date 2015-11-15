@@ -74,3 +74,4 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
 	ALTER TABLE LoanAgreementTemplate ADD CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes FOREIGN KEY (TemplateTypeID) REFERENCES NL_LoanAgreementTemplateTypes (TemplateTypeID)
 GO
 
+

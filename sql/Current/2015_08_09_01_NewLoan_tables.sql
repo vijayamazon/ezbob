@@ -458,7 +458,7 @@ BEGIN
 		DateClosed DATETIME NULL,	
 		PrimaryLoanID BIGINT NULL,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)
 		PaymentPerInterval DECIMAL(18, 6) NULL,	-- in "fixed payment" formula
-		-- OldLoanID INT NULL,
+		OldLoanID INT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Loans PRIMARY KEY (LoanID),
 		CONSTRAINT FK_NL_Loans_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
@@ -467,7 +467,7 @@ BEGIN
 		CONSTRAINT FK_NL_Loans_Formula FOREIGN KEY (LoanFormulaID) REFERENCES NL_LoanFormulas (LoanFormulaID),
 		CONSTRAINT FK_NL_Loans_Account FOREIGN KEY (EzbobBankAccountID) REFERENCES NL_EzbobBankAccounts (EzbobBankAccountID),
 		CONSTRAINT FK_NL_Loans_Source FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID),
-		CONSTRAINT FK_NL_Loans_Old FOREIGN KEY (Refnum) REFERENCES Loan ([RefNum]),
+		CONSTRAINT FK_NL_Loans_Old FOREIGN KEY (OldLoanID) REFERENCES Loan (Id),
 		CONSTRAINT CHK_NL_Loans CHECK (		
 			(Position >= 1)
 			AND 

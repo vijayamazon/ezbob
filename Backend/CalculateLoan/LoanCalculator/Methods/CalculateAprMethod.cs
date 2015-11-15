@@ -13,18 +13,18 @@
 			MaxIterationLimit = DefaultMaxIterationsLimit;
 			CalculationAccuracy = DefaultCalculationAccuracy;
 
-			this.aprDate = (aprDate ?? DateTime.UtcNow).Date;
+			AprDate = (aprDate ?? DateTime.UtcNow).Date;
 
 		} // constructor
-				
 
-		private readonly DateTime aprDate;
+
+		public DateTime AprDate { get; set; }
 		private double calculationAccuracy;
 		private ProgressCounter calculationProgress;
 		private const ulong DefaultMaxIterationsLimit = 100000;
-		private const double DefaultCalculationAccuracy = 1e-3;
+		private const double DefaultCalculationAccuracy = 1e-7;
 
-		private List<AmountDueDate> loanPlan = new List<AmountDueDate>();
+		private readonly List<AmountDueDate> loanPlan = new List<AmountDueDate>();
 
 		//private double issuedAmount;
 
@@ -44,29 +44,19 @@
 
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
-		public virtual decimal Execute() {
+		public virtual double Execute() {
 
-			Log.Debug(
-					"Calculating APR on {3} with accuracy {0} {1} for loan model\n{2}",
+			Log.Debug("Calculating APR on {3} with accuracy {0} {1} for loan model\n{2}",
 					CalculationAccuracy,
-					MaxIterationLimit == 0
-						? "without iterations limit"
-						: "using up to " + MaxIterationLimit + " iterations",
+					MaxIterationLimit == 0? "without iterations limit": "using up to " + MaxIterationLimit + " iterations",
 					WorkingModel,
-					this.aprDate.ToString("MMM d yyyy", Library.Instance.Culture)
-				);
-
+					AprDate.ToString("MMM d yyyy", Library.Instance.Culture));
 
 			try {
-				var poPlanu = new CreateScheduleMethod(Calculator);
-				poPlanu.Execute();
-
-
-				WorkingModel.Loan.LastHistory()
-					.Schedule.ForEach(s => Log.Debug(s.ToStringAsTable()));
-
-				WorkingModel.Loan.Fees.ForEach(f => Log.Debug(f.ToStringAsTable()));
-
+				if (WorkingModel.Loan.LastHistory().Schedule == null || WorkingModel.Loan.LastHistory().Schedule.Count == 0) {
+					var poPlanu = new CreateScheduleMethod(Calculator);
+					poPlanu.Execute();
+				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception createScheduleEx) {
 				Log.Error("Failed to get schedule err: {0}", createScheduleEx);
@@ -74,10 +64,11 @@
 				throw new NoScheduleException();
 			}
 
+			// debug
 			WorkingModel.Loan.LastHistory().Schedule.ForEach(s => Log.Debug(s.ToStringAsTable()));
 		
 			foreach (var s in WorkingModel.Loan.LastHistory().Schedule) {
-				this.loanPlan.Add(new AmountDueDate(this, s.PlannedDate, (double)s.AmountDue));
+				this.loanPlan.Add(new AmountDueDate(s.PlannedDate, (double)s.AmountDue, AprDate));
 			}
 			
 			this.calculationProgress = new ProgressCounter("{0} iterations performed during APR calculation.",WriteToLog ? Log : null );
@@ -109,7 +100,7 @@
 
 			this.calculationProgress.Log();
 
-			decimal apr = (decimal)x * 100m;
+			double apr = x * 100;
 
 			if (WriteToLog) {
 				Log.Debug(
@@ -120,7 +111,7 @@
 					WorkingModel,
 					Grammar.Number(this.calculationProgress.CurrentPosition, "iteration"),
 					accuracyReached ? " accuracy reached" : " max iterations limit reached",
-					this.aprDate.ToString("MMM d yyyy", Library.Instance.Culture),
+					this.AprDate.ToString("MMM d yyyy", Library.Instance.Culture),
 					string.Join("\n\t", this.loanPlan)
 				);
 			} // if
@@ -142,10 +133,10 @@
 		
 		private class AmountDueDate {
 
-			public AmountDueDate(CalculateAprMethod aprMethod, DateTime repaymentDate, double repaymentAmount ) {
+			public AmountDueDate(DateTime repaymentDate, double repaymentAmount, DateTime aprDate ) {
 				this.date = repaymentDate; // PlannedDate
 				this.amount = repaymentAmount; // AmountDue
-				this.t = -((repaymentDate - aprMethod.aprDate).Days) / 365.0;
+				this.t = -((repaymentDate - aprDate).Days) / 365.0;
 			} // constructor
 
 			public double ForFunction(double x) {

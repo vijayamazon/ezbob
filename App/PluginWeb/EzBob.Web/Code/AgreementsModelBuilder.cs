@@ -206,9 +206,10 @@
 									   schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
 
-		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
-		/// <exception cref="NullReferenceException"><paramref /> is null. </exception>
-		public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
+	    /// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
+	    /// <exception cref="NullReferenceException"><paramref /> is null. </exception>
+	    /// <exception cref="NoScheduleException">Condition. </exception>
+	    public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
 
 			// fill in loan+history with offer data
 			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
@@ -240,7 +241,7 @@
 
 			// no Schedule
 			if (history.Schedule.Count == 0) {
-				this.oLog.Alert("no Schedule: customer: {0}, err: {1}", nlModel.CustomerID);
+				this.oLog.Alert("No Schedule. Customer: {0}", nlModel.CustomerID);
 				return null;
 			}
 
@@ -337,7 +338,8 @@
 			model.IsBrokerFee = false;
 			model.IsManualSetupFee = false;
 
-			model.APR = (double)nlCalculator.CalculateApr(history.EventTime);
+			if (nlCalculator != null)
+				model.APR = nlCalculator.CalculateApr(history.EventTime);
 
 			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
 			model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);

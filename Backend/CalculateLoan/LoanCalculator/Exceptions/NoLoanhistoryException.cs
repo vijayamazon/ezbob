@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions {
 
-	public class NoLoanHistoryException : InvalidInitialDataException {
+	public class NoLoanHistoryException : ALoanCalculatorModelException {
 		public NoLoanHistoryException()
 			: base("History data not found")
 		{

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions {
-	public class NoInitialDataException : InvalidInitialDataException {
-		public NoInitialDataException() : base("Initial data was not specified.") {
+	public class NoInitialDataException : ALoanCalculatorModelException {
+		public NoInitialDataException(string msg = null)
+			: base(string.Format("Initial data was not specified. {0}", msg)) {
 		} // constructor
 	} // class NoInitialDataException
 } // namespace

@@ -52,7 +52,7 @@
 
 		[DataMember] // based on planned scheduled principal (balance)
 		[NonTraversable]
-		public decimal InterestScheduled {get; set; }
+		public decimal Interest {get; set; }
 
 		[DataMember]
 		[NonTraversable]
@@ -67,21 +67,21 @@
 
 		[DataMember] // p*r based on real open principal
 		[NonTraversable]
-		public decimal Interest { get; set; }
+		public decimal InterestOutstandingPrincipalBased { get; set; }
 
 		/// <summary>
 		/// p' + i' + f' (i' calculation based on planned scheduled principal (balance))
 		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal AmountDueScheduled { get; set; }
+		public decimal AmountDue { get; set; }
 
 		/// <summary>
 		/// p' + i' + f' (i' calculation based on real open principal)
 		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal AmountDue { get; set; }
+		public decimal AmountDueOutstandingPrincipalBased { get; set; }
 
 		[DataMember]
 		[NonTraversable]

@@ -7,6 +7,8 @@
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
+		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
+		/// <exception cref="OverflowException">The result is outside the range of a <see cref="T:System.Decimal" />.</exception>
 		public BankLikeLoanCalculator(NL_Model model, DateTime? calculationDate = null)
 			: base(model, calculationDate) {
 		} // constructor

@@ -62,7 +62,6 @@
     <Compile Include="Exceptions\NoLoanHistoryException.cs" />
     <Compile Include="Exceptions\InvalidInitialRepaymentCountException.cs" />
     <Compile Include="Exceptions\InvalidInitialInterestRateException.cs" />
-    <Compile Include="Exceptions\InvalidInitialDataException.cs" />
     <Compile Include="Exceptions\InvalidInitialAmountException.cs" />
     <Compile Include="Exceptions\NoInitialDataException.cs" />
     <Compile Include="Exceptions\NoPeriodEndDateException.cs" />
@@ -102,7 +101,7 @@
       <Name>EzEnvironment</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
-      <Project>{83a9efc6-0bd4-46fa-9058-329bee135bda}</Project>
+      <Project>{83A9EFC6-0BD4-46FA-9058-329BEE135BDA}</Project>
       <Name>LibraryGlobals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">

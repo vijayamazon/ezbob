@@ -25,7 +25,7 @@
 		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
+		/// <exception cref="OverflowException"><paramref /> represents a number that is less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
 		public virtual void Execute() {
 
 			NL_LoanHistory history = WorkingModel.Loan.LastHistory();
@@ -82,12 +82,6 @@
 
 				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType).Date;
 
-				//decimal dailyInterestRate = Calculator.AverageDailyInterestRate(r, plannedDate); // dr' = r/daysDiff
-
-				//int daysDiff = plannedDate.Date.Subtract(Calculator.PreviousScheduleDate(plannedDate)).Days;
-
-				//decimal interest = dailyInterestRate * balance * daysDiff; //	r/daysDiff*balance*daysDiff ;  if r in percents => /100;
-
 				balance -= principal;
 
 				history.Schedule.Add(
@@ -97,9 +91,7 @@
 						Principal = principal, // intervals' principal
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i,
-						Balance = balance, //open principal, scheduled
-					//	Interest = interest, //ei
-					//	AmountDue = (interest + principal)
+						Balance = balance //open principal, scheduled				
 					});
 			} // for
 
@@ -119,9 +111,8 @@
 				LoanEvent sEvent = new LoanEvent(new DateTime(s.PlannedDate.Year, s.PlannedDate.Month, s.PlannedDate.Day), s);
 				decimal sBalance = s.Balance;
 				s.Balance = counter == 0 ? Calculator.initialAmount : history.Schedule[counter-1].Balance; // use balance of previous item
-				s.InterestScheduled = Calculator.InterestBtwnEvents(sEvent);
-				//s.InterestScheduled = s.Interest;
-				s.AmountDueScheduled = s.InterestScheduled + s.Principal;
+				s.Interest = Calculator.InterestBtwnEvents(sEvent);				
+				s.AmountDue = s.Interest + s.Principal;
 				s.Balance = sBalance; // set balance back
 				Calculator.lastEvent = sEvent;
 				counter++;

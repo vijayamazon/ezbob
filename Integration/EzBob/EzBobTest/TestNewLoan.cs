@@ -187,59 +187,51 @@
 		}
 		[Test]
 		public void AddLoan() {
-			int userID = 357;
-			int oldLoanID = 2072;
+			const int userID = 357;
+			const int oldLoanID = 3091;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
-			DateTime now = oldLoan.Date; 
+			DateTime now = oldLoan.Date;
 			AgreementModel agreementModel = new AgreementModel() {
-				CustomerEmail = oldLoan.Customer.Name, 
-				APR = 35.35,
+				CustomerEmail = oldLoan.Customer.Name,
+				//APR = 35.35,
 				FullName = oldLoan.Customer.Name,
 				CountRepayment = oldLoan.RepaymentsNum
 			};
 			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
 				UserID = userID,
-				Loan = new NL_Loans() { /*OldLoanID = oldLoan.Id,*/ Refnum = oldLoan.RefNumber },
+				Loan = new NL_Loans() { OldLoanID = oldLoan.Id, Refnum = oldLoan.RefNumber },
 				FundTransfer = new NL_FundTransfers() {
 					Amount = oldLoan.LoanAmount,
 					FundTransferStatusID = (int)NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
 					LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 					TransferTime = now,
-					PacnetTransactions = new List<NL_PacnetTransactions>()
-				}
+					PacnetTransactions = new List<NL_PacnetTransactions>()}
 			};
-			//model.FundTransfer.PacnetTransactions.Clear();
-			//model.FundTransfer.PacnetTransactions.Add(new NL_PacnetTransactions() {
-			//	Amount = oldLoan.LoanAmount,
-			//	Notes = "addloan utest",
-			//	PacnetTransactionStatusID = (int)NLPacnetTransactionStatuses.Done,
-			//	StatusUpdatedTime = now,
-			//	TrackingNumber = "1111",
-			//	TransactionTime = now
-			//});
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = now,
-				AgreementModel = JsonConvert.SerializeObject(agreementModel)
-			});
+				AgreementModel = JsonConvert.SerializeObject(agreementModel)});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
-			});
+				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
-			});
-			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
+				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"});
 
+			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				agreementModel.APR = calc.CalculateApr();
+			} catch (Exception ex) {
+				Console.WriteLine("ex");
+			}
+			
+			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
 			AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
-
 				this.m_oLog.Debug(strategy.Error);
 				this.m_oLog.Debug(strategy.LoanID);
-
 				Console.WriteLine("LoanID: {0}, Error: {1}", strategy.LoanID, strategy.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
@@ -306,8 +298,8 @@
 
 		[Test]
 		public void TestNL_AddPayment() {
-			int customerID = 369;
-			int loanID = 5;
+			const int customerID = 369;
+			const int loanID = 5;
 			decimal amount = 5;
 
 			NL_Model nlModel = new NL_Model(customerID);
@@ -592,7 +584,7 @@
 			//	firstOrDefault.FeePayments = new List<NL_LoanFeePayments>();
 			//}
 			// dummy: remove all exists payment
-			//model.Loan.Payments.Clear();
+			model.Loan.Payments.Clear();
 			// dummy payment for test - between issue date and the first schedule item
 			/*model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 322.50m,
@@ -739,21 +731,25 @@
 
 		[Test]
 		public void APR() {
-			const long loanID = 17;
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				Loan = new NL_Loans()
+			const int userID = 357;
+			const int oldLoanID = 3091;
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan oldLoan = loanRep.Get(oldLoanID);
+			DateTime now = oldLoan.Date;
+			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
+				UserID = userID,
+				Loan = new NL_Loans() { OldLoanID = oldLoan.Id, Refnum = oldLoan.RefNumber }
 			};
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
-			strategy.Execute();
-			model = strategy.Result;
-			model.Loan.LastHistory().Schedule.Clear();
-			model.Loan.Payments.Clear();
-			this.m_oLog.Debug("\n=================Calculator start=================\n");
+			model.Loan.Histories.Add(new NL_LoanHistory() {
+				EventTime = now,
+				//AgreementModel = JsonConvert.SerializeObject(agreementModel),
+				InterestRate = oldLoan.InterestRate,
+				RepaymentCount = oldLoan.Schedule.Count,
+				Amount = oldLoan.LoanAmount
+			});
 			try {
-				DateTime calcDate = new DateTime(2015, 11, 25);
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				decimal apr = calc.CalculateApr();
+				double apr = calc.CalculateApr();
 				m_oLog.Debug("CalculationDate: {0}, apr: {1}", calc.CalculationDate, apr);
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
@@ -812,25 +808,7 @@
 			}
 		}
 
-		/*[Test]
-		public void NextEarlyPayment() {
-			const long loanID = 17;
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				Loan = new NL_Loans()
-			};
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
-			strategy.Execute();
-			model = strategy.Result;
-			this.m_oLog.Debug("=================================={0}\n", model.Loan);
-			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				calc.NextEarlyPayment();
-				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
-			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
-			}
-		}*/
+
 
 	} // class TestNewLoan
 } // namespace

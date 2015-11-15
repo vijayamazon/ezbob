@@ -56,29 +56,23 @@
 			- loan options row
 			*/
 		public override void Execute() {
-			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, null, null, null);
+			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, this.Error, null, null);
 			try {
 				if (model.CustomerID == 0) {
 					this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, NL_ExceptionCustomerNotFound.DefaultMessage, null);
+                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
 				if (model.Loan == null) {
 					this.Error = NL_ExceptionRequiredDataNotFound.Loan;
-                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, NL_ExceptionRequiredDataNotFound.Loan, null);
+					NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
-				//if (model.Loan.OldLoanID == null) {
-				//	this.Error = NL_ExceptionRequiredDataNotFound.OldLoan;
-				//	NL_AddLog(LogType.Error, "Strategy Faild ", this.strategyArgs, this.Error, NL_ExceptionRequiredDataNotFound.OldLoan, null);
-				//	return;
-				//}
-
-				if (model.Loan.Refnum == null) {
-					this.Error = NL_ExceptionRequiredDataNotFound.LoanRefNum;
-                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, NL_ExceptionRequiredDataNotFound.LoanRefNum, null);
+				if (model.Loan.OldLoanID == null) {
+					this.Error = NL_ExceptionRequiredDataNotFound.OldLoan;
+					NL_AddLog(LogType.Error, "Strategy Faild ", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
@@ -86,19 +80,19 @@
 
 				if (history == null) {
 					this.Error = NL_ExceptionRequiredDataNotFound.LastHistory;
-                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, NL_ExceptionRequiredDataNotFound.LastHistory, null);
+                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
 				if (history.Agreements == null || history.Agreements.Count == 0) {
 					this.Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
-                    NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, this.Error, null, null);
+					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, this.Error, null);
                     return;
 				}
 
 				if (history.AgreementModel == null) {
 					this.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
-                    NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, this.Error, null, null);
+					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
@@ -117,7 +111,7 @@
 
 				if (!string.IsNullOrEmpty(dataForLoan.Error)) {
 					this.Error = dataForLoan.Error;
-                    NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, this.Error, null, null);
+					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
@@ -150,7 +144,7 @@
 					Log.Alert("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, this.Error);
                     NL_AddLog(LogType.Error,
                         "Strategy Faild" + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, this.Error),
-                         this.strategyArgs, null, null, null);
+						 this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
@@ -169,7 +163,7 @@
 
 				if (nlSchedule.Count == 0) {
 					this.Error += "Failed to generate Schedule/fees";
-                    NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null,null,null);
+					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, this.Error, null);
 					return;
 				}
 
@@ -226,13 +220,12 @@
 					// 6. broker commissions
 					// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
 					if (model.Offer.BrokerSetupFeePercent > 0) {
-						//DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
-						DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = (select Id from dbo.Loan where [RefNum] = '{1}')", this.LoanID, model.Loan.Refnum));
+						DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
 					}
 
 					// 7. history
 					history.LoanID = this.LoanID;
-					history.Description = "adding loan refnum: " + model.Loan.Refnum; //.OldLoanID;
+					history.Description = "adding loan. oldID: " + model.Loan.OldLoanID;
 
 					//Log.Debug("Adding history: {0}", history);
 
@@ -345,7 +338,7 @@
 
 				// OK
 				SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
-				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, this.LoanID, null, null);
+				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, this.LoanID, this.Error, null);
 			} catch (Exception ex) {
 				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, ex.ToString(), ex.StackTrace);
 			}
@@ -360,7 +353,7 @@
 			string emailFromName = CurrentValues.Instance.MailSenderName;
 			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
-			string sMsg = string.Format("{0}. cust {1} user {2},  LoanID {3} error: {4}", subject, model.CustomerID, model.UserID, /*model.Loan.OldLoanID,*/ this.LoanID, this.Error);
+			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, this.LoanID, this.Error);
 
 			history.Schedule.Clear();
 			history.Schedule = schedule;

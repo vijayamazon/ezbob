@@ -46,7 +46,6 @@
 		[DataMember]
 		public DateTime CreationTime { get; set; }
 
-		[FK("Loan", "RefNum")]
 		[Length(50)]
 		[DataMember]
 		public string Refnum { get; set; }
@@ -66,9 +65,9 @@
 		[DataMember]
 		public decimal? PaymentPerInterval { get; set; }
 
-		//[FK("Loan", "Id")]
-		//[DataMember]
-		//public int? OldLoanID { get; set; }
+		[FK("Loan", "Id")]
+		[DataMember]
+		public int? OldLoanID { get; set; }
 
 		// additions
 		private List<NL_LoanHistory> _histories = new List<NL_LoanHistory>();

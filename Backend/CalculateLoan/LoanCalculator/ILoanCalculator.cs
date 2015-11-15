@@ -5,7 +5,7 @@
 
 		void CreateSchedule();  // result in model updated
 
-		decimal CalculateApr(DateTime? aprDate = null, double? calculationAccuracy = null, ulong? maxIterationCount = null);
+		double CalculateApr(DateTime? aprDate = null, double? calculationAccuracy = null, ulong? maxIterationCount = null);
 
 		void GetState(); // result in model updated
 
