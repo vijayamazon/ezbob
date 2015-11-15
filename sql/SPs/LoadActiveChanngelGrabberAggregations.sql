@@ -17,8 +17,6 @@ BEGIN
 		a.Turnover,
 		a.AverageSumOfExpensesDenominator,
 		a.AverageSumOfExpensesNumerator,
-		a.AverageSumOfOrderDenominator,
-		a.AverageSumOfOrderNumerator,
 		a.AverageSumOfOrdersDenominator,
 		a.AverageSumOfOrdersNumerator,
 		a.NumOfExpenses,
