@@ -5,9 +5,9 @@
 
 	public class EzbobSmsMessage
 	{
-		public static EzbobSmsMessage FromMessage(Message smsMessage) {
+		public static EzbobSmsMessage FromMessage(Message message) {
 			DateTime now = DateTime.UtcNow;
-			if (smsMessage == null) {
+			if (message == null) {
 				
 				return new EzbobSmsMessage {
 					Status = "null",
@@ -18,11 +18,41 @@
 			}
 
 			var model = new EzbobSmsMessage{
+				AccountSid = message.AccountSid,
+				Sid = message.Sid,
+				DateCreated = message.DateCreated == default(DateTime) ? now : message.DateCreated,
+				DateSent = message.DateSent == default(DateTime) ? now : message.DateSent,
+				DateUpdated = message.DateUpdated  == default(DateTime) ? now : message.DateUpdated,
+				From = message.From,
+				To = message.To,
+				Body = message.Body == null ? "" : (message.Body.Length > 255 ? message.Body.Substring(0, 255) : message.Body),
+				Status = message.Status,
+				Direction = message.Direction,
+				Price = message.Price,
+				ApiVersion = message.ApiVersion,
+			};
+			
+			return model;
+		}
+
+		public static EzbobSmsMessage FromMessage(SMSMessage smsMessage) {
+			DateTime now = DateTime.UtcNow;
+			if (smsMessage == null) {
+
+				return new EzbobSmsMessage {
+					Status = "null",
+					DateCreated = now,
+					DateSent = now,
+					DateUpdated = now
+				};
+			}
+
+			var model = new EzbobSmsMessage {
 				AccountSid = smsMessage.AccountSid,
 				Sid = smsMessage.Sid,
 				DateCreated = smsMessage.DateCreated == default(DateTime) ? now : smsMessage.DateCreated,
 				DateSent = smsMessage.DateSent == default(DateTime) ? now : smsMessage.DateSent,
-				DateUpdated = smsMessage.DateUpdated  == default(DateTime) ? now : smsMessage.DateUpdated,
+				DateUpdated = smsMessage.DateUpdated == default(DateTime) ? now : smsMessage.DateUpdated,
 				From = smsMessage.From,
 				To = smsMessage.To,
 				Body = smsMessage.Body == null ? "" : (smsMessage.Body.Length > 255 ? smsMessage.Body.Substring(0, 255) : smsMessage.Body),
@@ -31,9 +61,10 @@
 				Price = smsMessage.Price,
 				ApiVersion = smsMessage.ApiVersion,
 			};
-			
+
 			return model;
 		}
+
 
 		/// <summary>
 		/// sms sent to CustomerId or BrokerId

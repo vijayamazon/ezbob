@@ -1,5 +1,8 @@
 ﻿namespace EzBobTest {
 	using System;
+	using System.Net;
+	using System.Text;
+	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Twilio;
 
@@ -87,5 +90,41 @@
 				page++;
 			} while (numOfPages > page);
 		}
+
+		[Test]
+		public void TestLookupPhone() {
+			string TwilioApiUrl = "https://lookups.twilio.com";
+			string version = "v1";
+			string path = String.Format("/{0}/{1}/{2}", version, "PhoneNumbers", "447402031536");
+
+			string url;
+            if (path[0] == '/')
+                url = TwilioApiUrl + path;
+			else
+				url = TwilioApiUrl + "/" + path;
+
+            // 2. setup basic authenication
+			string authstring = Convert.ToBase64String(Encoding.ASCII.GetBytes(String.Format("{0}:{1}", "ACcc682df6341371ee27ada6858025490b", "fab0b8bd342443ff44497273b4ba2aa1")));
+            
+            // 3. perform GET using WebClient
+            var client = new WebClient();
+            client.Headers.Add("Authorization",
+                String.Format("Basic {0}", authstring));
+            byte[] resp = client.DownloadData(url);
+            
+            var res = Encoding.ASCII.GetString(resp);
+
+			var resObj = JsonConvert.DeserializeObject<TwilioLookupResponse>(res);
+
+			Assert.IsNotNull(resObj);
+		}
 	}
+
+	public class TwilioLookupResponse {
+		public string country_code { get; set; }
+		public string phone_number { get; set; }
+		public string national_format { get; set; }
+		public string url { get; set; }
+	}
+
 }

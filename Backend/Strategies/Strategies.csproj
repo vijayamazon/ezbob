@@ -183,6 +183,7 @@
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
+    <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
