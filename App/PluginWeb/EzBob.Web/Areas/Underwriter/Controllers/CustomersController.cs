@@ -71,27 +71,34 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult SetDecision(DecisionModel model) {
-			var user = this.context.User;
+			log.Debug(
+				"Update decision for customer {0} to {1}, signature {2}.",
+				model.id,
+				model.status,
+				model.signature
+			);
+
+			var underwriter = this.context.User;
 			var customer = this.customersRepo.GetChecked(model.id);
 
 			DateTime now = DateTime.UtcNow;
 			customer.CreditResult = model.status;
-			customer.UnderwriterName = user.Name;
+			customer.UnderwriterName = underwriter.Name;
 
 			var request = customer.LastCashRequest ?? new CashRequest();
-			request.IdUnderwriter = user.Id;
+			request.IdUnderwriter = underwriter.Id;
 			request.UnderwriterDecisionDate = DateTime.UtcNow;
 			request.UnderwriterDecision = model.status;
 			request.UnderwriterComment = model.reason;
 
 			var newDecision = new NL_Decisions {
-				UserID = user.Id,
+				UserID = underwriter.Id,
 				DecisionTime = now,
-				Notes = model.reason
+				Notes = model.reason,
 			};
 
 			string sWarning = string.Empty;
-			int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
+			int numOfPrevApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
 
 			if (model.status != CreditResultStatus.ApprovedPending)
 				customer.IsWaitingForSignature = false;
@@ -103,34 +110,27 @@
 				if (customer.WizardStep.TheLastOne)
 					runSilentAutomation = true;
 
-				ApproveCustomer(model, customer, user, now, request, newDecision, numOfPreviousApprovals, ref sWarning);
+				ApproveCustomer(model, customer, underwriter, now, request, newDecision, numOfPrevApprovals, ref sWarning);
 				break;
 
 			case CreditResultStatus.Rejected:
 				runSilentAutomation = true;
-				RejectCustomer(model, customer, now, user, request, newDecision, numOfPreviousApprovals, ref sWarning);
+				RejectCustomer(model, customer, now, underwriter, request, newDecision, numOfPrevApprovals, ref sWarning);
 				break;
 
 			case CreditResultStatus.Escalated:
-				EscalateCustomer(model, customer, user, request, newDecision, ref sWarning);
+				EscalateCustomer(model, customer, underwriter, request, newDecision, ref sWarning);
 				break;
 
 			case CreditResultStatus.ApprovedPending:
 				runSilentAutomation = true;
-				PendCustomer(model, customer, request, user, newDecision);
+				PendCustomer(model, customer, request, underwriter, newDecision);
 				break;
 
 			case CreditResultStatus.WaitingForDecision:
-				ReturnCustomerToWaitingForDecision(customer, user, request, newDecision);
+				ReturnCustomerToWaitingForDecision(customer, underwriter, request, newDecision);
 				break;
 			} // switch
-
-			log.Debug(
-				"update decision for customer {0} with decision {1} signature {2}",
-				customer.Id,
-				model.status,
-				model.signature
-			);
 
 			// send final decision data (0002) to Alibaba parther (if exists)
 			if (customer.IsAlibaba && model.status.In(CreditResultStatus.Rejected, CreditResultStatus.Approved)) {
@@ -142,7 +142,7 @@
 			} // if
 
 			if (runSilentAutomation)
-				this.serviceClient.Instance.SilentAutomation(customer.Id, user.Id);
+				this.serviceClient.Instance.SilentAutomation(customer.Id, underwriter.Id);
 
 			return Json(new { warning = sWarning });
 		} // SetDecision
@@ -275,7 +275,7 @@
 					Email = customer.Name,
 					CloseDate = now,
 					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
-					DealLostReason = customer.RejectedReason
+					DealLostReason = customer.RejectedReason,
 				}
 			);
 		} // RejectCustomer
