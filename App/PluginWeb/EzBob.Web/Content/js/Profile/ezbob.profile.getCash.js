@@ -75,7 +75,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			"get": _.template($('#d-getCash-template').html()),
 			"apply": _.template($('#d-getCash-template-apply').html()),
 			"wait": _.template($('#d-getCash-template-wait').html()),
-			"disabled": _.template($('#d-getCash-template-wait').html()),
+			"disabled": _.template($('#d-getCash-template-bad').html()),
 			//"bad": _.template($('#d-getCash-template-bad').html()),
 			"bad": _.template($('#d-getCash-template-apply').html()),
 			"late": _.template($('#d-getCash-template-late').html())

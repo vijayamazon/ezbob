@@ -111,13 +111,13 @@
 				bool blockTakingLoan = sr["BlockTakingLoan"];
 				bool canTakeAnotherLoan = sr["CanTakeAnotherLoan"];
 
-				if (!isEnabled)
+				if (!isEnabled || !canTakeAnotherLoan)
 					res = "disabled";
 				else if (hasLateLoans)
 					res = "late";
 				else if (string.IsNullOrEmpty(creditResult) || creditResult == "WaitingForDecision" || blockTakingLoan)
 					res = "wait";
-				else if (status == "Rejected" || !canTakeAnotherLoan)
+				else if (status == "Rejected")
 					res = "bad";
 				else if (status == "Manual")
 					res = "wait";

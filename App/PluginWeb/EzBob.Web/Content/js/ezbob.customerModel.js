@@ -116,9 +116,9 @@ EzBob.CustomerModel = Backbone.Model.extend({
             hasFunds = availableCredit >= EzBob.Config.XMinLoan,
             isDisabled = this.get('IsDisabled'),
             blockTakingLoan = this.get('BlockTakingLoan'),
-            canTakeAnotherLoan = this.getActiveLoans() < EzBob.Config.NumofAllowedActiveLoans;
+            canTakeAnotherLoan = this.getActiveLoans().length < EzBob.Config.NumofAllowedActiveLoans;
 
-        if (isDisabled) {
+        if (isDisabled || !canTakeAnotherLoan) {
             this.set('state', 'disabled');
             return;
         }
@@ -133,7 +133,7 @@ EzBob.CustomerModel = Backbone.Model.extend({
             return;
         }
         
-        if (status == 'Rejected' || !canTakeAnotherLoan) {
+        if (status == 'Rejected') {
             this.set('state', 'bad');
             return;
         }
@@ -143,7 +143,7 @@ EzBob.CustomerModel = Backbone.Model.extend({
             return;
         }
 
-        if (hasFunds && offerValid.TotalSeconds > 0 && (status == 'Approved') ) {
+        if (hasFunds && offerValid.TotalSeconds > 0 && (status == 'Approved')) {
             this.set('state', 'get');
             return;
         }
