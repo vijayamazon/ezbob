@@ -64,6 +64,7 @@
     <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="Coin.cs" />
+    <Compile Include="CollectionModels.cs" />
     <Compile Include="CompanyDataForCreditBureau.cs" />
     <Compile Include="CompanyInfo.cs" />
     <Compile Include="ConfigTable.cs" />

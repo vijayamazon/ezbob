@@ -26,6 +26,7 @@
 	} // enum NLLoanStatuses
 
 	public enum NLFeeTypes {
+        None = 0,
 		SetupFee = 1,		// DB table id
 		RolloverFee = 2,
 		AdminFee = 3,

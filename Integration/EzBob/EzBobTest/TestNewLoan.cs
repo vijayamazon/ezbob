@@ -11,6 +11,7 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using EzBob.Backend.Models;
@@ -809,6 +810,12 @@
 		}
 
 
+        [Test]
+        public void CollectionRobot()
+        {
+            LateLoanJob strategy = new LateLoanJob();
+            strategy.Execute();           
+        }
 
 	} // class TestNewLoan
 } // namespace

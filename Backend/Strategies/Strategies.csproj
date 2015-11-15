@@ -195,6 +195,12 @@
     <Compile Include="NewLoan\AddLoan.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NewLoan\Collection\LateLoanCured.cs" />
+    <Compile Include="NewLoan\Collection\LateCustomerStatusChange.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanNotification.cs" />
+    <Compile Include="NewLoan\Collection\AddCollectionLog.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanJob.cs" />
+    <Compile Include="NewLoan\Collection\SetLateLoanStatus.cs" />
     <Compile Include="NewLoan\UpdateLoanSchedules.cs" />
     <Compile Include="NewLoan\DeactivateLoanInterestFreeze.cs" />
     <Compile Include="NewLoan\AddLoanInterestFreeze.cs" />
