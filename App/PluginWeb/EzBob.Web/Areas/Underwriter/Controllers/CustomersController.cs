@@ -70,7 +70,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult ChangeStatus(DecisionModel model) {
+		public JsonResult SetDecision(DecisionModel model) {
 			var user = this.context.User;
 			var customer = this.customersRepo.GetChecked(model.id);
 
@@ -145,7 +145,7 @@
 				this.serviceClient.Instance.SilentAutomation(customer.Id, user.Id);
 
 			return Json(new { warning = sWarning });
-		} // ChangeStatus
+		} // SetDecision
 
 		private void ReturnCustomerToWaitingForDecision(
 			Customer customer,

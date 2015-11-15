@@ -118,7 +118,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 		BlockUi("on");
 		var xhr = $.ajax({
 			type: "POST",
-			url: window.gRootPath + "Underwriter/Customers/ChangeStatus",
+			url: window.gRootPath + "Underwriter/Customers/SetDecision",
 			data: data,
 			dataType: "json",
 			traditional: true
