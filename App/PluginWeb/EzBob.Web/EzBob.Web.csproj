@@ -190,10 +190,13 @@
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomerNavigatorController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AutomationController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\GridsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\LogBookController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\SalesForceController.cs" />
     <Compile Include="Areas\Underwriter\Models\AutoDecisionModel.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\IovationDetailsModel.cs" />
