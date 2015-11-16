@@ -125,6 +125,15 @@
 		public string phone_number { get; set; }
 		public string national_format { get; set; }
 		public string url { get; set; }
+		public Carrier carrier { get; set; }
+	}
+
+	public class Carrier {
+        public string type { get; set; }
+        public string error_code { get; set; }
+        public string mobile_network_code { get; set; }
+        public string mobile_country_code { get; set; }
+		public string name { get; set; }
 	}
 
 }
