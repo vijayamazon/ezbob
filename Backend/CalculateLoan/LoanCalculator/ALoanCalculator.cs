@@ -76,13 +76,11 @@
 		internal bool BalanceBasedInterestCalculation { get; set; }
 
 		/// <summary>
-		/// for autocharger, for customers dashboards - amount to charge at t date
+		/// for autocharger-amount to charge at t date. How much should pay at t date.
 		/// </summary>
 		public decimal AmountToCharge { get; internal set; }
-
 		
 		public decimal TotalEarlyPayment { get; internal set; }
-
 		
 		public decimal NextEarlyPayment { get; internal set; }
 
@@ -101,7 +99,7 @@
 		/// </summary>
 		public decimal Principal { get; internal set; }
 
-		private bool savedAmount { get; set; }
+		//private bool savedAmount { get; set; }
 
 		/// <summary>
 		/// for customer dashboards - amount to be saved for NextEarlyPayment
@@ -771,7 +769,7 @@
 		[ExcludeFromToString]
 		public void GetState() {
 
-			savedAmount = true;
+			//savedAmount = true;
 
 			this.calculationDateEventEnd = new LoanEvent(CalculationDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 
@@ -792,7 +790,8 @@
 
 				TotalEarlyPayment = Fees + Interest + Principal;
 
-				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}", Fees, Interest, Principal);
+				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}", Fees, Interest, Principal, TotalEarlyPayment);
+
 			};
 
 			HandleEvents();

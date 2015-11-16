@@ -1,204 +1,87 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Web;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Backend.Strategies.NewLoan.Exceptions;
-    using Ezbob.Database;
-    using MailApi;
+﻿namespace Ezbob.Backend.Strategies.NewLoan {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
+	using Ezbob.Utils.Extensions;
+	using NHibernate.Linq;
 
-    public class AddPayment : AStrategy
-    {
+	public class AddPayment : AStrategy {
 
-        public AddPayment(NL_Model nlModel)
-        {
+		public AddPayment(int customerID, NL_Payments payment) {
+			CustomerID = customerID;
+			Payment = payment;
+		}
 
-            NLModel = nlModel;
+		public override string Name { get { return "AddPayment"; } }
+		public NL_Payments Payment { get; private set; }
+		public int CustomerID { get; private set; }
+		public string Error;
 
-            this.emailToAddress = "elinar@ezbob.com";
-            this.emailFromAddress = "elinar@ezbob.com";
-            this.emailFromName = "ezbob-system";
-        } // constructor
+		public override void Execute() {
 
-        public override string Name { get { return "AddPayment"; } }
+			ConnectionWrapper pconn = DB.GetPersistent();
 
-        /// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-        /// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-        /// <exception cref="NL_ExceptionPaymentSave">Condition. </exception>
-        /// <exception cref="NL_ExceptionRequiredDataNotFound">Condition. </exception>
-        public override void Execute()
-        {
-            NL_AddLog(LogType.Info, "Strategy Start", this.NLModel, null, null, null);
-            try
-            {
-                Log.Debug("--------+++++++++++---------- customer {0}----------++++++++++++++--------------", NLModel.CustomerID);
+			try {
 
-                string message;
+				pconn.BeginTransaction();
 
-                // input validation
-                if (NLModel.Loan == null)
-                {
-                    message = string.Format("Expected input data not found (NL_Model initialized by: Loan.LoanID). Customer {0}", NLModel.CustomerID);
-                    Log.Alert(message);
-                    throw new NL_ExceptionInputDataInvalid(message);
-                }
+				Payment.PaymentID = DB.ExecuteScalar<long>("NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Payments>("Tbl", Payment));
 
-                if (NLModel.Loan.LoanID == 0)
-                {
-                    message = string.Format("Expected input data not found (NL_Model initialized by: Loan.LoanID). Customer {0}", NLModel.CustomerID);
-                    Log.Alert(message);
-                    throw new NL_ExceptionInputDataInvalid(message);
-                }
+				if (Payment.PaypointTransactions.Count > 0) {
 
-                // TODO
-                /*	if (NLModel.Payment == null) {
-                        message = string.Format("Expected input data not found (NL_Model initialized by: Payment). Customer {0}", NLModel.CustomerID);
-                        Log.Alert(message);
-                        throw new NL_ExceptionInputDataInvalid(message);
-                    }*/
+					NL_PaypointTransactions ppTransaction = Payment.PaypointTransactions.FirstOrDefault();
 
-                //if (NLModel.PaypointTransaction != null) {
+					if (ppTransaction == null) {
+						Log.Info("Paypoint transaction not found. payment {0}", Payment);
+					} else {
 
-                //	if (NLModel.PaypointTransactionStatus == null) {
-                //		message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus). Customer {0}", NLModel.CustomerID);
-                //		Log.Alert(message);
-                //		throw new NL_ExceptionInputDataInvalid(message);
-                //	}
+						ppTransaction.PaymentID = Payment.PaymentID;
+						ppTransaction.PaypointTransactionID = DB.ExecuteScalar<long>("NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_PaypointTransactions>("Tbl", ppTransaction));
+					}
+				}
 
-                //	if (NLModel.PaypointTransaction.PaypointUniqueID == null) {
-                //		message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus.PaypointUniqueID). Customer {0}", NLModel.CustomerID);
-                //		Log.Alert(message);
-                //		throw new NL_ExceptionInputDataInvalid(message);
-                //	}
+				pconn.Commit();
 
-                //	//	select ppc.Id from PayPointCard ppc where ppc.TransactionId = '6fc34f9a-422f-4643-b151-06a472bed9d7'
-                //	SafeReader sr = DB.GetFirst(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
 
-                //	//Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
-                //	//Console.WriteLine("========================" + sr.IsEmpty);
-                //	//Console.WriteLine("========================" + sr.Count);
-                //	if (sr.IsEmpty) {
-                //		message = string.Format("Paypoint card for customer {0}, loanID {1}, PaypointUniqueID {2} not found", NLModel.CustomerID, NLModel.Loan.LoanID, NLModel.PaypointTransaction.PaypointUniqueID);
-                //		Log.Alert(message);
-                //		throw new NL_ExceptionRequiredDataNotFound(message);
-                //	}
+				pconn.Rollback();
 
-                //	NLModel.PaypointTransaction.PaypointCardID = sr["PaypointCardID"];
+				this.Error = ex.Message;
+				Log.Error("Failed to add new payment: {0}", this.Error);
 
-                //	Console.WriteLine(NLModel.PaypointTransaction.ToString());
-                //}
+				NL_AddLog(LogType.Error, "Strategy Faild - Rollback", Payment, this.Error, ex.ToString(), ex.StackTrace);
 
-                //ConnectionWrapper pconn = DB.GetPersistent();
-
-                //try {
-
-                //	NLModel.Payment.CreationTime = DateTime.UtcNow;
-
-                //	Log.Debug(NLModel.Payment.ToString());
-
-                //	pconn.BeginTransaction();
-
-                //	// 1. save NL_Payments
-                //	NLModel.Payment.PaymentID = DB.ExecuteScalar<int>(pconn, "NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.Payment));
-
-                //	Log.Debug("NL_PaymentsSave: LoanID: {0}, paymentID: {1}", NLModel.Loan.LoanID, NLModel.Payment.PaymentID);
-
-                //	// 2. save NL_PaypointTransactions
-                //	if (NLModel.PaypointTransaction != null) {
-
-                //		NLModel.PaypointTransaction.PaymentID = NLModel.Payment.PaymentID;
-
-                //		List<NL_PaypointTransactionStatuses> ppstatsues = NL_Loader.PaypointTransactionStatuses();
-
-                //		//ppstatsues.ForEach(s=> 		Console.WriteLine(s.TransactionStatus));
-
-                //		var ppTransactionStatus = ppstatsues.Find(s => s.TransactionStatus.StartsWith(NLModel.PaypointTransactionStatus)) ?? ppstatsues.Find(s => s.TransactionStatus.Equals("Unknown"));
-
-                //		//Console.WriteLine("==================>" + ppTransactionStatus.TransactionStatus + "=" + ppTransactionStatus.PaypointTransactionStatusID);
-
-                //		NLModel.PaypointTransaction.PaypointTransactionStatusID = ppTransactionStatus.PaypointTransactionStatusID;
-
-                //		Log.Debug(NLModel.PaypointTransaction.ToString());
-
-                //		NLModel.PaypointTransaction.PaypointTransactionID = DB.ExecuteScalar<int>(pconn, "NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.PaypointTransaction));
-
-                //		Log.Debug("NL_PaypointTransactionsSave: LoanID: {0}, paymentID: {1}, PaypointTransactionID {2}", NLModel.Loan.LoanID, NLModel.Payment.PaymentID, NLModel.PaypointTransaction.PaypointTransactionID);
-                //	}
-
-                //	pconn.Commit();
-
-                //	AssignPaymentToLoan assignStrategy = new AssignPaymentToLoan(NLModel);
-                //	assignStrategy.Execute();
-
-                //	// ReSharper disable once CatchAllClause
-                //} catch (Exception ex) {
-
-                //	message = string.Format("Failed to write NL_Payment / NL_PaypointTransaction for customer {0}, LoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.LoanID, ex);
-                //	Log.Error(message);
-
-                //	pconn.Rollback();
-                //	SendErrorMail(message);
-
-                //	// ReSharper disable once ThrowFromCatchWithNoInnerException
-                //	throw new NL_ExceptionPaymentSave(message);
-                //}
-
-                /* 
-                * 3. strategy AssignPaymentToLoan: argument: NL_Model with Loan.LoanID; decimal amount; output: NL_Model containing list of fees/schedules that covered by the amount/payment
-                * closest unpaid loan fees and schedules (1.fee if exists; 2.interest; 3.principal) 
-                * 4. strategy AssignPaymentToLoan: saving into NL_LoanSchedulePayments with PaymentID sent + NL_LoanSchedules
-                */
-                // UNCOMMENT AFTER AssignPaymentToLoan be ready
-                // AssignPaymentToLoan payLoanStrategy = new AssignPaymentToLoan(NLModel);
-                // payLoanStrategy.Execute();
-                NL_AddLog(LogType.Info, "Strategy End", null, this.NLModel, null, null);
-            }
-            catch (Exception ex)
-            {
-                NL_AddLog(LogType.Error, "Strategy Faild",this.NLModel, null, ex.ToString(), ex.StackTrace);
-            }
-        } // Execute
+				return;
+			}
 
 
-        private void SendErrorMail(string sMsg, NL_LoanFees setupFee = null, List<NL_LoanSchedules> scheduleItems = null)
-        {
-            var message = string.Format(
-                "<h3>CustomerID: {0};</h3>"
-                 + "<h3>UserID: {1}</h3><p>"
-                 + "<h3>Input data</h3>: {2} <br/>"
-                 + "<h3>Loan</h3>: {3} <br/>"
-                 + "<h3>NL_Payment</h3>: {4} <br/>"
-                //	 + "<h3>NL_PaypointTransaction</h3>: {5} <br/>"
-                 + "</p>",
+			// assign payment to loan
 
-                NLModel.CustomerID
-                , NLModel.UserID
-                , HttpUtility.HtmlEncode(NLModel.ToString())
-                , HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
-                //		, HttpUtility.HtmlEncode(NLModel.Payment == null ? "no Payment specified" : NLModel.Payment.ToString())
-                //, HttpUtility.HtmlEncode(NLModel.PaypointTransaction == null ? "no PaypointTransaction specified" : NLModel.PaypointTransaction.ToString())
+			// get DB state
+			NL_Model model = new NL_Model(CustomerID) { UserID = Context.UserID };
+			LoanState loanState = new LoanState(model, Payment.LoanID, DateTime.UtcNow);
+			loanState.Execute();
+			model = loanState.Result;
 
-            );
+			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
+			List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
 
-            new Mail().Send(
-                this.emailToAddress,
-                null, // message text
-                message, //html
-                this.emailFromAddress, // fromEmail
-                this.emailFromName, // fromName
-                sMsg // subject
-            );
+			foreach (NL_Payments p in model.Loan.Payments) {
+				p.SchedulePayments.Where(sp => sp.PaymentID == Payment.PaymentID).ForEach(sp => schedulePayments.Add(sp));
+				p.FeePayments.Where(fp => fp.PaymentID == Payment.PaymentID).ForEach(fp => feePayments.Add(fp));
+			}
 
-        } // SendErrorMail
+			// record schedule/fees payments
+			if (schedulePayments.Count > 0) {
+				DB.ExecuteNonQuery("NL_LoanSchedulePaymentsList", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schedulePayments));
+			}
 
-
-
-        public NL_Model NLModel { get; private set; }
-
-        private readonly string emailToAddress;
-        private readonly string emailFromAddress;
-        private readonly string emailFromName;
-
-    } // class AddPayment
+			if (feePayments.Count > 0) {
+				DB.ExecuteNonQuery("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));
+			}
+		}
+	} // class AddPayment
 } // ns

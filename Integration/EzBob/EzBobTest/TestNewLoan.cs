@@ -574,18 +574,17 @@
 			const long loanID = 17;
 			NL_Model model = new NL_Model(56) {
 				UserID = 357,
-				Loan = new NL_Loans()
-			};
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
-			strategy.Execute();
-			model = strategy.Result;
+				Loan = new NL_Loans()};
+			LoanState state = new LoanState(model, loanID, DateTime.UtcNow);
+			state.Execute();
+			model = state.Result;
 			// dummy: reset fee payment, check calculator's adding this
 			//var firstOrDefault = model.Loan.Payments.FirstOrDefault();
 			//if (firstOrDefault != null) {
 			//	firstOrDefault.FeePayments = new List<NL_LoanFeePayments>();
 			//}
 			// dummy: remove all exists payment
-			model.Loan.Payments.Clear();
+			//model.Loan.Payments.Clear();
 			// dummy payment for test - between issue date and the first schedule item
 			/*model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 322.50m,
@@ -597,8 +596,7 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 13
-			});
-			
+			});			
 			// dummy payment for test - between issue date and the first schedule item
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 304.38m,
@@ -611,7 +609,6 @@
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 14
 			});
-
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 286.25m,
 				CreatedByUserID = 1,
@@ -623,7 +620,6 @@
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 15
 			});
-
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 266.31m,
 				CreatedByUserID = 1,
@@ -635,15 +631,21 @@
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 16
 			});*/
-
-			//this.m_oLog.Debug("{0}\n=================Calculator start=================\n", model.Loan);
 			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(model );
-				
+				DateTime calcTime = DateTime.UtcNow;
+				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.GetState();
-			//	calc.NextEarlyPayment();
-				//this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
 				this.m_oLog.Debug("Calc data: {0}", calc);
+
+				m_oLog.Debug("\n\n====================OLD LOAN ID={0}", model.Loan.OldLoanID);
+
+				// old calc
+				ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+				var oldLoan = loanRep.Get(model.Loan.OldLoanID);
+				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
+				oldCalc.GetState();
+				this.m_oLog.Debug("old loan state: {0}", oldLoan);
+
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
@@ -652,7 +654,7 @@
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
 
-		[Test]
+		/*[Test]
 		public void CalculatorAmountToPay() {
 			const long loanID = 17;
 			NL_Model model = new NL_Model(56) {
@@ -711,7 +713,7 @@
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
-		}
+		}*/
 
 
 		[Test]

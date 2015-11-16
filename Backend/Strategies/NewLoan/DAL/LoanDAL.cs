@@ -8,7 +8,7 @@
 
 		NL_Loans ILoanDAL.GetLoan(long loanID) {
 			try {
-				return Library.Instance.DB.FillFirst<NL_Loans>("NL_LoansGet", CommandSpecies.StoredProcedure, new QueryParameter("@loanID", loanID));
+				return Library.Instance.DB.FillFirst<NL_Loans>("NL_LoansGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanID));
 				// ReSharper disable once CatchAllClause
 			} catch (Exception e) {
 				Library.Instance.Log.Alert("{0}", e.Message);
