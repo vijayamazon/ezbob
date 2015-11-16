@@ -1450,7 +1450,7 @@ EzBob.validateChangeEmailForm = function(el, emailFieldID) {
 	return e.validate({ rules: rules, });
 };
 
-EzBob.validatemanualPaymentForm = function(el) {
+EzBob.validatemanualPaymentForm = function(el, outstandingBbalance) {
 	var e = el || $('form');
 
 	return e.validate({
@@ -1458,10 +1458,15 @@ EzBob.validatemanualPaymentForm = function(el) {
 			experiedDate: { required: true, requiredDate: true },
 			description: { required: true },
 			paymentMethod: { required: true, regex: "[a-zA-Z]+" },
-			totalSumPaid: { required: true, number: true },
+			totalSumPaid: { number: true, required: true, autonumericMax: outstandingBbalance },
 		},
 		messages: {
-			PaymentMethod: { regex: "This field is required" }
+			PaymentMethod: { regex: "This field is required" },
+			totalSumPaid: {
+				autonumericMax: 'Warning! <br /> Please pay attention that you are trying to enter greater than Outstanding amount relevant for the date of placed payment' +
+								 'In case the customer made a Bank Transfer in an amount which is higher than £' + outstandingBbalance +
+								 '.<br />Please, communicate the client and make access funds return after EZBOB LTD access transactions costs deduction.'
+			}
 		}//,
 		//errorPlacement: EzBob.Validation.errorPlacement,
 		//unhighlight: EzBob.Validation.unhighlight
