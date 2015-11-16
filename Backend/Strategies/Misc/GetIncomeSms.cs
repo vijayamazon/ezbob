@@ -14,15 +14,23 @@
     using Twilio;
 
 	public class GetIncomeSms : AStrategy {
-		public GetIncomeSms(DateTime? date) {
-			this.date = date;
+			
+		public GetIncomeSms(DateTime? date, bool isYesterday) {
+			if (date == null && isYesterday) {
+				date = DateTime.Today.AddDays(-1);
+			}
+			this.sentDate = date;
+
 			this.fromNumberUK = CurrentValues.Instance.TwilioSendingNumber;
 			this.twilioClient = new TwilioRestClient(CurrentValues.Instance.TwilioAccountSid, CurrentValues.Instance.TwilioAuthToken);
 
-			this.crmActionsRepository = ObjectFactory.GetInstance<CRMActionsRepository>();
-			this.crmStatusesRepository = ObjectFactory.GetInstance<CRMStatusesRepository>();
+			var crmActionsRepository = ObjectFactory.GetInstance<CRMActionsRepository>();
+			var crmStatusesRepository = ObjectFactory.GetInstance<CRMStatusesRepository>();
 			this.customerRelationsRepository = ObjectFactory.GetInstance<CustomerRelationsRepository>();
 			this.customerRelationStateRepository = ObjectFactory.GetInstance<CustomerRelationStateRepository>();
+
+			this.smsActionItem = crmActionsRepository.GetAll().FirstOrDefault(x => x.Name == "SMS");
+			this.noteStatusItem = crmStatusesRepository.GetAll().FirstOrDefault(x => x.Name == "Note for underwriting");
 		}
 
 		public override string Name { get { return "Get Income SMS"; } }
@@ -30,9 +38,9 @@
         public override void Execute() {
 			int page = 0, numOfPages = 0;
 			do {
-				var result = this.twilioClient.ListSmsMessages(this.fromNumberUK, null, this.date, page, 50);
+				var result = this.twilioClient.ListSmsMessages(this.fromNumberUK, null, this.sentDate, page, 50);
 				numOfPages = result.NumPages;
-
+				if(result.SMSMessages == null) return;
 				foreach (var msg in result.SMSMessages) {
 					HandleOneSms(msg);
 				}
@@ -41,28 +49,31 @@
         }//Execute
 
         private void HandleOneSms(SMSMessage msg) {
-			var senderID = FindSender(msg.From);
-
-			var message = EzbobSmsMessage.FromMessage(msg);
-			message.UserId = senderID;
-
-			SaveToDb(message);
-			AddCrm(message);
-			AddSalesForceActivity(message);
+	        try {
+		        var senderID = FindSender(msg.From);
+		        Log.Info("Retrieved income SMS from user: {0} {1} date: {2} body: {3}", senderID, msg.From, msg.DateSent, msg.Body);
+		        var message = EzbobSmsMessage.FromMessage(msg);
+		        message.UserId = senderID;
+		        message.UnderwriterId = 1;
+		        SaveToDb(message);
+		        AddCrm(message);
+		        AddSalesForceActivity(message);
+			} catch (Exception ex) {
+				msg = msg ?? new SMSMessage();
+				Log.Error(ex, "Failed to retrieve sms {0} {1} {2}", msg.Sid, msg.From, msg.Body);
+			}
         }//HandleOneSms
 
 		private void AddCrm(EzbobSmsMessage message) {
 			if(!message.UserId.HasValue) return;
 
-			var actionItem = this.crmActionsRepository.GetAll().FirstOrDefault(x => x.Name == "SMS");
-			var statusItem = this.crmStatusesRepository.GetAll().FirstOrDefault(x => x.Name == "Note for underwriting");
-
+			
 			var newEntry = new CustomerRelations {
 				CustomerId = message.UserId.Value,
 				UserName = "System",
 				Type = "In",
-				Action = actionItem,
-				Status = statusItem,
+				Action = this.smsActionItem,
+				Status = this.noteStatusItem,
 				Comment = message.Body,
 				Timestamp = message.DateSent,
 				IsBroker = false,
@@ -111,13 +122,13 @@
 								DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
 		}//SaveToDb
 
-		private readonly DateTime? date;
+		private readonly DateTime? sentDate;
 		private readonly TwilioRestClient twilioClient;
 		private readonly string fromNumberUK;
-		private readonly CRMActionsRepository crmActionsRepository;
-		private readonly CRMStatusesRepository crmStatusesRepository;
 		private readonly CustomerRelationsRepository customerRelationsRepository;
 		private readonly CustomerRelationStateRepository customerRelationStateRepository;
+		private readonly CRMActions smsActionItem;
+		private readonly CRMStatuses noteStatusItem;
 		private const string UkMobilePrefix = "+44";
 	}//class
 }//ns

@@ -286,5 +286,10 @@
 				ManualSetupFee = instance.Result.ManualSetupFee,
 			};
 		} // GetLoanCommissionDefaults
+
+		public ActionMetaData GetIncomeSms(DateTime? date, bool isYesterday) {
+			return Execute<GetIncomeSms>(null, null, date, isYesterday);
+		} // GetIncomeSms
+
 	} // class EzServiceImplementation
 } // namespace EzService

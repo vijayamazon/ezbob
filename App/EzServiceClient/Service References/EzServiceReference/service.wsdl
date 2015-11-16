@@ -983,6 +983,12 @@
   <wsdl:message name="IEzService_GetLoanCommissionDefaults_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetLoanCommissionDefaultsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetIncomeSms_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetIncomeSms" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetIncomeSms_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetIncomeSmsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -2091,6 +2097,10 @@
     <wsdl:operation name="GetLoanCommissionDefaults">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetLoanCommissionDefaults" message="tns:IEzService_GetLoanCommissionDefaults_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetLoanCommissionDefaultsResponse" message="tns:IEzService_GetLoanCommissionDefaults_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomeSms">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetIncomeSms" message="tns:IEzService_GetIncomeSms_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetIncomeSmsResponse" message="tns:IEzService_GetIncomeSms_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -3776,6 +3786,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetLoanCommissionDefaults">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetLoanCommissionDefaults" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomeSms">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetIncomeSms" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

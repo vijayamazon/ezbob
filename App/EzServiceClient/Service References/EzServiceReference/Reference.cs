@@ -4600,6 +4600,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetLoanCommissionDefaults", ReplyAction="http://tempuri.org/IEzService/GetLoanCommissionDefaultsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult> GetLoanCommissionDefaultsAsync(int underwriterID, long cashRequestID, decimal loanAmount);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetIncomeSms", ReplyAction="http://tempuri.org/IEzService/GetIncomeSmsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData GetIncomeSms(System.Nullable<System.DateTime> date, bool isYesterday);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetIncomeSms", ReplyAction="http://tempuri.org/IEzService/GetIncomeSmsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetIncomeSmsAsync(System.Nullable<System.DateTime> date, bool isYesterday);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -6298,6 +6304,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult> GetLoanCommissionDefaultsAsync(int underwriterID, long cashRequestID, decimal loanAmount) {
             return base.Channel.GetLoanCommissionDefaultsAsync(underwriterID, cashRequestID, loanAmount);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData GetIncomeSms(System.Nullable<System.DateTime> date, bool isYesterday) {
+            return base.Channel.GetIncomeSms(date, isYesterday);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetIncomeSmsAsync(System.Nullable<System.DateTime> date, bool isYesterday) {
+            return base.Channel.GetIncomeSmsAsync(date, isYesterday);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

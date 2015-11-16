@@ -113,7 +113,6 @@
 				};
 
 				this._customerRelationsRepository.SaveOrUpdate(newEntry);
-				this._session.Flush();
 				this._customerRelationStateRepository.SaveUpdateState(customerId, false, null, newEntry);
 
 				//Add SF activity
@@ -152,7 +151,6 @@
 				};
 
 				this._customerRelationFollowUpRepository.SaveOrUpdate(followUp);
-				this._session.Flush();
 				this._customerRelationStateRepository.SaveUpdateState(customerId, true, followUp, lastCrm);
 
 				return Json(new { success = true, error = "" });
@@ -175,7 +173,6 @@
 				};
 
 				this._customerRelationsRepository.Save(crm);
-				this._session.Flush();
 				this._customerRelationStateRepository.SaveUpdateRank(customerId, crm);
 
 				return Json(new { success = true, error = "" });
