@@ -19,8 +19,9 @@
 		[DataMember]
 		public decimal Amount { get; set; }
 
-
-
+		//[DataMember]
+		//[NonTraversable]
+		//public bool NewEntry { get; set; }
 		
 	} // class NL_LoanFeePayments
 } // ns

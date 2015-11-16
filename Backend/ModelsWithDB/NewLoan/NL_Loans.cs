@@ -75,6 +75,7 @@
 		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
 		private NL_LoanOptions _loanOptions = new NL_LoanOptions();
 		private List<NL_Payments> _payments = new List<NL_Payments>();
+		private NL_LoanRollovers _rollover = new NL_LoanRollovers();
 	
 		[DataMember]
 		[NonTraversable]
@@ -110,7 +111,13 @@
 			get { return this._payments; }
 			set { this._payments = value; }
 		}
-
+		
+		[DataMember]
+		[NonTraversable]
+		public NL_LoanRollovers Rollover {
+			get { return this._rollover; }
+			set { this._rollover = value; }
+		}
 
 		// helpers
 		public NL_LoanHistory LastHistory() {
@@ -162,11 +169,17 @@
 				sb.Append("No LoanInterestFreeze").Append(Environment.NewLine);
 
 			if (LoanOptions.LoanOptionsID > 0) {
-				sb.Append("Loan options:")
+				sb.Append("LoanOptions:")
 					.Append(Environment.NewLine)
 					.Append(LoanOptions);
 			} else
 				sb.Append("No Loan options").Append(Environment.NewLine);
+
+			// rollover
+			if (Rollover.LoanRolloverID > 0) {
+				sb.Append("ValidRollover:").Append(Environment.NewLine).Append(Rollover);
+			} else
+				sb.Append("No rollover").Append(Environment.NewLine);
 
 			// fees
 			if (Fees.Count > 0) {

@@ -30,13 +30,10 @@
 		ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
-		NL_Model AddPayment(NL_Model loanModel);
+		NLLongActionResult  AddPayment(int userID, int customerID, NL_Payments payment);
 
 		[OperationContract]
 		ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
-
-		//[OperationContract]
-		//NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
 		NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);

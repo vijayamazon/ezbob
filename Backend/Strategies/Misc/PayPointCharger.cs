@@ -25,6 +25,7 @@
 		}//constructor
 
 		public override void Execute() {
+			// step 1 - get NL data for paypoint iteration
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					try {
@@ -38,7 +39,7 @@
 				CommandSpecies.StoredProcedure
 			);
 
-
+			
 			//el: TODO: call SP NL_LoadLoanForAutomaticPayment - to get all loans to pay today
 		}//Execute
 
@@ -67,13 +68,8 @@
 			int daysLate = (int)span.TotalDays;
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
-
-			/*var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, this.amountToChargeFrom);
-			return payEarlyCalc.GetState();
-			 * return state.AmountDue;
-			 * */
-
-			//el: TODO: call SP NL_LoadLoanForAutomaticPayment - to get all loans to pay today
+	
+			//el: TODO: get NL amount due for relevant schedule item
 
 			if (!ShouldCharge(lastInstallment, amountDue)) {
 				Log.Info("Will not charge loan schedule id {0} (amount {1}): the minimal amount for collection is {2}.",
@@ -89,6 +85,7 @@
 				return;
 			}
 
+			// step 2 - charging
 			AutoPaymentResult autoPaymentResult = TryToMakeAutoPayment(
 				loanScheduleId,
 				initialAmountDue,
@@ -104,6 +101,7 @@
 				return;
 			} // if
 
+			// step 4 - notifications
 			if (autoPaymentResult.PaymentCollectedSuccessfully) {
 				SendConfirmationMail(customerId, autoPaymentResult.ActualAmountCharged, refNum);
 				SendLoanStatusMail(customerId, loanId, customerMail, autoPaymentResult.ActualAmountCharged); // Will send mail for paid off loans

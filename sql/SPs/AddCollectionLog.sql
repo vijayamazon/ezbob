@@ -1,5 +1,8 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF OBJECT_ID('AddCollectionLog') IS NULL
-	CREATE PROCEDURE AddCollectionLog
+	EXECUTE('CREATE PROCEDURE AddCollectionLog AS SELECT 1')
 GO
 
 ALTER PROCEDURE AddCollectionLog
@@ -8,7 +11,7 @@ ALTER PROCEDURE AddCollectionLog
 @Type NVARCHAR(30),
 @Method NVARCHAR(30),
 @LoanHistoryID BIGINT,
-@Comments NVARCHAR(no limit),
+@Comments NVARCHAR(max),
 @Now DATETIME
 AS
 BEGIN

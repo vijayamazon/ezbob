@@ -44,7 +44,11 @@
             string scheduleStatus = sr["ScheduleStatus"];
             decimal interest = sr["Interest"];
 
-            if (loanStatus != "Late")
+	        int statusLateID = 3;
+
+			//statusLateID == (int)NLLoanStatuses.Late;
+
+			if (statusLateID == (int)NLLoanStatuses.Late ) //loanStatus != "Late")
             {
                 DB.ExecuteNonQuery(
                     "NL_UpdateLoanStatusToLate", CommandSpecies.StoredProcedure,

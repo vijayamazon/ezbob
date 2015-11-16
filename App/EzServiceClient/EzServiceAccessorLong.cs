@@ -89,7 +89,7 @@
             return null;
         }
 
-		/// <summary>
+		/*/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="nlModel"></param>
@@ -98,9 +98,9 @@
 			Console.WriteLine("========================!!!!!!!!!!!!ACCESSOR LONG!!!!!!!!!!!=============================");
 			var result = this.m_oServiceClient.Instance.AddPayment(nlModel);
 /*			Console.WriteLine("result====>" + result.Payment.PaymentID);
-			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);*/
+			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);#1#
 			return result;
-		}
+		}*/
 	
 
 		private readonly ServiceClient m_oServiceClient;

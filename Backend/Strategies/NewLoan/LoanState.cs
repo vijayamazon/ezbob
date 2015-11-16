@@ -9,11 +9,9 @@
     /// <summary>
     /// Load NL Loan from DB into NL_Model
     /// </summary>
-    public class LoanState : AStrategy
-    {
+    public class LoanState : AStrategy{
 
-        public LoanState(NL_Model nlModel, long loanID, DateTime? stateDate)
-        {
+        public LoanState(NL_Model nlModel, long loanID, DateTime? stateDate){
 
             Result = nlModel;
             this.loanID = loanID;
@@ -21,6 +19,8 @@
             StateDate = stateDate ?? DateTime.UtcNow;
 
             LoanDAL = new LoanDAL();
+
+			this.strategyArgs = new object[] { Result, this.loanID, StateDate };
         } // constructor
 
         public override string Name { get { return "LoanState"; } }
@@ -30,16 +30,17 @@
         public DateTime StateDate { get; set; }
         public string Error;
 
+		private readonly object[] strategyArgs;
+
         //[SetterProperty]
         public ILoanDAL LoanDAL { get; set; }
 
-        public override void Execute()
-        {
-            NL_AddLog(LogType.Info, "Strategy Start", this.Result,null, null, null);
+        public override void Execute(){
+
+            NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, null, null);
+
             try
             {
-                // TODO replace with DAL calls
-
                 // loan
                 Result.Loan = new NL_Loans();
                 Result.Loan = LoanDAL.GetLoan(this.loanID);
@@ -49,10 +50,8 @@
                 Result.Loan.Histories = LoanDAL.GetLoanHistories(this.loanID, StateDate);
 
                 // schedules
-                foreach (NL_LoanHistory h in Result.Loan.Histories)
-                {
-                    h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet",
-                           CommandSpecies.StoredProcedure,
+                foreach (NL_LoanHistory h in Result.Loan.Histories){
+                    h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet",CommandSpecies.StoredProcedure,
                            new QueryParameter("@LoanID", this.loanID),
                            new QueryParameter("@Now", StateDate)
                     );
@@ -60,8 +59,7 @@
 
                 // loan fees
                 Result.Loan.Fees.Clear();
-                Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",
-                       CommandSpecies.StoredProcedure,
+                Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",CommandSpecies.StoredProcedure,
                        new QueryParameter("@LoanID", this.loanID));
 
                 // filter cnacelled/deleted fees on LoanState strategy
@@ -70,8 +68,7 @@
 
                 // interest freezes
                 Result.Loan.FreezeInterestIntervals.Clear();
-                List<NL_LoanInterestFreeze> freezes = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet",
-                       CommandSpecies.StoredProcedure,
+                List<NL_LoanInterestFreeze> freezes = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet",CommandSpecies.StoredProcedure,
                        new QueryParameter("@LoanID", this.loanID));
 
                 // filter cancelled (deactivated) periods
@@ -80,26 +77,22 @@
                 freezes.ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
 
                 // loan options
-                Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet",
-                       CommandSpecies.StoredProcedure,
+                Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet",CommandSpecies.StoredProcedure,
                        new QueryParameter("@LoanID", this.loanID)
                 );
 
-                // TODO combine all payments+ transactions to one SP
+                // TODO combine all payments + transactions to one SP kogda nibud'
 
                 // payments (logical loan transactions)
                 Result.Loan.Payments.Clear();
-                Result.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",
-                       CommandSpecies.StoredProcedure,
+                Result.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",CommandSpecies.StoredProcedure,
                        new QueryParameter("@LoanID", this.loanID),
                        new QueryParameter("@Now", StateDate)
                 );
 
-                foreach (NL_Payments p in Result.Loan.Payments)
-                {
+                foreach (NL_Payments p in Result.Loan.Payments){
                     p.SchedulePayments.Clear();
-                    p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet",
-                           CommandSpecies.StoredProcedure,
+                    p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet",CommandSpecies.StoredProcedure,
                            new QueryParameter("@LoanID", this.loanID)
                     );
 
@@ -107,18 +100,22 @@
                     p.SchedulePayments.ForEach(sp => sp.PaymentDate = p.PaymentTime);
 
                     p.FeePayments.Clear();
-                    p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",
-                           CommandSpecies.StoredProcedure,
+                    p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet",CommandSpecies.StoredProcedure,
                            new QueryParameter("@LoanID", this.loanID)
                     );
                 }
 
+				// valid rollover (StateDate between rollover expiration and creation time
+				Result.Loan.Rollover = DB.FillFirst<NL_LoanRollovers>("NL_ValidRollover",CommandSpecies.StoredProcedure,
+					   new QueryParameter("@LoanID", this.loanID), 
+					   new QueryParameter("@Now", StateDate)
+				);
+
                 // ReSharper disable once CatchAllClause
-                NL_AddLog(LogType.Info, "Strategy End", null,this.Result, null, null);
-            }
-            catch (Exception ex)
-            {
-                NL_AddLog(LogType.Error, "Strategy Faild", this.Result,null, ex.ToString(), ex.StackTrace);
+                NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, Result, null, null);
+
+            } catch (Exception ex){
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, ex.ToString(), ex.StackTrace);
                 Log.Alert(ex, "Failed to load loan state.");
             } // try
         } // Execute

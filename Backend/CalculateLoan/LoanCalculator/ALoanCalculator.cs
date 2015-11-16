@@ -61,7 +61,9 @@
 
 		public abstract string Name { get; }
 
-		// date of loan state calculation - input
+		/// <summary>
+		/// loan state date - input
+		/// </summary>
 		public DateTime CalculationDate { get; internal set; }
 
 		protected static ASafeLog Log { get { return Library.Instance.Log; } }
@@ -71,7 +73,7 @@
 		public NL_Model WorkingModel { get; internal set; }
 
 		/// <summary>
-		/// true- use schedule balance for i' calculation in InterestBtwnEvents method; default - false, i.e. use real currentOpenPrincipal that depends on payments only 
+		/// true - use schedule balance for i' calculation in InterestBtwnEvents method; default - false, i.e. use real currentOpenPrincipal that depends on payments only 
 		/// </summary>
 		internal bool BalanceBasedInterestCalculation { get; set; }
 
@@ -83,6 +85,8 @@
 		public decimal TotalEarlyPayment { get; internal set; }
 		
 		public decimal NextEarlyPayment { get; internal set; }
+
+		public decimal RolloverPayment { get; internal set; }
 
 		/// <summary>
 		/// open fees at t'
@@ -638,9 +642,9 @@
 						InterestPaid = iAmount,
 						LoanScheduleID = s.LoanScheduleID,
 						PaymentID = payment.PaymentID,
-						NewEntry = true,
 						PaymentDate = payment.PaymentTime,
-						PrincipalPaid = pAmount
+						PrincipalPaid = pAmount,
+						//NewEntry = true
 					};
 
 					payment.SchedulePayments.Add(schpayment);
@@ -737,10 +741,11 @@
 					decimal fAmount = Math.Min(assignAmount, fBalance);
 
 					NL_LoanFeePayments fpayment = new NL_LoanFeePayments() {
-						Amount = fAmount,		// maximal possible money to pay the fee
+						Amount = fAmount,			// maximal possible money to pay the fee
 						LoanFeeID = f.LoanFeeID,
 						LoanFeePaymentID = payment.PaymentID,
-						PaymentID = payment.PaymentID
+						PaymentID = payment.PaymentID,
+						//NewEntry = true
 					};
 
 					payment.FeePayments.Add(fpayment);
@@ -769,8 +774,6 @@
 		[ExcludeFromToString]
 		public void GetState() {
 
-			//savedAmount = true;
-
 			this.calculationDateEventEnd = new LoanEvent(CalculationDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 
 			IntiEvents();
@@ -790,8 +793,7 @@
 
 				TotalEarlyPayment = Fees + Interest + Principal;
 
-				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}", Fees, Interest, Principal, TotalEarlyPayment);
-
+				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}, RolloverPayment={4:F4}", Fees, Interest, Principal, TotalEarlyPayment, RolloverPayment);
 			};
 
 			HandleEvents();
@@ -806,6 +808,8 @@
 			NL_LoanSchedules item = GetScheduleItemForDate(CalculationDate);
 
 			NextEarlyPayment = item.OpenPrincipal + Interest + Fees;
+
+			RolloverPayment = Interest + Fees; // TODO put here rollover fees only ????
 		}
 
 

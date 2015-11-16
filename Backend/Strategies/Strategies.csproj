@@ -195,6 +195,9 @@
     <Compile Include="NewLoan\AddLoan.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NewLoan\AcceptRollover.cs" />
+    <Compile Include="NewLoan\UpdateLoanState.cs" />
+    <Compile Include="NewLoan\AddRolloverOpportunity.cs" />
     <Compile Include="NewLoan\Collection\LateLoanCured.cs" />
     <Compile Include="NewLoan\Collection\LateCustomerStatusChange.cs" />
     <Compile Include="NewLoan\Collection\LateLoanNotification.cs" />

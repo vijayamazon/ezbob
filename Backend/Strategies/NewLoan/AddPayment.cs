@@ -1,23 +1,33 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
-	using Ezbob.Utils.Extensions;
-	using NHibernate.Linq;
 
 	public class AddPayment : AStrategy {
 
-		public AddPayment(int customerID, NL_Payments payment) {
-			CustomerID = customerID;
+		public AddPayment(NL_Payments payment) {
+
+			if (Context.CustomerID == null || Context.CustomerID == 0) {
+				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
+				return;
+			}
+
+			CustomerID = (int)Context.CustomerID;
+
 			Payment = payment;
+
+			this.strategyArgs = new object[] { CustomerID, Context.UserID, Payment };
 		}
 
 		public override string Name { get { return "AddPayment"; } }
 		public NL_Payments Payment { get; private set; }
 		public int CustomerID { get; private set; }
 		public string Error;
+		public long PaymentID { get; private set; }
+		private readonly object[] strategyArgs;
 
 		public override void Execute() {
 
@@ -27,7 +37,8 @@
 
 				pconn.BeginTransaction();
 
-				Payment.PaymentID = DB.ExecuteScalar<long>("NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Payments>("Tbl", Payment));
+				PaymentID = DB.ExecuteScalar<long>("NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Payments>("Tbl", Payment));
+				Payment.PaymentID = PaymentID;
 
 				if (Payment.PaypointTransactions.Count > 0) {
 
@@ -57,8 +68,12 @@
 				return;
 			}
 
+			// TODO call UpdateLoanState
+			UpdateLoanState updateLoanStrategy = new UpdateLoanState(Payment.LoanID);
+			updateLoanStrategy.Context.CustomerID = CustomerID;
+			updateLoanStrategy.Context.UserID = Context.UserID;
 
-			// assign payment to loan
+			/*// assign payment to loan
 
 			// get DB state
 			NL_Model model = new NL_Model(CustomerID) { UserID = Context.UserID };
@@ -66,22 +81,96 @@
 			loanState.Execute();
 			model = loanState.Result;
 
+			// get loan state updated
+			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				calc.GetState();
+			} catch (NoInitialDataException noInitialDataException) {
+				this.Error = noInitialDataException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
+			} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
+				this.Error = invalidInitialInterestRateException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
+			} catch (NoLoanHistoryException noLoanHistoryException) {
+				this.Error = noLoanHistoryException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
+			} catch (InvalidInitialAmountException invalidInitialAmountException) {
+				this.Error = invalidInitialAmountException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
+			} catch (OverflowException overflowException) {
+				this.Error = overflowException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
+			} catch (Exception ex) {
+				this.Error = ex.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
+			}
+
+			List<NL_LoanSchedules> newSchedules = new List<NL_LoanSchedules>();
 			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
 			List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
 
-			foreach (NL_Payments p in model.Loan.Payments) {
-				p.SchedulePayments.Where(sp => sp.PaymentID == Payment.PaymentID).ForEach(sp => schedulePayments.Add(sp));
-				p.FeePayments.Where(fp => fp.PaymentID == Payment.PaymentID).ForEach(fp => feePayments.Add(fp));
+			foreach (NL_LoanHistory h in model.Loan.Histories) {
+				foreach (NL_LoanSchedules s in h.Schedule) {
+					if (s.LoanScheduleID == 0) {
+						newSchedules.Add(s);
+					} else {
+						// update existing schedules
+						DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
+							new QueryParameter("LoanScheduleID", s.LoanScheduleID),
+							new QueryParameter("LoanScheduleStatusID", s.LoanScheduleStatusID),
+							new QueryParameter("ClosedTime", s.ClosedTime)
+							);
+					}
+				}
 			}
 
-			// record schedule/fees payments
-			if (schedulePayments.Count > 0) {
-				DB.ExecuteNonQuery("NL_LoanSchedulePaymentsList", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schedulePayments));
+			// addd new schedules
+			DB.ExecuteNonQuery("NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", newSchedules));
+
+			
+
+			model.Loan.Payments.ForEach(p => p.SchedulePayments.ForEach(sp => schedulePayments.Add(sp)));
+
+			List<NL_LoanSchedulePayments> schPayments = (List<NL_LoanSchedulePayments>)schedulePayments.Where(sp => sp.LoanSchedulePaymentID == 0);
+			
+			if (schPayments.Count > 0) {
+				DB.ExecuteNonQuery("NL_LoanSchedulePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schPayments));
 			}
 
-			if (feePayments.Count > 0) {
-				DB.ExecuteNonQuery("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));
+			// existing schedule payments
+			schPayments = (List<NL_LoanSchedulePayments>)schedulePayments.Where(sp => sp.LoanSchedulePaymentID > 0);
+
+			if (schPayments.Count > 0) {
+				foreach (NL_LoanSchedulePayments sp in schPayments) {
+					DB.ExecuteNonQuery("NL_LoanSchedulePaymentsUpdate", CommandSpecies.StoredProcedure,
+								new QueryParameter("LoanSchedulePaymentID", sp.LoanSchedulePaymentID),
+							//	new QueryParameter("LoanScheduleID", sp.LoanScheduleID),
+							//	new QueryParameter("PaymentID", sp.PaymentID),
+								new QueryParameter("PrincipalPaid", sp.PrincipalPaid),
+								new QueryParameter("InterestPaid", sp.InterestPaid)
+							);
+				}
 			}
+
+			model.Loan.Payments.ForEach(p => p.FeePayments.ForEach(fp => feePayments.Add(fp)));
+
+			// new fee payments
+			List<NL_LoanFeePayments> fPayments = (List<NL_LoanFeePayments>)feePayments.Where(fp => fp.LoanFeePaymentID == 0);
+
+			if (fPayments.Count > 0) {
+				DB.ExecuteNonQuery("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", fPayments));
+			}
+
+			fPayments = (List<NL_LoanFeePayments>)feePayments.Where(fp => fp.LoanFeePaymentID > 0);
+			if (fPayments.Count > 0) {
+				foreach (NL_LoanFeePayments fp in fPayments) {
+					DB.ExecuteNonQuery("NL_LoanFeePaymentsUpdate", CommandSpecies.StoredProcedure,
+						new QueryParameter("LoanFeePaymentID", fp.LoanFeePaymentID),
+					//	new QueryParameter("PaymentID", fp.PaymentID),
+						new QueryParameter("Amount", fp.Amount)
+					);
+				}
+			}*/
 		}
 	} // class AddPayment
 } // ns

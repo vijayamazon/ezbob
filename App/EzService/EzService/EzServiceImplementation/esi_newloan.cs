@@ -58,10 +58,14 @@
 			 return Execute<AddLoan>(model.CustomerID, model.UserID, model);
 		 } // AddLoan
 
-		 public NL_Model AddPayment(NL_Model loanModel) {
+		 public NLLongActionResult AddPayment(int userID, int customerID, NL_Payments payment) {
 			 AddPayment strategy;
-			 ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
-			 return strategy.NLModel;
+			 var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment);
+			 return new NLLongActionResult {
+				 MetaData = amd,
+				 Value = strategy.PaymentID,
+				 Error = strategy.Error
+			 };
 		 } // AddPayment
 
 		 public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null) {

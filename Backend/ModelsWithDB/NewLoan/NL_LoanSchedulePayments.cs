@@ -24,13 +24,15 @@
 		[DataMember]
 		public decimal InterestPaid { get; set; }
 
-		[DataMember]
-		[NonTraversable]
-		public bool NewEntry { get; set; }
+		//[DataMember]
+		//[NonTraversable]
+		//public bool NewEntry { get; set; }
 
 		[DataMember]
 		[NonTraversable]
 		public DateTime? PaymentDate { get; set; }
+
+
 
 	} // class NL_LoanSchedulePayments
 } // ns

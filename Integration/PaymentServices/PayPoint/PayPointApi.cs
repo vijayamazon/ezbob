@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Calculators;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using log4net;
@@ -174,6 +175,8 @@
 
 					installments.CommitTransaction();
 
+					// TODO add NL_payments +  NL_PaypointTransactions  (AddPayment strategy)
+
 					return ex.PaypointData;
 				}
 
@@ -195,6 +198,7 @@
 			return payPointReturnData;
 		}
 
+		// step 2 - actual paypoint transaction
 		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount)
 		{
 
@@ -245,6 +249,8 @@
 				str = _service.repeatCardFullAddr(account.Mid, account.VpnPassword, transactionId,
 												  amount.ToString(CultureInfo.InvariantCulture),account.RemotePassword,
 												  newTransactionId, null, null, null, null, "repeat=true");
+
+				// input for step 3 (NL)
 				ret = new PayPointReturnData(str);
 			}
 

@@ -26,9 +26,6 @@
 		public long? LoanFeeID { get; set; }
 
 		[DataMember]
-		public decimal FeeAmount { get; set; }
-
-		[DataMember]
 		public DateTime CreationTime { get; set; }
 
 		[DataMember]

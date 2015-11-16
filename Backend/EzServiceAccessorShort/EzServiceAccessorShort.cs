@@ -1,17 +1,14 @@
 ﻿namespace EzServiceShortcut {
-	using System;
 	using System.Collections.Generic;
-	using Ezbob.Backend.Strategies.Experian;
-	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.VatReturn;
-	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.Misc;
-	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.VatReturn;
 	using Ezbob.Utils;
+	using EzServiceAccessor;
 
 	public class EzServiceAccessorShort : IEzServiceAccessor {
 		public ElapsedTimeInfo SaveVatReturnData(
@@ -104,7 +101,7 @@
         }
 	
 
-		/// <summary>
+		/*/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="userId"></param>
@@ -122,6 +119,6 @@
 			}
 
 			return null;
-		}
+		}*/
 	} // class EzServiceAccessorShort
 } // namespace EzServiceShortcut

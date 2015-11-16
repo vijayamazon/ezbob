@@ -50,11 +50,12 @@
 
 		WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);
 
-		/// <summary>
+		/*/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="nlModel"></param>
 		/// <returns></returns>
-		NL_Model AddPayment(NL_Model nlModel);
+		NL_Model AddPayment(NL_Model nlModel);*/
+
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor
