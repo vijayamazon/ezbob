@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TokenIntersection.cs" />
     <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />
@@ -71,6 +72,8 @@
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
     <Compile Include="ProcessHistory\AutoRejection\SameApprovalChance.cs" />
     <Compile Include="ProcessHistory\ProcessCheckpoints.cs" />
+    <Compile Include="Stopwords.cs" />
+    <Compile Include="TestAdjustCompanyName.cs" />
     <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
     <Compile Include="Turnover\AOneMonthValue.cs" />
     <Compile Include="Turnover\AutoRejectTurnover.cs" />
@@ -192,7 +195,7 @@
     </Compile>
     <Compile Include="Common\Range.cs" />
     <Compile Include="Turnover\TurnoverTargetMetaData.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="NameForComparison.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
@@ -245,6 +248,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="business-names.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="stopwords.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -55,11 +55,11 @@
     </tr>
 }
 
-@helper RowCellWithSlider(string title, string className, string labelOff, string labelOn, string css = "", string dataOn = "danger")
+@helper RowCellWithSlider(string title, string className, string labelOff, string labelOn, string css = "", string dataOn = "danger", string tooltip = "")
 {
     <tr>
         <td class="customer-details-switch-td">
-            <span class="@Html.Raw(css) customer-details-title">@Html.Raw(title)</span>
+			<span class="@Html.Raw(css) customer-details-title" data-title="@Html.Raw(tooltip)">@Html.Raw(title)</span>
             <span class="@Html.Raw(css) pull-right">
                 <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
                     <input type="checkbox" checked/>
@@ -334,7 +334,7 @@
                     </span>
                 </td>
             </tr>
-			@RowCellWithSlider("Block taking loan", "blockTakingLoanSwitch", "No", "Yes", "<%= data.BlockTakingLoan ? 'red_cell' : '' %> block-taking-loan-td customer-details-switch-height")
+			@RowCellWithSlider("Block taking loan", "blockTakingLoanSwitch", "No", "Yes", "<%= data.BlockTakingLoan ? 'red_cell' : '' %> block-taking-loan-td customer-details-switch-height tltp", tooltip: "<%= data.BlockTakingLoan ? 'Blocked for funds transfer,<br> uncheck to resume.' : '' %>")
 
             @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td customer-details-switch-height")
 
@@ -399,7 +399,7 @@
                 </td>
             </tr>
             @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
-            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
+            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvailableAmount) %>")
             @RawCell("Starting from date", "<%- m.StartingFromDate %>")
             @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
         </tbody>
@@ -441,7 +441,7 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
+            @RawCell("Repayment period", "<%- m.RepaymentPeriod %>")
             @RawCell("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
             
             <tr>

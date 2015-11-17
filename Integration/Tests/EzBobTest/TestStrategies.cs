@@ -7,16 +7,12 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Alibaba;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CreditSafe;
@@ -25,7 +21,6 @@
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.MailStrategies.Broker;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -38,7 +33,6 @@
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using EzBob.Models;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -47,9 +41,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Fraud;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EZBob.DatabaseLib.Repository;
 	using FraudChecker;
-	using NHibernate;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
@@ -897,7 +889,7 @@
 		}
 
 
-		[Test]
+		/*[Test]
 		public void TestLoanState() {
 			int loanID = 2151; // cust 329;   
 			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
@@ -909,7 +901,7 @@
 				Console.WriteLine(e);
 			}
 		}
-
+*/
 
 		[Test]
 		public void TestRescheduleOUT() {
@@ -1058,7 +1050,7 @@
 			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan1);
 		}
 
-		[Test]
+		/*[Test]
 		public void TestLoanCalculator() {
 
 			// new instance of loan calculator - for new schedules list
@@ -1091,7 +1083,7 @@
 			}
 
 			Console.WriteLine();
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();#1#
 
 			decimal A = 6000m;
 			decimal m = 600m;
@@ -1123,7 +1115,7 @@
 				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
 
 				Console.WriteLine();
-				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+				var scheduleswithinterests = calculator.CreateScheduleAndPlan();#1#
 
 			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
 				LoanIssueTime = DateTime.UtcNow,
@@ -1142,7 +1134,7 @@
 			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
 
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
-		}
+		}*/
 
 	
 
@@ -1258,6 +1250,12 @@
 
         }
 			*/
+		}
+
+		[Test]
+		public void TestGetIncomeSms() {
+			var stra = new GetIncomeSms(null,true);
+			stra.Execute();
 		}
 	}
 }

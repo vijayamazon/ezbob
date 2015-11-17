@@ -8,8 +8,8 @@
 		public decimal SystemCalculatedAmount { get; set; }
 		public decimal OfferedCreditLine { get; set; }
 		public decimal BorrowedAmount { get; set; }
-		public decimal AvaliableAmount { get; set; }
-		public int RepaymentPerion { get; set; }
+		public decimal AvailableAmount { get; set; }
+		public int RepaymentPeriod { get; set; }
 		public string StartingFromDate { get; set; }
 		public decimal InterestRate { get; set; }
 		public string OfferValidateUntil { get; set; }

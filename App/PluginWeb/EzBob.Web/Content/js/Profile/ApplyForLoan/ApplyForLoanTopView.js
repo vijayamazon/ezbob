@@ -23,7 +23,8 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			isLoanSourceCOSME: this.customer.get("IsLastApprovedLoanSourceCOSME"),
 			isCurrentCashRequestFromQuickOffer: this.customer.get("IsCurrentCashRequestFromQuickOffer"),
 			isCustomerRepaymentPeriodSelectionAllowed: this.customer.get('IsCustomerRepaymentPeriodSelectionAllowed'),
-			isLoanTypeSelectionAllowed: this.customer.get('IsLoanTypeSelectionAllowed')
+			isLoanTypeSelectionAllowed: this.customer.get('IsLoanTypeSelectionAllowed'),
+			numOfActiveLoans: this.customer.get('ActiveLoans').length
 		});
 		this.states = {
 			apply: { view: this.createApplyForLoanView, step: 0 },

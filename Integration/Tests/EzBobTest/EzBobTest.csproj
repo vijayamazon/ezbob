@@ -111,6 +111,7 @@
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="OpenPlatformTests\Core\TestBase.cs" />
+    <Compile Include="TestEarnedInterest.cs" />
     <Compile Include="OpenPlatformTests\Investor\TestInvestorRules.cs" />
     <Compile Include="TestNewLoan.cs" />
     <Compile Include="PayPalTest.cs" />
@@ -149,17 +150,9 @@
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Backend\CalculateLoan\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
-      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
-      <Name>CalculateLoanExceptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
       <Project>{D7A03EFE-B175-49EB-9B22-3315C1124091}</Project>
       <Name>LoanCalculator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Backend\CalculateLoan\Models\Models.csproj">
-      <Project>{DDAF0E80-8E9D-49F4-AA8C-30A69489361E}</Project>
-      <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessorShort\EzServiceShortcut.csproj">
       <Project>{3D162D7E-C8EA-4A97-AF1A-58E728093AD0}</Project>

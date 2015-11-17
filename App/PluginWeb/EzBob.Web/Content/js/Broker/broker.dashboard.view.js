@@ -79,7 +79,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		var oSampleLink = function (sSourceRef, nWidth, nHeight) {
 			var imagePath = oProps.Origin === 'ezbob'
-				? 'https://www.ezbob.com/brokers/logos/ezbob-logo-200x83px.png'
+				? 'https://www.ezbob.com/app/uploads/brokers/logos/ezbob-logo-200x83px.png'
 				: 'https://www.everline.com/app/uploads/brokers/logos/Everline-primary-logo-200x83px.png';
 
 			return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + sSourceRef + '" rel="nofollow">' +
@@ -338,7 +338,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			bJQueryUI: false,
 
 			bAutoWidth: true,
-			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"><"dataTables_top_left">>>>rt<"clear">',
+			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"f><"dataTables_top_left"i>>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',
 
 			bStateSave: true,
 

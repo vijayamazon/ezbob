@@ -11,8 +11,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 	onRender: function() {
 		
-		this.$el.find(".tltp").tooltip();
-		this.$el.find(".tltp-left").tooltip({ placement: "left" });
+		this.$el.find(".tltp").tooltip({html : true, container: 'body'});
+		this.$el.find(".tltp-left").tooltip({ placement: "left", container: 'body' });
 
 		if (this.model.get('IsWizardComplete'))
 			this.$el.find('#ForceFinishWizard').addClass('hide');
@@ -241,7 +241,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 		var self = this;
 
-		var oRequest = $.getJSON(window.gRootPath + 'Customers/GetGrid', {
+		var oRequest = $.getJSON(window.gRootPath + 'Grids/Load', {
 			grid: 'UwGridBrokers',
 			includeTestCustomers: false,
 			includeAllCustomers: false,

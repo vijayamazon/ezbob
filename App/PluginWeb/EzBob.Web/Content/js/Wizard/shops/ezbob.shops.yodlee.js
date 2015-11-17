@@ -96,7 +96,15 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 			href:"#yodlee_help",
 			inline: true,
 			open: true,
+			maxWidth: '100%',
+			maxHeight: '100%',
 			close: '<i class="pe-7s-close"></i>',
+			onOpen: function() {
+				$('body').addClass('stop-scroll');
+			},
+			onClosed: function() {
+				$('body').removeClass('stop-scroll');
+			}
 		});
 	},
 	

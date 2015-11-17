@@ -74,19 +74,23 @@ EzBob.Underwriter.AddBankAccount = EzBob.BoundItemView.extend({
 	},
 	
 	onSave: function () {
-		var xhr;
 		if (!this.validator.form()) {
 			alertify.error("invalid input");
 			return false;
 		}
 		BlockUi("on");
-		xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/TryAddBankAccount", this.model.toJSON());
+		var xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/TryAddBankAccount", this.model.toJSON());
 		var self = this;
 		xhr.done(function (r) {
 			if (r.error != null) {
 				alertify.error(r.error);
 				return false;
 			}
+
+			if (r.blockBank) {
+				EzBob.ShowMessage("Bank account was already added by another customer, customer can't take loan, please re-run fraud check for more info", "Fraud alert");
+			}
+
 			self.trigger('saved');
 			self.close();
 			return false;
@@ -99,22 +103,19 @@ EzBob.Underwriter.AddBankAccount = EzBob.BoundItemView.extend({
 	},
 	
 	check: function () {
-		var xhr;
-
 		if (!this.validator.form()) {
 			alertify.error("invalid input");
 			return false;
 		}
 		
 		BlockUi("on");
-		xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/CheckBankAccount", this.model.toJSON());
+		var xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/CheckBankAccount", this.model.toJSON());
 		xhr.done(function (r) {
-			var view;
 			if (r.error != null) {
 				alertify.error(r.error);
 				return false;
 			}
-			view = new EzBob.Underwriter.BankAccountDetailsView({
+			var view = new EzBob.Underwriter.BankAccountDetailsView({
 				model: new Backbone.Model(r)
 			});
 			EzBob.App.jqmodal.show(view);

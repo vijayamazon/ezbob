@@ -735,7 +735,7 @@
 				var historyRecordIDs = new List<int>();
 
 				this.db.ForEachRowSafe(
-					sr => { historyRecordIDs.Add(sr["Id"]); },
+					sr => historyRecordIDs.Add(sr["Id"]),
 					"GetMarketplaceUpdatingHistoryByCustomerAndTime",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", Results.CustomerId),
@@ -799,29 +799,29 @@
 							hmrcList.AddRange(filtered);
 					} // for each marketplace
 
-					if (hmrcList.Count > 0) {
+					if ((hmrcList.Count > 0) && (Results.NumOfHmrcMps > 0)) {
 						// get HMRC turnover for all months received
 						Results.HmrcAnnualTurnover = hmrcList.Sum(t => t.Turnover);
 						Results.HmrcAnnualTurnover = (Results.HmrcAnnualTurnover < 0) ? 0 : Results.HmrcAnnualTurnover;
 					} // if
+				} // if
 
-					// this is non-online medal type and has a hmrc
-					if (!Results.MedalType.IsOnline() && Results.NumOfHmrcMps > 0) {
-						Results.TurnoverType = TurnoverType.HMRC;
-						Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+				// this is non-online medal type and has a HMRC
+				if (!Results.MedalType.IsOnline() && Results.NumOfHmrcMps > 0) {
+					Results.TurnoverType = TurnoverType.HMRC;
+					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
 
-						this.log.Debug(
-							"Base: (HMRC) AnnualTurnover: {0}," + "HmrcAnnualTurnover: {1}," +
-							"BankAnnualTurnover: {2}," + "OnlineAnnualTurnover: {3}," + "Type: {4}",
-							Results.AnnualTurnover,
-							Results.HmrcAnnualTurnover,
-							Results.BankAnnualTurnover,
-							Results.OnlineAnnualTurnover,
-							Results.TurnoverType
-						);
+					this.log.Debug(
+						"Base: (HMRC) AnnualTurnover: {0}," + "HmrcAnnualTurnover: {1}," +
+						"BankAnnualTurnover: {2}," + "OnlineAnnualTurnover: {3}," + "Type: {4}",
+						Results.AnnualTurnover,
+						Results.HmrcAnnualTurnover,
+						Results.BankAnnualTurnover,
+						Results.OnlineAnnualTurnover,
+						Results.TurnoverType
+					);
 
-						return;
-					} // if
+					return;
 				} // if
 
 				var yodlees = new List<MarketplaceTurnoverModel>();

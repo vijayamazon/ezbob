@@ -347,7 +347,12 @@ table.squeezed tbody tr td {
     resize: none;
 }
 
-.controls.error input.error, .controls.error select, .controls.error textarea, .controls select.error, .controls textArea.error {
+.controls.error input.error,
+.controls.error select, 
+.controls.error textarea, 
+.controls select.error, 
+.controls textArea.error, 
+.controls input.error {
     color: #b94a48;
     border: 2px solid #b94a48;
 }
@@ -2381,4 +2386,8 @@ input[type="text"].err-field-red {
 
 #broker-main-content .new-email {
 	margin: 0;
+}
+
+#payment-form input[type="text"] {
+	margin-bottom: 0;
 }

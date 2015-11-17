@@ -651,10 +651,10 @@
 		private static int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
 		/// <summary>
-		/// Auto decision only treated 
-		/// In case of auto decision occurred (RR, R, RA, A), 002 sent immediately
-		/// In the case of "Waiting"/manual, 002 will be transmitted in UI underwrites,
-		/// CustomerController, ChangeStatus method.
+		/// In case of auto decision occurred (RR, R, RA, A), 002 sent immediately.
+		/// Otherwise, i.e. in the case of Waiting/Manual, 002 will be transmitted
+		/// when underwriter makes manual decision from
+		/// CustomersController SetDecision method.
 		/// </summary>
 		private void UpdatePartnerAlibaba() {
 			DecisionActions autoDecision = this.autoDecisionResponse.Decision ?? DecisionActions.Waiting;

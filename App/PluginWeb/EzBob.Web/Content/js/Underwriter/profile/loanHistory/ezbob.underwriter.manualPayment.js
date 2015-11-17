@@ -18,7 +18,6 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 
 	onRender: function() {
 		this.$el.find('.ezDateTime').splittedDateTime();
-		this.validator = EzBob.validatemanualPaymentForm(this.ui.form);
 		this.minAmount = 0.1;
 		this.maxAmount = 0;
 		this.updatePaymentData();
@@ -28,7 +27,6 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .confirm": "confirmClicked",
 		"click .uploadFiles": "uploadFilesClicked",
-		"change [name='totalSumPaid']": "updatePaymentData",
 		"change [name='paymentDate']": "updatePaymentData"
 	},
 
@@ -82,6 +80,7 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 				'title': moneyTitle
 			});
 			self.ui.money.tooltip("enable").tooltip('fixTitle');
+			self.validator = EzBob.validatemanualPaymentForm(self.ui.form, r.Balance);
 		});
 	}
 });

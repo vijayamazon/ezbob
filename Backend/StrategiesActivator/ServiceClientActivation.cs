@@ -1471,6 +1471,23 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.serviceClient.BackfillDailyLoanStats();
 		} // BackfillDailyLoanStats
 
+		[Activation]
+		private void GetIncomeSms() {
+			DateTime? date = null;
+
+			if (this.cmdLineArgs.Length == 2) {
+				DateTime day;
+				if (!DateTime.TryParse(this.cmdLineArgs[1], out day)) {
+					this.log.Msg("Usage: GetIncomeSms <date yyyy-mm-dd> OR GetIncomeSms without parameters for backfill everything");
+					return;
+				} else { //if
+					date = day;
+				}
+			} // if
+
+			this.serviceClient.GetIncomeSms(date, false);
+		} // GetIncomeSms
+
 		//[Activation]
 		//private void ExampleMethod() {
 		//	int customerID;

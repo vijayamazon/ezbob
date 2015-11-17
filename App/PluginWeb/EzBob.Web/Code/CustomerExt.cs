@@ -5,6 +5,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Logger;
+	using EzBob.Web.Code.MpUniq;
 	using PostcodeAnywhere;
 	using StructureMap;
 
@@ -39,7 +40,7 @@
 			);
 		} // AddAlibabaDefaultBankAccount
 
-		public static int AddBankAccount(this Customer customer, string bankAccount, string sortCode, BankAccountType accountType, ISortCodeChecker sortCodeChecker = null) {
+		public static int AddBankAccount(this Customer customer, string bankAccount, string sortCode, BankAccountType accountType, BankAccountUniqChecker bankAccountUniqChecker = null, ISortCodeChecker sortCodeChecker = null) {
 			if (customer == null) { // can happen for Alibaba call only
 				ms_oLog.Debug("Customer not specified for adding an account (#{0}, code {1}, type {2}).",
 					bankAccount,
@@ -96,6 +97,21 @@
 			);
 
 			customer.BankAccounts.Add(card);
+
+			if (bankAccountUniqChecker != null) {
+				try {
+					bankAccountUniqChecker.Check(customer.Id, card);
+				} catch (BankAccountIsAlreadyAddedException) {
+					ms_oLog.Debug(
+						"Account already was added by another customer {0} bank: {1} {2} {3}",
+						customer.Id,
+						bankAccount,
+						sortCode,
+						accountType
+						);
+					customer.BlockTakingLoan = true;
+				}
+			}
 
 			ms_oLog.Debug(
 				"Setting a new bank account (#{1}, code {2}, type {3}) as a default one for customer {0}.",

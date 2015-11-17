@@ -32,38 +32,44 @@
 		} // SpecialBussinesRulesSystemDecision
 
 		private void CompanySeniority() {
+			try {
+				DateTime now = DateTime.UtcNow;
+				int maxSeniorityYears = ConfigManager.CurrentValues.Instance.MaxSeniorityYears;
 
-			DateTime now = DateTime.UtcNow;
-			int maxSeniorityYears = ConfigManager.CurrentValues.Instance.MaxSeniorityYears;
+				bool finishedWizard = this.customer.WizardStep.TheLastOne;
 
-			bool finishedWizard = this.customer.WizardStep.TheLastOne;
+				if (!finishedWizard)
+					return;
 
-			if (!finishedWizard)
-				return;
+				bool isLimited = this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 
-			bool isLimited = this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
+				if (isLimited) {
+					this.incorporationDate = ObjectFactory.GetInstance<IEzServiceAccessor>()
+						.CheckLtdCompanyCache(1, this.customer.Company.ExperianRefNum)
+						.IncorporationDate;
+				} else {
+					this.incorporationDate = ObjectFactory.GetInstance<IEzServiceAccessor>()
+						.GetNonLimitedData(1, this.customer.Company.ExperianRefNum)
+						.IncorporationDate;
+				}
 
-			if (isLimited) {
-				this.incorporationDate = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(1, this.customer.Company.ExperianRefNum).IncorporationDate;
-			} 
-			else {
-				this.incorporationDate = ObjectFactory.GetInstance<IEzServiceAccessor>().GetNonLimitedData(1, this.customer.Company.ExperianRefNum).IncorporationDate;
+				this.companySeniority = MiscUtils.GetFullYears(this.incorporationDate ?? now);
+
+				bool isBeyondMaxSeniority = this.companySeniority > maxSeniorityYears;
+
+				if (isBeyondMaxSeniority)
+					this.fraudDetections.Add(
+						Helper.CreateDetection(
+							"Customer CompanySeniority",
+							this.customer,
+							null,
+							"Company Seniority Above " + maxSeniorityYears,
+							null, this.companySeniority.ToString()
+							)
+						);
+			} catch (Exception ex) {
+				log.Warn(ex, "Failed to check fraud of company seniority for customer {0}", this.customerID);
 			}
-
-			this.companySeniority = MiscUtils.GetFullYears(this.incorporationDate ?? now);
-
-			bool isBeyondMaxSeniority = this.companySeniority > maxSeniorityYears;
-			
-			if (isBeyondMaxSeniority)
-				this.fraudDetections.Add(
-					Helper.CreateDetection(
-						"Customer CompanySeniority",
-						this.customer,
-						null,
-						"Company Seniority Above " + maxSeniorityYears,
-						null,this.companySeniority.ToString()
-						)
-					);
 		}//CompanySeniority
 		
 		private readonly ISession session;

@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	public enum Gender {
@@ -183,6 +184,15 @@
 		WrittenOff,
 		Late,
 	} // enum CreditResultStatus
+
+	public static class CreditResultStatusExt {
+		public static bool In(this CreditResultStatus status, params CreditResultStatus[] lst) {
+			if ((lst == null) || (lst.Length < 1))
+				return false;
+
+			return lst.Any(member => member == status);
+		} // In
+	} // class CreditResultStatusExt
 
 	public enum Status {
 		Registered,

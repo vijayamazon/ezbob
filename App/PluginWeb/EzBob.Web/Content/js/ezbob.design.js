@@ -732,6 +732,7 @@ EzBob.ShowMessageEx = function(args) {
 		fOnOpen = function() {
 			if (args.hideClose)
 				$(".ui-dialog-titlebar-close", $(this).parent()).hide();
+			$('body').addClass('stop-scroll');
 		};
 	} else {
 		modalpopup.attr('data-time-to-close', nTimeout - 1);
@@ -769,6 +770,7 @@ EzBob.ShowMessageEx = function(args) {
 
 			$('.ok-button', modalpopup.dialog('widget')).text(args.okText + ' (' + nTimeout + ')');
 			setTimeout(fTimeoutFunc, 1000);
+			$('body').addClass('stop-scroll');
 		};
 	} // if
 
@@ -786,6 +788,7 @@ EzBob.ShowMessageEx = function(args) {
 		close: function() {
 			modalpopup.remove();
 			$(this).remove();
+			$('body').removeClass('stop-scroll');
 		}, // close
 		closeOnEscape: !!args.closeOnEscape,
 	});
@@ -1447,7 +1450,7 @@ EzBob.validateChangeEmailForm = function(el, emailFieldID) {
 	return e.validate({ rules: rules, });
 };
 
-EzBob.validatemanualPaymentForm = function(el) {
+EzBob.validatemanualPaymentForm = function(el, outstandingBbalance) {
 	var e = el || $('form');
 
 	return e.validate({
@@ -1455,10 +1458,15 @@ EzBob.validatemanualPaymentForm = function(el) {
 			experiedDate: { required: true, requiredDate: true },
 			description: { required: true },
 			paymentMethod: { required: true, regex: "[a-zA-Z]+" },
-			totalSumPaid: { required: true, number: true },
+			totalSumPaid: { number: true, required: true, autonumericMax: outstandingBbalance },
 		},
 		messages: {
-			PaymentMethod: { regex: "This field is required" }
+			PaymentMethod: { regex: "This field is required" },
+			totalSumPaid: {
+				autonumericMax: 'Warning! <br /> Please pay attention that you are trying to enter greater than Outstanding amount relevant for the date of placed payment' +
+								 'In case the customer made a Bank Transfer in an amount which is higher than £' + outstandingBbalance +
+								 '.<br />Please, communicate the client and make access funds return after EZBOB LTD access transactions costs deduction.'
+			}
 		}//,
 		//errorPlacement: EzBob.Validation.errorPlacement,
 		//unhighlight: EzBob.Validation.unhighlight

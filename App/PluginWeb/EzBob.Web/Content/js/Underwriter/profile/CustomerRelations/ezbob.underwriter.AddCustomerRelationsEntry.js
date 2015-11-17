@@ -11,10 +11,12 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         'change input[name="Type"]': 'determinePhoneNumbersState'
     }, // events
 
-    jqoptions: function () {
+    isUnderwriter: document.location.href.indexOf("Underwriter") > -1,
+
+    jqoptions: function() {
         return {
             modal: true,
-            resizable: true,
+            resizable: this.isUnderwriter,
             title: 'CRM - add entry',
             position: 'center',
             draggable: true,
@@ -112,7 +114,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         Form: 'form#customer-relations-form'
     }, // ui
 
-    onSave: function () {
+    onSave: function() {
+
         if (this.ui.Status[0].selectedIndex === 0)
             return false;
 
@@ -146,7 +149,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         xhr.done(function (r) {
             if (r.success && !self.model.get('isBroker')) {
                 self.model.fetch();
-            }else if (r.success && self.onsave) {
+            } else if (r.success && self.onsave) {
+            	$('body').removeClass('stop-scroll');
                 self.onsave();
             } else {
                 if (r.error) {
@@ -157,7 +161,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
             self.close();
         });
 
-        xhr.always(function () {
+        xhr.always(function() {
             return UnBlockUi();
         });
 

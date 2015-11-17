@@ -2,16 +2,11 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Security.AccessControl;
 	using System.Security.Cryptography;
 	using System.Text;
-	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Utils;
 	using Ezbob.ValueIntervals;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using NHibernate.Linq;
 	using NUnit.Framework;
 	using Reports;
@@ -135,7 +130,7 @@
 
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
-		[Test]
+		/*[Test]
 		public void TestLoanCalculator() {
 
 			decimal A = 6000m;
@@ -219,7 +214,7 @@
 			Console.WriteLine();
 			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
 		}
-
+*/
 
 		[Test]
 		public void DateDiffInMonth() {

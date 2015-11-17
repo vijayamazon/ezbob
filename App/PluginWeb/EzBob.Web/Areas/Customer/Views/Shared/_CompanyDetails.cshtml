@@ -69,11 +69,13 @@
 							origin: origin)
 			</div>
             <div class="after-financial-details">
-				@EzForm.InputTextWizard(new EzInputBuilder("OverallTurnOver", "Total annual revenue (sales)",
+				@EzForm.InputTextWizard(new EzInputBuilder("OverallTurnOver", "Total annual revenue",
+					captionLine2: "(sales)",
 					type: "tel",
 					cls: "cashInput form_field",
 					isRequired: true,
 					statusIcon: true,
+					labelClass: "long",
 					tabIndex: 8,
 					uiEventControlID: "personal-info:overall_turnover"),
 					origin: origin)
@@ -81,10 +83,12 @@
             <div class="row-fluid company-full-details"></div>
 
 			<hr class="wizard-hr" />
-			@EzForm.InputTextWizard(new EzInputBuilder("promoCode", "Promo code (optional)",
+			@EzForm.InputTextWizard(new EzInputBuilder("promoCode", "Promo code",
+					captionLine2: "(optional)",
 					cls: "form_field",
 					isRequired: false,
 					statusIcon: true,
+					labelClass: "long",
 					tabIndex: 16,
 					uiEventControlID: "personal-info:promo-code"),
 					origin: origin)
@@ -125,7 +129,7 @@
 
 <script id="employee-count-template" type="text/template">
 	
-	@EzForm.InputTextWizard(new EzInputBuilder("EmployeeCount", "Current # of employees",
+	@EzForm.InputTextWizard(new EzInputBuilder("EmployeeCount", "Current number of employees",
 						type: "tel",
 						cls: "form_field numeric",
 						isRequired: true,
@@ -136,7 +140,7 @@
 						max: 1000),
 						origin: origin)
 	
-	@EzForm.InputTextWizard(new EzInputBuilder("TotalMonthlySalary", "Total monthly salary expenditure (inc tax & national insurance)",
+	@EzForm.InputTextWizard(new EzInputBuilder("TotalMonthlySalary", "Total monthly salary expenditure (including tax & national insurance)",
 						type: "tel",
 						cls: "form_field cashInput",
 						isRequired: true,

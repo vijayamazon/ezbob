@@ -131,5 +131,20 @@
 					} })
 				);
 		}
+
+		[Test]
+		public void TestLoadSalesForceLeadAccount() {
+			var leadAccountModel = m_oDB.FillFirst<SalesForceLib.Models.LeadAccountModel>("SF_LoadAccountLead",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Email", null),
+				new QueryParameter("CustomerID", 100),
+				new QueryParameter("IsBrokerLead", false),
+				new QueryParameter("IsVipLead", false));
+
+			Assert.IsNotNull(leadAccountModel);
+			Assert.IsNotNullOrEmpty(leadAccountModel.MobilePhoneNumber);
+
+
+		}
 	} // class TestDbConnection
 } // namespace

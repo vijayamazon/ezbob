@@ -215,40 +215,45 @@
 			model.Turnovers = new List<TurnoverDbRow>();
 
 			this.DB.ForEachResult<TurnoverDbRow>(
-				r => model.Turnovers.Add(r),
+				r => {
+					model.Turnovers.Add(r);
+					r.WriteToLog(Log);
+				},
 				"GetCustomerTurnoverForAutoDecision",
 				new QueryParameter("IsForApprove", true),
 				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("Now", model.CalculationDate)
 			);
 
-			// extract hmrc data 
-			var hmrcList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(MpType.Hmrc) select r).AsQueryable();
-			// extract yodlee data only
-			var yodleeList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(MpType.Yodlee) select r).AsQueryable();
-
-			decimal hmrcTurnover = 0;
-			decimal yoodleeTurnover = 0;
-
-			// has a hmrc
 			if (model.HasHmrc) {
-				// get hmrc turnover for all months received
-				hmrcTurnover = hmrcList.Sum(t => t.Turnover);
-				model.AnnualTurnover = (hmrcTurnover < 0) ? 0 : hmrcTurnover;
-				model.HmrcAnnualTurnover = model.AnnualTurnover;
-				model.TurnoverType = TurnoverType.HMRC;
-			}
+				var hmrcList = (
+					from TurnoverDbRow r in model.Turnovers
+					where r.MpTypeID.Equals(MpType.Hmrc)
+					select r
+				).AsQueryable();
 
-			// has bank 
+				decimal hmrcTurnover = hmrcList.Sum(t => t.Turnover);
+				model.HmrcAnnualTurnover = (hmrcTurnover < 0) ? 0 : hmrcTurnover;
+
+				model.AnnualTurnover = model.HmrcAnnualTurnover;
+				model.TurnoverType = TurnoverType.HMRC;
+			} // if has HMRC
+			
 			if (dbData.NumOfBanks > 0) {
-				// get yoodlee turnover for all months received
-				yoodleeTurnover = yodleeList.Sum(t => t.Turnover);
+				var yodleeList = (
+					from TurnoverDbRow r in model.Turnovers
+					where r.MpTypeID.Equals(MpType.Yodlee)
+					select r
+				).AsQueryable();
+
+				decimal yoodleeTurnover = yodleeList.Sum(t => t.Turnover);
 				model.YodleeAnnualTurnover = (yoodleeTurnover < 0) ? 0 : yoodleeTurnover;
+
 				if (model.TurnoverType.Equals(null)) {
 					model.AnnualTurnover = model.YodleeAnnualTurnover;
 					model.TurnoverType = TurnoverType.Bank;
-				}
-			}
+				} // if
+			} // if has bank
 
 			// --------end new turnover calculation for medal----------------//
 
@@ -288,8 +293,14 @@
 
 			model.FreeCashFlowValue -= newActualLoansRepayment;
 
-			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
-			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
+			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc
+				? 0
+				: model.FreeCashFlowValue / model.AnnualTurnover;
+
+			model.TangibleEquity = model.AnnualTurnover == 0
+				? 0
+				: model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
+
 			model.CustomerId = customerId;
 
 			model.CapOfferByCustomerScoresTable = new CapOfferByCustomerScoreMatrix(customerId, this.DB);

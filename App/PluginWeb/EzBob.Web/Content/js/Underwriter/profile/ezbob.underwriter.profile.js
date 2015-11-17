@@ -102,6 +102,9 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 
 		this.paymentAccountsView.on('rechecked', this.mpRechecked, this.paymentAccountsModel);
+		this.paymentAccountsView.on('added', function() {
+			self.personalInfoModel.fetch();
+		}, this);
 
 		this.medalCalculationModel = new EzBob.Underwriter.MedalCalculationModel();
 		this.medalCalculationView = new EzBob.Underwriter.MedalCalculationView({
@@ -217,8 +220,12 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			            self.affordability.fetch().done(function() {
 			                BlockUi('off', $content);
 			                BlockUi('off', affordability);
+			                self.dashboardInfoView.drawSparklineGraphs();
 			            });
-			        } else { BlockUi('off', $content); }
+			        } else {
+			        	BlockUi('off', $content);
+			        	self.dashboardInfoView.drawSparklineGraphs();
+			        }
 					break;
 				case '#company-score':
 					self.companyScoreView.redisplayAccordion();
@@ -499,7 +506,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	}, // onDirectorAdded
 
 	recordRecentCustomers: function(id) {
-		$.post(window.gRootPath + 'Underwriter/Customers/SetRecentCustomer', { id: id }).done(function(recentCustomersModel) {
+		$.post(window.gRootPath + 'Underwriter/CustomerNavigator/SetRecentCustomer', { id: id }).done(function(recentCustomersModel) {
 			localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers));
 		});
 	}, // recordRecentCustomers
@@ -593,7 +600,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		if (this.personalInfoModel.get('IsWarning')) {
 			var approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
 				model: this.personalInfoModel,
-				parent: this
+				parent: this,
 			});
 			EzBob.App.jqmodal.show(approveLoanForWarningStatusCustomer);
 			return false;

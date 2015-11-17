@@ -102,10 +102,10 @@
 		@Description("Name", m.PersonalModel.Name)
 		@Description("Type of business", m.PersonalModel.TypeOfBusiness)
 		@Description("Company", m.PersonalModel.CompanyName + " " + m.PersonalModel.CompanyRefNumber)
-		@Description("FraudStatus", m.PersonalModel.FraudStatus)
+		@Description("Fraud status", m.PersonalModel.FraudStatus)
 
 		<dl class="dl-horizontal">
-			<dt>CreditStatus</dt>
+			<dt>Credit status</dt>
 			<dd>
 				@m.PersonalModel.CreditStatus
 				@if (m.PersonalModel.IsPendingDecision) {
@@ -117,9 +117,11 @@
 			</dd>
 		</dl>
 
-		@Description("Experian score", m.PersonalModel.ExperianScore.ToString())
-		@Description("Aml Score", m.PersonalModel.AmlScore.ToString())
-		@Description("Aml Description", m.PersonalModel.AmlDescription)
+		@Description("Personal score", m.PersonalModel.ExperianPersonalScore.ToString())
+		@Description("Indebtedness index", m.PersonalModel.ExperianCII.ToString())
+		@Description("Company score", m.PersonalModel.ExperianCompanyScore.ToString())
+		@Description("Aml score", m.PersonalModel.AmlScore.ToString())
+		@Description("Aml description", m.PersonalModel.AmlDescription)
 
 		@if (m.Phones.Any()) {
 			<dl class="dl-horizontal">

@@ -1148,18 +1148,9 @@ table.dashboard_sources {
     border: 1px solid #ccc;
 }
 
-#cboxLoadedContent {
-    /*background: #000;*/
-    padding: 1px;
-}
-
 #cboxLoadingGraphic {
     /*background: url(images/cb/loading.gif) no-repeat center center;*/
     background-color: transparent;
-}
-
-#cboxLoadingOverlay {
-    /*background: #000;*/
 }
 
 #cboxTitle {
@@ -3911,4 +3902,8 @@ button#switchToCaptcha {
 
 .form-director-is-dir-sha  .input-tag-wrap {
 	display: block;
+}
+
+.stop-scroll {
+	overflow: hidden;
 }

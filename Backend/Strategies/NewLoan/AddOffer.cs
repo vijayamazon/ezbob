@@ -2,9 +2,9 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
+	using Ezbob.Database;
 
-    public class AddOffer : AStrategy {
+	public class AddOffer : AStrategy {
         public AddOffer(NL_Offers offer, List<NL_OfferFees> fees = null ) {
             this.offer = offer;
 	        this.fees = fees;

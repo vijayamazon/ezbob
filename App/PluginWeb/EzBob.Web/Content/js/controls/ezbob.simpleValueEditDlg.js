@@ -2,6 +2,9 @@
 EzBob.Dialogs = EzBob.Dialogs || {};
 
 EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
+
+	isUnderwriter: document.location.href.indexOf("Underwriter") > -1,
+
     initialize: function () {
         this.template = $($('#simpleEditDlg').html());
     },
@@ -22,11 +25,19 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
             autoOpen: false,
             title: this.options.title,
             modal: true,
-            resizable: true,
+            resizable: this.isUnderwriter,
             draggable: true,
             width: this.options.width ? this.options.width : 350,
-            open: _.bind(this.dlgOpened, this),
-            close: _.bind(this.dlgClosed, this),
+            open: function() {
+            	_.bind(this.dlgOpened, this);
+            	if (!this.isUnderwriter)
+            		$('body').addClass('stop-scroll');
+            },
+            close: function() {
+            	_.bind(this.dlgClosed, this);
+            	if (!this.isUnderwriter)
+            		$('body').removeClass('stop-scroll');
+            },
             buttons: {
 				Save: {
 		            text: this.options.buttonName || 'Save',

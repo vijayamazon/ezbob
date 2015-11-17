@@ -183,15 +183,16 @@
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
+    <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
+    <Compile Include="Misc\LoadApplicationInfo.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
     <Compile Include="Misc\PacnetTopUpMailProcessor.cs" />
     <Compile Include="Exceptions\PacnetMailProcessorException.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
-    <Compile Include="NewLoan\CalculateLoanSchedule.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorParametersBLL.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorService.cs" />
@@ -752,10 +753,6 @@
     <ProjectReference Include="..\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
       <Project>{d7a03efe-b175-49eb-9b22-3315c1124091}</Project>
       <Name>LoanCalculator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CalculateLoan\Models\Models.csproj">
-      <Project>{ddaf0e80-8e9d-49f4-aa8c-30a69489361e}</Project>
-      <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>

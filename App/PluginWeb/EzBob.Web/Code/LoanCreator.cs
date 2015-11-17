@@ -16,11 +16,13 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using SalesForceLib.Models;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public interface ILoanCreator {
@@ -221,6 +223,7 @@
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
+			HandleSalesForceTopup(cus, now); //EZ-3908
 			// verify see above line 45-48
 			// 
 			// ++++++++
@@ -287,7 +290,25 @@
 			} // try
 
 			return loan;
-		} // CreateLoan
+		}// CreateLoan
+
+		private void HandleSalesForceTopup(Customer cus, DateTime now) {
+			if (cus.CreditSum > 1000 && cus.Loans.Count(x => x.Status != LoanStatus.PaidOff) < ConfigManager.CurrentValues.Instance.NumofAllowedActiveLoans) {
+				var requestedLoan = cus.CustomerRequestedLoan.OrderByDescending(x => x.Id).FirstOrDefault();
+				int requestedAmount = requestedLoan != null && requestedLoan.Amount.HasValue ? (int)requestedLoan.Amount.Value : 0;
+				this.serviceClient.Instance.SalesForceAddOpportunity(cus.Id, cus.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {
+					Name = cus.PersonalInfo.Fullname + " TopUp",
+					CreateDate = now,
+					Email = cus.Name,
+					ExpectedEndDate = cus.OfferValidUntil,
+					RequestedAmount = requestedAmount,
+					ApprovedAmount = (int?)cus.CreditSum,
+					Stage = OpportunityStage.s90.DescriptionAttr(),
+					Type = OpportunityType.Topup.DescriptionAttr()
+				});
+			}
+		}//HandleSalesForceTopup
+
 
 		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period) {
 			var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
@@ -305,7 +326,13 @@
 		} // ValidateLoanDelay
 
 		public virtual void ValidateOffer(Customer cus) {
-			cus.ValidateOfferDate();
+			try {
+				cus.ValidateOfferDate();
+			} catch {
+				log.Warn("ValidateOffer wrong offer date OfferStart {0} OfferValidUntil {1} Now {2} customerid:{3}", 
+					cus.OfferStart, cus.OfferValidUntil, DateTime.UtcNow, cus.Id);
+				throw;
+			}
 		} // ValidateOffer
 
 		public virtual void VerifyAvailableFunds(decimal transfered) {
@@ -313,25 +340,39 @@
 		} // VerifyAvailableFunds
 
 		public virtual void ValidateCustomer(Customer cus) {
-			if (cus == null || cus.PersonalInfo == null || cus.BankAccount == null)
+			if (cus == null || cus.PersonalInfo == null || cus.BankAccount == null) {
+				log.Warn("ValidateCustomer CustomerIsNotFullyRegisteredException cus == null {0} || cus.PersonalInfo == null {1} || cus.BankAccount == null {2} customerid {3}",
+					cus == null, cus == null || cus.PersonalInfo == null, cus == null || cus.BankAccount == null, cus == null ? 0 : cus.Id);
 				throw new CustomerIsNotFullyRegisteredException();
+			}
 
-			if (cus.Status != Status.Approved)
+			if (cus.Status != Status.Approved) {
+				log.Warn("ValidateCustomer CustomerIsNotApprovedException cus.Status != Status.Approved {0} customerid: {1}", cus.Status, cus.Id);
 				throw new CustomerIsNotApprovedException();
+			}
 
-			if (!cus.WizardStep.TheLastOne)
+			if (!cus.WizardStep.TheLastOne) {
+				log.Warn("ValidateCustomer CustomerIsNotFullyRegisteredException !cus.WizardStep.TheLastOne {0} customerid: {1}", cus.WizardStep.TheLastOne, cus.Id);
 				throw new CustomerIsNotFullyRegisteredException();
+			}
 
-			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.IsEnabled)
+			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.IsEnabled || cus.BlockTakingLoan) {
+				log.Warn("ValidateCustomer Invalid customer state !cus.CreditSum.HasValue {0} || !cus.CollectionStatus.IsEnabled {1} || cus.BlockTakingLoan {2} customerid: {3}",
+					 cus.CreditSum.HasValue, cus.CollectionStatus.IsEnabled, cus.BlockTakingLoan, cus.Id);
 				throw new Exception("Invalid customer state");
+			}
 		} // ValidateCustomer
 
-		public virtual void ValidateAmount(decimal loanAmount, Customer customer) {
-			if (loanAmount <= 0)
+		public virtual void ValidateAmount(decimal loanAmount, Customer cus) {
+			if (loanAmount <= 0) {
+				log.Warn("ValidateAmount loanAmount <= 0 {0} customerid: {1} ", loanAmount, cus.Id);
 				throw new ArgumentException();
+			}
 
-			if (customer.CreditSum < loanAmount)
+			if (cus.CreditSum < loanAmount) {
+				log.Warn("ValidateAmount cus.CreditSum < loanAmount {0} {1} customerid: {2}", cus.CreditSum, loanAmount, cus.Id);
 				throw new ArgumentException();
+			}
 		} // ValidateAmount
 
 		public virtual string GetCustomerNameForPacNet(Customer customer) {
@@ -416,15 +457,25 @@
 
 		private void ValidateRepaymentPeriodAndInterestRate(Customer cus) {
 			var cr = cus.LastCashRequest;
-			if (cr == null)
+			if (cr == null) {
+				log.Warn("ValidateRepaymentPeriodAndInterestRate No offer exists customerid: {0}", cus.Id);
 				throw new ArgumentException("No offer exists");
-			if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod)
+			}
+			if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod) {
+				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong repayment period !cr.IsCustomerRepaymentPeriodSelectionAllowed {0} && cr.RepaymentPeriod {1} != cr.ApprovedRepaymentPeriod {2} customerid: {3}",
+					cr.IsCustomerRepaymentPeriodSelectionAllowed, cr.RepaymentPeriod, cr.ApprovedRepaymentPeriod, cus.Id);
 				throw new ArgumentException("Wrong repayment period");
-
-			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod > cr.RepaymentPeriod)
+			}
+			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod > cr.RepaymentPeriod) {
+				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong repayment period2 cr.LoanSource.DefaultRepaymentPeriod.HasValue true && cr.LoanSource.DefaultRepaymentPeriod {0} > cr.RepaymentPeriod {1} customerid: {2}",
+					 cr.LoanSource.DefaultRepaymentPeriod, cr.RepaymentPeriod,cus.Id);
 				throw new ArgumentException("Wrong repayment period");
-			if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value)
+			}
+			if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
+				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong interest rate cr.LoanSource.MaxInterest.HasValue true && cr.InterestRate {0} > cr.LoanSource.MaxInterest.Value {1} customerid: {2}",
+					cr.InterestRate, cr.LoanSource.MaxInterest.Value, cus.Id);
 				throw new ArgumentException("Wrong interest rate");
+			}
 		} // ValidateRepaymentPeriodAndInterestRate
 
 
@@ -437,7 +488,6 @@
 		private readonly ISession session;
 		private readonly LoanTransactionMethodRepository tranMethodRepo;
 		
-
 		private static readonly ASafeLog log = new SafeILog(typeof(LoanCreator));
 	} // class LoanCreator
 } // namespace

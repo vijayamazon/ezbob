@@ -203,8 +203,8 @@
 				return;
 			} // if
 
-			foreach (string sName in Trail.MyInputData.HmrcBusinessNames) {
-				if (Trail.MyInputData.CompanyName.Equals(sName)) {
+			foreach (NameForComparison name in Trail.MyInputData.HmrcBusinessNames) {
+				if (Trail.MyInputData.CompanyName.SameAsCompany(name)) {
 					bIsRelevant = true;
 					break;
 				} // if

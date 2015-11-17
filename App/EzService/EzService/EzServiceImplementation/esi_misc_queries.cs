@@ -109,8 +109,9 @@
 				DateTime offerValidUntil = sr["ValidFor"];
 				bool hasFunds = availableFunds >= minLoanAmount;
 				bool blockTakingLoan = sr["BlockTakingLoan"];
+				bool canTakeAnotherLoan = sr["CanTakeAnotherLoan"];
 
-				if (!isEnabled)
+				if (!isEnabled || !canTakeAnotherLoan)
 					res = "disabled";
 				else if (hasLateLoans)
 					res = "late";
@@ -285,5 +286,10 @@
 				ManualSetupFee = instance.Result.ManualSetupFee,
 			};
 		} // GetLoanCommissionDefaults
+
+		public ActionMetaData GetIncomeSms(DateTime? date, bool isYesterday) {
+			return Execute<GetIncomeSms>(null, null, date, isYesterday);
+		} // GetIncomeSms
+
 	} // class EzServiceImplementation
 } // namespace EzService

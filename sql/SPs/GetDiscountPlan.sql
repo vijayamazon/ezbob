@@ -19,34 +19,12 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT TOP 1
-		DiscountPlanID = p.Id,
-		DiscountPlanName = p.Name,
-		p.ValuesStr,
-		p.IsDefault,
-		p.ForbiddenForReuse
+		DiscountPlanID,
+		DiscountPlanName,
+		ValuesStr,
+		IsDefault,
+		ForbiddenForReuse
 	FROM
-		DiscountPlan p
-	WHERE (
-			@DiscountPlanID IS NOT NULL AND (
-				p.Id = @DiscountPlanID
-				OR
-				p.IsDefault = 1
-				OR
-				p.Id = 1
-			)
-		)
-		OR (
-			@DiscountPlanID IS NULL AND (
-				p.IsDefault = 1
-				OR
-				p.Id = 1
-			)
-		)
-	ORDER BY
-		CASE WHEN @DiscountPlanID IS NOT NULL
-			THEN CASE WHEN @DiscountPlanID = p.Id THEN 0 ELSE 1 END
-			ELSE 1
-		END,		
-		p.IsDefault DESC
+		dbo.udfGetDiscountPlan(@DiscountPlanID)
 END
 GO

@@ -173,13 +173,13 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 	addNewDebitCard: function() {
-		var view;
 		var self = this;
-		view = new EzBob.Underwriter.AddBankAccount({
+		var view = new EzBob.Underwriter.AddBankAccount({
 			customerId: this.model.customerId
 		});
 		view.on('saved', function() {
-			return self.model.fetch();
+			self.model.fetch();
+			self.trigger('added');
 		});
 
 		EzBob.App.jqmodal.show(view);

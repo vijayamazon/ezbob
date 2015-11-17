@@ -105,7 +105,6 @@ dt {
 
 .main-page-everline #get-cash .loan-agreements ul li a {
 	display: block;
-	padding-left: 32px;
 	cursor: pointer;
 	position: relative;
 }
@@ -155,22 +154,30 @@ dt {
 
 .agreement .nav {
 	margin-bottom: 0;
-    margin-left: 24px;
+    margin-left: 34px;
     border-bottom: 0;}
 
 .nav-tabs > .active > a {
 	color: #e28023;
 	border: 1px solid #28211f;
     border-radius: 0;
+	border-bottom: 1px solid #ffffff;
+	position: relative;
+	z-index: 2;
 }
 
 	.nav > li > a:hover,
 	.nav-tabs > .active > a:hover {
 		color: #dc6e23;
-		text-decoration: underline;
 		background-color: transparent;
 		border-radius: 0;
 		border: 1px solid #28211f;
+	}
+
+	.nav-tabs > .active > a:hover {
+		border-bottom: 1px solid #ffffff;
+		position: relative;
+		z-index: 2;
 	}
 
 .agreement table {
