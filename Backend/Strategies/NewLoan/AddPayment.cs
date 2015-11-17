@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Linq;
+	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
@@ -31,6 +33,8 @@
 
 		public override void Execute() {
 
+			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
+
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
@@ -45,12 +49,17 @@
 					NL_PaypointTransactions ppTransaction = Payment.PaypointTransactions.FirstOrDefault();
 
 					if (ppTransaction == null) {
-						Log.Info("Paypoint transaction not found. payment {0}", Payment);
+						Log.Info("Paypoint transaction not found. Payment \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_Payments)), Payment.ToStringAsTable());
+						NL_AddLog(LogType.Info, "Paypoint transaction not found", this.strategyArgs, this.Error, null, null);
 					} else {
-
 						ppTransaction.PaymentID = Payment.PaymentID;
 						ppTransaction.PaypointTransactionID = DB.ExecuteScalar<long>("NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_PaypointTransactions>("Tbl", ppTransaction));
 					}
+				}
+
+				// RESET ALL PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER [DeletionTime] of deleted payment. New distribution of paid p, i, f (s) will be recalculated and saved again
+				if (Payment.PaymentStatusID == (int)NLPaymentStatuses.Cancelled) {
+					DB.ExecuteNonQuery("NL_CancelledPaymentPaidAmountsReset", CommandSpecies.StoredProcedure, new QueryParameter("PaymentID", PaymentID));
 				}
 
 				pconn.Commit();
@@ -68,109 +77,12 @@
 				return;
 			}
 
-			// TODO call UpdateLoanState
-			UpdateLoanState updateLoanStrategy = new UpdateLoanState(Payment.LoanID);
-			updateLoanStrategy.Context.CustomerID = CustomerID;
-			updateLoanStrategy.Context.UserID = Context.UserID;
-
-			/*// assign payment to loan
-
-			// get DB state
-			NL_Model model = new NL_Model(CustomerID) { UserID = Context.UserID };
-			LoanState loanState = new LoanState(model, Payment.LoanID, DateTime.UtcNow);
-			loanState.Execute();
-			model = loanState.Result;
-
-			// get loan state updated
-			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				calc.GetState();
-			} catch (NoInitialDataException noInitialDataException) {
-				this.Error = noInitialDataException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
-			} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
-				this.Error = invalidInitialInterestRateException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
-			} catch (NoLoanHistoryException noLoanHistoryException) {
-				this.Error = noLoanHistoryException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
-			} catch (InvalidInitialAmountException invalidInitialAmountException) {
-				this.Error = invalidInitialAmountException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
-			} catch (OverflowException overflowException) {
-				this.Error = overflowException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
-			} catch (Exception ex) {
-				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", model, this.Error, this.Error, null);
-			}
-
-			List<NL_LoanSchedules> newSchedules = new List<NL_LoanSchedules>();
-			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
-			List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
-
-			foreach (NL_LoanHistory h in model.Loan.Histories) {
-				foreach (NL_LoanSchedules s in h.Schedule) {
-					if (s.LoanScheduleID == 0) {
-						newSchedules.Add(s);
-					} else {
-						// update existing schedules
-						DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
-							new QueryParameter("LoanScheduleID", s.LoanScheduleID),
-							new QueryParameter("LoanScheduleStatusID", s.LoanScheduleStatusID),
-							new QueryParameter("ClosedTime", s.ClosedTime)
-							);
-					}
-				}
-			}
-
-			// addd new schedules
-			DB.ExecuteNonQuery("NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", newSchedules));
-
+			// save new recalculated loan state to DB
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(Payment.LoanID);
+			reloadLoanDBState.Context.CustomerID = CustomerID;
+			reloadLoanDBState.Context.UserID = Context.UserID;
+			reloadLoanDBState.Execute();
 			
-
-			model.Loan.Payments.ForEach(p => p.SchedulePayments.ForEach(sp => schedulePayments.Add(sp)));
-
-			List<NL_LoanSchedulePayments> schPayments = (List<NL_LoanSchedulePayments>)schedulePayments.Where(sp => sp.LoanSchedulePaymentID == 0);
-			
-			if (schPayments.Count > 0) {
-				DB.ExecuteNonQuery("NL_LoanSchedulePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schPayments));
-			}
-
-			// existing schedule payments
-			schPayments = (List<NL_LoanSchedulePayments>)schedulePayments.Where(sp => sp.LoanSchedulePaymentID > 0);
-
-			if (schPayments.Count > 0) {
-				foreach (NL_LoanSchedulePayments sp in schPayments) {
-					DB.ExecuteNonQuery("NL_LoanSchedulePaymentsUpdate", CommandSpecies.StoredProcedure,
-								new QueryParameter("LoanSchedulePaymentID", sp.LoanSchedulePaymentID),
-							//	new QueryParameter("LoanScheduleID", sp.LoanScheduleID),
-							//	new QueryParameter("PaymentID", sp.PaymentID),
-								new QueryParameter("PrincipalPaid", sp.PrincipalPaid),
-								new QueryParameter("InterestPaid", sp.InterestPaid)
-							);
-				}
-			}
-
-			model.Loan.Payments.ForEach(p => p.FeePayments.ForEach(fp => feePayments.Add(fp)));
-
-			// new fee payments
-			List<NL_LoanFeePayments> fPayments = (List<NL_LoanFeePayments>)feePayments.Where(fp => fp.LoanFeePaymentID == 0);
-
-			if (fPayments.Count > 0) {
-				DB.ExecuteNonQuery("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", fPayments));
-			}
-
-			fPayments = (List<NL_LoanFeePayments>)feePayments.Where(fp => fp.LoanFeePaymentID > 0);
-			if (fPayments.Count > 0) {
-				foreach (NL_LoanFeePayments fp in fPayments) {
-					DB.ExecuteNonQuery("NL_LoanFeePaymentsUpdate", CommandSpecies.StoredProcedure,
-						new QueryParameter("LoanFeePaymentID", fp.LoanFeePaymentID),
-					//	new QueryParameter("PaymentID", fp.PaymentID),
-						new QueryParameter("Amount", fp.Amount)
-					);
-				}
-			}*/
 		}
 	} // class AddPayment
 } // ns

@@ -34,7 +34,7 @@
 		public decimal Principal { get; set; }
 
 		[DataMember]
-		[DecimalFormat("F6")]
+		[DecimalFormat("F7")]
 		public decimal InterestRate { get; set; }
 
 

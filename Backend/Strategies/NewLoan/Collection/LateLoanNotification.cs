@@ -392,7 +392,7 @@
 
             NL_Model nlModel = new NL_Model(model.CustomerID){Loan = new NL_Loans()};
 
-            LoanState strategy = new LoanState(nlModel, model.LoanID, DateTime.UtcNow);
+            GetLoanDBState strategy = new GetLoanDBState(nlModel, model.LoanID, DateTime.UtcNow);
             strategy.Execute();
 
             nlModel = strategy.Result;

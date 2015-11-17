@@ -1,13 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using Ezbob.Backend.Models;
-    using Ezbob.Backend.Strategies.MailStrategies;
-    using Ezbob.Backend.Strategies.NewLoan;
-    using Ezbob.Database;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Database;
 
-    public class XDaysDue : AStrategy {
+	public class XDaysDue : AStrategy {
 		public override string Name {
 			get { return "XDays Due"; }
 		} // Name
@@ -94,8 +93,10 @@
                 new QueryParameter(parameterName, true)
             };
 
-            var strategy = new UpdateLoanSchedules(loanScheduleId, queryParameteres, loanId);
-            strategy.Execute();
+			//var strategy = new UpdateLoanSchedules(loanScheduleId, queryParameteres, loanId);
+			//strategy.Execute();
+
+			DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure, queryParameteres );
 
             Log.Info("update loan schedule x days due for customer {0}", customerId);
         }

@@ -1,25 +1,14 @@
-IF OBJECT_ID('NL_LoanSchedulePaymentsUpdate') IS NULL
-	EXECUTE('CREATE PROCEDURE NL_LoanSchedulePaymentsUpdate AS SELECT 1')
+IF OBJECT_ID('NL_CancelledPaymentPaidAmountsReset') IS NULL
+	EXECUTE('CREATE PROCEDURE NL_CancelledPaymentPaidAmountsReset AS SELECT 1')
 GO
 
-ALTER PROCEDURE [dbo].[NL_LoanSchedulePaymentsUpdate]
-	@LoanSchedulePaymentID BIGINT,
-	--@LoanScheduleID BIGINT = NULL,	
-	--@PaymentID BIGINT = NULL,	
-	@PrincipalPaid DECIMAL(18,6) = NULL,
-	@InterestPaid DECIMAL(18,6) = NULL	
+ALTER PROCEDURE [dbo].[NL_CancelledPaymentPaidAmountsReset]	
+	@PaymentID BIGINT 	
 AS
 BEGIN
 	SET NOCOUNT ON;
 			
-		UPDATE 
-			[NL_LoanSchedulePayments]
-		SET  
-			--[LoanScheduleID] = ISNULL(@LoanScheduleID, LoanScheduleID), 
-			--[PaymentID] = ISNULL(@PaymentID, PaymentID), 
-			[PrincipalPaid] = ISNULL(@PrincipalPaid, PrincipalPaid),
-			[InterestPaid] = ISNULL(@InterestPaid, InterestPaid)					
-		WHERE 
-			[LoanSchedulePaymentID] = @LoanSchedulePaymentID;	
+		UPDATE [NL_LoanSchedulePayments] SET  [PrincipalPaid] = 0, [InterestPaid] = 0 WHERE [PaymentID] = @PaymentID;
+		UPDATE [NL_LoanFeePayments] SET [Amount] = 0 WHERE [PaymentID] = @PaymentID;
 		
 END

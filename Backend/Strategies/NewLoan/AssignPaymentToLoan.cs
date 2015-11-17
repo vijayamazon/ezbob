@@ -69,7 +69,7 @@
 			/*
 			 * TODO
 			 * 
-			 * var stateStrategy = new LoanState(
+			 * var stateStrategy = new GetLoanDBState(
 				new NL_Model(NLModel.CustomerID),
 				NLModel.Loan.LoanID,
 		NLModel.CustomerID,

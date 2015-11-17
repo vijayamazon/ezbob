@@ -324,6 +324,8 @@
 
 				this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
 
+				// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL
+
 				LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
 
 				PaymentResult payFastModel = loanRepaymentFacade.MakePayment(

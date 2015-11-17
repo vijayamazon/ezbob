@@ -91,8 +91,7 @@
 	public enum NLPaymentStatuses {
 		InProgress = 1, // DB table id
 		Active = 2,
-		Deleted = 3,
-		Cancelled = 4
+		Cancelled = 3
 	} // enum NLPaymentStatuses
 
 	public enum NLLoanTransactionMethods {
@@ -140,7 +139,7 @@
 		[Description("1")] // IsActive
 		EqualPrincipal = 1,	// DB table id
 		[Description("0")] // 
-		FixedPayment = 2 // used for "out of loan agreement" rescheduling, disabled so far (15 October 2015)
+		FixedPayment = 2 // used for "out of loan agreement" rescheduling, not supported yet (15 October 2015)
 	}
 
 } // namespace

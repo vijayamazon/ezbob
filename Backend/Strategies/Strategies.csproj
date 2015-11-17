@@ -196,7 +196,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NewLoan\AcceptRollover.cs" />
-    <Compile Include="NewLoan\UpdateLoanState.cs" />
+    <Compile Include="NewLoan\UpdateLoanDBState.cs" />
     <Compile Include="NewLoan\AddRolloverOpportunity.cs" />
     <Compile Include="NewLoan\Collection\LateLoanCured.cs" />
     <Compile Include="NewLoan\Collection\LateCustomerStatusChange.cs" />
@@ -204,7 +204,6 @@
     <Compile Include="NewLoan\Collection\AddCollectionLog.cs" />
     <Compile Include="NewLoan\Collection\LateLoanJob.cs" />
     <Compile Include="NewLoan\Collection\SetLateLoanStatus.cs" />
-    <Compile Include="NewLoan\UpdateLoanSchedules.cs" />
     <Compile Include="NewLoan\DeactivateLoanInterestFreeze.cs" />
     <Compile Include="NewLoan\AddLoanInterestFreeze.cs" />
     <Compile Include="NewLoan\BuildLoanFromOffer.cs" />
@@ -216,7 +215,6 @@
     <Compile Include="NewLoan\AddLoanState.cs" />
     <Compile Include="NewLoan\AddRollover.cs" />
     <Compile Include="NewLoan\AddDecision.cs" />
-    <Compile Include="NewLoan\AssignPaymentToLoan.cs" />
     <Compile Include="NewLoan\AddPayment.cs" />
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
@@ -225,7 +223,7 @@
     <Compile Include="NewLoan\ReschedulingSaveException.cs" />
     <Compile Include="NewLoan\ReschedulingOutPaymentPerIntervalException.cs" />
     <Compile Include="NewLoan\ReschedulingInPeriodException.cs" />
-    <Compile Include="NewLoan\LoanState.cs">
+    <Compile Include="NewLoan\GetLoanDBState.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NewLoan\Exceptions\NL_ExceptionCustomerNotFound.cs" />

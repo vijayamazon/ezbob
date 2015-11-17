@@ -13,8 +13,8 @@
     {
         private DateTime now;
         public override string Name { get { return "Late Loan Cured"; } }
-        public override void Execute()
-        {
+
+        public override void Execute(){
             this.now = DateTime.UtcNow;
             try {
                 this.now = DateTime.UtcNow;
@@ -36,8 +36,8 @@
                 NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
             }
         }//Execute
-        private void HandleCuredLoan(int customerID, int loanID, long loanHistoryID)
-        {
+
+        private void HandleCuredLoan(int customerID, int loanID, long loanHistoryID){
             //TODO Don't delete will be uncomment on fully NL activation.
             var collectionChangeStatus = new LateCustomerStatusChange(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured,this.now);
             collectionChangeStatus.Execute();

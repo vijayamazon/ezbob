@@ -15,6 +15,7 @@
 	using Models;
 	using Code;
 	using Code.ReportGenerator;
+	using DbConstants;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
@@ -216,6 +217,8 @@
 
 					payPointTransactionId = paypointCard.TransactionId;
 					_paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
+
+					// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
@@ -303,9 +306,10 @@
 			var state = payEarlyCalc.GetState();
 
 			var rolloverCharge = CurrentValues.Instance.RolloverCharge;
+		
+			// TODO FOR NL: newcalc.Interest - interest at rollover info t'; calc.Fees - "lateCharge" == late fees at t'; rolloverCharge as now (from conf. variables)
 
-			var model = new
-							{
+			var model = new{
 								rolloverAmount = state.Fees + state.Interest + (!isEdit ? rolloverCharge : 0),
 								interest = state.Interest,
 								lateCharge = state.Fees - (isEdit && state.Fees != 0 ? rolloverCharge : 0),

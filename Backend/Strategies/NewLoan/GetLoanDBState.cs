@@ -2,16 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Backend.Strategies.NewLoan.DAL;
     using Ezbob.Database;
 
     /// <summary>
-    /// Load NL Loan from DB into NL_Model
+    /// Load NL Loan from DB into NL_Model. nlModel argument should be empty - filled in from within the strategy
     /// </summary>
-    public class LoanState : AStrategy{
+    public class GetLoanDBState : AStrategy{
 
-        public LoanState(NL_Model nlModel, long loanID, DateTime? stateDate){
+        public GetLoanDBState(NL_Model nlModel, long loanID, DateTime? stateDate){
 
             Result = nlModel;
             this.loanID = loanID;
@@ -23,7 +24,7 @@
 			this.strategyArgs = new object[] { Result, this.loanID, StateDate };
         } // constructor
 
-        public override string Name { get { return "LoanState"; } }
+        public override string Name { get { return "GetLoanDBState"; } }
 
         public NL_Model Result { get; private set; }
         private readonly long loanID;
@@ -62,7 +63,7 @@
                 Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet",CommandSpecies.StoredProcedure,
                        new QueryParameter("@LoanID", this.loanID));
 
-                // filter cnacelled/deleted fees on LoanState strategy
+                // filter cnacelled/deleted fees on GetLoanDBState strategy
                 // filter in Calculator according to CalculationDate
                 //fees.Where(f => f.DisabledTime == null || f.DeletedByUserID ==0).ForEach(f => Result.Loan.Fees.Add(f));;
 
@@ -83,12 +84,12 @@
 
                 // TODO combine all payments + transactions to one SP kogda nibud'
 
-                // payments (logical loan transactions)
+                // payments (logical transactions) ordered by PaymentTime
                 Result.Loan.Payments.Clear();
-                Result.Loan.Payments = DB.Fill<NL_Payments>("NL_PaymentsGet",CommandSpecies.StoredProcedure,
-                       new QueryParameter("@LoanID", this.loanID),
-                       new QueryParameter("@Now", StateDate)
-                );
+                Result.Loan.Payments = new List<NL_Payments>(DB.Fill<NL_Payments>("NL_PaymentsGet",CommandSpecies.StoredProcedure,
+	                new QueryParameter("@LoanID", this.loanID),
+	                new QueryParameter("@Now", StateDate)
+	                ).OrderBy(p=>p.PaymentTime));
 
                 foreach (NL_Payments p in Result.Loan.Payments){
                     p.SchedulePayments.Clear();
@@ -114,11 +115,12 @@
                 // ReSharper disable once CatchAllClause
                 NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, Result, null, null);
 
-            } catch (Exception ex){
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, ex.ToString(), ex.StackTrace);
+            } catch (Exception ex) {
+	            this.Error = ex.Message;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, ex.ToString(), ex.StackTrace);
                 Log.Alert(ex, "Failed to load loan state.");
             } // try
         } // Execute
 	
-    } // class LoanState
+    } // class GetLoanDBState
 } // namespace

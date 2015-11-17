@@ -3,6 +3,7 @@
 	using System.Globalization;
 	using System.Collections.Generic;
 
+	// TODO   rename to SendPaymentConfirmationEmail
 	public class PayEarly : AMailStrategyBase {
 		public PayEarly(int customerId, decimal amount, string loanRefNumber) : base(customerId, true) {
 			this.amount = amount;

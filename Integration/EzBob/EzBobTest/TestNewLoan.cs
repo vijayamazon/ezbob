@@ -189,16 +189,15 @@
 		[Test]
 		public void AddLoan() {
 			const int userID = 357;
-			const int oldLoanID = 3091;
+			const int oldLoanID = 3087;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			DateTime now = oldLoan.Date;
-			AgreementModel agreementModel = new AgreementModel() {
+			/*AgreementModel agreementModel = oldLoan.AgreementModel; new AgreementModel() {
 				CustomerEmail = oldLoan.Customer.Name,
-				//APR = 35.35,
 				FullName = oldLoan.Customer.Name,
-				CountRepayment = oldLoan.RepaymentsNum
-			};
+				CountRepayment = oldLoan.Schedule.Count
+			};*/
 			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
 				UserID = userID,
 				Loan = new NL_Loans() { OldLoanID = oldLoan.Id, Refnum = oldLoan.RefNumber },
@@ -211,7 +210,11 @@
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = now,
-				AgreementModel = JsonConvert.SerializeObject(agreementModel)});
+				AgreementModel = JsonConvert.SerializeObject(oldLoan.AgreementModel),
+				InterestRate = oldLoan.InterestRate,
+				RepaymentCount = oldLoan.Schedule.Count,
+				RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month
+			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
 				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"});
@@ -221,12 +224,13 @@
 
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				agreementModel.APR = calc.CalculateApr();
+				double apr = calc.CalculateApr();
+				m_oLog.Info("apr = {0}", apr);
 			} catch (Exception ex) {
 				Console.WriteLine("ex");
 			}
-			
-			model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
+
+			//model.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(agreementModel);
 			AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
 			try {
@@ -403,7 +407,7 @@
 			};
 			foreach (var lID in loans) {
 				try {
-					//var s = new LoanState<Loan>(new Loan(), lID, DateTime.UtcNow);
+					//var s = new GetLoanDBState<Loan>(new Loan(), lID, DateTime.UtcNow);
 					//s.Execute();
 				} catch (Exception e) {
 					Console.WriteLine(e);
@@ -554,7 +558,7 @@
 		[Test]
 		public void LoanStateStrategy() {
 			const long loanID = 17;
-			var strategy = new LoanState(new NL_Model(56), loanID, DateTime.UtcNow);
+			var strategy = new GetLoanDBState(new NL_Model(56), loanID, DateTime.UtcNow);
 			strategy.Execute();
 			this.m_oLog.Debug(strategy.Result.Loan);
 		}
@@ -571,13 +575,13 @@
 
 		[Test]
 		public void CalculatorGetState() {
-			const long loanID = 17;
-			NL_Model model = new NL_Model(56) {
+			const long loanID = 21;
+			NL_Model model = new NL_Model(351) {
 				UserID = 357,
 				Loan = new NL_Loans()};
-			LoanState state = new LoanState(model, loanID, DateTime.UtcNow);
-			state.Execute();
-			model = state.Result;
+			GetLoanDBState dbState = new GetLoanDBState(model, loanID, DateTime.UtcNow);
+			dbState.Execute();
+			model = dbState.Result;
 			// dummy: reset fee payment, check calculator's adding this
 			//var firstOrDefault = model.Loan.Payments.FirstOrDefault();
 			//if (firstOrDefault != null) {
@@ -644,7 +648,7 @@
 				var oldLoan = loanRep.Get(model.Loan.OldLoanID);
 				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 				oldCalc.GetState();
-				this.m_oLog.Debug("old loan state: {0}", oldLoan);
+				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);
 
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
@@ -661,7 +665,7 @@
 				UserID = 357,
 				Loan = new NL_Loans()
 			};
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			GetLoanDBState strategy = new GetLoanDBState(model, loanID, DateTime.UtcNow);
 			strategy.Execute();
 			model = strategy.Result;
 
@@ -761,8 +765,8 @@
 
 		[Test]
 		public void CreateSchedule() {
-			DateTime issueDate =  new DateTime(2015, 10, 25);
-			NL_Model model = new NL_Model(56) {UserID = 357,Loan = new NL_Loans()};
+			DateTime issueDate =  new DateTime(2015, 11, 17);
+			NL_Model model = new NL_Model(351) {UserID = 357,Loan = new NL_Loans()};
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();
@@ -772,6 +776,7 @@
 			}
 			model = strategy.Result;
 			this.m_oLog.Debug("=================================={0}\n", model.Loan);
+			//return;
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
 				calc.CreateSchedule();
@@ -789,7 +794,7 @@
 				UserID = 357,
 				Loan = new NL_Loans()
 			};
-			LoanState strategy = new LoanState(model, loanID, DateTime.UtcNow);
+			GetLoanDBState strategy = new GetLoanDBState(model, loanID, DateTime.UtcNow);
 			strategy.Execute();
 			model = strategy.Result;
 			model.Loan.Payments.Clear();

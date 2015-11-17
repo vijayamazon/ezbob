@@ -201,7 +201,6 @@
 		// step 2 - actual paypoint transaction
 		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount)
 		{
-
 			var newTransactionId = transactionId + DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss");
 			string str;
 			PayPointReturnData ret;

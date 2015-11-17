@@ -40,7 +40,7 @@
                 {
                     Log.Info("ChangeStatus to customer {0} loan {1} status {2} was not changed - customer already in this status", CustomerID, LoanID, Status);
                 }
-                //TODO update loan collection status if want to be on loan level and not on customer level. WILL BE IMPLEMENTED IN BI JOB (fill in LoanState table???)
+                //TODO update loan collection status if want to be on loan level and not on customer level. WILL BE IMPLEMENTED IN BI JOB (fill in GetLoanDBState table???)
                 Log.Info("update loan collection status if want to be on loan level and not on customer level for customer {0}, loan {1}", CustomerID, LoanID);
                 NL_AddLog(LogType.Info, "Strategy End", null, new object[] { this.CustomerID, this.LoanID, this.Status, this.Type }, null, null);
             }

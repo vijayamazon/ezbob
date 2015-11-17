@@ -95,8 +95,7 @@
                                                                 int customerID,
                                                                 int? oldLoanId,
                                                                 int oldLoanInterestFreezeID,
-                                                                DateTime? deactivationDate)
-        {
+                                                                DateTime? deactivationDate){
             DeactivateLoanInterestFreeze stra;
             var amd = ExecuteSync(out stra, customerID, userID, oldLoanId, oldLoanInterestFreezeID, deactivationDate);
             return new NLLongActionResult

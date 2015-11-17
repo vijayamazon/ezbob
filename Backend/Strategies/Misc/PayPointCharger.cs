@@ -103,6 +103,7 @@
 
 			// step 4 - notifications
 			if (autoPaymentResult.PaymentCollectedSuccessfully) {
+				// NL: send confirmation mail
 				SendConfirmationMail(customerId, autoPaymentResult.ActualAmountCharged, refNum);
 				SendLoanStatusMail(customerId, loanId, customerMail, autoPaymentResult.ActualAmountCharged); // Will send mail for paid off loans
 			}//if
@@ -117,6 +118,7 @@
 			while (counter <= 2) {
 				PayPointReturnData payPointReturnData;
 
+	
 				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData)) {
 					if (isNonRegulated && IsNotEnoughMoney(payPointReturnData)) {
 						if (!reductionFee) {
@@ -142,6 +144,9 @@
 					} else if (IsCollectionSuccessful(payPointReturnData)) {
 						result.PaymentCollectedSuccessfully = true;
 						result.ActualAmountCharged = actualAmountCharged;
+
+						// TODO use payPointReturnData as input of AddPayment strategy, i.e. register payment for NL
+
 						return result;
 					} else {
 						result.PaymentFailed = true;
@@ -152,6 +157,10 @@
 					result.IsException = true;
 					return result;
 				} //if
+
+				
+				
+
 			} //while
 
 			return result;
@@ -160,14 +169,19 @@
 		private void SendConfirmationMail(int customerId, decimal amountDue, string refNum) {
 			PayEarly payEarly = new PayEarly(customerId, amountDue, refNum);
 			payEarly.Execute();
+
+			// NL
+			// PayEarly payEarly = new PayEarly(customerId, amountDue, refNum);
+			// payEarly.Execute();
 		} //SendConfirmationMail
 
 		private void SendLoanStatusMail(int customerId, int loanId, string customerMail, decimal actualAmountCharged) {
+			// TODO remove, because the same SP called from the strategy below (LoanStatusAfterPayment)
 			SafeReader sr = DB.GetFirst(
 				"GetLoanStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("LoanId", loanId)
-			);
+			); // num of activve loans, "BadStatuses", customer data etc.
 
 			string loanStatus = sr["Status"];
 			decimal balance = sr["Balance"];
@@ -196,6 +210,8 @@
 		private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result) {
 			try {
 				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue);
+
+			
 				return true;
 			} catch (Exception ex) {
 				Log.Error("Failed making auto payment for loan schedule id:{0} exception:{1}", loanScheduleId, ex);

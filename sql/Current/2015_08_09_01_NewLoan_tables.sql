@@ -771,9 +771,8 @@ BEGIN
 
 	INSERT INTO NL_PaymentStatuses (PaymentStatusID, PaymentStatus) VALUES
 		(1, 'Pending'),
-		(2, 'Active'),
-		(3, 'Deleted'),
-		(4, 'Cancelled')
+		(2, 'Active'),		
+		(3, 'Cancelled')
 END
 GO
 
