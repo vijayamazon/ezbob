@@ -81,7 +81,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		var currentLoanType = _.find(this.cloneModel.get('LoanTypes'), function (l) { return l.Id === loanTypeId; });
 
-		this.cloneModel.set('RepaymentPerion', currentLoanType.RepaymentPeriod);
+		this.cloneModel.set('RepaymentPeriod', currentLoanType.RepaymentPeriod);
 	}, // onChangeLoanType
 
 	onChangeLoanSource: function () {
@@ -98,7 +98,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		if (currentLoanSource) {
 			if (currentLoanSource.DefaultRepaymentPeriod > 0)
-				this.cloneModel.set('RepaymentPerion', currentLoanSource.DefaultRepaymentPeriod);
+				this.cloneModel.set('RepaymentPeriod', currentLoanSource.DefaultRepaymentPeriod);
 
 			var maxInterestRate = currentLoanSource.MaxInterest;
 
@@ -142,7 +142,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			discountPlan: m.DiscountPlanId,
 			amount: m.OfferedCreditLine,
 			interestRate: m.InterestRate,
-			repaymentPeriod: m.RepaymentPerion,
+			repaymentPeriod: m.RepaymentPeriod,
 			offerStart: m.StartingFromDate,
 			offerValidUntil: m.OfferValidateUntil,
 			brokerSetupFeePercent: m.BrokerSetupFeePercent,
@@ -162,7 +162,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			selector: 'input[name="interestRate"]',
 			converter: EzBob.BindingConverters.percentsFormat,
 		},
-		RepaymentPerion: {
+		RepaymentPeriod: {
 			selector: 'input[name="repaymentPeriod"]',
 			converter: EzBob.BindingConverters.notNull,
 		},

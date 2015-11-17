@@ -15,7 +15,7 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 			isShowGift: this.options.isShowGift,
 			isShowExportBlock: this.options.isShowExportBlock,
 			OfferedCreditLine: this.options.schedule.Details.OfferedCreditLine,
-			RepaymentPerion: this.options.schedule.Details.RepaymentPeriod,
+			RepaymentPeriod: this.options.schedule.Details.RepaymentPeriod,
 			InterestRate: this.options.schedule.Details.InterestRate,
 			LoanType: this.options.schedule.Details.LoanType,
 			isShowExceedMaxInterestForSource: this.options.isShowExceedMaxInterestForSource,

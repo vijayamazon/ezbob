@@ -71,7 +71,7 @@
 			model.IsAvoid = customer.IsAvoid;
 			model.SystemDecision = customer.Status.ToString();
 
-			model.AvaliableAmount = customer.CreditSum ?? 0M;
+			model.AvailableAmount = customer.CreditSum ?? 0M;
 			model.OfferExpired = customer.OfferValidUntil <= DateTime.UtcNow;
 
 			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
@@ -145,6 +145,7 @@
 		private void BuildCashRequestModel(ApplicationInfoModel model, Customer customer, CashRequest cr) {
 			model.InterestRate = cr.InterestRate;
 			model.CashRequestId = cr.Id;
+			// TODO model.CashRequestTimestamp = 
 			model.SpreadSetupFee = cr.SpreadSetupFee();
 
 			model.ManualSetupFeePercent = cr.ManualSetupFeePercent;
@@ -160,7 +161,7 @@
 			cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
 			cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
 
-			model.RepaymentPerion = cr.RepaymentPeriod; //_repaymentCalculator.ReCalculateRepaymentPeriod(cr);
+			model.RepaymentPeriod = cr.RepaymentPeriod; //_repaymentCalculator.ReCalculateRepaymentPeriod(cr);
 
 			if (cr.SystemCalculatedSum.HasValue && Math.Abs(cr.SystemCalculatedSum.Value) > 0.01)
 				model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
@@ -194,7 +195,7 @@
 
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 			model.Apr = apr;
-			model.Air = (model.InterestRate * 100 * 12 + (model.RepaymentPerion == 0 ? 0 : (12 / (decimal)model.RepaymentPerion * model.TotalSetupFeePercent * 100))) / 100;
+			model.Air = (model.InterestRate * 100 * 12 + (model.RepaymentPeriod == 0 ? 0 : (12 / (decimal)model.RepaymentPeriod * model.TotalSetupFeePercent * 100))) / 100;
 			model.RealCost = loanOffer.RealInterestCost;
 		}// BuildCashRequestModel
 

@@ -186,6 +186,7 @@
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
+    <Compile Include="Misc\LoadApplicationInfo.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
     <Compile Include="Misc\PacnetTopUpMailProcessor.cs" />

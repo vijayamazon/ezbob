@@ -399,7 +399,7 @@
                 </td>
             </tr>
             @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
-            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
+            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvailableAmount) %>")
             @RawCell("Starting from date", "<%- m.StartingFromDate %>")
             @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
         </tbody>
@@ -441,7 +441,7 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
+            @RawCell("Repayment period", "<%- m.RepaymentPeriod %>")
             @RawCell("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
             
             <tr>

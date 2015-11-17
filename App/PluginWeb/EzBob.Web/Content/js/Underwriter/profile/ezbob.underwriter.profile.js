@@ -600,7 +600,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		if (this.personalInfoModel.get('IsWarning')) {
 			var approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
 				model: this.personalInfoModel,
-				parent: this
+				parent: this,
 			});
 			EzBob.App.jqmodal.show(approveLoanForWarningStatusCustomer);
 			return false;

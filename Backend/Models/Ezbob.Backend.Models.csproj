@@ -50,6 +50,12 @@
     <Compile Include="AffordabilityDataModel.cs" />
     <Compile Include="AgreementModel.cs" />
     <Compile Include="Alibaba\CustomerDataSharing.cs" />
+    <Compile Include="ApplicationInfo\ApplicationInfoModel.cs" />
+    <Compile Include="ApplicationInfo\AutomationOfferModel.cs" />
+    <Compile Include="ApplicationInfo\DiscountPlanModel.cs" />
+    <Compile Include="ApplicationInfo\LoanSourceModel.cs" />
+    <Compile Include="ApplicationInfo\LoanTypeModel.cs" />
+    <Compile Include="ApplicationInfo\SuggestedAmountModel.cs" />
     <Compile Include="BankStatementDataModel.cs" />
     <Compile Include="BrokerAddBankModel.cs" />
     <Compile Include="BrokerInvoiceCommissionModel.cs" />
