@@ -212,6 +212,7 @@
 			} else
 				model.AutomationOfferModel = new AutomationOfferModel();
 		}//BuildAutomationOfferModel
+
 		private void BuildSuggestedAmountModel(ApplicationInfoModel model, Customer customer) {
 			if (customer.CustomerMarketPlaces.Any(x => x.Marketplace.Name == "HMRC")) {
 				var hmrc = customer.CustomerMarketPlaces.First(x => x.Marketplace.Name == "HMRC")

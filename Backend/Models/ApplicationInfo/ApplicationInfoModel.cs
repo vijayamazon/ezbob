@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Models.ApplicationInfo {
+	using System.Linq;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
 
 	[DataContract]
 	public class ApplicationInfoModel {
@@ -43,13 +45,18 @@
 		public string OfferValidateUntil { get; set; }
 
 		[DataMember]
-		public string Details { get; set; }
-
-		[DataMember]
 		public bool Editable { get; set; }
 
 		[DataMember]
 		public long CashRequestId { get; set; }
+
+		public string CashRequestRowVersion {
+			get {
+				return CashRequestTimestamp == null
+					? string.Empty
+					: string.Join("", CashRequestTimestamp.Select(b => b.ToString("x2")));
+			} // get
+		} // CashRequestRowVersion
 
 		[DataMember]
 		public byte[] CashRequestTimestamp { get; set; }
@@ -64,19 +71,23 @@
 		public decimal TotalSetupFee { get; set; }
 
 		[DataMember]
-		public decimal TotalSetupFeePercent { get; set; }
-
-		[DataMember]
 		public decimal BrokerSetupFee { get; set; }
 
-		[DataMember]
-		public decimal BrokerSetupFeeActualPercent { get; set; }
+		public decimal TotalSetupFeePercent {
+			get { return OfferedCreditLine == 0 ? 0 : TotalSetupFee / OfferedCreditLine; }
+		} // TotalSetupFeePercent
 
-		[DataMember]
-		public decimal SetupFee { get; set; }
+		public decimal BrokerSetupFeeActualPercent {
+			get { return OfferedCreditLine == 0 ? 0 : BrokerSetupFee / OfferedCreditLine; }
+		} // BrokerSetupFeeActualPercent
 
-		[DataMember]
-		public decimal SetupFeeActualPercent { get; set; }
+		public decimal SetupFee {
+			get { return TotalSetupFee - BrokerSetupFee; }
+		} // SetupFee
+
+		public decimal SetupFeeActualPercent {
+			get { return OfferedCreditLine == 0 ? 0 : SetupFee / OfferedCreditLine; }
+		} // SetupFeeActualPercent
 
 		[DataMember]
 		public bool IsTest { get; set; }
@@ -111,6 +122,7 @@
 		[DataMember]
 		public int LoanTypeId { get; set; } // Current loan type id.
 
+		[NonTraversable]
 		[DataMember]
 		public LoanTypeModel[] LoanTypes { get; set; } // All the loan types.
 
@@ -120,6 +132,7 @@
 		[DataMember]
 		public int OfferValidForHours { get; set; }
 
+		[NonTraversable]
 		[DataMember]
 		public DiscountPlanModel[] DiscountPlans { get; set; }
 
@@ -133,13 +146,14 @@
 		public int DiscountPlanId { get; set; }
 
 		[DataMember]
-		public int LoanSourceID { get; set; } //current loan source id
+		public int LoanSourceID { get; set; } // Current loan source id.
 
 		[DataMember]
-		public string LoanSource { get; set; } //current loan source name
+		public string LoanSource { get; set; } // Current loan source name.
 
+		[NonTraversable]
 		[DataMember]
-		public LoanSourceModel[] AllLoanSources { get; set; } //all loan sources
+		public LoanSourceModel[] AllLoanSources { get; set; } // All loan sources.
 
 		[DataMember]
 		public string AMLResult { get; set; }
@@ -171,18 +185,28 @@
 		[DataMember]
 		public double Apr { get; set; }
 
-		[DataMember]
-		public decimal Air { get; set; }
+		public decimal Air {
+			get {
+				return
+					(InterestRate * 100m * 12m + (
+						RepaymentPeriod == 0
+							? 0
+							: (12m / RepaymentPeriod * TotalSetupFeePercent * 100)
+					)) / 100m;
+			} // get
+		} // Air
 
 		[DataMember]
 		public decimal RealCost { get; set; }
 
+		[NonTraversable]
 		[DataMember]
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
 
 		[DataMember]
 		public int TypeOfBusiness { get; set; }
 
+		[NonTraversable]
 		[DataMember]
 		public AutomationOfferModel AutomationOfferModel { get; set; }
 

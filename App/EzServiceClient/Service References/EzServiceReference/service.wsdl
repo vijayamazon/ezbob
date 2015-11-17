@@ -86,6 +86,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
   </wsdl:types>
@@ -988,6 +989,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_GetIncomeSms_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetIncomeSmsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadApplicationInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadApplicationInfo" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadApplicationInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadApplicationInfoResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -2101,6 +2108,10 @@
     <wsdl:operation name="GetIncomeSms">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetIncomeSms" message="tns:IEzService_GetIncomeSms_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetIncomeSmsResponse" message="tns:IEzService_GetIncomeSms_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadApplicationInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadApplicationInfo" message="tns:IEzService_LoadApplicationInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadApplicationInfoResponse" message="tns:IEzService_LoadApplicationInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -3802,6 +3813,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadApplicationInfo">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadApplicationInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
@@ -4570,20 +4590,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

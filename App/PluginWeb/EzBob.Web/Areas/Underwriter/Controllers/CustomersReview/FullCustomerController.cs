@@ -70,6 +70,15 @@
 					var m = new ApplicationInfoModel();
                     this._infoModelBuilder.InitApplicationInfo(m, customer, cr);
 					model.ApplicationInfoModel = m;
+
+					var aiar = new ServiceClientProxy.ServiceClient().Instance.LoadApplicationInfo(
+						0,
+						customer.Id,
+						cr == null ? (long?)null : cr.Id,
+						DateTime.UtcNow
+					);
+
+					ApplicationInfoController.VerifyApplicationInfoModels(m, aiar.Model);
 				} // using
 
 				using (tc.AddStep("CreditBureauModel Time taken"))

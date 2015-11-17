@@ -9,6 +9,7 @@
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using EzBob.Backend.Models;
+	using EzService.ActionResults;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData BackfillAml() {
@@ -291,5 +292,20 @@
 			return Execute<GetIncomeSms>(null, null, date, isYesterday);
 		} // GetIncomeSms
 
+		public ApplicationInfoResult LoadApplicationInfo(
+			int? underwriterID,
+			int customerID,
+			long? cashRequestID,
+			DateTime? now
+		) {
+			LoadApplicationInfo instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, underwriterID, customerID, cashRequestID, now);
+
+			return new ApplicationInfoResult {
+				MetaData = amd,
+				Model = instance.Result,
+			};
+		} // LoadApplicationInfo
 	} // class EzServiceImplementation
 } // namespace EzService

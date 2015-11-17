@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" />
   <xs:complexType name="BrokerInstantOfferResponseActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
@@ -23,11 +24,21 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
-  <xs:complexType name="CollectionSnailMailActionResult">
+  <xs:complexType name="ApplicationInfoResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q6:CollectionSnailMailMetadataModel" />
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" minOccurs="0" name="Model" nillable="true" type="q6:ApplicationInfoModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApplicationInfoResult" nillable="true" type="tns:ApplicationInfoResult" />
+  <xs:complexType name="CollectionSnailMailActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" base="q7:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q8:CollectionSnailMailMetadataModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

@@ -231,6 +231,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ApplicationInfoResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -1862,6 +1863,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ApplicationInfoResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class ApplicationInfoResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel ModelField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel Model {
+            get {
+                return this.ModelField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ModelField, value) != true)) {
+                    this.ModelField = value;
+                    this.RaisePropertyChanged("Model");
                 }
             }
         }
@@ -4606,6 +4630,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetIncomeSms", ReplyAction="http://tempuri.org/IEzService/GetIncomeSmsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetIncomeSmsAsync(System.Nullable<System.DateTime> date, bool isYesterday);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadApplicationInfo", ReplyAction="http://tempuri.org/IEzService/LoadApplicationInfoResponse")]
+        ServiceClientProxy.EzServiceReference.ApplicationInfoResult LoadApplicationInfo(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadApplicationInfo", ReplyAction="http://tempuri.org/IEzService/LoadApplicationInfoResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ApplicationInfoResult> LoadApplicationInfoAsync(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -6312,6 +6342,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetIncomeSmsAsync(System.Nullable<System.DateTime> date, bool isYesterday) {
             return base.Channel.GetIncomeSmsAsync(date, isYesterday);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ApplicationInfoResult LoadApplicationInfo(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now) {
+            return base.Channel.LoadApplicationInfo(underwriterID, customerID, cashRequestID, now);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ApplicationInfoResult> LoadApplicationInfoAsync(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now) {
+            return base.Channel.LoadApplicationInfoAsync(underwriterID, customerID, cashRequestID, now);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
