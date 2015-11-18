@@ -77,7 +77,7 @@
 				Comment = message.Body,
 				Timestamp = message.DateSent,
 				IsBroker = false,
-				PhoneNumber = message.To
+				PhoneNumber = message.From
 			};
 
 			this.customerRelationsRepository.SaveOrUpdate(newEntry);
