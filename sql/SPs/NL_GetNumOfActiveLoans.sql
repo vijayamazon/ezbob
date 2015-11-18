@@ -1,5 +1,6 @@
-IF OBJECT_ID('NL_GetNumberOfActiveLoans') IS NOT NULL
-	DROP PROCEDURE NL_GetNumberOfActiveLoans GO
+IF OBJECT_ID('NL_GetNumberOfActiveLoans') IS NULL
+	EXECUTE('CREATE PROCEDURE NL_GetNumberOfActiveLoans AS SELECT 1')
+GO
 
 CREATE PROCEDURE [dbo].NL_GetNumberOfActiveLoans @CustomerID INT AS 
 BEGIN
