@@ -3,14 +3,13 @@
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 	using System.Text;
-	using ConfigManager;
 	using Ezbob.Utils.Attributes;
 
 	[DataContract]
     public class NL_Model : AStringable
-    {
+	{
+		public NL_Model(int customerID){
 
-        public NL_Model(int customerID){
             CustomerID = customerID;
 
             Offer = new NL_Offers();
@@ -18,8 +17,7 @@
             Agreements = new List<NLAgreementItem>();
             FundTransfer = new NL_FundTransfers();
 
-            CalculatorImplementation = CurrentValues.Instance.DefaultLoanCalculator.Value;
-
+			//CalculatorImplementation = CurrentValues.Instance.DefaultLoanCalculator.Value;
         } // constructor
 
         [DataMember]
@@ -51,8 +49,8 @@
         public decimal? APR { get; set; }
 
         // use default from configuration
-        [DataMember]
-        public string CalculatorImplementation { get; private set; } // AloanCalculator LegacyLoanCalculator/BankLikeLoanCalculator
+		//[DataMember]
+		//public string CalculatorImplementation { get; private set; } // AloanCalculator LegacyLoanCalculator/BankLikeLoanCalculator
 
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {

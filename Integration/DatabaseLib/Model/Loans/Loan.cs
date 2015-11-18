@@ -50,7 +50,7 @@
 		public virtual Customer Customer { get; set; }
 
 		/// <summary>
-		/// Sum that customer have to pay, including all fees and interesets
+		/// Sum that customer have to pay, including all fees and interests
 		/// Сумма, которую клиенту необходимо выплатить, включая все дополнительные отчисления и проценты
 		/// </summary>
 		public virtual decimal Balance { get; set; }

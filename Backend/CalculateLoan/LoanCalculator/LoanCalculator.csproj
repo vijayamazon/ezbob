@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\NoInitialDataException.cs" />
     <Compile Include="Exceptions\NoPeriodEndDateException.cs" />
     <Compile Include="Exceptions\NoLoanEventsException.cs" />
+    <Compile Include="Exceptions\NoPaymentPerIntervalException.cs" />
     <Compile Include="Exceptions\NoScheduleException.cs" />
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />

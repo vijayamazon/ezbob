@@ -398,22 +398,7 @@
 			Console.WriteLine(calc.ToString());
 			this.m_oLog.Debug("---------------------------------------: \n {0}", loan);
 		}
-
-
-		[Test]
-		public void TestMultipleLoanState() {
-			var loans = new[] {
-				1, 2, 3, 4, 5
-			};
-			foreach (var lID in loans) {
-				try {
-					//var s = new GetLoanDBState<Loan>(new Loan(), lID, DateTime.UtcNow);
-					//s.Execute();
-				} catch (Exception e) {
-					Console.WriteLine(e);
-				}
-			}
-		}
+		
 
 		[Test]
 		public void TestLoanOldCalculator() {
@@ -436,15 +421,7 @@
 
 		[Test]
 		public void TestLoanCalculator() {
-			// new instance of loan calculator - for new schedules list
-			/*LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
-				LoanIssueTime = DateTime.UtcNow,
-				LoanAmount = 6000m,
-				RepaymentCount = 7,
-				MonthlyInterestRate = 0.06m,
-				InterestOnlyRepayments = 0,
-				RepaymentIntervalType = RepaymentIntervalTypes.Month
-			};
+			/*
 			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
 			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
 			// new schedules
@@ -460,9 +437,7 @@
 				Console.WriteLine(negativeRepaymentCountException);
 			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
 				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
-			}
-			Console.WriteLine();
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+			}	*/
 
 			decimal A = 6000m;
 			decimal m = 600m;
@@ -480,32 +455,12 @@
 
 			decimal k = Math.Ceiling(n + 2 * F / (A * r));
 
-			/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
-					LoanIssueTime = DateTime.UtcNow,
-					LoanAmount = A,
-					RepaymentCount = (int)n,
-					MonthlyInterestRate = 0.06m,
-					InterestOnlyRepayments = 0,
-					RepaymentIntervalType = RepaymentIntervalTypes.Month
-				};
-				Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
-				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
-				Console.WriteLine();
-				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+			/*	Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);			*/
 			// TODO: revive (Test)
-			/*
-		LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
-			LoanIssueTime = DateTime.UtcNow,
-			LoanAmount = B,
-			RepaymentCount = (int)(k),
-			MonthlyInterestRate = 0.06m,
-			InterestOnlyRepayments = 0,
-			RepaymentIntervalType = RepaymentIntervalTypes.Month
-		};
+			/*		
 		Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
-		ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);
-		Console.WriteLine();
-		List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
+		ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);		
 		Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));			*/
 		}
 
@@ -641,14 +596,14 @@
 				calc.GetState();
 				this.m_oLog.Debug("Calc data: {0}", calc);
 
-				m_oLog.Debug("\n\n====================OLD LOAN ID={0}", model.Loan.OldLoanID);
-
 				// old calc
 				ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 				var oldLoan = loanRep.Get(model.Loan.OldLoanID);
 				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 				oldCalc.GetState();
 				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);
+
+				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay );
 
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
@@ -776,7 +731,6 @@
 			}
 			model = strategy.Result;
 			this.m_oLog.Debug("=================================={0}\n", model.Loan);
-			//return;
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
 				calc.CreateSchedule();
@@ -818,7 +772,7 @@
 
 
         [Test]
-        public void CollectionRobot()
+		public void LateLoanJob()
         {
             LateLoanJob strategy = new LateLoanJob();
             strategy.Execute();           

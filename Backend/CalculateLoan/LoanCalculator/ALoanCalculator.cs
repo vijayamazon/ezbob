@@ -89,6 +89,11 @@
 		public decimal RolloverPayment { get; internal set; }
 
 		/// <summary>
+		/// for backworks compatibility with LoanRepaymentScheduleCalculator and "old" Loan model - sum of all AmountDue(s)
+		/// </summary>
+		public decimal Balance { get; internal set; }
+
+		/// <summary>
 		/// for customer dashboards - amount to be saved for NextEarlyPayment
 		/// </summary>
 		public decimal NextEarlyPaymentSavedAmount { get; internal set; }
@@ -314,7 +319,7 @@
 		/// <returns>bool</returns>
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		[ExcludeFromToString]
-		internal bool CalculationDateEqualScheduledDate() {
+		internal bool CalculationDateIsPlannedDate() {
 			if (this.schedule == null)
 				throw new NoScheduleException();
 
@@ -322,7 +327,7 @@
 		}
 
 		/// <exception cref="NoScheduleException">Condition. </exception>
-		internal bool HasLateScheduleItemsTillCalculationDate() {
+		internal bool HasLatesTillCalculationDate() {
 			if (this.schedule == null)
 				throw new NoScheduleException();
 
@@ -492,7 +497,7 @@
 				case "ScheduleItem":
 
 					ProcessScheduleItem(e.ScheduleItem);
-
+					// TODO calculate saved amounts
 					// saved amount for "next early" and "total early" payments
 					/*if (savedAmount && CalculationDate != DateTime.MinValue && CalculationDate.Date <= e.EventTime.Date) {
 
@@ -537,10 +542,24 @@
 				UpdateScheduleItem(e.ScheduleItem);
 			}
 
-			// set SCHEDULED interest and amount due (based on scheduled balance) for each non-closed installment
-			BalanceBasedInterestCalculation = true;
+			// close loan? // TODO when loan is closed?
+			if (Principal == 0m && Fees == 0m && Interest == 0m) {
+				WorkingModel.Loan.LoanStatusID = (int)NLLoanStatuses.PaidOff;
+				WorkingModel.Loan.DateClosed = CalculationDate;
+			}
+
+			// AmountDue
 			this.lastEvent = null;
-			decimal balance = initialAmount;
+			BalanceBasedAmountDue(initialAmount);
+		}
+		
+
+		/// set SCHEDULED (balance based) interest and amount due for each non-closed installment
+		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="OverflowException"><paramref /> represents a number that is less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
+		internal void BalanceBasedAmountDue(decimal balance) {
+			BalanceBasedInterestCalculation = true;
 			foreach (var s in this.events.Where(e => e.ScheduleItem != null)) {
 				if (s.ScheduleItem.LoanScheduleStatusID != (int)NLScheduleStatuses.Paid) {
 					s.ScheduleItem.Balance = balance;
@@ -553,9 +572,8 @@
 			}
 			// set interest calculation mode back to rela open principal 
 			BalanceBasedInterestCalculation = false;
-
-		} // HandleEvents
-
+		}
+		
 		/// <summary>
 		/// 1. pay fees 
 		/// 2. pay schedule (interest and principal)
@@ -779,6 +797,9 @@
 		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
 		/// <exception cref="Exception">A delegate callback throws an exception. </exception>
+		/// <exception cref="LoanPaidOffStatusException">Condition. </exception>
+		/// <exception cref="LoanWriteOffStatusException">Condition. </exception>
+		/// <exception cref="LoanPendingStatusException">Condition. </exception>
 		[ExcludeFromToString]
 		public void GetState() {
 
@@ -786,13 +807,19 @@
 
 			IntiEvents();
 
+			decimal earnedInterestForCalculationDate = 0;
+
 			// fetch the state at this event 
 			this.calculationDateEventEnd.Action = () => {
 
+				earnedInterestForCalculationDate = currentEarnedInterest;
+
 				// all local var calculated untill this event included
-				decimal tDistributedFees = 0;
-				foreach (NL_LoanFees f in this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date))
-					tDistributedFees += f.Amount;
+				//decimal tDistributedFees = 0;
+				//foreach (NL_LoanFees f in this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date))
+				//	tDistributedFees += f.Amount;
+
+				decimal tDistributedFees = this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date).Sum(f => f.Amount);
 
 				// outstanding balance = Fees + Interest + Principal
 				Fees = (totalLateFees + tDistributedFees - currentPaidFees);
@@ -806,26 +833,35 @@
 
 			HandleEvents();
 
-			// Today is a payment day
-			bool isScheduledDate = CalculationDateEqualScheduledDate();
+			CheckLoanClosed();
 
-			// All previous installments are paid
-			bool hasLate = HasLateScheduleItemsTillCalculationDate();
+			// AmountDue - in each schedule
 
 			// calc date schedule item
-			NL_LoanSchedules item = GetScheduleItemForDate(CalculationDate);
+			NL_LoanSchedules calcDateItem = GetScheduleItemForDate(CalculationDate);
 
-			NextEarlyPayment = item.OpenPrincipal + Interest + Fees;
+			Log.Debug("calcDateItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), calcDateItem);
 
-			RolloverPayment = Interest + Fees; // rollover fee + all late fees till "rolover opportunity" date
+			NextEarlyPayment = calcDateItem.OpenPrincipal + Interest + Fees;
 
-			// close loan? // TODO when loan is closed?
-			if (Principal == 0m && Fees == 0m && Interest == 0m) {
-				WorkingModel.Loan.LoanStatusID = (int)NLLoanStatuses.PaidOff;
-				WorkingModel.Loan.DateClosed = CalculationDate;
+			RolloverPayment = Interest; // to display separated: 1. rollover fee (from cong.varilables); 2. late fees till "rolover opportunity" (calc.date) == (open Fees)
+
+			// set outstanding balance - if pay as scheduled, this is the total amount due for calculation date
+			WorkingModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => Balance += s.AmountDue));
+		
+			// All previous installments are paid? i.e. check late
+			if (HasLatesTillCalculationDate()) {
+				return;
 			}
 
-			// TODO update loan status
+			// Today is a payment day
+			if (CalculationDateIsPlannedDate()) {
+				return;
+			}
+
+			NextEarlyPaymentSavedAmount = earnedInterestForCalculationDate - calcDateItem.Interest;
+
+			TotalEarlyPayment = currentEarnedInterest - calcDateItem.Interest; // TODO check???
 		}
 
 
