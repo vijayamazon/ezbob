@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{16A5A26A-EEC4-4A17-A40B-72A73429921F}</ProjectGuid>
+    <ProjectGuid>{02603C2E-F9BD-4481-9635-9FE612D6869B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EzBobTest</RootNamespace>
@@ -111,7 +111,6 @@
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="OpenPlatformTests\Core\TestBase.cs" />
-    <Compile Include="TestEarnedInterest.cs" />
     <Compile Include="OpenPlatformTests\Investor\TestInvestorRules.cs" />
     <Compile Include="TestNewLoan.cs" />
     <Compile Include="PayPalTest.cs" />
