@@ -11,12 +11,6 @@
 	[SuppressMessage("ReSharper", "InconsistentNaming")]
 	public class DecisionModel {
 		/// <summary>
-		/// Underwriter ID. Decision is being made by this underwriter.
-		/// </summary>
-		[DataMember]
-		public int underwriterID { get; set; }
-
-		/// <summary>
 		/// Customer ID. Decision is being made for this customer.
 		/// </summary>
 		[DataMember]
@@ -60,6 +54,12 @@
 		/// </summary>
 		[DataMember]
 		public string cashRequestRowVersion { get; set; }
+
+		/// <summary>
+		/// Underwriter ID. Decision is being made by this underwriter.
+		/// </summary>
+		[DataMember]
+		public int underwriterID { get; set; }
 
 		/// <summary>
 		/// Internal id, used to track decision process in logs.

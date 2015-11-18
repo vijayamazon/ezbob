@@ -113,6 +113,8 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 			cashRequestRowVersion: this.model.get('CashRequestRowVersion'),
 		};
 
+		console.log('data =', data, 'model =', this.model);
+
 		if (this.showReasonField())
 			data.reason = this.ReasonField.val();
 

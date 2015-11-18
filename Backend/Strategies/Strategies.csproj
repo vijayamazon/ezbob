@@ -183,6 +183,11 @@
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
+    <Compile Include="ManualDecision\ChangeDecisionOption.cs" />
+    <Compile Include="ManualDecision\CurrentCustomerDecisionState.cs" />
+    <Compile Include="ManualDecision\DecisionToApply.cs" />
+    <Compile Include="ManualDecision\ManuallyReject.cs" />
+    <Compile Include="ManualDecision\ManuallyApprove.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
@@ -193,7 +198,7 @@
     <Compile Include="Exceptions\PacnetMailProcessorException.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
-    <Compile Include="Misc\SetManualDecision.cs" />
+    <Compile Include="ManualDecision\ApplyManualDecision.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />

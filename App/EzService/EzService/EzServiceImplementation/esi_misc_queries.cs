@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Backfill;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.ManualDecision;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
@@ -309,7 +310,7 @@
 		} // LoadApplicationInfo
 
 		public StringStringMapActionResult SetManualDecision(DecisionModel model) {
-			SetManualDecision instance;
+			ApplyManualDecision instance;
 
 			int? customerID = (model != null) ? model.customerID : (int?)null;
 			int? underwriterID = (model != null) ? model.underwriterID : (int?)null;
