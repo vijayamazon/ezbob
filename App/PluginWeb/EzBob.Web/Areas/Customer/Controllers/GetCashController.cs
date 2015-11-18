@@ -241,7 +241,8 @@
 			if (amount == null || amount <= 0)
 				return;
 			var f = new LoanPaymentFacade();
-			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", nlModel: nlModel);
+			NL_Payments nlPayment = new NL_Payments();
+			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", false, null, nlPayment);
 		}
 
 		[Transactional]

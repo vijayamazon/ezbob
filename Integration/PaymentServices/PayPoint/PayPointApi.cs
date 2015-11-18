@@ -1,5 +1,4 @@
-﻿namespace PaymentServices.PayPoint
-{
+﻿namespace PaymentServices.PayPoint {
 	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using global::PayPoint;
@@ -16,8 +15,7 @@
 	using log4net;
 	using NHibernate.Properties;
 
-    public class PayPointApi
-	{
+	public class PayPointApi {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 		private readonly SECVPNService _service = new SECVPNService();
 		private readonly ILoanRepository _loans;
@@ -30,13 +28,12 @@
 
 
 
-		public void PayPointPayPal(PayPointAccount account, string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
-		{
-			try
-			{
+		public void PayPointPayPal(PayPointAccount account, string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false) {
+			try {
 				string transactionId = "TRAN" + Guid.NewGuid();
 				string options = string.Format("notificationurl={0},returnurl={1},cancelurl={2}", notificationUrl, returnUrl, cancelUrl);
-				if (isTest) options += ",test_status=true";
+				if (isTest)
+					options += ",test_status=true";
 				this._service.Url = account.ServiceUrl;
 
 				var str = this._service.
@@ -48,27 +45,23 @@
 				Log.Debug(str);
 				var ret = new PayPointReturnData(str);
 
-				if (!ret.HasError)
-				{
+				if (!ret.HasError) {
 
 				}
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				Log.Error(ex);
 			}
 		}
 		//-----------------------------------------------------------------------------------
-		public PayPointReturnData RefundCard(PayPointAccount account, string cardHolder, string cardNumber, decimal amount, DateTime expiryDate, string issueNumber, DateTime startDate, string order, string cv2, bool isTest)
-		{
+		public PayPointReturnData RefundCard(PayPointAccount account, string cardHolder, string cardNumber, decimal amount, DateTime expiryDate, string issueNumber, DateTime startDate, string order, string cv2, bool isTest) {
 			Log.InfoFormat("RefundCard: cardHolder={0}, cardNumber={1}, amount = {2}, expiryDate = {3}, issueNumber={4}, startDate={5}, order={6}, cv2={7}, isTest = {8}", cardHolder, cardNumber, amount, expiryDate, issueNumber, startDate, order, cv2, isTest);
 			this._service.Url = account.ServiceUrl;
-			try
-			{
+			try {
 				string transactionId = "TRAN" + Guid.NewGuid();
 				string transactionIdNew = transactionId + "_refund";
 				string options = String.Format("dups=false,card_type=Visa,cv2={0}", cv2);
-				if (isTest) options += ",test_status=true";
+				if (isTest)
+					options += ",test_status=true";
 				string startDateStr = startDate.ToString("MMyy");
 				string expiryDateStr = expiryDate.ToString("MMyy");
 
@@ -80,17 +73,14 @@
 				Log.Debug("validateCardFull result: " + str);
 				var ret = new PayPointReturnData(str);
 
-				if (!ret.HasError)
-				{
+				if (!ret.HasError) {
 					str = this._service.refundCardFull(account.Mid, account.VpnPassword, transactionId, amount.ToString(CultureInfo.InvariantCulture), account.RemotePassword, transactionIdNew);
 					ret = new PayPointReturnData(str);
 					Log.Debug("refundCardFull result: " + str);
-				}
-				else Log.InfoFormat("RefundCard completed successfully");
+				} else
+					Log.InfoFormat("RefundCard completed successfully");
 				return ret;
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				Log.Error(ex);
 				return new PayPointReturnData { Error = ex.Message };
 			}
@@ -100,18 +90,17 @@
 		public string GetReport(PayPointAccount account, string reportType, string filterType, string filter, string currency) {
 			_service.Url = account.ServiceUrl;
 			Log.InfoFormat("GetReport: reportType={0}, filterType={1}, filter = {2}, currency = {3}", reportType, filterType, filter, currency);
-			try
-			{
+			try {
 				var report = _service.getReport(account.Mid, account.VpnPassword, account.RemotePassword, reportType, filterType, filter, currency, String.Empty, false, false);
 
-				if (report.Length > 1000) Log.Debug("GetReport result (first 1000 symbols): " + report.Substring(0, 1000));
-				else Log.Debug("GetReport result: " + report);
+				if (report.Length > 1000)
+					Log.Debug("GetReport result (first 1000 symbols): " + report.Substring(0, 1000));
+				else
+					Log.Debug("GetReport result: " + report);
 				Log.InfoFormat("GetReport completed successfully");
 
 				return report;
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				Log.Error(ex);
 				return null;
 			}
@@ -124,9 +113,11 @@
 		/// </summary>
 		/// <param name="loanScheduleId">Installment Id</param>
 		/// <param name="amount">Amount to pay</param>
+		/// <param name="nlPayment"></param>
+		/// <exception cref="Exception"></exception>
 		/// <returns>PayPointReturnData as a result of call to paypoint API</returns>
-        public PayPointReturnData MakeAutomaticPayment(int loanScheduleId, decimal amount, ref NL_Payments nlp)
-		{
+		public PayPointReturnData MakeAutomaticPayment(int loanScheduleId, decimal amount,ref NL_Payments nlPayment ) {
+
 			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
 			var loanPaymentFacade = new LoanPaymentFacade();
 
@@ -134,8 +125,7 @@
 
 			installments.BeginTransaction();
 
-			try
-			{
+			try {
 				var installment = installments.Get(loanScheduleId);
 				var loan = installment.Loan;
 				var customer = loan.Customer;
@@ -148,18 +138,16 @@
 					defaultCard = customer.PayPointCards.First();
 				}
 				if (defaultCard == null) {
+					// ReSharper disable once ThrowingSystemException
 					throw new Exception("Debit card not found");
 				}
 
 				var payPointTransactionId = defaultCard.TransactionId;
 				var now = DateTime.UtcNow;
 
-				try
-				{
-					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount, ref nlp);
-				}
-				catch (PayPointException ex)
-				{
+				try {
+					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount, ref nlPayment); 
+				} catch (PayPointException ex) {
 					loan.Transactions.Add(new PaypointTransaction {
 						Amount = amount,
 						Description = ex.PaypointData.Message ?? "Exception:" + ex.Message,
@@ -176,29 +164,26 @@
 							.FindOrDefault("Auto"),
 					});
 
-				    nlp.PaypointTransactions.Add(new NL_PaypointTransactions() {
-				        IP = "",
-				        Amount = amount,
-				        Notes = "",
-				        PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
-				        TransactionTime = DateTime.UtcNow,
-				        PaypointTransactionID = loan.Transactions.Last().Id
-				    });
+					nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+						IP = "",
+						Amount = amount,
+						Notes = "paypointcharger failure",
+						PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
+						TransactionTime = DateTime.UtcNow,
+						PaypointTransactionID = loan.Transactions.Last().Id
+					});
 
 					installments.CommitTransaction();
-
-					// TODO add NL_payments +  NL_PaypointTransactions  (AddPayment strategy)
 
 					return ex.PaypointData;
 				}
 
-				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now);
+				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, nlPayment);
 				installments.CommitTransaction();
-			}
-			catch (Exception e)
-			{
-				if (!(e is PayPointException))
-				{
+
+
+			} catch (Exception e) {
+				if (!(e is PayPointException)) {
 					Log.Error(e);
 				}
 				if (payPointReturnData == null)
@@ -211,7 +196,7 @@
 		}
 
 		// step 2 - actual paypoint transaction
-        public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount, ref NL_Payments nlp)
+		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount, ref NL_Payments nlp) // TODO rename nlp to nlPayment 
 		{
 			var newTransactionId = transactionId + DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss");
 			string str;
@@ -226,16 +211,12 @@
 				var message = "debug mode";
 				var respCode = 0;
 
-				if (!account.DebugModeIsValidCard)
-				{
+				if (!account.DebugModeIsValidCard) {
 					message = "Card is not valid debug mode";
 					code = "B";
 					isValid = false;
-				}
-				else
-				{
-					if (account.EnableCardLimit && amount > account.CardLimitAmount)
-					{
+				} else {
+					if (account.EnableCardLimit && amount > account.CardLimitAmount) {
 						message = "Amount more than card amount debug mode";
 						code = "P:A";
 						isValid = false;
@@ -244,8 +225,7 @@
 
 				Random r = new Random();
 				var rand = r.Next(10);
-				if (account.DebugModeErrorCodeNEnabled && rand>6)
-				{
+				if (account.DebugModeErrorCodeNEnabled && rand > 6) {
 					isValid = false;
 					code = "N";
 					message = "INSUFF FUNDS";
@@ -254,83 +234,63 @@
 
 				str = string.Format("?valid={0}&trans_id={1}&code={2}&auth_code=9999&message={3}&resp_code={4}", isValid, transactionId, code, message, respCode);
 				ret = new PayPointReturnData(str);
-			}
-			else
-			{
+			} else {
 				str = _service.repeatCardFullAddr(account.Mid, account.VpnPassword, transactionId,
-												  amount.ToString(CultureInfo.InvariantCulture),account.RemotePassword,
+												  amount.ToString(CultureInfo.InvariantCulture), account.RemotePassword,
 												  newTransactionId, null, null, null, null, "repeat=true");
 
 				// input for step 3 (NL)
 				ret = new PayPointReturnData(str);
 			}
 
-			if (ret.HasError)
-			{
-				if (ret.Code == "N")
-				{
-					Log.WarnFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error,ret.Message, (ResponseCode)ret.RespCode);
-				}
-				else
-				{
+			if (ret.HasError) {
+				if (ret.Code == "N") {
+					Log.WarnFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error, ret.Message, (ResponseCode)ret.RespCode);
+				} else {
 					Log.ErrorFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error, ret.Message, (ResponseCode)ret.RespCode);
 				}
 
-				//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
-                nlp.PaypointTransactions.Add(new NL_PaypointTransactions()
-                {
-                    IP = "",
-                    Amount = amount,
-                    Notes = "",
-                    PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
-                    TransactionTime = DateTime.UtcNow,
-                    PaypointTransactionID = Convert.ToInt64(ret.NewTransId)
-                });
-
-
 				throw new PayPointException(str, ret);
 			}
+
 			Log.DebugFormat("RepeatTransaction successful: " + str);
 
 			//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
-            nlp.PaypointTransactions.Add(new NL_PaypointTransactions()
-            {
-                IP = "",
-                Amount = amount,
-                Notes = "",
-                PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
-                TransactionTime = DateTime.UtcNow,
-                PaypointTransactionID = Convert.ToInt64(ret.NewTransId)
-            });
+			nlp.PaypointTransactions.Add(new NL_PaypointTransactions() {
+				IP = "",
+				Amount = amount,
+				Notes = "",
+				PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
+				TransactionTime = DateTime.UtcNow,
+				//PaypointTransactionID = Convert.ToInt64(ret.NewTransId) // TODO check
+			});
+
 			return ret;
 		}
 
-		public bool ApplyLateCharge(decimal amount, int loanId, int loanChargesTypeId)
-		{
+		public bool ApplyLateCharge(decimal amount, int loanId, int loanChargesTypeId) {
 			DateTime now = DateTime.UtcNow;
 			var loan = _loans.Get(loanId);
 			var loanOptions = this.loanOptionsRepository.GetByLoanId(loanId);
 			if (loanOptions != null && loanOptions.AutoLateFees == false) {
 				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
-					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) || 
+					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) ||
 					(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
 					Log.InfoFormat("not applying late fee for loan {0} - auto late fee is disabled", loanId);
 					return false;
 				}
 			}
-			
+
 			return ApplyLateCharge(loan, amount, loanChargesTypeId, now);
 		}
 
-		public bool ApplyLateCharge(Loan loan, decimal amount, int loanChargesTypeId, DateTime date)
-		{
-			var charge = new LoanCharge
-							 {
-								 Amount = amount,
-								 ChargesType = new ConfigurationVariable(CurrentValues.Instance.GetByID(loanChargesTypeId)),
-								 Date = date,
-								 Loan = loan
-							 };
+		public bool ApplyLateCharge(Loan loan, decimal amount, int loanChargesTypeId, DateTime date) {
+			var charge = new LoanCharge {
+				Amount = amount,
+				ChargesType = new ConfigurationVariable(CurrentValues.Instance.GetByID(loanChargesTypeId)),
+				Date = date,
+				Loan = loan
+			};
 
 			var res = loan.TryAddCharge(charge);
 
@@ -342,10 +302,8 @@
 			return res;
 		}
 
-		public decimal GetAmountToPay(int installmentId)
-		{
-			try
-			{
+		public decimal GetAmountToPay(int installmentId) {
+			try {
 				Log.InfoFormat("Calculating payment for installment {0}", installmentId);
 
 				var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
@@ -360,10 +318,8 @@
 
 				Log.InfoFormat("Amount to charge is: {0}", state.AmountDue);
 				return state.AmountDue;
-			}
-			catch (Exception ex)
-			{
-                Log.Error(ex);
+			} catch (Exception ex) {
+				Log.Error(ex);
 				return 0;
 			}
 		}

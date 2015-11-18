@@ -12,6 +12,7 @@
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Code.MpUniq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -206,7 +207,8 @@
             if (amount > 0 && hasOpenLoans) {
                 Loan loan = customer.Loans.First(x => x.Status != LoanStatus.PaidOff);
                 var f = new LoanPaymentFacade();
-                f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay");
+	            NL_Payments nlPayment = new NL_Payments();
+				f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment);
                 paymentAdded = true;
             }
 

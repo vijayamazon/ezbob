@@ -42,8 +42,8 @@
 			string description = "payment from customer",
 			bool interestOnly = false,
 			string sManualPaymentMethod = null,
-			NL_Model nlModel = null
-		) {
+			NL_Payments nlPayment = null) {
+
 			var paymentTime = term ?? DateTime.UtcNow;
 
 			var oldLoan = loan.Clone();
@@ -189,7 +189,8 @@
 					break;
 
 				var money = Math.Min(amount, loan.TotalEarlyPayment(term));
-				PayLoan(loan, transId, money, null, date, description, sManualPaymentMethod: sManualPaymentMethod);
+				NL_Payments nlPayment = new NL_Payments();
+				PayLoan(loan, transId, money, null, date, description,  false, sManualPaymentMethod , nlPayment);
 				amount = amount - money;
 			} // for
 		} // PayAllLoansForCustomer
@@ -221,7 +222,8 @@
 
 				decimal money = Math.Min(amount, late);
 
-				PayLoan(loan, transId, money, null, date, description, sManualPaymentMethod: sManualPaymentMethod);
+				NL_Payments nlPayment = new NL_Payments();
+				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, nlPayment);
 
 				amount = amount - money;
 			} // for
@@ -323,7 +325,8 @@
 			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
-				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod: sManualPaymentMethod);
+				NL_Payments nlPayment = new NL_Payments();
+				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, nlPayment);
 				newInterest = 0;
 			} else {
 				Loan loan = customer.GetLoan(loanId);
@@ -337,7 +340,9 @@
 					select r
 				).FirstOrDefault();
 
-				PayLoan(loan, transId, amount, ip, date, description, sManualPaymentMethod: sManualPaymentMethod);
+
+				NL_Payments nlPayment = new NL_Payments();
+				PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, nlPayment);
 
 				newInterest = loan.Interest;
 
