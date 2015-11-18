@@ -60,7 +60,7 @@
                     }
 
                     return ActionResult.Continue;
-                }, "NL_GetLateForCollection",
+                }, "NL_LateLoansNotificationGet",
                     CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
             } catch (Exception ex) {
                 NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
@@ -388,7 +388,7 @@
         } //SendCollectionImail
         private CollectionMailModel GetCollectionMailModel(CollectionDataModel model)
         {
-            SafeReader sr = DB.GetFirst("NL_GetDataForCollectionMail", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("LoanID", model.LoanID));
+            SafeReader sr = DB.GetFirst("NL_LateLoanMailDataGet", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("LoanID", model.LoanID));
 
             NL_Model nlModel = new NL_Model(model.CustomerID){Loan = new NL_Loans()};
 

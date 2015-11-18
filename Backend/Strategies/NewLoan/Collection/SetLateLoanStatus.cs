@@ -22,7 +22,7 @@
                 {
                     MarkLoanAsLate(sr);
                     return ActionResult.Continue;
-                }, "NL_GetLoansToCollect",
+                }, "NL_LateLoansGet",
                 CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
             }catch (Exception ex){
                 NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
@@ -47,17 +47,21 @@
 
 			if (statusLateID == (int)NLLoanStatuses.Late ) { //loanStatus != "Late")
                 DB.ExecuteNonQuery(
-                    "NL_UpdateLoanStatusToLate", CommandSpecies.StoredProcedure,
-                    new QueryParameter("LoanId", loanId),
+                    "UpdateCustomer", CommandSpecies.StoredProcedure,
                     new QueryParameter("CustomerId", customerId),
-                    new QueryParameter("PaymentStatus", "Late"),
-                    new QueryParameter("LoanStatus", "Late")
+                    new QueryParameter("LoanStatus", "Late"),
+                     new QueryParameter("IsWasLate", true)
+                    );
+                    DB.ExecuteNonQuery(
+                    "NL_LoanUpdate", CommandSpecies.StoredProcedure,
+                    new QueryParameter("LoanID", loanId),
+                    new QueryParameter("LoanStatusID", 3)
                     );
             }
 
             if (scheduleStatus != "Late"){
-                DB.ExecuteNonQuery("NL_UpdateLoanScheduleStatus", CommandSpecies.StoredProcedure,
-                    new QueryParameter("Id", id), new QueryParameter("Status", "Late"));
+                DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
+                    new QueryParameter("LoanScheduleStatusID",3));
             }
 
             int daysBetween = (int)(this.now - scheduleDate).TotalDays;

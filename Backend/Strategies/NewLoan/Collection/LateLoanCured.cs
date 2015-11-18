@@ -31,7 +31,7 @@
                         Log.Error(ex, "Failed to handle cured loan for customer {0}", customerID);
                     }
                     return ActionResult.Continue;
-                }, "NL_GetCuredLoansForCollection", CommandSpecies.StoredProcedure);
+                }, "NL_CuredLoansGet", CommandSpecies.StoredProcedure);
             } catch (Exception ex) {
                 NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
             }

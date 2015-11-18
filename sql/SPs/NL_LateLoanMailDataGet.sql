@@ -1,8 +1,8 @@
-IF OBJECT_ID('NL_GetDataForCollectionMail') IS NOT NULL
-	DROP PROCEDURE NL_GetDataForCollectionMail
+IF OBJECT_ID('NL_LateLoanMailDataGet') IS  NULL
+	EXECUTE('CREATE PROCEDURE NL_LateLoanMailDataGet AS SELECT 1')
 GO
 
-CREATE PROCEDURE NL_GetDataForCollectionMail
+ALTER PROCEDURE NL_LateLoanMailDataGet
 @CustomerID INT,
 @LoanID INT
 AS

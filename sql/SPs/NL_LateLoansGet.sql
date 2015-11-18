@@ -1,8 +1,9 @@
-IF OBJECT_ID('NL_LateLoansGet') IS NOT NULL
-	DROP PROCEDURE NL_LateLoansGet
+IF OBJECT_ID('NL_GetLoansToCollect') IS  NULL
+	EXECUTE('CREATE PROCEDURE NL_GetLoansToCollect AS SELECT 1')
 GO
 
-CREATE PROCEDURE [dbo].[NL_LateLoansGet]
+
+ALTER PROCEDURE [dbo].[NL_GetLoansToCollect]
 @Now DATETIME
 AS
 BEGIN

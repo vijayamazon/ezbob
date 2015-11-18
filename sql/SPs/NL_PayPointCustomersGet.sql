@@ -1,9 +1,9 @@
-IF OBJECT_ID('NL_GetCustomersForPayPoint') IS  NULL
-	EXECUTE('CREATE PROCEDURE NL_GetCustomersForPayPoint AS SELECT 1')
+IF OBJECT_ID('NL_PayPointCustomersGet') IS  NULL
+	EXECUTE('CREATE PROCEDURE NL_PayPointCustomersGet AS SELECT 1')
 GO
 
 
-ALTER PROCEDURE NL_GetCustomersForPayPoint AS BEGIN DECLARE @Now DATETIME
+ALTER PROCEDURE NL_PayPointCustomersGet AS BEGIN DECLARE @Now DATETIME
 SET @Now = GETUTCDATE()
 SELECT ls.LoanScheduleID AS LoanScheduleId,
        l.LoanId,

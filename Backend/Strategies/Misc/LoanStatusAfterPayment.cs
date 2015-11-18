@@ -41,7 +41,7 @@
             //new QueryParameter("CustomerID", this.customerID));
 
             //SafeReader sr = DB.GetFirst(
-            //    "NL_GetLoanStatus",
+            //    "NL_LoanStatusGet",
             //    CommandSpecies.StoredProcedure,
             //    new QueryParameter("LoanId", this.loanID)
             //);

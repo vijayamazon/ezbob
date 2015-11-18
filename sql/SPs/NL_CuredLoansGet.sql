@@ -1,8 +1,8 @@
-IF OBJECT_ID('NL_GetCuredLoansForCollection') IS NOT NULL
-	DROP PROCEDURE NL_GetCuredLoansForCollection
+IF OBJECT_ID('NL_CuredLoansGet') IS  NULL
+	EXECUTE('CREATE PROCEDURE NL_CuredLoansGet AS SELECT 1')
 GO
 
-CREATE PROCEDURE NL_GetCuredLoansForCollection
+ALTER PROCEDURE NL_CuredLoansGet
 AS
 BEGIN
 SELECT c.Id CustomerID, l.LoanID LoanID, loanHistoryGrouBy.maxLoanHistoryID asLoanHistoryID

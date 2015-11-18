@@ -13,7 +13,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using PaymentServices.PayPoint;
 
-	// TODO : SP NL_GetNumOfActiveLoans.sql - add to where status write off also
+    // TODO : SP NL_GetNumOfActiveLoans.sql - add to where status write off also -> commented search :  //"NL_GetNumOfActiveLoans
 
 	public class AutoPaymentResult {
 		public decimal ActualAmountCharged { get; set; }
@@ -37,7 +37,7 @@
             NL_AddLog(LogType.Info, "Strategy Start", null, null, null, null);
 		    try {
                 IEnumerable<SafeReader> oldList = DB.ExecuteEnumerable("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
-                IEnumerable<SafeReader> newList = DB.ExecuteEnumerable("NL_GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
+                IEnumerable<SafeReader> newList = DB.ExecuteEnumerable("NL_PayPointCustomersGet", CommandSpecies.StoredProcedure);
 
                 foreach (var oldSr in oldList)
                 {
