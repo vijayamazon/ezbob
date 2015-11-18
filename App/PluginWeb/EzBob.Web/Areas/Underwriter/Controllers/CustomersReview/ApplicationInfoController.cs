@@ -25,6 +25,8 @@
 	using StructureMap;
 	using EZBob.DatabaseLib.Repository;
 
+	using CreditResultStatus = EZBob.DatabaseLib.Model.Database.CreditResultStatus;
+
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
 		private readonly ICustomerRepository _customerRepository;

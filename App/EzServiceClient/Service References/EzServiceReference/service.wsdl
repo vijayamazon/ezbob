@@ -996,6 +996,12 @@
   <wsdl:message name="IEzService_LoadApplicationInfo_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadApplicationInfoResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SetManualDecision_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetManualDecision" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetManualDecision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetManualDecisionResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -2112,6 +2118,10 @@
     <wsdl:operation name="LoadApplicationInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadApplicationInfo" message="tns:IEzService_LoadApplicationInfo_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadApplicationInfoResponse" message="tns:IEzService_LoadApplicationInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetManualDecision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetManualDecision" message="tns:IEzService_SetManualDecision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetManualDecisionResponse" message="tns:IEzService_SetManualDecision_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -3815,6 +3825,15 @@
     </wsdl:operation>
     <wsdl:operation name="LoadApplicationInfo">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadApplicationInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetManualDecision">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SetManualDecision" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

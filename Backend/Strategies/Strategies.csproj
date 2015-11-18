@@ -193,6 +193,7 @@
     <Compile Include="Exceptions\PacnetMailProcessorException.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
+    <Compile Include="Misc\SetManualDecision.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />

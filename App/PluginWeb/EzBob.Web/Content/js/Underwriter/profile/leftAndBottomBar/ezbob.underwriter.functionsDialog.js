@@ -106,9 +106,11 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 		$(e.currentTarget).addClass('disabled');
 
 		var data = {
-			id: this.model.get('CustomerId'),
+			customerID: this.model.get('CustomerId'),
 			status: this.type,
 			signature: this.getIsSignature(),
+			cashRequestID: this.model.get('CashRequestId'),
+			cashRequestRowVersion: this.model.get('CashRequestRowVersion'),
 		};
 
 		if (this.showReasonField())

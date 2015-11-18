@@ -202,7 +202,6 @@
     <Compile Include="Areas\Underwriter\Models\Fraud\IovationDetailsModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PaypointAddedModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
-    <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />

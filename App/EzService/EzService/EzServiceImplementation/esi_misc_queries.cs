@@ -307,5 +307,22 @@
 				Model = instance.Result,
 			};
 		} // LoadApplicationInfo
+
+		public StringStringMapActionResult SetManualDecision(DecisionModel model) {
+			SetManualDecision instance;
+
+			int? customerID = (model != null) ? model.customerID : (int?)null;
+			int? underwriterID = (model != null) ? model.underwriterID : (int?)null;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, underwriterID, model);
+
+			return new StringStringMapActionResult {
+				MetaData = amd,
+				Map = new SortedDictionary<string, string> {
+					{ "error", instance.Error },
+					{ "warning", instance.Warning },
+				},
+			};
+		} // SetManualDecision
 	} // class EzServiceImplementation
 } // namespace EzService

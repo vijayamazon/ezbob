@@ -579,5 +579,8 @@
 
 		[OperationContract]
 		ApplicationInfoResult LoadApplicationInfo(int? underwriterID, int customerID, long? cashRequestID, DateTime? now);
+
+		[OperationContract]
+		StringStringMapActionResult SetManualDecision(DecisionModel model);
 	} // interface IEzService
 } // namespace EzService

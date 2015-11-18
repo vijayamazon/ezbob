@@ -17,8 +17,9 @@
 	using log4net;
 	using ServiceClientProxy.EzServiceReference;
 
-	public class CustomerRelationsController : Controller {
+	using CreditResultStatus = EZBob.DatabaseLib.Model.Database.CreditResultStatus;
 
+	public class CustomerRelationsController : Controller {
 		public CustomerRelationsController(
 			CustomerRelationsRepository customerRelationsRepository,
 			LoanRepository loanRepository,
@@ -335,6 +336,5 @@
 		private readonly ServiceClient _serviceClient;
 		private readonly IWorkplaceContext _context;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
-
 	} // class CustomerRelationsController
 } // namespace
