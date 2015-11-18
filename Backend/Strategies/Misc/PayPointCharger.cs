@@ -3,8 +3,13 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 	using PaymentServices.PayPoint;
 
 	public class AutoPaymentResult {
@@ -46,6 +51,35 @@
 
 		public override string Name { get { return "PayPoint Charger"; } }
 
+
+        private bool IsRegulated(TypeOfBusiness typeOfBusiness)
+        {
+            return new[] {
+	            TypeOfBusiness.Limited,
+	            TypeOfBusiness.LLP,
+	            TypeOfBusiness.PShip
+	        }.Contains(typeOfBusiness);
+        }
+
+        public decimal GetAmountToPay(int customerID,
+                                      int loanScheduleID,
+                                      int loandID)
+        {
+            NL_Model nlModel = new NL_Model(customerID) { Loan = new NL_Loans() };
+            LoanState strategy = new LoanState(nlModel, loandID, DateTime.UtcNow);
+            strategy.Execute();
+            nlModel = strategy.Result;
+            ALoanCalculator calc = new LegacyLoanCalculator(nlModel);
+            calc.GetState();
+            var nlLoanSchedules = nlModel.Loan.LastHistory()
+                .Schedule.FirstOrDefault(x => x.LoanScheduleID == loanScheduleID);
+            if (nlLoanSchedules != null){
+                return nlLoanSchedules.AmountDue;
+            }
+            return 0;
+        }
+
+
 		private void HandleOnePayment(SafeReader sr) {
 			int loanScheduleId = sr["LoanScheduleId"];
 			int loanId = sr["LoanId"];
@@ -53,41 +87,50 @@
 			int customerId = sr["CustomerId"];
 			string customerMail = sr["Email"];
 			string fullname = sr["Fullname"];
-			string typeOfBusiness = sr["TypeOfBusiness"];
+            string typeOfBusinessStr = sr["TypeOfBusiness"];
 			DateTime dueDate = sr["DueDate"]; // PlannedDate
 			bool reductionFee = sr["ReductionFee"];
 			string refNum = sr["RefNum"]; // of loan
 			bool lastInstallment = sr["LastInstallment"]; // bit
 
-			bool isNonRegulated = typeOfBusiness == "Limited" || typeOfBusiness == "LLP" || typeOfBusiness == "PShip";
+            TypeOfBusiness typeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), typeOfBusinessStr);
+            bool isNonRegulated = IsRegulated(typeOfBusiness);
 
 			DateTime now = DateTime.UtcNow;
-
 			TimeSpan span = now.Subtract(dueDate);
-			
 			int daysLate = (int)span.TotalDays;
 
-			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
+            //Old amount due.
+			decimal oldAmountDue = payPointApi.GetAmountToPay(loanScheduleId);
+
+            //New amount due.    
+            decimal newAmountDue = GetAmountToPay(customerId, loanId, loanScheduleId);
+
+		    NL_AddLog(LogType.Info, Name + " - AmountDue OLD vs NEW", oldAmountDue, newAmountDue, null, null);
 	
 			//el: TODO: get NL amount due for relevant schedule item
 
-			if (!ShouldCharge(lastInstallment, amountDue)) {
+			if (!ShouldCharge(lastInstallment, oldAmountDue)) {
 				Log.Info("Will not charge loan schedule id {0} (amount {1}): the minimal amount for collection is {2}.",
-						 loanScheduleId, amountDue, amountToChargeFrom);
+						 loanScheduleId, oldAmountDue, amountToChargeFrom);
 				return;
 			}//if
 
-			decimal initialAmountDue = amountDue;
+			decimal initialAmountDue = oldAmountDue;
 
 			if ((!isNonRegulated && daysLate > 3) || !this.dueChargingDays.Contains(daysLate)) {
 				Log.Info("Will not charge loan schedule id {0} (amount {1}): the charging is not scheduled today",
-						 loanScheduleId, amountDue);
+						 loanScheduleId, oldAmountDue);
 				return;
 			}
 
+            var newLoanId = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
+
 			// step 2 - charging
 			AutoPaymentResult autoPaymentResult = TryToMakeAutoPayment(
-				loanScheduleId,
+				loanId,
+                newLoanId,
+                loanScheduleId,
 				initialAmountDue,
 				customerId,
 				customerMail,
@@ -103,23 +146,35 @@
 
 			// step 4 - notifications
 			if (autoPaymentResult.PaymentCollectedSuccessfully) {
-				// NL: send confirmation mail
-				SendConfirmationMail(customerId, autoPaymentResult.ActualAmountCharged, refNum);
-				SendLoanStatusMail(customerId, loanId, customerMail, autoPaymentResult.ActualAmountCharged); // Will send mail for paid off loans
+
+                PayEarly payEarly = new PayEarly(customerId, autoPaymentResult.ActualAmountCharged, refNum);
+                payEarly.Execute();
+				
+                SendLoanStatusMail(customerId, loanId, customerMail, autoPaymentResult.ActualAmountCharged); // Will send mail for paid off loans
 			}//if
 		}//HandleOnePayment
 
-		private AutoPaymentResult TryToMakeAutoPayment(int loanScheduleId, decimal initialAmountDue, int customerId, string customerMail, string fullname, bool reductionFee, bool isNonRegulated) {
+        private AutoPaymentResult TryToMakeAutoPayment(int loanId, long newLoanId, int loanScheduleId, decimal initialAmountDue, int customerId, string customerMail, string fullname, bool reductionFee, bool isNonRegulated)
+        {
 			var result = new AutoPaymentResult();
 			decimal actualAmountCharged = initialAmountDue;
+
+            NL_Payments nlp = new NL_Payments() {
+                Amount = actualAmountCharged,
+                LoanID = newLoanId,
+                CreatedByUserID = 0,
+                CreationTime = DateTime.UtcNow,
+                PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
+                PaypointTransactions = new List<NL_PaypointTransactions>()
+            };
 
 			int counter = 0;
 
 			while (counter <= 2) {
 				PayPointReturnData payPointReturnData;
 
-	
-				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData)) {
+                if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData, ref nlp))
+                {
 					if (isNonRegulated && IsNotEnoughMoney(payPointReturnData)) {
 						if (!reductionFee) {
 							result.PaymentFailed = true;
@@ -158,35 +213,21 @@
 					return result;
 				} //if
 
-				
-				
+                var nlStrategy = new AddPayment(nlp);
+                nlStrategy.Execute();
 
 			} //while
 
 			return result;
 		} //TryToMakeAutoPayment
 
-		private void SendConfirmationMail(int customerId, decimal amountDue, string refNum) {
-			PayEarly payEarly = new PayEarly(customerId, amountDue, refNum);
-			payEarly.Execute();
 
 			// NL
 			// PayEarly payEarly = new PayEarly(customerId, amountDue, refNum);
 			// payEarly.Execute();
-		} //SendConfirmationMail
 
 		private void SendLoanStatusMail(int customerId, int loanId, string customerMail, decimal actualAmountCharged) {
-			// TODO remove, because the same SP called from the strategy below (LoanStatusAfterPayment)
-			SafeReader sr = DB.GetFirst(
-				"GetLoanStatus",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("LoanId", loanId)
-			); // num of activve loans, "BadStatuses", customer data etc.
-
-			string loanStatus = sr["Status"];
-			decimal balance = sr["Balance"];
-
-			LoanStatusAfterPayment loanStatusAfterPayment = new LoanStatusAfterPayment(customerId, customerMail, loanId, actualAmountCharged, balance, loanStatus == "PaidOff", true);
+			LoanStatusAfterPayment loanStatusAfterPayment = new LoanStatusAfterPayment(customerId, customerMail, loanId, actualAmountCharged, true);
 			loanStatusAfterPayment.Execute();
 		}//SendLoanStatusMail
 
@@ -207,9 +248,10 @@
 			return (lastInstallment && amountDue > 0) || amountDue >= amountToChargeFrom;
 		}//ShouldCharge
 
-		private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result) {
+        private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result, ref NL_Payments nlp)
+        {
 			try {
-				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue);
+                result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue, ref nlp);
 
 			
 				return true;

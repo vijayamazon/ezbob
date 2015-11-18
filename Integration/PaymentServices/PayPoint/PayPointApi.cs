@@ -14,8 +14,9 @@
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using log4net;
+	using NHibernate.Properties;
 
-	public class PayPointApi
+    public class PayPointApi
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 		private readonly SECVPNService _service = new SECVPNService();
@@ -26,6 +27,8 @@
 			this.loanOptionsRepository = ObjectFactory.GetInstance<ILoanOptionsRepository>();
 			this._loans = ObjectFactory.GetInstance<ILoanRepository>();
 		}
+
+
 
 		public void PayPointPayPal(PayPointAccount account, string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
 		{
@@ -122,7 +125,7 @@
 		/// <param name="loanScheduleId">Installment Id</param>
 		/// <param name="amount">Amount to pay</param>
 		/// <returns>PayPointReturnData as a result of call to paypoint API</returns>
-		public PayPointReturnData MakeAutomaticPayment(int loanScheduleId, decimal amount)
+        public PayPointReturnData MakeAutomaticPayment(int loanScheduleId, decimal amount, ref NL_Payments nlp)
 		{
 			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
 			var loanPaymentFacade = new LoanPaymentFacade();
@@ -153,7 +156,7 @@
 
 				try
 				{
-					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount);
+					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount, ref nlp);
 				}
 				catch (PayPointException ex)
 				{
@@ -172,6 +175,15 @@
 							.LoanTransactionMethodRepository
 							.FindOrDefault("Auto"),
 					});
+
+				    nlp.PaypointTransactions.Add(new NL_PaypointTransactions() {
+				        IP = "",
+				        Amount = amount,
+				        Notes = "",
+				        PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
+				        TransactionTime = DateTime.UtcNow,
+				        PaypointTransactionID = loan.Transactions.Last().Id
+				    });
 
 					installments.CommitTransaction();
 
@@ -199,7 +211,7 @@
 		}
 
 		// step 2 - actual paypoint transaction
-		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount)
+        public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount, ref NL_Payments nlp)
 		{
 			var newTransactionId = transactionId + DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss");
 			string str;
@@ -265,13 +277,31 @@
 				}
 
 				//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
+                nlp.PaypointTransactions.Add(new NL_PaypointTransactions()
+                {
+                    IP = "",
+                    Amount = amount,
+                    Notes = "",
+                    PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
+                    TransactionTime = DateTime.UtcNow,
+                    PaypointTransactionID = Convert.ToInt64(ret.NewTransId)
+                });
+
 
 				throw new PayPointException(str, ret);
 			}
 			Log.DebugFormat("RepeatTransaction successful: " + str);
 
 			//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
-
+            nlp.PaypointTransactions.Add(new NL_PaypointTransactions()
+            {
+                IP = "",
+                Amount = amount,
+                Notes = "",
+                PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
+                TransactionTime = DateTime.UtcNow,
+                PaypointTransactionID = Convert.ToInt64(ret.NewTransId)
+            });
 			return ret;
 		}
 

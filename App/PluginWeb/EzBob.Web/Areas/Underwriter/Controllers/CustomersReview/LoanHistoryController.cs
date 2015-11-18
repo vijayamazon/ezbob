@@ -16,6 +16,7 @@
 	using Code;
 	using Code.ReportGenerator;
 	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
@@ -216,9 +217,18 @@
 					}
 
 					payPointTransactionId = paypointCard.TransactionId;
-					_paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 
-					// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL
+                    NL_Payments nlp = new NL_Payments()
+                    {
+                        Amount = realAmount,
+                        LoanID = model.LoanId,
+                        CreatedByUserID = this._context.UserId,
+                        CreationTime = DateTime.UtcNow,
+                        PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                    };
+
+                    this._paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount, ref nlp);
+                    this.m_oServiceClient.Instance.AddPayment(this._context.UserId, this._context.Customer.Id, nlp);
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,

@@ -324,7 +324,7 @@
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
-		ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
+        ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, decimal? balance = null, bool? isPaidOff = null);
 
 		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);

@@ -779,7 +779,7 @@
 
 		[Test]
 		public void TestLoanStatusAfterPayment() {
-			new LoanStatusAfterPayment(54, "", 27, 1000, 500, false, false).Execute();
+			new LoanStatusAfterPayment(54, "", 27, 1000, true, 500, false).Execute();
 		}
 
 		[Test]

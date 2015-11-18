@@ -4,7 +4,9 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using DbConstants;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using EzBob.Web.Areas.Customer.Models;
 	using EzBob.Web.Infrastructure;
@@ -298,6 +300,7 @@
 			} // try
 		} // Pay
 
+
 		[Transactional]
 		[HttpPost]
 		[Ajax]
@@ -322,7 +325,18 @@
 				if (card == null)
 					throw new Exception("Card not found");
 
-				this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
+
+                NL_Payments nlp = new NL_Payments()
+                {
+                    Amount = realAmount,
+                    LoanID = loanId,
+                    CreatedByUserID = this.context.UserId,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                };
+
+                this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount, ref nlp);
+                this.serviceClient.Instance.AddPayment(this.context.UserId, this.context.Customer.Id,nlp);
 
 				// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL
 
