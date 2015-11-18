@@ -14,9 +14,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Infrastructure.Attributes;
-	using Models;
 	using Code;
-	using Ezbob.Utils;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
@@ -34,7 +32,6 @@
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly LoanLimit _limit;
 		private readonly IDiscountPlanRepository _discounts;
-		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
 		private readonly LoanOptionsRepository loanOptionsRepository;
 		private readonly ILoanSourceRepository _loanSources;
@@ -53,7 +50,6 @@
 			ILoanTypeRepository loanTypes,
 			LoanLimit limit,
 			IDiscountPlanRepository discounts,
-			ApplicationInfoModelBuilder infoModelBuilder,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
@@ -69,7 +65,6 @@
 			_loanTypes = loanTypes;
 			_limit = limit;
 			_discounts = discounts;
-			_infoModelBuilder = infoModelBuilder;
 			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
 			_loanSources = loanSources;
 			_users = users;
@@ -88,9 +83,7 @@
 		[HttpGet]
 		public JsonResult Index(int id) {
 			var customer = _customerRepository.Get(id);
-			var m = new ApplicationInfoModel();
 			var cr = customer.LastCashRequest;
-			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
 
 			var aiar = this.serviceClient.Instance.LoadApplicationInfo(
 				this._context.UserId,
@@ -99,46 +92,8 @@
 				DateTime.UtcNow
 			);
 
-			VerifyApplicationInfoModels(m, aiar.Model);
-
-			return Json(m, JsonRequestBehavior.AllowGet);
-		}
-
-		public static void VerifyApplicationInfoModels(
-			ApplicationInfoModel oldModel,
-			Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel newModel
-		) {
-			newModel.Traverse((ignoredInstance, newPi) => {
-				if (newPi.Name == "CashRequestTimestamp") {
-					log.Debug("Cash request timestamp: {0}", newModel.CashRequestRowVersion);
-					return;
-				} // if
-
-				var oldPi = oldModel.GetType().GetProperty(newPi.Name);
-
-				object oldValue = oldPi.GetValue(oldModel);
-				object newValue = newPi.GetValue(newModel);
-
-				if (ReferenceEquals(oldValue, newValue))
-					return;
-
-				if ((oldValue != null) && oldValue.Equals(newValue))
-					return;
-
-				if ((newValue != null) && newValue.Equals(oldValue))
-					return;
-
-				log.Debug(
-					"Values in '{0}' property of old and new application models:\n" +
-						"\told: {1}: '{2}'\n\tnew: {3}: '{4}'",
-					newPi.Name,
-					oldPi.PropertyType,
-					oldValue,
-					newPi.PropertyType,
-					newValue
-				);
-			});
-		} // VerifyApplicationInfoModels
+			return Json(aiar.Model, JsonRequestBehavior.AllowGet);
+		} // Index
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]

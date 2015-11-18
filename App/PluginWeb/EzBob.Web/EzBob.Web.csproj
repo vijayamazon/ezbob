@@ -299,18 +299,15 @@
     <Compile Include="Areas\Underwriter\Controllers\ScheduleController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\StrategySettingsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\SupportController.cs" />
-    <Compile Include="Areas\Underwriter\Models\ApplicationInfoModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\CAIS\CaisModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
     <Compile Include="Areas\Underwriter\Models\FraudDetectionLogModel.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\FraudModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomerRelationsModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomersModel.cs" />
-    <Compile Include="Areas\Underwriter\Models\DiscountPlanModel.cs" />
     <Compile Include="Areas\Underwriter\Models\IdHubCustomAddressModel.cs" />
     <Compile Include="Areas\Underwriter\Models\LoanOptionsViewModel.cs" />
     <Compile Include="Areas\Underwriter\Models\LoansAndOffers.cs" />
-    <Compile Include="Areas\Underwriter\Models\LoanTypesModel.cs" />
     <Compile Include="Areas\Underwriter\Models\ManualPaymentModel.cs" />
     <Compile Include="Areas\Underwriter\Models\MessagesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\RolloverModel.cs" />
@@ -387,7 +384,6 @@
     <Compile Include="Areas\Underwriter\Controllers\Reports\ReportTableCreator.cs" />
     <Compile Include="Areas\Underwriter\Models\AlertDoc.cs" />
     <Compile Include="Areas\Underwriter\Models\ApiChecksLogModel.cs" />
-    <Compile Include="Areas\Underwriter\Models\ApplicationInfoModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CrossCheckModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomerGridModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CreditBureauModel.cs" />

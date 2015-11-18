@@ -112,7 +112,6 @@
     <Compile Include="Model\Database\PropertyStatus.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrace.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrail.cs" />
-    <Compile Include="Model\Database\Request\OfferCalculations.cs" />
     <Compile Include="Model\Database\WhatsNewExcludeCustomerOrigin.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\MedalCalculations.cs" />
