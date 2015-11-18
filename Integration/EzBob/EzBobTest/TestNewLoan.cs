@@ -521,10 +521,10 @@
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[Test]
 		public void GetLoanFees() {
-			long loanid = 15;
+			const long loanid = 15;
 			var loanFees = this.m_oDB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanid));
 			this.m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFees)));
-			loanFees.ForEach(f => m_oLog.Debug(f));
+			loanFees.ForEach(f => this.m_oLog.Debug(f));
 		}
 
 
@@ -610,10 +610,7 @@
 			}
 		}
 
-		// n = A/(m-Ar);
-		// total = A+A*r*((n+1)/2)
-
-		
+			
 
 
 		[Test]
@@ -718,6 +715,11 @@
             LateLoanJob strategy = new LateLoanJob();
             strategy.Execute();           
         }
+
+		// n = A/(m-Ar);
+		// total = A+A*r*((n+1)/2)
+
+
 
 		/*[Test]
 		public void CalculatorAmountToPay() {

@@ -4,14 +4,21 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
 
+	/// <summary>
+	/// adding new rollover proposal for loan or updates existing valid rollover?
+	/// </summary>
     public class AddRollover : AStrategy
     {
         public AddRollover(NL_LoanRollovers rollover)
         {
             this.rollover = rollover;
-        }//constructor
+        }
 
         public override string Name { get { return "AddRollover"; } }
+		public int RolloverID { get; set; }
+		public string Error;
+
+		private readonly NL_LoanRollovers rollover;
 
         public override void Execute()
         {
@@ -28,8 +35,7 @@
         }//Execute
 
 
-        public int RolloverID { get; set; }
+       
 
-        private readonly NL_LoanRollovers rollover;
     }//class AddRollover
 }//ns
