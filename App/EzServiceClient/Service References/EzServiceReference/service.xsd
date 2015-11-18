@@ -1324,9 +1324,9 @@
         <xs:element minOccurs="0" name="customerEmail" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="loanID" type="xs:int" />
         <xs:element minOccurs="0" name="paymentAmount" type="xs:decimal" />
-        <xs:element minOccurs="0" name="balance" type="xs:decimal" />
-        <xs:element minOccurs="0" name="isPaidOff" type="xs:boolean" />
         <xs:element minOccurs="0" name="sendMail" type="xs:boolean" />
+        <xs:element minOccurs="0" name="balance" nillable="true" type="xs:decimal" />
+        <xs:element minOccurs="0" name="isPaidOff" nillable="true" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

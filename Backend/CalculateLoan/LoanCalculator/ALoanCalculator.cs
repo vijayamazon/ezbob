@@ -14,7 +14,7 @@
 	/// <summary>
 	/// This class is implemented as Facade pattern. https://en.wikipedia.org/wiki/Facade_pattern
 	/// </summary>
-	public abstract partial class ALoanCalculator : ILoanCalculator {
+	public abstract class ALoanCalculator : ILoanCalculator {
 		/// <exception cref="NoInitialDataException">Condition. </exception>
 		/// <exception cref="NoLoanHistoryException">Condition. </exception>
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>

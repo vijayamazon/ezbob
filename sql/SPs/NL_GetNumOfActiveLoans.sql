@@ -11,3 +11,4 @@ BEGIN
 	WHERE v.CustomerId = @CustomerID
 	  AND lst.LoanStatus != 'PaidOff' 
 END
+GO

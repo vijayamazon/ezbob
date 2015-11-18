@@ -42,7 +42,6 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ALoanCalculator_stubs.cs" />
     <Compile Include="ALoanCalculator.cs" />
     <Compile Include="BankLikeLoanCalculator.cs" />
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />

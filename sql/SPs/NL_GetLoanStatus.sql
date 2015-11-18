@@ -1,8 +1,8 @@
-IF OBJECT_ID('NL_GetLoanStatus') IS NOT NULL
-	DROP PROCEDURE NL_GetLoanStatus
+IF OBJECT_ID('NL_GetLoanStatus') IS NULL
+	EXECUTE('CREATE PROCEDURE NL_GetLoanStatus AS SELECT 1')
 GO
 
-CREATE PROCEDURE [dbo].NL_GetLoanStatus @LoanId INT AS 
+ALTER PROCEDURE [dbo].NL_GetLoanStatus @LoanId INT AS 
 BEGIN
 	SELECT WasLate = CASE
 						 WHEN

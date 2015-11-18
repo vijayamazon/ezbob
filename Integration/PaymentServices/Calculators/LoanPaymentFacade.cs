@@ -96,9 +96,15 @@
 			//	nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); */
 	
 			//	//var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
+			/*AddPayment addStrategy = new AddPayment(nlp);
+			nlStrategy.Execute();*/
+
 				
 			//	//Log.Debug(nlPayment.Payment.ToString());
 			//}
+
+			
+
 
             
 

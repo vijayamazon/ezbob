@@ -32,6 +32,10 @@
 			3. make rollover using calculator - add to NL model new history, rearrange schedules, statuses
 			4. update DB: records new history, new schedule items; update previous schedule with appropriate statuses
 			*/
+
+
+
+
 		}
 
 	} // class AcceptRollover

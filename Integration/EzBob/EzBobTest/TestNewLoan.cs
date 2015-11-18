@@ -530,8 +530,8 @@
 
 		[Test]
 		public void CalculatorGetState() {
-			const long loanID = 21;
-			NL_Model model = new NL_Model(351) {
+			const long loanID = 17; // 21;
+			NL_Model model = new NL_Model(56) { //351
 				UserID = 357,
 				Loan = new NL_Loans()};
 			GetLoanDBState dbState = new GetLoanDBState(model, loanID, DateTime.UtcNow);
@@ -710,8 +710,7 @@
 
 
         [Test]
-		public void LateLoanJob()
-        {
+		public void LateLoanJob(){
             LateLoanJob strategy = new LateLoanJob();
             strategy.Execute();           
         }
@@ -719,68 +718,6 @@
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
 
-
-
-		/*[Test]
-		public void CalculatorAmountToPay() {
-			const long loanID = 17;
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				Loan = new NL_Loans()
-			};
-			GetLoanDBState strategy = new GetLoanDBState(model, loanID, DateTime.UtcNow);
-			strategy.Execute();
-			model = strategy.Result;
-
-			DateTime lateFeeDate = DateTime.UtcNow;
-			
-			// dummy late fee
-			model.Loan.Fees.Add(new NL_LoanFees() {
-				Amount = 25,
-				AssignTime = lateFeeDate,
-				AssignedByUserID = 1,
-				CreatedTime = lateFeeDate,
-				LoanFeeID = 22,
-				Notes = "latefee",				
-				LoanFeeTypeID = (int)NLFeeTypes.LatePeriod1
-			});
-
-			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 322,
-				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
-				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 11, 20),
-				Notes = "dummy payment for test",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-				PaymentID = 13
-			});
-
-			// dummy payment for test - between issue date and the first schedule item
-			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 70,
-				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
-				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 12, 15),
-				Notes = "dummy payment 2 for test",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-				PaymentID = 14
-			});
-
-			//this.m_oLog.Debug("{0}\n=================Calculator start=================\n", model.Loan);
-			try {
-				DateTime calcDate = new DateTime(2015, 11, 20);
-				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				//calc.AmountToPay(calcDate, true);
-				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
-				m_oLog.Debug("CalculationDate: {0}, AmountToPay={1}, NextEarlyPaymentSavedAmount={2}, TotalEarlyPaymentSavedAmount={3}", calc.CalculationDate, calc.AmountToCharge, calc.NextEarlyPaymentSavedAmount, calc.TotalEarlyPaymentSavedAmount);
-			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
-			}
-		}*/
 
 	} // class TestNewLoan
 } // namespace

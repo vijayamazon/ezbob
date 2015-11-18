@@ -336,7 +336,7 @@
                 };
 
                 this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount, ref nlp);
-                this.serviceClient.Instance.AddPayment(this.context.UserId, this.context.Customer.Id,nlp);
+				//this.serviceClient.Instance.AddPayment(this.context.UserId, this.context.Customer.Id, nlp); // TODO move AddPayment into loanRepaymentFacade.MakePayment
 
 				// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL
 
@@ -417,9 +417,9 @@
 				customer.Name,
 				loanId,
 				realAmount,
+				loanOptions == null || loanOptions.EmailSendingAllowed,
 				loan.Balance,
-				loan.Status == LoanStatus.PaidOff,
-				loanOptions == null || loanOptions.EmailSendingAllowed
+				loan.Status == LoanStatus.PaidOff
 			);
 		} // SendEmails
 
