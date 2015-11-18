@@ -358,9 +358,6 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 .early-payment-form .radio b {
     margin-left:33px;
 }
-input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
-   background-color: #eeeeee !important;
-}
 
 .modal-body {
 	padding: 0;
