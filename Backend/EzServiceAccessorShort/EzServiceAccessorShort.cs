@@ -3,9 +3,11 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.VatReturn;
 	using Ezbob.Utils;
 	using EzServiceAccessor;
@@ -99,9 +101,14 @@
             stra.Execute();
             return stra.Package.Out;
         }
-	
 
-		/*/// <summary>
+        public void AddPayment(int userID, int customerID, NL_Payments payment)
+        {
+            var stra = new AddPayment(payment);
+            stra.Execute();
+        } // AddPayment
+
+	    /*/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="userId"></param>

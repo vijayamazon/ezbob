@@ -57,5 +57,8 @@
 		/// <returns></returns>
 		NL_Model AddPayment(NL_Model nlModel);*/
 
+
+	    void AddPayment(int userID, int customerID, NL_Payments payment);
+
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

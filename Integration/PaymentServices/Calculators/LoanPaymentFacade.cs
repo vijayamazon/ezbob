@@ -4,6 +4,7 @@
 	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -41,8 +42,9 @@
 			DateTime? term = null,
 			string description = "payment from customer",
 			bool interestOnly = false,
-			string sManualPaymentMethod = null,
-			NL_Payments nlPayment = null) {
+			string sManualPaymentMethod = null,       
+			NL_Payments nlPayment = null,
+            int userID = 1) {
 
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -98,6 +100,8 @@
 			//	//Log.Debug(nlPayment.Payment.ToString());
 			//}
 
+            
+
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
 			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
@@ -133,8 +137,10 @@
 					});
 				} // for each delta
 			} // if
-
-			return amount;
+		    if (loan.Customer != null) {
+		        ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, userID, nlPayment);
+		    }
+		    return amount;
 		} // PayLoan
 
 		/// <summary>
@@ -190,7 +196,7 @@
 
 				var money = Math.Min(amount, loan.TotalEarlyPayment(term));
 				NL_Payments nlPayment = new NL_Payments();
-				PayLoan(loan, transId, money, null, date, description,  false, sManualPaymentMethod , nlPayment);
+                PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod,nlPayment);
 				amount = amount - money;
 			} // for
 		} // PayAllLoansForCustomer

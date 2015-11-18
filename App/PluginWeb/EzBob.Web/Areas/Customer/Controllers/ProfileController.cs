@@ -334,7 +334,7 @@
 		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
 		        var f = new LoanPaymentFacade();
 			    NL_Payments nlPayment = new NL_Payments();
-				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment);
+				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment, this.m_oContext.User.Id);
 		    }
 
             if (amount > 0 && !hasOpenLoans) {

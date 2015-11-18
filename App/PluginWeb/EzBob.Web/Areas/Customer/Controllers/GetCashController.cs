@@ -242,7 +242,7 @@
 				return;
 			var f = new LoanPaymentFacade();
 			NL_Payments nlPayment = new NL_Payments();
-			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", false, null, nlPayment);
+			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", false, null, nlPayment, this._context.UserId);
 		}
 
 		[Transactional]

@@ -33,32 +33,27 @@
 		}//constructor
 
 		public override void Execute() {
-			// step 1 - get NL data for paypoint iteration
-		/*	DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					try {
-						HandleOnePayment(sr);
-					} catch (Exception ex) {
-						Log.Error(ex, "failed to auto charge customer {0} schedule {1}", sr["CustomerId"], sr["LoanScheduleId"]);
-					}
-					return ActionResult.Continue;
-				},
-				"GetCustomersForPayPoint",
-				CommandSpecies.StoredProcedure
-			);*/
+            // step 1 - Get loans to pay.
+            NL_AddLog(LogType.Info, "Strategy Start", null, null, null, null);
+		    try {
+                IEnumerable<SafeReader> oldList = DB.ExecuteEnumerable("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
+                IEnumerable<SafeReader> newList = DB.ExecuteEnumerable("NL_GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
 
-			//IEnumerable<SafeReader> oldList  = DB.ExecuteEnumerable("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
-
-			//IEnumerable<SafeReader> newList  = DB.ExecuteEnumerable("NLGetCustomersForPayPoint", CommandSpecies.StoredProcedure);
-
-			//foreach (var sr in oldList) {
-
-			//	var nlloan = newList.FirstOrDefault(x => x["OldLoanID"] == sr["LoanId"]);
-
-			//	HandleOnePayment(sr, nlloan);
-			//}
-
-			//el: TODO: call SP NL_LoadLoanForAutomaticPayment - to get all loans to pay today
+                foreach (var oldSr in oldList)
+                {
+                    var newSr = newList.FirstOrDefault(x => x["OldLoanID"] == oldSr["LoanId"]);
+                    try{
+                        HandleOnePayment(oldSr, newSr);
+                    }
+                    catch (Exception ex){
+                        Log.Error(ex, "failed to auto charge customer {0} schedule {1}", oldSr["CustomerId"], oldSr["LoanScheduleId"]);
+                    }
+                }
+                NL_AddLog(LogType.Info, "Strategy End", null, null, null, null);
+		    } 
+            catch (Exception ex) {
+                NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
+		    }
 		}//Execute
 
 
@@ -105,19 +100,19 @@
 			return 0;
 		}
 
-
-		private void HandleOnePayment(SafeReader sr) {
-			int loanScheduleId = sr["LoanScheduleId"];
-			int loanId = sr["LoanId"];
-			string firstName = sr["FirstName"];
-			int customerId = sr["CustomerId"];
-			string customerMail = sr["Email"];
-			string fullname = sr["Fullname"];
-			string typeOfBusinessStr = sr["TypeOfBusiness"];
-			DateTime dueDate = sr["DueDate"]; // PlannedDate
-			bool reductionFee = sr["ReductionFee"];
-			string refNum = sr["RefNum"]; // of loan
-			bool lastInstallment = sr["LastInstallment"]; // bit
+        private void HandleOnePayment(SafeReader oldSr, SafeReader newSr)
+        {
+			int loanScheduleId = oldSr["LoanScheduleId"];
+			int loanId = oldSr["LoanId"];
+			string firstName = oldSr["FirstName"];
+			int customerId = oldSr["CustomerId"];
+			string customerMail = oldSr["Email"];
+			string fullname = oldSr["Fullname"];
+			string typeOfBusinessStr = oldSr["TypeOfBusiness"];
+			DateTime dueDate = oldSr["DueDate"]; // PlannedDate
+			bool reductionFee = oldSr["ReductionFee"];
+			string refNum = oldSr["RefNum"]; // of loan
+			bool lastInstallment = oldSr["LastInstallment"]; // bit
 
 			TypeOfBusiness typeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), typeOfBusinessStr);
 			bool isNonRegulated = IsRegulated(typeOfBusiness);
@@ -126,13 +121,19 @@
 			TimeSpan span = now.Subtract(dueDate);
 			int daysLate = (int)span.TotalDays;
 
+            decimal? newAmountDue = null;
+
 			//Old amount due.
+            if (newSr == null) {
+                NL_AddLog(LogType.Error, string.Format("could not find corsponding nl_loan for oldLoanID : {0}", loanId), null, null, null, null);
+            } else {
+                //New amount due.    
+                newAmountDue = GetAmountToPay(newSr["CustomerId"], newSr["LoanId"], newSr["LoanScheduleId"]);
+            }
+
 			decimal oldAmountDue = payPointApi.GetAmountToPay(loanScheduleId);
-
-			//New amount due.    
-			decimal newAmountDue = GetAmountToPay(customerId, loanId, loanScheduleId);
-
-			NL_AddLog(LogType.Info, Name + " - AmountDue OLD vs NEW", oldAmountDue, newAmountDue, null, null);
+            
+            NL_AddLog(LogType.Info, Name + " - AmountDue OLD vs NEW", oldAmountDue, newAmountDue, null, null);
 
 			//el: TODO: get NL amount due for relevant schedule item
 

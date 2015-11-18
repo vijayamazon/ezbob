@@ -89,6 +89,11 @@
             return null;
         }
 
+        public void AddPayment(int userID, int customerID, NL_Payments payment)
+        {
+            this.m_oServiceClient.Instance.AddPayment(userID,customerID,payment);
+        } // AddPayment
+
 		/*/// <summary>
 		/// 
 		/// </summary>
