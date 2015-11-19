@@ -66,6 +66,10 @@
 					view: new EzBob.Underwriter.BrokerProfileView({ el: $('#broker-profile-view'), }),
 					isRendered: false,
 				},
+				addInvestor: {
+					view: new EzBob.Underwriter.AddInvestorView({ el: $('#add-investor-view'), }),
+					isRendered: false,
+				}
 			}; // views
 		}, // initialize
 
@@ -86,6 +90,7 @@
 			'broker/:id/': 'broker',
 			'broker/:id/:section': 'broker',
 			'broker/:id/:section/': 'broker',
+			'add-investor': 'addInvestor',
 			'*z': 'customers',
 		}, // routes
 
@@ -163,6 +168,10 @@
 		broker: function(id, section) {
 			this.handleRoute('broker', id, section);
 		}, // broker
+
+		addInvestor: function (){
+			this.handleRoute('addInvestor');
+		},
 
 		hideAll: function() {
 			for (var i in this.views)

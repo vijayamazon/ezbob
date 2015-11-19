@@ -1,4 +1,6 @@
-﻿@using System.Web.Mvc
+﻿@using System
+@using System.Linq
+@using System.Web.Mvc
 @using EzBob.Web.Infrastructure
 @using StructureMap
 
@@ -8,6 +10,7 @@
         Customers,
         Customer,
 		Broker,
+		Investor,
         Other
     }
 }
@@ -51,7 +54,7 @@
     }
     catch (Exception e)
     {
-
+		//do nothing
     }
 
     sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
@@ -92,6 +95,7 @@
                 <li><a href="#late-grid" data-toggle="tab" title="Late"><i class="fa fa-flag"></i><span>Late</span></a></li>
                 <li><a href="#all-grid" data-toggle="tab" title="All customers"><i class="fa fa-female"></i><span>All customers</span></a></li>
                 <li><a href="#registered-grid" data-toggle="tab" title="Registered"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
+				
                 <li class="test-customers" title="Check to include test customers">
                     <i class="fa fa-filter"></i>
                     <label class="checkbox-inline">
@@ -109,8 +113,20 @@
                 <li><a href="#logbook-grid" data-toggle="tab" title="Logbook"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
                 <li><a href="#brokers-grid" data-toggle="tab" title="Brokers"><i class="fa fa-male"></i><span>Brokers</span></a></li>
                 <li id="liClient"><a href='#' title="Find"><i class="fa fa-search"></i><span>Find</span></a></li>
-                    break;
-                case SideBarType.Customer:
+
+
+				<li id="liInvestors" class="dropdown">
+					<a href="#" class="dropdown-toggle" title="Investor">
+						<i class="fa fa-file-text"></i><span>&nbsp;Investor</span>
+						<b class="arrow fa fa-angle-right"></b>
+					</a>
+					<ul class="submenu">
+						@InvestorMenu(page)
+					</ul>
+				</li>
+
+				break;
+				case SideBarType.Customer:
                 <li>
                     <a class="customers-link" href='@page.Url.Action("Index", "Customers")#' title="Customers"><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
                     <a href="#" class="dropdown-toggle more-options-link" title="Sub Menu">
@@ -152,12 +168,18 @@
 		        <li><a href="#broker-relations" data-toggle="tab" class="crm-tab" title="Broker relations"><i class="fa fa-users"></i><span>Broker relations</span></a></li>
 				<li><a href="#broker-whitelabel" data-toggle="tab" class="crm-tab" title="White Label"><i class="fa fa-tag"></i><span>White label</span></a></li>
 					break;
+				case SideBarType.Investor:
+					<li>
+						<a class="customers-link" href='@page.Url.Action("Index", "Customers")#' title="Customers"><i class="fa fa-angle-double-left"></i>Customers</a>
+					</li>
+					@InvestorMenu(page)
+					break;
 
-                case SideBarType.Other:
-                <li>
-                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
-                </li>
-                @SubMenu(page)
+				case SideBarType.Other:
+					<li>
+						<a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
+					</li>
+					@SubMenu(page)
                     break;
             }
         </ul>
@@ -166,6 +188,11 @@
             <i class="fa fa-angle-double-left"></i>
         </div>
     </div>
+}
+
+@helper InvestorMenu(WebViewPage page) {
+	<li><a href="Customers#add-investor" title="Add investor"><i class="fa fa-file-text-o"></i><span>&nbsp;Add investor</span></a></li>
+	<li><a href="Customers#manage-investor" title="Manage investor"><i class="fa fa-file-text-o"></i><span>&nbsp;Manage investor</span></a></li>
 }
 
 @helper SubMenu(WebViewPage page)
