@@ -208,7 +208,7 @@
 
 				facade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,
-												 date, description, null, model.PaymentMethod);
+												 date, description, null, model.PaymentMethod,this._context.UserId);
 			
 				Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
 				var loan = customer.GetLoan(model.LoanId);

@@ -156,7 +156,7 @@
 			} // if
 
 			LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
-			PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
+            PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext, null, "payment from customer", null, null, this.context.UserId);
 
 			SendEmails(loanId, amount.Value, customerContext);
 
@@ -341,7 +341,8 @@
 					DateTime.UtcNow,
 					"manual payment from customer",
 					paymentType,
-					"CustomerAuto"
+					"CustomerAuto",
+                    this.context.UserId
 				);               
 
 				payFastModel.CardNo = card.CardNo;
