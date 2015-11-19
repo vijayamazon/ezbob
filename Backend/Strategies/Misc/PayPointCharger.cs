@@ -188,21 +188,12 @@
 			var result = new AutoPaymentResult();
 			decimal actualAmountCharged = initialAmountDue;
 
-			NL_Payments nlp = new NL_Payments() {
-				Amount = actualAmountCharged,
-				LoanID = newLoanId,
-				CreatedByUserID = 0,
-				CreationTime = DateTime.UtcNow,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
-				PaypointTransactions = new List<NL_PaypointTransactions>()
-			};
-
 			int counter = 0;
 
 			while (counter <= 2) {
 				PayPointReturnData payPointReturnData;
 
-				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData, ref nlp)) {
+				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData)) {
 					if (isNonRegulated && IsNotEnoughMoney(payPointReturnData)) {
 						if (!reductionFee) {
 							result.PaymentFailed = true;
@@ -269,11 +260,11 @@
 			return (lastInstallment && amountDue > 0) || amountDue >= amountToChargeFrom;
 		}//ShouldCharge
 
-		private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result,
-			ref NL_Payments nlPayment // TODO rename to nlPayment
-			) {
+		private bool MakeAutoPayment(int loanScheduleId,
+            decimal amountDue,
+            out PayPointReturnData result) {
 			try {
-				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue, ref nlPayment);
+				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue);
 				return true;
 			} catch (Exception ex) {
 				Log.Error("Failed making auto payment for loan schedule id:{0} exception:{1}", loanScheduleId, ex);

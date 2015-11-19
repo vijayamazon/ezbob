@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model;
@@ -39,12 +40,13 @@
 			string transId,
 			decimal amount,
 			string ip,
+            NL_Payments nlPayment,
 			DateTime? term = null,
 			string description = "payment from customer",
 			bool interestOnly = false,
 			string sManualPaymentMethod = null,       
-			NL_Payments nlPayment = null,
-            int userID = 1) {
+            int userId = 1)
+        {
 
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -67,6 +69,16 @@
 			};
 
 			loan.AddTransaction(transactionItem);
+
+            nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions()
+            {
+                IP = ip,
+                Amount = amount,
+                Notes = description,
+                PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
+                TransactionTime = DateTime.UtcNow,                
+                PaypointUniqueID = transId                
+            });
 
 			// TODO add payment to new payment table
 			Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
@@ -103,11 +115,6 @@
 			//	//Log.Debug(nlPayment.Payment.ToString());
 			//}
 
-			
-
-
-            
-
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
 			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
@@ -141,11 +148,20 @@
 						StatusBefore = dlt.Status.StartValue,
 						Transaction = transactionItem
 					});
+
+                    nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions()
+                    {
+                        IP = "",
+                        Amount = amount,
+                        Notes = description,
+                        PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
+                        TransactionTime = DateTime.UtcNow,
+                        PaypointUniqueID = transId                       
+                    });
+
 				} // for each delta
 			} // if
-		    if (loan.Customer != null) {
-		        ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, userID, nlPayment);
-		    }
+            ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(userId, loan.Customer.Id, nlPayment);
 		    return amount;
 		} // PayLoan
 
@@ -201,8 +217,15 @@
 					break;
 
 				var money = Math.Min(amount, loan.TotalEarlyPayment(term));
-				NL_Payments nlPayment = new NL_Payments();
-                PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod,nlPayment);
+                NL_Payments nlPayment = new NL_Payments()
+                {
+                    Amount = amount,
+                    LoanID = loan.Id,
+                    CreatedByUserID = 1,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                }; 
+                PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
 				amount = amount - money;
 			} // for
 		} // PayAllLoansForCustomer
@@ -234,29 +257,37 @@
 
 				decimal money = Math.Min(amount, late);
 
-				NL_Payments nlPayment = new NL_Payments();
-				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, nlPayment);
+                NL_Payments nlPayment = new NL_Payments()
+                {
+                    Amount = amount,
+                    LoanID = loan.Id,
+                    CreatedByUserID = 1,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                }; 
+				PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
 
 				amount = amount - money;
 			} // for
 		} // PayAllLateLoansForCustomer
 
-		/// <summary>
-		/// Main method for making payments
-		/// </summary>
-		/// <param name="transId">pay point transaction id</param>
-		/// <param name="amount"></param>
-		/// <param name="ip"></param>
-		/// <param name="type"></param>
-		/// <param name="loanId"></param>
-		/// <param name="customer"></param>
-		/// <param name="date">payment date</param>
-		/// <param name="description"></param>
-		/// <param name="paymentType">If payment type is null - ordinary payment(reduces principal),
-		/// if nextInterest then it is for Interest Only loans, and reduces interest in the future.</param>
-		/// <param name="sManualPaymentMethod"></param>
-		/// <returns></returns>
-		public PaymentResult MakePayment(
+	    /// <summary>
+	    /// Main method for making payments
+	    /// </summary>
+	    /// <param name="transId">pay point transaction id</param>
+	    /// <param name="amount"></param>
+	    /// <param name="ip"></param>
+	    /// <param name="type"></param>
+	    /// <param name="loanId"></param>
+	    /// <param name="customer"></param>
+	    /// <param name="date">payment date</param>
+	    /// <param name="description"></param>
+	    /// <param name="paymentType">If payment type is null - ordinary payment(reduces principal),
+	    /// if nextInterest then it is for Interest Only loans, and reduces interest in the future.</param>
+	    /// <param name="sManualPaymentMethod"></param>
+	    /// <param name="userId"></param>
+	    /// <returns></returns>
+	    public PaymentResult MakePayment(            
 			string transId,
 			decimal amount,
 			string ip,
@@ -266,7 +297,8 @@
 			DateTime? date = null,
 			string description = "payment from customer",
 			string paymentType = null,
-			string sManualPaymentMethod = null
+			string sManualPaymentMethod = null,
+            int userId = 1
 		) {
 			Log.DebugFormat(
 				"MakePayment transId: {0}, amount: {1}, ip: {2}, type: {3}, loanId: {4}, customer: {5}," +
@@ -337,8 +369,17 @@
 			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
-				NL_Payments nlPayment = new NL_Payments();
-				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, nlPayment);
+
+                NL_Payments nlPayment = new NL_Payments()
+                {
+                    Amount = amount,
+                    LoanID = loan.Id,
+                    CreatedByUserID = userId,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                }; 
+
+				PayLoan(loan, transId, amount, ip,nlPayment, date, description, true, sManualPaymentMethod);
 				newInterest = 0;
 			} else {
 				Loan loan = customer.GetLoan(loanId);
@@ -353,9 +394,16 @@
 				).FirstOrDefault();
 
 
-				NL_Payments nlPayment = new NL_Payments();
-				PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, nlPayment);
-
+                NL_Payments nlPayment = new NL_Payments()
+                {
+                    Amount = amount,
+                    LoanID = loan.Id,
+                    CreatedByUserID = 1,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                };
+                PayLoan(loan, transId, amount, ip, nlPayment, date, description, false, sManualPaymentMethod);
+			   
 				newInterest = loan.Interest;
 
 				rolloverWasPaid = rollover != null && rollover.Status == RolloverStatus.Paid;

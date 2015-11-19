@@ -198,16 +198,7 @@
 
 					payPointTransactionId = paypointCard.TransactionId;
 
-					NL_Payments nlPayment = new NL_Payments() {
-						Amount = realAmount,
-						LoanID = model.LoanId,
-						CreatedByUserID = this._context.UserId,
-						CreationTime = DateTime.UtcNow,
-						PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-					};
-
-					this._paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount, ref nlPayment);
-					this.m_oServiceClient.Instance.AddPayment(this._context.UserId, this._context.Customer.Id, nlPayment);
+					this._paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
@@ -218,8 +209,7 @@
 				facade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,
 												 date, description, null, model.PaymentMethod);
-
-				//TODO add payment to new table
+			
 				Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
 				var loan = customer.GetLoan(model.LoanId);
 				facade.Recalculate(loan, DateTime.Now);

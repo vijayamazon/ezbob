@@ -12,6 +12,7 @@
 	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Code;
+	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Models.Agreements;
@@ -241,8 +242,15 @@
 			if (amount == null || amount <= 0)
 				return;
 			var f = new LoanPaymentFacade();
-			NL_Payments nlPayment = new NL_Payments();
-			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", false, null, nlPayment, this._context.UserId);
+            NL_Payments nlPayment = new NL_Payments()
+            {
+                Amount = (decimal)amount,
+                LoanID = loan.Id,
+                CreatedByUserID = this._context.UserId,
+                CreationTime = DateTime.UtcNow,
+                PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+            };
+            f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, nlPayment, now, "system-repay", false, null, this._context.UserId);
 		}
 
 		[Transactional]

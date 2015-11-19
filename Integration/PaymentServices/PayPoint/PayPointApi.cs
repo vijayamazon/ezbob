@@ -3,12 +3,14 @@
 	using EZBob.DatabaseLib;
 	using global::PayPoint;
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Calculators;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
@@ -116,7 +118,8 @@
 		/// <param name="nlPayment"></param>
 		/// <exception cref="Exception"></exception>
 		/// <returns>PayPointReturnData as a result of call to paypoint API</returns>
-		public PayPointReturnData MakeAutomaticPayment(int loanScheduleId, decimal amount,ref NL_Payments nlPayment ) {
+		public PayPointReturnData MakeAutomaticPayment(int loanScheduleId,
+                                                        decimal amount) {
 
 			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
 			var loanPaymentFacade = new LoanPaymentFacade();
@@ -125,9 +128,19 @@
 
 			installments.BeginTransaction();
 
+            NL_Payments nlPayment = new NL_Payments()
+            {
+                Amount = amount,
+                CreatedByUserID = 0,
+                CreationTime = DateTime.UtcNow,
+                PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
+                PaypointTransactions = new List<NL_PaypointTransactions>()
+            };
+
 			try {
 				var installment = installments.Get(loanScheduleId);
 				var loan = installment.Loan;
+			    nlPayment.LoanID = loan.Id;
 				var customer = loan.Customer;
 
 				Log.InfoFormat("Making automatic repayment for customer {0}(#{1}) for amount {2} for loan# {3}({4})",
@@ -146,7 +159,7 @@
 				var now = DateTime.UtcNow;
 
 				try {
-					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount, ref nlPayment); 
+					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount); 
 				} catch (PayPointException ex) {
 					loan.Transactions.Add(new PaypointTransaction {
 						Amount = amount,
@@ -167,10 +180,10 @@
 					nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
 						IP = "",
 						Amount = amount,
-						Notes = "paypointcharger failure",
+						Notes = ex.PaypointData.Message ?? "Exception:" + ex.Message,
 						PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
 						TransactionTime = DateTime.UtcNow,
-						PaypointTransactionID = loan.Transactions.Last().Id
+						PaypointTransactionID = Convert.ToInt64(payPointTransactionId)
 					});
 
 					installments.CommitTransaction();
@@ -178,9 +191,8 @@
 					return ex.PaypointData;
 				}
 
-				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, nlPayment);
+                loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, nlPayment, now, "auto-charge", false, null);
 				installments.CommitTransaction();
-
 
 			} catch (Exception e) {
 				if (!(e is PayPointException)) {
@@ -196,7 +208,7 @@
 		}
 
 		// step 2 - actual paypoint transaction
-		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount, ref NL_Payments nlPayment) // TODO rename nlp to nlPayment 
+		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount) 
 		{
 			var newTransactionId = transactionId + DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss");
 			string str;
@@ -254,16 +266,6 @@
 			}
 
 			Log.DebugFormat("RepeatTransaction successful: " + str);
-
-			//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
-			nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
-				IP = "",
-				Amount = amount,
-				Notes = "",
-				PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
-				TransactionTime = DateTime.UtcNow,
-				//PaypointTransactionID = Convert.ToInt64(ret.NewTransId) // TODO check
-			});
 
 			return ret;
 		}

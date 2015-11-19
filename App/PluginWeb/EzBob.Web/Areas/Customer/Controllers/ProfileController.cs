@@ -20,6 +20,7 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -333,8 +334,15 @@
 		    if (amount > 0 && hasOpenLoans) {
 		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
 		        var f = new LoanPaymentFacade();
-			    NL_Payments nlPayment = new NL_Payments();
-				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment, this.m_oContext.User.Id);
+                NL_Payments nlPayment = new NL_Payments()
+                {
+                    Amount = (decimal)amount,
+                    LoanID = loan.Id,
+                    CreatedByUserID = this.m_oContext.UserId,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+                };
+                f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, nlPayment, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id);
 		    }
 
             if (amount > 0 && !hasOpenLoans) {
