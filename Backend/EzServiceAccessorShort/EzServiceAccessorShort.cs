@@ -108,24 +108,6 @@
             stra.Execute();
         } // AddPayment
 
-	    /*/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="userId"></param>
-		/// <param name="customerId"></param>
-		/// <param name="nlModel"></param>
-		/// <returns></returns>
-		public NL_Model AddPayment(NL_Model nlModel) {
-			var strategy = new AddPayment(nlModel);
-			try {
-				strategy.Execute();
-				return strategy.NLModel;
-			} catch (Exception) {
-				Console.WriteLine("xxx");
-				//this.ServiceLogWriter(new WriteToLogPackage(new WriteToLogPackage.InputData("xxxx")));
-			}
-
-			return null;
-		}*/
+	   
 	} // class EzServiceAccessorShort
 } // namespace EzServiceShortcut

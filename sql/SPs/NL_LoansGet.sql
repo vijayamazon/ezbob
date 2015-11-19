@@ -20,12 +20,10 @@ BEGIN
 		l.LoanSourceID,		
 		l.EzbobBankAccountID,
 		l.CreationTime,
-		l.Refnum,		
-		l.RepaymentDate,
+		l.Refnum,				
 		l.Position,
 		l.DateClosed,	
-		l.PrimaryLoanID,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)	
-		l.PaymentPerInterval,
+		l.PrimaryLoanID,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)			
 		l.OldLoanID 		
 	FROM
 		NL_Loans l 

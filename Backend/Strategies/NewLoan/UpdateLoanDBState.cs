@@ -53,7 +53,7 @@
 
 			model = getLoanDBState.Result;
 
-			int loanstatusBedore = model.Loan.LoanStatusID;
+			int loanstatusBefore = model.Loan.LoanStatusID;
 
 			NL_AddLog(LogType.Error, "Loan dbState loaded", this.strategyArgs, model, this.Error, null);
 
@@ -87,14 +87,20 @@
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
-
+				
 				List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
 				List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
 				List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
 
-				model.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
-
 				pconn.BeginTransaction();
+
+				// save new history (on rescheduling/rollover)
+				foreach (NL_LoanHistory h in model.Loan.Histories.Where(h => h.LoanHistoryID == 0)) {
+					h.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", h));
+					h.Schedule.ForEach(s => s.LoanHistoryID = h.LoanHistoryID);
+				}
+
+				model.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
 
 				// add new schedules - when may happen?
 				DB.ExecuteNonQuery("NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedules.Where(s=>s.LoanScheduleID == 0)));
@@ -125,7 +131,7 @@
 				}
 
 				// update loan status
-				if (loanstatusBedore != model.Loan.LoanStatusID) {
+				if (loanstatusBefore != model.Loan.LoanStatusID) {
 					DB.ExecuteNonQuery("NL_LoanUpdate", CommandSpecies.StoredProcedure, 
 						new QueryParameter("LoanID", LoanID ),
 						new QueryParameter("LoanStatusID", model.Loan.LoanStatusID ),
@@ -146,5 +152,5 @@
 				NL_AddLog(LogType.Error, "Faild - Rollback", this.strategyArgs, this.Error, ex.ToString(), ex.StackTrace);
 			}
 		}
-	} // class AddPayment
-} // ns
+	} 
+} 

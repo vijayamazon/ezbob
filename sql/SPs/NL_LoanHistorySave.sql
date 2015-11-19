@@ -18,7 +18,9 @@ CREATE TYPE NL_LoanHistoryList AS TABLE (
 	[RepaymentCount] [int] NOT NULL,
 	[InterestRate] [decimal](18, 6) NULL,	
 	[EventTime] [datetime] NOT NULL,		
-	[Description] NVARCHAR(MAX) NULL,
+	[Description] NVARCHAR(MAX) NULL,	
+	[RepaymentDate] DATETIME NOT NULL,
+	[PaymentPerInterval] DECIMAL(18, 6) NULL,	-- in "fixed payment" formula
 	[AgreementModel] NVARCHAR(MAX) NULL,
 	[InterestOnlyRepaymentCount] INT NULL
 );
@@ -39,7 +41,9 @@ BEGIN
 	[RepaymentCount],
 	[InterestRate],	
 	[EventTime] ,
-	[Description]   ,	
+	[Description]   ,
+	[RepaymentDate],
+	[PaymentPerInterval] ,	
 	[AgreementModel] 	,
 	[InterestOnlyRepaymentCount] 
 	) SELECT
@@ -51,7 +55,9 @@ BEGIN
 	[RepaymentCount],
 	[InterestRate],	
 	[EventTime] ,
-	[Description]   ,	
+	[Description]   ,
+	[RepaymentDate],
+	[PaymentPerInterval] ,		
 	[AgreementModel] ,
 	[InterestOnlyRepaymentCount] 
 	 

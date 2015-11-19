@@ -14,15 +14,22 @@ BEGIN
 
 	SELECT
 		h.LoanHistoryID,
+		h.LoanID,
+		h.UserID,
+		h.LoanLegalID,		
 		h.Amount,
+		h.RepaymentIntervalTypeID,
 		h.RepaymentCount,
 		h.InterestRate,
-		h.EventTime
+		h.EventTime,
+		h.[Description],
+		h.RepaymentDate,
+		h.PaymentPerInterval,
+		h.AgreementModel,
+		h.InterestOnlyRepaymentCount
 	FROM
 		NL_LoanHistory h
 	WHERE
-		h.LoanID = @LoanID
-		AND
-		(@Now IS NULL OR h.EventTime < @Now)
+		h.LoanID = @LoanID -- AND (@Now IS NULL OR h.EventTime < @Now)
 END
 GO

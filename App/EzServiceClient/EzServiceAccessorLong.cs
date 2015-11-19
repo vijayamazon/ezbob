@@ -1,13 +1,12 @@
 ﻿namespace ServiceClientProxy {
-	using System;
 	using System.Collections.Generic;
-	using EzServiceAccessor;
-	using EzServiceReference;
 	using Ezbob.Backend.Models;
-    using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
+	using EzServiceAccessor;
+	using ServiceClientProxy.EzServiceReference;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
 		public EzServiceAccessorLong() {
@@ -93,20 +92,7 @@
         {
             this.m_oServiceClient.Instance.AddPayment(userID,customerID,payment);
         } // AddPayment
-
-		/*/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="nlModel"></param>
-		/// <returns></returns>
-		public NL_Model AddPayment(NL_Model nlModel) {
-			Console.WriteLine("========================!!!!!!!!!!!!ACCESSOR LONG!!!!!!!!!!!=============================");
-			var result = this.m_oServiceClient.Instance.AddPayment(nlModel);
-/*			Console.WriteLine("result====>" + result.Payment.PaymentID);
-			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);#1#
-			return result;
-		}*/
-	
+		
 
 		private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong

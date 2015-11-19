@@ -49,6 +49,12 @@
 		[DataMember]
 		public string Description { get; set; }
 
+		[DataMember]
+		public DateTime RepaymentDate { get; set; }
+
+		[DataMember]
+		public decimal? PaymentPerInterval { get; set; }
+
 		[Length(LengthType.MAX)]
 		[DataMember]
 		[ExcludeFromToString]
@@ -56,6 +62,8 @@
 
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
+
+	
 
 		// additions
 
@@ -102,9 +110,18 @@
 			RepaymentIntervalTypeID = (RepaymentIntervalTypeID == 0) ? (int)RepaymentIntervalTypes.Month : RepaymentIntervalTypeID;
 		}
 
+		// +month|+7 days
+		public void SetDefaultRepaymentDate() {
+			if (RepaymentDate == DateTime.MinValue) {
+				//NL_LoanHistory lastHistory = LastHistory() ?? new NL_LoanHistory();
+				RepaymentDate = (RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? EventTime.Date.AddMonths(1) : EventTime.Date.AddDays(7);
+			}
+		}
+
 		public void SetDefaults() {
 			SetDefaultEventTime();
 			SetDefaultRepaymentIntervalType();
+			SetDefaultRepaymentDate();
 			//SetDefaultInterestRate();
 			//SetDefaultRepaymentCount();
 		}

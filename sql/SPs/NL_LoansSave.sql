@@ -17,12 +17,10 @@ CREATE TYPE NL_LoansList AS TABLE (
 	LoanSourceID INT NOT NULL,		
 	EzbobBankAccountID INT NULL,
 	CreationTime DATETIME NOT NULL,
-	Refnum NVARCHAR(50) NOT NULL,		
-	RepaymentDate DATETIME NOT NULL,
+	Refnum NVARCHAR(50) NOT NULL,			
 	Position INT NOT NULL,
 	DateClosed DATETIME NULL,	
-	PrimaryLoanID BIGINT NULL,	
-	PaymentPerInterval DECIMAL(18, 6) NULL,
+	PrimaryLoanID BIGINT NULL,		
 	OldLoanID INT NULL
 )
 GO
@@ -41,12 +39,10 @@ BEGIN
 		LoanSourceID ,		
 		EzbobBankAccountID,
 		CreationTime,
-		Refnum ,		
-		RepaymentDate,
+		Refnum ,			
 		Position,
 		DateClosed,	
-		PrimaryLoanID,	
-		PaymentPerInterval,
+		PrimaryLoanID,			
 		OldLoanID
 	) SELECT
 		OfferID ,
@@ -56,12 +52,10 @@ BEGIN
 		LoanSourceID ,		
 		EzbobBankAccountID,
 		CreationTime,
-		Refnum ,		
-		RepaymentDate,
+		Refnum ,			
 		Position,
 		DateClosed,	
-		PrimaryLoanID,	
-		PaymentPerInterval,
+		PrimaryLoanID,		
 		OldLoanID
 	FROM @Tbl
 

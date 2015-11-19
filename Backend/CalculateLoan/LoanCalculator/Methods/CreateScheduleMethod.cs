@@ -83,7 +83,7 @@
 
 			throw new NotImplementedException("FixedPayment formula not supported yet");
 
-			if (WorkingModel.Loan.PaymentPerInterval == 0m) {
+			if (WorkingModel.Loan.LastHistory().PaymentPerInterval == 0m) {
 				throw new NoPaymentPerIntervalException();
 			}
 
@@ -131,19 +131,17 @@
 
 				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i - 1])) : history.InterestRate;
 
-				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, history.EventTime, intervalType)
-					.Date;
+				DateTime plannedDate = (i == 1) ? history.RepaymentDate.Date : Calculator.AddRepaymentIntervals(i, history.RepaymentDate, intervalType).Date;
 
 				balance -= principal;
 
-				history.Schedule.Add(
-					new NL_LoanSchedules() {
+				history.Schedule.Add(new NL_LoanSchedules() {
 						InterestRate = r,
 						PlannedDate = plannedDate.Date,
 						Principal = principal, // intervals' principal
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i,
-						Balance = balance //local open principal, scheduled		
+						Balance = balance		//local open principal, scheduled		
 					});
 			} // for
 		}

@@ -19,6 +19,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using Newtonsoft.Json;
 	using NHibernate.Linq;
 	using NUnit.Framework;
@@ -537,6 +538,27 @@
 			GetLoanDBState dbState = new GetLoanDBState(model, loanID, DateTime.UtcNow);
 			dbState.Execute();
 			model = dbState.Result;
+
+			// old loan
+
+			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			var oldLoan = loanRep.Get(model.Loan.OldLoanID);
+
+			var rolloverRep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
+			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id)
+				.FirstOrDefault();
+
+			// copy rollover to NL
+			if (oldRollover != null) {
+				model.Loan.Rollover = new NL_LoanRollovers() {
+					CreatedByUserID = 1,
+					CreationTime = oldRollover.Created,
+					CustomerActionTime = oldRollover.CustomerConfirmationDate,
+					ExpirationTime = (DateTime)oldRollover.ExpiryDate,
+					IsAccepted = true
+				};
+			}
+
 			// dummy: reset fee payment, check calculator's adding this
 			//var firstOrDefault = model.Loan.Payments.FirstOrDefault();
 			//if (firstOrDefault != null) {
@@ -597,8 +619,6 @@
 				this.m_oLog.Debug("Calc data: {0}", calc);
 
 				// old calc
-				ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-				var oldLoan = loanRep.Get(model.Loan.OldLoanID);
 				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 				oldCalc.GetState();
 				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);

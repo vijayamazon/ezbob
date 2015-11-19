@@ -50,14 +50,6 @@
 
 		WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);
 
-		/*/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="nlModel"></param>
-		/// <returns></returns>
-		NL_Model AddPayment(NL_Model nlModel);*/
-
-
 	    void AddPayment(int userID, int customerID, NL_Payments payment);
 
 	} // interface IEzServiceAccessor

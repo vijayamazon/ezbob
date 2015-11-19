@@ -49,10 +49,7 @@
 		[Length(50)]
 		[DataMember]
 		public string Refnum { get; set; }
-
-		[DataMember]
-		public DateTime RepaymentDate { get; set; }
-
+	
 		[DataMember]
 		public int Position { get; set; }
 
@@ -61,9 +58,6 @@
 
 		[DataMember]
 		public long PrimaryLoanID { get; set; }
-
-		[DataMember]
-		public decimal? PaymentPerInterval { get; set; }
 
 		[FK("Loan", "Id")]
 		[DataMember]
@@ -127,15 +121,7 @@
 		public NL_LoanHistory FirstHistory() {
 			return this._histories.OrderBy(h => h.EventTime).FirstOrDefault();
 		}
-
-		// +month|+7 days
-		public void SetDefaultRepaymentDate() {
-			if (RepaymentDate == DateTime.MinValue) {
-				NL_LoanHistory lastHistory = LastHistory() ?? new NL_LoanHistory();
-				RepaymentDate = (lastHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? lastHistory.EventTime.Date.AddMonths(1) : lastHistory.EventTime.Date.AddDays(7);
-			}
-		}
-
+		
 		public void SetDefaultFormula() {
 			if (LoanFormulaID == 0) 
 				LoanFormulaID = (int)NLLoanFormulas.EqualPrincipal;
@@ -147,7 +133,6 @@
 		}
 
 		public void SetDefaults() {
-			SetDefaultRepaymentDate();
 			SetDefaultFormula();
 			SetDefaultLoanType();
 		}

@@ -326,7 +326,7 @@
 					throw new Exception("Card not found");
 
 
-                NL_Payments nlp = new NL_Payments()
+                NL_Payments nlPayment = new NL_Payments()
                 {
                     Amount = realAmount,
                     LoanID = loanId,
@@ -335,7 +335,7 @@
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
 
-                this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount, ref nlp);
+				this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount, ref nlPayment);
 				//this.serviceClient.Instance.AddPayment(this.context.UserId, this.context.Customer.Id, nlp); // TODO move AddPayment into loanRepaymentFacade.MakePayment
 
 				// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL

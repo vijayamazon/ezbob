@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
 	using System.Text;
 	using DbConstants;
@@ -10,6 +11,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Attributes;
+	using Ezbob.Utils.Extensions;
 
 	/// <summary>
 	/// This class is implemented as Facade pattern. https://en.wikipedia.org/wiki/Facade_pattern
@@ -81,9 +83,9 @@
 		/// for autocharger-amount to charge at t date. How much should pay at t date.
 		/// </summary>
 		public decimal AmountToCharge { get; internal set; }
-		
+
 		public decimal TotalEarlyPayment { get; internal set; }
-		
+
 		public decimal NextEarlyPayment { get; internal set; }
 
 		public decimal RolloverPayment { get; internal set; }
@@ -244,10 +246,17 @@
 			return method.Execute();
 		} // CalculateApr
 
-
+		/// <exception cref="InvalidEnumArgumentException">Condition. </exception>
+		/// <exception cref="OverflowException">Condition. </exception>
 		[ExcludeFromToString]
 		public DateTime AddRepaymentIntervals(int intervals, DateTime issuedTime, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
-			return (intervalType == RepaymentIntervalTypes.Month) ? issuedTime.AddMonths(intervals) : issuedTime.AddDays(intervals * (int)intervalType);
+			try {
+				return (intervalType == RepaymentIntervalTypes.Month) ? issuedTime.AddMonths(intervals) : issuedTime.AddDays(intervals * Convert.ToInt32(intervalType.DescriptionAttr()));
+			} catch (InvalidEnumArgumentException enumArgumentException) {
+				throw new InvalidEnumArgumentException(string.Format("intervalType {0} days number not found", intervalType), enumArgumentException);
+			} catch (OverflowException overflowException) {
+				throw new OverflowException(string.Format("intervalType {0} days number not found", intervalType), overflowException);
+			}
 		} // AddRepaymentIntervals
 
 
@@ -290,7 +299,7 @@
 
 			if (item == null)
 				throw new NoInstallmentFoundException(theDate);
-
+			
 			// dr' = r/daysDiff or BankLike
 			decimal dr = AverageDailyInterestRate(item.InterestRate, item.PlannedDate);
 
@@ -411,7 +420,7 @@
 			foreach (var e in WorkingModel.Loan.Fees) {
 
 				// ignore fees disabled before CalculationDate ???  TODO check
-				if(e.DisabledTime != null && (e.DisabledTime.Value.Date <= CalculationDate.Date))
+				if (e.DisabledTime != null && (e.DisabledTime.Value.Date <= CalculationDate.Date))
 					continue;
 
 				feesEvents.Add(new LoanEvent(new DateTime(e.AssignTime.Year, e.AssignTime.Month, e.AssignTime.Day), e));
@@ -428,7 +437,7 @@
 			}
 
 			// payments - by PaymentTime, only non-deleted
-			foreach (var e in WorkingModel.Loan.Payments.Where(p=>p.DeletionTime==null && p.DeletedByUserID==null)) {
+			foreach (var e in WorkingModel.Loan.Payments.Where(p => p.DeletionTime == null && p.DeletedByUserID == null)) {
 
 				paymentEvents.Add(new LoanEvent(new DateTime(e.PaymentTime.Year, e.PaymentTime.Month, e.PaymentTime.Day), e));
 
@@ -495,25 +504,7 @@
 					break;
 
 				case "ScheduleItem":
-
 					ProcessScheduleItem(e.ScheduleItem);
-					// TODO calculate saved amounts
-					// saved amount for "next early" and "total early" payments
-					/*if (savedAmount && CalculationDate != DateTime.MinValue && CalculationDate.Date <= e.EventTime.Date) {
-
-						decimal earnedinterestTillCalculationDate = this.events.Where(ev => ev.EventTime <= this.calculationDateEventEnd.EventTime)
-							.Sum(ev => ev.EarnedInterestForPeriod);
-
-						var nextEarlyPaymentSchedule = this.schedule.FirstOrDefault(s => CalculationDate.Date >= s.PlannedDate);
-
-						if (nextEarlyPaymentSchedule != null && (nextEarlyPaymentSchedule.PlannedDate.Date == e.ScheduleItem.PlannedDate))
-							NextEarlyPaymentSavedAmount = currentEarnedInterest - earnedinterestTillCalculationDate;
-
-						var totalEarlyPaymentSchedule = this.schedule.LastOrDefault();
-
-						if (totalEarlyPaymentSchedule != null && (totalEarlyPaymentSchedule.PlannedDate.Date == e.ScheduleItem.PlannedDate))
-							TotalEarlyPaymentSavedAmount = currentEarnedInterest - earnedinterestTillCalculationDate;
-					}*/
 					break;
 
 				case "Fee":
@@ -552,7 +543,7 @@
 			this.lastEvent = null;
 			BalanceBasedAmountDue(initialAmount);
 		}
-		
+
 
 		/// set SCHEDULED (balance based) interest and amount due for each non-closed installment
 		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
@@ -573,7 +564,7 @@
 			// set interest calculation mode back to rela open principal 
 			BalanceBasedInterestCalculation = false;
 		}
-		
+
 		/// <summary>
 		/// 1. pay fees 
 		/// 2. pay schedule (interest and principal)
@@ -848,7 +839,7 @@
 
 			// set outstanding balance - if pay as scheduled, this is the total amount due for calculation date
 			WorkingModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => Balance += s.AmountDue));
-		
+
 			// All previous installments are paid? i.e. check late
 			if (HasLatesTillCalculationDate()) {
 				return;
@@ -978,6 +969,75 @@
 			}
 		}
 
+		/// <exception cref="OverflowException"><paramref name="value" /> represents a number that is less than <see cref="F:System.Int32.MinValue" /> or greater than <see cref="F:System.Int32.MaxValue" />. </exception>
+		public void RolloverRescheduling() {
+
+			// get balance
+			try {
+				GetState();
+			} catch (Exception ex) {
+				return;
+			}
+			
+			NL_LoanHistory rolloverHistory = WorkingModel.Loan.LastHistory();
+
+			rolloverHistory.LoanHistoryID = 0;
+			rolloverHistory.Amount = Balance;
+			rolloverHistory.Description = "rollover";
+			rolloverHistory.EventTime = CalculationDate;
+
+			int deletedItems = 0;
+			int daysInInterval = Convert.ToInt32(Enum.GetName(typeof(RepaymentIntervalTypes), rolloverHistory.RepaymentIntervalTypeID).DescriptionAttr());
+				
+
+			// mark non relevant schedules as CancelledOnRollover and save
+			foreach (NL_LoanSchedules s in WorkingModel.Loan.LastHistory().Schedule.Where(s => CalculationDate >= s.PlannedDate)) {
+
+
+
+				DateTime plannedDate = (rolloverHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? s.PlannedDate.AddMonths(1) : s.PlannedDate.AddDays(daysInInterval);
+				
+
+				NL_LoanSchedules s1 = s;
+				s1.PlannedDate = plannedDate;
+				
+				rolloverHistory.Schedule.Add(s1);
+
+				s.LoanScheduleStatusID = (int)NLScheduleStatuses.DeletedOnReschedule;
+				s.ClosedTime = CalculationDate;
+
+				deletedItems++;
+			}
+			
+		
+
+		
+			WorkingModel.Loan.Histories.Add(rolloverHistory);
+
+			//	create new history
+			/*WorkingModel.Loan.Histories.Add(
+				new NL_LoanHistory() {
+					Amount = Balance,
+					//InterestRate = firstHistory.InterestRate,
+					Description = "rollover",
+					EventTime = CalculationDate, // TODO check +month?
+					//LoanID = WorkingModel.Loan.LoanID,
+					//LoanLegalID = firstHistory.LoanLegalID,
+					//AgreementModel = firstHistory.AgreementModel,
+					//Agreements = firstHistory.Agreements,
+					RepaymentCount = (firstHistory.RepaymentCount - deletedItems),
+					//RepaymentIntervalTypeID = firstHistory.RepaymentIntervalTypeID,
+					//UserID = 1
+				});*/
+
+			// schedule for new history
+			try {
+				CreateSchedule();
+			} catch (Exception ex) {
+				return;
+			}
+
+		}
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder().Append("Calculator data:").Append(Environment.NewLine);

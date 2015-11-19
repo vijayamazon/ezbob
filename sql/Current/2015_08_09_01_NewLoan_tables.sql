@@ -452,12 +452,10 @@ BEGIN
 		LoanSourceID INT NOT NULL,		
 		EzbobBankAccountID INT NULL,
 		CreationTime DATETIME NOT NULL,
-		Refnum NVARCHAR(50) NOT NULL,		
-		RepaymentDate DATETIME NOT NULL,
+		Refnum NVARCHAR(50) NOT NULL,				
 		Position INT NOT NULL,
 		DateClosed DATETIME NULL,	
-		PrimaryLoanID BIGINT NULL,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)
-		PaymentPerInterval DECIMAL(18, 6) NULL,	-- in "fixed payment" formula
+		PrimaryLoanID BIGINT NULL,	-- in the case of current loan is an auxiliary loan for other main loan (re-scheduled)		
 		OldLoanID INT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Loans PRIMARY KEY (LoanID),
@@ -471,9 +469,9 @@ BEGIN
 		CONSTRAINT CHK_NL_Loans CHECK (		
 			(Position >= 1)
 			AND 
-			(LoanFormulaID in (1,2) )
-			AND
-			((LoanFormulaID = 1 AND PaymentPerInterval IS NULL) OR (LoanFormulaID = 2 AND PaymentPerInterval IS NOT NULL))
+			(LoanFormulaID in (1,2))
+			--AND
+			--((LoanFormulaID = 1 AND PaymentPerInterval IS NULL) OR (LoanFormulaID = 2 AND PaymentPerInterval IS NOT NULL))
 		)		
 	);
 	
@@ -596,7 +594,9 @@ BEGIN
 		RepaymentCount INT NOT NULL,
 		InterestRate DECIMAL(18, 6) NOT NULL,
 		EventTime DATETIME NOT NULL,
-		[Description] NVARCHAR(MAX) NOT NULL,
+		[Description] NVARCHAR(MAX) NOT NULL,		
+		RepaymentDate DATETIME NOT NULL,
+		PaymentPerInterval DECIMAL(18, 6) NULL,	-- in "fixed payment" formula
 		AgreementModel NVARCHAR(MAX) NULL,
 		InterestOnlyRepaymentCount INT NULL,
 		TimestampCounter ROWVERSION,
