@@ -8,7 +8,6 @@ GO
 ALTER PROCEDURE ManuallyEscalate
 @CustomerID INT,
 @CreditResult NVARCHAR(MAX),
-@Status NVARCHAR(250),
 @UnderwriterName VARCHAR(200),
 @IsWaitingForSignature BIT,
 @DateEscalated DATETIME,
@@ -31,7 +30,6 @@ BEGIN
 
 	UPDATE Customer SET
 		CreditResult = @CreditResult,
-		Status = @Status,
 		UnderwriterName = @UnderwriterName,
 		IsWaitingForSignature = CASE WHEN @IsWaitingForSignature IS NULL THEN IsWaitingForSignature ELSE @IsWaitingForSignature END,
 		DateEscalated = @DateEscalated,

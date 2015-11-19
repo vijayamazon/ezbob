@@ -8,7 +8,6 @@ GO
 ALTER PROCEDURE ManuallySuspend
 @CustomerID INT,
 @CreditResult NVARCHAR(MAX),
-@Status NVARCHAR(250),
 @UnderwriterName VARCHAR(200),
 @IsWaitingForSignature BIT,
 @PendingStatus NVARCHAR(50),
@@ -31,7 +30,6 @@ BEGIN
 
 	UPDATE Customer SET
 		CreditResult = @CreditResult,
-		Status = @Status,
 		UnderwriterName = @UnderwriterName,
 		IsWaitingForSignature = CASE WHEN @IsWaitingForSignature IS NULL THEN IsWaitingForSignature ELSE @IsWaitingForSignature END,
 		PendingStatus = @PendingStatus,
