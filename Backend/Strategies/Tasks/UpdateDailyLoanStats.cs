@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Database;
 	using Ezbob.Utils.Lingvo;
@@ -41,45 +42,65 @@
 				this.daysToKeep == 0 ? "entire" : Grammar.Number(this.daysToKeep, "day") + " of"
 			);
 
-			EarnedInterest ei = new EarnedInterest(
+			SortedDictionary<int, decimal> earnedInterestByPeriodsList = new EarnedInterest(
 				DB,
 				EarnedInterest.WorkingMode.ForPeriod,
 				false,
 				this.today,
 				this.today.AddDays(1),
 				Log
-			);
+			).Run();
 
-			SortedDictionary<int, decimal> earnedInterestList = ei.Run();
+			SortedDictionary<int, decimal> earnedInterestBySomeDateList = new EarnedInterest(
+				DB,
+				EarnedInterest.WorkingMode.ForPeriod,
+				true,
+				this.today,
+				this.today.AddDays(1),
+				Log
+			).Run();
 
-			decimal totalEarnedInterest = 0;
+			decimal totalEarnedInterestByPeriods = 0;
+			decimal totalEarnedInterestBySomeDate = 0;
+
+			List<int> union = earnedInterestByPeriodsList.Keys.Union(earnedInterestBySomeDateList.Keys).ToList();
+
 			var updatePkg = new List<UpdatePkgRow>();
 
-			foreach (KeyValuePair<int, decimal> pair in earnedInterestList) {
-				int loanID = pair.Key;
-				decimal earnedInterest = pair.Value;
+			foreach (int loanID in union) {
+				decimal byPeriods = earnedInterestByPeriodsList.ContainsKey(loanID)
+					? earnedInterestByPeriodsList[loanID]
+					: 0;
 
-				totalEarnedInterest += earnedInterest;
+				decimal bySomeDate = earnedInterestBySomeDateList.ContainsKey(loanID)
+					? earnedInterestBySomeDateList[loanID]
+					: 0;
+
+				totalEarnedInterestByPeriods += byPeriods;
+				totalEarnedInterestBySomeDate += bySomeDate;
 
 				Log.Debug(
-					"On {0} for loan ID {1} earned interest is {2}.",
+					"On {0} for loan ID {1} earned interest is: by periods {2}, by some date {3}.",
 					this.todayStr,
 					loanID,
-					earnedInterest.ToString("C2", Library.Instance.Culture)
+					byPeriods.ToString("C2", Library.Instance.Culture),
+					bySomeDate.ToString("C2", Library.Instance.Culture)
 				);
 
 				updatePkg.Add(new UpdatePkgRow {
 					LoanID = loanID,
 					TheDate = this.today,
-					EarnedInterest = earnedInterest,
+					EarnedInterestByPeriods = byPeriods,
+					EarnedInterestBySomeDate = bySomeDate,
 				});
 			} // for each
 
 			Log.Debug(
-				"On {0} for {1} total earned interest is {2}.",
+				"On {0} for {1} total earned interest is: by periods {2}, by some date {3}.",
 				this.todayStr,
-				Grammar.Number(earnedInterestList.Count, "loan"),
-				totalEarnedInterest.ToString("C2", Library.Instance.Culture)
+				Grammar.Number(union.Count, "loan"),
+				totalEarnedInterestByPeriods.ToString("C2", Library.Instance.Culture),
+				totalEarnedInterestBySomeDate.ToString("C2", Library.Instance.Culture)
 			);
 
 			DB.ExecuteNonQuery(
@@ -102,7 +123,8 @@
 		private class UpdatePkgRow {
 			public int LoanID { get; set; }
 			public DateTime TheDate { get; set; }
-			public decimal EarnedInterest { get; set; }
+			public decimal EarnedInterestByPeriods { get; set; }
+			public decimal EarnedInterestBySomeDate { get; set; }
 		} // class UpdatePkgRow
 
 		private readonly int daysToKeep;
