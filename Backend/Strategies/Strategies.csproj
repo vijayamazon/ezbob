@@ -142,6 +142,7 @@
     <Compile Include="AutomationVerification\KPMG\Excel\SheetInterestRate.cs" />
     <Compile Include="AutomationVerification\KPMG\Excel\SheetVerification.cs" />
     <Compile Include="AutomationVerification\KPMG\SpLoadCashRequestsForAutomationReport.cs" />
+    <Compile Include="AutomationVerification\Recalculate\RecalculateAutoRejectOnFirstDecision.cs" />
     <Compile Include="AutomationVerification\VerifyMedal.cs" />
     <Compile Include="AutomationVerification\VerifyReject.cs" />
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />

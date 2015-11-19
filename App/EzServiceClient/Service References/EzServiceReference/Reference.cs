@@ -3833,6 +3833,16 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "", ReplyAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData RecalculateAutoRejectOnFirstDecision();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "", ReplyAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RecalculateAutoRejectOnFirstDecisionAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerAcceptTermsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
         
@@ -5291,6 +5301,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
             return base.Channel.BravoAutomationReportAsync(startTime, endTime);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RecalculateAutoRejectOnFirstDecision() {
+            return base.Channel.RecalculateAutoRejectOnFirstDecision();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RecalculateAutoRejectOnFirstDecisionAsync() {
+            return base.Channel.RecalculateAutoRejectOnFirstDecisionAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
