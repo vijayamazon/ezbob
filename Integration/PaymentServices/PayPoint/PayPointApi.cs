@@ -196,7 +196,7 @@
 		}
 
 		// step 2 - actual paypoint transaction
-		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount, ref NL_Payments nlp) // TODO rename nlp to nlPayment 
+		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount, ref NL_Payments nlPayment) // TODO rename nlp to nlPayment 
 		{
 			var newTransactionId = transactionId + DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss");
 			string str;
@@ -256,7 +256,7 @@
 			Log.DebugFormat("RepeatTransaction successful: " + str);
 
 			//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
-			nlp.PaypointTransactions.Add(new NL_PaypointTransactions() {
+			nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
 				IP = "",
 				Amount = amount,
 				Notes = "",

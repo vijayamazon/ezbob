@@ -270,10 +270,10 @@
 		}//ShouldCharge
 
 		private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result,
-			ref NL_Payments nlp // TODO rename to nlPayment
+			ref NL_Payments nlPayment // TODO rename to nlPayment
 			) {
 			try {
-				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue, ref nlp);
+				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue, ref nlPayment);
 				return true;
 			} catch (Exception ex) {
 				Log.Error("Failed making auto payment for loan schedule id:{0} exception:{1}", loanScheduleId, ex);

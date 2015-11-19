@@ -198,7 +198,7 @@
 
 					payPointTransactionId = paypointCard.TransactionId;
 
-					NL_Payments nlp = new NL_Payments() {
+					NL_Payments nlPayment = new NL_Payments() {
 						Amount = realAmount,
 						LoanID = model.LoanId,
 						CreatedByUserID = this._context.UserId,
@@ -206,8 +206,8 @@
 						PaymentMethodID = (int)NLLoanTransactionMethods.Manual
 					};
 
-					this._paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount, ref nlp);
-					this.m_oServiceClient.Instance.AddPayment(this._context.UserId, this._context.Customer.Id, nlp);
+					this._paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount, ref nlPayment);
+					this.m_oServiceClient.Instance.AddPayment(this._context.UserId, this._context.Customer.Id, nlPayment);
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
