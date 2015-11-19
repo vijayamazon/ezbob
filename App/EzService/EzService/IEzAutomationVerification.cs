@@ -30,5 +30,8 @@
 
 		[OperationContract]
 		ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime);
+
+		[OperationContract]
+		ActionMetaData RecalculateAutoRejectOnFirstDecision();
 	} // interface IEzAutomationVerification
 } // namespace
