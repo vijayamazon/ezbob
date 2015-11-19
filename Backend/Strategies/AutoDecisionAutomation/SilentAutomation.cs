@@ -31,7 +31,7 @@
 			MainUpdateAndGoManual,
 			ManuallyApproved,
 			ManuallyRejected,
-			ManuallyPending,
+			ManuallySuspended,
 		} // enum Callers
 
 		public SilentAutomation(int customerID) {

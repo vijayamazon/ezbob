@@ -206,4 +206,11 @@
 		Reject,
 		Manual,
 	} // enum SystemDecision
+
+	public enum PendingStatus {
+		AML,
+		Bank,
+		Bank_AML,
+		Manual,
+	} // enum PendingStatus
 } // namespace

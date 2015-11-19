@@ -185,7 +185,12 @@
     <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
     <Compile Include="ManualDecision\ChangeDecisionOption.cs" />
     <Compile Include="ManualDecision\CurrentCustomerDecisionState.cs" />
+    <Compile Include="ManualDecision\DecisionIsChangable.cs" />
     <Compile Include="ManualDecision\DecisionToApply.cs" />
+    <Compile Include="ManualDecision\AApplyManualDecisionBase.cs" />
+    <Compile Include="ManualDecision\ManuallyUnsuspend.cs" />
+    <Compile Include="ManualDecision\ManuallySuspend.cs" />
+    <Compile Include="ManualDecision\ManuallyEscalate.cs" />
     <Compile Include="ManualDecision\ManuallyReject.cs" />
     <Compile Include="ManualDecision\ManuallyApprove.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />

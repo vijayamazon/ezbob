@@ -29,8 +29,8 @@ BEGIN
 		SELECT
 			CustomerID = c.Id,
 			CreditResult = c.CreditResult,
-			NumOfPrevApprovals = (SELECT COUNT(*) FROM DecisionHistory WHERE Action IN ('Approve', 'ReApprove') AND CustomerId = c.Id),
-			NumOfPrevRejections = (SELECT COUNT(*) FROM DecisionHistory WHERE Action IN ('Reject', 'ReReject') AND CustomerId = c.Id),
+			NumOfPrevApprovals = c.NumApproves,
+			NumOfPrevRejections = c.NumRejects,
 			LastWizardStep = (SELECT TheLastOne FROM WizardStepTypes WHERE WizardStepTypeID = c.WizardStep),
 			IsAlibaba = c.IsAlibaba,
 			Email = c.Name,

@@ -1,7 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.ManualDecision {
 	using System;
+	using System.Linq;
+	using System.Reflection;
 	using System.Threading.Tasks;
-	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -59,7 +60,8 @@
 			this.decisionToApply = new DecisionToApply(
 				this.decisionModel.underwriterID,
 				this.decisionModel.customerID,
-				this.decisionModel.cashRequestID
+				this.decisionModel.cashRequestID,
+				this.currentState.CashRequestTimestamp
 			);
 
 			this.decisionToApply.Customer.CreditResult = this.decisionModel.status.ToString();
@@ -84,17 +86,23 @@
 
 			SilentAutomation.Callers? silentAutomationCaller = null;
 
+			bool notifyAlibaba = false;
+
 			switch (this.decisionModel.status) {
 			case CreditResultStatus.Approved:
-				if (this.currentState.LastWizardStep)
-					silentAutomationCaller = SilentAutomation.Callers.ManuallyApproved;
+				if (ApproveCustomer(newDecision)) {
+					if (this.currentState.LastWizardStep)
+						silentAutomationCaller = SilentAutomation.Callers.ManuallyApproved;
 
-				ApproveCustomer(newDecision);
+					notifyAlibaba = this.currentState.IsAlibaba;
+				} // if
 				break;
 
 			case CreditResultStatus.Rejected:
-				silentAutomationCaller = SilentAutomation.Callers.ManuallyRejected;
-				RejectCustomer(newDecision);
+				if (RejectCustomer(newDecision)) {
+					silentAutomationCaller = SilentAutomation.Callers.ManuallyRejected;
+					notifyAlibaba = this.currentState.IsAlibaba;
+				} // if
 				break;
 
 			case CreditResultStatus.Escalated:
@@ -102,19 +110,14 @@
 				break;
 
 			case CreditResultStatus.ApprovedPending:
-				silentAutomationCaller = SilentAutomation.Callers.ManuallyPending;
-				PendCustomer(newDecision);
+				if (SuspendCustomer(newDecision))
+					silentAutomationCaller = SilentAutomation.Callers.ManuallySuspended;
 				break;
 
 			case CreditResultStatus.WaitingForDecision:
 				ReturnCustomerToWaitingForDecision(newDecision);
 				break;
 			} // switch
-
-			// send final decision data (0002) to Alibaba parther (if exists)
-			bool notifyAlibaba =
-				this.currentState.IsAlibaba &&
-				this.decisionModel.status.In(CreditResultStatus.Rejected, CreditResultStatus.Approved);
 
 			if (notifyAlibaba) {
 				FireToBackground(
@@ -167,38 +170,14 @@
 		} // FireToBackground
 
 		private ChangeDecisionOption CanChangeDecision() {
-			if (this.decisionModel == null) { // Should never happen but just in case.
-				Error = "No decision data provided.";
-				return ChangeDecisionOption.BlockedByError;
-			} // if
+			var checker = new DecisionIsChangable(this.decisionModel);
 
-			if (this.decisionModel.customerID <= 0) { // Should never happen but just in case.
-				Error = "Customer ID not specified.";
-				return ChangeDecisionOption.BlockedByError;
-			} // if
+			var checkResult = checker.Precheck();
 
-			if (this.decisionModel.underwriterID <= 0) { // Should never happen but just in case.
-				Error = "Underwriter ID not specified.";
-				return ChangeDecisionOption.BlockedByError;
-			} // if
-
-			if (this.decisionModel.cashRequestID <= 0) {
-				Error = string.Format(
-					"There is no open cash request for customer {0}, decision cannot be made.",
-					this.decisionModel.customerID
-				);
-				return ChangeDecisionOption.BlockedNoCashRequest;
-			} // if
-
-			// At this point should never happen but just in case.
-			if (string.IsNullOrWhiteSpace(this.decisionModel.cashRequestRowVersion)) {
-				Error = string.Format(
-					"Please refresh your browser page: decision cannot be applied " +
-					"to customer {0} with cash request {1}, (cash request row version is not specified).",
-					this.decisionModel.customerID,
-					this.decisionModel.cashRequestID
-				);
-				return ChangeDecisionOption.BlockedByError;
+			if (checkResult != ChangeDecisionOption.Available) {
+				Error = checker.Error;
+				Warning = checker.Warning;
+				return checkResult;
 			} // if
 
 			this.currentState = DB.FillFirst<CurrentCustomerDecisionState>(
@@ -209,173 +188,89 @@
 				new QueryParameter("@CashRequestID", this.decisionModel.cashRequestID)
 			);
 
-			if (this.currentState.CustomerID != this.decisionModel.customerID) { // Should never happen but just in case.
-				Error = string.Format(
-					"Decision cannot be applied " +
-					"to customer {0} with cash request {1}, (failed to load current customer state from DB).",
-					this.decisionModel.customerID,
-					this.decisionModel.cashRequestID
-				);
-				return ChangeDecisionOption.BlockedByError;
-			} // if
+			checkResult = checker.ValidateAgainstCurrentState(this.currentState);
 
-			if (!this.currentState.CashRequestMatches) { // Should never happen but just in case.
-				Error = string.Format(
-					"Something went terribly wrong: cash request {1} belongs to customer {2} " +
-					"rather than to customer {0}.",
-					this.decisionModel.customerID,
-					this.decisionModel.cashRequestID,
-					this.currentState.CashRequestCustomerID
-				);
-				return ChangeDecisionOption.BlockedByError;
-			} // if
+			Error = checker.Error;
+			Warning = checker.Warning;
 
-			// Should never happen but just in case.
-			if (this.decisionModel.cashRequestID != this.currentState.CashRequestID) {
-				Error = string.Format(
-					"Please retry later: decision cannot be applied " +
-					"to customer {0} with cash request {1}, (failed to load current cash request details from DB).",
-					this.decisionModel.customerID,
-					this.decisionModel.cashRequestID
-				);
-				return ChangeDecisionOption.BlockedByError;
-			} // if
-
-			if (this.currentState.IsFinalDecision) {
-				Error = string.Format(
-					"Cash request {1} of customer {0} is already '{2}', please refresh your browser page.",
-					this.decisionModel.customerID,
-					this.decisionModel.cashRequestID,
-					this.currentState.DecisionStr.ToLowerInvariant()
-				);
-				return ChangeDecisionOption.BlockedByFinalDecision;
-			} // if
-
-			if (this.currentState.RowVersionChanged(this.decisionModel.cashRequestRowVersion)) {
-				Error = string.Format(
-					"Please refresh your browser page: cash request {1} of customer {0} was changed by someone else.",
-					this.decisionModel.customerID,
-					this.decisionModel.cashRequestID
-				);
-				return ChangeDecisionOption.BlockedByConcurrency;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(this.currentState.CreditResult)) {
-				Error = string.Format(
-					"Please retry later: main strategy is being executed on customer {0}.",
-					this.decisionModel.customerID
-				);
-				return ChangeDecisionOption.BlockedByMainStrategy;
-			} // if
-
-			if (this.decisionModel.status == CreditResultStatus.Approved) {
-				if (this.currentState.OfferedCreditLine <= 0) {
-					Error = "Please specify approved amount.";
-					return ChangeDecisionOption.BlockedByApprovedAmount;
-				} // if
-
-				int minAmount = CurrentValues.Instance.XMinLoan;
-
-				if (this.currentState.OfferedCreditLine < minAmount) {
-					Error = string.Format(
-						"Approved amount is too small (should be at least {0}).",
-						minAmount.ToString("C0", Library.Instance.Culture)
-					);
-					return ChangeDecisionOption.BlockedByApprovedAmount;
-				} // if
-
-				int maxAmount = this.currentState.IsManager
-					? CurrentValues.Instance.ManagerMaxLoan
-					: CurrentValues.Instance.MaxLoan;
-
-				if (this.currentState.OfferedCreditLine > maxAmount) {
-					Error = string.Format(
-						"Approved amount is too big (should be at most {0}).",
-						maxAmount.ToString("C0", Library.Instance.Culture)
-					);
-					return ChangeDecisionOption.BlockedByApprovedAmount;
-				} // if
-			} // if
-
-			return ChangeDecisionOption.Available;
+			return checkResult;
 		} // CanChangeDecision
 
 		private void ReturnCustomerToWaitingForDecision(NL_Decisions newDecision) {
-			/*
-			customer.CreditResult = CreditResultStatus.WaitingForDecision;
-			// TODO: this.historyRepo.LogAction(DecisionActions.Waiting, "", user, customer);
-			var stage = OpportunityStage.s40.DescriptionAttr();
+			if (!SaveDecision<ManuallyUnsuspend>())
+				return;
 
 			newDecision.DecisionNameID = (int)DecisionActions.Waiting;
 
-			// this.serviceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
+			// this.serviceClient.Instance.AddDecision(
+			// 	this.decisionModel.underwriterID,
+			// 	this.decisionModel.customerID,
+			// 	newDecision,
+			// 	this.decisionToApply.CashRequest.ID,
+			// 	null
+			// );
 
-			this.serviceClient.Instance.SalesForceUpdateOpportunity(
-				this.context.UserId,
-				customer.Id,
-				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage, }
-			);
-			*/
+			UpdateSalesForceOpportunity(OpportunityStage.s40);
 		} // ReturnCustomerToWaitingForDecision
 
-		private void PendCustomer(NL_Decisions newDecision) {
-			/*
-			customer.IsWaitingForSignature = this.decisionModel.signature == 1;
-			customer.CreditResult = CreditResultStatus.ApprovedPending;
-			customer.PendingStatus = PendingStatus.Manual;
-			customer.ManagerApprovedSum = oldCashRequest.ApprovedSum();
-			// TODO: this.historyRepo.LogAction(DecisionActions.Pending, "", user, customer);
+		private bool SuspendCustomer(NL_Decisions newDecision) {
+			this.decisionToApply.Customer.IsWaitingForSignature = this.decisionModel.signature == 1;
+			this.decisionToApply.Customer.ManagerApprovedSum = this.currentState.OfferedCreditLine;
+
+			if (!SaveDecision<ManuallySuspend>())
+				return false;
 
 			newDecision.DecisionNameID = (int)DecisionActions.Pending;
-			// this.serviceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
 
-			var stage = this.decisionModel.signature == 1
-				? OpportunityStage.s75.DescriptionAttr()
-				: OpportunityStage.s50.DescriptionAttr();
+			// this.serviceClient.Instance.AddDecision(
+			// 	this.decisionModel.underwriterID,
+			// 	this.decisionModel.customerID,
+			// 	newDecision,
+			// 	this.decisionToApply.CashRequest.ID,
+			// 	null
+			// );
 
-			this.serviceClient.Instance.SalesForceUpdateOpportunity(
-				this.context.UserId,
-				customer.Id,
-				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }
-			);
-			*/
-		} // PendCustomer
+			UpdateSalesForceOpportunity((this.decisionModel.signature == 1) ? OpportunityStage.s75 : OpportunityStage.s50);
+
+			return true;
+		} // SuspendCustomer
 
 		private void EscalateCustomer(NL_Decisions newDecision) {
-			/*
-			customer.CreditResult = CreditResultStatus.Escalated;
-			customer.DateEscalated = DateTime.UtcNow;
-			customer.EscalationReason = this.decisionModel.reason;
-			// TODO: this.historyRepo.LogAction(DecisionActions.Escalate, this.decisionModel.reason, user, customer);
-			var stage = OpportunityStage.s20.DescriptionAttr();
+			this.decisionToApply.Customer.DateEscalated = this.now;
+			this.decisionToApply.Customer.EscalationReason = this.decisionModel.reason;
 
-			try {
-				this.serviceClient.Instance.Escalated(customer.Id, this.context.UserId);
-			} catch (Exception e) {
-				Warning = "Failed to send 'escalated' email: " + e.Message;
-				log.Warn(e, "Failed to send 'escalated' email.");
-			} // try
+			if (!SaveDecision<ManuallyEscalate>())
+				return;
+
+			FireToBackground(
+				"send 'escalated' email",
+				() => new Escalated(this.decisionModel.customerID).Execute(),
+				e => Warning = "Failed to send 'escalated' email: " + e.Message
+			);
 
 			newDecision.DecisionNameID = (int)DecisionActions.Escalate;
-			//this.serviceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
 
-			this.serviceClient.Instance.SalesForceUpdateOpportunity(
-				this.context.UserId,
-				customer.Id,
-				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }
-			);
-			*/
+			// this.serviceClient.Instance.AddDecision(
+			// 	this.decisionModel.underwriterID,
+			// 	this.decisionModel.customerID,
+			// 	newDecision,
+			// 	this.decisionToApply.CashRequest.ID,
+			// 	null
+			// );
+
+			UpdateSalesForceOpportunity(OpportunityStage.s20);
 		} // EscalateCustomer
 
-		private void RejectCustomer(NL_Decisions newDecision) {
+		private bool RejectCustomer(NL_Decisions newDecision) {
 			this.decisionToApply.Customer.DateRejected = this.now;
 			this.decisionToApply.Customer.RejectedReason = this.decisionModel.reason;
-			this.decisionToApply.Customer.NumRejects = this.currentState.NumOfPrevRejections;
+			this.decisionToApply.Customer.NumRejects = 1 + this.currentState.NumOfPrevRejections;
 
 			this.decisionToApply.CashRequest.RejectionReasons.Clear();
 			this.decisionToApply.CashRequest.RejectionReasons.AddRange(this.decisionModel.rejectionReasons);
 
-			new ManuallyReject(this.decisionToApply, DB, Log).ExecuteNonQuery();
+			if (!SaveDecision<ManuallyReject>())
+				return false;
 
 			bool bSendToCustomer = !(this.currentState.FilledByBroker && (this.currentState.NumOfPrevApprovals == 0));
 
@@ -389,24 +284,24 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Reject;
 
-			//this.serviceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToArray());
+			// this.serviceClient.Instance.AddDecision(
+			// 	this.decisionToApply.CashRequest.UnderwriterID,
+			// 	this.decisionToApply.Customer.ID
+			// 	newDecision,
+			// 	this.decisionToApply.CashRequest.ID,
+			// 	this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons{RejectReasonID = x}).ToArray()
+			// );
 
-			FireToBackground(
-				"update Sales Force opportunity",
-				() =>
-					new UpdateOpportunity(
-						this.decisionModel.customerID,
-						new OpportunityModel {
-							Email = this.currentState.Email,
-							CloseDate = this.now,
-							DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
-							DealLostReason = this.decisionModel.reason,
-						}
-					).Execute()
-			);
+			UpdateSalesForceOpportunity(null, model => {
+				model.CloseDate = this.now;
+				model.DealCloseType = OpportunityDealCloseReason.Lost.ToString();
+				model.DealLostReason = this.decisionModel.reason;
+			});
+
+			return true;
 		} // RejectCustomer
 
-		private void ApproveCustomer(NL_Decisions newDecision) {
+		private bool ApproveCustomer(NL_Decisions newDecision) {
 			this.decisionToApply.Customer.DateApproved = this.now;
 			this.decisionToApply.Customer.ApprovedReason = this.decisionModel.reason;
 
@@ -417,7 +312,8 @@
 
 			this.decisionToApply.CashRequest.ManagerApprovedSum = (int)this.currentState.OfferedCreditLine;
 
-			new ManuallyApprove(this.decisionToApply, DB, Log).ExecuteNonQuery();
+			if (!SaveDecision<ManuallyApprove>())
+				return false;
 
 			bool bSendBrokerForceResetCustomerPassword =
 				this.currentState.FilledByBroker &&
@@ -484,24 +380,68 @@
 			// 	lastOffer
 			// );
 
-			FireToBackground("update Sales Force opportunity", () =>
-				new UpdateOpportunity(
-					this.decisionModel.customerID,
-					new OpportunityModel {
-						Email = this.currentState.Email,
-						Stage = OpportunityStage.s90.DescriptionAttr(),
-						ApprovedAmount = (int)this.currentState.OfferedCreditLine,
-						ExpectedEndDate = this.currentState.OfferValidUntil
-					}
-				).Execute()
-			);
+			UpdateSalesForceOpportunity(OpportunityStage.s90, model => {
+				model.ApprovedAmount = (int)this.currentState.OfferedCreditLine;
+				model.ExpectedEndDate = this.currentState.OfferValidUntil;
+			});
+
+			return true;
 		} // ApproveCustomer
+
+		private bool SaveDecision<T>() where T : AApplyManualDecisionBase {
+			string result;
+
+			try {
+				ConstructorInfo constructorInfo = typeof(T).GetConstructors().FirstOrDefault(
+					ci => ci.GetParameters().Length == 3
+				);
+
+				if (constructorInfo == null)
+					result = "Failed to initialize stored procedure " + typeof(T).Name;
+				else {
+					T sp = (T)constructorInfo.Invoke(new object[] {
+						this.decisionToApply, DB, Log
+					});
+
+					if (sp == null)
+						result = "Failed to create stored procedure " + typeof(T).Name;
+					else
+						result = sp.ExecuteScalar<string>();
+				} // if
+			} catch (Exception e) {
+				Log.Alert(e, "Failed to save approval to DB.");
+				result = "Failed to save approval to the database: " + e.Message;
+			} // try
+
+			if (result == OK)
+				return true;
+
+			Error = result;
+			return false;
+		} // SaveDecision
+
+		private void UpdateSalesForceOpportunity(OpportunityStage? stage, Action<OpportunityModel> setMoreFields = null) {
+			var model = new OpportunityModel { Email = this.currentState.Email, };
+
+			if (stage != null)
+				model.Stage = stage.Value.DescriptionAttr();
+
+			if (setMoreFields != null)
+				setMoreFields(model);
+
+			FireToBackground(
+				"update Sales Force opportunity",
+				() => new UpdateOpportunity(this.decisionModel.customerID, model).Execute()
+			);
+		} // UpdateSalesForceOpportunity
 
 		private DecisionToApply decisionToApply;
 		private CurrentCustomerDecisionState currentState;
 
 		private readonly DecisionModel decisionModel;
 		private readonly DateTime now;
+
+		private const string OK = "OK";
 	} // class ApplyManualDecision
 } // namespace
 

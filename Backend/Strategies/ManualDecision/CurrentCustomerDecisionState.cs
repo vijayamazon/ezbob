@@ -35,10 +35,6 @@
 		public DateTime OfferValidUntil { get; set; }
 		public DateTime OfferStart { get; set; }
 
-
-
-
-
 		public CreditResultStatus? Decision { get; private set; }
 
 		public bool IsFinalDecision {

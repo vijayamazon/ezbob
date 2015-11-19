@@ -10,10 +10,12 @@ ALTER PROCEDURE ManuallyReject
 @CreditResult NVARCHAR(MAX),
 @Status NVARCHAR(250),
 @UnderwriterName VARCHAR(200),
+@IsWaitingForSignature BIT,
 @DateRejected DATETIME,
 @RejectedReason NVARCHAR(1000),
 @NumRejects INT,
 @CashRequestID BIGINT,
+@CashRequestRowVersion VARBINARY(8),
 @UnderwriterID INT,
 @UnderwriterDecisionDate DATETIME,
 @UnderwriterDecision NVARCHAR(50),
@@ -21,12 +23,19 @@ ALTER PROCEDURE ManuallyReject
 @RejectionReasons IntList READONLY
 AS
 BEGIN
+	IF NOT EXISTS (SELECT * FROM CashRequests WHERE Id = @CashRequestID AND TimestampCounter = @CashRequestRowVersion)
+	BEGIN
+		SELECT Result = 'Please refresh your browser page, cash request was changed by someone else.'
+		RETURN
+	END
+
 	BEGIN TRANSACTION
 
 	UPDATE Customer SET
 		CreditResult = @CreditResult,
 		Status = @Status,
 		UnderwriterName = @UnderwriterName,
+		IsWaitingForSignature = CASE WHEN @IsWaitingForSignature IS NULL THEN IsWaitingForSignature ELSE @IsWaitingForSignature END,
 		DateRejected = @DateRejected,
 		RejectedReason = @RejectedReason,
 		NumRejects = @NumRejects
@@ -70,8 +79,10 @@ BEGIN
 		Value,
 		@dhid
 	FROM
-		@RejectionReasons		
+		@RejectionReasons
 
 	COMMIT TRANSACTION
+
+	SELECT Result = 'OK'
 END
 GO

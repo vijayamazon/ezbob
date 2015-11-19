@@ -1,29 +1,22 @@
-IF OBJECT_ID('ManuallyApprove') IS NULL
-	EXECUTE('CREATE PROCEDURE ManuallyApprove AS SELECT 1')
+IF OBJECT_ID('ManuallyUnsuspend') IS NULL
+	EXECUTE('CREATE PROCEDURE ManuallyUnsuspend AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE ManuallyApprove
+ALTER PROCEDURE ManuallyUnsuspend
 @CustomerID INT,
 @CreditResult NVARCHAR(MAX),
 @Status NVARCHAR(250),
 @UnderwriterName VARCHAR(200),
 @IsWaitingForSignature BIT,
-@DateApproved DATETIME,
-@ApprovedReason NCHAR(200),
-@CreditSum DECIMAL(18, 0),
-@CustomerManagerApprovedSum DECIMAL(18, 4),
-@NumApproves INT,
-@IsLoanTypeSelectionAllowed INT,
 @CashRequestID BIGINT,
 @CashRequestRowVersion VARBINARY(8),
 @UnderwriterID INT,
 @UnderwriterDecisionDate DATETIME,
 @UnderwriterDecision NVARCHAR(50),
-@UnderwriterComment NVARCHAR(400),
-@CashRequestManagerApprovedSum INT
+@UnderwriterComment NVARCHAR(400)
 AS
 BEGIN
 	IF NOT EXISTS (SELECT * FROM CashRequests WHERE Id = @CashRequestID AND TimestampCounter = @CashRequestRowVersion)
@@ -38,13 +31,7 @@ BEGIN
 		CreditResult = @CreditResult,
 		Status = @Status,
 		UnderwriterName = @UnderwriterName,
-		IsWaitingForSignature = CASE WHEN @IsWaitingForSignature IS NULL THEN IsWaitingForSignature ELSE @IsWaitingForSignature END,
-		DateApproved = @DateApproved,
-		ApprovedReason = @ApprovedReason,
-		CreditSum = @CreditSum,
-		ManagerApprovedSum = @CustomerManagerApprovedSum,
-		NumApproves = @NumApproves,
-		IsLoanTypeSelectionAllowed = @IsLoanTypeSelectionAllowed
+		IsWaitingForSignature = CASE WHEN @IsWaitingForSignature IS NULL THEN IsWaitingForSignature ELSE @IsWaitingForSignature END
 	WHERE
 		Id = @CustomerID
 
@@ -52,8 +39,7 @@ BEGIN
 		IdUnderwriter = @UnderwriterID,
 		UnderwriterDecisionDate = @UnderwriterDecisionDate,
 		UnderwriterDecision = @UnderwriterDecision,
-		UnderwriterComment = @UnderwriterComment,
-		ManagerApprovedSum = @CashRequestManagerApprovedSum
+		UnderwriterComment = @UnderwriterComment
 	WHERE
 		Id = @CashRequestID
 
@@ -67,10 +53,10 @@ BEGIN
 		LoanTypeId
 	) SELECT
 		@UnderwriterDecisionDate,
-		'Approve',
+		'Waiting',
 		@UnderwriterID,
 		@CustomerID,
-		@ApprovedReason,
+		'',
 		@CashRequestID,
 		LoanTypeID
 	FROM
