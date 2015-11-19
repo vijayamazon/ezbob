@@ -117,4 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BrokerLoginHost" xml:space="preserve">
+    <value>https://test.everline.com/Broker#login</value>
+  </data>
+  <data name="BrokerSignupHost" xml:space="preserve">
+    <value>https://test.everline.com/Broker#signup</value>
+  </data>
+  <data name="Check_Incoming_Messages" xml:space="preserve">
+    <value>A message from your finance broker</value>
+  </data>
+  <data name="CustomerLogIn" xml:space="preserve">
+    <value>https://test.everline.com/Account/LogOn</value>
+  </data>
+  <data name="Enviorment_url" xml:space="preserve">
+    <value>test.everline.com</value>
+  </data>
+  <data name="WizardHost" xml:space="preserve">
+    <value>https://test.everline.com/Customer/Wizard</value>
+  </data>
 </root>

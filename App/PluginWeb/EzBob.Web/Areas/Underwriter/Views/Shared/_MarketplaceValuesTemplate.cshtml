@@ -160,6 +160,7 @@
                 <% }
 
 				_.each(marketplaces, function(m,i){
+					m.Name = m.Name || '';
 					var sShopName = m.Name.replace(' ', '');
 
 					if (EzBob.CgVendors.pure()[sShopName])
@@ -229,6 +230,7 @@
             </thead>
             <tbody class="box-content">
                 <% _.each(accounts, function(m, i) {
+				m.Name = m.Name || '';
 				var sShopName = m.Name.replace(' ', '');
 
 				var nBehaviour = 0;

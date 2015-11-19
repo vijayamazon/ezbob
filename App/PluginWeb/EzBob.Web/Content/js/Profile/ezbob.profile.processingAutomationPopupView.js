@@ -36,14 +36,15 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 		var templateName = 'noDecisionTemplate';
 		if (hasAutomationMps) {
 			templateName = 'processingTemplate';
-		}
+		}//if
 		
 		this.$el.html(this.templates[templateName]({
-			name: this.model.customer.get('FirstName'),
-			automationTimeout: timeoutSeconds,
-			offerValid: this.model.customer.offerValidFormatted(),
-			amount: this.model.customer.get('CreditSum')
-		}));
+				name: this.model.customer.get('FirstName'),
+				automationTimeout: timeoutSeconds,
+				offerValid: this.model.customer.offerValidFormatted(),
+				amount: this.model.customer.get('CreditSum')
+			})
+		);//html
 
 		this.popup = this.$el;
 		this.colorboxPopup = $.colorbox({
@@ -55,7 +56,6 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			width: width,
 			maxWidth: '100%',
 			maxHeight: '100%',
-			scrolling: false,
 			close: '<i class="pe-7s-close"></i>',
 			className: 'automation-popup',
 			onOpen: function() {
@@ -64,9 +64,12 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			onClosed: function() {
 				$('body').removeClass('stop-scroll');
 				self.onClose();
+			},
+			onComplete: function() {
+				$.colorbox.resize();
 			}
-		});
-
+		});//colorbox
+		
 		if (hasAutomationMps) {
 			var progress = 0;
 			var time = timeoutSeconds * 1000 / 100;
@@ -86,7 +89,7 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 						default:
 							templateName = 'noDecisionTemplate';
 							break;
-						}
+						}//switch
 
 						self.$el.html(self.templates[templateName]({
 							name: self.model.customer.get('FirstName'),
@@ -98,18 +101,18 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 						$.colorbox.resize();
 						if (self.progressTimeout) {
 							clearInterval(self.progressTimeout);
-						}
-					});
-				}
+						}//if
+					}); //fetch done
+				} //if
 
 				if (progress >= 100 && self.progressTimeout) {
 					clearInterval(self.progressTimeout);
-				}
-			}, time);
-		}
+				} //if
+			}, time); //set interval
+		}//if
 		EzBob.UiAction.registerView(this);
 		return this;
-	},
+	},//render
 
 	onClose: function () {
 		if (this.progressTimeout) {
@@ -119,7 +122,7 @@ EzBob.Profile.ProccessingAutomationPopupView = Backbone.View.extend({
 			clearTimeout(this.refreshTimerInterval);
 		}
 		EzBob.UiAction.saveOne('click', this.$el.find('button'));
-	},
+	},//onClose
 
 	refreshTimer: function () {
 		this.$el.find('.offerValidFor').text(this.model.customer.offerValidFormatted() + " hours");

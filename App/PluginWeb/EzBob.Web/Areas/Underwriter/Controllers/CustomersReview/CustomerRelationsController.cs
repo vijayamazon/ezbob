@@ -17,8 +17,9 @@
 	using log4net;
 	using ServiceClientProxy.EzServiceReference;
 
-	public class CustomerRelationsController : Controller {
+	using CreditResultStatus = EZBob.DatabaseLib.Model.Database.CreditResultStatus;
 
+	public class CustomerRelationsController : Controller {
 		public CustomerRelationsController(
 			CustomerRelationsRepository customerRelationsRepository,
 			LoanRepository loanRepository,
@@ -113,7 +114,6 @@
 				};
 
 				this._customerRelationsRepository.SaveOrUpdate(newEntry);
-				this._session.Flush();
 				this._customerRelationStateRepository.SaveUpdateState(customerId, false, null, newEntry);
 
 				//Add SF activity
@@ -152,7 +152,6 @@
 				};
 
 				this._customerRelationFollowUpRepository.SaveOrUpdate(followUp);
-				this._session.Flush();
 				this._customerRelationStateRepository.SaveUpdateState(customerId, true, followUp, lastCrm);
 
 				return Json(new { success = true, error = "" });
@@ -175,7 +174,6 @@
 				};
 
 				this._customerRelationsRepository.Save(crm);
-				this._session.Flush();
 				this._customerRelationStateRepository.SaveUpdateRank(customerId, crm);
 
 				return Json(new { success = true, error = "" });
@@ -338,6 +336,5 @@
 		private readonly ServiceClient _serviceClient;
 		private readonly IWorkplaceContext _context;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
-
 	} // class CustomerRelationsController
 } // namespace

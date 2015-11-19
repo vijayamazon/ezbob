@@ -33,8 +33,9 @@
 		public override string ToString() {
 			return string.Join("|",
 				AggID,
-				CustomerMarketPlaceUpdatingHistoryID,
+				CustomerID,
 				CustomerMarketPlaceID,
+				CustomerMarketPlaceUpdatingHistoryID,
 				TheMonth,
 				Turnover,
 				UpdatingEnd

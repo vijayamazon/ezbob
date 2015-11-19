@@ -29,6 +29,9 @@
 			Company,
 			MainSkipEverything,
 			MainUpdateAndGoManual,
+			ManuallyApproved,
+			ManuallyRejected,
+			ManuallySuspended,
 		} // enum Callers
 
 		public SilentAutomation(int customerID) {

@@ -76,7 +76,7 @@ EzBob.CustomerModel = Backbone.Model.extend({
         var loans = this.get('Loans');
         var liveLoans = loans.filter(function (l) {
             var status = l.get('Status');
-            return status == "Live" || status == "Late" || status == "Collection" || status == "Legal";
+            return status !== "PaidOff";
         });
         return liveLoans;
     },
@@ -115,9 +115,10 @@ EzBob.CustomerModel = Backbone.Model.extend({
             offerValid = this.offerValid(),
             hasFunds = availableCredit >= EzBob.Config.XMinLoan,
             isDisabled = this.get('IsDisabled'),
-            blockTakingLoan = this.get('BlockTakingLoan');
-        
-        if (isDisabled) {
+            blockTakingLoan = this.get('BlockTakingLoan'),
+            canTakeAnotherLoan = this.getActiveLoans().length < EzBob.Config.NumofAllowedActiveLoans;
+
+        if (isDisabled || !canTakeAnotherLoan) {
             this.set('state', 'disabled');
             return;
         }
@@ -142,7 +143,7 @@ EzBob.CustomerModel = Backbone.Model.extend({
             return;
         }
 
-        if (hasFunds && offerValid.TotalSeconds > 0 && (status == 'Approved') ) {
+        if (hasFunds && offerValid.TotalSeconds > 0 && (status == 'Approved')) {
             this.set('state', 'get');
             return;
         }

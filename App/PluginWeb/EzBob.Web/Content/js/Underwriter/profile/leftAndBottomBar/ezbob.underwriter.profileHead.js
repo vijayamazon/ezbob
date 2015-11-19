@@ -284,7 +284,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
 		var offer = this.loanModel.get('OfferedCreditLine') || 0;
 		this.drawDonut("offer-donut", "#00ab5d", offer / (EzBob.Config.ManagerMaxLoan || 120000), true);
-		var period = this.loanModel.get('RepaymentPerion') || 0;
+		var period = this.loanModel.get('RepaymentPeriod') || 0;
 		this.drawDi('period-di', "#00ab5d", period / 12);
 
 		if ($.cookie('editOfferVisible') == "true") {

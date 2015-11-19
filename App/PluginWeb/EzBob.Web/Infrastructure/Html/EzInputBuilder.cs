@@ -10,6 +10,7 @@ namespace EzBob.Web.Infrastructure.Html
 
         public string Id { get; set; }
         public string Caption { get; set; }
+		public string CaptionLine2 { get; set; }
         public string Value { get; set; }
         public string Type { get; set; }
         public string Cls { get; set; }
@@ -37,6 +38,7 @@ namespace EzBob.Web.Infrastructure.Html
         public EzInputBuilder(
             string id,
             string caption,
+			string captionLine2="",
             string value = "",
             string type = "text",
             string cls = "",
@@ -62,6 +64,7 @@ namespace EzBob.Web.Infrastructure.Html
             ) {
             Id = id;
             Caption = caption;
+			CaptionLine2 = captionLine2;
             Value = value;
             Type = type;
             Cls = cls;

@@ -113,6 +113,23 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ExperianServiceType" nillable="true" type="tns:ExperianServiceType" />
+  <xs:simpleType name="CreditResultStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="WaitingForDecision" />
+      <xs:enumeration value="Escalated" />
+      <xs:enumeration value="Rejected" />
+      <xs:enumeration value="Approved" />
+      <xs:enumeration value="CustomerRefused" />
+      <xs:enumeration value="ApprovedPending" />
+      <xs:enumeration value="Active" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="Legal" />
+      <xs:enumeration value="PaidOff" />
+      <xs:enumeration value="WrittenOff" />
+      <xs:enumeration value="Late" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CreditResultStatus" nillable="true" type="tns:CreditResultStatus" />
   <xs:simpleType name="Medal">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NoClassification" />

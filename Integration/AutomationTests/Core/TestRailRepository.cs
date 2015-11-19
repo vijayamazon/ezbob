@@ -1,6 +1,8 @@
 ﻿namespace UIAutomationTests.Core
 {
+    using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -26,7 +28,7 @@
             {
                 if (_PlanRepository == null)
                 {
-                    DirectoryInfo folder = new DirectoryInfo(@"E:\Jobs\JobsIn").GetDirectories().FirstOrDefault();
+                    DirectoryInfo folder = new DirectoryInfo(ConfigurationManager.AppSettings["teamcityJobsInFolder"]).GetDirectories().FirstOrDefault();
                     if (folder != null)
                     {
                         using (Stream stream = File.Open(string.Format(@"{0}\data.bin", folder.FullName), FileMode.Open))

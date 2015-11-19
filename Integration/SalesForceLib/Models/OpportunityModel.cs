@@ -39,8 +39,8 @@
 	public enum OpportunityType {
 		[Description("New Deal")] //created when lead converted to account or requested cash and has 0 loans
 		New, 
-		[Description("Top up")] // created when took amount is less then approved amount
-		Partial,
+		[Description("Top up")] // created when took amount is less then approved amount and more then 1000 and customer has less then 2 active loans
+		Topup,
 		[Description("Resell")] // created when customer requests cash
 		Resell,
 		[Description("Fully repaid")] //created when customer finishes to repay his loan

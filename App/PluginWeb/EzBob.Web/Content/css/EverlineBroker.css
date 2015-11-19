@@ -814,3 +814,21 @@ header.everline_header_broker nav .for-brokers {
   opacity: 0.8;
   background-color: #28211f;
 }
+
+.pagination li a:hover,
+.pagination li a:visited,
+.pagination li a:active,
+.pagination li a:focus {
+	color: #e28023 !important;
+}
+
+.pagination li.disabled > a:hover,
+.pagination li.disabled > a:visited,
+.pagination li.disabled > a:active,
+.pagination li.disabled > a:focus{
+	color: #999999 !important;
+}
+
+.files-group .col-md-6 {
+	padding: 0 13px;
+}

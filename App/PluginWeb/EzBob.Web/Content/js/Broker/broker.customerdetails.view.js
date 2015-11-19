@@ -197,7 +197,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 					} // callback
 				});
 
-				var opts = self.initDataTablesOptions('crm', '@CrDate,ActionName,StatusName,Comment');
+				var opts = self.initDataTablesOptions('crm', '@CrDate,ActionName,StatusName,Comment', 'tr<"clear">');
 
 				opts.aaData = oResponse.crm_data;
 
@@ -334,7 +334,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 					return;
 				} // if
 
-				var opts = self.initDataTablesOptions('files', 'FileName');
+				var opts = self.initDataTablesOptions('files', 'FileName', 'ftr<"bottom"<"col-md-6"il><"col-md-6 dataTables_bottom_right"p>><"clear">');
 
 				opts.aaData = oResponse.file_list;
 
@@ -452,7 +452,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		}; // always
 	}, // doDeleteSelectedFiles
 
-	initDataTablesOptions: function(sGridKey, sColumns) {
+	initDataTablesOptions: function(sGridKey, sColumns, sDom) {
 		sGridKey = 'brk-grid-state-' + this.router.getAuth() + '-customer-' + sGridKey;
 
 		return {
@@ -471,7 +471,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			aaSorting: [[0, 'desc']],
 
 			bAutoWidth: true,
-			sDom: 'rt<"clear">',
+			sDom: sDom,
 
 			bStateSave: true,
 

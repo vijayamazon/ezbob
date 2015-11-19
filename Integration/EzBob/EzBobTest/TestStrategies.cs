@@ -1251,5 +1251,11 @@
         }
 			*/
 		}
+
+		[Test]
+		public void TestGetIncomeSms() {
+			var stra = new GetIncomeSms(null,true);
+			stra.Execute();
+		}
 	}
 }

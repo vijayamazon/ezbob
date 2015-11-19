@@ -2,8 +2,8 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using JetBrains.Annotations;
-	using NHibernate;
 	using StructureMap;
 
 	public class MarketplaceInstantUpdate : AStrategy {
@@ -30,8 +30,10 @@
 
 		public void End(string sError, int nTokenExpired) {
 			// flush the session after updating mp
-			var session = ObjectFactory.GetInstance<ISession>();
-			session.Flush();
+			var customerMarketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
+			var mp = customerMarketPlaceRepository.Get(this.m_oStart.MarketplaceID);
+			customerMarketPlaceRepository.SaveOrUpdate(mp);
+
 
 			Log.Info("Executing end update for mp {0} ", m_oStart.MarketplaceID);
 			m_oEnd.ErrorMessage = sError;

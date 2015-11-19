@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Database;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository.Turnover;
@@ -9,19 +10,21 @@
 
 	public class AmazonMarketPlaceType : MP_MarketplaceType {
 		public override int UWPriority { get { return 2; } }
+
 		public override IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
 			DateTime relevantDate = GetRelevantDate(history);
-			var aggregations = mp.UpdatingHistory
-				.SelectMany(x => x.AmazonAggregations)
-				.Where(ag => ag.IsActive && ag.TheMonth < relevantDate)
-				.OrderByDescending(ag => ag.TheMonth)
-				.ToList();
+
+			List<AmazonAggregation> aggregations = Library.Instance.DB.Fill<AmazonAggregation>(
+				"LoadActiveAmazonAggregations",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MpID", mp.Id),
+				new QueryParameter("RelevantDate", relevantDate)
+			);
 
 			var calculatedAggregations = new List<IAnalysisDataParameterInfo>();
 
-			if (!aggregations.Any()) {
+			if (!aggregations.Any())
 				return calculatedAggregations;
-			}
 			
 			DateTime firstOfMonth = new DateTime(relevantDate.Year, relevantDate.Month, 1);
 
@@ -111,12 +114,12 @@
 			} // for each
 
 			return feedBackParams;
-		}//GetFeedbacks
-	}//class AmazonMarketPlaceType
+		} // GetFeedbacks
+	} // class AmazonMarketPlaceType
 
 	public class AmazonMarketPlaceTypeMap : SubclassMap<AmazonMarketPlaceType> {
 		public AmazonMarketPlaceTypeMap() {
 			DiscriminatorValue("Amazon");
-		}
-	}//AmazonMarketPlaceTypeMap
-}//ns
+		} // constructor
+	} // AmazonMarketPlaceTypeMap
+} // namespace

@@ -16,11 +16,13 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using SalesForceLib.Models;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public interface ILoanCreator {
@@ -221,6 +223,7 @@
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
+			HandleSalesForceTopup(cus, now); //EZ-3908
 			// verify see above line 45-48
 			// 
 			// ++++++++
@@ -287,7 +290,25 @@
 			} // try
 
 			return loan;
-		} // CreateLoan
+		}// CreateLoan
+
+		private void HandleSalesForceTopup(Customer cus, DateTime now) {
+			if (cus.CreditSum > 1000 && cus.Loans.Count(x => x.Status != LoanStatus.PaidOff) < ConfigManager.CurrentValues.Instance.NumofAllowedActiveLoans) {
+				var requestedLoan = cus.CustomerRequestedLoan.OrderByDescending(x => x.Id).FirstOrDefault();
+				int requestedAmount = requestedLoan != null && requestedLoan.Amount.HasValue ? (int)requestedLoan.Amount.Value : 0;
+				this.serviceClient.Instance.SalesForceAddOpportunity(cus.Id, cus.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {
+					Name = cus.PersonalInfo.Fullname + " TopUp",
+					CreateDate = now,
+					Email = cus.Name,
+					ExpectedEndDate = cus.OfferValidUntil,
+					RequestedAmount = requestedAmount,
+					ApprovedAmount = (int?)cus.CreditSum,
+					Stage = OpportunityStage.s90.DescriptionAttr(),
+					Type = OpportunityType.Topup.DescriptionAttr()
+				});
+			}
+		}//HandleSalesForceTopup
+
 
 		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period) {
 			var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();

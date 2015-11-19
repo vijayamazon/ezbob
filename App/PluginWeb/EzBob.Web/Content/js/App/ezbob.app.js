@@ -27,6 +27,7 @@ EzBob.Config = {
 	HeartBeatEnabled: true,
 	MinLoan: 1000,
 	XMinLoan: 100,
+	NumofAllowedActiveLoans: 2,
 	MaxLoan: 10000,
 	PayPalEnabled: false,
 	PasswordPolicyType: 'simple',

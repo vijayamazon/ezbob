@@ -4,7 +4,6 @@
 	using System.Text.RegularExpressions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using NHibernate;
 	using StructureMap;
 	using ZooplaLib;
 
@@ -18,8 +17,7 @@
 		public ZooplaStub(int customerId, bool reCheck = false) {
 			this.customerId = customerId;
 			this.reCheck = reCheck;
-			_session = ObjectFactory.GetInstance<ISession>();
-			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
+			this.customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 		} // constructor
 
 		public override void Execute() {
@@ -29,9 +27,9 @@
 		private void GetZooplaData() {
 			// TODO add flag customer address - isOwned for simple query and
 			// in case customer changes his personal address to have the owned address list correct
-			var customerAddress = customerAddressRepository.GetAll()
+			var customerAddress = this.customerAddressRepository.GetAll()
 				.Where(a =>
-					a.Customer.Id == customerId &&
+					a.Customer.Id == this.customerId &&
 					(a.AddressType == CustomerAddressType.OtherPropertyAddress || (
 						a.AddressType == CustomerAddressType.PersonalAddress &&
 						a.Customer.PropertyStatus.IsOwnerOfMainAddress
@@ -42,7 +40,7 @@
 
 			if (customerAddress.Any()) {
 				foreach (var address in customerAddress) {
-					if (!address.Zoopla.Any() || reCheck) {
+					if (!address.Zoopla.Any() || this.reCheck) {
 						var zooplaApi = new ZooplaApi();
 						try {
 							var areaValueGraphs = zooplaApi.GetAreaValueGraphs(address.Postcode);
@@ -77,7 +75,7 @@
 								UpdateDate = DateTime.UtcNow
 							});
 
-							_session.Flush();
+							this.customerAddressRepository.SaveOrUpdate(address);
 						} catch (Exception arg) {
 							Log.Error(arg, "Zoopla error");
 						}
@@ -86,7 +84,6 @@
 			}
 		}
 
-		private readonly ISession _session;
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly int customerId;
 		private readonly bool reCheck;

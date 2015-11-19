@@ -105,10 +105,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.LazyLoad()
 				.Cascade.All();
 
-			HasMany(x => x.MarketplaceTurnovers).
-				KeyColumn("CustomerMarketPlaceId")
-				.Cascade.All();
-
 			Map(x => x.Disabled);
 
 			References(x => x.AmazonMarketPlace, "AmazonMarketPlaceId");

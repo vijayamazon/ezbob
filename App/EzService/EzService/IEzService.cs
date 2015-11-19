@@ -573,5 +573,14 @@
 			long cashRequestID,
 			decimal loanAmount
 		);
+
+		[OperationContract]
+		ActionMetaData GetIncomeSms(DateTime? date, bool isYesterday);
+
+		[OperationContract]
+		ApplicationInfoResult LoadApplicationInfo(int? underwriterID, int customerID, long? cashRequestID, DateTime? now);
+
+		[OperationContract]
+		StringStringMapActionResult SetManualDecision(DecisionModel model);
 	} // interface IEzService
 } // namespace EzService

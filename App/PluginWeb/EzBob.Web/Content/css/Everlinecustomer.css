@@ -453,7 +453,9 @@ optgroup.fixiphone{
 }
 
  .form_field_container .input-wrapper input[readonly="readonly"]:not([type="submit"]):not([type="button"]),
- .form_field_container .input-wrapper textarea[readonly="readonly"]  .form_field_container .input-wrapper input[disabled="disabled"]:not([type="submit"]):not([type="button"]),
+ .form_field_container .input-wrapper select[disabled="disabled"],
+ .form_field_container .input-wrapper textarea[readonly="readonly"],  
+ .form_field_container .input-wrapper input[disabled="disabled"]:not([type="submit"]):not([type="button"]),
  .form_field_container .input-wrapper textarea[disabled="disabled"],
  .form_field_container .input-wrapper input.disabled:not([type="submit"]):not([type="button"]),
  .form_field_container .input-wrapper textarea.disabled:not([type="submit"]):not([type="button"]) {
@@ -988,9 +990,11 @@ hr.wizard-hr {
     margin-top: 20px;
 }
 
-
-
-
+/**Wizard step 3: breaking line labels**/
+label span.label-first-line,
+label span.label-second-line {
+	display: block;
+}
 
 /**Notifications**/
 .notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {

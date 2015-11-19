@@ -272,12 +272,13 @@
 					var db = DbConnectionGenerator.Get(Log);
 
 					Ezbob.Models.Library.Initialize(db.Env, db, Log);
+					EZBob.DatabaseLib.Library.Initialize(db.Env, db, Log);
 
 					CurrentValues.Init(
 						db,
 						Log,
 						oLimitations => oLimitations.UpdateWebSiteCfg("Ezbob.Web")
-						);
+					);
 
 					DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 					AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
