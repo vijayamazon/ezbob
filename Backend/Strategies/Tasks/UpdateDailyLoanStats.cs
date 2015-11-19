@@ -103,13 +103,16 @@
 				totalEarnedInterestBySomeDate.ToString("C2", Library.Instance.Culture)
 			);
 
-			DB.ExecuteNonQuery(
-				"UpdateDailyLoanStats",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("DaysToKeep", this.daysToKeep),
-				new QueryParameter("Now", this.today),
-				DB.CreateTableParameter<UpdatePkgRow>("UpdatePkg", updatePkg)
-			);
+			if (updatePkg.Count > 0) {
+				DB.ExecuteNonQuery(
+					"UpdateDailyLoanStats",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("DaysToKeep", this.daysToKeep),
+					new QueryParameter("Now", this.today),
+					DB.CreateTableParameter<UpdatePkgRow>("UpdatePkg", updatePkg)
+					);
+			} else
+				Log.Debug("Not updating: nothing to update.");
 
 			Log.Debug(
 				"Update complete for date '{0}' keeping {1} history...",
