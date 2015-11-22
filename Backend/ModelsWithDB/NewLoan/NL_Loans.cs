@@ -69,7 +69,7 @@
 		private List<NL_LoanInterestFreeze> _freezeInterestIntervals = new List<NL_LoanInterestFreeze>();
 		private NL_LoanOptions _loanOptions = new NL_LoanOptions();
 		private List<NL_Payments> _payments = new List<NL_Payments>();
-		private NL_LoanRollovers _rollover = new NL_LoanRollovers();
+		private List<NL_LoanRollovers> _acceptedRollovers = new List<NL_LoanRollovers>();
 	
 		[DataMember]
 		[NonTraversable]
@@ -108,9 +108,9 @@
 		
 		[DataMember]
 		[NonTraversable]
-		public NL_LoanRollovers Rollover {
-			get { return this._rollover; }
-			set { this._rollover = value; }
+		public List<NL_LoanRollovers> AcceptedRollovers {
+			get { return this._acceptedRollovers; }
+			set { this._acceptedRollovers = value; }
 		}
 
 		// helpers
@@ -160,11 +160,15 @@
 			} else
 				sb.Append("No Loan options").Append(Environment.NewLine);
 
-			// rollover
-			if (Rollover.LoanRolloverID > 0) {
-				sb.Append("ValidRollover:").Append(Environment.NewLine).Append(Rollover);
+			// rollovers
+			if (AcceptedRollovers.Count > 0) {
+				sb.Append(Environment.NewLine)
+					.Append("AcceptedRollovers:").Append(Environment.NewLine)
+					.Append(PrintHeadersLine(typeof(NL_LoanRollovers)));
+				Fees.ForEach(s => sb.Append(s.ToStringAsTable()));
+
 			} else
-				sb.Append("No rollover").Append(Environment.NewLine);
+				sb.Append("No AcceptedRollovers").Append(Environment.NewLine);
 
 			// fees
 			if (Fees.Count > 0) {

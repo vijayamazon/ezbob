@@ -12,6 +12,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using EzBob.Backend.Models;
@@ -207,7 +208,8 @@
 					FundTransferStatusID = (int)NLFundTransferStatuses.Pending, // (int)NLPacnetTransactionStatuses.Done,
 					LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 					TransferTime = now,
-					PacnetTransactions = new List<NL_PacnetTransactions>()}
+					PacnetTransactions = new List<NL_PacnetTransactions>()
+				}
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = now,
@@ -218,10 +220,12 @@
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"});
+				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
+			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"});
+				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
+			});
 
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
@@ -399,7 +403,7 @@
 			Console.WriteLine(calc.ToString());
 			this.m_oLog.Debug("---------------------------------------: \n {0}", loan);
 		}
-		
+
 
 		[Test]
 		public void TestLoanOldCalculator() {
@@ -531,32 +535,71 @@
 
 		[Test]
 		public void CalculatorGetState() {
+			DateTime calcTime = DateTime.UtcNow;
 			const long loanID = 17; // 21;
-			/*NL_Model model = new NL_Model(56) { //351
-				UserID = 357,
-				Loan = new NL_Loans()};*/
-			GetLoanState dbState = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
-			dbState.Execute();
+			GetLoanState dbState = new GetLoanState(56, loanID, calcTime, 357);
+			try {
+				dbState.Execute();
+			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
+				Console.WriteLine(nlExceptionInputDataInvalid.Message);
+			}
 			NL_Model model = dbState.Result;
 
+			//this.m_oLog.Debug("model: {0}", model);
+			//return;
 			// old loan
-
 			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			var oldLoan = loanRep.Get(model.Loan.OldLoanID);
 
 			var rolloverRep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
-			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id)
-				.FirstOrDefault();
+			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id).FirstOrDefault();
 
-			// copy rollover to NL
-			if (oldRollover != null) {
-				model.Loan.Rollover = new NL_LoanRollovers() {
+			// copy rollover+ fee +payment  to NL
+			if (oldRollover != null && oldRollover.PaidPaymentAmount > 0) {
+
+				DateTime rolloverConfirmationDate = (DateTime)oldRollover.CustomerConfirmationDate;
+
+				var fee = model.Loan.Fees.LastOrDefault();
+
+				model.Loan.Fees.Add(new NL_LoanFees() {
+					Amount = CurrentValues.Instance.RolloverCharge,
+					AssignTime = rolloverConfirmationDate,
+					CreatedTime = rolloverConfirmationDate,
+					LoanFeeID = (fee.LoanFeeID + 1),
+					LoanFeeTypeID = (int)NLFeeTypes.RolloverFee,
+					AssignedByUserID = 1,
+					LoanID = loanID,
+					Notes = "rollover fee"
+				});
+
+				fee = model.Loan.Fees.LastOrDefault();
+
+				model.Loan.AcceptedRollovers.Add(new NL_LoanRollovers() {
 					CreatedByUserID = 1,
 					CreationTime = oldRollover.Created,
 					CustomerActionTime = oldRollover.CustomerConfirmationDate,
-					ExpirationTime = (DateTime)oldRollover.ExpiryDate,
-					IsAccepted = true
-				};
+					ExpirationTime = rolloverConfirmationDate,
+					IsAccepted = true,
+					LoanHistoryID = model.Loan.LastHistory().LoanHistoryID,
+					LoanFeeID = fee.LoanFeeID
+				});
+
+				var	transaction = oldLoan.Transactions.LastOrDefault();
+				if (transaction != null) {
+					model.Loan.Payments.Add(new NL_Payments() {
+						Amount = transaction.Amount,
+						CreatedByUserID = 1,
+						CreationTime = transaction.PostDate,
+						LoanID = model.Loan.LoanID,
+						PaymentTime = transaction.PostDate,
+						Notes = "dummy payment for rollober",
+						PaymentStatusID = (int)NLPaymentStatuses.Active,
+						PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
+						PaymentID = 15
+					});
+				}
+
+
 			}
 
 			// dummy: reset fee payment, check calculator's adding this
@@ -613,24 +656,24 @@
 				PaymentID = 16
 			});*/
 			try {
-				DateTime calcTime = DateTime.UtcNow;
+
 				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.GetState();
-				this.m_oLog.Debug("Calc data: {0}", calc);
+				this.m_oLog.Debug("{0}", calc);
 
 				// old calc
 				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 				oldCalc.GetState();
 				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);
 
-				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay );
+				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);
 
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
 		}
 
-			
+
 
 
 		[Test]
@@ -679,11 +722,11 @@
 		[Test]
 		public void CreateSchedule() {
 			DateTime issueDate =  new DateTime(2015, 11, 17);
-			NL_Model model = new NL_Model(351) {UserID = 357,Loan = new NL_Loans()};
+			NL_Model model = new NL_Model(351) { UserID = 357, Loan = new NL_Loans() };
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();
-			if ( !string.IsNullOrEmpty( strategy.Error)) {
+			if (!string.IsNullOrEmpty(strategy.Error)) {
 				this.m_oLog.Debug("error: {0}", strategy.Error);
 				return;
 			}
@@ -729,11 +772,11 @@
 		}
 
 
-        [Test]
-		public void LateLoanJob(){
-            LateLoanJob strategy = new LateLoanJob();
-            strategy.Execute();           
-        }
+		[Test]
+		public void LateLoanJob() {
+			LateLoanJob strategy = new LateLoanJob();
+			strategy.Execute();
+		}
 
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)

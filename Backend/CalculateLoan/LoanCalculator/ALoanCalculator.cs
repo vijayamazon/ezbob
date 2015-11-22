@@ -405,7 +405,9 @@
 			List<LoanEvent> feesEvents = new List<LoanEvent>();
 			List<LoanEvent> paymentEvents = new List<LoanEvent>();
 			List<LoanEvent> schedulesEvents = new List<LoanEvent>();
+			List<LoanEvent> acceptedRolloverEvents = new List<LoanEvent>();
 			List<LoanEvent> actionEvents = new List<LoanEvent>();
+
 			currentPaidInterest = 0;
 
 			// histories => schedules
@@ -455,6 +457,12 @@
 				}
 			}
 
+			// accepted rollovers
+			List<NL_LoanRollovers> acceptedRollovers = WorkingModel.Loan.AcceptedRollovers.Where(e => e.IsAccepted).ToList();
+			if(acceptedRollovers.Count > 0)
+					acceptedRollovers.ForEach(e => acceptedRolloverEvents.Add(new LoanEvent(new DateTime(e.CustomerActionTime.Value.Year, e.CustomerActionTime.Value.Month, e.CustomerActionTime.Value.Day), e)));
+
+			
 			if (this.calculationDateEventEnd != null)
 				actionEvents.Add(this.calculationDateEventEnd);
 
@@ -519,7 +527,6 @@
 					break;
 
 				case "Rollover":
-					//HandleRolloverEvent(e.Rollover);
 					break;
 
 				case "Action":
@@ -1002,7 +1009,7 @@
 				RepaymentIntervalTypeID = prevHistory.RepaymentIntervalTypeID,
 				UserID = 1
 			};
-				
+
 			//prevHistory.ShallowCopy();
 
 			rolloverHistory.LoanHistoryID = 0;
@@ -1033,7 +1040,7 @@
 
 				// get info about payments for this schedule teim
 				ScheduleItemOutstandingData(s);
-				
+
 				// mark removed item
 				s.LoanScheduleStatusID = (s.AmountDue == 0) ? (int)NLScheduleStatuses.ClosedOnReschedule : (int)NLScheduleStatuses.DeletedOnReschedule;
 				s.ClosedTime = CalculationDate; // TODO check

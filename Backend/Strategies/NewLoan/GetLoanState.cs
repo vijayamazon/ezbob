@@ -61,11 +61,10 @@
 				throw new NL_ExceptionInputDataInvalid(this.Error);
 			}
 
-			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, null, null);
+			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, this.Error, null);
 
 			try {
 				// loan
-				Result.Loan = new NL_Loans();
 				Result.Loan = LoanDAL.GetLoan(Result.Loan.LoanID);
 
 				// histories
@@ -129,14 +128,11 @@
 				}
 
 				// valid rollover (StateDate between rollover expiration and creation time
-				var rollover = DB.FillFirst<NL_LoanRollovers>("NL_ValidRollover", CommandSpecies.StoredProcedure,
-					   new QueryParameter("@LoanID", Result.Loan.LoanID),
-					   new QueryParameter("@Now", StateDate)
+				Result.Loan.AcceptedRollovers = DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure,
+					   new QueryParameter("@LoanID", Result.Loan.LoanID)
+					//, new QueryParameter("@Now", StateDate)
 				);
 
-				//TODO add IsAccepted to SP
-				if (rollover != null && rollover.IsAccepted)
-					Result.Loan.Rollover = rollover;
 
 				// get loan state updated by calculator
 				try {
