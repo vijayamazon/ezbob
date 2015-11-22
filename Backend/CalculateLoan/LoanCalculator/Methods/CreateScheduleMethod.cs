@@ -9,8 +9,7 @@
 
 	internal class CreateScheduleMethod : AMethod {
 
-		public CreateScheduleMethod(ALoanCalculator calculator)
-			: base(calculator, false) {
+		public CreateScheduleMethod(ALoanCalculator calculator): base(calculator, false) {
 
 			//if (loanModel == null)
 			//	throw new NoInitialDataException();
@@ -81,11 +80,13 @@
 
 		private void CalculateScheduleFixedPaymentFormula(NL_LoanHistory history) {
 
-			throw new NotImplementedException("FixedPayment formula not supported yet");
-
+			
 			if (WorkingModel.Loan.LastHistory().PaymentPerInterval == 0m) {
 				throw new NoPaymentPerIntervalException();
 			}
+
+			throw new NotImplementedException("FixedPayment formula not supported yet");
+
 
 			// http://www.hughcalc.org/formula.php
 			// Finding the Number of Periods given a Payment, Interest and Loan Amount

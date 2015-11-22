@@ -9,29 +9,44 @@
 
 	public class AddPayment : AStrategy {
 
-		public AddPayment(NL_Payments payment) {
+		public AddPayment(int customerID, NL_Payments payment) {
 
-			if (Context.CustomerID == null || Context.CustomerID == 0) {
+			this.strategyArgs = new object[] { customerID, payment };
+
+			if (customerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
 				return;
 			}
 
-			CustomerID = (int)Context.CustomerID;
+			if (payment == null || payment.LoanID == 0) {
+				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
+				return;
+			}
+
+			CustomerID = customerID;
 
 			Payment = payment;
 
-			this.strategyArgs = new object[] { CustomerID, Context.UserID, Payment };
+			this.strategyArgs = new object[] { CustomerID, Payment };
 		}
 
 		public override string Name { get { return "AddPayment"; } }
 		public NL_Payments Payment { get; private set; }
 		public int CustomerID { get; private set; }
+
 		public string Error;
 		public long PaymentID { get; private set; }
+
 		private readonly object[] strategyArgs;
 
+		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		public override void Execute() {
+
+			if (!string.IsNullOrEmpty(this.Error)) {
+				throw new NL_ExceptionInputDataInvalid(this.Error);
+			}
 
 			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
 
@@ -77,12 +92,24 @@
 				return;
 			}
 
+			// get DB dbState before
+
+			GetLoanState getLoanState = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow);
+			getLoanState.Execute();
+
+			// failed to load loan from DB
+			if (!string.IsNullOrEmpty(getLoanState.Error)) {
+				this.Error = getLoanState.Error;
+				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, getLoanState.Error, this.Error, null);
+				return;
+			}
+
 			// save new recalculated loan state to DB
-			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(Payment.LoanID);
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(getLoanState.Result);
 			reloadLoanDBState.Context.CustomerID = CustomerID;
 			reloadLoanDBState.Context.UserID = Context.UserID;
 			reloadLoanDBState.Execute();
-			
+
 		}
 	} // class AddPayment
 } // ns

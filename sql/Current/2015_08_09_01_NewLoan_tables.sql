@@ -646,16 +646,13 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanScheduleStatuses PRIMARY KEY (LoanScheduleStatusID),
 		CONSTRAINT UC_NL_LoanScheduleStatuses UNIQUE (LoanScheduleStatus)
-	)
-
+	);
 	INSERT INTO NL_LoanScheduleStatuses (LoanScheduleStatusID, LoanScheduleStatus, [Description]) VALUES
-		(1, 'StillToPay', 'Open'),
-		(2, 'PaidOnTime', 'Paid on time'),
-		(3, 'Late', 'Late'),
-		(4, 'PaidEarly', 'Paid early'),
-		(5, 'Paid', 'Paid'),
-		(6, 'DeletedOnReschedule', 'Deleted on reshedule (nothing was paid before reschedule)'),
-		(7, 'ClosedOnReschedule', 'Closed on reshedule (was partially paid before reschedule)')
+		(1, 'StillToPay', 'Open'),		
+		(2, 'Late', 'Late'),		
+		(3, 'Paid', 'Paid'),
+		(4, 'DeletedOnReschedule', 'Deleted on reshedule (nothing was paid before reschedule)'),
+		(5, 'ClosedOnReschedule', 'Closed on reshedule (was partially paid before reschedule)')
 END
 GO
 

@@ -35,7 +35,7 @@
 		public DateTime? CustomerActionTime { get; set; }
 
 		[DataMember]
-		public bool? IsAccepted { get; set; }
+		public bool IsAccepted { get; set; }
 
 		[DataMember]
 		public DateTime? DeletionTime { get; set; }

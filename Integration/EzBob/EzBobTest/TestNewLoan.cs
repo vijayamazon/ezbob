@@ -514,7 +514,7 @@
 		[Test]
 		public void LoanStateStrategy() {
 			const long loanID = 17;
-			var strategy = new GetLoanDBState(new NL_Model(56), loanID, DateTime.UtcNow);
+			var strategy = new GetLoanState(56, loanID, DateTime.UtcNow);
 			strategy.Execute();
 			this.m_oLog.Debug(strategy.Result.Loan);
 		}
@@ -532,12 +532,12 @@
 		[Test]
 		public void CalculatorGetState() {
 			const long loanID = 17; // 21;
-			NL_Model model = new NL_Model(56) { //351
+			/*NL_Model model = new NL_Model(56) { //351
 				UserID = 357,
-				Loan = new NL_Loans()};
-			GetLoanDBState dbState = new GetLoanDBState(model, loanID, DateTime.UtcNow);
+				Loan = new NL_Loans()};*/
+			GetLoanState dbState = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
 			dbState.Execute();
-			model = dbState.Result;
+			NL_Model model = dbState.Result;
 
 			// old loan
 
@@ -702,13 +702,13 @@
 		[Test]
 		public void TestDateInterval() {
 			const long loanID = 17;
-			NL_Model model = new NL_Model(56) {
+			/*NL_Model model = new NL_Model(56) {
 				UserID = 357,
 				Loan = new NL_Loans()
-			};
-			GetLoanDBState strategy = new GetLoanDBState(model, loanID, DateTime.UtcNow);
+			};*/
+			GetLoanState strategy = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
 			strategy.Execute();
-			model = strategy.Result;
+			NL_Model model = strategy.Result;
 			model.Loan.Payments.Clear();
 			try {
 				DateTime calcDate = new DateTime(2015, 10, 25);
@@ -738,6 +738,22 @@
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
 
+		[Test]
+		public void RolloverRescheduling() {
+			const long loanID = 17;
+			//NL_Model model = new NL_Model(56) {UserID = 357,Loan = new NL_Loans()};
+			GetLoanState strategy = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
+			strategy.Execute();
+			NL_Model model = strategy.Result;
+			this.m_oLog.Debug("=================================={0}\n", model.Loan);
+			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				calc.RolloverRescheduling();
+				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
+			} catch (Exception exception) {
+				this.m_oLog.Error("{0}", exception.Message);
+			}
+		}
 
 	} // class TestNewLoan
 } // namespace

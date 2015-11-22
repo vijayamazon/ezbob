@@ -86,12 +86,12 @@
 									  int loandID) {
 
 			NL_Model nlModel = new NL_Model(customerID) { Loan = new NL_Loans() };
-			GetLoanDBState strategy = new GetLoanDBState(nlModel, loandID, DateTime.UtcNow);
+			GetLoanState strategy = new GetLoanState(customerID, loandID, DateTime.UtcNow);
 			strategy.Execute();
 			nlModel = strategy.Result;
 			// TODO wrap with try/catch
-			ALoanCalculator calc = new LegacyLoanCalculator(nlModel);
-			calc.GetState();
+			/*ALoanCalculator calc = new LegacyLoanCalculator(nlModel);
+			calc.GetState();*/
 			// ### wrap with try/catch
 			var nlLoanSchedules = nlModel.Loan.LastHistory().Schedule.FirstOrDefault(x => x.LoanScheduleID == loanScheduleID);
 			if (nlLoanSchedules != null) {

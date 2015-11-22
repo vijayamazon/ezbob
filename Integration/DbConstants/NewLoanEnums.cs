@@ -36,26 +36,20 @@
 		LatePeriod2 = 7,
 		LatePeriod3 = 8,
 		LatePaymentFee = 9,
-		PartialPaymentFee = 10,
+		PartialPaymentFee = 10
 	} // enum FeeTypes
 
 	public enum NLScheduleStatuses {
 		[Description("Open")]
 		StillToPay = 1, // db ID
-		//[Description("Paid on time")]
-		//PaidOnTime = 2,
 		[Description("Late")]
-		Late = 3,
-		//[Description("Paid early")]
-		//PaidEarly = 4,
+		Late = 2,
 		[Description("Paid")]
-		Paid = 5,
-		//[Description("Almost paid")]
-		//AlmostPaid = 6,
+		Paid = 3,
 		[Description("Deleted on reschedule (nothing was repaid before reschedule)")]
-		DeletedOnReschedule = 7,
+		DeletedOnReschedule = 4,
 		[Description("Closed on reschedule (was partially repaid before reschedule)")]
-		ClosedOnReschedule = 8,
+		ClosedOnReschedule = 5
 	} // enum NLScheduleStatuses
 
 	public enum NLLoanTypes {

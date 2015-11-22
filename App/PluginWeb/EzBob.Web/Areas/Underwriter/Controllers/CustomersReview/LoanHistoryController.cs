@@ -145,10 +145,15 @@
 			rolloverModel.Payment = CurrentValues.Instance.RolloverCharge;
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
-
+		
 
 			//TODO add rollover to new rollover table
 			Log.InfoFormat("add rollover to new rollover table schedule id {0}", scheduleId);
+
+	//long nlLoanID = m_oServiceClient.Instance
+
+//  + GetRollover
+			//NL_LoanRollovers nlRollover = new NL_LoanRollovers() {CreatedByUserID = _context.UserId, CreationTime = DateTime.Now, ExpirationTime =  expDate, LoanHistoryID = 
 
 			m_oServiceClient.Instance.EmailRolloverAdded(_context.UserId, customer.Id, payment);
 		}

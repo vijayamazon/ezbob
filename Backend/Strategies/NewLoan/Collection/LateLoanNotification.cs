@@ -390,24 +390,24 @@
         {
             SafeReader sr = DB.GetFirst("NL_LateLoanMailDataGet", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("LoanID", model.LoanID));
 
-            NL_Model nlModel = new NL_Model(model.CustomerID){Loan = new NL_Loans()};
+			//NL_Model nlModel = new NL_Model(model.CustomerID){Loan = new NL_Loans()};
 
-            GetLoanDBState strategy = new GetLoanDBState(nlModel, model.LoanID, DateTime.UtcNow);
+			GetLoanState strategy = new GetLoanState(model.CustomerID, model.LoanID, DateTime.UtcNow);
             strategy.Execute();
 
-            nlModel = strategy.Result;
+			//nlModel = strategy.Result;
 
-            ALoanCalculator calc = new LegacyLoanCalculator(nlModel);
-            calc.GetState();
+			//ALoanCalculator calc = new LegacyLoanCalculator(nlModel);
+			//calc.GetState();
 
-            var outstandingPrincipal = calc.Principal; 
-           
-            var firstMissedSchedule = nlModel.Loan.LastHistory().Schedule.FirstOrDefault(x => x.LoanScheduleStatusID == (int)NLScheduleStatuses.Late);
+			var outstandingPrincipal = strategy.Result.Principal;
+
+			var firstMissedSchedule = strategy.Result.Loan.LastHistory().Schedule.FirstOrDefault(x => x.LoanScheduleStatusID == (int)NLScheduleStatuses.Late);
 
             if (firstMissedSchedule == null)
                 return null;
 
-            var secondMissedSchedule = nlModel.Loan.LastHistory().Schedule.Where(x => x.LoanScheduleStatusID == (int)NLScheduleStatuses.Late).Skip(1).First();
+			var secondMissedSchedule = strategy.Result.Loan.LastHistory().Schedule.Where(x => x.LoanScheduleStatusID == (int)NLScheduleStatuses.Late).Skip(1).First();
 
 
             var mailModel = new CollectionMailModel{                

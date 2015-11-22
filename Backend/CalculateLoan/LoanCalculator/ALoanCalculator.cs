@@ -84,7 +84,7 @@
 		/// </summary>
 		public decimal AmountToCharge { get; internal set; }
 
-		public decimal TotalEarlyPayment { get; internal set; }
+		/*public decimal TotalEarlyPayment { get; internal set; }
 
 		public decimal NextEarlyPayment { get; internal set; }
 
@@ -103,9 +103,7 @@
 		/// <summary>
 		/// for customer dashboards - amount to be saved for TotalEarlyPayment
 		/// </summary>
-		public decimal TotalEarlyPaymentSavedAmount { get; internal set; }
-
-		public DateTime NowTime { get; private set; }
+		public decimal TotalEarlyPaymentSavedAmount { get; internal set; }	
 
 		/// <summary>
 		/// open fees at t'
@@ -120,7 +118,9 @@
 		/// <summary>
 		/// open principal at t'
 		/// </summary>
-		public decimal Principal { get; internal set; }
+		public decimal Principal { get; internal set; }*/
+
+		public DateTime NowTime { get; private set; }
 
 		//private LoanEvent calculationDateEventStart;
 		internal LoanEvent calculationDateEventEnd;
@@ -299,7 +299,7 @@
 
 			if (item == null)
 				throw new NoInstallmentFoundException(theDate);
-			
+
 			// dr' = r/daysDiff or BankLike
 			decimal dr = AverageDailyInterestRate(item.InterestRate, item.PlannedDate);
 
@@ -412,8 +412,12 @@
 			foreach (var h in WorkingModel.Loan.Histories) {
 				historiesEvents.Add(new LoanEvent(new DateTime(h.EventTime.Year, h.EventTime.Month, h.EventTime.Day), h));
 
-				h.Schedule.ForEach(e => schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
-				h.Schedule.ForEach(s => this.schedule.Add(s));
+				foreach (NL_LoanSchedules e in h.Schedule.Where(s=>s.LoanScheduleStatusID!=(int)NLScheduleStatuses.DeletedOnReschedule && s.LoanScheduleStatusID!=(int)NLScheduleStatuses.ClosedOnReschedule)) {
+					schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e));
+					this.schedule.Add(e);
+				}
+				//h.Schedule.ForEach(e => schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
+				//h.Schedule.ForEach(s => this.schedule.Add(s));
 			}
 
 			// fees
@@ -534,7 +538,7 @@
 			}
 
 			// close loan? // TODO when loan is closed?
-			if (Principal == 0m && Fees == 0m && Interest == 0m) {
+			if (WorkingModel.Principal == 0m && WorkingModel.Fees == 0m && WorkingModel.Interest == 0m) {
 				WorkingModel.Loan.LoanStatusID = (int)NLLoanStatuses.PaidOff;
 				WorkingModel.Loan.DateClosed = CalculationDate;
 			}
@@ -813,13 +817,13 @@
 				decimal tDistributedFees = this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date).Sum(f => f.Amount);
 
 				// outstanding balance = Fees + Interest + Principal
-				Fees = (totalLateFees + tDistributedFees - currentPaidFees);
-				Interest = (currentEarnedInterest - currentPaidInterest);
-				Principal = currentOpenPrincipal;
+				WorkingModel.Fees = (totalLateFees + tDistributedFees - currentPaidFees);
+				WorkingModel.Interest = (currentEarnedInterest - currentPaidInterest);
+				WorkingModel.Principal = currentOpenPrincipal;
 
-				TotalEarlyPayment = Fees + Interest + Principal;
+				WorkingModel.TotalEarlyPayment = WorkingModel.Fees + WorkingModel.Interest + WorkingModel.Principal;
 
-				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}, RolloverPayment={4:F4}", Fees, Interest, Principal, TotalEarlyPayment, RolloverPayment);
+				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}, RolloverPayment={4:F4}", WorkingModel.Fees, WorkingModel.Interest, WorkingModel.Principal, WorkingModel.TotalEarlyPayment, WorkingModel.RolloverPayment);
 			};
 
 			HandleEvents();
@@ -831,14 +835,21 @@
 			// calc date schedule item
 			NL_LoanSchedules calcDateItem = GetScheduleItemForDate(CalculationDate);
 
-			Log.Debug("calcDateItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), calcDateItem);
+			if (calcDateItem != null) {
 
-			NextEarlyPayment = calcDateItem.OpenPrincipal + Interest + Fees;
+				Log.Debug("calcDateItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), calcDateItem.ToStringAsTable());
 
-			RolloverPayment = Interest; // to display separated: 1. rollover fee (from cong.varilables); 2. late fees till "rolover opportunity" (calc.date) == (open Fees)
+				WorkingModel.NextEarlyPayment = calcDateItem.OpenPrincipal + WorkingModel.Interest + WorkingModel.Fees;
+
+				WorkingModel.NextEarlyPaymentSavedAmount = calcDateItem.Interest - earnedInterestForCalculationDate;
+
+				WorkingModel.TotalEarlyPayment = currentEarnedInterest - calcDateItem.Interest; // TODO check???
+			}
+
+			WorkingModel.RolloverPayment = WorkingModel.Interest; // to display separated: 1. rollover fee (from cong.varilables); 2. late fees till "rolover opportunity" (calc.date) == (open Fees)
 
 			// set outstanding balance - if pay as scheduled, this is the total amount due for calculation date
-			WorkingModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => Balance += s.AmountDue));
+			WorkingModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => WorkingModel.Balance += s.AmountDue));
 
 			// All previous installments are paid? i.e. check late
 			if (HasLatesTillCalculationDate()) {
@@ -850,9 +861,6 @@
 				return;
 			}
 
-			NextEarlyPaymentSavedAmount = earnedInterestForCalculationDate - calcDateItem.Interest;
-
-			TotalEarlyPayment = currentEarnedInterest - calcDateItem.Interest; // TODO check???
 		}
 
 
@@ -969,74 +977,80 @@
 			}
 		}
 
-		/// <exception cref="OverflowException"><paramref name="value" /> represents a number that is less than <see cref="F:System.Int32.MinValue" /> or greater than <see cref="F:System.Int32.MaxValue" />. </exception>
+		/// <exception cref="OverflowException"><paramref /> represents a number that is less than <see cref="F:System.Int32.MinValue" /> or greater than <see cref="F:System.Int32.MaxValue" />. </exception>
 		public void RolloverRescheduling() {
 
 			// get balance
 			try {
 				GetState();
 			} catch (Exception ex) {
+				Log.Error("Faled to GetState calculator, err: {0}", ex);
 				return;
 			}
-			
-			NL_LoanHistory rolloverHistory = WorkingModel.Loan.LastHistory();
+
+			NL_LoanHistory prevHistory = WorkingModel.Loan.LastHistory();
+
+			NL_LoanHistory rolloverHistory = new NL_LoanHistory() {
+				Amount = WorkingModel.Balance,
+				InterestRate = prevHistory.InterestRate,
+				Description = "rollover",
+				EventTime = CalculationDate, // TODO check +month?
+				LoanID = prevHistory.LoanID,
+				LoanLegalID = prevHistory.LoanLegalID,
+				AgreementModel = prevHistory.AgreementModel,
+				Agreements = prevHistory.Agreements,
+				RepaymentIntervalTypeID = prevHistory.RepaymentIntervalTypeID,
+				UserID = 1
+			};
+				
+			//prevHistory.ShallowCopy();
 
 			rolloverHistory.LoanHistoryID = 0;
-			rolloverHistory.Amount = Balance;
+			rolloverHistory.Amount = WorkingModel.Balance;
 			rolloverHistory.Description = "rollover";
 			rolloverHistory.EventTime = CalculationDate;
 
 			int deletedItems = 0;
-			int daysInInterval = Convert.ToInt32(Enum.GetName(typeof(RepaymentIntervalTypes), rolloverHistory.RepaymentIntervalTypeID).DescriptionAttr());
-				
 
-			// mark non relevant schedules as CancelledOnRollover and save
-			foreach (NL_LoanSchedules s in WorkingModel.Loan.LastHistory().Schedule.Where(s => CalculationDate >= s.PlannedDate)) {
+			string intervalEnumName = Enum.GetName(typeof(RepaymentIntervalTypes), rolloverHistory.RepaymentIntervalTypeID);
 
+			var daysInInterval = Convert.ToInt32(Enum.Parse(typeof(RepaymentIntervalTypes), intervalEnumName).DescriptionAttr());
 
+			var removeList = WorkingModel.Loan.LastHistory()
+				.Schedule.Where(s => s.PlannedDate >= CalculationDate);
 
-				DateTime plannedDate = (rolloverHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? s.PlannedDate.AddMonths(1) : s.PlannedDate.AddDays(daysInInterval);
-				
+			// copy future schedules to new history; mark future schedules schedules as DeletedOnReschedule + close time??? 
+			foreach (NL_LoanSchedules s in removeList) {
 
-				NL_LoanSchedules s1 = s;
-				s1.PlannedDate = plannedDate;
-				
+				//DateTime plannedDate = (rolloverHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? s.PlannedDate.AddMonths(1) : s.PlannedDate.AddDays(daysInInterval);
+
+				NL_LoanSchedules s1 = s.ShallowCopy();
+
+				s1.PlannedDate = (rolloverHistory.RepaymentIntervalTypeID == (int)RepaymentIntervalTypes.Month) ? s.PlannedDate.AddMonths(1) : s.PlannedDate.AddDays(daysInInterval);
+				s1.LoanScheduleID = 0;
+
 				rolloverHistory.Schedule.Add(s1);
 
-				s.LoanScheduleStatusID = (int)NLScheduleStatuses.DeletedOnReschedule;
-				s.ClosedTime = CalculationDate;
+				// get info about payments for this schedule teim
+				ScheduleItemOutstandingData(s);
+				
+				// mark removed item
+				s.LoanScheduleStatusID = (s.AmountDue == 0) ? (int)NLScheduleStatuses.ClosedOnReschedule : (int)NLScheduleStatuses.DeletedOnReschedule;
+				s.ClosedTime = CalculationDate; // TODO check
 
 				deletedItems++;
 			}
-			
-		
 
-		
+			rolloverHistory.RepaymentCount = deletedItems;
+
 			WorkingModel.Loan.Histories.Add(rolloverHistory);
 
-			//	create new history
-			/*WorkingModel.Loan.Histories.Add(
-				new NL_LoanHistory() {
-					Amount = Balance,
-					//InterestRate = firstHistory.InterestRate,
-					Description = "rollover",
-					EventTime = CalculationDate, // TODO check +month?
-					//LoanID = WorkingModel.Loan.LoanID,
-					//LoanLegalID = firstHistory.LoanLegalID,
-					//AgreementModel = firstHistory.AgreementModel,
-					//Agreements = firstHistory.Agreements,
-					RepaymentCount = (firstHistory.RepaymentCount - deletedItems),
-					//RepaymentIntervalTypeID = firstHistory.RepaymentIntervalTypeID,
-					//UserID = 1
-				});*/
-
-			// schedule for new history
 			try {
-				CreateSchedule();
+				GetState();
 			} catch (Exception ex) {
+				Log.Error("Faled to GetState calculator, err: {0}", ex);
 				return;
 			}
-
 		}
 
 		public override string ToString() {

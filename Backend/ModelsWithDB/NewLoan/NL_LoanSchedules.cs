@@ -37,9 +37,11 @@
 		[DecimalFormat("F7")]
 		public decimal InterestRate { get; set; }
 
+		[DataMember]
+		public bool TwoDaysDueMailSent { get; set; }
 
-
-
+		[DataMember]
+		public bool FiveDaysDueMailSent { get; set; }
 
 		// additions
 
@@ -87,5 +89,10 @@
 		[NonTraversable]
 		public bool LateFeesAttached { get; set; }
 
+		
+		public NL_LoanSchedules ShallowCopy() {
+			NL_LoanSchedules cloned = (NL_LoanSchedules)this.MemberwiseClone();
+			return cloned;
+		}
 	} // class NL_LoanSchedules
 } // ns

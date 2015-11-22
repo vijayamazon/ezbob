@@ -8,6 +8,7 @@
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Backend.Strategies.VatReturn;
 	using Ezbob.Utils;
 	using EzServiceAccessor;
@@ -102,9 +103,12 @@
             return stra.Package.Out;
         }
 
-        public void AddPayment(int userID, int customerID, NL_Payments payment)
+		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
+		public void AddPayment(int userID, int customerID, NL_Payments payment)
         {
-            var stra = new AddPayment(payment);
+			var stra = new AddPayment(customerID, payment);
+			stra.Context.CustomerID = customerID;
+			stra.Context.UserID = userID;
             stra.Execute();
         } // AddPayment
 

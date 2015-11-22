@@ -148,24 +148,6 @@
 			 };
 		 } // RescheduleLoan
 
-		 /*public NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model) {
-			 ActionMetaData amd = null;
-			 CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
-
-			 try {
-				 amd = ExecuteSync(out strategy, customerID, userID, model);
-				 // ReSharper disable once CatchAllClause
-			 } catch (Exception e) {
-				 Log.Alert("CalculateLoanSchedule exception: ", e);
-				 strategy.Result.Error = "InternalServerError";
-			 }
-
-			return new NewLoanModelActionResult() {
-				MetaData = amd,
-				Value = strategy.Result
-			};
-		}*/ // CalculateLoanSchedule
-
 		 public NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
 			 ActionMetaData amd = null;
 			 BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);

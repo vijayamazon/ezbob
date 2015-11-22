@@ -11,8 +11,10 @@ namespace EzBobTest {
 	using DbConstants;
 	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.ValueIntervals;
 	using NHibernate.Linq;
+	using NHibernate.Util;
 	using NUnit.Framework;
 	using Reports;
 
@@ -180,6 +182,10 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestEnum() {
+			string xx = Enum.GetName(typeof(RepaymentIntervalTypes), 3);
+			//Console.WriteLine(xx);
+			var yy = Enum.Parse(typeof(RepaymentIntervalTypes), xx);
+			Console.WriteLine(yy.DescriptionAttr());
 			string newStatus = "Done";
 			var nlStatus = Enum.GetNames(typeof(NLPacnetTransactionStatuses)).FirstOrDefault(s => s.Equals(newStatus));
 			Console.WriteLine(nlStatus);

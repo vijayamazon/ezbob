@@ -506,7 +506,8 @@
 			UpdateInstallmentsState();
 		}
 
-		private decimal PayRollover(PaymentRollover rollover, PaypointTransaction payment, decimal money) {
+		private decimal 
+			PayRollover(PaymentRollover rollover, PaypointTransaction payment, decimal money) {
 			decimal amount;
 			if (
 				rollover != null &&

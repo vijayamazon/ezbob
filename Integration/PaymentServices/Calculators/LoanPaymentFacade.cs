@@ -228,6 +228,9 @@
                 PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
 				amount = amount - money;
 			} // for
+
+
+
 		} // PayAllLoansForCustomer
 
 		public void PayAllLateLoansForCustomer(
