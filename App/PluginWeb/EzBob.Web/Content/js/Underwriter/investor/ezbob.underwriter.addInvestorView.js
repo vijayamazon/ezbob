@@ -2,12 +2,25 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.InvestorModel = Backbone.Model.extend({
-	url: "" + gRootPath + "Underwriter/Investor/Index"
+	url: '' + gRootPath + "Underwriter/Investor/Index"
+});
+
+EzBob.Underwriter.InvestorBankModel = Backbone.Model.extend({
+	defaults: {
+		InvestorBankAccountType: '',
+		BankSortCode: '',
+		BankAccountNumber: '',
+		BankAccountName: ''
+	}, // defaults
+}); // EzBob.InvestorBankModel
+
+EzBob.Underwriter.InvestorBanksModels = Backbone.Collection.extend({
+	model: EzBob.Underwriter.InvestorBanksModels
 });
 
 EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 	template: "#add-investor-template",
-	initialize: function() {
+	initialize: function () {
 		this.model = new EzBob.Underwriter.InvestorModel();
 		this.model.on("change reset", this.render, this);
 		return this;
@@ -15,7 +28,9 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 	ui: {
 		form: 'form#add-investor-form',
 		phone: '.phone',
-		numeric: '.numeric'
+		numeric: '.numeric',
+		sameBank: '#SameBank',
+		secondBank: '.second-bank'
 	},
 	serializeData: function () {
 		return {
@@ -23,7 +38,8 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		};
 	},
 	events: {
-		'click .add-investor': 'addInvestorClicked'
+		'click .add-investor': 'addInvestorClicked',
+		'change #SameBank': 'sameBankChanged'
 	},
 
 	onRender: function () {
@@ -38,36 +54,105 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 				ContactLastName: { required: true },
 				ContactEmail: { required: true, email: true, },
 				Role: { required: false, },
-				ContactMobile: { required: true, regex: "^0[0-9]{10}$" },
-				ContactOfficeNumber: { required: true, regex: "^0[0-9]{10}$" },
+				ContactMobile: { required: true, regex: '^0[0-9]{10}$' },
+				ContactOfficeNumber: { required: true, regex: '^0[0-9]{10}$' },
 				Comment: { required: false, },
-				InvestorBankAccountType: { required: false, },
-				BankSortCode: { required: true, number: true },
-				BankAccountNumber: { required: true, number: true },
-				BankAccountName: { required: true, },
+				'InvestorBank[0].AccountType': { required: false, notEqual: '[id="InvestorBank[1].AccountType"]' },
+				'InvestorBank[0].BankSortCode': { required: true, digits: true },
+				'InvestorBank[0].BankAccountNumber': { required: true, digits: true },
+				'InvestorBank[0].BankAccountName': { required: true, },
+				'InvestorBank[1].AccountType': { required: false, notEqual: '[id="InvestorBank[0].AccountType"]' },
+				'InvestorBank[1].BankSortCode': { required: true, digits: true },
+				'InvestorBank[1].BankAccountNumber': { required: true, digits: true },
+				'InvestorBank[1].BankAccountName': { required: true, },
 			},
 			messages: {
-				"ContactMobile": { regex: "Please enter a valid UK number" },
-				"ContactOfficeNumber": { regex: "Please enter a valid UK number" }
-				},
+				"ContactMobile": { regex: 'Please enter a valid UK number' },
+				"ContactOfficeNumber": { regex: 'Please enter a valid UK number' }
+			},
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlight,
+			ignore: ":not(:visible)"
 		});
 		return this;
 	},
-	addInvestorClicked: function(){
+	addInvestorClicked: function () {
 		if (!this.ui.form.valid()) {
-			console.log('invalid');
 			return false;
 		}
+		BlockUi();
+		var data = this.ui.form.serializeArray();
+		var sameBankChecked = this.ui.secondBank.is(':checked');
+		var sameBank = _.find(data, function (d) { return d.name === 'SameBank'; });
+		if (sameBank) {
+			sameBank.value = sameBankChecked;
+		} else {
+			data.push({ name: 'SameBank', value: sameBankChecked });
+		}
 
-		console.log('valid');
+		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddInvestor', data);
+		xhr.done(function(res) {
+			console.log('done', res);
+		});
+
+		xhr.fail(function (res) {
+			console.log('failed', res);
+		});
+
+		xhr.always(function() {
+			UnBlockUi();
+		});
+		//todo submit
 		return false;
 	},
+
+	sameBankChanged: function(){
+		this.ui.secondBank.toggle(!this.ui.sameBank.is(':checked'));
+	},
+
 	show: function () {
 		return this.$el.show();
 	},
 	hide: function () {
 		return this.$el.hide();
-	}
+	},
+
+	//bindings: {
+	//	CompanyName: {
+	//		selector: 'input[name="CompanyName"]',
+	//	},
+	//	InvestorType: {
+	//		selector: 'input[name="InvestorType"]',
+	//	},
+	//	ContactPersonalName: {
+	//		selector: 'input[name="ContactPersonalName"]',
+	//	},
+	//	ContactLastName: {
+	//		selector: 'input[name="ContactLastName"]',
+	//	},
+	//	ContactEmail: {
+	//		selector: 'input[name="ContactEmail"]',
+	//	},
+	//	Role: {
+	//		selector: 'input[name="Role"]',
+	//	},
+	//	ContactMobile: {
+	//		selector: 'input[name="ContactMobile"]',
+	//	},
+	//	ContactOfficeNumber: {
+	//		selector: 'input[name="ContactOfficeNumber"]',
+	//	},
+	//	Comment: {
+	//		selector: 'input[name="Comment"]',
+	//	},
+	//	InvestorBankAccountType: {
+	//		selector: 'input[name="InvestorBankAccountType"]',
+	//	},
+	//	BankSortCode: {
+	//		selector: 'input[name="BankSortCode"]',
+	//	},
+	//	BankAccountName: {
+	//		selector: 'input[name="BankAccountName"]',
+	//	},
+	//}
 });

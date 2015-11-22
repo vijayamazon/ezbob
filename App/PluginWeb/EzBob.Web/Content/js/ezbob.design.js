@@ -1560,6 +1560,10 @@ EzBob.escapeRegExp = function(str) {
 	return str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : '';
 }; // EzBob.escapeRegExp
 
+$.validator.addMethod("notEqual", function (value, element, param) {
+	return this.optional(element) || value != $(param).val();
+}, "This has to be different...");
+
 $.validator.addMethod('validateSignerName', function(value, element, params) {
 	function innerLog() {
 		// console.log.apply(console, Array.prototype.slice.call(arguments));
