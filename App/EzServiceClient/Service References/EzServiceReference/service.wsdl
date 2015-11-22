@@ -81,6 +81,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
@@ -568,6 +569,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_InvestorLoadTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:InvestorLoadTypes" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_InvestorLoadTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InvestorLoadTypesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
@@ -1821,6 +1828,10 @@
     <wsdl:operation name="RescheduleLoan">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InvestorLoadTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypes" message="tns:IEzService_InvestorLoadTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypesResponse" message="tns:IEzService_InvestorLoadTypes_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -3165,6 +3176,15 @@
     </wsdl:operation>
     <wsdl:operation name="RescheduleLoan">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InvestorLoadTypes">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypes" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

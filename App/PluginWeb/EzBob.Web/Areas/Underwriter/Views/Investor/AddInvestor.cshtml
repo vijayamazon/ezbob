@@ -1,15 +1,16 @@
-﻿@using System.Collections.Generic
-@using EzBob.Web.Infrastructure.Html
+﻿@using EzBob.Web.Infrastructure
+@using ServiceClientProxy
+@using StructureMap
 @model dynamic
 
+@{
+	var service = new ServiceClient();
+	var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+	var types = service.Instance.InvestorLoadTypes(context.UserId);
+}
 <script type="text/template" id="add-investor-template">
 	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
 	<div id="main-content">
-		<div class="page-title">
-			<div>
-				<h1>This is for adding investor</h1>
-			</div>
-		</div>
 		<div class="col-md-12">
 			<div class="box">
 				<div class="box-content">
@@ -20,7 +21,7 @@
 								<h4>Investor</h4>
 								<!--Investor fields-->
 								@EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
-								@EzForm.SelectAdvanced("InvestorType", "Type", new Dictionary<string, string>(), "Investor type")
+								@EzForm.SelectUnderwriter("InvestorType", "Type", types.InvestorTypes, "Investor type")
 
 								<h4>Investor primary contact</h4>
 								<!--Investor contact fields-->
@@ -28,18 +29,17 @@
 								@EzForm.InputTextUnderwriter(this, "ContactLastName", "Contact last name", null)
 								@EzForm.InputTextUnderwriter(this, "ContactEmail", "Contact email", null)
 								@EzForm.InputTextUnderwriter(this, "Role", "Role", null)
-								@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile", null)
-								@EzForm.InputTextUnderwriter(this, "ContactOfficeNumber", "Office number", null)
+								@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile", null, "phone")
+								@EzForm.InputTextUnderwriter(this, "ContactOfficeNumber", "Office number", null, "phone")
 								@EzForm.InputTextUnderwriter(this, "Comment", "Comment", null)
 								<!--Is Primary = 1-->
 
 								<h4>Investor bank details</h4>
 								<!--Investor bank details-->
-								@EzForm.SelectAdvanced("InvestorBankAccountType", "Bank account type", new Dictionary<string, string>(), "Bank account type")
-								@EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null)
-								@EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null)
+								@EzForm.SelectUnderwriter("InvestorBankAccountType", "Bank account type", types.InvestorBankAccountTypes, "Bank account type")
+								@EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null, "numeric")
+								@EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null, "numeric")
 								@EzForm.InputTextUnderwriter(this, "BankAccountName", "Bank account name", null)
-								@EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null)
 
 								<div class="control-group">
 									<label class="control-label"></label>
@@ -56,7 +56,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<button class="btn btn-primary apply pull-right">Submit</button>
+									<button class="btn btn-primary add-investor pull-right">Submit</button>
 								</div>
 							</div>
 						</div>

@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
+    <Compile Include="ActionResults\Investor\InvestorTypesActionResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />
     <Compile Include="ActionResults\ReschedulingActionResult.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="ActionResults\ExperianTargetingActionResult.cs" />
     <Compile Include="ActionStatus.cs" />
     <Compile Include="ExecuteArguments.cs" />
+    <Compile Include="EzServiceImplementation\esi_investor.cs" />
     <Compile Include="EzServiceImplementation\esi_agreement.cs" />
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceInvestor.cs" />
     <Compile Include="IEzServiceMainStrategy.cs" />
     <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />

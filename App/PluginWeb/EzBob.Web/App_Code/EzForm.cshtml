@@ -824,6 +824,26 @@ string formFieldID = "")
 		</div>
 }
 
+@helper SelectUnderwriter(string id, string caption, Dictionary<string, string> values, string placeHolder = "", string css = "", int defVal = 0, string defStrVal = "") {
+	var identificator = new HtmlString(id);
+	var i = 0;
+	<div class="form-group">
+		<label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
+		<div class="controls">
+			<select id="@identificator" name="@identificator" class="form-control @css" data-placeholder="@placeHolder">
+				@foreach (var v in values) {
+					if (i == defVal || v.Key == defStrVal) {
+						<option selected="selected" value="@v.Key">@v.Value</option>
+					} else {
+						<option value="@v.Key">@v.Value</option>
+					}
+					i++;
+				}
+			</select>
+		</div>
+	</div>
+}
+
 @helper SelectAdvanced(string id, string caption, Dictionary<string, string> values, string placeHolder = "", string css = "", int defVal = 0, string defStrVal = "")
 {
     var identificator = new HtmlString(id);

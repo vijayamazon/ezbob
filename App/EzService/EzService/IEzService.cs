@@ -20,11 +20,12 @@
 		IEzServiceMainStrategy,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceNewLoan
+		IEzServiceNewLoan,
+		IEzServiceInvestor
 	{
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
-[OperationContract]
+		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
 
 		[OperationContract]
