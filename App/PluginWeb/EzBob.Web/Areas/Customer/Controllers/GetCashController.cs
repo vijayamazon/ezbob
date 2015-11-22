@@ -242,10 +242,14 @@
 			if (amount == null || amount <= 0)
 				return;
 			var f = new LoanPaymentFacade();
+
+            long nl_LoanId = m_oServiceClient.Instance.GetLoan(loan.Id,this._context.UserId).LoanID;
+            NL_Model nlModelLoanState = m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow,this._context.UserId);
+
             NL_Payments nlPayment = new NL_Payments()
             {
-                Amount = (decimal)amount,
-                LoanID = loan.Id,
+                Amount = nlModelLoanState.Balance,
+                LoanID = nlModelLoanState.Loan.LoanID,
                 CreatedByUserID = this._context.UserId,
                 CreationTime = DateTime.UtcNow,
                 PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay

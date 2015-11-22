@@ -193,7 +193,8 @@
 			while (counter <= 2) {
 				PayPointReturnData payPointReturnData;
 
-				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData)) {
+                if (MakeAutoPayment(customerId, loanId, loanScheduleId, actualAmountCharged, out payPointReturnData))
+                {
 					if (isNonRegulated && IsNotEnoughMoney(payPointReturnData)) {
 						if (!reductionFee) {
 							result.PaymentFailed = true;
@@ -260,11 +261,11 @@
 			return (lastInstallment && amountDue > 0) || amountDue >= amountToChargeFrom;
 		}//ShouldCharge
 
-		private bool MakeAutoPayment(int loanScheduleId,
+        private bool MakeAutoPayment(int customerId,int loanId, int loanScheduleId,
             decimal amountDue,
             out PayPointReturnData result) {
 			try {
-				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue);
+                result = payPointApi.MakeAutomaticPayment(customerId, loanId, loanScheduleId, amountDue);
 				return true;
 			} catch (Exception ex) {
 				Log.Error("Failed making auto payment for loan schedule id:{0} exception:{1}", loanScheduleId, ex);

@@ -1,6 +1,9 @@
 ﻿namespace ServiceClientProxy {
-	using System.Collections.Generic;
-	using Ezbob.Backend.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -88,12 +91,25 @@
             return null;
         }
 
-        public void AddPayment(int userID, int customerID, NL_Payments payment)
-        {
-            this.m_oServiceClient.Instance.AddPayment(userID,customerID,payment);
-        } // AddPayment
-		
+        public void AddPayment(int customerID, NL_Payments payment, int userID) {
+            this.m_oServiceClient.Instance.AddPayment(userID, customerID, payment);
+        }
 
-		private readonly ServiceClient m_oServiceClient;
+
+	    public List<NL_Loans> GetCustomerLoans(int customerID, int userID)
+        {
+            return this.m_oServiceClient.Instance.GetCustomerLoans(customerID, userID).ToList();
+	    }
+
+        public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID)
+        {
+            return this.m_oServiceClient.Instance.GetLoanState(customerID, loanID,utcNow,userID);
+	    }
+
+	    public NL_Loans GetLoan(int loanId, int userID = 1) {
+            return this.m_oServiceClient.Instance.GetLoan(loanId, userID);
+	    }
+
+	    private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

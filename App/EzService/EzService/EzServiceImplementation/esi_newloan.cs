@@ -58,7 +58,8 @@
 			 return Execute<AddLoan>(model.CustomerID, model.UserID, model);
 		 } // AddLoan
 
-		 public NLLongActionResult AddPayment(int userID, int customerID, NL_Payments payment) {
+         public NLLongActionResult AddPayment(int customerID, NL_Payments payment, int userID)
+         {
 			 AddPayment strategy;
 			 var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment);
 			 return new NLLongActionResult {
@@ -67,6 +68,27 @@
 				 Error = strategy.Error
 			 };
 		 } // AddPayment
+
+         public List<NL_Loans> GetCustomerLoans(int customerID, int userID)
+         {
+             GetCustomerLoans stra;
+			 ExecuteSync(out stra, customerID, userID);
+			 return stra.Loans;
+         } // GetCustomerLoans
+
+         public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID)
+         {
+             GetLoanState stra;
+             ExecuteSync(out stra, customerID, userID, customerID, loanID, utcNow, userID);
+             return stra.Result;
+         } // GetLoanState
+
+         public NL_Loans GetLoan(int loanId, int userID)
+         {
+             GetLoan stra;
+             ExecuteSync(out stra, loanId, userID);
+             return stra.Loan;
+         } // GetLoan
 
 		 public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null) {
 			 AddLoanOptions stra;

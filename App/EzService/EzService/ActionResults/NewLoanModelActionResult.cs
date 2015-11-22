@@ -6,5 +6,9 @@
 	public class NewLoanModelActionResult : ActionResult {
 		[DataMember]
 		public NL_Model Value { get; set; }
+
+        [DataMember]
+        public string Error { get; set; }
+
 	} // class NewLoanModelActionResult
 } // namespace

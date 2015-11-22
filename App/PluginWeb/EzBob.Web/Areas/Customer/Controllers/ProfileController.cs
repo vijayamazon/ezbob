@@ -334,10 +334,14 @@
 		    if (amount > 0 && hasOpenLoans) {
 		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
 		        var f = new LoanPaymentFacade();
+
+                long nl_LoanId = m_oServiceClient.Instance.GetLoan(loan.Id, this.m_oContext.UserId).LoanID;
+                NL_Model nlModel = m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, this.m_oContext.UserId);
+
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = (decimal)amount,
-                    LoanID = loan.Id,
+                    Amount = nlModel.Balance,
+                    LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = this.m_oContext.UserId,
                     CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay

@@ -65,6 +65,7 @@
     </None>
     <None Include="Properties\DataSources\Ezbob.Backend.Models.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions.datasource" />
+    <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Loans.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers.datasource" />
     <None Include="Service References\EzServiceReference\Arrays.xsd">

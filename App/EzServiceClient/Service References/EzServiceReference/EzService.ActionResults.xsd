@@ -28,6 +28,7 @@
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
         <xs:sequence>
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
           <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Value" nillable="true" type="q6:NL_Model" />
         </xs:sequence>
       </xs:extension>

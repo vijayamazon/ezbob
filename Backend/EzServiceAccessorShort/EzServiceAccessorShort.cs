@@ -1,5 +1,6 @@
 ﻿namespace EzServiceShortcut {
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -104,13 +105,40 @@
         }
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		public void AddPayment(int userID, int customerID, NL_Payments payment)
+        public void AddPayment(int customerID, NL_Payments payment, int userID)
         {
 			var stra = new AddPayment(customerID, payment);
 			stra.Context.CustomerID = customerID;
 			stra.Context.UserID = userID;
             stra.Execute();
-        } // AddPayment
+        }
+
+        public List<NL_Loans> GetCustomerLoans(int customerID, int userID)
+        {
+            var stra = new GetCustomerLoans(customerID);
+            stra.Context.CustomerID = customerID;
+            stra.Context.UserID = userID;
+            stra.Execute();
+	        return stra.Loans;
+	    }
+
+        public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID)
+        {
+            var stra = new GetLoanState(customerID, loanID,utcNow);
+            stra.Context.CustomerID = customerID;
+            stra.Context.UserID = userID;
+            stra.Execute();
+	        return stra.Result;
+	    }
+
+	    public NL_Loans GetLoan(int loanId, int userID) {
+            var stra = new GetLoan( loanId);
+            stra.Context.UserID = userID;
+            stra.Execute();
+	        return stra.Loan;
+	    }
+
+// AddPayment
 
 	   
 	} // class EzServiceAccessorShort

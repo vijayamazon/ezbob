@@ -587,6 +587,24 @@
   <wsdl:message name="IEzService_AddLoanInterestFreeze_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddLoanInterestFreezeResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerLoans_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerLoans" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerLoans_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerLoansResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLoanState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanState" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLoanState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanStateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLoan_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoan" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLoan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
   </wsdl:message>
@@ -1845,6 +1863,18 @@
     <wsdl:operation name="AddLoanInterestFreeze">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze" message="tns:IEzService_AddLoanInterestFreeze_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreezeResponse" message="tns:IEzService_AddLoanInterestFreeze_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerLoans">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetCustomerLoans" message="tns:IEzService_GetCustomerLoans_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetCustomerLoansResponse" message="tns:IEzService_GetCustomerLoans_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLoanState" message="tns:IEzService_GetLoanState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLoanStateResponse" message="tns:IEzService_GetLoanState_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLoan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLoan" message="tns:IEzService_GetLoan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLoanResponse" message="tns:IEzService_GetLoan_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -3212,6 +3242,33 @@
     </wsdl:operation>
     <wsdl:operation name="AddLoanInterestFreeze">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerLoans">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/GetCustomerLoans" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanState">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/GetLoanState" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoan">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/GetLoan" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4608,20 +4665,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://elinar-pc:7081/" />
+      <soap12:address location="net.tcp://dora:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dora:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ELINAR-PC\elinar</Upn>
+          <Upn>DORA\Dor</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://elinar-pc:7081/" />
+      <soap12:address location="net.tcp://dora:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dora:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ELINAR-PC\elinar</Upn>
+          <Upn>DORA\Dor</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

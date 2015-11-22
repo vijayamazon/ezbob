@@ -161,7 +161,7 @@
 
 				} // for each delta
 			} // if
-            ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(userId, loan.Customer.Id, nlPayment);
+            ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment, userId);
 		    return amount;
 		} // PayLoan
 
@@ -211,25 +211,28 @@
 			var date = term ?? DateTime.Now;
 
 			var loans = customer.ActiveLoans;
+            var nl_loans = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).Where( x=> x.LoanStatusID == 0 || x.LoanStatusID ==1);
 
 			foreach (var loan in loans) {
 				if (amount <= 0)
 					break;
 
+			    var nl_LoanId = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id).LoanID;
+			    var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
+
 				var money = Math.Min(amount, loan.TotalEarlyPayment(term));
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = amount,
-                    LoanID = loan.Id,
+                    Amount = nlModel.Balance,
+                    LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
                     CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-                }; 
+                };
+
                 PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
 				amount = amount - money;
 			} // for
-
-
 
 		} // PayAllLoansForCustomer
 
@@ -244,12 +247,15 @@
 			DateTime date = term ?? DateTime.Now;
 
 			IEnumerable<Loan> loans = customer.ActiveLoans.Where(l => l.Status == LoanStatus.Late);
+            var nl_loans = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).Where(x => x.LoanStatusID == 0 || x.LoanStatusID == 1);
 
 			foreach (var loan in loans) {
 				if (amount <= 0)
 					break;
 
 				LoanRepaymentScheduleCalculator c = new LoanRepaymentScheduleCalculator(loan, term, this.amountToChargeFrom);
+
+                
 
 				LoanScheduleItem state = c.GetState();
 
@@ -259,11 +265,13 @@
 					state.LateCharges;
 
 				decimal money = Math.Min(amount, late);
+                var nl_LoanId = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id).LoanID;
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
 
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = amount,
-                    LoanID = loan.Id,
+                    Amount = nlModel.Balance,
+                    LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
                     CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
@@ -372,11 +380,13 @@
 			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
+                var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoan(loanId).LoanID;
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
 
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = amount,
-                    LoanID = loan.Id,
+                    Amount = nlModel.Balance,
+                    LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = userId,
                     CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
@@ -396,11 +406,13 @@
 					select r
 				).FirstOrDefault();
 
-
+                var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoan(loanId).LoanID;
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
+				
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = amount,
-                    LoanID = loan.Id,
+                    Amount = nlModel.Balance,
+                    LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
                     CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual

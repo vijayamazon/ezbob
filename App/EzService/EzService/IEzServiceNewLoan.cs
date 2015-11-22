@@ -48,6 +48,15 @@
         [OperationContract]
         NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, int? oldLoanId, NL_LoanInterestFreeze loanInterestFreeze);
 
+        [OperationContract]
+        List<NL_Loans> GetCustomerLoans(int customerID, int userID);
+
+        [OperationContract]
+        NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID);
+
+        [OperationContract]
+        NL_Loans GetLoan(int loanId, int userID);
+
 
     } // interface IEzServiceNewLoan
 
