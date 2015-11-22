@@ -112,6 +112,8 @@
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="OpenPlatformTests\Core\TestBase.cs" />
     <Compile Include="OpenPlatformTests\Investor\TestInvestorRules.cs" />
+    <Compile Include="TestEarnedInterest.cs" />
+    <Compile Include="TestIMail.cs" />
     <Compile Include="TestNewLoan.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
@@ -137,6 +139,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ErrorRetryingFixture.cs" />
+    <Compile Include="TestUpdateDailyLoanStats.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
   </ItemGroup>
