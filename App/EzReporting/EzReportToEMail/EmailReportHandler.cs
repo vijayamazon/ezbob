@@ -108,6 +108,10 @@
 					HandleGenericReport(report, dYesterday, sender, BuildTrafficReport, BuildTrafficReportXls, dToday);
 					break;
 
+				case ReportType.RPT_NOT_AUTO_APPROVED:
+					HandleGenericReport(report, dToday, sender, BuildNotAutoApprovedReport, BuildNotAutoApprovedXls);
+					break;
+
 				case ReportType.RPT_EARNED_INTEREST:
 					HandleGenericReport(report, dToday, sender, BuildEarnedInterestReport, BuildEarnedInterestXls);
 					break;

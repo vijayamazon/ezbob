@@ -23,6 +23,7 @@
 			this.requests = new List<Request>();
 			this.monthlyResults = new SortedTable<string, RequestTypes, int>();
 			this.dailyResults = new SortedTable<string, RequestTypes, int>();
+			this.monthList = new SortedSet<int>();
 
 			this.log = new FileLog("ziplogscan", true);
 
@@ -75,14 +76,19 @@
 				return false;
 			} // if
 
-			if (!int.TryParse(this.args.Dequeue(), out this.month)) {
-				this.log.Fatal("Could not parse <month> argument.");
-				Usage();
-				return false;
-			} // if
+			while (this.args.Count > 0) {
+				int mon;
+					if (!int.TryParse(this.args.Dequeue(), out mon))
+						continue;
 
-			if ((this.month < 1) || (this.month > 12)) {
-				this.log.Fatal("<month> should be between 1 and 12.");
+				if ((mon < 1) || (mon > 12))
+					continue;
+
+				this.monthList.Add(mon);
+			} // while
+
+			if (this.monthList.Count < 1) {
+				this.log.Fatal("No months specified.");
 				Usage();
 				return false;
 			} // if
@@ -91,9 +97,10 @@
 		} // Init
 
 		private void Usage() {
-			this.log.Info("Usage: ziplogscan <path to scan> <year> <month>");
+			this.log.Info("Usage: ziplogscan <path to scan> <year> <month> [<month> ...]");
 			this.log.Info("Year must be at least 2012.");
 			this.log.Info("Month must be between 1 and 12.");
+			this.log.Info("At least one month must be specified.");
 		} // Usage
 
 		private void Done() {
@@ -103,18 +110,15 @@
 		private void Run() {
 			this.log.Debug("Scan started for path '{0}'...", this.sourcePath);
 
-			ScanMonth();
+			foreach (int mon in this.monthList) {
+				this.month = mon;
+				ScanMonth(this.sourcePath);
+				FillZeros();
+			} // for each
 
 			foreach (Request rq in this.requests) {
-				if (!this.monthlyResults.Contains(rq.Month, rq.RequestType))
-					this.monthlyResults[rq.Month, rq.RequestType] = 1;
-				else
-					this.monthlyResults[rq.Month, rq.RequestType]++;
-
-				if (!this.dailyResults.Contains(rq.Day, rq.RequestType))
-					this.dailyResults[rq.Day, rq.RequestType] = 1;
-				else
-					this.dailyResults[rq.Day, rq.RequestType]++;
+				this.monthlyResults[rq.Month, rq.RequestType]++;
+				this.dailyResults[rq.Day, rq.RequestType]++;
 			} // for each
 
 			this.log.Msg(
@@ -130,28 +134,51 @@
 			this.log.Debug("Scan complete for path '{0}'.", this.sourcePath);
 		} // Run
 
-		private void ScanMonth() {
-			this.log.Debug("Scanning month {0}/{1}...", this.month, this.year);
+		private void FillZeros() {
+			string monthStr = string.Format("{0}-{1}", this.year.ToString("0000"), this.month.ToString("00"));
+
+			foreach (RequestTypes reqType in (RequestTypes[])Enum.GetValues(typeof(RequestTypes))) {
+				this.monthlyResults[monthStr, reqType] = 0;
+
+				for (int i = 1; i <= DateTime.DaysInMonth(this.year, this.month); i++)
+					this.dailyResults[monthStr + "-" + i.ToString("00"), reqType] = 0;
+			} // for each request type
+
+		} // FillZeros
+
+		private void ScanMonth(string sourceDir) {
+			this.log.Debug("Scanning month {0}/{1} in directory {2}...", this.month, this.year, sourceDir);
 
 			this.fsmState = FsmStates.Start;
 
-			for (int day = 1; day <= DateTime.DaysInMonth(this.year, this.month); day++)
-				ScanDay(day);
+			for (int day = 1; day <= DateTime.DaysInMonth(this.year, this.month); day++) {
+				ScanDay(sourceDir, ZippedFileNamePattern, day);
+				ScanDay(sourceDir, UnzippedFileNamePattern, day);
+			} // for
 
-			this.log.Debug("Scanning month {0}/{1} complete.", this.month, this.year);
+			string[] subDirs = Directory.GetDirectories(sourceDir);
+
+			foreach (string subDir in subDirs) {
+				if ((subDir == ".") || (subDir == ".."))
+					continue;
+
+				ScanMonth(subDir);
+			} // for each subDir
+
+			this.log.Debug("Scanning month {0}/{1} in directory {2} complete.", this.month, this.year, sourceDir);
 		} // ScanMonth
 
-		private void ScanDay(int day) {
+		private void ScanDay(string sourceDir, string pattern, int day) {
 			string mask = string.Format(
-				FileNamePattern,
+				pattern,
 				this.year.ToString("0000"),
 				this.month.ToString("00"),
 				day.ToString("00")
 			);
 
-			this.log.Debug("Scanning day {0}/{1}/{2} using mask '{3}'...", day, this.month, this.year, this.sourcePath);
+			this.log.Debug("Scanning day {0}/{1}/{2} using mask '{3}'...", day, this.month, this.year, sourceDir);
 
-			string[] files = Directory.GetFiles(this.sourcePath, mask);
+			string[] files = Directory.GetFiles(sourceDir, mask);
 
 			this.log.Info("{0} found by mask {1}.", Grammar.Number(files.Length, "file"), mask);
 
@@ -173,19 +200,26 @@
 				DateTime time = new DateTime(this.year, this.month, day, 0, 0, 0, DateTimeKind.Utc);
 
 				foreach (KeyValuePair<int, string> pair in sortedFileNames.Reverse())
-					ExtractAndProcess(pair.Value, time);
+					ProcessFile(pair.Value, time);
 
-				ExtractAndProcess(lastFileName, time);
+				ProcessFile(lastFileName, time);
 			} // if
 
 			this.log.Debug(
-				"Scanning month {0}/{1}/{2} using mask '{3}' complete.",
+				"Scanning day {0}/{1}/{2} using mask '{3}' complete.",
 				day,
 				this.month,
 				this.year,
-				this.sourcePath
+				sourceDir
 			);
 		} // ScanDay
+
+		private void ProcessFile(string fileName, DateTime time) {
+			if (fileName.ToLowerInvariant().EndsWith(".zip"))
+				ExtractAndProcess(fileName, time);
+			else
+				ProcessFileContent(new StreamReader(fileName), time);
+		} // ProcessFile
 
 		private void ExtractAndProcess(string fileName, DateTime time) {
 			this.log.Debug("Processing zip file '{0}'...", fileName);
@@ -193,14 +227,12 @@
 			ZipArchive archive = ZipFile.OpenRead(fileName);
 
 			foreach (ZipArchiveEntry entry in archive.Entries)
-				ProcessZippedFile(entry, time);
+				ProcessFileContent(new StreamReader(entry.Open()), time);
 
 			this.log.Debug("Processing zip file '{0}' complete.", fileName);
 		} // ExtractAndProcess
 
-		private void ProcessZippedFile(ZipArchiveEntry zippedFile, DateTime time) {
-			var rdr = new StreamReader(zippedFile.Open());
-
+		private void ProcessFileContent(StreamReader rdr, DateTime time) {
 			var pc = new ProgressCounter("{0} lines processed.", this.log, 25000UL);
 
 			for ( ; ; ) {
@@ -214,7 +246,9 @@
 			} // for
 
 			pc.Log();
-		} // ProcessZippedFile
+
+			rdr.Dispose();
+		} // ProcessFileContent
 
 		private void ProcessLine(string line, DateTime time) {
 			switch (this.fsmState) {
@@ -271,8 +305,10 @@
 		private string sourcePath;
 		private int year;
 		private int month;
+		private readonly SortedSet<int> monthList; 
 
-		private const string FileNamePattern = "EzService.log{0}-{1}-{2}*.zip";
+		private const string ZippedFileNamePattern = "EzService.log{0}-{1}-{2}*.zip";
+		private const string UnzippedFileNamePattern = "EzService.log{0}-{1}-{2}*";
 		private static readonly Regex fileNameRe = new Regex(@"EzService.log\d\d\d\d-\d\d-\d\d(\.\d+)*.zip$");
 
 		private const string RequestNeedle = "Request ";

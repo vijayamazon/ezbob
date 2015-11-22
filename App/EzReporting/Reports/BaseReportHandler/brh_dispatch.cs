@@ -9,6 +9,9 @@
 	public partial class BaseReportHandler : SafeLog {
 		protected ATag GetHtml(ReportQuery rptDef, List<string> oColumnTypes, Report report) {
 			switch (report.Type) {
+			case ReportType.RPT_NOT_AUTO_APPROVED:
+				return BuildNotAutoApprovedReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 			case ReportType.RPT_EARNED_INTEREST:
 				return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
@@ -56,6 +59,9 @@
 
 		protected ExcelPackage GetXls(ReportQuery rptDef, Report report) {
 			switch (report.Type) {
+			case ReportType.RPT_NOT_AUTO_APPROVED:
+				return BuildNotAutoApprovedXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
 			case ReportType.RPT_EARNED_INTEREST:
 				return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
