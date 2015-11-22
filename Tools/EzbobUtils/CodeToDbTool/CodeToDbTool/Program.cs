@@ -1,6 +1,7 @@
 ﻿namespace CodeToDbTool {
     using Ezbob.Utils.dbutils;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 
 	class Program {
 		static void Main(string[] args) {
@@ -8,7 +9,33 @@
 			//Console.WriteLine(CodeToSql.GetCreateTable<CallCreditDataApplicant>());
 			//Console.WriteLine(CodeToSql.GetCreateSp<CallCreditSearchData>());
            
-		    CreateNewLoanTablesSps();
+		  //  CreateNewLoanTablesSps();
+
+			CreateInvestorTableSps();
+		}
+
+		private static void CreateInvestorTableSps() {
+			CodeToFile.Folder = @"c:\temp\";
+			CodeToFile.SaveFile<I_Investor>();
+			CodeToFile.SaveFile<I_InvestorContact>();
+			CodeToFile.SaveFile<I_InvestorType>();
+			CodeToFile.SaveFile<I_InvestorAccountType>();
+			CodeToFile.SaveFile<I_InvestorBankAccount>();
+			CodeToFile.SaveFile<I_InvestorBankAccountTransaction>();
+			CodeToFile.SaveFile<I_InvestorConfigurationParam>();
+			CodeToFile.SaveFile<I_InvestorFundsAllocation>();
+			CodeToFile.SaveFile<I_InvestorSystemBalance>();
+			CodeToFile.SaveFile<I_Parameter>();
+			CodeToFile.SaveFile<I_Grade>();
+			CodeToFile.SaveFile<I_Portfolio>();
+			CodeToFile.SaveFile<I_Product>();
+			CodeToFile.SaveFile<I_ProductSubType>();
+			CodeToFile.SaveFile<I_Index>();
+			CodeToFile.SaveFile<I_Instrument>();
+			CodeToFile.SaveFile<I_InterestVariable>();
+			CodeToFile.SaveFile<I_InvestorOverallStatistics>();
+			CodeToFile.SaveFile<I_ProductType>();
+			CodeToFile.SaveFile<I_ProductTerm>();
 		}
 
 	    private static void CreateNewLoanTablesSps()
