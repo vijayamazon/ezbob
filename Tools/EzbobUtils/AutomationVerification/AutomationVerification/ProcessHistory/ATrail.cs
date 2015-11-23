@@ -70,6 +70,18 @@
 			get { return DecisionStatus == DecisionStatus.Affirmative; }
 		} // HasDecided
 
+		public T FindTrace<T>() where T: ATrace {
+			foreach (ATrace t in this.m_oSteps) {
+				if (t == null)
+					continue;
+
+				if (t.GetType() == typeof(T))
+					return t as T;
+			} // if
+
+			return null;
+		} // FindTrace
+
 		public virtual int Length {
 			get { return m_oSteps.Count; } // get
 		} // Length

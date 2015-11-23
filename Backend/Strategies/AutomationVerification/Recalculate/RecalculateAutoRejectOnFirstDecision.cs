@@ -2,6 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Database;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.ManAgainstAMachine;
@@ -42,6 +44,16 @@
 			try {
 				var agent = new SameDataAgent(customerID, cashRequestID, decisionTime, DB, Log);
 				agent.Decide(this.tag);
+
+				BrokerClientPreventer brokerClient = agent.Trail.FindTrace<BrokerClientPreventer>();
+
+				if ((brokerClient != null) && (brokerClient.DecisionStatus == DecisionStatus.Negative))
+					return;
+
+				var highAnnualTurnover = agent.Trail.FindTrace<AnnualTurnoverPreventer>();
+
+				if ((highAnnualTurnover != null) && (highAnnualTurnover.DecisionStatus == DecisionStatus.Negative))
+					return;
 
 				this.output.Add(string.Format("decision|{0}", string.Join("|",
 					agent.Trail.UniqueID,
