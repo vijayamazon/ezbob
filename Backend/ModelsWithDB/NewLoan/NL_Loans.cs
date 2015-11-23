@@ -165,7 +165,7 @@
 				sb.Append(Environment.NewLine)
 					.Append("AcceptedRollovers:").Append(Environment.NewLine)
 					.Append(PrintHeadersLine(typeof(NL_LoanRollovers)));
-				Fees.ForEach(s => sb.Append(s.ToStringAsTable()));
+				AcceptedRollovers.ForEach(r => sb.Append(r.ToStringAsTable()));
 
 			} else
 				sb.Append("No AcceptedRollovers").Append(Environment.NewLine);

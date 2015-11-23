@@ -48,8 +48,7 @@
 			NowTime = DateTime.UtcNow;
 
 			CalculationDate = calculationDate ?? NowTime;
-			Log.Debug("calculationDate: {0}", CalculationDate);
-
+		
 			currentHistory = WorkingModel.Loan.LastHistory();
 
 			InterestCalculationDateStart = WorkingModel.Loan.FirstHistory().EventTime;
@@ -82,7 +81,9 @@
 		/// <summary>
 		/// for autocharger-amount to charge at t date. How much should pay at t date.
 		/// </summary>
-		public decimal AmountToCharge { get; internal set; }
+		//public decimal AmountToCharge { get; internal set; }
+
+		private DateTime paymentReorderDate;
 
 		/*public decimal TotalEarlyPayment { get; internal set; }
 
@@ -386,7 +387,7 @@
 				//Log.Info("InterestBtwnEventsaaa: --------------------rateDate: {0:d} interest: {1:F4} currentOpenPrincipal: {2:C2}, i={3}, dr={4:F6}", rateDate, interest, currentOpenPrincipal, i, Math.Round(interestForPeriod, 4));
 			}
 
-			Log.Debug("InterestBtwnEvents: start={0:d}, currentEvent={1:d}, days={2}, interestForPeriod={3:F4}", start, currentEvent, daysDiff, Math.Round(interestForPeriod, 4));
+			Log.Debug("InterestBtwnEvents: start={0:d}, currentEvent={1:d}, days={2}, interestForPeriod={3:F4}", start, currentEvent.EventTime, daysDiff, Math.Round(interestForPeriod, 4));
 
 			return Math.Round(interestForPeriod, 4);
 		}
@@ -397,9 +398,10 @@
 		[ExcludeFromToString]
 		internal void IntiEvents() {
 
-			// prevent duplicate initializations
+			//prevent duplicate initializations
 			if (this.events != null)
 				return;
+			
 
 			List<LoanEvent> historiesEvents = new List<LoanEvent>();
 			List<LoanEvent> feesEvents = new List<LoanEvent>();
@@ -407,19 +409,30 @@
 			List<LoanEvent> schedulesEvents = new List<LoanEvent>();
 			List<LoanEvent> acceptedRolloverEvents = new List<LoanEvent>();
 			List<LoanEvent> actionEvents = new List<LoanEvent>();
-
-			currentPaidInterest = 0;
+			
+			/*currentEarnedInterest = 0;
+			currentOpenPrincipal = 0;
+			currentPaidFees = 0;
+			currentPaidPrincipal = 0;
+			currentPaidInterest = 0;*/
 
 			// histories => schedules
 			foreach (var h in WorkingModel.Loan.Histories) {
 				historiesEvents.Add(new LoanEvent(new DateTime(h.EventTime.Year, h.EventTime.Month, h.EventTime.Day), h));
 
-				foreach (NL_LoanSchedules e in h.Schedule.Where(s=>s.LoanScheduleStatusID!=(int)NLScheduleStatuses.DeletedOnReschedule && s.LoanScheduleStatusID!=(int)NLScheduleStatuses.ClosedOnReschedule)) {
+				foreach (NL_LoanSchedules e in h.Schedule.Where(s => s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule)) {
+
 					schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e));
 					this.schedule.Add(e);
+
+					// reset calculated fields
+					/*e.AmountDue = 0;
+					e.AmountDueOpenPrincipalBased = 0;
+					e.Interest = 0;
+					e.InterestOpenPrincipalBased = 0;
+					e.Fees = 0;
+					e.LateFeesAttached = false;*/
 				}
-				//h.Schedule.ForEach(e => schedulesEvents.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
-				//h.Schedule.ForEach(s => this.schedule.Add(s));
 			}
 
 			// fees
@@ -431,38 +444,49 @@
 
 				feesEvents.Add(new LoanEvent(new DateTime(e.AssignTime.Year, e.AssignTime.Month, e.AssignTime.Day), e));
 
-				if (e.LoanFeeTypeID != (int)NLFeeTypes.ServicingFee && e.LoanFeeTypeID != (int)NLFeeTypes.ArrangementFee/* && (e.DisabledTime == null && e.DeletedByUserID == null)*/) {
+				if ((e.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee || e.LoanFeeTypeID == (int)NLFeeTypes.ArrangementFee) /* && (e.DisabledTime == null && e.DeletedByUserID == null)*/) {
+					this.distributedFeesList.Add(e);
+				} else {
 					this.lateFeesList.Add(e);
 
-					// init totalLateFees
+					// cumulate totalLateFees
 					totalLateFees += e.Amount;
 				}
-
-				if ((e.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee || e.LoanFeeTypeID == (int)NLFeeTypes.ArrangementFee)/* && (e.DisabledTime == null && e.DeletedByUserID == null)*/)
-					this.distributedFeesList.Add(e);
 			}
 
 			// payments - by PaymentTime, only non-deleted
-			foreach (var e in WorkingModel.Loan.Payments.Where(p => p.DeletionTime == null && p.DeletedByUserID == null)) {
+			foreach (var e in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime).Where(p => p.DeletionTime == null && p.DeletedByUserID == null)) {
+
+				// if payment written by the system as retroactive - upon payment cancellation, manual payment from UW GUI. In those cases reset amounts paid and add new FPs, ShPs
+				if (e.PaymentTime.Date < e.CreationTime.Date) {
+					this.paymentReorderDate = e.PaymentTime;
+				}
 
 				paymentEvents.Add(new LoanEvent(new DateTime(e.PaymentTime.Year, e.PaymentTime.Month, e.PaymentTime.Day), e));
 
 				// init currentPaidInterest
 				foreach (NL_LoanSchedulePayments sp in e.SchedulePayments) {
+					if (this.paymentReorderDate != DateTime.MinValue) {
+						sp.PrincipalPaid = 0;
+						sp.InterestPaid = 0;
+					}
 					currentPaidInterest += sp.InterestPaid;
 				}
+
 				// init currentPaidFees
 				foreach (NL_LoanFeePayments fp in e.FeePayments) {
+					if (this.paymentReorderDate != DateTime.MinValue) {
+						fp.Amount = 0;
+					}
 					currentPaidFees += fp.Amount;
 				}
 			}
 
 			// accepted rollovers
 			List<NL_LoanRollovers> acceptedRollovers = WorkingModel.Loan.AcceptedRollovers.Where(e => e.IsAccepted).ToList();
-			if(acceptedRollovers.Count > 0)
-					acceptedRollovers.ForEach(e => acceptedRolloverEvents.Add(new LoanEvent(new DateTime(e.CustomerActionTime.Value.Year, e.CustomerActionTime.Value.Month, e.CustomerActionTime.Value.Day), e)));
+			if (acceptedRollovers.Count > 0)
+				acceptedRollovers.ForEach(e => acceptedRolloverEvents.Add(new LoanEvent(new DateTime(e.CustomerActionTime.Value.Year, e.CustomerActionTime.Value.Month, e.CustomerActionTime.Value.Day), e)));
 
-			
 			if (this.calculationDateEventEnd != null)
 				actionEvents.Add(this.calculationDateEventEnd);
 
@@ -471,7 +495,8 @@
 				.Union(paymentEvents)
 				.Union(feesEvents)
 				.Union(actionEvents)
-				// .Union(rollOverEvents) TODO add rolovers // .Union(reschedules) TODO add reschedules
+				.Union(acceptedRolloverEvents)
+				//  .Union(reschedules) TODO add reschedules
 				//.Union(new[] {this.calculationDateEventStart, this.calculationDateEventEnd })
 				//	.Union(new[] { this.calculationDateEventEnd })
 				.OrderBy(e => e.EventTime).ThenBy(e => e.Priority).ToList();
@@ -579,12 +604,11 @@
 		/// <summary>
 		/// 1. pay fees 
 		/// 2. pay schedule (interest and principal)
-		/// 3. pay rollover TODO phase 2
+		/// 3. pay rollover - record as rollover fee payment + interest payment to nearby schedule
 		/// </summary>
 		/// <param name="payment"></param>
 		/// <exception cref="ArgumentNullException"><paramref /> or <paramref /> is null.</exception>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[ExcludeFromToString]
 		internal void ProcessPayment(NL_Payments payment) {
 
@@ -592,14 +616,22 @@
 			decimal assignAmount = payment.Amount - payment.FeePayments.Sum(p => p.Amount) - payment.SchedulePayments.Sum(p => p.InterestPaid) - payment.SchedulePayments.Sum(p => p.PrincipalPaid);
 
 			// 1. pay fees
-			assignAmount = PayFees(payment, assignAmount);
+			//assignAmount = PayFees(payment, assignAmount);
 
-			Log.Debug("ProcessPayment: payment balance after PayFees = {0}", assignAmount);
+			// all unpaid late fees (not setup|servicing|arrangement), not related to calculation date
+			assignAmount = PayFees(this.lateFeesList, payment, assignAmount);
+
+			// unpaid servicing|arrangement untill LastEventDate including
+			var distributedfeesUntillThisEvent = this.distributedFeesList.Where(f => f.AssignTime <= payment.PaymentTime);
+
+			assignAmount = PayFees(distributedfeesUntillThisEvent.ToList(), payment, assignAmount);
+
+			//Log.Debug("ProcessPayment: payment balance after PayFees = {0}", assignAmount);
 
 			// 2. pay interest & principal
 			assignAmount = PaySchedules(payment, assignAmount);
 
-			Log.Debug("ProcessPayment: payment balance after PaySchedules = {0}", assignAmount);
+			//Log.Debug("ProcessPayment: payment balance after PaySchedules = {0}", assignAmount);
 		}
 
 		/// <summary>
@@ -611,19 +643,18 @@
 		/// </summary>
 		/// <param name="payment"></param>
 		/// <param name="assignAmount"></param>
-		/// <returns></returns>
+		/// <returns>decimal assignAmount</returns>
 		/// <exception cref="OverflowException">The result is outside the range of a <see cref="T:System.Decimal" />.</exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[ExcludeFromToString]
 		internal decimal PaySchedules(NL_Payments payment, decimal assignAmount) {
 
 			if (Math.Round(assignAmount) <= 0) {
-				Log.Info("PaySchedules: No amount to assign: {0}", assignAmount);
+				//Log.Info("PaySchedules: No amount to assign: {0}", assignAmount);
 				return assignAmount;
 			}
 
 			if (payment == null) {
-				Log.Info("PaySchedules: No payment defined");
+				//Log.Info("PaySchedules: No payment defined");
 				return assignAmount;
 			}
 
@@ -640,12 +671,11 @@
 			foreach (NL_LoanSchedules s in unpaidSchedules) {
 
 				if (Math.Round(assignAmount) <= 0m) {
-					Log.Debug("PaySchedules: amount assigned completely");
+					//Log.Debug("PaySchedules: amount assigned completely");
 					return 0;
 				}
 
-				Log.Debug("PaySchedules: currentEarnedInterest: {0}, currentPaidInterest: {1},  assignAmount: {2}, ScheduleToPay\n{3}{4}",
-					currentEarnedInterest, currentPaidInterest, assignAmount, AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), s.ToStringAsTable());
+				//Log.Debug("PaySchedules: currentEarnedInterest: {0}, currentPaidInterest: {1},  assignAmount: {2}, ScheduleToPay\n{3}{4}",currentEarnedInterest, currentPaidInterest, assignAmount, AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), s.ToStringAsTable());
 
 				decimal iAmount = Math.Min(assignAmount, (currentEarnedInterest - currentPaidInterest));
 
@@ -676,16 +706,14 @@
 
 					// cumulate interest paid on the payment to currentPaidInterest
 					currentPaidInterest += iAmount;
-					//currentPaidInterest = decimal.Round(currentPaidInterest, 4); 
 
 					// cumulate principal paid on the payment to currentPaidPrincipal
 					currentPaidPrincipal += pAmount;
-					//currentPaidPrincipal = decimal.Round(currentPaidPrincipal, 4); 
 
 					// update currentOpenPrincipal (principal to pay)
 					currentOpenPrincipal = initialAmount - currentPaidPrincipal;
 
-					Log.Debug("PaySchedules: added new LoanSchedulePayment\n {0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedulePayments)), schpayment.ToStringAsTable());
+					//Log.Debug("PaySchedules: added new LoanSchedulePayment\n {0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedulePayments)), schpayment.ToStringAsTable());
 				}
 
 			} // foreach
@@ -696,63 +724,35 @@
 		/// <summary>
 		/// 1. pay late fees
 		/// 2. pay distributed fees that should be paid till event date
+		/// 3. Record new NL_LoanFeePayments entry(s) to payment
+		/// 4. Cumulate paid fees into currentPaidFees
 		/// </summary>
+		/// <param name="feesList"></param>
 		/// <param name="payment"></param>
 		/// <param name="assignAmount"></param>
 		/// <returns>rest of available money of the payment</returns>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[ExcludeFromToString]
-		internal decimal PayFees(NL_Payments payment, decimal assignAmount) {
-
-			if (Math.Round(assignAmount) == 0) {
-				Log.Info("PayFees: No amount to assign: {0}", assignAmount);
-				return assignAmount;
-			}
-
-			if (payment == null) {
-				Log.Info("PayFees: No payment defined");
-				return assignAmount;
-			}
-
-			// all unpaid late fees (not setup|servicing|arrangement), not related to calculation date
-			assignAmount = AddFeesPayments(this.lateFeesList, payment, assignAmount);
-
-			// unpaid servicing|arrangement untill LastEventDate including
-			var distributedfeesUntillThisEvent = this.distributedFeesList.Where(f => f.AssignTime <= payment.PaymentTime);
-
-			assignAmount = AddFeesPayments(distributedfeesUntillThisEvent.ToList(), payment, assignAmount);
-
-			return assignAmount;
-		}
-
-		/// <summary>
-		/// 1. Record new NL_LoanFeePayments entry(s) to payment
-		/// 2. Cumulate paid fees into currentPaidFees
-		/// <exception cref="ArgumentNullException"><paramref /> or <paramref /> is null.</exception>
-		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
-		/// </summary>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
-		[ExcludeFromToString]
-		internal decimal AddFeesPayments(List<NL_LoanFees> feesList, NL_Payments payment, decimal assignAmount) {
+		internal decimal PayFees(List<NL_LoanFees> feesList, NL_Payments payment, decimal assignAmount) {
 
 			if (feesList.Count == 0) {
-				Log.Info("AddFeesPayments: No fees in list on payment {0}", payment.BaseString());
+				//Log.Info("PayFees: No fees in list on payment {0}", payment.BaseString());
 				return assignAmount;
 			}
 			if (payment == null) {
-				Log.Info("AddFeesPayments: No payment defined");
+				//Log.Info("PayFees: No payment defined");
 				return assignAmount;
 			}
 
-			if (Math.Round(assignAmount) <= 0) {
-				Log.Info("AddFeesPayments1: Amount assigned: {0}", assignAmount);
+			if (assignAmount <= 0m) {
+				//Log.Info("AddFeesPayments1: Amount assigned: {0}", assignAmount);
 				return assignAmount;
 			}
 
 			foreach (NL_LoanFees f in feesList) {
-				if (Math.Round(assignAmount) <= 0) {
-					Log.Info("AddFeesPayments: Amount assigned: {0}", assignAmount);
+
+				if (assignAmount <= 0m) {
+					//Log.Info("PayFees: Amount assigned: {0}", assignAmount);
 					return assignAmount;
 				}
 
@@ -769,11 +769,10 @@
 					decimal fAmount = Math.Min(assignAmount, fBalance);
 
 					NL_LoanFeePayments fpayment = new NL_LoanFeePayments() {
-						Amount = fAmount,			// maximal possible money to pay the fee
+						Amount = fAmount,			// maximal possible money to pay thProcessScheduleIteme fee
 						LoanFeeID = f.LoanFeeID,
 						LoanFeePaymentID = payment.PaymentID,
-						PaymentID = payment.PaymentID,
-						//NewEntry = true
+						PaymentID = payment.PaymentID
 					};
 
 					payment.FeePayments.Add(fpayment);
@@ -784,10 +783,11 @@
 					//	cumulate fees paid on the payment to currentPaidFees
 					currentPaidFees += fAmount;
 
-					Log.Debug("AddFeesPayments: feePayment recorded for fee {0}{1}: {2}{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_LoanFeePayments)), fpayment.ToStringAsTable());
+					//Log.Debug("PayFees: for fee\n {0}{1} feePayment recorded\n {2}{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_LoanFeePayments)), fpayment.ToStringAsTable());
 				}
 			}
-			return assignAmount;
+
+			return decimal.Round(assignAmount, 4);
 		}
 
 		/// <summary>
@@ -830,7 +830,7 @@
 
 				WorkingModel.TotalEarlyPayment = WorkingModel.Fees + WorkingModel.Interest + WorkingModel.Principal;
 
-				Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}, RolloverPayment={4:F4}", WorkingModel.Fees, WorkingModel.Interest, WorkingModel.Principal, WorkingModel.TotalEarlyPayment, WorkingModel.RolloverPayment);
+				//Log.Debug("GetState Action: Fees={0}, Interest={1}, Principal={2}, TotalEarlyPayment={3:F4}, RolloverPayment={4:F4}", WorkingModel.Fees, WorkingModel.Interest, WorkingModel.Principal, WorkingModel.TotalEarlyPayment, WorkingModel.RolloverPayment);
 			};
 
 			HandleEvents();
@@ -844,7 +844,7 @@
 
 			if (calcDateItem != null) {
 
-				Log.Debug("calcDateItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), calcDateItem.ToStringAsTable());
+				//Log.Debug("calcDateItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), calcDateItem.ToStringAsTable());
 
 				WorkingModel.NextEarlyPayment = calcDateItem.OpenPrincipal + WorkingModel.Interest + WorkingModel.Fees;
 
@@ -858,7 +858,7 @@
 			// set outstanding balance - if pay as scheduled, this is the total amount due for calculation date
 			WorkingModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => WorkingModel.Balance += s.AmountDue));
 
-			// All previous installments are paid? i.e. check late
+			/*// All previous installments are paid? i.e. check late
 			if (HasLatesTillCalculationDate()) {
 				return;
 			}
@@ -866,7 +866,7 @@
 			// Today is a payment day
 			if (CalculationDateIsPlannedDate()) {
 				return;
-			}
+			}*/
 
 		}
 
@@ -904,11 +904,11 @@
 			ScheduleItemOutstandingData(item);
 
 			// i'- current open interest, payments based (== real open principal)
-			item.InterestOutstandingPrincipalBased = currentEarnedInterest - currentPaidInterest;
+			item.InterestOpenPrincipalBased = currentEarnedInterest - currentPaidInterest;
 
-			item.AmountDueOutstandingPrincipalBased = item.Fees + item.InterestOutstandingPrincipalBased + item.OpenPrincipal;
+			item.AmountDueOpenPrincipalBased = item.Fees + item.InterestOpenPrincipalBased + item.OpenPrincipal;
 
-			Log.Info("ProcessScheduleItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
+			//Log.Info("ProcessScheduleItem: \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
 		}
 
 		/// <summary>
@@ -1053,6 +1053,7 @@
 			WorkingModel.Loan.Histories.Add(rolloverHistory);
 
 			try {
+				this.events = null;
 				GetState();
 			} catch (Exception ex) {
 				Log.Error("Faled to GetState calculator, err: {0}", ex);

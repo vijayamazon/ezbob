@@ -536,72 +536,15 @@
 		[Test]
 		public void CalculatorGetState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 17; // 21;
-			GetLoanState dbState = new GetLoanState(56, loanID, calcTime, 357);
+			const long loanID = 21; // ;17
+			const int customerID = 351; // 56
+			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				dbState.Execute();
 			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
 				Console.WriteLine(nlExceptionInputDataInvalid.Message);
 			}
 			NL_Model model = dbState.Result;
-
-			//this.m_oLog.Debug("model: {0}", model);
-			//return;
-			// old loan
-			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			var oldLoan = loanRep.Get(model.Loan.OldLoanID);
-
-			var rolloverRep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
-			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id).FirstOrDefault();
-
-			// copy rollover+ fee +payment  to NL
-			if (oldRollover != null && oldRollover.PaidPaymentAmount > 0) {
-
-				DateTime rolloverConfirmationDate = (DateTime)oldRollover.CustomerConfirmationDate;
-
-				var fee = model.Loan.Fees.LastOrDefault();
-
-				model.Loan.Fees.Add(new NL_LoanFees() {
-					Amount = CurrentValues.Instance.RolloverCharge,
-					AssignTime = rolloverConfirmationDate,
-					CreatedTime = rolloverConfirmationDate,
-					LoanFeeID = (fee.LoanFeeID + 1),
-					LoanFeeTypeID = (int)NLFeeTypes.RolloverFee,
-					AssignedByUserID = 1,
-					LoanID = loanID,
-					Notes = "rollover fee"
-				});
-
-				fee = model.Loan.Fees.LastOrDefault();
-
-				model.Loan.AcceptedRollovers.Add(new NL_LoanRollovers() {
-					CreatedByUserID = 1,
-					CreationTime = oldRollover.Created,
-					CustomerActionTime = oldRollover.CustomerConfirmationDate,
-					ExpirationTime = rolloverConfirmationDate,
-					IsAccepted = true,
-					LoanHistoryID = model.Loan.LastHistory().LoanHistoryID,
-					LoanFeeID = fee.LoanFeeID
-				});
-
-				var	transaction = oldLoan.Transactions.LastOrDefault();
-				if (transaction != null) {
-					model.Loan.Payments.Add(new NL_Payments() {
-						Amount = transaction.Amount,
-						CreatedByUserID = 1,
-						CreationTime = transaction.PostDate,
-						LoanID = model.Loan.LoanID,
-						PaymentTime = transaction.PostDate,
-						Notes = "dummy payment for rollober",
-						PaymentStatusID = (int)NLPaymentStatuses.Active,
-						PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-						PaymentID = 15
-					});
-				}
-
-
-			}
-
 			// dummy: reset fee payment, check calculator's adding this
 			//var firstOrDefault = model.Loan.Payments.FirstOrDefault();
 			//if (firstOrDefault != null) {
@@ -610,64 +553,83 @@
 			// dummy: remove all exists payment
 			//model.Loan.Payments.Clear();
 			// dummy payment for test - between issue date and the first schedule item
-			/*model.Loan.Payments.Add(new NL_Payments() {
+			DateTime p1date = new DateTime(2015, 12, 23);
+			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 322.50m,
 				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
+				CreationTime = p1date,
 				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 11, 20),
+				PaymentTime = p1date,
 				Notes = "dummy payment for test",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 13
 			});			
 			// dummy payment for test - between issue date and the first schedule item
+			/*DateTime p2date = new DateTime(2015, 12, 15);
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 304.38m,
 				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
+				CreationTime = p2date,
 				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 12, 15),
+				PaymentTime = p2date,
 				Notes = "dummy payment 2 for test",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 14
 			});
+			DateTime p3date = new DateTime(2015, 12, 18);
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 286.25m,
 				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
+				CreationTime = p3date,
 				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 12, 15),
+				PaymentTime = p3date,
 				Notes = "dummy payment 2 for test",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 15
-			});
+			});*/
+			
+			try {
+				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
+				calc.GetState();
+				this.m_oLog.Debug("============================={0}", calc);
+
+				// old loan
+				/*ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+				var oldLoan = loanRep.Get(model.Loan.OldLoanID);
+				// old calc
+				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
+				oldCalc.GetState();
+				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);
+				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);*/
+
+			} catch (Exception exception) {
+				this.m_oLog.Error("{0}", exception.Message);
+			}
+
+			return;
+
+			// add retroactive payment
+			DateTime p4date = new DateTime(2015, 12, 21);
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 266.31m,
 				CreatedByUserID = 1,
 				CreationTime = DateTime.UtcNow,
 				LoanID = model.Loan.LoanID,
-				PaymentTime = new DateTime(2015, 12, 15),
-				Notes = "dummy payment 2 for test",
+				PaymentTime = p4date,
+				Notes = "retropayment",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 16
-			});*/
+			});
+	
+			// retroactive payment
 			try {
-
 				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.GetState();
-				this.m_oLog.Debug("{0}", calc);
-
-				// old calc
-				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
-				oldCalc.GetState();
-				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);
-
-				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);
-
+				this.m_oLog.Debug("----------------------------------{0}", calc);
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
@@ -783,20 +745,86 @@
 
 		[Test]
 		public void RolloverRescheduling() {
-			const long loanID = 17;
-			//NL_Model model = new NL_Model(56) {UserID = 357,Loan = new NL_Loans()};
-			GetLoanState strategy = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
-			strategy.Execute();
-			NL_Model model = strategy.Result;
-			this.m_oLog.Debug("=================================={0}\n", model.Loan);
+			DateTime calcTime = DateTime.UtcNow;
+			const long loanID = 17; // 21;
+			GetLoanState dbState = new GetLoanState(56, loanID, calcTime, 357);
 			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				dbState.Execute();
+			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
+				Console.WriteLine(nlExceptionInputDataInvalid.Message);
+			}
+			NL_Model model = dbState.Result;
+		
+			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			var oldLoan = loanRep.Get(model.Loan.OldLoanID);
+			var rolloverRep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
+			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id).FirstOrDefault();
+
+			// copy rollover+ fee +payment  to NL
+			if (oldRollover != null && oldRollover.PaidPaymentAmount > 0) {
+
+				DateTime rolloverConfirmationDate = (DateTime)oldRollover.CustomerConfirmationDate;
+
+				var fee = model.Loan.Fees.LastOrDefault();
+
+				model.Loan.Fees.Add(new NL_LoanFees() {
+					Amount = CurrentValues.Instance.RolloverCharge,
+					AssignTime = rolloverConfirmationDate,
+					CreatedTime = rolloverConfirmationDate,
+					LoanFeeID = (fee.LoanFeeID + 1),
+					LoanFeeTypeID = (int)NLFeeTypes.RolloverFee,
+					AssignedByUserID = 1,
+					LoanID = loanID,
+					Notes = "rollover fee"
+				});
+
+				fee = model.Loan.Fees.LastOrDefault();
+
+				model.Loan.AcceptedRollovers.Add(new NL_LoanRollovers() {
+					CreatedByUserID = 1,
+					CreationTime = oldRollover.Created,
+					CustomerActionTime = oldRollover.CustomerConfirmationDate,
+					ExpirationTime = rolloverConfirmationDate,
+					IsAccepted = true,
+					LoanHistoryID = model.Loan.LastHistory().LoanHistoryID,
+					LoanFeeID = fee.LoanFeeID
+				});
+
+				var	transaction = oldLoan.Transactions.LastOrDefault();
+				if (transaction != null) {
+					model.Loan.Payments.Add(new NL_Payments() {
+						Amount = transaction.Amount,
+						CreatedByUserID = 1,
+						CreationTime = transaction.PostDate,
+						LoanID = model.Loan.LoanID,
+						PaymentTime = transaction.PostDate,
+						Notes = "dummy payment for rollover",
+						PaymentStatusID = (int)NLPaymentStatuses.Active,
+						PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
+						PaymentID = 15
+					});
+				}
+			}
+
+			try {
+
+				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.RolloverRescheduling();
-				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
+				this.m_oLog.Debug("{0}", calc);
+
+				// old calc
+				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
+				oldCalc.GetState();
+				this.m_oLog.Debug("old loan State: {0}", oldLoan);
+
+				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);
+
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
 		}
+
+
 
 	} // class TestNewLoan
 } // namespace

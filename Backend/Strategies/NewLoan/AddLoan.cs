@@ -265,8 +265,8 @@
 						   InsertDate = nowTime,
 						   IsActive = true,
 						   Notes = "default options"
-					   }),
-					   new QueryParameter("@LoanID", this.LoanID));
+					   }), new QueryParameter("@LoanID", this.LoanID)
+					 );
 
 					pconn.Commit();
 

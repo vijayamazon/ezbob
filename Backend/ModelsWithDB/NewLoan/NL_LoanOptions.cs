@@ -27,6 +27,7 @@
 		public bool EmailSendingAllowed { get; set; } = true;
 		[DataMember]
 		public bool SmsSendingAllowed { get; set; } = true;
+
 		[DataMember]
 		public bool MailSendingAllowed { get; set; } = true;
 		[DataMember]

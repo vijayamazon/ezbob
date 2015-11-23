@@ -52,6 +52,13 @@
 		[NonTraversable]
 		public decimal Balance { get; set; }
 
+		/// <summary>
+		/// current open principal (planned p' - paid p')
+		/// </summary>
+		[DataMember]
+		[NonTraversable]
+		public decimal OpenPrincipal { get; set; }
+
 		[DataMember] // based on planned scheduled principal (balance)
 		[NonTraversable]
 		public decimal Interest {get; set; }
@@ -61,34 +68,26 @@
 		public decimal Fees { get; set; }
 
 		/// <summary>
-		/// current open principal (planned p' - paid p')
-		/// </summary>
-		[DataMember]
-		[NonTraversable]
-		public decimal OpenPrincipal { get; set; }
-
-		[DataMember] // p*r based on real open principal
-		[NonTraversable]
-		public decimal InterestOutstandingPrincipalBased { get; set; }
-
-		/// <summary>
 		/// p' + i' + f' (i' calculation based on planned scheduled principal (balance))
 		/// </summary>
 		[DataMember]
 		[NonTraversable]
 		public decimal AmountDue { get; set; }
 
+		[DataMember] // p*r based on real open principal
+		[NonTraversable]
+		public decimal InterestOpenPrincipalBased { get; set; }
+
 		/// <summary>
 		/// p' + i' + f' (i' calculation based on real open principal)
 		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal AmountDueOutstandingPrincipalBased { get; set; }
+		public decimal AmountDueOpenPrincipalBased { get; set; }
 
 		[DataMember]
 		[NonTraversable]
 		public bool LateFeesAttached { get; set; }
-
 		
 		public NL_LoanSchedules ShallowCopy() {
 			NL_LoanSchedules cloned = (NL_LoanSchedules)this.MemberwiseClone();
