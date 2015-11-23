@@ -74,7 +74,7 @@
 		}
 
 		/// <summary>
-		/// for backworks compatibility with LoanRepaymentScheduleCalculator and "old" Loan model - sum of all AmountDue(s)
+		/// for backworkd compatibility with LoanRepaymentScheduleCalculator and "old" Loan model - sum of all AmountDue(s)
 		/// </summary>
 		public decimal Balance {
 			get { return this._interest + this._fees + this._principal; }

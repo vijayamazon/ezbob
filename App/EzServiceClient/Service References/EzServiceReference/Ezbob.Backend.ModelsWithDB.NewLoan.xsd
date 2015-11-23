@@ -394,13 +394,13 @@
       <xs:extension xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q20:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="AmountDue" type="xs:decimal" />
-          <xs:element minOccurs="0" name="AmountDueOpenPrincipalBased" type="xs:decimal" />
+          <xs:element minOccurs="0" name="AmountDueOP" type="xs:decimal" />
           <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
           <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
           <xs:element minOccurs="0" name="FiveDaysDueMailSent" type="xs:boolean" />
           <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
-          <xs:element minOccurs="0" name="InterestOpenPrincipalBased" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InterestOP" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
           <xs:element minOccurs="0" name="LateFeesAttached" type="xs:boolean" />
           <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />

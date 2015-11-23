@@ -515,12 +515,13 @@
 			Console.WriteLine(I);
 		}
 
+		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		[Test]
 		public void LoanStateStrategy() {
-			const long loanID = 17;
-			var strategy = new GetLoanState(56, loanID, DateTime.UtcNow);
+			const long loanID = 21;
+			var strategy = new GetLoanState(351, loanID, DateTime.UtcNow); // loanID = 17, customer = 56
 			strategy.Execute();
-			this.m_oLog.Debug(strategy.Result.Loan);
+			this.m_oLog.Debug(strategy.Result);
 		}
 
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
@@ -538,7 +539,7 @@
 			DateTime calcTime = DateTime.UtcNow;
 			const long loanID = 21; // ;17
 			const int customerID = 351; // 56
-			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357);
+			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
 			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {

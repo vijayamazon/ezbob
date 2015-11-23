@@ -386,8 +386,9 @@
                 Log.Info("Collection sending mail is not allowed, mail is not sent to customer {0}\n template {1}", model.CustomerID, type);
             }
         } //SendCollectionImail
-        private CollectionMailModel GetCollectionMailModel(CollectionDataModel model)
-        {
+
+
+        private CollectionMailModel GetCollectionMailModel(CollectionDataModel model){
             SafeReader sr = DB.GetFirst("NL_LateLoanMailDataGet", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("LoanID", model.LoanID));
 
 			//NL_Model nlModel = new NL_Model(model.CustomerID){Loan = new NL_Loans()};
@@ -454,7 +455,7 @@
                 AmountDue = firstMissedSchedule.AmountDue,
                 DateDue = firstMissedSchedule.PlannedDate,
                 Fees = firstMissedSchedule.Fees,
-                RepaidAmount = firstMissedSchedule.OpenPrincipal,
+                RepaidAmount = firstMissedSchedule.Principal - firstMissedSchedule.PrincipalPaid,  // firstMissedSchedule.OpenPrincipal,
                 RepaidDate = null //TODO retrieve the real value
             };
 
@@ -463,7 +464,7 @@
                     AmountDue = secondMissedSchedule.AmountDue,
                     DateDue = secondMissedSchedule.PlannedDate,
                     Fees = secondMissedSchedule.Fees,
-                    RepaidAmount = secondMissedSchedule.OpenPrincipal,
+					RepaidAmount = secondMissedSchedule.Principal - secondMissedSchedule.PrincipalPaid, // secondMissedSchedule.OpenPrincipal,
                     RepaidDate = null //TODO retrieve the real value
                 };
             }
@@ -476,6 +477,8 @@
 
             return mailModel;
         } //GetCollectionMailModel
+
+
         private void SendCollectionSms(CollectionDataModel model, CollectionType type)
         {
             var smsModel = this.smsTemplates.FirstOrDefault(x => x.IsActive && x.OriginID == model.OriginID && x.Type == type.ToString());

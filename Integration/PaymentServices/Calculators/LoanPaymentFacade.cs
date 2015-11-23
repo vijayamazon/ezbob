@@ -45,8 +45,7 @@
 			string description = "payment from customer",
 			bool interestOnly = false,
 			string sManualPaymentMethod = null,       
-            int userId = 1)
-        {
+            int userId = 1){
 
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -70,8 +69,7 @@
 
 			loan.AddTransaction(transactionItem);
 
-            nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions()
-            {
+            nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions(){
                 IP = ip,
                 Amount = amount,
                 Notes = description,
@@ -221,8 +219,7 @@
 			    var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
 
 				var money = Math.Min(amount, loan.TotalEarlyPayment(term));
-                NL_Payments nlPayment = new NL_Payments()
-                {
+                NL_Payments nlPayment = new NL_Payments(){
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
@@ -242,8 +239,8 @@
 			string transId,
 			DateTime? term = null,
 			string description = null,
-			string sManualPaymentMethod = null
-		) {
+			string sManualPaymentMethod = null) {
+
 			DateTime date = term ?? DateTime.Now;
 
 			IEnumerable<Loan> loans = customer.ActiveLoans.Where(l => l.Status == LoanStatus.Late);
@@ -254,9 +251,6 @@
 					break;
 
 				LoanRepaymentScheduleCalculator c = new LoanRepaymentScheduleCalculator(loan, term, this.amountToChargeFrom);
-
-                
-
 				LoanScheduleItem state = c.GetState();
 
 				decimal late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
@@ -268,8 +262,7 @@
                 var nl_LoanId = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id).LoanID;
                 var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
 
-                NL_Payments nlPayment = new NL_Payments()
-                {
+                NL_Payments nlPayment = new NL_Payments(){
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
@@ -309,8 +302,8 @@
 			string description = "payment from customer",
 			string paymentType = null,
 			string sManualPaymentMethod = null,
-            int userId = 1
-		) {
+            int userId = 1) {
+
 			Log.DebugFormat(
 				"MakePayment transId: {0}, amount: {1}, ip: {2}, type: {3}, loanId: {4}, customer: {5}," +
 				"date: {6}, description: {7}, paymentType: {8}, manualPaymentMethod: {9}",

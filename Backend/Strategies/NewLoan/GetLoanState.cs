@@ -14,7 +14,7 @@
 	/// </summary>
 	public class GetLoanState : AStrategy {
 
-		public GetLoanState(int customerID, long loanID, DateTime? stateDate, int? userID = null) {
+		public GetLoanState(int customerID, long loanID, DateTime? stateDate, int? userID = null, bool getCalculatorState = true) {
 
 			this.strategyArgs = new object[] { customerID, loanID, stateDate, userID };
 
@@ -36,6 +36,7 @@
 
 			Result.Loan = new NL_Loans() { LoanID = loanID };
 			Result.UserID = userID;
+			GetCalculatorState = getCalculatorState;
 
 			LoanDAL = new LoanDAL();
 
@@ -48,6 +49,7 @@
 		public NL_Model Result { get; private set; }
 		private readonly DateTime StateDate;
 		public string Error;
+		public bool GetCalculatorState { get; private set; }
 
 		private readonly object[] strategyArgs;
 
@@ -81,8 +83,7 @@
 
 				// loan fees
 				Result.Loan.Fees.Clear();
-				Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure,
-					   new QueryParameter("@LoanID", Result.Loan.LoanID));
+				Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 				// filter cnacelled/deleted fees on GetLoanDBState strategy
 				// filter in Calculator according to CalculationDate
@@ -90,8 +91,7 @@
 
 				// interest freezes
 				Result.Loan.FreezeInterestIntervals.Clear();
-				List<NL_LoanInterestFreeze> freezes = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet", CommandSpecies.StoredProcedure,
-					   new QueryParameter("@LoanID", Result.Loan.LoanID));
+				List<NL_LoanInterestFreeze> freezes = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 				// filter cancelled (deactivated) periods
 				// TODO: take in consideration stateDate
@@ -99,40 +99,34 @@
 				freezes.ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
 
 				// loan options
-				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure,
-					   new QueryParameter("@LoanID", Result.Loan.LoanID)
-				);
+				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 				// TODO combine all payments + transactions to one SP kogda nibud'
 
 				// payments (logical transactions) ordered by PaymentTime
 				Result.Loan.Payments.Clear();
-				Result.Loan.Payments = new List<NL_Payments>(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID", Result.Loan.LoanID),
+				Result.Loan.Payments = new List<NL_Payments>(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID),
 					new QueryParameter("@Now", StateDate)
 					).OrderBy(p => p.PaymentTime));
 
 				foreach (NL_Payments p in Result.Loan.Payments) {
 					p.SchedulePayments.Clear();
-					p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure,
-						   new QueryParameter("@LoanID", Result.Loan.LoanID)
-					);
+					p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 					// mark payment time for each schedule payment
 					p.SchedulePayments.ForEach(sp => sp.PaymentDate = p.PaymentTime);
 
 					p.FeePayments.Clear();
-					p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure,
-						   new QueryParameter("@LoanID", Result.Loan.LoanID)
-					);
+					p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 				}
 
 				// valid rollover (StateDate between rollover expiration and creation time
-				Result.Loan.AcceptedRollovers = DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure,
-					   new QueryParameter("@LoanID", Result.Loan.LoanID)
+				Result.Loan.AcceptedRollovers = DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)
 					//, new QueryParameter("@Now", StateDate)
 				);
 
+				if (!GetCalculatorState)
+					return;
 
 				// get loan state updated by calculator
 				try {
