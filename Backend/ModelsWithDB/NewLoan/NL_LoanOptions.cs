@@ -8,57 +8,38 @@
 		[PK(true)]
 		[DataMember]
 		public long LoanOptionsID { get; set; }
-
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
 		public long LoanID { get; set; }
-
-
-
 		[DataMember]
 		public DateTime? StopAutoChargeDate { get; set; }
-
-
+	    [DataMember]
+	    public bool PartialAutoCharging { get; set; } = true;
 		[DataMember]
-        public bool PartialAutoCharging { get; set; }
-
-		[DataMember]
-		public bool LatePaymentNotification { get; set; }
-
+		public bool LatePaymentNotification { get; set; } = true;
 		[Length(50)]
 		[DataMember]
 		public string CaisAccountStatus { get; set; }
-
 		[Length(20)]
 		[DataMember]
 		public string ManualCaisFlag { get; set; }
-
 		[DataMember]
-		public bool EmailSendingAllowed { get; set; }
-
+		public bool EmailSendingAllowed { get; set; } = true;
 		[DataMember]
-		public bool SmsSendingAllowed { get; set; }
+		public bool SmsSendingAllowed { get; set; } = true;
 		[DataMember]
-		public bool MailSendingAllowed { get; set; }
-
+		public bool MailSendingAllowed { get; set; } = true;
 		[DataMember]
 		public int? UserID { get; set; }
-
 		[DataMember]
 		public DateTime InsertDate { get; set; }
-
-		[DataMember]
 		public bool IsActive { get; set; }
-
 		[Length(LengthType.MAX)]
 		[DataMember]
 		public string Notes { get; set; }
-
 		[DataMember]
 		public virtual DateTime? StopLateFeeFromDate { get; set; }
-
 		[DataMember]
 		public virtual DateTime? StopLateFeeToDate { get; set; }
-
 	} // class NL_LoanOptions
 } // ns
