@@ -5,7 +5,14 @@
 
 	[DataContract(IsReference = true)]
 	public class NL_LoanOptions : AStringable {
-		[PK(true)]
+	    
+	    private bool partialAutoCharging = true;
+	    private bool latePaymentNotification = true;
+	    private bool emailSendingAllowed = true;
+	    private bool smsSendingAllowed = true;
+	    private bool mailSendingAllowed = true;
+
+	    [PK(true)]
 		[DataMember]
 		public long LoanOptionsID { get; set; }
 		[FK("NL_Loans", "LoanID")]
@@ -13,10 +20,20 @@
 		public long LoanID { get; set; }
 		[DataMember]
 		public DateTime? StopAutoChargeDate { get; set; }
+
 	    [DataMember]
-	    public bool PartialAutoCharging { get; set; } = true;
-		[DataMember]
-		public bool LatePaymentNotification { get; set; } = true;
+	    public bool PartialAutoCharging
+	    {
+            get { return this.partialAutoCharging; }
+            set { this.partialAutoCharging = value; }
+	    }
+
+	    [DataMember]
+        public bool LatePaymentNotification
+        {
+            get { return this.latePaymentNotification; }
+            set { this.latePaymentNotification = value; }
+        }
 		[Length(50)]
 		[DataMember]
 		public string CaisAccountStatus { get; set; }
@@ -24,12 +41,23 @@
 		[DataMember]
 		public string ManualCaisFlag { get; set; }
 		[DataMember]
-		public bool EmailSendingAllowed { get; set; } = true;
+        public bool EmailSendingAllowed
+        {
+            get { return this.emailSendingAllowed; }
+            set { this.emailSendingAllowed = value; }
+        }
 		[DataMember]
-		public bool SmsSendingAllowed { get; set; } = true;
-
+        public bool SmsSendingAllowed
+        {
+            get { return this.smsSendingAllowed; }
+            set { this.smsSendingAllowed = value; }
+        }
 		[DataMember]
-		public bool MailSendingAllowed { get; set; } = true;
+        public bool MailSendingAllowed
+        {
+            get { return this.mailSendingAllowed; }
+            set { this.mailSendingAllowed = value; }
+        }
 		[DataMember]
 		public int? UserID { get; set; }
 		[DataMember]
