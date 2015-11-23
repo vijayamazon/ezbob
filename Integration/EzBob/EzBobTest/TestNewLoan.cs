@@ -567,11 +567,11 @@
 				PaymentID = 13
 			});			
 			// dummy payment for test - between issue date and the first schedule item
-			/*DateTime p2date = new DateTime(2015, 12, 15);
+			DateTime p2date = new DateTime(2015, 12, 15);
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 304.38m,
 				CreatedByUserID = 1,
-				CreationTime = p2date,
+				CreationTime = DateTime.UtcNow,
 				LoanID = model.Loan.LoanID,
 				PaymentTime = p2date,
 				Notes = "dummy payment 2 for test",
@@ -579,7 +579,7 @@
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
 				PaymentID = 14
 			});
-			DateTime p3date = new DateTime(2015, 12, 18);
+			/*DateTime p3date = new DateTime(2015, 12, 18);
 			model.Loan.Payments.Add(new NL_Payments() {
 				Amount = 286.25m,
 				CreatedByUserID = 1,
