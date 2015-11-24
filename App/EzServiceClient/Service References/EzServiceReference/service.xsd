@@ -1241,7 +1241,7 @@
   <xs:element name="AddLoanResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q107="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanResult" nillable="true" type="q107:ActionMetaData" />
+        <xs:element xmlns:q107="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanResult" nillable="true" type="q107:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
