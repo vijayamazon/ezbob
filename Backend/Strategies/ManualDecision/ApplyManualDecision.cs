@@ -9,6 +9,7 @@
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
@@ -32,6 +33,7 @@
 
 		public string Error { get; private set; }
 
+		/// <exception cref="ArgumentOutOfRangeException">Condition. </exception>
 		public override void Execute() {
 			Log.Debug("Applying manual decision by model: {0}.", this.decisionModel.Stringify());
 
@@ -202,14 +204,11 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Waiting;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
-
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			nlAddDecision.Execute();
+	
 			UpdateSalesForceOpportunity(OpportunityStage.s40);
 		} // ReturnCustomerToWaitingForDecision
 
@@ -222,13 +221,10 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Pending;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			nlAddDecision.Execute();
 
 			UpdateSalesForceOpportunity((this.decisionModel.signature == 1) ? OpportunityStage.s75 : OpportunityStage.s50);
 
@@ -250,13 +246,10 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Escalate;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			nlAddDecision.Execute();
 
 			UpdateSalesForceOpportunity(OpportunityStage.s20);
 		} // EscalateCustomer
@@ -284,13 +277,10 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Reject;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons{RejectReasonID = x}).ToArray()
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToArray());
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			nlAddDecision.Execute();
 
 			UpdateSalesForceOpportunity(null, model => {
 				model.CloseDate = this.now;
@@ -359,26 +349,31 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Approve;
 
-			// NL_Offers lastOffer = this.serviceClient.Instance.GetLastOffer(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// );
+			
+			
+			AddDecision sAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			sAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			sAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			sAddDecision.Execute();
 
-			// var decisionID = this.serviceClient.Instance.AddDecision(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			Log.Debug("nl AddDecision {0}, Error: {1}", sAddDecision.DecisionID, sAddDecision.Error);
 
-			// lastOffer.DecisionID = decisionID.Value;
-			// lastOffer.CreatedTime = this.now;
-			// this.serviceClient.Instance.AddOffer(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	lastOffer
-			// );
+			GetLastOffer sLastOffer = new GetLastOffer(this.decisionToApply.Customer.ID);
+			sLastOffer.Context.UserID = this.decisionToApply.CashRequest.UnderwriterID;
+			sLastOffer.Execute();
+			NL_Offers lastOffer = sLastOffer.Offer;
+
+			Log.Debug("nl lastOffer {0}, Error: {1}", lastOffer.OfferID, sLastOffer.Error);
+
+			lastOffer.DecisionID = sAddDecision.DecisionID;
+			lastOffer.CreatedTime = this.now;
+
+			AddOffer sAddOffer = new AddOffer(lastOffer); // elina: TODO add offer fees also
+			sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
+			sAddOffer.Context.UserID = this.decisionModel.underwriterID;
+			sAddOffer.Execute();
+
+			Log.Debug("nl offer added: {0}, Error: {1}", sAddOffer.OfferID, sAddOffer.Error);
 
 			UpdateSalesForceOpportunity(OpportunityStage.s90, model => {
 				model.ApprovedAmount = (int)this.currentState.OfferedCreditLine;

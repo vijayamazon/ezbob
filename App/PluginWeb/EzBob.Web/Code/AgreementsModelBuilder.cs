@@ -1,30 +1,30 @@
 ﻿namespace EzBob.Web.Code {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using ConfigManager;
-    using DbConstants;
-    using Ezbob.Backend.CalculateLoan.LoanCalculator;
-    using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
-    using Ezbob.Backend.Models;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Logger;
-    using Ezbob.Utils.Extensions;
-    using EzBob.Backend.Models;
-    using EzBob.Models;
-    using EzBob.Web.Infrastructure;
-    using EzBob.Web.Models;
-    using EZBob.DatabaseLib.Model.Database;
-    using EZBob.DatabaseLib.Model.Database.Loans;
-    using EZBob.DatabaseLib.Model.Loans;
-    using EZBob.DatabaseLib.Repository;
-    using log4net;
-    using PaymentServices.Calculators;
-    using ServiceClientProxy;
-    using StructureMap;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using ConfigManager;
+	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
+	using EzBob.Backend.Models;
+	using EzBob.Models;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Models;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using log4net;
+	using PaymentServices.Calculators;
+	using ServiceClientProxy;
+	using StructureMap;
 
-    public class AgreementsModelBuilder {
+	public class AgreementsModelBuilder {
 		private readonly APRCalculator _aprCalc;
 		private readonly RepaymentCalculator _repaymentCalculator;
 		protected readonly ServiceClient serviceClient;
@@ -79,13 +79,13 @@
 					goto case TypeOfBusinessReduced.NonLimited;
 				case TypeOfBusinessReduced.NonLimited:
 					model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-				        var experianCompanyAddress = company.ExperianCompanyAddress.LastOrDefault();
-				        if (experianCompanyAddress != null && !String.IsNullOrEmpty(experianCompanyAddress.Postcode)) {
-				            companyAddress = company.ExperianCompanyAddress.LastOrDefault();
-				        } else {
-				            companyAddress = company.CompanyAddress.LastOrDefault();
-				        }
-				    break;
+					var experianCompanyAddress = company.ExperianCompanyAddress.LastOrDefault();
+					if (experianCompanyAddress != null && !String.IsNullOrEmpty(experianCompanyAddress.Postcode)) {
+						companyAddress = company.ExperianCompanyAddress.LastOrDefault();
+					} else {
+						companyAddress = company.CompanyAddress.LastOrDefault();
+					}
+					break;
 				}
 			}
 
@@ -206,15 +206,15 @@
 									   schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
 
-	    /// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
-	    /// <exception cref="NullReferenceException"><paramref /> is null. </exception>
-	    /// <exception cref="NoScheduleException">Condition. </exception>
-	    public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
+		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
+		/// <exception cref="NullReferenceException"><paramref /> is null. </exception>
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
 
 			// fill in loan+history with offer data
 			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
-		    ALoanCalculator nlCalculator = null;
+			ALoanCalculator nlCalculator = null;
 			// 2. get Schedule and Fees
 			try {
 				// init calculator

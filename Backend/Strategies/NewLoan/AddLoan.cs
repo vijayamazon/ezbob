@@ -38,7 +38,7 @@
 		}
 
 		public override string Name { get { return "AddLoan"; } }
-		public string Error;
+		public string Error { get; private set; }
 		public long LoanID;
 		public NL_Model model { get; private set; }
 

@@ -398,18 +398,20 @@
           <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
           <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FeesPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="FiveDaysDueMailSent" type="xs:boolean" />
           <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestOP" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
           <xs:element minOccurs="0" name="LateFeesAttached" type="xs:boolean" />
           <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanScheduleStatusID" type="xs:int" />
-          <xs:element minOccurs="0" name="OpenPrincipal" type="xs:decimal" />
           <xs:element minOccurs="0" name="PlannedDate" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Position" type="xs:int" />
           <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
+          <xs:element minOccurs="0" name="PrincipalPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="TwoDaysDueMailSent" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>

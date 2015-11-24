@@ -17,6 +17,13 @@
 
         public override string Name { get { return "AddDecision"; } }
 
+		public long DecisionID { get; private set; }
+		public string Error { get; private set; }
+
+		private readonly NL_Decisions decision;
+		private long? oldCashRequestID;
+		private readonly IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons;
+
         public override void Execute()
         {
             NL_AddLog(LogType.Info, "Strategy Start", this.decision, null, null, null);
@@ -66,11 +73,6 @@
 
         }//Execute
 
-        public long DecisionID { get; set; }
-        public string Error { get; set; }
-
-        private readonly NL_Decisions decision;
-        private long? oldCashRequestID;
-        private readonly IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons;
+     
     }//class AddDecision
 }//ns

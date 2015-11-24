@@ -305,6 +305,27 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianLtdCaisMonthly" nillable="true" type="tns:ExperianLtdCaisMonthly" />
+  <xs:complexType name="ExperianLtdCreditSummary">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CreditEventType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DateOfMostRecentRecordForType" nillable="true" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdCreditSummary" nillable="true" type="tns:ExperianLtdCreditSummary" />
+  <xs:complexType name="ExperianLtdErrors">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdErrors" nillable="true" type="tns:ExperianLtdErrors" />
   <xs:complexType name="ExperianLtdDL65">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AExperianLtdDataRow">
@@ -345,27 +366,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianLtdShareholders" nillable="true" type="tns:ExperianLtdShareholders" />
-  <xs:complexType name="ExperianLtdCreditSummary">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="CreditEventType" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DateOfMostRecentRecordForType" nillable="true" type="xs:dateTime" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdCreditSummary" nillable="true" type="tns:ExperianLtdCreditSummary" />
-  <xs:complexType name="ExperianLtdErrors">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdErrors" nillable="true" type="tns:ExperianLtdErrors" />
   <xs:complexType name="ExperianLtdDL48">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AExperianLtdDataRow">

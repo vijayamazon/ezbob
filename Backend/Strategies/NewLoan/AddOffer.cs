@@ -17,6 +17,12 @@
 
         public override string Name { get { return "AddOffer"; } }
 
+		public long OfferID { get; set; }
+		public string Error { get; private set; }
+
+		private readonly NL_Offers offer;
+		private readonly IEnumerable<NL_OfferFees> fees;
+
         public override void Execute()
         {
             NL_AddLog(LogType.Info, "Strategy Start", this.offer, null, null, null);
@@ -56,10 +62,6 @@
 
         }//Execute
 
-        public long OfferID { get; set; }
-        public string Error { get; set; }
-
-        private readonly NL_Offers offer;
-        private readonly IEnumerable<NL_OfferFees> fees;
+    
     }//class AddOffer
 }//ns

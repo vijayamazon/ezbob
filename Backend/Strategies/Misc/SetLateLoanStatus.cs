@@ -562,9 +562,6 @@
 		private DateTime now;
 		private List<CollectionSmsTemplate> smsTemplates;
 
-			CollectionDay3,
-			CollectionDay10,
-			CollectionDay13,
 		
 	}// class SetLateLoanStatus
 } // namespace
