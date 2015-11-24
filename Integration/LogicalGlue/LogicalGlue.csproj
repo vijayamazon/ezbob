@@ -52,7 +52,7 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Harvester\Interface\EvaluateeDetails.cs" />
+    <Compile Include="Harvester\Interface\InferenceInputSerializer.cs" />
     <Compile Include="Harvester\Interface\InferenceInput.cs" />
     <Compile Include="Harvester\Interface\EncodingFailure.cs" />
     <Compile Include="Harvester\Interface\IHarvester.cs" />
@@ -83,6 +83,7 @@
     <Compile Include="Library.cs" />
     <Compile Include="Engine\Implementation\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\InputSerialization.cs" />
     <Compile Include="Tests\ModelOutputSerialization.cs" />
     <Compile Include="Tests\ReplySerialization.cs" />
   </ItemGroup>

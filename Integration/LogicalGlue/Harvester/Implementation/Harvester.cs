@@ -8,12 +8,6 @@
 			this.log = new SafeILog(log);
 		} // constructor
 
-		public Response<InferenceInput> GetInferenceInputData(EvaluateeDetails evaluateeDetails) {
-			// 1. Send REST API request to Logical Glue endpoint.
-			// 2. Load API call into InferenceInput object.
-			return new Response<InferenceInput>(""); // TODO
-		} // GetInferenceInputData
-
 		public Response<InferenceOutput> Infer(InferenceInput inputData) {
 			// 1. Send REST API request to Logical Glue endpoint.
 			// 2. Load API call into InferenceOutput object.
