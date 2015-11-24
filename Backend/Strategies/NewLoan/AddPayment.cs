@@ -72,9 +72,9 @@
 				}
 
 				// RESET ALL PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER [DeletionTime] of deleted payment. New distribution of paid p, i, f (s) will be recalculated and saved again
-				if (Payment.PaymentStatusID == (int)NLPaymentStatuses.Cancelled) {
+				/*if (Payment.PaymentStatusID == (int)NLPaymentStatuses.Cancelled) {
 					DB.ExecuteNonQuery("NL_CancelledPaymentPaidAmountsReset", CommandSpecies.StoredProcedure, new QueryParameter("PaymentID", PaymentID));
-				}
+				}*/
 
 				pconn.Commit();
 
@@ -93,7 +93,7 @@
 
 			// get DB State 
 
-			GetLoanState getLoanState = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow, Context.UserID, false);
+			/*GetLoanState getLoanState = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow, Context.UserID, false);
 			getLoanState.Execute();
 
 			// failed to load loan from DB
@@ -101,10 +101,10 @@
 				this.Error = getLoanState.Error;
 				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, getLoanState.Error, this.Error, null);
 				return;
-			}
+			}*/
 
 			// recalculate state by calculator + save new state to DB
-			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(getLoanState.Result);
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID);
 			reloadLoanDBState.Context.CustomerID = CustomerID;
 			reloadLoanDBState.Context.UserID = Context.UserID;
 			reloadLoanDBState.Execute();

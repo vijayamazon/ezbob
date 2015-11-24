@@ -172,7 +172,6 @@
                     LoanID = nlModel.Loan.LoanID,
                     Amount = nlLoanScheduleAmountDue,
                     CreatedByUserID = 0,
-                    CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
                     PaypointTransactions = new List<NL_PaypointTransactions>()
                 };

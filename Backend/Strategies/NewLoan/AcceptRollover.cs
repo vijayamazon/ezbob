@@ -188,9 +188,7 @@
 
 
 			// save new recalculated loan state to DB
-			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(stateStrategy.Result);
-			reloadLoanDBState.Context.CustomerID = CustomerID;
-			reloadLoanDBState.Context.UserID = Context.UserID;
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, LoanID, CustomerID);
 			reloadLoanDBState.Execute();
 		}
 

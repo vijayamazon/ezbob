@@ -223,7 +223,6 @@
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
-                    CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
 
@@ -266,7 +265,6 @@
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
-                    CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 }; 
 				PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
@@ -381,7 +379,6 @@
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = userId,
-                    CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 }; 
 
@@ -407,7 +404,6 @@
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
-                    CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
                 PayLoan(loan, transId, amount, ip, nlPayment, date, description, false, sManualPaymentMethod);

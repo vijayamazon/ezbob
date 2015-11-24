@@ -16,7 +16,7 @@
 
 		public GetLoanState(int customerID, long loanID, DateTime? stateDate, int? userID = null, bool getCalculatorState = true) {
 
-			this.strategyArgs = new object[] { customerID, loanID, stateDate, userID };
+			this.strategyArgs = new object[] { customerID, loanID, stateDate, userID, getCalculatorState };
 
 			if (customerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
@@ -40,7 +40,7 @@
 
 			LoanDAL = new LoanDAL();
 
-			this.strategyArgs = new object[] { Result.CustomerID, Result.Loan.LoanID, this.StateDate, Result.UserID };
+			this.strategyArgs = new object[] { Result.CustomerID, Result.Loan.LoanID, this.StateDate, Result.UserID, GetCalculatorState };
 
 		} // constructor
 
@@ -73,12 +73,9 @@
 				Result.Loan.Histories.Clear();
 				Result.Loan.Histories = LoanDAL.GetLoanHistories(Result.Loan.LoanID, this.StateDate);
 
-				// schedules
+				// schedules of each history
 				foreach (NL_LoanHistory h in Result.Loan.Histories) {
-					h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure,
-						   new QueryParameter("@LoanID", Result.Loan.LoanID),
-						   new QueryParameter("@Now", this.StateDate)
-					);
+					h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure,new QueryParameter("@LoanID", Result.Loan.LoanID));
 				}
 
 				// loan fees
@@ -105,25 +102,18 @@
 
 				// payments (logical transactions) ordered by PaymentTime
 				Result.Loan.Payments.Clear();
-				Result.Loan.Payments = new List<NL_Payments>(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID),
-					new QueryParameter("@Now", StateDate)
-					).OrderBy(p => p.PaymentTime));
+				Result.Loan.Payments = new List<NL_Payments>(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).OrderBy(p => p.PaymentTime));
 
 				foreach (NL_Payments p in Result.Loan.Payments) {
 					p.SchedulePayments.Clear();
 					p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
-
-					// mark payment time for each schedule payment
-					p.SchedulePayments.ForEach(sp => sp.PaymentDate = p.PaymentTime);
-
+	
 					p.FeePayments.Clear();
 					p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 				}
 
 				// valid rollover (StateDate between rollover expiration and creation time
-				Result.Loan.AcceptedRollovers = DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)
-					//, new QueryParameter("@Now", StateDate)
-				);
+				Result.Loan.AcceptedRollovers = DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 				if (!GetCalculatorState)
 					return;

@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
+	using System.Runtime.Remoting.Contexts;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
@@ -21,6 +22,8 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using KellermanSoftware.CompareNetObjects;
+	using KellermanSoftware.CompareNetObjects.TypeComparers;
 	using Newtonsoft.Json;
 	using NHibernate.Linq;
 	using NUnit.Framework;
@@ -535,10 +538,10 @@
 
 
 		[Test]
-		public void CalculatorGetState() {
+		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 21; // ;17
-			const int customerID = 351; // 56
+			const long loanID = 17; // ;21
+			const int customerID = 56; //  351
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
@@ -546,87 +549,6 @@
 				Console.WriteLine(nlExceptionInputDataInvalid.Message);
 			}
 			NL_Model model = dbState.Result;
-			// dummy: reset fee payment, check calculator's adding this
-			//var firstOrDefault = model.Loan.Payments.FirstOrDefault();
-			//if (firstOrDefault != null) {
-			//	firstOrDefault.FeePayments = new List<NL_LoanFeePayments>();
-			//}
-			// dummy: remove all exists payment
-			//model.Loan.Payments.Clear();
-			// dummy payment for test - between issue date and the first schedule item
-			DateTime p1date = new DateTime(2015, 12, 23);
-			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 322.50m,
-				CreatedByUserID = 1,
-				CreationTime = p1date,
-				LoanID = model.Loan.LoanID,
-				PaymentTime = p1date,
-				Notes = "dummy payment for test",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-				PaymentID = 13
-			});			
-			// dummy payment for test - between issue date and the first schedule item
-			DateTime p2date = new DateTime(2015, 12, 15);
-			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 304.38m,
-				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
-				LoanID = model.Loan.LoanID,
-				PaymentTime = p2date,
-				Notes = "dummy payment 2 for test",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-				PaymentID = 14
-			});
-			/*DateTime p3date = new DateTime(2015, 12, 18);
-			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 286.25m,
-				CreatedByUserID = 1,
-				CreationTime = p3date,
-				LoanID = model.Loan.LoanID,
-				PaymentTime = p3date,
-				Notes = "dummy payment 2 for test",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-				PaymentID = 15
-			});*/
-			
-			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
-				calc.GetState();
-				this.m_oLog.Debug("============================={0}", calc);
-
-				// old loan
-				/*ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-				var oldLoan = loanRep.Get(model.Loan.OldLoanID);
-				// old calc
-				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
-				oldCalc.GetState();
-				this.m_oLog.Debug("old loan dbState: {0}", oldLoan);
-				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);*/
-
-			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
-			}
-
-			return;
-
-			// add retroactive payment
-			DateTime p4date = new DateTime(2015, 12, 21);
-			model.Loan.Payments.Add(new NL_Payments() {
-				Amount = 266.31m,
-				CreatedByUserID = 1,
-				CreationTime = DateTime.UtcNow,
-				LoanID = model.Loan.LoanID,
-				PaymentTime = p4date,
-				Notes = "retropayment",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Manual,
-				PaymentID = 16
-			});
-	
-			// retroactive payment
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.GetState();
@@ -636,20 +558,19 @@
 			}
 		}
 
-
-
-
 		[Test]
-		public void PayPoiinApiGetAmountToPay() {
+		public void GetLoanStateTest() {
+			DateTime calcTime = DateTime.UtcNow;
+			const long loanID = 17; // ;21
+			const int customerID = 56; //  351
+			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
-				ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-				var loan = loanRep.Get(2070);
-				var facade = new LoanPaymentFacade();
-				var installment = loan.Schedule.FirstOrDefault(s => s.Id == 3773);
-				var state = facade.GetStateAt(loan, DateTime.Now);
-				this.m_oLog.Debug("Amount to charge is: {0}", state.AmountDue);
+				state.Execute();
+				this.m_oLog.Debug("----------------------------------{0}", state.Result);
+			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
+				Console.WriteLine(nlExceptionInputDataInvalid.Message);
 			} catch (Exception ex) {
-				this.m_oLog.Debug(ex);
+				this.m_oLog.Error("{0}", ex.Message);
 			}
 		}
 
@@ -668,7 +589,6 @@
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() {
 				EventTime = now,
-				//AgreementModel = JsonConvert.SerializeObject(agreementModel),
 				InterestRate = oldLoan.InterestRate,
 				RepaymentCount = oldLoan.Schedule.Count,
 				Amount = oldLoan.LoanAmount
@@ -705,34 +625,7 @@
 		}
 
 
-		[Test]
-		public void TestDateInterval() {
-			const long loanID = 17;
-			/*NL_Model model = new NL_Model(56) {
-				UserID = 357,
-				Loan = new NL_Loans()
-			};*/
-			GetLoanState strategy = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
-			strategy.Execute();
-			NL_Model model = strategy.Result;
-			model.Loan.Payments.Clear();
-			try {
-				DateTime calcDate = new DateTime(2015, 10, 25);
-				ALoanCalculator calc = new LegacyLoanCalculator(model);
-				DateTime start = calcDate;
-				DateTime end = new DateTime(2016, 02, 25);
-				int days = end.Subtract(start).Days;
-				this.m_oLog.Debug("total days: {0}", days);
-				var schedule = model.Loan.LastHistory().Schedule;
-				for (int i=0; i <= days; i++) {
-					DateTime theDate = start.AddDays(i);
-					var scheduleItem = schedule.FirstOrDefault(s => theDate.Date >= calc.PreviousScheduleDate(s.PlannedDate.Date, RepaymentIntervalTypes.Month) && theDate.Date <= s.PlannedDate.Date);
-					m_oLog.Debug("theDate: {0}, {1}", theDate, scheduleItem.PlannedDate);
-				}
-			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
-			}
-		}
+		
 
 
 		[Test]
@@ -827,11 +720,22 @@
 
 		[Test]
 		public void AddPAymentTest() {
-			int customerid = 56;
-			long loanID = 17;
-			DateTime pdate = new DateTime(2015, 11, 20);
+			const int customerid = 56;
+			const long loanID = 17;
+			DateTime prebatedate = new DateTime(2015, 10, 25);
 			NL_Payments nlpayment = new NL_Payments() {
-				Amount = 266.31m,
+				Amount = 5m,
+				CreatedByUserID = 357,
+				CreationTime = DateTime.UtcNow,
+				LoanID = loanID,
+				PaymentTime = prebatedate,
+				Notes = "rebate",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Auto
+			};
+			/*DateTime pdate = new DateTime(2015, 11, 20);
+			NL_Payments nlpayment = new NL_Payments() {
+				Amount = 270m,
 				CreatedByUserID = 357,
 				CreationTime = DateTime.UtcNow,
 				LoanID = loanID,
@@ -839,11 +743,127 @@
 				Notes = "retropayment",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-			};
+			};*/
+			/*DateTime p1_date = new DateTime(2015, 12, 17);
+			NL_Payments nlpayment = new NL_Payments() {
+				Amount = 70m,
+				CreatedByUserID = 357,
+				//CreationTime = DateTime.UtcNow,
+				LoanID = loanID,
+				PaymentTime = p1_date,
+				Notes = "retropayment1",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+			};*/
 			try {
 				AddPayment pstrategy = new AddPayment(customerid, nlpayment);
 				pstrategy.Execute();
 				this.m_oLog.Debug(pstrategy.Error);
+			} catch (Exception ex) {
+				this.m_oLog.Debug(ex);
+			}
+		}
+
+		[Test]
+		public void UpdateLoanDBStateTest() {
+			const long loanID = 17;
+			const int customerID = 56;
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(customerID, loanID, 357);
+			reloadLoanDBState.Context.UserID = 357;
+			try {
+				reloadLoanDBState.Execute();
+			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
+				this.m_oLog.Debug(nlExceptionInputDataInvalid);
+			}
+		}
+
+
+		[Test]
+		public void TestDateInterval() {
+			const long loanID = 17;
+			GetLoanState strategy = new GetLoanState(56, loanID, DateTime.UtcNow, 357);
+			strategy.Execute();
+			NL_Model model = strategy.Result;
+			model.Loan.Payments.Clear();
+			try {
+				DateTime calcDate = new DateTime(2015, 10, 25);
+				ALoanCalculator calc = new LegacyLoanCalculator(model);
+				DateTime start = calcDate;
+				DateTime end = new DateTime(2016, 02, 25);
+				int days = end.Subtract(start).Days;
+				this.m_oLog.Debug("total days: {0}", days);
+				var schedule = model.Loan.LastHistory().Schedule;
+				for (int i=0; i <= days; i++) {
+					DateTime theDate = start.AddDays(i);
+					var scheduleItem = schedule.FirstOrDefault(s => theDate.Date >= calc.PreviousScheduleDate(s.PlannedDate.Date, RepaymentIntervalTypes.Month) && theDate.Date <= s.PlannedDate.Date);
+					m_oLog.Debug("theDate: {0}, {1}", theDate, scheduleItem.PlannedDate);
+				}
+			} catch (Exception exception) {
+				this.m_oLog.Error("{0}", exception.Message);
+			}
+		}
+
+		[Test]
+		public void Comparertest() {
+			try {
+			/*	NL_Model m1 = new NL_Model(56);
+				m1.Loan.LoanID = 6;
+				m1.Loan.OfferID = 22;*/
+				NL_Model m2 = new NL_Model(56);
+				m2.Loan.LoanID = 10;
+				m2.Loan.OfferID = 22;
+
+				GetLoanState strategy = new GetLoanState(56, 17, DateTime.UtcNow, 357);
+				strategy.Execute();
+				
+				int propertyCount = typeof(NL_Loans).GetProperties().Length + typeof(NL_Loans).GetMembers().Length + typeof(NL_Loans).GetFields().Length;
+				propertyCount += typeof(NL_Payments).GetProperties().Length;
+				propertyCount += typeof(NL_LoanSchedules).GetProperties().Length;
+				propertyCount += typeof(NL_LoanHistory).GetProperties().Length;
+				propertyCount += typeof(NL_LoanSchedulePayments).GetProperties().Length;
+				propertyCount += typeof(NL_LoanFeePayments).GetProperties().Length;
+
+				//m2.Loan = strategy.Result.Loan;
+				//m2.Loan.Payments.RemoveAt(1);
+
+			/*	CompareLogic advanedComparison = new CompareLogic() {Config = new ComparisonConfig() {MaxDifferences = propertyCount}};
+				List<Difference> diffs = advanedComparison.Compare(strategy.Result.Loan.Payments, m2.Loan.Payments).Differences;
+				foreach (Difference diff in diffs) {
+					this.m_oLog.Debug("Property name: {0}  value1: {1}, value1: {2}, o1={3}, o2={4}" , diff.PropertyName, diff.Object1Value, diff.Object2Value, diff.Object1, diff.Object2);
+				}*/
+
+				CompareLogic advanedComparison1 = new CompareLogic() { Config = new ComparisonConfig() { MaxDifferences = propertyCount } };
+				ComparisonResult result = advanedComparison1.Compare(strategy.Result.Loan.Payments, m2.Loan.Payments);
+				foreach (Difference c in result.Differences) {
+
+					
+
+					this.m_oLog.Debug("{0}  valueA: {1}, valueB: {2}, A={3}, B={4}, child={5}", c.PropertyName, c.Object1Value, c.Object2Value, c.Object1.Target, c.Object2.Target
+						, c.ChildPropertyName);
+
+					//CompareLogic advanedComparison2 = new CompareLogic() { Config = new ComparisonConfig() { MaxDifferences = propertyCount } };
+
+					//ComparisonResult schp = advanedComparison2.Compare(c.Object1, c.Object2);
+
+					//schp.Differences.ForEach(sp => this.m_oLog.Debug("{0}  valueAA: {1}, valueBB: {2}, AA={3}, BB={4}", sp.PropertyName, sp.Object1Value, sp.Object2Value, sp.Object1, sp.Object2.Target));
+				}
+				//result.Differences.ForEach(c => this.m_oLog.Debug("{0}  valueA: {1}, valueB: {2}, A={3}, B={4}", c.PropertyName, c.Object1Value, c.Object2Value, c.Object1, c.Object2.Target));
+
+			} catch (Exception ex) {
+				this.m_oLog.Debug(ex);
+			}
+		}
+
+
+		[Test]
+		public void PayPoiinApiGetAmountToPay() {
+			try {
+				ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+				var loan = loanRep.Get(2070);
+				var facade = new LoanPaymentFacade();
+				var installment = loan.Schedule.FirstOrDefault(s => s.Id == 3773);
+				var state = facade.GetStateAt(loan, DateTime.Now);
+				this.m_oLog.Debug("Amount to charge is: {0}", state.AmountDue);
 			} catch (Exception ex) {
 				this.m_oLog.Debug(ex);
 			}

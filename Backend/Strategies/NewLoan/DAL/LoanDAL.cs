@@ -18,11 +18,7 @@
 
 		public List<NL_LoanHistory> GetLoanHistories(long loanID, DateTime stateDate) {
 			try {
-				return Library.Instance.DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanID", loanID),
-					new QueryParameter("@Now", stateDate)
-				);
+				return Library.Instance.DB.Fill<NL_LoanHistory>("NL_LoanHistoryGet", CommandSpecies.StoredProcedure,new QueryParameter("@LoanID", loanID));
 				// ReSharper disable once CatchAllClause
 			} catch (Exception e) {
 				Library.Instance.Log.Alert("{0}", e.Message);

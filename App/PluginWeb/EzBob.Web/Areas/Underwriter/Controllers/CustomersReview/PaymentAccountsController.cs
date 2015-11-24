@@ -216,7 +216,6 @@
                     Amount = nlModel.Balance,
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = this.context.UserId,
-                    CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
                 f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, nlPayment, DateTime.UtcNow, "system-repay", false, null, this.context.UserId);

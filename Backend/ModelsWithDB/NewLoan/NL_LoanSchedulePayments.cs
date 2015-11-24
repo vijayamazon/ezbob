@@ -1,7 +1,5 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-	using System;
 	using System.Runtime.Serialization;
-	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -28,9 +26,9 @@
 		//[NonTraversable]
 		//public bool NewEntry { get; set; }
 
-		[DataMember]
-		[NonTraversable]
-		public DateTime? PaymentDate { get; set; }
+		//[DataMember]
+		//[NonTraversable]
+		//public DateTime? PaymentDate { get; set; }
 
 
 

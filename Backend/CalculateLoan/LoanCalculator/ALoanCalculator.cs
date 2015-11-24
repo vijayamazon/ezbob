@@ -683,7 +683,7 @@
 						InterestPaid = iAmount,
 						LoanScheduleID = s.LoanScheduleID,
 						PaymentID = payment.PaymentID,
-						PaymentDate = payment.PaymentTime,
+						//PaymentDate = payment.PaymentTime,
 						PrincipalPaid = pAmount
 					};
 
@@ -980,7 +980,7 @@
 
 			item.AmountDueOP = item.Principal - item.PrincipalPaid + item.InterestOP + item.Fees - item.FeesPaid;
 
-			Log.Debug("ScheduleItemOutstandingData \n {0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
+			//Log.Debug("ScheduleItemOutstandingData \n {0}{1}", AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), item.ToStringAsTable());
 		}
 
 		

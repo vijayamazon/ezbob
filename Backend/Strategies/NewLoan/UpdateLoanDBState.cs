@@ -7,6 +7,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
+	using KellermanSoftware.CompareNetObjects;
 	using NHibernate.Linq;
 
 	/// <summary>
@@ -14,23 +15,28 @@
 	/// </summary>
 	public class UpdateLoanDBState : AStrategy {
 
-		public UpdateLoanDBState(NL_Model nlmodel) {
+		public UpdateLoanDBState(int customerID, long loanID, int? userID = null) {
 
-			if (nlmodel.CustomerID == 0) {
+			this.strategyArgs = new object[] { customerID, loanID, userID };
+
+			if (customerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, this.Error, null);
 				return;
 			}
 
-			if (nlmodel.Loan == null || nlmodel.Loan.LoanID == 0) {
+			if (loanID == 0) {
 				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, this.Error, null);
 				return;
 			}
 
-			Model = nlmodel;
+			Model = new NL_Model(customerID);
+			Model.Loan.LoanID = loanID;
+			Context.UserID = userID ?? Context.UserID;
+			Model.UserID = Context.UserID;
 
-			this.strategyArgs = new object[] { nlmodel };
+			this.strategyArgs = new object[] { customerID, loanID, Context.UserID };
 		} // ctor
 
 		public override string Name { get { return "UpdateLoanDBState"; } }
@@ -41,53 +47,128 @@
 
 		private readonly object[] strategyArgs;
 
-
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
+		/// <exception cref="OverflowException">The array is multidimensional and contains more than <see cref="F:System.Int32.MaxValue" /> elements.</exception>
 		public override void Execute() {
 
 			if (!string.IsNullOrEmpty(this.Error)) {
 				throw new NL_ExceptionInputDataInvalid(this.Error);
 			}
 
-			int loanstatusBefore = Model.Loan.LoanStatusID;
+			// get raw DB state of the loan - without calc
+			GetLoanState getLoanState = new GetLoanState(Model.CustomerID, Model.Loan.LoanID, DateTime.UtcNow, Context.UserID, false);
+			getLoanState.Execute();
 
-			NL_AddLog(LogType.Error, "Loan dbState loaded", this.strategyArgs, Model, this.Error, null);
+			// failed to load loan from DB
+			if (!string.IsNullOrEmpty(getLoanState.Error)) {
+				this.Error = getLoanState.Error;
+				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, getLoanState.Error, this.Error, null);
+				return;
+			}
 
-			// get loan dbState updated by calculator
+			//Model = getLoanState.Result;
+
+		//	Log.Debug("NOTRECALUCLATED===================={0}", Model);
+
+			Model = getLoanState.Result;
+
+			// get loan state updated by calculator
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(Model);
 				calc.GetState();
 			} catch (NoInitialDataException noInitialDataException) {
 				this.Error = noInitialDataException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", Model, this.Error, this.Error, null);
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Model, this.Error, null);
 			} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
 				this.Error = invalidInitialInterestRateException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", Model, this.Error, this.Error, null);
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Model, this.Error, null);
 			} catch (NoLoanHistoryException noLoanHistoryException) {
 				this.Error = noLoanHistoryException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", Model, this.Error, this.Error, null);
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Model, this.Error, null);
 			} catch (InvalidInitialAmountException invalidInitialAmountException) {
 				this.Error = invalidInitialAmountException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", Model, this.Error, this.Error, null);
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Model, this.Error, null);
 			} catch (OverflowException overflowException) {
 				this.Error = overflowException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", Model, this.Error, this.Error, null);
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Model, this.Error, null);
+
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", Model, this.Error, this.Error, null);
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Model, this.Error, null);
 			}
 
-			NL_AddLog(LogType.Error, "Calculator's dbState loaded", this.strategyArgs, Model, this.Error, null);
+
+			//Log.Debug("RECALUCLATED===================={0}", updatedModel);
+
+			/*List<Type> classTypesToInclude = new List<Type>();
+			classTypesToInclude.Add(typeof(NL_Loans));
+			classTypesToInclude.Add(typeof(NL_LoanHistory));
+			classTypesToInclude.Add(typeof(NL_Payments));
+			classTypesToInclude.Add(typeof(NL_LoanSchedules));
+			classTypesToInclude.Add(typeof(NL_LoanSchedulePayments));
+			classTypesToInclude.Add(typeof(NL_LoanFeePayments));
+
+			List<string> membersToInclude = new List<string>();
+			membersToInclude.Add("Loan");
+			membersToInclude.Add("Payments");
+			membersToInclude.Add("SchedulePayments");
+			membersToInclude.Add("FeePayments");
+
+			ComparisonConfig compareConf = new ComparisonConfig() {
+				//ClassTypesToInclude = classTypesToInclude, 
+				//IgnoreCollectionOrder = true, 
+				//MaxStructDepth = 6,
+				MaxDifferences = 5000,
+				ShowBreadcrumb = true,
+				MembersToInclude = membersToInclude
+			}; 
+
+			//This is the comparison class
+			CompareLogic compareLogic = new CompareLogic(compareConf);
+	
+			ComparisonResult result = compareLogic.Compare(Model, updatedModel);
+			//if (!result.AreEqual) {
+			Log.Debug("updatedModel==============================={0}", result.DifferencesString);
+			Log.Debug(result.ExceededDifferences);
+			result.Differences.ForEach(d => Log.Debug(d));
+			Log.Debug(result.Config);
+			//}*/
+			
+			/*int propertyCount = typeof(NL_Loans).GetProperties().Length;
+			propertyCount += typeof(NL_Payments).GetProperties().Length;
+			propertyCount += typeof(NL_LoanSchedules).GetProperties().Length;
+			propertyCount += typeof(NL_LoanHistory).GetProperties().Length;
+			propertyCount += typeof(NL_LoanSchedulePayments).GetProperties().Length;
+			propertyCount += typeof(NL_LoanFeePayments).GetProperties().Length;
+
+			CompareLogic advanedComparison = new CompareLogic() {
+				Config = new ComparisonConfig() {
+					MaxDifferences = propertyCount
+				}
+			};
+			List<Difference> diffs = advanedComparison.Compare(Model.Loan, updatedModel.Loan).Differences;
+			foreach (Difference diff in diffs) {
+				Log.Debug("Property name:" + diff.PropertyName);
+				Log.Debug("1 value:" + diff.Object1Value);
+				Log.Debug("2 value:" + diff.Object2Value + "\n");
+			}
+			
+			return;*/
+
+			int loanstatusBefore = Model.Loan.LoanStatusID;
+
+			NL_AddLog(LogType.Info, "Loan state", this.strategyArgs, Model, this.Error, null);
+
+			List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
+			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
+			List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
+			List<BigintList> resetPayments = new List<BigintList>();
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
-
-				List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
-				List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
-				List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
-				List<BigintList> resetPayments = new List<BigintList>();
+				pconn.BeginTransaction();
 
 				// save new history - on rescheduling/rollover
 				foreach (NL_LoanHistory h in Model.Loan.Histories.Where(h => h.LoanHistoryID == 0)) {
@@ -96,19 +177,6 @@
 				}
 
 				Model.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
-
-				// assign payment to loan
-				foreach (NL_Payments p in Model.Loan.Payments) {
-					p.SchedulePayments.Where(sp => sp.LoanSchedulePaymentID == 0)
-						.ForEach(sp => schedulePayments.Add(sp));
-					p.FeePayments.Where(fp => fp.LoanFeePaymentID == 0)
-						.ForEach(fp => feePayments.Add(fp));
-
-					p.FeePayments.Where(fp => fp.LoanFeePaymentID > 0 && fp.Amount == 0).ForEach(fp => resetPayments.Add(new BigintList() { Item = fp.PaymentID }));
-					p.SchedulePayments.Where(sp => sp.LoanSchedulePaymentID > 0 && sp.InterestPaid == 0 && sp.PrincipalPaid == 0).ForEach(fp => resetPayments.Add(new BigintList() { Item = fp.PaymentID }));
-				}
-
-				pconn.BeginTransaction();
 
 				// add new schedules - on rescheduling/rollover
 				DB.ExecuteNonQuery("NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedules.Where(s => s.LoanScheduleID == 0)));
@@ -122,13 +190,29 @@
 							);
 				}
 
+				// assign payment to loan
+				foreach (NL_Payments p in Model.Loan.Payments) {
+					p.SchedulePayments
+						.Where(sp => sp.LoanSchedulePaymentID == 0)
+						.ForEach(sp => schedulePayments.Add(sp));
+					p.FeePayments
+						.Where(fp => fp.LoanFeePaymentID == 0)
+						.ForEach(fp => feePayments.Add(fp));
+
+					p.FeePayments.Where(fp => fp.LoanFeePaymentID > 0 && fp.Amount == 0).ForEach(fp => resetPayments.Add(new BigintList() { Item = fp.PaymentID }));
+					p.SchedulePayments.Where(sp => sp.LoanSchedulePaymentID > 0 && sp.InterestPaid == 0 && sp.PrincipalPaid == 0).ForEach(fp => resetPayments.Add(new BigintList() { Item = fp.PaymentID }));
+				}
+
 				// reset after reordered/cancelled payments - their amounts
-				DB.ExecuteNonQuery("NL_PaidAmountsReset", CommandSpecies.StoredProcedure, DB.CreateTableParameter<BigintList>("PaymentIds", resetPayments));
-				
+				if (resetPayments.Count > 0) {
+					DB.ExecuteNonQuery("NL_PaidAmountsReset", CommandSpecies.StoredProcedure, DB.CreateTableParameter<BigintList>("PaymentIds", resetPayments));
+				}
+
 				// save new schedule payment
 				if (schedulePayments.Count > 0) {
 					DB.ExecuteNonQuery("NL_LoanSchedulePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schedulePayments));
 				}
+
 				// save new fee payments
 				if (feePayments.Count > 0) {
 					DB.ExecuteNonQuery("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));

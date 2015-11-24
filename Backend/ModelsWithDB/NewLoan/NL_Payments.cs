@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 	using System.Text;
 	using DbConstants;
@@ -30,9 +31,14 @@
 		[EnumName(typeof(NLPaymentStatuses))]
 		public int PaymentStatusID { get; set; }
 
-		[DataMember]
-		public DateTime CreationTime { get; set; }
+		private DateTime _createDate = DateTime.UtcNow;
 
+		[DataMember]
+		public DateTime CreationTime {
+			get { return this._createDate; }
+			set { this._createDate = value ; }
+		} 
+	
 		[FK("Security_User", "UserId")]
 		[DataMember]
 		public int CreatedByUserID { get; set; }
@@ -59,8 +65,7 @@
 		private List<NL_PaypointTransactions> _paypointTransactions = new List<NL_PaypointTransactions>();
 		private List<NL_LoanSchedulePayments> _schedulePayments = new List<NL_LoanSchedulePayments>();
 		private List<NL_LoanFeePayments> _feePayments = new List<NL_LoanFeePayments>();
-
-
+		
 		[DataMember]
 		[NonTraversable]
 		[ExcludeFromToString]

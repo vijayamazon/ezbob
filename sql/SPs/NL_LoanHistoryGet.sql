@@ -6,8 +6,7 @@ IF OBJECT_ID('NL_LoanHistoryGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoanHistoryGet
-@LoanID BIGINT,
-@Now DATETIME
+@LoanID BIGINT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -30,6 +29,6 @@ BEGIN
 	FROM
 		NL_LoanHistory h
 	WHERE
-		h.LoanID = @LoanID -- AND (@Now IS NULL OR h.EventTime < @Now)
+		h.LoanID = @LoanID 
 END
 GO
