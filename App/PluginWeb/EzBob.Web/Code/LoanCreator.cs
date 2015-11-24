@@ -230,7 +230,7 @@
 				//log.Debug(nlModel.FundTransfer.ToString());
 				//log.Debug(nlModel.Loan.ToString());
 
-                var nlAddLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel).Value;
+                var nlAddLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				//nlModel.Loan.LoanID = nlAddLoan.Value;
 				//log.Debug(nlAddLoan.Error == "" ? "NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}" : "NewLoan adding: new LoanID {0}, oldLoanID {1}, Error: {2}", nlAddLoan.Value, oldloanID, nlAddLoan.Error);
 

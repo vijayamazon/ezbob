@@ -54,18 +54,9 @@
 			 return stra.Offer;
 		 } // GetLastOffer
 
-
-         public NLLongActionResult AddLoan(int? userID, int? customerID, NL_Model model)
-         {
-             //AddLoan Execute<AddLoan>(model.CustomerID, model.UserID, model);
-             AddLoan strategy;
-             var amd = ExecuteSync(out strategy, customerID, userID, model);
-             return new NLLongActionResult
-             {
-                 Value = strategy.LoanID,
-                 Error = strategy.Error
-             };
-         } // AddLoan
+		 public ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model) {
+			 return Execute<AddLoan>(model.CustomerID, model.UserID, model);
+		 } // AddLoan
 
          public NLLongActionResult AddPayment(int customerID, NL_Payments payment, int userID)
          {
