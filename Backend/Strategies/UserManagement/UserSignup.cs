@@ -37,8 +37,9 @@
 			};
 		} // constructor
 
-		// Create a user for Underwriter
-		public UserSignup(string sEmail, string sPassword, string sRoleName) {
+		// Create a user for Underwriter / investor
+		// branch id: 1 - UW, 2 - Investor
+		public UserSignup(string sEmail, string sPassword, string sRoleName, int branchID) {
 			b_isUW = true;
 
 			m_oResult = null;
@@ -54,7 +55,7 @@
 				SecurityQuestionID = null,
 				SecurityAnswer = null,
 				RoleName = sRoleName,
-				BranchID = 1,
+				BranchID = branchID,
 			};
 		} // constructor
 
@@ -69,28 +70,28 @@
 				m_oData.ValidateEmail(b_isUW);
 				m_oData.ValidateNewPassword();
 
-				int nUserID = 0;
+				UserID = 0;
 
-				m_oSp.ForEachRowSafe((sr, bRowsetStart) => {
+				m_oSp.ForEachRowSafe(ConnectionWrapper, (sr, bRowsetStart) => {
 					if (!sr.ContainsField("UserID"))
 						return ActionResult.Continue;
 
-					nUserID = sr["UserID"];
+					UserID = sr["UserID"];
 					SessionID = sr["SessionID"];
 					OriginID = sr["OriginID"];
 					return ActionResult.SkipAll;
 				});
 
-				if (nUserID == -1) {
+				if (UserID == -1) {
 					Log.Warn("User with email {0} already exists.", m_oData.Email);
 					m_oResult = MembershipCreateStatus.DuplicateEmail;
 				}
-				else if (nUserID == -2) {
+				else if (UserID == -2) {
 					Log.Warn("Could not find role '{0}'.", m_oSp.RoleName);
 					m_oResult = MembershipCreateStatus.ProviderError;
 				}
-				else if (nUserID <= 0) {
-					Log.Alert("CreateWebUser returned unexpected result {0}.", nUserID);
+				else if (UserID <= 0) {
+					Log.Alert("CreateWebUser returned unexpected result {0}.", UserID);
 					m_oResult = MembershipCreateStatus.ProviderError;
 				}
 				else
@@ -106,13 +107,16 @@
 			} // try
 		} // Execute
 
+		public MembershipCreateStatus? Status { get {  return this.m_oResult; } }
 		public string Result {
 			get { return m_oResult.HasValue ? m_oResult.Value.ToString() : string.Empty; } // get
 		} // Result
 
+		public int UserID { get; private set; }
+
 		public int OriginID { get; private set; } // OriginID
 		public int SessionID { get; private set; } // SessionID
-
+		public ConnectionWrapper ConnectionWrapper { get; set; }
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly CreateWebUser m_oSp;

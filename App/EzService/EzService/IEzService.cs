@@ -453,7 +453,7 @@
 		ActionMetaData TransferCashFailed(int customerId);
 
 		[OperationContract]
-		ActionMetaData UnderwriterSignup(string name, Password password, string role);
+		UserSignupActionResult UnderwriterSignup(string name, Password password, string roleName, int branchID);
 
 		[OperationContract]
 		ActionMetaData UpdateConfigurationVariables(int userId);

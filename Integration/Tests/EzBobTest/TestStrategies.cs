@@ -9,6 +9,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
+	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -19,6 +20,7 @@
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -1256,6 +1258,66 @@
 		public void TestGetIncomeSms() {
 			var stra = new GetIncomeSms(null,true);
 			stra.Execute();
+		}
+
+		[Test]
+		public void TestCreateInvestor() {
+			DateTime now = DateTime.UtcNow;
+			
+			var stra = new CreateInvestor(
+				new InvestorModel {
+					Name = "TestInvestor",
+					IsActive = true,
+					Timestamp = now,
+					InvestorTypeID = 1
+				}, 
+				new List<InvestorContactModel> {
+					new InvestorContactModel {
+						Timestamp = now, 
+						IsActive = true, 
+						Email = "stasd+investor1@ezbob.com",
+						Comment = "comment", 
+						IsPrimary = true,
+						LastName = "last", 
+						PersonalName = "personal", 
+						Mobile = "011111111111", 
+						OfficePhone = "02222222222", 
+						Role = "Role"
+					}
+				}, 
+				new List<InvestorBankAccountModel> {
+					new InvestorBankAccountModel{
+						IsActive = true,
+						Timestamp = now,
+						BankAccountName = "aname",
+						BankAccountNumber = "123",
+						BankBranchName = "bname",
+						BankBranchNumber = "456",
+						BankCode = "789",
+						BankCountryID = "UK",
+						BankName = "bank",
+						InvestorAccountTypeID = 1,
+						InvestorBankAccountID = 1,
+						RepaymentKey = "key"
+					},
+					new InvestorBankAccountModel{
+						IsActive = true,
+						Timestamp = now,
+						BankAccountName = "aname",
+						BankAccountNumber = "123",
+						BankBranchName = "bname",
+						BankBranchNumber = "456",
+						BankCode = "789",
+						BankCountryID = "UK",
+						BankName = "bank",
+						InvestorAccountTypeID = 1,
+						InvestorBankAccountID = 1,
+						RepaymentKey = "key"
+					}
+				});
+			stra.Execute();
+
+			Assert.IsTrue(stra.Result);
 		}
 	}
 }

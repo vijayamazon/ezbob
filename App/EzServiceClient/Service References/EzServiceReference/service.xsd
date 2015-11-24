@@ -1824,14 +1824,15 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
         <xs:element xmlns:q155="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="password" nillable="true" type="q155:Password" />
-        <xs:element minOccurs="0" name="role" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roleName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="branchID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UnderwriterSignupResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q156="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="UnderwriterSignupResult" nillable="true" type="q156:ActionMetaData" />
+        <xs:element xmlns:q156="http://schemas.datacontract.org/2004/07/EzService.ActionResults" minOccurs="0" name="UnderwriterSignupResult" nillable="true" type="q156:UserSignupActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

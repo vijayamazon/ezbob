@@ -351,7 +351,7 @@
 				return;
 			}
 
-			this.serviceClient.UnderwriterSignup(this.cmdLineArgs[1], new Password(this.cmdLineArgs[2]), this.cmdLineArgs[3]);
+			this.serviceClient.UnderwriterSignup(this.cmdLineArgs[1], new Password(this.cmdLineArgs[2]), this.cmdLineArgs[3], 1);
 		}
 
 		[Activation]

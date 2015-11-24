@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Backend.Models;
+	using EzService.ActionResults;
 
 	partial class EzServiceImplementation {
 		public UserLoginActionResult CustomerSignup(
@@ -28,8 +29,14 @@
 			};
 		} // CustomerSignup
 
-		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
-			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
+		public UserSignupActionResult UnderwriterSignup(string name, Password password, string roleName, int branchID) {
+			UserSignup strategy;
+			var metadata = ExecuteSync<UserSignup>(out strategy, null, null, name, password.Primary, roleName, branchID);
+			return new UserSignupActionResult {
+				MetaData = metadata,
+				Status = strategy.Result,
+				UserID = strategy.UserID
+			};
 		} // UnderwriterSignup
 
 		public UserLoginActionResult UserLogin(
