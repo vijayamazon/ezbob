@@ -1,4 +1,8 @@
 
+IF OBJECT_ID('NL_PaidAmountsReset') IS NOT NULL
+	EXECUTE('DROP PROCEDURE NL_PaidAmountsReset')
+GO
+
 IF TYPE_ID('BigintList') IS NOT NULL
 	DROP TYPE BigintList;
 GO
@@ -8,9 +12,6 @@ CREATE TYPE [dbo].[BigintList] AS TABLE(
 );
 GO
 
-IF OBJECT_ID('NL_PaidAmountsReset') IS NOT NULL
-	EXECUTE('DROP PROCEDURE NL_PaidAmountsReset')
-GO
 
 
 IF OBJECT_ID('NL_PaidAmountsReset') IS NULL

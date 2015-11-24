@@ -825,7 +825,29 @@
 			}
 		}
 
-
+		[Test]
+		public void AddPAymentTest() {
+			int customerid = 56;
+			long loanID = 17;
+			DateTime pdate = new DateTime(2015, 11, 20);
+			NL_Payments nlpayment = new NL_Payments() {
+				Amount = 266.31m,
+				CreatedByUserID = 357,
+				CreationTime = DateTime.UtcNow,
+				LoanID = loanID,
+				PaymentTime = pdate,
+				Notes = "retropayment",
+				PaymentStatusID = (int)NLPaymentStatuses.Active,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+			};
+			try {
+				AddPayment pstrategy = new AddPayment(customerid, nlpayment);
+				pstrategy.Execute();
+				this.m_oLog.Debug(pstrategy.Error);
+			} catch (Exception ex) {
+				this.m_oLog.Debug(ex);
+			}
+		}
 
 	} // class TestNewLoan
 } // namespace
