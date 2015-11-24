@@ -2391,3 +2391,11 @@ input[type="text"].err-field-red {
 #payment-form input[type="text"] {
 	margin-bottom: 0;
 }
+
+#MainStrategyIsInProgress {
+	font-weight: bold;
+	font-size: 90%;
+	display: inline-block;
+	margin: 0 20px 0 5px;
+	color: red;
+}

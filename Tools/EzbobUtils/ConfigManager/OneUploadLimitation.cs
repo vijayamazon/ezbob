@@ -152,6 +152,9 @@
 		private readonly SortedSet<string> m_oMimeTypesFromExtensions;
 
 		private bool Contains(string sMimeType) {
+			if (string.IsNullOrWhiteSpace(sMimeType))
+				return false;
+
 			if (MimeTypes.Contains(sMimeType) || m_oMimeTypesFromExtensions.Contains(sMimeType))
 				return true;
 
