@@ -1,13 +1,16 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
+	using Ezbob.Database;
 
 	public class AcceptRollover : AStrategy {
 
 
-		public AcceptRollover(int customerID, long loanID) {
+		public AcceptRollover(int customerID, long loanID, NL_LoanFees rolloverFee = null) {
 
 			/*if (Context.CustomerID == null || Context.CustomerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
@@ -20,7 +23,7 @@
 
 			this.strategyArgs = new object[] { CustomerID, Context.UserID };*/
 
-			this.strategyArgs = new object[] { customerID, loanID };
+			this.strategyArgs = new object[] { customerID, loanID, rolloverFee };
 
 			if (customerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
@@ -36,8 +39,9 @@
 
 			CustomerID = customerID;
 			LoanID = loanID;
+			fee = rolloverFee;
 
-			this.strategyArgs = new object[] { customerID, loanID };
+			this.strategyArgs = new object[] { customerID, loanID, rolloverFee };
 
 		}
 
@@ -51,6 +55,7 @@
 		private readonly object[] strategyArgs;
 
 		private ALoanCalculator calc;
+		public NL_LoanFees fee { get; private set; }
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		public override void Execute() {
@@ -77,6 +82,15 @@
 			*/
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, null, this.Error, null);
+
+			if (fee != null) {
+
+				// insert fees
+				List<NL_LoanFees> fList = new List<NL_LoanFees>();
+				fList.Add(fee);
+
+				//DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", fList));
+			}
 
 			GetLoanState stateStrategy = new GetLoanState(CustomerID, LoanID, DateTime.UtcNow, CustomerID);
 			stateStrategy.Execute();

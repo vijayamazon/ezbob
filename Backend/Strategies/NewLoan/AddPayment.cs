@@ -26,7 +26,6 @@
 			}
 
 			CustomerID = customerID;
-
 			Payment = payment;
 
 			this.strategyArgs = new object[] { CustomerID, Payment };
@@ -35,7 +34,7 @@
 		public override string Name { get { return "AddPayment"; } }
 		public NL_Payments Payment { get; private set; }
 		public int CustomerID { get; private set; }
-
+	
 		public string Error;
 		public long PaymentID { get; private set; }
 
@@ -92,9 +91,9 @@
 				return;
 			}
 
-			// get DB dbState before
+			// get DB State 
 
-			GetLoanState getLoanState = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow);
+			GetLoanState getLoanState = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow, Context.UserID, false);
 			getLoanState.Execute();
 
 			// failed to load loan from DB
@@ -104,7 +103,7 @@
 				return;
 			}
 
-			// save new recalculated loan state to DB
+			// recalculate state by calculator + save new state to DB
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(getLoanState.Result);
 			reloadLoanDBState.Context.CustomerID = CustomerID;
 			reloadLoanDBState.Context.UserID = Context.UserID;

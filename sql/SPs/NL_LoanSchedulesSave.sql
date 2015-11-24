@@ -16,7 +16,9 @@ CREATE TYPE NL_LoanSchedulesList AS TABLE (
 	[PlannedDate] DATETIME NOT NULL,
 	[ClosedTime] DATETIME NULL,
 	[Principal] DECIMAL(18, 6) NOT NULL,
-	[InterestRate] DECIMAL(18, 6) NOT NULL		
+	[InterestRate] DECIMAL(18, 6) NOT NULL,
+	[TwoDaysDueMailSent] BIT NOT NULL,
+	[FiveDaysDueMailSent]	BIT NOT NULL
 )
 GO
 
@@ -33,7 +35,9 @@ BEGIN
 		[PlannedDate],
 		[ClosedTime],
 		[Principal],
-		[InterestRate]		
+		[InterestRate],
+		[TwoDaysDueMailSent],
+		[FiveDaysDueMailSent]			
 	) SELECT
 		[LoanHistoryID],
 		[LoanScheduleStatusID],
@@ -41,7 +45,9 @@ BEGIN
 		[PlannedDate],
 		[ClosedTime],
 		[Principal],
-		[InterestRate]	
+		[InterestRate],
+		[TwoDaysDueMailSent],
+		[FiveDaysDueMailSent]				
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

@@ -366,7 +366,7 @@
 
 			decimal interestForPeriod = 0;
 			DateTime rateDate = start.Date;
-			decimal xxx = 0;
+			decimal principalBase = 0;
 
 			//Log.Debug("InterestBtwnEvents: start: {0}, currentEvent: {1}, days: {2}", start, currentEvent, daysDiff);
 
@@ -380,8 +380,8 @@
 					item = currentEvent.ScheduleItem ?? GetScheduleItemForDate(rateDate);
 				}
 				// BalanceBasedInterestCalculation true used from CreateScheduleMethod
-				xxx = ((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal);
-				decimal interest = xxx * dailyInterestRate; //((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal) * dailyInterestRate;
+				principalBase = ((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal);
+				decimal interest = principalBase * dailyInterestRate; //((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal) * dailyInterestRate;
 
 				interestForPeriod += interest;
 				rateDate = start.AddDays(i);
@@ -389,7 +389,7 @@
 				//Log.Info("InterestBtwnEventsaaa: --------------------rateDate: {0:d} interest: {1:F4} currentOpenPrincipal: {2:C2}, i={3}, dr={4:F6}", rateDate, interest, currentOpenPrincipal, i, Math.Round(interestForPeriod, 4));
 			}
 
-			Log.Debug("InterestBtwnEvents: start={0:s}, currentEvent={1:s}, days={2}, interestForPeriod={3:F4}, open principal/balance={4:F4}", start.Date, currentEvent.EventTime.Date, daysDiff, Math.Round(interestForPeriod, 4), xxx);
+			Log.Debug("InterestBtwnEvents: start={0:s}, currentEvent={1:s}, days={2}, interestForPeriod={3:F4}, open principal/balance={4:F6}", start.Date, currentEvent.EventTime.Date, daysDiff, decimal.Round(interestForPeriod, 6), principalBase);
 
 			return Math.Round(interestForPeriod, 4);
 		}
@@ -706,7 +706,7 @@
 
 			} // foreach
 
-			return decimal.Round(assignAmount, 4);
+			return decimal.Round(assignAmount, 6);
 		}
 
 		/// <summary>
@@ -775,7 +775,7 @@
 				}
 			}
 
-			return decimal.Round(assignAmount, 4);
+			return decimal.Round(assignAmount, 6);
 		}
 
 		/// <summary>

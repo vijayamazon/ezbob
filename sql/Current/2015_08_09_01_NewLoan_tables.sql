@@ -845,7 +845,7 @@ BEGIN
 		CONSTRAINT FK_LoanFeePayments_Fee FOREIGN KEY (LoanFeeID) REFERENCES NL_LoanFees (LoanFeeID),
 		CONSTRAINT FK_LoanFeePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payments (PaymentID),
 		CONSTRAINT UC_LoanFeePayments UNIQUE (LoanFeeID, PaymentID),
-		CONSTRAINT CHK_LoanFeePayments CHECK (Amount > 0)
+		CONSTRAINT CHK_LoanFeePayments CHECK (Amount >= 0)
 	)
 END
 GO
@@ -974,4 +974,14 @@ BEGIN
 		TimeStamp DATETIME NOT NULL		
 	)
 END
+GO
+
+-- TODO remove
+ALTER TABLE [dbo].[NL_LoanFeePayments]  DROP CONSTRAINT [CHK_LoanFeePayments] 
+GO
+
+ALTER TABLE [dbo].[NL_LoanFeePayments]  WITH CHECK ADD  CONSTRAINT [CHK_LoanFeePayments] CHECK  (([Amount]>=(0)))
+GO
+
+ALTER TABLE [dbo].[NL_LoanFeePayments] CHECK CONSTRAINT [CHK_LoanFeePayments]
 GO

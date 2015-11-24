@@ -123,7 +123,7 @@
 				}
 
 				// reset after reordered/cancelled payments - their amounts
-				DB.ExecuteNonQuery("NL_PaidAmountsReset", CommandSpecies.StoredProcedure, DB.CreateTableParameter<BigintList>("Tbl", resetPayments));
+				DB.ExecuteNonQuery("NL_PaidAmountsReset", CommandSpecies.StoredProcedure, DB.CreateTableParameter<BigintList>("PaymentIds", resetPayments));
 				
 				// save new schedule payment
 				if (schedulePayments.Count > 0) {

@@ -1,16 +1,13 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
 	public class SaveRolloverOpportunity : AStrategy {
 
-		public SaveRolloverOpportunity(NL_LoanRollovers r, NL_LoanFees rolloverFee = null) {
-
+		public SaveRolloverOpportunity(NL_LoanRollovers r) {
 			rollover = r;
-			this.strategyArgs = new object[]{r,rolloverFee};
-			fee = rolloverFee;
+			this.strategyArgs = new object[]{r};
 		}
 
 		public override string Name { get { return "SaveRolloverOpportunity"; } }
@@ -19,7 +16,7 @@
 		private readonly object[] strategyArgs;
 		public long RolloverID { get; private set; }
 		public NL_LoanRollovers rollover { get; private set; }
-		public NL_LoanFees fee { get; private set; }
+	
 
 		public override void Execute() {
 
@@ -33,17 +30,8 @@
 
 				pconn.BeginTransaction();
 
-
 				rollover.LoanRolloverID = DB.ExecuteScalar<long>("NL_LoanRolloversSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanRollovers>("Tbl", rollover));
 				RolloverID = rollover.LoanRolloverID;
-
-				if (fee != null) {
-					// insert fees
-					List<NL_LoanFees> fList = new List<NL_LoanFees>();
-					fList.Add(fee);
-
-					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", fList));
-				}
 
 			} catch (Exception ex) {
 
