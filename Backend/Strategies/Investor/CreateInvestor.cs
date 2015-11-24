@@ -63,10 +63,10 @@
 						Role = contact.Role
 					};
 
-					int contactID = DB.ExecuteScalar<int>(con, "I_InvestorContactSave", CommandSpecies.StoredProcedure,
+					int contactsCount = DB.ExecuteScalar<int>(con, "I_InvestorContactSave", CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<I_InvestorContact>("Tbl", new List<I_InvestorContact> { dbContact }));
 
-					if (contactID == 0) {
+					if (contactsCount != 1) {
 						throw new StrategyWarning(this, "Failed creating investor contact");
 					}
 				}

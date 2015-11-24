@@ -5,7 +5,7 @@
 
     [DataContract(IsReference = true)]
 	public class I_InvestorContact {
-        [PK(true)]
+		//[PK] not identity 
         [DataMember]
 		public int InvestorContactID { get; set; }
 

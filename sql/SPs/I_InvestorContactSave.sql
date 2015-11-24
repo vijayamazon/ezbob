@@ -10,6 +10,7 @@ IF TYPE_ID('I_InvestorContactList') IS NOT NULL
 GO
 
 CREATE TYPE I_InvestorContactList AS TABLE (
+	[InvestorContactID] INT NOT NULL,
 	[InvestorID] INT NOT NULL,
 	[PersonalName] NVARCHAR(255) NULL,
 	[LastName] NVARCHAR(255) NULL,
@@ -31,6 +32,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO I_InvestorContact (
+		[InvestorContactID],
 		[InvestorID],
 		[PersonalName],
 		[LastName],
@@ -43,6 +45,7 @@ BEGIN
 		[IsActive],
 		[Timestamp]
 	) SELECT
+		[InvestorContactID],
 		[InvestorID],
 		[PersonalName],
 		[LastName],
@@ -56,9 +59,7 @@ BEGIN
 		[Timestamp]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
-	SELECT @ScopeID AS ScopeID
+	SELECT count(*) AS AddedRows FROM @Tbl
 END
 GO
-
 

@@ -21,8 +21,8 @@
 				x.For<ISalesForceAppClient>().Use<SalesForceApiClient>();
 			});
 
-			this.client = GetSandboxDevClient();
-			//this.client = GetSandboxClient();
+			//this.client = GetSandboxDevClient();
+			this.client = GetSandboxClient();
 			//this.client = GetProdClient();
 			//this.client = GetFakeClient();
 		}
@@ -159,8 +159,8 @@
 			//Sandbox
 			return ObjectFactory
 				.With("userName").EqualTo("yarons@ezbob.com.sandbox")
-				.With("password").EqualTo("yaron1357")
-				.With("token").EqualTo("9bliHbTtvOpiwN5TB2Ap0UBH2")
+				.With("password").EqualTo("yaron13571")
+				.With("token").EqualTo("r81celQfGbxgsUhJi4qq0CoK")
 				.With("environment").EqualTo("Sandbox")
 				.GetInstance<ISalesForceAppClient>();
 		}
