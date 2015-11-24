@@ -229,7 +229,7 @@
 			private readonly ServiceLogWriter writer;
 		} // class SpSaveServiceLogEntry
 
-		private class SpSaveExperianHistory : AStoredProcedure {
+		private class SpSaveExperianHistory : AStoredProc {
 			public SpSaveExperianHistory(ServiceLogWriter writer) : base(writer.DB, writer.Log) {
 				this.doSave = false;
 
