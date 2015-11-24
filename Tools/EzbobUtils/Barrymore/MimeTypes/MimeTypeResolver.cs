@@ -586,7 +586,10 @@
 
 		public MimeType Find(string sMimeType) {
 			MimeType oType = null;
-			ms_oMimeTypeMap.TryGetValue(sMimeType, out oType);
+
+			if (!string.IsNullOrWhiteSpace(sMimeType))
+				ms_oMimeTypeMap.TryGetValue(sMimeType, out oType);
+
 			return oType;
 		} // Find
 

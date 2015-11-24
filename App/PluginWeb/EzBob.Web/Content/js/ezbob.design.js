@@ -1465,7 +1465,8 @@ EzBob.validatemanualPaymentForm = function(el, outstandingBbalance) {
 			totalSumPaid: {
 				autonumericMax: 'Warning! <br /> Please pay attention that you are trying to enter greater than Outstanding amount relevant for the date of placed payment' +
 								 'In case the customer made a Bank Transfer in an amount which is higher than £' + outstandingBbalance +
-								 '.<br />Please, communicate the client and make access funds return after EZBOB LTD access transactions costs deduction.'
+								 '.<br />Please, communicate the client and make access funds return after EZBOB LTD access transactions costs deduction.' +
+								 ' Then submit to the system only the actual for the day of payment amount.'
 			}
 		}//,
 		//errorPlacement: EzBob.Validation.errorPlacement,

@@ -4,11 +4,13 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Backfill;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.ManualDecision;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using EzBob.Backend.Models;
+	using EzService.ActionResults;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData BackfillAml() {
@@ -291,5 +293,37 @@
 			return Execute<GetIncomeSms>(null, null, date, isYesterday);
 		} // GetIncomeSms
 
+		public ApplicationInfoResult LoadApplicationInfo(
+			int? underwriterID,
+			int customerID,
+			long? cashRequestID,
+			DateTime? now
+		) {
+			LoadApplicationInfo instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, underwriterID, customerID, cashRequestID, now);
+
+			return new ApplicationInfoResult {
+				MetaData = amd,
+				Model = instance.Result,
+			};
+		} // LoadApplicationInfo
+
+		public StringStringMapActionResult SetManualDecision(DecisionModel model) {
+			ApplyManualDecision instance;
+
+			int? customerID = (model != null) ? model.customerID : (int?)null;
+			int? underwriterID = (model != null) ? model.underwriterID : (int?)null;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, underwriterID, model);
+
+			return new StringStringMapActionResult {
+				MetaData = amd,
+				Map = new SortedDictionary<string, string> {
+					{ "error", instance.Error },
+					{ "warning", instance.Warning },
+				},
+			};
+		} // SetManualDecision
 	} // class EzServiceImplementation
 } // namespace EzService

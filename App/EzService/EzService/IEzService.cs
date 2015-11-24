@@ -25,6 +25,7 @@
 	{
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
+
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
 
@@ -576,5 +577,11 @@
 
 		[OperationContract]
 		ActionMetaData GetIncomeSms(DateTime? date, bool isYesterday);
+
+		[OperationContract]
+		ApplicationInfoResult LoadApplicationInfo(int? underwriterID, int customerID, long? cashRequestID, DateTime? now);
+
+		[OperationContract]
+		StringStringMapActionResult SetManualDecision(DecisionModel model);
 	} // interface IEzService
 } // namespace EzService

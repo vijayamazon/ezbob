@@ -13,7 +13,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using Ezbob.Database;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
-	using EZBob.DatabaseLib.Repository.Turnover;
 	using StructureMap;
 
 	using ThisLibrary = Ezbob.Models.Library;
@@ -257,8 +256,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			if (av != null) {
 				foreach (var info in av) {
 					if (info != null && !string.IsNullOrEmpty(info.ParameterName)) {
-						var val = info.ParameterName.Replace(" ", "")
-							.Replace("%", "") + info.TimePeriod;
+						var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
 						string temp;
 						data.TryGetValue(val, out temp);
 						if (temp == null) {

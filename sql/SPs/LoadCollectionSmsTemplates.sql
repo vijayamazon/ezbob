@@ -12,7 +12,7 @@ GO
 ALTER PROCEDURE LoadCollectionSmsTemplates
 AS
 BEGIN
-	SELECT CollectionSmsTemplateID, Type, IsActive, OriginID, Template
-    FROM CollectionSmsTemplate
+	SELECT CollectionSmsTemplateID, Type, IsActive, OriginID, Template 
+    FROM CollectionSmsTemplate where IsActive=1
 END    
 GO

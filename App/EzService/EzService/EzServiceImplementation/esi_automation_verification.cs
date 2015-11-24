@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Backend.Strategies.AutomationVerification.Recalculate;
 	using Ezbob.Backend.Strategies.Tasks;
 
 	partial class EzServiceImplementation {
@@ -42,5 +43,9 @@
 		public ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime) {
 			return Execute<Bar>(null, null, startTime, endTime);
 		} // BravoAutomationReport
+
+		public ActionMetaData RecalculateAutoRejectOnFirstDecision() {
+			return Execute<RecalculateAutoRejectOnFirstDecision>(null, null);
+		} // RecalculateAutoRejectOnFirstDecision
 	} // class EzServiceImplementation
 } // namespace

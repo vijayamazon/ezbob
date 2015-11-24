@@ -192,3 +192,7 @@
 .main-page-everline .director-container .accordion-inner .form_field_container .input-wrapper .form_field_left_side {
 	width: 100% !important;
 }
+
+.form_field_container input[readonly="readonly"] {
+	color: #A6A6A6;
+}

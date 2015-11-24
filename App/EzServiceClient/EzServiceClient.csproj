@@ -74,6 +74,9 @@
     <None Include="Service References\EzServiceReference\EchoSignLib.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ApplicationInfo.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -110,9 +113,6 @@
     <None Include="Service References\EzServiceReference\EzService.ActionResults.Investor.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzService.ActionResults.Investor1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -122,10 +122,10 @@
     <None Include="Service References\EzServiceReference\SalesForceLib.Models.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\service.wsdl" />
     <None Include="Service References\EzServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\service1.wsdl" />
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -139,6 +139,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ApplicationInfoResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AvailableFundsActionResult.datasource">

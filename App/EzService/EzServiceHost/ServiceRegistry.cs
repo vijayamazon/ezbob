@@ -26,6 +26,7 @@
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
+			For<ICardInfoRepository>().Use<CardInfoRepository>();
 		
 			For<ICustomerRepository>().Use<CustomerRepository>();
 			For<ILoanTypeRepository>().Use<LoanTypeRepository>();

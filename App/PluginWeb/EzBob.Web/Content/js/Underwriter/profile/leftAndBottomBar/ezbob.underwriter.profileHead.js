@@ -297,68 +297,88 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	},
 
 	changeDecisionButtonsState: function(isHideAll) {
-		var creditResult = this.personalModel.get("CreditResult");
-
-		this.$el.find(
-	        "#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn"
-        ).toggleClass("disabled", !this.personalModel.get("IsCustomerInEnabledStatus"));
+		var creditResult = this.personalModel.get('CreditResult');
 
 		if (isHideAll)
-			this.$el.find("#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide();
+			this.$el.find('#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn').hide();
+
+		var inProgress = this.$el.find('#MainStrategyIsInProgress');
+
+		if (creditResult === '')
+			inProgress.show();
+		else
+			inProgress.hide();
 
 		switch (creditResult) {
-			case "WaitingForDecision":
-				this.$el.find("#ReturnBtn").hide();
-				this.$el.find("#RejectBtn").show();
-				this.$el.find("#ApproveBtn").show();
-				this.$el.find("#SuspendBtn").show();
-				this.$el.find("#SignatureBtn").show();
-				this.$el.find("#newCreditLineButtonId").addClass("disabled");
-				//if (!escalatedFlag) {this.$el.find("#EscalateBtn").show();}
+			case '':
+				this.$el.find('#ReturnBtn').hide();
+				this.$el.find('#RejectBtn').hide();
+				this.$el.find('#ApproveBtn').hide();
+				this.$el.find('#SuspendBtn').hide();
+				this.$el.find('#SignatureBtn').hide();
+				this.$el.find('#EscalateBtn').hide();
+				this.$el.find('#newCreditLineButtonId').addClass('disabled');
 				break;
 
-			case "Rejected":
-			case "Approved":
-			case "Late":
-				this.$el.find("#ReturnBtn").hide();
-				this.$el.find("#RejectBtn").hide();
-				this.$el.find("#ApproveBtn").hide();
-				this.$el.find("#SuspendBtn").hide();
-				this.$el.find("#SignatureBtn").hide();
-				this.$el.find("#EscalateBtn").hide();
-				this.$el.find("#newCreditLineButtonId").removeClass("disabled");
+			case 'WaitingForDecision':
+				this.$el.find('#ReturnBtn').hide();
+				this.$el.find('#RejectBtn').show();
+				this.$el.find('#ApproveBtn').show();
+				this.$el.find('#SuspendBtn').show();
+				this.$el.find('#SignatureBtn').show();
+				this.$el.find('#newCreditLineButtonId').addClass('disabled');
+				//if (!escalatedFlag) this.$el.find('#EscalateBtn').show();
 				break;
 
-			case "Escalated":
-				this.$el.find("#ReturnBtn").hide();
-				this.$el.find("#RejectBtn").show();
-				this.$el.find("#ApproveBtn").show();
-				this.$el.find("#SuspendBtn").show();
-				this.$el.find("#SignatureBtn").show();
-				this.$el.find("#EscalateBtn").hide();
-				this.$el.find("#newCreditLineButtonId").addClass("disabled");
+			case 'Rejected':
+			case 'Approved':
+			case 'Late':
+				this.$el.find('#ReturnBtn').hide();
+				this.$el.find('#RejectBtn').hide();
+				this.$el.find('#ApproveBtn').hide();
+				this.$el.find('#SuspendBtn').hide();
+				this.$el.find('#SignatureBtn').hide();
+				this.$el.find('#EscalateBtn').hide();
+				this.$el.find('#newCreditLineButtonId').removeClass('disabled');
 				break;
 
-			case "ApprovedPending":
-				this.$el.find("#ReturnBtn").show();
-				this.$el.find("#RejectBtn").hide();
-				this.$el.find("#ApproveBtn").hide();
-				this.$el.find("#SuspendBtn").hide();
-				this.$el.find("#SignatureBtn").hide();
-				this.$el.find("#EscalateBtn").hide();
-				this.$el.find("#newCreditLineButtonId").addClass("disabled");
+			case 'Escalated':
+				this.$el.find('#ReturnBtn').hide();
+				this.$el.find('#RejectBtn').show();
+				this.$el.find('#ApproveBtn').show();
+				this.$el.find('#SuspendBtn').show();
+				this.$el.find('#SignatureBtn').show();
+				this.$el.find('#EscalateBtn').hide();
+				this.$el.find('#newCreditLineButtonId').addClass('disabled');
+				break;
+
+			case 'ApprovedPending':
+				this.$el.find('#ReturnBtn').show();
+				this.$el.find('#RejectBtn').hide();
+				this.$el.find('#ApproveBtn').hide();
+				this.$el.find('#SuspendBtn').hide();
+				this.$el.find('#SignatureBtn').hide();
+				this.$el.find('#EscalateBtn').hide();
+				this.$el.find('#newCreditLineButtonId').addClass('disabled');
 				break;
 		} // switch
 
-		if (this.personalModel.get("UserStatus") === 'Registered') {
-			this.$el.find("#ReturnBtn").hide();
-			this.$el.find("#RejectBtn").hide();
-			this.$el.find("#ApproveBtn").hide();
-			this.$el.find("#SuspendBtn").hide();
-			this.$el.find("#SignatureBtn").hide();
-			this.$el.find("#EscalateBtn").hide();
-		}
-	},
+		if (this.personalModel.get('UserStatus') === 'Registered') {
+			this.$el.find('#ReturnBtn').hide();
+			this.$el.find('#RejectBtn').hide();
+			this.$el.find('#ApproveBtn').hide();
+			this.$el.find('#SuspendBtn').hide();
+			this.$el.find('#SignatureBtn').hide();
+			this.$el.find('#EscalateBtn').hide();
+		} // if
+
+		if (!this.personalModel.get('IsCustomerInEnabledStatus')) {
+			this.$el.find(
+				'#SuspendBtn, #SignatureBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn, #newCreditLineButtonId'
+			).addClass('disabled');
+		} // if
+	}, // changeDecisionButtonsState
+
 	drawDonut: function(canvasId, fillColor, fillPercent, isClock) {
 		var canvas = document.getElementById(canvasId);
 		if (!canvas) return false;

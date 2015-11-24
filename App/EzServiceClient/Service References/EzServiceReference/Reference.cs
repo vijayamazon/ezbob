@@ -209,6 +209,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringStringMapActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MarketplacesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult))]
@@ -224,7 +225,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringStringMapActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EsignatureFileActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EsignatureListActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult))]
@@ -232,6 +232,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserSignupActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ApplicationInfoResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorTypesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
@@ -1189,6 +1190,29 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StringStringMapActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class StringStringMapActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<string, string> MapField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<string, string> Map {
+            get {
+                return this.MapField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MapField, value) != true)) {
+                    this.MapField = value;
+                    this.RaisePropertyChanged("Map");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MarketplacesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class MarketplacesActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -1662,29 +1686,6 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="StringStringMapActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class StringStringMapActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<string, string> MapField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<string, string> Map {
-            get {
-                return this.MapField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MapField, value) != true)) {
-                    this.MapField = value;
-                    this.RaisePropertyChanged("Map");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EsignatureFileActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class EsignatureFileActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -1903,6 +1904,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.UserIDField.Equals(value) != true)) {
                     this.UserIDField = value;
                     this.RaisePropertyChanged("UserID");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ApplicationInfoResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class ApplicationInfoResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel ModelField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel Model {
+            get {
+                return this.ModelField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ModelField, value) != true)) {
+                    this.ModelField = value;
+                    this.RaisePropertyChanged("Model");
                 }
             }
         }
@@ -3626,6 +3650,47 @@ namespace ServiceClientProxy.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CreditResultStatus", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
+    public enum CreditResultStatus : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WaitingForDecision = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Escalated = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Rejected = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Approved = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CustomerRefused = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ApprovedPending = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Active = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Collection = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Legal = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PaidOff = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WrittenOff = 10,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Late = 11,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Medal", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
     public enum Medal : int {
         
@@ -3847,6 +3912,16 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "", ReplyAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData RecalculateAutoRejectOnFirstDecision();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "", ReplyAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
+            "Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RecalculateAutoRejectOnFirstDecisionAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerAcceptTermsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
@@ -4692,6 +4767,18 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetIncomeSms", ReplyAction="http://tempuri.org/IEzService/GetIncomeSmsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetIncomeSmsAsync(System.Nullable<System.DateTime> date, bool isYesterday);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadApplicationInfo", ReplyAction="http://tempuri.org/IEzService/LoadApplicationInfoResponse")]
+        ServiceClientProxy.EzServiceReference.ApplicationInfoResult LoadApplicationInfo(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadApplicationInfo", ReplyAction="http://tempuri.org/IEzService/LoadApplicationInfoResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ApplicationInfoResult> LoadApplicationInfoAsync(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetManualDecision", ReplyAction="http://tempuri.org/IEzService/SetManualDecisionResponse")]
+        ServiceClientProxy.EzServiceReference.StringStringMapActionResult SetManualDecision(Ezbob.Backend.Models.DecisionModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetManualDecision", ReplyAction="http://tempuri.org/IEzService/SetManualDecisionResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringStringMapActionResult> SetManualDecisionAsync(Ezbob.Backend.Models.DecisionModel model);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -5300,6 +5387,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
             return base.Channel.BravoAutomationReportAsync(startTime, endTime);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RecalculateAutoRejectOnFirstDecision() {
+            return base.Channel.RecalculateAutoRejectOnFirstDecision();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RecalculateAutoRejectOnFirstDecisionAsync() {
+            return base.Channel.RecalculateAutoRejectOnFirstDecisionAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
@@ -6406,6 +6501,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetIncomeSmsAsync(System.Nullable<System.DateTime> date, bool isYesterday) {
             return base.Channel.GetIncomeSmsAsync(date, isYesterday);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ApplicationInfoResult LoadApplicationInfo(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now) {
+            return base.Channel.LoadApplicationInfo(underwriterID, customerID, cashRequestID, now);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ApplicationInfoResult> LoadApplicationInfoAsync(System.Nullable<int> underwriterID, int customerID, System.Nullable<long> cashRequestID, System.Nullable<System.DateTime> now) {
+            return base.Channel.LoadApplicationInfoAsync(underwriterID, customerID, cashRequestID, now);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringStringMapActionResult SetManualDecision(Ezbob.Backend.Models.DecisionModel model) {
+            return base.Channel.SetManualDecision(model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringStringMapActionResult> SetManualDecisionAsync(Ezbob.Backend.Models.DecisionModel model) {
+            return base.Channel.SetManualDecisionAsync(model);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

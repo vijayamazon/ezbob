@@ -1472,6 +1472,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		} // BackfillDailyLoanStats
 
 		[Activation]
+		private void RecalculateAutoRejectOnFirstDecision() {
+			this.serviceClient.RecalculateAutoRejectOnFirstDecision();
+		} // RecalculateAutoRejectOnFirstDecision
+
+		[Activation]
 		private void GetIncomeSms() {
 			DateTime? date = null;
 

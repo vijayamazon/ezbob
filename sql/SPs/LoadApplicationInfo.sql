@@ -6,12 +6,65 @@ IF OBJECT_ID('LoadApplicationInfo') IS NULL
 GO
 
 ALTER PROCEDURE LoadApplicationInfo
+@CustomerID INT,
 @CashRequestID BIGINT,
 @Now DATETIME
 AS
 BEGIN
-	-- TODO: LoanTypes
-	-- TODO: LoanSources
+	------------------------------------------------------------------------------
+	--
+	-- Helper list: loan sources.
+	--
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType = 'LoanSource',
+		Id = ls.LoanSourceID,
+		Name = ls.LoanSourceName,
+		MaxInterest = ISNULL(ls.MaxInterest, -1),
+		DefaultRepaymentPeriod = ISNULL(ls.DefaultRepaymentPeriod, -1),
+		IsCustomerRepaymentPeriodSelectionAllowed = ISNULL(ls.IsCustomerRepaymentPeriodSelectionAllowed, -1),
+		MaxEmployeeCount = ISNULL(ls.MaxEmployeeCount, -1),
+		MaxAnnualTurnover = ISNULL(ls.MaxAnnualTurnover, -1),
+		IsDefault = ls.IsDefault,
+		AlertOnCustomerReasonType = ISNULL(ls.AlertOnCustomerReasonType, -1)
+	FROM
+		LoanSource ls
+
+	------------------------------------------------------------------------------
+	--
+	-- Helper list: loan types.
+	--
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType = 'LoanType',
+		Id = lt.Id,
+		Name = lt.Name,
+		value = lt.Id,
+		text = lt.Name,
+		RepaymentPeriod = lt.RepaymentPeriod
+	FROM
+		LoanType lt
+
+	------------------------------------------------------------------------------
+	--
+	-- Helper list: discount plans.
+	--
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType = 'DiscountPlan',
+		Id = dp.Id,
+		Name = dp.Name
+	FROM
+		DiscountPlan dp
+
+	------------------------------------------------------------------------------
+	--
+	-- Customer and cash request details - main model content.
+	--
+	------------------------------------------------------------------------------
 
 	;WITH skip_aml AS (
 		SELECT TOP 1
@@ -19,20 +72,19 @@ BEGIN
 			DoNotShowAgain = a.DoNotShowAgain
 		FROM
 			ApprovalsWithoutAML a
-			INNER JOIN CashRequests r
-				ON a.CustomerId = r.IdCustomer
-				AND r.Id = @CashRequestID
+		WHERE
+			a.CustomerId = @CustomerID
 		ORDER BY
 			a.Timestamp DESC
 	), cec AS (
 		SELECT TOP 1
-			CustomerID = c.Id,
+			CustomerID = cc.CustomerId,
 			EmployeeCount = cc.EmployeeCount
 		FROM
 			CompanyEmployeeCount cc
 			INNER JOIN Company co ON cc.CompanyId = co.Id
-			INNER JOIN Customer c ON cc.CustomerId = c.Id AND c.CompanyId = co.Id
-			INNER JOIN CashRequests r ON cc.CustomerId = r.IdCustomer AND r.Id = @CashRequestID
+		WHERE
+			cc.CustomerId = @CustomerID
 		ORDER BY
 			cc.Created DESC
 	), request_reason AS (
@@ -43,13 +95,33 @@ BEGIN
 			OtherReason = LTRIM(RTRIM(ISNULL(crl.OtherReason, '')))
 		FROM
 			CustomerRequestedLoan crl
-			INNER JOIN CashRequests r ON crl.CustomerId = r.IdCustomer AND r.Id = @CashRequestID
 			INNER JOIN CustomerReason cr ON crl.ReasonId = cr.Id
+		WHERE
+			crl.CustomerId = @CustomerID
 		ORDER BY
 			crl.Created DESC
-	)
-	SELECT
-		CustomerID = r.IdCustomer,
+	), first_business_summary AS (
+		SELECT
+			s.SummaryID,
+			Position = ROW_NUMBER() OVER (PARTITION BY s.BusinessID ORDER BY s.CreationDate DESC, s.SummaryID DESC)
+		FROM
+			MP_VatReturnSummary s
+		WHERE
+			s.CustomerID = @CustomerID
+	), value_added_fcf AS (
+		SELECT
+			s.CustomerID,
+			TotalValueAdded = SUM(s.TotalValueAdded),
+			FreeCashFlow = SUM(s.FreeCashFlow)
+		FROM
+			MP_VatReturnSummary s
+			INNER JOIN first_business_summary f ON s.SummaryID = f.SummaryID AND f.Position = 1
+		GROUP BY
+			s.CustomerID
+	) SELECT
+		RowType = 'Model',
+		Id = c.Id,
+		CustomerId = c.Id,
 		CustomerName = c.Fullname,
 		TypeOfBusiness = c.TypeOfBusiness,
 		CustomerRefNum = c.RefNumber,
@@ -57,21 +129,22 @@ BEGIN
 		LoanSource = ls.LoanSourceName,
 		IsTest = c.IsTest,
 		IsOffline = c.IsOffline,
-		YodleeCount = (
+		HasYodlee = CONVERT(BIT, CASE WHEN ISNULL((
 			SELECT COUNT(DISTINCT m.Id)
 			FROM MP_CustomerMarketPlace m
 			INNER JOIN MP_MarketplaceType t ON m.MarketPlaceId = t.Id
-			WHERE m.CustomerId = r.IdCustomer
+			WHERE m.CustomerId = c.Id
 			AND t.InternalId = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
-		),
+		), 0) > 0 THEN 1 ELSE 0 END),
 		IsAvoid = c.AvoidAutomaticDescison,
 		SystemDecision = c.Status,
 		AvailableAmount = ISNULL(c.CreditSum, 0),
 		OfferExpired = CONVERT(BIT, CASE WHEN c.ValidFor <= @Now THEN 1 ELSE 0 END),
 		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending') THEN 1 ELSE 0 END),
-		IsModified = CONVERT(BIT, CASE WHEN ISNULL(r.LoanTemplate, '') != '' THEN 1 ELSE 0 END),
+		IsModified = CONVERT(BIT, CASE WHEN r.Id IS NOT NULL AND ISNULL(r.LoanTemplate, '') != '' THEN 1 ELSE 0 END),
 		DiscountPlan = dp.DiscountPlanName,
 		DiscountPlanPercents = CASE WHEN dp.ValuesStr LIKE '%[1-9]%' THEN '(' + dp.ValuesStr + ')' ELSE '' END,
+		DiscountPlanId = dp.DiscountPlanID,
 		OfferValidForHours = CONVERT(INT, CONVERT(DECIMAL(18, 2), cv.Value)),
 		AMLResult = c.AMLResult,
 		SkipPopupForApprovalWithoutAML = ISNULL(skip_aml.DoNotShowAgain, 0),
@@ -85,24 +158,70 @@ BEGIN
 				ELSE ''
 			END
 		END,
-		CashRequestID = r.Id,
+		CashRequestId = ISNULL(r.Id, 0),
 		CashRequestTimestamp = r.TimestampCounter,
-		InterestRate = r.InterestRate,
+		InterestRate = ISNULL(r.InterestRate, 0),
 		SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0),
-		ManualSetupFeePercent = r.ManualSetupFeePercent,
-		BrokerSetupFeePercent = r.BrokerSetupFeePercent,
-		AllowSendingEmail = CONVERT(BIT, 1 - r.EmailSendingBanned)
+		ManualSetupFeePercent = ISNULL(r.ManualSetupFeePercent, 0),
+		BrokerSetupFeePercent = ISNULL(r.BrokerSetupFeePercent, 0),
+		AllowSendingEmail = CASE WHEN r.Id IS NULL THEN CONVERT(BIT, 0) ELSE CONVERT(BIT, 1 - r.EmailSendingBanned) END,
+		LoanTypeId = lt.LoanTypeID,
+		LoanType = lt.LoanTypeName,
+		OfferStart = ISNULL(r.OfferStart, c.ApplyForLoan),
+		RawOfferStart = r.OfferStart,
+		OfferValidUntil = ISNULL(r.OfferValidUntil, c.ValidFor),
+		RepaymentPeriod = ISNULL(r.RepaymentPeriod, 0),
+		SystemCalculatedAmount = CASE WHEN ISNULL(r.SystemCalculatedSum, 0) > 0.01 THEN ISNULL(r.SystemCalculatedSum, 0) ELSE 0 END,
+		OfferedCreditLine = ISNULL(ISNULL(r.ManagerApprovedSum, r.SystemCalculatedSum), 0),
+		BorrowedAmount = ISNULL((SELECT SUM(LoanAmount) FROM Loan WHERE RequestCashId = r.Id), 0),
+		StartingFromDate = CASE WHEN r.OfferStart IS NULL THEN '' ELSE CONVERT(NVARCHAR, r.OfferStart, 103) END,
+		OfferValidateUntil = CASE WHEN r.OfferValidUntil IS NULL THEN '' ELSE CONVERT(NVARCHAR, r.OfferValidUntil, 103) END,
+		Reason = r.UnderwriterComment,
+		IsLoanTypeSelectionAllowed = ISNULL(r.IsLoanTypeSelectionAllowed, 0),
+		IsCustomerRepaymentPeriodSelectionAllowed = ISNULL(r.IsCustomerRepaymentPeriodSelectionAllowed, 0),
+		AnnualTurnover = ISNULL(r.AnualTurnover, 0),
+		ValueAdded = ISNULL(vf.TotalValueAdded, 0),
+		FreeCashFlow = ISNULL(vf.FreeCashFlow, 0),
+		BrokerID = c.BrokerID,
+		BrokerCardID = (
+			SELECT TOP 1 ci.Id
+			FROM CardInfo ci
+			WHERE ci.BrokerID = c.BrokerID
+			AND ci.IsDefault = 1
+		)
 	FROM
-		CashRequests r
-		INNER JOIN Customer c ON r.IdCustomer = c.Id
+		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
 		INNER JOIN ConfigurationVariables cv ON cv.Name = 'OfferValidForHours'
+		LEFT JOIN CashRequests r ON c.Id = r.IdCustomer AND r.Id = @CashRequestID
 		LEFT JOIN skip_aml ON r.IdCustomer = skip_aml.CustomerID
 		LEFT JOIN cec ON c.Id = cec.CustomerID
 		LEFT JOIN request_reason rr ON c.Id = rr.CustomerID
+		LEFT JOIN value_added_fcf vf ON vf.CustomerID = r.IdCustomer
 		OUTER APPLY dbo.udfGetLoanSource(r.LoanSourceID) ls
 		OUTER APPLY dbo.udfGetDiscountPlan(r.DiscountPlanID) dp
+		OUTER APPLY dbo.udfGetLoanType(r.LoanTypeId) lt
 	WHERE
-		r.Id = @CashRequestID
+		c.Id = @CustomerID
+
+	------------------------------------------------------------------------------
+	--
+	-- Offer calculation.
+	--
+	------------------------------------------------------------------------------
+
+	SELECT TOP 1
+		RowType = 'OfferCalculation',
+		Amount = oc.Amount,
+		InterestRate = oc.InterestRate / 100.0,
+		RepaymentPeriod = oc.Period,
+		SetupFeePercent = oc.SetupFee / 100.0,
+		SetupFeeAmount = oc.Amount / 100.0 * oc.SetupFee
+	FROM
+		OfferCalculations oc
+	WHERE
+		oc.CustomerId = @CustomerID
+		AND
+		oc.IsActive = 1
 END
 GO
