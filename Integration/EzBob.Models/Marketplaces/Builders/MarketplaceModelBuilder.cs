@@ -6,24 +6,26 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using System.Web;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using Ezbob.Database;
-	using Ezbob.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using StructureMap;
 
+	using ThisLibrary = Ezbob.Models.Library;
+
 	public class MarketplaceModelBuilder : IMarketplaceModelBuilder {
 		public MarketplaceModelBuilder(ISession session) {
 			_session = session ?? ObjectFactory.GetInstance<ISession>();
-		}
+		} // constructor
 
 		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history) {
-			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
+			var lastChecked = mp.UpdatingEnd.HasValue
+				? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value)
+				: "never/in progress";
 			var updatingStatus = mp.GetUpdatingStatus(history);
 			var updatingError = mp.GetUpdatingError(history);
 			DateTime? originationDate;
@@ -56,10 +58,16 @@ namespace EzBob.Models.Marketplaces.Builders {
 			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
 			SetAggregationData(model, aggregations);
 
-			var monthSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Month && x.ParameterName == AggregationFunction.Turnover.ToString());
+			var monthSales = aggregations.FirstOrDefault(x =>
+				x.TimePeriod.TimePeriodType == TimePeriodEnum.Month &&
+				x.ParameterName == AggregationFunction.Turnover.ToString()
+			);
 			model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
 
-			var yearSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.Turnover.ToString());
+			var yearSales = aggregations.FirstOrDefault(x =>
+				x.TimePeriod.TimePeriodType == TimePeriodEnum.Year &&
+				x.ParameterName == AggregationFunction.Turnover.ToString()
+			);
 			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
 
 			InitializeSpecificData(mp, model, history);
@@ -76,12 +84,15 @@ namespace EzBob.Models.Marketplaces.Builders {
 				model.TotalNetOutPayments = paymentModel.TotalNetOutPayments;
 				model.TransactionsNumber = paymentModel.TransactionsNumber;
 				model.MonthInPayments = paymentModel.MonthInPayments;
-			}
+			} // if
+
 			return model;
-		}
+		} // Create
 
 		public MarketPlaceDataModel CreateLightModel(MP_CustomerMarketPlace mp, DateTime? history) {
-			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
+			var lastChecked = mp.UpdatingEnd.HasValue
+				? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value)
+				: "never/in progress";
 			var updatingStatus = mp.GetUpdatingStatus(history);
 			var updatingError = mp.GetUpdatingError(history);
 			DateTime? originationDate;
@@ -111,21 +122,27 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
 
-			model.TurnoverTrend = mp.MarketplaceTurnovers
-				.Where(x => x.IsActive)
+			model.TurnoverTrend = 
+				ThisLibrary.Instance.DB.Fill<TurnoverTrend>(
+					"LoadActiveMarketplaceTurnovers",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MpID", mp.Id)
+				)
 				.OrderByDescending(x => x.TheMonth)
 				.Take(12)
-				.Select(x => new TurnoverTrend {
-					TheMonth = x.TheMonth,
-					Turnover = x.Turnover
-				}).ToList();
+				.ToList();
 
-			var monthSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Month && x.ParameterName == AggregationFunction.Turnover.ToString());
+			var monthSales = aggregations.FirstOrDefault(x =>
+				x.TimePeriod.TimePeriodType == TimePeriodEnum.Month &&
+				x.ParameterName == AggregationFunction.Turnover.ToString()
+			);
 			model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
 
-			var yearSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.Turnover.ToString());
+			var yearSales = aggregations.FirstOrDefault(x =>
+				x.TimePeriod.TimePeriodType == TimePeriodEnum.Year &&
+				x.ParameterName == AggregationFunction.Turnover.ToString()
+			);
 			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
-
 
 			var feedbacks = GetFeedbackData(aggregations);
 			model.RaitingPercent = feedbacks.RaitingPercent;
@@ -136,41 +153,55 @@ namespace EzBob.Models.Marketplaces.Builders {
 				model.TotalNetOutPayments = paymentModel.TotalNetOutPayments;
 				model.MonthInPayments = paymentModel.MonthInPayments;
 				model.TransactionsNumber = paymentModel.TransactionsNumber;
-			}
+			} // if
+
 			return model;
-		}
+		} // CreateLightModel
 
 		protected virtual MarketPlaceFeedbackModel GetFeedbackData(List<IAnalysisDataParameterInfo> aggregations) {
 			return new MarketPlaceFeedbackModel();
-		}
+		} // GetFeedbackData
 
 		public string GetAccountAge(MP_CustomerMarketPlace mp, out DateTime? originationDate) {
 			originationDate = UpdateOriginationDate(mp);
-			return originationDate == null
-					   ? "-"
-					   : Convert.ToString(Math.Round((DateTime.UtcNow - originationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
-		}
+
+			return
+				originationDate == null
+					? "-"
+					: Convert.ToString(
+						Math.Round((DateTime.UtcNow - originationDate).Value.TotalDays / 30.0, 1),
+						CultureInfo.InvariantCulture
+					);
+		} // GetAccountAge
 
 		public virtual DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
 			return null;
-		}
+		} // GetLastTransaction
 
 		public DateTime? GetLastTransactionDate(MP_CustomerMarketPlace mp) {
 			DateTime? lastTransactionDate = UpdateLastTransactionDate(mp);
 			return lastTransactionDate;
-		}
+		} // GetLastTransactionDate
 
-		protected virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+		protected virtual PaymentAccountsModel GetPaymentAccountModel(
+			MP_CustomerMarketPlace mp,
+			DateTime? history,
+			List<IAnalysisDataParameterInfo> av
+		) {
 			return null;
-		}
+		} // GetPaymentAccountModel
 
 		public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
 			return null;
-		}
+		} // GetSeniority
 
 		public virtual string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo) {
-			return string.Format("https://www.google.com/search?q={0}+{1}", HttpUtility.UrlEncode(mp.Marketplace.Name), mp.DisplayName);
-		}
+			return string.Format(
+				"https://www.google.com/search?q={0}+{1}",
+				HttpUtility.UrlEncode(mp.Marketplace.Name),
+				mp.DisplayName
+			);
+		} // GetUrl
 
 		public virtual DateTime? UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
 			bool bShouldLastTransactionDateBeUpdated =
@@ -183,33 +214,41 @@ namespace EzBob.Models.Marketplaces.Builders {
 			DateTime? lastTransactionDate = GetLastTransaction(mp);
 			try {
 				if (lastTransactionDate.HasValue) {
-					Library.Instance.DB.ExecuteNonQuery("UpdateMarketPlaceLastTransactionDate", CommandSpecies.StoredProcedure,
+					ThisLibrary.Instance.DB.ExecuteNonQuery(
+						"UpdateMarketPlaceLastTransactionDate",
+						CommandSpecies.StoredProcedure,
 						new QueryParameter("MpID", mp.Id),
-						new QueryParameter("LastTransactionDate", lastTransactionDate));
-				}
+						new QueryParameter("LastTransactionDate", lastTransactionDate)
+					);
+				} // if
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to update LastTransactionDate for mp {0}", mp.Id);
-			}
+			} // try
 
 			return lastTransactionDate;
-		}
+		} // UpdateLastTransactionDate
 
 		public DateTime? UpdateOriginationDate(MP_CustomerMarketPlace mp) {
-			if (mp.OriginationDate.HasValue) {
+			if (mp.OriginationDate.HasValue)
 				return mp.OriginationDate;
-			}
+
 			DateTime? seniority = GetSeniority(mp);
+
 			try {
 				if (seniority.HasValue) {
-					Library.Instance.DB.ExecuteNonQuery("UpdateMarketPlaceOriginationDate", CommandSpecies.StoredProcedure,
-							new QueryParameter("MpID", mp.Id),
-							new QueryParameter("OriginationDate", seniority));
-				}
+					ThisLibrary.Instance.DB.ExecuteNonQuery(
+						"UpdateMarketPlaceOriginationDate",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("MpID", mp.Id),
+						new QueryParameter("OriginationDate", seniority)
+					);
+				} // if
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to update LastTransactionDate for mp {0}", mp.Id);
-			}
+			} // try
+
 			return seniority;
-		}
+		} // UpdateOriginationDate
 
 		public virtual void SetAggregationData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> av) {
 			var data = new Dictionary<string, string>();
@@ -217,8 +256,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			if (av != null) {
 				foreach (var info in av) {
 					if (info != null && !string.IsNullOrEmpty(info.ParameterName)) {
-						var val = info.ParameterName.Replace(" ", "")
-							.Replace("%", "") + info.TimePeriod;
+						var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
 						string temp;
 						data.TryGetValue(val, out temp);
 						if (temp == null) {
@@ -229,12 +267,12 @@ namespace EzBob.Models.Marketplaces.Builders {
 			}
 
 			model.AnalysisDataInfo = data;
-		}
+		} // SetAggregationData
 
 		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
-		}
+		} // InitializeSpecificData
 
 		protected static readonly ASafeLog Log = new SafeILog(typeof(MarketplaceModelBuilder));
 		protected readonly ISession _session;
-	}
-}
+	} // class MarketplaceModelBuilder
+} // namespace

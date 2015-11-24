@@ -79,6 +79,7 @@
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />
     <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="Model\Alibaba\AlibabaBuyer.cs" />
     <Compile Include="Model\Alibaba\AlibabaSentData.cs" />
     <Compile Include="Model\CustomerRelations\FrequentActionItemsForCustomer.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Model\Database\PropertyStatus.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrace.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrail.cs" />
-    <Compile Include="Model\Database\Request\OfferCalculations.cs" />
     <Compile Include="Model\Database\WhatsNewExcludeCustomerOrigin.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\MedalCalculations.cs" />
@@ -404,24 +404,23 @@
     <Compile Include="Repository\PaymentRolloverRepository.cs" />
     <Compile Include="Repository\PostcodeServiceLogRepository.cs" />
     <Compile Include="Repository\ServiceLogRepository.cs" />
-    <Compile Include="Repository\Turnover\MarketplaceTurnover.cs" />
-    <Compile Include="Repository\Turnover\PayPointAggregation.cs" />
-    <Compile Include="Repository\Turnover\SageAggregation.cs" />
-    <Compile Include="Repository\Turnover\FreeAgentAggregation.cs" />
-    <Compile Include="Repository\Turnover\EkmAggregation.cs" />
     <Compile Include="Repository\Turnover\AmazonAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Repository\Turnover\ChannelGrabberAggregation.cs" />
     <Compile Include="Repository\Turnover\EbayAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Repository\Turnover\ChannelGrabberAggregation.cs" />
+    <Compile Include="Repository\Turnover\EkmAggregation.cs" />
+    <Compile Include="Repository\Turnover\FreeAgentAggregation.cs" />
     <Compile Include="Repository\Turnover\HmrcAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Repository\Turnover\PayPalAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Repository\Turnover\PayPointAggregation.cs" />
+    <Compile Include="Repository\Turnover\SageAggregation.cs" />
     <Compile Include="Repository\Turnover\YodleeAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -575,6 +574,14 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
+      <Project>{83a9efc6-0bd4-46fa-9058-329bee135bda}</Project>
+      <Name>LibraryGlobals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>

@@ -506,7 +506,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	}, // onDirectorAdded
 
 	recordRecentCustomers: function(id) {
-		$.post(window.gRootPath + 'Underwriter/Customers/SetRecentCustomer', { id: id }).done(function(recentCustomersModel) {
+		$.post(window.gRootPath + 'Underwriter/CustomerNavigator/SetRecentCustomer', { id: id }).done(function(recentCustomersModel) {
 			localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers));
 		});
 	}, // recordRecentCustomers
@@ -600,7 +600,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		if (this.personalInfoModel.get('IsWarning')) {
 			var approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
 				model: this.personalInfoModel,
-				parent: this
+				parent: this,
 			});
 			EzBob.App.jqmodal.show(approveLoanForWarningStatusCustomer);
 			return false;

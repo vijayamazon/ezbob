@@ -36,6 +36,7 @@
 			Ezbob.Models.Library.Initialize(env, db, log);
 			AutomationCalculator.Library.Initialize(env, db, log);
 			Ezbob.Backend.CalculateLoan.LoanCalculator.Library.Initialize(env, db, log);
+			EZBob.DatabaseLib.Library.Initialize(env, db, log);
 		} // Initialize
 
 		private Library() {} // constructor

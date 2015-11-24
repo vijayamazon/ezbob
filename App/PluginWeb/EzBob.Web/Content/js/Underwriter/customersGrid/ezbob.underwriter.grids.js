@@ -219,7 +219,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 		var self = this;
 
-		$.post(window.gRootPath + 'Underwriter/Customers/AddLogbookEntry', { type: nEntryType, content: sMsg }, 'json')
+		$.post(window.gRootPath + 'Underwriter/LogBook/Add', { type: nEntryType, content: sMsg }, 'json')
 			.done(function(data) {
 				self.handleNewLogbookSaved(data.success, data.msg);
 			}) // on success
@@ -257,7 +257,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 	loadLogbookEntryTypeList: function() {
 		$.getJSON(
-			window.gRootPath + 'Underwriter/Customers/LoadLogbookEntryTypeList',
+			window.gRootPath + 'Underwriter/LogBook/Index',
 			function(data) {
 				var oSelect = $('#logbook-new-entry-type');
 
@@ -396,7 +396,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		else
 			oShowingTest.remove();
 
-		return window.gRootPath + 'Underwriter/Customers/GetGrid' +
+		return window.gRootPath + 'Underwriter/Grids/Load' +
 			'?grid=' + oGridProperties.action +
 			'&includeTestCustomers=' + (bIncludeTest ? 'true' : 'false') +
 			'&includeAllCustomers=' + (bIncludeAll ? 'true' : 'false');

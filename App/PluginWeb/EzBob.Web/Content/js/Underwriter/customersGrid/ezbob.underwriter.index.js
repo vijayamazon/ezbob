@@ -4,7 +4,7 @@
 
 	function updateCounters() {
 		var isTestChecked = $('#include-test-customers:checked').length > 0;
-		var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: isTestChecked });
+		var xhr = $.get(window.gRootPath + 'Underwriter/Grids/GetCounters', { isTest: isTestChecked });
 
 		xhr.done(function(response) {
 			_.each(response, function(val) {

@@ -30,6 +30,8 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
+	using CreditResultStatus = EZBob.DatabaseLib.Model.Database.CreditResultStatus;
+
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
 		private readonly ICustomerRepository _customerRepository;
@@ -37,7 +39,6 @@
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly LoanLimit _limit;
 		private readonly IDiscountPlanRepository _discounts;
-		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
 		private readonly LoanOptionsRepository loanOptionsRepository;
 		private readonly ILoanSourceRepository _loanSources;
@@ -56,7 +57,6 @@
 			ILoanTypeRepository loanTypes,
 			LoanLimit limit,
 			IDiscountPlanRepository discounts,
-			ApplicationInfoModelBuilder infoModelBuilder,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
@@ -72,7 +72,6 @@
 			_loanTypes = loanTypes;
 			_limit = limit;
 			_discounts = discounts;
-			_infoModelBuilder = infoModelBuilder;
 			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
 			_loanSources = loanSources;
 			_users = users;
@@ -91,11 +90,17 @@
 		[HttpGet]
 		public JsonResult Index(int id) {
 			var customer = _customerRepository.Get(id);
-			var m = new ApplicationInfoModel();
 			var cr = customer.LastCashRequest;
-			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
-			return Json(m, JsonRequestBehavior.AllowGet);
-		}
+
+			var aiar = this.serviceClient.Instance.LoadApplicationInfo(
+				this._context.UserId,
+				customer.Id,
+				cr == null ? (long?)null : cr.Id,
+				DateTime.UtcNow
+			);
+
+			return Json(aiar.Model, JsonRequestBehavior.AllowGet);
+		} // Index
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]

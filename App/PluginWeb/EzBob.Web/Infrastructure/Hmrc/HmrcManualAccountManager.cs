@@ -166,7 +166,7 @@
 			} // try
 		} // RemovePeriod
 
-		private Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
+		private static Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
 			sStateError = null;
 
 			var oResult = new Hopper(VatReturnSourceType.Manual);
@@ -414,7 +414,7 @@
 				switch (spExitCode) {
 				case 0:
 					oState.CustomerMarketPlaceID = sr["MpID"];
-					log.Alert(
+					log.Info(
 						"Successfully created uploaded/manual HMRC marketplace {0} for customer {1}.",
 						oState.CustomerMarketPlaceID,
 						oCustomer.Stringify()

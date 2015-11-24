@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
+	using AutomationCalculator;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
@@ -35,21 +36,19 @@
 						break;
 
 					case "HmrcBusinessName":
-						BusinessRelevance br = sr.Fill<BusinessRelevance>();
+						bool? belongsToCustomer = sr["BelongsToCustomer"];
 
-						if (!br.BelongsToCustomer.HasValue) {
-							br.Name = AutomationCalculator.Utils.AdjustCompanyName(br.Name);
-							businessNames.Add(br);
+						if (belongsToCustomer == null) {
+							businessNames.Add(new BusinessRelevance {
+								Name = new NameForComparison(sr["Name"]),
+								BusinessID = sr["BusinessID"],
+							});
 						} // if
 
 						break;
 
 					case "ExperianName":
-						experianFullName = UpdateHmrcBusinessRelevance.Concat(
-							sr["ForeName"],
-							sr["MiddleInitial"],
-							sr["Surname"]
-						);
+						experianFullName = Concat(sr["ForeName"], sr["MiddleInitial"], sr["Surname"]);
 						break;
 					} // switch
 				},
@@ -59,12 +58,24 @@
 				new QueryParameter("Now", this.now)
 			);
 
-			string companyName = AutomationCalculator.Utils.AdjustCompanyName(experianCompanyName);
-			if (companyName == string.Empty)
-				companyName = AutomationCalculator.Utils.AdjustCompanyName(enteredCompanyName);
+			if (businessNames.Count < 1) {
+				Log.Debug(
+					"Not updating HMRC business relevance for customer {0}: no HMRC business found.",
+					this.customerID
+				);
 
-			if ((companyName == string.Empty) || (businessNames.Count < 1))
 				return;
+			} // if
+
+			var companyName = new NameForComparison(experianCompanyName, enteredCompanyName);
+
+			Log.Debug(
+				"Customer {0}: company name '{1}' (adjusted to '{2}') with {3} HMRC business(es).",
+				this.customerID,
+				companyName.RawName,
+				companyName.AdjustedName,
+				businessNames.Count
+			);
 
 			foreach (BusinessRelevance bn in businessNames)
 				bn.SetOtherNameAndBelongs(companyName, experianFullName ?? enteredFullName);
@@ -102,8 +113,8 @@
 			public bool? BelongsToCustomer { get; set; }
 
 			public int BusinessID { get; set; }
-			public string Name { get; set; }
-			public string OtherName { get; set; }
+			public NameForComparison Name { get; set; }
+			public NameForComparison CompanyName { get; set; }
 			public string FullName { get; set; }
 
 			public static Type[] StructToSave() {
@@ -116,19 +127,25 @@
 				};
 			} // StructToSave
 
-			public void SetOtherNameAndBelongs(string companyName, string fullName) {
-				OtherName = companyName;
+			public void SetOtherNameAndBelongs(NameForComparison companyName, string fullName) {
+				CompanyName = companyName;
 				FullName = fullName;
 
-				BelongsToCustomer = !string.IsNullOrWhiteSpace(companyName) && (Name ?? string.Empty).Equals(companyName);
+				BelongsToCustomer = Name.SameAsCompany(CompanyName);
 
-				if (!BelongsToCustomer.Value)
-					BelongsToCustomer = !string.IsNullOrWhiteSpace(fullName) && (Name ?? string.Empty).Equals(fullName);
+				if (BelongsToCustomer.Value)
+					return;
+
+				BelongsToCustomer = Name.SameAsPerson(fullName);
 			} // SetOtherNameAndBelongs
 
 			public object[] ToParameter() {
 				return new object[] {
-					BusinessID, BelongsToCustomer, Name, OtherName, FullName
+					BusinessID,
+					BelongsToCustomer,
+					Name.AdjustedName,
+					CompanyName.AdjustedName,
+					FullName
 				};
 			} // ToParameter
 		} // class BusinessRelevance

@@ -86,6 +86,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
   </wsdl:types>
@@ -190,6 +191,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BravoAutomationReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:BravoAutomationReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RecalculateAutoRejectOnFirstDecision_InputMessage">
+    <wsdl:part name="parameters" element="tns:RecalculateAutoRejectOnFirstDecision" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RecalculateAutoRejectOnFirstDecision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RecalculateAutoRejectOnFirstDecisionResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerAcceptTerms_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerAcceptTerms" />
@@ -1019,6 +1026,24 @@
   <wsdl:message name="IEzService_GetLoanCommissionDefaults_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetLoanCommissionDefaultsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetIncomeSms_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetIncomeSms" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetIncomeSms_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetIncomeSmsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadApplicationInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadApplicationInfo" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadApplicationInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadApplicationInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetManualDecision_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetManualDecision" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetManualDecision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetManualDecisionResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -1600,6 +1625,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport" message="tns:IEzService_BravoAutomationReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse" message="tns:IEzService_BravoAutomationReport_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="RecalculateAutoRejectOnFirstDecision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" message="tns:IEzService_RecalculateAutoRejectOnFirstDecision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecisionResponse" message="tns:IEzService_RecalculateAutoRejectOnFirstDecision_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="BrokerAcceptTerms">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms" message="tns:IEzService_BrokerAcceptTerms_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTermsResponse" message="tns:IEzService_BrokerAcceptTerms_OutputMessage" />
@@ -2152,6 +2181,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetLoanCommissionDefaults" message="tns:IEzService_GetLoanCommissionDefaults_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetLoanCommissionDefaultsResponse" message="tns:IEzService_GetLoanCommissionDefaults_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetIncomeSms">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetIncomeSms" message="tns:IEzService_GetIncomeSms_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetIncomeSmsResponse" message="tns:IEzService_GetIncomeSms_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadApplicationInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadApplicationInfo" message="tns:IEzService_LoadApplicationInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadApplicationInfoResponse" message="tns:IEzService_LoadApplicationInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetManualDecision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetManualDecision" message="tns:IEzService_SetManualDecision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetManualDecisionResponse" message="tns:IEzService_SetManualDecision_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
@@ -2648,6 +2689,15 @@
     </wsdl:operation>
     <wsdl:operation name="BravoAutomationReport">
       <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecalculateAutoRejectOnFirstDecision">
+      <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3897,6 +3947,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetIncomeSms">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetIncomeSms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadApplicationInfo">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadApplicationInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetManualDecision">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SetManualDecision" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
@@ -4665,20 +4742,36 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
+<<<<<<< HEAD
       <soap12:address location="net.tcp://dora:7081/" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://dora:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>DORA\Dor</Upn>
+=======
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>ALEXBO-PC\alexbo</Upn>
+>>>>>>> master
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
+<<<<<<< HEAD
       <soap12:address location="net.tcp://dora:7081/" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://dora:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>DORA\Dor</Upn>
+=======
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>ALEXBO-PC\alexbo</Upn>
+>>>>>>> master
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

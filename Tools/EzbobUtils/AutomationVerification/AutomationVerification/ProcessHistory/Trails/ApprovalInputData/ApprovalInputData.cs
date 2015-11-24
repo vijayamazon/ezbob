@@ -22,7 +22,7 @@
 		public DateTime DataAsOf { get; private set; }
 		public decimal AvailableFunds { get; private set; }
 		public List<Name> DirectorNames { get; set; }
-		public List<string> HmrcBusinessNames { get; set; }
+		public List<NameForComparison> HmrcBusinessNames { get; set; }
 		public decimal Turnover1Y { get { return GetTurnover(12); } }
 		public decimal Turnover3M { get { return GetTurnover(3); } }
 		public List<Payment> LatePayments { get; private set; }
@@ -38,18 +38,18 @@
 		public Name CustomerName { get { return new Name(MetaData.FirstName, MetaData.LastName); } }
 
 		[JsonIgnore]
-		public string CompanyName {
+		public NameForComparison CompanyName {
 			get {
 				if (this.m_bCompanyNameHasValue)
-					return this.m_sCompanyName;
+					return this.companyName;
 
 				this.m_bCompanyNameHasValue = true;
 
-				this.m_sCompanyName = Utils.AdjustCompanyName(MetaData.ExperianCompanyName);
-				if (this.m_sCompanyName == string.Empty)
-					this.m_sCompanyName = Utils.AdjustCompanyName(MetaData.EnteredCompanyName);
+				this.companyName = new NameForComparison(MetaData.ExperianCompanyName);
+				if (this.companyName.AdjustedName == string.Empty)
+					this.companyName = new NameForComparison(MetaData.EnteredCompanyName);
 
-				return this.m_sCompanyName;
+				return this.companyName;
 			} // get
 		} // CompanyName
 
@@ -75,7 +75,7 @@
 			AutoApprovalTurnover oTurnover,
 			AvailableFunds oFunds,
 			List<Name> oDirectorNames,
-			List<string> oHmrcBusinessNames
+			IEnumerable<NameForComparison> oHmrcBusinessNames
 		) {
 			SetDataAsOf(oDataAsOf);
 			SetConfiguration(oCfg);
@@ -134,11 +134,11 @@
 				DirectorNames.AddRange(oDirectorNames.Where(n => !n.IsEmpty));
 		} // SetDirectorNames
 
-		public void SetHmrcBusinessNames(List<string> oHmrcBusinessNames) {
+		public void SetHmrcBusinessNames(IEnumerable<NameForComparison> oHmrcBusinessNames) {
 			HmrcBusinessNames.Clear();
 
 			if (oHmrcBusinessNames != null)
-				HmrcBusinessNames.AddRange(oHmrcBusinessNames.Where(n => n != string.Empty));
+				HmrcBusinessNames.AddRange(oHmrcBusinessNames.Where(n => n.AdjustedName != string.Empty));
 		} // SetHmrcBusinessNames
 
 		public void SetMetaData(MetaData oMetaData) {
@@ -169,7 +169,7 @@
 			LatePayments = new List<Payment>();
 			this.m_oArguments = new Arguments();
 			DirectorNames = new List<Name>();
-			HmrcBusinessNames = new List<string>();
+			HmrcBusinessNames = new List<NameForComparison>();
 
 			DataAsOf = default(DateTime);
 			Configuration = null;
@@ -193,6 +193,6 @@
 		private bool m_bCompanyNameHasValue;
 		private Arguments m_oArguments;
 		private SortedDictionary<int, decimal> turnover;
-		private string m_sCompanyName;
+		private NameForComparison companyName;
 	} // class ApprovalInputData
 } // namespace

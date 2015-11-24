@@ -2,7 +2,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -11,44 +10,36 @@
 	using Web.Models;
 	using NHibernate;
 	using System;
-	using System.Text;
-	using log4net;
+	using Ezbob.Logger;
 
 	public class FullCustomerController : Controller {
-
 		public FullCustomerController(
-			ICustomerRepository customers,
+			ICustomerRepository customerRepo,
 			ISession session,
-			ApplicationInfoModelBuilder infoModelBuilder,
-			WebMarketPlacesFacade marketPlaces,
 			CreditBureauModelBuilder creditBureauModelBuilder,
 			ProfileSummaryModelBuilder summaryModelBuilder,
-			CustomerRelationsRepository customerRelationsRepository,
-			NHibernateRepositoryBase<MP_AlertDocument> docRepo,
-			IBugRepository bugs,
-			LoanRepository loanRepository,
-			PropertiesModelBuilder propertiesModelBuilder) {
-			this._customers = customers;
-            this._session = session;
-            this._infoModelBuilder = infoModelBuilder;
-            this._marketPlaces = marketPlaces;
-            this._creditBureauModelBuilder = creditBureauModelBuilder;
-            this._summaryModelBuilder = summaryModelBuilder;
-            this._customerRelationsRepository = customerRelationsRepository;
-            this._docRepo = docRepo;
-            this._bugs = bugs;
-            this._loanRepository = loanRepository;
-            this._propertiesModelBuilder = propertiesModelBuilder;
-
+			CustomerRelationsRepository customerRelationsRepo,
+			IBugRepository bugRepo,
+			LoanRepository loanRepo,
+			PropertiesModelBuilder propertiesModelBuilder
+		) {
+			this.customerRepo = customerRepo;
+			this.session = session;
+			this.creditBureauModelBuilder = creditBureauModelBuilder;
+			this.summaryModelBuilder = summaryModelBuilder;
+			this.customerRelationsRepo = customerRelationsRepo;
+			this.bugRepo = bugRepo;
+			this.loanRepo = loanRepo;
+			this.propertiesModelBuilder = propertiesModelBuilder;
 		} // constructor
 
 		[HttpGet]
 		public JsonResult Index(int id) {
-			Log.DebugFormat("Build full customer model begin for customer {0}", id);
+			log.Debug("Build full customer model begin for customer {0}", id);
 
 			var model = new FullCustomerModel();
 
-            var customer = this._customers.TryGet(id);
+			var customer = this.customerRepo.ReallyTryGet(id);
 
 			if (customer == null) {
 				model.State = "NotFound";
@@ -67,31 +58,44 @@
 				} // using
 
 				using (tc.AddStep("ApplicationInfoModel Time taken")) {
-					var m = new ApplicationInfoModel();
-                    this._infoModelBuilder.InitApplicationInfo(m, customer, cr);
-					model.ApplicationInfoModel = m;
+					var aiar = new ServiceClientProxy.ServiceClient().Instance.LoadApplicationInfo(
+						0,
+						customer.Id,
+						cr == null ? (long?)null : cr.Id,
+						DateTime.UtcNow
+					);
+
+					model.ApplicationInfoModel = aiar.Model;
 				} // using
 
 				using (tc.AddStep("CreditBureauModel Time taken"))
-                    model.CreditBureauModel = this._creditBureauModelBuilder.Create(customer);
+					model.CreditBureauModel = this.creditBureauModelBuilder.Create(customer);
 
 				using (tc.AddStep("SummaryModel Time taken"))
-                    model.SummaryModel = this._summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
+					model.SummaryModel = this.summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
 
 				using (tc.AddStep("MedalCalculations Time taken"))
 					model.MedalCalculations = new MedalCalculators(customer);
 
-				using (tc.AddStep("PropertiesModel Time taken")) {
-                    model.Properties = this._propertiesModelBuilder.Create(customer);
-				}
-				
+				using (tc.AddStep("PropertiesModel Time taken"))
+					model.Properties = this.propertiesModelBuilder.Create(customer);
+
 				using (tc.AddStep("CustomerRelations Time taken")) {
-                    var crm = new CustomerRelationsModelBuilder(this._loanRepository, this._customerRelationsRepository, this._session);
+					var crm = new CustomerRelationsModelBuilder(
+						this.loanRepo,
+						this.customerRelationsRepo,
+						this.session
+					);
 					model.CustomerRelations = crm.Create(customer.Id);
 				} // using
 
-				using (tc.AddStep("Bugs Time taken"))
-                    model.Bugs = this._bugs.GetAll().Where(x => x.Customer.Id == customer.Id).Select(x => BugModel.ToModel(x)).ToList();
+				using (tc.AddStep("Bugs Time taken")) {
+					model.Bugs = this.bugRepo
+						.GetAll()
+						.Where(x => x.Customer.Id == customer.Id)
+						.Select(x => BugModel.ToModel(x))
+						.ToList();
+				} // using
 
 				using (tc.AddStep("CompanyScore Time taken")) {
 					var builder = new CompanyScoreModelBuilder();
@@ -100,11 +104,26 @@
 					DateTime? companySeniority = model.CompanyScore.DashboardModel.OriginationDate;
 					int companySeniorityYears = 0, companySeniorityMonths = 0;
 					if (companySeniority.HasValue) {
-						MiscUtils.GetFullYearsAndMonths(companySeniority.Value, out companySeniorityYears, out companySeniorityMonths);
-					}
+						MiscUtils.GetFullYearsAndMonths(
+							companySeniority.Value,
+							out companySeniorityYears,
+							out companySeniorityMonths
+						);
+					} // if
 
-					model.PersonalInfoModel.CompanySeniority = string.Format("{0}y {1}m", companySeniorityYears, companySeniorityMonths);
-					model.PersonalInfoModel.IsYoungCompany = companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow && (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month || companySeniority.Value.Day != DateTime.UtcNow.Day);
+					model.PersonalInfoModel.CompanySeniority = string.Format(
+						"{0}y {1}m",
+						companySeniorityYears,
+						companySeniorityMonths
+					);
+
+					model.PersonalInfoModel.IsYoungCompany =
+						companySeniority.HasValue &&
+						companySeniority.Value.AddYears(1) > DateTime.UtcNow && (
+							companySeniority.Value.Year != DateTime.UtcNow.Year ||
+							companySeniority.Value.Month != DateTime.UtcNow.Month ||
+							companySeniority.Value.Day != DateTime.UtcNow.Day
+						);
 				} // using
 
 				using (tc.AddStep("ExperianDirectors Time taken")) {
@@ -112,31 +131,27 @@
 					model.ExperianDirectors = expDirModel.DirectorNames;
 					model.PersonalInfoModel.NumOfDirectors = expDirModel.NumOfDirectors;
 					model.PersonalInfoModel.NumOfShareholders = expDirModel.NumOfShareHolders;
-				}
+				} // using
 
 				model.State = "Ok";
 			} // using "Total" step
 
-			Log.Info(tc.ToString());
-			
-			Log.DebugFormat("Build full customer model end for customer {0}", id);
+			log.Info(tc.ToString());
+
+			log.Debug("Build full customer model end for customer {0}", id);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		} // Index
 
-		
-		private readonly ICustomerRepository _customers;
-		private readonly ISession _session;
-		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
-		private readonly WebMarketPlacesFacade _marketPlaces;
-		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
-		private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
-		private readonly CustomerRelationsRepository _customerRelationsRepository;
-		private readonly PropertiesModelBuilder _propertiesModelBuilder;
-		private readonly LoanRepository _loanRepository;
-		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
-		private readonly IBugRepository _bugs;
-		private static readonly ILog Log = LogManager.GetLogger(typeof(FullCustomerController));
+		private readonly ICustomerRepository customerRepo;
+		private readonly ISession session;
+		private readonly CreditBureauModelBuilder creditBureauModelBuilder;
+		private readonly ProfileSummaryModelBuilder summaryModelBuilder;
+		private readonly CustomerRelationsRepository customerRelationsRepo;
+		private readonly PropertiesModelBuilder propertiesModelBuilder;
+		private readonly LoanRepository loanRepo;
+		private readonly IBugRepository bugRepo;
 
+		private static readonly ASafeLog log = new SafeILog(typeof(FullCustomerController));
 	} // class FullCustomerController
 } // namespace

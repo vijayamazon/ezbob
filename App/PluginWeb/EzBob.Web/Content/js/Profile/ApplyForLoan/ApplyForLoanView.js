@@ -91,7 +91,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		agreement: '.agreement',
 		form: 'form',
 		loanAmountInput: 'input#loanAmount',
-		repaymentPeriodInput: 'input#repaymentPeriod'
+		repaymentPeriodInput: 'input#repaymentPeriod',
+		cannotTakeAnotherLoan: '.cannot-take-another-loan'
 	}, // ui
 
 	preAgreementTermsReadChange: function() {
@@ -143,6 +144,13 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			BlockUi('off', self.$el.find('#block-loan-schedule'));
 			BlockUi('off', self.$el.find('#block-agreement'));
 		});
+
+		var numOfActiveLoans = this.model.get('numOfActiveLoans');
+		if (numOfActiveLoans > 0 && EzBob.Config.NumofAllowedActiveLoans - numOfActiveLoans <= 1 && this.model.get('neededCash') < this.model.get('CreditSum')) {
+			this.ui.cannotTakeAnotherLoan.show();
+		} else {
+			this.ui.cannotTakeAnotherLoan.hide();
+		}
 	}, // recalculateSchedule
 
 	renderSchedule: function (schedule) {

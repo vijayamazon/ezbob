@@ -15,7 +15,8 @@ GO
 CREATE TYPE UpdateDailyLoanStatsPkg AS TABLE (
 	LoanID INT NOT NULL,
 	TheDate DATETIME NOT NULL,
-	EarnedInterest DECIMAL(18, 2) NOT NULL
+	EarnedInterestByPeriods DECIMAL(18, 2) NOT NULL,
+	EarnedInterestBySomeDate DECIMAL(18, 2) NOT NULL
 )
 GO
 
@@ -44,10 +45,11 @@ BEGIN
 		CONVERT(DATE, dls.TheDate) = CONVERT(DATE, pkg.TheDate)
 	WHEN MATCHED THEN -- found in both source and target => update target from source
 		UPDATE SET
-			dls.EarnedInterest = pkg.EarnedInterest
+			dls.EarnedInterestByPeriods = pkg.EarnedInterestByPeriods,
+			dls.EarnedInterestBySomeDate = pkg.EarnedInterestBySomeDate
 	WHEN NOT MATCHED BY TARGET THEN -- found in source but not found in target => insert into target
-		INSERT (LoanID, TheDate, EarnedInterest)
-			VALUES (pkg.LoanID, CONVERT(DATE, pkg.TheDate), pkg.EarnedInterest)
+		INSERT (LoanID, TheDate, EarnedInterestByPeriods, EarnedInterestBySomeDate)
+			VALUES (pkg.LoanID, CONVERT(DATE, pkg.TheDate), pkg.EarnedInterestByPeriods, EarnedInterestBySomeDate)
 	;
 
 	------------------------------------------------------------------------------

@@ -13,8 +13,10 @@ AS
 BEGIN
 	DECLARE
 		@MinLoanAmount INT,
-		@NumOfLateLoans INT
-		
+		@NumOfLateLoans INT,
+		@NumOfActiveLoans INT,
+		@NumofAllowedActiveLoans INT
+	-----------------------------------------------	
 	SELECT 
 		@NumOfLateLoans = COUNT(1)
 	FROM
@@ -22,14 +24,30 @@ BEGIN
 	WHERE
 		CustomerId = @CustomerId AND
 		Status = 'Late'
-	
+	-----------------------------------------------	
 	SELECT 
-		@MinLoanAmount = CONVERT(INT, Value) 
+		@NumOfActiveLoans = COUNT(1)
+	FROM
+		Loan
+	WHERE
+		CustomerId = @CustomerId AND
+		Status != 'PaidOff'	
+	-----------------------------------------------
+	SELECT 
+		@MinLoanAmount = CONVERT(INT, Value)
 	FROM 
 		ConfigurationVariables 
 	WHERE 
 		Name = 'MinLoanAmount'
+	-----------------------------------------------	
+	SELECT 
+		@NumofAllowedActiveLoans = CONVERT(INT, Value)
+	FROM 
+		ConfigurationVariables 
+	WHERE 
+		Name = 'NumofAllowedActiveLoans'	
 	
+	-----------------------------------------------
 	SELECT
 		c.CreditResult,
 		c.Status,
@@ -38,7 +56,8 @@ BEGIN
 		@MinLoanAmount AS MinLoanAmount,
 		CAST(CASE WHEN @NumOfLateLoans = 0 THEN 0 ELSE 1 END AS BIT) AS HasLateLoans,
 		cs.IsEnabled, 
-		c.BlockTakingLoan
+		c.BlockTakingLoan,
+		CAST(CASE WHEN @NumOfActiveLoans < @NumofAllowedActiveLoans THEN 1 ELSE 0 END AS BIT) AS CanTakeAnotherLoan
 	FROM
 		Customer c 
 	INNER JOIN 
@@ -49,4 +68,5 @@ BEGIN
 		c.Id = @CustomerId
 
 END
+
 GO

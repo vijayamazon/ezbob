@@ -117,7 +117,8 @@
 			char cLineColSeparator = '+',
 			Func<TRowKey, string> oRowKeyToString = null,
 			Func<TColumnKey, string> oColumnKeyToString = null,
-			Func<TData, string> oDataToString = null 
+			Func<TData, string> oDataToString = null,
+			bool bSkipSeparationLine = false
 		) {
 			var oFirstRow = new List<string>();
 			var oOtherRows = new SortedDictionary<TRowKey, List<string>>();
@@ -189,7 +190,7 @@
 			);
 
 			foreach (var pair in oOtherRows) {
-				os.Append(sLine);
+				os.Append(bSkipSeparationLine ? Environment.NewLine : sLine);
 
 				os.Append(
 					string.Format(sFirstColFormat, oRowKeyStr[pair.Key]) + sColSeparator +

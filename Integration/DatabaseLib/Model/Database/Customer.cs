@@ -11,13 +11,6 @@
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;
 
-	public enum PendingStatus {
-		AML,
-		Bank,
-		Bank_AML,
-		Manual
-	} // enum PendingStatus
-
 	public class PendingStatusType : EnumStringType<PendingStatus> { }
 
 	public class SystemDecisionType : EnumStringType<SystemDecision> { }

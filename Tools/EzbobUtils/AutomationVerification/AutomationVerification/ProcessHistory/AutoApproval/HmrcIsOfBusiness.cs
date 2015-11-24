@@ -6,17 +6,17 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	/// Checks weather the uploaded or linked HMRC business name same as experian company name
 	/// </summary>
 	public class HmrcIsOfBusiness : ATrace {
-		public HmrcIsOfBusiness(DecisionStatus nDecisionStatus)
-			: base(nDecisionStatus)
-		{
-		} // constructor
+		public HmrcIsOfBusiness(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {} // constructor
 		
 		/// <summary>
 		/// Init if has HMRC.
 		/// </summary>
-		public void Init(List<string> hmrcBusinessName, string experianCompanyName) {
-			Comment = string.Format("HMRC business name: '{0}', experian business name: '{1}'", 
-				hmrcBusinessName.Aggregate((a,b) => string.Format("{0},{1}", a, b)), experianCompanyName);
+		public void Init(List<NameForComparison> hmrcBusinessName, NameForComparison experianCompanyName) {
+			Comment = string.Format(
+				"HMRC business name: '{0}', experian business name: '{1}'", 
+				hmrcBusinessName.Select(n => n.RawName).Aggregate((a, b) => string.Format("{0},{1}", a, b)),
+				experianCompanyName.RawName
+			);
 		} // Init
 
 		/// <summary>
@@ -24,6 +24,6 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 		/// </summary>
 		public void Init() {
 			Comment = "Customer has no HMRC.";
-		}
+		} // Init
 	} // class
 } // namespace

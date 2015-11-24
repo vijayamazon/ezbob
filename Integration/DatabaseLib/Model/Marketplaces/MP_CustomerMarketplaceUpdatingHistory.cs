@@ -4,7 +4,6 @@
 	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
 	using System;
-	using EZBob.DatabaseLib.Repository.Turnover;
 	using Iesi.Collections.Generic;
 
 	public class MP_CustomerMarketplaceUpdatingHistory {
@@ -32,38 +31,8 @@
 		public virtual MP_YodleeOrder YodleeOrder { get; set; }
 		public virtual int? UpdatingTimePassInSeconds { get; set; }
 
-		public virtual Iesi.Collections.Generic.ISet<HmrcAggregation> HmrcAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<AmazonAggregation> AmazonAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<EbayAggregation> EbayAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<PayPalAggregation> PayPalAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<YodleeAggregation> YodleeAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<ChannelGrabberAggregation> CGAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<EkmAggregation> EkmAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<PayPointAggregation> PayPointAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<SageAggregation> SageAggregations { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<FreeAgentAggregation> FreeAgentAggregations { get; set; }
-
-		// view
-		public virtual Iesi.Collections.Generic.ISet<MarketplaceTurnover> MarketplaceTurnovers { get; set; }
-
 		public MP_CustomerMarketplaceUpdatingHistory() {
 			this.ActionLog = new HashedSet<MP_CustomerMarketplaceUpdatingActionLog>();
-
-			this.HmrcAggregations = new HashedSet<HmrcAggregation>();
-			this.AmazonAggregations = new HashedSet<AmazonAggregation>();
-			this.YodleeAggregations = new HashedSet<YodleeAggregation>();
-			this.EbayAggregations = new HashedSet<EbayAggregation>();
-			this.PayPalAggregations = new HashedSet<PayPalAggregation>();
-			this.CGAggregations = new HashedSet<ChannelGrabberAggregation>();
-			this.EkmAggregations = new HashedSet<EkmAggregation>();
-			this.PayPointAggregations = new HashedSet<PayPointAggregation>();
-			this.SageAggregations = new HashedSet<SageAggregation>();
-			this.FreeAgentAggregations = new HashedSet<FreeAgentAggregation>();
-
-			// view
-			this.MarketplaceTurnovers = new HashedSet<MarketplaceTurnover>();
-
-
 		} // constructor
 	} // class MP_CustomerMarketplaceUpdatingHistory
 } // namespace

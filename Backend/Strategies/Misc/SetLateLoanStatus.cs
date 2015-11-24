@@ -158,6 +158,21 @@
 			SendCollectionSms(model, type);
 		}//CollectionDay0
 
+		private void CollectionDay3(CollectionDataModel model, CollectionType type) {
+			//send sms Default SMS3
+			SendCollectionSms(model, type);
+		}//CollectionDay3
+
+		private void CollectionDay10(CollectionDataModel model, CollectionType type) {
+			//send sms Default SMS10
+			SendCollectionSms(model, type);
+		}//CollectionDay10
+
+		private void CollectionDay13(CollectionDataModel model, CollectionType type) {
+			//send sms Default SMS13
+			SendCollectionSms(model, type);
+		}//CollectionDay13
+
 		private void CollectionDay15(CollectionDataModel model, CollectionType type) {
 			//change status to 15-30 days missed
 			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed15To30, type);
@@ -167,9 +182,6 @@
 
 			//send imail DefaulttemplateConsumer14
 			SendCollectionImail(model, type);
-
-			//send sms Default SMS14
-			SendCollectionSms(model, type);
 		}//CollectionDay15
 
 		private void CollectionDay1to6(CollectionDataModel model, CollectionType type) {
@@ -177,9 +189,6 @@
 
 			//send email Default Template1-6
 			SendCollectionEmail(CollectionDay1to6EmailTemplate, model, type);
-
-			//send sms Default SMS1-6
-			SendCollectionSms(model, type);
 		}//CollectionDay1to6
 
 		private void CollectionDay21(CollectionDataModel model, CollectionType type) {
@@ -221,9 +230,6 @@
 		private void CollectionDay8to14(CollectionDataModel model, CollectionType type) {
 			//send email Default Template8-13
 			SendCollectionEmail(CollectionDay8to14EmailTemplate, model, type);
-
-			//send sms Default SMS8-13
-			SendCollectionSms(model, type);
 		}//CollectionDay8to14
 
 		private void CollectionDay90(CollectionDataModel model, CollectionType type) {
@@ -328,9 +334,15 @@
 
 			if (lateDays >= 1 && lateDays <= 6) { CollectionDay1to6(model, CollectionType.CollectionDay1to6); }
 
+			if (lateDays == 3) { CollectionDay3(model, CollectionType.CollectionDay3); }
+
 			if (lateDays == 7) { CollectionDay7(model, CollectionType.CollectionDay7); }
 
 			if (lateDays >= 8 && lateDays <= 14) { CollectionDay8to14(model, CollectionType.CollectionDay8to14); }
+
+			if (lateDays == 10) { CollectionDay10(model, CollectionType.CollectionDay10); }
+
+			if (lateDays == 13) { CollectionDay13(model, CollectionType.CollectionDay13); }
 
 			if (lateDays == 15) { CollectionDay15(model, CollectionType.CollectionDay15); }
 
@@ -479,10 +491,7 @@
 				return;
 			}
 
-			var smsTemplate = string.Format(smsModel.Template, 
-				model.FirstName, 
-				FormattingUtils.NumericFormats(model.AmountDue), 
-				FormattingUtils.FormatDateToString(model.DueDate));
+			var smsTemplate = string.Format(smsModel.Template, model.FirstName);
 
 			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
 				Log.Info("Collection sending sms to customer {0} phone number {1}\n content {2}",
@@ -553,6 +562,9 @@
 		private DateTime now;
 		private List<CollectionSmsTemplate> smsTemplates;
 
+			CollectionDay3,
+			CollectionDay10,
+			CollectionDay13,
 		
 	}// class SetLateLoanStatus
 } // namespace

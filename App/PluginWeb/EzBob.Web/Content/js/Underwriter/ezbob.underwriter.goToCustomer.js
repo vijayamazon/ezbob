@@ -3,7 +3,7 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.RecentCustomersModel = Backbone.Model.extend({
-	url: window.gRootPath + 'Underwriter/Customers/GetRecentCustomers',
+	url: window.gRootPath + 'Underwriter/CustomerNavigator/GetRecentCustomers',
 }); // EzBob.Underwriter.RecentCustomersModel
 
 EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
@@ -60,7 +60,7 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 		this.okBtn = $('.ok-button');
 
 		this.ui.input.autocomplete({
-			source: '' + window.gRootPath + 'Underwriter/Customers/FindCustomer',
+			source: '' + window.gRootPath + 'Underwriter/CustomerNavigator/FindCustomer',
 			autoFocus: false,
 			minLength: 3,
 			delay: 500
@@ -109,7 +109,7 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 
 		var self = this;
 
-		var xhr = $.get('' + window.gRootPath + 'Underwriter/Customers/CheckCustomer?customerId=' + id);
+		var xhr = $.get('' + window.gRootPath + 'Underwriter/CustomerNavigator/CheckCustomer?customerId=' + id);
 
 		xhr.done(function(res) {
 			switch (res.State) {
@@ -118,10 +118,6 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 					break;
 
 				case 'NotSuccesfullyRegistred':
-					self.trigger('ok', id);
-					self.dialog.dialog('close');
-					break;
-
 				case 'Ok':
 					self.trigger('ok', id);
 					self.dialog.dialog('close');

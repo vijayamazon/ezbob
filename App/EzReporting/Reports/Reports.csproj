@@ -82,6 +82,7 @@
     <Compile Include="BaseReportHandler\brh.cs" />
     <Compile Include="BaseReportHandler\brh_AccountingLoanBalance.cs" />
     <Compile Include="BaseReportHandler\brh_dispatch.cs" />
+    <Compile Include="BaseReportHandler\brh_NotAutoApproved.cs" />
     <Compile Include="BaseReportHandler\brh_EarnedInterest.cs" />
     <Compile Include="BaseReportHandler\brh_FinancialStats.cs" />
     <Compile Include="BaseReportHandler\brh_StrategyRunningTime.cs" />

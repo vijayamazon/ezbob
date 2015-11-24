@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
+    <Compile Include="ActionResults\ApplicationInfoResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />

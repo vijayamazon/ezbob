@@ -61,7 +61,7 @@
 				Cfg = InitCfg();
 
 				DirectorNames = new List<Name>();
-				HmrcBusinessNames = new List<string>();
+				HmrcBusinessNames = new List<NameForComparison>();
 			} // using timer step
 
 			return this;
@@ -133,7 +133,7 @@
 
 		protected virtual AvailableFunds Funds { get; private set; }
 
-		protected virtual List<string> HmrcBusinessNames { get; private set; }
+		protected virtual List<NameForComparison> HmrcBusinessNames { get; private set; }
 
 		protected internal virtual ASafeLog Log { get; private set; }
 		protected virtual MetaData MetaData { get; private set; }
@@ -246,7 +246,7 @@
 
 			case RowType.HmrcBusinessName:
 				if (sr["BelongsToCustomer"])
-					HmrcBusinessNames.Add(AutomationCalculator.Utils.AdjustCompanyName(sr["Name"]));
+					HmrcBusinessNames.Add(new NameForComparison(sr["Name"]));
 				break;
 
 			case RowType.ExperianConsumerDataCais:
