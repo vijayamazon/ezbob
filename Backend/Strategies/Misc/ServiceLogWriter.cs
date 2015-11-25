@@ -297,6 +297,7 @@
 			[UsedImplicitly]
 			public string CompanyRefNum { get; set; }
 			[UsedImplicitly]
+			[FieldName("Balance")]
 			public decimal? CaisBalance { get; set; }
 			[UsedImplicitly]
 			public int? CII { get; set; }
