@@ -1450,7 +1450,7 @@ EzBob.validateChangeEmailForm = function(el, emailFieldID) {
 	return e.validate({ rules: rules, });
 };
 
-EzBob.validatemanualPaymentForm = function(el, outstandingBbalance) {
+EzBob.validatemanualPaymentForm = function(el, outstandingBbalance, minAmount) {
 	var e = el || $('form');
 
 	return e.validate({
@@ -1458,14 +1458,18 @@ EzBob.validatemanualPaymentForm = function(el, outstandingBbalance) {
 			experiedDate: { required: true, requiredDate: true },
 			description: { required: true },
 			paymentMethod: { required: true, regex: "[a-zA-Z]+" },
-			totalSumPaid: { number: true, required: true, autonumericMax: outstandingBbalance },
+			totalSumPaid: { number: true, required: true, positive: true, autonumericMax: outstandingBbalance, autonumericMin: minAmount },
 		},
 		messages: {
 			PaymentMethod: { regex: "This field is required" },
 			totalSumPaid: {
-				autonumericMax: 'Warning! <br /> Please pay attention that you are trying to enter greater than Outstanding amount relevant for the date of placed payment' +
+				autonumericMax: 'Warning! <br /> Please pay attention that you are trying to enter greater than Outstanding amount relevant for the date of placed payment. ' +
 								 'In case the customer made a Bank Transfer in an amount which is higher than £' + outstandingBbalance +
-								 '.<br />Please, communicate the client and make access funds return after EZBOB LTD access transactions costs deduction.' +
+								 ',<br />please, communicate the client and make access funds return after EZBOB LTD access transactions costs deduction.' +
+								 ' Then submit to the system only the actual for the day of payment amount.',
+				autonumericMin: 'Warning! <br /> Please pay attention that you are trying to enter less than minimal amount relevant for the date of placed payment. ' +
+								 'In case the customer made a Bank Transfer in an amount which is less than £' + minAmount +
+								 ',<br />please, communicate the client and make access funds beyond the minimal amount.' +
 								 ' Then submit to the system only the actual for the day of payment amount.'
 			}
 		}//,

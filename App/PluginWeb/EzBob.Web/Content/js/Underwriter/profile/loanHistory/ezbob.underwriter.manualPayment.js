@@ -66,7 +66,7 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		request.done(function(r) {
 			if (r.error)
 				return;
-
+			self.ui.form.removeData('validator');
 			self.ui.fees.val(r.Fee);
 			self.ui.principal.val(r.Principal);
 			self.ui.interest.val(r.Interest);
@@ -80,7 +80,10 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 				'title': moneyTitle
 			});
 			self.ui.money.tooltip("enable").tooltip('fixTitle');
-			self.validator = EzBob.validatemanualPaymentForm(self.ui.form, r.Balance);
+			
+			self.validator = EzBob.validatemanualPaymentForm(self.ui.form, r.Balance, r.MinValue);
 		});
+
+		return false;
 	}
 });
