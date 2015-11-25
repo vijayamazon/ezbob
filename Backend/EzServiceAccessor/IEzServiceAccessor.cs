@@ -55,7 +55,7 @@
 
         void AddPayment(int customerID, NL_Payments payment, int userID = 1);
 
-        NL_Loans GetLoan(int loanId, int userID = 1); 
+        long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1);
 
         List<NL_Loans> GetCustomerLoans(int customerID, int userID = 1);
 

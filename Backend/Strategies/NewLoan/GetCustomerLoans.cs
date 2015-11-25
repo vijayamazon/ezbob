@@ -32,6 +32,8 @@
         } // Execute
 
         public List<NL_Loans> Loans { get; private set; }
+        public string Error { get; set; }
+
         private readonly int customerID;
     } // class GetLastOffer
 } // ns

@@ -234,6 +234,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListNewLoanActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

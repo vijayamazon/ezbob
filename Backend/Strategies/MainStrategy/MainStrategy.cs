@@ -738,10 +738,10 @@
 				);
 
 				if (this.nlExists) {
-					this.nlCashRequestID = DB.ExecuteScalar<int>(
+					this.nlCashRequestID = DB.ExecuteScalar<long>(
 						"NL_CashRequestGetByOldID",
 						CommandSpecies.StoredProcedure,
-						new QueryParameter("@OldCashRequestID", this.cashRequestID)
+						new QueryParameter("@OldCashRequestID", this.cashRequestID.Value)
 					);
 				} // if
 

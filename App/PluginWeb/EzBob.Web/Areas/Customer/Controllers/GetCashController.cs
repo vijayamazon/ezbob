@@ -3,6 +3,8 @@
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
+	using System.Runtime.CompilerServices;
+	using System.Threading.Tasks;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -189,11 +191,11 @@
 
 				NL_Model nlModel = new NL_Model(cus.Id);
 
-				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
+			    AsyncCreateLoanAndRebatePayment(cus, loan_amount, card, now, nlModel, trans_id, amount);
 
-				Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
+				//var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);				
 	
-				RebatePayment(amount, loan, trans_id, now, nlModel);
+				//RebatePayment(amount, loan, trans_id, now, nlModel);
 
 				cus.PayPointErrorsCount = 0;
 
@@ -238,13 +240,20 @@
 			}
 		}
 
+        async void AsyncCreateLoanAndRebatePayment(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel, string trans_id, decimal? amount)
+        {
+            var loan = await Task.FromResult<Loan>(this._loanCreator.CreateLoan(cus, loanAmount, card, now, nlModel: nlModel));
+            Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
+            RebatePayment(amount, loan, trans_id, now, nlModel);
+        }
+
 		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
 			if (amount == null || amount <= 0)
 				return;
 			var f = new LoanPaymentFacade();
 
-            long nl_LoanId = m_oServiceClient.Instance.GetLoan(loan.Id,this._context.UserId).LoanID;
-            NL_Model nlModelLoanState = m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow,this._context.UserId);
+		    var nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this._context.UserId).Value;
+            NL_Model nlModelLoanState = m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow,this._context.UserId).Value;
 
             NL_Payments nlPayment = new NL_Payments()
             {
@@ -271,6 +280,8 @@
 
 			return Json(new { url = url });
 		}
+
+
 
 		private void ValidateCustomerName(string customer, Customer cus) {
 			if (!_validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname)) {

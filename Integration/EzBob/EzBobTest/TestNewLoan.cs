@@ -869,5 +869,14 @@
 			}
 		}
 
+
+        [Test]
+        public void GetLoan() {
+            int oldLoanId = 3107;
+            var strategy = new GetLoanByOldID(oldLoanId);
+            strategy.Execute();
+
+        }
+
 	} // class TestNewLoan
 } // namespace

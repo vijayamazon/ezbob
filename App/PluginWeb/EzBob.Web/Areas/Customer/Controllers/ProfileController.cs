@@ -335,8 +335,8 @@
 		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
 		        var f = new LoanPaymentFacade();
 
-                long nl_LoanId = m_oServiceClient.Instance.GetLoan(loan.Id, this.m_oContext.UserId).LoanID;
-                NL_Model nlModel = m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, this.m_oContext.UserId);
+                long nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
+                NL_Model nlModel = m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, this.m_oContext.UserId).Value;
 
                 NL_Payments nlPayment = new NL_Payments()
                 {

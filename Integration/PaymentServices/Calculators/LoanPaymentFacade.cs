@@ -371,7 +371,7 @@
 			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
-                var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoan(loanId).LoanID;
+                var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
                 var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
 
                 NL_Payments nlPayment = new NL_Payments()
@@ -396,7 +396,7 @@
 					select r
 				).FirstOrDefault();
 
-                var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoan(loanId).LoanID;
+                var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
                 var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
 				
                 NL_Payments nlPayment = new NL_Payments()

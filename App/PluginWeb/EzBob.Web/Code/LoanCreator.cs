@@ -1,31 +1,31 @@
 ﻿namespace EzBob.Web.Code {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
-	using System.Linq;
-	using DbConstants;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Logger;
-	using EzBob.Models.Agreements;
-	using EzBob.Web.Areas.Customer.Controllers;
-	using EzBob.Web.Areas.Customer.Controllers.Exceptions;
-	using EzBob.Web.Infrastructure;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate;
-	using Ezbob.Utils.Extensions;
-	using PaymentServices.Calculators;
-	using PaymentServices.PacNet;
-	using SalesForceLib.Models;
-	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using ConfigManager;
+    using DbConstants;
+    using Ezbob.Backend.Models;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Logger;
+    using Ezbob.Utils.Extensions;
+    using EzBob.Models.Agreements;
+    using EzBob.Web.Areas.Customer.Controllers;
+    using EzBob.Web.Areas.Customer.Controllers.Exceptions;
+    using EzBob.Web.Infrastructure;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.Model;
+    using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Loans;
+    using EZBob.DatabaseLib.Model.Loans;
+    using NHibernate;
+    using PaymentServices.Calculators;
+    using PaymentServices.PacNet;
+    using SalesForceLib.Models;
+    using ServiceClientProxy;
+    using StructureMap;
 
-	public interface ILoanCreator {
+    public interface ILoanCreator {
 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
 	} // interface ILoanCreator
 
@@ -291,7 +291,7 @@
 		}// CreateLoan
 
 		private void HandleSalesForceTopup(Customer cus, DateTime now) {
-			if (cus.CreditSum > 1000 && cus.Loans.Count(x => x.Status != LoanStatus.PaidOff) < ConfigManager.CurrentValues.Instance.NumofAllowedActiveLoans) {
+			if (cus.CreditSum > 1000 && cus.Loans.Count(x => x.Status != LoanStatus.PaidOff) < CurrentValues.Instance.NumofAllowedActiveLoans) {
 				var requestedLoan = cus.CustomerRequestedLoan.OrderByDescending(x => x.Id).FirstOrDefault();
 				int requestedAmount = requestedLoan != null && requestedLoan.Amount.HasValue ? (int)requestedLoan.Amount.Value : 0;
 				this.serviceClient.Instance.SalesForceAddOpportunity(cus.Id, cus.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {

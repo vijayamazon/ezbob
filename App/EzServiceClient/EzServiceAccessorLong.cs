@@ -92,23 +92,23 @@
         }
 
         public void AddPayment(int customerID, NL_Payments payment, int userID) {
-            this.m_oServiceClient.Instance.AddPayment(userID, customerID, payment);
+            this.m_oServiceClient.Instance.AddPayment(customerID, payment, userID);
         }
 
 
 	    public List<NL_Loans> GetCustomerLoans(int customerID, int userID)
         {
-            return this.m_oServiceClient.Instance.GetCustomerLoans(customerID, userID).ToList();
+            return this.m_oServiceClient.Instance.GetCustomerLoans(customerID, userID).Value.ToList();
 	    }
 
         public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID)
         {
-            return this.m_oServiceClient.Instance.GetLoanState(customerID, loanID,utcNow,userID);
+            return this.m_oServiceClient.Instance.GetLoanState(customerID, loanID, utcNow, userID).Value;
 	    }
 
-	    public NL_Loans GetLoan(int loanId, int userID = 1) {
-            return this.m_oServiceClient.Instance.GetLoan(loanId, userID);
-	    }
+        public long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1) {
+            return this.m_oServiceClient.Instance.GetLoanByOldID(loanId,customerID, userID).Value;
+        }
 
 	    private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong
