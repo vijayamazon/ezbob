@@ -6,11 +6,6 @@ EzBob.Underwriter.InvestorModel = Backbone.Model.extend({
 	urlRoot: '' + gRootPath + 'Underwriter/Investor/GetInvestor'
 });
 
-EzBob.Underwriter.InvestorsModels = Backbone.Collection.extend({
-	url: '' + gRootPath + 'Underwriter/Investor/GetAllInvestors',
-	model: EzBob.Underwriter.InvestorModel
-});
-
 EzBob.Underwriter.InvestorBankModel = Backbone.Model.extend({
 	defaults: {
 		InvestorBankAccountType: '',

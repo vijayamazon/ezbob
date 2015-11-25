@@ -15,6 +15,9 @@ EzBob.Underwriter.GridTools = {
 	brokerProfileLink: function(nBrokerID, sLinkText) {
 		return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Open broker profile" data-href="#broker/' + nBrokerID + '">' + (sLinkText || nBrokerID) + '</button>');
 	}, // brokerProfileLink
+	investorManageLink: function (nInvestorID, sLinkText) {
+		return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Manage investor" data-href="#manageInvestor/' + nInvestorID + '">' + (sLinkText || nInvestorID) + '</button>');
+	}, // investorManageLink
 }; // EzBob.Underwriter.GridTools
 
 EzBob.Underwriter.GridsView = Backbone.View.extend({
@@ -165,12 +168,23 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 					$('.grid-item-BrokerID', oTR).empty().html(EzBob.Underwriter.GridTools.brokerProfileLink(oData.BrokerID));
 
 					$(oTR).dblclick(function() {
-						console.log($(oTR).find('.profileLink'));
-
 						location.assign($(oTR).find('.profileLink').first().data('href'));
 					});
 				}, // fnRowCallback
 			}), // brokers
+
+			investors: new GridProperties({
+				icon: 'male',
+				action: 'UwGridInvestors',
+				columns: '#InvestorID,InvestorType,CompanyName,^Timestamp',
+				fnRowCallback: function (oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+					$('.grid-item-InvestorID', oTR).empty().html(EzBob.Underwriter.GridTools.investorManageLink(oData.InvestorID));
+
+					$(oTR).dblclick(function () {
+						location.assign($(oTR).find('.profileLink').first().data('href'));
+					});
+				}, // fnRowCallback
+			}), // investors
 		}; // gridProperties
 	}, // initialize
 
@@ -341,7 +355,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 			aaSorting: [[0, 'desc']],
 
-			bAutoWidth: true,
+			bAutoWidth: false,
 			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">><"box-content"tr<"row"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>>>>>',
 
 			bStateSave: true,
@@ -437,7 +451,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	}, // getValidType
 
 	isValidType: function(sType) {
-		return this.tabLinkTo(sType).length === 1;
+		return this.tabLinkTo(sType).length === 1 || sType === 'investors';
 	}, // isValidType
 
 	hide: function() {

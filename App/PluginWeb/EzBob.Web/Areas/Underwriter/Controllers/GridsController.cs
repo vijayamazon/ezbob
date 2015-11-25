@@ -121,6 +121,8 @@
 
 			case GridActions.UwGridBrokers:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridBroker());
+			case GridActions.UwGridInvestors:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridInvestor());
 
 			default:
 				string sMsg = string.Format("Cannot load underwriter grid because '{0}' is not implemented.", nAction);
@@ -221,6 +223,7 @@
 			UwGridLogbook,
 			UwGridSales,
 			UwGridBrokers,
+			UwGridInvestors,
 		} // enum GridActions
 
 		private readonly AConnection db;

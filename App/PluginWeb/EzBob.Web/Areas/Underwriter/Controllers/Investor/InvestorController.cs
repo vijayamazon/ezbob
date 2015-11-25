@@ -76,17 +76,6 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult GetAllInvestors() {
-			IEnumerable<FrontInvestorModel> investors = new List<FrontInvestorModel> {
-				new FrontInvestorModel { InvestorID = 1, InvestorType = 1, CompanyName = "investor1" },
-				new FrontInvestorModel { InvestorID = 2, InvestorType = 2, CompanyName = "investor2" }
-			};
-
-			return Json(investors, JsonRequestBehavior.AllowGet);
-		}
-
-		[Ajax]
-		[HttpGet]
 		public JsonResult GetInvestor(int id) {
 			var investor = new FrontInvestorModel {
 				InvestorID = 1,

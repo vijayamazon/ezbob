@@ -74,10 +74,6 @@
 					view: new EzBob.Underwriter.ManageInvestorView({ el: $('#manage-investor-view'), }),
 					isRendered: false,
 				},
-				manageInvestors: {
-					view: new EzBob.Underwriter.ManageInvestorsView({ el: $('#manage-investor-view'), }),
-					isRendered: false,
-				}
 			}; // views
 		}, // initialize
 
@@ -187,7 +183,7 @@
 		},
 
 		manageInvestors: function () {
-			this.handleRoute('manageInvestors');
+			this.customers('investors');
 		},
 
 		hideAll: function() {

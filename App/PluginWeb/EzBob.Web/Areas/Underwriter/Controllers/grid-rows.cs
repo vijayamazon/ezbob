@@ -392,4 +392,20 @@
 			BrokerID = nRowID;
 		} // Init
 	} // GridBroker
+
+	internal class GridInvestor : AGridRow {
+		public override string RowIDFieldName() {
+			return "InvestorID";
+		} // RowIDFieldName
+
+		public virtual long InvestorID { get; set; }
+		public virtual string CompanyName { get; set; }
+		public virtual string InvestorType { get; set; }
+		public virtual DateTime Timestamp { get; set; }
+
+		public override void Init(long nRowID, SafeReader oRow) {
+			oRow.Fill(this);
+			InvestorID = nRowID;
+		} // Init
+	} // GridInvestor
 } // namespace
