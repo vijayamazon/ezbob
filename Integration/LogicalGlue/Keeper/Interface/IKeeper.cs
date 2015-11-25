@@ -15,6 +15,6 @@
 		/// <param name="customerID">ID of customer to infer.</param>
 		/// <param name="requestType">Request type (fuzzy logic, neural network).</param>
 		/// <param name="response">Inference output (raw and parsed).</param>
-		void SaveInference(int customerID, RequestType requestType, Response<InferenceOutput> response);
+		void SaveInference(int customerID, RequestType requestType, Response<Reply> response);
 	} // interface IKeeper
 } // namespace

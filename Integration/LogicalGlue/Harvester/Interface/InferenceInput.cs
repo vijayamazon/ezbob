@@ -8,6 +8,22 @@
 	/// </summary>
 	[JsonConverter(typeof(InferenceInputSerializer))]
 	public class InferenceInput {
+		public string RequestID {
+			get {
+				if (this.requestID == null)
+					this.requestID = Guid.NewGuid().ToString("N").ToLowerInvariant();
+
+				return this.requestID;
+			} // get
+			set {
+				Guid g;
+
+				this.requestID = Guid.TryParse(value, out g)
+					? g.ToString("N").ToLowerInvariant()
+					: Guid.NewGuid().ToString("N").ToLowerInvariant();
+			} // set
+		} // RequestID
+
 		/// <summary>
 		/// Data received from Equifax (via LG) on this company and director.
 		/// </summary>
@@ -201,5 +217,6 @@
 		} // IsValid
 
 		private DirectorData director;
+		private string requestID;
 	} // class InferenceInput
 } // namespace

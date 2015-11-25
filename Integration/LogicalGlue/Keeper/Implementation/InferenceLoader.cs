@@ -122,7 +122,7 @@
 				MapOutputRatio ratio = sr.Fill<MapOutputRatio>();
 
 				if (this.models.ContainsKey(ratio.ResponseID)) {
-					this.models[ratio.ResponseID].Grade.MapOutputRatios[ratio.OutputClass] = ratio.Score;
+					this.models[ratio.ResponseID].Grade.OutputRatios[ratio.OutputClass] = ratio.Score;
 
 					this.log.Debug(
 						"Inference loader({0}, '{1}'): loaded map output ratio ({2}: {3}).",

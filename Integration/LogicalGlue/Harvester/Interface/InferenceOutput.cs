@@ -1,40 +1,14 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
-	using System;
-	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
 	public class InferenceOutput {
-		[JsonProperty(PropertyName = "score")]
-		public decimal Score { get; set; }
+		[JsonProperty(PropertyName = "FL", NullValueHandling = NullValueHandling.Ignore)]
+		public ModelOutput FuzzyLogic { get; set; }
 
-		[JsonProperty(PropertyName = "inferenceResultEncoded")]
-		public long InferenceResultEncoded { get; set; }
+		[JsonProperty(PropertyName = "NN", NullValueHandling = NullValueHandling.Ignore)]
+		public ModelOutput NeuralNetwork { get; set; }
 
-		[JsonProperty(PropertyName = "inferenceResultDecoded")]
-		public string InferenceResultDecoded { get; set; }
-
-		[JsonProperty(PropertyName = "warnings")]
-		public List<Warning> Warnings { get; set; }
-
-		[JsonProperty(PropertyName = "mapOutputRatios")]
-		public Dictionary<string, decimal> MapOutputRatios { get; set; }
-
-		[JsonProperty(PropertyName = "status")]
-		public string Status { get; set; }
-
-		[JsonProperty(PropertyName = "exception")]
-		public string Exception { get; set; }
-
-		[JsonProperty(PropertyName = "errorCode")]
-		public string ErrorCode { get; set; }
-
-		[JsonProperty(PropertyName = "missingColumns")]
-		public List<string> MissingColumns { get; set; }
-
-		[JsonProperty(PropertyName = "encodingFailures")]
-		public List<EncodingFailure> EncodingFailures { get; set; }
-
-		[JsonProperty(PropertyName = "uuid")]
-		public Guid? Uuid { get; set; }
+		[JsonProperty(PropertyName = "bucket", NullValueHandling = NullValueHandling.Ignore)]
+		public Bucket Bucket { get; set; }
 	} // class InferenceOutput
 } // namespace

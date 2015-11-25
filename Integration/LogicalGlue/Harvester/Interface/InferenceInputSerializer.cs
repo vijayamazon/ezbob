@@ -17,26 +17,33 @@
 			if (input == null)
 				return;
 
-			var jo = new JObject();
+			writer.WriteStartObject();
 
-			jo.Add(Equifax, JToken.FromObject(input.EquifaxData, serializer));
-			jo.Add(RegNum, JToken.FromObject(input.CompanyRegistrationNumber, serializer));
-			jo.Add(Payment, JToken.FromObject(input.MonthlyPayment, serializer));
+			writer.WritePropertyName(Equifax);
+			serializer.Serialize(writer, input.EquifaxData);
 
-			if (input.Director == null) {
-				jo.Add(FirstName, JToken.FromObject(string.Empty, serializer));
-				jo.Add(LastName, JToken.FromObject(string.Empty, serializer));
-				jo.Add(BirthDate, JToken.FromObject(string.Empty, serializer));
-			} else {
-				jo.Add(FirstName, JToken.FromObject(input.Director.FirstName, serializer));
-				jo.Add(LastName, JToken.FromObject(input.Director.LastName, serializer));
-				jo.Add(BirthDate, JToken.FromObject(
-					input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture),
-					serializer
-				));
-			} // if
+			writer.WritePropertyName(RegNum);
+			serializer.Serialize(writer, input.CompanyRegistrationNumber);
 
-			jo.WriteTo(writer);
+			writer.WritePropertyName(Payment);
+			serializer.Serialize(writer, input.MonthlyPayment);
+
+			bool hasDirector = input.Director != null;
+
+			writer.WritePropertyName(FirstName);
+			serializer.Serialize(writer, hasDirector ? input.Director.FirstName : string.Empty);
+
+			writer.WritePropertyName(LastName);
+			serializer.Serialize(writer, hasDirector ? input.Director.LastName : string.Empty);
+
+			writer.WritePropertyName(BirthDate);
+
+			serializer.Serialize(writer, hasDirector
+				? input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture)
+				: string.Empty
+			);
+
+			writer.WriteEndObject();
 		} // WriteJson
 
 		/// <summary>

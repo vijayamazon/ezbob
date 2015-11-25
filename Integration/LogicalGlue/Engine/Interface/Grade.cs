@@ -25,27 +25,27 @@
 		} // Warnings
 
 		[DataMember]
-		public Dictionary<string, decimal> MapOutputRatios {
+		public Dictionary<string, decimal> OutputRatios {
 			get {
-				if (this.mapOutputRatios == null)
-					this.mapOutputRatios = new Dictionary<string, decimal>();
+				if (this.outputRatios == null)
+					this.outputRatios = new Dictionary<string, decimal>();
 
-				return this.mapOutputRatios;
+				return this.outputRatios;
 			} // get
 			set {
-				if (this.mapOutputRatios == null)
-					this.mapOutputRatios = new Dictionary<string, decimal>();
+				if (this.outputRatios == null)
+					this.outputRatios = new Dictionary<string, decimal>();
 				else
-					this.mapOutputRatios.Clear();
+					this.outputRatios.Clear();
 
 				if (value != null)
 					foreach (KeyValuePair<string, decimal> pair in value)
-						this.mapOutputRatios[pair.Key] = pair.Value;
+						this.outputRatios[pair.Key] = pair.Value;
 			} // set
-		} // MapOutputRatios
+		} // OutputRatios
 
 		private List<Warning> warnings;
-		private Dictionary<string, decimal> mapOutputRatios;
+		private Dictionary<string, decimal> outputRatios;
 	} // class Grade
 
 	public static class GradeExt {
@@ -58,7 +58,7 @@
 			target.Score = source.Score;
 			target.EncodedResult = source.EncodedResult;
 			target.DecodedResult = source.DecodedResult;
-			target.MapOutputRatios = source.MapOutputRatios;
+			target.OutputRatios = source.OutputRatios;
 			target.Warnings = Utility.SetList(target.Warnings, source.Warnings);
 
 			return target;

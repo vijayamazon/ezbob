@@ -8,10 +8,10 @@
 			this.log = new SafeILog(log);
 		} // constructor
 
-		public Response<InferenceOutput> Infer(InferenceInput inputData) {
+		public Response<Reply> Infer(InferenceInput inputData) {
 			// 1. Send REST API request to Logical Glue endpoint.
 			// 2. Load API call into InferenceOutput object.
-			return new Response<InferenceOutput>(""); // TODO
+			return new Response<Reply>(""); // TODO
 		} // Infer
 
 		private readonly ASafeLog log;
