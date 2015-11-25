@@ -2,7 +2,13 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.InvestorModel = Backbone.Model.extend({
-	url: '' + gRootPath + "Underwriter/Investor/Index"
+	idAttribute: 'InvestorID',
+	urlRoot: '' + gRootPath + 'Underwriter/Investor/GetInvestor'
+});
+
+EzBob.Underwriter.InvestorsModels = Backbone.Collection.extend({
+	url: '' + gRootPath + 'Underwriter/Investor/GetAllInvestors',
+	model: EzBob.Underwriter.InvestorModel
 });
 
 EzBob.Underwriter.InvestorBankModel = Backbone.Model.extend({
@@ -90,19 +96,24 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 			data.push({ name: 'SameBank', value: sameBankChecked });
 		}
 
+		var self = this;
 		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddInvestor', data);
 		xhr.done(function(res) {
-			console.log('done', res);
+			if (res.success) {
+				self.router.navigate('manageInvestor/' + res.InvestorID);
+				self.router.handleRoute('manageInvestor', res.InvestorID);
+			} else {
+				EzBob.ShowMessage(res.error, "Failed adding investor", null, 'Ok');
+			}
 		});
 
 		xhr.fail(function (res) {
-			console.log('failed', res);
+			EzBob.ShowMessage(res, "Failed adding investor", null, 'Ok');
 		});
 
 		xhr.always(function() {
 			UnBlockUi();
 		});
-		//todo submit
 		return false;
 	},
 

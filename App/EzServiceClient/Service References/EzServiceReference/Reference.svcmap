@@ -37,6 +37,7 @@
     <MetadataFile FileName="Ezbob.Backend.Models.NewLoan.xsd" MetadataType="Schema" ID="b6194d52-8c12-4d12-baeb-64e59ec73725" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="cd55f9a8-915d-4767-9228-9258340e19f4" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="EzService.ActionResults.Investor.xsd" MetadataType="Schema" ID="7df376fb-75fb-4b4d-a34f-9b042449ff7e" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.Investor.xsd" MetadataType="Schema" ID="4f9a8abb-218d-4840-a54f-66ac269919c6" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="59d902b3-8130-4c3e-98eb-afa6dfb2b46e" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="397c1073-b84d-47a9-a5a9-9e6702b36e04" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="24c5535d-9cbd-4126-bc57-9c4d653c0e64" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />

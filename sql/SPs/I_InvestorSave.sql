@@ -22,7 +22,13 @@ CREATE PROCEDURE I_InvestorSave
 AS
 BEGIN
 	SET NOCOUNT ON;
-
+	
+	--Check if investor exists
+	IF EXISTS (SELECT * FROM I_Investor i INNER JOIN @Tbl t ON i.Name=t.Name)
+	BEGIN
+		SELECT 0 AS ScopeID
+	END
+	
 	INSERT INTO I_Investor (
 		[InvestorTypeID],
 		[Name],

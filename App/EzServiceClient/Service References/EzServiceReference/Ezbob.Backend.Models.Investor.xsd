@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="InvestorModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
+      <xs:element minOccurs="0" name="InvestorTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvestorModel" nillable="true" type="tns:InvestorModel" />
+  <xs:complexType name="ArrayOfInvestorContactModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InvestorContactModel" nillable="true" type="tns:InvestorContactModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInvestorContactModel" nillable="true" type="tns:ArrayOfInvestorContactModel" />
+  <xs:complexType name="InvestorContactModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InvestorContactID" type="xs:int" />
+      <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsPrimary" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Mobile" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OfficePhone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PersonalName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Role" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvestorContactModel" nillable="true" type="tns:InvestorContactModel" />
+  <xs:complexType name="ArrayOfInvestorBankAccountModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InvestorBankAccountModel" nillable="true" type="tns:InvestorBankAccountModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInvestorBankAccountModel" nillable="true" type="tns:ArrayOfInvestorBankAccountModel" />
+  <xs:complexType name="InvestorBankAccountModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BankAccountName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankAccountNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankBranchName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankBranchNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankCountryID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InvestorAccountTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="InvestorBankAccountID" type="xs:int" />
+      <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="RepaymentKey" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvestorBankAccountModel" nillable="true" type="tns:InvestorBankAccountModel" />
+</xs:schema>

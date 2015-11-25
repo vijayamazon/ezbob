@@ -4347,6 +4347,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypes", ReplyAction="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypesResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.InvestorTypesActionResult> InvestorLoadTypesAsync(int underwriterID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
         
@@ -5941,6 +5947,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.InvestorTypesActionResult> InvestorLoadTypesAsync(int underwriterID) {
             return base.Channel.InvestorLoadTypesAsync(underwriterID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
+            return base.Channel.CreateInvestor(underwriterID, investor, investorContacts, investorBanks);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
+            return base.Channel.CreateInvestorAsync(underwriterID, investor, investorContacts, investorBanks);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {

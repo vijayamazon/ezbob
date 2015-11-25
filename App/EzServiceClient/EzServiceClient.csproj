@@ -80,6 +80,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.Investor.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.NewLoan.xsd">
       <SubType>Designer</SubType>
     </None>

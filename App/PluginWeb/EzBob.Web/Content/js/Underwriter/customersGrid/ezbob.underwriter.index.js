@@ -69,6 +69,14 @@
 				addInvestor: {
 					view: new EzBob.Underwriter.AddInvestorView({ el: $('#add-investor-view'), }),
 					isRendered: false,
+				},
+				manageInvestor: {
+					view: new EzBob.Underwriter.ManageInvestorView({ el: $('#manage-investor-view'), }),
+					isRendered: false,
+				},
+				manageInvestors: {
+					view: new EzBob.Underwriter.ManageInvestorsView({ el: $('#manage-investor-view'), }),
+					isRendered: false,
 				}
 			}; // views
 		}, // initialize
@@ -90,13 +98,15 @@
 			'broker/:id/': 'broker',
 			'broker/:id/:section': 'broker',
 			'broker/:id/:section/': 'broker',
-			'add-investor': 'addInvestor',
+			'addInvestor': 'addInvestor',
+			'manageInvestor': 'manageInvestors',
+			'manageInvestor/:id': 'manageInvestor',
+			'manageInvestor/:id/': 'manageInvestor',
 			'*z': 'customers',
 		}, // routes
 
 		handleRoute: function(sViewName, id, type) {
 			var oView = this.views[sViewName];
-
 			if (!oView.isRendered) {
 				oView.isRendered = true;
 				oView.view.render();
@@ -123,7 +133,6 @@
 			});
 
 			$('[id="liClient"] > a').unbind("click").on('click', function() {
-				console.log('render click customers');
 				a.render();
 				return false;
 			});
@@ -169,8 +178,16 @@
 			this.handleRoute('broker', id, section);
 		}, // broker
 
-		addInvestor: function (){
+		addInvestor: function () {
 			this.handleRoute('addInvestor');
+		},
+
+		manageInvestor: function (id) {
+			this.handleRoute('manageInvestor', id);
+		},
+
+		manageInvestors: function () {
+			this.handleRoute('manageInvestors');
 		},
 
 		hideAll: function() {
@@ -183,11 +200,8 @@
 
 	var oRouter = new TUnderwriterRouter();
 
-	oRouter.views.grids.view.router = oRouter;
-
-	oRouter.views.profile.view.router = oRouter;
-
-	oRouter.views.broker.view.router = oRouter;
+	for (var i in oRouter.views)
+		oRouter.views[i].view.router = oRouter;
 
 	Backbone.history.start();
 

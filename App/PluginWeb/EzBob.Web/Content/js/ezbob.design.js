@@ -1561,9 +1561,12 @@ EzBob.escapeRegExp = function(str) {
 	return str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : '';
 }; // EzBob.escapeRegExp
 
-$.validator.addMethod("notEqual", function (value, element, param) {
+$.validator.addMethod('notEqual', function (value, element, param) {
+	if(!$(param).is(':visible')) {
+		return true;
+	}
 	return this.optional(element) || value != $(param).val();
-}, "This has to be different...");
+}, 'This has to be different...');
 
 $.validator.addMethod('validateSignerName', function(value, element, params) {
 	function innerLog() {

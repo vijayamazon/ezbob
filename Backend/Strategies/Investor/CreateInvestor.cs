@@ -23,7 +23,7 @@
 			con.BeginTransaction();
 			
 			try {
-				int investorID = DB.ExecuteScalar<int>(con, "I_InvestorSave", CommandSpecies.StoredProcedure,
+				InvestorID = DB.ExecuteScalar<int>(con, "I_InvestorSave", CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<I_Investor>("Tbl",
 						new List<I_Investor> {
 							new I_Investor {
@@ -35,7 +35,7 @@
 						})
 					);
 
-				if (investorID == 0) {
+				if (InvestorID == 0) {
 					throw new StrategyWarning(this, "Failed creating investor");
 				}
 
@@ -50,17 +50,17 @@
 
 					var dbContact = new I_InvestorContact {
 						InvestorContactID = userSingup.UserID,
-						Timestamp = now,
-						IsActive = true,
 						Email = contact.Email,
-						InvestorID = investorID,
+						InvestorID = InvestorID,
 						Comment = contact.Comment,
-						IsPrimary = true,
 						LastName = contact.LastName,
 						Mobile = contact.Mobile,
 						OfficePhone = contact.OfficePhone,
 						PersonalName = contact.PersonalName,
-						Role = contact.Role
+						Role = contact.Role,
+						IsPrimary = contact.IsPrimary,
+						Timestamp = now,
+						IsActive = true,
 					};
 
 					int contactsCount = DB.ExecuteScalar<int>(con, "I_InvestorContactSave", CommandSpecies.StoredProcedure,
@@ -86,7 +86,7 @@
 						InvestorAccountTypeID = bank.InvestorAccountTypeID,
 						InvestorBankAccountID = bank.InvestorBankAccountID,
 						RepaymentKey = bank.RepaymentKey,
-						InvestorID = investorID
+						InvestorID = InvestorID
 					});
 				}
 
@@ -106,6 +106,7 @@
 		}
 
 		public bool Result { get; set; }
+		public int InvestorID { get; private set; }
 
 		private readonly InvestorModel investor;
 		private readonly IEnumerable<InvestorContactModel> contacts;
