@@ -15,16 +15,34 @@ ALTER PROCEDURE SaveExperianHistory
 ,@Score INT 
 ,@CustomerId INT = NULL
 ,@DirectorId INT = NULL
-,@CompanyRefNum INT = NULL
+,@CompanyRefNum NVARCHAR(20) = NULL
 ,@Balance INT = NULL
 ,@CII INT = NULL
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * FROM MP_ExperianHistory WHERE ServiceLogId=@ServiceLogId)
+	IF NOT EXISTS (SELECT * FROM MP_ExperianHistory WHERE ServiceLogId = @ServiceLogId)
 	BEGIN
-		INSERT INTO MP_ExperianHistory (CustomerId, Type, [Date], ServiceLogId, Score, CII, CaisBalance, DirectorId, CompanyRefNum)
-		VALUES (@CustomerId, @Type, @InsertDate, @ServiceLogId, @Score, @CII, @Balance, @DirectorId,@CompanyRefNum)
+		INSERT INTO MP_ExperianHistory (
+			CustomerId,
+			Type,
+			[Date],
+			ServiceLogId,
+			Score,
+			CII,
+			CaisBalance,
+			DirectorId,
+			CompanyRefNum
+		) VALUES (
+			@CustomerId,
+			@Type,
+			@InsertDate,
+			@ServiceLogId,
+			@Score,
+			@CII,
+			@Balance,
+			@DirectorId,
+			@CompanyRefNum
+		)
 	END	
 END
 GO
-
