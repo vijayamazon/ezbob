@@ -315,14 +315,14 @@
 		private static string FormatRequestResponse(string input) {
 			const int substLen = 50;
 
-			string res = (input ?? string.Empty);
+			string res = (input ?? string.Empty).TrimStart();
 
-			string dots = (res.Length > substLen) ? "..." : string.Empty;
+			if (res.Length <= substLen)
+				return "'" + res.TrimEnd() + "'";
 
 			return "'" +
-				res.TrimStart().Substring(0, substLen).Replace("\r", string.Empty).Replace("\n", string.Empty) +
-				"'" +
-				dots;
+				res.Substring(0, substLen).TrimEnd().Replace("\r", string.Empty).Replace("\n", string.Empty) +
+				"'...";
 		} // FormatRequestResponse
 	} // class ServiceLogWriter
 } // namespace
