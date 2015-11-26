@@ -276,8 +276,6 @@
 		        MinValue = !hasRollover ? 0.01m : state.Fees + state.Interest
 		    };
 
-			money = (money > model.Balance) ? model.Balance : money;
-			money = (money < model.MinValue) ? model.MinValue : money;
 			model.Amount = money;
 
 			decimal amount = Math.Min(money, state.Fees);

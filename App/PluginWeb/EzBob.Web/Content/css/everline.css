@@ -6,7 +6,7 @@
   src: local('Open Sans'), local('OpenSans'), url(fonts/opensans.woff) format('woff');
 }
 
-body {
+html {
 	font-family: 'Open Sans',sans-serif;
 	font-size: 62.5%;
 }
@@ -16,6 +16,12 @@ html {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	
+	
+}
+
+body {
+	font-size: 10px;
 }
 
 #wrapper {
@@ -111,10 +117,10 @@ header.everline_header nav div.pin {
 			header.everline_header nav a.svg, header nav span.svg {
 				background: url(../everline/EverlineLogo.png) no-repeat 0 center;
 			
-				-ms-background-size: 82%;
-				background-size: 82%;
+				-ms-background-size: 85%;
+				background-size: 85%;
 				height: 5em;
-				margin-top: 17px;
+				margin-top: 14px;
 				width: 11.7em;
 				display: inline-block;
 				float: left;
@@ -218,5 +224,6 @@ footer .privacy-and-cookie-policy {
     margin-bottom: 20px;
     margin-top: 20px;
 }
+
 
 
