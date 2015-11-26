@@ -10,17 +10,7 @@ ALTER PROCEDURE LogicalGlueLoadInference
 @Now DATETIME
 AS
 BEGIN
-	SELECT
-		rt.RequestTypeID,
-		ResponseID = CONVERT(BIGINT, NULL)
-	INTO
-		#resp
-	FROM
-		LogicalGlueRequestTypes rt
-
-	------------------------------------------------------------------------------
-
-	UPDATE #resp SET ResponseID = ( 
+	DECLARE @ResponseID BIGINT = (
 		SELECT TOP 1
 			r.ResponseID
 		FROM
@@ -29,12 +19,21 @@ BEGIN
 				ON r.ServiceLogID = l.Id
 				AND l.CustomerId = @CustomerID
 				AND l.InsertDate < @Now
-				AND r.RequestTypeID = m.RequestTypeID
 		ORDER BY
 			l.InsertDate DESC,
 			l.Id DESC
 	)
-	FROM #resp m
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		m.ModelOutputID
+	INTO
+		#models
+	FROM
+		LogicalGlueModelOutputs m
+	WHERE
+		m.ResponseID = @ResponseID
 
 	------------------------------------------------------------------------------
 
@@ -42,10 +41,22 @@ BEGIN
 		RowType = 'Response',
 		r.ResponseID,
 		r.ServiceLogID,
-		r.ReceivingTime,
+		r.ReceivedTime,
 		r.MonthlyRepayment,
-		r.RequestTypeID,
 		r.BucketID,
+		r.HasEquifaxData
+	FROM
+		LogicalGlueResponses r
+	WHERE
+		r.ResponseID = @ResponseID
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType = 'Model',
+		r.ModelOutputID,
+		r.ResponseID,
+		r.RequestTypeID,
 		r.InferenceResultEncoded,
 		r.InferenceResultDecoded,
 		r.Score,
@@ -54,63 +65,63 @@ BEGIN
 		r.ErrorCode,
 		r.Uuid
 	FROM
-		LogicalGlueResponses r
-		INNER JOIN #resp m ON r.ResponseID = m.ResponseID
+		LogicalGlueModelOutputs r
+		INNER JOIN #models m ON r.ModelOutputID = m.ModelOutputID
 
 	------------------------------------------------------------------------------
 
 	SELECT
 		RowType = 'OutputRatio',
 		r.OutputRatioID,
-		r.ResponseID,
+		r.ModelOutputID,
 		r.OutputClass,
 		r.Score
 	FROM
-		LogicalGlueResponseMapOutputRatios r
-		INNER JOIN #resp m ON r.ResponseID = m.ResponseID
+		LogicalGlueModelOutputRatios r
+		INNER JOIN #models m ON r.ModelOutputID = m.ModelOutputID
 
 	------------------------------------------------------------------------------
 
 	SELECT
 		RowType = 'Warning',
 		r.WarningID,
-		r.ResponseID,
+		r.ModelOutputID,
 		r.Value,
 		r.FeatureName,
 		r.MinValue,
 		r.MaxValue
 	FROM
-		LogicalGlueResponseWarnings r
-		INNER JOIN #resp m ON r.ResponseID = m.ResponseID
+		LogicalGlueModelWarnings r
+		INNER JOIN #models m ON r.ModelOutputID = m.ModelOutputID
 
 	------------------------------------------------------------------------------
 
 	SELECT
 		RowType = 'EncodingFailure',
 		r.FailureID,
-		r.ResponseID,
+		r.ModelOutputID,
 		r.RowIndex,
 		r.ColumnName,
 		r.UnencodedValue,
 		r.Reason,
 		r.Message
 	FROM
-		LogicalGlueResponseEncodingFailures r
-		INNER JOIN #resp m ON r.ResponseID = m.ResponseID
+		LogicalGlueModelEncodingFailures r
+		INNER JOIN #models m ON r.ModelOutputID = m.ModelOutputID
 
 	------------------------------------------------------------------------------
 
 	SELECT
 		RowType = 'MissingColumn',
 		r.MissingColumnID,
-		r.ResponseID,
+		r.ModelOutputID,
 		r.ColumnName
 	FROM
-		LogicalGlueResponseMissingColumns r
-		INNER JOIN #resp m ON r.ResponseID = m.ResponseID
+		LogicalGlueModelMissingColumns r
+		INNER JOIN #models m ON r.ModelOutputID = m.ModelOutputID
 
 	------------------------------------------------------------------------------
 
-	DROP TABLE #resp
+	DROP TABLE #models
 END
 GO

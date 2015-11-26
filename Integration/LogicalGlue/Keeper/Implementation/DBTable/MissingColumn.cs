@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable {
-	class MissingColumn : AWithResponseID {
-		public long MissingColumnID { get; set; }
+	class MissingColumn : AWithModelOutputID {
 		public string ColumnName { get; set; }
 	} // class MissingColumn
 } // namespace

@@ -52,7 +52,7 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Harvester\Interface\Bucket.cs" />
+    <Compile Include="Engine\Interface\Bucket.cs" />
     <Compile Include="Harvester\Interface\Etl.cs" />
     <Compile Include="Harvester\Interface\EtlCode.cs" />
     <Compile Include="Harvester\Interface\InferenceInputSerializer.cs" />
@@ -77,10 +77,11 @@
     <Compile Include="Engine\Interface\Utility.cs" />
     <Compile Include="Engine\Interface\Warning.cs" />
     <Compile Include="Engine\Interface\IEngine.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\ModelOutput.cs" />
     <Compile Include="Keeper\Interface\IKeeper.cs" />
-    <Compile Include="Keeper\Implementation\DBTable\AWithResponseID.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\AWithModelOutputID.cs" />
     <Compile Include="Keeper\Implementation\DBTable\EncodingFailure.cs" />
-    <Compile Include="Keeper\Implementation\DBTable\MapOutputRatio.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\OutputRatio.cs" />
     <Compile Include="Keeper\Implementation\DBTable\MissingColumn.cs" />
     <Compile Include="Keeper\Implementation\DBTable\Response.cs" />
     <Compile Include="Keeper\Implementation\DBTable\Warning.cs" />

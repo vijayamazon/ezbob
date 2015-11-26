@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable {
-	class MapOutputRatio : AWithResponseID {
-		public long OutputRatioID { get; set; }
+	class OutputRatio : AWithModelOutputID {
 		public string OutputClass { get; set; }
 		public decimal Score { get; set; }
-	} // class MapOutputRatio
+	} // class OutputRatio
 } // namespace

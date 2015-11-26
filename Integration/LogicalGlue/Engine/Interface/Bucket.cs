@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
+﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System.Runtime.Serialization;
 
 	[DataContract]

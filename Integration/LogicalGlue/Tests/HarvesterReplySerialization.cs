@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
@@ -17,11 +18,11 @@
 				Status = HttpStatusCode.OK,
 				Error = "no error",
 				Inference = new InferenceOutput {
-					NeuralNetwork = new ModelOutput {
+					NeuralNetwork = new Harvester.Interface.ModelOutput {
 						DecodedResult = mo.Grade.DecodedResult,
 						EncodedResult = mo.Grade.EncodedResult,
-						EncodingFailures = new List<EncodingFailure>(
-							mo.Error.EncodingFailures.Select(ef => new EncodingFailure {
+						EncodingFailures = new List<Harvester.Interface.EncodingFailure>(
+							mo.Error.EncodingFailures.Select(ef => new Harvester.Interface.EncodingFailure {
 								ColumnName = ef.ColumnName,
 								Message = ef.Message,
 								Reason = ef.Reason,
@@ -37,11 +38,11 @@
 						Status = mo.Status,
 						Uuid = mo.Error.Uuid,
 					},
-					FuzzyLogic = new ModelOutput {
+					FuzzyLogic = new Harvester.Interface.ModelOutput {
 						DecodedResult = mo.Grade.DecodedResult,
 						EncodedResult = mo.Grade.EncodedResult,
-						EncodingFailures = new List<EncodingFailure>(
-							mo.Error.EncodingFailures.Select(ef => new EncodingFailure {
+						EncodingFailures = new List<Harvester.Interface.EncodingFailure>(
+							mo.Error.EncodingFailures.Select(ef => new Harvester.Interface.EncodingFailure {
 								ColumnName = ef.ColumnName,
 								Message = ef.Message,
 								Reason = ef.Reason,
@@ -108,7 +109,7 @@
 
 		[Test]
 		public void DeserializeModelOutput() {
-			ModelOutput deserialized = JsonConvert.DeserializeObject<ModelOutput>(serializedPattern);
+			Harvester.Interface.ModelOutput deserialized = JsonConvert.DeserializeObject<Harvester.Interface.ModelOutput>(serializedPattern);
 
 			string serialized = JsonConvert.SerializeObject(deserialized, Formatting.Indented);
 
@@ -119,7 +120,7 @@
 
 		private static readonly Guid uuid = new Guid("2626f582-bd52-4d92-95fc-c2ec2ee1b73c");
 
-		private static readonly ModelOutput pattern = new ModelOutput {
+		private static readonly Harvester.Interface.ModelOutput pattern = new Harvester.Interface.ModelOutput {
 			Score = 0.5927377710432571m,
 			DecodedResult = "BAD",
 			EncodedResult = -2147483446,
@@ -130,22 +131,22 @@
 			},
 			Exception = "some exception",
 			ErrorCode = "no error code",
-			EncodingFailures = new List<EncodingFailure> {
-				new EncodingFailure {
+			EncodingFailures = new List<Harvester.Interface.EncodingFailure> {
+				new Harvester.Interface.EncodingFailure {
 					ColumnName = "Bad encoded col",
 					Message = "it's bad",
 					Reason = "good reason",
 					RowIndex = 0,
 					UnencodedValue = "a value",
 				},
-				new EncodingFailure {
+				new Harvester.Interface.EncodingFailure {
 					ColumnName = null,
 					Message = null,
 					Reason = null,
 					RowIndex = 0,
 					UnencodedValue = null,
 				},
-				new EncodingFailure {
+				new Harvester.Interface.EncodingFailure {
 					ColumnName = "Another bad encoded col",
 					Message = "it's really bad",
 					Reason = "bad reason",

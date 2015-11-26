@@ -10,8 +10,5 @@
 
 		[EnumMember(Value = "L")]
 		LogicalGlueInferenceApi,
-
-		[EnumMember(Value = "P")]
-		PType,
 	} // enum TimeoutReasons
 } // namespace

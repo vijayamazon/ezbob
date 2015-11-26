@@ -7,6 +7,9 @@
 	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable;
 	using Ezbob.Logger;
 
+	using DBModelOutput = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.ModelOutput;
+	using PublicModelOutput = Ezbob.Integration.LogicalGlue.Engine.Interface.ModelOutput;
+
 	internal class InferenceLoader {
 		public InferenceLoader(AConnection db, ASafeLog log, int customerID, DateTime time) {
 			this.db = db;
@@ -15,7 +18,7 @@
 			this.time = time;
 			this.timeStr = this.time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
 
-			this.models = new SortedDictionary<long, ModelOutput>();
+			this.models = new SortedDictionary<long, PublicModelOutput>();
 			this.executed = false;
 
 			Result = new Inference();
@@ -76,12 +79,24 @@
 
 			switch (rowType) {
 			case RowTypes.Response:
-				Response response = sr.Fill<Response>();
+				sr.Fill(Result);
 
-				if (!Enum.IsDefined(typeof(RequestType), response.RequestTypeID)) {
+				this.log.Debug(
+					"Inference loader({0}, '{1}'): loaded response (id: {2}).",
+					this.customerID,
+					this.timeStr,
+					sr["ResponseID"]
+				);
+
+				break;
+
+			case RowTypes.ModelOutput:
+				DBModelOutput dbModel = sr.Fill<DBModelOutput>();
+
+				if (!Enum.IsDefined(typeof(RequestType), dbModel.RequestTypeID)) {
 					err = string.Format(
 						"inference loader({1}, '{2}'): unsupported request type '{0}'.",
-						response.RequestTypeID,
+						dbModel.RequestTypeID,
 						this.customerID,
 						this.timeStr
 					);
@@ -91,38 +106,40 @@
 					throw new ArgumentOutOfRangeException(err, (Exception)null);
 				} // if
 
-				RequestType requestType = (RequestType)response.RequestTypeID;
+				var pubModel = new PublicModelOutput {
+					Status = dbModel.Status,
+					Grade = new Grade {
+						DecodedResult = dbModel.InferenceResultDecoded,
+						EncodedResult = dbModel.InferenceResultEncoded,
+						Score = dbModel.Score,
+					},
+					Error = new Error {
+						ErrorCode = dbModel.ErrorCode,
+						Exception = dbModel.Exception,
+						Uuid = dbModel.Uuid,
+					},
+				};
 
-				var model = new ModelOutput();
+				RequestType requestType = (RequestType)dbModel.RequestTypeID;
 
-				this.models[response.ResponseID] = model;
-				Result[requestType] = model;
-
-				model.Status = response.Status;
-
-				model.Grade.Score = response.Score;
-				model.Grade.EncodedResult = response.InferenceResultEncoded;
-				model.Grade.DecodedResult = response.InferenceResultDecoded;
-
-				model.Error.ErrorCode = response.ErrorCode;
-				model.Error.Exception = response.Exception;
-				model.Error.Uuid = response.Uuid;
+				this.models[dbModel.ResponseID] = pubModel;
+				Result.ModelOutputs[requestType] = pubModel;
 
 				this.log.Debug(
-					"Inference loader({0}, '{1}'): loaded response (id: {2}, type: {3}).",
+					"Inference loader({0}, '{1}'): loaded model output (id: {2}, type: {3}).",
 					this.customerID,
 					this.timeStr,
-					response.ResponseID,
+					sr["ModelOutputID"],
 					requestType
 				);
 
 				break;
 
 			case RowTypes.OutputRatio:
-				MapOutputRatio ratio = sr.Fill<MapOutputRatio>();
+				OutputRatio ratio = sr.Fill<OutputRatio>();
 
-				if (this.models.ContainsKey(ratio.ResponseID)) {
-					this.models[ratio.ResponseID].Grade.OutputRatios[ratio.OutputClass] = ratio.Score;
+				if (this.models.ContainsKey(ratio.ModelOutputID)) {
+					this.models[ratio.ModelOutputID].Grade.OutputRatios[ratio.OutputClass] = ratio.Score;
 
 					this.log.Debug(
 						"Inference loader({0}, '{1}'): loaded map output ratio ({2}: {3}).",
@@ -136,8 +153,8 @@
 						"Inference loader({0}, '{1}'): map output ratio '{2}' should belong to unknown response '{3}'.",
 						this.customerID,
 						this.timeStr,
-						ratio.OutputRatioID,
-						ratio.ResponseID
+						sr["OutputRatioID"],
+						ratio.ModelOutputID
 					);
 
 					this.log.Alert("{0}", err);
@@ -150,8 +167,8 @@
 			case RowTypes.Warning:
 				DBTable.Warning warning = sr.Fill<DBTable.Warning>();
 
-				if (this.models.ContainsKey(warning.ResponseID)) {
-					this.models[warning.ResponseID].Grade.Warnings.Add(new Engine.Interface.Warning {
+				if (this.models.ContainsKey(warning.ModelOutputID)) {
+					this.models[warning.ModelOutputID].Grade.Warnings.Add(new Engine.Interface.Warning {
 						FeatureName = warning.FeatureName,
 						MaxValue = warning.MaxValue,
 						MinValue = warning.MinValue,
@@ -170,8 +187,8 @@
 						"Inference loader({0}, '{1}'): warning '{2}' should belong to unknown response '{3}'.",
 						this.customerID,
 						this.timeStr,
-						warning.WarningID,
-						warning.ResponseID
+						sr["WarningID"],
+						warning.ModelOutputID
 					);
 
 					this.log.Alert("{0}", err);
@@ -184,8 +201,8 @@
 			case RowTypes.EncodingFailure:
 				DBTable.EncodingFailure encodingFailure = sr.Fill<DBTable.EncodingFailure>();
 
-				if (this.models.ContainsKey(encodingFailure.ResponseID)) {
-					this.models[encodingFailure.ResponseID].Error.EncodingFailures.Add(
+				if (this.models.ContainsKey(encodingFailure.ModelOutputID)) {
+					this.models[encodingFailure.ModelOutputID].Error.EncodingFailures.Add(
 						new Engine.Interface.EncodingFailure {
 							ColumnName = encodingFailure.ColumnName,
 							Message = encodingFailure.Message,
@@ -207,8 +224,8 @@
 						"Inference loader({0}, '{1}'): encoding failure '{2}' should belong to unknown response '{3}'.",
 						this.customerID,
 						this.timeStr,
-						encodingFailure.FailureID,
-						encodingFailure.ResponseID
+						sr["FailureID"],
+						encodingFailure.ModelOutputID
 					);
 
 					this.log.Alert("{0}", err);
@@ -221,8 +238,8 @@
 			case RowTypes.MissingColumn:
 				MissingColumn column = sr.Fill<MissingColumn>();
 
-				if (this.models.ContainsKey(column.ResponseID)) {
-					this.models[column.ResponseID].Error.MissingColumns.Add(column.ColumnName);
+				if (this.models.ContainsKey(column.ModelOutputID)) {
+					this.models[column.ModelOutputID].Error.MissingColumns.Add(column.ColumnName);
 
 					this.log.Debug(
 						"Inference loader({0}, '{1}'): loaded missing column ({2}).",
@@ -235,8 +252,8 @@
 						"Inference loader({0}, '{1}'): missing column '{2}' should belong to unknown response '{3}'.",
 						this.customerID,
 						this.timeStr,
-						column.MissingColumnID,
-						column.ResponseID
+						sr["MissingColumnID"],
+						column.ModelOutputID
 					);
 
 					this.log.Alert("{0}", err);
@@ -262,6 +279,7 @@
 
 		private enum RowTypes {
 			Response,
+			ModelOutput,
 			OutputRatio,
 			Warning,
 			EncodingFailure,
@@ -270,7 +288,7 @@
 
 		private bool executed;
 
-		private readonly SortedDictionary<long, ModelOutput> models;
+		private readonly SortedDictionary<long, PublicModelOutput> models;
 
 		private readonly ASafeLog log;
 		private readonly AConnection db;

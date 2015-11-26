@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Newtonsoft.Json;
 
 	public class InferenceOutput {

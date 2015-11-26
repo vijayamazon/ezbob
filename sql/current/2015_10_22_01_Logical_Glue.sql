@@ -54,10 +54,24 @@ BEGIN
 	CREATE TABLE LogicalGlueResponses (
 		ResponseID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
+		ReceivedTime DATETIME NOT NULL,
 		MonthlyRepayment DECIMAL(18, 0) NOT NULL,
-		ReceivingTime DATETIME NOT NULL,
-		RequestTypeID BIGINT NOT NULL,
 		BucketID BIGINT NULL,
+		HasEquifaxData BIT NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_LogicalGlueResponses PRIMARY KEY (ResponseID),
+		CONSTRAINT FK_LogcialGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
+		CONSTRAINT FK_LogcialGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID)
+	)
+END
+GO
+
+IF OBJECT_ID('LogicalGlueModelOutputs') IS NULL
+BEGIN
+	CREATE TABLE LogicalGlueModelOutputs (
+		ModelOutputID BIGINT IDENTITY(1, 1) NOT NULL,
+		ResponseID BIGINT NOT NULL,
+		RequestTypeID BIGINT NOT NULL,
 		InferenceResultEncoded BIGINT NULL,
 		InferenceResultDecoded NVARCHAR(255) NULL,
 		Score DECIMAL(18, 16) NULL,
@@ -66,70 +80,69 @@ BEGIN
 		ErrorCode NVARCHAR(MAX) NULL,
 		Uuid UNIQUEIDENTIFIER NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogcialGlueResponses PRIMARY KEY (ResponseID),
-		CONSTRAINT FK_LogcialGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
-		CONSTRAINT FK_LogcialGlueResponses_RequestType FOREIGN KEY (RequestTypeID) REFERENCES LogicalGlueRequestTypes (RequestTypeID),
-		CONSTRAINT FK_LogcialGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID)
+		CONSTRAINT PK_LogcialGlueModelOutputs PRIMARY KEY (ModelOutputID),
+		CONSTRAINT FK_LogcialGlueModelOutputs_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID),
+		CONSTRAINT FK_LogcialGlueModelOutputs_RequestType FOREIGN KEY (RequestTypeID) REFERENCES LogicalGlueRequestTypes (RequestTypeID)
 	)
 END
 GO
 
-IF OBJECT_ID('LogicalGlueResponseOutputRatios') IS NULL
+IF OBJECT_ID('LogicalGlueModelOutputRatios') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueResponseOutputRatios (
+	CREATE TABLE LogicalGlueModelOutputRatios (
 		OutputRatioID BIGINT IDENTITY(1, 1) NOT NULL,
-		ResponseID BIGINT NOT NULL,
+		ModelOutputID BIGINT NOT NULL,
 		OutputClass NVARCHAR(255) NOT NULL,
 		Score DECIMAL(18, 16) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogcialGlueResponseOutputRatios PRIMARY KEY (OutputRatioID),
-		CONSTRAINT FK_LogcialGlueResponseOutputRatios_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
+		CONSTRAINT PK_LogcialGlueModelOutputRatios PRIMARY KEY (OutputRatioID),
+		CONSTRAINT FK_LogcialGlueModelOutputRatios_ModelOutput FOREIGN KEY (ModelOutputID) REFERENCES LogicalGlueModelOutputs (ModelOutputID)
 	)
 END
 GO
 
-IF OBJECT_ID('LogicalGlueResponseWarnings') IS NULL
+IF OBJECT_ID('LogicalGlueModelWarnings') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueResponseWarnings (
+	CREATE TABLE LogicalGlueModelWarnings (
 		WarningID BIGINT IDENTITY(1, 1) NOT NULL,
-		ResponseID BIGINT NOT NULL,
+		ModelOutputID BIGINT NOT NULL,
 		Value NVARCHAR(MAX) NULL,
 		FeatureName NVARCHAR(255) NULL,
 		MinValue NVARCHAR(255) NULL,
 		MaxValue NVARCHAR(255) NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogicalGlueResponseWarnings PRIMARY KEY (WarningID),
-		CONSTRAINT FK_LogicalGlueResponseWarnings_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
+		CONSTRAINT PK_LogicalGlueModelWarnings PRIMARY KEY (WarningID),
+		CONSTRAINT FK_LogicalGlueModelWarnings_ModelOutput FOREIGN KEY (ModelOutputID) REFERENCES LogicalGlueModelOutputs (ModelOutputID)
 	)
 END
 GO
 
-IF OBJECT_ID('LogicalGlueResponseEncodingFailures') IS NULL
+IF OBJECT_ID('LogicalGlueModelEncodingFailures') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueResponseEncodingFailures (
+	CREATE TABLE LogicalGlueModelEncodingFailures (
 		FailureID BIGINT IDENTITY(1, 1) NOT NULL,
-		ResponseID BIGINT NOT NULL,
+		ModelOutputID BIGINT NOT NULL,
 		RowIndex INT NOT NULL,
 		ColumnName NVARCHAR(255) NOT NULL,
 		UnencodedValue NVARCHAR(MAX) NULL,
 		Reason NVARCHAR(MAX) NULL,
 		Message NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogicalGlueResponseEncodingFailures PRIMARY KEY (FailureID),
-		CONSTRAINT FK_LogicalGlueResponseEncodingFailures_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
+		CONSTRAINT PK_LogicalGlueModelEncodingFailures PRIMARY KEY (FailureID),
+		CONSTRAINT FK_LogicalGlueModelEncodingFailures_ModelOutput FOREIGN KEY (ModelOutputID) REFERENCES LogicalGlueModelOutputs (ModelOutputID)
 	)
 END
 GO
 
-IF OBJECT_ID('LogicalGlueResponseMissingColumns') IS NULL
+IF OBJECT_ID('LogicalGlueModelMissingColumns') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueResponseMissingColumns (
+	CREATE TABLE LogicalGlueModelMissingColumns (
 		MissingColumnID BIGINT IDENTITY(1, 1) NOT NULL,
-		ResponseID BIGINT NOT NULL,
+		ModelOutputID BIGINT NOT NULL,
 		ColumnName NVARCHAR(255) NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogicalGlueResponseMissingColumns PRIMARY KEY (MissingColumnID),
-		CONSTRAINT FK_LogicalGlueResponseMissingColumns_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
+		CONSTRAINT PK_LogicalGlueModelMissingColumns PRIMARY KEY (MissingColumnID),
+		CONSTRAINT FK_LogicalGlueModelMissingColumns_ModelOutput FOREIGN KEY (ModelOutputID) REFERENCES LogicalGlueModelOutputs (ModelOutputID)
 	)
 END
 GO

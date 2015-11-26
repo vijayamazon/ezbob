@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable {
-	class EncodingFailure : AWithResponseID {
-		public long FailureID { get; set; }
+	class EncodingFailure : AWithModelOutputID {
 		public int RowIndex { get; set; }
 		public string ColumnName { get; set; }
 		public string UnencodedValue { get; set; }

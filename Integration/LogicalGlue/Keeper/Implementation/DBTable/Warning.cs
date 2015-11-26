@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable {
-	class Warning : AWithResponseID {
-		public long WarningID { get; set; }
+	class Warning : AWithModelOutputID {
 		public string Value { get; set; }
 		public string FeatureName { get; set; }
 		public string MinValue { get; set; }
