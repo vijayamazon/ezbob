@@ -4,6 +4,7 @@
 	class Response : AWithResponseID {
 		public long ServiceLogID { get; set; }
 		public DateTime ReceivingTime { get; set; }
+		public decimal MonthlyRepayment { get; set; }
 		public long RequestTypeID { get; set; }
 		public long? InferenceResultEncoded { get; set; }
 		public string InferenceResultDecoded { get; set; }

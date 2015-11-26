@@ -24,11 +24,8 @@
 		/// Saves inference output to the database.
 		/// </summary>
 		/// <param name="customerID">ID of customer to infer.</param>
-		/// <param name="requestType">Request type (fuzzy logic, neural network).</param>
 		/// <param name="response">Inference output (raw and parsed).</param>
-		public void SaveInference(int customerID, RequestType requestType, Response<Reply> response) {
-			var dbResponse = new DBTable.Response();
-			dbResponse.RequestTypeID = (long)requestType;
+		public void SaveInference(int customerID, Response<Reply> response) {
 		} // SaveInference
 
 		private readonly AConnection db;

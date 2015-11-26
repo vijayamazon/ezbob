@@ -43,7 +43,9 @@ BEGIN
 		r.ResponseID,
 		r.ServiceLogID,
 		r.ReceivingTime,
+		r.MonthlyRepayment,
 		r.RequestTypeID,
+		r.BucketID,
 		r.InferenceResultEncoded,
 		r.InferenceResultDecoded,
 		r.Score,
@@ -58,7 +60,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType = 'MapOutputRatio',
+		RowType = 'OutputRatio',
 		r.OutputRatioID,
 		r.ResponseID,
 		r.OutputClass,

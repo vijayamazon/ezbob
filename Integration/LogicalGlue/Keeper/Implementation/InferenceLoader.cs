@@ -118,7 +118,7 @@
 
 				break;
 
-			case RowTypes.MapOutputRatio:
+			case RowTypes.OutputRatio:
 				MapOutputRatio ratio = sr.Fill<MapOutputRatio>();
 
 				if (this.models.ContainsKey(ratio.ResponseID)) {
@@ -262,7 +262,7 @@
 
 		private enum RowTypes {
 			Response,
-			MapOutputRatio,
+			OutputRatio,
 			Warning,
 			EncodingFailure,
 			MissingColumn,

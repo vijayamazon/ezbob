@@ -1,11 +1,20 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Runtime.Serialization;
+	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 
+	[DataContract]
 	public class Inference : IReadOnlyDictionary<RequestType, ModelOutput> {
 		public Inference() {
 			this.data = new Dictionary<RequestType, ModelOutput>();
 		} // constructor
+
+		[DataMember]
+		public decimal MonthlyRepayment { get; set; }
+
+		[DataMember]
+		public Bucket Bucket { get; set; }
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.

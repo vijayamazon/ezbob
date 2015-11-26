@@ -27,13 +27,37 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('LogicalGlueBuckets') IS NULL
+BEGIN
+	CREATE TABLE LogicalGlueBuckets (
+		BucketID BIGINT NOT NULL,
+		Bucket NCHAR(1) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_LogicalGlueBuckets PRIMARY KEY (BucketID),
+		CONSTRAINT UC_LogicalGlueBuckets UNIQUE (Bucket)
+	)
+
+	INSERT INTO LogicalGlueBuckets (BucketID, Bucket) VALUES
+		(1, 'A'),
+		(2, 'B'),
+		(3, 'C'),
+		(4, 'D'),
+		(5, 'E'),
+		(6, 'F'),
+		(7, 'G'),
+		(8, 'H')
+END
+GO
+
 IF OBJECT_ID('LogicalGlueResponses') IS NULL
 BEGIN
 	CREATE TABLE LogicalGlueResponses (
 		ResponseID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
+		MonthlyRepayment DECIMAL(18, 0) NOT NULL,
 		ReceivingTime DATETIME NOT NULL,
 		RequestTypeID BIGINT NOT NULL,
+		BucketID BIGINT NULL,
 		InferenceResultEncoded BIGINT NULL,
 		InferenceResultDecoded NVARCHAR(255) NULL,
 		Score DECIMAL(18, 16) NULL,
@@ -44,21 +68,22 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogcialGlueResponses PRIMARY KEY (ResponseID),
 		CONSTRAINT FK_LogcialGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
-		CONSTRAINT FK_LogcialGlueResponses_RequestType FOREIGN KEY (RequestTypeID) REFERENCES LogicalGlueRequestTypes (RequestTypeID)
+		CONSTRAINT FK_LogcialGlueResponses_RequestType FOREIGN KEY (RequestTypeID) REFERENCES LogicalGlueRequestTypes (RequestTypeID),
+		CONSTRAINT FK_LogcialGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID)
 	)
 END
 GO
 
-IF OBJECT_ID('LogicalGlueResponseMapOutputRatios') IS NULL
+IF OBJECT_ID('LogicalGlueResponseOutputRatios') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueResponseMapOutputRatios (
+	CREATE TABLE LogicalGlueResponseOutputRatios (
 		OutputRatioID BIGINT IDENTITY(1, 1) NOT NULL,
 		ResponseID BIGINT NOT NULL,
 		OutputClass NVARCHAR(255) NOT NULL,
 		Score DECIMAL(18, 16) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogcialGlueResponseMapOutputRatios PRIMARY KEY (OutputRatioID),
-		CONSTRAINT FK_LogcialGlueResponseMapOutputRatios_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
+		CONSTRAINT PK_LogcialGlueResponseOutputRatios PRIMARY KEY (OutputRatioID),
+		CONSTRAINT FK_LogcialGlueResponseOutputRatios_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID)
 	)
 END
 GO
