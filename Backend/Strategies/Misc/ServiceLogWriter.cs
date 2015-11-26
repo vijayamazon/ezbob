@@ -65,7 +65,7 @@
 				Package.Out.ServiceLog = this.repoLog.GetById(this.serviceLogID);
 
 				if (IsSavedEntryValid())
-				LogNewServiceLogEntry();
+					LogNewServiceLogEntry();
 			} catch (Exception e) {
 				Log.Error(
 					e,
@@ -262,7 +262,7 @@
 					break;
 
 				case ExperianServiceType.NonLimitedData:
-					var strategyInstance = new GetCompanyDataForCreditBureau(writer.Package.Out.ServiceLog.CompanyRefNum);
+					var strategyInstance = new GetCompanyDataForCreditBureau(writer.Package.In.CompanyRefNum);
 					strategyInstance.Execute();
 
 					var notLimitedBusinessData = new CompanyDataForCreditBureau {
@@ -281,10 +281,10 @@
 
 				CustomerId = writer.customerID;
 				DirectorId = writer.directorID;
-				CompanyRefNum = writer.spSaveServiceLog.CompanyRefNum;
+				CompanyRefNum = writer.Package.In.CompanyRefNum;
 				ServiceLogId = writer.serviceLogID;
 				InsertDate = writer.spSaveServiceLog.InsertDate;
-				Type = writer.spSaveServiceLog.ServiceType;
+				Type = writer.Package.In.ServiceType.ToString();
 			} // constructor
 
 			public override bool HasValidParameters() {
