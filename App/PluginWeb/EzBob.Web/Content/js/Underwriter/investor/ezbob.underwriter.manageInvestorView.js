@@ -22,7 +22,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 	},
 	serializeData: function () {
 		return {
-
+			
 		};
 	},
 	events: {
@@ -30,8 +30,6 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 	},
 
 	onRender: function () {
-		console.log('this.model', this.model);
-
 		var view = this.views[this.stateModel.get('state')].view(this);
 		view.on('back', this.backClicked, this);
 
@@ -66,6 +64,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 	addEditInvestorBankView: function (self) {
 		var view = new EzBob.Underwriter.ManageInvestorBankView({
 			model: self.model,
+			stateModel: self.stateModel
 		});
 		return view;
 	},//addEditInvestorBankView
@@ -73,72 +72,25 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 	addEditInvestorContactView: function (self) {
 		var view = new EzBob.Underwriter.ManageInvestorContactView({
 			model: self.model,
+			stateModel: self.stateModel
 		});
 		return view;
 	},//addEditInvestorContactView
 
-	addBank: function () {
+	addBank: function (id) {
+		this.stateModel.set('editID', id, { silent: true });
 		this.stateModel.set('state', 'addEditBank');
+		return false;
 	},
 
-	addContact: function () {
+	addContact: function (id) {
+		this.stateModel.set('editID', id, { silent: true });
 		this.stateModel.set('state', 'addEditContact');
+		return false;
 	},
 
 	backClicked: function () {
 		this.stateModel.set('state', 'details');
+		return false;
 	},
 });
-
-EzBob.Underwriter.ManageInvestorDetailsView = Backbone.Marionette.ItemView.extend({
-	template: "#manage-investor-details-template",
-	initialize: function() {
-		this.model = new EzBob.Underwriter.InvestorModel();
-		this.model.on('change reset', this.render, this);
-	},//initialize
-
-	events:{
-		'click #addInvestorContact': 'addContact',
-		'click #addInvestorBank': 'addBank'
-	},
-
-	addContact: function() {
-		this.trigger('addContact');
-	},
-
-	addBank: function() {
-		this.trigger('addBank');
-	}
-});//EzBob.Underwriter.ManageInvestorDetailsView
-
-EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.extend({
-	template: '#manage-investor-contact-template',
-	initialize: function () {
-		this.model = new EzBob.Underwriter.InvestorModel();
-		this.model.on('change reset', this.render, this);
-	},//initialize
-
-	events: {
-		'click #investorContactBack': 'back'
-	},
-
-	back: function () {
-		this.trigger('back');
-	}
-});//EzBob.Underwriter.ManageInvestorContactView
-
-EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
-	template: '#manage-investor-bank-template',
-	initialize: function () {
-		this.model = new EzBob.Underwriter.InvestorModel();
-		this.model.on('change reset', this.render, this);
-	},//initialize
-
-	events: {
-		'click #investorBankBack': 'back'
-	},
-
-	back: function () {
-		this.trigger('back');
-	}
-});//EzBob.Underwriter.ManageInvestorBankView

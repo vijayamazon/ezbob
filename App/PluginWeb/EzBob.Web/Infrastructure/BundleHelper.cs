@@ -505,6 +505,9 @@
 				//investor
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.addInvestorView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorDetailsView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorContactView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorBankView.js")
 
 				.MvcRender("~/Content/js/min/underwriter_#.js");
 		} // RenderUnderwriterJs

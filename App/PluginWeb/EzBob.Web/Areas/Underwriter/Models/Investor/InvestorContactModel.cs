@@ -8,5 +8,7 @@
 		public string ContactMobile { get; set; }
 		public string ContactOfficeNumber { get; set; }
 		public string Comment { get; set; }
+		public bool IsActive { get; set; }
+		public bool IsPrimary { get; set; }
 	}
 }

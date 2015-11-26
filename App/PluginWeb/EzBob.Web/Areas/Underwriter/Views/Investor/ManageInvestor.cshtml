@@ -1,17 +1,21 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@using ServiceClientProxy
+@using StructureMap
+@model dynamic
+
+@{
+	var service = new ServiceClient();
+	var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+	var types = service.Instance.InvestorLoadTypes(context.UserId);
+}
 
 <script type="text/template" id="manage-investor-template">
-	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
+	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor)
 	<div id="main-content">
-		<div class="page-title">
-			<div>
-				<h1>This is for managing investor</h1>
-			</div>
-		</div>
 		<div class="col-md-12">
 			<div class="box">
 				<div class="box-content">
-					This is for managing investor
+					<h2>Managing investor</h2>
 					<div id="manage-investor-region"></div>
 				</div>
 			</div>
@@ -23,9 +27,90 @@
 	<div class="col-md-12">
 		<div class="box">
 			<div class="box-content">
-				This is for managing investor details
-				<button id="addInvestorContact" class="btn btn-primary">Add Contact</button>
-				<button id="addInvestorBank" class="btn btn-primary">Add Bank</button>
+				<div class="row">
+					<dl class="loan-details col-lg-3 col-md-6 col-sm-12">
+						<dt>#</dt>
+						<dd><%-data.InvestorID%></dd>
+						<dt>Type</dt>
+						<dd><%-data.InvestorType%></dd>
+						<dt>Company name</dt>
+						<dd><%-data.CompanyName%></dd>
+						<dt>Is active</dt>
+						<dd><%-data.IsActive%></dd>
+					</dl>
+				</div>
+				<div class="row">
+					<h3 class="clearfix">Contacts</h3>
+					<table class="table box table-hover">
+						<thead class="box">
+							<tr class="box-title">
+								<th>#</th>
+								<th>First name</th>
+								<th>Last name</th>
+								<th>Email</th>
+								<th>Role</th>
+								<th>Mobile</th>
+								<th>Office phone</th>
+								<th>Comment</th>
+								<th>Is primary</th>
+								<th>Is active</th>
+								<th>Edit</th>
+							</tr>
+						</thead>
+						<tbody class="box-content">
+							<%_.each(data.Contacts, function(c){%>
+							<tr>
+								<td><%-c.InvestorContactID%></td>
+								<td><%-c.ContactPersonalName%></td>
+								<td><%-c.ContactLastName%></td>
+								<td><%-c.ContactEmail%></td>
+								<td><%-c.Role%></td>
+								<td><%-c.ContactMobile%></td>
+								<td><%-c.ContactOfficeNumber%></td>
+								<td><%-c.Comment%></td>
+								<td><%-c.IsPrimary%></td>
+								<td><%-c.IsActive%></td>
+								<td><button class="btn btn-primary editInvestorContact" data-contactid="<%-c.InvestorContactID%>">Edit</button></td>
+							</tr>
+							<%});%>
+							<tr>
+								<td colspan="11"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="row">
+					<h3>Bank accounts</h3>
+					<table class="table box table-hover">
+						<thead class="box">
+							<tr class="box-title">
+								<th>#</th>
+								<th>Account type</th>
+								<th>Sort code</th>
+								<th>Account number</th>
+								<th>Account name</th>
+								<th>Is active</th>
+								<th>Edit</th>
+							</tr>
+						</thead>
+						<tbody class="box-content">
+							<%_.each(data.Banks, function(b){%>
+							<tr>
+								<td><%-b.InvestorBankAccountID%></td>
+								<td><%-b.AccountTypeString%></td>
+								<td><%-b.BankSortCode%></td>
+								<td><%-b.BankAccountNumber%></td>
+								<td><%-b.BankAccountName%></td>
+								<td><%-b.IsActive%></td>
+								<td><button class="btn btn-primary editInvestorBank" data-bankid="<%-b.InvestorBankAccountID%>">Edit</button></td>
+							</tr>
+							<%});%>
+							<tr>
+								<td colspan="7"><button id="addInvestorBank" class="btn btn-primary">Add Bank</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -35,8 +120,42 @@
 	<div class="col-md-12">
 		<div class="box">
 			<div class="box-content">
-				This is for managing investor contact
-				<button id="investorContactBack" class="btn btn-primary">Back</button>
+				<form id="addEditInvestorContactForm" class="form-horizontal">
+					<div class="row">
+						<div class="col-md-6">
+							@EzForm.InputTextUnderwriter(this, "ContactPersonalName", "Contact personal name", null)
+							@EzForm.InputTextUnderwriter(this, "ContactLastName", "Contact last name", null)
+							@EzForm.InputTextUnderwriter(this, "ContactEmail", "Contact email", null)
+							@EzForm.InputTextUnderwriter(this, "Role", "Role", null)
+							@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile", null, "phone")
+							@EzForm.InputTextUnderwriter(this, "ContactOfficeNumber", "Office number", null, "phone")
+							@EzForm.InputTextUnderwriter(this, "Comment", "Comment", null)
+
+							<div class="control-group">
+								<label class="control-label"></label>
+								<div class="control">
+									<label class="checkbox">
+										<input name="IsPrimary" id="IsPrimary" type="checkbox" value="true" checked="checked" />
+										Is primary
+									</label>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label"></label>
+								<div class="control">
+									<label class="checkbox">
+										<input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
+										Is active
+									</label>
+								</div>
+							</div>
+							<input type="hidden" id="InvestorContactID" name="InvestorContactID" />
+							<button id="investorContactSubmit" class="btn btn-primary">Submit</button>
+							<button id="investorContactBack" class="btn btn-primary">Back</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -46,8 +165,28 @@
 	<div class="col-md-12">
 		<div class="box">
 			<div class="box-content">
-				This is for managing investor bank
-				<button id="investorBankBack" class="btn btn-primary">Back</button>
+				<form id="addEditInvestorBankAccountForm" class="form-horizontal">
+					<div class="row">
+						<div class="col-md-6">
+							@EzForm.SelectUnderwriter("AccountType", "Bank account type", types.InvestorBankAccountTypes, "Bank account type")
+							@EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null, "numeric")
+							@EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null, "numeric")
+							@EzForm.InputTextUnderwriter(this, "BankAccountName", "Bank account name", null)
+							<div class="control-group">
+								<label class="control-label"></label>
+								<div class="control">
+									<label class="checkbox">
+										<input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
+										Is active
+									</label>
+								</div>
+							</div>
+							<input type="hidden" id="InvestorBankAccountID" name="InvestorBankAccountID" />
+							<button id="investorBankSubmit" class="btn btn-primary">Submit</button>
+							<button id="investorBankBack" class="btn btn-primary">Back</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

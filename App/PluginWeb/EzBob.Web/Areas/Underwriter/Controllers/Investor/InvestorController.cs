@@ -3,7 +3,6 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Infrastructure;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Infrastructure.Attributes;
 	using ServiceClientProxy;
 
@@ -13,14 +12,11 @@
 
 	public class InvestorController : Controller {
 		private readonly IEzbobWorkplaceContext context;
-		private readonly IUsersRepository users;
 		private readonly ServiceClient serviceClient;
 		public InvestorController(
 			IEzbobWorkplaceContext context,
-			IUsersRepository users,
 			ServiceClient serviceClient) {
 			this.context = context;
-			this.users = users;
 			this.serviceClient = serviceClient;
 		}
 
@@ -37,7 +33,7 @@
 			if (SameBank) {
 				var bank = InvestorBank.First();
 				var types = this.serviceClient.Instance.InvestorLoadTypes(this.context.UserId);
-				bank.AccountType = types.InvestorBankAccountTypes.First(x => x.Value == "Repayments").Key;
+				bank.AccountType = int.Parse(types.InvestorBankAccountTypes.First(x => x.Value == "Repayments").Key);
 				InvestorBank.Add(bank);
 			}
 
@@ -61,7 +57,7 @@
 					BankAccountName = x.BankAccountName,
 					BankAccountNumber = x.BankAccountNumber,
 					BankCode = x.BankSortCode,
-					InvestorAccountTypeID = int.Parse(x.AccountType)
+					InvestorAccountTypeID = x.AccountType
 				}).ToArray());
 
 			return Json(new {
@@ -75,12 +71,61 @@
 		}
 
 		[Ajax]
+		[HttpPost]
+		public JsonResult AddEditInvestorContact(int InvestorID, FrontInvestorContactModel contact) {
+			//todo implement
+			return Json(new { InvestorID, contact, success = true }, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public JsonResult AddEditInvestorBankAccount(int InvestorID, FrontInvestorBankAccountModel bank) {
+			//todo implement
+			return Json(new { InvestorID, bank, success = true }, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
 		[HttpGet]
 		public JsonResult GetInvestor(int id) {
 			var investor = new FrontInvestorModel {
 				InvestorID = 1,
 				InvestorType = 1,
-				CompanyName = "investor1"
+				CompanyName = "investor1",
+				IsActive = true,
+				Contacts = new List<FrontInvestorContactModel> {
+					new FrontInvestorContactModel {
+						InvestorContactID = 1,
+						ContactEmail = "a@b.c",
+						ContactPersonalName = "John",
+						ContactLastName = "Doe",
+						IsActive = true,
+						IsPrimary = true
+					},
+					new FrontInvestorContactModel {
+						InvestorContactID = 2,
+						ContactEmail = "aaa@b.c",
+						ContactPersonalName = "John",
+						ContactLastName = "Doe",
+						IsActive = true,
+						IsPrimary = true
+					}
+				},
+				Banks = new List<FrontInvestorBankAccountModel> {
+					new FrontInvestorBankAccountModel {
+						InvestorBankAccountID = 1,
+						BankAccountNumber = "12345678",
+						BankAccountName = "Name",
+						AccountType = 1,
+						BankSortCode = "00000"
+					},
+					new FrontInvestorBankAccountModel {
+						InvestorBankAccountID = 2,
+						BankAccountNumber = "87654321",
+						BankAccountName = "Name2",
+						AccountType = 2,
+						BankSortCode = "3156"
+					}
+				}
 			};
 
 			return Json(investor, JsonRequestBehavior.AllowGet);
