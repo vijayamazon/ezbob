@@ -4,26 +4,39 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('LogicalGlueRequests') IS NULL
+BEGIN
+	CREATE TABLE LogicalGlueRequests (
+		RequestID BIGINT IDENTITY(1, 1) NOT NULL,
+		ServiceLogID BIGINT NOT NULL,
+		UniqueID UNIQUEIDENTIFIER NOT NULL,
+		MonthlyRepayment DECIMAL(18, 0) NOT NULL,
+		CompanyRegistrationNumber NVARCHAR(32) NULL,
+		FirstName NVARCHAR(250) NULL,
+		LastName NVARCHAR(250) NULL,
+		DateOfBirth DATETIME NULL,
+		EquifaxData NVARCHAR(MAX) NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_LogicalGlueRequests PRIMARY KEY (RequestID),
+		CONSTRAINT FK_LogcialGlueRequests_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id)
+	)
+END
+GO
+
 IF OBJECT_ID('LogicalGlueRequestTypes') IS NULL
 BEGIN
 	CREATE TABLE LogicalGlueRequestTypes (
 		RequestTypeID BIGINT NOT NULL,
-		InternalRequestType NVARCHAR(255) NOT NULL,
 		RequestType NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueRequestTypes PRIMARY KEY (RequestTypeID),
-		CONSTRAINT UC_LogicalGlueRequestTypes_Internal UNIQUE (InternalRequestType),
 		CONSTRAINT UC_LogicalGlueRequestTypes_External UNIQUE (RequestType),
-		CONSTRAINT CHK_LogicalGlueRequestTypes CHECK (
-			LTRIM(RTRIM(InternalRequestType)) != ''
-			AND
-			LTRIM(RTRIM(RequestType)) != ''
-		)
+		CONSTRAINT CHK_LogicalGlueRequestTypes CHECK (LTRIM(RTRIM(RequestType)) != '')
 	)
 
-	INSERT INTO LogicalGlueRequestTypes (RequestTypeID, InternalRequestType, RequestType) VALUES
-		(1, 'LoGlueFuzzyLogic', 'Fuzzy logic'),
-		(2, 'LoGlueNeuralNetwork', 'Neural network')
+	INSERT INTO LogicalGlueRequestTypes (RequestTypeID, RequestType) VALUES
+		(1, 'Fuzzy logic'),
+		(2, 'Neural network')
 END
 GO
 
@@ -55,7 +68,6 @@ BEGIN
 		ResponseID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
 		ReceivedTime DATETIME NOT NULL,
-		MonthlyRepayment DECIMAL(18, 0) NOT NULL,
 		BucketID BIGINT NULL,
 		HasEquifaxData BIT NOT NULL,
 		TimestampCounter ROWVERSION,

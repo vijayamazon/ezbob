@@ -42,7 +42,6 @@ BEGIN
 		r.ResponseID,
 		r.ServiceLogID,
 		r.ReceivedTime,
-		r.MonthlyRepayment,
 		r.BucketID,
 		r.HasEquifaxData
 	FROM

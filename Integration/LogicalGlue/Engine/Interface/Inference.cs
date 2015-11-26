@@ -6,8 +6,7 @@
 
 	[DataContract]
 	public class Inference {
-		[DataMember]
-		public decimal MonthlyRepayment { get; set; }
+		// TODO : request? [DataMember] public ...
 
 		[DataMember]
 		public DateTime ReceivedTime { get; set; }

@@ -19,29 +19,24 @@
 
 			writer.WriteStartObject();
 
-			writer.WritePropertyName(Equifax);
-			serializer.Serialize(writer, input.EquifaxData);
-
-			writer.WritePropertyName(RegNum);
-			serializer.Serialize(writer, input.CompanyRegistrationNumber);
-
 			writer.WritePropertyName(Payment);
 			serializer.Serialize(writer, input.MonthlyPayment);
 
-			bool hasDirector = input.Director != null;
+			if (!string.IsNullOrWhiteSpace(input.EquifaxData)) {
+				writer.WritePropertyName(Equifax);
+				serializer.Serialize(writer, input.EquifaxData);
+			} else {
+				WriteIfNotEmpty(writer, serializer, RegNum, input.CompanyRegistrationNumber);
 
-			writer.WritePropertyName(FirstName);
-			serializer.Serialize(writer, hasDirector ? input.Director.FirstName : string.Empty);
+				bool hasDirector = input.Director != null;
 
-			writer.WritePropertyName(LastName);
-			serializer.Serialize(writer, hasDirector ? input.Director.LastName : string.Empty);
-
-			writer.WritePropertyName(BirthDate);
-
-			serializer.Serialize(writer, hasDirector
-				? input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture)
-				: string.Empty
-			);
+				WriteIfNotEmpty(writer, serializer, FirstName, hasDirector ? input.Director.FirstName : null);
+				WriteIfNotEmpty(writer, serializer, LastName, hasDirector ? input.Director.LastName : null);
+				WriteIfNotEmpty(writer, serializer, BirthDate, hasDirector
+					? input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture)
+					: null
+				);
+			} // if
 
 			writer.WriteEndObject();
 		} // WriteJson
@@ -91,6 +86,14 @@
 		public override bool CanConvert(Type objectType) {
 			return objectType == typeof(InferenceInput);
 		} // CanConvert
+
+		private static void WriteIfNotEmpty(JsonWriter writer, JsonSerializer serializer, string name, string val) {
+			if (string.IsNullOrWhiteSpace(val))
+				return;
+
+			writer.WritePropertyName(name);
+			serializer.Serialize(writer, val);
+		} // WriteIfNotEmpty
 
 		private const string Equifax   = "equifax";
 		private const string RegNum    = "companiesHourseRegisteredNumber";

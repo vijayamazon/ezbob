@@ -59,3 +59,7 @@ GO
 IF OBJECT_ID('LogicalGlueRequestTypes') IS NOT NULL
 	DROP TABLE LogicalGlueRequestTypes
 GO
+
+IF OBJECT_ID('LogicalGlueRequests') IS NOT NULL
+	DROP TABLE LogicalGlueRequests
+GO
