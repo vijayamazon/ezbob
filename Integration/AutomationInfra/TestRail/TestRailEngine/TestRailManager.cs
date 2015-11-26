@@ -12,7 +12,6 @@
         public static volatile TestRailData instance;
         private static readonly object syncRoot = new Object();
         private static Dictionary<ulong, Suite> suiteRepository;
-        private static Dictionary<ulong, List<Case>> casesRepository;
 
 
         public static TestRailData Instance
@@ -27,6 +26,18 @@
                         var user = ConfigurationManager.AppSettings["testRailUser"];
                         var apikey = ConfigurationManager.AppSettings["testRailApiKey"];
                         instance = new TestRailData(url, user, apikey);
+                        CasesRepository = new Dictionary<ulong, List<Case>>();
+                        var ezbobProject = instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
+                        if (ezbobProject != null) {
+                            var suites = instance.GetSuites(ezbobProject.ID);
+                            foreach (var suiteItem in suites) {
+                                if (suiteItem.ID != null) {
+                                    var cases = instance.GetCases(ezbobProject.ID, suiteItem.ID.Value);
+                                    CasesRepository.Add((ulong)suiteItem.ID, cases);
+                                }
+                            }
+                        }
+
                     }
                 }
                 return instance;
@@ -53,29 +64,6 @@
             set { suiteRepository = value; }
         }
 
-        public static Dictionary<ulong, List<Case>> CasesRepository
-        {
-            get
-            {
-                if (casesRepository == null) {
-                    casesRepository = new Dictionary<ulong, List<Case>>();
-                    var ezbobProject = Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
-                    if (ezbobProject != null)
-                    {
-                        var suites = Instance.GetSuites(ezbobProject.ID);
-                        foreach (var suiteItem in suites)
-                        {
-                            if (suiteItem.ID != null)
-                            {
-                                var cases = Instance.GetCases(ezbobProject.ID, suiteItem.ID.Value);
-                                casesRepository.Add((ulong)suiteItem.ID, cases);
-                            }
-                        }
-                    }
-                }
-                return casesRepository;
-            }
-            set { casesRepository = value; }
-        }
+        public static Dictionary<ulong, List<Case>> CasesRepository { get; set; }
     }
 }

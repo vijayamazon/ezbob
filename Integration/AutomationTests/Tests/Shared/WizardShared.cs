@@ -1,27 +1,21 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Resources;
-    using System.Threading;
-    using NUnit.Framework;
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Interactions;
-    using OpenQA.Selenium.Support.Events;
-    using OpenQA.Selenium.Support.Extensions;
     using OpenQA.Selenium.Support.UI;
-    using TestStack.Seleno.Extensions;
 
     class WizardShared {
 
-        private IWebDriver _Driver;
-        private ResourceManager _EnvironmentConfig;
-        private ResourceManager _BrandConfig;
+        private readonly IWebDriver _Driver;
+        private readonly ResourceManager _EnvironmentConfig;
+        private readonly ResourceManager _BrandConfig;
+        private readonly object Locker;
 
         public WizardShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
             this._Driver = Driver;
             this._EnvironmentConfig = EnvironmentConfig;
             this._BrandConfig = BrandConfig;
+            this.Locker = new object();
         }
 
         //This procedure is to replace OrangeMoney/Wizard test case 'C3'
@@ -77,7 +71,7 @@
             signupSubmitButton.Click();
         }
 
-        //This procedure is to replace OrangeMoney/Wizard test case 'C1380'
+        //This procedure is to replace OrangeMoney/Wizard test case 'C1380', 'C26'
         //origin - BrokerFillLead: when broker fills lead's wizard; ClientSignup: when accessing from main wizard page.
         public void PerformWizardStepTwo(string origin,
             string personName,
@@ -94,11 +88,18 @@
             string phone2,
              bool agreeTerms) {
 
-            IWebElement firstName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("FirstName"));//Step 1
-            firstName.SendKeys(personName);
+            SharedServiceClass.WaitForBlockUiOff(this._Driver);
+            lock (this.Locker) {
+                IWebElement firstName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("FirstName"));//Step 1
+                firstName.Click();
+                firstName.SendKeys(personName);
+            }
 
-            IWebElement surname = this._Driver.FindElement(By.Id("Surname"));//Step 2
-            surname.SendKeys(personSurename);
+            lock (this.Locker) {
+                IWebElement surname = this._Driver.FindElement(By.Id("Surname"));//Step 2
+                surname.Click();
+                surname.SendKeys(personSurename);
+            }
 
             IWebElement formRadioCtrl;//Step 3
             switch (char.ToUpper(gender)) {
