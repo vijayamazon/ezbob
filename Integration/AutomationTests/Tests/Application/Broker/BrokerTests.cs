@@ -26,7 +26,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("2962")]
-        public void TestCase2962() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+        public void TestCase2962() { throw new Exception(); }
 
         [Test]
         [Category("1966")]
