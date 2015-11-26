@@ -7,7 +7,6 @@
 	using System.Text;
 	using System.Web;
 	using ConfigManager;
-	using ExperianLib.EBusiness;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
@@ -23,7 +22,6 @@
 		public EBusinessService(AConnection oDB) {
 			this.retryer = new SqlRetryer(oLog: log);
 			this.eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
-			this.nonLimitedParser = new NonLimitedParser(oDB, log);
 
 			this.db = oDB;
 		} // constructor
@@ -331,15 +329,13 @@
 
 					var newResponse = MakeRequest(requestXml);
 
-					var writelog = Utils.WriteLog(
+					Utils.WriteLog(
 						requestXml,
 						newResponse,
 						ExperianServiceType.NonLimitedData,
 						customerId,
 						companyRefNum: refNumber
 					);
-
-					this.nonLimitedParser.ParseAndStore(newResponse, refNumber, writelog.ServiceLog.Id);
 
 					return BuildResponseFromDb(refNumber);
 				} // if
@@ -464,7 +460,6 @@
 		} // GetResource
 
 		private readonly SqlRetryer retryer;
-		private readonly NonLimitedParser nonLimitedParser;
 		private readonly string eSeriesUrl;
 		private readonly AConnection db;
 

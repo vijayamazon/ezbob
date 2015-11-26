@@ -88,8 +88,18 @@
 	header nav #user-menu a{
 		padding: 7px 0 !important;
 		margin-right: 0 !important;
-		margin-top: 13px;
+		margin-top: 7px;
 		width: 81px;
+	}
+
+	header.everline_header nav ul.sub-links li.sign-up.signup_btn a.org-btn {
+		padding: 7px 2.5px !important;
+	}
+
+	header nav .sub-links a.telephone i.fa.fa-phone{
+		position:absolute;
+		top: 20px;
+		left: 25px;
 	}
 
 	header nav .sub-links .telephone,

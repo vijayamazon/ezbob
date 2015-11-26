@@ -83,6 +83,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.core">
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.core.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
@@ -219,6 +222,7 @@
     <Compile Include="Tests\Legacy\Everline\EverlineTests.cs" />
     <Compile Include="Tests\Shared\BrokerShared.cs" />
     <Compile Include="Tests\Shared\CustomerShared.cs" />
+    <Compile Include="Tests\Shared\SharedDBClass.cs" />
     <Compile Include="Tests\Shared\SharedServiceClass.cs" />
     <Compile Include="Tests\Shared\WizardShared.cs" />
     <Compile Include="Tests\WorkFlow\Collection\CollectionTests.cs" />
@@ -239,11 +243,36 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebDrivers\chromedriver.exe" />
     <Content Include="WebDrivers\IEDriverServer.exe" />
     <Content Include="WebDrivers\wires.exe" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="configs\Brand\DefaultBrand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
