@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using System;
+	using ExperianLib.EBusiness;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.CallCreditStrategy;
@@ -38,6 +39,10 @@
 				switch (Package.In.ServiceType) {
 				case ExperianServiceType.LimitedData:
 					DoLimited();
+					break;
+
+				case ExperianServiceType.NonLimitedData:
+					DoNonLimited();
 					break;
 
 				case ExperianServiceType.Consumer:
@@ -73,6 +78,10 @@
 		} // Execute
 
 		public WriteToLogPackage Package { get; set; }
+
+		private void DoNonLimited() {
+			new NonLimitedParser(DB, Log).ParseAndStore(Package.In.Response, Package.In.CompanyRefNum, this.serviceLogID);
+		} // DoNonLimited
 
 		private void DoLimited() {
 			var parseExperianLtd = new ParseExperianLtd(this.serviceLogID);
