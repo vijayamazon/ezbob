@@ -3,7 +3,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.InvestorModel = Backbone.Model.extend({
 	idAttribute: 'InvestorID',
-	urlRoot: '' + gRootPath + 'Underwriter/Investor/GetInvestor'
+	urlRoot: '' + gRootPath + 'Underwriter/Investor/LoadInvestor'
 });
 
 EzBob.Underwriter.InvestorBankModel = Backbone.Model.extend({

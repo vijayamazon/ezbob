@@ -21,18 +21,18 @@ EzBob.Underwriter.ManageInvestorDetailsView = Backbone.Marionette.ItemView.exten
 	},
 
 	addContact: function() {
-		this.trigger('addContact');
+		this.trigger('manageContact');
 	},
 
 	addBank: function() {
-		this.trigger('addBank');
+		this.trigger('manageBank');
 	},
 
 	editContact: function (el) {
-		this.trigger('addContact', $(el.currentTarget).data('contactid'));
+		this.trigger('manageContact', $(el.currentTarget).data('contactid'));
 	},
 
 	editBank: function (el) {
-		this.trigger('addBank', $(el.currentTarget).data('bankid'));
+		this.trigger('manageBank', $(el.currentTarget).data('bankid'));
 	}
 });//EzBob.Underwriter.ManageInvestorDetailsView

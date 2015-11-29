@@ -235,6 +235,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ApplicationInfoResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorTypesActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -1989,6 +1990,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.InvestorTypesField, value) != true)) {
                     this.InvestorTypesField = value;
                     this.RaisePropertyChanged("InvestorTypes");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="InvestorActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class InvestorActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Investor.InvestorModel InvestorField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Investor.InvestorModel Investor {
+            get {
+                return this.InvestorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.InvestorField, value) != true)) {
+                    this.InvestorField = value;
+                    this.RaisePropertyChanged("Investor");
                 }
             }
         }
@@ -4353,6 +4377,24 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorResponse")]
+        ServiceClientProxy.EzServiceReference.InvestorActionResult LoadInvestor(int underwriterID, int investorID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.InvestorActionResult> LoadInvestorAsync(int underwriterID, int investorID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorContact", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorContactResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorContact(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorContact", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorContactResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorContactAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorBankAccount(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorBankAccountAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
         
@@ -5955,6 +5997,30 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
             return base.Channel.CreateInvestorAsync(underwriterID, investor, investorContacts, investorBanks);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.InvestorActionResult LoadInvestor(int underwriterID, int investorID) {
+            return base.Channel.LoadInvestor(underwriterID, investorID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.InvestorActionResult> LoadInvestorAsync(int underwriterID, int investorID) {
+            return base.Channel.LoadInvestorAsync(underwriterID, investorID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorContact(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact) {
+            return base.Channel.ManageInvestorContact(underwriterID, investorContact);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorContactAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact) {
+            return base.Channel.ManageInvestorContactAsync(underwriterID, investorContact);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorBankAccount(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank) {
+            return base.Channel.ManageInvestorBankAccount(underwriterID, investorBank);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorBankAccountAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank) {
+            return base.Channel.ManageInvestorBankAccountAsync(underwriterID, investorBank);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {

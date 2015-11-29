@@ -590,6 +590,24 @@
   <wsdl:message name="IEzService_CreateInvestor_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateInvestorResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadInvestor_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadInvestor" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadInvestor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadInvestorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManageInvestorContact_InputMessage">
+    <wsdl:part name="parameters" element="tns:ManageInvestorContact" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManageInvestorContact_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ManageInvestorContactResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManageInvestorBankAccount_InputMessage">
+    <wsdl:part name="parameters" element="tns:ManageInvestorBankAccount" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManageInvestorBankAccount_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ManageInvestorBankAccountResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
   </wsdl:message>
@@ -1866,6 +1884,18 @@
     <wsdl:operation name="CreateInvestor">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor" message="tns:IEzService_CreateInvestor_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse" message="tns:IEzService_CreateInvestor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadInvestor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadInvestor" message="tns:IEzService_LoadInvestor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadInvestorResponse" message="tns:IEzService_LoadInvestor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageInvestorContact">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorContact" message="tns:IEzService_ManageInvestorContact_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorContactResponse" message="tns:IEzService_ManageInvestorContact_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageInvestorBankAccount">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount" message="tns:IEzService_ManageInvestorBankAccount_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse" message="tns:IEzService_ManageInvestorBankAccount_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -3245,6 +3275,33 @@
     </wsdl:operation>
     <wsdl:operation name="CreateInvestor">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/CreateInvestor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadInvestor">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadInvestor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageInvestorContact">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorContact" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageInvestorBankAccount">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

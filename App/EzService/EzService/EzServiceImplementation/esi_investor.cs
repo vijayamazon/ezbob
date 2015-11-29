@@ -20,12 +20,39 @@
 			};
 		}
 
+		public InvestorActionResult LoadInvestor(int underwriterID, int investorID) {
+			LoadInvestor strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, investorID);
+			return new InvestorActionResult {
+				MetaData = metadata,
+				Investor = strategy.Result
+			};
+		}
+
 		public IntActionResult CreateInvestor(int underwriterID, InvestorModel investor, IEnumerable<InvestorContactModel> investorContacts, IEnumerable<InvestorBankAccountModel> investorBanks) {
 			CreateInvestor strategy;
 			var metadata = ExecuteSync(out strategy, null, underwriterID, investor, investorContacts, investorBanks);
 			return new IntActionResult{
 				MetaData = metadata, 
 				Value = strategy.InvestorID
+			};
+		}
+
+		public BoolActionResult ManageInvestorContact(int underwriterID, InvestorContactModel investorContact) {
+			ManageInvestorContact strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, investorContact);
+			return new BoolActionResult {
+				MetaData = metadata,
+				Value = strategy.Result
+			};
+		}
+
+		public BoolActionResult ManageInvestorBankAccount(int underwriterID, InvestorBankAccountModel investorBank) {
+			ManageInvestorBankAccount strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, investorBank);
+			return new BoolActionResult {
+				MetaData = metadata,
+				Value = strategy.Result
 			};
 		}
 	}

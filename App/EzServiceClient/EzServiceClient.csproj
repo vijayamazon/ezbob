@@ -237,6 +237,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.InvestorActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.InvestorTypesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

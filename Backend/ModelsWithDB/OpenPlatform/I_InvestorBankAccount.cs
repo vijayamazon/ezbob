@@ -1,7 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform {
 	using System;
 	using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using Ezbob.Utils;
+	using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
 	public class I_InvestorBankAccount {
@@ -54,5 +55,11 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
+
+		//////////////////////////////////////////
+
+		[DataMember]
+		[NonTraversable]
+		public I_InvestorAccountType AccountType { get; set; }
 	}//class I_InvestorBankAccount
 }//ns

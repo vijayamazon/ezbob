@@ -1,10 +1,19 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform {
 	using System;
+	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using Ezbob.Utils;
+	using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
 	public class I_Investor {
+		public I_Investor() {
+			InvestorContacts = new List<I_InvestorContact>();
+			InvestorBankAccounts = new List<I_InvestorBankAccount>();
+			InvestorType = new I_InvestorType();
+		}//ctor
+
+
         [PK(true)]
         [DataMember]
 		public int InvestorID { get; set; }
@@ -22,5 +31,19 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
+
+		//////////////////////////////////////////
+		
+		[DataMember]
+		[NonTraversable]
+		public I_InvestorType InvestorType { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public List<I_InvestorContact> InvestorContacts { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public List<I_InvestorBankAccount> InvestorBankAccounts { get; set; }
 	}//class I_Investor
 }//ns

@@ -10,8 +10,8 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 		this.stateModel.on('change:state', this.render, this);
 		this.views = {
 			details: { view: this.investorDetailsView },
-			addEditBank: { view: this.addEditInvestorBankView },
-			addEditContact: { view: this.addEditInvestorContactView },
+			manageBank: { view: this.manageInvestorBankView },
+			manageContact: { view: this.manageInvestorContactView },
 		};
 
 		return this;
@@ -56,36 +56,36 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 		var view = new EzBob.Underwriter.ManageInvestorDetailsView({
 			model: self.model,
 		});
-		view.on('addBank', self.addBank, self);
-		view.on('addContact', self.addContact, self);
+		view.on('manageBank', self.manageBank, self);
+		view.on('manageContact', self.manageContact, self);
 		return view;
 	},//investorDetailsView
 	
-	addEditInvestorBankView: function (self) {
+	manageInvestorBankView: function (self) {
 		var view = new EzBob.Underwriter.ManageInvestorBankView({
 			model: self.model,
 			stateModel: self.stateModel
 		});
 		return view;
-	},//addEditInvestorBankView
+	},//manageInvestorBankView
 
-	addEditInvestorContactView: function (self) {
+	manageInvestorContactView: function (self) {
 		var view = new EzBob.Underwriter.ManageInvestorContactView({
 			model: self.model,
 			stateModel: self.stateModel
 		});
 		return view;
-	},//addEditInvestorContactView
+	},//manageInvestorContactView
 
-	addBank: function (id) {
+	manageBank: function (id) {
 		this.stateModel.set('editID', id, { silent: true });
-		this.stateModel.set('state', 'addEditBank');
+		this.stateModel.set('state', 'manageBank');
 		return false;
 	},
 
-	addContact: function (id) {
+	manageContact: function (id) {
 		this.stateModel.set('editID', id, { silent: true });
-		this.stateModel.set('state', 'addEditContact');
+		this.stateModel.set('state', 'manageContact');
 		return false;
 	},
 

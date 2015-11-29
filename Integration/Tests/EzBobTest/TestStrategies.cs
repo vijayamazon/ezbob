@@ -1269,7 +1269,7 @@
 					Name = "TestInvestor",
 					IsActive = true,
 					Timestamp = now,
-					InvestorTypeID = 1
+					InvestorType = new InvestorTypeModel{ InvestorTypeID  = 1 }
 				}, 
 				new List<InvestorContactModel> {
 					new InvestorContactModel {
@@ -1296,7 +1296,7 @@
 						BankCode = "789",
 						BankCountryID = "UK",
 						BankName = "bank",
-						InvestorAccountTypeID = 1,
+						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 1 },
 						InvestorBankAccountID = 1,
 						RepaymentKey = "key"
 					},
@@ -1310,7 +1310,7 @@
 						BankCode = "789",
 						BankCountryID = "UK",
 						BankName = "bank",
-						InvestorAccountTypeID = 1,
+						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 1},
 						InvestorBankAccountID = 1,
 						RepaymentKey = "key"
 					}
@@ -1318,6 +1318,14 @@
 			stra.Execute();
 
 			Assert.IsTrue(stra.Result);
+		}
+
+		[Test]
+		public void TestLoadInvestor() {
+			var stra = new LoadInvestor(25);
+			stra.Execute();
+			Assert.IsNotNull(stra.Result);
+			Assert.Greater(stra.Result.Contacts.Count, 0);
 		}
 	}
 }

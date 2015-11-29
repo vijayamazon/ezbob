@@ -2,6 +2,8 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Ezbob.Backend.Models.Investor;
+	using EzBob.Web.Areas.Underwriter.Models.Investor;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using ServiceClientProxy;
@@ -13,11 +15,15 @@
 	public class InvestorController : Controller {
 		private readonly IEzbobWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
+		private readonly InvestorModelBuilder investorModelBuilder;
+
 		public InvestorController(
 			IEzbobWorkplaceContext context,
-			ServiceClient serviceClient) {
+			ServiceClient serviceClient,
+			InvestorModelBuilder investorModelBuilder) {
 			this.context = context;
 			this.serviceClient = serviceClient;
+			this.investorModelBuilder = investorModelBuilder;
 		}
 
 		[Ajax]
@@ -39,7 +45,7 @@
 
 			var result = this.serviceClient.Instance.CreateInvestor(this.context.UserId,
 				new Ezbob.Backend.Models.Investor.InvestorModel {
-					InvestorTypeID = investor.InvestorType,
+					InvestorType = new InvestorTypeModel{ InvestorTypeID = investor.InvestorType },
 					Name = investor.CompanyName
 				},
 				new[] { new Ezbob.Backend.Models.Investor.InvestorContactModel {
@@ -57,7 +63,7 @@
 					BankAccountName = x.BankAccountName,
 					BankAccountNumber = x.BankAccountNumber,
 					BankCode = x.BankSortCode,
-					InvestorAccountTypeID = x.AccountType
+					AccountType = new InvestorAccountTypeModel { InvestorAccountTypeID = x.AccountType }
 				}).ToArray());
 
 			return Json(new {
@@ -70,64 +76,55 @@
 			}, JsonRequestBehavior.AllowGet);
 		}
 
+		/// <summary>
+		/// Add / Update investor contact
+		/// </summary>
 		[Ajax]
 		[HttpPost]
-		public JsonResult AddEditInvestorContact(int InvestorID, FrontInvestorContactModel contact) {
-			//todo implement
-			return Json(new { InvestorID, contact, success = true }, JsonRequestBehavior.AllowGet);
+		public JsonResult ManageInvestorContact(int InvestorID, FrontInvestorContactModel contact) {
+			
+			var result = this.serviceClient.Instance.ManageInvestorContact(this.context.UserId,
+				new Ezbob.Backend.Models.Investor.InvestorContactModel {
+					InvestorContactID = contact.InvestorContactID,
+					InvestorID = InvestorID,
+					IsActive = contact.IsActive,
+					Comment = contact.Comment,
+					Email = contact.ContactEmail,
+					IsPrimary = contact.IsPrimary,
+					LastName = contact.ContactLastName,
+					PersonalName = contact.ContactPersonalName,
+					Mobile = contact.ContactMobile,
+					OfficePhone = contact.ContactOfficeNumber,
+					Role = contact.Role,
+				});
+			return Json(new { InvestorID, contact, success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
 
+		/// <summary>
+		/// Add / Update investor bank account
+		/// </summary>
 		[Ajax]
 		[HttpPost]
-		public JsonResult AddEditInvestorBankAccount(int InvestorID, FrontInvestorBankAccountModel bank) {
-			//todo implement
-			return Json(new { InvestorID, bank, success = true }, JsonRequestBehavior.AllowGet);
+		public JsonResult ManageInvestorBankAccount(int InvestorID, FrontInvestorBankAccountModel bank) {
+			
+			var result = this.serviceClient.Instance.ManageInvestorBankAccount(this.context.UserId,
+				new Ezbob.Backend.Models.Investor.InvestorBankAccountModel {
+					InvestorBankAccountID = bank.InvestorBankAccountID,
+					InvestorID = InvestorID,
+					IsActive = bank.IsActive,
+					BankAccountName = bank.BankAccountName,
+					BankAccountNumber = bank.BankAccountNumber,
+					BankCode = bank.BankSortCode,
+					AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = bank.AccountType }
+				});
+			return Json(new { InvestorID, bank, success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult GetInvestor(int id) {
-			var investor = new FrontInvestorModel {
-				InvestorID = 1,
-				InvestorType = 1,
-				CompanyName = "investor1",
-				IsActive = true,
-				Contacts = new List<FrontInvestorContactModel> {
-					new FrontInvestorContactModel {
-						InvestorContactID = 1,
-						ContactEmail = "a@b.c",
-						ContactPersonalName = "John",
-						ContactLastName = "Doe",
-						IsActive = true,
-						IsPrimary = true
-					},
-					new FrontInvestorContactModel {
-						InvestorContactID = 2,
-						ContactEmail = "aaa@b.c",
-						ContactPersonalName = "John",
-						ContactLastName = "Doe",
-						IsActive = true,
-						IsPrimary = true
-					}
-				},
-				Banks = new List<FrontInvestorBankAccountModel> {
-					new FrontInvestorBankAccountModel {
-						InvestorBankAccountID = 1,
-						BankAccountNumber = "12345678",
-						BankAccountName = "Name",
-						AccountType = 1,
-						BankSortCode = "00000"
-					},
-					new FrontInvestorBankAccountModel {
-						InvestorBankAccountID = 2,
-						BankAccountNumber = "87654321",
-						BankAccountName = "Name2",
-						AccountType = 2,
-						BankSortCode = "3156"
-					}
-				}
-			};
-
+		public JsonResult LoadInvestor(int id) {
+			var result = this.serviceClient.Instance.LoadInvestor(this.context.UserId, id);
+			var investor = this.investorModelBuilder.Build(result.Investor);
 			return Json(investor, JsonRequestBehavior.AllowGet);
 		}
 

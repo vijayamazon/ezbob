@@ -17,6 +17,9 @@
 				<div class="box-content">
 					<h2>Managing investor</h2>
 					<div id="manage-investor-region"></div>
+					<div>
+						<a href="Customers#manageInvestor" class="btn btn-primary">Back to investors</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -32,7 +35,7 @@
 						<dt>#</dt>
 						<dd><%-data.InvestorID%></dd>
 						<dt>Type</dt>
-						<dd><%-data.InvestorType%></dd>
+						<dd><%-data.InvestorTypeStr%></dd>
 						<dt>Company name</dt>
 						<dd><%-data.CompanyName%></dd>
 						<dt>Is active</dt>
@@ -97,7 +100,7 @@
 							<%_.each(data.Banks, function(b){%>
 							<tr>
 								<td><%-b.InvestorBankAccountID%></td>
-								<td><%-b.AccountTypeString%></td>
+								<td><%-b.AccountTypeStr%></td>
 								<td><%-b.BankSortCode%></td>
 								<td><%-b.BankAccountNumber%></td>
 								<td><%-b.BankAccountName%></td>

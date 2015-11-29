@@ -13,7 +13,7 @@
 			this.investor = investor;
 			this.contacts = contacts;
 			this.banks = banks;
-		}
+		}//ctor
 
 		public override string Name { get { return "CreateInvestor"; } }
 
@@ -28,7 +28,7 @@
 						new List<I_Investor> {
 							new I_Investor {
 								Name = this.investor.Name,
-								InvestorTypeID = this.investor.InvestorTypeID,
+								InvestorTypeID = this.investor.InvestorType.InvestorTypeID,
 								IsActive = true,
 								Timestamp = now
 							}
@@ -83,7 +83,7 @@
 						BankCode = bank.BankCode,
 						BankCountryID = bank.BankCountryID,
 						BankName = bank.BankName,
-						InvestorAccountTypeID = bank.InvestorAccountTypeID,
+						InvestorAccountTypeID = bank.AccountType.InvestorAccountTypeID,
 						InvestorBankAccountID = bank.InvestorBankAccountID,
 						RepaymentKey = bank.RepaymentKey,
 						InvestorID = InvestorID
@@ -103,7 +103,7 @@
 			con.Commit();
 			Result = true;
 			Log.Info("Save investor data into DB complete.");
-		}
+		}//Execute
 
 		public bool Result { get; set; }
 		public int InvestorID { get; private set; }
@@ -111,5 +111,5 @@
 		private readonly InvestorModel investor;
 		private readonly IEnumerable<InvestorContactModel> contacts;
 		private readonly IEnumerable<InvestorBankAccountModel> banks;
-	}
-}
+	}//CreateInvestor
+}//ns

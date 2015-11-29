@@ -26,8 +26,6 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 	},//ui
 
 	onRender: function () {
-		this.ui.phone.mask('0?9999999999', { placeholder: ' ' });
-		this.ui.phone.numericOnly(11);
 		this.ui.numeric.numericOnly(20);
 
 		this.editID = this.stateModel.get('editID');
@@ -70,7 +68,7 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 
 		var self = this;
 
-		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddEditInvestorBankAccount', data);
+		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/ManageInvestorBankAccount', data);
 		xhr.done(function(res) {
 			if (res.success) {
 				EzBob.ShowMessage('Bank added/updated successfully', 'Done', null, 'Ok');

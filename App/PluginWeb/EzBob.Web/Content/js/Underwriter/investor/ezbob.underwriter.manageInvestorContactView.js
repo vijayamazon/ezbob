@@ -41,7 +41,7 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 			if (contact) {
 				this.ui.ContactPersonalName.val(contact.ContactPersonalName).change();
 				this.ui.ContactLastName.val(contact.ContactLastName).change();
-				this.ui.ContactEmail.val(contact.ContactEmail).change();
+				this.ui.ContactEmail.val(contact.ContactEmail).prop('readonly', 'readonly').change();
 				this.ui.Role.val(contact.Role).change();
 				this.ui.ContactMobile.val(contact.ContactMobile).change();
 				this.ui.ContactOfficeNumber.val(contact.ContactOfficeNumber).change();
@@ -82,7 +82,7 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 
 		var self = this;
 
-		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddEditInvestorContact', data);
+		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/ManageInvestorContact', data);
 		xhr.done(function (res) {
 			if (res.success) {
 				EzBob.ShowMessage('Contact added/updated successfully', 'Done', null, 'Ok');

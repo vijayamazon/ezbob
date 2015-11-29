@@ -2,16 +2,13 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class InvestorBankAccountModel {
 		[DataMember]
 		public int InvestorBankAccountID { get; set; }
 
 		[DataMember]
 		public int InvestorID { get; set; }
-
-		[DataMember]
-		public int InvestorAccountTypeID { get; set; }
 
 		[DataMember]
 		public string BankName { get; set; }
@@ -42,5 +39,17 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
+
+		[DataMember]
+		public InvestorAccountTypeModel AccountType { get; set; }
+	}
+
+	[DataContract(IsReference = true)]
+	public class InvestorAccountTypeModel {
+		[DataMember]
+		public int InvestorAccountTypeID { get; set; }
+
+		[DataMember]
+		public string Name { get; set; }
 	}
 }
