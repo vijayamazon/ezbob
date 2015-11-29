@@ -47,8 +47,6 @@
 					mode
 				);
 			} // switch
-
-			return null;
 		} // GetInference
 
 		public Inference GetInference(int customerID, DateTime time) {
@@ -59,7 +57,7 @@
 			InferenceInput inputData = this.keeper.LoadInputData(customerID, this.now);
 
 			if (!inputData.IsValid())
-				throw new FailedToLoadInputDataAlert(this.log, customerID);
+				throw new FailedToLoadInputDataAlert(this.log, customerID, this.now);
 
 			long requestID = this.keeper.SaveInferenceRequest(customerID, inputData);
 

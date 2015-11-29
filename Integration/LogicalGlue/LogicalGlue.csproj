@@ -57,6 +57,7 @@
     <Compile Include="Exceptions\Engine\FailedToLoadInputDataAlert.cs" />
     <Compile Include="Exceptions\Engine\NoHarvesterEngineAlert.cs" />
     <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
     <Compile Include="Exceptions\Keeper\NoConnectionKeeperAlert.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Exceptions\LogicalGlueAlert.cs" />
     <Compile Include="Exceptions\LogicalGlueException.cs" />
     <Compile Include="Keeper\Implementation\InferenceRequestSaver.cs" />
+    <Compile Include="Keeper\Implementation\InferenceSaver.cs" />
     <Compile Include="Keeper\Interface\Configuration.cs" />
     <Compile Include="Keeper\Interface\IKeeper.cs" />
     <Compile Include="Keeper\Implementation\DBTable\AWithModelOutputID.cs" />

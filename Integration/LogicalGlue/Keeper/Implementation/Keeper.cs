@@ -42,7 +42,11 @@
 		} // LoadInference
 
 		public Inference SaveInference(int customerID, long requestID, Response<Reply> response) {
-			return null; // TODO
+			try {
+				return new InferenceSaver(this.db, this.log, customerID, requestID, response).Execute().Result;
+			} catch (Exception e) {
+				throw new InferenceSaverAlert(customerID, requestID, e, this.log);
+			} // try
 		} // SaveInference
 
 		public Configuration LoadConfiguration() {
