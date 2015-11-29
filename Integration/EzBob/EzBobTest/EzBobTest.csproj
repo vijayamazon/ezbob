@@ -71,7 +71,7 @@
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -45,7 +45,7 @@
       <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
