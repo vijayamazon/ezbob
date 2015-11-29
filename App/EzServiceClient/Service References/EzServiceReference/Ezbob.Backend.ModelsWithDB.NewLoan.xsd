@@ -504,7 +504,6 @@
           <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanSchedulePaymentID" type="xs:long" />
-          <xs:element minOccurs="0" name="PaymentDate" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
           <xs:element minOccurs="0" name="PrincipalPaid" type="xs:decimal" />
         </xs:sequence>

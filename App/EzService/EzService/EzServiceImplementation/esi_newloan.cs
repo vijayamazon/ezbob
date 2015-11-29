@@ -90,7 +90,7 @@
 
         public NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1) {
             GetLoanByOldID strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, customerID, oldId);
+            var amd = ExecuteSync(out strategy, customerID, userID, oldId);
             return new NLLongActionResult {
                 MetaData = amd,
                 Value = strategy.LoanID,

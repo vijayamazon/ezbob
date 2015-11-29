@@ -878,5 +878,29 @@
 
         }
 
+
+        [Test]
+        public void TestPaymentFacade() {
+            try {
+                
+                ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+                var loan = loanRep.Get(3117);
+                NL_Payments nlPayment = new NL_Payments() {
+                    LoanID = 1,
+                    Amount = 1000,
+                    CreatedByUserID = 1, //this._context.UserId,
+                    CreationTime = DateTime.UtcNow,
+                    PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+                };
+
+                var f = new LoanPaymentFacade();
+                f.PayLoan(loan, "111", 1000, "11.11.11.11", nlPayment, DateTime.UtcNow, "system-repay", false, null, 1);
+
+            }
+            catch (Exception ex) {
+                this.m_oLog.Debug(ex);
+            }
+        }
+
 	} // class TestNewLoan
 } // namespace

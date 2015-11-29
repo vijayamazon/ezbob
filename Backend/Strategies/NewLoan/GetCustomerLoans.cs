@@ -7,9 +7,10 @@
 
     public class GetCustomerLoans : AStrategy
     {
-        public GetCustomerLoans(int customerID)
-        {
-            this.customerID = customerID;
+        public GetCustomerLoans() {
+            var id = this.Context.CustomerID;
+            if (id != null)
+                this.customerID = (int)id;
         } // constructor
 
         public override string Name { get { return "GetCustomerLoans"; } }

@@ -25,8 +25,7 @@
     using ServiceClientProxy;
     using StructureMap;
 
-    public interface ILoanCreator {
-		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
+    public interface ILoanCreator {Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
 	} // interface ILoanCreator
 
 	public class LoanCreator : ILoanCreator {
@@ -226,7 +225,7 @@
 			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
 			nlModel.Loan.OldLoanID = oldloanID;
 			nlModel.Loan.Refnum = loan.RefNumber; // TODO generate another refnum with new algorithm in addloan strategy
-			try {
+			/*try {
 				//log.Debug(nlModel.FundTransfer.ToString());
 				//log.Debug(nlModel.Loan.ToString());
 
@@ -237,9 +236,8 @@
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
-			} // try
+			} // try*/
 			
-			//this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans moved below
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
