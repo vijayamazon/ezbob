@@ -61,7 +61,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.ezbob.com/Broker#login.
+        ///   Looks up a localized string similar to .ezbob.com/Broker#login.
         /// </summary>
         internal static string BrokerLoginHost {
             get {
@@ -70,7 +70,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.ezbob.com/Broker#signup.
+        ///   Looks up a localized string similar to .ezbob.com/Broker#signup.
         /// </summary>
         internal static string BrokerSignupHost {
             get {
@@ -88,7 +88,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.ezbob.com/Account/LogOn.
+        ///   Looks up a localized string similar to .ezbob.com/Account/LogOn.
         /// </summary>
         internal static string CustomerLogIn {
             get {
@@ -106,7 +106,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.ezbob.com/Customer/Wizard.
+        ///   Looks up a localized string similar to .ezbob.com/Customer/Wizard.
         /// </summary>
         internal static string WizardHost {
             get {

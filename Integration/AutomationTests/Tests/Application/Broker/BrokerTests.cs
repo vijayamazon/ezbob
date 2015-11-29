@@ -36,7 +36,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2036")]
         public void TestCase2036() {
             bool result = this.ExecuteTest<object>(() => {
-                string url = BrandConfig.GetString("BrokerLoginHost");
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
                 Driver.Navigate().GoToUrl(url);
 
                 IWebElement signUp = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.sign-up > a"));
@@ -55,7 +55,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2037")]
         public void TestCase2037() {
             bool result = this.ExecuteTest<object>(() => {
-                string url = BrandConfig.GetString("BrokerLoginHost");
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
                 Driver.Navigate().GoToUrl(url);
 
                 IWebElement signUp = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.sign-up > a"));
