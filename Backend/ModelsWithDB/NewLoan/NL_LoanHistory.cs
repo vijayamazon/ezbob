@@ -63,8 +63,6 @@
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
 
-	
-
 		// additions
 
 		private List<NL_LoanSchedules> _schedule = new List<NL_LoanSchedules>();
@@ -126,10 +124,10 @@
 			//SetDefaultRepaymentCount();
 		}
 
-		public NL_LoanHistory ShallowCopy() {
+		/*public NL_LoanHistory ShallowCopy() {
 			NL_LoanHistory cloned = (NL_LoanHistory)this.MemberwiseClone();
 			return cloned;
-		}
+		}*/
 
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {

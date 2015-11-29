@@ -103,7 +103,7 @@
 
         /// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
         public void AddPayment(int customerID, NL_Payments payment, int userID) {
-            var stra = new AddPayment(customerID, payment);
+			var stra = new AddPayment(customerID, payment, userID);
             stra.Context.CustomerID = customerID;
             stra.Context.UserID = userID;
             stra.Execute();

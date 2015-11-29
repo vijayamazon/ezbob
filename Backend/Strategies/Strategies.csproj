@@ -214,6 +214,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NewLoan\AcceptRollover.cs" />
+    <Compile Include="NewLoan\CancelPayment.cs" />
     <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />
     <Compile Include="NewLoan\GetLoanByOldID.cs" />
     <Compile Include="NewLoan\GetCustomerLoans.cs" />

@@ -1,12 +1,12 @@
 ﻿namespace EzService {
-    using System;
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
     using System.ServiceModel;
     using Ezbob.Backend.Models.NewLoan;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using EzService.ActionResults;
 
-    [ServiceContract(SessionMode = SessionMode.Allowed)]
+	[ServiceContract(SessionMode = SessionMode.Allowed)]
     public interface IEzServiceNewLoan {
         [OperationContract]
         NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
@@ -24,7 +24,7 @@
         NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
 
         [OperationContract]
-        NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null);
+		NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null);
 
         [OperationContract]
         ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model);
@@ -38,26 +38,24 @@
         [OperationContract]
         NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
 
-        [OperationContract]
-        NLLongActionResult DeactivateLoanInterestFreeze(int userID,
-            int customerID,
-            int? oldLoanId,
-            int oldLoanInterestFreezeID,
-            DateTime? deactivationDate);
+		[OperationContract]
+		NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, int? oldLoanId, int oldLoanInterestFreezeID, DateTime? deactivationDate);
 
-        [OperationContract]
-        NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, int? oldLoanId, NL_LoanInterestFreeze loanInterestFreeze);
+		[OperationContract]
+		NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, int? oldLoanId, NL_LoanInterestFreeze loanInterestFreeze);
 
-        [OperationContract]
+		[OperationContract]
         ListNewLoanActionResult GetCustomerLoans(int customerID, int userID);
 
-        [OperationContract]
+		[OperationContract]
         NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID);
 
-        [OperationContract]
+		[OperationContract]
         NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1);
+		NL_Loans GetLoan(int loanId, int userID);
 
-
-    } // interface IEzServiceNewLoan
+		[OperationContract]
+		NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID);
+	} // interface IEzServiceNewLoan
 
 } // namespace EzService

@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -71,7 +70,7 @@
 
 				// histories
 				Result.Loan.Histories.Clear();
-				Result.Loan.Histories = LoanDAL.GetLoanHistories(Result.Loan.LoanID, this.StateDate);
+				Result.Loan.Histories.AddRange(LoanDAL.GetLoanHistories(Result.Loan.LoanID, this.StateDate).ToList());
 
 				// schedules of each history
 				foreach (NL_LoanHistory h in Result.Loan.Histories) {
@@ -80,7 +79,7 @@
 
 				// loan fees
 				Result.Loan.Fees.Clear();
-				Result.Loan.Fees = DB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+				Result.Loan.Fees.AddRange(DB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).ToList());
 
 				// filter cnacelled/deleted fees on GetLoanDBState strategy
 				// filter in Calculator according to CalculationDate
@@ -88,32 +87,35 @@
 
 				// interest freezes
 				Result.Loan.FreezeInterestIntervals.Clear();
-				List<NL_LoanInterestFreeze> freezes = DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+				Result.Loan.FreezeInterestIntervals.AddRange(DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).ToList());
 
 				// filter cancelled (deactivated) periods
 				// TODO: take in consideration stateDate
 				// freezes.Where(fr => fr.DeactivationDate != null).ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
-				freezes.ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
+				//freezes.ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
 
 				// loan options
 				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 				// TODO combine all payments + transactions to one SP kogda nibud'
 
-				// payments (logical transactions) ordered by PaymentTime
+				// payments
 				Result.Loan.Payments.Clear();
-				Result.Loan.Payments = new List<NL_Payments>(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).OrderBy(p => p.PaymentTime));
+				Result.Loan.Payments.AddRange(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID))); //.OrderBy(p=>p.PaymentTime)); 
+
+				var schp = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+				var fps = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 
 				foreach (NL_Payments p in Result.Loan.Payments) {
 					p.SchedulePayments.Clear();
-					p.SchedulePayments = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+					p.SchedulePayments.AddRange(schp.Where(sp=>sp.PaymentID == p.PaymentID).ToList());
 	
 					p.FeePayments.Clear();
-					p.FeePayments = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+					p.FeePayments.AddRange(fps.Where(fp=>fp.PaymentID == p.PaymentID).ToList());
 				}
 
-				// valid rollover (StateDate between rollover expiration and creation time
-				Result.Loan.AcceptedRollovers = DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+				// valid accepted rollover
+				Result.Loan.AcceptedRollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)));
 
 				if (!GetCalculatorState)
 					return;

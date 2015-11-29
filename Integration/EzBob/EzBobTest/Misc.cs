@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 namespace EzBobTest {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security.Cryptography;
@@ -217,6 +218,34 @@ namespace EzBobTest {
 			xxx = DateTime.UtcNow;
 			Console.WriteLine("{0,-11:d}", xxx);
 			Console.WriteLine("{0:F}", 445.6667m);
+		}
+
+		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
+		[Test]
+		public void ArrayListTest() {
+			int[] myIntArray = new int[3] ;
+			myIntArray.SetValue(1, 0);
+			myIntArray.SetValue(100, 2);
+			myIntArray.ForEach(a=>Console.WriteLine( a));
+		}
+
+		[Test]
+		public void PDateSetTest() {
+			List<long> idList = new List<long>();
+			idList.Add(35);
+			idList.Add(36);
+			idList.Add(39);
+			idList.Add(37);
+
+			List<DateTime> dateList = new List<DateTime>();
+			dateList.Add(new DateTime(2015, 10, 25));
+			dateList.Add(new DateTime(2015, 10, 25));
+			dateList.Add(new DateTime(2015, 12, 10));
+			dateList.Add(new DateTime(2015, 12, 20));
+
+
+
+			
 		}
 
 	} // class Misc

@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -22,15 +23,13 @@
 		[DataMember]
 		public decimal InterestPaid { get; set; }
 
-		//[DataMember]
-		//[NonTraversable]
-		//public bool NewEntry { get; set; }
+		[DataMember]
+		[NonTraversable]
+		public bool NewEntry { get; set; }
 
 		//[DataMember]
 		//[NonTraversable]
-		//public DateTime? PaymentDate { get; set; }
-
-
+		//public bool ResetEntry { get; set; }
 
 	} // class NL_LoanSchedulePayments
 } // ns

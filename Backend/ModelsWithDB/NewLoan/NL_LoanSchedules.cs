@@ -5,6 +5,7 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
+	
 
 	[DataContract(IsReference = true)]
 	public class NL_LoanSchedules : AStringable {
@@ -31,6 +32,7 @@
 		public DateTime? ClosedTime { get; set; }
 
 		[DataMember]
+		[Ignore("Principal")]
 		public decimal Principal { get; set; }
 
 		[DataMember]

@@ -1,4 +1,3 @@
-
 IF OBJECT_ID('NL_PaidAmountsReset') IS NOT NULL
 	EXECUTE('DROP PROCEDURE NL_PaidAmountsReset')
 GO
@@ -12,19 +11,18 @@ CREATE TYPE [dbo].[BigintList] AS TABLE(
 );
 GO
 
-
-
 IF OBJECT_ID('NL_PaidAmountsReset') IS NULL
 	EXECUTE('CREATE PROCEDURE NL_PaidAmountsReset AS SELECT 1')
 GO
 
 ALTER PROCEDURE [dbo].[NL_PaidAmountsReset]			
-	@PaymentIds BigintList READONLY
+	@FeePaymentIds BigintList  READONLY,
+	@SchedulesPaymentIds BigintList READONLY
 AS
 BEGIN
 	SET NOCOUNT ON;	
 
-	UPDATE [NL_LoanSchedulePayments] SET [PrincipalPaid] = 0, [InterestPaid] = 0 WHERE [PaymentID] in (SELECT l.Item FROM @PaymentIds l) ;
-	UPDATE [NL_LoanFeePayments] SET [Amount] = 0 WHERE [PaymentID] in (SELECT l.Item FROM @PaymentIds l) ;
+	UPDATE [NL_LoanSchedulePayments] SET [PrincipalPaid] = 0, [InterestPaid] = 0 WHERE [LoanSchedulePaymentID] in (SELECT Item FROM @SchedulesPaymentIds) ;
+	UPDATE [NL_LoanFeePayments] SET [Amount] = 0 WHERE [LoanFeePaymentID] in (SELECT Item FROM @FeePaymentIds) ;
 		
 END

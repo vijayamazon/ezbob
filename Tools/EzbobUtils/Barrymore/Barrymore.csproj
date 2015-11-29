@@ -51,6 +51,7 @@
     <Compile Include="Attributes\DecimalFormatAttribute.cs" />
     <Compile Include="Attributes\EnumNameAttribute.cs" />
     <Compile Include="Attributes\ExcludeFromToStringAttribute.cs" />
+    <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="dbutils\LengthAttribute.cs" />

@@ -769,7 +769,9 @@ BEGIN
 	INSERT INTO NL_PaymentStatuses (PaymentStatusID, PaymentStatus) VALUES
 		(1, 'Pending'),
 		(2, 'Active'),		
-		(3, 'Cancelled')
+		--(3, 'Cancelled')
+		(3, 'ChargeBack'),	
+		(4, 'WrongPayment')		
 END
 GO
 
@@ -787,7 +789,7 @@ BEGIN
 		CreationTime DATETIME NOT NULL,
 		CreatedByUserID INT NOT NULL,
 		DeletionTime DATETIME NULL,
-		DeletionNotificationTime DATETIME NULL,
+		--DeletionNotificationTime DATETIME NULL,
 		DeletedByUserID INT NULL,
 		Notes NVARCHAR(MAX) NULL,
 		LoanID BIGINT NOT NULL,
@@ -799,9 +801,13 @@ BEGIN
 		CONSTRAINT FK_NL_Payments_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId),
 		CONSTRAINT FK_NL_Payments_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT CHK_NL_Payments CHECK (
-			(DeletionTime IS NULL AND DeletionNotificationTime IS NULL AND DeletedByUserID IS NULL)
+			(DeletionTime IS NULL 
+			--AND DeletionNotificationTime IS NULL 
+			AND DeletedByUserID IS NULL)
 			OR
-			(DeletionTime >= CreationTime AND DeletionNotificationTime >= DeletionTime AND DeletionNotificationTime >= CreationTime AND DeletedByUserID IS NOT NULL)
+			(DeletionTime >= CreationTime 
+			--AND DeletionNotificationTime >= DeletionTime AND DeletionNotificationTime >= CreationTime 
+			AND DeletedByUserID IS NOT NULL)
 		)
 	)
 END
@@ -978,13 +984,22 @@ GO
 
 -- TODO remove
 IF OBJECT_ID('CHK_LoanFeePayments') IS NOT NULL
-ALTER TABLE [dbo].[NL_LoanFeePayments]  DROP CONSTRAINT [CHK_LoanFeePayments] 
+ALTER TABLE [dbo].[NL_LoanFeePayments] DROP CONSTRAINT [CHK_LoanFeePayments] 
 GO
 
-ALTER TABLE [dbo].[NL_LoanFeePayments]  WITH CHECK ADD  CONSTRAINT [CHK_LoanFeePayments] CHECK  (([Amount]>=(0)))
+ALTER TABLE [dbo].[NL_LoanFeePayments] WITH CHECK ADD CONSTRAINT [CHK_LoanFeePayments] CHECK  (([Amount]>=(0)))
 GO
-
 
 IF OBJECT_ID('CHK_NL_LoanSchedulePayments_Paid') IS NOT NULL
-ALTER TABLE [dbo].[NL_LoanFeePayments]  DROP CONSTRAINT [CHK_NL_LoanSchedulePayments_Paid] 
+ALTER TABLE [dbo].[NL_LoanFeePayments] DROP CONSTRAINT [CHK_NL_LoanSchedulePayments_Paid] 
+GO
+
+IF OBJECT_ID('CHK_NL_Payments') IS NOT NULL
+ALTER TABLE [dbo].[NL_Payments] DROP CONSTRAINT CHK_NL_Payments
+GO
+ALTER TABLE NL_Payments ADD CONSTRAINT CHK_NL_Payments CHECK (
+	(DeletionTime IS NULL AND DeletedByUserID IS NULL)
+	OR 
+	(DeletionTime >= CreationTime AND DeletedByUserID IS NOT NULL)
+	);
 GO

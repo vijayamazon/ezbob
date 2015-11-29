@@ -85,7 +85,8 @@
 	public enum NLPaymentStatuses {
 		InProgress = 1, // DB table id
 		Active = 2,
-		Cancelled = 3
+		ChargeBack = 3,			// cancel payment
+		WrongPayment = 4,		// cancel payment
 	} // enum NLPaymentStatuses
 
 	public enum NLLoanTransactionMethods {
@@ -100,13 +101,9 @@
 		Other = 8,
 		CustomerAuto = 9,
 		WriteOff = 10,
-		ChargeBack = 11,
-		WrongPayment = 12,
-		SystemRepay = 13,
-		SetupFeeOffset = 14 // used to offsetting setup fee
+		SetupFeeOffset = 11, // used to offsetting setup fee,
+		SystemRepay = 12,
 	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
-
-
 
 	// duplicate of enum LoanAgreementTemplateType
 	public enum NLLoanAgreementTemplateTypes {

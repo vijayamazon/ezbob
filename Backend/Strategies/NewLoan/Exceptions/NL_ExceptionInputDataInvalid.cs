@@ -3,7 +3,7 @@
 
 	public class NL_ExceptionInputDataInvalid : Exception {
 
-		
+		public static string DefaultMessage = "InputDataInvalid";
 
 		public NL_ExceptionInputDataInvalid(){}
 

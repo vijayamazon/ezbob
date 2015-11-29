@@ -60,7 +60,7 @@
 
         public NLLongActionResult AddPayment(int customerID, NL_Payments payment, int userID) {
             AddPayment strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment);
+			 var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment, userID);
             return new NLLongActionResult {
                 MetaData = amd,
                 Value = strategy.PaymentID,
@@ -193,6 +193,15 @@
                 Value = strategy.Result
             };
         }
+
+		 public NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID) {
+			 CancelPayment strategy;
+			 var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment, userID);
+			 return new NLLongActionResult {
+				 MetaData = amd,
+				 Error = strategy.Error
+			 };
+		 } // AddPayment
 
     } // class EzServiceImplementation
 } // namespace

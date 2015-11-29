@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Linq;
-	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
@@ -9,9 +8,9 @@
 
 	public class AddPayment : AStrategy {
 
-		public AddPayment(int customerID, NL_Payments payment) {
+		public AddPayment(int customerID, NL_Payments payment, int userID) {
 
-			this.strategyArgs = new object[] { customerID, payment };
+			this.strategyArgs = new object[] { customerID, payment, userID };
 
 			if (customerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
@@ -27,14 +26,16 @@
 
 			CustomerID = customerID;
 			Payment = payment;
+			UserID = userID;
 
-			this.strategyArgs = new object[] { CustomerID, Payment };
+			this.strategyArgs = new object[] { CustomerID, Payment, UserID };
 		}
 
 		public override string Name { get { return "AddPayment"; } }
 		public NL_Payments Payment { get; private set; }
 		public int CustomerID { get; private set; }
-	
+		public int UserID { get; private set; }
+
 		public string Error;
 		public long PaymentID { get; private set; }
 
@@ -55,6 +56,7 @@
 
 				pconn.BeginTransaction();
 
+				//  RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID on retroactive payment - in SP NL_ResetPaymentsPaidAmounts, called from NL_PaymentsSave.
 				PaymentID = DB.ExecuteScalar<long>("NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Payments>("Tbl", Payment));
 				Payment.PaymentID = PaymentID;
 
@@ -71,12 +73,9 @@
 					}
 				}
 
-				// RESET ALL PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER [DeletionTime] of deleted payment. New distribution of paid p, i, f (s) will be recalculated and saved again
-				/*if (Payment.PaymentStatusID == (int)NLPaymentStatuses.Cancelled) {
-					DB.ExecuteNonQuery("NL_CancelledPaymentPaidAmountsReset", CommandSpecies.StoredProcedure, new QueryParameter("PaymentID", PaymentID));
-				}*/
-
 				pconn.Commit();
+
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, Payment, null, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -91,23 +90,14 @@
 				return;
 			}
 
-			// get DB State 
-
-			/*GetLoanState getLoanState = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow, Context.UserID, false);
-			getLoanState.Execute();
-
-			// failed to load loan from DB
-			if (!string.IsNullOrEmpty(getLoanState.Error)) {
-				this.Error = getLoanState.Error;
-				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, getLoanState.Error, this.Error, null);
-				return;
-			}*/
-
 			// recalculate state by calculator + save new state to DB
-			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID);
-			reloadLoanDBState.Context.CustomerID = CustomerID;
-			reloadLoanDBState.Context.UserID = Context.UserID;
-			reloadLoanDBState.Execute();
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID, UserID);
+			try {
+				reloadLoanDBState.Execute();
+			} catch (Exception ex) {
+				this.Error = ex.Message;
+				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Payment, reloadLoanDBState.Error + "\n" + this.Error, ex.ToString(), ex.StackTrace);
+			}
 
 		}
 	} // class AddPayment

@@ -32,7 +32,7 @@
 		/// mail notifications sent on success/on error
 		/// </summary>
 		/// <param name="nlModel"></param>
-		public AddLoan(NL_Model nlModel/*, NL_Payments rebatePayment = null */) {
+		public AddLoan(NL_Model nlModel) {
 			model = nlModel;
 			this.strategyArgs = new object[] {model};
 		}

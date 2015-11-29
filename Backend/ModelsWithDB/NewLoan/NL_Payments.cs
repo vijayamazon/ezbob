@@ -30,9 +30,7 @@
 		[DataMember]
 		[EnumName(typeof(NLPaymentStatuses))]
 		public int PaymentStatusID { get; set; }
-
-		private DateTime _createDate = DateTime.UtcNow;
-
+	
 		[DataMember]
 		public DateTime CreationTime {
 			get { return this._createDate; }
@@ -46,8 +44,8 @@
 		[DataMember]
 		public DateTime? DeletionTime { get; set; }
 
-		[DataMember]
-		public DateTime? DeletionNotificationTime { get; set; }
+		//[DataMember]
+		//public DateTime? DeletionNotificationTime { get; set; }
 
 		[FK("Security_User", "UserId")]
 		[DataMember]
@@ -60,6 +58,12 @@
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
 		public long LoanID { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public bool Reset { get; set; }
+	
+		private DateTime _createDate = DateTime.UtcNow;
 
 		// additions
 		private List<NL_PaypointTransactions> _paypointTransactions = new List<NL_PaypointTransactions>();
@@ -95,12 +99,6 @@
 			// payment
 			StringBuilder sb = new StringBuilder().Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_Payments))).Append(ToStringAsTable());
 
-			if (PaypointTransactions.Count > 0) {
-				sb.Append("Paypoint transactions:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_PaypointTransactions)));
-				PaypointTransactions.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append("No paypoint transactions.").Append(Environment.NewLine);
-
 			if (FeePayments.Count > 0) {
 				sb.Append("FeesPayments:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanFeePayments)));
 				FeePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
@@ -112,6 +110,12 @@
 				SchedulePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
 			} else
 				sb.Append("No SchedulePayments.").Append(Environment.NewLine);
+
+			if (PaypointTransactions.Count > 0) {
+				sb.Append("PaypointTransactions:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_PaypointTransactions)));
+				PaypointTransactions.ForEach(s => sb.Append(s.ToStringAsTable()));
+			} else
+				sb.Append("No PaypointTransactions.").Append(Environment.NewLine);
 
 			return sb.ToString();
 		}
