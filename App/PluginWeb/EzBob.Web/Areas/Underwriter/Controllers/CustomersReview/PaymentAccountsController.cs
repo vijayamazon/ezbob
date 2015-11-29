@@ -218,7 +218,7 @@
                     CreatedByUserID = this.context.UserId,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
-                f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, nlPayment, DateTime.UtcNow, "system-repay", false, null, this.context.UserId);
+                f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.context.UserId, nlPayment);
                 paymentAdded = true;
             }
 

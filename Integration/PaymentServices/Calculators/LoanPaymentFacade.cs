@@ -39,13 +39,13 @@
 			Loan loan,
 			string transId,
 			decimal amount,
-			string ip,
-            NL_Payments nlPayment,
+			string ip,            
 			DateTime? term = null,
 			string description = "payment from customer",
 			bool interestOnly = false,
 			string sManualPaymentMethod = null,       
-            int userId = 1){
+            int userId = 1,
+            NL_Payments nlPayment = null){
 
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -226,7 +226,7 @@
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
 
-                PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
+                PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod,1, nlPayment);
 				amount = amount - money;
 			} // for
 
@@ -266,8 +266,8 @@
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = 1,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-                }; 
-				PayLoan(loan, transId, money, null, nlPayment,date, description, false, sManualPaymentMethod);
+                };
+                PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, 1, nlPayment);
 
 				amount = amount - money;
 			} // for
@@ -380,9 +380,9 @@
                     LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = userId,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-                }; 
+                };
 
-				PayLoan(loan, transId, amount, ip,nlPayment, date, description, true, sManualPaymentMethod);
+                PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod,1, nlPayment);
 				newInterest = 0;
 			} else {
 				Loan loan = customer.GetLoan(loanId);
@@ -406,7 +406,7 @@
                     CreatedByUserID = 1,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
-                PayLoan(loan, transId, amount, ip, nlPayment, date, description, false, sManualPaymentMethod);
+                PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, 1, nlPayment);
 			   
 				newInterest = loan.Interest;
 

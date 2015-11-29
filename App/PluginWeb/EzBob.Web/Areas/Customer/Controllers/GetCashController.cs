@@ -286,7 +286,7 @@
                     PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
                 };
 
-                loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, nlPayment, now, "system-repay", false, null, userId);
+                loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, now, "system-repay", false, null, userId, nlPayment);
 
             return null;
         }

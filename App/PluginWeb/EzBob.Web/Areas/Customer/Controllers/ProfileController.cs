@@ -345,7 +345,7 @@
                     CreatedByUserID = this.m_oContext.UserId,
                     PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
                 };
-                f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, nlPayment, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id);
+                f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id, nlPayment);
 		    }
 
             if (amount > 0 && !hasOpenLoans) {

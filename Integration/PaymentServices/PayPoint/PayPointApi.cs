@@ -231,7 +231,7 @@
                     return ex.PaypointData;
                 }
 
-                loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, nlPayment, now, "auto-charge", false, null);
+                loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, 1,nlPayment);
                 installments.CommitTransaction();
 
             }

@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
+	using System.Runtime.Remoting.Contexts;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
@@ -1087,7 +1088,7 @@
                     PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
                 };
                 var f = new LoanPaymentFacade();
-                f.PayLoan(loan, "111", 1000, "11.11.11.11", nlPayment, DateTime.UtcNow, "system-repay", false, null, 1);
+                f.PayLoan(loan, "111", 1000, "11.11.11.11", DateTime.UtcNow, "system-repay", false, null, 1, nlPayment);
             }
             catch (Exception ex) {
                 this.m_oLog.Debug(ex);
