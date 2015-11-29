@@ -49,11 +49,19 @@
 			} // try
 		} // SaveInference
 
-		public Configuration LoadConfiguration() {
-			return new Configuration {
+		public ModuleConfiguration LoadModuleConfiguration() {
+			return new ModuleConfiguration {
 				CacheAcceptanceDays = CurrentValues.Instance.LogicalGlueCacheAcceptanceDays,
 			};
-		} // LoadConfiguration
+		} // LoadModuleConfiguration
+
+		public HarvesterConfiguration LoadHarvesterConfiguration() {
+			return new HarvesterConfiguration {
+				HostName = CurrentValues.Instance.LogicalGlueHostName,
+				NewCustomerRequestPath = CurrentValues.Instance.LogicalGlueNewCustomerRequestPath,
+				OldCustomerRequestPath = CurrentValues.Instance.LogicalGlueOldCustomerRequestPath,
+			};
+		} // LoadHarvesterConfiguration
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

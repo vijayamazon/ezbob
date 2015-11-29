@@ -58,7 +58,9 @@
     <Compile Include="Exceptions\Engine\NoHarvesterEngineAlert.cs" />
     <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
-    <Compile Include="Exceptions\Keeper\InputDataLoader.cs" />
+    <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
+    <Compile Include="Keeper\Implementation\AActionBase.cs" />
+    <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
     <Compile Include="Exceptions\Keeper\NoConnectionKeeperAlert.cs" />
     <Compile Include="Exceptions\Keeper\KeeperAlert.cs" />
@@ -95,7 +97,7 @@
     <Compile Include="Exceptions\LogicalGlueException.cs" />
     <Compile Include="Keeper\Implementation\InferenceRequestSaver.cs" />
     <Compile Include="Keeper\Implementation\InferenceSaver.cs" />
-    <Compile Include="Keeper\Interface\Configuration.cs" />
+    <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
     <Compile Include="Keeper\Interface\IKeeper.cs" />
     <Compile Include="Keeper\Implementation\DBTable\AWithModelOutputID.cs" />
     <Compile Include="Keeper\Implementation\DBTable\EncodingFailure.cs" />

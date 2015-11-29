@@ -275,6 +275,18 @@
 			get { return this[Variables.LogicalGlueCacheAcceptanceDays]; }
 		} // LogicalGlueCacheAcceptanceDays
 
+		public virtual VariableValue LogicalGlueHostName {
+			get { return this[Variables.LogicalGlueHostName]; }
+		} // LogicalGlueHostName
+
+		public virtual VariableValue LogicalGlueNewCustomerRequestPath {
+			get { return this[Variables.LogicalGlueNewCustomerRequestPath]; }
+		} // LogicalGlueNewCustomerRequestPath
+
+		public virtual VariableValue LogicalGlueOldCustomerRequestPath {
+			get { return this[Variables.LogicalGlueOldCustomerRequestPath]; }
+		} // LogicalGlueOldCustomerRequestPath
+
 		public virtual VariableValue LogOffMode {
 			get { return this[Variables.LogOffMode]; }
 		}

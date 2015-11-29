@@ -7,7 +7,7 @@
 			this.log = log.Safe();
 		} // constructor
 
-		public Response<Reply> Infer(InferenceInput inputData) {
+		public Response<Reply> Infer(InferenceInput inputData, HarvesterConfiguration cfg) {
 			// 1. Send REST API request to Logical Glue endpoint.
 			// 2. Load API call into InferenceOutput object.
 			return new Response<Reply>(""); // TODO

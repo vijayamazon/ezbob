@@ -40,6 +40,12 @@
 		/// Loads module configuration from the database.
 		/// </summary>
 		/// <returns>Module configuration.</returns>
-		Configuration LoadConfiguration();
+		ModuleConfiguration LoadModuleConfiguration();
+
+		/// <summary>
+		/// Loads harvester configuration from the database.
+		/// </summary>
+		/// <returns>Harvester configuration.</returns>
+		HarvesterConfiguration LoadHarvesterConfiguration();
 	} // interface IKeeper
 } // namespace

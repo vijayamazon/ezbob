@@ -10,11 +10,8 @@
 	using DBModelOutput = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.ModelOutput;
 	using PublicModelOutput = Ezbob.Integration.LogicalGlue.Engine.Interface.ModelOutput;
 
-	internal class InferenceLoader {
-		public InferenceLoader(AConnection db, ASafeLog log, int customerID, DateTime time) {
-			this.db = db;
-			this.log = log;
-			this.customerID = customerID;
+	internal class InferenceLoader : AActionBase {
+		public InferenceLoader(AConnection db, ASafeLog log, int customerID, DateTime time) : base(db, log, customerID) {
 			this.time = time;
 			this.timeStr = this.time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
 
@@ -28,9 +25,9 @@
 
 		public InferenceLoader Execute() {
 			if (this.executed) {
-				this.log.Alert(
+				Log.Alert(
 					"Inference loader({0}, '{1}') has already been executed.",
-					this.customerID,
+					CustomerID,
 					this.timeStr
 				);
 
@@ -39,18 +36,18 @@
 
 			this.executed = true;
 
-			this.log.Debug("Executing inference loader({0}, '{1}')...", this.customerID, this.timeStr);
+			Log.Debug("Executing inference loader({0}, '{1}')...", CustomerID, this.timeStr);
 
-			this.db.ForEachRowSafe(
+			DB.ForEachRowSafe(
 				ProcessInferenceRow,
 				"LogicalGlueLoadInference",
-				new QueryParameter("@CustomerID", this.customerID),
+				new QueryParameter("@CustomerID", CustomerID),
 				new QueryParameter("@Now", this.time)
 			);
 
-			this.log.Debug(
+			Log.Debug(
 				"Executing inference loader({0}, '{1}') complete.",
-				this.customerID,
+				CustomerID,
 				this.timeStr
 			);
 
@@ -68,11 +65,11 @@
 				err = string.Format(
 					"Inference loader({1}, '{2}'): unknown row type '{0}'.",
 					rowTypeName,
-					this.customerID,
+					CustomerID,
 					this.timeStr
 				);
 
-				this.log.Alert("{0}", err);
+				Log.Alert("{0}", err);
 				
 				throw new Exception(err);
 			} // if
@@ -81,9 +78,9 @@
 			case RowTypes.Response:
 				sr.Fill(Result);
 
-				this.log.Debug(
+				Log.Debug(
 					"Inference loader({0}, '{1}'): loaded response (id: {2}).",
-					this.customerID,
+					CustomerID,
 					this.timeStr,
 					sr["ResponseID"]
 				);
@@ -97,11 +94,11 @@
 					err = string.Format(
 						"inference loader({1}, '{2}'): unsupported request type '{0}'.",
 						dbModel.RequestTypeID,
-						this.customerID,
+						CustomerID,
 						this.timeStr
 					);
 
-					this.log.Alert("{0}", err);
+					Log.Alert("{0}", err);
 
 					throw new ArgumentOutOfRangeException(err, (Exception)null);
 				} // if
@@ -125,9 +122,9 @@
 				this.models[dbModel.ResponseID] = pubModel;
 				Result.ModelOutputs[requestType] = pubModel;
 
-				this.log.Debug(
+				Log.Debug(
 					"Inference loader({0}, '{1}'): loaded model output (id: {2}, type: {3}).",
-					this.customerID,
+					CustomerID,
 					this.timeStr,
 					sr["ModelOutputID"],
 					requestType
@@ -141,9 +138,9 @@
 				if (this.models.ContainsKey(ratio.ModelOutputID)) {
 					this.models[ratio.ModelOutputID].Grade.OutputRatios[ratio.OutputClass] = ratio.Score;
 
-					this.log.Debug(
+					Log.Debug(
 						"Inference loader({0}, '{1}'): loaded map output ratio ({2}: {3}).",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						ratio.OutputClass,
 						ratio.Score
@@ -151,13 +148,13 @@
 				} else {
 					err = string.Format(
 						"Inference loader({0}, '{1}'): map output ratio '{2}' should belong to unknown response '{3}'.",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						sr["OutputRatioID"],
 						ratio.ModelOutputID
 					);
 
-					this.log.Alert("{0}", err);
+					Log.Alert("{0}", err);
 
 					throw new ArgumentOutOfRangeException(err, (Exception)null);
 				} // if
@@ -175,9 +172,9 @@
 						Value = warning.Value,
 					});
 
-					this.log.Debug(
+					Log.Debug(
 						"Inference loader({0}, '{1}'): loaded warning ({2}: {3}).",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						warning.FeatureName,
 						warning.Value
@@ -185,13 +182,13 @@
 				} else {
 					err = string.Format(
 						"Inference loader({0}, '{1}'): warning '{2}' should belong to unknown response '{3}'.",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						sr["WarningID"],
 						warning.ModelOutputID
 					);
 
-					this.log.Alert("{0}", err);
+					Log.Alert("{0}", err);
 
 					throw new ArgumentOutOfRangeException(err, (Exception)null);
 				} // if
@@ -212,9 +209,9 @@
 						}
 					);
 
-					this.log.Debug(
+					Log.Debug(
 						"Inference loader({0}, '{1}'): loaded encoding failure ({2}: {3}).",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						encodingFailure.ColumnName,
 						encodingFailure.Reason
@@ -222,13 +219,13 @@
 				} else {
 					err = string.Format(
 						"Inference loader({0}, '{1}'): encoding failure '{2}' should belong to unknown response '{3}'.",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						sr["FailureID"],
 						encodingFailure.ModelOutputID
 					);
 
-					this.log.Alert("{0}", err);
+					Log.Alert("{0}", err);
 
 					throw new ArgumentOutOfRangeException(err, (Exception)null);
 				} // if
@@ -241,22 +238,22 @@
 				if (this.models.ContainsKey(column.ModelOutputID)) {
 					this.models[column.ModelOutputID].Error.MissingColumns.Add(column.ColumnName);
 
-					this.log.Debug(
+					Log.Debug(
 						"Inference loader({0}, '{1}'): loaded missing column ({2}).",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						column.ColumnName
 					);
 				} else {
 					err = string.Format(
 						"Inference loader({0}, '{1}'): missing column '{2}' should belong to unknown response '{3}'.",
-						this.customerID,
+						CustomerID,
 						this.timeStr,
 						sr["MissingColumnID"],
 						column.ModelOutputID
 					);
 
-					this.log.Alert("{0}", err);
+					Log.Alert("{0}", err);
 
 					throw new ArgumentOutOfRangeException(err, (Exception)null);
 				} // if
@@ -267,11 +264,11 @@
 				err = string.Format(
 					"Inference loader({1}, '{2}'): unsupported row type '{0}'.",
 					rowTypeName,
-					this.customerID,
+					CustomerID,
 					this.timeStr
 				);
 
-				this.log.Alert("{0}", err);
+				Log.Alert("{0}", err);
 
 				throw new ArgumentOutOfRangeException(err, (Exception)null);
 			} // switch
@@ -290,9 +287,6 @@
 
 		private readonly SortedDictionary<long, PublicModelOutput> models;
 
-		private readonly ASafeLog log;
-		private readonly AConnection db;
-		private readonly int customerID;
 		private readonly DateTime time;
 		private readonly string timeStr;
 	} // class InferenceLoader

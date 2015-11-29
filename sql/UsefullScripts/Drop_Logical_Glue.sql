@@ -65,6 +65,9 @@ IF OBJECT_ID('LogicalGlueRequests') IS NOT NULL
 GO
 
 DELETE FROM ConfigurationVariables WHERE Name IN (
-	'LogicalGlueCacheAcceptanceDays'
+	'LogicalGlueCacheAcceptanceDays',
+	'LogicalGlueHostName',
+	'LogicalGlueNewCustomerRequestPath',
+	'LogicalGlueOldCustomerRequestPath'
 )
 GO

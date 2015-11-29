@@ -28,7 +28,7 @@
 
 			case GetInferenceMode.DownloadIfOld:
 				Inference cachedInference = GetInference(customerID, this.now);
-				Configuration cfg = this.keeper.LoadConfiguration();
+				ModuleConfiguration cfg = this.keeper.LoadModuleConfiguration();
 
 				if (cachedInference.IsUpToDate(this.now, cfg.CacheAcceptanceDays))
 					return cachedInference;
@@ -61,7 +61,7 @@
 
 			long requestID = this.keeper.SaveInferenceRequest(customerID, inputData);
 
-			Response<Reply> reply = this.harvester.Infer(inputData);
+			Response<Reply> reply = this.harvester.Infer(inputData, this.keeper.LoadHarvesterConfiguration());
 
 			return this.keeper.SaveInference(customerID, requestID, reply);
 		} // DownloadAndSave

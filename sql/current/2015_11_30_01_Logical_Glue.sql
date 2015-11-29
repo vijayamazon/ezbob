@@ -4,6 +4,50 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueCacheAcceptanceDays')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGlueCacheAcceptanceDays',
+		'30',
+		'Integer. Logical Glue inference is valid for this number of days; it should be updated if older.',
+		0
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueHostName')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGlueHostName',
+		'etl.live.logicalglue.net',
+		'String. Host name of the Logical Glue API URL.',
+		0
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueNewCustomerRequestPath')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGlueNewCustomerRequestPath',
+		'/everline-scores-with-report/{0}',
+		'String. Full path to resource of Logical Glue API URL for new customer.',
+		0
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueOldCustomerRequestPath')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGlueOldCustomerRequestPath',
+		'/everline-scores/{0}',
+		'String. Full path to resource of Logical Glue API URL for returning customer.',
+		0
+	)
+END
+GO
+
 IF OBJECT_ID('LogicalGlueRequests') IS NULL
 BEGIN
 	CREATE TABLE LogicalGlueRequests (

@@ -4,11 +4,14 @@
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
 
-	internal class InferenceSaver {
-		public InferenceSaver(AConnection db, ASafeLog log, int customerID, long requestID, Response<Reply> response) {
-			this.db = db;
-			this.log = log;
-			this.customerID = customerID;
+	internal class InferenceSaver : AActionBase {
+		public InferenceSaver(
+			AConnection db,
+			ASafeLog log,
+			int customerID,
+			long requestID,
+			Response<Reply> response
+		) : base(db, log, customerID) {
 			this.requestID = requestID;
 			this.response = response;
 
@@ -16,14 +19,12 @@
 		} // constructor
 
 		public InferenceSaver Execute() {
+			// TODO
 			return this;
 		} // Execute
 
 		public Inference Result { get; private set; }
 
-		private readonly AConnection db;
-		private readonly ASafeLog log;
-		private readonly int customerID;
 		private readonly long requestID;
 		private readonly Response<Reply> response;
 	} // class InferenceSaver
