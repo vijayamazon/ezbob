@@ -6,7 +6,7 @@
 
     [DataContract(IsReference = true)]
 	public class I_InvestorBankAccount {
-        [PK(true)]
+        //[PK(true)]
         [DataMember]
 		public int InvestorBankAccountID { get; set; }
 

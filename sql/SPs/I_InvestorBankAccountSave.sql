@@ -5,11 +5,16 @@ IF OBJECT_ID('I_InvestorBankAccountSave') IS NOT NULL
 	DROP PROCEDURE I_InvestorBankAccountSave
 GO
 
+IF OBJECT_ID('I_InvestorBankAccountUpdate') IS NOT NULL
+	DROP PROCEDURE I_InvestorBankAccountUpdate
+GO
+
 IF TYPE_ID('I_InvestorBankAccountList') IS NOT NULL
 	DROP TYPE I_InvestorBankAccountList
 GO
 
 CREATE TYPE I_InvestorBankAccountList AS TABLE (
+	[InvestorBankAccountID] INT NOT NULL,
 	[InvestorID] INT NOT NULL,
 	[InvestorAccountTypeID] INT NOT NULL,
 	[BankName] NVARCHAR(255) NULL,
@@ -64,4 +69,32 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE I_InvestorBankAccountUpdate
+@Tbl I_InvestorBankAccountList READONLY
+AS
+BEGIN
+	SET NOCOUNT ON;
 
+	UPDATE 
+		I_InvestorBankAccount
+	SET 
+		I_InvestorBankAccount.[InvestorID] = tbl.[InvestorID],
+		I_InvestorBankAccount.[InvestorAccountTypeID] = tbl.[InvestorAccountTypeID],
+		I_InvestorBankAccount.[BankName] = tbl.[BankName],
+		I_InvestorBankAccount.[BankCode] = tbl.[BankCode],
+		I_InvestorBankAccount.[BankCountryID] = tbl.[BankCountryID],
+		I_InvestorBankAccount.[BankBranchName] = tbl.[BankBranchName],
+		I_InvestorBankAccount.[BankBranchNumber] = tbl.[BankBranchNumber],
+		I_InvestorBankAccount.[BankAccountName] = tbl.[BankAccountName],
+		I_InvestorBankAccount.[BankAccountNumber] = tbl.[BankAccountNumber],
+		I_InvestorBankAccount.[RepaymentKey] = tbl.[RepaymentKey],
+		I_InvestorBankAccount.[IsActive] = tbl.[IsActive],
+		I_InvestorBankAccount.[Timestamp] = tbl.[Timestamp]
+	FROM
+		I_InvestorBankAccount b 
+	INNER JOIN 
+		@Tbl tbl 
+	ON
+		b.InvestorBankAccountID = tbl.InvestorBankAccountID
+END
+GO

@@ -5,6 +5,10 @@ IF OBJECT_ID('I_InvestorContactSave') IS NOT NULL
 	DROP PROCEDURE I_InvestorContactSave
 GO
 
+IF OBJECT_ID('I_InvestorContactUpdate') IS NOT NULL
+	DROP PROCEDURE I_InvestorContactUpdate
+GO
+
 IF TYPE_ID('I_InvestorContactList') IS NOT NULL
 	DROP TYPE I_InvestorContactList
 GO
@@ -63,3 +67,32 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE I_InvestorContactUpdate
+@Tbl I_InvestorContactList READONLY
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE
+		I_InvestorContact
+	SET	
+		I_InvestorContact.[InvestorContactID] = tbl.[InvestorContactID],
+		I_InvestorContact.[InvestorID] = tbl.[InvestorID],
+		I_InvestorContact.[PersonalName] = tbl.[PersonalName],
+		I_InvestorContact.[LastName] = tbl.[LastName],
+		I_InvestorContact.[Email] = tbl.[Email],
+		I_InvestorContact.[Role] = tbl.[Role],
+		I_InvestorContact.[Comment] = tbl.[Comment],
+		I_InvestorContact.[IsPrimary] = tbl.[IsPrimary],
+		I_InvestorContact.[Mobile] = tbl.[Mobile],
+		I_InvestorContact.[OfficePhone] = tbl.[OfficePhone],
+		I_InvestorContact.[IsActive] = tbl.[IsActive],
+		I_InvestorContact.[Timestamp] = tbl.[Timestamp]
+	FROM
+		I_InvestorContact c 
+	INNER JOIN 
+		@Tbl tbl 
+	ON
+		c.InvestorContactID = tbl.InvestorContactID
+END
+GO

@@ -89,7 +89,7 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 				self.model.fetch();
 				self.trigger('back');
 			} else {
-				EzBob.ShowMessage(res, 'Failed saving investor contact', null, 'Ok');
+				EzBob.ShowMessage(res.error, 'Failed saving investor contact', null, 'Ok');
 			}
 		});
 

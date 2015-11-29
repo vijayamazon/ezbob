@@ -1323,9 +1323,27 @@
 		[Test]
 		public void TestLoadInvestor() {
 			var stra = new LoadInvestor(25);
+			
 			stra.Execute();
 			Assert.IsNotNull(stra.Result);
 			Assert.Greater(stra.Result.Contacts.Count, 0);
+		}
+
+		[Test]
+		public void TestManageInvestor() {
+			var stra = new ManageInvestorBankAccount(new InvestorBankAccountModel{
+				IsActive = true,
+				InvestorID = 10,
+				Timestamp = DateTime.Today,
+				InvestorBankAccountID = 4,
+				AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 2 },
+				BankCode = "435",
+				BankAccountNumber = "2345",
+				BankAccountName = "sdggfds"
+			});
+
+			stra.Execute();
+			Assert.IsTrue(stra.Result);
 		}
 	}
 }

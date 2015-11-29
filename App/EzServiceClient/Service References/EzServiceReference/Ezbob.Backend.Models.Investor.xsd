@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="InvestorModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Banks" nillable="true" type="tns:ArrayOfInvestorBankAccountModel" />
@@ -10,6 +11,8 @@
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
     </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorModel" nillable="true" type="tns:InvestorModel" />
   <xs:complexType name="ArrayOfInvestorBankAccountModel">
@@ -34,6 +37,8 @@
       <xs:element minOccurs="0" name="RepaymentKey" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
     </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorBankAccountModel" nillable="true" type="tns:InvestorBankAccountModel" />
   <xs:complexType name="InvestorAccountTypeModel">
@@ -41,6 +46,8 @@
       <xs:element minOccurs="0" name="InvestorAccountTypeID" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorAccountTypeModel" nillable="true" type="tns:InvestorAccountTypeModel" />
   <xs:complexType name="ArrayOfInvestorContactModel">
@@ -64,6 +71,8 @@
       <xs:element minOccurs="0" name="Role" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
     </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorContactModel" nillable="true" type="tns:InvestorContactModel" />
   <xs:complexType name="InvestorTypeModel">
@@ -71,6 +80,8 @@
       <xs:element minOccurs="0" name="InvestorTypeID" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorTypeModel" nillable="true" type="tns:InvestorTypeModel" />
 </xs:schema>

@@ -75,7 +75,7 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 				self.model.fetch();
 				self.trigger('back');
 			} else {
-				EzBob.ShowMessage(res, 'Failed saving investor bank', null, 'Ok');
+				EzBob.ShowMessage(res.error, 'Failed saving investor bank', null, 'Ok');
 			}
 		});
 

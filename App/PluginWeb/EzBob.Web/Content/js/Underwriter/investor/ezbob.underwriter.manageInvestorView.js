@@ -18,7 +18,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 	},//initialize
 
 	ui: {
-		
+		manageRegion: '#manage-investor-region'
 	},
 	serializeData: function () {
 		return {
@@ -34,7 +34,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 		view.on('back', this.backClicked, this);
 
 		var region = new Backbone.Marionette.Region({
-			el: this.$el.find('#manage-investor-region')
+			el: this.ui.manageRegion
 		});
 		region.show(view);
 		return this;
@@ -42,6 +42,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 
 	show: function (id) {
 		this.model.set('InvestorID', id);
+		this.stateModel.set({ state: 'details' }, { silent: true });
 		var self = this;
 		this.model.fetch().done(function() {
 			self.$el.show();
