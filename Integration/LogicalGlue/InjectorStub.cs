@@ -2,7 +2,7 @@
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
-	using log4net;
+	using Ezbob.Logger;
 
 	static class InjectorStub {
 		public static IKeeper GetKeeper() {
@@ -13,8 +13,8 @@
 			return new Harvester.Implementation.Harvester(GetLog());
 		} // GetHarvester
 
-		private static ILog GetLog() {
-			return LogManager.GetLogger(typeof(InjectorStub));
+		private static ASafeLog GetLog() {
+			return Library.Instance.Log;
 		} // GetLog
 
 		private static AConnection GetDBConnection() {

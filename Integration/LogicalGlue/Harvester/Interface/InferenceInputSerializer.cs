@@ -19,13 +19,16 @@
 
 			writer.WriteStartObject();
 
-			writer.WritePropertyName(Payment);
-			serializer.Serialize(writer, input.MonthlyPayment);
+			WriteIfNotEmpty(
+				writer,
+				serializer,
+				Payment,
+				input.MonthlyPayment == null ? string.Empty : input.MonthlyPayment.ToString()
+			);
 
-			if (!string.IsNullOrWhiteSpace(input.EquifaxData)) {
-				writer.WritePropertyName(Equifax);
-				serializer.Serialize(writer, input.EquifaxData);
-			} else {
+			if (!string.IsNullOrWhiteSpace(input.EquifaxData))
+				WriteIfNotEmpty(writer, serializer, Equifax, input.EquifaxData);
+			else {
 				WriteIfNotEmpty(writer, serializer, RegNum, input.CompanyRegistrationNumber);
 
 				bool hasDirector = input.Director != null;

@@ -36,7 +36,7 @@
 		/// LG returns answer related to this value (like in "what is probability that customer
 		/// will repay loan if paying this amount every month").
 		/// </summary>
-		public decimal MonthlyPayment { get; set; }
+		public decimal? MonthlyPayment { get; set; }
 
 		/// <summary>
 		/// Company identifier. Should be sent to LG as string.
@@ -95,11 +95,37 @@
 			return string.Join(
 				"_",
 				EquifaxData,
-				MonthlyPayment.ToString(CultureInfo.InvariantCulture),
+				MonthlyPayment == null ? "-- null --" : MonthlyPayment.Value.ToString(CultureInfo.InvariantCulture),
 				CompanyRegistrationNumber,
 				Director
 			).GetHashCode();
 		} // GetHashCode
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// Equifax data is truncated up to 50 characters.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public string ToShortString() {
+			string equifaxData;
+
+			if (string.IsNullOrWhiteSpace(EquifaxData))
+				equifaxData = string.Empty;
+			else if (EquifaxData.Length > 50)
+				equifaxData = EquifaxData.Substring(0, 50).TrimEnd() + "...";
+			else
+				equifaxData = EquifaxData;
+
+			return string.Format(
+				"Company: {0}, Payment {1}, Director: {2}, Equifax: {3}",
+				CompanyRegistrationNumber,
+				MonthlyPayment,
+				Director,
+				equifaxData.TrimStart()
+			);
+		} // ToShortString
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -210,10 +236,7 @@
 					return false;
 			} // if
 
-			if (MonthlyPayment <= 0)
-				return false;
-
-			return true;
+			return (MonthlyPayment ?? 0) > 0;
 		} // IsValid
 
 		private DirectorData director;

@@ -63,3 +63,8 @@ GO
 IF OBJECT_ID('LogicalGlueRequests') IS NOT NULL
 	DROP TABLE LogicalGlueRequests
 GO
+
+DELETE FROM ConfigurationVariables WHERE Name IN (
+	'LogicalGlueCacheAcceptanceDays'
+)
+GO

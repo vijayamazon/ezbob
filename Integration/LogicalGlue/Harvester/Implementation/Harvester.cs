@@ -1,11 +1,10 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Implementation {
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
-	using log4net;
 
 	public class Harvester : IHarvester {
-		public Harvester(ILog log) {
-			this.log = new SafeILog(log);
+		public Harvester(ASafeLog log) {
+			this.log = log.Safe();
 		} // constructor
 
 		public Response<Reply> Infer(InferenceInput inputData) {

@@ -2,37 +2,73 @@
 	using System;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
+	using Ezbob.Integration.LogicalGlue.Exceptions.Engine;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
-	using log4net;
 
 	public class Engine : IEngine {
-		public Engine(IKeeper keeper, IHarvester harvester, ILog log) {
+		public Engine(IKeeper keeper, IHarvester harvester, ASafeLog log) {
+			this.log = log.Safe();
+			this.now = DateTime.UtcNow;
+
 			this.keeper = keeper;
 			this.harvester = harvester;
-			this.log = new SafeILog(log);
+
+			if (this.keeper == null)
+				throw new NoConnectionEngineAlert(this.log);
+
+			if (this.harvester == null)
+				throw new NoHarvesterEngineAlert(this.log);
 		} // constructor
 
-		public Inference Infer(int customerID) {
-			// 1. Collect customer data from DB (via injected DB interface).
-			// 2. Load inference input data (via injected IHarvester) and save it (via injected DB interface).
-			// 3. Load inference output data of fuzzy logic model (via injected IHarvester)
-			//    and save it (via injected DB interface).
-			// 4. Load inference output data of neural network model (via injected IHarvester)
-			//    and save it (via injected DB interface).
-			// 5. Convert model outputs to Inference.
-			return new Inference(); // TODO
-		} // Infer
+		public Inference GetInference(int customerID, GetInferenceMode mode) {
+			switch (mode) {
+			case GetInferenceMode.CacheOnly:
+				return GetInference(customerID, this.now);
 
-		public Inference GetInference(int customerID) {
-			return GetHistoricalInference(customerID, DateTime.UtcNow);
+			case GetInferenceMode.DownloadIfOld:
+				Inference cachedInference = GetInference(customerID, this.now);
+				Configuration cfg = this.keeper.LoadConfiguration();
+
+				if (cachedInference.IsUpToDate(this.now, cfg.CacheAcceptanceDays))
+					return cachedInference;
+
+				goto case GetInferenceMode.ForceDownload; // !!! fall through !!!
+
+			case GetInferenceMode.ForceDownload:
+				return DownloadAndSave(customerID);
+
+			default:
+				throw new EngineAlert(
+					this.log,
+					new ArgumentOutOfRangeException("mode"),
+					"Failed to get customer {0} inference at mode {1}.",
+					customerID,
+					mode
+				);
+			} // switch
+
+			return null;
 		} // GetInference
 
-		public Inference GetHistoricalInference(int customerID, DateTime time) {
-			// 1. Load Inference from DB.
-			return new Inference(); // TODO
+		public Inference GetInference(int customerID, DateTime time) {
+			return this.keeper.LoadInference(customerID, time);
 		} // GetHistoricalInference
 
+		private Inference DownloadAndSave(int customerID) {
+			InferenceInput inputData = this.keeper.LoadInputData(customerID, this.now);
+
+			if (!inputData.IsValid())
+				throw new FailedToLoadInputDataAlert(this.log, customerID);
+
+			long requestID = this.keeper.SaveInferenceRequest(customerID, inputData);
+
+			Response<Reply> reply = this.harvester.Infer(inputData);
+
+			return this.keeper.SaveInference(customerID, requestID, reply);
+		} // DownloadAndSave
+
+		private readonly DateTime now;
 		private readonly IKeeper keeper;
 		private readonly IHarvester harvester;
 		private readonly ASafeLog log;

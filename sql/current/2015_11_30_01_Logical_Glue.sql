@@ -10,7 +10,7 @@ BEGIN
 		RequestID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
 		UniqueID UNIQUEIDENTIFIER NOT NULL,
-		MonthlyRepayment DECIMAL(18, 0) NOT NULL,
+		MonthlyRepayment DECIMAL(18, 0) NULL,
 		CompanyRegistrationNumber NVARCHAR(32) NULL,
 		FirstName NVARCHAR(250) NULL,
 		LastName NVARCHAR(250) NULL,
