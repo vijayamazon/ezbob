@@ -2384,17 +2384,12 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
 	display: none;
 }
 
- #loginSubmit,
- .simple-login .forgotpass {
-	margin-top: -52px;
-}
-
  .customer-logon-remember-me {
 	margin-top: -8px;
 }
 
  .logon-wrap {
-	padding-bottom: 0px;
+	padding-bottom: 18px;
 }
 
  .notifications .pe-7s-check,

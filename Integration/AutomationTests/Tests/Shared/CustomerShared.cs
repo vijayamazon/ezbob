@@ -9,9 +9,9 @@ namespace UIAutomationTests.Tests.Shared {
 
     class CustomerShared : WebTestBase {
 
-        private IWebDriver _Driver;
-        private ResourceManager _EnvironmentConfig;
-        private ResourceManager _BrandConfig;
+        private readonly IWebDriver _Driver;
+        private readonly ResourceManager _EnvironmentConfig;
+        private readonly ResourceManager _BrandConfig;
 
         public CustomerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
             this._Driver = Driver;

@@ -7,6 +7,7 @@
     using System.Text.RegularExpressions;
     using Newtonsoft.Json.Linq;
     using TestRailCore;
+    using TestRailData;
     using TestRailModels.Automation;
     using TestRailModels.TestRail;
 
@@ -82,22 +83,17 @@
             List<AtutomationCaseRun> caseAtutomationList = new List<AtutomationCaseRun>();
             var ezbobProject = TestRailManager.Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
             var plan = TestRailManager.Instance.GetPlan(planId);
+            
             if (ezbobProject != null) {
                 if (plan != null) {
                     foreach (var entryItem in plan.Entries) {
                         foreach (var runItem in entryItem.RunList) {
-                            var configs = runItem.ConfigIDs;
-                            if (runItem.SuiteID != null) {
-                                var cases = TestRailManager.CasesRepository[(ulong)runItem.SuiteID];
-                                foreach (var caseItem in cases) {
-                                    if (entryItem.SuiteID != null) {
-                                        var caseAtutomation = BildCaseAtutomation(caseItem,
-                                            configs,
-                                            entryItem.SuiteID,
-                                            runItem.ID);
-                                        caseAtutomationList.Add(caseAtutomation);
-                                    }
-                                }
+                            foreach (var test in TestRailManager.Instance.GetTests((ulong)runItem.ID)) {
+                                var caseAtutomation = BildCaseAtutomation(TestRailManager.Instance.GetCase((ulong)test.CaseID),
+                                    runItem.ConfigIDs,
+                                    entryItem.SuiteID,
+                                    runItem.ID);
+                                caseAtutomationList.Add(caseAtutomation);
                             }
                         }
                     }
@@ -105,6 +101,7 @@
             }
             return caseAtutomationList;
         }
+
 
         private static List<List<ulong>> GetPermutations() {
             var permutations = new List<List<ulong>>();

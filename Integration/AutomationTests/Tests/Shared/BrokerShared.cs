@@ -1,26 +1,21 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
-    using System;
     using System.Resources;
-    using System.Security.Cryptography.X509Certificates;
-    using System.Threading;
-    using NUnit.Framework;
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Support.UI;
     using UIAutomationTests.Core;
 
     class BrokerShared : WebTestBase {
 
-        private IWebDriver _Driver;
-        private ResourceManager _EnvironmentConfig;
-        private ResourceManager _BrandConfig;
-        private WebDriverWait wait;
+        private readonly IWebDriver _Driver;
+        private readonly ResourceManager _EnvironmentConfig;
+        private readonly ResourceManager _BrandConfig;
+        private readonly object Locker;
         //private static readonly object lockObject= new object();
 
         public BrokerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
             this._Driver = Driver;
             this._EnvironmentConfig = EnvironmentConfig;
             this._BrandConfig = BrandConfig;
-            //this.wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(120));
+            this.Locker = new object();
         }
         /// <summary>
         /// This procedure is to replace broker test case 'C1202'
@@ -122,13 +117,17 @@
             IWebElement addNewCustomer = SharedServiceClass.ElementToBeClickable(this._Driver, By.Id("AddNewCustomer"));
             addNewCustomer.Click();
 
-            IWebElement leadFirstName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("LeadFirstName"));
-            leadFirstName.Click();
-            leadFirstName.SendKeys(fName);
+            lock (this.Locker) {
+                IWebElement leadFirstName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("LeadFirstName"));
+                leadFirstName.Click();
+                leadFirstName.SendKeys(fName);
+            }
 
-            IWebElement leadLastName = this._Driver.FindElement(By.Id("LeadLastName"));
-            leadLastName.Click();
-            leadLastName.SendKeys(lName);
+            lock (this.Locker) {
+                IWebElement leadLastName = this._Driver.FindElement(By.Id("LeadLastName"));
+                leadLastName.Click();
+                leadLastName.SendKeys(lName);
+            }
 
             IWebElement leadMail = this._Driver.FindElement(By.Id("LeadEmail"));
             leadMail.SendKeys(leadEmail);
