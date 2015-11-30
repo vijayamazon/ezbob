@@ -583,7 +583,7 @@
 		} // ToDecimalOrNull
 
 		public byte[] ToByteArray(IFormatProvider provider = null) {
-			return (byte[])m_oValue;
+			return m_oValue == DBNull.Value ? null : (byte[])m_oValue;
 		} // ToByteArray
 
 		public static implicit operator string[](ParsedValue val) {
