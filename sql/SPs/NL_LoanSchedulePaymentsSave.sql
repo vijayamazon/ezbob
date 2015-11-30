@@ -13,7 +13,9 @@ CREATE TYPE NL_LoanSchedulePaymentsList AS TABLE (
 	[LoanScheduleID] BIGINT NOT NULL,
 	[PaymentID] BIGINT NOT NULL,
 	[PrincipalPaid] DECIMAL(18, 6) NOT NULL,
-	[InterestPaid] DECIMAL(18, 6) NOT NULL
+	[InterestPaid] DECIMAL(18, 6) NOT NULL,
+	[ResetPrincipalPaid] DECIMAL(18, 6) NULL,
+	[ResetInterestPaid] DECIMAL(18, 6) NULL
 )
 GO
 
@@ -27,12 +29,16 @@ BEGIN
 		[LoanScheduleID],
 		[PaymentID],
 		[PrincipalPaid],
-		[InterestPaid]
+		[InterestPaid],
+		[ResetPrincipalPaid],
+		[ResetInterestPaid]
 	) SELECT
 		[LoanScheduleID],
 		[PaymentID],
 		[PrincipalPaid],
-		[InterestPaid]
+		[InterestPaid],
+		[ResetPrincipalPaid],
+		[ResetInterestPaid]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

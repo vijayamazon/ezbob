@@ -12,7 +12,8 @@ GO
 CREATE TYPE NL_LoanFeePaymentsList AS TABLE (
 	[LoanFeeID] BIGINT NOT NULL,
 	[PaymentID] BIGINT NOT NULL,
-	[Amount] DECIMAL(18, 6) NOT NULL
+	[Amount] DECIMAL(18, 6) NOT NULL,
+	[ResetAmount] DECIMAL(18, 6) NULL
 )
 GO
 
@@ -25,11 +26,13 @@ BEGIN
 	INSERT INTO NL_LoanFeePayments (
 		[LoanFeeID],
 		[PaymentID],
-		[Amount]
+		[Amount],
+		[ResetAmount]
 	) SELECT
 		[LoanFeeID],
 		[PaymentID],
-		[Amount]
+		[Amount],
+		[ResetAmount] 
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

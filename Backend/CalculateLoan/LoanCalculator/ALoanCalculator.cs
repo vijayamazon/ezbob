@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Runtime.CompilerServices;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -422,11 +423,11 @@
 			}
 
 			// fees
-			foreach (var e in WorkingModel.Loan.Fees) {
+			foreach (var e in WorkingModel.Loan.Fees.OrderBy(f => f.AssignTime)) {
 
 				// ignore fees disabled before CalculationDate ???  TODO check
-				if (e.DisabledTime != null && (e.DisabledTime.Value.Date <= CalculationDate.Date))
-					continue;
+				//if (e.DisabledTime != null && (e.DisabledTime.Value.Date <= CalculationDate.Date))
+				//	continue;
 
 				feesEvents.Add(new LoanEvent(new DateTime(e.AssignTime.Year, e.AssignTime.Month, e.AssignTime.Day), e));
 
@@ -441,7 +442,7 @@
 			}
 
 			// payments - by PaymentTime, only non-deleted
-			foreach (NL_Payments p in WorkingModel.Loan.Payments.Where(p => p.PaymentStatusID == (int)NLPaymentStatuses.Active).OrderBy(p => p.PaymentTime)) {
+			foreach (NL_Payments p in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime)) {
 
 				// init currentPaidInterest, currentPaidPrincipal
 				foreach (NL_LoanSchedulePayments sp in p.SchedulePayments) {
@@ -452,6 +453,20 @@
 				// init currentPaidFees
 				foreach (NL_LoanFeePayments fp in p.FeePayments)
 					currentPaidFees += fp.Amount;
+
+				// charge-back date
+				if (p.PaymentStatusID == (int)NLPaymentStatuses.ChargeBack && !p.DeletionTime.Equals(DateTime.MinValue) && p.DeletionTime != null) {
+					// prevent from registering real schedule payments or fee payments
+					p.Amount = 0;
+
+					// on this point principal paid by the payment, should be removed from currently open principal, i.e. "ha-kesef shakhaf etzlenu"
+					paymentEvents.Add(item: new LoanEvent(new DateTime(p.PaymentTime.Year, p.PaymentTime.Month, p.PaymentTime.Day), payment: p, priority: 0, chargeBackPayment: true, chargeBackPaymentRecorded: true));
+					
+					DateTime chargeBackTime = (DateTime)p.DeletionTime;
+
+					// on this point principal paid by the payment, should be added to the currently open principal
+					paymentEvents.Add(item: new LoanEvent(new DateTime(chargeBackTime.Year, chargeBackTime.Month, chargeBackTime.Day), payment: p, priority: 0, chargeBackPayment: true, chargeBackPaymentRecorded: false));
+				}
 
 				paymentEvents.Add(new LoanEvent(new DateTime(p.PaymentTime.Year, p.PaymentTime.Month, p.PaymentTime.Day), p));
 			}
@@ -523,6 +538,22 @@
 
 				case "Payment":
 					ProcessPayment(e.Payment);
+					break;
+
+				case "ChargebackPaymentRecorded":
+					// remove paid principal to currentOpenPrincipal, i.e. decrease open principal for interest caclulation
+					var paidPrincipalR = e.ChargebackPaymentCancelled.SchedulePayments.Sum(sp => sp.ResetPrincipalPaid);
+					if (paidPrincipalR != null) {
+						currentOpenPrincipal -= (decimal)paidPrincipalR;
+					}
+					break;
+
+				case "ChargebackPaymentCancelled":
+					// add paid principal to currentOpenPrincipal, i.e. add unpaid principal open principal
+					var paidPrincipal = e.ChargebackPaymentCancelled.SchedulePayments.Sum(sp => sp.ResetPrincipalPaid);
+					if (paidPrincipal != null) {
+						currentOpenPrincipal += (decimal)paidPrincipal;
+					}
 					break;
 
 				case "Rollover":
@@ -628,17 +659,15 @@
 				return assignAmount;
 			}
 
-			// sch(planned-paid > 0)
-			IEnumerable<NL_LoanSchedules> unpaidSchedules = from s in this.schedule
-															join p in payment.SchedulePayments on s.LoanScheduleID equals p.LoanScheduleID into g
-															from x in g.DefaultIfEmpty()
-															where x == null || s.Principal < x.PrincipalPaid // not paid at all or partially paid
-															orderby s.PlannedDate
-															select s;
 			// Record schedules payments
 
-			// loop throught unpaid and partial paid schedules
-			foreach (NL_LoanSchedules s in unpaidSchedules) {
+			// find unpaid and partial paid schedules
+			foreach (NL_LoanSchedules s in this.schedule) { 
+
+				decimal pPaid = 0;
+				WorkingModel.Loan.Payments.ForEach(p => pPaid += p.SchedulePayments.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.PrincipalPaid));
+				if (pPaid == s.Principal)
+					continue;
 
 				if (assignAmount <= 0) {
 					//Log.Debug("PaySchedules: amount assigned completely");
@@ -652,7 +681,7 @@
 				assignAmount -= iAmount;
 
 				decimal pPaidAmount = 0;
-				foreach (var p in WorkingModel.Loan.Payments.Where(p => p.PaymentStatusID == (int)NLPaymentStatuses.Active)) 
+				foreach (var p in WorkingModel.Loan.Payments.Where(p => p.PaymentStatusID == (int)NLPaymentStatuses.Active))
 					pPaidAmount += p.SchedulePayments.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
 
 				// balance of principal p'
@@ -703,6 +732,7 @@
 		/// <param name="assignAmount"></param>
 		/// <returns>rest of available money of the payment</returns>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[ExcludeFromToString]
 		internal decimal PayFees(List<NL_LoanFees> feesList, NL_Payments payment, decimal assignAmount) {
 
@@ -725,6 +755,12 @@
 					fPaid += p.FeePayments.Where(fp => fp.LoanFeeID == f.LoanFeeID).Sum(fp => fp.Amount);
 
 				decimal fBalance = decimal.Round((f.Amount - fPaid), this.decimalAccurancy);
+
+				// fee disabled before the payment occured, i.e. the payment couldnt to pay the fee
+				if (f.DisabledTime != null && payment.PaymentTime > f.DisabledTime) {
+					Log.Debug("Trying to pay disabled fee: {0}\n{1} with payment: {2}\n{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_Payments)), payment.ToStringAsTable());
+					return assignAmount;
+				}
 
 				// fees not paid completely
 				if (fBalance > 0) {

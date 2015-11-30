@@ -21,6 +21,9 @@
 		public decimal Amount { get; set; }
 
 		[DataMember]
+		public decimal? ResetAmount { get; set; }
+
+		[DataMember]
 		[NonTraversable]
 		public bool NewEntry { get; set; }
 

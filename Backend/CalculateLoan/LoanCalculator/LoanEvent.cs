@@ -19,13 +19,26 @@
 			Fee = fee;
 		}
 		// payment
-		public LoanEvent(DateTime date, NL_Payments payment, int priority = 0): this(new DateTime(date.Year, date.Month, date.Day, 23, 59, 58), priority) {
+		public LoanEvent(DateTime date, NL_Payments payment, int priority = 0, bool chargeBackPayment = false, bool chargeBackPaymentRecorded = false )
+			: this(new DateTime(date.Year, date.Month, date.Day, 23, 59, 58), priority) {
+
+			if (chargeBackPayment) {
+				if (chargeBackPaymentRecorded) {
+					ChargebackPaymentRecorded = payment;
+					return;
+				}
+				ChargebackPaymentCancelled = payment;
+				return;
+			}
+			
 			Payment = payment;
 		}
+
 		//	installment processed at the end of day
 		public LoanEvent(DateTime date, NL_LoanSchedules scheduleItem, int priority = 0): this(new DateTime(date.Year, date.Month, date.Day, 23, 59, 59), priority) {
 			ScheduleItem = scheduleItem;
 		}
+
 		// rollover
 		public LoanEvent(DateTime date, NL_LoanRollovers rollover): this(date) {
 			Rollover = rollover;
@@ -41,6 +54,10 @@
 		public NL_LoanHistory History { get; set; }
 		public NL_LoanFees Fee { get; set; }
 		public NL_Payments Payment { get; set; }
+		
+		public NL_Payments ChargebackPaymentRecorded { get; set; }
+		public NL_Payments ChargebackPaymentCancelled { get; set; }
+
 		public NL_LoanSchedules ScheduleItem { get; set; }
 		public NL_LoanRollovers Rollover { get; set; } // not supported yet
 		public Action Action { get; set; } // not supported yet (re-scheduling, etc)
@@ -64,6 +81,10 @@
 					return 3;
 				if (Action != null)
 					return 4;
+				if (ChargebackPaymentRecorded != null)
+					return 5;
+				if (ChargebackPaymentCancelled != null)
+					return 6;
 
 				return 0;
 			}
@@ -82,6 +103,12 @@
 
 			if (Payment != null)
 				return "Payment";
+
+			if (ChargebackPaymentRecorded != null)
+				return "ChargebackPaymentRecorded";
+
+			if (ChargebackPaymentCancelled != null)
+				return "ChargebackPaymentCancelled";
 
 			if (Fee != null)
 				return "Fee";

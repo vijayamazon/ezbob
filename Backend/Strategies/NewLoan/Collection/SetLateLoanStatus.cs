@@ -73,7 +73,7 @@
                         new NL_LoanFees() {
                             AssignedByUserID = 1,
                             LoanID = loanId,
-                            Amount = GetLateFeesAmount(nlFeeType),
+                            Amount = NL_Model.GetLateFeesAmount(nlFeeType),
                             DeletedByUserID = null,
                             AssignTime = this.now,
                             CreatedTime = this.now,
@@ -105,7 +105,7 @@
             return this.now >= existsOptions.StopLateFeeFromDate;
         }
 
-        private decimal GetLateFeesAmount(NLFeeTypes nlFeeType){
+       /* private decimal GetLateFeesAmount(NLFeeTypes nlFeeType){
             switch (nlFeeType){
                 case NLFeeTypes.LatePaymentFee:
                     return CurrentValues.Instance.LatePaymentCharge.ID;
@@ -115,7 +115,7 @@
                     return CurrentValues.Instance.PartialPaymentCharge.ID;
             }
             return 0;
-        }
+        }*/
 
         private NLFeeTypes GetNLFeeTypes(int daysBetween, decimal interest){
             //  use NLFeeTypes

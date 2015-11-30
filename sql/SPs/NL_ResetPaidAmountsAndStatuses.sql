@@ -9,22 +9,23 @@ ALTER PROCEDURE [dbo].[NL_ResetPaidAmountsAndStatuses]
 AS
 BEGIN
 	SET NOCOUNT ON;
-
 		
 	DECLARE @Paymentids [dbo].[BigintList];
 
 	if  @PaymentDateInclude = 0 
-			insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID =  17 and [PaymentTime] > @PaymentDate;
-	ELSE IF 
-		@PaymentDateInclude = 1 
-			insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID =  17 and [PaymentTime] >= @PaymentDate;
+		insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID =  17 and [PaymentTime] > @PaymentDate;
+	ELSE IF @PaymentDateInclude = 1 
+		insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID =  17 and [PaymentTime] >= @PaymentDate;
 	
 	IF (select COUNT(Item) from @Paymentids) = 0 
 		RETURN 0;
 	
 	-- RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER PaymentDate of deleted/retroactive payment	
-	UPDATE [NL_LoanSchedulePayments] SET [PrincipalPaid] = 0, [InterestPaid] = 0 WHERE [PaymentID] in (select Item from @Paymentids);
-	UPDATE [NL_LoanFeePayments] SET [Amount] = 0 WHERE [PaymentID] in (select Item from @Paymentids);	
+	UPDATE [NL_LoanSchedulePayments] 
+	SET [ResetPrincipalPaid] = [PrincipalPaid], [ResetInterestPaid] = [InterestPaid],[PrincipalPaid] = 0, [InterestPaid] = 0 
+	WHERE [PaymentID] in (select Item from @Paymentids);
+	
+	UPDATE [NL_LoanFeePayments] SET [ResetAmount] = [Amount], [Amount] = 0 WHERE [PaymentID] in (select Item from @Paymentids);	
 
 	-- reset schedules statuses and closed time
 	UPDATE  s

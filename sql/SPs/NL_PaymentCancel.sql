@@ -14,13 +14,12 @@ BEGIN
 	IF @PaymentStatusID NOT IN (SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE [PaymentStatus] IN ('WrongPayment', 'ChargeBack'))
 		RETURN -1; 
 
-	--UPDATABLE: [PaymentStatusID], [DeletionTime], [DeletionNotificationTime], [DeletedByUserID], [Notes]
+	--UPDATABLE: [PaymentStatusID], [DeletionTime], [DeletedByUserID], [Notes]
 
 	UPDATE [dbo].[NL_Payments]  
 	SET 
 		[PaymentStatusID]= @PaymentStatusID,
 		[DeletionTime] = (SELECT DeletionTime FROM @Tbl), 
-		--[DeletionNotificationTime] = (SELECT DeletionNotificationTime FROM @Tbl ), 	
 		[DeletedByUserID] = (SELECT [DeletedByUserID] FROM @Tbl),		
 		[Notes] = concat([Notes], '\n' , (SELECT [Notes]  FROM @Tbl))
 	WHERE 

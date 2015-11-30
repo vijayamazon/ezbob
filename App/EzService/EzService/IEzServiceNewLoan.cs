@@ -52,8 +52,7 @@
 
 		[OperationContract]
         NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1);
-		NL_Loans GetLoan(int loanId, int userID);
-
+		
 		[OperationContract]
 		NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID);
 	} // interface IEzServiceNewLoan

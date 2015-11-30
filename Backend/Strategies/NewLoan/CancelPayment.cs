@@ -113,13 +113,13 @@
 			}
 
 			// recalculate state with calculator + save new state to DB
-		/*	UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID, UserID);
+			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID, UserID);
 			try {
 				reloadLoanDBState.Execute();
 			} catch (Exception ex) {
 				this.Error = ex.Message;
 				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Payment, reloadLoanDBState.Error + "\n" + this.Error, ex.ToString(), ex.StackTrace);
-			}*/
+			}
 
 		}
 	} // class AddPayment

@@ -133,4 +133,5 @@
 		FixedPayment = 2 // used for "out of loan agreement" rescheduling, not supported yet (15 October 2015)
 	}
 
+	
 } // namespace

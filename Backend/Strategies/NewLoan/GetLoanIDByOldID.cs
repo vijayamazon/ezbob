@@ -4,14 +4,14 @@
     using Ezbob.Backend.Strategies.NewLoan.Exceptions;
     using Ezbob.Database;
 
-    public class GetLoanByOldID : AStrategy
+	public class GetLoanIDByOldID : AStrategy
     {
-        public GetLoanByOldID(int oldID)
+        public GetLoanIDByOldID(int oldID)
         {
             this.OldLoanId = oldID;
         } // constructor
 
-        public override string Name { get { return "GetLoan"; } }
+		public override string Name { get { return "GetLoanIDByOldID"; } }
         public string Error { get; private set; }
         public long LoanID { get; private set; }
         private readonly long OldLoanId;

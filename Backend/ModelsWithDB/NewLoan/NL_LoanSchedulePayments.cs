@@ -24,6 +24,12 @@
 		public decimal InterestPaid { get; set; }
 
 		[DataMember]
+		public decimal? ResetPrincipalPaid { get; set; }
+
+		[DataMember]
+		public decimal? ResetInterestPaid { get; set; }
+
+		[DataMember]
 		[NonTraversable]
 		public bool NewEntry { get; set; }
 

@@ -743,14 +743,14 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Auto
 			};*/
-			DateTime pdate = new DateTime(2015, 12, 27);
+			DateTime pdate = new DateTime(2015, 12, 29);
 			NL_Payments nlpayment = new NL_Payments() {
-				Amount = 150m,
+				Amount = 100m,
 				CreatedByUserID = 357,
 				CreationTime = DateTime.UtcNow,
 				LoanID = loanID,
 				PaymentTime = pdate,
-				Notes = "payment2",
+				Notes = "payment3",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
 			};
@@ -764,7 +764,26 @@
 		}
 
 		[Test]
-		public void CancelPAymentTest() {
+		public void AddLateFeeTest() {
+			const long loanID = 17;
+			DateTime now = DateTime.UtcNow;
+			NL_LoanFees fee = new NL_LoanFees() {
+				LoanFeeTypeID = (int)NLFeeTypes.LatePeriod1,
+				Amount = NL_Model.GetLateFeesAmount(NLFeeTypes.LatePaymentFee),
+				AssignedByUserID = 1,
+				AssignTime = now ,
+				CreatedTime = now,
+				Notes = "test late fee",
+				LoanID = loanID
+			};
+			int result = this.m_oDB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, this.m_oDB.CreateTableParameter<NL_LoanFees>("Tbl", fee));
+			this.m_oLog.Debug(result);
+		}
+
+
+
+		[Test]
+		public void CancelPaymentTest() {
 			const int customerid = 56;
 			const long loanID = 17;
 			const long paymentToCancel = 10050;
@@ -1049,9 +1068,9 @@
 
 
         [Test]
-        public void GetLoan() {
+		public void GetLoanIDByOldID() {
             int oldLoanId = 3107;
-            var strategy = new GetLoanByOldID(oldLoanId);
+			var strategy = new GetLoanIDByOldID(oldLoanId);
             strategy.Execute();
 
         }

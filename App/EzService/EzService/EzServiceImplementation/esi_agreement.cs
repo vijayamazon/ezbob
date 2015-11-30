@@ -1,10 +1,9 @@
 ﻿namespace EzService.EzServiceImplementation {
-    using Ezbob.Backend.Models;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Backend.Strategies.Misc;
-    using EzBob.Backend.Models;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Misc;
+	using EzBob.Backend.Models;
 
-    partial class EzServiceImplementation {
+	partial class EzServiceImplementation {
         public ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name,
                                             TemplateModel template,
                                             string path1, string path2) {

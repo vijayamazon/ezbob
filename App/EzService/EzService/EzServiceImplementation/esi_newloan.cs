@@ -89,7 +89,7 @@
         } // GetLoanState
 
         public NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1) {
-            GetLoanByOldID strategy;
+			GetLoanIDByOldID strategy;
             var amd = ExecuteSync(out strategy, customerID, userID, oldId);
             return new NLLongActionResult {
                 MetaData = amd,

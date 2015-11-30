@@ -824,14 +824,15 @@ BEGIN
 		PaymentID BIGINT NOT NULL,
 		PrincipalPaid DECIMAL(18, 6) NOT NULL,
 		InterestPaid DECIMAL(18, 6) NOT NULL,
+		[ResetPrincipalPaid] [decimal](18, 6) NULL,
+		[ResetInterestPaid] [decimal](18, 6) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanSchedulePayments PRIMARY KEY (LoanSchedulePaymentID),
 		CONSTRAINT FK_NL_LoanSchedulePayments_Schedule FOREIGN KEY (LoanScheduleID) REFERENCES NL_LoanSchedules (LoanScheduleID),
 		CONSTRAINT FK_NL_LoanSchedulePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payments (PaymentID),
-		CONSTRAINT UC_NL_LoanSchedulePayments UNIQUE (LoanScheduleID, PaymentID),
+		--CONSTRAINT UC_NL_LoanSchedulePayments UNIQUE (LoanScheduleID, PaymentID),
 		CONSTRAINT CHK_NL_LoanSchedulePayments_Principal CHECK (PrincipalPaid >= 0),
-		CONSTRAINT CHK_NL_LoanSchedulePayments_Interest CHECK (InterestPaid >= 0)
-	--,	CONSTRAINT CHK_NL_LoanSchedulePayments_Paid CHECK (PrincipalPaid + InterestPaid > 0)
+		CONSTRAINT CHK_NL_LoanSchedulePayments_Interest CHECK (InterestPaid >= 0)	
 	)
 END
 GO
@@ -846,6 +847,7 @@ BEGIN
 		LoanFeeID BIGINT NOT NULL,
 		PaymentID BIGINT NOT NULL,
 		Amount DECIMAL(18, 6) NOT NULL,
+		[ResetAmount] DECIMAL(18, 6) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LoanFeePayments PRIMARY KEY (LoanFeePaymentID),
 		CONSTRAINT FK_LoanFeePayments_Fee FOREIGN KEY (LoanFeeID) REFERENCES NL_LoanFees (LoanFeeID),

@@ -12,7 +12,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT 
-		[LoanSchedulePaymentID], [LoanScheduleID], s.[PaymentID], [PrincipalPaid], [InterestPaid]
+		[LoanSchedulePaymentID], [LoanScheduleID], s.[PaymentID], [PrincipalPaid], [InterestPaid], [ResetPrincipalPaid], [ResetInterestPaid]
 	FROM
 		NL_LoanSchedulePayments s inner join NL_Payments p on p.PaymentID = s.PaymentID
 	WHERE

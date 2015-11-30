@@ -126,7 +126,7 @@
         }
 
         public long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1) {
-            var stra = new GetLoanByOldID(loanId);
+			var stra = new GetLoanIDByOldID(loanId);
             stra.Context.CustomerID = customerID;
             stra.Context.UserID = userID;
             stra.Execute();

@@ -5,8 +5,6 @@ GO
 
 ALTER PROCEDURE [dbo].[NL_LoanFeePaymentsUpdate]
 	@LoanFeePaymentID BIGINT,
-	--@LoanScheduleID BIGINT = NULL,	
---	@PaymentID BIGINT = NULL,	
 	@Amount DECIMAL(18,6) = NULL	
 AS
 BEGIN
@@ -14,8 +12,7 @@ BEGIN
 			
 		UPDATE 
 			[NL_LoanFeePayments]	
-		SET  		
-			--[PaymentID] = ISNULL(@PaymentID, PaymentID), 
+		SET 
 			[Amount] = ISNULL(@Amount, Amount)						
 		WHERE 
 			[LoanFeePaymentID] = @LoanFeePaymentID;		
