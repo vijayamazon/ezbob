@@ -152,6 +152,10 @@
 					HandleGenericReport(report, dToday, sender, BuildStrategyRunningTimeReport, BuildStrategyRunningTimeXls);
 					break;
 
+				case ReportType.RPT_NEW_UNMATCHED_PAYMENTS:
+					HandleGenericReport(report, dToday, sender, BuildNewUnmatchedPaymentsReport, BuildNewUnmatchedPaymentsXls);
+					break;
+
 				default:
 					HandleGenericReport(report, dToday, sender, null, null);
 					break;

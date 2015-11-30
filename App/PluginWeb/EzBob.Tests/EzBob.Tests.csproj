@@ -76,7 +76,7 @@
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -50,7 +50,7 @@
       <HintPath>..\..\Lib\3rdparty\GoogleAnalytics\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="nunit.util">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.util.dll</HintPath>

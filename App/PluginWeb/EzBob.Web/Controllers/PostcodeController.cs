@@ -14,13 +14,13 @@
 	public class PostcodeController : Controller {
 
 		public PostcodeController(IEzbobWorkplaceContext context) {
-			m_oContext = context;
+			this.m_oContext = context;
 		} // constructor
 
 		[OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
 		public JsonResult GetAddressListFromPostCode(string postCode) {
 			return Json(
-				PostToPostcodeService(typeof(PostCodeResponseSearchListModel), postCode, m_oContext.User.Id),
+				PostToPostcodeService(typeof(PostCodeResponseSearchListModel), postCode, this.m_oContext.User.Id),
 				JsonRequestBehavior.AllowGet
 			);
 		} // GetAddressListFromPostCode
@@ -28,7 +28,7 @@
 		[OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
 		public JsonResult GetFullAddressFromId(string id) {
 			return Json(
-				PostToPostcodeService(typeof(PostCodeResponseFullAddressModel), id, m_oContext.User.Id),
+				PostToPostcodeService(typeof(PostCodeResponseFullAddressModel), id, this.m_oContext.User.Id),
 				JsonRequestBehavior.AllowGet
 			);
 		} // GetFullAddressFromId
@@ -39,6 +39,12 @@
 			string sKeyName;
 
 			ms_oLog.DebugFormat("Postcode service request for user {0}: {1} of type {2}...", nUserID, sSearchKey, oPostCodeResponseType);
+
+			if (string.IsNullOrEmpty(sSearchKey)) {
+				ms_oLog.ErrorFormat("Empty postcode was provided {0} {1} {2}", nUserID, sSearchKey, oPostCodeResponseType);
+				return new PostCodeResponseSearchListModel { Success = false, Message = "Please, try again" };
+			}
+
 
 			if (oPostCodeResponseType == typeof (PostCodeResponseSearchListModel)) {
 				sRequestType = "Get list of address by postcode";

@@ -33,6 +33,7 @@ ALTER PROCEDURE MainStrategyUpdateCrC
 @RepaymentPeriod INT,
 @ManualSetupFeePercent DECIMAL(18, 4),
 @BrokerSetupFeePercent DECIMAL(18, 4),
+@SpreadSetupFee BIT,
 @IsCustomerRepaymentPeriodSelectionAllowed BIT,
 @EmailSendingBanned BIT,
 @DiscountPlanID INT,
@@ -92,7 +93,8 @@ BEGIN
 		IsCustomerRepaymentPeriodSelectionAllowed = @IsCustomerRepaymentPeriodSelectionAllowed,
 		EmailSendingBanned = @EmailSendingBanned,
 		DiscountPlanId = @DiscountPlanID,
-		HasApprovalChance = @HasApprovalChance
+		HasApprovalChance = @HasApprovalChance,
+		SpreadSetupFee = @SpreadSetupFee
 	WHERE
 		Id = @CashRequestID
 

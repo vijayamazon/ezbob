@@ -73,7 +73,7 @@
       <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
