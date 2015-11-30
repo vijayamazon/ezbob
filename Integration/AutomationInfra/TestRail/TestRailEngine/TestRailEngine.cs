@@ -84,17 +84,15 @@
             var ezbobProject = TestRailManager.Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
             var plan = TestRailManager.Instance.GetPlan(planId);
             
-            if (ezbobProject != null) {
-                if (plan != null) {
-                    foreach (var entryItem in plan.Entries) {
-                        foreach (var runItem in entryItem.RunList) {
-                            foreach (var test in TestRailManager.Instance.GetTests((ulong)runItem.ID)) {
-                                var caseAtutomation = BildCaseAtutomation(TestRailManager.Instance.GetCase((ulong)test.CaseID),
-                                    runItem.ConfigIDs,
-                                    entryItem.SuiteID,
-                                    runItem.ID);
-                                caseAtutomationList.Add(caseAtutomation);
-                            }
+            if (ezbobProject != null && plan != null) {
+                foreach (var entryItem in plan.Entries) {
+                    foreach (var runItem in entryItem.RunList) {
+                        foreach (var test in TestRailManager.Instance.GetTests((ulong)runItem.ID)) {
+                            var caseAtutomation = BildCaseAtutomation(TestRailManager.Instance.GetCase((ulong)test.CaseID),
+                                runItem.ConfigIDs,
+                                entryItem.SuiteID,
+                                runItem.ID);
+                            caseAtutomationList.Add(caseAtutomation);
                         }
                     }
                 }
