@@ -22,7 +22,8 @@ BEGIN
 		RepaymentPeriod,
 		DiscountPlanId DiscountPlanID,
 		IsCustomerRepaymentPeriodSelectionAllowed,
-		BrokerSetupFeePercent
+		BrokerSetupFeePercent,
+		SpreadSetupFee = ISNULL(SpreadSetupFee, 0)
 	FROM
 		CashRequests
 	WHERE 
