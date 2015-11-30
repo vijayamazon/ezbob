@@ -70,20 +70,20 @@ namespace UIAutomationTests.configs.Enviorment {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to qa2.
+        /// </summary>
+        internal static string ENV_name {
+            get {
+                return ResourceManager.GetString("ENV_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true&quot;.
         /// </summary>
         internal static string QA2DBConnectionString {
             get {
                 return ResourceManager.GetString("QA2DBConnectionString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GetString.
-        /// </summary>
-        internal static string String {
-            get {
-                return ResourceManager.GetString("String", resourceCulture);
             }
         }
     }

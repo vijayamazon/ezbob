@@ -61,6 +61,15 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .ezbob.com.
+        /// </summary>
+        internal static string Brand_url {
+            get {
+                return ResourceManager.GetString("Brand_url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .ezbob.com/Broker#login.
         /// </summary>
         internal static string BrokerLoginHost {
@@ -93,15 +102,6 @@ namespace UIAutomationTests.configs.Brand {
         internal static string CustomerLogIn {
             get {
                 return ResourceManager.GetString("CustomerLogIn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to test.ezbob.com.
-        /// </summary>
-        internal static string Enviorment_url {
-            get {
-                return ResourceManager.GetString("Enviorment_url", resourceCulture);
             }
         }
         

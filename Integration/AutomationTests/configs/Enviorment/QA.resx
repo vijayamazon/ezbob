@@ -120,10 +120,10 @@
   <data name="ENV_address" xml:space="preserve">
     <value>https://qa2</value>
   </data>
+  <data name="ENV_name" xml:space="preserve">
+    <value>qa2</value>
+  </data>
   <data name="QA2DBConnectionString" xml:space="preserve">
     <value>Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true"</value>
-  </data>
-  <data name="String" xml:space="preserve">
-    <value>GetString</value>
   </data>
 </root>

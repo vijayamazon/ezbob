@@ -105,66 +105,65 @@ namespace UIAutomationTests.Tests.Application.Broker {
             Assert.IsTrue(result);
         }
 
-        //[Test]
-        //[Category("1967")]
-        //public void TestCase1967() {
-        //    bool result = this.ExecuteTest<object>(() => {
-        //        BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
-        //        string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-        //        newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
+        [Test]
+        [Category("1967")]
+        public void TestCase1967() {
+            bool result = this.ExecuteTest<object>(() => {
+                BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
 
-        //        newBroker.BrokerLogIn(brokerMail);//Step 1-2
+                newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
-        //        string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-        //        newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
-        //        IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
-        //        leadSendInvitation.Click();
+                IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
+                leadSendInvitation.Click();
 
-        //        IWebElement statusList = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("tr.odd > td.grid-item-Status"));
-        //        Assert.AreEqual(statusList.Text, "Application not started");//Verify that lead status is "Application not started".
+                IWebElement statusList = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("tr.odd > td.grid-item-Status"));
+                Assert.AreEqual(statusList.Text, "Application not started");//Verify that lead status is "Application not started".
 
-        //        IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off > a"));
-        //        logOff.Click();
+                IWebElement logOff = Driver.FindElement(By.CssSelector("li.menu-btn.login.log-off > a"));
+                logOff.Click();
 
-        //        GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9
-        //        Assert.IsTrue(newApi.CheckIncomingMessages(BrandConfig.GetString("Check_Incoming_Messages"), leadMail));
-        //        return null;
-        //    });
-        //    Assert.IsTrue(result);
-        //}
+                GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9
+                Assert.IsTrue(newApi.CheckIncomingMessages(BrandConfig.GetString("Check_Incoming_Messages"), leadMail));
+                return null;
+            });
+            Assert.IsTrue(result);
+        }
 
-        //[Test]
-        //[Category("6032")]
-        //public void TestCase6032() {
-        //    bool result = this.ExecuteTest<object>(() => {
-        //        BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
-        //        string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-        //        newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
+        [Test]
+        [Category("6032")]
+        public void TestCase6032() {
+            bool result = this.ExecuteTest<object>(() => {
+                BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
 
-        //        newBroker.BrokerLogIn(brokerMail);//Step 1-2
+                newBroker.BrokerLogIn(brokerMail);//Step 1-2
 
-        //        string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-        //        newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
 
-        //        IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
-        //        leadSendInvitation.Click();
+                IWebElement leadSendInvitation = Driver.FindElement(By.Id("LeadSendInvitation"));//Step 7
+                leadSendInvitation.Click();
 
-        //        SharedServiceClass.WaitForBlockUiOff(Driver);
-        //        //Driver.Manage().Cookies.DeleteAllCookies();
-        //        IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));//Strep 8
-        //        logOff.Click();
+                SharedServiceClass.WaitForBlockUiOff(Driver);
+                IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));//Strep 8
+                logOff.Click();
 
-        //        GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9 
-        //        string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, BrandConfig.GetString("Enviorment_url"));
-        //        Driver.Navigate().GoToUrl(sentLink);
+                GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9 
+                string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, String.Concat(EnvironmentConfig.GetString("ENV_name"), BrandConfig.GetString("Brand_url")));
+                Driver.Navigate().GoToUrl(sentLink);
 
-        //        IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
-        //        Assert.AreEqual(email.GetAttribute("Value"), leadMail);
-        //        return null;
-        //    });
-        //    Assert.IsTrue(result);
-        //}
+                IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                Assert.AreEqual(email.GetAttribute("Value"), leadMail);
+                return null;
+            });
+            Assert.IsTrue(result);
+        }
 
         [Test]
         [Category("1352")]
