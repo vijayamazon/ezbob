@@ -54,13 +54,13 @@
 
             if (configs != null) {
                 if (configs.Count > 0) {
-                    caseAtutomation.Brand = (AutomationModels.Brand)configs[0];
+                    caseAtutomation.Environment = (AutomationModels.Environment)configs[0];
                 }
                 if (configs.Count > 1) {
-                    caseAtutomation.Browser = (AutomationModels.Browser)configs[1];
+                    caseAtutomation.Brand = (AutomationModels.Brand)configs[1];
                 }
                 if (configs.Count > 2) {
-                    caseAtutomation.Environment = (AutomationModels.Environment)configs[2];
+                    caseAtutomation.Browser = (AutomationModels.Browser)configs[2];
                 }
             }
 
