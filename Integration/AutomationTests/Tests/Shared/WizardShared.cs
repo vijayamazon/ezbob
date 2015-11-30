@@ -29,7 +29,7 @@
              string reqAmmount) {
 
             if (isLogIn) {
-                string url = this._BrandConfig.GetString("WizardHost");//Step 1
+                string url = String.Concat(this._EnvironmentConfig.GetString("ENV_address"), this._BrandConfig.GetString("WizardHost"));//Step 1
 
                 this._Driver.Navigate().GoToUrl(url);//Step 2
 
