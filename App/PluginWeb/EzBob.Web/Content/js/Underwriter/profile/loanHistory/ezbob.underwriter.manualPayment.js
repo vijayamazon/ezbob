@@ -27,7 +27,8 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .confirm": "confirmClicked",
 		"click .uploadFiles": "uploadFilesClicked",
-		"change [name='paymentDate']": "updatePaymentData"
+		"change [name='paymentDate']": "updatePaymentData",
+		"change [name='totalSumPaid']": "updatePaymentData"
 	},
 
 	ui: {
@@ -52,7 +53,14 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 
-	updatePaymentData: function() {
+	updatePaymentData: function () {
+		if (this.validator && !this.validator.element(this.ui.money)) {
+			this.ui.fees.val(0);
+			this.ui.principal.val(0);
+			this.ui.interest.val(0);
+			return false;
+		}
+
 		var data = {
 			date: this.ui.date.val(),
 			money: ValueOrDefault(this.ui.money.val(), 0),
