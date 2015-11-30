@@ -38,9 +38,18 @@
 
 			if (SameBank) {
 				var bank = InvestorBank.First();
+				
 				var types = this.serviceClient.Instance.InvestorLoadTypes(this.context.UserId);
-				bank.AccountType = int.Parse(types.InvestorBankAccountTypes.First(x => x.Value == "Repayments").Key);
-				InvestorBank.Add(bank);
+
+				var repaymentsBank = new FrontInvestorBankAccountModel {
+					IsActive = true,
+					AccountType = int.Parse(types.InvestorBankAccountTypes.First(x => x.Value == "Repayments").Key),
+					BankAccountName = bank.BankAccountName,
+					BankAccountNumber = bank.BankAccountNumber,
+					BankSortCode = bank.BankSortCode
+				};
+
+				InvestorBank.Add(repaymentsBank);
 			}
 
 			var result = this.serviceClient.Instance.CreateInvestor(this.context.UserId,
@@ -48,7 +57,8 @@
 					InvestorType = new InvestorTypeModel{ InvestorTypeID = investor.InvestorType },
 					Name = investor.CompanyName
 				},
-				new[] { new Ezbob.Backend.Models.Investor.InvestorContactModel {
+				new[] { 
+					new Ezbob.Backend.Models.Investor.InvestorContactModel {
 								Comment = investorContact.Comment,
 								Email = investorContact.ContactEmail,
 								IsPrimary = true,
@@ -57,7 +67,7 @@
 								Mobile = investorContact.ContactMobile,
 								OfficePhone = investorContact.ContactOfficeNumber,
 								Role = investorContact.Role,
-							}
+					}
 				},
 				InvestorBank.Select(x => new Ezbob.Backend.Models.Investor.InvestorBankAccountModel {
 					BankAccountName = x.BankAccountName,

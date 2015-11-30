@@ -82,8 +82,8 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 			return false;
 		}
 		BlockUi();
-		var data = this.ui.form.serializeArray();
-		var sameBankChecked = this.ui.secondBank.is(':checked');
+		var data = this.ui.form.find(':not(:hidden)').serializeArray();
+		var sameBankChecked = this.ui.sameBank.is(':checked');
 		var sameBank = _.find(data, function (d) { return d.name === 'SameBank'; });
 		if (sameBank) {
 			sameBank.value = sameBankChecked;
