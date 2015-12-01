@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using System;
+	using ExperianLib.EBusiness;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.CallCreditStrategy;
@@ -40,6 +41,10 @@
 					DoLimited();
 					break;
 
+				case ExperianServiceType.NonLimitedData:
+					DoNonLimited();
+					break;
+
 				case ExperianServiceType.Consumer:
 					DoConsumer();
 					break;
@@ -60,7 +65,7 @@
 				Package.Out.ServiceLog = this.repoLog.GetById(this.serviceLogID);
 
 				if (IsSavedEntryValid())
-				LogNewServiceLogEntry();
+					LogNewServiceLogEntry();
 			} catch (Exception e) {
 				Log.Error(
 					e,
@@ -73,6 +78,10 @@
 		} // Execute
 
 		public WriteToLogPackage Package { get; set; }
+
+		private void DoNonLimited() {
+			new NonLimitedParser(DB, Log).ParseAndStore(Package.In.Response, Package.In.CompanyRefNum, this.serviceLogID);
+		} // DoNonLimited
 
 		private void DoLimited() {
 			var parseExperianLtd = new ParseExperianLtd(this.serviceLogID);
@@ -229,7 +238,7 @@
 			private readonly ServiceLogWriter writer;
 		} // class SpSaveServiceLogEntry
 
-		private class SpSaveExperianHistory : AStoredProcedure {
+		private class SpSaveExperianHistory : AStoredProc {
 			public SpSaveExperianHistory(ServiceLogWriter writer) : base(writer.DB, writer.Log) {
 				this.doSave = false;
 
@@ -253,7 +262,7 @@
 					break;
 
 				case ExperianServiceType.NonLimitedData:
-					var strategyInstance = new GetCompanyDataForCreditBureau(writer.Package.Out.ServiceLog.CompanyRefNum);
+					var strategyInstance = new GetCompanyDataForCreditBureau(writer.Package.In.CompanyRefNum);
 					strategyInstance.Execute();
 
 					var notLimitedBusinessData = new CompanyDataForCreditBureau {
@@ -272,10 +281,10 @@
 
 				CustomerId = writer.customerID;
 				DirectorId = writer.directorID;
-				CompanyRefNum = writer.spSaveServiceLog.CompanyRefNum;
+				CompanyRefNum = writer.Package.In.CompanyRefNum;
 				ServiceLogId = writer.serviceLogID;
 				InsertDate = writer.spSaveServiceLog.InsertDate;
-				Type = writer.spSaveServiceLog.ServiceType;
+				Type = writer.Package.In.ServiceType.ToString();
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -297,6 +306,7 @@
 			[UsedImplicitly]
 			public string CompanyRefNum { get; set; }
 			[UsedImplicitly]
+			[FieldName("Balance")]
 			public decimal? CaisBalance { get; set; }
 			[UsedImplicitly]
 			public int? CII { get; set; }
@@ -314,14 +324,14 @@
 		private static string FormatRequestResponse(string input) {
 			const int substLen = 50;
 
-			string res = (input ?? string.Empty);
+			string res = (input ?? string.Empty).TrimStart();
 
-			string dots = (res.Length > substLen) ? "..." : string.Empty;
+			if (res.Length <= substLen)
+				return "'" + res.TrimEnd() + "'";
 
 			return "'" +
-				res.TrimStart().Substring(0, substLen).Replace("\r", string.Empty).Replace("\n", string.Empty) +
-				"'" +
-				dots;
+				res.Substring(0, substLen).TrimEnd().Replace("\r", string.Empty).Replace("\n", string.Empty) +
+				"'...";
 		} // FormatRequestResponse
 	} // class ServiceLogWriter
 } // namespace

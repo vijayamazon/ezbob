@@ -27,7 +27,8 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .confirm": "confirmClicked",
 		"click .uploadFiles": "uploadFilesClicked",
-		"change [name='paymentDate']": "updatePaymentData"
+		"change [name='paymentDate']": "updatePaymentData",
+		"change [name='totalSumPaid']": "updatePaymentData"
 	},
 
 	ui: {
@@ -52,7 +53,14 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 
-	updatePaymentData: function() {
+	updatePaymentData: function () {
+		if (this.validator && !this.validator.element(this.ui.money)) {
+			this.ui.fees.val(0);
+			this.ui.principal.val(0);
+			this.ui.interest.val(0);
+			return false;
+		}
+
 		var data = {
 			date: this.ui.date.val(),
 			money: ValueOrDefault(this.ui.money.val(), 0),
@@ -66,7 +74,7 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		request.done(function(r) {
 			if (r.error)
 				return;
-
+			self.ui.form.removeData('validator');
 			self.ui.fees.val(r.Fee);
 			self.ui.principal.val(r.Principal);
 			self.ui.interest.val(r.Interest);
@@ -80,7 +88,10 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 				'title': moneyTitle
 			});
 			self.ui.money.tooltip("enable").tooltip('fixTitle');
-			self.validator = EzBob.validatemanualPaymentForm(self.ui.form, r.Balance);
+			
+			self.validator = EzBob.validatemanualPaymentForm(self.ui.form, r.Balance, r.MinValue);
 		});
+
+		return false;
 	}
 });

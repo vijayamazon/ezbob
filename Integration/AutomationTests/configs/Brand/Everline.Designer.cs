@@ -61,7 +61,16 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.everline.com/Broker#login.
+        ///   Looks up a localized string similar to .everline.com.
+        /// </summary>
+        internal static string Brand_url {
+            get {
+                return ResourceManager.GetString("Brand_url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .everline.com/Broker#login.
         /// </summary>
         internal static string BrokerLoginHost {
             get {
@@ -70,7 +79,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.everline.com/Broker#signup.
+        ///   Looks up a localized string similar to .everline.com/Broker#signup.
         /// </summary>
         internal static string BrokerSignupHost {
             get {
@@ -88,7 +97,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://test.everline.com/Account/LogOn.
+        ///   Looks up a localized string similar to .everline.com/Account/LogOn.
         /// </summary>
         internal static string CustomerLogIn {
             get {
@@ -97,16 +106,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to test.everline.com.
-        /// </summary>
-        internal static string Enviorment_url {
-            get {
-                return ResourceManager.GetString("Enviorment_url", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://test.everline.com/Customer/Wizard.
+        ///   Looks up a localized string similar to .everline.com/Customer/Wizard.
         /// </summary>
         internal static string WizardHost {
             get {

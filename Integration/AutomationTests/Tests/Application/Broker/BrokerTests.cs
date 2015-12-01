@@ -1,13 +1,12 @@
 namespace UIAutomationTests.Tests.Application.Broker {
     using System;
-    using System.Threading;
+    using Ezbob.Database;
     using NUnit.Framework;
     using UIAutomationTests.Core;
     using UIAutomationTests.Tests.Shared;
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Firefox;
-    using OpenQA.Selenium.Interactions;
-    using OpenQA.Selenium.Support.UI;
+    using System.Collections.Generic;
+    //using System.ComponentModel;
 
     class BrokerTests : WebTestBase {
 
@@ -37,7 +36,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2036")]
         public void TestCase2036() {
             bool result = this.ExecuteTest<object>(() => {
-                string url = BrandConfig.GetString("BrokerLoginHost");
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
                 Driver.Navigate().GoToUrl(url);
 
                 IWebElement signUp = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.sign-up > a"));
@@ -56,7 +55,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2037")]
         public void TestCase2037() {
             bool result = this.ExecuteTest<object>(() => {
-                string url = BrandConfig.GetString("BrokerLoginHost");
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
                 Driver.Navigate().GoToUrl(url);
 
                 IWebElement signUp = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.sign-up > a"));
@@ -152,12 +151,11 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 leadSendInvitation.Click();
 
                 SharedServiceClass.WaitForBlockUiOff(Driver);
-                //Driver.Manage().Cookies.DeleteAllCookies();
                 IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));//Strep 8
                 logOff.Click();
 
                 GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9 
-                string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, BrandConfig.GetString("Enviorment_url"));
+                string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, String.Concat(EnvironmentConfig.GetString("ENV_name"), BrandConfig.GetString("Brand_url")));
                 Driver.Navigate().GoToUrl(sentLink);
 
                 IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
@@ -272,9 +270,87 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("7472")]
         public void TestCase7472() {
             bool result = this.ExecuteTest<object>(() => {
-                Assert.IsTrue(false); 
+
+                BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
+
+                newBroker.BrokerLogIn(brokerMail);//Step 1-2
+
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-afD10@ezbob.com";//Email according to format C4520
+                newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+
+                IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));//Step 7
+                leadFillWizard.Click();
+
+                IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
+
+                WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
+
+                //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
+                newWizard.PerformWizardStepOne(false, "BrokerFillLead", "", "123123", 2, "asd", "1000");//Step 8 (C3)
+
+                newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);//Step 9 (C1380)
+
+                newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");//Step 10 (C91)
+
+                //Wizard Step 4 - add paypal account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Step 11-12 (C4530, C4537)
+
+                SharedServiceClass.WaitForBlockUiOff(Driver);
+
+                IWebElement notificationAssert = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.notification_green > div.innerText > span.alert-msg"));
+                Assert.IsTrue(notificationAssert.Text.Contains("has been created."));
+
+                IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));
+                logOff.Click();
                 return null;
             }); 
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        [Category("7473")]
+        public void TestCase7473() {
+            bool result = this.ExecuteTest<object>(() => {
+
+                BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);//Precondition - create new broker account
+
+                newBroker.BrokerLogIn(brokerMail);//Step 1-2
+
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-af@ezbob.com";//Email according to format C4544
+                newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);//Steps 3-6
+
+                IWebElement leadFillWizard = Driver.FindElement(By.Id("LeadFillWizard"));//Step 7
+                leadFillWizard.Click();
+
+                IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+                Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
+
+                WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
+
+                //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
+                newWizard.PerformWizardStepOne(false, "BrokerFillLead", "", "123123", 2, "asd", "1000");//Step 8 (C3)
+
+                newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);//Step 9 (C1380)
+
+                newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");//Step 10 (C91)
+
+                //Wizard Step 4 - add paypal account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Step 11-12 (C4530, C4537)
+
+                SharedServiceClass.WaitForBlockUiOff(Driver);
+
+                IWebElement notificationAssert = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.notification_green > div.innerText > span.alert-msg"));
+                Assert.IsTrue(notificationAssert.Text.Contains("has been created."));
+
+                IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));
+                logOff.Click();
+                return null;
+            });
             Assert.IsTrue(result);
         }
 
@@ -322,18 +398,25 @@ namespace UIAutomationTests.Tests.Application.Broker {
         }
 
         #endregion
-
+        #region Application: Broker / Broker Dashboard / Marketing materials
         [Test]
         [Category("2040")]
         public void TestCase2040() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2041")]
-        public void TestCase2041() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+        public void TestCase2041() {
+            bool result = this.ExecuteTest<object>(() => {
+                Assert.IsTrue(false);
+                return null;
+            });
+            Assert.IsTrue(result);
+        }
 
         [Test]
         [Category("2042")]
         public void TestCase2042() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+        #endregion
 
         [Test]
         [Category("2043")]
@@ -414,14 +497,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
 
                 //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-                newWizard.PerformWizardStepOne(false, "BrokerFilllead", "", "123123", 2, "asd", "1000");
+                newWizard.PerformWizardStepOne(false, "BrokerFillLead", "", "123123", 2, "asd", "1000");
 
-                newWizard.PerformWizardStepTwo("BrokerFilllead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
+                newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
 
                 newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
 
                 //Wizard Step 4 - add paypal account
-                newWizard.PerformWizardStepFour("BrokerFilllead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
 
                 //SharedServiceClass.WaitForAjaxReady(Driver);
                 //Driver.Manage().Cookies.DeleteAllCookies();
@@ -441,7 +524,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 newBroker.BrokerLogIn(brokerMail);//Step 1
 
-                IWebElement widget = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
+                IWebElement widget = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
 
                 IWebElement widgetComission = widget.FindElement(By.CssSelector("dd.dashes"));//Step 2.1
                 Assert.AreEqual("---", widgetComission.Text);
@@ -491,11 +574,85 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("1358")]
-        public void TestCase1358() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+        public void TestCase1358() {
+            bool result = this.ExecuteTest<object>(() => {
+                Assert.IsTrue(false);
+                return null;
+            });
+            Assert.IsTrue(result);
+        }
 
         [Test]
         [Category("1359")]
-        public void TestCase1359() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+        public void TestCase1359() {
+            bool result = this.ExecuteTest<object>(() => {
+                BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                newBroker.CreateNewBrokerAccount("SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+
+                newBroker.BrokerLogIn(brokerMail);
+
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afd10@ezbob.com";
+                newBroker.BrokerLeadEnrolment("LeadFName", "LeadLName", leadMail);
+
+                IWebElement leadFillWizard = SharedServiceClass.ElementToBeClickable(Driver, By.Id("LeadFillWizard"));
+                leadFillWizard.Click();
+
+                IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
+
+                Assert.AreEqual(email.GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
+
+                WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
+
+                //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
+                newWizard.PerformWizardStepOne(false, "BrokerFillLead", "", "123123", 2, "asd", "1000");
+
+                newWizard.PerformWizardStepTwo("BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "1", "01111111111", "02222222222", true);
+
+                newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
+
+                //Wizard Step 4 - add paypal account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+
+                //Precondition 3
+                newBroker.BrokerAddBankAccount("20115636", "62", "10", "00", 'P');
+
+                //SharedServiceClass.WaitForAjaxReady(Driver);
+                //Driver.Manage().Cookies.DeleteAllCookies();
+                IWebElement logOffBroker = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
+                SharedServiceClass.WaitForBlockUiOff(Driver);
+                logOffBroker.Click();
+
+                CustomerShared newCustomer = new CustomerShared(Driver, EnvironmentConfig, BrandConfig);
+                newCustomer.CustomerLogIn(true, leadMail);
+                newCustomer.CustomerTakeLoan("LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
+
+                //SharedServiceClass.WaitForAjaxReady(Driver);
+                //Driver.Manage().Cookies.DeleteAllCookies();
+                SharedServiceClass.WaitForBlockUiOff(Driver);
+                IWebElement logOffCustomer = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.login > a"));
+                logOffCustomer.Click();
+
+                newBroker.BrokerLogIn(brokerMail);//Step 1
+
+                IWebElement widget = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.linked_bank > div.d-widgets > div.d-widget"));//Step 2
+
+                IWebElement widgetComission = widget.FindElement(By.CssSelector("dd.broker-commission"));//Step 2.1
+                Assert.IsTrue(decimal.Parse(widgetComission.Text.Substring(1)) != 0.0m);
+
+                IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
+                Assert.IsTrue(decimal.Parse(widgetIssued.Text.Substring(1)) != 0.0m);
+
+                //SharedDBClass dbAccess = new SharedDBClass(EnvironmentConfig);
+                //SafeReader SR = dbAccess.GetFirst("UIAT_C1359",CommandSpecies.StoredProcedure,new QueryParameter[]{new QueryParameter("brokerMail",brokerMail)});
+
+                IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
+                logOff.Click();
+
+                return null;
+            });
+            Assert.IsTrue(result);
+        }
 
         [Test]
         [Category("1360")]
@@ -514,6 +671,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Test]
         [Category("2034")]
         public void TestCase2034() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+
+        #region Application: Broker / Commission / Fee: Automatic Payments
 
         [Test]
         [Category("1364")]
@@ -558,6 +717,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Test]
         [Category("4541")]
         public void TestCase4541() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result); }
+        #endregion
 
         [Test]
         [Category("1441")]

@@ -59,7 +59,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	updateSliders: function(){
 		var self = this;
 		this.slidersModel.fetch().done(function () {
-			self.$el.find('.requested-loan-amount').text(EzBob.formatPounds(self.slidersModel.get('Amount')));
+			self.$el.find('.requested-loan-amount').text(EzBob.formatPoundsNoDecimals(self.slidersModel.get('Amount')));
 			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
 		});
 	},
@@ -196,7 +196,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		var self = this;
 		this.slidersModel.fetch().done(function() {
-			self.$el.find('.requested-loan-amount').text(EzBob.formatPounds(self.slidersModel.get('Amount')));
+			self.$el.find('.requested-loan-amount').text(EzBob.formatPoundsNoDecimals(self.slidersModel.get('Amount')));
 			self.$el.find('.requested-loan-period').text(self.slidersModel.get('Term') + ' months');
 		});
 		

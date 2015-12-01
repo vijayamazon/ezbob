@@ -9,9 +9,9 @@ namespace UIAutomationTests.Tests.Shared {
 
     class CustomerShared : WebTestBase {
 
-        private IWebDriver _Driver;
-        private ResourceManager _EnvironmentConfig;
-        private ResourceManager _BrandConfig;
+        private readonly IWebDriver _Driver;
+        private readonly ResourceManager _EnvironmentConfig;
+        private readonly ResourceManager _BrandConfig;
 
         public CustomerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
             this._Driver = Driver;
@@ -21,7 +21,7 @@ namespace UIAutomationTests.Tests.Shared {
 
         public void CustomerLogIn(bool isFirstTime, string brokerMail) {
             SharedServiceClass.WaitForBlockUiOff(this._Driver);
-            string url = this._BrandConfig.GetString("CustomerLogIn");
+            string url = String.Concat(this._EnvironmentConfig.GetString("ENV_address"), this._BrandConfig.GetString("CustomerLogIn"));
             this._Driver.Navigate().GoToUrl(url);
 
             IWebElement userName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("UserName"));
