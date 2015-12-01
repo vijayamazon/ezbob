@@ -13,8 +13,9 @@
 	[Authorize]
 	public class PostcodeController : Controller {
 
-		public PostcodeController(IEzbobWorkplaceContext context) {
+		public PostcodeController(IEzbobWorkplaceContext context, ServiceClient serviceClient) {
 			this.m_oContext = context;
+			this.serviceClient = serviceClient;
 		} // constructor
 
 		[OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
@@ -27,10 +28,14 @@
 
 		[OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
 		public JsonResult GetFullAddressFromId(string id) {
-			return Json(
-				PostToPostcodeService(typeof(PostCodeResponseFullAddressModel), id, this.m_oContext.User.Id),
-				JsonRequestBehavior.AllowGet
-			);
+			PostCodeResponseFullAddressModel result = (PostCodeResponseFullAddressModel)PostToPostcodeService(typeof(PostCodeResponseFullAddressModel), id, this.m_oContext.User.Id);
+			
+			//populate the nuts table
+			if (result != null) {
+				this.serviceClient.Instance.PostcodeNuts(this.m_oContext.UserId, result.Postcode);
+			}
+
+			return Json(result, JsonRequestBehavior.AllowGet);
 		} // GetFullAddressFromId
 
 		private IPostCodeResponse PostToPostcodeService(Type oPostCodeResponseType, string sSearchKey, int nUserID) {
@@ -121,7 +126,7 @@
 			ms_oLog.DebugFormat("Postcode service request for user {0}: {1} of type {2} done.", nUserID, sSearchKey, oPostCodeResponseType);
 
 			try {
-				new ServiceClient().Instance.PostcodeSaveLog(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
+				this.serviceClient.Instance.PostcodeSaveLog(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
 			}
 			catch (Exception e) {
 				ms_oLog.Error(string.Format("Postcode service request for user {0}: {1} of type {2} - failed to save log to DB.", nUserID, sSearchKey, oPostCodeResponseType), e);
@@ -133,6 +138,7 @@
 		} // PostToPostcodeService
 
 		private readonly IEzbobWorkplaceContext m_oContext;
+		private readonly ServiceClient serviceClient;
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (PostcodeController));
 
