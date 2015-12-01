@@ -207,6 +207,7 @@
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="ManualDecision\ApplyManualDecision.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
+    <Compile Include="Postcode\PostcodeNuts.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />

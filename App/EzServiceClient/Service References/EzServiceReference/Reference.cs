@@ -4351,6 +4351,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PostcodeSaveLog", ReplyAction="http://tempuri.org/IEzService/PostcodeSaveLogResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PostcodeSaveLogAsync(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PostcodeNuts", ReplyAction="http://tempuri.org/IEzService/PostcodeNutsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData PostcodeNuts(int nUserID, string postcode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PostcodeNuts", ReplyAction="http://tempuri.org/IEzService/PostcodeNutsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PostcodeNutsAsync(int nUserID, string postcode);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PricingModelCalculate", ReplyAction="http://tempuri.org/IEzService/PricingModelCalculateResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, ServiceClientProxy.EzServiceReference.PricingModelModel model);
         
@@ -5967,6 +5973,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PostcodeSaveLogAsync(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID) {
             return base.Channel.PostcodeSaveLogAsync(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData PostcodeNuts(int nUserID, string postcode) {
+            return base.Channel.PostcodeNuts(nUserID, postcode);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PostcodeNutsAsync(int nUserID, string postcode) {
+            return base.Channel.PostcodeNutsAsync(nUserID, postcode);
         }
         
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, ServiceClientProxy.EzServiceReference.PricingModelModel model) {

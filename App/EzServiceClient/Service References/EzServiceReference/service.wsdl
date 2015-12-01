@@ -666,6 +666,12 @@
   <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeNuts_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeNuts" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeNuts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeNutsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_PricingModelCalculate_InputMessage">
     <wsdl:part name="parameters" element="tns:PricingModelCalculate" />
   </wsdl:message>
@@ -1904,6 +1910,10 @@
     <wsdl:operation name="PostcodeSaveLog">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeNuts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeNuts" message="tns:IEzService_PostcodeNuts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeNutsResponse" message="tns:IEzService_PostcodeNuts_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PricingModelCalculate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculate" message="tns:IEzService_PricingModelCalculate_InputMessage" />
@@ -3347,6 +3357,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="PostcodeNuts">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeNuts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="PricingModelCalculate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PricingModelCalculate" style="document" />
       <wsdl:input>
@@ -4628,20 +4647,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
