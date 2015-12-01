@@ -59,6 +59,7 @@
     <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
     <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
+    <Compile Include="Keeper\Implementation\ATimedActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
     <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
@@ -97,6 +98,10 @@
     <Compile Include="Exceptions\LogicalGlueException.cs" />
     <Compile Include="Keeper\Implementation\InferenceRequestSaver.cs" />
     <Compile Include="Keeper\Implementation\InferenceSaver.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadInputData.cs" />
     <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
     <Compile Include="Keeper\Interface\IKeeper.cs" />
     <Compile Include="Keeper\Implementation\DBTable\AWithModelOutputID.cs" />
