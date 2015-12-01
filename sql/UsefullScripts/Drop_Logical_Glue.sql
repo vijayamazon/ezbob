@@ -4,6 +4,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('LogicalGlueSaveInferenceRequest') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveInferenceRequest
+GO
+
 IF OBJECT_ID('LogicalGlueLoadInputData') IS NOT NULL
 	DROP PROCEDURE LogicalGlueLoadInputData
 GO
@@ -64,7 +68,7 @@ IF OBJECT_ID('LogicalGlueModels') IS NOT NULL
 	DROP TABLE LogicalGlueModels
 GO
 
-IF OBJECT_ID('LogicalGlueRequestTypes') IS NOT NULL
+IF OBJECT_ID('LogicalGlueRequestTypes') IS NOT NULL -- obsolete table
 	DROP TABLE LogicalGlueRequestTypes
 GO
 
