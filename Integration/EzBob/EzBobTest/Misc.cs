@@ -212,12 +212,24 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestPrintFormat() {
-			DateTime? xxx = null;
+			/*DateTime? xxx = null;
 			//Console.WriteLine("{0:G}", NLFeeTypes.SetupFee);
 			Console.WriteLine("{0:d}", DateTime.UtcNow);
 			xxx = DateTime.UtcNow;
 			Console.WriteLine("{0,-11:d}", xxx);
-			Console.WriteLine("{0:F}", 445.6667m);
+			Console.WriteLine("{0:F}", 445.6667m);*/
+
+			Console.WriteLine("{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} ", 66, 67, 10050, 0.000000, 0.000000, 0.000000m);
+
+		/*	{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} {6,-17:d} {7,-8} 
+66
+67
+10050
+0.000000
+0.000000
+0.000000
+0.000000
+False*/
 		}
 
 		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
@@ -242,10 +254,6 @@ namespace EzBobTest {
 			dateList.Add(new DateTime(2015, 10, 25));
 			dateList.Add(new DateTime(2015, 12, 10));
 			dateList.Add(new DateTime(2015, 12, 20));
-
-
-
-			
 		}
 
 	} // class Misc

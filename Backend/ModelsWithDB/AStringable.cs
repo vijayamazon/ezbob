@@ -49,7 +49,19 @@
 					val = (enumattr != null) ? enumattr.GetName((int)val) : val;
 
 					var formatattr = prop.GetCustomAttribute(typeof(DecimalFormatAttribute)) as DecimalFormatAttribute;
-					switch (prop.PropertyType.Name) {
+					//Console.WriteLine(prop.PropertyType.Name + "=" + prop.PropertyType.FullName);
+
+					string propType = prop.PropertyType.Name;
+
+					if (propType.Equals("Nullable`1")) {
+						if (prop.PropertyType.FullName.Contains("System.Decimal")) {
+							propType = "Decimal";
+						}
+						if (prop.PropertyType.FullName.Contains("System.DateTime")) {
+							propType = "DateTime";
+						}
+					}
+					switch (propType) {
 					case "Decimal":
 						if (formatattr != null)
 							format.Append(",-")
@@ -62,7 +74,6 @@
 								.Append(headerLen)
 								.Append(":F} "); // other decimals
 						break;
-					case "Nullable`1":
 					case "DateTime":
 						format.Append(",-")
 							.Append(headerLen)
@@ -84,6 +95,9 @@
 			}
 			if (!values.Any()) 
 				return "No " + t.Name + " found.";
+
+			//Console.WriteLine(format);
+			//values.ToList().ForEach(i => Console.WriteLine(","+i.ToString()));
 
 			return string.Format(format.ToString(), values) + Environment.NewLine;
 		}

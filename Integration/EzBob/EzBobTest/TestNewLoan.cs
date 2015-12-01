@@ -4,7 +4,6 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Runtime.Remoting.Contexts;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
@@ -16,15 +15,12 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Utils;
-	using EzBob.Backend.Models;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using KellermanSoftware.CompareNetObjects;
-	using KellermanSoftware.CompareNetObjects.TypeComparers;
 	using Newtonsoft.Json;
 	using NHibernate.Linq;
 	using NUnit.Framework;
@@ -790,16 +786,18 @@
 			DateTime canceldate = new DateTime(2015, 12, 30);
 			var pp = this.m_oDB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanID));
 			var nlpayment = pp.FirstOrDefault(p => p.PaymentID == paymentToCancel);
-			nlpayment.PaymentStatusID = (int)NLPaymentStatuses.ChargeBack;
-			nlpayment.DeletionTime = canceldate;
-			nlpayment.Notes = "charge-backed";
-			nlpayment.DeletedByUserID = 1;
-			try {
-				CancelPayment pstrategy = new CancelPayment(customerid, nlpayment, 357);
-				pstrategy.Execute();
-				this.m_oLog.Debug(pstrategy.Error);
-			} catch (Exception ex) {
-				this.m_oLog.Debug(ex);
+			if (nlpayment != null) {
+				nlpayment.PaymentStatusID = (int)NLPaymentStatuses.ChargeBack;
+				nlpayment.DeletionTime = canceldate;
+				nlpayment.Notes = "charge";
+				nlpayment.DeletedByUserID = 1;
+				try {
+					CancelPayment pstrategy = new CancelPayment(customerid, nlpayment, 357);
+					pstrategy.Execute();
+					this.m_oLog.Debug(pstrategy.Error);
+				} catch (Exception ex) {
+					this.m_oLog.Debug(ex);
+				}
 			}
 		}
 
@@ -1079,7 +1077,6 @@
         [Test]
         public void TestPaymentFacade() {
             try {
-                
                 ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
                 var loan = loanRep.Get(3117);
                 NL_Payments nlPayment = new NL_Payments() {
@@ -1089,15 +1086,36 @@
                     CreationTime = DateTime.UtcNow,
                     PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
                 };
-
                 var f = new LoanPaymentFacade();
                 f.PayLoan(loan, "111", 1000, "11.11.11.11", nlPayment, DateTime.UtcNow, "system-repay", false, null, 1);
-
             }
             catch (Exception ex) {
                 this.m_oLog.Debug(ex);
             }
         }
+
+
+		[Test]
+		public void DecimalNullPrintTest() {
+			NL_LoanFeePayments fp = new NL_LoanFeePayments() {
+				Amount = 33,
+				LoanFeeID = 2,
+				LoanFeePaymentID = 22,
+				PaymentID = 44
+			};
+			m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFeePayments)));
+			m_oLog.Debug(fp.ToStringAsTable());
+			NL_LoanSchedulePayments sp = new NL_LoanSchedulePayments() {
+				InterestPaid = 22,
+				LoanScheduleID = 67,
+				LoanSchedulePaymentID = 45,
+				PaymentID = 66,
+				PrincipalPaid = 77
+			};
+			m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanSchedulePayments)));
+			m_oLog.Debug(sp.ToStringAsTable());
+		}
+
 
 	} // class TestNewLoan
 } // namespace

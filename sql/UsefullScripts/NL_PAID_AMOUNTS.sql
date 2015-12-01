@@ -16,3 +16,6 @@ from [dbo].[NL_LoanFees] f inner join [dbo].[NL_LoanFeeTypes] ft on f.[LoanFeeTy
 where  f.LoanID = @LoanID;
 
 select * from NL_Loans l where l.LoanID = @LoanID;
+
+-- make cancelled payment active payment again
+--update [dbo].[NL_Payments] set [PaymentStatusID] = 2, [DeletionTime]=null,[DeletedByUserID]=null where [PaymentStatusID] <> 2 and LoanID = @LoanID;

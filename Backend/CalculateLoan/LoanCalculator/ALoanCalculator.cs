@@ -375,12 +375,10 @@
 			//	interest for period = dr'(t)*p'(t)
 			for (int i = 0; i <= daysDiff; i++) {
 
-				decimal dailyInterestRate = InterestRateForDate(rateDate, currentEvent.ScheduleItem);	//	daily interest  dr' 
+				NL_LoanSchedules item = currentEvent.ScheduleItem ?? GetScheduleItemForDate(rateDate);
+			
+				decimal dailyInterestRate = InterestRateForDate(rateDate, item);	//	daily interest  dr' 
 
-				NL_LoanSchedules item = null;
-				if (BalanceBasedInterestCalculation) {
-					item = currentEvent.ScheduleItem ?? GetScheduleItemForDate(rateDate);
-				}
 				// BalanceBasedInterestCalculation true used from CreateScheduleMethod
 				principalBase = ((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal);
 				decimal interest = principalBase * dailyInterestRate; //((BalanceBasedInterestCalculation && item != null) ? item.Balance : currentOpenPrincipal) * dailyInterestRate;
@@ -390,7 +388,7 @@
 
 				//Log.Info("InterestBtwnEventsaaa: --------------------rateDate: {0:d} interest: {1:F4} currentOpenPrincipal: {2:C2}, i={3}, dr={4:F6}", rateDate, interest, currentOpenPrincipal, i, interestForPeriod);
 			}
-
+		
 			Log.Debug("InterestBtwnEvents: start={0:s}, currentEvent={1:s}, days={2}, interestForPeriod={3:F4}, open principal/balance={4:F6}", start.Date, currentEvent.EventTime.Date, daysDiff, interestForPeriod, principalBase);
 
 			return decimal.Round(interestForPeriod, this.decimalAccurancy);
@@ -467,8 +465,8 @@
 					// on this point principal paid by the payment, should be added to the currently open principal
 					paymentEvents.Add(item: new LoanEvent(new DateTime(chargeBackTime.Year, chargeBackTime.Month, chargeBackTime.Day), payment: p, priority: 0, chargeBackPayment: true, chargeBackPaymentRecorded: false));
 				}
-
-				paymentEvents.Add(new LoanEvent(new DateTime(p.PaymentTime.Year, p.PaymentTime.Month, p.PaymentTime.Day), p));
+				else
+					paymentEvents.Add(new LoanEvent(new DateTime(p.PaymentTime.Year, p.PaymentTime.Month, p.PaymentTime.Day), p));
 			}
 
 			// accepted rollovers
@@ -542,7 +540,7 @@
 
 				case "ChargebackPaymentRecorded":
 					// remove paid principal to currentOpenPrincipal, i.e. decrease open principal for interest caclulation
-					var paidPrincipalR = e.ChargebackPaymentCancelled.SchedulePayments.Sum(sp => sp.ResetPrincipalPaid);
+					var paidPrincipalR = e.ChargebackPaymentRecorded.SchedulePayments.Sum(sp => sp.ResetPrincipalPaid);
 					if (paidPrincipalR != null) {
 						currentOpenPrincipal -= (decimal)paidPrincipalR;
 					}

@@ -86,18 +86,25 @@
 
 				pconn.BeginTransaction();
 
-				// RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER [DeletionTime] on delete payment  - in SP NL_ResetPaymentsPaidAmounts, called from NL_PaymentCancel
-				int result = DB.ExecuteNonQuery("NL_PaymentCancel", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Payments>("Tbl", Payment), new QueryParameter("PaymentID", Payment.PaymentID));
+				Log.Debug("==============================={0}", new QueryParameter("PaymentStatusID", Payment.PaymentStatusID));
 
-				if (result <= 0) {
-					pconn.Rollback();
-					this.Error = "Failed to register payment cancellation";
-					NL_AddLog(LogType.Error, "Failed", Payment, this.Error, null, null);
-				}
+				// RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER [DeletionTime] on delete payment  - in SP NL_ResetPaymentsPaidAmounts, called from NL_PaymentCancel
+				DB.ExecuteNonQuery("NL_PaymentCancel", CommandSpecies.StoredProcedure, 
+					new QueryParameter("PaymentID", Payment.PaymentID),
+					new QueryParameter("LoanID", Payment.LoanID),
+					new QueryParameter("PaymentStatusID", Payment.PaymentStatusID),
+					new QueryParameter("DeletionTime", Payment.DeletionTime),
+					new QueryParameter("DeletedByUserID", Payment.DeletedByUserID),
+					new QueryParameter("Notes", Payment.Notes)
+				);
+
+				/*if (result == -1) {
+					this.Error = "Sent PaymentStatus not ChargeBack and not WrongPayment";
+					// ReSharper disable once ThrowingSystemException
+					throw new Exception(this.Error);
+				}*/
 
 				pconn.Commit();
-
-				NL_AddLog(LogType.Info, "End", this.strategyArgs, Payment, null, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -111,6 +118,8 @@
 
 				return;
 			}
+
+			NL_AddLog(LogType.Info, "End", this.strategyArgs, Payment, null, null);
 
 			// recalculate state with calculator + save new state to DB
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID, UserID);
