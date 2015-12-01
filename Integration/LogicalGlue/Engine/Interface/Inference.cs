@@ -16,18 +16,18 @@
 
 		[DataMember]
 		[NonTraversable]
-		public SortedDictionary<RequestType, ModelOutput> ModelOutputs {
+		public SortedDictionary<ModelNames, ModelOutput> ModelOutputs {
 			get {
 				if (this.modelOutputs == null)
-					this.modelOutputs = new SortedDictionary<RequestType, ModelOutput>();
+					this.modelOutputs = new SortedDictionary<ModelNames, ModelOutput>();
 
 				return this.modelOutputs;
 			} // get
 			set {
-				this.modelOutputs = value ?? new SortedDictionary<RequestType, ModelOutput>();
+				this.modelOutputs = value ?? new SortedDictionary<ModelNames, ModelOutput>();
 			} // set
 		} // ModelOutputs
 
-		private SortedDictionary<RequestType, ModelOutput> modelOutputs;
+		private SortedDictionary<ModelNames, ModelOutput> modelOutputs;
 	} // class Inference
 } // namespace

@@ -54,14 +54,14 @@
 		} // GetHistoricalInference
 
 		private Inference DownloadAndSave(int customerID) {
-			InferenceInput inputData = this.keeper.LoadInputData(customerID, this.now);
+			InferenceInputPackage inputPkg = this.keeper.LoadInputData(customerID, this.now);
 
-			if (!inputData.IsValid())
+			if (!inputPkg.InferenceInput.IsValid())
 				throw new FailedToLoadInputDataAlert(this.log, customerID, this.now);
 
-			long requestID = this.keeper.SaveInferenceRequest(customerID, inputData);
+			long requestID = this.keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, inputPkg.InferenceInput);
 
-			Response<Reply> reply = this.harvester.Infer(inputData, this.keeper.LoadHarvesterConfiguration());
+			Response<Reply> reply = this.harvester.Infer(inputPkg.InferenceInput, this.keeper.LoadHarvesterConfiguration());
 
 			return this.keeper.SaveInference(customerID, requestID, reply);
 		} // DownloadAndSave

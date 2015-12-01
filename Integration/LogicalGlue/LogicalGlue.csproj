@@ -57,8 +57,10 @@
     <Compile Include="Exceptions\Engine\FailedToLoadInputDataAlert.cs" />
     <Compile Include="Exceptions\Engine\NoHarvesterEngineAlert.cs" />
     <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceRequestSaverNoDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
     <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
+    <Compile Include="Harvester\Interface\InferenceInputPackage.cs" />
     <Compile Include="Keeper\Implementation\ATimedActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
     <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
@@ -81,7 +83,7 @@
     <Compile Include="Harvester\Implementation\Harvester.cs" />
     <Compile Include="InjectorStub.cs" />
     <Compile Include="Engine\Interface\ICanBeEmpty.cs" />
-    <Compile Include="Engine\Interface\RequestType.cs" />
+    <Compile Include="Engine\Interface\ModelNames.cs" />
     <Compile Include="Engine\Interface\EncodingFailure.cs" />
     <Compile Include="Engine\Interface\Error.cs" />
     <Compile Include="Engine\Interface\Inference.cs" />
@@ -98,9 +100,11 @@
     <Compile Include="Exceptions\LogicalGlueException.cs" />
     <Compile Include="Keeper\Implementation\InferenceRequestSaver.cs" />
     <Compile Include="Keeper\Implementation\InferenceSaver.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveInferenceRequest.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInputData.cs" />
     <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
     <Compile Include="Keeper\Interface\IKeeper.cs" />

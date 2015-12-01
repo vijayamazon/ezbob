@@ -55,30 +55,26 @@ BEGIN
 		ServiceLogID BIGINT NOT NULL,
 		UniqueID UNIQUEIDENTIFIER NOT NULL,
 		MonthlyRepayment DECIMAL(18, 0) NULL,
-		CompanyRegistrationNumber NVARCHAR(32) NULL,
-		FirstName NVARCHAR(250) NULL,
-		LastName NVARCHAR(250) NULL,
-		DateOfBirth DATETIME NULL,
 		EquifaxData NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueRequests PRIMARY KEY (RequestID),
-		CONSTRAINT FK_LogcialGlueRequests_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id)
+		CONSTRAINT FK_LogicalGlueRequests_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id)
 	)
 END
 GO
 
-IF OBJECT_ID('LogicalGlueRequestTypes') IS NULL
+IF OBJECT_ID('LogicalGlueModels') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueRequestTypes (
-		RequestTypeID BIGINT NOT NULL,
-		RequestType NVARCHAR(255) NOT NULL,
+	CREATE TABLE LogicalGlueModels (
+		ModelID BIGINT NOT NULL,
+		ModelName NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogicalGlueRequestTypes PRIMARY KEY (RequestTypeID),
-		CONSTRAINT UC_LogicalGlueRequestTypes_External UNIQUE (RequestType),
-		CONSTRAINT CHK_LogicalGlueRequestTypes CHECK (LTRIM(RTRIM(RequestType)) != '')
+		CONSTRAINT PK_LogicalGlueModels PRIMARY KEY (ModelID),
+		CONSTRAINT UC_LogicalGlueModels UNIQUE (ModelName),
+		CONSTRAINT CHK_LogicalGlueModels CHECK (LTRIM(RTRIM(ModelName)) != '')
 	)
 
-	INSERT INTO LogicalGlueRequestTypes (RequestTypeID, RequestType) VALUES
+	INSERT INTO LogicalGlueModels (ModelID, ModelName) VALUES
 		(1, 'Fuzzy logic'),
 		(2, 'Neural network')
 END
@@ -116,8 +112,8 @@ BEGIN
 		HasEquifaxData BIT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueResponses PRIMARY KEY (ResponseID),
-		CONSTRAINT FK_LogcialGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
-		CONSTRAINT FK_LogcialGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID)
+		CONSTRAINT FK_LogicalGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
+		CONSTRAINT FK_LogicalGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID)
 	)
 END
 GO
@@ -127,7 +123,7 @@ BEGIN
 	CREATE TABLE LogicalGlueModelOutputs (
 		ModelOutputID BIGINT IDENTITY(1, 1) NOT NULL,
 		ResponseID BIGINT NOT NULL,
-		RequestTypeID BIGINT NOT NULL,
+		ModelID BIGINT NOT NULL,
 		InferenceResultEncoded BIGINT NULL,
 		InferenceResultDecoded NVARCHAR(255) NULL,
 		Score DECIMAL(18, 16) NULL,
@@ -136,9 +132,9 @@ BEGIN
 		ErrorCode NVARCHAR(MAX) NULL,
 		Uuid UNIQUEIDENTIFIER NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogcialGlueModelOutputs PRIMARY KEY (ModelOutputID),
-		CONSTRAINT FK_LogcialGlueModelOutputs_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID),
-		CONSTRAINT FK_LogcialGlueModelOutputs_RequestType FOREIGN KEY (RequestTypeID) REFERENCES LogicalGlueRequestTypes (RequestTypeID)
+		CONSTRAINT PK_LogicalGlueModelOutputs PRIMARY KEY (ModelOutputID),
+		CONSTRAINT FK_LogicalGlueModelOutputs_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID),
+		CONSTRAINT FK_LogicalGlueModelOutputs_Model FOREIGN KEY (ModelID) REFERENCES LogicalGlueModels (ModelID)
 	)
 END
 GO
@@ -151,8 +147,8 @@ BEGIN
 		OutputClass NVARCHAR(255) NOT NULL,
 		Score DECIMAL(18, 16) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogcialGlueModelOutputRatios PRIMARY KEY (OutputRatioID),
-		CONSTRAINT FK_LogcialGlueModelOutputRatios_ModelOutput FOREIGN KEY (ModelOutputID) REFERENCES LogicalGlueModelOutputs (ModelOutputID)
+		CONSTRAINT PK_LogicalGlueModelOutputRatios PRIMARY KEY (OutputRatioID),
+		CONSTRAINT FK_LogicalGlueModelOutputRatios_ModelOutput FOREIGN KEY (ModelOutputID) REFERENCES LogicalGlueModelOutputs (ModelOutputID)
 	)
 END
 GO

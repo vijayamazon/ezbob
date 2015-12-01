@@ -106,10 +106,10 @@
 		private void ProcessModelOutput(SafeReader sr) {
 			DBModelOutput dbModel = sr.Fill<DBModelOutput>();
 
-			if (!Enum.IsDefined(typeof(RequestType), dbModel.RequestTypeID)) {
+			if (!Enum.IsDefined(typeof(ModelNames), dbModel.ModelID)) {
 				throw OutOfRangeException(
 					"inference loader({1}, '{2}'): unsupported request type '{0}'.",
-					dbModel.RequestTypeID,
+					dbModel.ModelID,
 					CustomerID,
 					NowStr
 				);
@@ -129,7 +129,7 @@
 				},
 			};
 
-			RequestType requestType = (RequestType)dbModel.RequestTypeID;
+			ModelNames requestType = (ModelNames)dbModel.ModelID;
 
 			this.models[dbModel.ResponseID] = pubModel;
 			Result.ModelOutputs[requestType] = pubModel;

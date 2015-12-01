@@ -60,6 +60,10 @@ IF OBJECT_ID('LogicalGlueBuckets') IS NOT NULL
 	DROP TABLE LogicalGlueBuckets
 GO
 
+IF OBJECT_ID('LogicalGlueModels') IS NOT NULL
+	DROP TABLE LogicalGlueModels
+GO
+
 IF OBJECT_ID('LogicalGlueRequestTypes') IS NOT NULL
 	DROP TABLE LogicalGlueRequestTypes
 GO

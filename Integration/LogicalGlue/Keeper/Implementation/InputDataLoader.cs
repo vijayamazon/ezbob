@@ -31,6 +31,7 @@
 		} // Execute
 
 		public InferenceInput Result { get; private set; }
+		public int CompanyID { get; private set; }
 
 		private void ProcessInputDataRow(SafeReader sr) {
 			string rowTypeName = sr["RowType"];
@@ -75,6 +76,8 @@
 				Result.Director.FirstName = sr["FirstName"];
 				Result.Director.LastName = sr["Surname"];
 				Result.Director.DateOfBirth = sr["DateOfBirth"];
+
+				CompanyID = sr["CompanyID"];
 				break;
 
 			case RowTypes.EquifaxData:
@@ -84,7 +87,7 @@
 
 			default:
 				throw OutOfRangeException(
-					"Inference loader({1}, '{2}'): unsupported row type '{0}'.",
+					"Input data loader({1}, '{2}'): unsupported row type '{0}'.",
 					rowTypeName,
 					CustomerID,
 					NowStr

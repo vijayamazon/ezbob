@@ -84,7 +84,8 @@ BEGIN
 		RowType = 'DirectorData',
 		c.FirstName,
 		c.Surname,
-		c.DateOfBirth
+		c.DateOfBirth,
+		CompanyID = @CompanyID
 	FROM
 		Customer c
 	WHERE

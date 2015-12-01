@@ -10,15 +10,16 @@
 		/// <param name="customerID">Customer to load data for.</param>
 		/// <param name="now">Current (specific time).</param>
 		/// <returns>Customer input data for LG API.</returns>
-		InferenceInput LoadInputData(int customerID, DateTime now);
+		InferenceInputPackage LoadInputData(int customerID, DateTime now);
 
 		/// <summary>
 		/// Saves LG request into DB.
 		/// </summary>
 		/// <param name="customerID">ID of customer to save inference request for.</param>
+		/// <param name="companyID">ID of company to save inference request for.</param>
 		/// <param name="request">Request to save.</param>
 		/// <returns>ID of the request in MP_ServiceLog table.</returns>
-		long SaveInferenceRequest(int customerID, InferenceInput request);
+		long SaveInferenceRequest(int customerID, int companyID, InferenceInput request);
 
 		/// <summary>
 		/// Loads the latest customer inference results that were available on specific time.

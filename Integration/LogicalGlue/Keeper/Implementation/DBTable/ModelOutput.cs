@@ -3,7 +3,7 @@
 
 	class ModelOutput {
 		public long ResponseID { get; set; }
-		public long RequestTypeID { get; set; }
+		public long ModelID { get; set; }
 		public long? InferenceResultEncoded { get; set; }
 		public string InferenceResultDecoded { get; set; }
 		public decimal? Score { get; set; }

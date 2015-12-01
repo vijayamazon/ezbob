@@ -9,20 +9,18 @@
 	[JsonConverter(typeof(InferenceInputSerializer))]
 	public class InferenceInput {
 		public string RequestID {
-			get {
-				if (this.requestID == null)
-					this.requestID = Guid.NewGuid().ToString("N").ToLowerInvariant();
-
-				return this.requestID;
-			} // get
-			set {
-				Guid g;
-
-				this.requestID = Guid.TryParse(value, out g)
-					? g.ToString("N").ToLowerInvariant()
-					: Guid.NewGuid().ToString("N").ToLowerInvariant();
-			} // set
+			get { return UniqueID.ToString("N").ToLowerInvariant(); }
 		} // RequestID
+
+		public Guid UniqueID {
+			get {
+				if (this.uniqueID == null)
+					this.uniqueID = Guid.NewGuid();
+
+				return this.uniqueID.Value;
+			} // get
+			set { this.uniqueID = value; } // set
+		} // UniqueID
 
 		/// <summary>
 		/// Data received from Equifax (via LG) on this company and director.
@@ -240,6 +238,6 @@
 		} // IsValid
 
 		private DirectorData director;
-		private string requestID;
+		private Guid? uniqueID;
 	} // class InferenceInput
 } // namespace

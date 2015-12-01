@@ -17,17 +17,18 @@
 				throw new NoConnectionKeeperAlert(this.log);
 		} // constructor
 
-		public InferenceInput LoadInputData(int customerID, DateTime now) {
+		public InferenceInputPackage LoadInputData(int customerID, DateTime now) {
 			try {
-				return new InputDataLoader(this.db, this.log, customerID, now).Execute().Result;
+				var loader = new InputDataLoader(this.db, this.log, customerID, now).Execute();
+				return new InferenceInputPackage(loader.Result, loader.CompanyID);
 			} catch (Exception e) {
 				throw new InputDataLoaderAlert(customerID, now, e, this.log);
 			} // try
 		} // LoadInputData
 
-		public long SaveInferenceRequest(int customerID, InferenceInput request) {
+		public long SaveInferenceRequest(int customerID, int companyID, InferenceInput request) {
 			try {
-				return new InferenceRequestSaver(this.db, this.log, customerID, request).Execute().Result;
+				return new InferenceRequestSaver(this.db, this.log, customerID, companyID, request).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceRequestSaverAlert(customerID, request, e, this.log);
 			} // try

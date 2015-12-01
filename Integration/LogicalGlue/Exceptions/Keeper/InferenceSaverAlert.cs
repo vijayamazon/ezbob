@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Exceptions.Keeper {
 	using System;
-	using System.Globalization;
 	using Ezbob.Logger;
 
 	public class InferenceSaverAlert : LogicalGlueAlert {
