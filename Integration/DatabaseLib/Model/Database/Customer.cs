@@ -492,7 +492,6 @@
 		public virtual bool? MonthlyStatusEnabled { get; set; }
 
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
-		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }
         
 		public virtual Company Company { get; set; }
 

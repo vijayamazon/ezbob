@@ -110,10 +110,6 @@ namespace EzBob.Models {
         
         public string RefNumber { get; set; }
 		
-        public IEnumerable<InvitedFriend> InvitedFriends { get; set; }
-
-		public string InviteFriendSource { get; set; }
-
 		public bool IsAlibaba { get; set; }
 
 		public bool IsBrokerFill { get; set; }
@@ -125,6 +121,8 @@ namespace EzBob.Models {
 		public bool IsDisabled { get; set; }
 
 		public bool IsEarly { get; set; }
+		
+		public bool IsTest { get; set; }
 
 		public bool IsLastApprovedLoanSourceEu { get; set; }
 		public bool IsLastApprovedLoanSourceCOSME { get; set; }
@@ -230,11 +228,6 @@ namespace EzBob.Models {
 
 		public string AlibabaCreditFacilityTemplate { get; set; }
 	} // class CustomerModel
-
-	public class InvitedFriend {
-		public string FriendName { get; set; }
-		public string FriendTookALoan { get; set; }
-	} // class InvitedFriend
 
 	public class SimpleMarketPlaceModel {
 		public string displayName { get; set; }
