@@ -41,7 +41,7 @@
                 }
                 return false;
             }
-
+            bool res=true;
             foreach (AutomationModels.Browser browser in browsers) {
                 Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                 foreach (AutomationModels.Environment enviorment in enviorments) {
@@ -66,12 +66,12 @@
                                 UpdateBlockedList(caseID);
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
                             }
-                            return false;
+                            res = false;
                         }
                     }
                 }
             }
-            return true;
+            return res;
         }
 
         public bool IsNotValidConfigured(List<AutomationModels.Browser> browsers,
@@ -93,7 +93,7 @@
         public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {
             if (IsDebugMode) {
                 return new List<AutomationModels.Browser>() {
-                    AutomationModels.Browser.Firefox
+                    AutomationModels.Browser.Chrome
                 };
             }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).Distinct().ToList();
@@ -102,7 +102,7 @@
         public List<AutomationModels.Brand> GetBrands(ulong caseID) {
             if (IsDebugMode) {
                 return new List<AutomationModels.Brand>() {
-                    AutomationModels.Brand.Ezbob
+                    AutomationModels.Brand.Everline
                 };
             }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).Distinct().ToList();
