@@ -43,7 +43,7 @@ EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
 
 		this.set({
 			neededCash: this.get("maxCash"),
-			minCash: (this.get("maxCash") > EzBob.Config.MinLoan ? EzBob.Config.MinLoan : EzBob.Config.XMinLoan),
+			minCash: (this.get("maxCash") >= EzBob.Config.MinLoan ? EzBob.Config.MinLoan : EzBob.Config.XMinLoan),
 			loanType: this.get("loanType"),
 			repaymentPeriod: this.get("repaymentPeriod"),
 			isLoanSourceEU: this.get("isLoanSourceEU"),
