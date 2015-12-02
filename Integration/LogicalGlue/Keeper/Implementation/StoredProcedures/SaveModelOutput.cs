@@ -20,17 +20,17 @@
 			if ((response == null) || !response.Parsed.HasInference())
 				return;
 
-			Outputs = new List<DbModelOutput> {
+			Tbl = new List<DbModelOutput> {
 				Create(responseID, ModelNames.FuzzyLogic, response.Parsed.Inference.FuzzyLogic),
 				Create(responseID, ModelNames.NeuralNetwork, response.Parsed.Inference.NeuralNetwork),
 			};
 		} // constructor
 
 		public override bool HasValidParameters() {
-			return (Outputs != null) && (Outputs.Count > 0);
+			return (Tbl != null) && (Tbl.Count > 0);
 		} // HasValidParameters
 
-		public List<DbModelOutput> Outputs { get; set; }
+		public List<DbModelOutput> Tbl { get; set; }
 
 		private static DbModelOutput Create(long responseID, ModelNames name, HarvesterModelOutput mo) {
 			return new DbModelOutput {

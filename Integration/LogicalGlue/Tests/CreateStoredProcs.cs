@@ -15,7 +15,11 @@
 			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.ModelOutput>();
 		} // CreateModelOutput
 
-		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.EncodingFailure>();
+		[Test]
+		public void CreateEncodingFailure() {
+			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.EncodingFailure>();
+		} // CreateEncodingFailure
+
 		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.MissingColumn>();
 		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.OutputRatio>();
 		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.Warning>();

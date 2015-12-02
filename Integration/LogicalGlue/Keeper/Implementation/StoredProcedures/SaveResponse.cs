@@ -17,7 +17,7 @@
 			ASafeLog log
 		) : base(db, log) {
 			if (response != null) {
-				Responses = new List<DbResponse> {
+				Tbl = new List<DbResponse> {
 					new DbResponse {
 						ServiceLogID = requestID,
 						BucketID = response.Parsed.HasInference() ? (int)response.Parsed.Inference.Bucket : (long?)null,
@@ -29,9 +29,9 @@
 		} // constructor
 
 		public override bool HasValidParameters() {
-			return (Responses != null) && (Responses.Count > 0);
+			return (Tbl != null) && (Tbl.Count > 0);
 		} // HasValidParameters
 
-		public List<DbResponse> Responses { get; set; }
+		public List<DbResponse> Tbl { get; set; }
 	} // class SaveResponse
 } // namespace

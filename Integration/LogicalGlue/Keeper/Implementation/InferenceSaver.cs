@@ -60,6 +60,10 @@
 
 					map[name] = id;
 				});
+
+				var saveEF = new SaveEncodingFailure(map, this.response, DB, Log);
+				if (saveEF.HasValidParameters())
+					saveEF.ExecuteNonQuery();
 			} // if
 
 			con.Commit();
