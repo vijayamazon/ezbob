@@ -106,7 +106,11 @@ BEGIN
 							where l.OfferID = (SELECT OfferID from #validOffer)
 				group by lh.LoanID) x)
 
-	update #validOffer set AvailableAmount = (select LoanLegalAmount from #validOffer) - @TakenAmount
+	if (select LoanLegalAmount from #validOffer) IS NOT NULL AND @TakenAmount IS NOT NULL
+	
+	BEGIN
+		update #validOffer set AvailableAmount = (select OfferAmount from #validOffer) - @TakenAmount		
+	END
 
 	SELECT * FROM #validOffer
 
