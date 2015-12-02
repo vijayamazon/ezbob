@@ -6,23 +6,27 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LogicalGlueLoadInference
+@ResponseID BIGINT,
 @CustomerID INT,
 @Now DATETIME
 AS
 BEGIN
-	DECLARE @ResponseID BIGINT = (
-		SELECT TOP 1
-			r.ResponseID
-		FROM
-			LogicalGlueResponses r
-			INNER JOIN MP_ServiceLog l
-				ON r.ServiceLogID = l.Id
-				AND l.CustomerId = @CustomerID
-				AND l.InsertDate < @Now
-		ORDER BY
-			l.InsertDate DESC,
-			l.Id DESC
-	)
+	IF @ResponseID <= 0
+	BEGIN
+		SET @ResponseID = (
+			SELECT TOP 1
+				r.ResponseID
+			FROM
+				LogicalGlueResponses r
+				INNER JOIN MP_ServiceLog l
+					ON r.ServiceLogID = l.Id
+					AND l.CustomerId = @CustomerID
+					AND l.InsertDate < @Now
+			ORDER BY
+				l.InsertDate DESC,
+				l.Id DESC
+		)
+	END
 
 	------------------------------------------------------------------------------
 

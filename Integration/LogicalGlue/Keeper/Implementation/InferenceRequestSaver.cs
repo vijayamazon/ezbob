@@ -5,7 +5,7 @@
 	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures;
 	using Ezbob.Logger;
 
-	internal class InferenceRequestSaver : AActionBase {
+	internal class InferenceRequestSaver : ACustomerActionBase {
 		public InferenceRequestSaver(
 			AConnection db,
 			ASafeLog log,

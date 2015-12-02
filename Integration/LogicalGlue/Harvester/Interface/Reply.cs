@@ -3,7 +3,7 @@
 	using Ezbob.Utils.Extensions;
 	using Newtonsoft.Json;
 
-	public class Reply {
+	public class Reply : IConvertableToShortString {
 		[JsonProperty(PropertyName = "status")]
 		public HttpStatusCode Status { get; set; }
 
@@ -31,6 +31,18 @@
 		public override string ToString() {
 			return this.ToLogStr();
 		} // ToString
+
+		public string ToShortString() {
+			return string.Format(
+				"Status '{0}', {1}, {2}, {3}, {4}, {5}.",
+				Status,
+				Timeout == null ? "no timeout" : "timeout " + Timeout.Value,
+				string.IsNullOrWhiteSpace(Error) ? "no error" : "with error",
+				(Inference == null ? "no" : "with") + " inference",
+				(string.IsNullOrWhiteSpace(EquifaxData) ? "no" : "with") + " Equifax data",
+				(Etl == null ? "no" : "with") + " ETL"
+			);
+		} // ToShortString
 
 		/// <summary>
 		/// Determines whether the specified <see cref="T:System.Object"/>

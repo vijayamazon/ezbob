@@ -11,8 +11,21 @@
 	using DBModelOutput = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.ModelOutput;
 	using PublicModelOutput = Ezbob.Integration.LogicalGlue.Engine.Interface.ModelOutput;
 
-	internal class InferenceLoader : ATimedActionBase {
+	internal class InferenceLoader : ATimedCustomerActionBase {
 		public InferenceLoader(AConnection db, ASafeLog log, int customerID, DateTime now) : base(db, log, customerID, now) {
+			this.responseID = 0;
+			this.models = new SortedDictionary<long, PublicModelOutput>();
+
+			Result = new Inference();
+		} // constructor
+
+		internal InferenceLoader(
+			AConnection db,
+			ASafeLog log,
+			long responseID,
+			int customerID
+		) : base(db, log, customerID, DateTime.UtcNow) {
+			this.responseID = responseID;
 			this.models = new SortedDictionary<long, PublicModelOutput>();
 
 			Result = new Inference();
@@ -30,7 +43,11 @@
 
 			Log.Debug("Executing inference loader({0}, '{1}')...", CustomerID, NowStr);
 
-			new LoadInference(DB, Log) { CustomerID = CustomerID, Now = Now, }.ForEachRowSafe(ProcessInferenceRow);
+			new LoadInference(DB, Log) {
+				ResponseID = this.responseID,
+				CustomerID = CustomerID,
+				Now = Now,
+			}.ForEachRowSafe(ProcessInferenceRow);
 
 			Log.Debug("Executing inference loader({0}, '{1}') complete.", CustomerID, NowStr);
 
@@ -261,5 +278,6 @@
 		} // enum RowTypes
 
 		private readonly SortedDictionary<long, PublicModelOutput> models;
+		private readonly long responseID;
 	} // class InferenceLoader
 } // namespace

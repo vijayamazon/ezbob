@@ -7,7 +7,7 @@
 	using Newtonsoft.Json;
 
 	[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
-	internal class SaveInferenceRequest : ACustomerStoredProc {
+	internal class SaveInferenceRequest : ACustomerTimeStoredProc {
 		public SaveInferenceRequest(
 			int customerID,
 			int companyID,
@@ -18,6 +18,7 @@
 			this.request = request;
 			CustomerID = customerID;
 			CompanyID = companyID;
+			Now = DateTime.UtcNow;
 		} // constructor
 
 		public override bool HasValidParameters() {
@@ -25,11 +26,6 @@
 		} // HasValidParameters
 
 		public int CompanyID { get; set; }
-
-		public DateTime Now {
-			get { return DateTime.UtcNow; }
-			set { }
-		} // DateOfBirth
 
 		public Guid UniqueID {
 			get { return this.request.UniqueID; }

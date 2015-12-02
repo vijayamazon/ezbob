@@ -44,7 +44,8 @@
 
 		public Inference SaveInference(int customerID, long requestID, Response<Reply> response) {
 			try {
-				return new InferenceSaver(this.db, this.log, customerID, requestID, response).Execute().Result;
+				long responseID = new InferenceSaver(this.db, this.log, requestID, response).Execute().ResponseID;
+				return new InferenceLoader(this.db, this.log, responseID, customerID).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceSaverAlert(customerID, requestID, e, this.log);
 			} // try

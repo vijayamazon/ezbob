@@ -8,7 +8,7 @@
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 
-	class InputDataLoader : ATimedActionBase {
+	class InputDataLoader : ATimedCustomerActionBase {
 		public InputDataLoader(AConnection db, ASafeLog log, int customerID, DateTime now) : base(db, log, customerID, now) {
 			Result = new InferenceInput();
 		} // constructor

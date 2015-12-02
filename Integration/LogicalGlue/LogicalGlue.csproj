@@ -58,10 +58,14 @@
     <Compile Include="Exceptions\Engine\NoHarvesterEngineAlert.cs" />
     <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceRequestSaverNoDataAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceSaverWrongRequestIDAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceSaverNoDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
     <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
+    <Compile Include="Harvester\Interface\IConvertableToShortString.cs" />
     <Compile Include="Harvester\Interface\InferenceInputPackage.cs" />
-    <Compile Include="Keeper\Implementation\ATimedActionBase.cs" />
+    <Compile Include="Keeper\Implementation\ACustomerActionBase.cs" />
+    <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
     <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveInference.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveInferenceRequest.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInputData.cs" />
     <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
