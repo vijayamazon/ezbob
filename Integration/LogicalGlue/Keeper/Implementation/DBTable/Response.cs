@@ -1,11 +1,16 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable {
 	using System;
+	using Ezbob.Database;
+	using Ezbob.Utils.dbutils;
 
 	class Response {
+		[FieldName("ResponseID")]
+		[PK(true)]
+		public long ID { get; set; }
+
 		public long ServiceLogID { get; set; }
 		public DateTime ReceivedTime { get; set; }
-		public decimal MonthlyRepayment { get; set; }
-		public int BucketID { get; set; }
+		public long? BucketID { get; set; }
 		public bool HasEquifaxData { get; set; }
 	} // class Response
 } // namespace

@@ -72,4 +72,18 @@
 			return string.Join("_", Status).GetHashCode();
 		} // GetHashCode
 	} // class Reply
+
+	public static class ReplyExt {
+		public static bool Exists(this Reply reply) {
+			return reply != null;
+		} // Exists
+
+		public static bool HasInference(this Reply reply) {
+			return reply.Exists() && (reply.Inference != null);
+		} // HasInference
+
+		public static bool HasEquifaxData(this Reply reply) {
+			return reply.Exists() && !string.IsNullOrWhiteSpace(reply.EquifaxData);
+		} // EquifaxData
+	} // class ReplyExt
 } // namespace

@@ -4,6 +4,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('LogicalGlueSaveRawResponse') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveRawResponse
+GO
+
 IF OBJECT_ID('LogicalGlueSaveInferenceRequest') IS NOT NULL
 	DROP PROCEDURE LogicalGlueSaveInferenceRequest
 GO

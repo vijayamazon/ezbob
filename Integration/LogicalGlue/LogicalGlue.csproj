@@ -108,7 +108,9 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
-    <Compile Include="Keeper\Implementation\StoredProcedures\SaveInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveRawResponse.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveModelOutput.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveResponse.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveInferenceRequest.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInputData.cs" />
     <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Engine\Implementation\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\ABaseTest.cs" />
+    <Compile Include="Tests\CreateStoredProcs.cs" />
     <Compile Include="Tests\InputSerialization.cs" />
     <Compile Include="Tests\ModelOutputSerialization.cs" />
     <Compile Include="Tests\HarvesterReplySerialization.cs" />

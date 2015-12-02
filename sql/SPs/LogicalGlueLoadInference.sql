@@ -59,7 +59,7 @@ BEGIN
 		RowType = 'Model',
 		r.ModelOutputID,
 		r.ResponseID,
-		r.RequestTypeID,
+		r.ModelID,
 		r.InferenceResultEncoded,
 		r.InferenceResultDecoded,
 		r.Score,
