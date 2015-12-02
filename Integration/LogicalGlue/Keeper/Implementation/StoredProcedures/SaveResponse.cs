@@ -20,6 +20,7 @@
 				Tbl = new List<DbResponse> {
 					new DbResponse {
 						ServiceLogID = requestID,
+						HttpStatus = response.Parsed.Exists() ? (int)response.Parsed.Status : 0,
 						BucketID = response.Parsed.HasInference() ? (int)response.Parsed.Inference.Bucket : (long?)null,
 						HasEquifaxData = response.Parsed.HasEquifaxData(),
 						ReceivedTime = DateTime.UtcNow,

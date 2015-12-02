@@ -27,7 +27,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO ModelOutput (
+	INSERT INTO LogicalGlueModelOutputs (
 		[ResponseID],
 		[ModelID],
 		[InferenceResultEncoded],

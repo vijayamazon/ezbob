@@ -24,7 +24,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO Warning (
+	INSERT INTO LogicalGlueModelWarnings (
 		[ModelOutputID] ,
 		[Value],
 		[FeatureName],

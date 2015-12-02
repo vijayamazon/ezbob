@@ -22,7 +22,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO OutputRatio (
+	INSERT INTO LogicalGlueModelOutputRatios (
 		[ModelOutputID] ,
 		[OutputClass],
 		[Score]

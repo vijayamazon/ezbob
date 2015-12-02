@@ -61,6 +61,7 @@
     <Compile Include="Exceptions\Keeper\InferenceSaverWrongRequestIDAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverNoDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
+    <Compile Include="Harvester\Implementation\TestHarvester.cs" />
     <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
     <Compile Include="Harvester\Interface\IConvertableToShortString.cs" />
     <Compile Include="Harvester\Interface\InferenceInputPackage.cs" />
@@ -131,12 +132,15 @@
     <Compile Include="Engine\Implementation\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\ABaseTest.cs" />
+    <Compile Include="Tests\BasicFlow.cs" />
     <Compile Include="Tests\CreateStoredProcs.cs" />
     <Compile Include="Tests\InputSerialization.cs" />
     <Compile Include="Tests\ModelOutputSerialization.cs" />
     <Compile Include="Tests\HarvesterReplySerialization.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
@@ -166,6 +170,12 @@
       <Project>{805F29C1-D575-49C5-A95D-4D393E65481F}</Project>
       <Name>MiniResharper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

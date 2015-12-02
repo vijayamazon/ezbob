@@ -2,20 +2,19 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	using Ezbob.Utils;
 
 	[DataContract]
 	public class Inference {
-		// TODO : request? [DataMember] public ...
+		[DataMember]
+		public long ResponseID { get; set; }
 
 		[DataMember]
 		public DateTime ReceivedTime { get; set; }
 
 		[DataMember]
-		public Bucket Bucket { get; set; }
+		public Bucket? Bucket { get; set; }
 
 		[DataMember]
-		[NonTraversable]
 		public SortedDictionary<ModelNames, ModelOutput> ModelOutputs {
 			get {
 				if (this.modelOutputs == null)

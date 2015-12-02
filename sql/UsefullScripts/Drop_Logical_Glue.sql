@@ -111,3 +111,8 @@ DELETE FROM ConfigurationVariables WHERE Name IN (
 	'LogicalGlueOldCustomerRequestPath'
 )
 GO
+
+DELETE FROM MP_ServiceLog WHERE ServiceType IN (
+	'LogicalGlue'
+)
+GO

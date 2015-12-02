@@ -21,7 +21,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO MissingColumn (
+	INSERT INTO LogicalGlueModelMissingColumns (
 		[ModelOutputID] ,
 		[ColumnName]
 	) SELECT

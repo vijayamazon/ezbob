@@ -10,6 +10,7 @@
 
 		public long ServiceLogID { get; set; }
 		public DateTime ReceivedTime { get; set; }
+		public int HttpStatus { get; set; }
 		public long? BucketID { get; set; }
 		public bool HasEquifaxData { get; set; }
 	} // class Response

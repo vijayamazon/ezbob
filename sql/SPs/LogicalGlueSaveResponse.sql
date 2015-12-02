@@ -12,6 +12,7 @@ GO
 CREATE TYPE LogicalGlueResponseList AS TABLE (
 	[ServiceLogID] BIGINT NOT NULL,
 	[ReceivedTime] DATETIME NOT NULL,
+	[HttpStatus] INT NOT NULL,
 	[BucketID] BIGINT NULL,
 	[HasEquifaxData] BIT NOT NULL
 )
@@ -23,14 +24,16 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO Response (
+	INSERT INTO LogicalGlueResponses (
 		[ServiceLogID],
 		[ReceivedTime],
+		[HttpStatus],
 		[BucketID],
 		[HasEquifaxData]
 	) SELECT
 		[ServiceLogID],
 		[ReceivedTime],
+		[HttpStatus],
 		[BucketID],
 		[HasEquifaxData]
 	FROM

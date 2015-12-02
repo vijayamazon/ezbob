@@ -8,6 +8,8 @@
 	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
+
+	using DBResponse = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.Response;
 	using DBModelOutput = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.ModelOutput;
 	using PublicModelOutput = Ezbob.Integration.LogicalGlue.Engine.Interface.ModelOutput;
 
@@ -110,13 +112,17 @@
 		} // OutOfRangeException
 
 		private void ProcessResponse(SafeReader sr) {
-			sr.Fill(Result);
+			var dbResponse = sr.Fill<DBResponse>();
+
+			Result.ResponseID = dbResponse.ID;
+			Result.ReceivedTime = dbResponse.ReceivedTime;
+			Result.Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID;
 
 			Log.Debug(
 				"Inference loader({0}, '{1}'): loaded response (id: {2}).",
 				CustomerID,
 				NowStr,
-				sr["ResponseID"]
+				Result.ResponseID
 			);
 		} // ProcessResponse
 
@@ -155,7 +161,7 @@
 				"Inference loader({0}, '{1}'): loaded model output (id: {2}, type: {3}).",
 				CustomerID,
 				NowStr,
-				sr["ModelOutputID"],
+				dbModel.ID,
 				requestType
 			);
 		} // ProcessModelOutput
@@ -178,7 +184,7 @@
 					"Inference loader({0}, '{1}'): map output ratio '{2}' should belong to unknown response '{3}'.",
 					CustomerID,
 					NowStr,
-					sr["OutputRatioID"],
+					ratio.ID,
 					ratio.ModelOutputID
 				);
 			} // if
@@ -207,7 +213,7 @@
 					"Inference loader({0}, '{1}'): warning '{2}' should belong to unknown response '{3}'.",
 					CustomerID,
 					NowStr,
-					sr["WarningID"],
+					warning.ID,
 					warning.ModelOutputID
 				);
 			} // if
@@ -239,7 +245,7 @@
 					"Inference loader({0}, '{1}'): encoding failure '{2}' should belong to unknown response '{3}'.",
 					CustomerID,
 					NowStr,
-					sr["FailureID"],
+					encodingFailure.ID,
 					encodingFailure.ModelOutputID
 				);
 			} // if
@@ -262,7 +268,7 @@
 					"Inference loader({0}, '{1}'): missing column '{2}' should belong to unknown response '{3}'.",
 					CustomerID,
 					NowStr,
-					sr["MissingColumnID"],
+					column.ID,
 					column.ModelOutputID
 				);
 			} // if

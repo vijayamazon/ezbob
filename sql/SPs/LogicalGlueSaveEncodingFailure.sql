@@ -25,7 +25,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO EncodingFailure (
+	INSERT INTO LogicalGlueModelEncodingFailures (
 		[ModelOutputID] ,
 		[RowIndex],
 		[ColumnName],

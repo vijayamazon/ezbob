@@ -23,7 +23,9 @@
 				writer,
 				serializer,
 				Payment,
-				input.MonthlyPayment == null ? string.Empty : input.MonthlyPayment.ToString()
+				input.MonthlyPayment == null
+					? string.Empty
+					: Math.Round(input.MonthlyPayment.Value).ToString("G0", CultureInfo.InvariantCulture)
 			);
 
 			if (!string.IsNullOrWhiteSpace(input.EquifaxData))

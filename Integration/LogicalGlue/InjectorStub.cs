@@ -1,10 +1,15 @@
 ﻿namespace Ezbob.Integration.LogicalGlue {
 	using Ezbob.Database;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
 
 	static class InjectorStub {
+		public static IEngine GetTestEngine() {
+			return new Engine.Implementation.Engine(GetKeeper(), GetTestHarvester(), GetLog());
+		} // GetTestEngine
+
 		public static IKeeper GetKeeper() {
 			return new Ezbob.Integration.LogicalGlue.Keeper.Implementation.Keeper(GetDBConnection(), GetLog());
 		} // GetKeeper
@@ -12,6 +17,10 @@
 		public static IHarvester GetHarvester() {
 			return new Harvester.Implementation.Harvester(GetLog());
 		} // GetHarvester
+
+		public static IHarvester GetTestHarvester() {
+			return new Harvester.Implementation.TestHarvester(GetLog());
+		} // GetTestHarvester
 
 		private static ASafeLog GetLog() {
 			return Library.Instance.Log;

@@ -108,6 +108,7 @@ BEGIN
 		ResponseID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
 		ReceivedTime DATETIME NOT NULL,
+		HttpStatus INT NOT NULL,
 		BucketID BIGINT NULL,
 		HasEquifaxData BIT NOT NULL,
 		TimestampCounter ROWVERSION,
