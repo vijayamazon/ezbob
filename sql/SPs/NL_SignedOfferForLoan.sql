@@ -1,113 +1,113 @@
-USE [ezbob]
-GO
-/****** Object:  StoredProcedure [dbo].[NL_SignedOfferForLoan]    Script Date: 21/10/2015 13:36:50 ******/
-SET ANSI_NULLS ON
-GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [dbo].[NL_SignedOfferForLoan]	
-	@CustomerID INT,
+IF OBJECT_ID('NL_SignedOfferForLoan') IS NULL
+	EXECUTE('CREATE PROCEDURE NL_SignedOfferForLoan AS SELECT 1')
+GO
+
+
+ALTER PROCEDURE [dbo].[NL_SignedOfferForLoan] 
+	@CustomerID INT, 
 	@Now DATETIME
 AS
+BEGIN 
+	-- prevent loan creation in less than 1 minute.
+	DECLARE @LastLoanDate DATETIME;
 
-declare @OfferID bigint;
-
-BEGIN
+	SET @LastLoanDate = (SELECT max( lh.EventTime )
+	FROM NL_Loans l
+	JOIN vw_NL_LoansCustomer v on v.LoanID = l.LoanID
+	JOIN NL_LoanHistory lh ON lh.LoanID = l.LoanID
+	where v.CustomerID = @CustomerID);
 	
-	-- get last valid 'Approve' or 'ReApprove' offer for the customer
-	set @OfferID = (select top 1 o.OfferID FROM NL_Offers o 
-	INNER JOIN NL_Decisions d ON d.DecisionID = o.DecisionID 
-	INNER JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
-	inner join [dbo].[Decisions] dnames on d.DecisionNameID = dnames.[DecisionID]
-	WHERE cr.CustomerID = @CustomerID and @Now between o.[StartTime] and o.[EndTime] and dnames.[DecisionName] in ('Approve', 'ReApprove') 
-	order by OfferID desc);
+	IF @LastLoanDate IS NOT NULL AND DATEDIFF(MINUTE, @now, @LastLoanDate) < 1	
+	BEGIN 
+		RETURN 'Loan delay violation' 
+	END
 
-	IF @OfferID IS NULL begin		
-		RETURN  ;
-	end;
-		
-	declare @LoansCount int;
+	IF object_id('#validOffer') IS NOT NULL DROP TABLE #validOffer;
 
-	IF object_id('#offerforloan') IS NOT NULL drop table #offerforloan;
+	DECLARE @NumofAllowedActiveLoans INT;
+	SET @NumofAllowedActiveLoans = (SELECT Value from ConfigurationVariables where Name = 'NumofAllowedActiveLoans')
 
-	IF @OfferID IS NOT NULL BEGIN
-		select top 1 		 
-			ll.LoanLegalID,
-			ll.Amount as LoanLegalAmount, 			
-			ll.RepaymentPeriod as LoanLegalRepaymentPeriod,
-			dp.DiscountPlanID,			
-			o.OfferID , 
-			o.LoanTypeID, 
-			o.RepaymentIntervalTypeID, 
-			o.LoanSourceID, 			 
-			o.RepaymentCount as OfferRepaymentCount, 			
-			o.Amount as OfferAmount, 
-			o.MonthlyInterestRate,			 
-			o.SetupFeeAddedToLoan,			
-			o.BrokerSetupFeePercent, 
-			o.InterestOnlyRepaymentCount,			
-			0 as LoansCount	,
-			o.Amount as AvailableAmount,
-			cast('' as nvarchar(max))  as ExistsRefnums			
-		into #offerforloan
-			FROM 
-				NL_LoanLegals ll INNER JOIN NL_Offers o on ll.OfferID = o.OfferID					
-				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID --and dp.IsActive = 1 				
-			WHERE o.OfferID = @OfferID
-			order by ll.LoanLegalID desc; 	
+	DECLARE @LoansCount int;
+
+	-- NUMBER OF ACTIVE LOANS
+	SET @LoansCount = (SELECT COUNT(l.LoanID) 
+		from vw_NL_LoansCustomer v
+		JOIN NL_Loans l on l.LoanID = v.LoanID
+		JOIN NL_LoanStatuses ls ON ls.LoanStatusID = l.LoanStatusID 
+		where v.CustomerID =  @CustomerID
+		AND ls.LoanStatus <> 'PaidOff')
+
+	IF @LoansCount IS NOT NULL AND @LoansCount >= @NumofAllowedActiveLoans 
+	BEGIN 
+		RETURN 'Max loans limit'
+	END
+
+	-- valid offer
+	SELECT top 1 
+		ll.LoanLegalID,
+		ll.Amount AS LoanLegalAmount,
+		ll.RepaymentPeriod AS LoanLegalRepaymentPeriod,
+		o.OfferID,
+		o.LoanTypeID,
+		o.RepaymentIntervalTypeID,
+		o.LoanSourceID,
+		o.RepaymentCount AS OfferRepaymentCount,
+		o.Amount AS OfferAmount,
+		o.MonthlyInterestRate,
+		o.SetupFeeAddedToLoan,
+		o.BrokerSetupFeePercent,
+		o.InterestOnlyRepaymentCount,
+		o.DiscountPlanID,
+		@LoansCount AS LoansCount,
+		0 AS AvailableAmount,
+		ExistsRefnums = (Select distinct(Refnum)+ ',' AS [text()] From NL_Loans For XML PATH ('')),
+		o.IsRepaymentPeriodSelectionAllowed
+	INTO #validOffer				   		
+	FROM NL_Offers o
+	JOIN NL_Decisions d ON d.DecisionID = o.DecisionID
+	JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
+	JOIN Decisions dn ON d.DecisionNameID = dn.DecisionID	
+	JOIN NL_LoanLegals ll ON ll.OfferID = o.OfferID
+	WHERE cr.CustomerID = @CustomerID
+		AND @Now BETWEEN o.StartTime AND o.EndTime
+		AND dn.DecisionName IN ('Approve','ReApprove') 
+	ORDER BY o.OfferID DESC ;
+
+	IF ((SELECT IsRepaymentPeriodSelectionAllowed from #validOffer) = 0
+	   AND (SELECT OfferRepaymentCount from #validOffer) <> (SELECT LoanLegalRepaymentPeriod from #validOffer))	 
+	BEGIN 
+		RETURN 'Wrong repayment period'
+	END
+
+	-- loan period is in the range of max period allowed by loan source
+	IF (select OfferRepaymentCount from  #validOffer) >
+	(select DefaultRepaymentPeriod from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
+	BEGIN 
+		RETURN 'Wrong repayment period'
+	END
+
+	-- loan interest is in the range of max interest allowed by loan source
+	IF (select MonthlyInterestRate from  #validOffer) >
+	(select MaxInterest from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
+	BEGIN 
+		RETURN 'Wrong interest rate'
+	END
 	
-		set @LoansCount = (select COUNT(LoanID) 
-							from NL_Loans l inner join NL_Offers o on o.OfferID = l.OfferID and o.OfferID = @OfferID inner join NL_Decisions d on d.DecisionID=o.DecisionID 
-							inner join NL_CashRequests cr on cr.CashRequestID = d.CashRequestID 
-							where cr.CustomerID=@CustomerID);	
+	-- available credit for current offer
+	declare @TakenAmount decimal;
+	set @TakenAmount = (select sum(x.loansAmount) FROM 
+						(select min(lh.Amount) as loansAmount
+							FROM NL_LoanHistory lh
+							JOIN NL_Loans l on l.LoanID = lh.LoanID 
+							JOIN NL_LoanStatuses lstatus on	lstatus.LoanStatusID = l.LoanStatusID AND lstatus.LoanStatus in ('Pending', 'Live', 'Late')
+							where l.OfferID = (SELECT OfferID from #validOffer)
+				group by lh.LoanID) x)
 
+	update #validOffer set AvailableAmount = (select LoanLegalAmount from #validOffer) - @TakenAmount
 
-		if @LoansCount > 0 begin
-
-			--print ('loanscount=' + cast(@LoansCount as nvarchar(15)));
-						
-			declare @TakenAmount decimal;
-			declare @PaidPrincipal decimal;
-			
-			-- can be queried [dbo].[NL_LoanStates] ??? TODO check
-			set @TakenAmount = 
-					(select 
-						SUM( h.[Amount]) 
-					from 
-						NL_Loans l inner join [dbo].[NL_LoanStatuses] lstatus on lstatus.[LoanStatusID] = l.[LoanStatusID] and lstatus.[LoanStatus] in ('Pending', 'Live', 'Late')	
-						inner join 	[dbo].[NL_LoanHistory] h on h.LoanID = l.LoanID
-						where l.OfferID =  @OfferID);
-	
-
-			if @TakenAmount is null set @TakenAmount =0;
-
-			--print ('TakenAmount=' + cast(@TakenAmount as nvarchar(150)));
-
-			-- consider use Customer.CreditSum
-
-			-- check already taken and returned loans for this offer
-			set @PaidPrincipal = 
-					(select 
-						SUM(sp.PrincipalPaid)	
-					from 
-						NL_Loans l inner join [dbo].[NL_LoanHistory] h on l.[LoanID] = h.LoanID 
-						inner join [dbo].[NL_LoanSchedules] s on s.[LoanHistoryID] = h.[LoanHistoryID] and s.[ClosedTime] is not null 
-						inner join [dbo].[NL_LoanScheduleStatuses] sstatus on sstatus.[LoanScheduleStatusID] = s.[LoanScheduleStatusID] and sstatus.[LoanScheduleStatus] in ('Paid', 'PaidEarly', 'PaidOnTime')		
-						inner join [dbo].[NL_LoanSchedulePayments]	sp on sp.LoanScheduleID = s.LoanScheduleID
-						inner join [dbo].[NL_Payments] p on p.PaymentID = sp.LoanSchedulePaymentID and p.[DeletionTime] is null
-						inner join [dbo].[NL_PaymentStatuses] pstatus on pstatus.[PaymentStatusID] = p.PaymentStatusID and pstatus.PaymentStatus in ('Pending', 'Active')			
-					where l.OfferID = @OfferID);
-
-			if @PaidPrincipal is null set @PaidPrincipal = 0;
-
-			--print ('PaidPrincipal=' + cast(@PaidPrincipal as nvarchar(150)));
-
-			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (#offerforloan.OfferAmount + @PaidPrincipal - @TakenAmount), ExistsRefnums = (Select distinct(Refnum )+ ',' AS [text()] From dbo.[NL_Loans] For XML PATH (''));
-
-		end; -- @LoansCount
-
-		select * from #offerforloan;
-	END;
+	SELECT * FROM #validOffer
 
 END

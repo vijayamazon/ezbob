@@ -299,8 +299,8 @@
             DateTime now = DateTime.UtcNow;
 
             NL_Model nlModel = new NL_Model(cus.Id);
-            var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel: nlModel);
-
+            var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel);
+            this.m_oServiceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel);
             var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
             return Json(new { url = url });

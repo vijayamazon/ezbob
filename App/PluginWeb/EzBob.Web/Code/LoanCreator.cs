@@ -454,20 +454,25 @@
 
 		private void ValidateRepaymentPeriodAndInterestRate(Customer cus) {
 			var cr = cus.LastCashRequest;
-			if (cr == null) {
+			
+            //validate that CR exsists.
+            if (cr == null) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate No offer exists customerid: {0}", cus.Id);
 				throw new ArgumentException("No offer exists");
 			}
+            //validate in case customer not allowed to change period that request equal to approved.
 			if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong repayment period !cr.IsCustomerRepaymentPeriodSelectionAllowed {0} && cr.RepaymentPeriod {1} != cr.ApprovedRepaymentPeriod {2} customerid: {3}",
 					cr.IsCustomerRepaymentPeriodSelectionAllowed, cr.RepaymentPeriod, cr.ApprovedRepaymentPeriod, cus.Id);
 				throw new ArgumentException("Wrong repayment period");
 			}
+            //validate that loan period is in the range of max period allowed by loan source
 			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod > cr.RepaymentPeriod) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong repayment period2 cr.LoanSource.DefaultRepaymentPeriod.HasValue true && cr.LoanSource.DefaultRepaymentPeriod {0} > cr.RepaymentPeriod {1} customerid: {2}",
 					 cr.LoanSource.DefaultRepaymentPeriod, cr.RepaymentPeriod,cus.Id);
 				throw new ArgumentException("Wrong repayment period");
 			}
+            //validate that loan interest is in the range of max interest allowed by loan source
 			if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong interest rate cr.LoanSource.MaxInterest.HasValue true && cr.InterestRate {0} > cr.LoanSource.MaxInterest.Value {1} customerid: {2}",
 					cr.InterestRate, cr.LoanSource.MaxInterest.Value, cus.Id);
