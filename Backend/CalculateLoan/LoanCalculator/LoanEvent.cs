@@ -68,6 +68,8 @@
 
 		private readonly int priority;
 
+		private object _currentID;
+
 		public int Priority {
 			get {
 				if (this.priority != 0)
@@ -90,8 +92,45 @@
 			}
 		}
 
+		public object GetTypeID() {
+			if (History != null) {
+				this._currentID = History.LoanHistoryID;
+				//return this._currentID;
+			}
+
+			if (ScheduleItem != null) {
+				this._currentID = ScheduleItem.LoanScheduleID;
+				//return this._currentID;
+			}
+
+			if (Payment != null) {
+				this._currentID = Payment.PaymentID;
+				//return this._currentID;
+			}
+
+			if (ChargebackPaymentRecorded != null) {
+				this._currentID = ChargebackPaymentRecorded.PaymentID;
+				//return this._currentID;
+			}
+
+			if (ChargebackPaymentCancelled != null){
+				this._currentID = ChargebackPaymentCancelled.PaymentID;return this._currentID;
+			}
+
+			if (Fee != null){
+				this._currentID = Fee.LoanFeeID;return this._currentID;
+			}
+
+			if (Rollover != null) {
+				this._currentID = Rollover.LoanRolloverID;
+				//return this._currentID;
+			}
+
+			return this._currentID;
+		}
+
 		public override string ToString() {
-			return string.Format("{0}, {1}", EventTime, GetTypeString());
+			return string.Format("EventTime={0}, EventType={1}, [ID]={2}", EventTime, GetTypeString(), GetTypeID());
 		}
 
 		public string GetTypeString() {

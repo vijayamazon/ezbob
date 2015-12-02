@@ -59,9 +59,9 @@
 		[DataMember]
 		public long LoanID { get; set; }
 
-		[DataMember]
-		[NonTraversable]
-		public bool Reset { get; set; }
+		//[DataMember]
+		//[NonTraversable]
+		//public bool Reset { get; set; }
 	
 		private DateTime _createDate = DateTime.UtcNow;
 

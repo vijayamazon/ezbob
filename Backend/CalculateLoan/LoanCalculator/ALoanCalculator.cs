@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
-	using System.Runtime.CompilerServices;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -376,7 +375,7 @@
 			for (int i = 0; i <= daysDiff; i++) {
 
 				NL_LoanSchedules item = currentEvent.ScheduleItem ?? GetScheduleItemForDate(rateDate);
-			
+
 				decimal dailyInterestRate = InterestRateForDate(rateDate, item);	//	daily interest  dr' 
 
 				// BalanceBasedInterestCalculation true used from CreateScheduleMethod
@@ -388,7 +387,7 @@
 
 				//Log.Info("InterestBtwnEventsaaa: --------------------rateDate: {0:d} interest: {1:F4} currentOpenPrincipal: {2:C2}, i={3}, dr={4:F6}", rateDate, interest, currentOpenPrincipal, i, interestForPeriod);
 			}
-		
+
 			Log.Debug("InterestBtwnEvents: start={0:s}, currentEvent={1:s}, days={2}, interestForPeriod={3:F4}, open principal/balance={4:F6}", start.Date, currentEvent.EventTime.Date, daysDiff, interestForPeriod, principalBase);
 
 			return decimal.Round(interestForPeriod, this.decimalAccurancy);
@@ -459,13 +458,12 @@
 
 					// on this point principal paid by the payment, should be removed from currently open principal, i.e. "ha-kesef shakhaf etzlenu"
 					paymentEvents.Add(item: new LoanEvent(new DateTime(p.PaymentTime.Year, p.PaymentTime.Month, p.PaymentTime.Day), payment: p, priority: 0, chargeBackPayment: true, chargeBackPaymentRecorded: true));
-					
+
 					DateTime chargeBackTime = (DateTime)p.DeletionTime;
 
 					// on this point principal paid by the payment, should be added to the currently open principal
 					paymentEvents.Add(item: new LoanEvent(new DateTime(chargeBackTime.Year, chargeBackTime.Month, chargeBackTime.Day), payment: p, priority: 0, chargeBackPayment: true, chargeBackPaymentRecorded: false));
-				}
-				else
+				} else
 					paymentEvents.Add(new LoanEvent(new DateTime(p.PaymentTime.Year, p.PaymentTime.Month, p.PaymentTime.Day), p));
 			}
 
@@ -517,7 +515,7 @@
 				e.EarnedInterestForPeriod = InterestBtwnEvents(e);
 				currentEarnedInterest += e.EarnedInterestForPeriod;
 
-				Log.Debug("HandleEvents: event: {0} lastEvent: {1}, EarnedInterestForPeriod={2}", e, this.lastEvent, e.EarnedInterestForPeriod);
+				Log.Debug("HandleEvents: {0} EarnedInterestForPeriod={1} OpenPrincipal={2}", e, e.EarnedInterestForPeriod, currentOpenPrincipal);
 
 				this.lastEvent = e;
 
@@ -565,6 +563,9 @@
 					Log.Debug("Unknown event type: {0}", e);
 					break;
 				}
+
+				Log.Debug("------------------------OpenPrincipal: {0}", currentOpenPrincipal);
+
 			}
 
 			// finalize schedules statuses/AmountDue after processing of all events (mainly payments)
@@ -613,28 +614,33 @@
 		/// <param name="payment"></param>
 		/// <exception cref="ArgumentNullException"><paramref /> or <paramref /> is null.</exception>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[ExcludeFromToString]
 		internal void ProcessPayment(NL_Payments payment) {
 
 			// money that can be distributed to pay loan
 			decimal assignAmount = payment.Amount - payment.FeePayments.Sum(p => p.Amount) - payment.SchedulePayments.Sum(p => p.InterestPaid) - payment.SchedulePayments.Sum(p => p.PrincipalPaid);
-
+			if (assignAmount <= 0)
+				return;
 			// 1. pay fees
 
 			// all unpaid late fees (not setup|servicing|arrangement), not related to calculation date
 			assignAmount = PayFees(this.lateFeesList, payment, assignAmount);
+			if (assignAmount <= 0)
+				return;
 
 			// unpaid servicing|arrangement untill LastEventDate including
 			var distributedfeesUntillThisEvent = this.distributedFeesList.Where(f => f.AssignTime <= payment.PaymentTime);
 
 			assignAmount = PayFees(distributedfeesUntillThisEvent.ToList(), payment, assignAmount);
-
+			if (assignAmount <= 0)
+				return;
 			//Log.Debug("ProcessPayment: payment balance after PayFees = {0}", assignAmount);
 
 			// 2. pay interest & principal
-			assignAmount = PaySchedules(payment, assignAmount);
+			PaySchedules(payment, assignAmount);
 
-			Log.Debug("ProcessPayment: payment balance after PaySchedules = {0}", assignAmount);
+			//Log.Debug("ProcessPayment: payment balance after PaySchedules = {0}", assignAmount);
 		}
 
 		/// <summary>
@@ -660,18 +666,13 @@
 			// Record schedules payments
 
 			// find unpaid and partial paid schedules
-			foreach (NL_LoanSchedules s in this.schedule) { 
-
-				decimal pPaid = 0;
-				WorkingModel.Loan.Payments.ForEach(p => pPaid += p.SchedulePayments.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.PrincipalPaid));
-				if (pPaid == s.Principal)
-					continue;
+			foreach (NL_LoanSchedules s in this.schedule) {
 
 				if (assignAmount <= 0) {
 					//Log.Debug("PaySchedules: amount assigned completely");
 					return 0;
 				}
-
+				
 				//Log.Debug("PaySchedules: currentEarnedInterest: {0}, currentPaidInterest: {1},  assignAmount: {2}, ScheduleToPay\n{3}{4}",currentEarnedInterest, currentPaidInterest, assignAmount, AStringable.PrintHeadersLine(typeof(NL_LoanSchedules)), s.ToStringAsTable());
 
 				decimal iAmount = decimal.Round(Math.Min(assignAmount, (currentEarnedInterest - currentPaidInterest)), this.decimalAccurancy);
@@ -681,6 +682,10 @@
 				decimal pPaidAmount = 0;
 				foreach (var p in WorkingModel.Loan.Payments.Where(p => p.PaymentStatusID == (int)NLPaymentStatuses.Active))
 					pPaidAmount += p.SchedulePayments.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
+
+				//schedule (principal) paid
+				if (s.Principal == pPaidAmount)
+					continue;
 
 				// balance of principal p'
 				decimal pAmount = decimal.Round(Math.Min(assignAmount, (s.Principal - pPaidAmount)), this.decimalAccurancy);
@@ -751,38 +756,47 @@
 				decimal fPaid = 0m;
 				foreach (var p in WorkingModel.Loan.Payments.Where(p => p.PaymentStatusID == (int)NLPaymentStatuses.Active))
 					fPaid += p.FeePayments.Where(fp => fp.LoanFeeID == f.LoanFeeID).Sum(fp => fp.Amount);
-
+				
 				decimal fBalance = decimal.Round((f.Amount - fPaid), this.decimalAccurancy);
+
+				if (fBalance == 0) {
+					Log.Debug("FeeID: {0} paid", f.LoanFeeID);
+					continue;
+				}
 
 				// fee disabled before the payment occured, i.e. the payment couldnt to pay the fee
 				if (f.DisabledTime != null && payment.PaymentTime > f.DisabledTime) {
 					Log.Debug("Trying to pay disabled fee: {0}\n{1} with payment: {2}\n{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_Payments)), payment.ToStringAsTable());
-					return assignAmount;
+					continue;
+				}
+
+				// fee's assign date is later then payment's date
+				if (f.AssignTime.Date > payment.PaymentTime.Date) {
+					Log.Debug("Tried to pay fee: {0}\n{1} with payment: {2}\n{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_Payments)), payment.ToStringAsTable());
+					continue;
 				}
 
 				// fees not paid completely
-				if (fBalance > 0) {
 
-					decimal fAmount = decimal.Round(Math.Min(assignAmount, fBalance), this.decimalAccurancy);
+				decimal fAmount = decimal.Round(Math.Min(assignAmount, fBalance), this.decimalAccurancy);
 
-					NL_LoanFeePayments fpayment = new NL_LoanFeePayments {
-						Amount = fAmount,
-						LoanFeeID = f.LoanFeeID,
-						LoanFeePaymentID = payment.PaymentID,
-						PaymentID = payment.PaymentID,
-						NewEntry = true
-					};
+				NL_LoanFeePayments fpayment = new NL_LoanFeePayments {
+					Amount = fAmount,
+					LoanFeeID = f.LoanFeeID,
+					LoanFeePaymentID = payment.PaymentID,
+					PaymentID = payment.PaymentID,
+					NewEntry = true
+				};
 
-					payment.FeePayments.Add(fpayment);
+				payment.FeePayments.Add(fpayment);
 
-					// decrease paid amount from available payment amount
-					assignAmount -= fAmount;
+				// decrease paid amount from available payment amount
+				assignAmount -= fAmount;
 
-					//	cumulate fees paid on the payment to currentPaidFees
-					currentPaidFees += fAmount;
+				//	cumulate fees paid on the payment to currentPaidFees
+				currentPaidFees += fAmount;
 
-					//Log.Debug("PayFees: for fee\n {0}{1} feePayment recorded\n {2}{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_LoanFeePayments)), fpayment.ToStringAsTable());
-				}
+				//Log.Debug("PayFees: for fee\n {0}{1} feePayment recorded\n {2}{3}", AStringable.PrintHeadersLine(typeof(NL_LoanFees)), f.ToStringAsTable(), AStringable.PrintHeadersLine(typeof(NL_LoanFeePayments)), fpayment.ToStringAsTable());
 			}
 
 			return assignAmount;
