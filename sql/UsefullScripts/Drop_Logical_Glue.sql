@@ -4,6 +4,30 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('LogicalGlueSaveWarning') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveWarning
+GO
+
+IF OBJECT_ID('LogicalGlueSaveOutputRatio') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveOutputRatio
+GO
+
+IF OBJECT_ID('LogicalGlueSaveMissingColumn') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveMissingColumn
+GO
+
+IF OBJECT_ID('LogicalGlueSaveModelOutput') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveModelOutput
+GO
+
+IF OBJECT_ID('LogicalGlueSaveEncodingFailure') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveEncodingFailure
+GO
+
+IF OBJECT_ID('LogicalGlueSaveResponse') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveResponse
+GO
+
 IF OBJECT_ID('LogicalGlueSaveRawResponse') IS NOT NULL
 	DROP PROCEDURE LogicalGlueSaveRawResponse
 GO

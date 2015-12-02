@@ -20,9 +20,20 @@
 			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.EncodingFailure>();
 		} // CreateEncodingFailure
 
-		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.MissingColumn>();
-		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.OutputRatio>();
-		// CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.Warning>();
+		[Test]
+		public void CreateMissingColumn() {
+			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.MissingColumn>();
+		} // CreateMissingColumn
+
+		[Test]
+		public void CreateOutputRatio() {
+			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.OutputRatio>();
+		} // CreateOutputRatio
+
+		[Test]
+		public void CreateWarning() {
+			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.Warning>();
+		} // CreateWarning
 
 		private void CreateSp<T>() where T: class {
 			Console.WriteLine("{0}", CodeToSql.GetCreateSp<T>());

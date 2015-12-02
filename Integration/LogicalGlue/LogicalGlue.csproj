@@ -108,6 +108,9 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveWarning.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveOutputRatio.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveMissingColumn.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveEncodingFailure.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveRawResponse.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveModelOutput.cs" />

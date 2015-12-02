@@ -7,9 +7,13 @@
 		[PK(true)]
 		public long ID { get; set; }
 
+		[Length(LengthType.MAX)]
 		public string Value { get; set; }
+		[Length(255)]
 		public string FeatureName { get; set; }
+		[Length(255)]
 		public string MinValue { get; set; }
+		[Length(255)]
 		public string MaxValue { get; set; }
 	} // class Warning
 } // namespace

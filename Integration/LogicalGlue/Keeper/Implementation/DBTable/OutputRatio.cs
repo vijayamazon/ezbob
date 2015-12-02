@@ -7,6 +7,7 @@
 		[PK(true)]
 		public long ID { get; set; }
 
+		[Length(255)]
 		public string OutputClass { get; set; }
 		public decimal Score { get; set; }
 	} // class OutputRatio
