@@ -74,6 +74,22 @@
 					view: new EzBob.Underwriter.ManageInvestorView({ el: $('#manage-investor-view'), }),
 					isRendered: false,
 				},
+
+				accountingInvestor: {
+					view: new EzBob.Underwriter.AccountingInvestorView({ el: $('#accounting-investor-view'), }),
+					isRendered: false,
+				},
+
+				portfolioInvestor: {
+					view: new EzBob.Underwriter.PortfolioInvestorView({ el: $('#portfolio-investor-view'), }),
+					isRendered: false,
+				},
+
+				statisticsInvestor: {
+					view: new EzBob.Underwriter.StatisticsInvestorView({ el: $('#statistics-investor-view'), }),
+					isRendered: false,
+				},
+				
 			}; // views
 		}, // initialize
 
@@ -96,6 +112,9 @@
 			'broker/:id/:section/': 'broker',
 			'addInvestor': 'addInvestor',
 			'manageInvestor': 'manageInvestors',
+			'accountingInvestor': 'accountingInvestor',
+			'portfolioInvestor': 'portfolioInvestor',
+			'statisticsInvestor': 'statisticsInvestor',
 			'manageInvestor/:id': 'manageInvestor',
 			'manageInvestor/:id/': 'manageInvestor',
 			'*z': 'customers',
@@ -184,6 +203,18 @@
 
 		manageInvestors: function () {
 			this.customers('investors');
+		},
+
+		accountingInvestor: function() {
+			this.handleRoute('accountingInvestor');
+		},
+
+		portfolioInvestor: function() {
+			this.handleRoute('portfolioInvestor');
+		},
+
+		statisticsInvestor: function() {
+			this.handleRoute('statisticsInvestor');
 		},
 
 		hideAll: function() {

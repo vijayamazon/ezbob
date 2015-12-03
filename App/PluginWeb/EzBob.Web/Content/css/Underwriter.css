@@ -2392,6 +2392,9 @@ input[type="text"].err-field-red {
 	margin-bottom: 0;
 }
 
+#liInvestors span.create-new-investor {
+	padding-left: 10px;
+}
 #MainStrategyIsInProgress {
 	font-weight: bold;
 	font-size: 90%;

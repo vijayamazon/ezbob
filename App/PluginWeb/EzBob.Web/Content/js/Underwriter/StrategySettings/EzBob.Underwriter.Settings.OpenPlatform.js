@@ -2,7 +2,7 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.Settings.OpenPlatformModel = Backbone.Model.extend({
-	url: window.gRootPath + "Underwriter/StrategySettings/OpenPlatform"
+	url: window.gRootPath + "Underwriter/StrategySettings/SettingsOpenPlatform"
 });
 
 EzBob.Underwriter.Settings.OpenPlatformView = Backbone.Marionette.ItemView.extend({
@@ -10,7 +10,7 @@ EzBob.Underwriter.Settings.OpenPlatformView = Backbone.Marionette.ItemView.exten
 	initialize: function(options) {
 		this.modelBinder = new Backbone.ModelBinder();
 		this.model.on("reset change update", this.render, this);
-		/*this.update();*/
+		this.update();
 		return this;
 	},
 	bindings: {
@@ -23,6 +23,13 @@ EzBob.Underwriter.Settings.OpenPlatformView = Backbone.Marionette.ItemView.exten
 
 	onRender: function() {
 
+	},
+
+	show: function(type) {
+		this.$el.show();
+	},
+	hide: function() {
+		this.$el.hide();
 	},
 
 	update: function() {

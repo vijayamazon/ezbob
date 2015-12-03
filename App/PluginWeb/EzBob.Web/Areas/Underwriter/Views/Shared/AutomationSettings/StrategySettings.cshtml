@@ -17,6 +17,8 @@
                         <li><a href="#eu-loan-monthly-interest-settings" data-toggle="tab">EU Loan Monthly Interest</a></li>
                         <li><a href="#default-rate-company-settings" data-toggle="tab">Default Rate Company</a></li>
                         <li><a href="#default-rate-customer-settings" data-toggle="tab">Default Rate Customer</a></li>
+						<li><a href="#product-settings" data-toggle="tab">Product</a></li>
+						<li><a href="#open-platform-settings" data-toggle="tab">Open Platform</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="general-settings"></div>
@@ -29,9 +31,11 @@
                         <div class="tab-pane" id="eu-loan-monthly-interest-settings"></div>
                         <div class="tab-pane" id="default-rate-company-settings"></div>
                         <div class="tab-pane" id="default-rate-customer-settings"></div>
+						<div class="tab-pane" id="product-settings"></div>
+						<div class="tab-pane" id="open-platform-settings"></div>
                     </div>
                 </div>
-    </div>
+			</div>
         </div>
     </div>
     
@@ -53,3 +57,5 @@
 @{ Html.RenderPartial("AutomationSettings/_CampaignSettings"); }
 @{ Html.RenderPartial("AutomationSettings/ConfigTableSettings"); }
 @{ Html.RenderPartial("AutomationSettings/PricingModelSettings"); }
+@{ Html.RenderPartial("AutomationSettings/ProductSettings"); }
+@{ Html.RenderPartial("AutomationSettings/OpenPlatformSettings"); }

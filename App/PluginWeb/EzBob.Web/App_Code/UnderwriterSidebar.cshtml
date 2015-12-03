@@ -88,6 +88,7 @@
                 <li><a href="#pending-grid" data-toggle="tab" title="Pending"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
                 <li><a href="#signature-grid" data-toggle="tab" title="Waiting for signature"><i class="fa fa-pencil-square-o"></i><span>Signature(<span id="signature-count"></span>)</span></a></li>
                 <li><a href="#approved-grid" data-toggle="tab" title="Approved"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
+				<li><a href="#pendingInvestor-grid" data-toggle="tab" title="Pending Investor"><i class="fa fa-hourglass-half"></i><span>Pending investor</span></a></li>
                 <li><a href="#rejected-grid" data-toggle="tab" title="Rejected"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
                 <li><a href="#loans-grid" data-toggle="tab" title="Loans"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
                 <li><a href="#sales-grid" data-toggle="tab" title="Sales"><i class="fa fa-phone"></i><span>Sales</span></a></li>
@@ -117,7 +118,7 @@
 
 				<li id="liInvestors" class="dropdown">
 					<a href="#" class="dropdown-toggle" title="Investor">
-						<i class="fa fa-file-text"></i><span>&nbsp;Investor</span>
+						<i class="fa fa-money"></i><span>&nbsp;Investors</span>
 						<b class="arrow fa fa-angle-right"></b>
 					</a>
 					<ul class="submenu">
@@ -191,8 +192,18 @@
 }
 
 @helper InvestorMenu(WebViewPage page) {
-	<li><a href="Customers#addInvestor" title="Add investor"><i class="fa fa-file-text-o"></i><span>&nbsp;Add investor</span></a></li>
-	<li><a href="Customers#manageInvestor" title="Manage investor"><i class="fa fa-file-text-o"></i><span>&nbsp;Manage investor</span></a></li>
+	<li><a href="Customers#addInvestor" title="Create new">
+			<i class="fa-stack">
+				<i class="fa fa-file-o fa-stack-1x"></i>
+				<i class="fa fa-plus fa-stack-1x" style="font-size: 10px"></i>
+			</i>
+			<span class="create-new-investor">&nbsp;Create new</span>
+		</a>
+	</li>
+	<li><a href="Customers#manageInvestor" title="Manage config"><i class="fa fa-cog"></i><span>&nbsp;Manage config</span></a></li>
+	<li><a href="Customers#accountingInvestor" title="Accounting"><i class="fa fa-book"></i><span>&nbsp;Accounting</span></a></li>
+	<li><a href="Customers#portfolioInvestor" title="Portfolio"><i class="fa fa-folder-open-o"></i><span>&nbsp;Portfolio</span></a></li>
+	<li><a href="Customers#statisticsInvestor" title="Statistics"><i class="fa fa-bar-chart"></i><span>&nbsp;Statistics</span></a></li>
 }
 
 @helper SubMenu(WebViewPage page)

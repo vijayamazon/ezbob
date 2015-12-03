@@ -410,6 +410,8 @@
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Campaign.js")
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.ConfigTables.js")
 				.Add("~/Content/js/underwriter/StrategySettings/Ezbob.underwriter.Settings.PricingModel.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Product.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.OpenPlatform.js")
 
 				//Customer grid
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
@@ -508,7 +510,9 @@
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorDetailsView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorContactView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorBankView.js")
-
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.accountingInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.portfolioInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.statisticsInvestorView.js")
 				.MvcRender("~/Content/js/min/underwriter_#.js");
 		} // RenderUnderwriterJs
 

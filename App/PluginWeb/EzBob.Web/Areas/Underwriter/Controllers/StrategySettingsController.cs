@@ -195,6 +195,28 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
+		public JsonResult SettingsProduct() {
+			string firstProperty;
+			var sc = new {
+				firstProperty = ""
+			};
+			return Json(sc, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		public JsonResult SettingsOpenPlatform() {
+			string firstProperty;
+			var sc = new {
+				firstProperty = ""
+			};
+			return Json(sc, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
 		public JsonResult AutomationGeneral()
 		{
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
