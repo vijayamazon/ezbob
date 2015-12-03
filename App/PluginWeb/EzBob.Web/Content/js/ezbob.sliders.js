@@ -5,7 +5,7 @@ EzBob.SlidersModel = Backbone.Model.extend({
 	defaults: {
 		'Amount': 20000,
 		'Term': 15,
-		'InterestRate' : 0.02
+		'InterestRate' : 0.0175
 	},
 	initialize: function(options){
 		if (options.Amount > 0) {
