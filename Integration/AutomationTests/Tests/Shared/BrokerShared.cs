@@ -130,8 +130,12 @@
                 leadLastName.SendKeys(lName);
             }
 
-            IWebElement leadMail = this._Driver.FindElement(By.Id("LeadEmail"));
-            leadMail.SendKeys(leadEmail);
+            lock (this.Locker) {
+                IWebElement leadMail = this._Driver.FindElement(By.Id("LeadEmail"));
+                leadMail.Click();
+                leadMail.SendKeys(leadEmail);
+            }
+
         }
 
         public void BrokerAddBankAccount(string accountNum,
