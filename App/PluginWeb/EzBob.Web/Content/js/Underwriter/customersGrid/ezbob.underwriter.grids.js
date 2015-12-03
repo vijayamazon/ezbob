@@ -60,6 +60,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				});
 			} // if has id
 
+
 			if (oData.IsWasLate)
 				$(oTR).addClass("table-flag-red");
 
@@ -93,6 +94,15 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				action: 'UwGridApproved',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale'
 			}), // approved
+
+
+			pendingInvestor: new GridProperties({
+				icon: 'hourglass-half',
+				action: 'UwGridPendingInvestor',
+				columns: '#Id,Name,Grade,ApplicantScore,$ApprovedAmount,!Term,*RequestApprovedAt,&TimeLimitUntilAutoreject'/*,btn,btn,ChooseInvestor,btn,btn'*/,
+			}), // pendingInvestor
+
+
 			loans: new GridProperties({
 				icon: 'gbp',
 				action: 'UwGridLoans',

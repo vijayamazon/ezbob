@@ -394,6 +394,7 @@
 	} // GridBroker
 
 	internal class GridInvestor : AGridRow {
+	
 		public override string RowIDFieldName() {
 			return "InvestorID";
 		} // RowIDFieldName
@@ -408,4 +409,24 @@
 			InvestorID = nRowID;
 		} // Init
 	} // GridInvestor
+
+	internal class GridPendingInvestorRow : AGridRow {
+		public override string RowIDFieldName() {
+			return "CustomerID";
+		} // RowIDFieldName
+
+		public virtual long Id { get; set; }
+		public virtual string Name { get; set; }
+		public virtual string Grade { get; set; }
+		public virtual string ApplicantScore { get; set; }
+		public virtual decimal ApprovedAmount { get; set; }
+		public virtual string Term { get; set; }
+		public virtual DateTime RequestApprovedAt { get; set; }
+		public virtual string TimeLimitUntilAutoreject { get; set; }
+
+		public override void Init(long nRowID, SafeReader oRow) {
+			oRow.Fill(this);
+			Id = nRowID;
+		} // Init
+	} // GridPendingInvestor
 } // namespace

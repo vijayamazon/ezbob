@@ -101,6 +101,9 @@
 			case GridActions.UwGridApproved:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridApprovedRow());
 
+			case GridActions.UwGridPendingInvestor:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridPendingInvestorRow());
+
 			case GridActions.UwGridCollection:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridCollectionRow());
 
@@ -155,6 +158,7 @@
 		) {
 			TimeCounter tc = new TimeCounter("LoadGrid building time for grid " + nSpName);
 			var oRes = new SortedDictionary<long, AGridRow>();
+			
 
 			var args = new List<QueryParameter> {
 				new QueryParameter("@WithTest", bIncludeTestCustomers),
@@ -168,6 +172,8 @@
 
 			if (oMoreSpArgs != null)
 				args.AddRange(oMoreSpArgs);
+
+
 
 			using (tc.AddStep("retrieving from db and processing")) {
 				this.db.ForEachRowSafe(
@@ -216,6 +222,7 @@
 			UwGridSignature,
 			UwGridAll,
 			UwGridApproved,
+			UwGridPendingInvestor,
 			UwGridCollection,
 			UwGridEscalated,
 			UwGridLate,

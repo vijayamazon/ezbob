@@ -1042,7 +1042,7 @@ EzBob.formatDateHumanFull = function(date) {
 	return moment.utc(date).format("MMM D YYYY");
 };
 
-EzBob.formatDateHumanFullUK = function(date) {
+EzBob.formatDateHumanFullSuffix = function(date) {
 	if (!date)
 		return '';
 
@@ -1080,8 +1080,16 @@ EzBob.formatDateHumanFullUK = function(date) {
 		break;
 	} // switch
 
-	return dayOfMonth + suffix + normalDate.format(' MMM YYYY');
-}; // EzBob.formatDateHumanFullUK
+	return dayOfMonth + suffix;
+}; // EzBob.formatDateHumanFulSuffix
+
+EzBob.formatDateHumanFullUK = function(date) {
+	return EzBob.formatDateHumanFullSuffix(date) + moment.utc(date).format(' MMM YYYY');
+}
+
+EzBob.formatDateTimeDelimitedUK = function(date) {
+	return EzBob.formatDateHumanFullSuffix(date) + moment.utc(date).format(' MMM | HH:mm');
+}
 
 EzBob.formatDateShortCard = function(date) {
 	if (!date) return "";
@@ -1118,6 +1126,30 @@ EzBob.formatTimeSpan = function(val) {
 	if (hours > 1) return hours + " hours";
 
 	return "less than hour";
+};
+
+EzBob.formatTimeFromNow = function(val) {
+	if (!val) return "";
+
+	var registered = moment.utc(val, 'DD/MM/YYYY HH:mm:ss');
+
+	if (!registered.isValid()) {
+		console.log.apply(console, 'Invalid UW decision date');
+		return "";
+	}
+
+	registered = registered.add(1, 'Day');
+
+	var hours = registered.diff(moment().utc(), 'hours');
+	var minutes = registered.diff(moment().utc(), 'minutes');
+	
+	minutes = minutes - hours * 60;
+	return (hours > 9 ? "" : "0") + hours + ":" + (minutes > 9 ? "" : "0") + minutes;
+};
+
+EzBob.formatMonths = function(num) {
+	if (!num) return "";
+	return num + " month" + (num % 10 === 1 ? "" : "s");
 };
 
 EzBob.isDarkColor = function(c) {
