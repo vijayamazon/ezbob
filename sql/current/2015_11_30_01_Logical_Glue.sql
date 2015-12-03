@@ -102,6 +102,40 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('LogicalGlueTimeoutSources') IS NULL
+BEGIN
+	CREATE TABLE LogicalGlueTimeoutSources (
+		TimeoutSourceID BIGINT NOT NULL,
+		TimeoutSource NVARCHAR(255) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_LogicalGlueTimeoutSources PRIMARY KEY (TimeoutSourceID),
+		CONSTRAINT UC_LogicalGlueTimeoutSources UNIQUE (TimeoutSource),
+		CONSTRAINT CHK_LogicalGlueTimeoutSources CHECK (LTRIM(RTRIM(TimeoutSource)) != '')
+	)
+
+	INSERT INTO LogicalGlueTimeoutSources (TimeoutSourceID, TimeoutSource) VALUES
+		(1, 'Equifax system'),
+		(2, 'Logical Glue Inference API')
+END
+GO
+
+IF OBJECT_ID('LogicalGlueEtlCodes') IS NULL
+BEGIN
+	CREATE TABLE LogicalGlueEtlCodes (
+		EtlCodeID BIGINT NOT NULL,
+		EtlCode NVARCHAR(255) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_LogicalGlueEtlCodes PRIMARY KEY (EtlCodeID),
+		CONSTRAINT UC_LogicalGlueEtlCodes UNIQUE (EtlCode),
+		CONSTRAINT CHK_LogicalGlueEtlCodes CHECK (LTRIM(RTRIM(EtlCode)) != '')
+	)
+
+	INSERT INTO LogicalGlueEtlCodes (EtlCodeID, EtlCode) VALUES
+		(1, 'Success'),
+		(2, 'Hard reject')
+END
+GO
+
 IF OBJECT_ID('LogicalGlueResponses') IS NULL
 BEGIN
 	CREATE TABLE LogicalGlueResponses (
@@ -109,12 +143,30 @@ BEGIN
 		ServiceLogID BIGINT NOT NULL,
 		ReceivedTime DATETIME NOT NULL,
 		HttpStatus INT NOT NULL,
+		TimeoutSourceID BIGINT NULL,
+		ErrorMessage NVARCHAR(MAX) NULL,
 		BucketID BIGINT NULL,
 		HasEquifaxData BIT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueResponses PRIMARY KEY (ResponseID),
 		CONSTRAINT FK_LogicalGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
-		CONSTRAINT FK_LogicalGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID)
+		CONSTRAINT FK_LogicalGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID),
+		CONSTRAINT FK_LogicalGlueResponses_TimeoutSource FOREIGN KEY (TimeoutSourceID) REFERENCES LogicalGlueTimeoutSources (TimeoutSourceID)
+	)
+END
+GO
+
+IF OBJECT_ID('LogicalGlueEtlData') IS NULL
+BEGIN
+	CREATE TABLE LogicalGlueEtlData (
+		EtlDataID BIGINT IDENTITY(1, 1) NOT NULL,
+		ResponseID BIGINT NOT NULL,
+		EtlCodeID BIGINT NULL,
+		Message NVARCHAR(MAX) NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_LogicalGlueEtlData PRIMARY KEY (EtlDataID),
+		CONSTRAINT FK_LogicalGlueEtlData_Response FOREIGN KEY (ResponseID) REFERENCES LogicalGlueResponses (ResponseID),
+		CONSTRAINT FK_LogicalGlueEtlData_Code FOREIGN KEY (EtlCodeID) REFERENCES LogicalGlueEtlCodes (EtlCodeID)
 	)
 END
 GO

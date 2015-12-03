@@ -4,6 +4,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('LogicalGlueSaveEtlData') IS NOT NULL
+	DROP PROCEDURE LogicalGlueSaveEtlData
+GO
+
 IF OBJECT_ID('LogicalGlueSaveWarning') IS NOT NULL
 	DROP PROCEDURE LogicalGlueSaveWarning
 GO
@@ -84,8 +88,20 @@ IF OBJECT_ID('LogicalGlueModelOutputs') IS NOT NULL
 	DROP TABLE LogicalGlueModelOutputs
 GO
 
+IF OBJECT_ID('LogicalGlueEtlData') IS NOT NULL
+	DROP TABLE LogicalGlueEtlData
+GO
+
 IF OBJECT_ID('LogicalGlueResponses') IS NOT NULL
 	DROP TABLE LogicalGlueResponses
+GO
+
+IF OBJECT_ID('LogicalGlueEtlCodes') IS NOT NULL
+	DROP TABLE LogicalGlueEtlCodes
+GO
+
+IF OBJECT_ID('LogicalGlueTimeoutSources') IS NOT NULL
+	DROP TABLE LogicalGlueTimeoutSources
 GO
 
 IF OBJECT_ID('LogicalGlueBuckets') IS NOT NULL

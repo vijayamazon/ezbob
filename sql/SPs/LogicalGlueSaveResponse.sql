@@ -13,6 +13,8 @@ CREATE TYPE LogicalGlueResponseList AS TABLE (
 	[ServiceLogID] BIGINT NOT NULL,
 	[ReceivedTime] DATETIME NOT NULL,
 	[HttpStatus] INT NOT NULL,
+	[TimeoutSourceID] BIGINT NULL,
+	[ErrorMessage] NVARCHAR(MAX) NULL,
 	[BucketID] BIGINT NULL,
 	[HasEquifaxData] BIT NOT NULL
 )
@@ -28,12 +30,16 @@ BEGIN
 		[ServiceLogID],
 		[ReceivedTime],
 		[HttpStatus],
+		[TimeoutSourceID],
+		[ErrorMessage],
 		[BucketID],
 		[HasEquifaxData]
 	) SELECT
 		[ServiceLogID],
 		[ReceivedTime],
 		[HttpStatus],
+		[TimeoutSourceID],
+		[ErrorMessage],
 		[BucketID],
 		[HasEquifaxData]
 	FROM

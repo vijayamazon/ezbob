@@ -8,29 +8,34 @@
 
 	public class Engine : IEngine {
 		public Engine(IKeeper keeper, IHarvester harvester, ASafeLog log) {
-			this.log = log.Safe();
-			this.now = DateTime.UtcNow;
+			Log = log.Safe();
+			Now = DateTime.UtcNow;
 
-			this.keeper = keeper;
-			this.harvester = harvester;
+			Keeper = keeper;
+			Harvester = harvester;
 
-			if (this.keeper == null)
-				throw new NoConnectionEngineAlert(this.log);
+			if (Keeper == null)
+				throw new NoConnectionEngineAlert(Log);
 
-			if (this.harvester == null)
-				throw new NoHarvesterEngineAlert(this.log);
+			if (Harvester == null)
+				throw new NoHarvesterEngineAlert(Log);
 		} // constructor
+
+		public DateTime Now { get; private set; }
+		public IKeeper Keeper { get; private set; }
+		public IHarvester Harvester { get; private set; }
+		public ASafeLog Log { get; private set; }
 
 		public Inference GetInference(int customerID, GetInferenceMode mode) {
 			switch (mode) {
 			case GetInferenceMode.CacheOnly:
-				return GetInference(customerID, this.now);
+				return GetInference(customerID, Now);
 
 			case GetInferenceMode.DownloadIfOld:
-				Inference cachedInference = GetInference(customerID, this.now);
-				ModuleConfiguration cfg = this.keeper.LoadModuleConfiguration();
+				Inference cachedInference = GetInference(customerID, Now);
+				ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
 
-				if (cachedInference.IsUpToDate(this.now, cfg.CacheAcceptanceDays))
+				if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays))
 					return cachedInference;
 
 				goto case GetInferenceMode.ForceDownload; // !!! fall through !!!
@@ -40,7 +45,7 @@
 
 			default:
 				throw new EngineAlert(
-					this.log,
+					Log,
 					new ArgumentOutOfRangeException("mode"),
 					"Failed to get customer {0} inference at mode {1}.",
 					customerID,
@@ -50,25 +55,20 @@
 		} // GetInference
 
 		public Inference GetInference(int customerID, DateTime time) {
-			return this.keeper.LoadInference(customerID, time);
+			return Keeper.LoadInference(customerID, time);
 		} // GetHistoricalInference
 
 		private Inference DownloadAndSave(int customerID) {
-			InferenceInputPackage inputPkg = this.keeper.LoadInputData(customerID, this.now);
+			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now);
 
 			if (!inputPkg.InferenceInput.IsValid())
-				throw new FailedToLoadInputDataAlert(this.log, customerID, this.now);
+				throw new FailedToLoadInputDataAlert(Log, customerID, Now);
 
-			long requestID = this.keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, inputPkg.InferenceInput);
+			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, inputPkg.InferenceInput);
 
-			Response<Reply> reply = this.harvester.Infer(inputPkg.InferenceInput, this.keeper.LoadHarvesterConfiguration());
+			Response<Reply> reply = Harvester.Infer(inputPkg.InferenceInput, Keeper.LoadHarvesterConfiguration());
 
-			return this.keeper.SaveInference(customerID, requestID, reply);
+			return Keeper.SaveInference(customerID, requestID, reply);
 		} // DownloadAndSave
-
-		private readonly DateTime now;
-		private readonly IKeeper keeper;
-		private readonly IHarvester harvester;
-		private readonly ASafeLog log;
 	} // class Engine
 } // namespace

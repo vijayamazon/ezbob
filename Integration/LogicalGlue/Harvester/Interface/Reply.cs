@@ -8,7 +8,7 @@
 		public HttpStatusCode Status { get; set; }
 
 		[JsonProperty(PropertyName = "timeout", NullValueHandling = NullValueHandling.Ignore)]
-		public TimeoutReasons? Timeout { get; set; }
+		public TimeoutSources? Timeout { get; set; }
 
 		[JsonProperty(PropertyName = "error", NullValueHandling = NullValueHandling.Ignore)]
 		public string Error { get; set; }
@@ -85,5 +85,9 @@
 		public static bool HasEquifaxData(this Reply reply) {
 			return reply.Exists() && !string.IsNullOrWhiteSpace(reply.EquifaxData);
 		} // EquifaxData
+
+		public static bool HasEtl(this Reply reply) {
+			return reply.Exists() && (reply.Etl != null);
+		} // HasEtl
 	} // class ReplyExt
 } // namespace

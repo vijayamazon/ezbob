@@ -68,6 +68,7 @@
     <Compile Include="Keeper\Implementation\ACustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />
     <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
     <Compile Include="Exceptions\Keeper\NoConnectionKeeperAlert.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="Harvester\Interface\ModelOutput.cs" />
     <Compile Include="Harvester\Interface\Reply.cs" />
     <Compile Include="Harvester\Interface\Response.cs" />
-    <Compile Include="Harvester\Interface\TimeoutReasons.cs" />
+    <Compile Include="Harvester\Interface\TimeoutSources.cs" />
     <Compile Include="Harvester\Interface\Warning.cs" />
     <Compile Include="Harvester\Implementation\Harvester.cs" />
     <Compile Include="InjectorStub.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveEtlData.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveWarning.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveOutputRatio.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveMissingColumn.cs" />

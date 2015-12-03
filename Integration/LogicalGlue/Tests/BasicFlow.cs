@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Tests {
 	using ConfigManager;
 	using Ezbob.Database;
+	using Ezbob.Integration.LogicalGlue.Engine.Implementation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
+	using Ezbob.Integration.LogicalGlue.Harvester.Implementation;
 	using Ezbob.Logger;
 	using NUnit.Framework;
 
@@ -24,8 +26,9 @@
 		public void TestBasicFlow() {
 			IEngine engine = InjectorStub.GetTestEngine();
 
-			// TODO: save "session level errors" (that are returned as hard rejects, etc)
-			// TODO: also save ETL objects
+			TestHarvester harvester = (TestHarvester)((Engine)engine).Harvester;
+
+			harvester.ReplyMode = TestHarvester.ReplyModes.BadInferenceRequest;
 
 			Inference inference = engine.GetInference(269, GetInferenceMode.DownloadIfOld);
 

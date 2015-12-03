@@ -6,9 +6,9 @@
 	[JsonConverter(typeof(StringEnumConverter))]
 	public enum EtlCode {
 		[EnumMember(Value = "P")]
-		Success,
+		Success = 1,
 
 		[EnumMember(Value = "R")]
-		HardReject,
+		HardReject = 2,
 	} // enum EtlCode
 } // namespace

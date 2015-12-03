@@ -56,7 +56,7 @@
 				if (this.response.Parsed.HasInference()) {
 					var map = new SortedDictionary<ModelNames, long>();
 
-					new SaveModelOutput(ResponseID, this.response, DB, Log).ForEachRowSafe(sr => {
+					new SaveModelOutput(ResponseID, this.response, DB, Log).ForEachRowSafe(con, sr => {
 						long id = sr["ModelOutputID"];
 						ModelNames name = (ModelNames)(int)(long)sr["ModelID"];
 
@@ -65,20 +65,24 @@
 
 					var saveEf = new SaveEncodingFailure(map, this.response, DB, Log);
 					if (saveEf.HasValidParameters()) // invalid if e.g. no failures
-						saveEf.ExecuteNonQuery();
+						saveEf.ExecuteNonQuery(con);
 
 					var saveMi = new SaveMissingColumn(map, this.response, DB, Log);
 					if (saveMi.HasValidParameters()) // invalid if e.g. no missing columns
-						saveMi.ExecuteNonQuery();
+						saveMi.ExecuteNonQuery(con);
 
 					var saveOr = new SaveOutputRatio(map, this.response, DB, Log);
 					if (saveOr.HasValidParameters()) // invalid if e.g. no output ratio
-						saveOr.ExecuteNonQuery();
+						saveOr.ExecuteNonQuery(con);
 
 					var saveW = new SaveWarning(map, this.response, DB, Log);
 					if (saveW.HasValidParameters()) // invalid if e.g. no output ratio
-						saveW.ExecuteNonQuery();
+						saveW.ExecuteNonQuery(con);
 				} // if
+
+				var saveEtl = new SaveEtlData(ResponseID, this.response, DB, Log);
+				if (saveEtl.HasValidParameters()) // invalid if e.g. no ETL data
+					saveEtl.ExecuteNonQuery(con);
 
 				con.Commit();
 			} catch (Exception e) {

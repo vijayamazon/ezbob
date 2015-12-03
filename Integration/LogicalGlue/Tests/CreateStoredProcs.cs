@@ -35,6 +35,11 @@
 			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.Warning>();
 		} // CreateWarning
 
+		[Test]
+		public void CreateEtlData() {
+			CreateSp<Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.EtlData>();
+		} // CreateEtlData
+
 		private void CreateSp<T>() where T: class {
 			Console.WriteLine("{0}", CodeToSql.GetCreateSp<T>());
 		} // CreateSp

@@ -4,11 +4,11 @@
 	using Newtonsoft.Json.Converters;
 
 	[JsonConverter(typeof(StringEnumConverter))]
-	public enum TimeoutReasons {
+	public enum TimeoutSources {
 		[EnumMember(Value = "E")]
-		Equifax,
+		Equifax = 1,
 
 		[EnumMember(Value = "L")]
-		LogicalGlueInferenceApi,
-	} // enum TimeoutReasons
+		LogicalGlueInferenceApi = 2,
+	} // enum TimeoutSources
 } // namespace

@@ -64,7 +64,7 @@
 
 			TestOneFullReply(new Reply {
 				Status = HttpStatusCode.OK,
-				Timeout = TimeoutReasons.Equifax,
+				Timeout = TimeoutSources.Equifax,
 			});
 		} // TestFullReply
 
