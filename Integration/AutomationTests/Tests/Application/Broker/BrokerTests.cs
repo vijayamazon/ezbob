@@ -65,7 +65,9 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 privacyLink.Click();
 
                 Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, 2));
-                SharedServiceClass.WebAddressContains(Driver, "privacy-and", 40);
+                SharedServiceClass.WebAddressContains(Driver, "privacy-and", 20);
+
+                Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.CssSelector(BrandConfig.GetString("C2037_Privacy_selector"))).Text, BrandConfig.GetString("C2037_Privacy_content"));
 
                 Driver.Close();
                 Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, 1));
