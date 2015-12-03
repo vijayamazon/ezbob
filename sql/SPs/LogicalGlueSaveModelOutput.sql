@@ -17,7 +17,8 @@ CREATE TYPE LogicalGlueModelOutputList AS TABLE (
 	[Score] DECIMAL(18, 6) NULL,
 	[Status] NVARCHAR(255) NULL,
 	[Exception] NVARCHAR(MAX) NULL,
-	[ErrorCode] NVARCHAR(MAX) NULL
+	[ErrorCode] NVARCHAR(MAX) NULL,
+	[Uuid] UNIQUEIDENTIFIER NULL
 )
 GO
 
@@ -35,7 +36,8 @@ BEGIN
 		[Score],
 		[Status],
 		[Exception],
-		[ErrorCode]
+		[ErrorCode],
+		[Uuid]
 	)
 	OUTPUT
 		INSERTED.[ModelOutputID],
@@ -48,7 +50,9 @@ BEGIN
 		[Score],
 		[Status],
 		[Exception],
-		[ErrorCode]
-	FROM @Tbl
+		[ErrorCode],
+		[Uuid]
+	FROM
+		@Tbl
 END
 GO

@@ -36,6 +36,9 @@
 			ModelNames name,
 			Dictionary<string, decimal> lst
 		) {
+			if (lst == null)
+				yield break;
+
 			foreach (var v in lst) {
 				yield return new DbOutputRatio {
 					ModelOutputID = map[name],

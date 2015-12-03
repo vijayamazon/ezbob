@@ -10,9 +10,9 @@ IF TYPE_ID('LogicalGlueOutputRatioList') IS NOT NULL
 GO
 
 CREATE TYPE LogicalGlueOutputRatioList AS TABLE (
-	[ModelOutputID] BIGINT NOT NULL,
 	[OutputClass] NVARCHAR(255) NULL,
-	[Score] DECIMAL(18, 6) NOT NULL
+	[Score] DECIMAL(18, 6) NOT NULL,
+	[ModelOutputID] BIGINT NOT NULL
 )
 GO
 

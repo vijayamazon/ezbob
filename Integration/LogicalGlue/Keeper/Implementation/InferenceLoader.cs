@@ -154,7 +154,7 @@
 
 			ModelNames requestType = (ModelNames)dbModel.ModelID;
 
-			this.models[dbModel.ResponseID] = pubModel;
+			this.models[dbModel.ID] = pubModel;
 			Result.ModelOutputs[requestType] = pubModel;
 
 			Log.Debug(
@@ -181,7 +181,7 @@
 				);
 			} else {
 				throw OutOfRangeException(
-					"Inference loader({0}, '{1}'): map output ratio '{2}' should belong to unknown response '{3}'.",
+					"Inference loader({0}, '{1}'): map output ratio '{2}' should belong to unknown model '{3}'.",
 					CustomerID,
 					NowStr,
 					ratio.ID,
@@ -202,15 +202,17 @@
 				});
 
 				Log.Debug(
-					"Inference loader({0}, '{1}'): loaded warning ({2}: {3}).",
+					"Inference loader({0}, '{1}'): loaded warning ({2}: '{3}' should be between '{4}' and '{5}').",
 					CustomerID,
 					NowStr,
 					warning.FeatureName,
-					warning.Value
+					warning.Value,
+					warning.MinValue,
+					warning.MaxValue
 				);
 			} else {
 				throw OutOfRangeException(
-					"Inference loader({0}, '{1}'): warning '{2}' should belong to unknown response '{3}'.",
+					"Inference loader({0}, '{1}'): warning '{2}' should belong to unknown model '{3}'.",
 					CustomerID,
 					NowStr,
 					warning.ID,
@@ -234,15 +236,17 @@
 				);
 
 				Log.Debug(
-					"Inference loader({0}, '{1}'): loaded encoding failure ({2}: {3}).",
+					"Inference loader({0}, '{1}'): loaded encoding failure ('{2}': '{3}'; unenc: '{4}', msg: '{5}').",
 					CustomerID,
 					NowStr,
 					encodingFailure.ColumnName,
-					encodingFailure.Reason
+					encodingFailure.Reason,
+					encodingFailure.UnencodedValue,
+					encodingFailure.Message
 				);
 			} else {
 				throw OutOfRangeException(
-					"Inference loader({0}, '{1}'): encoding failure '{2}' should belong to unknown response '{3}'.",
+					"Inference loader({0}, '{1}'): encoding failure '{2}' should belong to unknown model '{3}'.",
 					CustomerID,
 					NowStr,
 					encodingFailure.ID,
@@ -265,7 +269,7 @@
 				);
 			} else {
 				throw OutOfRangeException(
-					"Inference loader({0}, '{1}'): missing column '{2}' should belong to unknown response '{3}'.",
+					"Inference loader({0}, '{1}'): missing column '{2}' should belong to unknown model '{3}'.",
 					CustomerID,
 					NowStr,
 					column.ID,

@@ -10,12 +10,12 @@ IF TYPE_ID('LogicalGlueEncodingFailureList') IS NOT NULL
 GO
 
 CREATE TYPE LogicalGlueEncodingFailureList AS TABLE (
-	[ModelOutputID] BIGINT NOT NULL,
 	[RowIndex] INT NOT NULL,
 	[ColumnName] NVARCHAR(255) NULL,
 	[UnencodedValue] NVARCHAR(MAX) NULL,
 	[Reason] NVARCHAR(MAX) NULL,
-	[Message] NVARCHAR(MAX) NULL
+	[Message] NVARCHAR(MAX) NULL,
+	[ModelOutputID] BIGINT NOT NULL
 )
 GO
 

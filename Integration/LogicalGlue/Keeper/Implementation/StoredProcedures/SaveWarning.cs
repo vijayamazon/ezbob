@@ -37,6 +37,9 @@
 			ModelNames name,
 			IEnumerable<HarvesterWarning> lst
 		) {
+			if (lst == null)
+				yield break;
+
 			foreach (var v in lst) {
 				yield return new DbWarning {
 					ModelOutputID = map[name],

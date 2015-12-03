@@ -37,6 +37,9 @@
 			ModelNames name,
 			IEnumerable<HarvesterEncodingFailure> lst
 		) {
+			if (lst == null)
+				yield break;
+
 			foreach (var v in lst) {
 				yield return new DbEncodingFailure {
 					ColumnName = v.ColumnName,

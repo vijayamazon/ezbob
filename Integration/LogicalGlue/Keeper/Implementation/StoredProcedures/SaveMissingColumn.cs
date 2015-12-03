@@ -36,6 +36,9 @@
 			ModelNames name,
 			IEnumerable<string> lst
 		) {
+			if (lst == null)
+				yield break;
+
 			foreach (var v in lst) {
 				yield return new DbMissingColumn {
 					ColumnName = v,

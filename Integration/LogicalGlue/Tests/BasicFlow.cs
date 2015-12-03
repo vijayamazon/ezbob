@@ -28,7 +28,7 @@
 
 			TestHarvester harvester = (TestHarvester)((Engine)engine).Harvester;
 
-			harvester.ReplyMode = TestHarvester.ReplyModes.BadInferenceRequest;
+			harvester.ReplyMode = TestHarvester.ReplyModes.Success;
 
 			Inference inference = engine.GetInference(269, GetInferenceMode.DownloadIfOld);
 

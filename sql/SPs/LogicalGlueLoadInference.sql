@@ -56,7 +56,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType = 'Model',
+		RowType = 'ModelOutput',
 		r.ModelOutputID,
 		r.ResponseID,
 		r.ModelID,

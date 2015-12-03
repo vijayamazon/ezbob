@@ -22,6 +22,7 @@
 
 		public enum ReplyModes {
 			Random,
+			Success,
 			BadInferenceRequest,
 			BadEtlRequest,
 			EquifaxTimeout,
@@ -37,6 +38,9 @@
 
 		private string ChooseReply() {
 			switch (ReplyMode) {
+			case ReplyModes.Success:
+				return CreateSuccess();
+
 			case ReplyModes.BadInferenceRequest:
 				return BadInferenceRequest;
 
@@ -55,20 +59,46 @@
 
 			int rnd = new Random().Next(1, 101);
 
-			if (rnd <= 20)
+			if (rnd <= 85)
+				return CreateSuccess();
+
+			if (rnd <= 88)
 				return BadInferenceRequest;
 
-			if (rnd <= 40)
+			if (rnd <= 91)
 				return BadEtlRequest;
 
-			if (rnd <= 60)
+			if (rnd <= 94)
 				return EquifaxTimout;
 
-			if (rnd <= 80)
+			if (rnd <= 97)
 				return LogicalGlueInferenceApiTimout;
 			
 			return HardRejection;
 		} // ChooseReply
+
+		private static string CreateSuccess() {
+			var fl = ModelContent.Replace("__MAP_OUTPUT_RATIOS__", MapOutputRatios);
+			var nn = ModelContent.Replace("__MAP_OUTPUT_RATIOS__", string.Empty);
+
+			return SuccessfulRequest
+				.Replace("__FL_MODEL__", fl)
+				.Replace("__NN_MODEL__", nn);
+		} // CreateSuccess
+
+		private const string SuccessfulRequest = @"{
+	""status"": 200,
+	""etl"": {
+		""code"": ""P"",
+		""message"": ""Successfully processed '__NOW__'""
+	},
+	""equifax"": ""<xml>Equifax data for successful request '__NOW__'.</xml>"",
+	""logicalGlue"": {
+		""FL"": __FL_MODEL__,
+		""NN"": __NN_MODEL__,
+		""bucket"": 1
+	}
+}";
 
 		private const string BadInferenceRequest = @"{
 	""status"": 400,
@@ -76,7 +106,12 @@
 		""code"": ""P"",
 		""message"": ""Successfully processed '__NOW__'""
 	},
-	""equifax"": ""<xml>Equifax data for bad inference request '__NOW__'.</xml>""
+	""equifax"": ""<xml>Equifax data for bad inference request '__NOW__'.</xml>"",
+	""logicalGlue"": {
+		""FL"": __FL_MODEL__,
+		""NN"": __NN_MODEL__,
+		""bucket"": 1
+	}
 }";
 
 		private const string BadEtlRequest = @"{
@@ -103,9 +138,54 @@
 		""code"": ""R"",
 		""message"": ""Hard Rejection Rule Fired: Company is less than 2 years old '__NOW__'""
 	},
-	""equifax"": ""<xml>Equifax data for hard rejection '__NOW__'.</xml>""
+	""equifax"": ""<xml>Equifax data for hard rejection '__NOW__'.</xml>"",
+	""logicalGlue"": {
+		""FL"": __FL_MODEL__,
+		""NN"": __NN_MODEL__,
+		""bucket"": 1
+	}
 }";
 
+		private const string MapOutputRatios = @"""mapOutputRatios"": {
+	""BAD"": 0.5927377710432571,
+	""GOOD"": 0.4072622289567429
+},";
+
+		private const string ModelContent = @"{
+	""score"": 0.5927377710432571,
+	""inferenceResultEncoded"": -2147483446,
+	""inferenceResultDecoded"": ""BAD"",
+	""warnings"": [
+		{ ""featureName"": ""feature"", ""maxValue"": ""100"", ""minValue"": ""0"", ""currentValue"": ""ab"" },
+		{ ""featureName"": ""FEATURE"", ""maxValue"": ""900"", ""minValue"": ""1"", ""currentValue"": ""-1"" }
+	],
+	__MAP_OUTPUT_RATIOS__
+	""status"": ""SUCCESS"",
+	""exception"": ""some exception"",
+	""errorCode"": ""no error code __NOW__"",
+	""missingColumns"": [
+		""missing 0"",
+		""missing 1"",
+		""missing 2""
+	],
+	""encodingFailures"": [
+		{
+			""rowIndex"": 0,
+			""columnName"": ""Bad encoded col __NOW__"",
+			""unencodedValue"": ""a value"",
+			""reason"": ""good reason"",
+			""message"": ""it's bad""
+		},
+		{
+			""rowIndex"": 1,
+			""columnName"": ""Another bad encoded col __NOW__"",
+			""unencodedValue"": ""another value"",
+			""reason"": ""bad reason"",
+			""message"": ""it's really bad""
+		}
+	],
+	""uuid"": ""2626f582-bd52-4d92-95fc-c2ec2ee1b73c""
+}";
 		private readonly ASafeLog log;
 	} // class TestHarvester
 } // namespace

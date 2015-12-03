@@ -10,8 +10,8 @@ IF TYPE_ID('LogicalGlueMissingColumnList') IS NOT NULL
 GO
 
 CREATE TYPE LogicalGlueMissingColumnList AS TABLE (
-	[ModelOutputID] BIGINT NOT NULL,
-	[ColumnName] NVARCHAR(255) NULL
+	[ColumnName] NVARCHAR(255) NULL,
+	[ModelOutputID] BIGINT NOT NULL
 )
 GO
 

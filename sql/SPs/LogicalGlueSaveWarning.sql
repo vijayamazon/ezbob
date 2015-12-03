@@ -10,11 +10,11 @@ IF TYPE_ID('LogicalGlueWarningList') IS NOT NULL
 GO
 
 CREATE TYPE LogicalGlueWarningList AS TABLE (
-	[ModelOutputID] BIGINT NOT NULL,
 	[Value] NVARCHAR(MAX) NULL,
 	[FeatureName] NVARCHAR(255) NULL,
 	[MinValue] NVARCHAR(255) NULL,
-	[MaxValue] NVARCHAR(255) NULL
+	[MaxValue] NVARCHAR(255) NULL,
+	[ModelOutputID] BIGINT NOT NULL
 )
 GO
 
