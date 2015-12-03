@@ -11,6 +11,7 @@
     using TestRailModels.Automation;
     using TestRailModels.TestRail;
 
+    [TestFixture]
     public class WebTestBase {
         protected IWebDriver Driver { get; set; }
         protected ResourceManager EnvironmentConfig { get; set; }
@@ -24,6 +25,13 @@
                 }
                 return isDebugMode != null && (bool)isDebugMode;
             }
+        }
+        [TestFixtureTearDown]
+        public void Dispose() {
+            if (IsDebugMode) 
+                return;
+            foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
+                GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
         }
 
         protected bool ExecuteTest<T>(Func<T> codeToExecute) {
@@ -102,7 +110,7 @@
         public List<AutomationModels.Brand> GetBrands(ulong caseID) {
             if (IsDebugMode) {
                 return new List<AutomationModels.Brand>() {
-                    AutomationModels.Brand.Everline
+                    AutomationModels.Brand.Ezbob
                 };
             }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).Distinct().ToList();
