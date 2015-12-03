@@ -11,6 +11,7 @@ ALTER PROCEDURE [dbo].[NL_SignedOfferForLoan]
 	@Now DATETIME
 AS
 BEGIN 
+
 	-- prevent loan creation in less than 1 minute.
 	DECLARE @LastLoanDate DATETIME;
 
@@ -20,9 +21,10 @@ BEGIN
 	JOIN NL_LoanHistory lh ON lh.LoanID = l.LoanID
 	where v.CustomerID = @CustomerID);
 	
-	IF @LastLoanDate IS NOT NULL AND DATEDIFF(MINUTE, @now, @LastLoanDate) < 1	
-	BEGIN 
-		RETURN 'Loan delay violation' 
+	IF @LastLoanDate IS NOT NULL AND DATEDIFF(SECOND, @LastLoanDate, @now) < 60		
+	BEGIN			
+		select 0 as OfferID, 'Loan delay violation' as Error ;
+		RETURN 
 	END
 
 	IF object_id('#validOffer') IS NOT NULL DROP TABLE #validOffer;
@@ -42,7 +44,8 @@ BEGIN
 
 	IF @LoansCount IS NOT NULL AND @LoansCount >= @NumofAllowedActiveLoans 
 	BEGIN 
-		RETURN 'Max loans limit'
+		select 0 as OfferID, 'Max loans limit' as Error; --from @validOffer 
+		RETURN 
 	END
 
 	-- valid offer
@@ -79,21 +82,24 @@ BEGIN
 	IF ((SELECT IsRepaymentPeriodSelectionAllowed from #validOffer) = 0
 	   AND (SELECT OfferRepaymentCount from #validOffer) <> (SELECT LoanLegalRepaymentPeriod from #validOffer))	 
 	BEGIN 
-		RETURN 'Wrong repayment period'
+		 select 0 as OfferID, 'Wrong repayment period' as Error;
+		 RETURN
 	END
 
 	-- loan period is in the range of max period allowed by loan source
 	IF (select OfferRepaymentCount from  #validOffer) >
 	(select DefaultRepaymentPeriod from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
 	BEGIN 
-		RETURN 'Wrong repayment period'
+		 select 0 as OfferID, 'Wrong repayment period' as Error;
+		 RETURN
 	END
 
 	-- loan interest is in the range of max interest allowed by loan source
 	IF (select MonthlyInterestRate from  #validOffer) >
 	(select MaxInterest from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
 	BEGIN 
-		RETURN 'Wrong interest rate'
+		 select 0 as OfferID, 'Wrong interest rate' as Error;
+		 RETURN
 	END
 	
 	-- available credit for current offer
@@ -106,10 +112,12 @@ BEGIN
 							where l.OfferID = (SELECT OfferID from #validOffer)
 				group by lh.LoanID) x)
 
-	if (select LoanLegalAmount from #validOffer) IS NOT NULL AND @TakenAmount IS NOT NULL
-	
+	IF @TakenAmount IS NOT NULL	
 	BEGIN
 		update #validOffer set AvailableAmount = (select OfferAmount from #validOffer) - @TakenAmount		
+	END	ELSE
+	BEGIN
+		update #validOffer set AvailableAmount  = (select OfferAmount from #validOffer)		
 	END
 
 	SELECT * FROM #validOffer

@@ -56,12 +56,12 @@
 				try {
 					ISession curSession = null;
 
-					if (HttpContext.Current.Items.Contains(CurrentSessionKey))
-						curSession = HttpContext.Current.Items[CurrentSessionKey] as ISession;
+					if (System.Web.HttpContext.Current.Items.Contains(CurrentSessionKey))
+						curSession = System.Web.HttpContext.Current.Items[CurrentSessionKey] as ISession;
 
 					if (curSession == null) {
 						curSession = NHibernateManager.OpenSession();
-						HttpContext.Current.Items[CurrentSessionKey] = curSession;
+						System.Web.HttpContext.Current.Items[CurrentSessionKey] = curSession;
 					} // if
 
 					return curSession;
@@ -74,7 +74,7 @@
 
 		public MvcApplication() {
 			EndRequest += (sender, args) => {
-				var session = HttpContext.Current.Items["current.session"] as ISession;
+				var session = System.Web.HttpContext.Current.Items["current.session"] as ISession;
 
 				if (session != null) {
 					if (session.IsOpen)
@@ -83,7 +83,7 @@
 					CurrentSession.Dispose();
 				} // if
 
-				HttpContext.Current.Items["current.session"] = null;
+				System.Web.HttpContext.Current.Items["current.session"] = null;
 				ThreadContext.Properties.Clear();
 			};
 
@@ -210,7 +210,7 @@
 		} // Log
 
 		private static void ConfigureSquishIt() {
-			if (HttpContext.Current.IsDebuggingEnabled) {
+			if (System.Web.HttpContext.Current.IsDebuggingEnabled) {
 				Bundle.RegisterScriptPreprocessor(new CachingPreprocessor<CoffeeScriptPreprocessor>());
 				Bundle.RegisterScriptPreprocessor(new CachingPreprocessor<LessPreprocessor>());
 			} else {
@@ -220,13 +220,13 @@
 		}
 
 		private static IWorkplaceContext GetContext() {
-			var context = HttpContext.Current.Items["current.context"] as IWorkplaceContext;
+			var context = System.Web.HttpContext.Current.Items["current.context"] as IWorkplaceContext;
 
 			if (context != null)
 				return context;
 
 			context = ObjectFactory.GetInstance<EzBobContext>();
-			HttpContext.Current.Items["current.context"] = context;
+			System.Web.HttpContext.Current.Items["current.context"] = context;
 			return context;
 		}
 

@@ -89,8 +89,8 @@
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(56) {
-				UserID = 357,
+			NL_Model model = new NL_Model(1428) {
+				UserID = 1428,
 				Loan = new NL_Loans()
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
@@ -602,8 +602,8 @@
 
 		[Test]
 		public void CreateSchedule() {
-			DateTime issueDate =  new DateTime(2015, 11, 17);
-			NL_Model model = new NL_Model(351) { UserID = 357, Loan = new NL_Loans() };
+			DateTime issueDate =  new DateTime(2015, 12, 2);
+			NL_Model model = new NL_Model(1428) { UserID = 1428, Loan = new NL_Loans() };
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();

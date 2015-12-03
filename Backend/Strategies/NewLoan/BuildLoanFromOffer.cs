@@ -25,7 +25,7 @@
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1)); // checks if last loan was taken a minute before "now" - ?? to prevent multiple clicking on "create loan" button?
 			ValidateRepaymentPeriodAndInterestRate(cus);
 		*/
-		// TODO check if "credit available" is enough for this loan amount
+		// all validations moved to SP
 
 		public override void Execute() {
 			NL_AddLog(LogType.Info, "Strategy Start", Result, null, null, null);
@@ -36,7 +36,6 @@
 					NL_AddLog(LogType.Info, "Strategy Failed", Result, Result, this.Error, null);
 					return;
 				}
-				// TODO : Remove validations for NL_SignedOfferForLoan to separate SP's and call them from relevant strategies + Refactoring??? -> separate @PaidPrincipal
 
 				OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 					"NL_SignedOfferForLoan",
@@ -44,6 +43,13 @@
 					new QueryParameter("CustomerID", Result.CustomerID),
 					new QueryParameter("@Now", Result.Loan.LastHistory().EventTime)
 				);
+
+			    if (!string.IsNullOrEmpty(dataForLoan.Error)) {
+                    this.Error = string.Format(dataForLoan.Error + " dataForLoan: {0} ", Result); 
+                    NL_AddLog(LogType.Info, "Strategy Failed", Result, Result, this.Error, null);
+                    return;
+			    }
+
 
 				if (dataForLoan == null || dataForLoan.OfferID == 0) {
 					this.Error = NL_ExceptionOfferNotValid.DefaultMessage;

@@ -4,6 +4,7 @@
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web;
     using System.Web.Mvc;
     using DbConstants;
     using Ezbob.Backend.Models;
@@ -189,13 +190,15 @@
 
                 NL_Model nlModel = new NL_Model(cus.Id);
 
+
                 Loan loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel);
-                var loanPaymentFacade = new LoanPaymentFacade();
                 var userId = this._context.UserId;
                 var userHostAddress = Request.UserHostAddress;
 
+                var httpContext = System.Web.HttpContext.Current;
+
                 Task.Factory.StartNew(() => this.m_oServiceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel))
-                    .ContinueWith(x => x.RunSynchronously(RebatePayment(loanPaymentFacade, userId, userHostAddress, amount, loan, trans_id, now, nlModel))
+                    .ContinueWith(x => RebatePayment(httpContext, userId, userHostAddress, amount, loan, trans_id, now, nlModel)
                    , CancellationToken.None
                    , TaskContinuationOptions.None
                    , TaskScheduler.FromCurrentSynchronizationContext());
@@ -270,23 +273,27 @@
             return null;
         }*/
 
-        private TaskScheduler RebatePayment(LoanPaymentFacade loanPaymentFacade, int userId, string userHostAddress, decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
+        private TaskScheduler RebatePayment(HttpContext httpContext, int userId, string userHostAddress, decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
+            
+            System.Web.HttpContext.Current = httpContext;
+            
             if (amount == null || amount <= 0)
                 return null;
+            long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
 
-                long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
-
-                _log.Debug(string.Format("GetCashController.RebatePayment -> nlLoanID = {0} for oldLoanID {1}", nlLoanId.ToString(), loan.Id.ToString()));
-
-                NL_Payments nlPayment = new NL_Payments() {
-                    LoanID = nlLoanId,
-                    Amount = (decimal)amount,
-                    CreatedByUserID = userId, //this._context.UserId,
-                    CreationTime = DateTime.UtcNow,
-                    PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
-                };
-
-                loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, now, "system-repay", false, null, userId, nlPayment);
+            _log.Debug(string.Format("GetCashController.RebatePayment -> nlLoanID = {0} for oldLoanID {1}", nlLoanId.ToString(), loan.Id.ToString()));
+            NL_Payments nlPayment = new NL_Payments() {
+                Amount = (decimal)amount,
+                CreatedByUserID = userId,
+                CreationTime = DateTime.UtcNow,
+                LoanID = nlLoanId,
+                PaymentTime = DateTime.UtcNow,
+                Notes = "Rebate Payment",
+                PaymentStatusID = (int)NLPaymentStatuses.Active,
+                PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+            };
+            var loanPaymentFacade = new LoanPaymentFacade();
+            loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, now, "system-repay", false, null, userId, nlPayment);
 
             return null;
         }

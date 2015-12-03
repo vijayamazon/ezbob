@@ -78,41 +78,6 @@
                 PaypointUniqueID = transId                
             });
 
-			// TODO add payment to new payment table
-			Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
-			// elina: get distribution of amount to loan schedules from new loan calculator ALoanCalculator.AssignPaymentToLoan (princpal, interest) and fees and save to DB (design doc: "PayPointCharger" page 13-15; “Manual payment – by Customer” page 19; )
-
-			// TODO
-			//if (nlModel != null) {
-
-			//	if (nlModel.Payment == null)
-			//		nlModel.Payment = new NL_Payments();
-		
-			//	nlModel.Payment.PaymentMethodID = (int)NLLoanTransactionMethods.Manual; // this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
-			//	nlModel.Payment.PaymentTime = paymentTime;
-			//	//nlModel.Payment.IsActive = true; TODO check status here
-			//	nlModel.Payment.Amount = amount;
-			//	nlModel.Payment.Notes = description;
-
-
-			//	/*if (nlModel.PaypointTransaction == null)
-			//		nlModel.PaypointTransaction = new NL_PaypointTransactions();
-
-			//	nlModel.PaypointTransaction.TransactionTime = paymentTime; //??
-			//	nlModel.PaypointTransaction.Amount = amount;
-			//	nlModel.PaypointTransaction.Notes = description;
-			//	nlModel.PaypointTransaction.PaypointUniqueID = transId;
-			//	nlModel.PaypointTransaction.IP = ip;
-			//	nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); */
-	
-			//	//var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
-			/*AddPayment addStrategy = new AddPayment(nlp);
-			nlStrategy.Execute();*/
-
-				
-			//	//Log.Debug(nlPayment.Payment.ToString());
-			//}
-
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
 			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
@@ -159,7 +124,9 @@
 
 				} // for each delta
 			} // if
+
             ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment, userId);
+
 		    return amount;
 		} // PayLoan
 

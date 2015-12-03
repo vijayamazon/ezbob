@@ -53,5 +53,9 @@
 
 		[DataMember]
 		public string ExistsRefnums { get; set; }
+
+        [DataMember]
+        public string Error { get; set; }
+
 	} // class OfferForLoan
 } // namespace
