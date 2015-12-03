@@ -5,8 +5,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 	initialize: function () {
 		this.template = _.template($('#functionsDialogTemplate').html());
 		this.type = this.getType();
-
-		console.log('cash request id:', this.model.get('CashRequestId'));
+		return this;
 	}, // initialize
 
 	getType: function () { return null; },
@@ -112,8 +111,6 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 			cashRequestID: this.model.get('CashRequestId'),
 			cashRequestRowVersion: this.model.get('CashRequestRowVersion'),
 		};
-
-		console.log('data =', data, 'model =', this.model);
 
 		if (this.showReasonField())
 			data.reason = this.ReasonField.val();
