@@ -214,8 +214,12 @@
 
                 NL_Payments nlPayment = new NL_Payments(){
                     Amount = nlModel.Balance,
-                    LoanID = nlModel.Loan.LoanID,
                     CreatedByUserID = this.context.UserId,
+                    CreationTime = DateTime.UtcNow,
+                    LoanID = nlModel.Loan.LoanID,
+                    PaymentTime = DateTime.UtcNow,
+                    Notes = "Add Pay Point Card To Customer",
+                    PaymentStatusID = (int)NLPaymentStatuses.Active,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
                 f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.context.UserId, nlPayment);

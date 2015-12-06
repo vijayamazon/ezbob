@@ -169,9 +169,13 @@
 
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    LoanID = nlModel.Loan.LoanID,
                     Amount = nlLoanScheduleAmountDue,
-                    CreatedByUserID = 0,
+                    CreatedByUserID = 1,
+                    CreationTime = DateTime.UtcNow,
+                    LoanID = nlModel.Loan.LoanID,
+                    PaymentTime = DateTime.UtcNow,
+                    Notes = "Automatic Payment",
+                    PaymentStatusID = (int)NLPaymentStatuses.Active,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
                     PaypointTransactions = new List<NL_PaypointTransactions>()
                 };
@@ -218,12 +222,12 @@
 
                     nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions()
                     {
-                        IP = "",
+                        TransactionTime = DateTime.UtcNow,
                         Amount = 0,
                         Notes = ex.PaypointData.Message ?? "Exception:" + ex.Message,
-                        PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,
-                        TransactionTime = DateTime.UtcNow,
-                        PaypointTransactionID = Convert.ToInt64(payPointTransactionId)
+                        PaypointUniqueID = string.Empty,                    
+                        IP = string.Empty,
+                        PaypointTransactionStatusID = (int)LoanTransactionStatus.Error
                     });
 
                     installments.CommitTransaction();
