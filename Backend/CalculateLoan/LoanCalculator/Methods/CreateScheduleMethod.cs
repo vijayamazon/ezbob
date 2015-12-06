@@ -9,7 +9,8 @@
 
 	internal class CreateScheduleMethod : AMethod {
 
-		public CreateScheduleMethod(ALoanCalculator calculator): base(calculator, false) {
+		public CreateScheduleMethod(ALoanCalculator calculator)
+			: base(calculator, false) {
 
 			//if (loanModel == null)
 			//	throw new NoInitialDataException();
@@ -24,8 +25,6 @@
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
 		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
-		/// <exception cref="OverflowException"><paramref /> represents a number that is less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
 		public virtual void Execute() {
 
 			NL_LoanHistory history = WorkingModel.Loan.LastHistory();
@@ -68,25 +67,83 @@
 				throw new NoScheduleException();
 			}
 
-			// set scheduled interests (based on balance) and amountDue
-			Calculator.events = new List<LoanEvent>();
-			LoanEvent hEvent = new LoanEvent(new DateTime(history.EventTime.Year, history.EventTime.Month, history.EventTime.Day), history);
-			Calculator.events.Add(hEvent);
-			history.Schedule.ForEach(e => Calculator.events.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
-			Calculator.BalanceBasedAmountDue(history.Amount);
+			// set scheduled interests (based on balance), fees and amountDue: planned Ad= f'+i'+p'
+			/*	Calculator.events = new List<LoanEvent>();
+				LoanEvent hEvent = new LoanEvent(new DateTime(history.EventTime.Year, history.EventTime.Month, history.EventTime.Day), history);
+				Calculator.events.Add(hEvent);
+				history.Schedule.ForEach(e => Calculator.events.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
+				Calculator.PlannedScheduledAmountsDue(history.Amount);*/
 
 			AddFeesToScheduleItems(history);
 		}
 
+		/// <summary>
+		/// calculates schedules according to keren shava formula (EqualPrincipal)
+		/// </summary>
+		/// <param name="history"></param>
+		private void CalculateScheduleEqualPrincipalFormula(NL_LoanHistory history) {
+
+			int interestOnlyRepayments = history.InterestOnlyRepaymentCount;
+			history.Schedule.Clear();
+
+			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)history.RepaymentIntervalTypeID;
+
+			int principalPayments = history.RepaymentCount - interestOnlyRepayments;
+			decimal iPrincipal = Math.Floor(history.Amount / principalPayments);
+			decimal iFirstPrincipal = history.Amount - iPrincipal * (principalPayments - 1);
+			List<decimal> discounts = WorkingModel.Offer.DiscountPlan;
+			int discountCount = discounts.Count;
+			decimal balance = history.Amount;
+			Calculator.BalanceBasedInterestCalculation = true;
+			Calculator.schedule = new List<NL_LoanSchedules>();
+			Calculator.currentHistory = history;
+
+			// create Schedule 
+			for (int i = 1; i <= history.RepaymentCount; i++) {
+				decimal principal = iPrincipal;
+
+				if (i <= interestOnlyRepayments)
+					principal = 0;
+				else if (i == interestOnlyRepayments + 1)
+					principal = iFirstPrincipal;
+
+				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i - 1])) : history.InterestRate;
+
+				DateTime prevScheduleDate = Calculator.AddRepaymentIntervals(i, history.RepaymentDate, intervalType).Date;
+
+				DateTime plannedDate = (i == 1) ? history.RepaymentDate.Date : prevScheduleDate; //Calculator.AddRepaymentIntervals(i, history.RepaymentDate, intervalType).Date;
+
+				NL_LoanSchedules item = new NL_LoanSchedules() {
+					InterestRate = r,
+					PlannedDate = plannedDate.Date,
+					Principal = principal, // intervals' principal
+					LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
+					Position = i,
+					Balance = balance, //local open principal, scheduled
+					Interest = Calculator.InterestBtwnDates(plannedDate, prevScheduleDate, balance)
+				};
+
+				balance -= principal;
+
+				Calculator.schedule.Add(item);
+
+				history.Schedule.Add(item);
+			} // for
+
+			Calculator.BalanceBasedInterestCalculation = false;
+		}
+
+		/// <summary>
+		/// calculates schedules according to shpitzer formula (FixedPayment)
+		/// </summary>
+		/// <param name="history"></param>
 		private void CalculateScheduleFixedPaymentFormula(NL_LoanHistory history) {
 
-			
 			if (WorkingModel.Loan.LastHistory().PaymentPerInterval == 0m) {
 				throw new NoPaymentPerIntervalException();
 			}
 
 			throw new NotImplementedException("FixedPayment formula not supported yet");
-
 
 			// http://www.hughcalc.org/formula.php
 			// Finding the Number of Periods given a Payment, Interest and Loan Amount
@@ -105,46 +162,6 @@
 			n = amount payment periods
 			LN = natural logarithm
 			*/
-		}
-
-		private void CalculateScheduleEqualPrincipalFormula(NL_LoanHistory history) {
-
-			int interestOnlyRepayments = history.InterestOnlyRepaymentCount;
-			history.Schedule.Clear();
-
-			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)history.RepaymentIntervalTypeID;
-
-			int principalPayments = history.RepaymentCount - interestOnlyRepayments;
-			decimal iPrincipal = Math.Floor(history.Amount / principalPayments);
-			decimal iFirstPrincipal = history.Amount - iPrincipal * (principalPayments - 1);
-			List<decimal> discounts = WorkingModel.Offer.DiscountPlan;
-			int discountCount = discounts.Count;
-			decimal balance = history.Amount;
-
-			// create Schedule 
-			for (int i = 1; i <= history.RepaymentCount; i++) {
-				decimal principal = iPrincipal;
-
-				if (i <= interestOnlyRepayments)
-					principal = 0;
-				else if (i == interestOnlyRepayments + 1)
-					principal = iFirstPrincipal;
-
-				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i - 1])) : history.InterestRate;
-
-				DateTime plannedDate = (i == 1) ? history.RepaymentDate.Date : Calculator.AddRepaymentIntervals(i, history.RepaymentDate, intervalType).Date;
-
-				balance -= principal;
-
-				history.Schedule.Add(new NL_LoanSchedules() {
-						InterestRate = r,
-						PlannedDate = plannedDate.Date,
-						Principal = principal, // intervals' principal
-						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
-						Position = i,
-						Balance = balance		//local open principal, scheduled		
-					});
-			} // for
 		}
 
 		/// <summary>

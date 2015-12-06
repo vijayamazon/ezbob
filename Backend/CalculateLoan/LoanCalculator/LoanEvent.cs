@@ -10,8 +10,7 @@
 			this.priority = priority;
 		}
 		// history
-		public LoanEvent(DateTime date, NL_LoanHistory history, int priority = 0)
-			: this(new DateTime(date.Year, date.Month, date.Day, 00, 00, 00), priority) {
+		public LoanEvent(DateTime date, NL_LoanHistory history, int priority = 0): this(new DateTime(date.Year, date.Month, date.Day, 00, 00, 00), priority) {
 			History = history;
 		}
 		// fee
@@ -64,7 +63,11 @@
 
 		public NL_LoanHistory CurrentHistory { get; set; }
 
+		public decimal OpenPrincipalForPeriod { get; set; }
+
 		public decimal EarnedInterestForPeriod { get; set; }
+
+		//public decimal PaidInterestForPeriod { get; set; }
 
 		private readonly int priority;
 
@@ -74,7 +77,6 @@
 			get {
 				if (this.priority != 0)
 					return this.priority;
-
 				if (Fee != null)
 					return 1;
 				if (Payment != null)
@@ -87,7 +89,6 @@
 					return 5;
 				if (ChargebackPaymentCancelled != null)
 					return 6;
-
 				return 0;
 			}
 		}
@@ -95,22 +96,18 @@
 		public object GetTypeID() {
 			if (History != null) {
 				this._currentID = History.LoanHistoryID;
-				//return this._currentID;
 			}
 
 			if (ScheduleItem != null) {
 				this._currentID = ScheduleItem.LoanScheduleID;
-				//return this._currentID;
 			}
 
 			if (Payment != null) {
 				this._currentID = Payment.PaymentID;
-				//return this._currentID;
 			}
 
 			if (ChargebackPaymentRecorded != null) {
 				this._currentID = ChargebackPaymentRecorded.PaymentID;
-				//return this._currentID;
 			}
 
 			if (ChargebackPaymentCancelled != null){
@@ -123,14 +120,14 @@
 
 			if (Rollover != null) {
 				this._currentID = Rollover.LoanRolloverID;
-				//return this._currentID;
 			}
 
 			return this._currentID;
 		}
 
 		public override string ToString() {
-			return string.Format("EventTime={0}, EventType={1}, [ID]={2}", EventTime, GetTypeString(), GetTypeID());
+			// , PaidInterest={5}
+			return string.Format("EventTime={0}, EventType={1}, [ID]={2}, OpenPrincipal={3} EarnedInterest={4}", EventTime, GetTypeString(), GetTypeID(), OpenPrincipalForPeriod, EarnedInterestForPeriod); //, PaidInterestForPeriod);
 		}
 
 		public string GetTypeString() {

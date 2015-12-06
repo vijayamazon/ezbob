@@ -47,6 +47,7 @@
 
 		// additions
 
+		// --------------- used for real AmountDue calculations, based on payments ---------------
 		/// <summary>
 		/// open principal based on planned scheduled p'
 		/// </summary>
@@ -56,30 +57,20 @@
 
 		[DataMember]
 		[NonTraversable]
-		public decimal PrincipalPaid { get; set; }
-
-	/*	/// <summary>
-		/// current open principal (planned p' - paid p')
-		/// </summary>
-		[DataMember]
-		[NonTraversable]
-		public decimal OpenPrincipal { get; set; }*/
+		public decimal Fees { get; set; }
 
 		[DataMember] // based on planned scheduled principal (balance)
 		[NonTraversable]
-		public decimal Interest {get; set; }
+		public decimal Interest { get; set; }
 
-		[DataMember] 
-		[NonTraversable]
-		public decimal InterestPaid { get; set; }
-
+		/// <summary>
+		/// hold real open principal for item (based on payments)
+		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal Fees { get; set; }
+		public decimal BalancedPrincipal { get; set; }
 
-		[DataMember]
-		[NonTraversable]
-		public decimal FeesPaid { get; set; }
+		// --------------- ### used for real AmountDue calculations, based on payments ---------------
 
 		/// <summary>
 		/// p' + i' + f' (i' calculation based on planned scheduled principal (balance))
@@ -87,24 +78,36 @@
 		[DataMember]
 		[NonTraversable]
 		public decimal AmountDue { get; set; }
+		
+		[DataMember]
+		[NonTraversable]
+		public decimal PrincipalPaid { get; set; }
+
+		[DataMember] 
+		[NonTraversable]
+		public decimal InterestPaid { get; set; }
+	
+		[DataMember]
+		[NonTraversable]
+		public decimal FeesPaid { get; set; }
 
 		[DataMember] // p*r based on real open principal
 		[NonTraversable]
 		public decimal InterestOP { get; set; }
 
-		/// <summary>
+		/*/// <summary>
 		/// p' + i' + f' (i' calculation based on real open principal)
 		/// </summary>
 		[DataMember]
 		[NonTraversable]
-		public decimal AmountDueOP { get; set; }
+		public decimal AmountDueOP { get; set; }*/
 
 		[DataMember]
 		[NonTraversable]
 		public bool LateFeesAttached { get; set; }
 		
 		public NL_LoanSchedules ShallowCopy() {
-			NL_LoanSchedules cloned = (NL_LoanSchedules)this.MemberwiseClone();
+			NL_LoanSchedules cloned = (NL_LoanSchedules)MemberwiseClone();
 			return cloned;
 		}
 	} // class NL_LoanSchedules

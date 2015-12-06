@@ -2,6 +2,7 @@
 	using System;
 	using System.Runtime.Serialization;
 	using DbConstants;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
 
@@ -45,6 +46,10 @@
 		[Length(LengthType.MAX)]
 		[DataMember]
 		public string Notes { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public decimal PaidAmount { get; set; }
 		
 
 	} // class NL_LoanFees

@@ -307,46 +307,6 @@
 			//Console.WriteLine(Path.Combine(@"C:\temp\logs\", @"xxx\yyy.txt"));
 		}
 
-		[Test]
-		public void TestNL_AddPayment() {
-			const int customerID = 369;
-			const int loanID = 5;
-			decimal amount = 5;
-
-			NL_Model nlModel = new NL_Model(customerID);
-
-			nlModel.Loan = new NL_Loans() {
-				LoanID = loanID
-			};
-
-			//nlModel.PaypointTransactionStatus = "Done";
-
-			//nlModel.Payment = new NL_Payments() {
-			//	PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay, //2,
-			//	PaymentTime = DateTime.UtcNow,
-			//	PaymentStatusID = (int)NLPaymentStatuses.Active, //???
-			//	Amount = amount,
-			//	Notes = "system-repay"
-			//};
-
-			//nlModel.PaypointTransaction = new NL_PaypointTransactions() {
-			//	TransactionTime = DateTime.UtcNow,
-			//	Amount = amount,
-			//	Notes = "system-repay",
-			//	PaypointUniqueID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
-			//	IP = "127.0.0.1",
-			//	PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done
-			//};
-
-			/*var s = new AddPayment(nlModel);
-			try {
-				s.Execute();
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}*/
-		}
-
-
 		private int _daysInMonth = 0;
 		private const decimal InterestRate = 0.6m;
 
@@ -602,7 +562,7 @@
 
 		[Test]
 		public void CreateSchedule() {
-			DateTime issueDate =  new DateTime(2015, 12, 2);
+			DateTime issueDate =  new DateTime(2015, 11, 21);
 			NL_Model model = new NL_Model(1428) { UserID = 1428, Loan = new NL_Loans() };
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
@@ -763,14 +723,14 @@
 		[Test]
 		public void AddLateFeeTest() {
 			const long loanID = 17;
-			DateTime now = DateTime.UtcNow;
+			DateTime now = new DateTime(2015, 12, 28);
 			NL_LoanFees fee = new NL_LoanFees() {
-				LoanFeeTypeID = (int)NLFeeTypes.LatePeriod1,
-				Amount = NL_Model.GetLateFeesAmount(NLFeeTypes.LatePaymentFee),
+				LoanFeeTypeID = (int)NLFeeTypes.AdminFee,
+				Amount = NL_Model.GetLateFeesAmount(NLFeeTypes.AdminFee),
 				AssignedByUserID = 1,
 				AssignTime = now ,
 				CreatedTime = now,
-				Notes = "test late fee",
+				Notes = "test late fee3",
 				LoanID = loanID
 			};
 			int result = this.m_oDB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, this.m_oDB.CreateTableParameter<NL_LoanFees>("Tbl", fee));
@@ -1071,7 +1031,6 @@
             int oldLoanId = 3107;
 			var strategy = new GetLoanIDByOldID(oldLoanId);
             strategy.Execute();
-
         }
 
 
