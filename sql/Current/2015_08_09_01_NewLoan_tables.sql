@@ -885,7 +885,7 @@ GO
 IF OBJECT_ID('NL_PaypointTransactions') IS NULL
 BEGIN
 	CREATE TABLE NL_PaypointTransactions (
-		PaypointTransactionID INT NOT NULL,
+		PaypointTransactionID BIGINT IDENTITY(1, 1) NOT NULL,
 		PaymentID BIGINT NOT NULL,
 		TransactionTime DATETIME NOT NULL,
 		Amount DECIMAL(18, 6) NOT NULL,

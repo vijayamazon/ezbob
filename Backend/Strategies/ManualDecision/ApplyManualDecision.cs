@@ -394,13 +394,19 @@
 
 				lastOffer.DecisionID = sAddDecision.DecisionID;
 				lastOffer.CreatedTime = this.now;
+				
+				//var setupFee = this.currentState.SpreadSetupFee ? new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.ServicingFee, OneTimePartPercent = 0, DistributedPartPercent = 1 } : new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0};
+				//NL_OfferFees[] ofeerFees = { setupFee };
 
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, /*Percent = this.decisionToApply.CashRequest.*/ };
-				//if (this.decisionToApply.CashRequest.SpreadSetupFee != null && this.decisionToApply.CashRequest.SpreadSetupFee == true)
-				//	setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0};
+				if (this.currentState.SpreadSetupFee) {
+					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+					setupFee.OneTimePartPercent = 0;
+					setupFee.DistributedPartPercent = 1;
+				}
 				NL_OfferFees[] ofeerFees = { setupFee };
 
-				AddOffer sAddOffer = new AddOffer(lastOffer, ofeerFees); // elina: TODO add offer fees also
+				AddOffer sAddOffer = new AddOffer(lastOffer, ofeerFees); 
 				sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
 				sAddOffer.Context.UserID = this.decisionModel.underwriterID;
 
