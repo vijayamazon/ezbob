@@ -11,10 +11,15 @@
 		public long ServiceLogID { get; set; }
 		public DateTime ReceivedTime { get; set; }
 		public int HttpStatus { get; set; }
+		public int ResponseStatus { get; set; }
 		public long? TimeoutSourceID { get; set; }
 		[Length(LengthType.MAX)]
 		public string ErrorMessage { get; set; }
 		public long? BucketID { get; set; }
 		public bool HasEquifaxData { get; set; }
+		[Length(LengthType.MAX)]
+		public string ParsingExceptionType { get; set; }
+		[Length(LengthType.MAX)]
+		public string ParsingExceptionMessage { get; set; }
 	} // class Response
 } // namespace

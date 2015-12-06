@@ -10,6 +10,10 @@
 			return new Engine.Implementation.Engine(GetKeeper(), GetTestHarvester(), GetLog());
 		} // GetTestEngine
 
+		public static IEngine GetEngine() {
+			return new Engine.Implementation.Engine(GetKeeper(), GetHarvester(), GetLog());
+		} // GetEngine
+
 		public static IKeeper GetKeeper() {
 			return new Ezbob.Integration.LogicalGlue.Keeper.Implementation.Keeper(GetDBConnection(), GetLog());
 		} // GetKeeper

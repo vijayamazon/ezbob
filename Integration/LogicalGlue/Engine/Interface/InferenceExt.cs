@@ -8,7 +8,7 @@
 			if ((inference == null) || (inference.ResponseID <= 0))
 				return false;
 
-			return inference.ReceivedTime.AddDays(acceptenceDays) <= now;
+			return inference.ReceivedTime.AddDays(acceptenceDays).Date >= now.Date;
 		} // IsUpToDate
 	} // class InferenceExt
 } // namespace

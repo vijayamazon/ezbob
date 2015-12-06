@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Engine.Implementation {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Exceptions.Engine;
@@ -28,21 +29,36 @@
 		public ASafeLog Log { get; private set; }
 
 		public Inference GetInference(int customerID, GetInferenceMode mode) {
+			Log.Debug("Engine.GetInference({0}, {1}) started...", customerID, mode);
+
+			Inference result = null;
+
 			switch (mode) {
 			case GetInferenceMode.CacheOnly:
-				return GetInference(customerID, Now);
+				result = GetInference(customerID, Now);
+				break;
 
 			case GetInferenceMode.DownloadIfOld:
 				Inference cachedInference = GetInference(customerID, Now);
 				ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
 
-				if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays))
-					return cachedInference;
+				if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays)) {
+					Log.Debug(
+						"Engine.GetInference({0}, {1}): returning cached inference with ResponseID = {2}.",
+						customerID,
+						mode,
+						cachedInference.ResponseID
+					);
+
+					result = cachedInference;
+					break;
+				} // if
 
 				goto case GetInferenceMode.ForceDownload; // !!! fall through !!!
 
 			case GetInferenceMode.ForceDownload:
-				return DownloadAndSave(customerID);
+				result = DownloadAndSave(customerID);
+				break;
 
 			default:
 				throw new EngineAlert(
@@ -53,25 +69,57 @@
 					mode
 				);
 			} // switch
+
+			Log.Debug("Engine.GetInference({0}, {1}) complete.", customerID, mode);
+
+			return result;
 		} // GetInference
 
 		public Inference GetInference(int customerID, DateTime time) {
-			return Keeper.LoadInference(customerID, time);
+			Log.Debug(
+				"Engine.GetInference({0}, {1}) started...",
+				customerID,
+				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			);
+
+			Inference result = Keeper.LoadInference(customerID, time);
+
+			Log.Debug(
+				"Engine.GetInference({0}, {1}) complete.",
+				customerID,
+				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			);
+
+			return result;
 		} // GetHistoricalInference
 
 		private Inference DownloadAndSave(int customerID) {
+			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
+
 			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now);
+
+			Log.Debug("Engine.DownloadAndSave({0}) retrieved input package.", customerID);
 
 			List<string> errors = inputPkg.InferenceInput.Validate();
 
 			if (errors != null)
 				throw new FailedToLoadInputDataAlert(Log, customerID, Now, errors);
 
+			Log.Debug("Engine.DownloadAndSave({0}) input package is valid.", customerID);
+
 			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, inputPkg.InferenceInput);
+
+			Log.Debug("Engine.DownloadAndSave({0}) input package is persisted.", customerID);
 
 			Response<Reply> reply = Harvester.Infer(inputPkg.InferenceInput, Keeper.LoadHarvesterConfiguration());
 
-			return Keeper.SaveInference(customerID, requestID, reply);
+			Log.Debug("Engine.DownloadAndSave({0}) reply received.", customerID);
+
+			Inference result = Keeper.SaveInference(customerID, requestID, reply);
+
+			Log.Debug("Engine.DownloadAndSave({0}) complete.", customerID);
+
+			return result;
 		} // DownloadAndSave
 	} // class Engine
 } // namespace

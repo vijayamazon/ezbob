@@ -142,11 +142,14 @@ BEGIN
 		ResponseID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
 		ReceivedTime DATETIME NOT NULL,
-		HttpStatus INT NOT NULL,
+		HttpStatus INT NOT NULL, -- actual status of the actual REST request.
+		ResponseStatus INT NOT NULL, -- status received from LG in the field 'status' of the root object.
 		TimeoutSourceID BIGINT NULL,
 		ErrorMessage NVARCHAR(MAX) NULL,
 		BucketID BIGINT NULL,
 		HasEquifaxData BIT NOT NULL,
+		ParsingExceptionType NVARCHAR(MAX) NULL,
+		ParsingExceptionMessage NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueResponses PRIMARY KEY (ResponseID),
 		CONSTRAINT FK_LogicalGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),

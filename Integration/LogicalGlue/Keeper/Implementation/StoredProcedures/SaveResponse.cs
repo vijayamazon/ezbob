@@ -20,12 +20,19 @@
 				Tbl = new List<DbResponse> {
 					new DbResponse {
 						ServiceLogID = requestID,
-						HttpStatus = response.Parsed.Exists() ? (int)response.Parsed.Status : 0,
+						HttpStatus = (int)response.Status,
+						ResponseStatus = response.Parsed.Exists() ? (int)response.Parsed.Status : 0,
 						TimeoutSourceID = response.Parsed.Exists() ? (int?)response.Parsed.Timeout : null,
 						ErrorMessage = response.Parsed.Exists() ? response.Parsed.Error : null,
 						BucketID = response.Parsed.HasInference() ? (int)response.Parsed.Inference.Bucket : (long?)null,
 						HasEquifaxData = response.Parsed.HasEquifaxData(),
 						ReceivedTime = DateTime.UtcNow,
+						ParsingExceptionType = response.ParsingException == null
+							? null
+							: response.ParsingException.GetType().FullName,
+						ParsingExceptionMessage = response.ParsingException == null
+							? null
+							: response.ParsingException.Message,
 					}
 				};
 			} // if

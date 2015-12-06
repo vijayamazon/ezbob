@@ -46,8 +46,14 @@ BEGIN
 		r.ResponseID,
 		r.ServiceLogID,
 		r.ReceivedTime,
+		r.HttpStatus,
+		r.ResponseStatus,
+		r.TimeoutSourceID,
+		r.ErrorMessage,
 		r.BucketID,
-		r.HasEquifaxData
+		r.HasEquifaxData,
+		r.ParsingExceptionType,
+		r.ParsingExceptionMessage
 	FROM
 		LogicalGlueResponses r
 	WHERE

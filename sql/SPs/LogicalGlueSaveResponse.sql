@@ -13,10 +13,13 @@ CREATE TYPE LogicalGlueResponseList AS TABLE (
 	[ServiceLogID] BIGINT NOT NULL,
 	[ReceivedTime] DATETIME NOT NULL,
 	[HttpStatus] INT NOT NULL,
+	[ResponseStatus] INT NOT NULL,
 	[TimeoutSourceID] BIGINT NULL,
 	[ErrorMessage] NVARCHAR(MAX) NULL,
 	[BucketID] BIGINT NULL,
-	[HasEquifaxData] BIT NOT NULL
+	[HasEquifaxData] BIT NOT NULL,
+	[ParsingExceptionType] NVARCHAR(MAX) NULL,
+	[ParsingExceptionMessage] NVARCHAR(MAX) NULL
 )
 GO
 
@@ -30,18 +33,24 @@ BEGIN
 		[ServiceLogID],
 		[ReceivedTime],
 		[HttpStatus],
+		[ResponseStatus],
 		[TimeoutSourceID],
 		[ErrorMessage],
 		[BucketID],
-		[HasEquifaxData]
+		[HasEquifaxData],
+		[ParsingExceptionType],
+		[ParsingExceptionMessage]
 	) SELECT
 		[ServiceLogID],
 		[ReceivedTime],
 		[HttpStatus],
+		[ResponseStatus],
 		[TimeoutSourceID],
 		[ErrorMessage],
 		[BucketID],
-		[HasEquifaxData]
+		[HasEquifaxData],
+		[ParsingExceptionType],
+		[ParsingExceptionMessage]
 	FROM
 		@Tbl
 

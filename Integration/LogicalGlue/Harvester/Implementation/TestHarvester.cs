@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Implementation {
 	using System;
 	using System.Globalization;
+	using System.Net;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
 
@@ -15,7 +16,7 @@
 
 			this.log.Debug("Chosen reply in test harvester:\n{0}", reply);
 
-			return new Response<Reply>(reply);
+			return new Response<Reply>(HttpStatusCode.OK, reply);
 		} // Infer
 
 		public ReplyModes ReplyMode { get; set; }

@@ -35,6 +35,15 @@
 			this.log.Info("Inference read: {0}", inference);
 		} // TestBasicFlow
 
+		[Test]
+		public void TestEndToEndFlow() {
+			IEngine engine = InjectorStub.GetEngine();
+
+			Inference inference = engine.GetInference(269, GetInferenceMode.ForceDownload);
+
+			this.log.Info("Inference read: {0}", inference);
+		} // TestEndToEndFlow
+
 		private AConnection db;
 		private ASafeLog log;
 	} // class BasicFlow

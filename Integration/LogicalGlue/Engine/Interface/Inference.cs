@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils.Lingvo;
 
 	[DataContract]
 	public class Inference {
@@ -26,6 +28,22 @@
 				this.modelOutputs = value ?? new SortedDictionary<ModelNames, ModelOutput>();
 			} // set
 		} // ModelOutputs
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			return string.Format(
+				"Response #{0} received at {1}: bucket '{2}' with {3}.",
+				ResponseID,
+				ReceivedTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				Bucket,
+				Grammar.Number(ModelOutputs.Count, "model")
+			);
+		} // ToString
 
 		private SortedDictionary<ModelNames, ModelOutput> modelOutputs;
 	} // class Inference
