@@ -9,7 +9,7 @@
 	public class AddOffer : AStrategy {
 		public AddOffer(NL_Offers offer, IEnumerable<NL_OfferFees> fees = null) {
 			this.offer = offer;
-			this.fees = fees;
+			this.fees = (fees != null) ? fees.Where(f => f.Percent > 0) : null;
 		}//constructor
 
 		public override string Name { get { return "AddOffer"; } }

@@ -563,8 +563,8 @@
 
 		[Test]
 		public void CreateSchedule() {
-			DateTime issueDate =  new DateTime(2015, 11, 21);
-			NL_Model model = new NL_Model(1428) { UserID = 1428, Loan = new NL_Loans() };
+			DateTime issueDate =  new DateTime(2015, 12, 6, 19, 12, 00);
+			NL_Model model = new NL_Model(1428) { UserID = 362, Loan = new NL_Loans() };
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();

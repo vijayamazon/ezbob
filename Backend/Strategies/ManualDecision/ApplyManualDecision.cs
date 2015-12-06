@@ -394,11 +394,8 @@
 
 				lastOffer.DecisionID = sAddDecision.DecisionID;
 				lastOffer.CreatedTime = this.now;
-				
-				//var setupFee = this.currentState.SpreadSetupFee ? new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.ServicingFee, OneTimePartPercent = 0, DistributedPartPercent = 1 } : new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0};
-				//NL_OfferFees[] ofeerFees = { setupFee };
-
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0};
+	
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.currentState.ManualSetupFeePercent, OneTimePartPercent = 1, DistributedPartPercent = 0 };
 				if (this.currentState.SpreadSetupFee) {
 					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
 					setupFee.OneTimePartPercent = 0;

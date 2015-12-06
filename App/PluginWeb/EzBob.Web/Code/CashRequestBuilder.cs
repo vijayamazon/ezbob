@@ -119,9 +119,12 @@
 
 			Log.DebugFormat("Added NL DecisionID: {0}, Error: {1}", nlDecision.Value, nlDecision.Error);
 
-			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee };
-			if (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true)
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
+			if (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true){
 				setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+				setupFee.OneTimePartPercent = 0;
+				setupFee.DistributedPartPercent = 1;
+			}
 			NL_OfferFees[] ofeerFees = { setupFee };
 
 			var nlOffer = this.m_oServiceClient.Instance.AddOffer(userID, customer.Id, new NL_Offers {

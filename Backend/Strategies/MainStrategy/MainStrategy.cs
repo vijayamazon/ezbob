@@ -110,7 +110,7 @@
 				UnderwriterID
 			);
 
-			CalculateMedal(false); 
+			CalculateMedal(false);
 
 			new SilentAutomation(CustomerID)
 				.PreventMainStrategy()
@@ -475,10 +475,10 @@
 		private void UpdateCustomerAndCashRequest() {
 			DateTime now = DateTime.UtcNow;
 
-			AddOldDecisionOffer(now); 
+			AddOldDecisionOffer(now);
 
 			if (this.nlExists)
-				AddNLDecisionOffer(now); 
+				AddNLDecisionOffer(now);
 
 			UpdateSalesForceOpportunity();
 
@@ -513,7 +513,7 @@
 
 			if (!this.autoDecisionResponse.HasAutoDecided)
 				return;
-			
+
 			AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
 				DecisionNameID = this.autoDecisionResponse.DecisionCode ?? (int)DecisionActions.Waiting,
 				DecisionTime = now,
@@ -530,18 +530,14 @@
 			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
-				List<NL_OfferFees> offerFees = null;
-
-				if (this.autoDecisionResponse.SetupFee > 0) {
-					NLFeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee ? NLFeeTypes.ServicingFee : NLFeeTypes.SetupFee;
-
-					offerFees = new List<NL_OfferFees> {
-						new NL_OfferFees {
-							LoanFeeTypeID = (int)feeType,
-							Percent = this.autoDecisionResponse.SetupFee,
-						},
-					};
-				} // if
+				
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.autoDecisionResponse.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
+				if (this.autoDecisionResponse.SpreadSetupFee) {
+					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+					setupFee.OneTimePartPercent = 0;
+					setupFee.DistributedPartPercent = 1;
+				}
+				NL_OfferFees[] ofeerFees = { setupFee };
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
 					DecisionID = decisionID,
@@ -561,10 +557,10 @@
 					SendEmailNotification = !this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
 					// ReSharper disable once PossibleInvalidOperationException
 					Notes = "Auto decision: " + this.autoDecisionResponse.Decision.Value,
-				}, offerFees);
+				}, ofeerFees);
 
 				addOfferStrategy.Execute();
-				
+
 				Log.Debug("Added NL offer: {0}", addOfferStrategy.OfferID);
 			} // if
 		} // AddNLDecisionOffer
@@ -798,7 +794,7 @@
 
 			if (addOpportunity) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
-				
+
 				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
