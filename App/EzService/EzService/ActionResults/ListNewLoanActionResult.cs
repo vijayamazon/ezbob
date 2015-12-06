@@ -6,7 +6,7 @@
 	[DataContract]
     public class ListNewLoanActionResult : ActionResult {
 		[DataMember]
-		public List<NL_Loans> Value { get; set; }
+		public NL_Loans[] Value { get; set; }
 
         [DataMember]
         public string Error { get; set; }

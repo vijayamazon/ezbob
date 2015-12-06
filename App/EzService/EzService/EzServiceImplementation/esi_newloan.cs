@@ -78,9 +78,9 @@
             };
         } // GetCustomerLoans*/
 
-        public NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID) {
+        public NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true) {
             GetLoanState strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, customerID, loanID, utcNow, userID);
+            var amd = ExecuteSync(out strategy, customerID, userID, customerID, loanID, utcNow, userID, getCalculatorState);
             return new NewLoanModelActionResult {
                 MetaData = amd,
                 Value = strategy.Result,

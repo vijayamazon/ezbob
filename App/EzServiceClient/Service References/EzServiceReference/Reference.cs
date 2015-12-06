@@ -4417,6 +4417,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldID", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldIDResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> GetLoanByOldIDAsync(int oldId, int customerID, int userID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CancelPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CancelPaymentResponse")]
+        ServiceClientProxy.EzServiceReference.NLLongActionResult CancelPayment(int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Payments payment, int userID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CancelPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CancelPaymentResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> CancelPaymentAsync(int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Payments payment, int userID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, System.Nullable<decimal> balance, System.Nullable<bool> isPaidOff);
         
@@ -6051,6 +6057,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> GetLoanByOldIDAsync(int oldId, int customerID, int userID) {
             return base.Channel.GetLoanByOldIDAsync(oldId, customerID, userID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.NLLongActionResult CancelPayment(int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Payments payment, int userID) {
+            return base.Channel.CancelPayment(customerID, payment, userID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> CancelPaymentAsync(int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Payments payment, int userID) {
+            return base.Channel.CancelPaymentAsync(customerID, payment, userID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, System.Nullable<decimal> balance, System.Nullable<bool> isPaidOff) {

@@ -612,6 +612,12 @@
   <wsdl:message name="IEzService_GetLoanByOldID_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetLoanByOldIDResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CancelPayment_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelPayment" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CancelPayment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelPaymentResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
   </wsdl:message>
@@ -1904,6 +1910,10 @@
     <wsdl:operation name="GetLoanByOldID">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldID" message="tns:IEzService_GetLoanByOldID_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldIDResponse" message="tns:IEzService_GetLoanByOldID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelPayment">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelPayment" message="tns:IEzService_CancelPayment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelPaymentResponse" message="tns:IEzService_CancelPayment_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -3319,6 +3329,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetLoanByOldID">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelPayment">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CancelPayment" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

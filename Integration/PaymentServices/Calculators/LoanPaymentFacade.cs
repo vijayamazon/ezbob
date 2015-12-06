@@ -69,14 +69,17 @@
 
 			loan.AddTransaction(transactionItem);
 
-            nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions(){
-                IP = ip,
-                Amount = amount,
-                Notes = description,
-                PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
-                TransactionTime = DateTime.UtcNow,                
-                PaypointUniqueID = transId                
-            });
+		    if (nlPayment != null) {
+                nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+                    IP = ip,
+                    Amount = amount,
+                    Notes = description,
+                    PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
+                    TransactionTime = DateTime.UtcNow,
+                    PaypointUniqueID = transId
+                });  
+		    }
+
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
@@ -111,21 +114,21 @@
 						StatusBefore = dlt.Status.StartValue,
 						Transaction = transactionItem
 					});
-
-                    nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions()
-                    {
-                        IP = "",
-                        Amount = amount,
-                        Notes = description,
-                        PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
-                        TransactionTime = DateTime.UtcNow,
-                        PaypointUniqueID = transId                       
-                    });
-
+                    if (nlPayment != null) {
+                        nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+                            IP = "",
+                            Amount = amount,
+                            Notes = description,
+                            PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
+                            TransactionTime = DateTime.UtcNow,
+                            PaypointUniqueID = transId
+                        });
+                    }
 				} // for each delta
 			} // if
-
-            ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment, userId);
+            if (nlPayment != null) {
+                ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment, userId);
+            }
 
 		    return amount;
 		} // PayLoan
@@ -175,26 +178,40 @@
 		) {
 			var date = term ?? DateTime.Now;
 
-			var loans = customer.ActiveLoans;
-            var nl_loans = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).Where( x=> x.LoanStatusID == 0 || x.LoanStatusID ==1);
+			var loans = customer.Loans.Where(x => x.Status != LoanStatus.PaidOff || x.Id != 0).ToList();
+            var nl_loans = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).Where( x=> x.LoanStatusID == 0 || x.LoanStatusID ==1).ToList();
 
 			foreach (var loan in loans) {
 				if (amount <= 0)
 					break;
+                var money = Math.Min(amount, loan.TotalEarlyPayment(term));
+			    NL_Payments nlPayment = null;
 
-			    var nl_LoanId = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id).LoanID;
-			    var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
+			    Log.Info("DOR - "+ loan.Id + "         :" + loan.ToString());
 
-				var money = Math.Min(amount, loan.TotalEarlyPayment(term));
-                NL_Payments nlPayment = new NL_Payments(){
-                    Amount = nlModel.Balance,
-                    LoanID = nlModel.Loan.LoanID,
-                    CreatedByUserID = 1,
-                    PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-                };
+			    var firstOrDefault = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id);
+			    if (firstOrDefault != null) {
+                    var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, firstOrDefault.LoanID, DateTime.UtcNow,1);
 
-                PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod,1, nlPayment);
-				amount = amount - money;
+                    nlPayment = new NL_Payments() {
+                        Amount = nlModel.Balance,
+                        CreatedByUserID = 1,
+                        CreationTime = DateTime.UtcNow,
+                        LoanID = nlModel.Loan.LoanID,
+                        PaymentTime = DateTime.UtcNow,
+                        Notes = "Pay Early Payment",
+                        PaymentStatusID = (int)NLPaymentStatuses.Active,
+                        PaymentMethodID = (int)NLLoanTransactionMethods.Manual
+                    };    
+			    }
+			    try {
+                    PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, 1, nlPayment);
+                    amount = amount - money;
+			    } catch (Exception ex ) {
+                    Log.Error("DOR - " + ex + ex.StackTrace);
+			        throw;
+			    }
+
 			} // for
 
 		} // PayAllLoansForCustomer

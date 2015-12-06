@@ -1,6 +1,7 @@
 ﻿namespace EzServiceShortcut {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Ezbob.Backend.Models;
     using Ezbob.Backend.ModelsWithDB;
     using Ezbob.Backend.ModelsWithDB.Experian;
@@ -114,7 +115,7 @@
             stra.Context.CustomerID = customerID;
             stra.Context.UserID = userID;
             stra.Execute();
-            return stra.Loans;
+            return stra.Loans.ToList();
         }
 
         public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID) {

@@ -47,8 +47,8 @@
 		[OperationContract]
         ListNewLoanActionResult GetCustomerLoans(int customerID, int userID);
 
-		[OperationContract]
-        NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID);
+	    [OperationContract]
+	    NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
 
 		[OperationContract]
         NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1);

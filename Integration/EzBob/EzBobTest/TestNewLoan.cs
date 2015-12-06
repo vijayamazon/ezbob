@@ -559,8 +559,8 @@
 		[Test]
 		public void GetLoanStateTest() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 17; // ;21
-			const int customerID = 56; //  351
+			const long loanID = 4; // ;21
+			const int customerID = 1428; //  351
 			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				state.Execute();

@@ -432,7 +432,6 @@
           <xs:element minOccurs="0" name="CreatedByUserID" type="xs:int" />
           <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="DeletionNotificationTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="FeePayments" nillable="true" type="tns:ArrayOfNL_LoanFeePayments" />
           <xs:element minOccurs="0" name="LoanID" type="xs:long" />
@@ -461,7 +460,9 @@
           <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanFeeID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanFeePaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="NewEntry" type="xs:boolean" />
           <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="ResetAmount" nillable="true" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -504,8 +505,11 @@
           <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanSchedulePaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="NewEntry" type="xs:boolean" />
           <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
           <xs:element minOccurs="0" name="PrincipalPaid" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ResetInterestPaid" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ResetPrincipalPaid" nillable="true" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
