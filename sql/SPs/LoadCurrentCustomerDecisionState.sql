@@ -49,7 +49,8 @@ BEGIN
 			IsLoanTypeSelectionAllowed = r.IsLoanTypeSelectionAllowed,
 			EmailSendingBanned = r.EmailSendingBanned,
 			OfferValidUntil = r.OfferValidUntil,
-			OfferStart = r.OfferStart
+			OfferStart = r.OfferStart,
+			SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0)
 		FROM
 			CashRequests r
 		WHERE
@@ -77,7 +78,8 @@ BEGIN
 		IsLoanTypeSelectionAllowed = ISNULL(r.IsLoanTypeSelectionAllowed, 0),
 		EmailSendingBanned = ISNULL(r.EmailSendingBanned, 0),
 		r.OfferValidUntil,
-		r.OfferStart
+		r.OfferStart,
+		SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0)
 	FROM
 		c
 		FULL OUTER JOIN r ON 1 = 1
