@@ -1,7 +1,7 @@
-IF TYPE_ID('BigintList') IS NOT NULL
-     DROP TYPE BigintList;
-GO
- 
+-- IF TYPE_ID('BigintList') IS NOT NULL
+     -- DROP TYPE BigintList;
+-- GO
+IF TYPE_ID('BigintList') IS  NULL
 CREATE TYPE [dbo].[BigintList] AS TABLE(
     [Item] BIGINT NOT NULL
 )
