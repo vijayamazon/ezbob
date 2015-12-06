@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Engine.Implementation {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Exceptions.Engine;
@@ -61,8 +62,10 @@
 		private Inference DownloadAndSave(int customerID) {
 			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now);
 
-			if (!inputPkg.InferenceInput.IsValid())
-				throw new FailedToLoadInputDataAlert(Log, customerID, Now);
+			List<string> errors = inputPkg.InferenceInput.Validate();
+
+			if (errors != null)
+				throw new FailedToLoadInputDataAlert(Log, customerID, Now, errors);
 
 			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, inputPkg.InferenceInput);
 

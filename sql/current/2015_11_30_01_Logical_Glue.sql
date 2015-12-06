@@ -19,7 +19,7 @@ IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlue
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGlueHostName',
-		'etl.live.logicalglue.net',
+		'etl-dev.live.logicalglue.net',
 		'String. Host name of the Logical Glue API URL.',
 		0
 	)
@@ -30,7 +30,7 @@ IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlue
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGlueNewCustomerRequestPath',
-		'/everline-scores-with-report/{0}',
+		'/equifax-scores-with-report/{0}',
 		'String. Full path to resource of Logical Glue API URL for new customer.',
 		0
 	)
@@ -41,7 +41,7 @@ IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlue
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGlueOldCustomerRequestPath',
-		'/everline-scores/{0}',
+		'/equifax-scores/{0}',
 		'String. Full path to resource of Logical Glue API URL for returning customer.',
 		0
 	)

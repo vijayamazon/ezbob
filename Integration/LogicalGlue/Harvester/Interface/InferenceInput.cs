@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using Newtonsoft.Json;
 
@@ -191,18 +192,21 @@
 				return ToString().Replace(' ', '_').GetHashCode();
 			} // GetHashCode
 
-			public bool IsValid() {
+			public void Validate(List<string> result, string errorPrefix) {
 				if (string.IsNullOrWhiteSpace(FirstName))
-					return false;
+					result.Add(string.Format("{0} and no director first name specified.", errorPrefix));
 
 				if (string.IsNullOrWhiteSpace(LastName))
-					return false;
+					result.Add(string.Format("{0} and no director last name specified.", errorPrefix));
 
-				if (DateOfBirth < longAgo)
-					return false;
-
-				return true;
-			} // IsValid
+				if (DateOfBirth < longAgo) {
+					result.Add(string.Format(
+						"{0} and director is too old (born on {1}).",
+						errorPrefix,
+						DateOfBirth.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
+					));
+				} // if
+			} // Validate
 
 			/// <summary>
 			/// Returns a string that represents the current object.
@@ -222,19 +226,27 @@
 			private static readonly DateTime longAgo = DateTime.UtcNow.AddMonths(-12 * 120);
 		} // class DirectorData
 
-		public bool IsValid() {
+		public List<string> Validate() {
+			var result = new List<string>();
+
 			if (string.IsNullOrWhiteSpace(EquifaxData)) {
 				if (string.IsNullOrWhiteSpace(CompanyRegistrationNumber))
-					return false;
+					result.Add("No Equifax data and no company registration number are specified.");
 
 				if (Director == null)
-					return false;
-
-				if (!Director.IsValid())
-					return false;
+					result.Add("No Equifax data and no director are specified.");
+				else
+					Director.Validate(result, "No Equifax data and");
 			} // if
 
-			return (MonthlyPayment ?? 0) > 0;
+			if ((MonthlyPayment ?? 0) <= 0) {
+				result.Add(string.Format(
+					"Monthly payment '{0}' is not positive.",
+					MonthlyPayment == null ? "N/A" : MonthlyPayment.Value.ToString("C0", CultureInfo.InvariantCulture)
+				));
+			} // if
+
+			return result.Count > 0 ? result : null;
 		} // IsValid
 
 		private DirectorData director;

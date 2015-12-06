@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,6 +58,12 @@
     <Compile Include="Exceptions\Engine\FailedToLoadInputDataAlert.cs" />
     <Compile Include="Exceptions\Engine\NoHarvesterEngineAlert.cs" />
     <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
+    <Compile Include="Exceptions\Harvester\BadInputDataAlert.cs" />
+    <Compile Include="Exceptions\Harvester\HarvesterAlert.cs" />
+    <Compile Include="Exceptions\Harvester\HarvesterWarning.cs" />
+    <Compile Include="Exceptions\Harvester\BadConfigurationAlert.cs" />
+    <Compile Include="Exceptions\Harvester\NoConfigurationAlert.cs" />
+    <Compile Include="Exceptions\Harvester\NoInputDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceRequestSaverNoDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverWrongRequestIDAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverNoDataAlert.cs" />
