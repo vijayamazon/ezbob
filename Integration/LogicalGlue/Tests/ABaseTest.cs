@@ -18,7 +18,7 @@
 						new Warning { FeatureName = "FEATURE", MaxValue = "900", MinValue = "1", Value = "-1", },
 					},
 				},
-				Error = new Error {
+				Error = new ModelError {
 					ErrorCode = "error code",
 					Exception = "some exception",
 					Uuid = uuid,

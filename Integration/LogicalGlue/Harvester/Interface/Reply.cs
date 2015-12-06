@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
 	using System.Net;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils.Extensions;
 	using Newtonsoft.Json;
 

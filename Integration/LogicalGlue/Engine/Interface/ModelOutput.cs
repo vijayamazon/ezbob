@@ -18,10 +18,10 @@
 		} // Grade
 
 		[DataMember]
-		public Error Error {
+		public ModelError Error {
 			get {
 				if (this.error == null)
-					this.error = new Error();
+					this.error = new ModelError();
 
 				return this.error;
 			} // get
@@ -29,6 +29,6 @@
 		} // Set
 
 		private Grade grade;
-		private Error error;
+		private ModelError error;
 	} // class ModelOutput
 } // namespace

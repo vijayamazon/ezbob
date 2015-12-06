@@ -5,7 +5,7 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class Error {
+	public class ModelError {
 		[DataMember]
 		public string Exception { get; set; }
 
@@ -56,14 +56,14 @@
 
 		private List<EncodingFailure> encodingFailures;
 		private List<string> missingColumns;
-	} // class Error
+	} // class ModelError
 
-	public static class ErrorExt {
-		public static Error CloneFrom(this Error target, Error source) {
+	public static class ModelErrorExt {
+		public static ModelError CloneFrom(this ModelError target, ModelError source) {
 			if (source == null)
-				return new Error();
+				return new ModelError();
 
-			target = target ?? new Error();
+			target = target ?? new ModelError();
 
 			target.Exception = source.Exception;
 			target.ErrorCode = source.ErrorCode;
@@ -73,5 +73,5 @@
 
 			return target;
 		} // CloneFrom
-	} // class ErrorExt
+	} // class ModelErrorExt
 } // namespace

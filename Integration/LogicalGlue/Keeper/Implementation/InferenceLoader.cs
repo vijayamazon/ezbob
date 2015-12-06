@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
 	using System.Collections.Generic;
+	using System.Net;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Exceptions.Keeper;
@@ -118,6 +119,21 @@
 			Result.ReceivedTime = dbResponse.ReceivedTime;
 			Result.Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID;
 
+			Result.Error = new InferenceError {
+				Message = dbResponse.ErrorMessage,
+				ParsingExceptionMessage = dbResponse.ParsingExceptionMessage,
+				ParsingExceptionType = dbResponse.ParsingExceptionType,
+				TimeoutSource = dbResponse.TimeoutSourceID == null
+					? (TimeoutSources?)null
+					: (TimeoutSources)dbResponse.TimeoutSourceID.Value,
+			};
+
+			Result.Status = new InferenceStatus {
+				HasEquifaxData = dbResponse.HasEquifaxData,
+				HttpStatus = (HttpStatusCode)dbResponse.HttpStatus,
+				ResponseStatus = (HttpStatusCode)dbResponse.ResponseStatus,
+			};
+
 			Log.Debug(
 				"Inference loader({0}, '{1}'): loaded response (id: {2}).",
 				CustomerID,
@@ -145,7 +161,7 @@
 					EncodedResult = dbModel.InferenceResultEncoded,
 					Score = dbModel.Score,
 				},
-				Error = new Error {
+				Error = new ModelError {
 					ErrorCode = dbModel.ErrorCode,
 					Exception = dbModel.Exception,
 					Uuid = dbModel.Uuid,

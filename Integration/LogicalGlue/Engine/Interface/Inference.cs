@@ -29,6 +29,12 @@
 			} // set
 		} // ModelOutputs
 
+		[DataMember]
+		public InferenceError Error { get; set; }
+
+		[DataMember]
+		public InferenceStatus Status { get; set; }
+
 		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
