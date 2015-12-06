@@ -34,6 +34,7 @@
 		public bool EmailSendingBanned { get; set; }
 		public DateTime OfferValidUntil { get; set; }
 		public DateTime OfferStart { get; set; }
+		public bool SpreadSetupFee { get; set; }
 
 		public CreditResultStatus? Decision { get; private set; }
 
