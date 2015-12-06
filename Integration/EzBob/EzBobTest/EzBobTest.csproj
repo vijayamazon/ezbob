@@ -59,7 +59,7 @@
     </Reference>
     <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=3.3.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\CompareNETObjects.3.03.0.0\lib\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\CompareNETObjects.3.03.0.0\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>

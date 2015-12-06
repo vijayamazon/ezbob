@@ -50,8 +50,8 @@
 				NL_AddLog(LogType.Error, "Strategy Faild", this.offer, null, ex.ToString(), ex.StackTrace);
 			}
 
-		}//Execute
+		}
 
 
-	}//class AddOffer
-}//ns
+	}
+}

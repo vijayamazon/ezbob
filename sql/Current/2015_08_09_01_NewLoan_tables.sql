@@ -1005,3 +1005,5 @@ ALTER TABLE NL_Payments ADD CONSTRAINT CHK_NL_Payments CHECK (
 	(DeletionTime >= CreationTime AND DeletedByUserID IS NOT NULL)
 	);
 GO
+
+

@@ -383,7 +383,6 @@
 				sLastOffer.Context.UserID = this.decisionToApply.CashRequest.UnderwriterID;
 				try {
 					sLastOffer.Execute();
-
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
 					Log.Error("Failed to GetLastOffer. Err: {0}", ex.Message);
@@ -396,7 +395,12 @@
 				lastOffer.DecisionID = sAddDecision.DecisionID;
 				lastOffer.CreatedTime = this.now;
 
-				AddOffer sAddOffer = new AddOffer(lastOffer); // elina: TODO add offer fees also
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, /*Percent = this.decisionToApply.CashRequest.*/ };
+				//if (this.decisionToApply.CashRequest.SpreadSetupFee != null && this.decisionToApply.CashRequest.SpreadSetupFee == true)
+				//	setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+				NL_OfferFees[] ofeerFees = { setupFee };
+
+				AddOffer sAddOffer = new AddOffer(lastOffer, ofeerFees); // elina: TODO add offer fees also
 				sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
 				sAddOffer.Context.UserID = this.decisionModel.underwriterID;
 

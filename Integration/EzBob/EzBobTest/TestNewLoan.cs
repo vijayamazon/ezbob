@@ -89,8 +89,8 @@
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(1428) {
-				UserID = 1428,
+			NL_Model model = new NL_Model(362) {
+				UserID = 357,
 				Loan = new NL_Loans()
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
@@ -98,10 +98,11 @@
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
-				Console.WriteLine("error: {0}", strategy.Result.Error);
-
-				this.m_oLog.Debug(strategy.Result.Loan);
-				this.m_oLog.Debug(strategy.Result.Offer);
+				if(string.IsNullOrEmpty( strategy.Result.Error)){
+					this.m_oLog.Debug(strategy.Result.Loan);
+					this.m_oLog.Debug(strategy.Result.Offer);}
+				else
+					this.m_oLog.Debug("error: {0}", strategy.Result.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}

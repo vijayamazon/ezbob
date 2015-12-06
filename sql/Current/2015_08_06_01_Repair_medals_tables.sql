@@ -41,3 +41,13 @@ FROM
 	MedalCalculationsAV
 	INNER JOIN Medals ON MedalCalculationsAV.Medal = Medals.Medal
 GO
+
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_MedalCalculations_MedalNameID')
+	ALTER TABLE [dbo].[MedalCalculations] add constraint DF_MedalCalculations_MedalNameID DEFAULT 1 for MedalNameID	;
+GO
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_MedalCalculationsAV_MedalNameID')
+	ALTER TABLE [dbo].[MedalCalculationsAV] add constraint DF_MedalCalculationsAV_MedalNameID DEFAULT 1 for MedalNameID	;
+GO
+
