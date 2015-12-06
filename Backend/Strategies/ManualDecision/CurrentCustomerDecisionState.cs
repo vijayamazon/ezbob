@@ -35,6 +35,8 @@
 		public DateTime OfferValidUntil { get; set; }
 		public DateTime OfferStart { get; set; }
 		public bool SpreadSetupFee { get; set; }
+		public decimal ManualSetupFeePercent { get; set; }
+		public decimal BrokerSetupFeePercent { get; set; }
 
 		public CreditResultStatus? Decision { get; private set; }
 
