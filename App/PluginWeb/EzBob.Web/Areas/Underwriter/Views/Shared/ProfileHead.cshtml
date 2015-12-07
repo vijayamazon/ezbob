@@ -23,7 +23,7 @@
                             <div class="ez-bigtext"><%-EzBob.formatPercents(loan.InterestRate)%> <span class="ez-automation-offer">(A <%-EzBob.formatPercents(loan.AutomationOfferModel.InterestRate)%>)</span></div>
                             <div class="">APR: <%-loan.Apr%>%</div>
 							<div class="">AIR: <%-EzBob.formatPercents(loan.Air)%></div>
-                            <div class="">Average annual cost: <%-EzBob.formatPercents((loan.RealCost*loan.OfferedCreditLine) / (loan.OfferedCreditLine) / (loan.RepaymentPeriod / 12))%></div>
+                            <div class="">Average annual cost: <%-EzBob.formatPercents(loan.RealCost / (loan.RepaymentPeriod / 12))%></div>
                         </div>
                         <div class="col-md-2 col-lg-2 right-seperator offer-box">
                             <div class="ez-bigtext"><%-loan.RepaymentPeriod%> <span class="ez-automation-offer">(A <%-loan.AutomationOfferModel.RepaymentPeriod%>)</span></div>

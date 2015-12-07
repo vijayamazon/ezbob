@@ -4,12 +4,10 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 	template: '#loan-schedule-template',
 
 	serializeData: function() {
-		var averageAnnualCostofBorrowing = (this.options.schedule.TotalInterest / this.options.schedule.TotalPrincipal) / (this.options.schedule.Details.RepaymentPeriod / 12);
-
 		var data = {
 			schedule: this.options.schedule.Schedule,
 			setupFee: this.options.schedule.SetupFee,
-			averageAnnualCostofBorrowing: averageAnnualCostofBorrowing,
+			averageAnnualCostofBorrowing: this.options.schedule.RealInterestCost,
 			total: this.options.schedule.Total,
 			totalInterest: this.options.schedule.TotalInterest,
 			totalPrincipal: this.options.schedule.TotalPrincipal,
