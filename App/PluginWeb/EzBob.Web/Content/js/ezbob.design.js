@@ -1138,7 +1138,7 @@ EzBob.formatTimeFromNow = function(val) {
 		return "";
 	}
 
-	registered = registered.add(1, 'Day');
+	registered = registered.add(1, 'days');
 
 	var hours = registered.diff(moment().utc(), 'hours');
 	var minutes = registered.diff(moment().utc(), 'minutes');
@@ -1149,7 +1149,7 @@ EzBob.formatTimeFromNow = function(val) {
 
 EzBob.formatMonths = function(num) {
 	if (!num) return "";
-	return num + " month" + (num % 10 === 1 ? "" : "s");
+	return num + " month" + (num>1 ? 's' : '');
 };
 
 EzBob.isDarkColor = function(c) {

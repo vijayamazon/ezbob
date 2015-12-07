@@ -22,7 +22,12 @@ BEGIN
 		c.CreditSum AS ApprovedAmount,
 		r.RepaymentPeriod AS Term,
 		r.UnderwriterDecisionDate AS RequestApprovedAt,
-		r.UnderwriterDecisionDate AS TimeLimitUntilAutoreject
+		r.UnderwriterDecisionDate AS TimeLimitUntilAutoreject,
+		'Find Investor' AS FindInvestor,
+		'Edit Offer' AS EditOffer,
+		'ChooseInvestorCombo' AS ChooseInvestor,
+	    'Submit' AS SubmitChoosenInvestor,
+		'Manage' AS ManageChoosenInvestor
 
 	FROM
 		CashRequests r

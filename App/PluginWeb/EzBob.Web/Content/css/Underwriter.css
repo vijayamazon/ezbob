@@ -2402,3 +2402,11 @@ input[type="text"].err-field-red {
 	margin: 0 20px 0 5px;
 	color: red;
 }
+
+.table > tbody > tr > td.grid-btn {
+	padding: 3px 0;
+}
+
+.table > tbody > tr > td.grid-btn div a.btn-primary{
+	padding: 4px 12px;
+}

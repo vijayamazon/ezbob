@@ -423,6 +423,11 @@
 		public virtual string Term { get; set; }
 		public virtual DateTime RequestApprovedAt { get; set; }
 		public virtual string TimeLimitUntilAutoreject { get; set; }
+		public virtual string FindInvestor { get; set; }
+		public virtual string EditOffer { get; set; }
+		public virtual string ChooseInvestor { get; set; }
+		public virtual string SubmitChoosenInvestor { get; set; }
+		public virtual string ManageChoosenInvestor { get; set; }
 
 		public override void Init(long nRowID, SafeReader oRow) {
 			oRow.Fill(this);

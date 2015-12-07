@@ -18,6 +18,10 @@ EzBob.Underwriter.GridTools = {
 	investorManageLink: function (nInvestorID, sLinkText) {
 		return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Manage investor" data-href="#manageInvestor/' + nInvestorID + '">' + (sLinkText || nInvestorID) + '</button>');
 	}, // investorManageLink
+
+	investorButton: function(buttonName) {
+		return EzBob.DataTables.Helper.withScrollbar('<a href="#" class="btn btn-primary" title="' + buttonName + '" data-href="">' + buttonName + '</a>');
+	}, // profileLink
 }; // EzBob.Underwriter.GridTools
 
 EzBob.Underwriter.GridsView = Backbone.View.extend({
@@ -60,6 +64,17 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				});
 			} // if has id
 
+			if (oData.hasOwnProperty('FindInvestor'))
+				$('.grid-item-FindInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.FindInvestor));
+
+			if (oData.hasOwnProperty('EditOffer'))
+				$('.grid-item-EditOffer', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.EditOffer));
+
+			if (oData.hasOwnProperty('SubmitChoosenInvestor'))
+				$('.grid-item-SubmitChoosenInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.SubmitChoosenInvestor));
+
+			if (oData.hasOwnProperty('ManageChoosenInvestor'))
+				$('.grid-item-ManageChoosenInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.ManageChoosenInvestor));
 
 			if (oData.IsWasLate)
 				$(oTR).addClass("table-flag-red");
@@ -99,7 +114,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			pendingInvestor: new GridProperties({
 				icon: 'hourglass-half',
 				action: 'UwGridPendingInvestor',
-				columns: '#Id,Name,Grade,ApplicantScore,$ApprovedAmount,!Term,*RequestApprovedAt,&TimeLimitUntilAutoreject'/*,btn,btn,ChooseInvestor,btn,btn'*/,
+				columns: '#Id,Name,Grade,ApplicantScore,$ApprovedAmount,!Term,*RequestApprovedAt,&TimeLimitUntilAutoreject,FindInvestor,EditOffer,ChooseInvestor,SubmitChoosenInvestor,ManageChoosenInvestor',
 			}), // pendingInvestor
 
 
