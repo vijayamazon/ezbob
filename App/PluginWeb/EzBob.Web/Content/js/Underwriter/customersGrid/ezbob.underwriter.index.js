@@ -75,6 +75,11 @@
 					isRendered: false,
 				},
 
+				configInvestor: {
+					view: new EzBob.Underwriter.ConfigInvestorView({ el: $('#config-investor-view'), }),
+					isRendered: false,
+				},
+
 				accountingInvestor: {
 					view: new EzBob.Underwriter.AccountingInvestorView({ el: $('#accounting-investor-view'), }),
 					isRendered: false,
@@ -112,6 +117,7 @@
 			'broker/:id/:section/': 'broker',
 			'addInvestor': 'addInvestor',
 			'manageInvestor': 'manageInvestors',
+			'configInvestor': 'configInvestor',
 			'accountingInvestor': 'accountingInvestor',
 			'portfolioInvestor': 'portfolioInvestor',
 			'statisticsInvestor': 'statisticsInvestor',
@@ -203,6 +209,10 @@
 
 		manageInvestors: function () {
 			this.customers('investors');
+		},
+
+		configInvestor: function () {
+			this.handleRoute('configInvestor');
 		},
 
 		accountingInvestor: function() {

@@ -510,6 +510,7 @@
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorDetailsView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorContactView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorBankView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.configInvestorView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.accountingInvestorView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.portfolioInvestorView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.statisticsInvestorView.js")

@@ -908,6 +908,7 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.salesforce.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.accountingInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorDetailsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorBankView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorContactView.js" />
@@ -1008,6 +1009,7 @@
     <Content Include="Areas\Underwriter\Views\Investor\AccountingInvestor.cshtml" />
     <Content Include="Areas\Underwriter\Views\Investor\PortfolioInvestor.cshtml" />
     <Content Include="Areas\Underwriter\Views\Investor\StatisticsInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\ConfigInvestor.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
