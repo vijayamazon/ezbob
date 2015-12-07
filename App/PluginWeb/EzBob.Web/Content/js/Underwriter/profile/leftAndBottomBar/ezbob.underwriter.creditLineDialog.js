@@ -223,7 +223,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 					autonumericMax: EzBob.Config.MaxLoan,
 				},
 				repaymentPeriod: { required: true, autonumericMin: 1, },
-				interestRate: { required: true, autonumericMin: 1, autonumericMax: 100, },
+				interestRate: { required: true, autonumericMin: 0, autonumericMax: 100, },
 				startingFromDate: { required: true, dateCheck: true, },
 				offerValidUntil: { required: true, dateCheck: true, },
 				manualSetupFeePercent: { autonumericMin: 0, required: false, },
