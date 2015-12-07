@@ -20,7 +20,7 @@
 			ValidateInput(inputData, cfg);
 
 			using (var restClient = new HttpClient { BaseAddress = new Uri("https://" + cfg.HostName), }) {
-				HttpRequestMessage request = CreateRequest(inputData, cfg);
+				HttpRequestMessage request = CreateRequest(inputData, cfg, restClient);
 
 				HttpResponseMessage response = restClient.SendAsync(request).Result;
 
@@ -37,7 +37,11 @@
 			} // using
 		} // Infer
 
-		private HttpRequestMessage CreateRequest(InferenceInput inputData, HarvesterConfiguration cfg) {
+		private HttpRequestMessage CreateRequest(
+			InferenceInput inputData,
+			HarvesterConfiguration cfg,
+			HttpClient restClient
+		) {
 			string path = string.IsNullOrWhiteSpace(inputData.EquifaxData)
 				? cfg.NewCustomerRequestPath
 				: cfg.OldCustomerRequestPath;
@@ -46,25 +50,26 @@
 
 			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
-			// TODO request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-			request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
+			request.Headers.Authorization = new AuthenticationHeaderValue(cfg.AuthorizationScheme, cfg.AccessToken);
 			request.Headers.UserAgent.Add(new ProductInfoHeaderValue("EverlineLogicalGlueConnector", "1.0"));
 
-			request.Content = new StringContent(JsonConvert.SerializeObject(inputData), new UTF8Encoding());
+			string serialized = JsonConvert.SerializeObject(inputData);
 
-			string contentToLog = request.Content.ToString().TrimStart();
+			request.Content = new StringContent(serialized, new UTF8Encoding(), JsonContentType);
+
+			string contentToLog = serialized.TrimStart();
 
 			const int maxLen = 256;
 
 			if (contentToLog.Length > maxLen)
 				contentToLog = contentToLog.Substring(0, maxLen).TrimEnd() + "...";
 
+			var uri = new Uri(restClient.BaseAddress, request.RequestUri);
+
 			this.log.Debug(
 				"Executing {0} request:\nURL: {1}\nHeaders:\n\t{2}\nContent:\n\t{3}",
 				request.Method,
-				request.RequestUri,
+				uri,
 				string.Join("\n\t", request.Headers.Select(pair => string.Format(
 					"{0}: {1}",
 					pair.Key,
@@ -95,5 +100,6 @@
 		} // ValidateInput
 
 		private readonly ASafeLog log;
+		private const string JsonContentType = "application/json";
 	} // class Harvester
 } // namespace

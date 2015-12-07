@@ -271,6 +271,10 @@
 			get { return this[Variables.LoginValidity]; }
 		}
 
+		public virtual VariableValue LogicalGlueAuthorizationScheme {
+			get { return this[Variables.LogicalGlueAuthorizationScheme]; }
+		} // LogicalGlueAuthorizationScheme
+
 		public virtual VariableValue LogicalGlueCacheAcceptanceDays {
 			get { return this[Variables.LogicalGlueCacheAcceptanceDays]; }
 		} // LogicalGlueCacheAcceptanceDays
@@ -286,6 +290,14 @@
 		public virtual VariableValue LogicalGlueOldCustomerRequestPath {
 			get { return this[Variables.LogicalGlueOldCustomerRequestPath]; }
 		} // LogicalGlueOldCustomerRequestPath
+
+		public virtual VariableValue LogicalGluePassword {
+			get { return this[Variables.LogicalGluePassword]; }
+		} // LogicalGluePassword
+
+		public virtual VariableValue LogicalGlueUserName {
+			get { return this[Variables.LogicalGlueUserName]; }
+		} // LogicalGlueUserName
 
 		public virtual VariableValue LogOffMode {
 			get { return this[Variables.LogOffMode]; }

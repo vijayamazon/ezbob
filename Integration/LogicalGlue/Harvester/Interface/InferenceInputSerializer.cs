@@ -19,13 +19,10 @@
 
 			writer.WriteStartObject();
 
-			WriteIfNotEmpty(
-				writer,
-				serializer,
-				Payment,
-				input.MonthlyPayment == null
-					? string.Empty
-					: Math.Round(input.MonthlyPayment.Value).ToString("G0", CultureInfo.InvariantCulture)
+			writer.WritePropertyName(Payment);
+			writer.WriteRawValue(input.MonthlyPayment == null
+				? "0.00"
+				: Math.Round(input.MonthlyPayment.Value).ToString("##.00", CultureInfo.InvariantCulture)
 			);
 
 			if (!string.IsNullOrWhiteSpace(input.EquifaxData))
@@ -92,7 +89,7 @@
 			return objectType == typeof(InferenceInput);
 		} // CanConvert
 
-		private static void WriteIfNotEmpty(JsonWriter writer, JsonSerializer serializer, string name, string val) {
+		private static void WriteIfNotEmpty(JsonWriter writer, JsonSerializer serializer, string name, string val ) {
 			if (string.IsNullOrWhiteSpace(val))
 				return;
 
@@ -101,7 +98,7 @@
 		} // WriteIfNotEmpty
 
 		private const string Equifax   = "equifax";
-		private const string RegNum    = "companiesHourseRegisteredNumber";
+		private const string RegNum    = "companiesHouseRegisteredNumber";
 		private const string Payment   = "monthlyPayment";
 		private const string FirstName = "directorFirstName";
 		private const string LastName  = "directorLastName";

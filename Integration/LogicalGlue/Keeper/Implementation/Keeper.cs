@@ -62,6 +62,9 @@
 				HostName = CurrentValues.Instance.LogicalGlueHostName,
 				NewCustomerRequestPath = CurrentValues.Instance.LogicalGlueNewCustomerRequestPath,
 				OldCustomerRequestPath = CurrentValues.Instance.LogicalGlueOldCustomerRequestPath,
+				UserName = CurrentValues.Instance.LogicalGlueUserName,
+				Password = CurrentValues.Instance.LogicalGluePassword,
+				AuthorizationScheme = CurrentValues.Instance.LogicalGlueAuthorizationScheme,
 			};
 		} // LoadHarvesterConfiguration
 

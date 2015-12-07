@@ -124,7 +124,10 @@ DELETE FROM ConfigurationVariables WHERE Name IN (
 	'LogicalGlueCacheAcceptanceDays',
 	'LogicalGlueHostName',
 	'LogicalGlueNewCustomerRequestPath',
-	'LogicalGlueOldCustomerRequestPath'
+	'LogicalGlueOldCustomerRequestPath',
+	'LogicalGlueUserName',
+	'LogicalGluePassword',
+	'LogicalGlueAuthorizationScheme'
 )
 GO
 

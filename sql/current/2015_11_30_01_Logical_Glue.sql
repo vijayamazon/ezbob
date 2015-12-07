@@ -4,6 +4,39 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueAuthorizationScheme')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGlueAuthorizationScheme',
+		'Basic',
+		'String. Authorization scheme used to make Logical Glue requests.',
+		0
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueUserName')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGlueUserName',
+		'everline',
+		'String. User name used to make Logical Glue requests.',
+		0
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGluePassword')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'LogicalGluePassword',
+		'nexahbaey8ei',
+		'String. Password used to make Logical Glue requests.',
+		0
+	)
+END
+GO
+
 IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueCacheAcceptanceDays')
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
