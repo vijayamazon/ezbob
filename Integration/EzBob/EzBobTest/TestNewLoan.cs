@@ -98,10 +98,9 @@
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
-				if(string.IsNullOrEmpty( strategy.Result.Error)){
-					this.m_oLog.Debug(strategy.Result.Loan);
-					this.m_oLog.Debug(strategy.Result.Offer);}
-				else
+				if (string.IsNullOrEmpty(strategy.Result.Error)) {
+					this.m_oLog.Debug(strategy.Result.Offer);
+				} else
 					this.m_oLog.Debug("error: {0}", strategy.Result.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
@@ -193,7 +192,7 @@
 		[Test]
 		public void AddLoan() {
 			const int userID = 357;
-			const int oldLoanID = 3087;
+			const int oldLoanID = 3095;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			DateTime now = oldLoan.Date;
@@ -499,13 +498,14 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 17; // ;21
-			const int customerID = 56; //  351
+			const long loanID = 24; //17; // ;21
+			const int customerID = 362; //  351
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
 			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
 				Console.WriteLine(nlExceptionInputDataInvalid.Message);
+				return;
 			}
 			this.m_oLog.Debug("========================{0}", dbState.Result);
 			try {
@@ -679,8 +679,8 @@
 
 		[Test]
 		public void AddPAymentTest() {
-			const int customerid = 56;
-			const long loanID = 17;
+			const int customerid = 362;
+			const long loanID = 24;
 			/*NL_Payments nlpayment = new NL_Payments() {
 				Amount = 100m,
 				CreatedByUserID = 357,
@@ -690,18 +690,18 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.SetupFeeOffset
 			};*/
-			/*DateTime prebatedate = new DateTime(2015, 10, 25);
+			DateTime prebatedate = new DateTime(2015, 12, 6);
 			NL_Payments nlpayment = new NL_Payments() {
 				Amount = 5m,
-				CreatedByUserID = 357,
+				CreatedByUserID = customerid,
 				CreationTime = prebatedate,
 				LoanID = loanID,
 				PaymentTime = prebatedate,
 				Notes = "rebate",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Auto
-			};*/
-			DateTime pdate = new DateTime(2015, 12, 29);
+				PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+			};
+			/*DateTime pdate = new DateTime(2015, 12, 29);
 			NL_Payments nlpayment = new NL_Payments() {
 				Amount = 100m,
 				CreatedByUserID = 357,
@@ -711,7 +711,7 @@
 				Notes = "payment3",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-			};
+			};*/
 			try {
 				AddPayment pstrategy = new AddPayment(customerid, nlpayment, 357);
 				pstrategy.Execute();
@@ -729,7 +729,7 @@
 				LoanFeeTypeID = (int)NLFeeTypes.AdminFee,
 				Amount = NL_Model.GetLateFeesAmount(NLFeeTypes.AdminFee),
 				AssignedByUserID = 1,
-				AssignTime = now ,
+				AssignTime = now,
 				CreatedTime = now,
 				Notes = "test late fee3",
 				LoanID = loanID
@@ -767,8 +767,8 @@
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		[Test]
 		public void UpdateLoanDBStateTest() {
-			const long loanID = 17;
-			const int customerID = 56;
+			const long loanID = 24;
+			const int customerID = 362;
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(customerID, loanID, 357);
 			reloadLoanDBState.Context.UserID = 357;
 			try {
@@ -1027,33 +1027,32 @@
 		}
 
 
-        [Test]
+		[Test]
 		public void GetLoanIDByOldID() {
-            int oldLoanId = 3107;
+			int oldLoanId = 3107;
 			var strategy = new GetLoanIDByOldID(oldLoanId);
-            strategy.Execute();
-        }
+			strategy.Execute();
+		}
 
 
-        [Test]
-        public void TestPaymentFacade() {
-            try {
-                ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-                var loan = loanRep.Get(3117);
-                NL_Payments nlPayment = new NL_Payments() {
-                    LoanID = 1,
-                    Amount = 1000,
-                    CreatedByUserID = 1, //this._context.UserId,
-                    CreationTime = DateTime.UtcNow,
-                    PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
-                };
-                var f = new LoanPaymentFacade();
-                f.PayLoan(loan, "111", 1000, "11.11.11.11", DateTime.UtcNow, "system-repay", false, null, 1, nlPayment);
-            }
-            catch (Exception ex) {
-                this.m_oLog.Debug(ex);
-            }
-        }
+		[Test]
+		public void TestPaymentFacade() {
+			try {
+				ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+				var loan = loanRep.Get(3117);
+				NL_Payments nlPayment = new NL_Payments() {
+					LoanID = 1,
+					Amount = 1000,
+					CreatedByUserID = 1, //this._context.UserId,
+					CreationTime = DateTime.UtcNow,
+					PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+				};
+				var f = new LoanPaymentFacade();
+				f.PayLoan(loan, "111", 1000, "11.11.11.11", DateTime.UtcNow, "system-repay", false, null, 1, nlPayment);
+			} catch (Exception ex) {
+				this.m_oLog.Debug(ex);
+			}
+		}
 
 
 		[Test]

@@ -37,7 +37,7 @@
                 LoanID = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.OldLoanId));
 
 
-                NL_AddLog(LogType.Info, "Strategy End", this.OldLoanId, this.LoanID, null, null);
+                NL_AddLog(LogType.Info, "Strategy End", this.OldLoanId, LoanID, null, null);
             }
             catch (Exception ex)
             {

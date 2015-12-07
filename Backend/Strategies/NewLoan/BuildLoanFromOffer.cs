@@ -50,8 +50,7 @@
                     return;
 			    }
 
-
-				if (dataForLoan == null || dataForLoan.OfferID == 0) {
+				if (dataForLoan.OfferID == 0) {
 					this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
 					NL_AddLog(LogType.Info, "Strategy Failed", Result, Result, this.Error, null);
                     return;
