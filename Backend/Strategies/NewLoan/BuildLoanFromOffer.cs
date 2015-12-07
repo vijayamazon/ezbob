@@ -16,6 +16,7 @@
 
 		public override string Name { get { return "BuildLoanFromOffer"; } }
 		public NL_Model Result { get; private set; }
+        public OfferForLoan DataForLoan { get; private set; }
 		public string Error;
 
 		/*	
@@ -37,36 +38,36 @@
 					return;
 				}
 
-				OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
+                DataForLoan = DB.FillFirst<OfferForLoan>(
 					"NL_SignedOfferForLoan",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", Result.CustomerID),
 					new QueryParameter("@Now", Result.Loan.LastHistory().EventTime)
 				);
 
-			    if (!string.IsNullOrEmpty(dataForLoan.Error)) {
-                    this.Error = string.Format(dataForLoan.Error + " dataForLoan: {0} ", Result); 
+                if (!string.IsNullOrEmpty(DataForLoan.Error)) {
+                    this.Error = string.Format(DataForLoan.Error + " dataForLoan: {0} ", Result); 
                     NL_AddLog(LogType.Info, "Strategy Failed", Result, Result, this.Error, null);
                     return;
 			    }
 
-				if (dataForLoan.OfferID == 0) {
+                if (DataForLoan.OfferID == 0) {
 					this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
 					NL_AddLog(LogType.Info, "Strategy Failed", Result, Result, this.Error, null);
                     return;
 				}
 
-				Log.Debug(dataForLoan.ToString());
+                Log.Debug(DataForLoan.ToString());
 
-				if (dataForLoan.AvailableAmount < dataForLoan.LoanLegalAmount) {
+                if (DataForLoan.AvailableAmount < DataForLoan.LoanLegalAmount) {
 					this.Error = string.Format("No available credit for current offer. New loan is not allowed. dataForLoan: {0} ", Result); // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
 					NL_AddLog(LogType.Info, "Strategy Failed - No available credit for current offer. New loan is not allowed", Result, Result, this.Error, null);
                     return;
 				}
-
-				if (!string.IsNullOrEmpty(Result.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(Result.Loan.Refnum)) {
+                // moved to AddLoan
+			/*	if (!string.IsNullOrEmpty(Result.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(Result.Loan.Refnum)) {
 					this.Error = NL_ExceptionLoanExists.DefaultMessage;
-				}
+				}*/
 
 				/*** 
 				//CHECK "Enough Funds" (uncomment WHEN old BE REMOVED from \App\PluginWeb\EzBob.Web\Code\LoanCreator.cs, method CreateLoan method)                    
@@ -78,39 +79,39 @@
 				****/
 
 				// from offer => Loan
-				Result.Loan.OfferID = dataForLoan.OfferID;
-				Result.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
-				Result.Loan.LoanSourceID = dataForLoan.LoanSourceID;
+                Result.Loan.OfferID = DataForLoan.OfferID;
+                Result.Loan.LoanTypeID = DataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
+                Result.Loan.LoanSourceID = DataForLoan.LoanSourceID;
 				// EzbobBankAccountID - TODO
-				Result.Loan.Position = dataForLoan.LoansCount;
+                Result.Loan.Position = DataForLoan.LoansCount;
 
 				NL_LoanHistory history = Result.Loan.LastHistory();
 
 				// from offer => history initial/re-scheduling data
-				history.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
-				history.Amount = dataForLoan.LoanLegalAmount;
-				history.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
-				history.RepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
-				history.InterestRate = dataForLoan.MonthlyInterestRate;
-				history.LoanLegalID = dataForLoan.LoanLegalID;
+                history.InterestOnlyRepaymentCount = DataForLoan.InterestOnlyRepaymentCount;
+                history.Amount = DataForLoan.LoanLegalAmount;
+                history.RepaymentCount = DataForLoan.LoanLegalRepaymentPeriod;
+                history.RepaymentIntervalTypeID = DataForLoan.RepaymentIntervalTypeID;
+                history.InterestRate = DataForLoan.MonthlyInterestRate;
+                history.LoanLegalID = DataForLoan.LoanLegalID;
 
 				// from offer => Offer
 				Result.Offer = new NL_Offers {
-					BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent,
-					SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan,
-					OfferID = dataForLoan.OfferID
+                    BrokerSetupFeePercent = DataForLoan.BrokerSetupFeePercent,
+                    SetupFeeAddedToLoan = DataForLoan.SetupFeeAddedToLoan,
+                    OfferID = DataForLoan.OfferID
 				};
 
 				// offer-fees
-				Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", dataForLoan.OfferID));
+                Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", DataForLoan.OfferID));
 
 				//Result.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
 
 				// discounts
-				if (dataForLoan.DiscountPlanID > 0) {
+                if (DataForLoan.DiscountPlanID > 0) {
 					var discounts = DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet",
 						CommandSpecies.StoredProcedure,
-						new QueryParameter("@DiscountPlanID", dataForLoan.DiscountPlanID)
+                        new QueryParameter("@DiscountPlanID", DataForLoan.DiscountPlanID)
 					);
 					foreach (NL_DiscountPlanEntries dpe in discounts) {
 						Result.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));

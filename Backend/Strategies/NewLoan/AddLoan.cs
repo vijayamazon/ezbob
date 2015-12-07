@@ -117,6 +117,11 @@
 
 				model = dataForLoan.Result;
 
+                // prevent to create the same loan (by refnum)
+                if (!string.IsNullOrEmpty(model.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.DataForLoan.ExistsRefnums) && dataForLoan.DataForLoan.ExistsRefnums.Contains(model.Loan.Refnum)) {
+                    Error = NL_ExceptionLoanExists.DefaultMessage;
+                }
+
 				ALoanCalculator nlCalculator = null;
 				// 2. Init Schedule and Fees
 				try {
