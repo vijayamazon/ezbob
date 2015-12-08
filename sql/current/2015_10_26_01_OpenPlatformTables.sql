@@ -27,6 +27,7 @@ BEGIN
 		InvestorID INT NOT NULL IDENTITY(1,1),
 		InvestorTypeID INT NOT NULL,
 		Name NVARCHAR(255),
+		MonthlyFundingCapital DECIMAL(18, 6),
 		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
@@ -159,9 +160,20 @@ BEGIN
 	CREATE TABLE I_Product (
 		ProductID INT NOT NULL IDENTITY(1,1),
 	   	Name NVARCHAR(255),
+	   	IsDefault BIT NOT NULL,
+	   	IsEnabled BIT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_Product PRIMARY KEY (ProductID)
 	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_Product)
+BEGIN
+	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('Loans', 1, 1)
+	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('Alibaba', 0, 1)
+	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('CreditLine', 0, 1)
+	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('InvoiceFinance', 0, 1)
 END
 GO
 
@@ -179,37 +191,11 @@ BEGIN
 END
 GO
 
-
-IF object_id('I_ProductTerm') IS NULL
+IF NOT EXISTS (SELECT * FROM I_ProductType)
 BEGIN
-	CREATE TABLE I_ProductTerm (
-		ProductTermID INT NOT NULL IDENTITY(1,1),
-	   	Name NVARCHAR(255),
-	   	FromMonths INT NOT NULL,
-	   	ToMonths INT NOT NULL,
-		Timestamp DATETIME NOT NULL,
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_ProductTerm PRIMARY KEY (ProductTermID)
-	)
-END
-GO
-
-
-IF object_id('I_ProductSubType') IS NULL
-BEGIN
-	CREATE TABLE I_ProductSubType (
-		ProductSubTypeID INT NOT NULL IDENTITY(1,1),
-	   	ProductTypeID INT NOT NULL,
-	   	ProductTermID INT NOT NULL,
-	   	Name NVARCHAR(255),
-	   	AllowedForExternalInvestor BIT NOT NULL,
-	   	PulledLoans BIT NOT NULL,
-		Timestamp DATETIME NOT NULL,
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_ProductSubType PRIMARY KEY (ProductSubTypeID),
-		CONSTRAINT FK_I_ProductSubType_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
-		CONSTRAINT FK_I_ProductSubType_I_ProductTerm FOREIGN KEY (ProductTermID) REFERENCES I_ProductTerm(ProductTermID)
-	)
+	DECLARE @LoansProductID INT = (SELECT ProductID FROM I_Product WHERE Name='Loans')
+	INSERT INTO I_ProductType (ProductID, Name, Timestamp) VALUES (@LoansProductID, 'LongTermSMELoans', '2015-12-01')
+	INSERT INTO I_ProductType (ProductID, Name, Timestamp) VALUES (@LoansProductID, 'ShortTermSMELoans', '2015-12-01')
 END
 GO
 
@@ -232,8 +218,48 @@ BEGIN
 	INSERT INTO I_Grade (Name) VALUES ('D')
 	INSERT INTO I_Grade (Name) VALUES ('E')
 	INSERT INTO I_Grade (Name) VALUES ('F')
+	INSERT INTO I_Grade (Name) VALUES ('G')
+	INSERT INTO I_Grade (Name) VALUES ('H')
 END
 GO
+
+IF object_id('I_FundingType') IS NULL
+BEGIN
+	CREATE TABLE I_FundingType (
+		FundingTypeID INT NOT NULL IDENTITY(1,1),
+	   	Name NVARCHAR(50),
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_FundingType PRIMARY KEY (FundingTypeID)
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_FundingType)
+BEGIN
+	INSERT INTO I_FundingType (Name) VALUES ('CoInvestment')
+	INSERT INTO I_FundingType (Name) VALUES ('FullInvestment')
+	INSERT INTO I_FundingType (Name) VALUES ('PooledInvestment')
+END
+GO
+
+IF object_id('I_ProductSubType') IS NULL
+BEGIN
+	CREATE TABLE I_ProductSubType (
+		ProductSubTypeID INT NOT NULL IDENTITY(1,1),
+	   	ProductTypeID INT NOT NULL,
+	   	GradeID INT NOT NULL,
+	   	FundingTypeID INT NULL,
+	   	Name NVARCHAR(255),
+		Timestamp DATETIME NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_ProductSubType PRIMARY KEY (ProductSubTypeID),
+		CONSTRAINT FK_I_ProductSubType_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
+		CONSTRAINT FK_I_ProductSubType_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID),
+		CONSTRAINT FK_I_ProductSubType_I_FundingType FOREIGN KEY (FundingTypeID) REFERENCES I_FundingType(FundingTypeID)
+	)
+END
+GO
+
 
 IF object_id('I_Portfolio') IS NULL
 BEGIN
@@ -255,21 +281,21 @@ BEGIN
 	)
 END
 GO
-
-IF object_id('I_InvestorFundsAllocation') IS NULL
-BEGIN
-	CREATE TABLE I_InvestorFundsAllocation (
-		InvestorFundsAllocationID INT NOT NULL IDENTITY(1,1),
-		InvestorBankAccountID INT NOT NULL,
-		Amount DECIMAL(18,6) NOT NULL,		
-		AllocationTimestamp DATETIME NOT NULL,
-		ReleaseTimestamp DATETIME NOT NULL,
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_InvestorFundsAllocation PRIMARY KEY (InvestorFundsAllocationID),
-		CONSTRAINT FK_I_InvestorFundsAllocation_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID)
-	)
-END
-GO
+ 
+--IF object_id('I_InvestorFundsAllocation') IS NULL
+--BEGIN
+--	CREATE TABLE I_InvestorFundsAllocation (
+--		InvestorFundsAllocationID INT NOT NULL IDENTITY(1,1),
+--		InvestorBankAccountID INT NOT NULL,
+--		Amount DECIMAL(18,6) NOT NULL,		
+--		AllocationTimestamp DATETIME NOT NULL,
+--		ReleaseTimestamp DATETIME NOT NULL,
+--		TimestampCounter ROWVERSION,
+--		CONSTRAINT PK_I_InvestorFundsAllocation PRIMARY KEY (InvestorFundsAllocationID),
+--		CONSTRAINT FK_I_InvestorFundsAllocation_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID)
+--	)
+--END
+--GO
 
 IF object_id('I_Parameter') IS NULL
 BEGIN
@@ -301,19 +327,53 @@ BEGIN
 END
 GO
 
+IF object_id('I_UWInvestorConfigurationParam') IS NULL
+BEGIN
+	CREATE TABLE I_UWInvestorConfigurationParam (
+		UWInvestorConfigurationParamID INT NOT NULL IDENTITY(1,1),
+		InvestorID INT NOT NULL,
+		ParameterID INT NOT NULL,		
+		Value DECIMAL(18,6) NOT NULL,  
+		AllowedForConfig BIT NOT NULL,		
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_UWInvestorConfigurationParam PRIMARY KEY (UWInvestorConfigurationParamID),
+		CONSTRAINT FK_I_UWInvestorConfigurationParam_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_UWInvestorConfigurationParam_I_Parameter FOREIGN KEY (ParameterID) REFERENCES I_Parameter(ParameterID)
+	)
+END
+GO
+
 IF object_id('I_Index') IS NULL
 BEGIN
 	CREATE TABLE I_Index (
 		IndexID INT NOT NULL IDENTITY(1,1),
-		InvestorID INT NOT NULL,
-		ProductTypeID INT NOT NULL,
+		InvestorID INT NULL,
+		ProductTypeID INT NULL,
 		IsActive BIT NOT NULL,
-		GradeA DECIMAL(18,6) NOT NULL,
-		GradeB DECIMAL(18,6) NOT NULL,
-		GradeC DECIMAL(18,6) NOT NULL,
-		GradeD DECIMAL(18,6) NOT NULL,
-		GradeE DECIMAL(18,6) NOT NULL,
-		GradeF DECIMAL(18,6) NOT NULL,
+		GradeAPercent DECIMAL(18,6) NOT NULL,
+		GradeAMinScore DECIMAL(18,6) NOT NULL,
+		GradeAMaxScore DECIMAL(18,6) NOT NULL,
+		GradeBPercent DECIMAL(18,6) NOT NULL,
+		GradeBMinScore DECIMAL(18,6) NOT NULL,
+		GradeBMaxScore DECIMAL(18,6) NOT NULL,
+		GradeCPercent DECIMAL(18,6) NOT NULL,
+		GradeCMinScore DECIMAL(18,6) NOT NULL,
+		GradeCMaxScore DECIMAL(18,6) NOT NULL,
+		GradeDPercent DECIMAL(18,6) NOT NULL,
+		GradeDMinScore DECIMAL(18,6) NOT NULL,
+		GradeDMaxScore DECIMAL(18,6) NOT NULL,
+		GradeEPercent DECIMAL(18,6) NOT NULL,
+		GradeEMinScore DECIMAL(18,6) NOT NULL,
+		GradeEMaxScore DECIMAL(18,6) NOT NULL,
+		GradeFPercent DECIMAL(18,6) NOT NULL,
+		GradeFMinScore DECIMAL(18,6) NOT NULL,
+		GradeFMaxScore DECIMAL(18,6) NOT NULL,
+		GradeGPercent DECIMAL(18,6) NOT NULL,
+		GradeGMinScore DECIMAL(18,6) NOT NULL,
+		GradeGMaxScore DECIMAL(18,6) NOT NULL,
+		GradeHPercent DECIMAL(18,6) NOT NULL,
+		GradeHMinScore DECIMAL(18,6) NOT NULL,
+		GradeHMaxScore DECIMAL(18,6) NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_Index PRIMARY KEY (IndexID),
@@ -323,16 +383,51 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM I_Index)
+BEGIN
+	INSERT INTO I_Index (IsActive, 
+	GradeAPercent,GradeAMinScore,GradeAMaxScore, 
+	GradeBPercent,GradeBMinScore,GradeBMaxScore, 
+	GradeCPercent,GradeCMinScore,GradeCMaxScore, 
+	GradeDPercent,GradeDMinScore,GradeDMaxScore, 
+	GradeEPercent,GradeEMinScore,GradeEMaxScore, 
+	GradeFPercent,GradeFMinScore,GradeFMaxScore, 
+	GradeGPercent,GradeGMinScore,GradeGMaxScore, 
+	GradeHPercent,GradeHMinScore,GradeHMaxScore, 
+	Timestamp) 
+	VALUES (1, 
+	0.055,  0.002, 0.027,
+	0.1749, 0.028, 0.109,
+	0.2264, 0.11,  0.253,
+	0.1138, 0.254, 0.347,
+	0.0637, 0.348, 0.41,
+	0.1535, 0.411, 0.552,
+	0.1348, 0.553, 0.697,
+	0.0779, 0.698, 0.994,
+	'2015-12-01')
+END
+GO
+
 IF object_id('I_Instrument') IS NULL
 BEGIN
 	CREATE TABLE I_Instrument (
 		InstrumentID INT NOT NULL IDENTITY(1,1),
-		Name INT NOT NULL,
+		Name NVARCHAR(50) NOT NULL,
 		CurrencyID INT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_Instrument PRIMARY KEY (InstrumentID),
 		CONSTRAINT FK_I_Instrument_MP_Currency FOREIGN KEY (CurrencyID) REFERENCES MP_Currency(Id)
 	)
+END
+GO
+
+
+IF NOT EXISTS (SELECT * FROM I_Instrument)
+BEGIN
+	DECLARE @GbpID INT = (SELECT Id FROM MP_Currency WHERE Name='GBP' )
+	DECLARE @UsdID INT = (SELECT Id FROM MP_Currency WHERE Name='USD' )
+	INSERT INTO I_Instrument (Name, CurrencyID) VALUES ('Libor', @GbpID)
+	INSERT INTO I_Instrument (Name, CurrencyID) VALUES ('Libor', @UsdID)
 END
 GO
 
@@ -356,3 +451,6 @@ BEGIN
 	)
 END
 GO
+
+
+

@@ -48,9 +48,6 @@ IF NOT object_id('I_ProductType') IS NULL
 	DROP TABLE I_ProductType
 GO
 
-IF NOT object_id('I_Grade') IS NULL
-	DROP TABLE I_Grade
-GO
 
 IF NOT object_id('I_Product') IS NULL
 	DROP TABLE I_Product
@@ -58,6 +55,14 @@ GO
 
 IF NOT object_id('I_InvestorConfigurationParam') IS NULL
 	DROP TABLE I_InvestorConfigurationParam
+GO
+
+IF NOT object_id('I_FundingType') IS NULL
+	DROP TABLE I_FundingType
+GO
+	
+IF NOT object_id('I_UWInvestorConfigurationParam') IS NULL
+	DROP TABLE I_UWInvestorConfigurationParam
 GO
 
 IF NOT object_id('I_Investor') IS NULL
@@ -70,6 +75,10 @@ GO
 
 IF NOT object_id('I_Parameter') IS NULL
 	DROP TABLE I_Parameter
+GO
+
+IF NOT object_id('I_Grade') IS NULL
+	DROP TABLE I_Grade
 GO
 
 IF NOT object_id('I_InterestVariable') IS NULL
