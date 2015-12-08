@@ -66,9 +66,9 @@
 		/// <summary>
 		/// hold real open principal for item (based on payments)
 		/// </summary>
-		[DataMember]
-		[NonTraversable]
-		public decimal BalancedPrincipal { get; set; }
+		//[DataMember]
+		//[NonTraversable]
+		//public decimal BalancedPrincipal { get; set; }
 
 		// --------------- ### used for real AmountDue calculations, based on payments ---------------
 
@@ -86,10 +86,14 @@
 		[DataMember] 
 		[NonTraversable]
 		public decimal InterestPaid { get; set; }
+
+		//[DataMember]
+		//[NonTraversable]
+		//public decimal FeesAssigned { get; set; }
 	
-		[DataMember]
-		[NonTraversable]
-		public decimal FeesPaid { get; set; }
+		//[DataMember]
+		//[NonTraversable]
+		//public decimal FeesPaid { get; set; }
 
 		[DataMember] // p*r based on real open principal
 		[NonTraversable]

@@ -141,6 +141,15 @@
 				} catch (OverflowException overflowException) {
 					this.Error = overflowException.Message;
 					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+				} catch (LoanPaidOffStatusException loanPaidOffexException) {
+					this.Error = loanPaidOffexException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+				} catch (LoanWriteOffStatusException loanWriteoffexException) {
+					this.Error = loanWriteoffexException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+				} catch (LoanPendingStatusException loanPendingException) {
+					this.Error = loanPendingException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
 
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {

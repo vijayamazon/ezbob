@@ -15,7 +15,7 @@ CREATE TYPE NL_LoanFeesList AS TABLE (
 	[AssignedByUserID] INT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[CreatedTime] DATETIME NOT NULL,
-	[AssignTime] DATETIME NOT NULL,
+	[AssignTime] DATE NOT NULL,
 	[DeletedByUserID] INT NULL,
 	[DisabledTime] DATETIME NULL,
 	[Notes] NVARCHAR(MAX) NULL

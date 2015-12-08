@@ -58,16 +58,18 @@
 		public NL_Payments ChargebackPaymentCancelled { get; set; }
 
 		public NL_LoanSchedules ScheduleItem { get; set; }
-		public NL_LoanRollovers Rollover { get; set; } // not supported yet
-		public Action Action { get; set; } // not supported yet (re-scheduling, etc)
+		public NL_LoanRollovers Rollover { get; set; } 
+		public Action Action { get; set; }
 
-		public NL_LoanHistory CurrentHistory { get; set; }
+		public NL_LoanHistory CurrentHistory { get; internal set; }
 
-		public decimal OpenPrincipalForPeriod { get; set; }
+		public decimal OpenPrincipalForPeriod { get; internal set; }
 
-		public decimal EarnedInterestForPeriod { get; set; }
+		public decimal EarnedInterestForPeriod { get; internal set; }
 
 		//public decimal PaidInterestForPeriod { get; set; }
+
+		//public decimal CurrentPaidFees { get; internal set; }
 
 		private readonly int priority;
 
@@ -127,7 +129,7 @@
 
 		public override string ToString() {
 			// , PaidInterest={5}
-			return string.Format("EventTime={0}, EventType={1}, [ID]={2}, OpenPrincipal={3} EarnedInterest={4}", EventTime, GetTypeString(), GetTypeID(), OpenPrincipalForPeriod, EarnedInterestForPeriod); //, PaidInterestForPeriod);
+			return string.Format("EventTime={0}, EventType={1}, [ID]={2}, OpenPrincipal={3} EarnedInterest={4}", EventTime, GetTypeString(), GetTypeID(), OpenPrincipalForPeriod, EarnedInterestForPeriod); 
 		}
 
 		public string GetTypeString() {

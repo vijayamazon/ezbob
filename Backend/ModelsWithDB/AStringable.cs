@@ -30,6 +30,9 @@
 		public string ToStringAsTable() {
 			Type t = GetType();
 			var props = FilterPrintable(t);
+
+			props.RemoveAll(p => p.PropertyType.IsClass);
+
 			int propsCount = props.Count;
 
 			StringBuilder format = new StringBuilder();

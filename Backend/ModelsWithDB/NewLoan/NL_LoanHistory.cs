@@ -132,7 +132,7 @@
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// history
-			StringBuilder sb = new StringBuilder().Append(base.ToString());
+			StringBuilder sb = new StringBuilder().Append(PrintHeadersLine(typeof(NL_LoanHistory))).Append(ToStringAsTable());
 
 			// schedule
 			if (Schedule.Count > 0) {

@@ -102,20 +102,17 @@
 			if (FeePayments.Count > 0) {
 				sb.Append("FeesPayments:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanFeePayments)));
 				FeePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append("No FeesPayments.").Append(Environment.NewLine);
+			} //else sb.Append("No FeesPayments.").Append(Environment.NewLine);
 			
 			if (SchedulePayments.Count > 0) {
 				sb.Append("SchedulePayments:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanSchedulePayments)));
 				SchedulePayments.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append("No SchedulePayments.").Append(Environment.NewLine);
+			} //else sb.Append("No SchedulePayments.").Append(Environment.NewLine);
 
 			if (PaypointTransactions.Count > 0) {
 				sb.Append("PaypointTransactions:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_PaypointTransactions)));
 				PaypointTransactions.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append("No PaypointTransactions.").Append(Environment.NewLine);
+			} //else sb.Append("No PaypointTransactions.").Append(Environment.NewLine);
 
 			return sb.ToString();
 		}

@@ -140,9 +140,7 @@
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {
 			// loan
-			StringBuilder sb = new StringBuilder().Append(base.ToString()); //.Append(Environment.NewLine);
-
-			sb.Append(Environment.NewLine);
+			StringBuilder sb = new StringBuilder().Append(PrintHeadersLine(typeof(NL_Loans))).Append(ToStringAsTable()).Append(Environment.NewLine);
 
 			// freeze interest intervals
 			if (FreezeInterestIntervals.Count > 0) {
@@ -150,8 +148,7 @@
 					.Append(Environment.NewLine)
 					.Append(PrintHeadersLine(typeof(NL_LoanInterestFreeze)));
 				FreezeInterestIntervals.ForEach(s => sb.Append(s.ToString()));
-			} else
-				sb.Append("No LoanInterestFreeze").Append(Environment.NewLine);
+			} //else sb.Append("No LoanInterestFreeze").Append(Environment.NewLine);
 
 			if (LoanOptions.LoanOptionsID > 0) {
 				sb.Append("LoanOptions:")
@@ -166,8 +163,7 @@
 					.Append("AcceptedRollovers:").Append(Environment.NewLine)
 					.Append(PrintHeadersLine(typeof(NL_LoanRollovers)));
 				AcceptedRollovers.ForEach(r => sb.Append(r.ToStringAsTable()));
-			} else
-				sb.Append("No AcceptedRollovers").Append(Environment.NewLine);
+			} //else sb.Append("No AcceptedRollovers").Append(Environment.NewLine);
 
 			// fees
 			if (Fees.Count > 0) {
@@ -175,23 +171,20 @@
 					.Append("Fees:").Append(Environment.NewLine)
 					.Append(PrintHeadersLine(typeof(NL_LoanFees)));
 				Fees.ForEach(s => sb.Append(s.ToStringAsTable()));
-			} else
-				sb.Append("No Fees").Append(Environment.NewLine);
+			} //else sb.Append("No Fees").Append(Environment.NewLine);
 
 			// histories
 			if (Histories != null) {
 				sb.Append(Environment.NewLine)
 					.Append("Histories:");
 				Histories.ForEach(h => sb.Append(h.ToString()));
-			} else
-				sb.Append("No Histories").Append(Environment.NewLine);
+			}  // else sb.Append("No Histories").Append(Environment.NewLine);
 
 			// payments
 			if (Payments.Count > 0) {
 				sb.Append("Payments:");
 				Payments.ForEach(p => sb.Append(p.ToString()));
-			} else
-				sb.Append("No Payments").Append(Environment.NewLine);
+			} // else sb.Append("No Payments").Append(Environment.NewLine);
 		
 			return sb.ToString();
 		}

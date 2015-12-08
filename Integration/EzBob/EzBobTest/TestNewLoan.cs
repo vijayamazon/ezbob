@@ -498,8 +498,8 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-            const long loanID = 3; //17; // ;21
-            const int customerID = 1428; //  351
+			const long loanID = 21; //17; 
+			const int customerID = 362; // 351;
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
@@ -507,7 +507,6 @@
 				Console.WriteLine(nlExceptionInputDataInvalid.Message);
 				return;
 			}
-			this.m_oLog.Debug("========================{0}", dbState.Result);
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(dbState.Result, calcTime);
 				calc.GetState();

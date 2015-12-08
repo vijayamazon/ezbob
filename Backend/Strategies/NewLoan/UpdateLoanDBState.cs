@@ -24,7 +24,6 @@
 			CustomerID = customerID;
 			LoanID = loanID;
 			UserID = userID;
-
 		} // ctor
 
 		public override string Name { get { return "UpdateLoanDBState"; } }
@@ -42,6 +41,8 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
+
+			NL_AddLog(LogType.Error, "Started", this.strategyArgs, Error, null, null);
 
 			if (CustomerID == 0) {
 				Error = NL_ExceptionCustomerNotFound.DefaultMessage;

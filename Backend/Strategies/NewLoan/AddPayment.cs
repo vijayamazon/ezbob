@@ -13,13 +13,13 @@
 			this.strategyArgs = new object[] { customerID, payment, userID };
 
 			if (customerID == 0) {
-				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
 				return;
 			}
 
 			if (payment == null || payment.LoanID == 0) {
-				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				Error = NL_ExceptionLoanNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
 				return;
 			}
@@ -36,7 +36,7 @@
 		public int CustomerID { get; private set; }
 		public int UserID { get; private set; }
 
-		public string Error;
+		public string Error { get; private set; }
 		public long PaymentID { get; private set; }
 
 		private readonly object[] strategyArgs;
@@ -44,11 +44,28 @@
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		public override void Execute() {
 
-			if (!string.IsNullOrEmpty(this.Error)) {
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+			// invalid input
+			if (!string.IsNullOrEmpty(Error)) {
+				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
-			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
+			NL_AddLog(LogType.Info, "Started", this.strategyArgs, Error, null, null);
+
+			GetLoanState state = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow, UserID);
+			state.Execute();
+
+			// failed to load loan from DB or caclulator error
+			if (!string.IsNullOrEmpty(state.Error)) {
+
+				//if loan is paid - can't to add payment
+				Error = state.Error;
+				Log.Debug("Failed to get loan state: {0}", Error);
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, Error, Error, null);
+				return;
+			}
+
+			// TODO check adding the payment twice  kak?
+			/*if (state.Result.Loan.Payments.FirstOrDefault(p=>p.CreationTime.Equals(Payment.CreationTime) {}*/
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 
@@ -66,7 +83,7 @@
 
 					if (ppTransaction == null) {
 						Log.Info("Paypoint transaction not found. Payment \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_Payments)), Payment.ToStringAsTable());
-						NL_AddLog(LogType.Info, "Paypoint transaction not found", this.strategyArgs, this.Error, null, null);
+						NL_AddLog(LogType.Info, "Paypoint transaction not found", this.strategyArgs, Error, null, null);
 					} else {
 						ppTransaction.PaymentID = Payment.PaymentID;
 						ppTransaction.PaypointTransactionID = DB.ExecuteScalar<long>("NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_PaypointTransactions>("Tbl", ppTransaction));
@@ -82,10 +99,9 @@
 
 				pconn.Rollback();
 
-				this.Error = ex.Message;
-				Log.Error("Failed to add new payment: {0}", this.Error);
-
-				NL_AddLog(LogType.Error, "Strategy Faild - Rollback", Payment, this.Error, ex.ToString(), ex.StackTrace);
+				Error = ex.Message;
+				Log.Error("Failed to add new payment: {0}", Error);
+				NL_AddLog(LogType.Error, "Strategy Faild - Rollback", Payment, Error, ex.ToString(), ex.StackTrace);
 
 				return;
 			}
@@ -94,9 +110,12 @@
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Payment.LoanID, UserID);
 			try {
 				reloadLoanDBState.Execute();
+
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Payment, reloadLoanDBState.Error + "\n" + this.Error, ex.ToString(), ex.StackTrace);
+				Error = ex.Message;
+				Log.Error("Failed on UpdateLoanDBState {0}", Error);
+				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Payment, reloadLoanDBState.Error + "\n" + Error, ex.ToString(), ex.StackTrace);
 			}
 
 		}
