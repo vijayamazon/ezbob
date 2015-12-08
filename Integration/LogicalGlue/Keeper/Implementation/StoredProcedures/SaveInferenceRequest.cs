@@ -67,6 +67,21 @@
 			set { }
 		} // DateOfBirth
 
+		public string Postcode {
+			get { return this.request.Director.Postcode; }
+			set { }
+		} // Postcode
+
+		public string HouseName {
+			get { return this.request.Director.HouseName; }
+			set { }
+		} // HouseName
+
+		public string HouseNumber {
+			get { return this.request.Director.HouseNumber; }
+			set { }
+		} // HouseNumber
+
 		private readonly InferenceInput request;
 	} // class SaveInferenceRequest
 } // namespace

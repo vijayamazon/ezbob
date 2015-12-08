@@ -18,7 +18,7 @@
 		public InferenceOutput Inference { get; set; }
 
 		[JsonProperty(PropertyName = "equifax", NullValueHandling = NullValueHandling.Ignore)]
-		public string EquifaxData { get; set; }
+		public EquifaxData Equifax { get; set; }
 
 		[JsonProperty(PropertyName = "etl", NullValueHandling = NullValueHandling.Ignore)]
 		public Etl Etl { get; set; }
@@ -40,7 +40,7 @@
 				Timeout == null ? "no timeout" : "timeout " + Timeout.Value,
 				string.IsNullOrWhiteSpace(Error) ? "no error" : "with error",
 				(Inference == null ? "no" : "with") + " inference",
-				(string.IsNullOrWhiteSpace(EquifaxData) ? "no" : "with") + " Equifax data",
+				(this.HasEquifaxData() ? "with" : "no") + " Equifax data",
 				(Etl == null ? "no" : "with") + " ETL"
 			);
 		} // ToShortString
@@ -84,7 +84,7 @@
 		} // HasInference
 
 		public static bool HasEquifaxData(this Reply reply) {
-			return reply.Exists() && !string.IsNullOrWhiteSpace(reply.EquifaxData);
+			return reply.Exists() && (reply.Equifax != null) && !string.IsNullOrWhiteSpace(reply.Equifax.RawResponse);
 		} // EquifaxData
 
 		public static bool HasEtl(this Reply reply) {

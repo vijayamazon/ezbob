@@ -16,7 +16,10 @@ ALTER PROCEDURE LogicalGlueSaveInferenceRequest
 @CompanyRegistrationNumber NVARCHAR(50),
 @FirstName NVARCHAR(250),
 @LastName NVARCHAR(250),
-@DateOfBirth DATETIME
+@DateOfBirth DATETIME,
+@Postcode NVARCHAR(255),
+@HouseName NVARCHAR(255),
+@HouseNumber NVARCHAR(255)
 AS
 BEGIN
 	DECLARE @ServiceLogID BIGINT = NULL
@@ -30,11 +33,11 @@ BEGIN
 	INSERT INTO MP_ServiceLog (
 		ServiceType, InsertDate, RequestData,
 		CustomerId, CompanyID, CompanyRefNum,
-		Firstname, Surname, DateOfBirth
+		Firstname, Surname, DateOfBirth, Postcode
 	) VALUES (
 		'LogicalGlue', @Now, @RequestText,
 		@CustomerID, @CompanyID, @CompanyRegistrationNumber,
-		@FirstName, @LastName, @DateOfBirth
+		@FirstName, @LastName, @DateOfBirth, @Postcode
 	)
 
 	------------------------------------------------------------------------------
@@ -43,8 +46,8 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 
-	INSERT INTO LogicalGlueRequests (ServiceLogID, UniqueID, MonthlyRepayment, EquifaxData)
-		VALUES (@ServiceLogID, @UniqueID, @MonthlyPayment, @EquifaxData)
+	INSERT INTO LogicalGlueRequests (ServiceLogID, UniqueID, MonthlyRepayment, EquifaxData, HouseName, HouseNumber)
+		VALUES (@ServiceLogID, @UniqueID, @MonthlyPayment, @EquifaxData, @HouseName, @HouseNumber)
 	
 	------------------------------------------------------------------------------
 

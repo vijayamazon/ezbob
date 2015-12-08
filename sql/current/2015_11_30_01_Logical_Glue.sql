@@ -89,6 +89,8 @@ BEGIN
 		UniqueID UNIQUEIDENTIFIER NOT NULL,
 		MonthlyRepayment DECIMAL(18, 0) NULL,
 		EquifaxData NVARCHAR(MAX) NULL,
+		HouseName NVARCHAR(255) NULL,
+		HouseNumber NVARCHAR(255) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueRequests PRIMARY KEY (RequestID),
 		CONSTRAINT FK_LogicalGlueRequests_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id)

@@ -53,6 +53,23 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
+	SELECT TOP 1
+		RowType = 'Address',
+		a.Line1,
+		a.Line2,
+		Postcode = a.Rawpostcode
+	FROM
+		CustomerAddress a
+	WHERE
+		a.CustomerId = @CustomerID
+		AND
+		a.addressType = 1
+		AND
+		LTRIM(RTRIM(ISNULL(a.id, ''))) != ''
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 	;WITH rq AS (
 		SELECT TOP 1
 			Amount = crl.Amount,

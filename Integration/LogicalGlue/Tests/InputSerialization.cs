@@ -10,10 +10,13 @@
 		public void Serialize() {
 			InferenceInput ii = new InferenceInput {
 				CompanyRegistrationNumber = "12121234",
-				Director = new InferenceInput.DirectorData {
+				Director = new DirectorData {
 					FirstName = "Basil",
 					LastName = "Poop-kind",
 					DateOfBirth = new DateTime(1980, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+					Postcode = "AB101BA",
+					HouseName = "Uncle Tom Cottage",
+					HouseNumber = "61",
 				},
 				EquifaxData = "<xml>equi</xml>",
 				MonthlyPayment = 1265,

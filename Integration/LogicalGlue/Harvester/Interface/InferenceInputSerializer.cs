@@ -38,6 +38,10 @@
 					? input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture)
 					: null
 				);
+
+				WriteIfNotEmpty(writer, serializer, Postcode, hasDirector ? input.Director.Postcode : null);
+				WriteIfNotEmpty(writer, serializer, HouseName, hasDirector ? input.Director.HouseName : null);
+				WriteIfNotEmpty(writer, serializer, HouseNumber, hasDirector ? input.Director.HouseNumber : null);
 			} // if
 
 			writer.WriteEndObject();
@@ -65,7 +69,7 @@
 				EquifaxData = jo[Equifax].Value<string>(),
 				MonthlyPayment = jo[Payment].Value<decimal>(),
 				CompanyRegistrationNumber = jo[RegNum].Value<string>(),
-				Director = new InferenceInput.DirectorData {
+				Director = new DirectorData {
 					FirstName = jo[FirstName].Value<string>(),
 					LastName = jo[LastName].Value<string>(),
 					DateOfBirth = DateTime.ParseExact(
@@ -74,6 +78,9 @@
 						CultureInfo.InvariantCulture,
 						DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal
 					),
+					Postcode = jo[Postcode].Value<string>(),
+					HouseName = jo[HouseName].Value<string>(),
+					HouseNumber = jo[HouseNumber].Value<string>(),
 				},
 			};
 		} // ReadJson
@@ -97,12 +104,15 @@
 			serializer.Serialize(writer, val);
 		} // WriteIfNotEmpty
 
-		private const string Equifax   = "equifax";
-		private const string RegNum    = "companiesHouseRegisteredNumber";
-		private const string Payment   = "monthlyPayment";
-		private const string FirstName = "directorFirstName";
-		private const string LastName  = "directorLastName";
-		private const string BirthDate = "dob";
+		private const string Equifax     = "equifax";
+		private const string RegNum      = "companiesHouseRegisteredNumber";
+		private const string Payment     = "monthlyPayment";
+		private const string FirstName   = "directorFirstName";
+		private const string LastName    = "directorLastName";
+		private const string BirthDate   = "dob";
+		private const string Postcode    = "postcode";
+		private const string HouseName   = "houseName";
+		private const string HouseNumber = "houseNumber";
 
 		private const string BirthDateFormat = "yyyy-MM-dd";
 	} // class InferenceInputSerializer

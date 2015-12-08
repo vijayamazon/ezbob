@@ -71,6 +71,8 @@
     <Compile Include="Exceptions\Keeper\InferenceSaverNoDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
     <Compile Include="Harvester\Implementation\TestHarvester.cs" />
+    <Compile Include="Harvester\Interface\DirectorData.cs" />
+    <Compile Include="Harvester\Interface\EquifaxData.cs" />
     <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
     <Compile Include="Harvester\Interface\IConvertableToShortString.cs" />
     <Compile Include="Harvester\Interface\InferenceInputPackage.cs" />

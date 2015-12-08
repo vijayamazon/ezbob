@@ -53,6 +53,10 @@
 				Result.CompanyRegistrationNumber = sr["CompanyNumber"];
 				break;
 
+			case RowTypes.Address:
+				Result.Director.SetAddress(sr["Postcode"], sr["Line1"], sr["Line2"]);
+				break;
+
 			case RowTypes.RequestedLoan:
 				decimal defaultAmount = sr["DefaultAmount"];
 				if (defaultAmount <= 0)
@@ -82,7 +86,7 @@
 
 			case RowTypes.EquifaxData:
 				Reply reply = JsonConvert.DeserializeObject<Reply>(sr["ResponseData"]);
-				Result.EquifaxData = reply.EquifaxData;
+				Result.EquifaxData = reply.HasEquifaxData() ? reply.Equifax.RawResponse : null;
 				break;
 
 			default:
@@ -102,6 +106,7 @@
 
 		private enum RowTypes {
 			CompanyRegistrationNumber,
+			Address,
 			RequestedLoan,
 			DirectorData,
 			EquifaxData,
