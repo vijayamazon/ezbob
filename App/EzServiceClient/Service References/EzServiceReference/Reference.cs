@@ -4406,10 +4406,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ListNewLoanActionResult> GetCustomerLoansAsync(int customerID, int userID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLoanState", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLoanStateResponse")]
-        ServiceClientProxy.EzServiceReference.NewLoanModelActionResult GetLoanState(int customerID, long loanID, System.DateTime utcNow, int userID);
+        ServiceClientProxy.EzServiceReference.NewLoanModelActionResult GetLoanState(int customerID, long loanID, System.DateTime utcNow, int userID, bool getCalculatorState);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLoanState", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLoanStateResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> GetLoanStateAsync(int customerID, long loanID, System.DateTime utcNow, int userID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> GetLoanStateAsync(int customerID, long loanID, System.DateTime utcNow, int userID, bool getCalculatorState);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldID", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLoanByOldIDResponse")]
         ServiceClientProxy.EzServiceReference.NLLongActionResult GetLoanByOldID(int oldId, int customerID, int userID);
@@ -6043,12 +6043,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetCustomerLoansAsync(customerID, userID);
         }
         
-        public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult GetLoanState(int customerID, long loanID, System.DateTime utcNow, int userID) {
-            return base.Channel.GetLoanState(customerID, loanID, utcNow, userID);
+        public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult GetLoanState(int customerID, long loanID, System.DateTime utcNow, int userID, bool getCalculatorState) {
+            return base.Channel.GetLoanState(customerID, loanID, utcNow, userID, getCalculatorState);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> GetLoanStateAsync(int customerID, long loanID, System.DateTime utcNow, int userID) {
-            return base.Channel.GetLoanStateAsync(customerID, loanID, utcNow, userID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> GetLoanStateAsync(int customerID, long loanID, System.DateTime utcNow, int userID, bool getCalculatorState) {
+            return base.Channel.GetLoanStateAsync(customerID, loanID, utcNow, userID, getCalculatorState);
         }
         
         public ServiceClientProxy.EzServiceReference.NLLongActionResult GetLoanByOldID(int oldId, int customerID, int userID) {

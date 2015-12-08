@@ -316,6 +316,7 @@
           <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
           <xs:element minOccurs="0" name="LoanID" type="xs:long" />
           <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaidAmount" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -394,8 +395,8 @@
       <xs:extension xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q20:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="AmountDue" type="xs:decimal" />
-          <xs:element minOccurs="0" name="AmountDueOP" type="xs:decimal" />
           <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
+          <xs:element minOccurs="0" name="BalancedPrincipal" type="xs:decimal" />
           <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
           <xs:element minOccurs="0" name="FeesPaid" type="xs:decimal" />

@@ -160,7 +160,7 @@
 
                 decimal nlLoanScheduleAmountDue = 0;
                 var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customerId, nl_LoanId, DateTime.UtcNow);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customerId, nl_LoanId, DateTime.UtcNow,1,true);
                 var nlLoanSchedules = nlModel.Loan.LastHistory().Schedule.FirstOrDefault(x => x.PlannedDate == installment.Date);
                 if (nlLoanSchedules != null)
                 {

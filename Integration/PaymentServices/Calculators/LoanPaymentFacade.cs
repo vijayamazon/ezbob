@@ -232,7 +232,7 @@
 
 				decimal money = Math.Min(amount, late);
                 var nl_LoanId = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id).LoanID;
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow,1,true);
 
                 NL_Payments nlPayment = new NL_Payments(){
                     Amount = nlModel.Balance,
@@ -349,7 +349,7 @@
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
                 var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow, 1,true);
 
                 NL_Payments nlPayment = new NL_Payments()
                 {
@@ -378,7 +378,8 @@
 				).FirstOrDefault();
 
                 var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow, 1,true);
+
 				
                 NL_Payments nlPayment = new NL_Payments()
                 {

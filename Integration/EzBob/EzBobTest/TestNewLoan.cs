@@ -498,8 +498,8 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 24; //17; // ;21
-			const int customerID = 362; //  351
+            const long loanID = 3; //17; // ;21
+            const int customerID = 1428; //  351
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();

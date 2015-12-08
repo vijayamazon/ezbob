@@ -59,6 +59,6 @@
 
         List<NL_Loans> GetCustomerLoans(int customerID, int userID = 1);
 
-        NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID = 1);
+         NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
     } // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

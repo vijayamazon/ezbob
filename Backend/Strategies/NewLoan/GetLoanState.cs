@@ -124,6 +124,7 @@
 				try {
 					ALoanCalculator calc = new LegacyLoanCalculator(Result);
 					calc.GetState();
+				    Result = calc.WorkingModel;
 				} catch (NoInitialDataException noInitialDataException) {
 					this.Error = noInitialDataException.Message;
 					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);

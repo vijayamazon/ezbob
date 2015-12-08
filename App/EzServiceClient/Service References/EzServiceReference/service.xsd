@@ -1350,6 +1350,7 @@
         <xs:element minOccurs="0" name="loanID" type="xs:long" />
         <xs:element minOccurs="0" name="utcNow" type="xs:dateTime" />
         <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="getCalculatorState" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
