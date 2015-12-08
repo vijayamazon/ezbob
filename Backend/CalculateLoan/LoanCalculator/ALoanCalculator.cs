@@ -325,7 +325,6 @@
 		/// </summary>
 		/// <returns></returns>
 		/// <param name="currentEvent"></param>
-		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		/// [ExcludeFromToString]
 		internal decimal InterestBtwnEvents(LoanEvent currentEvent) {

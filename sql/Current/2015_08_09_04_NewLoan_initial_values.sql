@@ -48,9 +48,18 @@ update [LoanTransactionMethod]  set Id = 12 where [Name] = 'SystemRepay';
 
 
 IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'DefaultLoanCalculator')
+BEGIN
 	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('DefaultLoanCalculator', 
 	'Ezbob.Backend.CalculateLoan.LoanCalculator.LegacyLoanCalculator, Ezbob.Backend.CalculateLoan.LoanCalculator, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null', 
-	'used in "new loan" calculator')
+	'used in "new loan" calculator');
+END	
+	
+IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'NewLoanRun')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('NewLoanRun', 'true', 'NL code activated if true');
+END
+
+-- INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('Collection_Max_Cancel_Fee_Role_Collector', 200, 'Maximal amount of late fee cancellation for user in role Collector')
 
 -- IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'Collection_Max_Cancel_Fee_Role_Collector')
 -- INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('Collection_Max_Cancel_Fee_Role_Collector', 200, 'Maximal amount of late fee cancellation for user in role Collector')

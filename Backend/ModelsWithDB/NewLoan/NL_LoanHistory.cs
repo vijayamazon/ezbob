@@ -145,8 +145,7 @@
 			if (Agreements.Count > 0) {
 				sb.Append("Agreements:").Append(Environment.NewLine).Append(PrintHeadersLine(typeof(NL_LoanAgreements)));
 				Agreements.ForEach(a => sb.Append(a.ToStringAsTable()));
-			} else
-				sb.Append("No Agreements.").Append(Environment.NewLine);
+			} // else sb.Append("No Agreements.").Append(Environment.NewLine);
 
 			return sb.ToString();
 		}

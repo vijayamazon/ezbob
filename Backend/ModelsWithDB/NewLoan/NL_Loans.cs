@@ -156,9 +156,9 @@
 			if (LoanOptions.LoanOptionsID > 0) {
 				sb.Append("LoanOptions:")
 					.Append(Environment.NewLine)
-					.Append(LoanOptions);
-			} else
-				sb.Append("No Loan options").Append(Environment.NewLine);
+					.Append(PrintHeadersLine(typeof(NL_LoanOptions)))
+					.Append(LoanOptions.ToStringAsTable());
+			} //else sb.Append("No Loan options").Append(Environment.NewLine);
 
 			// rollovers
 			if (AcceptedRollovers.Count > 0) {
@@ -166,7 +166,6 @@
 					.Append("AcceptedRollovers:").Append(Environment.NewLine)
 					.Append(PrintHeadersLine(typeof(NL_LoanRollovers)));
 				AcceptedRollovers.ForEach(r => sb.Append(r.ToStringAsTable()));
-
 			} else
 				sb.Append("No AcceptedRollovers").Append(Environment.NewLine);
 

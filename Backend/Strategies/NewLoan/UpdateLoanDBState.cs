@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -28,7 +29,7 @@
 
 		public override string Name { get { return "UpdateLoanDBState"; } }
 
-		public string Error;
+		public string Error { get; private set; }
 
 		public int CustomerID { get; private set; }
 		public int UserID { get; private set; }
@@ -43,15 +44,15 @@
 		public override void Execute() {
 
 			if (CustomerID == 0) {
-				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionCustomerNotFound(this.Error);
+				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
+				throw new NL_ExceptionCustomerNotFound(Error);
 			}
 
 			if (LoanID == 0) {
-				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionLoanNotFound(this.Error);
+				Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
+				throw new NL_ExceptionLoanNotFound(Error);
 			}
 
 			// get raw DB state of the loan - without calc
@@ -60,8 +61,8 @@
 
 			// failed to load loan from DB
 			if (!string.IsNullOrEmpty(state.Error)) {
-				this.Error = state.Error;
-				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, state.Error, this.Error, null);
+				Error = state.Error;
+				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, state.Error, Error, null);
 				return;
 			}
 
@@ -77,36 +78,36 @@
 				ALoanCalculator calc = new LegacyLoanCalculator(RecalculatedModel);
 				calc.GetState();
 			} catch (NoInitialDataException noInitialDataException) {
-				this.Error = noInitialDataException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, this.Error, null);
+				Error = noInitialDataException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
 			} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
-				this.Error = invalidInitialInterestRateException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, this.Error, null);
+				Error = invalidInitialInterestRateException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
 			} catch (NoLoanHistoryException noLoanHistoryException) {
-				this.Error = noLoanHistoryException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, this.Error, null);
+				Error = noLoanHistoryException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
 			} catch (InvalidInitialAmountException invalidInitialAmountException) {
-				this.Error = invalidInitialAmountException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, this.Error, null);
+				Error = invalidInitialAmountException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
 			} catch (OverflowException overflowException) {
-				this.Error = overflowException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, this.Error, null);
+				Error = overflowException.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, this.Error, null);
+				Error = ex.Message;
+				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
 				return;
 			}
 
 			// no changes, exit
 			var stateAfter = JObject.FromObject(RecalculatedModel.Loan);
 			if (JToken.DeepEquals(stateBefore, stateAfter)) {
-				NL_AddLog(LogType.Info, "End - no diff btwn DB state and recalculated state", this.strategyArgs, RecalculatedModel, this.Error, null);
+				NL_AddLog(LogType.Info, "End - no diff btwn DB state and recalculated state", this.strategyArgs, RecalculatedModel, Error, null);
 				return;
 			}
 
-			NL_AddLog(LogType.Info, "recalculated loan state", this.strategyArgs, RecalculatedModel, this.Error, null);
+			NL_AddLog(LogType.Info, "recalculated loan state", this.strategyArgs, RecalculatedModel, Error, null);
 
 			List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
 			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
@@ -184,17 +185,17 @@
 
 				pconn.Commit();
 
-				NL_AddLog(LogType.Info, "End", this.strategyArgs, RecalculatedModel, this.Error, null);
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, RecalculatedModel, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 
 				pconn.Rollback();
 
-				this.Error = ex.Message;
-				Log.Error("Failed to update loan DB dbState. err: {0}", this.Error);
+				Error = ex.Message;
+				Log.Error("Failed to update loan DB dbState. err: {0}", Error);
 
-				NL_AddLog(LogType.Error, "Failed - Rollback", this.strategyArgs, this.Error, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Failed - Rollback", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 			}
 		}
 	}

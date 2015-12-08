@@ -56,7 +56,9 @@
 			- loan options row
 			*/
 		public override void Execute() {
+
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Error, null, null);
+
 			try {
 				if (model.CustomerID == 0) {
 					Error = NL_ExceptionCustomerNotFound.DefaultMessage;

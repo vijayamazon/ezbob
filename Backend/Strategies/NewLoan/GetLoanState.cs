@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Linq;
+	using ConfigManager;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -115,7 +116,7 @@
 				}
 
 				// valid accepted rollover
-				Result.Loan.AcceptedRollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_AcceptedRollovers", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)));
+				Result.Loan.AcceptedRollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).Where(r=>r.IsAccepted));
 
 				if (!GetCalculatorState)
 					return;
@@ -124,7 +125,7 @@
 				try {
 					ALoanCalculator calc = new LegacyLoanCalculator(Result);
 					calc.GetState();
-				    Result = calc.WorkingModel;
+					Result = calc.WorkingModel;
 				} catch (NoInitialDataException noInitialDataException) {
 					this.Error = noInitialDataException.Message;
 					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);

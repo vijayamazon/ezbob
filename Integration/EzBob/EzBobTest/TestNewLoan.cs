@@ -520,8 +520,8 @@
 		[Test]
 		public void GetLoanStateTest() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 4; // ;21
-			const int customerID = 1428; //  351
+			const long loanID = 21; // ;21
+			const int customerID = 351; //  351
 			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				state.Execute();
@@ -582,10 +582,7 @@
 				this.m_oLog.Error("{0}", exception.Message);
 			}
 		}
-
-
-
-
+		
 
 		[Test]
 		public void LateLoanJob() {
@@ -595,6 +592,11 @@
 
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
+
+		[Test]
+		public void AddRolloverTest() {
+			
+		}
 
 		[Test]
 		public void RolloverRescheduling() {
@@ -613,7 +615,7 @@
 			var rolloverRep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
 			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id).FirstOrDefault();
 
-			// copy rollover+ fee +payment  to NL
+			// copy rollover+fee+payment to NL
 			if (oldRollover != null && oldRollover.PaidPaymentAmount > 0) {
 
 				DateTime rolloverConfirmationDate = (DateTime)oldRollover.CustomerConfirmationDate;

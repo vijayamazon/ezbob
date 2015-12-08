@@ -328,6 +328,7 @@ namespace ConfigManager {
 		MinLoan,
 		MinLoanLifetimeMonths,
 
+		NewLoanRun,
 		NHibernateEnableProfiler,
 		NotEnoughFundsTemplateName,
 		NotEnoughFundsToAddress,
@@ -504,6 +505,6 @@ namespace ConfigManager {
 		YodleePassword,
 		YodleeSoapServer,
 		YodleeTncVersion,
-		YodleeUsername,
+		YodleeUsername
 	} // enum Variables
 } // namespace ConfigManager
