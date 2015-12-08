@@ -231,8 +231,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			},
 			messages: {
 				interestRate: {
-					autonumericMin: 'Interest Rate is below limit.',
-					autonumericMax: 'Interest Rate is above limit.',
+					autonumericMin: $.validator.format('Interest rate is below {0}%'),
+					autonumericMax: $.validator.format('Interest rate is above {0}%'),
 				},
 				repaymentPeriod: { autonumericMin: 'Repayment Period is below limit.', },
 				startingFromDate: {
