@@ -89,7 +89,8 @@ BEGIN
 		Amount = ISNULL(rq.Amount, dbo.udfGetAvergateLoanAmount()),
 		Term = ISNULL(ISNULL(rq.Term, ls.DefaultRepaymentPeriod), 12),
 		DefaultAmount = dbo.udfGetAvergateLoanAmount(),
-		DefaultTerm = ISNULL(ls.DefaultRepaymentPeriod, 12)
+		DefaultTerm = ISNULL(ls.DefaultRepaymentPeriod, 12),
+		MaxInterestRate = ISNULL(ls.MaxInterest, 0.0225)
 	FROM
 		dbo.udfGetLoanSource(0) ls
 		OUTER APPLY rq

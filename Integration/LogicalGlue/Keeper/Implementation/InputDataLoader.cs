@@ -67,12 +67,22 @@
 					defaultTerm = 12;
 
 				decimal amount = sr["Amount"];
+				if (amount <= 0)
+					amount = defaultAmount;
+
 				int term = sr["Term"];
+				term = term > 0 ? term : defaultTerm;
 
-				Result.MonthlyPayment = amount / (term > 0 ? term : defaultTerm);
+				decimal maxInterestRate = sr["MaxInterestRate"];
+				if (maxInterestRate <= 0)
+					maxInterestRate = 0.0225m;
 
-				if (Result.MonthlyPayment.Value <= 0)
-					Result.MonthlyPayment = defaultAmount / (term > 0 ? term : defaultTerm);
+				// Monthly repayment = principal + interest + fees.
+				// Principal = amount / term.
+				// Max interest = amount * interest rate.
+				// TODO: define default fees.
+
+				Result.MonthlyPayment = amount / term + amount * maxInterestRate;
 
 				break;
 
