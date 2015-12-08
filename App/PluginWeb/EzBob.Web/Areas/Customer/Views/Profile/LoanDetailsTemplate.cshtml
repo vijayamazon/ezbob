@@ -2,7 +2,6 @@
 @model dynamic
 @{
 	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
-	bool isEverline = origin == CustomerOriginEnum.everline;
 }
 <script id="loan-details-template" type="text/template">
 	<% 
@@ -83,16 +82,11 @@
 
 					<dt>Interest rate:</dt>
 					<dd><%- EzBob.formatPercents(loan.InterestRate) %></dd>
-					@if (isEverline) {
-							<dt>Loan APR:</dt>
-							<dd><%- loan.APR %> %</dd>
-						}
 
-					<% if (isLate) {
-					%>
+					<% if (isLate) { %>
 					<dt>Late balance:</dt>
-					<dd><%- EzBob.formatPounds(loan.Late) %></dd><%
-					} %>
+					<dd><%- EzBob.formatPounds(loan.Late) %></dd>
+					<% } %>
 				</dl>
 			</div>
 
@@ -103,11 +97,10 @@
 					<dt>Open balance:</dt>
 					<dd><%-EzBob.formatPounds(loan.TotalBalance)%></dd>
 
-					<% if (area !='Underwriter') {
-					%>
+					<% if (area !='Underwriter') { %>
 					<dt>Loan status:</dt>
-					<dd class="status<%-loan.Status%>"><%- loan.Status %></dd><%
-					} %>
+					<dd class="status<%-loan.Status%>"><%- loan.Status %></dd>
+					<% } %>
 
 					<dt>Total paid:</dt>
 					<dd><%- EzBob.formatPounds(loan.Repayments) %></dd>
@@ -119,11 +112,9 @@
 			
 			@if (origin != CustomerOriginEnum.everline) {
 				<div class="span3">
-					<%
-					if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
-					%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early clean-btn" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
-					}
-					%>
+					<% if ((loan.Status == 'Live') || (loan.Status == 'Late')) { %>
+						<a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green clean-btn pay-early clean-btn" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a>
+					<% } %>
 				</div>
 			}
 		</div>
@@ -243,8 +234,6 @@
 			%>
 		</tbody>
 	</table>
-
-	<div class="loan_apr_block">Loan APR: <%- loan.APR %> %</div>
 
 	<h2 id="loan-agreement">Loan agreement</h2>
 	<div class="simple-well">
