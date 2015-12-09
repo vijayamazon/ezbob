@@ -158,21 +158,14 @@
                 var loan = installment.Loan;
                 var customer = loan.Customer;
 
-                decimal nlLoanScheduleAmountDue = 0;
                 var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customerId, nl_LoanId, DateTime.UtcNow,1,true);
-                var nlLoanSchedules = nlModel.Loan.LastHistory().Schedule.FirstOrDefault(x => x.PlannedDate == installment.Date);
-                if (nlLoanSchedules != null)
-                {
-                    nlLoanScheduleAmountDue = nlLoanSchedules.AmountDue;
-                }
 
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = nlLoanScheduleAmountDue,
+                    Amount = amount,
                     CreatedByUserID = 1,
                     CreationTime = DateTime.UtcNow,
-                    LoanID = nlModel.Loan.LoanID,
+                    LoanID = nl_LoanId,
                     PaymentTime = DateTime.UtcNow,
                     Notes = "Automatic Payment",
                     PaymentStatusID = (int)NLPaymentStatuses.Active,
@@ -235,7 +228,6 @@
                     return ex.PaypointData;
                 }
 
-                Log.Info(string.Format("NL_Compare - PayPointApi.MakeAutomaticPayment Old : {0};  New : {1}", amount, nlPayment.Amount));
                 loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, 1,nlPayment);
                 installments.CommitTransaction();
 

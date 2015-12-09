@@ -250,29 +250,6 @@
             }
         }
 
-        /* private bool IsRebatePaymentRequired(decimal? amount) {
-             return !(amount == null || amount <= 0);
-         }*/
-
-        /*private TaskScheduler ChargeRebate(decimal? amount, string trans_id, Loan loan, DateTime? now) {
-
-            var nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
-            if (IsRebatePaymentRequired(amount)) {
-                if (amount != null) {
-                    NL_Payments nlPayment = new NL_Payments() {
-                        LoanID = nlLoanId,
-                        Amount = (decimal)amount,
-                        CreatedByUserID = this._context.UserId,
-                        CreationTime = DateTime.UtcNow,
-                        PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
-                    };
-                    var f = new LoanPaymentFacade();
-                    f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, nlPayment, now, "system-repay", false, null, this._context.UserId);
-                }
-            }
-            return null;
-        }*/
-
         private TaskScheduler RebatePayment(HttpContext httpContext, int userId, string userHostAddress, decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
             
             System.Web.HttpContext.Current = httpContext;
@@ -283,7 +260,7 @@
 
             _log.Debug(string.Format("GetCashController.RebatePayment -> nlLoanID = {0} for oldLoanID {1}", nlLoanId.ToString(), loan.Id.ToString()));
             NL_Payments nlPayment = new NL_Payments() {
-                Amount = (decimal)amount,
+                Amount = amount.Value,
                 CreatedByUserID = userId,
                 CreationTime = DateTime.UtcNow,
                 LoanID = nlLoanId,

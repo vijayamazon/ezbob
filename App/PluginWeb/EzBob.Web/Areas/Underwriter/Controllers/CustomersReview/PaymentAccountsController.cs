@@ -211,13 +211,12 @@
                 var f = new LoanPaymentFacade();
 
                 long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.context.UserId).Value;
-                NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, this.context.UserId,true).Value;
 
                 NL_Payments nlPayment = new NL_Payments(){
-                    Amount = (decimal)amount,
+                    Amount = amount.Value,
                     CreatedByUserID = this.context.UserId,
                     CreationTime = DateTime.UtcNow,
-                    LoanID = nlModel.Loan.LoanID,
+                    LoanID = nl_LoanId,
                     PaymentTime = DateTime.UtcNow,
                     Notes = "Add Pay Point Card To Customer",
                     PaymentStatusID = (int)NLPaymentStatuses.Active,
