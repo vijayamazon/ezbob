@@ -30,7 +30,7 @@
 			Payment = payment;
 			UserID = userID;
 
-            LoanDAL = new LoanDAL();
+			LoanDAL = new LoanDAL();
 
 			this.strategyArgs = new object[] { CustomerID, Payment, UserID };
 		}

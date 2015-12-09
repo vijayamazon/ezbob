@@ -49,8 +49,10 @@
 					new QueryParameter("@Now", Result.Loan.LastHistory().EventTime)
 				);
 
+				NL_AddLog(LogType.Info, "DataForLoan", this.strategyArgs, DataForLoan, Error, null);
+
 				if (!string.IsNullOrEmpty(DataForLoan.Error)) {
-					Error = string.Format(DataForLoan.Error + " dataForLoan: {0} ", Result);
+					Error = DataForLoan.Error;
 					Log.Error(Error);
 					NL_AddLog(LogType.Info, "Strategy Failed", this.strategyArgs, Result, Error, null);
 					return;
@@ -63,7 +65,7 @@
 					return;
 				}
 
-				//Log.Debug(DataForLoan.ToString());
+				Log.Debug(DataForLoan.ToString());
 
 				if (DataForLoan.AvailableAmount < DataForLoan.LoanLegalAmount) {
 					Error = string.Format("No available credit for current offer. New loan is not allowed. dataForLoan: {0} ", Result); // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
@@ -71,10 +73,6 @@
 					NL_AddLog(LogType.Info, "Strategy Failed - No available credit for current offer. New loan is not allowed", this.strategyArgs, Result, Error, null);
 					return;
 				}
-				// moved to AddLoan
-				/*	if (!string.IsNullOrEmpty(Result.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.ExistsRefnums) && dataForLoan.ExistsRefnums.Contains(Result.Loan.Refnum)) {
-						this.Error = NL_ExceptionLoanExists.DefaultMessage;
-					}*/
 
 				/*** 
 				//CHECK "Enough Funds" (uncomment WHEN old BE REMOVED from \App\PluginWeb\EzBob.Web\Code\LoanCreator.cs, method CreateLoan method)                    

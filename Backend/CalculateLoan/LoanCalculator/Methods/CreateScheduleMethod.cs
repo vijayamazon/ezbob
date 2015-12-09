@@ -12,11 +12,6 @@
 		public CreateScheduleMethod(ALoanCalculator calculator)
 			: base(calculator, false) {
 
-			//if (loanModel == null)
-			//	throw new NoInitialDataException();
-
-			//if (loanModel.Loan == null)
-			//	throw new NoInitialDataException();
 
 		} // constructor
 
@@ -27,28 +22,29 @@
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		public virtual void Execute() {
 
-			NL_LoanHistory history = WorkingModel.Loan.LastHistory();
+			Calculator.currentHistory = WorkingModel.Loan.LastHistory();
+			//NL_LoanHistory history = WorkingModel.Loan.LastHistory();
 
-			if (history == null) {
+			if (Calculator.currentHistory == null) {
 				throw new NoInitialDataException();
 			}
 
-			if (history.Amount <= 0) {
-				throw new InvalidInitialAmountException(history.Amount);
+			if (Calculator.currentHistory.Amount <= 0) {
+				throw new InvalidInitialAmountException(Calculator.currentHistory.Amount);
 			}
 
-			if (history.InterestRate == 0) {
-				throw new InvalidInitialInterestRateException(history.InterestRate);
+			if (Calculator.currentHistory.InterestRate == 0) {
+				throw new InvalidInitialInterestRateException(Calculator.currentHistory.InterestRate);
 			}
 
-			if (history.RepaymentCount == 0) {
-				throw new InvalidInitialRepaymentCountException(history.RepaymentCount);
+			if (Calculator.currentHistory.RepaymentCount == 0) {
+				throw new InvalidInitialRepaymentCountException(Calculator.currentHistory.RepaymentCount);
 			}
 
 			//int interestOnlyRepayments = history.InterestOnlyRepaymentCount; //  default is 0 \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 35
 
 			// RepaymentCount,  EventTime, InterestRate, RepaymentIntervalType 
-			history.SetDefaults();
+			Calculator.currentHistory.SetDefaults();
 
 			// LoanType, LoanFormulaID, RepaymentDate
 			WorkingModel.Loan.SetDefaults();
@@ -57,49 +53,44 @@
 			// decimal[] balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray(); ???
 
 			if (WorkingModel.Loan.LoanFormulaID == (int)NLLoanFormulas.EqualPrincipal) {
-				CalculateScheduleEqualPrincipalFormula(history);
+				CalculateScheduleEqualPrincipalFormula();
 			} else if (WorkingModel.Loan.LoanFormulaID == (int)NLLoanFormulas.FixedPayment) {
-				CalculateScheduleFixedPaymentFormula(history);
+				CalculateScheduleFixedPaymentFormula();
 			}
 
-			if (history.Schedule == null) {
+			if (Calculator.currentHistory.Schedule == null) {
 				Log.Error("No schedules created");
 				throw new NoScheduleException();
 			}
 
-			// set scheduled interests (based on balance), fees and amountDue: planned Ad= f'+i'+p'
-			/*	Calculator.events = new List<LoanEvent>();
-				LoanEvent hEvent = new LoanEvent(new DateTime(history.EventTime.Year, history.EventTime.Month, history.EventTime.Day), history);
-				Calculator.events.Add(hEvent);
-				history.Schedule.ForEach(e => Calculator.events.Add(new LoanEvent(new DateTime(e.PlannedDate.Year, e.PlannedDate.Month, e.PlannedDate.Day), e)));
-				Calculator.PlannedScheduledAmountsDue(history.Amount);*/
+			AddFeesToScheduleItems();
 
-			AddFeesToScheduleItems(history);
+			WorkingModel.Loan.Histories.Insert(0, Calculator.currentHistory);
 		}
 
 		/// <summary>
 		/// calculates schedules according to keren shava formula (EqualPrincipal)
 		/// </summary>
-		/// <param name="history"></param>
-		private void CalculateScheduleEqualPrincipalFormula(NL_LoanHistory history) {
+		private void CalculateScheduleEqualPrincipalFormula() {
 
-			int interestOnlyRepayments = history.InterestOnlyRepaymentCount;
-			history.Schedule.Clear();
+			int interestOnlyRepayments = Calculator.currentHistory.InterestOnlyRepaymentCount;
+			Calculator.currentHistory.Schedule.Clear();
 
-			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)history.RepaymentIntervalTypeID;
+			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)Calculator.currentHistory.RepaymentIntervalTypeID;
 
-			int principalPayments = history.RepaymentCount - interestOnlyRepayments;
-			decimal iPrincipal = Math.Floor(history.Amount / principalPayments);
-			decimal iFirstPrincipal = history.Amount - iPrincipal * (principalPayments - 1);
+			int principalPayments = Calculator.currentHistory.RepaymentCount - interestOnlyRepayments;
+			decimal iPrincipal = Math.Floor(Calculator.currentHistory.Amount / principalPayments);
+			decimal iFirstPrincipal = Calculator.currentHistory.Amount - iPrincipal * (principalPayments - 1);
 			List<decimal> discounts = WorkingModel.Offer.DiscountPlan;
+
+			discounts.ForEach(d => Log.Debug(d));
+
 			int discountCount = discounts.Count;
-			decimal balance = history.Amount;
-			
+			decimal balance = Calculator.currentHistory.Amount;
 			Calculator.schedule = new List<NL_LoanSchedules>();
-			Calculator.currentHistory = history;
 
 			// create Schedule 
-			for (int i = 1; i <= history.RepaymentCount; i++) {
+			for (int i = 1; i <= Calculator.currentHistory.RepaymentCount; i++) {
 				decimal principal = iPrincipal;
 
 				if (i <= interestOnlyRepayments)
@@ -107,11 +98,12 @@
 				else if (i == interestOnlyRepayments + 1)
 					principal = iFirstPrincipal;
 
-				decimal r = (i <= discountCount) ? (history.InterestRate *= (1 + discounts[i - 1])) : history.InterestRate;
+				decimal r = Calculator.currentHistory.InterestRate;
+				if (i <= discountCount)
+					r *= (1 + discounts[i - 1]);
 
-				DateTime prevScheduleDate = Calculator.AddRepaymentIntervals(i, history.RepaymentDate, intervalType).Date;
-
-				DateTime plannedDate = (i == 1) ? history.RepaymentDate.Date : prevScheduleDate; //Calculator.AddRepaymentIntervals(i, history.RepaymentDate, intervalType).Date;
+				DateTime plannedDate = Calculator.AddRepaymentIntervals(i-1, Calculator.currentHistory.RepaymentDate, intervalType).Date;
+				DateTime prevScheduleDate = Calculator.PreviousScheduleDate(plannedDate, intervalType);
 
 				NL_LoanSchedules item = new NL_LoanSchedules() {
 					InterestRate = r,
@@ -127,7 +119,7 @@
 
 				Calculator.schedule.Add(item);
 
-				history.Schedule.Add(item);
+				Calculator.currentHistory.Schedule.Add(item);
 			} // for
 
 		}
@@ -135,10 +127,9 @@
 		/// <summary>
 		/// calculates schedules according to shpitzer formula (FixedPayment)
 		/// </summary>
-		/// <param name="history"></param>
-		private void CalculateScheduleFixedPaymentFormula(NL_LoanHistory history) {
+		private void CalculateScheduleFixedPaymentFormula() {
 
-			if (WorkingModel.Loan.LastHistory().PaymentPerInterval == 0m) {
+			if (Calculator.currentHistory.PaymentPerInterval == 0m) {
 				throw new NoPaymentPerIntervalException();
 			}
 
@@ -166,8 +157,7 @@
 		/// <summary>
 		/// calculate setup/servicing (arrangement) fees and attach it to schedule items PlannedDate
 		/// </summary>
-		/// <param name="history"></param>
-		private void AddFeesToScheduleItems(NL_LoanHistory history) {
+		private void AddFeesToScheduleItems() {
 
 			// no fees defined
 			if (WorkingModel.Offer.OfferFees == null || WorkingModel.Offer.OfferFees.Count == 0) {
@@ -175,7 +165,7 @@
 				return;
 			}
 
-			int schedulesCount = history.Schedule.Count;
+			int schedulesCount = Calculator.currentHistory.Schedule.Count;
 
 			// extract offer-fees
 			var offerFees = WorkingModel.Offer.OfferFees;
@@ -192,8 +182,8 @@
 			if (setupFee != null) {
 				var feeCalculator = new SetupFeeCalculator(setupFee.Percent, brokerFeePercent);
 
-				decimal setupFeeAmount = feeCalculator.Calculate(history.Amount);
-				WorkingModel.BrokerComissions = feeCalculator.CalculateBrokerFee(history.Amount);
+				decimal setupFeeAmount = feeCalculator.Calculate(Calculator.currentHistory.Amount);
+				WorkingModel.BrokerComissions = feeCalculator.CalculateBrokerFee(Calculator.currentHistory.Amount);
 
 				//Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
 				Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
@@ -201,7 +191,7 @@
 				WorkingModel.Loan.Fees.Add(
 					new NL_LoanFees() {
 						Amount = setupFeeAmount,
-						AssignTime = history.EventTime,
+						AssignTime = Calculator.currentHistory.EventTime,
 						Notes = "setup fee one-part",
 						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
 						CreatedTime = Calculator.NowTime,
@@ -213,15 +203,15 @@
 			if (servicingFee != null) {
 				var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, brokerFeePercent);
 
-				decimal servicingFeeAmount = feeCalculator.Calculate(history.Amount);
-				WorkingModel.BrokerComissions = feeCalculator.CalculateBrokerFee(history.Amount);
+				decimal servicingFeeAmount = feeCalculator.Calculate(Calculator.currentHistory.Amount);
+				WorkingModel.BrokerComissions = feeCalculator.CalculateBrokerFee(Calculator.currentHistory.Amount);
 
 				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 
 				decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
 				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
-				foreach (NL_LoanSchedules s in history.Schedule) {
+				foreach (NL_LoanSchedules s in Calculator.currentHistory.Schedule) {
 					decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
 					WorkingModel.Loan.Fees.Add(
 						new NL_LoanFees() {
