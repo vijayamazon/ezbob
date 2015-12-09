@@ -69,8 +69,10 @@
 
 			loan.AddTransaction(transactionItem);
 
-		    if (nlPayment != null) {
-                nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+
+		    int cardId = 0;
+		    if (!transId.Equals("--- manual ---") && nlPayment != null) {
+		                        nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
                     TransactionTime = DateTime.UtcNow,
                     Amount = amount,
                     Notes = description,
