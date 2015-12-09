@@ -68,19 +68,7 @@
 	        }.Contains(typeOfBusiness);
 		}
 
-		/// <exception cref="OverflowException">The result is outside the range of a <see cref="T:System.Decimal" />.</exception>
-		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
-		/// <exception cref="NoLoanHistoryException">Condition. </exception>
-		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
-		/// <exception cref="NoInitialDataException">Condition. </exception>
-		/// <exception cref="LoanPendingStatusException">Condition. </exception>
-		/// <exception cref="LoanWriteOffStatusException">Condition. </exception>
-		/// <exception cref="LoanPaidOffStatusException">Condition. </exception>
-		/// <exception cref="Exception">A delegate callback throws an exception. </exception>
-		/// <exception cref="NoInstallmentFoundException">Condition. </exception>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="NoLoanEventsException">Condition. </exception>
+	
 		public decimal GetAmountToPay(int customerID,
 									  int loanScheduleID,
 									  int loandID) {

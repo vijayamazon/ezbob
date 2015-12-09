@@ -113,7 +113,7 @@
 			}
 
 			if (ChargebackPaymentCancelled != null){
-				this._currentID = ChargebackPaymentCancelled.PaymentID;return this._currentID;
+				this._currentID = ChargebackPaymentCancelled.PaymentID;
 			}
 
 			if (Fee != null){
@@ -128,7 +128,6 @@
 		}
 
 		public override string ToString() {
-			// , PaidInterest={5}
 			return string.Format("EventTime={0}, EventType={1}, [ID]={2}, OpenPrincipal={3} EarnedInterest={4}", EventTime, GetTypeString(), GetTypeID(), OpenPrincipalForPeriod, EarnedInterestForPeriod); 
 		}
 

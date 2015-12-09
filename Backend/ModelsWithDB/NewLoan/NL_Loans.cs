@@ -176,7 +176,7 @@
 			// histories
 			if (Histories != null) {
 				sb.Append(Environment.NewLine)
-					.Append("Histories:");
+					.Append("Histories:").Append(Environment.NewLine);
 				Histories.ForEach(h => sb.Append(h.ToString()));
 			}  // else sb.Append("No Histories").Append(Environment.NewLine);
 

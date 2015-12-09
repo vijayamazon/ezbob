@@ -5,7 +5,7 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Attributes;
 	using Ezbob.Utils.dbutils;
-	
+
 
 	[DataContract(IsReference = true)]
 	public class NL_LoanSchedules : AStringable {
@@ -78,24 +78,27 @@
 		[DataMember]
 		[NonTraversable]
 		public decimal AmountDue { get; set; }
-		
+
 		[DataMember]
 		[NonTraversable]
 		public decimal PrincipalPaid { get; set; }
 
-		[DataMember] 
+		[DataMember]
 		[NonTraversable]
 		public decimal InterestPaid { get; set; }
 
 		//[DataMember]
 		//[NonTraversable]
 		//public decimal FeesAssigned { get; set; }
-	
+
 		//[DataMember]
 		//[NonTraversable]
 		//public decimal FeesPaid { get; set; }
 
-		[DataMember] // p*r based on real open principal
+		/// <summary>
+		///  p*r based on real open principal: used to calculate schedule's interest to pay
+		/// </summary>
+		[DataMember]
 		[NonTraversable]
 		public decimal InterestOP { get; set; }
 
@@ -106,10 +109,10 @@
 		[NonTraversable]
 		public decimal AmountDueOP { get; set; }*/
 
-		[DataMember]
-		[NonTraversable]
-		public bool LateFeesAttached { get; set; }
-		
+		//[DataMember]
+		//[NonTraversable]
+		//public bool LateFeesAttached { get; set; }
+
 		public NL_LoanSchedules ShallowCopy() {
 			NL_LoanSchedules cloned = (NL_LoanSchedules)MemberwiseClone();
 			return cloned;

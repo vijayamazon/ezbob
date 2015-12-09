@@ -498,8 +498,8 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 21; //17; 
-			const int customerID = 362; // 351;
+			/*const long loanID = 21; const int customerID = 362; */
+			const long loanID = 17; const int customerID =351;
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
@@ -514,6 +514,14 @@
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
+
+			// old loan
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan oldLoan = loanRep.Get(dbState.Result.Loan.OldLoanID);
+			// old calc
+			LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
+			oldCalc.GetState();
+			this.m_oLog.Debug("++++++++++++++++++++++++++++++old loan: {0}", oldLoan);
 		}
 
 		[Test]

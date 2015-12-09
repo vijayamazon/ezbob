@@ -34,7 +34,7 @@
 		/// <param name="nlModel"></param>
 		public AddLoan(NL_Model nlModel) {
 			model = nlModel;
-			this.strategyArgs = new object[] {model};
+			this.strategyArgs = new object[] { model };
 		}
 
 		public override string Name { get { return "AddLoan"; } }
@@ -62,7 +62,7 @@
 			try {
 				if (model.CustomerID == 0) {
 					Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -82,14 +82,14 @@
 
 				if (history == null) {
 					Error = NL_ExceptionRequiredDataNotFound.LastHistory;
-                    NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (history.Agreements == null || history.Agreements.Count == 0) {
 					Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
 					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
-                    return;
+					return;
 				}
 
 				if (history.AgreementModel == null) {
@@ -119,10 +119,10 @@
 
 				model = dataForLoan.Result;
 
-                // prevent to create the same loan (by refnum)
-                if (!string.IsNullOrEmpty(model.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.DataForLoan.ExistsRefnums) && dataForLoan.DataForLoan.ExistsRefnums.Contains(model.Loan.Refnum)) {
-                    Error = NL_ExceptionLoanExists.DefaultMessage;
-                }
+				// prevent to create the same loan (by refnum)
+				if (!string.IsNullOrEmpty(model.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.DataForLoan.ExistsRefnums) && dataForLoan.DataForLoan.ExistsRefnums.Contains(model.Loan.Refnum)) {
+					Error = NL_ExceptionLoanExists.DefaultMessage;
+				}
 
 				ALoanCalculator nlCalculator = null;
 				// 2. Init Schedule and Fees
@@ -149,8 +149,8 @@
 
 				if (!string.IsNullOrEmpty(Error)) {
 					Log.Alert("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
-                    NL_AddLog(LogType.Error,
-                        "Strategy Faild" + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error),
+					NL_AddLog(LogType.Error,
+						"Strategy Faild" + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error),
 						 this.strategyArgs, null, Error, null);
 					return;
 				}
@@ -265,9 +265,9 @@
 					}
 
 					// 11. save default loan options record
-                    model.Loan.LoanOptions.LoanOptionsID = DB.ExecuteScalar<long>(pconn, "NL_SaveLoanOptions",
+					model.Loan.LoanOptions.LoanOptionsID = DB.ExecuteScalar<long>(pconn, "NL_SaveLoanOptions",
 					   CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", new NL_LoanOptions {
-						   LoanID = this.LoanID, 
+						   LoanID = this.LoanID,
 						   UserID = 1, // default system user?
 						   InsertDate = nowTime,
 						   IsActive = true,
@@ -288,7 +288,7 @@
 
 					SendMail("NL: loan rolled back", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
 
-                    NL_AddLog(LogType.Error, "Strategy Faild - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+					NL_AddLog(LogType.Error, "Strategy Faild - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 					return;
 				}
 

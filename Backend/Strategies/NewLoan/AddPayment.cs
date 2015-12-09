@@ -1,8 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.DAL;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 
@@ -41,6 +43,9 @@
 
 		private readonly object[] strategyArgs;
 
+		//[SetterProperty]
+		public ILoanDAL LoanDAL { get; set; }
+
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		public override void Execute() {
 
@@ -51,15 +56,21 @@
 
 			NL_AddLog(LogType.Info, "Started", this.strategyArgs, Error, null, null);
 
-			GetLoanState state = new GetLoanState(CustomerID, Payment.LoanID, DateTime.UtcNow, UserID);
-			state.Execute();
+			// load loan
+			var loan = LoanDAL.GetLoan(Payment.LoanID);
 
-			// failed to load loan from DB or caclulator error
-			if (!string.IsNullOrEmpty(state.Error)) {
+			if (loan.LoanStatusID == (int)NLLoanStatuses.Pending) {
+				// loan pending - can't to add payment
+				Error = string.Format("Loan {0} in status 'Pending' yet, payment registering not allowed.", loan.LoanID);
+				Log.Debug(Error);
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, Error, Error, null);
+				return;
+			}
 
-				//if loan is paid - can't to add payment
-				Error = state.Error;
-				Log.Debug("Failed to get loan state: {0}", Error);
+			if ((loan.LoanStatusID == (int)NLLoanStatuses.PaidOff || loan.LoanStatusID == (int)NLLoanStatuses.WriteOff) && loan.DateClosed!=null) {
+				// loan closed - can't to add payment
+				Error = string.Format("Loan {0} in status {1} since {2:d}, payment registering not allowed.", loan.LoanID, loan.LoanStatusID, loan.DateClosed);
+				Log.Debug(Error);
 				NL_AddLog(LogType.Info, "End", this.strategyArgs, Error, Error, null);
 				return;
 			}

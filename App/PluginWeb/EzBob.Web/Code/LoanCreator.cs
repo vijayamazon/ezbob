@@ -1,31 +1,32 @@
 ﻿namespace EzBob.Web.Code {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using ConfigManager;
-    using DbConstants;
-    using Ezbob.Backend.Models;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Logger;
-    using Ezbob.Utils.Extensions;
-    using EzBob.Models.Agreements;
-    using EzBob.Web.Areas.Customer.Controllers;
-    using EzBob.Web.Areas.Customer.Controllers.Exceptions;
-    using EzBob.Web.Infrastructure;
-    using EZBob.DatabaseLib;
-    using EZBob.DatabaseLib.Model;
-    using EZBob.DatabaseLib.Model.Database;
-    using EZBob.DatabaseLib.Model.Database.Loans;
-    using EZBob.DatabaseLib.Model.Loans;
-    using NHibernate;
-    using PaymentServices.Calculators;
-    using PaymentServices.PacNet;
-    using SalesForceLib.Models;
-    using ServiceClientProxy;
-    using StructureMap;
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
+	using ConfigManager;
+	using DbConstants;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
+	using EzBob.Models.Agreements;
+	using EzBob.Web.Areas.Customer.Controllers;
+	using EzBob.Web.Areas.Customer.Controllers.Exceptions;
+	using EzBob.Web.Infrastructure;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
+	using PaymentServices.Calculators;
+	using PaymentServices.PacNet;
+	using SalesForceLib.Models;
+	using ServiceClientProxy;
+	using StructureMap;
 
-    public interface ILoanCreator {Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
+	public interface ILoanCreator {
+		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
 	} // interface ILoanCreator
 
 	public class LoanCreator : ILoanCreator {
@@ -118,7 +119,7 @@
 			nlModel.FundTransfer = new NL_FundTransfers() {
 				Amount = loanAmount, // logic transaction - full amount
 				TransferTime = now,
-				FundTransferStatusID = (int) NLFundTransferStatuses.Pending, //  (int)NLPacnetTransactionStatuses.InProgress,
+				FundTransferStatusID = (int)NLFundTransferStatuses.Pending, //  (int)NLPacnetTransactionStatuses.InProgress,
 				LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet,
 				PacnetTransactions = new List<NL_PacnetTransactions>()
 			};
@@ -130,7 +131,7 @@
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
-					Status = (isFakeLoanCreate || isEverlineRefinance)? LoanTransactionStatus.Done: LoanTransactionStatus.InProgress,
+					Status = (isFakeLoanCreate || isEverlineRefinance) ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
 					TrackingNumber = ret.TrackingNumber,
 					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
@@ -154,7 +155,7 @@
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
 					Status = LoanTransactionStatus.Done,
-					TrackingNumber = "alibaba deal. CustomerID: " + cus.Id , // TODO save who got the money
+					TrackingNumber = "alibaba deal. CustomerID: " + cus.Id, // TODO save who got the money
 					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
 					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Manual")
@@ -199,6 +200,7 @@
 			*/
 
 			// NL model - loan. Create history here for agreements processing 
+			nlModel.Loan = new NL_Loans();
 			nlModel.Loan.Histories.Clear();
 			nlModel.Loan.Histories.Add(new NL_LoanHistory() {
 				Amount = loanAmount,
@@ -210,7 +212,7 @@
 
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
-			
+
 			// This is the place where the loan is created and saved to DB
 			log.Info(
 				"Create loan for customer {0} cash request {1} amount {2}",
@@ -237,7 +239,7 @@
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
 			} // try*/
-			
+
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
@@ -326,7 +328,7 @@
 			try {
 				cus.ValidateOfferDate();
 			} catch {
-				log.Warn("ValidateOffer wrong offer date OfferStart {0} OfferValidUntil {1} Now {2} customerid:{3}", 
+				log.Warn("ValidateOffer wrong offer date OfferStart {0} OfferValidUntil {1} Now {2} customerid:{3}",
 					cus.OfferStart, cus.OfferValidUntil, DateTime.UtcNow, cus.Id);
 				throw;
 			}
@@ -454,25 +456,25 @@
 
 		private void ValidateRepaymentPeriodAndInterestRate(Customer cus) {
 			var cr = cus.LastCashRequest;
-			
-            //validate that CR exsists.
-            if (cr == null) {
+
+			//validate that CR exsists.
+			if (cr == null) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate No offer exists customerid: {0}", cus.Id);
 				throw new ArgumentException("No offer exists");
 			}
-            //validate in case customer not allowed to change period that request equal to approved.
+			//validate in case customer not allowed to change period that request equal to approved.
 			if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong repayment period !cr.IsCustomerRepaymentPeriodSelectionAllowed {0} && cr.RepaymentPeriod {1} != cr.ApprovedRepaymentPeriod {2} customerid: {3}",
 					cr.IsCustomerRepaymentPeriodSelectionAllowed, cr.RepaymentPeriod, cr.ApprovedRepaymentPeriod, cus.Id);
 				throw new ArgumentException("Wrong repayment period");
 			}
-            //validate that loan period is in the range of max period allowed by loan source
+			//validate that loan period is in the range of max period allowed by loan source
 			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod > cr.RepaymentPeriod) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong repayment period2 cr.LoanSource.DefaultRepaymentPeriod.HasValue true && cr.LoanSource.DefaultRepaymentPeriod {0} > cr.RepaymentPeriod {1} customerid: {2}",
-					 cr.LoanSource.DefaultRepaymentPeriod, cr.RepaymentPeriod,cus.Id);
+					 cr.LoanSource.DefaultRepaymentPeriod, cr.RepaymentPeriod, cus.Id);
 				throw new ArgumentException("Wrong repayment period");
 			}
-            //validate that loan interest is in the range of max interest allowed by loan source
+			//validate that loan interest is in the range of max interest allowed by loan source
 			if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
 				log.Warn("ValidateRepaymentPeriodAndInterestRate Wrong interest rate cr.LoanSource.MaxInterest.HasValue true && cr.InterestRate {0} > cr.LoanSource.MaxInterest.Value {1} customerid: {2}",
 					cr.InterestRate, cr.LoanSource.MaxInterest.Value, cus.Id);

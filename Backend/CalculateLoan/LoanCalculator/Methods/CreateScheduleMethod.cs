@@ -94,7 +94,7 @@
 			List<decimal> discounts = WorkingModel.Offer.DiscountPlan;
 			int discountCount = discounts.Count;
 			decimal balance = history.Amount;
-			Calculator.BalanceBasedInterestCalculation = true;
+			
 			Calculator.schedule = new List<NL_LoanSchedules>();
 			Calculator.currentHistory = history;
 
@@ -130,7 +130,6 @@
 				history.Schedule.Add(item);
 			} // for
 
-			Calculator.BalanceBasedInterestCalculation = false;
 		}
 
 		/// <summary>
