@@ -5,12 +5,14 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Logger;
+	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
 	using PricingModel;
+	using StructureMap;
 
-	public class OfferCalculator1 {
+    public class OfferCalculator1 {
 		public OfferCalculator1() {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
@@ -190,6 +192,15 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                this.log.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel);
+            }
+            catch (Exception) {
+                this.log.Info("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+            }
 
 			return loan;
 		} // CreateLoan

@@ -9,9 +9,11 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Database;
+	using EzServiceAccessor;
 	using PaymentServices.Calculators;
-	
-	public class PricingModelCalculator: AStrategy
+	using StructureMap;
+
+    public class PricingModelCalculator: AStrategy
 	{
 		private readonly int customerId;
 
@@ -144,6 +146,15 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                Log.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel);
+            }
+            catch (Exception) {
+                Log.Info("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+            }
 
 			return loan;
 		}

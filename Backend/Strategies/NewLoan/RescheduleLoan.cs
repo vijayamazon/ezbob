@@ -10,6 +10,7 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Utils;
     using EzBob.Models;
+    using EzServiceAccessor;
     using EZBob.DatabaseLib.Model.Database.Loans;
     using EZBob.DatabaseLib.Model.Database.UserManagement;
     using EZBob.DatabaseLib.Model.Loans;
@@ -173,6 +174,17 @@
                         this.tLoan.InterestFreeze.Add(freeze);
 
                     calc.GetState(); // reload state with freeze consideration
+
+                    try {
+                        long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(this.tLoan.Id, 1, 1);
+                        var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(this.tLoan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                        Log.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, this.tLoan, nlModel);
+                    }
+                    catch (Exception) {
+                        Log.Info("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+                    }
+
+
                 }
 
                 decimal totalEarlyPayment = calc.TotalEarlyPayment();
@@ -473,6 +485,16 @@
             try
             {
                 calc.GetState();
+
+                try {
+                    long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(this.tLoan.Id, 1, 1);
+                    var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(this.tLoan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                    Log.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, this.tLoan, nlModel);
+                }
+                catch (Exception) {
+                    Log.Info("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+                }
+
                 // ReSharper disable once CatchAllClause
             }
             catch (Exception e)
@@ -617,6 +639,16 @@
             this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
             var calc = new LoanRepaymentScheduleCalculator(this.tLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
+
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(this.tLoan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(this.tLoan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                Log.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, this.tLoan, nlModel);
+            }
+            catch (Exception) {
+                Log.Info("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+            }
+
             var currentState = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan).Items;
             StringBuilder currentStateStr = new StringBuilder();
             if (currentState != null)

@@ -224,6 +224,15 @@
 				LoanRepaymentScheduleCalculator c = new LoanRepaymentScheduleCalculator(loan, term, this.amountToChargeFrom);
 				LoanScheduleItem state = c.GetState();
 
+                try {
+                    long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                    var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                    Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+                }
+                catch (Exception) {
+                    Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+                }
+
 				decimal late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
 					state.Interest +
 					state.Fees +
@@ -441,12 +450,33 @@
 
 		public LoanScheduleItem GetStateAt(Loan loan, DateTime dateTime) {
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, this.amountToChargeFrom);
-			return payEarlyCalc.GetState();
+			 var result = payEarlyCalc.GetState();
+
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
+
+		    return result;
 		} // GetStateAt
 
 		public void Recalculate(Loan loan, DateTime dateTime) {
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, this.amountToChargeFrom);
 			payEarlyCalc.GetState();
+
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
+
 		} // Recalculate
 
 		private readonly ILoanHistoryRepository _historyRepository;

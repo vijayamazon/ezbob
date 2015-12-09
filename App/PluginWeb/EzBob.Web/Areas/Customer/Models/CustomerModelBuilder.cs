@@ -22,7 +22,9 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EzBob.Web.Code;
+	using EzServiceAccessor;
 	using log4net;
+	using StructureMap;
 	using Web.Models;
 
 	public class CustomerModelBuilder {
@@ -422,6 +424,15 @@
 				CurrentValues.Instance.AmountToChargeFrom
 			);
 			var state = payEarlyCalc.GetState();
+		    
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                this.Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+		    } catch (Exception) {
+                this.Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+		    }
+
 
 			return state.Fees + state.Interest;
 		} // GetRolloverPayValue

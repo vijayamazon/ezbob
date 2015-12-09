@@ -68,7 +68,17 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-			var model = this._loanModelBuilder.BuildModel(loan);
+            try {
+                long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
+
+
+            var model = this._loanModelBuilder.BuildModel(loan);
 
 			RescheduleSetmodel(model, loan);
 
@@ -148,6 +158,15 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
+            try {
+                long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
+
 			RescheduleSetmodel(model, loan);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
@@ -198,6 +217,16 @@
 			try {
 				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
+
+                try {
+                    long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                    var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                    Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+                }
+                catch (Exception) {
+                    Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+                }
+
 			} catch (Exception e) {
 				model.Errors.Add(e.Message);
 				return model;
@@ -434,6 +463,15 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+
+            try {
+                long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
 			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);

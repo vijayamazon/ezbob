@@ -6,9 +6,11 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
+	using EzServiceAccessor;
 	using PaymentServices.Calculators;
+	using StructureMap;
 
-	public class LoanBuilder {
+    public class LoanBuilder {
 		public LoanBuilder(ChangeLoanDetailsModelBuilder builder) {
 			_builder = builder;
 		} // constructor
@@ -80,6 +82,8 @@
 
 			var c = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 			c.GetState();
+
+
 			loan.LoanSource = cr.LoanSource;
 			return loan;
 		} // CreateLoanFromTemplate

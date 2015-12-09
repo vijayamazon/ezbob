@@ -254,6 +254,16 @@
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
+            try {
+                long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
+
+
 			var model = new LoanPaymentDetails {
 				Balance = payEarlyCalc.TotalEarlyPayment(),
 				MinValue = !hasRollover ? 0.01m : state.Fees + state.Interest
@@ -281,6 +291,15 @@
 			var rollover = _rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
+
+            try {
+                long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
 
 			var rolloverCharge = CurrentValues.Instance.RolloverCharge;
 

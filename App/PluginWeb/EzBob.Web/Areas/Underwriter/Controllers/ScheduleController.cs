@@ -7,9 +7,11 @@
 	using Code;
 	using Code.ReportGenerator;
 	using ConfigManager;
+	using EzServiceAccessor;
 	using Infrastructure.Attributes;
 	using log4net;
 	using PaymentServices.Calculators;
+	using StructureMap;
 	using Web.Models;
 
 	public class ScheduleController : Controller
@@ -55,6 +57,15 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+
+            try {
+                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
+                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+            }
+            catch (Exception) {
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
 
 			var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 

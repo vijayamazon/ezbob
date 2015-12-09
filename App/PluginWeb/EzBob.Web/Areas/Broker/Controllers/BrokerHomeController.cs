@@ -1001,6 +1001,16 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
+            try {
+                long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+                var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+                ms_oLog.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel);
+            }
+            catch (Exception) {
+                ms_oLog.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+            }
+
+
 			var apr = loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);

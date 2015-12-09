@@ -773,6 +773,10 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
