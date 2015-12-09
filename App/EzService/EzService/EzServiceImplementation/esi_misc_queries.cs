@@ -262,7 +262,7 @@
 		}
 
 		public ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail,decimal? balance = null, bool? isPaidOff = null) {
-			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail, balance, isPaidOff);
+			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, sendMail, balance, isPaidOff);
 		}
 
 		public ActionMetaData BackfillBrokerCommissionInvoice() {

@@ -30,6 +30,8 @@
 			Payment = payment;
 			UserID = userID;
 
+            LoanDAL = new LoanDAL();
+
 			this.strategyArgs = new object[] { CustomerID, Payment, UserID };
 		}
 
@@ -57,7 +59,7 @@
 			NL_AddLog(LogType.Info, "Started", this.strategyArgs, Error, null, null);
 
 			// load loan
-			var loan = LoanDAL.GetLoan(Payment.LoanID);
+			NL_Loans loan = LoanDAL.GetLoan(Payment.LoanID);
 
 			if (loan.LoanStatusID == (int)NLLoanStatuses.Pending) {
 				// loan pending - can't to add payment
