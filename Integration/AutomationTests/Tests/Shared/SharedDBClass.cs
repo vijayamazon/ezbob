@@ -8,10 +8,8 @@
         private readonly ResourceManager _EnvironmentConfig;
 
         public SharedDBClass(ResourceManager EnvironmentConfig) {
-            this.oDB = new SqlConnection(sConnectionString:this._EnvironmentConfig.GetString("QA2DBConnectionString"));
             this._EnvironmentConfig = EnvironmentConfig;
-
-
+            this.oDB = new SqlConnection(sConnectionString:this._EnvironmentConfig.GetString("QA2DBConnectionString"));
         }
 
         public T ExecuteScalar<T>(string SP, CommandSpecies CS, string param = null) {
