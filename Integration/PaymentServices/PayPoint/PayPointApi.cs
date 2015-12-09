@@ -235,6 +235,7 @@
                     return ex.PaypointData;
                 }
 
+                Log.Info(string.Format("NL_Compare - PayPointApi.MakeAutomaticPayment Old : {0};  New : {1}", amount, nlPayment.Amount));
                 loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, 1,nlPayment);
                 installments.CommitTransaction();
 

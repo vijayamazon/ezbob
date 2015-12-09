@@ -183,7 +183,7 @@
                     var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, firstOrDefault.LoanID, DateTime.UtcNow,1);
 
                     nlPayment = new NL_Payments() {
-                        Amount = nlModel.Balance,
+                        Amount = nlModel.TotalEarlyPayment,
                         CreatedByUserID = 1,
                         CreationTime = DateTime.UtcNow,
                         LoanID = nlModel.Loan.LoanID,
@@ -194,6 +194,7 @@
                     };    
 			    }
 			    try {
+                    Log.Info(string.Format("NL_Compare - LoanPaymentFacade.PayAllLoansForCustomer Old : {0};  New : {1}", amount, nlPayment.Amount));
                     PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, 1, nlPayment);
                     amount = amount - money;
 			    } catch (Exception ex ) {
@@ -234,8 +235,13 @@
                 var nl_LoanId = nl_loans.FirstOrDefault(x => x.OldLoanID == loan.Id).LoanID;
                 var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow,1,true);
 
+			    decimal NL_late = nlModel.Loan.LastHistory()
+			        .Schedule.Where(s => s.LoanScheduleStatusID == 2)
+			        .Sum(s => s.AmountDue);
+                decimal NLmoney = Math.Min(amount, NL_late);
+
                 NL_Payments nlPayment = new NL_Payments(){
-                    Amount = nlModel.Balance,
+                    Amount = NLmoney,
                     CreatedByUserID = 1,
                     CreationTime = DateTime.UtcNow,
                     LoanID = nlModel.Loan.LoanID,
@@ -244,6 +250,7 @@
                     PaymentStatusID = (int)NLPaymentStatuses.Active,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual                    
                 };
+                Log.Info(string.Format("NL_Compare - LoanPaymentFacade.PayAllLoansForCustomer Old : {0};  New : {1}", amount, nlPayment.Amount));
                 PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, 1, nlPayment);
 
 				amount = amount - money;
@@ -351,9 +358,11 @@
                 var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
                 var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow, 1,true);
 
+                
+
                 NL_Payments nlPayment = new NL_Payments()
                 {
-                    Amount = nlModel.Balance,
+                    Amount = nlModel.Loan.LastHistory().Schedule.FirstOrDefault(x=> (DateTime.UtcNow - x.PlannedDate).TotalDays <= 30 ).Interest,
                     CreatedByUserID = userId,
                     CreationTime = DateTime.UtcNow,
                     LoanID = nlModel.Loan.LoanID,
@@ -363,6 +372,7 @@
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
 
+                Log.Info(string.Format("NL_Compare - LoanPaymentFacade.MakePayment Old : {0};  New : {1}", amount, nlPayment.Amount));
                 PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod,1, nlPayment);
 				newInterest = 0;
 			} else {
@@ -380,7 +390,8 @@
                 var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
                 var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nl_LoanId, DateTime.UtcNow, 1,true);
 
-				
+                //Payment Flow : Wizard select total balance -> PaypointController.PayFast -> PaymentFacade.MakePayment.
+
                 NL_Payments nlPayment = new NL_Payments()
                 {
                     Amount = nlModel.Balance,
@@ -392,6 +403,8 @@
                     PaymentStatusID = (int)NLPaymentStatuses.Active,
                     PaymentMethodID = (int)NLLoanTransactionMethods.Manual
                 };
+
+                Log.Info(string.Format("NL_Compare - LoanPaymentFacade.PayAllLoansForCustomer Old : {0};  New : {1}", amount, nlPayment.Amount));
                 PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, 1, nlPayment);
 			   
 				newInterest = loan.Interest;

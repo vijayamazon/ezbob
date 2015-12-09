@@ -795,7 +795,6 @@
 				DecisionTime = now,
 				DecisionNameID = (int)DecisionActions.Waiting,
 				Notes = "Waiting; oldCashRequest: " + cr.Id
-				//todo Position =
 			}, cr.Id, null);
 
 			log.Info("NL decisionID: {0}, oldCashRequestID: {1}, Error: {2}", decision.Value, cr.Id, decision.Error);

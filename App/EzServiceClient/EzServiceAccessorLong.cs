@@ -103,8 +103,9 @@
 
         public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true)
         {
-            return this.m_oServiceClient.Instance.GetLoanState(customerID, loanID, utcNow, userID, getCalculatorState).Value;
-	    }
+            var nlModel =  this.m_oServiceClient.Instance.GetLoanState(customerID, loanID, utcNow, userID, getCalculatorState).Value;
+            return nlModel;
+        }
 
         public long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1) {
             return this.m_oServiceClient.Instance.GetLoanByOldID(loanId,customerID, userID).Value;

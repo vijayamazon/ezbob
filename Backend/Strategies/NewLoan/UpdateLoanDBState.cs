@@ -41,9 +41,8 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
-
+            NL_AddLog(LogType.Info, "Strategy Start", LoanID, null, null, null);
 			NL_AddLog(LogType.Error, "Started", this.strategyArgs, Error, null, null);
-
 			if (CustomerID == 0) {
 				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
@@ -186,7 +185,7 @@
 
 				pconn.Commit();
 
-				NL_AddLog(LogType.Info, "End", this.strategyArgs, RecalculatedModel, Error, null);
+                NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, RecalculatedModel, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

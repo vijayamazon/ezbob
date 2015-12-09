@@ -17,6 +17,7 @@
 	using EzBob.Web.Code.MpUniq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using log4net;
 	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
     using PaymentServices.Calculators;
@@ -213,7 +214,7 @@
                 NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, this.context.UserId,true).Value;
 
                 NL_Payments nlPayment = new NL_Payments(){
-                    Amount = nlModel.Balance,
+                    Amount = (decimal)amount,
                     CreatedByUserID = this.context.UserId,
                     CreationTime = DateTime.UtcNow,
                     LoanID = nlModel.Loan.LoanID,

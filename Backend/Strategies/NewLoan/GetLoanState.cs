@@ -1,15 +1,14 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-	using System;
-	using System.Linq;
-	using ConfigManager;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Backend.Strategies.NewLoan.DAL;
-	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
-	using Ezbob.Database;
+    using System;
+    using System.Linq;
+    using Ezbob.Backend.CalculateLoan.LoanCalculator;
+    using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Backend.Strategies.NewLoan.DAL;
+    using Ezbob.Backend.Strategies.NewLoan.Exceptions;
+    using Ezbob.Database;
 
-	/// <summary>
+    /// <summary>
 	/// Load NL Loan from DB into NL_Model. Return state of the loan in nlModel with calculated data from the calculator
 	/// </summary>
 	public class GetLoanState : AStrategy {
@@ -44,7 +43,7 @@
 
 		} // constructor
 
-		public override string Name { get { return "GetLoanDBState"; } }
+        public override string Name { get { return "GetLoanState"; } }
 
 		public NL_Model Result { get; private set; }
 		private readonly DateTime StateDate;
