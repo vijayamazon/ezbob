@@ -24,6 +24,13 @@ CREATE PROCEDURE NL_DecisionsSave
 AS
 BEGIN
 	SET NOCOUNT ON;
+	
+	DECLARE @lastPosition int; 
+
+	set @lastPosition = (select Max(Position) from [dbo].[NL_Decisions] d join [dbo].[NL_CashRequests] cr on cr.CashRequestID = d.CashRequestID 
+	and cr.CustomerID = (select CustomerID from [dbo].[NL_CashRequests] where CashRequestID = (select [CashRequestID] from @Tbl)))
+
+	select @lastPosition = @lastPosition + 1;
 
 	INSERT INTO NL_Decisions (
 		[CashRequestID],
@@ -37,7 +44,7 @@ BEGIN
 		[UserID],
 		[DecisionNameID],
 		[DecisionTime],
-		[Position],
+		@lastPosition as [Position],
 		[Notes]		
 	FROM @Tbl
 

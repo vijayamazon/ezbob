@@ -152,7 +152,10 @@ BEGIN
 		CONSTRAINT PK_NL_Decisions PRIMARY KEY (DecisionID),
 		CONSTRAINT FK_NL_Decisions_CashRequest FOREIGN KEY (CashRequestID) REFERENCES NL_CashRequests (CashRequestID),
 		CONSTRAINT FK_NL_Decisions_User FOREIGN KEY (UserID) REFERENCES Security_User (UserId),
-		CONSTRAINT FK_NL_Decisions_Decision FOREIGN KEY (DecisionNameID) REFERENCES Decisions (DecisionID)
+		CONSTRAINT FK_NL_Decisions_Decision FOREIGN KEY (DecisionNameID) REFERENCES Decisions (DecisionID),
+		CONSTRAINT CHK_NL_Decisions CHECK (		
+			(Position >= 1)			
+		)	
 	)
 END
 GO
