@@ -267,7 +267,8 @@
                 PaymentTime = DateTime.UtcNow,
                 Notes = "Rebate Payment",
                 PaymentStatusID = (int)NLPaymentStatuses.Active,
-                PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+                PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
+                PaymentSystemType = NLPaymentSystemTypes.Paypoint
             };
             var loanPaymentFacade = new LoanPaymentFacade();
             loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, now, "system-repay", false, null, userId, nlPayment);

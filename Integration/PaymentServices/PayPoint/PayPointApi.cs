@@ -169,8 +169,8 @@
                     PaymentTime = DateTime.UtcNow,
                     Notes = "Automatic Payment",
                     PaymentStatusID = (int)NLPaymentStatuses.Active,
-                    PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
-                    PaypointTransactions = new List<NL_PaypointTransactions>()
+                    PaypointTransactions = new List<NL_PaypointTransactions>(),
+                    PaymentSystemType = NLPaymentSystemTypes.Paypoint
                 };
 
                 Log.InfoFormat("Making automatic repayment for customer {0}(#{1}) for amount {2} for loan# {3}({4})",
@@ -220,7 +220,7 @@
                         Notes = ex.PaypointData.Message ?? "Exception:" + ex.Message,
                         PaypointUniqueID = string.Empty,                    
                         IP = string.Empty,
-                        PaypointTransactionStatusID = (int)LoanTransactionStatus.Error
+                        PaypointTransactionStatusID = (int)LoanTransactionStatus.Error,                       
                     });
 
                     installments.CommitTransaction();

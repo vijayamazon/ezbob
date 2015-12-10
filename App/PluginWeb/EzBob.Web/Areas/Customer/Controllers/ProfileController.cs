@@ -346,7 +346,7 @@
                     PaymentTime = DateTime.UtcNow,
                     Notes = "Add Pay Point Card",
                     PaymentStatusID = (int)NLPaymentStatuses.Active,
-                    PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+                    PaymentSystemType = NLPaymentSystemTypes.Paypoint
                 };
 
                 f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id, nlPayment);
