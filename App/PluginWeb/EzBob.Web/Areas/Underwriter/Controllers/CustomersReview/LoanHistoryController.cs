@@ -3,25 +3,22 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Code.ReportGenerator;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using Ezbob.Backend.Models;
-	using Infrastructure.Attributes;
-	using Models;
-	using Code;
-	using Code.ReportGenerator;
-	using DbConstants;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Infrastructure;
+	using log4net;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
 	using ServiceClientProxy;
-	using log4net;
-	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class LoanHistoryController : Controller {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanHistoryController));
@@ -257,10 +254,10 @@
             try {
                 long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
                 var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
             }
             catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
             }
 
 
@@ -295,10 +292,10 @@
             try {
                 long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
                 var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
+                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
             }
             catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
+                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
             }
 
 			var rolloverCharge = CurrentValues.Instance.RolloverCharge;

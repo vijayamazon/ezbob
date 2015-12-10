@@ -69,6 +69,7 @@
 		private List<NL_PaypointTransactions> _paypointTransactions = new List<NL_PaypointTransactions>();
 		private List<NL_LoanSchedulePayments> _schedulePayments = new List<NL_LoanSchedulePayments>();
 		private List<NL_LoanFeePayments> _feePayments = new List<NL_LoanFeePayments>();
+		private NLPaymentSystemTypes _paymentSystemType = NLPaymentSystemTypes.None;
 		
 		[DataMember]
 		[NonTraversable]
@@ -93,6 +94,15 @@
 			get { return this._feePayments; }
 			set { this._feePayments = value; }
 		}
+
+		[DataMember]
+		[NonTraversable]
+		[EnumName(typeof(NLPaymentSystemTypes))]
+		public NLPaymentSystemTypes PaymentSystemType {
+			get { return this._paymentSystemType; }
+			set { this._paymentSystemType = value; }
+		}
+
 
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public override string ToString() {

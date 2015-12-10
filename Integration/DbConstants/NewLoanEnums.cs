@@ -26,7 +26,7 @@
 	} // enum NLLoanStatuses
 
 	public enum NLFeeTypes {
-        None = 0,
+		None = 0,
 		SetupFee = 1,		// DB table id
 		RolloverFee = 2,
 		AdminFee = 3,
@@ -105,6 +105,15 @@
 		SystemRepay = 12,
 	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
 
+	/// <summary>
+	/// used in "pay loan" flows to indicate throuhg which payment system current transaction done
+	/// </summary>
+	public enum NLPaymentSystemTypes {
+		None,
+		Paypoint,
+		Pacnet
+	} // NLMoneyTransactionTypes
+
 	// duplicate of enum LoanAgreementTemplateType
 	public enum NLLoanAgreementTemplateTypes {
 		GuarantyAgreement = 1, // DB table id
@@ -133,5 +142,5 @@
 		FixedPayment = 2 // used for "out of loan agreement" rescheduling, not supported yet (15 October 2015)
 	}
 
-	
+
 } // namespace

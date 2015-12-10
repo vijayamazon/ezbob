@@ -28,8 +28,8 @@
 		///			- int LoanID newly created
 		///			- optional string Error
 		/// 
-		/// Creation of loan from underwriter not supported
-		/// mail notifications sent on success/on error
+		/// Creation of loan from underwriter not supported 
+		/// Mail notifications sent on success/on error
 		/// </summary>
 		/// <param name="nlModel"></param>
 		public AddLoan(NL_Model nlModel) {
@@ -62,19 +62,19 @@
 			try {
 				if (model.CustomerID == 0) {
 					Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-					NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (model.Loan == null) {
 					Error = NL_ExceptionRequiredDataNotFound.Loan;
-					NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (model.Loan.OldLoanID == null) {
 					Error = NL_ExceptionRequiredDataNotFound.OldLoan;
-					NL_AddLog(LogType.Error, "Strategy Faild ", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed ", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -82,19 +82,19 @@
 
 				if (history == null) {
 					Error = NL_ExceptionRequiredDataNotFound.LastHistory;
-					NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (history.Agreements == null || history.Agreements.Count == 0) {
 					Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
-					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (history.AgreementModel == null) {
 					Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
-					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -113,7 +113,7 @@
 
 				if (!string.IsNullOrEmpty(dataForLoan.Error)) {
 					Error = dataForLoan.Error;
-					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -149,9 +149,7 @@
 
 				if (!string.IsNullOrEmpty(Error)) {
 					Log.Alert("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
-					NL_AddLog(LogType.Error,
-						"Strategy Faild" + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error),
-						 this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed" + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error), this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -170,7 +168,7 @@
 
 				if (nlSchedule.Count == 0) {
 					Error += "Failed to generate Schedule/fees";
-					NL_AddLog(LogType.Error, "Strategy Faild - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy Failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -288,7 +286,7 @@
 
 					SendMail("NL: loan rolled back", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
 
-					NL_AddLog(LogType.Error, "Strategy Faild - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+					NL_AddLog(LogType.Error, "Strategy Failed - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 					return;
 				}
 
@@ -347,7 +345,7 @@
 				SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements, setupfeeOffsetpayment, feePayment);
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, this.LoanID, Error, null);
 			} catch (Exception ex) {
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 			}
 		}//Execute
 
