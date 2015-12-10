@@ -77,6 +77,10 @@ IF NOT object_id('I_Parameter') IS NULL
 	DROP TABLE I_Parameter
 GO
 
+IF NOT object_id('I_GradeRange') IS NULL
+	DROP TABLE I_GradeRange
+GO
+
 IF NOT object_id('I_Grade') IS NULL
 	DROP TABLE I_Grade
 GO
