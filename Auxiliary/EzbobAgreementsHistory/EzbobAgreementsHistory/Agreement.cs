@@ -64,7 +64,7 @@
 
 		public void CopyFiles(string targetPath) {
 			foreach (DateTime date in ReleaseDates)
-				CopyOneFile(targetPath, date);
+				CopyAtLeastOneFile(targetPath, date);
 		} // CopyFiles
 
 		public string Name { get; private set; }
@@ -84,24 +84,41 @@
 			);
 		} // S2D
 
-		public void CopyOneFile(string targetPath, DateTime date) {
-			var sr = this.db.GetFirst(
+		public void CopyAtLeastOneFile(string targetPath, DateTime date) {
+			bool foundInDB = false;
+			bool copied = false;
+			
+			this.db.ForEachRowSafe(
+				(sr, ignored) => {
+					foundInDB = true;
+
+					if (CopyOneFile(sr["FilePath"], date, targetPath)) {
+						copied = true;
+						return ActionResult.SkipAll;
+					} // if
+
+					return ActionResult.Continue;
+				},
 				string.Format(QueryFormat, Name, date.ToString("MMMM d yyyy", CultureInfo.InvariantCulture)),
 				CommandSpecies.Text
 			);
 
-			if (sr.IsEmpty) {
+			if (!foundInDB) {
 				this.log.Alert(
 					"No file found in DB for {0} on {1}.",
 					Name,
 					date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
 				);
-
-				return;
+			} else if (!copied) {
+				this.log.Alert(
+					"No file found on disk for {0} on {1}.",
+					Name,
+					date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
+				);
 			} // if
+		} // CopyAtLeastOneFile
 
-			string sourceRelativePath = sr["FilePath"];
-
+		private bool CopyOneFile(string sourceRelativePath, DateTime date, string targetPath) {
 			string targetFileName = Path.Combine(
 				targetPath,
 				string.Format("{0}-{1}.pdf", Name, date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))
@@ -110,30 +127,34 @@
 			foreach (string basePath in basePaths) {
 				string sourceFileName = Path.Combine(basePath, sourceRelativePath);
 
-				if (File.Exists(sourceFileName)) {
-					File.Copy(sourceFileName, targetFileName);
+				if (!File.Exists(sourceFileName))
+					continue;
 
-					this.log.Info(
-						"{0} on {1} file copied to {2}.",
-						Name,
-						date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
-						targetFileName
-					);
+				File.Copy(sourceFileName, targetFileName);
 
-					return;
-				} // if
+				this.log.Info(
+					"{0} on {1} file copied to {2}.",
+					Name,
+					date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
+					targetFileName
+				);
+
+				return true;
 			} // for each
 
-			this.log.Alert(
-				"No file found on disk for {0} on {1}.",
+			this.log.Warn(
+				"No file found on disk for {0} on {1} with relative path of {2}.",
 				Name,
-				date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
+				date.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
+				sourceRelativePath
 			);
+
+			return false;
 		} // CopyOneFile
 
 		private static List<string> basePaths;
 
-		private const string QueryFormat = @"SELECT TOP 1
+		private const string QueryFormat = @"SELECT
 	a.FilePath
 FROM
 	LoanAgreement a
