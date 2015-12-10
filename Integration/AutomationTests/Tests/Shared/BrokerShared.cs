@@ -1,4 +1,5 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
+    using System;
     using System.Resources;
     using OpenQA.Selenium;
     using UIAutomationTests.Core;
@@ -33,7 +34,7 @@
             bool iAgreeToTerms,
             bool iAgreeToPrivacyPolicy
             ) {
-            string url = this._BrandConfig.GetString("BrokerSignupHost");
+            string url = String.Concat(this._EnvironmentConfig.GetString("ENV_address"),this._BrandConfig.GetString("BrokerSignupHost"));
 
             this._Driver.Navigate().GoToUrl(url);
 
@@ -88,7 +89,7 @@
 
         public void BrokerLogIn(string brokerMail) {
             SharedServiceClass.WaitForBlockUiOff(this._Driver);
-            string url = this._BrandConfig.GetString("BrokerLoginHost");
+            string url = String.Concat(this._EnvironmentConfig.GetString("ENV_address"), this._BrandConfig.GetString("BrokerLoginHost"));
 
             this._Driver.Navigate()
                 .GoToUrl(url);
@@ -129,8 +130,12 @@
                 leadLastName.SendKeys(lName);
             }
 
-            IWebElement leadMail = this._Driver.FindElement(By.Id("LeadEmail"));
-            leadMail.SendKeys(leadEmail);
+            lock (this.Locker) {
+                IWebElement leadMail = this._Driver.FindElement(By.Id("LeadEmail"));
+                leadMail.Click();
+                leadMail.SendKeys(leadEmail);
+            }
+
         }
 
         public void BrokerAddBankAccount(string accountNum,

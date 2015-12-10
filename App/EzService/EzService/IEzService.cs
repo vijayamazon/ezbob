@@ -377,6 +377,9 @@
 			);
 
 		[OperationContract]
+		ActionMetaData PostcodeNuts(int nUserID, string postcode);
+
+		[OperationContract]
 		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
 
 		[OperationContract]

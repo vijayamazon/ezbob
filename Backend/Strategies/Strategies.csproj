@@ -201,6 +201,7 @@
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
+    <Compile Include="Misc\GetCustomerState.cs" />
     <Compile Include="Misc\LoadApplicationInfo.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="ManualDecision\ApplyManualDecision.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
+    <Compile Include="Postcode\PostcodeNuts.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorParametersBLL.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorService.cs" />
     <Compile Include="OpenPlatform\BLL\InvestorParametersBLL.cs" />

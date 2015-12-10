@@ -11,6 +11,7 @@
     using TestRailModels.Automation;
     using TestRailModels.TestRail;
 
+    [TestFixture]
     public class WebTestBase {
         protected IWebDriver Driver { get; set; }
         protected ResourceManager EnvironmentConfig { get; set; }
@@ -24,6 +25,13 @@
                 }
                 return isDebugMode != null && (bool)isDebugMode;
             }
+        }
+        [TestFixtureTearDown]
+        public void Dispose() {
+            if (IsDebugMode) 
+                return;
+            foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
+                GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
         }
 
         protected bool ExecuteTest<T>(Func<T> codeToExecute) {
@@ -41,42 +49,37 @@
                 }
                 return false;
             }
-
+            bool res=true;
             foreach (AutomationModels.Browser browser in browsers) {
                 Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                 foreach (AutomationModels.Environment enviorment in enviorments) {
                     EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
-                    {
-                        foreach (AutomationModels.Brand brand in brands) {
-                            BrandConfig = Resources.GetBrandResourceManager(brand);
-                            try {
-                                if (!IsDebugMode) {
-                                    if (TestRailRepository.BlockedSet.Contains(caseID)) {
-                                        TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Blocked, "Automation is blocked depended test failed already");
-                                        return false;
-                                    }
-                                }
-
-                                Driver.Manage().Cookies.DeleteAllCookies();
-                                codeToExecute.Invoke();
-
-                                if (!IsDebugMode) {
-                                    TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
-                                }
-                            } catch (Exception ex) {
-                                string formattedMsg = String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u"));
-                                System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", formattedMsg);
-                                if (!IsDebugMode) {
-                                    UpdateBlockedList(caseID);
-                                    TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
-                                }
+                    foreach (AutomationModels.Brand brand in brands) {
+                        BrandConfig = Resources.GetBrandResourceManager(brand);
+                        try {
+                            if (!IsDebugMode && TestRailRepository.BlockedSet.Contains(caseID)) {
+                                TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Blocked, "Automation is blocked depended test failed already");
                                 return false;
                             }
+
+                            Driver.Manage().Cookies.DeleteAllCookies();
+                            codeToExecute.Invoke();
+
+                            if (!IsDebugMode) {
+                                TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
+                            }
+                        } catch (Exception ex) {
+                            System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u")));
+                            if (!IsDebugMode) {
+                                UpdateBlockedList(caseID);
+                                TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
+                            }
+                            res = false;
                         }
                     }
                 }
             }
-            return true;
+            return res;
         }
 
         public bool IsNotValidConfigured(List<AutomationModels.Browser> browsers,
@@ -98,7 +101,7 @@
         public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {
             if (IsDebugMode) {
                 return new List<AutomationModels.Browser>() {
-                    AutomationModels.Browser.Firefox
+                    AutomationModels.Browser.Chrome
                 };
             }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).Distinct().ToList();

@@ -36,7 +36,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2036")]
         public void TestCase2036() {
             bool result = this.ExecuteTest<object>(() => {
-                string url = BrandConfig.GetString("BrokerLoginHost");
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
                 Driver.Navigate().GoToUrl(url);
 
                 IWebElement signUp = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.sign-up > a"));
@@ -55,7 +55,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2037")]
         public void TestCase2037() {
             bool result = this.ExecuteTest<object>(() => {
-                string url = BrandConfig.GetString("BrokerLoginHost");
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
                 Driver.Navigate().GoToUrl(url);
 
                 IWebElement signUp = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.sign-up > a"));
@@ -66,6 +66,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, 2));
                 SharedServiceClass.WebAddressContains(Driver, "privacy-and", 20);
+
+                Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.CssSelector(BrandConfig.GetString("C2037_Privacy_selector"))).Text, BrandConfig.GetString("C2037_Privacy_content"));
 
                 Driver.Close();
                 Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, 1));
@@ -151,12 +153,11 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 leadSendInvitation.Click();
 
                 SharedServiceClass.WaitForBlockUiOff(Driver);
-                //Driver.Manage().Cookies.DeleteAllCookies();
                 IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a"));//Strep 8
                 logOff.Click();
 
                 GmailAPI.GmailOps newApi = new GmailAPI.GmailOps(); //Step 9 
-                string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, BrandConfig.GetString("Enviorment_url"));
+                string sentLink = newApi.ExtactLinkFromMessage(BrandConfig.GetString("Check_Incoming_Messages"), leadMail, String.Concat(EnvironmentConfig.GetString("ENV_name"), BrandConfig.GetString("Brand_url")));
                 Driver.Navigate().GoToUrl(sentLink);
 
                 IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
@@ -297,7 +298,9 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");//Step 10 (C91)
 
                 //Wizard Step 4 - add paypal account
-                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Step 11-12 (C4530, C4537)
+                //newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Step 11-12 (C4530, C4537)
+                //Wizard Step 4 - add EKM account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
 
                 SharedServiceClass.WaitForBlockUiOff(Driver);
 
@@ -341,7 +344,9 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");//Step 10 (C91)
 
                 //Wizard Step 4 - add paypal account
-                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Step 11-12 (C4530, C4537)
+                //newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Step 11-12 (C4530, C4537)
+                //Wizard Step 4 - add EKM account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
 
                 SharedServiceClass.WaitForBlockUiOff(Driver);
 
@@ -458,7 +463,9 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
 
                 //Wizard Step 4 - add paypal account
-                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                //newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                //Wizard Step 4 - add EKM account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
 
                 IWebElement widget = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
 
@@ -505,7 +512,9 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
 
                 //Wizard Step 4 - add paypal account
-                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                //newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                //Wizard Step 4 - add EKM account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
 
                 //SharedServiceClass.WaitForAjaxReady(Driver);
                 //Driver.Manage().Cookies.DeleteAllCookies();
@@ -577,6 +586,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1358")]
         public void TestCase1358() {
             bool result = this.ExecuteTest<object>(() => {
+                SharedDBClass dbAccess = new SharedDBClass(EnvironmentConfig);
+                SafeReader SR = dbAccess.GetFirst("UIAT_C1359", CommandSpecies.StoredProcedure, new QueryParameter[] { new QueryParameter("brokerMail", "test+broker_635851955123967269@ezbob.com") });
                 Assert.IsTrue(false);
                 return null;
             });
@@ -613,7 +624,9 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 newWizard.PerformWizardStepThree("Entrepreneur", false, "15", "123");
 
                 //Wizard Step 4 - add paypal account
-                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                //newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
+                //Wizard Step 4 - add EKM account
+                newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
 
                 //Precondition 3
                 newBroker.BrokerAddBankAccount("20115636", "62", "10", "00", 'P');
@@ -644,8 +657,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
                 Assert.IsTrue(decimal.Parse(widgetIssued.Text.Substring(1)) != 0.0m);
 
-                //SharedDBClass dbAccess = new SharedDBClass(EnvironmentConfig);
-                //SafeReader SR = dbAccess.GetFirst("UIAT_C1359",CommandSpecies.StoredProcedure,new QueryParameter[]{new QueryParameter("brokerMail",brokerMail)});
+                SharedDBClass dbAccess = new SharedDBClass(EnvironmentConfig);
+                SafeReader SR = dbAccess.GetFirst("UIAT_C1359",CommandSpecies.StoredProcedure,new QueryParameter[]{new QueryParameter("brokerMail",brokerMail)});
 
                 IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
                 logOff.Click();

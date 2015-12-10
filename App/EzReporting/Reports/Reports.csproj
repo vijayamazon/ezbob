@@ -85,6 +85,7 @@
     <Compile Include="BaseReportHandler\brh_NotAutoApproved.cs" />
     <Compile Include="BaseReportHandler\brh_EarnedInterest.cs" />
     <Compile Include="BaseReportHandler\brh_FinancialStats.cs" />
+    <Compile Include="BaseReportHandler\brh_NewUnmatchedPayments.cs" />
     <Compile Include="BaseReportHandler\brh_StrategyRunningTime.cs" />
     <Compile Include="BaseReportSender.cs" />
     <Compile Include="Cci\CciReport.cs" />

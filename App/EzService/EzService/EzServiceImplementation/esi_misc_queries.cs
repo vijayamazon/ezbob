@@ -94,47 +94,11 @@
 		}
 
 		public StringActionResult GetCustomerState(int customerId) {
-			string res = string.Empty;
-			try {
-				var instance = new GetAvailableFunds();
-				instance.Execute();
-				decimal availableFunds = instance.AvailableFunds;
-
-				SafeReader sr = DB.GetFirst("GetCustomerDetailsForStateCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-
-				int minLoanAmount = sr["MinLoanAmount"];
-				string creditResult = sr["CreditResult"];
-				string status = sr["Status"];
-				bool isEnabled = sr["IsEnabled"];
-				bool hasLateLoans = sr["HasLateLoans"];
-				DateTime offerStart = sr["ApplyForLoan"];
-				DateTime offerValidUntil = sr["ValidFor"];
-				bool hasFunds = availableFunds >= minLoanAmount;
-				bool blockTakingLoan = sr["BlockTakingLoan"];
-				bool canTakeAnotherLoan = sr["CanTakeAnotherLoan"];
-
-				if (!isEnabled || !canTakeAnotherLoan)
-					res = "disabled";
-				else if (hasLateLoans)
-					res = "late";
-				else if (string.IsNullOrEmpty(creditResult) || creditResult == "WaitingForDecision" || blockTakingLoan)
-					res = "wait";
-				else if (status == "Rejected")
-					res = "bad";
-				else if (status == "Manual")
-					res = "wait";
-				else if (hasFunds && DateTime.UtcNow >= offerStart && DateTime.UtcNow <= offerValidUntil && status == "Approved")
-					res = "get";
-				else if (hasFunds && DateTime.UtcNow < offerStart && offerStart < offerValidUntil && status == "Approved")
-					res = "wait";
-				else if (!hasFunds || DateTime.UtcNow > offerValidUntil)
-					res = "apply";
-			} catch (Exception e) {
-				Log.Error("Exception occurred during calculation of customer's state. The exception:{0}", e);
-			}
-
+			GetCustomerState instance;
+			ActionMetaData metadata = ExecuteSync(out instance, customerId, customerId, customerId);
 			return new StringActionResult {
-				Value = res
+				Value = instance.Result,
+				MetaData = metadata
 			};
 		}
 

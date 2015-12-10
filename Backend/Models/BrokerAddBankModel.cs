@@ -13,5 +13,9 @@
         public string SortCode { get; set; }
         [DataMember]
         public string BankAccountType { get; set; }
+
+		public override string ToString() {
+		    return string.Format("{0}, {1}, {2}, {3}", BrokerEmail, AccountNumber, SortCode, BankAccountType);
+	    }
     }
 }

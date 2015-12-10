@@ -37,22 +37,22 @@
 			} // if
 
 			var env = new Ezbob.Context.Environment(this.log);
-			var db = new SqlConnection(env, this.log);
+			this.DB = new SqlConnection(env, this.log);
 
-			CurrentValues.Init(db, this.log);
+			CurrentValues.Init(this.DB, this.log);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 
 			Configuration cfg;
 
 			if (this.methodList.ContainsKey(sInstanceName)) {
-				cfg = new DefaultConfiguration(System.Environment.MachineName, db, this.log);
+				cfg = new DefaultConfiguration(System.Environment.MachineName, this.DB, this.log);
 				this.cmdLineArgs = args;
 			} else {
 				this.cmdLineArgs = new string[args.Length - 1];
 				Array.Copy(args, 1, this.cmdLineArgs, 0, args.Length - 1);
 
-				cfg = new Configuration(sInstanceName, db, this.log);
+				cfg = new Configuration(sInstanceName, this.DB, this.log);
 			} // if
 
 			cfg.Init();
@@ -71,7 +71,11 @@
 				oTcpBinding,
 				new EndpointAddress(cfg.AdminEndpointAddress)
 				);
-		} // constructor
+		}// constructor
+
+		protected readonly SqlConnection DB;
+
+
 
 		public void Execute() {
 			string strategyName = this.cmdLineArgs[0];
@@ -218,6 +222,20 @@
 			} // if
 
 			this.serviceClient.BackfillZooplaValue();
+		}
+
+		[Activation]
+		private void BackfillPostcodeNuts() {
+			if ((this.cmdLineArgs.Length != 1)) {
+				this.log.Msg("Usage: BackfillPostcodeNuts");
+				return;
+			} // if
+
+			this.DB.ForEachRow((sr, bRowsetStart) => {
+				this.serviceClient.PostcodeNuts(1, sr["Postcode"].ToString());
+				return Ezbob.Database.ActionResult.Continue;
+			}, "SELECT DISTINCT Postcode FROM CustomerAddress WHERE Postcode IS NOT NULL AND Postcode <> ''", CommandSpecies.Text);
+			
 		}
 
 		[Activation]
@@ -1033,7 +1051,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 	        int customerId;
             if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId))
 	        {
-				log.Msg("Usage: RescheduleLoan <Loan Id> <Customer Id> <User Id>");
+				this.log.Msg("Usage: RescheduleLoan <Loan Id> <Customer Id> <User Id>");
 	            return;
 	        }
   
@@ -1049,7 +1067,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 		    reModel.PaymentPerInterval = 300;
 	
 			var res= this.serviceClient.RescheduleLoan(userId, customerId, reModel);
-			log.Msg(res.Value);
+			this.log.Msg(res.Value);
 	    }
         
         [Activation]
@@ -1420,7 +1438,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void BravoAutomationReport() {
 			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
 
-			log.Debug(
+			this.log.Debug(
 				"Start date is {0}, end date is {1}", 
 				dates.Item1.HasValue ? dates.Item1.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty,
 				dates.Item2.HasValue ? dates.Item2.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty

@@ -1,0 +1,22 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('PostcodeNutsCheckExists') IS NULL
+	EXECUTE('CREATE PROCEDURE PostcodeNutsCheckExists AS SELECT 1')
+GO
+
+ALTER PROCEDURE PostcodeNutsCheckExists
+@Postcode NVARCHAR(10)
+AS 
+BEGIN
+	SET NOCOUNT ON;
+	IF EXISTS (SELECT 1	FROM PostcodeNuts WHERE Postcode = @Postcode)
+	BEGIN
+		SELECT CAST(1 AS BIT) AS IsFound	
+	END
+	ELSE
+	BEGIN 
+		SELECT CAST(0 AS BIT) AS IsFound
+	END 
+END
+GO

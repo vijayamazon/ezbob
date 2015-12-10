@@ -168,6 +168,11 @@
 			set { }
 		} // BrokerSetupFeePercent
 
+		public bool SpreadSetupFee {
+			get { return this.autoDecisionResponse.SpreadSetupFee; }
+			set { }
+		} // SpreadSetupFee
+
 		public bool IsCustomerRepaymentPeriodSelectionAllowed {
 			get { return this.isCustomerRepaymentPeriodSelectionAllowedToUse; }
 			set { }

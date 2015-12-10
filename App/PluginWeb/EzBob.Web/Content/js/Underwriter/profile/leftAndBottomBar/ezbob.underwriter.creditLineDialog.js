@@ -223,7 +223,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 					autonumericMax: EzBob.Config.MaxLoan,
 				},
 				repaymentPeriod: { required: true, autonumericMin: 1, },
-				interestRate: { required: true, autonumericMin: 1, autonumericMax: 100, },
+				interestRate: { required: true, autonumericMin: 0, autonumericMax: 100, },
 				startingFromDate: { required: true, dateCheck: true, },
 				offerValidUntil: { required: true, dateCheck: true, },
 				manualSetupFeePercent: { autonumericMin: 0, required: false, },
@@ -231,8 +231,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			},
 			messages: {
 				interestRate: {
-					autonumericMin: 'Interest Rate is below limit.',
-					autonumericMax: 'Interest Rate is above limit.',
+					autonumericMin: $.validator.format('Interest rate is below {0}%'),
+					autonumericMax: $.validator.format('Interest rate is above {0}%'),
 				},
 				repaymentPeriod: { autonumericMin: 'Repayment Period is below limit.', },
 				startingFromDate: {

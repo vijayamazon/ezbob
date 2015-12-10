@@ -6,9 +6,8 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 	serializeData: function() {
 		var data = {
 			schedule: this.options.schedule.Schedule,
-			apr: this.options.schedule.Apr,
 			setupFee: this.options.schedule.SetupFee,
-			realInterestCost: this.options.schedule.RealInterestCost,
+			averageAnnualCostofBorrowing: this.options.schedule.RealInterestCost,
 			total: this.options.schedule.Total,
 			totalInterest: this.options.schedule.TotalInterest,
 			totalPrincipal: this.options.schedule.TotalPrincipal,
@@ -24,7 +23,9 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 			ManualAddressWarning: this.options.ManualAddressWarning,
 			customer: this.options.customer,
 			refNum: this.options.refNum,
+			apr: this.options.schedule.Apr,
 			isPersonal: this.options.isPersonal
+			
 		};
 
 		if (data.MaxInterestForSource === null)

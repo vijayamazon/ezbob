@@ -79,7 +79,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -139,18 +139,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestRailCore">
-      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailCore.dll</HintPath>
-    </Reference>
-    <Reference Include="TestRailData">
-      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailData.dll</HintPath>
-    </Reference>
-    <Reference Include="TestRailEngine">
-      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="TestRailModels">
-      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailModels.dll</HintPath>
-    </Reference>
     <Reference Include="TestStack.Seleno, Version=0.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\TestStack.Seleno.dll</HintPath>
@@ -267,6 +255,22 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationInfra\TestRail\Core\TestRailCore.csproj">
+      <Project>{6fe9c95a-0677-4a7a-8465-1123410ef786}</Project>
+      <Name>TestRailCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationInfra\TestRail\TestRailEngine\TestRailEngine.csproj">
+      <Project>{d880cf3a-2570-4a0d-84cc-67a33ae540f3}</Project>
+      <Name>TestRailEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationInfra\TestRail\TestRailModels\TestRailModels.csproj">
+      <Project>{ef3f7377-5398-489e-bcd5-774f5d93e5a9}</Project>
+      <Name>TestRailModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationInfra\TestRail\TestRail\TestRailData.csproj">
+      <Project>{68c04a3f-da7c-4588-8aa8-11a01c13630b}</Project>
+      <Name>TestRailData</Name>
     </ProjectReference>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>

@@ -208,7 +208,7 @@
 			this.properties[f] = oValue;
 
 			if (oLog != null)
-				oLog.Debug("VatReturnSeeds.{0} := {1}", f.ToString(), oValue.ToString());
+				oLog.Debug("VatReturnSeeds.{0} := {1}", f, (oValue == null) ? "-- null --" : oValue.ToString());
 		} // Set
 
 		public dynamic Get(Field f) {

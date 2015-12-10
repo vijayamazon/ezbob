@@ -224,6 +224,7 @@
     <Compile Include="NewLoan\NL_CashRequests.cs" />
     <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
     <Compile Include="NewLoan\OfferForLoan.cs" />
+    <Compile Include="PostcodeNutsDBModel.cs" />
     <Compile Include="OpenPlatform\I_InvestorOverallStatistics.cs" />
     <Compile Include="OpenPlatform\I_InvestorSystemBalance.cs" />
     <Compile Include="OpenPlatform\I_InvestorBankAccountTransaction.cs" />
