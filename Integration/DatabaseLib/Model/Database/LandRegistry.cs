@@ -23,8 +23,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	public class LandRegistryMap : ClassMap<LandRegistry> {
 		public LandRegistryMap() {
 			Table("LandRegistry");
-			Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
 			Id(x => x.Id);
 			References(x => x.Customer, "CustomerId");
 			Map(x => x.InsertDate).CustomType<UtcDateTimeType>();

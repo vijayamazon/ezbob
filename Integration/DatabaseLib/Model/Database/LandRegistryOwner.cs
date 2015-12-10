@@ -16,7 +16,6 @@
 		public LandRegistryOwnerMap()
 		{
 			Table("LandRegistryOwner");
-			Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
 			Id(x => x.Id);
 			References(x => x.LandRegistry, "LandRegistryId");
