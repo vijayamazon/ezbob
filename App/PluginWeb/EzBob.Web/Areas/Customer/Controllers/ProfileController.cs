@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-
 	using System;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
@@ -227,11 +226,10 @@
 		public RedirectResult AddPayPoint() {
 			var oCustomer = m_oContext.Customer;
 			PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
-            int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
+			int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "Profile",
-				new
-				{
+				new {
 					Area = "Customer",
 					customerId = oCustomer.Id,
 					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
@@ -239,8 +237,8 @@
 					origin = oCustomer.CustomerOrigin.Name
 				}, "https");
 
-			
-            
+
+
 			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5.00m, callback);
 
 			return Redirect(url);
@@ -330,32 +328,31 @@
 				payPointFacade.PayPointAccount
 			);
 
-            bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
-		    if (amount > 0 && hasOpenLoans) {
-		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
-		        var f = new LoanPaymentFacade();
+			bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
+			if (amount > 0 && hasOpenLoans) {
+				Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
+				var f = new LoanPaymentFacade();
 
-                long nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
+				long nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
 
-                NL_Payments nlPayment = new NL_Payments()
-                {
-                    Amount = amount.Value,
-                    CreatedByUserID = this.m_oContext.UserId,
-                    CreationTime = DateTime.UtcNow,
-                    LoanID = nl_LoanId,
-                    PaymentTime = DateTime.UtcNow,
-                    Notes = "Add Pay Point Card",
-                    PaymentStatusID = (int)NLPaymentStatuses.Active,
-                    PaymentSystemType = NLPaymentSystemTypes.Paypoint
-                };
+				NL_Payments nlPayment = new NL_Payments() {
+					Amount = amount.Value,
+					CreatedByUserID = this.m_oContext.UserId,
+					CreationTime = DateTime.UtcNow,
+					LoanID = nl_LoanId,
+					PaymentTime = DateTime.UtcNow,
+					Notes = "Add Pay Point Card",
+					PaymentStatusID = (int)NLPaymentStatuses.Active,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint
+				};
 
-                f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id, nlPayment);
-		    }
+				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id, nlPayment);
+			}
 
-            if (amount > 0 && !hasOpenLoans) {
-                this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(cust.Id, cust.Id, amount.Value, trans_id);
-            }
-		    return View(new { success = true });
+			if (amount > 0 && !hasOpenLoans) {
+				this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(cust.Id, cust.Id, amount.Value, trans_id);
+			}
+			return View(new { success = true });
 		} // PayPointCallback
 
 		private void DoApplyForLoan() {
@@ -393,7 +390,7 @@
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession m_oSession;
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(ProfileController));
 		private string hostname;
 		private readonly ISecurityQuestionRepository questions;
 	} // class ProfileController

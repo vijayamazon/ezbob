@@ -879,7 +879,7 @@
 						calcItem.AmountDue = calcItem.Fees + calcItem.Interest + lateItems.Sum(p => p.Principal) - lateItems.Sum(p => p.PrincipalPaid);
 					}
 
-					NextEarlyPayment = calcItem.Principal - calcItem.PrincipalPaid + calcItem.Fees + Interest + Fees;
+					NextEarlyPayment = calcItem.AmountDue; //calcItem.Principal - calcItem.PrincipalPaid + calcItem.Fees + Interest + Fees;
 					NextEarlyPaymentSavedAmount = calcItem.Interest - earnedInterestForCalculationDate;
 				}
 			}

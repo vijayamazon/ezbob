@@ -481,7 +481,7 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 10029; const int customerID = 365; 
+			const long loanID = 20023;const int customerID = 362; 
 			/*const long loanID = 21; const int customerID = 362; */
 			/*const long loanID = 17; const int customerID =351;*/
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
@@ -513,8 +513,8 @@
 		[Test]
 		public void GetLoanStateTest() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 21; // ;21
-			const int customerID = 351; //  351
+			/*const long loanID = 21; const int customerID = 351;*/
+			const long loanID = 20023;const int customerID = 362;
 			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				state.Execute();
@@ -1071,6 +1071,15 @@
 			m_oLog.Debug(sp.ToStringAsTable());
 		}
 
+		[Test]
+		public void GetCustomerLoansTest() {
+			GetCustomerLoans s = new GetCustomerLoans();
+			s.Context.CustomerID = 362;
+			s.Context.UserID = 357;
+			s.Execute();
+
+			s.Loans.ForEach(l => this.m_oLog.Debug(l));
+		}
 
 	} // class TestNewLoan
 } // namespace

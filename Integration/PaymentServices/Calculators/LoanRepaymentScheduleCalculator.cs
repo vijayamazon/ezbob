@@ -194,6 +194,8 @@
 
 				var principal = _loan.LoanAmount - _paidPrincipal;
 
+				Console.WriteLine("NextEarlyPayment principal={0} _expectedPrincipal={1} InterestToPay={2}", principal, _expectedPrincipal, InterestToPay);
+
 				//если пользователь пропустил платеж
 				//if user missed payment
 				if (principal > _expectedPrincipal) {
@@ -201,11 +203,15 @@
 					return;
 				}
 
-				var next = _schedule.FirstOrDefault(s => s.Date >= _lastActionDate && s.LoanRepayment > 0) ??
-						   _schedule.LastOrDefault();
+				var next = _schedule.FirstOrDefault(s => s.Date >= _lastActionDate && s.LoanRepayment > 0) ??_schedule.LastOrDefault();
+
 				if (next != null) {
+
 					var expectedPrincipal = next.Balance;
 					amount = Math.Round(Math.Max(0, principal - expectedPrincipal + InterestToPay + FeesToPay), 2);
+
+					Console.WriteLine("NextEarlyPayment next={0} expectedPrincipal={1} amount={2}", next, expectedPrincipal, amount);
+
 				}
 			};
 			Recalculate();

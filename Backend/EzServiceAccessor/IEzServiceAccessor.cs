@@ -8,8 +8,8 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Utils;
 
-    public interface IEzServiceAccessor
-    {
+    public interface IEzServiceAccessor{
+
         ElapsedTimeInfo SaveVatReturnData(
             int nCustomerMarketplaceID,
             int nHistoryRecordID,

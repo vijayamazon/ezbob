@@ -1,7 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
@@ -30,7 +29,6 @@
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
-	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EzServiceAccessor;
@@ -42,9 +40,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using FraudChecker;
 	using NUnit.Framework;
-	using PaymentServices.Calculators;
 	using SalesForceLib;
-	using SalesForceLib.Models;
 	using StructureMap;
 	using Twilio;
 

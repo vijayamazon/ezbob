@@ -51,7 +51,7 @@ update [dbo].[NL_Payments] set [PaymentTime]=DATEADD(MONTH, @monthBack, [Payment
 
 update [dbo].[NL_PaypointTransactions] set [TransactionTime]=DATEADD(MONTH, @monthBack, [TransactionTime]) where [PaymentID]=(select PaymentID from NL_Payments where LoanID=@loanID);
 
-return;
+--return;
 
 --- EXISTING LOAN------------
 
