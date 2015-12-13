@@ -121,7 +121,7 @@
 		} // GetInference (historical, by date [and payment])
 
 		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment) {
-			bool isTryOut = (explicitMonthlyPayment < 0.01m);
+			bool isTryOut = (explicitMonthlyPayment >= 0.01m);
 
 			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
 
