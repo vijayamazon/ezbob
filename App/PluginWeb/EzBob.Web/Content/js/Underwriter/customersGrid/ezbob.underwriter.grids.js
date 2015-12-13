@@ -19,8 +19,9 @@ EzBob.Underwriter.GridTools = {
 		return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Manage investor" data-href="#manageInvestor/' + nInvestorID + '">' + (sLinkText || nInvestorID) + '</button>');
 	}, // investorManageLink
 
-	investorButton: function(buttonName) {
-		return EzBob.DataTables.Helper.withScrollbar('<a href="#" class="btn btn-primary" title="' + buttonName + '" data-href="">' + buttonName + '</a>');
+	investorButton: function(buttonName, buttonClass, customerID) {
+		console.log('a button "', buttonName, '" was clicked at UW Pending Investor screen' );
+		return EzBob.DataTables.Helper.withScrollbar('<a href="#" class="btn btn-primary ' + buttonClass + '" data-id="' + customerID + '" title="' + buttonName + '" data-href="">' + buttonName + '</a>');
 	}, // profileLink
 }; // EzBob.Underwriter.GridTools
 
@@ -64,18 +65,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				});
 			} // if has id
 
-			if (oData.hasOwnProperty('FindInvestor'))
-				$('.grid-item-FindInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.FindInvestor));
-
-			if (oData.hasOwnProperty('EditOffer'))
-				$('.grid-item-EditOffer', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.EditOffer));
-
-			if (oData.hasOwnProperty('SubmitChoosenInvestor'))
-				$('.grid-item-SubmitChoosenInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.SubmitChoosenInvestor));
-
-			if (oData.hasOwnProperty('ManageChoosenInvestor'))
-				$('.grid-item-ManageChoosenInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.ManageChoosenInvestor));
-
 			if (oData.IsWasLate)
 				$(oTR).addClass("table-flag-red");
 
@@ -111,10 +100,55 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			}), // approved
 
 
-			pendingInvestor: new GridProperties({
+			pendingInvestor: new GridProperties({ 
 				icon: 'hourglass-half',
+				title: 'Pending Investor',
 				action: 'UwGridPendingInvestor',
 				columns: '#Id,Name,Grade,ApplicantScore,$ApprovedAmount,!Term,*RequestApprovedAt,&TimeLimitUntilAutoreject,FindInvestor,EditOffer,ChooseInvestor,SubmitChoosenInvestor,ManageChoosenInvestor',
+				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+					if (oData.hasOwnProperty('ChooseInvestor')) {
+						$('.grid-item-ChooseInvestor', oTR).addClass('grid-btn').html('<select class="form-control choose-investor" id="DataID' +
+							oData.Id + '"></select>');
+					}
+
+					var rowID = '#DataID' + oData.Id.toString();
+					var oSelect = $(oTR).find(rowID);
+
+					$.each(oData.ChooseInvestor, function(idx, investorData) {
+						oSelect.append(
+							$('<option></option>').val(investorData.InvestorID).text(investorData.InvestorName).attr('funds', investorData.InvestorFunds)
+						);
+					}); // for each
+
+					if (oData.hasOwnProperty('Id')) {
+						$('.grid-item-Id', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id));
+
+						if (oData.hasOwnProperty('Name')) {
+							if (oData.Name)
+								$('.grid-item-Name', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id, oData.Name));
+						} // if has name
+
+						$(oTR).dblclick(function() {
+							location.assign($(oTR).find('.profileLink').first().data('href'));
+						});
+					} // if has id
+
+					if (oData.hasOwnProperty('FindInvestor'))
+						$('.grid-item-FindInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.FindInvestor, 'find-investor', oData.Id));
+
+					if (oData.hasOwnProperty('EditOffer'))
+						$('.grid-item-EditOffer', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.EditOffer, 'edit-offer', oData.Id));
+
+					if (oData.hasOwnProperty('SubmitChoosenInvestor'))
+						$('.grid-item-SubmitChoosenInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.SubmitChoosenInvestor, 'submit-choosen-investor', oData.Id));
+
+					if (oData.hasOwnProperty('ManageChoosenInvestor'))
+						$('.grid-item-ManageChoosenInvestor', oTR).empty().addClass('grid-btn').html(EzBob.Underwriter.GridTools.investorButton(oData.ManageChoosenInvestor, 'manage-choosen-investor', oData.Id));
+
+					if (oData.IsWasLate)
+						$(oTR).addClass("table-flag-red");
+
+				}
 			}), // pendingInvestor
 
 
@@ -220,8 +254,28 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		'click #logbook-show-new-entry-form': 'showNewLogbookEntryForm',
 		'click #logbook-new-entry-cancel': 'hideNewLogbookEntryForm',
 		'click #logbook-new-entry-save': 'submitNewLogbookEntryForm',
-		'mouseup .profileLink': 'profileLinkClicked'
+		'mouseup .profileLink': 'profileLinkClicked',
+		'click .find-investor': 'findInvestor',
+		'click .edit-offer': 'editOffer',
+		'click .submit-choosen-investor': 'submitChoosenInvestor',
+		'click .manage-choosen-investor': 'manageChoosenInvestor'
 	}, // events
+
+	findInvestor: function() {
+
+	},
+
+	editOffer: function() {
+
+	},
+
+	submitChoosenInvestor: function() {
+
+	},
+
+	manageChoosenInvestor: function() {
+
+	},
 
 	profileLinkClicked: function(evt) {
 		event.preventDefault();

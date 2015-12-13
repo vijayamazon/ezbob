@@ -2410,3 +2410,19 @@ input[type="text"].err-field-red {
 .table > tbody > tr > td.grid-btn div a.btn-primary{
 	padding: 4px 12px;
 }
+
+.table > tbody > tr > td.grid-btn select.form-control {
+	height: 30px !important;
+	padding-top: 2px;
+	width: 220px; 
+	border-color: #c9c9c9;
+}
+
+.table > tbody > tr > td.grid-item-ChooseInvestor {
+	text-align: right;
+	padding-right: 14px;
+}
+
+.table tr th.grid-item-ChooseInvestor {
+	text-align: center;
+}

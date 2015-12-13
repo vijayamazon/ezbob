@@ -7,6 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Html.Attributes;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
@@ -55,6 +56,7 @@
 			}, JsonRequestBehavior.AllowGet);
 		} // GetCounters
 
+		
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
@@ -102,7 +104,10 @@
 				return LoadGrid(nAction, includeTestCustomers, () => new GridApprovedRow());
 
 			case GridActions.UwGridPendingInvestor:
-				return LoadGrid(nAction, includeTestCustomers, () => new GridPendingInvestorRow());
+
+				List<PendingInvestorModel> allInvestorData = this.db.Fill<PendingInvestorModel>("GetInvestorData", CommandSpecies.StoredProcedure);
+
+				return LoadGrid(nAction, includeTestCustomers, () => new GridPendingInvestorRow(allInvestorData));
 
 			case GridActions.UwGridCollection:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridCollectionRow());
@@ -193,6 +198,7 @@
 				); // foreach
 			} // using
 
+			
 			log.Debug("{0}: traversing done.", nSpName);
 
 			var sb = new StringBuilder();
