@@ -1,9 +1,8 @@
-IF OBJECT_ID('NL_GetLoansToCollect') IS  NULL
-	EXECUTE('CREATE PROCEDURE NL_GetLoansToCollect AS SELECT 1')
+IF OBJECT_ID('NL_LateLoansGet') IS  NULL
+	EXECUTE('CREATE PROCEDURE NL_LateLoansGet AS SELECT 1')
 GO
 
-
-ALTER PROCEDURE [dbo].[NL_GetLoansToCollect]
+ALTER PROCEDURE [dbo].[NL_LateLoansGet]
 @Now DATETIME
 AS
 BEGIN
@@ -11,7 +10,7 @@ BEGIN
 	SELECT 
 		ls.LoanScheduleID, 
 		l.LoanId,
-		v.CustomerId, 
+		v.CustomerId,  
 		lst.LoanStatus LoanStatus,
 		lss.LoanScheduleStatus ScheduleStatus, 
 		ls.PlannedDate ScheduleDate,
