@@ -24,6 +24,7 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.Reports;
 	using Ezbob.Backend.Strategies.SalesForce;
@@ -551,7 +552,7 @@
 
 		[Test]
 		public void TestSetLateLoanStatus() {
-			var stra = new SetLateLoanStatus();
+			var stra = new Ezbob.Backend.Strategies.Misc.SetLateLoanStatus();
 			stra.Execute();
 		}
 
@@ -559,6 +560,12 @@
         public void TestXDaysDue()
         {
             var stra = new XDaysDue();
+            stra.Execute();
+        }
+
+        [Test]
+        public void TestXLateLoanJob() {
+            var stra = new LateLoanJob();
             stra.Execute();
         }
 

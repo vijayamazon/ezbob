@@ -37,15 +37,12 @@
             int loanId = sr["LoanId"];
             int customerId = sr["CustomerId"];
             DateTime scheduleDate = sr["ScheduleDate"];
-            string loanStatus = sr["LoanStatus"];
-            string scheduleStatus = sr["ScheduleStatus"];
+            NLLoanStatuses loanStatus = (NLLoanStatuses)Enum.Parse(typeof(NLLoanStatuses), sr["LoanStatus"]);
+            NLLoanScheduleStatus scheduleStatus = (NLLoanScheduleStatus)Enum.Parse(typeof(NLLoanScheduleStatus), sr["ScheduleStatus"]);
             decimal interest = sr["Interest"];
 
-	        int statusLateID = 3;
 
-			//statusLateID == (int)NLLoanStatuses.Late;
-
-			if (statusLateID == (int)NLLoanStatuses.Late ) { //loanStatus != "Late")
+            if (loanStatus != NLLoanStatuses.Late) { //loanStatus != "Late")
                 DB.ExecuteNonQuery(
                     "UpdateCustomer", CommandSpecies.StoredProcedure,
                     new QueryParameter("CustomerId", customerId),
@@ -55,13 +52,14 @@
                     DB.ExecuteNonQuery(
                     "NL_LoanUpdate", CommandSpecies.StoredProcedure,
                     new QueryParameter("LoanID", loanId),
-                    new QueryParameter("LoanStatusID", 3)
+                    new QueryParameter("LoanStatusID", (int)NLLoanStatuses.Late)
                     );
             }
 
-            if (scheduleStatus != "Late"){
+            if (scheduleStatus != NLLoanScheduleStatus.Late) {
                 DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
-                    new QueryParameter("LoanScheduleStatusID",3));
+                    new QueryParameter("LoanScheduleID", id),
+                    new QueryParameter("LoanScheduleStatusID", (int)NLLoanScheduleStatus.Late));
             }
 
             int daysBetween = (int)(this.now - scheduleDate).TotalDays;
@@ -104,18 +102,6 @@
                 return (utcNow >= existsOptions.StopLateFeeFromDate && utcNow <= existsOptions.StopLateFeeToDate);
             return this.now >= existsOptions.StopLateFeeFromDate;
         }
-
-       /* private decimal GetLateFeesAmount(NLFeeTypes nlFeeType){
-            switch (nlFeeType){
-                case NLFeeTypes.LatePaymentFee:
-                    return CurrentValues.Instance.LatePaymentCharge.ID;
-                case NLFeeTypes.AdminFee:
-                    return CurrentValues.Instance.AdministrationCharge.ID;
-                case NLFeeTypes.PartialPaymentFee:
-                    return CurrentValues.Instance.PartialPaymentCharge.ID;
-            }
-            return 0;
-        }*/
 
         private NLFeeTypes GetNLFeeTypes(int daysBetween, decimal interest){
             //  use NLFeeTypes

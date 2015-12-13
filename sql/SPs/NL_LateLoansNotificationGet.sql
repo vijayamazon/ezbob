@@ -11,7 +11,7 @@ BEGIN
 		inner join NL_LoanScheduleStatuses lss on lss.LoanScheduleStatusID = ls.LoanScheduleStatusID
 		inner join NL_LoanHistory lh on lh.LoanHistoryID = ls.LoanHistoryID
 		inner join nl_loans l on l.LoanID = lh.LoanID
-		WHERE lss.LoanScheduleStatus IN ('Late', 'StillToPay') AND ls.PlannedDate < '11-12-2015'
+		WHERE lss.LoanScheduleStatus IN ('Late', 'StillToPay') AND ls.PlannedDate < @Now
 		GROUP BY l.LoanID
 	)
 	SELECT 

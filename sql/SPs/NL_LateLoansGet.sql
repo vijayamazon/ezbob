@@ -3,10 +3,9 @@ IF OBJECT_ID('NL_LateLoansGet') IS  NULL
 GO
 
 ALTER PROCEDURE [dbo].[NL_LateLoansGet]
-@Now DATETIME
+@Now DATE
 AS
 BEGIN
-	DECLARE @UtcNow DATE
 	SELECT 
 		ls.LoanScheduleID, 
 		l.LoanId,
@@ -30,5 +29,5 @@ BEGIN
 	WHERE 
 		(lss.LoanScheduleStatus = 'StillToPay' OR lss.LoanScheduleStatus = 'Late')
 		AND
-		ls.PlannedDate < @Now
+		CONVERT(DATE,ls.PlannedDate) < @Now
 END
