@@ -15,8 +15,17 @@
 	using PublicModelOutput = Ezbob.Integration.LogicalGlue.Engine.Interface.ModelOutput;
 
 	internal class InferenceLoader : ATimedCustomerActionBase {
-		public InferenceLoader(AConnection db, ASafeLog log, int customerID, DateTime now) : base(db, log, customerID, now) {
+		public InferenceLoader(
+			AConnection db,
+			ASafeLog log,
+			int customerID,
+			DateTime now,
+			bool includeTryOutData,
+			decimal monthlyPayment
+		) : base(db, log, customerID, now) {
 			this.responseID = 0;
+			this.includeTryOutData = includeTryOutData;
+			this.monthlyPayment = monthlyPayment;
 			this.models = new SortedDictionary<long, PublicModelOutput>();
 
 			Result = new Inference();
@@ -29,6 +38,8 @@
 			int customerID
 		) : base(db, log, customerID, DateTime.UtcNow) {
 			this.responseID = responseID;
+			this.includeTryOutData = false;
+			this.monthlyPayment = 0;
 			this.models = new SortedDictionary<long, PublicModelOutput>();
 
 			Result = new Inference();
@@ -50,6 +61,8 @@
 				ResponseID = this.responseID,
 				CustomerID = CustomerID,
 				Now = Now,
+				IncludeTryOutData = this.includeTryOutData,
+				MonthlyPayment = this.monthlyPayment,
 			}.ForEachRowSafe(ProcessInferenceRow);
 
 			Log.Debug("Executing inference loader({0}, '{1}') complete.", CustomerID, NowStr);
@@ -305,5 +318,7 @@
 
 		private readonly SortedDictionary<long, PublicModelOutput> models;
 		private readonly long responseID;
+		private readonly bool includeTryOutData;
+		private readonly decimal monthlyPayment;
 	} // class InferenceLoader
 } // namespace

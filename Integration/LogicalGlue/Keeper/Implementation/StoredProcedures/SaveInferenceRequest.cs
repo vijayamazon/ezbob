@@ -11,6 +11,7 @@
 		public SaveInferenceRequest(
 			int customerID,
 			int companyID,
+			bool isTryOut,
 			InferenceInput request,
 			AConnection db,
 			ASafeLog log
@@ -18,6 +19,7 @@
 			this.request = request;
 			CustomerID = customerID;
 			CompanyID = companyID;
+			IsTryOut = isTryOut;
 			Now = DateTime.UtcNow;
 		} // constructor
 
@@ -26,6 +28,8 @@
 		} // HasValidParameters
 
 		public int CompanyID { get; set; }
+
+		public bool IsTryOut { get; set; }
 
 		public Guid UniqueID {
 			get { return this.request.UniqueID; }

@@ -8,7 +8,9 @@ GO
 ALTER PROCEDURE LogicalGlueLoadInference
 @ResponseID BIGINT,
 @CustomerID INT,
-@Now DATETIME
+@Now DATETIME,
+@IncludeTryOutData BIT,
+@MonthlyPayment DECIMAL(18, 0)
 AS
 BEGIN
 	IF @ResponseID <= 0
@@ -22,6 +24,11 @@ BEGIN
 					ON r.ServiceLogID = l.Id
 					AND l.CustomerId = @CustomerID
 					AND l.InsertDate < @Now
+				INNER JOIN LogicalGlueRequests rr ON l.Id = rr.ServiceLogID
+			WHERE
+				(@IncludeTryOutData = 0 AND rr.IsTryOut = 0)
+				OR
+				(@IncludeTryOutData = 1 AND (@MonthlyPayment < 0.01 OR rr.MonthlyRepayment = @MonthlyPayment))
 			ORDER BY
 				l.InsertDate DESC,
 				l.Id DESC

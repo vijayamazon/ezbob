@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
+	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -11,5 +12,14 @@
 		} // HasValidParameters
 
 		public long ResponseID { get; set; }
+
+		public bool IncludeTryOutData { get; set; }
+
+		public decimal MonthlyPayment {
+			get { return this.monthlyPayment; }
+			set { this.monthlyPayment = Math.Truncate(value); }
+		} // MonthlyPayment
+
+		private decimal monthlyPayment;
 	} // class LoadInference
 } // namespace

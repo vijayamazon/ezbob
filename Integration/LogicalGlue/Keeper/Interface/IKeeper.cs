@@ -17,17 +17,22 @@
 		/// </summary>
 		/// <param name="customerID">ID of customer to save inference request for.</param>
 		/// <param name="companyID">ID of company to save inference request for.</param>
+		/// <param name="isTryOut">This request contains actual customer data (false), or
+		/// it contains some fictional data just to see "what if".</param>
 		/// <param name="request">Request to save.</param>
 		/// <returns>ID of the request in MP_ServiceLog table.</returns>
-		long SaveInferenceRequest(int customerID, int companyID, InferenceInput request);
+		long SaveInferenceRequest(int customerID, int companyID, bool isTryOut, InferenceInput request);
 
 		/// <summary>
 		/// Loads the latest customer inference results that were available on specific time.
 		/// </summary>
 		/// <param name="customerID">ID of customer to load inference for.</param>
 		/// <param name="time">Time of inference.</param>
+		/// <param name="includeTryOutData">Include try out data or not.</param>
+		/// <param name="monthlyPayment">Ignored if is non-positive or <see cref="includeTryOutData"/> is false.
+		/// Otherwise only inferences with this amount are included.</param>
 		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
-		Inference LoadInference(int customerID, DateTime time);
+		Inference LoadInference(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
 
 		/// <summary>
 		/// Saves inference output to the database.

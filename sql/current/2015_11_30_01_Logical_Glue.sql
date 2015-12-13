@@ -86,6 +86,7 @@ BEGIN
 	CREATE TABLE LogicalGlueRequests (
 		RequestID BIGINT IDENTITY(1, 1) NOT NULL,
 		ServiceLogID BIGINT NOT NULL,
+		IsTryOut BIT NOT NULL,
 		UniqueID UNIQUEIDENTIFIER NOT NULL,
 		MonthlyRepayment DECIMAL(18, 0) NULL,
 		EquifaxData NVARCHAR(MAX) NULL,

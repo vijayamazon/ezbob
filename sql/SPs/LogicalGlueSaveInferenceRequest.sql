@@ -8,6 +8,7 @@ GO
 ALTER PROCEDURE LogicalGlueSaveInferenceRequest
 @CustomerID INT,
 @CompanyID INT,
+@IsTryOut BIT,
 @Now DATETIME,
 @UniqueID UNIQUEIDENTIFIER,
 @RequestText NVARCHAR(MAX),
@@ -43,12 +44,12 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SET @ServiceLogiD = SCOPE_IDENTITY()
-	
+
 	------------------------------------------------------------------------------
 
-	INSERT INTO LogicalGlueRequests (ServiceLogID, UniqueID, MonthlyRepayment, EquifaxData, HouseName, HouseNumber)
-		VALUES (@ServiceLogID, @UniqueID, @MonthlyPayment, @EquifaxData, @HouseName, @HouseNumber)
-	
+	INSERT INTO LogicalGlueRequests (ServiceLogID, IsTryOut, UniqueID, MonthlyRepayment, EquifaxData, HouseName, HouseNumber)
+		VALUES (@ServiceLogID, @IsTryOut, @UniqueID, @MonthlyPayment, @EquifaxData, @HouseName, @HouseNumber)
+
 	------------------------------------------------------------------------------
 
 	COMMIT TRANSACTION	

@@ -3,7 +3,8 @@
 
 	public interface IEngine {
 		/// <summary>
-		/// Gets the latest existing inference from DB or queries Logical Glue API for specified customer.
+		/// Gets the latest existing inference (excluding try out data)
+		/// from DB or queries Logical Glue API for specified customer.
 		/// Method behaviour depends on <see cref="mode" />.
 		/// </summary>
 		/// <param name="customerID">ID of customer to infer.</param>
@@ -12,12 +13,23 @@
 		Inference GetInference(int customerID, GetInferenceMode mode);
 
 		/// <summary>
+		/// Gets the latest existing inference (including try out data)
+		/// from DB or queries Logical Glue API for specified customer and monthly payment.
+		/// </summary>
+		/// <param name="customerID">ID of customer to infer.</param>
+		/// <param name="monthlyPayment">Customer monthly payment.</param>
+		/// <returns>Customer inference results. Can be NULL.</returns>
+		Inference GetInference(int customerID, decimal monthlyPayment);
+
+		/// <summary>
 		/// Loads the latest customer inference results that were available on specific time.
 		/// Logical Glue API is not queried.
 		/// </summary>
 		/// <param name="customerID">ID of customer to infer.</param>
 		/// <param name="time">Time of interest.</param>
+		/// <param name="includeTryOuts">Include try out data or not.</param>
+		/// <param name="monthlyPayment">Customer monthly payment.</param>
 		/// <returns>The latest customer inference results that were available on requested time. Can be NULL.</returns>
-		Inference GetInference(int customerID, DateTime time);
+		Inference GetInference(int customerID, DateTime time, bool includeTryOuts, decimal monthlyPayment);
 	} // interface IEngine
 } // namespace

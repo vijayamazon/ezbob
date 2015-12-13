@@ -99,6 +99,25 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
+		RowType = 'OpenLoan',
+		LoanID = l.Id,
+		l.LoanAmount,
+		Term = ISNULL(ISNULL(l.CustomerSelectedTerm, ISNULL(r.ApprovedRepaymentPeriod, r.RepaymentPeriod)), 12),
+		l.InterestRate
+	FROM
+		Loan l
+		INNER JOIN CashRequests r ON l.RequestCashId = r.Id
+	WHERE
+		r.IdCustomer = @CustomerID
+		AND
+		l.[Date] < @Now
+		AND
+		(l.DateClosed IS NULL OR l.DateClosed > @Now)
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	SELECT
 		RowType = 'DirectorData',
 		c.FirstName,
 		c.Surname,

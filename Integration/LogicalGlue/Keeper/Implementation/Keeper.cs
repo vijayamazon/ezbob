@@ -26,17 +26,31 @@
 			} // try
 		} // LoadInputData
 
-		public long SaveInferenceRequest(int customerID, int companyID, InferenceInput request) {
+		public long SaveInferenceRequest(int customerID, int companyID, bool isTryOut, InferenceInput request) {
 			try {
-				return new InferenceRequestSaver(this.db, this.log, customerID, companyID, request).Execute().Result;
+				return new InferenceRequestSaver(
+					this.db,
+					this.log,
+					customerID,
+					companyID,
+					isTryOut,
+					request
+				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceRequestSaverAlert(customerID, request, e, this.log);
 			} // try
 		} // SaveRequest
 
-		public Inference LoadInference(int customerID, DateTime time) {
+		public Inference LoadInference(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment) {
 			try {
-				return new InferenceLoader(this.db, this.log, customerID, time).Execute().Result;
+				return new InferenceLoader(
+					this.db,
+					this.log,
+					customerID,
+					time,
+					includeTryOutData,
+					monthlyPayment
+				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try

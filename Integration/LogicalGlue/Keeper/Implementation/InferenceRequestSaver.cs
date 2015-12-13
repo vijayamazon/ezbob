@@ -11,10 +11,12 @@
 			ASafeLog log,
 			int customerID,
 			int companyID,
+			bool isTryOut,
 			InferenceInput request
 		) : base(db, log, customerID) {
 			Result = 0;
 			this.companyID = companyID;
+			this.isTryOut = isTryOut;
 			this.request = request;
 		} // constructor
 
@@ -42,7 +44,14 @@
 				this.request.ToShortString()
 			);
 
-			Result = new SaveInferenceRequest(CustomerID, this.companyID, this.request, DB, Log).ExecuteScalar<long>();
+			Result = new SaveInferenceRequest(
+				CustomerID,
+				this.companyID,
+				this.isTryOut,
+				this.request,
+				DB,
+				Log
+			).ExecuteScalar<long>();
 
 			Log.Debug(
 				"Executing inference request saver({0}, {1}, '{2}') complete, saved request id is {3}.",
@@ -56,6 +65,7 @@
 		} // Execute
 
 		private readonly int companyID;
+		private readonly bool isTryOut;
 		private readonly InferenceInput request;
 	} // class InferenceRequestSaver
 } // namespace

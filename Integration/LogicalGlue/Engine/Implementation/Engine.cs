@@ -28,6 +28,28 @@
 		public IHarvester Harvester { get; private set; }
 		public ASafeLog Log { get; private set; }
 
+		public Inference GetInference(int customerID, decimal monthlyPayment) {
+			if (monthlyPayment < 0.01m)
+				return GetInference(customerID, GetInferenceMode.DownloadIfOld);
+
+			Inference cachedInference = GetInference(customerID, Now, true, monthlyPayment);
+
+			ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
+
+			if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays)) {
+				Log.Debug(
+					"Engine.GetInference({0}, {1}): returning cached inference with ResponseID = {2}.",
+					customerID,
+					monthlyPayment.ToString("C2", enGB),
+					cachedInference.ResponseID
+				);
+
+				return cachedInference;
+			} // if
+
+			return DownloadAndSave(customerID, monthlyPayment);
+		} // GetInference (by monthly payment)
+
 		public Inference GetInference(int customerID, GetInferenceMode mode) {
 			Log.Debug("Engine.GetInference({0}, {1}) started...", customerID, mode);
 
@@ -35,11 +57,11 @@
 
 			switch (mode) {
 			case GetInferenceMode.CacheOnly:
-				result = GetInference(customerID, Now);
+				result = GetInference(customerID, Now, false, 0);
 				break;
 
 			case GetInferenceMode.DownloadIfOld:
-				Inference cachedInference = GetInference(customerID, Now);
+				Inference cachedInference = GetInference(customerID, Now, false, 0);
 				ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
 
 				if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays)) {
@@ -57,7 +79,7 @@
 				goto case GetInferenceMode.ForceDownload; // !!! fall through !!!
 
 			case GetInferenceMode.ForceDownload:
-				result = DownloadAndSave(customerID);
+				result = DownloadAndSave(customerID, 0);
 				break;
 
 			default:
@@ -73,16 +95,21 @@
 			Log.Debug("Engine.GetInference({0}, {1}) complete.", customerID, mode);
 
 			return result;
-		} // GetInference
+		} // GetInference (standard, by actual data)
 
-		public Inference GetInference(int customerID, DateTime time) {
+		public Inference GetInference(
+			int customerID,
+			DateTime time,
+			bool includeTryOutData,
+			decimal explicitMonthlyPayment
+		) {
 			Log.Debug(
 				"Engine.GetInference({0}, {1}) started...",
 				customerID,
 				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
 			);
 
-			Inference result = Keeper.LoadInference(customerID, time);
+			Inference result = Keeper.LoadInference(customerID, time, includeTryOutData, explicitMonthlyPayment);
 
 			Log.Debug(
 				"Engine.GetInference({0}, {1}) complete.",
@@ -91,14 +118,19 @@
 			);
 
 			return result;
-		} // GetHistoricalInference
+		} // GetInference (historical, by date [and payment])
 
-		private Inference DownloadAndSave(int customerID) {
+		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment) {
+			bool isTryOut = (explicitMonthlyPayment < 0.01m);
+
 			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
 
 			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now);
 
 			Log.Debug("Engine.DownloadAndSave({0}) retrieved input package.", customerID);
+
+			if (isTryOut)
+				inputPkg.InferenceInput.MonthlyPayment = explicitMonthlyPayment;
 
 			List<string> errors = inputPkg.InferenceInput.Validate();
 
@@ -107,7 +139,7 @@
 
 			Log.Debug("Engine.DownloadAndSave({0}) input package is valid.", customerID);
 
-			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, inputPkg.InferenceInput);
+			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, isTryOut, inputPkg.InferenceInput);
 
 			Log.Debug("Engine.DownloadAndSave({0}) input package is persisted.", customerID);
 
@@ -121,5 +153,7 @@
 
 			return result;
 		} // DownloadAndSave
+
+		private static readonly CultureInfo enGB = new CultureInfo("en-GB", false);
 	} // class Engine
 } // namespace
