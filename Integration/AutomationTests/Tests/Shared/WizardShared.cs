@@ -216,7 +216,7 @@
 
                 this._Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(this._Driver, 2));
 
-                SharedServiceClass.WebAddressContains(this._Driver, "webscr?cmd", 20);
+                SharedServiceClass.WebAddressContains(this._Driver, "webscr", 20);
             }
 
             IWebElement loginField = this._Driver.FindElement(By.Id(accLogin));
@@ -229,7 +229,8 @@
             linkAccounts.Click();
 
             if (String.Equals("a.marketplace-button-account-paypal", marketplace)) {
-                IWebElement grantPermission = SharedServiceClass.ElementToBeClickable(this._Driver, By.Name("grant.x"));
+                //By.Name("grant.x")
+                IWebElement grantPermission = SharedServiceClass.ElementToBeClickable(this._Driver, By.XPath("//input[@name='grant.x']"));
                 grantPermission.Click();
 
                 this._Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(this._Driver, 1));

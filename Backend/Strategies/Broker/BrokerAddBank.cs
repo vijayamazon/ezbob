@@ -20,6 +20,7 @@
 		} // Name
 
 		public override void Execute() {
+			Broker broker = null;
             try
             {
                 if (string.IsNullOrEmpty(this.model.AccountNumber) || !Regex.IsMatch(this.model.AccountNumber, @"^\d{8}$"))
@@ -43,7 +44,7 @@
                 }
 
                 var brokerRepository = ObjectFactory.GetInstance<BrokerRepository>();
-                var broker = brokerRepository.Find(this.model.BrokerEmail);
+                broker = brokerRepository.Find(this.model.BrokerEmail);
 
                 if (broker == null) {
                     Log.Alert("BrokerAddBank broker not found by email {0}", this.model.BrokerEmail);
@@ -89,7 +90,7 @@
                 throw new StrategyWarning(this, "Sort code is not valid");
             } 
             catch (Exception ex) {
-                Log.Error(ex, "BrokerAddBank failed");
+				Log.Error(ex, "BrokerAddBank failed " + this.model.BrokerEmail + " id: " + (broker == null ? 0 : broker.ID));
                 throw new StrategyWarning(this, "Failed adding bank account");
             }
 		} // Execute
