@@ -98,3 +98,4 @@ BEGIN
 		b.InvestorBankAccountID = tbl.InvestorBankAccountID
 END
 GO
+

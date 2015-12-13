@@ -11,5 +11,11 @@
 		[Length(255)]
 		[DataMember]
 		public string Name { get; set; }
+
+		[DataMember]
+		public bool IsDefault { get; set; }
+
+		[DataMember]
+		public bool IsEnabled { get; set; }
 	}//class I_Product
 }//ns

@@ -15,18 +15,12 @@
 
 		[FK("I_ProductTerm", "ProductTermID")]
 		[DataMember]
-		public int ProductTermID { get; set; }
+		public int FundingTypeID { get; set; }
 
 		[Length(255)]
 		[DataMember]
 		public string Name { get; set; }
-
-		[DataMember]
-		public bool AllowedForExternalInvestor { get; set; }
-
-		[DataMember]
-		public bool PulledLoans { get; set; }
-
+		
 		[DataMember]
 		public DateTime Timestamp { get; set; }
 	}//class I_ProductSubType

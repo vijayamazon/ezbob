@@ -13,6 +13,10 @@
         [DataMember]
 		public int InvestorBankAccountID { get; set; }
 
+		[FK("LoanTransaction", "Id")]
+		[DataMember]
+		public int LoanTransactionID { get; set; }
+
 		[DataMember]
 		public decimal? PreviousBalance { get; set; }
 
@@ -22,6 +26,9 @@
 		[DataMember]
 		public decimal? TransactionAmount { get; set; }
 
+		[DataMember]
+		public decimal? ServicingFeeAmount { get; set; }
+		
 		[DataMember]
 		public DateTime Timestamp { get; set; }
 	}//class I_InvestorSystemBalance

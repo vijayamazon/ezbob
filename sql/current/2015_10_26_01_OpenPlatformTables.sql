@@ -27,7 +27,9 @@ BEGIN
 		InvestorID INT NOT NULL IDENTITY(1,1),
 		InvestorTypeID INT NOT NULL,
 		Name NVARCHAR(255),
-		MonthlyFundingCapital DECIMAL(18, 6),
+		MonthlyFundingCapital DECIMAL(18, 6) NULL,
+		FundsTransferDate DATETIME NULL,
+		DiscountServicingFeePercent DECIMAL(18,6) NULL,
 		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
@@ -125,13 +127,16 @@ BEGIN
 	CREATE TABLE I_InvestorSystemBalance (
 		InvestorSystemBalanceID INT NOT NULL IDENTITY(1,1),
 		InvestorBankAccountID INT NOT NULL,
+		LoanTransactionID INT NOT NULL,
 		PreviousBalance DECIMAL(18,6),
 		NewBalance DECIMAL(18,6),
 		TransactionAmount DECIMAL(18,6),
+		ServicingFeeAmount DECIMAL(18,6),
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorSystemBalance PRIMARY KEY (InvestorSystemBalanceID),
 		CONSTRAINT FK_I_InvestorSystemBalance_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID),
+		CONSTRAINT FK_I_InvestorSystemBalance_LoanTransaction FOREIGN KEY (LoanTransactionID) REFERENCES LoanTransaction(Id)
 	)
 END
 GO
@@ -510,8 +515,6 @@ BEGIN
 	
 END
 GO
-
-SELECT * FROM I_GradeRange
 
 IF NOT EXISTS (SELECT * FROM I_Instrument)
 BEGIN

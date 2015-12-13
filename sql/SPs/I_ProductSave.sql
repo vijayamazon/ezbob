@@ -10,7 +10,9 @@ IF TYPE_ID('I_ProductList') IS NOT NULL
 GO
 
 CREATE TYPE I_ProductList AS TABLE (
-	[Name] NVARCHAR(255) NULL
+	[Name] NVARCHAR(255) NULL,
+	[IsDefault] BIT NOT NULL,
+	[IsEnabled] BIT NOT NULL
 )
 GO
 
@@ -21,9 +23,13 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO I_Product (
-		[Name]
+		[Name],
+		[IsDefault],
+		[IsEnabled]
 	) SELECT
-		[Name]
+		[Name],
+		[IsDefault],
+		[IsEnabled]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()
