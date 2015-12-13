@@ -1,9 +1,9 @@
-IIF OBJECT_ID('NL_GetCustomersXDaysDue') IS NOT NULL
+IF OBJECT_ID('NL_GetCustomersXDaysDue') IS NOT NULL
 	DROP PROCEDURE NL_GetCustomersXDaysDue
 GO
 
 CREATE PROCEDURE NL_GetCustomersXDaysDue
-	@Now DATETIME	
+	@Now DATE
 AS
 BEGIN
 	DECLARE @TodayPlusFive DATE
@@ -20,10 +20,10 @@ BEGIN
 		c.Id AS CustomerId,
 		Xdays = (
 			CASE WHEN
-			 		ls.PlannedDate BETWEEN  @TodayPlusTwo and DateAdd(dd, 1, @TodayPlusTwo) AND ls.TwoDaysDueMailSent = 0  
+			 		CONVERT(DATE,ls.PlannedDate) BETWEEN  @TodayPlusTwo and DateAdd(dd, 1, @TodayPlusTwo) AND ls.TwoDaysDueMailSent = 0  
 					THEN 2 
 				WHEN 
-					ls.PlannedDate BETWEEN @TodayPlusFive and  DateAdd(dd, 1, @TodayPlusFive) AND ls.FiveDaysDueMailSent = 0  
+					CONVERT(DATE,ls.PlannedDate) BETWEEN @TodayPlusFive and  DateAdd(dd, 1, @TodayPlusFive) AND ls.FiveDaysDueMailSent = 0  
 					THEN 5	
 			ELSE 0
 			END
@@ -41,11 +41,11 @@ BEGIN
 				ls.PlannedDate  >= @Now AND
 				(
 					(			
-						ls.PlannedDate BETWEEN  @TodayPlusTwo and DateAdd(dd, 1, @TodayPlusTwo) AND ls.TwoDaysDueMailSent = 0  
+						CONVERT(DATE,ls.PlannedDate) BETWEEN  @TodayPlusTwo and DateAdd(dd, 1, @TodayPlusTwo) AND ls.TwoDaysDueMailSent = 0  
 					)				
 					OR
 					(				
-						ls.PlannedDate BETWEEN @TodayPlusFive and  DateAdd(dd, 1, @TodayPlusFive) AND ls.FiveDaysDueMailSent = 0
+						CONVERT(DATE,ls.PlannedDate) BETWEEN @TodayPlusFive and  DateAdd(dd, 1, @TodayPlusFive) AND ls.FiveDaysDueMailSent = 0
 					)				
 				)		
 		JOIN nl_LoanOptions lo ON lo.LoanId = l.LoanID and lo.StopAutoChargeDate IS NULL and lo.IsActive = 1
