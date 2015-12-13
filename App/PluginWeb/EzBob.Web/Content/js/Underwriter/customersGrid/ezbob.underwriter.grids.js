@@ -20,7 +20,7 @@ EzBob.Underwriter.GridTools = {
 	}, // investorManageLink
 
 	investorButton: function(buttonName, buttonClass, customerID) {
-		console.log('a button "', buttonName, '" was clicked at UW Pending Investor screen' );
+		console.log('a button "', buttonName, '" was clicked at UW Pending Investor screen for customer with ID=', customerID);
 		return EzBob.DataTables.Helper.withScrollbar('<a href="#" class="btn btn-primary ' + buttonClass + '" data-id="' + customerID + '" title="' + buttonName + '" data-href="">' + buttonName + '</a>');
 	}, // profileLink
 }; // EzBob.Underwriter.GridTools
