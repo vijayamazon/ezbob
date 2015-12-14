@@ -83,6 +83,10 @@
 			return reply.Exists() && (reply.Inference != null);
 		} // HasInference
 
+		public static bool HasBucket(this Reply reply) {
+			return reply.HasInference() && (reply.Inference.Bucket != null);
+		} // HasBucket
+
 		public static bool HasEquifaxData(this Reply reply) {
 			return reply.Exists() && (reply.Equifax != null) && !string.IsNullOrWhiteSpace(reply.Equifax.RawResponse);
 		} // EquifaxData
