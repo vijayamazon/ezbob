@@ -6,7 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
-    public class AddLoanOptions : AStrategy, Inlstrategy{
+    public class AddLoanOptions : AStrategy, Inlstrategy
 
 		public List<string> PropertiesUpdateList { get; set; }
 		public int? oldLoanId { get; set; }
