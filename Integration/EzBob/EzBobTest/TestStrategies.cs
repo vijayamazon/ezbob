@@ -95,6 +95,7 @@
 			s.Execute();
 		}
 
+
 		[SetUp]
 		public new void Init() {
 			base.Init();
@@ -1272,5 +1273,14 @@
 				this.m_oLog.Info("Exists in cash");
 			}
 		}
+
+        [Test]
+        public void TestBrokerLoadCustomerList()
+        {
+            
+            var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com",423);
+            s.Execute();
+
+        }
 	}
 }

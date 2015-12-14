@@ -20,6 +20,7 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
     },
     render:function () {
     	var dialog = this.template;
+	    var self = this;
 	    
         dialog.dialog({
             autoOpen: false,
@@ -29,13 +30,13 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
             draggable: true,
             width: this.options.width ? this.options.width : 350,
             open: function() {
-            	_.bind(this.dlgOpened, this);
-            	if (!this.isUnderwriter)
+            	_.bind(self.dlgOpened, self);
+            	if (!self.isUnderwriter)
             		$('body').addClass('stop-scroll');
             },
             close: function() {
-            	_.bind(this.dlgClosed, this);
-            	if (!this.isUnderwriter)
+            	_.bind(self.dlgClosed, self);
+            	if (!self.isUnderwriter)
             		$('body').removeClass('stop-scroll');
             },
             buttons: {
