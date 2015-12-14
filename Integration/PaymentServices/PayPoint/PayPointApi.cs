@@ -198,7 +198,7 @@
 					installments.CommitTransaction();
 
 					if (nlPayment != null) {
-						ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment, 1);
+						ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment);
 					}
 
 					return ex.PaypointData;
