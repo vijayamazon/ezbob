@@ -17,7 +17,7 @@
 	/// By PaymentID
 	/// TODO: Add file uploading on full UI implementation of https://ezbobtech.atlassian.net/browse/EZ-3452
 	/// </summary>
-    public class CancelPayment : AStrategy, Inlstrategy {
+    public class CancelPayment : NewLoanBaseStrategy {
 
 		public CancelPayment(int customerID, NL_Payments payment, int userID) {
 	
@@ -40,10 +40,7 @@
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
-		public override void Execute() {
-
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
 			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
 

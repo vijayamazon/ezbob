@@ -7,7 +7,7 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 
-	public class AcceptRollover : AStrategy, Inlstrategy {
+	public class AcceptRollover : NewLoanBaseStrategy {
 
 
 		public AcceptRollover(int customerID, long loanID, NL_LoanFees rolloverFee = null) {
@@ -48,7 +48,7 @@
 
 		}
 
-		public override string Name { get { return "AcceptRollover"; } }
+	    public override string Name { get { return "AcceptRollover"; } }
 
 		public int CustomerID { get; private set; }
 		public long LoanID { get; private set; }
@@ -61,7 +61,7 @@
 		public NL_LoanFees fee { get; private set; }
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		public override void Execute() {
+        public override void NL_Execute() {
 
 			if (!string.IsNullOrEmpty(this.Error)) {
 				throw new NL_ExceptionInputDataInvalid(this.Error);

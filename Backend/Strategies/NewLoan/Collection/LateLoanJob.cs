@@ -4,10 +4,10 @@
     /// <summary>
     /// Late Loan Job
     /// </summary>
-    public class LateLoanJob : AStrategy
+    public class LateLoanJob : NewLoanBaseStrategy
     {
         public override string Name { get { return "Late Loan Job"; } }
-		public override void Execute() {
+        public override void NL_Execute() {
 		    try {
                 NL_AddLog(LogType.Info, "Strategy Start", null, null, null, null);
                 AStrategy strategy = new SetLateLoanStatus();

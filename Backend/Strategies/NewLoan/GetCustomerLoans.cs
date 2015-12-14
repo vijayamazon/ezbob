@@ -3,14 +3,11 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
-    public class GetCustomerLoans : AStrategy, Inlstrategy {
+    public class GetCustomerLoans : NewLoanBaseStrategy {
 
 		public override string Name { get { return "GetCustomerLoans"; } }
 
-		public override void Execute() {
-
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
 			NL_AddLog(LogType.Info, "Strategy Start", Context.CustomerID, null, null, null);
 			try {

@@ -11,7 +11,7 @@
     /// <summary>
 	/// Load NL Loan from DB into NL_Model. Return state of the loan in nlModel with calculated data from the calculator
 	/// </summary>
-    public class GetLoanState : AStrategy, Inlstrategy {
+    public class GetLoanState : NewLoanBaseStrategy {
 
 		public GetLoanState(int customerID, long loanID, DateTime? stateDate, int? userID = null, bool getCalculatorState = true) {
 
@@ -56,10 +56,7 @@
 		public ILoanDAL LoanDAL { get; set; }
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		public override void Execute() {
-
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
 			if (!string.IsNullOrEmpty(this.Error)) {
 				throw new NL_ExceptionInputDataInvalid(this.Error);

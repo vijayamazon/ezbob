@@ -19,7 +19,7 @@
     using PaymentServices.Calculators;
     using StructureMap;
 
-    public class RescheduleLoan<T> : AStrategy, Inlstrategy
+    public class RescheduleLoan<T> : NewLoanBaseStrategy
     {
 
         public RescheduleLoan(T t, ReschedulingArgument reschedulingArgument)
@@ -67,10 +67,7 @@
         public ReschedulingArgument ReschedulingArguments;	// input
         public ReschedulingResult Result;	// output
 
-        public override void Execute()
-        {
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
             NL_AddLog(LogType.Info, "Strategy Start", this.ReschedulingArguments, null, null, null);
             if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == null)

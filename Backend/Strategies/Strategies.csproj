@@ -220,7 +220,7 @@
     <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />
     <Compile Include="NewLoan\GetLoanIDByOldID.cs" />
     <Compile Include="NewLoan\GetCustomerLoans.cs" />
-    <Compile Include="NewLoan\Inlstrategy.cs" />
+    <Compile Include="NewLoan\NewLoanBaseStrategy.cs" />
     <Compile Include="NewLoan\UpdateLoanDBState.cs" />
     <Compile Include="NewLoan\Collection\LateLoanCured.cs" />
     <Compile Include="NewLoan\Collection\LateCustomerStatusChange.cs" />

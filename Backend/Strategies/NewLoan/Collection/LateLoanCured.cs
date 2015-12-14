@@ -9,12 +9,12 @@
     /// <summary>
     /// Late Loan Cured
     /// </summary>
-    public class LateLoanCured : AStrategy
+    public class LateLoanCured : NewLoanBaseStrategy
     {
         private DateTime now;
         public override string Name { get { return "Late Loan Cured"; } }
 
-        public override void Execute(){
+        public override void NL_Execute() {
             this.now = DateTime.UtcNow;
             try {
                 this.now = DateTime.UtcNow;

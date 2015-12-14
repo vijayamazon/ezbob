@@ -4,7 +4,7 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
 
-    public class AddLoanState : AStrategy, Inlstrategy
+    public class AddLoanState : NewLoanBaseStrategy
     {
         public AddLoanState(NL_LoanStates loanState)
         {
@@ -13,10 +13,7 @@
 
         public override string Name { get { return "AddLoanState"; } }
 
-        public override void Execute()
-        {
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
             try
             {

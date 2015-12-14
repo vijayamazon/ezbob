@@ -4,7 +4,7 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
 
-    public class AddLoanInterestFreeze : AStrategy, Inlstrategy
+    public class AddLoanInterestFreeze : NewLoanBaseStrategy
     {
 
         public string Error { get; set; }
@@ -22,10 +22,7 @@
 
         public override string Name { get { return "AddLoanInterestFreeze"; } }
 
-        public override void Execute()
-        {
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
             NL_AddLog(LogType.Info, "Strategy Start", this.loanInterestFreeze, null, null, null);
             try

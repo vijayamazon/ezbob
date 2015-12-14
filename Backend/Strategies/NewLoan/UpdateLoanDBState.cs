@@ -15,7 +15,7 @@
 	/// triggered on payment adding/cancellation, rollover, re-scheduling.
 	/// Save recalculated loan state differenced to DB
 	/// </summary>
-    public class UpdateLoanDBState : AStrategy, Inlstrategy {
+    public class UpdateLoanDBState : NewLoanBaseStrategy {
 
 		public UpdateLoanDBState(int customerID, long loanID, int userID) {
 
@@ -40,10 +40,7 @@
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
-		public override void Execute() {
-
-            if (!IsNewLoanRunStrategy)
-                return;
+        public override void NL_Execute() {
 
             NL_AddLog(LogType.Info, "Strategy Start", LoanID, null, null, null);
 			NL_AddLog(LogType.Error, "Started", this.strategyArgs, Error, null, null);
