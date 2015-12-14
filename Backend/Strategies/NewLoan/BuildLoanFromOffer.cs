@@ -8,7 +8,7 @@
 	/// <summary>
 	/// Loading last valid offer data for customer from DB and fill in NL_Model (Loan, last History) 
 	/// </summary>
-    public class BuildLoanFromOffer : AStrategy, Inlstrategy {
+	public class BuildLoanFromOffer : AStrategy {
 
 		public BuildLoanFromOffer(NL_Model model) {
 			Result = model;
@@ -32,11 +32,7 @@
 		// all validations moved to SP
 
 		public override void Execute() {
-            
-            if (!IsNewLoanRunStrategy)
-                return;
-
-            NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);
+			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);
 			try {
 
 				if (Result.CustomerID == 0) {

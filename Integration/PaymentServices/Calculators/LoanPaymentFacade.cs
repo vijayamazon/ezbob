@@ -5,7 +5,6 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Utils;
 	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -390,24 +389,21 @@
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
 
+				var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
 				NL_Payments nlPayment = null;
 
-                MiscUtils.NL_Action<object>(() => {
-                    var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-                    if (nlLoanId > 0) {
-                        nlPayment = new NL_Payments() {
-                            Amount = amount,
-                            CreatedByUserID = userId,
-                            CreationTime = DateTime.UtcNow,
-                            LoanID = nlLoanId,
-                            PaymentTime = DateTime.UtcNow,
-                            Notes = type,
-                            PaymentStatusID = (int)NLPaymentStatuses.Active,
-                            PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
-                        };
-                    }
-                    return null;
-                }, null,Log);
+				if (nlLoanId > 0) {
+					 nlPayment = new NL_Payments() {
+						Amount = amount,
+						CreatedByUserID = userId,
+						CreationTime = DateTime.UtcNow,
+						LoanID = nlLoanId,
+						PaymentTime = DateTime.UtcNow,
+						Notes = type,
+						PaymentStatusID = (int)NLPaymentStatuses.Active,
+						PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
+					};
+				}
 
 				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, 1, nlPayment);
 				newInterest = 0;
@@ -423,23 +419,18 @@
 					select r
 				).FirstOrDefault();
 
-                NL_Payments nlPayment = null;
+				var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
 
-                MiscUtils.NL_Action<object>(() => {
-                    var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-                    nlPayment = new NL_Payments() {
-                        Amount = amount,
-                        CreatedByUserID = userId,
-                        CreationTime = DateTime.UtcNow,
-                        LoanID = nl_LoanId,
-                        PaymentTime = DateTime.UtcNow,
-                        Notes = type,
-                        PaymentStatusID = (int)NLPaymentStatuses.Active,
-                        PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
-                    };
-                    return null;
-                }, null, Log);
-
+				NL_Payments nlPayment = new NL_Payments() {
+					Amount = amount,
+					CreatedByUserID = userId,
+					CreationTime = DateTime.UtcNow,
+					LoanID = nl_LoanId,
+					PaymentTime = DateTime.UtcNow,
+					Notes = type,
+					PaymentStatusID = (int)NLPaymentStatuses.Active,
+					PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
+				};
 
 				PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, 1, nlPayment);
 

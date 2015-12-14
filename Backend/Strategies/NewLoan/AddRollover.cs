@@ -12,7 +12,7 @@
 	/// <summary>
 	/// adding new rollover proposal for loan or updates existing valid rollover?
 	/// </summary>
-    public class AddRollover : AStrategy, Inlstrategy {
+    public class AddRollover : AStrategy{
 
 		public AddRollover(NL_LoanRollovers r, long loanID, bool saveRolloverFee = true) {
 			rollover = r;
@@ -35,9 +35,6 @@
 
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
-
-            if (!IsNewLoanRunStrategy)
-                return;
 
 			// EZ-4329 
 			// check if same rollover exists OK

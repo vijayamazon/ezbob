@@ -21,7 +21,6 @@
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using PaymentServices.Calculators;
@@ -332,25 +331,21 @@
 			bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
 			if (amount > 0 && hasOpenLoans) {
 				Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
+				var f = new LoanPaymentFacade();
 
-                NL_Payments nlPayment  = null;
-                    
-                    MiscUtils.NL_Action<object>(() => {
-                    long nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
-                    nlPayment = new NL_Payments() {
-                        Amount = amount.Value,
-                        CreatedByUserID = this.m_oContext.UserId,
-                        CreationTime = DateTime.UtcNow,
-                        LoanID = nl_LoanId,
-                        PaymentTime = DateTime.UtcNow,
-                        Notes = "Add Pay Point Card",
-                        PaymentStatusID = (int)NLPaymentStatuses.Active,
-                        PaymentSystemType = NLPaymentSystemTypes.Paypoint
-                    };
-                        return null;
-                    },ms_oLog);
+				long nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
 
-                var f = new LoanPaymentFacade();
+				NL_Payments nlPayment = new NL_Payments() {
+					Amount = amount.Value,
+					CreatedByUserID = this.m_oContext.UserId,
+					CreationTime = DateTime.UtcNow,
+					LoanID = nl_LoanId,
+					PaymentTime = DateTime.UtcNow,
+					Notes = "Add Pay Point Card",
+					PaymentStatusID = (int)NLPaymentStatuses.Active,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint
+				};
+
 				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id, nlPayment);
 			}
 

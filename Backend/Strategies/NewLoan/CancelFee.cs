@@ -5,7 +5,7 @@
 
 	/// <summary>
 	/// </summary>
-    public class CancelFee : AStrategy, Inlstrategy {
+	public class CancelFee : AStrategy {
 
 		public CancelFee(int customerID, NL_LoanFees fee, int userID) {
 	
@@ -29,9 +29,6 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
-
-            if (!IsNewLoanRunStrategy)
-                return;
 
 			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
 

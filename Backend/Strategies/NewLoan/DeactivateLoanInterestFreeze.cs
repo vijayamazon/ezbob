@@ -6,7 +6,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
-    public class DeactivateLoanInterestFreeze : AStrategy, Inlstrategy
+	public class DeactivateLoanInterestFreeze : AStrategy
     {
 
         public string Error { get; set; }
@@ -27,9 +27,6 @@
 
         public override void Execute()
         {
-            if (!IsNewLoanRunStrategy)
-                return;
-
             NL_AddLog(LogType.Info, "Strategy Start", this.OldLoanInterestFreezeID, null, null, null);
             try {
                 long? newLoanId = null;

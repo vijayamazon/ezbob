@@ -6,7 +6,7 @@
     using Ezbob.Database;
     using NHibernate.Util;
 
-    public class AddDecision : AStrategy, Inlstrategy
+    public class AddDecision : AStrategy
     {
         public AddDecision(NL_Decisions decision, long? oldCashRequestID, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons)
         {
@@ -26,9 +26,6 @@
 
         public override void Execute()
         {
-            if (!IsNewLoanRunStrategy)
-                return;
-
             NL_AddLog(LogType.Info, "Strategy Start", this.decision, null, null, null);
             Log.Debug("ADDIND decision: {0}", this.decision);
             try
