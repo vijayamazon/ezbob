@@ -4,7 +4,7 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
 
-    public class AddLoanLegals : NewLoanBaseStrategy
+    public class AddLoanLegals : AStrategy, Inlstrategy
     {
         public AddLoanLegals(int customerID, NL_LoanLegals loanLegals)
         {
@@ -14,7 +14,11 @@
 
         public override string Name { get { return "AddLoanLegal"; } }
 
-        public override void NL_Execute() {
+        public override void Execute()
+        {
+
+            if (!IsNewLoanRunStrategy)
+                return;
 
             NL_AddLog(LogType.Info, "Strategy Start", this.loanLegals, null, null, null);
             try

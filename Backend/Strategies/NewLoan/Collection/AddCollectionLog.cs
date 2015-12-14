@@ -7,7 +7,7 @@
     /// <summary>
     /// Add Collection Log
     /// </summary>
-    public class AddCollectionLog : NewLoanBaseStrategy
+    public class AddCollectionLog : AStrategy
     {
         public AddCollectionLog(CollectionLog collectionLog) {
             CollectionLog = collectionLog;
@@ -16,7 +16,7 @@
         public override string Name { get { return "Add Collection Log"; } }
         public CollectionLog CollectionLog { get; set; }
 
-        public override void NL_Execute() {
+        public override void Execute(){
             try{
                 NL_AddLog(LogType.Info, "Strategy Start", new object[] { CollectionLog.CollectionLogID, CollectionLog.CustomerID, CollectionLog.LoanID, CollectionLog.Type, CollectionLog.Method, CollectionLog.LoanHistoryID, CollectionLog.Comments }, null, null, null);
                 Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", CollectionLog.CustomerID, CollectionLog.LoanID, CollectionLog.Type, CollectionLog.TimeStamp);

@@ -10,12 +10,12 @@
     /// <summary>
     /// Set Late Loan Status
     /// </summary>
-    public class SetLateLoanStatus : NewLoanBaseStrategy
+    public class SetLateLoanStatus : AStrategy
     {
         private DateTime now;
         public override string Name { get { return "Set Late Loan Status"; } }
 
-        public override void NL_Execute() {
+        public override void Execute(){
             this.now = DateTime.UtcNow;
             try{
                 DB.ForEachRowSafe((sr, bRowsetStart) =>

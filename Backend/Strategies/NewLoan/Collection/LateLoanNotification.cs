@@ -21,7 +21,7 @@
     /// <summary>
     /// Late Loan Notification
     /// </summary>
-    public class LateLoanNotification : NewLoanBaseStrategy
+    public class LateLoanNotification : AStrategy
     {
         public LateLoanNotification()
         {
@@ -46,8 +46,8 @@
         private const string CollectionDay15EmailTemplate = "Mandrill - Warning notice- 40p late fee";
         private const string CollectionDay0EmailTemplate = "Mandrill - you missed your payment";
 
-      public override void NL_Execute() {
-        
+        public override void Execute()
+        {
             try {
                 LoadSmsTemplates();
                 LoadImailTemplates();

@@ -1,12 +1,16 @@
 ﻿namespace Ezbob.Backend.Strategies {
     using System;
+    using System.Reflection;
     using ConfigManager;
     using Ezbob.Backend.Strategies.Exceptions;
+    using Ezbob.Backend.Strategies.NewLoan;
     using Ezbob.Database;
+    using Ezbob.Utils;
     using EzBob.Models.Marketplaces.Builders;
     using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.Model.Database;
     using StructureMap;
+    using Newtonsoft.Json;
 
     public abstract class AStrategy {
 		static AStrategy() {
@@ -14,7 +18,10 @@
 			ms_bDefaultsAreReady = false;
 		} // static constructor
 
-
+        public bool IsNewLoanRunStrategy
+        {
+            get { return this is Inlstrategy && Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value); }
+        }
 
         public abstract string Name { get; }
 
@@ -102,6 +109,42 @@
 		private static readonly object ms_oLock;
 		private static bool ms_bDefaultsAreReady;
 
+        public void NL_AddLog(LogType logType,
+                                string description,
+                                object args,
+                                object result,
+                                string exception,
+                                string stacktrace) 
+        {
+            var sevirity = GetLogSection(logType);
+
+            var nlLog = new NL_Log() {
+                Exception = exception,
+                Description = description,
+                Referrer = this.Name,
+                TimeStamp = DateTime.Now,
+                Result = JsonConvert.SerializeObject(result, MiscUtils.GetJsonDBFormat()),                
+                Sevirity = sevirity,
+                Stacktrace = stacktrace,
+                Args = JsonConvert.SerializeObject(args, MiscUtils.GetJsonDBFormat()),
+                UserID = this.Context.UserID,
+                CustomerID = this.Context.CustomerID,                
+            };
+
+            var logId = DB.ExecuteScalar<long>("NL_AddLog",
+                CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Log>("Tbl", nlLog));
+        }
+
+	    public static string GetLogSection(LogType logType) {
+	        return logType.ToString();
+	    }
+
+	    public enum LogType {
+	        DataExsistense,
+            Error,
+            Info,
+            Debug
+	    }
 
     } // class AStrategy
 } // namespace Ezbob.Backend.Strategies

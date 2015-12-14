@@ -5,7 +5,7 @@
     using Ezbob.Database;
     using Newtonsoft.Json;
 
-    public class AddCashRequest : NewLoanBaseStrategy
+    public class AddCashRequest : AStrategy, Inlstrategy
     {
         public AddCashRequest(NL_CashRequests cashRequest)
         {
@@ -14,7 +14,11 @@
 
         public override string Name { get { return "AddCashRequest"; } }
 
-        public override void NL_Execute() {
+        public override void Execute()
+        {
+            if (!IsNewLoanRunStrategy)
+                return;
+
             NL_AddLog(LogType.Info, "Strategy Start", this.cashRequest,null, null, null);
             try
             {

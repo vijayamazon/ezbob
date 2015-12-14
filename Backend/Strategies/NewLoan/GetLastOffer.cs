@@ -3,7 +3,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
-    public class GetLastOffer : NewLoanBaseStrategy {
+    public class GetLastOffer : AStrategy, Inlstrategy {
 		public GetLastOffer(int customerID) {
 			this.customerID = customerID;
 		} // constructor
@@ -11,7 +11,10 @@
 		public override string Name { get { return "GetLastOffer"; } }
 		public string Error { get; private set; }
 
-        public override void NL_Execute() {
+		public override void Execute() {
+            
+            if (!IsNewLoanRunStrategy)
+                return;
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.customerID, null, null, null);
 			try {

@@ -8,7 +8,7 @@
     /// <summary>
     /// Late Customer Status Change
     /// </summary>
-    public class LateCustomerStatusChange : NewLoanBaseStrategy
+    public class LateCustomerStatusChange : AStrategy
     {
         public LateCustomerStatusChange(int customerID, int loanID, CollectionStatusNames status, CollectionType type, DateTime now)
         {
@@ -26,7 +26,7 @@
         public CollectionStatusNames Status { get; set; }
         public CollectionType Type { get; set; }
 
-        public override void NL_Execute() {
+        public override void Execute(){
             try{
                 NL_AddLog(LogType.Info, "Strategy Start", new object[] { this.CustomerID, this.LoanID, this.Status, this.Type }, null, null, null);
                 Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", CustomerID, LoanID, Type, Status);

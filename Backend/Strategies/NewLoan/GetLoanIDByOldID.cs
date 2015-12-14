@@ -4,7 +4,7 @@
     using Ezbob.Backend.Strategies.NewLoan.Exceptions;
     using Ezbob.Database;
 
-    public class GetLoanIDByOldID : NewLoanBaseStrategy
+    public class GetLoanIDByOldID : AStrategy, Inlstrategy
     {
         public GetLoanIDByOldID(int oldID)
         {
@@ -16,7 +16,10 @@
         public long LoanID { get; private set; }
         private readonly long OldLoanId;
 
-        public override void NL_Execute() {
+        public override void Execute()
+        {
+            if (!IsNewLoanRunStrategy)
+                return;
 
             if (this.OldLoanId == 0)
             {

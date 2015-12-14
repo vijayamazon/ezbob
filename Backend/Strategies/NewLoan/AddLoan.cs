@@ -12,7 +12,7 @@
 	using Ezbob.Database;
 	using MailApi;
 
-    public class AddLoan : NewLoanBaseStrategy {
+    public class AddLoan : AStrategy, Inlstrategy {
 
 		/// <summary>
 		/// Create new loan
@@ -55,7 +55,10 @@
 			- agreements
 			- loan options row
 			*/
-        public override void NL_Execute() {
+		public override void Execute() {
+
+            if (!IsNewLoanRunStrategy)
+                return;
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Error, null, null);
 

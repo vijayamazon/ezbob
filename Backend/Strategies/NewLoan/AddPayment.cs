@@ -8,7 +8,7 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 
-    public class AddPayment : NewLoanBaseStrategy {
+    public class AddPayment : AStrategy, Inlstrategy {
 
 		public AddPayment(int customerID, NL_Payments payment, int userID) {
 
@@ -49,7 +49,10 @@
 		public ILoanDAL LoanDAL { get; set; }
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-        public override void NL_Execute() {
+		public override void Execute() {
+
+            if (!IsNewLoanRunStrategy)
+                return;
 
 			// invalid input
 			if (!string.IsNullOrEmpty(Error)) {

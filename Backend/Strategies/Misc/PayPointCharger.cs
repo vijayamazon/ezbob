@@ -21,7 +21,7 @@
 		public bool IsException { get; set; }
 	}//class AutoPaymentResult
 
-	public class PayPointCharger : NewLoanBaseStrategy {
+	public class PayPointCharger : AStrategy {
 		private readonly int[] dueChargingDays = { 0, 1, 3, 7, 14, 21, 28 };
 		private readonly int amountToChargeFrom;
 		private readonly PayPointApi payPointApi = new PayPointApi();
@@ -34,7 +34,7 @@
 		private object[] strategyArgs;
 		public string Error { get; private set; }
 
-		public override void NL_Execute() {
+		public override void Execute() {
 
 			// step 1 - Get loans to pay.
 			try {
