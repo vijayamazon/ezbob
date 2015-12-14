@@ -35,6 +35,8 @@
 
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
 
 			// EZ-4329 
 			// check if same rollover exists OK

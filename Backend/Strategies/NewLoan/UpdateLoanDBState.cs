@@ -41,6 +41,9 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
+
             NL_AddLog(LogType.Info, "Strategy Start", LoanID, null, null, null);
 			NL_AddLog(LogType.Error, "Started", this.strategyArgs, Error, null, null);
 			if (CustomerID == 0) {

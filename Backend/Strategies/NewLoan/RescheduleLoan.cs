@@ -69,6 +69,8 @@
 
         public override void Execute()
         {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             NL_AddLog(LogType.Info, "Strategy Start", this.ReschedulingArguments, null, null, null);
             if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == null)
             {

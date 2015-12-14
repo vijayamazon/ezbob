@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Linq;
+	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -51,6 +52,8 @@
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		public override void Execute() {
 
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
 			// invalid input
 			if (!string.IsNullOrEmpty(Error)) {
 				throw new NL_ExceptionInputDataInvalid(Error);

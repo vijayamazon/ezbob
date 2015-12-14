@@ -16,6 +16,9 @@
         public override string Name { get { return "Set Late Loan Status"; } }
 
         public override void Execute(){
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
+
             this.now = DateTime.UtcNow;
             try{
                 DB.ForEachRowSafe((sr, bRowsetStart) =>

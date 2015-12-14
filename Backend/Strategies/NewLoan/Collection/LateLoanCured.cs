@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan.Collection
 {
     using System;
+    using ConfigManager;
     using DbConstants;
     using Ezbob.Backend.Models;
     using Ezbob.Database;
@@ -15,6 +16,8 @@
         public override string Name { get { return "Late Loan Cured"; } }
 
         public override void Execute(){
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             this.now = DateTime.UtcNow;
             try {
                 this.now = DateTime.UtcNow;

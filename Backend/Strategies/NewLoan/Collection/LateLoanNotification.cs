@@ -48,6 +48,8 @@
 
         public override void Execute()
         {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             try {
                 LoadSmsTemplates();
                 LoadImailTemplates();

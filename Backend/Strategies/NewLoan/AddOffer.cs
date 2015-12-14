@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 	using NHibernate.Linq;
@@ -21,6 +22,8 @@
 		private readonly IEnumerable<NL_OfferFees> fees;
 
 		public override void Execute() {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
 			NL_AddLog(LogType.Info, "Strategy Start", this.offer, null, null, null);
 
 			if (this.offer.DecisionID == 0) {

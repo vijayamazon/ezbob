@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
@@ -27,6 +28,8 @@
 
         public override void Execute()
         {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             NL_AddLog(LogType.Info, "Strategy Start", this.OldLoanInterestFreezeID, null, null, null);
             try {
                 long? newLoanId = null;

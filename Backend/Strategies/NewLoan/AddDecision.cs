@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using ConfigManager;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
     using NHibernate.Util;
@@ -26,6 +27,8 @@
 
         public override void Execute()
         {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             NL_AddLog(LogType.Info, "Strategy Start", this.decision, null, null, null);
             Log.Debug("ADDIND decision: {0}", this.decision);
             try

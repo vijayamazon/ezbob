@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan.Collection
 {
     using System;
+    using ConfigManager;
     using DbConstants;
     using Ezbob.Backend.Models;
     using Ezbob.Database;
@@ -27,6 +28,8 @@
         public CollectionType Type { get; set; }
 
         public override void Execute(){
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             try{
                 NL_AddLog(LogType.Info, "Strategy Start", new object[] { this.CustomerID, this.LoanID, this.Status, this.Type }, null, null, null);
                 Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", CustomerID, LoanID, Type, Status);

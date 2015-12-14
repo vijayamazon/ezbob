@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan
 {
     using System;
+    using ConfigManager;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
 
@@ -15,6 +16,8 @@
 
         public override void Execute()
         {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
             try
             {
                 NL_AddLog(LogType.Info, "Strategy Start", this.loanState, null, null, null);

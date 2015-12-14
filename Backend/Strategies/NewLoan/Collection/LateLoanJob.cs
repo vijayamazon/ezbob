@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan.Collection {
+    using ConfigManager;
     using System;
 
     /// <summary>
@@ -8,6 +9,8 @@
     {
         public override string Name { get { return "Late Loan Job"; } }
 		public override void Execute() {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+		        return;
 		    try {
                 NL_AddLog(LogType.Info, "Strategy Start", null, null, null, null);
                 AStrategy strategy = new SetLateLoanStatus();

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Globalization;
+	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
@@ -32,6 +33,8 @@
 		// all validations moved to SP
 
 		public override void Execute() {
+            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+                return;
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);
 			try {
 
