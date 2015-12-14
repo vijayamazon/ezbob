@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies {
     using System;
+    using System.Reflection;
     using ConfigManager;
     using Ezbob.Backend.Strategies.Exceptions;
     using Ezbob.Backend.Strategies.NewLoan;
@@ -17,7 +18,12 @@
 			ms_bDefaultsAreReady = false;
 		} // static constructor
 
-		public abstract string Name { get; }
+        public bool IsNewLoanRunStrategy
+        {
+            get { return this is Inlstrategy && Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value); }
+        }
+
+        public abstract string Name { get; }
 
 		public abstract void Execute();
 

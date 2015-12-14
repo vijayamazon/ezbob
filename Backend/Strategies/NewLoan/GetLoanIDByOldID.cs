@@ -4,7 +4,7 @@
     using Ezbob.Backend.Strategies.NewLoan.Exceptions;
     using Ezbob.Database;
 
-	public class GetLoanIDByOldID : AStrategy
+    public class GetLoanIDByOldID : AStrategy, Inlstrategy
     {
         public GetLoanIDByOldID(int oldID)
         {
@@ -18,6 +18,9 @@
 
         public override void Execute()
         {
+            if (!IsNewLoanRunStrategy)
+                return;
+
             if (this.OldLoanId == 0)
             {
                 Error = NL_ExceptionRequiredDataNotFound.OldLoan;

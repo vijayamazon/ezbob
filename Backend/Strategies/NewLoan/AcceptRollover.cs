@@ -7,10 +7,13 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 
-	public class AcceptRollover : AStrategy {
+	public class AcceptRollover : AStrategy, Inlstrategy {
 
 
 		public AcceptRollover(int customerID, long loanID, NL_LoanFees rolloverFee = null) {
+
+            if (!IsNewLoanRunStrategy)
+                return;
 
 			/*if (Context.CustomerID == null || Context.CustomerID == 0) {
 				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;

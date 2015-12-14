@@ -6,7 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
-	public class AddLoanOptions : AStrategy {
+    public class AddLoanOptions : AStrategy, Inlstrategy
 
 		public List<string> PropertiesUpdateList { get; set; }
 		public int? oldLoanId { get; set; }
@@ -24,6 +24,9 @@
 		public override string Name { get { return "AddLoanOptions"; } }
 
 		public override void Execute() {
+            if (!IsNewLoanRunStrategy)
+                return;
+
 			NL_AddLog(LogType.Info, "Strategy Start", this.nlLoanOptions, null, null, null);
 			try {
 				long newLoanId = -1;

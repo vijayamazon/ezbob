@@ -6,7 +6,7 @@
 	using Ezbob.Database;
 	using NHibernate.Linq;
 
-	public class AddOffer : AStrategy {
+    public class AddOffer : AStrategy, Inlstrategy {
 		public AddOffer(NL_Offers offer, IEnumerable<NL_OfferFees> fees = null) {
 			this.offer = offer;
 			this.fees = (fees != null) ? fees.Where(f => f.Percent > 0) : null;
@@ -21,6 +21,10 @@
 		private readonly IEnumerable<NL_OfferFees> fees;
 
 		public override void Execute() {
+            
+            if (!IsNewLoanRunStrategy)
+                return;
+
 			NL_AddLog(LogType.Info, "Strategy Start", this.offer, null, null, null);
 
 			if (this.offer.DecisionID == 0) {

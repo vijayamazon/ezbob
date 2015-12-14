@@ -1,14 +1,32 @@
-﻿namespace Ezbob.Utils
-{
+﻿namespace Ezbob.Utils {
     using System;
     using System.Globalization;
+    using ConfigManager;
+    using Ezbob.Logger;
+    using log4net;
     using Newtonsoft.Json;
 
-    public static class MiscUtils
-    {
+    public static class MiscUtils {
+        public static void NL_Action<T>(Func<T> func, ASafeLog ezbobLogger = null, ILog log4net= null) {
+            try {
+                if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) 
+                {
+                    func.Invoke();
+                }
+            }
+            catch (Exception ex) 
+            {
+                if (log4net != null)
+                    log4net.Error(string.Format("NL_ERROR {0} - {1}", ex, ex.StackTrace));
+                if (ezbobLogger!= null)
+                    ezbobLogger.Error("NL_ERROR {0} - {1}", ex ,ex.StackTrace);
+    
+            }
+        }
+
         public static Tuple<DateTime?, DateTime?> NL_GetLateFeeDates(bool AutoLateFees,
                                                            DateTime? StopLateFeeFromDate,
-                                                           DateTime? StopLateFeeToDate){
+                                                           DateTime? StopLateFeeToDate) {
             if (StopLateFeeFromDate != null)
                 return new Tuple<DateTime?, DateTime?>(StopLateFeeFromDate, StopLateFeeToDate);
             if (AutoLateFees)
@@ -16,7 +34,7 @@
             return new Tuple<DateTime?, DateTime?>(null, null);
         }
 
-        public static DateTime? NL_GetStopAutoChargeDate(bool AutoCharge, DateTime? StopAutoChargeDate){
+        public static DateTime? NL_GetStopAutoChargeDate(bool AutoCharge, DateTime? StopAutoChargeDate) {
             if (StopAutoChargeDate != null)
                 return StopAutoChargeDate;
             if (AutoCharge)
@@ -24,12 +42,10 @@
             return null;
         }
 
-        public static JsonSerializerSettings GetJsonDBFormat()
-        {
+        public static JsonSerializerSettings GetJsonDBFormat() {
             return new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
         }
-        public static string MD5(string input)
-        {
+        public static string MD5(string input) {
             return Security.SecurityUtils.MD5(input);
         } // MD5
 
@@ -38,20 +54,17 @@
             string sArgName,
             bool bThrow = true,
             int nMaxAllowedLength = 255
-        )
-        {
+        ) {
             sValue = (sValue ?? string.Empty).Trim();
 
-            if (sValue.Length == 0)
-            {
+            if (sValue.Length == 0) {
                 if (bThrow)
                     throw new ArgumentNullException(sArgName, sArgName + " not specified.");
 
                 return sValue;
             } // if
 
-            if (sValue.Length > nMaxAllowedLength)
-            {
+            if (sValue.Length > nMaxAllowedLength) {
                 if (bThrow)
                     throw new Exception(sArgName + " is too long.");
 
@@ -61,8 +74,7 @@
             return sValue;
         } // Validate
 
-        public static DateTime WeekStart(DateTime oDate, CultureInfo oCulture = null)
-        {
+        public static DateTime WeekStart(DateTime oDate, CultureInfo oCulture = null) {
             if (oCulture == null)
                 oCulture = CultureInfo.CurrentCulture;
 
@@ -74,18 +86,15 @@
             return oDate.AddDays(-1 * nDiff).Date;
         } // WeekStart
 
-        public static DateTime FirstDayOfWeek(this DateTime oDate, CultureInfo oCulture = null)
-        {
+        public static DateTime FirstDayOfWeek(this DateTime oDate, CultureInfo oCulture = null) {
             return WeekStart(oDate, oCulture);
         } // FirstDayOfWeek
 
-        public static DateTime FirstDayOfWeek(CultureInfo oCulture = null)
-        {
+        public static DateTime FirstDayOfWeek(CultureInfo oCulture = null) {
             return WeekStart(DateTime.UtcNow, oCulture);
         } // FirstDayOfWeek
 
-        public static int GetFullYears(DateTime date)
-        {
+        public static int GetFullYears(DateTime date) {
             int years = DateTime.UtcNow.Year - date.Year;
             if (date > DateTime.UtcNow.AddYears(-years))
                 years--;
@@ -93,10 +102,8 @@
             return years;
         } // GetFullYears
 
-        public static void GetFullYearsAndMonths(DateTime? date, out int years, out int months)
-        {
-            if (!date.HasValue)
-            {
+        public static void GetFullYearsAndMonths(DateTime? date, out int years, out int months) {
+            if (!date.HasValue) {
                 years = 0;
                 months = 0;
                 return;
@@ -120,15 +127,13 @@
         /// <param name="a">First date.</param>
         /// <param name="b">Second date.</param>
         /// <returns>Number of full months between the dates a and b.</returns>
-        public static int MonthDiff(DateTime a, DateTime b)
-        {
+        public static int MonthDiff(DateTime a, DateTime b) {
             if (a == b)
                 return 0;
 
             bool bReverse = a > b;
 
-            if (bReverse)
-            {
+            if (bReverse) {
                 DateTime t = a;
                 a = b;
                 b = t;
@@ -138,8 +143,7 @@
 
             DateTime c = b;
 
-            while (a <= c)
-            {
+            while (a <= c) {
                 c = b.AddMonths(-nCount - 1);
 
                 if (a <= c)
@@ -163,15 +167,13 @@
         /// <param name="a">First date.</param>
         /// <param name="b">Second date.</param>
         /// <returns>Number of months.</returns>
-        public static int CountMonthsBetween(DateTime a, DateTime b)
-        {
+        public static int CountMonthsBetween(DateTime a, DateTime b) {
             if (a == b)
                 return 0;
 
             int nReverse = a > b ? -1 : 1;
 
-            if (a > b)
-            {
+            if (a > b) {
                 DateTime t = a;
                 a = b;
                 b = t;
@@ -238,8 +240,7 @@
             DateTime lastUpdate,
             int tailLength,
             DateTime? lastExistingDataTime
-        )
-        {
+        ) {
             int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
 
             bool inTheSameTail =
@@ -279,12 +280,10 @@
         /// </summary>
         /// <param name="raw"></param>
         /// <returns></returns>
-        public static string ByteArr2Hex(byte[] raw)
-        {
+        public static string ByteArr2Hex(byte[] raw) {
             string hex = null;
 
-            if (raw != null)
-            {
+            if (raw != null) {
                 hex = BitConverter.ToString(raw);
                 hex = (hex.Replace("-", "")).ToLower();
             } // if
@@ -298,8 +297,7 @@
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        public static int DateDiffInMonths(DateTime start, DateTime end)
-        {
+        public static int DateDiffInMonths(DateTime start, DateTime end) {
             return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
         } // DateDiffInMonths
 
@@ -311,13 +309,11 @@
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        public static int DateDiffInWeeks(DateTime start, DateTime end)
-        {
+        public static int DateDiffInWeeks(DateTime start, DateTime end) {
             return (int)Math.Ceiling(end.Subtract(start).Days / 7d);
         } // DateDiffInWeeks
 
-        public static int DaysInMonth(DateTime date)
-        {
+        public static int DaysInMonth(DateTime date) {
             return DateTime.DaysInMonth(date.Year, date.Month);
         }
 
