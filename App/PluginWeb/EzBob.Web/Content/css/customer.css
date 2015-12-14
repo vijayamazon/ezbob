@@ -786,3 +786,9 @@ blockquote {
 }.address-dialog-buttonpane .ui-dialog-buttonset {
     direction:rtl;
 }
+
+ .agreements-checkboxes .input-tag-wrap label {
+  display:inline-block;
+  padding-top:3px;
+  vertical-align: top;   
+ }
