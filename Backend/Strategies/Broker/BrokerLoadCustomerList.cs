@@ -37,9 +37,11 @@ namespace Ezbob.Backend.Strategies.Broker {
 					FirstName = row.FirstName,
 					LastName = row.LastName,
 					Email = row.Email,
+                    IsWaitingForSignature = row.Signature,
 					WizardStep = row.WizardStep,
 					Status = row.Status,
 					ApplyDate = row.ApplyDate,
+                   
 					ApprovedAmount = row.ApprovedAmount,
 					CommissionAmount = row.CommissionAmount,
 					Marketplaces = row.Marketplaces,
@@ -70,6 +72,7 @@ namespace Ezbob.Backend.Strategies.Broker {
 						CustomerID = 0,
 						RefNumber = "",
 						FirstName = row.FirstName,
+                       
 						LastName = row.LastName,
 						Email = row.Email,
 						WizardStep = "",
@@ -114,9 +117,10 @@ namespace Ezbob.Backend.Strategies.Broker {
 				public string FirstName { get; set; }
 				public string LastName { get; set; }
 				public string Email { get; set; }
+                public bool Signature { get; set; }
 				public string RefNumber { get; set; }
 				public string WizardStep { get; set; }
-				public string Status { get; set; }
+				public string Status { get; set; } // need to change
 				public DateTime ApplyDate { get; set; }
 				public decimal LoanAmount { get; set; }
 				public DateTime LoanDate { get; set; }

@@ -38,14 +38,34 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
-
-	SELECT
+   ;WITH
+  last_cashrquests AS (
+	 SELECT 
+	 MAX(Id) maxid  
+	 FROM 
+	 CashRequests 
+	 GROUP BY IdCustomer
+   		
+   ),
+  last_cashrquests_prepare AS (
+   SELECT 
+   Id,
+   IdCustomer,
+   ManagerApprovedSum 
+   FROM 
+   CashRequests cr 
+   INNER JOIN  last_cashrquests lcr  ON lcr.maxid = cr.Id
+   )
+   
+  	SELECT
 		c.Id AS CustomerID,
 		c.FirstName AS FirstName,
 		c.Surname AS LastName,
 		c.Name AS Email,
+		c.IsWaitingForSignature AS Signature,
 		c.RefNumber,
 		w.WizardStepTypeDescription AS WizardStep,
+	 
 		CASE
 			WHEN W.WizardStepTypeName = 'success' THEN
 				CASE
@@ -67,22 +87,20 @@ BEGIN
 		ISNULL(l.LoanAmount, 0) AS LoanAmount,
 		l.Date AS LoanDate,
 		l.SetupFee,
-		ISNULL(cr.ManagerApprovedSum, 0) AS ApprovedAmount,
+		ISNULL(lcp.ManagerApprovedSum, 0) AS ApprovedAmount,
 		ISNULL(lb.CommissionAmount, 0) AS CommissionAmount, 
 		lb.PaidDate AS CommissionPaymentDate
 	FROM
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
 		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
-		LEFT JOIN CashRequests cr ON cr.Id = l.RequestCashId
+	  	LEFT JOIN last_cashrquests_prepare lcp ON lcp.IdCustomer = c.Id
 		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
 	WHERE
-		c.BrokerID = @BrokerID
-		AND
-		c.OriginID = @BrokerOriginID
+		c.BrokerID = 423
+	 
 	ORDER BY
 		c.Id
-
 	------------------------------------------------------------------------------
 END
 GO

@@ -181,9 +181,40 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				}; // mRender for LoanAmount
 			});
 
+			self.adjustAoColumn(theTableOpts, 'Status', function (oCol) {
+			    // ocol.mrender will run through all the ocol.mData(for example = 'status') coloums.
+			    // in adjust Ao column function(ocol) we can assign the mRender function to all the cols that need the same functionality  for example 3 cols of dates
+			    oCol.mRender = function (oData, sAction, oFullSource) {
+			        switch (sAction) {
+			            case 'display':
+			                if (oData === 'ApprovedPending') {
+			                    if (oFullSource.IsWaitingForSignature === true) {
+			                        return 'Waiting for signature';
+			                    }
+			                    else {
+			                        return 'Pending information';
+			                    }
+			                }
+			                return oData;
+
+			            case 'filter':
+			                return oData;
+
+			            case 'type':
+			                return oData;
+
+			            case 'sort':
+			                return oData;
+
+			            default:
+			                return oData;
+			        } // switch
+			    }; // mRender
+			});
 			var oSomeTimeAgo = moment([2012, 7]).utc();
 
 			self.adjustAoColumn(theTableOpts, ['ApplyDate', 'LoanDate', 'CommissionPaymentDate'], function (oCol) {
+                
 				oCol.mRender = function (oData, sAction, oFullSource) {
 					switch (sAction) {
 						case 'display':
@@ -308,7 +339,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			aryNames[oColumnName] = 1;
 
 		_.each(oTableOpts.aoColumns, function (oCol) {
-			if (aryNames[oCol.mData])
+			if (aryNames[oCol.mData]) //checks if column is in oColumn name
 				oAdjustFunc(oCol);
 		});
 	}, // adjustAoColumn
