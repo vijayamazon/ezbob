@@ -3,7 +3,7 @@ IF OBJECT_ID('NL_PayPointCustomersGet') IS  NULL
 GO
 
 
-ALTER PROCEDURE NL_PayPointCustomersGet AS BEGIN DECLARE @Now DATETIME
+ALTER PROCEDURE NL_CustomersForAutoCharger AS BEGIN DECLARE @Now DATETIME
 SET @Now = GETUTCDATE()
 SELECT ls.LoanScheduleID AS LoanScheduleId,
        l.LoanId,

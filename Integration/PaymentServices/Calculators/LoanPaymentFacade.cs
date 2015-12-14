@@ -54,7 +54,7 @@
 			const string Manual = "--- manual ---";
 			string otherMethod = transId == Manual ? "Manual" : "Auto";
 
-			var loanTransactionMethod = loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod);
+			var loanTransactionMethod = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod);
 
 			var transactionItem = new PaypointTransaction {
 				Amount = amount,

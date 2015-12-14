@@ -43,10 +43,7 @@
 
 		[DataMember]
 		public DateTime? DeletionTime { get; set; }
-
-		//[DataMember]
-		//public DateTime? DeletionNotificationTime { get; set; }
-
+	
 		[FK("Security_User", "UserId")]
 		[DataMember]
 		public int? DeletedByUserID { get; set; }
@@ -58,10 +55,6 @@
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
 		public long LoanID { get; set; }
-
-		//[DataMember]
-		//[NonTraversable]
-		//public bool Reset { get; set; }
 	
 		private DateTime _createDate = DateTime.UtcNow;
 

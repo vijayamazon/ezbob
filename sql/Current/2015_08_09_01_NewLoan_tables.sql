@@ -791,8 +791,7 @@ BEGIN
 		PaymentStatusID INT NOT NULL,
 		CreationTime DATETIME NOT NULL,
 		CreatedByUserID INT NOT NULL,
-		DeletionTime DATETIME NULL,
-		--DeletionNotificationTime DATETIME NULL,
+		DeletionTime DATETIME NULL,		
 		DeletedByUserID INT NULL,
 		Notes NVARCHAR(MAX) NULL,
 		LoanID BIGINT NOT NULL,
@@ -804,13 +803,9 @@ BEGIN
 		CONSTRAINT FK_NL_Payments_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId),
 		CONSTRAINT FK_NL_Payments_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT CHK_NL_Payments CHECK (
-			(DeletionTime IS NULL 
-			--AND DeletionNotificationTime IS NULL 
-			AND DeletedByUserID IS NULL)
+			(DeletionTime IS NULL AND DeletedByUserID IS NULL)
 			OR
-			(DeletionTime >= CreationTime 
-			--AND DeletionNotificationTime >= DeletionTime AND DeletionNotificationTime >= CreationTime 
-			AND DeletedByUserID IS NOT NULL)
+			(DeletionTime >= CreationTime AND DeletedByUserID IS NOT NULL)
 		)
 	)
 END
