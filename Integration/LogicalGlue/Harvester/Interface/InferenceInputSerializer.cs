@@ -25,20 +25,19 @@
 				: Math.Round(input.MonthlyPayment.Value).ToString("##.00", CultureInfo.InvariantCulture)
 			);
 
+			bool hasDirector = input.Director != null;
+
+			WriteIfNotEmpty(writer, serializer, FirstName, hasDirector ? input.Director.FirstName : null);
+			WriteIfNotEmpty(writer, serializer, LastName, hasDirector ? input.Director.LastName : null);
+			WriteIfNotEmpty(writer, serializer, BirthDate, hasDirector
+				? input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture)
+				: null
+			);
+
 			if (!string.IsNullOrWhiteSpace(input.EquifaxData))
 				WriteIfNotEmpty(writer, serializer, Equifax, input.EquifaxData);
 			else {
 				WriteIfNotEmpty(writer, serializer, RegNum, input.CompanyRegistrationNumber);
-
-				bool hasDirector = input.Director != null;
-
-				WriteIfNotEmpty(writer, serializer, FirstName, hasDirector ? input.Director.FirstName : null);
-				WriteIfNotEmpty(writer, serializer, LastName, hasDirector ? input.Director.LastName : null);
-				WriteIfNotEmpty(writer, serializer, BirthDate, hasDirector
-					? input.Director.DateOfBirth.ToString(BirthDateFormat, CultureInfo.InvariantCulture)
-					: null
-				);
-
 				WriteIfNotEmpty(writer, serializer, Postcode, hasDirector ? input.Director.Postcode : null);
 				WriteIfNotEmpty(writer, serializer, HouseName, hasDirector ? input.Director.HouseName : null);
 				WriteIfNotEmpty(writer, serializer, HouseNumber, hasDirector ? input.Director.HouseNumber : null);
