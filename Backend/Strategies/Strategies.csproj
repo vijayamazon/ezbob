@@ -233,6 +233,7 @@
     <Compile Include="NewLoan\BuildLoanFromOffer.cs" />
     <Compile Include="NewLoan\DAL\ILoanDAL.cs" />
     <Compile Include="NewLoan\DAL\LoanDAL.cs" />
+    <Compile Include="Postcode\PostcodeNuts.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoanOptions.cs" />
