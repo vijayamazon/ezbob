@@ -11,6 +11,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
@@ -1043,7 +1044,7 @@
 					PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
 				};
 				var f = new LoanPaymentFacade();
-				f.PayLoan(loan, "111", 1000, "11.11.11.11", DateTime.UtcNow, "system-repay", false, null, 1, nlPayment);
+				f.PayLoan(loan, "111", 1000, "11.11.11.11", DateTime.UtcNow, "system-repay", false, null, nlPayment);
 			} catch (Exception ex) {
 				this.m_oLog.Debug(ex);
 			}
@@ -1077,9 +1078,10 @@
 			s.Context.CustomerID = 362;
 			s.Context.UserID = 357;
 			s.Execute();
-
 			s.Loans.ForEach(l => this.m_oLog.Debug(l));
 		}
+
+		
 
 	} // class TestNewLoan
 } // namespace

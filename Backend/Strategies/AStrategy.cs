@@ -125,8 +125,7 @@
                 CustomerID = this.Context.CustomerID,                
             };
 
-            var logId = DB.ExecuteScalar<long>("NL_AddLog",
-                CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Log>("Tbl", nlLog));
+            var logId = DB.ExecuteScalar<long>("NL_AddLog", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Log>("Tbl", nlLog));
         }
 
 	    public static string GetLogSection(LogType logType) {

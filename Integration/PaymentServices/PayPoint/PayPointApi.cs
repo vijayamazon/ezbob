@@ -113,19 +113,19 @@
 		//-----------------------------------------------------------------------------------
 		/// <summary>
 		/// Make automatic payment for given installment
+		/// Called from PaypointCharger job
 		/// </summary>
 		/// <param name="customerId"></param>
 		/// <param name="loanId"></param>
 		/// <param name="loanScheduleId">Installment Id</param>
 		/// <param name="amount">Amount to pay</param>
-		/// <param name="nlPayment"></param>
 		/// <returns>PayPointReturnData as a result of call to paypoint API</returns>
 		public PayPointReturnData MakeAutomaticPayment(
 			int customerId,
 			int loanId,
 			int loanScheduleId,
-			decimal amount,
-			NL_Payments nlPayment = null) {
+			decimal amount
+			) {
 
 			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
 			var loanPaymentFacade = new LoanPaymentFacade();
@@ -140,9 +140,15 @@
 				var customer = loan.Customer;
 				var now = DateTime.UtcNow;
 
-				if (nlPayment != null) {
-					Log.InfoFormat("customerId={0} loanID = {1}, loanScheduleId={2} amount={3}; nlPayment={4}", customerId, loanId, loanScheduleId, amount, nlPayment);
-				}
+				NL_Payments	nlPayment = new NL_Payments() {
+					Amount = amount,
+					PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
+					PaymentStatusID = (int)NLPaymentStatuses.InProgress,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint,
+					CreationTime = now,
+					CreatedByUserID = 1,
+					Notes = "autocharger"
+				};
 
 				Log.InfoFormat("Making automatic repayment for customer {0}(#{1}) for amount {2} for loan# {3}({4})", customer.PersonalInfo.Fullname, customer.RefNumber, amount, loan.RefNumber, loan.Id);
 
@@ -160,10 +166,8 @@
 				try {
 					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount);
 
-					if (nlPayment != null) {
-						// set real charged amount
-						nlPayment.Amount = amount;
-					}
+					// set real charged amount
+					nlPayment.Amount = amount;
 
 				} catch (PayPointException ex) {
 
@@ -180,31 +184,29 @@
 						LoanTransactionMethod = ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository.FindOrDefault("Auto")
 					});
 
-					// insert failed transaction
-					if (nlPayment != null) {
-						nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
-							TransactionTime = now,
-							Amount = amount, // in the case of Exception amount should be 0 ????
-							Notes = ex.PaypointData.Message ?? "Exception:" + ex.Message,
-							PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Error,
-							IP = string.Empty,
-							PaypointUniqueID = payPointTransactionId,
-							PaypointCardID = defaultCard.Id
-						});
-
-						Log.InfoFormat("Failed Paypoint transaction: customerId={0} loanID = {1}, loanScheduleId={2} amount={3}; nlPayment={4}", customerId, loanId, loanScheduleId, amount, nlPayment);
-					}
-
 					installments.CommitTransaction();
 
-					if (nlPayment != null) {
-						ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment);
-					}
+					// save failed transaction
+					nlPayment.Amount = 0;
+					nlPayment.PaypointTransactions.Clear();
+					nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+						TransactionTime = now,
+						Amount = amount, // in the case of Exception amount should be 0 ????
+						Notes = ex.PaypointData.Message ?? "Exception:" + ex.Message,
+						PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Error,
+						IP = string.Empty,
+						PaypointUniqueID = payPointTransactionId,
+						PaypointCardID = defaultCard.Id
+					});
+
+					Log.InfoFormat("Failed Paypoint transaction: customerId={0} loanID = {1}, loanScheduleId={2} amount={3}; nlPayment={4}", customerId, loanId, loanScheduleId, amount, nlPayment);
+
+					ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment);
 
 					return ex.PaypointData;
 				}
 
-				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, 1, nlPayment);
+				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, nlPayment);
 				installments.CommitTransaction();
 
 			} catch (Exception e) {

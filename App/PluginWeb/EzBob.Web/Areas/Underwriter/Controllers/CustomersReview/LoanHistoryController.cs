@@ -3,7 +3,9 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Code.ReportGenerator;
@@ -142,14 +144,14 @@
 			rolloverModel.Payment = CurrentValues.Instance.RolloverCharge;
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
-		
+
 
 			//TODO add rollover to new rollover table
 			Log.InfoFormat("add rollover to new rollover table schedule id {0}", scheduleId);
 
-	//long nlLoanID = m_oServiceClient.Instance
+			//long nlLoanID = m_oServiceClient.Instance
 
-//  + GetRollover
+			//  + GetRollover
 			//NL_LoanRollovers nlRollover = new NL_LoanRollovers() {CreatedByUserID = _context.UserId, CreationTime = DateTime.Now, ExpirationTime =  expDate, LoanHistoryID = 
 
 			m_oServiceClient.Instance.EmailRolloverAdded(_context.UserId, customer.Id, payment);
@@ -206,12 +208,23 @@
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
-				var facade = new LoanPaymentFacade();
+				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+					var method = Enum.GetName(typeof(NLLoanTransactionMethods), model.PaymentMethod);
+					var nlPayment = new NL_Payments() {
+						CreatedByUserID = this._context.UserId,
+						Amount = realAmount,
+						PaymentMethodID = (int)Enum.Parse(typeof(NLLoanTransactionMethods), method),
+						PaymentSystemType = NLPaymentSystemTypes.None,
+					};
 
+					Log.InfoFormat("ManualPayment: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
+				//}
+
+				var facade = new LoanPaymentFacade();
 				facade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,
-												 date, description, null, model.PaymentMethod,this._context.UserId);
-			
+												 date, description, null, model.PaymentMethod, nlPayment);
+
 				Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
 				var loan = customer.GetLoan(model.LoanId);
 				facade.Recalculate(loan, DateTime.Now);
@@ -251,14 +264,13 @@
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
-            try {
-                long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
-            }
-            catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
-            }
+			try {
+				long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+				Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
+			} catch (Exception) {
+				Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
+			}
 
 
 			var model = new LoanPaymentDetails {
@@ -289,14 +301,13 @@
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
-            try {
-                long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
-            }
-            catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
-            }
+			try {
+				long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
+				Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
+			} catch (Exception) {
+				Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
+			}
 
 			var rolloverCharge = CurrentValues.Instance.RolloverCharge;
 

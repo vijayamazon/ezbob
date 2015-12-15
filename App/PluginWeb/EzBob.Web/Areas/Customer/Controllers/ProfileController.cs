@@ -244,6 +244,7 @@
 			return Redirect(url);
 		} // AddPayPoint
 
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[Transactional]
 		[HttpGet]
 		public ActionResult PayPointCallback(
@@ -330,23 +331,27 @@
 
 			bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
 			if (amount > 0 && hasOpenLoans) {
+
 				Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
-				var f = new LoanPaymentFacade();
 
-				long nl_LoanId = m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
+				//NL_Payments nlPayment = null;
+				//long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.m_oContext.UserId).Value;
 
-				NL_Payments nlPayment = new NL_Payments() {
-					Amount = amount.Value,
-					CreatedByUserID = this.m_oContext.UserId,
-					CreationTime = DateTime.UtcNow,
-					LoanID = nl_LoanId,
-					PaymentTime = DateTime.UtcNow,
-					Notes = "Add Pay Point Card",
-					PaymentStatusID = (int)NLPaymentStatuses.Active,
-					PaymentSystemType = NLPaymentSystemTypes.Paypoint
+				//if (nlLoanId > 0) {
+				NL_Payments	nlPayment = new NL_Payments() {
+						Amount = amount.Value,
+						CreatedByUserID = this.m_oContext.UserId,
+					//	LoanID = nlLoanId,
+						//PaymentStatusID = (int)NLPaymentStatuses.Active,
+						PaymentSystemType = NLPaymentSystemTypes.Paypoint,
+						PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
+						PaymentTime = DateTime.UtcNow,
+						Notes = "add payPoint card",
+						CreationTime = DateTime.UtcNow
 				};
 
-				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, this.m_oContext.User.Id, nlPayment);
+				var f = new LoanPaymentFacade();
+				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment);
 			}
 
 			if (amount > 0 && !hasOpenLoans) {

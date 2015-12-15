@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.NewLoan;
@@ -20,6 +19,29 @@
 		public bool PaymentCollectedSuccessfully { get; set; }
 		public bool IsException { get; set; }
 	}//class AutoPaymentResult
+
+	public class AutoChargerModel {
+		public string FirstName { get; set; }
+		public string Fullname { get; set; }
+		public int CustomerId { get; set; }
+		public string Email { get; set; }
+		public string TypeOfBusiness { get; set; }
+		public DateTime DueDate { get; set; }
+		public bool ReductionFee { get; set; }
+		public bool LastInstallment { get; set; }
+		public string RefNum { get; set; }
+	}
+
+	public class LoanAutoChargeModel: AutoChargerModel {
+		public int LoanScheduleId { get; set; }
+		public int LoanId { get; set; }
+	}
+
+	public class NLLoanAutoChargeModel : AutoChargerModel {
+		public long LoanScheduleId { get; set; }
+		public long LoanId { get; set; }
+		public int OldLoanID { get; set; }
+	}
 
 	public class PayPointCharger : AStrategy {
 		private readonly int[] dueChargingDays = { 0, 1, 3, 7, 14, 21, 28 };
@@ -38,20 +60,21 @@
 
 			// step 1 - Get loans to pay.
 			try {
-				IEnumerable<SafeReader> loansList = DB.ExecuteEnumerable("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
-				IEnumerable<SafeReader> nlList = DB.ExecuteEnumerable("NL_CustomersForAutoCharger", CommandSpecies.StoredProcedure, new QueryParameter("Now", DateTime.UtcNow)).ToList();
+
+				List<LoanAutoChargeModel> loansList = DB.Fill<LoanAutoChargeModel>("GetCustomersForPayPoint", CommandSpecies.StoredProcedure); //.ToList();
+				List<NLLoanAutoChargeModel> nlList = DB.Fill<NLLoanAutoChargeModel>("NL_CustomersForAutoCharger", CommandSpecies.StoredProcedure, new QueryParameter("Now", DateTime.UtcNow)); //.ToList();
 
 				this.strategyArgs = new object[] { loansList, nlList };
 
 				NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Error, null, null);
 
 				foreach (var loan in loansList) {
-					var nlLoan = nlList.FirstOrDefault(ldata => ldata["OldLoanID"] == loan["LoanId"]);
+					var nlLoan = nlList.FirstOrDefault(ldata => ldata.OldLoanID == loan.LoanId);
 					try {
 						HandleOnePayment(loan, nlLoan);
 						// ReSharper disable once CatchAllClause
 					} catch (Exception ex) {
-						Error = string.Format("failed to auto charge customer {0} schedule {1}", loan["CustomerId"], loan["LoanScheduleId"]);
+						Error = string.Format("failed to auto charge customer {0} schedule {1}", loan.CustomerId, loan.LoanScheduleId);
 						Log.Error(ex, Error);
 						NL_AddLog(LogType.Error, "loan iteration failed", this.strategyArgs, Error, ex.Message, ex.StackTrace);
 					}
@@ -79,7 +102,7 @@
 		}
 
 
-		public decimal GetAmountToPay(int customerID, int loanScheduleID, int loandID) {
+		public decimal GetAmountToPay(int customerID, long loandID, long loanScheduleID ) {
 
 			NL_Model nlModel = new NL_Model(customerID) { Loan = new NL_Loans() };
 			GetLoanState state = new GetLoanState(customerID, loandID, DateTime.UtcNow);
@@ -111,19 +134,19 @@
 			return 0;
 		}
 
-		private void HandleOnePayment(SafeReader loan, SafeReader nlLoan = null) {
+		private void HandleOnePayment(LoanAutoChargeModel loan, NLLoanAutoChargeModel nlLoan = null) {
 			string message;
-			int loanScheduleId = loan["LoanScheduleId"];
-			int loanId = loan["LoanId"];
+			int loanScheduleId = loan.LoanScheduleId;
+			int loanId = loan.LoanId;
 			//string firstName = loan["FirstName"];
-			int customerId = loan["CustomerId"];
-			string customerMail = loan["Email"];
-			string fullname = loan["Fullname"];
-			string typeOfBusinessStr = loan["TypeOfBusiness"];
-			DateTime dueDate = loan["DueDate"]; // PlannedDate
-			bool reductionFee = loan["ReductionFee"];
-			string refNum = loan["RefNum"]; // of loan
-			bool lastInstallment = loan["LastInstallment"]; // bit
+			int customerId = loan.CustomerId;
+			string customerMail = loan.Email;
+			string fullname = loan.Fullname;
+			string typeOfBusinessStr = loan.TypeOfBusiness;
+			DateTime dueDate = loan.DueDate; // PlannedDate
+			bool reductionFee = loan.ReductionFee;
+			string refNum = loan.RefNum; // of loan
+			bool lastInstallment = loan.LastInstallment; // bit
 
 			TypeOfBusiness typeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), typeOfBusinessStr);
 			bool isNonRegulated = IsRegulated(typeOfBusiness);
@@ -134,36 +157,21 @@
 
 			// amount due.
 			decimal amountDue = this.payPointApi.GetAmountToPay(loanScheduleId);
-
-			NL_Payments nlPayment = null;
-
+			
 			if (nlLoan == null) {
-				NL_AddLog(LogType.Info, string.Format("could not find corresponding nl_loan for oldLoanID : {0}", loanId), this.strategyArgs, null, null, null);
+				NL_AddLog(LogType.Info, string.Format("corresponding nlloan for oldLoanID {0} not found", loanId), this.strategyArgs, null, null, null);
 			} else {
 				// new loan amount due.  
-				decimal nlAmountDue = GetAmountToPay(nlLoan["CustomerId"], nlLoan["LoanId"], nlLoan["LoanScheduleId"]);
+				decimal nlAmountDue = GetAmountToPay(nlLoan.CustomerId, nlLoan.LoanId, nlLoan.LoanScheduleId);
 
-				message = string.Format("LoanID={0} oldLoanID={1} amountDue= {2} nlAmountDue={3}", nlLoan["LoanId"], nlLoan["OldLoanID"], amountDue, nlAmountDue);
+				message = string.Format("LoanID={0} oldLoanID={1} amountDue= {2} nlAmountDue={3}", nlLoan.LoanId, nlLoan.OldLoanID, amountDue, nlAmountDue);
 				Log.Debug(message);
 				NL_AddLog(LogType.Info, "AmountDue", this.strategyArgs, message, null, null);
-
-				nlPayment = new NL_Payments() {
-					PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
-					Amount = nlAmountDue,
-					PaymentStatusID = (int)NLPaymentStatuses.InProgress,
-					PaymentSystemType = NLPaymentSystemTypes.Paypoint,
-					CreationTime = now,
-					CreatedByUserID = 1,
-					Notes = "autocharger",
-					LoanID = nlLoan["LoanId"]
-				};
 			}
 
 			if (!ShouldCharge(lastInstallment, amountDue)) {
 				message = string.Format("Will not charge loan schedule id {0} (amount {1}): the minimal amount for collection is {2}.", loanScheduleId, amountDue, this.amountToChargeFrom);
 				Log.Info(message);
-				if (nlPayment != null)
-					message = String.Concat(message, string.Format(" nlPayment={0}", nlPayment));
 				NL_AddLog(LogType.Info, "Exit 1", this.strategyArgs, message, null, null);
 				return;
 			}//if
@@ -173,8 +181,6 @@
 			if ((!isNonRegulated && daysLate > 3) || !this.dueChargingDays.Contains(daysLate)) {
 				message = string.Format("Will not charge loan schedule id {0} (amount {1}): the charging is not scheduled today", loanScheduleId, amountDue);
 				Log.Info(message);
-				if (nlPayment != null)
-					message = String.Concat(message, string.Format(" nlPayment={0}", nlPayment));
 				NL_AddLog(LogType.Info, "Exit 2", this.strategyArgs, message, null, null);
 				return;
 			}
@@ -188,14 +194,12 @@
 				customerMail,
 				fullname,
 				reductionFee,
-				isNonRegulated,
-				nlPayment);
+				isNonRegulated
+				);
 
 			if (autoPaymentResult.IsException || autoPaymentResult.PaymentFailed) {
 				Error = string.Format("Failed collection from customer:{0} amount:{1}, loanID={2}", customerId, initialAmountDue, loanId);
 				Log.Warn(Error);
-				if (nlPayment != null)
-					Error = String.Concat(Error, string.Format(" nlPayment={0}", nlPayment));
 				NL_AddLog(LogType.Info, "Exit 3", this.strategyArgs, Error, null, null);
 				return;
 			} // if
@@ -221,7 +225,6 @@
 		/// <param name="fullname"></param>
 		/// <param name="reductionFee"></param>
 		/// <param name="isNonRegulated"></param>
-		/// <param name="nlPayment"></param>
 		/// <returns></returns>
 		private AutoPaymentResult TryToMakeAutoPayment(
 			int loanId,
@@ -231,8 +234,8 @@
 			string customerMail,
 			string fullname,
 			bool reductionFee,
-			bool isNonRegulated,
-			NL_Payments nlPayment = null) {
+			bool isNonRegulated
+			) {
 
 			var result = new AutoPaymentResult();
 			decimal actualAmountCharged = initialAmountDue;
@@ -244,7 +247,7 @@
 
 				string message;
 
-				if (MakeAutoPayment(customerId, loanId, loanScheduleId, actualAmountCharged, out payPointReturnData, nlPayment)) {
+				if (MakeAutoPayment(customerId, loanId, loanScheduleId, actualAmountCharged, out payPointReturnData)) {
 
 					if (isNonRegulated && IsNotEnoughMoney(payPointReturnData)) {
 
@@ -252,7 +255,7 @@
 							result.PaymentFailed = true;
 
 							message = string.Format("payPointReturnData={0} result={1}", payPointReturnData, result);
-							NL_AddLog(LogType.Info, "NonRegulated+IsNotEnoughMoney", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, null, null);
+							NL_AddLog(LogType.Info, "NonRegulated+IsNotEnoughMoney", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, null, null);
 
 							return result;
 						}
@@ -262,7 +265,7 @@
 						if (counter > 2) {
 							message = string.Format("payPointReturnData={0} result={1}", payPointReturnData, result);
 
-							NL_AddLog(LogType.Info, "More that 2 tryings", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, null, null);
+							NL_AddLog(LogType.Info, "More that 2 tryings", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, null, null);
 
 							return result;
 						}
@@ -274,7 +277,7 @@
 
 							Log.Info(message);
 
-							NL_AddLog(LogType.Info, "Counter==1", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, null, null);
+							NL_AddLog(LogType.Info, "Counter==1", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, null, null);
 
 						} else if (counter == 2) {
 							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.25), 2);
@@ -283,7 +286,7 @@
 
 							Log.Info(message);
 
-							NL_AddLog(LogType.Info, "Counter==2", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, null, null);
+							NL_AddLog(LogType.Info, "Counter==2", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, null, null);
 						}
 
 					} else if (IsCollectionSuccessful(payPointReturnData)) {
@@ -291,14 +294,14 @@
 						result.ActualAmountCharged = actualAmountCharged;
 
 						message = string.Format("payPointReturnData={0} result={1}", payPointReturnData, result);
-						NL_AddLog(LogType.Info, "Collection Successful", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, null, null);
+						NL_AddLog(LogType.Info, "Collection Successful", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, null, null);
 
 						return result;
 					} else {
 						result.PaymentFailed = true;
 						message = string.Format("payPointReturnData={0} result={1}", payPointReturnData, result);
 
-						NL_AddLog(LogType.Info, "Collection Failed", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, message, null);
+						NL_AddLog(LogType.Info, "Collection Failed", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, message, null);
 
 						return result;
 					}//if
@@ -307,7 +310,7 @@
 					result.IsException = true;
 
 					message = string.Format("payPointReturnData={0} result={1}", payPointReturnData, result);
-					NL_AddLog(LogType.Info, "Collection failed -send mail", new object[] { customerId, loanId, loanScheduleId, initialAmountDue, nlPayment }, message, null, null);
+					NL_AddLog(LogType.Info, "Collection failed -send mail", new object[] { customerId, loanId, loanScheduleId, initialAmountDue }, message, null, null);
 
 					return result;
 				} //if
@@ -340,11 +343,11 @@
 			return (lastInstallment && amountDue > 0) || amountDue >= this.amountToChargeFrom;
 		}//ShouldCharge
 
-		private bool MakeAutoPayment(int customerId, int loanId, int loanScheduleId, decimal amountDue, out PayPointReturnData result, NL_Payments nlPayment = null) {
+		private bool MakeAutoPayment(int customerId, int loanId, int loanScheduleId, decimal amountDue, out PayPointReturnData result) {
 			try {
-				result = this.payPointApi.MakeAutomaticPayment(customerId, loanId, loanScheduleId, amountDue, nlPayment);
+				result = this.payPointApi.MakeAutomaticPayment(customerId, loanId, loanScheduleId, amountDue);
 
-				NL_AddLog(LogType.Debug, "MakeAutoPayment success", new object[] { customerId, loanId, loanScheduleId, amountDue, nlPayment }, result, null, null);
+				NL_AddLog(LogType.Debug, "MakeAutoPayment success", new object[] { customerId, loanId, loanScheduleId, amountDue }, result, null, null);
 				return true;
 
 				// ReSharper disable once CatchAllClause
@@ -352,7 +355,7 @@
 				Error = string.Format("Failed making auto payment for loan schedule id:{0} exception:{1}", loanScheduleId, ex);
 				Log.Error(Error);
 
-				NL_AddLog(LogType.Error, "MakeAutoPayment failed", new object[] { customerId, loanId, loanScheduleId, amountDue, nlPayment }, Error, ex.Message, ex.StackTrace);
+				NL_AddLog(LogType.Error, "MakeAutoPayment failed", new object[] { customerId, loanId, loanScheduleId, amountDue }, Error, ex.Message, ex.StackTrace);
 				result = null;
 				return false;
 			}//try

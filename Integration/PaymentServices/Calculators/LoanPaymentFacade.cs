@@ -4,6 +4,7 @@
 	using System.Linq;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model;
@@ -16,8 +17,8 @@
 
 	public class LoanPaymentFacade {
 		public LoanPaymentFacade() {
-			loanTransactionMethodRepository = ObjectFactory.GetInstance<LoanTransactionMethodRepository>();
-			_historyRepository = ObjectFactory.GetInstance<LoanHistoryRepository>();
+			this.loanTransactionMethodRepository = ObjectFactory.GetInstance<LoanTransactionMethodRepository>();
+			this._historyRepository = ObjectFactory.GetInstance<LoanHistoryRepository>();
 			this.amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
 		} // constructor
 
@@ -26,7 +27,7 @@
 			ILoanTransactionMethodRepository loanTransactionMethodRepository,
 			int? amountToChargeFrom = null
 		) {
-			_historyRepository = historyRepository;
+			this._historyRepository = historyRepository;
 			this.loanTransactionMethodRepository = loanTransactionMethodRepository;
 			this.amountToChargeFrom = amountToChargeFrom ?? CurrentValues.Instance.AmountToChargeFrom;
 		} // constructor
@@ -35,6 +36,7 @@
 		/// Заплатить за кредит. Платёж может быть произвольный. Early, On time, Late.
 		/// Perform loan payment. Payment can be manual. Early, On time, Late.
 		/// </summary>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public virtual decimal PayLoan(
 			Loan loan,
 			string transId,
@@ -44,8 +46,9 @@
 			string description = "payment from customer",
 			bool interestOnly = false,
 			string sManualPaymentMethod = null,
-			int userId = 1,
 			NL_Payments nlPayment = null) {
+
+			int customerID = loan.Customer.Id;
 
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -71,29 +74,14 @@
 
 			loan.AddTransaction(transactionItem);
 
-
-			int cardId = 0;
-			if (nlPayment != null && nlPayment.PaymentSystemType == NLPaymentSystemTypes.Paypoint) {
-				nlPayment.PaymentMethodID = loanTransactionMethod.Id;
-				nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
-					TransactionTime = DateTime.UtcNow,
-					Amount = amount,
-					Notes = description,
-					PaypointUniqueID = transId,
-					IP = ip,
-					PaypointTransactionStatusID = (int)LoanTransactionStatus.Done,
-					PaypointCardID = loan.Customer.PayPointCards.FirstOrDefault(x => x.TransactionId == transId).Id
-				});
-			}
-
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
 			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
 			calculator.RecalculateSchedule();
 
-			if (_historyRepository != null) {
+			if (this._historyRepository != null) {
 				var historyRecord = new LoanHistory(loan, paymentTime);
-				_historyRepository.SaveOrUpdate(historyRecord);
+				this._historyRepository.SaveOrUpdate(historyRecord);
 			} // if
 
 			loan.UpdateStatus(paymentTime);
@@ -120,8 +108,56 @@
 					});
 				} // for each delta
 			} // if
+
+
 			if (nlPayment != null) {
-				ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(loan.Customer.Id, nlPayment, userId);
+
+				Log.InfoFormat("PayLoan: oldLoanID: {0} customer: {1} nlpayment {2}", loan.Id, customerID, nlPayment);
+
+				// override those for backword compatibility
+				nlPayment.PaymentMethodID = loanTransactionMethod.Id;
+				nlPayment.Notes = description;
+				nlPayment.CreationTime = DateTime.UtcNow;
+				nlPayment.PaymentTime = paymentTime;
+				nlPayment.Amount = amount;
+
+				Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
+
+				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, customerID);
+
+				if (nlLoanId == 0) {
+					Log.InfoFormat("Failed to find nl loan for oldLoanID {0}, customer {1}", loan.Id, customerID);
+				} else {
+
+					nlPayment.LoanID = nlLoanId;
+
+					// use argument's nlPayment data: CreatedByUserID 
+
+					if (nlPayment.PaymentSystemType == NLPaymentSystemTypes.Paypoint) {
+
+						// workaround - from MakeAutomaticPayment sent transactionid with timestamp concated
+
+						var card = loan.Customer.PayPointCards.FirstOrDefault(x => transId.StartsWith(x.TransactionId));
+
+						if (card == null) {
+							Log.ErrorFormat("PayPointCard for customer {0}, transId={1}, oldLoanID={2}, nl loanID={3} not found. Can't to write NL_PaypointTransactions for nl payment\n {4}{5}",
+								customerID, transId, loan.Id, nlPayment.LoanID, AStringable.PrintHeadersLine(typeof(NL_Payments)), nlPayment.ToStringAsTable());
+						} else {
+							nlPayment.PaypointTransactions.Clear();
+							nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+								TransactionTime = paymentTime,
+								Amount = amount,
+								Notes = description,
+								PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
+								PaypointUniqueID = transId,
+								PaypointCardID = card.Id,
+								IP = ip
+							});
+						}
+					}
+
+					ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
+				}
 			}
 
 			return amount;
@@ -162,19 +198,22 @@
 		/// <summary>
 		/// Оплатить все кредиты клиента.
 		/// </summary>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public void PayAllLoansForCustomer(
 			Customer customer,
 			decimal amount,
 			string transId,
 			DateTime? term = null,
 			string description = null,
-			string sManualPaymentMethod = null) {
+			string sManualPaymentMethod = null,
+		NL_Payments nlPaymentCommomData = null
+			) {
 
 			var date = term ?? DateTime.Now;
 
 			var loans = customer.Loans.Where(x => x.Status != LoanStatus.PaidOff || x.Id != 0).ToList();
 
-			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList(); //.Where(x => x.LoanStatusID == 0 || x.LoanStatusID == 1);
+			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList(); 
 
 			foreach (var loan in loans) {
 
@@ -193,7 +232,7 @@
 
 					if (nlLoan != null) {
 
-						var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
+						var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
 
 						Log.InfoFormat("<<< NL_Compare at: {0}. Loan : {1} NLModel: {2}.\n money={3}, nlModel.TotalEarlyPayment={4} >>>", System.Environment.StackTrace, loan, nlModel, money, nlModel.TotalEarlyPayment);
 
@@ -205,13 +244,14 @@
 							PaymentTime = DateTime.UtcNow,
 							Notes = "TotalEarlyPayment",
 							PaymentStatusID = (int)NLPaymentStatuses.Active,
-							PaymentSystemType = NLPaymentSystemTypes.Paypoint
+							PaymentSystemType = nlPaymentCommomData != null ? nlPaymentCommomData.PaymentSystemType : NLPaymentSystemTypes.None,
+							PaymentMethodID = nlPaymentCommomData != null ? nlPaymentCommomData.PaymentMethodID : (int)NLLoanTransactionMethods.Manual // put better check
 						};
 					}
 				}
 
 				//try {
-				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, 1, nlPayment);
+				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, nlPayment);
 				amount = amount - money;
 				//} catch (Exception ex) {
 				//	Log.Error("DOR - " + ex + ex.StackTrace);
@@ -224,19 +264,26 @@
 
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
 		/// <exception cref="ArgumentNullException"><paramref /> or <paramref /> is null.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public void PayAllLateLoansForCustomer(
 			Customer customer,
 			decimal amount,
 			string transId,
 			DateTime? term = null,
 			string description = null,
-			string sManualPaymentMethod = null) {
+			string sManualPaymentMethod = null,
+			NL_Payments nlPaymentCommomData = null
+			) {
 
 			DateTime date = term ?? DateTime.Now;
 
 			IEnumerable<Loan> loans = customer.ActiveLoans.Where(l => l.Status == LoanStatus.Late);
 
-			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList(); //Where(x => x.LoanStatusID == 0 || x.LoanStatusID == 1);
+			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList();
+
+			if (nlLoansList.Count > 0) {
+				nlLoansList.ForEach(l => Log.InfoFormat("PayAllLateLoansForCustomer NLLoanID={0}", l.LoanID));
+			}
 
 			foreach (var loan in loans) {
 
@@ -275,13 +322,15 @@
 							LoanID = nlLoan.LoanID,
 							PaymentTime = DateTime.UtcNow,
 							Notes = "PayAllLateLoansForCustomer",
+							//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
 							PaymentStatusID = (int)NLPaymentStatuses.Active,
-							PaymentSystemType = NLPaymentSystemTypes.Paypoint
+							PaymentSystemType = nlPaymentCommomData != null ? nlPaymentCommomData.PaymentSystemType : NLPaymentSystemTypes.None,
+							PaymentMethodID = nlPaymentCommomData != null ? nlPaymentCommomData.PaymentMethodID : (int)NLLoanTransactionMethods.Manual // put better check
 						};
 					}
 				}
 
-				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, 1, nlPayment);
+				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, nlPayment);
 
 				amount = amount - money;
 			} // for
@@ -301,9 +350,10 @@
 		/// <param name="paymentType">If payment type is null - ordinary payment(reduces principal),
 		/// if nextInterest then it is for Interest Only loans, and reduces interest in the future.</param>
 		/// <param name="sManualPaymentMethod"></param>
-		/// <param name="userId"></param>
+		/// <param name="nlPayment"></param>
 		/// <returns></returns>
 		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public PaymentResult MakePayment(
 			string transId,
 			decimal amount,
@@ -315,11 +365,11 @@
 			string description = "payment from customer",
 			string paymentType = null,
 			string sManualPaymentMethod = null,
-			int userId = 1) {
+			NL_Payments nlPayment = null) {
 
 			Log.DebugFormat(
 				"MakePayment transId: {0}, amount: {1}, ip: {2}, type: {3}, loanId: {4}, customer: {5}," +
-				"date: {6}, description: {7}, paymentType: {8}, manualPaymentMethod: {9}",
+				"date: {6}, description: {7}, paymentType: {8}, manualPaymentMethod: {9}, nlPayment: {10}",
 				transId,
 				amount,
 				ip,
@@ -329,7 +379,8 @@
 				date,
 				description,
 				paymentType,
-				sManualPaymentMethod
+				sManualPaymentMethod,
+				nlPayment
 			);
 
 			decimal oldInterest;
@@ -357,8 +408,9 @@
 					amount,
 					transId,
 					date,
-					description,
-					sManualPaymentMethod: sManualPaymentMethod
+					description, 
+					sManualPaymentMethod
+					,nlPayment
 				);
 
 				newInterest = customer.Loans.Sum(l => l.Interest);
@@ -379,8 +431,8 @@
 					amount,
 					transId,
 					date,
-					description,
-					sManualPaymentMethod: sManualPaymentMethod
+					description, 
+					sManualPaymentMethod
 				);
 
 				newInterest = customer.Loans.Sum(l => l.Interest);
@@ -389,23 +441,24 @@
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
 
-				var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-				NL_Payments nlPayment = null;
+				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+					if (nlPayment != null) {
+						var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
+						if (nlLoanId > 0) {
+							nlPayment.Amount = amount;
+							nlPayment.CreationTime = DateTime.UtcNow;
+							nlPayment.LoanID = nlLoanId;
+							nlPayment.PaymentTime = DateTime.UtcNow;
+							nlPayment.Notes = description;
+							nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+							//CreatedByUserID = userId,
+							//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+							//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
+						}
+					}
+				//}
 
-				if (nlLoanId > 0) {
-					 nlPayment = new NL_Payments() {
-						Amount = amount,
-						CreatedByUserID = userId,
-						CreationTime = DateTime.UtcNow,
-						LoanID = nlLoanId,
-						PaymentTime = DateTime.UtcNow,
-						Notes = type,
-						PaymentStatusID = (int)NLPaymentStatuses.Active,
-						PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
-					};
-				}
-
-				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, 1, nlPayment);
+				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, nlPayment);
 				newInterest = 0;
 			} else {
 				Loan loan = customer.GetLoan(loanId);
@@ -418,21 +471,25 @@
 					where r.Status == RolloverStatus.New
 					select r
 				).FirstOrDefault();
+				
+				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+					if (nlPayment != null) {
+						var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
+						if (nlLoanId > 0) {
+							nlPayment.Amount = amount;
+							nlPayment.CreationTime = DateTime.UtcNow;
+							nlPayment.LoanID = nlLoanId;
+							nlPayment.PaymentTime = DateTime.UtcNow;
+							nlPayment.Notes = description;
+							nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+							//CreatedByUserID = userId,
+							//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+							//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
+						}
+					}
+				//}
 
-				var nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-
-				NL_Payments nlPayment = new NL_Payments() {
-					Amount = amount,
-					CreatedByUserID = userId,
-					CreationTime = DateTime.UtcNow,
-					LoanID = nl_LoanId,
-					PaymentTime = DateTime.UtcNow,
-					Notes = type,
-					PaymentStatusID = (int)NLPaymentStatuses.Active,
-					PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
-				};
-
-				PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, 1, nlPayment);
+				PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, nlPayment);
 
 				newInterest = loan.Interest;
 
@@ -483,11 +540,19 @@
 			var result = payEarlyCalc.GetState();
 
 			try {
-				long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
-				var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1);
-				Log.InfoFormat("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, nlModel, loan);
+				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
+				if (nlLoanId > 0) {
+					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>()
+						.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+					Log.InfoFormat("<<<GetStateAt NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
+				} else {
+					Log.InfoFormat("<<<GetStateAt NL loan for oldid {0} not found >>>", loan.Id);
+				}
+				//long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
+				//var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+				//Log.InfoFormat("<<< NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
 			} catch (Exception) {
-				Log.InfoFormat("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+				Log.InfoFormat("<<<GetStateAt NL_Compare Fail at : {0}", System.Environment.StackTrace);
 			}
 
 			return result;
@@ -498,9 +563,14 @@
 			payEarlyCalc.GetState();
 
 			try {
-				long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
-				var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1);
-				Log.InfoFormat("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, nlModel, loan);
+				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
+				if (nlLoanId > 0) {
+					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>()
+						.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+					Log.InfoFormat("<<<Recalculate NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
+				} else {
+					Log.InfoFormat("<<<Recalculate NL loan for oldid {0} not found >>>", loan.Id);
+				}
 			} catch (Exception) {
 				Log.InfoFormat("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
 			}

@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -38,6 +39,8 @@
 			this.serviceClient = new ServiceClient();
 		} // constructor
 
+		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[HttpGet]
 		[NoCache]
 		[Transactional]
@@ -155,8 +158,19 @@
 				return View(TempData.Get<PaymentConfirmationModel>());
 			} // if
 
+			//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+			NL_Payments nlPayment = new NL_Payments() {
+				CreatedByUserID = this.context.UserId,
+				Amount = amount.Value,
+				PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+				PaymentSystemType = NLPaymentSystemTypes.Paypoint
+			};
+
+			log.Debug("Callback: Sending nlPayment: {0} for customer {1}, oldloanId {2}", nlPayment, this.context.UserId, loanId);
+			//}
+
 			LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
-            PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext, null, "payment from customer", null, null, this.context.UserId);
+			PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext, null, "payment from customer", null, null, nlPayment);
 
 			SendEmails(loanId, amount.Value, customerContext);
 
@@ -313,6 +327,7 @@
 
 				log.Msg("Payment request for customer id {0}, amount {1}", customer.Id, realAmount);
 
+				// TotalEarlyPayment
 				realAmount = CalculateRealAmount(type, loanId, realAmount);
 
 				if (realAmount < 0)
@@ -326,8 +341,17 @@
 					throw new Exception("Card not found");
 
 				this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
-				 // TODO move AddPayment into loanRepaymentFacade.MakePayment
-				// TODO use this.paypointApi.RepeatTransactionEx result as input of AddPayment strategy, i.e. register payment for NL
+
+				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+				NL_Payments nlPayment = new NL_Payments() {
+					CreatedByUserID = this.context.UserId,
+					Amount = realAmount,
+					PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint
+				};
+
+				log.Debug("PayFast: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
+				//}
 
 				LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
 
@@ -342,8 +366,8 @@
 					"manual payment from customer",
 					paymentType,
 					"CustomerAuto",
-                    this.context.UserId
-				);               
+				   nlPayment
+				);
 
 				payFastModel.CardNo = card.CardNo;
 
