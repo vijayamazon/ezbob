@@ -7,6 +7,7 @@
 	partial class EzServiceImplementation : IEzServiceInvestor {
 		public InvestorTypesActionResult InvestorLoadTypes(int underwriterID) {
 			return new InvestorTypesActionResult {
+				//TODO implement
 				InvestorBankAccountTypes = new Dictionary<string, string>{
 					{"1","Funding"},
 					{"2","Repayments"},

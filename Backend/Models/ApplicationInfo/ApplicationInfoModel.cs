@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Models.ApplicationInfo {
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Utils;
 
 	[DataContract]
@@ -174,6 +176,12 @@
 		public string CustomerReason { get; set; }
 
 		[DataMember]
+		public decimal RequestedLoanAmount { get; set; }
+
+		[DataMember]
+		public int RequestedLoanTerm { get; set; }
+
+		[DataMember]
 		public decimal Turnover { get; set; }
 
 		[DataMember]
@@ -212,5 +220,64 @@
 
 		[DataMember]
 		public bool SpreadSetupFee { get; set; }
+
+		[DataMember]
+		public int GradeID { get; set; }
+
+		[DataMember]
+		public int? ProductSubTypeID { get; set; }
+
+		[DataMember]
+		public int OriginID { get; set; }
+
+		public int NumOfLoans { get; set; }
+		//-----------------------------OP ---------------------\\
+		[NonTraversable]
+		[DataMember]
+		public List<I_Product> Products { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public I_Product CurrentProduct { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public List<I_ProductType> ProductTypes { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public I_ProductType CurrentProductType { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public List<I_ProductSubType> ProductSubTypes { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public I_ProductSubType CurrentProductSubType { get; set; }
+		
+		[NonTraversable]
+		[DataMember]
+		public List<I_Grade> Grades { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public I_Grade CurrentGrade { get; set; }
+		
+		[NonTraversable]
+		[DataMember]
+		public List<I_GradeRange> GradeRanges { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public I_GradeRange CurrentGradeRange { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public List<I_FundingType> FundingTypes { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public I_FundingType CurrentFundingType { get; set; }
 	} // class ApplicationInfoModel
 } // namespace

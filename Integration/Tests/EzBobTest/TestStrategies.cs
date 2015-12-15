@@ -28,6 +28,7 @@
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.OpenPlatform;
 	using Ezbob.Backend.Strategies.Postcode;
 	using Ezbob.Backend.Strategies.Reports;
 	using Ezbob.Backend.Strategies.SalesForce;
@@ -1358,6 +1359,22 @@
 
 			stra.Execute();
 			Assert.IsTrue(stra.Result);
+		}
+
+		[Test]
+		public void TestLoadPApplicationInfo() {
+			var stra = new LoadApplicationInfo(3416, 42816, DateTime.Now);
+			stra.Execute();
+
+			Assert.IsNotNull(stra.Result);
+			Assert.Greater(stra.Result.LoanTypes.Count(), 0);
+			Assert.Greater(stra.Result.FundingTypes.Count, 0);
+			Assert.Greater(stra.Result.GradeRanges.Count, 0);
+			Assert.Greater(stra.Result.AllLoanSources.Count(), 0);
+			Assert.Greater(stra.Result.Grades.Count, 0);
+			Assert.Greater(stra.Result.ProductSubTypes.Count, 0);
+			Assert.Greater(stra.Result.ProductTypes.Count, 0);
+			Assert.Greater(stra.Result.Products.Count, 0);
 		}
 	}
 }

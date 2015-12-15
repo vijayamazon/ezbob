@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.Models.ApplicationInfo;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
@@ -51,7 +52,43 @@
 
 			// Loan cost must be calculated after set up fee (it uses set up fee output).
 			BuildLoanCost();
-		} // Execute
+
+			Result.Products = DB.Fill<I_Product>("SELECT * FROM I_Product", CommandSpecies.Text);
+			Result.ProductTypes = DB.Fill<I_ProductType>("SELECT * FROM I_ProductType", CommandSpecies.Text);
+			Result.ProductSubTypes = DB.Fill<I_ProductSubType>("SELECT * FROM I_ProductSubType", CommandSpecies.Text);
+			Result.Grades = DB.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
+			Result.GradeRanges = DB.Fill<I_GradeRange>("SELECT * FROM I_GradeRange", CommandSpecies.Text);
+			Result.FundingTypes = DB.Fill<I_FundingType>("SELECT * FROM I_FundingType", CommandSpecies.Text);
+
+			BuildDefaultProduct();
+		}// Execute
+
+		private void BuildDefaultProduct() {
+			Result.CurrentGrade = Result.Grades.FirstOrDefault(x => x.GradeID == Result.GradeID);
+
+			if (Result.ProductSubTypeID.HasValue) {
+				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.ProductSubTypeID == Result.ProductSubTypeID.Value);
+			} else {
+				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.GradeID == Result.GradeID && x.OriginID == Result.OriginID && x.LoanSourceID == Result.LoanSourceID);
+			}
+
+			if (Result.CurrentProductSubType != null) {
+				Result.ProductSubTypeID = Result.CurrentProductSubType.ProductSubTypeID;
+				Result.CurrentProductType = Result.ProductTypes.FirstOrDefault(x => x.ProductTypeID == Result.CurrentProductSubType.ProductTypeID);
+				if (Result.CurrentProductSubType.FundingTypeID.HasValue) {
+					Result.CurrentFundingType = Result.FundingTypes.FirstOrDefault(x => x.FundingTypeID == Result.CurrentProductSubType.FundingTypeID.Value);
+				}
+			}
+
+			if (Result.CurrentProductType != null) {
+				Result.CurrentProduct = Result.Products.FirstOrDefault(x => x.ProductID == Result.CurrentProductType.ProductID);
+			}
+			
+			Result.CurrentGradeRange = Result.GradeRanges.FirstOrDefault(x => x.GradeID.HasValue && x.GradeID.Value == Result.GradeID &&
+				x.LoanSourceID == Result.LoanSourceID &&
+				x.OriginID == Result.OriginID &&
+				x.IsFirstLoan == (Result.NumOfLoans == 0));
+		}//BuildDefaultProduct
 
 		public ApplicationInfoModel Result { get; private set; }
 

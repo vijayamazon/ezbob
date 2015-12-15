@@ -92,10 +92,12 @@ BEGIN
 			CustomerID = crl.CustomerId,
 			ReasonType = ISNULL(cr.ReasonType, -1),
 			Reason = LTRIM(RTRIM(ISNULL(cr.Reason, ''))),
-			OtherReason = LTRIM(RTRIM(ISNULL(crl.OtherReason, '')))
+			OtherReason = LTRIM(RTRIM(ISNULL(crl.OtherReason, ''))),
+			RequestedLoanAmount = crl.Amount,
+			RequestedLoanTerm = crl.Term
 		FROM
 			CustomerRequestedLoan crl
-			INNER JOIN CustomerReason cr ON crl.ReasonId = cr.Id
+			LEFT JOIN CustomerReason cr ON crl.ReasonId = cr.Id
 		WHERE
 			crl.CustomerId = @CustomerID
 		ORDER BY
@@ -118,6 +120,8 @@ BEGIN
 			INNER JOIN first_business_summary f ON s.SummaryID = f.SummaryID AND f.Position = 1
 		GROUP BY
 			s.CustomerID
+	), num_of_loans AS (
+		SELECT @CustomerId CustomerID, COUNT(*) NumOfLoans FROM Loan WHERE CustomerId=@CustomerID
 	) SELECT
 		RowType = 'Model',
 		Id = c.Id,
@@ -158,6 +162,8 @@ BEGIN
 				ELSE ''
 			END
 		END,
+		RequestedLoanAmount = rr.RequestedLoanAmount,
+		RequestedLoanTerm = rr.RequestedLoanTerm,
 		CashRequestId = ISNULL(r.Id, 0),
 		CashRequestTimestamp = r.TimestampCounter,
 		InterestRate = ISNULL(r.InterestRate, 0),
@@ -188,11 +194,16 @@ BEGIN
 			FROM CardInfo ci
 			WHERE ci.BrokerID = c.BrokerID
 			AND ci.IsDefault = 1
-		)
+		),
+		OriginID = c.OriginID,
+		GradeID = 1,  -- todo retrieve customers real grade
+		ProductSubTypeID = r.ProductSubTypeID,
+		NumOfLoans = nol.NumOfLoans
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
 		INNER JOIN ConfigurationVariables cv ON cv.Name = 'OfferValidForHours'
+		INNER JOIN num_of_loans nol ON nol.CustomerID = c.Id
 		LEFT JOIN CashRequests r ON c.Id = r.IdCustomer AND r.Id = @CashRequestID
 		LEFT JOIN skip_aml ON r.IdCustomer = skip_aml.CustomerID
 		LEFT JOIN cec ON c.Id = cec.CustomerID

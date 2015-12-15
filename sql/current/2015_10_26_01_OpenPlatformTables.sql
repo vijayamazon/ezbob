@@ -254,14 +254,74 @@ BEGIN
 	   	ProductTypeID INT NOT NULL,
 	   	GradeID INT NOT NULL,
 	   	FundingTypeID INT NULL,
-	   	Name NVARCHAR(255),
+	   	OriginID INT NOT NULL,
+	   	LoanSourceID INT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_ProductSubType PRIMARY KEY (ProductSubTypeID),
 		CONSTRAINT FK_I_ProductSubType_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
 		CONSTRAINT FK_I_ProductSubType_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID),
-		CONSTRAINT FK_I_ProductSubType_I_FundingType FOREIGN KEY (FundingTypeID) REFERENCES I_FundingType(FundingTypeID)
+		CONSTRAINT FK_I_ProductSubType_I_FundingType FOREIGN KEY (FundingTypeID) REFERENCES I_FundingType(FundingTypeID),
+		CONSTRAINT FK_I_ProductSubType_CustomerOrigin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin(CustomerOriginID),
+		CONSTRAINT FK_I_ProductSubType_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource(LoanSourceID)
 	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_ProductSubType)
+BEGIN
+	DECLARE @GradeA INT = (SELECT GradeID FROM I_Grade WHERE Name='A')
+	DECLARE @GradeB INT = (SELECT GradeID FROM I_Grade WHERE Name='B')
+	DECLARE @GradeC INT = (SELECT GradeID FROM I_Grade WHERE Name='C')
+	DECLARE @GradeD INT = (SELECT GradeID FROM I_Grade WHERE Name='D')
+	DECLARE @GradeE INT = (SELECT GradeID FROM I_Grade WHERE Name='E')
+	DECLARE @GradeF INT = (SELECT GradeID FROM I_Grade WHERE Name='F')
+	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
+	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
+	
+	DECLARE @ProductTypeLongTerm INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='LongTermSMELoans')
+	DECLARE @ProductTypeShortTerm INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='ShortTermSMELoans')
+		
+	DECLARE @FundingTypeFull INT = (SELECT FundingTypeID FROM I_FundingType WHERE Name='FullInvestment')
+	
+	DECLARE @LoanSourceCosme INT = (SELECT LoanSourceID FROM LoanSource WHERE LoanSourceName='COSME')
+	DECLARE @LoanSourceStandard INT = (SELECT LoanSourceID FROM LoanSource WHERE LoanSourceName='Standard')
+	
+	DECLARE @OriginEzbob INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='ezbob')
+	DECLARE @OriginEverline INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='everline')
+	
+	
+
+	INSERT INTO I_ProductSubType (ProductTypeID, GradeID, FundingTypeID, OriginID, LoanSourceID, Timestamp)
+	VALUES (@ProductTypeLongTerm,@GradeA,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeLongTerm,@GradeA,@FundingTypeFull,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeLongTerm,@GradeB,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeLongTerm,@GradeB,@FundingTypeFull,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeA,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeA,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeB,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeB,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeE,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeE,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
+		   
+		   (@ProductTypeShortTerm,@GradeF,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
+		   (@ProductTypeShortTerm,@GradeF,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01')
 END
 GO
 
@@ -445,7 +505,9 @@ BEGIN
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_GradeRange PRIMARY KEY (GradeRangeID),
-		CONSTRAINT FK_I_GradeRange_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID)
+		CONSTRAINT FK_I_GradeRange_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID),
+		CONSTRAINT FK_I_GradeRange_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource(LoanSourceID),
+		CONSTRAINT FK_I_GradeRange_CustomerOrigin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin(CustomerOriginID)
 	)
 END
 GO
@@ -546,5 +608,9 @@ BEGIN
 END
 GO
 
-
-
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('CashRequests') AND name='ProductSubTypeID')
+BEGIN
+	ALTER TABLE CashRequests ADD ProductSubTypeID INT 
+	ALTER TABLE CashRequests ADD CONSTRAINT FK_CashRequests_I_ProductSubType FOREIGN KEY (ProductSubTypeID) REFERENCES I_ProductSubType(ProductSubTypeID)
+END
+GO

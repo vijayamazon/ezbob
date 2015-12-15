@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" />
   <xs:complexType name="ApplicationInfoModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="AMLResult" nillable="true" type="xs:string" />
@@ -14,6 +15,12 @@
       <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="CashRequestId" type="xs:long" />
       <xs:element minOccurs="0" name="CashRequestTimestamp" nillable="true" type="xs:base64Binary" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentFundingType" nillable="true" type="q1:I_FundingType" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentGrade" nillable="true" type="q2:I_Grade" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentGradeRange" nillable="true" type="q3:I_GradeRange" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentProduct" nillable="true" type="q4:I_Product" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentProductSubType" nillable="true" type="q5:I_ProductSubType" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentProductType" nillable="true" type="q6:I_ProductType" />
       <xs:element minOccurs="0" name="CustomerId" type="xs:int" />
       <xs:element minOccurs="0" name="CustomerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CustomerReason" nillable="true" type="xs:string" />
@@ -26,6 +33,10 @@
       <xs:element minOccurs="0" name="Editable" type="xs:boolean" />
       <xs:element minOccurs="0" name="EmployeeCount" type="xs:int" />
       <xs:element minOccurs="0" name="FreeCashFlow" type="xs:decimal" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="FundingTypes" nillable="true" type="q7:ArrayOfI_FundingType" />
+      <xs:element minOccurs="0" name="GradeID" type="xs:int" />
+      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="GradeRanges" nillable="true" type="q8:ArrayOfI_GradeRange" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="Grades" nillable="true" type="q9:ArrayOfI_Grade" />
       <xs:element minOccurs="0" name="HasYodlee" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
@@ -45,6 +56,11 @@
       <xs:element minOccurs="0" name="OfferValidForHours" type="xs:int" />
       <xs:element minOccurs="0" name="OfferValidateUntil" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="OfferedCreditLine" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
+      <xs:element minOccurs="0" name="ProductSubTypeID" nillable="true" type="xs:int" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="ProductSubTypes" nillable="true" type="q10:ArrayOfI_ProductSubType" />
+      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="ProductTypes" nillable="true" type="q11:ArrayOfI_ProductType" />
+      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="Products" nillable="true" type="q12:ArrayOfI_Product" />
       <xs:element minOccurs="0" name="RealCost" type="xs:decimal" />
       <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />

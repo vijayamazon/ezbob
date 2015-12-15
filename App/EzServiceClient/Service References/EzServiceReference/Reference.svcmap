@@ -44,6 +44,7 @@
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="0a170ccc-d1f9-4488-9892-ba4314b19f85" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="ca7ecfb2-e085-440a-9859-0a465b1f16e9" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ApplicationInfo.xsd" MetadataType="Schema" ID="07d254e0-563b-4b2c-bed0-67c982518d26" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd" MetadataType="Schema" ID="251cafd5-143c-4e82-b2ea-fb0a49983e7b" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="564b4e84-577d-431e-b432-03cf7a68fb38" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
   </Metadata>
   <Extensions>
