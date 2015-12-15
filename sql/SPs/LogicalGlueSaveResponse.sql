@@ -16,7 +16,7 @@ CREATE TYPE LogicalGlueResponseList AS TABLE (
 	[ResponseStatus] INT NOT NULL,
 	[TimeoutSourceID] BIGINT NULL,
 	[ErrorMessage] NVARCHAR(MAX) NULL,
-	[BucketID] BIGINT NULL,
+	[GradeID] BIGINT NULL,
 	[HasEquifaxData] BIT NOT NULL,
 	[ParsingExceptionType] NVARCHAR(MAX) NULL,
 	[ParsingExceptionMessage] NVARCHAR(MAX) NULL
@@ -36,7 +36,7 @@ BEGIN
 		[ResponseStatus],
 		[TimeoutSourceID],
 		[ErrorMessage],
-		[BucketID],
+		[GradeID],
 		[HasEquifaxData],
 		[ParsingExceptionType],
 		[ParsingExceptionMessage]
@@ -47,7 +47,7 @@ BEGIN
 		[ResponseStatus],
 		[TimeoutSourceID],
 		[ErrorMessage],
-		[BucketID],
+		[GradeID],
 		[HasEquifaxData],
 		[ParsingExceptionType],
 		[ParsingExceptionMessage]

@@ -57,7 +57,7 @@ BEGIN
 		r.ResponseStatus,
 		r.TimeoutSourceID,
 		r.ErrorMessage,
-		r.BucketID,
+		r.GradeID,
 		r.HasEquifaxData,
 		r.ParsingExceptionType,
 		r.ParsingExceptionMessage

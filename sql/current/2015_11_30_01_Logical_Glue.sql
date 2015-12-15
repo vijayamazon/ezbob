@@ -116,17 +116,18 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('LogicalGlueBuckets') IS NULL
+IF OBJECT_ID('I_Grade') IS NULL
 BEGIN
-	CREATE TABLE LogicalGlueBuckets (
-		BucketID BIGINT NOT NULL,
-		Bucket NCHAR(1) NOT NULL,
+	CREATE TABLE I_Grade (
+		GradeID INT NOT NULL,
+		Name NVARCHAR(5) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_LogicalGlueBuckets PRIMARY KEY (BucketID),
-		CONSTRAINT UC_LogicalGlueBuckets UNIQUE (Bucket)
+		CONSTRAINT PK_I_Grade PRIMARY KEY (GradeID),
+		CONSTRAINT UC_I_Grade UNIQUE (Name),
+		CONSTRAINT CHK_I_Grade CHECK (LTRIM(RTRIM(Name)) != '')
 	)
 
-	INSERT INTO LogicalGlueBuckets (BucketID, Bucket) VALUES
+	INSERT INTO I_Grade (GradeID, Name) VALUES
 		(1, 'A'),
 		(2, 'B'),
 		(3, 'C'),
@@ -182,14 +183,14 @@ BEGIN
 		ResponseStatus INT NOT NULL, -- status received from LG in the field 'status' of the root object.
 		TimeoutSourceID BIGINT NULL,
 		ErrorMessage NVARCHAR(MAX) NULL,
-		BucketID BIGINT NULL,
+		GradeID INT NULL,
 		HasEquifaxData BIT NOT NULL,
 		ParsingExceptionType NVARCHAR(MAX) NULL,
 		ParsingExceptionMessage NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LogicalGlueResponses PRIMARY KEY (ResponseID),
 		CONSTRAINT FK_LogicalGlueResponses_ServiceLog FOREIGN KEY (ServiceLogID) REFERENCES MP_ServiceLog (Id),
-		CONSTRAINT FK_LogicalGlueResponses_Bucket FOREIGN KEY (BucketID) REFERENCES LogicalGlueBuckets (BucketID),
+		CONSTRAINT FK_LogicalGlueResponses_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade (GradeID),
 		CONSTRAINT FK_LogicalGlueResponses_TimeoutSource FOREIGN KEY (TimeoutSourceID) REFERENCES LogicalGlueTimeoutSources (TimeoutSourceID)
 	)
 END

@@ -24,7 +24,7 @@
 						ResponseStatus = response.Parsed.Exists() ? (int)response.Parsed.Status : 0,
 						TimeoutSourceID = response.Parsed.Exists() ? (int?)response.Parsed.Timeout : null,
 						ErrorMessage = response.Parsed.Exists() ? response.Parsed.Error : null,
-						BucketID = response.Parsed.HasBucket() ? (int)response.Parsed.Inference.Bucket.Value : (long?)null,
+						BucketID = response.Parsed.HasBucket() ? (int)response.Parsed.Inference.Bucket.Value : (int?)null,
 						HasEquifaxData = response.Parsed.HasEquifaxData(),
 						ReceivedTime = DateTime.UtcNow,
 						ParsingExceptionType = response.ParsingException == null
