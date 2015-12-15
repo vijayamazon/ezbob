@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:complexType name="NL_CashRequests">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q1:AStringable">
@@ -158,12 +159,20 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="APR" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="Agreements" nillable="true" type="tns:ArrayOfNLAgreementItem" />
+          <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
           <xs:element minOccurs="0" name="BrokerComissions" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
           <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
           <xs:element minOccurs="0" name="FundTransfer" nillable="true" type="tns:NL_FundTransfers" />
+          <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
           <xs:element minOccurs="0" name="Loan" nillable="true" type="tns:NL_Loans" />
+          <xs:element minOccurs="0" name="NextEarlyPayment" type="xs:decimal" />
           <xs:element minOccurs="0" name="Offer" nillable="true" type="tns:NL_Offers" />
+          <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
+          <xs:element minOccurs="0" name="RolloverPayment" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalEarlyPayment" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalEarlyPaymentSavedAmount" type="xs:decimal" />
           <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
         </xs:sequence>
       </xs:extension>
@@ -396,16 +405,13 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="AmountDue" type="xs:decimal" />
           <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
-          <xs:element minOccurs="0" name="BalancedPrincipal" type="xs:decimal" />
           <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
-          <xs:element minOccurs="0" name="FeesPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="FiveDaysDueMailSent" type="xs:boolean" />
           <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestOP" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
-          <xs:element minOccurs="0" name="LateFeesAttached" type="xs:boolean" />
           <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanScheduleStatusID" type="xs:int" />
@@ -440,6 +446,7 @@
           <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
           <xs:element minOccurs="0" name="PaymentMethodID" type="xs:int" />
           <xs:element minOccurs="0" name="PaymentStatusID" type="xs:int" />
+          <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="PaymentSystemType" type="q22:NLPaymentSystemTypes" />
           <xs:element minOccurs="0" name="PaymentTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="PaypointTransactions" nillable="true" type="tns:ArrayOfNL_PaypointTransactions" />
           <xs:element minOccurs="0" name="SchedulePayments" nillable="true" type="tns:ArrayOfNL_LoanSchedulePayments" />
@@ -456,7 +463,7 @@
   <xs:element name="ArrayOfNL_LoanFeePayments" nillable="true" type="tns:ArrayOfNL_LoanFeePayments" />
   <xs:complexType name="NL_LoanFeePayments">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q22="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q22:AStringable">
+      <xs:extension xmlns:q23="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q23:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanFeeID" type="xs:long" />
@@ -477,7 +484,7 @@
   <xs:element name="ArrayOfNL_PaypointTransactions" nillable="true" type="tns:ArrayOfNL_PaypointTransactions" />
   <xs:complexType name="NL_PaypointTransactions">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q23="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q23:AStringable">
+      <xs:extension xmlns:q24="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q24:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
           <xs:element minOccurs="0" name="IP" nillable="true" type="xs:string" />
@@ -501,7 +508,7 @@
   <xs:element name="ArrayOfNL_LoanSchedulePayments" nillable="true" type="tns:ArrayOfNL_LoanSchedulePayments" />
   <xs:complexType name="NL_LoanSchedulePayments">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q24="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q24:AStringable">
+      <xs:extension xmlns:q25="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q25:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />

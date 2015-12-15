@@ -1,13 +1,12 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 	using System.Web.Mvc;
-	using Code;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Web.Code;
 	using ServiceClientProxy;
 
 	public abstract class ABrokerBaseController : Controller {

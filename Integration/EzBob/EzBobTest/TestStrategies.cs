@@ -881,7 +881,6 @@
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
 					int loanid = sr["Id"];
-
 					// IN
 				  /*  ReschedulingArgument reModel = new ReschedulingArgument();
 					reModel.LoanID = loanid;
@@ -920,16 +919,7 @@
 		//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null order ",
 			CommandSpecies.Text); //top 100 
 		}
-
-
-	
-
-
-
-	
-
-
-
+		
 
 		[Test]
 		public void TestGetIncomeSms() {

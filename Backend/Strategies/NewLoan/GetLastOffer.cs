@@ -13,16 +13,18 @@
 		public string Error { get; private set; }
 
 		public override void Execute() {
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
+
+			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+				return;
+
 			NL_AddLog(LogType.Info, "Strategy Start", this.customerID, null, null, null);
+
 			try {
-				Offer = DB.FillFirst<NL_Offers>(
-					"NL_OffersGetLast",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.customerID)
-				);
-				NL_AddLog(LogType.Info, "Strategy End", this.customerID, this.Offer, null, null);
+				Offer = DB.FillFirst<NL_Offers>("NL_OffersGetLast", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID));
+
+				NL_AddLog(LogType.Info, "Strategy End", this.customerID, Offer, null, null);
+
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				Error = ex.Message;
 				NL_AddLog(LogType.Error, "Strategy Faild", this.customerID, null, ex.ToString(), ex.StackTrace);

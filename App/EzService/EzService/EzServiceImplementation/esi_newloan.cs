@@ -76,7 +76,7 @@
                 Value = strategy.Loans,
                 Error = strategy.Error
             };
-        } // GetCustomerLoans*/
+        } // GetCustomerLoans
 
         public NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true) {
             GetLoanState strategy;

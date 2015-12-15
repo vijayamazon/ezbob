@@ -4,14 +4,12 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Runtime.Remoting.Contexts;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
@@ -101,9 +99,9 @@
 				strategy.Execute();
 				//if (string.IsNullOrEmpty(strategy.Result.Error)) {
 				//	this.m_oLog.Debug(strategy.Result.Offer);
-					this.m_oLog.Debug(strategy.Result.Loan);
+				this.m_oLog.Debug(strategy.Result.Loan);
 				//} else
-					this.m_oLog.Debug("error: {0}", strategy.Result.Error);
+				this.m_oLog.Debug("error: {0}", strategy.Result.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}
@@ -482,7 +480,8 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 20023;const int customerID = 362; 
+			const long loanID = 20023;
+			const int customerID = 362;
 			/*const long loanID = 21; const int customerID = 362; */
 			/*const long loanID = 17; const int customerID =351;*/
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
@@ -506,7 +505,7 @@
 			// old calc
 			LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 			oldCalc.GetState();
-			
+
 			this.m_oLog.Debug("++++++++++++++++++++++++++++++old loan: {0}", oldLoan);
 			m_oLog.Debug("NextEarlyPayment={0}", oldCalc.NextEarlyPayment());
 		}
@@ -515,7 +514,8 @@
 		public void GetLoanStateTest() {
 			DateTime calcTime = DateTime.UtcNow;
 			/*const long loanID = 21; const int customerID = 351;*/
-			const long loanID = 20023;const int customerID = 362;
+			const long loanID = 20023;
+			const int customerID = 362;
 			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				state.Execute();
@@ -576,7 +576,7 @@
 				this.m_oLog.Error("{0}", exception.Message);
 			}
 		}
-		
+
 
 		[Test]
 		public void LateLoanJob() {
@@ -589,7 +589,7 @@
 
 		[Test]
 		public void AddRolloverTest() {
-			
+
 		}
 
 		[Test]
@@ -1081,7 +1081,7 @@
 			s.Loans.ForEach(l => this.m_oLog.Debug(l));
 		}
 
-		
+
 
 	} // class TestNewLoan
 } // namespace

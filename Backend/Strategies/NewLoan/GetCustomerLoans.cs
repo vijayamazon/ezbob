@@ -9,16 +9,19 @@
 		public override string Name { get { return "GetCustomerLoans"; } }
 
 		public override void Execute() {
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
-			NL_AddLog(LogType.Info, "Strategy Start", Context.CustomerID, null, null, null);
-			try {
-				Loans = DB.Fill<NL_Loans>("NL_CustomerLoansGet",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", Context.CustomerID)
-				).ToArray();
 
-				NL_AddLog(LogType.Info, "Strategy End", Context.CustomerID, this.Loans, null, null);
+			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+				return;
+
+			NL_AddLog(LogType.Info, "Strategy Start", Context.CustomerID, null, null, null);
+
+			try {
+
+				Loans = DB.Fill<NL_Loans>("NL_CustomerLoansGet",CommandSpecies.StoredProcedure,new QueryParameter("CustomerID", Context.CustomerID)).ToArray();
+
+				NL_AddLog(LogType.Info, "Strategy End", Context.CustomerID, Loans, null, null);
+
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				NL_AddLog(LogType.Error, "Strategy Faild", Context.CustomerID, null, ex.ToString(), ex.StackTrace);
 			}

@@ -1,30 +1,29 @@
 ﻿namespace EzBob.Web.Areas.Customer.Models {
 	using System;
 	using System.Linq;
+	using System.Web;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using EzBob.Models;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Email;
+	using EzBob.Web.Models;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models;
-	using Infrastructure.Email;
-	using Underwriter.Models;
-	using PaymentServices.Calculators;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using Ezbob.Backend.Models;
-	using Infrastructure;
-	using System.Web;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using EzBob.Web.Code;
-	using EzServiceAccessor;
 	using log4net;
-	using StructureMap;
-	using Web.Models;
+	using PaymentServices.Calculators;
+	using ServiceClientProxy;
 
 	public class CustomerModelBuilder {
 		public CustomerModelBuilder(
@@ -401,15 +400,18 @@
 				CurrentValues.Instance.AmountToChargeFrom
 			);
 			var state = payEarlyCalc.GetState();
-		    
-            try {
-                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
-                this.Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
-		    } catch (Exception) {
-                this.Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
-		    }
-
+       
+			try {
+				ServiceClient service = new ServiceClient();
+				long nlLoanId = service.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = service.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					this.Log.InfoFormat("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				this.Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			return state.Fees + state.Interest;
 		} // GetRolloverPayValue

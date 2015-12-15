@@ -19,14 +19,14 @@
 			this.strategyArgs = new object[] { customerID, loanID, stateDate, userID, getCalculatorState };
 
 			if (customerID == 0) {
-				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, this.Error, null);
+				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, Error, null);
 				return;
 			}
 
 			if (loanID == 0) {
-				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, this.Error, null);
+				Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, Error, null);
 				return;
 			}
 
@@ -48,7 +48,7 @@
 
 		public NL_Model Result { get; private set; }
 		private readonly DateTime StateDate;
-		public string Error;
+		public string Error { get; private set; }
 		public bool GetCalculatorState { get; private set; }
 
 		private readonly object[] strategyArgs;
@@ -62,11 +62,11 @@
             if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
                 return;
 
-			if (!string.IsNullOrEmpty(this.Error)) {
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+			if (!string.IsNullOrEmpty(Error)) {
+				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
-			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, this.Error, null);
+			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);
 
 			try {
 				// loan
@@ -130,42 +130,42 @@
 					calc.GetState();
 					Result = calc.WorkingModel;
 				} catch (NoInitialDataException noInitialDataException) {
-					this.Error = noInitialDataException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = noInitialDataException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
-					this.Error = invalidInitialInterestRateException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = invalidInitialInterestRateException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (NoLoanHistoryException noLoanHistoryException) {
-					this.Error = noLoanHistoryException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = noLoanHistoryException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (InvalidInitialAmountException invalidInitialAmountException) {
-					this.Error = invalidInitialAmountException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = invalidInitialAmountException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (OverflowException overflowException) {
-					this.Error = overflowException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = overflowException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (LoanPaidOffStatusException loanPaidOffexException) {
-					this.Error = loanPaidOffexException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = loanPaidOffexException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (LoanWriteOffStatusException loanWriteoffexException) {
-					this.Error = loanWriteoffexException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = loanWriteoffexException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				} catch (LoanPendingStatusException loanPendingException) {
-					this.Error = loanPendingException.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = loanPendingException.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
-					this.Error = ex.Message;
-					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, this.Error, null);
+					Error = ex.Message;
+					NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, Result, Error, null);
 				}
 
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, Result, null, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.Error, ex.ToString(), ex.StackTrace);
+				Error = ex.Message;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 				Log.Alert(ex, "Failed to load loan state.");
 			} // try
 		} // Execute

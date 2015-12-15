@@ -1,18 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.OfferCalculation {
-	using ConfigManager;
-	using Ezbob.Database;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
+	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.PricingModel;
+	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzServiceAccessor;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
-	using PricingModel;
-	using StructureMap;
 
-    public class OfferCalculator1 {
+	public class OfferCalculator1 {
 		public OfferCalculator1() {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
@@ -23,7 +23,7 @@
 			DateTime calculationTime,
 			int amount,
 			bool hasLoans,
-			EZBob.DatabaseLib.Model.Database.Medal medalClassification,
+			Medal medalClassification,
 			int period
 		) {
 			var result = new OfferResult {
@@ -193,14 +193,20 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            try {
-                long nl_LoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, 1, 1);
-                var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true);
-                this.log.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel);
-            }
-            catch (Exception) {
-                this.log.Info("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
-            }
+			try {
+				GetLoanIDByOldID s1 = new GetLoanIDByOldID(loan.Id);
+				s1.Execute();
+				var nlLoanId = s1.LoanID;
+				if (nlLoanId > 0) {
+					GetLoanState nlState = new GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1);
+					nlState.Execute();
+					var nlModel = nlState.Result;
+					this.log.Info("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				this.log.Info("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			return loan;
 		} // CreateLoan

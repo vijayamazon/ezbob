@@ -18,15 +18,17 @@
 		private readonly NL_LoanOptions nlLoanOptions;
 		public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId, List<String> PropertiesUpdateList = null) {
 			this.nlLoanOptions = loanOptions;
-			this.oldLoanId = OldLoanId;
+			oldLoanId = OldLoanId;
 			this.PropertiesUpdateList = PropertiesUpdateList;
 		} //constructor
 
 		public override string Name { get { return "AddLoanOptions"; } }
 
 		public override void Execute() {
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
+
+			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+				return;
+
 			NL_AddLog(LogType.Info, "Strategy Start", this.nlLoanOptions, null, null, null);
 			try {
 				long newLoanId = -1;

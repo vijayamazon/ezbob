@@ -54,12 +54,13 @@
 
             if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
                 return;
+
 			// invalid input
 			if (!string.IsNullOrEmpty(Error)) {
 				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
-			NL_AddLog(LogType.Info, "Started", this.strategyArgs, Error, null, null);
+			NL_AddLog(LogType.Info, "Started", this.strategyArgs, null, Error, null);
 
 			// load loan
 			NL_Loans loan = LoanDAL.GetLoan(Payment.LoanID);
@@ -68,7 +69,7 @@
 				// loan pending - can't to add payment
 				Error = string.Format("Loan {0} in status 'Pending' yet, payment registering not allowed.", loan.LoanID);
 				Log.Debug(Error);
-				NL_AddLog(LogType.Info, "End", this.strategyArgs, Error, Error, null);
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, null, Error, null);
 				return;
 			}
 
@@ -76,13 +77,10 @@
 				// loan closed - can't to add payment
 				Error = string.Format("Loan {0} in status {1} since {2:d}, payment registering not allowed.", loan.LoanID, loan.LoanStatusID, loan.DateClosed);
 				Log.Debug(Error);
-				NL_AddLog(LogType.Info, "End", this.strategyArgs, Error, Error, null);
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, null, Error, null);
 				return;
 			}
-
-			// TODO check adding the payment twice  kak?
-			/*if (state.Result.Loan.Payments.FirstOrDefault(p=>p.CreationTime.Equals(Payment.CreationTime) {}*/
-
+	
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
@@ -99,7 +97,7 @@
 
 					if (ppTransaction == null) {
 						Log.Info("Paypoint transaction not found. Payment \n{0}{1}", AStringable.PrintHeadersLine(typeof(NL_Payments)), Payment.ToStringAsTable());
-						NL_AddLog(LogType.Info, "Paypoint transaction not found", this.strategyArgs, Error, null, null);
+						NL_AddLog(LogType.Info, "Paypoint transaction not found", this.strategyArgs, null, Error, null);
 					} else {
 						ppTransaction.PaymentID = Payment.PaymentID;
 						ppTransaction.PaypointTransactionID = DB.ExecuteScalar<long>("NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_PaypointTransactions>("Tbl", ppTransaction));
@@ -108,7 +106,7 @@
 
 				pconn.Commit();
 
-				NL_AddLog(LogType.Info, "End", this.strategyArgs, Payment, null, null);
+				NL_AddLog(LogType.Info, "End", this.strategyArgs, Payment, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

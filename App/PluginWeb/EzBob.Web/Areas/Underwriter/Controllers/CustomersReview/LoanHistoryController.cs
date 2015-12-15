@@ -209,15 +209,15 @@
 												   model.Description, Environment.NewLine);
 
 				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
-					var method = Enum.GetName(typeof(NLLoanTransactionMethods), model.PaymentMethod);
-					var nlPayment = new NL_Payments() {
-						CreatedByUserID = this._context.UserId,
-						Amount = realAmount,
-						PaymentMethodID = (int)Enum.Parse(typeof(NLLoanTransactionMethods), method),
-						PaymentSystemType = NLPaymentSystemTypes.None,
-					};
+				var method = Enum.GetName(typeof(NLLoanTransactionMethods), model.PaymentMethod);
+				var nlPayment = new NL_Payments() {
+					CreatedByUserID = this._context.UserId,
+					Amount = realAmount,
+					PaymentMethodID = (int)Enum.Parse(typeof(NLLoanTransactionMethods), method),
+					PaymentSystemType = NLPaymentSystemTypes.None,
+				};
 
-					Log.InfoFormat("ManualPayment: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
+				Log.InfoFormat("ManualPayment: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
 				//}
 
 				var facade = new LoanPaymentFacade();
@@ -265,13 +265,15 @@
 			var state = payEarlyCalc.GetState();
 
 			try {
-				long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-				var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-				Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
-			} catch (Exception) {
-				Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, paymentDate, 1, true).Value;
+					Log.InfoFormat("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", System.Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
-
 
 			var model = new LoanPaymentDetails {
 				Balance = payEarlyCalc.TotalEarlyPayment(),
@@ -302,11 +304,15 @@
 			var state = payEarlyCalc.GetState();
 
 			try {
-				long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-				var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-				Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", Environment.StackTrace, loan, nlModel));
-			} catch (Exception) {
-				Log.Info(string.Format("<<< NL_Compare Fail at : {0}", Environment.StackTrace));
+
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					Log.InfoFormat("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
 
 			var rolloverCharge = CurrentValues.Instance.RolloverCharge;

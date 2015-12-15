@@ -11,6 +11,9 @@
 			this.decision = decision;
 			this.oldCashRequestID = oldCashRequestID;
 			this.decisionRejectReasons = decisionRejectReasons;
+
+			this.strategyArgs = new object[] { decision, oldCashRequestID, decisionRejectReasons };
+
 		}//constructor
 
 		public override string Name { get { return "AddDecision"; } }
@@ -22,11 +25,17 @@
 		private long? oldCashRequestID;
 		private readonly IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons;
 
+		private readonly object[] strategyArgs;
+
 		public override void Execute() {
+
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
 				return;
-			NL_AddLog(LogType.Info, "Strategy Start", this.decision, null, null, null);
+
+			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, this.decision, null, null);
+
 			Log.Debug("ADDIND decision: {0}", this.decision);
+
 			try {
 				if (this.oldCashRequestID.HasValue) {
 
@@ -37,6 +46,7 @@
 					if (this.decision.CashRequestID == 0) {
 						Log.Error("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
 						Error = string.Format("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
+						NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, this.decision, Error, null);
 						return;
 					}
 				}
@@ -49,16 +59,17 @@
 					foreach (var decisionRejectReason in this.decisionRejectReasons) {
 						decisionRejectReason.DecisionID = DecisionID;
 					}
-
 					DB.ExecuteNonQuery("NL_DecisionRejectReasonsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", this.decisionRejectReasons));
 				}
-				// ReSharper disable once CatchAllClause
-				NL_AddLog(LogType.Info, "Strategy End", this.decision, DecisionID, null, null);
 
+				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, new object[] { this.decision, DecisionID }, Error, null);
+
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
+				Error = ex.Message;
 				Log.Alert("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex);
 				Error = string.Format("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex.Message);
-				NL_AddLog(LogType.Error, "Strategy Faild", this.decision, null, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.decision, Error, ex.StackTrace);
 			}
 
 		}//Execute

@@ -4,7 +4,6 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
-	using EchoSignLib.EchoSignService;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
@@ -23,7 +22,7 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
-    [RestfullErrorHandling]
+	[RestfullErrorHandling]
 	public class LoanEditorController : Controller {
 		private readonly ILoanRepository _loans;
 		private readonly ICashRequestRepository _cashRequests;
@@ -68,15 +67,16 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            try {
-                long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
-            }
-            catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
-            }
-
+			try {
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					Log.InfoFormat("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
             var model = this._loanModelBuilder.BuildModel(loan);
 
@@ -158,14 +158,16 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            try {
-                long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
-            }
-            catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
-            }
+			try {
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					Log.InfoFormat("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			RescheduleSetmodel(model, loan);
 
@@ -218,14 +220,16 @@
 				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
 
-                try {
-                    long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                    var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                    Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
-                }
-                catch (Exception) {
-                    Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
-                }
+				try {
+					long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+					if (nlLoanId > 0) {
+						var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, now, 1, true).Value;
+						Log.InfoFormat("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+					}
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				}
 
 			} catch (Exception e) {
 				model.Errors.Add(e.Message);
@@ -464,14 +468,16 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            try {
-                long nl_LoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                Log.Info(string.Format("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel));
-            }
-            catch (Exception) {
-                Log.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
-            }
+			try {
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					Log.InfoFormat("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
 			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);

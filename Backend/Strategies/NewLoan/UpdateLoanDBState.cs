@@ -18,21 +18,17 @@
 	public class UpdateLoanDBState : AStrategy {
 
 		public UpdateLoanDBState(int customerID, long loanID, int userID) {
-
-			this.strategyArgs = new object[] { customerID, loanID, userID };
-
 			CustomerID = customerID;
 			LoanID = loanID;
 			UserID = userID;
+			this.strategyArgs = new object[] { customerID, loanID, userID };
 		} // ctor
 
 		public override string Name { get { return "UpdateLoanDBState"; } }
 
 		public string Error { get; private set; }
-
 		public int CustomerID { get; private set; }
 		public int UserID { get; private set; }
-
 		public long LoanID { get; private set; }
 
 		private object[] strategyArgs;
@@ -41,11 +37,12 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
+
             if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
                 return;
 
-            NL_AddLog(LogType.Info, "Strategy Start", LoanID, null, null, null);
-			NL_AddLog(LogType.Error, "Started", this.strategyArgs, Error, null, null);
+			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, null, Error, null);
+
 			if (CustomerID == 0) {
 				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, Error, null);

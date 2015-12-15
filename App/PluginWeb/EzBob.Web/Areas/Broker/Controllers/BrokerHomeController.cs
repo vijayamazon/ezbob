@@ -255,7 +255,7 @@
 				sLeadID
 			);
 
-			return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
+			return new LeadDetailsBrokerForJsonResult(oDetails: oDetails.BrokerLeadDataModel);
 		} // LoadLeadDetails
 
 		[HttpGet]
@@ -643,7 +643,7 @@
 				(int?)null,
 				LeadEmail,
 				(int?)null,
-				true,false);
+				true, false);
 
 			ms_oLog.Debug(
 				"Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.",
@@ -662,7 +662,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddBank(string AccountNumber, string SortCode, string ContactEmail, string bankAccountType) {
 			ms_oLog.Debug(
-				"Broker add bank request for contact email {0}: {1} {2} {3}.", 
+				"Broker add bank request for contact email {0}: {1} {2} {3}.",
 				ContactEmail,
 				AccountNumber,
 				SortCode,
@@ -1001,16 +1001,17 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-            try {
-                long nl_LoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-                var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nl_LoanId, DateTime.UtcNow, 1, true).Value;
-                ms_oLog.Info("<<< NL_Compare at : {0} ;  New : {1} Old: {2} >>>", System.Environment.StackTrace, loan, nlModel);
-            }
-            catch (Exception) {
-                ms_oLog.Info(string.Format("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace));
-            }
-
-
+			try {
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1, true).Value;
+					ms_oLog.Info("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", System.Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				ms_oLog.Info("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
+			
 			var apr = loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
