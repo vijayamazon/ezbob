@@ -57,6 +57,6 @@
 
 		public string Result { get; private set; }
 
-		public EchoSignEnvelope[] Package;
+		public EchoSignEnvelope[] Package { get; set; }
 	} // class EsignSend
 } // namespace

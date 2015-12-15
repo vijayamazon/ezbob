@@ -4,10 +4,9 @@
 	using Ezbob.Backend.Strategies.MailStrategies;
 
 	public class EsignProcessPending : AStrategy {
-
 		public EsignProcessPending(int? nCustomerID) {
-			m_nCustomerID = nCustomerID;
-			m_oFacade = new EchoSignFacade(DB, Log);
+			this.customerID = nCustomerID;
+			this.facade = new EchoSignFacade(DB, Log);
 		} // constructor
 
 		public override string Name {
@@ -15,14 +14,13 @@
 		} // Name
 
 		public override void Execute() {
-			List<EsignatureStatus> oCompleted = m_oFacade.ProcessPending(m_nCustomerID);
+			List<EsignatureStatus> oCompleted = this.facade.ProcessPending(this.customerID);
 
 			foreach (var oStatus in oCompleted)
 				new NotifyDocumentSigned(oStatus).Execute();
 		} // Execute
 
-		private readonly EchoSignFacade m_oFacade;
-		private readonly int? m_nCustomerID;
-
+		private readonly EchoSignFacade facade;
+		private readonly int? customerID;
 	} // class EsignProcessPending
 } // namespace

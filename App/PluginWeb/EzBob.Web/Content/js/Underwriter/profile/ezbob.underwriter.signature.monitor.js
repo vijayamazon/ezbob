@@ -7,6 +7,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		this.SignersList = null;
 
 		this.personalInfoModel = this.options.personalInfoModel;
+		this.loanInfoModel = this.options.loanInfoModel;
 
 		this.boardResolutionTemplateID = 1;
 		this.personalGuaranteeTemplateID = 2;
@@ -232,8 +233,9 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		var bHasDocuments = false;
 
 		// ReSharper disable DuplicatingLocalDeclaration
-		function echoSignEnvelope(nCustomerID, nTemplateID) {
+		function echoSignEnvelope(nCustomerID, cashRequestID, nTemplateID) {
 			this.CustomerID = nCustomerID;
+			this.CashRequestID = cashRequestID;
 			this.Directors = [];
 			this.ExperianDirectors = [];
 			this.TemplateID = nTemplateID;
@@ -243,6 +245,9 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		echoSignEnvelope.prototype.IsReadyToSend = function() {
 			if (this.CustomerID < 1)
+				return false;
+
+			if (this.CashRequestID < 1)
 				return false;
 
 			if (this.TemplateID < 1)
@@ -265,6 +270,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		};
 
 		var nCustomerID = this.$el.find('.do-send').data('CustomerID');
+		var cashRequestID = this.loanInfoModel.get('CashRequestId');
 
 		this.$el.find('.document-type').each(function() {
 			var oChk = $(this);
@@ -276,7 +282,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			var nTemplateID = parseInt(oChk.data('template-id'), 10);
 
-			oPackage[nTemplateID] = new echoSignEnvelope(nCustomerID, nTemplateID);
+			oPackage[nTemplateID] = new echoSignEnvelope(nCustomerID, cashRequestID, nTemplateID);
 		});
 
 		if (!bHasDocuments) {

@@ -20,10 +20,15 @@ EzBob.Underwriter = EzBob.Underwriter || {};
             );
 
 	        if (this.customerID > 0) {
+				var loanInfoModel = new EzBob.Underwriter.LoanInfoModel({ Id: this.customerID });
+		        loanInfoModel.fetch();
+
 		        this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel({ Id: this.customerID });
+
 		        this.signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView({
 			        el: $('#signature-monitor'),
-			        personalInfoModel: this.personalInfoModel
+			        personalInfoModel: this.personalInfoModel,
+					loanInfoModel: loanInfoModel,
 		        });
 
 		        this.personalInfoModel.fetch().done(function() {
