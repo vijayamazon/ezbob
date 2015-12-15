@@ -126,6 +126,12 @@
   <data name="BrokerSignupHost" xml:space="preserve">
     <value>.everline.com/Broker#signup</value>
   </data>
+  <data name="C2037_Privacy_content" xml:space="preserve">
+    <value>Privacy &amp; cookie policy</value>
+  </data>
+  <data name="C2037_Privacy_selector" xml:space="preserve">
+    <value>div.row &gt; div.col.span_16.hero-content &gt; h1</value>
+  </data>
   <data name="Check_Incoming_Messages" xml:space="preserve">
     <value>A message from your finance broker</value>
   </data>

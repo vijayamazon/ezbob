@@ -88,6 +88,24 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Privacy &amp; cookies.
+        /// </summary>
+        internal static string C2037_Privacy_content {
+            get {
+                return ResourceManager.GetString("C2037_Privacy_content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to div.content-block.default-content-padding.align-left &gt; div.generic-container &gt; h1.
+        /// </summary>
+        internal static string C2037_Privacy_selector {
+            get {
+                return ResourceManager.GetString("C2037_Privacy_selector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You were invited to register with ezbob!.
         /// </summary>
         internal static string Check_Incoming_Messages {

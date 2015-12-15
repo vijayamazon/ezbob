@@ -109,14 +109,15 @@ EzBob.CustomerModel = Backbone.Model.extend({
         return "" + offer.H + ":" + EzBob.formatNumberLength(offer.M, 2) + ":" + EzBob.formatNumberLength(offer.S, 2);
     },
     calculateState: function () {
-        var availableCredit = this.get('CreditSum'),
-            creditResult = this.get('CreditResult'),
-            status = this.get('Status'),
-            offerValid = this.offerValid(),
-            hasFunds = availableCredit >= EzBob.Config.XMinLoan,
-            isDisabled = this.get('IsDisabled'),
-            blockTakingLoan = this.get('BlockTakingLoan'),
-            canTakeAnotherLoan = this.getActiveLoans().length < EzBob.Config.NumofAllowedActiveLoans;
+	    var isTest = this.get('IsTest');
+	    var availableCredit = this.get('CreditSum');
+    	var creditResult = this.get('CreditResult');
+	    var status = this.get('Status');
+    	var offerValid = this.offerValid();
+	    var hasFunds = isTest ? availableCredit >= EzBob.Config.XMinLoan : availableCredit >= EzBob.Config.MinLoan;
+    	var isDisabled = this.get('IsDisabled');
+	    var blockTakingLoan = this.get('BlockTakingLoan');
+    	var canTakeAnotherLoan = this.getActiveLoans().length < EzBob.Config.NumofAllowedActiveLoans;
 
         if (isDisabled || !canTakeAnotherLoan) {
             this.set('state', 'disabled');

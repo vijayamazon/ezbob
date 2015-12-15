@@ -13,7 +13,6 @@
 	using Infrastructure.Email;
 	using Underwriter.Models;
 	using PaymentServices.Calculators;
-	using System.Collections.Generic;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Backend.Models;
@@ -33,8 +32,6 @@
 			ICustomerRepository customerRepository,
 			IUsersRepository users,
 			PaymentRolloverRepository paymentRolloverRepository,
-			ICustomerInviteFriendRepository customerInviteFriendRepository,
-			PerksRepository perksRepository,
 			DatabaseDataHelper oDbHelper,
 			WhiteLabelProviderRepository whiteLabelProviderRepository
 		) {
@@ -42,8 +39,6 @@
 			m_oCustomerRepository = customerRepository;
 			m_oUsers = users;
 			m_oPaymentRolloverRepository = paymentRolloverRepository;
-			m_oCustomerInviteFriendRepository = customerInviteFriendRepository;
-			m_oPerksRepository = perksRepository;
 			m_oChangeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
 			m_oExperianDirectors = oDbHelper.ExperianDirectorRepository;
 			_whiteLabelProviderRepository = whiteLabelProviderRepository;
@@ -99,6 +94,7 @@
 			var user = m_oUsers.Get(cus.Id);
 
 			customerModel.Origin = customer.CustomerOrigin.Name;
+			customerModel.IsTest = customer.IsTest;
 
 			if (customer.WhiteLabel != null) {
 				wizardModel.WhiteLabel = customer.WhiteLabel;
@@ -357,25 +353,6 @@
 			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.IsDefault;
 			customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
 
-			var inviteFriend = customer.CustomerInviteFriend.FirstOrDefault();
-			if (inviteFriend == null) {
-				customer.CustomerInviteFriend = new List<CustomerInviteFriend>();
-				var customerInviteFriend = new CustomerInviteFriend(customer);
-				customer.CustomerInviteFriend.Add(customerInviteFriend);
-			} // if
-
-			customerModel.InviteFriendSource = customer.CustomerInviteFriend.First().InviteFriendSource;
-
-			customerModel.InvitedFriends = m_oCustomerInviteFriendRepository
-				.GetAll()
-				.Where(c => c.InvitedByFriendSource == customer.CustomerInviteFriend.First().InviteFriendSource)
-				.Select(i => new InvitedFriend {
-					FriendName = string.IsNullOrEmpty(i.Customer.PersonalInfo.Fullname)
-						? i.Customer.Name
-						: i.Customer.PersonalInfo.Fullname,
-					FriendTookALoan = (i.Customer.Loans.Any() ? "Yes" : "No")
-				});
-
 			SafeReader sr = DbConnectionGenerator.Get(new SafeILog(this)).GetFirst(
 				"LoadActiveLotteries",
 				CommandSpecies.StoredProcedure,
@@ -446,8 +423,6 @@
 		private readonly IUsersRepository m_oUsers;
 		private readonly PaymentRolloverRepository m_oPaymentRolloverRepository;
 		private readonly ChangeLoanDetailsModelBuilder m_oChangeLoanDetailsModelBuilder;
-		private readonly ICustomerInviteFriendRepository m_oCustomerInviteFriendRepository;
-		private readonly PerksRepository m_oPerksRepository;
 		private readonly ExperianDirectorRepository m_oExperianDirectors;
 		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
 		private readonly ILog Log = LogManager.GetLogger(typeof(CustomerModelBuilder));

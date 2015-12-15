@@ -26,6 +26,7 @@
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.Postcode;
 	using Ezbob.Backend.Strategies.Reports;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.UserManagement;
@@ -88,6 +89,7 @@
 			var s = new Greeting(21401, "torke");
 			s.Execute();
 		}
+
 
 		[SetUp]
 		public new void Init() {
@@ -934,5 +936,28 @@
 			var stra = new GetIncomeSms(null,true);
 			stra.Execute();
 		}
+
+		[Test]
+		public void TestPostcodeNutsStra() {
+			var stra = new PostcodeNuts("AB10 1BA");
+			stra.Execute();
+			if (!stra.ExistsInCash) {
+				Assert.IsNotNull(stra.Result);
+				Assert.AreEqual(stra.Result.status, 200);
+				Assert.IsNotNullOrEmpty(stra.Result.result.postcode);
+				Assert.IsNotNullOrEmpty(stra.Result.result.codes.nuts);
+			} else {
+				this.m_oLog.Info("Exists in cash");
+			}
+		}
+
+        [Test]
+        public void TestBrokerLoadCustomerList()
+        {
+            
+            var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com",423);
+            s.Execute();
+
+        }
 }
 }

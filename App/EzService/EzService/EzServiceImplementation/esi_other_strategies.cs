@@ -98,8 +98,13 @@
 				sErrorMessage,
 				nUserID
 			);
-		} 
-		// PostcodeSaveLog
+		}// PostcodeSaveLog
+
+		public ActionMetaData PostcodeNuts(int userID, string postcode) {
+			PostcodeNuts instance;
+			ActionMetaData metaData = ExecuteSync(out instance, userID, userID, postcode);
+			return metaData;
+		}// PostcodeNuts
 
 		public ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
 			return ExecuteSync<MarketplaceInstantUpdate>(null, null, nMarketplaceID);

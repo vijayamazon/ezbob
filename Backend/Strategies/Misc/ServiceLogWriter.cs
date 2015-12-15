@@ -284,7 +284,7 @@
 				CompanyRefNum = writer.Package.In.CompanyRefNum;
 				ServiceLogId = writer.serviceLogID;
 				InsertDate = writer.spSaveServiceLog.InsertDate;
-				Type = writer.Package.In.ServiceType.ToString();
+				Type = writer.Package.In.ServiceType.DescriptionAttr();
 			} // constructor
 
 			public override bool HasValidParameters() {

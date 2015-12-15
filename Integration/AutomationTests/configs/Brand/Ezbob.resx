@@ -126,6 +126,12 @@
   <data name="BrokerSignupHost" xml:space="preserve">
     <value>.ezbob.com/Broker#signup</value>
   </data>
+  <data name="C2037_Privacy_content" xml:space="preserve">
+    <value>Privacy &amp; cookies</value>
+  </data>
+  <data name="C2037_Privacy_selector" xml:space="preserve">
+    <value>div.content-block.default-content-padding.align-left &gt; div.generic-container &gt; h1</value>
+  </data>
   <data name="Check_Incoming_Messages" xml:space="preserve">
     <value>You were invited to register with ezbob!</value>
   </data>

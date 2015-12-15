@@ -1031,7 +1031,6 @@
 				CollectionStatus = m_oCustomerStatusesRepository.Get((int)CollectionStatusNames.Enabled),
 				IsTest = isAutomaticTest,
 				IsOffline = null,
-				CustomerInviteFriend = new List<CustomerInviteFriend>(),
 				PersonalInfo = new PersonalInfo {
 					MobilePhone = mobilePhone,
 					MobilePhoneVerified = mobilePhoneVerified,
@@ -1075,11 +1074,6 @@
 				campaignSourceRef.RUrl = GetAndRemoveCookie("rurl");
 				campaignSourceRef.RDate = ToDate(GetAndRemoveCookie("rdate"));
 			} // if
-
-			var customerInviteFriend = new CustomerInviteFriend(customer) {
-				InvitedByFriendSource = GetAndRemoveCookie("invite"),
-			};
-			customer.CustomerInviteFriend.Add(customerInviteFriend);
 
 			customer.ABTesting = GetAndRemoveCookie("ezbobab");
 			string visitTimes = GetAndRemoveCookie("sourceref_time");

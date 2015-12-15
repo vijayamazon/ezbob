@@ -189,12 +189,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.AllDeleteOrphan()
 				.Inverse();
 
-			HasMany(x => x.CustomerInviteFriend)
-				.AsBag()
-				.KeyColumn("CustomerId")
-				.Cascade.All()
-				.Inverse();
-
 			HasMany(x => x.Session)
 				.AsBag()
 				.KeyColumn("CustomerId")

@@ -53,7 +53,7 @@
 		public decimal TotalInterest { get; set; } // total interest + charges + setup fee
 
 		[DataMember]
-		public decimal RealInterestCost { get; set; } // total interest / Loan amount
+		public decimal RealInterestCost { get; set; } // (total interest / Loan amount) / repayment period annualized
 
 		[DataMember]
 		public long TimeStamp { get; set; } //utcnow.ticks not in use
@@ -78,13 +78,13 @@
 
 	    private static readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
-        public static LoanOffer InitFromLoan(Loan loan, double calculateApr,  AgreementModel agreement, CashRequest cr)
-        {
+        public static LoanOffer InitFromLoan(Loan loan, double calculateApr,  AgreementModel agreement, CashRequest cr) {
+	        var repaymentPeriod = _repaymentCalculator.CalculateCountRepayment(loan);
             var apr = loan.LoanAmount == 0 ? 0 : calculateApr;
             var total = loan.Schedule.Sum(s => s.AmountDue) + loan.SetupFee;
             var totalPrincipal = loan.Schedule.Sum(s => s.LoanRepayment);
             var totalInterest = loan.Schedule.Sum(s => s.Interest) + loan.Charges.Sum(x => x.Amount) + loan.SetupFee;
-            var realInterestCost = loan.LoanAmount == 0 ? 0 : totalInterest / loan.LoanAmount;
+            var realInterestCost = loan.LoanAmount == 0 ? 0 : (totalInterest / loan.LoanAmount) / ( repaymentPeriod / 12.0M);
             var timestamp = DateTime.UtcNow.Ticks;
 
 	        var offer = new LoanOffer();
@@ -101,7 +101,7 @@
 			offer.Details = new LoanOfferDetails
 				{
 					InterestRate = cr.InterestRate,
-					RepaymentPeriod = _repaymentCalculator.CalculateCountRepayment(loan),
+					RepaymentPeriod = repaymentPeriod,
 					OfferedCreditLine = totalPrincipal,
 					LoanType = cr.LoanType.Name,
 					IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),

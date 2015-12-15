@@ -88,6 +88,24 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Privacy &amp; cookie policy.
+        /// </summary>
+        internal static string C2037_Privacy_content {
+            get {
+                return ResourceManager.GetString("C2037_Privacy_content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to div.row &gt; div.col.span_16.hero-content &gt; h1.
+        /// </summary>
+        internal static string C2037_Privacy_selector {
+            get {
+                return ResourceManager.GetString("C2037_Privacy_selector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A message from your finance broker.
         /// </summary>
         internal static string Check_Incoming_Messages {
