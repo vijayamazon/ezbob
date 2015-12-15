@@ -27,11 +27,13 @@ BEGIN
 	
 	DECLARE @lastPosition int; 
 
-	set @lastPosition = (select Max(Position) from [dbo].[NL_Decisions] d join [dbo].[NL_CashRequests] cr on cr.CashRequestID = d.CashRequestID 		
-	IF (@lastPosition IS NULL)
-	SET @lastPosition = 0
-	
+	set @lastPosition = (select Max(Position) from [dbo].[NL_Decisions] d join [dbo].[NL_CashRequests] cr on cr.CashRequestID = d.CashRequestID	
 	and cr.CustomerID = (select CustomerID from [dbo].[NL_CashRequests] where CashRequestID = (select [CashRequestID] from @Tbl)))
+
+	IF @lastPosition IS NULL
+	BEGIN
+		SET @lastPosition = 0
+	END
 
 	select @lastPosition = @lastPosition + 1;
 
