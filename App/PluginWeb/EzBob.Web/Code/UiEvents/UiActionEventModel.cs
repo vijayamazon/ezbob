@@ -17,23 +17,51 @@
 		public string eventArgs { get; set; }
 
 		public bool Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie) {
-			long nRefNum = 0;
+			long nRefNum;
 
 			if (!long.TryParse(eventID, out nRefNum)) {
-				ms_oLog.Error("Failed to save UI event: cannot parse eventID as long in {0}.", this);
+				log.Error("Failed to save UI event: cannot parse eventID as long in {0}.", this);
 				return false;
 			} // if
 
 			DateTime oTime;
 
-			if (!DateTime.TryParseExact(eventTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out oTime)) {
-				ms_oLog.Error("Failed to save UI event: cannot parse event time in {0}.", this);
+			bool validDate = DateTime.TryParseExact(
+				eventTime,
+				"yyyyMMddHHmmss",
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+				out oTime
+			);
+
+			if (!validDate) {
+				log.Error("Failed to save UI event: cannot parse event time in {0}.", this);
 				return false;
 			} // if failed to parse time
 
 			string sResult = null;
 
-			var oRetryer = new SqlRetryer(oLog: ms_oLog);
+			var oRetryer = new SqlRetryer(oLog: log);
+
+			string evtArgs = string.IsNullOrWhiteSpace(eventArgs) ? null : eventArgs;
+
+			if ((evtArgs != null) && (evtArgs.Length > MaxAllowedLength)) {
+				string id = Guid.NewGuid().ToString("N").ToLowerInvariant();
+
+				evtArgs = string.Format(
+					"Trimmed to {0} chars, trim id is '{1}': {2}",
+					MaxAllowedLength,
+					id,
+					evtArgs.Substring(0, MaxAllowedLength)
+				);
+
+				log.Debug(
+					"Event arguments are too long, trimmed to {0} chars, trim id is '{1}', untrimmed value is: {2}",
+					MaxAllowedLength,
+					id,
+					eventArgs
+				);
+			} // if
 
 			oRetryer.Retry(() => {
 				sResult = oDB.ExecuteScalar<string>(
@@ -42,7 +70,7 @@
 					new QueryParameter("@ActionName", actionName),
 					new QueryParameter("@UserName", userName),
 					new QueryParameter("@ControlName", controlName),
-					new QueryParameter("@EventArgs", eventArgs),
+					new QueryParameter("@EventArgs", evtArgs),
 					new QueryParameter("@BrowserVersionID", nBrowserVersionID),
 					new QueryParameter("@HtmlID", htmlID),
 					new QueryParameter("@RefNum", nRefNum),
@@ -55,7 +83,7 @@
 			if (string.IsNullOrWhiteSpace(sResult))
 				return true;
 
-			ms_oLog.Warn("Failed to save UI event: {0}", sResult);
+			log.Warn("Failed to save UI event: {0}", sResult);
 
 			return false;
 		} // Save
@@ -74,7 +102,7 @@
 			return os.ToString();
 		} // ToString
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(UiActionEventModel));
+		private static readonly ASafeLog log = new SafeILog(typeof(UiActionEventModel));
+		private const int MaxAllowedLength = 4000;
 	} // class UiActionEventModel
-
 } // namespace EZBob.DatabaseLib
