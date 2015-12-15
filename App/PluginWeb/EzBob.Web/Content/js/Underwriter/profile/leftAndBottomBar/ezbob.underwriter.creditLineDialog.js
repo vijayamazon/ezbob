@@ -149,7 +149,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			manualSetupFeePercent: m.ManualSetupFeePercent,
 			allowSendingEmail: m.AllowSendingEmail,
 			isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed,
-			isCustomerRepaymentPeriodSelectionAllowed: m.IsCustomerRepaymentPeriodSelectionAllowed
+			isCustomerRepaymentPeriodSelectionAllowed: m.IsCustomerRepaymentPeriodSelectionAllowed,
+			spreadSetupFee: m.SpreadSetupFee
 		};
 	}, // getPostData
 
@@ -190,6 +191,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			selector: 'input[name="loanTypeSelection"]',
 			converter: EzBob.BindingConverters.boolFormat,
 		},
+		SpreadSetupFee: {
+			selector: 'input[name="spreadSetupFee"]'
+		},
 		IsCustomerRepaymentPeriodSelectionAllowed: {
 			selector: 'input[name="repaymentPeriodSelection"]',
 		},
@@ -197,7 +201,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	onRender: function () {
 		this.modelBinder.bind(this.cloneModel, this.el, this.bindings);
-
+		console.log('cloneModel', this.cloneModel);
 		this.$el.find('#startingFromDate, #offerValidUntil').mask('99/99/9999').datepicker({
 			autoclose: true,
 			format: 'dd/mm/yyyy'

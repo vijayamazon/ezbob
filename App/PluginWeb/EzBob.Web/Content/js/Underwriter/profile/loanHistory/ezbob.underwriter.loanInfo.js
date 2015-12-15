@@ -225,7 +225,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 
 			this.UpdateNewCreditLineState();
-			this.initSwitch(".spreadSetupFeeSwitch", 'SpreadSetupFee', this.toggleValue, 'SpreadSetupFee');
 			this.validateLoanSourceRelated();
 			EzBob.handleUserLayoutSetting();
 		},
