@@ -10,7 +10,7 @@
 		public AddDecision(NL_Decisions decision, long? oldCashRequestID, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
 			this.decision = decision;
 			this.oldCashRequestID = oldCashRequestID;
-			this.decisionRejectReasons = decisionRejectReasons;
+			this.decisionRejectReasons = (List<NL_DecisionRejectReasons>)decisionRejectReasons;
 
 			this.strategyArgs = new object[] { decision, oldCashRequestID, decisionRejectReasons };
 
@@ -23,7 +23,7 @@
 
 		private readonly NL_Decisions decision;
 		private long? oldCashRequestID;
-		private readonly IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons;
+		private readonly List<NL_DecisionRejectReasons> decisionRejectReasons;
 
 		private readonly object[] strategyArgs;
 
@@ -55,11 +55,9 @@
 
 				DecisionID = DB.ExecuteScalar<long>("NL_DecisionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", this.decision));
 
-				if (this.decisionRejectReasons != null && this.decisionRejectReasons.Any()) {
-					foreach (var decisionRejectReason in this.decisionRejectReasons) {
-						decisionRejectReason.DecisionID = DecisionID;
-					}
-					DB.ExecuteNonQuery("NL_DecisionRejectReasonsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", this.decisionRejectReasons));
+				if (this.decisionRejectReasons.Count > 0) {
+					this.decisionRejectReasons.ForEach( rr=>rr.DecisionID = DecisionID);
+					DB.ExecuteNonQuery("NL_DecisionRejectReasonsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_DecisionRejectReasons>("Tbl", this.decisionRejectReasons));
 				}
 
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, new object[] { this.decision, DecisionID }, Error, null);

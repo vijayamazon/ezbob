@@ -1082,6 +1082,27 @@
 		}
 
 
+		[Test]
+		public void TestAddDecision() {
+			AddDecision addDecision = new AddDecision(new NL_Decisions {
+				UserID = 357,
+				DecisionTime = DateTime.UtcNow,
+				Notes = " old CR 30364",
+				DecisionNameID = (int)DecisionActions.Reject
+			}, 30364,
+				 new List<NL_DecisionRejectReasons> {
+					new NL_DecisionRejectReasons {
+						RejectReasonID = 1
+					},
+					new NL_DecisionRejectReasons {
+						RejectReasonID = 3
+					}
+				}
+			);
+			addDecision.Execute();
+			Console.WriteLine(addDecision.DecisionID);
+			Console.WriteLine(addDecision.Error);
+		}
 
 	} // class TestNewLoan
 } // namespace

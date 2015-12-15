@@ -166,7 +166,7 @@ GO
 IF OBJECT_ID('NL_DecisionRejectReasons') IS NULL
 BEGIN
 	CREATE TABLE NL_DecisionRejectReasons (
-		DecisionRejectReasonID INT NOT NULL,
+		DecisionRejectReasonID INT IDENTITY(1, 1) NOT NULL,
 		DecisionID BIGINT NOT NULL,
 		RejectReasonID INT NOT NULL,
 		TimestampCounter ROWVERSION,

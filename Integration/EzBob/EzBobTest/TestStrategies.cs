@@ -558,18 +558,17 @@
 			stra.Execute();
 		}
 
-        [Test]
-        public void TestXDaysDue()
-        {
-            var stra = new XDaysDue();
-            stra.Execute();
-        }
+		[Test]
+		public void TestXDaysDue() {
+			var stra = new XDaysDue();
+			stra.Execute();
+		}
 
-        [Test]
-        public void TestXLateLoanJob() {
-            var stra = new LateLoanJob();
-            stra.Execute();
-        }
+		[Test]
+		public void TestXLateLoanJob() {
+			var stra = new LateLoanJob();
+			stra.Execute();
+		}
 
 		[Test]
 		public void ThreeInvalidAttempts() {
@@ -678,7 +677,7 @@
 		[Test]
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
-            int customerID = 16134; //  23504; // 24319;  //24321 ; 
+			int customerID = 16134; //  23504; // 24319;  //24321 ; 
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
@@ -747,27 +746,6 @@
 		}
 
 
-		[Test]
-		public void TestAddDecision() {
-			AddDecision addDecision = new AddDecision(new NL_Decisions {
-				UserID = 357,
-				DecisionTime = DateTime.UtcNow,
-				Notes = " 336",
-				DecisionNameID = (int)DecisionActions.Escalate
-			}, 336, null
-				//,new List<NL_DecisionRejectReasons> {
-				//	new NL_DecisionRejectReasons {
-				//		RejectReasonID = 1
-				//	},
-				//	new NL_DecisionRejectReasons {
-				//		RejectReasonID = 3
-				//	}
-				//}
-			);
-			addDecision.Execute();
-			Console.WriteLine(addDecision.DecisionID);
-			Console.WriteLine(addDecision.Error);
-		}
 
 
 
@@ -796,8 +774,8 @@
 		public void Test1() {
 			Console.WriteLine("AAA");
 		}
-		
-	
+
+
 
 		[Test]
 		public void TestRescheduleOUT() {
@@ -837,7 +815,7 @@
 			reModel.StopFutureInterest = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
-				s.Context.UserID =  357; // 25852
+				s.Context.UserID = 357; // 25852
 				s.Execute();
 				this.m_oLog.Debug("RESULT FOR IN" + s.Result.ToString());
 				// ReSharper disable once CatchAllClause
@@ -875,25 +853,25 @@
 					Console.WriteLine(e);
 				}
 			}*/
-			
-            Loan loan = new Loan();
+
+			Loan loan = new Loan();
 
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
 					int loanid = sr["Id"];
 					// IN
-				  /*  ReschedulingArgument reModel = new ReschedulingArgument();
-					reModel.LoanID = loanid;
-					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
-					reModel.RescheduleIn = true;
-					reModel.SaveToDB = false;
-					reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(15);
-					reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-                    var s = new RescheduleLoan<Loan>(loan, reModel);
-					s.Context.UserID = 357; //25852;
-					s.Execute();
-					this.m_oLog.Debug(s.Result.ToString());
-					this.m_oLog.Debug("IN_RESULT: {0}", s.Result.ToString());*/
+					/*  ReschedulingArgument reModel = new ReschedulingArgument();
+					  reModel.LoanID = loanid;
+					  reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+					  reModel.RescheduleIn = true;
+					  reModel.SaveToDB = false;
+					  reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(15);
+					  reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+					  var s = new RescheduleLoan<Loan>(loan, reModel);
+					  s.Context.UserID = 357; //25852;
+					  s.Execute();
+					  this.m_oLog.Debug(s.Result.ToString());
+					  this.m_oLog.Debug("IN_RESULT: {0}", s.Result.ToString());*/
 
 					// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
@@ -916,14 +894,14 @@
 				}
 			},
 			"select top 100 l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and DateClosed is null", // order by l.Id desc", 
-		//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null order ",
+				//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null order ",
 			CommandSpecies.Text); //top 100 
 		}
-		
+
 
 		[Test]
 		public void TestGetIncomeSms() {
-			var stra = new GetIncomeSms(null,true);
+			var stra = new GetIncomeSms(null, true);
 			stra.Execute();
 		}
 
@@ -941,13 +919,10 @@
 			}
 		}
 
-        [Test]
-        public void TestBrokerLoadCustomerList()
-        {
-            
-            var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com",423);
-            s.Execute();
-
-        }
-}
+		[Test]
+		public void TestBrokerLoadCustomerList() {
+			var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com", 423);
+			s.Execute();
+		}
+	}
 }
