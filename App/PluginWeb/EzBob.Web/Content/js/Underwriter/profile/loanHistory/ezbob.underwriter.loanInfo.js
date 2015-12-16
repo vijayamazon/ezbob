@@ -170,7 +170,13 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			this.$el.find('.discount-exceeds-max-by-loan-source').addClass('hide');
 
-			var sPercentList = this.model.get('DiscountPlanPercents');
+			var discountPlanID = this.model.get('DiscountPlanId');
+			if (!discountPlanID)
+				return [];
+
+			var discountPlan = _.find(this.model.get('DiscountPlans'), function(d) { return d.Id === discountPlanID; });
+			var sPercentList = discountPlan.DiscountPlanPercents;
+
 
 			if (!sPercentList)
 				return [];
@@ -212,9 +218,22 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		statuses: {},
 
-		serializeData: function() {
+		serializeData: function () {
+			var self = this;
+			var loanSource = _.find(this.model.get('AllLoanSources'), function (ls) { return self.model.get('LoanSourceID') === ls.Id; });
+			var loanType = _.find(this.model.get('LoanTypes'), function (lt) { return self.model.get('LoanTypeId') === lt.Id; });
+			var product = _.find(this.model.get('Products'), function (p) { return self.model.get('CurrentProductID') === p.ProductID; });
+			var productType = _.find(this.model.get('ProductTypes'), function (pt) { return self.model.get('CurrentProductTypeID') === pt.ProductTypeID; });
+			var fundingType = _.find(this.model.get('FundingTypes'), function (ft) { return self.model.get('CurrentFundingTypeID') === ft.FundingTypeID; });
+			var discountPlan = _.find(this.model.get('DiscountPlans'), function (dp) { return self.model.get('DiscountPlanId') === dp.Id; });
 			return {
-				m: this.model.toJSON()
+				m: this.model.toJSON(),
+				productName: product ? product.Name : '-',
+				productTypeName: productType ? productType.Name : '-',
+				loanTypeName: loanType ? loanType.Name : '-',
+				loanSourceName: loanSource ? loanSource.Name : '-',
+				fundingTypeName: fundingType ? fundingType.Name : '-',
+				discountPlanName: discountPlan ? discountPlan.Name : '-',
 			};
 		},
 

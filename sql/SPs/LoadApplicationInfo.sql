@@ -56,7 +56,8 @@ BEGIN
 	SELECT
 		RowType = 'DiscountPlan',
 		Id = dp.Id,
-		Name = dp.Name
+		Name = dp.Name,
+		DiscountPlanPercents = CASE WHEN dp.ValuesStr LIKE '%[1-9]%' THEN '(' + dp.ValuesStr + ')' ELSE '' END
 	FROM
 		DiscountPlan dp
 
@@ -130,7 +131,6 @@ BEGIN
 		TypeOfBusiness = c.TypeOfBusiness,
 		CustomerRefNum = c.RefNumber,
 		LoanSourceID = ls.LoanSourceID,
-		LoanSource = ls.LoanSourceName,
 		IsTest = c.IsTest,
 		IsOffline = c.IsOffline,
 		HasYodlee = CONVERT(BIT, CASE WHEN ISNULL((
@@ -146,8 +146,6 @@ BEGIN
 		OfferExpired = CONVERT(BIT, CASE WHEN c.ValidFor <= @Now THEN 1 ELSE 0 END),
 		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending') THEN 1 ELSE 0 END),
 		IsModified = CONVERT(BIT, CASE WHEN r.Id IS NOT NULL AND ISNULL(r.LoanTemplate, '') != '' THEN 1 ELSE 0 END),
-		DiscountPlan = dp.DiscountPlanName,
-		DiscountPlanPercents = CASE WHEN dp.ValuesStr LIKE '%[1-9]%' THEN '(' + dp.ValuesStr + ')' ELSE '' END,
 		DiscountPlanId = dp.DiscountPlanID,
 		OfferValidForHours = CONVERT(INT, CONVERT(DECIMAL(18, 2), cv.Value)),
 		AMLResult = c.AMLResult,
@@ -172,7 +170,6 @@ BEGIN
 		BrokerSetupFeePercent = ISNULL(r.BrokerSetupFeePercent, 0),
 		AllowSendingEmail = CASE WHEN r.Id IS NULL THEN CONVERT(BIT, 0) ELSE CONVERT(BIT, 1 - r.EmailSendingBanned) END,
 		LoanTypeId = lt.LoanTypeID,
-		LoanType = lt.LoanTypeName,
 		OfferStart = ISNULL(r.OfferStart, c.ApplyForLoan),
 		RawOfferStart = r.OfferStart,
 		OfferValidUntil = ISNULL(r.OfferValidUntil, c.ValidFor),

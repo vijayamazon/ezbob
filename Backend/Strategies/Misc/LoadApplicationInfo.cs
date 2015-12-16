@@ -64,24 +64,26 @@
 		}// Execute
 
 		private void BuildDefaultProduct() {
-			Result.CurrentGrade = Result.Grades.FirstOrDefault(x => x.GradeID == Result.GradeID);
-
 			if (Result.ProductSubTypeID.HasValue) {
 				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.ProductSubTypeID == Result.ProductSubTypeID.Value);
 			} else {
 				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.GradeID == Result.GradeID && x.OriginID == Result.OriginID && x.LoanSourceID == Result.LoanSourceID);
 			}
-
+			I_ProductType currentProductType = null;
 			if (Result.CurrentProductSubType != null) {
 				Result.ProductSubTypeID = Result.CurrentProductSubType.ProductSubTypeID;
-				Result.CurrentProductType = Result.ProductTypes.FirstOrDefault(x => x.ProductTypeID == Result.CurrentProductSubType.ProductTypeID);
+				 currentProductType = Result.ProductTypes.FirstOrDefault(x => x.ProductTypeID == Result.CurrentProductSubType.ProductTypeID);
+				Result.CurrentProductTypeID = currentProductType != null ? currentProductType.ProductTypeID : 0;
 				if (Result.CurrentProductSubType.FundingTypeID.HasValue) {
-					Result.CurrentFundingType = Result.FundingTypes.FirstOrDefault(x => x.FundingTypeID == Result.CurrentProductSubType.FundingTypeID.Value);
+					 var currentFundingType = Result.FundingTypes.FirstOrDefault(x => x.FundingTypeID == Result.CurrentProductSubType.FundingTypeID.Value);
+					Result.CurrentFundingTypeID = currentFundingType != null ? currentFundingType.FundingTypeID : 0;
 				}
 			}
 
-			if (Result.CurrentProductType != null) {
-				Result.CurrentProduct = Result.Products.FirstOrDefault(x => x.ProductID == Result.CurrentProductType.ProductID);
+			if (currentProductType != null) {
+				 var currentProduct = Result.Products.FirstOrDefault(x => x.ProductID == currentProductType.ProductID);
+				currentProduct = currentProduct ?? Result.Products.FirstOrDefault(x => x.IsDefault);
+				Result.CurrentProductID = currentProduct != null ? currentProduct.ProductID : 0;
 			}
 			
 			Result.CurrentGradeRange = Result.GradeRanges.FirstOrDefault(x => x.GradeID.HasValue && x.GradeID.Value == Result.GradeID &&

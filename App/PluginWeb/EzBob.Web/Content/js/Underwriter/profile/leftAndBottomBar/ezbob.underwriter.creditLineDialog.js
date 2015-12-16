@@ -5,32 +5,44 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	template: '#credit-line-dialog-template',
 
-	initialize: function (options) {
+	initialize: function(options) {
 		this.cloneModel = this.model.clone();
 		this.cloneModel.set('BrokerSetupFeePercent', options.brokerCommissionDefaultResult.brokerCommission);
 		this.cloneModel.set('ManualSetupFeePercent', options.brokerCommissionDefaultResult.setupFeePercent);
 		this.modelBinder = new Backbone.ModelBinder();
 		this.bindTo(this.cloneModel, 'change:StartingFromDate', this.onChangeStartingDate, this);
+
+		this.bindTo(this.cloneModel, 'change:ProductID', this.onChangeProduct, this);
+		this.bindTo(this.cloneModel, 'change:ProductTypeID', this.onChangeProductType, this);
+		this.bindTo(this.cloneModel, 'change:LoanTypeId', this.onChangeLoanType, this);
+		this.bindTo(this.cloneModel, 'change:LoanSourceID', this.onChangeLoanSource, this);
+
 		this.bind('close', this.closeDialog);
 	}, // initialize
 
 	events: {
 		'click .btnOk': 'save',
-		'change #loan-type': 'onChangeLoanType',
-		'change #loan-source': 'onChangeLoanSource',
+		//'change #loan-type': 'onChangeLoanType',
+		//'change #loan-source': 'onChangeLoanSource',
 		'change #offeredCreditLine': 'onChangeOfferedAmout',
 	}, // events
 
 	ui: {
 		form: 'form',
-		offeredCreditLine: '#offeredCreditLine'
+		offeredCreditLine: '#offeredCreditLine',
+		loanProduct: '#product',
+		loanProductType: '#product-type',
+		loanType: '#loan-type',
+		loanSource: '#loan-source',
+		requestedLoanAmount: '#requestLoanAmount',
+		requestedLoanTerm: '#requestedLoanTerm'
 	}, // ui
 
-	jqoptions: function () {
+	jqoptions: function() {
 		return {
 			modal: true,
 			resizable: false,
-			title: 'Credit Line',
+			title: 'Edit offer',
 			position: 'center',
 			draggable: true,
 			dialogClass: 'creditline-popup',
@@ -38,11 +50,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		};
 	}, // jqoptions
 
-	closeDialog: function () {
+	closeDialog: function() {
 		this.model.fetch();
 	}, // closeDialog
 
-	onChangeStartingDate: function () {
+	onChangeStartingDate: function() {
 		var startingDate = moment.utc(this.cloneModel.get('StartingFromDate'), 'DD/MM/YYYY');
 
 		if (startingDate) {
@@ -51,7 +63,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		} // if
 	}, // onChangeStartingDate
 
-	onChangeOfferedAmout: function () {
+	onChangeOfferedAmout: function() {
 		// BlockUi();
 		var btnOk = this.$el.find('.btnOk');
 
@@ -62,16 +74,24 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
 			id: this.cloneModel.get('CashRequestId'),
 			amount: self.ui.offeredCreditLine.autoNumeric('get')
-		}).done(function (result) {
+		}).done(function(result) {
 			self.cloneModel.set('BrokerSetupFeePercent', result.brokerCommission);
 			self.cloneModel.set('ManualSetupFeePercent', result.setupFeePercent);
-		}).always(function () {
+		}).always(function() {
 			// UnBlockUi();
 			btnOk.show();
 		});
 	}, // onChangeOfferedAmout
 
+	onChangeProduct: function () {
+		console.log('change p');
+	},
+	onChangeProductType: function () {
+		console.log('change pt');
+	},
 	onChangeLoanType: function () {
+		console.log('change lt');
+		/*
 		var loanTypeId = this.$el.find('#loan-type option:selected').val();
 
 		if (isNaN(loanTypeId) || (loanTypeId <= 0))
@@ -79,12 +99,15 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		loanTypeId = parseInt(loanTypeId, 10);
 
-		var currentLoanType = _.find(this.cloneModel.get('LoanTypes'), function (l) { return l.Id === loanTypeId; });
+		var currentLoanType = _.find(this.cloneModel.get('LoanTypes'), function(l) { return l.Id === loanTypeId; });
 
 		this.cloneModel.set('RepaymentPeriod', currentLoanType.RepaymentPeriod);
+		*/
 	}, // onChangeLoanType
 
 	onChangeLoanSource: function () {
+		console.log('change ls');
+		/*
 		var loanSourceId = this.$el.find('#loan-source option:selected').val();
 		if (isNaN(loanSourceId) || (loanSourceId <= 0))
 			return;
@@ -93,7 +116,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		var currentLoanSource = _.find(
 			this.cloneModel.get('AllLoanSources'),
-			function (l) { return l.Id === loanSourceId; }
+			function(l) { return l.Id === loanSourceId; }
 		);
 
 		if (currentLoanSource) {
@@ -103,8 +126,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			var maxInterestRate = currentLoanSource.MaxInterest;
 
 			var fixInterestRate = maxInterestRate &&
-				(maxInterestRate > 0) &&
-				(this.cloneModel.get('InterestRate') > maxInterestRate);
+			(maxInterestRate > 0) &&
+			(this.cloneModel.get('InterestRate') > maxInterestRate);
 
 			if (fixInterestRate)
 				this.cloneModel.set('InterestRate', maxInterestRate);
@@ -116,9 +139,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			this.setSomethingEnabled(this.$el.find('#repaymentPeriodSelection'), false);
 		} else
 			this.setSomethingEnabled(this.$el.find('#repaymentPeriodSelection'), true);
+
+		*/
 	}, // onChangeLoanSource
 
-	save: function () {
+	save: function() {
 		if (!this.ui.form.valid())
 			return;
 
@@ -127,13 +152,13 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var post = $.post(action, postData);
 		var self = this;
 
-		post.done(function () {
+		post.done(function() {
 			self.close();
 			EzBob.App.vent.trigger('newCreditLine:updated');
 		});
 	}, // save
 
-	getPostData: function () {
+	getPostData: function() {
 		var m = this.cloneModel.toJSON();
 		return {
 			id: m.CashRequestId,
@@ -177,6 +202,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			selector: 'input[name="allowSendingEmail"]',
 		},
 		DiscountPlanId: 'select[name="discount-plan"]',
+		ProductID: 'select[name="product"]',
+		ProductTypeID: 'select[name="product-type"]',
 		LoanTypeId: 'select[name="loan-type"]',
 		LoanSourceID: 'select[name="loan-source"]',
 		ManualSetupFeePercent: {
@@ -197,9 +224,16 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		IsCustomerRepaymentPeriodSelectionAllowed: {
 			selector: 'input[name="repaymentPeriodSelection"]',
 		},
+		RequestedLoanAmount: {
+			selector: 'span[name="requestedLoanAmount"]',
+			converter: EzBob.BindingConverters.moneyFormat,
+		},
+		RequestedLoanTerm: {
+			selector: 'span[name="requestedLoanTerm"]'
+		},
 	}, // bindings
 
-	onRender: function () {
+	onRender: function() {
 		this.modelBinder.bind(this.cloneModel, this.el, this.bindings);
 		console.log('cloneModel', this.cloneModel);
 		this.$el.find('#startingFromDate, #offerValidUntil').mask('99/99/9999').datepicker({
@@ -216,7 +250,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		this.$el.find('#manualSetupFeePercent').autoNumeric('init', EzBob.percentFormat);
 		this.$el.find('#brokerSetupFeePercent').autoNumeric('init', EzBob.percentFormat);
 		this.$el.find('#repaymentPeriod').numericOnly();
-
+		this.populateDropDowns();
 		this.onChangeLoanSource();
 
 		this.ui.form.validate({
@@ -252,4 +286,52 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			unhighlight: EzBob.Validation.unhighlight,
 		});
 	}, // onRender
+
+	populateDropDowns: function() {
+		var self = this;
+
+		var currentProduct = self.cloneModel.get('CurrentProduct');
+		this.ui.loanProduct.empty();
+		_.each(this.cloneModel.get('Products'), function(p) {
+			if (p.IsEnabled) {
+				var selected = '';
+				if (currentProduct && p.ProductID === currentProduct.ProductID) {
+					selected = ' selected="selected" ';
+				}
+				self.ui.loanProduct.append($('<option value="'+ p.ProductID +'"'+ selected +'>' + p.Name +'</option>'));
+			}
+		});
+
+		var currentProductType = self.cloneModel.get('CurrentProductType');
+		this.ui.loanProductType.empty();
+		_.each(this.cloneModel.get('ProductTypes'), function (pt) {
+			if (currentProduct && pt.ProductID === currentProduct.ProductID) {
+				var selected = '';
+				if (currentProductType && pt.ProductTypeID === currentProductType.ProductTypeID) {
+					selected = ' selected="selected" ';
+				}
+				self.ui.loanProductType.append($('<option value="' + pt.ProductTypeID + '"' + selected + '>' + pt.Name + '</option>'));
+			}
+		});
+
+		var currentLoanTypeID = self.cloneModel.get('LoanTypeId');
+		this.ui.loanType.empty();
+		_.each(this.cloneModel.get('LoanTypes'), function (lt) {
+			var selected = '';
+			if (lt.Id === currentLoanTypeID) {
+				selected = ' selected="selected" ';
+			}
+			self.ui.loanType.append($('<option value="' + lt.Id + '"' + selected + '>' + lt.Name + '</option>'));
+		});
+
+		var currentLoanSourceID = self.cloneModel.get('LoanSourceID');
+		this.ui.loanSource.empty();
+		_.each(this.cloneModel.get('AllLoanSources'), function (ls) {
+			var selected = '';
+			if (ls.Id === currentLoanSourceID) {
+				selected = ' selected="selected" ';
+			}
+			self.ui.loanSource.append($('<option value="' + ls.Id + '"' + selected + '>' + ls.Name + '</option>'));
+		});
+	}//populateDropDowns
 }); // EzBob.Underwriter.CreditLineDialog

@@ -107,9 +107,6 @@
 		public bool AllowSendingEmail { get; set; }
 
 		[DataMember]
-		public string LoanType { get; set; }
-
-		[DataMember]
 		public bool OfferExpired { get; set; }
 
 		[DataMember]
@@ -139,19 +136,10 @@
 		public DiscountPlanModel[] DiscountPlans { get; set; }
 
 		[DataMember]
-		public string DiscountPlan { get; set; }
-
-		[DataMember]
-		public string DiscountPlanPercents { get; set; }
-
-		[DataMember]
 		public int DiscountPlanId { get; set; }
 
 		[DataMember]
 		public int LoanSourceID { get; set; } // Current loan source id.
-
-		[DataMember]
-		public string LoanSource { get; set; } // Current loan source name.
 
 		[NonTraversable]
 		[DataMember]
@@ -238,7 +226,7 @@
 
 		[NonTraversable]
 		[DataMember]
-		public I_Product CurrentProduct { get; set; }
+		public int CurrentProductID { get; set; }
 
 		[NonTraversable]
 		[DataMember]
@@ -246,7 +234,7 @@
 
 		[NonTraversable]
 		[DataMember]
-		public I_ProductType CurrentProductType { get; set; }
+		public int CurrentProductTypeID { get; set; }
 
 		[NonTraversable]
 		[DataMember]
@@ -262,10 +250,6 @@
 
 		[NonTraversable]
 		[DataMember]
-		public I_Grade CurrentGrade { get; set; }
-		
-		[NonTraversable]
-		[DataMember]
 		public List<I_GradeRange> GradeRanges { get; set; }
 
 		[NonTraversable]
@@ -278,6 +262,6 @@
 
 		[NonTraversable]
 		[DataMember]
-		public I_FundingType CurrentFundingType { get; set; }
+		public int CurrentFundingTypeID { get; set; }
 	} // class ApplicationInfoModel
 } // namespace

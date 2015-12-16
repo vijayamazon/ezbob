@@ -1,24 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:complexType name="I_FundingType">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="FundingTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="I_FundingType" nillable="true" type="tns:I_FundingType" />
-  <xs:complexType name="I_Grade">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="GradeID" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="I_Grade" nillable="true" type="tns:I_Grade" />
   <xs:complexType name="I_GradeRange">
     <xs:sequence>
       <xs:element minOccurs="0" name="GradeID" nillable="true" type="xs:int" />
@@ -40,17 +22,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="I_GradeRange" nillable="true" type="tns:I_GradeRange" />
-  <xs:complexType name="I_Product">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsEnabled" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ProductID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="I_Product" nillable="true" type="tns:I_Product" />
   <xs:complexType name="I_ProductSubType">
     <xs:sequence>
       <xs:element minOccurs="0" name="FundingTypeID" nillable="true" type="xs:int" />
@@ -65,23 +36,21 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="I_ProductSubType" nillable="true" type="tns:I_ProductSubType" />
-  <xs:complexType name="I_ProductType">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ProductID" type="xs:int" />
-      <xs:element minOccurs="0" name="ProductTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="I_ProductType" nillable="true" type="tns:I_ProductType" />
   <xs:complexType name="ArrayOfI_FundingType">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="I_FundingType" nillable="true" type="tns:I_FundingType" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfI_FundingType" nillable="true" type="tns:ArrayOfI_FundingType" />
+  <xs:complexType name="I_FundingType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FundingTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="I_FundingType" nillable="true" type="tns:I_FundingType" />
   <xs:complexType name="ArrayOfI_GradeRange">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="I_GradeRange" nillable="true" type="tns:I_GradeRange" />
@@ -94,6 +63,15 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfI_Grade" nillable="true" type="tns:ArrayOfI_Grade" />
+  <xs:complexType name="I_Grade">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GradeID" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="I_Grade" nillable="true" type="tns:I_Grade" />
   <xs:complexType name="ArrayOfI_ProductSubType">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="I_ProductSubType" nillable="true" type="tns:I_ProductSubType" />
@@ -106,10 +84,32 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfI_ProductType" nillable="true" type="tns:ArrayOfI_ProductType" />
+  <xs:complexType name="I_ProductType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProductID" type="xs:int" />
+      <xs:element minOccurs="0" name="ProductTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="I_ProductType" nillable="true" type="tns:I_ProductType" />
   <xs:complexType name="ArrayOfI_Product">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="I_Product" nillable="true" type="tns:I_Product" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfI_Product" nillable="true" type="tns:ArrayOfI_Product" />
+  <xs:complexType name="I_Product">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsEnabled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProductID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="I_Product" nillable="true" type="tns:I_Product" />
 </xs:schema>

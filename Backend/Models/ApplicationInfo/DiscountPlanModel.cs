@@ -8,5 +8,8 @@ namespace Ezbob.Backend.Models.ApplicationInfo {
 
 		[DataMember]
 		public string Name { get; set; }
+
+		[DataMember]
+		public string DiscountPlanPercents { get; set; }
 	} // class DiscountPlanModel
 } // namespace

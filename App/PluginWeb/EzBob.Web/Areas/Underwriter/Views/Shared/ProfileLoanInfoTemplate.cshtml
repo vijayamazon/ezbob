@@ -441,13 +441,16 @@
             
             <tr>
                 <td>Discount plan</td>
-                <td><%= m.DiscountPlan %>
+                <td><%= discountPlanName %>
                     <i data-title="" class="tltp-left fa fa-question-circle" data-original-title=""></i> 
                     <div class="hide red discount-exceeds-max-by-loan-source">Interest rate for at least one month exceeds max rate for this loan source.</div>
                 </td>
             </tr>
-            @RawCell("Loan Type", "<%= m.LoanType %>")
-            @RawCell("Loan Source", "<%- m.LoanSource %>")
+			@RawCell("Product", "<%= productName %>")
+			@RawCell("Product type", "<%= productTypeName %>")
+			@RawCell("Open platform", "<%= fundingTypeName %>")
+            @RawCell("Loan type", "<%= loanTypeName %>")
+            @RawCell("Loan source", "<%- loanSourceName %>")
             @RawCell("Loan type selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
             @RawCell("Repayment period selection", "<%= m.IsCustomerRepaymentPeriodSelectionAllowed ? 'Yes' : 'No' %>")
         </tbody>
