@@ -181,12 +181,20 @@
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
 			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, null);
-		    Log.Info("GetAffordabilityData for customer {0} returned {1} types {2}", id, ar.MpModel.Affordability.Count,
-                ar.MpModel.Affordability.Count > 0 ? ar.MpModel.Affordability.Select(x => x.TypeStr).Aggregate((a, b) => a + ", " + b) : "");
-		    return Json(new {
-		        customerId = id,
-                Affordabilities = ar.MpModel.Affordability
-		    }, JsonRequestBehavior.AllowGet);
+
+			Log.Info(
+				"GetAffordabilityData for customer {0} returned {1} types {2}",
+				id,
+				ar.MpModel.Affordability.Count,
+				ar.MpModel.Affordability.Count > 0
+					? ar.MpModel.Affordability.Select(x => x.TypeStr).Aggregate((a, b) => a + ", " + b)
+					: ""
+			);
+
+			return Json(new {
+				customerId = id,
+				Affordabilities = ar.MpModel.Affordability
+			}, JsonRequestBehavior.AllowGet);
 		} // GetAffordabilityData
 
 		[Ajax]
