@@ -120,7 +120,7 @@
 				nlPayment.CreationTime = DateTime.UtcNow;
 				nlPayment.PaymentTime = paymentTime;
 				nlPayment.Amount = amount;
-				nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active; // Done, InProgress
+			    nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
 
 				Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
 
