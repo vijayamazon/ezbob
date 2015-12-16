@@ -2426,3 +2426,8 @@ input[type="text"].err-field-red {
 .table tr th.grid-item-ChooseInvestor {
 	text-align: center;
 }
+
+.table td.grid-money {
+	text-align: right;
+	padding-right: 2%;
+}

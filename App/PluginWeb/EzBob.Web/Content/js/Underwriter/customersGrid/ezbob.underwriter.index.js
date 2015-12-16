@@ -117,12 +117,14 @@
 			'broker/:id/:section/': 'broker',
 			'addInvestor': 'addInvestor',
 			'manageInvestor': 'manageInvestors',
+			'manageInvestor/:id': 'manageInvestor',
+			'manageInvestor/:id/': 'manageInvestor',
 			'configInvestor': 'configInvestor',
+			'configInvestor/:id': 'configInvestor',
+			'configInvestor/:id/': 'configInvestor',
 			'accountingInvestor': 'accountingInvestor',
 			'portfolioInvestor': 'portfolioInvestor',
 			'statisticsInvestor': 'statisticsInvestor',
-			'manageInvestor/:id': 'manageInvestor',
-			'manageInvestor/:id/': 'manageInvestor',
 			'*z': 'customers',
 		}, // routes
 
@@ -211,8 +213,8 @@
 			this.customers('investors');
 		},
 
-		configInvestor: function () {
-			this.handleRoute('configInvestor');
+		configInvestor: function (id) {
+			this.handleRoute('configInvestor', id);
 		},
 
 		accountingInvestor: function() {

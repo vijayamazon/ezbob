@@ -16,7 +16,6 @@ EzBob.Underwriter.ConfigInvestorView = Backbone.Marionette.ItemView.extend({
 
 	ui: {
 		form: 'form#config-investor-form'
-
 	},
 
 	serializeData: function() {
@@ -30,10 +29,12 @@ EzBob.Underwriter.ConfigInvestorView = Backbone.Marionette.ItemView.extend({
 	},
 
 	onRender: function() {
-
+		this.$el.find('#investorID').text(this.investorID);
 	},
 
-	show: function() {
+	show: function(id) {
+		this.investorID = id;
+		this.render();
 		return this.$el.show();
 	},
 

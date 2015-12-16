@@ -159,7 +159,7 @@ EzBob.DataTables.Helper = {
 				sName = sName.substr(1);
 			}
 			else if (sName[0] === '$') {
-				sClass = 'numeric';
+				sClass = 'numeric grid-money';
 				sName = sName.substr(1);
 				oRenderFunc = renderMoney;
 			}

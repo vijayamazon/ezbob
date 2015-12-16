@@ -436,8 +436,8 @@
 		public virtual string TimeLimitUntilAutoreject { get; set; }
 		public virtual string FindInvestor { get; set; }
 		public virtual string EditOffer { get; set; }
-		public virtual string SubmitChoosenInvestor { get; set; }
-		public virtual string ManageChoosenInvestor { get; set; }
+		public virtual string SubmitChosenInvestor { get; set; }
+		public virtual string ManageChosenInvestor { get; set; }
 
 		private readonly List<PendingInvestorModel> allinvestors;
 		[NonTraversable]

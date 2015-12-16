@@ -26,8 +26,8 @@ BEGIN
 		'Find Investor' AS FindInvestor,
 		'Edit Offer' AS EditOffer,
 		'ChooseInvestorCombo' AS ChooseInvestor,
-	    'Submit' AS SubmitChoosenInvestor,
-		'Manage' AS ManageChoosenInvestor
+	    'Submit' AS SubmitChosenInvestor,
+		'Manage' AS ManageChosenInvestor
 
 	FROM
 		CashRequests r

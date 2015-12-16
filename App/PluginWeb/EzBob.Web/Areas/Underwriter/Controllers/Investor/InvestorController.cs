@@ -138,5 +138,20 @@
 			return Json(investor, JsonRequestBehavior.AllowGet);
 		}
 
+		[Ajax]
+		[HttpPost]
+		public JsonResult FindInvestor(int customerId) {
+			//TODO find investor chosen for pending offer
+			return Json(true, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public JsonResult SubmitInvestor(int customerID, int investorID) {
+			//TODO submit investor for pending offer
+			return Json(true, JsonRequestBehavior.AllowGet);
+		}
+
+
 	}
 }
