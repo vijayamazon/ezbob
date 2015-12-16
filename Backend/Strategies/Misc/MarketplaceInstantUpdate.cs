@@ -30,17 +30,18 @@
 
 		public void End(string sError, int nTokenExpired) {
 			// flush the session after updating mp
-			var customerMarketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
-			var mp = customerMarketPlaceRepository.Get(this.m_oStart.MarketplaceID);
-			customerMarketPlaceRepository.SaveOrUpdate(mp);
-
+			try {
+				var customerMarketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
+				var mp = customerMarketPlaceRepository.Get(this.m_oStart.MarketplaceID);
+				customerMarketPlaceRepository.SaveOrUpdate(mp);
+			} catch (Exception e) {
+				Log.Alert(e, "Something went really-really not cool while updating marketplace, ignoring it for now.");
+			} // try
 
 			Log.Info("Executing end update for mp {0} ", m_oStart.MarketplaceID);
 			m_oEnd.ErrorMessage = sError;
 			m_oEnd.TokenExpired = nTokenExpired;
 			m_oEnd.ExecuteNonQuery();
-
-			
 		} // End
 
 		private readonly StartMarketplaceUpdate m_oStart;
