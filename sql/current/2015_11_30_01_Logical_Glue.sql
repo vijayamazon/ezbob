@@ -139,6 +139,29 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE name = 'UpperBound' AND id = OBJECT_ID('I_Grade'))
+BEGIN
+	ALTER TABLE I_Grade DROP COLUMN TimestampCounter
+
+	ALTER TABLE I_Grade ADD UpperBound DECIMAL(18, 6) NULL
+
+	EXECUTE('
+		UPDATE I_Grade SET UpperBound = 0.155 WHERE Name = ''A''
+		UPDATE I_Grade SET UpperBound = 0.253 WHERE Name = ''B''
+		UPDATE I_Grade SET UpperBound = 0.347 WHERE Name = ''C''
+		UPDATE I_Grade SET UpperBound = 0.452 WHERE Name = ''D''
+		UPDATE I_Grade SET UpperBound = 0.455 WHERE Name = ''E''
+		UPDATE I_Grade SET UpperBound = 0.552 WHERE Name = ''F''
+		UPDATE I_Grade SET UpperBound = 0.697 WHERE Name = ''G''
+		UPDATE I_Grade SET UpperBound = 1.000 WHERE Name = ''H''
+
+		ALTER TABLE I_Grade ALTER COLUMN UpperBound DECIMAL(18, 6) NOT NULL
+	')
+
+	ALTER TABLE I_Grade ADD TimestampCounter ROWVERSION
+END
+GO
+
 IF OBJECT_ID('LogicalGlueTimeoutSources') IS NULL
 BEGIN
 	CREATE TABLE LogicalGlueTimeoutSources (
