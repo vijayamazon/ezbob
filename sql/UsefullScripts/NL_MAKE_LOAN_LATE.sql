@@ -1,5 +1,5 @@
-declare @monthBack int; set @monthBack = -1;
-declare @loanID int; set @loanID = 5095;
+declare @monthBack int; set @monthBack = -20;
+declare @loanID int; set @loanID = 3223;
 declare @NLloanID bigint; set @NLloanID = (select LoanID from NL_Loans where OldLoanID = @loanID);
 
 if @NLloanID is null return;
@@ -87,9 +87,6 @@ update [dbo].[LoanScheduleTransaction] set [Date] = DATEADD(MONTH, @monthBack, [
 update [dbo].[LoanTransaction] set [PostDate] = DATEADD(MONTH, @monthBack, [PostDate]) where [LoanId] =@loanID;
 
 update [dbo].[LoanOptions] set 
-	[StopAutoCharge]= DATEADD(MONTH, @monthBack, [StopAutoCharge]),
-	[StopInterestAccumulation]= DATEADD(MONTH, @monthBack, [StopInterestAccumulation]),
-	[StopLateFee]= DATEADD(MONTH, @monthBack, [StopLateFee]),
 	[StopAutoChargeDate]= DATEADD(MONTH, @monthBack, [StopAutoChargeDate]),
 	[StopLateFeeFromDate]= DATEADD(MONTH, @monthBack, [StopLateFeeFromDate]),
 	[StopLateFeeToDate]= DATEADD(MONTH, @monthBack, [StopLateFeeToDate]) where [LoanId] =@loanID;

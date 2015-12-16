@@ -16,11 +16,13 @@
                 AStrategy strategy = new SetLateLoanStatus();
                 strategy.Execute();
 
-                strategy = new LateLoanNotification();
-                strategy.Execute();
+                //We dont want to send notifications twice for now...
+                //strategy = new LateLoanNotification();
+                //strategy.Execute();
 
-                strategy = new LateLoanCured();
-                strategy.Execute();
+                //We dont want to change customer status twice for now...
+                //strategy = new LateLoanCured();
+                //strategy.Execute();
                 NL_AddLog(LogType.Info, "Strategy End", null, null, null, null);
 		    } catch (Exception ex) {
                 NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
