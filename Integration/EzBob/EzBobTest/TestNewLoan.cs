@@ -192,9 +192,11 @@
 		[Test]
 		public void AddLoan() {
 			const int userID = 357;
-			const int oldLoanID = 3093;
+			const int oldLoanID = 2140;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
+			if(oldLoan==null)
+				return;
 			DateTime now = oldLoan.Date;
 			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
 				UserID = userID,
