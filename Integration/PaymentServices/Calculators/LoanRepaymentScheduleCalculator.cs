@@ -125,6 +125,7 @@
 			_charges = loan.Charges.OrderBy(x => x.Date).ToList();
 
 			_term = (term ?? DateTime.UtcNow).Date;
+			//CalculationDate = _term;
 
 			_eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
 			_eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
@@ -133,6 +134,11 @@
 
 			Init();
 		}
+
+		//public DateTime CalculationDate {
+		//	get { return _term; }
+		//	private set
+		//}
 
 		private void Init() {
 			_shifted = false;
@@ -512,8 +518,7 @@
 			UpdateInstallmentsState();
 		}
 
-		private decimal 
-			PayRollover(PaymentRollover rollover, PaypointTransaction payment, decimal money) {
+		private decimal PayRollover(PaymentRollover rollover, PaypointTransaction payment, decimal money) {
 			decimal amount;
 			if (
 				rollover != null &&

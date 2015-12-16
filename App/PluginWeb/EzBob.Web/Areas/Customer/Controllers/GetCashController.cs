@@ -65,8 +65,6 @@
 			}
 			var cr = customer.LastCashRequest;
 
-
-
 			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
 			if (customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
@@ -186,20 +184,21 @@
 				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
-				NL_Model nlModel = new NL_Model(cus.Id);
+				//NL_Model nlModel = new NL_Model(cus.Id);
 
+				Loan loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
+				//var userId = this._context.UserId;
+				//var userHostAddress = Request.UserHostAddress;
 
-				Loan loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel);
-				var userId = this._context.UserId;
-				var userHostAddress = Request.UserHostAddress;
+				RebatePayment(amount, loan, trans_id, now);
 
-				var httpContext = System.Web.HttpContext.Current;
+				//var httpContext = System.Web.HttpContext.Current;
 
-				Task.Factory.StartNew(() => this.m_oServiceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel))
-					.ContinueWith(x => RebatePayment(httpContext, userId, userHostAddress, amount, loan, trans_id, now, nlModel)
-				   , CancellationToken.None
-				   , TaskContinuationOptions.None
-				   , TaskScheduler.FromCurrentSynchronizationContext());
+				//Task.Factory.StartNew(() => this.m_oServiceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel))
+				//	.ContinueWith(x => RebatePayment(httpContext, userId, userHostAddress, amount, loan, trans_id, now, nlModel)
+				//   , CancellationToken.None
+				//   , TaskContinuationOptions.None
+				//   , TaskScheduler.FromCurrentSynchronizationContext());
 
 				cus.PayPointErrorsCount = 0;
 
@@ -244,7 +243,14 @@
 			}
 		}
 
-		private TaskScheduler RebatePayment(HttpContext httpContext, int userId, string userHostAddress, decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
+		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now) {
+			if (amount == null || amount <= 0)
+				return;
+			var f = new LoanPaymentFacade();
+			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay");
+		}
+
+	/*	private TaskScheduler RebatePayment(HttpContext httpContext, int userId, string userHostAddress, decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
 
 			System.Web.HttpContext.Current = httpContext;
 
@@ -274,7 +280,7 @@
 			loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, now, "system-repay", false, null, nlPayment);
 
 			return null;
-		}
+		}*/
 
 		[Transactional]
 		[HttpPost]

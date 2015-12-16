@@ -4,7 +4,6 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -44,7 +43,7 @@
 		[HttpGet]
 		[NoCache]
 		[Transactional]
-		public System.Web.Mvc.ActionResult Callback(
+		public ActionResult Callback(
 			bool valid,
 			string trans_id,
 			string code,
@@ -235,7 +234,7 @@
 		} // Callback
 
 		[NoCache]
-		public System.Web.Mvc.ActionResult Error() {
+		public ActionResult Error() {
 			var code = (string)TempData["code"];
 			var message = (string)TempData["message"];
 
@@ -255,13 +254,13 @@
 		} // Error
 
 		[NoCache]
-		public System.Web.Mvc.ActionResult ErrorOfferDate() {
+		public ActionResult ErrorOfferDate() {
 			ViewData["Message"] = "Unfortunately, time of the offer expired! Please apply for a new offer.";
 			return View("ErrorOfferDate");
 		} // ErrorOfferDate
 
 		[NoCache]
-		public System.Web.Mvc.ActionResult Pay(decimal amount, string type, int loanId, int rolloverId) {
+		public ActionResult Pay(decimal amount, string type, int loanId, int rolloverId) {
 			try {
 				log.Msg("Payment request for customer id {0}, amount {1}", this.context.Customer.Id, amount);
 

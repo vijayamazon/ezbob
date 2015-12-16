@@ -120,6 +120,7 @@
 				nlPayment.CreationTime = DateTime.UtcNow;
 				nlPayment.PaymentTime = paymentTime;
 				nlPayment.Amount = amount;
+				nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active; // Done, InProgress
 
 				Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
 
@@ -542,15 +543,11 @@
 			try {
 				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
 				if (nlLoanId > 0) {
-					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>()
-						.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
 					Log.InfoFormat("<<<GetStateAt NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
 				} else {
 					Log.InfoFormat("<<<GetStateAt NL loan for oldid {0} not found >>>", loan.Id);
 				}
-				//long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
-				//var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
-				//Log.InfoFormat("<<< NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
 			} catch (Exception) {
 				Log.InfoFormat("<<<GetStateAt NL_Compare Fail at : {0}", System.Environment.StackTrace);
 			}

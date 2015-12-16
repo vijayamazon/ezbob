@@ -278,6 +278,8 @@
 
 					pconn.Commit();
 
+					Rebate();
+
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
 
@@ -352,6 +354,12 @@
 			}
 		}//Execute
 
+		private void Rebate() {
+			if (LoanID > 0 ) {
+				// get old "rebate" transaction data
+				// call AddPayment 
+			}
+		}
 
 		private void SendMail(string subject, NL_LoanHistory history, List<NL_LoanFees> fees,
 			List<NL_LoanSchedules> schedule, List<NL_LoanAgreements> agreements,

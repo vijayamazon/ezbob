@@ -8,6 +8,7 @@
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using IMailLib;
@@ -294,6 +295,21 @@
             var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, this.now, CurrentValues.Instance.AmountToChargeFrom);
 			var balance = payEarlyCalc.TotalEarlyPayment();
 			mailModel.OutstandingBalance = balance;
+
+			try {
+				GetLoanIDByOldID s1 = new GetLoanIDByOldID(loan.Id);
+				s1.Execute();
+				long nlLoanId = s1.LoanID;
+				if (nlLoanId > 0) {
+					GetLoanState nlState = new GetLoanState(model.CustomerID, nlLoanId, this.now, 1);
+					nlState.Execute();
+					var nlModel = nlState.Result;
+					Log.Info("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Info("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			return mailModel;
 		}//GetCollectionMailModel

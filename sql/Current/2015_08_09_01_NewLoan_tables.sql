@@ -767,12 +767,11 @@ BEGIN
 		CONSTRAINT PK_NL_PaymentStatuses PRIMARY KEY (PaymentStatusID),
 		CONSTRAINT UC_NL_PaymentStatuses UNIQUE (PaymentStatus),
 		CONSTRAINT CHK_NL_PaymentStatuses CHECK (LTRIM(RTRIM(PaymentStatus)) != '')
-	)
+	);
 
 	INSERT INTO NL_PaymentStatuses (PaymentStatusID, PaymentStatus) VALUES
-		(1, 'Pending'),
-		(2, 'Active'),		
-		--(3, 'Cancelled')
+		(1, 'Error'),
+		(2, 'Active'),	
 		(3, 'ChargeBack'),	
 		(4, 'WrongPayment')		
 END
@@ -871,9 +870,10 @@ BEGIN
 	)
 
 	INSERT INTO NL_PaypointTransactionStatuses (PaypointTransactionStatusID, TransactionStatus) VALUES
-		(1, 'Done'),
-		(2, 'Error'),
-		(3, 'Unknown')
+		(1, 'InProgress'),
+		(2, 'Done'),
+		(3, 'Error'),
+		(4, 'Unknown')
 END
 GO
 

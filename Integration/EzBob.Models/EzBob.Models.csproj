@@ -126,6 +126,10 @@
     <Compile Include="SecurityQuestionModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
+      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
+      <Name>EzServiceClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
       <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
       <Name>EzServiceAccessor</Name>

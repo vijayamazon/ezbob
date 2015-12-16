@@ -193,9 +193,6 @@
     <Compile Include="NewLoan\NL_Log.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
-    <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NewLoan\NL_LoanLienLinks.cs" />
     <Compile Include="NewLoan\NL_LoanRollovers.cs" />
     <Compile Include="NewLoan\NL_LoanOptions.cs" />
@@ -208,14 +205,10 @@
     <Compile Include="NewLoan\NL_LoanLegals.cs" />
     <Compile Include="NewLoan\NL_LoanHistory.cs" />
     <Compile Include="NewLoan\NL_LoanSchedules.cs" />
-    <Compile Include="NewLoan\NL_LoanScheduleStatuses.cs" />
-    <Compile Include="NewLoan\NL_LoanStatuses.cs" />
     <Compile Include="NewLoan\NL_OfferFees.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NewLoan\NL_PaymentStatuses.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
-    <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_Payments.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactions.cs" />
     <Compile Include="NewLoan\NL_LoanSchedulePayments.cs" />
@@ -225,7 +218,6 @@
     <Compile Include="NewLoan\NL_Offers.cs" />
     <Compile Include="NewLoan\NL_Decisions.cs" />
     <Compile Include="NewLoan\NL_CashRequests.cs" />
-    <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
     <Compile Include="NewLoan\OfferForLoan.cs" />
     <Compile Include="NL_Log.cs" />
     <Compile Include="PostcodeNutsDBModel.cs" />

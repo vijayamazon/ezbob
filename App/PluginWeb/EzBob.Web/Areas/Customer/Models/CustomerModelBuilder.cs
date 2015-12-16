@@ -102,7 +102,7 @@
 			} // if
 
 			customerModel.Id = customer.Id;
-		    customerModel.RefNumber = customer.RefNumber;
+			customerModel.RefNumber = customer.RefNumber;
 			customerModel.userName = user.Name;
 			customerModel.Email = customer.Name;
 			customerModel.EmailState = EmailConfirmationState.Get(customer);
@@ -253,7 +253,7 @@
 
 			customerModel.OfferStart = customer.OfferStart;
 			customerModel.OfferValidUntil = customer.OfferValidUntil;
-			
+
 
 			customerModel.Loans = customer.Loans
 				.OrderBy(l => l.Status)
@@ -400,7 +400,7 @@
 				CurrentValues.Instance.AmountToChargeFrom
 			);
 			var state = payEarlyCalc.GetState();
-       
+
 			try {
 				ServiceClient service = new ServiceClient();
 				long nlLoanId = service.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;

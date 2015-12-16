@@ -25,14 +25,14 @@
 		DebtManagement = 7
 	} // enum NLLoanStatuses
 
-    public enum NLLoanScheduleStatus {
-        StillToPay,
-        PaidOnTime,
-        Late,
-        PaidEarly,
-        Paid,
-        AlmostPaid
-    }
+	public enum NLLoanScheduleStatus {
+		StillToPay,
+		PaidOnTime,
+		Late,
+		PaidEarly,
+		Paid,
+		AlmostPaid
+	}
 
 	public enum NLFeeTypes {
 		None = 0,
@@ -86,18 +86,20 @@
 	} //enum NLPacnetTransactionStatuses
 
 	public enum NLPaypointTransactionStatuses {
-		Done = 1, // DB table id
-		Error = 2,
-		Unknown = 3
-	} // enum NLPaypointTransactionStatuses
-
-	public enum NLPaymentStatuses {
 		InProgress = 1, // DB table id
-		Active = 2,
+		Done = 2, 
+		Error = 3,
+		Unknown = 4
+	} // enum NLPaypointTransactionStatuses
+	
+	public enum NLPaymentStatuses {
+		Error = 1,				// DB table id => Error, Unknown
+		Active = 2,				// => InProgress, Done
 		ChargeBack = 3,			// cancel payment
-		WrongPayment = 4,		// cancel payment
+		WrongPayment = 4		// cancel payment
 	} // enum NLPaymentStatuses
 
+	
 	public enum NLLoanTransactionMethods {
 		Unknown = 0, // DB table id
 		Pacnet = 1,
