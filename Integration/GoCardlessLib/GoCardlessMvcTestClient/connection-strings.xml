@@ -14,7 +14,8 @@
 	<add name="dev-romanp" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
   
 	<add name="qa" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa01;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
-  <add name="qa-2" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa02;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-2" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa02;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-3" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa03;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa-prod-auto" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_auto;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa-prod-medal" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_medal;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa-prod-test" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
