@@ -13,26 +13,7 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	DECLARE @CompanyID INT = NULL
-
-	------------------------------------------------------------------------------
-
-	SELECT TOP 1
-		@CompanyID = h.CompanyID
-	FROM
-		CustomerCompanyHistory h
-	WHERE
-		h.InsertDate < @Now
-		AND
-		h.CustomerId = @CustomerID
-	ORDER BY
-		h.InsertDate DESC,
-		h.Id DESC
-
-	------------------------------------------------------------------------------
-
-	IF @CompanyID IS NULL
-		SELECT @CompanyID = c.CompanyID FROM Customer c WHERE c.Id = @CustomerID
+	DECLARE @CompanyID INT = dbo.udfGetCustomerCompanyID(@CustomerID, @Now)
 
 	------------------------------------------------------------------------------
 
