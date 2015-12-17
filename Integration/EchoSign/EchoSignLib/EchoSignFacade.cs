@@ -5,10 +5,12 @@
 	using System.Linq;
 	using System.ServiceModel;
 	using ConfigManager;
+	using EchoSignLib.Internal;
 	using EchoSignService;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
+	using Ezbob.Utils.Lingvo;
 	using Ezbob.Utils.Serialization;
 
 	using EchoSignClient = EchoSignLib.EchoSignService.EchoSignDocumentService19PortTypeClient;
@@ -21,27 +23,29 @@
 	} // class EchoSignFacadeExt
 
 	public class EchoSignFacade {
-
 		public EchoSignFacade(AConnection oDB, ASafeLog oLog) {
-			m_bIsReady = false;
+			this.isReady = false;
 
-			m_oLog = oLog.Safe();
+			this.log = oLog.Safe();
 
 			if (oDB == null)
-				throw new Alert(m_oLog, "Cannot create EchoSign façade: database connection not specified.");
+				throw new Alert(this.log, "Cannot create EchoSign façade: database connection not specified.");
 
-			m_oDB = oDB;
+			this.db = oDB;
 
 			try {
 				LoadConfiguration();
 				CreateClient();
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to initialise EchoSign façade.");
-				m_bIsReady = false;
+			} catch (Exception e) {
+				this.log.Alert(e, "Failed to initialize EchoSign façade.");
+				this.isReady = false;
 			} // try
 
-			m_oLog.Say(m_bIsReady ? Severity.Msg : Severity.Warn, "EchoSign façade is {0}ready.", m_bIsReady ? string.Empty : "NOT ");
+			this.log.Say(
+				this.isReady ? Severity.Msg : Severity.Warn,
+				"EchoSign façade is {0}ready.",
+				this.isReady ? string.Empty : "NOT "
+			);
 		} // constructor
 
 		public EchoSignSendResult Send(IEnumerable<EchoSignEnvelope> oCorrespondence) {
@@ -66,30 +70,77 @@
 			return result;
 		} // Send
 
+		public List<EsignatureStatus> ProcessPending(int? nCustomerID = null) {
+			if (!this.isReady) {
+				this.log.Msg("EchoSign cannot process pending - not ready.");
+				return new List<EsignatureStatus>();
+			} // if
+
+			var oSp = new SpLoadPendingEsignatures(nCustomerID, this.db, this.log);
+			oSp.Load();
+
+			this.log.Debug(
+				"{0} pending signature{1} discovered.",
+				oSp.Signatures.Count,
+				oSp.Signatures.Count == 1 ? "" : "s"
+			);
+
+			var oCompleted = new List<EsignatureStatus>();
+
+			foreach (KeyValuePair<int, Esignature> pair in oSp.Signatures) {
+				Esignature oSignature = pair.Value;
+
+				AgreementStatus? nStatus = GetDocumentInfo(oSignature);
+
+				if ((nStatus != null) && this.terminalStatuses.Contains(nStatus.Value)) {
+					this.log.Debug(
+						"Terminal status {0} for e-signature {1} (customer {2}).",
+						nStatus.Value, oSignature.ID, oSignature.CustomerID
+					);
+
+					oCompleted.Add(new EsignatureStatus {
+						CustomerID = oSignature.CustomerID,
+						EsignatureID = oSignature.ID,
+						Status = nStatus.Value,
+					});
+				} // if
+			} // for each signature
+
+			this.log.Debug(
+				"{0} processed, out of them {1} ha{2} completed.",
+				Grammar.Number(oSp.Signatures.Count, "pending signature"),
+				oCompleted.Count,
+				oCompleted.Count == 1 ? "ve" : "s"
+			);
+
+			return oCompleted;
+		} // ProcessPending
+
 		private EchoSignSendResultCode Send(EchoSignEnvelope oLetter, EchoSignSendResult result) {
-			if (!m_bIsReady) {
+			if (!this.isReady) {
 				const string msg = "EchoSign cannot send - not ready.";
-				m_oLog.Warn("{0}", msg);
+				this.log.Warn("{0}", msg);
 				result.AddErrorMessage(msg);
 				return EchoSignSendResultCode.Fail;
 			} // if
 
 			if (oLetter == null) {
 				const string msg = "NULL EchoSign request discovered.";
-				m_oLog.Warn("{0}", msg);
+				this.log.Warn("{0}", msg);
 				result.AddErrorMessage(msg);
 				return EchoSignSendResultCode.Fail;
 			} // if
 
 			if (!oLetter.IsValid) {
 				string msg = string.Format("Some data are missing in EchoSign request: {0}.", oLetter);
-				m_oLog.Warn("{0}", msg);
+				this.log.Warn("{0}", msg);
 				result.AddErrorMessage(msg);
 				return EchoSignSendResultCode.Fail;
 			} // if
 
 			return Send(
 				oLetter.CustomerID,
+				oLetter.CashRequestID,
 				oLetter.Directors ?? new int[0],
 				oLetter.ExperianDirectors ?? new int[0],
 				oLetter.TemplateID,
@@ -100,6 +151,7 @@
 
 		private EchoSignSendResultCode Send(
 			int nCustomerID,
+			long cashRequestID,
 			IEnumerable<int> aryDirectors,
 			IEnumerable<int> aryExperianDirectors,
 			int nTemplateID,
@@ -109,7 +161,7 @@
 			SpLoadDataForEsign sp;
 
 			try {
-				sp = new SpLoadDataForEsign(m_oDB, m_oLog) {
+				sp = new SpLoadDataForEsign(this.db, this.log) {
 					CustomerID = nCustomerID,
 					TemplateID = nTemplateID,
 					DirectorIDs = aryDirectors.ToList(),
@@ -117,10 +169,9 @@
 				};
 
 				sp.Load();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				const string msg = "EchoSign cannot send: failed to load all the data from database.";
-				m_oLog.Warn(e, msg);
+				this.log.Warn(e, msg);
 				result.AddErrorMessage("{0} {1}", msg, e.Message);
 				return EchoSignSendResultCode.Fail;
 			} // try
@@ -131,7 +182,7 @@
 					string.Join("\n", sp.ErrorList)
 				);
 
-				m_oLog.Warn(msg);
+				this.log.Warn(msg);
 				result.AddErrorMessage(msg);
 				return EchoSignSendResultCode.Fail;
 			} // if
@@ -146,17 +197,26 @@
 
 			if (oRecipients.Count < 1) {
 				const string msg = "EchoSign cannot send: no recipients specified.";
-				m_oLog.Warn(msg);
+				this.log.Warn(msg);
 				result.AddErrorMessage(msg);
 				return EchoSignSendResultCode.Fail;
 			} // if
 
 			switch (sp.Template.TemplateType) {
 			case TemplateType.BoardResolution:
-				return SendOne(sp.Template, null, oRecipients, sp.Customer.ID, sp.Template.ID, bSendToCustomer, result);
+				return SendOne(
+					sp.Template,
+					null,
+					oRecipients,
+					sp.Customer.ID,
+					cashRequestID,
+					sp.Template.ID,
+					bSendToCustomer,
+					result
+				);
 
 			case TemplateType.PersonalGuarantee:
-				int nApprovedSum = m_oDB.ExecuteScalar<int>(
+				int nApprovedSum = this.db.ExecuteScalar<int>(
 					"LoadCustomerLatestApprovedSum",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", sp.Customer.ID)
@@ -164,7 +224,7 @@
 
 				if (nApprovedSum <= 0) {
 					const string msg = "EchoSign cannot send: approved sum is not positive.";
-					m_oLog.Warn(msg);
+					this.log.Warn(msg);
 					result.AddErrorMessage(msg);
 					return EchoSignSendResultCode.Fail;
 				} // if
@@ -185,6 +245,7 @@
 						sp.Template.PersonalGuarantee(oRecipient, nApprovedSum),
 						new List<Person> { oRecipient },
 						sp.Customer.ID,
+						cashRequestID,
 						sp.Template.ID,
 						bIsCustomer,
 						result
@@ -207,86 +268,38 @@
 				} // if
 
 			default: {
-				string msg = string.Format(
-					"EchoSign cannot send: don't know how to send template of type {0}.",
-					sp.Template.TemplateType
-				);
-				m_oLog.Warn("{0}", msg);
-				result.AddErrorMessage(msg);
-				return EchoSignSendResultCode.Fail;
+					string msg = string.Format(
+						"EchoSign cannot send: don't know how to send template of type {0}.",
+						sp.Template.TemplateType
+					);
+					this.log.Warn("{0}", msg);
+					result.AddErrorMessage(msg);
+					return EchoSignSendResultCode.Fail;
 				}
 			} // switch
 		} // Send
 
-		public List<EsignatureStatus> ProcessPending(int? nCustomerID = null) {
-			if (!m_bIsReady) {
-				m_oLog.Msg("EchoSign cannot process pending - not ready.");
-				return new List<EsignatureStatus>();
-			} // if
-
-			var oSp = new SpLoadPendingEsignatures(nCustomerID, m_oDB, m_oLog);
-			oSp.Load();
-
-			m_oLog.Debug(
-				"{0} pending signature{1} discovered.",
-				oSp.Signatures.Count,
-				oSp.Signatures.Count == 1 ? "" : "s"
-			);
-
-			var oCompleted = new List<EsignatureStatus>();
-
-			foreach (KeyValuePair<int, Esignature> pair in oSp.Signatures) {
-				Esignature oSignature = pair.Value;
-
-				AgreementStatus? nStatus = GetDocumentInfo(oSignature);
-
-				if ((nStatus != null) && m_oTerminalStatuses.Contains(nStatus.Value)) {
-					m_oLog.Debug(
-						"Terminal status {0} for e-signature {1} (customer {2}).",
-						nStatus.Value, oSignature.ID, oSignature.CustomerID
-					);
-
-					oCompleted.Add(new EsignatureStatus {
-						CustomerID = oSignature.CustomerID,
-						EsignatureID = oSignature.ID,
-						Status = nStatus.Value,
-					});
-				} // if
-			} // for each signature
-
-			m_oLog.Debug(
-				"{0} pending signature{1} processed, out of them {2} ha{3} completed.",
-				oSp.Signatures.Count,
-				oSp.Signatures.Count == 1 ? "" : "s",
-				oCompleted.Count,
-				oCompleted.Count == 1 ? "ve" : "s"
-			);
-
-			return oCompleted;
-		} // ProcessPending
-
 		private SignedDoc GetDocuments(Esignature oSignature) {
-			m_oLog.Msg("Loading documents for the key '{0}' started...", oSignature.DocumentKey);
+			this.log.Msg("Loading documents for the key '{0}' started...", oSignature.DocumentKey);
 
 			GetDocumentsResult oResult;
 
 			try {
-				oResult = m_oEchoSign.getDocuments(
-					m_sApiKey,
+				oResult = this.echoSign.getDocuments(
+					this.apiKey,
 					oSignature.DocumentKey,
 					new GetDocumentsOptions {
 						combine = true,
 						attachSupportingDocuments = true,
 					}
 				);
-			}
-			catch (Exception e) {
-				m_oLog.Warn(e, "Failed to load documents for the key '{0}'.", oSignature.DocumentKey);
+			} catch (Exception e) {
+				this.log.Warn(e, "Failed to load documents for the key '{0}'.", oSignature.DocumentKey);
 				return new SignedDoc { HasValue = false, };
 			} // try
 
 			if (!oResult.success) {
-				m_oLog.Warn(
+				this.log.Warn(
 					"Error while retrieving documents for the key '{0}': code = {1}, message = {2}.",
 					oSignature.DocumentKey, oResult.errorCode, oResult.errorMessage
 				);
@@ -297,36 +310,44 @@
 			int nDocumentCount = oResult.documents == null ? 0 : oResult.documents.Length;
 
 			if (nDocumentCount != 1) {
-				m_oLog.Warn("No documents received for the key '{0}' (document count = {1}).", oSignature.DocumentKey, nDocumentCount);
+				this.log.Warn(
+					"No documents received for the key '{0}' (document count = {1}).",
+					oSignature.DocumentKey,
+					nDocumentCount
+				);
 				return new SignedDoc { HasValue = false, };
 			} // if
 
+			// ReSharper disable once PossibleNullReferenceException
+			// Can be disabled because of documentCount != 1 check just above.
 			DocumentContent doc = oResult.documents[0];
 
-			m_oLog.Debug("Document '{0}' of type '{1}', size {2} bytes.", doc.name, doc.mimetype, doc.bytes.Length);
+			this.log.Debug("Document '{0}' of type '{1}', size {2} bytes.", doc.name, doc.mimetype, doc.bytes.Length);
 
-			m_oLog.Msg("Loading documents for the key '{0}' complete.", oSignature.DocumentKey);
+			this.log.Msg("Loading documents for the key '{0}' complete.", oSignature.DocumentKey);
 
 			return new SignedDoc { HasValue = true, MimeType = doc.mimetype, Content = doc.bytes, };
 		} // GetDocuments
 
 		private AgreementStatus? GetDocumentInfo(Esignature oSignature) {
-			m_oLog.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
+			this.log.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
 
 			DocumentInfo oResult;
 
 			try {
-				oResult = m_oEchoSign.getDocumentInfo(m_sApiKey, oSignature.DocumentKey);
-			}
-			catch (Exception e) {
-				m_oLog.Warn(e, "Failed to load document info for the '{0}'.", oSignature.DocumentKey);
+				oResult = this.echoSign.getDocumentInfo(this.apiKey, oSignature.DocumentKey);
+			} catch (Exception e) {
+				this.log.Warn(e, "Failed to load document info for the '{0}'.", oSignature.DocumentKey);
 				return null;
 			} // try
 
-			m_oLog.Debug("Loading document info result:");
-			m_oLog.Debug("Name: {0}", oResult.name);
-			m_oLog.Debug("Status: {0}", oResult.status);
-			m_oLog.Debug("Expiration: {0}", oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+			this.log.Debug("Loading document info result:");
+			this.log.Debug("Name: {0}", oResult.name);
+			this.log.Debug("Status: {0}", oResult.status);
+			this.log.Debug(
+				"Expiration: {0}",
+				oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			);
 
 			if (oResult.status.HasValue) {
 				SignedDoc doc = GetDocuments(oSignature);
@@ -334,7 +355,7 @@
 				oSignature.SetHistoryAndStatus(oResult.events, oResult.participants);
 
 				if (doc.HasValue) {
-					var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
+					var sp = new SpSaveSignedDocument(this.db, this.log) {
 						EsignatureID = oSignature.ID,
 						StatusID = (int)oResult.status.Value,
 						DoSaveDoc = doc.HasValue,
@@ -346,16 +367,18 @@
 
 					try {
 						sp.ExecuteNonQuery();
-					}
-					catch (Exception e) {
-						m_oLog.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
+					} catch (Exception e) {
+						this.log.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
 					} // try
-				}
-				else
-					m_oLog.Debug("Nothing to save for the key '{0}': no documents received from EchoSign.", oSignature.DocumentKey);
+				} else {
+					this.log.Debug(
+						"Nothing to save for the key '{0}': no documents received from EchoSign.",
+						oSignature.DocumentKey
+					);
+				} // if
 			} // if
 
-			m_oLog.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
+			this.log.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
 
 			return oResult.status;
 		} // GetDocumentInfo
@@ -365,6 +388,7 @@
 			byte[] oFileContent,
 			List<Person> oAddressee,
 			int nCustomerID,
+			long cashRequestID,
 			int nTemplateID,
 			bool bSentToCustomer,
 			EchoSignSendResult result
@@ -385,43 +409,44 @@
 			var dci = new DocumentCreationInfo {
 				name = oTemplate.DocumentName,
 				signatureType = SignatureType.ESIGN,
-				reminderFrequency = m_nReminderFrequency,
+				reminderFrequency = this.reminderFrequency,
 				signatureFlow = SignatureFlow.PARALLEL,
-				daysUntilSigningDeadline = m_nDeadline,
+				daysUntilSigningDeadline = this.deadline,
 				recipients = oRecipients,
-				fileInfos = new [] { fi },
+				fileInfos = new[] { fi },
 			};
 
-			m_oLog.Debug("Sending a document '{0}' to {1}...", oTemplate.DocumentName, sAllRecipients);
+			this.log.Debug("Sending a document '{0}' to {1}...", oTemplate.DocumentName, sAllRecipients);
 
 			DocumentKey[] aryResult;
 
 			try {
-				aryResult = m_oEchoSign.sendDocument(m_sApiKey, null, dci);
-			}
-			catch (Exception e) {
+				aryResult = this.echoSign.sendDocument(this.apiKey, null, dci);
+			} catch (Exception e) {
 				string msg = string.Format(
 					"Something went exceptionally terrible while sending a document '{0}' to {1}.",
 					oTemplate.DocumentName,
 					sAllRecipients
 				);
-				m_oLog.Warn(e, msg);
+				this.log.Warn(e, msg);
 				result.AddErrorMessage(msg);
 				return EchoSignSendResultCode.Fail;
 			} // try
 
 			if (aryResult.Length != 1) {
 				const string msg = "Failed to send documents for signing.";
-				m_oLog.Alert(msg);
+				this.log.Alert(msg);
 				result.AddErrorMessage(msg);
-			}
-			else {
-				m_oLog.Debug("Sending result: document key is '{0}'.", aryResult[0].documentKey);
+			} else {
+				this.log.Debug("Sending result: document key is '{0}'.", aryResult[0].documentKey);
 
-				var sp = new SpSaveEsignSent(m_oDB, m_oLog) {
+				var sp = new SpSaveEsignSent(this.db, this.log) {
 					CustomerID = nCustomerID,
+					CashRequestID = cashRequestID,
 					Directors = oAddressee.Where(x => x.PersonType == PersonType.Director).Select(x => x.ID).ToList(),
-					ExperianDirectors = oAddressee.Where(x => x.PersonType == PersonType.ExperianDirector).Select(x => x.ID).ToList(),
+					ExperianDirectors = oAddressee
+						.Where(x => x.PersonType == PersonType.ExperianDirector)
+						.Select(x => x.ID).ToList(),
 					DocumentKey = aryResult[0].documentKey,
 					SentToCustomer = bSentToCustomer,
 					TemplateID = nTemplateID,
@@ -434,28 +459,27 @@
 		} // SendOne
 
 		private void LoadConfiguration() {
-			m_sApiKey = CurrentValues.Instance.EchoSignApiKey;
-			m_sUrl = CurrentValues.Instance.EchoSignUrl;
+			this.apiKey = CurrentValues.Instance.EchoSignApiKey;
+			this.url = CurrentValues.Instance.EchoSignUrl;
 
-			m_nReminderFrequency = null;
+			this.reminderFrequency = null;
 
 			ReminderFrequency rf;
 			if (Enum.TryParse(CurrentValues.Instance.EchoSignReminder, true, out rf))
-				m_nReminderFrequency = rf;
+				this.reminderFrequency = rf;
 
 			try {
-				m_nDeadline = CurrentValues.Instance.EchoSignDeadline;
-			}
-			catch (Exception) {
-				m_nDeadline = -1;
+				this.deadline = CurrentValues.Instance.EchoSignDeadline;
+			} catch (Exception) {
+				this.deadline = -1;
 			} // try
 
-			if (m_nDeadline < 0)
-				m_nDeadline = null;
+			if (this.deadline < 0)
+				this.deadline = null;
 
-			m_oTerminalStatuses = new SortedSet<AgreementStatus>();
+			this.terminalStatuses = new SortedSet<AgreementStatus>();
 
-			m_oDB.ForEachRowSafe(
+			this.db.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					if (!sr["IsTerminal"])
 						return ActionResult.Continue;
@@ -463,7 +487,7 @@
 					AgreementStatus nStatus;
 
 					if (Enum.TryParse(sr["StatusName"], out nStatus))
-						m_oTerminalStatuses.Add(nStatus);
+						this.terminalStatuses.Add(nStatus);
 
 					return ActionResult.Continue;
 				},
@@ -471,59 +495,68 @@
 				CommandSpecies.StoredProcedure
 			);
 
-			m_oLog.Debug("************************************************************************");
-			m_oLog.Debug("*");
-			m_oLog.Debug("* EchoSign façade configuration - begin:");
-			m_oLog.Debug("*");
-			m_oLog.Debug("************************************************************************");
+			this.log.Debug("************************************************************************");
+			this.log.Debug("*");
+			this.log.Debug("* EchoSign façade configuration - begin:");
+			this.log.Debug("*");
+			this.log.Debug("************************************************************************");
 
-			m_oLog.Debug("API key: {0}.", m_sApiKey);
-			m_oLog.Debug("URL: {0}.", m_sUrl);
-			m_oLog.Debug("Reminder frequency: {0}.", m_nReminderFrequency.HasValue ? m_nReminderFrequency.Value.ToString() : "never");
-			m_oLog.Debug("Signing deadline (days): {0}.", m_nDeadline.HasValue ? m_nDeadline.ToString() : "never");
-			m_oLog.Debug("Terminal statuses: {0}.", string.Join(", ", m_oTerminalStatuses));
+			this.log.Debug("API key: {0}.", this.apiKey);
+			this.log.Debug("URL: {0}.", this.url);
+			this.log.Debug(
+				"Reminder frequency: {0}.",
+				this.reminderFrequency.HasValue ? this.reminderFrequency.Value.ToString() : "never"
+			);
+			this.log.Debug(
+				"Signing deadline (days): {0}.",
+				this.deadline.HasValue ? this.deadline.ToString() : "never"
+			);
+			this.log.Debug("Terminal statuses: {0}.", string.Join(", ", this.terminalStatuses));
 
-			m_oLog.Debug("************************************************************************");
-			m_oLog.Debug("*");
-			m_oLog.Debug("* EchoSign façade configuration - end.");
-			m_oLog.Debug("*");
-			m_oLog.Debug("************************************************************************");
+			this.log.Debug("************************************************************************");
+			this.log.Debug("*");
+			this.log.Debug("* EchoSign façade configuration - end.");
+			this.log.Debug("*");
+			this.log.Debug("************************************************************************");
 		} // LoadConfiguration
 
 		private void CreateClient() {
-			m_oEchoSign = new EchoSignClient(
+			this.echoSign = new EchoSignClient(
 				new BasicHttpsBinding {
 					MaxBufferSize = 65536000,
 					MaxReceivedMessageSize = 65536000,
 					MaxBufferPoolSize = 524288,
 				},
-				new EndpointAddress(m_sUrl)
+				new EndpointAddress(this.url)
 			);
 
-			m_oLog.Debug("EchoSign ping test...");
+			this.log.Debug("EchoSign ping test...");
 
-			Pong pong = m_oEchoSign.testPing(m_sApiKey);
+			Pong pong = this.echoSign.testPing(this.apiKey);
 
 			if (pong.message == ExpectedPong)
-				m_oLog.Debug("EchoSign ping succeeded.");
+				this.log.Debug("EchoSign ping succeeded.");
 			else {
-				m_oLog.Alert("EchoSign ping failed! Pong is: {0}", pong.message);
-				m_bIsReady = false;
+				this.log.Alert("EchoSign ping failed! Pong is: {0}", pong.message);
+				this.isReady = false;
 				return;
 			} // if
 
-			m_oLog.Debug("EchoSign echo test...");
+			this.log.Debug("EchoSign echo test...");
 
-			byte[] oTestData = Serialized.AsBase64(string.Format("Current time is {0}.", DateTime.UtcNow.ToString("MMMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+			byte[] oTestData = Serialized.AsBase64(string.Format(
+				"Current time is {0}.",
+				DateTime.UtcNow.ToString("MMMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+			));
 
-			byte[] oTestResult = m_oEchoSign.testEchoFile(m_sApiKey, oTestData);
+			byte[] oTestResult = this.echoSign.testEchoFile(this.apiKey, oTestData);
 
-			m_bIsReady = (oTestData.Length == oTestResult.Length) && oTestData.SequenceEqual(oTestResult);
+			this.isReady = (oTestData.Length == oTestResult.Length) && oTestData.SequenceEqual(oTestResult);
 
-			if (m_bIsReady)
-				m_oLog.Debug("EchoSign echo succeeded.");
+			if (this.isReady)
+				this.log.Debug("EchoSign echo succeeded.");
 			else
-				m_oLog.Alert("EchoSign echo failed!");
+				this.log.Alert("EchoSign echo failed!");
 		} // CreateClient
 
 		private class SignedDoc {
@@ -532,22 +565,20 @@
 			public byte[] Content { get; set; }
 		} // class SignedDoc
 
-		private SortedSet<AgreementStatus> m_oTerminalStatuses;
+		private SortedSet<AgreementStatus> terminalStatuses;
 
-		private readonly AConnection m_oDB;
-		private readonly ASafeLog m_oLog;
+		private readonly AConnection db;
+		private readonly ASafeLog log;
 
-		private bool m_bIsReady;
+		private bool isReady;
 
-		private string m_sApiKey;
-		private string m_sUrl;
-		private ReminderFrequency? m_nReminderFrequency;
-		private int? m_nDeadline;
+		private string apiKey;
+		private string url;
+		private ReminderFrequency? reminderFrequency;
+		private int? deadline;
 
-		private EchoSignClient m_oEchoSign;
+		private EchoSignClient echoSign;
 
 		private const string ExpectedPong = "It works!";
-
 	} // class EchoSignFacade
-
 } // namespace

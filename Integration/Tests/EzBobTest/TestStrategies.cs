@@ -98,6 +98,7 @@
 			s.Execute();
 		}
 
+
 		[SetUp]
 		public new void Init() {
 			base.Init();
@@ -1376,5 +1377,14 @@
 			Assert.Greater(stra.Result.ProductTypes.Count, 0);
 			Assert.Greater(stra.Result.Products.Count, 0);
 		}
+
+        [Test]
+        public void TestBrokerLoadCustomerList()
+        {
+            
+            var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com",423);
+            s.Execute();
+
+        }
 	}
 }

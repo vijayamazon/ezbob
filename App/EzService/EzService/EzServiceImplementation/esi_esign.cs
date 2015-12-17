@@ -5,7 +5,6 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
-
 		public ActionMetaData EsignProcessPending(int? nCustomerID) {
 			return Execute<EsignProcessPending>(null, null, nCustomerID);
 		} // EsignProcessPending
@@ -15,13 +14,13 @@
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, userId, nCustomerID, bPollStatus);
 
-			List<Esignature> data = new List<Esignature>();
+			List<Esignature> eSignData = new List<Esignature>();
 
-			oInstance.Result.ForEach((ignored, longIgnored, oSignature) => data.Add(oSignature));
+			oInstance.Result.ForEach((ignored, longIgnored, oSignature) => eSignData.Add(oSignature));
 
 			return new EsignatureListActionResult {
 				MetaData = oMetaData,
-				Data = data,
+				Data = eSignData,
 				PotentialSigners = oInstance.PotentialEsigners,
 			};
 		} // LoadEsignatures
@@ -52,6 +51,5 @@
 				Value = oInstance.Result,
 			};
 		} // EsignSend
-
 	} // class EzServiceImplementation
 } // namespace

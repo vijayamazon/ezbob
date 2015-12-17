@@ -15,6 +15,9 @@
 
 		[DataMember]
 		public string RefNumber { get; set; }
+        [DataMember]
+        public bool IsWaitingForSignature { get; set; }
+      
 
 		[DataMember]
 		public string FirstName { get; set; }

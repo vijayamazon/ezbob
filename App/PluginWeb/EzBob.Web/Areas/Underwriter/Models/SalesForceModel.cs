@@ -47,7 +47,8 @@
                 IsPendingDecision = customer.CreditResult.HasValue && 
                                     customer.CreditResult.Value == CreditResultStatus.ApprovedPending &&
                                    (!customer.IsWaitingForSignature.HasValue || (!customer.IsWaitingForSignature.Value)),
-				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.DescriptionAttr() : string.Empty
+				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.DescriptionAttr() : string.Empty,
+				PromoCode = customer.PromoCode
 			};
 
 			if (customer.Company != null) {
@@ -102,6 +103,7 @@
 		public int? AmlScore { get; set; }
 		public string AmlDescription { get; set; }
         public bool IsPendingDecision { get; set; }
+		public string PromoCode { get; set; }
 	}
 	public class SalesForceMarketPlaceModel : SimpleMarketPlaceModel {
 		public DateTime? Created { get; set; }
