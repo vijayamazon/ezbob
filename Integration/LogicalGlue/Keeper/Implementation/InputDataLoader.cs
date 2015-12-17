@@ -7,6 +7,7 @@
 	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
+	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 
@@ -76,7 +77,12 @@
 				break;
 
 			case RowTypes.EquifaxData:
-				Reply reply = JsonConvert.DeserializeObject<Reply>(sr["ResponseData"]);
+				string rawResponse = sr["ResponseData"];
+
+				Reply reply = string.IsNullOrWhiteSpace(rawResponse) ? null : JsonConvert.DeserializeObject<Reply>(
+					Encrypted.Decrypt(rawResponse)
+				);
+
 				Result.EquifaxData = reply.HasEquifaxData() ? reply.Equifax.RawResponse : null;
 				break;
 

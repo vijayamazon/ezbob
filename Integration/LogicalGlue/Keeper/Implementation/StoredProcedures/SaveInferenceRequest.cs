@@ -4,6 +4,8 @@
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
 	using Newtonsoft.Json;
 
 	[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
@@ -37,12 +39,16 @@
 		} // UniqueID 
 
 		public string RequestText {
-			get { return JsonConvert.SerializeObject(this.request); }
+			get { return new Encrypted(JsonConvert.SerializeObject(this.request)).ToString(); }
 			set { }
 		} // RequestText
 
 		public string EquifaxData {
-			get { return this.request.EquifaxData; }
+			get {
+				return string.IsNullOrWhiteSpace(this.request.EquifaxData)
+					? null
+					: new Encrypted(this.request.EquifaxData).ToString();
+			} // get
 			set { }
 		} // EquifaxData
 

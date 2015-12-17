@@ -1,9 +1,9 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
-	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 
 	[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 	internal class SaveRawResponse : ALogicalGlueStoredProc {
@@ -14,7 +14,14 @@
 			ASafeLog log
 		) : base(db, log) {
 			ServiceLogID = requestID;
-			RawResponse = response == null ? null : response.RawReply;
+
+			if (response == null)
+				RawResponse = null;
+			else {
+				RawResponse = string.IsNullOrWhiteSpace(response.RawReply)
+					? null
+					: new Encrypted(response.RawReply).ToString();
+			} // if
 		} // constructor
 
 		public override bool HasValidParameters() {

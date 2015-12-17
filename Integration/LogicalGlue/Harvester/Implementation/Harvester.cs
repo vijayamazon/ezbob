@@ -9,6 +9,7 @@
 	using Ezbob.Integration.LogicalGlue.Exceptions.Harvester;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 	using Newtonsoft.Json;
 
 	public class Harvester : IHarvester {
@@ -28,9 +29,12 @@
 
 				this.log.Say(
 					response.StatusCode == HttpStatusCode.OK ? Severity.Debug : Severity.Warn,
-					"Response status code is {0}, content:\n'{1}'",
+					"Response status code is {0}, content:\n" +
+					"=== Start of encrypted and serialized text ===\n" +
+					"{1}\n" +
+					"=== End of encrypted and serialized text ===",
 					response.StatusCode,
-					responseContent
+					new Encrypted(responseContent)
 				);
 
 				return new Response<Reply>(response.StatusCode, responseContent);
