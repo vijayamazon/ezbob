@@ -7,36 +7,46 @@
 	public class GetLoanIDByOldID : AStrategy {
 
 		public GetLoanIDByOldID(int oldID) {
-			this.OldLoanId = oldID;
+			this.oldLoanId = oldID;
 		} // constructor
 
 		public override string Name { get { return "GetLoanIDByOldID"; } }
 		public string Error { get; private set; }
 		public long LoanID { get; private set; }
-		private readonly long OldLoanId;
+		private readonly int oldLoanId;
 
 		public override void Execute() {
 
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
 				return;
 
-			NL_AddLog(LogType.Info, "Strategy Start", this.OldLoanId, null, null, null);
+			NL_AddLog(LogType.Info, "Strategy Start", this.oldLoanId, null, null, null);
 
-			if (this.OldLoanId == 0) {
+			if (this.oldLoanId == 0) {
 				Error = NL_ExceptionRequiredDataNotFound.OldLoan;
-				NL_AddLog(LogType.Info, "Strategy Failed", this.OldLoanId, null, Error, null);
+				Log.Error(Error);
+				NL_AddLog(LogType.Error, "Failed", this.oldLoanId, null, Error, null);
 				return;
 			}
 
 			try {
-				LoanID = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.OldLoanId));
 
-				NL_AddLog(LogType.Info, "Strategy End", this.OldLoanId, LoanID, null, null);
+				LoanID = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.oldLoanId));
+
+				if (LoanID <= 0) {
+					NL_ExceptionLoanForOldIDNotFound er = new NL_ExceptionLoanForOldIDNotFound(this.oldLoanId);
+					Error = er.Message;
+					NL_AddLog(LogType.DataExsistense, "End", this.oldLoanId, null, Error, null);
+					return;
+				}
+
+				NL_AddLog(LogType.Info, "Strategy End", this.oldLoanId, LoanID, null, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				Error = ex.Message;
-				NL_AddLog(LogType.Error, "Strategy Failed", this.OldLoanId, Error, ex.ToString(), ex.StackTrace);
+				Log.Info(ex);
+				NL_AddLog(LogType.Error, "Strategy Failed", this.oldLoanId, Error, ex.ToString(), ex.StackTrace);
 			}
 		} // Execute
 

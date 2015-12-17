@@ -6,45 +6,32 @@ GO
 
 DECLARE @lastid INT
 
---IF EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
---	DELETE FROM LoanTransactionMethod WHERE Name = 'Write Off'
+IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
+BEGIN
+	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
+END
+ELSE
+	update [LoanTransactionMethod]  set Id = 10 where [Name] = 'Write Off';
 
---IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'WriteOff')
---BEGIN
---	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
---	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'WriteOff', 0)
---END
-
-
--- IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'ChargeBack')
--- BEGIN
-	-- SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
-	-- INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'ChargeBack', 0) 
--- END
-
--- IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'WrongPayment')
--- BEGIN
-	-- SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
-	-- INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'WrongPayment', 0)
--- END
+IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'SetupFeeOffset')
+ BEGIN
+	 SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	 INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SetupFeeOffset', 0)
+END
+ELSE
+	update [LoanTransactionMethod]  set Id = 11 where [Name] = 'SetupFeeOffset';
 
  IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'SystemRepay')
  BEGIN
 	 SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
 	 INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SystemRepay', 0)
  END
-
--- IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'SetupFeeOffset')
--- BEGIN
-	-- SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
-	-- INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SetupFeeOffset', 0)
--- END
--- GO
+ ELSE
+	update [LoanTransactionMethod]  set Id = 12 where [Name] = 'SystemRepay';
 
 
-update [LoanTransactionMethod]  set Id = 10 where [Name] = 'WriteOff';
-update [LoanTransactionMethod]  set Id = 11 where [Name] = 'SetupFeeOffset';
-update [LoanTransactionMethod]  set Id = 12 where [Name] = 'SystemRepay';
+
 
 
 IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'DefaultLoanCalculator')

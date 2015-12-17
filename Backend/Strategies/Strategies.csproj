@@ -219,6 +219,7 @@
     <Compile Include="NewLoan\CancelFee.cs" />
     <Compile Include="NewLoan\CancelPayment.cs" />
     <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanForOldIDNotFound.cs" />
     <Compile Include="NewLoan\GetLoanIDByOldID.cs" />
     <Compile Include="NewLoan\GetCustomerLoans.cs" />
     <Compile Include="NewLoan\UpdateLoanDBState.cs" />

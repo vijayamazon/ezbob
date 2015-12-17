@@ -8,10 +8,10 @@
 
 	public class DeactivateLoanInterestFreeze : AStrategy {
 
-		public DeactivateLoanInterestFreeze(int? OldLoanId, int oldLoanInterestFreezeID, DateTime deactivationDate) {
-			oldLoanId = OldLoanId;
-			OldLoanInterestFreezeID = oldLoanInterestFreezeID;
-			DeactivationDate = deactivationDate;
+		public DeactivateLoanInterestFreeze(NL_LoanInterestFreeze freezeInterval) {
+			//oldLoanId = OldLoanId;
+			//OldLoanInterestFreezeID = oldLoanInterestFreezeID;
+			//DeactivationDate = deactivationDate;
 		}//constructor
 
 		public override string Name { get { return "DeactivateLoanInterestFreeze"; } }

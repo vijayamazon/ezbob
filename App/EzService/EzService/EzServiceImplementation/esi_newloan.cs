@@ -1,207 +1,218 @@
 ﻿namespace EzService.EzServiceImplementation {
-    using System;
-    using System.Collections.Generic;
-    using Ezbob.Backend.Models.NewLoan;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Backend.Strategies.NewLoan;
-    using EzService.ActionResults;
-    using EZBob.DatabaseLib.Model.Database.Loans;
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan;
+	using EzService.ActionResults;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
-    public partial class EzServiceImplementation : IEzServiceNewLoan {
-        public NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
-            AddCashRequest strategy;
-            var amd = ExecuteSync(out strategy, cashRequest.CustomerID, userID, cashRequest);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = strategy.CashRequestID,
-                Error = strategy.Error
-            };
-        } // AddCashRequest
+	public partial class EzServiceImplementation : IEzServiceNewLoan {
+		public NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
+			AddCashRequest s = new AddCashRequest(cashRequest);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = cashRequest.CustomerID;
+			var amd = ExecuteSync(out s, cashRequest.CustomerID, userID, cashRequest);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.CashRequestID,
+				Error = s.Error
+			};
+		} // AddCashRequest
 
-        public NLLongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
-            AddDecision strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, decision, oldCashRequest, decisionRejectReasons);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = strategy.DecisionID,
-                Error = strategy.Error
-            };
-        } // AddDecision
+		public NLLongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
+			AddDecision s = new AddDecision(decision, oldCashRequest, decisionRejectReasons);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, decision, oldCashRequest, decisionRejectReasons);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.DecisionID,
+				Error = s.Error
+			};
+		} // AddDecision
 
-        public NLLongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null) {
-            AddOffer strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, offer, fees);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = strategy.OfferID,
-                Error = strategy.Error
-            };
-        } // AddOffer
+		public NLLongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null) {
+			AddOffer s = new AddOffer(offer, fees);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, offer, fees);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.OfferID,
+				Error = s.Error
+			};
+		} // AddOffer
 
-        public NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
-            AddLoanLegals strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, customerID, loanLegals);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = strategy.LoanLegalsID,
-                Error = strategy.Error
-            };
-        } // AddLoanLegals
+		public NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
+			AddLoanLegals s = new AddLoanLegals(customerID, loanLegals);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, customerID, loanLegals);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.LoanLegalsID,
+				Error = s.Error
+			};
+		} // AddLoanLegals
 
-        public NL_Offers GetLastOffer(int userID, int customerID) {
-            GetLastOffer stra;
-            ExecuteSync(out stra, customerID, userID, customerID);
-            return stra.Offer;
-        } // GetLastOffer
+		public NL_Offers GetLastOffer(int userID, int customerID) {
+			GetLastOffer s = new GetLastOffer(customerID);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			ExecuteSync(out s, customerID, userID, customerID);
+			return s.Offer;
+		} // GetLastOffer
 
-        public ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model) {
-            return Execute<AddLoan>(model.CustomerID, model.UserID, model);
-        } // AddLoan
+		public ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model) {
+			return Execute<AddLoan>(model.CustomerID, model.UserID, model);
+		} // AddLoan
 
-        public NLLongActionResult AddPayment(int customerID, NL_Payments payment, int userID) {
-            AddPayment strategy;
-			 var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment, userID);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = strategy.PaymentID,
-                Error = strategy.Error
-            };
-        } // AddPayment
+		public NLLongActionResult AddPayment(int customerID, NL_Payments payment, int userID) {
+			AddPayment s = new AddPayment(customerID, payment, userID);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, customerID, payment, userID);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.PaymentID,
+				Error = s.Error
+			};
+		} // AddPayment
 
-        public ListNewLoanActionResult GetCustomerLoans(int customerID, int userID) {
-            GetCustomerLoans strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID);
-            return new ListNewLoanActionResult {
-                MetaData = amd,
-                Value = strategy.Loans,
-                Error = strategy.Error
-            };
-        } // GetCustomerLoans
+		public ListNewLoanActionResult GetCustomerLoans(int customerID, int userID) {
+			GetCustomerLoans s = new GetCustomerLoans();
+			s.Context.CustomerID = customerID;
+			s.Context.UserID = userID;
+			var amd = ExecuteSync(out s, customerID, userID);
+			return new ListNewLoanActionResult {
+				MetaData = amd,
+				Value = s.Loans,
+				Error = s.Error
+			};
+		} // GetCustomerLoans
 
-        public NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true) {
-            GetLoanState strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, customerID, loanID, utcNow, userID, getCalculatorState);
-            return new NewLoanModelActionResult {
-                MetaData = amd,
-                Value = strategy.Result,
-                Error = strategy.Error
-            };
-        } // GetLoanState
+		public NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime calculationDate, int userID, bool getCalculatorState = true) {
+			GetLoanState s = new GetLoanState(customerID, loanID, calculationDate, userID, getCalculatorState);
+			s.Context.CustomerID = customerID;
+			s.Context.UserID = userID;
+			var amd = ExecuteSync(out s, customerID, userID, customerID, loanID, calculationDate, userID, getCalculatorState);
+			return new NewLoanModelActionResult {
+				MetaData = amd,
+				Value = s.Result,
+				Error = s.Error
+			};
+		} // GetLoanState
 
-        public NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1) {
-			GetLoanIDByOldID strategy;
-            var amd = ExecuteSync(out strategy, customerID, userID, oldId);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = strategy.LoanID,
-                Error = strategy.Error
-            };
-        } // GetLoanByOldID
+		public NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1) {
+			GetLoanIDByOldID s = new GetLoanIDByOldID(oldId);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, oldId);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.LoanID,
+				Error = s.Error
+			};
+		} // GetLoanByOldID
 
-        public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null) {
-            AddLoanOptions stra;
-            var amd = ExecuteSync(out stra, customerID, userID, loanOptions, oldLoanId, PropertiesUpdateList);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = stra.LoanOptionsID
-            };
-        } // AddLoanOptions
+		public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> propertiesUpdateList = null) {
+			AddLoanOptions s = new AddLoanOptions(loanOptions, oldLoanId, propertiesUpdateList);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, loanOptions, oldLoanId, propertiesUpdateList);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.LoanOptionsID
+			};
+		} // AddLoanOptions
 
-        public NLLongActionResult AddLoanInterestFreeze(int userID,
-                                                        int customerID,
-                                                        int? oldLoanId,
-                                                        NL_LoanInterestFreeze loanInterestFreeze) {
-            AddLoanInterestFreeze stra;
-            var amd = ExecuteSync(out stra, customerID, userID, oldLoanId, loanInterestFreeze);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = stra.LoanInterestFreezeID
-            };
-        } // AddLoanOptions
+		public NLLongActionResult AddLoanInterestFreeze(int userID,int customerID,NL_LoanInterestFreeze loanInterestFreeze) {
+			AddLoanInterestFreeze s = new AddLoanInterestFreeze( loanInterestFreeze);
+			var amd = ExecuteSync(out s, customerID, userID, loanInterestFreeze);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.LoanInterestFreezeID
+			};
+		} // AddLoanOptions
 
-        public NLLongActionResult DeactivateLoanInterestFreeze(int userID,
-                                                                int customerID,
-                                                                int? oldLoanId,
-                                                                int oldLoanInterestFreezeID,
-                                                                DateTime? deactivationDate) {
-            DeactivateLoanInterestFreeze stra;
-            var amd = ExecuteSync(out stra, customerID, userID, oldLoanId, oldLoanInterestFreezeID, deactivationDate);
-            return new NLLongActionResult {
-                MetaData = amd,
-                Value = stra.OldLoanInterestFreezeID
-            };
-        } // AddLoanOptions
+		public NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze) {
+			DeactivateLoanInterestFreeze s;
+			//var amd = ExecuteSync(out s, customerID, userID, oldLoanInterestFreezeID, deactivationDate, oldLoanId);
+			var amd = ExecuteSync(out s, customerID, userID, loanInterestFreeze);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Value = s.OldLoanInterestFreezeID
+			};
+		} // AddLoanOptions
 
-        public ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reAgrs) {
-            Type t;
+		public ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reAgrs) {
+			Type t;
 
-            try {
-                t = Type.GetType(reAgrs.LoanType);
-            }
-            catch (Exception e) {
-                Log.Alert("Fail to get type from the argument {0}. ReschedulingArgument: {1}; error: {2}", reAgrs.LoanType, reAgrs, e);
-                return null;
-            } // try
+			try {
+				t = Type.GetType(reAgrs.LoanType);
+			} catch (Exception e) {
+				Log.Alert("Fail to get type from the argument {0}. ReschedulingArgument: {1}; error: {2}", reAgrs.LoanType, reAgrs, e);
+				return null;
+			} // try
 
-            if (t == null) {
-                Log.Alert("Type t (of loan) not found");
-                return null;
-            } // if
+			if (t == null) {
+				Log.Alert("Type t (of loan) not found");
+				return null;
+			} // if
 
-            //Log.Debug("t is {0}, t.Name={1}", t, t.Name);
+			//Log.Debug("t is {0}, t.Name={1}", t, t.Name);
 
-            ReschedulingResult result = new ReschedulingResult();
+			ReschedulingResult result = new ReschedulingResult();
 
-            try {
-                if (t.Name == "Loan") {
-                    RescheduleLoan<Loan> strategy;
-                    var amd = ExecuteSync(out strategy, customerID, userID, new Loan(), reAgrs);
-                    return new ReschedulingActionResult {
-                        MetaData = amd,
-                        Value = strategy.Result
-                    };
-                } // if
+			try {
+				if (t.Name == "Loan") {
+					RescheduleLoan<Loan> strategy;
+					var amd = ExecuteSync(out strategy, customerID, userID, new Loan(), reAgrs);
+					return new ReschedulingActionResult {
+						MetaData = amd,
+						Value = strategy.Result
+					};
+				} // if
 
-                if (t.Name == "NL_Model") {
-                    //RescheduleLoan<NL_Model> strategy;
-                    // TODO
-                } // if
-            }
-            catch (Exception e) {
-                Log.Alert("Reschedule; exception: ", e);
-                result.Error = "InternalServerError";
-            } // try
+				if (t.Name == "NL_Model") {
+					//RescheduleLoan<NL_Model> strategy;
+					// TODO
+				} // if
+			} catch (Exception e) {
+				Log.Alert("Reschedule; exception: ", e.Message);
+				result.Error = "InternalServerError";
+			} // try
 
-            return new ReschedulingActionResult {
-                Value = result
-            };
-        } // RescheduleLoan
+			return new ReschedulingActionResult {
+				Value = result
+			};
+		} // RescheduleLoan
 
-        public NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
-            ActionMetaData amd = null;
-            BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
-            try {
-                amd = ExecuteSync(out strategy, customerID, userID, model);
-                // ReSharper disable once CatchAllClause
-            }
-            catch (Exception e) {
-                Log.Alert("BuildLoanFromOffer failed: {0}", e);
-                strategy.Result.Error = "InternalServerError";
-            }
-            return new NewLoanModelActionResult() {
-                MetaData = amd,
-                Value = strategy.Result
-            };
-        }
+		public NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
+			ActionMetaData amd = null;
+			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
+			try {
+				amd = ExecuteSync(out strategy, customerID, userID, model);
+				// ReSharper disable once CatchAllClause
+			} catch (Exception e) {
+				Log.Alert("BuildLoanFromOffer failed: {0}", e);
+				strategy.Result.Error = "InternalServerError";
+			}
+			return new NewLoanModelActionResult() {
+				MetaData = amd,
+				Value = strategy.Result
+			};
+		}
 
-		 public NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID) {
-			 CancelPayment strategy;
-			 var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment, userID);
-			 return new NLLongActionResult {
-				 MetaData = amd,
-				 Error = strategy.Error
-			 };
-		 } // AddPayment
+		public NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID) {
+			CancelPayment strategy;
+			var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment, userID);
+			return new NLLongActionResult {
+				MetaData = amd,
+				Error = strategy.Error
+			};
+		} // AddPayment
 
-    } // class EzServiceImplementation
+	} // class EzServiceImplementation
 } // namespace

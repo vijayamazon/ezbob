@@ -41,7 +41,6 @@
 
 		[DataMember]
 		public int? OldID { get; set; }
-
 	
 		/// <summary>
 		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.

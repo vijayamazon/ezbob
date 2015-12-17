@@ -2,6 +2,7 @@
 	using System;
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 
 	public class GetCustomerLoans : AStrategy {
@@ -13,17 +14,24 @@
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
 				return;
 
-			NL_AddLog(LogType.Info, "Strategy Start", Context.CustomerID, null, null, null);
+			if (Context.CustomerID == 0) {
+				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Failed", Context.CustomerID, null, Error, null);
+				return;
+			}
+
+			NL_AddLog(LogType.Info, "Strategy Start", Context.CustomerID, null, Error, null);
 
 			try {
 
 				Loans = DB.Fill<NL_Loans>("NL_CustomerLoansGet",CommandSpecies.StoredProcedure,new QueryParameter("CustomerID", Context.CustomerID)).ToArray();
 
-				NL_AddLog(LogType.Info, "Strategy End", Context.CustomerID, Loans, null, null);
+				NL_AddLog(LogType.Info, "Strategy End", Context.CustomerID, Loans, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				NL_AddLog(LogType.Error, "Strategy Faild", Context.CustomerID, null, ex.ToString(), ex.StackTrace);
+				Error = "nl loans for customer not found";
+				NL_AddLog(LogType.Error, "Strategy Faild", Context.CustomerID, Error, ex.ToString(), ex.StackTrace);
 			}
 		} // Execute
 

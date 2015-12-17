@@ -214,16 +214,16 @@ GO
 --
 -------------------------------------------------------------------------------
 
-DELETE FROM LoanTransactionMethod WHERE Name IN ('WriteOff', 'ChargeBack', 'WrongPayment', 'SystemRepay')
+DELETE FROM LoanTransactionMethod WHERE Name IN ('WriteOff', 'Write Off', 'ChargeBack', 'SetupFee Offset', 'SetupFeeOffset', 'WrongPayment', 'SystemRepay')
 GO
 
 DECLARE @lastid INT
 
-IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
-BEGIN
-	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
-	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
-END
+-- IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
+-- BEGIN
+	-- SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	-- INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
+-- END
 
 -------------------------------------------------------------------------------
 --

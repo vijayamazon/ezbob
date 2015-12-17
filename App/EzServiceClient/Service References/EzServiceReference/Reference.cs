@@ -4402,16 +4402,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> BuildLoanFromOfferAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreeze", ReplyAction="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreezeResponse")]
-        ServiceClientProxy.EzServiceReference.NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, System.Nullable<int> oldLoanId, int oldLoanInterestFreezeID, System.Nullable<System.DateTime> deactivationDate);
+        ServiceClientProxy.EzServiceReference.NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreeze", ReplyAction="http://tempuri.org/IEzServiceNewLoan/DeactivateLoanInterestFreezeResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> DeactivateLoanInterestFreezeAsync(int userID, int customerID, System.Nullable<int> oldLoanId, int oldLoanInterestFreezeID, System.Nullable<System.DateTime> deactivationDate);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> DeactivateLoanInterestFreezeAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreezeResponse")]
-        ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, System.Nullable<int> oldLoanId, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze);
+        ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreeze", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanInterestFreezeResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanInterestFreezeAsync(int userID, int customerID, System.Nullable<int> oldLoanId, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanInterestFreezeAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetCustomerLoans", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetCustomerLoansResponse")]
         ServiceClientProxy.EzServiceReference.ListNewLoanActionResult GetCustomerLoans(int customerID, int userID);
@@ -6039,20 +6039,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BuildLoanFromOfferAsync(userID, customerID, model);
         }
         
-        public ServiceClientProxy.EzServiceReference.NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, System.Nullable<int> oldLoanId, int oldLoanInterestFreezeID, System.Nullable<System.DateTime> deactivationDate) {
-            return base.Channel.DeactivateLoanInterestFreeze(userID, customerID, oldLoanId, oldLoanInterestFreezeID, deactivationDate);
+        public ServiceClientProxy.EzServiceReference.NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze) {
+            return base.Channel.DeactivateLoanInterestFreeze(userID, customerID, loanInterestFreeze);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> DeactivateLoanInterestFreezeAsync(int userID, int customerID, System.Nullable<int> oldLoanId, int oldLoanInterestFreezeID, System.Nullable<System.DateTime> deactivationDate) {
-            return base.Channel.DeactivateLoanInterestFreezeAsync(userID, customerID, oldLoanId, oldLoanInterestFreezeID, deactivationDate);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> DeactivateLoanInterestFreezeAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze) {
+            return base.Channel.DeactivateLoanInterestFreezeAsync(userID, customerID, loanInterestFreeze);
         }
         
-        public ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, System.Nullable<int> oldLoanId, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze) {
-            return base.Channel.AddLoanInterestFreeze(userID, customerID, oldLoanId, loanInterestFreeze);
+        public ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze) {
+            return base.Channel.AddLoanInterestFreeze(userID, customerID, loanInterestFreeze);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanInterestFreezeAsync(int userID, int customerID, System.Nullable<int> oldLoanId, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze) {
-            return base.Channel.AddLoanInterestFreezeAsync(userID, customerID, oldLoanId, loanInterestFreeze);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanInterestFreezeAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanInterestFreeze loanInterestFreeze) {
+            return base.Channel.AddLoanInterestFreezeAsync(userID, customerID, loanInterestFreeze);
         }
         
         public ServiceClientProxy.EzServiceReference.ListNewLoanActionResult GetCustomerLoans(int customerID, int userID) {

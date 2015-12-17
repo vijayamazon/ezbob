@@ -39,10 +39,10 @@
         NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
-		NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, int? oldLoanId, int oldLoanInterestFreezeID, DateTime? deactivationDate);
+		NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze);
 
 		[OperationContract]
-		NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, int? oldLoanId, NL_LoanInterestFreeze loanInterestFreeze);
+		NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze);
 
 		[OperationContract]
         ListNewLoanActionResult GetCustomerLoans(int customerID, int userID);

@@ -8,6 +8,7 @@
 		public static string HistoryEventTime = "History EventTime not found";
 		public static string OldLoan = "Loan.OldLoanID not found";
 		public static string LoanRefNum = "Loan.Refnum not found";
+		public static string OldID = "OldID not found";
 
 		public NL_ExceptionRequiredDataNotFound() { }
 
