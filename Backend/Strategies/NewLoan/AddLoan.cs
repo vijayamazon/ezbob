@@ -389,7 +389,8 @@
 				Notes = rebateTransaction.Description,
 				PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
 				PaypointUniqueID = rebateTransaction.PaypointId,
-				PaypointCardID = rebateTransaction.CardID
+				PaypointCardID = rebateTransaction.CardID,
+				TransactionTime = rebatePayment.PaymentTime
 			});
 
 			AddPayment p = new AddPayment(model.CustomerID, rebatePayment, 1);

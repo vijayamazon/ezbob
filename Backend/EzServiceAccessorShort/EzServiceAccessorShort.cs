@@ -118,7 +118,8 @@
             return stra.Loans.ToList();
         }
 
-        public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true) {
+	    /// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
+	    public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true) {
             var stra = new GetLoanState(customerID, loanID, utcNow);
             stra.Context.CustomerID = customerID;
             stra.Context.UserID = userID;
