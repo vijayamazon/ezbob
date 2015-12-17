@@ -114,11 +114,24 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.currentRepaymentPeriod = this.$('#loan-sliders .period-slider').slider('value');
 
 		var amount = this.$('#loan-sliders .amount-slider').slider('value');
-
-		this.model.set('neededCash', parseInt(amount, 10));
+	    amount = parseInt(amount, 10);
+	    this.model.set('neededCash', amount);
 		this.model.set('loanType', this.currentLoanTypeID);
 		this.model.set('repaymentPeriod', this.currentRepaymentPeriod);
-
+		var maxCash = this.model.get('maxCash');
+		var minLoan = EzBob.Config.MinLoan;
+		var reminingAmountForTopUp = maxCash - amount;
+		if (reminingAmountForTopUp < minLoan) {
+		    this.$el.find('.cannot-take-under-minloan').show();
+		}
+		else {
+		    this.$el.find('.cannot-take-under-minloan').hide();
+		}
+	
+	
+		
+	 
+	   
 		this.neededCashChanged(true);
 	}, // loanSelectionChanged
 
@@ -151,6 +164,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		} else {
 			this.ui.cannotTakeAnotherLoan.hide();
 		}
+	
 	}, // recalculateSchedule
 
 	renderSchedule: function (schedule) {
@@ -219,6 +233,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 				var view = new EzBob.TakeLoanSlidersView({ el: this.$('#loan-sliders'), model: this.model });
 				view.render();
 				EzBob.App.on('loanSelectionChanged', this.loanSelectionChanged, this);
+
+			
 			}
 		} // else
 

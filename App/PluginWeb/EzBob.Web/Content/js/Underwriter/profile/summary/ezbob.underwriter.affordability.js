@@ -30,6 +30,9 @@ EzBob.Underwriter.AffordabilityView = Backbone.Marionette.ItemView.extend({
 	fillRows: function() {
 		var affordability = this.model.get('Affordabilities');
 
+		if (!affordability || !affordability.length)
+			return;
+
 		var template = this.$el.find('tfoot').find('tr').first();
 
 		var target = this.$el.find('tbody');
@@ -70,8 +73,6 @@ EzBob.Underwriter.AffordabilityView = Backbone.Marionette.ItemView.extend({
 			else
 				newEl.find('.fa-exclamation-circle').remove();
 		} // for i
-
-		this.$el.find('tfoot').remove();
 	}, // fillRows
 
 	rotateTable: function () {

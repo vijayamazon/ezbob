@@ -244,27 +244,41 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		// ReSharper restore DuplicatingLocalDeclaration
 
 		echoSignEnvelope.prototype.IsReadyToSend = function() {
-			if (this.CustomerID < 1)
+			if (this.CustomerID < 1) {
+				console.log('Customer id not specified.');
 				return false;
+			} // if
 
-			if (this.CashRequestID < 1)
+			if (this.CashRequestID < 1) {
+				console.log('Cash request id not specified.');
 				return false;
+			} // if
 
-			if (this.TemplateID < 1)
+			if (this.TemplateID < 1) {
+				console.log('Template id not specified.');
 				return false;
+			} // if
 
-			if (!this.SendToCustomer && ((this.Directors.length < 1) && (this.ExperianDirectors.length < 1)))
+			if (!this.SendToCustomer && ((this.Directors.length < 1) && (this.ExperianDirectors.length < 1))) {
+				console.log('"Send to customer" is false and no directors found in both (Experian/non-Experian) lists.');
 				return false;
+			} // if
 
 			var i;
 
-			for (i = 0; i < this.Directors.length; i++)
-				if (this.Directors[i] < 1)
+			for (i = 0; i < this.Directors.length; i++) {
+				if (this.Directors[i] < 1) {
+					console.log('Invalid director id detected in place', i);
 					return false;
+				} // if
+			} // for
 
-			for (i = 0; i < this.ExperianDirectors.length; i++)
-				if (this.ExperianDirectors[i] < 1)
+			for (i = 0; i < this.ExperianDirectors.length; i++) {
+				if (this.ExperianDirectors[i] < 1) {
+					console.log('Invalid Experian director id detected in place', i);
 					return false;
+				} // if
+			} // for
 
 			return true;
 		};
@@ -283,6 +297,14 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			var nTemplateID = parseInt(oChk.data('template-id'), 10);
 
 			oPackage[nTemplateID] = new echoSignEnvelope(nCustomerID, cashRequestID, nTemplateID);
+			console.log(
+				'Template was added to the package: customer =',
+				nCustomerID,
+				'cash request =',
+				cashRequestID,
+				'template =',
+				nTemplateID
+			);
 		});
 
 		if (!bHasDocuments) {
@@ -309,21 +331,53 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			if (oSigner.IsDirector && oPackage[self.boardResolutionTemplateID]) {
 				if (oSigner.DirectorID) {
-					if (oSigner.Type === 'experian')
+					if (oSigner.Type === 'experian') {
 						oPackage[self.boardResolutionTemplateID].ExperianDirectors.push(oSigner.DirectorID);
-					else
+
+						console.log(
+							'Experian director added to BR (id',
+							self.boardResolutionTemplateID,
+							') list:',
+							oSigner.DirectorID
+						);
+					} else {
 						oPackage[self.boardResolutionTemplateID].Directors.push(oSigner.DirectorID);
-				}
-				else
+
+						console.log(
+							'Director added to BR (id',
+							self.boardResolutionTemplateID,
+							') list:',
+							oSigner.DirectorID
+						);
+					} // if
+				} else {
 					oPackage[self.boardResolutionTemplateID].SendToCustomer = true;
+
+					console.log('The customer added to BR (id', self.boardResolutionTemplateID, ') list');
+				} // if
 			} // if
 
 			if (oSigner.IsShareholder && oPackage[self.personalGuaranteeTemplateID]) {
 				if (oSigner.DirectorID) {
-					if (oSigner.Type === 'experian')
+					if (oSigner.Type === 'experian') {
 						oPackage[self.personalGuaranteeTemplateID].ExperianDirectors.push(oSigner.DirectorID);
-					else
+
+						console.log(
+							'Experian director added to PG (id',
+							self.personalGuaranteeTemplateID,
+							') list:',
+							oSigner.DirectorID
+						);
+					} else {
 						oPackage[self.personalGuaranteeTemplateID].Directors.push(oSigner.DirectorID);
+
+						console.log(
+							'Director added to PG (id',
+							self.personalGuaranteeTemplateID,
+							') list:',
+							oSigner.DirectorID
+						);
+					} // if
 				} // if
 			} // if
 		});

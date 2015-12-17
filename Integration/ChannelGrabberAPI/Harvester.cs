@@ -260,15 +260,13 @@
 		private void LoadOrdExp(List<Order> lst, XmlDocument oData, int nIsExpense, AccountData oAccountData) {
 			Debug("Loading list of {0}s...", nIsExpense == 0 ? "order": "expense");
 
-			string sShopTypeName = m_oAccountData.AccountTypeName().ToLower();
-
 			uint nCount = 0;
 
 			foreach (XmlNode oNode in oData.DocumentElement.ChildNodes) {
 				if (oNode.Name != "resource")
 					continue;
 
-				var o = Order.Create(oNode, sShopTypeName, oAccountData, nIsExpense);
+				var o = Order.Create(oNode, m_oAccountData.AccountTypeName().ToLower(), oAccountData, nIsExpense);
 
 				if (o != null) {
 					lst.Add(o);
@@ -399,7 +397,7 @@ Data: {3}
 
 		private string BuildRegisterShopRq(Customer oCustomer) {
 			return string.Format(
-				RegisterShopRq, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower()
+				RegisterShopRq, oCustomer.Id, m_oAccountData.UrlPathElement().ToLower()
 			);
 		} // BuildRegisterShopRq
 
@@ -411,19 +409,19 @@ Data: {3}
 
 		private string BuildValidityRq(Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
-				ValidityReportRq, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id()
+				ValidityReportRq, oCustomer.Id, m_oAccountData.UrlPathElement().ToLower(), oAccountData.Id()
 			);
 		} // BuildValidityRq
 
 		private string BuildGenerateOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
-				sRequest, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id()
+				sRequest, oCustomer.Id, m_oAccountData.UrlPathElement().ToLower(), oAccountData.Id()
 			);
 		} // BuildGenerateOrdExpRq
 
 		private string BuildOrdExpGeneratedRq(string sRequest, Customer oCustomer, AccountData oAccountData, int nRqID) {
 			return string.Format(
-				sRequest, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id(), nRqID
+				sRequest, oCustomer.Id, m_oAccountData.UrlPathElement().ToLower(), oAccountData.Id(), nRqID
 			);
 		} // BuildOrdExpGeneratedRq
 
