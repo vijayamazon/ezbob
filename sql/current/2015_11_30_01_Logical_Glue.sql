@@ -150,8 +150,8 @@ BEGIN
 		UPDATE I_Grade SET UpperBound = 0.253 WHERE Name = ''B''
 		UPDATE I_Grade SET UpperBound = 0.347 WHERE Name = ''C''
 		UPDATE I_Grade SET UpperBound = 0.452 WHERE Name = ''D''
-		UPDATE I_Grade SET UpperBound = 0.455 WHERE Name = ''E''
-		UPDATE I_Grade SET UpperBound = 0.552 WHERE Name = ''F''
+		UPDATE I_Grade SET UpperBound = 0.552 WHERE Name = ''E''
+		UPDATE I_Grade SET UpperBound = 0.594 WHERE Name = ''F''
 		UPDATE I_Grade SET UpperBound = 0.697 WHERE Name = ''G''
 		UPDATE I_Grade SET UpperBound = 1.000 WHERE Name = ''H''
 

@@ -30,9 +30,9 @@
 				this.log.Say(
 					response.StatusCode == HttpStatusCode.OK ? Severity.Debug : Severity.Warn,
 					"Response status code is {0}, content:\n" +
-					"=== Start of encrypted and serialized text ===\n" +
+					"=== Start of encrypted text ===\n" +
 					"{1}\n" +
-					"=== End of encrypted and serialized text ===",
+					"=== End of encrypted text ===",
 					response.StatusCode,
 					new Encrypted(responseContent)
 				);
