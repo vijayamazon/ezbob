@@ -96,6 +96,12 @@ BEGIN
 		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
 	  	LEFT JOIN last_cashrquests_prepare lcp ON lcp.IdCustomer = c.Id
 		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
+	  
+		WHERE
+		c.BrokerID = @BrokerID
+		AND
+		c.OriginID = @BrokerOriginID
+		
 
 	ORDER BY
 		c.Id
