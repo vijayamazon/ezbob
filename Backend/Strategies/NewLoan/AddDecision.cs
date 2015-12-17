@@ -55,7 +55,7 @@
 
 				DecisionID = DB.ExecuteScalar<long>("NL_DecisionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", this.decision));
 
-				if (this.decisionRejectReasons.Count > 0) {
+				if ((this.decisionRejectReasons !=null) && (this.decisionRejectReasons.Count > 0)) {
 					this.decisionRejectReasons.ForEach( rr=>rr.DecisionID = DecisionID);
 					DB.ExecuteNonQuery("NL_DecisionRejectReasonsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_DecisionRejectReasons>("Tbl", this.decisionRejectReasons));
 				}
