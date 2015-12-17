@@ -80,11 +80,11 @@
 			};
 		} // AddPayment
 
-		public ListNewLoanActionResult GetCustomerLoans(int customerID, int userID) {
-			GetCustomerLoans s = new GetCustomerLoans();
+		public ListNewLoanActionResult GetCustomerLoans(int customerID, int userID=1) {
+			GetCustomerLoans s = new GetCustomerLoans(customerID);
 			s.Context.CustomerID = customerID;
 			s.Context.UserID = userID;
-			var amd = ExecuteSync(out s, customerID, userID);
+			var amd = ExecuteSync(out s, customerID, userID, customerID);
 			return new ListNewLoanActionResult {
 				MetaData = amd,
 				Value = s.Loans,

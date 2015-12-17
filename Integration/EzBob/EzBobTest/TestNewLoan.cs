@@ -804,9 +804,7 @@
 
 		[Test]
 		public void GetCustomerLoansTest() {
-			GetCustomerLoans s = new GetCustomerLoans();
-			s.Context.CustomerID = 362;
-			s.Context.UserID = 357;
+			GetCustomerLoans s = new GetCustomerLoans(371);
 			s.Execute();
 			s.Loans.ForEach(l => this.m_oLog.Debug(l));
 		}

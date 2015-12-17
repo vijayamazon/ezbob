@@ -907,8 +907,7 @@
                 DateTime oDate = DateTime.ParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 NL_Model nlModel = new NL_Model(nCustomerID);
                 lc.CreateLoan(oCustomer, nAmount, null, oDate, nlModel);
-                this.serviceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel);
-
+                
                 return Json(new { success = true, error = false, });
             }
             catch (Exception e) {

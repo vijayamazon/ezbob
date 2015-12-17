@@ -53,5 +53,5 @@
 
 		private readonly int customerID;
 		private readonly NL_LoanLegals loanLegals;
-	}//class AddLoan
+	}
 }//ns

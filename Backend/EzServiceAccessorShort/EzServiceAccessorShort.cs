@@ -111,7 +111,7 @@
         }
 
         public List<NL_Loans> GetCustomerLoans(int customerID, int userID) {
-            var stra = new GetCustomerLoans();
+            var stra = new GetCustomerLoans(customerID);
             stra.Context.CustomerID = customerID;
             stra.Context.UserID = userID;
             stra.Execute();

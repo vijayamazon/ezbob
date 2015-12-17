@@ -33,9 +33,12 @@
 		// all validations moved to SP
 
 		public override void Execute() {
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
+
+			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+				return;
+
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);
+
 			try {
 
 				if (Result.CustomerID == 0) {

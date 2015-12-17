@@ -183,23 +183,11 @@
 
 				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
-
-				//NL_Model nlModel = new NL_Model(cus.Id);
-
+	
 				Loan loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
-				//var userId = this._context.UserId;
-				//var userHostAddress = Request.UserHostAddress;
 
 				RebatePayment(amount, loan, trans_id, now);
-
-				//var httpContext = System.Web.HttpContext.Current;
-
-				//Task.Factory.StartNew(() => this.m_oServiceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel))
-				//	.ContinueWith(x => RebatePayment(httpContext, userId, userHostAddress, amount, loan, trans_id, now, nlModel)
-				//   , CancellationToken.None
-				//   , TaskContinuationOptions.None
-				//   , TaskScheduler.FromCurrentSynchronizationContext());
-
+	
 				cus.PayPointErrorsCount = 0;
 
 				TempData["amount"] = loan_amount;
@@ -250,38 +238,6 @@
 			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay");
 		}
 
-	/*	private TaskScheduler RebatePayment(HttpContext httpContext, int userId, string userHostAddress, decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
-
-			System.Web.HttpContext.Current = httpContext;
-
-			if (amount == null || amount <= 0)
-				return null;
-
-			//if (nlModel != null) {
-
-				//long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
-
-				_log.Debug(string.Format("GetCashController.RebatePayment -> oldLoanID {0}", loan.Id));
-
-				var nlPayment = new NL_Payments() {
-					Amount = amount.Value,
-					CreatedByUserID = userId,
-					//	LoanID = nlLoanId,
-					//	PaymentStatusID = (int)NLPaymentStatuses.Active,
-					PaymentSystemType = NLPaymentSystemTypes.Paypoint,
-					PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
-					CreationTime = now,
-					PaymentTime = now,
-					Notes = "Rebate Payment",
-				};
-			//}
-
-			var loanPaymentFacade = new LoanPaymentFacade();
-			loanPaymentFacade.PayLoan(loan, transId, amount.Value, userHostAddress, now, "system-repay", false, null, nlPayment);
-
-			return null;
-		}*/
-
 		[Transactional]
 		[HttpPost]
 		public JsonResult Now(int cardId, decimal amount) {
@@ -291,7 +247,7 @@
 
 			NL_Model nlModel = new NL_Model(cus.Id);
 			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel);
-			this.m_oServiceClient.Instance.AddLoan(nlModel.UserID, nlModel.CustomerID, nlModel);
+			
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
 			return Json(new { url = url });

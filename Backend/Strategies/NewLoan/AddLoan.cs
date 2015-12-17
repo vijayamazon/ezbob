@@ -162,9 +162,10 @@
 					}
 				}
 
+				// prevent creation of same loan
 				if (!string.IsNullOrEmpty(Error)) {
 					Log.Alert("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
-					NL_AddLog(LogType.Error, "Strategy Failed" + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error), this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy " + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error), this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -180,7 +181,7 @@
 
 				if (nlSchedule.Count == 0) {
 					Error += "Failed to generate Schedule/fees";
-					NL_AddLog(LogType.Error, "Strategy Failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -350,20 +351,6 @@
 			if (LoanID == 0)
 				return;
 
-			//LoanTransactionModel rebateTransaction = DB.ExecuteScalar<LoanTransactionModel>(
-			//	"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t" +
-			//	"join PayPointCard c on c.TransactionId = t.PaypointId" +
-			//	"where Description='system-repay' " +
-			//	"and Status='Done' " +
-			//	"and Type ='PaypointTransaction' " +
-			//	"and LoanId = @LoanID " +
-			//	"and cast(PostDate as DATE) = @DATE " +
-			//	"and LoanTransactionMethodId = @LoanTransactionMethodId ",
-			//	CommandSpecies.Auto,
-			//	new QueryParameter("@LoanID", model.Loan.OldLoanID),
-			//	new QueryParameter("@DATE", DateTime.UtcNow.Date),
-			//	new QueryParameter("@LoanTransactionMethodId", (int)NLLoanTransactionMethods.Auto));
-
 			AddLoan.LoanTransactionModel rebateTransaction = DB.FillFirst<AddLoan.LoanTransactionModel>(
 				"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
 				"join PayPointCard c on c.TransactionId = t.PaypointId " +
@@ -378,7 +365,7 @@
 
 			if (rebateTransaction == null || rebateTransaction.Amount == 0) {
 				Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
-				NL_AddLog(LogType.Error, "AddLoan:rebate" + string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
+				NL_AddLog(LogType.DataExsistense, "AddLoan:rebate" + string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
 				return;
 			}
 
@@ -459,51 +446,5 @@
 
 		} // SendMail
 
-
-		/*private void bkpSendMail(string subject, NL_LoanHistory history, List<NL_LoanFees> fees,
-			List<NL_LoanSchedules> schedule, List<NL_LoanAgreements> agreements,
-			NL_Payments setupfeeOffsetpayment = null, NL_LoanFeePayments feePayment = null) {
-
-			string emailToAddress = CurrentValues.Instance.Environment.Value.Contains("Dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
-			string emailFromName = CurrentValues.Instance.MailSenderName;
-			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
-
-			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, LoanID, Error);
-
-			history.Schedule.Clear();
-			history.Schedule = schedule;
-			history.Agreements.Clear();
-			history.Agreements = agreements;
-
-			model.Loan.Histories.Clear();
-			model.Loan.Histories.Add(history);
-			model.Loan.Fees.Clear();
-			model.Loan.Fees = fees;
-
-			var message = string.Format(
-					"<h5>{0}</h5>"
-					+ "<h5>Loan</h5> <pre>{1}</pre>"
-					+ "<h5>FundTransfer</h5> <pre>{2}</pre>"
-					+ "<h5>Setup fee offset payment</h5> <pre>{3}</pre>"
-					+ "<h5>Setup fee offset loan-payment</h5> <pre>{4}</pre>",
-
-				HttpUtility.HtmlEncode(sMsg)
-				, HttpUtility.HtmlEncode(model.Loan.ToString())
-				, HttpUtility.HtmlEncode(model.FundTransfer == null ? "no FundTransfer specified" : model.FundTransfer.ToString())
-				, HttpUtility.HtmlEncode(setupfeeOffsetpayment == null ? "" : setupfeeOffsetpayment.ToString())
-				, HttpUtility.HtmlEncode(feePayment == null ? "" : feePayment.ToString()));
-
-			new Mail().Send(
-				emailToAddress,
-				null,				// message text
-				message,			//html
-				emailFromAddress,	// fromEmail
-				emailFromName,		// fromName
-				subject
-				);
-
-		} // SendMail*/
-
-
-	}//class AddLoan
+	}
 }//ns
