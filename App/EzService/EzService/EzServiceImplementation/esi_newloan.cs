@@ -129,16 +129,19 @@
 
 		public NLLongActionResult AddLoanInterestFreeze(int userID,int customerID,NL_LoanInterestFreeze loanInterestFreeze) {
 			AddLoanInterestFreeze s = new AddLoanInterestFreeze( loanInterestFreeze);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
 			var amd = ExecuteSync(out s, customerID, userID, loanInterestFreeze);
 			return new NLLongActionResult {
 				MetaData = amd,
-				Value = s.LoanInterestFreezeID
+				Value = s.LoanFreezeInterval.LoanInterestFreezeID
 			};
 		} // AddLoanOptions
 
 		public NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze) {
-			DeactivateLoanInterestFreeze s;
-			//var amd = ExecuteSync(out s, customerID, userID, oldLoanInterestFreezeID, deactivationDate, oldLoanId);
+			DeactivateLoanInterestFreeze s = new DeactivateLoanInterestFreeze(loanInterestFreeze);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
 			var amd = ExecuteSync(out s, customerID, userID, loanInterestFreeze);
 			return new NLLongActionResult {
 				MetaData = amd,
