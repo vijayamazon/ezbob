@@ -194,7 +194,7 @@
 		[Test]
 		public void AddLoan() {
 			const int userID = 357;
-			const int oldLoanID = 2140;
+			const int oldLoanID = 5095;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			if (oldLoan == null)
@@ -771,9 +771,12 @@
 
 		[Test]
 		public void GetLoanIDByOldID() {
-			int oldLoanId = 3107;
+			int oldLoanId = 1063;
 			var strategy = new GetLoanIDByOldID(oldLoanId);
 			strategy.Execute();
+
+			m_oLog.Debug(strategy.Error);
+			m_oLog.Debug(strategy.LoanID);
 		}
 
 

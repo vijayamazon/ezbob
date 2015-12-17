@@ -132,7 +132,7 @@
 			s.Context.UserID = userID;
 			s.Context.CustomerID = customerID;
 			var amd = ExecuteSync(out s, customerID, userID, loanInterestFreeze);
-			return new NLLongActionResult {
+			return new NLLongActionResult {	
 				MetaData = amd,
 				Value = s.LoanFreezeInterval.LoanInterestFreezeID
 			};
