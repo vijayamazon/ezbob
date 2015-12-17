@@ -350,11 +350,20 @@
 			if (LoanID == 0)
 				return;
 
-			// get old "rebate" transaction data
-			LoanTransactionModel rebateTransaction=	DB.ExecuteScalar<LoanTransactionModel>(string.Format("select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t join [dbo].[PayPointCard] c " +
-				"on c.TransactionId=t.PaypointId " +
-				"where [Description]='system-repay' and [Status]='Done' and [Type]='PaypointTransaction' and LoanId={0} and cast([PostDate] as DATE)='{1}' and [LoanTransactionMethodId]={2} ",
-				model.Loan.OldLoanID, DateTime.UtcNow.Date, (int)NLLoanTransactionMethods.Auto));
+		    LoanTransactionModel rebateTransaction = DB.ExecuteScalar<LoanTransactionModel>(
+                "select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t" +
+		        "join PayPointCard c on c.TransactionId = t.PaypointId" +
+		        "where Description='system-repay' " +
+		        "and Status='Done' " +
+                "and Type ='PaypointTransaction' " +
+		        "and LoanId = @LoanID " +
+		        "and cast(PostDate as DATE) = @DATE " +
+		        "and LoanTransactionMethodId = @LoanTransactionMethodId ",
+                CommandSpecies.Auto,
+                new QueryParameter("@LoanID", model.Loan.OldLoanID),
+		        new QueryParameter("@DATE", DateTime.UtcNow.Date),
+		        new QueryParameter("@LoanTransactionMethodId", (int)NLLoanTransactionMethods.Auto));
+
 
 			if (rebateTransaction == null || rebateTransaction.Amount == 0) {
 				Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
