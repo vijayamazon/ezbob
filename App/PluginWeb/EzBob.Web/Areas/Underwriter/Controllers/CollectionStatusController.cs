@@ -214,29 +214,40 @@
 		}
 
 		private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId, int loanID) {
-			var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this.context.UserId,
-																						customerId,
-																						loanID,
-																						loanInterestFreeze.Id,
-																						loanInterestFreeze.DeactivationDate);
+                long newLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this.context.UserId).Value;
+                if (newLoanId < 0)
+                    return;
+
+                //NL Loan Options
+                NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
+                    OldID = loanInterestFreeze.Id,
+                    DeactivationDate = loanInterestFreeze.DeactivationDate,
+                    LoanID = newLoanId,
+                    AssignedByUserID = this.context.UserId,
+                    DeletedByUserID = null,
+                };
+                var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this.context.UserId,
+                                                                                          customerId,
+                                                                                          nlLoanInterestFreeze).Value;
 		}
 
 		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId, int loanID) {
-
-			//NL Loan Options
-			NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
-				StartDate = loanInterestFreeze.StartDate,
-				OldID = loanInterestFreeze.Id,
-				ActivationDate = loanInterestFreeze.ActivationDate,
-				DeactivationDate = loanInterestFreeze.DeactivationDate,
-				EndDate = loanInterestFreeze.EndDate,
-				InterestRate = loanInterestFreeze.InterestRate,
-				LoanID = loanInterestFreeze.Loan.Id,
-				AssignedByUserID = this.context.UserId,
-				DeletedByUserID = null,
-			};
-
-			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this.context.UserId, customerId, loanID, nlLoanInterestFreeze);
+                long newLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this.context.UserId).Value;
+                if (newLoanId < 0 )
+		            return;
+                //NL Loan Options
+                NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
+                    StartDate = loanInterestFreeze.StartDate,
+                    OldID = loanInterestFreeze.Id,
+                    ActivationDate = loanInterestFreeze.ActivationDate,
+                    DeactivationDate = loanInterestFreeze.DeactivationDate,
+                    EndDate = loanInterestFreeze.EndDate,
+                    InterestRate = loanInterestFreeze.InterestRate,
+                    LoanID = newLoanId,
+                    AssignedByUserID = this.context.UserId,
+                    DeletedByUserID = null,
+                };
+                var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this.context.UserId, customerId, nlLoanInterestFreeze).Value;
+		    }
 		}
-	}
 }

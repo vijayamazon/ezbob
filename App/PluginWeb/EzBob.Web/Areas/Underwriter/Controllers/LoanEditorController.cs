@@ -490,39 +490,44 @@
 
         private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze)
         {
-
-            var context = ObjectFactory.GetInstance<IWorkplaceContext>();
             int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id;
 
-            var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId, 
-                                                                                        customerId,
-                                                                                        loanInterestFreeze.Loan.Id,
-                                                                                        loanInterestFreeze.Id,
-                                                                                        loanInterestFreeze.DeactivationDate);
-            Log.DebugFormat("NL DeactivateLoanInterestFreeze LoanInterestFreezeID : {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+                long newLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId).Value;
+                if (newLoanId < 0)
+                    return;
+                NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
+                    OldID = loanInterestFreeze.Id,
+                    DeactivationDate = loanInterestFreeze.DeactivationDate,
+                    LoanID = newLoanId,
+                    AssignedByUserID = this._context.UserId,
+                    DeletedByUserID = null,
+                };
+                var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId,
+                                                                                          customerId,
+                                                                                          nlLoanInterestFreeze).Value;
         }
         private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze,
                                             int loanID) {
             
-            int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id; 
+            int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id;
 
-            //NL Loan Options
-            NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze()
-            {
-                StartDate = loanInterestFreeze.StartDate,
-				OldID = loanInterestFreeze.Id,
-                ActivationDate = loanInterestFreeze.ActivationDate,
-                DeactivationDate = loanInterestFreeze.DeactivationDate,
-                EndDate =  loanInterestFreeze.EndDate,
-                InterestRate =  loanInterestFreeze.InterestRate,
-                LoanID = loanInterestFreeze.Loan.Id,
-                AssignedByUserID = this._context.UserId,
-                DeletedByUserID = null,
-            };
+                long newLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId).Value;
+                if (newLoanId < 0)
+                    return;
+                NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
+                    StartDate = loanInterestFreeze.StartDate,
+                    OldID = loanInterestFreeze.Id,
+                    ActivationDate = loanInterestFreeze.ActivationDate,
+                    DeactivationDate = loanInterestFreeze.DeactivationDate,
+                    EndDate = loanInterestFreeze.EndDate,
+                    InterestRate = loanInterestFreeze.InterestRate,
+                    LoanID = newLoanId,
+                    AssignedByUserID = this._context.UserId,
+                    DeletedByUserID = null,
+                };
+                var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze).Value;
+            }
 
-            var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, loanID, nlLoanInterestFreeze);
-            Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
-        }
         private DateTime? NL_GetStopAutoChargeDate(bool AutoCharge,
                                            DateTime? StopAutoChargeDate)
         {

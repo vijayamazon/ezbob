@@ -142,7 +142,7 @@
 			var amd = ExecuteSync(out s, customerID, userID, loanInterestFreeze);
 			return new NLLongActionResult {
 				MetaData = amd,
-				Value = s.OldLoanInterestFreezeID
+				Value = s.LoanFreezeInterval.LoanInterestFreezeID
 			};
 		} // AddLoanOptions
 
