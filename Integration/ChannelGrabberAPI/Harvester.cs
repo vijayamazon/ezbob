@@ -260,15 +260,13 @@
 		private void LoadOrdExp(List<Order> lst, XmlDocument oData, int nIsExpense, AccountData oAccountData) {
 			Debug("Loading list of {0}s...", nIsExpense == 0 ? "order": "expense");
 
-			string sShopTypeName = m_oAccountData.AccountTypeName().ToLower();
-
 			uint nCount = 0;
 
 			foreach (XmlNode oNode in oData.DocumentElement.ChildNodes) {
 				if (oNode.Name != "resource")
 					continue;
 
-				var o = Order.Create(oNode, sShopTypeName, oAccountData, nIsExpense);
+				var o = Order.Create(oNode, m_oAccountData.AccountTypeName().ToLower(), oAccountData, nIsExpense);
 
 				if (o != null) {
 					lst.Add(o);
