@@ -146,7 +146,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		this.signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView({
 			el: this.$el.find('#signature-monitor'),
-			personalInfoModel: this.personalInfoModel
+			personalInfoModel: this.personalInfoModel,
+			loanInfoModel: this.loanInfoModel,
 		});
 
 		this.alertDocs = new EzBob.Underwriter.Docs();

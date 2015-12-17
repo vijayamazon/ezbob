@@ -7,6 +7,7 @@ GO
 
 ALTER PROCEDURE SaveEsignSent
 @CustomerID INT,
+@CashRequestID BIGINT,
 @TemplateID INT,
 @DocumentKey NVARCHAR(255),
 @SentToCustomer BIT,
@@ -21,8 +22,8 @@ BEGIN
 
 	BEGIN TRANSACTION
 
-	INSERT INTO Esignatures (CustomerID, EsignTemplateID, DocumentKey, SendDate, StatusID)
-		VALUES (@CustomerID, @TemplateID, @DocumentKey, @Now, 0)
+	INSERT INTO Esignatures (CustomerID, EsignTemplateID, DocumentKey, SendDate, StatusID, CashRequestID)
+		VALUES (@CustomerID, @TemplateID, @DocumentKey, @Now, 0, @CashRequestID)
 
 	SET @SignatureID = SCOPE_IDENTITY()
 

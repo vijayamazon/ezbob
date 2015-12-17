@@ -18,12 +18,15 @@
 
 		public string Name { get; set; }
 
+		public string UrlElement { get; set; }
+
 		public SecurityData SecurityData { get; set; }
 
 		public VendorInfo() {
 			Behaviour = Behaviour.Default;
 			Name = "";
 			DisplayName = "";
+			UrlElement = "";
 			Description = "";
 			InternalID = (new Guid()).ToString();
 			HasExpenses = false;
@@ -45,6 +48,10 @@
 			DisplayName = (DisplayName ?? "").Trim();
 			if (DisplayName == string.Empty)
 				DisplayName = Name;
+
+			UrlElement = (UrlElement ?? "").Trim();
+			if (UrlElement == string.Empty)
+				UrlElement = Name;
 
 			Description = (Description ?? "").Trim();
 			if (Description == string.Empty)

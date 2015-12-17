@@ -1,41 +1,43 @@
 ﻿@model dynamic
 
 <script id="affordability-template" type="text/template">
-    <table class="table" id="affordabilityTable" style="margin-top: -7px !important;">
-        <tr>
-            <td></td>
-            <td>Annual</td>
-            <td>Revenues</td>
-            <td>Opex</td>
-            <td><strong>Value added</strong></td>
-            <td>Salaries</td>
-            <td>tax</td>
-            <td><strong>EBIDA</strong></td>
-            <td>Loan repayment</td>
-            <td><strong>FCF</strong></td>
-            <td>Turnover Trend</td>
-        </tr>
-        <%_.each(affordability, function(af,i) { if(af.TypeStr) {%>
-        <tr>
-            <td>
-                <strong>
-                    <%-af.TypeStr%>
-                    <%if(af.ErrorMsgs){%>
-                    <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-title="<%-af.ErrorMsgs%>"></i>
-                    <%}%>
-                </strong>
-            </td>
-            <td><span><%-af.IsAnnualized ? 'Annualized ' : '' %><%-EzBob.formatDate2(af.DateFrom)%> - <%-EzBob.formatDate2(af.DateTo)%></span></td>
-            <td><%-EzBob.formatPoundsNoDecimals(af.Revenues)%></td>
-            <td><%-EzBob.formatPoundsNoDecimals(af.Opex)%></td>
-            <td><strong><%-EzBob.formatPoundsNoDecimals(af.ValueAdded)%></strong></td>
-            <td><%-EzBob.formatPoundsNoDecimals(af.Salaries)%></td>
-            <td><%-EzBob.formatPoundsNoDecimals(af.Tax)%></td>
-            <td><strong><%-EzBob.formatPoundsNoDecimals(af.Ebitda)%></strong></td>
-            <td><%-EzBob.formatPoundsNoDecimals(af.LoanRepayment)%></td>
-            <td><strong><span class="alert <%- af.FreeCashFlow < 0 ? 'alert-danger' : 'alert-success' %>"><%-EzBob.formatPoundsNoDecimals(af.FreeCashFlow)%></span></strong></td>
-            <td><span class="affordability-trend-<%-i%>"></span></td>
-        </tr>
-        <%}});%>
-    </table>
+	<table class="table" id="affordabilityTable" style="margin-top: -7px !important;">
+		<thead>
+			<tr>
+				<td></td>
+				<td>Annual</td>
+				<td>Revenues</td>
+				<td>Opex</td>
+				<td><strong>Value added</strong></td>
+				<td>Salaries</td>
+				<td>tax</td>
+				<td><strong>EBIDA</strong></td>
+				<td>Loan repayment</td>
+				<td><strong>FCF</strong></td>
+				<td>Turnover Trend</td>
+			</tr>
+		</thead>
+		<tbody></tbody>
+
+		<tfoot class="hide the-row-in-this-table-section-is-template-for-tbody">
+			<tr>
+				<td>
+					<strong>
+						<span data-field-name="TypeStr"></span>
+						<i class="fa fa-exclamation-circle" data-toggle="tooltip" data-title=""></i>
+					</strong>
+				</td>
+				<td><span><span data-field-name="Annualized"></span><span data-field-name="DateFrom"></span> - <span data-field-name="DateTo"></span></span></td>
+				<td data-field-name="Revenues"></td>
+				<td data-field-name="Opex"></td>
+				<td><strong data-field-name="ValueAdded"></strong></td>
+				<td data-field-name="Salaries"></td>
+				<td data-field-name="Tax"></td>
+				<td><strong data-field-name="Ebitda"></strong></td>
+				<td data-field-name="LoanRepayment"></td>
+				<td><strong><span class="alert" data-field-name="FreeCashFlow"></span></strong></td>
+				<td><span class="affordability-trend-"></span></td>
+			</tr>
+		</tfoot>
+	</table>
 </script>

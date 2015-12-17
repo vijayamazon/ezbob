@@ -7,21 +7,22 @@
 	using Newtonsoft.Json;
 	using Ezbob.Database;
 	using Code.UiEvents;
+	using EzBob.Web.Infrastructure.csrf;
 
 	public class UiActionController : Controller {
-
+		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		public JsonResult Save(string version, string history) {
 			Dictionary<string, UiCachePkgModel> oHistory = null;
+
 			try {
 				oHistory = JsonConvert.DeserializeObject<Dictionary<string, UiCachePkgModel>>(history);
-			}
-			catch (Exception ex) {
-				ms_oLog.Warn(ex, "Failed to deserialize history: {0}", history);
-			}
+			} catch (Exception ex) {
+				log.Warn(ex, "Failed to de-serialize history: {0}", history);
+			} // try
 
 			if ((oHistory == null) || (oHistory.Count < 1)) {
-				ms_oLog.Warn("No data received, nothing done.");
+				log.Warn("No data received, nothing done.");
 				return Json(new { result = "success" });
 			} // if
 
@@ -29,20 +30,26 @@
 
 			string sRemoteIP = this.GetRemoteIP();
 
-			AConnection oDB = DbConnectionGenerator.Get(ms_oLog);
+			AConnection oDB = DbConnectionGenerator.Get(log);
 
-			int nBrowserVersionID = this.GetBrowserVersionID(version, oDB, ms_oLog);
+			int nBrowserVersionID = this.GetBrowserVersionID(version, oDB, log);
 
 			if (nBrowserVersionID == 0)
 				return Json(new { result = "Failed to save browser version." });
 
-			// ms_oLog.Debug("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:", oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID );
+			//log.Debug(
+			//	"{1} at {2}: UiActionController.Save(version: {3} - {0}), data:",
+			//	oBrowserVersion.UserAgent,
+			//	sSessionID,
+			//	sRemoteIP,
+			//	oBrowserVersion.ID
+			//);
 
 			var oSavedPackages = new List<string>();
 			var oFailedPackages = new List<UiCachePkgModel.SaveResult>();
 
 			foreach (KeyValuePair<string, UiCachePkgModel> pair in oHistory) {
-				// ms_oLog.Debug("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
+				// log.Debug("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
 
 				UiCachePkgModel.SaveResult oResult = pair.Value.Save(oDB, nBrowserVersionID, sRemoteIP, sSessionID);
 
@@ -55,7 +62,6 @@
 			return Json(new { result = "success", saved = oSavedPackages, failures = oFailedPackages });
 		} // Save
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(UiActionController));
-
+		private static readonly ASafeLog log = new SafeILog(typeof(UiActionController));
 	} // class UiActionController
 } // namespace
