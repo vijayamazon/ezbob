@@ -350,26 +350,40 @@
 			if (LoanID == 0)
 				return;
 
-		    LoanTransactionModel rebateTransaction = DB.ExecuteScalar<LoanTransactionModel>(
-                "select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t" +
-		        "join PayPointCard c on c.TransactionId = t.PaypointId" +
-		        "where Description='system-repay' " +
-		        "and Status='Done' " +
-                "and Type ='PaypointTransaction' " +
-		        "and LoanId = @LoanID " +
-		        "and cast(PostDate as DATE) = @DATE " +
-		        "and LoanTransactionMethodId = @LoanTransactionMethodId ",
-                CommandSpecies.Auto,
-                new QueryParameter("@LoanID", model.Loan.OldLoanID),
-		        new QueryParameter("@DATE", DateTime.UtcNow.Date),
-		        new QueryParameter("@LoanTransactionMethodId", (int)NLLoanTransactionMethods.Auto));
+			//LoanTransactionModel rebateTransaction = DB.ExecuteScalar<LoanTransactionModel>(
+			//	"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t" +
+			//	"join PayPointCard c on c.TransactionId = t.PaypointId" +
+			//	"where Description='system-repay' " +
+			//	"and Status='Done' " +
+			//	"and Type ='PaypointTransaction' " +
+			//	"and LoanId = @LoanID " +
+			//	"and cast(PostDate as DATE) = @DATE " +
+			//	"and LoanTransactionMethodId = @LoanTransactionMethodId ",
+			//	CommandSpecies.Auto,
+			//	new QueryParameter("@LoanID", model.Loan.OldLoanID),
+			//	new QueryParameter("@DATE", DateTime.UtcNow.Date),
+			//	new QueryParameter("@LoanTransactionMethodId", (int)NLLoanTransactionMethods.Auto));
 
+			AddLoan.LoanTransactionModel rebateTransaction = DB.FillFirst<AddLoan.LoanTransactionModel>(
+				"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
+				"join PayPointCard c on c.TransactionId = t.PaypointId " +
+				"where Description='system-repay' " +
+				"and Status='Done' " +
+				"and Type ='PaypointTransaction' " +
+				"and LoanId = @loanID " +
+				"and DateDiff(d, t.PostDate, @dd) = 0 " +
+				 "and LoanTransactionMethodId = @methodId",
+				CommandSpecies.Text, new QueryParameter("@loanID", model.Loan.OldLoanID), new QueryParameter("@dd", DateTime.UtcNow.Date), new QueryParameter("@methodId", (int)NLLoanTransactionMethods.Auto)
+			 );
 
 			if (rebateTransaction == null || rebateTransaction.Amount == 0) {
 				Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
 				NL_AddLog(LogType.Error, "AddLoan:rebate" + string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
 				return;
 			}
+
+			NL_AddLog(LogType.Info, "Addloan:rebate", new object[] { rebateTransaction }, Error, null, null);
+
 			// call AddPayment 
 			NL_Payments rebatePayment = new NL_Payments() {
 				Amount = rebateTransaction.Amount,

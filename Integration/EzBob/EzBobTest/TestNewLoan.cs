@@ -1,6 +1,8 @@
 ﻿namespace EzBobTest {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
+	using System.Data.SqlTypes;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -195,7 +197,7 @@
 			const int oldLoanID = 2140;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
-			if(oldLoan==null)
+			if (oldLoan == null)
 				return;
 			DateTime now = oldLoan.Date;
 			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
@@ -369,50 +371,6 @@
 			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan);
 		}
 
-		[Test]
-		public void TestLoanCalculator() {
-			/*
-			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
-			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
-			// new schedules
-			try {
-				//var shedules = calculator.CreateSchedule();
-			} catch (InterestOnlyMonthsCountException interestOnlyMonthsCountException) {
-				Console.WriteLine(interestOnlyMonthsCountException);
-			} catch (NegativeMonthlyInterestRateException negativeMonthlyInterestRateException) {
-				Console.WriteLine(negativeMonthlyInterestRateException);
-			} catch (NegativeLoanAmountException negativeLoanAmountException) {
-				Console.WriteLine(negativeLoanAmountException);
-			} catch (NegativeRepaymentCountException negativeRepaymentCountException) {
-				Console.WriteLine(negativeRepaymentCountException);
-			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
-				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
-			}	*/
-
-			decimal A = 6000m;
-			decimal m = 600m;
-			decimal r = 0.06m;
-			decimal F = 100m;
-
-			decimal n = Math.Ceiling(A / (m - A * r));
-			Console.WriteLine("n=" + n);
-			decimal total1 = A + A * r * ((n + 1) / 2);
-			Console.WriteLine(total1);
-			decimal B = (A + F);
-
-			//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
-			//	Console.WriteLine(total2);
-
-			decimal k = Math.Ceiling(n + 2 * F / (A * r));
-
-			/*	Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
-				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);			*/
-			// TODO: revive (Test)
-			/*		
-		Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
-		ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);		
-		Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));			*/
-		}
 
 
 		[Test]
@@ -605,19 +563,14 @@
 				Console.WriteLine(nlExceptionInputDataInvalid.Message);
 			}
 			NL_Model model = dbState.Result;
-
 			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			var oldLoan = loanRep.Get(model.Loan.OldLoanID);
 			var rolloverRep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
 			var oldRollover = rolloverRep.GetByLoanId(oldLoan.Id).FirstOrDefault();
-
 			// copy rollover+fee+payment to NL
 			if (oldRollover != null && oldRollover.PaidPaymentAmount > 0) {
-
 				DateTime rolloverConfirmationDate = (DateTime)oldRollover.CustomerConfirmationDate;
-
 				var fee = model.Loan.Fees.LastOrDefault();
-
 				model.Loan.Fees.Add(new NL_LoanFees() {
 					Amount = CurrentValues.Instance.RolloverCharge,
 					AssignTime = rolloverConfirmationDate,
@@ -628,9 +581,7 @@
 					LoanID = loanID,
 					Notes = "rollover fee"
 				});
-
 				fee = model.Loan.Fees.LastOrDefault();
-
 				model.Loan.AcceptedRollovers.Add(new NL_LoanRollovers() {
 					CreatedByUserID = 1,
 					CreationTime = oldRollover.Created,
@@ -640,7 +591,6 @@
 					LoanHistoryID = model.Loan.LastHistory().LoanHistoryID,
 					LoanFeeID = fee.LoanFeeID
 				});
-
 				var	transaction = oldLoan.Transactions.LastOrDefault();
 				if (transaction != null) {
 					model.Loan.Payments.Add(new NL_Payments() {
@@ -656,20 +606,15 @@
 					});
 				}
 			}
-
 			try {
-
 				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.RolloverRescheduling();
 				this.m_oLog.Debug("{0}", calc);
-
 				// old calc
 				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 				oldCalc.GetState();
 				this.m_oLog.Debug("old loan State: {0}", oldLoan);
-
 				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);
-
 			} catch (Exception exception) {
 				this.m_oLog.Error("{0}", exception.Message);
 			}
@@ -802,208 +747,7 @@
 			}
 		}
 
-		[Test]
-		public void Comparertest() {
-			try {
-				const	int  customerID =56;
-				DateTime nowtime = DateTime.UtcNow;
-
-				NL_Model m1 = new NL_Model(customerID);
-				m1.Loan.LoanID = 6;
-
-				m1.Loan.Histories.Add(new NL_LoanHistory() {
-					LoanHistoryID = 100,
-					EventTime = nowtime,
-					Amount = 1000,
-					LoanID = m1.Loan.LoanID,
-					InterestRate = 0.34m,
-					RepaymentCount = 5
-				});
-
-				m1.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 11, Principal = 100, PlannedDate = new DateTime(2015, 10, 20) });
-				m1.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 12, Principal = 100, PlannedDate = new DateTime(2015, 11, 20) });
-				m1.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 13, Principal = 100, PlannedDate = new DateTime(2015, 12, 20) });
-				/*
-								m1.Loan.Payments.Add(new NL_Payments() {
-									Amount = 250m,
-									PaymentID = 12,
-									CreatedByUserID = 1,
-									PaymentTime = DateTime.UtcNow,
-									PaymentMethodID = 1,
-									PaymentStatusID = 1,
-									Notes = "pay1",
-									LoanID = m1.Loan.LoanID
-								});
-
-								m1.Loan.Payments.FirstOrDefault()
-									.FeePayments.Add(new NL_LoanFeePayments() {
-										Amount = 0m,
-										LoanFeeID = 15,
-										LoanFeePaymentID = 9,
-										PaymentID = 7
-									});*/
-
-				NL_Model m2 = new NL_Model(customerID);
-				m2.Loan.LoanID = m1.Loan.LoanID;
-
-				m2.Loan.Histories.Add(new NL_LoanHistory() {
-					LoanHistoryID = 100,
-					EventTime = nowtime,
-					Amount = 1000,
-					LoanID = m1.Loan.LoanID,
-					InterestRate = 0.34m,
-					RepaymentCount = 5
-				});
-
-				m2.Loan.Histories.Add(new NL_LoanHistory() {
-					LoanHistoryID = 0,
-					EventTime = nowtime.AddMonths(4),
-					Amount = 2700,
-					LoanID = m2.Loan.LoanID,
-					InterestRate = 0.95m,
-					RepaymentCount = 9
-				});
-
-				m2.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 11, Principal = 100, PlannedDate = new DateTime(2015, 10, 20), ClosedTime = DateTime.UtcNow.AddDays(4), LoanScheduleStatusID = 3 });
-				m2.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 12, Principal = 100, PlannedDate = new DateTime(2015, 11, 20) });
-				m2.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 13, Principal = 100, PlannedDate = new DateTime(2015, 12, 20) });
-
-
-				m2.Loan.LastHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 77, Principal = 300, PlannedDate = new DateTime(2015, 12, 20), ClosedTime = DateTime.UtcNow, LoanScheduleStatusID = 5 });
-
-
-				/*m2.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 12, Principal = 100, PlannedDate = new DateTime(2015, 11, 20) });
-				m2.Loan.FirstHistory().Schedule.Add(new NL_LoanSchedules() { Interest = 13, Principal = 100, PlannedDate = new DateTime(2015, 12, 20) });
-
-				m2.Loan.Payments.Add(new NL_Payments() {
-					Amount = 250m,
-					PaymentID = 12,
-					CreatedByUserID = 1,
-					PaymentTime = DateTime.UtcNow,
-					PaymentMethodID = 1,
-					PaymentStatusID = 1,
-					Notes = "pay1",
-					LoanID = m2.Loan.LoanID
-				});
-
-				m2.Loan.Payments.FirstOrDefault()
-					.FeePayments.Add(new NL_LoanFeePayments() {
-						Amount = 50m,
-						LoanFeeID = 15,
-						LoanFeePaymentID = 3,
-						PaymentID = 6
-					});
-
-				m2.Loan.Payments.FirstOrDefault()
-					.FeePayments.Add(new NL_LoanFeePayments() {
-						Amount = 66m,
-						LoanFeeID = 77,
-						LoanFeePaymentID = 88,
-						PaymentID = 77
-					});*/
-
-
-				int propertyCount = typeof(NL_Loans).GetProperties().Length + typeof(NL_Loans).GetMembers().Length + typeof(NL_Loans).GetFields().Length;
-				propertyCount += typeof(NL_Payments).GetProperties().Length + typeof(NL_Payments).GetMembers().Length + typeof(NL_Payments).GetFields().Length;
-				propertyCount += typeof(NL_LoanSchedules).GetProperties().Length + typeof(NL_LoanSchedules).GetMembers().Length + typeof(NL_LoanSchedules).GetFields().Length;
-				propertyCount += typeof(NL_LoanHistory).GetProperties().Length + typeof(NL_LoanHistory).GetMembers().Length + typeof(NL_LoanHistory).GetFields().Length;
-				propertyCount += typeof(NL_LoanSchedulePayments).GetProperties().Length + typeof(NL_LoanSchedulePayments).GetMembers().Length + typeof(NL_LoanSchedulePayments).GetFields().Length;
-				propertyCount += typeof(NL_LoanFeePayments).GetProperties().Length + typeof(NL_LoanFeePayments).GetMembers().Length + typeof(NL_LoanFeePayments).GetFields().Length;
-
-				Action<Difference> historyCallback = delegate(Difference c) {
-					//this.m_oLog.Debug("XXXXXXXXXXXXXXXXXXXX: {0}", c);
-					this.m_oLog.Debug(": \t  PropertyName={0} V1={1} V2={2}", c.PropertyName, c.Object1Value, c.Object2Value);
-				};
-
-
-				/*List<string> membersToInclude = new List<string>();
-				membersToInclude.Add("LoanHistoryID");
-				membersToInclude.Add("EventTime");*/
-
-				this.m_oLog.Debug("\n\n");
-				CompareLogic comparer = new CompareLogic() {
-					Config = new ComparisonConfig() {
-						MaxDifferences = propertyCount,
-						//MembersToInclude = membersToInclude,
-						//DifferenceCallback = historyCallback,
-						CompareChildren = true,
-						//IgnoreCollectionOrder = true
-						//ShowBreadcrumb = true
-					}
-				};
-
-				List<string> properties = new List<string>();
-				properties.Add(".Histories");
-				properties.Add(".Schedule");
-
-				ComparisonResult result = comparer.Compare(m1.Loan, m2.Loan);
-
-				foreach (Difference c in result.Differences) {
-					this.m_oLog.Debug("Diff: {0}", c);
-					this.m_oLog.Debug("\t PropertyName={0} Value1={1} Value2={2}", c.PropertyName, c.Object1Value, c.Object2Value);
-					string prop = c.PropertyName;
-
-				}
-
-				//result.Differences.ForEach(c => this.m_oLog.Debug("{0}  valueA: {1}, valueB: {2}, A={3}, B={4}", c.PropertyName, c.Object1Value, c.Object2Value, c.Object1, c.Object2.Target));
-
-			} catch (Exception ex) {
-				this.m_oLog.Debug(ex);
-			}
-		}
-
-		[Test]
-		public void Comparertest2() {
-			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 17;
-			const int customerID = 56;
-			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357, false);
-			try {
-				state.Execute();
-			} catch (Exception ex) {
-				this.m_oLog.Error("{0}", ex.Message);
-			}
-
-			GetLoanState state1 = new GetLoanState(customerID, loanID, calcTime, 357);
-			try {
-				state1.Execute();
-			} catch (Exception ex) {
-				this.m_oLog.Error("{0}", ex.Message);
-			}
-
-			int propertyCount = typeof(NL_Loans).GetProperties().Length + typeof(NL_Loans).GetMembers().Length + typeof(NL_Loans).GetFields().Length;
-			propertyCount += typeof(NL_Payments).GetProperties().Length + typeof(NL_Payments).GetMembers().Length + typeof(NL_Payments).GetFields().Length;
-			propertyCount += typeof(NL_LoanSchedules).GetProperties().Length + typeof(NL_LoanSchedules).GetMembers().Length + typeof(NL_LoanSchedules).GetFields().Length;
-			propertyCount += typeof(NL_LoanHistory).GetProperties().Length + typeof(NL_LoanHistory).GetMembers().Length + typeof(NL_LoanHistory).GetFields().Length;
-			propertyCount += typeof(NL_LoanSchedulePayments).GetProperties().Length + typeof(NL_LoanSchedulePayments).GetMembers().Length + typeof(NL_LoanSchedulePayments).GetFields().Length;
-			propertyCount += typeof(NL_LoanFeePayments).GetProperties().Length + typeof(NL_LoanFeePayments).GetMembers().Length + typeof(NL_LoanFeePayments).GetFields().Length;
-
-			//Console.WriteLine(propertyCount);
-			//return;
-
-			var compConfig = new ComparisonConfig();
-			compConfig.MaxDifferences = propertyCount;
-			//		compConfig.IgnoreCollectionOrder = true;
-			compConfig.MembersToIgnore.Add("Count");
-			compConfig.IgnoreObjectTypes = true;
-			compConfig.ShowBreadcrumb = true;
-			compConfig.ActualName = "New";
-			compConfig.ExpectedName = "Current";
-			compConfig.CompareChildren = true;
-			compConfig.CollectionMatchingSpec.Add(typeof(NL_LoanHistory), new[] { "LoanHistoryID", "EventTime" });
-			compConfig.CollectionMatchingSpec.Add(typeof(NL_LoanSchedules), new[] { "ClosedTime", "LoanScheduleStatusID", "LoanHistoryID", "LoanScheduleID" });
-			compConfig.AttributesToIgnore.Add(typeof(NonTraversableAttribute));
-
-			this.m_oLog.Debug("\n\n");
-			CompareLogic comparer = new CompareLogic(compConfig);
-
-			ComparisonResult result = comparer.Compare(state.Result.Loan, state1.Result.Loan);
-
-			foreach (Difference c in result.Differences) {
-				//	this.m_oLog.Debug("Diff: {0}", c);
-				this.m_oLog.Debug("\t PropertyName={0} Value1={1} Value2={2}", c.PropertyName, c.Object1Value, c.Object2Value);
-			}
-		}
+	
 
 		[Test]
 		public void PayPoiinApiGetAmountToPay() {
@@ -1053,26 +797,7 @@
 		}
 
 
-		[Test]
-		public void DecimalNullPrintTest() {
-			NL_LoanFeePayments fp = new NL_LoanFeePayments() {
-				Amount = 33,
-				LoanFeeID = 2,
-				LoanFeePaymentID = 22,
-				PaymentID = 44
-			};
-			m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFeePayments)));
-			m_oLog.Debug(fp.ToStringAsTable());
-			NL_LoanSchedulePayments sp = new NL_LoanSchedulePayments() {
-				InterestPaid = 22,
-				LoanScheduleID = 67,
-				LoanSchedulePaymentID = 45,
-				PaymentID = 66,
-				PrincipalPaid = 77
-			};
-			m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanSchedulePayments)));
-			m_oLog.Debug(sp.ToStringAsTable());
-		}
+	
 
 		[Test]
 		public void GetCustomerLoansTest() {
@@ -1104,6 +829,25 @@
 			addDecision.Execute();
 			Console.WriteLine(addDecision.DecisionID);
 			Console.WriteLine(addDecision.Error);
+		}
+
+		[Test]
+		public void DirectQueryTest() {
+			AddLoan.LoanTransactionModel rebateTransaction = this.m_oDB.FillFirst<AddLoan.LoanTransactionModel>(
+			   "select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
+			   "join PayPointCard c on c.TransactionId = t.PaypointId " +
+			   "where Description='system-repay' " +
+			   "and Status='Done' " +
+			   "and Type ='PaypointTransaction' " +
+			   "and LoanId = @LoanID " +
+			   "and DateDiff(d, t.PostDate, @dd) = 0 " +
+				"and LoanTransactionMethodId = @LoanTransactionMethodId",
+			   CommandSpecies.Text,
+			   new QueryParameter("@LoanID", 2079), new QueryParameter("@dd", new DateTime(2015, 10, 23)), new QueryParameter("@LoanTransactionMethodId", (int)NLLoanTransactionMethods.Auto)
+			);
+			m_oLog.Debug(rebateTransaction.Amount);
+			m_oLog.Debug(rebateTransaction.PostDate);
+			m_oLog.Debug(rebateTransaction.PaypointId);
 		}
 
 	} // class TestNewLoan
