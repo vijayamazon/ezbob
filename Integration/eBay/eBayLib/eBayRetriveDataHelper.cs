@@ -24,20 +24,18 @@
 	using eBayServiceLib.TradingServiceCore.ResultInfos;
 	using eBayServiceLib.TradingServiceCore.TokenProvider;
 	using eBayServiceLib.com.ebay.developer.soap;
-	using Ezbob.Database;
 	using StructureMap;
 
 	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public eBayRetriveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBaseBase marketplace
-		)
-			: base(helper, marketplace) {
-			_Settings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
+		) : base(helper, marketplace) {
+			this.settings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
 
 			var ebayConnectionInfo = ObjectFactory.GetInstance<IEbayMarketplaceTypeConnection>();
 
-			_EbayConnectionInfo = eBayServiceHelper.CreateConnection(ebayConnectionInfo);
+			this.connectionInfo = eBayServiceHelper.CreateConnection(ebayConnectionInfo);
 		} // constructor
 
 		public static IEnumerable<string> GetTopSealedProductItems(EbayDatabaseOrdersList orders, int countTopItems = 10) {
@@ -47,38 +45,35 @@
 				.OrderByDescending(x => x.Sum)
 				.Take(countTopItems)
 				.Where(a => a.ItemId != null).Select(a => a.ItemId).ToList();
-		}
+		} // GetTopSealedProductItems
 
 		public ResultInfoEbayUser GetCustomerUserInfo(eBaySecurityInfo data) {
 			DataProviderCreationInfo info = CreateProviderCreationInfo(data);
 			return GetCustomerUserInfo(info);
-		}
+		} // GetCustomerUserInfo
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return RetrieveCustomerSecurityInfo<eBaySecurityInfo>(GetDatabaseCustomerMarketPlace(customerMarketPlaceId));
-		}
+		} // RetrieveCustomerSecurityInfo
 
 		public override void Update(int nCustomerMarketplaceID) {
 			UpdateCustomerMarketplaceFirst(nCustomerMarketplaceID);
 		} // Update
 
-		internal enum UpdateStrategyType {
-			OnlyTeraPeak,
-			EbayGetOrdersAfterTeraPeak
-		}
-
 		protected override void InternalUpdateInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			var info = CreateProviderCreationInfo(RetrieveCustomerSecurityInfo<eBaySecurityInfo>(databaseCustomerMarketPlace));
+			var info = CreateProviderCreationInfo(RetrieveCustomerSecurityInfo<eBaySecurityInfo>(
+				databaseCustomerMarketPlace
+			));
 
 			UpdateTeraPeakOrders(databaseCustomerMarketPlace, databaseCustomerMarketPlace.DisplayName, historyRecord);
 			CheckTokenStatus(databaseCustomerMarketPlace, info, historyRecord);
 			UpdateAccountInfo(databaseCustomerMarketPlace, info, historyRecord);
 			UpdateUserInfo(databaseCustomerMarketPlace, info, historyRecord);
 			UpdateFeedbackInfo(databaseCustomerMarketPlace, info, historyRecord);
-		}
+		} // InternalUpdateInfo
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -86,47 +81,52 @@
 		) {
 			// This method is not implemented here because elapsed time is got from over source.
 			throw new NotImplementedException();
-		}
+		} // RetrieveAndAggregate
 
 		private void CheckTokenStatus(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			DataProviderCreationInfo info,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateAccountInfo, databaseCustomerMarketPlace, historyRecord, () => {
-				var elapsedTimeInfo = new ElapsedTimeInfo();
+			Helper.CustomerMarketplaceUpdateAction(
+				CustomerMarketplaceUpdateActionType.UpdateAccountInfo,
+				databaseCustomerMarketPlace,
+				historyRecord,
+				() => {
+					var elapsedTimeInfo = new ElapsedTimeInfo();
 
-				var checker = new DataProviderCheckAuthenticationToken(info);
+					var checker = new DataProviderCheckAuthenticationToken(info);
 
-				var result = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-					elapsedTimeInfo,
-					databaseCustomerMarketPlace.Id,
-					ElapsedDataMemberType.RetrieveDataFromExternalService,
-					() => checker.Check()
-				);
+					var result = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+						elapsedTimeInfo,
+						databaseCustomerMarketPlace.Id,
+						ElapsedDataMemberType.RetrieveDataFromExternalService,
+						() => checker.Check()
+					);
 
-				return new UpdateActionResultInfo {
-					Name = UpdateActionResultType.GetTokenStatus,
-					RequestsCounter = result == null ? null : result.RequestsCounter,
-					ElapsedTime = elapsedTimeInfo
-				};
-			});
-		}
+					return new UpdateActionResultInfo {
+						Name = UpdateActionResultType.GetTokenStatus,
+						RequestsCounter = result == null ? null : result.RequestsCounter,
+						ElapsedTime = elapsedTimeInfo
+					};
+				}
+			);
+		} // CheckTokenStatus
 
 		private DataProviderCreationInfo CreateProviderCreationInfo(eBaySecurityInfo securityInfo) {
-			var connectionInfo = _EbayConnectionInfo;
+			var serviceConnectionInfo = this.connectionInfo;
 			IServiceTokenProvider serviceTokenProvider = new ServiceTokenProviderCustom(securityInfo.Token);
-			IEbayServiceProvider serviceProvider = new EbayTradingServiceProvider(connectionInfo);
+			IEbayServiceProvider serviceProvider = new EbayTradingServiceProvider(serviceConnectionInfo);
 
 			return new DataProviderCreationInfo(serviceProvider) {
 				ServiceTokenProvider = serviceTokenProvider,
-				Settings = _Settings
+				Settings = this.settings
 			};
-		}
+		} // CreateProviderCreationInfo
 
 		private ResultInfoEbayUser GetCustomerUserInfo(DataProviderCreationInfo info) {
 			return DataProviderUserInfo.GetDataAboutMySelf(info);
-		}
+		} // GetCustomerUserInfo
 
 		private void SaveFeedbackInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -164,8 +164,14 @@
 			} // for
 
 			var timePeriodsRaiting = new[] { 
-				new Tuple<TimePeriodEnum, FeedbackSummaryPeriodCodeType>(TimePeriodEnum.Month, FeedbackSummaryPeriodCodeType.ThirtyDays),
-				new Tuple<TimePeriodEnum, FeedbackSummaryPeriodCodeType>(TimePeriodEnum.Year, FeedbackSummaryPeriodCodeType.FiftyTwoWeeks)
+				new Tuple<TimePeriodEnum, FeedbackSummaryPeriodCodeType>(
+					TimePeriodEnum.Month,
+					FeedbackSummaryPeriodCodeType.ThirtyDays
+				),
+				new Tuple<TimePeriodEnum, FeedbackSummaryPeriodCodeType>(
+					TimePeriodEnum.Year,
+					FeedbackSummaryPeriodCodeType.FiftyTwoWeeks
+				)
 			};
 
 			foreach (var pair in timePeriodsRaiting) {
@@ -173,15 +179,27 @@
 				var periodCodeType = pair.Item2;
 
 				data.RaitingByPeriod.Add(timePeriod, new DatabaseEbayRaitingDataByPeriod(timePeriod) {
-					Communication = feedbackInfo.GetRaitingData(periodCodeType, FeedbackRatingDetailCodeType.Communication),
-					ItemAsDescribed = feedbackInfo.GetRaitingData(periodCodeType, FeedbackRatingDetailCodeType.ItemAsDescribed),
-					ShippingAndHandlingCharges = feedbackInfo.GetRaitingData(periodCodeType, FeedbackRatingDetailCodeType.ShippingAndHandlingCharges),
-					ShippingTime = feedbackInfo.GetRaitingData(periodCodeType, FeedbackRatingDetailCodeType.ShippingTime)
+					Communication = feedbackInfo.GetRaitingData(
+						periodCodeType,
+						FeedbackRatingDetailCodeType.Communication
+					),
+					ItemAsDescribed = feedbackInfo.GetRaitingData(
+						periodCodeType,
+						FeedbackRatingDetailCodeType.ItemAsDescribed
+					),
+					ShippingAndHandlingCharges = feedbackInfo.GetRaitingData(
+						periodCodeType,
+						FeedbackRatingDetailCodeType.ShippingAndHandlingCharges
+					),
+					ShippingTime = feedbackInfo.GetRaitingData(
+						periodCodeType,
+						FeedbackRatingDetailCodeType.ShippingTime
+					)
 				});
 			} // for
 
 			Helper.StoreEbayFeedbackData(databaseCustomerMarketPlace, data, historyRecord);
-		}
+		} // SaveFeedbackInfo
 
 		private void UpdateAccountInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -219,7 +237,7 @@
 					};
 				}
 			);
-		}
+		} // UpdateAccountInfo
 
 		private void UpdateFeedbackInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -247,9 +265,10 @@
 						() => SaveFeedbackInfo(databaseCustomerMarketPlace, resultInfo, historyRecord)
 					);
 
-					var ebayRaitingInfo = resultInfo == null
-						? null
-						: resultInfo.GetRaitingData(FeedbackSummaryPeriodCodeType.FiftyTwoWeeks, FeedbackRatingDetailCodeType.ShippingAndHandlingCharges);
+					var ebayRaitingInfo = resultInfo == null ? null : resultInfo.GetRaitingData(
+						FeedbackSummaryPeriodCodeType.FiftyTwoWeeks,
+						FeedbackRatingDetailCodeType.ShippingAndHandlingCharges
+					);
 
 					return new UpdateActionResultInfo {
 						Name = UpdateActionResultType.FeedbackRaiting,
@@ -259,7 +278,7 @@
 					};
 				}
 			);
-		}
+		} // UpdateFeedbackInfo
 
 		private void UpdateTeraPeakOrders(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -280,12 +299,13 @@
 
 					var sellerInfo = new TeraPeakSellerInfo(ebayUserID);
 
-					TeraPeakDatabaseSellerData allTeraPeakData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						databaseCustomerMarketPlace.Id,
-						ElapsedDataMemberType.RetrieveDataFromDatabase,
-						() => Helper.GetAllTeraPeakDataWithFullRange(now, databaseCustomerMarketPlace)
-					);
+					TeraPeakDatabaseSellerData allTeraPeakData = 
+						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+							elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
+							ElapsedDataMemberType.RetrieveDataFromDatabase,
+							() => Helper.GetAllTeraPeakDataWithFullRange(now, databaseCustomerMarketPlace)
+						);
 
 					if (allTeraPeakData.Count > 0) {
 						DateTime lastDate = allTeraPeakData.Max(i => i.EndDate);
@@ -312,7 +332,7 @@
 
 					ranges.AddRange(TerapeakRequestsQueue.CreateQueriesDates(peakRequestDataInfo, now));
 
-					var requestInfoByRange = new TeraPeakRequestInfo(sellerInfo, ranges, _Settings.ErrorRetryingInfo);
+					var requestInfoByRange = new TeraPeakRequestInfo(sellerInfo, ranges, this.settings.ErrorRetryingInfo);
 
 					var teraPeakDatabaseSellerDataByRange = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 						elapsedTimeInfo,
@@ -325,7 +345,11 @@
 						elapsedTimeInfo,
 						databaseCustomerMarketPlace.Id,
 						ElapsedDataMemberType.StoreDataToDatabase,
-						() => Helper.StoretoDatabaseTeraPeakOrdersData(databaseCustomerMarketPlace, teraPeakDatabaseSellerDataByRange, historyRecord)
+						() => Helper.StoretoDatabaseTeraPeakOrdersData(
+							databaseCustomerMarketPlace,
+							teraPeakDatabaseSellerDataByRange,
+							historyRecord
+						)
 					);
 
 					return new UpdateActionResultInfo {
@@ -336,7 +360,7 @@
 					};
 				} // action as argument
 			);
-		}
+		} // UpdateTeraPeakOrders
 
 		private void UpdateUserInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -377,7 +401,7 @@
 		private const int MaxPossibleRetriveMonthsFromTeraPeak = 12;
 
 		private static readonly ASafeLog log = new SafeILog(typeof(eBayRetriveDataHelper));
-		private readonly EbayServiceConnectionInfo _EbayConnectionInfo;
-		private readonly IEbayMarketplaceSettings _Settings;
+		private readonly EbayServiceConnectionInfo connectionInfo;
+		private readonly IEbayMarketplaceSettings settings;
 	} // class eBayRetriveDataHelper
 } // namespace
