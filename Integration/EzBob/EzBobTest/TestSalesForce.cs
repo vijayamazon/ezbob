@@ -57,6 +57,7 @@
 				RequestedLoanAmount = 10000,
 				IsTest = false,
 				Origin = "ezbob",
+				Promocode = "promo code test",
 				BrokerEmail = "broker@email.com",
 				BrokerFirmName = "Broker Firm Name",
 				BrokerName = "Broker Name",
