@@ -163,22 +163,26 @@
 				
 			} // if*/ //todo
 
-			MpModel.Affordability.Add(new AffordabilityData {
+			var ad = new AffordabilityData {
 				Type = AffordabilityType.Hmrc,
 				DateFrom = oModel.OriginationDate,
 				DateTo = oModel.LastTransactionDate,
-				
+
 				Opex = oModel.TotalNetOutPayments,
 				Revenues = oModel.TotalNetInPayments,
 				ValueAdded = oModel.TotalNetInPayments - oModel.TotalNetOutPayments,
-				
+
 				Ebitda = oModel.TotalNetInPayments - oModel.TotalNetOutPayments, //todo
 				FreeCashFlow = oModel.TotalNetInPayments - oModel.TotalNetOutPayments, //todo
 				LoanRepayment = LoadLoanRepaymentsForHmrc(),
 				Salaries = 0, //todo
-				Tax = 0,//todo
+				Tax = 0, //todo
 				TurnoverTrend = oModel.TurnoverTrend
-			});
+			};
+
+			ad.FreeCashFlow -= ad.LoanRepayment;
+			
+			MpModel.Affordability.Add(ad);
 		} // HmrcBank
 
 		private void Psp(List<LocalMp> oPayPals) {

@@ -18,6 +18,8 @@ namespace Integration.ChannelGrabberConfig {
 		/// <returns>Account type name.</returns>
 		public virtual string AccountTypeName() { return VendorInfo.Name; } // AccountTypeName
 
+		public virtual string UrlPathElement() { return VendorInfo.UrlElement; } // UrlElement
+
 		/// <summary>
 		/// Verifies that Channel Grabber service returned valid data as a reply for
 		/// account registration request.

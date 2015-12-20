@@ -57,6 +57,7 @@
 				RequestedLoanAmount = 10000,
 				IsTest = false,
 				Origin = "ezbob",
+				Promocode = "promo code test",
 				BrokerEmail = "broker@email.com",
 				BrokerFirmName = "Broker Firm Name",
 				BrokerName = "Broker Name",
@@ -221,7 +222,8 @@
                 Origin = "ezbob",
 				CustomerID = 1111.ToString(),
 				IsTest = true,
-				NumOfLoans = 2
+				NumOfLoans = 2,
+				Promocode = "promotest"
 			};
 
 			this.client.CreateUpdateLeadAccount(model);
