@@ -234,8 +234,8 @@
 					if (nlLoan != null) {
 
 						var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
-
-						Log.InfoFormat("<<< NL_Compare at: {0}. Loan : {1} NLModel: {2}.\n money={3}, nlModel.TotalEarlyPayment={4} >>>", System.Environment.StackTrace, loan, nlModel, money, nlModel.TotalEarlyPayment);
+						
+						Log.InfoFormat("<<< NL_Compare Loan: {0} NLModel: {1}.\n money={2}, nlModel.TotalEarlyPayment={3} >>>", loan, nlModel, money, nlModel.TotalEarlyPayment);
 
 						nlPayment = new NL_Payments() {
 							Amount = money,
@@ -314,7 +314,7 @@
 						nlModel.Loan.Histories.ForEach(h => h.Schedule.Where(s => s.LoanScheduleStatusID == (int)NLScheduleStatuses.Late).Sum(s => nlLate += s.Principal));
 						decimal nlMoney = Math.Min(amount, nlLate);
 
-						Log.InfoFormat("<<< NL_Compare at: {0}. Loan : {1} NLModel: {2}.\n late={3}, nlLate={4}, amount={5}, money={6}, nlMoney={7} >>>", System.Environment.StackTrace, loan, nlModel, late, nlLate, amount, money, nlMoney);
+						Log.InfoFormat("<<< NL_Compare: Loan:{0} NLModel:{1}.\n late={2}, nlLate={3}, amount={4}, money={5}, nlMoney={6} >>>", loan, nlModel, late, nlLate, amount, money, nlMoney);
 
 						nlPayment = new NL_Payments() {
 							Amount = money,

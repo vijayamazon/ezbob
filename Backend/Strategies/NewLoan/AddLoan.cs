@@ -377,7 +377,6 @@
 				CreatedByUserID = 1,
 				LoanID = LoanID,
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				//PaymentSystemType = NLPaymentSystemTypes.Paypoint,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
 				CreationTime = nowTime,
 				PaymentTime = rebateTransaction.PostDate,

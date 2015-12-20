@@ -1005,11 +1005,11 @@
 				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1, true).Value;
-					ms_oLog.Info("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", System.Environment.StackTrace, nlModel, loan);
+					ms_oLog.Info("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				ms_oLog.Info("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				ms_oLog.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
 			
 			var apr = loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);

@@ -201,11 +201,11 @@
 					GetLoanState nlState = new GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1);
 					nlState.Execute();
 					var nlModel = nlState.Result;
-					this.log.Info("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+					this.log.Info("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.log.Info("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				this.log.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
 
 			return loan;

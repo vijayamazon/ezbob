@@ -406,11 +406,11 @@
 				long nlLoanId = service.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = service.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
-					this.Log.InfoFormat("<<< NL_Compare at: {0}; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+					this.Log.InfoFormat("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				this.Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				this.Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
 
 			return state.Fees + state.Interest;

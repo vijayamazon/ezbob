@@ -305,11 +305,11 @@
 					GetLoanState nlState = new GetLoanState(model.CustomerID, nlLoanId, this.now, 1);
 					nlState.Execute();
 					var nlModel = nlState.Result;
-					Log.Info("<<< NL_Compare at: {0} ; nlModel : {1} loan: {2}  >>>", Environment.StackTrace, nlModel, loan);
+					Log.Info("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				Log.Info("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				Log.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
 
 			return mailModel;
