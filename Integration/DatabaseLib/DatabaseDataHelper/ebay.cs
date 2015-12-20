@@ -639,23 +639,35 @@
 		public DateTime FindLastKnownEbayTransactionTime(int mpID) {
 			MP_CustomerMarketPlace mp = GetCustomerMarketPlace(mpID);
 
-			DateTime maxFromNative = mp.EbayOrders
-				.SelectMany(o => o.OrderItems)
-				.SelectMany(oi => oi.Transactions)
-				.Select(t => t.CreatedDate)
-				.Max()
-				.Date;
+			DateTime yearAgo = DateTime.UtcNow.AddYears(-1).Date;
 
-			DateTime maxFromTeraPeak = mp.TeraPeakOrders
-				.SelectMany(o => o.OrderItems)
-				.Where(oi => oi.RangeMarker == RangeMarkerType.Full)
-				.Select(oi => oi.EndDate)
-				.Max()
-				.Date;
+			DateTime maxFromNative;
+
+			try {
+				maxFromNative = mp.EbayOrders
+					.SelectMany(o => o.OrderItems)
+					.SelectMany(oi => oi.Transactions)
+					.Select(t => t.CreatedDate)
+					.Max()
+					.Date;
+			} catch {
+				maxFromNative = yearAgo;
+			} // try
+
+			DateTime maxFromTeraPeak;
+
+			try {
+				maxFromTeraPeak = mp.TeraPeakOrders
+					.SelectMany(o => o.OrderItems)
+					.Where(oi => oi.RangeMarker == RangeMarkerType.Full)
+					.Select(oi => oi.EndDate)
+					.Max()
+					.Date;
+			} catch {
+				maxFromTeraPeak = yearAgo;
+			} // try
 
 			DateTime dbMax = maxFromNative > maxFromTeraPeak ? maxFromNative : maxFromTeraPeak;
-
-			DateTime yearAgo = DateTime.UtcNow.AddYears(-1).Date;
 
 			DateTime resultingMonth = dbMax > yearAgo ? dbMax : yearAgo;
 
