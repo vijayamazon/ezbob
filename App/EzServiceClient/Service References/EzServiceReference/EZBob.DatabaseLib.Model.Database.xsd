@@ -127,6 +127,7 @@
       <xs:enumeration value="PaidOff" />
       <xs:enumeration value="WrittenOff" />
       <xs:enumeration value="Late" />
+      <xs:enumeration value="PandingInvestor" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="CreditResultStatus" nillable="true" type="tns:CreditResultStatus" />
