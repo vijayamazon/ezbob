@@ -42,12 +42,20 @@ FROM
 	INNER JOIN Medals ON MedalCalculationsAV.Medal = Medals.Medal
 GO
 
+-- rename defaults in MedalCalculations, MedalCalculationsAV
+DECLARE @MedalCalculationsDefaultMedalNameID nvarchar(40);
 
-IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_MedalCalculations_MedalNameID')
-	ALTER TABLE [dbo].[MedalCalculations] add constraint DF_MedalCalculations_MedalNameID DEFAULT 1 for MedalNameID	;
+set @MedalCalculationsDefaultMedalNameID = (select o.name  from sysobjects o inner join syscolumns c on o.id = c.cdefault inner join sysobjects t
+on c.id = t.id where o.xtype = 'D' and c.name = 'MedalNameID' and t.name = 'MedalCalculations');
+
+IF @MedalCalculationsDefaultMedalNameID <> 'DF_MedalCalculations_MedalNameID'
+	EXEC sp_rename @MedalCalculationsDefaultMedalNameID, 'DF_MedalCalculations_MedalNameID'
 GO
 
-IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_MedalCalculationsAV_MedalNameID')
-	ALTER TABLE [dbo].[MedalCalculationsAV] add constraint DF_MedalCalculationsAV_MedalNameID DEFAULT 1 for MedalNameID	;
-GO
+DECLARE @MedalCalculationsAVDefaultMedalNameID nvarchar(40);
+set @MedalCalculationsAVDefaultMedalNameID = (select o.name  from sysobjects o inner join syscolumns c on o.id = c.cdefault inner join sysobjects t
+on c.id = t.id where o.xtype = 'D' and c.name = 'MedalNameID' and t.name = 'MedalCalculationsAV');
 
+IF @MedalCalculationsAVDefaultMedalNameID <> 'DF_MedalCalculationsAV_MedalNameID'
+	EXEC sp_rename @MedalCalculationsAVDefaultMedalNameID, 'DF_MedalCalculationsAV_MedalNameID'
+GO

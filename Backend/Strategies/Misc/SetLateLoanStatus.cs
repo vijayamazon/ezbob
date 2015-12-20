@@ -35,8 +35,9 @@
 		public override void Execute() {
             this.now = DateTime.UtcNow;
 
-            //-----------Mark Loans as Late----------------------------------------------------
+            //-----------Select relevan loans----------------------------------------------------
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
+				//-----------Mark Loans as Late----------------------------------------------------
 				MarkLoanAsLate(sr);
 				return ActionResult.Continue;
 			}, "GetLoansToCollect",
