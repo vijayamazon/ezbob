@@ -199,7 +199,7 @@
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			if (oldLoan == null)
 				return;
-			DateTime now = oldLoan.Date;
+			DateTime now = DateTime.UtcNow; // oldLoan.Date;
 			NL_Model model = new NL_Model(oldLoan.Customer.Id) {
 				UserID = userID,
 				Loan = new NL_Loans() { OldLoanID = oldLoan.Id, Refnum = oldLoan.RefNumber },

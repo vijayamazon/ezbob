@@ -23,9 +23,9 @@ BEGIN
 		[PaymentStatusID]= @PaymentStatusID,
 		[DeletionTime] = @DeletionTime, 
 		[DeletedByUserID] = @DeletedByUserID,	
-		[Notes] = concat([Notes], ';' , @Notes)
+		[Notes] = ISNULL(@Notes, [Notes])
 	WHERE 
-		[PaymentID] = @PaymentID;
+		[PaymentID] = @PaymentID and LoanID = @LoanID;
 		
 	-- reset paid amounts
 	

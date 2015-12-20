@@ -45,14 +45,15 @@
 
 			if (loanStatus != NLLoanStatuses.Late) { //loanStatus != "Late")
 
-				// DONE WITH "old" SetLateLoanStatus.cs job
-				// DON'T REMOVE. SHOULD BE UNCOMMENT AFTER "old" job cancelation
+				// DONE SO AFRE WITH "old" SetLateLoanStatus.cs job
+				// DON'T REMOVE!!!!!!!!!! SHOULD BE UNCOMMENT AFTER "old" job cancelation
 				//DB.ExecuteNonQuery(
 				//	"UpdateCustomer", CommandSpecies.StoredProcedure,
 				//	new QueryParameter("CustomerId", customerId),
 				//	new QueryParameter("LoanStatus", "Late"),
 				//	 new QueryParameter("IsWasLate", true)
 				//	);
+
 
 				DB.ExecuteNonQuery(
 					"NL_LoanUpdate", CommandSpecies.StoredProcedure,

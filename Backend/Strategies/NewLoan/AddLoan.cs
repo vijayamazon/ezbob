@@ -351,7 +351,7 @@
 			if (LoanID == 0)
 				return;
 
-			AddLoan.LoanTransactionModel rebateTransaction = DB.FillFirst<AddLoan.LoanTransactionModel>(
+			LoanTransactionModel rebateTransaction = DB.FillFirst<LoanTransactionModel>(
 				"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
 				"join PayPointCard c on c.TransactionId = t.PaypointId " +
 				"where Description='system-repay' " +
@@ -377,8 +377,8 @@
 				CreatedByUserID = 1,
 				LoanID = LoanID,
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentSystemType = NLPaymentSystemTypes.Paypoint,
-				PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
+				//PaymentSystemType = NLPaymentSystemTypes.Paypoint,
+				PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
 				CreationTime = nowTime,
 				PaymentTime = rebateTransaction.PostDate,
 				Notes = "rebate"
@@ -390,7 +390,7 @@
 				PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
 				PaypointUniqueID = rebateTransaction.PaypointId,
 				PaypointCardID = rebateTransaction.CardID,
-				TransactionTime = rebatePayment.PaymentTime
+				TransactionTime = rebateTransaction.PostDate
 			});
 
 			AddPayment p = new AddPayment(model.CustomerID, rebatePayment, 1);
