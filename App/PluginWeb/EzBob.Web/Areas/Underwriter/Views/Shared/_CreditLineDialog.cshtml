@@ -4,7 +4,10 @@
 	<div class="modal-body">
 		<div class="box">
 			<div class="box-content">
-				customer requested loan of <span name="requestedLoanAmount"></span> for <span name="requestedLoanTerm"></span> months
+				<div>
+					customer requested loan of <span name="requestedLoanAmount"></span> for <span name="requestedLoanTerm"></span> months
+				</div>
+				<div id="error-message" class="red_cell"></div>
 			</div>
 		</div>
 		<form id="credit-line-form" class="form-horizontal" action="/" method="POST">
@@ -48,21 +51,21 @@
 				<div class="control-group">
 					<label for="offeredCreditLine" class="control-label">Offered credit line:</label>
 					<div class="controls cashControlls">
-						<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control" />
+						<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control tltp" data-placement="bottom" />
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label for="interestRate" class="control-label">Interest rate:</label>
 					<div class="controls cashControlls">
-						<input name="interestRate" id="interestRate" type="text" class="form-control" />
+						<input name="interestRate" id="interestRate" type="text" class="form-control tltp" data-placement="bottom" />
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label for="repaymentPeriod" class="control-label">Repayment period:</label>
 					<div class="controls">
-						<input name="repaymentPeriod" id="repaymentPeriod" type="text" class="form-control" />
+						<input name="repaymentPeriod" id="repaymentPeriod" type="text" class="form-control tltp" data-placement="bottom" />
 					</div>
 				</div>
 
@@ -89,7 +92,7 @@
 				<div class="control-group">
 					<label for="manualSetupFeePercent" class="control-label">Manual setup fee percent:</label>
 					<div class="controls">
-						<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control" />
+						<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control tltp" data-placement="bottom" />
 					</div>
 				</div>
 

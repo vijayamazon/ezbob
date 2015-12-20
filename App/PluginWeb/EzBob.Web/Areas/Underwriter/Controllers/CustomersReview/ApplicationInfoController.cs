@@ -367,6 +367,9 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult ChangeCreditLine(
 			long id,
+			int productID,
+			int productTypeID,
+			int productSubTypeID,
 			int loanType,
 			int loanSource,
 			double amount,
@@ -412,10 +415,12 @@
 
 				cr.DiscountPlan = this.discounts.Get(discountPlan);
 				cr.SpreadSetupFee = spreadSetupFee;
+				cr.ProductSubTypeID = productSubTypeID;
 				Customer c = cr.Customer;
 				c.OfferStart = cr.OfferStart;
 				c.OfferValidUntil = cr.OfferValidUntil;
 				c.ManagerApprovedSum = sum;
+				
 				this.cashRequestsRepository.SaveOrUpdate(cr);
 				this.customerRepository.SaveOrUpdate(c);
 			}).Execute();

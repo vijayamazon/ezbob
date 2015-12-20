@@ -104,6 +104,7 @@
 
 		public virtual bool? SpreadSetupFee { get; set; }
 
+		public virtual int? ProductSubTypeID { get; set; }
 		public virtual bool? HasApprovalChance { get; set; }
 
 		private int repaymentPeriod = 3;
