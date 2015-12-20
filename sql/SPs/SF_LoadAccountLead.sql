@@ -51,6 +51,7 @@ BEGIN
         o.Name AS Origin,
         c.IsTest AS IsTest,
         @NumOfLoans AS NumOfLoans,
+        c.PromoCode AS Promocode,
         b.ContactName AS BrokerName,
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,

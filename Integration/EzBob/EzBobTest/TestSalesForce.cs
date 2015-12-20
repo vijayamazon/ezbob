@@ -221,7 +221,8 @@
                 Origin = "ezbob",
 				CustomerID = 1111.ToString(),
 				IsTest = true,
-				NumOfLoans = 2
+				NumOfLoans = 2,
+				Promocode = "promotest"
 			};
 
 			this.client.CreateUpdateLeadAccount(model);
