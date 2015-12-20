@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using Ezbob.Utils.Security;
 	using Newtonsoft.Json;
 
 	/// <summary>
@@ -108,21 +109,16 @@
 		/// A string that represents the current object.
 		/// </returns>
 		public string ToShortString() {
-			string equifaxData;
-
-			if (string.IsNullOrWhiteSpace(EquifaxData))
-				equifaxData = string.Empty;
-			else if (EquifaxData.Length > 50)
-				equifaxData = EquifaxData.Substring(0, 50).TrimEnd() + "...";
-			else
-				equifaxData = EquifaxData;
+			string equifaxData = string.IsNullOrWhiteSpace(EquifaxData)
+				? string.Empty
+				: new Encrypted(EquifaxData.Length > 50 ? EquifaxData.Substring(0, 50) : EquifaxData);
 
 			return string.Format(
 				"Company: {0}, Payment {1}, Director: {2}, Equifax: {3}",
 				CompanyRegistrationNumber,
 				MonthlyPayment,
 				Director,
-				equifaxData.TrimStart()
+				equifaxData
 			);
 		} // ToShortString
 

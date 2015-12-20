@@ -5,7 +5,6 @@
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
-	using Ezbob.Utils.Serialization;
 	using Newtonsoft.Json;
 
 	[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
