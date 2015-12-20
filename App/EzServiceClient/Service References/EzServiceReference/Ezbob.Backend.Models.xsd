@@ -135,6 +135,7 @@
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsLeadDeleted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsWaitingForSignature" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastInvitationSent" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LeadID" type="xs:int" />
