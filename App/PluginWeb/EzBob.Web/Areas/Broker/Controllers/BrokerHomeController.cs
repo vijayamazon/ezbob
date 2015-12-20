@@ -1011,7 +1011,7 @@
 			} catch (Exception ex) {
 				ms_oLog.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
-			
+
 			var apr = loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);

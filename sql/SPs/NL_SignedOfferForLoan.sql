@@ -6,6 +6,7 @@ IF OBJECT_ID('NL_SignedOfferForLoan') IS NULL
 GO
 
 
+
 ALTER PROCEDURE [dbo].[NL_SignedOfferForLoan] 
 	@CustomerID INT, 
 	@Now DATETIME
@@ -48,7 +49,7 @@ BEGIN
 		RETURN 
 	END
 
-	-- valid offer
+	-- valid offer	
 	SELECT top 1 
 		ll.LoanLegalID,
 		ll.Amount AS LoanLegalAmount,
@@ -73,10 +74,11 @@ BEGIN
 	JOIN NL_Decisions d ON d.DecisionID = o.DecisionID
 	JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
 	JOIN Decisions dn ON d.DecisionNameID = dn.DecisionID	
-	JOIN NL_LoanLegals ll ON ll.OfferID = o.OfferID
-	WHERE cr.CustomerID = @CustomerID
-		AND @Now BETWEEN o.StartTime AND o.EndTime
+	JOIN NL_LoanLegals ll ON o.OfferID = ll.OfferID
+	WHERE cr.CustomerID = 371
+		AND '2015 20 December 19:10' BETWEEN o.StartTime AND o.EndTime
 		AND dn.DecisionName IN ('Approve','ReApprove') 
+		and ll.LoanLegalID = (select MAX( ll1.LoanLegalID) from NL_LoanLegals ll1 where ll1.OfferID=o.OfferID )
 	ORDER BY o.OfferID DESC ;
 
 	IF ((SELECT IsRepaymentPeriodSelectionAllowed from #validOffer) = 0

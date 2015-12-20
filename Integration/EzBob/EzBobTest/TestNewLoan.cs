@@ -17,6 +17,7 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Utils;
+	using EzServiceAccessor;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -849,6 +850,12 @@
 			m_oLog.Debug(rebateTransaction.Amount);
 			m_oLog.Debug(rebateTransaction.PostDate);
 			m_oLog.Debug(rebateTransaction.PaypointId);
+		}
+
+		[Test]
+		public void LongGetCustomerLoansTest() {
+			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(271).ToList();
+			nlLoansList.ForEach(l => this.m_oLog.Debug("{0}", l.LoanID));
 		}
 
 	} // class TestNewLoan

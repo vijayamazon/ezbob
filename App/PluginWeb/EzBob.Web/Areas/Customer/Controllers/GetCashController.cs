@@ -183,11 +183,11 @@
 
 				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
-	
+
 				Loan loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
 
 				RebatePayment(amount, loan, trans_id, now);
-	
+
 				cus.PayPointErrorsCount = 0;
 
 				TempData["amount"] = loan_amount;
@@ -247,7 +247,7 @@
 
 			NL_Model nlModel = new NL_Model(cus.Id);
 			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel);
-			
+
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
 			return Json(new { url = url });
