@@ -7,19 +7,13 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Collections.Generic;
-	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Backend.Models;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 
 	class EBayMarketplaceModelBuilder : MarketplaceModelBuilder {
-		public EBayMarketplaceModelBuilder(
-			EbayAmazonCategoryRepository categoryRepository,
-			ISession session
-		) : base(session) {
-			this.categoryRepository = categoryRepository;
-		} // constructor
+		public EBayMarketplaceModelBuilder(ISession session) : base(session) { }
 
 		protected override void InitializeSpecificData(
 			MP_CustomerMarketPlace mp,
@@ -28,7 +22,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		) {
 			var ebayFeedBack = mp.EbayFeedback.LastOrDefault();
 
-			model.Categories = this.categoryRepository.GetEbayCategories(mp);
+			model.Categories = GetEbayCategories(mp);
 
 			model.EBay = BuildEBay(mp.EbayUserData.LastOrDefault(), mp.EbayUserAccountData.LastOrDefault(), ebayFeedBack);
 		} // InitializeSpecificData
@@ -186,6 +180,34 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return lst.Count > 0 ? lst.Max() : (DateTime?)null;
 		} // GetLastTransaction
 
-		private readonly EbayAmazonCategoryRepository categoryRepository;
+		private static List<string> GetEbayCategories(MP_CustomerMarketPlace marketplace) {
+			IEnumerable<string> terapeak;
+			IEnumerable<string> native;
+
+			if (marketplace.TeraPeakOrders != null) {
+				List<string> cats = marketplace.TeraPeakOrders
+					.SelectMany(o => o.OrderItems)
+					.SelectMany(t => t.CategoryStatistics)
+					.Select(c => c.Category.FullName)
+					.ToList();
+
+				terapeak = cats.Count > 0 ? cats.Distinct().ToList() : cats;
+			} else
+				terapeak = new List<string>();
+
+			if (marketplace.EbayOrders != null) {
+				List<string> cats = marketplace.EbayOrders
+					.SelectMany(o => o.OrderItems)
+					.SelectMany(oi => oi.Transactions)
+					.Where(x => (x.OrderItemDetail != null) && (x.OrderItemDetail.PrimaryCategory != null))
+					.Select(x => x.OrderItemDetail.PrimaryCategory.Name)
+					.ToList();
+
+				native = cats.Count > 0 ? cats.Distinct().ToList() : cats;
+			} else
+				native = new List<string>();
+
+			return terapeak.Union(native).Distinct().ToList();
+		} // GetEbayCategories
 	} // class EBayMarketplaceModelBuilder
 } // namespace
