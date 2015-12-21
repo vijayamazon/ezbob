@@ -26,57 +26,61 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	-- 1. Select all the full months.
-
-	SELECT
-		i.Id,
-		i.RangeMarker,
-		i.StartDate,
-		i.Transactions,
-		i.Listings,
-		i.Successful,
-		i.ItemsSold,
-		i.Revenue
+	;WITH relevant_months AS ( -- update all the months that have transactions in this fetch event
+		SELECT DISTINCT
+			TheMonth = dbo.udfMonthStart(oi.CreatedTime)
+		FROM
+			MP_EbayOrderItem oi
+			INNER JOIN MP_EbayOrder o
+				ON oi.OrderId = o.Id
+				AND o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
+	), transaction_unificator AS ( -- process only unique transactions by eBayTransactionId
+		SELECT
+			TransactionID = t.Id,
+			Pos = ROW_NUMBER() OVER (
+				PARTITION BY t.eBayTransactionId
+				ORDER BY
+					o.Created DESC,
+					o.Id DESC,
+					oi.OrderStatus DESC,
+					oi.CheckoutStatus ASC,
+					oi.AmountPaidAmount DESC
+			)
+		FROM
+			MP_EbayTransaction t
+			INNER JOIN MP_EbayOrderItem oi ON t.OrderItemId = oi.Id
+			INNER JOIN MP_EbayOrder o
+				ON oi.OrderId = o.Id
+				AND o.CustomerMarketPlaceId = @MpID
+			INNER JOIN relevant_months rm ON rm.TheMonth = dbo.udfMonthStart(oi.CreatedTime)
+	), raw_order_data AS ( -- gather transaction and order item data
+		SELECT
+			OrderItemID = oi.Id,
+			OrderTime = oi.CreatedTime,
+			OrderStatus = oi.OrderStatus,
+			OrderAmount = oi.TotalAmount * dbo.udfGetCurrencyRate(oi.PaymentTime, oi.TotalCurrency),
+			TransactionID = t.Id,
+			ItemCount = t.QuantityPurchased
+		FROM
+			MP_EbayTransaction t
+			INNER JOIN transaction_unificator tu ON tu.TransactionID = t.Id AND tu.Pos = 1
+			INNER JOIN MP_EbayOrderItem oi ON t.OrderItemId = oi.Id
+			INNER JOIN MP_EbayOrder o ON oi.OrderId = o.Id
+	) SELECT -- group data by order item id
+		o.OrderItemID,
+		o.OrderTime,
+		o.OrderStatus,
+		o.OrderAmount,
+		ItemCount = SUM(o.ItemCount)
 	INTO
 		#order_items
 	FROM
-		MP_TeraPeakOrderItem i
-		INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
-	WHERE
-		i.RangeMarker = 0
-		AND
-		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-
-	-- 2. Append the last partial month which is greater than any existing full month.
-
-	DECLARE @MaxFull DATETIME
-
-	SELECT
-		@MaxFull = MAX(StartDate)
-	FROM
-		#order_items
-
-	INSERT INTO #order_items(Id, RangeMarker, StartDate, Transactions, Listings, Successful, ItemsSold, Revenue)
-	SELECT TOP 1
-		i.Id,
-		i.RangeMarker,
-		i.StartDate,
-		i.Transactions,
-		i.Listings,
-		i.Successful,
-		i.ItemsSold,
-		i.Revenue
-	FROM
-		MP_TeraPeakOrderItem i
-		INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
-	WHERE
-		i.RangeMarker = 1
-		AND
-		i.StartDate > @MaxFull
-		AND
-		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-	ORDER BY
-		o.Created DESC
+		raw_order_data o
+	GROUP BY
+		o.OrderItemID,
+		o.OrderTime,
+		o.OrderStatus,
+		o.OrderAmount
 
 	------------------------------------------------------------------------------
 	--
@@ -130,7 +134,7 @@ BEGIN
 		TotalSumOfOrders
 	)
 	SELECT DISTINCT
-		dbo.udfMonthStart(StartDate),
+		dbo.udfMonthStart(OrderTime),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
 		@HistoryID,
 		0, -- Turnover,
@@ -167,11 +171,12 @@ BEGIN
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Revenue, 0))
+				Value = SUM(ISNULL(i.OrderAmount, 0))
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.OrderTime BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus IN ('Completed', 'Authenticated', 'Shipped')
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
@@ -179,7 +184,7 @@ BEGIN
 	------------------------------------------------------------------------------
 	--
 	-- Calculate NumOfOrders, AverageItemsPerOrderDenominator,
-	--           AverageSumOfOrderDenominator, and OrdersCancellationRateDenominator.
+	-- AverageSumOfOrderDenominator, and OrdersCancellationRateDenominator.
 	--
 	------------------------------------------------------------------------------
 
@@ -193,11 +198,12 @@ BEGIN
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Transactions, 0))
+				Value = COUNT(DISTINCT i.OrderItemID)
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.OrderTime BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus IN ('Completed', 'Authenticated', 'Shipped')
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
@@ -216,11 +222,12 @@ BEGIN
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.ItemsSold, 0))
+				Value = SUM(ISNULL(i.ItemCount, 0))
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.OrderTime BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus IN ('Completed', 'Authenticated', 'Shipped')
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
@@ -239,62 +246,19 @@ BEGIN
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Transactions - i.Successful, 0))
+				Value = COUNT(DISTINCT i.OrderItemID)
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.OrderTime BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus IN ('Cancelled')
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
 
 	------------------------------------------------------------------------------
 	--
-	-- Calculate TopCategories
-	--
-	------------------------------------------------------------------------------
-
-	-- 1. Select all the full months of the marketplace.
-
-	SELECT
-		i.Id
-	INTO
-		#all_ids
-	FROM
-		MP_TeraPeakOrderItem i
-		INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
-	WHERE
-		i.RangeMarker = 0
-		AND
-		o.CustomerMarketPlaceId = @MpID
-
-	-- 2. Append the last partial month of the marketplace.
-
-	INSERT INTO #all_ids (Id)
-	SELECT
-		Id
-	FROM
-		#order_items
-	WHERE
-		RangeMarker = 1
-
-	-- 3. Create statistics.
-
-	SELECT
-		s.CategoryId,
-		SUM(s.Listings) AS Listings
-	INTO
-		#cat
-	FROM
-		MP_TeraPeakCategoryStatistics s
-		INNER JOIN #all_ids a ON s.OrderItemId = a.Id
-	GROUP BY
-		s.CategoryId
-
-	------------------------------------------------------------------------------
-	--
-	-- At this point table #months contains new aggregated data and table #cat
-	-- contains updated category statistics.
+	-- At this point table #months contains new aggregated data.
 	--
 	------------------------------------------------------------------------------
 
@@ -355,34 +319,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	UPDATE EbayAggregationCategories SET
-		IsActive = 0
-	FROM
-		EbayAggregationCategories a
-		INNER JOIN MP_CustomerMarketPlaceUpdatingHistory h
-			ON a.CustomerMarketplaceUpdatingHistoryID = h.Id
-			AND h.CustomerMarketplaceID = @MpID
-	WHERE
-		a.IsActive = 1
-
-	------------------------------------------------------------------------------
-
-	INSERT INTO EbayAggregationCategories (
-		CustomerMarketPlaceUpdatingHistoryID,
-		IsActive,
-		CategoryID,
-		Listings
-	)
-	SELECT
-		@HistoryID,
-		1, -- IsActive
-		CategoryId,
-		Listings
-	FROM
-		#cat
-
-	------------------------------------------------------------------------------
-
 	COMMIT TRANSACTION
 
 	------------------------------------------------------------------------------
@@ -391,11 +327,7 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	DROP TABLE #cat
-	DROP TABLE #all_ids
 	DROP TABLE #months
 	DROP TABLE #order_items
 END
-
 GO
-
