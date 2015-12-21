@@ -75,8 +75,8 @@ BEGIN
 	JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
 	JOIN Decisions dn ON d.DecisionNameID = dn.DecisionID	
 	JOIN NL_LoanLegals ll ON o.OfferID = ll.OfferID
-	WHERE cr.CustomerID = 371
-		AND '2015 20 December 19:10' BETWEEN o.StartTime AND o.EndTime
+	WHERE cr.CustomerID = @CustomerID
+		AND @Now BETWEEN o.StartTime AND o.EndTime
 		AND dn.DecisionName IN ('Approve','ReApprove') 
 		and ll.LoanLegalID = (select MAX( ll1.LoanLegalID) from NL_LoanLegals ll1 where ll1.OfferID=o.OfferID )
 	ORDER BY o.OfferID DESC ;
