@@ -34,6 +34,8 @@ BEGIN
 			INNER JOIN MP_EbayOrder o
 				ON oi.OrderId = o.Id
 				AND o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
+		WHERE
+			oi.CreatedTime IS NOT NULL
 	), transaction_unificator AS ( -- process only unique transactions by eBayTransactionId
 		SELECT
 			TransactionID = t.Id,
@@ -58,7 +60,7 @@ BEGIN
 			OrderItemID = oi.Id,
 			OrderTime = oi.CreatedTime,
 			OrderStatus = oi.OrderStatus,
-			OrderAmount = oi.TotalAmount * dbo.udfGetCurrencyRate(oi.PaymentTime, oi.TotalCurrency),
+			OrderAmount = oi.TotalAmount * dbo.udfGetCurrencyRate(oi.CreatedTime, oi.TotalCurrency),
 			TransactionID = t.Id,
 			ItemCount = t.QuantityPurchased
 		FROM

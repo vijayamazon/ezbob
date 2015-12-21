@@ -349,7 +349,7 @@
 						elapsedTimeInfo,
 						mpID,
 						ElapsedDataMemberType.StoreDataToDatabase,
-						() => Helper.AddEbayOrdersData( databaseCustomerMarketPlace, databaseOrdersList, historyRecord)
+						() => Helper.AddEbayOrdersData(databaseCustomerMarketPlace, databaseOrdersList, historyRecord)
 					);
 
 					EbayDatabaseOrdersList allEBayOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
