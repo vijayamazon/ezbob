@@ -93,6 +93,12 @@
 		
 		
 		@if (!IsSectionDefined("customJs")) {
+			<div id="modalRegion" class="modal hide fade"></div>
+		}
+	</div>
+	
+	@if (!IsSectionDefined("customJs")) {
+		<div id="promotion-pages">
 			<div id="valentine2015scratch">
 				<div class="content">
 					<img class="title" src="~/Content/img/valentine2015scratch/headline.png"/>
@@ -168,12 +174,6 @@
 				</div>
 			</div>
 
-			<div id="modalRegion" class="modal hide fade"></div>
-		}
-	</div>
-	
-	@if (!IsSectionDefined("customJs")) {
-		<div id="promotion-pages">
 			<div id="easter2015scratch" class="in-customer">
 				<div class="opening">
 					<div class="leave"></div>

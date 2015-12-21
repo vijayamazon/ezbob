@@ -107,35 +107,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 			return orderDates.Any() ? orderDates.Max() : (DateTime?)null;
 		}
 
-	    public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-	    {
-			var customerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);
-
-			var data = new TeraPeakDatabaseSellerData(submittedDate);
-
-			data.AddRange(customerMarketPlace.TeraPeakOrders
-				.SelectMany(to => to.OrderItems)
-				.Where(oi => oi.RangeMarker == RangeMarkerType.Full)
-				.Select(o =>
-							new TeraPeakDatabaseSellerDataItem(o.StartDate, o.EndDate)
-							{
-								AverageSellersPerDay = o.AverageSellersPerDay,
-								Bids = o.Bids,
-								ItemsOffered = o.ItemsOffered,
-								ItemsSold = o.ItemsSold,
-								Listings = o.Listings,
-								Revenue = o.Revenue,
-								SuccessRate = o.SuccessRate,
-								Successful = o.Successful,
-								Transactions = o.Transactions,
-								RangeMarker = o.RangeMarker
-							}
-						)
-				);
-
-			return data;
-	    }
-
         public DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
         {
             var mpCustomerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);
