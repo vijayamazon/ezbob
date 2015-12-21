@@ -42,30 +42,30 @@
 				</div>
 				
 				<div class="control-group">
-					<label for="loan-type" class="control-label">Funding type:</label>
+					<label for="loan-type" class="control-label">Funding type (Open platform):</label>
 					<div class="controls">
-						<span name="funding-type"></span>
+						<input name="funding-type" id="funding-type" type="text" class="form-control" readonly="readonly" />
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label for="offeredCreditLine" class="control-label">Offered credit line:</label>
-					<div class="controls cashControlls">
-						<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control tltp" data-placement="bottom" />
+					<div class="controls" data-toggle="tooltip">
+						<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control tltp" />
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label for="interestRate" class="control-label">Interest rate:</label>
-					<div class="controls cashControlls">
-						<input name="interestRate" id="interestRate" type="text" class="form-control tltp" data-placement="bottom" />
+					<div class="controls" data-toggle="tooltip">
+						<input name="interestRate" id="interestRate" type="text" class="form-control tltp" />
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label for="repaymentPeriod" class="control-label">Repayment period:</label>
-					<div class="controls">
-						<input name="repaymentPeriod" id="repaymentPeriod" type="text" class="form-control tltp" data-placement="bottom" />
+					<div class="controls" data-toggle="tooltip">
+						<input name="repaymentPeriod" id="repaymentPeriod" type="text" class="form-control tltp" />
 					</div>
 				</div>
 
@@ -91,8 +91,8 @@
 
 				<div class="control-group">
 					<label for="manualSetupFeePercent" class="control-label">Manual setup fee percent:</label>
-					<div class="controls">
-						<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control tltp" data-placement="bottom" />
+					<div class="controls" data-toggle="tooltip">
+						<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control tltp" />
 					</div>
 				</div>
 
@@ -134,15 +134,7 @@
 				<div class="control-group">
 					<label for="loan-type" class="control-label">Discount Plan:</label>
 					<div class="controls">
-						<select id="discount-plan" name="discount-plan" class="valid form-control selectheight">
-							<%
-							_.each(DiscountPlans, function(discountPlan) {
-							var selected = (discountPlan.Id == DiscountPlanId) ? "selected='selected'" : "";
-							%>
-							<option <%= selected  %> value="<%=discountPlan.Id%>"><%=discountPlan.Name%></option><%
-							});
-							%>
-						</select>
+						<select id="discount-plan" name="discount-plan" class="valid form-control selectheight"></select>
 					</div>
 				</div>
 

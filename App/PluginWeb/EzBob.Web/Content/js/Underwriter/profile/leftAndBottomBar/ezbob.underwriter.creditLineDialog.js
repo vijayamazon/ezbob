@@ -37,6 +37,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		loanProductType: '#product-type',
 		loanType: '#loan-type',
 		loanSource: '#loan-source',
+		discountPlan: '#discount-plan',
+		fundingType: '#funding-type',
 		requestedLoanAmount: '#requestLoanAmount',
 		requestedLoanTerm: '#requestedLoanTerm'
 	}, // ui
@@ -87,58 +89,25 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	}, // onChangeOfferedAmout
 
 	onChangeProduct: function () {
-		console.log('change p');
 		this.populateDropDowns();
 	},
 	onChangeProductType: function () {
-		console.log('change pt');
 		this.populateDropDowns();
 	},
 	onChangeLoanType: function () {
-		console.log('change lt');
 		this.populateDropDowns();
-		/*
-		var loanTypeId = this.$el.find('#loan-type option:selected').val();
-
-		if (isNaN(loanTypeId) || (loanTypeId <= 0))
-			return;
-
-		loanTypeId = parseInt(loanTypeId, 10);
-
-		var currentLoanType = _.find(this.cloneModel.get('LoanTypes'), function(l) { return l.Id === loanTypeId; });
-
-		this.cloneModel.set('RepaymentPeriod', currentLoanType.RepaymentPeriod);
-		*/
 	}, // onChangeLoanType
 
-	onChangeLoanSource: function () {
-		console.log('change ls');
-		this.populateDropDowns();
-		/*
-		var loanSourceId = this.$el.find('#loan-source option:selected').val();
-		if (isNaN(loanSourceId) || (loanSourceId <= 0))
-			return;
+	onChangeLoanSource: function (that) {
+		if (that !== null) {
+			this.populateDropDowns();
+		}
 
-		loanSourceId = parseInt(loanSourceId, 10);
-
+		var self = this;
 		var currentLoanSource = _.find(
 			this.cloneModel.get('AllLoanSources'),
-			function(l) { return l.Id === loanSourceId; }
+			function (l) { return l.Id == self.cloneModel.get('LoanSourceID'); }
 		);
-
-		if (currentLoanSource) {
-			if (currentLoanSource.DefaultRepaymentPeriod > 0)
-				this.cloneModel.set('RepaymentPeriod', currentLoanSource.DefaultRepaymentPeriod);
-
-			var maxInterestRate = currentLoanSource.MaxInterest;
-
-			var fixInterestRate = maxInterestRate &&
-			(maxInterestRate > 0) &&
-			(this.cloneModel.get('InterestRate') > maxInterestRate);
-
-			if (fixInterestRate)
-				this.cloneModel.set('InterestRate', maxInterestRate);
-		} // if
 
 		if (!currentLoanSource.IsCustomerRepaymentPeriodSelectionAllowed) {
 			this.cloneModel.set('IsCustomerRepaymentPeriodSelectionAllowed', false);
@@ -146,8 +115,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			this.setSomethingEnabled(this.$el.find('#repaymentPeriodSelection'), false);
 		} else
 			this.setSomethingEnabled(this.$el.find('#repaymentPeriodSelection'), true);
-
-		*/
 	}, // onChangeLoanSource
 
 	save: function() {
@@ -171,22 +138,35 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 	}, // save
 
-	getPostData: function() {
-		var m = this.cloneModel.toJSON();
-
+	getCurrentProductSubType: function () {
+		var self = this;
 		var productSubType = _.find(this.cloneModel.get('ProductSubTypes'), function(pst) {
-			return pst.ProductTypeID == m.ProductTypeID && pst.OriginID == m.OriginID && pst.GradeID == m.GradeID && pst.LoanSourceID == m.LoanSourceID;
+			return pst.ProductTypeID == self.cloneModel.get('CurrentProductTypeID') &&
+				   pst.OriginID      == self.cloneModel.get('OriginID')             &&
+				   pst.GradeID       == self.cloneModel.get('GradeID')              &&
+				   pst.LoanSourceID  == self.cloneModel.get('LoanSourceID');
 		});
 
 		if (!productSubType) {
 			this.ui.errorMessage.text('No product found for such offer');
 			return null;
+		}else {
+			this.ui.errorMessage.empty();
+		}
+		return productSubType;
+	},
+
+	getPostData: function() {
+		var m = this.cloneModel.toJSON();
+		var productSubType = this.getCurrentProductSubType();
+		if (!productSubType) {
+			return null;
 		}
 
 		return {
 			id: m.CashRequestId,
-			productID: m.ProductID,
-			productTypeID: m.ProductTypeID,
+			productID: m.CurrentProductID,
+			productTypeID: m.CurrentProductTypeID,
 			productSubTypeID: productSubType.ProductSubTypeID,
 			loanType: m.LoanTypeId,
 			loanSource: m.LoanSourceID,
@@ -277,6 +257,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		this.$el.find('#brokerSetupFeePercent').autoNumeric('init', EzBob.percentFormat);
 		this.$el.find('#repaymentPeriod').numericOnly();
 		this.populateDropDowns();
+		this.onChangeLoanSource(null);
 	}, // onRender
 
 	populateDropDowns: function() {
@@ -286,7 +267,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		
 		var productSubTypesPerGradeAndOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function(pst) {
-			return pst.GradeID === gradeID && pst.OriginID === originID;
+			return pst.GradeID == gradeID && pst.OriginID == originID;
 		});
 
 		if (productSubTypesPerGradeAndOrigin.length <= 0) {
@@ -354,7 +335,30 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			self.ui.loanSource.append($('<option value="' + ls.Id + '"' + selected + '>' + ls.Name + '</option>'));
 		});
 
+		var currentDiscountPlanID = self.cloneModel.get('DiscountPlanId');
+		this.ui.discountPlan.empty();
+		_.each(self.cloneModel.get('DiscountPlans'), function (dp) {
+			var selected = '';
+			if (dp.Id == currentDiscountPlanID) {
+				selected = ' selected="selected" ';
+			}
+			self.ui.discountPlan.append($('<option value="' + dp.Id + '"' + selected + '>' + dp.Name + '</option>'));
+		});
+		
 		var isFirstLoan = this.cloneModel.get('NumOfLoans') === 0;
+
+		var productSubType = this.getCurrentProductSubType();
+		if (productSubType && productSubType.FundingTypeID) {
+			var fundingType = _.find(this.cloneModel.get('FundingTypes'), function(ft) {
+				return ft.FundingTypeID == productSubType.FundingTypeID;
+			});
+
+			if (fundingType) {
+				this.ui.fundingType.val(fundingType.Name);
+			} else {
+				this.ui.fundingType.val('');
+			}
+		}
 
 		var gradeRange = _.find(this.cloneModel.get('GradeRanges'), function(gr) {
 			return gr.OriginID     == originID            &&
@@ -378,20 +382,17 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	},//populateDropDowns
 
 	setTooltips: function (gradeRanges) {
-		var offeredCreditLineTooltip = 'Valid between ' + GBPValues(gradeRanges.MinLoanAmount) + ' and ' + GBPValues(gradeRanges.MaxLoanAmount);
-		this.ui.offeredCreditLine.attr('data-original-title', offeredCreditLineTooltip);
+		var offeredCreditLineTooltip = 'Valid between ' + GBPValues(gradeRanges.MinLoanAmount, true) + ' and ' + GBPValues(gradeRanges.MaxLoanAmount, true);
+		this.ui.offeredCreditLine.parent().tooltip('destroy').tooltip({ title: offeredCreditLineTooltip, trigger: 'hover focus', placement: 'bottom' });
 
 		var repaymentPeriodTooltip = 'Valid between ' + gradeRanges.MinTerm + ' and ' + gradeRanges.MaxTerm + ' months';
-		this.ui.repaymentPeriod.attr('data-original-title', repaymentPeriodTooltip);
+		this.ui.repaymentPeriod.parent().tooltip('destroy').tooltip({ title: repaymentPeriodTooltip, trigger: 'hover focus', placement: 'bottom' });
 
 		var interestRateTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinInterestRate) + ' and ' + EzBob.formatPercents(gradeRanges.MaxInterestRate);
-		this.ui.interestRate.attr('data-original-title', interestRateTooltip);
+		this.ui.interestRate.parent().tooltip('destroy').tooltip({ title: interestRateTooltip, trigger: 'hover focus', placement: 'bottom' });
 
 		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinSetupFee) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
-		this.ui.manualSetupFeePercent.attr('data-original-title', manualSetupFeePercentTooltip);
-		_.each(this.ui.tooltips, function (t) {
-			$(t).tooltip({ placement: 'bottom', trigger: 'hover focus' });
-		});
+		this.ui.manualSetupFeePercent.parent().tooltip('destroy').tooltip({ title: manualSetupFeePercentTooltip, trigger: 'hover focus', placement: 'bottom' });
 	},//setTooltips
 }); // EzBob.Underwriter.CreditLineDialog
 
@@ -406,17 +407,17 @@ EzBob.validateCreditLineDialogForm = function (el, gradeRange) {
 				autonumericMin: _.max([EzBob.Config.XMinLoan, gradeRange.MinLoanAmount]),
 				autonumericMax: _.min([EzBob.Config.MaxLoan, gradeRange.MaxLoanAmount]),
 			},
-			repaymentPeriod: { required: true, min: gradeRange.MinTerm || 1, max: gradeRange.MaxTerm || 60 },
-			interestRate: { required: true, autonumericMin: gradeRange.MinInterestRate * 100 || 0, autonumericMax: gradeRange.MaxInterestRate * 100 || 100, },
+			repaymentPeriod: { required: true, min: gradeRange.MinTerm, max: gradeRange.MaxTerm },
+			interestRate: { required: true, autonumericMin: gradeRange.MinInterestRate * 100, autonumericMax: gradeRange.MaxInterestRate * 100, },
 			startingFromDate: { required: true, dateCheck: true, },
 			offerValidUntil: { required: true, dateCheck: true, },
-			manualSetupFeePercent: { autonumericMin: gradeRange.MinSetupFee * 100 || 0, autonumericMax: gradeRange.MaxSetupFee * 100 || 100, required: true, },
+			manualSetupFeePercent: { autonumericMin: gradeRange.MinSetupFee * 100, autonumericMax: gradeRange.MaxSetupFee * 100, required: true, },
 			brokerSetupFeePercent: { autonumericMin: 0, required: false, },
 		},
 		messages: {
 			offeredCreditLine:{
-				autonumericMin: $.validator.format('Offered credit line is below £{0}'),
-				autonumericMax: $.validator.format('Offered credit line is above £{0}'),
+				autonumericMin: $.validator.format('Offered credit line is below &pound;{0}'),
+				autonumericMax: $.validator.format('Offered credit line is above &pound;{0}'),
 			},
 			interestRate: {
 				autonumericMin: $.validator.format('Interest rate is below {0}%'),
@@ -438,4 +439,4 @@ EzBob.validateCreditLineDialogForm = function (el, gradeRange) {
 		errorPlacement: EzBob.Validation.errorPlacement,
 		unhighlight: EzBob.Validation.unhighlight,
 	});
-}
+}//validateCreditLineDialogForm
