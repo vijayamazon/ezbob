@@ -115,7 +115,7 @@
 				Length = nonAffirmative.Length;
 				Array.Sort(nonAffirmative);
 				List = string.Join(", ", nonAffirmative);
-				Hash = MiscUtils.MD5(List);
+				Hash = Ezbob.Utils.Security.SecurityUtils.MD5(List);
 			} // constructor
 
 			public NonAffirmativeGroupKey(int length) {

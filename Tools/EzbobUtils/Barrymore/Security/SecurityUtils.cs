@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Utils.Security {
+	using System;
 	using System.Text;
 
 	public static class SecurityUtils {
-
 		public static string MD5(string input) {
 			// step 1, calculate MD5 hash from input
 			var md5 = System.Security.Cryptography.MD5.Create();
@@ -19,30 +19,13 @@
 			return sb.ToString().ToLowerInvariant();
 		} // MD5
 
+		[Obsolete]
 		public static string HashPassword(string sUserName, string sPassword) {
-			return Hash(sUserName + sPassword);
-		} // HashPassword
-
-		public static string HashPassword(string sPassword) {
-			return Hash(sPassword);
+			return PasswordUtility.HashPasswordOldWay(sUserName, sPassword);
 		} // HashPassword
 
 		public static string Hash(string sPassword) {
-			var sha = System.Security.Cryptography.SHA512.Create();
-
-			byte[] aryInputBytes = System.Text.Encoding.ASCII.GetBytes(sPassword ?? string.Empty);
-			byte[] oFirstHash = sha.ComputeHash(aryInputBytes);
-
-			// truncating some characters - salt replacement
-			byte[] oSecondHash = sha.ComputeHash(oFirstHash, 6, oFirstHash.Length - 14);
-
-			var sb = new StringBuilder();
-
-			for (int i = 0; i < oSecondHash.Length; i++)
-				sb.Append(oSecondHash[i].ToString("X2"));
-
-			return sb.ToString().ToLowerInvariant();
+			return PasswordUtility.HashPasswordOldWay(sPassword);
 		} // Hash
-
 	} // class SecurityUtils
 } // namespace

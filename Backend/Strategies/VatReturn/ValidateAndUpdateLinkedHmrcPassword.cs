@@ -5,13 +5,11 @@
 	using MailStrategies;
 
 	public class ValidateAndUpdateLinkedHmrcPassword : UpdateLinkedHmrcPassword {
-
 		public ValidateAndUpdateLinkedHmrcPassword(
 			string sCustomerID,
 			string sDisplayName,
-			string sPassword,
-			string sHash
-		) : base(sCustomerID, sDisplayName, sPassword, sHash) {
+			string sPassword
+		) : base(sCustomerID, sDisplayName, sPassword) {
 			ErrorMessage = null;
 		} // constructor
 
@@ -74,6 +72,5 @@
 
 			return true;
 		} // CheckHmrc
-
 	} // class ValidateAndUpdateLinkedHmrcPassword
 } // namespace

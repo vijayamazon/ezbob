@@ -17,6 +17,10 @@ BEGIN
 
 	ALTER TABLE Security_User ADD CONSTRAINT FK_Security_User_Origin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin (CustomerOriginID)
 
+	ALTER TABLE Security_User ADD Salt VARCHAR(255) NULL
+
+	ALTER TABLE Security_User ADD CycleCount VARCHAR(255) NULL
+
 	ALTER TABLE Security_User ADD TimestampCounter ROWVERSION
 END
 GO
@@ -101,4 +105,15 @@ GO
 -------------------------------------------------------------------------------
 
 DROP TABLE #new_column_created
+GO
+
+IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name = 'PasswordHashCycleCount')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
+		'PasswordHashCycleCount',
+		'Ug5/VvsG75w2SAVFjzP42A==',
+		'Integer. How many times the password should be hashed before saving it to DB.',
+		1
+	)
+END
 GO

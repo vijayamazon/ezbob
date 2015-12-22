@@ -4194,18 +4194,18 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RemoveManualVatReturnPeriodAsync(System.Guid oPeriodID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceVatReturn/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzServiceVatReturn/UpdateLinkedHmrcPasswordResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceVatReturn/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzServiceVatReturn/UpdateLinkedHmrcPasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPasswordRespons" +
             "e")]
-        ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPasswordRespons" +
             "e")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddCashRequest", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddCashRequestResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult AddCashRequest(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest);
@@ -5767,20 +5767,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RemoveManualVatReturnPeriodAsync(oPeriodID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.UpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword) {
+            return base.Channel.UpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.UpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword, sHash);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword) {
+            return base.Channel.UpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.ValidateAndUpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
+        public ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword) {
+            return base.Channel.ValidateAndUpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.ValidateAndUpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword, sHash);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword) {
+            return base.Channel.ValidateAndUpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword);
         }
         
         public ServiceClientProxy.EzServiceReference.IntActionResult AddCashRequest(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest) {

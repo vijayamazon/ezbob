@@ -577,7 +577,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			string sOriginalPassword = os.ToString();
 
-			string sHash = SecurityUtils.HashPassword(sOriginalPassword);
+			string sHash = PasswordUtility.HashPasswordOldWay(sOriginalPassword); // TODO
 
 			this.log.Msg(
 				"\n\nOriginal string:\n\t{0}\n\ngenerated hash:\n\t{1}\n\nquery:\n" +
@@ -1276,13 +1276,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			string sDisplayName = this.cmdLineArgs[2];
 			string sPassword = this.cmdLineArgs[3];
-			string sHash = SecurityUtils.Hash(nCustomerID + sPassword + sDisplayName);
 
 			this.serviceClient.UpdateLinkedHmrcPassword(
 				new Encrypted(nCustomerID.ToString(CultureInfo.InvariantCulture)),
 				new Encrypted(sDisplayName),
-				new Encrypted(sPassword), sHash
-				);
+				new Encrypted(sPassword)
+			);
 		}
 
 		[Activation]

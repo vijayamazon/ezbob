@@ -1102,7 +1102,6 @@
         <xs:element minOccurs="0" name="sCustomerID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sDisplayName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sPassword" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="sHash" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1119,7 +1118,6 @@
         <xs:element minOccurs="0" name="sCustomerID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sDisplayName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sPassword" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="sHash" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

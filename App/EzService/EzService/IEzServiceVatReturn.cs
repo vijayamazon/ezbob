@@ -36,14 +36,13 @@
 		ActionMetaData RemoveManualVatReturnPeriod(Guid oPeriodID);
 
 		[OperationContract]
-		ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+		ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword);
 
 		[OperationContract]
 		StringActionResult ValidateAndUpdateLinkedHmrcPassword(
 			string sCustomerID,
 			string sDisplayName,
-			string sPassword,
-			string sHash
+			string sPassword
 		);
 	} // interface IEzServiceVatReturn
 } // namespace

@@ -3,11 +3,6 @@
 	using System.Globalization;
 
 	public static class MiscUtils {
-
-		public static string MD5(string input) {
-			return Security.SecurityUtils.MD5(input);
-		} // MD5
-
 		public static string ValidateStringArg(
 			string sValue,
 			string sArgName,

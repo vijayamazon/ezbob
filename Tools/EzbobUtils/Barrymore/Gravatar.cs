@@ -3,11 +3,13 @@
 	using System.Web;
 
 	public static class Gravatar {
-
 		public static string Url(string sEmail, string sDefaultImgUrl = null, int nImgSize = 0) {
 			var os = new StringBuilder();
 
-			os.AppendFormat("https://secure.gravatar.com/avatar/{0}", MiscUtils.MD5((sEmail ?? string.Empty).Trim().ToLower()).ToLower());
+			os.AppendFormat(
+				"https://secure.gravatar.com/avatar/{0}",
+				Security.SecurityUtils.MD5((sEmail ?? string.Empty).Trim().ToLower()).ToLower()
+			);
 
 			string sSeparator = "?";
 
@@ -23,6 +25,5 @@
 
 			return os.ToString();
 		} // Url
-
 	} // class Gravatar
 } // namespace
