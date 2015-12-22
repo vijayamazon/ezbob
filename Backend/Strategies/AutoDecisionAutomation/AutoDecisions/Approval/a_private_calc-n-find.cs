@@ -55,7 +55,8 @@
 			return this.cashRequestsRepository.GetAll().Count(cr =>
 				cr.UnderwriterDecisionDate.HasValue &&
 				cr.UnderwriterDecisionDate.Value.Date == now.Date &&
-				cr.AutoDecisionID == 1
+				cr.AutoDecisionID == 1 &&
+				!cr.Customer.IsTest
 			);
 		} // CalculateTodaysApprovals
 
@@ -64,7 +65,8 @@
 				cr.UnderwriterDecisionDate.HasValue &&
 				cr.UnderwriterDecisionDate.Value.Date == Now.Date &&
 				cr.UnderwriterDecisionDate.Value.Hour == Now.Hour &&
-				cr.AutoDecisionID == 1
+				cr.AutoDecisionID == 1 &&
+				!cr.Customer.IsTest
 			);
 		} // CalculateHourlyTodaysApprovals
 
@@ -74,7 +76,8 @@
 			return this.cashRequestsRepository.GetAll().Count(cr =>
 				cr.UnderwriterDecisionDate.HasValue &&
 				cr.UnderwriterDecisionDate.Value >= anHourAgo &&
-				cr.AutoDecisionID == 1
+				cr.AutoDecisionID == 1 &&
+				!cr.Customer.IsTest
 			);
 		} // CalculateLastHourApprovals
 
@@ -83,7 +86,8 @@
 				(l.Date.Date == now.Date) &&
 				(l.Date < Now) &&
 				(l.CashRequest != null) &&
-				(l.CashRequest.AutoDecisionID == 1)
+				(l.CashRequest.AutoDecisionID == 1) &&
+				!l.CashRequest.Customer.IsTest
 			);
 
 			decimal todayLoansAmount = 0;
