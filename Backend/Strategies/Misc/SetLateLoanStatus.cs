@@ -306,7 +306,7 @@
 					GetLoanState nlState = new GetLoanState(model.CustomerID, nlLoanId, this.now, 1);
 					nlState.Execute();
 					var nlModel = nlState.Result;
-					Log.Info("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
+					Log.Info("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

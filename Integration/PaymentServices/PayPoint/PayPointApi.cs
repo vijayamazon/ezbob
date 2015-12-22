@@ -187,7 +187,7 @@
 					installments.CommitTransaction();
 
 					// save failed NL payment + PP transaction
-					long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, customerId);
+					long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId, customerId);
 
 					if (nlLoanId > 0) {
 						nlPayment.Amount = 0;

@@ -1005,7 +1005,7 @@
 				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1, true).Value;
-					ms_oLog.Info("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
+					ms_oLog.Info("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

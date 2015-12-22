@@ -1,9 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
+	using NHibernate.Linq;
 
 	public class GetCustomerLoans : AStrategy {
 
@@ -27,12 +30,12 @@
 			}
 
 			NL_AddLog(LogType.Info, "Strategy Start", CustomerID, null, Error, null);
-
+			
 			try {
 
 				Loans = DB.Fill<NL_Loans>("NL_CustomerLoansGet", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", CustomerID)).ToArray();
-
-				NL_AddLog(LogType.Info, "Strategy End", Context.CustomerID, Loans, Error, null);
+	
+				NL_AddLog(LogType.Info, "Strategy End", Context.CustomerID, Loans.Select(v => v.LoanID.ToString()), Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

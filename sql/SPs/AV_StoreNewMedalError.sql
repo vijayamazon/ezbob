@@ -14,7 +14,7 @@ ALTER PROCEDURE AV_StoreNewMedalError
 ,@NumOfHmrcMps INT
 ,@CashRequestID BIGINT
 ,@Tag NVARCHAR(256)
-,@NLCashRequestID BIGINT NULL
+,@NLCashRequestID BIGINT =NULL
 )
 AS 
 BEGIN 

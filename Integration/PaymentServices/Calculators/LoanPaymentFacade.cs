@@ -120,7 +120,7 @@
 				nlPayment.CreationTime = DateTime.UtcNow;
 				nlPayment.PaymentTime = paymentTime;
 				nlPayment.Amount = amount;
-			    nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+				nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
 
 				Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
 
@@ -216,7 +216,7 @@
 
 			var loans = customer.Loans.Where(x => x.Status != LoanStatus.PaidOff || x.Id != 0).ToList();
 
-			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList(); 
+			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList();
 
 			foreach (var loan in loans) {
 
@@ -236,7 +236,7 @@
 					if (nlLoan != null) {
 
 						var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
-						
+
 						Log.InfoFormat("<<< NL_Compare Loan: {0} NLModel: {1}.\n money={2}, nlModel.TotalEarlyPayment={3} >>>", loan, nlModel, money, nlModel.TotalEarlyPayment);
 
 						nlPayment = new NL_Payments() {
@@ -411,9 +411,9 @@
 					amount,
 					transId,
 					date,
-					description, 
+					description,
 					sManualPaymentMethod
-					,nlPayment
+					, nlPayment
 				);
 
 				newInterest = customer.Loans.Sum(l => l.Interest);
@@ -434,7 +434,7 @@
 					amount,
 					transId,
 					date,
-					description, 
+					description,
 					sManualPaymentMethod
 				);
 
@@ -445,20 +445,20 @@
 				var loan = customer.GetLoan(loanId);
 
 				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
-					if (nlPayment != null) {
-						var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-						if (nlLoanId > 0) {
-							nlPayment.Amount = amount;
-							nlPayment.CreationTime = DateTime.UtcNow;
-							nlPayment.LoanID = nlLoanId;
-							nlPayment.PaymentTime = DateTime.UtcNow;
-							nlPayment.Notes = description;
-							nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
-							//CreatedByUserID = userId,
-							//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
-							//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
-						}
+				if (nlPayment != null) {
+					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
+					if (nlLoanId > 0) {
+						nlPayment.Amount = amount;
+						nlPayment.CreationTime = DateTime.UtcNow;
+						nlPayment.LoanID = nlLoanId;
+						nlPayment.PaymentTime = DateTime.UtcNow;
+						nlPayment.Notes = description;
+						nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+						//CreatedByUserID = userId,
+						//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+						//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
 					}
+				}
 				//}
 
 				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, nlPayment);
@@ -474,23 +474,21 @@
 					where r.Status == RolloverStatus.New
 					select r
 				).FirstOrDefault();
-				
-				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
-					if (nlPayment != null) {
-						var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
-						if (nlLoanId > 0) {
-							nlPayment.Amount = amount;
-							nlPayment.CreationTime = DateTime.UtcNow;
-							nlPayment.LoanID = nlLoanId;
-							nlPayment.PaymentTime = DateTime.UtcNow;
-							nlPayment.Notes = description;
-							nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
-							//CreatedByUserID = userId,
-							//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
-							//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
-						}
+
+				if (nlPayment != null) {
+					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
+					if (nlLoanId > 0) {
+						nlPayment.Amount = amount;
+						nlPayment.CreationTime = DateTime.UtcNow;
+						nlPayment.LoanID = nlLoanId;
+						nlPayment.PaymentTime = DateTime.UtcNow;
+						nlPayment.Notes = description;
+						nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+						//CreatedByUserID = userId,
+						//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+						//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
 					}
-				//}
+				}
 
 				PayLoan(loan, transId, amount, ip, date, description, false, sManualPaymentMethod, nlPayment);
 

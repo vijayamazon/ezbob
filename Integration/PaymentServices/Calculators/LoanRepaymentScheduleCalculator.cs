@@ -200,7 +200,7 @@
 
 				var principal = _loan.LoanAmount - _paidPrincipal;
 
-				Console.WriteLine("NextEarlyPayment principal={0} _expectedPrincipal={1} InterestToPay={2}", principal, _expectedPrincipal, InterestToPay);
+				//Console.WriteLine("NextEarlyPayment principal={0} _expectedPrincipal={1} InterestToPay={2}", principal, _expectedPrincipal, InterestToPay);
 
 				//если пользователь пропустил платеж
 				//if user missed payment

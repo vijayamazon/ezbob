@@ -186,21 +186,17 @@
 
 				Loan loan = customer.Loans.First(x => x.Status != LoanStatus.PaidOff);
 
-				//long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.context.UserId).Value;
-
-				//if (nlLoanId > 0) {
-					var nlPayment = new NL_Payments() {
-						Amount = amount.Value,
-						CreatedByUserID = this.context.UserId,
-						//CreationTime = DateTime.UtcNow,
-						//	LoanID = nlLoanId,
-						//PaymentTime = DateTime.UtcNow,
-						Notes = "Add paypoint card",
-						//PaymentStatusID = (int)NLPaymentStatuses.Active,
-						PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
-						PaymentSystemType = NLPaymentSystemTypes.Paypoint
-					};
-				//}
+				var nlPayment = new NL_Payments() {
+					Amount = amount.Value,
+					CreatedByUserID = this.context.UserId,
+					//CreationTime = DateTime.UtcNow,
+					//	LoanID = nlLoanId,
+					//PaymentTime = DateTime.UtcNow,
+					Notes = "Add paypoint card",
+					//PaymentStatusID = (int)NLPaymentStatuses.Active,
+					PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint
+				};
 
 				var f = new LoanPaymentFacade();
 				f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment);

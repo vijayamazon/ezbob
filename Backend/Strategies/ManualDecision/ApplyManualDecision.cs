@@ -288,7 +288,7 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Reject;
 
-			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToArray());
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToList());
 			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
 			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
 			try {
@@ -365,14 +365,14 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Approve;
 
-			AddDecision sAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
-			sAddDecision.Context.CustomerID = this.decisionModel.customerID;
-			sAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
 
 			try {
 				try {
-					sAddDecision.Execute();
-					Log.Debug("nl AddDecision {0}, Error: {1}", sAddDecision.DecisionID, sAddDecision.Error);
+					nlAddDecision.Execute();
+					Log.Debug("nl AddDecision {0}, Error: {1}", nlAddDecision.DecisionID, nlAddDecision.Error);
 
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
@@ -392,7 +392,7 @@
 
 				Log.Debug("nl lastOffer {0}, Error: {1}", lastOffer.OfferID, sLastOffer.Error);
 
-				lastOffer.DecisionID = sAddDecision.DecisionID;
+				lastOffer.DecisionID = nlAddDecision.DecisionID;
 				lastOffer.CreatedTime = this.now;
 	
 				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.currentState.ManualSetupFeePercent, OneTimePartPercent = 1, DistributedPartPercent = 0 };

@@ -90,8 +90,8 @@ ALTER PROCEDURE StoreMedal
 	,@CapOfferByCustomerScoresTable NVARCHAR(MAX)
 	,@Tag NVARCHAR(256)
 	,@MaxOfferedLoanAmount INT
-	,@CashRequestID BIGINT ,
-	,@NLCashRequestID BIGINT NULL
+	,@CashRequestID BIGINT 
+	,@NLCashRequestID BIGINT = NULL
 AS
 BEGIN
 	SET QUOTED_IDENTIFIER ON;

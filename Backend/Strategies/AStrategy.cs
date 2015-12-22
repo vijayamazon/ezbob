@@ -135,6 +135,7 @@
 	    public enum LogType {
 	        DataExsistense,
             Error,
+			Warn,
             Info,
             Debug
 	    }

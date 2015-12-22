@@ -1,4 +1,4 @@
-declare @monthBack int; set @monthBack = -20;
+declare @monthBack int; set @monthBack = -1;
 declare @loanID int; set @loanID = 3223;
 declare @NLloanID bigint; set @NLloanID = (select LoanID from NL_Loans where OldLoanID = @loanID);
 

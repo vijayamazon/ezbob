@@ -24,8 +24,8 @@
 
 			if (this.oldLoanId == 0) {
 				Error = NL_ExceptionRequiredDataNotFound.OldLoan;
-				Log.Error(Error);
-				NL_AddLog(LogType.Error, "Failed", this.oldLoanId, null, Error, null);
+				Log.Alert(Error);
+				NL_AddLog(LogType.DataExsistense, "Inpit invalid", this.oldLoanId, null, Error, null);
 				return;
 			}
 

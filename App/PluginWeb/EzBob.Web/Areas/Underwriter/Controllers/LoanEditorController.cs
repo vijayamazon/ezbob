@@ -68,7 +68,7 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, 1, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
 					Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
@@ -159,7 +159,7 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(model.Id, 1, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
 					Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
@@ -469,10 +469,10 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, 1, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
-					Log.InfoFormat("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
+					Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -505,12 +505,11 @@
 																					  customerId,
 																					  nlLoanInterestFreeze).Value;
 		}
-		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze,
-											int loanID) {
+		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int loanID) {
 
 			int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id;
 
-			long newLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId).Value;
+			long newLoanId = this.serviceClient.Instance.GetLoanByOldID(loanID, customerId, this._context.UserId).Value;
 			if (newLoanId < 0)
 				return;
 			NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
@@ -527,16 +526,14 @@
 			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze).Value;
 		}
 
-		private DateTime? NL_GetStopAutoChargeDate(bool AutoCharge,
-										   DateTime? StopAutoChargeDate) {
-			if (AutoCharge) {
-				if (StopAutoChargeDate == null)
-					return DateTime.Now;
-				else
-					return StopAutoChargeDate;
-			}
-			return null;
-		}
+		//private DateTime? NL_GetStopAutoChargeDate(bool AutoCharge, DateTime? StopAutoChargeDate) {
+		//	if (AutoCharge) {
+		//		if (StopAutoChargeDate == null)
+		//			return DateTime.Now;
+		//		return StopAutoChargeDate;
+		//	}
+		//	return null;
+		//}
 
 
 		private void NL_SaveLoanOptions(LoanOptions options, List<String> PropertiesUpdateList) {

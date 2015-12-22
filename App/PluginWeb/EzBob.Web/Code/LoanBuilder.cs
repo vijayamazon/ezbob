@@ -83,18 +83,20 @@
 			var c = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 			c.GetState();
 
-			try {
-				ServiceClient serviceClient = new ServiceClient();
-				long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
-				if (nlLoanId > 0) {
-					var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
-					Log.InfoFormat("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
+			if (loan.Id > 0) {
+				try {
+					ServiceClient serviceClient = new ServiceClient();
+					long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1)
+						.Value;
+					if (nlLoanId > 0) {
+						var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+						Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+					}
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 				}
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
-
 
 			loan.LoanSource = cr.LoanSource;
 			return loan;

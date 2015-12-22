@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConfigManager">
-      <HintPath>..\ConfigManager\bin\Debug\ConfigManager.dll</HintPath>
+      <HintPath>..\..\..\Backend\CalculateLoan\Models\bin\Debug\ConfigManager.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>

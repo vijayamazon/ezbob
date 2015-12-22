@@ -411,7 +411,7 @@
 				AConnection oDB,
 				ASafeLog oLog
 			) : base(oDB, oLog) {
-				m_oTrail = oTrail;
+				this.m_oTrail = oTrail;
 				CustomerID = oTrail.CustomerID;
 				DecisionID = (int)oTrail.Decision;
 				UniqueID = oDiffID;

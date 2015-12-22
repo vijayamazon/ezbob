@@ -132,21 +132,6 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-			try {
-				GetLoanIDByOldID s1 = new GetLoanIDByOldID(loan.Id);
-				s1.Execute();
-				var nlLoanId = s1.LoanID;
-				if (nlLoanId > 0) {
-					GetLoanState nlState = new GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1);
-					nlState.Execute();
-					var nlModel = nlState.Result;
-					Log.Info("<<< NL_Compare: nlModel: {0} loan: {1}  >>>", nlModel, loan);
-				}
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				Log.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
-			}
-
 			return loan;
 		}
 

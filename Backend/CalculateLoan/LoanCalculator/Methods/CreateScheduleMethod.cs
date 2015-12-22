@@ -11,8 +11,6 @@
 
 		public CreateScheduleMethod(ALoanCalculator calculator)
 			: base(calculator, false) {
-
-
 		} // constructor
 
 		/// <exception cref="NoInitialDataException">Condition. </exception>
@@ -23,7 +21,6 @@
 		public virtual void Execute() {
 
 			Calculator.currentHistory = WorkingModel.Loan.LastHistory();
-			//NL_LoanHistory history = WorkingModel.Loan.LastHistory();
 
 			if (Calculator.currentHistory == null) {
 				throw new NoInitialDataException();

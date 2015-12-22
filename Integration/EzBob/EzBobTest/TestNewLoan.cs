@@ -860,7 +860,7 @@
 		[Test]
 		public void ShortGetCustomerLoansTest() {
 			ServiceClient s = new ServiceClient();
-			var nlLoansList = s.Instance.GetCustomerLoans(371, 1).Value;
+			var nlLoansList = s.Instance.GetCustomerLoans(375, 1).Value;
 			nlLoansList.ForEach(l => this.m_oLog.Debug("{0}", l.LoanID));
 		}
 

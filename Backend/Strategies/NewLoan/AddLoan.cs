@@ -311,7 +311,7 @@
 				SetupOffsetPayment();
 
 				// temporary - should be removed/modified after "old" loan remove
-				Rebate();
+				CopyRebateTransaction();
 
 				// OK
 				SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements);
@@ -347,7 +347,7 @@
 			}
 		}
 
-		private void Rebate() {
+		private void CopyRebateTransaction() {
 			if (LoanID == 0)
 				return;
 
@@ -365,7 +365,7 @@
 
 			if (rebateTransaction == null || rebateTransaction.Amount == 0) {
 				Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
-				NL_AddLog(LogType.DataExsistense, "AddLoan:rebate" + string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
+				NL_AddLog(LogType.DataExsistense, string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
 				return;
 			}
 

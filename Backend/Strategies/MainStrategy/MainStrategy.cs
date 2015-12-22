@@ -766,15 +766,17 @@
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 
-			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
+			AddCashRequest nlsCashRequest = new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 				CustomerID = CustomerID,
 				OldCashRequestID = this.cashRequestID,
 				RequestTime = now,
 				UserID = UnderwriterID,
 			});
-			cashRequestStrategy.Execute();
-			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
+			nlsCashRequest.Context.CustomerID = CustomerID;
+			nlsCashRequest.Context.UserID = UnderwriterID;
+			nlsCashRequest.Execute();
+			this.nlCashRequestID = nlsCashRequest.CashRequestID;
 
 			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
 

@@ -3,6 +3,7 @@
 	using System.Globalization;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Utils.Security;
 	using Newtonsoft.Json;
 
 	public static class MiscUtils {
@@ -28,7 +29,7 @@
 			return new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 		}
 		public static string MD5(string input) {
-			return Security.SecurityUtils.MD5(input);
+			return SecurityUtils.MD5(input);
 		} // MD5
 
 		public static string ValidateStringArg(
