@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConfigManager">
+      <HintPath>..\ConfigManager\bin\Debug\ConfigManager.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -126,6 +129,10 @@
     <EmbeddedResource Include="uk\postcode\regions.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>

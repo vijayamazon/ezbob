@@ -9,7 +9,6 @@
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
@@ -564,11 +563,7 @@
 			stra.Execute();
 		}
 
-		[Test]
-		public void TestXLateLoanJob() {
-			var stra = new LateLoanJob();
-			stra.Execute();
-		}
+		
 
 		[Test]
 		public void ThreeInvalidAttempts() {

@@ -171,6 +171,7 @@
 		/// <param name="customer"></param>
 		/// <param name="term"></param>
 		/// <returns></returns>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public decimal CalculateSavings(Customer customer, DateTime? term = null) {
 			if (term == null)
 				term = DateTime.UtcNow;
@@ -181,6 +182,7 @@
 
 			Customer clonedCustomer = new Customer();
 			clonedCustomer.Loans.AddAll(customer.Loans.Select(l => l.Clone()).ToList());
+			clonedCustomer.Id = customer.Id;
 			PayAllLoansForCustomer(clonedCustomer, totalToPay, "", term);
 
 			decimal newInterest = clonedCustomer.Loans.Sum(l => l.Interest);

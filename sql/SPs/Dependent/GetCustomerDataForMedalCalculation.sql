@@ -32,6 +32,7 @@ BEGIN
 		@EarliestHmrcLastUpdateDate DATETIME,
 		@EarliestYodleeLastUpdateDate DATETIME,
 		@LastCashRequestID BIGINT
+		@NLLastCashRequestID BIGINT
 		
 	------------------------------------------------------------------------------
 
@@ -139,6 +140,8 @@ BEGIN
 	ORDER BY
 		CreationDate DESC,
 		Id DESC
+		
+	set @NLLastCashRequestID = (select Max(cr.CashRequestID) from NL_CashRequests cr where OldCashRequestID = @LastCashRequestID);
 
 	------------------------------------------------------------------------------
 
@@ -151,6 +154,7 @@ BEGIN
 		@ConsumerScore AS ConsumerScore,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
-		@LastCashRequestID AS LastCashRequestID
+		@LastCashRequestID AS LastCashRequestID,
+		@NLLastCashRequestID as NLLastCashRequestID
 END
 GO

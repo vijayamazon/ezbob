@@ -96,6 +96,8 @@
 
 			this.cashRequestID = sr["CashRequestID"];
 
+			this.nlCashRequestID = sr["NLCashRequestID"];
+
 			ForceNhibernateResync.ForCustomer(this.customerID);
 
 			Log.Debug(
@@ -118,14 +120,16 @@
 			int offeredCreditLine = CapOffer(medal);
 
 			Log.Debug(
-				"Executing silent approve for customer '{0}' using cash request '{1}'...",
+				"Executing silent approve for customer '{0}' using cash request '{1}', nlCashRequest '{2}'...",
 				this.customerID,
-				this.cashRequestID
+				this.cashRequestID,
+				this.nlCashRequestID
 			);
 
 			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,
 				this.cashRequestID,
+				this.nl
 				offeredCreditLine,
 				medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)medal.MedalType,
@@ -294,7 +298,7 @@
 
 			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
 
-			var instance = new CalculateMedal(this.customerID, this.cashRequestID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(this.customerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true ) {
 				Tag = Tag,
 				QuietMode = true,
 			};
@@ -313,5 +317,6 @@
 		private bool mainStrategyExecutedBefore;
 		private bool doMainStrategy;
 		private MedalResult medalToUse;
+		private long nlCashRequestID;
 	} // class SilentAutomation
 } // namespace

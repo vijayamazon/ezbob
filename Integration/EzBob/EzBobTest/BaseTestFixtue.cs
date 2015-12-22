@@ -10,6 +10,7 @@
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.RegistryScanner;
+	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
@@ -24,6 +25,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using ServiceClientProxy;
 
 	[TestFixture]
 	public class BaseTestFixtue {
@@ -54,6 +56,8 @@
 				x.For<ILoanSourceRepository>().Use<LoanSourceRepository>();
 				x.For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 				x.For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
+				x.For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
+
 			});
 
 			var oLog4NetCfg = new Log4Net().Init();

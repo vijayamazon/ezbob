@@ -1,8 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
-	using System.Data.SqlTypes;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -23,11 +21,11 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using KellermanSoftware.CompareNetObjects;
 	using Newtonsoft.Json;
 	using NHibernate.Linq;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
+	using ServiceClientProxy;
 	using StructureMap;
 
 	[TestFixture]
@@ -669,9 +667,10 @@
 		public void AddLateFeeTest() {
 			const long loanID = 17;
 			DateTime now = new DateTime(2015, 12, 28);
+
 			NL_LoanFees fee = new NL_LoanFees() {
 				LoanFeeTypeID = (int)NLFeeTypes.AdminFee,
-				Amount = NL_Model.GetLateFeesAmount(NLFeeTypes.AdminFee),
+				Amount = decimal.Parse(CurrentValues.Instance.AdministrationCharge.Value),    //NL_Model.GetLateFeesAmount(NLFeeTypes.AdminFee),
 				AssignedByUserID = 1,
 				AssignTime = now,
 				CreatedTime = now,
@@ -854,8 +853,21 @@
 
 		[Test]
 		public void LongGetCustomerLoansTest() {
-			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(271).ToList();
+			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(371).ToList();
 			nlLoansList.ForEach(l => this.m_oLog.Debug("{0}", l.LoanID));
+		}
+
+		[Test]
+		public void ShortGetCustomerLoansTest() {
+			ServiceClient s = new ServiceClient();
+			var nlLoansList = s.Instance.GetCustomerLoans(371, 1).Value;
+			nlLoansList.ForEach(l => this.m_oLog.Debug("{0}", l.LoanID));
+		}
+
+		[Test]
+		public void TestLateLoanJob() {
+			var stra = new LateLoanJob();
+			stra.Execute();
 		}
 
 	} // class TestNewLoan

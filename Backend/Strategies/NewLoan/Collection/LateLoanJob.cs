@@ -1,33 +1,40 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan.Collection {
-    using ConfigManager;
-    using System;
+	using ConfigManager;
+	using System;
 
-    /// <summary>
-    /// Late Loan Job
-    /// </summary>
-    public class LateLoanJob : AStrategy
-    {
-        public override string Name { get { return "Late Loan Job"; } }
+	/// <summary>
+	/// Late Loan Job
+	/// </summary>
+	public class LateLoanJob : AStrategy {
+
+		public override string Name { get { return "LateLoanJob"; } }
+
 		public override void Execute() {
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-		        return;
-		    try {
-                NL_AddLog(LogType.Info, "Strategy Start", null, null, null, null);
-                AStrategy strategy = new SetLateLoanStatus();
-                strategy.Execute();
 
-                //We dont want to send notifications twice for now...
-                //strategy = new LateLoanNotification();
-                //strategy.Execute();
+			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+				return;
 
-                //We dont want to change customer status twice for now...
-                //strategy = new LateLoanCured();
-                //strategy.Execute();
-                NL_AddLog(LogType.Info, "Strategy End", null, null, null, null);
-		    } catch (Exception ex) {
-                NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
-		    }
+			try {
+
+				NL_AddLog(LogType.Info, "Strategy Start", DateTime.UtcNow, null, null, null);
+
+				//For each loan schedule marks it as late, it's loan as late, applies fee if needed
+				AStrategy strategy = new SetLateLoanStatus();
+				strategy.Execute();
+
+				//We dont want to send notifications twice for now...
+				strategy = new LateLoanNotification();
+				//strategy.Execute();
+
+				//We dont want to change customer status twice for now...
+				strategy = new LateLoanCured();
+				//strategy.Execute();
+
+				NL_AddLog(LogType.Info, "Strategy End", DateTime.UtcNow, null, null, null);
+			} catch (Exception ex) {
+				NL_AddLog(LogType.Error, "Strategy Faild", DateTime.UtcNow, null, ex.ToString(), ex.StackTrace);
+			}
 		}//Execute
 
-    }// class CollectionRobot
+	}// class CollectionRobot
 } // namespace

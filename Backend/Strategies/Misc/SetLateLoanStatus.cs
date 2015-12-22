@@ -30,9 +30,10 @@
 				ConfigManager.CurrentValues.Instance.IMailSavePath);
 		} // constructor
 
-		public override string Name { get { return "Set Late Loan Status"; } }
+		public override string Name { get { return "SetLateLoanStatus"; } }
 
 		public override void Execute() {
+
 			this.now = DateTime.UtcNow;
 
 			//-----------Select relevan loans----------------------------------------------------
@@ -381,6 +382,7 @@
 		/// </summary>
 		/// <param name="sr"></param>
 		private void MarkLoanAsLate(SafeReader sr) {
+
 			int id = sr["id"];
 			int loanId = sr["LoanId"];
 			int customerId = sr["CustomerId"];
@@ -404,6 +406,7 @@
 			//		return;
 			//	}
 			//} // if
+
 			if (loanStatus != "Late") {
 				DB.ExecuteNonQuery(
 					"UpdateLoanStatusToLate", CommandSpecies.StoredProcedure,

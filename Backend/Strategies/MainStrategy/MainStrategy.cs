@@ -247,7 +247,7 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, this.cashRequestID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(CustomerID, this.cashRequestID, DateTime.UtcNow, false, true, this.nlCashRequestID) {
 				Tag = this.tag,
 			};
 			instance.Execute();
@@ -477,8 +477,7 @@
 
 			AddOldDecisionOffer(now);
 
-			if (this.nlExists)
-				AddNLDecisionOffer(now);
+			AddNLDecisionOffer(now);
 
 			UpdateSalesForceOpportunity();
 
@@ -508,8 +507,6 @@
 		} // AddOldDecisionOffer
 
 		private void AddNLDecisionOffer(DateTime now) {
-			if (!this.nlExists)
-				return;
 
 			if (!this.autoDecisionResponse.HasAutoDecided)
 				return;
@@ -530,7 +527,7 @@
 			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
-				
+
 				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.autoDecisionResponse.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
 				if (this.autoDecisionResponse.SpreadSetupFee) {
 					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
@@ -733,18 +730,10 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
-				DB.ExecuteNonQuery(
-					"MainStrategySetCustomerIsBeingProcessed",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerID", CustomerID)
-				);
+				DB.ExecuteNonQuery("MainStrategySetCustomerIsBeingProcessed", CommandSpecies.StoredProcedure, new QueryParameter("@CustomerID", CustomerID));
 
 				if (this.nlExists) {
-					this.nlCashRequestID = DB.ExecuteScalar<long>(
-						"NL_CashRequestGetByOldID",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("@OldCashRequestID", this.cashRequestID.Value)
-					);
+					this.nlCashRequestID = DB.ExecuteScalar<long>("NL_CashRequestGetByOldID", CommandSpecies.StoredProcedure, new QueryParameter("@OldCashRequestID", this.cashRequestID.Value));
 				} // if
 
 				return;
@@ -771,19 +760,19 @@
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 
-			if (this.nlExists) {
-				AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
-					CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-					CustomerID = CustomerID,
-					OldCashRequestID = this.cashRequestID,
-					RequestTime = now,
-					UserID = UnderwriterID,
-				});
-				cashRequestStrategy.Execute();
-				this.nlCashRequestID = cashRequestStrategy.CashRequestID;
+			//if (this.nlExists) {
+			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
+				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
+				CustomerID = CustomerID,
+				OldCashRequestID = this.cashRequestID,
+				RequestTime = now,
+				UserID = UnderwriterID,
+			});
+			cashRequestStrategy.Execute();
+			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
 
-				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
-			} // if
+			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+			//} // if
 
 			int cashRequestCount = sr["CashRequestCount"];
 

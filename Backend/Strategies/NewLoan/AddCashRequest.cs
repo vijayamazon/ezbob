@@ -12,17 +12,14 @@
 		public override string Name { get { return "AddCashRequest"; } }
 
 		public override void Execute() {
+
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
 				return;
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.cashRequest, null, Error, null);
 
 			try {
-				CashRequestID = DB.ExecuteScalar<long>(
-					"NL_CashRequestsSave",
-					CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter<NL_CashRequests>("Tbl", this.cashRequest)
-					);
+				CashRequestID = DB.ExecuteScalar<long>("NL_CashRequestsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_CashRequests>("Tbl", this.cashRequest));
 
 				NL_AddLog(LogType.Info, "Strategy End", this.cashRequest, CashRequestID, Error, null);
 
