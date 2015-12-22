@@ -3714,7 +3714,7 @@ namespace ServiceClientProxy.EzServiceReference {
         Late = 11,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        PandingInvestor = 12,
+        PendingInvestor = 12,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]

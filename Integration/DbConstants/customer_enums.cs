@@ -183,7 +183,7 @@
 		PaidOff,
 		WrittenOff,
 		Late,
-		PandingInvestor
+		PendingInvestor
 	} // enum CreditResultStatus
 
 	public static class CreditResultStatusExt {
