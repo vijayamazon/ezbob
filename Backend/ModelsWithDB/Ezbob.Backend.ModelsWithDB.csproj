@@ -178,6 +178,8 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
+    <Compile Include="OpenPlatform\I_OpenPlatformOffer.cs" />
+    <Compile Include="OpenPlatform\I_SubGrade.cs" />
     <Compile Include="OpenPlatform\I_GradeRange.cs" />
     <Compile Include="OpenPlatform\I_FundingType.cs" />
     <Compile Include="OpenPlatform\I_Grade.cs" />

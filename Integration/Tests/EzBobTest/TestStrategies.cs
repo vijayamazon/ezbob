@@ -6,10 +6,8 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
-	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -20,7 +18,6 @@
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
-	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -28,7 +25,6 @@
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.OfferCalculation;
-	using Ezbob.Backend.Strategies.OpenPlatform;
 	using Ezbob.Backend.Strategies.Postcode;
 	using Ezbob.Backend.Strategies.Reports;
 	using Ezbob.Backend.Strategies.SalesForce;
@@ -1277,91 +1273,6 @@
 			}
 		}
 		
-		public void TestCreateInvestor() {
-			DateTime now = DateTime.UtcNow;
-			
-			var stra = new CreateInvestor(
-				new InvestorModel {
-					Name = "TestInvestor",
-					IsActive = true,
-					Timestamp = now,
-					InvestorType = new InvestorTypeModel{ InvestorTypeID  = 1 }
-				}, 
-				new List<InvestorContactModel> {
-					new InvestorContactModel {
-						Timestamp = now, 
-						IsActive = true, 
-						Email = "stasd+investor1@ezbob.com",
-						Comment = "comment", 
-						IsPrimary = true,
-						LastName = "last", 
-						PersonalName = "personal", 
-						Mobile = "011111111111", 
-						OfficePhone = "02222222222", 
-						Role = "Role"
-					}
-				}, 
-				new List<InvestorBankAccountModel> {
-					new InvestorBankAccountModel{
-						IsActive = true,
-						Timestamp = now,
-						BankAccountName = "aname",
-						BankAccountNumber = "123",
-						BankBranchName = "bname",
-						BankBranchNumber = "456",
-						BankCode = "789",
-						BankCountryID = "UK",
-						BankName = "bank",
-						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 1 },
-						InvestorBankAccountID = 1,
-						RepaymentKey = "key"
-					},
-					new InvestorBankAccountModel{
-						IsActive = true,
-						Timestamp = now,
-						BankAccountName = "aname",
-						BankAccountNumber = "123",
-						BankBranchName = "bname",
-						BankBranchNumber = "456",
-						BankCode = "789",
-						BankCountryID = "UK",
-						BankName = "bank",
-						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 1},
-						InvestorBankAccountID = 1,
-						RepaymentKey = "key"
-					}
-				});
-			stra.Execute();
-
-			Assert.IsTrue(stra.Result);
-		}
-
-		[Test]
-		public void TestLoadInvestor() {
-			var stra = new LoadInvestor(25);
-			
-			stra.Execute();
-			Assert.IsNotNull(stra.Result);
-			Assert.Greater(stra.Result.Contacts.Count, 0);
-		}
-
-		[Test]
-		public void TestManageInvestor() {
-			var stra = new ManageInvestorBankAccount(new InvestorBankAccountModel{
-				IsActive = true,
-				InvestorID = 10,
-				Timestamp = DateTime.Today,
-				InvestorBankAccountID = 4,
-				AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 2 },
-				BankCode = "435",
-				BankAccountNumber = "2345",
-				BankAccountName = "sdggfds"
-			});
-
-			stra.Execute();
-			Assert.IsTrue(stra.Result);
-		}
-
 		[Test]
 		public void TestLoadPApplicationInfo() {
 			var stra = new LoadApplicationInfo(3416, 42816, DateTime.Now);

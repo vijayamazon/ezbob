@@ -207,26 +207,45 @@ GO
 IF object_id('I_Grade') IS NULL
 BEGIN
 	CREATE TABLE I_Grade (
-		GradeID INT NOT NULL IDENTITY(1,1),
+		GradeID INT NOT NULL,
 	   	Name NVARCHAR(5),
+	   	UpperBound DECIMAL(18, 6) NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_Grade PRIMARY KEY (GradeID)
+		CONSTRAINT PK_I_Grade PRIMARY KEY (GradeID),
+		CONSTRAINT UC_I_Grade UNIQUE (Name),
+		CONSTRAINT CHK_I_Grade CHECK (LTRIM(RTRIM(Name)) != '')
 	)
 END
 GO
 
 IF NOT EXISTS (SELECT * FROM I_Grade)
 BEGIN
-	INSERT INTO I_Grade (Name) VALUES ('A')
-	INSERT INTO I_Grade (Name) VALUES ('B')
-	INSERT INTO I_Grade (Name) VALUES ('C')
-	INSERT INTO I_Grade (Name) VALUES ('D')
-	INSERT INTO I_Grade (Name) VALUES ('E')
-	INSERT INTO I_Grade (Name) VALUES ('F')
-	INSERT INTO I_Grade (Name) VALUES ('G')
-	INSERT INTO I_Grade (Name) VALUES ('H')
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (1,'A',0.155)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (2,'B',0.253)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (3,'C',0.347)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (4,'D',0.452)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (5,'E',0.552)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (6,'F',0.594)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (7,'G',0.697)
+	INSERT INTO I_Grade (GradeID,Name,UpperBound) VALUES (8,'H',1.000)
 END
 GO
+
+IF object_id('I_SubGrade') IS NULL
+BEGIN
+	CREATE TABLE I_SubGrade (
+		SubGradeID INT NOT NULL IDENTITY(1,1),
+		GradeID INT NOT NULL,
+	   	Name NVARCHAR(5),
+	   	MinScore DECIMAL(18, 6) NULL,
+	   	MaxScore DECIMAL(18, 6) NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_SubGrade PRIMARY KEY (SubGradeID)
+	)
+END
+GO
+
+
 
 IF object_id('I_FundingType') IS NULL
 BEGIN
@@ -491,6 +510,7 @@ BEGIN
 	CREATE TABLE I_GradeRange (
 		GradeRangeID INT NOT NULL IDENTITY(1,1),
 		GradeID INT NULL,
+		SubGradeID INT NULL,
 		LoanSourceID INT NOT NULL,
 		OriginID INT NOT NULL,
 		IsFirstLoan BIT NOT NULL,
@@ -506,6 +526,7 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_GradeRange PRIMARY KEY (GradeRangeID),
 		CONSTRAINT FK_I_GradeRange_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID),
+		CONSTRAINT FK_I_GradeRange_I_SubGrade FOREIGN KEY (SubGradeID) REFERENCES I_SubGrade(SubGradeID),
 		CONSTRAINT FK_I_GradeRange_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource(LoanSourceID),
 		CONSTRAINT FK_I_GradeRange_CustomerOrigin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin(CustomerOriginID)
 	)
@@ -531,50 +552,48 @@ BEGIN
 	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
 	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
 		
-	INSERT INTO I_GradeRange (GradeID, LoanSourceID, OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, Timestamp)
-	VALUES (@GradeA, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.09 ,50000,150000,12,60,'2015-12-01'),
-		   (@GradeB, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.115,40000,120000,12,60,'2015-12-01'),
-		   (@GradeC, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.102,0.14 ,30000, 80000,12,60,'2015-12-01'),
-		   (@GradeD, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.135,0.183,25000, 65000,12,36,'2015-12-01'),
+	INSERT INTO I_GradeRange (GradeID, SubGradeID, LoanSourceID, OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, Timestamp)
+	VALUES (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.09 ,50000,150000,12,60,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.115,40000,120000,12,60,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.102,0.14 ,30000, 80000,12,60,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.135,0.183,25000, 65000,12,36,'2015-12-01'),
 		   
-		   (@GradeA, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.057 ,0.09, 50000,150000,12,60,'2015-12-01'),
-		   (@GradeB, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0855,0.115,40000,120000,12,60,'2015-12-01'),
-		   (@GradeC, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,12,60,'2015-12-01'),
-		   (@GradeD, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.1283,0.183,25000, 65000,12,36,'2015-12-01'),
+		   (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.057 ,0.09, 50000,150000,12,60,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0855,0.115,40000,120000,12,60,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,12,60,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.1283,0.183,25000, 65000,12,36,'2015-12-01'),
 		   
-		   (@GradeA, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.057 ,0.09, 50000,150000,15,  60,  '2015-12-01'),
-		   (@GradeB, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,15,  60,  '2015-12-01'),
-		   (@GradeC, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,15,  60,  '2015-12-01'),
-		   (@GradeD, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,15,  36,  '2015-12-01'),
-		 --(@GradeE, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
-		 --(@GradeF, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
+		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.057 ,0.09, 50000,150000,15,  60,  '2015-12-01'),
+		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,15,  60,  '2015-12-01'),
+		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,15,  60,  '2015-12-01'),
+		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,15,  36,  '2015-12-01'),
+		 --(@GradeE, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
+		 --(@GradeF, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
 		   
-		   (@GradeA, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,15,  60,  '2015-12-01'),
-		   (@GradeB, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,15,  60,  '2015-12-01'),
-		   (@GradeC, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,15,  60,  '2015-12-01'),
-		   (@GradeD, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,15,  36,  '2015-12-01'),
-		 --(@GradeE, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
-		 --(@GradeF, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
+		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,15,  60,  '2015-12-01'),
+		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,15,  60,  '2015-12-01'),
+		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,15,  60,  '2015-12-01'),
+		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,15,  36,  '2015-12-01'),
+		 --(@GradeE, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
+		 --(@GradeF, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
 		   
-		   (@GradeA, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.057, 0.09, 50000,150000,3,60,'2015-12-01'),
-		   (@GradeB, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,3,60,'2015-12-01'),
-		   (@GradeC, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,3,60,'2015-12-01'),
-		   (@GradeD, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,3,36,'2015-12-01'),
-		 --(@GradeE, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeF, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeG, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),	
-		 --(@GradeH, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.057, 0.09, 50000,150000,3,60,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,3,60,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,3,60,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,3,36,'2015-12-01'),
+		 --(@GradeE, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		 --(@GradeF, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		 --(@GradeG, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),	
+		 --(@GradeH, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
 		   
-		   (@GradeA, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,3,60,'2015-12-01'),
-		   (@GradeB, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,3,60,'2015-12-01'),
-		   (@GradeC, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,3,60,'2015-12-01'),
-		   (@GradeD, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,3,36,'2015-12-01')
-		 --(@GradeE, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeF, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeG, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeH, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01')
-		   
-	
+		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,3,60,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,3,60,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,3,60,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,3,36,'2015-12-01')
+		 --(@GradeE, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		 --(@GradeF, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		 --(@GradeG, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		 --(@GradeH, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01')
 END
 GO
 
@@ -604,6 +623,21 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InterestVariable PRIMARY KEY (InterestVariableID),
 		CONSTRAINT FK_I_InterestVariable_I_Instrument FOREIGN KEY (InstrumentID) REFERENCES I_Instrument(InstrumentID)
+	)
+END
+GO
+
+IF object_id('I_OpenPlatformOffer') IS NULL
+BEGIN
+	CREATE TABLE I_OpenPlatformOffer (
+		OpenPlatformOfferID INT NOT NULL IDENTITY(1,1),
+		CashRequestID BIGINT NOT NULL,
+		InvestorID INT NOT NULL,
+		InvestmentPercent DECIMAL(18,6) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_OpenPlatformOffer PRIMARY KEY (OpenPlatformOfferID),
+		CONSTRAINT FK_I_OpenPlatformOffer_CashRequest FOREIGN KEY (CashRequestID) REFERENCES CashRequests(Id),
+		CONSTRAINT FK_I_OpenPlatformOffer_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID)
 	)
 END
 GO

@@ -37,6 +37,8 @@
 			CodeToFile.SaveFile<I_ProductSubType>();
 			CodeToFile.SaveFile<I_ProductType>();
 			CodeToFile.SaveFile<I_UWInvestorConfigurationParam>();
+			CodeToFile.SaveFile<I_SubGrade>();
+			CodeToFile.SaveFile<I_OpenPlatformOffer>();
 		}
 
 	    private static void CreateNewLoanTablesSps()

@@ -11,7 +11,7 @@ GO
 
 CREATE TYPE I_PortfolioList AS TABLE (
 	[InvestorID] INT NOT NULL,
-	[LoanID] NVARCHAR(255) NULL,
+	[LoanID] INT NOT NULL,
 	[LoanPercentage] DECIMAL(18, 6) NOT NULL,
 	[InitialTerm] INT NOT NULL,
 	[GradeId] INT NOT NULL

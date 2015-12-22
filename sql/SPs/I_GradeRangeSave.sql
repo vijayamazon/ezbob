@@ -11,6 +11,7 @@ GO
 
 CREATE TYPE I_GradeRangeList AS TABLE (
 	[GradeID] INT NULL,
+	[SubGradeID] INT NULL,
 	[LoanSourceID] INT NOT NULL,
 	[OriginID] INT NOT NULL,
 	[IsFirstLoan] BIT NOT NULL,
@@ -34,6 +35,7 @@ BEGIN
 
 	INSERT INTO I_GradeRange (
 		[GradeID],
+		[SubGradeID],
 		[LoanSourceID],
 		[OriginID],
 		[IsFirstLoan],
@@ -48,6 +50,7 @@ BEGIN
 		[Timestamp]
 	) SELECT
 		[GradeID],
+		[SubGradeID],
 		[LoanSourceID],
 		[OriginID],
 		[IsFirstLoan],

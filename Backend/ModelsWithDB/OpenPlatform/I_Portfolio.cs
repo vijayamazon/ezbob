@@ -16,7 +16,7 @@
 
 		[FK("Loan", "Id")]
 		[DataMember]
-        public String LoanID { get; set; }
+        public int LoanID { get; set; }
 
         [DataMember]
         public decimal LoanPercentage { get; set; }
@@ -31,5 +31,5 @@
         [DataMember]
         public TimeSpan TimeSpan { get; set; }
 
-    }//class Portfolio
+	}//class I_Portfolio
 }//ns

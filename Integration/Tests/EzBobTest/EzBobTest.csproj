@@ -112,6 +112,7 @@
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="OpenPlatformTests\Core\TestBase.cs" />
     <Compile Include="OpenPlatformTests\Investor\TestInvestorRules.cs" />
+    <Compile Include="OpenPlatformTests\Investor\TestOpenPlatformStrategies.cs" />
     <Compile Include="TestEarnedInterest.cs" />
     <Compile Include="TestIMail.cs" />
     <Compile Include="TestNewLoan.cs" />

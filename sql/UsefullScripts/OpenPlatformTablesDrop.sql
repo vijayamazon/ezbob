@@ -1,4 +1,11 @@
 
+IF EXISTS (SELECT * FROM syscolumns WHERE name='ProductSubTypeID' AND id=object_id('CashRequests'))
+BEGIN
+	ALTER TABLE CashRequests DROP CONSTRAINT FK_CashRequests_I_ProductSubType
+	ALTER TABLE CashRequests DROP COLUMN ProductSubTypeID
+END
+GO
+
 IF NOT object_id('I_InvestorContact') IS NULL
 	DROP TABLE I_InvestorContact
 GO
@@ -28,9 +35,14 @@ IF NOT object_id('I_InvestorAccountType') IS NULL
 	DROP TABLE I_InvestorAccountType
 GO
 
+IF NOT object_id('I_GradeRange') IS NULL
+	DROP TABLE I_GradeRange
+GO
+
 IF NOT object_id('I_ProductSubType') IS NULL
 	DROP TABLE I_ProductSubType
 GO
+
 
 IF NOT object_id('I_Portfolio') IS NULL
 	DROP TABLE I_Portfolio
@@ -43,6 +55,7 @@ GO
 IF NOT object_id('I_Index') IS NULL
 	DROP TABLE I_Index
 GO
+
 
 IF NOT object_id('I_ProductType') IS NULL
 	DROP TABLE I_ProductType
@@ -60,9 +73,26 @@ GO
 IF NOT object_id('I_FundingType') IS NULL
 	DROP TABLE I_FundingType
 GO
+
+IF NOT object_id('I_Grade') IS NULL
+	DROP TABLE I_Grade
+GO
+
+IF NOT object_id('I_SubGrade') IS NULL
+	DROP TABLE I_SubGrade
+GO
 	
 IF NOT object_id('I_UWInvestorConfigurationParam') IS NULL
 	DROP TABLE I_UWInvestorConfigurationParam
+GO
+
+IF NOT object_id('I_Parameter') IS NULL
+	DROP TABLE I_Parameter
+GO
+
+
+IF NOT object_id('I_OpenPlatformOffer') IS NULL
+	DROP TABLE I_OpenPlatformOffer
 GO
 
 IF NOT object_id('I_Investor') IS NULL
@@ -71,18 +101,6 @@ GO
 
 IF NOT object_id('I_InvestorType') IS NULL
 	DROP TABLE I_InvestorType
-GO
-
-IF NOT object_id('I_Parameter') IS NULL
-	DROP TABLE I_Parameter
-GO
-
-IF NOT object_id('I_GradeRange') IS NULL
-	DROP TABLE I_GradeRange
-GO
-
-IF NOT object_id('I_Grade') IS NULL
-	DROP TABLE I_Grade
 GO
 
 IF NOT object_id('I_InterestVariable') IS NULL

@@ -13,6 +13,10 @@
 		[DataMember]
 		public int? GradeID { get; set; }
 
+		[FK("I_SubGrade", "SubGradeID")]
+		[DataMember]
+		public int? SubGradeID { get; set; }
+
 		[FK("LoanSource", "GradeID")]
 		[DataMember]
 		public int LoanSourceID { get; set; }
