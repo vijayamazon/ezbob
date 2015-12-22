@@ -545,7 +545,7 @@
 					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
 					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
 					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-					RepaymentIntervalTypeID = Convert.ToInt32(RepaymentIntervalTypes.Month.DescriptionAttr()), // TODO some day...
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month, //Convert.ToInt32(RepaymentIntervalTypes.Month.DescriptionAttr()), // TODO some day...
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,

@@ -4,7 +4,6 @@
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
-	using NHibernate.Util;
 
 	public class AddDecision : AStrategy {
 		public AddDecision(NL_Decisions decision, long? oldCashRequestID, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
@@ -13,7 +12,6 @@
 			this.decisionRejectReasons = (List<NL_DecisionRejectReasons>)decisionRejectReasons;
 
 			this.strategyArgs = new object[] { decision, oldCashRequestID, decisionRejectReasons };
-
 		}//constructor
 
 		public override string Name { get { return "AddDecision"; } }
