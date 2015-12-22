@@ -4,8 +4,8 @@
 	using Ezbob.Logger;
 
 	public class SameDataAgent : Agent {
-		public SameDataAgent(int customerID, long? cashRequestID, DateTime now, AConnection db, ASafeLog log)
-			: base(customerID, cashRequestID, db, log)
+		public SameDataAgent(int customerID, long? cashRequestID, long? nlCashRequestID, DateTime now, AConnection db, ASafeLog log)
+			: base(customerID, cashRequestID, nlCashRequestID, db, log)
 		{
 			this.now = now; // Not assigning directly to Now to avoid "virtual call in constructor".
 		} // constructor

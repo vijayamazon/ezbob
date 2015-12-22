@@ -39,10 +39,11 @@
 		private void ProcessRow(SafeReader sr) {
 			int customerID = sr["CustomerID"];
 			long cashRequestID = sr["CashRequestID"];
+			long? nlCashRequestID = sr["NLCashRequestID"];
 			DateTime decisionTime = sr["DecisionTime"];
 
 			try {
-				var agent = new SameDataAgent(customerID, cashRequestID, decisionTime, DB, Log);
+				var agent = new SameDataAgent(customerID, cashRequestID, nlCashRequestID, decisionTime, DB, Log);
 				agent.Decide(this.tag);
 
 				BrokerClientPreventer brokerClient = agent.Trail.FindTrace<BrokerClientPreventer>();
@@ -88,11 +89,13 @@
 	SELECT
 		CustomerID = c.Id,
 		CashRequestID = r.Id,
+		NLCashRequestID = nlr.CashRequestID,
 		DecisionTime = r.UnderwriterDecisionDate,
 		Position = ROW_NUMBER() OVER (PARTITION BY r.IdCustomer ORDER BY r.UnderwriterDecisionDate)
 	FROM
 		Customer c
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer AND r.UnderwriterDecisionDate IS NOT NULL
+		LEFT JOIN NL_CashRequests nlr ON r.Id = nlr.OldCashRequestID
 	WHERE
 		c.IsTest = 0
 ) SELECT

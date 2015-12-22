@@ -178,6 +178,7 @@
 			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
 				CustomerID,
 				CashRequestID,
+				NLCashRequestID,
 				DecisionTime,
 				this.db,
 				Log
@@ -193,7 +194,7 @@
 		private void RunAutoReapproval() {
 			var agent = new
 				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
-				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, CashRequestID, DecisionTime, this.db, Log);
+				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, CashRequestID, NLCashRequestID, DecisionTime, this.db, Log);
 
 			agent.Init();
 
@@ -204,7 +205,13 @@
 
 		private void RunAutoReject(AutomationTrails atra) {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
-				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(this.db, Log, CustomerID, CashRequestID);
+				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(
+					this.db,
+					Log,
+					CustomerID,
+					CashRequestID,
+					NLCashRequestID
+				);
 
 			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
 
@@ -219,7 +226,14 @@
 		} // RunAutoReject
 
 		private MedalResult RunCalculateMedal() {
-			CalculateMedal instance = new CalculateMedal(CustomerID, CashRequestID DecisionTime, true, true) { Tag = Tag, };
+			CalculateMedal instance = new CalculateMedal(
+				CustomerID,
+				CashRequestID,
+				NLCashRequestID,
+				DecisionTime,
+				true,
+				true
+			) { Tag = Tag, };
 			instance.Execute();
 			return instance.Result;
 		} // RunCalculateMedal
@@ -234,6 +248,7 @@
 			var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
 				CustomerID,
 				CashRequestID,
+				NLCashRequestID,
 				120000, // this is currently max loan amount
 				(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)this.medal.MedalType,

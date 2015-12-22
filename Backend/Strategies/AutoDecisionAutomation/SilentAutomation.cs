@@ -101,14 +101,16 @@
 			ForceNhibernateResync.ForCustomer(this.customerID);
 
 			Log.Debug(
-				"Executing silent reject for customer '{0}' using cash request '{1}'...",
+				"Executing silent reject for customer '{0}' using cash request 'o {1}/n {2}'...",
 				this.customerID,
-				this.cashRequestID
+				this.cashRequestID,
+				this.nlCashRequestID
 			);
 
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID,
 				this.cashRequestID,
+				this.nlCashRequestID,
 				DB,
 				Log
 			).Init();
@@ -129,7 +131,7 @@
 			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,
 				this.cashRequestID,
-				this.nl
+				this.nlCashRequestID,
 				offeredCreditLine,
 				medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)medal.MedalType,
@@ -148,11 +150,12 @@
 					ExecuteMain();
 				else {
 					Log.Debug(
-						"Not running auto decision for customer {0} using cash request {3}: no potential ({1} and {2}).",
+						"Not running auto decision for customer {0} using cash request 'o {3}/n {4}': no potential ({1} and {2}).",
 						this.customerID,
 						isRejected ? "rejected" : "not rejected",
 						isApproved ? "approved" : "not approved",
-						this.cashRequestID
+						this.cashRequestID,
+						this.nlCashRequestID
 					);
 				} // if
 			} // if
@@ -179,10 +182,11 @@
 			} // if
 
 			Log.Debug(
-				"Silent decision for customer {0} using cash request {1} is 'approve', " +
+				"Silent decision for customer {0} using cash request 'o {1}/n {2}' is 'approve', " +
 				"checking whether cash request is intact...",
 				this.customerID,
-				this.cashRequestID
+				this.cashRequestID,
+				this.nlCashRequestID
 			);
 
 			SafeReader sr = DB.GetFirst(
@@ -204,6 +208,7 @@
 			long currentCashRequestID = sr["CashRequestID"];
 			string uwDecision = (sr["UnderwriterDecision"] ?? string.Empty).Trim();
 
+			// TODO: when removing old cash request: it should be nlCashRequestID.
 			bool suitableCashRequest = this.cashRequestID == currentCashRequestID;
 
 			bool suitableDecision =

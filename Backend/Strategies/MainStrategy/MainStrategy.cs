@@ -32,7 +32,7 @@
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
 			FinishWizardArgs fwa,
-			long? cashRequestID,
+			long? cashRequestID, // When old cash request is removed replace this with NLcashRequestID
 			CashRequestOriginator? cashRequestOriginator
 		) {
 			UnderwriterID = underwriterID;
@@ -61,8 +61,6 @@
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
-
-			this.nlExists = DB.ExecuteScalar<bool>("NL_Exists", CommandSpecies.StoredProcedure);
 
 			this.customerDetails = new CustomerDetails(customerID);
 
@@ -247,7 +245,7 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, this.cashRequestID, DateTime.UtcNow, false, true, this.nlCashRequestID) {
+			var instance = new CalculateMedal(CustomerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true) {
 				Tag = this.tag,
 			};
 			instance.Execute();
@@ -358,6 +356,7 @@
 				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
 					CustomerID,
 					this.cashRequestID,
+					this.nlCashRequestID,
 					DB,
 					Log
 				).Init();
@@ -382,6 +381,7 @@
 				var aAgent = new Approval(
 					CustomerID,
 					this.cashRequestID,
+					this.nlCashRequestID,
 					this.offeredCreditLine,
 					this.medal.MedalClassification,
 					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
@@ -441,7 +441,7 @@
 				return;
 
 			if (EnableAutomaticReRejection) {
-				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, DB, Log);
+				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log);
 				rrAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 				if (rrAgent.WasMismatch) {
@@ -460,7 +460,7 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			var rAgent = new Agent(CustomerID, this.cashRequestID, DB, Log).Init();
+			var rAgent = new Agent(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log).Init();
 			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 			if (rAgent.WasMismatch) {
@@ -730,11 +730,17 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
-				DB.ExecuteNonQuery("MainStrategySetCustomerIsBeingProcessed", CommandSpecies.StoredProcedure, new QueryParameter("@CustomerID", CustomerID));
+				DB.ExecuteNonQuery(
+					"MainStrategySetCustomerIsBeingProcessed",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", CustomerID)
+				);
 
-				if (this.nlExists) {
-					this.nlCashRequestID = DB.ExecuteScalar<long>("NL_CashRequestGetByOldID", CommandSpecies.StoredProcedure, new QueryParameter("@OldCashRequestID", this.cashRequestID.Value));
-				} // if
+				this.nlCashRequestID = DB.ExecuteScalar<long>(
+					"NL_CashRequestGetByOldID",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@OldCashRequestID", this.cashRequestID.Value)
+				);
 
 				return;
 			} // if
@@ -760,7 +766,6 @@
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 
-			//if (this.nlExists) {
 			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 				CustomerID = CustomerID,
@@ -772,7 +777,6 @@
 			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
 
 			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
-			//} // if
 
 			int cashRequestCount = sr["CashRequestCount"];
 
@@ -890,7 +894,6 @@
 
 		private readonly CashRequestOriginator? cashRequestOriginator;
 
-		private readonly bool nlExists;
 		private readonly string tag;
 		private bool wasMismatch;
 		private ABackdoorSimpleDetails backdoorSimpleDetails;

@@ -16,6 +16,7 @@
 			return new ReRejection(
 				oRow.CustomerId,
 				null,
+				null,
 				DB,
 				Log
 			).MakeAndVerifyDecision(Tag);

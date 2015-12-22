@@ -75,6 +75,7 @@
 			this.m_oSecondaryImplementation = new Agent(
 				this.trail.CustomerID,
 				this.trail.CashRequestID,
+				this.trail.NLCashRequestID,
 				offeredCreditLine,
 				(AutomationCalculator.Common.Medal)medalClassification,
 				medalType,

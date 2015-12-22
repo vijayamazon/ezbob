@@ -16,12 +16,19 @@
 
 		public ReapprovalTrail Trail { get; private set; }
 
-		public Agent(AConnection oDB, ASafeLog oLog, int customerId, long? cashRequestID, DateTime? dataAsOf = null) {
+		public Agent(
+			AConnection oDB,
+			ASafeLog oLog,
+			int customerId,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			DateTime? dataAsOf = null
+		) {
 			this.m_oDB = oDB;
 			this.m_oLog = oLog.Safe();
 			this.CustomerId = customerId;
 			this.Now = dataAsOf ?? DateTime.UtcNow;
-			Trail = new ReapprovalTrail(customerId, cashRequestID, this.m_oLog);
+			Trail = new ReapprovalTrail(customerId, cashRequestID, nlCashRequestID, this.m_oLog);
 			Result = new ReApprovalResult(false, 0);
 		} // constructor
 

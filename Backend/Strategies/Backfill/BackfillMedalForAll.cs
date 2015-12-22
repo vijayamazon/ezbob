@@ -62,7 +62,7 @@
 
 				var verification = new AutomationCalculator.MedalCalculation.MedalChooser(DB, Log);
 				AutomationCalculator.Common.MedalOutputModel medal = verification.GetMedal(cri.CustomerID, cri.DecisionTime);
-				medal.SaveToDb(cri.CashRequestID, this.tag, DB, Log);
+				medal.SaveToDb(cri.CashRequestID, null, this.tag, DB, Log);
 
 				Log.Debug(
 					"Medal backfill complete for customer {0} with cash request id {1}.",

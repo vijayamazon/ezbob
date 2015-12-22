@@ -3,6 +3,7 @@
 
 	public class ManualDecision : ADecision {
 		public long CashRequestID { get; set; }
+		public long? NLCashRequestID { get; set; }
 
 		public bool IsOldCustomer { get; set; }
 		public bool HasSignature { get; set; }

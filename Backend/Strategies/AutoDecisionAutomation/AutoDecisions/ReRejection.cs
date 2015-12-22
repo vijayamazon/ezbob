@@ -12,13 +12,14 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class ReRejection : AAutoDecisionBase {
-		public ReRejection(int customerId, long? cashRequestID, AConnection db, ASafeLog log) {
+		public ReRejection(int customerId, long? cashRequestID, long? nlCashRequestID, AConnection db, ASafeLog log) {
 			this.db = db;
 			this.log = log.Safe();
 
 			this.trail = new ReRejectionTrail(
 				customerId,
 				cashRequestID,
+				nlCashRequestID,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -101,7 +102,12 @@
 
 		private AutomationCalculator.AutoDecision.AutoReRejection.Agent RunSecondary() {
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
-				this.trail.CustomerID, this.trail.CashRequestID, this.trail.InputData.DataAsOf, this.db, this.log
+				this.trail.CustomerID,
+				this.trail.CashRequestID,
+				this.trail.NLCashRequestID,
+				this.trail.InputData.DataAsOf,
+				this.db,
+				this.log
 			).Init();
 
 			oSecondary.MakeDecision();

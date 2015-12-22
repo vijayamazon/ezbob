@@ -23,7 +23,7 @@
 			DateTime calculationTime,
 			bool primaryOnly,
 			bool doStoreMedal
-			 ) {
+		) {
 
 			this.doStoreMedal = doStoreMedal;
 			this.primaryOnly = primaryOnly;

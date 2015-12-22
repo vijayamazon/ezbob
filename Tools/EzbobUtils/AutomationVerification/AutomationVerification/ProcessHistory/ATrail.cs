@@ -322,7 +322,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				var sp = new SaveDecisionTrail(this, UniqueID, true, CashRequestID, this.tag, oDB, this.m_oLog);
+				var sp = new SaveDecisionTrail(this, UniqueID, true, CashRequestID, NLCashRequestID, this.tag, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -330,7 +330,7 @@
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, UniqueID, false, CashRequestID, this.tag, oDB, this.m_oLog);
+					sp = new SaveDecisionTrail(oTrail, UniqueID, false, CashRequestID, NLCashRequestID, this.tag, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
@@ -406,11 +406,11 @@
 				Guid oDiffID,
 				bool bIsPrimary,
 				long? cashRequestID,
+				long? nlCashRequestID,
 				string tag,
 				AConnection oDB,
 				ASafeLog oLog
-			)
-				: base(oDB, oLog) {
+			) : base(oDB, oLog) {
 				m_oTrail = oTrail;
 				CustomerID = oTrail.CustomerID;
 				DecisionID = (int)oTrail.Decision;
@@ -420,6 +420,7 @@
 				IsPrimary = bIsPrimary;
 				HasApprovalChance = oTrail.HasApprovalChance;
 				CashRequestID = cashRequestID;
+				NLCashRequestID = nlCashRequestID;
 				Tag = tag;
 
 				Traces = new List<ATrace.DBModel>();

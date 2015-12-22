@@ -444,7 +444,7 @@
 
 			this.m_oDB.ForEachRowSafe((sr) => {
 				int customerId = sr["Id"];
-				new CalculateMedal(customerId, null, DateTime.UtcNow, false, true).Execute();
+				new CalculateMedal(customerId, null, null, DateTime.UtcNow, false, true).Execute();
 			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 		}
 

@@ -19,10 +19,10 @@
 
 		public virtual decimal ApprovedAmount { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, long? cashRequestID, long? nlCashRequestID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID);
+			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
 		} // constructor
 
 		public virtual Agent Init() {
@@ -36,6 +36,7 @@
 			Trail = new ReapprovalTrail(
 				Args.CustomerID,
 				Args.CashRequestID,
+				Args.NLCashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -223,6 +224,7 @@
 				Log,
 				Args.CustomerID,
 				Args.CashRequestID,
+				Args.NLCashRequestID,
 				Trail.InputData.DataAsOf
 			);
 			oSecondary.MakeDecision(oSecondary.GetInputData());

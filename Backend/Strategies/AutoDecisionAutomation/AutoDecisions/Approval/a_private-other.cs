@@ -118,6 +118,7 @@
 			this.trail.MyInputData.SetArgs(
 				this.trail.CustomerID,
 				this.trail.CashRequestID,
+				this.trail.NLCashRequestID,
 				this.trail.SafeAmount,
 				(AutomationCalculator.Common.Medal)this.medalClassification,
 				this.medalType,

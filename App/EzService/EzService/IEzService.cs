@@ -74,7 +74,7 @@
 		ActionMetaData CaisUpdate(int userId, int caisId);
 
 		[OperationContract]
-		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID);
+		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID);
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
