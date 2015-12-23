@@ -64,6 +64,8 @@
 		public int RequestedLoanAmount { get; set; }
 		[DataMember]
 		public int? NumOfLoans { get; set; }
+		[DataMember]
+		public string Promocode { get; set; }
 
 		//broker data
 		[DataMember]

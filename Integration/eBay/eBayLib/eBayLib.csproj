@@ -107,10 +107,6 @@
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
-      <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
-      <Name>TeraPeakServiceLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\eBayServiceLib\eBayServiceLib.csproj">
       <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
       <Name>eBayServiceLib</Name>
