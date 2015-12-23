@@ -4,7 +4,6 @@
 	using System.Configuration;
 	using System.Globalization;
 	using System.Linq;
-	using System.Net;
 	using System.Security.Principal;
 	using System.Web;
 	using System.Web.Helpers;
@@ -19,11 +18,9 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
-	using ExperianLib.Ebusiness;
 	using Code;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EzBob.Web.Infrastructure.Email;
 	using Infrastructure;
@@ -43,19 +40,18 @@
 
 	public class AccountController : Controller {
 		public AccountController() {
-			m_oDatabaseHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-			 m_oUsers = ObjectFactory.GetInstance<IUsersRepository>();
-			m_oCustomers = ObjectFactory.GetInstance<CustomerRepository>();
-			m_oServiceClient = new ServiceClient();
-			m_oContext = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
-			m_oSessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
-			m_oTestCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
-			m_oCustomerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
-			m_oBrokerHelper = new BrokerHelper();
-			m_oLogOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
-			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
-			m_oDB = DbConnectionGenerator.Get(ms_oLog);
-			_whiteLabelProviderRepository = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
+			this.dbHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			this.userRepo = ObjectFactory.GetInstance<IUsersRepository>();
+			this.customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
+			this.serviceClient = new ServiceClient();
+			this.context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
+			this.customerSessionRepo = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
+			this.testCustomerRepo = ObjectFactory.GetInstance<ITestCustomerRepository>();
+			this.customerStatusRepo = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
+			this.brokerHelper = new BrokerHelper();
+			this.logOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
+			this.vipRequestRepo = ObjectFactory.GetInstance<IVipRequestRepository>();
+			this.whiteLabelProviderRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
@@ -66,7 +62,7 @@
 				(requestContext.HttpContext.Request.Url != null);
 
 			hostname = hasHost ? requestContext.HttpContext.Request.Url.Host : string.Empty;
-			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			log.Info("WizardController Initialize {0}", hostname);
 			base.Initialize(requestContext);
 		}
 
@@ -88,21 +84,21 @@
 
 			if (ModelState.IsValid) {
 				try {
-					if (m_oBrokerHelper.IsBroker(model.UserName)) {
-						ms_oLog.Alert("Broker '{0}' tried to log in as an underwriter!", model.UserName);
+					if (this.brokerHelper.IsBroker(model.UserName)) {
+						log.Alert("Broker '{0}' tried to log in as an underwriter!", model.UserName);
 						ModelState.AddModelError("LoginError", "Wrong user name/password.");
 						return View(model);
 					} // if is broker
 				} catch (Exception e) {
-					ms_oLog.Warn(
+					log.Warn(
 						e,
 						"Failed to check whether '{0}' is a broker login, continuing as an underwriter.",
 						model.UserName
 					);
 				} // try
 
-				if (m_oCustomers.TryGetByEmail(model.UserName) != null) {
-					ms_oLog.Alert("Customer '{0}' tried to log in as an underwriter!", model.UserName);
+				if (this.customerRepo.TryGetByEmail(model.UserName) != null) {
+					log.Alert("Customer '{0}' tried to log in as an underwriter!", model.UserName);
 					ModelState.AddModelError("LoginError", "Wrong user name/password.");
 					return View(model);
 				} // if
@@ -131,7 +127,7 @@
 					loginError = string.IsNullOrEmpty(loginError) ? "Wrong user name/password." : loginError;
 					ModelState.AddModelError("LoginError", loginError);
 				} catch (UserNotFoundException ex) {
-					ms_oLog.Warn(ex, "Failed to log in as underwriter '{0}'.", model.UserName);
+					log.Warn(ex, "Failed to log in as underwriter '{0}'.", model.UserName);
 					ModelState.AddModelError("LoginError", "Wrong user name/password.");
 				} // try
 			} // if
@@ -154,7 +150,7 @@
 			var customerIp = RemoteIp();
 
 			if (!ModelState.IsValid) {
-				ms_oLog.Debug(
+				log.Debug(
 					"Customer log on attempt from remote IP {0}: model state is invalid, list of errors:",
 					customerIp
 				);
@@ -164,10 +160,10 @@
 						continue;
 
 					foreach (var err in val.Errors)
-						ms_oLog.Debug("Model value '{0}' with error '{1}'.", val.Value, err.ErrorMessage);
+						log.Debug("Model value '{0}' with error '{1}'.", val.Value, err.ErrorMessage);
 				} // for each value
 
-				ms_oLog.Debug("End of list of errors.");
+				log.Debug("End of list of errors.");
 
 				return Json(new {
 					success = false,
@@ -175,7 +171,7 @@
 				}, JsonRequestBehavior.AllowGet);
 			} // if
 
-			ms_oLog.Debug(
+			log.Debug(
 				"Customer log on attempt from remote IP {0} received " +
 				"with user name '{1}' and hash '{2}' (promotion: {3})...",
 				customerIp,
@@ -185,8 +181,8 @@
 			);
 
 			try {
-				if (m_oBrokerHelper.IsBroker(model.UserName)) {
-					BrokerProperties bp = m_oBrokerHelper.TryLogin(
+				if (this.brokerHelper.IsBroker(model.UserName)) {
+					BrokerProperties bp = this.brokerHelper.TryLogin(
 						model.UserName,
 						model.Password,
 						model.PromotionName,
@@ -205,7 +201,7 @@
 					});
 				} // if is broker
 			} catch (Exception e) {
-				ms_oLog.Warn(
+				log.Warn(
 					e,
 					"Failed to check whether '{0}' is a broker login, continuing as a customer.",
 					model.UserName
@@ -215,9 +211,9 @@
 			User user;
 
 			try {
-				user = m_oUsers.GetUserByLogin(model.UserName);
+				user = this.userRepo.GetUserByLogin(model.UserName);
 			} catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
+				log.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
 				user = null;
 			} // try
 
@@ -230,7 +226,7 @@
 
 					switch (status.status) {
 					case EverlineLoanStatus.Error:
-						ms_oLog.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
+						log.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
 						return Json(new {
 							success = false,
 							errorMessage = "User not found or incorrect password."
@@ -251,7 +247,7 @@
 						}, JsonRequestBehavior.AllowGet);
 
 					default:
-						ms_oLog.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
+						log.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
 						return Json(new {
 							success = false,
 							errorMessage = "User not found or incorrect password."
@@ -259,7 +255,7 @@
 					} // switch
 				} // if
 
-				ms_oLog.Warn(
+				log.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",
 					customerIp,
 					model.UserName
@@ -273,13 +269,13 @@
 
 			var isUnderwriter = user.BranchId == 1;
 
-			ms_oLog.Debug(
+			log.Debug(
 				"{1} log on attempt with login '{0}'.",
 				model.UserName,
 				isUnderwriter ? "Underwriter" : "Customer"
 			);
 
-			ms_oLog.Debug(
+			log.Debug(
 				"{2} log on attempt from remote IP {0} with user name '{1}': log on attempt #{3}.",
 				customerIp,
 				model.UserName,
@@ -288,7 +284,7 @@
 			);
 
 			if (isUnderwriter) {
-				ms_oLog.Debug(
+				log.Debug(
 					"Underwriter log on attempt from remote IP {0} with user name '{1}': failed, " +
 					"underwriters should use a dedicated log on page.",
 					customerIp,
@@ -304,9 +300,9 @@
 			Customer customer;
 
 			try {
-				customer = m_oCustomers.Get(user.Id);
+				customer = this.customerRepo.Get(user.Id);
 			} catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to retrieve a customer by id {0}.", user.Id);
+				log.Warn(e, "Failed to retrieve a customer by id {0}.", user.Id);
 				return Json(new {
 					success = false,
 					errorMessage = "User not found or invalid password."
@@ -326,10 +322,10 @@
 					ErrorMessage = sDisabledError,
 				};
 
-				m_oSessionIpLog.AddSessionIpLog(session);
+				this.customerSessionRepo.AddSessionIpLog(session);
 				Session["UserSessionId"] = session.Id;
 
-				ms_oLog.Warn(
+				log.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
 					customerIp,
 					model.UserName
@@ -339,7 +335,7 @@
 			} // if user is disabled
 
 			if (uiOrigin.GetOrigin() != customer.CustomerOrigin.GetOrigin()) {
-				ms_oLog.Warn(
+				log.Warn(
 					"Customer {0} with origin {1} tried to login with UI origin {2} (from host {3}).",
 					user.Id,
 					customer.CustomerOrigin.Name,
@@ -365,7 +361,7 @@
 			if (MembershipCreateStatus.Success == nStatus) {
 				model.SetCookie(LogOnModel.Roles.Customer);
 
-				ms_oLog.Debug(
+				log.Debug(
 					"Customer log on attempt from remote IP {0} with user name '{1}': success.",
 					customerIp,
 					model.UserName
@@ -380,7 +376,7 @@
 					"</span> has issued you with a temporary password. Please check your e-mail."
 				: "User not found or incorrect password.";
 
-			ms_oLog.Warn(
+			log.Warn(
 				"Customer log on attempt from remote IP {0} with user name '{1}': failed {2}.",
 				customerIp,
 				model.UserName,
@@ -394,7 +390,7 @@
 		public ActionResult LogOff() {
 			EndSession("LogOff customer");
 
-			switch (m_oLogOffMode) {
+			switch (this.logOffMode) {
 			case LogOffMode.SignUpOfEnv:
 				return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 
@@ -459,7 +455,7 @@
 				bool mobilePhoneVerified = false;
 
 				if (isInCaptchaMode != "True") {
-					mobilePhoneVerified = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
+					mobilePhoneVerified = this.serviceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
 
 					if (!mobilePhoneVerified)
 						throw new Exception(DbStrings.InvalidMobileCode);
@@ -499,10 +495,10 @@
 					)
 				).Execute();
 
-				string token = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Token.ToString();
+				string token = this.serviceClient.Instance.EmailConfirmationGenerate(customer.Id).Token.ToString();
 
 				if (blm.IsSet) {
-					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(
+					this.serviceClient.Instance.BrokerLeadAcquireCustomer(
 						customer.Id,
 						blm.LeadID,
 						blm.FirstName,
@@ -510,7 +506,7 @@
 						token
 					);
 				} else {
-					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(
+					this.serviceClient.Instance.BrokerCheckCustomerRelevance(
 						customer.Id,
 						customer.Name,
 						customer.IsAlibaba,
@@ -519,7 +515,7 @@
 					); // Add is Alibaba, or do after saving it to DB
 				} // if
 
-				m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(
+				this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(
 					customer.Id,
 					customer.Name,
 					customer.Id,
@@ -560,22 +556,22 @@
 				return GetModelStateErrors(ModelState);
 
 			try {
-				if (m_oBrokerHelper.IsBroker(email))
+				if (this.brokerHelper.IsBroker(email))
 					return Json(new { broker = true }, JsonRequestBehavior.AllowGet);
 			} catch (Exception e) {
-				ms_oLog.Warn(
+				log.Warn(
 					e,
 					"Failed to check whether the email '{0}' is a broker email, continuing as a customer.",
 					email
 				);
 			} // try
 
-			var user = m_oUsers.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
+			var user = this.userRepo.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
 
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
 			if (user != null) {
-				var customer = m_oCustomers.ReallyTryGet(user.Id);
+				var customer = this.customerRepo.ReallyTryGet(user.Id);
 
 				if (customer != null) {
 					if (customer.CustomerOrigin.GetOrigin() == uiOrigin.GetOrigin()) {
@@ -584,7 +580,7 @@
 						}, JsonRequestBehavior.AllowGet);
 					} // if
 
-					ms_oLog.Warn(
+					log.Warn(
 						"Customer {0} {1} tried to restore password from another origin {2} (at {3})",
 						customer.Id,
 						customer.CustomerOrigin.Name,
@@ -602,25 +598,25 @@
 
 				switch (status.status) {
 				case EverlineLoanStatus.Error:
-					ms_oLog.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
+					log.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
 
 				case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
-					ms_oLog.Warn("Customer {0} ExistsWithCurrentLiveLoan in Everiline tried to restore password", email);
+					log.Warn("Customer {0} ExistsWithCurrentLiveLoan in Everiline tried to restore password", email);
 					return Json(new { everlineAccount = true }, JsonRequestBehavior.AllowGet);
 
 				case EverlineLoanStatus.ExistsWithNoLiveLoan:
-					ms_oLog.Warn("Customer {0} ExistsWithNoLiveLoan in Everiline tried to restore password", email);
+					log.Warn("Customer {0} ExistsWithNoLiveLoan in Everiline tried to restore password", email);
 					TempData["IsEverline"] = true;
 					TempData["CustomerEmail"] = email;
 					return Json(new { everlineWizard = true }, JsonRequestBehavior.AllowGet);
 
 				case EverlineLoanStatus.DoesNotExist:
-					ms_oLog.Warn("Customer {0} DoesNotExist in Everiline tried to restore password", email);
+					log.Warn("Customer {0} DoesNotExist in Everiline tried to restore password", email);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
 
 				default:
-					ms_oLog.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
+					log.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
 				} // switch
 			} // if
@@ -636,7 +632,7 @@
 
 			bool userNotFound =
 				string.IsNullOrEmpty(email) ||
-					m_oUsers.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null;
+					this.userRepo.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null;
 
 			if (userNotFound)
 				throw new UserNotFoundException(string.Format("User {0} not found", email));
@@ -644,15 +640,15 @@
 			if (string.IsNullOrEmpty(answer))
 				throw new EmptyAnswerExeption("Answer is empty");
 
-			var user = m_oUsers.GetAll().FirstOrDefault(x =>
+			var user = this.userRepo.GetAll().FirstOrDefault(x =>
 				(x.EMail == email || x.Name == email) && (x.SecurityAnswer == answer)
 			);
 
 			if (user == null)
 				return Json(new { error = "Wrong answer to secret questions" }, JsonRequestBehavior.AllowGet);
 
-			user = m_oUsers.GetUserByLogin(email);
-			m_oServiceClient.Instance.PasswordRestored(user.Id);
+			user = this.userRepo.GetUserByLogin(email);
+			this.serviceClient.Instance.PasswordRestored(user.Id);
 			user.IsPasswordRestored = true;
 
 			return Json(new { result = true }, JsonRequestBehavior.AllowGet);
@@ -676,7 +672,7 @@
 			string refNum,
 			int? customerId = null
 		) {
-			ms_oLog.Debug(
+			log.Debug(
 				"CheckingCompany cId:{0}, postcode:{1}, companuName:{2}, filter:{3}, refnum:{4}",
 				customerId,
 				postcode,
@@ -686,18 +682,18 @@
 			);
 
 
-            if (customerId == null && m_oContext.Customer == null)
+            if (customerId == null && this.context.Customer == null)
             {
                 throw new Exception(DbStrings.CustomeIdNotProvided);
             }
             if (customerId == null)
             {
-                customerId = m_oContext.Customer.Id;
+                customerId = this.context.Customer.Id;
             }
 
-		    ExperianTargetingActionResult response = this.m_oServiceClient.Instance.ExperianTarget(
+		    ExperianTargetingActionResult response = this.serviceClient.Instance.ExperianTarget(
                 customerId.Value, 
-                this.m_oContext.UserId,
+                this.context.UserId,
 		        new ExperianTargetingRequest {
 		            CompanyName = companyName,
 		            CustomerID = customerId.Value,
@@ -712,14 +708,14 @@
 		[Ajax]
 		[HttpPost]
 		public bool GenerateMobileCode(string mobilePhone) {
-			return m_oServiceClient.Instance.GenerateMobileCode(mobilePhone).Value;
+			return this.serviceClient.Instance.GenerateMobileCode(mobilePhone).Value;
 		} // GenerateMobileCode
 
 		[HttpPost]
 		public JsonResult GetTwilioConfig() {
-			WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.Instance.GetWizardConfigs();
+			WizardConfigsActionResult wizardConfigsActionResult = this.serviceClient.Instance.GetWizardConfigs();
 
-			ms_oLog.Msg(
+			log.Msg(
 				"Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1}",
 				wizardConfigsActionResult.IsSmsValidationActive,
 				wizardConfigsActionResult.NumberOfMobileCodeAttempts
@@ -753,18 +749,18 @@
 			};
 
 			if (oModel.IsTokenValid) {
-				ms_oLog.Debug("AccountController.CreatePassword: token received {0}.", token);
+				log.Debug("AccountController.CreatePassword: token received {0}.", token);
 
 				try {
 					CustomerDetailsActionResult ar =
-						m_oServiceClient.Instance.LoadCustomerByCreatePasswordToken(oModel.Token);
+						this.serviceClient.Instance.LoadCustomerByCreatePasswordToken(oModel.Token);
 
 					if (ar.Value.CustomerID > 0) {
 						oModel.FirstName = ar.Value.FirstName;
 						oModel.LastName = ar.Value.LastName;
 						oModel.UserName = ar.Value.Email;
 
-						ms_oLog.Debug(
+						log.Debug(
 							"AccountController.CreatePassword: token received {0} -> user {1} ({2}, {3}).",
 							token,
 							oModel.FirstName,
@@ -775,12 +771,12 @@
 						return View(oModel);
 					} // if
 
-					ms_oLog.Debug("AccountController.CreatePassword: token received {0} -> no user found.", token);
+					log.Debug("AccountController.CreatePassword: token received {0} -> no user found.", token);
 				} catch (Exception e) {
-					ms_oLog.Alert(e, "Failed to check create password token '{0}'.", token);
+					log.Alert(e, "Failed to check create password token '{0}'.", token);
 				} // try
 			} else
-				ms_oLog.Warn("AccountController.CreatePassword: invalid token received {0}.", token);
+				log.Warn("AccountController.CreatePassword: invalid token received {0}.", token);
 
 			return RedirectToAction("LogOn", "Account", new { Area = "" });
 		} // CreatePassword
@@ -791,7 +787,7 @@
 			var customerIp = RemoteIp();
 
 			if (!ModelState.IsValid) {
-				ms_oLog.Debug(
+				log.Debug(
 					"Customer create password attempt from remote IP {0}: model state is invalid, list of errors:",
 					customerIp
 				);
@@ -801,10 +797,10 @@
 						continue;
 
 					foreach (var err in val.Errors)
-						ms_oLog.Debug("Model value '{0}' with error '{1}'.", val.Value, err.ErrorMessage);
+						log.Debug("Model value '{0}' with error '{1}'.", val.Value, err.ErrorMessage);
 				} // for each value
 
-				ms_oLog.Debug("End of list of errors.");
+				log.Debug("End of list of errors.");
 
 				return Json(new {
 					success = false,
@@ -812,7 +808,7 @@
 				}, JsonRequestBehavior.AllowGet);
 			} // if
 
-			ms_oLog.Debug(
+			log.Debug(
 				"Customer create password attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
 				customerIp,
 				model.UserName,
@@ -832,14 +828,14 @@
 				if (model.Password.Length < maxPassLength)
 					throw new Exception(DbStrings.NotValidEmailAddress);
 
-				nUserID = m_oServiceClient.Instance.SetCustomerPasswordByToken(
+				nUserID = this.serviceClient.Instance.SetCustomerPasswordByToken(
 					model.UserName,
 					new Password(model.Password),
 					model.Token,
 					model.IsBrokerLead
 				).Value;
 			} catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
+				log.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
 				return Json(new {
 					success = false,
 					errorMessage = "Failed to set a password.",
@@ -847,7 +843,7 @@
 			} // try
 
 			if (nUserID <= 0) {
-				ms_oLog.Warn("Failed to set a password (returned user id is 0) for user name {0}.", model.UserName);
+				log.Warn("Failed to set a password (returned user id is 0) for user name {0}.", model.UserName);
 				return Json(new {
 					success = false,
 					errorMessage = "Failed to set a password.",
@@ -855,7 +851,7 @@
 			} // if
 
 			try {
-				if (m_oBrokerHelper.IsBroker(model.UserName)) {
+				if (this.brokerHelper.IsBroker(model.UserName)) {
 					BrokerHelper.SetAuth(model.UserName);
 
 					return Json(new {
@@ -865,7 +861,7 @@
 					});
 				} // if is broker
 			} catch (Exception e) {
-				ms_oLog.Warn(
+				log.Warn(
 					e,
 					"Failed to check whether '{0}' is a broker login, continuing as a customer.",
 					model.UserName
@@ -875,9 +871,9 @@
 			Customer customer;
 
 			try {
-				customer = m_oCustomers.Get(nUserID);
+				customer = this.customerRepo.Get(nUserID);
 			} catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to retrieve a customer by id {0}.", nUserID);
+				log.Warn(e, "Failed to retrieve a customer by id {0}.", nUserID);
 				return Json(new {
 					success = false,
 					errorMessage = "Failed to set a password."
@@ -898,10 +894,10 @@
 					IsPasswdOk = false,
 					ErrorMessage = sDisabledError,
 				};
-				m_oSessionIpLog.AddSessionIpLog(session);
+				this.customerSessionRepo.AddSessionIpLog(session);
 				Session["UserSessionId"] = session.Id;
 
-				ms_oLog.Warn(
+				log.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
 					customerIp,
 					model.UserName
@@ -914,49 +910,50 @@
 			return Json(new { success = true, broker = false, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
 
-        [ValidateJsonAntiForgeryToken]
+		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-        [HttpPost]
-        public JsonResult Iovation(string blackbox, string origin) {
-            var ip = RemoteIp();
-            var customer = this.m_oContext.Customer;
-            if (customer == null) {
-                ms_oLog.Info("Iovation black box {0} ip {1} customer is null", blackbox, ip);
-                return Json(new { });
-            }
+		[HttpPost]
+		public JsonResult Iovation(string blackbox, string origin) {
+			var ip = RemoteIp();
+			var customer = this.context.Customer;
 
-            var request = new IovationCheckModel {
-                CustomerID = customer.Id,
-                AccountCode = customer.RefNumber,
-                BeginBlackBox = blackbox,
-                Email = customer.Name,
-                EndUserIp = ip,
-                MobilePhoneNumber = customer.PersonalInfo != null ? customer.PersonalInfo.MobilePhone : string.Empty,
-                Origin = origin,
-                Type = "application",
-                mobilePhoneVerified = customer.PersonalInfo != null && customer.PersonalInfo.MobilePhoneVerified,
-                mobilePhoneSmsEnabled = customer.PersonalInfo != null && customer.PersonalInfo.MobilePhoneVerified
-            };
+			if (customer == null) {
+				log.Info("Iovation black box {0} ip {1} customer is null", blackbox, ip);
+				return Json(new { });
+			} // if
 
-            if (customer.WizardStep.TheLastOne) {
-                var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-                request.MoreData = new IovationCheckMoreDataModel {
-                    BillingCity = address == null ? "" : address.Town,
-                    BillingPostalCode = address == null ? "" : address.Postcode,
-                    BillingCountry = address == null ? "" : address.Country,
-                    BillingStreet = address == null ? "" : address.Line1,
-                    FirstName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.FirstName,
-                    LastName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.Surname,
-                    HomePhoneNumber = customer.PersonalInfo == null ? "" : customer.PersonalInfo.DaytimePhone,
-                    EmailVerified = EmailConfirmationState.IsVerified(customer),
-                };
-            }
+			var request = new IovationCheckModel {
+				CustomerID = customer.Id,
+				AccountCode = customer.RefNumber,
+				BeginBlackBox = blackbox,
+				Email = customer.Name,
+				EndUserIp = ip,
+				MobilePhoneNumber = customer.PersonalInfo != null ? customer.PersonalInfo.MobilePhone : string.Empty,
+				Origin = origin,
+				Type = "application",
+				mobilePhoneVerified = customer.PersonalInfo != null && customer.PersonalInfo.MobilePhoneVerified,
+				mobilePhoneSmsEnabled = customer.PersonalInfo != null && customer.PersonalInfo.MobilePhoneVerified
+			};
 
-            this.m_oServiceClient.Instance.IovationCheck(request);
+			if (customer.WizardStep.TheLastOne) {
+				var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+				request.MoreData = new IovationCheckMoreDataModel {
+					BillingCity = address == null ? "" : address.Town,
+					BillingPostalCode = address == null ? "" : address.Postcode,
+					BillingCountry = address == null ? "" : address.Country,
+					BillingStreet = address == null ? "" : address.Line1,
+					FirstName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.FirstName,
+					LastName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.Surname,
+					HomePhoneNumber = customer.PersonalInfo == null ? "" : customer.PersonalInfo.DaytimePhone,
+					EmailVerified = EmailConfirmationState.IsVerified(customer),
+				};
+			} // if
 
-            ms_oLog.Info("Iovation black box {0} ip {1} customer {2}, origin {3}", blackbox, ip, customer.Id, origin);
-            return Json(new {});
-        }
+			this.serviceClient.Instance.IovationCheck(request);
+
+			log.Info("Iovation black box {0} ip {1} customer {2}, origin {3}", blackbox, ip, customer.Id, origin);
+			return Json(new { });
+		} // Iovation
 
 		private UserLoginActionResult CreateUser(
 			string email,
@@ -964,12 +961,12 @@
 			string passwordQuestion,
 			string passwordAnswer
 		) {
-			ms_oLog.Debug("Creating a user '{0}'...", email);
+			log.Debug("Creating a user '{0}'...", email);
 			
 			UserLoginActionResult ular;
 
 			try {
-				ular = m_oServiceClient.Instance.CustomerSignup(
+				ular = this.serviceClient.Instance.CustomerSignup(
 					email,
 					new Password(password),
 					Convert.ToInt32(passwordQuestion),
@@ -981,11 +978,11 @@
 					ular.SessionID.ToString(CultureInfo.InvariantCulture);
 				
 			} catch (Exception e) {
-				ms_oLog.Error(e, "Failed to create user '{0}'.", email);
+				log.Error(e, "Failed to create user '{0}'.", email);
 				throw;
 			} // try
 
-			ms_oLog.Debug("User '{0}' has been created.", email);
+			log.Debug("User '{0}' has been created.", email);
 			return ular;
 		} // CreateUser
 
@@ -998,12 +995,12 @@
 			bool brokerFillsForCustomer,
 			int whiteLabelId
 		) {
-			var user = m_oUsers.GetUserByLogin(email);
-			var g = new RefNumberGenerator(m_oCustomers);
+			var user = this.userRepo.GetUserByLogin(email);
+			var g = new RefNumberGenerator(this.customerRepo);
 			var isAutomaticTest = IsAutomaticTest(email);
-			var vip = m_oVipRequestRepository.RequestedVip(email);
+			var vip = this.vipRequestRepo.RequestedVip(email);
 			var whiteLabel = whiteLabelId != 0
-				? _whiteLabelProviderRepository.GetAll().FirstOrDefault(x => x.Id == whiteLabelId)
+				? this.whiteLabelProviderRepo.GetAll().FirstOrDefault(x => x.Id == whiteLabelId)
 				: null;
 
 			Broker broker = null;
@@ -1027,8 +1024,8 @@
 				Id = user.Id,
 				Status = Status.Registered,
 				RefNumber = g.GenerateForCustomer(),
-				WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-				CollectionStatus = m_oCustomerStatusesRepository.Get((int)CollectionStatusNames.Enabled),
+				WizardStep = this.dbHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
+				CollectionStatus = this.customerStatusRepo.Get((int)CollectionStatusNames.Enabled),
 				IsTest = isAutomaticTest,
 				IsOffline = null,
 				PersonalInfo = new PersonalInfo {
@@ -1037,7 +1034,7 @@
 					FirstName = sFirstName,
 					Surname = sLastName,
 				},
-				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
+				TrustPilotStatus = this.dbHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
 				GreetingMailSentDate = DateTime.UtcNow,
 				Vip = vip,
 				WhiteLabel = whiteLabel,
@@ -1046,7 +1043,7 @@
 
 			customer.CustomerOrigin = UiCustomerOrigin.Get();
 
-			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
+			log.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
 			CampaignSourceRef campaignSourceRef = null;
 
 			if (brokerFillsForCustomer) {
@@ -1082,7 +1079,7 @@
 			if (Request.Cookies["istest"] != null)
 				customer.IsTest = true;
 
-			m_oCustomers.Save(customer);
+			this.customerRepo.Save(customer);
 
 			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
 				CustomerId = customer.Id,
@@ -1098,17 +1095,17 @@
 				IsPasswdOk = true,
 				ErrorMessage = "Registration"
 			};
-			m_oSessionIpLog.AddSessionIpLog(session);
+			this.customerSessionRepo.AddSessionIpLog(session);
 			Session["UserSessionId"] = session.Id;
 			try {
-				m_oServiceClient.Instance.SaveSourceRefHistory(
+				this.serviceClient.Instance.SaveSourceRefHistory(
 					user.Id,
 					customer.ReferenceSource,
 					visitTimes,
 					campaignSourceRef
 				);
 			} catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to save sourceref history.");
+				log.Warn(e, "Failed to save sourceref history.");
 			} // try
 
 			// save AlibabaBuyer
@@ -1120,7 +1117,7 @@
 					EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 					aliMemberRep.SaveOrUpdate(alibabaMember);
 				} catch (Exception alieException) {
-					ms_oLog.Error(alieException, "Failed to save alibabaMember ID");
+					log.Error(alieException, "Failed to save alibabaMember ID");
 				}
 			}
 
@@ -1182,13 +1179,13 @@
 			DateTime? promotionPageVisitTime,
 			out string error
 		) {
-			ms_oLog.Debug("Validating user '{0}' password...", username);
+			log.Debug("Validating user '{0}' password...", username);
 
 			int nSessionID;
 			MembershipCreateStatus nStatus;
 			error = null;
 			try {
-				UserLoginActionResult ular = m_oServiceClient.Instance.UserLogin(
+				UserLoginActionResult ular = this.serviceClient.Instance.UserLogin(
 					username,
 					new Password(password),
 					RemoteIp(),
@@ -1200,18 +1197,18 @@
 				nStatus = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
 				error = ular.ErrorMessage;
 			} catch (Exception e) {
-				ms_oLog.Error(e, "Failed to validate user '{0}' credentials.", username);
+				log.Error(e, "Failed to validate user '{0}' credentials.", username);
 				return MembershipCreateStatus.ProviderError;
 			} // try
 
 			if (nStatus == MembershipCreateStatus.Success) {
-				this.m_oContext.SessionId =
+				this.context.SessionId =
 					nSessionID.ToString(CultureInfo.InvariantCulture);
 
-				ms_oLog.Debug("User '{0}' password has been validated.", username);
+				log.Debug("User '{0}' password has been validated.", username);
 			} // if
 			else
-				ms_oLog.Debug("User '{0}' password has NOT been validated.", username);
+				log.Debug("User '{0}' password has NOT been validated.", username);
 
 			return nStatus;
 		} // ValidateUser
@@ -1220,7 +1217,7 @@
 			bool isAutomaticTest = false;
 
 			if (CurrentValues.Instance.AutomaticTestCustomerMark == "1") {
-				var patterns = m_oTestCustomers.GetAllPatterns();
+				var patterns = this.testCustomerRepo.GetAllPatterns();
 				if (patterns.Any(email.Contains))
 					isAutomaticTest = true;
 			} // if
@@ -1259,25 +1256,25 @@
 		} // RemoteIp
 
 		private void EndSession(string comment) {
-			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
+			if (!string.IsNullOrWhiteSpace(this.context.SessionId)) {
 				int nSessionID;
 
-				if (int.TryParse(m_oContext.SessionId, out nSessionID)) {
+				if (int.TryParse(this.context.SessionId, out nSessionID)) {
 					try {
 						if (nSessionID > 0) {
-							m_oServiceClient.Instance.MarkSessionEnded(
+							this.serviceClient.Instance.MarkSessionEnded(
 								nSessionID,
 								comment,
-								m_oContext.Customer != null ? m_oContext.Customer.Id : (int?)null
+								this.context.Customer != null ? this.context.Customer.Id : (int?)null
 							);
 						} // if
 					} catch (Exception e) {
-						ms_oLog.Debug(e, "Failed to mark customer session as ended.");
+						log.Debug(e, "Failed to mark customer session as ended.");
 					} // try
 				} // if
 			} // if
 
-			m_oContext.SessionId = null;
+			this.context.SessionId = null;
 
 			FormsAuthentication.SignOut();
 			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
@@ -1289,7 +1286,7 @@
 
 			scratchPromotion = (scratchPromotion ?? string.Empty).Trim();
 
-			ms_oLog.Debug("Scratch promotion data: '{0}'.", scratchPromotion);
+			log.Debug("Scratch promotion data: '{0}'.", scratchPromotion);
 
 			if (string.IsNullOrWhiteSpace(scratchPromotion))
 				return;
@@ -1302,12 +1299,12 @@
 
 			if (tokens.Length != 2) {
 				hasGoodTokens = false;
-				ms_oLog.Debug("Scratch promotion has {0} tokens, while 2 expected.", tokens.Length);
+				log.Debug("Scratch promotion has {0} tokens, while 2 expected.", tokens.Length);
 			} // if
 
 			if (string.IsNullOrWhiteSpace(tokens[0])) {
 				hasGoodTokens = false;
-				ms_oLog.Debug("Scratch promotion name is empty.");
+				log.Debug("Scratch promotion name is empty.");
 			} // if
 
 			if (!DateTime.TryParseExact(
@@ -1318,7 +1315,7 @@
 				out ppvt
 			)) {
 				hasGoodTokens = false;
-				ms_oLog.Debug("Failed to parse page visit time using pattern 'yyyy-M-d_H-m-s' from {0}.", tokens[1]);
+				log.Debug("Failed to parse page visit time using pattern 'yyyy-M-d_H-m-s' from {0}.", tokens[1]);
 			} // if
 
 			if (hasGoodTokens) {
@@ -1327,21 +1324,20 @@
 			} // if
 		} // FillPromotionData
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountController));
+		private static readonly ASafeLog log = new SafeILog(typeof(AccountController));
 
-		private readonly IUsersRepository m_oUsers;
-		private readonly CustomerRepository m_oCustomers;
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzbobWorkplaceContext m_oContext;
-		private readonly ICustomerSessionsRepository m_oSessionIpLog;
-		private readonly ITestCustomerRepository m_oTestCustomers;
-		private readonly ICustomerStatusesRepository m_oCustomerStatusesRepository;
-		private readonly DatabaseDataHelper m_oDatabaseHelper;
-		private readonly BrokerHelper m_oBrokerHelper;
-		private readonly LogOffMode m_oLogOffMode;
-		private readonly IVipRequestRepository m_oVipRequestRepository;
-		private readonly AConnection m_oDB;
-		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
+		private readonly IUsersRepository userRepo;
+		private readonly CustomerRepository customerRepo;
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly ICustomerSessionsRepository customerSessionRepo;
+		private readonly ITestCustomerRepository testCustomerRepo;
+		private readonly ICustomerStatusesRepository customerStatusRepo;
+		private readonly DatabaseDataHelper dbHelper;
+		private readonly BrokerHelper brokerHelper;
+		private readonly LogOffMode logOffMode;
+		private readonly IVipRequestRepository vipRequestRepo;
+		private readonly WhiteLabelProviderRepository whiteLabelProviderRepo;
 		private string hostname;
 	} // class AccountController
 } // namespace
