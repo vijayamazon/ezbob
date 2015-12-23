@@ -114,10 +114,6 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
-      <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
-      <Name>TeraPeakServiceLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PayPal.Base\PayPal.Base.csproj">
       <Project>{E16B6793-6589-412F-9798-5E99E7112D84}</Project>
       <Name>PayPal.Base</Name>

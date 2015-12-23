@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 EzBob.ScratchCards = EzBob.ScratchCards || {};
 
-EzBob.ScratchCards.Valentine2015 = EzBob.View.extend({
+EzBob.ScratchCards.Valentine2015 = EzBob.ScratchCards.Base.extend({
 	initialize: function(options) {
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;
@@ -177,6 +177,7 @@ EzBob.ScratchCards.Valentine2015 = EzBob.View.extend({
 	}, // showClose
 
 	show: function() {
+		EzBob.ScratchCards.Valentine2015.__super__.show.call(this);
 		this.$mainPage.hide();
 		this.$won.hide();
 		this.$el.show();
@@ -190,6 +191,8 @@ EzBob.ScratchCards.Valentine2015 = EzBob.View.extend({
 		this.$won.hide();
 		this.$el.hide();
 		this.$mainPage.show();
+
+		EzBob.ScratchCards.Valentine2015.__super__.hide.call(this);
 	}, // hide
 
 	renewArea: function(className) {
@@ -199,4 +202,4 @@ EzBob.ScratchCards.Valentine2015 = EzBob.View.extend({
 
 		return newArea;
 	}, // renewArea
-}); // EzBob.Profile.Valentine2015ScratchView
+}); // EzBob.ScratchCards.Valentine2015

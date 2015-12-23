@@ -50,10 +50,6 @@
 			return customerMarketPlace.TeraPeakOrders.Count > 0;
 		}
 
-		public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return _CustomerMarketplaceRepository.GetAllTeraPeakDataWithFullRange(submittedDate, databaseCustomerMarketPlace);
-		}
-
 		public void AddEbayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -639,6 +635,44 @@
 		{
 			return _session.Query<MP_EbayFeedback>();
 		}
+
+		public DateTime FindLastKnownEbayTransactionTime(int mpID) {
+			MP_CustomerMarketPlace mp = GetCustomerMarketPlace(mpID);
+
+			DateTime yearAgo = DateTime.UtcNow.AddYears(-1).Date;
+
+			DateTime maxFromNative;
+
+			try {
+				maxFromNative = mp.EbayOrders
+					.SelectMany(o => o.OrderItems)
+					.SelectMany(oi => oi.Transactions)
+					.Select(t => t.CreatedDate)
+					.Max()
+					.Date;
+			} catch {
+				maxFromNative = yearAgo;
+			} // try
+
+			DateTime maxFromTeraPeak;
+
+			try {
+				maxFromTeraPeak = mp.TeraPeakOrders
+					.SelectMany(o => o.OrderItems)
+					.Where(oi => oi.RangeMarker == RangeMarkerType.Full)
+					.Select(oi => oi.EndDate)
+					.Max()
+					.Date;
+			} catch {
+				maxFromTeraPeak = yearAgo;
+			} // try
+
+			DateTime dbMax = maxFromNative > maxFromTeraPeak ? maxFromNative : maxFromTeraPeak;
+
+			DateTime resultingMonth = dbMax > yearAgo ? dbMax : yearAgo;
+
+			return resultingMonth.AddDays(1 - resultingMonth.Day);
+		} // FindLastKnownEbayTransactionTime
 
 		private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item) {
 			var cache = GetCache(marketplace);

@@ -979,7 +979,6 @@
     <Content Include="Areas\Broker\Views\BrokerHome\CustomerDetails.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\Forbidden.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\RequestAcceptTerms.cshtml" />
-    <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards_Old_Do_NOT_AppendHere.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\Header.cshtml" />
     <Content Include="Areas\Broker\Files\everline.credit.file.release.and.consent.doc" />
