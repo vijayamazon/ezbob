@@ -194,6 +194,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Staging.resx</DependentUpon>
     </Compile>
+    <Compile Include="Core\ActionBot.cs" />
     <Compile Include="Core\BrowserWebDriver.cs" />
     <Compile Include="Core\Resources.cs" />
     <Compile Include="Core\WebTestBase.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Tests\Shared\CustomerShared.cs" />
     <Compile Include="Tests\Shared\SharedDBClass.cs" />
     <Compile Include="Tests\Shared\SharedServiceClass.cs" />
+    <Compile Include="Tests\Shared\UnderWriterShared.cs" />
     <Compile Include="Tests\Shared\WizardShared.cs" />
     <Compile Include="Tests\WorkFlow\Collection\CollectionTests.cs" />
     <Compile Include="Tests\WorkFlow\Loan\LoanTests.cs" />
@@ -240,6 +242,10 @@
     <Content Include="WebDrivers\wires.exe" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
       <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
       <Name>ConfigManager</Name>

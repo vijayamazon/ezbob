@@ -10,12 +10,14 @@
     using OpenQA.Selenium;
     using TestRailModels.Automation;
     using TestRailModels.TestRail;
+    using UIAutomationTests.Tests.Shared;
 
     [TestFixture]
     public class WebTestBase {
         protected IWebDriver Driver { get; set; }
         protected ResourceManager EnvironmentConfig { get; set; }
         protected ResourceManager BrandConfig { get; set; }
+        protected ActionBot actionBot { get; set; }
 
         private static bool? isDebugMode;
         protected static bool IsDebugMode {
@@ -62,6 +64,7 @@
                                 return false;
                             }
 
+                            this.actionBot = new ActionBot(Driver);
                             Driver.Manage().Cookies.DeleteAllCookies();
                             codeToExecute.Invoke();
 

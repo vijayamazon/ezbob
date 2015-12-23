@@ -3,6 +3,7 @@
     using OpenQA.Selenium.Support.UI;
     using System;
     using System.Linq;
+    using Google.Apis.Discovery;
 
     static class SharedServiceClass {
 
@@ -18,6 +19,10 @@
 
         public static IWebElement ElementToBeClickable(IWebDriver Driver, By byElement, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<IWebElement>(ExpectedConditions.ElementToBeClickable(byElement));
+        }
+
+        public static bool TryElementClick(IWebDriver Driver, By byElement, int waitTime = MAX_WAIT_TIME) {
+            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.TryElementClick(byElement));
         }
 
         public static IWebElement ElementToBeClickableAdvanced(IWebDriver Driver, By byElement, int waitTime = MAX_WAIT_TIME) {
@@ -51,6 +56,17 @@
             };
         }
 
+        public static Func<IWebDriver, bool> TryElementClick(By byElement) {
+            return (driver) => {
+                try {
+                    IWebElement element = ExpectedConditions.ElementToBeClickable(byElement).Invoke(driver);
+                    element.Click();
+                    return true;
+                } catch{}
+                return false;
+            };
+        }
+
         public static Func<IWebDriver, SelectElement> SelectIsVisible(By byElement) {
             return (driver) => new SelectElement(driver.FindElement(byElement));
         }
@@ -72,7 +88,7 @@
         }
 
         public static Func<IWebDriver, bool> WaitForBlockUiOff() {
-            return (driver) => driver.FindElements(By.CssSelector(".blockUI")).Count == 0;
+            return (driver) => (driver.FindElements(By.CssSelector(".blockUI")).Count == 0);//&&(driver.FindElements(By.CssSelector(".automation-popup")).Count==0);
         }
 
         //public static Func<IWebDriver, bool> WaitForAjaxReady4(IJavaScriptExecutor jsExe) {
