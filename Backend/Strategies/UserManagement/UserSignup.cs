@@ -1,46 +1,14 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
-	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
 	using JetBrains.Annotations;
 
 	public class UserSignup : AStrategy {
-
-		// Create a user for Customer
-		public UserSignup(
-			string sEmail,
-			Password oPassword,
-			int nPasswordQuestion,
-			string sPasswordAnswer,
-			string sRemoteIp
-		) {
-			m_oResult = null;
-
-			m_oData = new UserSecurityData(this) {
-				Email = sEmail,
-				NewPassword = oPassword.Primary,
-				PasswordQuestion = nPasswordQuestion,
-				PasswordAnswer = sPasswordAnswer,
-			};
-
-			m_oSp = new CreateWebUser(DB, Log) {
-				Email = m_oData.Email,
-				EzPassword = Ezbob.Utils.Security.SecurityUtils.HashPassword(m_oData.Email, m_oData.NewPassword),
-				SecurityQuestionID = m_oData.PasswordQuestion,
-				SecurityAnswer = m_oData.PasswordAnswer,
-				RoleName = UserSecurityData.WebRole,
-				BranchID = 0,
-				Ip = sRemoteIp,
-			};
-		} // constructor
-
 		// Create a user for Underwriter
 		public UserSignup(string sEmail, string sPassword, string sRoleName) {
-			b_isUW = true;
-
 			m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
@@ -66,7 +34,7 @@
 			m_oResult = MembershipCreateStatus.ProviderError;
 
 			try {
-				m_oData.ValidateEmail(b_isUW);
+				m_oData.ValidateEmail(true);
 				m_oData.ValidateNewPassword();
 
 				int nUserID = 0;
@@ -116,7 +84,6 @@
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly CreateWebUser m_oSp;
-		private bool b_isUW;
 
 		private class CreateWebUser : AStoredProcedure {
 			public CreateWebUser(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor

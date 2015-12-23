@@ -25,14 +25,13 @@
 
 			// Email is invalid if it arrived from some strange source.
 			// Our UI does this validation...
-            if (!isUW)
-            {
-                if (!Regex.IsMatch(sEmail, Cfg.LoginValidationStringForWeb))
-                    throw new StrategyAlert(m_oStrategy, "Login does not conform to the password security policy.");
+			if (!isUW) {
+				if (!Regex.IsMatch(sEmail, Cfg.LoginValidationStringForWeb))
+					throw new StrategyAlert(m_oStrategy, "Login does not conform to the password security policy.");
 
-                if (!RegexValidate("Login", sEmail, Cfg.LoginValidity))
-                    throw new StrategyAlert(m_oStrategy, "Can't validate login");
-            }
+				if (!RegexValidate("Login", sEmail, Cfg.LoginValidity))
+					throw new StrategyAlert(m_oStrategy, "Can't validate login");
+			} // if
 		} // ValidateEmail
 
 		public string OldPassword { get; set; }

@@ -6,6 +6,19 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
+		public UserLoginActionResult SignupCustomerMutliOrigin(SignupMultiOriginModel model) {
+			SignupCustomerMutliOrigin instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, model);
+
+			return new UserLoginActionResult {
+				MetaData = amd,
+				Status = instance.Result,
+				SessionID = instance.SessionID,
+				OriginID = instance.OriginID,
+			};
+		} // SignupCustomerMutliOrigin
+
 		public UserLoginActionResult CustomerSignup(
 			string sEmail,
 			Password oPassword,
@@ -142,8 +155,7 @@
 			};
 		} // UserChangeEmail
 
-		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId)
-		{
+		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId) {
 			return Execute<MarkSessionEnded>(nCustomerId, null, nSessionID, sComment);
 		} // MarkSessionEnded
 

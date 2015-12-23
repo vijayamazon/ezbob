@@ -8,7 +8,6 @@
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
-	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
@@ -18,13 +17,11 @@
 		IEzAutomationVerification,
 		IEzServiceBroker,
 		IEzServiceMainStrategy,
+		IEzServiceNewLoan,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceNewLoan
+		IEzSericeUserManagement
 	{
-		[OperationContract]
-		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
-
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
 
@@ -135,19 +132,7 @@
 		CrmLookupsActionResult CrmLoadLookups();
 
 		[OperationContract]
-		StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword);
-
-		[OperationContract]
 		ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID);
-
-		[OperationContract]
-		UserLoginActionResult CustomerSignup(
-			string sEmail,
-			Password oPassword,
-			int nPasswordQuestion,
-			string sPasswordAnswer,
-			string sRemoteIp
-		);
 
 		[OperationContract]
 		ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
@@ -157,18 +142,6 @@
 
 		[OperationContract]
 		ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID);
-
-		[OperationContract]
-		IntActionResult EmailConfirmationCheckOne(Guid oToken);
-
-		[OperationContract]
-		ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID);
-
-		[OperationContract]
-		EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
-
-		[OperationContract]
-		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, int underwriterId);
 
 		[OperationContract]
 		ActionMetaData EmailHmrcParsingErrors(
@@ -297,9 +270,6 @@
 		ActionMetaData LateBy14Days();
 
 		[OperationContract]
-		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
-
-		[OperationContract]
 		StringStringMapActionResult LoadCustomerLeadFieldNames();
 
 		[OperationContract]
@@ -328,9 +298,6 @@
 
 		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
-
-		[OperationContract]
-		ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId);
 
 		[OperationContract]
 		ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId);
@@ -400,9 +367,6 @@
 		ActionMetaData RequestCashWithoutTakenLoan(int customerId);
 
 		[OperationContract]
-		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
-
-		[OperationContract]
 		ActionMetaData SaveAgreement(
 			int customerId,
 			AgreementModel model,
@@ -444,9 +408,6 @@
 			);
 
 		[OperationContract]
-		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead);
-
-		[OperationContract]
 		ActionMetaData SetLateLoanStatus();
 
 		[OperationContract]
@@ -454,9 +415,6 @@
 
 		[OperationContract]
 		ActionMetaData TransferCashFailed(int customerId);
-
-		[OperationContract]
-		ActionMetaData UnderwriterSignup(string name, Password password, string role);
 
 		[OperationContract]
 		ActionMetaData UpdateConfigurationVariables(int userId);
@@ -475,41 +433,6 @@
 
 		[OperationContract]
 		ActionMetaData UpdateTransactionStatus();
-
-		[OperationContract]
-		StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
-
-		[OperationContract]
-		StringActionResult UserChangePassword(
-			string sEmail,
-			Password oOldPassword,
-			Password oNewPassword,
-			bool bForceChangePassword
-		);
-
-		[OperationContract]
-		UserLoginActionResult UserLogin(
-			string sEmail,
-			Password sPassword,
-			string sRemoteIp,
-			string promotionName,
-			DateTime? promotionPageVisitTime
-		);
-
-        [OperationContract]
-        StringActionResult UserDisable(
-            int userID,
-            int customerID,
-            string email,
-            bool unsubscribeFromMailChimp,
-            bool changeEmail
-        );
-
-		[OperationContract]
-		StringActionResult UserResetPassword(string sEmail);
-
-		[OperationContract]
-		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
 
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);

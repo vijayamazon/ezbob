@@ -466,15 +466,13 @@
 				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
 				
 				if (status == MembershipCreateStatus.DuplicateEmail) {
-
 					int EmailOriginID = createuserresult.OriginID;
 
 					if (uiOrigin.CustomerOriginID != EmailOriginID)
 						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));
-					else {
+					else
 						throw new Exception(DbStrings.EmailAddressAlreadyExists);
-					}
-				}
+				} // if
 				
 				if (status != MembershipCreateStatus.Success)
 					throw new Exception(DbStrings.UserCreationFailed);

@@ -2,13 +2,18 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.Serialization;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 
+	[DataContract]
 	public enum CustomerOriginEnum {
+		[EnumMember]
 		ezbob,
+		[EnumMember]
 		everline,
+		[EnumMember]
 		alibaba,
 	} // enum CustomerOriginEnum
 
