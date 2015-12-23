@@ -56,7 +56,9 @@
 			NL_Model nlModel = loanState.Result;
 			decimal interest = nlModel.Interest; // TODO check: real unpaid interest for this date here
 
-			NL_AddLog(LogType.Info, "MarkLoanAsLate", now, sr, null, null);
+			var args = new object[] { customerID, loanID, loanStatus, scheduleID, scheduleStatus, scheduleDate, now };
+
+			NL_AddLog(LogType.Info, "MarkLoanAsLate", args, null, null, null);
 
 			if (loanStatus != NLLoanStatuses.Late) { //loanStatus != "Late")
 
@@ -69,24 +71,20 @@
 				//	 new QueryParameter("IsWasLate", true)
 				//	);
 
-				NL_AddLog(LogType.Info, "NL_LoanUpdate-late", now, loanID, null, null);
+				NL_AddLog(LogType.Info, "update loan", args, loanID, null, null);
 
-				DB.ExecuteNonQuery("NL_LoanUpdate", CommandSpecies.StoredProcedure,
-					new QueryParameter("LoanID", loanID),
-					new QueryParameter("LoanStatusID", (int)NLLoanStatuses.Late)
-				);
+				DB.ExecuteNonQuery("NL_LoanUpdate", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", loanID), new QueryParameter("LoanStatusID", (int)NLLoanStatuses.Late));
 			}
 
 			if (scheduleStatus != NLScheduleStatuses.Late) {
-				NL_AddLog(LogType.Info, "NL_LoanSchedulesUpdate-late", now, sr, null, null);
 
-				DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
-					new QueryParameter("LoanScheduleID", scheduleID),
-					new QueryParameter("LoanScheduleStatusID", (int)NLScheduleStatuses.Late));
+				NL_AddLog(LogType.Info, "update schedule ", args, scheduleID, null, null);
+
+				DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure, new QueryParameter("LoanScheduleID", scheduleID), new QueryParameter("LoanScheduleStatusID", (int)NLScheduleStatuses.Late));
 			}
 
 			if (!LateFeesAllowed(nlModel.Loan.LoanOptions, loanID)) {
-				NL_AddLog(LogType.Info, "LateFeesAllowed not allowed", now, new object[] { sr, nlModel.Loan.LoanOptions }, null, null);
+				NL_AddLog(LogType.Info, "late fees not allowed", args, nlModel.Loan.LoanOptions, null, null);
 				return;
 			}
 
@@ -95,20 +93,20 @@
 			NLFeeTypes nlFeeType;
 			NL_Model.CalculateFee(daysBetween, interest, out feeAmount, out nlFeeType);
 
-			NL_AddLog(LogType.Info, "NLFeeTypes by late days of schedule", now, new object[] { sr, daysBetween, interest, feeAmount, nlFeeType }, null, null);
+			NL_AddLog(LogType.Info, "late fee data", args, new object[] { sr, daysBetween, interest, feeAmount, nlFeeType }, null, null);
 
 			if (nlFeeType != NLFeeTypes.None) {
 				List<NL_LoanFees> nlFees = new List<NL_LoanFees>() {new NL_LoanFees() {
                             AssignedByUserID = 1,
                             LoanID = loanID,
-                            Amount = feeAmount, // NL_Model.GetLateFeesAmount(nlFeeType),
+                            Amount = feeAmount, 
                             DeletedByUserID = null,
                             AssignTime = now,
                             CreatedTime = now,
                             DisabledTime = null,
                             LoanFeeTypeID = (int)nlFeeType,
                             Notes = "SetLateLoanStatus scheduleID="+ scheduleID
-                        }
+						}
                     };
 
 				try {
@@ -116,24 +114,16 @@
 					DB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", nlFees));
 
 					Log.Info("NL: Applied late charge for customer {0} loan {1}: data: {2}", customerID, loanID, sr);
-					NL_AddLog(LogType.Info, "Applied late charge", now, new object[] { sr, nlFees }, null, null);
+					NL_AddLog(LogType.Info, "Late fee", args, nlFees, null, null);
 
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
-					NL_AddLog(LogType.Error, "Strategy failed to add late fees", now, new object[] { sr, nlFees }, ex.ToString(), ex.StackTrace);
+					NL_AddLog(LogType.Error, "Strategy failed to add late fees", args, nlFees, ex.ToString(), ex.StackTrace);
 				}
 
 			} // if
 		}
-
-		//ApplyLateCharge
-		//if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
-		//			(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) ||
-		//			(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
-		//			Log.InfoFormat("not applying late fee for loan {0} - auto late fee is disabled", loanId);
-		//			return false;
-		//		}
-
+		
 		protected bool LateFeesAllowed(NL_LoanOptions options, long loanID) {
 			if (options.StopLateFeeToDate != null && options.StopLateFeeFromDate != null && (now >= options.StopLateFeeFromDate.Value.Date && now <= options.StopLateFeeToDate.Value.Date)) {
 				Log.Info("NL: not applying late fee for loan {0} - auto late fee is disabled from {1:d} to {2:d}", loanID, options.StopLateFeeFromDate, options.StopLateFeeToDate);
@@ -141,36 +131,6 @@
 			}
 			return true;
 		}
-
-		//private NLFeeTypes GetNLFeeTypes(int daysBetween, decimal interest) {
-		//	//  use NLFeeTypes
-		//	if (daysBetween >= CurrentValues.Instance.CollectionPeriod1 && daysBetween < CurrentValues.Instance.CollectionPeriod2) {
-		//		return NLFeeTypes.LatePaymentFee;
-		//	}
-		//	if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest > 0) {
-		//		return NLFeeTypes.AdminFee;
-		//	}
-		//	if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest <= 0) {
-		//		return NLFeeTypes.PartialPaymentFee;
-		//	}//if
-		//	return NLFeeTypes.None;
-		//}
-
-		/*private void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out NLFeeTypes feeType) {
-			feeAmount = 0;
-			feeType = NLFeeTypes.None;
-
-			if (daysBetween >= CurrentValues.Instance.CollectionPeriod1 && daysBetween < CurrentValues.Instance.CollectionPeriod2) {
-				feeAmount = CurrentValues.Instance.LatePaymentCharge;
-				feeType = NLFeeTypes.LatePaymentFee;
-			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest > 0) {
-				feeAmount = CurrentValues.Instance.AdministrationCharge;
-				feeType = NLFeeTypes.AdminFee;
-			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest <= 0) {
-				feeAmount = CurrentValues.Instance.PartialPaymentCharge;
-				feeType = NLFeeTypes.PartialPaymentFee;
-			}//if
-		}//CalculateFee*/
 
 	}// class CollectionScanner
 } // namespace

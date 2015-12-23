@@ -1,8 +1,6 @@
 ﻿namespace Ezbob.Utils {
 	using System;
 	using System.Globalization;
-	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Utils.Security;
 	using Newtonsoft.Json;
 

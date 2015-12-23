@@ -1004,4 +1004,7 @@ ALTER TABLE NL_Payments ADD CONSTRAINT CHK_NL_Payments CHECK (
 	);
 GO
 
+IF OBJECT_ID('UQ_LoanID_LoanFeeTypeID_Amount_AssignTime') IS NULL
+ALTER TABLE [dbo].[NL_LoanFees] ADD CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime UNIQUE NONCLUSTERED ([LoanID],[LoanFeeTypeID],[Amount],[AssignTime]);
+GO
 

@@ -22,11 +22,20 @@ CREATE TYPE NL_LoanFeesList AS TABLE (
 )
 GO
 
-CREATE PROCEDURE NL_LoanFeesSave
+CREATE PROCEDURE [dbo].[NL_LoanFeesSave]
 @Tbl NL_LoanFeesList READONLY
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	declare @LoanID bigint = (select LoanID from @Tbl);
+	declare @LoanFeeTypeID int = (select LoanFeeTypeID from @Tbl);
+	declare @CreatedTime date = (select CreatedTime from @Tbl);
+	declare @Amount decimal (18,6) = (select Amount from @Tbl);
+
+	-- prevent to insert same fee
+	if (select LoanFeeID from NL_LoanFees where LoanID = @LoanID and LoanFeeTypeID=@LoanFeeTypeID and DATEDIFF(DAY, CreatedTime, @CreatedTime)=0 and Amount = @Amount) > 0
+		return;
 
 	INSERT INTO NL_LoanFees (		
 		[LoanID],
@@ -53,6 +62,3 @@ BEGIN
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
-GO
-
-
