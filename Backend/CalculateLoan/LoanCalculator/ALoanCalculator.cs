@@ -368,11 +368,11 @@
 			bool loanClosed = false;
 			try {
 				CheckLoanClosed();
-			} catch (LoanPendingStatusException loanPendingStatusException) {
+			} catch (LoanPendingStatusException) {
 				loanClosed = true;
-			} catch (LoanPaidOffStatusException loanPaidOffStatusException) {
+			} catch (LoanPaidOffStatusException) {
 				loanClosed = true;
-			} catch (LoanWriteOffStatusException loanWriteOffStatusException) {
+			} catch (LoanWriteOffStatusException) {
 				loanClosed = true;
 			}
 
