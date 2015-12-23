@@ -300,21 +300,5 @@
 			return DateTime.DaysInMonth(date.Year, date.Month);
 		}
 
-
-		public static void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out NLFeeTypes feeType) {
-			feeAmount = 0;
-			feeType = NLFeeTypes.None;
-			if (daysBetween >= CurrentValues.Instance.CollectionPeriod1 && daysBetween < CurrentValues.Instance.CollectionPeriod2) {
-				feeAmount = CurrentValues.Instance.LatePaymentCharge;
-				feeType = NLFeeTypes.LatePaymentFee;
-			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest > 0) {
-				feeAmount = CurrentValues.Instance.AdministrationCharge;
-				feeType = NLFeeTypes.AdminFee;
-			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest <= 0) {
-				feeAmount = CurrentValues.Instance.PartialPaymentCharge;
-				feeType = NLFeeTypes.PartialPaymentFee;
-			}//if
-		}//CalculateFee
-
 	} // class MiscUtils
 } // namespace

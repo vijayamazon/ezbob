@@ -108,6 +108,21 @@
 		[DataMember]
 		public decimal Principal { get { return this._principal; } set { this._principal = value; } }
 
+		public static void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out NLFeeTypes feeType) {
+			feeAmount = 0;
+			feeType = NLFeeTypes.None;
+			if (daysBetween >= CurrentValues.Instance.CollectionPeriod1 && daysBetween < CurrentValues.Instance.CollectionPeriod2) {
+				feeAmount = CurrentValues.Instance.LatePaymentCharge;
+				feeType = NLFeeTypes.LatePaymentFee;
+			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest > 0) {
+				feeAmount = CurrentValues.Instance.AdministrationCharge;
+				feeType = NLFeeTypes.AdminFee;
+			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest <= 0) {
+				feeAmount = CurrentValues.Instance.PartialPaymentCharge;
+				feeType = NLFeeTypes.PartialPaymentFee;
+			}//if
+		}//CalculateFee
+
 		// 21 december - combined in method CalculateFee, in \ezbob\backend\Strategies\NewLoan\Collection\SetLateLoanStatus.cs
 		/*public static decimal GetLateFeesAmount(NLFeeTypes nlFeeType) {
 			switch (nlFeeType) {

@@ -93,7 +93,7 @@
 			int daysBetween = (int)(now - scheduleDate).TotalDays;
 			int feeAmount;
 			NLFeeTypes nlFeeType;
-			MiscUtils.CalculateFee(daysBetween, interest, out feeAmount, out nlFeeType);
+			NL_Model.CalculateFee(daysBetween, interest, out feeAmount, out nlFeeType);
 
 			NL_AddLog(LogType.Info, "NLFeeTypes by late days of schedule", now, new object[] { sr, daysBetween, interest, feeAmount, nlFeeType }, null, null);
 
