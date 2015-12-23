@@ -9,6 +9,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using IMailLib;
@@ -69,6 +70,18 @@
 				}
 				return ActionResult.Continue;
 			}, "GetCuredLoansForCollection", CommandSpecies.StoredProcedure);
+
+
+			// run NL "SetLateLoanStatus" job.
+			try {
+				LateLoanJob nlLateJob = new LateLoanJob(this.now);
+				nlLateJob.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Debug(ex.Message);
+				NL_AddLog(LogType.Error, "Strategy failed", this.now, null, ex.Message, ex.StackTrace);
+			}
+
 		}//Execute
 
 		private void LoadImailTemplates() {
@@ -418,8 +431,7 @@
 			}
 
 			if (scheduleStatus != "Late") {
-				DB.ExecuteNonQuery("UpdateLoanScheduleStatus", CommandSpecies.StoredProcedure,
-					new QueryParameter("Id", id), new QueryParameter("Status", "Late"));
+				DB.ExecuteNonQuery("UpdateLoanScheduleStatus", CommandSpecies.StoredProcedure, new QueryParameter("Id", id), new QueryParameter("Status", "Late"));
 			}
 
 			int daysBetween = (int)(this.now - scheduleDate).TotalDays;

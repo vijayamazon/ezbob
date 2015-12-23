@@ -7,21 +7,24 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
-	/// <summary>
-	/// Set Late Loan Status
-	/// </summary>
 	public class SetLateLoanStatus : AStrategy {
-		
-		private DateTime now;
+
+		public SetLateLoanStatus(DateTime? runTime) {
+			if (runTime != null)
+				now = (DateTime)runTime;
+			else
+				now = DateTime.UtcNow;
+		}
+
+		public DateTime now { get; private set; }
 		public override string Name { get { return "SetLateLoanStatus"; } }
 
 		public override void Execute() {
+
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
 				return;
 
-			this.now = DateTime.UtcNow;
-
-			NL_AddLog(LogType.Info, "Strategy Start", this.now, null, null, null);
+			NL_AddLog(LogType.Info, "Strategy Start", now, null, null, null);
 
 			try {
 				//-----------Select relevan loans----------------------------------------------------
@@ -30,8 +33,9 @@
 					MarkLoanAsLate(sr);
 					return ActionResult.Continue;
 				}, "NL_LateLoansGet",
-				CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+				CommandSpecies.StoredProcedure, new QueryParameter("Now", now));
 
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
 			}
@@ -45,14 +49,14 @@
 			int customerID = sr["CustomerId"];
 			DateTime scheduleDate = sr["ScheduleDate"];
 			NLLoanStatuses loanStatus = (NLLoanStatuses)Enum.Parse(typeof(NLLoanStatuses), sr["LoanStatus"]);
-			NLLoanScheduleStatus scheduleStatus = (NLLoanScheduleStatus)Enum.Parse(typeof(NLLoanScheduleStatus), sr["ScheduleStatus"]);
+			NLScheduleStatuses scheduleStatus = (NLScheduleStatuses)Enum.Parse(typeof(NLScheduleStatuses), sr["ScheduleStatus"]);
 
-			GetLoanState loanState = new GetLoanState(customerID, loanID, this.now);
+			GetLoanState loanState = new GetLoanState(customerID, loanID, now);
 			loanState.Execute();
 			NL_Model nlModel = loanState.Result;
 			decimal interest = nlModel.Interest; // TODO check: real unpaid interest for this date here
 
-			NL_AddLog(LogType.Info, "MarkLoanAsLate", this.now, sr, null, null);
+			NL_AddLog(LogType.Info, "MarkLoanAsLate", now, sr, null, null);
 
 			if (loanStatus != NLLoanStatuses.Late) { //loanStatus != "Late")
 
@@ -65,7 +69,7 @@
 				//	 new QueryParameter("IsWasLate", true)
 				//	);
 
-				NL_AddLog(LogType.Info, "NL_LoanUpdate-late", this.now, loanID, null, null);
+				NL_AddLog(LogType.Info, "NL_LoanUpdate-late", now, loanID, null, null);
 
 				DB.ExecuteNonQuery("NL_LoanUpdate", CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanID", loanID),
@@ -73,25 +77,25 @@
 				);
 			}
 
-			if (scheduleStatus != NLLoanScheduleStatus.Late) {
-				NL_AddLog(LogType.Info, "NL_LoanSchedulesUpdate-late", this.now, sr, null, null);
+			if (scheduleStatus != NLScheduleStatuses.Late) {
+				NL_AddLog(LogType.Info, "NL_LoanSchedulesUpdate-late", now, sr, null, null);
 
 				DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanScheduleID", scheduleID),
-					new QueryParameter("LoanScheduleStatusID", (int)NLLoanScheduleStatus.Late));
+					new QueryParameter("LoanScheduleStatusID", (int)NLScheduleStatuses.Late));
 			}
 
 			if (!LateFeesAllowed(nlModel.Loan.LoanOptions, loanID)) {
-				NL_AddLog(LogType.Info, "LateFeesAllowed not allowed", this.now, new object[] { sr, nlModel.Loan.LoanOptions }, null, null);
+				NL_AddLog(LogType.Info, "LateFeesAllowed not allowed", now, new object[] { sr, nlModel.Loan.LoanOptions }, null, null);
 				return;
 			}
 
-			int daysBetween = (int)(this.now - scheduleDate).TotalDays;
+			int daysBetween = (int)(now - scheduleDate).TotalDays;
 			int feeAmount;
 			NLFeeTypes nlFeeType;
 			MiscUtils.CalculateFee(daysBetween, interest, out feeAmount, out nlFeeType);
 
-			NL_AddLog(LogType.Info, "NLFeeTypes by late days of schedule", this.now, new object[] { sr, daysBetween, interest, feeAmount, nlFeeType }, null, null);
+			NL_AddLog(LogType.Info, "NLFeeTypes by late days of schedule", now, new object[] { sr, daysBetween, interest, feeAmount, nlFeeType }, null, null);
 
 			if (nlFeeType != NLFeeTypes.None) {
 				List<NL_LoanFees> nlFees = new List<NL_LoanFees>() {new NL_LoanFees() {
@@ -99,8 +103,8 @@
                             LoanID = loanID,
                             Amount = feeAmount, // NL_Model.GetLateFeesAmount(nlFeeType),
                             DeletedByUserID = null,
-                            AssignTime = this.now,
-                            CreatedTime = this.now,
+                            AssignTime = now,
+                            CreatedTime = now,
                             DisabledTime = null,
                             LoanFeeTypeID = (int)nlFeeType,
                             Notes = "SetLateLoanStatus scheduleID="+ scheduleID
@@ -112,11 +116,11 @@
 					DB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", nlFees));
 
 					Log.Info("NL: Applied late charge for customer {0} loan {1}: data: {2}", customerID, loanID, sr);
-					NL_AddLog(LogType.Info, "Applied late charge", this.now, new object[] { sr, nlFees }, null, null);
+					NL_AddLog(LogType.Info, "Applied late charge", now, new object[] { sr, nlFees }, null, null);
 
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
-					NL_AddLog(LogType.Error, "Strategy failed to add late fees", this.now, new object[] { sr, nlFees }, ex.ToString(), ex.StackTrace);
+					NL_AddLog(LogType.Error, "Strategy failed to add late fees", now, new object[] { sr, nlFees }, ex.ToString(), ex.StackTrace);
 				}
 
 			} // if
@@ -131,7 +135,7 @@
 		//		}
 
 		protected bool LateFeesAllowed(NL_LoanOptions options, long loanID) {
-			if (options.StopLateFeeToDate != null && options.StopLateFeeFromDate != null && (this.now >= options.StopLateFeeFromDate.Value.Date && this.now <= options.StopLateFeeToDate.Value.Date)) {
+			if (options.StopLateFeeToDate != null && options.StopLateFeeFromDate != null && (now >= options.StopLateFeeFromDate.Value.Date && now <= options.StopLateFeeToDate.Value.Date)) {
 				Log.Info("NL: not applying late fee for loan {0} - auto late fee is disabled from {1:d} to {2:d}", loanID, options.StopLateFeeFromDate, options.StopLateFeeToDate);
 				return false;
 			}

@@ -24,15 +24,7 @@
 		WriteOff = 6,
 		DebtManagement = 7
 	} // enum NLLoanStatuses
-
-	public enum NLLoanScheduleStatus {
-		StillToPay,
-		PaidOnTime,
-		Late,
-		PaidEarly,
-		Paid,
-		AlmostPaid
-	}
+	
 
 	public enum NLFeeTypes {
 		None = 0,

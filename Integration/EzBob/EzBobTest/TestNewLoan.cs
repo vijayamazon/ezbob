@@ -17,6 +17,7 @@
 	using Ezbob.Utils;
 	using EzServiceAccessor;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -25,6 +26,7 @@
 	using NHibernate.Linq;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
+	using PaymentServices.PayPoint;
 	using ServiceClientProxy;
 	using StructureMap;
 
@@ -539,7 +541,7 @@
 
 		[Test]
 		public void LateLoanJob() {
-			LateLoanJob strategy = new LateLoanJob();
+			LateLoanJob strategy = new LateLoanJob(DateTime.UtcNow);
 			strategy.Execute();
 		}
 
@@ -747,7 +749,7 @@
 			}
 		}
 
-	
+
 
 		[Test]
 		public void PayPoiinApiGetAmountToPay() {
@@ -800,7 +802,7 @@
 		}
 
 
-	
+
 
 		[Test]
 		public void GetCustomerLoansTest() {
@@ -866,8 +868,42 @@
 
 		[Test]
 		public void TestLateLoanJob() {
-			var stra = new LateLoanJob();
+			var stra = new LateLoanJob(DateTime.UtcNow);
 			stra.Execute();
+		}
+
+		[Test]
+		public void ApplayLateCharge() {
+			int loanid = 5103;
+			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			var loan = loanRep.Get(loanid);
+			DateTime now = DateTime.UtcNow;
+			ILoanOptionsRepository optRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
+			var loanOptions = optRep.GetByLoanId(loanid);
+
+		//	m_oLog.Debug("loanOption={0}", loanOptions.ToString());
+
+			if (loanOptions != null && loanOptions.AutoLateFees == false) {
+				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
+					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) ||
+					(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
+					m_oLog.Debug("not applying late fee for loan {0} - auto late fee is disabled", loanid);
+					return;
+				}
+			}
+
+			var charge = new LoanCharge {
+				Amount = 20,
+				ChargesType = new ConfigurationVariable(CurrentValues.Instance.GetByID(CurrentValues.Instance.LatePaymentCharge.ID)),
+				Date = now,
+				Loan = loan
+			};
+
+			m_oLog.Debug("charge={0}", charge);
+
+			var res = loan.TryAddCharge(charge);
+
+			m_oLog.Debug("result={0}", res);
 		}
 
 	} // class TestNewLoan

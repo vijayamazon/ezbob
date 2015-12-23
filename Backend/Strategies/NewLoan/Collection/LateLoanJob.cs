@@ -7,6 +7,14 @@
 	/// </summary>
 	public class LateLoanJob : AStrategy {
 
+		public LateLoanJob(DateTime? runTime) {
+			if (runTime != null)
+				this.nowTime = (DateTime)runTime;
+			else
+				this.nowTime = DateTime.UtcNow;
+		}
+
+		private readonly DateTime nowTime;
 		public override string Name { get { return "LateLoanJob"; } }
 
 		public override void Execute() {
@@ -19,7 +27,7 @@
 				NL_AddLog(LogType.Info, "Strategy Start", DateTime.UtcNow, null, null, null);
 
 				//For each loan schedule marks it as late, it's loan as late, applies fee if needed
-				AStrategy strategy = new SetLateLoanStatus();
+				AStrategy strategy = new SetLateLoanStatus(this.nowTime);
 				strategy.Execute();
 
 				//We dont want to send notifications twice for now...

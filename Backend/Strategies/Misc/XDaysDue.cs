@@ -112,11 +112,11 @@
                 new QueryParameter(parameterName, true)
             };
 
-			NL_AddLog(LogType.Warn, "Processing", new object[] { customerID, loanID, Xdays, loanScheduleId, plannedDate, nowTime }, new object[] { theSchedule, parameterName, templateName }, null, null);
+			NL_AddLog(LogType.Info, "Processing", new object[] { customerID, loanID, Xdays, loanScheduleId, plannedDate, nowTime }, new object[] { theSchedule, parameterName, templateName }, null, null);
 
 			DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure, queryParameteres);
 
-			Log.Info("update loan schedule x days due for customer {0}", customerID);
+			Log.Info("update loanID {2} scheduleID {1} x days due for customer {0}", customerID, loanScheduleId, loanID);
 		}
 	} // class XDaysDue
 } // namespace
