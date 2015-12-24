@@ -7,7 +7,7 @@
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzSericeUserManagement {
 		[OperationContract]
-		UserLoginActionResult SignupCustomerMutliOrigin(SignupMultiOriginModel model);
+		UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model);
 
 		[OperationContract]
 		UserLoginActionResult CustomerSignup(

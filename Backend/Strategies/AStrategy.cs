@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies {
 	using System;
+	using System.Threading.Tasks;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -52,6 +53,34 @@
 
 			InitDefaults(); // should not be moved to static constructor
 		} // constructor
+
+		protected void FireToBackground(string description, Action task, Action<Exception> onFailedToExecute = null) {
+			if (task == null)
+				return;
+
+			string taskID = Guid.NewGuid().ToString("N");
+
+			StrategyLog log = Log;
+
+			log.Debug("Starting background task '{1}' with id '{0}'...", taskID, description);
+
+			try {
+				Task.Run(() => {
+					try {
+						task();
+
+						log.Debug("Background task '{1}' (id: '{0}') completed successfully.", taskID, description);
+					} catch (Exception e) {
+						log.Alert(e, "Background task '{1}' (id: '{0}') failed.", taskID, description);
+					} // try
+				});
+			} catch (Exception e) {
+				Log.Alert(e, "Failed to fire task '{1}' (id: '{0}') to background.", taskID, description);
+
+				if (onFailedToExecute != null)
+					onFailedToExecute(e);
+			} // try
+		} // FireToBackground
 
 		protected static IMarketplaceModelBuilder GetMpModelBuilder(MP_CustomerMarketPlace mp) {
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());

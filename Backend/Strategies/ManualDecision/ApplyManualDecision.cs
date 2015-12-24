@@ -2,7 +2,6 @@
 	using System;
 	using System.Linq;
 	using System.Reflection;
-	using System.Threading.Tasks;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -140,34 +139,6 @@
 
 			Log.Debug("Done applying manual decision by model: {0}.", this.decisionModel.Stringify());
 		} // Execute
-
-		private void FireToBackground(string description, Action task, Action<Exception> onFailedToStart = null) {
-			if (task == null)
-				return;
-
-			string taskID = Guid.NewGuid().ToString("N");
-
-			StrategyLog log = Log;
-
-			log.Debug("Starting background task '{1}' with id '{0}'...", taskID, description);
-
-			try {
-				Task.Run(() => {
-					try {
-						task();
-
-						log.Debug("Background task '{1}' (id: '{0}') completed successfully.", taskID, description);
-					} catch (Exception e) {
-						log.Alert(e, "Background task '{1}' (id: '{0}') failed.", taskID, description);
-					} // try
-				});
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to fire task '{1}' (id: '{0}') to background.", taskID, description);
-
-				if (onFailedToStart != null)
-					onFailedToStart(e);
-			} // try
-		} // FireToBackground
 
 		private ChangeDecisionOption CanChangeDecision() {
 			var checker = new DecisionIsChangable(this.decisionModel);

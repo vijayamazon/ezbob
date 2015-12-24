@@ -6,7 +6,7 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
-		public UserLoginActionResult SignupCustomerMutliOrigin(SignupMultiOriginModel model) {
+		public UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model) {
 			SignupCustomerMutliOrigin instance;
 
 			ActionMetaData amd = ExecuteSync(out instance, null, null, model);

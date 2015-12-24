@@ -542,6 +542,139 @@
 			} // try
 		} // SignUp
 
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[CaptchaValidationFilter(Order = 999999)]
+		public JsonResult SignUpOld(
+			User model,
+			string FirstName,
+			string Surname,
+			string signupPass1,
+			string signupPass2,
+			string securityQuestion,
+			string mobilePhone,
+			string mobileCode,
+			string isInCaptchaMode,
+			int whiteLabelId
+		) {
+			if (!ModelState.IsValid)
+				return GetModelStateErrors(ModelState);
+
+			if (model.SecurityAnswer.Length > 199)
+				throw new Exception(DbStrings.MaximumAnswerLengthExceeded);
+
+			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+
+			if (uiOrigin.IsAlibaba() && string.IsNullOrWhiteSpace(GetCookie("alibaba_id"))) {
+				return Json(new {
+					success = false,
+					errorMessage = "No Alibaba customer id provided.",
+				}, JsonRequestBehavior.AllowGet);
+			} // if
+
+			try {
+				if (string.IsNullOrEmpty(model.EMail))
+					throw new Exception(DbStrings.NotValidEmailAddress);
+
+				if (!string.Equals(signupPass1, signupPass2))
+					throw new Exception(DbStrings.PasswordDoesNotMatch);
+
+				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
+
+				if (signupPass1.Length < maxPassLength)
+					throw new Exception(DbStrings.PasswordPolicyCheck);
+
+				bool mobilePhoneVerified = false;
+
+				if (isInCaptchaMode != "True") {
+					mobilePhoneVerified = this.serviceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
+
+					if (!mobilePhoneVerified)
+						throw new Exception(DbStrings.InvalidMobileCode);
+				} // if
+
+				UserLoginActionResult createuserresult = CreateUser(model.EMail, signupPass1, securityQuestion, model.SecurityAnswer);
+
+				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
+				
+				if (status == MembershipCreateStatus.DuplicateEmail) {
+					int EmailOriginID = createuserresult.OriginID;
+
+					if (uiOrigin.CustomerOriginID != EmailOriginID)
+						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));
+					else
+						throw new Exception(DbStrings.EmailAddressAlreadyExists);
+				} // if
+				
+				if (status != MembershipCreateStatus.Success)
+					throw new Exception(DbStrings.UserCreationFailed);
+
+				Customer customer = null;
+
+				var blm = new WizardBrokerLeadModel(Session);
+
+				new Transactional(
+					() => customer = CreateCustomer(
+						model.EMail,
+						FirstName,
+						Surname,
+						mobilePhone,
+						mobilePhoneVerified,
+						blm.BrokerFillsForCustomer,
+						whiteLabelId
+					)
+				).Execute();
+
+				string token = this.serviceClient.Instance.EmailConfirmationGenerate(customer.Id).Token.ToString();
+
+				if (blm.IsSet) {
+					this.serviceClient.Instance.BrokerLeadAcquireCustomer(
+						customer.Id,
+						blm.LeadID,
+						blm.FirstName,
+						blm.BrokerFillsForCustomer,
+						token
+					);
+				} else {
+					this.serviceClient.Instance.BrokerCheckCustomerRelevance(
+						customer.Id,
+						customer.Name,
+						customer.IsAlibaba,
+						customer.ReferenceSource,
+						token
+					); // Add is Alibaba, or do after saving it to DB
+				} // if
+
+				this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(
+					customer.Id,
+					customer.Name,
+					customer.Id,
+					false,
+					false
+				);
+
+				FormsAuthentication.SetAuthCookie(model.EMail, false);
+				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
+
+				return Json(new {
+					success = true,
+					antiforgery_token = AntiForgery.GetHtml().ToString(),
+					refNumber = customer.RefNumber
+				}, JsonRequestBehavior.AllowGet);
+			} catch (Exception e) {
+/*
+				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString()) {
+					return Json(new {
+						success = false,
+						errorMessage = DbStrings.EmailAddressAlreadyExists
+					}, JsonRequestBehavior.AllowGet);
+				} // if*/
+
+				return Json(new { success = false, errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
+			} // try
+		} // SignUpOld
+
 		public ActionResult ForgotPassword() {
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
 			return View("ForgotPassword");

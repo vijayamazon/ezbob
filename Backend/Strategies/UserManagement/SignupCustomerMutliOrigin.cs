@@ -4,15 +4,20 @@
 	using System.Web.Security;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.Exceptions;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.SalesForce;
+	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
 	using Ezbob.Utils.Security;
+	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
 	public class SignupCustomerMutliOrigin : AStrategy {
-		public SignupCustomerMutliOrigin(SignupMultiOriginModel model) {
+		public SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model) {
 			this.model = model;
 		} // constructor
 
@@ -21,17 +26,34 @@
 		} // Name
 
 		public override void Execute() {
+			Success = false;
+
 			if (this.model == null)
 				throw new StrategyAlert(this, "No sign up data specified.");
 
-			CreateSecurityUserEntry();
+			this.dbTransaction = DB.GetPersistent();
 
-			if (Status != MembershipCreateStatus.Success)
-				return;
+			try {
+				CreateSecurityUserStaff();
 
-			CreateCustomerEntry();
+				if (Status != MembershipCreateStatus.Success)
+					throw new UserNotCreatedException();
+
+				CreateCustomerStaff();
+
+				this.dbTransaction.Commit();
+
+				Success = true;
+			} catch (Exception e) {
+				Log.Warn(e, "Failed to create a customer with name '{0}'.", this.model.UserName);
+				this.dbTransaction.Rollback();
+			} // try
+
+			if (Success)
+				DoBrokerLeadsAndThirdParties();
 		} // Execute
 
+		public bool Success { get; private set; }
 		public int UserID { get; private set; }
 		public int SessionID { get; private set; }
 		public int OriginID { get; private set; }
@@ -41,7 +63,71 @@
 			get { return Status.HasValue ? Status.Value.ToString() : string.Empty;}
 		} // Result
 
-		private void CreateSecurityUserEntry() {
+		private void DoBrokerLeadsAndThirdParties() {
+			string token = GenerateConfirmationToken();
+
+			if (token != null) {
+				AStrategy stra = CreateEmailStrategy(token);
+
+				if (stra != null)
+					FireToBackground(string.Format("{0} for customer {1}", stra.Name, UserID), () => stra.Execute());
+			} // if
+
+			FireToBackground(
+				"SalesForce add lead for customer " + this.model.UserName,
+				() => new AddUpdateLeadAccount(this.model.UserName, UserID, false, false).Execute()
+			);
+		} // DoBrokerLeadsAndThirdParties
+
+		private AStrategy CreateEmailStrategy(string token) {
+			try {
+				if (this.model.BrokerLeadIsSet()) {
+					return new BrokerLeadAcquireCustomer(
+						UserID,
+						this.model.BrokerLeadID,
+						this.model.BrokerLeadFirstName,
+						this.model.BrokerFillsForCustomer,
+						token
+					);
+				} // if
+
+				return new BrokerCheckCustomerRelevance(
+					UserID,
+					this.model.UserName,
+					this.model.IsAlibaba(),
+					this.model.ReferenceSource,
+					token
+				);
+			} catch (Exception e) {
+				Log.Alert(
+					e,
+					"Failed to create BrokerLeadAcquireCustomer/BrokerCheckCustomerRelevance for customer {0}; " +
+					"attachment to broker not checked, greeting email not sent.",
+					this.model.UserName
+				);
+
+				return null;
+			} // try
+		} // CreateEmailStrategy
+
+		private string GenerateConfirmationToken() {
+			try {
+				var ecg = new EmailConfirmationGenerate(UserID);
+				ecg.Execute();
+				return ecg.Token.ToString();
+			} catch (Exception e) {
+				Log.Alert(
+					e,
+					"Failed to create email confirmation token for customer '{0}'; " +
+					"attachment to broker not checked, greeting email not sent.",
+					this.model.UserName
+				);
+
+				return null;
+			} // try
+		} // GenerateConfirmationToken
+
+		private void CreateSecurityUserStaff() {
 			if (this.model.Origin == null)
 				throw new StrategyAlert(this, "No origin specified.");
 
@@ -63,7 +149,7 @@
 
 				HashedPassword hashedPassword = passUtil.Generate(this.model.UserName, this.model.RawPassword);
 				
-				var sp = new CreateWebUser(DB, Log) {
+				var sp = new CreateUserForCustomer(DB, Log) {
 					OriginID = (int)this.model.Origin.Value,
 					Email = this.model.UserName,
 					EzPassword = hashedPassword.Password,
@@ -78,7 +164,7 @@
 
 				UserID = 0;
 
-				sp.ForEachRowSafe((sr, bRowsetStart) => {
+				sp.ForEachRowSafe(this.dbTransaction, (sr, bRowsetStart) => {
 					if (!sr.ContainsField("UserID"))
 						return ActionResult.Continue;
 
@@ -91,166 +177,63 @@
 				if (UserID == -1) {
 					Log.Warn("User with email {0} and origin {1} already exists.", this.model.UserName, this.model.Origin);
 					Status = MembershipCreateStatus.DuplicateEmail;
-				}
-				else if (UserID == -2) {
+				} else if (UserID == -2) {
 					Log.Warn("Could not find role '{0}'.", sp.RoleName);
 					Status = MembershipCreateStatus.ProviderError;
-				}
-				else if (UserID <= 0) {
+				} else if (UserID <= 0) {
 					Log.Alert("CreateWebUser returned unexpected result {0}.", UserID);
 					Status = MembershipCreateStatus.ProviderError;
-				}
-				else
+				} else
 					Status = MembershipCreateStatus.Success;
-			}
-			catch (AException) {
+			} catch (AException) {
 				Status = MembershipCreateStatus.ProviderError;
 				throw;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Alert(e, "Failed to create user.");
 				Status = MembershipCreateStatus.ProviderError;
 			} // try
-		} // CreateSecurityUserEntry
+		} // CreateSecurityUserStaff
 
-		private void CreateCustomerEntry() {
-			/*
-			var g = new RefNumberGenerator(this.customerRepo);
-			var isAutomaticTest = IsAutomaticTest(email);
-			var vip = this.vipRequestRepo.RequestedVip(email);
-			var whiteLabel = whiteLabelId != 0
-				? this.whiteLabelProviderRepo.GetAll().FirstOrDefault(x => x.Id == whiteLabelId)
-				: null;
+		private void CreateCustomerStaff() {
+			bool mobilePhoneVerified = false;
 
-			Broker broker = null;
-
-			if (whiteLabel != null) {
-				var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
-				broker = brokerRepo.GetAll().FirstOrDefault(x => x.WhiteLabel == whiteLabel);
+			if (!this.model.CaptchaMode) {
+				var vmc = new ValidateMobileCode(this.model.MobilePhone, this.model.MobileVerificationCode) {
+					Transaction = this.dbTransaction
+				};
+				vmc.Execute();
+				mobilePhoneVerified = vmc.IsValidatedSuccessfully();
 			} // if
 
-			sFirstName = (sFirstName ?? string.Empty).Trim();
-			sLastName = (sLastName ?? string.Empty).Trim();
+			var customer = new CreateCustomer(this, mobilePhoneVerified);
+			customer.ExecuteNonQuery(this.dbTransaction);
 
-			if (sFirstName == string.Empty)
-				sFirstName = null;
+			if (!this.model.BrokerFillsForCustomer)
+				new CreateCampaignSourceRef(this).ExecuteNonQuery(this.dbTransaction);
 
-			if (sLastName == string.Empty)
-				sLastName = null;
+			new CreateCustomerRequestedLoan(this).ExecuteNonQuery(this.dbTransaction);
 
-			var customer = new Customer {
-				Name = email,
-				Id = UserID,
-				Status = Status.Registered,
-				RefNumber = g.GenerateForCustomer(),
-				WizardStep = this.dbHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-				CollectionStatus = this.customerStatusRepo.Get((int)CollectionStatusNames.Enabled),
-				IsTest = isAutomaticTest,
-				IsOffline = null,
-				PersonalInfo = new PersonalInfo {
-					MobilePhone = mobilePhone,
-					MobilePhoneVerified = mobilePhoneVerified,
-					FirstName = sFirstName,
-					Surname = sLastName,
-				},
-				TrustPilotStatus = this.dbHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
-				GreetingMailSentDate = DateTime.UtcNow,
-				Vip = vip,
-				WhiteLabel = whiteLabel,
-				Broker = broker,
-			};
+			new SaveSourceRefHistory(
+				UserID,
+				this.model.ReferenceSource,
+				this.model.VisitTimes,
+				this.model.BrokerFillsForCustomer ? null : this.model.CampaignSourceRef
+			) { Transaction = this.dbTransaction, } .Execute();
 
-			customer.CustomerOrigin = UiCustomerOrigin.Get();
+			if (this.model.IsAlibaba())
+				new CreateAlibabaBuyer(this).ExecuteNonQuery(this.dbTransaction);
+		} // CreateCustomerStaff
 
-			log.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
-			CampaignSourceRef campaignSourceRef = null;
+		private readonly SignupCustomerMultiOriginModel model;
+		private ConnectionWrapper dbTransaction;
 
-			if (brokerFillsForCustomer) {
-				customer.ReferenceSource = "Broker";
-				customer.GoogleCookie = string.Empty;
-			} else {
-				customer.GoogleCookie = GetAndRemoveCookie("__utmz");
-				customer.ReferenceSource = GetAndRemoveCookie("sourceref");
-				customer.AlibabaId = GetAndRemoveCookie("alibaba_id");
-				customer.IsAlibaba = !string.IsNullOrWhiteSpace(customer.AlibabaId);
-
-				campaignSourceRef = new CampaignSourceRef();
-				campaignSourceRef.FContent = GetAndRemoveCookie("fcontent");
-				campaignSourceRef.FMedium = GetAndRemoveCookie("fmedium");
-				campaignSourceRef.FName = GetAndRemoveCookie("fname");
-				campaignSourceRef.FSource = GetAndRemoveCookie("fsource");
-				campaignSourceRef.FTerm = GetAndRemoveCookie("fterm");
-				campaignSourceRef.FUrl = GetAndRemoveCookie("furl");
-				campaignSourceRef.FDate = ToDate(GetAndRemoveCookie("fdate"));
-				campaignSourceRef.RContent = GetAndRemoveCookie("rcontent");
-				campaignSourceRef.RMedium = GetAndRemoveCookie("rmedium");
-				campaignSourceRef.RName = GetAndRemoveCookie("rname");
-				campaignSourceRef.RSource = GetAndRemoveCookie("rsource");
-				campaignSourceRef.RTerm = GetAndRemoveCookie("rterm");
-				campaignSourceRef.RUrl = GetAndRemoveCookie("rurl");
-				campaignSourceRef.RDate = ToDate(GetAndRemoveCookie("rdate"));
-			} // if
-
-			customer.ABTesting = GetAndRemoveCookie("ezbobab");
-			string visitTimes = GetAndRemoveCookie("sourceref_time");
-			customer.FirstVisitTime = HttpUtility.UrlDecode(visitTimes);
-
-			if (Request.Cookies["istest"] != null)
-				customer.IsTest = true;
-
-			this.customerRepo.Save(customer);
-
-			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
-				CustomerId = customer.Id,
-				Amount = ToInt(GetAndRemoveCookie("loan_amount"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 24000 : 20000),
-				Term = ToInt(GetAndRemoveCookie("loan_period"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 12 : 9),
-				Created = DateTime.UtcNow,
-			}};
-
-			var session = new CustomerSession {
-				CustomerId = UserID,
-				StartSession = DateTime.UtcNow,
-				Ip = RemoteIp(),
-				IsPasswdOk = true,
-				ErrorMessage = "Registration"
-			};
-			this.customerSessionRepo.AddSessionIpLog(session);
-			Session["UserSessionId"] = session.Id;
-			try {
-				this.serviceClient.Instance.SaveSourceRefHistory(
-					UserID,
-					customer.ReferenceSource,
-					visitTimes,
-					campaignSourceRef
-				);
-			} catch (Exception e) {
-				log.Warn(e, "Failed to save sourceref history.");
-			} // try
-
-			// save AlibabaBuyer
-			if (customer.AlibabaId != null && customer.IsAlibaba) {
-				try {
-					AlibabaBuyer alibabaMember = new AlibabaBuyer();
-					alibabaMember.AliId = Convert.ToInt64(customer.AlibabaId);
-					alibabaMember.Customer = customer;
-					EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
-					aliMemberRep.SaveOrUpdate(alibabaMember);
-				} catch (Exception alieException) {
-					log.Error(alieException, "Failed to save alibabaMember ID");
-				}
-			}
-
-			return customer;
-			 */
-		} // CreateCustomerEntry
-
-		private readonly SignupMultiOriginModel model;
+		private class UserNotCreatedException : Exception {} // class UserNotCreatedException
 
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
-		private class CreateWebUser : AStoredProcedure {
-			public CreateWebUser(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
+		private class CreateUserForCustomer : AStoredProcedure {
+			public CreateUserForCustomer(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
 				if (OriginID <= 0)
@@ -313,6 +296,252 @@
 			} // Now
 
 			private string ip;
-		} // class CreateWebUser
-	} // class SignupCustomerMutliOrigin
+		} // class CreateUserForCustomer
+
+		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		private class CreateCustomer : AStoredProcedure {
+			public CreateCustomer(SignupCustomerMutliOrigin stra, bool mobilePhoneVerified) : base(stra.DB, stra.Log) {
+				this.stra = stra;
+				this.refNumber = new RefNumber(this.stra.UserID);
+				this.mobilePhoneVerified = mobilePhoneVerified;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return (CustomerID > 0) && (OriginID > 0) && !string.IsNullOrWhiteSpace(UserName);
+			} // HasValidParameters
+
+			[FieldName("Name")]
+			public string UserName {
+				get { return this.stra.model.UserName; }
+				set { }
+			} // Name
+
+			[FieldName("Id")]
+			public int CustomerID {
+				get { return this.stra.UserID; }
+				set { }
+			} // CustomerID
+
+			public string Status {
+				get { return EZBob.DatabaseLib.Model.Database.Status.Registered.ToString(); }
+				set { }
+			} // Status
+
+			public string RefNumber {
+				get { return this.refNumber;  }
+				set { }
+			} // RefNumber
+
+			public int WizardStep {
+				get { return (int)DbConstants.WizardStepType.SignUp; }
+				set { }
+			} // WizardStep
+
+			public int CollectionStatus {
+				get { return (int)DbConstants.CollectionStatusNames.Enabled; }
+				set { }
+			} // CollectionStatus
+
+			public bool? IsTest { // TODO: if null fill from email (TestCustomer table)
+				get { return this.stra.model.IsTest; }
+				set { }
+			} // IsTest
+
+			// IsOffline = null, // TODO: in DB
+			// Vip = vip, // TODO: whether email exists in VipRequest
+			// WhiteLabel = this.stra.model.WhiteLabelID, // TODO: validate exists in WhiteLabelProvider
+			// Broker = broker, // TODO: find by white label
+
+			public string MobilePhone {
+				get { return this.stra.model.MobilePhone; }
+				set { }
+			} // MobilePhone
+
+			public bool MobilePhoneVerified {
+				get { return this.mobilePhoneVerified; }
+				set { }
+			} // MobilePhoneVerified
+
+			public string FirstName {
+				get { return NormalizeName(this.stra.model.FirstName); }
+				set { }
+			} // FirstName
+
+			[FieldName("Surname")]
+			public string LastName {
+				get { return NormalizeName(this.stra.model.LastName); }
+				set { }
+			} // LastName
+
+			public int TrustPilotStatus {
+				get { return (int)EZBob.DatabaseLib.Model.Database.TrustPilotStauses.Neither; }
+				set { }
+			} // TrustPilotStatus
+
+			public DateTime GreetingMailSentDate {
+				get { return DateTime.UtcNow; }
+				set { }
+			} // GreetingMailSentDate
+
+			public int OriginID {
+				// ReSharper disable once PossibleInvalidOperationException
+				// If Origin is null this class won't even be created.
+				get { return (int)this.stra.model.Origin.Value; }
+				set { }
+			} // OriginID
+
+			public string ABTesting {
+				get { return this.stra.model.ABTesting; }
+				set { }
+			} // ABTesting
+
+			public string FirstVisitTime {
+				get { return this.stra.model.FirstVisitTime; }
+				set { }
+			} // FirstVisitTime
+
+			public string ReferenceSource {
+				get { return this.stra.model.BrokerFillsForCustomer ? "Broker" : this.stra.model.ReferenceSource; }
+				set { }
+			} // ReferenceSource
+
+			public string GoogleCookie {
+				get { return this.stra.model.BrokerFillsForCustomer ? string.Empty : this.stra.model.GoogleCookie; }
+				set { }
+			} // GoogleCookie
+
+			public string AlibabaID {
+				get { return this.stra.model.BrokerFillsForCustomer ? null : this.stra.model.AlibabaID; }
+				set { }
+			} // AlibabaID
+
+			public bool? IsAlibaba {
+				get {
+					return this.stra.model.BrokerFillsForCustomer 
+						? (bool?)null
+						: !string.IsNullOrWhiteSpace(this.stra.model.AlibabaID);
+				}
+				set { }
+			} // IsAlibaba
+
+			private static string NormalizeName(string name) {
+				var s = (name ?? string.Empty).Trim();
+				return s == string.Empty ? null : s;
+			} // NormalizeName
+
+			private readonly bool mobilePhoneVerified;
+			private readonly SignupCustomerMutliOrigin stra;
+			private readonly string refNumber;
+		} // class CreateCustomer
+
+		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		private class CreateCampaignSourceRef : AStoredProcedure {
+			public CreateCampaignSourceRef(SignupCustomerMutliOrigin stra) : base(stra.DB, stra.Log) {
+				this.stra = stra;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return (CustomerID > 0);
+			} // HasValidParameters
+
+			public int CustomerID { get { return this.stra.UserID; } set { } }
+
+			public string FUrl { get { return this.stra.model.FUrl(); } set { } }
+			public string FSource { get { return this.stra.model.FSource(); } set { } }
+			public string FMedium { get { return this.stra.model.FMedium(); } set { } }
+			public string FTerm { get { return this.stra.model.FTerm(); } set { } }
+			public string FContent { get { return this.stra.model.FContent(); } set { } }
+			public string FName { get { return this.stra.model.FName(); } set { } }
+			public DateTime? FDate { get { return this.stra.model.FDate(); } set { } }
+			public string RUrl { get { return this.stra.model.RUrl(); } set { } }
+			public string RSource { get { return this.stra.model.RSource(); } set { } }
+			public string RMedium { get { return this.stra.model.RMedium(); } set { } }
+			public string RTerm { get { return this.stra.model.RTerm(); } set { } }
+			public string RContent { get { return this.stra.model.RContent(); } set { } }
+			public string RName { get { return this.stra.model.RName(); } set { } }
+			public DateTime? RDate { get { return this.stra.model.RDate(); } set { } }
+
+			private readonly SignupCustomerMutliOrigin stra;
+		} // class CreateCampaignSourceRef
+
+		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		private class CreateCustomerRequestedLoan : AStoredProcedure {
+			public CreateCustomerRequestedLoan(SignupCustomerMutliOrigin stra) : base(stra.DB, stra.Log) {
+				this.stra = stra;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return (CustomerID > 0);
+			} // HasValidParameters
+
+			public int CustomerID { get { return this.stra.UserID; } set { } }
+
+			public DateTime Created {
+				get { return DateTime.UtcNow; }
+				set { }
+			} // Created
+
+			public int Amount {
+				get {
+					return ToInt(
+						this.stra.model.RequestedLoanAmount,
+						this.stra.model.Origin == CustomerOriginEnum.everline ? 24000 : 20000
+					);
+				}
+				set { }
+			} // Amount
+
+			public int Term {
+				get {
+					return ToInt(
+						this.stra.model.RequestedLoanTerm,
+						this.stra.model.Origin == CustomerOriginEnum.everline ? 12 : 9
+					);
+				}
+				set { }
+			} // Term
+
+			private static int ToInt(string intStr, int intDefault) {
+				if (string.IsNullOrEmpty(intStr))
+					return intDefault;
+				
+				int result;
+
+				bool bSuccess = int.TryParse(intStr, out result);
+
+				return bSuccess ? result : intDefault;
+			} // ToInt
+
+			private readonly SignupCustomerMutliOrigin stra;
+		} // class CreateCustomerRequestedLoan
+
+		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		private class CreateAlibabaBuyer : AStoredProcedure {
+			public CreateAlibabaBuyer(SignupCustomerMutliOrigin stra) : base(stra.DB, stra.Log) {
+				this.stra = stra;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return (CustomerID > 0);
+			} // HasValidParameters
+
+			public int CustomerID { get { return this.stra.UserID; } set { } }
+
+			[FieldName("AliId")]
+			public long AliID {
+				get { return Convert.ToInt64(this.stra.model.AlibabaID); }
+				set { }
+			} // AliID
+
+			private readonly SignupCustomerMutliOrigin stra;
+		} // class CreateAlibabaBuyer
+	} // class SignupAlibabaBuyer
 } // namespace

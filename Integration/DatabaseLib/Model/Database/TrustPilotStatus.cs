@@ -3,14 +3,7 @@
 	using ApplicationMng.Repository;
 	using NHibernate;
 
-	public enum TrustPilotStauses {
-		Neither,
-		Claims,
-		Done,
-	} // enum TrustPilotStauses
-
 	public class TrustPilotStatus {
-
 		public virtual int ID { get; set; }
 		public virtual string Name { get; set; }
 		public virtual string Description { get; set; }
@@ -43,5 +36,4 @@
 			return null;
 		} // Find
 	} // class TrustPilotStatusRepository
-
 } // namespace EZBob.DatabaseLib.Model.Database

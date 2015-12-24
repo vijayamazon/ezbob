@@ -38,7 +38,7 @@
 				target.Push(m);
 			} while (running > 0);
 
-			Encoded = prefix + string.Join("", target).PadLeft(7, 'A');
+			Encoded = prefix + string.Join("", target).PadLeft(MaxTargetLength, 'A');
 		} // constructor
 
 		/// <summary>
@@ -70,6 +70,8 @@
 		/// Number of letters in the alphabet.
 		/// </summary>
 		private const int TargetBase = 26;
+
+		private const int MaxTargetLength = 7;
 
 		/// <summary>
 		/// The aim of this map: to exclude letters that appear in swear words.
