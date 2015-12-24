@@ -3,15 +3,14 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [dbo].[UIAT_C1359]
+IF OBJECT_ID('UIAT_PacnetStatusValidation') IS NULL
+	EXECUTE('CREATE PROCEDURE UIAT_PacnetStatusValidation AS SELECT 1')
+GO
+
+ALTER PROCEDURE [dbo].[UIAT_PacnetStatusValidation]
 @brokerMail NVARCHAR(50)
 AS
 BEGIN
-	UPDATE [ezbob].[dbo].[EzServiceCrontab] SET RepetitionTime=DATEADD(minute,1,GETDATE()) 
-	WHERE JobID=(SELECT TOP 1 JobID FROM [ezbob].[dbo].[EzServiceCrontab] WHERE ActionNameID=221 ORDER BY JobID)
-
-	WAITFOR DELAY '00:01:15'
-
 	SELECT l.[LoanAmount]
 		  ,lbc.[CardInfoID]
 		  ,lbc.[CommissionAmount]

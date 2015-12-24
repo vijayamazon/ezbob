@@ -4,38 +4,40 @@ namespace UIAutomationTests.Tests.Shared {
     using System.Threading;
     using NUnit.Framework;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
     using OpenQA.Selenium.Support.UI;
     using UIAutomationTests.Core;
 
     class CustomerShared : WebTestBase {
 
-        private readonly IWebDriver _Driver;
-        private readonly ResourceManager _EnvironmentConfig;
-        private readonly ResourceManager _BrandConfig;
-
         public CustomerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
-            this._Driver = Driver;
-            this._EnvironmentConfig = EnvironmentConfig;
-            this._BrandConfig = BrandConfig;
+            this.Driver = Driver;
+            this.EnvironmentConfig = EnvironmentConfig;
+            this.BrandConfig = BrandConfig;
+            this.actionBot = new ActionBot(Driver);
         }
 
         public void CustomerLogIn(bool isFirstTime, string brokerMail) {
-            SharedServiceClass.WaitForBlockUiOff(this._Driver);
-            string url = String.Concat(this._EnvironmentConfig.GetString("ENV_address"), this._BrandConfig.GetString("CustomerLogIn"));
-            this._Driver.Navigate().GoToUrl(url);
+            SharedServiceClass.WaitForAjaxReady(Driver);
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("CustomerLogIn"));
+            Driver.Navigate().GoToUrl(url);
 
-            IWebElement userName = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("UserName"));
-            userName.SendKeys(brokerMail);
+            //IWebElement userName = SharedServiceClass.ElementIsVisible(Driver, By.Id("UserName"));
+            //userName.SendKeys(brokerMail);
+            actionBot.SendKeys(By.Id("UserName"), brokerMail, "");
 
-            IWebElement password = this._Driver.FindElement(By.Id("Password"));
-            password.SendKeys("123123");
+            //IWebElement password = Driver.FindElement(By.Id("Password"));
+            //password.SendKeys("123123");
+            actionBot.SendKeys(By.Id("Password"), "123123", "");
 
-            IWebElement loginBrokerButton = SharedServiceClass.ElementToBeClickable(this._Driver, By.Id("loginSubmit"));
-            loginBrokerButton.Click();
+            //IWebElement loginBrokerButton = SharedServiceClass.ElementToBeClickable(Driver, By.Id("loginSubmit"));
+            //loginBrokerButton.Click();
+            actionBot.Click(By.Id("loginSubmit"), "");
 
             if (isFirstTime) {
-                IWebElement continueButton = SharedServiceClass.ElementToBeClickable(this._Driver, By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button"));//By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button.btn-green.pull-right.automation-button.ev-btn-org")
-                continueButton.Click();
+                //IWebElement continueButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button"));//By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button.btn-green.pull-right.automation-button.ev-btn-org")
+                //continueButton.Click();
+                actionBot.Click(By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button"), "");
             }
         }
 
@@ -51,83 +53,116 @@ namespace UIAutomationTests.Tests.Shared {
             string cardType,
             string cardNumber,
             string expDate,
-            string securityCode) {
+            string securityCode,
+            double? loanFraction = null) {
 
-            SharedServiceClass.WaitForBlockUiOff(this._Driver);
-            IWebElement chooseAmountBtn = SharedServiceClass.ElementToBeClickable(this._Driver, By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"));
-            chooseAmountBtn.Click();
+            //SharedServiceClass.WaitForBlockUiOff(Driver);
+            //IWebElement chooseAmountBtn = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"));
+            //chooseAmountBtn.Click();
+            SharedServiceClass.TryElementClick(Driver, By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"));
+            actionBot.WriteToLog("");
 
-            IWebElement preAgreementTermsRead = this._Driver.FindElement(By.XPath("//label[@for='preAgreementTermsRead']"));
-            preAgreementTermsRead.Click();
 
-            IWebElement agreementTermsRead = this._Driver.FindElement(By.XPath("//label[@for='agreementTermsRead']"));
-            agreementTermsRead.Click();
+            //IWebElement preAgreementTermsRead = Driver.FindElement(By.XPath("//label[@for='preAgreementTermsRead']"));
+            //preAgreementTermsRead.Click();
+            actionBot.Click(By.XPath("//label[@for='preAgreementTermsRead']"), "");
 
-            IWebElement notInBankruptcy = this._Driver.FindElement(By.XPath("//label[@for='notInBankruptcy']"));
-            notInBankruptcy.Click();
+            if (loanFraction != null) {
+                IWebElement rangeSelector = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min"));//Driver.FindElement(By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min")));
+                int clickCoordinate = (int)(rangeSelector.Size.Width * loanFraction);
+                Actions moveAction = new Actions(Driver);
+                moveAction.MoveToElement(rangeSelector, clickCoordinate, 0).Click().Build().Perform();
+            }
 
-            SharedServiceClass.WaitForBlockUiOff(this._Driver);
+            //IWebElement agreementTermsRead = Driver.FindElement(By.XPath("//label[@for='agreementTermsRead']"));
+            //agreementTermsRead.Click();
+            actionBot.Click(By.XPath("//label[@for='agreementTermsRead']"), "");
 
-            IWebElement confirmButton = SharedServiceClass.ElementToBeClickable(this._Driver, By.CssSelector("button.ok-button.button.btn-green.ev-btn-org"));
-            confirmButton.Click();
+            //IWebElement notInBankruptcy = Driver.FindElement(By.XPath("//label[@for='notInBankruptcy']"));
+            //notInBankruptcy.Click();
+            actionBot.Click(By.XPath("//label[@for='notInBankruptcy']"), "");
 
-            IWebElement signedName = this._Driver.FindElement(By.Id("signedName"));
-            signedName.SendKeys(fName + " " + lName);
+            SharedServiceClass.WaitForBlockUiOff(Driver);
 
-            IWebElement nextButton = SharedServiceClass.ElementToBeClickable(this._Driver, By.CssSelector("form.LoanLegal a.btn-continue.button.btn-green.ev-btn-org.submit"));
-            nextButton.Click();
+            //IWebElement confirmButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.ok-button.button.btn-green.ev-btn-org"));
+            //confirmButton.Click();
+            actionBot.Click(By.CssSelector("button.ok-button.button.btn-green.ev-btn-org"), "");
+
+            //IWebElement signedName = Driver.FindElement(By.Id("signedName"));
+            //signedName.SendKeys(fName + " " + lName);
+            actionBot.SendKeys(By.Id("signedName"), fName + " " + lName, "");
+
+            //IWebElement nextButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("form.LoanLegal a.btn-continue.button.btn-green.ev-btn-org.submit"));
+            //nextButton.Click();
+            actionBot.Click(By.CssSelector("form.LoanLegal a.btn-continue.button.btn-green.ev-btn-org.submit"), "");
 
             //End of Step 1 - Choosing loas terms
-            IWebElement accountNumber = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("AccountNumber"));
-            accountNumber.SendKeys(accountNum);
+            //IWebElement accountNumber = SharedServiceClass.ElementIsVisible(Driver, By.Id("AccountNumber"));
+            //accountNumber.SendKeys(accountNum);
+            actionBot.SendKeys(By.Id("AccountNumber"), accountNum, "");
 
-            IWebElement sortCode1 = this._Driver.FindElement(By.Id("SortCode1"));
-            sortCode1.SendKeys(sort1);
+            //IWebElement sortCode1 = Driver.FindElement(By.Id("SortCode1"));
+            //sortCode1.SendKeys(sort1);
+            actionBot.SendKeys(By.Id("SortCode1"), sort1, "");
 
-            IWebElement sortCode2 = this._Driver.FindElement(By.Id("SortCode2"));
-            sortCode2.SendKeys(sort2);
+            //IWebElement sortCode2 = Driver.FindElement(By.Id("SortCode2"));
+            //sortCode2.SendKeys(sort2);
+            actionBot.SendKeys(By.Id("SortCode2"), sort2, "");
 
-            IWebElement sortCode3 = this._Driver.FindElement(By.Id("SortCode3"));
-            sortCode3.SendKeys(sort3);
+            //IWebElement sortCode3 = Driver.FindElement(By.Id("SortCode3"));
+            //sortCode3.SendKeys(sort3);
+            actionBot.SendKeys(By.Id("SortCode3"), sort3, "");
 
             IWebElement accTypeRadio;
             switch (char.ToUpper(accType)) {
                 case 'B':
-                    accTypeRadio = this._Driver.FindElement(By.XPath("//label[@for='baBusiness']"));
+                    accTypeRadio = SharedServiceClass.ElementToBeClickable(Driver, By.XPath("//label[@for='baBusiness']"));//Driver.FindElement(By.XPath("//label[@for='baBusiness']")));
                     break;
                 default:
-                    accTypeRadio = this._Driver.FindElement(By.XPath("//label[@for='baPersonal']"));
+                    accTypeRadio = SharedServiceClass.ElementToBeClickable(Driver, By.XPath("//label[@for='baPersonal']"));//Driver.FindElement(By.XPath("//label[@for='baPersonal']"));
                     break;
             }
             accTypeRadio.Click();
+            actionBot.WriteToLog("");
 
-            IWebElement continueButton = SharedServiceClass.ElementToBeClickable(this._Driver, By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"));
-            continueButton.Click();
+            //IWebElement continueButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"));
+            //continueButton.Click();
+            actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), "");
             //Thread.Sleep(2000);
-            SharedServiceClass.WaitForBlockUiOff(this._Driver);
-            continueButton.Click();
+            SharedServiceClass.WaitForBlockUiOff(Driver);
+            //continueButton.Click();
+            //actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), "");
             //End of step 2 - Entering bank details
+            SharedServiceClass.TryElementClick(Driver, By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"));
+            actionBot.WriteToLog("");
 
-            IWebElement customer = SharedServiceClass.ElementIsVisible(this._Driver, By.Id("customer"));
-            customer.SendKeys(cardHolderName);
+            //IWebElement customer = SharedServiceClass.ElementIsVisible(Driver, By.Id("customer"));
+            //customer.SendKeys(cardHolderName);
+            actionBot.SendKeys(By.Id("customer"), cardHolderName, "");
 
-            SelectElement cardTypeSelect = new SelectElement(this._Driver.FindElement(By.CssSelector("select.selectheight.form_field")));
-            cardTypeSelect.SelectByValue(cardType);
+            //SelectElement cardTypeSelect = new SelectElement(Driver.FindElement(By.CssSelector("select.selectheight.form_field")));
+            //cardTypeSelect.SelectByValue(cardType);
+            actionBot.SelectByValue(By.CssSelector("select.selectheight.form_field"), cardType, "");
 
-            IWebElement cardNo = this._Driver.FindElement(By.Id("card_no"));
-            cardNo.SendKeys(cardNumber);
+            //IWebElement cardNo = Driver.FindElement(By.Id("card_no"));
+            //cardNo.SendKeys(cardNumber);
+            actionBot.SendKeys(By.Id("card_no"), cardNumber, "");
 
-            IWebElement expiry = this._Driver.FindElement(By.Id("expiry"));
-            expiry.SendKeys(expDate);
+            //IWebElement expiry = Driver.FindElement(By.Id("expiry"));
+            //expiry.SendKeys(expDate);
+            actionBot.SendKeys(By.Id("expiry"), expDate, "");
 
-            IWebElement cv2 = this._Driver.FindElement(By.Id("cv2"));
-            cv2.SendKeys(securityCode);
+            //IWebElement cv2 = Driver.FindElement(By.Id("cv2"));
+            //cv2.SendKeys(securityCode);
+            actionBot.SendKeys(By.Id("cv2"), securityCode, "");
 
-            IWebElement confirmStep3Button = SharedServiceClass.ElementToBeClickable(this._Driver, By.Id("paypoint-submit"));
-            confirmStep3Button.Click();
+            //IWebElement confirmStep3Button = SharedServiceClass.ElementToBeClickable(Driver, By.Id("paypoint-submit"));
+            //confirmStep3Button.Click();
+            actionBot.Click(By.Id("paypoint-submit"), "");
 
-            IWebElement myAccountButton = SharedServiceClass.ElementToBeClickable(this._Driver, By.Id("pacnet-status-back-to-profile"));
-            myAccountButton.Click();
+            //IWebElement myAccountButton = SharedServiceClass.ElementToBeClickable(Driver, By.Id("pacnet-status-back-to-profile"));
+            //myAccountButton.Click();
+            actionBot.Click(By.Id("pacnet-status-back-to-profile"), "");
             //End of step 3 - Get cash
         }
     }

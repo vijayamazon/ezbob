@@ -1,0 +1,14 @@
+company_search_description:
+    'incorporated-on' : "Incorporated on {date:date_of_creation}"
+    'registered-on' : "Registered on {date:date_of_creation}"
+    'formed-on' : "Formed on {date:date_of_creation}"
+    'dissolved-on' : "Dissolved on {date:date_of_cessation}"
+    'closed-on' : "Converted/Closed on {date:date_of_cessation}"
+    "voluntary-arrangement": "Voluntary Arrangement"
+    "receivership": "Receivership"
+    'insolvency-proceedings' : "Insolvency Proceedings"
+    'liquidation' : "Liquidation"
+    'administration' : "In Administration"
+officer_search_description:
+    'appointment-count' : "Total number of appointments {appointment_count}"
+    'born-on' : "Born {month-year:date_of_birth}"
