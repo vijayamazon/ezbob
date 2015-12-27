@@ -233,6 +233,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserSignupActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ApplicationInfoResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecisionHistoryResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorTypesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorActionResult))]
@@ -1921,6 +1922,29 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel Model {
+            get {
+                return this.ModelField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ModelField, value) != true)) {
+                    this.ModelField = value;
+                    this.RaisePropertyChanged("Model");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DecisionHistoryResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class DecisionHistoryResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.DecisionHistoryDBModel[] ModelField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.DecisionHistoryDBModel[] Model {
             get {
                 return this.ModelField;
             }
@@ -4836,6 +4860,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetManualDecision", ReplyAction="http://tempuri.org/IEzService/SetManualDecisionResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringStringMapActionResult> SetManualDecisionAsync(Ezbob.Backend.Models.DecisionModel model);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadDecisionHistory", ReplyAction="http://tempuri.org/IEzService/LoadDecisionHistoryResponse")]
+        ServiceClientProxy.EzServiceReference.DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadDecisionHistory", ReplyAction="http://tempuri.org/IEzService/LoadDecisionHistoryResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DecisionHistoryResult> LoadDecisionHistoryAsync(int customerID, int underwriterID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -6614,6 +6644,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringStringMapActionResult> SetManualDecisionAsync(Ezbob.Backend.Models.DecisionModel model) {
             return base.Channel.SetManualDecisionAsync(model);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID) {
+            return base.Channel.LoadDecisionHistory(customerID, underwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DecisionHistoryResult> LoadDecisionHistoryAsync(int customerID, int underwriterID) {
+            return base.Channel.LoadDecisionHistoryAsync(customerID, underwriterID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

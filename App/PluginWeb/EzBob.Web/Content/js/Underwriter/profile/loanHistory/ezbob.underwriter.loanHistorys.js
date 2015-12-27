@@ -12,7 +12,7 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 	initialize: function() {
 		this.template = _.template($("#loanhistory-template").html());
 		this.templateView = _.template($("#loanhistory-view-template").html());
-		this.offersTemplate = _.template($("#offrers-template").html());
+		this.offersTemplate = _.template($("#offers-history-template").html());
 		this.bindTo(this.model, "reset fetch change sync", this.render, this);
 		this.isRejections = true;
 	},
@@ -102,12 +102,12 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 
 	renderOffers: function() {
 		var data = { offers: this.filterOffers() };
-		this.offersConteiner = this.$el.find("#offers-conteiner");
+		this.offersConteiner = this.$el.find("#offers-container");
 		this.offersConteiner.html(this.offersTemplate(data));
 		return this;
 	},
 
-	filterOffers: function() {
+	filterOffers: function () {
 		if (this.isRejections) {
 			return _.filter(this.model.get("offers"), function(o) {
 				return o.UnderwriterDecision === "Rejected" || o.UnderwriterDecision === "Approved";

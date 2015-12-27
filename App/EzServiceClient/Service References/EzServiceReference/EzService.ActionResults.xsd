@@ -45,11 +45,21 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ApplicationInfoResult" nillable="true" type="tns:ApplicationInfoResult" />
-  <xs:complexType name="CollectionSnailMailActionResult">
+  <xs:complexType name="DecisionHistoryResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/EzService" base="q8:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q9:CollectionSnailMailMetadataModel" />
+          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="Model" nillable="true" type="q9:ArrayOfDecisionHistoryDBModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DecisionHistoryResult" nillable="true" type="tns:DecisionHistoryResult" />
+  <xs:complexType name="CollectionSnailMailActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q10="http://schemas.datacontract.org/2004/07/EzService" base="q10:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q11:CollectionSnailMailMetadataModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

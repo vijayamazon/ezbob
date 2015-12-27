@@ -75,7 +75,6 @@
     <Compile Include="HmrcManualDataModel.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="CustomerModel.cs" />
-    <Compile Include="DecisionHistoryModel.cs" />
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="Library.cs" />

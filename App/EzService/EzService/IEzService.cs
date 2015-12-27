@@ -586,5 +586,8 @@
 
 		[OperationContract]
 		StringStringMapActionResult SetManualDecision(DecisionModel model);
+
+		[OperationContract]
+		DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID);
 	} // interface IEzService
 } // namespace EzService

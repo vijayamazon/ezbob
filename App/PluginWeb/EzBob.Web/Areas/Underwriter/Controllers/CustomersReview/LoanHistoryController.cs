@@ -7,7 +7,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Backend.Models;
@@ -15,6 +14,7 @@
 	using Models;
 	using Code;
 	using Code.ReportGenerator;
+	using EzBob.Models;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
@@ -25,49 +25,56 @@
 	public class LoanHistoryController : Controller
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanHistoryController));
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly CustomerRepository _customerRepository;
-		private readonly LoanRepository _loanRepository;
-		private readonly LoanScheduleRepository _loanScheduleRepository;
-		private readonly IPacnetPaypointServiceLogRepository _logRepository;
-		private readonly PaymentRolloverRepository _rolloverRepository;
-		private readonly IUsersRepository _users;
-		private readonly PayPointApi _paypoint;
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly CustomerRepository customerRepository;
+		private readonly LoanRepository loanRepository;
+		private readonly LoanScheduleRepository loanScheduleRepository;
+		private readonly IPacnetPaypointServiceLogRepository logRepository;
+		private readonly PaymentRolloverRepository rolloverRepository;
+		private readonly PayPointApi paypoint;
 
-		public LoanHistoryController(CustomerRepository customersRepository,
-									 PaymentRolloverRepository rolloverRepository,
-									 LoanScheduleRepository loanScheduleRepository, IEzbobWorkplaceContext context,
-									 
-									 IPacnetPaypointServiceLogRepository logRepository, LoanRepository loanRepository,
-									 IUsersRepository users,
-									 PayPointApi paypoint)
+		public LoanHistoryController(
+			CustomerRepository customersRepository,
+			PaymentRolloverRepository rolloverRepository,
+			LoanScheduleRepository loanScheduleRepository, 
+			IEzbobWorkplaceContext context,
+			IPacnetPaypointServiceLogRepository logRepository, 
+			LoanRepository loanRepository,
+			PayPointApi paypoint, 
+			ServiceClient serviceClient)
 		{
-			_customerRepository = customersRepository;
-			_rolloverRepository = rolloverRepository;
-			_loanScheduleRepository = loanScheduleRepository;
-			_context = context;
-
-			m_oServiceClient = new ServiceClient();
-			_logRepository = logRepository;
-			_loanRepository = loanRepository;
-			_users = users;
-			_paypoint = paypoint;
+			this.customerRepository = customersRepository;
+			this.rolloverRepository = rolloverRepository;
+			this.loanScheduleRepository = loanScheduleRepository;
+			this.context = context;
+			this.logRepository = logRepository;
+			this.loanRepository = loanRepository;
+			this.paypoint = paypoint;
+			this.serviceClient = serviceClient;
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult Index(int id)
 		{
-			Customer customer = _customerRepository.Get(id);
-			return Json(new LoansAndOffers(customer), JsonRequestBehavior.AllowGet);
+			Customer customer = this.customerRepository.Get(id);
+			var loans = customer
+				.Loans
+				.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null, CurrentValues.Instance.AmountToChargeFrom))).ToList();
+			var decisions = this.serviceClient.Instance.LoadDecisionHistory(customer.Id, this.context.UserId);
+			var offers = decisions.Model.Where(x => x.Action != "Escalate" && x.Action != "Pending" && x.Action != "Waiting")
+				.Select(CashRequestModel.Create)
+				.ToList();
+
+			return Json(new { offers = offers, loans = loans }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult Details(int customerid, int loanid)
 		{
-			var customer = _customerRepository.Get(customerid);
+			var customer = this.customerRepository.Get(customerid);
 			var loan = customer.Loans.SingleOrDefault(l => l.Id == loanid);
 
 			if (loan == null)
@@ -76,10 +83,10 @@
 			}
 
 			var loansDetailsBuilder = new LoansDetailsBuilder();
-			var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
+			var details = loansDetailsBuilder.Build(loan, this.rolloverRepository.GetByLoanId(loan.Id));
 			decimal rolloverCharge = CurrentValues.Instance.RolloverCharge;
 			var notExperiedRollover =
-				_rolloverRepository.GetByLoanId(loan.Id)
+				this.rolloverRepository.GetByLoanId(loan.Id)
 				.Where(x => x.Status != RolloverStatus.Expired)
 				.Select(x => new RolloverModel
 								{
@@ -89,7 +96,7 @@
 									PaidPaymentAmount = x.PaidPaymentAmount,
 									LoanScheduleId = x.LoanSchedule.Id
 								});
-			var rolloverCount = _rolloverRepository.GetByLoanId(loan.Id).Count(x => x.Status != RolloverStatus.Removed && x.Status != RolloverStatus.Expired);
+			var rolloverCount = this.rolloverRepository.GetByLoanId(loan.Id).Count(x => x.Status != RolloverStatus.Removed && x.Status != RolloverStatus.Expired);
 
 			bool transactionsDoneToday = loan.Transactions.Count(x => x.PostDate.Date == DateTime.UtcNow.Date && x.Status == LoanTransactionStatus.Done) > 0;
 			string rolloverAvailableClass = transactionsDoneToday ? "disabled" : string.Empty;
@@ -102,7 +109,7 @@
 		[HttpGet]
 		public ActionResult ExportToExel(int id)
 		{
-			Customer customer = _customerRepository.Get(id);
+			Customer customer = this.customerRepository.Get(id);
 			return new LoanHistoryExelReportResult(customer);
 		}
 
@@ -110,9 +117,9 @@
 		[Transactional]
 		public void RemoveRollover(int rolloverId)
 		{
-			var rollover = _rolloverRepository.GetById(rolloverId);
+			var rollover = this.rolloverRepository.GetById(rolloverId);
 			rollover.Status = RolloverStatus.Removed;
-			_rolloverRepository.Update(rollover);
+			this.rolloverRepository.Update(rollover);
 
             //TODO remove rollover from new rollover table
 		    Log.InfoFormat("remove rollover from new rollover table rollover id {0}", rolloverId);
@@ -124,8 +131,8 @@
 		public void AddRollover(int scheduleId, string experiedDate, bool isEditCurrent, decimal payment, int? rolloverId, int mounthCount)
 		{
 			var expDate = FormattingUtils.ParseDateWithoutTime(experiedDate);
-			var currentLoanSchedule = _loanScheduleRepository.GetById(scheduleId);
-			var rolloverModel = isEditCurrent && rolloverId.HasValue ? _rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
+			var currentLoanSchedule = this.loanScheduleRepository.GetById(scheduleId);
+			var rolloverModel = isEditCurrent && rolloverId.HasValue ? this.rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
 			var customer = currentLoanSchedule.Loan.Customer;
 
 			if (expDate <= DateTime.UtcNow)
@@ -143,7 +150,7 @@
 			}
 			else
 			{
-				var rollovers = _rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
+				var rollovers = this.rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
 				if (rollovers.Any(rollover => rollover.Status == RolloverStatus.New && rollover.ExpiryDate > DateTime.UtcNow))
 				{
 					throw new Exception("The loan has an unpaid rollover. Please close unpaid rollover and try again");
@@ -153,24 +160,24 @@
 			rolloverModel.MounthCount = mounthCount;
 			rolloverModel.ExpiryDate = expDate;
 			rolloverModel.LoanSchedule = currentLoanSchedule;
-			rolloverModel.CreatorName = _context.User.Name;
+			rolloverModel.CreatorName = this.context.User.Name;
 			rolloverModel.Created = DateTime.Now;
 			rolloverModel.Payment = CurrentValues.Instance.RolloverCharge;
 			rolloverModel.Status = RolloverStatus.New;
-			_rolloverRepository.SaveOrUpdate(rolloverModel);
+			this.rolloverRepository.SaveOrUpdate(rolloverModel);
 
 
             //TODO add rollover to new rollover table
             Log.InfoFormat("add rollover to new rollover table schedule id {0}", scheduleId);
 
-			m_oServiceClient.Instance.EmailRolloverAdded(_context.UserId, customer.Id, payment);
+			this.serviceClient.Instance.EmailRolloverAdded(this.context.UserId, customer.Id, payment);
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetRollover(int scheduleId)
 		{
-			return Json(new { roolover = _rolloverRepository.GetByCheduleId(scheduleId) }, JsonRequestBehavior.AllowGet);
+			return Json(new { roolover = this.rolloverRepository.GetByCheduleId(scheduleId) }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -179,7 +186,7 @@
 		public void ManualPayment(ManualPaymentModel model)
 		{
 			var realAmount = model.TotalSumPaid;
-			var customer = _customerRepository.Get(model.CustomerId);
+			var customer = this.customerRepository.Get(model.CustomerId);
 
 			try
 			{
@@ -215,7 +222,7 @@
 					}
 
 					payPointTransactionId = paypointCard.TransactionId;
-					_paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
+					this.paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
@@ -233,10 +240,10 @@
 				facade.Recalculate(loan, DateTime.Now);
 
 				if (model.SendEmail)
-					this.m_oServiceClient.Instance.PayEarly(customer.Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
+					this.serviceClient.Instance.PayEarly(customer.Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
-				this.m_oServiceClient.Instance.LoanStatusAfterPayment(
-					this._context.UserId, 
+				this.serviceClient.Instance.LoanStatusAfterPayment(
+					this.context.UserId, 
 					customer.Id, 
 					customer.Name, 
 					model.LoanId,
@@ -247,15 +254,15 @@
 
 				string requestType = string.Format("UW Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);
-				_logRepository.Log(_context.UserId, date, requestType, "Successful", "");
+				this.logRepository.Log(this.context.UserId, date, requestType, "Successful", "");
 			}
 			catch (PayPointException ex)
 			{
-				_logRepository.Log(customer.Id, DateTime.UtcNow, "Paypoint Manual Payment", "Failed", ex.ToString());
+				this.logRepository.Log(customer.Id, DateTime.UtcNow, "Paypoint Manual Payment", "Failed", ex.ToString());
 			}
 			catch (Exception exx)
 			{
-				_logRepository.Log(customer.Id, DateTime.UtcNow, "Paypoint Manual Payment", "Failed", exx.ToString());
+				this.logRepository.Log(customer.Id, DateTime.UtcNow, "Paypoint Manual Payment", "Failed", exx.ToString());
 			}
 		}
 
@@ -264,9 +271,9 @@
 		public JsonResult GetPaymentInfo(string date, decimal money, int loanId)
 		{
 			DateTime paymentDate = FormattingUtils.ParseDateWithoutTime(date);
-			Loan loan = _loanRepository.Get(loanId);
+			Loan loan = this.loanRepository.Get(loanId);
 
-			var hasRollover = _rolloverRepository.GetByLoanId(loanId).Any(x => x.Status == RolloverStatus.New);
+			var hasRollover = this.rolloverRepository.GetByLoanId(loanId).Any(x => x.Status == RolloverStatus.New);
 
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
@@ -295,8 +302,8 @@
 		[HttpGet]
 		public JsonResult GetRolloverInfo(int loanId, bool isEdit)
 		{
-			var loan = _loanRepository.Get(loanId);
-			var rollover = _rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
+			var loan = this.loanRepository.Get(loanId);
+			var rollover = this.rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
@@ -316,14 +323,14 @@
 		[HttpGet]
 		public ActionResult ExportDetails(int id, int loanid, bool isExcel, bool wError)
 		{
-			var customer = _customerRepository.Get(id);
+			var customer = this.customerRepository.Get(id);
 			var loan = customer.Loans.SingleOrDefault(l => l.Id == loanid);
 
 			if (loan == null)
 			{
 				return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
 			}
-			return new LoanScheduleReportResult(_rolloverRepository, loan, isExcel, wError, customer);
+			return new LoanScheduleReportResult(this.rolloverRepository, loan, isExcel, wError, customer);
 		}
 	}
 }

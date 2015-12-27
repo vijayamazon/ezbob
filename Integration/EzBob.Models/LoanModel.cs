@@ -58,6 +58,7 @@
 		public bool IsEarly { get; set; }
 
 		public string LoanSourceName { get; set; }
+		public string IsOpenPlatform { get; set; }
 
         public static LoanModel FromLoan(Loan loan, ILoanRepaymentScheduleCalculator calculator, ILoanRepaymentScheduleCalculator calculatorForNow = null)
         {
@@ -95,7 +96,8 @@
                     LoanType = loan.LoanType.Name,
                     Modified = loan.Modified || (loan.CashRequest != null && !string.IsNullOrEmpty(loan.CashRequest.LoanTemplate)),
                     InterestDue = loan.InterestDue,
-                    SInterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList()
+                    SInterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList(),
+					IsOpenPlatform = loan.IsOpenPlatform
                 };
 
 			if (loan.Schedule != null)

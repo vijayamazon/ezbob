@@ -302,6 +302,8 @@
 
 		public virtual int? CustomerSelectedTerm { get; set; }
 
+		public virtual string IsOpenPlatform { get; set; }
+
 		public virtual List<LoanScheduleItem> FindLateScheduledItems() {
 			return Schedule.Where(s => s.Status == LoanScheduleStatus.Late).OrderBy(s => s.Date).ToList();
 		} // FindLateScheduledItems

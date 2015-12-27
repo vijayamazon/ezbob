@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace EzBobTest.OpenPlatformTests.Investor {
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.Strategies.Investor;
+	using Ezbob.Backend.Strategies.Misc;
 	using EzBobTest.OpenPlatformTests.Core;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -131,6 +132,13 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 			var stra = new FindInvestorForOffer(3449, 42814);
 			stra.Execute();
 			Assert.IsTrue(stra.IsFound);
+		}
+
+		[Test]
+		public void TestLoadDecisionHistory() {
+			var stra = new LoadDecisionHistory(3477);
+			stra.Execute();
+			Assert.Greater(stra.Result.Count(), 0);
 		}
 
 	}

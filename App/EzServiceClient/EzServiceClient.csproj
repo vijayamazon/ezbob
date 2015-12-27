@@ -213,6 +213,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.DecimalActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.DecisionHistoryResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

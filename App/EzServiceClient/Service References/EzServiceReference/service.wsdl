@@ -1047,6 +1047,12 @@
   <wsdl:message name="IEzService_SetManualDecision_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetManualDecisionResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadDecisionHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadDecisionHistory" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadDecisionHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadDecisionHistoryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -2195,6 +2201,10 @@
     <wsdl:operation name="SetManualDecision">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetManualDecision" message="tns:IEzService_SetManualDecision_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetManualDecisionResponse" message="tns:IEzService_SetManualDecision_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadDecisionHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadDecisionHistory" message="tns:IEzService_LoadDecisionHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadDecisionHistoryResponse" message="tns:IEzService_LoadDecisionHistory_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -3970,6 +3980,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetManualDecision">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SetManualDecision" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadDecisionHistory">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadDecisionHistory" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -203,6 +203,7 @@
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
     <Compile Include="Misc\GetCustomerState.cs" />
+    <Compile Include="Misc\LoadDecisionHistory.cs" />
     <Compile Include="Misc\LoadApplicationInfo.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
@@ -788,9 +789,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeLtdRequestTemplate.xml" />

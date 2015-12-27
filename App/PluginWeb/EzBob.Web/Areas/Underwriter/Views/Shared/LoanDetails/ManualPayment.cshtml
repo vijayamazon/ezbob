@@ -1,0 +1,38 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using EZBob.DatabaseLib.Model.Database.Loans
+@using StructureMap
+@model dynamic
+<script id="manualPayment-template" type="text/template">
+	@{
+		List<string> paymentMethods = ObjectFactory.GetInstance<LoanTransactionMethodRepository>()
+		   .GetAll()
+		   .Where(x => x.DisplaySort > 0)
+		   .OrderBy(x => x.DisplaySort)
+		   .Select(x => x.Name)
+		   .ToList();
+	}
+	<input type="hidden" name="loanId" value="<%-loanId%>" />
+	<div class="modal-header">
+		<h3 id="myModalLabel">Manual Payment</h3>
+	</div>
+
+	<div class="modal-body">
+		<form id="payment-form" class="form-horizontal" action="/" method="POST">
+			@EzForm.Select("paymentMethod", "Payment method", paymentMethods, "form-control")
+			@EzForm.InputTextUnderwriter(this, "totalSumPaid", "Total sum paid", "")
+			@EzForm.DateInputUnderwriter("paymentDate", "Date", false, new[] { DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
+			@EzForm.InputTextUnderwriter(this, "fees", "Fees", "", "text", isDisabled: true)
+			@EzForm.InputTextUnderwriter(this, "interest", "Interest", "", "text", isDisabled: true)
+			@EzForm.InputTextUnderwriter(this, "principal", "Principal", "", "text", isDisabled: true)
+			@EzForm.CheckBox("sendemail", "Send confirmation email")
+			@EzForm.TextAreaSmall("description", "Description", "", "form-control")
+		</form>
+	</div>
+
+	<div class="pull-right">
+		<a href="#" class="btn btn-primary uploadFiles">Upload files</a>
+		<button class="btn btn-primary confirm">OK</button>
+	</div>
+</script>

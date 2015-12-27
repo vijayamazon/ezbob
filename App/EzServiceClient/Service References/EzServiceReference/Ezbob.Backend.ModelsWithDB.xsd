@@ -72,6 +72,42 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="WriteToLogPackage.InputData" nillable="true" type="tns:WriteToLogPackage.InputData" />
+  <xs:complexType name="ArrayOfDecisionHistoryDBModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DecisionHistoryDBModel" nillable="true" type="tns:DecisionHistoryDBModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDecisionHistoryDBModel" nillable="true" type="tns:ArrayOfDecisionHistoryDBModel" />
+  <xs:complexType name="DecisionHistoryDBModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Action" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ApprovedRepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="ApprovedSum" type="xs:int" />
+      <xs:element minOccurs="0" name="BrokerSetupFeePercent" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CashRequestID" type="xs:long" />
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DecisionHistoryID" type="xs:int" />
+      <xs:element minOccurs="0" name="DiscountPlan" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FundingType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanSourceName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LoanType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ManualSetupFeePercent" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OfferStart" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OfferValidUntil" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Originator" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Product" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProductType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="UnderwriterDecision" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UnderwriterName" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="DecisionHistoryDBModel" nillable="true" type="tns:DecisionHistoryDBModel" />
   <xs:complexType name="CollectionSnailMailMetadataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="CollectionSnailMailMetadataID" type="xs:int" />
