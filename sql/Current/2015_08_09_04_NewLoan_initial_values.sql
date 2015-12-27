@@ -43,12 +43,12 @@ END
 	
 IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'NewLoanRun')
 BEGIN
-	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('NewLoanRun', 'true', 'NL code activated if true');
+	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('NewLoanRun', 1, 'NL code activated if true');
 END
 
 IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'SendCollectionMailOnNewLoan')
 BEGIN
-	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('SendCollectionMailOnNewLoan', 'true', 'if true, collection email/imail/sms will be send for new loan also');
+	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('SendCollectionMailOnNewLoan', 1, 'if true, collection email/imail/sms will be send for new loan also');
 END
 
 

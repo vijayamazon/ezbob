@@ -35,8 +35,10 @@
 
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
+			if (!CurrentValues.Instance.NewLoanRun) {
+				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
+				return;
+			}
 
 			// EZ-4329 
 			// check if same rollover exists OK

@@ -156,8 +156,7 @@
 
 				return View(TempData.Get<PaymentConfirmationModel>());
 			} // if
-
-			//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+			
 			NL_Payments nlPayment = new NL_Payments() {
 				CreatedByUserID = this.context.UserId,
 				Amount = amount.Value,
@@ -166,7 +165,6 @@
 			};
 
 			log.Debug("Callback: Sending nlPayment: {0} for customer {1}, oldloanId {2}", nlPayment, this.context.UserId, loanId);
-			//}
 
 			LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
 			PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext, null, "payment from customer", null, null, nlPayment);
@@ -341,7 +339,6 @@
 
 				this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
 
-				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
 				NL_Payments nlPayment = new NL_Payments() {
 					CreatedByUserID = this.context.UserId,
 					Amount = realAmount,
@@ -350,7 +347,6 @@
 				};
 
 				log.Debug("PayFast: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
-				//}
 
 				LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
 

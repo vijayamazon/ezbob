@@ -443,8 +443,7 @@
 			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
-
-				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
+				
 				if (nlPayment != null) {
 					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
 					if (nlLoanId > 0) {
@@ -459,7 +458,6 @@
 						//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
 					}
 				}
-				//}
 
 				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod, nlPayment);
 				newInterest = 0;

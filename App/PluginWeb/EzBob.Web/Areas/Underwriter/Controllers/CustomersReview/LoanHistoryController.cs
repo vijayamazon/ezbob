@@ -208,7 +208,6 @@
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
-				//if (Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value)) {
 				var method = Enum.GetName(typeof(NLLoanTransactionMethods), model.PaymentMethod);
 				var nlPayment = new NL_Payments() {
 					CreatedByUserID = this._context.UserId,
@@ -218,7 +217,6 @@
 				};
 
 				Log.InfoFormat("ManualPayment: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
-				//}
 
 				var facade = new LoanPaymentFacade();
 				facade.MakePayment(payPointTransactionId, realAmount, null,

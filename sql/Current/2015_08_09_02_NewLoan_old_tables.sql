@@ -74,4 +74,7 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
 	ALTER TABLE LoanAgreementTemplate ADD CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes FOREIGN KEY (TemplateTypeID) REFERENCES NL_LoanAgreementTemplateTypes (TemplateTypeID)
 GO
 
+update [dbo].[LoanSource] set [IsDefault] = 0 where [LoanSourceName]= 'Standard';
+update [dbo].[LoanSource] set [IsDefault] = 1 where [LoanSourceName]= 'COSME'; 
+
 

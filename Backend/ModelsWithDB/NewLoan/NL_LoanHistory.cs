@@ -87,7 +87,7 @@
 			return this._schedule.Where(s => (s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)).ToList();
 		}
 
-		//set default to 3? \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 11-14, 143
+		//set default to 3? \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 11-14, 143 -TODO should be from LoanSource
 		public void SetDefaultRepaymentCount() {
 			RepaymentCount = RepaymentCount == 0 ? 3 : RepaymentCount;
 		}

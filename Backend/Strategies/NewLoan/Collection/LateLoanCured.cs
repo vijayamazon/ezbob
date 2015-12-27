@@ -22,9 +22,10 @@
 		private readonly List<CollectionDataModel> loansList;
 
 		public override void Execute() {
-
-			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+			if (!CurrentValues.Instance.NewLoanRun) {
+				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;
+			}
 
 			NL_AddLog(LogType.Info, "Strategy Start", now, null, null, null);
 

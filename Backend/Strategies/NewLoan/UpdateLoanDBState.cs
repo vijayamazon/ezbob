@@ -37,9 +37,10 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
-
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
+			if (!CurrentValues.Instance.NewLoanRun) {
+				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
+				return;
+			}
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, null, Error, null);
 

@@ -545,7 +545,7 @@
 					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
 					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
 					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month, //Convert.ToInt32(RepaymentIntervalTypes.Month.DescriptionAttr()), // TODO some day...
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,
@@ -758,9 +758,7 @@
 			);
 
 			if (sr.IsEmpty) {
-				throw new StrategyAlert(
-					this,
-					string.Format("Cash request was not created for customer {0}.", CustomerID)
+				throw new StrategyAlert(this, string.Format("Cash request was not created for customer {0}.", CustomerID)
 				);
 			} // if
 

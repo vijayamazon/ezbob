@@ -19,9 +19,10 @@
 		public override string Name { get { return "GetCustomerLoans"; } }
 
 		public override void Execute() {
-
-			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
+			if (!CurrentValues.Instance.NewLoanRun) {
+				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;
+			}
 
 			if (CustomerID == 0) {
 				Error = NL_ExceptionCustomerNotFound.DefaultMessage;

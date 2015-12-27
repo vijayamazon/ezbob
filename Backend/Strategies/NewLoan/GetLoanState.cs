@@ -58,9 +58,10 @@
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		public override void Execute() {
-
-            if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
-                return;
+			if (!CurrentValues.Instance.NewLoanRun) {
+				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
+				return;
+			}
 
 			if (!string.IsNullOrEmpty(Error)) {
 				throw new NL_ExceptionInputDataInvalid(Error);

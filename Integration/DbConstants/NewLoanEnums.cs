@@ -60,7 +60,7 @@
 	} // enum NLLoanTypes
 
 	public enum NLLoanSources {
-		Standard = 1,
+		Standard = 1, // DB table id
 		EU = 2,
 		COSME = 3
 	}
