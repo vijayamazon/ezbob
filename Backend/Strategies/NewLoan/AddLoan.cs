@@ -402,7 +402,7 @@
 			string emailFromName = CurrentValues.Instance.MailSenderName;
 			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
-			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, LoanID, Error);
+			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, LoanID, string.IsNullOrEmpty(Error)?"No error":Error);
 
 			history.Schedule.Clear();
 			history.Schedule = schedule;
@@ -428,9 +428,6 @@
 				"<h5>{0}</h5>"
 					+ "<h5>Loan</h5> <pre>{1}</pre>"
 					+ "<h5>FundTransfer</h5> <pre>{2}</pre>",
-				//	+ "<h5>Setup fee offset payment</h5> <pre>{3}</pre>"
-				//	+ "<h5>Setup fee offset loan-payment</h5> <pre>{4}</pre>",
-
 				HttpUtility.HtmlEncode(sMsg)
 				, HttpUtility.HtmlEncode(model.Loan.ToString())
 				, HttpUtility.HtmlEncode(model.FundTransfer == null ? "no FundTransfer specified" : model.FundTransfer.ToString()));

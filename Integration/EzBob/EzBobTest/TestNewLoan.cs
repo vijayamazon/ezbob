@@ -872,6 +872,13 @@
 			stra.Execute();
 		}
 
+
+		[Test]
+		public void TestLateNotificationJob() {
+			var stra = new LateLoanNotification(DateTime.UtcNow);
+			stra.Execute();
+		}
+
 		[Test]
 		public void ApplayLateCharge() {
 			int loanid = 5103;
@@ -880,30 +887,42 @@
 			DateTime now = DateTime.UtcNow;
 			ILoanOptionsRepository optRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
 			var loanOptions = optRep.GetByLoanId(loanid);
-
 		//	m_oLog.Debug("loanOption={0}", loanOptions.ToString());
-
 			if (loanOptions != null && loanOptions.AutoLateFees == false) {
 				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
 					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) ||
 					(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
-					m_oLog.Debug("not applying late fee for loan {0} - auto late fee is disabled", loanid);
+					this.m_oLog.Debug("not applying late fee for loan {0} - auto late fee is disabled", loanid);
 					return;
 				}
 			}
-
 			var charge = new LoanCharge {
 				Amount = 20,
 				ChargesType = new ConfigurationVariable(CurrentValues.Instance.GetByID(CurrentValues.Instance.LatePaymentCharge.ID)),
 				Date = now,
 				Loan = loan
 			};
-
-			m_oLog.Debug("charge={0}", charge);
-
+			this.m_oLog.Debug("charge={0}", charge);
 			var res = loan.TryAddCharge(charge);
+			this.m_oLog.Debug("result={0}", res);
+		}
 
-			m_oLog.Debug("result={0}", res);
+		[Test]
+		public void SetLateStatusTest() {
+			SetLateLoanStatus s = new SetLateLoanStatus(null);
+			s.Execute();
+		}
+
+		[Test]
+		public void LateLoanNotificationTest() {
+			LateLoanNotification s = new LateLoanNotification(null);
+			s.Execute();
+		}
+
+		[Test]
+		public void LateLoanCuredTest() {
+			LateLoanCured s = new LateLoanCured(null);
+			s.Execute();
 		}
 
 	} // class TestNewLoan

@@ -18,7 +18,7 @@
 		}
 
 		private readonly DateTime now;
-		public override string Name { get { return " Late Customer Status Change"; } }
+		public override string Name { get { return "LateCustomerStatusChange"; } }
 		public int CustomerID { get; set; }
 		public int LoanID { get; set; }
 		public CollectionStatusNames Status { get; set; }

@@ -2,6 +2,7 @@
 	using System;
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 
 	/// <summary>
@@ -12,14 +13,22 @@
 			CollectionLog = collectionLog;
 		}
 
-		public override string Name { get { return "Add Collection Log"; } }
+		public override string Name { get { return "AddCollectionLog"; } }
 		public CollectionLog CollectionLog { get; set; }
 
 		public override void Execute() {
+
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
 				return;
+
+			NL_AddLog(LogType.Info, "Strategy Start", CollectionLog, null, null, null);
+
+			if (CollectionLog.LoanHistoryID == 0) {
+				NL_AddLog(LogType.DataExsistense, "Strategy failed", CollectionLog, null, NL_ExceptionRequiredDataNotFound.LastHistory, null);
+				return;
+			}
+
 			try {
-				NL_AddLog(LogType.Info, "Strategy Start", new object[] { CollectionLog.CollectionLogID, CollectionLog.CustomerID, CollectionLog.LoanID, CollectionLog.Type, CollectionLog.Method, CollectionLog.LoanHistoryID, CollectionLog.Comments }, null, null, null);
 				Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", CollectionLog.CustomerID, CollectionLog.LoanID, CollectionLog.Type, CollectionLog.TimeStamp);
 				CollectionLog.CollectionLogID = DB.ExecuteScalar<int>("AddCollectionLog",
 					CommandSpecies.StoredProcedure,
@@ -30,14 +39,12 @@
 					new QueryParameter("LoanHistoryID", CollectionLog.LoanHistoryID),
 					new QueryParameter("Comments", CollectionLog.Comments),
 					new QueryParameter("Now", CollectionLog.TimeStamp));
-				NL_AddLog(LogType.Info, "Strategy End", null, new object[] { CollectionLog.CollectionLogID, CollectionLog.CustomerID, CollectionLog.LoanID, CollectionLog.Type, CollectionLog.Method, CollectionLog.LoanHistoryID, CollectionLog.Comments }, null, null);
+
+				NL_AddLog(LogType.Info, "Strategy End", CollectionLog, CollectionLog.CollectionLogID, null, null);
+
 			} catch (Exception ex) {
-				NL_AddLog(LogType.Error, "Strategy Faild", null, null, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Strategy failed", CollectionLog, null, ex.ToString(), ex.StackTrace);
 			}
-
-		}//Execute
-
-	}// class CollectionLog
-} // namespace
-
-
+		}
+	}
+}

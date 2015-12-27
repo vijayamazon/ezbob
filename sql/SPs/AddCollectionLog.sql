@@ -10,13 +10,13 @@ ALTER PROCEDURE [dbo].[AddCollectionLog]
 	@LoanID INT,
 	@Type NVARCHAR(30),
 	@Method NVARCHAR(30),
-	@LoanHistoryID BIGINT = null,
+	@LoanHistoryID BIGINT = null,	
 	@Comments NVARCHAR(max) = null,
 	@Now DATETIME
 AS
 BEGIN
 	INSERT INTO CollectionLog (CustomerID, LoanID, TimeStamp, Type, Method, LoanHistoryID, Comments) VALUES
-	(@CustomerID, @LoanID, @Now, @Type, @Method, @LoanHistoryID, @Comments)
+	(@CustomerID, @LoanID, @Now, @Type, @Method, @LoanHistoryID, @Comments);
 	
-	SELECT CAST(SCOPE_IDENTITY() AS INT) AS CollectionLogID
+	SELECT CAST(SCOPE_IDENTITY() AS INT) AS CollectionLogID;
 END

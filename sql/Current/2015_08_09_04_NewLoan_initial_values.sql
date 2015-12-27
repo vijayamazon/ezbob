@@ -46,6 +46,12 @@ BEGIN
 	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('NewLoanRun', 'true', 'NL code activated if true');
 END
 
+IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'SendCollectionMailOnNewLoan')
+BEGIN
+	INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('SendCollectionMailOnNewLoan', 'true', 'if true, collection email/imail/sms will be send for new loan also');
+END
+
+
 -- INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('Collection_Max_Cancel_Fee_Role_Collector', 200, 'Maximal amount of late fee cancellation for user in role Collector')
 
 -- IF NOT EXISTS( SELECT Name FROM ConfigurationVariables WHERE Name = 'Collection_Max_Cancel_Fee_Role_Collector')

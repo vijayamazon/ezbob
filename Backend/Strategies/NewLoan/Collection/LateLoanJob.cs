@@ -17,6 +17,7 @@
 		private readonly DateTime nowTime;
 		public override string Name { get { return "LateLoanJob"; } }
 
+
 		public override void Execute() {
 
 			if (!Convert.ToBoolean(CurrentValues.Instance.NewLoanRun.Value))
@@ -24,23 +25,23 @@
 
 			try {
 
-				NL_AddLog(LogType.Info, "Strategy Start", DateTime.UtcNow, null, null, null);
+				NL_AddLog(LogType.Info, "Strategy Start", this.nowTime, null, null, null);
 
 				//For each loan schedule marks it as late, it's loan as late, applies fee if needed
 				AStrategy strategy = new SetLateLoanStatus(this.nowTime);
 				strategy.Execute();
 
 				//We dont want to send notifications twice for now...
-				strategy = new LateLoanNotification();
-				//strategy.Execute();
+				strategy = new LateLoanNotification(this.nowTime);
+				strategy.Execute();
 
 				//We dont want to change customer status twice for now...
-				strategy = new LateLoanCured();
-				//strategy.Execute();
+				strategy = new LateLoanCured(this.nowTime);
+				strategy.Execute();
 
-				NL_AddLog(LogType.Info, "Strategy End", DateTime.UtcNow, null, null, null);
+				NL_AddLog(LogType.Info, "Strategy End", this.nowTime, null, null, null);
 			} catch (Exception ex) {
-				NL_AddLog(LogType.Error, "Strategy Faild", DateTime.UtcNow, null, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Strategy failed", this.nowTime, null, ex.ToString(), ex.StackTrace);
 			}
 		}//Execute
 

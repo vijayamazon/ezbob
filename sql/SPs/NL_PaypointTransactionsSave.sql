@@ -17,7 +17,7 @@ CREATE TYPE NL_PaypointTransactionsList AS TABLE (
 	[PaypointTransactionStatusID] INT NOT NULL,
 	[PaypointUniqueID] NVARCHAR(100) NOT NULL, -- extra not needed?
 	[PaypointCardID] INT NOT NULL, -- PaypointUniqID is in PayPointCard [TransactionId] filed
-	[IP] NVARCHAR(10) NULL
+	[IP] NVARCHAR(32) NULL
 )
 GO
 

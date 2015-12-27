@@ -16,28 +16,25 @@
 
 
 	public enum NLLoanStatuses {
-		Live = 1, // DB table id
-		Late = 2,
-		PaidOff = 3,
-		Pending = 4,
-		Default = 5,
+		Pending = 1,// DB table id
+		Live = 2, 
+		Late = 3,
+		PaidOff = 4,
 		WriteOff = 6,
-		DebtManagement = 7
+		//Default = 5,
+		//DebtManagement = 7
 	} // enum NLLoanStatuses
 	
 
 	public enum NLFeeTypes {
 		None = 0,
 		SetupFee = 1,		// DB table id
-		RolloverFee = 2,
-		AdminFee = 3,
-		ServicingFee = 4,	// distributed - requires different consideration in loan calculator (other types should be paif in the nearby installment)
-		ArrangementFee = 5, // distributed - requires different consideration in loan calculator (other types should be paif in the nearby installment)
-		LatePeriod1 = 6,
-		LatePeriod2 = 7,
-		LatePeriod3 = 8,
-		LatePaymentFee = 9,
-		PartialPaymentFee = 10
+		ServicingFee = 2,	// distributed - requires different consideration in loan calculator
+		ArrangementFee = 3, // Arrangement - requires different consideration in loan calculator (other types should be paif in the nearby installment)
+		RolloverFee = 4,
+		AdminFee = 5,
+		LatePaymentFee = 6,
+		PartialPaymentFee = 7
 	} // enum FeeTypes
 
 	public enum NLScheduleStatuses {

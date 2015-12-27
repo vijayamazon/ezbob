@@ -262,15 +262,12 @@ BEGIN
 
 	INSERT INTO NL_LoanFeeTypes (LoanFeeTypeID, LoanFeeType, [DefaultAmount], [Description]) VALUES
 		  ( 1, 'SetupFee',        NULL, 'One-time fee upon loan creation, may be added or didacted from loan')
-		, ( 2, 'RolloverFee',       50, 'A rollover has been agreed')
-		, ( 3, 'AdminFee',          75, 'A fee applied when no payment is received or less than (repayment interest + late payment fee)')
-		, ( 4, 'ServicingFee',    NULL, 'Distributed through the entire loan period. On paying early - not to charge remaining part')
-		, ( 5, 'ArrangementFee',  NULL, 'Distributed through the payments. On paying early - all remaned amount need to be charged')
-		, ( 6, 'LatePeriod1',        7, 'first collection period')
-		, ( 7, 'LatePeriod2',       14, 'second collection period')
-		, ( 8, 'LatePeriod3',       30, 'third collection period')
-		, ( 9, 'LatePaymentFee',    20, 'A charge when an instalment is paid after 5 UK working days of the grace period')
-		, (10, 'PartialPaymentFee', 45, 'A payment has been made (more than repayment interest + late payment fee but was not made in full)')
+		, ( 2, 'ServicingFee',    NULL, 'Distributed through the entire loan period. On paying early - not to charge remaining part')
+		, ( 3, 'ArrangementFee',  NULL, 'Distributed through the payments. On paying early - all remaned amount need to be charged')
+		, ( 4, 'RolloverFee',       50, 'A rollover has been agreed')
+		, ( 5, 'AdminFee',          20, 'A fee applied when no payment is received or less than (repayment interest + late payment fee)')				
+		, ( 6, 'LatePaymentFee',    20, 'A charge when an instalment is paid after 5 UK working days of the grace period')
+		, (7, 'PartialPaymentFee', 45, 'A payment has been made (more than repayment interest + late payment fee but was not made in full)')
 END
 GO
 

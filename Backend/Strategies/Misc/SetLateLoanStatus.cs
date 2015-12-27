@@ -4,10 +4,10 @@
 	using System.Globalization;
 	using System.Linq;
 	using ConfigManager;
-	using Ezbob.Backend.Strategies.MailStrategies;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Database;
@@ -24,11 +24,11 @@
 	public class SetLateLoanStatus : AStrategy {
 		public SetLateLoanStatus() {
 			this.collectionIMailer = new CollectionMail(
-				ConfigManager.CurrentValues.Instance.ImailUserName,
-				ConfigManager.CurrentValues.Instance.IMailPassword,
-				ConfigManager.CurrentValues.Instance.IMailDebugModeEnabled,
-				ConfigManager.CurrentValues.Instance.IMailDebugModeEmail,
-				ConfigManager.CurrentValues.Instance.IMailSavePath);
+				CurrentValues.Instance.ImailUserName,
+				CurrentValues.Instance.IMailPassword,
+				CurrentValues.Instance.IMailDebugModeEnabled,
+				CurrentValues.Instance.IMailDebugModeEmail,
+				CurrentValues.Instance.IMailSavePath);
 		} // constructor
 
 		public override string Name { get { return "SetLateLoanStatus"; } }
@@ -37,43 +37,43 @@
 
 			this.now = DateTime.UtcNow;
 
-			//-----------Select relevan loans----------------------------------------------------
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				//-----------Mark Loans as Late----------------------------------------------------
+				// mark loan/schedule status as late, record fee
 				MarkLoanAsLate(sr);
 				return ActionResult.Continue;
-			}, "GetLoansToCollect",
-			CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+			}, "GetLoansToCollect", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 
-			//-----------Send collection mails sms imails and change status --------------------
+
+			//------NL/"old"-----Send collection mails sms imails and change status --------------------
 			LoadSmsTemplates();
 			LoadImailTemplates();
+
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				try {
+					// build data model+changesStatus?+senEmail?+sentImail?+sent
 					HandleCollectionLogic(sr);
+					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
 					Log.Error(ex, "Failed to handle collection for customer {0}", sr["CustomerID"]);
 				}
-
 				return ActionResult.Continue;
-			}, "GetLateForCollection",
-			CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+			}, "GetLateForCollection", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 
 			//-----------Change status to enabled for cured loans--------------------------------
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int customerID = sr["CustomerID"];
 				int loanID = sr["LoanID"];
 				try {
-					HandleCuredLoan(customerID, loanID);
+					HandleCuredLoan(customerID, loanID, null);
 				} catch (Exception ex) {
 					Log.Error(ex, "Failed to handle cured loan for customer {0}", customerID);
 				}
 				return ActionResult.Continue;
 			}, "GetCuredLoansForCollection", CommandSpecies.StoredProcedure);
 
-
-			// run NL "SetLateLoanStatus" job.
+			// run NL job
 			try {
+				Log.Debug("====================================NEWLOAN late job started===========================");
 				LateLoanJob nlLateJob = new LateLoanJob(this.now);
 				nlLateJob.Execute();
 				// ReSharper disable once CatchAllClause
@@ -81,11 +81,10 @@
 				Log.Debug(ex.Message);
 				NL_AddLog(LogType.Error, "Strategy failed", this.now, null, ex.Message, ex.StackTrace);
 			}
-
 		}//Execute
 
-		private void LoadImailTemplates() {
-			List<CollectionSnailMailTemplate> templates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
+		protected void LoadImailTemplates() {
+			List<CollectionSnailMailTemplate> templates = DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
 			this.collectionIMailer.SetTemplates(templates.Select(x => new SnailMailTemplate {
 				ID = x.CollectionSnailMailTemplateID,
 				Type = x.Type,
@@ -98,30 +97,33 @@
 			}));
 		}
 
-		private void LoadSmsTemplates() {
+		protected void LoadSmsTemplates() {
 			this.smsTemplates = DB.Fill<CollectionSmsTemplate>("LoadCollectionSmsTemplates", CommandSpecies.StoredProcedure);
 		}//LoadSmsTemplates
 
-		private void HandleCuredLoan(int customerID, int loanID) {
-			ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured);
+		protected void HandleCuredLoan(int customerID, int loanID, CollectionDataModel model) {
+			ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured, model);
 		}//HandleCuredLoan
 
-		private int AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
-			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", customerID, loanID, type, method);
+		private int AddCollectionLog(CollectionLog model) {
+			var historyID = model.LoanHistoryID > 0 ? (object)model.LoanHistoryID :null;
+			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3} history {4}", model.CustomerID, model.LoanID, model.Type, model.Method, model.LoanHistoryID);
 			return DB.ExecuteScalar<int>("AddCollectionLog",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerID),
-				new QueryParameter("LoanID", loanID),
-				new QueryParameter("Type", type.ToString()),
-				new QueryParameter("Method", method.ToString()),
-				new QueryParameter("Now", this.now));
+				new QueryParameter("CustomerID", model.CustomerID),
+				new QueryParameter("LoanID", model.LoanID),
+				new QueryParameter("Type", model.Type),
+				new QueryParameter("Method", model.Method),
+				new QueryParameter("Now", this.now),
+				new QueryParameter("LoanHistoryID", historyID),
+				new QueryParameter("Comments", model.Comments)
+			);
 		}//AddCollectionLog
 
-		private void SaveCollectionSnailMailMetadata(int collectionLogID, FileMetadata fileMetadata) {
+		protected void SaveCollectionSnailMailMetadata(int collectionLogID, FileMetadata fileMetadata) {
 			if (fileMetadata == null) {
 				return;
 			}
-
 			Log.Info("Adding collection snail mail metadata collection log id {0} file {1}", collectionLogID, fileMetadata.Name);
 			DB.ExecuteNonQuery("AddCollectionSnailMailMetadata",
 				CommandSpecies.StoredProcedure,
@@ -149,18 +151,33 @@
 			}//if
 		}//CalculateFee
 
-		private void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type) {
+		protected void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type, CollectionDataModel model) {
 			Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", customerID, loanID, type, status);
-			bool wasChanged = DB.ExecuteScalar<bool>("UpdateCollectionStatus",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerID),
-				new QueryParameter("CollectionStatus", (int)status),
-				new QueryParameter("Now", this.now));
-			if (!wasChanged) {
-				Log.Info("ChangeStatus to customer {0} loan {1} status {2} was not changed - customer already in this status", customerID, loanID, status);
+			// prevent while running on new loan - duplicate update
+			if (model.UpdateCustomerAllowed) {
+				bool wasChanged = DB.ExecuteScalar<bool>("UpdateCollectionStatus",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", customerID),
+					new QueryParameter("CollectionStatus", (int)status),
+					new QueryParameter("Now", this.now));
+				if (!wasChanged) {
+					Log.Info("ChangeStatus to customer {0} loan {1} status {2} was not changed - customer already in this status", customerID, loanID, status);
+				}
 			}
 
-			AddCollectionLog(customerID, loanID, type, CollectionMethod.ChangeStatus);
+			//AddCollectionLog(customerID, loanID, type, CollectionMethod.ChangeStatus, model);
+
+			model.CustomerID = customerID;
+			model.LoanID = loanID;
+
+			AddCollectionLog(new CollectionLog() {
+				CustomerID = model.CustomerID,
+				LoanID = model.LoanID,
+				LoanHistoryID = model.LoanHistoryID,
+				Type = type.ToString(),
+				Method = CollectionMethod.ChangeStatus.ToString(),
+				Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
+			});
 
 			//TODO update loan collection status if want to be on loan level and not on customer level
 			Log.Info("update loan collection status if want to be on loan level and not on customer level for customer {0}, loan {1}", customerID, loanID);
@@ -191,7 +208,7 @@
 
 		private void CollectionDay15(CollectionDataModel model, CollectionType type) {
 			//change status to 15-30 days missed
-			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed15To30, type);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed15To30, type, model);
 
 			//send email Default Template14-29
 			SendCollectionEmail(CollectionDay15EmailTemplate, model, type);
@@ -201,7 +218,7 @@
 		}//CollectionDay15
 
 		private void CollectionDay1to6(CollectionDataModel model, CollectionType type) {
-			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed1To14, type);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed1To14, type, model);
 
 			//send email Default Template1-6
 			SendCollectionEmail(CollectionDay1to6EmailTemplate, model, type);
@@ -213,7 +230,7 @@
 		}//CollectionDay21
 
 		private void CollectionDay31(CollectionDataModel model, CollectionType type) {
-			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed31To45, type);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed31To45, type, model);
 			//send email Default Template30
 			SendCollectionEmail(CollectionDay31EmailTemplate, model, type);
 
@@ -225,11 +242,11 @@
 		}//CollectionDay31
 
 		private void CollectionDay46(CollectionDataModel model, CollectionType type) {
-			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed46To60, type);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed46To60, type, model);
 		}//CollectionDay46
 
 		private void CollectionDay60(CollectionDataModel model, CollectionType type) {
-			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed61To90, type);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed61To90, type, model);
 		}//CollectionDay60
 
 		private void CollectionDay7(CollectionDataModel model, CollectionType type) {
@@ -249,7 +266,7 @@
 		}//CollectionDay8to14
 
 		private void CollectionDay90(CollectionDataModel model, CollectionType type) {
-			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed90Plus, type);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed90Plus, type, model);
 		}//CollectionDay90
 
 		private CollectionMailModel GetCollectionMailModel(CollectionDataModel model) {
@@ -304,26 +321,27 @@
 					RepaidDate = sr["PreviousRepaidDate"]
 				},
 			};
-
 			var loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRepository.Get(model.LoanID);
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, this.now, CurrentValues.Instance.AmountToChargeFrom);
 			var balance = payEarlyCalc.TotalEarlyPayment();
 			mailModel.OutstandingBalance = balance;
 
-			try {
-				GetLoanIDByOldID s1 = new GetLoanIDByOldID(loan.Id);
-				s1.Execute();
-				long nlLoanId = s1.LoanID;
-				if (nlLoanId > 0) {
-					GetLoanState nlState = new GetLoanState(model.CustomerID, nlLoanId, this.now, 1);
-					nlState.Execute();
-					var nlModel = nlState.Result;
-					Log.Info("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+			if (model.NLLoanID > 0) {
+				GetLoanState nlState = new GetLoanState(model.CustomerID, model.NLLoanID, this.now, 1);
+				nlState.Execute();
+
+				mailModel.LoanRef = nlState.Result.Loan.Refnum;
+				mailModel.OutstandingPrincipal = nlState.Result.Principal;
+				mailModel.OutstandingBalance = nlState.Result.TotalEarlyPayment;
+
+				var firtHistory = nlState.Result.Loan.FirstHistory();
+				if (firtHistory != null) {
+					mailModel.LoanAmount = (int)firtHistory.Amount;
+					mailModel.LoanDate = firtHistory.EventTime;
 				}
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				Log.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+
+				// TODO handle MissedPayment, PreviousMissedPayment
 			}
 
 			return mailModel;
@@ -338,7 +356,6 @@
 			string dayPhone = sr["DaytimePhone"];
 			string mobilePhone = sr["MobilePhone"];
 			int lateDays = (int)(this.now - scheduleDate).TotalDays;
-
 			var model = new CollectionDataModel {
 				CustomerID = sr["CustomerID"],
 				OriginID = sr["OriginID"],
@@ -357,6 +374,7 @@
 				SmsSendingAllowed = sr["SmsSendingAllowed"],
 				EmailSendingAllowed = sr["EmailSendingAllowed"],
 				ImailSendingAllowed = sr["MailSendingAllowed"],
+				//SendNotification = true // always perform action(send notification/changeStatus) for "old" loan
 			};
 
 			Log.Info(model.ToString());
@@ -388,14 +406,14 @@
 			if (lateDays == 90) { CollectionDay90(model, CollectionType.CollectionDay90); }
 
 			UpdateLoanStats(loanId, lateDays, model.AmountDue);
+
 		}//HandleCollectionLogic
 
 		/// <summary>
-		/// For each loan schedule marks it as late, it's loan as late, applies fee if needed
+		/// For each loan schedule marks it as late, it's loan as late, insert fee if needed/possible
 		/// </summary>
 		/// <param name="sr"></param>
 		private void MarkLoanAsLate(SafeReader sr) {
-
 			int id = sr["id"];
 			int loanId = sr["LoanId"];
 			int customerId = sr["CustomerId"];
@@ -403,55 +421,28 @@
 			string loanStatus = sr["LoanStatus"];
 			string scheduleStatus = sr["ScheduleStatus"];
 			decimal interest = sr["Interest"];
-
-			//Some strange logic to set custom installment date was used for fake loan generation logic --not reproduced
-			//if (!isLastInstallment) {
-			//	decimal amountDue = new PayPointApi().GetAmountToPay(id);
-
-			//	int daysBetweenCustom = customInstallmentDate.HasValue ? (int)(customInstallmentDate.Value - DateTime.UtcNow).TotalDays : 0;
-
-			//	if (!(amountDue > ConfigManager.CurrentValues.Instance.AmountToChargeFrom && daysBetweenCustom > 1)) {
-			//		DB.ExecuteNonQuery(
-			//			"UpdateLoanScheduleCustomDate",
-			//			CommandSpecies.StoredProcedure,
-			//			new QueryParameter("Id", id)
-			//			);
-			//		return;
-			//	}
-			//} // if
-
 			if (loanStatus != "Late") {
-				DB.ExecuteNonQuery(
-					"UpdateLoanStatusToLate", CommandSpecies.StoredProcedure,
+				DB.ExecuteNonQuery("UpdateLoanStatusToLate", CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanId", loanId),
 					new QueryParameter("CustomerId", customerId),
 					new QueryParameter("PaymentStatus", "Late"),
-					new QueryParameter("LoanStatus", "Late")
-					);
+					new QueryParameter("LoanStatus", "Late"));
 			}
-
 			if (scheduleStatus != "Late") {
 				DB.ExecuteNonQuery("UpdateLoanScheduleStatus", CommandSpecies.StoredProcedure, new QueryParameter("Id", id), new QueryParameter("Status", "Late"));
 			}
-
 			int daysBetween = (int)(this.now - scheduleDate).TotalDays;
 			int feeAmount, feeType;
 			CalculateFee(daysBetween, interest, out feeAmount, out feeType);
-
 			bool appliedLateCharge = false;
 			if (feeType != 0) {
 				var papi = new PayPointApi();
 				appliedLateCharge = papi.ApplyLateCharge(feeAmount, loanId, feeType);
-			} // if
-
-			//TODO add late fees to new table
-			Log.Info("add new late fee and mark loan as late for customer {0}", customerId);
-
+			}
 			Log.Info("Applied late charge for customer {0} loan {1} : {2}", customerId, loanId, appliedLateCharge);
-
 		} // MarkLoansAsLate
 
-		private void SendCollectionEmail(string emailTemplateName, CollectionDataModel model, CollectionType type) {
+		protected void SendCollectionEmail(string emailTemplateName, CollectionDataModel model, CollectionType type) {
 			if (model.EmailSendingAllowed) {
 				var variables = new Dictionary<string, string> {
 					{"FirstName", model.FirstName}, 
@@ -460,18 +451,31 @@
 					{"AmountCharged", model.AmountDue.ToString(CultureInfo.InvariantCulture)},
 					{"ScheduledAmount", model.AmountDue.ToString(CultureInfo.InvariantCulture)},
 				};
-				CollectionMails collectionMails = new CollectionMails(model.CustomerID, emailTemplateName, variables);
+				// model.SendNotification == bool SendToCustomer 
+				// prevent while running on new loan - duplicate update
+				CollectionMails collectionMails = new CollectionMails(model.CustomerID, emailTemplateName, variables, model.EmailSendingAllowed);
 				collectionMails.Execute();
-				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Email);
+
+				AddCollectionLog(new CollectionLog() {
+					CustomerID = model.CustomerID,
+					LoanID = model.LoanID,
+					LoanHistoryID = model.LoanHistoryID,
+					Type = type.ToString(),
+					Method = CollectionMethod.Email.ToString(),
+					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
+				});
+
+				//AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Email, model);
+
 			} else {
 				Log.Info("Collection sending email is not allowed, email is not sent to customer {0}\n email template {1}", model.CustomerID, emailTemplateName);
 			}
 		}//SendCollectionEmail
 
-		private void SendCollectionImail(CollectionDataModel model, CollectionType type) {
+		protected void SendCollectionImail(CollectionDataModel model, CollectionType type) {
 			if (model.ImailSendingAllowed) {
 				try {
-					IMailLib.CollectionMailModel mailModel = GetCollectionMailModel(model);
+					CollectionMailModel mailModel = GetCollectionMailModel(model);
 					switch (type) {
 					case CollectionType.CollectionDay7:
 						if (mailModel.IsLimited) {
@@ -479,7 +483,18 @@
 							FileMetadata personal;
 							FileMetadata business;
 							this.collectionIMailer.SendDefaultTemplateComm7(mailModel, out personal, out business);
-							int collection7LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+
+							//int collection7LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail, model);
+
+							int collection7LogID = AddCollectionLog(new CollectionLog() {
+								CustomerID = model.CustomerID,
+								LoanID = model.LoanID,
+								LoanHistoryID = model.LoanHistoryID,
+								Type = type.ToString(),
+								Method = CollectionMethod.Mail.ToString(),
+								Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+							});
+
 							SaveCollectionSnailMailMetadata(collection7LogID, personal);
 							SaveCollectionSnailMailMetadata(collection7LogID, business);
 						}
@@ -495,14 +510,35 @@
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 							day15Metadata = this.collectionIMailer.SendDefaultTemplateConsumer14(mailModel);
 						}
-						int collection15LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+						//int collection15LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail, model);
+
+						int collection15LogID = AddCollectionLog(new CollectionLog() {
+							CustomerID = model.CustomerID,
+							LoanID = model.LoanID,
+							LoanHistoryID = model.LoanHistoryID,
+							Type = type.ToString(),
+							Method = CollectionMethod.Mail.ToString(),
+							Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+
+						});
+
 						SaveCollectionSnailMailMetadata(collection15LogID, day15Metadata);
 						break;
 					case CollectionType.CollectionDay31:
 						if (!mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 							FileMetadata consumer = this.collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
-							int collection31LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+							//int collection31LogID = AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail, model);
+
+							int collection31LogID = AddCollectionLog(new CollectionLog() {
+								CustomerID = model.CustomerID,
+								LoanID = model.LoanID,
+								LoanHistoryID = model.LoanHistoryID,
+								Type = type.ToString(),
+								Method = CollectionMethod.Mail.ToString(),
+								Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
+							});
+
 							SaveCollectionSnailMailMetadata(collection31LogID, consumer);
 						}
 						break;
@@ -515,7 +551,7 @@
 			}
 		}//SendCollectionImail
 
-		private void SendCollectionSms(CollectionDataModel model, CollectionType type) {
+		protected void SendCollectionSms(CollectionDataModel model, CollectionType type) {
 			var smsModel = this.smsTemplates.FirstOrDefault(x => x.IsActive && x.OriginID == model.OriginID && x.Type == type.ToString());
 			if (smsModel == null) {
 				Log.Info("Collection not sending sms, sms template is not found. customer {0} origin {1} type {2}",
@@ -525,18 +561,36 @@
 
 			var smsTemplate = string.Format(smsModel.Template, model.FirstName);
 
-			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
-				Log.Info("Collection sending sms to customer {0} phone number {1}\n content {2}",
-					model.CustomerID, model.PhoneNumber, smsTemplate);
+			if (model.SmsSendingAllowed && !CurrentValues.Instance.SmsTestModeEnabled) {
+				Log.Info("Collection sending sms to customer {0} phone number {1}\n content {2}", model.CustomerID, model.PhoneNumber, smsTemplate);
+
 				new SendSms(model.CustomerID, 1, model.PhoneNumber, smsTemplate).Execute();
-				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms);
+
+				//AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms, model);
+
+				AddCollectionLog(new CollectionLog() {
+					CustomerID = model.CustomerID,
+					LoanID = model.LoanID,
+					LoanHistoryID = model.LoanHistoryID,
+					Type = type.ToString(),
+					Method = CollectionMethod.Sms.ToString(),
+					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+				});
+
 			} else if (model.SmsSendingAllowed) {
-				Log.Info("Collection sending sms is in test mode, sms is not sent to customer {0} phone number {1}\n content {2}",
-					model.CustomerID, model.PhoneNumber, smsTemplate);
-				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms);
+				Log.Info("Collection sending sms is in test mode, sms is not sent to customer {0} phone number {1}\n content {2}", model.CustomerID, model.PhoneNumber, smsTemplate);
+				//AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms, model);
+
+				AddCollectionLog(new CollectionLog() {
+					CustomerID = model.CustomerID,
+					LoanID = model.LoanID,
+					LoanHistoryID = model.LoanHistoryID,
+					Type = type.ToString(),
+					Method = CollectionMethod.Sms.ToString(),
+					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+				});
 			} else {
-				Log.Info("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}",
-					model.CustomerID, model.PhoneNumber, smsTemplate);
+				Log.Info("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}", model.CustomerID, model.PhoneNumber, smsTemplate);
 			}
 		}//SendCollectionSms
 
@@ -558,10 +612,8 @@
 				model.Late90PlusNum++;
 				model.Late90Plus += amountDue;
 			} // if
-
 			model.PastDues += amountDue;
 			model.PastDuesNum++;
-
 			DB.ExecuteNonQuery(
 				"UpdateCollection",
 				CommandSpecies.StoredProcedure,
@@ -578,21 +630,19 @@
 				new QueryParameter("Late90Plus", model.Late90Plus),
 				new QueryParameter("Late90PlusNum", model.Late90PlusNum)
 				);
-
-			//TODO save loan statistics to new table
-			Log.Info("add new late fee and mark loan as late for loanId {0}", loanId);
 		}// UpdateLoanStats
 
-		private const string CollectionDay8to14EmailTemplate = "Mandrill - Last warning - Debt recovery";
-		private const string CollectionDay7EmailTemplate     = "Mandrill - 20p late fee";
-		private const string CollectionDay31EmailTemplate    = "Mandrill - legal process starting";
-		private const string CollectionDay1to6EmailTemplate  = "Mandrill - missed payment";
-		private const string CollectionDay15EmailTemplate    = "Mandrill - Warning notice- 40p late fee";
-		private const string CollectionDay0EmailTemplate     = "Mandrill - you missed your payment";
 
-		private readonly IMailLib.CollectionMail collectionIMailer;
-		private DateTime now;
-		private List<CollectionSmsTemplate> smsTemplates;
+		protected const string CollectionDay8to14EmailTemplate = "Mandrill - Last warning - Debt recovery";
+		protected const string CollectionDay7EmailTemplate     = "Mandrill - 20p late fee";
+		protected const string CollectionDay31EmailTemplate    = "Mandrill - legal process starting";
+		protected const string CollectionDay1to6EmailTemplate  = "Mandrill - missed payment";
+		protected const string CollectionDay15EmailTemplate    = "Mandrill - Warning notice- 40p late fee";
+		protected const string CollectionDay0EmailTemplate     = "Mandrill - you missed your payment";
+
+		protected CollectionMail collectionIMailer;
+		protected DateTime now;
+		protected List<CollectionSmsTemplate> smsTemplates;
 
 
 	}// class SetLateLoanStatus

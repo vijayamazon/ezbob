@@ -562,14 +562,13 @@
 			try {
 				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
 				if (nlLoanId > 0) {
-					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>()
-						.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
-					Log.InfoFormat("<<<Recalculate NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
+					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+					Log.InfoFormat("<<<Recalculate NL_Compare {0}\n  'old' loan: {1} >>>", nlModel, loan);
 				} else {
 					Log.InfoFormat("<<<Recalculate NL loan for oldid {0} not found >>>", loan.Id);
 				}
 			} catch (Exception) {
-				Log.InfoFormat("<<< NL_Compare Fail at : {0}", System.Environment.StackTrace);
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}", System.Environment.StackTrace);
 			}
 
 		} // Recalculate

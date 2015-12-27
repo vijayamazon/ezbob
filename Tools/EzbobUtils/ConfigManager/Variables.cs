@@ -441,6 +441,7 @@ namespace ConfigManager {
 		SalesForceEnvironment,
 		SalesForceNumberOfRetries,
 		SalesForceRetryWaitSeconds,
+		SendCollectionMailOnNewLoan,
 		SessionTimeout,
 		SetupFeeEnabled,
 		SetupFeeFixed,

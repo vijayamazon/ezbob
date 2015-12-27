@@ -1,5 +1,5 @@
 DECLARE @LoanID bigint;
-set @LoanID = 17;
+set @LoanID = 1;
 
 select * from [dbo].[NL_Payments] where LoanID = @LoanID;
 
