@@ -5,6 +5,7 @@
 	using System.Web.Security;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using ServiceClientProxy;
@@ -87,13 +88,12 @@
 			try {
 				bp = m_oServiceClient.Instance.BrokerLogin(
 					sLoginEmail,
-					new Password(sPassword),
+					new Encrypted(sPassword),
 					promotionName,
 					promotionPageVisitTime,
 					uio.CustomerOriginID
 				);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				m_oLog.Warn(
 					e,
 					"Error encountered while trying to login as a broker '{0}' with origin '{1}'.",

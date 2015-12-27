@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
@@ -20,7 +21,7 @@
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
-				OldPassword = sPassword,
+				OldPassword = SafeDecrypt(sPassword),
 			};
 
 			this.originName = originID.HasValue ? originID.Value.ToString() : "-- null --";
@@ -174,6 +175,14 @@
 		private readonly UserLoginCheckResult m_oSpResult;
 		private readonly UserDataForLogin m_oSpLoad;
 		private readonly string originName;
+
+		private static string SafeDecrypt(string s) {
+			try {
+				return Encrypted.Decrypt(s);
+			} catch {
+				return string.Empty;
+			} // try
+		} // SafeDecrypt
 
 		private class UserLoginCheckResult : AStoredProcedure {
 			public UserLoginCheckResult(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {

@@ -21,6 +21,7 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
+	using Ezbob.Utils.Security;
 	using EzBob.Web.Infrastructure.Email;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -48,18 +49,6 @@
 			this.brokerHelper = new BrokerHelper();
 			this.logOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
 		} // constructor
-
-		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
-			bool hasHost =
-				(requestContext != null) &&
-				(requestContext.HttpContext != null) &&
-				(requestContext.HttpContext.Request != null) &&
-				(requestContext.HttpContext.Request.Url != null);
-
-			hostname = hasHost ? requestContext.HttpContext.Request.Url.Host : string.Empty;
-			log.Info("WizardController Initialize {0}", hostname);
-			base.Initialize(requestContext);
-		}
 
 		public ActionResult AdminLogOn(string returnUrl) {
 			Response.AddHeader("X-FRAME-OPTIONS", "");
@@ -157,12 +146,14 @@
 				}, JsonRequestBehavior.AllowGet);
 			} // if
 
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
 			log.Debug(
 				"Customer log on attempt from remote IP {0} received " +
 				"with user name '{1}' and hash '{2}' (promotion: {3})...",
 				customerIp,
 				model.UserName,
-				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password),
+				pu.Generate(model.UserName, model.Password),
 				model.PromotionDisplayData
 			);
 
@@ -194,9 +185,9 @@
 				);
 			} // try
 
-			User user;
-
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+
+			User user;
 
 			try {
 				user = this.userRepo.GetUserByLogin(model.UserName, uiOrigin.GetOrigin());
@@ -468,8 +459,8 @@
 			var signupModel = new SignupCustomerMultiOriginModel {
 				UserName = model.EMail,
 				Origin = uiOrigin.GetOrigin(),
-				RawPassword = signupPass1,
-				RawPasswordAgain = signupPass2,
+				RawPassword = new Encrypted(signupPass1),
+				RawPasswordAgain = new Encrypted(signupPass2),
 				PasswordQuestion = Convert.ToInt32(securityQuestion),
 				PasswordAnswer = model.SecurityAnswer,
 				RemoteIp = RemoteIp(),
@@ -962,6 +953,18 @@
 			return Json(new { });
 		} // Iovation
 
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			bool hasHost =
+				(requestContext != null) &&
+				(requestContext.HttpContext != null) &&
+				(requestContext.HttpContext.Request != null) &&
+				(requestContext.HttpContext.Request.Url != null);
+
+			this.hostname = hasHost ? requestContext.HttpContext.Request.Url.Host : string.Empty;
+			log.Info("AccountController Initialize {0}", this.hostname);
+			base.Initialize(requestContext);
+		} // Initialize
+
 		private static DateTime? ToDate(string dateStr) {
 			if (string.IsNullOrEmpty(dateStr))
 				return null;
@@ -1031,7 +1034,7 @@
 				UserLoginActionResult ular = this.serviceClient.Instance.UserLogin(
 					remoteOriginID,
 					username,
-					password,
+					new Encrypted(password),
 					RemoteIp(),
 					promotionName,
 					promotionPageVisitTime

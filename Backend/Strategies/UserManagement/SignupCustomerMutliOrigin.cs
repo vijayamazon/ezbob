@@ -59,6 +59,9 @@
 					throw new BadDataException();
 				} // if
 
+				this.model.RawPassword = SafeDecrypt(this.model.RawPassword);
+				this.model.RawPasswordAgain = SafeDecrypt(this.model.RawPasswordAgain);
+
 				if (string.IsNullOrWhiteSpace(this.model.RawPassword)) {
 					SetInternalErrorMsg("This is not a valid password.");
 					Log.Alert("Sign up attempt '{0}': no password specified.", this.uniqueID);
@@ -371,6 +374,14 @@
 		private readonly SignupCustomerMultiOriginModel model;
 		private ConnectionWrapper dbTransaction;
 		private const int IdChunkSize = 4;
+
+		private static string SafeDecrypt(string s) {
+			try {
+				return Encrypted.Decrypt(s);
+			} catch {
+				return string.Empty;
+			} // try
+		} // SafeDecrypt
 
 		private class UserNotCreatedException : Exception {} // class UserNotCreatedException
 		private class BadDataException : Exception {} // class BadDataException
