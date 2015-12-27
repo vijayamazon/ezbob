@@ -16,6 +16,9 @@
 		public string RawPassword { get; set; }
 
 		[DataMember]
+		public string RawPasswordAgain { get; set; }
+
+		[DataMember]
 		public int? PasswordQuestion { get; set; }
 
 		[DataMember]

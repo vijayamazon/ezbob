@@ -407,7 +407,6 @@
     <Compile Include="Code\CashRequestBuilder.cs" />
     <Compile Include="Code\LoanDetailsBuilder.cs" />
     <Compile Include="Code\PayPal\PersonalData.cs" />
-    <Compile Include="Code\RefNumberGenerator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

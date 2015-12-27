@@ -11,10 +11,8 @@
 	using System.Web.Security;
 	using Areas.Customer.Controllers.Exceptions;
 	using ConfigManager;
-	using DbConstants;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
@@ -22,6 +20,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 	using EzBob.Web.Infrastructure.Email;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -34,26 +33,18 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Alibaba;
 	using ActionResult = System.Web.Mvc.ActionResult;
-
-	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
 
 	public class AccountController : Controller {
 		public AccountController() {
-			this.dbHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			this.cookiesToRemoveOnSignup = new SortedSet<string>();
 			this.userRepo = ObjectFactory.GetInstance<IUsersRepository>();
 			this.customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 			this.serviceClient = new ServiceClient();
 			this.context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
 			this.customerSessionRepo = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
-			this.testCustomerRepo = ObjectFactory.GetInstance<ITestCustomerRepository>();
-			this.customerStatusRepo = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
 			this.brokerHelper = new BrokerHelper();
 			this.logOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
-			this.vipRequestRepo = ObjectFactory.GetInstance<IVipRequestRepository>();
-			this.whiteLabelProviderRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
@@ -427,6 +418,17 @@
 			string isInCaptchaMode,
 			int whiteLabelId
 		) {
+			string id = Guid.NewGuid().ToString("N");
+			const int idChunkSize = 4;
+
+			string uniqueID = string.Join("-",
+				Enumerable.Range(0, id.Length / idChunkSize).Select(i => id.Substring(i * idChunkSize, idChunkSize))
+			);
+
+			log.Debug("Sign up client attempt id: '{0}'...", uniqueID);
+
+			this.cookiesToRemoveOnSignup.Clear();
+
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
 
@@ -435,247 +437,123 @@
 
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
-			if (uiOrigin.IsAlibaba() && string.IsNullOrWhiteSpace(GetCookie("alibaba_id"))) {
+			string alibabaID = GetAndRemoveCookie("alibaba_id");
+
+			if (uiOrigin.IsAlibaba() && string.IsNullOrWhiteSpace(alibabaID)) {
 				return Json(new {
 					success = false,
 					errorMessage = "No Alibaba customer id provided.",
 				}, JsonRequestBehavior.AllowGet);
 			} // if
 
+			var blm = new WizardBrokerLeadModel(Session);
+
+			CampaignSourceRef campaignSourceRef = null;
+
+			if (!blm.BrokerFillsForCustomer) {
+				campaignSourceRef = new CampaignSourceRef {
+					FContent = GetAndRemoveCookie("fcontent"),
+					FMedium = GetAndRemoveCookie("fmedium"),
+					FName = GetAndRemoveCookie("fname"),
+					FSource = GetAndRemoveCookie("fsource"),
+					FTerm = GetAndRemoveCookie("fterm"),
+					FUrl = GetAndRemoveCookie("furl"),
+					FDate = ToDate(GetAndRemoveCookie("fdate")),
+					RContent = GetAndRemoveCookie("rcontent"),
+					RMedium = GetAndRemoveCookie("rmedium"),
+					RName = GetAndRemoveCookie("rname"),
+					RSource = GetAndRemoveCookie("rsource"),
+					RTerm = GetAndRemoveCookie("rterm"),
+					RUrl = GetAndRemoveCookie("rurl"),
+					RDate = ToDate(GetAndRemoveCookie("rdate")),
+				};
+			} // if
+
+			string visitTimes = GetAndRemoveCookie("sourceref_time");
+
+			var signupModel = new SignupCustomerMultiOriginModel {
+				UserName = model.EMail,
+				Origin = uiOrigin.GetOrigin(),
+				RawPassword = signupPass1,
+				RawPasswordAgain = signupPass2,
+				PasswordQuestion = Convert.ToInt32(securityQuestion),
+				PasswordAnswer = model.SecurityAnswer,
+				RemoteIp = RemoteIp(),
+				FirstName = FirstName,
+				LastName = Surname,
+				CaptchaMode = isInCaptchaMode == "True",
+				MobilePhone = mobilePhone,
+				MobileVerificationCode = mobileCode,
+				BrokerFillsForCustomer = blm.BrokerFillsForCustomer,
+				WhiteLabelID = whiteLabelId,
+				IsTest = (Request.Cookies["istest"] != null) ? true : (bool?)null,
+				CampaignSourceRef = campaignSourceRef,
+				GoogleCookie = blm.BrokerFillsForCustomer ? string.Empty : GetAndRemoveCookie("__utmz"),
+				ReferenceSource = blm.BrokerFillsForCustomer ? "Broker" : GetAndRemoveCookie("sourceref"),
+				AlibabaID = blm.BrokerFillsForCustomer ? null : GetAndRemoveCookie("alibaba_id"),
+				ABTesting = GetAndRemoveCookie("ezbobab"),
+				VisitTimes = visitTimes,
+				FirstVisitTime = HttpUtility.UrlDecode(visitTimes),
+				RequestedLoanAmount = GetAndRemoveCookie("loan_amount"),
+				RequestedLoanTerm = GetAndRemoveCookie("loan_period"),
+				BrokerLeadID = blm.LeadID,
+				BrokerLeadEmail = blm.LeadEmail,
+				BrokerLeadFirstName = blm.FirstName,
+			};
+
+			log.Debug(
+				"Sign up client attempt id: '{0}', model is {1}.",
+				uniqueID,
+				signupModel.ToLogStr()
+			);
+
 			try {
-				if (string.IsNullOrEmpty(model.EMail))
-					throw new Exception(DbStrings.NotValidEmailAddress);
+				log.Debug("Sign up client attempt id: '{0}', requesting backend sign up.", uniqueID);
 
-				if (!string.Equals(signupPass1, signupPass2))
-					throw new Exception(DbStrings.PasswordDoesNotMatch);
+				UserLoginActionResult signupResult = this.serviceClient.Instance.SignupCustomerMutliOrigin(signupModel);
 
-				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
+				log.Debug("Sign up client attempt id: '{0}', backend sign up complete.", uniqueID);
 
-				if (signupPass1.Length < maxPassLength)
-					throw new Exception(DbStrings.PasswordPolicyCheck);
-
-				bool mobilePhoneVerified = false;
-
-				if (isInCaptchaMode != "True") {
-					mobilePhoneVerified = this.serviceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
-
-					if (!mobilePhoneVerified)
-						throw new Exception(DbStrings.InvalidMobileCode);
-				} // if
-
-				UserLoginActionResult createuserresult = CreateUser(model.EMail, signupPass1, securityQuestion, model.SecurityAnswer);
-
-				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
-				
-				if (status == MembershipCreateStatus.DuplicateEmail) {
-					int EmailOriginID = 1; // TODO createuserresult.OriginID;
-
-					if (uiOrigin.CustomerOriginID != EmailOriginID)
-						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));
-					else
-						throw new Exception(DbStrings.EmailAddressAlreadyExists);
-				} // if
-				
-				if (status != MembershipCreateStatus.Success)
-					throw new Exception(DbStrings.UserCreationFailed);
-
-				Customer customer = null;
-
-				var blm = new WizardBrokerLeadModel(Session);
-
-				new Transactional(
-					() => customer = CreateCustomer(
-						model.EMail,
-						FirstName,
-						Surname,
-						mobilePhone,
-						mobilePhoneVerified,
-						blm.BrokerFillsForCustomer,
-						whiteLabelId
-					)
-				).Execute();
-
-				string token = this.serviceClient.Instance.EmailConfirmationGenerate(customer.Id).Token.ToString();
-
-				if (blm.IsSet) {
-					this.serviceClient.Instance.BrokerLeadAcquireCustomer(
-						customer.Id,
-						blm.LeadID,
-						blm.FirstName,
-						blm.BrokerFillsForCustomer,
-						token
-					);
-				} else {
-					this.serviceClient.Instance.BrokerCheckCustomerRelevance(
-						customer.Id,
-						customer.Name,
-						customer.IsAlibaba,
-						customer.ReferenceSource,
-						token
-					); // Add is Alibaba, or do after saving it to DB
-				} // if
-
-				this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(
-					customer.Id,
-					customer.Name,
-					customer.Id,
-					false,
-					false
+				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(
+					typeof(MembershipCreateStatus),
+					signupResult.Status
 				);
+
+				log.Debug("Sign up client attempt id: '{0}', status is {1}.", uniqueID, status);
+
+				if ((status != MembershipCreateStatus.Success) || !string.IsNullOrWhiteSpace(signupResult.ErrorMessage)) {
+					throw new Exception(string.IsNullOrWhiteSpace(signupResult.ErrorMessage)
+						? string.Format("Failed to sign up (error code is '{0}').", uniqueID)
+						: signupResult.ErrorMessage
+					);
+				} // if
+				
+				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SessionId =
+					signupResult.SessionID.ToString(CultureInfo.InvariantCulture);
+
+				Session["UserSessionId"] = signupResult.SessionID;
 
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
 
+				RemoveCookiesOnSignup();
+
+				log.Debug("Sign up client attempt id: '{0}', sign up complete.", uniqueID, status);
+
 				return Json(new {
 					success = true,
 					antiforgery_token = AntiForgery.GetHtml().ToString(),
-					refNumber = customer.RefNumber
+					refNumber = signupResult.RefNumber
 				}, JsonRequestBehavior.AllowGet);
 			} catch (Exception e) {
-/*
-				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString()) {
-					return Json(new {
-						success = false,
-						errorMessage = DbStrings.EmailAddressAlreadyExists
-					}, JsonRequestBehavior.AllowGet);
-				} // if*/
+				log.Alert(e, "Failed to sign up, client attempt id: {0}.", uniqueID);
 
-				return Json(new { success = false, errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new {
+					success = false,
+					errorMessage = string.Format("Failed to sign up (error code is '{0}'), please retry.", uniqueID),
+				}, JsonRequestBehavior.AllowGet);
 			} // try
 		} // SignUp
-
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[CaptchaValidationFilter(Order = 999999)]
-		public JsonResult SignUpOld(
-			User model,
-			string FirstName,
-			string Surname,
-			string signupPass1,
-			string signupPass2,
-			string securityQuestion,
-			string mobilePhone,
-			string mobileCode,
-			string isInCaptchaMode,
-			int whiteLabelId
-		) {
-			if (!ModelState.IsValid)
-				return GetModelStateErrors(ModelState);
-
-			if (model.SecurityAnswer.Length > 199)
-				throw new Exception(DbStrings.MaximumAnswerLengthExceeded);
-
-			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
-
-			if (uiOrigin.IsAlibaba() && string.IsNullOrWhiteSpace(GetCookie("alibaba_id"))) {
-				return Json(new {
-					success = false,
-					errorMessage = "No Alibaba customer id provided.",
-				}, JsonRequestBehavior.AllowGet);
-			} // if
-
-			try {
-				if (string.IsNullOrEmpty(model.EMail))
-					throw new Exception(DbStrings.NotValidEmailAddress);
-
-				if (!string.Equals(signupPass1, signupPass2))
-					throw new Exception(DbStrings.PasswordDoesNotMatch);
-
-				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
-
-				if (signupPass1.Length < maxPassLength)
-					throw new Exception(DbStrings.PasswordPolicyCheck);
-
-				bool mobilePhoneVerified = false;
-
-				if (isInCaptchaMode != "True") {
-					mobilePhoneVerified = this.serviceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
-
-					if (!mobilePhoneVerified)
-						throw new Exception(DbStrings.InvalidMobileCode);
-				} // if
-
-				UserLoginActionResult createuserresult = CreateUser(model.EMail, signupPass1, securityQuestion, model.SecurityAnswer);
-
-				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
-				
-				if (status == MembershipCreateStatus.DuplicateEmail) {
-					int EmailOriginID = 1; // TODO createuserresult.OriginID;
-
-					if (uiOrigin.CustomerOriginID != EmailOriginID)
-						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));
-					else
-						throw new Exception(DbStrings.EmailAddressAlreadyExists);
-				} // if
-				
-				if (status != MembershipCreateStatus.Success)
-					throw new Exception(DbStrings.UserCreationFailed);
-
-				Customer customer = null;
-
-				var blm = new WizardBrokerLeadModel(Session);
-
-				new Transactional(
-					() => customer = CreateCustomer(
-						model.EMail,
-						FirstName,
-						Surname,
-						mobilePhone,
-						mobilePhoneVerified,
-						blm.BrokerFillsForCustomer,
-						whiteLabelId
-					)
-				).Execute();
-
-				string token = this.serviceClient.Instance.EmailConfirmationGenerate(customer.Id).Token.ToString();
-
-				if (blm.IsSet) {
-					this.serviceClient.Instance.BrokerLeadAcquireCustomer(
-						customer.Id,
-						blm.LeadID,
-						blm.FirstName,
-						blm.BrokerFillsForCustomer,
-						token
-					);
-				} else {
-					this.serviceClient.Instance.BrokerCheckCustomerRelevance(
-						customer.Id,
-						customer.Name,
-						customer.IsAlibaba,
-						customer.ReferenceSource,
-						token
-					); // Add is Alibaba, or do after saving it to DB
-				} // if
-
-				this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(
-					customer.Id,
-					customer.Name,
-					customer.Id,
-					false,
-					false
-				);
-
-				FormsAuthentication.SetAuthCookie(model.EMail, false);
-				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
-
-				return Json(new {
-					success = true,
-					antiforgery_token = AntiForgery.GetHtml().ToString(),
-					refNumber = customer.RefNumber
-				}, JsonRequestBehavior.AllowGet);
-			} catch (Exception e) {
-/*
-				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString()) {
-					return Json(new {
-						success = false,
-						errorMessage = DbStrings.EmailAddressAlreadyExists
-					}, JsonRequestBehavior.AllowGet);
-				} // if*/
-
-				return Json(new { success = false, errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
-			} // try
-		} // SignUpOld
 
 		public ActionResult ForgotPassword() {
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
@@ -1088,176 +966,7 @@
 			return Json(new { });
 		} // Iovation
 
-		private UserLoginActionResult CreateUser(
-			string email,
-			string password,
-			string passwordQuestion,
-			string passwordAnswer
-		) {
-			log.Debug("Creating a user '{0}'...", email);
-			
-			UserLoginActionResult ular;
-
-			try {
-				ular = this.serviceClient.Instance.CustomerSignup(
-					email,
-					new Password(password),
-					Convert.ToInt32(passwordQuestion),
-					passwordAnswer,
-					RemoteIp()
-				);
-
-				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SessionId =
-					ular.SessionID.ToString(CultureInfo.InvariantCulture);
-				
-			} catch (Exception e) {
-				log.Error(e, "Failed to create user '{0}'.", email);
-				throw;
-			} // try
-
-			log.Debug("User '{0}' has been created.", email);
-			return ular;
-		} // CreateUser
-
-		private Customer CreateCustomer(
-			string email,
-			string sFirstName,
-			string sLastName,
-			string mobilePhone,
-			bool mobilePhoneVerified,
-			bool brokerFillsForCustomer,
-			int whiteLabelId
-		) {
-			var user = this.userRepo.GetUserByLogin(email);
-			var g = new RefNumberGenerator(this.customerRepo);
-			var isAutomaticTest = IsAutomaticTest(email);
-			var vip = this.vipRequestRepo.RequestedVip(email);
-			var whiteLabel = whiteLabelId != 0
-				? this.whiteLabelProviderRepo.GetAll().FirstOrDefault(x => x.Id == whiteLabelId)
-				: null;
-
-			Broker broker = null;
-
-			if (whiteLabel != null) {
-				var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
-				broker = brokerRepo.GetAll().FirstOrDefault(x => x.WhiteLabel == whiteLabel);
-			} // if
-
-			sFirstName = (sFirstName ?? string.Empty).Trim();
-			sLastName = (sLastName ?? string.Empty).Trim();
-
-			if (sFirstName == string.Empty)
-				sFirstName = null;
-
-			if (sLastName == string.Empty)
-				sLastName = null;
-
-			var customer = new Customer {
-				Name = email,
-				Id = user.Id,
-				Status = Status.Registered,
-				RefNumber = g.GenerateForCustomer(),
-				WizardStep = this.dbHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-				CollectionStatus = this.customerStatusRepo.Get((int)CollectionStatusNames.Enabled),
-				IsTest = isAutomaticTest,
-				IsOffline = null,
-				PersonalInfo = new PersonalInfo {
-					MobilePhone = mobilePhone,
-					MobilePhoneVerified = mobilePhoneVerified,
-					FirstName = sFirstName,
-					Surname = sLastName,
-				},
-				TrustPilotStatus = this.dbHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
-				GreetingMailSentDate = DateTime.UtcNow,
-				Vip = vip,
-				WhiteLabel = whiteLabel,
-				Broker = broker,
-			};
-
-			customer.CustomerOrigin = UiCustomerOrigin.Get();
-
-			log.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
-			CampaignSourceRef campaignSourceRef = null;
-
-			if (brokerFillsForCustomer) {
-				customer.ReferenceSource = "Broker";
-				customer.GoogleCookie = string.Empty;
-			} else {
-				customer.GoogleCookie = GetAndRemoveCookie("__utmz");
-				customer.ReferenceSource = GetAndRemoveCookie("sourceref");
-				customer.AlibabaId = GetAndRemoveCookie("alibaba_id");
-				customer.IsAlibaba = !string.IsNullOrWhiteSpace(customer.AlibabaId);
-
-				campaignSourceRef = new CampaignSourceRef();
-				campaignSourceRef.FContent = GetAndRemoveCookie("fcontent");
-				campaignSourceRef.FMedium = GetAndRemoveCookie("fmedium");
-				campaignSourceRef.FName = GetAndRemoveCookie("fname");
-				campaignSourceRef.FSource = GetAndRemoveCookie("fsource");
-				campaignSourceRef.FTerm = GetAndRemoveCookie("fterm");
-				campaignSourceRef.FUrl = GetAndRemoveCookie("furl");
-				campaignSourceRef.FDate = ToDate(GetAndRemoveCookie("fdate"));
-				campaignSourceRef.RContent = GetAndRemoveCookie("rcontent");
-				campaignSourceRef.RMedium = GetAndRemoveCookie("rmedium");
-				campaignSourceRef.RName = GetAndRemoveCookie("rname");
-				campaignSourceRef.RSource = GetAndRemoveCookie("rsource");
-				campaignSourceRef.RTerm = GetAndRemoveCookie("rterm");
-				campaignSourceRef.RUrl = GetAndRemoveCookie("rurl");
-				campaignSourceRef.RDate = ToDate(GetAndRemoveCookie("rdate"));
-			} // if
-
-			customer.ABTesting = GetAndRemoveCookie("ezbobab");
-			string visitTimes = GetAndRemoveCookie("sourceref_time");
-			customer.FirstVisitTime = HttpUtility.UrlDecode(visitTimes);
-
-			if (Request.Cookies["istest"] != null)
-				customer.IsTest = true;
-
-			this.customerRepo.Save(customer);
-
-			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
-				CustomerId = customer.Id,
-				Amount = ToInt(GetAndRemoveCookie("loan_amount"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 24000 : 20000),
-				Term = ToInt(GetAndRemoveCookie("loan_period"), customer.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline ? 12 : 9),
-				Created = DateTime.UtcNow,
-			}};
-
-			var session = new CustomerSession {
-				CustomerId = user.Id,
-				StartSession = DateTime.UtcNow,
-				Ip = RemoteIp(),
-				IsPasswdOk = true,
-				ErrorMessage = "Registration"
-			};
-			this.customerSessionRepo.AddSessionIpLog(session);
-			Session["UserSessionId"] = session.Id;
-			try {
-				this.serviceClient.Instance.SaveSourceRefHistory(
-					user.Id,
-					customer.ReferenceSource,
-					visitTimes,
-					campaignSourceRef
-				);
-			} catch (Exception e) {
-				log.Warn(e, "Failed to save sourceref history.");
-			} // try
-
-			// save AlibabaBuyer
-			if (customer.AlibabaId != null && customer.IsAlibaba) {
-				try {
-					AlibabaBuyer alibabaMember = new AlibabaBuyer();
-					alibabaMember.AliId = Convert.ToInt64(customer.AlibabaId);
-					alibabaMember.Customer = customer;
-					EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
-					aliMemberRep.SaveOrUpdate(alibabaMember);
-				} catch (Exception alieException) {
-					log.Error(alieException, "Failed to save alibabaMember ID");
-				}
-			}
-
-			return customer;
-		} // CreateCustomer
-
-		private DateTime? ToDate(string dateStr) {
+		private static DateTime? ToDate(string dateStr) {
 			if (string.IsNullOrEmpty(dateStr))
 				return null;
 
@@ -1274,36 +983,30 @@
 			return bSuccess ? date : (DateTime?)null;
 		} // ToDate
 
-		private int ToInt(string intStr, int intDefault) {
-			if (string.IsNullOrEmpty(intStr))
-				return intDefault;
-			
-			int result;
-			bool bSuccess = int.TryParse(intStr,out result);
-			return bSuccess ? result : intDefault;
-		} // ToDate
-
-		private string GetCookie(string cookieName) {
-			var reqCookie = Request.Cookies[cookieName];
-
-			return reqCookie != null ? HttpUtility.UrlDecode(reqCookie.Value) : null;
-		} // GetCookie
-
 		private string GetAndRemoveCookie(string cookieName) {
 			var reqCookie = Request.Cookies[cookieName];
 
 			if (reqCookie != null) {
-				var cookie = new HttpCookie(cookieName, "") {
-					Expires = DateTime.Now.AddMonths(-1),
-					HttpOnly = true,
-					Secure = true,
-				};
-				Response.Cookies.Add(cookie);
+				this.cookiesToRemoveOnSignup.Add(cookieName);
 				return HttpUtility.UrlDecode(reqCookie.Value);
 			} // if
 
 			return null;
 		} // GetAndRemoveCookie
+
+		private void RemoveCookiesOnSignup() {
+			foreach (string cookieName in this.cookiesToRemoveOnSignup) {
+				Response.Cookies.Add(new HttpCookie(cookieName, string.Empty) {
+					Expires = DateTime.UtcNow.AddMonths(-1),
+					HttpOnly = true,
+					Secure = true,
+				});
+			} // if
+
+			this.cookiesToRemoveOnSignup.Clear();
+		} // RemoveCookiesOnSignup
+
+		private readonly SortedSet<string> cookiesToRemoveOnSignup;
 
 		private MembershipCreateStatus ValidateUser(
 			string username,
@@ -1345,18 +1048,6 @@
 
 			return nStatus;
 		} // ValidateUser
-
-		private bool IsAutomaticTest(string email) {
-			bool isAutomaticTest = false;
-
-			if (CurrentValues.Instance.AutomaticTestCustomerMark == "1") {
-				var patterns = this.testCustomerRepo.GetAllPatterns();
-				if (patterns.Any(email.Contains))
-					isAutomaticTest = true;
-			} // if
-
-			return isAutomaticTest;
-		} // IsAutomaticTest
 
 		private JsonResult GetModelStateErrors(ModelStateDictionary modelStateDictionary) {
 			return Json(
@@ -1464,13 +1155,8 @@
 		private readonly ServiceClient serviceClient;
 		private readonly IEzbobWorkplaceContext context;
 		private readonly ICustomerSessionsRepository customerSessionRepo;
-		private readonly ITestCustomerRepository testCustomerRepo;
-		private readonly ICustomerStatusesRepository customerStatusRepo;
-		private readonly DatabaseDataHelper dbHelper;
 		private readonly BrokerHelper brokerHelper;
 		private readonly LogOffMode logOffMode;
-		private readonly IVipRequestRepository vipRequestRepo;
-		private readonly WhiteLabelProviderRepository whiteLabelProviderRepo;
 		private string hostname;
 	} // class AccountController
 } // namespace

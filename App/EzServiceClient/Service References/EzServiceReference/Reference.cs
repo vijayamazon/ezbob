@@ -847,6 +847,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private string ErrorMessageField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RefNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int SessionIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -861,6 +864,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ErrorMessageField, value) != true)) {
                     this.ErrorMessageField = value;
                     this.RaisePropertyChanged("ErrorMessage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RefNumber {
+            get {
+                return this.RefNumberField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RefNumberField, value) != true)) {
+                    this.RefNumberField = value;
+                    this.RaisePropertyChanged("RefNumber");
                 }
             }
         }

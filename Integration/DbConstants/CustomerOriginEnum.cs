@@ -4,12 +4,12 @@
 	[DataContract]
 	public enum CustomerOriginEnum {
 		[EnumMember]
-		ezbob,
+		ezbob = 1,
 
 		[EnumMember]
-		everline,
+		everline = 2,
 
 		[EnumMember]
-		alibaba,
+		alibaba = 3,
 	} // enum CustomerOriginEnum
 } // namespace

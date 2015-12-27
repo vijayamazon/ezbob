@@ -16,6 +16,7 @@
 				Status = instance.Status.ToString(),
 				SessionID = instance.SessionID,
 				ErrorMessage = instance.ErrorMsg,
+				RefNumber = instance.RefNumber,
 			};
 		} // SignupCustomerMutliOrigin
 

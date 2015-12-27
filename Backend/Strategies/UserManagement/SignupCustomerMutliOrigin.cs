@@ -49,11 +49,37 @@
 					throw new BadDataException();
 				} // if
 
+				Log.Debug("Sign up attempt '{0}', model is {1}.", this.uniqueID, this.model.ToLogStr());
+
 				this.model.UserName = (this.model.UserName ?? string.Empty).Trim().ToLower(CultureInfo.InvariantCulture);
 
 				if (string.IsNullOrWhiteSpace(this.model.UserName)) {
-					SetInternalErrorMsg();
+					SetInternalErrorMsg("This is not a valid email address.");
 					Log.Alert("Sign up attempt '{0}': no user name specified.", this.uniqueID);
+					throw new BadDataException();
+				} // if
+
+				if (string.IsNullOrWhiteSpace(this.model.RawPassword)) {
+					SetInternalErrorMsg("This is not a valid password.");
+					Log.Alert("Sign up attempt '{0}': no password specified.", this.uniqueID);
+					throw new BadDataException();
+				} // if
+
+				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
+
+				if (this.model.RawPassword.Length < maxPassLength) {
+					SetInternalErrorMsg(string.Format(
+						"Please enter a password that is {0} characters or more.",
+						maxPassLength
+					));
+
+					Log.Alert("Sign up attempt '{0}': password is too short.", this.uniqueID);
+					throw new BadDataException();
+				} // if
+
+				if (this.model.RawPassword != this.model.RawPasswordAgain) {
+					SetInternalErrorMsg("Passwords don't match, please re-enter.");
+					Log.Alert("Sign up attempt '{0}': password mismatch.", this.uniqueID);
 					throw new BadDataException();
 				} // if
 
@@ -88,6 +114,7 @@
 		public int UserID { get; private set; }
 		public int SessionID { get; private set; }
 		public string ErrorMsg { get; private set; }
+		public string RefNumber { get; private set; }
 		public MembershipCreateStatus Status { get; private set; }
 
 		private void DoBrokerLeadsAndThirdParties() {
@@ -296,6 +323,7 @@
 
 			var customer = new CreateCustomer(this, mobilePhoneVerified);
 			customer.ExecuteNonQuery(this.dbTransaction);
+			RefNumber = customer.RefNumber;
 
 			Log.Debug("Sign up attempt '{0}': creating a campaign source reference entry...", this.uniqueID);
 
@@ -331,11 +359,11 @@
 			);
 		} // GenerateUniqueID
 
-		private void SetInternalErrorMsg() {
-			ErrorMsg = string.Format(
+		private void SetInternalErrorMsg(string errorMessage = null) {
+			ErrorMsg = string.IsNullOrWhiteSpace(errorMessage) ? string.Format(
 				"Internal server error. Please call support, error code is: '{0}'.",
 				this.uniqueID
-			);
+			) : errorMessage.Trim();
 		} // SetInternalErrorMsg
 
 		private readonly string uniqueID;
@@ -367,26 +395,40 @@
 			public CreateUserForCustomer(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
-				if (OriginID <= 0)
+				if (OriginID <= 0) {
+					Log.Warn("Origin id is not positive.");
 					return false;
+				} // if
 
-				if (string.IsNullOrEmpty(Email))
+				if (string.IsNullOrWhiteSpace(Email)) {
+					Log.Warn("Email is not specified.");
 					return false;
+				} // if
 
-				if (string.IsNullOrEmpty(EzPassword))
+				if (string.IsNullOrEmpty(EzPassword)) {
+					Log.Warn("Password is not specified.");
 					return false;
+				} // if
 
-				if (string.IsNullOrEmpty(Salt))
+				if (string.IsNullOrWhiteSpace(Salt)) {
+					Log.Warn("Salt is not specified.");
 					return false;
+				} // if
 
-				if (string.IsNullOrEmpty(CycleCount))
+				if (string.IsNullOrWhiteSpace(CycleCount)) {
+					Log.Warn("Cycle count is not specified.");
 					return false;
+				} // if
 
-				if (SecurityQuestionID <= 0)
+				if (SecurityQuestionID <= 0) {
+					Log.Warn("Security question is not specified.");
 					return false;
+				} // if
 
-				if (string.IsNullOrEmpty(SecurityAnswer))
+				if (string.IsNullOrWhiteSpace(SecurityAnswer)) {
+					Log.Warn("Security answer is not specified.");
 					return false;
+				} // if
 
 				return true;
 			} // HasValidParameters

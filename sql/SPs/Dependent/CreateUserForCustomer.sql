@@ -97,11 +97,11 @@ BEGIN
 		INSERT INTO Security_User (
 			PassSetTime, UserName, FullName, Email, BranchId,
 			SecurityQuestion1ID, SecurityAnswer1,
-			EzPassword, Salt, CycleCount
+			EzPassword, Salt, CycleCount, OriginID
 		) VALUES (
 			@Now, @Email, @Email, @Email, @BranchID,
 			@SecurityQuestionID, @SecurityAnswer,
-			@EzPassword, @Salt, @CycleCount
+			@EzPassword, @Salt, @CycleCount, @OriginID
 		)
 
 		SET @UserID = SCOPE_IDENTITY()
