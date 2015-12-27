@@ -23,6 +23,8 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
+	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
+
 	public class ProfileSummaryModelBuilder {
 		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, CreditBureauModelBuilder creditBureauModelBuilder) {
 			_decisions = decisions;

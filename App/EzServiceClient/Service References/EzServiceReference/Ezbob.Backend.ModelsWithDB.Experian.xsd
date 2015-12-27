@@ -1,212 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:complexType name="ExperianConsumerData">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ActiveCaisBalanceExcMortgages" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Applicants" nillable="true" type="tns:ArrayOfExperianConsumerDataApplicant" />
-      <xs:element minOccurs="0" name="BadDebt" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Bankruptcy" type="xs:boolean" />
-      <xs:element minOccurs="0" name="BureauScore" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CAISDefaults" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CAISSpecialInstructionFlag" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CCJLast2Years" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CII" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Cais" nillable="true" type="tns:ArrayOfExperianConsumerDataCais" />
-      <xs:element minOccurs="0" name="CaisDOB" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="CreditCardBalances" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreditCardOverLimit" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreditCommitmentsNonRevolving" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreditCommitmentsRevolving" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreditLimitUtilisation" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CustomerId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DirectorId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="EnquiriesLast3Months" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="EnquiriesLast6Months" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HasExperianError" type="xs:boolean" />
-      <xs:element minOccurs="0" name="HasParsingError" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Locations" nillable="true" type="tns:ArrayOfExperianConsumerDataLocation" />
-      <xs:element minOccurs="0" name="MortgageBalance" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="MortgagePayments" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="NOCAndNOD" type="xs:boolean" />
-      <xs:element minOccurs="0" name="NOCsOnCAIS" type="xs:boolean" />
-      <xs:element minOccurs="0" name="NOCsOnCCJ" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Nocs" nillable="true" type="tns:ArrayOfExperianConsumerDataNoc" />
-      <xs:element minOccurs="0" name="NumAccounts" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="NumCCJs" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="NumCreditCards" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="OtherBankruptcy" type="xs:boolean" />
-      <xs:element minOccurs="0" name="PersonalLoanStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Residencies" nillable="true" type="tns:ArrayOfExperianConsumerDataResidency" />
-      <xs:element minOccurs="0" name="SatisfiedJudgement" type="xs:boolean" />
-      <xs:element minOccurs="0" name="ServiceLogId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="TotalAccountBalances" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="TotalCCJValue1" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="TotalCCJValue2" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="WorstCurrentStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="WorstHistoricalStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="WorstStatus" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerData" nillable="true" type="tns:ExperianConsumerData" />
-  <xs:complexType name="ArrayOfExperianConsumerDataApplicant">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataApplicant" nillable="true" type="tns:ExperianConsumerDataApplicant" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataApplicant" nillable="true" type="tns:ArrayOfExperianConsumerDataApplicant" />
-  <xs:complexType name="ExperianConsumerDataApplicant">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ApplicantIdentifier" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Forename" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Suffix" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataApplicant" nillable="true" type="tns:ExperianConsumerDataApplicant" />
-  <xs:complexType name="ArrayOfExperianConsumerDataCais">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataCais" nillable="true" type="tns:ExperianConsumerDataCais" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataCais" nillable="true" type="tns:ArrayOfExperianConsumerDataCais" />
-  <xs:complexType name="ExperianConsumerDataCais">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="AccountBalances" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisBalance" />
-      <xs:element minOccurs="0" name="AccountStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="AccountStatusCodes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Balance" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CAISAccStartDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="CardHistories" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisCardHistory" />
-      <xs:element minOccurs="0" name="CompanyType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CreditLimit" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CurrentDefBalance" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DelinquentBalance" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="LastUpdatedDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="MatchTo" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="NumAccountBalances" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="NumCardHistories" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="NumOfMonthsHistory" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Payment" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="RepaymentPeriod" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="SettlementDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Status1To2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="StatusTo3" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="WorstStatus" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataCais" nillable="true" type="tns:ExperianConsumerDataCais" />
-  <xs:complexType name="ArrayOfExperianConsumerDataCaisBalance">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataCaisBalance" nillable="true" type="tns:ExperianConsumerDataCaisBalance" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataCaisBalance" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisBalance" />
-  <xs:complexType name="ExperianConsumerDataCaisBalance">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="AccountBalance" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ExperianConsumerDataCaisId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataCaisBalance" nillable="true" type="tns:ExperianConsumerDataCaisBalance" />
-  <xs:complexType name="ArrayOfExperianConsumerDataCaisCardHistory">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataCaisCardHistory" nillable="true" type="tns:ExperianConsumerDataCaisCardHistory" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataCaisCardHistory" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisCardHistory" />
-  <xs:complexType name="ExperianConsumerDataCaisCardHistory">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CashAdvanceAmount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ExperianConsumerDataCaisId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="NumCashAdvances" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="PaymentAmount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="PaymentCode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PrevStatementBal" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="PromotionalRate" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataCaisCardHistory" nillable="true" type="tns:ExperianConsumerDataCaisCardHistory" />
-  <xs:complexType name="ArrayOfExperianConsumerDataLocation">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataLocation" nillable="true" type="tns:ExperianConsumerDataLocation" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataLocation" nillable="true" type="tns:ArrayOfExperianConsumerDataLocation" />
-  <xs:complexType name="ExperianConsumerDataLocation">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="District" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="District2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Flat" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FormattedLocation" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HouseName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HouseNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="LocationCode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LocationIdentifier" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="POBox" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PostTown" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="SharedLetterbox" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Street" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Street2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TimeAtMonths" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TimeAtYears" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataLocation" nillable="true" type="tns:ExperianConsumerDataLocation" />
-  <xs:complexType name="ArrayOfExperianConsumerDataNoc">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataNoc" nillable="true" type="tns:ExperianConsumerDataNoc" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataNoc" nillable="true" type="tns:ArrayOfExperianConsumerDataNoc" />
-  <xs:complexType name="ExperianConsumerDataNoc">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TextLine" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataNoc" nillable="true" type="tns:ExperianConsumerDataNoc" />
-  <xs:complexType name="ArrayOfExperianConsumerDataResidency">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataResidency" nillable="true" type="tns:ExperianConsumerDataResidency" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfExperianConsumerDataResidency" nillable="true" type="tns:ArrayOfExperianConsumerDataResidency" />
-  <xs:complexType name="ExperianConsumerDataResidency">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ApplicantIdentifier" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="LocationCode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LocationIdentifier" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ResidencyDateFrom" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ResidencyDateTo" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="TimeAtMonths" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TimeAtYears" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ExperianConsumerDataResidency" nillable="true" type="tns:ExperianConsumerDataResidency" />
   <xs:complexType name="ExperianLtd">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AExperianLtdDataRow">
@@ -561,6 +354,213 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianLtdLenderDetails" nillable="true" type="tns:ExperianLtdLenderDetails" />
+  <xs:complexType name="ExperianConsumerData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActiveCaisBalanceExcMortgages" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Applicants" nillable="true" type="tns:ArrayOfExperianConsumerDataApplicant" />
+      <xs:element minOccurs="0" name="BadDebt" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Bankruptcy" type="xs:boolean" />
+      <xs:element minOccurs="0" name="BureauScore" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CAISDefaults" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CAISSpecialInstructionFlag" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CCJLast2Years" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CII" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Cais" nillable="true" type="tns:ArrayOfExperianConsumerDataCais" />
+      <xs:element minOccurs="0" name="CaisDOB" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CreditCardBalances" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CreditCardOverLimit" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CreditCommitmentsNonRevolving" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CreditCommitmentsRevolving" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CreditLimitUtilisation" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DirectorId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="EnquiriesLast3Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="EnquiriesLast6Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HasExperianError" type="xs:boolean" />
+      <xs:element minOccurs="0" name="HasParsingError" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Locations" nillable="true" type="tns:ArrayOfExperianConsumerDataLocation" />
+      <xs:element minOccurs="0" name="MortgageBalance" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="MortgagePayments" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NOCAndNOD" type="xs:boolean" />
+      <xs:element minOccurs="0" name="NOCsOnCAIS" type="xs:boolean" />
+      <xs:element minOccurs="0" name="NOCsOnCCJ" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Nocs" nillable="true" type="tns:ArrayOfExperianConsumerDataNoc" />
+      <xs:element minOccurs="0" name="NumAccounts" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumCCJs" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumCreditCards" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OtherBankruptcy" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PersonalLoanStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Residencies" nillable="true" type="tns:ArrayOfExperianConsumerDataResidency" />
+      <xs:element minOccurs="0" name="SatisfiedJudgement" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ServiceLogId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="TotalAccountBalances" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalCCJValue1" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalCCJValue2" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="WorstCurrentStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WorstHistoricalStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WorstStatus" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerData" nillable="true" type="tns:ExperianConsumerData" />
+  <xs:complexType name="ArrayOfExperianConsumerDataApplicant">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataApplicant" nillable="true" type="tns:ExperianConsumerDataApplicant" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataApplicant" nillable="true" type="tns:ArrayOfExperianConsumerDataApplicant" />
+  <xs:complexType name="ExperianConsumerDataApplicant">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ApplicantIdentifier" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Forename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Suffix" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataApplicant" nillable="true" type="tns:ExperianConsumerDataApplicant" />
+  <xs:complexType name="ArrayOfExperianConsumerDataCais">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataCais" nillable="true" type="tns:ExperianConsumerDataCais" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataCais" nillable="true" type="tns:ArrayOfExperianConsumerDataCais" />
+  <xs:complexType name="ExperianConsumerDataCais">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountBalances" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisBalance" />
+      <xs:element minOccurs="0" name="AccountStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AccountStatusCodes" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Balance" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CAISAccStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CardHistories" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisCardHistory" />
+      <xs:element minOccurs="0" name="CompanyType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CreditLimit" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CurrentDefBalance" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DelinquentBalance" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="LastUpdatedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="MatchTo" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumAccountBalances" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumCardHistories" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumOfMonthsHistory" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Payment" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="SettlementDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status1To2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StatusTo3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WorstStatus" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataCais" nillable="true" type="tns:ExperianConsumerDataCais" />
+  <xs:complexType name="ArrayOfExperianConsumerDataCaisBalance">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataCaisBalance" nillable="true" type="tns:ExperianConsumerDataCaisBalance" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataCaisBalance" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisBalance" />
+  <xs:complexType name="ExperianConsumerDataCaisBalance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountBalance" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ExperianConsumerDataCaisId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataCaisBalance" nillable="true" type="tns:ExperianConsumerDataCaisBalance" />
+  <xs:complexType name="ArrayOfExperianConsumerDataCaisCardHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataCaisCardHistory" nillable="true" type="tns:ExperianConsumerDataCaisCardHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataCaisCardHistory" nillable="true" type="tns:ArrayOfExperianConsumerDataCaisCardHistory" />
+  <xs:complexType name="ExperianConsumerDataCaisCardHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CashAdvanceAmount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ExperianConsumerDataCaisId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="NumCashAdvances" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PaymentAmount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PaymentCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PrevStatementBal" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PromotionalRate" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataCaisCardHistory" nillable="true" type="tns:ExperianConsumerDataCaisCardHistory" />
+  <xs:complexType name="ArrayOfExperianConsumerDataLocation">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataLocation" nillable="true" type="tns:ExperianConsumerDataLocation" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataLocation" nillable="true" type="tns:ArrayOfExperianConsumerDataLocation" />
+  <xs:complexType name="ExperianConsumerDataLocation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="District" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="District2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Flat" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FormattedLocation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HouseName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HouseNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="LocationCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LocationIdentifier" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="POBox" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostTown" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SharedLetterbox" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Street" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Street2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TimeAtMonths" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TimeAtYears" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataLocation" nillable="true" type="tns:ExperianConsumerDataLocation" />
+  <xs:complexType name="ArrayOfExperianConsumerDataNoc">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataNoc" nillable="true" type="tns:ExperianConsumerDataNoc" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataNoc" nillable="true" type="tns:ArrayOfExperianConsumerDataNoc" />
+  <xs:complexType name="ExperianConsumerDataNoc">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TextLine" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataNoc" nillable="true" type="tns:ExperianConsumerDataNoc" />
+  <xs:complexType name="ArrayOfExperianConsumerDataResidency">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExperianConsumerDataResidency" nillable="true" type="tns:ExperianConsumerDataResidency" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExperianConsumerDataResidency" nillable="true" type="tns:ArrayOfExperianConsumerDataResidency" />
+  <xs:complexType name="ExperianConsumerDataResidency">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ApplicantIdentifier" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ExperianConsumerDataId" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="LocationCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LocationIdentifier" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ResidencyDateFrom" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ResidencyDateTo" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TimeAtMonths" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TimeAtYears" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerDataResidency" nillable="true" type="tns:ExperianConsumerDataResidency" />
   <xs:complexType name="ExperianConsumerMortgagesData">
     <xs:sequence>
       <xs:element minOccurs="0" name="MortgageBalance" type="xs:int" />

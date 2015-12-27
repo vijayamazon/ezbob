@@ -97,6 +97,14 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="CashRequestOriginator" nillable="true" type="tns:CashRequestOriginator" />
+  <xs:simpleType name="CustomerOriginEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ezbob" />
+      <xs:enumeration value="everline" />
+      <xs:enumeration value="alibaba" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CustomerOriginEnum" nillable="true" type="tns:CustomerOriginEnum" />
   <xs:simpleType name="ExperianServiceType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Aml" />

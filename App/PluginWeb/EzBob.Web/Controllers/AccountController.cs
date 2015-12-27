@@ -38,6 +38,8 @@
 	using EZBob.DatabaseLib.Model.Alibaba;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
+	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
+
 	public class AccountController : Controller {
 		public AccountController() {
 			this.dbHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
@@ -466,7 +468,7 @@
 				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
 				
 				if (status == MembershipCreateStatus.DuplicateEmail) {
-					int EmailOriginID = createuserresult.OriginID;
+					int EmailOriginID = 1; // TODO createuserresult.OriginID;
 
 					if (uiOrigin.CustomerOriginID != EmailOriginID)
 						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));
@@ -599,7 +601,7 @@
 				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
 				
 				if (status == MembershipCreateStatus.DuplicateEmail) {
-					int EmailOriginID = createuserresult.OriginID;
+					int EmailOriginID = 1; // TODO createuserresult.OriginID;
 
 					if (uiOrigin.CustomerOriginID != EmailOriginID)
 						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<a href=\"tel:{0}\">{0}</a>", UiCustomerOrigin.Get().PhoneNumber));

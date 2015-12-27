@@ -13,9 +13,9 @@
 
 			return new UserLoginActionResult {
 				MetaData = amd,
-				Status = instance.Result,
+				Status = instance.Status.ToString(),
 				SessionID = instance.SessionID,
-				OriginID = instance.OriginID,
+				ErrorMessage = instance.ErrorMsg,
 			};
 		} // SignupCustomerMutliOrigin
 
@@ -36,8 +36,6 @@
 				MetaData = oMetaData,
 				Status = oInstance.Result,
 				SessionID = oInstance.SessionID,
-				OriginID = oInstance.OriginID,
-
 			};
 		} // CustomerSignup
 

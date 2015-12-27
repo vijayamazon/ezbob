@@ -1,23 +1,34 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
+	using System.ComponentModel;
 	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
+	using System.Linq;
 	using System.Web.Security;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Broker;
-	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.dbutils;
 	using Ezbob.Utils.Exceptions;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
 	public class SignupCustomerMutliOrigin : AStrategy {
 		public SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model) {
+			this.uniqueID = GenerateUniqueID();
+
+			Status = MembershipCreateStatus.ProviderError;
+			Success = false;
+			this.dbTransaction = null;
+			ErrorMsg = null;
+
 			this.model = model;
 		} // constructor
 
@@ -26,42 +37,58 @@
 		} // Name
 
 		public override void Execute() {
-			Success = false;
+			Log.Debug("Sign up attempt '{0}' started...", this.uniqueID);
 
-			if (this.model == null)
-				throw new StrategyAlert(this, "No sign up data specified.");
-
-			this.dbTransaction = DB.GetPersistent();
+			string userName = (this.model == null) ? "unknown name" : this.model.UserName;
 
 			try {
-				CreateSecurityUserStaff();
+				if (this.model == null) {
+					SetInternalErrorMsg();
+					Log.Alert("Sign up attempt '{0}': no sign up data specified.", this.uniqueID);
+
+					throw new BadDataException();
+				} // if
+
+				this.model.UserName = (this.model.UserName ?? string.Empty).Trim().ToLower(CultureInfo.InvariantCulture);
+
+				if (string.IsNullOrWhiteSpace(this.model.UserName)) {
+					SetInternalErrorMsg();
+					Log.Alert("Sign up attempt '{0}': no user name specified.", this.uniqueID);
+					throw new BadDataException();
+				} // if
+
+				this.dbTransaction = DB.GetPersistent();
+
+				CreateSecurityUserStuff();
 
 				if (Status != MembershipCreateStatus.Success)
 					throw new UserNotCreatedException();
 
-				CreateCustomerStaff();
+				CreateCustomerStuff();
 
 				this.dbTransaction.Commit();
 
 				Success = true;
-			} catch (Exception e) {
-				Log.Warn(e, "Failed to create a customer with name '{0}'.", this.model.UserName);
-				this.dbTransaction.Rollback();
-			} // try
 
-			if (Success)
-				DoBrokerLeadsAndThirdParties();
+				if (Success)
+					FireToBackground("do broker leads and third-parties", DoBrokerLeadsAndThirdParties);
+
+				Log.Info("Sign up attempt '{0}' completed, success: {1}.", this.uniqueID, Success ? "yes" : "no");
+			} catch (Exception e) {
+				Log.Warn(e, "Sign up attempt {0} failed for customer name '{1}'.", this.uniqueID, userName);
+
+				if (this.dbTransaction != null)
+					this.dbTransaction.Rollback();
+
+				Log.Info("Sign up attempt '{0}' completed with exception.", this.uniqueID);
+			} // try
 		} // Execute
 
 		public bool Success { get; private set; }
 		public int UserID { get; private set; }
 		public int SessionID { get; private set; }
-		public int OriginID { get; private set; }
-		public MembershipCreateStatus? Status { get; private set; }
-
-		public string Result {
-			get { return Status.HasValue ? Status.Value.ToString() : string.Empty;}
-		} // Result
+		public string ErrorMsg { get; private set; }
+		public MembershipCreateStatus Status { get; private set; }
 
 		private void DoBrokerLeadsAndThirdParties() {
 			string token = GenerateConfirmationToken();
@@ -127,12 +154,18 @@
 			} // try
 		} // GenerateConfirmationToken
 
-		private void CreateSecurityUserStaff() {
-			if (this.model.Origin == null)
-				throw new StrategyAlert(this, "No origin specified.");
+		private void CreateSecurityUserStuff() {
+			if (this.model.Origin == null) {
+				SetInternalErrorMsg();
+				Log.Alert("Sign up attempt {0}: no origin specified.", this.uniqueID);
+				throw new BadDataException();
+			} // if
 
-			if (this.model.PasswordQuestion == null)
-				throw new StrategyWarning(this, "No security question specified.");
+			if (this.model.PasswordQuestion == null) {
+				SetInternalErrorMsg();
+				Log.Alert("Sign up attempt {0}: no security question specified.", this.uniqueID);
+				throw new BadDataException();
+			} // if
 
 			try {
 				var data = new UserSecurityData(this) {
@@ -142,8 +175,15 @@
 					PasswordAnswer = this.model.PasswordAnswer,
 				};
 
+				Log.Debug("Sign up attempt '{0}': validating user name...", this.uniqueID);
+
 				data.ValidateEmail();
+
+				Log.Debug("Sign up attempt '{0}': validating password...", this.uniqueID);
+
 				data.ValidateNewPassword();
+
+				Log.Debug("Sign up attempt '{0}': validated user name and password.", this.uniqueID);
 
 				var passUtil = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
 
@@ -160,8 +200,6 @@
 					Ip = this.model.RemoteIp,
 				};
 
-				Status = MembershipCreateStatus.ProviderError;
-
 				UserID = 0;
 
 				sp.ForEachRowSafe(this.dbTransaction, (sr, bRowsetStart) => {
@@ -170,31 +208,80 @@
 
 					UserID = sr["UserID"];
 					SessionID = sr["SessionID"];
-					OriginID = sr["OriginID"];
 					return ActionResult.SkipAll;
 				});
 
-				if (UserID == -1) {
-					Log.Warn("User with email {0} and origin {1} already exists.", this.model.UserName, this.model.Origin);
-					Status = MembershipCreateStatus.DuplicateEmail;
-				} else if (UserID == -2) {
-					Log.Warn("Could not find role '{0}'.", sp.RoleName);
-					Status = MembershipCreateStatus.ProviderError;
-				} else if (UserID <= 0) {
-					Log.Alert("CreateWebUser returned unexpected result {0}.", UserID);
-					Status = MembershipCreateStatus.ProviderError;
-				} else
-					Status = MembershipCreateStatus.Success;
-			} catch (AException) {
 				Status = MembershipCreateStatus.ProviderError;
-				throw;
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to create user.");
-				Status = MembershipCreateStatus.ProviderError;
-			} // try
-		} // CreateSecurityUserStaff
 
-		private void CreateCustomerStaff() {
+				switch (UserID) {
+				case (int)CreateUserForCustomer.Errors.DuplicateUser:
+					ErrorMsg =
+						"This email address already exists in our system. " +
+						"Please try to log-in or request new password.";
+
+					Status = MembershipCreateStatus.DuplicateEmail;
+
+					Log.Warn(
+						"Sign up attempt '{0}': user with email {1} and origin {2} already exists.",
+						this.uniqueID,
+						this.model.UserName,
+						this.model.Origin.Value
+					);
+
+					break;
+
+				case (int)CreateUserForCustomer.Errors.OriginNotFound:
+					Log.Alert("Sign up attempt '{0}': origin {1} was not found.", this.uniqueID, this.model.Origin.Value);
+					SetInternalErrorMsg();
+					break;
+
+				case (int)CreateUserForCustomer.Errors.RoleNotFound:
+				case (int)CreateUserForCustomer.Errors.FailedToCreateUser:
+				case (int)CreateUserForCustomer.Errors.FailedToAttachRole:
+				case (int)CreateUserForCustomer.Errors.FailedToCreateSession:
+					Log.Alert(
+						"Sign up attempt '{0}' - internal DB error: {1}.",
+						this.uniqueID,
+						((CreateUserForCustomer.Errors)UserID).DescriptionAttr()
+					);
+					SetInternalErrorMsg();
+					break;
+
+				default:
+					if (UserID <= 0) {
+						Log.Alert(
+							"Sign up attempt '{0}': {1} returned unexpected result: {2}.",
+							this.uniqueID,
+							sp.GetType().Name,
+							UserID
+						);
+						SetInternalErrorMsg();
+					} else {
+						Log.Msg(
+							"Sign up attempt '{0}': user '{1}' with origin {2} was inserted into Security_User table.",
+							this.uniqueID,
+							this.model.UserName,
+							this.model.Origin.Value
+						);
+						Status = MembershipCreateStatus.Success;
+					} // if
+
+					break;
+				} // switch
+			} catch (AException ae) {
+				SetInternalErrorMsg();
+				Log.Alert("Sign up attempt {0} threw an exception: {1}.", this.uniqueID, ae.Message);
+				throw new InternalErrorException();
+			} catch (Exception e) {
+				SetInternalErrorMsg();
+				Log.Alert(e, "Sign up attempt {0} threw an exception.", this.uniqueID);
+				throw new InternalErrorException();
+			} // try
+		} // CreateSecurityUserStuff
+
+		private void CreateCustomerStuff() {
+			Log.Debug("Sign up attempt '{0}': validating mobile phone...", this.uniqueID);
+
 			bool mobilePhoneVerified = false;
 
 			if (!this.model.CaptchaMode) {
@@ -205,13 +292,21 @@
 				mobilePhoneVerified = vmc.IsValidatedSuccessfully();
 			} // if
 
+			Log.Debug("Sign up attempt '{0}': creating a customer entry...", this.uniqueID);
+
 			var customer = new CreateCustomer(this, mobilePhoneVerified);
 			customer.ExecuteNonQuery(this.dbTransaction);
+
+			Log.Debug("Sign up attempt '{0}': creating a campaign source reference entry...", this.uniqueID);
 
 			if (!this.model.BrokerFillsForCustomer)
 				new CreateCampaignSourceRef(this).ExecuteNonQuery(this.dbTransaction);
 
+			Log.Debug("Sign up attempt '{0}': creating a requested loan entry...", this.uniqueID);
+
 			new CreateCustomerRequestedLoan(this).ExecuteNonQuery(this.dbTransaction);
+
+			Log.Debug("Sign up attempt '{0}': creating a source reference history entry...", this.uniqueID);
 
 			new SaveSourceRefHistory(
 				UserID,
@@ -220,19 +315,55 @@
 				this.model.BrokerFillsForCustomer ? null : this.model.CampaignSourceRef
 			) { Transaction = this.dbTransaction, } .Execute();
 
-			if (this.model.IsAlibaba())
+			if (this.model.IsAlibaba()) {
+				Log.Debug("Sign up attempt '{0}': creating an Alibaba buyer entry...", this.uniqueID);
 				new CreateAlibabaBuyer(this).ExecuteNonQuery(this.dbTransaction);
-		} // CreateCustomerStaff
+			} // if
 
+			Log.Debug("Sign up attempt '{0}': customer stuff was created.", this.uniqueID);
+		} // CreateCustomerStuff
+
+		private static string GenerateUniqueID() {
+			string id = Guid.NewGuid().ToString("N");
+
+			return string.Join("-",
+				Enumerable.Range(0, id.Length / IdChunkSize).Select(i => id.Substring(i * IdChunkSize, IdChunkSize))
+			);
+		} // GenerateUniqueID
+
+		private void SetInternalErrorMsg() {
+			ErrorMsg = string.Format(
+				"Internal server error. Please call support, error code is: '{0}'.",
+				this.uniqueID
+			);
+		} // SetInternalErrorMsg
+
+		private readonly string uniqueID;
 		private readonly SignupCustomerMultiOriginModel model;
 		private ConnectionWrapper dbTransaction;
+		private const int IdChunkSize = 4;
 
 		private class UserNotCreatedException : Exception {} // class UserNotCreatedException
+		private class BadDataException : Exception {} // class BadDataException
+		private class InternalErrorException : Exception {} // class InternalErrorException
 
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
 		private class CreateUserForCustomer : AStoredProcedure {
+			public enum Errors {
+				DuplicateUser         = -1,
+				OriginNotFound        = -2,
+				[Description("role 'Web' was not found in the database")]
+				RoleNotFound          = -3,
+				[Description("failed to create Security_User entry")]
+				FailedToCreateUser    = -4,
+				[Description("failed to attach user to security role")]
+				FailedToAttachRole    = -5,
+				[Description("failed to create CustomerSession entry")]
+				FailedToCreateSession = -6,
+			} // enum Errors
+
 			public CreateUserForCustomer(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
@@ -260,30 +391,40 @@
 				return true;
 			} // HasValidParameters
 
-			public string Email { get; set; }
+			[Length(255)]
+			public string Email {
+				get {
+					if (string.IsNullOrWhiteSpace(this.email))
+						return string.Empty;
 
+					return this.email.Trim();
+				} // get
+
+				set {
+					this.email = (value ?? string.Empty).Trim();
+
+					if (string.IsNullOrWhiteSpace(this.email))
+						this.email = string.Empty;
+				} // set
+			} // Email
+
+			public int OriginID { get; set; }
+
+			[Length(255)]
 			public string EzPassword { get; set; }
 
+			[Length(255)]
 			public string Salt { get; set; }
 
+			[Length(255)]
 			public string CycleCount { get; set; }
 
 			public int? SecurityQuestionID { get; set; }
 
+			[Length(200)]
 			public string SecurityAnswer { get; set; }
 
-			public string RoleName {
-				get { return UserSecurityData.WebRole; }
-				set { }
-			} // RoleName
-
-			public int BranchID {
-				get { return 0; }
-				set { }
-			} // BranchID
-
-			public int OriginID { get; set; }
-
+			[Length(50)]
 			public string Ip {
 				get { return this.ip ?? string.Empty; }
 				set { this.ip = value ?? string.Empty; }
@@ -296,6 +437,7 @@
 			} // Now
 
 			private string ip;
+			private string email;
 		} // class CreateUserForCustomer
 
 		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
@@ -312,23 +454,31 @@
 				return (CustomerID > 0) && (OriginID > 0) && !string.IsNullOrWhiteSpace(UserName);
 			} // HasValidParameters
 
-			[FieldName("Name")]
-			public string UserName {
-				get { return this.stra.model.UserName; }
-				set { }
-			} // Name
-
-			[FieldName("Id")]
 			public int CustomerID {
 				get { return this.stra.UserID; }
 				set { }
 			} // CustomerID
 
+			[Length(128)]
+			public string UserName {
+				get { return this.stra.model.UserName; }
+				set { }
+			} // Name
+
+			public int OriginID {
+				// ReSharper disable once PossibleInvalidOperationException
+				// If Origin is null this class won't even be created.
+				get { return (int)this.stra.model.Origin.Value; }
+				set { }
+			} // OriginID
+
+			[Length(250)]
 			public string Status {
 				get { return EZBob.DatabaseLib.Model.Database.Status.Registered.ToString(); }
 				set { }
 			} // Status
 
+			[Length(8)]
 			public string RefNumber {
 				get { return this.refNumber;  }
 				set { }
@@ -344,16 +494,17 @@
 				set { }
 			} // CollectionStatus
 
-			public bool? IsTest { // TODO: if null fill from email (TestCustomer table)
+			public bool? IsTest {
 				get { return this.stra.model.IsTest; }
 				set { }
 			} // IsTest
 
-			// IsOffline = null, // TODO: in DB
-			// Vip = vip, // TODO: whether email exists in VipRequest
-			// WhiteLabel = this.stra.model.WhiteLabelID, // TODO: validate exists in WhiteLabelProvider
-			// Broker = broker, // TODO: find by white label
+			public int WhiteLabelID {
+				get { return this.stra.model.WhiteLabelID; }
+				set { }
+			} // WhiteLabelID
 
+			[Length(50)]
 			public string MobilePhone {
 				get { return this.stra.model.MobilePhone; }
 				set { }
@@ -364,54 +515,53 @@
 				set { }
 			} // MobilePhoneVerified
 
+			[Length(250)]
 			public string FirstName {
 				get { return NormalizeName(this.stra.model.FirstName); }
 				set { }
 			} // FirstName
 
-			[FieldName("Surname")]
+			[Length(250)]
 			public string LastName {
 				get { return NormalizeName(this.stra.model.LastName); }
 				set { }
 			} // LastName
 
-			public int TrustPilotStatus {
+			public int TrustPilotStatusID {
 				get { return (int)EZBob.DatabaseLib.Model.Database.TrustPilotStauses.Neither; }
 				set { }
-			} // TrustPilotStatus
+			} // TrustPilotStatusID
 
 			public DateTime GreetingMailSentDate {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // GreetingMailSentDate
 
-			public int OriginID {
-				// ReSharper disable once PossibleInvalidOperationException
-				// If Origin is null this class won't even be created.
-				get { return (int)this.stra.model.Origin.Value; }
-				set { }
-			} // OriginID
-
+			[Length(512)]
 			public string ABTesting {
 				get { return this.stra.model.ABTesting; }
 				set { }
 			} // ABTesting
 
+			[Length(64)]
 			public string FirstVisitTime {
 				get { return this.stra.model.FirstVisitTime; }
 				set { }
 			} // FirstVisitTime
 
+			[Length(1000)]
 			public string ReferenceSource {
 				get { return this.stra.model.BrokerFillsForCustomer ? "Broker" : this.stra.model.ReferenceSource; }
 				set { }
 			} // ReferenceSource
 
+			[Length(300)]
 			public string GoogleCookie {
 				get { return this.stra.model.BrokerFillsForCustomer ? string.Empty : this.stra.model.GoogleCookie; }
 				set { }
 			} // GoogleCookie
 
+			[Length(300)]
 			public string AlibabaID {
 				get { return this.stra.model.BrokerFillsForCustomer ? null : this.stra.model.AlibabaID; }
 				set { }
@@ -450,19 +600,34 @@
 
 			public int CustomerID { get { return this.stra.UserID; } set { } }
 
+			[Length(255)]
 			public string FUrl { get { return this.stra.model.FUrl(); } set { } }
+			[Length(255)]
 			public string FSource { get { return this.stra.model.FSource(); } set { } }
+			[Length(255)]
 			public string FMedium { get { return this.stra.model.FMedium(); } set { } }
+			[Length(255)]
 			public string FTerm { get { return this.stra.model.FTerm(); } set { } }
+			[Length(255)]
 			public string FContent { get { return this.stra.model.FContent(); } set { } }
+			[Length(255)]
 			public string FName { get { return this.stra.model.FName(); } set { } }
+
 			public DateTime? FDate { get { return this.stra.model.FDate(); } set { } }
+
+			[Length(255)]
 			public string RUrl { get { return this.stra.model.RUrl(); } set { } }
+			[Length(255)]
 			public string RSource { get { return this.stra.model.RSource(); } set { } }
+			[Length(255)]
 			public string RMedium { get { return this.stra.model.RMedium(); } set { } }
+			[Length(255)]
 			public string RTerm { get { return this.stra.model.RTerm(); } set { } }
+			[Length(255)]
 			public string RContent { get { return this.stra.model.RContent(); } set { } }
+			[Length(255)]
 			public string RName { get { return this.stra.model.RName(); } set { } }
+
 			public DateTime? RDate { get { return this.stra.model.RDate(); } set { } }
 
 			private readonly SignupCustomerMutliOrigin stra;
@@ -535,7 +700,6 @@
 
 			public int CustomerID { get { return this.stra.UserID; } set { } }
 
-			[FieldName("AliId")]
 			public long AliID {
 				get { return Convert.ToInt64(this.stra.model.AlibabaID); }
 				set { }
