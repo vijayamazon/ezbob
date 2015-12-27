@@ -2,7 +2,6 @@
 	using System;
 	using System.Security.Cryptography;
 	using System.Text;
-	using CryptSharp;
 	using CryptSharp.Utility;
 
 	public class PasswordUtility {
@@ -61,7 +60,7 @@
 				: HashPassword(rawPassword, serializedPassword);
 
 			var result = new PasswordValidationResult(
-				Crypter.CheckPassword(hashedPassword, serializedPassword.Password)
+				hashedPassword.Equals(serializedPassword.Password, StringComparison.InvariantCulture)
 			);
 
 			if (!result)

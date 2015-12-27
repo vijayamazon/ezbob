@@ -1,9 +1,11 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Backend.Models;
+	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
 		public UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model) {
@@ -20,33 +22,14 @@
 			};
 		} // SignupCustomerMutliOrigin
 
-		public UserLoginActionResult CustomerSignup(
-			string sEmail,
-			Password oPassword,
-			int nPasswordQuestion,
-			string sPasswordAnswer,
-			string sRemoteIp
-		) {
-			UserSignup oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null,
-				sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp
-			);
-
-			return new UserLoginActionResult {
-				MetaData = oMetaData,
-				Status = oInstance.Result,
-				SessionID = oInstance.SessionID,
-			};
-		} // CustomerSignup
-
 		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
 			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
 		} // UnderwriterSignup
 
 		public UserLoginActionResult UserLogin(
+			CustomerOriginEnum? originID,
 			string sEmail,
-			Password oPassword,
+			string sPassword,
 			string sRemoteIp,
 			string promotionName,
 			DateTime? promotionPageVisitTime
@@ -57,8 +40,9 @@
 				out oInstance,
 				null,
 				null,
+				originID,
 				sEmail,
-				oPassword,
+				sPassword,
 				sRemoteIp,
 				promotionName,
 				promotionPageVisitTime
@@ -224,5 +208,15 @@
 			return Execute<AddCciHistory>(nCustomerID, nUnderwriterID, nCustomerID, nUnderwriterID, bCciMark);
 		} // AddCciHistory
 
+		public StringListActionResult LoadAllLoginRoles(string login) {
+			LoadAllLoginRoles instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, login);
+
+			return new StringListActionResult {
+				MetaData = amd,
+				Records = new List<string>(instance.Roles),
+			};
+		} // LoadAllLoginRoles
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -3502,13 +3502,13 @@ namespace ServiceClientProxy.EzServiceReference {
     public enum CustomerOriginEnum : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        ezbob = 0,
+        ezbob = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        everline = 1,
+        everline = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        alibaba = 2,
+        alibaba = 3,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -4275,123 +4275,123 @@ namespace ServiceClientProxy.EzServiceReference {
             "e")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOriginResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse")]
         ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMutliOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOriginResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMutliOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/CustomerSignup", ReplyAction="http://tempuri.org/IEzSericeUserManagement/CustomerSignupResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/CustomerSignup", ReplyAction="http://tempuri.org/IEzSericeUserManagement/CustomerSignupResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> CustomerSignupAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignupResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignupResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, Ezbob.Backend.Models.Password password, string role);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignupResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignupResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserLoginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserLoginResponse")]
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserLoginResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserDisableResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserDisable(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserDisableResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserDisableAsync(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserResetPassword", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserResetPasswordResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserResetPassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserResetPasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserResetPassword", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserResetPasswordResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserResetPassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserResetPasswordResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserChangePasswordResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangePasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserChangePasswordResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangePasswordResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzSericeUserManagement/CustomerChangePasswordResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/CustomerChangePasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzSericeUserManagement/CustomerChangePasswordResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/CustomerChangePasswordResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestionResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestionResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestionResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestionResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserChangeEmail", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserChangeEmailResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangeEmail", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangeEmailResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/UserChangeEmail", ReplyAction="http://tempuri.org/IEzSericeUserManagement/UserChangeEmailResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangeEmail", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangeEmailResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzSericeUserManagement/MarkSessionEndedResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzServiceUserManagement/MarkSessionEndedResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzSericeUserManagement/MarkSessionEndedResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzServiceUserManagement/MarkSessionEndedResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordTokenRespo" +
-            "nse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordTokenResp" +
+            "onse")]
         ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(System.Guid oToken);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordTokenRespo" +
-            "nse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordTokenResp" +
+            "onse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult> LoadCustomerByCreatePasswordTokenAsync(System.Guid oToken);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByTokenResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByTokenResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456", ReplyAction="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456Response")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456", ReplyAction="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456Response")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456Response")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerate", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerate", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateResponse")]
         ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerate", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerate", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult> EmailConfirmationGenerateAsync(int nUserID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSendRespon" +
-            "se")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSendRespo" +
+            "nse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, int underwriterId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSendRespon" +
-            "se")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSendRespo" +
+            "nse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID, int underwriterId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOneResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOneResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult EmailConfirmationCheckOne(System.Guid oToken);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOneResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOneResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> EmailConfirmationCheckOneAsync(System.Guid oToken);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUserResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUserResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUserResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUserResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationConfirmUserAsync(int nUserID, int nUnderwriterID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/AddCciHistory", ReplyAction="http://tempuri.org/IEzSericeUserManagement/AddCciHistoryResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/AddCciHistory", ReplyAction="http://tempuri.org/IEzServiceUserManagement/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzSericeUserManagement/AddCciHistory", ReplyAction="http://tempuri.org/IEzSericeUserManagement/AddCciHistoryResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/AddCciHistory", ReplyAction="http://tempuri.org/IEzServiceUserManagement/AddCciHistoryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse")]
+        ServiceClientProxy.EzServiceReference.StringListActionResult LoadAllLoginRoles(string login);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordRestored", ReplyAction="http://tempuri.org/IEzService/PasswordRestoredResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData PasswordRestored(int customerId);
@@ -5887,14 +5887,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SignupCustomerMutliOriginAsync(model);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
-            return base.Channel.CustomerSignup(sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> CustomerSignupAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
-            return base.Channel.CustomerSignupAsync(sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, Ezbob.Backend.Models.Password password, string role) {
             return base.Channel.UnderwriterSignup(name, password, role);
         }
@@ -5903,12 +5895,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UnderwriterSignupAsync(name, password, role);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
-            return base.Channel.UserLogin(sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+            return base.Channel.UserLogin(originID, sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
-            return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+            return base.Channel.UserLoginAsync(originID, sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult UserDisable(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail) {
@@ -6029,6 +6021,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark) {
             return base.Channel.AddCciHistoryAsync(nCustomerID, nUnderwriterID, bCciMark);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringListActionResult LoadAllLoginRoles(string login) {
+            return base.Channel.LoadAllLoginRoles(login);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login) {
+            return base.Channel.LoadAllLoginRolesAsync(login);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData PasswordRestored(int customerId) {

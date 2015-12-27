@@ -582,12 +582,6 @@
   <wsdl:message name="IEzService_SignupCustomerMutliOrigin_OutputMessage">
     <wsdl:part name="parameters" element="tns:SignupCustomerMutliOriginResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CustomerSignup_InputMessage">
-    <wsdl:part name="parameters" element="tns:CustomerSignup" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CustomerSignup_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CustomerSignupResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UnderwriterSignup_InputMessage">
     <wsdl:part name="parameters" element="tns:UnderwriterSignup" />
   </wsdl:message>
@@ -689,6 +683,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadAllLoginRoles_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadAllLoginRoles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadAllLoginRoles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadAllLoginRolesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_PasswordRestored_InputMessage">
     <wsdl:part name="parameters" element="tns:PasswordRestored" />
@@ -1858,80 +1858,80 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPasswordResponse" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SignupCustomerMutliOrigin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOrigin" message="tns:IEzService_SignupCustomerMutliOrigin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOriginResponse" message="tns:IEzService_SignupCustomerMutliOrigin_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CustomerSignup">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/CustomerSignup" message="tns:IEzService_CustomerSignup_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/CustomerSignupResponse" message="tns:IEzService_CustomerSignup_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin" message="tns:IEzService_SignupCustomerMutliOrigin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse" message="tns:IEzService_SignupCustomerMutliOrigin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UnderwriterSignup">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignup" message="tns:IEzService_UnderwriterSignup_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignupResponse" message="tns:IEzService_UnderwriterSignup_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup" message="tns:IEzService_UnderwriterSignup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignupResponse" message="tns:IEzService_UnderwriterSignup_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserLogin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserDisable">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserDisable" message="tns:IEzService_UserDisable_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserDisableResponse" message="tns:IEzService_UserDisable_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserDisable" message="tns:IEzService_UserDisable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse" message="tns:IEzService_UserDisable_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserChangePassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserChangePasswordResponse" message="tns:IEzService_UserChangePassword_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserChangePasswordResponse" message="tns:IEzService_UserChangePassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CustomerChangePassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/CustomerChangePassword" message="tns:IEzService_CustomerChangePassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/CustomerChangePasswordResponse" message="tns:IEzService_CustomerChangePassword_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/CustomerChangePassword" message="tns:IEzService_CustomerChangePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/CustomerChangePasswordResponse" message="tns:IEzService_CustomerChangePassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserUpdateSecurityQuestion">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestion" message="tns:IEzService_UserUpdateSecurityQuestion_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestionResponse" message="tns:IEzService_UserUpdateSecurityQuestion_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestion" message="tns:IEzService_UserUpdateSecurityQuestion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestionResponse" message="tns:IEzService_UserUpdateSecurityQuestion_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserChangeEmail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserChangeEmail" message="tns:IEzService_UserChangeEmail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/UserChangeEmailResponse" message="tns:IEzService_UserChangeEmail_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserChangeEmail" message="tns:IEzService_UserChangeEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserChangeEmailResponse" message="tns:IEzService_UserChangeEmail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/MarkSessionEndedResponse" message="tns:IEzService_MarkSessionEnded_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/MarkSessionEndedResponse" message="tns:IEzService_MarkSessionEnded_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoadCustomerByCreatePasswordToken">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordToken" message="tns:IEzService_LoadCustomerByCreatePasswordToken_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordTokenResponse" message="tns:IEzService_LoadCustomerByCreatePasswordToken_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordToken" message="tns:IEzService_LoadCustomerByCreatePasswordToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordTokenResponse" message="tns:IEzService_LoadCustomerByCreatePasswordToken_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SetCustomerPasswordByToken">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByToken" message="tns:IEzService_SetCustomerPasswordByToken_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByTokenResponse" message="tns:IEzService_SetCustomerPasswordByToken_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken" message="tns:IEzService_SetCustomerPasswordByToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse" message="tns:IEzService_SetCustomerPasswordByToken_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ResetPassword123456">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456" message="tns:IEzService_ResetPassword123456_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456Response" message="tns:IEzService_ResetPassword123456_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456" message="tns:IEzService_ResetPassword123456_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456Response" message="tns:IEzService_ResetPassword123456_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationGenerate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerate" message="tns:IEzService_EmailConfirmationGenerate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateResponse" message="tns:IEzService_EmailConfirmationGenerate_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerate" message="tns:IEzService_EmailConfirmationGenerate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateResponse" message="tns:IEzService_EmailConfirmationGenerate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationGenerateAndSend">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSend" message="tns:IEzService_EmailConfirmationGenerateAndSend_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSendResponse" message="tns:IEzService_EmailConfirmationGenerateAndSend_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSend" message="tns:IEzService_EmailConfirmationGenerateAndSend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSendResponse" message="tns:IEzService_EmailConfirmationGenerateAndSend_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationCheckOne">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOne" message="tns:IEzService_EmailConfirmationCheckOne_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOneResponse" message="tns:IEzService_EmailConfirmationCheckOne_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOne" message="tns:IEzService_EmailConfirmationCheckOne_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOneResponse" message="tns:IEzService_EmailConfirmationCheckOne_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationConfirmUser">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUser" message="tns:IEzService_EmailConfirmationConfirmUser_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUserResponse" message="tns:IEzService_EmailConfirmationConfirmUser_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUser" message="tns:IEzService_EmailConfirmationConfirmUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUserResponse" message="tns:IEzService_EmailConfirmationConfirmUser_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzSericeUserManagement/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzSericeUserManagement/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadAllLoginRoles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles" message="tns:IEzService_LoadAllLoginRoles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse" message="tns:IEzService_LoadAllLoginRoles_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PasswordRestored">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PasswordRestored" message="tns:IEzService_PasswordRestored_InputMessage" />
@@ -3233,16 +3233,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SignupCustomerMutliOrigin">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/SignupCustomerMutliOrigin" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CustomerSignup">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/CustomerSignup" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3251,7 +3242,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UnderwriterSignup">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UnderwriterSignup" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3260,7 +3251,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UserLogin">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UserLogin" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserLogin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3269,7 +3260,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UserDisable">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UserDisable" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserDisable" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3278,7 +3269,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UserResetPassword" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserResetPassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3287,7 +3278,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UserChangePassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UserChangePassword" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserChangePassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3296,7 +3287,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CustomerChangePassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/CustomerChangePassword" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/CustomerChangePassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3305,7 +3296,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UserUpdateSecurityQuestion">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UserUpdateSecurityQuestion" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestion" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3314,7 +3305,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UserChangeEmail">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/UserChangeEmail" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserChangeEmail" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3323,7 +3314,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/MarkSessionEnded" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/MarkSessionEnded" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3332,7 +3323,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="LoadCustomerByCreatePasswordToken">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/LoadCustomerByCreatePasswordToken" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordToken" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3341,7 +3332,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SetCustomerPasswordByToken">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/SetCustomerPasswordByToken" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3350,7 +3341,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="ResetPassword123456">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/ResetPassword123456" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3359,7 +3350,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationGenerate">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerate" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3368,7 +3359,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationGenerateAndSend">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationGenerateAndSend" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationGenerateAndSend" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3377,7 +3368,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationCheckOne">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationCheckOne" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationCheckOne" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3386,7 +3377,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationConfirmUser">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/EmailConfirmationConfirmUser" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/EmailConfirmationConfirmUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3395,7 +3386,16 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
-      <soap12:operation soapAction="http://tempuri.org/IEzSericeUserManagement/AddCciHistory" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/AddCciHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadAllLoginRoles">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

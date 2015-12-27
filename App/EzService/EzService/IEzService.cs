@@ -20,7 +20,7 @@
 		IEzServiceNewLoan,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzSericeUserManagement
+		IEzServiceUserManagement
 	{
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);

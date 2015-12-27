@@ -94,13 +94,15 @@ BEGIN
 		CollectionStatus, IsTest, MobilePhone, MobilePhoneVerified,
 		FirstName, Surname, TrustPilotStatusID, GreetingMailSentDate,
 		ABTesting, FirstVisitTime, ReferenceSource, GoogleCookie,
-		AlibabaId, IsAlibaba, IsOffline, Vip, WhiteLabelId, BrokerID
+		AlibabaId, IsAlibaba, IsOffline, Vip, WhiteLabelId, BrokerID,
+		PropertyStatusId
 	) VALUES (
 		@CustomerID, @UserName, @OriginID, @Status, @RefNumber, @WizardStep,
 		@CollectionStatus, @IsTest, @MobilePhone, @MobilePhoneVerified,
 		@FirstName, @LastName, @TrustPilotStatusID, @GreetingMailSentDate,
 		@ABTesting, @FirstVisitTime, @ReferenceSource, @GoogleCookie,
-		@AlibabaID, @IsAlibaba, @IsOffline, @Vip, @WhiteLabelID, @BrokerID
+		@AlibabaID, @IsAlibaba, @IsOffline, @Vip, @WhiteLabelID, @BrokerID,
+		NULL
 	)
 END
 GO

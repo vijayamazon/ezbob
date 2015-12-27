@@ -13,7 +13,7 @@
 	using Integration.ChannelGrabberConfig;
 	using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 	using Backend.Models;
-	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using StructureMap;
 
 	/// <summary>
@@ -130,7 +130,7 @@
 					} // if
 
 					if (Password == VendorInfo.TopSecret) {
-						if (null != ObjectFactory.GetInstance<CustomerRepository>().TryGetByEmail(UserName)) {
+						if (0 < ObjectFactory.GetInstance<IUsersRepository>().ExternalUserCount(UserName)) {
 							Debug(
 								"This HMRC account for customer {0} was created from uploaded files, nothing to retrieve.",
 								UserName

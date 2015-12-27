@@ -266,6 +266,7 @@
 				case (int)CreateUserForCustomer.Errors.FailedToCreateUser:
 				case (int)CreateUserForCustomer.Errors.FailedToAttachRole:
 				case (int)CreateUserForCustomer.Errors.FailedToCreateSession:
+				case (int)CreateUserForCustomer.Errors.ConflictsWithInternal:
 					Log.Alert(
 						"Sign up attempt '{0}' - internal DB error: {1}.",
 						this.uniqueID,
@@ -390,6 +391,8 @@
 				FailedToAttachRole    = -5,
 				[Description("failed to create CustomerSession entry")]
 				FailedToCreateSession = -6,
+				[Description("customer email is already known as an underwriter login")]
+				ConflictsWithInternal = -7,
 			} // enum Errors
 
 			public CreateUserForCustomer(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor

@@ -1,66 +1,74 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System;
+	using System.Linq;
 	using System.Web;
+	using System.Web.Routing;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 
 	public class EzBobContext : IEzbobWorkplaceContext {
-		private readonly IUsersRepository _users;
-		private readonly ICustomerRepository _customers;
-
 		public EzBobContext(IUsersRepository users, ICustomerRepository customers) {
-			_users = users;
-			_customers = customers;
-		}
+			this.userRepo = users;
+			this.customerRepo = customers;
+		} // constructor
 
 		public User User {
 			get {
-				var cached = HttpContext.Current.Items["EzBobUser"] as User;
+				var cached = HttpContext.Current.Items[UserItemName] as User;
 				if (cached != null)
 					return cached;
 
 				var login = HttpContext.Current.User.Identity.Name;
+				int? originID = null;
 
-				var user = _users.GetUserByLogin(login);
-				HttpContext.Current.Items["EzBobUser"] = user;
+				RouteData routeData = HttpContext.Current.Request.RequestContext.RouteData;
+
+				if (routeData.Values.Count > 0) {
+					string area = routeData.DataTokens["area"] as string;
+
+					if (this.originAreas.Contains((area ?? string.Empty).ToLowerInvariant())) {
+						var uiOrigin = UiCustomerOrigin.Get(HttpContext.Current.Request.Url);
+						originID = (int)uiOrigin.GetOrigin();
+					} // if
+				} // if
+
+				var user = this.userRepo.GetUserByLogin(login, originID);
+				HttpContext.Current.Items[UserItemName] = user;
 
 				return user;
-			}
-		}
+			} // get
+		} // User
 
 		public int UserId {
 			get { return User.Id; }
-		}
+		} // UserId
 
 		public string SessionId {
 			get {
-				var cookie = HttpContext.Current.Request.Cookies["_EzbobSession_"];
+				var cookie = HttpContext.Current.Request.Cookies[SessionCookieName];
+				return cookie == null ? string.Empty : cookie.Value;
+			} // get
 
-				if (cookie != null) {
-					string sid = cookie.Value;
-					return sid;
-				}
-
-				return "";
-			}
 			set {
-				var httpCookie = new HttpCookie("_EzbobSession_", value) { HttpOnly = true, Secure = true };
+				var httpCookie = new HttpCookie(SessionCookieName, value) { HttpOnly = true, Secure = true };
 
 				if (value == null)
 					httpCookie.Expires = DateTime.UtcNow.AddDays(-1);
 
 				HttpContext.Current.Response.SetCookie(httpCookie);
-			}
-		}
+			} // set
+		} // SessionId
 
 		public Customer Customer {
-			get {
-				if (User == null)
-					return null;
+			get { return User == null ? null : this.customerRepo.ReallyTryGet(User.Id); }
+		} // Customer
 
-				return _customers.ReallyTryGet(User.Id);
-			}
-		}
-	}
-}
+		private const string SessionCookieName = "_EzbobSession_";
+		private const string UserItemName = "EzBobUser";
+
+		private readonly IUsersRepository userRepo;
+		private readonly ICustomerRepository customerRepo;
+		private readonly string[] originAreas = { "broker", "customer", };
+	} // class EzBobContext
+} // namespace

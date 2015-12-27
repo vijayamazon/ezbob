@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
+	using System;
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using Exceptions;
@@ -36,6 +37,7 @@
 
 		public string OldPassword { get; set; }
 
+		[Obsolete]
 		public string OldPasswordHash {
 			get { return Ezbob.Utils.Security.SecurityUtils.HashPassword(Email, OldPassword); }
 		} // OldPasswordHash
@@ -49,6 +51,7 @@
 
 		public string NewPassword { get; set; }
 
+		[Obsolete]
 		public string NewPasswordHash {
 			get { return Ezbob.Utils.Security.SecurityUtils.HashPassword(Email, NewPassword); }
 		} // NewPasswordHash

@@ -4,13 +4,12 @@
 	using Exceptions;
 
 	public class Cache<TKey, TValue> where TValue : class {
-
 		public Cache(TimeSpan oAge, Func<TKey, TValue> oUpdater) {
-			m_oData = new SortedDictionary<TKey, StoredValue<TValue>>();
-			m_oDataLock = new object();
+			this.data = new SortedDictionary<TKey, StoredValue<TValue>>();
+			this.dataLock = new object();
 
-			m_oAge = oAge;
-			m_oValueUpdater = oUpdater;
+			this.age = oAge;
+			this.valueUpdater = oUpdater;
 		} // constructor
 
 		public TValue this[TKey idx] {
@@ -33,11 +32,11 @@
 			bContains = false;
 			TValue oResult = null;
 
-			lock (m_oDataLock) {
-				if (m_oData.ContainsKey(sKey)) {
-					StoredValue<TValue> oValue = m_oData[sKey];
+			lock (this.dataLock) {
+				if (this.data.ContainsKey(sKey)) {
+					StoredValue<TValue> oValue = this.data[sKey];
 
-					if (!oValue.IsTooOld(m_oAge)) {
+					if (!oValue.IsTooOld(this.age)) {
 						oResult = oValue.Value;
 						bContains = true;
 					} // if
@@ -48,21 +47,21 @@
 		} // Retrieve
 
 		private TValue SetOrUpdate(TKey sKey, TValue oValue) {
-			lock (m_oDataLock) {
-				if (m_oData.ContainsKey(sKey))
-					m_oData[sKey].Update(oValue);
+			lock (this.dataLock) {
+				if (this.data.ContainsKey(sKey))
+					this.data[sKey].Update(oValue);
 				else
-					m_oData[sKey] = new StoredValue<TValue>(oValue);
+					this.data[sKey] = new StoredValue<TValue>(oValue);
 			} // lock
 
 			return oValue;
 		} // SetOrUpdate
 
 		private TValue UpdateValue(TKey idx) {
-			if (m_oValueUpdater == null)
+			if (this.valueUpdater == null)
 				throw new NullSeldenException("Cache value updater not specified.");
 
-			return m_oValueUpdater(idx);
+			return this.valueUpdater(idx);
 		} // UpdateValue
 
 		private class StoredValue<T> where T : class {
@@ -86,10 +85,9 @@
 			private DateTime StoredTime { get; set; }
 		} // StoredValue
 
-		private readonly SortedDictionary<TKey, StoredValue<TValue>> m_oData;
-		private readonly object m_oDataLock;
-		private readonly TimeSpan m_oAge;
-		private readonly Func<TKey, TValue> m_oValueUpdater;
-
+		private readonly SortedDictionary<TKey, StoredValue<TValue>> data;
+		private readonly object dataLock;
+		private readonly TimeSpan age;
+		private readonly Func<TKey, TValue> valueUpdater;
 	} // class Cache
 } // namespace

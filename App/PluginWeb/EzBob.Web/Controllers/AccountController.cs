@@ -33,7 +33,9 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
+
 	using ActionResult = System.Web.Mvc.ActionResult;
+	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
 
 	public class AccountController : Controller {
 		public AccountController() {
@@ -71,36 +73,28 @@
 
 		[HttpPost]
 		public ActionResult AdminLogOn(LogOnModel model) {
-			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"])) {
+			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"]))
 				return RedirectToAction("LogOn", "Account");
-			}
 
 			if (ModelState.IsValid) {
-				try {
-					if (this.brokerHelper.IsBroker(model.UserName)) {
-						log.Alert("Broker '{0}' tried to log in as an underwriter!", model.UserName);
-						ModelState.AddModelError("LoginError", "Wrong user name/password.");
-						return View(model);
-					} // if is broker
-				} catch (Exception e) {
-					log.Warn(
-						e,
-						"Failed to check whether '{0}' is a broker login, continuing as an underwriter.",
-						model.UserName
-					);
-				} // try
-
-				if (this.customerRepo.TryGetByEmail(model.UserName) != null) {
-					log.Alert("Customer '{0}' tried to log in as an underwriter!", model.UserName);
+				if (this.userRepo.ExternalUserCount(model.UserName) > 0) {
+					log.Alert("External user '{0}' tried to log in as an underwriter!", model.UserName);
 					ModelState.AddModelError("LoginError", "Wrong user name/password.");
 					return View(model);
 				} // if
 
 				try {
 					string loginError;
-					var membershipCreateStatus = ValidateUser(model.UserName, model.Password, null, null, out loginError);
+					var membershipCreateStatus = ValidateUser(
+						null,
+						model.UserName,
+						model.Password,
+						null,
+						null,
+						out loginError
+					);
+
 					if (MembershipCreateStatus.Success == membershipCreateStatus) {
-						
 						model.SetCookie(LogOnModel.Roles.Underwriter);
 
 						bool bRedirectToUrl =
@@ -112,7 +106,6 @@
 
 						if (bRedirectToUrl)
 							return Redirect(model.ReturnUrl);
-
 
 						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 					} // if
@@ -203,14 +196,14 @@
 
 			User user;
 
+			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+
 			try {
-				user = this.userRepo.GetUserByLogin(model.UserName);
+				user = this.userRepo.GetUserByLogin(model.UserName, uiOrigin.GetOrigin());
 			} catch (Exception e) {
 				log.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
 				user = null;
 			} // try
-
-			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
 			if (user == null) {
 				if (uiOrigin.IsEverline()) {
@@ -344,6 +337,7 @@
 
 			string loginError;
 			var nStatus = ValidateUser(
+				uiOrigin.GetOrigin(),
 				model.UserName,
 				model.Password,
 				model.PromotionName,
@@ -658,7 +652,9 @@
 			if (user == null)
 				return Json(new { error = "Wrong answer to secret questions" }, JsonRequestBehavior.AllowGet);
 
-			user = this.userRepo.GetUserByLogin(email);
+			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+
+			user = this.userRepo.GetUserByLogin(email, uiOrigin.GetOrigin());
 			this.serviceClient.Instance.PasswordRestored(user.Id);
 			user.IsPasswordRestored = true;
 
@@ -1009,21 +1005,33 @@
 		private readonly SortedSet<string> cookiesToRemoveOnSignup;
 
 		private MembershipCreateStatus ValidateUser(
+			CustomerOriginEnum? originID,
 			string username,
 			string password,
 			string promotionName,
 			DateTime? promotionPageVisitTime,
 			out string error
 		) {
-			log.Debug("Validating user '{0}' password...", username);
+			log.Debug(
+				"Validating user '{0}' from origin '{1}' password...",
+				username,
+				originID.HasValue ? originID.Value.ToString() : "-- null --"
+			);
 
 			int nSessionID;
 			MembershipCreateStatus nStatus;
 			error = null;
+
+			ServiceClientProxy.EzServiceReference.CustomerOriginEnum? remoteOriginID = null;
+
+			if (originID != null)
+				remoteOriginID = (ServiceClientProxy.EzServiceReference.CustomerOriginEnum)(int)originID.Value;
+
 			try {
 				UserLoginActionResult ular = this.serviceClient.Instance.UserLogin(
+					remoteOriginID,
 					username,
-					new Password(password),
+					password,
 					RemoteIp(),
 					promotionName,
 					promotionPageVisitTime
@@ -1033,18 +1041,30 @@
 				nStatus = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
 				error = ular.ErrorMessage;
 			} catch (Exception e) {
-				log.Error(e, "Failed to validate user '{0}' credentials.", username);
+				log.Alert(
+					e,
+					"Failed to validate user '{0}' from origin '{1}' credentials.",
+					username,
+					originID.HasValue ? originID.Value.ToString() : "-- null --"
+				);
 				return MembershipCreateStatus.ProviderError;
 			} // try
 
 			if (nStatus == MembershipCreateStatus.Success) {
-				this.context.SessionId =
-					nSessionID.ToString(CultureInfo.InvariantCulture);
+				this.context.SessionId = nSessionID.ToString(CultureInfo.InvariantCulture);
 
-				log.Debug("User '{0}' password has been validated.", username);
+				log.Debug(
+					"User '{0}' from origin '{1}' password has been validated.",
+					username,
+					originID.HasValue ? originID.Value.ToString() : "-- null --"
+				);
+			} else {
+				log.Debug(
+					"User '{0}' from origin '{1}' password has NOT been validated.",
+					username,
+					originID.HasValue ? originID.Value.ToString() : "-- null --"
+				);
 			} // if
-			else
-				log.Debug("User '{0}' password has NOT been validated.", username);
 
 			return nStatus;
 		} // ValidateUser

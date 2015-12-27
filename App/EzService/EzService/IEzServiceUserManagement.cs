@@ -3,28 +3,21 @@
 	using System.ServiceModel;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.UserManagement;
+	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
-	public interface IEzSericeUserManagement {
+	public interface IEzServiceUserManagement {
 		[OperationContract]
 		UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model);
-
-		[OperationContract]
-		UserLoginActionResult CustomerSignup(
-			string sEmail,
-			Password oPassword,
-			int nPasswordQuestion,
-			string sPasswordAnswer,
-			string sRemoteIp
-		);
 
 		[OperationContract]
 		ActionMetaData UnderwriterSignup(string name, Password password, string role);
 
 		[OperationContract]
 		UserLoginActionResult UserLogin(
+			CustomerOriginEnum? originID,
 			string sEmail,
-			Password sPassword,
+			string sPassword,
 			string sRemoteIp,
 			string promotionName,
 			DateTime? promotionPageVisitTime
@@ -85,5 +78,8 @@
 
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
-	} // interface IEzSericeUserManagement
+
+		[OperationContract]
+		StringListActionResult LoadAllLoginRoles(string login);
+	} // interface IEzServiceUserManagement
 } // namespace

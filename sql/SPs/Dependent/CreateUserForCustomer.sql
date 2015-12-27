@@ -29,6 +29,7 @@ BEGIN
 	DECLARE @ErrorFailedToCreateUser    INT = -4
 	DECLARE @ErrorFailedToAttachRole    INT = -5
 	DECLARE @ErrorFailedToCreateSession INT = -6
+	DECLARE @ErrorConflictsWithInternal INT = -7
 
 	------------------------------------------------------------------------------
 	--
@@ -85,6 +86,18 @@ BEGIN
 	BEGIN
 		SELECT
 			UserID = @ErrorDuplicateUser,
+			SessionID = @SessionID
+
+		RETURN
+	END
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = @Email AND OriginID IS NULL)
+	BEGIN
+		SELECT
+			UserID = @ErrorConflictsWithInternal,
 			SessionID = @SessionID
 
 		RETURN
