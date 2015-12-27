@@ -5,6 +5,8 @@
 	using EchoSignLib;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using EzBob.Models;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
@@ -13,15 +15,17 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class EsignaturesController : Controller {
-
-		public EsignaturesController(IEzbobWorkplaceContext oContext) {
+	    private DirectorRepository directoreRepository;
+		public EsignaturesController(IEzbobWorkplaceContext oContext, 
+            DirectorRepository directoreRepository) {
 			m_oContext = oContext;
-			m_oServiceClient = new ServiceClient();
+		    this.directoreRepository = directoreRepository;
+		    m_oServiceClient = new ServiceClient();
 		} // constructor
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		[HttpGet]
+		[HttpGet] 
 		public JsonResult Load(int? nCustomerID, bool bPollStatus) {
 			ms_oLog.Debug("Loading e-signatures for customer {0} {1} polling status...", nCustomerID, bPollStatus ? "with" : "without");
 
@@ -43,6 +47,19 @@
 
 			return Json(new { signatures = oSignatures, signers = oPotentialSigners, }, JsonRequestBehavior.AllowGet);
 		} // Load
+       
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [HttpGet]
+        public JsonResult LoadDirector(int directorId) {
+            var director = this.directoreRepository.Get(directorId);
+            if (director == null) {
+                throw new Exception(string.Format("director not found id {0}", directorId));
+            }
+
+            DirectorModel directorModel = DirectorModel.FromDirector(director, director.Company.Directors.ToList());
+            return Json(directorModel, JsonRequestBehavior.AllowGet);
+        } // LoadDirector
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
