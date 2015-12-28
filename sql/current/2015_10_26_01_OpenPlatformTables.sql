@@ -665,11 +665,16 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM I_RuleType)
+IF NOT EXISTS (SELECT * FROM I_Operator)
 BEGIN
-	INSERT INTO I_RuleType (Name) VALUES ('System')
-	INSERT INTO I_RuleType (Name) VALUES ('UnderWriter')
-	INSERT INTO I_RuleType (Name) VALUES ('Investor')
+	INSERT INTO I_Operator (Name) VALUES ('Or')
+	INSERT INTO I_Operator (Name) VALUES ('And')
+	INSERT INTO I_Operator (Name) VALUES ('GreaterThan')
+	INSERT INTO I_Operator (Name) VALUES ('LessThan')
+	INSERT INTO I_Operator (Name) VALUES ('Equal')
+	INSERT INTO I_Operator (Name) VALUES ('NotEqual')
+	INSERT INTO I_Operator (Name) VALUES ('Not')
+	INSERT INTO I_Operator (Name) VALUES ('IsTrue')
 END
 GO
 
@@ -683,10 +688,11 @@ CREATE TABLE [dbo].[I_InvestorRule](
 	[MemberNameSource] [nvarchar](256) NULL,
 	[MemberNameTarget] [nvarchar](256) NULL,
 	[LeftParamID] [int] NULL,
-	[RightParamID] [int] NOT NULL,
+	[RightParamID] [int] NULL,
 	[Operator] [int] NOT NULL,
 	[IsRoot] [bit] NOT NULL,
-	CONSTRAINT FK_I_InvestorRule FOREIGN KEY (RuleType) REFERENCES I_RuleType(RuleTypeID),
+	CONSTRAINT FK_I_InvestorRuleI_RuleType FOREIGN KEY (RuleType) REFERENCES I_RuleType(RuleTypeID),
+	CONSTRAINT FK_I_InvestorRuleI_Operator FOREIGN KEY (Operator) REFERENCES I_Operator(OperatorID),
 	CONSTRAINT FK_I_InvestorRule_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID)
 	)
 END

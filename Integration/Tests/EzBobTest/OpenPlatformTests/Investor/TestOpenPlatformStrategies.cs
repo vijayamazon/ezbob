@@ -42,6 +42,7 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
+        [Test]
 		public void TestCreateInvestor() {
 			DateTime now = DateTime.UtcNow;
 
