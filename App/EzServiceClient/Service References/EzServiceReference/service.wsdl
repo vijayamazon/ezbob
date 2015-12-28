@@ -82,11 +82,11 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
   </wsdl:types>
@@ -690,6 +690,12 @@
   <wsdl:message name="IEzService_LoadAllLoginRoles_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadAllLoginRolesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianLtd_InputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianLtd" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianLtd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianLtdResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_PasswordRestored_InputMessage">
     <wsdl:part name="parameters" element="tns:PasswordRestored" />
   </wsdl:message>
@@ -1019,6 +1025,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_SetManualDecision_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetManualDecisionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddHistoryDirector_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddHistoryDirectorResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_ApprovedUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ApprovedUser" />
@@ -1524,12 +1536,6 @@
   <wsdl:message name="IEzService_ParseExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:ParseExperianConsumerResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianLtd_InputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianLtd" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianLtd_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianLtdResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1933,6 +1939,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles" message="tns:IEzService_LoadAllLoginRoles_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse" message="tns:IEzService_LoadAllLoginRoles_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ParseExperianLtd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtd" message="tns:IEzService_ParseExperianLtd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtdResponse" message="tns:IEzService_ParseExperianLtd_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PasswordRestored">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PasswordRestored" message="tns:IEzService_PasswordRestored_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PasswordRestoredResponse" message="tns:IEzService_PasswordRestored_OutputMessage" />
@@ -2152,6 +2162,10 @@
     <wsdl:operation name="SetManualDecision">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetManualDecision" message="tns:IEzService_SetManualDecision_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetManualDecisionResponse" message="tns:IEzService_SetManualDecision_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddHistoryDirector">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirectorResponse" message="tns:IEzService_AddHistoryDirector_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ApprovedUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ApprovedUser" message="tns:IEzService_ApprovedUser_InputMessage" />
@@ -2488,10 +2502,6 @@
     <wsdl:operation name="ParseExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ParseExperianLtd">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtd" message="tns:IEzService_ParseExperianLtd_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtdResponse" message="tns:IEzService_ParseExperianLtd_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -3403,6 +3413,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ParseExperianLtd">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianLtd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="PasswordRestored">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PasswordRestored" style="document" />
       <wsdl:input>
@@ -3891,6 +3910,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetManualDecision">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SetManualDecision" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddHistoryDirector">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AddHistoryDirector" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4647,15 +4675,6 @@
     </wsdl:operation>
     <wsdl:operation name="ParseExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ParseExperianLtd">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianLtd" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
