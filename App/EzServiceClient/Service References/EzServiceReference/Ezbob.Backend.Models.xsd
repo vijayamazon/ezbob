@@ -246,6 +246,12 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
+  <xs:complexType name="DasKennwort">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Data" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DasKennwort" nillable="true" type="tns:DasKennwort" />
   <xs:complexType name="Password">
     <xs:sequence>
       <xs:element minOccurs="0" name="m_sConfirmation" nillable="true" type="xs:string" />
@@ -432,8 +438,8 @@
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="Origin" nillable="true" type="q4:CustomerOriginEnum" />
       <xs:element minOccurs="0" name="PasswordAnswer" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PasswordQuestion" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="RawPassword" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RawPasswordAgain" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RawPassword" nillable="true" type="tns:DasKennwort" />
+      <xs:element minOccurs="0" name="RawPasswordAgain" nillable="true" type="tns:DasKennwort" />
       <xs:element minOccurs="0" name="ReferenceSource" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RemoteIp" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RequestedLoanAmount" nillable="true" type="xs:string" />

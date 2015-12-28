@@ -4010,10 +4010,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly, int originID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerLogin", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerLoginResponse")]
-        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID);
+        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.DasKennwort oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerLogin", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, string oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.DasKennwort oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerRestorePasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -4288,10 +4288,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserLoginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, Ezbob.Backend.Models.DasKennwort sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, Ezbob.Backend.Models.DasKennwort sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserDisable(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
@@ -5547,11 +5547,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadStaticDataAsync(bLoadFilesOnly, originID);
         }
         
-        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID) {
+        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.DasKennwort oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID) {
             return base.Channel.BrokerLogin(sEmail, oPassword, promotionName, promotionPageVisitTime, uiOriginID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, string oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.DasKennwort oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID) {
             return base.Channel.BrokerLoginAsync(sEmail, oPassword, promotionName, promotionPageVisitTime, uiOriginID);
         }
         
@@ -5901,11 +5901,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UnderwriterSignupAsync(name, password, role);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, Ezbob.Backend.Models.DasKennwort sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
             return base.Channel.UserLogin(originID, sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, string sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, Ezbob.Backend.Models.DasKennwort sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
             return base.Channel.UserLoginAsync(originID, sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
         }
         

@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Models {
+	using System;
 	using System.Runtime.Serialization;
 	using Utils.Security;
 
+	[Obsolete]
 	[DataContract]
 	public class Password {
 

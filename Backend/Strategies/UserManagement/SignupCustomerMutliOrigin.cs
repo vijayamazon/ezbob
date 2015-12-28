@@ -59,10 +59,10 @@
 					throw new BadDataException();
 				} // if
 
-				this.model.RawPassword = SafeDecrypt(this.model.RawPassword);
-				this.model.RawPasswordAgain = SafeDecrypt(this.model.RawPasswordAgain);
+				string rawPassword = this.model.RawPassword.Decrypt();
+				string rawPasswordAgain = this.model.RawPasswordAgain.Decrypt();
 
-				if (string.IsNullOrWhiteSpace(this.model.RawPassword)) {
+				if (string.IsNullOrWhiteSpace(rawPassword)) {
 					SetInternalErrorMsg("This is not a valid password.");
 					Log.Alert("Sign up attempt '{0}': no password specified.", this.uniqueID);
 					throw new BadDataException();
@@ -70,7 +70,7 @@
 
 				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
 
-				if (this.model.RawPassword.Length < maxPassLength) {
+				if (rawPassword.Length < maxPassLength) {
 					SetInternalErrorMsg(string.Format(
 						"Please enter a password that is {0} characters or more.",
 						maxPassLength
@@ -80,7 +80,7 @@
 					throw new BadDataException();
 				} // if
 
-				if (this.model.RawPassword != this.model.RawPasswordAgain) {
+				if (rawPassword != rawPasswordAgain) {
 					SetInternalErrorMsg("Passwords don't match, please re-enter.");
 					Log.Alert("Sign up attempt '{0}': password mismatch.", this.uniqueID);
 					throw new BadDataException();
@@ -198,9 +198,11 @@
 			} // if
 
 			try {
+				string rawPassword = this.model.RawPassword.Decrypt();
+
 				var data = new UserSecurityData(this) {
 					Email = this.model.UserName,
-					NewPassword = this.model.RawPassword,
+					NewPassword = rawPassword,
 					PasswordQuestion = this.model.PasswordQuestion.Value,
 					PasswordAnswer = this.model.PasswordAnswer,
 				};
@@ -217,7 +219,7 @@
 
 				var passUtil = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
 
-				HashedPassword hashedPassword = passUtil.Generate(this.model.UserName, this.model.RawPassword);
+				HashedPassword hashedPassword = passUtil.Generate(this.model.UserName, rawPassword);
 				
 				var sp = new CreateUserForCustomer(DB, Log) {
 					OriginID = (int)this.model.Origin.Value,
@@ -374,14 +376,6 @@
 		private readonly SignupCustomerMultiOriginModel model;
 		private ConnectionWrapper dbTransaction;
 		private const int IdChunkSize = 4;
-
-		private static string SafeDecrypt(string s) {
-			try {
-				return Encrypted.Decrypt(s);
-			} catch {
-				return string.Empty;
-			} // try
-		} // SafeDecrypt
 
 		private class UserNotCreatedException : Exception {} // class UserNotCreatedException
 		private class BadDataException : Exception {} // class BadDataException

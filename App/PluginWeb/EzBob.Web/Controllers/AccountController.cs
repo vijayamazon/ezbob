@@ -288,7 +288,7 @@
 
 			if (customer.CollectionStatus.Name == "Disabled") {
 				string sDisabledError =
-					"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> " +
+					"This account is closed, please contact customer care<br/> " +
 					uiOrigin.CustomerCareEmail;
 
 				var session = new CustomerSession {
@@ -459,8 +459,8 @@
 			var signupModel = new SignupCustomerMultiOriginModel {
 				UserName = model.EMail,
 				Origin = uiOrigin.GetOrigin(),
-				RawPassword = new Encrypted(signupPass1),
-				RawPasswordAgain = new Encrypted(signupPass2),
+				RawPassword = new DasKennwort(signupPass1),
+				RawPasswordAgain = new DasKennwort(signupPass2),
 				PasswordQuestion = Convert.ToInt32(securityQuestion),
 				PasswordAnswer = model.SecurityAnswer,
 				RemoteIp = RemoteIp(),
@@ -1034,7 +1034,7 @@
 				UserLoginActionResult ular = this.serviceClient.Instance.UserLogin(
 					remoteOriginID,
 					username,
-					new Encrypted(password),
+					new DasKennwort(password), 
 					RemoteIp(),
 					promotionName,
 					promotionPageVisitTime

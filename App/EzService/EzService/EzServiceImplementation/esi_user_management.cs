@@ -29,7 +29,7 @@
 		public UserLoginActionResult UserLogin(
 			CustomerOriginEnum? originID,
 			string sEmail,
-			string sPassword,
+			DasKennwort sPassword,
 			string sRemoteIp,
 			string promotionName,
 			DateTime? promotionPageVisitTime

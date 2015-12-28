@@ -13,10 +13,10 @@
 		public CustomerOriginEnum? Origin { get; set; }
 
 		[DataMember]
-		public string RawPassword { get; set; }
+		public DasKennwort RawPassword { get; set; }
 
 		[DataMember]
-		public string RawPasswordAgain { get; set; }
+		public DasKennwort RawPasswordAgain { get; set; }
 
 		[DataMember]
 		public int? PasswordQuestion { get; set; }

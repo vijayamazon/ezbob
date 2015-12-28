@@ -12,7 +12,7 @@
 	public class BrokerLogin : AStrategy {
 		public BrokerLogin(
 			string sEmail,
-			string sPassword,
+			DasKennwort sPassword,
 			string promotionName,
 			DateTime? promotionPageVisitTime,
 			int uiOriginID
@@ -27,7 +27,7 @@
 				PageVisitTime = promotionPageVisitTime,
 			};
 
-			this.password = SafeDecrypt(sPassword);
+			this.password = sPassword.Decrypt();
 
 			Properties = new BrokerProperties();
 		} // constructor
@@ -114,14 +114,6 @@
 		private readonly BrokerLoginSucceeded spOnSuccess;
 		private readonly BrokerLoadLoginData spLoadDataForLoginCheck;
 		private readonly string password;
-
-		private static string SafeDecrypt(string s) {
-			try {
-				return Encrypted.Decrypt(s);
-			} catch {
-				return string.Empty;
-			} // try
-		} // SafeDecrypt
 
 		private class BrokerLoadLoginData : AStoredProcedure {
 			public BrokerLoadLoginData(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor

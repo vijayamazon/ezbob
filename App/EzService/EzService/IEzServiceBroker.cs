@@ -113,7 +113,7 @@
 		[OperationContract]
 		BrokerPropertiesActionResult BrokerLogin(
 			string sEmail,
-			string oPassword,
+			DasKennwort oPassword,
 			string promotionName,
 			DateTime? promotionPageVisitTime,
 			int uiOriginID

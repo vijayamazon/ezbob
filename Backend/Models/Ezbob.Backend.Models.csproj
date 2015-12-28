@@ -88,6 +88,7 @@
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />
+    <Compile Include="DasKennwort.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />
     <Compile Include="CrmStatusGroup.cs" />

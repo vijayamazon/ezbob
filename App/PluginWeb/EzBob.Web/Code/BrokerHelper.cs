@@ -5,7 +5,6 @@
 	using System.Web.Security;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
-	using Ezbob.Utils.Security;
 	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using ServiceClientProxy;
@@ -88,7 +87,7 @@
 			try {
 				bp = m_oServiceClient.Instance.BrokerLogin(
 					sLoginEmail,
-					new Encrypted(sPassword),
+					new DasKennwort(sPassword), 
 					promotionName,
 					promotionPageVisitTime,
 					uio.CustomerOriginID

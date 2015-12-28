@@ -1,10 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
@@ -12,7 +12,7 @@
 		public UserLogin(
 			CustomerOriginEnum? originID,
 			string sEmail,
-			string sPassword,
+			DasKennwort sPassword,
 			string sRemoteIp,
 			string promotionName,
 			DateTime? promotionPageVisitTime
@@ -21,7 +21,7 @@
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
-				OldPassword = SafeDecrypt(sPassword),
+				OldPassword = sPassword.Decrypt(),
 			};
 
 			this.originName = originID.HasValue ? originID.Value.ToString() : "-- null --";
@@ -175,14 +175,6 @@
 		private readonly UserLoginCheckResult m_oSpResult;
 		private readonly UserDataForLogin m_oSpLoad;
 		private readonly string originName;
-
-		private static string SafeDecrypt(string s) {
-			try {
-				return Encrypted.Decrypt(s);
-			} catch {
-				return string.Empty;
-			} // try
-		} // SafeDecrypt
 
 		private class UserLoginCheckResult : AStoredProcedure {
 			public UserLoginCheckResult(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
