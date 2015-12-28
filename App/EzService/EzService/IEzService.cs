@@ -31,10 +31,9 @@
 		[OperationContract]
 		ActionMetaData BackfillAml();
 
-
 		[OperationContract]
 		ActionMetaData BackFillExperianNonLtdScoreText();
-		
+
 		[OperationContract]
 		ActionMetaData BackfillExperianConsumer();
 
@@ -44,8 +43,8 @@
 		[OperationContract]
 		ActionMetaData BackfillExperianLtd();
 
-        [OperationContract]
-        ActionMetaData BackfillExperianLtdScoreText();
+		[OperationContract]
+		ActionMetaData BackfillExperianLtdScoreText();
 
 		[OperationContract]
 		ActionMetaData BackfillHmrcBusinessRelevance();
@@ -87,7 +86,7 @@
 			int amount,
 			bool hasLoans,
 			Medal medalClassification
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst);
@@ -106,7 +105,7 @@
 			string idhubTown,
 			string idhubCounty,
 			string idhubPostCode
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData CheckBwa(int customerId, int userId);
@@ -124,13 +123,13 @@
 			string idhubPostCode,
 			string idhubBranchCode,
 			string idhubAccountNumber
-			);
+		);
 
 		[OperationContract]
 		ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
 
 		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType,bool isBankStatement);
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType, bool isBankStatement);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
@@ -152,7 +151,7 @@
 			int nCustomerID,
 			int nCustomerMarketplaceID,
 			SortedDictionary<string, string> oErrorsToEmail
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
@@ -265,7 +264,7 @@
 			string streetName,
 			string cityName,
 			string postCode
-			);
+		);
 
 		[OperationContract]
 		string LandRegistryRes(int userId, int customerId, string titleNumber);
@@ -344,7 +343,7 @@
 			string sResponseData,
 			string sErrorMessage,
 			int nUserID
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData PostcodeNuts(int nUserID, string postcode);
@@ -379,7 +378,7 @@
 			TemplateModel template,
 			string path1,
 			string path2
-			);
+		);
 
 		[OperationContract]
 		BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType);
@@ -409,7 +408,7 @@
 			int nCustomerID,
 			decimal nRevenue,
 			string sComment
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData SetLateLoanStatus();
@@ -462,14 +461,14 @@
 		[OperationContract]
 		ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID);
 
-	    [OperationContract]
-        AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto);
+		[OperationContract]
+		AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto);
 
-        [OperationContract]
-        ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+		[OperationContract]
+		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
 
-        [OperationContract]
-        ActionMetaData SaveApiCall(ApiCallData data);
+		[OperationContract]
+		ActionMetaData SaveApiCall(ApiCallData data);
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
