@@ -533,7 +533,7 @@
 				List<NL_OfferFees> offerFees = null;
 
 				if (this.autoDecisionResponse.SetupFee > 0) {
-					FeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee ? FeeTypes.ServicingFee : FeeTypes.SetupFee;
+					NLFeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee ? NLFeeTypes.ServicingFee : NLFeeTypes.SetupFee;
 
 					offerFees = new List<NL_OfferFees> {
 						new NL_OfferFees {
@@ -552,7 +552,7 @@
 					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
 					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
 					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month, 
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,
