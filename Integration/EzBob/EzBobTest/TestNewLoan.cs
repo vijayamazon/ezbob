@@ -887,7 +887,7 @@
 			DateTime now = DateTime.UtcNow;
 			ILoanOptionsRepository optRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
 			var loanOptions = optRep.GetByLoanId(loanid);
-		//	m_oLog.Debug("loanOption={0}", loanOptions.ToString());
+			//	m_oLog.Debug("loanOption={0}", loanOptions.ToString());
 			if (loanOptions != null && loanOptions.AutoLateFees == false) {
 				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
 					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) ||
@@ -923,6 +923,36 @@
 		public void LateLoanCuredTest() {
 			LateLoanCured s = new LateLoanCured(null);
 			s.Execute();
+		}
+
+		[Test]
+		public void AddSpreadedFeeTest() {
+			const long loanID = 4;
+			DateTime now = DateTime.UtcNow;
+			List<NL_LoanFees> fees = new List<NL_LoanFees>();
+			NL_LoanFees f1 = new NL_LoanFees() {
+				LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
+				Amount = 20,
+				AssignedByUserID = 1,
+				AssignTime = now,
+				CreatedTime = now,
+				Notes = "test servicing",
+				LoanID = loanID
+			};
+			fees.Add(f1);
+			NL_LoanFees f2 = new NL_LoanFees() {
+				LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
+				Amount = 20,
+				AssignedByUserID = 1,
+				AssignTime = now.AddMonths(1),
+				CreatedTime = now,
+				Notes = "test servicing",
+				LoanID = loanID
+			};
+			fees.Add(f2);
+			fees.ForEach(f => this.m_oLog.Debug(f));
+			int result = this.m_oDB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, this.m_oDB.CreateTableParameter<NL_LoanFees>("Tbl", fees));
+			this.m_oLog.Debug(result);
 		}
 
 	} // class TestNewLoan
