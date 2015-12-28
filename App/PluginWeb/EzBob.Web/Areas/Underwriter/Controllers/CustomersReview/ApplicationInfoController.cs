@@ -798,43 +798,6 @@
 
 			log.Info("NL decisionID: {0}, oldCashRequestID: {1}, Error: {2}", decision.Value, cr.Id, decision.Error);
 
-			NL_OfferFees offerFee = new NL_OfferFees() {
-				LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
-				Percent = manualSetupFeePercent ?? 0,
-				OneTimePartPercent = 1,
-				DistributedPartPercent = 0
-			};
-			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true) {
-				offerFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
-				offerFee.OneTimePartPercent = 0;
-				offerFee.DistributedPartPercent = 1;
-			}
-			NL_OfferFees[] ofeerFees = { offerFee };
-
-			var offer = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
-				DecisionID = decision.Value,
-				LoanTypeID = loanType,
-				RepaymentIntervalTypeID = (int)DbConstants.RepaymentIntervalTypes.Month,
-				LoanSourceID = loanSource,
-				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
-				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
-				RepaymentCount = repaymentPeriod,
-				Amount = (decimal)amount,
-				MonthlyInterestRate = interestRate,
-				CreatedTime = now,
-				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
-				Notes = "offer from ChangeCreditLine, ApplicationInfoController",
-				DiscountPlanID = discountPlan,
-				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
-				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
-				SendEmailNotification = allowSendingEmail,
-				// SetupFeeAddedToLoan = 0 // default 0 TODO EZ-3515
-				// InterestOnlyRepaymentCount = 
-				//IsAmountSelectionAllowed = 1 default 1 always allowed
-			}, ofeerFees);
-
-			log.Info("NL--- offerID: {0}, decisionID: {1} oldCashRequestID: {2}, Error: {3}", offer.Value, decision.Value, cr.Id, offer.Error);
-
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 
 			return Json(true);
