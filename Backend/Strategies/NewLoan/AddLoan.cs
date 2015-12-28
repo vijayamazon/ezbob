@@ -223,11 +223,11 @@
 					model.Loan.Fees.Clear();
 					model.Loan.Fees.AddRange(nlFees);
 
-					// 6. broker commissions
+					/*// 6. broker commissions
 					// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
 					if (model.Offer.BrokerSetupFeePercent > 0) {
 						DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", LoanID, model.Loan.OldLoanID));
-					}
+					}*/
 
 					// 7. history
 					history.LoanID = LoanID;
@@ -314,6 +314,12 @@
 
 				// temporary - should be removed/modified after "old" loan remove
 				CopyRebateTransaction();
+
+				// 6. broker commissions
+				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
+				if (model.Offer.BrokerSetupFeePercent > 0) {
+					DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", LoanID, model.Loan.OldLoanID));
+				}
 
 				// OK
 				SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements);

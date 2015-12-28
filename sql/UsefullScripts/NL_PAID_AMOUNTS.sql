@@ -1,5 +1,5 @@
 DECLARE @LoanID bigint;
-set @LoanID = 1;
+set @LoanID = 8;
 
 select * from [dbo].[NL_Payments] where LoanID = @LoanID;
 
@@ -15,7 +15,8 @@ select f.*, ft.[LoanFeeType]
 from [dbo].[NL_LoanFees] f inner join [dbo].[NL_LoanFeeTypes] ft on f.[LoanFeeTypeID]= ft.[LoanFeeTypeID]
 where  f.LoanID = @LoanID;
 
-select * from NL_Loans l where l.LoanID = @LoanID;
+select l.*, st.LoanStatus from NL_Loans l join NL_LoanStatuses st on st.LoanStatusID=l.LoanStatusID where l.LoanID = @LoanID;
+select * from LoanTransaction where LoanId = (select OldLoanID from NL_Loans l where l.LoanID = @LoanID);
 
 -- make cancelled payment active payment again
 --update [dbo].[NL_Payments] set [PaymentStatusID] = 2, [DeletionTime]=null,[DeletedByUserID]=null where [PaymentStatusID] <> 2 and LoanID = @LoanID;
