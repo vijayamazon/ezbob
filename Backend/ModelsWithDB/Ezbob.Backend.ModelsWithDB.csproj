@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ezbob.Backend.ModelsWithDB">
+      <HintPath>..\..\App\PluginWeb\EzBob.Web\Bin\Ezbob.Backend.ModelsWithDB.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -186,14 +189,12 @@
     <Compile Include="OpenPlatform\I_InterestVariable.cs" />
     <Compile Include="OpenPlatform\I_Instrument.cs" />
     <Compile Include="OpenPlatform\I_Index.cs" />
-    <Compile Include="OpenPlatform\I_UWInvestorConfigurationParam.cs" />
-    <Compile Include="OpenPlatform\I_InvestorConfigurationParam.cs" />
+    <Compile Include="OpenPlatform\I_InvestorParams.cs" />
     <Compile Include="OpenPlatform\I_Parameter.cs" />
     <Compile Include="OpenPlatform\I_ProductSubType.cs" />
     <Compile Include="OpenPlatform\I_ProductType.cs" />
     <Compile Include="OpenPlatform\I_Product.cs" />
     <Compile Include="OpenPlatform\LoanParameters.cs" />
-    <Compile Include="OpenPlatform\InvestorParameters.cs" />
     <Compile Include="OpenPlatform\InvestorEnums.cs" />
     <Compile Include="OpenPlatform\I_Portfolio.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />

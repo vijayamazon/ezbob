@@ -1,9 +1,9 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform {
-	using System;
-	using System.Collections.Generic;
-	using System.Runtime.Serialization;
-	using Ezbob.Utils;
-	using Ezbob.Utils.dbutils;
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using Ezbob.Utils;
+    using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
 	public class I_Investor {
@@ -52,9 +52,14 @@
 		[DataMember]
 		[NonTraversable]
 		public List<I_InvestorContact> InvestorContacts { get; set; }
-
-		[DataMember]
+        
+        [DataMember]
 		[NonTraversable]
 		public List<I_InvestorBankAccount> InvestorBankAccounts { get; set; }
+        
+        [NonTraversable]
+        public List<I_InvestorSystemBalance> InvestorSystemBalance { get; set; }
+
+        
 	}//class I_Investor
 }//ns

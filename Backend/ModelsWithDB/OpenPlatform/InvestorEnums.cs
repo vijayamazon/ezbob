@@ -2,13 +2,14 @@
 {
 	public enum Operator
     {
-        Or = 0,
-        And = 1,
-        GreaterThan = 2,
-        LessThan = 3,
-        Equal = 4,
-        NotEqual = 5,
-        Not = 6
+        Or,
+        And,
+        GreaterThan,
+        LessThan,
+        Equal,
+        NotEqual,
+        Not,
+        IsTrue
     };
 
     public enum Field
@@ -28,5 +29,11 @@
         D, 
         E,
         F
+    };
+
+    public enum RuleType {
+        System,
+        UnderWriter,
+        Investor 
     };
 }

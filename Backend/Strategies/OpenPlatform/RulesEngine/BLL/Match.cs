@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Contracts;
 	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.DAL;
 	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Models;

@@ -13,7 +13,7 @@
 		public int UserID { get; set; }
 
 		[DataMember]
-		public RuleType RuleType { get; set; }
+		public int RuleType { get; set; }
 
 		[DataMember]
 		public int InvestorID { get; set; }
@@ -31,7 +31,7 @@
 		public int RightParamID { get; set; }
 
 		[DataMember]
-		public Operator Operator { get; set; }
+		public int Operator { get; set; }
 
 		[DataMember]
 		public bool IsRoot { get; set; }

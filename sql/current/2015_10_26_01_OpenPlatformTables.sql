@@ -381,51 +381,6 @@ GO
 --END
 --GO
 
-IF object_id('I_Parameter') IS NULL
-BEGIN
-	CREATE TABLE I_Parameter (
-		ParameterID INT NOT NULL IDENTITY(1,1),
-		Name NVARCHAR(255),
-		ValueType NVARCHAR(255) NOT NULL,
-		DefaultValue DECIMAL(18,6) NULL,		
-		MaxLimit DECIMAL(18,6) NULL,		
-		MinLimit DECIMAL(18,6) NULL,		
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_Parameter PRIMARY KEY (ParameterID)
-	)
-END
-GO
-
-IF object_id('I_InvestorConfigurationParam') IS NULL
-BEGIN
-	CREATE TABLE I_InvestorConfigurationParam (
-		InvestorConfigurationParamID INT NOT NULL IDENTITY(1,1),
-		InvestorID INT NOT NULL,
-		ParameterID INT NOT NULL,		
-		Value DECIMAL(18,6) NOT NULL,		
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_InvestorConfigurationParam PRIMARY KEY (InvestorConfigurationParamID),
-		CONSTRAINT FK_I_InvestorConfigurationParam_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
-		CONSTRAINT FK_I_InvestorConfigurationParam_I_Parameter FOREIGN KEY (ParameterID) REFERENCES I_Parameter(ParameterID)
-	)
-END
-GO
-
-IF object_id('I_UWInvestorConfigurationParam') IS NULL
-BEGIN
-	CREATE TABLE I_UWInvestorConfigurationParam (
-		UWInvestorConfigurationParamID INT NOT NULL IDENTITY(1,1),
-		InvestorID INT NOT NULL,
-		ParameterID INT NOT NULL,		
-		Value DECIMAL(18,6) NOT NULL,  
-		AllowedForConfig BIT NOT NULL,		
-		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_I_UWInvestorConfigurationParam PRIMARY KEY (UWInvestorConfigurationParamID),
-		CONSTRAINT FK_I_UWInvestorConfigurationParam_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
-		CONSTRAINT FK_I_UWInvestorConfigurationParam_I_Parameter FOREIGN KEY (ParameterID) REFERENCES I_Parameter(ParameterID)
-	)
-END
-GO
 
 IF object_id('I_Index') IS NULL
 BEGIN
@@ -646,5 +601,93 @@ IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('CashRequests') AND n
 BEGIN
 	ALTER TABLE CashRequests ADD ProductSubTypeID INT 
 	ALTER TABLE CashRequests ADD CONSTRAINT FK_CashRequests_I_ProductSubType FOREIGN KEY (ProductSubTypeID) REFERENCES I_ProductSubType(ProductSubTypeID)
+END
+GO
+
+IF object_id('I_Parameter') IS NULL
+BEGIN
+	CREATE TABLE I_Parameter (
+		ParameterID INT NOT NULL IDENTITY(1,1),
+		Name NVARCHAR(255),
+		ValueType NVARCHAR(255) NOT NULL,
+		DefaultValue DECIMAL(18,6) NULL,		
+		MaxLimit DECIMAL(18,6) NULL,		
+		MinLimit DECIMAL(18,6) NULL,		
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_Parameter PRIMARY KEY (ParameterID)
+	)
+END
+GO
+
+IF object_id('I_InvestorParams') IS NULL
+BEGIN
+	CREATE TABLE I_InvestorParams (
+		InvestorParamsID INT NOT NULL IDENTITY(1,1),
+		InvestorID INT NOT NULL,
+		ParameterID INT NOT NULL,		
+		Value DECIMAL(18,6) NOT NULL,	
+		Type INT NOT NULL,	
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_I_InvestorParams PRIMARY KEY (InvestorParamsID),
+		CONSTRAINT FK_I_I_InvestorParams_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_I_InvestorParams_I_Parameter FOREIGN KEY (ParameterID) REFERENCES I_Parameter(ParameterID)
+	)
+END
+GO
+
+IF object_id('I_RuleType') IS NULL
+BEGIN
+	CREATE TABLE I_RuleType (
+		RuleTypeID INT NOT NULL IDENTITY(1,1),
+		Name NVARCHAR(255) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_RuleTypeID PRIMARY KEY (RuleTypeID)
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_RuleType)
+BEGIN
+	INSERT INTO I_RuleType (Name) VALUES ('System')
+	INSERT INTO I_RuleType (Name) VALUES ('UnderWriter')
+	INSERT INTO I_RuleType (Name) VALUES ('Investor')
+END
+GO
+
+IF object_id('I_Operator') IS NULL
+BEGIN
+	CREATE TABLE I_Operator (
+		OperatorID INT NOT NULL IDENTITY(1,1),
+		Name NVARCHAR(255) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_OperatorID PRIMARY KEY (OperatorID)
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_RuleType)
+BEGIN
+	INSERT INTO I_RuleType (Name) VALUES ('System')
+	INSERT INTO I_RuleType (Name) VALUES ('UnderWriter')
+	INSERT INTO I_RuleType (Name) VALUES ('Investor')
+END
+GO
+
+IF object_id('I_InvestorRule') IS NULL
+BEGIN
+CREATE TABLE [dbo].[I_InvestorRule](
+	[RuleID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NULL,
+	[RuleType] [int] NULL,
+	[InvestorID] [int] NULL,
+	[MemberNameSource] [nvarchar](256) NULL,
+	[MemberNameTarget] [nvarchar](256) NULL,
+	[LeftParamID] [int] NULL,
+	[RightParamID] [int] NOT NULL,
+	[Operator] [int] NOT NULL,
+	[IsRoot] [bit] NOT NULL,
+	CONSTRAINT FK_I_InvestorRule FOREIGN KEY (RuleType) REFERENCES I_RuleType(RuleTypeID),
+	CONSTRAINT FK_I_InvestorRule_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID)
+	)
 END
 GO

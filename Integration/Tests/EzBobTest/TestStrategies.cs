@@ -18,6 +18,7 @@
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -52,7 +53,14 @@
 
 	[TestFixture]
 	public class TestStrategies : BaseTestFixtue {
-		[Test]
+
+        [Test]
+        public void FindInvestorForOffer() {
+            var s = new FindInvestorForOffer(1,1);
+            s.Execute();
+        }
+        
+        [Test]
 		public void ApprovedUser() {
 			var s = new ApprovedUser(182, 1000, 24, true);
 			s.Execute();

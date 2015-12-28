@@ -1,20 +1,22 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL
 {
-	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-	using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
-	using Ezbob.Backend.Strategies.OpenPlatform.DAL;
-	using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
-	using Ezbob.Backend.Strategies.OpenPlatform.Provider;
-	using Ezbob.Backend.Strategies.OpenPlatform.Provider.Contracts;
-	using RulesEngine.BLL;
-	using RulesEngine.Contracts;
-	using RulesEngine.DAL;
-	using StructureMap.Configuration.DSL;
+    using Ezbob.Backend.Models.Investor;
+    using Ezbob.Backend.ModelsWithDB.OpenPlatform;
+    using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.DAL;
+    using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
+    using Ezbob.Backend.Strategies.OpenPlatform.Provider;
+    using Ezbob.Backend.Strategies.OpenPlatform.Provider.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.BLL;
+    using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.DAL;
+    using EZBob.DatabaseLib.Model.Database;
+    using StructureMap.Configuration.DSL;
 
-	public class InvestorRegistry : Registry
+    public class InvestorRegistry : Registry
     {
         public InvestorRegistry() {
-            For<IProvider<IMatch<OfferParameters, InvestorParameters>>>().Use(ctx => new Provider<Match<OfferParameters, InvestorParameters>>(ctx));
+            For <IProvider<IMatch<InvestorCashRequest, InvestorParameters>>>().Use(ctx => new Provider<Match<InvestorCashRequest, InvestorParameters>>(ctx));
             ForSingletonOf<IRulesEngineDAL>().Use<RulesEngineDAL>();
             ForSingletonOf<IInvestorParametersBLL>().Use<InvestorParametersBLL>();
             ForSingletonOf<IInvestorService>().Use<InvestorService>();

@@ -33,6 +33,8 @@
             var expressionTypeValue = (ExpressionType)fieldInfo.GetValue(ruleOperator);
             if (ruleOperator == Operator.Not)
                 return Expression.Not(leftExpression);
+            if ( ruleOperator == Operator.IsTrue)
+                return Expression.IsTrue(leftExpression);
             return Expression.MakeBinary(expressionTypeValue, leftExpression, rightExpression);
         }
 
@@ -67,7 +69,7 @@
                 !string.IsNullOrEmpty(rule.MemberNameTarget))
             {
                 return BuildExpression<T1, T2>(rule.MemberNameSource,
-                    rule.Operator,
+                    (Operator)rule.Operator,
                     rule.MemberNameTarget,
                     parameterExpressionLeft,
                     parameterExpressionRight);
@@ -79,7 +81,7 @@
             var rightRule = ruleDict.FirstOrDefault(x => x.Value.RuleID == rule.RightParamID).Value;
             var exRight = BuildRecursiveExpression<T1, T2>(investorId, ruleDict, rightRule, parameterExpressionLeft, parameterExpressionRight);
 
-            return BuildSubExpression(rule.Operator, exLeft, exRight);
+            return BuildSubExpression((Operator)rule.Operator, exLeft, exRight);
         }
 
     }

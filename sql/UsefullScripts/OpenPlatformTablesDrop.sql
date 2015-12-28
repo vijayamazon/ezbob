@@ -86,13 +86,32 @@ IF NOT object_id('I_UWInvestorConfigurationParam') IS NULL
 	DROP TABLE I_UWInvestorConfigurationParam
 GO
 
+IF NOT object_id('I_OpenPlatformOffer') IS NULL
+	DROP TABLE I_OpenPlatformOffer
+GO
+
+IF NOT object_id('I_InterestVariable') IS NULL
+	DROP TABLE I_InterestVariable
+GO
+
+IF NOT object_id('I_Instrument') IS NULL
+	DROP TABLE I_Instrument
+GO
+
+IF NOT object_id('I_Operator') IS NULL
+	DROP TABLE I_Operator
+GO
+
+IF NOT object_id('I_InvestorRule') IS NULL
+	DROP TABLE I_InvestorRule
+GO
+
 IF NOT object_id('I_Parameter') IS NULL
 	DROP TABLE I_Parameter
 GO
 
-
-IF NOT object_id('I_OpenPlatformOffer') IS NULL
-	DROP TABLE I_OpenPlatformOffer
+IF NOT object_id('I_InvestorParams') IS NULL
+	DROP TABLE I_InvestorRule
 GO
 
 IF NOT object_id('I_Investor') IS NULL
@@ -103,10 +122,5 @@ IF NOT object_id('I_InvestorType') IS NULL
 	DROP TABLE I_InvestorType
 GO
 
-IF NOT object_id('I_InterestVariable') IS NULL
-	DROP TABLE I_InterestVariable
-GO
 
-IF NOT object_id('I_Instrument') IS NULL
-	DROP TABLE I_Instrument
-GO
+

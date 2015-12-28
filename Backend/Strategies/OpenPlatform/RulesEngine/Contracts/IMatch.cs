@@ -1,9 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Contracts
 {
-	using System;
-	using Ezbob.Backend.Strategies.OpenPlatform.RulesEngine.Models;
+    using System;
+    using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 
-	public interface IMatch<T1, T2>
+    public interface IMatch<T1, T2>
     {        
         T1 Source { get; set; }
         T2 Target { get; set; }

@@ -1,9 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract
 {
-	using System.Collections.Generic;
-	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
+    using System.Collections.Generic;
+    using Ezbob.Backend.Models.Investor;
 
-	public interface IInvestorParametersDAL {
+    public interface IInvestorParametersDAL {
         List<InvestorParameters> GetInvestorParametersList();
     }
 }

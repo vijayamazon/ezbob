@@ -84,6 +84,8 @@
     <Compile Include="Investor\InvestorBankAccountModel.cs" />
     <Compile Include="Investor\InvestorContactModel.cs" />
     <Compile Include="Investor\InvestorModel.cs" />
+    <Compile Include="Investor\InvestorCashRequest.cs" />
+    <Compile Include="Investor\InvestorParameters.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MarketplaceTurnoverModel.cs" />
