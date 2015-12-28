@@ -1,8 +1,6 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System;
-	using System.Linq;
 	using System.Web;
-	using System.Web.Routing;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -15,30 +13,31 @@
 
 		public User User {
 			get {
-				var cached = HttpContext.Current.Items[UserItemName] as User;
-				if (cached != null)
-					return cached;
+				User user = GetCachedUser();
 
-				var login = HttpContext.Current.User.Identity.Name;
-				int? originID = null;
+				if (user != null)
+					return user;
 
-				RouteData routeData = HttpContext.Current.Request.RequestContext.RouteData;
+				var originHolder = HttpContext.Current.Session[SessionOriginIDName] as OriginHolder;
 
-				if (routeData.Values.Count > 0) {
-					string area = routeData.DataTokens["area"] as string;
+				if (originHolder == null)
+					return null;
 
-					if (this.originAreas.Contains((area ?? string.Empty).ToLowerInvariant())) {
-						var uiOrigin = UiCustomerOrigin.Get(HttpContext.Current.Request.Url);
-						originID = (int)uiOrigin.GetOrigin();
-					} // if
-				} // if
+				user = this.userRepo.GetUserByLogin(HttpContext.Current.User.Identity.Name, originHolder.Origin);
 
-				var user = this.userRepo.GetUserByLogin(login, originID);
-				HttpContext.Current.Items[UserItemName] = user;
+				SetCachedUser(user);
 
 				return user;
 			} // get
 		} // User
+
+		public void SetSessionOrigin(CustomerOriginEnum? originID) {
+			HttpContext.Current.Session[SessionOriginIDName] = new OriginHolder(originID);
+		} // SetSessionOrigin
+
+		public void RemoveSessionOrigin() {
+			HttpContext.Current.Session.Remove(SessionOriginIDName);
+		} // RemoveSessionOrigin
 
 		public int UserId {
 			get { return User.Id; }
@@ -64,11 +63,37 @@
 			get { return User == null ? null : this.customerRepo.ReallyTryGet(User.Id); }
 		} // Customer
 
+		private static User GetCachedUser() {
+			return HttpContext.Current.Items[RequestUserItemName] as User;
+		} // GetCachedUser
+
+		private static void SetCachedUser(User u) {
+			HttpContext.Current.Items[RequestUserItemName] = u;
+		} // SetCachedUser
+
+		private class OriginHolder {
+			public OriginHolder(CustomerOriginEnum? originID) {
+				if (originID == null)
+					this.hasValue = false;
+				else {
+					this.hasValue = true;
+					this.origin = originID.Value;
+				} // if
+			} // constructor
+
+			public int? Origin {
+				get { return this.hasValue ? (int)this.origin : (int?)null; }
+			} // Origin
+
+			private readonly bool hasValue;
+			private readonly CustomerOriginEnum origin;
+		} // class OriginHolder
+
 		private const string SessionCookieName = "_EzbobSession_";
-		private const string UserItemName = "EzBobUser";
+		private const string SessionOriginIDName = "__EzbobSessionOriginID__";
+		private const string RequestUserItemName = "__EzbobCurrentUser__";
 
 		private readonly IUsersRepository userRepo;
 		private readonly ICustomerRepository customerRepo;
-		private readonly string[] originAreas = { "broker", "customer", };
 	} // class EzBobContext
 } // namespace

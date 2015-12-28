@@ -22,6 +22,20 @@
 			};
 		} // SignupCustomerMutliOrigin
 
+		public UserLoginActionResult LoginCustomerMutliOrigin(LoginCustomerMultiOriginModel model) {
+			LoginCustomerMutliOrigin instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, model);
+
+			return new UserLoginActionResult {
+				MetaData = amd,
+				Status = instance.Status.ToString(),
+				SessionID = instance.SessionID,
+				ErrorMessage = instance.ErrorMsg,
+				RefNumber = instance.RefNumber,
+			};
+		} // LoginCustomerMutliOrigin
+
 		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
 			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
 		} // UnderwriterSignup

@@ -11,6 +11,9 @@
 		UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model);
 
 		[OperationContract]
+		UserLoginActionResult LoginCustomerMutliOrigin(LoginCustomerMultiOriginModel model);
+
+		[OperationContract]
 		ActionMetaData UnderwriterSignup(string name, Password password, string role);
 
 		[OperationContract]

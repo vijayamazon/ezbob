@@ -22,7 +22,7 @@
 				UiOriginID = uiOriginID,
 			};
 
-			spOnSuccess = new BrokerLoginSucceeded(DB, Log) {
+			this.spOnSuccess = new BrokerLoginSucceeded(DB, Log) {
 				LotteryCode = promotionName,
 				PageVisitTime = promotionPageVisitTime,
 			};

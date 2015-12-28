@@ -20,7 +20,10 @@ namespace EZBob.DatabaseLib.Model.Database.Repository {
 		public Customer Get(int clientId) {
 			var m_oRetryer = new SqlRetryer(nSleepBeforeRetryMilliseconds: 500);
 
-			var customer = m_oRetryer.Retry(() => Session.Get<Customer>(clientId));
+			// var customer = m_oRetryer.Retry(() => Session.Get<Customer>(clientId));
+			var customer = m_oRetryer.Retry(
+				() => Session.QueryOver<Customer>().Where(c => c.Id == clientId).SingleOrDefault<Customer>()
+			);
 
 			if (customer == null)
 				throw new InvalidCustomerException(clientId);

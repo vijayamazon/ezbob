@@ -582,6 +582,12 @@
   <wsdl:message name="IEzService_SignupCustomerMutliOrigin_OutputMessage">
     <wsdl:part name="parameters" element="tns:SignupCustomerMutliOriginResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoginCustomerMutliOrigin_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoginCustomerMutliOrigin" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoginCustomerMutliOrigin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginCustomerMutliOriginResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UnderwriterSignup_InputMessage">
     <wsdl:part name="parameters" element="tns:UnderwriterSignup" />
   </wsdl:message>
@@ -1866,6 +1872,10 @@
     <wsdl:operation name="SignupCustomerMutliOrigin">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin" message="tns:IEzService_SignupCustomerMutliOrigin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse" message="tns:IEzService_SignupCustomerMutliOrigin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoginCustomerMutliOrigin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOrigin" message="tns:IEzService_LoginCustomerMutliOrigin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOriginResponse" message="tns:IEzService_LoginCustomerMutliOrigin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UnderwriterSignup">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup" message="tns:IEzService_UnderwriterSignup_InputMessage" />
@@ -3244,6 +3254,15 @@
     </wsdl:operation>
     <wsdl:operation name="SignupCustomerMutliOrigin">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoginCustomerMutliOrigin">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOrigin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

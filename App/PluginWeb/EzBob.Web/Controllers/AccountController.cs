@@ -86,6 +86,8 @@
 					if (MembershipCreateStatus.Success == membershipCreateStatus) {
 						model.SetCookie(LogOnModel.Roles.Underwriter);
 
+						this.context.SetSessionOrigin(null);
+
 						bool bRedirectToUrl =
 							Url.IsLocalUrl(model.ReturnUrl) &&
 							(model.ReturnUrl.Length > 1) &&
@@ -122,12 +124,14 @@
 		[HttpPost]
 		[NoCache]
 		public JsonResult CustomerLogOn(LogOnModel model) {
-			var customerIp = RemoteIp();
+			string customerIp = RemoteIp();
+			CustomerOriginEnum origin = UiCustomerOrigin.Get().GetOrigin();
 
 			if (!ModelState.IsValid) {
 				log.Debug(
-					"Customer log on attempt from remote IP {0}: model state is invalid, list of errors:",
-					customerIp
+					"Customer log on attempt from remote IP {0} to origin '{1}': model state is invalid, list of errors:",
+					customerIp,
+					origin
 				);
 
 				foreach (var val in ModelState.Values) {
@@ -180,193 +184,36 @@
 			} catch (Exception e) {
 				log.Warn(
 					e,
-					"Failed to check whether '{0}' is a broker login, continuing as a customer.",
-					model.UserName
+					"Failed to check whether '{0}' is a broker login at origin '{1}', continuing as a customer.",
+					model.UserName,
+					origin
 				);
 			} // try
 
-			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+			var loginModel = new LoginCustomerMultiOriginModel {
+				UserName = model.UserName,
+				Origin = origin,
+				Password = new DasKennwort(model.Password),
+				PromotionName = model.PromotionName,
+				PromotionPageVisitTime = model.PromotionPageVisitTime,
+				RemoteIp = customerIp,
+			};
 
-			User user;
+			UserLoginActionResult ular = this.serviceClient.Instance.LoginCustomerMutliOrigin(loginModel);
 
-			try {
-				user = this.userRepo.GetUserByLogin(model.UserName, uiOrigin.GetOrigin());
-			} catch (Exception e) {
-				log.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
-				user = null;
-			} // try
-
-			if (user == null) {
-				if (uiOrigin.IsEverline()) {
-					var loginLoanChecker = new EverlineLoginLoanChecker();
-					var status = loginLoanChecker.GetLoginStatus(model.UserName);
-
-					switch (status.status) {
-					case EverlineLoanStatus.Error:
-						log.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
-						return Json(new {
-							success = false,
-							errorMessage = "User not found or incorrect password."
-						}, JsonRequestBehavior.AllowGet);
-
-					case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
-						return Json(new { success = true, everlineAccount = true }, JsonRequestBehavior.AllowGet);
-
-					case EverlineLoanStatus.ExistsWithNoLiveLoan:
-						TempData["IsEverline"] = true;
-						TempData["CustomerEmail"] = model.UserName;
-						return Json(new { success = true, everlineWizard = true }, JsonRequestBehavior.AllowGet);
-
-					case EverlineLoanStatus.DoesNotExist:
-						return Json(new {
-							success = false,
-							errorMessage = "User not found or incorrect password."
-						}, JsonRequestBehavior.AllowGet);
-
-					default:
-						log.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
-						return Json(new {
-							success = false,
-							errorMessage = "User not found or incorrect password."
-						}, JsonRequestBehavior.AllowGet);
-					} // switch
-				} // if
-
-				log.Warn(
-					"Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",
-					customerIp,
-					model.UserName
-				);
-
-				return Json(new {
-					success = false,
-					errorMessage = "User not found or incorrect password."
-				}, JsonRequestBehavior.AllowGet);
-			} // if user not found
-
-			var isUnderwriter = user.BranchId == 1;
-
-			log.Debug(
-				"{1} log on attempt with login '{0}'.",
-				model.UserName,
-				isUnderwriter ? "Underwriter" : "Customer"
-			);
-
-			log.Debug(
-				"{2} log on attempt from remote IP {0} with user name '{1}': log on attempt #{3}.",
-				customerIp,
-				model.UserName,
-				isUnderwriter ? "Underwriter" : "Customer",
-				(user.LoginFailedCount ?? 0) + 1
-			);
-
-			if (isUnderwriter) {
-				log.Debug(
-					"Underwriter log on attempt from remote IP {0} with user name '{1}': failed, " +
-					"underwriters should use a dedicated log on page.",
-					customerIp,
-					model.UserName
-				);
-
-				return Json(new {
-					success = false,
-					errorMessage = "Please use dedicated underwriter log on page."
-				}, JsonRequestBehavior.AllowGet);
-			} // if
-
-			Customer customer;
-
-			try {
-				customer = this.customerRepo.Get(user.Id);
-			} catch (Exception e) {
-				log.Warn(e, "Failed to retrieve a customer by id {0}.", user.Id);
-				return Json(new {
-					success = false,
-					errorMessage = "User not found or invalid password."
-				}, JsonRequestBehavior.AllowGet);
-			} // try
-
-			if (customer.CollectionStatus.Name == "Disabled") {
-				string sDisabledError =
-					"This account is closed, please contact customer care<br/> " +
-					uiOrigin.CustomerCareEmail;
-
-				var session = new CustomerSession {
-					CustomerId = user.Id,
-					StartSession = DateTime.Now,
-					Ip = customerIp,
-					IsPasswdOk = false,
-					ErrorMessage = sDisabledError,
-				};
-
-				this.customerSessionRepo.AddSessionIpLog(session);
-				Session["UserSessionId"] = session.Id;
-
-				log.Warn(
-					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
-					customerIp,
-					model.UserName
-				);
-
-				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
-			} // if user is disabled
-
-			if (uiOrigin.GetOrigin() != customer.CustomerOrigin.GetOrigin()) {
-				log.Warn(
-					"Customer {0} with origin {1} tried to login with UI origin {2} (from host {3}).",
-					user.Id,
-					customer.CustomerOrigin.Name,
-					uiOrigin.Name,
-					this.hostname
-				);
-
-				return Json(new {
-					success = false,
-					errorMessage = "User not found or invalid password.",
-				}, JsonRequestBehavior.AllowGet);
-			} // if
-
-			string loginError;
-			var nStatus = ValidateUser(
-				uiOrigin.GetOrigin(),
-				model.UserName,
-				model.Password,
-				model.PromotionName,
-				model.PromotionPageVisitTime,
-				out loginError
-			);
-
-			if (MembershipCreateStatus.Success == nStatus) {
+			if (MembershipCreateStatus.Success.ToString() == ular.Status) {
 				model.SetCookie(LogOnModel.Roles.Customer);
-
-				log.Debug(
-					"Customer log on attempt from remote IP {0} with user name '{1}': success.",
-					customerIp,
-					model.UserName
-				);
-
+				this.context.SetSessionOrigin(origin);
 				return Json(new { success = true, model, }, JsonRequestBehavior.AllowGet);
-			} // if logged in successfully
-
-			string errorMessage = MembershipCreateStatus.InvalidProviderUserKey == nStatus
-				? "Three unsuccessful login attempts have been made. <span class='bold'>" +
-					customer.CustomerOrigin.Name +
-					"</span> has issued you with a temporary password. Please check your e-mail."
-				: "User not found or incorrect password.";
-
-			log.Warn(
-				"Customer log on attempt from remote IP {0} with user name '{1}': failed {2}.",
-				customerIp,
-				model.UserName,
-				errorMessage
-			);
+			} // if
 
 			// If we got this far, something failed, redisplay form
-			return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
+			return Json(new { success = false, errorMessage = ular.ErrorMessage }, JsonRequestBehavior.AllowGet);
 		} // CustomerLogOn
 
 		public ActionResult LogOff() {
 			EndSession("LogOff customer");
+			this.context.RemoveSessionOrigin();
 
 			switch (this.logOffMode) {
 			case LogOffMode.SignUpOfEnv:
@@ -383,6 +230,7 @@
 
 		public ActionResult LogOffUnderwriter() {
 			EndSession("LogOff UW");
+			this.context.RemoveSessionOrigin();
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
@@ -518,6 +366,7 @@
 
 				Session["UserSessionId"] = signupResult.SessionID;
 
+				this.context.SetSessionOrigin(uiOrigin.GetOrigin());
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
 

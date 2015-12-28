@@ -170,6 +170,10 @@
 
 		public int SessionID { get; private set; } // SessionID
 
+		public MembershipCreateStatus Status {
+			get { return this.m_oResult ?? MembershipCreateStatus.ProviderError; }
+		} // Status
+
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly UserLoginCheckResult m_oSpResult;
