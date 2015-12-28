@@ -576,6 +576,7 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
+<<<<<<< HEAD
   <wsdl:message name="IEzService_BuildLoanFromOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:BuildLoanFromOffer" />
   </wsdl:message>
@@ -617,6 +618,13 @@
   </wsdl:message>
   <wsdl:message name="IEzService_CancelPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:CancelPaymentResponse" />
+=======
+  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
+>>>>>>> master
   </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
@@ -1061,6 +1069,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddHistoryDirector_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddHistoryDirectorResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_ApprovedUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ApprovedUser" />
@@ -1560,12 +1574,6 @@
   <wsdl:message name="IEzService_LoadManualVatReturnPeriods_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadManualVatReturnPeriodsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1893,6 +1901,7 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
+<<<<<<< HEAD
     <wsdl:operation name="BuildLoanFromOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" message="tns:IEzService_BuildLoanFromOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse" message="tns:IEzService_BuildLoanFromOffer_OutputMessage" />
@@ -1920,6 +1929,11 @@
     <wsdl:operation name="CancelPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelPayment" message="tns:IEzService_CancelPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelPaymentResponse" message="tns:IEzService_CancelPayment_OutputMessage" />
+=======
+    <wsdl:operation name="LoanFullyPaid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
+>>>>>>> master
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -2216,6 +2230,10 @@
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddHistoryDirector">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirectorResponse" message="tns:IEzService_AddHistoryDirector_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ApprovedUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ApprovedUser" message="tns:IEzService_ApprovedUser_InputMessage" />
@@ -2548,10 +2566,6 @@
     <wsdl:operation name="LoadManualVatReturnPeriods">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriods" message="tns:IEzService_LoadManualVatReturnPeriods_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriodsResponse" message="tns:IEzService_LoadManualVatReturnPeriods_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoanFullyPaid">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -3292,6 +3306,7 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+<<<<<<< HEAD
     <wsdl:operation name="BuildLoanFromOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer" style="document" />
       <wsdl:input>
@@ -3348,6 +3363,10 @@
     </wsdl:operation>
     <wsdl:operation name="CancelPayment">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CancelPayment" style="document" />
+=======
+    <wsdl:operation name="LoanFullyPaid">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanFullyPaid" style="document" />
+>>>>>>> master
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4014,6 +4033,15 @@
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddHistoryDirector">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AddHistoryDirector" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4768,32 +4796,39 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="LoanFullyPaid">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanFullyPaid" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
+<<<<<<< HEAD
       <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>ALEXBO-PC\alexbo</Upn>
+=======
+      <soap12:address location="net.tcp://shlomim-pc:7081/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://shlomim-pc:7081/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>SHLOMIM-PC\shlomim</Upn>
+>>>>>>> master
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
+<<<<<<< HEAD
       <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>ALEXBO-PC\alexbo</Upn>
+=======
+      <soap12:address location="net.tcp://shlomim-pc:7081/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://shlomim-pc:7081/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>SHLOMIM-PC\shlomim</Upn>
+>>>>>>> master
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

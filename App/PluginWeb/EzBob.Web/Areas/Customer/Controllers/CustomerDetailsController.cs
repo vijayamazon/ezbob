@@ -52,7 +52,8 @@
 			this.customerRepository = customerRepository;
 		} // constructor
 
-		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
+        public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate, int userId)
+        {
 			if (customer.Company == null)
 				return new { error = "Customer doesn't have a company." + customer.Id };
 
@@ -71,7 +72,7 @@
 
 			dbDirector.Customer = customer;
 			dbDirector.Company = customer.Company;
-
+            dbDirector.UserId = userId;
 			var nAddressType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
 				? CustomerAddressType.LimitedDirectorHomeAddress
 				: CustomerAddressType.NonLimitedDirectorHomeAddress;
@@ -303,7 +304,7 @@
 
 			if (customer == null)
 				return Json(new { error = "Customer not found" });
-			var response = AddDirectorToCustomer(director, customer, this.session, true);
+            var response = AddDirectorToCustomer(director, customer, this.session, true, this.context.UserId);
 			this.serviceClient.Instance.SalesForceAddUpdateContact(customer.Id, customer.Id, null, director.Email); 
 			return Json(response);
 		} // AddDirector

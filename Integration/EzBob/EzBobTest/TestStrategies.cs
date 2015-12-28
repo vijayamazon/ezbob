@@ -14,6 +14,7 @@
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CreditSafe;
+	using Ezbob.Backend.Strategies.Esign;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
@@ -919,5 +920,39 @@
 			var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com", 423);
 			s.Execute();
 		}
+          [Test]
+        public void TestLoadEsigner() {
+
+              var s = new LoadEsignatures(22, true);
+            s.Execute();
+
+        }
+          [Test]
+          public void TestEditdirector() {
+              Esigner edirector = new Esigner {
+                  DirectorID = 69,
+                  CustomerID = 1418,
+                  FirstName = "shlomi",
+                  LastName = "lastname",
+                  MiddleName ="midname",
+                  BirthDate =  new DateTime(2011, 6, 10),
+                  Gender = "M",
+                  Email = "meinershlomi@gmail.com",
+                  CompanyId = 1220,
+                  MobilePhone = "0547998484",
+                  IsDirector = true,
+                  IsShareholder = false,
+                  UserId = 22
+              };
+
+              var s = new AddHistoryDirector(edirector);
+              s.Execute();
+
+              //this.m_oDB.ExecuteNonQuery("AddHistoryDirector2", CommandSpecies.StoredProcedure,
+              //new QueryParameter("@DirectorID", 1),
+              //new QueryParameter("@Name", "asdgfa"));
+              
+
+          }
 	}
 }

@@ -11,6 +11,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.failOnDuplicate = options.failOnDuplicate;
 
 		this.initDupCheck(options);
+
 	}, // initialize
 
 	initDupCheck: function(options) {
@@ -86,7 +87,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		'click    input': 'handleUiEvent',
 		'focusout input': 'handleUiEvent',
 		'keyup    input': 'handleUiEvent',
-
+	
 		'change   select': 'handleUiEvent',
 		'click    select': 'handleUiEvent',
 		'focusout select': 'handleUiEvent',
@@ -120,9 +121,10 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.$el.find('.alphaOnly').alphaOnly();
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.addressCaption').hide();
-
+		this.$el.find('.addDirector').html('Add Director');
+		this.$el.find('#nDirectorID').val(-1);
 		this.validator = this.buildValidator();
-
+		
 		var oAddressContainer = this.$el.find('#DirectorAddress');
 
 		var that = this;
@@ -157,40 +159,38 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.trigger(this.backEvtName());
 	}, // directorBack
 
-	directorAdd: function() {
-		if (!this.canSubmit())
-			return false;
+	directorAdd: function () {
+	    if (!this.canSubmit())
+	        return false;
 
-		var data = this.form().serializeArray();
+	    var data = this.form().serializeArray();
+	    BlockUi('on');
+	    var self = this;
+	    var action = (this.$el.find('#nDirectorID').val() === '-1' ) ? this.form().attr('action') : '/Underwriter/CrossCheck/editDirector';
+	    var request = $.post(action, data);
 
-		BlockUi('on');
+	    request.done(function (res) {
+	        if (res.success) {
+	            self.alreadySaved = true;
+	            self.trigger(self.successEvtName());
+	        }
+	        else {
+	            if (res.error)
+	                EzBob.App.trigger('error', res.error);
+	            else
+	                EzBob.App.trigger('error', 'Error occurred, try again');
 
-		var request = $.post(this.form().attr('action'), data);
+	            self.trigger(self.failEvtName());
+	        } // if
+	    }); // on success
 
-		var self = this;
+request.fail(function() {
+    self.trigger(self.failEvtName());
+}); // on fail
 
-		request.done(function(res) {
-			if (res.success) {
-				self.alreadySaved = true;
-				self.trigger(self.successEvtName());
-			}
-			else {
-				if (res.error)
-					EzBob.App.trigger('error', res.error);
-				else
-					EzBob.App.trigger('error', 'Error occurred, try again');
-
-				self.trigger(self.failEvtName());
-			} // if
-		}); // on success
-
-		request.fail(function() {
-			self.trigger(self.failEvtName());
-		}); // on fail
-
-		request.always(function() {
-			BlockUi('off');
-		}); // always
+request.always(function() {
+    BlockUi('off');
+}); // always
 
 		return false;
 	}, // directorAdd

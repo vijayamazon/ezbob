@@ -273,6 +273,11 @@
 			};
 		} // LoadApplicationInfo
 
+        public ActionMetaData AddHistoryDirector(Esigner Edirector)
+        {
+            return Execute<AddHistoryDirector>(null,null,Edirector);
+        }
+
 		public StringStringMapActionResult SetManualDecision(DecisionModel model) {
 			ApplyManualDecision instance;
 
