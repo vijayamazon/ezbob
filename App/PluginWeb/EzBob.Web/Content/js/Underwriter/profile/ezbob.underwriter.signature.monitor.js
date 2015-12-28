@@ -77,27 +77,35 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // deleteDirector
 
 	startEditDirector: function(e) {
-		var oRow = $(e.target).closest('TR.experian-director');
-		if (oRow.length !== 1)
-			return;
+	    var oRow = $(e.target).closest('TR');
+	   
+	    if (oRow.hasClass("underwriter-director")) {
+	        this.editUnderwriterDirector(e, oRow);
+	    }
 
-		var oView = new EzBob.EditExperianDirectorView({
-			data: oRow.data('for-edit'),
+	    else if (oRow.hasClass("experian-director")) {
+	        var oView = new EzBob.EditExperianDirectorView({
+	            data: oRow.data('for-edit'),
 
-			saveUrl: window.gRootPath + 'Underwriter/Esignatures/SaveExperianDirector',
+	            saveUrl: window.gRootPath + 'Underwriter/Esignatures/SaveExperianDirector',
 
-			row: oRow,
+	            row: oRow,
 
-			editBtn: oRow.find('.edit-and-delete'),
-			saveBtn: oRow.find('.btn-save-director'),
-			cancelBtn: oRow.find('.btn-cancel-edit'),
+	            editBtn: oRow.find('.edit-and-delete'),
+	            saveBtn: oRow.find('.btn-save-director'),
+	            cancelBtn: oRow.find('.btn-cancel-edit'),
 
-			emailCell: oRow.find('.grid-item-Email'),
-			mobilePhoneCell: oRow.find('.grid-item-MobilePhone'),
-			addressCell: oRow.find('.grid-item-Address'),
-		});
-
-		oView.render();
+	            emailCell: oRow.find('.grid-item-Email'),
+	            mobilePhoneCell: oRow.find('.grid-item-MobilePhone'),
+	            addressCell: oRow.find('.grid-item-Address'),
+	        });
+	        oView.render();
+	    } else {
+	        return;
+	    }
+	
+	
+		
 	}, // startEditDirector
 
 	toggleAllSigners: function() {
@@ -112,10 +120,64 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		else
 			this.$el.find('.selected-signer').removeAttr('checked');
 	}, // toggleAllSigners
+	editUnderwriterDirector: function (event, oRow) {
+	  
+	    var rowdata = oRow.data('for-edit');
+	    var self = this;
+	    var oRequest = $.get(window.gRootPath + 'Underwriter/Esignatures/LoadDirector', { directorId: rowdata.directorID });
+	    
+	    oRequest.done(function (oResponse) {
+	        if (oResponse) {
+	            self.addDirectorClicked("", oResponse);
+	            if (oResponse.IsShareholder === "yes") {
+	                self.$el.find('#DirectorIsDirectorShareholder_Sha').attr('checked', true);
+	            } else {
+	                self.$el.find('#DirectorIsDirectorShareholder_Sha').attr('checked', false);
+	            }
+	        if (oResponse.IsDirector === "yes") {
+	                self.$el.find('#DirectorIsDirectorShareholder_Dir').attr('checked', true);
+	            } else {
+	                self.$el.find('#DirectorIsDirectorShareholder_Dir').attr('checked', false);
+	            }
+	            self.$el.find('#Name').val(rowdata.FirstName);
+	            self.$el.find('#Middle').val(rowdata.MiddleName);
+	            self.$el.find('#Surname').val(rowdata.LastName);
+	            if (rowdata.gender === 'M') {
+	                self.$el.find('#DirectorFormRadioCtrl_M').attr('checked', true);
+	                self.$el.find('#DirectorFormRadioCtrl_M').trigger('click');
+	            } else {
+	                self.$el.find('#DirectorFormRadioCtrl_F').attr('checked', true);
+	                self.$el.find('#DirectorFormRadioCtrl_F').trigger('click');
+	            }
+	            var birthdate = rowdata.BirthDate;
+	           
+	            self.$el.find('#DateOfBirthDay').val(moment(birthdate).format('D'));
+	            self.$el.find('#DateOfBirthDay').trigger('change');
+	            self.$el.find('#DateOfBirthMonth').val(moment(birthdate).format('M'));
+	            self.$el.find('#DateOfBirthMonth').trigger('change');
+	            self.$el.find('#DateOfBirthYear').val(moment(birthdate).format('YYYY'));
+	            self.$el.find('#DateOfBirthYear').trigger('change');
+	            self.$el.find('#Email').val(rowdata.email);
+	            
+	            self.$el.find('#Phone').val(rowdata.mobilePhone);
+	            self.$el.find('#nDirectorID').val(rowdata.directorID);
+	            self.$el.find('.addDirector').html('Save Director');
+	            self.$el.find('.add-director-container input').blur();
 
-	addDirectorClicked: function(event) {
-		event.stopPropagation();
-		event.preventDefault();
+	            return;
+	        } // if
+ 
+	    });
+	    
+
+	},//editUnderwriterDirector
+	addDirectorClicked: function (ev,DirectorInfo) {
+        if (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+           
+        }
+		
 
 		this.$el.find('.add-director').hide();
 
@@ -131,13 +193,13 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		var directorEl = this.$el.find('.add-director-container');
 
 		var addDirectorView = new EzBob.AddDirectorInfoView({
-			model: new EzBob.DirectorModel(),
+		    model: new EzBob.DirectorModel(DirectorInfo),
 			el: directorEl,
 			backButtonCaption: 'Cancel',
 			failOnDuplicate: false,
 			customerInfo: customerInfo,
 		});
-
+        // if has address then do
 		var nCustomerID = this.personalInfoModel.get('Id');
 
 		var self = this;
@@ -149,17 +211,26 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		addDirectorView.setSuccessHandler(function() {
 			return self.onDirectorAdded(nCustomerID);
 		});
-
-		addDirectorView.setDupCheckCompleteHandler(function(bDupFound) {
-			return self.onDuplicateCheckComplete(bDupFound);
-		});
-
+		if (!DirectorInfo) {
+            addDirectorView.setDupCheckCompleteHandler(function (bDupFound) {
+                return self.onDuplicateCheckComplete(bDupFound);
+            });
+        }
+		
+		
 		addDirectorView.render();
 
 		addDirectorView.setCustomerID(nCustomerID);
 
 		directorEl.show();
 		this.$el.find('.add-director-container-wrapper').show();
+        if (ev) {
+            addDirectorView.$el.find('.form_start').html('Add director/shareholder');
+        } else {
+            addDirectorView.$el.find('.form_start').html('Edit director/shareholder');
+        }
+	
+
 
 		return false;
 	}, // addDirectorClicked
@@ -175,10 +246,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // onDirectorAdded
 
 	onDuplicateCheckComplete: function(bDupFound) {
-		if (bDupFound)
-			this.$el.find('.duplicate-director-detected').show();	
-		else
-			this.$el.find('.duplicate-director-detected').hide();
+	    if (bDupFound)
+	    this.$el.find('.duplicate-director-detected').show();	
+	    else
+	        this.$el.find('.duplicate-director-detected').hide();
 	}, // onDuplicateCheckComplete
 
 	pollStatus: function() {
@@ -453,7 +524,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		var oRequest = $.getJSON(
 			window.gRootPath + 'Underwriter/Esignatures/Load',
 			{ nCustomerID: nCustomerID, bPollStatus: bPollStatus, }
-		);
+		); //shlomi here
 		
 		oRequest.done(function(oResponse) {
 			var oSignatures = self.prepareSignatures(oResponse.signatures);
@@ -575,7 +646,13 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			town: oData.Town,
 			county: oData.County,
 			postcode: oData.Postcode,
+			gender: oData.Gender,
+			MiddleName: oData.MiddleName,
+			FirstName: oData.FirstName,
+			LastName: oData.LastName,
+			BirthDate: oData.BirthDate,
 		}));
+        
 
 		this.$el.find('.do-send').data('CustomerID', oData.CustomerID);
 
@@ -598,23 +675,37 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		oRow.find('.grid-item-IsSelected').empty().append(oSelected);
 
 		var oControls = oRow.find('.grid-item-Controls').empty();
-
+        
 		if (oData.Type === 'experian') {
-			oControls
-				.append($(
-					'<div class=edit-and-delete>' +
-					'<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>' +
-					'<button class="btn btn-primary btn-delete-director" title="Delete this director">' +
-						'<i class="fa fa-times"></i>' +
-					'</button>' +
-					'</div>' +
+		    oControls
+		        .append($(
+		            '<div class=edit-and-delete>' +
+		            '<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>' +
+		            '<button class="btn btn-primary btn-delete-director" title="Delete this director">' +
+		            '<i class="fa fa-times"></i>' +
+		            '</button>' +
+		            '</div>' +
+		            '<button class="btn btn-primary btn-save-director hide"><i class="fa fa-save"></i> Save</button>' +
+		            '<button class="btn btn-primary btn-cancel-edit hide"><i class="fa fa-undo"></i> Cancel</button>'
+		        ));
 
-					'<button class="btn btn-primary btn-save-director hide"><i class="fa fa-save"></i> Save</button>' +
-					'<button class="btn btn-primary btn-cancel-edit hide"><i class="fa fa-undo"></i> Cancel</button>'
-				));
-
-			oRow.addClass('experian-director');
+		    oRow.addClass('experian-director');
 		} // if
+		else {
+		    if (oData.UserId !== oData.CustomerID && oData.UserId != null && oData.UserId != 0) {
+		        oControls
+             .append($(
+                 '<div class=edit-and-delete>' +
+                 '<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>' +
+                 '<button class="btn btn-primary btn-delete-director" title="Delete this director">' +
+                 '<i class="fa fa-times"></i>' +
+                 '</button>' +
+                 '</div>' 
+              
+             ));
+		        oRow.addClass('underwriter-director');
+		    }
+		}
 	}, // signersListRowCallback
 
 	downloadSignedDocument: function() {

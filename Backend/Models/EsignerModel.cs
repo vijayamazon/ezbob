@@ -38,14 +38,19 @@
 		public DateTime? SignDate { get; set; }
 
 		[DataMember]
-		public bool IsDirector { get; set; }
+		public bool? IsDirector { get; set; }
 
 		[DataMember]
-		public bool IsShareholder { get; set; }
+		public bool? IsShareholder { get; set; }
 
 		[DataMember]
 		public string MobilePhone { get; set; }
-
+       
+        [DataMember]
+        public string MiddleName { get; set; }
+       
+        [DataMember]
+        public string Gender { get; set; }
 		[DataMember]
 		public string Line1 { get; set; }
 
@@ -63,6 +68,12 @@
 
 		[DataMember]
 		public string Postcode { get; set; }
+    
+        [DataMember]
+        public int CompanyId { get; set; }    
+
+        [DataMember]
+        public int? UserId { get; set; }    
 
 		[DataMember]
 		public DateTime? BirthDate { get; set; }

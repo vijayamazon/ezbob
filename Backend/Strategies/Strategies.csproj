@@ -194,6 +194,7 @@
     <Compile Include="ManualDecision\ManuallyEscalate.cs" />
     <Compile Include="ManualDecision\ManuallyReject.cs" />
     <Compile Include="ManualDecision\ManuallyApprove.cs" />
+    <Compile Include="Misc\AddHistoryDirector.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
