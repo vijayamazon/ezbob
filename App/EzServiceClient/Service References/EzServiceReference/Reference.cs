@@ -4395,7 +4395,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
-<<<<<<< HEAD
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/BuildLoanFromOfferResponse")]
         ServiceClientProxy.EzServiceReference.NewLoanModelActionResult BuildLoanFromOffer(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
         
@@ -4437,13 +4436,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CancelPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CancelPaymentResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> CancelPaymentAsync(int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Payments payment, int userID);
-=======
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
->>>>>>> master
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, System.Nullable<decimal> balance, System.Nullable<bool> isPaidOff);
@@ -6039,7 +6037,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
         }
         
-<<<<<<< HEAD
         public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult BuildLoanFromOffer(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
             return base.Channel.BuildLoanFromOffer(userID, customerID, model);
         }
@@ -6096,9 +6093,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CancelPaymentAsync(customerID, payment, userID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, System.Nullable<decimal> balance, System.Nullable<bool> isPaidOff) {
-            return base.Channel.LoanStatusAfterPayment(userId, customerID, customerEmail, loanID, paymentAmount, sendMail, balance, isPaidOff);
-=======
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
             return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
@@ -6107,9 +6101,8 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
-            return base.Channel.LoanStatusAfterPayment(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
->>>>>>> master
+        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, System.Nullable<decimal> balance, System.Nullable<bool> isPaidOff) {
+            return base.Channel.LoanStatusAfterPayment(userId, customerID, customerEmail, loanID, paymentAmount, sendMail, balance, isPaidOff);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, System.Nullable<decimal> balance, System.Nullable<bool> isPaidOff) {
