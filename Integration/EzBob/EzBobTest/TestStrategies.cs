@@ -636,7 +636,6 @@
 			s.Execute();
 		}
 
-
 		[Test]
 		public void AvailableCredit() {
 			int customerID = 18234; //217; // 18234;

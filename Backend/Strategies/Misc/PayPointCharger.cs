@@ -61,8 +61,8 @@
 			// step 1 - Get loans to pay.
 			try {
 
-				List<LoanAutoChargeModel> loansList = DB.Fill<LoanAutoChargeModel>("GetCustomersForPayPoint", CommandSpecies.StoredProcedure); //.ToList();
-				List<NLLoanAutoChargeModel> nlList = DB.Fill<NLLoanAutoChargeModel>("NL_CustomersForAutoCharger", CommandSpecies.StoredProcedure, new QueryParameter("Now", DateTime.UtcNow)); //.ToList();
+				List<LoanAutoChargeModel> loansList = DB.Fill<LoanAutoChargeModel>("GetCustomersForPayPoint", CommandSpecies.StoredProcedure); 
+				List<NLLoanAutoChargeModel> nlList = DB.Fill<NLLoanAutoChargeModel>("NL_CustomersForAutoCharger", CommandSpecies.StoredProcedure, new QueryParameter("Now", DateTime.UtcNow)); 
 
 				this.strategyArgs = new object[] { loansList, nlList };
 
