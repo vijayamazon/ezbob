@@ -171,6 +171,9 @@
     <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
+    <Compile Include="Investor\LinkOfferToInvestor.cs" />
+    <Compile Include="Investor\NotifyRiskPendingInvestorOffer.cs" />
+    <Compile Include="Investor\OfferExpiredChecker.cs" />
     <Compile Include="Investor\FindInvestorForOffer.cs" />
     <Compile Include="Investor\ManageInvestorBankAccount.cs" />
     <Compile Include="Investor\ManageInvestorContact.cs" />

@@ -4,7 +4,7 @@
 
     [DataContract(IsReference = true)]
 	public class I_InvestorAccountType {
-        [PK(true)]
+        [PK]
         [DataMember]
 		public int InvestorAccountTypeID { get; set; }
 		
@@ -12,4 +12,10 @@
 		[DataMember]
 		public string Name { get; set; }
 	}//class I_InvestorAccountType
+
+	public enum I_InvestorAccountTypeEnum {
+		Funding = 1,
+		Repayments = 2,
+		Bridging = 3,
+	}//enum I_InvestorTypeEnum
 }//ns

@@ -382,6 +382,7 @@ namespace ConfigManager {
 		PayPalTrustAll,
 		PayPalUseLastTimeOut,
 		PayPointValidateName,
+		PendingInvestorNoficationReciever,
 		PostcodeAnywhereEnabled,
 		PostcodeAnywhereKey,
 		PostcodeAnywhereMaxBankAccountValidationAttempts,

@@ -1,15 +1,11 @@
 ﻿@using System.Collections.Generic
-@using EzBob.Web.Infrastructure
-@using ServiceClientProxy
-@using StructureMap
+@using Ezbob.Backend.ModelsWithDB.OpenPlatform
+@using EzBob.CommonLib
 @model dynamic
-
 @{
-	var service = new ServiceClient();
-	var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-	var types = service.Instance.InvestorLoadTypes(context.UserId);
+	Dictionary<string, string> investorTypes = I_InvestorTypeEnum.Private.ToDictionaryInt<I_InvestorTypeEnum>();
+	Dictionary<string, string> accountTypes = I_InvestorAccountTypeEnum.Funding.ToDictionaryInt<I_InvestorAccountTypeEnum>();
 }
-
 <script type="text/template" id="add-investor-template">
 	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
 	<div id="main-content">
@@ -23,7 +19,7 @@
 								<h4>Investor</h4>
 								<!--Investor fields-->
 								@EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
-								@EzForm.SelectUnderwriter("InvestorType", "Type", types.InvestorTypes, "Investor type")
+								@EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
 
 								<h4>Investor primary contact</h4>
 								<!--Investor contact fields-->
@@ -39,7 +35,7 @@
 								<h4>Investor bank details</h4>
 								<!--Investor bank details-->
 								
-								@InvestorBank(0, types.InvestorBankAccountTypes)
+								@InvestorBank(0, accountTypes)
 								<div class="control-group">
 									<label class="control-label"></label>
 									<div class="control">
@@ -51,7 +47,7 @@
 								</div>
 								
 								<div class="second-bank" style="display: none">
-									@InvestorBank(1, types.InvestorBankAccountTypes)
+									@InvestorBank(1, accountTypes)
 								</div>
 							</div>
 						</div>

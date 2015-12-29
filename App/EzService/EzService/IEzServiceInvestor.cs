@@ -7,9 +7,6 @@
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceInvestor {
 		[OperationContract]
-		InvestorTypesActionResult InvestorLoadTypes(int underwriterID);
-
-		[OperationContract]
 		IntActionResult CreateInvestor(int underwriterID, InvestorModel investor, IEnumerable<InvestorContactModel> investorContacts, IEnumerable<InvestorBankAccountModel> investorBanks);
 
 		[OperationContract]

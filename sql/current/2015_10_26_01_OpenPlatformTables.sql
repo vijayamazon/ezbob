@@ -4,7 +4,7 @@ GO
 IF object_id('I_InvestorType') IS NULL
 BEGIN
 	CREATE TABLE I_InvestorType (
-		InvestorTypeID INT NOT NULL IDENTITY(1,1),
+		InvestorTypeID INT NOT NULL,
 		Name NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorType PRIMARY KEY (InvestorTypeID)
@@ -14,9 +14,9 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_InvestorType)
 BEGIN
-	INSERT INTO I_InvestorType (Name) VALUES ('Institutional')
-	INSERT INTO I_InvestorType (Name) VALUES ('Private')
-	INSERT INTO I_InvestorType (Name) VALUES ('Hedge Fund')
+	INSERT INTO I_InvestorType (InvestorTypeID, Name) VALUES (1, 'Institutional')
+	INSERT INTO I_InvestorType (InvestorTypeID, Name) VALUES (2, 'Private')
+	INSERT INTO I_InvestorType (InvestorTypeID, Name) VALUES (3, 'Hedge Fund')
 END
 GO
 
@@ -65,7 +65,7 @@ GO
 IF object_id('I_InvestorAccountType') IS NULL
 BEGIN
 	CREATE TABLE I_InvestorAccountType (
-		InvestorAccountTypeID INT NOT NULL IDENTITY(1,1),
+		InvestorAccountTypeID INT NOT NULL,
 		Name NVARCHAR(255),
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorAccountType PRIMARY KEY (InvestorAccountTypeID)
@@ -75,9 +75,9 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_InvestorAccountType)
 BEGIN
-	INSERT INTO I_InvestorAccountType (Name) VALUES ('Funding')
-	INSERT INTO I_InvestorAccountType (Name) VALUES ('Repayments')
-	INSERT INTO I_InvestorAccountType (Name) VALUES ('Bridging')
+	INSERT INTO I_InvestorAccountType (InvestorAccountTypeID, Name) VALUES (1, 'Funding')
+	INSERT INTO I_InvestorAccountType (InvestorAccountTypeID, Name) VALUES (2, 'Repayments')
+	INSERT INTO I_InvestorAccountType (InvestorAccountTypeID, Name) VALUES (3, 'Bridging')
 END
 GO
 
@@ -163,7 +163,7 @@ GO
 IF object_id('I_Product') IS NULL
 BEGIN
 	CREATE TABLE I_Product (
-		ProductID INT NOT NULL IDENTITY(1,1),
+		ProductID INT NOT NULL,
 	   	Name NVARCHAR(255),
 	   	IsDefault BIT NOT NULL,
 	   	IsEnabled BIT NOT NULL,
@@ -175,10 +175,10 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_Product)
 BEGIN
-	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('Loans', 1, 1)
-	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('Alibaba', 0, 1)
-	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('CreditLine', 0, 1)
-	INSERT INTO I_Product (Name, IsDefault,IsEnabled) VALUES ('InvoiceFinance', 0, 1)
+	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (1, 'Loans',          1, 1)
+	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (2, 'Alibaba',        0, 1)
+	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (3, 'CreditLine',     0, 1)
+	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (4, 'InvoiceFinance', 0, 1)
 END
 GO
 
@@ -250,7 +250,7 @@ GO
 IF object_id('I_FundingType') IS NULL
 BEGIN
 	CREATE TABLE I_FundingType (
-		FundingTypeID INT NOT NULL IDENTITY(1,1),
+		FundingTypeID INT NOT NULL,
 	   	Name NVARCHAR(50),
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_FundingType PRIMARY KEY (FundingTypeID)
@@ -260,9 +260,9 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_FundingType)
 BEGIN
-	INSERT INTO I_FundingType (Name) VALUES ('CoInvestment')
-	INSERT INTO I_FundingType (Name) VALUES ('FullInvestment')
-	INSERT INTO I_FundingType (Name) VALUES ('PooledInvestment')
+	INSERT INTO I_FundingType (FundingTypeID, Name) VALUES (1, 'CoInvestment')
+	INSERT INTO I_FundingType (FundingTypeID, Name) VALUES (2, 'FullInvestment')
+	INSERT INTO I_FundingType (FundingTypeID, Name) VALUES (3, 'PooledInvestment')
 END
 GO
 

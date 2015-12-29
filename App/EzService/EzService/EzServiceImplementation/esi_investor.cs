@@ -5,22 +5,7 @@
 	using EzService.ActionResults.Investor;
 
 	partial class EzServiceImplementation : IEzServiceInvestor {
-		public InvestorTypesActionResult InvestorLoadTypes(int underwriterID) {
-			return new InvestorTypesActionResult {
-				//TODO implement
-				InvestorBankAccountTypes = new Dictionary<string, string>{
-					{"1","Funding"},
-					{"2","Repayments"},
-					{"3","Bridging"},
-				},
-				InvestorTypes = new Dictionary<string, string>{
-					{"1","Institutional"},
-					{"2","Private"},
-					{"3","Hedge Fund"},
-				}
-			};
-		}
-
+		
 		public InvestorActionResult LoadInvestor(int underwriterID, int investorID) {
 			LoadInvestor strategy;
 			var metadata = ExecuteSync(out strategy, null, underwriterID, investorID);

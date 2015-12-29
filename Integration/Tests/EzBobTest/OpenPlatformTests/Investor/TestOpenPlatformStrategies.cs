@@ -142,5 +142,10 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 			Assert.Greater(stra.Result.Count(), 0);
 		}
 
+		[Test]
+		public void NotifyRiskPendingInvestorOffer() {
+			var stra = new NotifyRiskPendingInvestorOffer(154, 1000, DateTime.UtcNow.AddDays(1));
+			stra.Execute();
+		}
 	}
 }

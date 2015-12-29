@@ -1,12 +1,10 @@
-﻿@using EzBob.Web.Infrastructure
-@using ServiceClientProxy
-@using StructureMap
+﻿@using System.Collections.Generic
+@using Ezbob.Backend.ModelsWithDB.OpenPlatform
+@using EzBob.CommonLib
 @model dynamic
 
 @{
-	var service = new ServiceClient();
-	var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-	var types = service.Instance.InvestorLoadTypes(context.UserId);
+	Dictionary<string, string> accountTypes = I_InvestorAccountTypeEnum.Funding.ToDictionaryInt<I_InvestorAccountTypeEnum>();
 }
 
 <script type="text/template" id="manage-investor-template">
@@ -171,7 +169,7 @@
 				<form id="addEditInvestorBankAccountForm" class="form-horizontal">
 					<div class="row">
 						<div class="col-md-6">
-							@EzForm.SelectUnderwriter("AccountType", "Bank account type", types.InvestorBankAccountTypes, "Bank account type")
+							@EzForm.SelectUnderwriter("AccountType", "Bank account type", accountTypes, "Bank account type")
 							@EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null, "numeric")
 							@EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null, "numeric")
 							@EzForm.InputTextUnderwriter(this, "BankAccountName", "Bank account name", null)

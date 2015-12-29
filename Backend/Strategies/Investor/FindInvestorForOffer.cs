@@ -9,7 +9,7 @@
     using StructureMap;
 
     public class FindInvestorForOffer : AStrategy {
-		public FindInvestorForOffer(int customerID, int cashRequestID) {
+		public FindInvestorForOffer(int customerID, long cashRequestID) {
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
 		}
@@ -81,6 +81,6 @@
 		public bool IsFound { get; private set; }
 
 		private readonly int customerID;
-		private readonly int cashRequestID;
+		private readonly long cashRequestID;
 	}
 }

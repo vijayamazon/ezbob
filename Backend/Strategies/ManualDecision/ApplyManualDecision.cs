@@ -8,6 +8,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
@@ -301,7 +302,14 @@
 			return true;
 		} // RejectCustomer
 
+
 		private bool ApproveCustomer(NL_Decisions newDecision) {
+			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID);
+			if (linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
+				PendingInvestor(newDecision);
+				return false;
+			}
+
 			this.decisionToApply.Customer.DateApproved = this.now;
 			this.decisionToApply.Customer.ApprovedReason = this.decisionModel.reason;
 
@@ -386,7 +394,24 @@
 			});
 
 			return true;
-		} // ApproveCustomer
+		}// ApproveCustomer
+
+		private void PendingInvestor(NL_Decisions newDecision) {
+			this.decisionToApply.Customer.CreditResult = CreditResultStatus.PendingInvestor.ToString();
+			this.decisionToApply.CashRequest.UnderwriterDecision = CreditResultStatus.PendingInvestor.ToString();
+			SaveDecision<ManuallyApprove>();
+
+			var notifyRiskPendingInvestorCustomer = new NotifyRiskPendingInvestorOffer(
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ManagerApprovedSum,
+				this.currentState.OfferValidUntil
+			);
+			notifyRiskPendingInvestorCustomer.Execute();
+
+			//TODO newDecision PendingInvestor status
+		}
+
+
 
 		private bool SaveDecision<T>() where T : AApplyManualDecisionBase {
 			string result;

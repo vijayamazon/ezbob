@@ -3,6 +3,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using EzBob.Web.Areas.Underwriter.Models.Investor;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -39,11 +40,9 @@
 			if (SameBank) {
 				var bank = InvestorBank.First();
 				
-				var types = this.serviceClient.Instance.InvestorLoadTypes(this.context.UserId);
-
 				var repaymentsBank = new FrontInvestorBankAccountModel {
 					IsActive = true,
-					AccountType = int.Parse(types.InvestorBankAccountTypes.First(x => x.Value == "Repayments").Key),
+					AccountType = (int)I_InvestorAccountTypeEnum.Repayments,
 					BankAccountName = bank.BankAccountName,
 					BankAccountNumber = bank.BankAccountNumber,
 					BankSortCode = bank.BankSortCode
