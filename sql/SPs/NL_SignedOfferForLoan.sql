@@ -88,17 +88,15 @@ BEGIN
 		 RETURN
 	END
 
-	-- loan period is in the range of max period allowed by loan source
-	IF (select OfferRepaymentCount from  #validOffer) >
-	(select DefaultRepaymentPeriod from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
+	-- loan period is in the range of default period allowed by loan source
+	IF (select OfferRepaymentCount from  #validOffer) < (select DefaultRepaymentPeriod from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
 	BEGIN 
 		 select 0 as OfferID, 'Wrong repayment period' as Error;
 		 RETURN
 	END
 
 	-- loan interest is in the range of max interest allowed by loan source
-	IF (select MonthlyInterestRate from  #validOffer) >
-	(select MaxInterest from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
+	IF (select MonthlyInterestRate from  #validOffer) >	(select MaxInterest from  #validOffer JOIN LoanSource ls ON #validOffer.LoanSourceID = ls.LoanSourceID) 
 	BEGIN 
 		 select 0 as OfferID, 'Wrong interest rate' as Error;
 		 RETURN
