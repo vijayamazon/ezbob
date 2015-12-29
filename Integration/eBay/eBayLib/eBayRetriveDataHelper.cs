@@ -71,7 +71,13 @@
 			UpdateAccountInfo(databaseCustomerMarketPlace, info, historyRecord);
 			UpdateUserInfo(databaseCustomerMarketPlace, info, historyRecord);
 			UpdateFeedbackInfo(databaseCustomerMarketPlace, info, historyRecord);
-			FetchTransactions(databaseCustomerMarketPlace, info, historyRecord);
+
+			Helper.CustomerMarketplaceUpdateAction(
+				CustomerMarketplaceUpdateActionType.EbayGetOrders,
+				databaseCustomerMarketPlace,
+				historyRecord,
+				() => FetchTransactions(databaseCustomerMarketPlace, info, historyRecord)
+			);
 		} // InternalUpdateInfo
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
@@ -315,80 +321,137 @@
 			);
 		} // UpdateUserInfo
 
-		private void FetchTransactions(
+		private IUpdateActionResultInfo FetchTransactions(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			DataProviderCreationInfo info,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			Helper.CustomerMarketplaceUpdateAction(
-				CustomerMarketplaceUpdateActionType.EbayGetOrders,
-				databaseCustomerMarketPlace,
-				historyRecord,
-				() => {
-					int mpID = databaseCustomerMarketPlace.Id;
+			int mpID = databaseCustomerMarketPlace.Id;
 
-					DateTime toDate = DateTime.UtcNow;
+			DateTime toDate = DateTime.UtcNow.Date;
 
-					var elapsedTimeInfo = new ElapsedTimeInfo();
+			var elapsedTimeInfo = new ElapsedTimeInfo();
 
-					DateTime fromDate = Helper.FindLastKnownEbayTransactionTime(mpID);
+			DateTime fromDate = Helper.FindLastKnownEbayTransactionTime(mpID);
 
-					ResultInfoOrders orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						mpID,
-						ElapsedDataMemberType.RetrieveDataFromExternalService,
-						() => DataProviderGetOrders.GetOrders(
-							info,
-							new ParamsDataInfoGetOrdersFromDateToDateCreated(fromDate, toDate)
-						)
-					);
+			var periods = new Stack<FetchPeriod>();
 
-					EbayDatabaseOrdersList databaseOrdersList = ParseOrdersInfo(orders);
+			DateTime t = toDate;
 
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						mpID,
-						ElapsedDataMemberType.StoreDataToDatabase,
-						() => Helper.AddEbayOrdersData(databaseCustomerMarketPlace, databaseOrdersList, historyRecord)
-					);
+			while (t >= fromDate) {
+				DateTime f = t.AddDays(-90);
 
-					EbayDatabaseOrdersList allEBayOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						mpID,
-						ElapsedDataMemberType.RetrieveDataFromDatabase,
-						() => Helper.GetAllEBayOrders(orders.SubmittedDate, databaseCustomerMarketPlace)
-					);
+				periods.Push(new FetchPeriod { To = t, From = f < fromDate ? fromDate : f, });
 
-					if (this.settings.DownloadCategories) {
-						IEnumerable<string> topSealedProductItems = GetTopSealedProductItems(allEBayOrders);
+				t = f;
+			} // while
 
-						if (topSealedProductItems != null) {
-							List<MP_EBayOrderItemDetail> orderItemDetails = topSealedProductItems.Select(
-								item => FindEBayOrderItemInfo(
-									databaseCustomerMarketPlace,
-									info,
-									item,
-									databaseOrdersList.RequestsCounter,
-									elapsedTimeInfo
-								)
-							).Where(d => d != null)
-							.ToList();
+			var frc = new FetchResultCounters();
 
-							Helper.UpdateOrderItemsInfo(orderItemDetails, elapsedTimeInfo, mpID);
-						} // if
-					} // if
+			foreach (var period in periods) {
+				frc.Add(FetchOnePeriodTransactions(
+					mpID,
+					databaseCustomerMarketPlace,
+					elapsedTimeInfo,
+					info,
+					historyRecord,
+					period
+				));
+			} // for each
 
-					int value = orders == null || orders.Orders == null ? 0 : orders.Orders.Count;
-
-					return new UpdateActionResultInfo {
-						Name = UpdateActionResultType.eBayOrdersCount,
-						Value = value,
-						RequestsCounter = databaseOrdersList == null ? null : databaseOrdersList.RequestsCounter,
-						ElapsedTime = elapsedTimeInfo
-					};
-				}
-			);
+			return new UpdateActionResultInfo {
+				Name = UpdateActionResultType.eBayOrdersCount,
+				Value = frc.OrderCount,
+				RequestsCounter = frc.RequestCount.IsEmpty ? null : frc.RequestCount,
+				ElapsedTime = elapsedTimeInfo
+			};
 		} // FetchTransactions
+
+		private struct FetchPeriod {
+			public DateTime From { get; set; }
+			public DateTime To { get; set; }
+		} // struct FetchPeriod
+
+		private class FetchResultCounters {
+			public FetchResultCounters() : this(null, 0) {} // constructor
+
+			public FetchResultCounters(RequestsCounterData requestCount, int orderCount) {
+				RequestCount = requestCount ?? new RequestsCounterData();
+				OrderCount = orderCount;
+			} // constructor
+
+			public RequestsCounterData RequestCount { get; private set; }
+			public int OrderCount { get; private set; }
+
+			public void Add(FetchResultCounters other) {
+				if (other == null)
+					return;
+
+				if (!other.RequestCount.IsEmpty)
+					RequestCount.Add(other.RequestCount);
+
+				OrderCount += other.OrderCount;
+			} // Add
+		} // class FetchResultCounters
+
+		private FetchResultCounters FetchOnePeriodTransactions(
+			int mpID,
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			ElapsedTimeInfo elapsedTimeInfo,
+			DataProviderCreationInfo info,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord,
+			FetchPeriod period
+		) {
+			ResultInfoOrders orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				mpID,
+				ElapsedDataMemberType.RetrieveDataFromExternalService,
+				() => DataProviderGetOrders.GetOrders(
+					info,
+					new ParamsDataInfoGetOrdersFromDateToDateCreated(period.From, period.To)
+				)
+			);
+
+			EbayDatabaseOrdersList databaseOrdersList = ParseOrdersInfo(orders);
+
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				mpID,
+				ElapsedDataMemberType.StoreDataToDatabase,
+				() => Helper.AddEbayOrdersData(databaseCustomerMarketPlace, databaseOrdersList, historyRecord)
+			);
+
+			EbayDatabaseOrdersList allEBayOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				mpID,
+				ElapsedDataMemberType.RetrieveDataFromDatabase,
+				() => Helper.GetAllEBayOrders(orders.SubmittedDate, databaseCustomerMarketPlace)
+			);
+
+			if (this.settings.DownloadCategories) {
+				IEnumerable<string> topSealedProductItems = GetTopSealedProductItems(allEBayOrders);
+
+				if (topSealedProductItems != null) {
+					List<MP_EBayOrderItemDetail> orderItemDetails = topSealedProductItems.Select(
+						item => FindEBayOrderItemInfo(
+							databaseCustomerMarketPlace,
+							info,
+							item,
+							databaseOrdersList.RequestsCounter,
+							elapsedTimeInfo
+						)
+					).Where(d => d != null)
+					.ToList();
+
+					Helper.UpdateOrderItemsInfo(orderItemDetails, elapsedTimeInfo, mpID);
+				} // if
+			} // if
+
+			return new FetchResultCounters(
+				(databaseOrdersList == null) ? null : databaseOrdersList.RequestsCounter,
+				((orders == null) || (orders.Orders == null)) ? 0 : orders.Orders.Count
+			);
+		} // FetchOnePeriodTransactions
 
 		private EbayDatabaseOrdersList ParseOrdersInfo(ResultInfoOrders data) {
 			var rez = new EbayDatabaseOrdersList(data.SubmittedDate) {

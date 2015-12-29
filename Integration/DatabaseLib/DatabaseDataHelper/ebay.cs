@@ -671,7 +671,7 @@
 
 			DateTime resultingMonth = dbMax > yearAgo ? dbMax : yearAgo;
 
-			return resultingMonth.AddDays(1 - resultingMonth.Day);
+			return resultingMonth.AddDays(1 - resultingMonth.Day).Date;
 		} // FindLastKnownEbayTransactionTime
 
 		private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item) {
