@@ -1002,9 +1002,9 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, context.UserId).Value;
 				if (nlLoanId > 0) {
-					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, 1, true).Value;
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, context.UserId, true).Value;
 					ms_oLog.Info("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause

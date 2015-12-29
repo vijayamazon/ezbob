@@ -518,7 +518,7 @@
 					? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr()
 					: string.Empty,
 				CashRequestID = this.nlCashRequestID,
-				UserID = 1,
+				UserID = UnderwriterID,
 			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
@@ -764,19 +764,17 @@
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 
-			AddCashRequest nlsCashRequest = new AddCashRequest(new NL_CashRequests {
+			AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 				CustomerID = CustomerID,
 				OldCashRequestID = this.cashRequestID,
 				RequestTime = now,
 				UserID = UnderwriterID,
 			});
-			nlsCashRequest.Context.CustomerID = CustomerID;
-			nlsCashRequest.Context.UserID = UnderwriterID;
-			nlsCashRequest.Execute();
-			this.nlCashRequestID = nlsCashRequest.CashRequestID;
-
-			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+			nlAddCashRequest.Context.CustomerID = CustomerID;
+			nlAddCashRequest.Context.UserID = UnderwriterID;
+			nlAddCashRequest.Execute();
+			this.nlCashRequestID = nlAddCashRequest.CashRequestID;
 
 			int cashRequestCount = sr["CashRequestCount"];
 

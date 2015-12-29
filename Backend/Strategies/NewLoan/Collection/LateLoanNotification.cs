@@ -22,7 +22,7 @@
 			base.now = now;
 
 			nlNotificationsList = new List<CollectionDataModel>();
-			sendNotificationForNewLoan = Convert.ToBoolean(CurrentValues.Instance.SendCollectionMailOnNewLoan.Value);
+			sendNotificationForNewLoan = CurrentValues.Instance.SendCollectionMailOnNewLoan;
 		} // constructor
 
 		public new DateTime now { get; private set; }

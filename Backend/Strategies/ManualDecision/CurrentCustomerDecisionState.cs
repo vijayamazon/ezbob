@@ -37,6 +37,14 @@
 		public bool SpreadSetupFee { get; set; }
 		public decimal ManualSetupFeePercent { get; set; }
 		public decimal BrokerSetupFeePercent { get; set; }
+		public decimal InterestRate { get; set; }
+		public int DiscountPlanID { get; set; }
+		public int LoanSourceID { get; set; }
+		public int LoanTypeID { get; set; }
+		public int RepaymentPeriod { get; set; }
+		public int ApprovedRepaymentPeriod { get; set; }
+		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
+		public DateTime CreationDate { get; set; }
 
 		public CreditResultStatus? Decision { get; private set; }
 

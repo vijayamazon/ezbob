@@ -2,6 +2,7 @@ IF OBJECT_ID('NL_CustomersForAutoCharger') IS  NULL
 	EXECUTE('CREATE PROCEDURE NL_CustomersForAutoCharger AS SELECT 1')
 GO
 
+
 ALTER PROCEDURE NL_CustomersForAutoCharger 
 @Now DATE
 AS 
@@ -35,7 +36,7 @@ BEGIN
 		JOIN NL_LoanScheduleStatuses lss on lss.LoanScheduleStatusID = s.LoanScheduleStatusID AND (lss.LoanScheduleStatus = 'StillToPay' OR lss.LoanScheduleStatus = 'Late') AND s.PlannedDate <= @Now
 	WHERE 	 
 	  s.PlannedDate = (SELECT min(PlannedDate) FROM NL_LoanSchedules WHERE LoanHistoryID = s.LoanHistoryID)  -- get the first schedule from "still to pay" or "lates"	  
-	  AND DATEDIFF(DAY, s.PlannedDate, @Now) <= 30 --TODO CHECK WHAT SHOULD BE HERE
+	  AND DATEDIFF(DAY, s.PlannedDate, @Now) <= 30 
 	  AND c.ExternalCollectionStatusID IS NULL;
 	   
 

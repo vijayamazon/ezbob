@@ -39,7 +39,7 @@
 						LoanHistoryID = sr["LoanHistoryID"],
 						NLLoanID = sr["LoanID"]
 					};
-					if (Convert.ToBoolean(CurrentValues.Instance.SendCollectionMailOnNewLoan.Value) == false) {
+					if (CurrentValues.Instance.SendCollectionMailOnNewLoan == false) {
 						model.UpdateCustomerAllowed = false;
 					}
 					this.loansList.Add(model);

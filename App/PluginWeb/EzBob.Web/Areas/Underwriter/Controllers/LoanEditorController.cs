@@ -68,9 +68,9 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, 1, 1).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, loan.Customer.Id, this._context.UserId).Value;
 				if (nlLoanId > 0) {
-					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, true).Value;
 					Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
@@ -159,9 +159,9 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(model.Id, 1, 1).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(model.Id, loan.Customer.Id, this._context.UserId).Value;
 				if (nlLoanId > 0) {
-					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, true).Value;
 					Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
@@ -221,9 +221,9 @@
 				calc.GetState();
 
 				try {
-					long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+					long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, cr.Customer.Id, this._context.UserId).Value;
 					if (nlLoanId > 0) {
-						var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, now, 1, true).Value;
+						var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, now, this._context.UserId, true).Value;
 						Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
 					}
 					// ReSharper disable once CatchAllClause
@@ -469,9 +469,9 @@
 			calc.GetState();
 
 			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, 1, 1).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, loan.Customer.Id, this._context.UserId).Value;
 				if (nlLoanId > 0) {
-					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, true).Value;
 					Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause

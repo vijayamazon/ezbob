@@ -926,6 +926,12 @@
 		}
 
 		[Test]
+		public void LateLoanJobTest() {
+			LateLoanJob s = new LateLoanJob(null);
+			s.Execute();
+		}
+
+		[Test]
 		public void AddSpreadedFeeTest() {
 			const long loanID = 4;
 			DateTime now = DateTime.UtcNow;

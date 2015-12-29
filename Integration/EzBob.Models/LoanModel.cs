@@ -67,7 +67,7 @@
 			if (loan.Id > 0) {
 				try {
 					ServiceClient serviceClient = new ServiceClient();
-					long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, 1, 1)
+					long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1)
 						.Value;
 					if (nlLoanId > 0) {
 						var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true)

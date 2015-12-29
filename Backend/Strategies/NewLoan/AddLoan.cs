@@ -373,7 +373,7 @@
 
 			if (rebateTransaction == null || rebateTransaction.Amount == 0) {
 				Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
-				NL_AddLog(LogType.DataExsistense, string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
+				NL_AddLog(LogType.Info, string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
 				return;
 			}
 

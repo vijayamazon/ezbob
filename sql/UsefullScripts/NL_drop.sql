@@ -208,6 +208,18 @@ IF OBJECT_ID('NL_loansGet') IS NOT NULL
 	DROP PROCEDURE NL_loansGet
 GO
 
+IF OBJECT_ID('NL_CustomersForAutoCharger') IS NOT NULL
+	DROP PROCEDURE NL_CustomersForAutoCharger
+GO
+
+IF OBJECT_ID('NL_LateLoanMailDataGet') IS NOT NULL
+	DROP PROCEDURE NL_LateLoanMailDataGet
+GO
+
+IF OBJECT_ID('NL_CuredLoansGet') IS NOT NULL
+	DROP PROCEDURE NL_CuredLoansGet
+GO
+
 -------------------------------------------------------------------------------
 --
 -- Drop new rows in old tables

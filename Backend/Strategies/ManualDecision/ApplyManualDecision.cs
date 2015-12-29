@@ -379,23 +379,35 @@
 					Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
 				}
 
-				GetLastOffer sLastOffer = new GetLastOffer(this.decisionToApply.Customer.ID);
-				sLastOffer.Context.UserID = this.decisionToApply.CashRequest.UnderwriterID;
-				try {
-					sLastOffer.Execute();
-					// ReSharper disable once CatchAllClause
-				} catch (Exception ex) {
-					Log.Error("Failed to GetLastOffer. Err: {0}", ex.Message);
-				}
+				NL_Offers nlOffer = new NL_Offers() {
+					DecisionID = nlAddDecision.DecisionID,
+					CreatedTime = this.currentState.CreationDate,
+					Amount = this.currentState.OfferedCreditLine,
+					BrokerSetupFeePercent = this.currentState.BrokerSetupFeePercent,
+					//IsAmountSelectionAllowed = this.currentState.
+					SendEmailNotification = !this.currentState.EmailSendingBanned,
+					StartTime = this.currentState.OfferStart,
+					EndTime = this.currentState.OfferValidUntil,
+					IsLoanTypeSelectionAllowed = this.currentState.IsLoanTypeSelectionAllowed == 1,
+					Notes = this.decisionToApply.CashRequest.UnderwriterComment + " old cr " + this.decisionToApply.CashRequest.ID,
+					MonthlyInterestRate = this.currentState.InterestRate,
+					LoanSourceID = this.currentState.LoanSourceID,
+					DiscountPlanID = this.currentState.DiscountPlanID,
+					LoanTypeID = this.currentState.LoanTypeID,
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
+					RepaymentCount = this.currentState.RepaymentPeriod, // ApprovedRepaymentPeriod???
+					IsRepaymentPeriodSelectionAllowed = this.currentState.IsCustomerRepaymentPeriodSelectionAllowed
+				};
 
-				NL_Offers lastOffer = sLastOffer.Offer;
+				Log.Debug("Adding nl offer: {0}", nlOffer);
+					
+				NL_OfferFees setupFee = new NL_OfferFees() { 
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee, 
+					Percent = this.currentState.ManualSetupFeePercent, 
+					OneTimePartPercent = 1, 
+					DistributedPartPercent = 0 
+				};
 
-				Log.Debug("nl lastOffer {0}, Error: {1}", lastOffer.OfferID, sLastOffer.Error);
-
-				lastOffer.DecisionID = nlAddDecision.DecisionID;
-				lastOffer.CreatedTime = this.now;
-	
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.currentState.ManualSetupFeePercent, OneTimePartPercent = 1, DistributedPartPercent = 0 };
 				if (this.currentState.SpreadSetupFee) {
 					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
 					setupFee.OneTimePartPercent = 0;
@@ -403,7 +415,7 @@
 				}
 				NL_OfferFees[] ofeerFees = { setupFee };
 
-				AddOffer sAddOffer = new AddOffer(lastOffer, ofeerFees); 
+				AddOffer sAddOffer = new AddOffer(nlOffer, ofeerFees); 
 				sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
 				sAddOffer.Context.UserID = this.decisionModel.underwriterID;
 

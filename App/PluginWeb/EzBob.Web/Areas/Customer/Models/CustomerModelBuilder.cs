@@ -403,7 +403,7 @@
 
 			try {
 				ServiceClient service = new ServiceClient();
-				long nlLoanId = service.Instance.GetLoanByOldID(loan.Id, 1, 1).Value;
+				long nlLoanId = service.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
 				if (nlLoanId > 0) {
 					var nlModel = service.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
 					this.Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);

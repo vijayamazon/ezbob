@@ -19,6 +19,9 @@
 
 
 		public override void Execute() {
+
+			NL_AddLog(LogType.Info, "Strategy Start", this.nowTime, null, null, null);
+
 			if (!CurrentValues.Instance.NewLoanRun) {
 				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;

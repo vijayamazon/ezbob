@@ -320,7 +320,7 @@
 
 			_loans.Update(loan);
 
-			Log.Debug(string.Format("updated loan: {0}", loan));
+			//Log.Debug(string.Format("updated loan: {0}", loan));
 
 			return res;
 		}

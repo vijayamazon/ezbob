@@ -445,7 +445,7 @@
 				var loan = customer.GetLoan(loanId);
 				
 				if (nlPayment != null) {
-					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
+					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId, customer.Id);
 					if (nlLoanId > 0) {
 						nlPayment.Amount = amount;
 						nlPayment.CreationTime = DateTime.UtcNow;
@@ -474,7 +474,7 @@
 				).FirstOrDefault();
 
 				if (nlPayment != null) {
-					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId);
+					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId, customer.Id);
 					if (nlLoanId > 0) {
 						nlPayment.Amount = amount;
 						nlPayment.CreationTime = DateTime.UtcNow;
@@ -539,7 +539,7 @@
 			var result = payEarlyCalc.GetState();
 
 			try {
-				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
+				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, loan.Customer.Id);
 				if (nlLoanId > 0) {
 					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
 					Log.InfoFormat("<<<GetStateAt NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
@@ -558,7 +558,7 @@
 			payEarlyCalc.GetState();
 
 			try {
-				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id);
+				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, loan.Customer.Id);
 				if (nlLoanId > 0) {
 					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
 					Log.InfoFormat("<<<Recalculate NL_Compare {0}\n  'old' loan: {1} >>>", nlModel, loan);
