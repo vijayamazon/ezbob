@@ -37,7 +37,7 @@ BEGIN
 
 	IF @CheckUsers = 1
 	BEGIN
-		IF EXISTS (SELECT * FROM Customer WHERE (DaytimePhone = @ContactMobile OR MobilePhone = @ContactMobile) AND OriginID = @OriginID)
+		IF EXISTS (SELECT * FROM Customer WHERE (DaytimePhone = @ContactMobile OR MobilePhone = @ContactMobile))
 			RETURN 'There is already a customer with such phone number: ' + @ContactMobile
 	END
 

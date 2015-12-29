@@ -46,6 +46,11 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
+		SET @ErrMsg = dbo.udfCheckExternalBrokerEmailCollissions(@ContactEmail)
+	END
+
+	IF @ErrMsg = ''
+	BEGIN
 		BEGIN TRY
 			INSERT INTO Security_User (UserName, FullName, Email, BranchId, EzPassword, Salt, CycleCount, OriginID)
 				VALUES (@ContactEmail, @FirmName, @ContactEmail, 0, @Password, @Salt, @CycleCount, @UiOriginID)

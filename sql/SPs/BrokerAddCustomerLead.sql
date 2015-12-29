@@ -31,7 +31,13 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@LeadEmail, @OriginID, NULL, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+		SET @ErrMsg = dbo.udfCheckEmailUniqueness(@LeadEmail, @OriginID, DEFAULT, DEFAULT, DEFAULT)
+	END
+
+	IF @ErrMsg = ''
+	BEGIN
+		IF EXISTS (SELECT BrokerID FROM Broker WHERE ContactEmail = @LeadEmail)
+			SET @ErrMsg = 'email is already being used'
 	END
 
 	IF @ErrMsg = ''

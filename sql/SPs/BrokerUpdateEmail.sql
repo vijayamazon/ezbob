@@ -23,6 +23,9 @@ BEGIN
 		SET @ErrMsg = dbo.udfCheckEmailUniqueness(@NewEmail, @OriginID, DEFAULT, DEFAULT, DEFAULT)
 
 	IF @ErrMsg = ''
+		SET @ErrMsg = dbo.udfCheckExternalBrokerEmailCollissions(@NewEmail)
+
+	IF @ErrMsg = ''
 	BEGIN
 		BEGIN TRY
 			BEGIN TRANSACTION
