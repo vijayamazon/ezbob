@@ -8,13 +8,13 @@
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceUserManagement {
 		[OperationContract]
-		UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model);
+		UserLoginActionResult SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model);
 
 		[OperationContract]
 		UserLoginActionResult LoginCustomerMutliOrigin(LoginCustomerMultiOriginModel model);
 
 		[OperationContract]
-		ActionMetaData UnderwriterSignup(string name, Password password, string role);
+		ActionMetaData SignupUnderwriterMultiOrigin(string name, DasKennwort password, string role);
 
 		[OperationContract]
 		UserLoginActionResult UserLogin(

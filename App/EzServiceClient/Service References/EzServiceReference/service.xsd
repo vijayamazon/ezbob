@@ -1268,17 +1268,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SignupCustomerMutliOrigin">
+  <xs:element name="SignupCustomerMultiOrigin">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q110="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="model" nillable="true" type="q110:SignupCustomerMultiOriginModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SignupCustomerMutliOriginResponse">
+  <xs:element name="SignupCustomerMultiOriginResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SignupCustomerMutliOriginResult" nillable="true" type="q111:UserLoginActionResult" />
+        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SignupCustomerMultiOriginResult" nillable="true" type="q111:UserLoginActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1296,19 +1296,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UnderwriterSignup">
+  <xs:element name="SignupUnderwriterMultiOrigin">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-        <xs:element xmlns:q114="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="password" nillable="true" type="q114:Password" />
+        <xs:element xmlns:q114="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="password" nillable="true" type="q114:DasKennwort" />
         <xs:element minOccurs="0" name="role" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UnderwriterSignupResponse">
+  <xs:element name="SignupUnderwriterMultiOriginResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q115="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="UnderwriterSignupResult" nillable="true" type="q115:ActionMetaData" />
+        <xs:element xmlns:q115="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SignupUnderwriterMultiOriginResult" nillable="true" type="q115:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

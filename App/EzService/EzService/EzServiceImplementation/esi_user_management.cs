@@ -8,8 +8,8 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
-		public UserLoginActionResult SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model) {
-			SignupCustomerMutliOrigin instance;
+		public UserLoginActionResult SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model) {
+			SignupCustomerMultiOrigin instance;
 
 			ActionMetaData amd = ExecuteSync(out instance, null, null, model);
 
@@ -20,7 +20,7 @@
 				ErrorMessage = instance.ErrorMsg,
 				RefNumber = instance.RefNumber,
 			};
-		} // SignupCustomerMutliOrigin
+		} // SignupCustomerMultiOrigin
 
 		public UserLoginActionResult LoginCustomerMutliOrigin(LoginCustomerMultiOriginModel model) {
 			LoginCustomerMutliOrigin instance;
@@ -36,9 +36,9 @@
 			};
 		} // LoginCustomerMutliOrigin
 
-		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
-			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
-		} // UnderwriterSignup
+		public ActionMetaData SignupUnderwriterMultiOrigin(string name, DasKennwort password, string roleName) {
+			return ExecuteSync<SignupUnderwriterMultiOrigin>(null, null, name, password, roleName);
+		} // SignupUnderwriterMultiOrigin
 
 		public UserLoginActionResult UserLogin(
 			CustomerOriginEnum? originID,

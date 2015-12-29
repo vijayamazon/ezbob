@@ -1942,16 +1942,16 @@ namespace ServiceClientProxy.EzServiceReference {
     public enum RepaymentIntervalTypes : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Month = 0,
+        Month = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Day = 1,
+        Day = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Week = 7,
+        Week = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        TenDays = 10,
+        TenDays = 4,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -4275,11 +4275,11 @@ namespace ServiceClientProxy.EzServiceReference {
             "e")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMutliOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOriginResponse")]
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMultiOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMutliOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOriginResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMultiOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOriginResponse")]
         ServiceClientProxy.EzServiceReference.UserLoginActionResult LoginCustomerMutliOrigin(Ezbob.Backend.Models.LoginCustomerMultiOriginModel model);
@@ -4287,11 +4287,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOriginResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> LoginCustomerMutliOriginAsync(Ezbob.Backend.Models.LoginCustomerMultiOriginModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignupResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, Ezbob.Backend.Models.Password password, string role);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOriginResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SignupUnderwriterMultiOrigin(string name, Ezbob.Backend.Models.DasKennwort password, string role);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignupResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOriginResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SignupUnderwriterMultiOriginAsync(string name, Ezbob.Backend.Models.DasKennwort password, string role);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserLogin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserLoginResponse")]
         ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, Ezbob.Backend.Models.DasKennwort sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
@@ -5891,12 +5891,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ValidateAndUpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMutliOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model) {
-            return base.Channel.SignupCustomerMutliOrigin(model);
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMultiOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model) {
+            return base.Channel.SignupCustomerMultiOrigin(model);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMutliOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model) {
-            return base.Channel.SignupCustomerMutliOriginAsync(model);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMultiOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model) {
+            return base.Channel.SignupCustomerMultiOriginAsync(model);
         }
         
         public ServiceClientProxy.EzServiceReference.UserLoginActionResult LoginCustomerMutliOrigin(Ezbob.Backend.Models.LoginCustomerMultiOriginModel model) {
@@ -5907,12 +5907,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoginCustomerMutliOriginAsync(model);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, Ezbob.Backend.Models.Password password, string role) {
-            return base.Channel.UnderwriterSignup(name, password, role);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SignupUnderwriterMultiOrigin(string name, Ezbob.Backend.Models.DasKennwort password, string role) {
+            return base.Channel.SignupUnderwriterMultiOrigin(name, password, role);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role) {
-            return base.Channel.UnderwriterSignupAsync(name, password, role);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SignupUnderwriterMultiOriginAsync(string name, Ezbob.Backend.Models.DasKennwort password, string role) {
+            return base.Channel.SignupUnderwriterMultiOriginAsync(name, password, role);
         }
         
         public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> originID, string sEmail, Ezbob.Backend.Models.DasKennwort sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {

@@ -6,14 +6,11 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 ALTER PROCEDURE CreateUserForCustomer
-@Email NVARCHAR(250),
-@OriginID INT,
+@UserName NVARCHAR(250),
 @EzPassword VARCHAR(255),
 @Salt VARCHAR(255),
 @CycleCount VARCHAR(255),
-@SecurityQuestionID INT,
-@SecurityAnswer VARCHAR(200),
-@Ip NVARCHAR(50),
+@RoleName NVARCHAR(255),
 @Now DATETIME
 AS
 BEGIN
@@ -24,12 +21,10 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DECLARE @ErrorDuplicateUser         INT = -1
-	DECLARE @ErrorOriginNotFound        INT = -2
-	DECLARE @ErrorRoleNotFound          INT = -3
-	DECLARE @ErrorFailedToCreateUser    INT = -4
-	DECLARE @ErrorFailedToAttachRole    INT = -5
-	DECLARE @ErrorFailedToCreateSession INT = -6
-	DECLARE @ErrorConflictsWithInternal INT = -7
+	DECLARE @ErrorRoleNotFound          INT = -2
+	DECLARE @ErrorFailedToCreateUser    INT = -3
+	DECLARE @ErrorFailedToAttachRole    INT = -4
+	DECLARE @ErrorFailedToCreateSession INT = -5
 
 	------------------------------------------------------------------------------
 	--
@@ -37,7 +32,8 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	DECLARE @BranchID INT = 0 -- this SP is for customers only
+	DECLARE @BranchID INT = 1 -- this SP is for underwriters only
+	DECLARE @OriginID INT = NULL
 
 	------------------------------------------------------------------------------
 	--
@@ -54,19 +50,7 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	IF NOT EXISTS (SELECT * FROM CustomerOrigin WHERE CustomerOriginID = @OriginID)
-	BEGIN
-		SELECT
-			UserID = @ErrorOriginNotFound,
-			SessionID = @SessionID
-
-		RETURN
-	END
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	DECLARE @RoleID INT = (SELECT r.RoleId FROM Security_Role r WHERE r.Name = 'Web')
+	DECLARE @RoleID NVARCHAR(255) = (SELECT r.RoleId FROM Security_Role r WHERE LOWER(r.Name) = @RoleName)
 
 	------------------------------------------------------------------------------
 
@@ -82,7 +66,7 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = @Email AND OriginID = @OriginID)
+	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = @UserName)
 	BEGIN
 		SELECT
 			UserID = @ErrorDuplicateUser,
@@ -94,26 +78,12 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = @Email AND OriginID IS NULL)
-	BEGIN
-		SELECT
-			UserID = @ErrorConflictsWithInternal,
-			SessionID = @SessionID
-
-		RETURN
-	END
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
 	BEGIN TRY
 		INSERT INTO Security_User (
 			PassSetTime, UserName, FullName, Email, BranchId,
-			SecurityQuestion1ID, SecurityAnswer1,
 			EzPassword, Salt, CycleCount, OriginID
 		) VALUES (
-			@Now, @Email, @Email, @Email, @BranchID,
-			@SecurityQuestionID, @SecurityAnswer,
+			@Now, @UserName, @UserName, @UserName, @BranchID,
 			@EzPassword, @Salt, @CycleCount, @OriginID
 		)
 
@@ -145,7 +115,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	BEGIN TRY
-		EXECUTE CreateCustomerSession @UserID, @Now, @Ip, 1, 'Registration', NULL, @SessionID OUTPUT
+		EXECUTE CreateCustomerSession @UserID, @Now, '::1', 1, 'Registration', NULL, @SessionID OUTPUT
 	END TRY
 	BEGIN CATCH
 		SELECT

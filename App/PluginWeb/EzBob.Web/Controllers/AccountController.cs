@@ -343,7 +343,7 @@
 			try {
 				log.Debug("Sign up client attempt id: '{0}', requesting backend sign up.", uniqueID);
 
-				UserLoginActionResult signupResult = this.serviceClient.Instance.SignupCustomerMutliOrigin(signupModel);
+				UserLoginActionResult signupResult = this.serviceClient.Instance.SignupCustomerMultiOrigin(signupModel);
 
 				log.Debug("Sign up client attempt id: '{0}', backend sign up complete.", uniqueID);
 

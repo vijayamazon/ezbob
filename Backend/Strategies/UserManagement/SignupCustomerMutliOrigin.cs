@@ -2,7 +2,6 @@
 	using System;
 	using System.ComponentModel;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Globalization;
 	using System.Linq;
 	using System.Web.Security;
 	using ConfigManager;
@@ -20,8 +19,8 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
-	public class SignupCustomerMutliOrigin : AStrategy {
-		public SignupCustomerMutliOrigin(SignupCustomerMultiOriginModel model) {
+	public class SignupCustomerMultiOrigin : AStrategy {
+		public SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model) {
 			this.uniqueID = GenerateUniqueID();
 
 			Status = MembershipCreateStatus.ProviderError;
@@ -33,7 +32,7 @@
 		} // constructor
 
 		public override string Name {
-			get { return "SignupCustomerMutliOrigin"; }
+			get { return "SignupCustomerMultiOrigin"; }
 		} // Name
 
 		public override void Execute() {
@@ -51,7 +50,7 @@
 
 				Log.Debug("Sign up attempt '{0}', model is {1}.", this.uniqueID, this.model.ToLogStr());
 
-				this.model.UserName = (this.model.UserName ?? string.Empty).Trim().ToLower(CultureInfo.InvariantCulture);
+				this.model.UserName = (this.model.UserName ?? string.Empty).Trim().ToLowerInvariant();
 
 				if (string.IsNullOrWhiteSpace(this.model.UserName)) {
 					SetInternalErrorMsg("This is not a valid email address.");
@@ -494,7 +493,7 @@
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class CreateCustomer : AStoredProcedure {
-			public CreateCustomer(SignupCustomerMutliOrigin stra, bool mobilePhoneVerified) : base(stra.DB, stra.Log) {
+			public CreateCustomer(SignupCustomerMultiOrigin stra, bool mobilePhoneVerified) : base(stra.DB, stra.Log) {
 				this.stra = stra;
 				this.refNumber = new RefNumber(this.stra.UserID);
 				this.mobilePhoneVerified = mobilePhoneVerified;
@@ -632,7 +631,7 @@
 			} // NormalizeName
 
 			private readonly bool mobilePhoneVerified;
-			private readonly SignupCustomerMutliOrigin stra;
+			private readonly SignupCustomerMultiOrigin stra;
 			private readonly string refNumber;
 		} // class CreateCustomer
 
@@ -640,7 +639,7 @@
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class CreateCampaignSourceRef : AStoredProcedure {
-			public CreateCampaignSourceRef(SignupCustomerMutliOrigin stra) : base(stra.DB, stra.Log) {
+			public CreateCampaignSourceRef(SignupCustomerMultiOrigin stra) : base(stra.DB, stra.Log) {
 				this.stra = stra;
 			} // constructor
 
@@ -680,14 +679,14 @@
 
 			public DateTime? RDate { get { return this.stra.model.RDate(); } set { } }
 
-			private readonly SignupCustomerMutliOrigin stra;
+			private readonly SignupCustomerMultiOrigin stra;
 		} // class CreateCampaignSourceRef
 
 		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class CreateCustomerRequestedLoan : AStoredProcedure {
-			public CreateCustomerRequestedLoan(SignupCustomerMutliOrigin stra) : base(stra.DB, stra.Log) {
+			public CreateCustomerRequestedLoan(SignupCustomerMultiOrigin stra) : base(stra.DB, stra.Log) {
 				this.stra = stra;
 			} // constructor
 
@@ -733,14 +732,14 @@
 				return bSuccess ? result : intDefault;
 			} // ToInt
 
-			private readonly SignupCustomerMutliOrigin stra;
+			private readonly SignupCustomerMultiOrigin stra;
 		} // class CreateCustomerRequestedLoan
 
 		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class CreateAlibabaBuyer : AStoredProcedure {
-			public CreateAlibabaBuyer(SignupCustomerMutliOrigin stra) : base(stra.DB, stra.Log) {
+			public CreateAlibabaBuyer(SignupCustomerMultiOrigin stra) : base(stra.DB, stra.Log) {
 				this.stra = stra;
 			} // constructor
 
@@ -755,7 +754,7 @@
 				set { }
 			} // AliID
 
-			private readonly SignupCustomerMutliOrigin stra;
+			private readonly SignupCustomerMultiOrigin stra;
 		} // class CreateAlibabaBuyer
 	} // class SignupAlibabaBuyer
 } // namespace

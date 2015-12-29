@@ -498,7 +498,7 @@
     <Compile Include="UserManagement\UserDataForLogin.cs" />
     <Compile Include="UserManagement\UserLogin.cs" />
     <Compile Include="UserManagement\UserResetPassword.cs" />
-    <Compile Include="UserManagement\UserSignup.cs" />
+    <Compile Include="UserManagement\SignupUnderwriterMultiOrigin.cs" />
     <Compile Include="UserManagement\UserManagementConfigs.cs" />
     <Compile Include="UserManagement\UserSecurityData.cs" />
     <Compile Include="UserManagement\UserUpdateSecurityQuestion.cs" />

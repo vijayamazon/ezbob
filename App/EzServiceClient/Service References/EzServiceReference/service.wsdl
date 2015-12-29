@@ -576,11 +576,11 @@
   <wsdl:message name="IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:ValidateAndUpdateLinkedHmrcPasswordResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_SignupCustomerMutliOrigin_InputMessage">
-    <wsdl:part name="parameters" element="tns:SignupCustomerMutliOrigin" />
+  <wsdl:message name="IEzService_SignupCustomerMultiOrigin_InputMessage">
+    <wsdl:part name="parameters" element="tns:SignupCustomerMultiOrigin" />
   </wsdl:message>
-  <wsdl:message name="IEzService_SignupCustomerMutliOrigin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SignupCustomerMutliOriginResponse" />
+  <wsdl:message name="IEzService_SignupCustomerMultiOrigin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SignupCustomerMultiOriginResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoginCustomerMutliOrigin_InputMessage">
     <wsdl:part name="parameters" element="tns:LoginCustomerMutliOrigin" />
@@ -588,11 +588,11 @@
   <wsdl:message name="IEzService_LoginCustomerMutliOrigin_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoginCustomerMutliOriginResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UnderwriterSignup_InputMessage">
-    <wsdl:part name="parameters" element="tns:UnderwriterSignup" />
+  <wsdl:message name="IEzService_SignupUnderwriterMultiOrigin_InputMessage">
+    <wsdl:part name="parameters" element="tns:SignupUnderwriterMultiOrigin" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UnderwriterSignup_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UnderwriterSignupResponse" />
+  <wsdl:message name="IEzService_SignupUnderwriterMultiOrigin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SignupUnderwriterMultiOriginResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_UserLogin_InputMessage">
     <wsdl:part name="parameters" element="tns:UserLogin" />
@@ -1869,17 +1869,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPassword" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceVatReturn/ValidateAndUpdateLinkedHmrcPasswordResponse" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SignupCustomerMutliOrigin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin" message="tns:IEzService_SignupCustomerMutliOrigin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOriginResponse" message="tns:IEzService_SignupCustomerMutliOrigin_OutputMessage" />
+    <wsdl:operation name="SignupCustomerMultiOrigin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOrigin" message="tns:IEzService_SignupCustomerMultiOrigin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOriginResponse" message="tns:IEzService_SignupCustomerMultiOrigin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoginCustomerMutliOrigin">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOrigin" message="tns:IEzService_LoginCustomerMutliOrigin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOriginResponse" message="tns:IEzService_LoginCustomerMutliOrigin_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UnderwriterSignup">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup" message="tns:IEzService_UnderwriterSignup_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignupResponse" message="tns:IEzService_UnderwriterSignup_OutputMessage" />
+    <wsdl:operation name="SignupUnderwriterMultiOrigin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOrigin" message="tns:IEzService_SignupUnderwriterMultiOrigin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOriginResponse" message="tns:IEzService_SignupUnderwriterMultiOrigin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserLogin">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
@@ -3252,8 +3252,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SignupCustomerMutliOrigin">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMutliOrigin" style="document" />
+    <wsdl:operation name="SignupCustomerMultiOrigin">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOrigin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3270,8 +3270,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UnderwriterSignup">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UnderwriterSignup" style="document" />
+    <wsdl:operation name="SignupUnderwriterMultiOrigin">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/SignupUnderwriterMultiOrigin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
