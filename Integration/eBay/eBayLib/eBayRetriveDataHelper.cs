@@ -1,8 +1,11 @@
 ﻿namespace EzBob.eBayLib {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
+	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Lingvo;
 	using EzBob.CommonLib;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using EzBob.eBayLib.Config;
@@ -30,6 +33,7 @@
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBaseBase marketplace
 		) : base(helper, marketplace) {
+			this.log = new SafeILog(this);
 			this.settings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
 
 			var ebayConnectionInfo = ObjectFactory.GetInstance<IEbayMarketplaceTypeConnection>();
@@ -346,6 +350,12 @@
 				t = f;
 			} // while
 
+			this.log.Debug(
+				"Fetching eBay orders for marketplace '{0}' using these date range list: {1}.",
+				mpID,
+				string.Join("; ", periods)
+			);
+
 			var frc = new FetchResultCounters();
 
 			foreach (var period in periods) {
@@ -359,6 +369,12 @@
 				));
 			} // for each
 
+			this.log.Debug(
+				"Done fetching eBay orders for marketplace '{0}' using these date range list: {1}.",
+				mpID,
+				string.Join("; ", periods)
+			);
+
 			return new UpdateActionResultInfo {
 				Name = UpdateActionResultType.eBayOrdersCount,
 				Value = frc.OrderCount,
@@ -370,6 +386,20 @@
 		private struct FetchPeriod {
 			public DateTime From { get; set; }
 			public DateTime To { get; set; }
+
+			/// <summary>
+			/// Returns the fully qualified type name of this instance.
+			/// </summary>
+			/// <returns>
+			/// A <see cref="T:System.String"/> containing a fully qualified type name.
+			/// </returns>
+			public override string ToString() {
+				return string.Format(
+					"{0} - {1}",
+					From.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
+					To.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
+				);
+			} // ToString
 		} // struct FetchPeriod
 
 		private class FetchResultCounters {
@@ -402,6 +432,8 @@
 			MP_CustomerMarketplaceUpdatingHistory historyRecord,
 			FetchPeriod period
 		) {
+			this.log.Debug("Fetching eBay orders '{0}'@{1}...", mpID, period);
+
 			ResultInfoOrders orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				mpID,
@@ -414,6 +446,29 @@
 
 			EbayDatabaseOrdersList databaseOrdersList = ParseOrdersInfo(orders);
 
+			DateTime? max = null;
+			DateTime? min = null;
+
+			foreach (EbayDatabaseOrderItem o in databaseOrdersList.Where(x => x.CreatedTime != null)) {
+				DateTime c = o.CreatedTime.Value;
+
+				if ((min == null) || (c < min.Value))
+					min = c;
+
+				if ((max == null) || (c > max.Value))
+					max = c;
+			} // for each
+
+			this.log.Debug(
+				"Fetching eBay orders '{0}'@{1}: {2} are ready to be stored; " +
+				"min order date is '{3}', max order date is '{4}'.",
+				mpID,
+				period,
+				Grammar.Number(databaseOrdersList.Count, "order"),
+				(min == null) ? "N/A" : min.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				(max == null) ? "N/A" : max.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			);
+
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				mpID,
@@ -421,11 +476,25 @@
 				() => Helper.AddEbayOrdersData(databaseCustomerMarketPlace, databaseOrdersList, historyRecord)
 			);
 
+			this.log.Debug(
+				"Fetching eBay orders '{0}'@{1}: {2} were stored.",
+				mpID,
+				period,
+				Grammar.Number(databaseOrdersList.Count, "order")
+			);
+
 			EbayDatabaseOrdersList allEBayOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				mpID,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllEBayOrders(orders.SubmittedDate, databaseCustomerMarketPlace)
+			);
+
+			this.log.Debug(
+				"Fetching eBay orders '{0}'@{1}: {2} were loaded from DB.",
+				mpID,
+				period,
+				Grammar.Number(allEBayOrders.Count, "order")
 			);
 
 			if (this.settings.DownloadCategories) {
@@ -447,10 +516,19 @@
 				} // if
 			} // if
 
-			return new FetchResultCounters(
-				(databaseOrdersList == null) ? null : databaseOrdersList.RequestsCounter,
-				((orders == null) || (orders.Orders == null)) ? 0 : orders.Orders.Count
+			var frc = new FetchResultCounters(
+				databaseOrdersList.RequestsCounter,
+				(orders.Orders == null) ? 0 : orders.Orders.Count
 			);
+
+			this.log.Debug(
+				"Done fetching eBay orders '{0}'@{1}: {2} fetched.",
+				mpID,
+				period,
+				Grammar.Number(frc.OrderCount, "order")
+			);
+
+			return frc;
 		} // FetchOnePeriodTransactions
 
 		private EbayDatabaseOrdersList ParseOrdersInfo(ResultInfoOrders data) {
@@ -618,5 +696,6 @@
 
 		private readonly EbayServiceConnectionInfo connectionInfo;
 		private readonly IEbayMarketplaceSettings settings;
+		private readonly ASafeLog log;
 	} // class eBayRetriveDataHelper
 } // namespace

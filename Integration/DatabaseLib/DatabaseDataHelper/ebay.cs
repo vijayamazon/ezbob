@@ -1,9 +1,7 @@
 ﻿namespace EZBob.DatabaseLib {
-
 	using System;
 	using System.Collections.Concurrent;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Linq;
 	using DatabaseWrapper;
 	using DatabaseWrapper.AccountInfo;
@@ -16,10 +14,8 @@
 	using Model.Database.Repository;
 	using EzBob.CommonLib;
 	using EzBob.CommonLib.TimePeriodLogic;
-	using Model.Marketplaces.Amazon;
 	using NHibernate.Linq;
 	using Repository;
-	using Iesi.Collections.Generic;
 
 	public partial class DatabaseDataHelper {
 		private readonly EbayUserAddressDataRepository _EbayUserAddressDataRepository;
@@ -31,37 +27,14 @@
 		private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
 		private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
 
-		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			if (data == null) {
-				WriteToLog("StoreTeraPeakUserData: invalid data to store", WriteLogType.Error);
-				return;
-			}
-
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-
-			var helper = new TeraPeackHelper();
-			helper.StoretoDatabaseTeraPeakOrdersData(customerMarketPlace, data, historyRecord);
-
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		}
-
-		public bool ExistsTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-			return customerMarketPlace.TeraPeakOrders.Count > 0;
-		}
-
 		public void AddEbayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Orders Data", customerMarketPlace, data);
 
-			Debug.Assert(data != null);
-
 			if (data == null)
-			{
 				return;
-			}
 
 			var mpOrder = new MP_EbayOrder
 			{
@@ -122,16 +95,13 @@
 						if (databaseOrder.ExternalTransactionData != null && databaseOrder.ExternalTransactionData.HasData)
 						{
 							mpOrderItem.ExternalTransactions.AddAll(databaseOrder.ExternalTransactionData.Select(t =>
+								new MP_EbayExternalTransaction
 							{
-								return new MP_EbayExternalTransaction
-								{
-									OrderItem = mpOrderItem,
-									TransactionID = t.TransactionID,
-									TransactionTime = t.TransactionTime,
-									FeeOrCreditAmount = t.FeeOrCreditAmount,
-									PaymentOrRefundAmount = t.PaymentOrRefundAmount
-								};
-
+								OrderItem = mpOrderItem,
+								TransactionID = t.TransactionID,
+								TransactionTime = t.TransactionTime,
+								FeeOrCreditAmount = t.FeeOrCreditAmount,
+								PaymentOrRefundAmount = t.PaymentOrRefundAmount
 							}).ToArray());
 						}
 						mpOrder.OrderItems.Add(mpOrderItem);
@@ -142,15 +112,12 @@
 			customerMarketPlace.EbayOrders.Add(mpOrder);
 
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-
 		}
 
 		public void UpdateOrderItemsInfo(IEnumerable<MP_EBayOrderItemDetail> mpEBayOrderItemDetails, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
-			if (mpEBayOrderItemDetails == null || !mpEBayOrderItemDetails.Any())
-			{
+			if (mpEBayOrderItemDetails == null)
 				return;
-			}
 
 			foreach (MP_EBayOrderItemDetail mpEBayOrderItemDetail in mpEBayOrderItemDetails)
 			{
@@ -180,26 +147,6 @@
 									() => _MP_EbayTransactionsRepository.SaveOrUpdate(transaction));
 				}
 			}
-		}
-
-		private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)
-		{
-			if (categories == null)
-			{
-				return null;
-			}
-			return new HashedSet<MP_AmazonOrderItemDetailCatgory>(
-				categories.Select(c =>
-					new MP_AmazonOrderItemDetailCatgory
-					{
-						Category = _EbayAmazonCategoryRepository.Get(c.Id),
-						OrderItemDetail = orderItemDetail
-					}).ToArray());
-		}
-
-		public DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			return _CustomerMarketplaceRepository.GetLastEbayOrdersRequest(databaseCustomerMarketPlace);
 		}
 
 		public void StoreEbayUserData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IDatabaseEbayUserData data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -504,25 +451,6 @@
 				PhoneLocalNumber = address.PhoneLocalNumber
 			};
 		}
-		//not in use
-		public bool ExistsEBayOrderItemInfo(eBayFindOrderItemInfoData eBayFindOrderItemInfoData, ElapsedTimeInfo elapsedTimeInfo, int mpId)
-		{
-			MP_EBayOrderItemDetail value;
-			if (!_CacheEBayOrderItemInfo.TryGetValue(eBayFindOrderItemInfoData.ItemId, out value))
-			{
-				value = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									mpId,
-									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => _EBayOrderItemInfoRepository.FindItem(eBayFindOrderItemInfoData));
-
-				if (value != null)
-				{
-					_CacheEBayOrderItemInfo.TryAdd(value.ItemID, value);
-				}
-			}
-
-			return value != null;
-		}
 
 		public MP_EBayOrderItemDetail FindEBayOrderItemInfo(eBayFindOrderItemInfoData eBayFindOrderItemInfoData, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
@@ -631,11 +559,6 @@
 			return cache;
 		}
 
-		public IQueryable<MP_EbayFeedback> GetEbayFeedback()
-		{
-			return _session.Query<MP_EbayFeedback>();
-		}
-
 		public DateTime FindLastKnownEbayTransactionTime(int mpID) {
 			MP_CustomerMarketPlace mp = GetCustomerMarketPlace(mpID);
 
@@ -678,7 +601,7 @@
 			var cache = GetCache(marketplace);
 
 			cache.TryAdd(item.CategoryId, item);
-		}
+		} // AddCategoryToCache
 	} // class DatabaseDataHelper
 
 	public class eBayFindOrderItemInfoData
@@ -698,5 +621,4 @@
 		public bool? IsVirtual { get; set; }
 		//public string[] ParentIdList { get; set; }
 	} // class eBayCategoryInfo
-
 } // namespace EZBob.DatabaseLib

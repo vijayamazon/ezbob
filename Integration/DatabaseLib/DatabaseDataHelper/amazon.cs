@@ -12,6 +12,7 @@
 	using Model.Database.Repository;
 	using EzBob.CommonLib;
 	using EzBob.CommonLib.TimePeriodLogic;
+	using Iesi.Collections.Generic;
 	using Model.Marketplaces.Amazon;
 	using NHibernate.Linq;
 	using Repository;
@@ -102,6 +103,21 @@
 			}
 
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		}
+
+		private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)
+		{
+			if (categories == null)
+			{
+				return null;
+			}
+			return new HashedSet<MP_AmazonOrderItemDetailCatgory>(
+				categories.Select(c =>
+					new MP_AmazonOrderItemDetailCatgory
+					{
+						Category = _EbayAmazonCategoryRepository.Get(c.Id),
+						OrderItemDetail = orderItemDetail
+					}).ToArray());
 		}
 
 		public DateTime? GetLastAmazonOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
