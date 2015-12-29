@@ -10,7 +10,9 @@ IF TYPE_ID('I_GradeList') IS NOT NULL
 GO
 
 CREATE TYPE I_GradeList AS TABLE (
-	[Name] NVARCHAR(255) NULL
+	[GradeID] INT NOT NULL,
+	[Name] NVARCHAR(255) NULL,
+	[UpperBound] DECIMAL(18, 6) NULL
 )
 GO
 
@@ -21,9 +23,13 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO I_Grade (
-		[Name]
+		[GradeID],
+		[Name],
+		[UpperBound]
 	) SELECT
-		[Name]
+		[GradeID],
+		[Name],
+		[UpperBound]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

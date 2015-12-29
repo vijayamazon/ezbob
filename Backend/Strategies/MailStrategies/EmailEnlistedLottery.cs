@@ -51,7 +51,7 @@
 		} // LoadRecipientData
 
 		protected override Addressee[] GetRecipients() {
-			return this.doSend ? new [] { new Addressee(this.emailAddress) } : new Addressee[0];
+			return this.doSend ? new [] { new Addressee(this.emailAddress, userID: CustomerId, addSalesforceActivity: !this.isBroker ) } : new Addressee[0];
 		} // GetRecipients
 
 		protected override void SetTemplateAndVariables() {

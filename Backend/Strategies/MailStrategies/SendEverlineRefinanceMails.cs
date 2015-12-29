@@ -46,7 +46,7 @@ namespace Ezbob.Backend.Strategies.MailStrategies {
 			if (string.IsNullOrWhiteSpace(sEmail))
 				return new Addressee[0];
 
-			return sEmail.Split(',').Select(addr => new Addressee(addr, bShouldRegister: false)).ToArray();
+			return sEmail.Split(',').Select(addr => new Addressee(addr, bShouldRegister: false, addSalesforceActivity: false)).ToArray();
 		} // GetRecipients
 	}
 }

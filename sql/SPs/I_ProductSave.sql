@@ -10,6 +10,7 @@ IF TYPE_ID('I_ProductList') IS NOT NULL
 GO
 
 CREATE TYPE I_ProductList AS TABLE (
+	[ProductID] INT NOT NULL,
 	[Name] NVARCHAR(255) NULL,
 	[IsDefault] BIT NOT NULL,
 	[IsEnabled] BIT NOT NULL
@@ -23,10 +24,12 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO I_Product (
+		[ProductID],
 		[Name],
 		[IsDefault],
 		[IsEnabled]
 	) SELECT
+		[ProductID],
 		[Name],
 		[IsDefault],
 		[IsEnabled]

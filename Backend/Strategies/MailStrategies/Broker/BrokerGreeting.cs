@@ -45,7 +45,7 @@
 			var aryAddresses = new List<Addressee>();
 
 			if (!string.IsNullOrWhiteSpace(BrokerData.Email))
-				aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, isBroker: true));
+				aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, addSalesforceActivity: false));
 
 			return aryAddresses.ToArray();
 		} // GetRecipients

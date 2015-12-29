@@ -27,22 +27,22 @@
 		public string Name { get; set; }
 
 		[DataMember]
+		public decimal? MonthlyFundingCapital { get; set; }
+
+		[DataMember]
+		public int? FundsTransferDate { get; set; }
+
+		[DataMember]
+		public decimal? DiscountServicingFeePercent { get; set; }
+
+		[DataMember]
+		public decimal? FundingLimitForNotification { get; set; }
+
+		[DataMember]
 		public bool IsActive { get; set; }
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
-
-		/*
-		[DataMember]
-		public decimal? MonthlyFundingCapital { get; set; }
-
-		[DataMember]
-		public DateTime? FundsTransferDate { get; set; }
-
-		[DataMember]
-		public decimal? DiscountServicingFee { get; set; } 
-		*/
-
 		//////////////////////////////////////////
 		
 		[DataMember]

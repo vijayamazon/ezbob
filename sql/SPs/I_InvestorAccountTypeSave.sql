@@ -10,6 +10,7 @@ IF TYPE_ID('I_InvestorAccountTypeList') IS NOT NULL
 GO
 
 CREATE TYPE I_InvestorAccountTypeList AS TABLE (
+	[InvestorAccountTypeID] INT NOT NULL,
 	[Name] NVARCHAR(255) NULL
 )
 GO
@@ -21,8 +22,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO I_InvestorAccountType (
+		[InvestorAccountTypeID],
 		[Name]
 	) SELECT
+		[InvestorAccountTypeID],
 		[Name]
 	FROM @Tbl
 

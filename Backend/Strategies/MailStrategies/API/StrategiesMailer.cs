@@ -31,7 +31,7 @@
 
 		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients) {
 			var oMeta = new MailMetaData(templateName) {
-				new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false)
+				new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false, 1, false)
 			};
 
 			Send(oMeta, variables, aryRecipients);
@@ -69,7 +69,7 @@
 						new QueryParameter("TemplateName", oMeta.TemplateName)
 					);
 
-				    if (!addr.IsBroker) {
+				    if (addr.AddSalesforceActivity) {
 				        AddSalesForceActivity(now, oMeta, addr);
 				    }//if
 				} // if should register

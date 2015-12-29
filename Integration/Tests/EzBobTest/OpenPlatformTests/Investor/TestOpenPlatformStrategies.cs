@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobTest.OpenPlatformTests.Investor {
+﻿namespace EzBobTest.OpenPlatformTests.Investor {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Backend.Models.Investor;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.Misc;
-	using EzBobTest.OpenPlatformTests.Core;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -51,13 +48,13 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 					Name = "TestInvestor",
 					IsActive = true,
 					Timestamp = now,
-					InvestorType = new InvestorTypeModel { InvestorTypeID = 1 }
+					InvestorType = new InvestorTypeModel { InvestorTypeID = (int)I_InvestorTypeEnum.Private }
 				},
 				new List<InvestorContactModel> {
 					new InvestorContactModel {
 						Timestamp = now, 
 						IsActive = true, 
-						Email = "stasd+investor1@ezbob.com",
+						Email = "stasd+investor16@ezbob.com",
 						Comment = "comment", 
 						IsPrimary = true,
 						LastName = "last", 
@@ -78,7 +75,7 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 						BankCode = "789",
 						BankCountryID = "UK",
 						BankName = "bank",
-						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 1 },
+						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = (int)I_InvestorAccountTypeEnum.Funding },
 						InvestorBankAccountID = 1,
 						RepaymentKey = "key"
 					},
@@ -92,7 +89,7 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 						BankCode = "789",
 						BankCountryID = "UK",
 						BankName = "bank",
-						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = 1},
+						AccountType = new InvestorAccountTypeModel{ InvestorAccountTypeID = (int)I_InvestorAccountTypeEnum.Repayments },
 						InvestorBankAccountID = 1,
 						RepaymentKey = "key"
 					}
@@ -118,7 +115,7 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 				InvestorID = 10,
 				Timestamp = DateTime.Today,
 				InvestorBankAccountID = 4,
-				AccountType = new InvestorAccountTypeModel { InvestorAccountTypeID = 2 },
+				AccountType = new InvestorAccountTypeModel { InvestorAccountTypeID = (int)I_InvestorAccountTypeEnum.Repayments },
 				BankCode = "435",
 				BankAccountNumber = "2345",
 				BankAccountName = "sdggfds"
@@ -143,8 +140,14 @@ namespace EzBobTest.OpenPlatformTests.Investor {
 		}
 
 		[Test]
-		public void NotifyRiskPendingInvestorOffer() {
+		public void TestNotifyRiskPendingInvestorOffer() {
 			var stra = new NotifyRiskPendingInvestorOffer(154, 1000, DateTime.UtcNow.AddDays(1));
+			stra.Execute();
+		}
+
+		[Test]
+		public void TestNotifyInvestorUtilizedFunds() {
+			var stra = new NotifyInvestorUtilizedFunds(1);
 			stra.Execute();
 		}
 	}

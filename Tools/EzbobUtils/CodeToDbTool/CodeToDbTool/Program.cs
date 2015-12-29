@@ -26,7 +26,7 @@
 			CodeToFile.SaveFile<I_InvestorAccountType>();
 			CodeToFile.SaveFile<I_InvestorBankAccount>();
 			CodeToFile.SaveFile<I_InvestorBankAccountTransaction>();
-			CodeToFile.SaveFile<I_InvestorConfigurationParam>();
+			CodeToFile.SaveFile<I_InvestorParams>();
 			CodeToFile.SaveFile<I_InvestorContact>();
 			CodeToFile.SaveFile<I_InvestorOverallStatistics>();
 			CodeToFile.SaveFile<I_InvestorSystemBalance>();
@@ -36,7 +36,6 @@
 			CodeToFile.SaveFile<I_Product>();
 			CodeToFile.SaveFile<I_ProductSubType>();
 			CodeToFile.SaveFile<I_ProductType>();
-			CodeToFile.SaveFile<I_UWInvestorConfigurationParam>();
 			CodeToFile.SaveFile<I_SubGrade>();
 			CodeToFile.SaveFile<I_OpenPlatformOffer>();
 		}

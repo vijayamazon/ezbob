@@ -10,6 +10,7 @@ IF TYPE_ID('I_FundingTypeList') IS NOT NULL
 GO
 
 CREATE TYPE I_FundingTypeList AS TABLE (
+	[FundingTypeID] INT NOT NULL,
 	[Name] NVARCHAR(255) NULL
 )
 GO
@@ -21,8 +22,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO I_FundingType (
+		[FundingTypeID],
 		[Name]
 	) SELECT
+		[FundingTypeID],
 		[Name]
 	FROM @Tbl
 
