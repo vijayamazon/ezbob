@@ -4,6 +4,7 @@ GO
 
 ALTER FUNCTION dbo.udfCheckContactInfoUniqueness(
 @ContactEmail NVARCHAR(255),
+@OriginID INT,
 @ContactMobile NVARCHAR(255),
 @CheckUsers BIT = 1,
 @CheckBrokers BIT = 1,
@@ -15,11 +16,11 @@ AS
 BEGIN
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 
-	SET @ErrMsg = dbo.udfCheckEmailUniqueness(@ContactEmail, @CheckUsers, @CheckBrokers, @CheckBrokerLeads)
+	SET @ErrMsg = dbo.udfCheckEmailUniqueness(@ContactEmail, @OriginID, @CheckUsers, @CheckBrokers, @CheckBrokerLeads)
 
 	IF @ErrMsg != ''
 		RETURN @ErrMsg
 
-	RETURN dbo.udfCheckPhoneNumUniqueness(@ContactMobile, @CheckUsers, @CheckBrokers, @RespectSkipCodeNumber)
+	RETURN dbo.udfCheckPhoneNumUniqueness(@ContactMobile, @OriginID, @CheckUsers, @CheckBrokers, @RespectSkipCodeNumber)
 END
 GO

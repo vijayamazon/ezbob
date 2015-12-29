@@ -14,8 +14,13 @@ BEGIN
 
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 
+	DECLARE @OriginID INT = (SELECT OriginID FROM Broker WHERE BrokerID = @BrokerID)
+
+	IF @OriginID IS NULL OR @OriginID < 0
+		SET @ErrMsg = 'Failed to find broker by id ' + @BrokerID
+
 	IF @ErrMsg = ''
-		SET @ErrMsg = dbo.udfCheckEmailUniqueness(@NewEmail, DEFAULT, DEFAULT, DEFAULT)
+		SET @ErrMsg = dbo.udfCheckEmailUniqueness(@NewEmail, @OriginID, DEFAULT, DEFAULT, DEFAULT)
 
 	IF @ErrMsg = ''
 	BEGIN
