@@ -343,11 +343,14 @@
 			DateTime t = toDate;
 
 			while (t >= fromDate) {
-				DateTime f = t.AddDays(-90);
+				DateTime f = t.AddDays(-90).Date;
 
-				periods.Push(new FetchPeriod { To = t, From = f < fromDate ? fromDate : f, });
+				periods.Push(new FetchPeriod {
+					To = t.Date.AddDays(1).AddSeconds(-1), // convert to 23:59:59
+					From = (f < fromDate ? fromDate : f).Date,
+				});
 
-				t = f;
+				t = f.AddDays(-1).Date;
 			} // while
 
 			this.log.Debug(
@@ -396,8 +399,8 @@
 			public override string ToString() {
 				return string.Format(
 					"{0} - {1}",
-					From.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
-					To.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
+					From.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					To.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
 				);
 			} // ToString
 		} // struct FetchPeriod
