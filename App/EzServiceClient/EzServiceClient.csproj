@@ -135,6 +135,9 @@
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AccountingDataResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

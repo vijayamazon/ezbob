@@ -2,8 +2,7 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.AccountingInvestorModel = Backbone.Model.extend({
-	idAttribute: 'InvestorID',
-	urlRoot: '' + gRootPath + 'Underwriter/Investor/AccountingInvestor'
+	url: '' + gRootPath + 'Underwriter/Investor/GetAccountingData'
 });
 
 EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
@@ -11,6 +10,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	initialize: function() {
 		this.model = new EzBob.Underwriter.AccountingInvestorModel();
 		this.model.on("change reset", this.render, this);
+		
 		return this;
 	},
 
@@ -21,19 +21,30 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 
 	serializeData: function() {
 		return {
-
+			data: this.model.get('AccountingList')
 		};
 	},
 
 	events: {
-		
+
 	},
 
 	onRender: function() {
+		this.displayAccountingData();
 
 	},
 
+
+	displayAccountingData: function() {
+		
+		this.model.fetch();
+
+	}, // displayAccountingData
+
+
 	show: function() {
+		
+
 		return this.$el.show();
 	},
 

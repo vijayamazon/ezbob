@@ -17,5 +17,8 @@
 
 		[OperationContract]
 		BoolActionResult ManageInvestorBankAccount(int underwriterID, InvestorBankAccountModel investorBank);
+
+		[OperationContract]
+		AccountingDataResult LoadAccountingData(int underwriterID);
 	} // interface IEzServiceInvestor
-} // namespace
+} // namespace  

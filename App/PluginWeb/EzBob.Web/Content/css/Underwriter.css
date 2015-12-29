@@ -2431,3 +2431,25 @@ input[type="text"].err-field-red {
 	text-align: right;
 	padding-right: 2%;
 }
+
+.tab-pane#accounting-tbl tr {
+	border: 1px solid #dddddd;
+	border-right: 2px solid #dddddd;
+}
+
+.tab-pane#accounting-tbl tr:last-child {
+	border-bottom: 2px solid #dddddd;
+}
+
+.tab-pane#accounting-tbl td > span {
+	width: 45%;
+	display: inline-block;
+	padding-left: 10px;
+	vertical-align: top;
+	text-align: right;
+}
+
+.tab-pane#accounting-tbl td > span.accounting-btn {
+	padding-top: 4px;
+	text-align: left;
+}

@@ -603,6 +603,12 @@
   <wsdl:message name="IEzService_ManageInvestorBankAccount_OutputMessage">
     <wsdl:part name="parameters" element="tns:ManageInvestorBankAccountResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadAccountingData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadAccountingData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadAccountingData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadAccountingDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
   </wsdl:message>
@@ -1899,6 +1905,10 @@
     <wsdl:operation name="ManageInvestorBankAccount">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount" message="tns:IEzService_ManageInvestorBankAccount_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse" message="tns:IEzService_ManageInvestorBankAccount_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadAccountingData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData" message="tns:IEzService_LoadAccountingData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse" message="tns:IEzService_LoadAccountingData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -3304,6 +3314,15 @@
     </wsdl:operation>
     <wsdl:operation name="ManageInvestorBankAccount">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadAccountingData">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadAccountingData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4745,20 +4764,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

@@ -176,6 +176,7 @@
     <Compile Include="Investor\NotifyRiskPendingInvestorOffer.cs" />
     <Compile Include="Investor\OfferExpiredChecker.cs" />
     <Compile Include="Investor\FindInvestorForOffer.cs" />
+    <Compile Include="Investor\LoadAccountingData.cs" />
     <Compile Include="Investor\ManageInvestorBankAccount.cs" />
     <Compile Include="Investor\ManageInvestorContact.cs" />
     <Compile Include="Investor\LoadInvestor.cs" />

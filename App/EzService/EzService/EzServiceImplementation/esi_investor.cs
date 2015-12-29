@@ -41,6 +41,16 @@
 				Value = strategy.Result
 			};
 		}
+
+
+		public AccountingDataResult LoadAccountingData(int underwriterID) {
+			LoadAccountingData strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID);
+			return new AccountingDataResult {
+				MetaData = metadata,
+				AccountingData = strategy.Result
+			};
+		}
 	}
 }
 

@@ -8,7 +8,7 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using ServiceClientProxy;
-
+	using ServiceClientProxy.EzServiceReference;
 	using FrontInvestorModel = EzBob.Web.Areas.Underwriter.Models.Investor.InvestorModel;
 	using FrontInvestorContactModel = EzBob.Web.Areas.Underwriter.Models.Investor.InvestorContactModel;
 	using FrontInvestorBankAccountModel = EzBob.Web.Areas.Underwriter.Models.Investor.InvestorBankAccountModel;
@@ -17,6 +17,7 @@
 		private readonly IEzbobWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
 		private readonly InvestorModelBuilder investorModelBuilder;
+		private int currentInvestorID;
 
 		public InvestorController(
 			IEzbobWorkplaceContext context,
@@ -141,6 +142,18 @@
 			var investor = this.investorModelBuilder.Build(result.Investor);
 			return Json(investor, JsonRequestBehavior.AllowGet);
 		}
+
+		[Ajax]
+		[HttpGet]
+		public JsonResult GetAccountingData() {
+
+			AccountingDataResult result = this.serviceClient.Instance.LoadAccountingData(this.context.UserId);
+
+			return Json(new { AccountingList = result.AccountingData }, JsonRequestBehavior.AllowGet);
+		}
+
+
+
 
 		[Ajax]
 		[HttpPost]

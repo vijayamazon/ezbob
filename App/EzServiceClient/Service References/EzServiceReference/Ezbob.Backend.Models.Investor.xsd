@@ -87,4 +87,28 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorTypeModel" nillable="true" type="tns:InvestorTypeModel" />
+  <xs:complexType name="ArrayOfAccountingDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountingDataModel" nillable="true" type="tns:AccountingDataModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountingDataModel" nillable="true" type="tns:ArrayOfAccountingDataModel" />
+  <xs:complexType name="AccountingDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccumulatedRepayments" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FundingBankAccountID" type="xs:int" />
+      <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
+      <xs:element minOccurs="0" name="InvestorName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsInvestorActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRepaymentsBankAccountActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OutstandingFunding" type="xs:decimal" />
+      <xs:element minOccurs="0" name="RepaymentsBankAccountID" type="xs:int" />
+      <xs:element minOccurs="0" name="ServicingFeeDiscount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TotalNonActiveAccumulatedRepayments" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="AccountingDataModel" nillable="true" type="tns:AccountingDataModel" />
 </xs:schema>
