@@ -8,17 +8,36 @@ GO
 CREATE PROCEDURE [dbo].[GetInvestorData]
 AS
 BEGIN
-	DECLARE @FundsAccountID DECIMAL = (SELECT InvestorAccountTypeID FROM I_InvestorAccountType WHERE Name = 'Funding')
+	DECLARE @FundsAccountTypeID DECIMAL = (SELECT InvestorAccountTypeID FROM I_InvestorAccountType WHERE Name = 'Funding')
+
+	;WITH
+	 last_funding_bat_newbalances AS(
+	 SELECT 
+	 MAX(InvestorBankAccountTransactionID) AS maxid
+	 FROM 
+	 I_InvestorBankAccountTransaction 
+	 GROUP BY InvestorBankAccountID
+	 ),
+     active_funding_account_data AS (
+	 SELECT 
+	 ibat.NewBalance AS NewBalance,
+	 ibat.InvestorBankAccountID AS InvestorBankAccountID,
+	 iba.InvestorID AS InvestorID    
+	 FROM 
+	 I_InvestorBankAccountTransaction ibat
+	 INNER JOIN last_funding_bat_newbalances libat ON libat.maxid = ibat.InvestorBankAccountTransactionID
+	 LEFT JOIN I_InvestorBankAccount iba ON ibat.InvestorBankAccountID = iba.InvestorBankAccountID
+	 WHERE iba.IsActive=1 AND iba.InvestorAccountTypeID=@FundsAccountTypeID	   		
+   )
 
 	SELECT 
 		i.InvestorID AS InvestorID,
 		i.Name AS InvestorName, 
-		sum(sb.NewBalance) AS InvestorFunds
+		sum(ibatf.NewBalance) AS InvestorFunds
 	FROM 
 		I_Investor i
-		LEFT JOIN I_InvestorBankAccount ba ON i.InvestorID = ba.InvestorID
-		LEFT JOIN I_InvestorSystemBalance sb ON sb.InvestorBankAccountID = ba.InvestorBankAccountID
-		WHERE i.IsActive=1 AND ba.InvestorAccountTypeID=@FundsAccountID AND ba.IsActive=1
+		LEFT JOIN active_funding_account_data ibatf ON i.InvestorID = ibatf.InvestorID
+		WHERE i.IsActive=1
 	GROUP BY i.InvestorID, i.Name 
 END
 GO
