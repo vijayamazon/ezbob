@@ -78,3 +78,20 @@ update [dbo].[LoanSource] set [IsDefault] = 0 where [LoanSourceName]= 'Standard'
 update [dbo].[LoanSource] set [IsDefault] = 1 where [LoanSourceName]= 'COSME'; 
 
 
+IF EXISTS( SELECT [Id] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'RescheduleOutOfLoan_Collector_MAX_INTERVALS' ) BEGIN 	
+	DELETE FROM [dbo].[ConfigurationVariables]  WHERE  Name = 'RescheduleOutOfLoan_Collector_MAX_INTERVALS';
+END;
+
+IF EXISTS( SELECT [Id] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'RescheduleOutOfLoan_Collector_MAX_AMOUNT' ) BEGIN 	
+	DELETE FROM [dbo].[ConfigurationVariables]  WHERE  Name = 'RescheduleOutOfLoan_Collector_MAX_AMOUNT';
+END;
+
+IF EXISTS( SELECT [Id] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'RescheduleOutOfLoan_CollectorSenior_MAX_INTERVALS' ) BEGIN 	
+	DELETE FROM [dbo].[ConfigurationVariables]  WHERE  Name = 'RescheduleOutOfLoan_CollectorSenior_MAX_INTERVALS';
+END;
+
+IF EXISTS( SELECT [Id] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'RescheduleOutOfLoan_CollectorSenior_MAX_AMOUNT' ) BEGIN 	
+	DELETE FROM [dbo].[ConfigurationVariables]  WHERE  Name = 'RescheduleOutOfLoan_CollectorSenior_MAX_AMOUNT';
+END;
+
+
