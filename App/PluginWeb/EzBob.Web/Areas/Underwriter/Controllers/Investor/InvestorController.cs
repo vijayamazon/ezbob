@@ -53,8 +53,13 @@
 
 			var result = this.serviceClient.Instance.CreateInvestor(this.context.UserId,
 				new Ezbob.Backend.Models.Investor.InvestorModel {
-					InvestorType = new InvestorTypeModel{ InvestorTypeID = investor.InvestorType },
-					Name = investor.CompanyName
+					InvestorType = new InvestorTypeModel { 
+						InvestorTypeID = investor.InvestorType 
+					},
+					Name = investor.CompanyName,
+					FundingLimitForNotification = investor.FundingLimitForNotification,
+					MonthlyFundingCapital = investor.MonthlyFundingCapital,
+					FundsTransferDate = investor.FundsTransferDate
 				},
 				new[] { 
 					new Ezbob.Backend.Models.Investor.InvestorContactModel {

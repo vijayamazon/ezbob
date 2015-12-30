@@ -30,6 +30,7 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		form: 'form#add-investor-form',
 		phone: '.phone',
 		numeric: '.numeric',
+		money: '.cashInput',
 		sameBank: '#SameBank',
 		secondBank: '.second-bank'
 	},
@@ -47,6 +48,7 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		this.ui.phone.mask('0?9999999999', { placeholder: ' ' });
 		this.ui.phone.numericOnly(11);
 		this.ui.numeric.numericOnly(20);
+		this.ui.money.moneyFormat();
 		this.ui.form.validate({
 			rules: {
 				CompanyName: { required: true },
@@ -90,6 +92,9 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		} else {
 			data.push({ name: 'SameBank', value: sameBankChecked });
 		}
+
+		_.find(data, function (d) { return d.name === 'MonthlyFundingCapital'; }).value = this.$el.find('#MonthlyFundingCapital').autoNumeric('get');
+		_.find(data, function (d) { return d.name === 'FundingLimitForNotification'; }).value = this.$el.find('#FundingLimitForNotification').autoNumeric('get');
 
 		var self = this;
 		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddInvestor', data);

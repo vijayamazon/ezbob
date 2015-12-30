@@ -10,6 +10,9 @@
 		public string CompanyName { get; set; }
 		public bool IsActive { get; set; }
 		public DateTime Timestamp { get; set; }
+		public int? FundsTransferDate { get; set; }
+		public decimal? MonthlyFundingCapital { get; set; }
+		public decimal? FundingLimitForNotification { get; set; }
 		public IEnumerable<InvestorContactModel> Contacts { get; set; }
 		public IEnumerable<InvestorBankAccountModel> Banks { get; set; } 
 	}

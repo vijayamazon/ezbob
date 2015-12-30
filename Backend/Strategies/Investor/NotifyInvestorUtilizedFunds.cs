@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
+	using System;
 	using System.Collections.Generic;
+	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Database;
@@ -12,36 +14,39 @@
 		public override string Name { get { return "NotifyInvestorUtilizedFunds"; } }
 
 		public override void Execute() {
-			this.investor = DB.FillFirst<I_Investor>(string.Format("SELECT * FROM I_Investor WHERE InvestorID = {0}", this.investorID), CommandSpecies.Text);
-			this.fundingBankAccount = DB.FillFirst<I_InvestorBankAccount>(string.Format("SELECT TOP 1 * FROM I_InvestorBankAccount WHERE InvestorID = {0} AND IsActive = 1 AND InvestorAccountTypeID = {1}", 
-				this.investorID, 
-				(int)I_InvestorAccountTypeEnum.Funding), 
-				CommandSpecies.Text);
+			try {
+				this.investor = DB.FillFirst<I_Investor>(string.Format("SELECT * FROM I_Investor WHERE InvestorID = {0}", this.investorID), CommandSpecies.Text);
+				this.fundingBankAccount = DB.FillFirst<I_InvestorBankAccount>(string.Format("SELECT TOP 1 * FROM I_InvestorBankAccount WHERE InvestorID = {0} AND IsActive = 1 AND InvestorAccountTypeID = {1}",
+					this.investorID,
+					(int)I_InvestorAccountTypeEnum.Funding),
+					CommandSpecies.Text);
 
-			this.systemBalance = DB.FillFirst<I_InvestorSystemBalance>(string.Format("SELECT TOP 1 * FROM I_InvestorSystemBalance WHERE InvestorID = {0} AND InvestorBankAccountID = {1} ORDER BY InvestorSystemBalanceID DESC",
-				this.investorID, 
-				this.fundingBankAccount.InvestorBankAccountID));
+				this.systemBalance = DB.FillFirst<I_InvestorSystemBalance>(string.Format("SELECT TOP 1 * FROM I_InvestorSystemBalance WHERE InvestorBankAccountID = {0} ORDER BY InvestorSystemBalanceID DESC",
+					this.fundingBankAccount.InvestorBankAccountID));
 
-			if (!this.systemBalance.NewBalance.HasValue) {
-				Log.Info("NotifyInvestorUtilizedFunds investor {0} has no balance in his funding account {1}",
-					this.investorID, 
-					this.fundingBankAccount.InvestorBankAccountID);
-				return;
-			}
+				if (!this.systemBalance.NewBalance.HasValue) {
+					Log.Info("NotifyInvestorUtilizedFunds investor {0} has no balance in his funding account {1}",
+						this.investorID,
+						this.fundingBankAccount.InvestorBankAccountID);
+					return;
+				}
 
-			if (this.systemBalance.NewBalance.Value < ConfigManager.CurrentValues.Instance.MinLoan) {
-				SendFundsUtilized();
-			} else if (this.investor.MonthlyFundingCapital.HasValue && 
-				this.investor.MonthlyFundingCapital.Value > 0 && 
-				this.systemBalance.NewBalance.Value / this.investor.MonthlyFundingCapital.Value < 0.9M) {
-				SendFundsUtilized();
-			} else if (this.investor.MonthlyFundingCapital.HasValue && 
-				this.investor.MonthlyFundingCapital.Value > 0 && 
-				this.systemBalance.NewBalance.Value / this.investor.MonthlyFundingCapital.Value < 0.75M) {
-				SendFundsUtilized();
-			} else if (this.investor.FundingLimitForNotification.HasValue && 
-				this.systemBalance.NewBalance.Value < this.investor.FundingLimitForNotification.Value) {
-				SendFundsUtilized();
+				if (this.systemBalance.NewBalance.Value < CurrentValues.Instance.MinLoan) {
+					SendFundsUtilized();
+				} else if (this.investor.MonthlyFundingCapital.HasValue &&
+					this.investor.MonthlyFundingCapital.Value > 0 &&
+					this.systemBalance.NewBalance.Value / this.investor.MonthlyFundingCapital.Value < CurrentValues.Instance.InvestorFundsUtilized75) {
+					SendFundsUtilized();
+				} else if (this.investor.MonthlyFundingCapital.HasValue &&
+					this.investor.MonthlyFundingCapital.Value > 0 &&
+					this.systemBalance.NewBalance.Value / this.investor.MonthlyFundingCapital.Value < CurrentValues.Instance.InvestorFundsUtilized90) {
+					SendFundsUtilized();
+				} else if (this.investor.FundingLimitForNotification.HasValue &&
+					this.systemBalance.NewBalance.Value < this.investor.FundingLimitForNotification.Value) {
+					SendFundsUtilized();
+				}
+			} catch (Exception ex) {
+				Log.Error(ex, "failed to send funds utilized notification to investor {0}", this.investorID);
 			}
 		}
 
@@ -68,7 +73,7 @@
 					{ "BankAccountNumber", this.fundingBankAccount.BankAccountNumber },
 				};
 
-				mailer.Send("InvestorUtilizedFunds", 
+				mailer.Send("InvestorFundsNotification", 
 					parameters, 
 					new Addressee(
 						investorContact.Email, 

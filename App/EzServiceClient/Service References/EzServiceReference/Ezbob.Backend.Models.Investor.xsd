@@ -5,9 +5,12 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Banks" nillable="true" type="tns:ArrayOfInvestorBankAccountModel" />
       <xs:element minOccurs="0" name="Contacts" nillable="true" type="tns:ArrayOfInvestorContactModel" />
+      <xs:element minOccurs="0" name="FundingLimitForNotification" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FundsTransferDate" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="tns:InvestorTypeModel" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MonthlyFundingCapital" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
     </xs:sequence>

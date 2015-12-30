@@ -271,6 +271,8 @@ namespace ConfigManager {
 		IntervalWaitForMarketplacesUpdate,
 		InvalidPasswordAttemptsPeriodSeconds,
 		InvalidPasswordBlockSeconds,
+		InvestorFundsUtilized75,
+		InvestorFundsUtilized90,
 		IovationAdminAccountName,
         IovationAdminSubscriber,
         IovationAdminPassword,

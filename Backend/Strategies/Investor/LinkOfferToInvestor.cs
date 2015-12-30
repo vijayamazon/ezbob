@@ -46,6 +46,9 @@
 					new QueryParameter("ServicingFeeAmount", null),
 					new QueryParameter("LoanTransactionID", null));
 
+				var notifyInvestor = new NotifyInvestorUtilizedFunds(investorID);
+				notifyInvestor.Execute();
+
 			} catch (Exception ex) {
 				Log.Warn(ex, "failed to add system balance for approved cash request {0} for investor {1}", 
 					this.cashRequestID, sr["InvestorID"]);

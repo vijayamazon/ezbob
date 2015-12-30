@@ -20,6 +20,9 @@
 								<!--Investor fields-->
 								@EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
 								@EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
+								@EzForm.InputTextUnderwriter(this, "MonthlyFundingCapital", "Monthly funding capital", null, "cashInput")
+								@EzForm.InputTextUnderwriter(this, "FundsTransferDate", "Funds transfer day in month", "1")
+								@EzForm.InputTextUnderwriter(this, "FundingLimitForNotification", "Funding limit for notification", "250000", "cashInput")
 
 								<h4>Investor primary contact</h4>
 								<!--Investor contact fields-->

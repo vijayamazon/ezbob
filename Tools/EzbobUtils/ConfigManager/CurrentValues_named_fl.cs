@@ -199,6 +199,14 @@
 			get { return this[Variables.InvalidPasswordBlockSeconds]; }
 		}
 
+		public virtual VariableValue InvestorFundsUtilized75 {
+			get { return this[Variables.InvestorFundsUtilized75]; }
+		}
+
+		public virtual VariableValue InvestorFundsUtilized90 {
+			get { return this[Variables.InvestorFundsUtilized90]; }
+		}
+
 		public virtual VariableValue IovationAdminAccountName {
 			get { return this[Variables.IovationAdminAccountName]; }
 		}

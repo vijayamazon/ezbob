@@ -21,6 +21,15 @@
 		public DateTime Timestamp { get; set; }
 
 		[DataMember]
+		public int? FundsTransferDate { get; set; }
+		
+		[DataMember]
+		public decimal? MonthlyFundingCapital { get; set; }
+		
+		[DataMember]
+		public decimal? FundingLimitForNotification { get; set; }
+
+		[DataMember]
 		public List<InvestorContactModel> Contacts { get; set; }
 
 		[DataMember]

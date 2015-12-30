@@ -147,7 +147,7 @@
 
 		[Test]
 		public void TestNotifyInvestorUtilizedFunds() {
-			var stra = new NotifyInvestorUtilizedFunds(1);
+			var stra = new NotifyInvestorUtilizedFunds(2);
 			stra.Execute();
 		}
 	}
