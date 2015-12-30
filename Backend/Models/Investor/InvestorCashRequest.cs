@@ -4,7 +4,8 @@
     public class InvestorCashRequest
     {
         public double ManagerApprovedSum { get; set; }
-        public Grade Grade { get; set; }
+		public double ManagerApprovedSumFinal { get; set; }
+		public Grade Grade { get; set; }
     }//class InvestorCashRequest
 
 }//ns

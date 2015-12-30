@@ -4,7 +4,7 @@
     using EZBob.DatabaseLib.Model.Database;
 
     class BudgetLevelRule : IGenericRules {
-        public bool InvokeRule(int cashRequestId, int investorID) {
+        public bool InvokeRule(long cashRequestId, int investorID) {
             var cashRequest = new InvestorCashRequest();
             var investor = new I_Investor();
             var investorParameters = new InvestorParameters();
