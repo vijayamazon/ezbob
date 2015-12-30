@@ -19,25 +19,27 @@
 			currentInvestorID = -1;
 
 			foreach (var investorDataSet in Result) {
-
-				if (!investorDataSet.IsRepaymentsBankAccountActive) {
-					investorDataSet.IsInvestorActive = false;
-					investorDataSet.AccumulatedRepayments = 0;
-				}
-
-				if (currentInvestorID < 0 || resultFiltered.All(x => x.InvestorID != investorDataSet.InvestorID))
+				if (currentInvestorID < 0 || resultFiltered.All(x => x.InvestorID != investorDataSet.InvestorID)) {
+					if (!investorDataSet.IsRepaymentsBankAccountActive) {
+						investorDataSet.IsInvestorActive = false;
+						investorDataSet.AccumulatedRepayments = 0;
+					}
 					resultFiltered.Add(investorDataSet);
-				else {
+				} else {
 					var anotherDataSetOfTheSameInvestor = resultFiltered.Find(x => x.InvestorID == investorDataSet.InvestorID);
-					if (!resultFiltered.Find(x => x.InvestorID == investorDataSet.InvestorID).IsRepaymentsBankAccountActive) {
+					if (investorDataSet.IsRepaymentsBankAccountActive) {
+						if (anotherDataSetOfTheSameInvestor.IsRepaymentsBankAccountActive)
+							Log.Info("Multiple active repayments bank accounts for InvestorID=" + investorDataSet.InvestorID);
 						resultFiltered.Remove(anotherDataSetOfTheSameInvestor);
 						resultFiltered.Add(investorDataSet);
 					}
 				}
 
 				currentInvestorID = investorDataSet.InvestorID;
-				Result = resultFiltered;
 			}
+
+			Result = resultFiltered;
+			
 		}//Execute
 
 		private List<AccountingDataModel> LoadFromDb() {
