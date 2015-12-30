@@ -285,6 +285,20 @@
 			return this.GetType().Name;
 		} // GetName
 
+		protected virtual TiedException CreateTiedException() {
+			return new TiedException(GetName());
+		} // CreateTiedException
+
+		protected static string CheckForSp(string sName) {
+			if (sName.Equals("sp", StringComparison.InvariantCultureIgnoreCase))
+				return sName;
+
+			if (sName.StartsWith("sp", StringComparison.InvariantCultureIgnoreCase))
+				sName = sName.Substring(2);
+
+			return sName;
+		} // CheckForSp
+
 		private void CheckDirection() {
 			bool bReturnFound = false;
 
@@ -328,15 +342,7 @@
 		/// </summary>
 		/// <returns>SP name.</returns>
 		protected override string GetName() {
-			string sName = this.GetType().Name;
-
-			if (sName.Equals("sp", StringComparison.InvariantCultureIgnoreCase))
-				return sName;
-
-			if (sName.StartsWith("sp", StringComparison.InvariantCultureIgnoreCase))
-				sName = sName.Substring(2);
-
-			return sName;
+			return CheckForSp(base.GetName());
 		} // GetName
 	} // class AStoredProc
 } // namespace Ezbob.Database

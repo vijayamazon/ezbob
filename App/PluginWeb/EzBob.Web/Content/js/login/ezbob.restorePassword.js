@@ -170,16 +170,6 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 				return true;
 			}
 
-			if (response.everlineAccount) {
-				document.location.href = 'https://accounts.everline.com/login';
-				return true;
-			}
-
-			if (response.everlineWizard) {
-				document.location.href = '' + window.gRootPath + 'Customer/Wizard';
-				return true;
-			}
-
 			if (!EzBob.isNullOrEmpty(response.errorMessage) || !EzBob.isNullOrEmpty(response.error)) {
 				EzBob.App.trigger('error', response.errorMessage || response.error);
 				self.ui.questionArea.hide();

@@ -109,7 +109,6 @@
     <Compile Include="Security\PasswordValidationResult.cs" />
     <Compile Include="Security\RefNumber.cs" />
     <Compile Include="Security\SecurityUtils.cs" />
-    <Compile Include="Security\SimplePassword.cs" />
     <Compile Include="Exceptions\SeldenException.cs" />
     <Compile Include="Serialization\Serialized.cs" />
     <Compile Include="SimpleRetryer.cs" />

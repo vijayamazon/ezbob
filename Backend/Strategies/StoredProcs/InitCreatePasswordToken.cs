@@ -1,20 +1,47 @@
 ﻿namespace Ezbob.Backend.Strategies.StoredProcs {
 	using System;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 
-	internal static class InitCreatePasswordToken {
-		public static Guid Execute(AConnection oDB, string sEmail) {
-			Guid oToken = Guid.NewGuid();
+	internal class InitCreatePasswordTokenByUserID : ATiedStoredProcedure {
+		public InitCreatePasswordTokenByUserID(int userID, AConnection db, ASafeLog log) : base(db, log) {
+			this.userID = userID;
+			Token = Guid.NewGuid();
+		} // constructor
 
-			bool bSuccess = oDB.ExecuteScalar<bool>(
-				"InitCreatePasswordToken",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("TokenID", oToken),
-				new QueryParameter("Email", sEmail),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
+		public override bool HasValidParameters() {
+			return this.userID > 0;
+		} // HasValidParameters
 
-			return bSuccess ? oToken : Guid.Empty;
-		} // Execute
+		protected override void TiedAction() {
+			ConnectionWrapper cw = null;
+			try {
+				cw = DB.GetPersistent();
+
+				cw.BeginTransaction();
+
+				DB.ExecuteNonQuery(
+					cw,
+					GetName(),
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("TokenID", Token),
+					new QueryParameter("UserID", this.userID),
+					new QueryParameter("Now", DateTime.UtcNow)
+				);
+
+				cw.Commit();
+			} catch (Exception e) {
+				Token = Guid.Empty;
+
+				if (cw != null)
+					cw.Rollback();
+
+				Log.Alert(e, "Failed to initialize password change token for user {0}.", this.userID);
+			} // try
+		} // TiedAction
+
+		public Guid Token { get; private set; }
+
+		private readonly int userID;
 	} // class InitCreatePasswordToken
 } // namespace

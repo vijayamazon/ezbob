@@ -129,8 +129,7 @@
 					m_oSpResult.LoginFailedCount = 0;
 					m_oSpResult.IsDeleted = 0;
 					m_oResult = MembershipCreateStatus.Success;
-				}
-				else {
+				} else {
 					Log.Debug(
 						"User '{0}' with origin '{1}': invalid password (verified using {2} password style).",
 						m_oData.Email,
@@ -158,8 +157,17 @@
 				Result
 			);
 
-			if (m_oSpResult.LoginFailedCount.HasValue && (m_oSpResult.LoginFailedCount >= m_oData.Cfg.NumOfInvalidPasswordAttempts))
-				new ThreeInvalidAttempts(m_oSpResult.UserID).Execute();
+			bool tooManyAttempts =
+				m_oSpResult.LoginFailedCount.HasValue &&
+				(m_oSpResult.LoginFailedCount >= m_oData.Cfg.NumOfInvalidPasswordAttempts);
+
+			if (tooManyAttempts) {
+				try {
+					new ThreeInvalidAttempts(m_oSpResult.UserID).Execute();
+				} catch (Exception e) {
+					Log.Alert(e, "Failed to fully process 'Three invalid attempts' password generation and  email.");
+				} // try
+			} // if
 		} // Execute
 
 		public string Result {

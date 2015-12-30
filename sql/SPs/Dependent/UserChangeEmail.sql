@@ -9,6 +9,8 @@ ALTER PROCEDURE UserChangeEmail
 @UserID INT,
 @Email NVARCHAR(250),
 @EzPassword VARCHAR(255),
+@Salt VARCHAR(255),
+@CycleCount VARCHAR(255),
 @RequestID UNIQUEIDENTIFIER,
 @RequestState NVARCHAR(100),
 @Now DATETIME
@@ -30,6 +32,8 @@ BEGIN
 		EMail = @Email,
 		FullName = @Email,
 		EzPassword = @EzPassword,
+		Salt = @Salt,
+		CycleCount = @CycleCount,
 		PassSetTime = @Now
 	WHERE
 		UserId = @UserID

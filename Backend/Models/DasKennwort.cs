@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Runtime.Serialization;
+	using System.Text;
 	using Utils.Security;
 
 	[DataContract]
@@ -28,6 +29,32 @@
 				this.setTime = DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture);
 			} // set
 		} // Data
+
+		public void GenerateSimplePassword(int nLength) {
+			var osPassword = new StringBuilder();
+
+			const int cLowerMin = 'a';
+			const int cLowerMax = 1 + (int)'z';
+
+			const int cUpperMin = 'A';
+			const int cUpperMax = 1 + (int)'Z';
+
+			const int cDigitMin = '0';
+			const int cDigitMax = 1 + (int)'9';
+
+			var rnd = new Random();
+
+			for (int i = 1; i <= Math.Max(nLength, 4); i++) {
+				if (i % 3 == 0)
+					osPassword.Append((char)rnd.Next(cDigitMin, cDigitMax));
+				else if (i % 2 == 0)
+					osPassword.Append((char)rnd.Next(cUpperMin, cUpperMax));
+				else
+					osPassword.Append((char)rnd.Next(cLowerMin, cLowerMax));
+			} // for
+
+			Data = osPassword.ToString();
+		} // GenerateSimplePassword
 
 		public override string ToString() {
 			return this.setTime;

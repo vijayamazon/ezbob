@@ -3,6 +3,7 @@
 	using System.ServiceModel;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.UserManagement;
+	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -36,9 +37,6 @@
 		);
 
 		[OperationContract]
-		StringActionResult UserResetPassword(string sEmail);
-
-		[OperationContract]
 		StringActionResult UserChangePassword(
 			string sEmail,
 			Password oOldPassword,
@@ -62,7 +60,7 @@
 		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
 
 		[OperationContract]
-		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead);
+		IntActionResult SetCustomerPasswordByToken(Guid token, DasKennwort password, bool isBrokerLead);
 
 		[OperationContract]
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);

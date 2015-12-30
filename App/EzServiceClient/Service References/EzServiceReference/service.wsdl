@@ -606,12 +606,6 @@
   <wsdl:message name="IEzService_UserDisable_OutputMessage">
     <wsdl:part name="parameters" element="tns:UserDisableResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UserResetPassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserResetPassword" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserResetPassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserResetPasswordResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UserChangePassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UserChangePassword" />
   </wsdl:message>
@@ -1888,10 +1882,6 @@
     <wsdl:operation name="UserDisable">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserDisable" message="tns:IEzService_UserDisable_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse" message="tns:IEzService_UserDisable_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UserResetPassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UserChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
@@ -3290,15 +3280,6 @@
     </wsdl:operation>
     <wsdl:operation name="UserDisable">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserDisable" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UserResetPassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/UserResetPassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

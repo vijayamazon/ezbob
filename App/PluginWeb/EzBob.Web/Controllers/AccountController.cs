@@ -437,37 +437,7 @@
 				}
 			} // if
 
-			if (uiOrigin.IsEverline()) {
-				var loginLoanChecker = new EverlineLoginLoanChecker();
-				var status = loginLoanChecker.GetLoginStatus(email);
-
-				switch (status.status) {
-				case EverlineLoanStatus.Error:
-					log.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
-					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
-
-				case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
-					log.Warn("Customer {0} ExistsWithCurrentLiveLoan in Everiline tried to restore password", email);
-					return Json(new { everlineAccount = true }, JsonRequestBehavior.AllowGet);
-
-				case EverlineLoanStatus.ExistsWithNoLiveLoan:
-					log.Warn("Customer {0} ExistsWithNoLiveLoan in Everiline tried to restore password", email);
-					TempData["IsEverline"] = true;
-					TempData["CustomerEmail"] = email;
-					return Json(new { everlineWizard = true }, JsonRequestBehavior.AllowGet);
-
-				case EverlineLoanStatus.DoesNotExist:
-					log.Warn("Customer {0} DoesNotExist in Everiline tried to restore password", email);
-					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
-
-				default:
-					log.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
-					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
-				} // switch
-			} // if
-
 			return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
-
 		} // QuestionForEmail
 
 		[Transactional]
@@ -655,11 +625,12 @@
 				}, JsonRequestBehavior.AllowGet);
 			} // if
 
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
 			log.Debug(
-				"Customer create password attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
+				"Customer create password attempt from remote IP {0} received: {1}...",
 				customerIp,
-				model.UserName,
-				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password)
+				pu.Generate(model.UserName, model.Password)
 			);
 
 			int nUserID;
@@ -676,9 +647,8 @@
 					throw new Exception(DbStrings.NotValidEmailAddress);
 
 				nUserID = this.serviceClient.Instance.SetCustomerPasswordByToken(
-					model.UserName,
-					new Password(model.Password),
 					model.Token,
+					new DasKennwort(model.Password),
 					model.IsBrokerLead
 				).Value;
 			} catch (Exception e) {

@@ -4307,12 +4307,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserDisableAsync(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserResetPassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserResetPasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserResetPassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserResetPasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangePasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
@@ -4352,10 +4346,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult> LoadCustomerByCreatePasswordTokenAsync(System.Guid oToken);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead);
+        ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
@@ -5935,14 +5929,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UserDisableAsync(userID, customerID, email, unsubscribeFromMailChimp, changeEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail) {
-            return base.Channel.UserResetPassword(sEmail);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail) {
-            return base.Channel.UserResetPasswordAsync(sEmail);
-        }
-        
         public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
             return base.Channel.UserChangePassword(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
         }
@@ -5991,12 +5977,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadCustomerByCreatePasswordTokenAsync(oToken);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead) {
-            return base.Channel.SetCustomerPasswordByToken(sEmail, oPassword, oToken, bIsBrokerLead);
+        public ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead) {
+            return base.Channel.SetCustomerPasswordByToken(token, password, isBrokerLead);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead) {
-            return base.Channel.SetCustomerPasswordByTokenAsync(sEmail, oPassword, oToken, bIsBrokerLead);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead) {
+            return base.Channel.SetCustomerPasswordByTokenAsync(token, password, isBrokerLead);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {

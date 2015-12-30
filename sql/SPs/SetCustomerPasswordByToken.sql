@@ -6,92 +6,48 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE SetCustomerPasswordByToken
-@Email NVARCHAR(128),
+@UserID INT,
+@Token UNIQUEIDENTIFIER,
 @EzPassword VARCHAR(255),
-@TokenID UNIQUEIDENTIFIER,
+@Salt VARCHAR(255),
+@CycleCount VARCHAR(255),
 @IsBrokerLead BIT,
 @Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @CustomerID INT = 0
-	DECLARE @BrokerLeadTokenID INT = 0
+	------------------------------------------------------------------------------
+
+	BEGIN TRANSACTION
 
 	------------------------------------------------------------------------------
 
 	IF @IsBrokerLead = 0
 	BEGIN
-		SELECT
-			@CustomerID = c.UserId
-		FROM
-			Security_User c
-			INNER JOIN CreatePasswordTokens t
-				ON c.UserId = t.CustomerID
-				AND t.TokenID = @TokenID
-				AND t.DateAccessed IS NOT NULL
-				AND t.DateDeleted IS NULL
+		UPDATE CreatePasswordTokens SET
+			DateDeleted = @Now
 		WHERE
-			c.Email = @Email
+			TokenID = @Token
 	END
 	ELSE BEGIN
-		SELECT
-			@CustomerID = l.CustomerID,
-			@BrokerLeadTokenID = t.BrokerLeadTokenID
-		FROM
-			BrokerLeads l
-			INNER JOIN BrokerLeadTokens t
-				ON l.BrokerLeadID = t.BrokerLeadID
-				AND t.BrokerLeadToken = @TokenID
-				AND l.Email = @Email
-				AND t.DateAccessed IS NOT NULL
-				AND t.DateDeleted IS NULL
-	END
-
-	------------------------------------------------------------------------------
-
-	IF @CustomerID > 0
-	BEGIN
-		BEGIN TRANSACTION
-
-		-------------------------------------------------------------------------
-
-		IF @IsBrokerLead = 0
-		BEGIN
-			UPDATE CreatePasswordTokens SET
-				DateDeleted = @Now
-			WHERE
-				TokenID = @TokenID
-		END
-		ELSE BEGIN
-			UPDATE BrokerLeadTokens SET
-				DateDeleted = @Now
-			WHERE
-				BrokerLeadTokenID = @BrokerLeadTokenID
-		END
-
-		-------------------------------------------------------------------------
-
-		UPDATE Security_User SET
-			EzPassword = @EzPassword
+		UPDATE BrokerLeadTokens SET
+			DateDeleted = @Now
 		WHERE
-			UserId = @CustomerID
-
-		-------------------------------------------------------------------------
-
-		SELECT @CustomerID AS CustomerID
-
-		-------------------------------------------------------------------------
-
-		COMMIT TRANSACTION
-
-		-------------------------------------------------------------------------
-
-		RETURN
+			BrokerLeadToken = @Token
 	END
 
 	------------------------------------------------------------------------------
 
-	SELECT CONVERT(INT, 0) AS CustomerID
+	UPDATE Security_User SET
+		EzPassword = @EzPassword,
+		Salt = @Salt,
+		CycleCount = @CycleCount
+	WHERE
+		UserId = @UserID
+
+	------------------------------------------------------------------------------
+
+	COMMIT TRANSACTION
 END
 GO

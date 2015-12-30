@@ -1,64 +1,87 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
+	using ConfigManager;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 
 	public class UserResetPassword : AStrategy {
-		public UserResetPassword(string sEmail) {
-			Password = new SimplePassword(8, sEmail);
+		public UserResetPassword(int userID) {
+			Password = new DasKennwort();
+			Password.GenerateSimplePassword(8);
 
-			m_oData = new UserSecurityData(this) {
-				Email = sEmail,
-				NewPassword = Password.RawValue,
-			};
-
-			m_oSp = new SpUserResetPassword(DB, Log) {
-				Email = sEmail,
-				EzPassword = Password.Hash,
-			};
+			this.userID = userID;
 		} // constructor
 
 		public override string Name {
 			get { return "User reset password"; }
 		} // Name
 
-		public SimplePassword Password { get; private set; } // Password
+		public DasKennwort Password { get; private set; } // Password
 
 		public bool Success { get; private set; } // Success
 
 		public override void Execute() {
-			m_oData.ValidateEmail();
-			m_oData.ValidateNewPassword();
+			Success = false;
 
-			Success = 0 < m_oSp.ExecuteScalar<int>();
+			SafeReader sr = DB.GetFirst(
+				"LoadUserDetails",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@UserID", this.userID)
+			);
+
+			if (sr.IsEmpty) {
+				Log.Alert("User not found by id {0}.", this.userID);
+				return;
+			} // if
+
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
+			HashedPassword hashed = pu.Generate(sr["Email"], Password.Data);
+
+			var sp = new SpUserResetPassword(DB, Log) {
+				UserID = this.userID,
+				EzPassword = hashed.Password,
+				Salt = hashed.Salt,
+				CycleCount = hashed.CycleCount,
+			};
+
+			Success = 0 < sp.ExecuteScalar<int>();
 		} // Execute
 
-		private readonly SpUserResetPassword m_oSp;
-		private readonly UserSecurityData m_oData;
+		private readonly int userID;
 
 		private class SpUserResetPassword : AStoredProc {
 			public SpUserResetPassword(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			public override bool HasValidParameters() {
 				return
-					!string.IsNullOrWhiteSpace(Email) &&
-					!string.IsNullOrWhiteSpace(EzPassword);
+					(UserID > 0) &&
+					!string.IsNullOrWhiteSpace(EzPassword) &&
+					!string.IsNullOrWhiteSpace(Salt) &&
+					!string.IsNullOrWhiteSpace(CycleCount);
 			} // HasValidParameters
 
 			[UsedImplicitly]
-			public string Email { get; set; }
+			public int UserID { get; set; }
 
 			[UsedImplicitly]
 			public string EzPassword { get; set; }
 
 			[UsedImplicitly]
+			public string Salt { get; set; }
+
+			[UsedImplicitly]
+			public string CycleCount { get; set; }
+
+			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; }
+				// ReSharper disable once ValueParameterNotUsed
 				set { }
 			} // Now
 		} // class SpUserResetPassword
-
 	} // class UserResetPassword
 } // namespace Ezbob.Backend.Strategies.UserManagement

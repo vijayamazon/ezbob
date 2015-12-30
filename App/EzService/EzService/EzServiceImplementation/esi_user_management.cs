@@ -70,43 +70,45 @@
 			};
 		} // UserLogin
 
-        public StringActionResult UserDisable(
-            int userID,
-            int customerID,
-            string email,
-            bool unsubscribeFromMailChimp,
-            bool changeEmail
-        ) {
-            UserDisable udInstance;
+		public StringActionResult UserDisable(
+			int userID,
+			int customerID,
+			string email,
+			bool unsubscribeFromMailChimp,
+			bool changeEmail
+		) {
+			UserDisable udInstance;
 
-            ActionMetaData udMetaData = ExecuteSync(out udInstance, customerID, userID, customerID, email, unsubscribeFromMailChimp);
+			ActionMetaData udMetaData = ExecuteSync(
+				out udInstance,
+				customerID,
+				userID,
+				customerID,
+				email,
+				unsubscribeFromMailChimp
+			);
 
-            if (changeEmail) {
-                UserChangeEmail uceInstance;
+			if (changeEmail) {
+				UserChangeEmail uceInstance;
 
-                ActionMetaData oMetaData = ExecuteSync(out uceInstance, customerID, userID, customerID, string.Format("{0}frozen", email));
+				ActionMetaData oMetaData = ExecuteSync(
+					out uceInstance,
+					customerID,
+					userID,
+					customerID,
+					string.Format("{0}frozen", email)
+				);
 
-                return new StringActionResult {
-                    MetaData = oMetaData,
-                    Value = uceInstance.ErrorMessage,
-                };
-            }
-
-            return new StringActionResult {
-                MetaData = udMetaData
-            };
-        }
-
-		public StringActionResult UserResetPassword(string sEmail) {
-			UserResetPassword oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail);
+				return new StringActionResult {
+					MetaData = oMetaData,
+					Value = uceInstance.ErrorMessage,
+				};
+			}
 
 			return new StringActionResult {
-				MetaData = oMetaData,
-				Value = oInstance.Success ? oInstance.Password.Encrypted : string.Empty,
+				MetaData = udMetaData
 			};
-		} // UserResetPassword
+		}
 
 		public StringActionResult UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
 			UserChangePassword oInstance;
@@ -167,10 +169,10 @@
 			};
 		} // LoadCustomerByCreatePasswordToken
 
-		public IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead) {
+		public IntActionResult SetCustomerPasswordByToken(Guid token, DasKennwort password, bool isBrokerLead) {
 			SetCustomerPasswordByToken oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, oToken, bIsBrokerLead);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, token, password, isBrokerLead);
 
 			return new IntActionResult {
 				MetaData = oMetaData,
