@@ -68,6 +68,11 @@
                                                                     "Could not find valid configiration for this run, make sure run has {browser, brand, enviorment}"));
         }
 
+        internal static string TestRailCaseName(ulong caseID) {
+            AtutomationCaseRun atutomationCaseRun = PlanRepository.FirstOrDefault(x => x.CaseBase.ID == caseID);
+
+            return atutomationCaseRun == null ? null : atutomationCaseRun.CaseBase.Title;
+        }
     }
 }
 
