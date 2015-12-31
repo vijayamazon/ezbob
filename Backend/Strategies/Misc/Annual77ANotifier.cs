@@ -23,7 +23,13 @@
 
 		public override void Execute() {
 			LoadImailTemplates();
-			DB.ForEachRowSafe(HandleOneNotification, "LoadLoansForAnnual77ANofication", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+			var template = this.templates.FirstOrDefault(x => x.IsActive && x.OriginID == 1);
+			if (template == null) {
+				Log.Debug("No template found for annual 77A notification for originID {2} to customer {0} for loan {1}", 1, 1, 1);
+				return;
+			}
+			PrepareAndSendMail(27, 54, template);
+			//DB.ForEachRowSafe(HandleOneNotification, "LoadLoansForAnnual77ANofication", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 		} // Execute
 
 		private ActionResult HandleOneNotification(SafeReader sr, bool bRowSetStart) {
@@ -48,13 +54,41 @@
 				return ActionResult.Continue;
 			}
 
-			var variables = PrepareVariables(loanID, customerID);
-			var metadata = this.collectionIMailer.SendAnual77ANotification(customerID, template, new Address(), variables);
-			var collectionLogID = AddCollectionLog(customerID, loanID, SetLateLoanStatus.CollectionType.Annual77ANotification, SetLateLoanStatus.CollectionMethod.Mail);
-			SaveCollectionSnailMailMetadata(collectionLogID, metadata);
+			PrepareAndSendMail(loanID, customerID, template);
 			return ActionResult.Continue;
 		}//HandleOneNotification
 
+		private void PrepareAndSendMail(int loanID, int customerID, SnailMailTemplate template){
+			Address address;
+			var variables = PrepareVariables(loanID, customerID, out address);
+			List<string> header = new List<string>{
+				{"Date"},
+				{"Amount"},
+				{"Description"}
+			};
+
+			List<List<string>> content = new List<List<string>> {
+				new List<string> { 
+					{"2015-1-1"},
+					{"100"},
+					{"Payment"}
+				},
+				new List<string> {
+					{"2015-2-1"},
+					{"200"},
+					{"Payment"}
+				}
+			};
+
+			var schedule = new TableModel {
+				Header = header,
+				Content = content
+			};
+
+			var metadata = this.collectionIMailer.SendAnual77ANotification(customerID, template, address, variables, schedule, "@ScheduleTable@");
+			var collectionLogID = AddCollectionLog(customerID, loanID, SetLateLoanStatus.CollectionType.Annual77ANotification, SetLateLoanStatus.CollectionMethod.Mail);
+			SaveCollectionSnailMailMetadata(collectionLogID, metadata);
+		}
 		private void LoadImailTemplates() {
 			List<CollectionSnailMailTemplate> dbTemplates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
 			this.templates = dbTemplates
@@ -71,9 +105,27 @@
 				});
 		}
 
-		private Dictionary<string, string> PrepareVariables(int loanID, int customerID) {
+		private Dictionary<string, string> PrepareVariables(int loanID, int customerID, out Address address) {
+
 			//TODO
-			return new Dictionary<string, string>();
+
+			address = new Address {
+				Line1 = "l1",
+				Line2 = "l2",
+				Line3 = "l3",
+				Line4 = "l4",
+				Postcode = "AB10 1BA"
+			};
+		
+			return new Dictionary<string, string>{
+				{"CustomerName","John Doe"},
+				{"LoanRefNum","054656465465"},
+				{"Date",DateTime.UtcNow.ToString("yyyy-MM-dd")},
+				{"LoanDate",DateTime.UtcNow.AddYears(-1).ToString("yyyy-MM-dd")},
+				{"LoanAmount","10000"},
+				{"AnnualInterestRatePercent","15"},
+				{"ScheduleTable", ""}
+			};
 		}//PrepareVariables
 
 		private int AddCollectionLog(int customerID, int loanID, SetLateLoanStatus.CollectionType type, SetLateLoanStatus.CollectionMethod method) {

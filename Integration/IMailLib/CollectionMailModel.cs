@@ -1,5 +1,7 @@
 namespace IMailLib {
 	using System;
+	using System.Collections.Generic;
+	using Aspose.Words.Lists;
 
 	public class Address {
 		public string Line1 { get; set; }
@@ -36,5 +38,10 @@ namespace IMailLib {
 		public decimal Fees { get; set; }
 		public decimal RepaidAmount { get; set; }
 		public DateTime? RepaidDate { get; set; }
+	}
+
+	public class TableModel {
+		public List<string> Header { get; set; }
+		public List<List<string>> Content { get; set; }
 	}
 }

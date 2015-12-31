@@ -180,10 +180,13 @@
 			return SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName, templateModel.ID);
 		}
 
-		public FileMetadata SendAnual77ANotification(int customerID, SnailMailTemplate template, Address address, Dictionary<string,string> variables) {
+		public FileMetadata SendAnual77ANotification(int customerID, SnailMailTemplate template, Address address, Dictionary<string,string> variables, TableModel schedule, string scheduleNode) {
 			SetAddress(address, ref variables);
 			Stream templateStream = PrepareMail.ByteArrayToStream(template.Template);
-			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(templateStream, variables);
+			var templateDoc = PrepareMail.GetDocumentFromTemplate(templateStream);
+			var scheduleTableDoc = PrepareMail.CreateTable(schedule);
+			var templateDocWithSchedule = PrepareMail.ReplaceNodeByAnotherDocument(templateDoc, scheduleNode, scheduleTableDoc);
+			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(templateDocWithSchedule, variables);
 			return SendMail(pdfData, customerID, template.TemplateName, template.ID);
 		}
 

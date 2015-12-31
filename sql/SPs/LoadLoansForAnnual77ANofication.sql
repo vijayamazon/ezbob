@@ -22,7 +22,7 @@ BEGIN
 		GROUP BY 
 			cl.LoanID
 	)
-	SELECT c.TypeOfBusiness, c.Id CustomerID, l.Id LoanID, ls.LastSent
+	SELECT c.OriginID, c.TypeOfBusiness, c.Id CustomerID, l.Id LoanID, ls.LastSent
 	FROM 
 		Loan l INNER JOIN Customer c ON l.CustomerId=c.Id 
 		LEFT JOIN last_notification_sent ls ON ls.LoanID = l.Id

@@ -37,6 +37,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="Callcredit.CRBSB, Version=7.2.0.0, Culture=neutral, PublicKeyToken=aed89f8db6c5d243, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\CallCredit\Callcredit.CRBSB.dll</HintPath>
