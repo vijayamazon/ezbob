@@ -28,21 +28,35 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		'click .btn-delete-director': 'deleteDirector',
 	}, // events
 
-	deleteDirector: function (event) {
-		var oRow = $(event.target).closest('TR.experian-director');
-
-		if (oRow.length !== 1)
+	deleteDirector: function (ev) {
+		var isExperianDirector = $(ev.target).closest('TR.experian-director');
+		var isUWDirector = $(ev.target).closest('TR.underwriter-director');
+		if (isExperianDirector.length !== 1 && isUWDirector.length !== 1)
 			return;
 
 		var self = this;
 
-		var doDeleteDirector = function () {
-			BlockUi('on', this.$el);
+		var doDeleteDirector = function (oRow, type) {
+			
+			BlockUi('on', self.$el);
+			var post = null;
+			switch (type) {
+				case 'experianDirector':
+					post = window.gRootPath + 'Underwriter/Esignatures/DeleteExperianDirector';
+					break;
+				case 'uwDirector':
+					post = window.gRootPath + 'Underwriter/Esignatures/DeleteDirector';
+					break;
+
+			}
+
+			if (post == null) {
+				return;
+			}
 
 			var oData = oRow.data('for-edit');
-
-			var oRequest = $.post(
-				window.gRootPath + 'Underwriter/Esignatures/DeleteExperianDirector',
+			
+			var oRequest = $.post(post,
 				{ nDirectorID: oData.directorID, }
 			);
 
@@ -68,12 +82,17 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			});
 		}; // doDeleteDirector
 
-		var sTitle = $.trim(
-			$.trim(oRow.find('.grid-item-FirstName').text()) + ' ' +
-			$.trim(oRow.find('.grid-item-LastName').text())
-		);
 
-		EzBob.ShowMessage('Confirm deleting director', sTitle, doDeleteDirector, 'Delete', null, 'Keep');
+		var row = isExperianDirector.length == 1 ? isExperianDirector : isUWDirector;
+		var type = isExperianDirector.length == 1 ? 'experianDirector' : 'uwDirector';
+		var sTitle = $.trim(
+			$.trim(row.find('.grid-item-FirstName').text()) + ' ' +
+			$.trim(row.find('.grid-item-LastName').text())
+		);
+		
+		EzBob.ShowMessage('Confirm deleting director', sTitle, function () {
+			doDeleteDirector(row, type);
+		}, 'Delete', null, 'Keep');
 	}, // deleteDirector
 
 	startEditDirector: function (e) {
