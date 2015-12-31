@@ -180,6 +180,13 @@
 			return SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName, templateModel.ID);
 		}
 
+		public FileMetadata SendAnual77ANotification(int customerID, SnailMailTemplate template, Address address, Dictionary<string,string> variables) {
+			SetAddress(address, ref variables);
+			Stream templateStream = PrepareMail.ByteArrayToStream(template.Template);
+			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(templateStream, variables);
+			return SendMail(pdfData, customerID, template.TemplateName, template.ID);
+		}
+
 		private FileMetadata SendDefaultTemplateComm7Business(int customerID, Dictionary<string, string> variables, Address companyAddress, int originId) {
 			SetAddress(companyAddress, ref variables);
 			var templateModel = this.templates.FirstOrDefault(x => x.TemplateName == DefaulttemplateComm7BusinessTemplateName && originId == x.OriginID && x.IsActive);

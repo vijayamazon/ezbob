@@ -583,7 +583,8 @@
 			CollectionDay31,
 			CollectionDay46,
 			CollectionDay60,
-			CollectionDay90
+			CollectionDay90,
+			Annual77ANotification
 		}//enum
 
 		public class CollectionDataModel {
