@@ -211,9 +211,8 @@
 			
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 
-			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
-				
-				var directors =customer.Company.Directors.Where(x => !x.IsDeleted);
+			if (nBusinessType != TypeOfBusiness.Entrepreneur && customer.Company != null) {
+				var directors = customer.Company.Directors.Where(x => !x.IsDeleted);
 				foreach (var director in directors) {
 					try {
 						this.serviceClient.Instance.ExperianConsumerCheck(1, customer.Id, director.Id, false);
