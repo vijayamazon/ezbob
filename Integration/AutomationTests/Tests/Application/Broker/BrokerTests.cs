@@ -16,7 +16,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("1202")]
-        public void TestCase1202() {
+        public void TestCase1202() {//TODO - add DB validation.
             bool result = this.ExecuteTest((logHeader) => {
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
                 BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
@@ -522,76 +522,45 @@ namespace UIAutomationTests.Tests.Application.Broker {
         public void TestCase1355() {
             bool result = this.ExecuteTest((logHeader) => {
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
-                BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
-                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                newBroker.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
 
+                    BrokerShared newBroker = new BrokerShared(Driver, EnvironmentConfig, BrandConfig);
+                    //Precondition 2 - Prepare a registered broker account: C1202.
+                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                    newBroker.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+
+                    //Precondition 3 - Broker account is linked to approved customer: C7472.
+                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afd10@ezbob.com";
+                    newBroker.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                    WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
+                    newWizard.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
+                    newWizard.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
+                    newWizard.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", false, "15", "123");
+                    //Wizard Step 4 - add EKM account
+                    newWizard.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
+
+                    newBroker.BrokerLogOff(logHeader + " - BrokerLogOff");
+
+                    CustomerShared newCustomer = new CustomerShared(Driver, EnvironmentConfig, BrandConfig);
+                    newCustomer.CustomerLogIn(logHeader + " - CustomerLogIn", true, leadMail);
+                    newCustomer.CustomerTakeLoan(logHeader + " - CustomerTakeLoan", "LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
+                    newCustomer.CustomerLogOff(logHeader + " - CustomerLogOff");
+
+                //Step 1 - Browse to broker dashboard.
                 newBroker.BrokerLogIn(logHeader + " - BrokerLogIn", brokerMail);
 
-                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afd10@ezbob.com";
-                newBroker.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                //Step 2 - Commission widget display the following as disabled.
+                IWebElement widget = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));
 
-                //IWebElement leadFillWizard = SharedServiceClass.ElementToBeClickable(Driver, By.Id("LeadFillWizard"));
-                //leadFillWizard.Click();
+                //Step 2.1 - Commission: Unlinked.
+                actionBot.WriteToLog("Begin assert: Commission field is empty.");
+                Assert.AreEqual("---", widget.FindElement(By.CssSelector("dd.dashes")).Text);
+                actionBot.WriteToLog("Positively asserted: Commission field is empty." + Environment.NewLine);
 
-                //IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));
-                actionBot.WriteToLog(logHeader + " - " + By.Id("Email") + ". Begin assert.");
-                Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("Email")).GetAttribute("value"), leadMail);//Verify that lead's email is displayed in the Email address field.
-                actionBot.WriteToLog(logHeader + " - " + By.Id("Email") + ". Assert positively." + Environment.NewLine);
+                //Step 2.2 - Approved: Linked broker entitled for full commission.
+                actionBot.WriteToLog("Begin assert: Approved ammount  field is not empty.");
+                Assert.IsTrue(decimal.Parse(widget.FindElement(By.CssSelector("dd.broker-approved")).Text.Substring(1)) != 0.0m);
+                actionBot.WriteToLog("Positively asserted: Approved ammount  field is not empty." + Environment.NewLine);
 
-                WizardShared newWizard = new WizardShared(Driver, EnvironmentConfig, BrandConfig);
-
-                //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-                newWizard.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", "", "123123", 2, "asd", "1000");
-
-                newWizard.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "", "", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
-
-                newWizard.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", false, "15", "123");
-
-                //Wizard Step 4 - add paypal account
-                //newWizard.PerformWizardStepFour("BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");//Preconditions. At the end of this step broker dashboard is displayed - Step 1.
-                //Wizard Step 4 - add EKM account
-                newWizard.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Step 12 (C788) - TODO: instead of step 11, replace when problem resolved
-
-                newBroker.BrokerLogOff(logHeader);
-                //SharedServiceClass.WaitForAjaxReady(Driver);
-                //Driver.Manage().Cookies.DeleteAllCookies();
-                //IWebElement logOffBroker = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
-                //SharedServiceClass.WaitForBlockUiOff(Driver);
-                //logOffBroker.Click();
-                //actionBot.Click(By.CssSelector("li.menu-btn.login.log-off > a.button"), logHeader + " - Base");
-
-                CustomerShared newCustomer = new CustomerShared(Driver, EnvironmentConfig, BrandConfig);
-                newCustomer.CustomerLogIn(logHeader + " - CustomerLogIn", true, leadMail);
-                newCustomer.CustomerTakeLoan(logHeader + " - CustomerTakeLoan", "LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
-                newCustomer.CustomerLogOff(logHeader);
-                //SharedServiceClass.WaitForAjaxReady(Driver);
-                //Driver.Manage().Cookies.DeleteAllCookies();
-                //SharedServiceClass.WaitForBlockUiOff(Driver);
-                //IWebElement logOffCustomer = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.login > a"));
-                //logOffCustomer.Click();
-                //SharedServiceClass.WaitForBlockUiOff(Driver);
-                //actionBot.Click(By.CssSelector("li.login > a"), logHeader + " - Base");
-                
-
-                newBroker.BrokerLogIn(logHeader + " - BrokerLogIn", brokerMail);//Step 1
-
-                
-                IWebElement widget = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector("div.not_linked_bank > div.d-widgets > div.d-widget"));//Step 2
-                
-                IWebElement widgetComission = widget.FindElement(By.CssSelector("dd.dashes"));//Step 2.1
-                actionBot.WriteToLog(logHeader + " - " + By.Id("Email") + ". Begin assert.");
-                Assert.AreEqual("---", widgetComission.Text);
-                actionBot.WriteToLog(logHeader + " - " + By.Id("Email") + ". Assert positively." + Environment.NewLine);
-
-                IWebElement widgetIssued = widget.FindElement(By.CssSelector("dd.broker-approved"));//Step 2.2
-                actionBot.WriteToLog(logHeader + " - " + By.Id("Email") + ". Begin assert.");
-                Assert.IsTrue(decimal.Parse(widgetIssued.Text.Substring(1)) != 0.0m);
-                actionBot.WriteToLog(logHeader + " - " + By.Id("Email") + ". Assert positively." + Environment.NewLine);
-
-                //IWebElement logOff = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.menu-btn.login.log-off > a.button"));
-                //logOff.Click();
-                //actionBot.Click(By.CssSelector("li.menu-btn.login.log-off > a.button"), logHeader + " - Base");
                 newBroker.BrokerLogOff(logHeader);
 
                 actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);

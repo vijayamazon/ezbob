@@ -20,6 +20,7 @@
             log.Info("ClickAssert finished.");
             log.Info(description + " - ClickAssert performed. '" + locator.ToString() + "' has been clicked. and '" + assertLocator.ToString()+"' asserted.");
         }
+
         public void SendKeys(By locator, string keys, string description, int waitTime = 120, bool isClear = true) {
             IWebElement element = SharedServiceClass.ElementIsVisible(Driver, locator, waitTime);
             if (isClear)
@@ -41,6 +42,11 @@
         public void SelectByText(By locator, string text, string description, int waitTime = 120) {
             SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByText(text);
             log.Info(description + " - '" + locator.ToString() + "' - SelectByText: '" + text + "'.");
+        }
+
+        public void SwitchToWindow(int lastWindowIndex, string description) {
+            Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, lastWindowIndex));
+            log.Info("Moving focust to window: " + description + ".");
         }
 
         public void WriteToLog(string description) {

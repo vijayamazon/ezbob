@@ -1,6 +1,7 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
     using System;
     using System.Resources;
+    using NUnit.Framework;
     using OpenQA.Selenium;
     using UIAutomationTests.Core;
 
@@ -15,76 +16,75 @@
             this.Locker = new object();
         }
 
-        //This procedure is to replace OrangeMoney/Wizard test case 'C3'
+        //This procedure follows C3.
         //origin - BrokerFillLead: when broker fills lead's wizard; ClientSignup: when accessing from main wizard page.
-        public void PerformWizardStepOne(string logHeader,
+        public void PerformWizardStepOne(
+            string logHeader,
             string origin,
             string emailAdress,
-             string password,
-             int secretQuestion,
-             string secAnswer,
-             string reqAmmount) {
+            string password,
+            int secretQuestion,
+            string secAnswer,
+            string reqAmmount
+            ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            if (string.Equals("ClientSignup",origin)) {
-                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("WizardHost"));//Step 1
 
-                Driver.Navigate().GoToUrl(url);//Step 2
+            if (string.Equals("ClientSignup", origin)) {
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("WizardHost"));
 
-                actionBot.WriteToLog(logHeader + " - " + "Nevigate to url: " + url);
+                //Step 2 - Browse to OM app.
+                Driver.Navigate().GoToUrl(url);
+                actionBot.WriteToLog("Nevigate to url: " + url);
 
-                //IWebElement agreeToTerms = Driver.FindElement(By.XPath("//label[@for='AgreeToTerms']"));
-                //agreeToTerms.Click();
+                //Step 3 - Insert a valid email address to the Email address field and focus out.
+                actionBot.SendKeys(By.Id("Email"), emailAdress, "(valid email address)");
             }
 
-            //IWebElement email = SharedServiceClass.ElementIsVisible(Driver, By.Id("Email"));//Step 3
-            //email.SendKeys(emailAdress);
-            actionBot.SendKeys(By.Id("Email"), emailAdress, logHeader, isClear: false);
+            if (string.Equals("BrokerFillLead", origin)) {
+                actionBot.WriteToLog("Begin assert: Verify e-mail address in wizard is: " + emailAdress);
+                Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("Email")).GetAttribute("value"), emailAdress);
+                actionBot.WriteToLog("Positively asserted: e-mail addresses matched.");
+            }
 
-            //IWebElement signupPass1 = Driver.FindElement(By.Id("signupPass1"));//Step 4
-            //signupPass1.SendKeys(password);
-            actionBot.SendKeys(By.Id("signupPass1"), password, logHeader);
+            //Step 4 - Insert a valid password to the password field and focus out.
+            actionBot.SendKeys(By.Id("signupPass1"), password, "(password field)");
 
-            //IWebElement signupPass2 = Driver.FindElement(By.Id("signupPass2"));//Step 5
-            //signupPass2.SendKeys(password);
-            actionBot.SendKeys(By.Id("signupPass2"), password, logHeader);
+            //Step 5 - Insert the same password to the confirm password field and focus out.
+            actionBot.SendKeys(By.Id("signupPass2"), password, "(confirm password)");
 
-            //SelectElement secrertQuestion = new SelectElement(Driver.FindElement(By.Id("securityQuestion")));//Step 6
-            //secrertQuestion.SelectByIndex(secretQuestion);
-            actionBot.SelectByIndex(By.Id("securityQuestion"), secretQuestion, logHeader);
+            //Step 6 - Select secret question from the list.
+            actionBot.SelectByIndex(By.Id("securityQuestion"), secretQuestion, "(secret question select)");
 
-            //IWebElement securityAnswer = Driver.FindElement(By.Id("SecurityAnswer"));//Step 7
-            //securityAnswer.SendKeys(secAnswer);
-            actionBot.SendKeys(By.Id("SecurityAnswer"), secAnswer, logHeader);
+            //Step 7 - Insert answer in the Secret answer field and focus out.
+            actionBot.SendKeys(By.Id("SecurityAnswer"), secAnswer, "(secret answer field)");
 
             //IWebElement amount = Driver.FindElement(By.Id("amount"));
             //amount.SendKeys(reqAmmount);
 
             if (String.Equals(origin, "ClientSignup")) {//This code is ilrelevant in case accessed from Broker-lead-fill
 
-                //IWebElement mobilePhone = Driver.FindElement(By.Id("mobilePhone"));//Step 8
-                //mobilePhone.SendKeys("1111111111");
-                actionBot.SendKeys(By.Id("mobilePhone"), "1111111111", logHeader);
+                //Step 8 - Insert number in the Mobile phone field and focus out.
+                actionBot.SendKeys(By.Id("mobilePhone"), "1111111111", "(contact person mobile phone)");
 
-                //IWebElement generateMobileCode = Driver.FindElement(By.Id("generateMobileCode"));//Step 9
-                //generateMobileCode.Click();
-                actionBot.Click(By.Id("generateMobileCode"), logHeader);
+                //Step 9 - Click send activation code.
+                actionBot.Click(By.Id("generateMobileCode"), "(generate mobile code button)");
 
-                //IWebElement mobileCode = Driver.FindElement(By.Id("mobileCode"));//Step 10
-                //mobileCode.SendKeys("222222");
-                actionBot.SendKeys(By.Id("mobileCode"), "222222", logHeader);
+                //Step 10 - Insert the authentication code. Workaround is: 222222
+                actionBot.SendKeys(By.Id("mobileCode"), "222222", "(valid mobile code)");
             }
 
-            //IWebElement signupSubmitButton = Driver.FindElement(By.Id("signupSubmitButton"));//Step 11
-            //signupSubmitButton.Click();
-            actionBot.Click(By.Id("signupSubmitButton"), logHeader);
+            //Step 11 - Click continue.
+            actionBot.Click(By.Id("signupSubmitButton"), "(continue button)");
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
 
-        //This procedure is to replace OrangeMoney/Wizard test case 'C1380', 'C26'
+        //This procedure follows C26.
         //origin - BrokerFillLead: when broker fills lead's wizard; ClientSignup: when accessing from main wizard page.
-        public void PerformWizardStepTwo(string logHeader,
-            string origin,
-            string personName,
+        public void PerformWizardStepTwo(
+             string logHeader,
+             string origin,
+             string personName,
              string personSurename,
              char gender,
              string dobDay,
@@ -95,167 +95,147 @@
              string addressTime,
              string resStatus,
              string phone,
-            string phone2,
-             bool agreeTerms) {
+             string phone2,
+             bool agreeTerms
+            ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            //SharedServiceClass.WaitForBlockUiOff(Driver);
+
             SharedServiceClass.WaitForAjaxReady(Driver);
-            lock (this.Locker) {
-                //IWebElement firstName = SharedServiceClass.ElementIsVisible(Driver, By.Id("FirstName"));//Step 1
-                //firstName.Click();
-                //firstName.SendKeys(personName);
-                actionBot.SendKeys(By.Id("FirstName"), personName, logHeader, isClear: false);
+
+            //TODO: remove a-sync locks. must be a workaround this problem.
+            if (string.Equals("ClientSignup", origin)) {
+                //Step 1 - Insert first name and focus out.
+                lock (this.Locker)
+                    actionBot.SendKeys(By.Id("FirstName"), personName, "(first name field)");
+
+                lock (this.Locker)
+                    actionBot.SendKeys(By.Id("Surname"), personSurename, "(surname field)");
             }
 
-            lock (this.Locker) {
-                //IWebElement surname = Driver.FindElement(By.Id("Surname"));//Step 2
-                //surname.Click();
-                //surname.SendKeys(personSurename);
-                actionBot.SendKeys(By.Id("Surname"), personSurename, logHeader, isClear: false);
+            if (string.Equals("BrokerFillLead", origin)) {
+                actionBot.WriteToLog("Begin assert: Verify first name in wizard is: " + personName);
+                Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("FirstName")).GetAttribute("value"), personName);
+                actionBot.WriteToLog("Positively asserted: first names matched.");
+
+                actionBot.WriteToLog("Begin assert: Verify sure name in wizard is: " + personSurename);
+                Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("Surname")).GetAttribute("value"), personSurename);
+                actionBot.WriteToLog("Positively asserted: sure names matched.");
             }
 
-            By formRadioCtrl;//Step 3
+            //Step 3 - Select gender and focus out.
+            By formRadioCtrl;
             switch (char.ToUpper(gender)) {
                 case 'F':
-                    formRadioCtrl = By.XPath("//label[@for='FormRadioCtrl_F']");//Driver.FindElement(By.XPath("//label[@for='FormRadioCtrl_F']"));
+                    formRadioCtrl = By.XPath("//label[@for='FormRadioCtrl_F']");
                     break;
                 default:
-                    formRadioCtrl = By.XPath("//label[@for='FormRadioCtrl_M']");//Driver.FindElement(By.XPath("//label[@for='FormRadioCtrl_M']"));
+                    formRadioCtrl = By.XPath("//label[@for='FormRadioCtrl_M']");
                     break;
             }
-            actionBot.Click(formRadioCtrl, logHeader);
+            actionBot.Click(formRadioCtrl, "(gender select button)");
 
-            //SelectElement dateOfBirthDay = new SelectElement(Driver.FindElement(By.Id("DateOfBirthDay")));//Step 4
-            //dateOfBirthDay.SelectByValue(dobDay);
-            actionBot.SelectByValue(By.Id("DateOfBirthDay"), dobDay, logHeader);
+            //Step 4 - 	Select date of birth and focus out.
+            actionBot.SelectByValue(By.Id("DateOfBirthDay"), dobDay, "(date of birth - day select)");
 
-            //SelectElement dateOfBirthMonth = new SelectElement(Driver.FindElement(By.Id("DateOfBirthMonth")));
-            //dateOfBirthMonth.SelectByText(dobMonth);
-            actionBot.SelectByText(By.Id("DateOfBirthMonth"), dobMonth, logHeader);
+            actionBot.SelectByText(By.Id("DateOfBirthMonth"), dobMonth, "(date of birth - month select)");
 
-            //SelectElement dateOfBirthYear = new SelectElement(Driver.FindElement(By.Id("DateOfBirthYear")));
-            //dateOfBirthYear.SelectByValue(dobYear);
-            actionBot.SelectByValue(By.Id("DateOfBirthYear"), dobYear, logHeader);
+            actionBot.SelectByValue(By.Id("DateOfBirthYear"), dobYear, "(date of birth - year select)");
 
-            //SelectElement maritalStatus = new SelectElement(Driver.FindElement(By.Id("MaritalStatus")));//Step 5
-            //maritalStatus.SelectByValue(marStatus);
-            actionBot.SelectByValue(By.Id("MaritalStatus"), marStatus, logHeader);
+            //Step 5 - Select Marital status other and focus out.
+            actionBot.SelectByValue(By.Id("MaritalStatus"), marStatus, "(marital status select)");
 
-            //IWebElement addAddressInput = Driver.FindElement(By.CssSelector("input.addAddressInput"));//Step 6
-            //addAddressInput.SendKeys(postCode);
-            actionBot.SendKeys(By.CssSelector("input.addAddressInput"), postCode, logHeader);
+            //Step 6 - Insert post code.
+            actionBot.SendKeys(By.CssSelector("input.addAddressInput"), postCode, "(post code field)");
 
-            //IWebElement addAddressButton = Driver.FindElement(By.CssSelector("input.addAddress"));//Step 7
-            //addAddressButton.Click();
-            actionBot.Click(By.CssSelector("input.addAddress"), logHeader);
+            //Step 7 - Click Postcode lookup.
+            actionBot.Click(By.CssSelector("input.addAddress"), "(postcode lookup button)");
 
-            //IWebElement matchingAddressList = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("ul.matchingAddressList > li"));//Step 8
-            //matchingAddressList.Click();
-            actionBot.Click(By.CssSelector("ul.matchingAddressList > li"), logHeader);
+            //Step 8 - Click the correct address.
+            actionBot.Click(By.CssSelector("ul.matchingAddressList > li"), "(sellect address from list)");
 
-            //IWebElement postCodeBtnOk = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.postCodeBtnOk"));//Step 9
-            //postCodeBtnOk.Click();
-            actionBot.Click(By.CssSelector("button.postCodeBtnOk"), logHeader);
+            //Step 9 - Click OK.
+            actionBot.Click(By.CssSelector("button.postCodeBtnOk"), "(address OK button)");
 
-            //SelectElement timeAtAddress = new SelectElement(Driver.FindElement(By.Id("TimeAtAddress")));//Step 10
-            //timeAtAddress.SelectByValue(addressTime);
-            actionBot.SelectByValue(By.Id("TimeAtAddress"), addressTime, logHeader);
+            //Step 10 - In the How long at this address field, select relevant property and focus out.
+            actionBot.SelectByValue(By.Id("TimeAtAddress"), addressTime, "(how long at this address select)");
 
-            //SelectElement propertyStatus = new SelectElement(Driver.FindElement(By.Id("PropertyStatus")));//Step 11
-            //propertyStatus.SelectByValue(resStatus);
-            actionBot.SelectByValue(By.Id("PropertyStatus"), resStatus, logHeader);
+            //Step 11 - In the Residential status field, select relevant property and focus out.
+            actionBot.SelectByValue(By.Id("PropertyStatus"), resStatus, "(residential status select)");
 
+            //Step 12 - Insert valid format phone number in the Other contact number field and focus out.
             if (String.Equals(origin, "BrokerFillLead")) {
-
-                //IWebElement mobilePhone = Driver.FindElement(By.Id("MobilePhone")); //This code is only implemented in case accessed from Broker-lead-fill
-                //mobilePhone.SendKeys(phone);
-                actionBot.SendKeys(By.Id("MobilePhone"), phone, logHeader);
+                actionBot.SendKeys(By.Id("MobilePhone"), phone, "(valid format mobile phone number)");
             }
 
-            //IWebElement dayTimePhone = Driver.FindElement(By.Id("DayTimePhone"));//Step 12
-            //dayTimePhone.SendKeys(phone2);
-            actionBot.SendKeys(By.Id("DayTimePhone"), phone2, logHeader);
+            actionBot.SendKeys(By.Id("DayTimePhone"), phone2, "(valid format day time phone number)");
 
-            if (agreeTerms) {//Step 14
-                //IWebElement consentToSearch = Driver.FindElement(By.XPath("//label[@for='ConsentToSearch']"));
-                //consentToSearch.Click();
-                actionBot.Click(By.XPath("//label[@for='ConsentToSearch']"), logHeader);
-            }
+            //Step 13 - Check the TOS checkbox.
+            if (agreeTerms)
+                actionBot.Click(By.XPath("//label[@for='ConsentToSearch']"), "(terms and conditions checkBox)");
 
-            //IWebElement personInfoContinueBtn = Driver.FindElement(By.Id("personInfoContinueBtn"));//Step 15
-            //personInfoContinueBtn.Click();
-            actionBot.Click(By.Id("personInfoContinueBtn"), logHeader);
+            //Step 14 - Click continue.
+            actionBot.Click(By.Id("personInfoContinueBtn"), "(continue button)");
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
 
-        //This procedure is to replace OrangeMoney/Wizard test case 'C91'
-        public void PerformWizardStepThree(string logHeader,
+        //This procedure follows C91.
+        public void PerformWizardStepThree(
+            string logHeader,
             string businessType,
             bool isSmallBusiness,
             string indType,
-            string revenue) {
+            string revenue
+            ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            //SharedServiceClass.WaitForBlockUiOff(Driver);
+
             SharedServiceClass.WaitForAjaxReady(Driver);
 
-            //SelectElement typeOfBusiness = SharedServiceClass.SelectIsVisible(Driver, By.Id("TypeOfBusiness"));//Step 1
-            //typeOfBusiness.SelectByValue(businessType);
-            actionBot.SelectByValue(By.Id("TypeOfBusiness"), businessType, logHeader);
+            //Step 1 - In the Type of Business field, select relevant property and focus out.
+            actionBot.SelectByValue(By.Id("TypeOfBusiness"), businessType, "(type of business select)");
 
-            //if (isSmallBusiness) {//Removed in new wizard verssion
-            //    IWebElement bussinesSquare = Driver.FindElement(By.CssSelector("i.fa.fa-square-o"));
-            //    bussinesSquare.Click();
-            //}
+            //Step 2 - In the Type of Industry field, select relevant property and focus out.
+            actionBot.SelectByValue(By.Id("IndustryType"), indType, "(type of industry select)");
 
-            //SelectElement industryType = new SelectElement(Driver.FindElement(By.Id("IndustryType")));//Step 2
-            //industryType.SelectByValue(indType);
-            actionBot.SelectByValue(By.Id("IndustryType"), indType, logHeader);
+            //Step 3 - Insert any amount to the Total annual revenue field and focus out.
+            actionBot.SendKeys(By.Id("OverallTurnOver"), revenue, "(total annual revenue field)");
 
-            //IWebElement overallTurnOver = Driver.FindElement(By.Id("OverallTurnOver"));//Step 3
-            //overallTurnOver.SendKeys(revenue);
-            actionBot.SendKeys(By.Id("OverallTurnOver"), revenue, logHeader);
+            //Step 4 - Click continue.
+            actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
 
-            //IWebElement companyContinueBtn = Driver.FindElement(By.Id("companyContinueBtn"));//Step 4
-            //companyContinueBtn.Click();
-            actionBot.Click(By.Id("companyContinueBtn"), logHeader);
-
+            //TODO: find out when this dialog is displayed, and create more acurate scenario for it.
             try {
-                //SharedServiceClass.WaitForAjaxReady(Driver);
-                //IWebElement targets = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.ui-dialog > div.ui-dialog-content > ul.targets > li"), 25);
                 SharedServiceClass.WaitForBlockUiOff(Driver);
-                //targets.Click();
-                actionBot.Click(By.CssSelector("div.ui-dialog > div.ui-dialog-content > ul.targets > li"), logHeader, 25);
 
-                //IWebElement button = Driver.FindElement(By.CssSelector("button.button.btn-green.btnTargetOk.ev-btn-org"));
-                //button.Click();
-                actionBot.Click(By.CssSelector("button.button.btn-green.btnTargetOk.ev-btn-org"), logHeader);
+                //Click the correct address.
+                actionBot.Click(By.CssSelector("div.ui-dialog > div.ui-dialog-content > ul.targets > li"), "(sellect address from list)", 25);
+
+                //Click OK.
+                actionBot.Click(By.CssSelector("button.button.btn-green.btnTargetOk.ev-btn-org"), "(address OK button)");
             } catch { }
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
 
+        //This procedure follows C4530. (PayPal sometimes replaced by other data sources - C4537)
         //origin - BrokerFillLead: when broker fills lead's wizard; ClientSignup: when accessing from main wizard page.
-        //This procedure is to replace OrangeMoney/Wizard test case 'C778' - Steps 1-4 have been replaced.
-        public void PerformWizardStepFour(string logHeader,
+        public void PerformWizardStepFour(
+            string logHeader,
             string origin,
             string marketplace,
             string accLogin,
             string loginVal,
             string accPass,
             string passVal,
-            string accBtn) {
+            string accBtn
+            ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            SharedServiceClass.WaitForBlockUiOff(Driver);
-            //IWebElement showMore = SharedServiceClass.ElementToBeClickable(Driver, By.Id("link_account_see_more_less"));
-            //SharedServiceClass.ScrollIntoView(Driver, showMore);
-            //SharedServiceClass.WaitForBlockUiOff(Driver);
-            //showMore.Click();
-            actionBot.Click(By.Id("link_account_see_more_less"), logHeader);
 
-            //Thread.Sleep(1000);
-            //SharedServiceClass.WaitForBlockUiOff(Driver);
-            //IWebElement marketplaceButton = SharedServiceClass.ElementIsVisible(Driver, By.CssSelector(marketplace));
-            //marketplaceButton.Click();
-            //actionBot.Click(By.CssSelector(marketplace), "");
+            SharedServiceClass.WaitForBlockUiOff(Driver);
+
+            actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
+
+            //Step 1 - Click on relevant data source.
             By marketplacedAssert;
             switch (marketplace) {
                 case "a.marketplace-button-account-paypal":
@@ -265,62 +245,57 @@
                     marketplacedAssert = By.Id(accLogin);
                     break;
             }
-            actionBot.ClickAssert(By.CssSelector(marketplace),marketplacedAssert, logHeader);
-            //SharedServiceClass.TryElementClick(Driver, By.CssSelector(marketplace));
-            //actionBot.WriteToLog(logHeader + " - " + By.CssSelector(marketplace).ToString() + " - TryElementClick.");
+            actionBot.ClickAssert(By.CssSelector(marketplace), marketplacedAssert, "(data source button)");
 
             if (String.Equals("a.marketplace-button-account-paypal", marketplace)) {
 
-                //IWebElement paypalContinueBtn = SharedServiceClass.ElementToBeClickable(Driver, By.Id("paypalContinueBtn"));
-                //paypalContinueBtn.Click();
-                actionBot.Click(By.Id("paypalContinueBtn"), logHeader);
+                //PayPal Click continue.
+                actionBot.Click(By.Id("paypalContinueBtn"), "(continue to PayPal button)");
 
-                Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, 2));
+                //Move focus to the pop-uped window.
+                actionBot.SwitchToWindow(2, "(PayPal add account window)");
 
+                //Verify the pop-up address is correct.
+                actionBot.WriteToLog("Begin assert: Verify web address contains the sub-string: 'webscr'");
                 SharedServiceClass.WebAddressContains(Driver, "webscr", 20);
+                actionBot.WriteToLog("Positively asserted: web address contains the sub-string.");
             }
 
-            //IWebElement loginField = Driver.FindElement(By.Id(accLogin));
-            //loginField.SendKeys(loginVal);
-            actionBot.SendKeys(By.Id(accLogin), loginVal, logHeader);
+            //Step 3 - Insert prepared credentials and click sign in.
+            actionBot.SendKeys(By.Id(accLogin), loginVal, "(data source login field)");
 
-            //IWebElement passwordField = Driver.FindElement(By.Id(accPass));
-            //passwordField.SendKeys(passVal);
-            actionBot.SendKeys(By.Id(accPass), passVal, logHeader);
+            actionBot.SendKeys(By.Id(accPass), passVal, "(data source password field)");
 
-            //IWebElement linkAccounts = Driver.FindElement(By.Id(accBtn));
-            //linkAccounts.Click();
-            actionBot.Click(By.Id(accBtn), logHeader);
+            actionBot.Click(By.Id(accBtn), "(data source login button)");
 
             if (String.Equals("a.marketplace-button-account-paypal", marketplace)) {
-                //By.Name("grant.x")
-                //IWebElement grantPermission = SharedServiceClass.ElementToBeClickable(Driver, By.XPath("//input[@name='grant.x']"));
-                //grantPermission.Click();
-                actionBot.Click(By.XPath("//input[@name='grant.x']"), logHeader);
+                //By.XPath("//input[@name='grant.x']")
+                //PayPal Click continue.
+                actionBot.Click(By.Name("grant.x"), "(PayPal continue to Ezbob/Everline button)");
 
-                Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, 1));
+                //Move focus back to Ezbob/Everline window.
+                actionBot.SwitchToWindow(1, "(back to Ezbob/Everline application window)");
             }
 
-            //SharedServiceClass.WaitForBlockUiOff(Driver);
             SharedServiceClass.WaitForAjaxReady(Driver);
-            //IWebElement finishWizard = SharedServiceClass.ElementToBeClickable(Driver, By.Id("finish-wizard"));//Step 5
-            //finishWizard.Click();
+
+            //Step 4 - Click complete.
             By finishWizardAssert = By.Id("");
             switch (origin) {
                 case "BrokerFillLead":
-                    finishWizardAssert =By.Id("AddNewCustomer");
+                    finishWizardAssert = By.Id("AddNewCustomer");
                     break;
                 case "ClientSignup":
                     finishWizardAssert = By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']");
                     break;
             }
-            actionBot.ClickAssert(By.Id("finish-wizard"), finishWizardAssert, logHeader);
+            actionBot.ClickAssert(By.Id("finish-wizard"), finishWizardAssert, "(complete button)");
 
+            //Step 5 - Accept dialog.
             if (String.Equals("ClientSignup", origin)) {
-                //IWebElement continueToAccount = SharedServiceClass.ElementToBeClickable(Driver, By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']"));
-                //continueToAccount.Click();
-                actionBot.Click(By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']"), logHeader);
+                actionBot.Click(By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']"), "(accept dialog button)");
             }
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
     }
