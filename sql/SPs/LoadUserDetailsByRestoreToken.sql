@@ -18,7 +18,8 @@ BEGIN
 		SELECT 
 			u.UserId,
 			u.UserName,
-			u.Email
+			u.Email,
+			u.OriginID
 		FROM 
 			Security_User u
 			INNER JOIN CreatePasswordTokens t
@@ -31,7 +32,8 @@ BEGIN
 		SELECT
 			u.UserId,
 			u.UserName,
-			u.Email
+			u.Email,
+			u.OriginID
 		FROM
 			Security_User u
 			INNER JOIN BrokerLeads l ON l.CustomerID = u.UserId

@@ -271,6 +271,21 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="CustomerDetailsActionResult" nillable="true" type="tns:CustomerDetailsActionResult" />
+  <xs:complexType name="SetPasswordActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ErrorMsg" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsBroker" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsDisabled" type="xs:boolean" />
+          <xs:element minOccurs="0" name="SessionID" type="xs:int" />
+          <xs:element minOccurs="0" name="UserID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SetPasswordActionResult" nillable="true" type="tns:SetPasswordActionResult" />
   <xs:complexType name="EmailConfirmationTokenActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

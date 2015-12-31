@@ -11,11 +11,9 @@
 	using System.Web.Security;
 	using Areas.Customer.Controllers.Exceptions;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EZBob.DatabaseLib.Repository;
 	using Code;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
@@ -45,7 +43,6 @@
 			this.customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 			this.serviceClient = new ServiceClient();
 			this.context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
-			this.customerSessionRepo = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
 			this.brokerHelper = new BrokerHelper();
 			this.logOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
 		} // constructor
@@ -372,7 +369,7 @@
 
 				RemoveCookiesOnSignup();
 
-				log.Debug("Sign up client attempt id: '{0}', sign up complete.", uniqueID, status);
+				log.Debug("Sign up client attempt id: '{0}', sign up complete.", uniqueID);
 
 				return Json(new {
 					success = true,
@@ -633,98 +630,71 @@
 				pu.Generate(model.UserName, model.Password)
 			);
 
-			int nUserID;
+			CustomerOriginEnum origin = UiCustomerOrigin.Get().GetOrigin();
+			SetPasswordActionResult spar;
 
 			try {
-				if (string.IsNullOrEmpty(model.UserName))
-					throw new Exception(DbStrings.NotValidEmailAddress);
-
-				if (!string.Equals(model.Password, model.signupPass2))
-					throw new Exception(DbStrings.PasswordDoesNotMatch);
-
-				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
-				if (model.Password.Length < maxPassLength)
-					throw new Exception(DbStrings.NotValidEmailAddress);
-
-				nUserID = this.serviceClient.Instance.SetCustomerPasswordByToken(
+				spar = this.serviceClient.Instance.SetCustomerPasswordByToken(
 					model.Token,
+					(ServiceClientProxy.EzServiceReference.CustomerOriginEnum)(int)origin,
 					new DasKennwort(model.Password),
-					model.IsBrokerLead
-				).Value;
+					new DasKennwort(model.signupPass2),
+					model.IsBrokerLead,
+					customerIp
+				);
 			} catch (Exception e) {
-				log.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
+				log.Warn(e, "Failed to set new password for user '{0}'.", model.UserName);
+
 				return Json(new {
 					success = false,
 					errorMessage = "Failed to set a password.",
 				}, JsonRequestBehavior.AllowGet);
 			} // try
 
-			if (nUserID <= 0) {
+			if (!string.IsNullOrWhiteSpace(spar.ErrorMsg)) {
+				log.Warn(
+					"Failed to set a password for user name {0}, error message returned: {1}.",
+					model.UserName,
+					spar.ErrorMsg
+				);
+
+				return Json(new {
+					success = false,
+					errorMessage = spar.ErrorMsg,
+				}, JsonRequestBehavior.AllowGet);
+			} // if
+
+			if (spar.UserID <= 0) {
 				log.Warn("Failed to set a password (returned user id is 0) for user name {0}.", model.UserName);
+
 				return Json(new {
 					success = false,
 					errorMessage = "Failed to set a password.",
 				}, JsonRequestBehavior.AllowGet);
 			} // if
 
-			try {
-				if (this.brokerHelper.IsBroker(model.UserName)) {
-					BrokerHelper.SetAuth(model.UserName);
+			if (spar.IsBroker) {
+				BrokerHelper.SetAuth(spar.Email);
 
-					return Json(new {
-						success = true,
-						errorMessage = string.Empty,
-						broker = true,
-					});
-				} // if is broker
-			} catch (Exception e) {
-				log.Warn(
-					e,
-					"Failed to check whether '{0}' is a broker login, continuing as a customer.",
-					model.UserName
-				);
-			} // try
-
-			Customer customer;
-
-			try {
-				customer = this.customerRepo.Get(nUserID);
-			} catch (Exception e) {
-				log.Warn(e, "Failed to retrieve a customer by id {0}.", nUserID);
 				return Json(new {
-					success = false,
-					errorMessage = "Failed to set a password."
-				}, JsonRequestBehavior.AllowGet);
-			} // try
+					success = true,
+					errorMessage = string.Empty,
+					broker = true,
+				});
+			} // if is broker
 
-			if (customer.CollectionStatus.Name == "Disabled") {
-				CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+			if (spar.IsDisabled)
+				Session["UserSessionId"] = spar.SessionID;
+			else {
+				model.SetCookie(LogOnModel.Roles.Customer);
+				this.context.SetSessionOrigin(origin);
+			} // if
 
-				string sDisabledError =
-					"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> " +
-					uiOrigin.CustomerCareEmail;
-
-				var session = new CustomerSession {
-					CustomerId = nUserID,
-					StartSession = DateTime.Now,
-					Ip = customerIp,
-					IsPasswdOk = false,
-					ErrorMessage = sDisabledError,
-				};
-				this.customerSessionRepo.AddSessionIpLog(session);
-				Session["UserSessionId"] = session.Id;
-
-				log.Warn(
-					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
-					customerIp,
-					model.UserName
-				);
-
-				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
-			} // if user is disabled
-
-			model.SetCookie(LogOnModel.Roles.Customer);
-			return Json(new { success = true, broker = false, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
+			return Json(new {
+				success = string.IsNullOrWhiteSpace(spar.ErrorMsg),
+				errorMessage = spar.ErrorMsg,
+				broker = false,
+			}, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
 
 		[ValidateJsonAntiForgeryToken]
@@ -996,7 +966,6 @@
 		private readonly CustomerRepository customerRepo;
 		private readonly ServiceClient serviceClient;
 		private readonly IEzbobWorkplaceContext context;
-		private readonly ICustomerSessionsRepository customerSessionRepo;
 		private readonly BrokerHelper brokerHelper;
 		private readonly LogOffMode logOffMode;
 		private string hostname;

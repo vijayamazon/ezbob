@@ -169,14 +169,36 @@
 			};
 		} // LoadCustomerByCreatePasswordToken
 
-		public IntActionResult SetCustomerPasswordByToken(Guid token, DasKennwort password, bool isBrokerLead) {
-			SetCustomerPasswordByToken oInstance;
+		public SetPasswordActionResult SetCustomerPasswordByToken(
+			Guid token,
+			CustomerOriginEnum origin,
+			DasKennwort password,
+			DasKennwort passwordAgain,
+			bool isBrokerLead,
+			string remoteIP
+		) {
+			SetCustomerPasswordByToken instance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, token, password, isBrokerLead);
+			ActionMetaData oMetaData = ExecuteSync(
+				out instance,
+				null,
+				null,
+				token,
+				origin,
+				password,
+				passwordAgain,
+				isBrokerLead,
+				remoteIP
+			);
 
-			return new IntActionResult {
+			return new SetPasswordActionResult {
 				MetaData = oMetaData,
-				Value = oInstance.CustomerID,
+				ErrorMsg = instance.ErrorMsg,
+				UserID = instance.UserID,
+				IsBroker = instance.IsBroker,
+				Email = instance.Email,
+				SessionID = instance.SessionID,
+				IsDisabled = instance.IsDisabled,
 			};
 		} // SetCustomerPasswordByToken
 

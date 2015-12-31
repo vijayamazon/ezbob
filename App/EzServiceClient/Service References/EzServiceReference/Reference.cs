@@ -200,6 +200,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SetPasswordActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianLtdActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
@@ -926,6 +927,109 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SetPasswordActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class SetPasswordActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorMsgField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsBrokerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsDisabledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SessionIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int UserIDField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ErrorMsg {
+            get {
+                return this.ErrorMsgField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorMsgField, value) != true)) {
+                    this.ErrorMsgField = value;
+                    this.RaisePropertyChanged("ErrorMsg");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsBroker {
+            get {
+                return this.IsBrokerField;
+            }
+            set {
+                if ((this.IsBrokerField.Equals(value) != true)) {
+                    this.IsBrokerField = value;
+                    this.RaisePropertyChanged("IsBroker");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsDisabled {
+            get {
+                return this.IsDisabledField;
+            }
+            set {
+                if ((this.IsDisabledField.Equals(value) != true)) {
+                    this.IsDisabledField = value;
+                    this.RaisePropertyChanged("IsDisabled");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SessionID {
+            get {
+                return this.SessionIDField;
+            }
+            set {
+                if ((this.SessionIDField.Equals(value) != true)) {
+                    this.SessionIDField = value;
+                    this.RaisePropertyChanged("SessionID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int UserID {
+            get {
+                return this.UserIDField;
+            }
+            set {
+                if ((this.UserIDField.Equals(value) != true)) {
+                    this.UserIDField = value;
+                    this.RaisePropertyChanged("UserID");
                 }
             }
         }
@@ -4346,10 +4450,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult> LoadCustomerByCreatePasswordTokenAsync(System.Guid oToken);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead);
+        ServiceClientProxy.EzServiceReference.SetPasswordActionResult SetCustomerPasswordByToken(System.Guid token, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, Ezbob.Backend.Models.DasKennwort passwordAgain, bool isBrokerLead, string remoteIP);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SetCustomerPasswordByTokenResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SetPasswordActionResult> SetCustomerPasswordByTokenAsync(System.Guid token, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, Ezbob.Backend.Models.DasKennwort passwordAgain, bool isBrokerLead, string remoteIP);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ResetPassword123456Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
@@ -5977,12 +6081,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadCustomerByCreatePasswordTokenAsync(oToken);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead) {
-            return base.Channel.SetCustomerPasswordByToken(token, password, isBrokerLead);
+        public ServiceClientProxy.EzServiceReference.SetPasswordActionResult SetCustomerPasswordByToken(System.Guid token, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, Ezbob.Backend.Models.DasKennwort passwordAgain, bool isBrokerLead, string remoteIP) {
+            return base.Channel.SetCustomerPasswordByToken(token, origin, password, passwordAgain, isBrokerLead, remoteIP);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(System.Guid token, Ezbob.Backend.Models.DasKennwort password, bool isBrokerLead) {
-            return base.Channel.SetCustomerPasswordByTokenAsync(token, password, isBrokerLead);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SetPasswordActionResult> SetCustomerPasswordByTokenAsync(System.Guid token, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, Ezbob.Backend.Models.DasKennwort passwordAgain, bool isBrokerLead, string remoteIP) {
+            return base.Channel.SetCustomerPasswordByTokenAsync(token, origin, password, passwordAgain, isBrokerLead, remoteIP);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {

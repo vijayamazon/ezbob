@@ -60,7 +60,14 @@
 		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
 
 		[OperationContract]
-		IntActionResult SetCustomerPasswordByToken(Guid token, DasKennwort password, bool isBrokerLead);
+		SetPasswordActionResult SetCustomerPasswordByToken(
+			Guid token,
+			CustomerOriginEnum origin,
+			DasKennwort password,
+			DasKennwort passwordAgain,
+			bool isBrokerLead,
+			string remoteIP
+		);
 
 		[OperationContract]
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
