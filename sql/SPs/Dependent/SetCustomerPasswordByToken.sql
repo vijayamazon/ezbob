@@ -70,8 +70,9 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @IsDisabled = 1
-		EXECUTE CreateCustomerSession @UserID, @Now, @Ip, 1, 'User account is disabled', NULL, @SessionID OUTPUT
+	DECLARE @SessionMessage NVARCHAR(50) = (CASE @IsDisabled WHEN  1 THEN 'User account is disabled' ELSE 'Password restored' END)
+
+	EXECUTE CreateCustomerSession @UserID, @Now, @Ip, 1, @SessionMessage, NULL, @SessionID OUTPUT
 
 	------------------------------------------------------------------------------
 

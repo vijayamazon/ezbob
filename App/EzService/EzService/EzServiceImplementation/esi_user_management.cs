@@ -256,5 +256,27 @@
 				Records = new List<string>(instance.Roles),
 			};
 		} // LoadAllLoginRoles
+
+		public StringActionResult GetCustomerSecurityQuestion(string email, CustomerOriginEnum origin) {
+			GetCustomerSecurityQuestion instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, email, origin);
+
+			return new StringActionResult {
+				MetaData = amd,
+				Value = instance.SecurityQuestion,
+			};
+		} // GetCustomerSecurityQuestion
+
+		public StringActionResult ValidateSecurityAnswer(string email, CustomerOriginEnum origin, string answer) {
+			ValidateSecurityAnswer instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, email, origin);
+
+			return new StringActionResult {
+				MetaData = amd,
+				Value = instance.ErrorMsg,
+			};
+		} // ValidateSecurityAnswer
 	} // class EzServiceImplementation
 } // namespace EzService

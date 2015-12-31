@@ -54,9 +54,7 @@
 			if (!string.IsNullOrWhiteSpace(ErrorMessage))
 				return;
 
-			FireToBackground("send 'email changed' email", () =>
-				new EmailChanged(this.spUpdate.UserID, this.spUpdate.RequestID.ToString()).Execute()
-			);
+			FireToBackground(new EmailChanged(this.spUpdate.UserID, this.spUpdate.RequestID.ToString()));
 
 			ISalesForceAppClient salesForceApiClient = ObjectFactory
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)

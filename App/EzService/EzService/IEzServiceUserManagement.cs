@@ -89,5 +89,11 @@
 
 		[OperationContract]
 		StringListActionResult LoadAllLoginRoles(string login);
+
+		[OperationContract]
+		StringActionResult GetCustomerSecurityQuestion(string email, CustomerOriginEnum origin);
+
+		[OperationContract]
+		StringActionResult ValidateSecurityAnswer(string email, CustomerOriginEnum origin, string answer);
 	} // interface IEzServiceUserManagement
 } // namespace

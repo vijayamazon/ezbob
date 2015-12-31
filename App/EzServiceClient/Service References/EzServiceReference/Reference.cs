@@ -4499,6 +4499,18 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestionResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult GetCustomerSecurityQuestion(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestionResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> GetCustomerSecurityQuestionAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswerResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult ValidateSecurityAnswer(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, string answer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateSecurityAnswerAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, string answer);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianLtd", ReplyAction="http://tempuri.org/IEzService/ParseExperianLtdResponse")]
         ServiceClientProxy.EzServiceReference.ExperianLtdActionResult ParseExperianLtd(long nServiceLogID);
         
@@ -6143,6 +6155,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login) {
             return base.Channel.LoadAllLoginRolesAsync(login);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult GetCustomerSecurityQuestion(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin) {
+            return base.Channel.GetCustomerSecurityQuestion(email, origin);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> GetCustomerSecurityQuestionAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin) {
+            return base.Channel.GetCustomerSecurityQuestionAsync(email, origin);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult ValidateSecurityAnswer(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, string answer) {
+            return base.Channel.ValidateSecurityAnswer(email, origin, answer);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateSecurityAnswerAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, string answer) {
+            return base.Channel.ValidateSecurityAnswerAsync(email, origin, answer);
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult ParseExperianLtd(long nServiceLogID) {

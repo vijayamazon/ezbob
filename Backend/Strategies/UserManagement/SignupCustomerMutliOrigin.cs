@@ -122,17 +122,10 @@
 		private void DoBrokerLeadsAndThirdParties() {
 			string token = GenerateConfirmationToken();
 
-			if (token != null) {
-				AStrategy stra = CreateEmailStrategy(token);
+			if (token != null)
+				FireToBackground(CreateEmailStrategy(token));
 
-				if (stra != null)
-					FireToBackground(string.Format("{0} for customer {1}", stra.Name, UserID), () => stra.Execute());
-			} // if
-
-			FireToBackground(
-				"SalesForce add lead for customer " + this.model.UserName,
-				() => new AddUpdateLeadAccount(this.model.UserName, UserID, false, false).Execute()
-			);
+			FireToBackground(new AddUpdateLeadAccount(this.model.UserName, UserID, false, false));
 		} // DoBrokerLeadsAndThirdParties
 
 		private AStrategy CreateEmailStrategy(string token) {

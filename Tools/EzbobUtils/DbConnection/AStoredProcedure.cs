@@ -8,6 +8,7 @@
 	using System.Reflection;
 	using Ezbob.Utils;
 	using Ezbob.Logger;
+	using Ezbob.Utils.dbutils;
 
 	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class DirectionAttribute : Attribute {
@@ -32,8 +33,23 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.ExecuteNonQuery(oConnectionToUse, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			int result = DB.ExecuteNonQuery(oConnectionToUse, GetName(), Species, args);
+
+			FillOutputs(args);
+
+			return result;
 		} // ExecuteNonQuery
+
+		private void FillOutputs(QueryParameter[] args) {
+			if ((args == null) || (args.Length < 1))
+				return;
+
+			foreach (QueryParameter prm in args) {
+				PropertyInfo pi = GetType().GetProperty(prm.ObjectPropertyName);
+			} // foreach parameter
+		} // FillOutputs
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
 			ForEachRow(null, oAction);
@@ -248,6 +264,25 @@
 						qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
 							Direction = nDirection,
 						};
+
+						bool shouldSetSize =
+							qp.Direction.In(ParameterDirection.Output, ParameterDirection.InputOutput) &&
+							(oPropertyInfo.PropertyType == typeof(string));
+
+						if (shouldSetSize) {
+							object[] lengthAttrs = oPropertyInfo.GetCustomAttributes(typeof(LengthAttribute), false);
+
+							if (lengthAttrs.Length < 1) {
+								throw new Exception(string.Format(
+									"Property '{0}' must have attribute Length attached because " +
+									"it is converted to '{1}' parameter.",
+									oPropertyInfo.Name,
+									qp.Direction
+								));
+							} // if
+
+							qp.Size = ((LengthAttribute)lengthAttrs[0]).Quantity;
+						} // if
 					} else {
 						if (TypeUtils.IsEnumerable(oPropertyInfo.PropertyType)) {
 							Type oUnderlyingType = oPropertyInfo.PropertyType.GetGenericArguments()[0];
@@ -257,13 +292,15 @@
 								sFieldName,
 								(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
 								TypeUtils.GetConvertorToObjectArray(oUnderlyingType)
-								);
+							);
 						} else {
 							throw new NotImplementedException(
 								"Type " + oPropertyInfo.PropertyType + " does not implement IEnumerable<T>"
 							);
 						} // if
 					} // if
+
+					qp.ObjectPropertyName = oPropertyInfo.Name;
 
 					args.Add(qp);
 				});

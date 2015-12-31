@@ -690,6 +690,18 @@
   <wsdl:message name="IEzService_LoadAllLoginRoles_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadAllLoginRolesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerSecurityQuestion_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerSecurityQuestion" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerSecurityQuestion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerSecurityQuestionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateSecurityAnswer_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateSecurityAnswer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateSecurityAnswer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateSecurityAnswerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_ParseExperianLtd_InputMessage">
     <wsdl:part name="parameters" element="tns:ParseExperianLtd" />
   </wsdl:message>
@@ -1938,6 +1950,14 @@
     <wsdl:operation name="LoadAllLoginRoles">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles" message="tns:IEzService_LoadAllLoginRoles_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse" message="tns:IEzService_LoadAllLoginRoles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerSecurityQuestion">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestion" message="tns:IEzService_GetCustomerSecurityQuestion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestionResponse" message="tns:IEzService_GetCustomerSecurityQuestion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateSecurityAnswer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer" message="tns:IEzService_ValidateSecurityAnswer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswerResponse" message="tns:IEzService_ValidateSecurityAnswer_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ParseExperianLtd">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtd" message="tns:IEzService_ParseExperianLtd_InputMessage" />
@@ -3406,6 +3426,24 @@
     </wsdl:operation>
     <wsdl:operation name="LoadAllLoginRoles">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerSecurityQuestion">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateSecurityAnswer">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -186,7 +186,6 @@
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerRequestedLoanController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerStatusController.cs" />
-    <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />

@@ -118,22 +118,14 @@
 				break;
 			} // switch
 
-			if (notifyAlibaba) {
-				FireToBackground(
-					"notify Alibaba",
-					() => new DataSharing(this.decisionModel.customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute()
-				);
-			} // if
+			if (notifyAlibaba)
+				FireToBackground(new DataSharing(this.decisionModel.customerID, AlibabaBusinessType.APPLICATION_REVIEW));
 
 			if (silentAutomationCaller.HasValue) {
 				FireToBackground(
-					"silent automation",
-					() => {
-						new SilentAutomation(this.decisionModel.customerID)
-							.SetTag(silentAutomationCaller.Value)
-							.PreventMainStrategy()
-							.Execute();
-					}
+					new SilentAutomation(this.decisionModel.customerID)
+						.SetTag(silentAutomationCaller.Value)
+						.PreventMainStrategy()
 				);
 			} // if
 
@@ -214,8 +206,7 @@
 				return;
 
 			FireToBackground(
-				"send 'escalated' email",
-				() => new Escalated(this.decisionModel.customerID).Execute(),
+				new Escalated(this.decisionModel.customerID),
 				e => Warning = "Failed to send 'escalated' email: " + e.Message
 			);
 
@@ -247,8 +238,7 @@
 
 			if (!this.currentState.EmailSendingBanned) {
 				FireToBackground(
-					"send 'rejected' email",
-					() => new RejectUser(this.decisionModel.customerID, bSendToCustomer).Execute(),
+					new RejectUser(this.decisionModel.customerID, bSendToCustomer),
 					e => Warning = "Failed to send 'reject user' email: " + e.Message
 				);
 			} // if
@@ -296,37 +286,26 @@
 
 			if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 				FireToBackground(
-					"send 'approved' and force reset customer password",
-					() => {
-						var stra = new ApprovedUser(
-							this.decisionModel.customerID,
-							this.currentState.OfferedCreditLine,
-							validForHours,
-							this.currentState.NumOfPrevApprovals == 0
-						);
-						stra.SendToCustomer = false;
-						stra.Execute();
-					},
+					 new ApprovedUser(
+						this.decisionModel.customerID,
+						this.currentState.OfferedCreditLine,
+						validForHours,
+						this.currentState.NumOfPrevApprovals == 0
+					) { SendToCustomer = false, },
 					e => Warning = "Failed to force reset customer password and send 'approved user' email: " + e.Message
 				);
 			} else if (bSendApprovedUser) {
 				FireToBackground(
-					"send 'approved' email",
-					() =>
-						new ApprovedUser(
-							this.decisionModel.customerID,
-							this.currentState.OfferedCreditLine,
-							validForHours,
-							this.currentState.NumOfPrevApprovals == 0
-						).Execute(),
+					new ApprovedUser(
+						this.decisionModel.customerID,
+						this.currentState.OfferedCreditLine,
+						validForHours,
+						this.currentState.NumOfPrevApprovals == 0
+					),
 					e => Warning = "Failed to send 'approved user' email: " + e.Message
 				);
-			} else if (bSendBrokerForceResetCustomerPassword) {
-				FireToBackground(
-					"force reset customer password",
-					() => new BrokerForceResetCustomerPassword(this.decisionModel.customerID).Execute()
-				);
-			} // if
+			} else if (bSendBrokerForceResetCustomerPassword)
+				FireToBackground(new BrokerForceResetCustomerPassword(this.decisionModel.customerID));
 
 			newDecision.DecisionNameID = (int)DecisionActions.Approve;
 
@@ -400,10 +379,7 @@
 			if (setMoreFields != null)
 				setMoreFields(model);
 
-			FireToBackground(
-				"update Sales Force opportunity",
-				() => new UpdateOpportunity(this.decisionModel.customerID, model).Execute()
-			);
+			FireToBackground(new UpdateOpportunity(this.decisionModel.customerID, model));
 		} // UpdateSalesForceOpportunity
 
 		private DecisionToApply decisionToApply;

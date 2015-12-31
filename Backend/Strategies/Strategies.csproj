@@ -389,6 +389,7 @@
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationLoad.cs" />
+    <Compile Include="UserManagement\GetCustomerSecurityQuestion.cs" />
     <Compile Include="UserManagement\LoadAllLoginRoles.cs" />
     <Compile Include="UserManagement\LoginCustomerMutliOrigin.cs" />
     <Compile Include="UserManagement\ResetPassword123456.cs" />
@@ -404,6 +405,7 @@
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
     <Compile Include="UserManagement\SignupCustomerMutliOrigin.cs" />
     <Compile Include="UserManagement\UserDisable.cs" />
+    <Compile Include="UserManagement\ValidateSecurityAnswer.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />

@@ -54,6 +54,13 @@
 			InitDefaults(); // should not be moved to static constructor
 		} // constructor
 
+		protected void FireToBackground(AStrategy strategy, Action<Exception> onFailedToExecute = null) {
+			if (strategy == null)
+				return;
+
+			FireToBackground(strategy.Name, strategy.Execute, onFailedToExecute);
+		} // FireToBackground
+
 		protected void FireToBackground(string description, Action task, Action<Exception> onFailedToExecute = null) {
 			if (task == null)
 				return;

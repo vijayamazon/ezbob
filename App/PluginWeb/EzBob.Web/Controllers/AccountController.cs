@@ -9,7 +9,6 @@
 	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using System.Web.Security;
-	using Areas.Customer.Controllers.Exceptions;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -35,6 +34,7 @@
 
 	using ActionResult = System.Web.Mvc.ActionResult;
 	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
+	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
 
 	public class AccountController : Controller {
 		public AccountController() {
@@ -69,41 +69,36 @@
 					return View(model);
 				} // if
 
-				try {
-					string loginError;
-					var membershipCreateStatus = ValidateUser(
-						null,
-						model.UserName,
-						model.Password,
-						null,
-						null,
-						out loginError
-					);
+				string loginError;
+				var membershipCreateStatus = ValidateUser(
+					null,
+					model.UserName,
+					model.Password,
+					null,
+					null,
+					out loginError
+				);
 
-					if (MembershipCreateStatus.Success == membershipCreateStatus) {
-						model.SetCookie(LogOnModel.Roles.Underwriter);
+				if (MembershipCreateStatus.Success == membershipCreateStatus) {
+					model.SetCookie(LogOnModel.Roles.Underwriter);
 
-						this.context.SetSessionOrigin(null);
+					this.context.SetSessionOrigin(null);
 
-						bool bRedirectToUrl =
-							Url.IsLocalUrl(model.ReturnUrl) &&
-							(model.ReturnUrl.Length > 1) &&
-							model.ReturnUrl.StartsWith("/") &&
-							!model.ReturnUrl.StartsWith("//") &&
-							!model.ReturnUrl.StartsWith("/\\");
+					bool bRedirectToUrl =
+						Url.IsLocalUrl(model.ReturnUrl) &&
+						(model.ReturnUrl.Length > 1) &&
+						model.ReturnUrl.StartsWith("/") &&
+						!model.ReturnUrl.StartsWith("//") &&
+						!model.ReturnUrl.StartsWith("/\\");
 
-						if (bRedirectToUrl)
-							return Redirect(model.ReturnUrl);
+					if (bRedirectToUrl)
+						return Redirect(model.ReturnUrl);
 
-						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
-					} // if
+					return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+				} // if
 
-					loginError = string.IsNullOrEmpty(loginError) ? "Wrong user name/password." : loginError;
-					ModelState.AddModelError("LoginError", loginError);
-				} catch (UserNotFoundException ex) {
-					log.Warn(ex, "Failed to log in as underwriter '{0}'.", model.UserName);
-					ModelState.AddModelError("LoginError", "Wrong user name/password.");
-				} // try
+				loginError = string.IsNullOrEmpty(loginError) ? "Wrong user name/password." : loginError;
+				ModelState.AddModelError("LoginError", loginError);
 			} // if
 
 			return View(model);
@@ -231,7 +226,7 @@
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
-		
+
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -357,7 +352,7 @@
 						: signupResult.ErrorMessage
 					);
 				} // if
-				
+
 				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SessionId =
 					signupResult.SessionID.ToString(CultureInfo.InvariantCulture);
 
@@ -408,33 +403,30 @@
 				);
 			} // try
 
-			var user = this.userRepo.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
-
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
-			if (user != null) {
-				var customer = this.customerRepo.ReallyTryGet(user.Id);
+			try {
+				StringActionResult sar = this.serviceClient.Instance.GetCustomerSecurityQuestion(
+					email,
+					(RemoteCustomerOriginEnum)(int)uiOrigin.GetOrigin()
+				);
 
-				if (customer != null) {
-					if (customer.CustomerOrigin.GetOrigin() == uiOrigin.GetOrigin()) {
-						return Json(new {
-							question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : ""
-						}, JsonRequestBehavior.AllowGet);
-					} // if
+				if (string.IsNullOrWhiteSpace(sar.Value)) {
+					return Json(new {
+						error = "Security question not found for user " + email,
+					}, JsonRequestBehavior.AllowGet);
+				} // if
 
-					log.Warn(
-						"Customer {0} {1} tried to restore password from another origin {2} (at {3})",
-						customer.Id,
-						customer.CustomerOrigin.Name,
-						uiOrigin.Name,
-						hostname
-					);
-
-					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
-				}
-			} // if
-
-			return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+				return Json(new { question = sar.Value, }, JsonRequestBehavior.AllowGet);
+			} catch (Exception e) {
+				log.Alert(
+					e,
+					"Failed to detect security question for customer '{0}' with origin '{1}'.",
+					email,
+					uiOrigin.GetOrigin()
+				);
+				return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+			} // try
 		} // QuestionForEmail
 
 		[Transactional]
@@ -442,30 +434,32 @@
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
 
-			bool userNotFound =
-				string.IsNullOrEmpty(email) ||
-					this.userRepo.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null;
-
-			if (userNotFound)
-				throw new UserNotFoundException(string.Format("User {0} not found", email));
-
-			if (string.IsNullOrEmpty(answer))
-				throw new EmptyAnswerExeption("Answer is empty");
-
-			var user = this.userRepo.GetAll().FirstOrDefault(x =>
-				(x.EMail == email || x.Name == email) && (x.SecurityAnswer == answer)
-			);
-
-			if (user == null)
-				return Json(new { error = "Wrong answer to secret questions" }, JsonRequestBehavior.AllowGet);
+			if (string.IsNullOrWhiteSpace(answer))
+				throw new EmptyAnswerExeption("Answer is empty.");
 
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
-			user = this.userRepo.GetUserByLogin(email, uiOrigin.GetOrigin());
-			this.serviceClient.Instance.PasswordRestored(user.Id);
-			user.IsPasswordRestored = true;
+			try {
+				StringActionResult sar = this.serviceClient.Instance.ValidateSecurityAnswer(
+					email,
+					(RemoteCustomerOriginEnum)(int)uiOrigin.GetOrigin(),
+					answer
+				);
 
-			return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+				if (string.IsNullOrWhiteSpace(sar.Value))
+					return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+
+				return Json(new { error = "Wrong answer to secret question." }, JsonRequestBehavior.AllowGet);
+			} catch (Exception e) {
+				log.Alert(
+					e,
+					"Failed to validate an answer to security question for customer '{0}' with origin '{1}'.",
+					email,
+					uiOrigin.GetOrigin()
+				);
+				
+				return Json(new { error = "Wrong answer to secret questions" }, JsonRequestBehavior.AllowGet);
+			} // try
 		} // RestorePassword
 
 		public ActionResult SimpleCaptcha() {
@@ -495,28 +489,24 @@
 				refNum
 			);
 
+			if (customerId == null && this.context.Customer == null)
+				throw new Exception(DbStrings.CustomeIdNotProvided);
 
-            if (customerId == null && this.context.Customer == null)
-            {
-                throw new Exception(DbStrings.CustomeIdNotProvided);
-            }
-            if (customerId == null)
-            {
-                customerId = this.context.Customer.Id;
-            }
+			if (customerId == null)
+				customerId = this.context.Customer.Id;
 
-		    ExperianTargetingActionResult response = this.serviceClient.Instance.ExperianTarget(
-                customerId.Value, 
-                this.context.UserId,
-		        new ExperianTargetingRequest {
-		            CompanyName = companyName,
-		            CustomerID = customerId.Value,
-		            Filter = filter,
-		            Postcode = postcode,
-		            RefNum = refNum
-		        });
+			ExperianTargetingActionResult response = this.serviceClient.Instance.ExperianTarget(
+				customerId.Value,
+				this.context.UserId,
+				new ExperianTargetingRequest {
+					CompanyName = companyName,
+					CustomerID = customerId.Value,
+					Filter = filter,
+					Postcode = postcode,
+					RefNum = refNum
+				});
 
-		    return Json(response.CompanyInfos, JsonRequestBehavior.AllowGet);
+			return Json(response.CompanyInfos, JsonRequestBehavior.AllowGet);
 		} // CheckingCompany
 
 		[Ajax]
@@ -636,7 +626,7 @@
 			try {
 				spar = this.serviceClient.Instance.SetCustomerPasswordByToken(
 					model.Token,
-					(ServiceClientProxy.EzServiceReference.CustomerOriginEnum)(int)origin,
+					(RemoteCustomerOriginEnum)(int)origin,
 					new DasKennwort(model.Password),
 					new DasKennwort(model.signupPass2),
 					model.IsBrokerLead,
@@ -683,9 +673,10 @@
 				});
 			} // if is broker
 
-			if (spar.IsDisabled)
+			if (spar.SessionID != 0)
 				Session["UserSessionId"] = spar.SessionID;
-			else {
+
+			if (string.IsNullOrWhiteSpace(spar.ErrorMsg)) {
 				model.SetCookie(LogOnModel.Roles.Customer);
 				this.context.SetSessionOrigin(origin);
 			} // if
@@ -823,7 +814,7 @@
 				UserLoginActionResult ular = this.serviceClient.Instance.UserLogin(
 					remoteOriginID,
 					username,
-					new DasKennwort(password), 
+					new DasKennwort(password),
 					RemoteIp(),
 					promotionName,
 					promotionPageVisitTime

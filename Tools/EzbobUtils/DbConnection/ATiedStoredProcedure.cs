@@ -93,7 +93,7 @@
 		protected abstract void TiedAction();
 	} // class ATiedStoredProcedure
 
-	public abstract class ATiedStoredProc : AStoredProcedure {
+	public abstract class ATiedStoredProc : ATiedStoredProcedure {
 		protected ATiedStoredProc(AConnection db, ASafeLog log) : base(db, log) {
 		} // constructor
 
