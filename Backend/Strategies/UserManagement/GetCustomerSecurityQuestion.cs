@@ -24,8 +24,8 @@
 				"GetCustomerSecurityQuestion({0}, {1}) = (result = {2}) '{3}'",
 				this.sp.Email,
 				this.sp.OriginID,
-				this.sp.SecurityQuestion,
-				this.sp.Result
+				this.sp.Result,
+				this.sp.SecurityQuestion
 			);
 		} // Execute
 

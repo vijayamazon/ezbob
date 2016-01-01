@@ -61,7 +61,7 @@
 					? UnderwriterSite + "/Underwriter/Customers#profile/" + CustomerData.Id
 					: UnderwriterSite + "/Underwriter/Customers#broker/" + nBrokerID;
 
-				TemplateName = "Mandrill - password restored - staff";
+				TemplateName = "Mandrill - password restored - to staff";
 			} // if
 		} // SetTemplateAndVariables
 

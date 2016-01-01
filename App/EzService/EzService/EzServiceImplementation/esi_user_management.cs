@@ -271,7 +271,7 @@
 		public StringActionResult ValidateSecurityAnswer(string email, CustomerOriginEnum origin, string answer) {
 			ValidateSecurityAnswer instance;
 
-			ActionMetaData amd = ExecuteSync(out instance, null, null, email, origin);
+			ActionMetaData amd = ExecuteSync(out instance, null, null, email, origin, answer);
 
 			return new StringActionResult {
 				MetaData = amd,

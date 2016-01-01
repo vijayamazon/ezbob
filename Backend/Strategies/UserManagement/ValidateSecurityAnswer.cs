@@ -53,8 +53,10 @@
 				return;
 			} // if
 
-			if (this.answer.Equals(this.sp.Answer, StringComparison.InvariantCulture))
+			if (!this.answer.Equals(this.sp.Answer, StringComparison.InvariantCulture)) {
 				ErrorMsg = "Wrong answer to security question.";
+				return;
+			} // if
 
 			FireToBackground(new PasswordRestored(this.sp.UserID));
 		} // Execute

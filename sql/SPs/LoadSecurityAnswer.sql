@@ -8,7 +8,7 @@ GO
 ALTER PROCEDURE LoadSecurityAnswer
 @Email NVARCHAR(250),
 @OriginID INT,
-@UserID INT,
+@UserID INT OUTPUT,
 @Answer NVARCHAR(200) OUTPUT
 AS
 BEGIN

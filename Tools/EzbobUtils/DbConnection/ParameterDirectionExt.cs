@@ -12,5 +12,9 @@
 
 			return false;
 		} // In
+
+		public static bool IsOutput(this ParameterDirection prm) {
+			return prm != ParameterDirection.Input;
+		} // IsOutput
 	} // class ParameterDirectionExt
 } // namespace
