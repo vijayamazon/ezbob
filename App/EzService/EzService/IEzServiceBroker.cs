@@ -176,9 +176,6 @@
 		);
 
 		[OperationContract]
-		ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);
-
-		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail, int uiOrigin);
 
 		[OperationContract]

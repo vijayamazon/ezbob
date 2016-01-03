@@ -9,6 +9,12 @@
 			return HashPasswordOldWay(userName + password);
 		} // HashPasswordOldWay
 
+		/// <summary>
+		/// This method can easily be broken so DO NOT use it to hash sensitive data.
+		/// It can be used to convert insensitive data into scrambled strings though.
+		/// </summary>
+		/// <param name="sPassword"></param>
+		/// <returns></returns>
 		public static string HashPasswordOldWay(string sPassword) {
 			var sha = System.Security.Cryptography.SHA512.Create();
 

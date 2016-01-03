@@ -340,16 +340,6 @@
 		}
 
 		[Activation]
-		private void ChangeBrokerEmail() {
-			if ((this.cmdLineArgs.Length != 4)) {
-				this.log.Msg("Usage: ChangeBrokerEmail <OldEmail> <NewEmail> <NewPassword>");
-				return;
-			}
-
-			this.serviceClient.ChangeBrokerEmail(this.cmdLineArgs[1], this.cmdLineArgs[2], this.cmdLineArgs[3]);
-		}
-
-		[Activation]
 		private void CreateUnderwriter() {
 			if (this.cmdLineArgs.Length != 4) {
 				this.log.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");

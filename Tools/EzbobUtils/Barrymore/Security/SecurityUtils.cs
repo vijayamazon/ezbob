@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Utils.Security {
-	using System;
 	using System.Text;
 
 	public static class SecurityUtils {
@@ -18,14 +17,5 @@
 
 			return sb.ToString().ToLowerInvariant();
 		} // MD5
-
-		[Obsolete]
-		public static string HashPassword(string sUserName, string sPassword) {
-			return PasswordUtility.HashPasswordOldWay(sUserName, sPassword);
-		} // HashPassword
-
-		public static string Hash(string sPassword) {
-			return PasswordUtility.HashPasswordOldWay(sPassword);
-		} // Hash
 	} // class SecurityUtils
 } // namespace

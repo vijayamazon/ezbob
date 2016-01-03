@@ -55,11 +55,6 @@
 			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, hasLoans, medalClassification);
 		}
 
-		public ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword) {
-			ChangeBrokerEmail instance;
-			return ExecuteSync(out instance, 0, 0, oldEmail, newEmail, newPassword);
-		}
-
 		public NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
 			GetCompanySeniority instance;
 

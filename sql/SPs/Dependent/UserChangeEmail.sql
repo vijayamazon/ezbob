@@ -20,6 +20,11 @@ BEGIN
 
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @AffectedRows INT = 0
+	DECLARE @OriginID INT
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
 	BEGIN TRAN
 
@@ -27,30 +32,84 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	UPDATE Security_User SET
-		UserName = @Email,
-		EMail = @Email,
-		FullName = @Email,
-		EzPassword = @EzPassword,
-		Salt = @Salt,
-		CycleCount = @CycleCount,
-		PassSetTime = @Now
-	WHERE
-		UserId = @UserID
+	IF @ErrMsg = ''
+	BEGIN
+		SELECT
+			@OriginID = OriginID
+		FROM
+			Customer
+		WHERE
+			Id = @UserID
+
+		-------------------------------------------------------------------------
+
+		IF @OriginID IS NULL
+		BEGIN
+			SET @ErrMsg = 'User not found.'
+			ROLLBACK TRAN
+		END
+	END
 
 	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
-	SET @AffectedRows = @@ROWCOUNT
-
-	IF @AffectedRows = 0
+	IF @ErrMsg = ''
 	BEGIN
-		SET @ErrMsg = 'User not found.'
-		ROLLBACK TRAN
+		IF EXISTS (
+			SELECT
+				c.Id
+			FROM
+				Customer c
+			WHERE
+				c.Name = @Email
+				AND
+				c.OriginID = @OriginID
+			UNION
+			SELECT
+				b.BrokerID
+			FROM
+				Broker b
+			WHERE
+				b.ContactEmail = @Email
+		)
+		BEGIN
+			SET @ErrMsg = 'Email is already being used.'
+			ROLLBACK TRAN
+		END
 	END
-	ELSE IF @AffectedRows > 1
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	IF @ErrMsg = ''
 	BEGIN
-		SET @ErrMsg = 'Too many rows updated.'
-		ROLLBACK TRAN
+		UPDATE Security_User SET
+			UserName = @Email,
+			EMail = @Email,
+			FullName = @Email,
+			EzPassword = @EzPassword,
+			Salt = @Salt,
+			CycleCount = @CycleCount,
+			PassSetTime = @Now
+		WHERE
+			UserId = @UserID
+
+		-------------------------------------------------------------------------
+
+		SET @AffectedRows = @@ROWCOUNT
+
+		IF @AffectedRows = 0
+		BEGIN
+			SET @ErrMsg = 'User not found.'
+			ROLLBACK TRAN
+		END
+		ELSE IF @AffectedRows > 1
+		BEGIN
+			SET @ErrMsg = 'Too many rows updated.'
+			ROLLBACK TRAN
+		END
 	END
 
 	------------------------------------------------------------------------------
