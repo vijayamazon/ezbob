@@ -146,7 +146,7 @@
 
 		[Test]
 		public void PasswordChanged() {
-			var s = new PasswordChanged(3060, new Password("dfsgfsdg"));
+			var s = new PasswordChanged(3060, new DasKennwort("dfsgfsdg"));
 			s.Execute();
 		}
 

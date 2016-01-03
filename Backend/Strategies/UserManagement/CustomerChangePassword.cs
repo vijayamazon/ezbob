@@ -17,6 +17,5 @@
 			if (string.IsNullOrWhiteSpace(ErrorMessage))
 				new PasswordChanged(UserID, Password).Execute();
 		} // Execute
-
 	} // class CustomerChangePassword
 } // namespace Ezbob.Backend.Strategies.UserManagement

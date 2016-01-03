@@ -12,6 +12,8 @@
 	using EzBob.Web.Infrastructure.Filters;
 	using ServiceClientProxy.EzServiceReference;
 
+	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
+
 	public class BrokerAccountController : ABrokerBaseController {
 		[HttpPost]
 		[Ajax]
@@ -210,9 +212,12 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult UpdatePassword(string ContactEmail, string OldPassword, string NewPassword, string NewPassword2) {
-			ms_oLog.Debug("Broker update password request for contact email {0}", ContactEmail);
+			RemoteCustomerOriginEnum origin = (RemoteCustomerOriginEnum)(int)UiCustomerOrigin.Get().GetOrigin();
+
+			ms_oLog.Debug("Broker update password request for contact email {0} with origin {1}", ContactEmail, origin);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Update password", ContactEmail);
+
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
@@ -222,17 +227,29 @@
 				ReferenceEquals(NewPassword2, null);
 
 			if (passwordIsNull) {
-				ms_oLog.Warn("Cannot update password for contact email {0}: one of passwords not specified.", ContactEmail);
+				ms_oLog.Warn(
+					"Cannot update password for contact email {0} with origin {1}: one of passwords not specified.",
+					ContactEmail,
+					origin
+				);
 				return new BrokerForJsonResult("Cannot update password: some required fields are missing.");
 			} // if
 
 			if (NewPassword != NewPassword2) {
-				ms_oLog.Warn("Cannot update password: passwords do not match.");
+				ms_oLog.Warn(
+					"Cannot update password for contact email {0} with origin {1}: passwords do not match.",
+					ContactEmail,
+					origin
+				);
 				return new BrokerForJsonResult("Cannot update password: passwords do not match.");
 			} // if
 
 			if (NewPassword == OldPassword) {
-				ms_oLog.Warn("Cannot update password: new password is equal to the old one.");
+				ms_oLog.Warn(
+					"Cannot update password for contact email {0} with origin {1}: new password is equal to the old one.",
+					ContactEmail,
+					origin
+				);
 				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
 			} // if
 
@@ -241,20 +258,26 @@
 			try {
 				oResult = this.m_oServiceClient.Instance.BrokerUpdatePassword(
 					ContactEmail,
-					new Password(OldPassword),
-					new Password(NewPassword, NewPassword2)
+					origin,
+					new DasKennwort(OldPassword),
+					new DasKennwort(NewPassword),
+					new DasKennwort(NewPassword2)
 				);
 			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
+				ms_oLog.Alert(e, "Failed to update password for contact email {0} with origin {1}.", ContactEmail, origin);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // try
 
 			if (oResult == null) {
-				ms_oLog.Warn("Failed to update password for contact email {0}", ContactEmail);
+				ms_oLog.Warn("Failed to update password for contact email {0} with origin {1}.", ContactEmail, origin);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // if
 
-			ms_oLog.Debug("Broker update password request for contact email {0} complete.", ContactEmail);
+			ms_oLog.Debug(
+				"Broker update password request for contact email {0} with origin {1} complete.",
+				ContactEmail,
+				origin
+			);
 
 			return new BrokerForJsonResult();
 		} // UpdatePassword

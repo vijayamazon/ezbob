@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using EzService.ActionResults;
+	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceBroker {
@@ -166,7 +167,13 @@
 		ActionMetaData BrokerTransferCommission();
 
 		[OperationContract]
-		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);
+		ActionMetaData BrokerUpdatePassword(
+			string contactEmail,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword,
+			DasKennwort newPasswordAgain
+		);
 
 		[OperationContract]
 		ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);

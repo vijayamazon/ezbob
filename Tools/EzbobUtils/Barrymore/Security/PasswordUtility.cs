@@ -31,7 +31,7 @@
 		/// </summary>
 		/// <param name="minCycleCount">How many times the password should be hashed.</param>
 		public PasswordUtility(int minCycleCount) {
-			this.algorithm = new System.Security.Cryptography.HMACSHA512();
+			this.algo = new HashAlgorithm();
 			this.minCycleCount = Math.Max(minCycleCount, 30000);
 		} // constructor
 
@@ -88,9 +88,9 @@
 
 			int iterations = cycleCount ?? this.minCycleCount;
 
-			this.algorithm.Key = System.Text.Encoding.UTF8.GetBytes(userName + (rawPassword ?? string.Empty));
+			this.algo.Prepare(userName, rawPassword);
 
-			byte[] hashedPassword = Pbkdf2.ComputeDerivedKey(this.algorithm, saltToUse, iterations, HashSize);
+			byte[] hashedPassword = Pbkdf2.ComputeDerivedKey(this.algo.Instance, saltToUse, iterations, this.algo.HashSize);
 
 			return new HashedPassword(userName, iterations, hashedPassword, saltToUse);
 		} // Generate
@@ -102,11 +102,51 @@
 			return salt;
 		} // GenerateSalt
 
-		private int HashSize {
-			get { return this.algorithm.HashSize / 8; }
-		} // HashSize
+		private class HashAlgorithm {
+			public HashAlgorithm() {
+				CreateInstance();
+			} // constructor
+
+			public void Prepare(string userName, string rawPassword) {
+				if (this.instance.IsDisposed)
+					CreateInstance();
+
+				this.instance.Key = System.Text.Encoding.UTF8.GetBytes(userName + (rawPassword ?? string.Empty));
+
+				HashSize = this.instance.HashSize / 8;
+			} // Prepare
+
+			public int HashSize { get; private set; }
+
+			public KeyedHashAlgorithm Instance { get { return this.instance; } }
+
+			private void CreateInstance() {
+				this.instance = new HmacSha512();
+			} // CreateInstance
+
+			private HmacSha512 instance;
+		} // class HashAlgorithm
+
+		private class HmacSha512 : System.Security.Cryptography.HMACSHA512 {
+			public HmacSha512() {
+				IsDisposed = false;
+			} // constructor
+
+			public bool IsDisposed { get; private set; }
+
+			/// <summary>
+			/// Releases the unmanaged resources used by the <see cref="T:System.Security.Cryptography.HMAC"/> class
+			/// when a key change is legitimate and optionally releases the managed resources.
+			/// </summary>
+			/// <param name="disposing">true to release both managed and unmanaged resources;
+			/// false to release only unmanaged resources. </param>
+			protected override void Dispose(bool disposing) {
+				IsDisposed = true;
+				base.Dispose(disposing);
+			} // Dispose
+		} // class HmacSha512
 
 		private readonly int minCycleCount;
-		private readonly KeyedHashAlgorithm algorithm;
+		private readonly HashAlgorithm algo;
 	} // class PasswordUtility
 } // namespace

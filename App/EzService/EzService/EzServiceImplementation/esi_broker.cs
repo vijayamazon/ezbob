@@ -8,6 +8,7 @@
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sConfirmationToken) {
@@ -322,15 +323,22 @@
 			};
 		} // BrokerLoadPropertiesByID
 
-		public ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword) {
-			BrokerUpdatePassword oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, oOldPassword, oNewPassword);
-
-			if ((oInstance != null) && (oInstance.BrokerID > 0))
-				Execute<BrokerPasswordChanged>(null, oInstance.BrokerID, oInstance.BrokerID, oNewPassword);
-
-			return oMetaData;
+		public ActionMetaData BrokerUpdatePassword(
+			string contactEmail,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword,
+			DasKennwort newPasswordAgain
+		) {
+			return ExecuteSync<BrokerUpdatePassword>(
+				null,
+				null,
+				contactEmail,
+				origin,
+				oldPassword,
+				newPassword,
+				newPasswordAgain
+			);
 		} // BrokerUpdatePassword
 
 		public BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly, int originID) {

@@ -3023,6 +3023,20 @@ namespace ServiceClientProxy.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerOriginEnum", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
+    public enum CustomerOriginEnum : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ezbob = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        everline = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        alibaba = 3,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CashRequestOriginator", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
     public enum CashRequestOriginator : int {
         
@@ -3602,20 +3616,6 @@ namespace ServiceClientProxy.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerOriginEnum", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
-    public enum CustomerOriginEnum : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ezbob = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        everline = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        alibaba = 3,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetTarget", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement")]
     public enum PasswordResetTarget : int {
         
@@ -4186,10 +4186,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerTransferCommissionAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerUpdatePasswordResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string contactEmail, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword, Ezbob.Backend.Models.DasKennwort newPasswordAgain);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerUpdatePasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string contactEmail, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword, Ezbob.Backend.Models.DasKennwort newPasswordAgain);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/ChangeBrokerEmail", ReplyAction="http://tempuri.org/IEzServiceBroker/ChangeBrokerEmailResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);
@@ -5749,12 +5749,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerTransferCommissionAsync();
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
-            return base.Channel.BrokerUpdatePassword(sContactEmail, oOldPassword, oNewPassword);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string contactEmail, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword, Ezbob.Backend.Models.DasKennwort newPasswordAgain) {
+            return base.Channel.BrokerUpdatePassword(contactEmail, origin, oldPassword, newPassword, newPasswordAgain);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
-            return base.Channel.BrokerUpdatePasswordAsync(sContactEmail, oOldPassword, oNewPassword);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string contactEmail, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword, Ezbob.Backend.Models.DasKennwort newPasswordAgain) {
+            return base.Channel.BrokerUpdatePasswordAsync(contactEmail, origin, oldPassword, newPassword, newPasswordAgain);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword) {
