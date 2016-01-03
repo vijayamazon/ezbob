@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('LoadPotentialEsigners') IS NULL
 	EXECUTE('CREATE PROCEDURE LoadPotentialEsigners AS SELECT 1')
 GO
@@ -68,6 +69,7 @@ BEGIN
 		INNER JOIN Customer c ON co.Id = c.CompanyId AND (@CustomerID IS NULL OR c.Id = @CustomerID)
 		INNER JOIN CustomerAddress a ON d.Id = a.DirectorId AND a.addressType IN (4, 6)
 		INNER JOIN EsignUserAgreementStatus s ON s.StatusID = 7
+	WHERE d.IsDeleted IS NULL OR d.IsDeleted = 0
 	UNION
 	SELECT
 		'experian' AS Type,

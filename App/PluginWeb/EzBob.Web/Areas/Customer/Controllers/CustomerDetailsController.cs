@@ -22,7 +22,6 @@
 	using Infrastructure.csrf;
 	using Iesi.Collections.Generic;
 	using NHibernate;
-	using Reports.Alibaba.DataSharing;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
@@ -33,7 +32,6 @@
 			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
 			ISession oSession,
 			CashRequestBuilder oCashRequestBuilder,
-			DirectorRepository oDirectorRepository,
 			PropertyStatusRepository propertyStatusRepository,
 			CustomerPhoneRepository customerPhoneRepository,
 			CustomerAddressRepository customerAddressRepository,
@@ -45,7 +43,6 @@
 			this.serviceClient = new ServiceClient();
 			this.session = oSession;
 			this.cashRequestBuilder = oCashRequestBuilder;
-			this.directorRepository = oDirectorRepository;
 			this.propertyStatusRepository = propertyStatusRepository;
 			this.customerPhoneRepository = customerPhoneRepository;
 			this.customerAddressRepository = customerAddressRepository;
@@ -214,10 +211,9 @@
 			
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 
-			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
-				IQueryable<Director> directors = this.directorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
-
-				foreach (Director director in directors) {
+			if (nBusinessType != TypeOfBusiness.Entrepreneur && customer.Company != null) {
+				var directors = customer.Company.Directors.Where(x => !x.IsDeleted);
+				foreach (var director in directors) {
 					try {
 						this.serviceClient.Instance.ExperianConsumerCheck(1, customer.Id, director.Id, false);
 					}
@@ -1099,7 +1095,6 @@
 		private readonly CashRequestBuilder cashRequestBuilder;
 		private readonly IConcentAgreementHelper m_oConcentAgreementHelper = new ConcentAgreementHelper();
 		private readonly DatabaseDataHelper databaseHelper;
-		private readonly DirectorRepository directorRepository;
 		private readonly PropertyStatusRepository propertyStatusRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;

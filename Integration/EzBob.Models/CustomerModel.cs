@@ -55,7 +55,7 @@ namespace EzBob.Models {
 				RentMonthLeft = company.RentMonthLeft,
 				CapitalExpenditure = company.CapitalExpenditure,
 				VatReporting = company.VatReporting,
-				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToList(),
+				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, company.Directors.Where(x=> !x.IsDeleted).ToList())).ToList(),
 				ExperianRefNum = company.ExperianRefNum,
 				VatRegistered = company.VatRegistered
 			};

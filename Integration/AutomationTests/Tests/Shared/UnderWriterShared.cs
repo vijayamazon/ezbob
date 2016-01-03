@@ -1,11 +1,13 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
     using System;
     using System.Resources;
+    using log4net;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Interactions;
     using UIAutomationTests.Core;
 
     class UnderWriterShared : WebTestBase {
+        private static readonly ILog log = LogManager.GetLogger(typeof(UnderWriterShared));
 
         public UnderWriterShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
             this.Driver = Driver;
@@ -13,7 +15,8 @@
             this.BrandConfig = BrandConfig;
         }
 
-        public void LogIn(string user, string pass) {
+        public void LogIn(string logHeader, string user, string pass) {
+            actionBot.WriteToLog("Begin method: " + logHeader);
             string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), "/Account/AdminLogOn");
 
             Driver.Navigate().GoToUrl(url);
@@ -26,10 +29,11 @@
 
             IWebElement logIn = Driver.FindElement(By.Id("loginSubmitBtn"));
             logIn.Click();
+            actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }//test+client_635862269583123148@ezbob.com
 
-        public void FindCustomer(string identifier) {
-
+        public void FindCustomer(string logHeader, string identifier) {
+            actionBot.WriteToLog("Begin method: " + logHeader);
             SharedServiceClass.WaitForBlockUiOff(Driver);
             Actions sendKeyAction = new Actions(Driver);
             sendKeyAction.KeyDown(Keys.Control).SendKeys("g").Build().Perform();
@@ -50,6 +54,7 @@
 
             IWebElement okButton = Driver.FindElement(By.CssSelector("div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div.ui-dialog-buttonset > button.ok-button.btn.btn-primary"));
             okButton.Click();
+            actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
         
     }

@@ -153,7 +153,7 @@
 			}
 
 			if (customer.Company != null)
-				Directors.AddRange(customer.Company.Directors);
+				Directors.AddRange(customer.Company.Directors.Where(x => !x.IsDeleted));
 
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);

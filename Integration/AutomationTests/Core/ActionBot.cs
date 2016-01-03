@@ -1,54 +1,56 @@
 ﻿namespace UIAutomationTests.Core {
+    using log4net;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
     using UIAutomationTests.Tests.Shared;
     public class ActionBot : WebTestBase {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ActionBot));
         public ActionBot(IWebDriver Driver) {
             this.Driver = Driver;
         }
 
-        public bool Click(By locator, string description, int waitTime = 120) {
-            //IWebElement a  = SharedServiceClass.WaitForElemetVisible();
-            //Driver.FindElement(locator).Click();
+        public void Click(By locator, string description, int waitTime = 120) {
             SharedServiceClass.ElementToBeClickable(Driver, locator, waitTime).Click();
-            return true;
+            log.Info(description + " - '" + locator.ToString() + "' - Click.");
         }
-        public bool SendKeys(By locator, string keys, string description, int waitTime = 120, bool isClear = true) {
+
+        public void ClickAssert(By locator, By assertLocator, string description, int waitTime = 120) {
+            log.Info("ClickAssert start.");
+            SharedServiceClass.ClickAssert(Driver, locator, assertLocator, waitTime);
+            log.Info("ClickAssert finished.");
+            log.Info(description + " - ClickAssert performed. '" + locator.ToString() + "' has been clicked. and '" + assertLocator.ToString()+"' asserted.");
+        }
+
+        public void SendKeys(By locator, string keys, string description, int waitTime = 120, bool isClear = true) {
             IWebElement element = SharedServiceClass.ElementIsVisible(Driver, locator, waitTime);
             if (isClear)
                 element.Clear();
             element.SendKeys(keys);
-            return true;
+            log.Info(description + " - '" + locator.ToString() + "' - SendKeys: '" + keys + "'.");
         }
 
-        public bool SelectByIndex(By locator,int index, string description, int waitTime = 120) {
-            //IWebElement a  = SharedServiceClass.WaitForElemetVisible();
-            //Driver.FindElement(locator).Click();
+        public void SelectByIndex(By locator, int index, string description, int waitTime = 120) {
             SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByIndex(index);
-            return true;
+            log.Info(description + " - '" + locator.ToString() + "' - SelectByIndex: '" + index + "'.");
         }
 
-        public bool SelectByValue(By locator, string value, string description, int waitTime = 120) {
-            //IWebElement a  = SharedServiceClass.WaitForElemetVisible();
-            //Driver.FindElement(locator).Click();
+        public void SelectByValue(By locator, string value, string description, int waitTime = 120) {
             SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByValue(value);
-            return true;
+            log.Info(description + " - '" + locator.ToString() + "' - SelectByValue: '" + value + "'.");
         }
 
-        public bool SelectByText(By locator, string text, string description, int waitTime = 120) {
-            //IWebElement a  = SharedServiceClass.WaitForElemetVisible();
-            //Driver.FindElement(locator).Click();
+        public void SelectByText(By locator, string text, string description, int waitTime = 120) {
             SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByText(text);
-            return true;
+            log.Info(description + " - '" + locator.ToString() + "' - SelectByText: '" + text + "'.");
         }
 
-        public bool WriteToLog(string description) {
-            return true;
+        public void SwitchToWindow(int lastWindowIndex, string description) {
+            Driver.SwitchTo().Window(SharedServiceClass.LastWindowName(Driver, lastWindowIndex));
+            log.Info("Moving focust to window: " + description + ".");
         }
 
-        public bool Type(By locator, string text, string description) {
-            Driver.FindElement(locator).Clear();
-            Driver.FindElement(locator).SendKeys(text);
-            return true;
+        public void WriteToLog(string description) {
+            log.Info(description);
         }
     }
 }
