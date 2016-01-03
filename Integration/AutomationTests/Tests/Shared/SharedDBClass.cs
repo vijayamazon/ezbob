@@ -2,14 +2,16 @@
     using System.Linq;
     using System.Resources;
     using Ezbob.Database;
+    using log4net;
+    using UIAutomationTests.Core;
 
-    class SharedDBClass {
+    class SharedDBClass:WebTestBase {
         private readonly AConnection oDB;
-        private readonly ResourceManager _EnvironmentConfig;
+        private static readonly ILog log = LogManager.GetLogger(typeof(SharedDBClass));
 
         public SharedDBClass(ResourceManager EnvironmentConfig) {
-            this._EnvironmentConfig = EnvironmentConfig;
-            this.oDB = new SqlConnection(sConnectionString:this._EnvironmentConfig.GetString("QA2DBConnectionString"));
+            this.EnvironmentConfig = EnvironmentConfig;
+            this.oDB = new SqlConnection(null,this.EnvironmentConfig.GetString("QA2DBConnectionString"));
         }
 
         public T ExecuteScalar<T>(string SP, CommandSpecies CS, string param = null) {
@@ -25,6 +27,17 @@
             }
 
             return result;
+        }
+
+        public void ExecuteNonQuery(string SP, CommandSpecies CS, QueryParameter[] param = null) {
+            switch (param == null ? 0 : param.Count()) {
+                case 0:
+                    this.oDB.ExecuteNonQuery(SP, CS);
+                    break;
+                default:
+                    this.oDB.ExecuteNonQuery(SP, CS, param);
+                    break;
+            }
         }
 
         public SafeReader GetFirst(string SP, CommandSpecies CS, QueryParameter[] param = null) {

@@ -16,8 +16,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Phone { get; set; }
 		public virtual Company Company { get; set; }
 		public virtual bool? IsShareholder { get; set; }
+        public virtual int? UserId { get; set; }
+
 		public virtual bool? IsDirector { get; set; }
 		public virtual int? ExperianConsumerScore { get; set; }
+		public virtual bool IsDeleted { get; set; }
 	} // class Director
 
 	public class DirectorAddressInfo {
@@ -87,7 +90,8 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 			Map(x => x.IsShareholder);
 			Map(x => x.IsDirector);
 			Map(x => x.ExperianConsumerScore);
-
+            Map(x => x.UserId);
+			Map(x => x.IsDeleted);
 			Component(x => x.DirectorAddressInfo, m => {
 				m.HasMany(x => x.LimitedDirectorHomeAddressPrev)
 					.AsSet()

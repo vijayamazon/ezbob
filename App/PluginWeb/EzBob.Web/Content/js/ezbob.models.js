@@ -45,7 +45,8 @@ EzBob.AddressModels = Backbone.Collection.extend({
 
 EzBob.DirectorModel = Backbone.Model.extend({
 	initialize: function() {
-		this.set('DirectorAddress', new EzBob.AddressModels(this.get('DirectorAddress')));
+	    this.set('DirectorAddress', new EzBob.AddressModels(this.get('DirectorAddress')));
+	    this.set('PrevDirectorAddress', new EzBob.AddressModels(this.get('PrevDirectorAddress')));
 	}, // initialize
 }); // EzBob.DirectorModel
 

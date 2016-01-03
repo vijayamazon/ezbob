@@ -38,25 +38,34 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
-   ;WITH
-  last_cashrquests AS (
-	 SELECT 
-	 MAX(Id) maxid  
-	 FROM 
-	 CashRequests 
-	 GROUP BY IdCustomer
-   		
-   ),
-  last_cashrquests_prepare AS (
-   SELECT 
-   Id,
-   IdCustomer,
-   ManagerApprovedSum 
-   FROM 
-   CashRequests cr 
-   INNER JOIN  last_cashrquests lcr  ON lcr.maxid = cr.Id
-   )
-   
+	;WITH
+	last_cashrquests AS (
+		SELECT 
+			MAX(cr.Id) maxid  
+		FROM 
+			CashRequests cr 
+		INNER JOIN 
+			Customer c 
+		ON 
+			c.BrokerID = @BrokerID	
+		GROUP BY cr.IdCustomer
+	),
+	
+	last_cashrquests_prepare AS (
+		SELECT 
+			cr.Id,
+			cr.IdCustomer,
+			cr.ManagerApprovedSum
+		FROM 
+			CashRequests cr 
+		INNER JOIN
+		  	last_cashrquests lcr 
+		ON 
+			lcr.maxid = cr.Id
+		WHERE
+			cr.UnderwriterDecision = 'Approved'	
+	)
+	
   	SELECT
 		c.Id AS CustomerID,
 		c.FirstName AS FirstName,
@@ -65,7 +74,6 @@ BEGIN
 		c.IsWaitingForSignature AS Signature,
 		c.RefNumber,
 		w.WizardStepTypeDescription AS WizardStep,
-	 
 		CASE
 			WHEN W.WizardStepTypeName = 'success' THEN
 				CASE
@@ -92,17 +100,26 @@ BEGIN
 		lb.PaidDate AS CommissionPaymentDate
 	FROM
 		Customer c
-		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
-		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
-	  	LEFT JOIN last_cashrquests_prepare lcp ON lcp.IdCustomer = c.Id
-		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
-	  
+		INNER JOIN 
+			WizardStepTypes w 
+		ON 
+			c.WizardStep = w.WizardStepTypeID
+		LEFT JOIN 
+			Loan l 
+		ON 
+			l.CustomerId = c.Id AND l.Position = 0
+	  	LEFT JOIN 
+	  		last_cashrquests_prepare lcp 
+	  	ON 
+	  		lcp.IdCustomer = c.Id
+		LEFT JOIN 
+			LoanBrokerCommission lb 
+		ON 
+			lb.LoanID = l.Id
 		WHERE
-		c.BrokerID = @BrokerID
+			c.BrokerID = @BrokerID
 		AND
-		c.OriginID = @BrokerOriginID
-		
-
+			c.OriginID = @BrokerOriginID
 	ORDER BY
 		c.Id
 	------------------------------------------------------------------------------

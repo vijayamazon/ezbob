@@ -722,6 +722,7 @@
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.signature.monitor.js")
+				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.js")
 			// custom
 				.Add("~/Content/js/Underwriter/ezbob.underwriter.salesforce.js")
 			.MvcRender("~/Content/js/min/jsSalesForce_#.js");

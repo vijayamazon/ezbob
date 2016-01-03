@@ -3,7 +3,7 @@
 EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 	template: '#add-director-info-template',
 
-	initialize: function(options) {
+	initialize: function (options) {
 		this.alreadySaved = false;
 
 		this.backButtonCaption = options.backButtonCaption || 'Back';
@@ -11,9 +11,10 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.failOnDuplicate = options.failOnDuplicate;
 
 		this.initDupCheck(options);
+
 	}, // initialize
 
-	initDupCheck: function(options) {
+	initDupCheck: function (options) {
 		this.dupCheckKeys = {};
 
 		var sKey = this.detailsToKey(
@@ -42,7 +43,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 			self.dupCheckKeys[sKey] = 1;
 		}, this);
 
-		this.DupCheckModel = function(ary) {
+		this.DupCheckModel = function (ary) {
 			this.Name = '';
 			this.Surname = '';
 			this.Gender = '';
@@ -53,28 +54,28 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		};
 
 		this.DupCheckModel.prototype = {
-			init: function(ary) {
-				_.each(ary, function(obj) { this.setProp(obj); }, this);
+			init: function (ary) {
+				_.each(ary, function (obj) { this.setProp(obj); }, this);
 			}, // init
 
-			readyForCheck: function() {
+			readyForCheck: function () {
 				return this.Name && this.Surname && this.Gender && this.DateOfBirth && this.PostCode;
 			}, // readyForCheck
 
-			setProp: function(obj) {
+			setProp: function (obj) {
 				if (this.hasOwnProperty(obj.name))
 					this[obj.name] = obj.value;
 				else if (obj.name.match(/\.Rawpostcode$/))
 					this.PostCode = obj.value;
 			}, // setProp
 
-			toDetails: function() {
+			toDetails: function () {
 				return self.detailsToKey(this.Name, this.Surname, this.DateOfBirth, 'D/M/YYYY', this.Gender, this.PostCode);
 			}, // toDetails
 		};
 	}, // initDupCheck
 
-	form: function() {
+	form: function () {
 		return this.$el.find('.addDirectorInfoForm');
 	}, // form
 
@@ -95,7 +96,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		'click .is-dir-sha': 'toggleIsDirSha',
 	}, // events
 
-	toggleIsDirSha: function() {
+	toggleIsDirSha: function () {
 		var oChk = $(event.target);
 
 		var bChecked = oChk.attr('checked') ? true : false;
@@ -106,21 +107,22 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.canSubmit();
 	}, // toggleIsDirSha
 
-	addressModelChange: function() {
+	addressModelChange: function () {
 		return EzBob.App.trigger('dash-director-address-change', this.model);
 	}, // addressModelChange
 
-	setCustomerID: function(nCustomerID) {
+	setCustomerID: function (nCustomerID) {
 		this.$el.find('#nCustomerID').val(nCustomerID);
 	}, // setCustomerID
 
-	onRender: function() {
+	onRender: function () {
 		this.$el.find('.directorBack').text(this.backButtonCaption);
 		this.$el.find('.ezDateTime').splittedDateTime();
 		this.$el.find('.alphaOnly').alphaOnly();
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.addressCaption').hide();
-
+		this.$el.find('.addDirector').html('Add Director');
+		this.$el.find('#nDirectorID').val(-1);
 		this.validator = this.buildValidator();
 
 		var oAddressContainer = this.$el.find('#DirectorAddress');
@@ -134,8 +136,8 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix')
 		});
 
-		this.model.get('DirectorAddress').on('all', function() {
-			return that.trigger('director:addressChanged');
+		this.model.get('DirectorAddress').on('all', function () {
+			that.handleUiEvent();
 		});
 
 		this.addressView.render().$el.appendTo(oAddressContainer);
@@ -153,23 +155,21 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		return this;
 	}, // onRender
 
-	directorBack: function() {
+	directorBack: function () {
 		this.trigger(this.backEvtName());
 	}, // directorBack
 
-	directorAdd: function() {
+	directorAdd: function () {
 		if (!this.canSubmit())
 			return false;
 
 		var data = this.form().serializeArray();
-
 		BlockUi('on');
-
-		var request = $.post(this.form().attr('action'), data);
-
 		var self = this;
+		var action = (this.$el.find('#nDirectorID').val() === '-1') ? this.form().attr('action') : '/Underwriter/CrossCheck/editDirector';
+		var request = $.post(action, data);
 
-		request.done(function(res) {
+		request.done(function (res) {
 			if (res.success) {
 				self.alreadySaved = true;
 				self.trigger(self.successEvtName());
@@ -184,26 +184,26 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 			} // if
 		}); // on success
 
-		request.fail(function() {
+		request.fail(function () {
 			self.trigger(self.failEvtName());
 		}); // on fail
 
-		request.always(function() {
+		request.always(function () {
 			BlockUi('off');
 		}); // always
 
 		return false;
 	}, // directorAdd
 
-	handleUiEvent: function() {
+	handleUiEvent: function () {
 		this.canSubmit();
 	}, // handleUiEvent
 
-	isDirSha: function(sSelector) {
+	isDirSha: function (sSelector) {
 		return this.$el.find(sSelector).val() === 'on';
 	}, // isDirSha
 
-	canSubmit: function() {
+	canSubmit: function () {
 		if (this.alreadySaved)
 			return false;
 
@@ -217,32 +217,32 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		return bEnabled;
 	}, // canSubmit
 
-	backEvtName: function() { return 'go-back'; }, // backEvtName
-	successEvtName: function() { return 'success'; }, // successEvtName
-	failEvtName: function() { return 'fail'; }, // failEvtName
-	dupCheckCompleteName: function() { return 'dup-check-done'; }, // dupCheckCompleteName
+	backEvtName: function () { return 'go-back'; }, // backEvtName
+	successEvtName: function () { return 'success'; }, // successEvtName
+	failEvtName: function () { return 'fail'; }, // failEvtName
+	dupCheckCompleteName: function () { return 'dup-check-done'; }, // dupCheckCompleteName
 
-	setBackHandler: function(oHandler) {
+	setBackHandler: function (oHandler) {
 		if (oHandler && (typeof oHandler === 'function'))
 			this.on(this.backEvtName(), oHandler);
 	}, // setBackHandler
 
-	setSuccessHandler: function(oHandler) {
+	setSuccessHandler: function (oHandler) {
 		if (oHandler && (typeof oHandler === 'function'))
 			this.on(this.successEvtName(), oHandler);
 	}, // setSuccessHandler
 
-	setFailHandler: function(oHandler) {
+	setFailHandler: function (oHandler) {
 		if (oHandler && (typeof oHandler === 'function'))
 			this.on(this.failEvtName(), oHandler);
 	}, // setFailHandler
 
-	setDupCheckCompleteHandler: function(oHandler) {
+	setDupCheckCompleteHandler: function (oHandler) {
 		if (oHandler && (typeof oHandler === 'function'))
 			this.on(this.dupCheckCompleteName(), oHandler);
 	}, // setDupCheckCompleteHandler
 
-	validateDuplicates: function() {
+	validateDuplicates: function () {
 		var oModel = new this.DupCheckModel(this.form().serializeArray());
 
 		if (!oModel.readyForCheck())
@@ -255,7 +255,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		return bDupFound ? !this.failOnDuplicate : true;
 	}, // validateDuplicates
 
-	detailsToKey: function(sFirstName, sLastName, oBirthDate, sDateFormat, sGender, sPostCode) {
+	detailsToKey: function (sFirstName, sLastName, oBirthDate, sDateFormat, sGender, sPostCode) {
 		var oDate = sDateFormat ? moment(oBirthDate, sDateFormat) : moment(oBirthDate);
 		var sBirthDate = '';
 
@@ -281,7 +281,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		return JSON.stringify({ f: sFirstName, l: sLastName, b: sBirthDate, g: sGender, p: sPostCode, });
 	}, // detailsToKey
 
-	buildValidator: function() {
+	buildValidator: function () {
 		return this.form().validate({
 			rules: {
 				Name: EzBob.Validation.NameValidationObject,

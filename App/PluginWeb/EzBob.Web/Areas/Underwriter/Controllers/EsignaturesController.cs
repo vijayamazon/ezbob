@@ -5,6 +5,8 @@
 	using EchoSignLib;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using EzBob.Models;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
@@ -13,36 +15,51 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class EsignaturesController : Controller {
-
-		public EsignaturesController(IEzbobWorkplaceContext oContext) {
-			m_oContext = oContext;
-			m_oServiceClient = new ServiceClient();
+	    private readonly DirectorRepository directorRepository;
+		public EsignaturesController(IEzbobWorkplaceContext oContext, 
+            DirectorRepository directorRepository) {
+			this.context = oContext;
+		    this.directorRepository = directorRepository;
+		    this.serviceClient = new ServiceClient();
 		} // constructor
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		[HttpGet]
+		[HttpGet] 
 		public JsonResult Load(int? nCustomerID, bool bPollStatus) {
-			ms_oLog.Debug("Loading e-signatures for customer {0} {1} polling status...", nCustomerID, bPollStatus ? "with" : "without");
+			Log.Debug("Loading e-signatures for customer {0} {1} polling status...", nCustomerID, bPollStatus ? "with" : "without");
 
 			Esignature[] oSignatures;
 			Esigner[] oPotentialSigners;
 
 			try {
-				EsignatureListActionResult elar = m_oServiceClient.Instance.LoadEsignatures(m_oContext.UserId, nCustomerID, bPollStatus);
+				EsignatureListActionResult elar = this.serviceClient.Instance.LoadEsignatures(this.context.UserId, nCustomerID, bPollStatus);
 				oSignatures = elar.Data;
 				oPotentialSigners = elar.PotentialSigners;
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to load e-signatures for customer {0} {1} polling status.", nCustomerID, bPollStatus ? "with" : "without");
+				Log.Warn(e, "Failed to load e-signatures for customer {0} {1} polling status.", nCustomerID, bPollStatus ? "with" : "without");
 				oSignatures = new Esignature[0];
 				oPotentialSigners = new Esigner[0];
 			} // try
 
-			ms_oLog.Debug("Loading e-signatures for customer {0} {1} polling status complete.", nCustomerID, bPollStatus ? "with" : "without");
+			Log.Debug("Loading e-signatures for customer {0} {1} polling status complete.", nCustomerID, bPollStatus ? "with" : "without");
 
 			return Json(new { signatures = oSignatures, signers = oPotentialSigners, }, JsonRequestBehavior.AllowGet);
 		} // Load
+       
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [HttpGet]
+        public JsonResult LoadDirector(int directorId) {
+            var director = this.directorRepository.Get(directorId);
+            if (director == null) {
+                throw new Exception(string.Format("director not found id {0}", directorId));
+            }
+
+            DirectorModel directorModel = DirectorModel.FromDirector(director, director.Company.Directors.ToList());
+            return Json(directorModel, JsonRequestBehavior.AllowGet);
+        } // LoadDirector
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -51,32 +68,32 @@
 			EchoSignEnvelope[] oPackage = JsonConvert.DeserializeObject<EchoSignEnvelope[]>(sPackage);
 
 			if (oPackage == null) {
-				ms_oLog.Debug("Could not extract e-sign package from {0}.", sPackage);
+				Log.Debug("Could not extract e-sign package from {0}.", sPackage);
 				return Json(new { success = false, error = "Could not extract e-sign package from input.", });
 			} // if
 
 			if (oPackage.Length == 0) {
-				ms_oLog.Debug("Empty e-sign package received: {0}.", sPackage);
+				Log.Debug("Empty e-sign package received: {0}.", sPackage);
 				return Json(new { success = false, error = "Empty e-sign package received.", });
 			} // if
 
 			EchoSignEnvelope[] oPackageToSend = oPackage.Where(x => x.IsValid).ToArray();
 
 			if (oPackage.Length == 0) {
-				ms_oLog.Debug("No envelopes are ready to be sent in: {0}.", string.Join("\n", (object[])oPackage));
+				Log.Debug("No envelopes are ready to be sent in: {0}.", string.Join("\n", (object[])oPackage));
 				return Json(new { success = false, error = "No envelopes are ready to be sent.", });
 			} // if
 
-			ms_oLog.Debug("Send for signature request:\n{0}", string.Join("\n", (object[])oPackageToSend));
+			Log.Debug("Send for signature request:\n{0}", string.Join("\n", (object[])oPackageToSend));
 
 			string sResult;
 
 			try {
-				StringActionResult sar = m_oServiceClient.Instance.EsignSend(m_oContext.UserId, oPackageToSend);
+				StringActionResult sar = this.serviceClient.Instance.EsignSend(this.context.UserId, oPackageToSend);
 				sResult = sar.Value;
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to send a package for e-signing.");
+				Log.Warn(e, "Failed to send a package for e-signing.");
 				return Json(new { success = false, error = "Failed to send a package for e-signing.", });
 			} // try
 
@@ -85,19 +102,19 @@
 
 		[HttpGet]
 		public FileResult Download(long nEsignatureID) {
-			ms_oLog.Debug("Loading e-signature file for id {0}...", nEsignatureID);
+			Log.Debug("Loading e-signature file for id {0}...", nEsignatureID);
 
 			try {
-				EsignatureFileActionResult efar = m_oServiceClient.Instance.LoadEsignatureFile(m_oContext.UserId, nEsignatureID);
+				EsignatureFileActionResult efar = this.serviceClient.Instance.LoadEsignatureFile(this.context.UserId, nEsignatureID);
 
-				ms_oLog.Debug("Loading e-signature file for id {0} complete.", nEsignatureID);
+				Log.Debug("Loading e-signature file for id {0} complete.", nEsignatureID);
 
 				return new FileContentResult(efar.Contents, efar.MimeType) {
 					FileDownloadName = efar.FileName,
 				};
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Loading e-signature file for id {0} failed.", nEsignatureID);
+				Log.Warn(e, "Loading e-signature file for id {0} failed.", nEsignatureID);
 				throw new Exception("Failed to download requested file.");
 			} // try
 		} // Download
@@ -116,7 +133,7 @@
 			string county,
 			string postcode
 		) {
-			ms_oLog.Debug("Saving Experian director (E-signatures controller): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
+			Log.Debug("Saving Experian director (E-signatures controller): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
 				directorID,
 				email,
 				mobilePhone,
@@ -146,10 +163,10 @@
 				return Json(new { success = false, error = sValidation, });
 
 			try {
-				m_oServiceClient.Instance.UpdateExperianDirectorDetails(null, m_oContext.UserId, m);
+				this.serviceClient.Instance.UpdateExperianDirectorDetails(null, this.context.UserId, m);
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to save experian director details.");
+				Log.Warn(e, "Failed to save experian director details.");
 				return Json(new { success = false, error = string.Empty, });
 			} // try
 
@@ -160,25 +177,49 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult DeleteExperianDirector(int nDirectorID) {
-			ms_oLog.Debug("Deleting Experian director (E-signatures controller): {0}", nDirectorID);
+			Log.Debug("Deleting Experian director (E-signatures controller): {0}", nDirectorID);
 
 			if (nDirectorID <= 0)
 				return Json(new { success = false, error = "Invalid director ID.", });
 
 			try {
-				m_oServiceClient.Instance.DeleteExperianDirector(nDirectorID, m_oContext.UserId);
+				this.serviceClient.Instance.DeleteExperianDirector(nDirectorID, this.context.UserId);
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to delete experian director.");
+				Log.Warn(e, "Failed to delete experian director.");
 				return Json(new { success = false, error = string.Empty, });
 			} // try
 
 			return Json(new { success = true, error = string.Empty, });
 		} // DeleteExperianDirector
 
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzbobWorkplaceContext m_oContext;
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult DeleteDirector(int nDirectorID) {
+			Log.Debug("Deleting director (E-signatures controller): {0}", nDirectorID);
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (EsignaturesController));
+			if (nDirectorID <= 0)
+				return Json(new { success = false, error = "Invalid director ID.", });
+
+			try {
+				var director = this.directorRepository.Get(nDirectorID);
+				if (director != null) {
+					director.IsDeleted = true;
+					this.directorRepository.SaveOrUpdate(director);
+				}
+
+			} catch (Exception e) {
+				Log.Warn(e, "Failed to delete director {0}.", nDirectorID);
+				return Json(new { success = false, error = string.Empty, });
+			} // try
+
+			return Json(new { success = true, error = string.Empty, });
+		} // DeleteDirector
+
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
+
+		protected static readonly ASafeLog Log = new SafeILog(typeof (EsignaturesController));
 	} // class EsignaturesController
 } // namespace
