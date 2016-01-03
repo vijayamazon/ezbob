@@ -14,9 +14,9 @@
   <xs:element name="InvestorActionResult" nillable="true" type="tns:InvestorActionResult" />
   <xs:complexType name="AccountingDataResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/EzService" base="q6:ActionResult">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/EzService" base="q3:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="AccountingData" nillable="true" type="q7:ArrayOfAccountingDataModel" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="AccountingData" nillable="true" type="q4:ArrayOfAccountingDataModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
