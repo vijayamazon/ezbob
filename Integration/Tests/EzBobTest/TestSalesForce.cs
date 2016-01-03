@@ -150,8 +150,8 @@
 			 */
 			return ObjectFactory
 				.With("userName").EqualTo("techapi@ezbob.com.devsandbox")
-				.With("password").EqualTo("Ezca$h123")
-				.With("token").EqualTo("HfEt5jFnAuyqo2vs5Da6ZK9q")
+				.With("password").EqualTo("yaron13572")
+				.With("token").EqualTo("Um6lDVET6x0bRuIcA13tJqVPD")
 				.With("environment").EqualTo("Sandbox")
 				.GetInstance<ISalesForceAppClient>();
 		}
@@ -190,6 +190,12 @@
 		}
 
 		[Test]
+		public void TestDevSandbox() {
+			var c = GetSandboxDevClient();
+			Assert.IsFalse(c.HasError);
+		}
+
+		[Test]
 		public void TestClient() {
 			Assert.IsFalse(this.client.HasError);
 		}
@@ -197,7 +203,7 @@
 		[Test]
 		public void TestLead() {
 			LeadAccountModel model = new LeadAccountModel {
-				Email = "testdev1@b.c",
+				Email = "testdev10@b.c",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -220,7 +226,7 @@
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
                 Origin = "ezbob",
-				CustomerID = 1111.ToString(),
+				CustomerID = 2222.ToString(),
 				IsTest = true,
 				NumOfLoans = 2,
 				Promocode = "promotest"

@@ -13,7 +13,7 @@
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Database;
 	using FreeAgent;
-	using Integration.ChannelGrabberFrontend;
+	using global::Integration.ChannelGrabberFrontend;
 	using PayPoint;
 	using Sage;
 	using YodleeLib.connector;
@@ -87,7 +87,7 @@
 				oMpUpdateTimesSetter.Start();
 
 				IMarketplaceRetrieveDataHelper oRetrieveDataHelper = null;
-				var vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
+				var vi = global::Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
 
 				if (null != vi)
 					oRetrieveDataHelper = new RetrieveDataHelper(DbHelper, new DatabaseMarketPlace(marketplaceName));

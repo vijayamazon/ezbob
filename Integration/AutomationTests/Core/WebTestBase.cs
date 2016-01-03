@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Resources;
+    using log4net;
     using NUnit.Framework;
     using OpenQA.Selenium;
     using TestRailModels.Automation;
@@ -16,8 +17,12 @@
         protected IWebDriver Driver { get; set; }
         protected ResourceManager EnvironmentConfig { get; set; }
         protected ResourceManager BrandConfig { get; set; }
+        protected ActionBot actionBot { get; set; }
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(WebTestBase));
 
         private static bool? isDebugMode;
+
         protected static bool IsDebugMode {
             get {
                 if (isDebugMode == null) {
@@ -26,6 +31,7 @@
                 return isDebugMode != null && (bool)isDebugMode;
             }
         }
+
         [TestFixtureTearDown]
         public void Dispose() {
             if (IsDebugMode) 
@@ -34,7 +40,7 @@
                 GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
         }
 
-        protected bool ExecuteTest<T>(Func<T> codeToExecute) {
+        protected bool ExecuteTest(Action<string> codeToExecute) {
 
             MethodBase method = new StackFrame(1).GetMethod();
             ulong caseID = ulong.Parse(((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name);
@@ -42,6 +48,7 @@
             List<AutomationModels.Browser> browsers = GetBrowsers(caseID);
             List<AutomationModels.Brand> brands = GetBrands(caseID);
             List<AutomationModels.Environment> enviorments = GetEnviorments(caseID);
+
 
             if (IsNotValidConfigured(browsers, brands, enviorments)) {
                 if (!IsDebugMode) {
@@ -62,14 +69,16 @@
                                 return false;
                             }
 
+                            this.actionBot = new ActionBot(Driver);
                             Driver.Manage().Cookies.DeleteAllCookies();
-                            codeToExecute.Invoke();
+                            codeToExecute.Invoke(caseID.ToString() + " - " + TestRailRepository.TestRailCaseName(caseID));
 
                             if (!IsDebugMode) {
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
                             }
                         } catch (Exception ex) {
                             System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u")));
+                            log.Error(String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(), DateTime.UtcNow.ToString("u")));
                             if (!IsDebugMode) {
                                 UpdateBlockedList(caseID);
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);

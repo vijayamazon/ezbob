@@ -92,7 +92,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		form: 'form',
 		loanAmountInput: 'input#loanAmount',
 		repaymentPeriodInput: 'input#repaymentPeriod',
-		cannotTakeAnotherLoan: '.cannot-take-another-loan'
+		cannotTakeAnotherLoan: '.cannot-take-another-loan',
+		cannotTakeUnderMinLoan: '.cannot-take-under-minloan'
 	}, // ui
 
 	preAgreementTermsReadChange: function() {
@@ -118,20 +119,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	    this.model.set('neededCash', amount);
 		this.model.set('loanType', this.currentLoanTypeID);
 		this.model.set('repaymentPeriod', this.currentRepaymentPeriod);
-		var maxCash = this.model.get('maxCash');
-		var minLoan = EzBob.Config.MinLoan;
-		var reminingAmountForTopUp = maxCash - amount;
-		if (reminingAmountForTopUp < minLoan) {
-		    this.$el.find('.cannot-take-under-minloan').show();
-		}
-		else {
-		    this.$el.find('.cannot-take-under-minloan').hide();
-		}
-	
-	
-		
-	 
-	   
+
 		this.neededCashChanged(true);
 	}, // loanSelectionChanged
 
@@ -148,6 +136,9 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		BlockUi('on', this.$el.find('#block-loan-schedule'));
 		BlockUi('on', this.$el.find('#block-agreement'));
+		if (!this.currentRepaymentPeriod) {
+			this.currentRepaymentPeriod = this.model.get('repaymentPeriod');
+		}
 
 		var sMoreParams = '&loanType=' + this.currentLoanTypeID + '&repaymentPeriod=' + this.currentRepaymentPeriod;
 
@@ -157,14 +148,24 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			BlockUi('off', self.$el.find('#block-loan-schedule'));
 			BlockUi('off', self.$el.find('#block-agreement'));
 		});
-
+		var requestedAmount = this.model.get('neededCash');
 		var numOfActiveLoans = this.model.get('numOfActiveLoans');
-		if (numOfActiveLoans > 0 && EzBob.Config.NumofAllowedActiveLoans - numOfActiveLoans <= 1 && this.model.get('neededCash') < this.model.get('CreditSum')) {
+		if (numOfActiveLoans > 0 && EzBob.Config.NumofAllowedActiveLoans - numOfActiveLoans <= 1 && requestedAmount < this.model.get('CreditSum')) {
 			this.ui.cannotTakeAnotherLoan.show();
 		} else {
 			this.ui.cannotTakeAnotherLoan.hide();
 		}
-	
+
+		
+		var maxCash = this.model.get('maxCash');
+		var minLoan = EzBob.Config.MinLoan;
+		var remainingAmountForTopUp = maxCash - requestedAmount;
+
+		if (numOfActiveLoans == 0 && remainingAmountForTopUp < minLoan && requestedAmount < maxCash) {
+			this.ui.cannotTakeUnderMinLoan.show();
+		} else {
+			this.ui.cannotTakeUnderMinLoan.hide();
+		}
 	}, // recalculateSchedule
 
 	renderSchedule: function (schedule) {

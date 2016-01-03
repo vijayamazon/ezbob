@@ -124,6 +124,6 @@
     <value>qa2</value>
   </data>
   <data name="QA2DBConnectionString" xml:space="preserve">
-    <value>Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true"</value>
+    <value>Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true</value>
   </data>
 </root>

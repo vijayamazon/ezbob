@@ -40,7 +40,7 @@
 
 		[Test]
 		public void TestRepaymentIntervalTypes() {
-			Console.WriteLine(Enum.ToObject(typeof(RepaymentIntervalTypesId), 1));
+			Console.WriteLine(Enum.ToObject(typeof(RepaymentIntervalTypes), 1));
 		}
 
 	

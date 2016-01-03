@@ -126,7 +126,7 @@
 				CompanyExperianRefNum = customer.Company.ExperianRefNum;
 
 				if (customer.Company.Directors != null) {
-					List<Director> oDirList = customer.Company.Directors.ToList();
+					List<Director> oDirList = customer.Company.Directors.Where(x => !x.IsDeleted).ToList();
 
 					if (oDirList.Count > 0)
 						Directors = customer.Company.Directors.Select(d => DirectorModel.FromDirector(d, oDirList)).ToArray();

@@ -4378,9 +4378,13 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorResponse")]
         ServiceClientProxy.EzServiceReference.InvestorActionResult LoadInvestor(int underwriterID, int investorID);
@@ -4855,6 +4859,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddHistoryDirector", ReplyAction="http://tempuri.org/IEzService/AddHistoryDirectorResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddHistoryDirector", ReplyAction="http://tempuri.org/IEzService/AddHistoryDirectorResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddHistoryDirectorAsync(Ezbob.Backend.Models.Esigner Edirector);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
@@ -5353,12 +5363,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriods", ReplyAction="http://tempuri.org/IEzService/LoadManualVatReturnPeriodsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult> LoadManualVatReturnPeriodsAsync(int nCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -6008,10 +6012,16 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
             return base.Channel.CreateInvestor(underwriterID, investor, investorContacts, investorBanks);
+            }
+        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
+            return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
             return base.Channel.CreateInvestorAsync(underwriterID, investor, investorContacts, investorBanks);
+            }
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum) {
+            return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
         }
         
         public ServiceClientProxy.EzServiceReference.InvestorActionResult LoadInvestor(int underwriterID, int investorID) {
@@ -6644,6 +6654,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark) {
             return base.Channel.AddCciHistoryAsync(nCustomerID, nUnderwriterID, bCciMark);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector) {
+            return base.Channel.AddHistoryDirector(Edirector);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddHistoryDirectorAsync(Ezbob.Backend.Models.Esigner Edirector) {
+            return base.Channel.AddHistoryDirectorAsync(Edirector);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
@@ -7308,14 +7326,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult> LoadManualVatReturnPeriodsAsync(int nCustomerID) {
             return base.Channel.LoadManualVatReturnPeriodsAsync(nCustomerID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
-            return base.Channel.LoanFullyPaid(customerId, loanRefNum);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum) {
-            return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
         }
     }
 }

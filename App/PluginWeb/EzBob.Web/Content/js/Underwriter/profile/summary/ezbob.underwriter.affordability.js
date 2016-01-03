@@ -36,6 +36,8 @@ EzBob.Underwriter.AffordabilityView = Backbone.Marionette.ItemView.extend({
 		var template = this.$el.find('tfoot').find('tr').first();
 
 		var target = this.$el.find('tbody');
+	    if (!affordability)
+	        return false;
 
 		for (var i = 0; i < affordability.length; i++) {
 			var af = affordability[i];

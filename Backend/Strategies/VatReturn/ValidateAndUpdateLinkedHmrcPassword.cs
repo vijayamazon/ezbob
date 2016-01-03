@@ -1,11 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
-	using Integration.ChannelGrabberConfig;
-	using Integration.ChannelGrabberFrontend;
+	using global::Integration.ChannelGrabberConfig;
+	using global::Integration.ChannelGrabberFrontend;
 	using MailStrategies;
 
 	public class ValidateAndUpdateLinkedHmrcPassword : UpdateLinkedHmrcPassword {
-
 		public ValidateAndUpdateLinkedHmrcPassword(
 			string sCustomerID,
 			string sDisplayName,
@@ -32,7 +31,12 @@
 				m_oCustomerData.Load();
 			}
 			catch (Exception e) {
-				Log.Warn(e, "Failed to validate credentials for linked HMRC account {0} ({1}).", data.CustomerMarketplaceID, data.SecInfo.login);
+				Log.Warn(
+					e,
+					"Failed to validate credentials for linked HMRC account {0} ({1}).",
+					data.CustomerMarketplaceID,
+					data.SecInfo.login
+				);
 				ErrorMessage = "Failed to validate credentials. Please retry.";
 				return;
 			} // try
@@ -60,20 +64,26 @@
 					ctr.Run(true);
 					ctr.Done();
 				} // if
-			}
-			catch (InvalidCredentialsException) {
-				Log.Debug("Invalid credentials detected for linked HMRC account {0} ({1}).", data.CustomerMarketplaceID, data.SecInfo.login);
+			} catch (InvalidCredentialsException) {
+				Log.Debug(
+					"Invalid credentials detected for linked HMRC account {0} ({1}).",
+					data.CustomerMarketplaceID,
+					data.SecInfo.login
+				);
 				ErrorMessage = "Invalid user name or password.";
 				return false;
-			}
-			catch (Exception e) {
-				Log.Warn(e, "Failed to validate credentials for linked HMRC account {0} ({1}).", data.CustomerMarketplaceID, data.SecInfo.login);
+			} catch (Exception e) {
+				Log.Warn(
+					e,
+					"Failed to validate credentials for linked HMRC account {0} ({1}).",
+					data.CustomerMarketplaceID,
+					data.SecInfo.login
+				);
 				ErrorMessage = "Failed to validate credentials. Please retry.";
 				return false;
 			} // try
 
 			return true;
 		} // CheckHmrc
-
 	} // class ValidateAndUpdateLinkedHmrcPassword
 } // namespace

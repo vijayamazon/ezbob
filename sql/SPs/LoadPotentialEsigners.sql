@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('LoadPotentialEsigners') IS NULL
 	EXECUTE('CREATE PROCEDURE LoadPotentialEsigners AS SELECT 1')
 GO
@@ -18,6 +19,9 @@ BEGIN
 		c.FirstName,
 		c.Surname AS LastName,
 		c.Name AS Email,
+		0 AS UserId,
+		c.MiddleInitial AS MiddleName,
+		c.Gender AS Gender,
 		s.StatusID,
 		s.StatusName AS Status,
 		CONVERT(BIT, 1) AS IsDirector,
@@ -44,6 +48,9 @@ BEGIN
 		d.Name AS FirstName,
 		d.Surname AS LastName,
 		d.Email AS Email,
+		d.UserId AS UserId,  
+		d.Middle AS MiddleName,
+		d.Gender AS Gender,
 		s.StatusID,
 		s.StatusName AS Status,
 		ISNULL(d.IsDirector, 0) AS IsDirector,
@@ -62,6 +69,7 @@ BEGIN
 		INNER JOIN Customer c ON co.Id = c.CompanyId AND (@CustomerID IS NULL OR c.Id = @CustomerID)
 		INNER JOIN CustomerAddress a ON d.Id = a.DirectorId AND a.addressType IN (4, 6)
 		INNER JOIN EsignUserAgreementStatus s ON s.StatusID = 7
+	WHERE d.IsDeleted IS NULL OR d.IsDeleted = 0
 	UNION
 	SELECT
 		'experian' AS Type,
@@ -70,6 +78,9 @@ BEGIN
 		d.FirstName AS FirstName,
 		d.LastName AS LastName,
 		d.Email AS Email,
+		0 AS UserId,
+		d.MiddleName AS MiddleName,
+		d.Gender AS Gender,
 		s.StatusID,
 		s.StatusName AS Status,
 		d.IsDirector AS IsDirector,

@@ -1,8 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Serialization;
 	using EzBob.Models;
@@ -12,6 +14,7 @@
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using LandRegistryLib;
 	using MoreLinq;
@@ -21,11 +24,13 @@
 	public class CrossCheckController : Controller {
 		public CrossCheckController(
 			CustomerRepository customerRepository,
+			DirectorRepository directorRepository,
 			CustomerAddressRepository customerAddressRepository,
 			ISession oSession, IWorkplaceContext context) {
 			this.m_oServiceClient = new ServiceClient();
 			this._customerRepository = customerRepository;
 			this._customerAddressRepository = customerAddressRepository;
+			this._directorRepository = directorRepository;
 			this.m_oSession = oSession;
 			this._context = context;
 		} // constructor
@@ -34,7 +39,8 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
-		public JsonResult AddDirector(int nCustomerID, DirectorModel director) {
+		public JsonResult AddDirector(int nCustomerID, int nDirectorID, DirectorModel director) {
+
 			ms_oLog.Info("Adding director to customer " + nCustomerID);
 			var customer = this._customerRepository.Get(nCustomerID);
 
@@ -43,9 +49,56 @@
 					error = "Customer not found"
 				});
 			}
-			var response = CustomerDetailsController.AddDirectorToCustomer(director, customer, this.m_oSession, false);
-			m_oServiceClient.Instance.SalesForceAddUpdateContact(this._context.UserId, customer.Id, null, director.Email);
+
+			var response = CustomerDetailsController.AddDirectorToCustomer(director, customer, this.m_oSession, false, this._context.UserId);
+			this.m_oServiceClient.Instance.SalesForceAddUpdateContact(this._context.UserId, customer.Id, null, director.Email);
 			return Json(response);
+		}
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		[Transactional]
+		public JsonResult EditDirector(int nCustomerID, int nDirectorID, DirectorModel directorModel) {
+			ms_oLog.Debug("updating director");
+			Director director = this._directorRepository.Get(nDirectorID);
+			Esigner Edirector = directorModel.ToEsigner(director, nCustomerID);
+			this.m_oServiceClient.Instance.AddHistoryDirector(Edirector);
+			directorModel.UpdateFromModel(ref director);
+			var tybReduced = director.Company.TypeOfBusiness.Reduce();
+			switch (tybReduced) {
+				case TypeOfBusinessReduced.Limited:
+					var limitedCurrAddress = director.DirectorAddressInfo.LimitedDirectorHomeAddress;
+					if (!limitedCurrAddress.Any()) {
+						limitedCurrAddress = director.DirectorAddressInfo.NonLimitedDirectorHomeAddress;
+					}
+
+					MakeAddress(
+						directorModel.DirectorAddress,
+				  	    director.DirectorAddressInfo.LimitedDirectorHomeAddressPrev,
+					    CustomerAddressType.LimitedDirectorHomeAddressPrev,
+						limitedCurrAddress,
+					    CustomerAddressType.LimitedDirectorHomeAddress
+					);
+					break;
+				default:
+					var nonLimitedCurrAddress = director.DirectorAddressInfo.NonLimitedDirectorHomeAddress;
+					if (!nonLimitedCurrAddress.Any()) {
+						nonLimitedCurrAddress = director.DirectorAddressInfo.LimitedDirectorHomeAddress;
+					}
+					MakeAddress(
+					   directorModel.DirectorAddress,
+					   director.DirectorAddressInfo.NonLimitedDirectorHomeAddressPrev,
+					   CustomerAddressType.NonLimitedDirectorHomeAddressPrev,
+					   nonLimitedCurrAddress,
+					   CustomerAddressType.NonLimitedDirectorHomeAddress
+				    );
+					break;
+			}
+
+			this._directorRepository.Update(director);
+
+			return Json(new { success = true }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -60,7 +113,7 @@
 		public JsonResult LandRegistry(int customerId, string titleNumber = null) {
 			ms_oLog.Debug("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
 			this.m_oServiceClient.Instance.LandRegistryRes(this._context.UserId, customerId, titleNumber);
-			return Json(new {}, JsonRequestBehavior.AllowGet);
+			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 
 		// TODO: method should be removed after testing
@@ -187,59 +240,60 @@
 		} // Zoopla
 
 
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult ChangeAddress(string addressInput, List<CustomerAddress> customerAddress, int customerId) {
-            ms_oLog.Info("ChangeAddress was called {0} {1} {2}", customerId, customerAddress.Count, customerAddress[0].Line1);
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult ChangeAddress(string addressInput, List<CustomerAddress> customerAddress, int customerId) {
+			ms_oLog.Info("ChangeAddress was called {0} {1} {2}", customerId, customerAddress.Count, customerAddress[0].Line1);
 
-            var customer = this._customerRepository.Get(customerId);
-            
-            MakeAddress(
-                customerAddress,
-                customer.AddressInfo.PrevPersonAddresses,
-                CustomerAddressType.PrevPersonAddresses,
-                customer.AddressInfo.PersonalAddress,
-                CustomerAddressType.PersonalAddress
-            );
+			var customer = this._customerRepository.Get(customerId);
 
-            this._customerRepository.SaveOrUpdate(customer);
-            return Json(new {});
-        }
+			MakeAddress(
+				customerAddress,
+				customer.AddressInfo.PrevPersonAddresses,
+				CustomerAddressType.PrevPersonAddresses,
+				customer.AddressInfo.PersonalAddress,
+				CustomerAddressType.PersonalAddress
+			);
 
-        private void MakeAddress(
-            IEnumerable<CustomerAddress> newAddress,
-            Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress,
-            CustomerAddressType prevAddressType,
-            Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress,
-            CustomerAddressType currentAddressType
-        ) {
-            var newAddresses = newAddress as IList<CustomerAddress> ?? newAddress.ToList();
-            var addAddress = newAddresses.Where(i => i.AddressId == 0).ToList();
-            var curAddress = addAddress.LastOrDefault() ?? currentAddress.LastOrDefault();
+			this._customerRepository.SaveOrUpdate(customer);
+			return Json(new { });
+		}
 
-            if (curAddress == null)
-                return;
+		private void MakeAddress(
+			IEnumerable<CustomerAddress> newAddress,
+			Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress,
+			CustomerAddressType prevAddressType,
+			Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress,
+			CustomerAddressType currentAddressType
+		) {
+			var newAddresses = newAddress as IList<CustomerAddress> ?? newAddress.ToList();
+			var addAddress = newAddresses.Where(i => i.AddressId == 0).ToList();
+			var curAddress = addAddress.LastOrDefault() ?? currentAddress.LastOrDefault();
 
-            foreach (var address in newAddresses) {
-                address.Director = currentAddress.First().Director;
-                address.Customer = currentAddress.First().Customer;
-                address.Company = currentAddress.First().Company;
-            } // for each new address
+			if (curAddress == null)
+				return;
 
-            foreach (var item in currentAddress) {
-                item.AddressType = prevAddressType;
-                prevAddress.Add(item);
-            } // for each old address
+			foreach (var address in newAddresses) {
+				address.Director = currentAddress.First().Director;
+				address.Customer = currentAddress.First().Customer;
+				address.Company = currentAddress.First().Company;
+			} // for each new address
 
-            curAddress.AddressType = currentAddressType;
-            currentAddress.Add(curAddress);
-        } // MakeAddress
+			foreach (var item in currentAddress) {
+				item.AddressType = prevAddressType;
+				prevAddress.Add(item);
+			} // for each old address
+
+			curAddress.AddressType = currentAddressType;
+			currentAddress.Add(curAddress);
+		} // MakeAddress
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CrossCheckController));
 		private readonly IWorkplaceContext _context;
 		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly CustomerRepository _customerRepository;
+		private readonly DirectorRepository _directorRepository;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession m_oSession;
 	} // class CrossCheckController

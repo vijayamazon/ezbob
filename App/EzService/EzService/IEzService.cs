@@ -26,11 +26,16 @@
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
+
+        [OperationContract]
+        ActionMetaData AddHistoryDirector(Esigner Edirector);
+
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
 
 		[OperationContract]
 		ActionMetaData BackfillAml();
+
 
 		[OperationContract]
 		ActionMetaData BackFillExperianNonLtdScoreText();
