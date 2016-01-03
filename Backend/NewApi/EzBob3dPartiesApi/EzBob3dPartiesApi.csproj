@@ -48,6 +48,10 @@
     <Compile Include="EBay\EbayValidationCommandResponse.cs" />
     <Compile Include="Experian\ExperianTarget3dPartyBuisnessCommandResponse.cs" />
     <Compile Include="Experian\ExperianTarget3dPartyBusinessCommand.cs" />
+    <Compile Include="PayPal\PayPalGetConsentUrl3dPartyCommand.cs" />
+    <Compile Include="PayPal\PayPalGetConsentUrl3dPartyCommandResponse.cs" />
+    <Compile Include="PayPal\PayPalGetUserData3dPartyCommand.cs" />
+    <Compile Include="PayPal\PayPalGetUserData3dPartyCommandResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twilio\TwilioSendSmsCommand.cs" />
     <Compile Include="Twilio\TwilioSendSmsCommandResponse.cs" />
@@ -59,7 +63,6 @@
     <Compile Include="Yodlee\YodleeGetFastLinkCommandResponse.cs" />
     <Compile Include="Yodlee\YodleeGetUserAccountsCommand.cs" />
     <Compile Include="Yodlee\YodleeGetUserAccountsCommandResponse.cs" />
-    <Compile Include="Yodlee\YodleeTransaction.cs" />
     <Compile Include="Yodlee\YodleeContentServiceAccount.cs" />
   </ItemGroup>
   <ItemGroup />

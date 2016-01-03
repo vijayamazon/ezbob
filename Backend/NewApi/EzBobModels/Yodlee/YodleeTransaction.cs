@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBob3dPartiesApi.Yodlee
+namespace EzBobModels.Yodlee
 {
+    using System;
+
     public class YodleeTransaction {
         public int AccountId { get; set; }
         public int TransactionId { get; set; }

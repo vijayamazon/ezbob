@@ -8,6 +8,7 @@
     using EzBob3dPartiesApi.Yodlee;
     using EzBobCommon;
     using EzBobCommon.NSB;
+    using EzBobModels.Yodlee;
     using Newtonsoft.Json;
     using NServiceBus;
 

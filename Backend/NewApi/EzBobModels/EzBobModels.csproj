@@ -87,6 +87,7 @@
     <Compile Include="MarketPlace\CustomerMarketPlaceUpdateHistory.cs" />
     <Compile Include="MobilePhone\CountInfo.cs" />
     <Compile Include="CustomerPersonalInfo.cs" />
+    <Compile Include="PayPal\PayPalUserPersonalInfo.cs" />
     <Compile Include="SourceRefEntry.cs" />
     <Compile Include="ThirdParties\Experian\Experian3dPartyCompanyInfo.cs" />
     <Compile Include="ThirdParties\Twilio\TwilioSms.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Yodlee\YodleeOrderItem.cs" />
     <Compile Include="Yodlee\YodleeOrderItemTransaction.cs" />
     <Compile Include="Yodlee\YodleeSecurityInfo.cs" />
+    <Compile Include="Yodlee\YodleeTransaction.cs" />
     <Compile Include="Yodlee\YodleeUserAccount.cs" />
   </ItemGroup>
   <ItemGroup>

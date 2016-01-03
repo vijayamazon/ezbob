@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using EzBobCommon.NSB;
+    using EzBobModels.Yodlee;
 
     public class YodleeGetTransactionsCommandResponse : CommandResponseBase
     {
