@@ -5,8 +5,7 @@
     using TestRailCore;
 
     /// <summary>stores information about a plan</summary>
-    public class Plan
-    {
+    public class Plan {
         #region Public Properties
         /// <summary>id of the plan</summary>
         public ulong ID { get; set; }
@@ -77,16 +76,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>parses json into a plan</summary>
         /// <param name="json">json to parse</param>
         /// <returns>plan corresponding to the json</returns>
-        public static Plan Parse(JObject json)
-        {
+        public static Plan Parse(JObject json) {
             Plan p = new Plan();
             p.ID = (ulong)json["id"];
             p.Name = (string)json["name"];
@@ -111,8 +108,7 @@
             p.CustomStatus7Count = (ulong)json["custom_status7_count"];
 
             JArray jarray = json["entries"] as JArray;
-            if (null != jarray)
-            {
+            if (null != jarray) {
                 p.Entries = JsonUtility.ConvertJArrayToList<PlanEntry>(jarray, PlanEntry.Parse);
             }
 
@@ -121,19 +117,15 @@
 
         /// <summary>Get the json object that describes this object</summary>
         /// <returns>the json object</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (!string.IsNullOrWhiteSpace(Name)) { jsonParams.name = Name; }
             if (!string.IsNullOrWhiteSpace(Description)) { jsonParams.description = Description; }
             if (null != MilestoneID) { jsonParams.milestone_id = MilestoneID; }
-            if (null != Entries && 0 < Entries.Count)
-            {
+            if (null != Entries && 0 < Entries.Count) {
                 JArray jarray = new JArray();
-                foreach (PlanEntry pe in Entries)
-                {
-                    if (null != pe)
-                    {
+                foreach (PlanEntry pe in Entries) {
+                    if (null != pe) {
                         jarray.Add(pe.GetJson());
                     }
                 }

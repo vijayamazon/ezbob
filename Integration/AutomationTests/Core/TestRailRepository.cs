@@ -1,5 +1,4 @@
-﻿namespace UIAutomationTests.Core
-{
+﻿namespace UIAutomationTests.Core {
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -12,27 +11,20 @@
     using TestRailModels.TestRail;
     using TestStack.Seleno.Extensions;
 
-    class TestRailRepository
-    {
+    class TestRailRepository {
         private static List<AtutomationCaseRun> _PlanRepository;
         private static Set<ulong> _BlockedSet;
 
-        public static Set<ulong> BlockedSet
-        {
+        public static Set<ulong> BlockedSet {
             get { return _BlockedSet ?? (_BlockedSet = new HashedSet<ulong>()); }
         }
 
-        public static List<AtutomationCaseRun> PlanRepository
-        {
-            get
-            {
-                if (_PlanRepository == null)
-                {
+        public static List<AtutomationCaseRun> PlanRepository {
+            get {
+                if (_PlanRepository == null) {
                     DirectoryInfo folder = new DirectoryInfo(ConfigurationManager.AppSettings["teamcityJobsInFolder"]).GetDirectories().FirstOrDefault();
-                    if (folder != null)
-                    {
-                        using (Stream stream = File.Open(string.Format(@"{0}\data.bin", folder.FullName), FileMode.Open))
-                        {
+                    if (folder != null) {
+                        using (Stream stream = File.Open(string.Format(@"{0}\data.bin", folder.FullName), FileMode.Open)) {
                             BinaryFormatter bin = new BinaryFormatter();
                             _PlanRepository = (List<AtutomationCaseRun>)bin.Deserialize(stream);
                         }
@@ -47,8 +39,7 @@
                                                     AutomationModels.Brand brand,
                                                     AutomationModels.Environment enviorment,
                                                     TestRailModels.TestRail.ResultStatus resultStatus,
-                                                    string messege)
-        {
+                                                    string messege) {
             AtutomationCaseRun automationCase = PlanRepository
                 .Where(x => x.CaseBase.ID == caseID)
                 .Where(x => x.Browser == browser)
@@ -58,8 +49,7 @@
                 TestRailManager.Instance.AddResultForCase(automationCase.RunId, caseID, resultStatus, messege);
         }
 
-        internal static void ReportTestRailBlockedNotConfiguredResults(ulong caseID)
-        {
+        internal static void ReportTestRailBlockedNotConfiguredResults(ulong caseID) {
             var automationCases = PlanRepository
                 .Where(x => x.CaseBase.ID == caseID)
                 .Each(x => TestRailManager.Instance.AddResultForCase(x.RunId,

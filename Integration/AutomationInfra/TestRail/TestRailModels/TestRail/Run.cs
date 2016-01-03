@@ -4,8 +4,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about a run</summary>
-    public class Run
-    {
+    public class Run {
         #region Properties
         /// <summary>id of the run</summary>
         public ulong? ID { get; private set; }
@@ -92,16 +91,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>parses json into a run</summary>
         /// <param name="json">json to parse</param>
         /// <returns>run corresponding to the json</returns>
-        public static Run Parse(JObject json)
-        {
+        public static Run Parse(JObject json) {
             Run r = new Run();
             r.ID = (ulong?)json["id"];
             r.Name = (string)json["name"];
@@ -136,8 +133,7 @@
 
         /// <summary>Creates a json object for this class</summary>
         /// <returns>json object that represents this class</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (null != SuiteID) { jsonParams.suite_id = SuiteID; }
             if (!string.IsNullOrWhiteSpace(Name)) { jsonParams.name = Name; }
@@ -146,21 +142,17 @@
             if (null != AssignedTo) { jsonParams.assignedto_id = AssignedTo; }
             jsonParams.include_all = IncludeAll;
 
-            if (null != CaseIDs && 0 < CaseIDs.Count)
-            {
+            if (null != CaseIDs && 0 < CaseIDs.Count) {
                 JArray jarray = new JArray();
-                foreach (ulong caseID in CaseIDs)
-                {
+                foreach (ulong caseID in CaseIDs) {
                     jarray.Add(caseID);
                 }
                 jsonParams.case_ids = jarray;
             }
 
-            if (null != ConfigIDs && 0 < ConfigIDs.Count)
-            {
+            if (null != ConfigIDs && 0 < ConfigIDs.Count) {
                 JArray jarray = new JArray();
-                foreach (ulong configID in ConfigIDs)
-                {
+                foreach (ulong configID in ConfigIDs) {
                     jarray.Add(configID);
                 }
                 jsonParams.config_ids = jarray;

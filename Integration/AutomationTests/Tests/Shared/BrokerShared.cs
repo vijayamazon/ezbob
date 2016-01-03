@@ -7,11 +7,11 @@
     class BrokerShared : WebTestBase {
         private readonly object Locker;
 
-        public BrokerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
+        public BrokerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig, ActionBot actionBot) {
             this.Driver = Driver;
             this.EnvironmentConfig = EnvironmentConfig;
             this.BrandConfig = BrandConfig;
-            this.actionBot = new ActionBot(Driver);
+            this.actionBot = actionBot;
             this.Locker = new object();
         }
         /// <summary>
@@ -123,7 +123,7 @@
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
             //Click log-off
-            actionBot.Click(By.CssSelector("li.menu-btn.login.log-off > a.button"), "(Broker log-off button)");
+            actionBot.Click(By.CssSelector("li.menu-btn.login.log-off > a.button"), "(broker log-off button)");
 
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
@@ -171,40 +171,37 @@
             string sort3,
             char accType) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            //IWebElement addBank = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.button.btn-green.pull-right.btn-wide.add-bank.ev-btn-org"));
-            //addBank.Click();
-            actionBot.Click(By.CssSelector("button.button.btn-green.pull-right.btn-wide.add-bank.ev-btn-org"), logHeader);
 
-            //IWebElement accountNumber = SharedServiceClass.ElementIsVisible(Driver, By.Id("AccountNumber"));
-            //accountNumber.SendKeys(accountNum);
-            actionBot.SendKeys(By.Id("AccountNumber"), accountNum, logHeader);
+            //Click on add bank account button.
+            actionBot.Click(By.CssSelector("button.button.btn-green.pull-right.btn-wide.add-bank.ev-btn-org"), "(add bank account button)");
 
-            //IWebElement sortCode1 = Driver.FindElement(By.Id("SortCode1"));
-            //sortCode1.SendKeys(sort1);
-            actionBot.SendKeys(By.Id("SortCode1"), sort1, logHeader);
+            //Fill in the account number an sort codes.
+            actionBot.SendKeys(By.Id("AccountNumber"), accountNum, "(account number field)");
 
-            //IWebElement sortCode2 = Driver.FindElement(By.Id("SortCode2"));
-            //sortCode2.SendKeys(sort2);
-            actionBot.SendKeys(By.Id("SortCode2"), sort2, logHeader);
+            actionBot.SendKeys(By.Id("SortCode1"), sort1, "(sort code field - part 1)");
 
-            //IWebElement sortCode3 = Driver.FindElement(By.Id("SortCode3"));
-            //sortCode3.SendKeys(sort3);
-            actionBot.SendKeys(By.Id("SortCode3"), sort3, logHeader);
+            actionBot.SendKeys(By.Id("SortCode2"), sort2, "(sort code field - part 2)");
 
+            actionBot.SendKeys(By.Id("SortCode3"), sort3, "(sort code field - part 3)");
+
+            //Select account type.
             By accTypeRadio;
+            string accTypeComment;
             switch (char.ToUpper(accType)) {
                 case 'B':
-                    accTypeRadio = By.XPath("//label[@for='baBusiness']");//Driver.FindElement(By.XPath("//label[@for='baBusiness']")));
+                    accTypeRadio = By.XPath("//label[@for='baBusiness']");
+                    accTypeComment ="(account type radioButton set to Bussines)";
                     break;
                 default:
-                    accTypeRadio = By.XPath("//label[@for='baPersonal']");//Driver.FindElement(By.XPath("//label[@for='baPersonal']"));
+                    accTypeRadio = By.XPath("//label[@for='baPersonal']");
+                    accTypeComment = "(account type radioButton set to Personal)";
                     break;
             }
-            actionBot.Click(accTypeRadio, logHeader);
+            actionBot.Click(accTypeRadio, accTypeComment);
 
-            //IWebElement continueButton = SharedServiceClass.ElementToBeClickable(Driver, By.Id("broker_bank_details_continue_button"));
-            //continueButton.Click();
-            actionBot.Click(By.Id("broker_bank_details_continue_button"), logHeader);
+            //Click on continue button.
+            actionBot.Click(By.Id("broker_bank_details_continue_button"), "(bank details continue button)");
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
     }

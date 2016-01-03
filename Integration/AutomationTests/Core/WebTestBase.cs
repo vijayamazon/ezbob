@@ -32,9 +32,10 @@
             }
         }
 
+        // TODO rename
         [TestFixtureTearDown]
         public void Dispose() {
-            if (IsDebugMode) 
+            if (IsDebugMode)
                 return;
             foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
                 GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
@@ -56,7 +57,7 @@
                 }
                 return false;
             }
-            bool res=true;
+            bool res = true;
             foreach (AutomationModels.Browser browser in browsers) {
                 Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                 foreach (AutomationModels.Environment enviorment in enviorments) {
@@ -69,7 +70,7 @@
                                 return false;
                             }
 
-                            this.actionBot = new ActionBot(Driver);
+                            actionBot = new ActionBot(Driver);
                             Driver.Manage().Cookies.DeleteAllCookies();
                             codeToExecute.Invoke(caseID.ToString() + " - " + TestRailRepository.TestRailCaseName(caseID));
 
@@ -77,7 +78,7 @@
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
                             }
                         } catch (Exception ex) {
-                            System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u")));
+                            //System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u")));
                             log.Error(String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(), DateTime.UtcNow.ToString("u")));
                             if (!IsDebugMode) {
                                 UpdateBlockedList(caseID);

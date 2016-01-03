@@ -1,5 +1,4 @@
-﻿namespace UIAutomationTests.Core
-{
+﻿namespace UIAutomationTests.Core {
     using System;
     using System.IO;
     using OpenQA.Selenium;
@@ -8,8 +7,7 @@
     using OpenQA.Selenium.IE;
     using TestRailModels.Automation;
 
-    public static class GetBrowserWebDriver
-    {
+    public static class GetBrowserWebDriver {
 
         public const int DriverTimeOut = 30;
         public static IWebDriver ChromeDriver { get; set; }
@@ -18,50 +16,43 @@
         public static IWebDriver InternetExplorerDriver { get; set; }
         public static IWebDriver SafariDriver { get; set; }
 
-        public static IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser)
-        {
+        public static IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser) {
             IWebDriver driver = null;
             string path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
-            switch (browser)
-            {
+            switch (browser) {
                 case AutomationModels.Browser.Chrome:
-                    if (ChromeDriver == null)
-                    {
+                    if (ChromeDriver == null) {
                         ChromeDriver = new ChromeDriver(path + @"\WebDrivers");
                     }
                     driver = ChromeDriver;
                     break;
 
                 case AutomationModels.Browser.Firefox:
-                    if (FirefoxDriver == null)
-                    {
+                    if (FirefoxDriver == null) {
                         FirefoxProfile profile = new FirefoxProfile();
                         profile.SetPreference("webdriver.firefox.bin", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
                         FirefoxDriver = new FirefoxDriver(profile);
                     }
-                driver = FirefoxDriver;
+                    driver = FirefoxDriver;
                     break;
 
                 case AutomationModels.Browser.IE:
-                    if (InternetExplorerDriver == null)
-                    {
+                    if (InternetExplorerDriver == null) {
                         InternetExplorerDriver = new InternetExplorerDriver(path + @"\WebDrivers");
                     }
-                driver =  InternetExplorerDriver;
+                    driver = InternetExplorerDriver;
                     break;
 
                 case AutomationModels.Browser.Safari:
-                    if (SafariDriver == null)
-                    {
+                    if (SafariDriver == null) {
                         SafariDriver = new ChromeDriver(path + @"E:\WebDrivers");
                     }
                     driver = SafariDriver;
                     break;
             }
 
-            if (driver != null)
-            {
-              //  driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(DriverTimeOut));
+            if (driver != null) {
+                //  driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(DriverTimeOut));
                 driver.Manage().Window.Maximize();
             }
 

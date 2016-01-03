@@ -1,7 +1,6 @@
 ﻿namespace TestRailModels.TestRail {
     /// <summary>the enumeration represents the status of a test result</summary>
-    public enum ResultStatus
-    {
+    public enum ResultStatus {
         /// <summary>the test has not been run</summary>
         Untested = 3,
         /// <summary>the test passed</summary>
@@ -29,13 +28,11 @@
     }
 
     /// <summary>extension methods for the status enum</summary>
-    public static class ResultStatusExtensions
-    {
+    public static class ResultStatusExtensions {
         /// <summary>gets the value of the enum as a string</summary>
         /// <param name="s">the status</param>
         /// <returns>the value of the status enum as a string</returns>
-        public static string ValueAsString(this ResultStatus s)
-        {
+        public static string ValueAsString(this ResultStatus s) {
             return ((int)s).ToString();
         }
     }

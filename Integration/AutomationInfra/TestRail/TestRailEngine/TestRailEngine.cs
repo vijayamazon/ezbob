@@ -83,7 +83,7 @@
             List<AtutomationCaseRun> caseAtutomationList = new List<AtutomationCaseRun>();
             var ezbobProject = TestRailManager.Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
             var plan = TestRailManager.Instance.GetPlan(planId);
-            
+
             if (ezbobProject != null && plan != null) {
                 foreach (var entryItem in plan.Entries) {
                     foreach (var runItem in entryItem.RunList) {
@@ -127,7 +127,7 @@
 
         private static void BuildTestRailPlan(ulong projectId, Label label) {
             ulong planId = TestRailManager.Instance.AddPlan(projectId, string.Format("Automation {0} plan {1}", DateTime.Now, label.ToString()), label.ToString()).Value;
-            
+
             foreach (var key in TestRailManager.CasesRepository.Keys) {
 
                 var runList = new List<Run>();
@@ -136,7 +136,7 @@
                     List<ulong> caseIds = TestRailManager.CasesRepository[key].Where(x => x.Labels.Contains(label))
                         .Select(x => x.ID ?? 0)
                         .ToList();
-                    if (caseIds.Count > 1) {   
+                    if (caseIds.Count > 1) {
                         Run run = new Run() {
                             Name = TestRailManager.SuiteRepository[key].Name,
                             ConfigIDs = configList,
@@ -167,14 +167,12 @@
             foreach (var key in TestRailManager.CasesRepository.Keys) {
                 foreach (var caseItem in TestRailManager.CasesRepository[key]) {
                     bool updateRequired = false;
-                    if (caseItem.CustomPreConds != null && caseItem.CustomPreConds.Contains(fromStr))
-                    {
+                    if (caseItem.CustomPreConds != null && caseItem.CustomPreConds.Contains(fromStr)) {
                         caseItem.CustomPreConds = caseItem.CustomPreConds.Replace(fromStr, toStr);
                         updateRequired = true;
                     }
 
-                    foreach (var stepItem in caseItem.Steps)
-                    {
+                    foreach (var stepItem in caseItem.Steps) {
                         if (stepItem.Description != null && stepItem.Description.Contains(fromStr)) {
                             stepItem.Description = stepItem.Description.Replace(fromStr, toStr);
                             updateRequired = true;

@@ -61,7 +61,16 @@ namespace UIAutomationTests.configs.Enviorment {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://qa2.
+        ///   Looks up a localized string similar to Server=192.168.120.6;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true.
+        /// </summary>
+        internal static string DBConnectionString {
+            get {
+                return ResourceManager.GetString("DBConnectionString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://qa3.
         /// </summary>
         internal static string ENV_address {
             get {
@@ -70,20 +79,11 @@ namespace UIAutomationTests.configs.Enviorment {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to qa2.
+        ///   Looks up a localized string similar to qa3.
         /// </summary>
         internal static string ENV_name {
             get {
                 return ResourceManager.GetString("ENV_name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true.
-        /// </summary>
-        internal static string QA2DBConnectionString {
-            get {
-                return ResourceManager.GetString("QA2DBConnectionString", resourceCulture);
             }
         }
     }

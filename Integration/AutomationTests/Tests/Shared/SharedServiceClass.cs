@@ -10,10 +10,12 @@
         private static readonly ILog log = LogManager.GetLogger(typeof(SharedServiceClass));
         const int MAX_WAIT_TIME = 120;
 
+        //Awaits untill element is visible By locator, returns the element.
         public static IWebElement ElementIsVisible(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<IWebElement>(ExpectedConditionsExtention.ElementIsVisible(locator));
         }
 
+        //Awaits untill element is clickable By locator, returns the element.
         public static IWebElement ElementToBeClickable(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<IWebElement>(ExpectedConditionsExtention.ElementToBeClickable(locator));
         }
@@ -22,27 +24,34 @@
         //    return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.TryElementClick(locator));
         //}
 
+        //Awaits an element to be clickable By locator,
+        //clicks the element and than asserts By a following locator that the click action was initiated and performed correctly.
         public static bool ClickAssert(IWebDriver Driver, By locator, By assertElement, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.ClickAssert(locator, assertElement));
         }
 
+        //Awaits untill select element is visible By locator, returns the element.
         public static SelectElement SelectIsVisible(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<SelectElement>(ExpectedConditionsExtention.SelectIsVisible(locator));
         }
 
+        //Switches Driver's focus to the windowCount's opened browser instance.
         public static string LastWindowName(IWebDriver Driver, int windowCount, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<string>(ExpectedConditionsExtention.LastWindowName(windowCount));
         }
 
+        //Check weather the current Driver's web address contains a sub-string repeatedly.
         public static bool WebAddressContains(IWebDriver Driver, string partialUrl, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WebAddressContains(partialUrl));
         }
 
+        //Waits untill Jquery.Active==0, then returns True.
         public static bool WaitForAjaxReady(IWebDriver Driver, int waitTime = MAX_WAIT_TIME) {
             IJavaScriptExecutor jsExe = Driver as IJavaScriptExecutor;
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForAjaxReady(jsExe));
         }
 
+        //Waits untill count of elements containing the class name ".blockUI" is 0, then returns True.
         public static bool WaitForBlockUiOff(IWebDriver Driver, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForBlockUiOff());
         }
@@ -62,9 +71,9 @@
         //    };
         //}
 
-        public static Func<IWebDriver, bool> WaitForAjaxReady2() {
-            return (driver) => driver.FindElements(By.CssSelector(".waiting, .tb-loading")).Count == 0;
-        }
+        //public static Func<IWebDriver, bool> WaitForAjaxReady2() {
+        //    return (driver) => driver.FindElements(By.CssSelector(".waiting, .tb-loading")).Count == 0;
+        //}
 
         public static Func<IWebDriver, string> LastWindowName(int windowCount) {
             return (Func<IWebDriver, string>)(driver => {
@@ -73,10 +82,10 @@
                         log.Debug("WindowCount matches the value of: " + windowCount.ToString());
                         return driver.WindowHandles.Last().ToString();
                     }
-                    log.Debug("WindowCount is: " + driver.WindowHandles.Count() + "while expected to be: " + windowCount.ToString());
+                    log.Debug("WindowCount is: " + driver.WindowHandles.Count() + " while expected to be: " + windowCount.ToString());
                     return null;
                 } catch (Exception ex) {
-                    log.Debug("WindowCount is: " + driver.WindowHandles.Count() + "while expected to be: " + windowCount.ToString());
+                    log.Debug("WindowCount is: " + driver.WindowHandles.Count() + " while expected to be: " + windowCount.ToString());
                     return null;
                 }
             });

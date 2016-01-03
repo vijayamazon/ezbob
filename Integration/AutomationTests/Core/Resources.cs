@@ -1,17 +1,13 @@
-﻿namespace UIAutomationTests.Core
-{
+﻿namespace UIAutomationTests.Core {
     using System.Resources;
     using UIAutomationTests.configs.Brand;
     using UIAutomationTests.configs.Enviorment;
-    using TestRailModels .Automation;
+    using TestRailModels.Automation;
 
-    class Resources
-    {
+    class Resources {
 
-        public static ResourceManager GetEnvironmentResourceManager(AutomationModels.Environment env)
-        {
-            switch (env)
-            {
+        public static ResourceManager GetEnvironmentResourceManager(AutomationModels.Environment env) {
+            switch (env) {
                 case AutomationModels.Environment.QA:
                     return QA.ResourceManager;
                 case AutomationModels.Environment.Staging:
@@ -21,10 +17,8 @@
             }
         }
 
-        public static ResourceManager GetBrandResourceManager(AutomationModels.Brand brand)
-        {
-            switch (brand)
-            {
+        public static ResourceManager GetBrandResourceManager(AutomationModels.Brand brand) {
+            switch (brand) {
                 case AutomationModels.Brand.Everline:
                     return Everline.ResourceManager;
                 case AutomationModels.Brand.Ezbob:

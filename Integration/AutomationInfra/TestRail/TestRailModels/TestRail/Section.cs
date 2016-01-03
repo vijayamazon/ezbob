@@ -2,8 +2,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about a section</summary>
-    public class Section
-    {
+    public class Section {
         #region Public Properties
 
         /// <summary>id of the section</summary>
@@ -29,16 +28,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>parses json into a section</summary>
         /// <param name="json">json to parse</param>
         /// <returns>section corresponding to the json</returns>
-        public static Section Parse(JObject json)
-        {
+        public static Section Parse(JObject json) {
             Section s = new Section();
             s.ID = (ulong?)json["id"];
             s.Name = (string)json["name"];
@@ -51,8 +48,7 @@
 
         /// <summary>Creates a json object for this class</summary>
         /// <returns>json object that represents this class</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (null != SuiteID) { jsonParams.suite_id = SuiteID.Value; }
             if (null != ParentID) { jsonParams.parent_id = ParentID.Value; }

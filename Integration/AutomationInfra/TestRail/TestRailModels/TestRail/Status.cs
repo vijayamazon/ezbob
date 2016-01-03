@@ -2,8 +2,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about a status</summary>
-    public class Status
-    {
+    public class Status {
         #region Public Properties
         /// <summary>id of the status</summary>
         public ulong ID { get; private set; }
@@ -37,16 +36,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>	
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>Parses json into a Status object</summary>
         /// <param name="json">json to parse</param>
         /// <returns>Status object corresponding to the json</returns>
-        public static Status Parse(JObject json)
-        {
+        public static Status Parse(JObject json) {
             Status s = new Status();
             s.ID = (ulong)json["id"];
             s.Name = (string)json["name"];

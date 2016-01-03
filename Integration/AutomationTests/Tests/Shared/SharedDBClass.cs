@@ -1,19 +1,27 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
+    using System;
     using System.Linq;
     using System.Resources;
     using Ezbob.Database;
     using log4net;
     using UIAutomationTests.Core;
 
-    class SharedDBClass:WebTestBase {
-        private readonly AConnection oDB;
+    class SharedDBClass : WebTestBase {
+        public AConnection oDB { get; private set; }
         private static readonly ILog log = LogManager.GetLogger(typeof(SharedDBClass));
 
         public SharedDBClass(ResourceManager EnvironmentConfig) {
             this.EnvironmentConfig = EnvironmentConfig;
-            this.oDB = new SqlConnection(null,this.EnvironmentConfig.GetString("QA2DBConnectionString"));
+            try {
+                oDB = new SqlConnection(null, this.EnvironmentConfig.GetString("DBConnectionString"));
+                log.Debug("Connection to DB successfully opened." + Environment.NewLine);
+            } catch (Exception ex) {
+                log.Debug("Connection to DB failed." + Environment.NewLine);
+            }
         }
 
+        //TODO: check if logs while running SQL SPs needed.
+/*
         public T ExecuteScalar<T>(string SP, CommandSpecies CS, string param = null) {
 
             T result;
@@ -53,6 +61,6 @@
             }
 
             return result;
-        }
+        }*/
     }
 }

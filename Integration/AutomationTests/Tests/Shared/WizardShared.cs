@@ -6,13 +6,13 @@
     using UIAutomationTests.Core;
 
     class WizardShared : WebTestBase {
-        private readonly object Locker;
+        private readonly object Locker; // TODO to be removed
 
-        public WizardShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
+        public WizardShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig, ActionBot actionBot) {
             this.Driver = Driver;
             this.EnvironmentConfig = EnvironmentConfig;
             this.BrandConfig = BrandConfig;
-            this.actionBot = new ActionBot(Driver);
+            this.actionBot = actionBot;
             this.Locker = new object();
         }
 
@@ -183,7 +183,6 @@
         public void PerformWizardStepThree(
             string logHeader,
             string businessType,
-            bool isSmallBusiness,
             string indType,
             string revenue
             ) {
@@ -258,7 +257,7 @@
                 //Verify the pop-up address is correct.
                 actionBot.WriteToLog("Begin assert: Verify web address contains the sub-string: 'webscr'");
                 SharedServiceClass.WebAddressContains(Driver, "webscr", 20);
-                actionBot.WriteToLog("Positively asserted: web address contains the sub-string.");
+                actionBot.WriteToLog("Positively asserted: Web address contains the sub-string.");
             }
 
             //Step 3 - Insert prepared credentials and click sign in.

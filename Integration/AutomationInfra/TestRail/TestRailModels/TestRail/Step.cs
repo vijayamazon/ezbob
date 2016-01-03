@@ -4,8 +4,7 @@
 
     /// <summary>stores information about a step</summary>
     [Serializable]
-    public class Step
-    {
+    public class Step {
         #region Public Properties
         /// <summary>description of the step</summary>
         public string Description;
@@ -21,8 +20,7 @@
         /// <summary>parses json into a step</summary>
         /// <param name="json">json to parse</param>
         /// <returns>step corresponding to the json</returns>
-        public static Step Parse(JObject json)
-        {
+        public static Step Parse(JObject json) {
             Step s = new Step();
             s.Description = (string)json["content"];
             s.Expected = (string)json["expected"];
@@ -33,8 +31,7 @@
 
         /// <summary>Get the json object that describes this class</summary>
         /// <returns>json object for this class</returns>
-        public JObject GetJsonObject()
-        {
+        public JObject GetJsonObject() {
             dynamic json = new JObject();
             if (!string.IsNullOrWhiteSpace(this.Description)) { json.content = this.Description; }
             if (!string.IsNullOrWhiteSpace(this.Expected)) { json.expected = this.Expected; }

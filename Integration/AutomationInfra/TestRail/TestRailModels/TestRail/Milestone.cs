@@ -4,8 +4,7 @@
     using TestRailCore;
 
     /// <summary>stores information about a milestone</summary>
-    public class Milestone
-    {
+    public class Milestone {
         #region Properties
         /// <summary>id of the milestone</summary>
         public ulong ID { get; private set; }
@@ -35,16 +34,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>parses json into a milestone</summary>
         /// <param name="json">json to parse</param>
         /// <returns>milestone corresponding to the json</returns>
-        public static Milestone Parse(JObject json)
-        {
+        public static Milestone Parse(JObject json) {
             Milestone m = new Milestone();
             m.ID = (ulong)json["id"];
             m.Name = (string)json["name"];
@@ -59,8 +56,7 @@
 
         /// <summary>Creates a json object for this class</summary>
         /// <returns>json object that represents this class</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (!string.IsNullOrWhiteSpace(Name)) { jsonParams.name = Name; }
             if (!string.IsNullOrWhiteSpace(Description)) { jsonParams.description = Description; }
