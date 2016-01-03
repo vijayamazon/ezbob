@@ -1,27 +1,36 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
+	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
+	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
 	public class UserChangePassword : AStrategy {
-
-		public UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
-			m_bForceChangePassword = bForceChangePassword;
+		public UserChangePassword(
+			string email,
+			CustomerOriginEnum? origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword,
+			bool bForceChangePassword
+		) {
+			this.forceChangePassword = bForceChangePassword;
 			ErrorMessage = null;
 
-			m_oData = new UserSecurityData(this) {
-				Email = sEmail,
-				OldPassword = oOldPassword.Primary,
-				NewPassword = oNewPassword.Primary,
+			this.securityData = new UserSecurityData(this) {
+				Email = email,
+				OldPassword = oldPassword.Decrypt(),
+				NewPassword = newPassword.Decrypt(),
 			};
 
-			m_oSpLoad = new UserDataForLogin(DB, Log) {
-				Email = sEmail,
+			this.spLoad = new UserDataForLogin(DB, Log) {
+				Email = email,
+				OriginID = origin == null ? (int?)null : (int)origin.Value
 			};
 
-			m_oSpResult = new SpUserChangePassword(DB, Log);
+			this.spResult = new SpUserChangePassword(DB, Log);
 		} // constructor
 
 		public override string Name {
@@ -31,50 +40,58 @@
 		public override void Execute() {
 			ErrorMessage = null;
 
-			m_oData.ValidateEmail();
-			m_oData.ValidateOldPassword();
-			m_oData.ValidateNewPassword();
+			string userDisplay = string.Format("{0} with origin {1}", this.securityData.Email, this.spLoad.OriginID);
 
-			var oUser = m_oSpLoad.FillFirst<UserDataForLogin.Result>();
+			this.securityData.ValidateEmail();
+			this.securityData.ValidateOldPassword();
+			this.securityData.ValidateNewPassword();
 
-			Log.Debug("User '{0}': data for check is {1}.", m_oData.Email, oUser);
+			var oUser = this.spLoad.FillFirst<UserDataForLogin.Result>();
 
-			if (oUser.Email != m_oData.Email) {
-				Log.Debug("User '{0}' not found.", m_oData.Email);
+			Log.Debug("User '{0}': data for check is {1}.", userDisplay, oUser);
+
+			if (oUser.Email != this.securityData.Email) {
+				Log.Debug("User '{0}' not found.", this.securityData.Email);
 				ErrorMessage = "Invalid user name.";
 				return;
 			} // if
 
-			if (m_oData.OldPassword == m_oData.NewPassword) {
-				Log.Debug("User '{0}': current and new passwords are the same.", m_oData.Email);
+			if (this.securityData.OldPassword == this.securityData.NewPassword) {
+				Log.Debug("User '{0}': current and new passwords are the same.", userDisplay);
 				ErrorMessage = "Current and new passwords are the same.";
 				return;
 			} // if
 
-			if (!m_bForceChangePassword) {
+			if (!this.forceChangePassword) {
 				if (oUser.DisablePassChange.HasValue && oUser.DisablePassChange.Value) {
-					Log.Debug("User '{0}': changing password is disabled.", m_oData.Email);
+					Log.Debug("User '{0}': changing password is disabled.", userDisplay);
 					ErrorMessage = "Changing password is disabled.";
-					return;
-				} // if
-
-				if (!oUser.IsPasswordValid(m_oData.OldPassword)) {
-					Log.Debug("User '{0}': current password does not match.", m_oData.Email);
-					ErrorMessage = "Current password does not match.";
 					return;
 				} // if
 			} // if
 
+			if (!oUser.IsPasswordValid(this.securityData.OldPassword)) {
+				Log.Debug("User '{0}': current password does not match.", userDisplay);
+				ErrorMessage = "Current password does not match.";
+				return;
+			} // if
+
 			UserID = oUser.UserID;
 
-			m_oSpResult.UserID = oUser.UserID;
-			m_oSpResult.EzPassword = m_oData.NewPasswordHash;
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
 
-			ErrorMessage = m_oSpResult.ExecuteScalar<string>();
+			var hashed = pu.Generate(oUser.Email, this.securityData.NewPassword);
+
+			this.spResult.UserID = oUser.UserID;
+			this.spResult.EzPassword = hashed.Password;
+			this.spResult.Salt = hashed.Salt;
+			this.spResult.CycleCount = hashed.CycleCount;
+
+			ErrorMessage = this.spResult.ExecuteScalar<string>();
 
 			Log.Debug(
 				"User '{0}' password has{1} been changed. {2}",
-				m_oData.Email,
+				userDisplay,
 				string.IsNullOrWhiteSpace(ErrorMessage) ? "" : " NOT",
 				ErrorMessage
 			);
@@ -84,25 +101,31 @@
 
 		protected int UserID { get; private set; } // UserID
 
-		protected string Password {
-			get { return m_oData.NewPassword; }
+		protected string RawPassword {
+			get { return this.securityData.NewPassword; }
 		} // Password
 
-		private readonly UserSecurityData m_oData;
-		private readonly bool m_bForceChangePassword;
-		private readonly UserDataForLogin m_oSpLoad;
-		private readonly SpUserChangePassword m_oSpResult;
+		private readonly UserSecurityData securityData;
+		private readonly bool forceChangePassword;
+		private readonly UserDataForLogin spLoad;
+		private readonly SpUserChangePassword spResult;
 
 		private class SpUserChangePassword : AStoredProc {
 			public SpUserChangePassword(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			public override bool HasValidParameters() {
-				return (UserID > 0) && !string.IsNullOrWhiteSpace(EzPassword);
+				return
+					(UserID > 0) &&
+					!string.IsNullOrWhiteSpace(EzPassword) &&
+					!string.IsNullOrWhiteSpace(Salt) &&
+					!string.IsNullOrWhiteSpace(CycleCount);
 			} // HasValidParameters
 
 			public int UserID { [UsedImplicitly] get; set; }
 
 			public string EzPassword { [UsedImplicitly] get; set; }
+			public string Salt { [UsedImplicitly] get; set; }
+			public string CycleCount { [UsedImplicitly] get; set; }
 
 			[UsedImplicitly]
 			public DateTime Now {
@@ -112,6 +135,5 @@
 				// ReSharper restore ValueParameterNotUsed
 			} // Now
 		} // class SpUserChangePassword
-
 	} // class UserChangePassword
 } // namespace Ezbob.Backend.Strategies.UserManagement

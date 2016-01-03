@@ -10,8 +10,9 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
-	public class AccountSettingsController : Controller {
+	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
 
+	public class AccountSettingsController : Controller {
 		public AccountSettingsController(IWorkplaceContext context) {
 			m_oContext = context;
 			m_oServiceClient = new ServiceClient();
@@ -27,8 +28,9 @@
 			try {
 				StringActionResult sar = m_oServiceClient.Instance.CustomerChangePassword(
 					m_oContext.User.Name,
-					new Password(oldPassword),
-					new Password(newPassword)
+					(RemoteCustomerOriginEnum)(int)UiCustomerOrigin.Get().GetOrigin(),
+					new DasKennwort(oldPassword),
+					new DasKennwort(newPassword)
 				);
 
 				sErrorMsg = sar.Value;
@@ -44,7 +46,7 @@
 			} // try
 
 			return Json(new { success = bSuccess, error = sErrorMsg, });
-		}
+		} // ChangePassword
 
 		[Ajax]
 		[HttpPost]
@@ -72,8 +74,6 @@
 
 			return Json(new { success = bSuccess, error = sErrorMsg, });
 		} // UpdateSecurityQuestion
-
-		// ChangePassword
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountSettingsController));
 		private readonly IWorkplaceContext m_oContext;

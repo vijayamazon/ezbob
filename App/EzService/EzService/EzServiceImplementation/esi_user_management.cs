@@ -121,10 +121,23 @@
 			};
 		} // UserChangePassword
 
-		public StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword) {
+		public StringActionResult CustomerChangePassword(
+			string email,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword
+		) {
 			CustomerChangePassword oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oOldPassword, oNewPassword);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				email,
+				origin,
+				oldPassword,
+				newPassword
+			);
 
 			return new StringActionResult {
 				MetaData = oMetaData,

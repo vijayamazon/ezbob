@@ -3,7 +3,6 @@
 	using System.ServiceModel;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.UserManagement;
-	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -45,7 +44,12 @@
 		);
 
 		[OperationContract]
-		StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword);
+		StringActionResult CustomerChangePassword(
+			string email,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword
+		);
 
 		[OperationContract]
 		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
