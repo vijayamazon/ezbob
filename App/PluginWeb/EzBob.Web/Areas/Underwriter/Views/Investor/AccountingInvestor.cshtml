@@ -1,14 +1,4 @@
 ﻿@model dynamic
-@using EzBob.Web.Infrastructure
-@using ServiceClientProxy
-@using StructureMap
-@using EzBob.Web.Infrastructure.Html
-
-@{
-	var service = new ServiceClient();
-	var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-	var types = service.Instance.InvestorLoadTypes(context.UserId);
-}
 
 <script type="text/template" id="accounting-investor-template">
 	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
