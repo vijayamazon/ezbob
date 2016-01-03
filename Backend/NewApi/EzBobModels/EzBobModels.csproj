@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CAD2D79B-6513-4101-9A76-53AB90F5C50D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBobModels</RootNamespace>
+    <AssemblyName>EzBobModels</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlibabaBuyer.cs" />
+    <Compile Include="AutoDecisionResponse.cs" />
+    <Compile Include="CampaignSourceRef.cs" />
+    <Compile Include="Company.cs" />
+    <Compile Include="Configurations\UserManagementConfiguration.cs" />
+    <Compile Include="Currency\CurrencyData.cs" />
+    <Compile Include="Currency\CurrencyRateHistory.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="CustomerAddress.cs" />
+    <Compile Include="CustomerPhone.cs" />
+    <Compile Include="CustomerRequestedLoan.cs" />
+    <Compile Include="CustomerSession.cs" />
+    <Compile Include="Director.cs" />
+    <Compile Include="EBay\EbayAdditionalUserAccountData.cs" />
+    <Compile Include="EBay\EbayExternalTransaction.cs" />
+    <Compile Include="EBay\EbayFeedbackData.cs" />
+    <Compile Include="EBay\EbayFeedbackItem.cs" />
+    <Compile Include="EBay\EbayOrder.cs" />
+    <Compile Include="EBay\EbayOrderInfo.cs" />
+    <Compile Include="EBay\EBayOrderItem.cs" />
+    <Compile Include="EBay\EbayRatingData.cs" />
+    <Compile Include="EBay\EbaySecurityInfo.cs" />
+    <Compile Include="EBay\EbayTimePeriod.cs" />
+    <Compile Include="EBay\EbayTransaction.cs" />
+    <Compile Include="EBay\EbayUserAccountData.cs" />
+    <Compile Include="EBay\EbayUserAddressData.cs" />
+    <Compile Include="EBay\EbayUserData.cs" />
+    <Compile Include="Enums\CollectionStatusNames.cs" />
+    <Compile Include="Enums\CustomerAddressType.cs" />
+    <Compile Include="Enums\EnumExtensions.cs" />
+    <Compile Include="Enums\Gender.cs" />
+    <Compile Include="Enums\IndustryType.cs" />
+    <Compile Include="Enums\LandRegistryRequestType.cs" />
+    <Compile Include="Enums\LandRegistryResponseType.cs" />
+    <Compile Include="Enums\MeritalStatus.cs" />
+    <Compile Include="Enums\ResidentialStatusType.cs" />
+    <Compile Include="Enums\TrustPilotStauses.cs" />
+    <Compile Include="Enums\TypeOfBusiness.cs" />
+    <Compile Include="Enums\WizardStepType.cs" />
+    <Compile Include="LandRegistry.cs" />
+    <Compile Include="LandRegistryOwner.cs" />
+    <Compile Include="LoginInfo.cs" />
+    <Compile Include="MarketPlace\CustomerMarketPlace.cs" />
+    <Compile Include="MarketPlace\CustomerMarketPlaceUpdateHistory.cs" />
+    <Compile Include="MobilePhone\CountInfo.cs" />
+    <Compile Include="CustomerPersonalInfo.cs" />
+    <Compile Include="SourceRefEntry.cs" />
+    <Compile Include="ThirdParties\Experian\Experian3dPartyCompanyInfo.cs" />
+    <Compile Include="ThirdParties\Twilio\TwilioSms.cs" />
+    <Compile Include="ThirdParties\Twilio\TwilioConfig.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="CustomerApproval.cs" />
+    <Compile Include="CustomerDetails.cs" />
+    <Compile Include="Enums\CashRequestOriginator.cs" />
+    <Compile Include="Enums\CreditResultStatus.cs" />
+    <Compile Include="Enums\DecisionActions.cs" />
+    <Compile Include="Enums\FraudMode.cs" />
+    <Compile Include="Enums\NewCreditLineOption.cs" />
+    <Compile Include="Enums\SystemDecision.cs" />
+    <Compile Include="Loan\Enums\LoanType.cs" />
+    <Compile Include="Loan\Enums\LoanKind.cs" />
+    <Compile Include="Enums\Status.cs" />
+    <Compile Include="Loan\LoanSource.cs" />
+    <Compile Include="Password.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WizardFinishArgs.cs" />
+    <Compile Include="Yodlee\YodleeOrderItem.cs" />
+    <Compile Include="Yodlee\YodleeOrderItemTransaction.cs" />
+    <Compile Include="Yodlee\YodleeSecurityInfo.cs" />
+    <Compile Include="Yodlee\YodleeUserAccount.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EzBobCommon\EzBobCommon.csproj">
+      <Project>{A15304A2-EE4B-40C1-9585-1AC3CF7F5205}</Project>
+      <Name>EzBobCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

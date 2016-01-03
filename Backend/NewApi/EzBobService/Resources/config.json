@@ -1,0 +1,20 @@
+{
+    "Twilio": {
+        "TwilioAccountSid": "ACcc682df6341371ee27ada6858025490b",
+        "TwilioAuthToken": "fab0b8bd342443ff44497273b4ba2aa1",
+        "TwilioSendingNumber": "+441301272000"
+    },
+    "MobilePhone": {
+        "MaxPerDay": 100,
+        "MaxPerNumber": 100,
+        "SkipCodeGenerationNumber": "01111111111",
+        "SkipCodeGenerationNumberCode": "222222"
+    },
+    "Yodlee": {
+        "CoBrandUserName": "sbCobromanp",
+        "CoBrandPassword": "01267bdc-7685-477d-a012-b97d3cfb697e"
+    },
+    "ThirdPartyService" :  { 
+        "Address" :  "3dParties"
+    }
+}

@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobCommon", "EzBobCommon\EzBobCommon.csproj", "{A15304A2-EE4B-40C1-9585-1AC3CF7F5205}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobService", "EzBobService\EzBobService.csproj", "{88C4BD44-41AC-4E21-A2CD-F6CBE0220C91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobServiceTests", "EzBobServiceTests\EzBobServiceTests.csproj", "{D7DF90F1-0258-4478-B4A6-E00AEFB0551D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobModels", "EzBobModels\EzBobModels.csproj", "{CAD2D79B-6513-4101-9A76-53AB90F5C50D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobApi", "EzBobApi\EzBobApi.csproj", "{A114FDA6-B321-43BD-A903-20872111B100}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBob3dParties", "EzBob3dParties\EzBob3dParties.csproj", "{91441436-A618-4098-820A-65AD3EA4A2DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobPersistence", "EzBobPersistence\EzBobPersistence.csproj", "{AA6EB5FB-1AE9-495D-8456-8E159D766CD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBob3dPartiesApi", "EzBob3dPartiesApi\EzBob3dPartiesApi.csproj", "{8028DFB6-8501-4979-8B08-5E57619CC257}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBob3dPartiesTests", "EzBob3dPartiesTests\EzBob3dPartiesTests.csproj", "{290DC24B-4042-4CD8-961E-7D5FF3A6DE09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobRest", "EzBobRest\EzBobRest.csproj", "{12F4FA7A-D7CA-4861-A38E-D8C33529133C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobRestTests", "EzBobRestTests\EzBobRestTests.csproj", "{259D6D2E-35E3-4BA3-864D-15390FC8C54C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A15304A2-EE4B-40C1-9585-1AC3CF7F5205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A15304A2-EE4B-40C1-9585-1AC3CF7F5205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A15304A2-EE4B-40C1-9585-1AC3CF7F5205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A15304A2-EE4B-40C1-9585-1AC3CF7F5205}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88C4BD44-41AC-4E21-A2CD-F6CBE0220C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C4BD44-41AC-4E21-A2CD-F6CBE0220C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C4BD44-41AC-4E21-A2CD-F6CBE0220C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C4BD44-41AC-4E21-A2CD-F6CBE0220C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7DF90F1-0258-4478-B4A6-E00AEFB0551D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7DF90F1-0258-4478-B4A6-E00AEFB0551D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7DF90F1-0258-4478-B4A6-E00AEFB0551D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7DF90F1-0258-4478-B4A6-E00AEFB0551D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD2D79B-6513-4101-9A76-53AB90F5C50D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD2D79B-6513-4101-9A76-53AB90F5C50D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD2D79B-6513-4101-9A76-53AB90F5C50D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD2D79B-6513-4101-9A76-53AB90F5C50D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A114FDA6-B321-43BD-A903-20872111B100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A114FDA6-B321-43BD-A903-20872111B100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A114FDA6-B321-43BD-A903-20872111B100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A114FDA6-B321-43BD-A903-20872111B100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91441436-A618-4098-820A-65AD3EA4A2DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91441436-A618-4098-820A-65AD3EA4A2DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91441436-A618-4098-820A-65AD3EA4A2DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91441436-A618-4098-820A-65AD3EA4A2DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA6EB5FB-1AE9-495D-8456-8E159D766CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA6EB5FB-1AE9-495D-8456-8E159D766CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA6EB5FB-1AE9-495D-8456-8E159D766CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA6EB5FB-1AE9-495D-8456-8E159D766CD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8028DFB6-8501-4979-8B08-5E57619CC257}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8028DFB6-8501-4979-8B08-5E57619CC257}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8028DFB6-8501-4979-8B08-5E57619CC257}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8028DFB6-8501-4979-8B08-5E57619CC257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{290DC24B-4042-4CD8-961E-7D5FF3A6DE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{290DC24B-4042-4CD8-961E-7D5FF3A6DE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{290DC24B-4042-4CD8-961E-7D5FF3A6DE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{290DC24B-4042-4CD8-961E-7D5FF3A6DE09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12F4FA7A-D7CA-4861-A38E-D8C33529133C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12F4FA7A-D7CA-4861-A38E-D8C33529133C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12F4FA7A-D7CA-4861-A38E-D8C33529133C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12F4FA7A-D7CA-4861-A38E-D8C33529133C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal

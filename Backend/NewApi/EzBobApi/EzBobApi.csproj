@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A114FDA6-B321-43BD-A903-20872111B100}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBobApi</RootNamespace>
+    <AssemblyName>EzBobApi</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\Address.cs" />
+    <Compile Include="Commands\Company\AuthorityInfo.cs" />
+    <Compile Include="Commands\Company\CompanyDetailsInfo.cs" />
+    <Compile Include="Commands\Company\UpdateCompanyCommand.cs" />
+    <Compile Include="Commands\Company\UpdateCompanyCommandResponse.cs" />
+    <Compile Include="Commands\Customer\CustomerUpdateCommand.cs" />
+    <Compile Include="Commands\Customer\CustomerUpdateCommandResponse.cs" />
+    <Compile Include="Commands\Customer\HousingType.cs" />
+    <Compile Include="Commands\Customer\Sections\AccountInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\AlibabaInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\ContactDetailsInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\AddressInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\CookiesInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\LivingAccommodationInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\LivingAddressInfo.cs" />
+    <Compile Include="Commands\Customer\Sections\PersonalDetailsInfo.cs" />
+    <Compile Include="Commands\Customer\CustomerSignupCommand.cs" />
+    <Compile Include="Commands\Customer\CustomerSignupCommandResponse.cs" />
+    <Compile Include="Commands\Customer\Sections\OwnedPropertyAddressInfo.cs" />
+    <Compile Include="Commands\Ebay\EbayGetLoginUrlCommand.cs" />
+    <Compile Include="Commands\Ebay\EbayGetLoginUrlCommandResponse.cs" />
+    <Compile Include="Commands\Ebay\EbayRegisterUserCommand.cs" />
+    <Compile Include="Commands\Ebay\EbayRegisterUserCommandResponse.cs" />
+    <Compile Include="Commands\Experian\ExperianBusinessTargetingCommand.cs" />
+    <Compile Include="Commands\Experian\ExperianBusinessTargetingCommandResponse.cs" />
+    <Compile Include="Commands\Experian\ExperianCompanyInfo.cs" />
+    <Compile Include="Commands\Yodlee\YodleeAddUserAccountCommand.cs" />
+    <Compile Include="Commands\Yodlee\YodleeAddUserAccountResponse.cs" />
+    <Compile Include="Commands\Yodlee\YodleeLoginUserCommand.cs" />
+    <Compile Include="Commands\Yodlee\YodleeLoginUserCommandResponse.cs" />
+    <Compile Include="Commands\Yodlee\YodleeUserAddedAccountCommand.cs" />
+    <Compile Include="Commands\Yodlee\YodleeUserAddedAccountCommandResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EzBobCommon\EzBobCommon.csproj">
+      <Project>{a15304a2-ee4b-40c1-9585-1ac3cf7f5205}</Project>
+      <Name>EzBobCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBobModels\EzBobModels.csproj">
+      <Project>{cad2d79b-6513-4101-9a76-53ab90f5c50d}</Project>
+      <Name>EzBobModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(ProjectDir)$(OutputPath)NServiceBus.Host.exe</StartProgram>
+  </PropertyGroup>
+</Project>

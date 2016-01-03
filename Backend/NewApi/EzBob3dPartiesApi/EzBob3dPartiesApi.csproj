@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8028DFB6-8501-4979-8B08-5E57619CC257}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob3dPartiesApi</RootNamespace>
+    <AssemblyName>EzBob3dPartiesApi</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EBay\EbayGetLoginUrl3dPartyCommand.cs" />
+    <Compile Include="EBay\EbayGetLoginUrl3dPartyCommandResponse.cs" />
+    <Compile Include="EBay\EbayGetUserData3dPartyCommand.cs" />
+    <Compile Include="EBay\EbayGetUserData3dPartyCommandResponse.cs" />
+    <Compile Include="EBay\EbayValidationCommand.cs" />
+    <Compile Include="EBay\EbayValidationCommandResponse.cs" />
+    <Compile Include="Experian\ExperianTarget3dPartyBuisnessCommandResponse.cs" />
+    <Compile Include="Experian\ExperianTarget3dPartyBusinessCommand.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Twilio\TwilioSendSmsCommand.cs" />
+    <Compile Include="Twilio\TwilioSendSmsCommandResponse.cs" />
+    <Compile Include="Yodlee\YodleeGetTransactionsCommand.cs" />
+    <Compile Include="Yodlee\YodleeGetTransactionsCommandResponse.cs" />
+    <Compile Include="Yodlee\YodleeLoginUser3dPartyCommand.cs" />
+    <Compile Include="Yodlee\YodleeLoginUser3dPartyCommandResponse.cs" />
+    <Compile Include="Yodlee\YodleeGetFastLinkCommand.cs" />
+    <Compile Include="Yodlee\YodleeGetFastLinkCommandResponse.cs" />
+    <Compile Include="Yodlee\YodleeGetUserAccountsCommand.cs" />
+    <Compile Include="Yodlee\YodleeGetUserAccountsCommandResponse.cs" />
+    <Compile Include="Yodlee\YodleeTransaction.cs" />
+    <Compile Include="Yodlee\YodleeContentServiceAccount.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EzBobCommon\EzBobCommon.csproj">
+      <Project>{a15304a2-ee4b-40c1-9585-1ac3cf7f5205}</Project>
+      <Name>EzBobCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBobModels\EzBobModels.csproj">
+      <Project>{cad2d79b-6513-4101-9a76-53ab90f5c50d}</Project>
+      <Name>EzBobModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

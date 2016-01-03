@@ -1,0 +1,6 @@
+{
+    "RestServer": {
+        "ServerAddress": "http://localhost:12345",
+        "ServiceAddress": "EzBobService2"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "Twilio": {
+        "TwilioAccountSid": "ACcc682df6341371ee27ada6858025490b",
+        "TwilioAuthToken": "fab0b8bd342443ff44497273b4ba2aa1",
+        "TwilioSendingNumber": "+441301272000"
+    },
+    "Yodlee": {
+        "RestUrl": "https://rest.developer.yodlee.com/services/srest/restserver/v1.0/",
+        "NodeUrl": "https://node.developer.yodlee.com/authenticate/restserver/"
+    },
+    "EBay": {
+        "RuName": "test-test8f473-e17f--xjwup",
+        "ApiServerUrl": "https://api.sandbox.ebay.com/ws/api.dll",
+        "Application": "test8f473-e17f-4c46-8ee7-22418d11dd2",
+        "Certificate": "aea6ac5f-7a80-48ff-820d-355f1979a6e5",
+        "Developer": "87cffac6-4c2c-4352-bc88-7cdba02b8085",
+        "SignInUrl": "https://signin.sandbox.ebay.com/ws/eBayISAPI.dll?SignIn&ru=",
+        "GetOrdersCallPageSize": 100, //this is the maximum allowed by API
+        "GetOrdersCallRetryDelayMilliSec": 1000,
+        "GetOrdersCallMaximumRetries": 3,
+        "MaxDaysIntervalForGetOrdersCall": 90 //this is the maximum allowed by API
+    },
+    "PayPal": {
+        "Mode": "live",
+        "ClientId": "AYOz8x2wzco1qYwGHa-HO9a9eucwxm0aPOp6ZB_YCtE3EEpnbJYAuxK7GwfHVzeEKK5kxJXg-1B4DNSo",
+        "ClientSecret": "EOnZgionWPonkTqsg6BrLAdwOsc7FV-2uNrUBMiu8LVi93qNezdb5CZL34Wm6KUa5D3wsrQh_-u5Bt3W",
+        "AuthorizationUrl": "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize"
+    }
+}

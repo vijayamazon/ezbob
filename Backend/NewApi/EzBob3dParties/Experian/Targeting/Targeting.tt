@@ -1,0 +1,61 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<EXPERIAN>
+
+  <ESERIES>
+    <FORM_ID>BUSTARGETER</FORM_ID>
+  </ESERIES>
+
+  <DK01>
+    <APPNAME>XML8255</APPNAME>
+    <VERSIONMAJOR>0100</VERSIONMAJOR>
+    <VERSIONMINOR>0100</VERSIONMINOR>
+  </DK01>
+
+  <DK02>
+  </DK02>
+
+  <DK03>
+    <MESSAGETYPE>BTGR</MESSAGETYPE>
+    <MESSAGESUBTYPE>0001</MESSAGESUBTYPE>
+    <MESSAGEID>00</MESSAGEID>
+  </DK03>
+
+  <DK04>
+    <FLAGCOUNT>1</FLAGCOUNT>
+    <FLAGVALUE>YCON</FLAGVALUE>
+  </DK04>
+
+  <DT01>
+    <ADDRINSTANCE>01</ADDRINSTANCE>
+    <SEARCHCORP><#=this.Limited#></SEARCHCORP>
+    <EXLUDEDISSCORP>N</EXLUDEDISSCORP>
+    <SEARCHNONCORP><#=this.NonLimited#></SEARCHNONCORP>
+    <SINGLESHOT>N</SINGLESHOT>
+    <EXACTNAMEMATCH>N</EXACTNAMEMATCH>
+    <BUSREFNUM><#=this.RegNum#></BUSREFNUM>
+    <BUSNAME><#=this.CompanyName#></BUSNAME>
+  </DT01>
+
+  <ADDR>
+    <DETAILCODE/>
+    <FORMATCODE>UKNLTD</FORMATCODE>
+    <DATACOUNT>003</DATACOUNT>
+    <ELEMENTCOUNT>008</ELEMENTCOUNT>
+    <DATAITEM>NULL</DATAITEM>
+    <DATAITEM></DATAITEM>
+    <DATAITEM/>
+    <FLAT/>
+    <HOUSENAME/>
+    <HOUSENUMBER/>
+    <STREET/>
+    <DISTRICT/>
+    <TOWN/>
+    <COUNTY/>
+    <POSTCODE><#=this.PostCode#></POSTCODE>
+  </ADDR>
+
+</EXPERIAN>

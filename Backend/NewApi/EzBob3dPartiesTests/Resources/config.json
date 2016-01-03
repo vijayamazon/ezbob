@@ -1,0 +1,12 @@
+{
+    "EBay": {
+        "RuName": "test-test8f473-e17f--xjwup",
+        "ApiServerUrl": "https://api.ebay.com/ws/api.dll",
+        "Application": "test8c677-69fb-4ff4-a22f-06d1b0e001e",
+        "Certificate": "7c840fe4-9beb-4d98-b36e-677e8b5aa1fd",
+        "Developer": "e5f86656-1547-4745-abc4-09846cb813f2",
+        "SignInUrl": "https://signin.sandbox.ebay.com/ws/eBayISAPI.dll?SignIn&ru=",
+        "GetOrdersCallRetryDelayMilliSec": 2000,
+        "GetOrdersCallMaximumRetries": 4
+    }
+}

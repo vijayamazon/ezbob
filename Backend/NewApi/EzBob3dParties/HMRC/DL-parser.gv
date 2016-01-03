@@ -1,0 +1,39 @@
+digraph fsm {
+	bgcolor = transparent;
+
+	inv [ style = invis ];
+
+	o [ label = "A: Start", shape = doublecircle ];
+	a [ label = "B" ];
+	b [ label = "C" ];
+	c [ label = "D: DT\ncontains\nKEY" ];
+	d [ label = "E" ];
+	e [ label = "F" ];
+	f [ label = "G: DD\ncontains\nvalue" ];
+	k [ label = "H: Alert:\nwrong\nstructure" ];
+	l [ label = "I: End", shape = doublecircle ];
+
+	inv -> o [ color = green3, label = "Parameter:\non empty DT\nfail or\nappend." ];
+
+	o -> a [ label = "Empty\nKEY-VALUE\nstorage.", color = green3, fontcolor = green3 ];
+
+	a -> b [ label = "Fetch\nnext\nchild.", color = green3, fontcolor = green3 ];
+
+	b -> a [ label = "#text", color = gold4, fontcolor = gold4 ];
+	b -> l [ label = "No more\nchildren.", color = indigo, fontcolor = indigo ];
+	b -> k [ label = "Other\ntag\nname.", color = red, fontcolor = red ];
+	b -> c [ label = "DT", color = green3, fontcolor = green3 ];
+
+	c -> d [ label = "Remember\nthe KEY.", color = green3, fontcolor = blue ];
+	c -> k [ label = "If parameter:\nthe KEY is\nempty and\nno previous\nkey.", color = red, fontcolor = red ];
+
+	d -> e [ label = "Fetch\nnext\nchild.", color = green3, fontcolor = green3 ];
+
+	e -> d [ label = "#text", color = gold4, fontcolor = gold4 ];
+	e -> k [ label = "Other\ntag\nname\nor no\nmore\nchildren.", color = red, fontcolor = red ];
+	e -> f [ label = "DD", color = green3, fontcolor = green3 ];
+
+	f -> a [ label = "Save\nKEY-VALUE\npair.", color = green3, fontcolor = blue ];
+
+	k -> l;
+}

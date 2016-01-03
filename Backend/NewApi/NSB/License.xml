@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<license id="a2a3e032-6cf0-4011-803a-d1af824d2d61" expiration="2016-11-22T09:58:12.4951181" type="Standard" ProductName="SaaS/Internal Platform License" WorkerThreads="Max" LicenseVersion="5.0" MaxMessageThroughputPerSecond="Max" AllowedNumberOfWorkerNodes="Max" Applications="ServiceControl;ServiceInsight;ServiceMatrix;NServiceBus;ServicePulse;" LicenseType="SaaS/Internal Platform License" Edition="Enterprise" Quantity="2">
+  <name>Orange money EZBOB Israel  ltd</name>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+      <Reference URI="">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <DigestValue>/OvTOZcW1xK65Vlf3vPgMWaleiQ=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>NXgbjl62Sd1TNHNfzl3snb9q+i4zsOQCDKDnn63B/uNO8DfkNMI9mYLcqcdL9cev63jC3ZUjjMOpywkdmkea3fdqENz9TxtdKFOIU3zh7J4vV4zhQ+S5Tsgi56/hfcuC5hY1HRwy59NKzIYNCnbBxs8LtgYlWAFdUbsoqycBmGA=</SignatureValue>
+  </Signature>
+</license>
