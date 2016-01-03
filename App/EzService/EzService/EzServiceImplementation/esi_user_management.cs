@@ -110,17 +110,6 @@
 			};
 		}
 
-		public StringActionResult UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
-			UserChangePassword oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oOldPassword, oNewPassword, bForceChangePassword);
-
-			return new StringActionResult {
-				MetaData = oMetaData,
-				Value = oInstance.ErrorMessage,
-			};
-		} // UserChangePassword
-
 		public StringActionResult CustomerChangePassword(
 			string email,
 			CustomerOriginEnum origin,
@@ -145,10 +134,25 @@
 			};
 		} // CustomerChangePassword
 
-		public StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer) {
+		public StringActionResult UserUpdateSecurityQuestion(
+			string email,
+			CustomerOriginEnum origin,
+			DasKennwort password,
+			int questionID,
+			string answer
+		) {
 			UserUpdateSecurityQuestion oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, nQuestionID, sAnswer);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				email,
+				origin,
+				password,
+				questionID,
+				answer
+			);
 
 			return new StringActionResult {
 				MetaData = oMetaData,

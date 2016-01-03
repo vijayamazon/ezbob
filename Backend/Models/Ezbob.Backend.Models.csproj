@@ -97,7 +97,6 @@
     <Compile Include="EsignerModel.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="IdNameModel.cs" />
-    <Compile Include="Password.cs" />
     <Compile Include="RejectionModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />
     <Compile Include="IovationCheckModel.cs" />

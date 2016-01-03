@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System;
 	using System.Web;
+	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -13,17 +14,36 @@
 
 		public User User {
 			get {
+				var log = new SafeILog(this);
+
 				User user = GetCachedUser();
+
+				log.Debug("Cached user is {0}", user == null ? "-- null --" : user.Id.ToString());
 
 				if (user != null)
 					return user;
 
-				var originHolder = HttpContext.Current.Session[SessionOriginIDName] as OriginHolder;
+				var originHolder = GetSessionOrigin();
+
+				log.Debug("Cached origin holder is {0}", originHolder == null ? "-- null --" : originHolder.ToString());
+
+				if (originHolder == null) {
+					SetSessionOrigin(UiCustomerOrigin.Get(HttpContext.Current.Request.Url).GetOrigin());
+
+					originHolder = GetSessionOrigin();
+
+					log.Debug(
+						"Detected origin holder is {0}",
+						originHolder == null ? "-- null --" : originHolder.ToString()
+					);
+				} // if
 
 				if (originHolder == null)
 					return null;
 
 				user = this.userRepo.GetUserByLogin(HttpContext.Current.User.Identity.Name, originHolder.Origin);
+
+				log.Debug("User by login is {0}", user == null ? "-- null --" : user.Id.ToString());
 
 				SetCachedUser(user);
 
@@ -63,6 +83,10 @@
 			get { return User == null ? null : this.customerRepo.ReallyTryGet(User.Id); }
 		} // Customer
 
+		private OriginHolder GetSessionOrigin() {
+			return HttpContext.Current.Session[SessionOriginIDName] as OriginHolder;
+		} // GetSessionOrigin
+
 		private static User GetCachedUser() {
 			return HttpContext.Current.Items[RequestUserItemName] as User;
 		} // GetCachedUser
@@ -84,6 +108,16 @@
 			public int? Origin {
 				get { return this.hasValue ? (int)this.origin : (int?)null; }
 			} // Origin
+
+			/// <summary>
+			/// Returns a string that represents the current object.
+			/// </summary>
+			/// <returns>
+			/// A string that represents the current object.
+			/// </returns>
+			public override string ToString() {
+				return string.Format("origin value is {0}", Origin == null ? "-- null --" : Origin.Value.ToString());
+			} // ToString
 
 			private readonly bool hasValue;
 			private readonly CustomerOriginEnum origin;

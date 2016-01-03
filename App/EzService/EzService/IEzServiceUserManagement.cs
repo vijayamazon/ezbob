@@ -36,14 +36,6 @@
 		);
 
 		[OperationContract]
-		StringActionResult UserChangePassword(
-			string sEmail,
-			Password oOldPassword,
-			Password oNewPassword,
-			bool bForceChangePassword
-		);
-
-		[OperationContract]
 		StringActionResult CustomerChangePassword(
 			string email,
 			CustomerOriginEnum origin,
@@ -52,7 +44,13 @@
 		);
 
 		[OperationContract]
-		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
+		StringActionResult UserUpdateSecurityQuestion(
+			string email,
+			CustomerOriginEnum origin,
+			DasKennwort password,
+			int questionID,
+			string answer
+		);
 
 		[OperationContract]
 		StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);

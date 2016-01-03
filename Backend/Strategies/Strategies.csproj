@@ -497,7 +497,6 @@
     <Compile Include="UserManagement\MarkSessionEnded.cs" />
     <Compile Include="UserManagement\UserChangeEmail.cs" />
     <Compile Include="UserManagement\CustomerChangePassword.cs" />
-    <Compile Include="UserManagement\UserChangePassword.cs" />
     <Compile Include="UserManagement\UserDataForLogin.cs" />
     <Compile Include="UserManagement\UserLogin.cs" />
     <Compile Include="UserManagement\UserResetPassword.cs" />

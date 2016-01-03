@@ -4411,12 +4411,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserDisable", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserDisableResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserDisableAsync(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangePasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangePasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzServiceUserManagement/CustomerChangePasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword);
         
@@ -4424,10 +4418,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestionResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
+        ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, int questionID, string answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserUpdateSecurityQuestionResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, int questionID, string answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/UserChangeEmail", ReplyAction="http://tempuri.org/IEzServiceUserManagement/UserChangeEmailResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
@@ -6045,14 +6039,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UserDisableAsync(userID, customerID, email, unsubscribeFromMailChimp, changeEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
-            return base.Channel.UserChangePassword(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
-            return base.Channel.UserChangePasswordAsync(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
-        }
-        
         public ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort oldPassword, Ezbob.Backend.Models.DasKennwort newPassword) {
             return base.Channel.CustomerChangePassword(email, origin, oldPassword, newPassword);
         }
@@ -6061,12 +6047,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CustomerChangePasswordAsync(email, origin, oldPassword, newPassword);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
-            return base.Channel.UserUpdateSecurityQuestion(sEmail, oPassword, nQuestionID, sAnswer);
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, int questionID, string answer) {
+            return base.Channel.UserUpdateSecurityQuestion(email, origin, password, questionID, answer);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
-            return base.Channel.UserUpdateSecurityQuestionAsync(sEmail, oPassword, nQuestionID, sAnswer);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, Ezbob.Backend.Models.DasKennwort password, int questionID, string answer) {
+            return base.Channel.UserUpdateSecurityQuestionAsync(email, origin, password, questionID, answer);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {

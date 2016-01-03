@@ -454,13 +454,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginCustomerMultiOriginModel" nillable="true" type="tns:LoginCustomerMultiOriginModel" />
-  <xs:complexType name="Password">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="m_sConfirmation" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="m_sPrimary" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Password" nillable="true" type="tns:Password" />
   <xs:complexType name="CustomerDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />

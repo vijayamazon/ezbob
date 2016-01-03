@@ -27,7 +27,8 @@ BEGIN
 		PassSetTime = @Now,
 		LoginFailedCount = NULL,
 		LastBadLogin = NULL,
-		ForcePassChange = NULL
+		ForcePassChange = NULL,
+		IsPasswordRestored = 0
 	WHERE
 		UserId = @UserID
 
