@@ -28,12 +28,29 @@
 				log.Debug("Cached origin holder is {0}", originHolder == null ? "-- null --" : originHolder.ToString());
 
 				if (originHolder == null) {
+					const string uwArea = "/underwriter/";
+
+					var path = HttpContext.Current.Request.Url.PathAndQuery;
+					if (path.Length >= uwArea.Length) {
+						if (path.Substring(0, uwArea.Length).ToLowerInvariant().StartsWith(uwArea)) {
+							SetSessionOrigin(null);
+							originHolder = GetSessionOrigin();
+
+							log.Debug(
+								"Underwriter origin holder is '{0}'",
+								originHolder == null ? "-- null --" : originHolder.ToString()
+							);
+						} // if
+					} // if
+				} // if
+
+				if (originHolder == null) {
 					SetSessionOrigin(UiCustomerOrigin.Get(HttpContext.Current.Request.Url).GetOrigin());
 
 					originHolder = GetSessionOrigin();
 
 					log.Debug(
-						"Detected origin holder is {0}",
+						"Detected origin holder is '{0}'",
 						originHolder == null ? "-- null --" : originHolder.ToString()
 					);
 				} // if

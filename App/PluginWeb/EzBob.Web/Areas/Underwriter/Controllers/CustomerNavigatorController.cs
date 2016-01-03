@@ -49,7 +49,7 @@
 				.Where(e => e.UserName == underwriter)
 				.OrderByDescending(e => e.Id);
 
-			foreach (var recentCustomer in recentCustomers) {
+			foreach (UnderwriterRecentCustomers recentCustomer in recentCustomers) {
 				var customer = this.customersRepo.ReallyTryGet(recentCustomer.CustomerId);
 
 				if (customer != null) {
@@ -57,10 +57,11 @@
 						new System.Tuple<int, string>(
 							recentCustomer.CustomerId,
 							string.Format(
-								"{0}, {1}, {2}",
+								"{0}: {1}, {2} ({3})",
 								recentCustomer.CustomerId,
 								customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname,
-								customer.Name
+								customer.Name,
+								customer.CustomerOrigin.Name
 							)
 						)
 					);

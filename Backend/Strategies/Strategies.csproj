@@ -348,7 +348,6 @@
     <Compile Include="Backfill\BackfillLandRegistry2PropertyLink.cs" />
     <Compile Include="Backfill\BackfillZooplaValue.cs" />
     <Compile Include="MedalCalculations\CalculateMedal.cs" />
-    <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Misc\GetCurrentCustomerAnnualTurnover.cs" />
