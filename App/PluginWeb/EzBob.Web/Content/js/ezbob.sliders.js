@@ -21,8 +21,9 @@ EzBob.SlidersModel = Backbone.Model.extend({
 
 EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 	template: '#sliders-template',
-    initialize: function () {
-        this.model.on('change', this.render, this);
+    initialize: function (options) {
+    	this.model.on('change', this.render, this);
+	    this.type = options.type;
         return this;
     },
     events: {
@@ -34,7 +35,13 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     	'amount': '.amount',
     	'interest': '.interest',
     	'total': '.total',
-		'interestRate': '.interest-rate'
+    	'interestRate': '.interest-rate',
+    	'dashboardRequestSummary': '.request-summary',
+    	'sliderWrapper': '.slider-wrapper',
+    	'totalTooltip': '.total-repayment-tooltip'
+    },
+    serializeData: function () {
+	    return { type: this.type };
     },
     onRender: function () {
         var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
@@ -67,13 +74,21 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
                     self.loanSelectionChanged();
             }
         });
+
+        if (this.type == 'dashboardRequestLoan' && EzBob.Config.Origin !== 'everline') {
+        	this.ui.dashboardRequestSummary.appendTo(this.ui.sliderWrapper);
+        	var interestRate = this.model.get('InterestRate') ? this.model.get('InterestRate') : 0.0175;
+        	this.ui.totalTooltip.tooltip({ title: '*Actual loan amount is subject to status. Loan estimate based on ' + EzBob.formatPercents(interestRate) + ' interest charge per month. Interest rate varies between 1.75% - 2.25% per month and setup fee of 2% - 7% may be charged depending on your business risk rating.', container: 'body', viewport: '.request-summary-title' });
+        } else {
+	        this.ui.dashboardRequestSummary.remove();
+        }
         this.loanSelectionChanged();
 
         EzBob.UiAction.registerView(this);
         return this;
     },
 
-    changeLoanAmount: function(){
+    changeLoanAmount: function(ev) {
     	var currentTerm = $('#calc-slider .period-slider').slider('value');
     	var currentAmount = $('#calc-slider .amount-slider').slider('value');
 
@@ -85,10 +100,10 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     	this.model
 			.save()
 			.done(function () {
-	    		self.closeClicked();
+				if(ev !== 'saveOnly') self.closeClicked();
 			})
 			.fail(function () {
-				self.closeClicked();
+				if (ev !== 'saveOnly') self.closeClicked();
 			});
     },
 

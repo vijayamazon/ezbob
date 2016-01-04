@@ -45,7 +45,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 	showSlidersClicked: function () {
 		var self = this;
-        this.slidersView = new EzBob.SlidersView({ model: this.slidersModel, el: $('.sliders-wrapper') });
+		this.slidersView = new EzBob.SlidersView({ model: this.slidersModel, el: $('.sliders-wrapper'), type: 'wizardRequestLoan' });
         this.slidersModel.fetch().done(function () {
         	$('.inner').hide();
 	        self.slidersView.render();
