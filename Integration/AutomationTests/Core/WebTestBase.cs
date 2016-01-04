@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Resources;
@@ -32,9 +33,15 @@
             }
         }
 
-        // TODO rename
+        [TestFixtureSetUp]
+        public void RunBeforeTests() {
+            FileInfo fileInfo = new FileInfo(@"C:\Exception\Log4NetConfig.config");
+            log4net.Config.XmlConfigurator.Configure(fileInfo);
+        }
+
         [TestFixtureTearDown]
-        public void Dispose() {
+        public void RunAfterTests() {
+            LogManager.Shutdown();
             if (IsDebugMode)
                 return;
             foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
