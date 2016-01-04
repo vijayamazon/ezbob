@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System;
 	using System.Web;
-	using Ezbob.Logger;
+	// using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -14,18 +14,18 @@
 
 		public User User {
 			get {
-				var log = new SafeILog(this);
+				// var log = new SafeILog(this);
 
 				User user = GetCachedUser();
 
-				log.Debug("Cached user is {0}", user == null ? "-- null --" : user.Id.ToString());
+				// log.Debug("Cached user is {0}", user == null ? "-- null --" : user.Id.ToString());
 
 				if (user != null)
 					return user;
 
 				var originHolder = GetSessionOrigin();
 
-				log.Debug("Cached origin holder is {0}", originHolder == null ? "-- null --" : originHolder.ToString());
+				// log.Debug("Cached origin holder is {0}", originHolder == null ? "-- null --" : originHolder.ToString());
 
 				if (originHolder == null) {
 					const string uwArea = "/underwriter/";
@@ -36,10 +36,10 @@
 							SetSessionOrigin(null);
 							originHolder = GetSessionOrigin();
 
-							log.Debug(
-								"Underwriter origin holder is '{0}'",
-								originHolder == null ? "-- null --" : originHolder.ToString()
-							);
+							//log.Debug(
+							//	"Underwriter origin holder is '{0}'",
+							//	originHolder == null ? "-- null --" : originHolder.ToString()
+							//);
 						} // if
 					} // if
 				} // if
@@ -49,10 +49,10 @@
 
 					originHolder = GetSessionOrigin();
 
-					log.Debug(
-						"Detected origin holder is '{0}'",
-						originHolder == null ? "-- null --" : originHolder.ToString()
-					);
+					//log.Debug(
+					//	"Detected origin holder is '{0}'",
+					//	originHolder == null ? "-- null --" : originHolder.ToString()
+					//);
 				} // if
 
 				if (originHolder == null)
@@ -60,7 +60,7 @@
 
 				user = this.userRepo.GetUserByLogin(HttpContext.Current.User.Identity.Name, originHolder.Origin);
 
-				log.Debug("User by login is {0}", user == null ? "-- null --" : user.Id.ToString());
+				// log.Debug("User by login is {0}", user == null ? "-- null --" : user.Id.ToString());
 
 				SetCachedUser(user);
 

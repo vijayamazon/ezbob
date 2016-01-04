@@ -7,6 +7,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
 	using System;
+	using Ezbob.Database;
 	using Iesi.Collections.Generic;
 	using StructureMap;
 
@@ -70,7 +71,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual bool IsNew {
 			get {
-				return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
+				return Library.Instance.DB.ExecuteScalar<bool>(
+					"IsMarketplaceNew",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MpID", Id)
+				);
 			}
 		}
 
