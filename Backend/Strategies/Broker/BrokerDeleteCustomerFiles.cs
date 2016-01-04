@@ -1,12 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerDeleteCustomerFiles : AStrategy {
-
-		public BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
+		public BrokerDeleteCustomerFiles(
+			string sCustomerRefNum,
+			string sContactEmail,
+			int[] aryFileIDs,
+			CustomerOriginEnum origin
+		) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			m_aryFileIDs = aryFileIDs;
+			this.origin = (int)origin;
 		} // constructor
 
 		public override string Name {
@@ -22,14 +28,14 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail),
-				DB.CreateVectorParameter<int>("@FileIDs", m_aryFileIDs)
+				DB.CreateVectorParameter<int>("@FileIDs", m_aryFileIDs),
+				new QueryParameter("@Origin", this.origin)
 			);
 		} // Execute
 
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 		private readonly int[] m_aryFileIDs;
-
+		private readonly int origin;
 	} // class BrokerDeleteCustomerFiles
-
 } // namespace Ezbob.Backend.Strategies.Broker

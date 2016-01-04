@@ -72,10 +72,10 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
@@ -389,12 +389,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerUpdatePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerUpdatePasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ChangeBrokerEmail_InputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeBrokerEmail" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ChangeBrokerEmail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeBrokerEmailResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_IsBroker_InputMessage">
     <wsdl:part name="parameters" element="tns:IsBroker" />
@@ -1745,10 +1739,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerUpdatePassword" message="tns:IEzService_BrokerUpdatePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerUpdatePasswordResponse" message="tns:IEzService_BrokerUpdatePassword_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ChangeBrokerEmail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/ChangeBrokerEmail" message="tns:IEzService_ChangeBrokerEmail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/ChangeBrokerEmailResponse" message="tns:IEzService_ChangeBrokerEmail_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
@@ -2966,15 +2956,6 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerUpdatePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceBroker/BrokerUpdatePassword" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangeBrokerEmail">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceBroker/ChangeBrokerEmail" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

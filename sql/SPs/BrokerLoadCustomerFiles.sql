@@ -4,7 +4,8 @@ GO
 
 ALTER PROCEDURE BrokerLoadCustomerFiles
 @RefNum NVARCHAR(8),
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -17,6 +18,8 @@ BEGIN
 		Broker b
 	WHERE
 		b.ContactEmail = @ContactEmail
+		AND
+		b.OriginID = @Origin
 
 	SELECT
 		d.Id AS FileID,

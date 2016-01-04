@@ -85,7 +85,7 @@
 					throw new BadDataException();
 				} // if
 
-				this.dbTransaction = DB.GetPersistent();
+				this.dbTransaction = DB.GetPersistentTransaction();
 
 				CreateSecurityUserStuff();
 
@@ -611,9 +611,7 @@
 
 			public bool? IsAlibaba {
 				get {
-					return this.stra.model.BrokerFillsForCustomer 
-						? (bool?)null
-						: !string.IsNullOrWhiteSpace(this.stra.model.AlibabaID);
+					return !this.stra.model.BrokerFillsForCustomer && !string.IsNullOrWhiteSpace(this.stra.model.AlibabaID);
 				}
 				set { }
 			} // IsAlibaba

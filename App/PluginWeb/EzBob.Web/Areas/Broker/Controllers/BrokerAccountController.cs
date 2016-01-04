@@ -157,20 +157,26 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Logoff(string sContactEmail) {
 			bool bGoodToLogOff =
-				string.IsNullOrWhiteSpace(sContactEmail) ||
-				(User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail));
+				string.IsNullOrWhiteSpace(sContactEmail) || (
+				User.Identity.IsAuthenticated &&
+				(User.Identity.Name == sContactEmail) &&
+				(UiOrigin == SessionUiOrigin)
+			);
 
 			if (bGoodToLogOff) {
 				this.m_oHelper.Logoff(User.Identity.Name, HttpContext);
+
 				return new BrokerForJsonResult {
-					antiforgery_token = AntiForgery.GetHtml().ToString()
+					antiforgery_token = AntiForgery.GetHtml().ToString(),
 				};
 			} // if
 
 			ms_oLog.Warn(
 				"Log off request with contact email {0} while {1} logged in.",
 				sContactEmail,
-				User.Identity.IsAuthenticated ? "broker " + User.Identity.Name + " is" : "not"
+				User.Identity.IsAuthenticated
+					? "broker " + User.Identity.Name + " with origin " + SessionUiOrigin + " is"
+					: "not"
 			);
 
 			return new BrokerForJsonResult(bExplicitSuccess: false);
@@ -212,9 +218,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult UpdatePassword(string ContactEmail, string OldPassword, string NewPassword, string NewPassword2) {
-			RemoteCustomerOriginEnum origin = (RemoteCustomerOriginEnum)(int)UiCustomerOrigin.Get().GetOrigin();
-
-			ms_oLog.Debug("Broker update password request for contact email {0} with origin {1}", ContactEmail, origin);
+			ms_oLog.Debug("Broker update password request for contact email {0} with origin {1}", ContactEmail, UiOrigin);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Update password", ContactEmail);
 
@@ -230,7 +234,7 @@
 				ms_oLog.Warn(
 					"Cannot update password for contact email {0} with origin {1}: one of passwords not specified.",
 					ContactEmail,
-					origin
+					UiOrigin
 				);
 				return new BrokerForJsonResult("Cannot update password: some required fields are missing.");
 			} // if
@@ -239,7 +243,7 @@
 				ms_oLog.Warn(
 					"Cannot update password for contact email {0} with origin {1}: passwords do not match.",
 					ContactEmail,
-					origin
+					UiOrigin
 				);
 				return new BrokerForJsonResult("Cannot update password: passwords do not match.");
 			} // if
@@ -248,7 +252,7 @@
 				ms_oLog.Warn(
 					"Cannot update password for contact email {0} with origin {1}: new password is equal to the old one.",
 					ContactEmail,
-					origin
+					UiOrigin
 				);
 				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
 			} // if
@@ -258,25 +262,25 @@
 			try {
 				oResult = this.m_oServiceClient.Instance.BrokerUpdatePassword(
 					ContactEmail,
-					origin,
+					UiOrigin.AsRemote(),
 					new DasKennwort(OldPassword),
 					new DasKennwort(NewPassword),
 					new DasKennwort(NewPassword2)
 				);
 			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update password for contact email {0} with origin {1}.", ContactEmail, origin);
+				ms_oLog.Alert(e, "Failed to update password for contact email {0} with origin {1}.", ContactEmail, UiOrigin);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // try
 
 			if (oResult == null) {
-				ms_oLog.Warn("Failed to update password for contact email {0} with origin {1}.", ContactEmail, origin);
+				ms_oLog.Warn("Failed to update password for contact email {0} with origin {1}.", ContactEmail, UiOrigin);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // if
 
 			ms_oLog.Debug(
 				"Broker update password request for contact email {0} with origin {1} complete.",
 				ContactEmail,
-				origin
+				UiOrigin
 			);
 
 			return new BrokerForJsonResult();

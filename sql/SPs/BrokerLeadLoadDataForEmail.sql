@@ -7,7 +7,8 @@ GO
 
 ALTER PROCEDURE BrokerLeadLoadDataForEmail
 @LeadID INT,
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@OriginID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -27,6 +28,8 @@ BEGIN
 		INNER JOIN CustomerOrigin o ON b.OriginID = o.CustomerOriginID
 	WHERE
 		b.ContactEmail = @ContactEmail
+		AND
+		b.OriginID = @OriginID
 
 	SELECT
 		bl.BrokerLeadID AS LeadID,

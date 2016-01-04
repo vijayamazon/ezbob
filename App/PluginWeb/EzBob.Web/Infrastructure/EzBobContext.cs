@@ -1,7 +1,8 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System;
+	using System.Collections.Generic;
 	using System.Web;
-	// using Ezbob.Logger;
+	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -14,32 +15,46 @@
 
 		public User User {
 			get {
-				// var log = new SafeILog(this);
+				var log = new List<string>();
+
+				log.Add(string.Format(
+					"Request:\n\thost: {0}\n\tpath and query: {1}\n\tabsolute path: {2}",
+					HttpContext.Current.Request.Url.Host,
+					HttpContext.Current.Request.Url.PathAndQuery,
+					HttpContext.Current.Request.Url.AbsolutePath
+				));
 
 				User user = GetCachedUser();
 
-				// log.Debug("Cached user is {0}", user == null ? "-- null --" : user.Id.ToString());
+				log.Add(string.Format("Cached user is {0}", user == null ? "-- null --" : user.Id.ToString()));
 
-				if (user != null)
+				if (user != null) {
+					FlushLog(log);
 					return user;
+				} // if
 
-				var originHolder = GetSessionOrigin();
+				var originHolder = InternalGetSessionOrigin();
 
-				// log.Debug("Cached origin holder is {0}", originHolder == null ? "-- null --" : originHolder.ToString());
+				log.Add(string.Format(
+					"Cached origin holder is {0}", originHolder == null ? "-- null --" : originHolder.ToString()
+				));
 
 				if (originHolder == null) {
 					const string uwArea = "/underwriter/";
 
-					var path = HttpContext.Current.Request.Url.PathAndQuery;
-					if (path.Length >= uwArea.Length) {
-						if (path.Substring(0, uwArea.Length).ToLowerInvariant().StartsWith(uwArea)) {
-							SetSessionOrigin(null);
-							originHolder = GetSessionOrigin();
+					string path = HttpContext.Current.Request.Url.AbsolutePath;
 
-							//log.Debug(
-							//	"Underwriter origin holder is '{0}'",
-							//	originHolder == null ? "-- null --" : originHolder.ToString()
-							//);
+					if (path.Length >= uwArea.Length) {
+						string prefix = path.Length == uwArea.Length ? path : path.Substring(0, uwArea.Length);
+
+						if (prefix.ToLowerInvariant().StartsWith(uwArea)) {
+							SetSessionOrigin(null);
+							originHolder = InternalGetSessionOrigin();
+
+							log.Add(string.Format(
+								"Underwriter origin holder is '{0}'",
+								originHolder == null ? "-- null --" : originHolder.ToString()
+							));
 						} // if
 					} // if
 				} // if
@@ -47,22 +62,26 @@
 				if (originHolder == null) {
 					SetSessionOrigin(UiCustomerOrigin.Get(HttpContext.Current.Request.Url).GetOrigin());
 
-					originHolder = GetSessionOrigin();
+					originHolder = InternalGetSessionOrigin();
 
-					//log.Debug(
-					//	"Detected origin holder is '{0}'",
-					//	originHolder == null ? "-- null --" : originHolder.ToString()
-					//);
+					log.Add(string.Format(
+						"Detected origin holder is '{0}'",
+						originHolder == null ? "-- null --" : originHolder.ToString()
+					));
 				} // if
 
-				if (originHolder == null)
+				if (originHolder == null) {
+					FlushLog(log);
 					return null;
+				} // if
 
 				user = this.userRepo.GetUserByLogin(HttpContext.Current.User.Identity.Name, originHolder.Origin);
 
-				// log.Debug("User by login is {0}", user == null ? "-- null --" : user.Id.ToString());
+				log.Add(string.Format("User by login is {0}", user == null ? "-- null --" : user.Id.ToString()));
 
 				SetCachedUser(user);
+
+				FlushLog(log);
 
 				return user;
 			} // get
@@ -71,6 +90,12 @@
 		public void SetSessionOrigin(CustomerOriginEnum? originID) {
 			HttpContext.Current.Session[SessionOriginIDName] = new OriginHolder(originID);
 		} // SetSessionOrigin
+
+		public CustomerOriginEnum? GetSessionOrigin() {
+			var originHolder = InternalGetSessionOrigin();
+
+			return originHolder == null ? null : originHolder.RawOrigin;
+		} // GetSessionOrigin
 
 		public void RemoveSessionOrigin() {
 			HttpContext.Current.Session.Remove(SessionOriginIDName);
@@ -100,9 +125,17 @@
 			get { return User == null ? null : this.customerRepo.ReallyTryGet(User.Id); }
 		} // Customer
 
-		private OriginHolder GetSessionOrigin() {
+		private OriginHolder InternalGetSessionOrigin() {
 			return HttpContext.Current.Session[SessionOriginIDName] as OriginHolder;
-		} // GetSessionOrigin
+		} // InternalGetSessionOrigin
+
+		private void FlushLog(List<string> lst) {
+			return;
+			new SafeILog(this).Debug(
+				"\n\nEzbobContext.get_User - begin:\n\n{0}\n\nEzbobContext.get_User - end.\n",
+				string.Join("\n", lst)
+			);
+		} // FlushLog
 
 		private static User GetCachedUser() {
 			return HttpContext.Current.Items[RequestUserItemName] as User;
@@ -125,6 +158,10 @@
 			public int? Origin {
 				get { return this.hasValue ? (int)this.origin : (int?)null; }
 			} // Origin
+
+			public CustomerOriginEnum? RawOrigin {
+				get { return this.hasValue ? this.origin : (CustomerOriginEnum?)null; }
+			} // RawOrigin
 
 			/// <summary>
 			/// Returns a string that represents the current object.

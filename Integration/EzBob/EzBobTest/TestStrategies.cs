@@ -778,13 +778,6 @@
 		}
 
 		[Test]
-		public void TestBrokerLeadSendInvitation() {
-			new BrokerLeadSendInvitation(1040, "stasd+evlbrk5@ezbob.com").Execute();
-		}
-
-
-
-		[Test]
 		public void TestNL_AddLoan() {
 			int customerID = 369; // 366;
 			int oldLoanID = 1049; //1042;
@@ -1275,14 +1268,6 @@
 			}
 		}
 
-        [Test]
-        public void TestBrokerLoadCustomerList()
-        {
-            
-            var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com",423);
-            s.Execute();
-
-        }
           [Test]
         public void TestLoadEsigner() {
 

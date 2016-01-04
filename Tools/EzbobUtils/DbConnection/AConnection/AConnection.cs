@@ -244,6 +244,10 @@
 			return new ConnectionWrapper(pc).Open();
 		} // GetPersistent
 
+		public virtual ConnectionWrapper GetPersistentTransaction() {
+			return GetPersistent().BeginTransaction();
+		} // GetPersistentTransaction
+
 		public ConnectionWrapper TakeFromPool() {
 			PooledConnection pc = ms_oPool.Give();
 

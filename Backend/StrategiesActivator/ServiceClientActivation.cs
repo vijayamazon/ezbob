@@ -261,12 +261,19 @@
 
 		[Activation]
 		private void BrokerLoadCustomerList() {
-			if (this.cmdLineArgs.Length != 2) {
-				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email>");
+			if (this.cmdLineArgs.Length != 3) {
+				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email> <broker origin>");
 				return;
 			} // if
 
-			BrokerCustomersActionResult res = this.serviceClient.BrokerLoadCustomerList(this.cmdLineArgs[1]);
+			CustomerOriginEnum origin;
+
+			if (!Enum.TryParse(this.cmdLineArgs[2], true, out origin)) {
+				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email> <broker origin>");
+				return;
+			} // if
+
+			BrokerCustomersActionResult res = this.serviceClient.BrokerLoadCustomerList(this.cmdLineArgs[1], origin);
 
 			foreach (var oEntry in res.Customers)
 				this.log.Msg("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);

@@ -3,10 +3,23 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerLeadSendInvitation : AMailStrategyBase {
-		public BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) : base(nLeadID, true) {
+		public BrokerLeadSendInvitation(
+			int nLeadID,
+			string sBrokerContactEmail,
+			CustomerOriginEnum origin
+		) : this(nLeadID, sBrokerContactEmail, (int)origin) {
+		} // constructor
+
+		public BrokerLeadSendInvitation(
+			int nLeadID,
+			string sBrokerContactEmail,
+			int origin
+		) : base(nLeadID, true) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
+			this.origin = origin;
 			m_oSp = new BrokerLeadSaveInvitationToken(DB, Log);
 		} // constructor
 
@@ -15,7 +28,7 @@
 		protected override void LoadRecipientData() {
 			Log.Debug("Loading broker lead data...");
 
-			LeadData = new BrokerLeadData(m_sBrokerContactEmail, this, LeadID, DB);
+			LeadData = new BrokerLeadData(m_sBrokerContactEmail, this.origin, this, LeadID, DB);
 			LeadData.Load();
 
 			Log.Debug("Loading broker lead complete.");
@@ -55,6 +68,7 @@
 		} // LeadID
 
 		private readonly string m_sBrokerContactEmail;
+		private readonly int origin;
 		private readonly BrokerLeadSaveInvitationToken m_oSp;
 
 		private class BrokerLeadSaveInvitationToken : AStoredProcedure {

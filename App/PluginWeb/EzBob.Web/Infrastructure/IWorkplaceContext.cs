@@ -7,6 +7,7 @@ namespace EzBob.Web.Infrastructure {
 		int UserId { get; }
 		string SessionId { get; set; }
 		void SetSessionOrigin(CustomerOriginEnum? originID);
+		CustomerOriginEnum? GetSessionOrigin();
 		void RemoveSessionOrigin();
 	} // interface IWorkplaceContext
 } // namespace

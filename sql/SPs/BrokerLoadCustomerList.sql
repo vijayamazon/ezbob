@@ -7,6 +7,7 @@ GO
 
 ALTER PROCEDURE BrokerLoadCustomerList
 @ContactEmail NVARCHAR(255),
+@Origin INT,
 @BrokerID INT
 AS
 BEGIN
@@ -27,6 +28,8 @@ BEGIN
 			Broker
 		WHERE
 			ContactEmail = @ContactEmail
+			AND
+			OriginID = @Origin
 	END
 	ELSE BEGIN
 		SELECT

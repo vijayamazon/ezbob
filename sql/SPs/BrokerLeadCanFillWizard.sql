@@ -6,7 +6,8 @@ GO
 ALTER PROCEDURE BrokerLeadCanFillWizard
 @LeadID INT,
 @LeadEmail NVARCHAR(255),
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -33,6 +34,8 @@ BEGIN
 			Broker
 		WHERE
 			ContactEmail = @ContactEmail
+			AND
+			OriginID = @Origin
 	END
 
 	IF @ErrMsg = ''

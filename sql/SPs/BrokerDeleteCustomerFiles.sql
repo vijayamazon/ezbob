@@ -5,7 +5,8 @@ GO
 ALTER PROCEDURE BrokerDeleteCustomerFiles
 @RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255),
-@FileIDs IntList READONLY
+@FileIDs IntList READONLY,
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -18,6 +19,8 @@ BEGIN
 		Broker b
 	WHERE
 		b.ContactEmail = @ContactEmail
+		AND
+		b.OriginID = @Origin
 
 	DELETE
 		MP_AlertDocument

@@ -4,14 +4,15 @@ GO
 
 ALTER PROCEDURE BrokerLoadCustomerCRM
 @RefNum NVARCHAR(8),
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @BrokerID INT
 
-	SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
+	SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail AND OriginID = @Origin
 
 	SELECT DISTINCT
 		cr.Id,
