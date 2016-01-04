@@ -511,5 +511,8 @@
 
 		[OperationContract]
 		StringStringMapActionResult SetManualDecision(DecisionModel model);
+
+		[OperationContract]
+		MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID);
 	} // interface IEzService
 } // namespace EzService

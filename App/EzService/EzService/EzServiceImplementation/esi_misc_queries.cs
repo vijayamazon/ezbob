@@ -289,5 +289,16 @@
 				},
 			};
 		} // SetManualDecision
+
+		public MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID) {
+			BuildMultiBrandLoanSummary instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID);
+
+			return new MultiBrandLoanSummaryActionResult {
+				MetaData = amd,
+				Summary = instance.Result,
+			};
+		} // BuildMultiBrandLoanSummary
 	} // class EzServiceImplementation
 } // namespace EzService

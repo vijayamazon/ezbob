@@ -196,6 +196,7 @@
     <Compile Include="ManualDecision\ManuallyApprove.cs" />
     <Compile Include="Misc\AddHistoryDirector.cs" />
     <Compile Include="Misc\Annual77ANotifier.cs" />
+    <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />

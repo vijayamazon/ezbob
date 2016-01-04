@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using DotNetOpenAuth.Messaging;
+	// using DotNetOpenAuth.Messaging;     <------------ It compiles without this. And appears to work without this.
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;

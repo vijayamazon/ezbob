@@ -6,6 +6,7 @@
 	using System.Text;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using EzBob.Backend.Models;
 	using EzBob.Models;
@@ -15,7 +16,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using log4net;
 	using MoreLinq;
 	using Newtonsoft.Json;
 	using NHibernate;
@@ -97,6 +97,23 @@
 			sb.Append("</li>");
 		}
 
+		private void BuildMultiBrandAlert(int customerID, AlertsModel target) {
+			try {
+				MultiBrandLoanSummaryActionResult ar = this.serviceClient.Instance.BuildMultiBrandLoanSummary(customerID);
+
+				bool isMulti = ar.Summary.OriginCount > 1;
+
+				(isMulti ? target.Errors : target.Infos).Add(new AlertModel {
+					Abbreviation = "BRND",
+					Alert = (isMulti ? "Multi-" : "Single ") + "branded customer",
+					AlertType = (isMulti ? AlertType.Error : AlertType.Info).DescriptionAttr(),
+					Tooltip = "<br>" + string.Join("<br>", ar.Summary.Loans),
+				});
+			} catch (Exception e) {
+				log.Alert(e, "Failed to build multi brand alert.");
+			} // try
+		} // BuildMultiBrandAlert
+
 		private void BuildAlerts(ProfileSummaryModel summary, Customer customer) {
 			summary.Alerts = new AlertsModel {
 				Errors = new List<AlertModel>(),
@@ -104,13 +121,15 @@
 				Infos = new List<AlertModel>(),
 			};
 
+			BuildMultiBrandAlert(customer.Id, summary.Alerts);
+
 			if (customer.IsTest) {
 				summary.Alerts.Infos.Add(new AlertModel {
 					Abbreviation = "Test",
 					Alert = "Is test",
 					AlertType = AlertType.Info.DescriptionAttr()
 				});
-			}
+			} // if
 
 			if (customer.IsAlibaba) {
 				summary.Alerts.Infos.Add(new AlertModel {
@@ -118,7 +137,7 @@
 					Alert = "Is alibaba customer",
 					AlertType = AlertType.Info.DescriptionAttr()
 				});
-			}
+			} // if
 
 			if (customer.CciMark) {
 				summary.Alerts.Errors.Add(new AlertModel {
@@ -126,7 +145,7 @@
 					Alert = "CCI Mark",
 					AlertType = AlertType.Error.DescriptionAttr()
 				});
-			}
+			} // if
 
 			if (customer.CollectionStatus.IsDefault || customer.CollectionStatus.Name == "Bad") {
 				summary.Alerts.Errors.Add(new AlertModel {
@@ -140,7 +159,7 @@
 					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
-			}
+			} // if
 
 			if (customer.FraudStatus != FraudStatus.Ok) {
 				summary.Alerts.Errors.Add(new AlertModel {
@@ -148,7 +167,7 @@
 					Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()),
 					AlertType = AlertType.Error.DescriptionAttr()
 				});
-			}
+			} // if
 
 			switch (customer.AMLResult) {
 			case "Rejected":
@@ -166,7 +185,7 @@
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
 				break;
-			}
+			} // switch
 
 			switch (summary.CreditBureau.ThinFile) {
 			case "Yes":
@@ -183,7 +202,7 @@
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
 				break;
-			}
+			} // switch
 
 			if (summary.CreditBureau.NumDirectorThinFiles > 0) {
 				summary.Alerts.Errors.Add(new AlertModel {
@@ -193,7 +212,7 @@
 							summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
 					AlertType = AlertType.Error.DescriptionAttr()
 				});
-			}
+			} // if
 
 			if (summary.CreditBureau.NumDirectorNA > 0) {
 				summary.Alerts.Warnings.Add(new AlertModel {
@@ -203,7 +222,7 @@
 							summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
-			}
+			} // if
 
 			if (summary.CreditBureau.ApplicantDOBs != null) {
 				foreach (var dob in summary.CreditBureau.ApplicantDOBs) {
@@ -213,9 +232,9 @@
 							Alert = "Age of applicant under 18",
 							AlertType = AlertType.Error.DescriptionAttr()
 						});
-					}
-				}
-			}
+					} // if
+				} // for each
+			} // if
 
 			if (customer.CustomerRelationStates.Any()) {
 				var state = customer.CustomerRelationStates.First();
@@ -225,8 +244,8 @@
 						Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"),
 						AlertType = AlertType.Error.DescriptionAttr()
 					});
-				}
-			}
+				} // if
+			} // if
 
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			try {
@@ -247,11 +266,11 @@
 					}
 				}
 			} catch (Exception e) {
-				Log.Debug("Error fetching company seniority: {0}", e);
-			}
+				log.Debug(e, "Error fetching company seniority.");
+			} // try
 
 			bool bResult = BuildLandRegistryAlerts(customer, summary);
-			Log.DebugFormat("Just FYI: BuildLandRegistryAlerts() returned {0}", bResult ? "true" : "false");
+			log.Debug("Just FYI: BuildLandRegistryAlerts() returned {0}", bResult ? "true" : "false");
 
 			BuildDataAlerts(customer, summary);
 			BuildCompanyCaisAlerts(customer, summary, context.UserId);
@@ -262,8 +281,8 @@
 				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortgageData(context.UserId, customer.Id)
 					.Value.NumMortgages > 0;
 			} catch (Exception e) {
-				Log.Debug("Error fetching customer's mortgages: {0}", e);
-			}
+				log.Debug(e, "Error fetching customer's mortgages.");
+			} // try
 
 			if (isHomeOwner && !hasMortgage) {
 				summary.Alerts.Warnings.Add(new AlertModel {
@@ -277,7 +296,7 @@
 					Alert = "Has mortgages but not a home owner",
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
-			}
+			} // if
 
 			_medalCalculationsRepository = ObjectFactory.GetInstance<MedalCalculationsRepository>();
 			MedalCalculations medalCalculationsRecord = _medalCalculationsRepository.GetActiveMedal(customer.Id);
@@ -296,7 +315,7 @@
 						Alert = string.Format("Error while calculating new medal: {0}", medalCalculationsRecord.Error),
 						AlertType = AlertType.Error.DescriptionAttr()
 					});
-				}
+				} // if
 			} else if (customer.Company != null && (customer.Company.TypeOfBusiness != TypeOfBusiness.LLP &&
 													customer.Company.TypeOfBusiness != TypeOfBusiness.Limited) ||
 						customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") > 1) {
@@ -305,7 +324,8 @@
 					Alert = "This customer shouldn't have new medal",
 					AlertType = AlertType.Info.DescriptionAttr()
 				});
-			}
+			} // if
+
 			if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()) {
 				EverlineLoginLoanChecker evlLoanChecker = new EverlineLoginLoanChecker();
 				var response = evlLoanChecker.GetLoginStatus(customer.Name);
@@ -322,14 +342,14 @@
                         loanRef = openLoan.LoanId.ToString();
                         loanDate = openLoan.FundedOn;
                         term = openLoan.Term;
-                    }
+                    } // if
 					
                     summary.Alerts.Infos.Add(new AlertModel {
 						Abbreviation = "EVL",
 						Alert = string.Format("Everline customer has open loan ref: {0}, open date {1}, outstanding amount {2}, term {3} ", loanRef, loanDate, outsatandingBalance, term),
 						AlertType = AlertType.Info.DescriptionAttr(),
 					});
-				}
+				} // if
 
 				if (response.status == EverlineLoanStatus.Error) {
 					summary.Alerts.Infos.Add(new AlertModel {
@@ -337,9 +357,9 @@
 						Alert = "Everline retrieve loan status failed " + response.Message,
 						AlertType = AlertType.Error.DescriptionAttr(),
 					});
-				}
-			}
-		}
+				} // if
+			} // if Everline
+		} // BuildAlerts
 
 		private void BuildCompanyCaisAlerts(Customer customer, ProfileSummaryModel summary, int userId) {
 			var errors = new StringBuilder();
@@ -583,7 +603,7 @@
 						var agreement = JsonConvert.DeserializeObject<AgreementModel>(loan.AgreementModel);
 						term = agreement.Term;
 					} catch (Exception ex) {
-						Log.Error("Failed to build current loans model", ex);
+						log.Alert(ex, "Failed to build current loans model.");
 					}
 
 					if (loan.AgreementModel != null) {
@@ -723,7 +743,7 @@
 			return LightsState.Passed;
 		}
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof (ProfileSummaryModelBuilder));
+		private static readonly ASafeLog log = new SafeILog(typeof (ProfileSummaryModelBuilder));
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 		private readonly IDecisionHistoryRepository _decisions;
 		private readonly ServiceClient serviceClient;

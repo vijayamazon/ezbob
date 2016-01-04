@@ -212,6 +212,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringStringMapActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MarketplacesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult))]
@@ -1347,6 +1348,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.MapField, value) != true)) {
                     this.MapField = value;
                     this.RaisePropertyChanged("Map");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MultiBrandLoanSummaryActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class MultiBrandLoanSummaryActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.MultiBrandLoanSummary SummaryField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.MultiBrandLoanSummary Summary {
+            get {
+                return this.SummaryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SummaryField, value) != true)) {
+                    this.SummaryField = value;
+                    this.RaisePropertyChanged("Summary");
                 }
             }
         }
@@ -4835,6 +4859,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetManualDecision", ReplyAction="http://tempuri.org/IEzService/SetManualDecisionResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringStringMapActionResult> SetManualDecisionAsync(Ezbob.Backend.Models.DecisionModel model);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BuildMultiBrandLoanSummary", ReplyAction="http://tempuri.org/IEzService/BuildMultiBrandLoanSummaryResponse")]
+        ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BuildMultiBrandLoanSummary", ReplyAction="http://tempuri.org/IEzService/BuildMultiBrandLoanSummaryResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult> BuildMultiBrandLoanSummaryAsync(int customerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddHistoryDirector", ReplyAction="http://tempuri.org/IEzService/AddHistoryDirectorResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector);
         
@@ -6591,6 +6621,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringStringMapActionResult> SetManualDecisionAsync(Ezbob.Backend.Models.DecisionModel model) {
             return base.Channel.SetManualDecisionAsync(model);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID) {
+            return base.Channel.BuildMultiBrandLoanSummary(customerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult> BuildMultiBrandLoanSummaryAsync(int customerID) {
+            return base.Channel.BuildMultiBrandLoanSummaryAsync(customerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector) {

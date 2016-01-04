@@ -255,8 +255,6 @@
 			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
 		} // DateDiffInMonths
 
-	
-
 		/// <summary>
 		/// Calculates difference between to DateTime dates in weeks
 		/// </summary>

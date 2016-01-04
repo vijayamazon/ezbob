@@ -1026,6 +1026,12 @@
   <wsdl:message name="IEzService_SetManualDecision_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetManualDecisionResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BuildMultiBrandLoanSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:BuildMultiBrandLoanSummary" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BuildMultiBrandLoanSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BuildMultiBrandLoanSummaryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
     <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
   </wsdl:message>
@@ -2162,6 +2168,10 @@
     <wsdl:operation name="SetManualDecision">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetManualDecision" message="tns:IEzService_SetManualDecision_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetManualDecisionResponse" message="tns:IEzService_SetManualDecision_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BuildMultiBrandLoanSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BuildMultiBrandLoanSummary" message="tns:IEzService_BuildMultiBrandLoanSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BuildMultiBrandLoanSummaryResponse" message="tns:IEzService_BuildMultiBrandLoanSummary_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddHistoryDirector">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
@@ -3910,6 +3920,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetManualDecision">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SetManualDecision" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuildMultiBrandLoanSummary">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BuildMultiBrandLoanSummary" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
