@@ -2,13 +2,18 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using DotNetOpenAuth.Messaging;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
+	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
 	using IMailLib;
+	using IMailLib.Helpers;
+	using StructureMap;
 
 	public class Annual77ANotifier : AStrategy {
-
 		public Annual77ANotifier() {
 			this.now = DateTime.UtcNow;
 			this.collectionIMailer = new CollectionMail(
@@ -17,19 +22,24 @@
 			   ConfigManager.CurrentValues.Instance.IMailDebugModeEnabled,
 			   ConfigManager.CurrentValues.Instance.IMailDebugModeEmail,
 			   ConfigManager.CurrentValues.Instance.IMailSavePath);
+			this.loanRepository = ObjectFactory.GetInstance<ILoanRepository>();
 		}
 
 		public override string Name { get { return "Annual77ANotifier"; } } // Name
 
 		public override void Execute() {
 			LoadImailTemplates();
-			var template = this.templates.FirstOrDefault(x => x.IsActive && x.OriginID == 1);
+			DB.ForEachRowSafe(HandleOneNotification, "LoadLoansForAnnual77ANofication", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+		} // Execute
+
+		public void ExecuteTest(int customerID, int loanID, int originID) {
+			LoadImailTemplates();
+			var template = this.templates.FirstOrDefault(x => x.IsActive && x.OriginID == originID);
 			if (template == null) {
-				Log.Debug("No template found for annual 77A notification for originID {2} to customer {0} for loan {1}", 1, 1, 1);
+				Log.Debug("No template found for annual 77A notification for originID {2} to customer {0} for loan {1}", customerID, loanID, originID);
 				return;
 			}
-			PrepareAndSendMail(27, 54, template);
-			//DB.ForEachRowSafe(HandleOneNotification, "LoadLoansForAnnual77ANofication", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+			PrepareAndSendMail(loanID, customerID, template);
 		} // Execute
 
 		private ActionResult HandleOneNotification(SafeReader sr, bool bRowSetStart) {
@@ -60,30 +70,8 @@
 
 		private void PrepareAndSendMail(int loanID, int customerID, SnailMailTemplate template){
 			Address address;
-			var variables = PrepareVariables(loanID, customerID, out address);
-			List<string> header = new List<string>{
-				{"Date"},
-				{"Amount"},
-				{"Description"}
-			};
-
-			List<List<string>> content = new List<List<string>> {
-				new List<string> { 
-					{"2015-1-1"},
-					{"100"},
-					{"Payment"}
-				},
-				new List<string> {
-					{"2015-2-1"},
-					{"200"},
-					{"Payment"}
-				}
-			};
-
-			var schedule = new TableModel {
-				Header = header,
-				Content = content
-			};
+			TableModel schedule;
+			var variables = PrepareVariables(loanID, customerID, out address, out schedule);
 
 			var metadata = this.collectionIMailer.SendAnual77ANotification(customerID, template, address, variables, schedule, "@ScheduleTable@");
 			var collectionLogID = AddCollectionLog(customerID, loanID, SetLateLoanStatus.CollectionType.Annual77ANotification, SetLateLoanStatus.CollectionMethod.Mail);
@@ -105,27 +93,85 @@
 				});
 		}
 
-		private Dictionary<string, string> PrepareVariables(int loanID, int customerID, out Address address) {
+		private Dictionary<string, string> PrepareVariables(int loanID, int customerID, out Address address, out TableModel scheduleModel) {
+			var loan = this.loanRepository.Get(loanID);
+			if (loan == null) {
+				throw new Exception(string.Format("Loan not found for id {0} customer {1}", loanID, customerID));
+			}
 
-			//TODO
+			var customer = loan.Customer;
+			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var customerPersonalInfo = customer.PersonalInfo ?? new PersonalInfo();
+			if (customerAddress == null) {
+				throw new Exception(string.Format("Customer {0} does not have address", customerID));
+			}
 
 			address = new Address {
-				Line1 = "l1",
-				Line2 = "l2",
-				Line3 = "l3",
-				Line4 = "l4",
-				Postcode = "AB10 1BA"
+				Line1 = customerAddress.Line1,
+				Line2 = customerAddress.Line2,
+				Line3 = customerAddress.Line3,
+				Line4 = customerAddress.Town,
+				Postcode = customerAddress.Postcode
 			};
-		
-			return new Dictionary<string, string>{
-				{"CustomerName","John Doe"},
-				{"LoanRefNum","054656465465"},
-				{"Date",DateTime.UtcNow.ToString("yyyy-MM-dd")},
-				{"LoanDate",DateTime.UtcNow.AddYears(-1).ToString("yyyy-MM-dd")},
-				{"LoanAmount","10000"},
-				{"AnnualInterestRatePercent","15"},
+
+			var interestRate = loan.InterestRate * 12 * 100;
+			var repaymentPeriod = loan.CustomerSelectedTerm ?? loan.CashRequest.RepaymentPeriod;
+
+			scheduleModel = new TableModel();
+
+			var pacnet = loan.PacnetTransactions
+				.Select(ScheduleRowModel.CreatePacnet)
+				.ToList();
+			var paypoint = loan.TransactionsWithPaypointSuccesefull
+				.Select(ScheduleRowModel.CreatePaypoint)
+				.ToList();
+			var fees = loan.Charges.Where(x => x.State != "Paid" && x.State != "Expired")
+				.Select(ScheduleRowModel.CreateFees)
+				.ToList();
+			var schedule = loan.Schedule
+				.Where(x => x.Status == LoanScheduleStatus.AlmostPaid || x.Status == LoanScheduleStatus.Late || x.Status == LoanScheduleStatus.StillToPay)
+				.Select(ScheduleRowModel.CreateSchedule)
+				.ToList();
+
+			var allRows = pacnet;
+			allRows.AddRange(paypoint);
+			allRows.AddRange(fees);
+			allRows.AddRange(schedule);
+
+			scheduleModel.Header = new List<string>{
+				{"Type"},
+				{"Date"},
+				{"Status"},
+				{"Interest"},
+				{"Principal"},
+				{"Fee"},
+				{"Total"}
+			};
+			
+			scheduleModel.Content = allRows
+				.Select(x => new List<string> {
+					{x.Type},
+					{x.Date.ToLongUKDate()},
+					{x.Status},
+					{x.Interest.ToNumeric2Decimals(true)},
+					{x.Principal.ToNumeric2Decimals(true)},
+					{x.Fees.ToNumeric2Decimals(true)},
+					{x.Total.ToNumeric2Decimals(true)},
+				})
+				.ToList();
+
+			return new Dictionary<string, string> {
+				{"CustomerName",customerPersonalInfo.Fullname},
+				{"LoanRefNum",loan.RefNumber},
+				{"Date",this.now.ToLongUKDate()},
+				{"LoanDate",loan.Date.ToLongUKDate()},
+				{"LoanAmount",loan.LoanAmount.ToNumeric2Decimals()},
+				{"AnnualInterestRatePercent", interestRate.ToNumeric2Decimals()},
+				{"LoanTermMonths", repaymentPeriod.ToString()},
 				{"ScheduleTable", ""}
 			};
+
+
 		}//PrepareVariables
 
 		private int AddCollectionLog(int customerID, int loanID, SetLateLoanStatus.CollectionType type, SetLateLoanStatus.CollectionMethod method) {
@@ -158,5 +204,64 @@
 		private readonly DateTime now;
 		private readonly CollectionMail collectionIMailer;
 		private IEnumerable<SnailMailTemplate> templates;
+		private readonly ILoanRepository loanRepository;
 	} // class Anual77ANotifier
+
+	public class ScheduleRowModel {
+		public string Type { get; set; }
+		public string Status { get; set; }
+		public DateTime Date { get; set; }
+		public decimal? Principal { get; set; }
+		public decimal? Interest { get; set; }
+		public decimal Fees { get; set; }
+		public decimal Total { get; set; }
+
+		public static ScheduleRowModel CreatePacnet(PacnetTransaction p) {
+			return new ScheduleRowModel {
+				Status = p.Status.ToDescription(),
+				Type = "Loan advance",
+				Date = p.PostDate,
+				Interest = null,
+				Principal = null,
+				Fees = p.Fees,
+				Total = p.Amount
+			};
+		}
+
+		public static ScheduleRowModel CreatePaypoint(PaypointTransaction p) {
+			return new ScheduleRowModel {
+				Status = p.Status.ToDescription(),
+				Type = "Repayment",
+				Date = p.PostDate,
+				Interest = p.Interest,
+				Principal = p.LoanRepayment,
+				Fees = p.Fees,
+				Total = p.Amount
+			};
+		}
+
+		public static ScheduleRowModel CreateFees(LoanCharge lc) {
+			return new ScheduleRowModel {
+				Status = string.IsNullOrEmpty(lc.State) ? "Active" : lc.State,
+				Type = "Charge",
+				Date = lc.Date,
+				Interest = null,
+				Principal = null,
+				Fees = lc.Amount,
+				Total = lc.Amount
+			};
+		}
+
+		public static ScheduleRowModel CreateSchedule(LoanScheduleItem ls) {
+			return new ScheduleRowModel {
+				Status = ls.Status.DescriptionAttr(),
+				Type = "Schedule",
+				Date = ls.Date,
+				Interest = ls.Interest,
+				Principal = ls.LoanRepayment,
+				Fees = ls.Fees,
+				Total = ls.AmountDue
+			};
+		}
+	}//class ScheduleRowModel
 } // namespace

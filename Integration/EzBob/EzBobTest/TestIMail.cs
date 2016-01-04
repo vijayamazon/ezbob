@@ -11,8 +11,14 @@
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
+	using Ezbob.RegistryScanner;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using log4net;
+	using NHibernate;
+	using NHibernateWrapper.NHibernate;
 	using NUnit.Framework;
+	using StructureMap;
+	using StructureMap.Pipeline;
 
 	[TestFixture]
 	public class TestIMail {
@@ -28,6 +34,16 @@
 			ConfigManager.CurrentValues.Init(this.DB, this.ALog);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
+
+			
+			NHibernateManager.FluentAssemblies.Add(typeof(Loan).Assembly);
+			Scanner.Register();
+
+			ObjectFactory.Configure(x => {
+				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.OpenSession());
+				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.For<ILoanRepository>().Use<LoanRepository>();
+			});
 		}
 
 		[Test]
@@ -295,7 +311,8 @@
 		[Test]
 		public void TestAnnual77A() {
 			var stra = new Annual77ANotifier();
-			stra.Execute();
+			stra.ExecuteTest(54, 1058, 1);
+			stra.ExecuteTest(199, 1057, 2);
 		}
 
 		[Test]
