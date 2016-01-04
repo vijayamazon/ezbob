@@ -47,7 +47,7 @@ BEGIN
 		INNER JOIN 
 			Customer c 
 		ON 
-			c.BrokerID = @BrokerID	
+			c.Id = cr.IdCustomer AND c.BrokerID = @BrokerID	
 		GROUP BY cr.IdCustomer
 	),
 	
@@ -124,4 +124,7 @@ BEGIN
 		c.Id
 	------------------------------------------------------------------------------
 END
+
 GO
+
+
