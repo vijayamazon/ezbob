@@ -4,7 +4,6 @@
     using System;
     using System.Linq;
     using log4net;
-    using UIAutomationTests.Core;
 
     static class SharedServiceClass {
         private static readonly ILog log = LogManager.GetLogger(typeof(SharedServiceClass));

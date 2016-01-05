@@ -87,7 +87,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                 //Step 1 - Navigate to broker's sign up page.
-                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerSignupHost"));
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("BrokerSignupHost"));
                 Driver.Navigate().GoToUrl(url);
                 actionBot.WriteToLog("Nevigate to url: " + url);
 
@@ -111,7 +111,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     //Precondition 3 - Navigate to broker's sign up page.
-                    string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerSignupHost"));
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("BrokerSignupHost"));
                     Driver.Navigate().GoToUrl(url);
                     actionBot.WriteToLog("Nevigate to url: " + url);
 

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
+    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -24,12 +25,21 @@
 
         private static bool? isDebugMode;
 
+
         protected static bool IsDebugMode {
             get {
                 if (isDebugMode == null) {
                     isDebugMode = Convert.ToBoolean(ConfigurationManager.AppSettings["isDebugMode"]);
                 }
                 return isDebugMode != null && (bool)isDebugMode;
+            }
+        }
+
+        public static string IsRunLocal {
+            get {
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["isRunLocal"]) == false)
+                    return "";
+                return ":44300";
             }
         }
 
@@ -85,8 +95,14 @@
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
                             }
                         } catch (Exception ex) {
-                            //System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u")));
                             log.Error(String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(), DateTime.UtcNow.ToString("u")));
+                            try {
+                                string scrshtFileName = DateTime.Now.Ticks + " - " + DateTime.UtcNow.ToString("yyyy-MM-ddTHH.mm.ssZ") + " - CaseId_" + caseID.ToString() + " - Enviorment_" + EnvironmentConfig.BaseName.Split('.')[3] + " - Brand_" + BrandConfig.BaseName.Split('.')[3] + " - Browser_" + Driver.GetType().ToString().Split('.')[2] + ".png";
+                                (Driver as ITakesScreenshot).GetScreenshot().SaveAsFile("C:\\Exception\\" + scrshtFileName, ImageFormat.Png);
+                                log.Error("Screenshot of last screen was taken and saved in C:\\Exception\\" + scrshtFileName);
+                            } catch (Exception e) {
+                                log.Error("ERROR: failed to save screen shot.");
+                            }
                             if (!IsDebugMode) {
                                 UpdateBlockedList(caseID);
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);

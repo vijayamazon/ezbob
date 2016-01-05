@@ -21,7 +21,7 @@ namespace UIAutomationTests.Tests.Shared {
             ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
             SharedServiceClass.WaitForAjaxReady(Driver);
-            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("CustomerLogIn"));
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("CustomerLogIn"));
             Driver.Navigate().GoToUrl(url);
             actionBot.WriteToLog("Nevigate to url: " + url);
 

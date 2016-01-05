@@ -34,7 +34,7 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             //Step 4 - Click create an account.
-            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerSignupHost"));
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("BrokerSignupHost"));
             Driver.Navigate().GoToUrl(url);
             actionBot.WriteToLog("Nevigate to url: " + url);
 
@@ -95,7 +95,7 @@
             SharedServiceClass.WaitForAjaxReady(Driver);
 
             //Navigate to broker log-in page.
-            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("BrokerLoginHost"));
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("BrokerLoginHost"));
             Driver.Navigate().GoToUrl(url);
             actionBot.WriteToLog("Nevigate to url: " + url);
 

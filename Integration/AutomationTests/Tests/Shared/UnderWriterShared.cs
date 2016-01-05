@@ -16,7 +16,7 @@
 
         public void LogIn(string logHeader, string user, string pass) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), "/Account/AdminLogOn");
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, "/Account/AdminLogOn");
 
             Driver.Navigate().GoToUrl(url);
 

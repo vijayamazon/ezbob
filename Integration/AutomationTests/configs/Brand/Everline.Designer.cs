@@ -70,7 +70,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .everline.com/Broker#login.
+        ///   Looks up a localized string similar to /Broker#login.
         /// </summary>
         internal static string BrokerLoginHost {
             get {
@@ -79,7 +79,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .everline.com/Broker#signup.
+        ///   Looks up a localized string similar to /Broker#signup.
         /// </summary>
         internal static string BrokerSignupHost {
             get {
@@ -115,7 +115,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .everline.com/Account/LogOn.
+        ///   Looks up a localized string similar to /Account/LogOn.
         /// </summary>
         internal static string CustomerLogIn {
             get {
@@ -124,7 +124,7 @@ namespace UIAutomationTests.configs.Brand {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .everline.com/Customer/Wizard.
+        ///   Looks up a localized string similar to /Customer/Wizard.
         /// </summary>
         internal static string WizardHost {
             get {

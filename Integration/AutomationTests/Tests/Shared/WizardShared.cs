@@ -30,7 +30,7 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             if (string.Equals("ClientSignup", origin)) {
-                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("WizardHost"));
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("WizardHost"));
 
                 //Step 2 - Browse to OM app.
                 Driver.Navigate().GoToUrl(url);

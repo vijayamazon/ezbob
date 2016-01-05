@@ -121,10 +121,10 @@
     <value>.ezbob.com</value>
   </data>
   <data name="BrokerLoginHost" xml:space="preserve">
-    <value>.ezbob.com/Broker#login</value>
+    <value>/Broker#login</value>
   </data>
   <data name="BrokerSignupHost" xml:space="preserve">
-    <value>.ezbob.com/Broker#signup</value>
+    <value>/Broker#signup</value>
   </data>
   <data name="C2037_Privacy_content" xml:space="preserve">
     <value>Privacy &amp; cookies</value>
@@ -136,9 +136,9 @@
     <value>You were invited to register with ezbob!</value>
   </data>
   <data name="CustomerLogIn" xml:space="preserve">
-    <value>.ezbob.com/Account/LogOn</value>
+    <value>/Account/LogOn</value>
   </data>
   <data name="WizardHost" xml:space="preserve">
-    <value>.ezbob.com/Customer/Wizard</value>
+    <value>/Customer/Wizard</value>
   </data>
 </root>
