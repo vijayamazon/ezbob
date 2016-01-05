@@ -23,7 +23,7 @@
 
 			var pass = pu.Generate(sEmail, this.securityData.NewPassword);
 
-			this.sp = new CreateUserForCustomer(DB, Log) {
+			this.sp = new CreateUserForUnderwriter(DB, Log) {
 				UserName = userName,
 				EzPassword = pass.Password,
 				Salt = pass.Salt,
@@ -52,20 +52,20 @@
 				});
 
 				switch (nUserID) {
-				case (int)CreateUserForCustomer.Errors.DuplicateUser:
+				case (int)CreateUserForUnderwriter.Errors.DuplicateUser:
 					Log.Warn("User with name {0} already exists.", this.securityData.Email);
 					break;
 
-				case (int)CreateUserForCustomer.Errors.RoleNotFound:
+				case (int)CreateUserForUnderwriter.Errors.RoleNotFound:
 					Log.Warn("Could not find role '{0}'.", this.sp.RoleName);
 					break;
 
-				case (int)CreateUserForCustomer.Errors.FailedToCreateUser:
-				case (int)CreateUserForCustomer.Errors.FailedToAttachRole:
-				case (int)CreateUserForCustomer.Errors.FailedToCreateSession:
+				case (int)CreateUserForUnderwriter.Errors.FailedToCreateUser:
+				case (int)CreateUserForUnderwriter.Errors.FailedToAttachRole:
+				case (int)CreateUserForUnderwriter.Errors.FailedToCreateSession:
 					Log.Alert(
 						"Internal DB error: {0}.",
-						((CreateUserForCustomer.Errors)nUserID).DescriptionAttr()
+						((CreateUserForUnderwriter.Errors)nUserID).DescriptionAttr()
 					);
 					break;
 
@@ -85,9 +85,9 @@
 		} // Execute
 
 		private readonly UserSecurityData securityData;
-		private readonly CreateUserForCustomer sp;
+		private readonly CreateUserForUnderwriter sp;
 
-		private class CreateUserForCustomer : AStoredProcedure {
+		private class CreateUserForUnderwriter : AStoredProcedure {
 			public enum Errors {
 				DuplicateUser         = -1,
 				RoleNotFound          = -2,
@@ -99,7 +99,7 @@
 				FailedToCreateSession = -5,
 			} // enum Errors
 
-			public CreateUserForCustomer(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
+			public CreateUserForUnderwriter(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
 				return
@@ -125,6 +125,6 @@
 				set { }
 				// ReSharper restore ValueParameterNotUsed
 			} // Now
-		} // class CreateUserForCustomer
+		} // class CreateUserForUnderwriter
 	} // class SignupUnderwriterMultiOrigin
 } // namespace

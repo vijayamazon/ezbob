@@ -1,11 +1,11 @@
-IF OBJECT_ID('CreateUserForCustomer') IS NULL
-	EXECUTE('CREATE PROCEDURE CreateUserForCustomer AS SELECT 1')
+IF OBJECT_ID('CreateUserForUnderwriter') IS NULL
+	EXECUTE('CREATE PROCEDURE CreateUserForUnderwriter AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON;
 GO
 
-ALTER PROCEDURE CreateUserForCustomer
+ALTER PROCEDURE CreateUserForUnderwriter
 @UserName NVARCHAR(250),
 @EzPassword VARCHAR(255),
 @Salt VARCHAR(255),

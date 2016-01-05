@@ -23,14 +23,37 @@ ALTER PROCEDURE CreateCampaignSourceRef
 @RDate DATETIME
 AS
 BEGIN
-	INSERT INTO CampaignSourceRef (	
-		CustomerID,
-		FUrl, FSource, FMedium, FTerm, FContent, FName, FDate,
-		RUrl, RSource, RMedium, RTerm, RContent, RName, RDate
-	) VALUES (
-		@CustomerID,
-		@FUrl, @FSource, @FMedium, @FTerm, @FContent, @FName, @FDate,
-		@RUrl, @RSource, @RMedium, @RTerm, @RContent, @RName, @RDate
-	)
+	UPDATE CampaignSourceRef SET
+		FUrl = @FUrl,
+		FSource = @FSource,
+		FMedium = @FMedium,
+		FTerm = @FTerm,
+		FContent = @FContent,
+		FName = @FName,
+		FDate = @FDate,
+		RUrl = @RUrl,
+		RSource = @RSource,
+		RMedium = @RMedium,
+		RTerm = @RTerm,
+		RContent = @RContent,
+		RName = @RName,
+		RDate = @RDate
+	WHERE
+		CustomerID = @CustomerID
+
+	DECLARE @affected INT = @@ROWCOUNT
+
+	IF @affected < 1
+	BEGIN
+		INSERT INTO CampaignSourceRef (
+			CustomerID,
+			FUrl, FSource, FMedium, FTerm, FContent, FName, FDate,
+			RUrl, RSource, RMedium, RTerm, RContent, RName, RDate
+		) VALUES (
+			@CustomerID,
+			@FUrl, @FSource, @FMedium, @FTerm, @FContent, @FName, @FDate,
+			@RUrl, @RSource, @RMedium, @RTerm, @RContent, @RName, @RDate
+		)
+	END
 END
 GO
