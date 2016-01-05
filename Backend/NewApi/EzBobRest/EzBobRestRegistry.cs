@@ -76,6 +76,9 @@
 
             For<CompanyUpdateValidator>()
                 .Use<CompanyUpdateValidator>();
+
+            For<CustomerBySmsVerificationValidator>()
+                .Use<CustomerBySmsVerificationValidator>();
         }
     }
 }
