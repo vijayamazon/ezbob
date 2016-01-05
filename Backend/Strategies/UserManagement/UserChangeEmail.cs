@@ -9,6 +9,7 @@
 	using JetBrains.Annotations;
 	using MailStrategies;
 	using SalesForceLib;
+	using SalesForceLib.Models;
 	using StructureMap;
 
 	public class UserChangeEmail : AStrategy {
@@ -33,11 +34,8 @@
 		public override void Execute() {
 			Log.Debug("User '{0}': request to change email to {1}...", this.spUpdate.UserID, this.securityData.Email);
 
-			string oldEmail = DB.ExecuteScalar<string>(
-				"GetCustomerEmail",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.spUpdate.UserID)
-			);
+			var customerData = (new CustomerData(this, this.spUpdate.UserID, DB));
+			customerData.Load();
 
 			this.securityData.ValidateEmail();
 			this.securityData.ValidateNewPassword();
@@ -63,7 +61,7 @@
 				.With("environment").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceEnvironment.Value)
 				.GetInstance<ISalesForceAppClient>();
 
-			salesForceApiClient.ChangeEmail(oldEmail, this.securityData.Email);
+			salesForceApiClient.ChangeEmail(new ChangeEmailModel{ currentEmail = customerData.Mail, newEmail = this.securityData.Email, Origin = customerData.Origin});
 			Log.Debug(
 				"User '{0}': request to change email to {1} fully processed.",
 				this.spUpdate.UserID,

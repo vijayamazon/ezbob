@@ -76,17 +76,17 @@
 			}
 		}
 
-		public void ChangeEmail(string currentEmail, string newEmail) {
-			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
-			ApiResponse response = this.api.ChangeEmail(currentEmail, newEmail);
+		public void ChangeEmail(ChangeEmailModel model) {
+			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", model.currentEmail, model.newEmail);
+			ApiResponse response = this.api.ChangeEmail(model);
 			if (!response.IsSuccess) {
-				Log.ErrorFormat("SalesForce ChangeEmail failed from {0} to {1} failed, error: {2}", currentEmail, newEmail, response.Error);
+				Log.ErrorFormat("SalesForce ChangeEmail failed from {0} to {1} failed, error: {2}", model.currentEmail, model.newEmail, response.Error);
 			}
 		}
 
-		public GetActivityResultModel GetActivity(string email) {
-			Log.InfoFormat("SalesForce GetActivity for {0}", email);
-			ApiResponse response = this.api.GetActivity(email);
+		public GetActivityResultModel GetActivity(GetActivityModel model) {
+			Log.InfoFormat("SalesForce GetActivity for {0}", model.Email);
+			ApiResponse response = this.api.GetActivity(model);
 
 			if (!string.IsNullOrEmpty(response.Success)) {
 				try {

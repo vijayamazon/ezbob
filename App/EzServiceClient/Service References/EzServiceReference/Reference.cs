@@ -3129,6 +3129,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private bool IsOpportunityField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OriginField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OriginatorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -3211,6 +3214,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.IsOpportunityField.Equals(value) != true)) {
                     this.IsOpportunityField = value;
                     this.RaisePropertyChanged("IsOpportunity");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Origin {
+            get {
+                return this.OriginField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OriginField, value) != true)) {
+                    this.OriginField = value;
+                    this.RaisePropertyChanged("Origin");
                 }
             }
         }
@@ -3299,6 +3315,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private bool IsOpportunityField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OriginField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OriginatorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -3365,6 +3384,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.IsOpportunityField.Equals(value) != true)) {
                     this.IsOpportunityField = value;
                     this.RaisePropertyChanged("IsOpportunity");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Origin {
+            get {
+                return this.OriginField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OriginField, value) != true)) {
+                    this.OriginField = value;
+                    this.RaisePropertyChanged("Origin");
                 }
             }
         }
@@ -3450,6 +3482,9 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OriginField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> RequestedAmountField;
@@ -3573,6 +3608,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.NameField, value) != true)) {
                     this.NameField = value;
                     this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Origin {
+            get {
+                return this.OriginField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OriginField, value) != true)) {
+                    this.OriginField = value;
+                    this.RaisePropertyChanged("Origin");
                 }
             }
         }
@@ -4330,10 +4378,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceUpdateOpportunityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivity", ReplyAction="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivityResponse")]
-        ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult SalesForceGetActivity(System.Nullable<int> userID, int customerID, string email);
+        ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult SalesForceGetActivity(System.Nullable<int> userID, int customerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivity", ReplyAction="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivityResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult> SalesForceGetActivityAsync(System.Nullable<int> userID, int customerID, string email);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult> SalesForceGetActivityAsync(System.Nullable<int> userID, int customerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceVatReturn/BackfillLinkedHmrc", ReplyAction="http://tempuri.org/IEzServiceVatReturn/BackfillLinkedHmrcResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLinkedHmrc();
@@ -5927,12 +5975,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SalesForceUpdateOpportunityAsync(userID, customerID, model);
         }
         
-        public ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult SalesForceGetActivity(System.Nullable<int> userID, int customerID, string email) {
-            return base.Channel.SalesForceGetActivity(userID, customerID, email);
+        public ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult SalesForceGetActivity(System.Nullable<int> userID, int customerID) {
+            return base.Channel.SalesForceGetActivity(userID, customerID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult> SalesForceGetActivityAsync(System.Nullable<int> userID, int customerID, string email) {
-            return base.Channel.SalesForceGetActivityAsync(userID, customerID, email);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult> SalesForceGetActivityAsync(System.Nullable<int> userID, int customerID) {
+            return base.Channel.SalesForceGetActivityAsync(userID, customerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLinkedHmrc() {

@@ -57,12 +57,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult SalesForceActivity(int id) {
-			var customer = this.customerRepository.ReallyTryGet(id);
-			if (customer == null) {
-				throw new Exception("Customer not found " + id);
-			}
-
-			var activity = this._serviceClient.Instance.SalesForceGetActivity(this._context.UserId, id, customer.Name);
+			var activity = this._serviceClient.Instance.SalesForceGetActivity(this._context.UserId, id);
 			return Json(new {
 				Activities = activity.Value.Activities.OrderByDescending(x => x.StartDate),
 				Error = activity.Value.Error

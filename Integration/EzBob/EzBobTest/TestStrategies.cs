@@ -6,7 +6,6 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -1140,6 +1139,7 @@
 			AddOpportunity add = new AddOpportunity(28, new OpportunityModel {
 				Name = "NewOpportunity",
 				Email = "alexbo+off02@ezbob.com",
+				Origin = "ezbob",
 				CreateDate = now,
 				ExpectedEndDate = now.AddDays(7),
 				RequestedAmount = 1000,

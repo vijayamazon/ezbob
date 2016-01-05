@@ -175,8 +175,8 @@
 			LogResult("CreateActivity", result, model.Email);
 		}
 
-		public void ChangeEmail(string currentEmail, string newEmail) {
-			Model=new { currentEmail, newEmail }.ToJsonExtension();
+		public void ChangeEmail(ChangeEmailModel model) {
+			Model = model.ToJsonExtension();
 			string result = null;
 			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
 				var response = this.api.ChangeEmail(
@@ -191,11 +191,11 @@
 
 				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("ChangeEmail", result, newEmail);
+			LogResult("ChangeEmail", result, model.newEmail);
 		}
 
-		public GetActivityResultModel GetActivity(string email) {
-			Model = new { Email = email }.ToJsonExtension(); 
+		public GetActivityResultModel GetActivity(GetActivityModel model) {
+			Model = model.ToJsonExtension(); 
 			string result = null;
 			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
 				var response = this.api.GetActivity(
@@ -210,7 +210,7 @@
 
 				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("GetActivity", result, email);
+			LogResult("GetActivity", result, model.Email);
 			try {
 				var res = result.JsonStringToObject<ApiResponse>(true);
 				if (res.Success == null) { res.Success = String.Empty;}
@@ -240,6 +240,7 @@
 				Error = "Failed parsing result to object " + result;
 				string message = "SalesForce " + serviceName + " failed for customer " + email + ", request \n" + Model + "\n error: failed parsing response:\n" + result + "";
 				Log.Warn(message);
+				Log.Warn(ex);
 			}
 		}
 

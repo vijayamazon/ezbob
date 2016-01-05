@@ -371,7 +371,7 @@
 		} // SaveDecision
 
 		private void UpdateSalesForceOpportunity(OpportunityStage? stage, Action<OpportunityModel> setMoreFields = null) {
-			var model = new OpportunityModel { Email = this.currentState.Email, };
+			var model = new OpportunityModel { Email = this.currentState.Email, Origin = this.currentState.Origin, };
 
 			if (stage != null)
 				model.Stage = stage.Value.DescriptionAttr();

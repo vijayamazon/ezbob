@@ -6,6 +6,8 @@
 	public class LeadAccountModel {
 		[DataMember]
 		public string Email { get; set; } // lead/account unique identifier
+		[DataMember]
+		public string Origin { get; set; } // lead/account/opportunity unique identifier
 		//----------------------------------------//
 
 		//Contact Data
@@ -39,8 +41,6 @@
 		public bool IsBroker { get; set; }
 		[DataMember]
 		public DateTime? RegistrationDate { get; set; }
-		[DataMember]
-		public string Origin { get; set; }
         [DataMember]
         public bool IsTest { get; set; }
 		//Company data

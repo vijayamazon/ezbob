@@ -39,7 +39,7 @@
 			DateTime loanDate = sr["LoanDate"];
 			DateTime now = DateTime.UtcNow;
 			double monthsSinceLoanWasTaken = (now - loanDate).TotalDays / (365.0 / 12.0);
-
+			this.origin = sr["Origin"];
 			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, is paid off {2}, loan amount {3}, balance {4}, paid {5}, was late {6}, numOfActiveLoans {7}, monthsSinceLoanWasTaken {8}",
 				this.customerID, this.loanID, this.isPaidOff, loanAmount, this.balance, this.paymentAmount, wasLate, numOfActiveLoans, monthsSinceLoanWasTaken);
 
@@ -50,6 +50,7 @@
 					SalesForce.AddOpportunity addOpportunity = new AddOpportunity(this.customerID, new OpportunityModel {
 						CreateDate = DateTime.UtcNow,
 						Email = this.customerEmail,
+						Origin = this.origin,
 						Stage = OpportunityStage.s5.DescriptionAttr(),
 						Type = OpportunityType.FinishLoan.DescriptionAttr(),
 						Name = this.customerEmail + OpportunityType.FinishLoan.DescriptionAttr()
@@ -79,6 +80,7 @@
 			SalesForce.AddOpportunity addOpportunity = new AddOpportunity(this.customerID, new OpportunityModel {
 				CreateDate = DateTime.UtcNow,
 				Email = this.customerEmail,
+				Origin = this.origin,
 				Stage = OpportunityStage.s5.DescriptionAttr(),
 				Type = OpportunityType.FiftyPercentRepaid.DescriptionAttr(),
 				Name = this.customerEmail + OpportunityType.FiftyPercentRepaid.DescriptionAttr()
@@ -88,6 +90,7 @@
 
 		private readonly int customerID;
 		private readonly string customerEmail;
+		private string origin;
 		private readonly int loanID;
 		private readonly decimal paymentAmount;
 		private readonly decimal balance;

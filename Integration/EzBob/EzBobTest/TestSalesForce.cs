@@ -33,6 +33,8 @@
 			Log.Debug("call CreateUpdateLeadAccount");
 			LeadAccountModel model = new LeadAccountModel {
 				Email = "a@b.c",
+				Origin = "ezbob",
+				
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -56,7 +58,6 @@
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
 				IsTest = false,
-				Origin = "ezbob",
 				Promocode = "promo code test",
 				BrokerEmail = "broker@email.com",
 				BrokerFirmName = "Broker Firm Name",
@@ -67,13 +68,13 @@
 			Log.Debug("call CreateOpportunity/UpdateOpportunity");
 
 			var opModel = new OpportunityModel {
-				ApprovedAmount = 10000,
 				Email = "a@b.c",
+				Origin = "ezbob",
+				
+				ApprovedAmount = 10000,
 				ExpectedEndDate = new DateTime(2015, 01, 29),
 				Stage = OpportunityStage.s90.DescriptionAttr(),
 				Name = "opName",
-				
-				
 			};
 			Log.Debug(opModel.ToJsonExtension());
 
@@ -81,8 +82,9 @@
 			Log.Debug("call CreateUpdateContact");
 
 			var cModel = new ContactModel {
-				
 				Email = "a@b.c",
+				Origin = "ezbob",
+				
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -103,8 +105,9 @@
 			Log.Debug("call CreateTask");
 
 			var tModel = new TaskModel {
-
 				Email = "a@b.c",
+				Origin = "ezbob",
+				
 				CreateDate = new DateTime(2015, 01, 27),
 				DueDate = new DateTime(2015, 01, 29),
 				Originator = "Originator",
@@ -117,8 +120,9 @@
 			Log.Debug("call CreateActivity");
 
 			var aModel = new ActivityModel {
-
 				Email = "a@b.c",
+				Origin = "ezbob",
+				
 				Description = "Description",
 				Type = "Mail",
 				Originator = "Originator",
@@ -129,12 +133,22 @@
 			Log.Debug(aModel.ToJsonExtension());
 			Log.Debug("call ChangeEmail");
 
-			var changeModel = new {
+			var changeModel = new ChangeEmailModel  {
 				currentEmail = "a@b.c",
+				Origin = "ezbob",
+
 				newEmail = "b@a.c"
 			};
-
 			Log.Debug(changeModel.ToJsonExtension());
+			
+
+			Log.Debug("call GetActivity");
+			var gaModel = new GetActivityModel {
+				Email = "a@b.c",
+				Origin = "ezbob"
+			};
+			Log.Debug(gaModel.ToJsonExtension());
+
 			Log.Debug("All methods response");
 
 			var rModel = new ApiResponse("Success", "");
@@ -247,7 +261,8 @@
 				Originator = "Originator",
 				Status = "Status",
 				Subject = "Subject",
-                Description = "Description"
+                Description = "Description",
+				Origin = "ezbob"
 			};
 
 			this.client.CreateTask(tModel);
@@ -258,8 +273,8 @@
 		public void TestActivity() {
 			var now = DateTime.UtcNow;
 			var aModel = new ActivityModel {
-
 				Email = "testdev1@b.c",
+				Origin = "ezbob",
 				Description = "Description",
 				Type = "Mail",
 				Originator = "Originator",
@@ -274,7 +289,7 @@
 
 		[Test]
 		public void TestChangeEmail() {
-			this.client.ChangeEmail("testdev1@b.c", "testdev2@b.c");
+			this.client.ChangeEmail(new ChangeEmailModel{currentEmail = "testdev1@b.c", newEmail = "testdev2@b.c", Origin = "ezbob" });
 			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
@@ -283,7 +298,7 @@
 
 			//var activity = client.GetActivity("alexbo+073@ezbob.com_Frozen");
 			//client.GetActivity("stasdes@ezbob.com");
-			var activity = this.client.GetActivity("testdev1@b.c");
+			var activity = this.client.GetActivity(new GetActivityModel{ Email = "testdev1@b.c", Origin = "ezbob"});
 			Assert.IsNotNull(activity);
 			Assert.IsNullOrEmpty(this.client.Error);
 			Assert.IsNullOrEmpty(activity.Error);
@@ -308,7 +323,8 @@
 				RequestedAmount = 1000,
 				DealCloseType = OpportunityDealCloseReason.Lost.DescriptionAttr(),
  				DealLostReason = "test lost",
-				CloseDate = now
+				CloseDate = now,
+				Origin = "ezbob"
 			});
 
 			Assert.IsNullOrEmpty(this.client.Error);
@@ -321,6 +337,7 @@
 			this.client.CreateOpportunity(new OpportunityModel() {
 				Name = "NewOpportunity",
 				Email = "testpdf@ezbob.com",
+				Origin = "ezbob",
 				CreateDate = now,
 				ExpectedEndDate = now.AddDays(7),
 				RequestedAmount = 1000,
@@ -335,7 +352,7 @@
 		[Test]
 		public void TestFakeGetActivity() {
 			ISalesForceAppClient fakeClient = new FakeApiClient();
-			var activity = fakeClient.GetActivity("");
+			var activity = fakeClient.GetActivity(new GetActivityModel());
 			Assert.IsNotNull(activity);
 			Assert.IsNullOrEmpty(fakeClient.Error);
 			Assert.IsNullOrEmpty(activity.Error);

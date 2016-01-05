@@ -53,6 +53,8 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api.cs" />
+    <Compile Include="Models\ChangeEmailModel.cs" />
+    <Compile Include="Models\GetActivityModel.cs" />
     <Compile Include="Models\GetActivityResultModel.cs" />
     <Compile Include="SalesForceApiClient.cs" />
     <Compile Include="FakeApiClient.cs" />

@@ -581,8 +581,9 @@
 			case DecisionActions.Approve:
 			case DecisionActions.ReApprove:
 				new UpdateOpportunity(CustomerID, new OpportunityModel {
-					ApprovedAmount = this.autoDecisionResponse.AutoApproveAmount,
 					Email = customerEmail,
+					Origin = this.customerDetails.Origin,
+					ApprovedAmount = this.autoDecisionResponse.AutoApproveAmount,
 					ExpectedEndDate = this.autoDecisionResponse.AppValidFor,
 					Stage = OpportunityStage.s90.DescriptionAttr(),
 				}).Execute();
@@ -592,9 +593,10 @@
 			case DecisionActions.ReReject:
 				new UpdateOpportunity(CustomerID, new OpportunityModel {
 					Email = customerEmail,
+					Origin = this.customerDetails.Origin,
 					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 					DealLostReason = "Auto " + this.autoDecisionResponse.Decision.Value.ToString(),
-					CloseDate = DateTime.UtcNow
+					CloseDate = DateTime.UtcNow,
 				}).Execute();
 				break;
 			} // switch
@@ -802,6 +804,7 @@
 				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
+						Origin = this.customerDetails.Origin,
 						CreateDate = now,
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
