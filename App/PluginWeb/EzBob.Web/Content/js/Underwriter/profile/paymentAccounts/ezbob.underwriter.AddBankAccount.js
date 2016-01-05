@@ -9,7 +9,7 @@ EzBob.Underwriter.AddBankAccount = EzBob.BoundItemView.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: "Add Bank Account",
+			title: "Add bank account",
 			position: "center",
 			draggable: false,
 			dialogClass: "add-bank-account-popup",

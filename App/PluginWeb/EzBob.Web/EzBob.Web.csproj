@@ -1571,7 +1571,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanOptions.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\PaymentRollover.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\RenewEbayToken.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\_CustomersPopupTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
     <Content Include="Content\js\Profile\ezbob.profile.paypointSchedule.js" />
@@ -1692,9 +1691,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Underwriter\Views\Shared\_ExportToExcel.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Shared\_LoanTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />

@@ -1,4 +1,7 @@
-﻿@using EZBob.DatabaseLib.Model.Database.Loans
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using EZBob.DatabaseLib.Model.Database.Loans
 @using StructureMap
 @model dynamic
 
@@ -176,10 +179,7 @@
         .ToList();
 
     <input type="hidden" name="loanId" value="<%-loanId%>" />
-    <div class="modal-header">
-        <h3 id="myModalLabel">Manual Payment</h3>
-    </div>
-
+    
     <div class="modal-body">
 
         <form id="payment-form" class="form-horizontal" action="/" method="POST">
