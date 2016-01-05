@@ -5,10 +5,8 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
-	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
 	using IMailLib;
 	using IMailLib.Helpers;
 	using StructureMap;
@@ -130,54 +128,77 @@
 			var paypoint = loan.TransactionsWithPaypointSuccesefull
 				.Select(ScheduleRowModel.CreatePaypoint)
 				.ToList();
-			var fees = loan.Charges.Where(x => x.State != "Paid" && x.State != "Expired")
-				.Select(ScheduleRowModel.CreateFees)
-				.ToList();
+			//var fees = loan.Charges.Where(x => x.State != "Paid" && x.State != "Expired")
+			//	.Select(ScheduleRowModel.CreateFees)
+			//	.ToList();
 			var schedule = loan.Schedule
 				.Where(x => x.Status == LoanScheduleStatus.AlmostPaid || x.Status == LoanScheduleStatus.Late || x.Status == LoanScheduleStatus.StillToPay)
 				.Select(ScheduleRowModel.CreateSchedule)
 				.ToList();
 
+			var lastSchedule = loan.Schedule
+				.OrderByDescending(x => x.Date)
+				.FirstOrDefault();
+			DateTime endPeriod = this.now;
+			if(lastSchedule != null && lastSchedule.Date > this.now) {
+				endPeriod = lastSchedule.Date;
+			}
+			
 			var allRows = pacnet;
 			allRows.AddRange(paypoint);
-			allRows.AddRange(fees);
+			//allRows.AddRange(fees);
 			allRows.AddRange(schedule);
 
+			scheduleModel.Content = CalculateBalance(allRows, endPeriod);
+
 			scheduleModel.Header = new List<string>{
-				{"Type"},
 				{"Date"},
-				{"Status"},
-				{"Interest"},
-				{"Principal"},
-				{"Fee"},
-				{"Total"}
+				{"Description"},
+				{"Payment received"},
+				{"Interest and fees"},
+				{"Balance"}
 			};
 			
-			scheduleModel.Content = allRows
-				.Select(x => new List<string> {
-					{x.Type},
-					{x.Date.ToLongUKDate()},
-					{x.Status},
-					{x.Interest.ToNumeric2Decimals(true)},
-					{x.Principal.ToNumeric2Decimals(true)},
-					{x.Fees.ToNumeric2Decimals(true)},
-					{x.Total.ToNumeric2Decimals(true)},
-				})
-				.ToList();
-
 			return new Dictionary<string, string> {
 				{"CustomerName",customerPersonalInfo.Fullname},
 				{"LoanRefNum",loan.RefNumber},
 				{"Date",this.now.ToLongUKDate()},
+				{"StartPeriod",loan.Date.ToLongUKDate()},
+				{"EndPeriod",endPeriod.ToLongUKDate()},
 				{"LoanDate",loan.Date.ToLongUKDate()},
 				{"LoanAmount",loan.LoanAmount.ToNumeric2Decimals()},
 				{"AnnualInterestRatePercent", interestRate.ToNumeric2Decimals()},
 				{"LoanTermMonths", repaymentPeriod.ToString()},
 				{"ScheduleTable", ""}
 			};
-
-
 		}//PrepareVariables
+
+		private List<List<string>> CalculateBalance(List<List<ScheduleRowModel>> allRows, DateTime endPeriod) {
+			decimal balance = 0;
+			foreach (var typeRows in allRows) {
+				foreach (var row in typeRows) {
+					row.Balance = row.Balance + balance + (row.InterestAndFees ?? 0) - (row.PaymentReceived ?? 0);
+					balance = row.Balance;
+				}
+			}
+
+			allRows.Add(new List<ScheduleRowModel> {
+				ScheduleRowModel.CreateClosingBalance(endPeriod, balance)
+			});
+
+			var content = allRows
+				.SelectMany(x => x.ToArray())
+				.Select(x => new List<string> {
+					{x.Date.ToLongUKDate()},
+					{x.Description},
+					{x.PaymentReceived.ToNumeric2Decimals(true)},
+					{x.InterestAndFees.ToNumeric2Decimals(true)},
+					{x.Balance.ToNumeric2Decimals(true)}
+				})
+				.ToList();
+
+			return content;
+		}//CalculateBalance
 
 		private int AddCollectionLog(int customerID, int loanID, SetLateLoanStatus.CollectionType type, SetLateLoanStatus.CollectionMethod method) {
 			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", customerID, loanID, type, method);
@@ -213,60 +234,87 @@
 	} // class Anual77ANotifier
 
 	public class ScheduleRowModel {
-		public string Type { get; set; }
-		public string Status { get; set; }
 		public DateTime Date { get; set; }
-		public decimal? Principal { get; set; }
-		public decimal? Interest { get; set; }
-		public decimal Fees { get; set; }
-		public decimal Total { get; set; }
-
-		public static ScheduleRowModel CreatePacnet(PacnetTransaction p) {
-			return new ScheduleRowModel {
-				Status = p.Status.ToDescription(),
-				Type = "Loan advance",
-				Date = p.PostDate,
-				Interest = null,
-				Principal = null,
-				Fees = p.Fees,
-				Total = p.Amount
+		public string Description { get; set; }
+		public decimal? PaymentReceived { get; set; }
+		public decimal? InterestAndFees { get; set; }
+		public decimal Balance { get; set; }
+		
+		public static List<ScheduleRowModel> CreatePacnet(PacnetTransaction p) {
+			return new List<ScheduleRowModel> {
+				new ScheduleRowModel {
+					Description = "Opening balance",
+					Date = p.PostDate,
+					PaymentReceived = null,
+					InterestAndFees = null,
+					Balance = p.Amount
+				}
 			};
-		}
+		}//CreatePacnet
 
-		public static ScheduleRowModel CreatePaypoint(PaypointTransaction p) {
-			return new ScheduleRowModel {
-				Status = p.Status.ToDescription(),
-				Type = "Repayment",
-				Date = p.PostDate,
-				Interest = p.Interest,
-				Principal = p.LoanRepayment,
-				Fees = p.Fees,
-				Total = p.Amount
-			};
-		}
+		public static List<ScheduleRowModel> CreatePaypoint(PaypointTransaction p) {
+			var list = new List<ScheduleRowModel>();
+			if (p.Fees > 0) {
+				list.Add(new ScheduleRowModel {
+					Description = "Late fee",
+					Date = p.PostDate,
+					PaymentReceived = null,
+					InterestAndFees = p.Fees,
+				});
+			}
 
-		public static ScheduleRowModel CreateFees(LoanCharge lc) {
-			return new ScheduleRowModel {
-				Status = string.IsNullOrEmpty(lc.State) ? "Active" : lc.State,
-				Type = "Charge",
-				Date = lc.Date,
-				Interest = null,
-				Principal = null,
-				Fees = lc.Amount,
-				Total = lc.Amount
-			};
-		}
+			if (p.Interest > 0) {
+				list.Add(new ScheduleRowModel {
+					Description = "Interest",
+					Date = p.PostDate,
+					PaymentReceived = null,
+					InterestAndFees = p.Interest,
+				});
+			}
 
-		public static ScheduleRowModel CreateSchedule(LoanScheduleItem ls) {
+			if (p.Amount > 0) {
+				list.Add(new ScheduleRowModel {
+					Description = "Repayment",
+					Date = p.PostDate,
+					PaymentReceived = p.Amount,
+					InterestAndFees = null,
+				});
+			}
+
+			return list;
+		}//CreatePaypoint
+
+		public static List<ScheduleRowModel> CreateSchedule(LoanScheduleItem ls) {
+			var list = new List<ScheduleRowModel>();
+			if (ls.Fees > 0) {
+				list.Add(new ScheduleRowModel {
+					Description = "Late fee",
+					Date = ls.Date,
+					PaymentReceived = null,
+					InterestAndFees = ls.Fees,
+				});
+			}
+
+			if (ls.Interest > 0) {
+				list.Add(new ScheduleRowModel {
+					Description = "Interest",
+					Date = ls.Date,
+					PaymentReceived = null,
+					InterestAndFees = ls.Interest,
+				});
+			}
+
+			return list;
+		}//CreateSchedule
+
+		public static ScheduleRowModel CreateClosingBalance(DateTime date, decimal balance) {
 			return new ScheduleRowModel {
-				Status = ls.Status.DescriptionAttr(),
-				Type = "Schedule",
-				Date = ls.Date,
-				Interest = ls.Interest,
-				Principal = ls.LoanRepayment,
-				Fees = ls.Fees,
-				Total = ls.AmountDue
+				Description = "Closing balance",
+				Date = date,
+				PaymentReceived = null,
+				InterestAndFees = null,
+				Balance = balance
 			};
-		}
+		}//CreateClosingBalance
 	}//class ScheduleRowModel
 } // namespace
