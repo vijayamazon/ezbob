@@ -3,8 +3,7 @@
     using System;
     using EzBobCommon.NSB;
 
-    public class CustomerSignupCommandResponse : CommandResponseBase
+    public class CustomerSignupCommandResponse : CustomerCommandResponseBase
     {
-        public string CustomerId { get; set; }
     }
 }

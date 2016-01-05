@@ -8,7 +8,8 @@ namespace EzBobApi.Commands.Customer
 {
     using EzBobCommon.NSB;
 
-    public class CustomerUpdateCommandResponse : CustomerCommandResponseBase
+    public class CustomerCommandResponseBase : CommandResponseBase
     {
+        public string CustomerId { get; set; }
     }
 }
