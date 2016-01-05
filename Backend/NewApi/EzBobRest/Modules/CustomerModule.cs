@@ -1,11 +1,13 @@
 ﻿namespace EzBobRest.Modules {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using EzBobApi.Commands.Customer;
     using EzBobCommon;
     using EzBobCommon.NSB;
     using EzBobCommon.Utils;
     using EzBobRest.NSB;
+    using EzBobRest.ResponseHelpers;
     using EzBobRest.Validators;
     using Nancy;
     using Nancy.ModelBinding;
@@ -51,10 +53,9 @@
                     return Response.AsJson(info)
                         .WithStatusCode(HttpStatusCode.BadRequest);
 
-                } catch (Exception ex) {
-                    InfoAccumulator info = new InfoAccumulator();
-                    info.AddError("Invalid request format");
-                    return Response.AsJson(info)
+                } catch (ModelBindingException ex) {
+                    var errorRespone = CreateErrorResponse(null, null, ex);
+                    return Response.AsJson(errorRespone)
                         .WithStatusCode(HttpStatusCode.BadRequest);
                 }
             };
@@ -65,43 +66,24 @@
         /// </summary>
         private void CustomerUpdate() {
             Post["UpdateCustomer", "api/v1/customer/update/{id}"] = o => {
-                string id = o.id;
+                string customerId = o.id;
                 CustomerUpdateCommand updateCommand = null;
                 try {
                     updateCommand = this.Bind<CustomerUpdateCommand>();
                 } catch (ModelBindingException ex) {
-                    JObject resp = new JObject();
-                    resp.Add("CustomerId", id);
-                    var errors = new JArray();
-                    resp.Add("Errors", errors);
-                    string errorMsg = "Invalid " + ExtractInvalidPropertyName(ex);
-                    errors.Add(errorMsg);
-                    return Response.AsJson(resp)
+                    var errorRespone = CreateErrorResponse(customerId, null, ex);
+                    return Response.AsJson(errorRespone)
                         .WithStatusCode(HttpStatusCode.BadRequest);
                 }
 
                 if (updateCommand != null) {
-                    updateCommand.CustomerId = id;
+                    updateCommand.CustomerId = customerId;
                     var response = UpdateSender.SendAndBlockUntilReceive(Config.ServiceAddress, updateCommand);
                     return CreateResponse(response);
                 }
 
                 return null;
             };
-        }
-
-        /// <summary>
-        /// Extracts the name of the invalid property.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <returns></returns>
-        private string ExtractInvalidPropertyName(ModelBindingException exception) {
-            if (exception.InnerException != null) {
-                var items = exception.InnerException.Message.Split(',')[0].Split('.');
-                return items[items.Length - 1];
-            }
-
-            return String.Empty;
         }
 
         /// <summary>
@@ -124,17 +106,14 @@
         /// </summary>
         /// <param name="response">The response.</param>
         /// <returns></returns>
-        private Response CreateResponse(dynamic response) {
+        private Response CreateResponse(CustomerCommandResponseBase response) {
             if (CollectionUtils.IsNotEmpty(response.Errors)) {
-                JObject errors = new JObject {
-                    {
-                        "CustomerId", response.CustomerId
-                    }, {
-                        "Errors", new JArray(response.Errors)
-                    }
-                };
 
-                return Response.AsJson(errors)
+                var errorResponse = new ErrorResponseBuilder().AddKeyValue("CustomerId", response.CustomerId)
+                    .AddErrorMessages(response.Errors)
+                    .BuildResponse();
+
+                return Response.AsJson(errorResponse)
                     .WithStatusCode(HttpStatusCode.BadRequest);
             }
 
@@ -145,6 +124,24 @@
             };
             return Response.AsJson(resp)
                 .WithStatusCode(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Creates the error response.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="errors">The errors.</param>
+        /// <param name="exception">The exception.</param>
+        /// <returns></returns>
+        private JObject CreateErrorResponse(string customerId, IEnumerable<string> errors, ModelBindingException exception = null)
+        {
+            var errorResponse = new ErrorResponseBuilder()
+                       .AddKeyValue("CustomerId", customerId)
+                       .AddErrorMessages(errors)
+                       .AddModelBindingException(exception)
+                       .BuildResponse();
+
+            return errorResponse;
         }
     }
 }

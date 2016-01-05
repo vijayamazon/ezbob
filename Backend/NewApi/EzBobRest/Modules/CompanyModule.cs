@@ -9,6 +9,7 @@ namespace EzBobRest.Modules {
     using EzBobCommon;
     using EzBobCommon.Utils;
     using EzBobRest.NSB;
+    using EzBobRest.ResponseHelpers;
     using EzBobRest.Validators;
     using Nancy;
     using Nancy.ModelBinding;
@@ -42,9 +43,9 @@ namespace EzBobRest.Modules {
                     var updateCommand = this.Bind<UpdateCompanyCommand>();
                     InfoAccumulator info = Validate(updateCommand);
                     if (info.HasErrors) {
-                        var error = CreateErrorObject(customerId, companyId, info.GetErrors()
-                            .ToArray());
-                        return Response.AsJson(error)
+                        var errorResponse = CreateErrorResponse(customerId, companyId, info.GetErrors());
+
+                        return Response.AsJson(errorResponse)
                             .WithStatusCode(HttpStatusCode.BadRequest);
                     }
 
@@ -54,8 +55,9 @@ namespace EzBobRest.Modules {
 
                     UpdateCompanyCommandResponse response = UpdateCompany.SendAndBlockUntilReceive(Config.ServiceAddress, updateCommand);
                     if (CollectionUtils.IsNotEmpty(response.Errors)) {
-                        var error = CreateErrorObject(customerId, companyId, response.Errors);
-                        return Response.AsJson(error)
+                        var errorResponse = CreateErrorResponse(customerId, companyId, response.Errors);
+
+                        return Response.AsJson(errorResponse)
                             .WithStatusCode(HttpStatusCode.BadRequest);
                     }
 
@@ -65,8 +67,9 @@ namespace EzBobRest.Modules {
                     return Response.AsJson(res)
                         .WithStatusCode(HttpStatusCode.OK);
                 } catch (ModelBindingException ex) {
-                    var error = CreateErrorObject(customerId, companyId, ex);
-                    return Response.AsJson(error)
+                    var errorResponse = CreateErrorResponse(customerId, companyId, null, ex);
+
+                    return Response.AsJson(errorResponse)
                         .WithStatusCode(HttpStatusCode.BadRequest);
                 }
             };
@@ -90,56 +93,22 @@ namespace EzBobRest.Modules {
         }
 
         /// <summary>
-        /// Creates the error object.
+        /// Creates the error response.
         /// </summary>
         /// <param name="customerId">The customer identifier.</param>
         /// <param name="companyId">The company identifier.</param>
         /// <param name="errors">The errors.</param>
-        /// <returns></returns>
-        private JObject CreateErrorObject(string customerId, string companyId, string[] errors) {
-            JObject error = new JObject();
-
-            error.Add("CustomerId", customerId);
-            if (StringUtils.IsNotEmpty(companyId)) {
-                error.Add("CompanyId", companyId);
-            }
-
-            var errorsArr = new JArray();
-            error.Add("Errors", errorsArr);
-
-            foreach (var err in errors) {
-                errorsArr.Add(err);
-            }
-
-            return error;
-        }
-
-        /// <summary>
-        /// Creates the error object.
-        /// </summary>
-        /// <param name="customerId">The customer identifier.</param>
-        /// <param name="companyId">The company identifier.</param>
         /// <param name="exception">The exception.</param>
         /// <returns></returns>
-        private JObject CreateErrorObject(string customerId, string companyId, ModelBindingException exception) {
-            string errorMsg = "Invalid " + ExtractInvalidPropertyName(exception);
-            return CreateErrorObject(customerId, companyId, new string[] {
-                errorMsg
-            });
-        }
+        private JObject CreateErrorResponse(string customerId, string companyId, IEnumerable<string> errors, ModelBindingException exception = null) {
+            var errorResponse = new ErrorResponseBuilder()
+                       .AddKeyValue("CustomerId", customerId)
+                       .AddKeyValue("CompanyId", companyId)
+                       .AddErrorMessages(errors)
+                       .AddModelBindingException(exception)
+                       .BuildResponse();
 
-        /// <summary>
-        /// Extracts the name of the invalid property.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <returns></returns>
-        private string ExtractInvalidPropertyName(ModelBindingException exception) {
-            if (exception.InnerException != null) {
-                var items = exception.InnerException.Message.Split(',')[0].Split('.');
-                return items[items.Length - 1];
-            }
-
-            return String.Empty;
+            return errorResponse;
         }
     }
 }
