@@ -4679,12 +4679,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SavePricingModelSettings", ReplyAction="http://tempuri.org/IEzService/SavePricingModelSettingsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SavePricingModelSettingsAsync(int underwriterId, string scenarioName, ServiceClientProxy.EzServiceReference.PricingModelModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveSourceRefHistory", ReplyAction="http://tempuri.org/IEzService/SaveSourceRefHistoryResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveSourceRefHistory", ReplyAction="http://tempuri.org/IEzService/SaveSourceRefHistoryResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveSourceRefHistoryAsync(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendPendingMails", ReplyAction="http://tempuri.org/IEzService/SendPendingMailsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SendPendingMails(int underwriterId, int customerId);
         
@@ -6365,14 +6359,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SavePricingModelSettingsAsync(int underwriterId, string scenarioName, ServiceClientProxy.EzServiceReference.PricingModelModel model) {
             return base.Channel.SavePricingModelSettingsAsync(underwriterId, scenarioName, model);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef) {
-            return base.Channel.SaveSourceRefHistory(nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveSourceRefHistoryAsync(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef) {
-            return base.Channel.SaveSourceRefHistoryAsync(nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SendPendingMails(int underwriterId, int customerId) {

@@ -108,31 +108,6 @@
 		}
 
 		[Test]
-		public void TestSaveCampaignSourceRef() {
-			m_oDB.ExecuteNonQuery(
-					"SaveCampaignSourceRef",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", 25),
-					m_oDB.CreateTableParameter<CampaignSourceRef>("Tbl", new List<CampaignSourceRef>() { new CampaignSourceRef {
-						FContent = "fc",
-						FDate = DateTime.UtcNow.AddDays(-1),
-						FMedium = "fm",
-						FName = "fn",
-						FSource = "fs",
-						FTerm = "ft",
-						FUrl = "fu",
-						RContent = "rc",
-						RDate = DateTime.UtcNow,
-						RMedium = "rm",
-						RName = "rn",
-						RSource = "rs",
-						RTerm = "rt",
-						RUrl = "ru",
-					} })
-				);
-		}
-
-		[Test]
 		public void TestLoadSalesForceLeadAccount() {
 			var leadAccountModel = m_oDB.FillFirst<SalesForceLib.Models.LeadAccountModel>("SF_LoadAccountLead",
 				CommandSpecies.StoredProcedure,

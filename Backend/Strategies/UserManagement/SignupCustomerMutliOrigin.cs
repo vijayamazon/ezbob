@@ -1,8 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
 	using System.Linq;
+	using System.Web;
 	using System.Web.Security;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
@@ -103,6 +106,8 @@
 
 				Log.Info("Sign up attempt '{0}' completed, success: {1}.", this.uniqueID, Success ? "yes" : "no");
 			} catch (Exception e) {
+				Success = false;
+
 				Log.Warn(e, "Sign up attempt {0} failed for customer name '{1}'.", this.uniqueID, userName);
 
 				if (this.dbTransaction != null)
@@ -334,12 +339,7 @@
 
 			Log.Debug("Sign up attempt '{0}': creating a source reference history entry...", this.uniqueID);
 
-			new SaveSourceRefHistory(
-				UserID,
-				this.model.ReferenceSource,
-				this.model.VisitTimes,
-				this.model.BrokerFillsForCustomer ? null : this.model.CampaignSourceRef
-			) { Transaction = this.dbTransaction, } .Execute();
+			SaveSourceRefHistory();
 
 			if (this.model.IsAlibaba()) {
 				Log.Debug("Sign up attempt '{0}': creating an Alibaba buyer entry...", this.uniqueID);
@@ -348,6 +348,71 @@
 
 			Log.Debug("Sign up attempt '{0}': customer stuff was created.", this.uniqueID);
 		} // CreateCustomerStuff
+
+		private void SaveSourceRefHistory() {
+			Log.Debug("Saving sourceref history for user {0}...", UserID);
+
+			var lst = new List<SourceRefEntry>();
+
+			string[] arySourceRefs = (HttpUtility.UrlDecode(this.model.ReferenceSource) ?? string.Empty).Split(';');
+			string[] aryVisitTimes = (HttpUtility.UrlDecode(this.model.VisitTimes) ?? string.Empty).Split(';');
+
+			for (int i = 0; i < arySourceRefs.Length; i++) {
+				string sSourceRef = arySourceRefs[i].Trim();
+
+				if (string.IsNullOrWhiteSpace(sSourceRef))
+					continue;
+
+				DateTime? oVisitTime = null;
+
+				if (i < aryVisitTimes.Length) {
+					DateTime oTime;
+
+					bool isParsed = DateTime.TryParseExact(
+						aryVisitTimes[i],
+						"dd/MM/yyyy HH:mm:ss",
+						CultureInfo.InvariantCulture,
+						DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
+						out oTime
+					);
+
+					if (isParsed)
+						oVisitTime = oTime;
+				} // if
+
+				lst.Add(new SourceRefEntry { SourceRef = sSourceRef, VisitTime = oVisitTime, });
+
+				Log.Debug(
+					"Sourceref entry for customer {0}: '{1}' on {2}.",
+					UserID,
+					sSourceRef,
+					oVisitTime.HasValue
+						? oVisitTime.Value.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+						: "unknown"
+				);
+			} // for each sourceref
+
+			if (lst.Count > 0) {
+				Log.Msg(
+					"{1} entr{2} in sourceref history for user {0} complete.",
+					UserID,
+					lst.Count,
+					lst.Count == 1 ? "y" : "ies"
+				);
+
+				DB.ExecuteNonQuery(
+					this.dbTransaction,
+					"SaveSourceRefHistory",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("UserID", UserID),
+					DB.CreateTableParameter<SourceRefEntry>("Lst", lst)
+				);
+			}
+			else
+				Log.Msg("No sourceref history to save for user {0}.", UserID);
+
+			Log.Debug("Saving sourceref history for user {0} complete.", UserID);
+		} // SaveSourceRefHistory
 
 		private static string GenerateUniqueID() {
 			string id = Guid.NewGuid().ToString("N");
@@ -368,6 +433,11 @@
 		private readonly SignupCustomerMultiOriginModel model;
 		private ConnectionWrapper dbTransaction;
 		private const int IdChunkSize = 4;
+
+		private class SourceRefEntry {
+			public string SourceRef { [UsedImplicitly] get; set; }
+			public DateTime? VisitTime { [UsedImplicitly] get; set; }
+		} // class SourceRefEntry
 
 		private class UserNotCreatedException : Exception {} // class UserNotCreatedException
 		private class BadDataException : Exception {} // class BadDataException
@@ -658,7 +728,7 @@
 			[Length(255)]
 			public string RUrl { get { return this.stra.model.RUrl(); } set { } }
 			[Length(255)]
-			public string RSource { get { return this.stra.model.RSource(); } set { } }
+			public string RSource { get { return this.stra.model.RSource() ?? "Direct"; } set { } }
 			[Length(255)]
 			public string RMedium { get { return this.stra.model.RMedium(); } set { } }
 			[Length(255)]
@@ -668,7 +738,7 @@
 			[Length(255)]
 			public string RName { get { return this.stra.model.RName(); } set { } }
 
-			public DateTime? RDate { get { return this.stra.model.RDate(); } set { } }
+			public DateTime RDate { get { return this.stra.model.RDate() ?? DateTime.UtcNow; } set { } }
 
 			private readonly SignupCustomerMultiOrigin stra;
 		} // class CreateCampaignSourceRef

@@ -11,7 +11,6 @@
 	using System.Web.Security;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Code;
 	using Ezbob.Backend.Models;
@@ -40,7 +39,6 @@
 		public AccountController() {
 			this.cookiesToRemoveOnSignup = new SortedSet<string>();
 			this.userRepo = ObjectFactory.GetInstance<IUsersRepository>();
-			this.customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 			this.serviceClient = new ServiceClient();
 			this.context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
 			this.brokerHelper = new BrokerHelper();
@@ -954,7 +952,6 @@
 		private static readonly ASafeLog log = new SafeILog(typeof(AccountController));
 
 		private readonly IUsersRepository userRepo;
-		private readonly CustomerRepository customerRepo;
 		private readonly ServiceClient serviceClient;
 		private readonly IEzbobWorkplaceContext context;
 		private readonly BrokerHelper brokerHelper;

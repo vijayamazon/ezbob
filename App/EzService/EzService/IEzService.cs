@@ -387,14 +387,6 @@
 		ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model);
 
 		[OperationContract]
-		ActionMetaData SaveSourceRefHistory(
-			int nUserID,
-			string sSourceRefList,
-			string sVisitTimeList,
-			CampaignSourceRef campaignSourceRef
-		);
-
-		[OperationContract]
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
 
 		[OperationContract]
