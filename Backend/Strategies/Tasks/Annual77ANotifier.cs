@@ -1,9 +1,9 @@
-﻿namespace Ezbob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Tasks {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	// using DotNetOpenAuth.Messaging;     <------------ It compiles without this. And appears to work without this.
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
@@ -64,6 +64,11 @@
 				return ActionResult.Continue;
 			}
 
+			if (!typeOfBusiness.IsRegulated()) {
+				Log.Debug("Not sending annual 77A notification to customer {0} with regulated business type {1}", customerID, typeOfBusiness);
+				return ActionResult.Continue;
+			}
+
 			PrepareAndSendMail(loanID, customerID, template);
 			return ActionResult.Continue;
 		}//HandleOneNotification
@@ -78,7 +83,7 @@
 			SaveCollectionSnailMailMetadata(collectionLogID, metadata);
 		}
 		private void LoadImailTemplates() {
-			List<CollectionSnailMailTemplate> dbTemplates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
+			List<CollectionSnailMailTemplate> dbTemplates = DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
 			this.templates = dbTemplates
 				.Where(x => x.Type == SetLateLoanStatus.CollectionType.Annual77ANotification.ToString())
 				.Select(x => new SnailMailTemplate {

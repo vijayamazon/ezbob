@@ -8,6 +8,7 @@
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Tasks;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
