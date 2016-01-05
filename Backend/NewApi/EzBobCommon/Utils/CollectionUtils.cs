@@ -36,7 +36,7 @@
         /// <param name="collection">The collection.</param>
         /// <returns></returns>
         public static bool IsEmpty(IEnumerable collection) {
-            return collection == null || collection.GetEnumerator()
+            return collection == null || !collection.GetEnumerator()
                 .MoveNext();
         }
 
