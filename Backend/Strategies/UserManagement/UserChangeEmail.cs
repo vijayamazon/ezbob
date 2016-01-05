@@ -3,6 +3,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
@@ -51,6 +52,8 @@
 
 			if (!string.IsNullOrWhiteSpace(ErrorMessage))
 				return;
+
+			FireToBackground(new UpdateUploadedHmrcDisplayName(this.spUpdate.UserID));
 
 			FireToBackground(new EmailChanged(this.spUpdate.UserID, this.spUpdate.RequestID.ToString()));
 

@@ -79,7 +79,7 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 		var val = this.ui.input.val();
 
 		if (!IsInt(val, true))
-			val = val.substring(0, val.indexOf(','));
+			val = val.substring(0, val.indexOf(':'));
 
 		if (!IsInt(val, true)) {
 			var selectVal = this.ui.select.val();
