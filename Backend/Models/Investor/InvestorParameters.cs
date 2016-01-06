@@ -9,8 +9,7 @@
         public int WeeklyInvestmentAllowed { get; set; }
         public int MonthlyInvestmentAllowed { get; set; }
         public int GradeMin { get; set; } // TODO TO REMOVE
-        public int GradeMax { get; set; } // TODO TO REMOVE
-        public Dictionary<Grade, double> GrageABudgets { get; set; }
+        public int GradeMax { get; set; } // TODO TO REMOVE        
         public double Balance { get; set; }
     }//class InvestorParameters
 

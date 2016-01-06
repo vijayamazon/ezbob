@@ -4,8 +4,8 @@
     using System.Linq;
     using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-    using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
-    using Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement;
+    using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;
     using StructureMap;
 
     public class FindInvestorForOffer : AStrategy {
@@ -27,27 +27,19 @@
 			//	return;
 			//}
 
-
-            var investorParameters = new InvestorParameters();
-
-		    investorParameters.InvestorID = 1;
-
-            var investorParametersList = new List<InvestorParameters>();
-            investorParametersList.Add(new InvestorParameters() {
-                InvestorID = 1,
-                DailyInvestmentAllowed = 700,
-                Balance = 500
-            });
-
-		    //var filtered = investorsList.Where(x => x.IsActive);
+		    this.cashRequestID = 1;
             var container = InitContainer(typeof(InvestorService));
             var investorService = container.GetInstance<IInvestorService>();
+            List<InvestorParameters> investorParametersList = investorService.GetInvestorParameters();
+            InvestorLoanCashRequest investorLoancCashRequest = investorService.GetInvestorLoanCashRequest(this.cashRequestID);
 
-            var cashRequest = new InvestorCashRequest() {
-                ManagerApprovedSum = 2000
-            };
+		    //var filtered = investorsList.Where(x => x.IsActive);
 
-            var aa = investorService.GetMatchedInvestors(cashRequest, investorParametersList, RuleType.System);
+		    investorParametersList = investorService.GetMatchedInvestors(investorLoancCashRequest, investorParametersList, RuleType.System);
+            investorParametersList = investorService.GetMatchedInvestors(investorLoancCashRequest, investorParametersList, RuleType.UnderWriter);
+            investorParametersList = investorService.GetMatchedInvestors(investorLoancCashRequest, investorParametersList, RuleType.Investor);
+            
+
                 
                                         //x.InvestorSystemBalance.Max(m => m.InvestorSystemBalanceID) <= cashRequest.ManagerApprovedSum &&
                                         //systemParameters.DailyInvestmentAllowed - (cashRequest.ManagerApprovedSum + x.InvestorSystemBalance.Where(w => w.Timestamp.Date == DateTime.Today).Sum(y => Convert.ToDouble(y.TransactionAmount))) <= cashRequest.ManagerApprovedSum &&
@@ -77,10 +69,11 @@
 
             return container;
         }
+        
 
 		public bool IsFound { get; private set; }
 
 		private readonly int customerID;
-		private readonly long cashRequestID;
+		private long cashRequestID;
 	}
 }

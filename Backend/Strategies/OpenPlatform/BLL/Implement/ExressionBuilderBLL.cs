@@ -7,15 +7,13 @@
     using System.Reflection;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
-    using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
-    using StructureMap;
     using StructureMap.Attributes;
 
-    public class ExressionBuilder : IExressionBuilder {
+    public class ExressionBuilderBLL : IExressionBuilderBLL {
 
         [SetterProperty]
-        public IGenericRules GenericRules { get; set; }
+        public IGenericRulesBLL GenericRules { get; set; }
 
         public Expression BuildExpression<T1, T2>(string leftPropertyName,
                                                                 Operator ruleOperator, string rightPropertyName,
@@ -46,7 +44,7 @@
             var expLeft = Expression.Parameter(typeof(T1));
             var expRight = Expression.Parameter(typeof(T2));
 
-            var rootRule = rulesDict.FirstOrDefault(x => ((x.Value.InvestorID == investorId) && (x.Value.IsRoot)));
+            var rootRule = rulesDict.FirstOrDefault(x => (x.Value.IsRoot));
 
             var binaryExpression = BuildRecursiveExpression<T1, T2>(investorId,
                                                                     cashRequestID,
@@ -89,7 +87,7 @@
             bool result = false;
             Assembly genericRulesAssembly = GenericRules.GetType().Assembly;
             Type myType = genericRulesAssembly.GetTypes()
-                .FirstOrDefault(x => x.FullName.Contains("GenericRules"));
+                .FirstOrDefault(x => x.FullName.Contains("GenericRulesBLL"));
             if (myType != null) {
                 MethodInfo Method = myType.GetMethod(methodName);
                 object myInstance = GenericRules;

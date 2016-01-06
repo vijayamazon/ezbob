@@ -8,18 +8,23 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using StructureMap.Attributes;
 
-    public class Match<T1, T2> : IMatch<T1,T2>
+    public class MatchBLL<T1, T2> : IMatchBLL<T1,T2>
     {
         [SetterProperty]
-        public IExressionBuilder ExressionBuilder { get; set; }
+        public IExressionBuilderBLL ExressionBuilder { get; set; }
+        
         [SetterProperty]
         public IRulesEngineDAL RulesDAL { get; set; }
+        
         public Func<T1, T2, bool> Func { get; set; }
         public T1 Source { get; set; }
         public T2 Target { get; set; }
         public void BuildFunc(int investorID, long cashRequestID, RuleType ruleType)
         {
             Dictionary<int, Rule> Rules = RulesDAL.GetRules(investorID, ruleType);
+            if (Rules == null) {
+                Func = delegate { return true; };
+            }
             Func = ExressionBuilder.CompileRule<T1, T2>(investorID,cashRequestID, Rules);
         }
         public bool IsMatched()

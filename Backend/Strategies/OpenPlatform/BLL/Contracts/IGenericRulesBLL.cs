@@ -1,5 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts {
-    public interface IGenericRules {
+    public interface IGenericRulesBLL {
         bool RuleBadgetLevel(int InvestorId, long CashRequestId);
     }
 }

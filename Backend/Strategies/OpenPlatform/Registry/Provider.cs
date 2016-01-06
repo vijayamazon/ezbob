@@ -1,6 +1,5 @@
-﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement
+﻿namespace Ezbob.Backend.Strategies.OpenPlatform.Registry
 {
-    using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using StructureMap;
 
     public class Provider<T> : IProvider<T>

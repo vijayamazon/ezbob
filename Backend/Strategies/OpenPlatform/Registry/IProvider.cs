@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts
+﻿namespace Ezbob.Backend.Strategies.OpenPlatform.Registry
 {
     public interface IProvider<out T> 
     {

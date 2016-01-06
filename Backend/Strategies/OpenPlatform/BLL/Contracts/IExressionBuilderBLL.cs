@@ -6,7 +6,7 @@
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
 
-    public interface IExressionBuilder
+    public interface IExressionBuilderBLL
     {
         Expression BuildExpression<T1, T2>(string leftPropertyName,
             Operator ruleOperator, string rightPropertyName,

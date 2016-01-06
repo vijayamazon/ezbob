@@ -3,7 +3,7 @@
     using System;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 
-    public interface IMatch<T1, T2>
+    public interface IMatchBLL<T1, T2>
     {        
         T1 Source { get; set; }
         T2 Target { get; set; }

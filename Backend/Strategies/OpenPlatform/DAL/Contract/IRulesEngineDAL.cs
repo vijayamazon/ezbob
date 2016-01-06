@@ -4,6 +4,6 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
 
     public interface IRulesEngineDAL {
-        Dictionary<int, Rule> GetRules(int ID, RuleType ruleType);
+        Dictionary<int, Rule> GetRules(int investorID, RuleType ruleType);
     }
 }

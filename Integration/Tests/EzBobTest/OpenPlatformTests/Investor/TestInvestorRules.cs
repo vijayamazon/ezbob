@@ -5,6 +5,8 @@
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
+    using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using EzBobTest.OpenPlatformTests.Core;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -68,7 +70,7 @@
 
             var investorParametersMock = new Mock<IInvestorParametersDAL>();
 
-            var cashRequest = new InvestorCashRequest() {
+            var cashRequest = new InvestorLoanCashRequest() {
                 ManagerApprovedSum = 20
             };
 
@@ -147,7 +149,7 @@
 
             var investorParametersMock = new Mock<IInvestorParametersDAL>();
 
-            var cashRequest = new InvestorCashRequest() {
+            var cashRequest = new InvestorLoanCashRequest() {
                 ManagerApprovedSum = 2000
             };
 
@@ -225,7 +227,7 @@
 
             var investorParametersMock = new Mock<IInvestorParametersDAL>();
 
-            var cashRequest = new InvestorCashRequest() {
+            var cashRequest = new InvestorLoanCashRequest() {
                 ManagerApprovedSum = 20,
                 CashRequestID = 1
             };
@@ -246,11 +248,11 @@
                 }
             };
 
-            var genericRulesMock = new Mock<IGenericRules>();
+            var genericRulesMock = new Mock<IGenericRulesBLL>();
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1))
                 .Returns(true);
 
-            container.Configure(r => r.ForSingletonOf<IGenericRules>()
+            container.Configure(r => r.ForSingletonOf<IGenericRulesBLL>()
             .Use(() => genericRulesMock.Object));
 
 
