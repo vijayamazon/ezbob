@@ -22,7 +22,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
-	public class SignupCustomerMultiOrigin : AStrategy {
+	public class SignupCustomerMultiOrigin : ASignupLoginBaseStrategy {
 		public SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model) {
 			this.uniqueID = GenerateUniqueID();
 
@@ -41,6 +41,9 @@
 		public override void Execute() {
 			Log.Debug("Sign up attempt '{0}' started...", this.uniqueID);
 
+			if (this.model != null)
+				this.model.UserName = NormalizeUserName(this.model.UserName);
+
 			string userName = (this.model == null) ? "unknown name" : this.model.UserName;
 
 			try {
@@ -52,8 +55,6 @@
 				} // if
 
 				Log.Debug("Sign up attempt '{0}', model is {1}.", this.uniqueID, this.model.ToLogStr());
-
-				this.model.UserName = (this.model.UserName ?? string.Empty).Trim().ToLowerInvariant();
 
 				if (string.IsNullOrWhiteSpace(this.model.UserName)) {
 					SetInternalErrorMsg("This is not a valid email address.");

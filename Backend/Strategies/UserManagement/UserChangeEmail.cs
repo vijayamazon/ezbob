@@ -13,9 +13,11 @@
 	using SalesForceLib.Models;
 	using StructureMap;
 
-	public class UserChangeEmail : AStrategy {
+	public class UserChangeEmail : ASignupLoginBaseStrategy {
 		public UserChangeEmail(int nUserID, string sNewEmail) {
 			ErrorMessage = null;
+
+			sNewEmail = NormalizeUserName(sNewEmail);
 
 			this.spUpdate = new SpUserChangeEmail(DB, Log) {
 				Email = sNewEmail,

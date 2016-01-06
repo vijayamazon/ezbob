@@ -10,9 +10,9 @@
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 
-	public class SignupUnderwriterMultiOrigin : AStrategy {
+	public class SignupUnderwriterMultiOrigin : ASignupLoginBaseStrategy {
 		public SignupUnderwriterMultiOrigin(string sEmail, DasKennwort sPassword, string sRoleName) {
-			string userName = (sEmail ?? string.Empty).Trim().ToLowerInvariant();
+			string userName = NormalizeUserName(sEmail);
 
 			this.securityData = new UserSecurityData(this) {
 				Email = userName,

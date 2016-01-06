@@ -8,7 +8,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
-	public class UserLogin : AStrategy {
+	public class UserLogin : ASignupLoginBaseStrategy {
 		public UserLogin(
 			CustomerOriginEnum? originID,
 			string sEmail,
@@ -18,6 +18,8 @@
 			DateTime? promotionPageVisitTime
 		) {
 			m_oResult = null;
+
+			sEmail = NormalizeUserName(sEmail);
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
