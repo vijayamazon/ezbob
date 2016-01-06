@@ -213,6 +213,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringStringMapActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MessagesListActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MarketplacesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult))]
@@ -1371,6 +1372,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.SummaryField, value) != true)) {
                     this.SummaryField = value;
                     this.RaisePropertyChanged("Summary");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MessagesListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class MessagesListActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.MessagesModel[] MessagesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.MessagesModel[] Messages {
+            get {
+                return this.MessagesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessagesField, value) != true)) {
+                    this.MessagesField = value;
+                    this.RaisePropertyChanged("Messages");
                 }
             }
         }
@@ -4907,6 +4931,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BuildMultiBrandLoanSummary", ReplyAction="http://tempuri.org/IEzService/BuildMultiBrandLoanSummaryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult> BuildMultiBrandLoanSummaryAsync(int customerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadMessagesSentToUser", ReplyAction="http://tempuri.org/IEzService/LoadMessagesSentToUserResponse")]
+        ServiceClientProxy.EzServiceReference.MessagesListActionResult LoadMessagesSentToUser(int userID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadMessagesSentToUser", ReplyAction="http://tempuri.org/IEzService/LoadMessagesSentToUserResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MessagesListActionResult> LoadMessagesSentToUserAsync(int userID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddHistoryDirector", ReplyAction="http://tempuri.org/IEzService/AddHistoryDirectorResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector);
         
@@ -6663,6 +6693,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult> BuildMultiBrandLoanSummaryAsync(int customerID) {
             return base.Channel.BuildMultiBrandLoanSummaryAsync(customerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.MessagesListActionResult LoadMessagesSentToUser(int userID) {
+            return base.Channel.LoadMessagesSentToUser(userID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MessagesListActionResult> LoadMessagesSentToUserAsync(int userID) {
+            return base.Channel.LoadMessagesSentToUserAsync(userID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector) {

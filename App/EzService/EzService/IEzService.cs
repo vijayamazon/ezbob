@@ -506,5 +506,8 @@
 
 		[OperationContract]
 		MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID);
+
+		[OperationContract]
+		MessagesListActionResult LoadMessagesSentToUser(int userID);
 	} // interface IEzService
 } // namespace EzService

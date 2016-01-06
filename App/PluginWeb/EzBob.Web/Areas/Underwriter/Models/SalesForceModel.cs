@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;

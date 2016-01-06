@@ -1,31 +1,36 @@
 ﻿<script id="message-template" type="text/template">
-    <div class="messages row">
-        <div class="col-md-12">
-            <table class="table box">
-                <thead class="box-title">
-                    <tr>
-                        <th>Sent document name</th>
-                        <th>Download</th>
-                        <th>Date created</th>
-                    </tr>
-                </thead>
-                <tbody class="box-content">
-                    <%_.each(model, function(val, i){ if(!val.Id) { return; }%>
-                    <tr>
-                        <td>
-                            <a href="@Url.Action("DownloadMessagesDocument", "Messages", new { Area = "Underwriter" })/<%-val.Id%>" target="_blank"><%-val.FileName%></a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("DownloadMessagesDocument", "Messages", new { Area = "Underwriter" })/?id=<%-val.Id%>&download=true" target="_blank">download</a>
-                        </td>
-                        <td><%-val.CreationDate%></td>
-                    </tr>
-                    <%});%>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="pull-right">
-        <button class="btn btn-primary aml-button-margin" id="btnAMLInformation">AML</button>
-    </div>
+	<div class="messages row">
+		<div class="col-md-12">
+			<table class="table box">
+				<thead class="box-title">
+					<tr>
+						<th></th>
+						<th>Sent document name</th>
+						<th>Download</th>
+						<th>Date created</th>
+					</tr>
+				</thead>
+				<tbody class="box-content messages-list">
+				</tbody>
+				<tfoot class="body-template hide">
+					<tr class="body-row-template">
+						<td>
+							<i class="not-own fa fa-flag hide" title="This message was sent to customer's email address."></i>
+							<i class="own fa fa-check hide" title="This message was sent directly to the customer."></i>
+						</td>
+						<td>
+							<a class="open" href="@Url.Action("DownloadMessagesDocument", "Messages", new { Area = "Underwriter" })?id=" target="_blank"></a>
+						</td>
+						<td>
+							<a class="download" href="@Url.Action("DownloadMessagesDocument", "Messages", new { Area = "Underwriter" })?download=true&id=" target="_blank">download</a>
+						</td>
+						<td class="creation-date"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	<div class="pull-right">
+		<button class="btn btn-primary aml-button-margin" id="btnAMLInformation">AML</button>
+	</div>
 </script>

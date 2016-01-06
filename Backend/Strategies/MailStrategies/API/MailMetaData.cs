@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 
 	public sealed class MailMetaData : IEnumerable {
-
 		public static implicit operator Dictionary<string, string>(MailMetaData oSrc) {
 			return oSrc.m_oVariables;
 		} // operator cast to Dictionary
@@ -48,6 +47,5 @@
 		private string Normalise(string v) {
 			return string.IsNullOrWhiteSpace(v) ? string.Empty : v.Trim();
 		} // Normalise
-
 	} // class MailMetaData
 } // namespace Ezbob.Backend.Strategies.MailStrategies.API

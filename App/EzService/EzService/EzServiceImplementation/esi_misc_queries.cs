@@ -300,5 +300,16 @@
 				Summary = instance.Result,
 			};
 		} // BuildMultiBrandLoanSummary
+
+		public MessagesListActionResult LoadMessagesSentToUser(int userID) {
+			LoadMessagesSentToUser instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, userID);
+
+			return new MessagesListActionResult {
+				MetaData = amd,
+				Messages = instance.Result,
+			};
+		} // LoadMessagesSentToUser
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -84,6 +84,7 @@
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MarketplaceTurnoverModel.cs" />
+    <Compile Include="MessagesModel.cs" />
     <Compile Include="MpModel.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />

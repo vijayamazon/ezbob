@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\ApplicationInfoResult.cs" />
+    <Compile Include="ActionResults\MessagesListActionResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\MultiBrandLoanSummaryActionResult.cs" />
     <Compile Include="ActionResults\SetPasswordActionResult.cs" />

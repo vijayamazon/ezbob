@@ -356,7 +356,6 @@
     <Compile Include="Model\Database\DailyReportRow.cs" />
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
-    <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeMarketPlaceType.cs" />
     <Compile Include="Model\PayPointAccount.cs" />
     <Compile Include="Model\PayPointCard.cs" />

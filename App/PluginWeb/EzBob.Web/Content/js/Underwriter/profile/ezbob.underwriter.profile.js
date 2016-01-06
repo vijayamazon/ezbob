@@ -253,6 +253,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 						BlockUi('off', self.alertDocsView.$el);
 					});
 
+					self.messagesModel.clear({ silent: true });
 					self.messagesModel.set({ Id: self.customerId }, { silent: true });
 					self.messagesModel.fetch().done(function () {
 						BlockUi('off', self.Message.$el);

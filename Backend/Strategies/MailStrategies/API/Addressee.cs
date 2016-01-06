@@ -1,15 +1,22 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies.API {
 	public sealed class Addressee {
-
-		public Addressee(string sRecipient = "", string sCarbonCopy = "", bool bShouldRegister = true, int? userID = null, bool isBroker = false, string origin = "") {
+		public Addressee(
+			string sRecipient = "",
+			string sCarbonCopy = "",
+			bool bShouldRegister = true,
+			int? userID = null,
+			bool isBroker = false,
+			string origin = ""
+		) {
 			Recipient = sRecipient;
 			CarbonCopy = sCarbonCopy;
 			ShouldRegister = bShouldRegister;
 			UserID = userID;
-		    IsBroker = isBroker;
+			IsBroker = isBroker;
+			Origin = origin;
 		}// constructor
 
-	    public bool IsBroker { get; private set; }
+		public bool IsBroker { get; private set; }
 
 		public string Origin {
 			get { return m_sOrigin; } // get
@@ -42,6 +49,5 @@
 		private string Normalise(string v) {
 			return string.IsNullOrWhiteSpace(v) ? string.Empty : v.Trim();
 		} // Normalise
-
 	} // class Addressee
 } // namespace Ezbob.Backend.Strategies.MailStrategies.API

@@ -635,6 +635,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DecisionModel" nillable="true" type="tns:DecisionModel" />
+  <xs:complexType name="ArrayOfMessagesModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MessagesModel" nillable="true" type="tns:MessagesModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMessagesModel" nillable="true" type="tns:ArrayOfMessagesModel" />
+  <xs:complexType name="MessagesModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsOwn" type="xs:boolean" />
+      <xs:element minOccurs="0" name="RawCreationDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RawFileName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MessagesModel" nillable="true" type="tns:MessagesModel" />
   <xs:complexType name="MpModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Affordability" nillable="true" type="tns:ArrayOfAffordabilityData" />

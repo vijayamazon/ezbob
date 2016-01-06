@@ -307,7 +307,6 @@
     <Compile Include="Areas\Underwriter\Models\LoanOptionsViewModel.cs" />
     <Compile Include="Areas\Underwriter\Models\LoansAndOffers.cs" />
     <Compile Include="Areas\Underwriter\Models\ManualPaymentModel.cs" />
-    <Compile Include="Areas\Underwriter\Models\MessagesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\RolloverModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SupportModel.cs" />
     <Compile Include="Code\AgreementsGenerator.cs" />
@@ -338,7 +337,6 @@
     <Compile Include="Code\MpUniq\MarketPlaceIsAlreadyAddedException.cs" />
     <Compile Include="Code\MpUniq\MPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\ConsentController.cs" />
-    <Compile Include="Areas\Underwriter\Models\MessagesModel.cs" />
     <Compile Include="Code\CustomerNameValidator.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\CustomerIsNotApprovedException.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\CustomerIsNotFullyRegistered.cs" />

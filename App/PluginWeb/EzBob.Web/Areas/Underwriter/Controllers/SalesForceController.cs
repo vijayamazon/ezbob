@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Ezbob.Backend.Models;
 	using EzBob.Models.Marketplaces;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
@@ -11,11 +13,11 @@
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using log4net;
+	using ServiceClientProxy;
 
 	public class SalesForceController : Controller {
 		public SalesForceController(CustomerRepository customerRepository, 
 			FraudDetectionRepository fraudDetectionLog, 
-			MessagesModelBuilder messagesModelBuilder, 
 			CustomerPhoneRepository customerPhoneRepository, 
 			CustomerRelationsRepository customerRelationsRepository, 
 			CompanyFilesMetaDataRepository companyFilesMetaDataRepository, 
@@ -24,7 +26,6 @@
 		) {
 			this.customerRepository = customerRepository;
 			this.fraudDetectionLog = fraudDetectionLog;
-			this.messagesModelBuilder = messagesModelBuilder;
 			this.customerPhoneRepository = customerPhoneRepository;
 			this.customerRelationsRepository = customerRelationsRepository;
 			this.companyFilesMetaDataRepository = companyFilesMetaDataRepository;
@@ -115,7 +116,14 @@
 				LastCheckDate = lastCheckDate,
 			};
 
-			model.Messages = this.messagesModelBuilder.Create(customer);
+			try {
+				model.Messages = new List<MessagesModel>(
+					new ServiceClient().Instance.LoadMessagesSentToUser(customer.Id).Messages
+				);
+			} catch (Exception e) {
+				Log.Error("Failed to load messages sent to customer " + customer.Id, e);
+				model.Messages = new List<MessagesModel>();
+			} // try
 
 			model.Phones = this.customerPhoneRepository
 				.GetAll()
@@ -146,7 +154,6 @@
 		private readonly CustomerRepository customerRepository;
 		private readonly IUsersRepository userRepo;
 		private readonly FraudDetectionRepository fraudDetectionLog;
-		private readonly MessagesModelBuilder messagesModelBuilder;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private readonly CustomerRelationsRepository customerRelationsRepository;
 		private readonly CompanyFilesMetaDataRepository companyFilesMetaDataRepository;
