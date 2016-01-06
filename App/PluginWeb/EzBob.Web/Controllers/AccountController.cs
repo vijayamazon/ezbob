@@ -344,6 +344,16 @@
 
 				log.Debug("Sign up client attempt id: '{0}', status is {1}.", uniqueID, status);
 
+				if (status == MembershipCreateStatus.DuplicateEmail) {
+					return Json(
+						new {
+							success = false,
+							errorMessage = signupResult.ErrorMessage,
+						},
+						JsonRequestBehavior.AllowGet
+					);
+				} // if
+
 				if ((status != MembershipCreateStatus.Success) || !string.IsNullOrWhiteSpace(signupResult.ErrorMessage)) {
 					throw new Exception(string.IsNullOrWhiteSpace(signupResult.ErrorMessage)
 						? string.Format("Failed to sign up (error code is '{0}').", uniqueID)
@@ -364,18 +374,24 @@
 
 				log.Debug("Sign up client attempt id: '{0}', sign up complete.", uniqueID);
 
-				return Json(new {
-					success = true,
-					antiforgery_token = AntiForgery.GetHtml().ToString(),
-					refNumber = signupResult.RefNumber
-				}, JsonRequestBehavior.AllowGet);
+				return Json(
+					new {
+						success = true,
+						antiforgery_token = AntiForgery.GetHtml().ToString(),
+						refNumber = signupResult.RefNumber,
+					},
+					JsonRequestBehavior.AllowGet
+				);
 			} catch (Exception e) {
 				log.Alert(e, "Failed to sign up, client attempt id: {0}.", uniqueID);
 
-				return Json(new {
-					success = false,
-					errorMessage = string.Format("Failed to sign up (error code is '{0}'), please retry.", uniqueID),
-				}, JsonRequestBehavior.AllowGet);
+				return Json(
+					new {
+						success = false,
+						errorMessage = string.Format("Failed to sign up (error code is '{0}'), please retry.", uniqueID),
+					},
+					JsonRequestBehavior.AllowGet
+				);
 			} // try
 		} // SignUp
 
