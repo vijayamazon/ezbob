@@ -118,6 +118,15 @@ BEGIN
 			INNER JOIN first_business_summary f ON s.SummaryID = f.SummaryID AND f.Position = 1
 		GROUP BY
 			s.CustomerID
+	), origin_count AS (
+		SELECT
+			CustomerID = @CustomerID,
+			OriginCount = COUNT(DISTINCT c.OriginID)
+		FROM
+			Customer c
+			INNER JOIN Customer cc ON c.Name = cc.Name
+		WHERE
+			cc.Id = @CustomerID
 	) SELECT
 		RowType = 'Model',
 		Id = c.Id,
@@ -188,7 +197,8 @@ BEGIN
 			FROM CardInfo ci
 			WHERE ci.BrokerID = c.BrokerID
 			AND ci.IsDefault = 1
-		)
+		),
+		IsMultiBranded = CONVERT(BIT, CASE ISNULL(oc.OriginCount, 0) WHEN 1 THEN 0 ELSE 1 END)
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
@@ -198,6 +208,7 @@ BEGIN
 		LEFT JOIN cec ON c.Id = cec.CustomerID
 		LEFT JOIN request_reason rr ON c.Id = rr.CustomerID
 		LEFT JOIN value_added_fcf vf ON vf.CustomerID = r.IdCustomer
+		LEFT JOIN origin_count oc ON oc.CustomerID = @CustomerID
 		OUTER APPLY dbo.udfGetLoanSource(r.LoanSourceID) ls
 		OUTER APPLY dbo.udfGetDiscountPlan(r.DiscountPlanID) dp
 		OUTER APPLY dbo.udfGetLoanType(r.LoanTypeId) lt

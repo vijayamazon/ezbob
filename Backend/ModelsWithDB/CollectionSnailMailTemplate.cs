@@ -1,10 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB {
-	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	public class CollectionSnailMailTemplate {
-		[PK]
-		[NonTraversable]
+		[PK(true)]
 		public int CollectionSnailMailTemplateID { get; set; }
 
 		[Length(30)]

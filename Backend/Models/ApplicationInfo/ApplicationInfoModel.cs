@@ -212,5 +212,8 @@
 
 		[DataMember]
 		public bool SpreadSetupFee { get; set; }
+
+		[DataMember]
+		public bool IsMultiBranded { get; set; }
 	} // class ApplicationInfoModel
 } // namespace

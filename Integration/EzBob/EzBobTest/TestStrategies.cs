@@ -6,7 +6,6 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -146,7 +145,7 @@
 
 		[Test]
 		public void PasswordChanged() {
-			var s = new PasswordChanged(3060, new Password("dfsgfsdg"));
+			var s = new PasswordChanged(3060, new DasKennwort("dfsgfsdg"));
 			s.Execute();
 		}
 
@@ -778,13 +777,6 @@
 		}
 
 		[Test]
-		public void TestBrokerLeadSendInvitation() {
-			new BrokerLeadSendInvitation(1040, "stasd+evlbrk5@ezbob.com").Execute();
-		}
-
-
-
-		[Test]
 		public void TestNL_AddLoan() {
 			int customerID = 369; // 366;
 			int oldLoanID = 1049; //1042;
@@ -1147,6 +1139,7 @@
 			AddOpportunity add = new AddOpportunity(28, new OpportunityModel {
 				Name = "NewOpportunity",
 				Email = "alexbo+off02@ezbob.com",
+				Origin = "ezbob",
 				CreateDate = now,
 				ExpectedEndDate = now.AddDays(7),
 				RequestedAmount = 1000,
@@ -1275,14 +1268,6 @@
 			}
 		}
 
-        [Test]
-        public void TestBrokerLoadCustomerList()
-        {
-            
-            var s = new BrokerLoadCustomerList("shlomi+naor@ezbob.com",423);
-            s.Execute();
-
-        }
           [Test]
         public void TestLoadEsigner() {
 

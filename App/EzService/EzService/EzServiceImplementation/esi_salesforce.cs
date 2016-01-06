@@ -28,9 +28,9 @@
 			return Execute<UpdateOpportunity>(customerID, userID, customerID, model);
 		}
 
-		public SalesForceActivityActionResult SalesForceGetActivity(int? userID, int customerID, string email) {
+		public SalesForceActivityActionResult SalesForceGetActivity(int? userID, int customerID) {
 			GetActivity stra;
-			var amd = ExecuteSync<GetActivity>(out stra, customerID, userID, customerID, email);
+			var amd = ExecuteSync<GetActivity>(out stra, customerID, userID, customerID);
 
 			return new SalesForceActivityActionResult {
 				MetaData = amd,

@@ -29,7 +29,11 @@
 				return string.Format("Enumerable with {0} items.\n{1}-- End of enumeration.\n", counter - 1, builder);
 			} // if
 
+			bool appended = false;
+
 			target.TraverseReadable((ignored, propInfo) => {
+				appended = true;
+
 				builder.AppendFormat(
 					"{0} = '{1}' (of type {2})\n",
 					propInfo.Name,
@@ -37,6 +41,9 @@
 					propInfo.PropertyType
 				);
 			});
+
+			if (!appended)
+				builder.AppendFormat("{0}", target);
 
 			return builder.ToString();
 		} // ToLogStr

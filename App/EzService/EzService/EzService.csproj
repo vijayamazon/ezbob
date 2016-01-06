@@ -66,6 +66,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -74,6 +75,8 @@
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\ApplicationInfoResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
+    <Compile Include="ActionResults\MultiBrandLoanSummaryActionResult.cs" />
+    <Compile Include="ActionResults\SetPasswordActionResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />
     <Compile Include="ActionResults\ReschedulingActionResult.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceUserManagement.cs" />
     <Compile Include="IEzServiceMainStrategy.cs" />
     <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />

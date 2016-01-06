@@ -98,21 +98,19 @@
 		public ActionMetaData UpdateLinkedHmrcPassword(
 			string sCustomerID,
 			string sDisplayName,
-			string sPassword,
-			string sHash
+			string sPassword
 		) {
-			return ExecuteSync<UpdateLinkedHmrcPassword>(null, null, sCustomerID, sDisplayName, sPassword, sHash);
+			return ExecuteSync<UpdateLinkedHmrcPassword>(null, null, sCustomerID, sDisplayName, sPassword);
 		} // UpdateLinkedHmrcPassword
 
 		public StringActionResult ValidateAndUpdateLinkedHmrcPassword(
 			string sCustomerID,
 			string sDisplayName,
-			string sPassword,
-			string sHash
+			string sPassword
 		) {
 			ValidateAndUpdateLinkedHmrcPassword oInstanse;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstanse, null, null, sCustomerID, sDisplayName, sPassword, sHash);
+			ActionMetaData oMetaData = ExecuteSync(out oInstanse, null, null, sCustomerID, sDisplayName, sPassword);
 
 			return new StringActionResult {
 				MetaData = oMetaData,

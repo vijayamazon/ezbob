@@ -8,25 +8,60 @@
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
-		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sConfirmationToken) {
-			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sConfirmationToken);
+		public ActionMetaData BrokerLeadAcquireCustomer(
+			int nCustomerID,
+			int nLeadID,
+			string sFirstName,
+			bool bBrokerFillsForCustomer,
+			string sConfirmationToken
+		) {
+			return Execute<BrokerLeadAcquireCustomer>(
+				nCustomerID,
+				null,
+				nCustomerID,
+				nLeadID,
+				sFirstName,
+				bBrokerFillsForCustomer,
+				sConfirmationToken
+			);
 		} // BrokerLeadAcquireCustomer
 
 		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
 			return Execute<BrokerCustomerWizardComplete>(nCustomerID, null, nCustomerID);
 		} // BrokerCustomerWizardComplete
 
-		public ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, bool isAlibaba, string sSourceRef, string sConfirmEmailLink) {
-			return Execute<BrokerCheckCustomerRelevance>(nCustomerID, nCustomerID, nCustomerID, sCustomerEmail, isAlibaba, sSourceRef, sConfirmEmailLink);
+		public ActionMetaData BrokerCheckCustomerRelevance(
+			int nCustomerID,
+			string sCustomerEmail,
+			bool isAlibaba,
+			string sSourceRef,
+			string sConfirmEmailLink
+		) {
+			return Execute<BrokerCheckCustomerRelevance>(
+				nCustomerID,
+				nCustomerID,
+				nCustomerID,
+				sCustomerEmail,
+				isAlibaba,
+				sSourceRef,
+				sConfirmEmailLink
+			);
 		} // BrokerCheckCustomerRelevance
 
-		public ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
-			return Execute<BrokerAcceptTerms>(null, null, nTermsID, sContactEmail);
+		public ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail, CustomerOriginEnum origin) {
+			return Execute<BrokerAcceptTerms>(null, null, nTermsID, sContactEmail, origin);
 		} // BrokerAcceptTerms
 
-		public ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst) {
+		public ActionMetaData BrokerApproveAndResetCustomerPassword(
+			int nUnderwriterID,
+			int nCustomerID,
+			decimal nLoanAmount,
+			int nValidHours,
+			bool isFirst
+		) {
 			return Execute(new ExecuteArguments(nCustomerID, nLoanAmount, nValidHours, isFirst) {
 				StrategyType = typeof(ApprovedUser),
 				CustomerID = nCustomerID,
@@ -55,7 +90,8 @@
 			string sMobileCode,
 			string sContactOtherPhone,
 			decimal nEstimatedMonthlyClientAmount,
-			Password oPassword,
+			DasKennwort password,
+			DasKennwort passwordAgain,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled,
@@ -76,7 +112,8 @@
 				sMobileCode,
 				sContactOtherPhone,
 				nEstimatedMonthlyClientAmount,
-				oPassword,
+				password,
+				passwordAgain,
 				sFirmWebSiteUrl,
 				nEstimatedMonthlyApplicationCount,
 				bIsCaptchEnabled,
@@ -105,7 +142,7 @@
 
 		public BrokerPropertiesActionResult BrokerLogin(
 			string sEmail,
-			Password oPassword,
+			DasKennwort oPassword,
 			string promotionName,
 			DateTime? promotionPageVisitTime,
 			int uiOriginID
@@ -135,7 +172,7 @@
 		public BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID) {
 			BrokerLoadCustomerList oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, string.Empty, nBrokerID);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, string.Empty, nBrokerID, null);
 
 			return new BrokerCustomersActionResult {
 				MetaData = oResult,
@@ -143,10 +180,10 @@
 			};
 		} // BrokerLoadCustomersByID
 
-		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
+		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail, CustomerOriginEnum origin) {
 			BrokerLoadCustomerList oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sContactEmail, 0);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sContactEmail, 0, origin);
 
 			return new BrokerCustomersActionResult {
 				MetaData = oResult,
@@ -154,10 +191,14 @@
 			};
 		} // BrokerLoadCustomerList
 
-		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
+		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(
+			string sCustomerRefNum,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
 			BrokerLoadCustomerDetails oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sCustomerRefNum, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sCustomerRefNum, sContactEmail, origin);
 
 			return new BrokerCustomerDetailsActionResult {
 				MetaData = oResult,
@@ -166,18 +207,30 @@
 			};
 		} // BrokerLoadCustomerDetails
 
-        public BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail) {
-            BrokerLoadLeadDetails oIntstance;
+		public BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(
+			int leadID,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
+			BrokerLoadLeadDetails oIntstance;
 
-            ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, leadID, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, leadID, sContactEmail, origin);
 
-            return new BrokerLeadDetailsDataActionResult {
-                MetaData = oResult,
-                BrokerLeadDataModel = oIntstance.Result
-            };
-        } // BrokerLoadLeadDetails
+			return new BrokerLeadDetailsDataActionResult {
+				MetaData = oResult,
+				BrokerLeadDataModel = oIntstance.Result
+			};
+		} // BrokerLoadLeadDetails
 
-		public StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
+		public StringActionResult BrokerSaveCrmEntry(
+			string sType,
+			int nActionID,
+			int nStatusID,
+			string sComment,
+			string sCustomerRefNum,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
 			BrokerSaveCrmEntry oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
@@ -189,7 +242,8 @@
 				nStatusID,
 				sComment,
 				sCustomerRefNum,
-				sContactEmail
+				sContactEmail,
+				origin
 			);
 
 			return new StringActionResult {
@@ -198,7 +252,11 @@
 			};
 		} // BrokerSaveCrmEntry
 
-		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
+		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(
+			string sCustomerRefNum,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
 			BrokerLoadCustomerFiles oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
@@ -206,7 +264,8 @@
 				null,
 				null,
 				sCustomerRefNum,
-				sContactEmail
+				sContactEmail,
+				origin
 			);
 
 			return new BrokerCustomerFilesActionResult {
@@ -215,7 +274,12 @@
 			};
 		} // BrokerLoadCustomerFiles
 
-		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
+		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(
+			string sCustomerRefNum,
+			string sContactEmail,
+			int nFileID,
+			CustomerOriginEnum origin
+		) {
 			BrokerDownloadCustomerFile oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
@@ -224,7 +288,8 @@
 				null,
 				sCustomerRefNum,
 				sContactEmail,
-				nFileID
+				nFileID,
+				origin
 			);
 
 			return new BrokerCustomerFileContentsActionResult {
@@ -234,23 +299,63 @@
 			};
 		} // BrokerLoadCustomerFiles
 
-		public ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName) {
-			return ExecuteSync<BrokerSaveUploadedCustomerFile>(null, null, sCustomerRefNum, sContactEmail, oFileContents, sFileName);
+		public ActionMetaData BrokerSaveUploadedCustomerFile(
+			string sCustomerRefNum,
+			string sContactEmail,
+			byte[] oFileContents,
+			string sFileName,
+			CustomerOriginEnum origin
+		) {
+			return ExecuteSync<BrokerSaveUploadedCustomerFile>(
+				null,
+				null,
+				sCustomerRefNum,
+				sContactEmail,
+				oFileContents,
+				sFileName,
+				origin
+			);
 		} // BrokerSaveUploadedCustomerFile
 
-		public ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
-			return ExecuteSync<BrokerDeleteCustomerFiles>(null, null, sCustomerRefNum, sContactEmail, aryFileIDs);
+		public ActionMetaData BrokerDeleteCustomerFiles(
+			string sCustomerRefNum,
+			string sContactEmail,
+			int[] aryFileIDs,
+			CustomerOriginEnum origin
+		) {
+			return ExecuteSync<BrokerDeleteCustomerFiles>(null, null, sCustomerRefNum, sContactEmail, aryFileIDs, origin);
 		} // BrokerDeleteCustomerFiles
 
-		public ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {
-			return ExecuteSync<BrokerAddCustomerLead>(null, null, sLeadFirstName, sLeadLastName, sLeadEmail, sLeadAddMode, sContactEmail);
+		public ActionMetaData BrokerAddCustomerLead(
+			string sLeadFirstName,
+			string sLeadLastName,
+			string sLeadEmail,
+			string sLeadAddMode,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
+			return ExecuteSync<BrokerAddCustomerLead>(
+				null,
+				null,
+				sLeadFirstName,
+				sLeadLastName,
+				sLeadEmail,
+				sLeadAddMode,
+				sContactEmail,
+				origin
+			);
 		} // BrokerAddCustomerLead
 
         public ActionMetaData BrokerAddBank(BrokerAddBankModel model) {
             return ExecuteSync<BrokerAddBank>(null, null, model);
         } // BrokerAddBank
 
-		public BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
+		public BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(
+			int nLeadID,
+			string sLeadEmail,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
 			BrokerLeadCanFillWizard oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
@@ -259,7 +364,8 @@
 				null,
 				nLeadID,
 				sLeadEmail,
-				sContactEmail
+				sContactEmail,
+				origin
 			);
 
 			return new BrokerLeadDetailsActionResult {
@@ -298,10 +404,10 @@
 			};
 		} // BrokerLeadCheckToken
 
-		public BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail) {
+		public BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail, CustomerOriginEnum origin) {
 			BrokerLoadOwnProperties oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, 0);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, origin);
 
 			return new BrokerPropertiesActionResult {
 				MetaData = oMetaData,
@@ -320,15 +426,22 @@
 			};
 		} // BrokerLoadPropertiesByID
 
-		public ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword) {
-			BrokerUpdatePassword oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, oOldPassword, oNewPassword);
-
-			if ((oInstance != null) && (oInstance.BrokerID > 0))
-				Execute<BrokerPasswordChanged>(null, oInstance.BrokerID, oInstance.BrokerID, oNewPassword);
-
-			return oMetaData;
+		public ActionMetaData BrokerUpdatePassword(
+			string contactEmail,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword,
+			DasKennwort newPasswordAgain
+		) {
+			return ExecuteSync<BrokerUpdatePassword>(
+				null,
+				null,
+				contactEmail,
+				origin,
+				oldPassword,
+				newPassword,
+				newPasswordAgain
+			);
 		} // BrokerUpdatePassword
 
 		public BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly, int originID) {
@@ -407,10 +520,10 @@
 			return ExecuteSync<BrokerAttachCustomer>(nCustomerID, nUnderwriterID, nCustomerID, nBrokerID, nUnderwriterID);
 		} // BrokerAttachCustomer
 
-		public StringListActionResult BrokerLoadSignedTerms(string sContactEmail) {
+		public StringListActionResult BrokerLoadSignedTerms(string sContactEmail, CustomerOriginEnum origin) {
 			BrokerLoadSignedTerms oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, origin);
 
 			return new StringListActionResult {
 				MetaData = oMetaData,

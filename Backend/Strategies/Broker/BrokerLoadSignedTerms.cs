@@ -2,14 +2,15 @@
 	using System;
 	using System.Globalization;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerLoadSignedTerms : AStrategy {
-
-		public BrokerLoadSignedTerms(string sContactEmail) {
+		public BrokerLoadSignedTerms(string sContactEmail, CustomerOriginEnum origin) {
 			Terms = string.Empty;
 			SignedTime = string.Empty;
 
-			m_sContactEmail = sContactEmail;
+			this.contactEmail = sContactEmail;
+			this.origin = (int)origin;
 		} // constructor
 
 		public override string Name {
@@ -20,10 +21,11 @@
 			SafeReader sr = DB.GetFirst(
 				"BrokerLoadSignedTerms",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("ContactEmail", m_sContactEmail)
+				new QueryParameter("ContactEmail", this.contactEmail),
+				new QueryParameter("Origin", this.origin)
 			);
 
-			if ((string)sr["ContactEmail"] == m_sContactEmail) {
+			if ((string)sr["ContactEmail"] == this.contactEmail) {
 				Terms = sr["Terms"];
 				DateTime oTime = sr["SignedTime"];
 
@@ -35,7 +37,7 @@
 
 		public string SignedTime { get; private set; }
 
-		private readonly string m_sContactEmail;
-
+		private readonly string contactEmail;
+		private readonly int origin;
 	} // class BrokerLoadSignedTerms
 } // namespace

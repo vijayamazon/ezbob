@@ -195,6 +195,9 @@
     <Compile Include="ManualDecision\ManuallyReject.cs" />
     <Compile Include="ManualDecision\ManuallyApprove.cs" />
     <Compile Include="Misc\AddHistoryDirector.cs" />
+    <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
+    <Compile Include="Tasks\Annual77ANotifier.cs" />
+    <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
@@ -347,7 +350,6 @@
     <Compile Include="Backfill\BackfillLandRegistry2PropertyLink.cs" />
     <Compile Include="Backfill\BackfillZooplaValue.cs" />
     <Compile Include="MedalCalculations\CalculateMedal.cs" />
-    <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Misc\GetCurrentCustomerAnnualTurnover.cs" />
@@ -366,7 +368,6 @@
     <Compile Include="Esign\EsignProcessPending.cs" />
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
-    <Compile Include="Misc\SaveSourceRefHistory.cs" />
     <Compile Include="Misc\ZooplaStub.cs" />
     <Compile Include="OfferCalculation\CalculateOffer.cs" />
     <Compile Include="OfferCalculation\OfferCalculator1.cs" />
@@ -388,6 +389,9 @@
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationLoad.cs" />
+    <Compile Include="UserManagement\GetCustomerSecurityQuestion.cs" />
+    <Compile Include="UserManagement\LoadAllLoginRoles.cs" />
+    <Compile Include="UserManagement\LoginCustomerMutliOrigin.cs" />
     <Compile Include="UserManagement\ResetPassword123456.cs" />
     <Compile Include="Misc\VerifyEnoughAvailableFunds.cs" />
     <Compile Include="Misc\DisableCurrentManualPacnetDeposits.cs" />
@@ -399,7 +403,9 @@
     <Compile Include="StoredProcs\GetCustomerAddresses.cs" />
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
+    <Compile Include="UserManagement\SignupCustomerMutliOrigin.cs" />
     <Compile Include="UserManagement\UserDisable.cs" />
+    <Compile Include="UserManagement\ValidateSecurityAnswer.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />
@@ -491,11 +497,10 @@
     <Compile Include="UserManagement\MarkSessionEnded.cs" />
     <Compile Include="UserManagement\UserChangeEmail.cs" />
     <Compile Include="UserManagement\CustomerChangePassword.cs" />
-    <Compile Include="UserManagement\UserChangePassword.cs" />
     <Compile Include="UserManagement\UserDataForLogin.cs" />
     <Compile Include="UserManagement\UserLogin.cs" />
     <Compile Include="UserManagement\UserResetPassword.cs" />
-    <Compile Include="UserManagement\UserSignup.cs" />
+    <Compile Include="UserManagement\SignupUnderwriterMultiOrigin.cs" />
     <Compile Include="UserManagement\UserManagementConfigs.cs" />
     <Compile Include="UserManagement\UserSecurityData.cs" />
     <Compile Include="UserManagement\UserUpdateSecurityQuestion.cs" />

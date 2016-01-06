@@ -67,28 +67,18 @@ EzBob.CustomerLoginView = Backbone.View.extend({
 			EzBob.ServerLog.debug('login request completed with status', status);
 
 			if (status === 'success') {
-				if (result.success) {
-					if (result.broker) {
-						document.location.href = '' + window.gRootPath + 'Broker#login';
-					} else if (result.everlineWizard) {
-						document.location.href = '' + window.gRootPath + 'Customer/Wizard';
-					} else if (result.everlineAccount) {
-						document.location.href = 'https://accounts.everline.com/login';
-					} else {
-						document.location.href = '' + window.gRootPath + 'Customer/Profile';
-					}
-				}
+				if (result.success)
+					document.location.href = '' + window.gRootPath + (result.broker ? 'Broker#login' : 'Customer/Profile');
 				else {
 					EzBob.App.trigger('error', result.errorMessage);
 					self.blockBtn(false);
-				}
-			}
-			else {
+				} // if
+			} else {
 				if (result.errorMessage)
 					EzBob.App.trigger('error', result.errorMessage);
 
 				self.blockBtn(false);
-			}
+			} // if
 		});
 
 		return false;

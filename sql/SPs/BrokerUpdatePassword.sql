@@ -3,45 +3,24 @@ IF OBJECT_ID('BrokerUpdatePassword') IS NULL
 GO
 
 ALTER PROCEDURE BrokerUpdatePassword
-@ContactEmail NVARCHAR(255),
-@OldPassword NVARCHAR(255),
-@NewPassword NVARCHAR(255)
+@BrokerID INT,
+@NewPassword NVARCHAR(255),
+@Salt NVARCHAR(255),
+@CycleCount NVARCHAR(255)
 AS
 BEGIN
-	SET NOCOUNT ON;
+	UPDATE Security_User SET
+		EzPassword = @NewPassword,
+		Salt = @Salt,
+		CycleCount = @CycleCount
+	WHERE
+		UserId = @BrokerID
 
-	DECLARE @BrokerID INT = 0
+	-------------------------------------------------------------------------
 
-	------------------------------------------------------------------------------
-
-	IF @OldPassword != @NewPassword
-	BEGIN
-		SELECT
-			@BrokerID = u.UserID
-		FROM
-			Security_User u
-		WHERE
-			u.Email = @ContactEmail
-			AND
-			u.EzPassword = @OldPassword
-
-		-------------------------------------------------------------------------
-
-		UPDATE Security_User SET
-			EzPassword = @NewPassword
-		WHERE
-			UserId = @BrokerID
-
-		-------------------------------------------------------------------------
-
-		UPDATE Broker SET
-			Password = 'not used'
-		WHERE
-			BrokerID = @BrokerID
-	END
-
-	------------------------------------------------------------------------------
-
-	SELECT @BrokerID AS BrokerID
+	UPDATE Broker SET
+		Password = 'not used'
+	WHERE
+		BrokerID = @BrokerID
 END
 GO

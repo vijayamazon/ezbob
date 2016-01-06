@@ -6,12 +6,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 
-	public enum CustomerOriginEnum {
-		ezbob,
-		everline,
-		alibaba,
-	} // enum CustomerOriginEnum
-
 	public class CustomerOrigin {
 		public virtual int CustomerOriginID { get; set; }
 		public virtual string Name {

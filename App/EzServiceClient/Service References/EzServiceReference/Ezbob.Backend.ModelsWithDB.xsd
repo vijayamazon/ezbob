@@ -2,6 +2,7 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:complexType name="BrokerInstantOfferRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="AnnualProfit" type="xs:decimal" />
@@ -72,6 +73,13 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="WriteToLogPackage.InputData" nillable="true" type="tns:WriteToLogPackage.InputData" />
+  <xs:complexType name="MultiBrandLoanSummary">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Loans" nillable="true" type="q2:ArrayOfstring" />
+      <xs:element minOccurs="0" name="OriginCount" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MultiBrandLoanSummary" nillable="true" type="tns:MultiBrandLoanSummary" />
   <xs:complexType name="CollectionSnailMailMetadataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="CollectionSnailMailMetadataID" type="xs:int" />

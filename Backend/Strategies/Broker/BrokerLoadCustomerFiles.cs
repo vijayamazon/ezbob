@@ -2,11 +2,13 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerLoadCustomerFiles : AStrategy {
-		public BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
+		public BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail, CustomerOriginEnum origin) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
+			this.origin = (int)origin;
 			Files = new List<BrokerCustomerFile>();
 		} // constructor
 
@@ -24,11 +26,13 @@
 				"BrokerLoadCustomerFiles",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@RefNum", m_sCustomerRefNum),
-				new QueryParameter("@ContactEmail", m_sContactEmail)
+				new QueryParameter("@ContactEmail", m_sContactEmail),
+				new QueryParameter("@Origin", this.origin)
 			);
 		} // Execute
 
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
+		private readonly int origin;
 	} // class BrokerLoadCustomerFiles
 } // namespace Ezbob.Backend.Strategies.Broker

@@ -83,6 +83,7 @@
 	                EndDate = now,
 	                Description = oMeta.TemplateName,
 	                Email = addr.Recipient,
+					Origin = addr.Origin,
 	                Originator = "System",
 	                Type = ActivityType.Email.ToString(),
 	                IsOpportunity = false,

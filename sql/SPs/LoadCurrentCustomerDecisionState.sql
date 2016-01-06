@@ -34,9 +34,10 @@ BEGIN
 			LastWizardStep = (SELECT TheLastOne FROM WizardStepTypes WHERE WizardStepTypeID = c.WizardStep),
 			IsAlibaba = c.IsAlibaba,
 			Email = c.Name,
-			FilledByBroker = c.FilledByBroker
+			FilledByBroker = c.FilledByBroker,
+			Origin = o.Name
 		FROM
-			Customer c
+			Customer c LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 		WHERE
 			c.Id = @CustomerID
 	), r AS (
@@ -67,6 +68,7 @@ BEGIN
 		LastWizardStep = ISNULL(c.LastWizardStep, 0),
 		IsAlibaba = ISNULL(c.IsAlibaba, 0),
 		c.Email,
+		c.Origin,
 		FilledByBroker = ISNULL(c.FilledByBroker, 0),
 
 		r.CashRequestID,

@@ -14,13 +14,11 @@
 		public UpdateLinkedHmrcPassword(
 			string sCustomerID,
 			string sDisplayName,
-			string sPassword,
-			string sHash
+			string sPassword
 		) {
 			m_sRawCustomerID = sCustomerID;
 			m_sRawDisplayName = sDisplayName;
 			m_sRawPassword = sPassword;
-			m_sHash = sHash;
 		} // constructor
 
 		public override string Name {
@@ -40,7 +38,6 @@
 			GetCustomerID();
 			GetDisplayName();
 			GetPassword();
-			ValidateHash();
 
 			var oReader = new LoadCustomerMarketplaceSecurityData(
 				CustomerID,
@@ -101,7 +98,6 @@
 		private readonly string m_sRawCustomerID;
 		private readonly string m_sRawDisplayName;
 		private readonly string m_sRawPassword;
-		private readonly string m_sHash;
 
 		private void GetCustomerID() {
 			try {
@@ -129,13 +125,6 @@
 				throw new StrategyWarning(this, "Failed to get password from " + m_sRawPassword, e);
 			}
 		} // GetPassword
-
-		private void ValidateHash() {
-			string sHash = SecurityUtils.Hash(CustomerID + Password + m_sDisplayName);
-
-			if (sHash != m_sHash)
-				throw new StrategyAlert(this, "Failed to validate hash: " + sHash + " != " + m_sHash);
-		} // ValidateHash
 
 		private class UpdateMarketplaceSecurityData : AStoredProcedure {
 			public UpdateMarketplaceSecurityData(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor

@@ -1,12 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerDownloadCustomerFile : AStrategy {
-
-		public BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
+		public BrokerDownloadCustomerFile(
+			string sCustomerRefNum,
+			string sContactEmail,
+			int nFileID,
+			CustomerOriginEnum origin
+		) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			m_nFileID = nFileID;
+			this.origin = (int)origin;
 
 			FileName = null;
 			Contents = null;
@@ -35,14 +41,14 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail),
-				new QueryParameter("@FileID", m_nFileID)
+				new QueryParameter("@FileID", m_nFileID),
+				new QueryParameter("@Origin", this.origin)
 			);
 		} // Execute
 
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 		private readonly int m_nFileID;
-
+		private readonly int origin;
 	} // class BrokerDownloadCustomerFile 
-
 } // namespace Ezbob.Backend.Strategies.Broker

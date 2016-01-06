@@ -146,24 +146,28 @@
 			} // switch
 
 			return TypeOfBusinessReduced.Personal;
-		} // Reduse
+		} // Reduce
 
 		public static TypeOfBusinessAgreementReduced AgreementReduce(this TypeOfBusiness typeOfBusiness) {
 			switch (typeOfBusiness) {
 			case TypeOfBusiness.Entrepreneur:
 			case TypeOfBusiness.PShip3P:
 			case TypeOfBusiness.SoleTrader:
-            case TypeOfBusiness.PShip:
+            
 				return TypeOfBusinessAgreementReduced.Personal;
 
 			case TypeOfBusiness.LLP:
 			case TypeOfBusiness.Limited:
+			case TypeOfBusiness.PShip:
 				return TypeOfBusinessAgreementReduced.Business;
 			}
 
 			return TypeOfBusinessAgreementReduced.Personal;
-		}
+		}//AgreementReduce
 
+		public static bool IsRegulated(this TypeOfBusiness typeOfBusiness) {
+			return typeOfBusiness.AgreementReduce() == TypeOfBusinessAgreementReduced.Personal;
+		}//IsRegulated
 
 		public static string TypeOfBussinessForWeb(TypeOfBusiness businessReduced)
 		{

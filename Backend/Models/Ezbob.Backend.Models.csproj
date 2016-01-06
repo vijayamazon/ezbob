@@ -88,6 +88,7 @@
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />
+    <Compile Include="DasKennwort.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />
     <Compile Include="CrmStatusGroup.cs" />
@@ -96,10 +97,11 @@
     <Compile Include="EsignerModel.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="IdNameModel.cs" />
-    <Compile Include="Password.cs" />
     <Compile Include="RejectionModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />
     <Compile Include="IovationCheckModel.cs" />
+    <Compile Include="LoginCustomerMultiOriginModel.cs" />
+    <Compile Include="SignupCustomerMultiOriginModel.cs" />
     <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />

@@ -3,11 +3,6 @@
 	using System.Globalization;
 
 	public static class MiscUtils {
-
-		public static string MD5(string input) {
-			return Security.SecurityUtils.MD5(input);
-		} // MD5
-
 		public static string ValidateStringArg(
 			string sValue,
 			string sArgName,
@@ -259,8 +254,6 @@
 		public static int DateDiffInMonths(DateTime start, DateTime end) {
 			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
 		} // DateDiffInMonths
-
-	
 
 		/// <summary>
 		/// Calculates difference between to DateTime dates in weeks

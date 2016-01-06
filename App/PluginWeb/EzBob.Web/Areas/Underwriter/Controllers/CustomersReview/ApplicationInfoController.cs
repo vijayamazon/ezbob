@@ -629,7 +629,8 @@
 		[Permission(Name = "NewCreditLineButton")]
 		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
 			NewCreditLineOption typedNewCreditLineOption = (NewCreditLineOption)newCreditLineOption;
-			User underwriter = this._users.GetUserByLogin(User.Identity.Name);
+
+			User underwriter = this._users.GetUserByLogin(User.Identity.Name, null);
 
 			log.Debug("RunNewCreditLine({0}, {1}) start", Id, typedNewCreditLineOption);
 

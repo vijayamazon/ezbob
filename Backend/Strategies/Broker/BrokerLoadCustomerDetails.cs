@@ -3,12 +3,13 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerLoadCustomerDetails : AStrategy {
-
-		public BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
+		public BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail, CustomerOriginEnum origin) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
+			this.origin = origin;
 			Result = new BrokerCustomerDetails();
 			PotentialEsigners = new List<Esigner>();
 		} // constructor
@@ -18,7 +19,7 @@
 		} // Name
 
 		public class BrokerLoadCustomerDetailsRawData {
-            public int CustomerID { get; set; }
+			public int CustomerID { get; set; }
 			public string FirstName { get; set; }
 			public string Surname { get; set; }
 			public DateTime DateOfBirth { get; set; }
@@ -36,8 +37,8 @@
 			public string County { get; set; }
 			public string Postcode { get; set; }
 			public string Country { get; set; }
-            public int LeadID { get; set; }
-            public bool FinishedWizard { get; set; }
+			public int LeadID { get; set; }
+			public bool FinishedWizard { get; set; }
 
 			public void ToModel(BrokerCustomerPersonalData oModel) {
 				oModel.id = CustomerID;
@@ -59,8 +60,8 @@
 					string.IsNullOrEmpty(County) ? "" : County + "\n",
 					string.IsNullOrEmpty(Country) ? "" : Country + "\n"
 				);
-			    oModel.leadID = LeadID;
-			    oModel.finishedWizard = FinishedWizard;
+				oModel.leadID = LeadID;
+				oModel.finishedWizard = FinishedWizard;
 			} // ToModel
 
 		} // BrokerLoadCustomerDetailsRawData
@@ -69,7 +70,8 @@
 			BrokerLoadCustomerDetailsRawData raw = DB.FillFirst<BrokerLoadCustomerDetailsRawData>(
 				"BrokerLoadCustomerDetails",
 				new QueryParameter("@RefNum", m_sCustomerRefNum),
-				new QueryParameter("@ContactEmail", m_sContactEmail)
+				new QueryParameter("@ContactEmail", m_sContactEmail),
+				new QueryParameter("@Origin", (int)this.origin)
 			);
 
 			if (raw == null) {
@@ -82,7 +84,8 @@
 			Result.CrmData = DB.Fill<BrokerCustomerCrmEntry>(
 				"BrokerLoadCustomerCRM",
 				new QueryParameter("@RefNum", m_sCustomerRefNum),
-				new QueryParameter("@ContactEmail", m_sContactEmail)
+				new QueryParameter("@ContactEmail", m_sContactEmail),
+				new QueryParameter("@Origin", (int)this.origin)
 			);
 
 			PotentialEsigners = DB.Fill<Esigner>(
@@ -98,7 +101,6 @@
 
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
-
+		private readonly CustomerOriginEnum origin;
 	} // class BrokerLoadCustomerDetails
-
 } // namespace Ezbob.Backend.Strategies.Broker

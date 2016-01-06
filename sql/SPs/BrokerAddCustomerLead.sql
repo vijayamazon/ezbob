@@ -8,7 +8,8 @@ ALTER PROCEDURE BrokerAddCustomerLead
 @LeadEmail NVARCHAR(128),
 @LeadAddMode NVARCHAR(10),
 @ContactEmail NVARCHAR(255),
-@DateCreated DATETIME
+@DateCreated DATETIME,
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,15 +22,21 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@LeadEmail, NULL, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+		SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail AND OriginID = @Origin
+
+		IF @BrokerID IS NULL
+			SET @ErrMsg = 'No broker found with contact email ' + @ContactEmail
 	END
 
 	IF @ErrMsg = ''
 	BEGIN
-		SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
+		SET @ErrMsg = dbo.udfCheckEmailUniqueness(@LeadEmail, @Origin, DEFAULT, DEFAULT, DEFAULT)
+	END
 
-		IF @BrokerID IS NULL
-			SET @ErrMsg = 'No broker found with contact email ' + @ContactEmail
+	IF @ErrMsg = ''
+	BEGIN
+		IF EXISTS (SELECT BrokerID FROM Broker WHERE ContactEmail = @LeadEmail)
+			SET @ErrMsg = 'email is already being used'
 	END
 
 	IF @ErrMsg = ''

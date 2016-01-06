@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies.API {
 	public sealed class Addressee {
 
-		public Addressee(string sRecipient = "", string sCarbonCopy = "", bool bShouldRegister = true, int? userID = null, bool isBroker = false) {
+		public Addressee(string sRecipient = "", string sCarbonCopy = "", bool bShouldRegister = true, int? userID = null, bool isBroker = false, string origin = "") {
 			Recipient = sRecipient;
 			CarbonCopy = sCarbonCopy;
 			ShouldRegister = bShouldRegister;
@@ -10,6 +10,13 @@
 		}// constructor
 
 	    public bool IsBroker { get; private set; }
+
+		public string Origin {
+			get { return m_sOrigin; } // get
+			set { m_sOrigin = Normalise(value); } // set
+		} // Origin
+
+		private string m_sOrigin;
 
 		public string Recipient {
 			get { return m_sRecipient; } // get

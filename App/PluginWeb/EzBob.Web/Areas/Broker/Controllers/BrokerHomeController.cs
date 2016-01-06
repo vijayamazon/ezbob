@@ -21,6 +21,9 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
+	// using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
+	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
+
 	public class BrokerHomeController : ABrokerBaseController {
 		// GET: /Broker/BrokerHome/
 		public System.Web.Mvc.ActionResult Index(string sourceref = "") {
@@ -88,7 +91,7 @@
 				return oIsAuthResult;
 
 			try {
-				this.m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail);
+				this.m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail, UiOrigin.AsRemote());
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -120,7 +123,7 @@
 			StringListActionResult slar;
 
 			try {
-				slar = this.m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail);
+				slar = this.m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail, UiOrigin.AsRemote());
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load signed terms for contact email {0}.", sContactEmail);
 				return new SignedTermsBrokerForJsonResult("Failed to load signed terms.");
@@ -144,7 +147,7 @@
 			BrokerPropertiesActionResult oResult;
 
 			try {
-				oResult = this.m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail, UiOrigin.AsRemote());
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load properties request for contact email {0}", sContactEmail);
 				return new PropertiesBrokerForJsonResult("Failed to load broker properties.");
@@ -168,7 +171,7 @@
 			BrokerCustomersActionResult oResult;
 
 			try {
-				oResult = this.m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail, UiOrigin.AsRemote());
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
 				return new CustomerListBrokerForJsonResult("Failed to load customer list.");
@@ -199,7 +202,11 @@
 			BrokerCustomerDetailsActionResult oDetails;
 
 			try {
-				oDetails = this.m_oServiceClient.Instance.BrokerLoadCustomerDetails(sCustomerID, sContactEmail);
+				oDetails = this.m_oServiceClient.Instance.BrokerLoadCustomerDetails(
+					sCustomerID,
+					sContactEmail,
+					UiOrigin.AsRemote()
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -238,7 +245,7 @@
 			BrokerLeadDetailsDataActionResult oDetails;
 
 			try {
-				oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail);
+				oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail, UiOrigin.AsRemote());
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -326,7 +333,8 @@
 					status,
 					comment,
 					customerId,
-					sContactEmail
+					sContactEmail,
+					UiOrigin.AsRemote()
 				);
 			} catch (Exception e) {
 				ms_oLog.Alert(e,
@@ -353,7 +361,7 @@
 				type, action, status, customerId, sContactEmail,
 				string.IsNullOrWhiteSpace(oResult.Value) ? "complete" : "failed",
 				string.IsNullOrWhiteSpace(oResult.Value) ? "no error" : oResult.Value
-				);
+			);
 
 			return new BrokerForJsonResult(oResult.Value);
 		} // SaveCrmEntry
@@ -378,7 +386,11 @@
 			BrokerCustomerFilesActionResult oFiles;
 
 			try {
-				oFiles = this.m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
+				oFiles = this.m_oServiceClient.Instance.BrokerLoadCustomerFiles(
+					sCustomerID,
+					sContactEmail,
+					UiOrigin.AsRemote()
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -459,7 +471,8 @@
 							sCustomerID,
 							sContactEmail,
 							oFileContents,
-							oFile.FileName
+							oFile.FileName,
+							UiOrigin.AsRemote()
 						);
 					} catch (Exception e) {
 						ms_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
@@ -493,7 +506,12 @@
 			BrokerCustomerFileContentsActionResult oFile;
 
 			try {
-				oFile = this.m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
+				oFile = this.m_oServiceClient.Instance.BrokerDownloadCustomerFile(
+					sCustomerID,
+					sContactEmail,
+					nFileID,
+					UiOrigin.AsRemote()
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -573,7 +591,12 @@
 				return oIsAuthResult;
 
 			try {
-				this.m_oServiceClient.Instance.BrokerDeleteCustomerFiles(sCustomerID, sContactEmail, aryFileIDs);
+				this.m_oServiceClient.Instance.BrokerDeleteCustomerFiles(
+					sCustomerID,
+					sContactEmail,
+					aryFileIDs,
+					UiOrigin.AsRemote()
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -624,7 +647,8 @@
 					LeadLastName,
 					LeadEmail,
 					LeadAddMode,
-					ContactEmail
+					ContactEmail,
+					UiOrigin.AsRemote()
 				);
 			} catch (Exception e) {
 				ms_oLog.Warn(
@@ -643,7 +667,9 @@
 				(int?)null,
 				LeadEmail,
 				(int?)null,
-				true,false);
+				true,
+				false // TODO add origin
+			);
 
 			ms_oLog.Debug(
 				"Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.",
@@ -678,7 +704,8 @@
 					AccountNumber = AccountNumber,
 					SortCode = SortCode,
 					BankAccountType = bankAccountType,
-					BrokerEmail = ContactEmail
+					BrokerEmail = ContactEmail,
+					Origin = UiOrigin,
 				});
 			} catch (Exception ex) {
 				ms_oLog.Warn(
@@ -713,7 +740,7 @@
 				return oIsAuthResult;
 
 			try {
-				this.m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail);
+				this.m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail, UiOrigin.AsRemote());
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -768,7 +795,12 @@
 			BrokerLeadDetailsActionResult bld;
 
 			try {
-				bld = this.m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
+				bld = this.m_oServiceClient.Instance.BrokerLeadCanFillWizard(
+					nLeadID.Value,
+					sLeadEmail,
+					sContactEmail,
+					UiOrigin.AsRemote()
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -811,7 +843,7 @@
 				bld.FirstName,
 				bld.LastName,
 				true
-				);
+			);
 			// ReSharper restore ObjectCreationAsStatement
 
 			ms_oLog.Debug(

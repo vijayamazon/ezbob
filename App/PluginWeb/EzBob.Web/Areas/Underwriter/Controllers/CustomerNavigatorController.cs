@@ -2,19 +2,16 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Ezbob.Database;
 	using EzBob.Web.Infrastructure.Attributes;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using NHibernate;
-	using NHibernate.Linq;
 
 	public class CustomerNavigatorController : Controller {
 		public CustomerNavigatorController(
-			ISession session,
 			CustomerRepository customersRepo,
 			UnderwriterRecentCustomersRepository uwRecentCustomersRepo
 		) {
-			this.session = session;
 			this.customersRepo = customersRepo;
 			this.uwRecentCustomersRepo = uwRecentCustomersRepo;
 		} // constructor
@@ -49,7 +46,7 @@
 				.Where(e => e.UserName == underwriter)
 				.OrderByDescending(e => e.Id);
 
-			foreach (var recentCustomer in recentCustomers) {
+			foreach (UnderwriterRecentCustomers recentCustomer in recentCustomers) {
 				var customer = this.customersRepo.ReallyTryGet(recentCustomer.CustomerId);
 
 				if (customer != null) {
@@ -57,10 +54,11 @@
 						new System.Tuple<int, string>(
 							recentCustomer.CustomerId,
 							string.Format(
-								"{0}, {1}, {2}",
+								"{0}: {1}, {2} ({3})",
 								recentCustomer.CustomerId,
 								customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname,
-								customer.Name
+								customer.Name,
+								customer.CustomerOrigin.Name
 							)
 						)
 					);
@@ -73,22 +71,45 @@
 		[HttpGet]
 		[Ajax]
 		public JsonResult FindCustomer(string term) {
-			term = term.Trim();
+			bool queryDB = false;
+
+			term = (term ?? string.Empty).Trim();
+
 			int id;
-			if (!int.TryParse(term, out id))
-				term = term.Replace(" ", "%");
 
-			var findResult = this.session.Query<Customer>()
-				.Where(c =>
-					c.Id == id || c.Name.Contains(term) ||
-					c.PersonalInfo.Fullname.Contains(term)
-				)
-				.Select(x => string.Format("{0}, {1}, {2}", x.Id, x.PersonalInfo.Fullname, x.Name))
-				.Take(20);
+			if (int.TryParse(term, out id))
+				queryDB = true;
+			else {
+				id = 0;
 
-			var retVal = new HashSet<string>(findResult);
+				if (term.Length > 2) {
+					queryDB = true;
+					term = term.Replace(" ", "%");
+				} // if
+			} // if
 
-			return Json(retVal.Take(15), JsonRequestBehavior.AllowGet);
+			var retVal = new HashSet<string>();
+
+			if (!queryDB)
+				return Json(retVal, JsonRequestBehavior.AllowGet);
+
+			DbConnectionGenerator.Get().ForEachRowSafe(
+				sr => {
+					retVal.Add(string.Format(
+						"{0}: {1}, {2} ({3})",
+						(int)sr["CustomerID"],
+						(string)sr["CustomerName"],
+						(string)sr["Email"],
+						(string)sr["Origin"]
+					));
+				},
+				"FindCustomer",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Ntoken", id),
+				new QueryParameter("Stoken", term.ToLowerInvariant())
+			);
+
+			return Json(retVal, JsonRequestBehavior.AllowGet);
 		} // FindCustomer
 
 		private enum CustomerState {
@@ -97,7 +118,6 @@
 			Ok,
 		} // enum CustomerState
 
-		private readonly ISession session;
 		private readonly UnderwriterRecentCustomersRepository uwRecentCustomersRepo;
 		private readonly CustomerRepository customersRepo;
 	} // class CustomerNavigatorController

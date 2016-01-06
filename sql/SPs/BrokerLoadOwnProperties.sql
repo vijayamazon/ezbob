@@ -11,6 +11,7 @@ GO
 
 ALTER PROCEDURE BrokerLoadOwnProperties
 @ContactEmail NVARCHAR(255) = '',
+@Origin INT = 0,
 @BrokerID INT = 0,
 @ContactMobile NVARCHAR(255) = ''
 AS
@@ -37,7 +38,7 @@ BEGIN
 
 	IF @ContactEmail != ''
 	BEGIN
-		IF @ContactMobile != '' OR @BrokerID > 0
+		IF @ContactMobile != '' OR @BrokerID > 0 OR ISNULL(@Origin, 0) <= 0
 			RAISERROR('Invalid arguments: broker id or contact mobile is set when contact email is set.', 11, 1)
 	END
 	ELSE BEGIN
@@ -59,7 +60,7 @@ BEGIN
 		SET @BrokerID = (
 			SELECT TOP 1 b.BrokerID
 			FROM Broker b
-			WHERE b.ContactEmail = @ContactEmail
+			WHERE (b.ContactEmail = @ContactEmail AND b.OriginID = @Origin)
 			OR b.ContactMobile = @ContactMobile
 		)
 

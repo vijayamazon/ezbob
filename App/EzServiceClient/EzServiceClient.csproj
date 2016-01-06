@@ -240,6 +240,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.MarketplacesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.MultiBrandLoanSummaryActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -256,6 +259,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SetPasswordActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringActionResult.datasource">

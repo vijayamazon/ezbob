@@ -4,13 +4,22 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
+	using Aspose.Words;
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Tasks;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
+	using Ezbob.RegistryScanner;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using log4net;
+	using NHibernate;
+	using NHibernateWrapper.NHibernate;
 	using NUnit.Framework;
+	using StructureMap;
+	using StructureMap.Pipeline;
 
 	[TestFixture]
 	public class TestIMail {
@@ -22,10 +31,20 @@
 			this.Env = oLog4NetCfg.Environment;
 			this.ALog = new SafeILog(Log);
 			this.DB = new SqlConnection(oLog4NetCfg.Environment, this.ALog);
-
+			Ezbob.Backend.Strategies.Library.Initialize(this.Env, this.DB, this.ALog);
 			ConfigManager.CurrentValues.Init(this.DB, this.ALog);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
+
+			
+			NHibernateManager.FluentAssemblies.Add(typeof(Loan).Assembly);
+			Scanner.Register();
+
+			ObjectFactory.Configure(x => {
+				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.OpenSession());
+				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.For<ILoanRepository>().Use<LoanRepository>();
+			});
 		}
 
 		[Test]
@@ -288,6 +307,38 @@
 				OutstandingPrincipal = 20000,
 			};
 			return model;
+		}
+
+		[Test]
+		public void TestAnnual77A() {
+			var stra = new Annual77ANotifier();
+			stra.ExecuteTest(54, 1058, 1);
+			stra.ExecuteTest(199, 1057, 2);
+		}
+
+		[Test]
+		public void TestCreateTable() {
+			List<string> header = new List<string>{
+				{"Date"},
+				{"Amount"},
+				{"Description"}
+			};
+
+			List<List<string>> content = new List<List<string>>() {
+				new List<string>(){ 
+					{"2015-1-1"},
+					{"100"},
+					{"Payment"}
+				},
+				new List<string>(){
+					{"2015-2-1"},
+					{"200"},
+					{"Payment"}
+				}
+			};
+
+			var doc = PrepareMail.CreateTable(new TableModel { Header = header, Content = content });
+			doc.Save("c:\\Temp\\imail\\table" + DateTime.UtcNow.Ticks + ".docx", SaveFormat.Docx);
 		}
 
 		private IMailApi api;

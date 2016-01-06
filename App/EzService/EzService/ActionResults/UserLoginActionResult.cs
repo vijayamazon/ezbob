@@ -13,6 +13,6 @@
 		public string ErrorMessage { get; set; }
 
 		[DataMember]
-		public int OriginID { get; set; }
+		public string RefNumber { get; set; }
 	} // class UserLoginActionResult
 } // namespace EzService

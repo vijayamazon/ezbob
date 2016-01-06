@@ -4,6 +4,7 @@ GO
 
 ALTER FUNCTION dbo.udfCheckPhoneNumUniqueness(
 @ContactMobile NVARCHAR(255),
+@OriginID INT,
 @CheckUsers BIT = 1,
 @CheckBrokers BIT = 1,
 @RespectSkipCodeNumber BIT = 1
@@ -36,13 +37,13 @@ BEGIN
 
 	IF @CheckUsers = 1
 	BEGIN
-		IF EXISTS (SELECT * FROM Customer WHERE DaytimePhone = @ContactMobile OR MobilePhone = @ContactMobile)
+		IF EXISTS (SELECT * FROM Customer WHERE (DaytimePhone = @ContactMobile OR MobilePhone = @ContactMobile))
 			RETURN 'There is already a customer with such phone number: ' + @ContactMobile
 	END
 
 	IF @CheckBrokers = 1
 	BEGIN
-		IF EXISTS (SELECT * FROM Broker WHERE ContactMobile = @ContactMobile)
+		IF EXISTS (SELECT * FROM Broker WHERE ContactMobile = @ContactMobile AND OriginID = @OriginID)
 			RETURN 'There is already a broker with such mobile phone: ' + @ContactMobile
 	END
 

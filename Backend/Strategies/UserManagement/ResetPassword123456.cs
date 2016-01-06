@@ -1,7 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
+	using System.Data;
 	using System.Runtime.Serialization;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.dbutils;
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 	using MailStrategies;
@@ -17,9 +20,9 @@
 
 	public class ResetPassword123456 : AStrategy {
 		public ResetPassword123456(int nTargetID, PasswordResetTarget nTarget) {
-			m_nTargetType = nTarget;
+			this.targetType = nTarget;
 
-			m_oSpLoad = new LoadEmailForPasswordReset(DB, Log) {
+			this.spLoad = new LoadEmailForPasswordReset(DB, Log) {
 				TargetID = nTargetID,
 			};
 		} // constructor
@@ -29,41 +32,46 @@
 		} // Name
 
 		public override void Execute() {
-			Log.Debug("Resetting password for user {0}...", m_oSpLoad.TargetID);
+			Log.Debug("Resetting password for user {0}...", this.spLoad.TargetID);
 
-			string sEmail = m_oSpLoad.ExecuteScalar<string>();
+			this.spLoad.ExecuteNonQuery();
 
-			if (string.IsNullOrWhiteSpace(sEmail)) {
-				Log.Warn("Resetting password for user {0} failed: no email found.", m_oSpLoad.TargetID);
+			if (string.IsNullOrWhiteSpace(this.spLoad.Email)) {
+				Log.Warn("Resetting password for user {0} failed: no email found.", this.spLoad.TargetID);
 				return;
 			} // if
 
-			var sp = new SavePassword(m_oSpLoad, DB, Log) {
-				Password = SecurityUtils.HashPassword(sEmail, ThePassword),
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
+			HashedPassword hashed = pu.Generate(this.spLoad.Email, ThePassword);
+
+			var sp = new SavePassword(this.spLoad, DB, Log) {
+				Password = hashed.Password,
+				Salt = hashed.Salt,
+				CycleCount = hashed.CycleCount,
 			};
 
 			sp.ExecuteNonQuery();
 
-			Log.Debug("Resetting password for user {0} complete.", m_oSpLoad.TargetID);
+			Log.Debug("Resetting password for user {0} complete.", this.spLoad.TargetID);
 
 			AStrategy oEmailSender = null;
 
-			switch (m_nTargetType) {
+			switch (this.targetType) {
 			case PasswordResetTarget.Customer:
-				oEmailSender = new PasswordChanged(m_oSpLoad.TargetID, ThePassword);
+				oEmailSender = new PasswordChanged(this.spLoad.TargetID, ThePassword);
 				break;
 
 			case PasswordResetTarget.Broker:
-				oEmailSender = new BrokerPasswordChanged(m_oSpLoad.TargetID, ThePassword);
+				oEmailSender = new BrokerPasswordChanged(this.spLoad.TargetID, ThePassword);
 				break;
 			} // switch
 
-			if (oEmailSender != null)
-				oEmailSender.Execute();
+			FireToBackground(oEmailSender);
 		} // Execute
 
-		private readonly LoadEmailForPasswordReset m_oSpLoad;
-		private readonly PasswordResetTarget m_nTargetType;
+		private readonly LoadEmailForPasswordReset spLoad;
+		private readonly PasswordResetTarget targetType;
 
 		private const string ThePassword = "123456";
 
@@ -76,6 +84,11 @@
 
 			[UsedImplicitly]
 			public int TargetID { get; set; }
+
+			[UsedImplicitly]
+			[Direction(ParameterDirection.Output)]
+			[Length(255)]
+			public string Email { get; set; }
 		} // class LoadEmailForPasswordReset
 
 		private class SavePassword : AStoredProcedure {
@@ -92,7 +105,12 @@
 
 			[UsedImplicitly]
 			public string Password { get; set; }
-		} // class SavePassword
 
+			[UsedImplicitly]
+			public string Salt { get; set; }
+
+			[UsedImplicitly]
+			public string CycleCount { get; set; }
+		} // class SavePassword
 	} // class ResetPassword123456
 } // namespace

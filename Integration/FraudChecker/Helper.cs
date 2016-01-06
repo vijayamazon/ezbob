@@ -1,5 +1,4 @@
 ﻿namespace FraudChecker {
-	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Fraud;
 
@@ -18,7 +17,7 @@
 				InternalCustomer = internalCustomer,
 				CurrentField = currentField,
 				ExternalUser = externalUser,
-				Value = value ?? String.Empty
+				Value = value ?? string.Empty
 			};
 		} // CreateDetection
 	} // class Helper

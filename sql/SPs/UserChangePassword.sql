@@ -8,6 +8,8 @@ GO
 ALTER PROCEDURE UserChangePassword
 @UserID INT,
 @EzPassword VARCHAR(255),
+@Salt VARCHAR(255),
+@CycleCount VARCHAR(255),
 @Now DATETIME
 AS
 BEGIN
@@ -20,10 +22,13 @@ BEGIN
 
 	UPDATE Security_User SET
 		EzPassword = @EzPassword,
+		Salt = @Salt,
+		CycleCount = @CycleCount,
 		PassSetTime = @Now,
 		LoginFailedCount = NULL,
 		LastBadLogin = NULL,
-		ForcePassChange = NULL
+		ForcePassChange = NULL,
+		IsPasswordRestored = 0
 	WHERE
 		UserId = @UserID
 

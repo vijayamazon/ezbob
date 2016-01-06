@@ -2399,3 +2399,8 @@ input[type="text"].err-field-red {
 	margin: 0 20px 0 5px;
 	color: red;
 }
+
+.multi-brand-area {
+	border-top: 1px solid #e5e5e5;
+	color: #c71585;
+}

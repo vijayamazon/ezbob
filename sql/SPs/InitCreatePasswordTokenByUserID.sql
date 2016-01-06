@@ -33,6 +33,13 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	UPDATE Security_User SET
+		IsPasswordRestored = 1
+	WHERE
+		UserId = @UserID
+
+	------------------------------------------------------------------------------
+
 	INSERT INTO CreatePasswordTokens(TokenID, CustomerID, DateCreated, DateAccessed, DateDeleted)
 		VALUES (@TokenID, @UserID, @Now, NULL, NULL)
 END

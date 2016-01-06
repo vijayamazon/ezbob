@@ -8,9 +8,9 @@
 		void CreateUpdateContact(ContactModel model);
 		void CreateTask(TaskModel model);
 		void CreateActivity(ActivityModel model);
-		void ChangeEmail(string currentEmail, string newEmail);
+		void ChangeEmail(ChangeEmailModel model);
 		void Login();
-		GetActivityResultModel GetActivity(string email);
+		GetActivityResultModel GetActivity(GetActivityModel email);
         string Error { get; }
         bool HasError { get; }
 		bool HasLoginError { get; }

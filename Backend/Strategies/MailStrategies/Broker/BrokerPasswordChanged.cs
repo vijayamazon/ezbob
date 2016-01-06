@@ -2,7 +2,7 @@
 	using Ezbob.Backend.Models;
 
 	public class BrokerPasswordChanged : PasswordChanged {
-		public BrokerPasswordChanged(int nBrokerID, Password oPassword) : base(nBrokerID, oPassword) {
+		public BrokerPasswordChanged(int nBrokerID, DasKennwort oPassword) : base(nBrokerID, oPassword) {
 		} // constructor
 
 		public BrokerPasswordChanged(int nBrokerID, string sPassword) : base(nBrokerID, sPassword) {

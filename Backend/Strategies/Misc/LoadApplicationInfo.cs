@@ -166,7 +166,7 @@
 
 			if ((Result.BrokerSetupFee > 0) && (this.brokerID != null)) {
 				loan.BrokerCommissions.Add(new LoanBrokerCommission {
-					Broker = ObjectFactory.GetInstance<BrokerRepository>().GetByUserId(this.brokerID.Value),
+					Broker = ObjectFactory.GetInstance<BrokerRepository>().GetByID(this.brokerID.Value),
 					CardInfo = this.brokerCardID == null
 						? null
 						: ObjectFactory.GetInstance<ICardInfoRepository>().GetAll().FirstOrDefault(ci =>

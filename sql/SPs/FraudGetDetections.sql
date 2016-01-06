@@ -5,20 +5,37 @@ IF OBJECT_ID('FraudGetDetections') IS NULL
 	EXECUTE('CREATE PROCEDURE FraudGetDetections AS SELECT 1')
 GO
 
-ALTER PROCEDURE [dbo].[FraudGetDetections] 
-	(@CustomerId INT)
+ALTER PROCEDURE FraudGetDetections
+@CustomerId INT
 AS
 BEGIN
 	IF OBJECT_ID('tempdb..#tmpCustomerPhones') IS NOT NULL DROP TABLE #tmpCustomerPhones
 	IF OBJECT_ID('tempdb..#tmpCustomerAddresses') IS NOT NULL DROP TABLE #tmpCustomerAddresses
 	IF OBJECT_ID('tempdb..#tmpCustomerYodlees') IS NOT NULL DROP TABLE #tmpCustomerYodlees
 			
-	DECLARE @FirstName NVARCHAR(300) = (SELECT FirstName  FROM Customer WHERE Id=@CustomerId)
-	DECLARE @Surname NVARCHAR(300) = (SELECT Surname  FROM Customer WHERE Id=@CustomerId)
-	DECLARE @DateOfBirth DATETIME = (SELECT DateOfBirth FROM Customer WHERE Id=@CustomerId)
-	DECLARE @AccountNumber NVARCHAR(20) = (SELECT AccountNumber FROM Customer WHERE Id=@CustomerId)
-	DECLARE @SortCode NVARCHAR(20) = (SELECT SortCode FROM Customer WHERE Id=@CustomerId)
-	DECLARE @CompanyId INT = (SELECT CompanyId FROM Customer WHERE Id = @CustomerId)
+	DECLARE @Email NVARCHAR(128)
+	DECLARE @OriginID INT
+	DECLARE @FirstName NVARCHAR(300)
+	DECLARE @Surname NVARCHAR(300)
+	DECLARE @DateOfBirth DATETIME
+	DECLARE @AccountNumber NVARCHAR(20)
+	DECLARE @SortCode NVARCHAR(20)
+	DECLARE @CompanyId INT
+
+	SELECT
+		@Email = Name,
+		@FirstName = FirstName,
+		@Surname = Surname,
+		@DateOfBirth = DateOfBirth,
+		@AccountNumber = AccountNumber,
+		@SortCode = SortCode,
+		@CompanyId = CompanyId,
+		@OriginID = OriginID
+	FROM
+		Customer
+	WHERE
+		Id = @CustomerId
+
 	DECLARE @CompanyRefNum NVARCHAR(30) = (SELECT ExperianRefNum FROM Company WHERE Id=@CompanyId)
 
 	--customer phones
@@ -74,6 +91,7 @@ BEGIN
 	OR c.AccountNumber = @AccountNumber
 	OR c.SortCode = @SortCode
 	OR (cc.ExperianRefNum IS NOT NULL AND cc.ExperianRefNum = @CompanyRefNum AND @CompanyRefNum <> 'NotFound')
+	OR (c.Name LIKE @Email AND c.OriginID != @OriginID)
 	)
 
 	UNION

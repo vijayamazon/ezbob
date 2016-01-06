@@ -37,6 +37,7 @@
             Log.Info("VIP add task {0}, {1}", this.email, this.customerId);
 			SalesForce.AddTask addTask = new SalesForce.AddTask(this.customerId, new TaskModel {
 				Email = this.email,
+				Origin = "ezbob",
 				Originator = "System",
 				CreateDate = DateTime.UtcNow,
 				DueDate = DateTime.UtcNow.AddDays(1),

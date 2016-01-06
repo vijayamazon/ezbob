@@ -7,11 +7,18 @@ GO
 
 ALTER PROCEDURE SavePassword
 @TargetID INT,
-@Password NVARCHAR(255)
+@Password NVARCHAR(255),
+@Salt NVARCHAR(255),
+@CycleCount NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	UPDATE Security_User SET EzPassword = @Password WHERE UserId = @TargetID
+	UPDATE Security_User SET
+		EzPassword = @Password,
+		Salt = @Salt,
+		CycleCount = @CycleCount
+	WHERE
+		UserId = @TargetID
 END
 GO

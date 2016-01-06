@@ -15,6 +15,7 @@
 		public bool LastWizardStep { get; set; }
 		public bool IsAlibaba { get; set; }
 		public string Email { get; set; }
+		public string Origin { get; set; }
 		public bool FilledByBroker { get; set; }
 
 		public long CashRequestID { get; set; }

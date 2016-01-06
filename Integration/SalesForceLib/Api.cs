@@ -62,16 +62,16 @@
 		/// UW changes customer email
 		/// as it is unique identifier of lead / account / MainApplicant contact should be updated
 		/// </summary>
-		public ApiResponse ChangeEmail(string currentEmail, string newEmail) {
+		public ApiResponse ChangeEmail(ChangeEmailModel model) {
 			return new ApiResponse();
 		}
 
 		/// <summary>
 		/// Retrieve all activities for account/lead/contact/opportunity
 		/// </summary>
-		/// <param name="email"></param>
+		/// <param name="model"></param>
 		/// <returns></returns>
-		public ApiResponse GetActivity(string email) {
+		public ApiResponse GetActivity(GetActivityModel model) {
 			string result = @"{ ""Success"" :  ""[ {
   \""Status\"" : \""Not Started\"",
   \""Description\"" : \""test content task\"",

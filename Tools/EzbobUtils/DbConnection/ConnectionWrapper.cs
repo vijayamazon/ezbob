@@ -36,14 +36,16 @@
 			Connection = null;
 		} // Close
 
-		public void BeginTransaction() {
+		public ConnectionWrapper BeginTransaction() {
 			if (Transaction != null)
-				return;
+				return this;
 
 			if (!IsOpen)
-				return;
+				return this;
 
 			Transaction = Connection.BeginTransaction();
+
+			return this;
 		} // BeginTransaction
 
 		public void Commit() {

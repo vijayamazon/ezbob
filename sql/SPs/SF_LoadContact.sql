@@ -26,6 +26,7 @@ IF @DirectorID IS NOT NULL
 BEGIN
 	SELECT
 		c.Name AS Email,
+		o.Name AS Origin,
 		d.Email AS ContactEmail,
 		isnull(d.Name, '') + ' ' + isnull(d.Middle, '') + ' ' + isnull(d.Surname, '') AS Name,
 		'Director' AS Type,
@@ -41,6 +42,7 @@ BEGIN
 		a.Postcode AS AddressPostcode
 	FROM Director d
 	INNER JOIN Customer c ON c.Id = d.CustomerId
+	LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 	LEFT JOIN CustomerAddress a ON d.id = a.DirectorId AND a.addressType IN (4,6)
 	WHERE d.id=@DirectorID
 		
@@ -49,6 +51,7 @@ END
 
 SELECT 
 	c.Name AS Email,
+	o.Name AS Origin,
 	c.Name AS ContactEmail,
 	c.Fullname AS Name,
 	'MainApplicant' AS Type,
@@ -65,6 +68,7 @@ SELECT
 
 FROM Customer c 
 LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
+LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 WHERE c.Id=@CustomerID
 
 END

@@ -255,7 +255,7 @@
 				if (mp.Marketplace.InternalId != this.vendorInfo.Guid())
 					return false;
 
-				if (mp.DisplayName != oCustomer.Name)
+				if (!mp.DisplayName.StartsWith(oCustomer.Name))
 					return false;
 
 				return AccountModel.ToModel(mp).password == VendorInfo.TopSecret;

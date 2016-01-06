@@ -628,7 +628,7 @@
 				{
 					try
 					{
-						var customer = _customerRepository.TryGet(customerId);
+						var customer = _customerRepository.ReallyTryGet(customerId);
 						if (customer != null && campaign.Clients.All(cc => cc.Customer != customer))
 						{
 							campaign.Clients.Add(new CampaignClients { Campaign = campaign, Customer = customer });

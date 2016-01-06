@@ -6,7 +6,6 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
-	using System.Text;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
@@ -262,12 +261,19 @@
 
 		[Activation]
 		private void BrokerLoadCustomerList() {
-			if (this.cmdLineArgs.Length != 2) {
-				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email>");
+			if (this.cmdLineArgs.Length != 3) {
+				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email> <broker origin>");
 				return;
 			} // if
 
-			BrokerCustomersActionResult res = this.serviceClient.BrokerLoadCustomerList(this.cmdLineArgs[1]);
+			CustomerOriginEnum origin;
+
+			if (!Enum.TryParse(this.cmdLineArgs[2], true, out origin)) {
+				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email> <broker origin>");
+				return;
+			} // if
+
+			BrokerCustomersActionResult res = this.serviceClient.BrokerLoadCustomerList(this.cmdLineArgs[1], origin);
 
 			foreach (var oEntry in res.Customers)
 				this.log.Msg("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
@@ -341,16 +347,6 @@
 		}
 
 		[Activation]
-		private void ChangeBrokerEmail() {
-			if ((this.cmdLineArgs.Length != 4)) {
-				this.log.Msg("Usage: ChangeBrokerEmail <OldEmail> <NewEmail> <NewPassword>");
-				return;
-			}
-
-			this.serviceClient.ChangeBrokerEmail(this.cmdLineArgs[1], this.cmdLineArgs[2], this.cmdLineArgs[3]);
-		}
-
-		[Activation]
 		private void CreateUnderwriter() {
 			if (this.cmdLineArgs.Length != 4) {
 				this.log.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");
@@ -369,7 +365,11 @@
 				return;
 			}
 
-			this.serviceClient.UnderwriterSignup(this.cmdLineArgs[1], new Password(this.cmdLineArgs[2]), this.cmdLineArgs[3]);
+			this.serviceClient.SignupUnderwriterMultiOrigin(
+				this.cmdLineArgs[1],
+				new DasKennwort(this.cmdLineArgs[2]),
+				this.cmdLineArgs[3]
+			);
 		}
 
 		[Activation]
@@ -559,33 +559,49 @@
 
 		[Activation]
 		private void GeneratePassword() {
-			if (this.cmdLineArgs.Length < 2) {
-				this.log.Msg(@"Usage: GeneratePassword <arg 1> <arg 2> ... <arg N>
+			if (this.cmdLineArgs.Length != 3) {
+				this.log.Msg(@"Usage: GeneratePassword <user name> <new password>
 
-Generates password hash by concatenating all the arguments in the order of appearance.
+Generates new password hash from given user name and password.
+Neither user name nor password can contain a white space character!
 
-I.e. to generate broker password call
-GeneratePassword broker-contact-email@example.com password-itself
+I.e. to generate hash for underwriter 'manager' with password '123456' call
+GeneratePassword manager 123456
 
 ");
 				return;
 			} // if
 
-			var os = new StringBuilder();
-			for (int i = 1; i < this.cmdLineArgs.Length; i++)
-				os.Append(this.cmdLineArgs[i]);
+			string userName = this.cmdLineArgs[1];
+			string rawPassword = this.cmdLineArgs[2];
 
-			string sOriginalPassword = os.ToString();
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
 
-			string sHash = SecurityUtils.HashPassword(sOriginalPassword);
+			var pass = pu.Generate(userName, rawPassword);
 
-			this.log.Msg(
-				"\n\nOriginal string:\n\t{0}\n\ngenerated hash:\n\t{1}\n\nquery:\n" +
-					"\tUPDATE Broker SET Password = '{1}' WHERE ContactEmail = '{2}'\n" +
-					"\n\tUPDATE Security_User SET EzPassword = '{1}' WHERE UserName = '{2}'\n",
-				sOriginalPassword, sHash, this.cmdLineArgs[1]
-				);
-		}
+			this.log.Msg("\n\n" +
+				"Raw user name:password:\n" +
+				"\t{0}:{1}\n\n" +
+				"generated hash:\n" +
+				"\t{2}\n\n" +
+				"generated salt:\n" +
+				"\t{3}\n\n" +
+				"generated cycle count:\n" +
+				"\t{4}\n\n" +
+				"query:\n" +
+				"\tUPDATE Security_User SET\n" +
+					"\t\tEzPassword = '{2}',\n" +
+					"\t\tSalt = '{3}',\n" +
+					"\t\tCycleCount = '{4}'\n" +
+				"\tWHERE\n" +
+					"\t\tUserName = '{0}'\n",
+				userName,
+				rawPassword,
+				pass.Password,
+				pass.Salt,
+				pass.CycleCount
+			);
+		} // GeneratePassword
 
 		[Activation]
 		private void GetCashFailed() {
@@ -1276,13 +1292,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			string sDisplayName = this.cmdLineArgs[2];
 			string sPassword = this.cmdLineArgs[3];
-			string sHash = SecurityUtils.Hash(nCustomerID + sPassword + sDisplayName);
 
 			this.serviceClient.UpdateLinkedHmrcPassword(
 				new Encrypted(nCustomerID.ToString(CultureInfo.InvariantCulture)),
 				new Encrypted(sDisplayName),
-				new Encrypted(sPassword), sHash
-				);
+				new Encrypted(sPassword)
+			);
 		}
 
 		[Activation]

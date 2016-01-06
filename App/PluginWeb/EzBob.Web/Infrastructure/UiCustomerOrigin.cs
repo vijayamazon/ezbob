@@ -1,18 +1,21 @@
 ﻿namespace EzBob.Web.Infrastructure {
+	using System;
 	using System.Web;
 	using EZBob.DatabaseLib.Model.Database;
 	using StructureMap;
 
 	public static class UiCustomerOrigin {
-		public static CustomerOrigin Get() {
+		public static CustomerOrigin Get(Uri uri = null) {
 			CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
 
+			string host = (uri ?? HttpContext.Current.Request.Url).Host;
+
 			foreach (var co in customerOriginRepository.GetAllOrdered())
-				if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle))
+				if (host.Contains(co.UrlNeedle))
 					return co;
 
 			return customerOriginRepository.GetDefault();
-		} // Set
+		} // Get
 
 		public static void Set(dynamic viewBag, string phoneNumber = null, CustomerOrigin customerOrigin = null) {
 			customerOrigin = customerOrigin ?? Get();

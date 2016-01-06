@@ -1,36 +1,31 @@
-using System;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
+namespace EzBob.Web.Code.MpUniq {
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
 
-namespace EzBob.Web.Code.MpUniq
-{
-    public class MPUniqChecker : IMPUniqChecker
-    {
-		protected readonly ICustomerMarketPlaceRepository _customerMarketPlaceRepository;
-        protected readonly IMP_WhiteListRepository _whiteList;
+	public class MPUniqChecker : IMPUniqChecker {
+		public MPUniqChecker(
+			ICustomerMarketPlaceRepository customerMarketPlaceRepository,
+			IMP_WhiteListRepository whiteList
+		) {
+			this.WhiteList = whiteList;
+			this.CustomerMarketPlaceRepository = customerMarketPlaceRepository;
+		} // constructor
 
-        public MPUniqChecker(ICustomerMarketPlaceRepository customerMarketPlaceRepository, IMP_WhiteListRepository whiteList)
-        {
-            _whiteList = whiteList;
-            _customerMarketPlaceRepository = customerMarketPlaceRepository;
-        }
+		public virtual void Check(Guid marketplaceType, Customer customer, string token) {
+			if (this.WhiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
+				return;
 
-        public virtual void Check(Guid marketplaceType, Customer customer, string token)
-        {
-            if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
-            {
-                return;
-            }
-            if (_customerMarketPlaceRepository.Exists(marketplaceType, customer, token))
-            {
-                return;
-                //throw new MarketPlaceAddedByThisCustomerException();
-            }
-            if (_customerMarketPlaceRepository.Exists(marketplaceType, token))
-            {
-                throw new MarketPlaceIsAlreadyAddedException();
-            }
-        }
-    }
-}
+			if (this.CustomerMarketPlaceRepository.Exists(marketplaceType, customer, token))
+				return;
+				//throw new MarketPlaceAddedByThisCustomerException();
+
+			if (this.CustomerMarketPlaceRepository.Exists(marketplaceType, customer.CustomerOrigin.CustomerOriginID, token))
+				throw new MarketPlaceIsAlreadyAddedException();
+		} // Check
+
+		protected readonly ICustomerMarketPlaceRepository CustomerMarketPlaceRepository;
+		protected readonly IMP_WhiteListRepository WhiteList;
+	} // class MPUniqChecker
+} // namespace

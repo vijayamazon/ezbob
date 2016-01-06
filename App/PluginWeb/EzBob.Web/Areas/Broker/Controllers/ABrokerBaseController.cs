@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
@@ -8,13 +7,39 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Web.Infrastructure;
 	using ServiceClientProxy;
+	using StructureMap;
+
+	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
+	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
+
+	internal static class CustomerOriginEnumExtForBroker {
+		public static RemoteCustomerOriginEnum? AsRemote(this CustomerOriginEnum? origin) {
+			if (origin == null)
+				return null;
+
+			return origin.Value.AsRemote();
+		} // AsRemote
+
+		public static RemoteCustomerOriginEnum AsRemote(this CustomerOriginEnum origin) {
+			return (RemoteCustomerOriginEnum)(int)origin;
+		} // AsRemote
+	} // class CustomerOriginEnumExtForBroker
 
 	public abstract class ABrokerBaseController : Controller {
 		static ABrokerBaseController() {
 			ms_oLog = new SafeILog(typeof(BrokerHomeController));
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 		} // static constructor
+
+		protected static CustomerOriginEnum UiOrigin {
+			get { return UiCustomerOrigin.Get().GetOrigin(); }
+		} // UiOrigin
+
+		protected static CustomerOriginEnum? SessionUiOrigin {
+			get { return ObjectFactory.GetInstance<IEzbobWorkplaceContext>().GetSessionOrigin(); }
+		} // SessionUiOrigin
 
 		protected ABrokerBaseController() {
 			this.m_oServiceClient = new ServiceClient();
@@ -29,12 +54,16 @@
 		/// Checks if broker is logged in session if OK returned null else return error message
 		/// </summary>
 		protected virtual T IsAuth<T>(string sRequestDescription, string sContactEmail) where T : BrokerForJsonResult {
-			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
+			bool thisBrokerIsLoggedIn = (User.Identity.Name == sContactEmail) && (UiOrigin == SessionUiOrigin);
+
+			if (!User.Identity.IsAuthenticated || !thisBrokerIsLoggedIn) {
 				ms_oLog.Alert(
 					"{0} request with contact email {1}: {2}.",
 					sRequestDescription,
 					sContactEmail,
-					User.Identity.IsAuthenticated ? "authorised as " + User.Identity.Name : "not authenticated"
+					User.Identity.IsAuthenticated
+						? "authorised as " + User.Identity.Name + " with origin " + UiOrigin
+						: "not authenticated"
 				);
 
 				ConstructorInfo ci = typeof(T).GetConstructors().FirstOrDefault();

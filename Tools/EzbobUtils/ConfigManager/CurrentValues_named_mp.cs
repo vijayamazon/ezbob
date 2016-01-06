@@ -196,6 +196,10 @@ namespace ConfigManager {
 			get { return this[Variables.PartialPaymentCharge]; }
 		}
 
+		public virtual VariableValue PasswordHashCycleCount {
+			get { return this[Variables.PasswordHashCycleCount]; }
+		}
+
 		public virtual VariableValue PasswordPolicyType {
 			get { return this[Variables.PasswordPolicyType]; }
 		}

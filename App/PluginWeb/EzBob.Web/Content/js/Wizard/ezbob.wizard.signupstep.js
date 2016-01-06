@@ -114,13 +114,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var oEverlineDialog = this.$el.find('#everline_help');
 		var email = this.model.get('Email');
 
-		if (email) {
-			this.$el.find("#Email").val(email);
-		}
-
+		if (email)
+			this.$el.find('#Email').val(email);
 
 		if (this.model.get('IsEverline')) {
-
 			oEverlineDialog.val(email);
 			//currently not showing the explanation popup but saving the email 
 			EzBob.UiAction.saveOne(EzBob.UiAction.evtLinked(), oEverlineDialog, true);
@@ -153,29 +150,33 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		this.inputChanged();
 
-		if (this.$el.find('.broker-for-customer').length)
-			this.switchToCaptcha();
+		var brokerFillsForCustomer = !!this.$el.find('.broker-for-customer').length;
 
 		var emailObj = this.$el.find('#Email');
-		if (this.alreadyRendered) {
+
+		if (brokerFillsForCustomer) {
+			this.switchToCaptcha();
+			emailObj.attr('readonly', 'readonly').addClass('disabled');
+		} // if
+
+		if (this.alreadyRendered)
 			EzBob.Validation.element(this.validator, emailObj);
-		} else {
-			if (emailObj.val() !== '') {
+		else {
+			if (emailObj.val() !== '')
 				EzBob.Validation.element(this.validator, emailObj);
-			}
+
 			this.alreadyRendered = true;
-		}
+		} // if
 
 		emailObj.change().attardi_labels('toggle');
-		if (emailObj.val() === '') {
+		if (emailObj.val() === '')
 			setTimeout(this.focusOnEmail, 50);
-		} else {
+		else
 			setTimeout(this.focusOnPassword, 50);
-		}
 
 		this.readyToProceed = true;
 		return this;
-	},
+	}, // render
 
 	focusOnEmail: function () {
 		document.getElementById('Email').focus();

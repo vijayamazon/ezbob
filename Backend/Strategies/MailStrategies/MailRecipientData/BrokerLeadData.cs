@@ -3,9 +3,15 @@
 	using Ezbob.Database;
 
 	public class BrokerLeadData : CustomerData {
-
-		public BrokerLeadData(string sBrokerContactEmail, AStrategy oStrategy, int nLeadID, AConnection oDB) : base(oStrategy, nLeadID, oDB) {
+		public BrokerLeadData(
+			string sBrokerContactEmail,
+			int origin,
+			AStrategy oStrategy,
+			int nLeadID,
+			AConnection oDB
+		) : base(oStrategy, nLeadID, oDB) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
+			this.origin = origin;
 		} // constructor
 
 		public override void Load() {
@@ -28,7 +34,8 @@
 				"BrokerLeadLoadDataForEmail",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@LeadID", RequestedID),
-				new QueryParameter("@ContactEmail", m_sBrokerContactEmail)
+				new QueryParameter("@ContactEmail", m_sBrokerContactEmail),
+				new QueryParameter("@OriginID", this.origin)
 			);
 
 			if (LeadID != RequestedID)
@@ -63,6 +70,6 @@
 		public virtual string FirmName { get; protected set; } // FirmName
 
 		private readonly string m_sBrokerContactEmail;
-
+		private readonly int origin;
 	} // class CustomerData
 } // namespace

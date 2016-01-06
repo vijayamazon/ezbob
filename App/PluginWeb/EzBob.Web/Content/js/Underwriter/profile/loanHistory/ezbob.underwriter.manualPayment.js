@@ -8,7 +8,7 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: "Manual Payment",
+			title: "Manual payment",
 			position: "center",
 			draggable: false,
 			dialogClass: "manual-payment-popup",

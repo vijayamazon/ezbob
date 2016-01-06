@@ -4,6 +4,7 @@
 	using System.Web.Mvc;
 	using System.Web.Routing;
 	using Code;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using StructureMap;
 
@@ -37,7 +38,15 @@
 					return false;
 
 				var users = UsersRepository();
-				var user = users.GetUserByLogin(httpContext.User.Identity.Name);
+
+				User user;
+
+				if (m_sAreaName == "Underwriter")
+					user = users.GetUserByLogin(httpContext.User.Identity.Name, null);
+				else {
+					CustomerOrigin uiOrigin = UiCustomerOrigin.Get(httpContext.Request.Url);
+					user = users.GetUserByLogin(httpContext.User.Identity.Name, uiOrigin.GetOrigin());
+				} // if
 
 				//if strict mode, do not allow to login users that have more than one role
 				if (m_bIsStrict && user.Roles.Count > 1)

@@ -2,7 +2,6 @@
 	using System;
 	using System.Linq;
 	using System.Reflection;
-	using System.Threading.Tasks;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -119,55 +118,19 @@
 				break;
 			} // switch
 
-			if (notifyAlibaba) {
-				FireToBackground(
-					"notify Alibaba",
-					() => new DataSharing(this.decisionModel.customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute()
-				);
-			} // if
+			if (notifyAlibaba)
+				FireToBackground(new DataSharing(this.decisionModel.customerID, AlibabaBusinessType.APPLICATION_REVIEW));
 
 			if (silentAutomationCaller.HasValue) {
 				FireToBackground(
-					"silent automation",
-					() => {
-						new SilentAutomation(this.decisionModel.customerID)
-							.SetTag(silentAutomationCaller.Value)
-							.PreventMainStrategy()
-							.Execute();
-					}
+					new SilentAutomation(this.decisionModel.customerID)
+						.SetTag(silentAutomationCaller.Value)
+						.PreventMainStrategy()
 				);
 			} // if
 
 			Log.Debug("Done applying manual decision by model: {0}.", this.decisionModel.Stringify());
 		} // Execute
-
-		private void FireToBackground(string description, Action task, Action<Exception> onFailedToStart = null) {
-			if (task == null)
-				return;
-
-			string taskID = Guid.NewGuid().ToString("N");
-
-			StrategyLog log = Log;
-
-			log.Debug("Starting background task '{1}' with id '{0}'...", taskID, description);
-
-			try {
-				Task.Run(() => {
-					try {
-						task();
-
-						log.Debug("Background task '{1}' (id: '{0}') completed successfully.", taskID, description);
-					} catch (Exception e) {
-						log.Alert(e, "Background task '{1}' (id: '{0}') failed.", taskID, description);
-					} // try
-				});
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to fire task '{1}' (id: '{0}') to background.", taskID, description);
-
-				if (onFailedToStart != null)
-					onFailedToStart(e);
-			} // try
-		} // FireToBackground
 
 		private ChangeDecisionOption CanChangeDecision() {
 			var checker = new DecisionIsChangable(this.decisionModel);
@@ -243,8 +206,7 @@
 				return;
 
 			FireToBackground(
-				"send 'escalated' email",
-				() => new Escalated(this.decisionModel.customerID).Execute(),
+				new Escalated(this.decisionModel.customerID),
 				e => Warning = "Failed to send 'escalated' email: " + e.Message
 			);
 
@@ -276,8 +238,7 @@
 
 			if (!this.currentState.EmailSendingBanned) {
 				FireToBackground(
-					"send 'rejected' email",
-					() => new RejectUser(this.decisionModel.customerID, bSendToCustomer).Execute(),
+					new RejectUser(this.decisionModel.customerID, bSendToCustomer),
 					e => Warning = "Failed to send 'reject user' email: " + e.Message
 				);
 			} // if
@@ -325,37 +286,26 @@
 
 			if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 				FireToBackground(
-					"send 'approved' and force reset customer password",
-					() => {
-						var stra = new ApprovedUser(
-							this.decisionModel.customerID,
-							this.currentState.OfferedCreditLine,
-							validForHours,
-							this.currentState.NumOfPrevApprovals == 0
-						);
-						stra.SendToCustomer = false;
-						stra.Execute();
-					},
+					 new ApprovedUser(
+						this.decisionModel.customerID,
+						this.currentState.OfferedCreditLine,
+						validForHours,
+						this.currentState.NumOfPrevApprovals == 0
+					) { SendToCustomer = false, },
 					e => Warning = "Failed to force reset customer password and send 'approved user' email: " + e.Message
 				);
 			} else if (bSendApprovedUser) {
 				FireToBackground(
-					"send 'approved' email",
-					() =>
-						new ApprovedUser(
-							this.decisionModel.customerID,
-							this.currentState.OfferedCreditLine,
-							validForHours,
-							this.currentState.NumOfPrevApprovals == 0
-						).Execute(),
+					new ApprovedUser(
+						this.decisionModel.customerID,
+						this.currentState.OfferedCreditLine,
+						validForHours,
+						this.currentState.NumOfPrevApprovals == 0
+					),
 					e => Warning = "Failed to send 'approved user' email: " + e.Message
 				);
-			} else if (bSendBrokerForceResetCustomerPassword) {
-				FireToBackground(
-					"force reset customer password",
-					() => new BrokerForceResetCustomerPassword(this.decisionModel.customerID).Execute()
-				);
-			} // if
+			} else if (bSendBrokerForceResetCustomerPassword)
+				FireToBackground(new BrokerForceResetCustomerPassword(this.decisionModel.customerID));
 
 			newDecision.DecisionNameID = (int)DecisionActions.Approve;
 
@@ -421,7 +371,7 @@
 		} // SaveDecision
 
 		private void UpdateSalesForceOpportunity(OpportunityStage? stage, Action<OpportunityModel> setMoreFields = null) {
-			var model = new OpportunityModel { Email = this.currentState.Email, };
+			var model = new OpportunityModel { Email = this.currentState.Email, Origin = this.currentState.Origin, };
 
 			if (stage != null)
 				model.Stage = stage.Value.DescriptionAttr();
@@ -429,10 +379,7 @@
 			if (setMoreFields != null)
 				setMoreFields(model);
 
-			FireToBackground(
-				"update Sales Force opportunity",
-				() => new UpdateOpportunity(this.decisionModel.customerID, model).Execute()
-			);
+			FireToBackground(new UpdateOpportunity(this.decisionModel.customerID, model));
 		} // UpdateSalesForceOpportunity
 
 		private DecisionToApply decisionToApply;
