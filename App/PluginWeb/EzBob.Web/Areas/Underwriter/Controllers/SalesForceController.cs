@@ -55,6 +55,18 @@
 					if (user != null)
 						customer = this.customerRepository.ReallyTryGet(user.Id);
 				} // if
+			} else if (string.IsNullOrWhiteSpace(origin) && !string.IsNullOrWhiteSpace(id)) {
+				int numOfUsersWithEmail = this.userRepo.GetAll().Count(x => x.Name == id);
+				if (numOfUsersWithEmail == 1) {
+					User user = this.userRepo.GetAll().FirstOrDefault(x => x.Name == id);
+					if (user != null) {
+						customer = this.customerRepository.ReallyTryGet(user.Id);
+					}//if
+				}//if
+
+				if (numOfUsersWithEmail > 1) {
+					this.Log.WarnFormat("{0} customers found for email {1} returning empty result", numOfUsersWithEmail, id);
+				}//if
 			} // if
 
 			var model = new SalesForceModel();
