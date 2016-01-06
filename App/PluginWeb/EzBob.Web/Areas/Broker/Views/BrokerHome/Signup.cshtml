@@ -231,7 +231,7 @@
 
 					@{ EzInputBuilder checkbox2 = new EzInputBuilder(
 							"AgreeToTerms",
-							String.Format("I have read and accept the {0} <a href='#' class='show-terms-and-conditions'>Terms &amp; Conditions</a>", origin),
+							"I have read and agree to the <a href='#' class='show-terms-and-conditions'>Broker and Intermediary Program Terms &amp; Conditions</a>",
 							value: "accepted-terms",
 							type: "checkbox",
 							isRequired: true,
@@ -240,10 +240,10 @@
 							name: "AgreeToTerms",
 							uiEventControlID: "broker:signup-agree-to-terms",
 							wrapperCls: "broker-terms"); 
-							
+
 						EzInputBuilder checkbox3 = new EzInputBuilder(
 							"AgreeToPrivacyPolicy",
-							String.Format("I have read and accept the {0} <a target='_blank' href='{1}'>Privacy Policy</a>", origin, privacyUrl),
+							string.Format("I have read and agree to the <a target='_blank' href='{0}'>Privacy Policy</a>", privacyUrl),
 							value: "accepted-privacy-policy",
 							type: "checkbox",
 							isRequired: true,
@@ -252,8 +252,6 @@
 							name: "AgreeToPrivacyPolicy",
 							uiEventControlID: "broker:signup-agree-to-privacy-policy",
 							wrapperCls: "broker-terms"); 
-
-							
 
 						List<EzInputBuilder> checkboxesList2 = new List<EzInputBuilder> { checkbox2, checkbox3 };
 
