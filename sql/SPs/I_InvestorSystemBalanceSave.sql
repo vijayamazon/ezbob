@@ -11,12 +11,15 @@ GO
 
 CREATE TYPE I_InvestorSystemBalanceList AS TABLE (
 	[InvestorBankAccountID] INT NOT NULL,
-	[LoanTransactionID] INT NOT NULL,
 	[PreviousBalance] DECIMAL(18, 6) NULL,
 	[NewBalance] DECIMAL(18, 6) NULL,
 	[TransactionAmount] DECIMAL(18, 6) NULL,
 	[ServicingFeeAmount] DECIMAL(18, 6) NULL,
-	[Timestamp] DATETIME NOT NULL
+	[Timestamp] DATETIME NOT NULL,
+	[CashRequestID] BIGINT NULL,
+	[LoanID] INT NULL,
+	[LoanTransactionID] INT NULL,
+	[Comment] NVARCHAR(500) NULL
 )
 GO
 
@@ -28,20 +31,26 @@ BEGIN
 
 	INSERT INTO I_InvestorSystemBalance (
 		[InvestorBankAccountID],
-		[LoanTransactionID],
 		[PreviousBalance],
 		[NewBalance],
 		[TransactionAmount],
 		[ServicingFeeAmount],
-		[Timestamp]
+		[Timestamp],
+		[CashRequestID],
+		[LoanID],
+		[LoanTransactionID],
+		[Comment]
 	) SELECT
 		[InvestorBankAccountID],
-		[LoanTransactionID],
 		[PreviousBalance],
 		[NewBalance],
 		[TransactionAmount],
 		[ServicingFeeAmount],
-		[Timestamp]
+		[Timestamp],
+		[CashRequestID],
+		[LoanID],
+		[LoanTransactionID],
+		[Comment]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

@@ -11,10 +11,10 @@ GO
 
 CREATE TYPE I_ProductSubTypeList AS TABLE (
 	[ProductTypeID] INT NOT NULL,
-	[GradeID] INT NOT NULL,
 	[FundingTypeID] INT NULL,
 	[OriginID] INT NOT NULL,
 	[LoanSourceID] INT NOT NULL,
+	[IsRegulated] BIT NOT NULL,
 	[Timestamp] DATETIME NOT NULL
 )
 GO
@@ -27,17 +27,17 @@ BEGIN
 
 	INSERT INTO I_ProductSubType (
 		[ProductTypeID],
-		[GradeID],
 		[FundingTypeID],
 		[OriginID],
 		[LoanSourceID],
+		[IsRegulated],
 		[Timestamp]
 	) SELECT
 		[ProductTypeID],
-		[GradeID],
 		[FundingTypeID],
 		[OriginID],
 		[LoanSourceID],
+		[IsRegulated],
 		[Timestamp]
 	FROM @Tbl
 

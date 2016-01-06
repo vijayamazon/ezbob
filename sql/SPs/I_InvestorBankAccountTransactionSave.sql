@@ -14,7 +14,9 @@ CREATE TYPE I_InvestorBankAccountTransactionList AS TABLE (
 	[PreviousBalance] DECIMAL(18, 6) NULL,
 	[NewBalance] DECIMAL(18, 6) NULL,
 	[TransactionAmount] DECIMAL(18, 6) NULL,
-	[Timestamp] DATETIME NOT NULL
+	[Timestamp] DATETIME NOT NULL,
+	[UserID] INT NULL,
+	[Comment] NVARCHAR(500) NULL
 )
 GO
 
@@ -29,13 +31,17 @@ BEGIN
 		[PreviousBalance],
 		[NewBalance],
 		[TransactionAmount],
-		[Timestamp]
+		[Timestamp],
+		[UserID],
+		[Comment]
 	) SELECT
 		[InvestorBankAccountID],
 		[PreviousBalance],
 		[NewBalance],
 		[TransactionAmount],
-		[Timestamp]
+		[Timestamp],
+		[UserID],
+		[Comment]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

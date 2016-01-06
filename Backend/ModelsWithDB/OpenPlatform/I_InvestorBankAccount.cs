@@ -54,6 +54,10 @@
 		public bool IsActive { get; set; }
 
 		[DataMember]
+		[FK("Security_User", "UserId")]
+		public int? UserID { get; set; }
+
+		[DataMember]
 		public DateTime Timestamp { get; set; }
 
 		//////////////////////////////////////////

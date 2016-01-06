@@ -6,6 +6,10 @@ BEGIN
 END
 GO
 
+IF NOT object_id('I_GradeOriginMap') IS NULL
+	DROP TABLE I_GradeOriginMap
+GO
+
 IF NOT object_id('I_InvestorContact') IS NULL
 	DROP TABLE I_InvestorContact
 GO

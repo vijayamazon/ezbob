@@ -23,6 +23,7 @@ CREATE TYPE I_GradeRangeList AS TABLE (
 	[MaxLoanAmount] DECIMAL(18, 6) NOT NULL,
 	[MinTerm] INT NOT NULL,
 	[MaxTerm] INT NOT NULL,
+	[IsActive] BIT NOT NULL,
 	[Timestamp] DATETIME NOT NULL
 )
 GO
@@ -47,6 +48,7 @@ BEGIN
 		[MaxLoanAmount],
 		[MinTerm],
 		[MaxTerm],
+		[IsActive],
 		[Timestamp]
 	) SELECT
 		[GradeID],
@@ -62,6 +64,7 @@ BEGIN
 		[MaxLoanAmount],
 		[MinTerm],
 		[MaxTerm],
+		[IsActive],
 		[Timestamp]
 	FROM @Tbl
 

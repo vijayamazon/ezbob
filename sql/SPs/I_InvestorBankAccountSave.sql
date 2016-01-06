@@ -26,6 +26,7 @@ CREATE TYPE I_InvestorBankAccountList AS TABLE (
 	[BankAccountNumber] NVARCHAR(255) NULL,
 	[RepaymentKey] NVARCHAR(255) NULL,
 	[IsActive] BIT NOT NULL,
+	[UserID] INT NULL,
 	[Timestamp] DATETIME NOT NULL
 )
 GO
@@ -48,6 +49,7 @@ BEGIN
 		[BankAccountNumber],
 		[RepaymentKey],
 		[IsActive],
+		[UserID],
 		[Timestamp]
 	) SELECT
 		[InvestorID],
@@ -61,6 +63,7 @@ BEGIN
 		[BankAccountNumber],
 		[RepaymentKey],
 		[IsActive],
+		[UserID],
 		[Timestamp]
 	FROM @Tbl
 
@@ -90,6 +93,7 @@ BEGIN
 		I_InvestorBankAccount.[RepaymentKey] = tbl.[RepaymentKey],
 		I_InvestorBankAccount.[IsActive] = tbl.[IsActive],
 		I_InvestorBankAccount.[Timestamp] = tbl.[Timestamp]
+		I_InvestorBankAccount.[UserID] = tbl.[UserID]
 	FROM
 		I_InvestorBankAccount b 
 	INNER JOIN 

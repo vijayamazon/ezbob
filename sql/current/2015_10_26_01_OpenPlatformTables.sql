@@ -31,6 +31,8 @@ BEGIN
 		FundsTransferDate INT NULL DEFAULT 1,
 		DiscountServicingFeePercent DECIMAL(18,6) NULL,
 		FundingLimitForNotification DECIMAL(18,6) NULL DEFAULT 250000,
+		FundsTransferSchedule NVARCHAR(255),
+		RepaymentsTransferSchedule NVARCHAR(255),
 		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
@@ -98,11 +100,13 @@ BEGIN
 		BankAccountNumber NVARCHAR(255),
 		RepaymentKey NVARCHAR(255),
 		IsActive BIT NOT NULL,
+		UserID INT,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorBankAccount PRIMARY KEY (InvestorBankAccountID),
 		CONSTRAINT FK_I_InvestorBankAccount_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
-		CONSTRAINT FK_I_InvestorBankAccount_I_InvestorAccountType FOREIGN KEY (InvestorAccountTypeID) REFERENCES I_InvestorAccountType(InvestorAccountTypeID)
+		CONSTRAINT FK_I_InvestorBankAccount_I_InvestorAccountType FOREIGN KEY (InvestorAccountTypeID) REFERENCES I_InvestorAccountType(InvestorAccountTypeID),
+		CONSTRAINT FK_I_InvestorBankAccount_Security_User FOREIGN KEY (UserID) REFERENCES Security_User(UserId)
 	)
 END
 GO
@@ -116,9 +120,12 @@ BEGIN
 		NewBalance DECIMAL(18,6),
 		TransactionAmount DECIMAL(18,6),
 		Timestamp DATETIME NOT NULL,
+		UserID INT,
+		Comment NVARCHAR(500),
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorBankAccountTransaction PRIMARY KEY (InvestorBankAccountTransactionID),
-		CONSTRAINT FK_I_InvestorBankAccountTransaction_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID)
+		CONSTRAINT FK_I_InvestorBankAccountTransaction_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID),
+		CONSTRAINT FK_I_InvestorBankAccountTransaction_Security_User FOREIGN KEY (UserID) REFERENCES Security_User(UserId)
 	)
 END
 GO
@@ -128,15 +135,20 @@ BEGIN
 	CREATE TABLE I_InvestorSystemBalance (
 		InvestorSystemBalanceID INT NOT NULL IDENTITY(1,1),
 		InvestorBankAccountID INT NOT NULL,
-		LoanTransactionID INT NOT NULL,
 		PreviousBalance DECIMAL(18,6),
 		NewBalance DECIMAL(18,6),
 		TransactionAmount DECIMAL(18,6),
 		ServicingFeeAmount DECIMAL(18,6),
 		Timestamp DATETIME NOT NULL,
+		CashRequestID BIGINT,
+		LoanID INT,
+		LoanTransactionID INT,
+		Comment NVARCHAR(500),
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorSystemBalance PRIMARY KEY (InvestorSystemBalanceID),
 		CONSTRAINT FK_I_InvestorSystemBalance_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID),
+		CONSTRAINT FK_I_InvestorSystemBalance_CashRequest FOREIGN KEY (CashRequestID) REFERENCES CashRequests(Id),
+		CONSTRAINT FK_I_InvestorSystemBalance_Loan FOREIGN KEY (LoanID) REFERENCES Loan(Id),
 		CONSTRAINT FK_I_InvestorSystemBalance_LoanTransaction FOREIGN KEY (LoanTransactionID) REFERENCES LoanTransaction(Id)
 	)
 END
@@ -178,8 +190,8 @@ IF NOT EXISTS (SELECT * FROM I_Product)
 BEGIN
 	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (1, 'Loans',          1, 1)
 	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (2, 'Alibaba',        0, 1)
-	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (3, 'CreditLine',     0, 1)
-	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (4, 'InvoiceFinance', 0, 1)
+	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (3, 'CreditLine',     0, 0)
+	INSERT INTO I_Product (ProductID, Name, IsDefault,IsEnabled) VALUES (4, 'InvoiceFinance', 0, 0)
 END
 GO
 
@@ -246,8 +258,6 @@ BEGIN
 END
 GO
 
-
-
 IF object_id('I_FundingType') IS NULL
 BEGIN
 	CREATE TABLE I_FundingType (
@@ -267,20 +277,45 @@ BEGIN
 END
 GO
 
+IF object_id('TypeOfBusiness') IS NULL
+BEGIN
+	CREATE TABLE TypeOfBusiness (
+		TypeOfBusinessID INT NOT NULL,
+	   	Name NVARCHAR(20),
+	   	Description NVARCHAR(255),
+	   	IsActive BIT NOT NULL,
+	   	IsLimited BIT NOT NULL,
+	   	IsRegulated BIT NOT NULL,
+		TimestampCounter ROWVERSION
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM TypeOfBusiness)
+BEGIN
+	INSERT INTO TypeOfBusiness (TypeOfBusinessID, Name, Description, IsActive, IsLimited, IsRegulated) 
+	VALUES (0, 'Entrepreneur','Sole trader (not Inc.)',1,0,1),
+		   (1, 'LLP','Limited liability partnership',1,1,0),
+		   (2, 'PShip3P','Partnership (less than three)',1,0,1),
+		   (3, 'PShip','Partnership (more than three)',1,0,0),
+		   (4, 'SoleTrader','Sole trader (Inc.)',0,0,1),
+	       (5, 'Limited','Limited company',1,1,0)
+END
+GO
+
 IF object_id('I_ProductSubType') IS NULL
 BEGIN
 	CREATE TABLE I_ProductSubType (
 		ProductSubTypeID INT NOT NULL IDENTITY(1,1),
 	   	ProductTypeID INT NOT NULL,
-	   	GradeID INT NOT NULL,
 	   	FundingTypeID INT NULL,
 	   	OriginID INT NOT NULL,
 	   	LoanSourceID INT NOT NULL,
+		IsRegulated BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_ProductSubType PRIMARY KEY (ProductSubTypeID),
 		CONSTRAINT FK_I_ProductSubType_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
-		CONSTRAINT FK_I_ProductSubType_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID),
 		CONSTRAINT FK_I_ProductSubType_I_FundingType FOREIGN KEY (FundingTypeID) REFERENCES I_FundingType(FundingTypeID),
 		CONSTRAINT FK_I_ProductSubType_CustomerOrigin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin(CustomerOriginID),
 		CONSTRAINT FK_I_ProductSubType_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource(LoanSourceID)
@@ -290,15 +325,6 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_ProductSubType)
 BEGIN
-	DECLARE @GradeA INT = (SELECT GradeID FROM I_Grade WHERE Name='A')
-	DECLARE @GradeB INT = (SELECT GradeID FROM I_Grade WHERE Name='B')
-	DECLARE @GradeC INT = (SELECT GradeID FROM I_Grade WHERE Name='C')
-	DECLARE @GradeD INT = (SELECT GradeID FROM I_Grade WHERE Name='D')
-	DECLARE @GradeE INT = (SELECT GradeID FROM I_Grade WHERE Name='E')
-	DECLARE @GradeF INT = (SELECT GradeID FROM I_Grade WHERE Name='F')
-	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
-	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
-	
 	DECLARE @ProductTypeLongTerm INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='LongTermSMELoans')
 	DECLARE @ProductTypeShortTerm INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='ShortTermSMELoans')
 		
@@ -312,38 +338,62 @@ BEGIN
 	
 	
 
-	INSERT INTO I_ProductSubType (ProductTypeID, GradeID, FundingTypeID, OriginID, LoanSourceID, Timestamp)
-	VALUES (@ProductTypeLongTerm,@GradeA,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeLongTerm,@GradeA,@FundingTypeFull,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
+	INSERT INTO I_ProductSubType (ProductTypeID, FundingTypeID, OriginID, LoanSourceID, Timestamp, IsRegulated)
+	VALUES (@ProductTypeLongTerm,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01', 0),
+		   (@ProductTypeLongTerm,@FundingTypeFull,@OriginEverline,@LoanSourceStandard, '2015-12-01', 0),
 		   
-		   (@ProductTypeLongTerm,@GradeB,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeLongTerm,@GradeB,@FundingTypeFull,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
+		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01', 0),
+		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01', 0),
 		   
-		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEverline,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEverline,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeA,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeA,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeB,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeB,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeC,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeD,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeE,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeE,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01'),
-		   
-		   (@ProductTypeShortTerm,@GradeF,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01'),
-		   (@ProductTypeShortTerm,@GradeF,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01')
+		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01', 1),
+		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01', 1)
 END
 GO
+
+IF object_id('I_GradeOriginMap') IS NULL
+BEGIN
+	CREATE TABLE I_GradeOriginMap (
+		GradeOriginID INT NOT NULL IDENTITY(1,1),
+	   	GradeID INT NOT NULL,
+		OriginID INT NOT NULL,
+	   	TimestampCounter ROWVERSION,
+		CONSTRAINT PK_I_GradeOriginMap PRIMARY KEY (GradeOriginID),
+		CONSTRAINT FK_I_GradeOriginMap_CustomerOrigin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin(CustomerOriginID),
+		CONSTRAINT FK_I_GradeOriginMap_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeID)
+	)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_GradeOriginMap)
+BEGIN
+	DECLARE @GradeA INT = (SELECT GradeID FROM I_Grade WHERE Name='A')
+	DECLARE @GradeB INT = (SELECT GradeID FROM I_Grade WHERE Name='B')
+	DECLARE @GradeC INT = (SELECT GradeID FROM I_Grade WHERE Name='C')
+	DECLARE @GradeD INT = (SELECT GradeID FROM I_Grade WHERE Name='D')
+	DECLARE @GradeE INT = (SELECT GradeID FROM I_Grade WHERE Name='E')
+	DECLARE @GradeF INT = (SELECT GradeID FROM I_Grade WHERE Name='F')
+	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
+	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
+	
+	DECLARE @OriginEzbob INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='ezbob')
+	DECLARE @OriginEverline INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='everline')
+	
+	INSERT INTO I_GradeOriginMap (GradeID,OriginID)
+	VALUES  (@GradeA,@OriginEverline),
+			(@GradeB,@OriginEverline),
+			(@GradeC,@OriginEverline),
+			(@GradeD,@OriginEverline),
+			
+			(@GradeA,@OriginEzbob),
+			(@GradeB,@OriginEzbob),
+			(@GradeC,@OriginEzbob),
+			(@GradeD,@OriginEzbob),
+			(@GradeE,@OriginEzbob),
+			(@GradeF,@OriginEzbob)
+		   
+END
+GO
+
 
 
 IF object_id('I_Portfolio') IS NULL
@@ -367,22 +417,6 @@ BEGIN
 END
 GO
  
---IF object_id('I_InvestorFundsAllocation') IS NULL
---BEGIN
---	CREATE TABLE I_InvestorFundsAllocation (
---		InvestorFundsAllocationID INT NOT NULL IDENTITY(1,1),
---		InvestorBankAccountID INT NOT NULL,
---		Amount DECIMAL(18,6) NOT NULL,		
---		AllocationTimestamp DATETIME NOT NULL,
---		ReleaseTimestamp DATETIME NOT NULL,
---		TimestampCounter ROWVERSION,
---		CONSTRAINT PK_I_InvestorFundsAllocation PRIMARY KEY (InvestorFundsAllocationID),
---		CONSTRAINT FK_I_InvestorFundsAllocation_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID)
---	)
---END
---GO
-
-
 IF object_id('I_Index') IS NULL
 BEGIN
 	CREATE TABLE I_Index (
@@ -478,6 +512,7 @@ BEGIN
 		MaxLoanAmount DECIMAL(18,6) NOT NULL,
 		MinTerm INT NOT NULL,
 		MaxTerm INT NOT NULL,
+		IsActive BIT NOT NULL,
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_GradeRange PRIMARY KEY (GradeRangeID),
@@ -508,44 +543,44 @@ BEGIN
 	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
 	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
 		
-	INSERT INTO I_GradeRange (GradeID, SubGradeID, LoanSourceID, OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, Timestamp)
-	VALUES (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.09 ,50000,150000,12,60,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.115,40000,120000,12,60,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.102,0.14 ,30000, 80000,12,60,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.135,0.183,25000, 65000,12,36,'2015-12-01'),
+	INSERT INTO I_GradeRange (GradeID, SubGradeID, LoanSourceID, OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, IsActive, Timestamp)
+	VALUES (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.09 ,50000,150000,12,60,1,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.115,40000,120000,12,60,1,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.102,0.14 ,30000, 80000,12,60,1,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.135,0.183,25000, 65000,12,36,1,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.057 ,0.09, 50000,150000,12,60,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0855,0.115,40000,120000,12,60,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,12,60,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.1283,0.183,25000, 65000,12,36,'2015-12-01'),
+		   (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.057 ,0.09, 50000,150000,12,60,1,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0855,0.115,40000,120000,12,60,1,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,12,60,1,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.1283,0.183,25000, 65000,12,36,1,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.057 ,0.09, 50000,150000,15,  60,  '2015-12-01'),
-		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,15,  60,  '2015-12-01'),
-		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,15,  60,  '2015-12-01'),
-		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,15,  36,  '2015-12-01'),
+		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.057 ,0.09, 50000,150000,15,  60,1, '2015-12-01'),
+		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,15,  60,1, '2015-12-01'),
+		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,15,  60,1, '2015-12-01'),
+		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,15,  36,1, '2015-12-01'),
 		 --(@GradeE, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
 		 --(@GradeF, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,15,  60,  '2015-12-01'),
-		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,15,  60,  '2015-12-01'),
-		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,15,  60,  '2015-12-01'),
-		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,15,  36,  '2015-12-01'),
+		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,15,  60,1, '2015-12-01'),
+		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,15,  60,1, '2015-12-01'),
+		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,15,  60,1, '2015-12-01'),
+		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,15,  36,1, '2015-12-01'),
 		 --(@GradeE, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
 		 --(@GradeF, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.057, 0.09, 50000,150000,3,60,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,3,60,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,3,60,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,3,36,'2015-12-01'),
+		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.057, 0.09, 50000,150000,3,60,1, '2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,3,60,1,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,3,60,1,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,3,36,1,'2015-12-01'),
 		 --(@GradeE, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
 		 --(@GradeF, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
 		 --(@GradeG, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),	
 		 --(@GradeH, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,3,60,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,3,60,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,3,60,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,3,36,'2015-12-01')
+		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,3,60,1,'2015-12-01'),
+		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,3,60,1,'2015-12-01'),
+		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,3,60,1,'2015-12-01'),
+		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,3,36,1,'2015-12-01')
 		 --(@GradeE, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
 		 --(@GradeF, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
 		 --(@GradeG, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
@@ -640,7 +675,7 @@ GO
 IF object_id('I_RuleType') IS NULL
 BEGIN
 	CREATE TABLE I_RuleType (
-		RuleTypeID INT NOT NULL IDENTITY(1,1),
+		RuleTypeID INT NOT NULL,
 		Name NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_RuleTypeID PRIMARY KEY (RuleTypeID)
@@ -650,16 +685,16 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_RuleType)
 BEGIN
-	INSERT INTO I_RuleType (Name) VALUES ('System')
-	INSERT INTO I_RuleType (Name) VALUES ('UnderWriter')
-	INSERT INTO I_RuleType (Name) VALUES ('Investor')
+	INSERT INTO I_RuleType (RuleTypeID,Name) VALUES (1,'System')
+	INSERT INTO I_RuleType (RuleTypeID,Name) VALUES (2,'UnderWriter')
+	INSERT INTO I_RuleType (RuleTypeID,Name) VALUES (3,'Investor')
 END
 GO
 
 IF object_id('I_Operator') IS NULL
 BEGIN
 	CREATE TABLE I_Operator (
-		OperatorID INT NOT NULL IDENTITY(1,1),
+		OperatorID INT NOT NULL,
 		Name NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_OperatorID PRIMARY KEY (OperatorID)
@@ -669,14 +704,14 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_Operator)
 BEGIN
-	INSERT INTO I_Operator (Name) VALUES ('Or')
-	INSERT INTO I_Operator (Name) VALUES ('And')
-	INSERT INTO I_Operator (Name) VALUES ('GreaterThan')
-	INSERT INTO I_Operator (Name) VALUES ('LessThan')
-	INSERT INTO I_Operator (Name) VALUES ('Equal')
-	INSERT INTO I_Operator (Name) VALUES ('NotEqual')
-	INSERT INTO I_Operator (Name) VALUES ('Not')
-	INSERT INTO I_Operator (Name) VALUES ('IsTrue')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (1,'Or')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (2,'And')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (3,'GreaterThan')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (4,'LessThan')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (5,'Equal')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (6,'NotEqual')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (7,'Not')
+	INSERT INTO I_Operator (OperatorID,Name) VALUES (8,'IsTrue')
 END
 GO
 

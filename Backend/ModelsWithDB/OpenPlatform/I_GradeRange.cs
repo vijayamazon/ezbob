@@ -53,6 +53,9 @@
 		public int MaxTerm { get; set; }
 
 		[DataMember]
+		public bool IsActive { get; set; }
+
+		[DataMember]
 		public DateTime Timestamp { get; set; }
 	}//class I_GradeRange
 }//ns

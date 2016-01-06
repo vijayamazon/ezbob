@@ -23,6 +23,7 @@
 			CodeToFile.SaveFile<I_Instrument>();
 			CodeToFile.SaveFile<I_InterestVariable>();
 			CodeToFile.SaveFile<I_Investor>();
+			CodeToFile.SaveFile<I_InvestorAccountingConfiguration>();
 			CodeToFile.SaveFile<I_InvestorAccountType>();
 			CodeToFile.SaveFile<I_InvestorBankAccount>();
 			CodeToFile.SaveFile<I_InvestorBankAccountTransaction>();
@@ -38,6 +39,7 @@
 			CodeToFile.SaveFile<I_ProductType>();
 			CodeToFile.SaveFile<I_SubGrade>();
 			CodeToFile.SaveFile<I_OpenPlatformOffer>();
+			CodeToFile.SaveFile<I_GradeOriginMap>();
 		}
 
 	    private static void CreateNewLoanTablesSps()

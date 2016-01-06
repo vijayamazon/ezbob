@@ -12,10 +12,6 @@ GO
 CREATE TYPE I_InvestorList AS TABLE (
 	[InvestorTypeID] INT NOT NULL,
 	[Name] NVARCHAR(255) NULL,
-	[MonthlyFundingCapital] DECIMAL(18, 6) NULL,
-	[FundsTransferDate] INT NULL,
-	[DiscountServicingFeePercent] DECIMAL(18, 6) NULL,
-	[FundingLimitForNotification] DECIMAL(18, 6) NULL,
 	[IsActive] BIT NOT NULL,
 	[Timestamp] DATETIME NOT NULL
 )
@@ -32,24 +28,15 @@ BEGIN
 	BEGIN
 		SELECT 0 AS ScopeID
 	END
-	
 
 	INSERT INTO I_Investor (
 		[InvestorTypeID],
 		[Name],
-		[MonthlyFundingCapital],
-		[FundsTransferDate],
-		[DiscountServicingFeePercent],
-		[FundingLimitForNotification],
 		[IsActive],
 		[Timestamp]
 	) SELECT
 		[InvestorTypeID],
 		[Name],
-		[MonthlyFundingCapital],
-		[FundsTransferDate],
-		[DiscountServicingFeePercent],
-		[FundingLimitForNotification],
 		[IsActive],
 		[Timestamp]
 	FROM @Tbl

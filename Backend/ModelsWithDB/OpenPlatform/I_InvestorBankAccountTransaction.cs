@@ -24,5 +24,13 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
+
+		[DataMember]
+		[FK("Security_User", "UserId")]
+		public int? UserID { get; set; }
+
+		[DataMember]
+		[Length(500)]
+		public string Comment { get; set; }
 	}//class I_InvestorBankAccountTransaction
 }//ns

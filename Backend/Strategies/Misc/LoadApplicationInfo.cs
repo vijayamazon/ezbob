@@ -64,10 +64,13 @@
 		}// Execute
 
 		private void BuildDefaultProduct() {
+			TypeOfBusiness typeOfBusiness = (TypeOfBusiness)Result.TypeOfBusiness;
+
+
 			if (Result.ProductSubTypeID.HasValue) {
 				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.ProductSubTypeID == Result.ProductSubTypeID.Value);
 			} else {
-				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.GradeID == Result.GradeID && x.OriginID == Result.OriginID && x.LoanSourceID == Result.LoanSourceID);
+				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.OriginID == Result.OriginID && x.LoanSourceID == Result.LoanSourceID && x.IsRegulated == typeOfBusiness.IsRegulated());
 			}
 			I_ProductType currentProductType = null;
 			if (Result.CurrentProductSubType != null) {

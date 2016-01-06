@@ -153,15 +153,20 @@
 			case TypeOfBusiness.Entrepreneur:
 			case TypeOfBusiness.PShip3P:
 			case TypeOfBusiness.SoleTrader:
-            case TypeOfBusiness.PShip:
+            
 				return TypeOfBusinessAgreementReduced.Personal;
 
+			case TypeOfBusiness.PShip:
 			case TypeOfBusiness.LLP:
 			case TypeOfBusiness.Limited:
 				return TypeOfBusinessAgreementReduced.Business;
 			}
 
 			return TypeOfBusinessAgreementReduced.Personal;
+		}
+
+		public static bool IsRegulated(this TypeOfBusiness typeOfBusiness) {
+			return typeOfBusiness.AgreementReduce() == TypeOfBusinessAgreementReduced.Personal;
 		}
 
 

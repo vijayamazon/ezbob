@@ -27,18 +27,6 @@
 		public string Name { get; set; }
 
 		[DataMember]
-		public decimal? MonthlyFundingCapital { get; set; }
-
-		[DataMember]
-		public int? FundsTransferDate { get; set; }
-
-		[DataMember]
-		public decimal? DiscountServicingFeePercent { get; set; }
-
-		[DataMember]
-		public decimal? FundingLimitForNotification { get; set; }
-
-		[DataMember]
 		public bool IsActive { get; set; }
 
 		[DataMember]
@@ -62,4 +50,34 @@
 
         
 	}//class I_Investor
+
+	/// <summary>
+	/// Those columns relate to I_Investor table but configured from different place
+	/// </summary>
+	public class I_InvestorAccountingConfiguration {
+		[PK(true)]
+		[DataMember]
+		public int InvestorID { get; set; }
+
+		[DataMember]
+		public decimal? MonthlyFundingCapital { get; set; }
+
+		[DataMember]
+		public int? FundsTransferDate { get; set; }
+
+		[DataMember]
+		public decimal? DiscountServicingFeePercent { get; set; }
+
+		[DataMember]
+		public decimal? FundingLimitForNotification { get; set; }
+
+		[DataMember]
+		[Length(255)]
+		public string FundsTransferSchedule { get; set; }
+
+		[DataMember]
+		[Length(255)]
+		public string RepaymentsTransferSchedule { get; set; }
+
+	}//class I_InvestorAccountingConfiguration
 }//ns

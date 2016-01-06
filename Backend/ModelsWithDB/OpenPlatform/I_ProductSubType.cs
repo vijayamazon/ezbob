@@ -13,10 +13,6 @@
 		[DataMember]
 		public int ProductTypeID { get; set; }
 
-		[FK("I_Grade", "GradeID")]
-		[DataMember]
-		public int GradeID { get; set; }
-
 		[FK("I_ProductTerm", "ProductTermID")]
 		[DataMember]
 		public int? FundingTypeID { get; set; }
@@ -28,6 +24,9 @@
 		[FK("LoanSource", "LoanSourceID")]
 		[DataMember]
 		public int LoanSourceID { get; set; }
+
+		[DataMember]
+		public bool IsRegulated { get; set; }
 		
 		[DataMember]
 		public DateTime Timestamp { get; set; }
