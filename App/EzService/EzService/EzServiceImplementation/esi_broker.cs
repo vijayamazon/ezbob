@@ -418,7 +418,7 @@
 		public BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID) {
 			BrokerLoadOwnProperties oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, string.Empty, nBrokerID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nBrokerID);
 
 			return new BrokerPropertiesActionResult {
 				MetaData = oMetaData,

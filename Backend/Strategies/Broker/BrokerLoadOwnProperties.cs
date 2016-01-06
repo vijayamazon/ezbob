@@ -9,6 +9,19 @@
 			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
 				ContactEmail = sContactEmail,
 				Origin = (int)origin,
+				BrokerID = 0,
+				ContactMobile = null,
+			};
+
+			Properties = new BrokerProperties();
+		} // constructor
+
+		public BrokerLoadOwnProperties(int brokerID) {
+			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
+				ContactEmail = null,
+				Origin = 0,
+				BrokerID = brokerID,
+				ContactMobile = null,
 			};
 
 			Properties = new BrokerProperties();
