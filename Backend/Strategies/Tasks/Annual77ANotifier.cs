@@ -117,7 +117,8 @@
 				Postcode = customerAddress.Postcode
 			};
 
-			var interestRate = loan.InterestRate * 12 * 100;
+			var monthlyInterestRate = loan.InterestRate * 100;
+			var interestRate = monthlyInterestRate * 12;
 			var repaymentPeriod = loan.CustomerSelectedTerm ?? loan.CashRequest.RepaymentPeriod;
 
 			scheduleModel = new TableModel();
@@ -168,6 +169,7 @@
 				{"LoanDate",loan.Date.ToLongUKDate()},
 				{"LoanAmount",loan.LoanAmount.ToNumeric2Decimals()},
 				{"AnnualInterestRatePercent", interestRate.ToNumeric2Decimals()},
+				{"MonthlyInterestRatePercent", monthlyInterestRate.ToNumeric2Decimals()},
 				{"LoanTermMonths", repaymentPeriod.ToString()},
 				{"ScheduleTable", ""}
 			};
@@ -256,7 +258,7 @@
 			var list = new List<ScheduleRowModel>();
 			if (p.Fees > 0) {
 				list.Add(new ScheduleRowModel {
-					Description = "Late fee",
+					Description = "Fee",
 					Date = p.PostDate,
 					PaymentReceived = null,
 					InterestAndFees = p.Fees,
@@ -288,7 +290,7 @@
 			var list = new List<ScheduleRowModel>();
 			if (ls.Fees > 0) {
 				list.Add(new ScheduleRowModel {
-					Description = "Late fee",
+					Description = "Fee",
 					Date = ls.Date,
 					PaymentReceived = null,
 					InterestAndFees = ls.Fees,
