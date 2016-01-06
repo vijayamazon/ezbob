@@ -220,25 +220,27 @@
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="ManualDecision\ApplyManualDecision.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
-    <Compile Include="OpenPlatform\GenericRule\BadgetLevelRule.cs" />
-    <Compile Include="OpenPlatform\GenericRule\IGenericRulecs.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IGenericRules.cs" />
+    <Compile Include="OpenPlatform\Models\BoolExpression.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\GenericRules.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IRulesEngineDAL.cs" />
     <Compile Include="Postcode\PostcodeNuts.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorParametersBLL.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorService.cs" />
-    <Compile Include="OpenPlatform\BLL\InvestorParametersBLL.cs" />
-    <Compile Include="OpenPlatform\BLL\InvestorRegistry.cs" />
-    <Compile Include="OpenPlatform\BLL\InvestorService.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\InvestorParametersBLL.cs" />
+    <Compile Include="OpenPlatform\Registry\InvestorRegistry.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\InvestorService.cs" />
     <Compile Include="OpenPlatform\DAL\Contract\IInvestorParametersDAL.cs" />
-    <Compile Include="OpenPlatform\DAL\InvestorParametersDAL.cs" />
-    <Compile Include="OpenPlatform\Provider\Contracts\IProvider.cs" />
-    <Compile Include="OpenPlatform\Provider\Provider.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\BLL\ExressionBuilder.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\BLL\Match.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\Contracts\IExressionBuilder.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\Contracts\IMatch.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\DAL\RulesEngineDAL.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\Models\Rule.cs" />
-    <Compile Include="OpenPlatform\RulesEngine\RulesEngineRegistry.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\InvestorParametersDAL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IProvider.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\Provider.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\ExressionBuilder.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\Match.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IExressionBuilder.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IMatch.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\RulesEngineDAL.cs" />
+    <Compile Include="OpenPlatform\Models\Rule.cs" />
+    <Compile Include="OpenPlatform\Registry\RulesEngineRegistry.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />
@@ -810,6 +812,7 @@
   <ItemGroup>
     <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeNonLtdSearchTemplate.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

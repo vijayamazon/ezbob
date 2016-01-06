@@ -3,8 +3,8 @@
 
     public class InvestorCashRequest
     {
+        public long CashRequestID { get; set; }
         public double ManagerApprovedSum { get; set; }
-		public double ManagerApprovedSumFinal { get; set; }
 		public Grade Grade { get; set; }
     }//class InvestorCashRequest
 

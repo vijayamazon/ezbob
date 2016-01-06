@@ -4,8 +4,8 @@
     using System.Linq;
     using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-    using Ezbob.Backend.Strategies.OpenPlatform.BLL;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement;
     using StructureMap;
 
     public class FindInvestorForOffer : AStrategy {
