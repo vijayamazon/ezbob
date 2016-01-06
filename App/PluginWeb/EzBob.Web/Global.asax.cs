@@ -46,7 +46,7 @@
 			const string format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
 			return DateTime.TryParseExact(value.AttemptedValue, format, null, DateTimeStyles.RoundtripKind, out date) ? date : null as DateTime?;
 		} // parseIso8601Date
-	}
+	} // class Iso8601DateTimeBinder
 
 	public class MvcApplication : HttpApplication {
 		public static ISession CurrentSession {
@@ -90,21 +90,6 @@
 			InitOnStart();
 		} // constructor
 
-		public static void RegisterGlobalFilters(GlobalFilterCollection filters) {
-			var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>()
-				.GetAll()
-				.Where(x => x.Name != "Web")
-				.Select(x => x.Name));
-
-			if (CurrentValues.Instance.LandingPageEnabled)
-				filters.Add(new WhiteListFilter(), 0);
-
-			filters.Add(new GlobalAreaAuthorizationFilter("Underwriter", underwriterRoles, true), 1);
-			filters.Add(new GlobalAreaAuthorizationFilter("Customer", "Web", false, true), 1);
-			filters.Add(new EzBobHandleErrorAttribute());
-			filters.Add(new LoggingContextFilter(), 1);
-		}
-
 		public static void RegisterRoutes(RouteCollection routes) {
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 			routes.IgnoreRoute("favicon.ico");
@@ -116,7 +101,7 @@
 					controller = "ConfirmEmail",
 					action = "EmailChanged"
 				} // Parameter defaults
-				);
+			);
 
 			routes.MapRoute(
 				"EmailConfirmation", // Route name
@@ -125,7 +110,7 @@
 					controller = "ConfirmEmail",
 					action = "Index"
 				} // Parameter defaults
-				);
+			);
 
 			routes.MapRoute(
 				"Default", // Route name
@@ -135,7 +120,7 @@
 					action = "Index",
 					id = UrlParameter.Optional
 				} // Parameter defaults
-				);
+			);
 
 			routes.Insert(0, new Route("pie.htc", new RouteValueDictionary(new {
 				controller = "Pie",
@@ -151,11 +136,11 @@
 
 		protected void Application_BeginRequest(Object sender, EventArgs e) {
 			CheckForCSSPIE();
-		}
+		} // Application_BeginRequest
 
 		protected void Application_End() {
 			Log.NotifyStop();
-		}
+		} // Application_End
 
 		protected void Application_Start() {
 			MvcHandler.DisableMvcResponseHeader = true;
@@ -182,22 +167,20 @@
 			bs.InitDatabaseMarketPlaceTypes();
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
-		}
+		} // Application_Start
 
 		protected void ConfigureStructureMap(IContainer container) {
-			container.Configure(x => x.For<IWorkplaceContext>()
-				.Use(GetContext));
+			container.Configure(x => x.For<IWorkplaceContext>().Use(GetContext));
 			container.Configure(x => x.AddRegistry<PluginWebRegistry>());
 			container.Configure(x => x.AddRegistry<PaymentServices.PacNet.PacnetRegistry>());
-			container.Configure(x => x.For<ISession>()
-				.Use(() => CurrentSession));
+			container.Configure(x => x.For<ISession>().Use(() => CurrentSession));
 		} // ConfigureStructureMap
 
 		protected void Session_End(object sender, EventArgs e) {
 			string userSessionIdStr = Session["UserSessionId"] == null ? null : Session["UserSessionId"].ToString();
 			int sessionId = 0;
 			if (int.TryParse(userSessionIdStr, out sessionId) && sessionId > 0)
-				new ServiceClient().Instance.MarkSessionEnded(sessionId, "Session time out", null);
+				new ServiceClient().Instance.MarkSessionEnded(sessionId, "Session time out", null, null);
 		} // SessionEnd
 
 		private static SafeILog Log {
@@ -217,7 +200,7 @@
 				Bundle.RegisterScriptPreprocessor(new CoffeeScriptPreprocessor());
 				Bundle.RegisterScriptPreprocessor(new LessPreprocessor());
 			} // if
-		}
+		} // ConfigureSquishIt
 
 		private static IWorkplaceContext GetContext() {
 			var context = HttpContext.Current.Items["current.context"] as IWorkplaceContext;
@@ -228,19 +211,18 @@
 			context = ObjectFactory.GetInstance<EzBobContext>();
 			HttpContext.Current.Items["current.context"] = context;
 			return context;
-		}
+		} // GetContext
 
 		private static void InitAspose() {
 			var license = new License();
 
-			using (var s = Assembly.GetExecutingAssembly()
-				.GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
+			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
 				if (s != null) {
 					s.Position = 0;
 					license.SetLicense(s);
 				} // if
 			} // using
-		}
+		} // InitAspose
 
 		private void CheckForCSSPIE() {
 			if (!Regex.IsMatch(Request.Url.ToString(), "CSS3PIE"))
@@ -252,7 +234,7 @@
 			Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
 			Response.RedirectLocation = path;
 			Response.End();
-		}
+		} // CheckForCSSPIE
 
 		private void InitOnStart() {
 			Init();
@@ -294,6 +276,38 @@
 				_isInitialized = true;
 			} // lock
 		} // InitOnStart
+
+		private static void RegisterGlobalFilters(GlobalFilterCollection filters) {
+			const string webRole = "Web";
+
+			var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>()
+				.GetAll()
+				.Where(x => x.Name != webRole)
+				.Select(x => x.Name));
+
+			if (CurrentValues.Instance.LandingPageEnabled)
+				filters.Add(new WhiteListFilter(), 0);
+
+			RoleCache roleCache = new RoleCache();
+
+			filters.Add(
+				new GlobalAreaAuthorizationFilter(
+					roleCache,
+					GlobalAreaAuthorizationFilter.AreaName.Underwriter,
+					underwriterRoles
+				),
+				1
+			);
+
+			filters.Add(
+				new GlobalAreaAuthorizationFilter(roleCache, GlobalAreaAuthorizationFilter.AreaName.Customer, webRole),
+				1
+			);
+
+			filters.Add(new EzBobHandleErrorAttribute());
+
+			filters.Add(new LoggingContextFilter(), 1);
+		} // RegisterGlobalFilters
 
 		// ReSharper disable RedundantDefaultFieldInitializer
 		private static bool _isInitialized = false;

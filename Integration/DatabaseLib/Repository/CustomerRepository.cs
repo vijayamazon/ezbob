@@ -1,5 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Database.Repository {
 	using System;
+	using System.Diagnostics;
+	using System.Text;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Exceptions;
 	using Ezbob.Database;
@@ -37,6 +39,17 @@ namespace EZBob.DatabaseLib.Model.Database.Repository {
 			} catch (Exception e) {
 				var oLog = new SafeILog(this);
 				oLog.Warn(e, "Could not retrieve customer by id {0}.", clientId);
+
+				var os = new StringBuilder();
+
+				StackTrace st = new StackTrace(true);
+
+				for (int i = 0; i < st.FrameCount; i++) {
+					StackFrame sf = st.GetFrame(i);
+					os.AppendFormat("{0} at {1}:{2}\n", sf.GetMethod(), sf.GetFileName(), sf.GetFileLineNumber());
+				} // for
+				oLog.Debug("Stack trace:\n{0}", os.ToString());
+
 				return null;
 			} // try
 		} // ReallyTryGet

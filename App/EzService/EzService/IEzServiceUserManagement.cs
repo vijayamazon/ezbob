@@ -56,7 +56,7 @@
 		StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
 
 		[OperationContract]
-		ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId);
+		ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? userID, int? nCustomerId);
 
 		[OperationContract]
 		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
@@ -90,7 +90,7 @@
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
 		[OperationContract]
-		StringListActionResult LoadAllLoginRoles(string login);
+		StringListActionResult LoadAllLoginRoles(string login, CustomerOriginEnum? origin, bool ignoreOrigin);
 
 		[OperationContract]
 		StringActionResult GetCustomerSecurityQuestion(string email, CustomerOriginEnum origin);

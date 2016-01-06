@@ -1,30 +1,13 @@
 ﻿namespace EzBob.Web.Infrastructure.Membership {
 	using System;
-	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using Ezbob.Utils.Lingvo;
 	using ServiceClientProxy;
 
 	public class EzbobRoleProvider : System.Web.Security.RoleProvider {
 		public EzbobRoleProvider() {
 			this.cache = new Cache<string, string[]>(
 				TimeSpan.FromMinutes(25),
-				userName => {
-					var log = new SafeILog(this);
-
-					log.Debug("Loading all the roles for login '{0}'...", userName);
-
-					var result = new ServiceClient().Instance.LoadAllLoginRoles(userName).Records;
-
-					log.Debug(
-						"Login '{0}' has {1}{2}.",
-						userName,
-						Grammar.Number(result.Length, "role"),
-						result.Length < 1 ? string.Empty : ": " + string.Join(", ", result)
-					);
-					return result;
-				}
-			);
+				userName => new ServiceClient().Instance.LoadAllLoginRoles(userName, null, true).Records);
 		} // constructor
 
 		public override bool IsUserInRole(string username, string roleName) {

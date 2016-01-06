@@ -171,8 +171,8 @@
 			};
 		} // UserChangeEmail
 
-		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId) {
-			return Execute<MarkSessionEnded>(nCustomerId, null, nSessionID, sComment);
+		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? userID, int? nCustomerId) {
+			return Execute<MarkSessionEnded>(nCustomerId, userID, nSessionID, sComment);
 		} // MarkSessionEnded
 
 		public CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken) {
@@ -263,10 +263,10 @@
 			return Execute<AddCciHistory>(nCustomerID, nUnderwriterID, nCustomerID, nUnderwriterID, bCciMark);
 		} // AddCciHistory
 
-		public StringListActionResult LoadAllLoginRoles(string login) {
+		public StringListActionResult LoadAllLoginRoles(string login, CustomerOriginEnum? origin, bool ignoreOrigin) {
 			LoadAllLoginRoles instance;
 
-			ActionMetaData amd = ExecuteSync(out instance, null, null, login);
+			ActionMetaData amd = ExecuteSync(out instance, null, null, login, origin, ignoreOrigin);
 
 			return new StringListActionResult {
 				MetaData = amd,

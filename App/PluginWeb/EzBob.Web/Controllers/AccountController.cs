@@ -202,7 +202,7 @@
 		} // CustomerLogOn
 
 		public ActionResult LogOff() {
-			EndSession("LogOff customer");
+			EndSession("LogOff customer", true);
 			this.context.RemoveSessionOrigin();
 
 			switch (this.logOffMode) {
@@ -219,7 +219,7 @@
 		} // LogOff
 
 		public ActionResult LogOffUnderwriter() {
-			EndSession("LogOff UW");
+			EndSession("LogOff UW", false);
 			this.context.RemoveSessionOrigin();
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
@@ -896,19 +896,20 @@
 			return ip;
 		} // RemoteIp
 
-		private void EndSession(string comment) {
+		private void EndSession(string comment, bool lookForCustomer) {
 			if (!string.IsNullOrWhiteSpace(this.context.SessionId)) {
 				int nSessionID;
 
-				if (int.TryParse(this.context.SessionId, out nSessionID)) {
+				if (int.TryParse(this.context.SessionId, out nSessionID) && (nSessionID > 0)) {
 					try {
-						if (nSessionID > 0) {
-							this.serviceClient.Instance.MarkSessionEnded(
-								nSessionID,
-								comment,
-								this.context.Customer != null ? this.context.Customer.Id : (int?)null
-							);
-						} // if
+						int? userID = (this.context.User == null) ? (int?)null : this.context.User.Id;
+
+						int? customerID = null;
+
+						if ((userID != null) && lookForCustomer)
+							customerID = (this.context.Customer != null) ? this.context.Customer.Id : (int?)null;
+
+						this.serviceClient.Instance.MarkSessionEnded(nSessionID, comment, userID, customerID);
 					} catch (Exception e) {
 						log.Debug(e, "Failed to mark customer session as ended.");
 					} // try

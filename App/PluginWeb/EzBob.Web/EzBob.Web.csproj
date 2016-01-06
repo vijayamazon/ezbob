@@ -238,6 +238,7 @@
     <Compile Include="Infrastructure\Html\EzClickInputModel.cs" />
     <Compile Include="Infrastructure\Html\EzInputBuilder.cs" />
     <Compile Include="Infrastructure\Html\EzSelectModel.cs" />
+    <Compile Include="Infrastructure\RoleCache.cs" />
     <Compile Include="Infrastructure\UiCustomerOrigin.cs" />
     <Compile Include="Models\CompanyScoreModelBuilder.cs" />
     <Compile Include="Models\CreatePasswordModel.cs" />

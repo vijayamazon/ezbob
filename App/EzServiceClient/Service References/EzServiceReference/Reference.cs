@@ -4520,10 +4520,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzServiceUserManagement/MarkSessionEndedResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> userID, System.Nullable<int> nCustomerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzServiceUserManagement/MarkSessionEndedResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> userID, System.Nullable<int> nCustomerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadCustomerByCreatePasswordTokenResp" +
             "onse")]
@@ -4578,10 +4578,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse")]
-        ServiceClientProxy.EzServiceReference.StringListActionResult LoadAllLoginRoles(string login);
+        ServiceClientProxy.EzServiceReference.StringListActionResult LoadAllLoginRoles(string login, System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> origin, bool ignoreOrigin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRoles", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoadAllLoginRolesResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login, System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> origin, bool ignoreOrigin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestion", ReplyAction="http://tempuri.org/IEzServiceUserManagement/GetCustomerSecurityQuestionResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult GetCustomerSecurityQuestion(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin);
@@ -6151,12 +6151,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UserChangeEmailAsync(underwriterId, nUserID, sNewEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId) {
-            return base.Channel.MarkSessionEnded(nSessionID, sComment, nCustomerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> userID, System.Nullable<int> nCustomerId) {
+            return base.Channel.MarkSessionEnded(nSessionID, sComment, userID, nCustomerId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> nCustomerId) {
-            return base.Channel.MarkSessionEndedAsync(nSessionID, sComment, nCustomerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> userID, System.Nullable<int> nCustomerId) {
+            return base.Channel.MarkSessionEndedAsync(nSessionID, sComment, userID, nCustomerId);
         }
         
         public ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(System.Guid oToken) {
@@ -6223,12 +6223,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddCciHistoryAsync(nCustomerID, nUnderwriterID, bCciMark);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringListActionResult LoadAllLoginRoles(string login) {
-            return base.Channel.LoadAllLoginRoles(login);
+        public ServiceClientProxy.EzServiceReference.StringListActionResult LoadAllLoginRoles(string login, System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> origin, bool ignoreOrigin) {
+            return base.Channel.LoadAllLoginRoles(login, origin, ignoreOrigin);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login) {
-            return base.Channel.LoadAllLoginRolesAsync(login);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> LoadAllLoginRolesAsync(string login, System.Nullable<ServiceClientProxy.EzServiceReference.CustomerOriginEnum> origin, bool ignoreOrigin) {
+            return base.Channel.LoadAllLoginRolesAsync(login, origin, ignoreOrigin);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult GetCustomerSecurityQuestion(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin) {

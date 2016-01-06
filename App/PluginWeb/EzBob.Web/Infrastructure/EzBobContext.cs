@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Web;
-	using Ezbob.Logger;
+	// using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -130,11 +130,10 @@
 		} // InternalGetSessionOrigin
 
 		private void FlushLog(List<string> lst) {
-			return;
-			new SafeILog(this).Debug(
-				"\n\nEzbobContext.get_User - begin:\n\n{0}\n\nEzbobContext.get_User - end.\n",
-				string.Join("\n", lst)
-			);
+			//new SafeILog(this).Debug(
+			//	"\n\nEzbobContext.get_User - begin:\n\n{0}\n\nEzbobContext.get_User - end.\n",
+			//	string.Join("\n", lst)
+			//);
 		} // FlushLog
 
 		private static User GetCachedUser() {
