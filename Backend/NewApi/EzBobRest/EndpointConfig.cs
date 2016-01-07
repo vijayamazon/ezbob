@@ -2,12 +2,7 @@
 namespace EzBobRest
 {
     using System.Diagnostics;
-    using log4net.Appender;
-    using log4net.Config;
-    using log4net.Core;
-    using log4net.Layout;
     using NServiceBus;
-    using NServiceBus.Log4Net;
     using NServiceBus.Logging;
     using NServiceBus.Persistence.Legacy;
     using StructureMap;
@@ -50,7 +45,7 @@ namespace EzBobRest
 
         private void InitLogging()
         {
-            NServiceBus.Logging.LogManager.Use<CommonLoggingFactory>();
+            LogManager.Use<CommonLoggingFactory>();
 //
 //            LogManager.Use<Log4NetFactory>();
 //
