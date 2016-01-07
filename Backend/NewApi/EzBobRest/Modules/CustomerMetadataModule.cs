@@ -91,9 +91,41 @@
 
 
         public CustomerMetadataModule() {
+            string tag = "01. Customer API";//swagger groups descriptions by tags
+            DescribeCustomerSignup(tag);
+            DescribeCustomerUpdate(tag);
+        }
 
+       
+
+        /// <summary>
+        /// Describes the customer update.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        private void DescribeCustomerUpdate(string tag) {
+            string customerApiDescription = "<u>Living accommodation:</u> should be empty if person lives at his own property<br/>" +
+                "<u>All properties are optional.</u> Fill only what you have, omit all others (there is no need to provide default values)";
+
+            Describe["UpdateCustomer"] = desc => new SwaggerRouteMetadata(desc)
+                .With(i => i.WithDescription(customerApiDescription, tags: tag))
+                .With(i => i.WithResponseModel(HttpStatusCode.BadRequest, new {
+                    CustomerId = string.Empty,
+                    Errors = new string[] {}
+                }.GetType(), "Invalid request format"))
+                .With(i => i.WithResponseModel(HttpStatusCode.OK, new {
+                    CustomerId = string.Empty
+                }.GetType(), "some description"))
+                .With(i => i.WithRequestParameter("id", "customer id given at sign-up"))
+                .With(i => i.WithRequestModel(this.update.GetType(), "body", "<ul><li><u>DateOfBirth:</u><br/>'yyyy-MM-ddTHH:mm:ssZ'</li><li><u>Gender:</u> M,F</li><li><u>MeritalStatus:</u><br/>Married=0,Single=1,Divorced=2<br/>Widowed=3,LivingTogether=4<br/>Separated=5,Other=6</li><li><u>HousingType:</u><br/>Renting=1,Social=2,Parents=3</li></ul>"));
+        }
+
+        /// <summary>
+        /// Describes the customer sign-up.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        private void DescribeCustomerSignup(string tag) {
             Describe["SignupCustomer"] = desc => new SwaggerRouteMetadata(desc)
-                .With(i => i.WithDescription("Defines customer related operations", tags: "01. Customer API"))
+                .With(i => i.WithDescription("Defines customer related operations", tags: tag))
                 .With(i => i.WithResponseModel(HttpStatusCode.BadRequest, new {
                     CustomerId = string.Empty,
                     Errors = new string[] {}
@@ -106,23 +138,6 @@
                         EmailAddress = ""
                     }
                 }.GetType(), "body", "creates new customer"));
-
-            string customerApiDescription = "<u>Living accommodation:</u> should be empty if person lives at his own property<br/>" +
-                "<u>All properties are optional.</u> Fill only what you have, omit all others (there is no need to provide default values)";
-
-
-            Describe["UpdateCustomer"] = desc => new SwaggerRouteMetadata(desc)
-                .With(i => i.WithDescription(customerApiDescription, tags: "01. Customer API"))
-                .With(i => i.WithResponseModel(HttpStatusCode.BadRequest, new {
-                    CustomerId = string.Empty,
-                    Errors = new string[] { }
-                }.GetType(), "Invalid request format"))
-                .With(i => i.WithResponseModel(HttpStatusCode.OK, new
-                {
-                    CustomerId = string.Empty
-                }.GetType(), "some description"))
-                .With(i => i.WithRequestParameter("id", "customer id given at sign-up"))
-                .With(i => i.WithRequestModel(this.update.GetType(), "body", "<ul><li><u>DateOfBirth:</u><br/>'yyyy-MM-ddTHH:mm:ssZ'</li><li><u>Gender:</u> M,F</li><li><u>MeritalStatus:</u><br/>Married=0,Single=1,Divorced=2<br/>Widowed=3,LivingTogether=4<br/>Separated=5,Other=6</li><li><u>HousingType:</u><br/>Renting=1,Social=2,Parents=3</li></ul>"));
         }
     }
 }

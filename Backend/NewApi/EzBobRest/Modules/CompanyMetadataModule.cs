@@ -29,7 +29,7 @@ namespace EzBobRest.Modules {
                     CompanyId = string.Empty
                 }.GetType(), "some description"))
                 .With(i => i.WithRequestParameter("customerId", "customer id given at sign-up"))
-                .With(i => i.WithRequestParameter("companyId", "id created by first updated company request", "string", null, false))
+                .With(i => i.WithRequestParameter("companyId", "id created by first 'update company' request", "string", null, false))
                 .With(i => i.WithRequestModel(new {
                     CompanyDetails = new {
                         IndustryType = IndustryType.Other,
