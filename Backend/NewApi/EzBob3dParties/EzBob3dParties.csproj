@@ -79,8 +79,24 @@
       <HintPath>..\packages\NServiceBus.StructureMap.5.0.1\lib\net45\NServiceBus.ObjectBuilder.StructureMap.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PayPal, Version=1.7.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\PayPal.1.7.1\lib\net45\PayPal.dll</HintPath>
+    <Reference Include="PayPalAdaptiveAccountsSDK, Version=2.9.110.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalAdaptiveAccountsSDK.2.9.110\lib\net20\PayPalAdaptiveAccountsSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PayPalAdaptivePaymentsSDK, Version=2.15.117.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalAdaptivePaymentsSDK.2.15.117\lib\net20\PayPalAdaptivePaymentsSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PayPalCoreSDK, Version=1.7.0.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalCoreSDK.1.7.0\lib\net45\PayPalCoreSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PayPalMerchantSDK, Version=2.16.117.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalMerchantSDK.2.16.117\lib\net20\PayPalMerchantSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PayPalPermissionsSDK, Version=2.8.109.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalPermissionsSDK.2.8.109\lib\net20\PayPalPermissionsSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -144,9 +160,9 @@
     <Compile Include="HMRC\VatReturnInfoParser.cs" />
     <Compile Include="HMRC\HmrcVatReturnsInfo.cs" />
     <Compile Include="HMRC\VatReturnsInfoFetcher.cs" />
-    <Compile Include="PayPal\Handlers\PayPalGetUserDataCommandHandler.cs" />
-    <Compile Include="PayPal\PayPalConfig.cs" />
-    <Compile Include="PayPal\PayPalService.cs" />
+    <Compile Include="PayPalService\Handlers\PayPalGetUserDataCommandHandler.cs" />
+    <Compile Include="PayPalService\Soap\PayPalSoapConfig.cs" />
+    <Compile Include="PayPalService\Soap\PayPalSoapService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

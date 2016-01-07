@@ -25,5 +25,15 @@
         "ClientId": "AYOz8x2wzco1qYwGHa-HO9a9eucwxm0aPOp6ZB_YCtE3EEpnbJYAuxK7GwfHVzeEKK5kxJXg-1B4DNSo",
         "ClientSecret": "EOnZgionWPonkTqsg6BrLAdwOsc7FV-2uNrUBMiu8LVi93qNezdb5CZL34Wm6KUa5D3wsrQh_-u5Bt3W",
         "AuthorizationUrl": "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize"
+    },
+    "PayPalSoap": {
+        "Mode": "live",
+        "ApplicationId": "APP-3UB991847T1143334",
+        "ApiUsername": "caroles_api1.ezbob.com",
+        "ApiPassword": "8RYKUCVNC5PXWLPD",
+        "ApiSignature": "AFcWxV21C7fd0v3bYYYRCpSSRl31Aoui-O9-IwfGEuUAgSnmws-LttVZ",
+        "ConnectionTimeout": "30000",
+        "RequestRetries": "3",
+        "RedirectUrl": "https://www.paypal.com/webscr&cmd="
     }
 }
