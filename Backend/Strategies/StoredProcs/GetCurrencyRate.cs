@@ -3,6 +3,7 @@
 	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 
 	public enum CurrencyCode {
 		GBP = 0, GBX,
@@ -40,6 +41,7 @@
 			set { }
 		} // CurrencyName
 
+		[NonTraversable]
 		public CurrencyCode CurrencyCode { get; set; }
 
 		public DateTime TheDate { get; set; }
