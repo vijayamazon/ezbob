@@ -10,7 +10,6 @@ namespace EzBobRest.NSB {
 
     /// <summary>
     /// This class is created automatically by NSB<br/>
-    /// imitates synchronous NSB call
     /// </summary>
-    public class UpdateCustomerSendReceive : SendRecieveHandler<CustomerUpdateCommandResponse> {}
+    public class UpdateCustomerSendReceive : SendRecieveAsyncHandler<CustomerUpdateCommandResponse> { }
 }
