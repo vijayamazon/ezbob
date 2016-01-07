@@ -48,8 +48,8 @@ BEGIN
 		[BankAccountName],
 		[BankAccountNumber],
 		[RepaymentKey],
-		[IsActive], 
-		
+		[IsActive],
+		[UserID],
 		[Timestamp]
 	) SELECT
 		[InvestorID],
@@ -92,7 +92,7 @@ BEGIN
 		I_InvestorBankAccount.[BankAccountNumber] = tbl.[BankAccountNumber],
 		I_InvestorBankAccount.[RepaymentKey] = tbl.[RepaymentKey],
 		I_InvestorBankAccount.[IsActive] = tbl.[IsActive],
-		I_InvestorBankAccount.[Timestamp] = tbl.[Timestamp]
+		I_InvestorBankAccount.[Timestamp] = tbl.[Timestamp],
 		
 	FROM
 		I_InvestorBankAccount b 
