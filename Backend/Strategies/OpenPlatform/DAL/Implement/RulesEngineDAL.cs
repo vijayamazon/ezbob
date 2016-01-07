@@ -6,7 +6,7 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
 
     public class RulesEngineDAL : IRulesEngineDAL {
-        public Dictionary<int, Rule> GetRules(int InvestorId, RuleType ruleType) {
+        public Dictionary<int, InvestorRule> GetRules(int InvestorId, RuleType ruleType) {
 
             //TODO: remove mock
             var rules =  GetRules();
@@ -23,7 +23,7 @@
         }
 
 
-        private List<Rule> GetRules() {
+        private List<InvestorRule> GetRules() {
 
             //int? investorID = null;
             //if (ruleType != RuleType.System)
@@ -34,9 +34,9 @@
             //);
             //return rules.ToDictionary(x => x.RuleID, x=> x);
             
-            var rulList = new List<Rule>();
+            var rulList = new List<InvestorRule>();
 
-            rulList.Add(new Rule {
+            rulList.Add(new InvestorRule {
                 Operator = (int)Operator.And,
                 MemberNameSource = null,
                 MemberNameTarget = null,
@@ -49,7 +49,7 @@
                 RuleType = (int)RuleType.System
             });
 
-            rulList.Add(new Rule {
+            rulList.Add(new InvestorRule {
                 Operator = (int)Operator.LessThan,
                 MemberNameSource = "ManagerApprovedSum",
                 MemberNameTarget = "Balance",
@@ -62,7 +62,7 @@
                 RuleType = (int)RuleType.System
             });
 
-            rulList.Add(new Rule {
+            rulList.Add(new InvestorRule {
                 Operator = (int)Operator.IsTrue,
                 MemberNameSource = null,
                 MemberNameTarget = null,

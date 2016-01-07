@@ -24,9 +24,9 @@
 
             var ruleEngineDalMock = new Mock<IRulesEngineDAL>();
 
-            var rulesDict1 = new Dictionary<int, Rule>();
+            var rulesDict1 = new Dictionary<int, InvestorRule>();
 
-            rulesDict1.Add(1, new Rule {
+            rulesDict1.Add(1, new InvestorRule {
                 Operator = (int)Operator.And,
                 MemberNameSource = null,
                 MemberNameTarget = null,
@@ -39,7 +39,7 @@
                 RuleType = (int)RuleType.System
             });
 
-            rulesDict1.Add(2, new Rule {
+            rulesDict1.Add(2, new InvestorRule {
                 Operator = (int)Operator.LessThan,
                 MemberNameSource = "ManagerApprovedSum",
                 MemberNameTarget = "Balance",
@@ -51,7 +51,7 @@
                 UserID = 1
             });
 
-            rulesDict1.Add(3, new Rule {
+            rulesDict1.Add(3, new InvestorRule {
                 Operator = (int)Operator.LessThan,
                 MemberNameSource = "ManagerApprovedSum",
                 MemberNameTarget = "DailyInvestmentAllowed",
@@ -103,9 +103,9 @@
 
             var ruleEngineDalMock = new Mock<IRulesEngineDAL>();
 
-            var rulesDict1 = new Dictionary<int, Rule>();
+            var rulesDict1 = new Dictionary<int, InvestorRule>();
 
-            rulesDict1.Add(1, new Rule {
+            rulesDict1.Add(1, new InvestorRule {
                 Operator = (int)Operator.And,
                 MemberNameSource = null,
                 MemberNameTarget = null,
@@ -118,7 +118,7 @@
                 RuleType = (int)RuleType.System
             });
 
-            rulesDict1.Add(2, new Rule {
+            rulesDict1.Add(2, new InvestorRule {
                 Operator = (int)Operator.LessThan,
                 MemberNameSource = "ManagerApprovedSum",
                 MemberNameTarget = "Balance",
@@ -130,7 +130,7 @@
                 UserID = 1
             });
 
-            rulesDict1.Add(3, new Rule {
+            rulesDict1.Add(3, new InvestorRule {
                 Operator = (int)Operator.LessThan,
                 MemberNameSource = "ManagerApprovedSum",
                 MemberNameTarget = "DailyInvestmentAllowed",
@@ -180,9 +180,9 @@
 
             var ruleEngineDalMock = new Mock<IRulesEngineDAL>();
 
-            var rulesDict1 = new Dictionary<int, Rule>();
+            var rulesDict1 = new Dictionary<int, InvestorRule>();
 
-            rulesDict1.Add(1, new Rule {
+            rulesDict1.Add(1, new InvestorRule {
                 Operator = (int)Operator.And,
                 MemberNameSource = null,
                 MemberNameTarget = null,
@@ -195,7 +195,7 @@
                 RuleType = (int)RuleType.System
             });
 
-            rulesDict1.Add(2, new Rule {
+            rulesDict1.Add(2, new InvestorRule {
                 Operator = (int)Operator.IsTrue,
                 MemberNameSource = null,
                 MemberNameTarget = null,
@@ -208,7 +208,7 @@
                 FuncName = "RuleBadgetLevel"
             });
 
-            rulesDict1.Add(3, new Rule {
+            rulesDict1.Add(3, new InvestorRule {
                 Operator = (int)Operator.LessThan,
                 MemberNameSource = "ManagerApprovedSum",
                 MemberNameTarget = "DailyInvestmentAllowed",

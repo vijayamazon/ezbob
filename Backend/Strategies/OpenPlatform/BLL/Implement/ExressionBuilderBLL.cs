@@ -39,7 +39,7 @@
             return Expression.MakeBinary(expressionTypeValue, leftExpression, rightExpression);
         }
 
-        public Func<T1, T2, bool> CompileRule<T1, T2>(int investorId, long cashRequestID, Dictionary<int, Rule> rulesDict) {
+        public Func<T1, T2, bool> CompileRule<T1, T2>(int investorId, long cashRequestID, Dictionary<int, InvestorRule> rulesDict) {
 
             var expLeft = Expression.Parameter(typeof(T1));
             var expRight = Expression.Parameter(typeof(T2));
@@ -59,7 +59,7 @@
         }
 
 
-        public Expression BuildRecursiveExpression<T1, T2>(int investorId, long cashRequestID, Dictionary<int, Rule> ruleDict, Rule rule, ParameterExpression parameterExpressionLeft, ParameterExpression parameterExpressionRight) {
+        public Expression BuildRecursiveExpression<T1, T2>(int investorId, long cashRequestID, Dictionary<int, InvestorRule> ruleDict, InvestorRule rule, ParameterExpression parameterExpressionLeft, ParameterExpression parameterExpressionRight) {
             if (!string.IsNullOrEmpty(rule.FuncName)) {
                 var result = InvokeGenericRule(investorId, cashRequestID, rule.FuncName);
                 return Expression.IsTrue(Expression.Constant(result));
@@ -74,7 +74,7 @@
                     parameterExpressionRight);
             }
 
-            Rule leftRule = ruleDict.FirstOrDefault(x => x.Value.RuleID == rule.LeftParamID).Value;
+            InvestorRule leftRule = ruleDict.FirstOrDefault(x => x.Value.RuleID == rule.LeftParamID).Value;
             var exLeft = BuildRecursiveExpression<T1, T2>(investorId, cashRequestID, ruleDict, leftRule, parameterExpressionLeft, parameterExpressionRight);
 
             var rightRule = ruleDict.FirstOrDefault(x => x.Value.RuleID == rule.RightParamID).Value;

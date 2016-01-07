@@ -17,12 +17,12 @@
             Expression leftExpression,
             Expression rightExpression);
 
-        Func<T1, T2, bool> CompileRule<T1, T2>(int investorId, long cashRequestID, Dictionary<int, Rule> rulesDict);
+        Func<T1, T2, bool> CompileRule<T1, T2>(int investorId, long cashRequestID, Dictionary<int, InvestorRule> rulesDict);
 
         Expression BuildRecursiveExpression<T1, T2>(int investorId,
             long cashRequestID,
-            Dictionary<int, Rule> ruleDict,
-            Rule rule,
+            Dictionary<int, InvestorRule> ruleDict,
+            InvestorRule rule,
             ParameterExpression parameterExpressionLeft,
             ParameterExpression parameterExpressionRight);
     }

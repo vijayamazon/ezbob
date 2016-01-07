@@ -3,7 +3,7 @@
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
-	public class Rule {
+	public class InvestorRule {
 		[PK(true)]
 		[DataMember]
 		public int RuleID { get; set; }

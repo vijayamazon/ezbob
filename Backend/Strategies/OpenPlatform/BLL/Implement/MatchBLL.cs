@@ -21,7 +21,7 @@
         public T2 Target { get; set; }
         public void BuildFunc(int investorID, long cashRequestID, RuleType ruleType)
         {
-            Dictionary<int, Rule> Rules = RulesDAL.GetRules(investorID, ruleType);
+            Dictionary<int, InvestorRule> Rules = RulesDAL.GetRules(investorID, ruleType);
             if (Rules == null) {
                 Func = delegate { return true; };
             }

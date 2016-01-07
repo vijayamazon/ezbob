@@ -722,6 +722,7 @@ CREATE TABLE [dbo].[I_InvestorRule](
 	[UserID] [int] NULL,
 	[RuleType] [int] NULL,
 	[InvestorID] [int] NULL,
+	[FuncName] [nvarchar](256) NULL,
 	[MemberNameSource] [nvarchar](256) NULL,
 	[MemberNameTarget] [nvarchar](256) NULL,
 	[LeftParamID] [int] NULL,
