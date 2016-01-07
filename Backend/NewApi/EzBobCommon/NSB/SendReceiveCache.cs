@@ -3,7 +3,7 @@ namespace EzBobCommon.NSB {
     using System.Collections.Concurrent;
 
     /// <summary>
-    /// Used to by send-receive handler to imitate synchronous NSB call 
+    /// Used by send-receive handlers
     /// </summary>
     public class SendReceiveCache {
         private readonly ConcurrentDictionary<Guid, object> dict = new ConcurrentDictionary<Guid, object>();
