@@ -37,6 +37,7 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
+
 			if (!CurrentValues.Instance.NewLoanRun) {
 				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;
@@ -131,16 +132,30 @@
 				RecalculatedModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
 
 				// save new schedules - on rescheduling/rollover
-				DB.ExecuteNonQuery("NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedules.Where(s => s.LoanScheduleID == 0)));
+				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, 
+					DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedules.Where(s => s.LoanScheduleID == 0)));
 
 				// update schedules - closed time and statuses
-				foreach (NL_LoanSchedules s in schedules) {
-					DB.ExecuteNonQuery("NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
+				foreach (NL_LoanSchedules s in schedules.Where(s => s.LoanScheduleID > 0)) {
+					DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesUpdate", CommandSpecies.StoredProcedure,
 							new QueryParameter("LoanScheduleID", s.LoanScheduleID),
 							new QueryParameter("LoanScheduleStatusID", s.LoanScheduleStatusID),
 							new QueryParameter("ClosedTime", s.ClosedTime));
 				}
+				
+				// disable fees
+				foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID!=null && f.DisabledTime!=null)) {
+					DB.ExecuteNonQuery(pconn, "NL_LoanFeeDisable", CommandSpecies.StoredProcedure,
+							new QueryParameter("LoanFeeID", f.LoanFeeID),
+							new QueryParameter("DeletedByUserID", f.DeletedByUserID),
+							new QueryParameter("DisabledTime", f.DisabledTime),
+							new QueryParameter("Notes", f.Notes));
+				}
 
+				// insert fees
+				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, 
+					DB.CreateTableParameter<NL_LoanFees>("Tbl", RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID == 0)));
+				
 				// assign payment to loan
 				foreach (NL_Payments p in RecalculatedModel.Loan.Payments) {
 
@@ -149,7 +164,7 @@
 
 					// update existing schedule payments - TODO remove after development end
 					p.SchedulePayments.Where(sp => !sp.NewEntry).ForEach(sp =>
-						DB.ExecuteNonQuery("NL_LoanSchedulePaymentsUpdate", CommandSpecies.StoredProcedure,
+						DB.ExecuteNonQuery(pconn, "NL_LoanSchedulePaymentsUpdate", CommandSpecies.StoredProcedure,
 							new QueryParameter("LoanSchedulePaymentID", sp.LoanSchedulePaymentID),
 							new QueryParameter("PrincipalPaid", sp.PrincipalPaid),
 							new QueryParameter("InterestPaid", sp.InterestPaid)));
@@ -159,7 +174,7 @@
 
 					// update existing fee payments - TODO remove after development end
 					p.FeePayments.Where(fp => !fp.NewEntry).ForEach(fp =>
-						DB.ExecuteNonQuery("NL_LoanFeePaymentsUpdate", CommandSpecies.StoredProcedure,
+						DB.ExecuteNonQuery(pconn, "NL_LoanFeePaymentsUpdate", CommandSpecies.StoredProcedure,
 							new QueryParameter("LoanFeePaymentID", fp.LoanFeePaymentID),
 							new QueryParameter("Amount", fp.Amount))
 						);
@@ -167,17 +182,17 @@
 			
 				// save new schedule payment
 				if (schedulePayments.Count > 0) {
-					DB.ExecuteNonQuery("NL_LoanSchedulePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schedulePayments));
+					DB.ExecuteNonQuery(pconn, "NL_LoanSchedulePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schedulePayments));
 				}
 
 				// save new fee payments
 				if (feePayments.Count > 0) {
-					DB.ExecuteNonQuery("NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));
+					DB.ExecuteNonQuery(pconn, "NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));
 				}
 
 				// update loan status
 				if (RecalculatedModel.Loan.LoanStatusID != state.Result.Loan.LoanStatusID) {
-					DB.ExecuteNonQuery("NL_LoanUpdate", CommandSpecies.StoredProcedure,
+					DB.ExecuteNonQuery(pconn, "NL_LoanUpdate", CommandSpecies.StoredProcedure,
 						new QueryParameter("LoanID", RecalculatedModel.Loan.LoanID),
 						new QueryParameter("LoanStatusID", RecalculatedModel.Loan.LoanStatusID),
 						new QueryParameter("DateClosed", RecalculatedModel.Loan.DateClosed)

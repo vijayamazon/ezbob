@@ -275,6 +275,7 @@
           <xs:element minOccurs="0" name="Position" type="xs:int" />
           <xs:element minOccurs="0" name="PrimaryLoanID" type="xs:long" />
           <xs:element minOccurs="0" name="Refnum" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Rollovers" nillable="true" type="tns:ArrayOfNL_LoanRollovers" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -300,6 +301,7 @@
           <xs:element minOccurs="0" name="LoanFeeID" nillable="true" type="xs:long" />
           <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanRolloverID" type="xs:long" />
+          <xs:element minOccurs="0" name="Processed" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -443,6 +445,7 @@
           <xs:element minOccurs="0" name="FeePayments" nillable="true" type="tns:ArrayOfNL_LoanFeePayments" />
           <xs:element minOccurs="0" name="LoanID" type="xs:long" />
           <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaymentDestination" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
           <xs:element minOccurs="0" name="PaymentMethodID" type="xs:int" />
           <xs:element minOccurs="0" name="PaymentStatusID" type="xs:int" />

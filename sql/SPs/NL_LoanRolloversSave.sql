@@ -5,6 +5,10 @@ IF OBJECT_ID('NL_LoanRolloversSave') IS NOT NULL
 	DROP PROCEDURE NL_LoanRolloversSave
 GO
 
+IF OBJECT_ID('NL_LoanRolloverUpdate') IS NOT NULL
+	DROP PROCEDURE NL_LoanRolloverUpdate
+GO
+
 IF TYPE_ID('NL_LoanRolloversList') IS NOT NULL
 	DROP TYPE NL_LoanRolloversList
 GO

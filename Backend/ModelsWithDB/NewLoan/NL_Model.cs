@@ -9,11 +9,6 @@
 	public class NL_Model : AStringable {
 		public NL_Model(int customerID) {
 			CustomerID = customerID;
-			//Offer = new NL_Offers();
-			//Loan = new NL_Loans();
-			//Agreements = new List<NLAgreementItem>();
-			//FundTransfer = new NL_FundTransfers();
-			//CalculatorImplementation = CurrentValues.Instance.DefaultLoanCalculator.Value;
 		} // constructor
 
 		[DataMember]

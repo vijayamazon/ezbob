@@ -22,6 +22,7 @@ BEGIN
 		p.DeletionTime,
 		p.DeletedByUserID,
 		p.Notes,
+		p.PaymentDestination,
 		p.LoanID
 	FROM		
 		[dbo].[NL_Payments] p 		

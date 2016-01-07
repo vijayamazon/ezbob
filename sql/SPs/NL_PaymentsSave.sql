@@ -1,11 +1,30 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF OBJECT_ID('NL_PaymentsSave') IS NULL
-	EXECUTE('CREATE PROCEDURE NL_PaymentsSave AS SELECT 1')
+IF OBJECT_ID('NL_PaymentsSave') IS NOT NULL
+	DROP PROCEDURE NL_PaymentsSave
 GO
 
-ALTER PROCEDURE NL_PaymentsSave
+IF TYPE_ID('NL_PaymentsList') IS NOT NULL
+	DROP TYPE NL_PaymentsList
+GO
+
+CREATE TYPE NL_PaymentsList AS TABLE (		
+		PaymentMethodID INT NOT NULL,
+		PaymentTime DATETIME NOT NULL,
+		Amount DECIMAL(18, 6) NOT NULL,
+		PaymentStatusID INT NOT NULL,
+		CreationTime DATETIME NOT NULL,
+		CreatedByUserID INT NOT NULL,
+		DeletionTime DATETIME NULL,		
+		DeletedByUserID INT NULL,
+		Notes NVARCHAR(MAX) NULL,
+		PaymentDestination NVARCHAR(20) NULL,
+		LoanID BIGINT NOT NULL
+)
+GO
+
+CREATE PROCEDURE NL_PaymentsSave
 @Tbl NL_PaymentsList READONLY
 AS
 BEGIN
@@ -21,6 +40,7 @@ BEGIN
 		[DeletionTime],
 		[DeletedByUserID],
 		[Notes],
+		PaymentDestination,
 		[LoanID]
 	) SELECT
 		[PaymentMethodID],	
@@ -32,6 +52,7 @@ BEGIN
 		[DeletionTime],
 		[DeletedByUserID],
 		[Notes],
+		PaymentDestination,
 		[LoanID]
 	FROM @Tbl;
 	

@@ -79,6 +79,7 @@
     <Compile Include="Methods\AMethod.cs" />
     <Compile Include="Methods\CalculateAprMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
+    <Compile Include="Methods\RolloverRescheduling.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

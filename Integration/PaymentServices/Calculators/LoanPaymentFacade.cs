@@ -20,6 +20,7 @@
 			this.loanTransactionMethodRepository = ObjectFactory.GetInstance<LoanTransactionMethodRepository>();
 			this._historyRepository = ObjectFactory.GetInstance<LoanHistoryRepository>();
 			this.amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
+			serviceInstance = ObjectFactory.GetInstance<IEzServiceAccessor>();
 		} // constructor
 
 		public LoanPaymentFacade(
@@ -124,7 +125,7 @@
 
 				Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
 
-				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, customerID);
+				long nlLoanId = serviceInstance.GetLoanByOldID(loan.Id, customerID);
 
 				if (nlLoanId == 0) {
 					Log.InfoFormat("Failed to find nl loan for oldLoanID {0}, customer {1}", loan.Id, customerID);
@@ -157,7 +158,7 @@
 						}
 					}
 
-					ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
+					serviceInstance.AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
 				}
 			}
 
@@ -209,14 +210,13 @@
 			DateTime? term = null,
 			string description = null,
 			string sManualPaymentMethod = null,
-		NL_Payments nlPaymentCommomData = null
-			) {
+		NL_Payments nlPaymentCommomData = null) {
 
 			var date = term ?? DateTime.Now;
 
 			var loans = customer.Loans.Where(x => x.Status != LoanStatus.PaidOff || x.Id != 0).ToList();
 
-			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList();
+			var nlLoansList = serviceInstance.GetCustomerLoans(customer.Id).ToList();
 
 			foreach (var loan in loans) {
 
@@ -235,7 +235,7 @@
 
 					if (nlLoan != null) {
 
-						var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
+						var nlModel = serviceInstance.GetLoanState(customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
 
 						Log.InfoFormat("<<< NL_Compare Loan: {0} NLModel: {1}.\n money={2}, nlModel.TotalEarlyPayment={3} >>>", loan, nlModel, money, nlModel.TotalEarlyPayment);
 
@@ -253,13 +253,9 @@
 					}
 				}
 
-				//try {
 				PayLoan(loan, transId, money, null, date, description, false, sManualPaymentMethod, nlPayment);
+
 				amount = amount - money;
-				//} catch (Exception ex) {
-				//	Log.Error("DOR - " + ex + ex.StackTrace);
-				//	throw;
-				//}
 
 			} // for
 
@@ -275,14 +271,13 @@
 			DateTime? term = null,
 			string description = null,
 			string sManualPaymentMethod = null,
-			NL_Payments nlPaymentCommomData = null
-			) {
+			NL_Payments nlPaymentCommomData = null) {
 
 			DateTime date = term ?? DateTime.Now;
 
 			IEnumerable<Loan> loans = customer.ActiveLoans.Where(l => l.Status == LoanStatus.Late);
 
-			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(customer.Id).ToList();
+			var nlLoansList = serviceInstance.GetCustomerLoans(customer.Id).ToList();
 
 			if (nlLoansList.Count > 0) {
 				nlLoansList.ForEach(l => Log.InfoFormat("PayAllLateLoansForCustomer NLLoanID={0}", l.LoanID));
@@ -310,7 +305,7 @@
 
 					if (nlLoan != null) {
 
-						var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
+						var nlModel = serviceInstance.GetLoanState(loan.Customer.Id, nlLoan.LoanID, DateTime.UtcNow, 1);
 
 						decimal nlLate = nlModel.Interest + nlModel.Fees;
 						nlModel.Loan.Histories.ForEach(h => h.Schedule.Where(s => s.LoanScheduleStatusID == (int)NLScheduleStatuses.Late).Sum(s => nlLate += s.Principal));
@@ -443,9 +438,9 @@
 			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
-				
+
 				if (nlPayment != null) {
-					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId, customer.Id);
+					var nlLoanId = serviceInstance.GetLoanByOldID(loanId, customer.Id);
 					if (nlLoanId > 0) {
 						nlPayment.Amount = amount;
 						nlPayment.CreationTime = DateTime.UtcNow;
@@ -473,8 +468,9 @@
 					select r
 				).FirstOrDefault();
 
+				long nlLoanId = 0;
 				if (nlPayment != null) {
-					var nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loanId, customer.Id);
+					nlLoanId = serviceInstance.GetLoanByOldID(loanId, customer.Id);
 					if (nlLoanId > 0) {
 						nlPayment.Amount = amount;
 						nlPayment.CreationTime = DateTime.UtcNow;
@@ -482,6 +478,7 @@
 						nlPayment.PaymentTime = DateTime.UtcNow;
 						nlPayment.Notes = description;
 						nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+						nlPayment.PaymentDestination = rollover != null ? NLPaymentDestinations.Rollover.ToString() : null;
 						//CreatedByUserID = userId,
 						//PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
 						//PaymentSystemType = (transId == PaypointTransaction.Manual ? NLPaymentSystemTypes.None : NLPaymentSystemTypes.Paypoint)
@@ -493,6 +490,11 @@
 				newInterest = loan.Interest;
 
 				rolloverWasPaid = rollover != null && rollover.Status == RolloverStatus.Paid;
+
+				if (rolloverWasPaid && nlLoanId > 0) {
+					serviceInstance.AcceptRollover(customer.Id, nlLoanId);
+				}
+
 			} // if
 
 			SortedSet<int> openLoansAfter = new SortedSet<int>(
@@ -539,9 +541,9 @@
 			var result = payEarlyCalc.GetState();
 
 			try {
-				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, loan.Customer.Id);
+				long nlLoanId = serviceInstance.GetLoanByOldID(loan.Id, loan.Customer.Id);
 				if (nlLoanId > 0) {
-					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+					var nlModel = serviceInstance.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
 					Log.InfoFormat("<<<GetStateAt NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
 				} else {
 					Log.InfoFormat("<<<GetStateAt NL loan for oldid {0} not found >>>", loan.Id);
@@ -558,9 +560,9 @@
 			payEarlyCalc.GetState();
 
 			try {
-				long nlLoanId = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanByOldID(loan.Id, loan.Customer.Id);
+				long nlLoanId = serviceInstance.GetLoanByOldID(loan.Id, loan.Customer.Id);
 				if (nlLoanId > 0) {
-					var nlModel = ObjectFactory.GetInstance<IEzServiceAccessor>().GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
+					var nlModel = serviceInstance.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
 					Log.InfoFormat("<<<Recalculate NL_Compare {0}\n  'old' loan: {1} >>>", nlModel, loan);
 				} else {
 					Log.InfoFormat("<<<Recalculate NL loan for oldid {0} not found >>>", loan.Id);
@@ -575,5 +577,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanPaymentFacade));
 		private readonly ILoanTransactionMethodRepository loanTransactionMethodRepository;
 		private readonly int amountToChargeFrom;
+
+		public IEzServiceAccessor serviceInstance { get; private set; }
 	} // class LoanPaymentFacade
 } // namespace

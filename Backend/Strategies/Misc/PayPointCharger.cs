@@ -11,8 +11,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using PaymentServices.PayPoint;
 
-	// TODO : SP NL_GetNumOfActiveLoans.sql - add to where status write off also -> commented search :  //"NL_GetNumOfActiveLoans
-
 	public class AutoPaymentResult {
 		public decimal ActualAmountCharged { get; set; }
 		public bool PaymentFailed { get; set; }
@@ -138,7 +136,6 @@
 			string message;
 			int loanScheduleId = loan.LoanScheduleId;
 			int loanId = loan.LoanId;
-			//string firstName = loan["FirstName"];
 			int customerId = loan.CustomerId;
 			string customerMail = loan.Email;
 			string fullname = loan.Fullname;
@@ -159,7 +156,7 @@
 			decimal amountDue = this.payPointApi.GetAmountToPay(loanScheduleId);
 			
 			if (nlLoan == null) {
-				NL_AddLog(LogType.Info, string.Format("corresponding nlloan for oldLoanID {0} not found", loanId), this.strategyArgs, null, null, null);
+				NL_AddLog(LogType.Info, string.Format("nlloan for oldLoan {0} not found", loanId), this.strategyArgs, null, null, null);
 			} else {
 				// new loan amount due.  
 				decimal nlAmountDue = GetAmountToPay(nlLoan.CustomerId, nlLoan.LoanId, nlLoan.LoanScheduleId);

@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
+	using System.Data;
 	using System.Linq;
 	using ConfigManager;
 	using DbConstants;
@@ -17,13 +18,13 @@
 
 			if (customerID == 0) {
 				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
 				return;
 			}
 
 			if (payment == null || payment.LoanID == 0) {
 				Error = NL_ExceptionLoanNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, this.Error, null);
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, null, Error, null);
 				return;
 			}
 
@@ -88,7 +89,7 @@
 			try {
 
 				pconn.BeginTransaction();
-
+	
 				//  RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID on retroactive payment - in SP NL_ResetPaymentsPaidAmounts, called from NL_PaymentsSave.
 				PaymentID = DB.ExecuteScalar<long>("NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Payments>("Tbl", Payment));
 				Payment.PaymentID = PaymentID;

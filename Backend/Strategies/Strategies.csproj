@@ -213,11 +213,13 @@
     <Compile Include="ManualDecision\ApplyManualDecision.cs" />
     <Compile Include="Misc\SetLateLoanStatus.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
+    <Compile Include="NewLoan\AcceptRollover.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewLoan\AddLoan.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NewLoan\AcceptRollover.cs" />
-    <Compile Include="NewLoan\AddRollover.cs" />
+    <Compile Include="NewLoan\SaveRollover.cs" />
     <Compile Include="NewLoan\CancelFee.cs" />
     <Compile Include="NewLoan\CancelPayment.cs" />
     <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />

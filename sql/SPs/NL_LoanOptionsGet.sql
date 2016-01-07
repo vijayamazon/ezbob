@@ -7,6 +7,7 @@ CREATE PROCEDURE [dbo].[NL_LoanOptionsGet]
 AS
 BEGIN
 	SELECT
+		LoanID,
 	   [LoanOptionsID]
       ,[StopAutoChargeDate]
       ,[PartialAutoCharging]

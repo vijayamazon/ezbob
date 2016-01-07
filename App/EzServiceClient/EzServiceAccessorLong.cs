@@ -107,6 +107,10 @@
 			return this.m_oServiceClient.Instance.GetLoanByOldID(loanId, customerID, userID).Value;
 		}
 
+		public void AcceptRollover(int customerID, long loanId) {
+			this.m_oServiceClient.Instance.AcceptRollover(customerID, loanId);
+		}
+
 		private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

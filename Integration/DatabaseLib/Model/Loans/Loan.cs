@@ -1,5 +1,4 @@
-﻿namespace EZBob.DatabaseLib.Model.Database.Loans 
-{
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
 	using log4net;
 	using System;
 	using System.Collections.Generic;
@@ -18,10 +17,9 @@
 		Early
 	} // enum PaymentStatus
 
-	public class PaymentStatusType : EnumStringType<PaymentStatus> {} // class PaymentStatusType
+	public class PaymentStatusType : EnumStringType<PaymentStatus> { } // class PaymentStatusType
 
-	public class Loan
-	{
+	public class Loan {
 		private static readonly ILog log = LogManager.GetLogger(typeof(Loan));
 
 		public virtual int Id { get; set; }
@@ -272,11 +270,11 @@
 		}
 
 
-        private Iesi.Collections.Generic.ISet<LoanBrokerCommission> _brokerCommissions = new HashedSet<LoanBrokerCommission>();
-        public virtual Iesi.Collections.Generic.ISet<LoanBrokerCommission> BrokerCommissions {
-            get { return _brokerCommissions; }
-            set { _brokerCommissions = value; }
-        }
+		private Iesi.Collections.Generic.ISet<LoanBrokerCommission> _brokerCommissions = new HashedSet<LoanBrokerCommission>();
+		public virtual Iesi.Collections.Generic.ISet<LoanBrokerCommission> BrokerCommissions {
+			get { return _brokerCommissions; }
+			set { _brokerCommissions = value; }
+		}
 
 
 		public virtual string LastReportedCaisStatus { get; set; }
@@ -308,10 +306,10 @@
 
 		public virtual void UpdateNexPayment() {
 			var q = from repayment in Schedule
-				where repayment.AmountDue > 0
-				where repayment.Status == LoanScheduleStatus.StillToPay || repayment.Status == LoanScheduleStatus.Late
-				orderby repayment.Date
-				select repayment;
+					where repayment.AmountDue > 0
+					where repayment.Status == LoanScheduleStatus.StillToPay || repayment.Status == LoanScheduleStatus.Late
+					orderby repayment.Date
+					select repayment;
 
 			var payment = q.FirstOrDefault();
 
@@ -345,15 +343,11 @@
 				s => s.Status == LoanScheduleStatus.PaidOnTime ||
 					 s.Status == LoanScheduleStatus.Paid ||
 					 s.Status == LoanScheduleStatus.PaidEarly
-				))
-			{
-				if (Id != 0)
-				{
+				)) {
+				if (Id != 0) {
 					var scheduledPaymentStatuses = new StringBuilder();
-					foreach (var ls in Schedule)
-					{
-						if (scheduledPaymentStatuses.ToString() != string.Empty)
-						{
+					foreach (var ls in Schedule) {
+						if (scheduledPaymentStatuses.ToString() != string.Empty) {
 							scheduledPaymentStatuses.Append(" ");
 						}
 						scheduledPaymentStatuses.Append("(Id=").Append(ls.Id).Append(" Status=").Append(ls.Status).Append(")");
@@ -365,8 +359,7 @@
 				Status = LoanStatus.PaidOff;
 				DateClosed = date;
 				return;
-			}
-			else {
+			} else {
 				DateClosed = null;
 			}
 
@@ -444,7 +437,8 @@
 		public override string ToString() {
 			var sb = new StringBuilder();
 
-			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}, Issued: {3}, Close date: {4}, Balance: {5}, Principal: {6}\n", Id, LoanAmount, InterestRate, Date, DateClosed, Balance, Principal);
+			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}, Issued: {3:d}, Close date: {4}, Balance: {5}, Principal: {6}, Interest: {7}, Fees: {8}\n", 
+				Id, LoanAmount, InterestRate, Date, DateClosed, Balance, Principal, Interest, Fees);
 
 			sb.AppendLine("Schedule:");
 			foreach (var item in _schedule) {

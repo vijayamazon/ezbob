@@ -3,7 +3,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
-    public class NewLoanModelActionResult : ActionResult {
+    public class NLModelActionResult : ActionResult {
 		[DataMember]
 		public NL_Model Value { get; set; }
 

@@ -88,7 +88,10 @@
 		WrongPayment = 4		// cancel payment
 	} // enum NLPaymentStatuses
 
-	
+	public enum NLPaymentDestinations {
+		Rollover
+	} // enum NLPaymentDestinations
+
 	public enum NLLoanTransactionMethods {
 		Unknown = 0, // DB table id
 		Pacnet = 1,

@@ -33,9 +33,5 @@
 		[NonTraversable]
 		public bool NewEntry { get; set; }
 
-		//[DataMember]
-		//[NonTraversable]
-		//public bool ResetEntry { get; set; }
-
 	} // class NL_LoanSchedulePayments
 } // ns

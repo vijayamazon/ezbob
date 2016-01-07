@@ -135,5 +135,12 @@
             return stra.LoanID;
         }
 
+		public void AcceptRollover(int customerID, long loanID)  {
+			var stra = new AcceptRollover(customerID, loanID);
+			stra.Context.CustomerID = customerID;
+			stra.Context.UserID = customerID;
+			stra.Execute();
+		}
+
     } // class EzServiceAccessorShort
 } // namespace EzServiceShortcut

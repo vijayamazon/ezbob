@@ -1,6 +1,5 @@
 ﻿namespace EzService.ActionResults {
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
+	using System.Runtime.Serialization;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]

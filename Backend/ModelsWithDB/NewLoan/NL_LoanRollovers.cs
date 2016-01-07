@@ -39,5 +39,10 @@
 
 		[DataMember]
 		public DateTime? DeletionTime { get; set; }
+
+		//[DataMember]
+		//[NonTraversable]
+		//public bool Processed { get; set; }
+
 	} // class NL_LoanRollovers
 } // ns

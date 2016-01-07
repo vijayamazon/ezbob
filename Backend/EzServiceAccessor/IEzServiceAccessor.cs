@@ -59,5 +59,8 @@
 		List<NL_Loans> GetCustomerLoans(int customerID, int userID = 1);
 
 		NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
+
+		void AcceptRollover(int customerID, long loanID);
+
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

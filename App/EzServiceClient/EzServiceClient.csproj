@@ -246,10 +246,10 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.MarketplacesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NewLoanModelActionResult.datasource">
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NLLongActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NLLongActionResult.datasource">
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NLModelActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult.datasource">

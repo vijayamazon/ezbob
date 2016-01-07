@@ -70,6 +70,7 @@
 		private NL_LoanOptions _loanOptions = new NL_LoanOptions();
 		private List<NL_Payments> _payments = new List<NL_Payments>();
 		private List<NL_LoanRollovers> _acceptedRollovers = new List<NL_LoanRollovers>();
+		private List<NL_LoanRollovers> _rollovers = new List<NL_LoanRollovers>();
 	
 		[DataMember]
 		[NonTraversable]
@@ -111,6 +112,13 @@
 		public List<NL_LoanRollovers> AcceptedRollovers {
 			get { return this._acceptedRollovers; }
 			set { this._acceptedRollovers = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanRollovers> Rollovers {
+			get { return this._rollovers; }
+			set { this._rollovers = value; }
 		}
 
 		// helpers

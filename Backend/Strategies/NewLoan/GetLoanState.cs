@@ -70,6 +70,7 @@
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);
 
 			try {
+
 				// loan
 				Result.Loan = LoanDAL.GetLoan(Result.Loan.LoanID);
 
@@ -106,7 +107,7 @@
 
 				// payments
 				Result.Loan.Payments.Clear();
-				Result.Loan.Payments.AddRange(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID))); //.OrderBy(p=>p.PaymentTime)); 
+				Result.Loan.Payments.AddRange(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)));
 
 				var schp = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
 				var fps = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
@@ -119,8 +120,11 @@
 					p.FeePayments.AddRange(fps.Where(fp=>fp.PaymentID == p.PaymentID).ToList());
 				}
 
-				// valid accepted rollover
-				Result.Loan.AcceptedRollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).Where(r=>r.IsAccepted));
+				Result.Loan.Rollovers.Clear();
+				Result.Loan.Rollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)));
+
+				// accepted rollover
+				Result.Loan.AcceptedRollovers.AddRange(Result.Loan.Rollovers.Where(r => r.IsAccepted && r.CustomerActionTime.HasValue &&r.DeletionTime==null && r.DeletedByUserID==null));
 
 				if (!GetCalculatorState)
 					return;

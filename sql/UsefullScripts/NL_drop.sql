@@ -37,6 +37,10 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 	ALTER TABLE NL_Payments DROP CONSTRAINT FK_NL_Payments_Loan;	
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UQ_LoanID_LoanFeeTypeID_Amount_AssignTime')
+	ALTER TABLE NL_LoanFees DROP CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime;	
+GO
+
 
 -------------------------------------------------------------------------------
 --

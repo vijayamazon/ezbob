@@ -8,6 +8,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public partial class EzServiceImplementation : IEzServiceNewLoan {
+
 		public NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
 			AddCashRequest s = new AddCashRequest(cashRequest);
 			s.Context.UserID = userID;
@@ -92,12 +93,12 @@
 			};
 		} // GetCustomerLoans
 
-		public NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime calculationDate, int userID, bool getCalculatorState = true) {
+		public NLModelActionResult GetLoanState(int customerID, long loanID, DateTime calculationDate, int userID, bool getCalculatorState = true) {
 			GetLoanState s = new GetLoanState(customerID, loanID, calculationDate, userID, getCalculatorState);
 			s.Context.CustomerID = customerID;
 			s.Context.UserID = userID;
 			var amd = ExecuteSync(out s, customerID, userID, customerID, loanID, calculationDate, userID, getCalculatorState);
-			return new NewLoanModelActionResult {
+			return new NLModelActionResult {
 				MetaData = amd,
 				Value = s.Result,
 				Error = s.Error
@@ -192,7 +193,7 @@
 			};
 		} // RescheduleLoan
 
-		public NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
+		public NLModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model) {
 			ActionMetaData amd = null;
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			try {
@@ -202,20 +203,40 @@
 				Log.Alert("BuildLoanFromOffer failed: {0}", e);
 				strategy.Result.Error = "InternalServerError";
 			}
-			return new NewLoanModelActionResult() {
+			return new NLModelActionResult() {
 				MetaData = amd,
 				Value = strategy.Result
 			};
 		}
 
 		public NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID) {
-			CancelPayment strategy;
-			var amd = ExecuteSync(out strategy, customerID, userID, customerID, payment, userID);
+			CancelPayment s;
+			var amd = ExecuteSync(out s, customerID, userID, customerID, payment, userID);
 			return new NLLongActionResult {
 				MetaData = amd,
-				Error = strategy.Error
+				Error = s.Error
 			};
 		} // AddPayment
+
+		public StringActionResult SaveRollover(int userID, int customerID, NL_LoanRollovers rollover, long loanID) {
+			SaveRollover s = new SaveRollover(rollover, loanID);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, rollover, loanID);
+			return new StringActionResult {
+				Value = s.Error
+			};
+		} // SaveRollover
+
+		public StringActionResult AcceptRollover(int customerID, long loanID) {
+			AcceptRollover s = new AcceptRollover(customerID, loanID);
+			s.Context.UserID = customerID;
+			s.Context.CustomerID = customerID;
+			s.Execute();
+			return new StringActionResult {
+				Value = s.Error
+			};
+		} // AcceptRollover
 
 	} // class EzServiceImplementation
 } // namespace

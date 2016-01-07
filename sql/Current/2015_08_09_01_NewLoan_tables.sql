@@ -790,6 +790,7 @@ BEGIN
 		DeletionTime DATETIME NULL,		
 		DeletedByUserID INT NULL,
 		Notes NVARCHAR(MAX) NULL,
+		PaymentDestination NVARCHAR(20) NULL,
 		LoanID BIGINT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Payment PRIMARY KEY (PaymentID),
@@ -1001,7 +1002,7 @@ ALTER TABLE NL_Payments ADD CONSTRAINT CHK_NL_Payments CHECK (
 	);
 GO
 
-IF OBJECT_ID('UQ_LoanID_LoanFeeTypeID_Amount_AssignTime') IS NULL
-ALTER TABLE [dbo].[NL_LoanFees] ADD CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime UNIQUE NONCLUSTERED ([LoanID],[LoanFeeTypeID],[Amount],[AssignTime]);
+IF OBJECT_ID('UQ_LoanID_LoanFeeTypeID_Amount_AssignTime_Disabled') IS NULL
+	ALTER TABLE [dbo].[NL_LoanFees] ADD CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime_Disabled UNIQUE NONCLUSTERED ([LoanID],[LoanFeeTypeID],[Amount],[AssignTime],[DisabledTime]);
 GO
 

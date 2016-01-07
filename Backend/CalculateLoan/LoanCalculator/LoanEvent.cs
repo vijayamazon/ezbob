@@ -67,10 +67,6 @@
 
 		public decimal EarnedInterestForPeriod { get; internal set; }
 
-		//public decimal PaidInterestForPeriod { get; set; }
-
-		//public decimal CurrentPaidFees { get; internal set; }
-
 		private readonly int priority;
 
 		private object _currentID;
@@ -128,7 +124,7 @@
 		}
 
 		public override string ToString() {
-			return string.Format("EventTime={0}, EventType={1}, [ID]={2}, OpenPrincipal={3} EarnedInterest={4}", EventTime, GetTypeString(), GetTypeID(), OpenPrincipalForPeriod, EarnedInterestForPeriod); 
+			return string.Format("EventTime={0}, EventType={1}, [ID]={2}, OpenPrincipalForPeriod={3} EarnedInterestForPeriod={4}", EventTime, GetTypeString(), GetTypeID(), OpenPrincipalForPeriod, EarnedInterestForPeriod); 
 		}
 
 		public string GetTypeString() {

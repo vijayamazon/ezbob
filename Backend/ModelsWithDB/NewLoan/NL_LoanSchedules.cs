@@ -87,13 +87,13 @@
 		[NonTraversable]
 		public decimal InterestPaid { get; set; }
 
-		//[DataMember]
-		//[NonTraversable]
-		//public decimal FeesAssigned { get; set; }
+		[DataMember]
+		[NonTraversable]
+		public decimal FeesAssigned { get; set; }
 
-		//[DataMember]
-		//[NonTraversable]
-		//public decimal FeesPaid { get; set; }
+		[DataMember]
+		[NonTraversable]
+		public decimal FeesPaid { get; set; }
 
 		/// <summary>
 		///  p*r based on real open principal: used to calculate schedule's interest to pay

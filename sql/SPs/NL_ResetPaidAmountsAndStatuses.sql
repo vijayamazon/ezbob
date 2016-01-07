@@ -1,6 +1,4 @@
--- IF TYPE_ID('BigintList') IS NOT NULL
-     -- DROP TYPE BigintList;
--- GO
+
 IF TYPE_ID('BigintList') IS  NULL
 CREATE TYPE [dbo].[BigintList] AS TABLE(
     [Item] BIGINT NOT NULL
@@ -22,27 +20,31 @@ BEGIN
                 DECLARE @Paymentids [dbo].[BigintList];
  
                 if  @PaymentDateInclude = 0 
-                                insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID =  17 and [PaymentTime] > @PaymentDate;
+                    insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID = @LoanID and [PaymentTime] > @PaymentDate;
                 ELSE IF @PaymentDateInclude = 1 
-                                insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID =  17 and [PaymentTime] >= @PaymentDate;
+                    insert into @Paymentids select PaymentID from [dbo].[NL_Payments] where LoanID = @LoanID and [PaymentTime] >= @PaymentDate;
                 
                 IF (select COUNT(Item) from @Paymentids) = 0 
                                 RETURN 0;
                 
                 -- RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER PaymentDate of deleted/retroactive payment              
                 UPDATE [NL_LoanSchedulePayments] 
-                SET [ResetPrincipalPaid] = [PrincipalPaid], [ResetInterestPaid] = [InterestPaid],[PrincipalPaid] = 0, [InterestPaid] = 0 
+                SET 
+					[ResetPrincipalPaid] = [PrincipalPaid], 
+					[ResetInterestPaid] = [InterestPaid],
+					[PrincipalPaid] = 0, 
+					[InterestPaid] = 0 
                 WHERE [PaymentID] in (select Item from @Paymentids);
                 
                 UPDATE [NL_LoanFeePayments] SET [ResetAmount] = [Amount], [Amount] = 0 WHERE [PaymentID] in (select Item from @Paymentids);            
  
                 -- reset schedules statuses and closed time
                 UPDATE  s
-                                SET s.ClosedTime = null, s.LoanScheduleStatusID = (select st.LoanScheduleStatusID from [dbo].[NL_LoanScheduleStatuses] st where st.LoanScheduleStatus = 'StillToPay')
+                    SET s.ClosedTime = null, s.LoanScheduleStatusID = (select st.LoanScheduleStatusID from [dbo].[NL_LoanScheduleStatuses] st where st.LoanScheduleStatus = 'StillToPay')
                 FROM
-                                [dbo].[NL_LoanSchedules] s
+                    [dbo].[NL_LoanSchedules] s
                 INNER JOIN
-                                [dbo].[NL_LoanSchedulePayments] sp ON s.[LoanScheduleID] = sp.[LoanScheduleID]
+                    [dbo].[NL_LoanSchedulePayments] sp ON s.[LoanScheduleID] = sp.[LoanScheduleID]
                 WHERE sp.[PaymentID] in (select Item from @Paymentids);
                                                                                 
  

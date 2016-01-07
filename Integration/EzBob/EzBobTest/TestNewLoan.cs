@@ -26,7 +26,6 @@
 	using NHibernate.Linq;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
-	using PaymentServices.PayPoint;
 	using ServiceClientProxy;
 	using StructureMap;
 
@@ -102,9 +101,9 @@
 				strategy.Execute();
 				//if (string.IsNullOrEmpty(strategy.Result.Error)) {
 				//	this.m_oLog.Debug(strategy.Result.Offer);
-				this.m_oLog.Debug(strategy.Result.Loan);
+				m_oLog.Debug(strategy.Result.Loan);
 				//} else
-				this.m_oLog.Debug("error: {0}", strategy.Result.Error);
+				m_oLog.Debug("error: {0}", strategy.Result.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}
@@ -126,7 +125,7 @@
 				LoanScheduleStatusID = 3,
 				PlannedDate = new DateTime(2014, 10, 19)
 			};
-			this.m_oLog.Debug(x1.ToString());
+			m_oLog.Debug(x1.ToString());
 		}
 
 
@@ -189,7 +188,7 @@
 					Console.WriteLine(oldLoan.CashRequest.DiscountPlan.Discounts[i]);
 				}
 				//Console.WriteLine(cr.ToString());
-				cr.DiscountPlan.Discounts.ForEach(d => this.m_oLog.Debug("=====" + d.ToString(CultureInfo.InvariantCulture)));
+				cr.DiscountPlan.Discounts.ForEach(d => m_oLog.Debug("=====" + d.ToString(CultureInfo.InvariantCulture)));
 			}
 		}
 		[Test]
@@ -228,8 +227,8 @@
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
-				this.m_oLog.Debug(strategy.Error);
-				this.m_oLog.Debug(strategy.LoanID);
+				m_oLog.Debug(strategy.Error);
+				m_oLog.Debug(strategy.LoanID);
 				Console.WriteLine("LoanID: {0}, Error: {1}", strategy.LoanID, strategy.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
@@ -246,7 +245,7 @@
 						new QueryParameter("@DiscountPlanID", 2)
 						);
 			if (discounts != null) {
-				discounts.ForEach(d => this.m_oLog.Debug(d));
+				discounts.ForEach(d => m_oLog.Debug(d));
 				NL_Model model = new NL_Model(374);
 				foreach (NL_DiscountPlanEntries dpe in discounts) {
 					model.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
@@ -349,7 +348,7 @@
 			Console.WriteLine(loan.ToString());
 			Console.WriteLine();
 			Console.WriteLine(calc.ToString());
-			this.m_oLog.Debug("---------------------------------------: \n {0}", loan);
+			m_oLog.Debug("---------------------------------------: \n {0}", loan);
 		}
 
 
@@ -369,7 +368,7 @@
 			//m_oLog.Debug("----------------------" + loan1.InterestFreeze.Count);*/
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
-			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan);
+			m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan);
 		}
 
 
@@ -387,7 +386,7 @@
 			if (firstSchedule != null && lastSchedule != null)
 				//r = calc.GetInterestRate(firstSchedule.Date, lastSchedule.Date);
 				r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01, 01));
-			this.m_oLog.Debug("{0}", loan);
+			m_oLog.Debug("{0}", loan);
 			Console.WriteLine(r);
 		}
 
@@ -425,7 +424,7 @@
 			const long loanID = 21;
 			var strategy = new GetLoanState(351, loanID, DateTime.UtcNow); // loanID = 17, customer = 56
 			strategy.Execute();
-			this.m_oLog.Debug(strategy.Result);
+			m_oLog.Debug(strategy.Result);
 		}
 
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
@@ -433,18 +432,16 @@
 		public void GetLoanFees() {
 			const long loanid = 15;
 			var loanFees = this.m_oDB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanid));
-			this.m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFees)));
-			loanFees.ForEach(f => this.m_oLog.Debug(f));
+			m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFees)));
+			loanFees.ForEach(f => m_oLog.Debug(f));
 		}
 
 
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 20023;
-			const int customerID = 362;
-			/*const long loanID = 21; const int customerID = 362; */
-			/*const long loanID = 17; const int customerID =351;*/
+			const long loanID = 14;
+			const int customerID = 389;
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
@@ -455,10 +452,12 @@
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(dbState.Result, calcTime);
 				calc.GetState();
-				this.m_oLog.Debug("----------------------------------{0}", calc);
+				m_oLog.Debug("----------------------------------{0}", calc.WorkingModel);
 			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
+				m_oLog.Error("{0}", exception.Message);
 			}
+
+			return;
 
 			// old loan
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
@@ -467,7 +466,7 @@
 			LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 			oldCalc.GetState();
 
-			this.m_oLog.Debug("++++++++++++++++++++++++++++++old loan: {0}", oldLoan);
+			m_oLog.Debug("++++++++++++++++++++++++++++++old loan: {0}", oldLoan);
 			m_oLog.Debug("NextEarlyPayment={0}", oldCalc.NextEarlyPayment());
 		}
 
@@ -480,11 +479,11 @@
 			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				state.Execute();
-				this.m_oLog.Debug("----------------------------------{0}", state.Result);
+				m_oLog.Debug("----------------------------------{0}", state.Result);
 			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
 				Console.WriteLine(nlExceptionInputDataInvalid.Message);
 			} catch (Exception ex) {
-				this.m_oLog.Error("{0}", ex.Message);
+				m_oLog.Error("{0}", ex.Message);
 			}
 		}
 
@@ -512,7 +511,7 @@
 				double apr = calc.CalculateApr();
 				m_oLog.Debug("CalculationDate: {0}, apr: {1}", calc.CalculationDate, apr);
 			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
+				m_oLog.Error("{0}", exception.Message);
 			}
 		}
 
@@ -524,17 +523,17 @@
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();
 			if (!string.IsNullOrEmpty(strategy.Error)) {
-				this.m_oLog.Debug("error: {0}", strategy.Error);
+				m_oLog.Debug("error: {0}", strategy.Error);
 				return;
 			}
 			model = strategy.Result;
-			this.m_oLog.Debug("=================================={0}\n", model.Loan);
+			m_oLog.Debug("=================================={0}\n", model.Loan);
 			try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model);
 				calc.CreateSchedule();
-				this.m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
+				m_oLog.Debug("=================Calculator end================={0}\n", model.Loan);
 			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
+				m_oLog.Error("{0}", exception.Message);
 			}
 		}
 
@@ -548,10 +547,7 @@
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
 
-		[Test]
-		public void AddRolloverTest() {
-
-		}
+		
 
 		[Test]
 		public void RolloverRescheduling() {
@@ -607,24 +603,24 @@
 					});
 				}
 			}
-			try {
+			/*try {
 				ALoanCalculator calc = new LegacyLoanCalculator(model, calcTime);
 				calc.RolloverRescheduling();
-				this.m_oLog.Debug("{0}", calc);
+				m_oLog.Debug("{0}", calc);
 				// old calc
 				LoanRepaymentScheduleCalculator oldCalc = new LoanRepaymentScheduleCalculator(oldLoan, calcTime, 0);
 				oldCalc.GetState();
-				this.m_oLog.Debug("old loan State: {0}", oldLoan);
-				this.m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);
+				m_oLog.Debug("old loan State: {0}", oldLoan);
+				m_oLog.Debug("\n\n====================OLD CALC InterestToPay={0}, FeesToPay={1}", oldCalc.InterestToPay, oldCalc.FeesToPay);
 			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
-			}
+				m_oLog.Error("{0}", exception.Message);
+			}*/
 		}
 
 		[Test]
 		public void AddPAymentTest() {
-			const int customerid = 362;
-			const long loanID = 24;
+			const int customerid = 388;
+			const long loanID = 11;
 			/*NL_Payments nlpayment = new NL_Payments() {
 				Amount = 100m,
 				CreatedByUserID = 357,
@@ -634,7 +630,7 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.SetupFeeOffset
 			};*/
-			DateTime prebatedate = new DateTime(2015, 12, 6);
+		/*	DateTime prebatedate = DateTime.UtcNow; // new DateTime(2015, 12, 6);
 			NL_Payments nlpayment = new NL_Payments() {
 				Amount = 5m,
 				CreatedByUserID = customerid,
@@ -644,24 +640,24 @@
 				Notes = "rebate",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
-			};
-			/*DateTime pdate = new DateTime(2015, 12, 29);
+			};*/
+			DateTime pdate = new DateTime(2016, 1, 7);
 			NL_Payments nlpayment = new NL_Payments() {
-				Amount = 100m,
-				CreatedByUserID = 357,
+				Amount = 250m,
+				CreatedByUserID = 388,
 				CreationTime = DateTime.UtcNow,
 				LoanID = loanID,
 				PaymentTime = pdate,
 				Notes = "payment3",
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Manual
-			};*/
+			};
 			try {
 				AddPayment pstrategy = new AddPayment(customerid, nlpayment, 357);
 				pstrategy.Execute();
-				this.m_oLog.Debug(pstrategy.Error);
+				m_oLog.Debug(pstrategy.Error);
 			} catch (Exception ex) {
-				this.m_oLog.Debug(ex);
+				m_oLog.Debug(ex);
 			}
 		}
 
@@ -680,7 +676,7 @@
 				LoanID = loanID
 			};
 			int result = this.m_oDB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, this.m_oDB.CreateTableParameter<NL_LoanFees>("Tbl", fee));
-			this.m_oLog.Debug(result);
+			m_oLog.Debug(result);
 		}
 
 
@@ -701,9 +697,9 @@
 				try {
 					CancelPayment pstrategy = new CancelPayment(customerid, nlpayment, 357);
 					pstrategy.Execute();
-					this.m_oLog.Debug(pstrategy.Error);
+					m_oLog.Debug(pstrategy.Error);
 				} catch (Exception ex) {
-					this.m_oLog.Debug(ex);
+					m_oLog.Debug(ex);
 				}
 			}
 		}
@@ -712,14 +708,14 @@
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		[Test]
 		public void UpdateLoanDBStateTest() {
-			const long loanID = 24;
-			const int customerID = 362;
+			const long loanID = 14;
+			const int customerID = 389;
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(customerID, loanID, 357);
 			reloadLoanDBState.Context.UserID = 357;
 			try {
 				reloadLoanDBState.Execute();
 			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
-				this.m_oLog.Debug(nlExceptionInputDataInvalid);
+				m_oLog.Debug(nlExceptionInputDataInvalid);
 			}
 		}
 
@@ -737,7 +733,7 @@
 				DateTime start = calcDate;
 				DateTime end = new DateTime(2016, 02, 25);
 				int days = end.Subtract(start).Days;
-				this.m_oLog.Debug("total days: {0}", days);
+				m_oLog.Debug("total days: {0}", days);
 				var schedule = model.Loan.LastHistory().Schedule;
 				for (int i=0; i <= days; i++) {
 					DateTime theDate = start.AddDays(i);
@@ -745,7 +741,7 @@
 					m_oLog.Debug("theDate: {0}, {1}", theDate, scheduleItem.PlannedDate);
 				}
 			} catch (Exception exception) {
-				this.m_oLog.Error("{0}", exception.Message);
+				m_oLog.Error("{0}", exception.Message);
 			}
 		}
 
@@ -759,9 +755,9 @@
 				var facade = new LoanPaymentFacade();
 				var installment = loan.Schedule.FirstOrDefault(s => s.Id == 3773);
 				var state = facade.GetStateAt(loan, DateTime.Now);
-				this.m_oLog.Debug("Amount to charge is: {0}", state.AmountDue);
+				m_oLog.Debug("Amount to charge is: {0}", state.AmountDue);
 			} catch (Exception ex) {
-				this.m_oLog.Debug(ex);
+				m_oLog.Debug(ex);
 			}
 		}
 
@@ -797,7 +793,7 @@
 				var f = new LoanPaymentFacade();
 				f.PayLoan(loan, "111", 1000, "11.11.11.11", DateTime.UtcNow, "system-repay", false, null, nlPayment);
 			} catch (Exception ex) {
-				this.m_oLog.Debug(ex);
+				m_oLog.Debug(ex);
 			}
 		}
 
@@ -808,7 +804,7 @@
 		public void GetCustomerLoansTest() {
 			GetCustomerLoans s = new GetCustomerLoans(371);
 			s.Execute();
-			s.Loans.ForEach(l => this.m_oLog.Debug(l));
+			s.Loans.ForEach(l => m_oLog.Debug(l));
 		}
 
 
@@ -856,14 +852,14 @@
 		[Test]
 		public void LongGetCustomerLoansTest() {
 			var nlLoansList = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCustomerLoans(371).ToList();
-			nlLoansList.ForEach(l => this.m_oLog.Debug("{0}", l.LoanID));
+			nlLoansList.ForEach(l => m_oLog.Debug("{0}", l.LoanID));
 		}
 
 		[Test]
 		public void ShortGetCustomerLoansTest() {
 			ServiceClient s = new ServiceClient();
 			var nlLoansList = s.Instance.GetCustomerLoans(375, 1).Value;
-			nlLoansList.ForEach(l => this.m_oLog.Debug("{0}", l.LoanID));
+			nlLoansList.ForEach(l => m_oLog.Debug("{0}", l.LoanID));
 		}
 
 		[Test]
@@ -892,7 +888,7 @@
 				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
 					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) ||
 					(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
-					this.m_oLog.Debug("not applying late fee for loan {0} - auto late fee is disabled", loanid);
+					m_oLog.Debug("not applying late fee for loan {0} - auto late fee is disabled", loanid);
 					return;
 				}
 			}
@@ -902,9 +898,9 @@
 				Date = now,
 				Loan = loan
 			};
-			this.m_oLog.Debug("charge={0}", charge);
+			m_oLog.Debug("charge={0}", charge);
 			var res = loan.TryAddCharge(charge);
-			this.m_oLog.Debug("result={0}", res);
+			m_oLog.Debug("result={0}", res);
 		}
 
 		[Test]
@@ -956,9 +952,84 @@
 				LoanID = loanID
 			};
 			fees.Add(f2);
-			fees.ForEach(f => this.m_oLog.Debug(f));
+			fees.ForEach(f => m_oLog.Debug(f));
 			int result = this.m_oDB.ExecuteNonQuery("NL_LoanFeesSave", CommandSpecies.StoredProcedure, this.m_oDB.CreateTableParameter<NL_LoanFees>("Tbl", fees));
-			this.m_oLog.Debug(result);
+			m_oLog.Debug(result);
+		}
+
+		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
+		[Test]
+		public void SaveRolloverTest() {
+			const int oldID = 5116;
+			const int customerID = 385;
+			DateTime now = DateTime.UtcNow;
+			PaymentRolloverRepository rep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
+			var rollovers = rep.GetByLoanId(oldID);
+			var paymentRollovers = rollovers as IList<PaymentRollover> ?? rollovers.ToList();
+			//paymentRollovers.ForEach(rr => this.m_oLog.Debug(rr));
+			var r = paymentRollovers.FirstOrDefault(rr => rr.ExpiryDate > now);
+			m_oLog.Debug(r);
+			if (r == null) {
+				return;
+			}
+
+			var s = new GetLoanIDByOldID(oldID);
+			s.Execute();
+			GetLoanState state = new GetLoanState(customerID, s.LoanID, now, 1, false);
+			state.Execute();
+			NL_LoanRollovers nlr = new NL_LoanRollovers() {
+				CreatedByUserID = 1,
+				CreationTime = r.Created,
+				ExpirationTime = (DateTime)r.ExpiryDate,
+				LoanHistoryID = state.Result.Loan.LastHistory().LoanHistoryID
+			};
+			SaveRollover saver = new SaveRollover(nlr, state.Result.Loan.LoanID);
+			saver.Execute();
+			m_oLog.Debug(saver.Error);
+		}
+
+		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
+		[Test]
+		public void UpdateRolloverTest() {
+			const int oldID = 5116;
+			const int customerID = 385;
+			DateTime now = DateTime.UtcNow;
+			PaymentRolloverRepository rep = ObjectFactory.GetInstance<PaymentRolloverRepository>();
+			var rollovers = rep.GetByLoanId(oldID);
+			var paymentRollovers = rollovers as IList<PaymentRollover> ?? rollovers.ToList();
+			//paymentRollovers.ForEach(rr => this.m_oLog.Debug(rr));
+			var r = paymentRollovers.FirstOrDefault(rr => rr.ExpiryDate > now);
+			m_oLog.Debug(r);
+			if (r == null) {
+				return;
+			}
+
+			var s = new GetLoanIDByOldID(oldID);
+			s.Execute();
+			GetLoanState state = new GetLoanState(customerID, s.LoanID, now, 1, false);
+			state.Execute();
+
+			NL_LoanRollovers nlr = state.Result.Loan.Rollovers.FirstOrDefault(nr => nr.CreationTime.Date == r.Created.Date && nr.ExpirationTime.Date == r.ExpiryDate);
+
+			if (nlr == null) 
+				return;
+
+			nlr.ExpirationTime = nlr.ExpirationTime.AddDays(4);
+
+			m_oLog.Debug(nlr);
+
+			SaveRollover saver = new SaveRollover(nlr, state.Result.Loan.LoanID);
+			saver.Execute();
+			m_oLog.Debug(saver.Error);
+		}
+
+		
+		[Test]
+		public void AcceptRolloverTest() {
+			const long loanID = 9;
+			const int customerID = 387;
+			AcceptRollover s = new AcceptRollover(customerID, loanID);
+			s.Execute();
 		}
 
 	} // class TestNewLoan

@@ -51,6 +51,10 @@
 		[DataMember]
 		public string Notes { get; set; }
 
+		[DataMember]
+		[EnumName(typeof(NLPaymentStatuses))]
+		public string PaymentDestination { get; set; }
+
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
 		public long LoanID { get; set; }

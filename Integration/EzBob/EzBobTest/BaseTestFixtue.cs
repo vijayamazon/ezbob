@@ -76,7 +76,7 @@
 		} // Init
 
 		protected AConnection m_oDB;
-		protected ASafeLog m_oLog;
+		public ASafeLog m_oLog { get; protected set; }
 		protected Ezbob.Context.Environment m_oEnv;
 	} // class BaseTestFixture
 } // namespace

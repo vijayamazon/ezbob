@@ -53,7 +53,7 @@
 					"NL_SignedOfferForLoan",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", Result.CustomerID),
-					new QueryParameter("@Now", Result.Loan.LastHistory().EventTime)
+					new QueryParameter("Now", Result.Loan.LastHistory().EventTime)
 				);
 
 				NL_AddLog(LogType.Info, "DataForLoan", this.strategyArgs, DataForLoan, Error, null);

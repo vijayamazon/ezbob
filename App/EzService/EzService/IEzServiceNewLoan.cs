@@ -36,7 +36,7 @@
         ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
 
         [OperationContract]
-        NewLoanModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
+        NLModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
 		NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze);
@@ -48,13 +48,20 @@
         ListNewLoanActionResult GetCustomerLoans(int customerID, int userID);
 
 	    [OperationContract]
-	    NewLoanModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
+	    NLModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
 
 		[OperationContract]
         NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1);
 		
 		[OperationContract]
 		NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID);
+
+		[OperationContract]
+		StringActionResult SaveRollover(int userID, int customerID, NL_LoanRollovers rollover, long loanID);
+
+		[OperationContract]
+		StringActionResult AcceptRollover(int customerID, long loanID);
+
 	} // interface IEzServiceNewLoan
 
 } // namespace EzService

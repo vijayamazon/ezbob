@@ -1,5 +1,5 @@
 declare @monthBack int; set @monthBack = -1;
-declare @loanID int; set @loanID = 5116;
+declare @loanID int; set @loanID = 5130;
 declare @NLloanID bigint; set @NLloanID = (select LoanID from NL_Loans where OldLoanID = @loanID);
 
 if @NLloanID is null return;
@@ -15,9 +15,10 @@ update [dbo].[NL_LoanFees] set [CreatedTime] = DATEADD(MONTH, @monthBack,[Create
 
 update [dbo].[NL_LoanHistory] set [EventTime]=DATEADD(MONTH, @monthBack,[EventTime]) where [LoanID] = @NLloanID;
 
-update [dbo].[NL_Payments] set [PaymentTime]=DATEADD(MONTH, @monthBack, [PaymentTime]), 
+update [dbo].[NL_Payments] set 
+	[PaymentTime]=DATEADD(MONTH, @monthBack, [PaymentTime]), 
 	[CreationTime]=DATEADD(MONTH, @monthBack, [CreationTime]),
-	[DeletionTime]=DATEADD(MONTH, @monthBack, [DeletionTime]) where LoanID=@loanID;
+	[DeletionTime]=DATEADD(MONTH, @monthBack, [DeletionTime]) where LoanID=@NLloanID;
 
 update [dbo].[NL_LoanInterestFreeze] set 
 	[StartDate]=DATEADD(MONTH, @monthBack,[StartDate]),
@@ -94,6 +95,23 @@ update [dbo].[LoanOptions] set
 	[StopLateFeeFromDate]= DATEADD(MONTH, @monthBack, [StopLateFeeFromDate]),
 	[StopLateFeeToDate]= DATEADD(MONTH, @monthBack, [StopLateFeeToDate]) where [LoanId] =@loanID;
 
+update [dbo].[CashRequests] set
+	[CreationDate]= DATEADD(MONTH, @monthBack, [CreationDate]),
+	[OfferStart] = DATEADD(MONTH, @monthBack, [OfferStart]),
+	[OfferValidUntil] = DATEADD(MONTH, @monthBack, [OfferValidUntil])
+where IdCustomer = (select [CustomerId] from [dbo].[Loan] where Id=@loanID) 
+and [dbo].[CashRequests].[Id] = (select MAX([Id]) from [dbo].[CashRequests] where IdCustomer = (select [CustomerId] from [dbo].[Loan] where Id=@loanID));
+ 
+
+UPDATE PaymentRollover 
+SET 
+	Created=isnull(DATEADD(MONTH, @monthBack,  Created), null),
+	CustomerConfirmationDate = isnull(DATEADD(MONTH, @monthBack, CustomerConfirmationDate), null), 
+	ExpiryDate= isnull(DATEADD(MONTH, @monthBack, ExpiryDate), null)
+FROM (
+    SELECT s.Id FROM PaymentRollover r join LoanSchedule s on s.Id=r.LoanScheduleId where s.LoanId=@loanID) sch
+WHERE 
+    sch.Id = PaymentRollover.[LoanScheduleId]
 
 
 

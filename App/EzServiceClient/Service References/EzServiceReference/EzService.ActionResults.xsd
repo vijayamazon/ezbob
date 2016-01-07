@@ -25,7 +25,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
-  <xs:complexType name="NewLoanModelActionResult">
+  <xs:complexType name="NLModelActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
         <xs:sequence>
@@ -35,7 +35,7 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="NewLoanModelActionResult" nillable="true" type="tns:NewLoanModelActionResult" />
+  <xs:element name="NLModelActionResult" nillable="true" type="tns:NLModelActionResult" />
   <xs:complexType name="ListNewLoanActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" base="q7:ActionResult">

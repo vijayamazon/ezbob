@@ -20,7 +20,8 @@ BEGIN
 		s.PlannedDate,
 		s.ClosedTime,
 		s.Principal,
-		s.InterestRate
+		s.InterestRate,
+		s.[TwoDaysDueMailSent], s.[FiveDaysDueMailSent]
 	FROM
 		NL_LoanSchedules s INNER JOIN NL_LoanHistory h ON s.LoanHistoryID = h.LoanHistoryID
 	WHERE

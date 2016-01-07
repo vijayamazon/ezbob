@@ -10,7 +10,7 @@ BEGIN
 
 	SELECT 
 		[LoanRolloverID]
-		,[LoanHistoryID]
+		,r.[LoanHistoryID]
 		,[CreatedByUserID]
 		,[DeletedByUserID]
 		,[LoanFeeID]	
@@ -19,6 +19,7 @@ BEGIN
 		,[CustomerActionTime]
 		,[IsAccepted]
 		,[DeletionTime]
-	FROM  [dbo].[NL_LoanRollovers]
+	FROM  [dbo].[NL_LoanRollovers] r join NL_LoanHistory h on h.LoanHistoryID=r.LoanHistoryID and h.LoanID=@LoanID;
+	 
 END
 

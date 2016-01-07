@@ -78,47 +78,48 @@
 			int principalPayments = Calculator.currentHistory.RepaymentCount - interestOnlyRepayments;
 			decimal iPrincipal = Math.Floor(Calculator.currentHistory.Amount / principalPayments);
 			decimal iFirstPrincipal = Calculator.currentHistory.Amount - iPrincipal * (principalPayments - 1);
-			List<decimal> discounts = WorkingModel.Offer.DiscountPlan;
+			List<decimal> discounts = (WorkingModel.Offer != null && WorkingModel.Offer.DiscountPlan != null) ? WorkingModel.Offer.DiscountPlan : null;
 
-			discounts.ForEach(d => Log.Debug(d));
+			if (discounts != null) {
+				discounts.ForEach(d => Log.Debug(d));
 
-			int discountCount = discounts.Count;
-			decimal balance = Calculator.currentHistory.Amount;
-			Calculator.schedule = new List<NL_LoanSchedules>();
+				int discountCount = discounts.Count;
+				decimal balance = Calculator.currentHistory.Amount;
+				Calculator.schedule = new List<NL_LoanSchedules>();
 
-			// create Schedule 
-			for (int i = 1; i <= Calculator.currentHistory.RepaymentCount; i++) {
-				decimal principal = iPrincipal;
+				// create Schedule 
+				for (int i = 1; i <= Calculator.currentHistory.RepaymentCount; i++) {
+					decimal principal = iPrincipal;
 
-				if (i <= interestOnlyRepayments)
-					principal = 0;
-				else if (i == interestOnlyRepayments + 1)
-					principal = iFirstPrincipal;
+					if (i <= interestOnlyRepayments)
+						principal = 0;
+					else if (i == interestOnlyRepayments + 1)
+						principal = iFirstPrincipal;
 
-				decimal r = Calculator.currentHistory.InterestRate;
-				if (i <= discountCount)
-					r *= (1 + discounts[i - 1]);
+					decimal r = Calculator.currentHistory.InterestRate;
+					if (i <= discountCount)
+						r *= (1 + discounts[i - 1]);
 
-				DateTime plannedDate = Calculator.AddRepaymentIntervals(i-1, Calculator.currentHistory.RepaymentDate, intervalType).Date;
-				DateTime prevScheduleDate = Calculator.PreviousScheduleDate(plannedDate, intervalType);
+					DateTime plannedDate = Calculator.AddRepaymentIntervals(i - 1, Calculator.currentHistory.RepaymentDate, intervalType).Date;
+					DateTime prevScheduleDate = Calculator.PreviousScheduleDate(plannedDate, intervalType);
 
-				NL_LoanSchedules item = new NL_LoanSchedules() {
-					InterestRate = r,
-					PlannedDate = plannedDate.Date,
-					Principal = principal, // intervals' principal
-					LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
-					Position = i,
-					Balance = balance, //local open principal, scheduled
-					Interest = Calculator.InterestBtwnDates(plannedDate, prevScheduleDate, balance)
-				};
+					NL_LoanSchedules item = new NL_LoanSchedules() {
+						InterestRate = r,
+						PlannedDate = plannedDate.Date,
+						Principal = principal, // intervals' principal
+						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
+						Position = i,
+						Balance = balance, //local open principal, scheduled
+						Interest = Calculator.InterestBtwnDates(plannedDate, prevScheduleDate, balance)
+					};
 
-				balance -= principal;
+					balance -= principal;
 
-				Calculator.schedule.Add(item);
+					Calculator.schedule.Add(item);
 
-				Calculator.currentHistory.Schedule.Add(item);
-			} // for
-
+					Calculator.currentHistory.Schedule.Add(item);
+				} // for
+			}
 		}
 
 		/// <summary>

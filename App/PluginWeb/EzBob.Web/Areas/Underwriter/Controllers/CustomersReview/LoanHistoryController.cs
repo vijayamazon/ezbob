@@ -101,22 +101,57 @@
 
 		[Ajax]
 		[Transactional]
-		public void RemoveRollover(int rolloverId) {
-			var rollover = _rolloverRepository.GetById(rolloverId);
+		public void RemoveRollover(int rolloverId, long nlRolloverID = 0) {
+			var rollover = this._rolloverRepository.GetById(rolloverId);
 			rollover.Status = RolloverStatus.Removed;
-			_rolloverRepository.Update(rollover);
+			this._rolloverRepository.Update(rollover);
 
-			//TODO remove rollover from new rollover table
-			Log.InfoFormat("remove rollover from new rollover table rollover id {0}", rolloverId);
+			try {
+
+				int loanID = rollover.LoanSchedule.Loan.Id;
+				int customerID = rollover.LoanSchedule.Loan.Customer.Id;
+
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loanID, customerID, this._context.UserId).Value;
+
+				if (nlLoanId > 0) {
+
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(customerID, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
+
+					NL_LoanRollovers nlRollover = null;
+
+					if (nlRolloverID > 0) {
+						nlRollover = nlModel.Loan.Rollovers.FirstOrDefault(r => r.LoanRolloverID == nlRolloverID);
+					}
+
+					// TEMPORARY UNTILL "old" WILL BE RAPLACED BY NL rollover
+					DateTime oexpireTime = rollover.ExpiryDate.HasValue ? rollover.ExpiryDate.Value : DateTime.MinValue;
+					nlRollover = nlModel.Loan.Rollovers.FirstOrDefault(r => r.CreationTime.Date == rollover.Created.Date && r.ExpirationTime.Date == oexpireTime.Date);
+
+					if (nlRollover == null) {
+						string message = string.Format("remove rollover: rollover record for loan {0}/nl {1} not found", loanID, nlModel.Loan.LoanID);
+						Log.InfoFormat(message);
+						return;
+					}
+
+					nlRollover.DeletedByUserID = this._context.UserId;
+					nlRollover.DeletionTime = DateTime.UtcNow;
+
+					this.m_oServiceClient.Instance.SaveRollover(this._context.UserId, customerID, nlRollover, nlLoanId);
+				}
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public void AddRollover(int scheduleId, string experiedDate, bool isEditCurrent, decimal payment, int? rolloverId, int mounthCount) {
+		public void AddRollover(int scheduleId, string experiedDate, bool isEditCurrent, decimal payment, int? rolloverId, int mounthCount, long nlRolloverID = 0) {
 			var expDate = FormattingUtils.ParseDateWithoutTime(experiedDate);
-			var currentLoanSchedule = _loanScheduleRepository.GetById(scheduleId);
-			var rolloverModel = isEditCurrent && rolloverId.HasValue ? _rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
+			var currentLoanSchedule = this._loanScheduleRepository.GetById(scheduleId);
+			var rolloverModel = isEditCurrent && rolloverId.HasValue ? this._rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
 			var customer = currentLoanSchedule.Loan.Customer;
 
 			if (expDate <= DateTime.UtcNow) {
@@ -130,31 +165,62 @@
 				if (rolloverModel == null)
 					throw new Exception("Loan schedule #{0} not found for editing");
 			} else {
-				var rollovers = _rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
+				var rollovers = this._rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
 				if (rollovers.Any(rollover => rollover.Status == RolloverStatus.New && rollover.ExpiryDate > DateTime.UtcNow)) {
 					throw new Exception("The loan has an unpaid rollover. Please close unpaid rollover and try again");
 				}
 			}
 
+
+			DateTime ocreateTime = rolloverModel.Created.Date;
+			DateTime oexpireTime = rolloverModel.ExpiryDate.HasValue ? rolloverModel.ExpiryDate.Value : DateTime.MinValue;
+
 			rolloverModel.MounthCount = mounthCount;
 			rolloverModel.ExpiryDate = expDate;
 			rolloverModel.LoanSchedule = currentLoanSchedule;
-			rolloverModel.CreatorName = _context.User.Name;
+			rolloverModel.CreatorName = this._context.User.Name;
 			rolloverModel.Created = DateTime.Now;
 			rolloverModel.Payment = CurrentValues.Instance.RolloverCharge;
 			rolloverModel.Status = RolloverStatus.New;
-			_rolloverRepository.SaveOrUpdate(rolloverModel);
+			this._rolloverRepository.SaveOrUpdate(rolloverModel);
 
+			try {
 
-			//TODO add rollover to new rollover table
-			Log.InfoFormat("add rollover to new rollover table schedule id {0}", scheduleId);
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(currentLoanSchedule.Loan.Id, customer.Id, this._context.UserId).Value;
 
-			//long nlLoanID = m_oServiceClient.Instance
+				if (nlLoanId > 0) {
 
-			//  + GetRollover
-			//NL_LoanRollovers nlRollover = new NL_LoanRollovers() {CreatedByUserID = _context.UserId, CreationTime = DateTime.Now, ExpirationTime =  expDate, LoanHistoryID = 
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(customer.Id, nlLoanId, rolloverModel.Created, this._context.UserId, false).Value;
 
-			m_oServiceClient.Instance.EmailRolloverAdded(_context.UserId, customer.Id, payment);
+					NL_LoanRollovers nlRollover = null;
+
+					if (nlRolloverID > 0) {
+						nlRollover = nlModel.Loan.Rollovers.FirstOrDefault(r => r.LoanRolloverID == nlRolloverID);
+					}
+
+					// TEMPORARY UNTILL "old" WILL BE RAPLACED BY NL rollover
+					if (isEditCurrent && rolloverId > 0) {
+						nlRollover = nlModel.Loan.Rollovers.FirstOrDefault(r => r.CreationTime.Date == ocreateTime && r.ExpirationTime.Date == oexpireTime.Date);
+					}
+
+					if (nlRollover == null) {
+						nlRollover = new NL_LoanRollovers();
+						nlRollover.LoanHistoryID = nlModel.Loan.LastHistory().LoanHistoryID;
+					}
+
+					nlRollover.CreatedByUserID = this._context.UserId;
+					nlRollover.CreationTime = rolloverModel.Created;
+					nlRollover.ExpirationTime = (DateTime)rolloverModel.ExpiryDate;
+
+					this.m_oServiceClient.Instance.SaveRollover(this._context.UserId, customer.Id, nlRollover, nlLoanId);
+				}
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
+
+			this.m_oServiceClient.Instance.EmailRolloverAdded(this._context.UserId, customer.Id, payment);
 		}
 
 		[Ajax]
@@ -266,7 +332,7 @@
 				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this._context.UserId).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, paymentDate, this._context.UserId, true).Value;
-					Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
+					Log.InfoFormat("<<< NL_Compare: {0}\n================= loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -296,13 +362,21 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetRolloverInfo(int loanId, bool isEdit) {
-			var loan = _loanRepository.Get(loanId);
-			var rollover = _rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
+			var loan = this._loanRepository.Get(loanId);
+			var rollover = this._rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
-			try {
+			var rolloverCharge = CurrentValues.Instance.RolloverCharge;
 
+			var model = new {
+				rolloverAmount = state.Fees + state.Interest + (!isEdit ? rolloverCharge : 0),
+				interest = state.Interest,
+				lateCharge = state.Fees - (isEdit && state.Fees != 0 ? rolloverCharge : 0),
+				mounthAmount = rollover != null ? rollover.MounthCount : 1
+			};
+
+			try {
 				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this._context.UserId).Value;
 				if (nlLoanId > 0) {
 					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, true).Value;
@@ -312,17 +386,6 @@
 			} catch (Exception ex) {
 				Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
-
-			var rolloverCharge = CurrentValues.Instance.RolloverCharge;
-
-			// TODO FOR NL: newcalc.Interest - interest at rollover info t'; calc.Fees - "lateCharge" == late fees at t'; rolloverCharge as now (from conf. variables)
-
-			var model = new {
-				rolloverAmount = state.Fees + state.Interest + (!isEdit ? rolloverCharge : 0),
-				interest = state.Interest,
-				lateCharge = state.Fees - (isEdit && state.Fees != 0 ? rolloverCharge : 0),
-				mounthAmount = rollover != null ? rollover.MounthCount : 1
-			};
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
