@@ -5,7 +5,6 @@
     using EzBobCommon.NSB;
     using EzBobRest.Init;
     using EzBobRest.Properties;
-    using EzBobRest.Validators;
     using log4net;
     using Microsoft.Owin.Security.OAuth;
     using StructureMap.Configuration.DSL;
@@ -20,6 +19,10 @@
                 scan.TheCallingAssembly();
                 scan.WithDefaultConventions();
             });
+
+            //!!!!
+            //There are different classes that you will not see here registered in container
+            //The objects of these classes are automatically created by container on request
 
             For<ILog>()
                 .Add(ctx => LogManager.GetLogger(ctx.ParentType));
@@ -67,18 +70,6 @@
 
             For<OAuthAuthorizationServerProvider>()
                 .Use<EzBobOAuth2AuthorizationProvider>();
-
-//            For<INancyBootstrapper>()
-//                .Use<NancyBootstrapper>();
-
-            For<CustomerSignupValidator>()
-                .Use<CustomerSignupValidator>();
-
-            For<CompanyUpdateValidator>()
-                .Use<CompanyUpdateValidator>();
-
-            For<CustomerBySmsVerificationValidator>()
-                .Use<CustomerBySmsVerificationValidator>();
         }
     }
 }
