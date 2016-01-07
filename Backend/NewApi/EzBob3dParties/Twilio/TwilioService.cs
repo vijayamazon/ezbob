@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBob3dParties.Twilio
+﻿namespace EzBob3dParties.Twilio
 {
+    using System.Threading.Tasks;
+    using Common.Logging;
     using EzBobCommon;
-    using EzBobModels.ThirdParties.Twilio;
     using global::Twilio;
-    using log4net;
 
     /// <summary>
     /// Uses Twilo rest client to send sms

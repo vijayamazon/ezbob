@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobService.Mobile {
+﻿namespace EzBobService.Mobile {
+    using System;
     using System.Globalization;
+    using System.Threading.Tasks;
+    using Common.Logging;
     using EzBob3dPartiesApi.Twilio;
     using EzBobCommon;
     using EzBobModels.MobilePhone;
-    using EzBobModels.ThirdParties.Twilio;
     using EzBobPersistence.MobilePhone;
     using EzBobService.ThirdParties;
     using EzBobService.ThirdParties.Twilio;
-    using log4net;
 
     /// <summary>
     /// Holds methods responsible for 

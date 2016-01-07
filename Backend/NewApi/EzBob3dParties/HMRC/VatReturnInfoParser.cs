@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBob3dParties.HMRC
+﻿namespace EzBob3dParties.HMRC
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using Common.Logging;
     using EzBobCommon;
-    using EzBobCommon.Currencies;
     using HtmlAgilityPack;
-    using log4net;
 
+    /// <summary>
+    /// Parsers VAT return info
+    /// </summary>
     public class VatReturnInfoParser
     {
         private static readonly CultureInfo Culture = new CultureInfo("en-GB", false);

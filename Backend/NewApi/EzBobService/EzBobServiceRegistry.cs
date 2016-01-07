@@ -1,8 +1,8 @@
 ﻿namespace EzBobService {
     using System.IO;
     using System.Text;
+    using Common.Logging;
     using EzBobCommon.Configuration;
-    using EzBobCommon.Currencies;
     using EzBobCommon.NSB;
     using EzBobPersistence;
     using EzBobPersistence.Alibaba;
@@ -18,7 +18,6 @@
     using EzBobService.Misc;
     using EzBobService.Mobile;
     using EzBobService.Properties;
-    using log4net;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
 

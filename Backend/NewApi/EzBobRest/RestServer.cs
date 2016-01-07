@@ -1,8 +1,8 @@
 ﻿namespace EzBobRest {
     using System.Threading;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobRest.Init;
-    using log4net;
     using Microsoft.Owin.Hosting;
 
     /// <summary>

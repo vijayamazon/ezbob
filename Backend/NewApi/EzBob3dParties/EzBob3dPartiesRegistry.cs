@@ -1,13 +1,14 @@
 ﻿namespace EzBob3dParties {
     using System.IO;
     using System.Text;
+    using Common.Logging;
     using EzBob3dParties.EBay;
     using EzBob3dParties.HMRC;
     using EzBob3dParties.Properties;
     using EzBob3dParties.Yodlee;
     using EzBobCommon.Configuration;
+    using EzBobCommon.NSB;
     using EzBobCommon.Web;
-    using log4net;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
 
@@ -29,6 +30,9 @@
 
             For<IEzBobWebBrowser>()
                 .Use<EzBobWebBrowser>();
+
+            ForSingletonOf<IHandlersProvider>()
+              .Use<HandlersProvider>();
 
             InitYodleeRelated();
 

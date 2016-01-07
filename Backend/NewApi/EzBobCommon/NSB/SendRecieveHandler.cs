@@ -1,6 +1,6 @@
 ﻿namespace EzBobCommon.NSB {
     using System;
-    using log4net;
+    using Common.Logging;
     using NServiceBus;
 
     /// <summary>

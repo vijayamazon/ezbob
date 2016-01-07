@@ -1,10 +1,10 @@
 ﻿namespace EzBob3dParties.HMRC {
     using System.IO;
     using System.Threading.Tasks;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Web;
     using HtmlAgilityPack;
-    using log4net;
 
     public class LoginDetailsScraper {
 

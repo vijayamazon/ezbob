@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EzBobCommon.NSB {
     using System.Threading;
-    using log4net;
+    using Common.Logging;
     using NServiceBus;
 
     /// <summary>

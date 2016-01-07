@@ -1,11 +1,11 @@
 ﻿namespace EzBobRest {
     using System.IO;
     using System.Text;
+    using Common.Logging;
     using EzBobCommon.Configuration;
     using EzBobCommon.NSB;
     using EzBobRest.Init;
     using EzBobRest.Properties;
-    using log4net;
     using Microsoft.Owin.Security.OAuth;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;

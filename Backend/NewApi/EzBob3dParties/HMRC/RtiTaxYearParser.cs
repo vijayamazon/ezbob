@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace EzBob3dParties.HMRC {
     using System.IO;
     using System.Text.RegularExpressions;
+    using Common.Logging;
     using EzBobCommon;
     using HtmlAgilityPack;
-    using log4net;
 
     public class RtiTaxYearParser {
         private static readonly string OneMonthPattern = @"(\d+)[^ ]+ (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)";

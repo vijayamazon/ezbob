@@ -3,7 +3,7 @@ namespace EzBobCommon.NSB {
     using System.Collections.Generic;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
-    using log4net;
+    using Common.Logging;
     using NServiceBus;
     using NServiceBus.Faults;
 

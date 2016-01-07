@@ -3,11 +3,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Web;
     using HtmlAgilityPack;
-    using log4net;
 
+    /// <summary>
+    /// Fetches VAT returns info
+    /// </summary>
     public class VatReturnsInfoFetcher {
         [Injected]
         public ILog Log { get; set; }

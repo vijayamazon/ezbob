@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobCommon.Configuration {
+﻿namespace EzBobCommon.Configuration {
+    using System;
     using System.IO;
-    using log4net;
+    using System.Linq;
+    using Common.Logging;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 

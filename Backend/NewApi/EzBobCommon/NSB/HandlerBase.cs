@@ -4,7 +4,7 @@ namespace EzBobCommon.NSB {
     using System.Reflection;
     using System.Runtime.Caching;
     using System.Text;
-    using log4net;
+    using Common.Logging;
     using Newtonsoft.Json;
     using NServiceBus;
     using NServiceBus.Faults;

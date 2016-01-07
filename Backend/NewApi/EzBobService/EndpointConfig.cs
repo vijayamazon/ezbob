@@ -1,12 +1,7 @@
 
 namespace EzBobService {
     using System.Diagnostics;
-    using log4net.Appender;
-    using log4net.Config;
-    using log4net.Core;
-    using log4net.Layout;
     using NServiceBus;
-    using NServiceBus.Log4Net;
     using NServiceBus.Logging;
     using NServiceBus.Persistence.Legacy;
     using StructureMap;
@@ -44,20 +39,22 @@ namespace EzBobService {
 
         private void InitLogging() {
 
-            LogManager.Use<Log4NetFactory>();
+            LogManager.Use<CommonLoggingFactory>();
 
-            PatternLayout layout = new PatternLayout {
-                ConversionPattern = "%d [%t] %-5p %c [%x] - %m%n"
-            };
-            layout.ActivateOptions();
-            ConsoleAppender consoleAppender = new ConsoleAppender {
-                Threshold = Level.Debug,
-                Layout = layout
-            };
-            // Note that ActivateOptions is required in NSB 5 and above
-            consoleAppender.ActivateOptions();
-
-            BasicConfigurator.Configure(consoleAppender);
+//            LogManager.Use<Log4NetFactory>();
+//
+//            PatternLayout layout = new PatternLayout {
+//                ConversionPattern = "%d [%t] %-5p %c [%x] - %m%n"
+//            };
+//            layout.ActivateOptions();
+//            ConsoleAppender consoleAppender = new ConsoleAppender {
+//                Threshold = Level.Debug,
+//                Layout = layout
+//            };
+//            // Note that ActivateOptions is required in NSB 5 and above
+//            consoleAppender.ActivateOptions();
+//
+//            BasicConfigurator.Configure(consoleAppender);
 
         }
     }

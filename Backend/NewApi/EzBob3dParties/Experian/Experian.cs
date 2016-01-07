@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBob3dParties.Experian {
+﻿namespace EzBob3dParties.Experian {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
-    using System.Net.Http.Headers;
+    using System.Text;
     using System.Web;
     using System.Xml.Linq;
-    using System.Xml.Serialization;
+    using Common.Logging;
+    using EzBob3dParties.Experian.Targeting;
     using EzBobCommon;
     using EzBobModels.ThirdParties.Experian;
-    using log4net;
 
     public class Experian : IExperian {
         private static readonly string ExperianESeriesUrl = "http://192.168.100.2:8888/e-series/Controller";
@@ -33,7 +30,7 @@ namespace EzBob3dParties.Experian {
             ResultInfoAccomulator<IEnumerable<Experian3dPartyCompanyInfo>> info = new ResultInfoAccomulator<IEnumerable<Experian3dPartyCompanyInfo>>();
 
             companyName = HttpUtility.HtmlEncode(companyName);
-            var xml = new Targeting.TargetingRequest(companyName, postCode, regNum, isLimited).TransformText();
+            var xml = new TargetingRequest(companyName, postCode, regNum, isLimited).TransformText();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ExperianESeriesUrl);
             request.Method = "POST";

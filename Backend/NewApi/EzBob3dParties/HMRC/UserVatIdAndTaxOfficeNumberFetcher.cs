@@ -2,11 +2,14 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Web;
     using HtmlAgilityPack;
-    using log4net;
 
+    /// <summary>
+    /// fetches user vat id and tax office number
+    /// </summary>
     public class UserVatIdAndTaxOfficeNumberFetcher {
         private static readonly string Href = "href";
 

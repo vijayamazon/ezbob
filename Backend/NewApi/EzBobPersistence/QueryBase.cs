@@ -8,10 +8,10 @@
     using System.Reflection;
     using System.Text;
     using System.Transactions;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Utils;
     using EzBobPersistence.QueryGenerators;
-    using log4net;
     using Microsoft.Practices.EnterpriseLibrary.Data;
     using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 

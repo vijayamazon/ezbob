@@ -1,18 +1,15 @@
 ﻿namespace EzBobRest.Modules {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Common.Logging;
     using EzBobApi.Commands.Customer;
     using EzBobCommon;
-    using EzBobCommon.NSB;
-    using EzBobCommon.Utils;
     using EzBobRest.NSB;
     using EzBobRest.ResponseHelpers;
     using EzBobRest.Validators;
     using FluentValidation.Results;
-    using log4net;
     using Nancy;
     using Nancy.ModelBinding;
     using Newtonsoft.Json.Linq;

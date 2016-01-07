@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBob3dParties.HMRC {
-    using System.IO;
+﻿namespace EzBob3dParties.HMRC {
+    using System;
+    using System.Collections.Generic;
     using System.Net.Http;
+    using System.Threading.Tasks;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Utils.Encryption;
     using EzBobCommon.Web;
     using HtmlAgilityPack;
-    using log4net;
 
     public class HmrcService : IHmrcService {
         private static readonly string Href = "href";

@@ -2,10 +2,10 @@
 {
     using System;
     using System.Globalization;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Currencies;
     using EzBobPersistence.Currency;
-    using log4net;
 
     public class CurrencyConverter : ICurrencyConverter {
         private static readonly RegionInfo UkRegion = new RegionInfo(new CultureInfo("en-GB").LCID);

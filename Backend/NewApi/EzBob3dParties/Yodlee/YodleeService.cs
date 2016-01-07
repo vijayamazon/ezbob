@@ -1,18 +1,20 @@
 ﻿namespace EzBob3dParties.Yodlee {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Common.Logging;
     using EzBob3dParties.Yodlee.Models;
     using EzBob3dParties.Yodlee.Models.SiteAccount;
     using EzBob3dParties.Yodlee.RequestResponse;
     using EzBobCommon;
     using EzBobCommon.Utils;
     using EzBobCommon.Web;
-    using log4net;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// The Yodlee service
+    /// </summary>
     public class YodleeService {
 
         [Injected]

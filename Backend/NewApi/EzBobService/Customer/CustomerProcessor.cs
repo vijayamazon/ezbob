@@ -1,7 +1,7 @@
 ﻿namespace EzBobService.Customer {
     using System;
-    using System.Collections.Generic;
     using System.Text.RegularExpressions;
+    using Common.Logging;
     using EzBobCommon;
     using EzBobCommon.Utils;
     using EzBobModels;
@@ -12,7 +12,6 @@
     using EzBobPersistence.Customer;
     using EzBobPersistence.Loan;
     using EzBobService.Misc;
-    using log4net;
 
     /// <summary>
     /// encapsulates customer sign-up procedure
