@@ -20,28 +20,22 @@
     var userId = 0;
     var userEmail = "";
 
-    try
-    {
+    try {
         var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 
-        if (context != null && context.User != null)
-        {
+        if (context != null && context.User != null) {
             var user = context.User;
-            if (user != null)
-            {
+            if (user != null) {
                 userName = user.FullName ?? user.Name;
                 userId = user.Id;
                 userEmail = user.EMail;
 
 	            var roles = context.UserRoles;
 
-                if (roles.Any(r => r == "manager"))
-                {
+                if (roles.Any(r => r == "manager")) {
                     sRoleImageUrl = "manager.png";
                     sRoleImageTitle = "Manager";
-                }
-                else if (roles.Any(r => r == "Underwriter"))
-                {
+                } else if (roles.Any(r => r == "Underwriter")) {
                     sRoleImageUrl = "underwriter.png";
                     sRoleImageTitle = "Underwriter";
                 }
@@ -49,10 +43,9 @@
 	            sRoleImageTitle = roles.Last();
             }
         }
-    }
-    catch (Exception e)
-    {
-
+    } catch (Exception e) {
+		<div class="hide exception-while-fetching-user-roles">@e.Message</div>
+		<script>console.error($('.exception-while-fetching-user-roles').text());</script>
     }
 
     sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
