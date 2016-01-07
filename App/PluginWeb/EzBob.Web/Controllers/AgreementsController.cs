@@ -67,7 +67,7 @@
 
         private string GenerateFileName(LoanAgreement agreement)
         {
-            return _context.User.Roles.Any(r => r.Name == "Underwriter") ? agreement.LongFilename() : agreement.ShortFilename();
+            return _context.UserRoles.Any(r => r == "Underwriter") ? agreement.LongFilename() : agreement.ShortFilename();
         }
     }
 }

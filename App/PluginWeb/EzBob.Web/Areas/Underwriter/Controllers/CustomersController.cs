@@ -35,7 +35,7 @@
 
 		public ViewResult Index() {
 			var grids = new LoansGrids {
-				IsEscalated = this.context.User.Roles.Any(r => r.Name == "manager"),
+				IsEscalated = this.context.UserRoles.Any(r => r == "manager"),
 				MpTypes = this.mpType.GetAll().ToList(),
 				CollectionStatuses = this.customerStatusesRepo.GetVisible().ToList(),
 				MaxLoan = this.loanLimit.GetMaxLimit(),

@@ -5,7 +5,7 @@
 		public AvailableFundsActionResult GetAvailableFunds(int underwriterId)
 		{
 			GetAvailableFunds instance;
-			ActionMetaData result = ExecuteSync(out instance, 0, underwriterId);
+			ActionMetaData result = ExecuteSync(out instance, null, underwriterId > 0 ? underwriterId : (int?)null);
 
 			return new AvailableFundsActionResult
 			{

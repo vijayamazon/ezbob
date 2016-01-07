@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Web;
 	// using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
@@ -102,8 +103,30 @@
 		} // RemoveSessionOrigin
 
 		public int UserId {
-			get { return User.Id; }
+			get { return User == null ? 0 : User.Id; }
 		} // UserId
+
+		public SortedSet<Permission> UserPermissions {
+			get {
+				User user = User;
+
+				if (user == null)
+					return new SortedSet<Permission>();
+
+				return new SortedSet<Permission>(user.Permissions);
+			} // get
+		} // UserPermissions
+
+		public SortedSet<string> UserRoles {
+			get {
+				User user = User;
+
+				if (user == null)
+					return new SortedSet<string>();
+
+				return new SortedSet<string>(user.Roles.Select(r => r.Name));
+			} // get
+		} // UserRoles
 
 		public string SessionId {
 			get {

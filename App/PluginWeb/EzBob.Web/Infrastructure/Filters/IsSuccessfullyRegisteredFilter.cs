@@ -23,8 +23,8 @@
 				} // if
 			} // if
 
-			var isUnderwriter = (workplaceContext.User != null) && workplaceContext.User.Roles.Any(
-				x => x.Name.ToLower() == "crm" || x.Name.ToLower() == "manager" || x.Name.ToLower() == "underwriter"
+			var isUnderwriter = workplaceContext.UserRoles.Any(
+				x => x.ToLower() == "crm" || x.ToLower() == "manager" || x.ToLower() == "underwriter"
 			);
 
 			if (isUnderwriter) {

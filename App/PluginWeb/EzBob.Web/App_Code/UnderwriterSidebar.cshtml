@@ -33,19 +33,20 @@
                 userId = user.Id;
                 userEmail = user.EMail;
 
+	            var roles = context.UserRoles;
 
-                if (user.Roles.Any(r => r.Name == "manager"))
+                if (roles.Any(r => r == "manager"))
                 {
                     sRoleImageUrl = "manager.png";
                     sRoleImageTitle = "Manager";
                 }
-                else if (user.Roles.Any(r => r.Name == "Underwriter"))
+                else if (roles.Any(r => r == "Underwriter"))
                 {
                     sRoleImageUrl = "underwriter.png";
                     sRoleImageTitle = "Underwriter";
                 }
 
-                sRoleImageTitle = user.Roles.Last().Name;
+	            sRoleImageTitle = roles.Last();
             }
         }
     }

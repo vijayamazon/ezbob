@@ -32,8 +32,8 @@
 
         if (context != null && context.User != null)
         {
-            string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
-            string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
+            string sPermissions = context.UserPermissions.Count < 1 ? "" : string.Join(" ", context.UserPermissions.Select(p => "permission-" + p.Name));
+            string sRoles = context.UserRoles.Count < 1 ? "" : string.Join(" ", context.UserRoles);
             sBodyClasses = sRoles + " " + sPermissions;
         }
     }
