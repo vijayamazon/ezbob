@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
+	using System;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
 
 	public class BrokerUpdateEmail : AStrategy {
-		public BrokerUpdateEmail(int brokerID, string newEmail) {
+		public BrokerUpdateEmail(int changedByUserID, int brokerID, string newEmail) {
+			this.changedByUserID = changedByUserID;
 			this.brokerID = brokerID;
 			this.newEmail = newEmail;
 			Result = string.Empty;
@@ -25,8 +27,10 @@
 				Result = DB.ExecuteScalar<string>(
 					"BrokerUpdateEmail",
 					CommandSpecies.StoredProcedure,
+					new QueryParameter("ChangedByUserID", this.changedByUserID),
 					new QueryParameter("BrokerID", this.brokerID),
-					new QueryParameter("NewEmail", this.newEmail)
+					new QueryParameter("NewEmail", this.newEmail),
+					new QueryParameter("Now", DateTime.UtcNow)
 				);
 			} // if
 
@@ -41,6 +45,7 @@
 			);
 		} // Execute
 
+		private readonly int changedByUserID;
 		private readonly int brokerID;
 		private readonly string newEmail;
 	} // class BrokerUpdateEmail

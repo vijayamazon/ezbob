@@ -6,15 +6,26 @@ IF OBJECT_ID('BrokerUpdateEmail') IS NULL
 GO
 
 ALTER PROCEDURE BrokerUpdateEmail
+@ChangedByUserID INT,
 @BrokerID INT,
-@NewEmail NVARCHAR(255)
+@NewEmail NVARCHAR(255),
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 
-	DECLARE @OriginID INT = (SELECT OriginID FROM Broker WHERE BrokerID = @BrokerID)
+	DECLARE @OriginID INT
+	DECLARE @OldEmail NVARCHAR(250)
+	
+	SELECT
+		@OriginID = OriginID,
+		@OldEmail = ContactEmail
+	FROM
+		Broker
+	WHERE
+		BrokerID = @BrokerID
 
 	IF @OriginID IS NULL OR @OriginID < 0
 		SET @ErrMsg = 'Failed to find broker by id ' + @BrokerID
@@ -40,6 +51,9 @@ BEGIN
 				ContactEmail = @NewEmail
 			WHERE
 				BrokerID = @BrokerID
+
+			INSERT INTO UserEmailHistory (EventTime, ChangedByUserID, UserID, OldEmail, NewEmail)
+				VALUES (@Now, @ChangedByUserID, @BrokerID, @OldEmail, @NewEmail)
 
 			SET @ErrMsg = ''
 

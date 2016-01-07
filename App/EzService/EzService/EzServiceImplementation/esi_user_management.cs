@@ -95,6 +95,7 @@
 					out uceInstance,
 					customerID,
 					userID,
+					userID,
 					customerID,
 					string.Format("{0}frozen", email)
 				);
@@ -163,7 +164,7 @@
 		public StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {
 			UserChangeEmail oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, nUserID, sNewEmail);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, underwriterId, nUserID, sNewEmail);
 
 			return new StringActionResult {
 				MetaData = oMetaData,

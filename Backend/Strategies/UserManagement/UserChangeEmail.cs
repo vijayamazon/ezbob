@@ -14,12 +14,13 @@
 	using StructureMap;
 
 	public class UserChangeEmail : ASignupLoginBaseStrategy {
-		public UserChangeEmail(int nUserID, string sNewEmail) {
+		public UserChangeEmail(int changedByUserID, int nUserID, string sNewEmail) {
 			ErrorMessage = null;
 
 			sNewEmail = NormalizeUserName(sNewEmail);
 
 			this.spUpdate = new SpUserChangeEmail(DB, Log) {
+				ChangedByUserID = changedByUserID,
 				Email = sNewEmail,
 				UserID = nUserID,
 			};
@@ -92,8 +93,10 @@
 			} // constructor
 
 			public override bool HasValidParameters() {
-				return (UserID > 0) && !string.IsNullOrWhiteSpace(Email);
+				return (ChangedByUserID > 0) && (UserID > 0) && !string.IsNullOrWhiteSpace(Email);
 			} // HasValidParameters
+
+			public int ChangedByUserID { [UsedImplicitly] get; set; }
 
 			public int UserID { [UsedImplicitly] get; set; }
 

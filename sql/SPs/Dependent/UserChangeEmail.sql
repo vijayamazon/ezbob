@@ -6,6 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UserChangeEmail
+@ChangedByUserID INT,
 @UserID INT,
 @Email NVARCHAR(250),
 @EzPassword VARCHAR(255),
@@ -21,6 +22,7 @@ BEGIN
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @AffectedRows INT = 0
 	DECLARE @OriginID INT
+	DECLARE @OldEmail NVARCHAR(250)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -35,7 +37,8 @@ BEGIN
 	IF @ErrMsg = ''
 	BEGIN
 		SELECT
-			@OriginID = OriginID
+			@OriginID = OriginID,
+			@OldEmail = Name
 		FROM
 			Customer
 		WHERE
@@ -133,6 +136,22 @@ BEGIN
 			SET @ErrMsg = 'Too many rows updated.'
 			ROLLBACK TRAN
 		END
+	END
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	IF @ErrMsg = ''
+	BEGIN
+		BEGIN TRY
+			INSERT INTO UserEmailHistory (EventTime, ChangedByUserID, UserID, OldEmail, NewEmail)
+				VALUES (@Now, @ChangedByUserID, @UserID, @OldEmail, @Email)
+		END TRY
+		BEGIN CATCH
+			SET @ErrMsg = 'Failed to save email change history.'
+			ROLLBACK TRAN
+		END CATCH
 	END
 
 	------------------------------------------------------------------------------
