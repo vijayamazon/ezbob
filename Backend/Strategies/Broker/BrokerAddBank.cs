@@ -38,16 +38,16 @@
 				var sp = new FindBrokerID(this.model, DB, Log);
 				sp.ExecuteNonQuery();
 
-				if (sp.BrokerID == null) {
+				if (sp.BrokerID <= 0) {
 					Log.Alert("BrokerAddBank broker id not found by email {0}", this.model.BrokerEmail);
 					throw new StrategyWarning(this, "Failed adding bank account");
 				} // if
 
 				var brokerRepository = ObjectFactory.GetInstance<BrokerRepository>();
-				broker = brokerRepository.GetByID(sp.BrokerID.Value);
+				broker = brokerRepository.GetByID(sp.BrokerID);
 
 				if (broker == null) {
-					Log.Alert("BrokerAddBank broker not found by id {0}", sp.BrokerID.Value);
+					Log.Alert("BrokerAddBank broker not found by id {0}", sp.BrokerID);
 					throw new StrategyWarning(this, "Failed adding bank account");
 				} // if
 
@@ -92,7 +92,7 @@
 			public FindBrokerID(BrokerAddBankModel model, AConnection db, ASafeLog log) : base(db, log) {
 				ContactEmail = model.BrokerEmail;
 				Origin = (int)model.Origin;
-				BrokerID = null;
+				BrokerID = 0;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -104,7 +104,7 @@
 			public int Origin { get; set; }
 
 			[Direction(ParameterDirection.Output)]
-			public int? BrokerID { get; set; }
+			public int BrokerID { get; set; }
 		} // class FindBrokerID
 
 		private readonly BrokerAddBankModel model;
