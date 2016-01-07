@@ -198,6 +198,7 @@
     <Compile Include="Misc\AddHistoryDirector.cs" />
     <Compile Include="Misc\LoadMessagesSentToUser.cs" />
     <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
+    <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="Tasks\Annual77ANotifier.cs" />
     <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
