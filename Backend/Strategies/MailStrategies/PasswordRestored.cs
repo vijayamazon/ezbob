@@ -36,33 +36,7 @@
 				{"FirstName", string.IsNullOrWhiteSpace(CustomerData.FirstName) ? Salutation : CustomerData.FirstName}
 			};
 
-			var ecl = new EmailConfirmationLoad(CustomerData.UserID);
-			ecl.Execute();
-
-			if (ecl.IsConfirmed)
-				TemplateName = "Mandrill - EZBOB password was restored";
-			else {
-				int nBrokerID = DB.ExecuteScalar<int>(
-					"BrokerIsBroker",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("ContactEmail", CustomerData.Mail),
-					new QueryParameter("UiOriginID")
-				);
-
-				SendToCustomer = false;
-
-				Variables["UserType"] = (nBrokerID == 0) ? "customer" : "broker";
-
-				Variables["ErrMsg"] = ecl.ErrorMessage;
-
-				Variables["UserID"] = CustomerData.Id.ToString(CultureInfo.InvariantCulture);
-
-				Variables["ProfileLink"] = (nBrokerID == 0)
-					? UnderwriterSite + "/Underwriter/Customers#profile/" + CustomerData.Id
-					: UnderwriterSite + "/Underwriter/Customers#broker/" + nBrokerID;
-
-				TemplateName = "Mandrill - password restored - to staff";
-			} // if
+			TemplateName = "Mandrill - EZBOB password was restored";
 		} // SetTemplateAndVariables
 
 		protected virtual string Salutation {

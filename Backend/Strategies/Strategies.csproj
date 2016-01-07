@@ -390,7 +390,6 @@
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />
-    <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationLoad.cs" />
     <Compile Include="UserManagement\GetCustomerSecurityQuestion.cs" />
     <Compile Include="UserManagement\LoadAllLoginRoles.cs" />
     <Compile Include="UserManagement\LoginCustomerMutliOrigin.cs" />
