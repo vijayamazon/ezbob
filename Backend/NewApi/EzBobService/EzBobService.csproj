@@ -98,13 +98,15 @@
     <Compile Include="Currency\CurrencyConverter.cs" />
     <Compile Include="Currency\ICurrencyConverter.cs" />
     <Compile Include="Customer\CustomerProcessor.cs" />
+    <Compile Include="Customer\CustomerVerificationCodelValidationHandler.cs" />
+    <Compile Include="Customer\CustomerVerificationSmsHandler.cs" />
     <Compile Include="Customer\SignupCustomerHandler.cs" />
     <Compile Include="Customer\UpdateCustomerHandler.cs" />
     <Compile Include="DependencyResolution\CommandHandlerConvention.cs" />
     <Compile Include="EndpointConfig.cs" />
     <Compile Include="EzBobServiceRegistry.cs" />
-    <Compile Include="InfoAccomulatorWithPayload.cs" />
     <Compile Include="Misc\RefNumberGenerator.cs" />
+    <Compile Include="Misc\VerificationHelper.cs" />
     <Compile Include="Mobile\Country.cs" />
     <Compile Include="Mobile\CountryName.cs" />
     <Compile Include="Mobile\MobilePhone.cs" />
