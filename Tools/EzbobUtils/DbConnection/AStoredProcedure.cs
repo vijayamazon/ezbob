@@ -9,6 +9,7 @@
 	using Ezbob.Utils;
 	using Ezbob.Logger;
 	using Ezbob.Utils.dbutils;
+	using Ezbob.Utils.ParsedValue;
 
 	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class DirectionAttribute : Attribute {
@@ -409,8 +410,17 @@
 
 				PropertyInfo pi = GetType().GetProperty(prm.ObjectPropertyName);
 
-				if (pi != null)
-					pi.SetValue(this, prm.UnderlyingParameter.Value);
+				if (pi == null)
+					continue;
+
+				object rawValue = null;
+
+				if (prm.UnderlyingParameter != null) {
+					if ((prm.UnderlyingParameter.Value != null) && (prm.UnderlyingParameter.Value != DBNull.Value))
+						rawValue = prm.UnderlyingParameter.Value;
+				} // if
+
+				pi.SetValue(this, new ParsedValue(rawValue).ToType(pi.PropertyType));
 			} // for each parameter
 		} // FillOutputs
 
