@@ -2453,3 +2453,12 @@ input[type="text"].err-field-red {
 	padding-top: 4px;
 	text-align: left;
 }
+
+.medal-box .btn-group li{
+	display: inline;
+}
+
+.medal-box .btn-group li.active .btn {
+	background: linear-gradient(to bottom, #adadad, #6d6d6d);
+	color: #fff;
+}

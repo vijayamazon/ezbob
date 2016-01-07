@@ -12,41 +12,25 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
 		this.bindTo(this.model, "change sync", this.render, this);
 		this.bindTo(this.loanModel, "change sync", this.render, this);
-		this.bindTo(this.medalModel, "change sync", this.render, this);
+		this.bindTo(this.medalModel, "change sync", this.renderMedal, this);
 		this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
 	},
 
 	serializeData: function() {
 		return {
 			m: this.model.toJSON(),
-			loan: this.loanModel.toJSON(),
-			medal: this.medalModel.get('Score'),
+			loan: this.loanModel.toJSON()
 		};
 	},
 
 	events: {
 		'click a.collapseall': "collapseAll",
 		'click #OfferEditBtn': 'editOfferClick',
-		'click #RecalculateMedalBtn': 'recalculateMedalClick'
 	},
 
 	ui: {
 		editOfferDiv: '.editOfferDiv',
 		automationOffer: '.ez-automation-offer'
-	},
-
-	recalculateMedalClick: function() {
-		var that = this;
-		BlockUi();
-
-		$.post(window.gRootPath + 'Underwriter/Medal/RecalculateMedal', {
-			customerId: this.model.id
-		}).always(function() {
-			that.model.fetch();
-			that.medalModel.fetch().always(function() {
-				UnBlockUi();
-			});
-		});
 	},
 
 	editOfferClick: function() {
@@ -154,11 +138,143 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			'placement': 'bottom'
 		});
 
-		var medalHistory = this.medalModel.get('History');
+		var offer = this.loanModel.get('OfferedCreditLine') || 0;
+		EzBob.drawDonut("offer-donut", "#00ab5d", offer / (EzBob.Config.ManagerMaxLoan || 120000), true);
+		var period = this.loanModel.get('RepaymentPeriod') || 0;
+		EzBob.drawDi('period-di', "#00ab5d", period / 12);
+
+		if ($.cookie('editOfferVisible') == "true") {
+			this.ui.editOfferDiv.removeClass('hide');
+			$(".profile-content").css({ "margin-top": this.$el.height() + "px" });
+		}
+		if ($.cookie('collapseAll') == "true") {
+			this.collapseAll();
+		}
+	},
+
+	renderMedal: function () {
+		this.profileHeadMedalView = new EzBob.Underwriter.ProfileHeadMedalView({ el: this.$el.find('#medal-wrapper'), model: this.medalModel });
+		this.profileHeadMedalView.render();
+	},
+	changeDecisionButtonsState: function(isHideAll) {
+		var creditResult = this.personalModel.get('CreditResult');
+		var isWizardComplete = this.personalModel.get('IsWizardComplete');
+
+		if (isHideAll)
+			this.$el.find('#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn').hide();
+
+		this.$el.find('#MainStrategyIsInProgress').toggle(!!(isWizardComplete && (creditResult === '')));
+
+		switch (creditResult) {
+		case '':
+			this.$el.find('#ReturnBtn').hide();
+			this.$el.find('#RejectBtn').hide();
+			this.$el.find('#ApproveBtn').hide();
+			this.$el.find('#SuspendBtn').hide();
+			this.$el.find('#SignatureBtn').hide();
+			this.$el.find('#EscalateBtn').hide();
+			this.$el.find('#newCreditLineButtonId').addClass('disabled');
+			break;
+
+		case 'WaitingForDecision':
+			this.$el.find('#ReturnBtn').hide();
+			this.$el.find('#RejectBtn').show();
+			this.$el.find('#ApproveBtn').show();
+			this.$el.find('#SuspendBtn').show();
+			this.$el.find('#SignatureBtn').show();
+			this.$el.find('#newCreditLineButtonId').addClass('disabled');
+			//if (!escalatedFlag) this.$el.find('#EscalateBtn').show();
+			break;
+
+		case 'Rejected':
+		case 'Approved':
+		case 'Late':
+			this.$el.find('#ReturnBtn').hide();
+			this.$el.find('#RejectBtn').hide();
+			this.$el.find('#ApproveBtn').hide();
+			this.$el.find('#SuspendBtn').hide();
+			this.$el.find('#SignatureBtn').hide();
+			this.$el.find('#EscalateBtn').hide();
+			this.$el.find('#newCreditLineButtonId').removeClass('disabled');
+			break;
+
+		case 'Escalated':
+			this.$el.find('#ReturnBtn').hide();
+			this.$el.find('#RejectBtn').show();
+			this.$el.find('#ApproveBtn').show();
+			this.$el.find('#SuspendBtn').show();
+			this.$el.find('#SignatureBtn').show();
+			this.$el.find('#EscalateBtn').hide();
+			this.$el.find('#newCreditLineButtonId').addClass('disabled');
+			break;
+
+		case 'ApprovedPending':
+			this.$el.find('#ReturnBtn').show();
+			this.$el.find('#RejectBtn').hide();
+			this.$el.find('#ApproveBtn').hide();
+			this.$el.find('#SuspendBtn').hide();
+			this.$el.find('#SignatureBtn').hide();
+			this.$el.find('#EscalateBtn').hide();
+			this.$el.find('#newCreditLineButtonId').addClass('disabled');
+			break;
+		} // switch
+
+		if (this.personalModel.get('UserStatus') === 'Registered') {
+			this.$el.find('#ReturnBtn').hide();
+			this.$el.find('#RejectBtn').hide();
+			this.$el.find('#ApproveBtn').hide();
+			this.$el.find('#SuspendBtn').hide();
+			this.$el.find('#SignatureBtn').hide();
+			this.$el.find('#EscalateBtn').hide();
+		} // if
+
+		if (!this.personalModel.get('IsCustomerInEnabledStatus')) {
+			this.$el.find(
+				'#SuspendBtn, #SignatureBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn, #newCreditLineButtonId'
+			).addClass('disabled');
+		} // if
+	}, // changeDecisionButtonsState
+
+	
+});
+
+EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
+	template: '#profile-head-medal-template',
+
+	initialize: function () {
+		this.bindTo(this.model, "change sync", this.render, this);
+	},
+
+	events: {
+		'click #RecalculateMedalBtn': 'recalculateMedalClick'
+	},
+
+	recalculateMedalClick: function () {
+		var that = this;
+		BlockUi();
+
+		$.post(window.gRootPath + 'Underwriter/Medal/RecalculateMedal', {
+			customerId: this.model.id
+		}).always(function () {
+			that.model.fetch();
+			that.medalModel.fetch().always(function () {
+				UnBlockUi();
+			});
+		});
+	},
+
+	serializeData: function () {
+		return {
+			medal: this.model.get('Score'),
+		};
+	},
+
+	onRender: function () {
+		var medalHistory = this.model.get('History');
 		if (medalHistory) {
 			var histData = [];
 			//var medalLabels = [];
-			_.each(medalHistory.MedalHistories, function(hist, i) {
+			_.each(medalHistory.MedalHistories, function (hist, i) {
 				histData.push([i + 1, hist.Result * 100, hist.Medal, EzBob.formatDate3(hist.Date), hist.MedalType + (hist.Error ? " <span class='red_cell'>*</span>" : "") + "</p>"]);
 			});
 			if (histData.length > 0) {
@@ -262,7 +378,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			});
 
 		}
-		var medal = this.medalModel.get('Score');
+		var medal = this.model.get('Score');
 		if (medal) {
 			var fillColor = 'black';
 			var medalToUse = medal.Medal;
@@ -279,162 +395,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 					fillColor = '#39A3E1'; break;
 			}
 
-			this.drawDonut('medalCanvas', fillColor, resultToUse, false);
+			EzBob.drawDonut('medalCanvas', fillColor, resultToUse, false);
 		}
-
-		var offer = this.loanModel.get('OfferedCreditLine') || 0;
-		this.drawDonut("offer-donut", "#00ab5d", offer / (EzBob.Config.ManagerMaxLoan || 120000), true);
-		var period = this.loanModel.get('RepaymentPeriod') || 0;
-		this.drawDi('period-di', "#00ab5d", period / 12);
-
-		if ($.cookie('editOfferVisible') == "true") {
-			this.ui.editOfferDiv.removeClass('hide');
-			$(".profile-content").css({ "margin-top": this.$el.height() + "px" });
-		}
-		if ($.cookie('collapseAll') == "true") {
-			this.collapseAll();
-		}
-	},
-
-	changeDecisionButtonsState: function(isHideAll) {
-		var creditResult = this.personalModel.get('CreditResult');
-		var isWizardComplete = this.personalModel.get('IsWizardComplete');
-
-		if (isHideAll)
-			this.$el.find('#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn').hide();
-
-		this.$el.find('#MainStrategyIsInProgress').toggle(!!(isWizardComplete && (creditResult === '')));
-
-		switch (creditResult) {
-		case '':
-			this.$el.find('#ReturnBtn').hide();
-			this.$el.find('#RejectBtn').hide();
-			this.$el.find('#ApproveBtn').hide();
-			this.$el.find('#SuspendBtn').hide();
-			this.$el.find('#SignatureBtn').hide();
-			this.$el.find('#EscalateBtn').hide();
-			this.$el.find('#newCreditLineButtonId').addClass('disabled');
-			break;
-
-		case 'WaitingForDecision':
-			this.$el.find('#ReturnBtn').hide();
-			this.$el.find('#RejectBtn').show();
-			this.$el.find('#ApproveBtn').show();
-			this.$el.find('#SuspendBtn').show();
-			this.$el.find('#SignatureBtn').show();
-			this.$el.find('#newCreditLineButtonId').addClass('disabled');
-			//if (!escalatedFlag) this.$el.find('#EscalateBtn').show();
-			break;
-
-		case 'Rejected':
-		case 'Approved':
-		case 'Late':
-			this.$el.find('#ReturnBtn').hide();
-			this.$el.find('#RejectBtn').hide();
-			this.$el.find('#ApproveBtn').hide();
-			this.$el.find('#SuspendBtn').hide();
-			this.$el.find('#SignatureBtn').hide();
-			this.$el.find('#EscalateBtn').hide();
-			this.$el.find('#newCreditLineButtonId').removeClass('disabled');
-			break;
-
-		case 'Escalated':
-			this.$el.find('#ReturnBtn').hide();
-			this.$el.find('#RejectBtn').show();
-			this.$el.find('#ApproveBtn').show();
-			this.$el.find('#SuspendBtn').show();
-			this.$el.find('#SignatureBtn').show();
-			this.$el.find('#EscalateBtn').hide();
-			this.$el.find('#newCreditLineButtonId').addClass('disabled');
-			break;
-
-		case 'ApprovedPending':
-			this.$el.find('#ReturnBtn').show();
-			this.$el.find('#RejectBtn').hide();
-			this.$el.find('#ApproveBtn').hide();
-			this.$el.find('#SuspendBtn').hide();
-			this.$el.find('#SignatureBtn').hide();
-			this.$el.find('#EscalateBtn').hide();
-			this.$el.find('#newCreditLineButtonId').addClass('disabled');
-			break;
-		} // switch
-
-		if (this.personalModel.get('UserStatus') === 'Registered') {
-			this.$el.find('#ReturnBtn').hide();
-			this.$el.find('#RejectBtn').hide();
-			this.$el.find('#ApproveBtn').hide();
-			this.$el.find('#SuspendBtn').hide();
-			this.$el.find('#SignatureBtn').hide();
-			this.$el.find('#EscalateBtn').hide();
-		} // if
-
-		if (!this.personalModel.get('IsCustomerInEnabledStatus')) {
-			this.$el.find(
-				'#SuspendBtn, #SignatureBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn, #newCreditLineButtonId'
-			).addClass('disabled');
-		} // if
-	}, // changeDecisionButtonsState
-
-	drawDonut: function(canvasId, fillColor, fillPercent, isClock) {
-		var canvas = document.getElementById(canvasId);
-		if (!canvas) return false;
-		var context = canvas.getContext('2d');
-		var x = canvas.width / 2;
-		var y = canvas.height / 2;
-		var radius = isClock ? 35 : 40;
-		var startAngle = 1 * Math.PI;
-		var endAngle = (isClock ? 2 : 3) * Math.PI;
-		var lineWidth = isClock ? 25 : 15;
-		var endEngleData = Math.PI * (1 + fillPercent * (isClock ? 1 : 2));
-		context.beginPath();
-		context.arc(x, y, radius, startAngle, endAngle, false);
-		context.lineWidth = lineWidth;
-		context.strokeStyle = '#ebebeb';
-		context.stroke();
-		context.beginPath();
-		context.arc(x, y, radius, startAngle, endEngleData, false);
-		context.strokeStyle = fillColor;
-		context.lineWidth = lineWidth;
-		context.stroke();
-
-		if (isClock) {
-			context.beginPath();
-			context.moveTo(
-                x - (radius + lineWidth / 2) * Math.cos(endEngleData - Math.PI),
-                y - (radius + lineWidth / 2) * Math.sin(endEngleData - Math.PI)
-            );
-			context.lineTo(x, y);
-			context.strokeStyle = '#000000';
-			context.lineWidth = 2;
-			context.stroke();
-			context.beginPath();
-			context.arc(x, y, 5, startAngle, 3 * Math.PI, false);
-			context.lineWidth = 5;
-			context.strokeStyle = '#ebebeb';
-			context.stroke();
-		}
-
-		return true;
-	},
-	drawDi: function(canvasId, fillColor, fillPercent) {
-		var canvas = document.getElementById(canvasId);
-		if (!canvas) return false;
-		var context = canvas.getContext('2d');
-		var x = canvas.width / 2;
-		var y = canvas.height;
-		context.beginPath();
-		context.moveTo(x, y);
-		context.lineTo(x, 0);
-		context.strokeStyle = '#ebebeb';
-		context.lineWidth = 15;
-		context.stroke();
-
-		context.beginPath();
-		context.moveTo(x, y - y * fillPercent);
-		context.lineTo(x, y);
-		context.strokeStyle = fillColor;
-		context.lineWidth = 15;
-		context.stroke();
-		return true;
 	}
 });

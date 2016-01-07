@@ -623,6 +623,69 @@ EzBob.UpdateBugsIcons = function(data) {
 	});
 };
 
+EzBob.drawDonut = function(canvasId, fillColor, fillPercent, isClock) {
+	var canvas = document.getElementById(canvasId);
+	if (!canvas) return false;
+	var context = canvas.getContext('2d');
+	var x = canvas.width / 2;
+	var y = canvas.height / 2;
+	var radius = isClock ? 35 : 40;
+	var startAngle = 1 * Math.PI;
+	var endAngle = (isClock ? 2 : 3) * Math.PI;
+	var lineWidth = isClock ? 25 : 15;
+	var endEngleData = Math.PI * (1 + fillPercent * (isClock ? 1 : 2));
+	context.beginPath();
+	context.arc(x, y, radius, startAngle, endAngle, false);
+	context.lineWidth = lineWidth;
+	context.strokeStyle = '#ebebeb';
+	context.stroke();
+	context.beginPath();
+	context.arc(x, y, radius, startAngle, endEngleData, false);
+	context.strokeStyle = fillColor;
+	context.lineWidth = lineWidth;
+	context.stroke();
+
+	if (isClock) {
+		context.beginPath();
+		context.moveTo(
+			x - (radius + lineWidth / 2) * Math.cos(endEngleData - Math.PI),
+			y - (radius + lineWidth / 2) * Math.sin(endEngleData - Math.PI)
+		);
+		context.lineTo(x, y);
+		context.strokeStyle = '#000000';
+		context.lineWidth = 2;
+		context.stroke();
+		context.beginPath();
+		context.arc(x, y, 5, startAngle, 3 * Math.PI, false);
+		context.lineWidth = 5;
+		context.strokeStyle = '#ebebeb';
+		context.stroke();
+	}
+
+	return true;
+},
+EzBob.drawDi = function(canvasId, fillColor, fillPercent) {
+	var canvas = document.getElementById(canvasId);
+	if (!canvas) return false;
+	var context = canvas.getContext('2d');
+	var x = canvas.width / 2;
+	var y = canvas.height;
+	context.beginPath();
+	context.moveTo(x, y);
+	context.lineTo(x, 0);
+	context.strokeStyle = '#ebebeb';
+	context.lineWidth = 15;
+	context.stroke();
+
+	context.beginPath();
+	context.moveTo(x, y - y * fillPercent);
+	context.lineTo(x, y);
+	context.strokeStyle = fillColor;
+	context.lineWidth = 15;
+	context.stroke();
+	return true;
+}
+
 EzBob.currentServerDate = function() {
 	return moment().utc().add('milliseconds', EzBob.serverOffset || 0);
 };
