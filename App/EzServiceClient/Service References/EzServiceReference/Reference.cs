@@ -237,6 +237,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountingDataResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.TransactionsDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -2021,6 +2022,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.AccountingDataField, value) != true)) {
                     this.AccountingDataField = value;
                     this.RaisePropertyChanged("AccountingData");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TransactionsDataResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class TransactionsDataResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Investor.TransactionsDataModel[] TransactionsDataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Investor.TransactionsDataModel[] TransactionsData {
+            get {
+                return this.TransactionsDataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TransactionsDataField, value) != true)) {
+                    this.TransactionsDataField = value;
+                    this.RaisePropertyChanged("TransactionsData");
                 }
             }
         }
@@ -4408,9 +4432,13 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
+        ServiceClientProxy.EzServiceReference.TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.TransactionsDataResult> LoadTransactionsDataAsync(int underwriterID, int investorID, int bankAccountTypeID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
@@ -6050,6 +6078,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AccountingDataResult> LoadAccountingDataAsync(int underwriterID) {
             return base.Channel.LoadAccountingDataAsync(underwriterID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID) {
+            return base.Channel.LoadTransactionsData(underwriterID, investorID, bankAccountTypeID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.TransactionsDataResult> LoadTransactionsDataAsync(int underwriterID, int investorID, int bankAccountTypeID) {
+            return base.Channel.LoadTransactionsDataAsync(underwriterID, investorID, bankAccountTypeID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {

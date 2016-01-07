@@ -2462,3 +2462,22 @@ input[type="text"].err-field-red {
 	background: linear-gradient(to bottom, #adadad, #6d6d6d);
 	color: #fff;
 }
+.transactions-range {
+	display: inline-block;
+	float: right;
+}
+
+.transactions-range span {
+	line-height: 30px;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.transactions-range .input-group {
+	margin: 0 15px 0 5px;
+}
+
+div.add-transaction {
+	margin-top: 10px;
+	margin-bottom: 15px;
+}

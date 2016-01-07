@@ -90,7 +90,6 @@ BEGIN
 		LEFT JOIN active_funding_account_data ibatf ON ibatf.InvestorID = i.InvestorID
 		LEFT JOIN active_repayments_account_data isbr ON isbr.InvestorID = i.InvestorID
 
-	WHERE i.IsActive=1
 	ORDER BY
 	i.Name
 END

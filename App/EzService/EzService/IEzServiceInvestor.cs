@@ -20,5 +20,8 @@
 
 		[OperationContract]
 		AccountingDataResult LoadAccountingData(int underwriterID);
+
+		[OperationContract]
+		TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
 	} // interface IEzServiceInvestor
 } // namespace  

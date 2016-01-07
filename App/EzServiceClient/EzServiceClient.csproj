@@ -285,6 +285,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringStringMapActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.TransactionsDataResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.UserLoginActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

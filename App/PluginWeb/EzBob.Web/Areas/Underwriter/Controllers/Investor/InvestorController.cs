@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.Investor {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -7,6 +8,7 @@
 	using EzBob.Web.Areas.Underwriter.Models.Investor;
 	using Infrastructure;
 	using Infrastructure.Attributes;
+	using log4net;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using FrontInvestorModel = EzBob.Web.Areas.Underwriter.Models.Investor.InvestorModel;
@@ -17,7 +19,8 @@
 		private readonly IEzbobWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
 		private readonly InvestorModelBuilder investorModelBuilder;
-		private int currentInvestorID;
+		
+		protected static readonly ILog Log = LogManager.GetLogger(typeof(InvestorController));
 
 		public InvestorController(
 			IEzbobWorkplaceContext context,
@@ -152,6 +155,19 @@
 			return Json(new { AccountingList = result.AccountingData }, JsonRequestBehavior.AllowGet);
 		}
 
+		[Ajax]
+		[HttpGet]
+		public JsonResult GetTransactionsData(int id, string bankAccountType) {
+			Log.InfoFormat("GetTransactionsData for InvestorID={0}", id);
+			I_InvestorAccountTypeEnum accountTypeEnum;
+			if(!Enum.TryParse(bankAccountType, out accountTypeEnum)) {
+				throw new Exception("Wrong account type");
+			}
+
+			TransactionsDataResult result = this.serviceClient.Instance.LoadTransactionsData(this.context.UserId, id, (int)accountTypeEnum);
+
+			return Json(new { TransactionsList = result.TransactionsData }, JsonRequestBehavior.AllowGet);
+		}
 
 
 

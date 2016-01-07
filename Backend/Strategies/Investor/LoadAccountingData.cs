@@ -20,10 +20,9 @@
 
 			foreach (var investorDataSet in Result) {
 				if (currentInvestorID < 0 || resultFiltered.All(x => x.InvestorID != investorDataSet.InvestorID)) {
-					if (!investorDataSet.IsRepaymentsBankAccountActive) {
-						investorDataSet.IsInvestorActive = false;
+					if (!investorDataSet.IsRepaymentsBankAccountActive) 
 						investorDataSet.AccumulatedRepayments = 0;
-					}
+					
 					resultFiltered.Add(investorDataSet);
 				} else {
 					var anotherDataSetOfTheSameInvestor = resultFiltered.Find(x => x.InvestorID == investorDataSet.InvestorID);

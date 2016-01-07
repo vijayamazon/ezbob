@@ -51,6 +51,15 @@
 				AccountingData = strategy.Result
 			};
 		}
+
+		public TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID) {
+			LoadTransactionsData strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, investorID, bankAccountTypeID);
+			return new TransactionsDataResult {
+				MetaData = metadata,
+				TransactionsData = strategy.Result
+			};
+		}
 	}
 }
 

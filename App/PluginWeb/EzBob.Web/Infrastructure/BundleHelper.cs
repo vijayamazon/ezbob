@@ -514,8 +514,10 @@
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.accountingInvestorView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.portfolioInvestorView.js")
 				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.statisticsInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.fundingTransactionsView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.repaymentsTransactionsView.js")
 				.MvcRender("~/Content/js/min/underwriter_#.js");
-		} // RenderUnderwriterJs
+		} // RenderUnderwriterJs    
 
 		public static MvcHtmlString RenderWizardJs() {
 			return Bundle.JavaScript()

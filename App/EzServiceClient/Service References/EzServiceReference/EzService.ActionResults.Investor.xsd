@@ -22,4 +22,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="AccountingDataResult" nillable="true" type="tns:AccountingDataResult" />
+  <xs:complexType name="TransactionsDataResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="TransactionsData" nillable="true" type="q6:ArrayOfTransactionsDataModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TransactionsDataResult" nillable="true" type="tns:TransactionsDataResult" />
 </xs:schema>

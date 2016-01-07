@@ -77,6 +77,7 @@
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\Investor\AccountingDataResult.cs" />
     <Compile Include="ActionResults\Investor\InvestorActionResult.cs" />
+    <Compile Include="ActionResults\Investor\TransactionsDataResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />
     <Compile Include="ActionResults\ReschedulingActionResult.cs" />

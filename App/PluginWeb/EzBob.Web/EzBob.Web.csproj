@@ -910,12 +910,14 @@
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.accountingInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.fundingTransactionsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorDetailsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorBankView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorContactView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.addInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.portfolioInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.repaymentsTransactionsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.statisticsInvestorView.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />

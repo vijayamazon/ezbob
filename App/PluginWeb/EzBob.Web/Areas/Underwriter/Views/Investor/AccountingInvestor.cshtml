@@ -1,5 +1,4 @@
 ﻿@model dynamic
-
 <script type="text/template" id="accounting-investor-template">
 	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
 	<div id="main-content">
@@ -8,72 +7,68 @@
 				<div class="box-content">
 					<form id="accounting-investor-form" class="form-horizontal">
 						<div class="row">
-							<div class="col-md-6">
 
-								<h3>Investor Status</h3>
+							<h3>Investor Status</h3>								
 								
-								<div class="control-group">
-									<label class="control-label"></label>
-									<div class="control">
-										<label class="checkbox">
-											<input name="IncludeNonActiveAccounts" id="IncludeNonActiveAccounts" type="checkbox" value="true" checked="checked" />
-											Include non active accounts
-										</label>
-									</div>
-								</div>
+							<div>
+								<label class="checkbox">
+									<input type="checkbox" class="includeNonActiveInvestors" />
+									Include non active investors
+								</label>
+							</div>
+						
 								
-								<div class="tab-pane" id="accounting-tbl">
-									<div class="table-responsive table-ezbig">
-										<table class="table grid-data">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Type</th>
-													<th>Name</th>
-													<th style="width: 200px; text-align: center">Outstanding funding</th>
-													<th>Accumulated Repayment for Investor</th>
-													<th>Servicing fee discount</th>
-													<th>Config Schedulers</th>
-													<th>Is Active</th>
-												</tr>
-												<% data = data || {}; console.log('data', data); %>
-												<%_.each(data, function(a){ %>
-												<tr>
-													<td><%-a.InvestorID%></td>
-													<td><%-a.InvestorType%></td>
-													<td><%-a.InvestorName%></td>
-													<td>
-														<span>
-															<%-EzBob.formatPoundsNoDecimals(a.OutstandingFunding)%>
-														</span>
-														<span class="accounting-btn">
-															<button class="btn btn-primary fa fa-exchange funding-transactions" data-fundaccid="<%-a.FundingBankAccountID%>"></button>
-														</span>
-													</td>
-													<td>
-														<span>
-															<p><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>
-															<%if(a.TotalNonActiveAccumulatedRepayments) {%>
-															<p><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
-															<%}%>
-														</span>
-														<span class="accounting-btn">
-															<button class="btn btn-primary fa fa-exchange repayments-transactions" data-investorid="<%-a.Investor%>"></button>
-														</span>
-													</td>
-													<td><%-EzBob.formatPercents(a.ServicingFeeDiscount)%></td>
-													<td>
-														<span class="accounting-btn">
-															<button class="btn btn-primary fa fa-clock-o investor-scheduler" data-investorid="<%-a.Investor%>"></button>
-														</span>
-													</td>
-													<td><img src="/Content/img/<%-a.IsInvestorActive?'check_icon.svg':'close_icon.svg'%>" /></td>													
-												</tr>
-												<%});%>
+							<div class="tab-pane" id="accounting-tbl">
+								<div class="table-responsive table-ezbig">
+									<table class="table grid-data">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Type</th>
+												<th>Name</th>
+												<th style="text-align: center">Outstanding funding</th>
+												<th style="text-align: center">Accumulated Repayments <br/> for Investor</th>
+												<th>Servicing fee discount</th>
+												<th>Config Schedulers</th>
+												<th>Is Active</th>
+											</tr>
+											<% data = data || {}; %>
+											<%_.each(data, function(a){ %>
+											<tr>
+												<td><%-a.InvestorID%></td>
+												<td><%-a.InvestorType%></td>
+												<td><%-a.InvestorName%></td>
+												<td>
+													<span>
+														<%-EzBob.formatPoundsNoDecimals(a.OutstandingFunding)%>
+													</span>
+													<span class="accounting-btn">
+														<button class="btn btn-primary fa fa-exchange funding-transactions" data-investorid="<%-a.InvestorID%>"></button>
+													</span>
+												</td>
+												<td>
+													<span>
+														<p><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>
+														<%if(a.TotalNonActiveAccumulatedRepayments) {%>
+														<p><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
+														<%}%>
+													</span>
+													<span class="accounting-btn">
+														<button class="btn btn-primary fa fa-exchange repayments-transactions" data-investorid="<%-a.InvestorID%>"></button>
+													</span>
+												</td>
+												<td><%-EzBob.formatPercents(a.ServicingFeeDiscount)%></td>
+												<td>
+													<span class="accounting-btn">
+														<button class="btn btn-primary fa fa-clock-o investor-scheduler" data-investorid="<%-a.InvestorID%>"></button>
+													</span>
+												</td>
+												<td><img src="/Content/img/<%-a.IsInvestorActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%"/></td>													
+											</tr>
+											<%});%>
 
-											</thead>
-										</table>
-									</div>
+										</thead>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -83,3 +78,154 @@
 		</div>
 	</div>
 </script>
+
+<script type="text/template" id="funding-transactions-template">
+	<div class="box">
+		<div class="box-content">
+			<div class="row">					
+
+				<div class="add-transaction">
+					<button class="btn btn-primary add-transaction-btn">Add Transaction</button>
+				</div>
+
+				<h3 class="panel-title" style="display: inline-block">Funding Transactions</h3>
+				
+				<div class="row transactions-range">
+					<span class="float_left">
+						Choose range from
+					</span>
+					<span class="float_left" style="margin-left: 13px;">
+						<div class="input-group">							
+							<input class="form-control input-width" type="text" id="funding-transactions-from">
+							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+						</div>
+					</span>
+					<span class="float_left">
+						&nbsp;to&nbsp;
+					</span>
+					<span class="float_left">
+						<div class="input-group">
+							<input class="form-control input-width" type="text" id="funding-transactions-to">
+							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+						</div>
+					</span>
+					<button class="btn btn-primary pull-left" id="funding-transactions-range-submit-btn" style="margin-right: 10px;">Submit</button>
+				</div>				
+				
+
+				<div class="tab-pane" id="funding-transactions-tbl">
+					<div class="table-responsive table-ezbig">
+						<table class="table grid-data">
+							<thead>
+								<tr>
+									<th></th>
+									<th>#</th>
+									<th>Transaction Date</th>
+									<th>Transaction Amount</th>
+									<th>Previous Amount</th>
+									<th>New Amount</th>
+									<th>Bank Account</th>
+									<th>Bank Account Name</th>
+									<th>Is Account Active</th>
+									<th>Comment</th>
+								</tr>
+								<% accountingData = accountingData || {};%>
+								<%_.each(accountingData, function(a){ %>
+								<tr>
+									<td><%-a.PreviousAmount > a.NewAmount ? '-':'+'%></td>
+									<td><%-a.TransactionID%></td>
+									<td><%-EzBob.formatDateUK(a.TransactionDate)%></td>
+									<td><%-EzBob.formatPoundsNoDecimals(a.TransactionAmount)%></td>
+									<td><%-EzBob.formatPoundsNoDecimals(a.PreviousAmount)%></td>
+									<td><%-EzBob.formatPoundsNoDecimals(a.NewAmount)%></td>
+									<td><%-a.BankAccountNumber%></td>
+									<td><%-a.BankAccountName%></td>
+									<td><img src="/Content/img/<%-a.IsBankAccountActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+									<td><%-a.Comment%></td>
+								<tr>
+								<%});%>
+							</thead>
+						</table>
+					</div>
+				</div>					
+			</div>
+		</div>
+	</div>
+</script>
+
+
+<script type="text/template" id="repayments-transactions-template">
+	<div class="box">
+		<div class="box-content">
+			<div class="row">
+
+				<div class="add-transaction">
+					<button class="btn btn-primary add-transaction-btn">Add Transaction</button>
+				</div>
+
+				<h3 class="panel-title" style="display: inline-block">Repayments Transactions</h3>
+
+				<div class="row transactions-range">
+					<span class="float_left">
+						Choose range from
+					</span>
+					<span class="float_left" style="margin-left: 13px;">
+						<div class="input-group">
+							<input class="form-control input-width" type="text" id="repayments-transactions-from">
+							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+						</div>
+					</span>
+					<span class="float_left">
+						&nbsp;to&nbsp;
+					</span>
+					<span class="float_left">
+						<div class="input-group">
+							<input class="form-control input-width" type="text" id="repayments-transactions-to">
+							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+						</div>
+					</span>
+					<button class="btn btn-primary pull-left" id="repayments-transactions-range-submit-btn" style="margin-right: 10px;">Submit</button>
+				</div>
+
+
+				<div class="tab-pane" id="repayments-transactions-tbl">
+					<div class="table-responsive table-ezbig">
+						<table class="table grid-data">
+							<thead>
+								<tr>
+									<th></th>
+									<th>#</th>
+									<th>Transaction Date</th>
+									<th>Transaction Amount</th>
+									<th>Previous Amount</th>
+									<th>New Amount</th>
+									<th>Bank Account</th>
+									<th>Bank Account Name</th>
+									<th>Is Account Active</th>
+									<th>Comment</th>
+								</tr>
+								<% accountingData = accountingData || {};%>
+								<%_.each(accountingData, function(a){ %>
+								<tr>
+									<td><%-a.PreviousAmount > a.NewAmount ? '-':'+'%></td>
+									<td><%-a.TransactionID%></td>
+									<td><%-EzBob.formatDateUK(a.TransactionDate)%></td>
+									<td><%-EzBob.formatPoundsNoDecimals(a.TransactionAmount)%></td>
+									<td><%-EzBob.formatPoundsNoDecimals(a.PreviousAmount)%></td>
+									<td><%-EzBob.formatPoundsNoDecimals(a.NewAmount)%></td>
+									<td><%-a.BankAccountNumber%></td>
+									<td><%-a.BankAccountName%></td>
+									<td><img src="/Content/img/<%-a.IsBankAccountActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+									<td><%-a.Comment%></td>
+								<tr>
+									<%});%>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+
