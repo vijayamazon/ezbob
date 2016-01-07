@@ -388,7 +388,10 @@
 				return Json(
 					new {
 						success = false,
-						errorMessage = string.Format("Failed to sign up (error code is '{0}'), please retry.", uniqueID),
+						errorMessage = string.Format(
+							"Failed to sign up, please call support (error code is '{0}').",
+							uniqueID
+						),
 					},
 					JsonRequestBehavior.AllowGet
 				);
