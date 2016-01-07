@@ -27,7 +27,7 @@ namespace EzBobService.Mobile {
         public TwilioSmsAsyncSendReceive TwilioSmsSender { get; set; }
 
         [Injected]
-        public MobilePhoneQueries MobilePhoneQueries { get; set; }
+        public IMobilePhoneQueries MobilePhoneQueries { get; set; }
 
         [Injected]
         public MobilePhoneConfig Config { get; set; }
