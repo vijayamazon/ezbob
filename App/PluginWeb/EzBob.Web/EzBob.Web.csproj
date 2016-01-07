@@ -212,6 +212,7 @@
     <Compile Include="Code\ScratchHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionNames.cs" />
     <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />
+    <Compile Include="Infrastructure\PermissionsAndRoles.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManagerException.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcFileProcessor.cs" />
     <Compile Include="Areas\Customer\Models\EkmAccountModel.cs" />

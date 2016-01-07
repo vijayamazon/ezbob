@@ -299,6 +299,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	changeDecisionButtonsState: function(isHideAll) {
 		var creditResult = this.personalModel.get('CreditResult');
 		var isWizardComplete = this.personalModel.get('IsWizardComplete');
+		var userStatus = this.personalModel.get('UserStatus');
 
 		if (isHideAll)
 			this.$el.find('#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn').hide();
@@ -359,7 +360,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			break;
 		} // switch
 
-		if (this.personalModel.get('UserStatus') === 'Registered') {
+		if (userStatus === 'Registered') {
 			this.$el.find('#ReturnBtn').hide();
 			this.$el.find('#RejectBtn').hide();
 			this.$el.find('#ApproveBtn').hide();

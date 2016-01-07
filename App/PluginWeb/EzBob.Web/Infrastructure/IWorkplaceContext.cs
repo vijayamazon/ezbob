@@ -6,8 +6,8 @@ namespace EzBob.Web.Infrastructure {
 	public interface IWorkplaceContext {
 		User User { get; }
 		int UserId { get; }
-		SortedSet<string> UserRoles { get; }
-		SortedSet<Permission> UserPermissions { get; }
+		List<string> UserRoles { get; }
+		List<Permission> UserPermissions { get; }
 		string SessionId { get; set; }
 		void SetSessionOrigin(CustomerOriginEnum? originID);
 		CustomerOriginEnum? GetSessionOrigin();
