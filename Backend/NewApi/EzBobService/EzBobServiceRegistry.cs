@@ -46,7 +46,7 @@
 
             ForSingletonOf<MobilePhone>()
                 .Use<MobilePhone>();
-            ForSingletonOf<MobilePhoneQueries>()
+            ForSingletonOf<IMobilePhoneQueries>()
                 .Use<MobilePhoneQueries>()
                 .Ctor<string>(ConnectionString)
                 .Is(TheConnectionString);
@@ -96,7 +96,6 @@
 
             ForSingletonOf<ICurrencyConverter>()
                 .Use<CurrencyConverter>();
-
         }
 
         private void InitConfigurationManger(ConfigManager configManager) {
