@@ -106,7 +106,7 @@
 
 			try {
 				LoanCommissionDefaultsActionResult lcdar = this.serviceClient.Instance.GetLoanCommissionDefaults(
-					this._context.User.Id,
+					this._context.UserId,
 					id,
 					amount
 				);
