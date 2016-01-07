@@ -30,6 +30,7 @@ BEGIN
 	DECLARE @ErrorFailedToAttachRole    INT = -5
 	DECLARE @ErrorFailedToCreateSession INT = -6
 	DECLARE @ErrorConflictsWithInternal INT = -7
+	DECLARE @ErrorConflictsWithBroker   INT = -8
 
 	------------------------------------------------------------------------------
 	--
@@ -86,6 +87,18 @@ BEGIN
 	BEGIN
 		SELECT
 			UserID = @ErrorDuplicateUser,
+			SessionID = @SessionID
+
+		RETURN
+	END
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	IF EXISTS (SELECT b.BrokerID FROM Broker b WHERE LOWER(b.ContactEmail) = @Email)
+	BEGIN
+		SELECT
+			UserID = @ErrorConflictsWithBroker,
 			SessionID = @SessionID
 
 		RETURN
