@@ -52,8 +52,13 @@
     <Compile Include="Commands\Company\CompanyDetailsInfo.cs" />
     <Compile Include="Commands\Company\UpdateCompanyCommand.cs" />
     <Compile Include="Commands\Company\UpdateCompanyCommandResponse.cs" />
+    <Compile Include="Commands\Customer\CustomerCommandResponseBase.cs" />
+    <Compile Include="Commands\Customer\CustomerSendVerificationSmsCommand.cs" />
+    <Compile Include="Commands\Customer\CustomerSendVerificationSmsCommandResponse.cs" />
     <Compile Include="Commands\Customer\CustomerUpdateCommand.cs" />
     <Compile Include="Commands\Customer\CustomerUpdateCommandResponse.cs" />
+    <Compile Include="Commands\Customer\CustomerValidateVerificationCodeCommand.cs" />
+    <Compile Include="Commands\Customer\CustomerValidateVerificationCodeCommandResponse.cs" />
     <Compile Include="Commands\Customer\HousingType.cs" />
     <Compile Include="Commands\Customer\Sections\AccountInfo.cs" />
     <Compile Include="Commands\Customer\Sections\AlibabaInfo.cs" />
