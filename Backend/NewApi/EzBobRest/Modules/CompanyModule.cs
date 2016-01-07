@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EzBobRest.Modules {
+    using System.Threading;
     using EzBobApi.Commands.Company;
     using EzBobCommon;
     using EzBobCommon.Utils;
     using EzBobRest.NSB;
     using EzBobRest.ResponseHelpers;
     using EzBobRest.Validators;
+    using log4net;
     using Nancy;
     using Nancy.ModelBinding;
     using Nancy.Security;
@@ -22,7 +24,7 @@ namespace EzBobRest.Modules {
     public class CompanyModule : NancyModule {
 
         [Injected]
-        public UpdateCompanySendReceive UpdateCompany { get; set; }
+        public UpdateCompanySendReceive UpdateCompanySendReceive { get; set; }
 
         [Injected]
         public RestServerConfig Config { get; set; }
@@ -30,48 +32,51 @@ namespace EzBobRest.Modules {
         [Injected]
         public CompanyUpdateValidator Validator { get; set; }
 
+        [Injected]
+        public ILog Log { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CompanyModule"/> class.
         /// </summary>
         public CompanyModule() {
 //            this.RequiresMSOwinAuthentication();
-            Post["UpdateCompany", "api/v1/company/update/{customerId}/{companyId}"] = o => {
-                string customerId = o.CustomerId;
+            UpdateCompany();
+        }
+
+        private void UpdateCompany() {
+            Post["UpdateCompany", "api/v1/company/update/{customerId}/{companyId}", runAsync: true] = async (o, ct) => {
+                string customerId = o.customerId;
                 //"{companyId}" - is the default value in case when company id is not supplied by request
                 string companyId = o.CompanyId != "{companyId}" ? o.CompanyId : null;
+
+                //Bind
+                UpdateCompanyCommand updateCommand;
                 try {
-                    var updateCommand = this.Bind<UpdateCompanyCommand>();
-                    InfoAccumulator info = Validate(updateCommand);
-                    if (info.HasErrors) {
-                        var errorResponse = CreateErrorResponse(customerId, companyId, info.GetErrors());
-
-                        return Response.AsJson(errorResponse)
-                            .WithStatusCode(HttpStatusCode.BadRequest);
-                    }
-
-                    //binding automatically fills in company id
-                    //when company id is not supplied, the automatic default value is "{companyId}"
-                    updateCommand.CompanyId = companyId;
-
-                    UpdateCompanyCommandResponse response = UpdateCompany.SendAndBlockUntilReceive(Config.ServiceAddress, updateCommand);
-                    if (CollectionUtils.IsNotEmpty(response.Errors)) {
-                        var errorResponse = CreateErrorResponse(customerId, companyId, response.Errors);
-
-                        return Response.AsJson(errorResponse)
-                            .WithStatusCode(HttpStatusCode.BadRequest);
-                    }
-
-                    JObject res = new JObject();
-                    res.Add("CustomerId", response.CustomerId);
-                    res.Add("CompanyId", response.CompanyId);
-                    return Response.AsJson(res)
-                        .WithStatusCode(HttpStatusCode.OK);
+                    updateCommand = this.Bind<UpdateCompanyCommand>();
                 } catch (ModelBindingException ex) {
-                    var errorResponse = CreateErrorResponse(customerId, companyId, null, ex);
-
-                    return Response.AsJson(errorResponse)
-                        .WithStatusCode(HttpStatusCode.BadRequest);
+                    Log.Warn("error on update company", ex);
+                    return CreateErrorResponse(customerId, companyId, ex);
                 }
+
+                //Validate
+                InfoAccumulator info = Validate(updateCommand);
+                if (info.HasErrors) {
+                    return CreateErrorResponse(customerId, companyId, null, info.GetErrors());
+                }
+
+                //Send Command
+                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                try {
+                    var response = await UpdateCompanySendReceive.SendAsync(Config.ServerAddress, updateCommand, cts);
+                    if (response.HasErrors) {
+                        return CreateErrorResponse(customerId, companyId, null, response.Errors);
+                    }
+                } catch (TaskCanceledException) {
+                    Log.Error("timeout on update company");
+                    return CreateErrorResponse(customerId, companyId, null, null, HttpStatusCode.InternalServerError);
+                }
+
+                return CreateOkResponse(customerId, companyId);
             };
         }
 
@@ -80,11 +85,9 @@ namespace EzBobRest.Modules {
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        private InfoAccumulator Validate(UpdateCompanyCommand command)
-        {
+        private InfoAccumulator Validate(UpdateCompanyCommand command) {
             var validationResult = Validator.Validate(command);
-            if (validationResult.IsValid)
-            {
+            if (validationResult.IsValid) {
                 return new InfoAccumulator();
             }
 
@@ -93,22 +96,41 @@ namespace EzBobRest.Modules {
         }
 
         /// <summary>
+        /// Creates the ok response.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        private Response CreateOkResponse(string customerId, string companyId) {
+            JObject res = new JObject();
+            res.Add("CustomerId", customerId);
+            if (!string.IsNullOrEmpty(companyId)) {
+                res.Add("CompanyId", companyId);
+            }
+
+            return Response.AsJson(res)
+                .WithStatusCode(HttpStatusCode.OK);
+        }
+
+        /// <summary>
         /// Creates the error response.
         /// </summary>
         /// <param name="customerId">The customer identifier.</param>
         /// <param name="companyId">The company identifier.</param>
-        /// <param name="errors">The errors.</param>
         /// <param name="exception">The exception.</param>
+        /// <param name="errors">The errors.</param>
+        /// <param name="statusCode">The status code.</param>
         /// <returns></returns>
-        private JObject CreateErrorResponse(string customerId, string companyId, IEnumerable<string> errors, ModelBindingException exception = null) {
-            var errorResponse = new ErrorResponseBuilder()
-                       .AddKeyValue("CustomerId", customerId)
-                       .AddKeyValue("CompanyId", companyId)
-                       .AddErrorMessages(errors)
-                       .AddModelBindingException(exception)
-                       .BuildResponse();
+        private Response CreateErrorResponse(string customerId, string companyId, ModelBindingException exception, IEnumerable<string> errors = null, HttpStatusCode statusCode = HttpStatusCode.BadRequest) {
+            var response = new ErrorResponseBuilder()
+                .AddKeyValue("CustomerId", customerId)
+                .AddKeyValue("CompanyId", companyId)
+                .AddErrorMessages(errors)
+                .AddModelBindingException(exception)
+                .BuildResponse();
 
-            return errorResponse;
+            return Response.AsJson(response)
+                .WithStatusCode(statusCode);
         }
     }
 }
