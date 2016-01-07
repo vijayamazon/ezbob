@@ -22,7 +22,7 @@
 
             //!!!!
             //There are different classes that you will not see here registered in container
-            //The objects of these classes are automatically created by container on request
+            //The objects of these classes created automatically (for example validators)
 
             For<ILog>()
                 .Add(ctx => LogManager.GetLogger(ctx.ParentType));

@@ -178,6 +178,7 @@
     <Compile Include="NSB\CustomerValidateVerificationCodeSendRecieve.cs" />
     <Compile Include="NSB\CustomerVerificationSmsSendRecieve.cs" />
     <Compile Include="NSB\SignupCommandSendReceive.cs" />
+    <Compile Include="NSB\TargetCompanySendReceive.cs" />
     <Compile Include="NSB\UpdateCompanySendReceive.cs" />
     <Compile Include="NSB\UpdateCustomerSendReceive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="RestServer.cs" />
     <Compile Include="RestServerConfig.cs" />
     <Compile Include="Validators\AuthorityInfoValidator.cs" />
+    <Compile Include="Validators\CompanyTargetingValidator.cs" />
     <Compile Include="Validators\CompanyUpdateValidator.cs" />
     <Compile Include="Validators\ContactDetailsValidator.cs" />
     <Compile Include="Validators\CustomerSendVerificationSmsValidator.cs" />

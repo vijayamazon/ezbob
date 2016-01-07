@@ -14,8 +14,7 @@ namespace EzBobRest
 	*/
     public class EndpointConfig : IConfigureThisEndpoint
     {
-        public void Customize(BusConfiguration configuration)
-        {
+        public void Customize(BusConfiguration configuration) {
             InitLogging();
             InitConventions(configuration);
 
@@ -26,9 +25,12 @@ namespace EzBobRest
             configuration.UseTransport<MsmqTransport>();
             configuration.EnableInstallers();
 
-            configuration.EnableFeature<InMemoryTimeoutPersistence>();//msmq persistence does not provide timeout persistence
-            configuration.UsePersistence<MsmqPersistence>();
-
+            if (Debugger.IsAttached) {
+                configuration.UsePersistence<InMemoryPersistence>();
+            } else {
+                configuration.EnableFeature<InMemoryTimeoutPersistence>(); //msmq persistence does not provide timeout persistence
+                configuration.UsePersistence<MsmqPersistence>();
+            }
             configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
         }
 
