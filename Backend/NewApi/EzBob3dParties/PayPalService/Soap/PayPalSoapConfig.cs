@@ -8,18 +8,6 @@ namespace EzBob3dParties.PayPalService.Soap
 {
     public class PayPalSoapConfig
     {
-        public PayPalSoapConfig()
-        {
-            Mode = "live";
-            ApplicationId = "APP-3UB991847T1143334";
-            ApiUsername = "caroles_api1.ezbob.com";
-            ApiPassword = "8RYKUCVNC5PXWLPD";
-            ApiSignature = "AFcWxV21C7fd0v3bYYYRCpSSRl31Aoui-O9-IwfGEuUAgSnmws-LttVZ";
-            ConnectionTimeout = "30000";
-
-            RedirectUrl = "https://www.paypal.com/webscr&cmd=";
-        }
-
         public string Mode { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
