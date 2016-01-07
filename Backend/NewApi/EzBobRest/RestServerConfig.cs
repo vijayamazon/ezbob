@@ -4,5 +4,6 @@
     {
         public string ServerAddress { get; private set; }
         public string ServiceAddress { get; private set; }
+        public int SendRecieveTaskTimeoutMilis { get; private set; }
     }
 }
