@@ -7,7 +7,7 @@
     {
         public DocsModule(IRouteCacheProvider routeCacheProvider)
             : base(routeCacheProvider,
-              "Ezbob API v.1 documentation",   // title
+              "Ezbob API v.1 Documentation",   // title
               "v1.0",                       // api version
               "localhost:12345",             // host
               "/api/v1",                       // api base url (ie /dev, /api)
