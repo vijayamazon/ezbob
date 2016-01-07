@@ -3,6 +3,7 @@ namespace EzBobRest
 {
     using System.Diagnostics;
     using NServiceBus;
+    using NServiceBus.Features;
     using NServiceBus.Logging;
     using NServiceBus.Persistence.Legacy;
     using StructureMap;
@@ -25,14 +26,8 @@ namespace EzBobRest
             configuration.UseTransport<MsmqTransport>();
             configuration.EnableInstallers();
 
-            if (Debugger.IsAttached)
-            {
-                configuration.UsePersistence<InMemoryPersistence>();
-            }
-            else
-            {
-                configuration.UsePersistence<MsmqPersistence>();
-            }
+            configuration.EnableFeature<InMemoryTimeoutPersistence>();//msmq persistence does not provide timeout persistence
+            configuration.UsePersistence<MsmqPersistence>();
 
             configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
         }
