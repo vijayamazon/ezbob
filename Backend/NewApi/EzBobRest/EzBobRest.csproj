@@ -143,6 +143,8 @@
     <Compile Include="Modules\CompanyMetadataModule.cs" />
     <Compile Include="Modules\CustomerMetadataModule.cs" />
     <Compile Include="Modules\CustomerModule.cs" />
+    <Compile Include="Modules\CustomerVerificationMetadataModule.cs" />
+    <Compile Include="Modules\CustomerVerificationModule.cs" />
     <Compile Include="Modules\DocsModule.cs" />
     <Compile Include="Modules\MainModule.cs" />
     <Compile Include="NancySwagger\Core\SwaggerRouteMetadata.cs" />
@@ -157,6 +159,8 @@
     <Compile Include="NancySwagger\Model\SwaggerSpecification.cs" />
     <Compile Include="NancySwagger\Model\SwaggerTypeDefinition.cs" />
     <Compile Include="NancySwagger\Modules\SwaggerDocsModuleBase.cs" />
+    <Compile Include="NSB\CustomerValidateVerificationCodeSendRecieve.cs" />
+    <Compile Include="NSB\CustomerVerificationSmsSendRecieve.cs" />
     <Compile Include="NSB\SignupCommandSendReceive.cs" />
     <Compile Include="NSB\UpdateCompanySendReceive.cs" />
     <Compile Include="NSB\UpdateCustomerSendReceive.cs" />
@@ -166,12 +170,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ResponseHelpers\ErrorResponseBuilder.cs" />
     <Compile Include="RestServer.cs" />
     <Compile Include="RestServerConfig.cs" />
     <Compile Include="Validators\AuthorityInfoValidator.cs" />
     <Compile Include="Validators\CompanyUpdateValidator.cs" />
     <Compile Include="Validators\ContactDetailsValidator.cs" />
+    <Compile Include="Validators\CustomerSendVerificationSmsValidator.cs" />
     <Compile Include="Validators\CustomerSignupValidator.cs" />
+    <Compile Include="Validators\CustomerUpdateValidator.cs" />
+    <Compile Include="Validators\CustomerValidateVerificationCodeValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzBobApi\EzBobApi.csproj">
