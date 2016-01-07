@@ -5,6 +5,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="GradeID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="GradeRangeID" type="xs:int" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsFirstLoan" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
       <xs:element minOccurs="0" name="MaxInterestRate" type="xs:decimal" />
@@ -26,7 +27,7 @@
   <xs:complexType name="I_ProductSubType">
     <xs:sequence>
       <xs:element minOccurs="0" name="FundingTypeID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="GradeID" type="xs:int" />
+      <xs:element minOccurs="0" name="IsRegulated" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
       <xs:element minOccurs="0" name="OriginID" type="xs:int" />
       <xs:element minOccurs="0" name="ProductSubTypeID" type="xs:int" />
@@ -114,4 +115,22 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="I_Product" nillable="true" type="tns:I_Product" />
+  <xs:complexType name="ArrayOfI_SubGrade">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="I_SubGrade" nillable="true" type="tns:I_SubGrade" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfI_SubGrade" nillable="true" type="tns:ArrayOfI_SubGrade" />
+  <xs:complexType name="I_SubGrade">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GradeID" type="xs:int" />
+      <xs:element minOccurs="0" name="MaxScore" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MinScore" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SubGradeID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="I_SubGrade" nillable="true" type="tns:I_SubGrade" />
 </xs:schema>

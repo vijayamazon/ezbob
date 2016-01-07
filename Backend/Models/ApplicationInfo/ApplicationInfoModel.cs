@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Models.ApplicationInfo {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Utils;
+	using EZBob.DatabaseLib.Model.Database;
 
 	[DataContract]
 	public class ApplicationInfoModel {
@@ -202,12 +204,18 @@
 		[DataMember]
 		public int TypeOfBusiness { get; set; }
 
+		[DataMember]
+		public bool IsRegulated { get; set; }
+
 		[NonTraversable]
 		[DataMember]
 		public AutomationOfferModel AutomationOfferModel { get; set; }
 
 		[DataMember]
 		public bool SpreadSetupFee { get; set; }
+		
+		[DataMember]
+		public decimal LogicalGlueScore { get; set; }
 
 		[DataMember]
 		public int GradeID { get; set; }
@@ -218,6 +226,7 @@
 		[DataMember]
 		public int OriginID { get; set; }
 
+		[DataMember]
 		public int NumOfLoans { get; set; }
 		//-----------------------------OP ---------------------\\
 		[NonTraversable]
@@ -263,5 +272,17 @@
 		[NonTraversable]
 		[DataMember]
 		public int CurrentFundingTypeID { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public List<I_SubGrade> SubGrades { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public int? SubGradeID { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public string Origin { get; set; }
 	} // class ApplicationInfoModel
 } // namespace

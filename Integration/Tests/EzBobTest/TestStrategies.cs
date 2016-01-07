@@ -1283,8 +1283,8 @@
 		}
 		
 		[Test]
-		public void TestLoadPApplicationInfo() {
-			var stra = new LoadApplicationInfo(3416, 42816, DateTime.Now);
+		public void TestLoadApplicationInfo() {
+			var stra = new LoadApplicationInfo(2357,42825, DateTime.Now);
 			stra.Execute();
 
 			Assert.IsNotNull(stra.Result);
@@ -1293,6 +1293,7 @@
 			Assert.Greater(stra.Result.GradeRanges.Count, 0);
 			Assert.Greater(stra.Result.AllLoanSources.Count(), 0);
 			Assert.Greater(stra.Result.Grades.Count, 0);
+			Assert.Greater(stra.Result.SubGrades.Count, 0);
 			Assert.Greater(stra.Result.ProductSubTypes.Count, 0);
 			Assert.Greater(stra.Result.ProductTypes.Count, 0);
 			Assert.Greater(stra.Result.Products.Count, 0);

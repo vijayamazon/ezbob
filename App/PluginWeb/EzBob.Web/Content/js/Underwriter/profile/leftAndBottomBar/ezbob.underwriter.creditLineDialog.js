@@ -39,8 +39,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		loanSource: '#loan-source',
 		discountPlan: '#discount-plan',
 		fundingType: '#funding-type',
-		requestedLoanAmount: '#requestLoanAmount',
-		requestedLoanTerm: '#requestedLoanTerm'
 	}, // ui
 
 	jqoptions: function() {
@@ -143,7 +141,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var productSubType = _.find(this.cloneModel.get('ProductSubTypes'), function(pst) {
 			return pst.ProductTypeID == self.cloneModel.get('CurrentProductTypeID') &&
 				   pst.OriginID      == self.cloneModel.get('OriginID')             &&
-				   pst.GradeID       == self.cloneModel.get('GradeID')              &&
 				   pst.LoanSourceID  == self.cloneModel.get('LoanSourceID');
 		});
 
@@ -237,6 +234,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		RequestedLoanTerm: {
 			selector: 'span[name="requestedLoanTerm"]'
 		},
+		Origin: {
+			selector: 'span[name="origin"]'
+		},
 	}, // bindings
 
 	onRender: function() {
@@ -264,13 +264,13 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var self = this;
 		var originID = this.model.get('OriginID');
 		var gradeID = this.model.get('GradeID');
-
+		var subGradeID = this.model.get('SubGradeID');
 		
-		var productSubTypesPerGradeAndOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function(pst) {
-			return pst.GradeID == gradeID && pst.OriginID == originID;
+		var productSubTypesPerOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function(pst) {
+			return pst.OriginID == originID;
 		});
 
-		if (productSubTypesPerGradeAndOrigin.length <= 0) {
+		if (productSubTypesPerOrigin.length <= 0) {
 			//todo replace ids with names
 			this.ui.errorMessage.text('No products available for origin ' + originID + ' and grade ' + gradeID);
 			return;
@@ -279,7 +279,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		}
 
 		var availableProductTypes = _.filter(this.cloneModel.get('ProductTypes'), function (pt) {
-			var found = _.find(productSubTypesPerGradeAndOrigin, function (pst) { return pst.ProductTypeID === pt.ProductTypeID; });
+			var found = _.find(productSubTypesPerOrigin, function (pst) { return pst.ProductTypeID === pt.ProductTypeID; });
 			return found;
 		});
 
@@ -289,7 +289,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 
 		var availableLoanSources = _.filter(this.cloneModel.get('AllLoanSources'), function (ls) {
-			var found = _.find(productSubTypesPerGradeAndOrigin, function (pst) { return pst.LoanSourceID === ls.Id; });
+			var found = _.find(productSubTypesPerOrigin, function (pst) { return pst.LoanSourceID === ls.Id; });
 			return found;
 		});
 
@@ -364,11 +364,12 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			return gr.OriginID     == originID            &&
 				   gr.LoanSourceID == currentLoanSourceID &&
 				   gr.GradeID      == gradeID             &&
+				   gr.SubGradeID   == subGradeID          &&
 				   gr.IsFirstLoan  == isFirstLoan;
 		});
 
 		if (!gradeRange) {
-			this.ui.errorMessage.text('No pricing for such product combination found origin ' + originID + ' grade ' + gradeID + ' loan source ' + currentLoanSourceID + ' is first loan ' + isFirstLoan);
+			this.ui.errorMessage.text('No pricing for such product combination found origin ' + originID + ' grade ' + gradeID + ' subGrade ' + subGradeID + ' loan source ' + currentLoanSourceID + ' is first loan ' + isFirstLoan);
 			gradeRange = {};
 		} else {
 			this.ui.errorMessage.empty();

@@ -19,7 +19,7 @@ BEGIN
 
 	SELECT
 		RowType = 'CompanyRegistrationNumber',
-		c.CompanyNumber
+		c.ExperianRefNum AS CompanyNumber
 	FROM
 		Company c
 	WHERE

@@ -53,24 +53,37 @@
 			// Loan cost must be calculated after set up fee (it uses set up fee output).
 			BuildLoanCost();
 
-			Result.Products = DB.Fill<I_Product>("SELECT * FROM I_Product", CommandSpecies.Text);
+			Result.Products = DB.Fill<I_Product>("SELECT * FROM I_Product WHERE IsEnabled = 1", CommandSpecies.Text);
 			Result.ProductTypes = DB.Fill<I_ProductType>("SELECT * FROM I_ProductType", CommandSpecies.Text);
 			Result.ProductSubTypes = DB.Fill<I_ProductSubType>("SELECT * FROM I_ProductSubType", CommandSpecies.Text);
 			Result.Grades = DB.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
-			Result.GradeRanges = DB.Fill<I_GradeRange>("SELECT * FROM I_GradeRange", CommandSpecies.Text);
+			Result.SubGrades = DB.Fill<I_SubGrade>("SELECT * FROM I_SubGrade", CommandSpecies.Text);
+			Result.GradeRanges = DB.Fill<I_GradeRange>("SELECT * FROM I_GradeRange WHERE IsActive = 1", CommandSpecies.Text);
 			Result.FundingTypes = DB.Fill<I_FundingType>("SELECT * FROM I_FundingType", CommandSpecies.Text);
 
 			BuildDefaultProduct();
 		}// Execute
 
 		private void BuildDefaultProduct() {
+			var subGrade = Result.SubGrades.FirstOrDefault(x => x.GradeID == Result.GradeID && x.MinScore < Result.LogicalGlueScore && x.MaxScore > Result.LogicalGlueScore);
+			if (subGrade != null) {
+				Result.SubGradeID = subGrade.SubGradeID;
+			}
+
 			TypeOfBusiness typeOfBusiness = (TypeOfBusiness)Result.TypeOfBusiness;
+			Result.IsRegulated = typeOfBusiness.IsRegulated();
 
+			CustomerOriginEnum originEnum = (CustomerOriginEnum)Result.OriginID;
+			Result.Origin = originEnum.ToString();
 
+			
 			if (Result.ProductSubTypeID.HasValue) {
 				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.ProductSubTypeID == Result.ProductSubTypeID.Value);
 			} else {
-				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.OriginID == Result.OriginID && x.LoanSourceID == Result.LoanSourceID && x.IsRegulated == typeOfBusiness.IsRegulated());
+				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => 
+					x.OriginID == Result.OriginID && 
+					x.LoanSourceID == Result.LoanSourceID && 
+					x.IsRegulated == typeOfBusiness.IsRegulated());
 			}
 			I_ProductType currentProductType = null;
 			if (Result.CurrentProductSubType != null) {
@@ -89,7 +102,9 @@
 				Result.CurrentProductID = currentProduct != null ? currentProduct.ProductID : 0;
 			}
 			
-			Result.CurrentGradeRange = Result.GradeRanges.FirstOrDefault(x => x.GradeID.HasValue && x.GradeID.Value == Result.GradeID &&
+			Result.CurrentGradeRange = Result.GradeRanges.FirstOrDefault(x => 
+				x.GradeID.HasValue && x.GradeID.Value == Result.GradeID &&
+				x.SubGradeID == Result.SubGradeID &&
 				x.LoanSourceID == Result.LoanSourceID &&
 				x.OriginID == Result.OriginID &&
 				x.IsFirstLoan == (Result.NumOfLoans == 0));

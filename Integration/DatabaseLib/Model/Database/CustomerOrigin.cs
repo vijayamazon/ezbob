@@ -7,9 +7,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using NHibernate;
 
 	public enum CustomerOriginEnum {
-		ezbob,
-		everline,
-		alibaba,
+		ezbob = 1,
+		everline = 2,
+		alibaba = 3,
 	} // enum CustomerOriginEnum
 
 	public class CustomerOrigin {

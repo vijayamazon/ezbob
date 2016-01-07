@@ -129,7 +129,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		validateLoanSourceRelated: function () {
 		    var loanSourceID = this.model.get('LoanSourceID');
-		    var loanSourceModel = _.find(this.model.get("AllLoanSources"), function (l) { return l.Id == loanSourceID; });
+		    var loanSourceModel = _.find(this.model.get("AllLoanSources"), function (l) { return l.Id == loanSourceID; }) || {};
 
 			this.validateInterestVsSource(loanSourceModel.MaxInterest);
 

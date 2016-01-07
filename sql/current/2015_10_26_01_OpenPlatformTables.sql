@@ -257,6 +257,32 @@ BEGIN
 	)
 END
 GO
+/*
+IF NOT EXISTS (SELECT * FROM I_SubGrade)
+BEGIN
+
+	DECLARE @GradeA INT = (SELECT GradeID FROM I_Grade WHERE Name='A')
+	DECLARE @GradeB INT = (SELECT GradeID FROM I_Grade WHERE Name='B')
+	DECLARE @GradeC INT = (SELECT GradeID FROM I_Grade WHERE Name='C')
+	DECLARE @GradeD INT = (SELECT GradeID FROM I_Grade WHERE Name='D')
+	DECLARE @GradeE INT = (SELECT GradeID FROM I_Grade WHERE Name='E')
+	DECLARE @GradeF INT = (SELECT GradeID FROM I_Grade WHERE Name='F')
+	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
+	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
+	
+	INSERT INTO I_SubGrade (GradeID,Name,MinScore,MaxScore) 
+	VALUES 
+		(@GradeA,'A1',0,0.155),
+		(@GradeB,'B1',0.155,0.253),
+		(@GradeC,'C1',0.254,0.347),
+		(@GradeD,'D1',0.347,0.452),
+		(@GradeE,'E1',0.452,0.552),
+		(@GradeF,'F1',0.552,0.594),
+		(@GradeG,'G1',0.594,0.697),
+		(@GradeH,'H1',0.697,1.000)
+END
+GO
+*/
 
 IF object_id('I_FundingType') IS NULL
 BEGIN
@@ -542,7 +568,8 @@ BEGIN
 	DECLARE @GradeF INT = (SELECT GradeID FROM I_Grade WHERE Name='F')
 	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
 	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
-		
+	
+	--TODO populate with real data with sub grades.	
 	INSERT INTO I_GradeRange (GradeID, SubGradeID, LoanSourceID, OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, IsActive, Timestamp)
 	VALUES (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.09 ,50000,150000,12,60,1,'2015-12-01'),
 		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.115,40000,120000,12,60,1,'2015-12-01'),

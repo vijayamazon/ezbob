@@ -11,6 +11,8 @@
 	using NHibernate;
 	using System;
 	using Ezbob.Logger;
+	using EzBob.Web.Infrastructure;
+	using ServiceClientProxy;
 
 	public class FullCustomerController : Controller {
 		public FullCustomerController(
@@ -21,8 +23,9 @@
 			CustomerRelationsRepository customerRelationsRepo,
 			IBugRepository bugRepo,
 			LoanRepository loanRepo,
-			PropertiesModelBuilder propertiesModelBuilder
-		) {
+			PropertiesModelBuilder propertiesModelBuilder, 
+			IEzbobWorkplaceContext context, 
+			ServiceClient serviceClient) {
 			this.customerRepo = customerRepo;
 			this.session = session;
 			this.creditBureauModelBuilder = creditBureauModelBuilder;
@@ -31,6 +34,8 @@
 			this.bugRepo = bugRepo;
 			this.loanRepo = loanRepo;
 			this.propertiesModelBuilder = propertiesModelBuilder;
+			this.context = context;
+			this.serviceClient = serviceClient;
 		} // constructor
 
 		[HttpGet]
@@ -58,14 +63,18 @@
 				} // using
 
 				using (tc.AddStep("ApplicationInfoModel Time taken")) {
-					var aiar = new ServiceClientProxy.ServiceClient().Instance.LoadApplicationInfo(
-						0,
-						customer.Id,
-						cr == null ? (long?)null : cr.Id,
-						DateTime.UtcNow
-					);
+					try {
+						var aiar = this.serviceClient.Instance.LoadApplicationInfo(
+							this.context.UserId,
+							customer.Id,
+							cr == null ? (long?)null : cr.Id,
+							DateTime.UtcNow
+							);
 
-					model.ApplicationInfoModel = aiar.Model;
+						model.ApplicationInfoModel = aiar.Model;
+					} catch (Exception ex) {
+						log.Error(ex, "Failed to load application info model for customer {0} cr {1}", customer.Id, cr == null ? (long?)null : cr.Id);
+					}
 				} // using
 
 				using (tc.AddStep("CreditBureauModel Time taken"))
@@ -151,7 +160,8 @@
 		private readonly PropertiesModelBuilder propertiesModelBuilder;
 		private readonly LoanRepository loanRepo;
 		private readonly IBugRepository bugRepo;
-
+		private readonly IEzbobWorkplaceContext context;
+		private readonly ServiceClientProxy.ServiceClient serviceClient;
 		private static readonly ASafeLog log = new SafeILog(typeof(FullCustomerController));
 	} // class FullCustomerController
 } // namespace

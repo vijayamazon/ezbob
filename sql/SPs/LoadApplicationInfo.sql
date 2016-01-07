@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -63,10 +64,39 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
+	-- Logica glue params
+	--
+	------------------------------------------------------------------------------
+	DECLARE @LogicalGlueResponseID BIGINT 
+	DECLARE @GradeID INT 
+	DECLARE @LogicalGlueScore DECIMAL(18,6)
+	
+	SELECT 
+		TOP 1
+		@LogicalGlueResponseID = lg.ResponseID,
+		@GradeID = lg.GradeID
+	FROM 
+		LogicalGlueResponses lg INNER JOIN MP_ServiceLog sl ON sl.Id = lg.ServiceLogID 
+	WHERE 
+		sl.CustomerId=@CustomerID AND sl.ServiceType='LogicalGlue'
+	ORDER BY lg.ResponseID DESC 	
+	
+	SELECT TOP 1 
+		@LogicalGlueScore = lgm.Score
+	FROM 
+		LogicalGlueModelOutputs lgm 
+	WHERE
+		lgm.ResponseID = @LogicalGlueResponseID
+	AND
+		lgm.ModelID = 2  --'Neural network'	
+	ORDER BY 
+		lgm.ModelOutputID DESC
+	
+		------------------------------------------------------------------------------
+	--
 	-- Customer and cash request details - main model content.
 	--
 	------------------------------------------------------------------------------
-
 	;WITH skip_aml AS (
 		SELECT TOP 1
 			CustomerID = a.CustomerId,
@@ -193,7 +223,8 @@ BEGIN
 			AND ci.IsDefault = 1
 		),
 		OriginID = c.OriginID,
-		GradeID = 1,  -- todo retrieve customers real grade
+		LogicalGlueScore = @LogicalGlueScore,
+		GradeID = @GradeID,
 		ProductSubTypeID = r.ProductSubTypeID,
 		NumOfLoans = nol.NumOfLoans
 	FROM

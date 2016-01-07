@@ -42,15 +42,19 @@
       <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:int" />
       <xs:element minOccurs="0" name="IsModified" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOffline" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRegulated" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsTest" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanTypeId" type="xs:int" />
       <xs:element minOccurs="0" name="LoanTypes" nillable="true" type="tns:ArrayOfLoanTypeModel" />
+      <xs:element minOccurs="0" name="LogicalGlueScore" type="xs:decimal" />
       <xs:element minOccurs="0" name="ManualSetupFeePercent" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="NumOfLoans" type="xs:int" />
       <xs:element minOccurs="0" name="OfferExpired" type="xs:boolean" />
       <xs:element minOccurs="0" name="OfferValidForHours" type="xs:int" />
       <xs:element minOccurs="0" name="OfferValidateUntil" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="OfferedCreditLine" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="OriginID" type="xs:int" />
       <xs:element minOccurs="0" name="ProductSubTypeID" nillable="true" type="xs:int" />
       <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="ProductSubTypes" nillable="true" type="q6:ArrayOfI_ProductSubType" />
@@ -64,6 +68,8 @@
       <xs:element minOccurs="0" name="SkipPopupForApprovalWithoutAML" type="xs:boolean" />
       <xs:element minOccurs="0" name="SpreadSetupFee" type="xs:boolean" />
       <xs:element minOccurs="0" name="StartingFromDate" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SubGradeID" nillable="true" type="xs:int" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="SubGrades" nillable="true" type="q9:ArrayOfI_SubGrade" />
       <xs:element minOccurs="0" name="SuggestedAmounts" nillable="true" type="tns:ArrayOfSuggestedAmountModel" />
       <xs:element minOccurs="0" name="SystemCalculatedAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="SystemDecision" nillable="true" type="xs:string" />

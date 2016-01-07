@@ -5,7 +5,7 @@
 		<div class="box">
 			<div class="box-content">
 				<div>
-					customer requested loan of <span name="requestedLoanAmount"></span> for <span name="requestedLoanTerm"></span> months
+					<span name="origin"></span> customer requested loan of <span name="requestedLoanAmount"></span> for <span name="requestedLoanTerm"></span> months
 				</div>
 				<div id="error-message" class="red_cell"></div>
 			</div>
@@ -104,33 +104,12 @@
 				</div>
 
 				<div class="control-group">
-					<label for="spreadSetupFee" class="control-label">Spread setup fee:</label>
-					<div class="controls">
-						<input name="spreadSetupFee" id="spreadSetupFee" type="checkbox" class="form-control" />
-					</div>
+					<label for="spreadSetupFee" class="control-label">Spread setup fee: <input name="spreadSetupFee" id="spreadSetupFee" type="checkbox" class="form-control" /></label>
+					<label for="allowSendingEmail" class="control-label">Send Emails: <input name="allowSendingEmail" id="allowSendingEmail" type="checkbox" class="form-control" /></label>
+					<label for="loanTypeSelection" class="control-label">Loan type selection allowed: <input name="loanTypeSelection" id="loanTypeSelection" type="checkbox" class="form-control" /></label>
+					<label for="repaymentPeriodSelection" class="control-label">Repayment period selection allowed: <input name="repaymentPeriodSelection" id="repaymentPeriodSelection" type="checkbox" class="form-control" /></label>
 				</div>
-
-				<div class="control-group">
-					<label for="allowSendingEmail" class="control-label">Send Emails:</label>
-					<div class="controls">
-						<input name="allowSendingEmail" id="allowSendingEmail" type="checkbox" class="form-control" />
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label for="loanTypeSelection" class="control-label">Loan type selection allowed:</label>
-					<div class="controls">
-						<input name="loanTypeSelection" id="loanTypeSelection" type="checkbox" class="form-control" />
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label for="repaymentPeriodSelection" class="control-label">Repayment period selection allowed:</label>
-					<div class="controls">
-						<input name="repaymentPeriodSelection" id="repaymentPeriodSelection" type="checkbox" class="form-control" />
-					</div>
-				</div>
-
+				
 				<div class="control-group">
 					<label for="loan-type" class="control-label">Discount Plan:</label>
 					<div class="controls">
