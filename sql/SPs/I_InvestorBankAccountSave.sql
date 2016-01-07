@@ -48,8 +48,8 @@ BEGIN
 		[BankAccountName],
 		[BankAccountNumber],
 		[RepaymentKey],
-		[IsActive],
-		[UserID],
+		[IsActive], 
+		
 		[Timestamp]
 	) SELECT
 		[InvestorID],
@@ -63,7 +63,7 @@ BEGIN
 		[BankAccountNumber],
 		[RepaymentKey],
 		[IsActive],
-		[UserID],
+	
 		[Timestamp]
 	FROM @Tbl
 
@@ -93,7 +93,7 @@ BEGIN
 		I_InvestorBankAccount.[RepaymentKey] = tbl.[RepaymentKey],
 		I_InvestorBankAccount.[IsActive] = tbl.[IsActive],
 		I_InvestorBankAccount.[Timestamp] = tbl.[Timestamp]
-		I_InvestorBankAccount.[UserID] = tbl.[UserID]
+		
 	FROM
 		I_InvestorBankAccount b 
 	INNER JOIN 
@@ -102,4 +102,3 @@ BEGIN
 		b.InvestorBankAccountID = tbl.InvestorBankAccountID
 END
 GO
-
