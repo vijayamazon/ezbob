@@ -313,6 +313,10 @@
       <Project>{19ec11bc-48ae-4bfb-bf8e-7aa6a90ac484}</Project>
       <Name>IovationLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LogicalGlue\LogicalGlue.csproj">
+      <Project>{8D2C4B94-EB8F-470E-927E-F22B7BEEC42F}</Project>
+      <Name>LogicalGlue</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>

@@ -17,7 +17,9 @@
 		/// from DB or queries Logical Glue API for specified customer and monthly payment.
 		/// </summary>
 		/// <param name="customerID">ID of customer to infer.</param>
-		/// <param name="monthlyPayment">Customer monthly payment.</param>
+		/// <param name="monthlyPayment">Customer monthly payment. If non-positive just calls
+		/// previous version of the method with requested customerID and GetInferenceMode.DownloadIfOld.
+		/// </param>
 		/// <returns>Customer inference results. Can be NULL.</returns>
 		Inference GetInference(int customerID, decimal monthlyPayment);
 
@@ -28,7 +30,8 @@
 		/// <param name="customerID">ID of customer to infer.</param>
 		/// <param name="time">Time of interest.</param>
 		/// <param name="includeTryOuts">Include try out data or not.</param>
-		/// <param name="monthlyPayment">Customer monthly payment.</param>
+		/// <param name="monthlyPayment">Customer monthly payment.
+		/// Ignored if is non-positive or <see cref="includeTryOuts"/> is false.</param>
 		/// <returns>The latest customer inference results that were available on requested time. Can be NULL.</returns>
 		Inference GetInference(int customerID, DateTime time, bool includeTryOuts, decimal monthlyPayment);
 	} // interface IEngine

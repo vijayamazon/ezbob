@@ -5,7 +5,7 @@
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
 
-	static class InjectorStub {
+	public static class InjectorStub {
 		public static IEngine GetTestEngine() {
 			return new Engine.Implementation.Engine(GetKeeper(), GetTestHarvester(), GetLog());
 		} // GetTestEngine

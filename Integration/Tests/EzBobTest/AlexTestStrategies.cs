@@ -1,6 +1,9 @@
 ﻿namespace EzBobTest {
 	using System;
+	using Ezbob.Backend.Strategies.LogicalGlue;
 	using Ezbob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Integration.LogicalGlue;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils;
 	using NUnit.Framework;
 
@@ -66,5 +69,15 @@
 			var x = new CalculateMedal(29486, null, DateTime.UtcNow, false, false);
 			x.Execute();
 		} // TestMedal
+
+		[Test]
+		public void TestGetLatestKnownLogicalGlue() {
+			var lgEngine = InjectorStub.GetEngine();
+			lgEngine.GetInference(1417, GetInferenceMode.DownloadIfOld);
+
+			var stra = new GetLatestKnownInference(1417, null, false);
+			stra.Execute();
+			m_oLog.Debug("Inference is: {0}", stra.Inference);
+		} // TestGetLatestKnownLogicalGlue
 	} // class AlexTestStrategies
 } // namespace

@@ -184,6 +184,7 @@
     <Compile Include="Investor\CreateInvestor.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="LogicalGlue\GetLatestKnownInference.cs" />
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
