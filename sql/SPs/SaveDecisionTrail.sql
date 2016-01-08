@@ -46,7 +46,7 @@ CREATE PROCEDURE SaveDecisionTrail
 @UniqueID UNIQUEIDENTIFIER,
 @DecisionStatusID INT,
 @InputData NVARCHAR(MAX),
-@IsPrimary BIT,
+@IsPrimary INT,
 @HasApprovalChance BIT,
 @CashRequestID BIGINT,
 @Tag NVARCHAR(256),

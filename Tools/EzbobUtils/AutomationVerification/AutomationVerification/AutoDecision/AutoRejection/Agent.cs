@@ -24,8 +24,6 @@
 			long? cashRequestID,
 			RejectionConfigs configs = null
 		) {
-			IsAutoRejected = false;
-
 			this.customerId = nCustomerID;
 
 			this.log = oLog;
@@ -37,8 +35,6 @@
 
 			Trail = new RejectionTrail(nCustomerID, cashRequestID, oLog);
 		} // constructor
-
-		public bool IsAutoRejected { get; private set; }
 
 		/// <summary>
 		/// Retrieves customer's rejection input data
@@ -149,9 +145,6 @@
 				!this.companyTooYoung;
 
 			Trail.DecideIfNotDecided();
-
-			if (Trail.HasDecided)
-				IsAutoRejected = true;
 
 			this.log.Debug(
 				"Secondary: checking if auto reject should take place for customer {0} complete; {1}",

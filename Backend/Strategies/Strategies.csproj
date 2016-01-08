@@ -103,6 +103,7 @@
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LGAgent.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\ApproveStatus.cs" />

@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoDecision\AutoRejection\LGAgent.cs" />
+    <Compile Include="ProcessHistory\TrailPrimaryStatus.cs" />
     <Compile Include="TokenIntersection.cs" />
     <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />

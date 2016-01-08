@@ -32,7 +32,6 @@
 			DB = oDB;
 			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, cashRequestID);
-			HasApprovalChance = false;
 		} // constructor
 
 		public virtual Agent Init() {
@@ -56,8 +55,6 @@
 
 			return this;
 		} // Init
-
-		public bool HasApprovalChance { get; private set; }
 
 		public virtual bool MakeAndVerifyDecision(string tag, bool quiet = false) {
 			Trail.SetTag(tag);
@@ -301,9 +298,7 @@
 
 			GatherData();
 
-			var checker = new Checker(Trail, Log).Run();
-
-			HasApprovalChance = checker.Trail.HasApprovalChance;
+			new Checker(Trail, Log).Run();
 
 			Trail.DecideIfNotDecided();
 

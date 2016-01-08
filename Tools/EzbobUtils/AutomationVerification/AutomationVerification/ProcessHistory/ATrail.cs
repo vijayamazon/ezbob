@@ -125,7 +125,12 @@
 				if (nSecondFieldLength < oTrace.Name.Length)
 					nSecondFieldLength = oTrace.Name.Length;
 
-				lst.Add(new Tuple<string, string, string, string>(sDecisionName, oTrace.Name, oTrace.Comment, oTrace.HasLockedDecision ? "LOCKED DECISION " : string.Empty));
+				lst.Add(new Tuple<string, string, string, string>(
+					sDecisionName,
+					oTrace.Name,
+					oTrace.Comment,
+					oTrace.HasLockedDecision ? "LOCKED DECISION " : string.Empty
+				));
 			} // for
 
 			var os = new StringBuilder();
@@ -136,7 +141,7 @@
 				nFirstFieldLength,
 				nSecondFieldLength + 1
 			);
-            
+
 			for (int i = 0; i < lst.Count; i++) {
 				Tuple<string, string, string, string> tpl = lst[i];
 				os.AppendFormat(sFormat, i + 1, tpl.Item1, tpl.Item2 + ':', tpl.Item3, tpl.Item4);
@@ -255,14 +260,14 @@
 
 					if (!bQuiet)
 						m_oLog.Warn("Trails are different: {0}", sMsg);
-				}
-				else if (oMyTrace.DecisionStatus != oOtherTrace.DecisionStatus) {
+				} else if (oMyTrace.DecisionStatus != oOtherTrace.DecisionStatus) {
 					if (!oMyTrace.AllowMismatch)
 						bResult = false;
 
 					string sMsg = string.Format(
-						"Different conclusions for '{4}' have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
-						i+1,
+						"Different conclusions for '{4}' have been reached on step {0} - {1}: " +
+						"{2} in the first vs {3} in the second.",
+						i + 1,
 						oMyTrace.GetType().Name,
 						oMyTrace.DecisionStatus,
 						oOtherTrace.DecisionStatus,
@@ -281,8 +286,9 @@
 						bResult = false;
 
 					string sMsg = string.Format(
-						"Different conclusions for '{4}' decision lock have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
-						i+1,
+						"Different conclusions for '{4}' decision lock have been reached on step {0} - {1}: " +
+						"{2} in the first vs {3} in the second.",
+						i + 1,
 						oMyTrace.GetType().Name,
 						oMyTrace.HasLockedDecision ? "locked" : "not locked",
 						oOtherTrace.HasLockedDecision ? "locked" : "not locked",
@@ -312,7 +318,12 @@
 
 		private Guid? m_oUniqueID;
 
-		public virtual void Save(AConnection oDB, ATrail oTrail) {
+		public virtual void Save(
+			AConnection oDB,
+			ATrail oTrail,
+			TrailPrimaryStatus primaryStatus = TrailPrimaryStatus.Primary,
+			TrailPrimaryStatus secondaryStatus = TrailPrimaryStatus.Verification
+		) {
 			ConnectionWrapper cw = null;
 
 			try {
@@ -321,16 +332,30 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				var sp = new SaveDecisionTrail(this, UniqueID, true, CashRequestID, this.tag, oDB, this.m_oLog);
-				sp.ExecuteNonQuery(cw);
+				new SaveDecisionTrail(
+					this,
+					UniqueID,
+					(int)primaryStatus,
+					CashRequestID,
+					Tag,
+					oDB,
+					this.m_oLog
+				).ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
 
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, UniqueID, false, CashRequestID, this.tag, oDB, this.m_oLog);
-					sp.ExecuteNonQuery(cw);
+					new SaveDecisionTrail(
+						oTrail,
+						UniqueID,
+						(int)secondaryStatus,
+						CashRequestID,
+						Tag,
+						oDB,
+						this.m_oLog
+					).ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
 				} // if
@@ -353,9 +378,11 @@
 		} // AddCheckpoint
 
 		public ATrail SetTag(string aTag) {
-			this.tag = aTag;
+			Tag = aTag;
 			return this;
 		} // SetTag
+
+		public string Tag { get; private set; }
 
 		protected ATrail(
 			int nCustomerID,
@@ -401,7 +428,7 @@
 			public SaveDecisionTrail(
 				ATrail oTrail,
 				Guid oDiffID,
-				bool bIsPrimary,
+				int isPrimary,
 				long? cashRequestID,
 				string tag,
 				AConnection oDB,
@@ -413,7 +440,7 @@
 				UniqueID = oDiffID;
 				DecisionStatusID = (int)oTrail.DecisionStatus;
 				InputData = oTrail.InputData.Serialize();
-				IsPrimary = bIsPrimary;
+				IsPrimary = isPrimary;
 				HasApprovalChance = oTrail.HasApprovalChance;
 				CashRequestID = cashRequestID;
 				Tag = tag;
@@ -510,7 +537,7 @@
 			public string InputData { get; set; }
 
 			[UsedImplicitly]
-			public bool IsPrimary { get; set; }
+			public int IsPrimary { get; set; }
 
 			[UsedImplicitly]
 			public bool HasApprovalChance { get; set; }
@@ -569,7 +596,7 @@
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
 				HttpUtility.HtmlEncode(InputData.Serialize()),
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize()),
-				this.tag,
+				Tag,
 				UniqueID
 			);
 
@@ -584,7 +611,10 @@
 		} // SendExplanationMail
 
 		private const string EmailFormat =
-			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b> (tag '{7}')</u></h1><br>" +
+			"<h1><u>" +
+				"Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b> " +
+				"(tag '{7}')" +
+			"</u></h1><br>" +
 			"<h2><b style='color:red'>{2}</b><br></h2>" +
 			"<p>Trail unique id: '{8}'</p>" +
 			"<h2><b>main flow:</b></h2>" +
@@ -603,6 +633,5 @@
 		private readonly string m_sFromEmailAddress;
 		private readonly string m_sFromEmailName;
 		private readonly TimeCounter timer;
-		private string tag;
 	} // class Trail
 } // namespace

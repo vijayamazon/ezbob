@@ -37,7 +37,7 @@
 		) {
 			UnderwriterID = underwriterID;
 			this.newCreditLineOption = newCreditLine;
-			this.avoidAutomaticDecision = avoidAutoDecision;
+			this.avoidAutomaticDecision = (avoidAutoDecision == 1) || newCreditLine.AvoidAutoDecision();
 			this.finishWizardArgs = fwa;
 			this.overrideApprovedRejected = true;
 			this.cashRequestID = new InternalCashRequestID(cashRequestID);
@@ -132,7 +132,7 @@
 		} // SkipEverything
 
 		private void StandardFlow() {
-			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
+			if (this.newCreditLineOption.UpdateData()) {
 				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
 				new Staller(CustomerID, this.mailer)
@@ -142,10 +142,8 @@
 				ExecuteAdditionalStrategies();
 			} // if
 
-			if (!this.customerDetails.IsTest) {
-				var fraudChecker = new FraudChecker(CustomerID, FraudMode.FullCheck);
-				fraudChecker.Execute();
-			} // if
+			if (!this.customerDetails.IsTest)
+				new FraudChecker(CustomerID, FraudMode.FullCheck).Execute();
 
 			ForceNhibernateResync.ForCustomer(CustomerID);
 
@@ -308,7 +306,7 @@
 			);
 		} // CapOffer
 
-		private void ProcessApprovals() {
+		private bool ApprovalPreconditions() {
 			bool bContinue = true;
 
 			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -322,12 +320,7 @@
 				bContinue = false;
 			} // if
 
-			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision && bContinue) {
-				Log.Info("Not processing approvals: {0} option selected.", this.newCreditLineOption);
-				bContinue = false;
-			} // if
-
-			if (this.avoidAutomaticDecision == 1 && bContinue) {
+			if (this.avoidAutomaticDecision && bContinue) {
 				Log.Info("Not processing approvals: automatic decisions should be avoided.");
 				bContinue = false;
 			} // if
@@ -351,6 +344,12 @@
 				Log.Info("Not processing approvals: auto rejection is disabled.");
 				bContinue = false;
 			} // if
+
+			return bContinue;
+		} // ApprovalPreconditions
+
+		private void ProcessApprovals() {
+			bool bContinue = ApprovalPreconditions();
 
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (EnableAutomaticReApproval && bContinue) {
@@ -377,6 +376,11 @@
 				} // if
 			} else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
+
+			if (this.customerDetails.IsAlibaba && bContinue) {
+				Log.Info("Not processing auto-approval: Alibaba customer.");
+				bContinue = false;
+			} // if
 
 			if (EnableAutomaticApproval && bContinue) {
 				var aAgent = new Approval(
@@ -434,11 +438,10 @@
 		} // ProcessApprovals
 
 		private void ProcessRejections() {
-			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision)
+			if (this.avoidAutomaticDecision) {
+				Log.Debug("Not processing auto-rejections: auto decisions should be avoided.");
 				return;
-
-			if (this.avoidAutomaticDecision == 1)
-				return;
+			} // if
 
 			if (EnableAutomaticReRejection) {
 				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, DB, Log);
@@ -451,16 +454,22 @@
 				} // if
 			} // if
 
-			if (this.autoDecisionResponse.IsReRejected)
+			if (this.autoDecisionResponse.IsReRejected) {
+				Log.Debug("Not processing auto-rejection: re-rejected.");
 				return;
+			} // if
 
-			if (!EnableAutomaticRejection)
+			if (!EnableAutomaticRejection) {
+				Log.Debug("Not processing auto-rejection: auto-rejection is disabled.");
 				return;
+			} // if
 
-			if (this.customerDetails.IsAlibaba)
+			if (this.customerDetails.IsAlibaba) {
+				Log.Debug("Not processing auto-rejection: Alibaba customer.");
 				return;
+			} // if
 
-			var rAgent = new Agent(CustomerID, this.cashRequestID, DB, Log).Init();
+			var rAgent = new LGAgent(CustomerID, this.cashRequestID, DB, Log).Init();
 			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 			if (rAgent.WasMismatch) {
@@ -594,15 +603,13 @@
 					Email = customerEmail,
 					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 					DealLostReason = "Auto " + this.autoDecisionResponse.Decision.Value.ToString(),
-					CloseDate = DateTime.UtcNow
+					CloseDate = DateTime.UtcNow,
 				}).Execute();
 				break;
 			} // switch
 		} // UpdateSalesForceOpportunity
 
-		private void ExecuteAdditionalStrategies() {
-			var preData = new PreliminaryData(CustomerID);
-
+		private void DoConsumerCheck(PreliminaryData preData) {
 			new ExperianConsumerCheck(CustomerID, null, false)
 				.PreventSilentAutomation()
 				.Execute();
@@ -625,17 +632,23 @@
 					new QueryParameter("CustomerId", CustomerID)
 				);
 			} // if
+		} // DoConsumerCheck
 
+		private void DoCompanyCheck(PreliminaryData preData) {
 			if (preData.LastStartedMainStrategyEndTime.HasValue) {
 				Library.Instance.Log.Info("Performing experian company check");
 				new ExperianCompanyCheck(CustomerID, false)
 					.PreventSilentAutomation()
 					.Execute();
 			} // if
+		} // DoCompanyCheck
 
+		private void DoAmlCheck(PreliminaryData preData) {
 			if (preData.LastStartedMainStrategyEndTime.HasValue)
 				new AmlChecker(CustomerID).PreventSilentAutomation().Execute();
+		} // DoAmlCheck
 
+		private void DoBwaCheck(PreliminaryData preData) {
 			bool shouldRunBwa =
 				preData.AppBankAccountType == "Personal" &&
 				preData.BwaBusinessCheck == "1" &&
@@ -644,9 +657,21 @@
 
 			if (shouldRunBwa)
 				new BwaChecker(CustomerID).Execute();
+		} // DoBwaCheck
 
+		private void DoZooplaCheck() {
 			Library.Instance.Log.Info("Getting Zoopla data for customer {0}", CustomerID);
 			new ZooplaStub(CustomerID).Execute();
+		} // DoZooplaCheck
+
+		private void ExecuteAdditionalStrategies() {
+			var preData = new PreliminaryData(CustomerID);
+
+			DoConsumerCheck(preData);
+			DoCompanyCheck(preData);
+			DoAmlCheck(preData);
+			DoBwaCheck(preData);
+			DoZooplaCheck();
 		} // ExecuteAdditionalStrategies
 
 		private static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
@@ -816,11 +841,7 @@
 		} // CreateCashRequest
 
 		private MarketplaceUpdateStatus UpdateMarketplaces() {
-			bool updateEverything =
-				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
-				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
-
-			if (!updateEverything)
+			if (!this.newCreditLineOption.UpdateData())
 				return null;
 
 			Log.Debug("Checking which marketplaces should be updated for customer {0}...", CustomerID);
@@ -880,7 +901,7 @@
 		} // UpdateMarketplaces
 
 		private readonly FinishWizardArgs finishWizardArgs;
-		private readonly int avoidAutomaticDecision;
+		private readonly bool avoidAutomaticDecision;
 
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly AutoDecisionResponse autoDecisionResponse;

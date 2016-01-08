@@ -16,6 +16,20 @@
 		UpdateEverythingAndGoToManualDecision = 4,
 	} // enum NewCreditLineOption
 
+	public static class NewCreditLineOptionExt {
+		public static bool AvoidAutoDecision(this NewCreditLineOption nco) {
+			return
+				(nco == NewCreditLineOption.SkipEverything) ||
+				(nco == NewCreditLineOption.UpdateEverythingAndGoToManualDecision);
+		} // AvoidAutoDecision
+
+		public static bool UpdateData(this NewCreditLineOption nco) {
+			return
+				(nco == NewCreditLineOption.UpdateEverythingAndApplyAutoRules) ||
+				(nco == NewCreditLineOption.UpdateEverythingAndGoToManualDecision);
+		} // UpdateData
+	} // class NewCreditLineOptionExt
+
 	[DataContract]
 	public enum FraudMode {
 		[EnumMember]
