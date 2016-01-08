@@ -16,6 +16,14 @@
 		[DataMember]
 		public Bucket? Bucket { get; set; }
 
+		public decimal? Score {
+			get {
+				return ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
+					? ModelOutputs[ModelNames.NeuralNetwork].Grade.Score
+					: null;
+			} // get
+		} // Score
+
 		[DataMember]
 		public SortedDictionary<ModelNames, ModelOutput> ModelOutputs {
 			get {
