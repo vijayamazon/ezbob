@@ -66,20 +66,24 @@
 			this.oldWayAgent.MakeDecision(this.oldWayAgent.GetRejectionInputData(this.now));
 			this.oldWayAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
 
-			bool followLogicalGlueFlow = FollowLogicalGlueFlow();
+			ChooseInternalOrLogicalGlueFlow();
 
-			if (followLogicalGlueFlow) {
-				StepNoDecision<LogicalGlueFlow>().Init();
+			if (LogicalGlueFlowFollowed) {
 				// TODO Logical Glue flow goes here.
-			} else {
-				StepNoDecision<InternalFlow>().Init();
+			} else
 				Trail.AppendOverridingResults(this.oldWayAgent.Trail);
-			} // if
 		} // MakeDecision
 
-		private bool FollowLogicalGlueFlow() {
-			return false; // TODO: detect from company type	
-		} // FollowLogicalGlueFlow
+		public bool LogicalGlueFlowFollowed {
+			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
+		} // LogicalGlueFlowFollowed
+
+		protected virtual void ChooseInternalOrLogicalGlueFlow() {
+			if (false) // TODO choose from company type
+				StepNoDecision<LogicalGlueFlow>().Init();
+			else
+				StepNoDecision<InternalFlow>().Init();
+		} // ChooseInternalOrLogicalGlueFlow
 
 		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);

@@ -35,13 +35,15 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public virtual void MakeAndVerifyDecision(string tag, bool quiet = false) {
+			AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary = null;
+
 			try {
 				Trail.SetTag(tag);
 
 				RunPrimary();
 
-				AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary = RunSecondary();
+				oSecondary = RunSecondary();
 
 				if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
 					Trail.Negative<SameApprovalChance>(false)
@@ -56,31 +58,29 @@
 				} // if
 
 				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
-
-				Trail.Save(DB, oSecondary.Trail);
-
-				return !WasMismatch;
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				Trail.Negative<ExceptionThrown>(true).Init(e);
-				return false;
 			} // try
+
+			Trail.Save(DB, oSecondary == null ? null : oSecondary.Trail);
 		} // MakeAndVerifyDecision
+
+		public bool LogicalGlueFlowFollowed {
+			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
+		} // LogicalGlueFlowFollowed
 
 		protected virtual void RunPrimary() {
 			this.oldWayAgent.RunPrimaryOnly();
 			this.oldWayAgent.Trail.SetTag(Trail.Tag);
 			this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
 
-			bool followLogicalGlueFlow = FollowLogicalGlueFlow();
+			ChooseInternalOrLogicalGlueFlow();
 
-			if (followLogicalGlueFlow) {
-				Trail.Dunno<LogicalGlueFlow>().Init();
+			if (LogicalGlueFlowFollowed) {
 				// TODO Logical Glue flow goes here.
-			} else {
-				Trail.Dunno<InternalFlow>().Init();
+			} else
 				Trail.AppendOverridingResults(this.oldWayAgent.Trail);
-			} // if
 		} // RunPrimary
 
 		protected virtual Configuration InitCfg() {
@@ -110,9 +110,12 @@
 			return oSecondary;
 		} // RunSecondary
 
-		private bool FollowLogicalGlueFlow() {
-			return false; // TODO: detect from company type	
-		} // FollowLogicalGlueFlow
+		protected virtual void ChooseInternalOrLogicalGlueFlow() {
+			if (false) // TODO choose from company type
+				Trail.Dunno<LogicalGlueFlow>().Init();
+			else
+				Trail.Dunno<InternalFlow>().Init();
+		} // ChooseInternalOrLogicalGlueFlow
 
 		private readonly Agent oldWayAgent;
 	} // class LGAgent

@@ -13,12 +13,16 @@
 		} // DecisionName
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
-			return new Agent(
+			var a = new Agent(
 				oRow.CustomerId,
 				null,
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision(Tag);
+			).Init();
+			
+			a.MakeAndVerifyDecision(Tag);
+
+			return !a.WasMismatch;
 		} // MakeAndVerifyDecision
 	} // class VerifyReject
 } // namespace

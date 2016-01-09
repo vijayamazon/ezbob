@@ -54,13 +54,14 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public virtual void MakeAndVerifyDecision(string tag, bool quiet = false) {
+			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = null;
 			try {
 				Trail.SetTag(tag);
 
 				RunPrimary();
 
-				AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = RunSecondary();
+				oSecondary = RunSecondary();
 
 				if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
 					Trail.Negative<SameApprovalChance>(false)
@@ -76,14 +77,12 @@
 
 				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
 
-				Trail.Save(DB, oSecondary.Trail);
-
-				return !WasMismatch;
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
-				return false;
 			} // try
+
+			Trail.Save(DB, oSecondary == null ? null : oSecondary.Trail);
 		} // MakeAndVerifyDecision
 
 		public virtual void RunPrimaryOnly() {
