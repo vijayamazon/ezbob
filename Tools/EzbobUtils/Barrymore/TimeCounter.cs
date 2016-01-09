@@ -30,6 +30,13 @@
 
 		public string Title { get; private set; }
 
+		public TimeCounter Append(TimeCounter other) {
+			if (other != null)
+				Steps.AddRange(other.Steps);
+
+			return this;
+		} // Append
+
 		public class Timer : IDisposable {
 			internal Timer(List<Step> oCheckpoints, string sFormat, params object[] args) {
 				m_oStopwatch = Stopwatch.StartNew();

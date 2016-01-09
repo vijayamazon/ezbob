@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
 	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -65,14 +66,32 @@
 			this.oldWayAgent.MakeDecision(this.oldWayAgent.GetRejectionInputData(this.now));
 			this.oldWayAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
 
-			bool useOldFlow = true; // TODO: detect from company type
+			bool followLogicalGlueFlow = FollowLogicalGlueFlow();
 
-			if (useOldFlow)
-				Trail = this.oldWayAgent.Trail;
-			else {
+			if (followLogicalGlueFlow) {
+				StepNoDecision<LogicalGlueFlow>().Init();
 				// TODO Logical Glue flow goes here.
+			} else {
+				StepNoDecision<InternalFlow>().Init();
+				Trail.AppendOverridingResults(this.oldWayAgent.Trail);
 			} // if
 		} // MakeDecision
+
+		private bool FollowLogicalGlueFlow() {
+			return false; // TODO: detect from company type	
+		} // FollowLogicalGlueFlow
+
+		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
+			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
+		} // StepReject
+
+		private T StepNoReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
+			return Trail.Negative<T>(bLockDecisionAfterAddingAStep);
+		} // StepNoReject
+
+		private T StepNoDecision<T>() where T : ATrace {
+			return Trail.Dunno<T>();
+		} // StepReject
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

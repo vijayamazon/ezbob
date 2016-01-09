@@ -470,11 +470,17 @@
 			} // if
 
 			var rAgent = new LGAgent(CustomerID, this.cashRequestID, DB, Log).Init();
-			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
+			bool success = rAgent.MakeAndVerifyDecision(this.tag);
 
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;
 				Log.Warn("Mismatch happened while executing rejection, automation aborted.");
+			} else if (success && rAgent.Trail.HasDecided) {
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
+				this.autoDecisionResponse.UserStatus = Status.Rejected;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
+				this.autoDecisionResponse.DecisionName = "Rejection";
+				this.autoDecisionResponse.Decision = DecisionActions.Reject;
 			} // if
 		} // ProcessRejections
 

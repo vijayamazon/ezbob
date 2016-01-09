@@ -12,7 +12,6 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -23,7 +22,6 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Lingvo;
-	using EZBob.DatabaseLib.Model.Database;
 
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
@@ -57,53 +55,40 @@
 		} // Init
 
 		public virtual bool MakeAndVerifyDecision(string tag, bool quiet = false) {
-			Trail.SetTag(tag);
+			try {
+				Trail.SetTag(tag);
 
-			RunPrimary();
+				RunPrimary();
 
-			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = RunSecondary();
+				AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = RunSecondary();
 
-			if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
-				Trail.Negative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-				oSecondary.Trail.Negative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-			} else {
-				Trail.Affirmative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-				oSecondary.Trail.Affirmative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-			} // if
+				if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
+					Trail.Negative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+					oSecondary.Trail.Negative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				} else {
+					Trail.Affirmative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+					oSecondary.Trail.Affirmative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				} // if
 
-			WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
+				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
 
-			Trail.Save(DB, oSecondary.Trail);
+				Trail.Save(DB, oSecondary.Trail);
 
-			return !WasMismatch;
+				return !WasMismatch;
+			} catch (Exception e) {
+				Log.Error(e, "Exception during auto rejection.");
+				StepNoReject<ExceptionThrown>().Init(e);
+				return false;
+			} // try
 		} // MakeAndVerifyDecision
 
 		public virtual void RunPrimaryOnly() {
 			RunPrimary();
 		} // RunPrimaryOnly
-
-		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
-			bool bSuccess = false;
-
-			try {
-				bSuccess = MakeAndVerifyDecision(tag);
-			} catch (Exception e) {
-				Log.Error(e, "Exception during auto rejection.");
-				StepNoReject<ExceptionThrown>().Init(e);
-			} // try
-
-			if (bSuccess && Trail.HasDecided) {
-				response.CreditResult = CreditResultStatus.Rejected;
-				response.UserStatus = Status.Rejected;
-				response.SystemDecision = SystemDecision.Reject;
-				response.DecisionName = "Rejection";
-				response.Decision = DecisionActions.Reject;
-			} // if
-		} // MakeDecision
 
 		/// <summary>
 		/// Calculate annual and quarter turnover for R
