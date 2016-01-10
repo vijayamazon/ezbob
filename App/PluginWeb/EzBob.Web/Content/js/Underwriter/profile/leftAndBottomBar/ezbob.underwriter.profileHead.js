@@ -266,10 +266,17 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 	serializeData: function () {
 		return {
 			medal: this.model.get('Score'),
+			logicalGlue: this.model.get('LogicalGlue'),
+			m: { Id: this.model.get('Id') }
 		};
 	},
 
 	onRender: function () {
+		this.$el.find('[data-toggle="tooltip"]').tooltip({
+			html: true,
+			'placement': 'bottom'
+		});
+
 		var medalHistory = this.model.get('History');
 		if (medalHistory) {
 			var histData = [];

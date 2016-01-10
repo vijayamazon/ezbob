@@ -75,6 +75,7 @@
     <Compile Include="ActionResults\DecisionHistoryResult.cs" />
     <Compile Include="ActionResults\ApplicationInfoResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
+    <Compile Include="ActionResults\Investor\LogicalGlueResult.cs" />
     <Compile Include="ActionResults\Investor\AccountingDataResult.cs" />
     <Compile Include="ActionResults\Investor\InvestorActionResult.cs" />
     <Compile Include="ActionResults\Investor\TransactionsDataResult.cs" />
@@ -218,6 +219,10 @@
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
       <Name>FraudChecker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\LogicalGlue\LogicalGlue.csproj">
+      <Project>{8D2C4B94-EB8F-470E-927E-F22B7BEEC42F}</Project>
+      <Name>LogicalGlue</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>

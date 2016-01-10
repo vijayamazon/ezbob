@@ -113,6 +113,9 @@
     <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -250,6 +253,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LogicalGlueResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LotteryActionResult.datasource">

@@ -83,6 +83,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
@@ -609,15 +610,23 @@
   <wsdl:message name="IEzService_LoadAccountingData_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadAccountingDataResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
   <wsdl:message name="IEzService_LoadTransactionsData_InputMessage">
     <wsdl:part name="parameters" element="tns:LoadTransactionsData" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
   <wsdl:message name="IEzService_LoadTransactionsData_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadTransactionsDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLatestKnownInference_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLatestKnownInference" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLatestKnownInference_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLatestKnownInferenceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
@@ -1920,12 +1929,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData" message="tns:IEzService_LoadAccountingData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse" message="tns:IEzService_LoadAccountingData_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="LoanFullyPaid">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     <wsdl:operation name="LoadTransactionsData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData" message="tns:IEzService_LoadTransactionsData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse" message="tns:IEzService_LoadTransactionsData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestKnownInference">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInference" message="tns:IEzService_GetLatestKnownInference_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInferenceResponse" message="tns:IEzService_GetLatestKnownInference_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoanFullyPaid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -3349,6 +3363,15 @@
     </wsdl:operation>
     <wsdl:operation name="LoadTransactionsData">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestKnownInference">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInference" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -238,6 +238,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountingDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.TransactionsDataResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LogicalGlueResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -2052,6 +2053,141 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LogicalGlueResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class LogicalGlueResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<ServiceClientProxy.EzServiceReference.Bucket> BucketField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal BucketPercentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BucketStrField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> FLScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal MonthlyRepaymentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> NNScoreField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<ServiceClientProxy.EzServiceReference.Bucket> Bucket {
+            get {
+                return this.BucketField;
+            }
+            set {
+                if ((this.BucketField.Equals(value) != true)) {
+                    this.BucketField = value;
+                    this.RaisePropertyChanged("Bucket");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal BucketPercent {
+            get {
+                return this.BucketPercentField;
+            }
+            set {
+                if ((this.BucketPercentField.Equals(value) != true)) {
+                    this.BucketPercentField = value;
+                    this.RaisePropertyChanged("BucketPercent");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string BucketStr {
+            get {
+                return this.BucketStrField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BucketStrField, value) != true)) {
+                    this.BucketStrField = value;
+                    this.RaisePropertyChanged("BucketStr");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Date {
+            get {
+                return this.DateField;
+            }
+            set {
+                if ((this.DateField.Equals(value) != true)) {
+                    this.DateField = value;
+                    this.RaisePropertyChanged("Date");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> FLScore {
+            get {
+                return this.FLScoreField;
+            }
+            set {
+                if ((this.FLScoreField.Equals(value) != true)) {
+                    this.FLScoreField = value;
+                    this.RaisePropertyChanged("FLScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal MonthlyRepayment {
+            get {
+                return this.MonthlyRepaymentField;
+            }
+            set {
+                if ((this.MonthlyRepaymentField.Equals(value) != true)) {
+                    this.MonthlyRepaymentField = value;
+                    this.RaisePropertyChanged("MonthlyRepayment");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> NNScore {
+            get {
+                return this.NNScoreField;
+            }
+            set {
+                if ((this.NNScoreField.Equals(value) != true)) {
+                    this.NNScoreField = value;
+                    this.RaisePropertyChanged("NNScore");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="StringListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class StringListActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -3052,6 +3188,36 @@ namespace ServiceClientProxy.EzServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Bucket", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Inte" +
+        "rface")]
+    public enum Bucket : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        A = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        B = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        C = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        D = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        E = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        F = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        G = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        H = 8,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -4430,15 +4596,23 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AccountingDataResult> LoadAccountingDataAsync(int underwriterID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
         ServiceClientProxy.EzServiceReference.TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.TransactionsDataResult> LoadTransactionsDataAsync(int underwriterID, int investorID, int bankAccountTypeID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInference", ReplyAction="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInferenceResponse")]
+        ServiceClientProxy.EzServiceReference.LogicalGlueResult GetLatestKnownInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInference", ReplyAction="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInferenceResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> GetLatestKnownInferenceAsync(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
@@ -6086,6 +6260,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.TransactionsDataResult> LoadTransactionsDataAsync(int underwriterID, int investorID, int bankAccountTypeID) {
             return base.Channel.LoadTransactionsDataAsync(underwriterID, investorID, bankAccountTypeID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.LogicalGlueResult GetLatestKnownInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
+            return base.Channel.GetLatestKnownInference(underwriterID, customerID, date, includeTryouts);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> GetLatestKnownInferenceAsync(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
+            return base.Channel.GetLatestKnownInferenceAsync(underwriterID, customerID, date, includeTryouts);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {

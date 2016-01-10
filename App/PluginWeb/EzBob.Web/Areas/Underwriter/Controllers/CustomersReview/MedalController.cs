@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System;
 	using Code;
 	using System.Web.Mvc;
 	using Infrastructure;
@@ -8,7 +9,7 @@
 	using ServiceClientProxy;
 
 	public class MedalController : Controller {
-		public MedalController(CustomerRepository customersRepository, IWorkplaceContext context) {
+		public MedalController(CustomerRepository customersRepository, IEzbobWorkplaceContext context) {
 			this.customerRepository = customersRepository;
 			this.serviceClient = new ServiceClient();
 			this.context = context;

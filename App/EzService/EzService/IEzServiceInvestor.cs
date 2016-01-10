@@ -1,4 +1,5 @@
 ﻿namespace EzService {
+	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using Ezbob.Backend.Models.Investor;
@@ -23,5 +24,8 @@
 
 		[OperationContract]
 		TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
+
+		[OperationContract]
+		LogicalGlueResult GetLatestKnownInference(int underwriterID, int customerID, DateTime? date, bool includeTryouts);
 	} // interface IEzServiceInvestor
 } // namespace  

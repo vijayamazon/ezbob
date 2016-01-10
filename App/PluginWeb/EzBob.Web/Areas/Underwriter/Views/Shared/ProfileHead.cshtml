@@ -8,7 +8,7 @@
 					<li ><a href="#logical-glue" class="btn btn-dashboard" data-toggle="tab">Grade</a></li>
 				</ul>
 				<button class="btn btn-mini btn-dashboard" id="RecalculateMedalBtn">Recalculate</button>
-				@BoxTools("Medal", "#calculator", false)
+				@BoxTools("Medal", "#calculator")
 			</div>
 			<div class="box-content">
 				<div class="tab-content">
@@ -30,18 +30,39 @@
 					</div>
 					<div class="tab-pane fade in logical-glue" id="logical-glue">
 						<div class="logical-glue-bucket">
-							<span>Bucket <span class="logical-glue-bucket-value">A</span></span>
+							<span>Bucket 
+								<span class="logical-glue-bucket-value"><%-logicalGlue.BucketStr%></span>
+								<%if(logicalGlue.Error){%>
+									<span class="logical-glue-error" data-toggle="tooltip" data-title="<%-logicalGlue.Error%>"><i class="fa fa-info-circle"></i></span>
+								<%}%>
+							</span>
 							<div class="logical-glue-bucket-progress progress progress-striped">
-								<div class="bar" style="width: 27%;"></div>
+								<div class="bar" style="width: <%- logicalGlue.BucketPercent*100 %>%;"></div>
 							</div>
 						</div>
 						<div>
+							<div class="logical-glue-score">
+								<div>
+									<span>Monthly payment</span>
+								</div>
+								<div>
+									<span><%- EzBob.formatPoundsAsInt(logicalGlue.MonthlyRepayment) %></span>
+								</div>
+							</div>
+							<div class="logical-glue-score">
+								<div>
+									<span>Date</span>
+								</div>
+								<div>
+									<span><%-EzBob.formatDateUK(logicalGlue.Date)%></span>
+								</div>
+							</div>
 							<div class="logical-glue-score alert alert-info">
 								<div>
 									<span>NN</span>
 								</div>
 								<div>
-									<span>0.156</span>
+									<span><%-logicalGlue.NNScore%></span>
 								</div>
 							</div>
 							<div class="logical-glue-score alert alert-info">
@@ -49,7 +70,7 @@
 									<span>FL</span>
 								</div>
 								<div>
-									<span>0.156</span>
+									<span><%-logicalGlue.FLScore%></span>
 								</div>
 							</div>
 						</div>
