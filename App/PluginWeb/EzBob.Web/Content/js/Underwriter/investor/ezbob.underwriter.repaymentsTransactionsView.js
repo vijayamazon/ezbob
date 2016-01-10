@@ -50,7 +50,7 @@ EzBob.Underwriter.RepaymentsTransactionsView = Backbone.Marionette.ItemView.exte
 			return this.model.get("TransactionsList");
 		} else {
 			var temp = _.filter(this.model.get("TransactionsList"), function(a) {
-				return ((moment(transactionsFrom, "DD/MM/YYYY") < moment(a.TransactionDate)) && (moment(transactionsTo, "DD/MM/YYYY") > moment(a.TransactionDate).add(1, 'days')));
+				return ((moment(transactionsFrom, "DD/MM/YYYY") < moment(a.TransactionDate)) && (moment(a.TransactionDate) < moment(transactionsTo, "DD/MM/YYYY").add(1, 'days')));
 			});
 			return temp;
 		}

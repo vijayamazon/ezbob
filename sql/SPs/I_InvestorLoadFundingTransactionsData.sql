@@ -1,11 +1,11 @@
-IF OBJECT_ID('[I_InvestorLoadTransactionsData]') IS NULL
-	EXECUTE('CREATE PROCEDURE [I_InvestorLoadTransactionsData] AS SELECT 1')
+IF OBJECT_ID('[I_InvestorLoadFundingTransactionsData]') IS NULL
+	EXECUTE('CREATE PROCEDURE [I_InvestorLoadFundingTransactionsData] AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [I_InvestorLoadTransactionsData]
+ALTER PROCEDURE I_InvestorLoadFundingTransactionsData
 	@InvestorID INT,
 	@BankAccountTypeID INT
 AS
