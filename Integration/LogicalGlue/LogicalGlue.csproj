@@ -80,6 +80,7 @@
     <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
     <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />
+    <Compile Include="Keeper\Implementation\InferenceHistoryLoader.cs" />
     <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
     <Compile Include="Exceptions\Keeper\NoConnectionKeeperAlert.cs" />
