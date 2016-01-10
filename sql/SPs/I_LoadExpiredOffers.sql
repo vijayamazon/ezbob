@@ -6,8 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE I_LoadExpiredOffers
-@Now DATETIME,
-@LastCheckTime DATETIME
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -23,19 +22,19 @@ BEGIN
 	FROM 
 		CashRequests cr
 	INNER JOIN 
-		I_OpenPlatformOffer o ON o.CashRequestID = cr.Id
-	INNER JOIN 
 		Customer c ON c.Id = cr.IdCustomer
-	INNER JOIN 
+	LEFT JOIN 
+		I_OpenPlatformOffer o ON o.CashRequestID = cr.Id
+	LEFT JOIN 
 		I_InvestorBankAccount ibFunding 
 		ON 
 			o.InvestorID=ibFunding.InvestorID 
 		AND 
-			ibFunding.InvestorAccountTypeID=1 
+			ibFunding.InvestorAccountTypeID=1 --funding
 		AND 
 			ibFunding.IsActive=1
 	WHERE 
-			cr.OfferValidUntil > @LastCheckTime 
+			cr.IsExpired = 0
 		AND
 			cr.OfferValidUntil < @Now 
 		AND 

@@ -3,9 +3,7 @@
 	using Ezbob.Database;
 
 	public class OfferExpiredChecker : AStrategy {
-
-		public OfferExpiredChecker(DateTime lastCheckTime) {
-			this.lastCheckTime = lastCheckTime;
+		public OfferExpiredChecker() {
 			this.now = DateTime.UtcNow;
 		}//ctor
 
@@ -15,7 +13,6 @@
 			
 			DB.ForEachRowSafe(HandleOneExpired, "I_LoadExpiredOffers", 
 				CommandSpecies.StoredProcedure, 
-				new QueryParameter("LastCheckTime", this.lastCheckTime),
 				new QueryParameter("Now", this.now)
 				);
 		}//Execute
@@ -26,24 +23,33 @@
 				int customerID = sr["CustomerID"];
 				decimal approvedSum = sr["ManagerApprovedSum"];
 				decimal creditSum = sr["CreditSum"];
-				int investorID = sr["InvestorID"];
-				decimal investmentPercent = sr["InvestmentPercent"];
-				int fundingBankAccountID = sr["InvestorBankAccountID"];
+				int? investorID = sr["InvestorID"];
+				decimal? investmentPercent = sr["InvestmentPercent"];
+				int? fundingBankAccountID = sr["InvestorBankAccountID"];
 
-				var systemBalanceID = DB.ExecuteScalar<int>("I_SystemBalanceAdd",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("BankAccountID", fundingBankAccountID),
-					new QueryParameter("Now", this.now),
-					new QueryParameter("TransactionAmount", creditSum * investmentPercent),
-					new QueryParameter("ServicingFeeAmount", null),
-					new QueryParameter("LoanTransactionID", null));
+				DB.ExecuteNonQuery(@"UPDATE 
+										CashRequests 
+									 SET 
+										IsExpired = 1 
+									 WHERE 
+										Id = " + cashRequestID,
+					CommandSpecies.Text);
+
+				if (investorID.HasValue && fundingBankAccountID.HasValue) {
+					var systemBalanceID = DB.ExecuteScalar<int>("I_SystemBalanceAdd",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("BankAccountID", fundingBankAccountID),
+						new QueryParameter("Now", this.now),
+						new QueryParameter("TransactionAmount", creditSum * investmentPercent),
+						new QueryParameter("ServicingFeeAmount", null),
+						new QueryParameter("LoanTransactionID", null));
+				}
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to add system balance raw when expired offer {0} for investor {1}", sr["CashRequestID"], sr["InvestorID"]);
 			}
 			return ActionResult.Continue;
 		}//HandleOneExpired
 
-		private readonly DateTime lastCheckTime;
 		private readonly DateTime now;
 	}//OfferExpiredChecker
 }//ns
