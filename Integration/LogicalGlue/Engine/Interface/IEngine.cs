@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System;
+	using System.Collections.Generic;
 
 	public interface IEngine {
 		/// <summary>
@@ -34,5 +35,17 @@
 		/// Ignored if is non-positive or <see cref="includeTryOuts"/> is false.</param>
 		/// <returns>The latest customer inference results that were available on requested time. Can be NULL.</returns>
 		Inference GetInference(int customerID, DateTime time, bool includeTryOuts, decimal monthlyPayment);
+
+		/// <summary>
+		/// Loads all the inference results for customer that were available up to specific time.
+		/// Logical Glue API is not queried.
+		/// Number of returned results can be limited.
+		/// </summary>
+		/// <param name="customerID">ID of customer to infer.</param>
+		/// <param name="time">Time of interest, results received after this time are ignored.</param>
+		/// <param name="includeTryOuts">Include try out data or not.</param>
+		/// <param name="maxHistoryLength">Limit returned list by this length. Ignored if null or non-positive.</param>
+		/// <returns>List of customer inferences ordered from the newest to the oldest.</returns>
+		List<Inference> GetInferenceHistory(int customerID, DateTime time, bool includeTryOuts, int? maxHistoryLength);
 	} // interface IEngine
 } // namespace

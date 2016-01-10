@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
+	using System.Collections.Generic;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -81,6 +82,26 @@
 				AuthorizationScheme = CurrentValues.Instance.LogicalGlueAuthorizationScheme,
 			};
 		} // LoadHarvesterConfiguration
+
+		public List<Inference> LoadInferenceHistory(
+			int customerID,
+			DateTime time,
+			bool includeTryOuts,
+			int? maxHistoryLength
+		) {
+			try {
+				return new InferenceHistoryLoader(
+					this.db,
+					this.log,
+					customerID,
+					time,
+					includeTryOuts,
+					Math.Max(maxHistoryLength ?? 0, 0)
+				).Execute().Result;
+			} catch (Exception e) {
+				throw new InferenceLoaderAlert(customerID, time, e, this.log);
+			} // try
+		} // LoadInferenceHistory
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

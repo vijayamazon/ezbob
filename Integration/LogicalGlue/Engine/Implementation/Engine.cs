@@ -7,6 +7,7 @@
 	using Ezbob.Integration.LogicalGlue.Exceptions.Engine;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Lingvo;
 
 	public class Engine : IEngine {
 		public Engine(IKeeper keeper, IHarvester harvester, ASafeLog log) {
@@ -119,6 +120,38 @@
 
 			return result;
 		} // GetInference (historical, by date [and payment])
+
+		public List<Inference> GetInferenceHistory(
+			int customerID,
+			DateTime time,
+			bool includeTryOuts,
+			int? maxHistoryLength = null
+		) {
+			Log.Debug(
+				"Engine.GetInferenceHistory({0}, {1}, {2}, {3}) started...",
+				customerID,
+				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				includeTryOuts,
+				maxHistoryLength == null ? "entire history" : Grammar.Number(maxHistoryLength.Value, "item")
+			);
+
+			List<Inference> result = Keeper.LoadInferenceHistory(
+				customerID,
+				time,
+				includeTryOuts,
+				maxHistoryLength
+			);
+
+			Log.Debug(
+				"Engine.GetInferenceHistory({0}, {1}, {2}, {3}) complete.",
+				customerID,
+				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				includeTryOuts,
+				maxHistoryLength == null ? "entire history" : Grammar.Number(maxHistoryLength.Value, "item")
+			);
+
+			return result;
+		} // GetInferenceHistory
 
 		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment) {
 			bool isTryOut = (explicitMonthlyPayment >= 0.01m);
