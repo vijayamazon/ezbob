@@ -2481,3 +2481,28 @@ div.add-transaction {
 	margin-top: 10px;
 	margin-bottom: 15px;
 }
+
+/*Logical glue profile head*/
+.logical-glue{
+	font-size: 20px;
+}
+
+.logical-glue .logical-glue-bucket {
+	text-align: center;
+}
+
+.logical-glue .logical-glue-score {
+	display: inline-block;
+	float: left;
+	width: 49%;
+	font-size:18px;
+}
+
+.logical-glue .logical-glue-score div {
+	text-align: center;
+}
+
+.logical-glue .logical-glue-bucket-progress {
+	margin-bottom: 5px;
+}
+
