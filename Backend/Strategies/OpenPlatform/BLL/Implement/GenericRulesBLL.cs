@@ -18,17 +18,17 @@
             return gradeAvailableAmount >= investorLoancCashRequest.ManagerApprovedSum;
         }
 
-        public bool RuleDailyInvesmentAllowed(int InvestorId, long CashRequestId, int ruleType) {
-            var investorLoanCashRequest = InvestorCashRequestBLL.GetInvestorLoanCashRequest(CashRequestId);
-            var investorParameters = InvestorParametersBLL.GetInvestorParameters(InvestorId, ruleType);
-            return investorParameters.DailyAvailableAmount <= investorLoanCashRequest.ManagerApprovedSum;
-        }
+        //public bool RuleDailyInvesmentAllowed(int InvestorId, long CashRequestId, int ruleType) {
+        //    var investorLoanCashRequest = InvestorCashRequestBLL.GetInvestorLoanCashRequest(CashRequestId);
+        //    var investorParameters = InvestorParametersBLL.GetInvestorParameters(InvestorId, (RuleType)ruleType);
+        //    return investorParameters.DailyAvailableAmount <= investorLoanCashRequest.ManagerApprovedSum;
+        //}
 
-        public bool RuleWeeklyInvesmentAllowed(int InvestorId, long CashRequestId, int ruleType) {
-            var investorLoanCashRequest = InvestorCashRequestBLL.GetInvestorLoanCashRequest(CashRequestId);
-            var investorParameters = InvestorParametersBLL.GetInvestorParameters(InvestorId, ruleType);
-            return investorParameters.WeeklyAvailableAmount <= investorLoanCashRequest.ManagerApprovedSum;
-        }
+        //public bool RuleWeeklyInvesmentAllowed(int InvestorId, long CashRequestId, int ruleType) {
+        //    var investorLoanCashRequest = InvestorCashRequestBLL.GetInvestorLoanCashRequest(CashRequestId);
+        //    var investorParameters = InvestorParametersBLL.GetInvestorParameters(InvestorId, (RuleType)ruleType);
+        //    return investorParameters.WeeklyAvailableAmount <= investorLoanCashRequest.ManagerApprovedSum;
+        //}
 
     }
 }

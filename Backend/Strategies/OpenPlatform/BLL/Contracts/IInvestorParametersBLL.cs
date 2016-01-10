@@ -6,8 +6,8 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
 
     public interface IInvestorParametersBLL {
-        Dictionary<int, InvestorParameters> GetInvestorsParameters();
-        InvestorParameters GetInvestorParameters(int InvestorId, int ruleType);
+        List<int> GetInvestorsIds();
+        InvestorParameters GetInvestorParameters(int InvestorId, RuleType ruleType);
         double GetGradeAvailableAmount(int InvestorId, InvestorLoanCashRequest investorLoanCashRequest, int ruleType);
     }
 }

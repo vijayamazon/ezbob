@@ -20,30 +20,40 @@
         [SetterProperty]
         public IProvider<IMatchBLL<InvestorLoanCashRequest, InvestorParameters>> MatchProvider { get; set; }
 
-        public Dictionary<int, InvestorParameters> GetMatchedInvestors(long cashRequestID) {
+        public List<int> GetMatchedInvestors(long cashRequestID) {
             InvestorLoanCashRequest investorLoancCashRequest = IInvestorCashRequestBLL.GetInvestorLoanCashRequest(cashRequestID);
-            Dictionary<int, InvestorParameters> investorsDict = InvestorParametersBLL.GetInvestorsParameters();
+            List<int> investorsList = InvestorParametersBLL.GetInvestorsIds();
 
-            investorsDict = FilterInvestors(investorLoancCashRequest, investorsDict, RuleType.System);
-            investorsDict = FilterInvestors(investorLoancCashRequest, investorsDict, RuleType.UnderWriter);
-            investorsDict = FilterInvestors(investorLoancCashRequest, investorsDict, RuleType.Investor);
-            return investorsDict;
+            investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.System);
+            investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.UnderWriter);
+            investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.Investor);
+            return investorsList;
         }
 
 
-        public Dictionary<int, InvestorParameters> FilterInvestors(InvestorLoanCashRequest investorLoancCashRequest, Dictionary<int, InvestorParameters> InvestorParametersDict, RuleType parameterType)
+        public List<int> FilterInvestors(InvestorLoanCashRequest investorLoancCashRequest, List<int> InvestorList, RuleType ruleType)
         {
+            
             var matchList = new List<IMatchBLL<InvestorLoanCashRequest, InvestorParameters>>();
-            foreach (var investorParameters in InvestorParametersDict) {
+            foreach (var investorId in InvestorList) {
+                var investorParameter = InvestorParametersBLL.GetInvestorParameters(investorId, ruleType);
                 var matchInvestor = MatchProvider.GetNew();
+                if (investorParameter == null) {
+                    matchInvestor.Target = new InvestorParameters() {
+                        InvestorID = investorId,                       
+                    };
+                    matchInvestor.Func = delegate { return true; };
+                    matchList.Add(matchInvestor);
+                    continue;                    
+                }
                 matchInvestor.Source = investorLoancCashRequest;
-                matchInvestor.Target = investorParameters.Value;
-                matchInvestor.BuildFunc(investorParameters.Value.InvestorID, investorLoancCashRequest.CashRequestID, parameterType);
+                matchInvestor.Target = investorParameter;
+                matchInvestor.BuildFunc(investorParameter.InvestorID, investorLoancCashRequest.CashRequestID, ruleType);
                 matchList.Add(matchInvestor);
             }
             return matchList.Where(x => x.IsMatched())
-                .Select(x => x.Target)
-                .ToDictionary(x => x.InvestorID, x => x);
+                .Select(x => x.Target.InvestorID)
+                .ToList();
         }
     }
 }

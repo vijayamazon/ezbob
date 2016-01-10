@@ -12,11 +12,11 @@
         [SetterProperty]
         public IInvestorParametersDAL InvestorParametersDAL { get; set; }
 
-        public Dictionary<int, InvestorParameters> GetInvestorsParameters() {
-            return InvestorParametersDAL.GetInvestorsParameters();
+        public List<int> GetInvestorsIds() {
+            return InvestorParametersDAL.GetInvestorsIds();
         }
 
-        public InvestorParameters GetInvestorParameters(int InvestorId, int ruleType) {
+        public InvestorParameters GetInvestorParameters(int InvestorId, RuleType ruleType) {
             return InvestorParametersDAL.GetInvestorParameters(InvestorId, ruleType);
         }
 

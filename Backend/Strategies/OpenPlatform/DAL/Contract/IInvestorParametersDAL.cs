@@ -5,8 +5,8 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
 
     public interface IInvestorParametersDAL {
-        Dictionary<int, InvestorParameters> GetInvestorsParameters();
-        InvestorParameters GetInvestorParameters(int InvestorId, int ruleType);
+        List<int> GetInvestorsIds();
+        InvestorParameters GetInvestorParameters(int InvestorId, RuleType ruleType);
      
         double GetGradeMonthlyInvestedAmount(int investorId, Grade grade);
         decimal GetGradeMaxScore(int investorId, Grade grade);

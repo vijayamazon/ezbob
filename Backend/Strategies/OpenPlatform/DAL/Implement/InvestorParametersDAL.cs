@@ -22,20 +22,21 @@
             }
         }
 
-        public Dictionary<int, InvestorParameters> GetInvestorsParameters() {
-            var investorIds = Library.Instance.DB.Fill<int>("select InvestorID from I_Investor", CommandSpecies.Text);
-            Dictionary<int, InvestorParameters> investorParametersDict = new Dictionary<int, InvestorParameters>();
-            foreach (var investorId in investorIds) {
-                investorParametersDict.Add(investorId, new InvestorParameters() {
-                    InvestorID = investorId,
-                    Balance = InvestorsBalance[investorId]
-                });
-            }
-            return investorParametersDict;
+        public List<int> GetInvestorsIds() {
+           return Library.Instance.DB.Fill<int>("select InvestorID from I_Investor", CommandSpecies.Text);
+            //Dictionary<int, InvestorParameters> investorParametersDict = new Dictionary<int, InvestorParameters>();
+            //foreach (var investorId in investorIds) {
+            //    investorParametersDict.Add(investorId, new InvestorParameters() {
+            //        InvestorID = investorId,
+            //        Balance = InvestorsBalance[investorId]
+            //    });
+            //}
+            //return investorParametersDict;
         }
 
-        public InvestorParameters GetInvestorParameters(int investorId, int ruleType) {
-            var iInvestorParameters =  Library.Instance.DB.Fill<I_InvestorParams>(string.Format(" select * from I_InvestorParams where InvestorID ={0} and type = {1}", investorId, ruleType), CommandSpecies.Text);
+        public InvestorParameters GetInvestorParameters(int investorId, RuleType ruleType) {
+
+            var iInvestorParameters = Library.Instance.DB.Fill<I_InvestorParams>(string.Format(" select * from I_InvestorParams where InvestorID ={0} and type = {1}", ruleType == RuleType.System ? (int?)null : investorId, (int)ruleType), CommandSpecies.Text);
             return new InvestorParameters() {
                 InvestorID = investorId,
                 Balance = InvestorsBalance[investorId],
