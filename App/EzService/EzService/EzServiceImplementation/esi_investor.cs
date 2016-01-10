@@ -89,20 +89,28 @@
 				Log.Error(ex, "Failed to retrieve min max grade scores for bucket {0}", strategy.Inference.Bucket);
 			}
 
-			var result =  new LogicalGlueResult {
-				MetaData = metadata,
-				Error = strategy.Inference.Error.Message,
-				Date = strategy.Inference.ReceivedTime,
-				Bucket = strategy.Inference.Bucket,
-				BucketStr = strategy.Inference.Bucket.HasValue ? strategy.Inference.Bucket.ToString() : string.Empty,
-				MonthlyRepayment = 0, //TODO
-				FLScore = strategy.Inference.ModelOutputs.ContainsKey(ModelNames.FuzzyLogic) ? strategy.Inference.ModelOutputs[ModelNames.FuzzyLogic].Grade.Score : null,
-				NNScore = strategy.Inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) ? strategy.Inference.ModelOutputs[ModelNames.NeuralNetwork].Grade.Score : null,
-			};
-			var b = (maxScore - minScore) ?? 0;
-			var a = (result.NNScore - minScore) ?? 0;
-			result.BucketPercent = b == 0 ? 0 : a / b;
-			return result;
+			try {
+				var result = new LogicalGlueResult {
+					MetaData = metadata,
+					Error = strategy.Inference.Error.Message,
+					Date = strategy.Inference.ReceivedTime,
+					Bucket = strategy.Inference.Bucket,
+					BucketStr = strategy.Inference.Bucket.HasValue ? strategy.Inference.Bucket.ToString() : string.Empty,
+					MonthlyRepayment = 0, //TODO
+					FLScore = strategy.Inference.ModelOutputs.ContainsKey(ModelNames.FuzzyLogic) ? strategy.Inference.ModelOutputs[ModelNames.FuzzyLogic].Grade.Score : null,
+					NNScore = strategy.Inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) ? strategy.Inference.ModelOutputs[ModelNames.NeuralNetwork].Grade.Score : null,
+				};
+				var b = (maxScore - minScore) ?? 0;
+				var a = (result.NNScore - minScore) ?? 0;
+				result.BucketPercent = b == 0 ? 0 : a / b;
+				return result;
+			} catch (Exception ex) {
+				Log.Warn(ex, "Failed loading lg data for customer {0}", customerID);
+				return new LogicalGlueResult {
+					MetaData = metadata,
+					Error = ex.Message
+				};
+			}
 		}
 	}
 }

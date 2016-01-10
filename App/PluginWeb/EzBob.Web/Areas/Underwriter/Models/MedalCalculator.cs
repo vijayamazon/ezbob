@@ -122,9 +122,17 @@
 
 			var logicalGlue = serviceClient.Instance.GetLatestKnownInference(context.UserId, customer.Id, DateTime.UtcNow, false);
 			this.LogicalGlue = logicalGlue;
+
+			//TODO retrieve
+			this.LogicalGlueHistory = new List<LogicalGlueResult> {
+				this.LogicalGlue,
+				this.LogicalGlue,
+				this.LogicalGlue
+			};
 		}
 
 		public LogicalGlueResult LogicalGlue { get; set; }
+		public IList<LogicalGlueResult> LogicalGlueHistory { get; set; }
 
 		private Score BuildScore(ScoringResult scoringResult)
 		{

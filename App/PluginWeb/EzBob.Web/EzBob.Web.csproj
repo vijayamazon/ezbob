@@ -921,6 +921,7 @@
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.statisticsInvestorView.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.logicalGlueHistory.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.changeAddress.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.salesForceActivity.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.MarkAsPending.js" />
@@ -1013,6 +1014,7 @@
     <Content Include="Areas\Underwriter\Views\Investor\StatisticsInvestor.cshtml" />
     <Content Include="Areas\Underwriter\Views\Investor\ConfigInvestor.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\ManualPayment.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_LogicalGlueHistoryTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

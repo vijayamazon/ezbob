@@ -1,0 +1,57 @@
+﻿@model dynamic
+
+<script id="logical-glue-history-template" type="text/template">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-title">
+					<h3>Logical glue history</h3>
+					<div class="box-tool">
+						<a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="box-content">
+					<%if(logicalGlue) {%>
+					<table class="table box table-striped">
+						<thead class="box">
+							<tr class="box-title">
+								<th>Date</th>
+								<th>Bucket</th>
+								<th>Monthly payment</th>
+								<th>NN Score</th>
+								<th>FL Score</th>
+								<th>Is lookup</th>
+								<th>Error</th>
+							</tr>
+						</thead>
+						<tbody class="box-content">
+							<% _.each(logicalGlue, function(lg, i) {
+								var rowClass = '';
+								if(i == currentHistoryID) {
+									rowClass='active';
+								}
+							%>
+							
+							<tr class="logical-glue-tr <%-rowClass%>" data-line="<%-i%>" data-id="<%lg.ResponseID%>">
+								<td><%-EzBob.formatDateUK(lg.Date)%></td>
+								<td><%-lg.BucketStr%></td>
+								<td><%-EzBob.formatPoundsAsInt(lg.MonthlyRepayment)%></td>
+								<td><%-lg.NNScore%></td>
+								<td><%-lg.FLScore%></td>
+								<td><%-lg.IsLookup%></td>
+								<td><%-lg.Error%></td>
+							</tr>
+							<%}); %>
+						</tbody>
+					</table>
+					<%}%>
+					
+					<div>
+						<span>Show iframe for line <%-currentHistoryID %></span>
+						<iframe id="logical-glue-iframe"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>

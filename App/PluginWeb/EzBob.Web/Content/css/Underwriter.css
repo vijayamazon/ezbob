@@ -2483,10 +2483,6 @@ div.add-transaction {
 }
 
 /*Logical glue profile head*/
-.logical-glue{
-	
-}
-
 .logical-glue .logical-glue-bucket {
 	text-align: center;
 	font-size: 20px;
@@ -2508,3 +2504,8 @@ div.add-transaction {
 	margin-bottom: 5px;
 }
 
+iframe#logical-glue-iframe{
+	width: 100%;
+    height: 100%;
+    min-height: 600px;
+}

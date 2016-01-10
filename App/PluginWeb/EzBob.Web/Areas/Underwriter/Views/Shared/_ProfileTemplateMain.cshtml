@@ -19,6 +19,7 @@
                     <div id="medal-calc"></div>
                     <div id="automation-calc"></div>
                 </div>
+				<div class="tab-pane" id="logical-glue-history"></div>
                 <div class="tab-pane" id="loanhistorys"></div>
                 <div class="tab-pane" id="customer-info"></div>
                 <div class="tab-pane" id="company-score">
@@ -55,6 +56,7 @@
     Html.RenderPartial("ProfileHead");
     Html.RenderPartial("CreditBureau");
     Html.RenderPartial("_MedalCalculationTemplate");
+	Html.RenderPartial("_LogicalGlueHistoryTemplate");
     Html.RenderPartial("_AutomationCalculationTemplate");
     Html.RenderPartial("PricingModelCalculationTemplate");
     Html.RenderPartial("_ApiChecksLog");
