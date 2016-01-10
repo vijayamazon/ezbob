@@ -230,6 +230,7 @@
     <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
     <Compile Include="NewLoan\OfferForLoan.cs" />
     <Compile Include="DecisionHistoryDBModel.cs" />
+    <Compile Include="OpenPlatform\I_InvestorRule.cs" />
     <Compile Include="PostcodeNutsDBModel.cs" />
     <Compile Include="OpenPlatform\I_InvestorOverallStatistics.cs" />
     <Compile Include="OpenPlatform\I_InvestorSystemBalance.cs" />

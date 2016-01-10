@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.OpenPlatform.Models {
+﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform {
     using System.Runtime.Serialization;
     using Ezbob.Utils.dbutils;
 

@@ -5,9 +5,9 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
-    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using StructureMap.Attributes;
 
     public class ExressionBuilderBLL : IExressionBuilderBLL {
@@ -61,7 +61,7 @@
 
         public Expression BuildRecursiveExpression<T1, T2>(int investorId, long cashRequestID, Dictionary<int, InvestorRule> ruleDict, InvestorRule rule, ParameterExpression parameterExpressionLeft, ParameterExpression parameterExpressionRight) {
             if (!string.IsNullOrEmpty(rule.FuncName)) {
-                var result = InvokeGenericRule(investorId, cashRequestID, rule.FuncName);
+                var result = InvokeGenericRule(investorId, cashRequestID,rule.RuleType, rule.FuncName);
                 return Expression.IsTrue(Expression.Constant(result));
             }
 
@@ -83,7 +83,7 @@
             return BuildSubExpression((Operator)rule.Operator, exLeft, exRight);
         }
 
-        public bool InvokeGenericRule(int InvestorId, long CashRequestId, string methodName) {
+        public bool InvokeGenericRule(int InvestorId, long CashRequestId, int ruleType, string methodName) {
             bool result = false;
             Assembly genericRulesAssembly = GenericRules.GetType().Assembly;
             Type myType = genericRulesAssembly.GetTypes()
@@ -92,7 +92,7 @@
                 MethodInfo Method = myType.GetMethod(methodName);
                 object myInstance = GenericRules;
                 result = (bool)Method.Invoke(myInstance, BindingFlags.InvokeMethod | BindingFlags.Public, null, new object[] {
-                    InvestorId, CashRequestId
+                    InvestorId, CashRequestId,ruleType
                 }, CultureInfo.CurrentCulture);
             }
             return result;

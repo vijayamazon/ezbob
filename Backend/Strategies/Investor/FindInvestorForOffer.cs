@@ -6,6 +6,7 @@
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;
+    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using StructureMap;
 
     public class FindInvestorForOffer : AStrategy {
@@ -30,16 +31,8 @@
 		    this.cashRequestID = 1;
             var container = InitContainer(typeof(InvestorService));
             var investorService = container.GetInstance<IInvestorService>();
-            List<InvestorParameters> investorParametersList = investorService.GetInvestorParameters();
-            InvestorLoanCashRequest investorLoancCashRequest = investorService.GetInvestorLoanCashRequest(this.cashRequestID);
-
 		    //var filtered = investorsList.Where(x => x.IsActive);
-
-		    investorParametersList = investorService.GetMatchedInvestors(investorLoancCashRequest, investorParametersList, RuleType.System);
-            investorParametersList = investorService.GetMatchedInvestors(investorLoancCashRequest, investorParametersList, RuleType.UnderWriter);
-            investorParametersList = investorService.GetMatchedInvestors(investorLoancCashRequest, investorParametersList, RuleType.Investor);
-            
-
+            var investorParametersList = investorService.GetMatchedInvestors(this.cashRequestID);
                 
                                         //x.InvestorSystemBalance.Max(m => m.InvestorSystemBalanceID) <= cashRequest.ManagerApprovedSum &&
                                         //systemParameters.DailyInvestmentAllowed - (cashRequest.ManagerApprovedSum + x.InvestorSystemBalance.Where(w => w.Timestamp.Date == DateTime.Today).Sum(y => Convert.ToDouble(y.TransactionAmount))) <= cashRequest.ManagerApprovedSum &&

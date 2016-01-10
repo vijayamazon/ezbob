@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-    using Ezbob.Backend.Strategies.OpenPlatform.Models;
 
     public interface IExressionBuilderBLL
     {

@@ -7,6 +7,7 @@
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Implement;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;
+    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using StructureMap.Configuration.DSL;
 
     public class InvestorRegistry : Registry

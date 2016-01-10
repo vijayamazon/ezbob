@@ -1,25 +1,15 @@
 
-INSERT INTO [dbo].[I_InvestorRule]([UserID],[RuleType],[InvestorID],[MemberNameSource],[MemberNameTarget],[LeftParamID],[RightParamID],[Operator],[IsRoot])
-     VALUES(1,1,null,null,null,2,3,1,1)
+INSERT INTO [dbo].[I_InvestorRule]([UserID],[RuleType],[InvestorID],[FuncName],[MemberNameSource],[MemberNameTarget],[LeftParamID],[RightParamID],[Operator],[IsRoot])
+     VALUES(1,0,null,null,null,null,2,3,1,1)
 GO
 
-INSERT INTO [dbo].[I_InvestorRule]([UserID],[RuleType],[InvestorID],[MemberNameSource],[MemberNameTarget],[LeftParamID],[RightParamID],[Operator],[IsRoot])
-     VALUES (1,1,null,'ManagerApprovedSum','Balance',null,null,3,0)
+INSERT INTO [dbo].[I_InvestorRule]([UserID],[RuleType],[InvestorID],[FuncName],[MemberNameSource],[MemberNameTarget],[LeftParamID],[RightParamID],[Operator],[IsRoot])
+     VALUES (1,0,null,null,'InvestmentAmount','Balance',null,null,3,0)
 
 GO
-INSERT INTO [dbo].[I_InvestorRule]([UserID],[RuleType],[InvestorID],[MemberNameSource],[MemberNameTarget],[LeftParamID],[RightParamID],[Operator],[IsRoot])
-     VALUES (1,1,null,'ManagerApprovedSum','DailyInvestmentAllowed',null,null,3,0)
+INSERT INTO [dbo].[I_InvestorRule]([UserID],[RuleType],[InvestorID],[FuncName],[MemberNameSource],[MemberNameTarget],[LeftParamID],[RightParamID],[Operator],[IsRoot])
+     VALUES (1,0,null,'RuleBadgetLevel',null,null,null,null,7,0)
 
-GO
-
-INSERT INTO [dbo].[I_Parameter]
-           ([Name]
-           ,[ValueType]
-           ,[DefaultValue]
-           ,[MaxLimit]
-           ,[MinLimit])
-     VALUES
-           ('Balance', 'double', 0, null, 0)
 GO
 
 INSERT INTO [dbo].[I_Parameter]
@@ -29,27 +19,48 @@ INSERT INTO [dbo].[I_Parameter]
            ,[MaxLimit]
            ,[MinLimit])
      VALUES
-           ('DailyInvestmentAllowed', 'double', 0, null , 0)
+           ('DailyInvestmentAllowed', 'double', 0, null, null)
+GO
+
+INSERT INTO [dbo].[I_Parameter]
+           ([Name]
+           ,[ValueType]
+           ,[DefaultValue]
+           ,[MaxLimit]
+           ,[MinLimit])
+     VALUES
+           ('WeeklyInvestmentAllowed', 'double', 0, null , null)
 GO
 
 INSERT INTO [dbo].[I_InvestorParams]
            ([InvestorID]
            ,[ParameterID]
            ,[Value]
-           ,[Type])
+           ,[Type]
+		   ,[AllowedForConfig])
      VALUES
-			(1, 1, 500, 1)
+			(null, 1, 500, 1,1)
 GO
 
 INSERT INTO [dbo].[I_InvestorParams]
            ([InvestorID]
            ,[ParameterID]
            ,[Value]
-           ,[Type])
+           ,[Type]
+		   ,[AllowedForConfig])
      VALUES
-			(1, 2, 200, 1)
+			(null, 2, 200, 1,1)
 GO
 
 
+INSERT INTO [dbo].[I_InvestorParams]
+           ([InvestorID]
+           ,[ParameterID]
+           ,[Value]
+           ,[Type]
+		   ,[AllowedForConfig])
+     VALUES
+			(null, 2, 200, 1,1)
+GO
 
 

@@ -3,13 +3,13 @@
     using System.Linq;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
-    using Ezbob.Backend.Strategies.OpenPlatform.Models;
+    using Ezbob.Database;
 
     public class RulesEngineDAL : IRulesEngineDAL {
         public Dictionary<int, InvestorRule> GetRules(int InvestorId, RuleType ruleType) {
 
             //TODO: remove mock
-            var rules =  GetRules();
+            var rules = GetRulesList(InvestorId, ruleType);
 
             switch (ruleType) {
                     case RuleType.System:
@@ -23,63 +23,16 @@
         }
 
 
-        private List<InvestorRule> GetRules() {
+        private List<InvestorRule> GetRulesList(int InvestorId, RuleType ruleType) {
 
-            //int? investorID = null;
-            //if (ruleType != RuleType.System)
-            //    investorID = InvestorId;
-            //var rules = Library.Instance.DB.Fill<Rule>("GetInvestorRules", CommandSpecies.StoredProcedure,
-            //    new QueryParameter("InvestorId", investorID),
-            //    new QueryParameter("RuleType", (int)ruleType)
-            //);
-            //return rules.ToDictionary(x => x.RuleID, x=> x);
-            
-            var rulList = new List<InvestorRule>();
-
-            rulList.Add(new InvestorRule {
-                Operator = (int)Operator.And,
-                MemberNameSource = null,
-                MemberNameTarget = null,
-                IsRoot = true,
-                LeftParamID = 2,
-                RightParamID = 3,
-                InvestorID = 1,
-                RuleID = 1,
-                UserID = 1,
-                RuleType = (int)RuleType.System
-            });
-
-            rulList.Add(new InvestorRule {
-                Operator = (int)Operator.LessThan,
-                MemberNameSource = "ManagerApprovedSum",
-                MemberNameTarget = "Balance",
-                IsRoot = false,
-                LeftParamID = -1,
-                RightParamID = -1,
-                InvestorID = 1,
-                RuleID = 2,
-                UserID = 1,
-                RuleType = (int)RuleType.System
-            });
-
-            rulList.Add(new InvestorRule {
-                Operator = (int)Operator.IsTrue,
-                MemberNameSource = null,
-                MemberNameTarget = null,
-                IsRoot = false,
-                LeftParamID = -1,
-                RightParamID = -1,
-                InvestorID = 1,
-                RuleID = 3,
-                UserID = 1,
-                FuncName = "RuleBadgetLevel",
-                RuleType = (int)RuleType.System
-            });
-
-            return rulList;
-
-
-           
+            int? investorID = null;
+            if (ruleType != RuleType.System)
+                investorID = InvestorId;
+            var rules = Library.Instance.DB.Fill<InvestorRule>("I_GetInvestorRules", CommandSpecies.StoredProcedure,
+                new QueryParameter("InvestorId", investorID),
+                new QueryParameter("RuleType", (int)ruleType)
+            );
+            return rules;
         }
 
 

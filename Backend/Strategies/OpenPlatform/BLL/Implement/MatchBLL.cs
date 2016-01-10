@@ -2,10 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
-    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using StructureMap.Attributes;
 
     public class MatchBLL<T1, T2> : IMatchBLL<T1,T2>
@@ -24,6 +24,7 @@
             Dictionary<int, InvestorRule> Rules = RulesDAL.GetRules(investorID, ruleType);
             if (Rules == null) {
                 Func = delegate { return true; };
+                return;
             }
             Func = ExressionBuilder.CompileRule<T1, T2>(investorID,cashRequestID, Rules);
         }

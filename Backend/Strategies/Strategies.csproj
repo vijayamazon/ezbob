@@ -232,9 +232,9 @@
     <Compile Include="OpenPlatform\DAL\Implement\InvestorCashRequestDAL.cs" />
     <Compile Include="OpenPlatform\Facade\Contracts\IInvestorService.cs" />
     <Compile Include="OpenPlatform\Facade\Implement\InvestorService.cs" />
-    <Compile Include="OpenPlatform\Models\BoolExpression.cs" />
     <Compile Include="OpenPlatform\BLL\Implement\GenericRulesBLL.cs" />
     <Compile Include="OpenPlatform\DAL\Contract\IRulesEngineDAL.cs" />
+    <Compile Include="OpenPlatform\Models\InvestorParameters.cs" />
     <Compile Include="Postcode\PostcodeNuts.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IInvestorParametersBLL.cs" />
     <Compile Include="OpenPlatform\BLL\Implement\InvestorParametersBLL.cs" />
@@ -248,7 +248,6 @@
     <Compile Include="OpenPlatform\BLL\Contracts\IExressionBuilderBLL.cs" />
     <Compile Include="OpenPlatform\BLL\Contracts\IMatchBLL.cs" />
     <Compile Include="OpenPlatform\DAL\Implement\RulesEngineDAL.cs" />
-    <Compile Include="OpenPlatform\Models\Rule.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />

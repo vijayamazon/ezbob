@@ -6,6 +6,7 @@
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
+    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using Ezbob.Backend.Strategies.OpenPlatform.Registry;
     using StructureMap.Attributes;
 
@@ -19,24 +20,30 @@
         [SetterProperty]
         public IProvider<IMatchBLL<InvestorLoanCashRequest, InvestorParameters>> MatchProvider { get; set; }
 
-        public List<InvestorParameters> GetMatchedInvestors(InvestorLoanCashRequest cashRequest, List<InvestorParameters> InvestorParametersList, RuleType parameterType) {
+        public Dictionary<int, InvestorParameters> GetMatchedInvestors(long cashRequestID) {
+            InvestorLoanCashRequest investorLoancCashRequest = IInvestorCashRequestBLL.GetInvestorLoanCashRequest(cashRequestID);
+            Dictionary<int, InvestorParameters> investorsDict = InvestorParametersBLL.GetInvestorsParameters();
 
+            investorsDict = FilterInvestors(investorLoancCashRequest, investorsDict, RuleType.System);
+            investorsDict = FilterInvestors(investorLoancCashRequest, investorsDict, RuleType.UnderWriter);
+            investorsDict = FilterInvestors(investorLoancCashRequest, investorsDict, RuleType.Investor);
+            return investorsDict;
+        }
+
+
+        public Dictionary<int, InvestorParameters> FilterInvestors(InvestorLoanCashRequest investorLoancCashRequest, Dictionary<int, InvestorParameters> InvestorParametersDict, RuleType parameterType)
+        {
             var matchList = new List<IMatchBLL<InvestorLoanCashRequest, InvestorParameters>>();
-            foreach (var investorParameters in InvestorParametersList) {
+            foreach (var investorParameters in InvestorParametersDict) {
                 var matchInvestor = MatchProvider.GetNew();
-                matchInvestor.Source = cashRequest;
-                matchInvestor.Target = investorParameters;
-                matchInvestor.BuildFunc(investorParameters.InvestorID, cashRequest.CashRequestID, parameterType);
+                matchInvestor.Source = investorLoancCashRequest;
+                matchInvestor.Target = investorParameters.Value;
+                matchInvestor.BuildFunc(investorParameters.Value.InvestorID, investorLoancCashRequest.CashRequestID, parameterType);
                 matchList.Add(matchInvestor);
             }
-            return matchList.Where(x => x.IsMatched()).Select(x => x.Target).ToList();
-        }
-
-        public List<InvestorParameters> GetInvestorParameters() {
-            return InvestorParametersBLL.GetInvestorParametersList();
-        }
-        public InvestorLoanCashRequest GetInvestorLoanCashRequest(long cashRequestID) {
-            return IInvestorCashRequestBLL.GetInvestorLoanCashRequest(cashRequestID);
+            return matchList.Where(x => x.IsMatched())
+                .Select(x => x.Target)
+                .ToDictionary(x => x.InvestorID, x => x);
         }
     }
 }

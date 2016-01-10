@@ -32,8 +32,14 @@
     };
 
     public enum RuleType {
-        System,
-        UnderWriter,
-        Investor 
+        System =1,
+        UnderWriter = 2,
+        Investor = 3 
+    };
+
+    public enum ParameterPeriod {
+        Day=1, 
+        Week=2,
+        Month=3
     };
 }

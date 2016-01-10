@@ -686,7 +686,7 @@ IF object_id('I_InvestorParams') IS NULL
 BEGIN
 	CREATE TABLE I_InvestorParams (
 		InvestorParamsID INT NOT NULL IDENTITY(1,1),
-		InvestorID INT NOT NULL,
+		InvestorID INT NULL,
 		ParameterID INT NOT NULL,		
 		Value DECIMAL(18,6) NOT NULL,	
 		Type INT NOT NULL,	
