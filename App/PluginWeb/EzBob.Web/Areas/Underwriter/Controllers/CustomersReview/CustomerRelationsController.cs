@@ -117,6 +117,7 @@
 					this._serviceClient.Instance.SalesForceAddActivity(this._context.UserId, customerId, new ActivityModel {
 						Description = string.Format("{0}, {1}, {2}, {3}", type, actionItem.Name, statusItem.Name, comment),
 						Email = customer.Name,
+						Origin = customer.CustomerOrigin.Name,
 						StartDate = DateTime.UtcNow,
 						EndDate = DateTime.UtcNow,
 						IsOpportunity = false,

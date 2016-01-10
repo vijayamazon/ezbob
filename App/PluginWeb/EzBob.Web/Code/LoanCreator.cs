@@ -201,6 +201,7 @@
 				cus.Id,
 				new ServiceClientProxy.EzServiceReference.OpportunityModel {
 					Email = cus.Name,
+					Origin = cus.CustomerOrigin.Name,
 					CloseDate = now,
 					TookAmount = (int)loan.LoanAmount,
 					ApprovedAmount = (int)(cus.CreditSum ?? 0) + (int)loanAmount,
@@ -300,6 +301,7 @@
 					Name = cus.PersonalInfo.Fullname + " TopUp",
 					CreateDate = now,
 					Email = cus.Name,
+					Origin = cus.CustomerOrigin.Name,
 					ExpectedEndDate = cus.OfferValidUntil,
 					RequestedAmount = requestedAmount,
 					ApprovedAmount = (int?)cus.CreditSum,
