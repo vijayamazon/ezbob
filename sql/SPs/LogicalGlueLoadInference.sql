@@ -60,9 +60,12 @@ BEGIN
 		r.GradeID,
 		r.HasEquifaxData,
 		r.ParsingExceptionType,
-		r.ParsingExceptionMessage
+		r.ParsingExceptionMessage,
+		q.UniqueID,
+		q.MonthlyRepayment
 	FROM
 		LogicalGlueResponses r
+		INNER JOIN LogicalGlueRequests q ON r.ServiceLogID = q.ServiceLogID
 	WHERE
 		r.ResponseID = @ResponseID
 

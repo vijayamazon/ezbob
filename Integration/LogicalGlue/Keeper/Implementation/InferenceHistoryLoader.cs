@@ -41,6 +41,7 @@
 
 			Executed = true;
 
+/*
 			Log.Debug("Executing inference loader({0}, '{1}')...", CustomerID, NowStr);
 
 			new LoadInference(DB, Log) {
@@ -50,12 +51,12 @@
 				IncludeTryOutData = this.includeTryOutData,
 				MonthlyPayment = this.monthlyPayment,
 			}.ForEachRowSafe(ProcessInferenceRow);
-
+*/
 			Log.Debug("Executing inference loader({0}, '{1}') complete.", CustomerID, NowStr);
 
 			return this;
 		} // Execute
-
+/*
 		private void ProcessInferenceRow(SafeReader sr) {
 			string rowTypeName = sr["RowType"];
 
@@ -301,7 +302,7 @@
 			EncodingFailure,
 			MissingColumn,
 		} // enum RowTypes
-
+*/
 		private readonly SortedDictionary<long, PublicModelOutput> models;
 		private readonly long responseID;
 		private readonly bool includeTryOutData;

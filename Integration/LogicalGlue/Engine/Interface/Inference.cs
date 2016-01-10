@@ -16,6 +16,12 @@
 		[DataMember]
 		public Bucket? Bucket { get; set; }
 
+		[DataMember]
+		public Guid UniqueID { get; set; }
+
+		[DataMember]
+		public decimal MonthlyRepayment { get; set; }
+
 		public decimal? Score {
 			get {
 				return ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)

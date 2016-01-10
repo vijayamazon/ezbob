@@ -126,6 +126,9 @@
 		} // OutOfRangeException
 
 		private void ProcessResponse(SafeReader sr) {
+			Result.UniqueID = sr["UniqueID"];
+			Result.MonthlyRepayment = sr["MonthlyRepayment"];
+
 			var dbResponse = sr.Fill<DBResponse>();
 
 			Result.ResponseID = dbResponse.ID;
