@@ -2,6 +2,7 @@
 	using System;
 	using System.Runtime.Serialization;
 	using System.Threading;
+	using Ezbob.Backend.Strategies;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -30,7 +31,7 @@
 				m_oLog = oLog,
 				m_nServiceInstanceID = nServiceInstanceID,
 				UserID = nUserID,
-				CustomerID = nCustomerID
+				CustomerID = nCustomerID,
 			};
 
 			amd.Save();
@@ -78,6 +79,24 @@
 		} // CustomerID
 
 		private readonly SafeValue<int?> m_oCustomerID;
+
+		public AStrategy Strategy {
+			get {
+				AStrategy stra;
+
+				lock (this.strategyLock)
+					stra = this.strategy;
+
+				return stra;
+			} // get
+			set {
+				lock (this.strategyLock)
+					this.strategy = value;
+			} // set
+		} // Strategy
+
+		private readonly object strategyLock;
+		private AStrategy strategy;
 
 		public override string ToString() {
 			return string.Format(
@@ -159,6 +178,9 @@
 			m_oComment = new SafeValue<string>();
 			m_oUserID = new SafeValue<int?>();
 			m_oCustomerID = new SafeValue<int?>();
+
+			this.strategyLock = new object();
+			Strategy = null;
 		} // constructor
 
 		private readonly object m_oLockSave;
@@ -166,7 +188,5 @@
 		private AConnection m_oDB;
 		private ASafeLog m_oLog;
 		private int m_nServiceInstanceID;
-
 	} // struct ActionMetaData
-
 } // namespace EzService

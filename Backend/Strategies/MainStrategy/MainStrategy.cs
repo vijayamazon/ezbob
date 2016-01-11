@@ -1023,13 +1023,21 @@
 			DateTime now = DateTime.UtcNow;
 
 			var mpsToUpdate = new List<int>();
+			var mpNamesToUpdate = new List<string>();
 
 			DB.ForEachRowSafe(
 				sr => {
 					DateTime lastUpdateTime = sr["UpdatingEnd"];
 
-					if ((now - lastUpdateTime).Days > CurrentValues.Instance.UpdateOnReapplyLastDays)
-						mpsToUpdate.Add(sr["MpID"]);
+					if ((now - lastUpdateTime).Days <= CurrentValues.Instance.UpdateOnReapplyLastDays)
+						return;
+
+					int mpID = sr["MpID"];
+
+					mpsToUpdate.Add(mpID);
+
+					if (sr["LongUpdateTime"])
+						mpNamesToUpdate.Add(string.Format("{0} marketplace with id {1}", (string)sr["Name"], mpID));
 				},
 				"LoadMarketplacesLastUpdateTime",
 				CommandSpecies.StoredProcedure,
@@ -1039,6 +1047,13 @@
 			if (mpsToUpdate.Count < 1) {
 				Log.Debug("No marketplace should be updated for customer {0}.", CustomerID);
 				return null;
+			} // if
+
+			if (mpNamesToUpdate.Count > 0) {
+				Context.Description = string.Format(
+					"This strategy can take long time (updating {0}).",
+					string.Join(", ", mpNamesToUpdate)
+				);
 			} // if
 
 			Log.Debug(

@@ -4,6 +4,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using Exceptions;
+	using Ezbob.Backend.Extensions;
 	using EzBob.Models.Marketplaces.Builders;
 	using Ezbob.Database;
 	using StructureMap;
@@ -19,8 +20,25 @@
 		public abstract void Execute();
 
 		public class StrategyContext {
+			public StrategyContext() {
+				StartTime = DateTime.UtcNow;
+			} // constructor
+
 			public int? UserID { get; set; }
 			public int? CustomerID { get; set; }
+			public DateTime StartTime { get; private set; }
+
+			public string Description {
+				get {
+					if (string.IsNullOrWhiteSpace(this.description))
+						this.description = DefaultDescription;
+
+					return this.description;
+				} // get
+				set {
+					this.description = string.IsNullOrWhiteSpace(value) ? DefaultDescription : value.Trim();
+				} // set
+			} // Description
 
 			/// <summary>
 			/// Returns a string that represents the current object.
@@ -30,11 +48,16 @@
 			/// </returns>
 			public override string ToString() {
 				return string.Format(
-					"user ID: '{0}', customer ID: '{1}'",
+					"user ID: '{0}', customer ID: '{1}', started at '{2}'",
 					UserID.HasValue ? UserID.Value.ToString() : "-- null --",
-					CustomerID.HasValue ? CustomerID.Value.ToString() : "-- null --"
+					CustomerID.HasValue ? CustomerID.Value.ToString() : "-- null --",
+					StartTime.MomentStr()
 				);
 			} // ToString
+
+			private const string DefaultDescription = "This strategy usually finishes almost instantly.";
+
+			private string description;
 		} // class Context
 
 		public StrategyContext Context { get; private set; }

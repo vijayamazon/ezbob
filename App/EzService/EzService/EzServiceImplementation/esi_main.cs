@@ -119,6 +119,8 @@
 						if (oInstance == null)
 							throw new NullReferenceException("Failed to create an instance of " + oArgs.StrategyType);
 
+						amd.Strategy = oInstance;
+
 						oInstance.Context.UserID = oArgs.UserID;
 						oInstance.Context.CustomerID = oArgs.CustomerID;
 
@@ -283,6 +285,8 @@
 
 				if (oInstance == null)
 					throw new NullReferenceException("Failed to create an instance of " + sStrategyType);
+
+				amd.Strategy = oInstance;
 
 				oInstance.Context.UserID = args.UserID;
 				oInstance.Context.CustomerID = args.CustomerID;
