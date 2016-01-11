@@ -9,7 +9,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using log4net;
 	using PaymentServices;
-	using ServiceClientProxy;
+	//using ServiceClientProxy;
 
 	[Serializable]
 	public class LoanModel {
@@ -64,20 +64,20 @@
 		public static LoanModel FromLoan(Loan loan, ILoanRepaymentScheduleCalculator calculator, ILoanRepaymentScheduleCalculator calculatorForNow = null) {
 			var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
 
-			if (loan.Id > 0) {
-				try {
-					ServiceClient serviceClient = new ServiceClient();
-					long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
-					if (nlLoanId > 0) {
-						var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true)
-							.Value;
-						Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
-					}
-					// ReSharper disable once CatchAllClause
-				} catch (Exception ex) {
-					Log.ErrorFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
-				}
-			}
+			//if (loan.Id > 0) {
+			//	try {
+			//		ServiceClient serviceClient = new ServiceClient();
+			//		long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
+			//		if (nlLoanId > 0) {
+			//			var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true)
+			//				.Value;
+			//			Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+			//		}
+			//		// ReSharper disable once CatchAllClause
+			//	} catch (Exception ex) {
+			//		Log.ErrorFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			//	}
+			//}
 
 			var loanModel = new LoanModel {
 				Date = loan.Date,
