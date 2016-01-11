@@ -5,34 +5,54 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+-- @HistoryLength values:
+-- if @ResponseID > 0, then ignored; otherwise
+-- NULL, 0 or less means entire history,
+-- positive means number of responses to find.
+
 ALTER PROCEDURE LogicalGlueLoadInference
 @ResponseID BIGINT,
 @CustomerID INT,
 @Now DATETIME,
-@IncludeTryOutData BIT,
-@MonthlyPayment DECIMAL(18, 0)
+@HistoryLength INT = NULL,
+@IncludeTryOutData BIT = NULL,
+@MonthlyPayment DECIMAL(18, 0) = NULL
 AS
 BEGIN
-	IF @ResponseID <= 0
-	BEGIN
-		SET @ResponseID = (
-			SELECT TOP 1
-				r.ResponseID
-			FROM
-				LogicalGlueResponses r
-				INNER JOIN MP_ServiceLog l
-					ON r.ServiceLogID = l.Id
-					AND l.CustomerId = @CustomerID
-					AND l.InsertDate < @Now
-				INNER JOIN LogicalGlueRequests rr ON l.Id = rr.ServiceLogID
-			WHERE
-				(@IncludeTryOutData = 0 AND rr.IsTryOut = 0)
-				OR
-				(@IncludeTryOutData = 1 AND (@MonthlyPayment < 0.01 OR rr.MonthlyRepayment = @MonthlyPayment))
-			ORDER BY
-				l.InsertDate DESC,
-				l.Id DESC
-		)
+	SET @IncludeTryOutData = ISNULL(@IncludeTryOutData, 0)
+	SET @MonthlyPayment = ISNULL(@MonthlyPayment, 0)
+
+	CREATE TABLE #relevant_responses (ResponseID BIGINT)
+
+	IF @ResponseID > 0
+		INSERT INTO #relevant_responses(ResponseID) VALUES (@ResponseID)
+	ELSE BEGIN
+		SET @HistoryLength = ISNULL(@HistoryLength, 0)
+
+		IF @HistoryLength < 0
+			SET @HistoryLength = 0
+
+		SET ROWCOUNT @HistoryLength
+
+		INSERT INTO #relevant_responses (ResponseID)
+		SELECT
+			r.ResponseID
+		FROM
+			LogicalGlueResponses r
+			INNER JOIN MP_ServiceLog l
+				ON r.ServiceLogID = l.Id
+				AND l.CustomerId = @CustomerID
+				AND l.InsertDate < @Now
+			INNER JOIN LogicalGlueRequests rr ON l.Id = rr.ServiceLogID
+		WHERE
+			(@IncludeTryOutData = 0 AND rr.IsTryOut = 0)
+			OR
+			(@IncludeTryOutData = 1 AND (@MonthlyPayment < 0.01 OR rr.MonthlyRepayment = @MonthlyPayment))
+		ORDER BY
+			l.InsertDate DESC,
+			l.Id DESC
+
+		SET ROWCOUNT 0
 	END
 
 	------------------------------------------------------------------------------
@@ -43,8 +63,7 @@ BEGIN
 		#models
 	FROM
 		LogicalGlueModelOutputs m
-	WHERE
-		m.ResponseID = @ResponseID
+		INNER JOIN #relevant_responses rr ON m.ResponseID = rr.ResponseID
 
 	------------------------------------------------------------------------------
 
@@ -66,8 +85,7 @@ BEGIN
 	FROM
 		LogicalGlueResponses r
 		INNER JOIN LogicalGlueRequests q ON r.ServiceLogID = q.ServiceLogID
-	WHERE
-		r.ResponseID = @ResponseID
+		INNER JOIN #relevant_responses rr ON r.ResponseID = rr.ResponseID
 
 	------------------------------------------------------------------------------
 
@@ -142,5 +160,6 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DROP TABLE #models
+	DROP TABLE #relevant_responses
 END
 GO

@@ -13,6 +13,8 @@
 
 		public long ResponseID { get; set; }
 
+		public int HistoryLength { get; set; }
+
 		public bool IncludeTryOutData { get; set; }
 
 		public decimal MonthlyPayment {

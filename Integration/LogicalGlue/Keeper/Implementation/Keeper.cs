@@ -97,7 +97,7 @@
 					time,
 					includeTryOuts,
 					Math.Max(maxHistoryLength ?? 0, 0)
-				).Execute().Result;
+				).Execute().Results;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try

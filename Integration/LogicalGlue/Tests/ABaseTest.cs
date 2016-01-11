@@ -1,9 +1,26 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Tests {
 	using System;
 	using System.Collections.Generic;
+	using ConfigManager;
+	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
+	using Ezbob.Logger;
+	using NUnit.Framework;
 
 	abstract class ABaseTest {
+		[SetUp]
+		public void Init() {
+			var oLog4NetCfg = new Log4Net().Init();
+
+			var env = oLog4NetCfg.Environment;
+			Log = new ConsoleLog(new SafeILog(this));
+			DB = new SqlConnection(oLog4NetCfg.Environment, Log);
+
+			Ezbob.Integration.LogicalGlue.Library.Initialize(env, this.DB, Log);
+
+			ConfigManager.CurrentValues.Init(DB, Log);
+		} // Init
+
 		protected ModelOutput CreateInternalModelOutput() {
 			var mo = new ModelOutput {
 				Status = "Status of the model",
@@ -54,6 +71,9 @@
 
 			return mo;
 		} // CreateInternalModelOutput
+
+		protected AConnection DB { get; private set; }
+		protected ASafeLog Log { get; private set; }
 
 		private static readonly Guid uuid = Guid.NewGuid();
 	} // class ABaseTest
