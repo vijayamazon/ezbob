@@ -10,10 +10,10 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		this.medalModel = options.medalModel;
 		this.parentView = options.parentView;
 
-		this.bindTo(this.model, "change sync", this.render, this);
-		this.bindTo(this.loanModel, "change sync", this.render, this);
-		this.bindTo(this.medalModel, "change sync", this.renderMedal, this);
-		this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
+		this.bindTo(this.model, 'change sync', this.render, this);
+		this.bindTo(this.loanModel, 'change sync', this.render, this);
+		this.bindTo(this.medalModel, 'change sync', this.renderMedal, this);
+		this.bindTo(this.personalModel, 'change sync', this.personalModelChanged, this);
 	},
 
 	serializeData: function() {
@@ -24,7 +24,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	},
 
 	events: {
-		'click a.collapseall': "collapseAll",
+		'click a.collapseall': 'collapseAll',
 		'click #OfferEditBtn': 'editOfferClick',
 	},
 
@@ -45,16 +45,16 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	collapseAll: function() {
 		var that = this;
 		var btn = this.$el.find('a.collapseall');
-		btn.children("i").addClass("anim-turn180");
-		btn.parents(".box").children(".box-content").slideToggle(500, function() {
+		btn.children('i').addClass('anim-turn180');
+		btn.parents('.box').children('.box-content').slideToggle(500, function() {
 			if ($(this).is(":hidden")) {
-				btn.children("i").attr("class", "fa fa-chevron-down");
+				btn.children("i").attr('class', 'fa fa-chevron-down');
 				that.$el.find(".box-title-collapse").show();
 				that.$el.find('#RecalculateMedalBtn').text('Re');
 				$.cookie('collapseAll', true);
 			} else {
-				btn.children("i").attr("class", "fa fa-chevron-up");
-				that.$el.find(".box-title-collapse").hide();
+				btn.children('i').attr('class', 'fa fa-chevron-up');
+				that.$el.find('.box-title-collapse').hide();
 				that.$el.find('#RecalculateMedalBtn').text('Recalculate');
 				$.cookie('collapseAll', false);
 			}
@@ -94,19 +94,14 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			personalInfo: this.personalModel,
 			parentView: this.parentView
 		});
-
-		// if (!this.loanInfoView.$el.hasClass('editOfferDiv')) {
-			// this.loanInfoView.$el = this.ui.editOfferDiv; // this.$el.find('.editOfferDiv');
-			// this.loanInfoView.delegateEvents();
-		// } // if
-
+		
 		this.loanInfoView.render();
 
 		var controlButtons = this.$el.find("#controlButtons");
 		this.controlButtonsView = new EzBob.Underwriter.ControlButtonsView(
             {
             	el: controlButtons,
-            	model: new Backbone.Model({ customerId: this.model.get("Id") })
+            	model: new Backbone.Model({ customerId: this.model.get('Id') })
             });
 		this.controlButtonsView.render();
 
@@ -117,7 +112,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		}
 
 		if (this.personalModel) {
-			this.changeDecisionButtonsState(this.personalModel.get("Editable"));
+			this.changeDecisionButtonsState(this.personalModel.get('Editable'));
 		}
 
 		if (this.model.get('Alerts') !== void 0) {
@@ -133,21 +128,24 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 				}
 			}
 		}
+
+		this.medalModel.trigger('change');
+
 		this.$el.find('[data-toggle="tooltip"]').tooltip({
 			html: true,
 			'placement': 'bottom'
 		});
 
 		var offer = this.loanModel.get('OfferedCreditLine') || 0;
-		EzBob.drawDonut("offer-donut", "#00ab5d", offer / (EzBob.Config.ManagerMaxLoan || 120000), true);
+		EzBob.drawDonut("offer-donut", '#00ab5d', offer / (EzBob.Config.ManagerMaxLoan || 120000), true);
 		var period = this.loanModel.get('RepaymentPeriod') || 0;
-		EzBob.drawDi('period-di', "#00ab5d", period / 12);
+		EzBob.drawDi('period-di', '#00ab5d', period / 12);
 
-		if ($.cookie('editOfferVisible') == "true") {
+		if ($.cookie('editOfferVisible') == 'true') {
 			this.ui.editOfferDiv.removeClass('hide');
-			$(".profile-content").css({ "margin-top": this.$el.height() + "px" });
+			$(".profile-content").css({ "margin-top": this.$el.height() + 'px' });
 		}
-		if ($.cookie('collapseAll') == "true") {
+		if ($.cookie('collapseAll') == 'true') {
 			this.collapseAll();
 		}
 	},
@@ -234,15 +232,13 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			).addClass('disabled');
 		} // if
 	}, // changeDecisionButtonsState
-
-	
 });
 
 EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 	template: '#profile-head-medal-template',
 
 	initialize: function () {
-		this.bindTo(this.model, "change sync", this.render, this);
+		this.bindTo(this.model, 'change sync', this.render, this);
 	},
 
 	events: {
@@ -254,10 +250,9 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 		BlockUi();
 
 		$.post(window.gRootPath + 'Underwriter/Medal/RecalculateMedal', {
-			customerId: this.model.id
+			customerId: this.model.get('Id')
 		}).always(function () {
-			that.model.fetch();
-			that.medalModel.fetch().always(function () {
+			that.model.fetch().always(function () {;
 				UnBlockUi();
 			});
 		});
@@ -265,8 +260,8 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 
 	serializeData: function () {
 		return {
-			medal: this.model.get('Score'),
-			logicalGlue: this.model.get('LogicalGlue'),
+			medal: this.model.get('Score') || {},
+			logicalGlue: this.model.get('LogicalGlue') || {},
 			m: { Id: this.model.get('Id') }
 		};
 	},
@@ -282,7 +277,7 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 			var histData = [];
 			//var medalLabels = [];
 			_.each(medalHistory.MedalHistories, function (hist, i) {
-				histData.push([i + 1, hist.Result * 100, hist.Medal, EzBob.formatDate3(hist.Date), hist.MedalType + (hist.Error ? " <span class='red_cell'>*</span>" : "") + "</p>"]);
+				histData.push([i + 1, hist.Result * 100, hist.Medal, EzBob.formatDate3(hist.Date), hist.MedalType + (hist.Error ? ' <span class=\'red_cell\'>*</span>' : '') + '</p>']);
 			});
 			if (histData.length > 0) {
 				this.medalHistoryGraph = $.jqplot('medalHistory', [histData], {
@@ -314,10 +309,10 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 					},
 					seriesDefaults: {
 						shadow: false,
-						color: "#a7a7a7",
+						color: '#a7a7a7',
 						markerOptions: {
-							color: "#a7a7a7",
-							style: "filledCircle",
+							color: '#a7a7a7',
+							style: 'filledCircle',
 							size: 7,
 							shadow: false
 						},

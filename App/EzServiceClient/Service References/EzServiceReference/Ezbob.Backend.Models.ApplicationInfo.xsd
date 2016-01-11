@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
   <xs:complexType name="ApplicationInfoModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="AMLResult" nillable="true" type="xs:string" />
@@ -39,6 +40,7 @@
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="IsAvoid" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCustomerRepaymentPeriodSelectionAllowed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsLimited" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:int" />
       <xs:element minOccurs="0" name="IsModified" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOffline" nillable="true" type="xs:boolean" />
@@ -75,7 +77,7 @@
       <xs:element minOccurs="0" name="SystemDecision" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TotalSetupFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="Turnover" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TypeOfBusiness" type="xs:int" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="TypeOfBusiness" type="q10:TypeOfBusiness" />
       <xs:element minOccurs="0" name="ValueAdded" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>

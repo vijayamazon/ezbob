@@ -28,5 +28,8 @@
 
 		[DataMember]
 		public decimal BucketPercent { get; set; }
+
+		[DataMember]
+		public Guid UniqueID { get; set; }
 	}
 }

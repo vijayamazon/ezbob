@@ -70,8 +70,9 @@
 				Result.SubGradeID = subGrade.SubGradeID;
 			}
 
-			TypeOfBusiness typeOfBusiness = (TypeOfBusiness)Result.TypeOfBusiness;
-			Result.IsRegulated = typeOfBusiness.IsRegulated();
+			
+			Result.IsRegulated = Result.TypeOfBusiness.IsRegulated();
+			Result.IsLimited = Result.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 
 			CustomerOriginEnum originEnum = (CustomerOriginEnum)Result.OriginID;
 			Result.Origin = originEnum.ToString();
@@ -82,8 +83,8 @@
 			} else {
 				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => 
 					x.OriginID == Result.OriginID && 
-					x.LoanSourceID == Result.LoanSourceID && 
-					x.IsRegulated == typeOfBusiness.IsRegulated());
+					x.LoanSourceID == Result.LoanSourceID &&
+					x.IsRegulated == Result.IsRegulated);
 			}
 			I_ProductType currentProductType = null;
 			if (Result.CurrentProductSubType != null) {
@@ -139,6 +140,11 @@
 				this.rawOfferStart = sr["RawOfferStart"];
 				this.brokerCardID = sr["BrokerCardID"];
 				this.brokerID = sr["BrokerID"];
+				string typeOfBusinessStr = sr["TypeOfBusiness"];
+				TypeOfBusiness typeOfBusiness;
+				if(Enum.TryParse(typeOfBusinessStr, out typeOfBusiness)) {
+					Result.TypeOfBusiness = typeOfBusiness;
+				}
 				break;
 
 			case RowTypes.OfferCalculation:

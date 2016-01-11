@@ -176,7 +176,7 @@
 			var customer = this.context.Customer;
 			customer.PromoCode = promoCode;
 
-			TypeOfBusiness nBusinessType;
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
 
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
@@ -211,7 +211,7 @@
 			
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 
-			if (nBusinessType != TypeOfBusiness.Entrepreneur && customer.Company != null) {
+			if (nBusinessType != EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Entrepreneur && customer.Company != null) {
 				var directors = customer.Company.Directors.Where(x => !x.IsDeleted);
 				foreach (var director in directors) {
 					try {
@@ -594,7 +594,7 @@
 		} // UpdateAddresses
 
 		private string ProcessCompanyInfoTemporary(
-			TypeOfBusiness businessType,
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness businessType,
 			bool vatRegistered,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
@@ -605,7 +605,7 @@
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCount,
 			CompanyInfo experianInfo, Customer customer,
-			TypeOfBusiness nBusinessType,
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness nBusinessType,
 			IndustryType eIndustryType
 		) {
 			if (customer.PersonalInfo == null)

@@ -117,7 +117,7 @@
 		private CompanyDetails BuildDetails(Customer customer) {
 			var details = new CompanyDetails{
 				CustomerId = customer.Id,
-				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.ToString() : TypeOfBusiness.Entrepreneur.ToString()
+				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.ToString() : EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Entrepreneur.ToString()
 			};
 
 			if (customer.Company != null) {

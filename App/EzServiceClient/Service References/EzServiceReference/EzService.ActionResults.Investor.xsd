@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="InvestorActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
@@ -45,6 +46,7 @@
           <xs:element minOccurs="0" name="FLScore" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="MonthlyRepayment" type="xs:decimal" />
           <xs:element minOccurs="0" name="NNScore" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="UniqueID" type="ser:guid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

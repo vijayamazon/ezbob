@@ -22,6 +22,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	events: {
 		'click .btnOk': 'save',
+		'click .btnLogicalGlue': 'checkLogicalGlue',
 		'change #offeredCreditLine': 'onChangeOfferedAmout',
 	}, // events
 
@@ -39,6 +40,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		loanSource: '#loan-source',
 		discountPlan: '#discount-plan',
 		fundingType: '#funding-type',
+		btnLogicalGlue: '.btnLogicalGlue'
 	}, // ui
 
 	jqoptions: function() {
@@ -85,7 +87,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			btnOk.show();
 		});
 	}, // onChangeOfferedAmout
-
 	onChangeProduct: function () {
 		this.populateDropDowns();
 	},
@@ -95,7 +96,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	onChangeLoanType: function () {
 		this.populateDropDowns();
 	}, // onChangeLoanType
-
 	onChangeLoanSource: function (that) {
 		if (that !== null) {
 			this.populateDropDowns();
@@ -135,6 +135,34 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			EzBob.App.vent.trigger('newCreditLine:updated');
 		});
 	}, // save
+
+	checkLogicalGlue: function () {
+		BlockUi();
+		var action = '' + window.gRootPath + 'Underwriter/ApplicationInfo/CheckLogicalGlue';
+		var m = this.cloneModel.toJSON();
+		
+		var postData = {
+			customerID: m.CustomerId,
+			cashRequestID: m.CashRequestId,
+			amount: m.OfferedCreditLine,
+			repaymentPeriod: m.RepaymentPeriod,
+		};
+		
+		var xhr = $.post(action, postData);
+		var self = this;
+
+		xhr.done(function (res) {
+			var logicalGlueModel = new Backbone.Model(res);
+			var dialog = new EzBob.Underwriter.LogicalGluePopupView({
+				model: logicalGlueModel
+			});
+			dialog.render();
+		});
+
+		xhr.always(function() {
+			UnBlockUi();
+		});
+	},
 
 	getCurrentProductSubType: function () {
 		var self = this;
@@ -256,6 +284,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		this.$el.find('#manualSetupFeePercent').autoNumeric('init', EzBob.percentFormat);
 		this.$el.find('#brokerSetupFeePercent').autoNumeric('init', EzBob.percentFormat);
 		this.$el.find('#repaymentPeriod').numericOnly();
+
+		if (this.model.get('IsLimited')) {
+			this.ui.btnLogicalGlue.show();
+		}
+
 		this.populateDropDowns();
 		this.onChangeLoanSource(null);
 	}, // onRender
@@ -397,8 +430,45 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	},//setTooltips
 }); // EzBob.Underwriter.CreditLineDialog
 
+EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
+	template: '#logical-glue-template',
 
-EzBob.validateCreditLineDialogForm = function (el, gradeRange) {
+	initialize: function () {
+		this.$el.dialog(this.jqoptions());
+	},
+
+	onRender: function() {
+		this.$el.find('[data-toggle="tooltip"]').tooltip({
+			html: true,
+			'placement': 'bottom'
+		});
+	},
+
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: 'Logical glue',
+			position: 'center',
+			draggable: true,
+			dialogClass: 'logical-glue-popup',
+			width: 400,
+			close: function () {
+				$(this).dialog("destroy");
+				return that.trigger("close");
+			}
+		};
+	}, // jqoptions
+
+	serializeData: function () {
+		return {
+			logicalGlue: this.model.toJSON()
+		}
+	}
+});
+
+
+EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
 	var e = el || $('form');
 
 	return e.validate({
@@ -416,7 +486,7 @@ EzBob.validateCreditLineDialogForm = function (el, gradeRange) {
 			brokerSetupFeePercent: { autonumericMin: 0, required: false, },
 		},
 		messages: {
-			offeredCreditLine:{
+			offeredCreditLine: {
 				autonumericMin: $.validator.format('Offered credit line is below &pound;{0}'),
 				autonumericMax: $.validator.format('Offered credit line is above &pound;{0}'),
 			},
@@ -440,4 +510,4 @@ EzBob.validateCreditLineDialogForm = function (el, gradeRange) {
 		errorPlacement: EzBob.Validation.errorPlacement,
 		unhighlight: EzBob.Validation.unhighlight,
 	});
-}//validateCreditLineDialogForm
+} //validateCreditLineDialogForm

@@ -2081,6 +2081,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<decimal> NNScoreField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid UniqueIDField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<ServiceClientProxy.EzServiceReference.Bucket> Bucket {
             get {
@@ -2181,6 +2184,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.NNScoreField.Equals(value) != true)) {
                     this.NNScoreField = value;
                     this.RaisePropertyChanged("NNScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid UniqueID {
+            get {
+                return this.UniqueIDField;
+            }
+            set {
+                if ((this.UniqueIDField.Equals(value) != true)) {
+                    this.UniqueIDField = value;
+                    this.RaisePropertyChanged("UniqueID");
                 }
             }
         }
@@ -3188,6 +3204,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TypeOfBusiness", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
+    public enum TypeOfBusiness : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Entrepreneur = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LLP = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PShip3P = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PShip = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoleTrader = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Limited = 5,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]

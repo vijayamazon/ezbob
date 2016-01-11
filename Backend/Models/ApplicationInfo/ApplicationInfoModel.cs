@@ -201,11 +201,15 @@
 		[DataMember]
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
 
+		[NonTraversable]
 		[DataMember]
-		public int TypeOfBusiness { get; set; }
+		public TypeOfBusiness TypeOfBusiness { get; set; }
 
 		[DataMember]
 		public bool IsRegulated { get; set; }
+
+		[DataMember]
+		public bool IsLimited { get; set; }
 
 		[NonTraversable]
 		[DataMember]

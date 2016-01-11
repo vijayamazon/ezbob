@@ -96,7 +96,8 @@
 					Date = strategy.Inference.ReceivedTime,
 					Bucket = strategy.Inference.Bucket,
 					BucketStr = strategy.Inference.Bucket.HasValue ? strategy.Inference.Bucket.ToString() : string.Empty,
-					MonthlyRepayment = 0, //TODO
+					MonthlyRepayment = strategy.Inference.MonthlyRepayment, 
+					UniqueID = strategy.Inference.UniqueID,
 					FLScore = strategy.Inference.ModelOutputs.ContainsKey(ModelNames.FuzzyLogic) ? strategy.Inference.ModelOutputs[ModelNames.FuzzyLogic].Grade.Score : null,
 					NNScore = strategy.Inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) ? strategy.Inference.ModelOutputs[ModelNames.NeuralNetwork].Grade.Score : null,
 				};

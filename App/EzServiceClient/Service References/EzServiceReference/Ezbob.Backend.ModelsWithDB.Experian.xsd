@@ -295,17 +295,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfAExperianLtdDataRow" nillable="true" type="tns:ArrayOfAExperianLtdDataRow" />
-  <xs:complexType name="ExperianLtdDL52">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DateOfNotice" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="NoticeType" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL52" nillable="true" type="tns:ExperianLtdDL52" />
   <xs:complexType name="ExperianLtdDL65">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AExperianLtdDataRow">
@@ -380,17 +369,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianLtdDL72" nillable="true" type="tns:ExperianLtdDL72" />
-  <xs:complexType name="ExperianLtdDL48">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="FraudCategory" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SupplierName" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL48" nillable="true" type="tns:ExperianLtdDL48" />
   <xs:complexType name="ExperianLtdPrevCompanyNames">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AExperianLtdDataRow">
@@ -437,6 +415,28 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianLtdErrors" nillable="true" type="tns:ExperianLtdErrors" />
+  <xs:complexType name="ExperianLtdDL48">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="FraudCategory" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SupplierName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL48" nillable="true" type="tns:ExperianLtdDL48" />
+  <xs:complexType name="ExperianLtdDL52">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DateOfNotice" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="NoticeType" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL52" nillable="true" type="tns:ExperianLtdDL52" />
   <xs:complexType name="ExperianLtdShareholders">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AExperianLtdDataRow">
