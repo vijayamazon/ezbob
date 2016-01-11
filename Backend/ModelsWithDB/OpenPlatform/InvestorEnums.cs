@@ -37,7 +37,7 @@
         Investor = 3 
     };
 
-    public enum ParameterPeriod {
+    public enum InvesmentPeriod {
         Day=1, 
         Week=2,
         Month=3

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
@@ -16,8 +17,26 @@
             return InvestorParametersDAL.GetInvestorsIds();
         }
 
-        public InvestorParameters GetInvestorParameters(int InvestorId, RuleType ruleType) {
-            return InvestorParametersDAL.GetInvestorParameters(InvestorId, ruleType);
+        public InvestorParameters GetInvestorParameters(int investorId, RuleType ruleType) {
+            var iInvestorParameters = InvestorParametersDAL.GetInvestorParametersDB(investorId, ruleType);
+            var investorParameters = new InvestorParameters();
+
+            investorParameters.InvestorID = investorId;
+            investorParameters.Balance = InvestorParametersDAL.InvestorsBalance[investorId];
+            
+            if (iInvestorParameters == null) {
+                return investorParameters;
+            }
+
+            var firstOrDefault = iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == 1);
+            if (firstOrDefault != null) {
+                investorParameters.DailyAvailableAmount = (double)firstOrDefault.Value - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Day);
+            }
+            var investorParams = iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == 2);
+            if (investorParams != null) {
+                investorParameters.WeeklyAvailableAmount = (double)investorParams.Value - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Week);
+            }
+            return investorParameters;
         }
 
         public double GetGradeAvailableAmount(int investorId, InvestorLoanCashRequest investorLoanCashRequest, int ruleType) {

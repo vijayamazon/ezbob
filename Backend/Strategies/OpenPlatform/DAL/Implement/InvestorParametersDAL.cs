@@ -1,11 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Implement {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
-    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using Ezbob.Database;
 
     public class InvestorParametersDAL : IInvestorParametersDAL {
@@ -23,28 +20,12 @@
         }
 
         public List<int> GetInvestorsIds() {
-           return Library.Instance.DB.Fill<int>("select InvestorID from I_Investor", CommandSpecies.Text);
-            //Dictionary<int, InvestorParameters> investorParametersDict = new Dictionary<int, InvestorParameters>();
-            //foreach (var investorId in investorIds) {
-            //    investorParametersDict.Add(investorId, new InvestorParameters() {
-            //        InvestorID = investorId,
-            //        Balance = InvestorsBalance[investorId]
-            //    });
-            //}
-            //return investorParametersDict;
+            return Library.Instance.DB.Fill<int>("select InvestorID from I_Investor i where i.IsActive = 1", CommandSpecies.Text);
         }
 
-        public InvestorParameters GetInvestorParameters(int investorId, RuleType ruleType) {
 
-            var iInvestorParameters = Library.Instance.DB.Fill<I_InvestorParams>(string.Format(" select * from I_InvestorParams where InvestorID ={0} and type = {1}", ruleType == RuleType.System ? (int?)null : investorId, (int)ruleType), CommandSpecies.Text);
-            return new InvestorParameters() {
-                InvestorID = investorId,
-                Balance = InvestorsBalance[investorId],
-                DailyAvailableAmount = (double)iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == 1)
-                    .Value,
-                WeeklyAvailableAmount = (double)iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == 2)
-                    .Value
-            };
+        public List<I_InvestorParams> GetInvestorParametersDB(int investorId, RuleType ruleType) {
+            return Library.Instance.DB.Fill<I_InvestorParams>(string.Format(" select * from I_InvestorParams where InvestorID ={0} and type = {1}", ruleType == RuleType.System ? (int?)null : investorId, (int)ruleType), CommandSpecies.Text);
         }
 
         public double GetGradeMonthlyInvestedAmount(int investorId, Grade grade) {
@@ -74,6 +55,18 @@
 
         public double GetInvestorMonthlyFundingCapital(int investorId) {
             return Library.Instance.DB.ExecuteScalar<double>(string.Format("SELECT MonthlyFundingCapital FROM I_Investor WHERE InvestorID ={0}", investorId), CommandSpecies.Text);
+        }
+
+        public double GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod) {
+            switch (invesmentPeriod) {
+                case InvesmentPeriod.Day:
+                    return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) as invesmentAmount from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.Timestamp  <= DATEADD(day, -1, GETDATE())", investorId), CommandSpecies.Text);
+                case InvesmentPeriod.Week:
+                    return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) as invesmentAmount from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.Timestamp  <= DATEADD(week, -1, GETDATE())", investorId), CommandSpecies.Text);
+                case  InvesmentPeriod.Month:
+                    return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) as invesmentAmount from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.Timestamp  <= DATEADD(month, -1, GETDATE())", investorId), CommandSpecies.Text);
+            }
+            return 0;
         }
     }
 }

@@ -72,13 +72,14 @@
 
 
             var investorParametersDALMock = new Mock<IInvestorParametersDAL>();
+            var investorParametersBLLMock = new Mock<IInvestorParametersBLL>();
             var investorCashRequestDALMock = new Mock<IInvestorCashRequestDAL>();
             var genericRulesMock = new Mock<IGenericRulesBLL>();
 
             ruleEngineDalMock.Setup(x => x.GetRules(1, RuleType.System)).Returns(rulesDict1);
             investorCashRequestDALMock.Setup(x => x.GetInvestorLoanCashRequest(1)).Returns(new InvestorLoanCashRequest() { ManagerApprovedSum = 20, CashRequestID = 1 });
-            investorParametersDALMock.Setup(x=> x.GetInvestorsIds()).Returns(new List<int>(){1});
-            investorParametersDALMock.Setup(x => x.GetInvestorParameters(1,RuleType.System)).Returns(investorParameters);
+            investorParametersDALMock.Setup(x => x.GetInvestorsIds()).Returns(new List<int>() { 1 });
+            investorParametersBLLMock.Setup(x => x.GetInvestorParameters(1, RuleType.System)).Returns(investorParameters);
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1)).Returns(true);
 
 
@@ -86,6 +87,7 @@
             container.Configure(r => r.ForSingletonOf<IRulesEngineDAL>().Use(() => ruleEngineDalMock.Object));
             container.Configure(r => r.ForSingletonOf<IInvestorParametersDAL>().Use(() => investorParametersDALMock.Object));
             container.Configure(r => r.ForSingletonOf<IGenericRulesBLL>().Use(() => genericRulesMock.Object));
+            container.Configure(r => r.ForSingletonOf<IInvestorParametersBLL>().Use(() => investorParametersBLLMock.Object));
 
 
             var investorService = container.GetInstance<IInvestorService>();
@@ -107,36 +109,105 @@
 
             var container = this.InitContainer(typeof(InvestorService));
 
-            var rulesDict1 = GetRules();
-            var investorParameters = GetInvestorParameters();
             
+
             var ruleEngineDalMock = new Mock<IRulesEngineDAL>();
             var investorParametersDALMock = new Mock<IInvestorParametersDAL>();
             var investorCashRequestDALMock = new Mock<IInvestorCashRequestDAL>();
             var genericRulesMock = new Mock<IGenericRulesBLL>();
 
-            ruleEngineDalMock.Setup(x => x.GetRules(1, RuleType.System)).Returns(rulesDict1);
-            investorCashRequestDALMock.Setup(x => x.GetInvestorLoanCashRequest(1)).Returns(GetInvestorLoanCashRequest());
-            investorParametersDALMock.Setup(x => x.GetInvestorParameters(1, RuleType.System)).Returns(investorParameters);
-            genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1)).Returns(true);
+            SetSetups(ruleEngineDalMock, investorCashRequestDALMock, investorParametersDALMock, genericRulesMock);
 
-            container.Configure(r => r.ForSingletonOf<IInvestorCashRequestDAL>().Use(() => investorCashRequestDALMock.Object));
-            container.Configure(r => r.ForSingletonOf<IRulesEngineDAL>().Use(() => ruleEngineDalMock.Object));
-            container.Configure(r => r.ForSingletonOf<IInvestorParametersDAL>().Use(() => investorParametersDALMock.Object));
-            container.Configure(r => r.ForSingletonOf<IGenericRulesBLL>().Use(() => genericRulesMock.Object));
+            container.Configure(r => r.ForSingletonOf<IInvestorCashRequestDAL>()
+                .Use(() => investorCashRequestDALMock.Object));
+            container.Configure(r => r.ForSingletonOf<IRulesEngineDAL>()
+                .Use(() => ruleEngineDalMock.Object));
+            container.Configure(r => r.ForSingletonOf<IInvestorParametersDAL>()
+                .Use(() => investorParametersDALMock.Object));
+            container.Configure(r => r.ForSingletonOf<IGenericRulesBLL>()
+                .Use(() => genericRulesMock.Object));
+
 
             var investorService = container.GetInstance<IInvestorService>();
 
             var ids = investorService.GetMatchedInvestors(1);
             Assert.IsTrue(ids.Count == 1);
 
-            genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1)).Returns(false);
+            genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1))
+            .Returns(false);
 
             ids = investorService.GetMatchedInvestors(1);
             Assert.IsTrue(ids.Count == 0);
 
         }
 
+
+        private void SetSetups(Mock<IRulesEngineDAL> ruleEngineDalMock, 
+            Mock<IInvestorCashRequestDAL> investorCashRequestDALMock,
+            Mock<IInvestorParametersDAL> investorParametersDALMock,
+            Mock<IGenericRulesBLL> genericRulesMock) 
+        {
+            var rulesDict1 = GetRules();
+            
+            ruleEngineDalMock.Setup(x => x.GetRules(1, RuleType.System))
+            .Returns(rulesDict1);
+
+
+            genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1))
+                .Returns(true);
+            
+            investorCashRequestDALMock.Setup(x => x.GetInvestorLoanCashRequest(1))
+                .Returns(GetInvestorLoanCashRequest());
+
+            Dictionary<int, double> dict2 = new Dictionary<int, double>();
+            dict2.Add(1, 3000);
+
+            investorParametersDALMock.Setup(x => x.InvestorsBalance)
+                .Returns(dict2);
+
+            investorParametersDALMock.Setup(x => x.GetFundedAmountPeriod(1, InvesmentPeriod.Day))
+                .Returns(0);
+
+            investorParametersDALMock.Setup(x => x.GetFundedAmountPeriod(1, InvesmentPeriod.Week))
+                .Returns(500);
+
+            investorParametersDALMock.Setup(x => x.GetInvestorsIds())
+                .Returns(new List<int>() {
+                    1
+                });
+
+
+            investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, Grade.A))
+                .Returns((decimal)0.2);
+            investorParametersDALMock.Setup(x => x.GetGradeMonthlyInvestedAmount(1, Grade.A))
+                .Returns(100);
+            investorParametersDALMock.Setup(x => x.GetInvestorBalanceMonthAgo(1))
+                .Returns(200);
+
+            investorParametersDALMock.Setup(x => x.GetInvestorMonthlyFundingCapital(1))
+                .Returns(5000);
+
+            investorParametersDALMock.Setup(x => x.GetInvestorTotalMonthlyDeposits(1))
+                .Returns(5000);
+
+            investorParametersDALMock.Setup(x => x.GetInvestorParametersDB(1, RuleType.System))
+                .Returns(new List<I_InvestorParams>() {
+                    new I_InvestorParams() {
+                        InvestorID = 1,
+                        Type = 1,
+                        ParameterID = 1,
+                        Value = 1000,
+                        InvestorParamsID = 1
+                    },
+                    new I_InvestorParams() {
+                        InvestorID = 1,
+                        Type = 1,
+                        ParameterID = 2,
+                        Value = 7000,
+                        InvestorParamsID = 2
+                    }
+                });
+        }
 
 
         private Dictionary<int, InvestorRule> GetRules() {
@@ -243,14 +314,16 @@
             return new InvestorParameters() {
                 InvestorID = 1,
                 DailyAvailableAmount = 700,
-                Balance = 500
+                Balance = 500,
+                WeeklyAvailableAmount = 2000
             };
         }
 
         private InvestorLoanCashRequest GetInvestorLoanCashRequest() {
             return new InvestorLoanCashRequest() {
-                ManagerApprovedSum = 20,
-                CashRequestID = 1
+                ManagerApprovedSum = 999,
+                CashRequestID = 1,
+                Grade = Grade.A
             };
         }
 
