@@ -852,6 +852,7 @@
 
 			if (nStatus == MembershipCreateStatus.Success) {
 				this.context.SessionId = nSessionID.ToString(CultureInfo.InvariantCulture);
+				Session["UserSessionId"] = nSessionID;
 
 				log.Debug(
 					"User '{0}' from origin '{1}' password has been validated.",
