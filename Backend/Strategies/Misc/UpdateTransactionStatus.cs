@@ -1,5 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
-    using Ezbob.Database;
+	using System;
+	using System.Linq;
+	using DbConstants;
+	using Ezbob.Database;
     using PaymentServices.PacNet;
     using StructureMap;
 
@@ -38,6 +41,35 @@
                     new QueryParameter("TransactionStatus", newStatus),
                     new QueryParameter("Description", description)
                 );
+
+
+				// UPDATE [dbo].[LoanTransaction] SET [Status] = @TransactionStatus, PacnetStatus=@TransactionStatus, [Description] = @Description WHERE TrackingNumber = @TrackingId
+
+				// update NL_PacnetTransactions:
+				// PacnetTransactionStatusID = @TransactionStatus 
+				// TrackingNumber = @TrackingId
+				// StatusUpdatedTime = now
+				// Notes = @Description
+	            try {
+		            var nlStatus = Enum.GetNames(typeof(NLPacnetTransactionStatuses)).FirstOrDefault(s => s.Equals(newStatus));
+		            if (nlStatus != null) {
+			            int nlStatusID = (int)Enum.Parse(typeof(NLPacnetTransactionStatuses), nlStatus);
+			            DB.ExecuteNonQuery("NL_PacnetTransactionsUpdate",
+				            CommandSpecies.StoredProcedure,
+				            new QueryParameter("TrackingNumber", trackingNumber),
+				            new QueryParameter("PacnetTransactionStatusID", nlStatusID),
+				            new QueryParameter("Notes", description),
+				            new QueryParameter("UpdateTime", DateTime.UtcNow),
+				            new QueryParameter("FundTransferActive", (newStatus.Equals("Done") ? 1 : 0))
+				        );
+		            }
+	            } catch (OverflowException overflowException) {
+					Log.Alert("Failed to get status {0} from NLPacnetTransactionStatuses. {1}", newStatus, overflowException);
+		            // ReSharper disable once CatchAllClause
+	            } catch (Exception ex) {
+					Log.Alert("Failed to update NL_PacnetTransactionsUpdate, NL_FundTransfers for customer: {0}, trackingNumber: {1}, {2}", customerId, trackingNumber, ex);
+	            }
+
             } // foreach
         }//UpdateLoanTransactionStatus
 

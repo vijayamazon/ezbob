@@ -74,7 +74,7 @@
 		ActionMetaData CaisUpdate(int userId, int caisId);
 
 		[OperationContract]
-		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID);
+		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID);
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
@@ -297,7 +297,7 @@
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
-		ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
+        ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, decimal? balance = null, bool? isPaidOff = null);
 
 		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);

@@ -1,10 +1,9 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database.Mapping {
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using FluentNHibernate.Mapping;
-	using NHibernate.Mapping.ByCode;
 	using NHibernate.Type;
 
-	public class LoanMap : ClassMap<Loans.Loan> {
+	public class LoanMap : ClassMap<Loan> {
 		public LoanMap() {
 			Table("Loan");
 			Cache.ReadWrite().Region("LongTerm").ReadWrite();

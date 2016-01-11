@@ -56,39 +56,39 @@ END;
 
 -- BE SURE USERNAME ARE CORRECT !!!!!!!!!!!!!!!
 
-set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'Collector');
---select @RoleID;
-set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] = 'emma')
---select @UserID;
---SELECT [UserId], [RoleId]  FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID
-IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
-	IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
-		INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
-	END;
-END;
+-- set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'Collector');
+-- --select @RoleID;
+-- set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] = 'emma')
+-- --select @UserID;
+-- --SELECT [UserId], [RoleId]  FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID
+-- IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
+	-- IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
+		-- INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
+	-- END;
+-- END;
 
-set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'CollectorSenior');
-set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] = 'russellb')
-IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
-	IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
-		INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
-	END;
-END;
-
-
-set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'CollectorManager');
-set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] = 'vitasd')
-IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
-	IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
-		INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
-	END;
-END;
+-- set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'CollectorSenior');
+-- set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] = 'russellb')
+-- IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
+	-- IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
+		-- INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
+	-- END;
+-- END;
 
 
-set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'CollectorManager');
-set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] =  '%tomerg%');
-IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
-	IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
-		INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
-	END;
-END;
+-- set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'CollectorManager');
+-- set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] = 'vitasd')
+-- IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
+	-- IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
+		-- INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
+	-- END;
+-- END;
+
+
+-- set @RoleID = (select [RoleId] from [dbo].[Security_Role] where [Name] = 'CollectorManager');
+-- set @UserID = (select [UserId] from [dbo].[Security_User] where [UserName] =  '%tomerg%');
+-- IF @RoleID IS NOT NULL AND @UserID IS NOT NULL BEGIN 
+	-- IF NOT EXISTS( SELECT [UserId], [RoleId] FROM [dbo].[Security_UserRoleRelation] WHERE [UserId] = @UserID and [RoleId] = @RoleID) BEGIN
+		-- INSERT INTO [dbo].[Security_UserRoleRelation] ([UserId],[RoleId]) values (@UserID, @RoleID);
+	-- END;
+-- END;

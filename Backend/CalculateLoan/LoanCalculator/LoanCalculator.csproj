@@ -42,24 +42,54 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ALoanCalculator_stubs.cs" />
-    <Compile Include="ALoanCalculator.cs" />
+    <Compile Include="ALoanCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="BankLikeLoanCalculator.cs" />
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />
-    <Compile Include="Exceptions\InterestOnlyMonthsCountException.cs" />
+    <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
+    <Compile Include="Exceptions\ANegativeDecimalException.cs" />
+    <Compile Include="Exceptions\LoanWriteOffStatusException.cs" />
+    <Compile Include="Exceptions\LoanPaidOffStatusException.cs" />
+    <Compile Include="Exceptions\LoanPendingStatusException.cs" />
+    <Compile Include="Exceptions\InvalidPaymentAmountToAssignException.cs" />
+    <Compile Include="Exceptions\NoInstallmentFoundException.cs" />
+    <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
+    <Compile Include="Exceptions\NegativeLoanAmountException.cs" />
+    <Compile Include="Exceptions\NegativeMonthlyInterestRateException.cs" />
+    <Compile Include="Exceptions\NegativeOpenPrincipalException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentAmountException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentCountException.cs" />
+    <Compile Include="Exceptions\NoLoanHistoryException.cs" />
+    <Compile Include="Exceptions\InvalidInitialRepaymentCountException.cs" />
+    <Compile Include="Exceptions\InvalidInitialInterestRateException.cs" />
+    <Compile Include="Exceptions\InvalidInitialAmountException.cs" />
+    <Compile Include="Exceptions\NoInitialDataException.cs" />
     <Compile Include="Exceptions\NoPeriodEndDateException.cs" />
-    <Compile Include="Exceptions\NullLoanCalculatorModelException.cs" />
+    <Compile Include="Exceptions\NoLoanEventsException.cs" />
+    <Compile Include="Exceptions\NoPaymentPerIntervalException.cs" />
+    <Compile Include="Exceptions\NoScheduleException.cs" />
+    <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
+    <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
+    <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
+    <Compile Include="ILoanCalculator.cs" />
+    <Compile Include="LoanEvent.cs" />
     <Compile Include="LegacyLoanCalculator.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AMethod.cs" />
-    <Compile Include="Methods\APRCalculateMethod.cs" />
+    <Compile Include="Methods\CalculateAprMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
+    <Compile Include="Methods\RolloverRescheduling.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
+      <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
+      <Name>PaymentServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
@@ -74,7 +104,7 @@
       <Name>EzEnvironment</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
-      <Project>{83a9efc6-0bd4-46fa-9058-329bee135bda}</Project>
+      <Project>{83A9EFC6-0BD4-46FA-9058-329BEE135BDA}</Project>
       <Name>LibraryGlobals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
@@ -89,10 +119,18 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

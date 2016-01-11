@@ -39,6 +39,12 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="BrokerInstantOfferResponse" nillable="true" type="tns:BrokerInstantOfferResponse" />
+  <xs:complexType name="AStringable">
+    <xs:sequence />
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="AStringable" nillable="true" type="tns:AStringable" />
   <xs:complexType name="CampaignSourceRef">
     <xs:sequence>
       <xs:element minOccurs="0" name="FContent" nillable="true" type="xs:string" />

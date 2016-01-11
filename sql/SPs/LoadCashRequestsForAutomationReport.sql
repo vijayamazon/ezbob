@@ -54,6 +54,7 @@ BEGIN
 
 	SELECT
 		r.Id AS CashRequestID,
+		NLCashRequestID = nlr.CashRequestID,
 		r.IdCustomer AS CustomerID,
 		c.BrokerID,
 		CASE
@@ -102,6 +103,7 @@ BEGIN
 		INNER JOIN #customers c ON r.IdCustomer = c.Id
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 		INNER JOIN LoanSource ls ON r.LoanSourceId = ls.LoanSourceID
+		LEFT JOIN NL_CashRequests nlr ON nlr.OldCashRequestID = r.Id
 	WHERE
 		r.CreationDate >= ISNULL(@DateFrom, 'Sep 4 2012')
 		AND (

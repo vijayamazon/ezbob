@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ApplicationMng.Repository;
-using NHibernate;
-
-namespace EZBob.DatabaseLib.Model.Database.Repository
+﻿namespace EZBob.DatabaseLib.Model.Database.Repository
 {
-    public interface ICashRequestsRepository : IRepository<CashRequest>
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public interface ICashRequestsRepository : IRepository<CashRequest>
     {
     }
 

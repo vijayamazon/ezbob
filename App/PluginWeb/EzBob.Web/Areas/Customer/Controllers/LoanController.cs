@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -13,13 +12,11 @@
 	using PaymentServices;
 	using PaymentServices.Calculators;
 
-	public class LoanController : Controller
-	{
+	public class LoanController : Controller {
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly PaymentRolloverRepository _rolloverRepository;
 
-		public LoanController(IEzbobWorkplaceContext context, PaymentRolloverRepository rolloverRepository)
-		{
+		public LoanController(IEzbobWorkplaceContext context, PaymentRolloverRepository rolloverRepository) {
 			_context = context;
 			_rolloverRepository = rolloverRepository;
 		}
@@ -27,14 +24,12 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Ajax]
-		public JsonResult Details(int id)
-		{
+		public JsonResult Details(int id) {
 			var customer = _context.Customer;
 
 			var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
 
-			if (loan == null)
-			{
+			if (loan == null) {
 				return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
 			}
 
@@ -47,8 +42,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Ajax]
-		public JsonResult Get(int id)
-		{
+		public JsonResult Get(int id) {
 			var customer = _context.Customer;
 			var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
 

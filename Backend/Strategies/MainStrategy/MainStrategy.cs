@@ -32,7 +32,7 @@
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
 			FinishWizardArgs fwa,
-			long? cashRequestID,
+			long? cashRequestID, // When old cash request is removed replace this with NLcashRequestID
 			CashRequestOriginator? cashRequestOriginator
 		) {
 			UnderwriterID = underwriterID;
@@ -61,8 +61,6 @@
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
-
-			this.nlExists = DB.ExecuteScalar<bool>("NL_Exists", CommandSpecies.StoredProcedure);
 
 			this.customerDetails = new CustomerDetails(customerID);
 
@@ -110,7 +108,7 @@
 				UnderwriterID
 			);
 
-			CalculateMedal(false); 
+			CalculateMedal(false);
 
 			new SilentAutomation(CustomerID)
 				.PreventMainStrategy()
@@ -247,7 +245,7 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, this.cashRequestID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(CustomerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true) {
 				Tag = this.tag,
 			};
 			instance.Execute();
@@ -358,6 +356,7 @@
 				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
 					CustomerID,
 					this.cashRequestID,
+					this.nlCashRequestID,
 					DB,
 					Log
 				).Init();
@@ -382,6 +381,7 @@
 				var aAgent = new Approval(
 					CustomerID,
 					this.cashRequestID,
+					this.nlCashRequestID,
 					this.offeredCreditLine,
 					this.medal.MedalClassification,
 					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
@@ -441,7 +441,7 @@
 				return;
 
 			if (EnableAutomaticReRejection) {
-				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, DB, Log);
+				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log);
 				rrAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 				if (rrAgent.WasMismatch) {
@@ -460,7 +460,7 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			var rAgent = new Agent(CustomerID, this.cashRequestID, DB, Log).Init();
+			var rAgent = new Agent(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log).Init();
 			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 			if (rAgent.WasMismatch) {
@@ -475,10 +475,9 @@
 		private void UpdateCustomerAndCashRequest() {
 			DateTime now = DateTime.UtcNow;
 
-			AddOldDecisionOffer(now); 
+			AddOldDecisionOffer(now);
 
-			if (this.nlExists)
-				AddNLDecisionOffer(now); 
+			AddNLDecisionOffer(now);
 
 			UpdateSalesForceOpportunity();
 
@@ -508,12 +507,10 @@
 		} // AddOldDecisionOffer
 
 		private void AddNLDecisionOffer(DateTime now) {
-			if (!this.nlExists)
-				return;
 
 			if (!this.autoDecisionResponse.HasAutoDecided)
 				return;
-			
+
 			AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
 				DecisionNameID = this.autoDecisionResponse.DecisionCode ?? (int)DecisionActions.Waiting,
 				DecisionTime = now,
@@ -521,27 +518,23 @@
 					? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr()
 					: string.Empty,
 				CashRequestID = this.nlCashRequestID,
-				UserID = 1,
+				UserID = UnderwriterID,
 			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
-			int decisionID = addDecisionStra.DecisionID;
+			long decisionID = addDecisionStra.DecisionID;
 
 			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
-				List<NL_OfferFees> offerFees = null;
 
-				if (this.autoDecisionResponse.SetupFee > 0) {
-					NLFeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee ? NLFeeTypes.ServicingFee : NLFeeTypes.SetupFee;
-
-					offerFees = new List<NL_OfferFees> {
-						new NL_OfferFees {
-							LoanFeeTypeID = (int)feeType,
-							Percent = this.autoDecisionResponse.SetupFee,
-						},
-					};
-				} // if
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.autoDecisionResponse.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
+				if (this.autoDecisionResponse.SpreadSetupFee) {
+					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+					setupFee.OneTimePartPercent = 0;
+					setupFee.DistributedPartPercent = 1;
+				}
+				NL_OfferFees[] ofeerFees = { setupFee };
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
 					DecisionID = decisionID,
@@ -561,10 +554,10 @@
 					SendEmailNotification = !this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
 					// ReSharper disable once PossibleInvalidOperationException
 					Notes = "Auto decision: " + this.autoDecisionResponse.Decision.Value,
-				}, offerFees);
+				}, ofeerFees);
 
 				addOfferStrategy.Execute();
-				
+
 				Log.Debug("Added NL offer: {0}", addOfferStrategy.OfferID);
 			} // if
 		} // AddNLDecisionOffer
@@ -745,13 +738,11 @@
 					new QueryParameter("@CustomerID", CustomerID)
 				);
 
-				if (this.nlExists) {
-					this.nlCashRequestID = DB.ExecuteScalar<int>(
-						"NL_CashRequestGetByOldID",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("@OldCashRequestID", this.cashRequestID)
-					);
-				} // if
+				this.nlCashRequestID = DB.ExecuteScalar<long>(
+					"NL_CashRequestGetByOldID",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@OldCashRequestID", this.cashRequestID.Value)
+				);
 
 				return;
 			} // if
@@ -769,27 +760,23 @@
 			);
 
 			if (sr.IsEmpty) {
-				throw new StrategyAlert(
-					this,
-					string.Format("Cash request was not created for customer {0}.", CustomerID)
+				throw new StrategyAlert(this, string.Format("Cash request was not created for customer {0}.", CustomerID)
 				);
 			} // if
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 
-			if (this.nlExists) {
-				AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
-					CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-					CustomerID = CustomerID,
-					OldCashRequestID = this.cashRequestID,
-					RequestTime = now,
-					UserID = UnderwriterID,
-				});
-				cashRequestStrategy.Execute();
-				this.nlCashRequestID = cashRequestStrategy.CashRequestID;
-
-				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
-			} // if
+			AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
+				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
+				CustomerID = CustomerID,
+				OldCashRequestID = this.cashRequestID,
+				RequestTime = now,
+				UserID = UnderwriterID,
+			});
+			nlAddCashRequest.Context.CustomerID = CustomerID;
+			nlAddCashRequest.Context.UserID = UnderwriterID;
+			nlAddCashRequest.Execute();
+			this.nlCashRequestID = nlAddCashRequest.CashRequestID;
 
 			int cashRequestCount = sr["CashRequestCount"];
 
@@ -800,7 +787,7 @@
 
 			if (addOpportunity) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
-				
+
 				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
@@ -895,7 +882,7 @@
 		private int offeredCreditLine;
 
 		private readonly InternalCashRequestID cashRequestID;
-		private int nlCashRequestID;
+		private long nlCashRequestID;
 
 		private readonly StrategiesMailer mailer;
 
@@ -908,7 +895,6 @@
 
 		private readonly CashRequestOriginator? cashRequestOriginator;
 
-		private readonly bool nlExists;
 		private readonly string tag;
 		private bool wasMismatch;
 		private ABackdoorSimpleDetails backdoorSimpleDetails;

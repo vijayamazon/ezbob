@@ -38,5 +38,6 @@
 		private static readonly object lockInstance;
 		private static Library instance;
 		private static bool isInitialized;
+
 	} // class Library
 } // namespace

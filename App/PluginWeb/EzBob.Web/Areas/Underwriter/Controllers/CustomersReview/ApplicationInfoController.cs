@@ -1,31 +1,33 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using Code.Agreements;
-	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using System;
 	using System.Web.Mvc;
+	using ConfigManager;
+	using DbConstants;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
+	using EzBob.Models.Agreements;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
+	using EzBob.Web.Infrastructure.csrf;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Ezbob.Backend.Models;
-	using Ezbob.Logger;
-	using Infrastructure.Attributes;
-	using Code;
-	using Infrastructure;
-	using Infrastructure.csrf;
+	using EZBob.DatabaseLib.Repository;
 	using NHibernate;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
-	using EZBob.DatabaseLib.Repository;
-
-	using CreditResultStatus = EZBob.DatabaseLib.Model.Database.CreditResultStatus;
 
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
@@ -57,7 +59,7 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository, 
+			CustomerPhoneRepository customerPhoneRepository,
 			IExternalCollectionStatusesRepository externalCollectionStatusesRepository,
 			LoanOptionsRepository loanOptionsRepository,
 			ILoanRepository loanRepository
@@ -95,6 +97,7 @@
 			);
 
 			return Json(aiar.Model, JsonRequestBehavior.AllowGet);
+
 		} // Index
 
 		[Ajax]
@@ -487,6 +490,7 @@
 					options.StopAutoChargeDate = customerInGoodStatus ? (DateTime?)null : now;
 
 					this.loanOptionsRepository.SaveOrUpdate(options);
+					NL_SaveLoanOptions(oCustomer, options);
 
 					if (!customerInGoodStatus) {
 						loan.InterestFreeze.Add(new LoanInterestFreeze {
@@ -497,18 +501,88 @@
 							ActivationDate = now,
 							DeactivationDate = null
 						});
+
+						SaveLoanInterestFreeze(loan.InterestFreeze.Last(), oCustomer.Id);
+
 					} else if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
 						foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
 							interestFreeze.DeactivationDate = now;
+							DeactivateLoanInterestFreeze(interestFreeze, oCustomer.Id);
 						}
 					}
 
 					this.loanRepository.SaveOrUpdate(loan);
 				}
-			} 
+			}
 
 			return Json(new { error = (string)null, id = id, status = externalStatusID });
 		} // ChangeExternalCollectionStatus
+
+
+		private void NL_SaveLoanOptions(Customer customer, LoanOptions options) {
+			NL_LoanOptions nlOptions = new NL_LoanOptions() {
+				LoanID = options.LoanId,
+				CaisAccountStatus = options.CaisAccountStatus,
+				EmailSendingAllowed = options.EmailSendingAllowed,
+				LatePaymentNotification = options.LatePaymentNotification,
+				LoanOptionsID = options.Id,
+				MailSendingAllowed = options.MailSendingAllowed,
+				ManualCaisFlag = options.ManualCaisFlag,
+				PartialAutoCharging = options.ReductionFee,
+				SmsSendingAllowed = options.SmsSendingAllowed,
+				StopAutoChargeDate = MiscUtils.NL_GetStopAutoChargeDate(options.AutoPayment, options.StopAutoChargeDate),
+				StopLateFeeFromDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item1,
+				StopLateFeeToDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item2,
+				UserID = this._context.UserId,
+				InsertDate = DateTime.Now,
+				IsActive = true,
+				Notes = "From Application Info",
+			};
+
+			var PropertiesUpdateList = new List<String>() {
+		        "StopAutoChargeDate",
+                "StopLateFeeFromDate",
+		        "StopLateFeeToDate",
+		    };
+
+			var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customer.Id, nlOptions, options.LoanId, PropertiesUpdateList.ToArray());
+
+		}
+
+
+		private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId) {
+			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId).Value;
+			if (nlLoanId == 0)
+				return;
+			NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
+				OldID = loanInterestFreeze.Id,
+				DeactivationDate = loanInterestFreeze.DeactivationDate,
+				LoanID = nlLoanId,
+				AssignedByUserID = this._context.UserId,
+				DeletedByUserID = null,
+			};
+			var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze).Value;
+		}
+
+		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId) {
+			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId)
+				.Value;
+			if (nlLoanId == 0)
+				return;
+			NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
+				StartDate = loanInterestFreeze.StartDate,
+				OldID = loanInterestFreeze.Id,
+				ActivationDate = loanInterestFreeze.ActivationDate,
+				DeactivationDate = loanInterestFreeze.DeactivationDate,
+				EndDate = loanInterestFreeze.EndDate,
+				InterestRate = loanInterestFreeze.InterestRate,
+				LoanID = nlLoanId,
+				AssignedByUserID = this._context.UserId,
+				DeletedByUserID = null,
+			};
+			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze);
+		}
+
 
 		[HttpPost]
 		[Transactional]
@@ -640,7 +714,7 @@
 			Customer customer = this._customerRepository.Load(Id);
 
 			string strategyError = amd.Status == ActionStatus.Done ? null : "Error: " + amd.Comment;
-			CreditResultStatus? status = customer.CreditResult;
+			EZBob.DatabaseLib.Model.Database.CreditResultStatus? status = customer.CreditResult;
 
 			log.Debug(
 				"RunNewCreditLine({0}, {1}) ended; status = {2}, error = '{3}'",
@@ -651,7 +725,7 @@
 			);
 
 			return Json(new {
-				status = (status ?? CreditResultStatus.WaitingForDecision).ToString(),
+				status = (status ?? EZBob.DatabaseLib.Model.Database.CreditResultStatus.WaitingForDecision).ToString(),
 				strategyError = strategyError,
 			});
 		} // RunNewCreditLine
@@ -676,7 +750,7 @@
 			bool isCustomerRepaymentPeriodSelectionAllowed,
 			int isLoanTypeSelectionAllowed
 		) {
-			CashRequest cr = _cashRequestsRepository.Get(id);
+			CashRequest cr = this._cashRequestsRepository.Get(id);
 
 			new Transactional(() => {
 
@@ -710,48 +784,60 @@
 				c.OfferStart = cr.OfferStart;
 				c.OfferValidUntil = cr.OfferValidUntil;
 				c.ManagerApprovedSum = sum;
-				_cashRequestsRepository.SaveOrUpdate(cr);
-				_customerRepository.SaveOrUpdate(c);
+				this._cashRequestsRepository.SaveOrUpdate(cr);
+				this._customerRepository.SaveOrUpdate(c);
 			}).Execute();
 
 			DateTime now = DateTime.UtcNow;
-			/*
-			var decisionId = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
+
+			var decision = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this._context.UserId,
-				SendEmailNotification = allowSendingEmail,
 				DecisionTime = now,
-				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
-				DecisionNameID = (int)DecisionActions.Waiting
-				//todo IsAmountSelectionAllowed = 
-				//todo InterestOnlyRepaymentCount = 
-				//todo Notes = 
-				//todo Position = 
+				DecisionNameID = (int)DecisionActions.Waiting,
+				Notes = "Waiting; oldCashRequest: " + cr.Id
 			}, cr.Id, null);
 
-			this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
-				Amount = (decimal)amount,
-				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
-				CreatedTime = now,
-				DiscountPlanID = discountPlan,
-				EmailSendingBanned = !allowSendingEmail,
-				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
-				SetupFeePercent = manualSetupFeePercent ?? 0,
-				// DistributedSetupFeePercent TODO EZ-3515
-				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
-				LoanSourceID = loanSource,
-				LoanTypeID = loanType,
-				MonthlyInterestRate = interestRate,
-				RepaymentCount = repaymentPeriod,
-				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
-				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
-				DecisionID = decisionId.Value,
-				//todo Notes = 
-				//todo InterestOnlyRepaymentCount = 
-			});
-			 */
-			//TODO update new offer table
-			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
+			log.Info("NL decisionID: {0}, oldCashRequestID: {1}, Error: {2}", decision.Value, cr.Id, decision.Error);
 
+			NL_OfferFees offerFee = new NL_OfferFees() {
+				LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+				Percent = manualSetupFeePercent ?? 0,
+				OneTimePartPercent = 1,
+				DistributedPartPercent = 0
+			};
+			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true) {
+				offerFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+				offerFee.OneTimePartPercent = 0;
+				offerFee.DistributedPartPercent = 1;
+			}
+			NL_OfferFees[] ofeerFees = { offerFee };
+
+			var offer = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
+				DecisionID = decision.Value,
+				LoanTypeID = loanType,
+				RepaymentIntervalTypeID = (int)DbConstants.RepaymentIntervalTypes.Month,
+				LoanSourceID = loanSource,
+				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
+				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
+				RepaymentCount = repaymentPeriod,
+				Amount = (decimal)amount,
+				MonthlyInterestRate = interestRate,
+				CreatedTime = now,
+				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
+				Notes = "offer from ChangeCreditLine, ApplicationInfoController",
+				DiscountPlanID = discountPlan,
+				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
+				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
+				SendEmailNotification = allowSendingEmail,
+				// SetupFeeAddedToLoan = 0 // default 0 TODO EZ-3515
+				// InterestOnlyRepaymentCount = 
+				//IsAmountSelectionAllowed = 1 default 1 always allowed
+			}, ofeerFees);
+
+			log.Info("NL--- offerID: {0}, decisionID: {1} oldCashRequestID: {2}, Error: {3}", offer.Value, decision.Value, cr.Id, offer.Error);
+
+
+			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 
 			return Json(true);
 		} // ChangeCreditLine
@@ -808,8 +894,8 @@
 				Customer oCustomer = _customerRepository.Get(nCustomerID);
 
 				DateTime oDate = DateTime.ParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-				lc.CreateLoan(oCustomer, nAmount, null, oDate);
+				NL_Model nlModel = new NL_Model(nCustomerID);
+				lc.CreateLoan(oCustomer, nAmount, null, oDate, nlModel);
 
 				return Json(new { success = true, error = false, });
 			} catch (Exception e) {

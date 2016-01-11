@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
@@ -77,13 +78,13 @@
 			var variables = PrepareVariables(loanID, customerID, out address, out schedule);
 
 			var metadata = this.collectionIMailer.SendAnual77ANotification(customerID, template, address, variables, schedule, "@ScheduleTable@");
-			var collectionLogID = AddCollectionLog(customerID, loanID, SetLateLoanStatus.CollectionType.Annual77ANotification, SetLateLoanStatus.CollectionMethod.Mail);
+			var collectionLogID = AddCollectionLog(customerID, loanID, CollectionType.Annual77ANotification, CollectionMethod.Mail);
 			SaveCollectionSnailMailMetadata(collectionLogID, metadata);
 		}
 		private void LoadImailTemplates() {
 			List<CollectionSnailMailTemplate> dbTemplates = DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
 			this.templates = dbTemplates
-				.Where(x => x.Type == SetLateLoanStatus.CollectionType.Annual77ANotification.ToString())
+				.Where(x => x.Type == CollectionType.Annual77ANotification.ToString())
 				.Select(x => new SnailMailTemplate {
 					ID = x.CollectionSnailMailTemplateID,
 					Type = x.Type,
@@ -202,7 +203,7 @@
 			return content;
 		}//CalculateBalance
 
-		private int AddCollectionLog(int customerID, int loanID, SetLateLoanStatus.CollectionType type, SetLateLoanStatus.CollectionMethod method) {
+		private int AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
 			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", customerID, loanID, type, method);
 			return DB.ExecuteScalar<int>("AddCollectionLog",
 				CommandSpecies.StoredProcedure,

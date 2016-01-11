@@ -28,10 +28,10 @@
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, long? cashRequestID, long? nlCashRequestID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID);
+			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
 			HasApprovalChance = false;
 		} // constructor
 
@@ -39,6 +39,7 @@
 			Trail = new RejectionTrail(
 				Args.CustomerID,
 				Args.CashRequestID,
+				Args.NLCashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -512,7 +513,7 @@
 
 		private AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent RunSecondary() {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
-				new RejectionAgent(DB, Log, Args.CustomerID, Args.CashRequestID, Cfg.Values);
+				new RejectionAgent(DB, Log, Args.CustomerID, Args.CashRequestID, Args.NLCashRequestID, Cfg.Values);
 
 			oSecondary.MakeDecision(oSecondary.GetRejectionInputData(Trail.InputData.DataAsOf));
 

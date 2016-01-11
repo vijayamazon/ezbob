@@ -7,6 +7,7 @@
 		public SameDataAgent(
 			int nCustomerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			decimal nSystemCalculatedAmount,
 			AutomationCalculator.Common.Medal nMedal,
 			AutomationCalculator.Common.MedalType nMedalType,
@@ -14,7 +15,17 @@
 			DateTime now,
 			AConnection oDB,
 			ASafeLog oLog
-		) : base(nCustomerID, cashRequestID, nSystemCalculatedAmount, nMedal, nMedalType, turnoverType, oDB, oLog) {
+		) : base(
+			nCustomerID,
+			cashRequestID,
+			nlCashRequestID,
+			nSystemCalculatedAmount,
+			nMedal,
+			nMedalType,
+			turnoverType,
+			oDB,
+			oLog
+		) {
 			this.now = now;
 		} // constructor
 

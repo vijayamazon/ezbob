@@ -8,6 +8,7 @@
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
@@ -31,6 +32,7 @@
 
 		public string Error { get; private set; }
 
+		/// <exception cref="ArgumentOutOfRangeException">Condition. </exception>
 		public override void Execute() {
 			Log.Debug("Applying manual decision by model: {0}.", this.decisionModel.Stringify());
 
@@ -165,13 +167,16 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Waiting;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+
+			try {
+				nlAddDecision.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+			}
 
 			UpdateSalesForceOpportunity(OpportunityStage.s40);
 		} // ReturnCustomerToWaitingForDecision
@@ -185,13 +190,10 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Pending;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			nlAddDecision.Execute();
 
 			UpdateSalesForceOpportunity((this.decisionModel.signature == 1) ? OpportunityStage.s75 : OpportunityStage.s50);
 
@@ -212,13 +214,15 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Escalate;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			try {
+				nlAddDecision.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+			}
 
 			UpdateSalesForceOpportunity(OpportunityStage.s20);
 		} // EscalateCustomer
@@ -245,13 +249,15 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Reject;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons{RejectReasonID = x}).ToArray()
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToList());
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			try {
+				nlAddDecision.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+			}
 
 			UpdateSalesForceOpportunity(null, model => {
 				model.CloseDate = this.now;
@@ -309,26 +315,72 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Approve;
 
-			// NL_Offers lastOffer = this.serviceClient.Instance.GetLastOffer(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
 
-			// var decisionID = this.serviceClient.Instance.AddDecision(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			try {
+				try {
+					nlAddDecision.Execute();
+					Log.Debug("nl AddDecision {0}, Error: {1}", nlAddDecision.DecisionID, nlAddDecision.Error);
 
-			// lastOffer.DecisionID = decisionID.Value;
-			// lastOffer.CreatedTime = this.now;
-			// this.serviceClient.Instance.AddOffer(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	lastOffer
-			// );
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+				}
+
+				NL_Offers nlOffer = new NL_Offers() {
+					DecisionID = nlAddDecision.DecisionID,
+					CreatedTime = this.currentState.CreationDate,
+					Amount = this.currentState.OfferedCreditLine,
+					BrokerSetupFeePercent = this.currentState.BrokerSetupFeePercent,
+					//IsAmountSelectionAllowed = this.currentState.
+					SendEmailNotification = !this.currentState.EmailSendingBanned,
+					StartTime = this.currentState.OfferStart,
+					EndTime = this.currentState.OfferValidUntil,
+					IsLoanTypeSelectionAllowed = this.currentState.IsLoanTypeSelectionAllowed == 1,
+					Notes = this.decisionToApply.CashRequest.UnderwriterComment + " old cr " + this.decisionToApply.CashRequest.ID,
+					MonthlyInterestRate = this.currentState.InterestRate,
+					LoanSourceID = this.currentState.LoanSourceID,
+					DiscountPlanID = this.currentState.DiscountPlanID,
+					LoanTypeID = this.currentState.LoanTypeID,
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
+					RepaymentCount = this.currentState.RepaymentPeriod, // ApprovedRepaymentPeriod???
+					IsRepaymentPeriodSelectionAllowed = this.currentState.IsCustomerRepaymentPeriodSelectionAllowed
+				};
+
+				Log.Debug("Adding nl offer: {0}", nlOffer);
+					
+				NL_OfferFees setupFee = new NL_OfferFees() { 
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee, 
+					Percent = this.currentState.ManualSetupFeePercent, 
+					OneTimePartPercent = 1, 
+					DistributedPartPercent = 0 
+				};
+
+				if (this.currentState.SpreadSetupFee) {
+					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+					setupFee.OneTimePartPercent = 0;
+					setupFee.DistributedPartPercent = 1;
+				}
+				NL_OfferFees[] ofeerFees = { setupFee };
+
+				AddOffer sAddOffer = new AddOffer(nlOffer, ofeerFees); 
+				sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
+				sAddOffer.Context.UserID = this.decisionModel.underwriterID;
+
+				try {
+					sAddOffer.Execute();
+					Log.Debug("nl offer added: {0}, Error: {1}", sAddOffer.OfferID, sAddOffer.Error);
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.Error("Failed to AddOffer. Err: {0}", ex.Message);
+				}
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception nlException) {
+				Log.Error("Failed to run NL offer/decision Err: {0}", nlException.Message);
+			}
 
 			UpdateSalesForceOpportunity(OpportunityStage.s90, model => {
 				model.ApprovedAmount = (int)this.currentState.OfferedCreditLine;

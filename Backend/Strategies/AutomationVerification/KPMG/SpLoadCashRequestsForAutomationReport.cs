@@ -26,6 +26,7 @@
 
 		public class ResultRow : AResultRow {
 			public long CashRequestID { get; set; }
+			public long? NLCashRequestID { get; set; }
 			public int CustomerID { get; set; }
 			public int? BrokerID { get; set; }
 			public DateTime DecisionTime { get; set; }

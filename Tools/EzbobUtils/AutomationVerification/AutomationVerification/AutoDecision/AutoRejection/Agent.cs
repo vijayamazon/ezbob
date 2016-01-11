@@ -22,6 +22,7 @@
 			ASafeLog oLog,
 			int nCustomerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			RejectionConfigs configs = null
 		) {
 			IsAutoRejected = false;
@@ -35,7 +36,7 @@
 
 			this.configs = configs ?? this.dbHelper.GetRejectionConfigs();
 
-			Trail = new RejectionTrail(nCustomerID, cashRequestID, oLog);
+			Trail = new RejectionTrail(nCustomerID, cashRequestID, nlCashRequestID, oLog);
 		} // constructor
 
 		public bool IsAutoRejected { get; private set; }

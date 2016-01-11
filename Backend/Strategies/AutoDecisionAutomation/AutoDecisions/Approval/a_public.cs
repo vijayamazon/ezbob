@@ -26,23 +26,25 @@
 		public Approval(
 			int customerId,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			int offeredCreditLine,
 			Medal medalClassification,
 			AutomationCalculator.Common.MedalType medalType,
 			AutomationCalculator.Common.TurnoverType? turnoverType,
 			AConnection db,
 			ASafeLog log
-		) {
+			) {
+
 			this.incorporationDate = null;
 
 			this.trail = new ApprovalTrail(
 				customerId,
 				cashRequestID,
+				nlCashRequestID,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
-				CurrentValues.Instance.MailSenderName
-			) {
+				CurrentValues.Instance.MailSenderName) {
 				Amount = offeredCreditLine,
 			};
 
@@ -73,6 +75,7 @@
 			this.m_oSecondaryImplementation = new Agent(
 				this.trail.CustomerID,
 				this.trail.CashRequestID,
+				this.trail.NLCashRequestID,
 				offeredCreditLine,
 				(AutomationCalculator.Common.Medal)medalClassification,
 				medalType,

@@ -16,6 +16,7 @@
 			return new Agent(
 				oRow.CustomerId,
 				null,
+				null,
 				DB,
 				Log
 			).Init().MakeAndVerifyDecision(Tag);

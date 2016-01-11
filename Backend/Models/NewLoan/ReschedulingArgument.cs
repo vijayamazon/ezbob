@@ -6,7 +6,7 @@
 
 	[DataContract]
 	public class ReschedulingArgument {
-	
+
 		[DataMember]
 		public int LoanID { get; set; }  // loan ID to re-schedule
 
@@ -18,7 +18,7 @@
 
 		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type - selected
-	
+
 		[DataMember]
 		public decimal? PaymentPerInterval { get; set; } // monthly/weekly A amount for "outside" rescheduling
 

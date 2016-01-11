@@ -30,8 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\Lib\3rdparty\MoreLinq\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnit.CompareNetObjects, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.CompareNetObjects.0.1.0.0\lib\net45\NUnit.CompareNetObjects.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -180,10 +187,14 @@
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
     <Compile Include="MultiBrandLoanModel.cs" />
     <Compile Include="MultiBrandLoanSummary.cs" />
+    <Compile Include="AStringable.cs" />
+    <Compile Include="NewLoan\NLAgreementItem.cs" />
+    <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
+    <Compile Include="NewLoan\NL_DiscountPlans.cs" />
+    <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\NL_Log.cs" />
+    <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
-    <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NewLoan\NL_LoanLienLinks.cs" />
     <Compile Include="NewLoan\NL_LoanRollovers.cs" />
     <Compile Include="NewLoan\NL_LoanOptions.cs" />
@@ -196,10 +207,10 @@
     <Compile Include="NewLoan\NL_LoanLegals.cs" />
     <Compile Include="NewLoan\NL_LoanHistory.cs" />
     <Compile Include="NewLoan\NL_LoanSchedules.cs" />
-    <Compile Include="NewLoan\NL_LoanStatuses.cs" />
-    <Compile Include="NewLoan\NL_OfferFees.cs" />
+    <Compile Include="NewLoan\NL_OfferFees.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
-    <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_Payments.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactions.cs" />
     <Compile Include="NewLoan\NL_LoanSchedulePayments.cs" />
@@ -209,8 +220,8 @@
     <Compile Include="NewLoan\NL_Offers.cs" />
     <Compile Include="NewLoan\NL_Decisions.cs" />
     <Compile Include="NewLoan\NL_CashRequests.cs" />
-    <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
     <Compile Include="NewLoan\OfferForLoan.cs" />
+    <Compile Include="NL_Log.cs" />
     <Compile Include="PostcodeNutsDBModel.cs" />
     <Compile Include="ServiceLog.cs" />
     <Compile Include="IovationLastCheckModel.cs" />
@@ -219,13 +230,25 @@
     <Compile Include="WriteToLogPackage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
+      <Name>ConfigManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
@@ -235,8 +258,17 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

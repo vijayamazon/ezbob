@@ -4,6 +4,7 @@
 	using System.Web;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
+	using ConfigManager;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using MailApi;
@@ -18,10 +19,12 @@
 		public CalculateMedal(
 			int customerId,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			DateTime calculationTime,
 			bool primaryOnly,
 			bool doStoreMedal
 		) {
+
 			this.doStoreMedal = doStoreMedal;
 			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
@@ -30,11 +33,15 @@
 			WasMismatch = true;
 
 			CashRequestID = cashRequestID;
+			NLCashRequestID = nlCashRequestID;
+
 		} // constructor
 
 		public virtual string Tag { get; set; }
 
 		public virtual long? CashRequestID { get; private set; }
+
+		public virtual long? NLCashRequestID { get; private set; }
 
 		public virtual bool QuietMode {
 			get { return this.quietMode; }
@@ -71,11 +78,17 @@
 
 					if (CashRequestID == null)
 						CashRequestID = sr["LastCashRequestID"];
+
+					// get nl cash request
+					if (NLCashRequestID == null)
+						NLCashRequestID = sr["NLLastCashRequestID"];
+					
 				} // if
 
 				Log.Debug(
 					"customer id = {0}, " +
 					"cash request id = {12}, " +
+					"NLcash request id = {13}, " +
 					"calc time = {1}, " +
 					"sr.IsEmpty = {2}, " +
 					"type of business = {3}, " +
@@ -99,7 +112,8 @@
 					this.earliestHmrcLastUpdateDate,
 					this.earliestYodleeLastUpdateDate,
 					Tag,
-					CashRequestID
+					CashRequestID,
+					NLCashRequestID
 				);
 
 				// The first scenario (1) for checking medal type and getting medal value
@@ -121,7 +135,7 @@
 
 				MedalOutputModel result2 = null;
 
-				if (!primaryOnly) {
+				if (!this.primaryOnly) {
 					// Alternative scenario (2) for checking medal type and getting medal value
 					// namespace AutomationCalculator.MedalCalculation
 					var verification = new MedalChooser(DB, Log);
@@ -130,12 +144,12 @@
 					Log.Debug("\n\nSecondary medal:\n{0}", result2.ToString());
 
 					if (this.doStoreMedal)
-						result2.SaveToDb(CashRequestID, Tag, DB, Log);
+						result2.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
 				} // if
 
 				if ((result1 != null) && result1.IsLike(result2)) {
 					if (this.doStoreMedal)
-						result1.SaveToDb(CashRequestID, Tag, DB);
+						result1.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
 
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
 
@@ -154,7 +168,7 @@
 				result1.Error = (result1.Error ?? string.Empty) + " Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
-					result1.SaveToDb(CashRequestID, Tag, DB);
+					result1.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
 
 				SendExplanationMail(result1, result2);
 
@@ -229,11 +243,11 @@
 			);
 
 			new Mail().Send(
-				ConfigManager.CurrentValues.Instance.AutomationExplanationMailReciever,
+				CurrentValues.Instance.AutomationExplanationMailReciever,
 				null,
 				message,
-				ConfigManager.CurrentValues.Instance.MailSenderEmail,
-				ConfigManager.CurrentValues.Instance.MailSenderName,
+				CurrentValues.Instance.MailSenderEmail,
+				CurrentValues.Instance.MailSenderName,
 				"#Mismatch in medal calculation for customer " + this.customerId
 			);
 		} // SendExplanationMail

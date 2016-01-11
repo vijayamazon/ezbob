@@ -1,0 +1,34 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('NL_BlendedOffersSave') IS NOT NULL
+	DROP PROCEDURE NL_BlendedOffersSave
+GO
+
+IF TYPE_ID('NL_BlendedOffersList') IS NOT NULL
+	DROP TYPE NL_BlendedOffersList
+GO
+
+CREATE TYPE NL_BlendedOffersList AS TABLE (
+	[OfferID] INT NOT NULL
+)
+GO
+
+CREATE PROCEDURE NL_BlendedOffersSave
+@Tbl NL_BlendedOffersList READONLY
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO NL_BlendedOffers (
+		[OfferID]
+	) SELECT
+		[OfferID]
+	FROM @Tbl
+
+	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	SELECT @ScopeID AS ScopeID
+END
+GO
+
+

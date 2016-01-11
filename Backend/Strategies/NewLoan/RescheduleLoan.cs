@@ -6,6 +6,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -19,7 +20,6 @@
 	public class RescheduleLoan<T> : AStrategy {
 
 		public RescheduleLoan(T t, ReschedulingArgument reschedulingArgument) {
-
 			this.ReschedulingArguments = reschedulingArgument;
 
 			if (t.GetType() == typeof(Loan)) {
@@ -61,6 +61,8 @@
 		public ReschedulingResult Result;	// output
 
 		public override void Execute() {
+
+			NL_AddLog(LogType.Info, "Strategy Start", this.ReschedulingArguments, null, null, null);
 
 			if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == null) {
 				this.Result.Error = "Weekly/monthly payment amount for OUT rescheduling not provided";
@@ -140,6 +142,7 @@
 
 				// if StopFutureInterest checked - add active "freeze inteval" from FirstItemDate untill NoLimitDate
 				if (this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest) {
+					//TODO : also add it to NL_InterestFreeze && deactivating.
 					LoanInterestFreeze freeze = new LoanInterestFreeze {
 						Loan = this.tLoan,
 						StartDate = lastPaidSchedule != null ? lastPaidSchedule.Date : this.tLoan.Date.Date, //this.Result.FirstItemDate,
@@ -154,22 +157,22 @@
 					calc.GetState(); // reload state with freeze consideration
 				}
 
-				decimal totalEarlyPayment =  calc.TotalEarlyPayment();
+				decimal totalEarlyPayment = calc.TotalEarlyPayment();
 				decimal P = this.Result.OpenPrincipal;
 				decimal F = calc.FeesToPay;	// unpaid fees
 				//decimal I = lastPaidSchedule != null ? (calc.GetInterestRate(lastPaidSchedule.Date.AddDays(1), this.Result.FirstItemDate) *P) : (calc.GetInterestRate(this.tLoan.Date.Date.AddDays(1), this.Result.FirstItemDate) * P); // unpaid interest till rescheduling start date
 				decimal I = (totalEarlyPayment - P - F);	// unpaid interest till first rescheduled item
-				I = I < 0 ? 0 : I;
+				I = I < 0 ? 0 : I; // bugfix EZ-4236
 				decimal r = ((this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest)) ? 0 : this.tLoan.InterestRate;
 
 				this.Result.ReschedulingBalance = (P + I + F); // not final - add to I period from rescheduling date untill new maturity date
 
-				Log.Debug("--------------P: {0}, I: {1}, F: {2}, LoanCloseDate: {3}, totalEarlyPayment: {4}, r: {5}, ReschedulingBalance: {6}, \n lastPaidSchedule: {7}", 
-					P, 
-					I, 
-					F, 
+				Log.Debug("--------------P: {0}, I: {1}, F: {2}, LoanCloseDate: {3}, totalEarlyPayment: {4}, r: {5}, ReschedulingBalance: {6}, \n lastPaidSchedule: {7}",
+					P,
+					I,
+					F,
 					this.Result.LoanCloseDate.Date,
-					totalEarlyPayment, 
+					totalEarlyPayment,
 					r,
 					this.Result.ReschedulingBalance,
 					lastPaidSchedule);
@@ -374,10 +377,11 @@
 				}
 
 				LoanRescheduleSave();
-
+				NL_AddLog(LogType.Info, "Strategy End", this.ReschedulingArguments, this.Result, null, null);
 				// ReSharper disable once CatchAllClause
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);
+			} catch (Exception ex) {
+				Log.Alert(ex, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);
+				NL_AddLog(LogType.Error, "Strategy Faild", this.ReschedulingArguments, null, ex.ToString(), ex.StackTrace);
 			}
 		}
 
@@ -493,7 +497,6 @@
 					ObjectFactory.GetInstance<LoanChangesHistoryRepository>().Save(this.loanHistory);
 
 					Log.Debug("==========================Saving rescheduled loan: {0}", this.tLoan);
-
 					this.tLoan.Status = this.ReschedulingArguments.RescheduleIn ? LoanStatus.Live : LoanStatus.Late;
 					this.tLoan.LastRecalculation = DateTime.UtcNow;
 					this.tLoan.Modified = true;
@@ -597,8 +600,8 @@
 		private LoanChangesHistory loanHistory;
 
 		private readonly string emailToAddress;
-		private readonly string	emailFromAddress;
-		private readonly string	emailFromName;
+		private readonly string emailFromAddress;
+		private readonly string emailFromName;
 
 		private readonly DateTime noLimitDate = new DateTime(2099, 1, 1);
 

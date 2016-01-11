@@ -26,6 +26,9 @@
 			public long CashRequestID { get; set; }
 
 			[UsedImplicitly]
+			public long NlCashRequestID { get; set; }
+
+			[UsedImplicitly]
 			public DateTime DataAsOf { get; set; }
 
 			[UsedImplicitly]
@@ -83,10 +86,18 @@
 				dst.MetaData.RestoreValidationErrors(MetaDataValidationErrors);
 
 				AutomationCalculator.Common.TurnoverType turnoverType;
-				if (Enum.TryParse(TurnoverTypeStr, out turnoverType))
-					dst.SetArgs(CustomerID, CashRequestID, SystemCalculatedAmount, Medal, MedalType, turnoverType);
-				else
-					dst.SetArgs(CustomerID, CashRequestID, SystemCalculatedAmount, Medal, MedalType, null);
+
+				bool turnoverTypeParsed = Enum.TryParse(TurnoverTypeStr, out turnoverType);
+
+				dst.SetArgs(
+					CustomerID,
+					CashRequestID,
+					NlCashRequestID,
+					SystemCalculatedAmount,
+					Medal,
+					MedalType,
+					turnoverTypeParsed ? turnoverType : (AutomationCalculator.Common.TurnoverType?)null
+				);
 
 				dst.SetSeniority(MarketplaceSeniority);
 				dst.LatePayments = new List<Payment>(LatePayments);
@@ -134,8 +145,11 @@
 				ReservedFunds = src.ReservedFunds;
 
 				DirectorNames = new List<Tuple<string, string>>();
-				if (src.DirectorNames != null)
-					DirectorNames.AddRange(src.DirectorNames.Select(n => new Tuple<string, string>(n.FirstName, n.LastName)));
+				if (src.DirectorNames != null) {
+					DirectorNames.AddRange(src.DirectorNames.Select(
+						n => new Tuple<string, string>(n.FirstName, n.LastName)
+					));
+				} // if
 
 				HmrcBusinessNames = new List<string>();
 				if (src.HmrcBusinessNames != null)

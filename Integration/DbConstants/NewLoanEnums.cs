@@ -17,14 +17,14 @@
 
 	public enum NLLoanStatuses {
 		Pending = 1,// DB table id
-		Live = 2,
+		Live = 2, 
 		Late = 3,
 		PaidOff = 4,
 		WriteOff = 6,
 		//Default = 5,
 		//DebtManagement = 7
 	} // enum NLLoanStatuses
-
+	
 
 	public enum NLFeeTypes {
 		None = 0,
@@ -76,11 +76,11 @@
 
 	public enum NLPaypointTransactionStatuses {
 		InProgress = 1, // DB table id
-		Done = 2,
+		Done = 2, 
 		Error = 3,
 		Unknown = 4
 	} // enum NLPaypointTransactionStatuses
-
+	
 	public enum NLPaymentStatuses {
 		Error = 1,				// DB table id => Error, Unknown
 		Active = 2,				// => InProgress, Done
@@ -88,6 +88,9 @@
 		WrongPayment = 4		// cancel payment
 	} // enum NLPaymentStatuses
 
+	public enum NLPaymentDestinations {
+		Rollover
+	} // enum NLPaymentDestinations
 
 	public enum NLLoanTransactionMethods {
 		Unknown = 0, // DB table id

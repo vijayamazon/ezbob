@@ -3,10 +3,10 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.Web.Mvc;
-	using Code;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using ServiceClientProxy;
 	using StructureMap;

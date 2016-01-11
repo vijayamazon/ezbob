@@ -49,6 +49,7 @@ CREATE PROCEDURE SaveDecisionTrail
 @IsPrimary BIT,
 @HasApprovalChance BIT,
 @CashRequestID BIGINT,
+@NLCashRequestID BIGINT = null,
 @Tag NVARCHAR(256),
 @Traces DecisionTraceList READONLY,
 @TimerSteps DecisionTrailStepTimeList READONLY,

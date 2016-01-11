@@ -53,6 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=3.3.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\CompareNETObjects.3.03.0.0\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -213,17 +217,39 @@
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="ManualDecision\ApplyManualDecision.cs" />
+    <Compile Include="Misc\SetLateLoanStatus.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
+    <Compile Include="NewLoan\AcceptRollover.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\AddLoan.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\SaveRollover.cs" />
+    <Compile Include="NewLoan\CancelFee.cs" />
+    <Compile Include="NewLoan\CancelPayment.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanForOldIDNotFound.cs" />
+    <Compile Include="NewLoan\GetLoanIDByOldID.cs" />
+    <Compile Include="NewLoan\GetCustomerLoans.cs" />
+    <Compile Include="NewLoan\UpdateLoanDBState.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanCured.cs" />
+    <Compile Include="NewLoan\Collection\LateCustomerStatusChange.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanNotification.cs" />
+    <Compile Include="NewLoan\Collection\AddCollectionLog.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanJob.cs" />
+    <Compile Include="NewLoan\Collection\SetLateLoanStatus.cs" />
+    <Compile Include="NewLoan\DeactivateLoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\AddLoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\BuildLoanFromOffer.cs" />
+    <Compile Include="NewLoan\DAL\ILoanDAL.cs" />
+    <Compile Include="NewLoan\DAL\LoanDAL.cs" />
     <Compile Include="Postcode\PostcodeNuts.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
-    <Compile Include="NewLoan\AddLoan.cs" />
-    <Compile Include="NewLoan\AddFee.cs" />
     <Compile Include="NewLoan\AddLoanOptions.cs" />
     <Compile Include="NewLoan\AddLoanState.cs" />
-    <Compile Include="NewLoan\AddRollover.cs" />
     <Compile Include="NewLoan\AddDecision.cs" />
-    <Compile Include="NewLoan\AssignPaymentToLoan.cs" />
     <Compile Include="NewLoan\AddPayment.cs" />
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
@@ -232,16 +258,14 @@
     <Compile Include="NewLoan\ReschedulingSaveException.cs" />
     <Compile Include="NewLoan\ReschedulingOutPaymentPerIntervalException.cs" />
     <Compile Include="NewLoan\ReschedulingInPeriodException.cs" />
-    <Compile Include="NewLoan\LoanState.cs">
+    <Compile Include="NewLoan\GetLoanState.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NewLoan\NL_ExceptionCustomerNotFound.cs" />
-    <Compile Include="NewLoan\NL_ExceptionPaymentSave.cs" />
-    <Compile Include="NewLoan\NL_ExceptionInputDataInvalid.cs" />
-    <Compile Include="NewLoan\NL_ExceptionRequiredDataNotFound.cs" />
-    <Compile Include="NewLoan\NL_ExceptionOfferNotValid.cs" />
-    <Compile Include="NewLoan\NL_Loader.cs" />
-    <Compile Include="NewLoan\NL_ExceptionLoanExists.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionCustomerNotFound.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionInputDataInvalid.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionRequiredDataNotFound.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionOfferNotValid.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanExists.cs" />
     <Compile Include="Tasks\UpdateDailyLoanStats.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
@@ -514,7 +538,6 @@
     <Compile Include="Misc\FraudChecker.cs" />
     <Compile Include="Exceptions\StrategyException.cs" />
     <Compile Include="StrategyLog.cs" />
-    <Compile Include="Misc\SetLateLoanStatus.cs" />
     <Compile Include="Misc\LateBy14Days.cs" />
     <Compile Include="Misc\FirstOfMonthStatusNotifier.cs" />
     <Compile Include="Misc\XDaysDue.cs" />
@@ -763,6 +786,10 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
@@ -774,6 +801,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

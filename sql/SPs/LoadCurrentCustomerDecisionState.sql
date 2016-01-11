@@ -5,7 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE LoadCurrentCustomerDecisionState
+ALTER PROCEDURE [dbo].[LoadCurrentCustomerDecisionState]
 @UnderwriterID INT,
 @CustomerID INT,
 @CashRequestID BIGINT
@@ -50,7 +50,18 @@ BEGIN
 			IsLoanTypeSelectionAllowed = r.IsLoanTypeSelectionAllowed,
 			EmailSendingBanned = r.EmailSendingBanned,
 			OfferValidUntil = r.OfferValidUntil,
-			OfferStart = r.OfferStart
+			OfferStart = r.OfferStart,
+			SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0),
+			ManualSetupFeePercent = ISNULL(r.ManualSetupFeePercent, 0),
+			BrokerSetupFeePercent= ISNULL(r.BrokerSetupFeePercent, 0),
+			r.InterestRate,
+			r.DiscountPlanId,
+			r.LoanSourceID,
+			r.LoanTypeId,
+			r.RepaymentPeriod,
+			r.ApprovedRepaymentPeriod,
+			r.IsCustomerRepaymentPeriodSelectionAllowed,
+			r.CreationDate
 		FROM
 			CashRequests r
 		WHERE
@@ -79,10 +90,21 @@ BEGIN
 		IsLoanTypeSelectionAllowed = ISNULL(r.IsLoanTypeSelectionAllowed, 0),
 		EmailSendingBanned = ISNULL(r.EmailSendingBanned, 0),
 		r.OfferValidUntil,
-		r.OfferStart
+		r.OfferStart,
+		SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0),
+		ManualSetupFeePercent = ISNULL(r.ManualSetupFeePercent, 0),
+		BrokerSetupFeePercent = ISNULL(r.BrokerSetupFeePercent, 0),
+		r.InterestRate,
+		r.DiscountPlanId as DiscountPlanID,
+		r.LoanSourceID,
+		r.LoanTypeId as LoanTypeID,
+		r.RepaymentPeriod,
+		r.ApprovedRepaymentPeriod,
+		r.IsCustomerRepaymentPeriodSelectionAllowed,
+		r.CreationDate
 	FROM
 		c
 		FULL OUTER JOIN r ON 1 = 1
 		FULL OUTER JOIN u ON 1 = 1
 END
-GO
+

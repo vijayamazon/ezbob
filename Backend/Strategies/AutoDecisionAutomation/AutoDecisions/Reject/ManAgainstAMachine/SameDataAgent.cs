@@ -10,8 +10,8 @@
 	/// Verifies whether the customer should be rejected using customer data that was available on specific date.
 	/// </summary>
 	public class SameDataAgent : Agent {
-		public SameDataAgent(int nCustomerID, long? cashRequestID, DateTime oNow, AConnection oDB, ASafeLog oLog)
-			: base(nCustomerID, cashRequestID, oDB, oLog)
+		public SameDataAgent(int nCustomerID, long? cashRequestID, long? nlCashRequestID, DateTime oNow, AConnection oDB, ASafeLog oLog)
+			: base(nCustomerID, cashRequestID, nlCashRequestID, oDB, oLog)
 		{
 			this.m_oNow = oNow;
 		} // constructor

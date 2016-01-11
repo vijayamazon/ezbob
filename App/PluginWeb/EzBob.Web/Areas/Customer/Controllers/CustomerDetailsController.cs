@@ -147,7 +147,7 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-			this.cashRequestBuilder.CreateQuickOfferCashRequest(customer);
+			this.cashRequestBuilder.CreateQuickOfferCashRequest(customer, this.context.UserId);
 
 			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 

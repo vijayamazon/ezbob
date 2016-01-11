@@ -1658,9 +1658,6 @@
     <None Include="Properties\PublishProfiles\TeamCityEzBobWeb.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Code\EzForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1696,20 +1693,24 @@
     <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
+      <Project>{D7A03EFE-B175-49EB-9B22-3315C1124091}</Project>
+      <Name>LoanCalculator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
-      <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
-      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
-      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">

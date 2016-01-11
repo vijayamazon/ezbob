@@ -2,28 +2,30 @@
 	using System;
 	using System.Linq;
 	using System.Reflection;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using System.Web;
 	using System.Web.Mvc;
+	using DbConstants;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzBob.CommonLib;
+	using EzBob.Models.Agreements;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using CommonLib;
-	using Ezbob.Backend.Models;
-	using Infrastructure.Attributes;
-	using Code;
-	using Ezbob.Backend.Models.NewLoan;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using EzBob.Models.Agreements;
-	using EzBob.Web.Areas.Customer.Models;
-	using Infrastructure;
+	using EZBob.DatabaseLib.Model.Loans;
+	using log4net;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using StructureMap;
-	using log4net;
-	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate.Util;
 
 	public class GetCashController : Controller {
 		private readonly ServiceClient m_oServiceClient;
@@ -62,8 +64,6 @@
 				loan_amount = (int)Math.Floor(customer.CreditSum.Value);
 			}
 			var cr = customer.LastCashRequest;
-
-
 
 			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
 			if (customer.IsLoanTypeSelectionAllowed == 1) {
@@ -176,22 +176,17 @@
 
 				ValidateCustomerName(customer, cus);
 
-				// 5 pounds charged successfully, continue to save PayPointCard, create new loan, and make "rebate" payment 
+				// "x rebate" pounds charged successfully, continue to save PayPointCard, create new loan, and make "rebate" payment 
 
 				// continue to log paypoint transaction also for NL
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
-
 				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
-				NL_Model nlModel = new NL_Model(cus.Id);
+				Loan loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
 
-				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
-
-				Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
-	
-				RebatePayment(amount, loan, trans_id, now, nlModel);
+				RebatePayment(amount, loan, trans_id, now);
 
 				cus.PayPointErrorsCount = 0;
 
@@ -236,11 +231,11 @@
 			}
 		}
 
-		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
+		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now) {
 			if (amount == null || amount <= 0)
 				return;
 			var f = new LoanPaymentFacade();
-			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", nlModel: nlModel);
+			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay");
 		}
 
 		[Transactional]
@@ -251,12 +246,14 @@
 			DateTime now = DateTime.UtcNow;
 
 			NL_Model nlModel = new NL_Model(cus.Id);
-			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel: nlModel);
+			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel);
 
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
 			return Json(new { url = url });
 		}
+
+
 
 		private void ValidateCustomerName(string customer, Customer cus) {
 			if (!_validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname)) {
@@ -328,7 +325,7 @@
 			});
 
 
-			NL_LoanLegals loanLegals = new NL_LoanLegals {
+			NL_LoanLegals nlLoanLegals = new NL_LoanLegals {
 				Amount = loanAmount,
 				RepaymentPeriod = repaymentPeriod,
 				SignatureTime = now,
@@ -341,8 +338,10 @@
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
 			};
-			//this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, loanLegals);
-			//el: TODO add LoanLegal for offer
+
+			var nlStrategyLegals = this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, nlLoanLegals);
+
+			//_log.Debug("NL_LoanLegals: ID {0}, Error: {1}", nlStrategyLegals.Value, nlStrategyLegals.Error);
 
 			return Json(new { });
 
@@ -406,9 +405,9 @@
 
 			IAgreementsTemplatesProvider templateProvider = ObjectFactory.GetInstance<IAgreementsTemplatesProvider>();
 
-            var ezbobAlibabaCreditFacilityTemplatePath = templateProvider.GetTemplatePath(LoanAgreementTemplateType.CreditFacility, false, true, false);
+			var ezbobAlibabaCreditFacilityTemplatePath = templateProvider.GetTemplatePath(LoanAgreementTemplateType.CreditFacility, false, true, false);
 
-            string templateText = templateProvider.GetTemplateByName(ezbobAlibabaCreditFacilityTemplatePath);
+			string templateText = templateProvider.GetTemplateByName(ezbobAlibabaCreditFacilityTemplatePath);
 
 			var template = ObjectFactory.GetInstance<DatabaseDataHelper>()
 				.LoadOrCreateLoanAgreementTemplate(templateText, LoanAgreementTemplateType.CreditFacility);

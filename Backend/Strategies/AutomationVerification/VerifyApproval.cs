@@ -12,6 +12,7 @@
 			return new Approval(
 				oRow.CustomerId,
 				null,
+				null,
 				oRow.OfferedLoanAmount,
 				oRow.GetMedal(),
 				oRow.GetMedalType(),

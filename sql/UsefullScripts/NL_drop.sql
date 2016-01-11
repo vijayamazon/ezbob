@@ -33,7 +33,13 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
  ALTER TABLE [WriteOffReasons] DROP CONSTRAINT FK_WriteOffReasons_Payments ;
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_Payments_Loan')
+	ALTER TABLE NL_Payments DROP CONSTRAINT FK_NL_Payments_Loan;	
+GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UQ_LoanID_LoanFeeTypeID_Amount_AssignTime')
+	ALTER TABLE NL_LoanFees DROP CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime;	
+GO
 
 
 -------------------------------------------------------------------------------
@@ -110,8 +116,8 @@ IF OBJECT_ID('NL_LoanOptionsGet') IS NOT NULL
 	DROP PROCEDURE NL_LoanOptionsGet
 GO
 
-IF OBJECT_ID('NL_LoanOptionsSave') IS NOT NULL
-	DROP PROCEDURE NL_LoanOptionsSave
+IF OBJECT_ID('NL_SaveLoanOptions') IS NOT NULL
+	DROP PROCEDURE NL_SaveLoanOptions
 GO
 
 IF OBJECT_ID('NL_LoanRolloversSave') IS NOT NULL
@@ -206,22 +212,34 @@ IF OBJECT_ID('NL_loansGet') IS NOT NULL
 	DROP PROCEDURE NL_loansGet
 GO
 
+IF OBJECT_ID('NL_CustomersForAutoCharger') IS NOT NULL
+	DROP PROCEDURE NL_CustomersForAutoCharger
+GO
+
+IF OBJECT_ID('NL_LateLoanMailDataGet') IS NOT NULL
+	DROP PROCEDURE NL_LateLoanMailDataGet
+GO
+
+IF OBJECT_ID('NL_CuredLoansGet') IS NOT NULL
+	DROP PROCEDURE NL_CuredLoansGet
+GO
+
 -------------------------------------------------------------------------------
 --
 -- Drop new rows in old tables
 --
 -------------------------------------------------------------------------------
 
-DELETE FROM LoanTransactionMethod WHERE Name IN ('WriteOff', 'ChargeBack', 'WrongPayment', 'SystemRepay')
+DELETE FROM LoanTransactionMethod WHERE Name IN ('WriteOff', 'Write Off', 'ChargeBack', 'SetupFee Offset', 'SetupFeeOffset', 'WrongPayment', 'SystemRepay')
 GO
 
 DECLARE @lastid INT
 
-IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
-BEGIN
-	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
-	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
-END
+-- IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
+-- BEGIN
+	-- SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	-- INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
+-- END
 
 -------------------------------------------------------------------------------
 --

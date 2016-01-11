@@ -1,13 +1,21 @@
-﻿namespace EzBobTest {
+﻿using System;
+using DbConstants;
+using NUnit.Framework;
+
+namespace EzBobTest {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security.Cryptography;
 	using System.Text;
+	using DbConstants;
 	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.ValueIntervals;
 	using NHibernate.Linq;
+	using NHibernate.Util;
 	using NUnit.Framework;
 	using Reports;
 
@@ -128,93 +136,8 @@
 		}
 
 
-		// n = A/(m-Ar);
-		// total = A+A*r*((n+1)/2)
-		/*[Test]
-		public void TestLoanCalculator() {
+		
 
-			decimal A = 6000m;
-			decimal m = 600m;
-			decimal r = 0.06m;
-			decimal F = 100m;
-
-			Console.WriteLine("A: {0}, F: {1}, r: {2}, m: {3}", A, F, r, m);
-
-			//decimal earned = A * r;
-
-			decimal n = Math.Ceiling(A / (m - A * r));
-			
-			//decimal total1 = A + A * r * ((n + 1) / 2);
-			//Console.WriteLine(total1);
-
-			//decimal B = (A + F);
-
-			decimal k = Math.Ceiling((A + F) / (m - (A + F) * r));
-
-			Console.WriteLine("n==================" + n);
-
-			List<decimal> paymentsN = new List<decimal>();
-			decimal pi = 0m;
-			decimal sum = 0m;
-			for (int i = 1; i <= n; i++) {
-				pi = (A + F) / k + ((n - i + 1) / n) * (A + F) * r;
-				Console.WriteLine(pi);
-				paymentsN.Add(pi);
-				sum += pi;
-			}
-
-			Console.WriteLine(sum);Console.WriteLine();
-
-			Console.WriteLine("k=======================" + k);
-			List<decimal> paymentsK = new List<decimal>();
-			decimal pik = 0m;
-			decimal sumK = 0;
-			for (int i = 1; i <= k; i++) {
-				pik = (A + F) / k + ((n - i + 1) / n) * (A + F) * r;
-				Console.WriteLine(pik);
-				paymentsK.Add(pik);
-				sumK += pik;
-			}
-			Console.WriteLine(sumK);Console.WriteLine();
-
-			Console.WriteLine("kkk=======================" + (n + 1));
-			List<decimal> paymentsNK = new List<decimal>();
-			decimal pink = 0m;
-			decimal sumNK = 0m;
-
-			for (int i = 1; i <= (n + 1); i++) {
-				pink = (A + F) / k + ((n - i + 1) / n) * (A + F) * r;
-				Console.WriteLine(pink);
-				paymentsK.Add(pink);
-				sumNK += pink;
-			}
-
-			Console.WriteLine(sumNK);Console.WriteLine();
-
-			decimal totalNK = (A + F) + (A + F) * r * ((n + 1) / 2);
-			
-			Console.WriteLine(totalNK);
-
-			return;
-
-			// new instance of loan calculator - for new schedules list
-			LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
-				LoanIssueTime = DateTime.UtcNow,
-				LoanAmount = A,
-				RepaymentCount = 25,
-				MonthlyInterestRate = 0.06m,
-				InterestOnlyRepayments = 0,
-				RepaymentIntervalType = RepaymentIntervalTypes.Month
-			};
-
-			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
-
-			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
-
-			Console.WriteLine();
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
-		}
-*/
 
 		[Test]
 		public void DateDiffInMonth() {
@@ -229,34 +152,23 @@
 
 		[Test]
 		public void DateDiffs() {
-
 			// 2/11/2016
 			DateTime to = new DateTime(2015, 8, 9);
-
 			// 31/10/2016
 			DateTime  from = new DateTime(2015, 8, 13);
-
 			Console.WriteLine(from);
 			Console.WriteLine(to);
-
 			TimeSpan ts = to.Subtract(from);
-
 			double totalDays = ts.TotalDays;
 			int dDays = ts.Days;
-
 			Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
-
 			return;
-
 			// 12/10/2016
 			//end = new DateTime(2016, 10, 12);
 			//Console.WriteLine(end);
-
 			//ts = start.Subtract(end);
-
 			// totalDays = ts.TotalDays;
 			// dDays = ts.Days;
-
 			// Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
 		}
 
@@ -269,6 +181,80 @@
 	        Console.WriteLine(cds.applicationDate.ToString());
 	    }
 
+		[Test]
+		public void TestEnum() {
+			string xx = Enum.GetName(typeof(RepaymentIntervalTypes), 3);
+			//Console.WriteLine(xx);
+			var yy = Enum.Parse(typeof(RepaymentIntervalTypes), xx);
+			Console.WriteLine(yy.DescriptionAttr());
+			string newStatus = "Done";
+			var nlStatus = Enum.GetNames(typeof(NLPacnetTransactionStatuses)).FirstOrDefault(s => s.Equals(newStatus));
+			Console.WriteLine(nlStatus);
+			try {
+				var val = (int)Enum.Parse(typeof(NLPacnetTransactionStatuses), nlStatus);
+				Console.WriteLine(val);
+			} catch (OverflowException overflowException) {
+				Console.WriteLine(overflowException);
+			}
+		}
+
+
+	    [Test]
+	    public void TestEnumGetName() {
+            //Console.WriteLine(Enum.GetName(typeof(NLScheduleStatuses), 3));
+            //Console.WriteLine(NLScheduleStatuses.Paid.DescriptionAttr());
+            //Console.WriteLine(Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), 3).ToString()).DescriptionAttr());
+            Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2));
+            Console.WriteLine(NLLoanTypes.HalfWayLoanType.ToString());
+            Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2) == NLLoanTypes.HalfWayLoanType.ToString());
+	    }
+
+
+		[Test]
+		public void TestPrintFormat() {
+			/*DateTime? xxx = null;
+			//Console.WriteLine("{0:G}", NLFeeTypes.SetupFee);
+			Console.WriteLine("{0:d}", DateTime.UtcNow);
+			xxx = DateTime.UtcNow;
+			Console.WriteLine("{0,-11:d}", xxx);
+			Console.WriteLine("{0:F}", 445.6667m);*/
+
+			Console.WriteLine("{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} ", 66, 67, 10050, 0.000000, 0.000000, 0.000000m);
+
+		/*	{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} {6,-17:d} {7,-8} 
+66
+67
+10050
+0.000000
+0.000000
+0.000000
+0.000000
+False*/
+		}
+
+		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
+		[Test]
+		public void ArrayListTest() {
+			int[] myIntArray = new int[3] ;
+			myIntArray.SetValue(1, 0);
+			myIntArray.SetValue(100, 2);
+			myIntArray.ForEach(a=>Console.WriteLine( a));
+		}
+
+		[Test]
+		public void PDateSetTest() {
+			List<long> idList = new List<long>();
+			idList.Add(35);
+			idList.Add(36);
+			idList.Add(39);
+			idList.Add(37);
+
+			List<DateTime> dateList = new List<DateTime>();
+			dateList.Add(new DateTime(2015, 10, 25));
+			dateList.Add(new DateTime(2015, 10, 25));
+			dateList.Add(new DateTime(2015, 12, 10));
+			dateList.Add(new DateTime(2015, 12, 20));
+		}
 
 	} // class Misc
 } // namespace

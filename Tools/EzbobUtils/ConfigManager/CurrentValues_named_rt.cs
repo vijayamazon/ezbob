@@ -183,6 +183,10 @@
 		public virtual VariableValue SalesForceRetryWaitSeconds {
 			get { return this[Variables.SalesForceRetryWaitSeconds]; }
 		}
+
+		public virtual VariableValue SendCollectionMailOnNewLoan {
+			get { return this[Variables.SendCollectionMailOnNewLoan]; }
+		}
 		
 		public virtual VariableValue SessionTimeout {
 			get { return this[Variables.SessionTimeout]; }

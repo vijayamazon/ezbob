@@ -205,16 +205,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BoolActionResult" nillable="true" type="tns:BoolActionResult" />
-  <xs:complexType name="IntActionResult">
+  <xs:complexType name="NLLongActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:int" />
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Value" type="xs:long" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
+  <xs:element name="NLLongActionResult" nillable="true" type="tns:NLLongActionResult" />
   <xs:complexType name="ReschedulingActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -298,6 +299,16 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="EmailConfirmationTokenActionResult" nillable="true" type="tns:EmailConfirmationTokenActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
   <xs:complexType name="ExperianLtdActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

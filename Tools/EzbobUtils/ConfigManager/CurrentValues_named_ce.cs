@@ -128,6 +128,10 @@
 			get { return this[Variables.DefaultFeedbackValue]; }
 		}
 
+		public virtual VariableValue DefaultLoanCalculator {
+			get { return this[Variables.DefaultLoanCalculator]; }
+		}
+
 		public virtual VariableValue DirectorDetailsNonLimitedParserConfiguration {
 			get { return this[Variables.DirectorDetailsNonLimitedParserConfiguration]; }
 		}

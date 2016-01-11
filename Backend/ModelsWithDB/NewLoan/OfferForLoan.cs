@@ -1,56 +1,61 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-	using System;
 	using System.Runtime.Serialization;
-	using System.Text;
 
 	[DataContract]
-	public class OfferForLoan {
+	public class OfferForLoan : AStringable {
+		[DataMember]
+		public long LoanLegalID { get; set; }
 
 		[DataMember]
-		public int LoanLegalID { get; set; }
-		[DataMember]
 		public decimal LoanLegalAmount { get; set; }
+
 		[DataMember]
 		public int LoanLegalRepaymentPeriod { get; set; }
+
 		[DataMember]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
+
 		[DataMember]
 		public int LoanTypeID { get; set; }
+
 		[DataMember]
 		public int RepaymentIntervalTypeID { get; set; }
+
 		[DataMember]
 		public int LoanSourceID { get; set; }
+
 		[DataMember]
 		public int OfferRepaymentCount { get; set; }
+
 		[DataMember]
 		public decimal OfferAmount { get; set; }
+
 		[DataMember]
 		public decimal MonthlyInterestRate { get; set; }
+
 		[DataMember]
-		public decimal SetupFeePercent { get; set; }
+		public bool SetupFeeAddedToLoan { get; set; }
+
 		[DataMember]
 		public decimal BrokerSetupFeePercent { get; set; }
+
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
+
 		[DataMember]
-		public string DiscountPlan { get; set; }
+		public int DiscountPlanID { get; set; }
+
 		[DataMember]
 		public int LoansCount { get; set; }
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
-			Type t = typeof(OfferForLoan);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-		}
-	}
-}
+		[DataMember]
+		public decimal AvailableAmount { get; set; }
+
+		[DataMember]
+		public string ExistsRefnums { get; set; }
+
+        [DataMember]
+        public string Error { get; set; }
+
+	} // class OfferForLoan
+} // namespace

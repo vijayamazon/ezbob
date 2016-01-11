@@ -286,6 +286,14 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
+  <xs:complexType name="TemplateModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />
@@ -517,7 +525,7 @@
       <xs:element minOccurs="0" name="BalanceBeforeRepayment" type="xs:decimal" />
       <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
       <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
       <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
@@ -532,14 +540,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />
-  <xs:complexType name="TemplateModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
   <xs:simpleType name="ConfigTableType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="LoanOfferMultiplier" />

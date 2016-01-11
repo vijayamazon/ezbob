@@ -11,9 +11,11 @@
 		public virtual int CollectionLogID { get; set; }
 		public virtual int CustomerID { get; set; }
 		public virtual int LoanID { get; set; }
+        public virtual long LoanHistoryID { get; set; }
 		public virtual DateTime TimeStamp { get; set; }
 		public virtual string Type { get; set; }
 		public virtual string Method { get; set; }
+        public virtual string Comments { get; set; }
 		public virtual IList<CollectionSnailMailMetadata> SnailMailMetadata { get; set; } 
 	}
 

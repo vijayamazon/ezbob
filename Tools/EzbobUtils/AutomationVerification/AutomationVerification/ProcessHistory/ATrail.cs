@@ -41,6 +41,8 @@
 
 		public long? CashRequestID { get; private set; }
 
+		public long? NLCashRequestID { get; private set; }
+
 		public bool HasApprovalChance { get; set; }
 
 		public abstract string PositiveDecisionName { get; }
@@ -70,7 +72,7 @@
 			get { return DecisionStatus == DecisionStatus.Affirmative; }
 		} // HasDecided
 
-		public T FindTrace<T>() where T: ATrace {
+		public T FindTrace<T>() where T : ATrace {
 			foreach (ATrace t in this.m_oSteps) {
 				if (t == null)
 					continue;
@@ -136,7 +138,7 @@
 				nFirstFieldLength,
 				nSecondFieldLength + 1
 			);
-            
+
 			for (int i = 0; i < lst.Count; i++) {
 				Tuple<string, string, string, string> tpl = lst[i];
 				os.AppendFormat(sFormat, i + 1, tpl.Item1, tpl.Item2 + ':', tpl.Item3, tpl.Item4);
@@ -245,7 +247,7 @@
 
 					string sMsg = string.Format(
 						"Different checks for '{3}' encountered on step {0}: {1} in this vs {2} in the second.",
-						i+1,
+						i + 1,
 						oMyTrace.GetType().Name,
 						oOtherTrace.GetType().Name,
 						Decision
@@ -255,14 +257,13 @@
 
 					if (!bQuiet)
 						m_oLog.Warn("Trails are different: {0}", sMsg);
-				}
-				else if (oMyTrace.DecisionStatus != oOtherTrace.DecisionStatus) {
+				} else if (oMyTrace.DecisionStatus != oOtherTrace.DecisionStatus) {
 					if (!oMyTrace.AllowMismatch)
 						bResult = false;
 
 					string sMsg = string.Format(
 						"Different conclusions for '{4}' have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
-						i+1,
+						i + 1,
 						oMyTrace.GetType().Name,
 						oMyTrace.DecisionStatus,
 						oOtherTrace.DecisionStatus,
@@ -276,13 +277,13 @@
 						SendExplanationMail(oTrail, sMsg);
 					} // if
 				} // if
-				else if (oMyTrace.HasLockedDecision != oOtherTrace.HasLockedDecision) {
+				  else if (oMyTrace.HasLockedDecision != oOtherTrace.HasLockedDecision) {
 					if (!oMyTrace.AllowMismatch)
 						bResult = false;
 
 					string sMsg = string.Format(
 						"Different conclusions for '{4}' decision lock have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
-						i+1,
+						i + 1,
 						oMyTrace.GetType().Name,
 						oMyTrace.HasLockedDecision ? "locked" : "not locked",
 						oOtherTrace.HasLockedDecision ? "locked" : "not locked",
@@ -321,7 +322,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				var sp = new SaveDecisionTrail(this, UniqueID, true, CashRequestID, this.tag, oDB, this.m_oLog);
+				var sp = new SaveDecisionTrail(this, UniqueID, true, CashRequestID, NLCashRequestID, this.tag, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -329,7 +330,7 @@
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, UniqueID, false, CashRequestID, this.tag, oDB, this.m_oLog);
+					sp = new SaveDecisionTrail(oTrail, UniqueID, false, CashRequestID, NLCashRequestID, this.tag, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
@@ -337,8 +338,7 @@
 
 				cw.Commit();
 				m_oLog.Debug("Decision trail has been saved, connection is closed.");
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				if (cw != null)
 					cw.Rollback();
 
@@ -360,6 +360,7 @@
 		protected ATrail(
 			int nCustomerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			DecisionStatus nDecisionStatus,
 			ASafeLog oLog,
 			string toExplanationEmailAddress,
@@ -372,6 +373,8 @@
 
 			CustomerID = nCustomerID;
 			CashRequestID = cashRequestID;
+			NLCashRequestID = nlCashRequestID;
+
 			m_nDecisionStatus = nDecisionStatus;
 			m_sToExplanationEmailAddress = toExplanationEmailAddress;
 			m_sFromEmailAddress = fromEmailAddress;
@@ -403,11 +406,12 @@
 				Guid oDiffID,
 				bool bIsPrimary,
 				long? cashRequestID,
+				long? nlCashRequestID,
 				string tag,
 				AConnection oDB,
 				ASafeLog oLog
 			) : base(oDB, oLog) {
-				m_oTrail = oTrail;
+				this.m_oTrail = oTrail;
 				CustomerID = oTrail.CustomerID;
 				DecisionID = (int)oTrail.Decision;
 				UniqueID = oDiffID;
@@ -416,6 +420,7 @@
 				IsPrimary = bIsPrimary;
 				HasApprovalChance = oTrail.HasApprovalChance;
 				CashRequestID = cashRequestID;
+				NLCashRequestID = nlCashRequestID;
 				Tag = tag;
 
 				Traces = new List<ATrace.DBModel>();
@@ -454,7 +459,7 @@
 					bResult = false;
 				} // if
 
-				if (!Enum.IsDefined(typeof (DecisionStatus), DecisionStatusID)) {
+				if (!Enum.IsDefined(typeof(DecisionStatus), DecisionStatusID)) {
 					Log.Debug("Invalid {0} parameter: decision status id is {1}", GetName(), DecisionStatusID);
 					bResult = false;
 				} // if
@@ -462,8 +467,7 @@
 				if (Traces == null) {
 					Log.Debug("Invalid {0} parameter: Traces is null", GetName());
 					bResult = false;
-				}
-				else {
+				} else {
 					if (Traces.Count == 0) {
 						Log.Debug("Invalid {0} parameter: Traces is empty", GetName());
 						bResult = false;
@@ -533,13 +537,16 @@
 			public long? CashRequestID { get; set; }
 
 			[UsedImplicitly]
+			public long? NLCashRequestID { get; set; }
+
+			[UsedImplicitly]
 			public string Tag { get; set; }
 
 			private readonly ATrail m_oTrail;
 		} // class SaveDecisionTrail
 
-		private T Add<T>(DecisionStatus nDecisionStatus, bool bLockDecisionAfterAddingAStep) where T: ATrace {
-			T oTrace = (T)Activator.CreateInstance(typeof (T), nDecisionStatus);
+		private T Add<T>(DecisionStatus nDecisionStatus, bool bLockDecisionAfterAddingAStep) where T : ATrace {
+			T oTrace = (T)Activator.CreateInstance(typeof(T), nDecisionStatus);
 
 			m_oSteps.Add(oTrace);
 
@@ -552,7 +559,7 @@
 			} // if
 
 			// ReSharper disable PossibleNullReferenceException
-			if (oTrace.GetType() == typeof (ExceptionThrown))
+			if (oTrace.GetType() == typeof(ExceptionThrown))
 				(oTrace as ExceptionThrown).OnAfterInitEvent += step => this.m_oDiffNotes.Add(step.Comment);
 			// ReSharper restore PossibleNullReferenceException
 

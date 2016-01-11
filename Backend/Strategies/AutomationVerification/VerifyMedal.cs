@@ -74,7 +74,7 @@
 		private void DoCustomerList(List<int> lst) {
 			foreach (int customerID in lst) {
 				try {
-					new CalculateMedal(customerID, null, this.calculationTime, false, true) { Tag = this.tag, }.Execute();
+					new CalculateMedal(customerID, null, null, this.calculationTime, false, true) { Tag = this.tag, }.Execute();
 				} catch (Exception e) {
 					Log.Alert(
 						e,

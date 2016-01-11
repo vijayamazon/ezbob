@@ -1,22 +1,20 @@
-﻿namespace Ezbob.Backend.Strategies.PricingModel
-{
+﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
 	using System.Text;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Ezbob.Database;
 	using PaymentServices.Calculators;
-	
-	public class PricingModelCalculator: AStrategy
-	{
+
+	public class PricingModelCalculator : AStrategy {
 		private readonly int customerId;
 
-		public PricingModelCalculator(int customerId, PricingModelModel model)
-		{
+		public PricingModelCalculator(int customerId, PricingModelModel model) {
 			Model = model;
 			this.customerId = customerId;
 			LogInputs();
@@ -25,22 +23,18 @@
 		public PricingModelModel Model { get; private set; }
 		public string Error { get; private set; }
 
-		public bool CalculateInterestRate()
-		{
-			if (Model == null)
-			{
+		public bool CalculateInterestRate() {
+			if (Model == null) {
 				Error = "Model can't be empty";
 				return false;
 			}
 
-			if (Model.LoanAmount <= 0)
-			{
+			if (Model.LoanAmount <= 0) {
 				Error = "LoanAmount must be positive";
 				return false;
 			}
 
-			if (Model.TenureMonths <= 0)
-			{
+			if (Model.TenureMonths <= 0) {
 				Error = "TenureMonths must be positive";
 				return false;
 			}
@@ -48,8 +42,7 @@
 			Model.FeesRevenue = Model.SetupFeePounds;
 
 			decimal balanceForUpperBoundary, upperBoundary;
-			if (!FindUpperBoundary(out upperBoundary, out balanceForUpperBoundary))
-			{
+			if (!FindUpperBoundary(out upperBoundary, out balanceForUpperBoundary)) {
 				Error = "Monthly interest rate should be over 1000000, aborting calculation";
 				return false;
 			}
@@ -59,20 +52,17 @@
 			return true;
 		}
 
-		public void Calculate()
-		{
-			if (!CalculateInterestRate())
-			{
+		public void Calculate() {
+			if (!CalculateInterestRate()) {
 				return;
 			}
 
 			CalculateFullModelAfterInterestRate();
 		}
 
-		private void CalculateFullModelAfterInterestRate()
-		{
+		private void CalculateFullModelAfterInterestRate() {
 			Loan loan = CreateLoan(Model.MonthlyInterestRate, Model.FeesRevenue + Model.BrokerSetupFeePounds);
-			
+
 			Model.CostOfDebtOutput = GetCostOfDebt(loan.Schedule);
 			Model.InterestRevenue = GetInterestRevenue(loan.Schedule);
 			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
@@ -93,16 +83,16 @@
 				APR = GetApr(loan)
 			});
 
-		    GetPricingModelDefaultRate defaultRate = new GetPricingModelDefaultRate(this.customerId, Model.DefaultRateCompanyShare);
-		    defaultRate.Execute();
+			GetPricingModelDefaultRate defaultRate = new GetPricingModelDefaultRate(this.customerId, Model.DefaultRateCompanyShare);
+			defaultRate.Execute();
 
 
-            decimal preferableEUInterest = GetEuLoanMonthlyInterest(defaultRate.ConsumerScore);
+			decimal preferableEUInterest = GetEuLoanMonthlyInterest(defaultRate.ConsumerScore);
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("EU Loan (2%)", 0.02M, Model.EuCollectionRate, preferableEUInterest));
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("EU Loan (1.75%)", 0.0175M, Model.EuCollectionRate, preferableEUInterest));
 
-            decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest(defaultRate.ConsumerScore, defaultRate.BusinessScore);
-            Log.Info("Pricing calculator: Customer {0} Consumer score: {1} Company Score: {2} preferable COSME interest {3} preferable EU interest {4}", this.customerId, defaultRate.ConsumerScore, defaultRate.BusinessScore, preferableCOSMEInterest, preferableEUInterest);
+			decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest(defaultRate.ConsumerScore, defaultRate.BusinessScore);
+			Log.Info("Pricing calculator: Customer {0} Consumer score: {1} Company Score: {2} preferable COSME interest {3} preferable EU interest {4}", this.customerId, defaultRate.ConsumerScore, defaultRate.BusinessScore, preferableCOSMEInterest, preferableEUInterest);
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (2.25%)", 0.0225M, Model.CosmeCollectionRate, preferableCOSMEInterest));
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (2%)", 0.02M, Model.CosmeCollectionRate, preferableCOSMEInterest));
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (1.75%)", 0.0175M, Model.CosmeCollectionRate, preferableCOSMEInterest));
@@ -121,18 +111,15 @@
 				IsPreferable = isPreferable
 			};
 		}
-		private decimal GetApr(Loan loan)
-		{
+		private decimal GetApr(Loan loan) {
 			var aprCalc = new APRCalculator();
 			return (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date) / 100);
 		}
 
-		private Loan CreateLoan(decimal interestRate, decimal setupFee)
-		{
+		private Loan CreateLoan(decimal interestRate, decimal setupFee) {
 			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = (int)Model.TenureMonths };
 			LoanType lt = new StandardLoanType();
-			var loan = new Loan
-			{
+			var loan = new Loan {
 				LoanAmount = Model.LoanAmount,
 				Date = DateTime.UtcNow,
 				LoanType = lt,
@@ -148,14 +135,13 @@
 			return loan;
 		}
 
-		private decimal GetSetupFeeForEu(decimal monthlyInterestRate, decimal collectionRate, out decimal annualizedInterestRate, out decimal apr)
-		{
+		private decimal GetSetupFeeForEu(decimal monthlyInterestRate, decimal collectionRate, out decimal annualizedInterestRate, out decimal apr) {
 			Loan loan = CreateLoan(monthlyInterestRate, Model.FeesRevenue);
 			decimal costOfDebtEu = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
 			decimal netLossFromDefaults = (1 - collectionRate) * Model.LoanAmount * Model.DefaultRate;
-            decimal totalCost = Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
-            decimal profit = totalCost / (1 - Model.ProfitMarkup);
+			decimal totalCost = Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
+			decimal profit = totalCost / (1 - Model.ProfitMarkup);
 			decimal setupFeePounds = profit - interestRevenue;
 			decimal setupFee = setupFeePounds / Model.LoanAmount;
 			loan = CreateLoan(monthlyInterestRate, setupFeePounds + Model.BrokerSetupFeePounds);
@@ -164,14 +150,11 @@
 			return setupFee;
 		}
 
-		private bool FindUpperBoundary(out decimal boundary, out decimal balance)
-		{
+		private bool FindUpperBoundary(out decimal boundary, out decimal balance) {
 			balance = -1;
 			decimal monthlyInterestRate = 1;
-			while (balance < 0)
-			{
-				if (monthlyInterestRate > 1000000)
-				{
+			while (balance < 0) {
+				if (monthlyInterestRate > 1000000) {
 					LogInputs();
 					boundary = -1;
 					return false;
@@ -184,8 +167,7 @@
 			return true;
 		}
 
-		private decimal GetMonthlyInterestRate(decimal upperBoundary, decimal balanceForUpperBoundary)
-		{
+		private decimal GetMonthlyInterestRate(decimal upperBoundary, decimal balanceForUpperBoundary) {
 			decimal lowerBoundary = 0;
 			decimal interestRateForMinBalanceAbs;
 			decimal minBalanceAbsValue;
@@ -194,30 +176,24 @@
 			calculations.Add(upperBoundary, balanceForUpperBoundary);
 			calculations.Add(lowerBoundary, balanceForLowerBoundary);
 
-			if (Math.Abs(balanceForUpperBoundary) < Math.Abs(balanceForLowerBoundary))
-			{
+			if (Math.Abs(balanceForUpperBoundary) < Math.Abs(balanceForLowerBoundary)) {
 				minBalanceAbsValue = Math.Abs(balanceForUpperBoundary);
 				interestRateForMinBalanceAbs = upperBoundary;
-			}
-			else
-			{
+			} else {
 				minBalanceAbsValue = Math.Abs(balanceForLowerBoundary);
 				interestRateForMinBalanceAbs = lowerBoundary;
 			}
 
 			decimal monthlyInterestRate = Math.Round((lowerBoundary + upperBoundary) / 2, 4, MidpointRounding.AwayFromZero);
 
-			while (minBalanceAbsValue != 0)
-			{
+			while (minBalanceAbsValue != 0) {
 				decimal balance = CalculateBalance(monthlyInterestRate);
-				if (Math.Abs(balance) < minBalanceAbsValue)
-				{
+				if (Math.Abs(balance) < minBalanceAbsValue) {
 					minBalanceAbsValue = Math.Abs(balance);
 					interestRateForMinBalanceAbs = monthlyInterestRate;
 				}
 
-				if (lowerBoundary + 0.0001m == upperBoundary)
-				{
+				if (lowerBoundary + 0.0001m == upperBoundary) {
 					return interestRateForMinBalanceAbs;
 				}
 
@@ -226,17 +202,13 @@
 					calculations.Add(monthlyInterestRate, balance);
 				}
 
-				if (balance < 0)
-				{
+				if (balance < 0) {
 					lowerBoundary = monthlyInterestRate;
 					monthlyInterestRate = Math.Round((lowerBoundary + upperBoundary) / 2, 5, MidpointRounding.AwayFromZero);
-					if ((monthlyInterestRate*100000)%10 != 0)
-					{
+					if ((monthlyInterestRate * 100000) % 10 != 0) {
 						monthlyInterestRate -= 0.00005m;
 					}
-				}
-				else
-				{
+				} else {
 					upperBoundary = monthlyInterestRate;
 					monthlyInterestRate = Math.Round((lowerBoundary + upperBoundary) / 2, 4, MidpointRounding.AwayFromZero);
 				}
@@ -245,8 +217,7 @@
 			return interestRateForMinBalanceAbs;
 		}
 
-		private void LogInputs()
-		{
+		private void LogInputs() {
 			var inputs = new StringBuilder();
 			inputs.Append("LoanAmount:").Append(Model.LoanAmount).Append("\r\n");
 			inputs.Append("DefaultRate:").Append(Model.DefaultRate).Append("\r\n");
@@ -285,12 +256,10 @@
 			Log.Info("Pricing Model:\n{0}", inputs);
 		}
 
-		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule)
-		{
+		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule) {
 			decimal costOfDebtOutput = 0;
 			decimal balanceAtBeginningOfMonth = Model.LoanAmount;
-			foreach (LoanScheduleItem scheuldeItem in schedule)
-			{
+			foreach (LoanScheduleItem scheuldeItem in schedule) {
 				costOfDebtOutput += balanceAtBeginningOfMonth * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
 				balanceAtBeginningOfMonth = scheuldeItem.Balance;
 			}
@@ -298,15 +267,13 @@
 			return costOfDebtOutput;
 		}
 
-		private decimal GetInterestRevenue(IEnumerable<LoanScheduleItem> schedule)
-		{
+		private decimal GetInterestRevenue(IEnumerable<LoanScheduleItem> schedule) {
 			decimal interestRevenue = schedule.Sum(scheuldeItem => scheuldeItem.Interest);
 			interestRevenue *= 1 - Model.DefaultRate;
 			return interestRevenue;
 		}
 
-		private decimal CalculateBalance(decimal interestRate)
-		{
+		private decimal CalculateBalance(decimal interestRate) {
 			Loan loan = CreateLoan(interestRate, Model.FeesRevenue);
 			decimal costOfDebtOutput = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
@@ -318,8 +285,7 @@
 			return ebitda - netLossFromDefaults - costOfDebtOutput - profitMarkupOutput;
 		}
 
-		private decimal GetEuLoanMonthlyInterest(int key)
-		{
+		private decimal GetEuLoanMonthlyInterest(int key) {
 			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "EuLoanMonthlyInterest"), new QueryParameter("Key", key));
 			return sr["Value"];
 		}
@@ -332,7 +298,7 @@
 		private decimal GetCOSMELoanMonthlyInterest(int consumerScore, int companyScore) {
 			if (consumerScore < 1040 && companyScore == 0) {
 				return 0.0225M;
-			} 
+			}
 			if (consumerScore >= 1040 && companyScore == 0) {
 				return 0.0175M;
 			}
@@ -374,7 +340,7 @@
 		}
 
 		public override string Name {
-			get {return "Pricing Model Calculator";}
+			get { return "Pricing Model Calculator"; }
 		}
 
 		public override void Execute() {

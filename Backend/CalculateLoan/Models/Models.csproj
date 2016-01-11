@@ -42,37 +42,21 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BadPeriods.cs" />
-    <Compile Include="CurrentPaymentModel.cs" />
+    <Compile Include="DailyLoanStatus.cs" />
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
-    <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\ANegativeDecimalException.cs" />
-    <Compile Include="Exceptions\NegativeRepaymentAmountException.cs" />
-    <Compile Include="Exceptions\NegativeMonthlyInterestRateException.cs" />
+    <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\NegativeLoanAmountException.cs" />
-    <Compile Include="Exceptions\NegativeRepaymentCountException.cs" />
+    <Compile Include="Exceptions\NegativeMonthlyInterestRateException.cs" />
     <Compile Include="Exceptions\NegativeOpenPrincipalException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentAmountException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentCountException.cs" />
     <Compile Include="Exceptions\NoScheduleException.cs" />
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
-    <Compile Include="Exceptions\TooLateOpenPrincipalException.cs" />
-    <Compile Include="Exceptions\WrongFirstOpenPrincipalException.cs" />
-    <Compile Include="Exceptions\WrongOpenPrincipalOrderException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
-    <Compile Include="Extensions\RepaymentListExt.cs" />
-    <Compile Include="Extensions\ScheduleListExt.cs" />
-    <Compile Include="Helpers\BadPeriod.cs" />
-    <Compile Include="Helpers\DailyLoanStatus.cs" />
-    <Compile Include="Helpers\Fee.cs" />
-    <Compile Include="Helpers\InterestFreeze.cs" />
-    <Compile Include="Helpers\OneDayLoanStatus.cs" />
-    <Compile Include="Helpers\OpenPrincipal.cs" />
-    <Compile Include="Helpers\RepaidPrincipal.cs" />
-    <Compile Include="Helpers\Repayment.cs" />
-    <Compile Include="Helpers\Rollovers.cs" />
-    <Compile Include="Helpers\ScheduledItem.cs" />
-    <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
+    <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
     <Compile Include="Library.cs" />
-    <Compile Include="LoanCalculatorModel.cs" />
+    <Compile Include="OneDayState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -108,10 +92,17 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
       <Project>{9f39f6b0-980a-46ea-8977-416449be9c5c}</Project>
       <Name>CalculateLoanExceptions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,11 +2,13 @@
 	using System;
 	using System.Linq;
 	using ConfigManager;
+	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Models;
+	using log4net;
 	using PaymentServices.Calculators;
+	using ServiceClientProxy;
 
 	public class LoanBuilder {
 		public LoanBuilder(ChangeLoanDetailsModelBuilder builder) {
@@ -80,6 +82,22 @@
 
 			var c = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 			c.GetState();
+
+			if (loan.Id > 0) {
+				try {
+					ServiceClient serviceClient = new ServiceClient();
+					long nlLoanId = serviceClient.Instance.GetLoanByOldID(loan.Id, cr.Customer.Id, 1)
+						.Value;
+					if (nlLoanId > 0) {
+						var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+						Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+					}
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				}
+			}
+
 			loan.LoanSource = cr.LoanSource;
 			return loan;
 		} // CreateLoanFromTemplate
@@ -113,5 +131,6 @@
 		} // AdjustDates
 
 		private readonly ChangeLoanDetailsModelBuilder _builder;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanBuilder));
 	} // class LoanBuilder
 } // namespace

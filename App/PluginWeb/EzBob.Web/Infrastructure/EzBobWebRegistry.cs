@@ -1,5 +1,27 @@
 namespace EzBob.Web.Infrastructure
 {
+    using ConfigManager;
+    using EzBob.CommonLib;
+    using EzBob.Models.Agreements;
+    using EzBob.PayPalServiceLib.Common;
+    using EzBob.Web.Areas.Customer.Controllers;
+    using EzBob.Web.Areas.Customer.Models;
+    using EzBob.Web.Code;
+    using EzBob.Web.Code.Bank;
+    using EzBob.Web.Code.MpUniq;
+    using EzBob.Web.Models.Repository;
+    using EzServiceAccessor;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Loans;
+    using EZBob.DatabaseLib.Model.Database.Repository;
+    using EZBob.DatabaseLib.Model.Database.Request;
+    using EZBob.DatabaseLib.Model.Database.UserManagement;
+    using EZBob.DatabaseLib.Model.Experian;
+    using EZBob.DatabaseLib.Model.Loans;
+    using EZBob.DatabaseLib.Repository;
+    using ServiceClientProxy;
+    using StructureMap.Configuration.DSL;
 	using Code.Bank;
 	using CommonLib;
 	using EZBob.DatabaseLib;
@@ -15,8 +37,7 @@ namespace EzBob.Web.Infrastructure
 	using PayPalServiceLib.Common;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Models;
-	using Code;
-	using Code.Agreements;
+	using Code;	
 	using Code.MpUniq;
 	using Models.Repository;
 	using ServiceClientProxy;

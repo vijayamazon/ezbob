@@ -156,6 +156,7 @@ namespace ConfigManager {
 
 		DEBUG_SaveVatReturnData,
 		DefaultFeedbackValue,
+		DefaultLoanCalculator,
 		DirectorDetailsNonLimitedParserConfiguration,
 		DirectorDetailsParserConfiguration,
 		DirectorInfoNonLimitedParserConfiguration,
@@ -327,12 +328,18 @@ namespace ConfigManager {
 		MinLoan,
 		MinLoanLifetimeMonths,
 
+		NewLoanRun,
 		NHibernateEnableProfiler,
 		NotEnoughFundsTemplateName,
 		NotEnoughFundsToAddress,
 		NumofAllowedActiveLoans,
 		NumOfInvalidPasswordAttempts,
 		NumberOfMobileCodeAttempts,
+
+		NL_AgreementPdfLoanPath1,
+		NL_AgreementPdfLoanPath2,
+		NL_AgreementPdfConsentPath1,
+		NL_AgreementPdfConsentPath2,
 
 		OfferValidForHours,
 		OnlineMedalTurnoverCutoff,
@@ -435,6 +442,7 @@ namespace ConfigManager {
 		SalesForceEnvironment,
 		SalesForceNumberOfRetries,
 		SalesForceRetryWaitSeconds,
+		SendCollectionMailOnNewLoan,
 		SessionTimeout,
 		SetupFeeEnabled,
 		SetupFeeFixed,
@@ -499,6 +507,6 @@ namespace ConfigManager {
 		YodleePassword,
 		YodleeSoapServer,
 		YodleeTncVersion,
-		YodleeUsername,
+		YodleeUsername
 	} // enum Variables
 } // namespace ConfigManager

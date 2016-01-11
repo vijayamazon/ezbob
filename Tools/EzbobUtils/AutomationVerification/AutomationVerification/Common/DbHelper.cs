@@ -220,7 +220,7 @@
 				new QueryParameter("Type", type.ToString()));
 		}
 
-		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID) {
+		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID, long? nlCashRequestID) {
 			if (model.WeightsDict != null) {
 				if (!model.WeightsDict.ContainsKey(Parameter.BusinessScore))
 					model.WeightsDict[Parameter.BusinessScore] = new Weight();
@@ -319,7 +319,8 @@
 					new QueryParameter("CapOfferByCustomerScoresTable", model.CapOfferByCustomerScoresTable),
 					new QueryParameter("Tag", tag),
 					new QueryParameter("MaxOfferedLoanAmount", model.MaxOfferedLoanAmount),
-					new QueryParameter("CashRequestID", cashRequestID)
+					new QueryParameter("CashRequestID", cashRequestID),
+					new QueryParameter("NLCashRequestID", nlCashRequestID)
 				);
 			} else {
 				_db.ExecuteNonQuery(
@@ -332,7 +333,8 @@
 					new QueryParameter("Error", model.Error),
 					new QueryParameter("NumOfHmrcMps", 0),
 					new QueryParameter("CashRequestID", cashRequestID),
-					new QueryParameter("Tag", tag)
+					new QueryParameter("Tag", tag),
+					new QueryParameter("NLCashRequestID", nlCashRequestID)
 				);
 			} // if
 		} // StoreMedalVerification

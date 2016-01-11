@@ -45,9 +45,9 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID) {
+		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID) {
 			CalculateMedal instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, DateTime.UtcNow, false, true);
+			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, nlCashRequestID, DateTime.UtcNow, false, true);
 		}
 
 		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification) {
@@ -220,8 +220,8 @@
 			return true;
 		}
 
-		public ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
-			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
+		public ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail,decimal? balance = null, bool? isPaidOff = null) {
+			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, sendMail, balance, isPaidOff);
 		}
 
 		public ActionMetaData BackfillBrokerCommissionInvoice() {

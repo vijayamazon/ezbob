@@ -1,14 +1,16 @@
 ﻿namespace Ezbob.Backend.Strategies.OfferCalculation {
-	using ConfigManager;
-	using Ezbob.Database;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
+	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.PricingModel;
+	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
-	using PricingModel;
 
 	public class OfferCalculator1 {
 		public OfferCalculator1() {
@@ -21,7 +23,7 @@
 			DateTime calculationTime,
 			int amount,
 			bool hasLoans,
-			EZBob.DatabaseLib.Model.Database.Medal medalClassification,
+			Medal medalClassification,
 			int period
 		) {
 			var result = new OfferResult {
