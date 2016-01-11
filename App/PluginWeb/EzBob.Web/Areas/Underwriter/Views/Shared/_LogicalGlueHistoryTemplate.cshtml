@@ -30,9 +30,11 @@
 								if(i == currentHistoryID) {
 									rowClass='active';
 								}
+								var uniqueID = lg.UniqueID || '';
+								uniqueID = uniqueID.toLowerCase().replace(/-/g,'');
 							%>
 							
-							<tr class="logical-glue-tr <%-rowClass%>" data-line="<%-i%>" data-id="<%lg.ResponseID%>">
+							<tr class="logical-glue-tr <%-rowClass%>" data-line="<%-i%>" data-id="<%-uniqueID%>">
 								<td><%-EzBob.formatDateUK(lg.Date)%></td>
 								<td><%-lg.BucketStr%></td>
 								<td><%-EzBob.formatPoundsAsInt(lg.MonthlyRepayment)%></td>
@@ -45,11 +47,12 @@
 						</tbody>
 					</table>
 					<%}%>
-					
+
+					<%if(currentGuid){%>
 					<div>
-						<span>Show iframe for line <%-currentHistoryID %></span>
-						<iframe id="logical-glue-iframe"></iframe>
+						<iframe id="logical-glue-iframe" src="https://everline.app.logicalglue.net/#/project/3/deployment/view/27/history?externalIdFilter=<%-currentGuid%>"></iframe>
 					</div>
+					<%}%>
 				</div>
 			</div>
 		</div>
