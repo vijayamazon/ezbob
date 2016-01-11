@@ -20,7 +20,7 @@
 						? ""
 						: string.Join(" ", context.UserPermissions.Select(p => "permission-" + p.Name));
 
-					string sRoles = context.UserRoles.Count < 1 ? "" : string.Join(" ", context.UserRoles);
+					string sRoles = context.UserRoles.Count < 1 ? "" : string.Join(" ", context.UserRoles.Select(r => "role-" + r));
 
 					result.BodyClassName = sRoles + " " + sPermissions;
 				}
