@@ -13,7 +13,14 @@ BEGIN
 	;WITH u AS (
 		SELECT
 			UserID = u.UserId,
-			IsDisabled = CONVERT(BIT, CASE LOWER(s.Name) WHEN 'disabled' THEN 1 ELSE 0 END),
+			IsDisabled = CONVERT(BIT,
+				CASE
+					WHEN (u.IsDeleted = 1) OR (1 = CONVERT(BIT, CASE LOWER(s.Name) WHEN 'disabled' THEN 1 ELSE 0 END))
+						THEN 1
+					ELSE
+						0
+				END
+			),
 			c.RefNumber,
 			u.LoginFailedCount
 		FROM

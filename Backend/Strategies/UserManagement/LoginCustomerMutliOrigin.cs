@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
+	using System.Data;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Web.Security ;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 	using Ezbob.Utils.dbutils;
 
 	public class LoginCustomerMutliOrigin : AStrategy {
@@ -49,15 +51,13 @@
 					"This account is closed, please contact customer care<br/> " +
 					this.spLoad.Result.CustomerCareEmail;
 
-				int sessionID = DB.ExecuteScalar<int>(
-					"CreateCustomerSession",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.spLoad.Result.UserID),
-					new QueryParameter("StartSession", DateTime.UtcNow),
-					new QueryParameter("Ip", this.model.RemoteIp),
-					new QueryParameter("IsPasswdOk", false),
-					new QueryParameter("ErrorMessage", sDisabledError)
-				);
+				var sp = new CreateCustomerSession(DB, Log) {
+					CustomerID = this.spLoad.Result.UserID,
+					Ip = this.model.RemoteIp,
+					ErrorMessage = sDisabledError,
+				};
+
+				int sessionID = sp.ExecuteScalar<int>();
 
 				Log.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}' and origin '{2}': " +
@@ -205,6 +205,41 @@
 
 			private readonly LoginCustomerMutliOrigin stra;
 		} // class CustomerLoadLoginData
+
+		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		private class CreateCustomerSession : AStoredProcedure {
+			public CreateCustomerSession(AConnection db, ASafeLog log) : base(db, log) {}
+
+			public override bool HasValidParameters() {
+				return CustomerID > 0;
+			} // HasValidParameters
+
+			public int CustomerID { get; set; }
+
+			public DateTime StartSession {
+				get { return DateTime.UtcNow; }
+				set { }
+			} // StartSession
+
+			public DateTime EndSession {
+				get { return DateTime.UtcNow; }
+				set { }
+			} // EndSession
+
+			public string Ip { get; set; }
+
+			public bool IsPasswdOk {
+				get { return false; }
+				set { }
+			} // IsPasswordOk
+
+			public string ErrorMessage { get; set; }
+
+			[Direction(ParameterDirection.Output)]
+			public int SessionID { get; set; }
+		} // CreateCustomerSession
 
 		private readonly LoginCustomerMultiOriginModel model;
 	} // class LoginCustomerMutliOrigin
