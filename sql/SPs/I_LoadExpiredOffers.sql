@@ -18,7 +18,9 @@ BEGIN
 		c.CreditSum, 
 		o.InvestorID, 
 		o.InvestmentPercent, 
-		ibFunding.InvestorBankAccountID
+		ibFunding.InvestorBankAccountID,
+		cr.UnderwriterDecision AS Decision,
+		c.Name Email
 	FROM 
 		CashRequests cr
 	INNER JOIN 
@@ -38,8 +40,9 @@ BEGIN
 		AND
 			cr.OfferValidUntil < @Now 
 		AND 
-			cr.UnderwriterDecision = 'Approved'
-		AND 
-			c.CreditSum > 0	
+			((cr.UnderwriterDecision = 'Approved' AND c.CreditSum > 0)
+			OR 
+			cr.UnderwriterDecision='PendingInvestor')
+		
 END 
 GO
