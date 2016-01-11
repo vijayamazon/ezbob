@@ -73,7 +73,7 @@
 		[Test]
 		public void TestGetLatestKnownLogicalGlue() {
 			var lgEngine = InjectorStub.GetEngine();
-			lgEngine.GetInference(1417, GetInferenceMode.DownloadIfOld);
+			lgEngine.GetInference(1417, 0, false, GetInferenceMode.DownloadIfOld);
 
 			var stra = new GetLatestKnownInference(1417, null, false);
 			stra.Execute();

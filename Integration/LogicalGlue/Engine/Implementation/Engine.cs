@@ -29,40 +29,18 @@
 		public IHarvester Harvester { get; private set; }
 		public ASafeLog Log { get; private set; }
 
-		public Inference GetInference(int customerID, decimal monthlyPayment) {
-			if (monthlyPayment < 0.01m)
-				return GetInference(customerID, GetInferenceMode.DownloadIfOld);
-
-			Inference cachedInference = GetInference(customerID, Now, true, monthlyPayment);
-
-			ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
-
-			if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays)) {
-				Log.Debug(
-					"Engine.GetInference({0}, {1}): returning cached inference with ResponseID = {2}.",
-					customerID,
-					monthlyPayment.ToString("C2", enGB),
-					cachedInference.ResponseID
-				);
-
-				return cachedInference;
-			} // if
-
-			return DownloadAndSave(customerID, monthlyPayment);
-		} // GetInference (by monthly payment)
-
-		public Inference GetInference(int customerID, GetInferenceMode mode) {
+		public Inference GetInference(int customerID, decimal monthlyPayment, bool isTryout, GetInferenceMode mode) {
 			Log.Debug("Engine.GetInference({0}, {1}) started...", customerID, mode);
 
 			Inference result = null;
 
 			switch (mode) {
 			case GetInferenceMode.CacheOnly:
-				result = GetInference(customerID, Now, false, 0);
+				result = GetInference(customerID, Now, isTryout, 0);
 				break;
 
 			case GetInferenceMode.DownloadIfOld:
-				Inference cachedInference = GetInference(customerID, Now, false, 0);
+				Inference cachedInference = GetInference(customerID, Now, isTryout, monthlyPayment);
 				ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
 
 				if (cachedInference.IsUpToDate(Now, cfg.CacheAcceptanceDays)) {
@@ -80,7 +58,7 @@
 				goto case GetInferenceMode.ForceDownload; // !!! fall through !!!
 
 			case GetInferenceMode.ForceDownload:
-				result = DownloadAndSave(customerID, 0);
+				result = DownloadAndSave(customerID, monthlyPayment, isTryout);
 				break;
 
 			default:
@@ -153,9 +131,7 @@
 			return result;
 		} // GetInferenceHistory
 
-		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment) {
-			bool isTryOut = (explicitMonthlyPayment >= 0.01m);
-
+		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment, bool isTryOut) {
 			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
 
 			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now);

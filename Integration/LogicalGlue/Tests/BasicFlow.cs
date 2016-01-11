@@ -14,7 +14,7 @@
 
 			harvester.ReplyMode = TestHarvester.ReplyModes.Success;
 
-			Inference inference = engine.GetInference(1417, GetInferenceMode.DownloadIfOld);
+			Inference inference = engine.GetInference(1417, 0, false,GetInferenceMode.DownloadIfOld);
 
 			Log.Info("Inference read: {0}", inference);
 		} // TestBasicFlow
@@ -23,7 +23,7 @@
 		public void TestEndToEndFlow() {
 			IEngine engine = InjectorStub.GetEngine();
 
-			Inference inference = engine.GetInference(1417, GetInferenceMode.ForceDownload);
+			Inference inference = engine.GetInference(1417, 0, false, GetInferenceMode.ForceDownload);
 
 			Log.Info("Inference read: {0}", inference);
 		} // TestEndToEndFlow
