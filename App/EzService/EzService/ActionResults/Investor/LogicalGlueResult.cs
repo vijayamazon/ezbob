@@ -77,7 +77,7 @@
 			} catch (Exception ex) {
 				log.Warn(ex, "Failed loading lg data for customer {0}", customerID);
 				return new LogicalGlueResult {
-					Error = ex.Message
+					Error = "Failed loading logical glue data"
 				};
 			}
 		}

@@ -368,6 +368,7 @@
         </thead>
         <tbody class="box-content">
             @RawCell("System decision", "<%- m.SystemDecision %>")
+			@RawCell("Credit result", "<%- m.CreditResult%>")
             @RawCell("System amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
             @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
 

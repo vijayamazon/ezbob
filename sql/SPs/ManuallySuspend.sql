@@ -58,7 +58,7 @@ BEGIN
 		'Pending',
 		@UnderwriterID,
 		@CustomerID,
-		'',
+		@UnderwriterDecision,
 		@CashRequestID,
 		LoanTypeID
 	FROM

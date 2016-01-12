@@ -64,36 +64,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
-	-- Logica glue params
-	--
-	------------------------------------------------------------------------------
-	DECLARE @LogicalGlueResponseID BIGINT 
-	DECLARE @GradeID INT 
-	DECLARE @LogicalGlueScore DECIMAL(18,6)
-	
-	SELECT 
-		TOP 1
-		@LogicalGlueResponseID = lg.ResponseID,
-		@GradeID = lg.GradeID
-	FROM 
-		LogicalGlueResponses lg INNER JOIN MP_ServiceLog sl ON sl.Id = lg.ServiceLogID 
-	WHERE 
-		sl.CustomerId=@CustomerID AND sl.ServiceType='LogicalGlue'
-	ORDER BY lg.ResponseID DESC 	
-	
-	SELECT TOP 1 
-		@LogicalGlueScore = lgm.Score
-	FROM 
-		LogicalGlueModelOutputs lgm 
-	WHERE
-		lgm.ResponseID = @LogicalGlueResponseID
-	AND
-		lgm.ModelID = 2  --'Neural network'	
-	ORDER BY 
-		lgm.ModelOutputID DESC
-	
-		------------------------------------------------------------------------------
-	--
 	-- Customer and cash request details - main model content.
 	--
 	------------------------------------------------------------------------------
@@ -172,9 +142,10 @@ BEGIN
 		), 0) > 0 THEN 1 ELSE 0 END),
 		IsAvoid = c.AvoidAutomaticDescison,
 		SystemDecision = c.Status,
+		CreditResult = c.CreditResult,
 		AvailableAmount = ISNULL(c.CreditSum, 0),
 		OfferExpired = CONVERT(BIT, CASE WHEN c.ValidFor <= @Now THEN 1 ELSE 0 END),
-		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending') THEN 1 ELSE 0 END),
+		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending', 'PendingInvestor') THEN 1 ELSE 0 END),
 		IsModified = CONVERT(BIT, CASE WHEN r.Id IS NOT NULL AND ISNULL(r.LoanTemplate, '') != '' THEN 1 ELSE 0 END),
 		DiscountPlanId = dp.DiscountPlanID,
 		OfferValidForHours = CONVERT(INT, CONVERT(DECIMAL(18, 2), cv.Value)),
@@ -223,8 +194,6 @@ BEGIN
 			AND ci.IsDefault = 1
 		),
 		OriginID = c.OriginID,
-		LogicalGlueScore = @LogicalGlueScore,
-		GradeID = @GradeID,
 		ProductSubTypeID = r.ProductSubTypeID,
 		NumOfLoans = nol.NumOfLoans
 	FROM

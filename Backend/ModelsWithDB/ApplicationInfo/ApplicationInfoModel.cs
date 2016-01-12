@@ -24,6 +24,9 @@
 		public string SystemDecision { get; set; }
 
 		[DataMember]
+		public string CreditResult { get; set; }
+
+		[DataMember]
 		public decimal SystemCalculatedAmount { get; set; }
 
 		[DataMember]
@@ -217,21 +220,26 @@
 		[DataMember]
 		public bool SpreadSetupFee { get; set; }
 		
-		[DataMember]
-		public decimal LogicalGlueScore { get; set; }
+		
 
-		[DataMember]
-		public int GradeID { get; set; }
-
-		[DataMember]
-		public int? ProductSubTypeID { get; set; }
-
+		
 		[DataMember]
 		public int OriginID { get; set; }
 
 		[DataMember]
 		public int NumOfLoans { get; set; }
 		//-----------------------------OP ---------------------\\
+		[DataMember]
+		public int? ProductSubTypeID { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public decimal? LogicalGlueScore { get; set; }
+
+		[NonTraversable]
+		[DataMember]
+		public int? GradeID { get; set; }
+
 		[NonTraversable]
 		[DataMember]
 		public List<I_Product> Products { get; set; }

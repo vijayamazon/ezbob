@@ -272,6 +272,10 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 			html: true,
 			'placement': 'bottom'
 		});
+		var self = this;
+		this.$el.find('[data-toggle="tab"]').click(function (el) {
+			self.$el.find('#RecalculateMedalBtn').toggle($(this).attr('href') == '#medal');
+		});
 
 		var medalHistory = this.model.get('History');
 		if (medalHistory) {

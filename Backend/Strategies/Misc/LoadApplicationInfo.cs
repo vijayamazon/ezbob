@@ -4,6 +4,7 @@
 	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.ApplicationInfo;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
+	using Ezbob.Backend.Strategies.LogicalGlue;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
@@ -61,8 +62,28 @@
 			Result.GradeRanges = DB.Fill<I_GradeRange>("SELECT * FROM I_GradeRange WHERE IsActive = 1", CommandSpecies.Text);
 			Result.FundingTypes = DB.Fill<I_FundingType>("SELECT * FROM I_FundingType", CommandSpecies.Text);
 
+			BuildLogicalGlue();
 			BuildDefaultProduct();
 		}// Execute
+
+		private void BuildLogicalGlue() {
+			var lg = new GetLatestKnownInference(this.customerID, this.now, false);
+			lg.Execute();
+
+			if (lg.Inference == null) { return; }
+
+			Result.LogicalGlueScore = lg.Inference.Score;
+			Result.GradeID = lg.Inference.Bucket.HasValue ? (int)lg.Inference.Bucket : (int?)null;
+
+			if (Result.LogicalGlueScore.HasValue) {
+				var subGrade = Result.SubGrades.FirstOrDefault(x => x.MaxScore > Result.LogicalGlueScore.Value && x.MinScore <= Result.LogicalGlueScore.Value);
+				if (subGrade != null) {
+					Result.SubGradeID = subGrade.SubGradeID;
+				}//if
+			}//if
+		}//BuildLogicalGlue
+
+
 
 		private void BuildDefaultProduct() {
 			var subGrade = Result.SubGrades.FirstOrDefault(x => x.GradeID == Result.GradeID && x.MinScore < Result.LogicalGlueScore && x.MaxScore > Result.LogicalGlueScore);

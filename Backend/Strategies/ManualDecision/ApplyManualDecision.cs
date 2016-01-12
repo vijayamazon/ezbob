@@ -305,6 +305,15 @@
 
 		private bool ApproveCustomer(NL_Decisions newDecision) {
 			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID);
+			linkOfferToInvestor.Execute();
+
+			Log.Info("ApproveCustomer Decision {0} for Customer {1} cr {2} OP {3} FoundInvestor {4}",
+				this.decisionToApply.CashRequest.UnderwriterDecision,
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ID,
+				linkOfferToInvestor.IsForOpenPlatform, 
+				linkOfferToInvestor.FoundInvestor);
+
 			if (linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
 				PendingInvestor(newDecision);
 				return false;
@@ -397,9 +406,13 @@
 		}// ApproveCustomer
 
 		private void PendingInvestor(NL_Decisions newDecision) {
+			Log.Info("Investor not found for customer {0} cr {1}, mark as pending investor",
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ID);
+
 			this.decisionToApply.Customer.CreditResult = CreditResultStatus.PendingInvestor.ToString();
 			this.decisionToApply.CashRequest.UnderwriterDecision = CreditResultStatus.PendingInvestor.ToString();
-			SaveDecision<ManuallyApprove>();
+			SaveDecision<ManuallySuspend>();
 
 			var notifyRiskPendingInvestorCustomer = new NotifyRiskPendingInvestorOffer(
 				this.decisionToApply.Customer.ID, 
@@ -410,8 +423,6 @@
 
 			//TODO newDecision PendingInvestor status
 		}
-
-
 
 		private bool SaveDecision<T>() where T : AApplyManualDecisionBase {
 			string result;
