@@ -390,7 +390,7 @@
 				creditBureau.TotalDebt = creditBureauModel.Consumer.TotalAccountBalances;
 				creditBureau.TotalMonthlyRepayments = creditBureauModel.Consumer.TotalMonthlyRepayments;
 				creditBureau.CreditCardBalances = creditBureauModel.Consumer.CreditCardBalances;
-				creditBureau.BorrowerType = TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
+				creditBureau.BorrowerType = customer.PersonalInfo.TypeOfBusiness.TypeOfBussinessForWeb();
 				creditBureau.FinancialAccounts = creditBureauModel.Consumer.AccountsInformation.Count();
 				creditBureau.ThinFile = creditBureau.FinancialAccounts == 0 ? "Yes" : "No";
 				// patch to fix crashing underwriter

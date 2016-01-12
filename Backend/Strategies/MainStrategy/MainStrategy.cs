@@ -630,9 +630,10 @@
 				return;
 			} // if
 
-			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LGAgent(
+			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
 				CustomerID,
 				this.cashRequestID,
+				DateTime.UtcNow,
 				DB,
 				Log
 			).Init();

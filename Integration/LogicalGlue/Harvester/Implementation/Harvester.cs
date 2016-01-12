@@ -70,15 +70,24 @@
 
 			var uri = new Uri(restClient.BaseAddress, request.RequestUri);
 
+			string requestHeaders = string.Join("\n\t", request.Headers.Select(pair => string.Format(
+				"{0}: {1}",
+				pair.Key,
+				string.Join(", ", pair.Value)
+			)));
+
+			string contentHeaders = string.Join("\n\t", request.Content.Headers.Select(pair => string.Format(
+				"{0}: {1}",
+				pair.Key,
+				string.Join(", ", pair.Value)
+			)));
+
 			this.log.Debug(
-				"Executing {0} request:\nURL: {1}\nHeaders:\n\t{2}\nContent:\n\t{3}",
+				"Executing {0} request:\nURL: {1}\nRequest headers:\n\t{2}\nContent headers:\n\t{3}\nContent:\n\t{4}",
 				request.Method,
 				uri,
-				string.Join("\n\t", request.Headers.Select(pair => string.Format(
-					"{0}: {1}",
-					pair.Key,
-					string.Join(", ", pair.Value)
-				))),
+				requestHeaders,
+				contentHeaders,
 				contentToLog
 			);
 

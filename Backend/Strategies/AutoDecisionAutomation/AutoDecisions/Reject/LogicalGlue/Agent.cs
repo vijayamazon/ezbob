@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue {
 	using System;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
@@ -8,18 +8,23 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class LGAgent : AAutoDecisionBase {
+	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
-		public LGAgent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, long? cashRequestID, DateTime? now, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID);
+			Args = new Arguments(nCustomerID, cashRequestID, now);
 
-			this.oldWayAgent = new Agent(nCustomerID, cashRequestID, oDB, oLog);
+			this.oldWayAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
+				nCustomerID,
+				cashRequestID,
+				oDB,
+				oLog
+			);
 		} // constructor
 
-		public virtual LGAgent Init() {
+		public virtual Agent Init() {
 			Trail = new RejectionTrail(
 				Args.CustomerID,
 				Args.CashRequestID,
@@ -29,7 +34,6 @@
 				CurrentValues.Instance.MailSenderName
 			);
 
-			Now = DateTime.UtcNow;
 			Cfg = InitCfg();
 
 			return this;
@@ -87,8 +91,6 @@
 			return new Configuration(DB, Log);
 		} // InitCfg
 
-		protected virtual DateTime Now { get; set; }
-
 		protected virtual AConnection DB { get; private set; }
 		protected virtual ASafeLog Log { get; private set; }
 
@@ -117,6 +119,6 @@
 				Trail.Dunno<InternalFlow>().Init();
 		} // ChooseInternalOrLogicalGlueFlow
 
-		private readonly Agent oldWayAgent;
-	} // class LGAgent
+		private readonly Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent oldWayAgent;
+	} // class Agent
 } // namespace

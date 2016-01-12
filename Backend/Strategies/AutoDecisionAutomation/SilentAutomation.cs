@@ -104,9 +104,10 @@
 				this.cashRequestID
 			);
 
-			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LGAgent(
+			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
 				this.customerID,
 				this.cashRequestID,
+				DateTime.UtcNow,
 				DB,
 				Log
 			).Init();

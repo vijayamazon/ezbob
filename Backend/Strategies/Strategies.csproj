@@ -104,7 +104,7 @@
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LGAgent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LGAgent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\ICreateOfferInputData.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
