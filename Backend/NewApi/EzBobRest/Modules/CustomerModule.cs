@@ -57,17 +57,17 @@
                 }
 
                 //Validate
-                signupCommand.Account.RemoteIp = Context.Request.UserHostAddress;
                 InfoAccumulator info = Validate(signupCommand);
-                if (!info.HasErrors) {
+                if (info.HasErrors) {
                     return CreateErrorResponse(null, null, info.GetErrors());
                 }
 
+                signupCommand.Account.RemoteIp = Context.Request.UserHostAddress;
                 //Send Command
                 var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
                 CustomerSignupCommandResponse response;
                 try {
-                    response = await SignupSendReceive.SendAsync(Config.ServerAddress, signupCommand, cts);
+                    response = await SignupSendReceive.SendAsync(Config.ServiceAddress, signupCommand, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(null, null, response.Errors);
                     }

@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobRest", "EzBobRest\EzBo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobRestTests", "EzBobRestTests\EzBobRestTests.csproj", "{259D6D2E-35E3-4BA3-864D-15390FC8C54C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobAcceptanceTests", "EzBobAcceptanceTests\EzBobAcceptanceTests.csproj", "{C2806AD3-8BD7-4810-99EA-20EA16B951DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{259D6D2E-35E3-4BA3-864D-15390FC8C54C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2806AD3-8BD7-4810-99EA-20EA16B951DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2806AD3-8BD7-4810-99EA-20EA16B951DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2806AD3-8BD7-4810-99EA-20EA16B951DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2806AD3-8BD7-4810-99EA-20EA16B951DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

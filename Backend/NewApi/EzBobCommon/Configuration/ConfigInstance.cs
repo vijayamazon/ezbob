@@ -19,8 +19,7 @@ namespace EzBobCommon.Configuration {
         /// Initializes a new instance of the <see cref="ConfigInstance{T}"/> class.
         /// </summary>
         public ConfigInstance()
-            : base(string.Format("Building {0} from application settings", typeof(T).FullName),
-                c => c.GetInstance<ConfigManager>()
-                    .GetConfigObject<T>()) {}
+            : base(c => c.GetInstance<ConfigManager>()
+                .GetConfigObject<T>()) {}
     }
 }

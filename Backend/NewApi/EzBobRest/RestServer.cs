@@ -11,6 +11,7 @@
     public class RestServer {
         private readonly CountdownEvent latch = new CountdownEvent(1);
         private int isOpened = 0;
+        private volatile bool isStarted = false;
 
         [Injected]
         public RestServerConfig Config { get; set; }
@@ -28,9 +29,16 @@
 
             using (WebApp.Start(Config.ServerAddress, Startup.Configuration)) {
                 Log.Info("started rest server");
+                isStarted = true;
                 this.latch.Wait();
+                isStarted = false;
                 Log.Info("rest server is stopped");
             }
+        }
+
+        public bool IsStarted
+        {
+            get { return this.isStarted; }
         }
 
         public void Stop() {

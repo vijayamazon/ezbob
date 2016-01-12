@@ -93,6 +93,7 @@
     <Compile Include="Currencies\Money.cs" />
     <Compile Include="Currencies\MoneyJsonSerializer.cs" />
     <Compile Include="EqComparer.cs" />
+    <Compile Include="Http\JsonContent.cs" />
     <Compile Include="InfoAccumulator.cs" />
     <Compile Include="InfoAccumulatorSerializer.cs" />
     <Compile Include="Injected.cs" />

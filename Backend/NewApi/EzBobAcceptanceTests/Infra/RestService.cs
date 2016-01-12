@@ -1,4 +1,4 @@
-﻿namespace EzBobServiceTests.NSB {
+﻿namespace EzBobAcceptanceTests.Infra {
     using EzBobApi.Commands.Customer;
     using EzBobRest;
     using NServiceBus.AcceptanceTesting;
