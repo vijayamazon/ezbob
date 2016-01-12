@@ -99,7 +99,7 @@
             .Returns(false);
 
             investor = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(investor == nul);
+            Assert.IsTrue(investor == null);
 
         }
 
