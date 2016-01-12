@@ -31,7 +31,7 @@ GO
 IF OBJECT_ID('I_GetFundedAmountPeriod') IS NULL 
 	EXECUTE('CREATE PROCEDURE I_GetFundedAmountPeriod AS SELECT 1')
 GO
-IF OBJECT_ID('I_GetInvestorRules') IS NOT NULL
+IF OBJECT_ID('I_GetInvestorRules') IS NULL
 	EXECUTE('CREATE PROCEDURE I_GetInvestorRules AS SELECT 1')
 GO
 
@@ -60,9 +60,9 @@ BEGIN
 		AND
 		RuleType = @RuleType
 END
+GO
 
-
-ALTER PROCEDURE I_GetInvestorLoanCashRequest 
+ALTER PROCEDURE I_GetInvestorLoanCashRequest
 	@CashRequestsId bigint
 AS
 BEGIN
