@@ -21,24 +21,12 @@
         public void SignupCustomerTest() {
             Context ctx = new Context();
 
-            IContainer serviceContainer = null;
-            IContainer restContainer = null;
-
-            RestClient restClient = new RestClient();
-
-            HttpClient httpClient = null;
-
             Scenario.Define(ctx)
                 .WithEndpoint<EzBobService>(c => c
                     .Given((bus, context) => {
-                        serviceContainer = context.Container;
                         context.IsMaySignup = true;
                     }))
                 .WithEndpoint<RestService>(c => c
-                    .Given((bus, context) => {
-                        restContainer = context.Container;
-                        DecorateHandlers(serviceContainer);
-                    })
                     .When(context => context.IsRestServerStarted && context.IsMaySignup,
                         (bus, contxt) => {
                             TestSameEmailDoubleSignup(bus, contxt);
@@ -72,7 +60,7 @@
             Assert.IsTrue(signupResponse.SelfValidate(), "invalid response format");
             Assert.IsTrue(signupResponse.HasErrors, "expected to get errors");
 
-            ctx.IsDone = true;//finish test
+            ctx.IsDone = true; //finish test
         }
 
         private string SendSignupRequest(HttpClient client, string emailAddress) {
@@ -84,22 +72,6 @@
                 .Result;
             return response;
         }
-
-        private void ValidateSignupResponse(string response, Context ctx) {
-            int kk = 0;
-            ctx.IsDone = true;
-        }
-
-        private void DecorateHandlers(IContainer container) {
-            try { 
-                var sch = container.GetInstance<SignupCustomerHandler>();
-                var handler = container.GetInstance<IHandleMessages<CustomerSignupCommand>>();
-                var handlers = container.GetAllInstances(typeof(IHandleMessages<CustomerSignupCommand>));
-                int kk = 0;
-            } catch (Exception ex) {
-                int kk = 0;
-            }
-        }
     }
 
     internal class Context : ScenarioContext, IEzScenarioContext {
@@ -109,7 +81,8 @@
 
         private IContainer container;
 
-        public IContainer Container {
+        public IContainer Container
+        {
             get { return this.container; }
         }
 
