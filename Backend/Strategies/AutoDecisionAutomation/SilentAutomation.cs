@@ -104,7 +104,7 @@
 				this.cashRequestID
 			);
 
-			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
+			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LGAgent(
 				this.customerID,
 				this.cashRequestID,
 				DB,
@@ -123,9 +123,10 @@
 				this.cashRequestID
 			);
 
-			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
+			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
 				this.customerID,
 				this.cashRequestID,
+				DateTime.UtcNow,
 				offeredCreditLine,
 				medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)medal.MedalType,
@@ -138,7 +139,7 @@
 
 			if (this.caller == Callers.AddMarketplace) {
 				bool isRejected = !rejectAgent.WasMismatch && rejectAgent.Trail.HasDecided;
-				bool isApproved = !approveAgent.WasMismatch && (approveAgent.ApprovedAmount > 0);
+				bool isApproved = !approveAgent.WasMismatch && (approveAgent.Trail.RoundedAmount > 0);
 
 				if (!isRejected && isApproved)
 					ExecuteMain();
