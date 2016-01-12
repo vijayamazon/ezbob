@@ -21,10 +21,6 @@
 		[DataMember]
 		public NL_Loans Loan { get; set; }
 
-		//[DataMember]
-		//[ExcludeFromToString]
-		//public List<NLAgreementItem> Agreements { get; set; }
-
 		[DataMember]
 		public decimal? BrokerComissions { get; set; }
 

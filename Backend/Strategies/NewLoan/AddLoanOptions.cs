@@ -57,7 +57,7 @@
 						}
 					}
 
-					LoanOptionsID = DB.ExecuteScalar<long>("NL_SaveLoanOptions",
+					LoanOptionsID = DB.ExecuteScalar<long>("NL_LoanOptionsSave",
 						CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanOptions>("Tbl", existsOptions),
 						new QueryParameter("@LoanID", this.nlLoanOptions.LoanID));
 					NL_AddLog(LogType.Info, "Strategy End", this.nlLoanOptions, this.LoanOptionsID, null, null);

@@ -257,7 +257,7 @@
 					}
 
 					// 11. save default loan options record
-					model.Loan.LoanOptions.LoanOptionsID = DB.ExecuteScalar<long>(pconn, "NL_SaveLoanOptions",
+					model.Loan.LoanOptions.LoanOptionsID = DB.ExecuteScalar<long>(pconn, "NL_LoanOptionsSave",
 					   CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", new NL_LoanOptions {
 						   LoanID = LoanID,
 						   UserID = 1, // default system user?
