@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Implement {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
+    using Ezbob.Backend.ModelsWithDB.Wrappers;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
     using Ezbob.Database;
 
@@ -10,30 +12,29 @@
         private Dictionary<int, double> investorsBalance;
         public Dictionary<int, double> InvestorsBalance {
             get {
-                return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<KeyValuePair<int, double>>
-                    (string.Format("SELECT iiba.InvestorID, MAX(iisb.Timestamp) as Balance from I_InvestorSystemBalance iisb" +
-                        " join I_InvestorBankAccount iiba on iiba.InvestorBankAccountID = iisb.InvestorBankAccountID " +
-                        "WHERE iiba.InvestorAccountTypeID = 1 " +
-                        "GROUP BY InvestorID "), CommandSpecies.Text)
-                    .ToDictionary(x => x.Key, x => x.Value));
+                return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
             }
         }
 
         public List<int> GetInvestorsIds() {
-            return Library.Instance.DB.Fill<int>("select InvestorID from I_Investor i where i.IsActive = 1", CommandSpecies.Text);
+            var temp = Library.Instance.DB.Fill<IntWrapper>("I_GetInvestorsIds", CommandSpecies.StoredProcedure);
+                return temp.Select(x=> x.Value).ToList();
         }
 
-
         public List<I_InvestorParams> GetInvestorParametersDB(int investorId, RuleType ruleType) {
-            return Library.Instance.DB.Fill<I_InvestorParams>(string.Format(" select * from I_InvestorParams where InvestorID ={0} and type = {1}", ruleType == RuleType.System ? (int?)null : investorId, (int)ruleType), CommandSpecies.Text);
+            var queryParameters = ruleType == RuleType.System ? new[] { new QueryParameter("TypeID", (int)ruleType) } : new[] { new QueryParameter("TypeID", (int)ruleType), new QueryParameter("InvestorId", investorId) };
+            return Library.Instance.DB.Fill<I_InvestorParams>("I_GetInvestorParametersDB", CommandSpecies.StoredProcedure, queryParameters);
         }
 
         public double GetGradeMonthlyInvestedAmount(int investorId, Grade grade) {
-            return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) GradeSum from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.GradeID = {1} and ip.Timestamp  <= DATEADD(month, -1, GETDATE())  group by ip.GradeID", investorId, grade), CommandSpecies.Text);
+            var myDate = DateTime.Now;
+            var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
+            var result = Library.Instance.DB.ExecuteScalar<decimal>("I_GetGradeMonthlyInvestedAmount", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("GradeID", (int)grade), new QueryParameter("FirstOfMonth", TimeZoneInfo.ConvertTimeToUtc(firstOfMonth)));
+            return (double)result;
         }
 
-        public decimal GetGradeMaxScore(int investorId, Grade grade) {
-            var index = Library.Instance.DB.ExecuteScalar<I_Index>(string.Format("select * from I_Index where InvestorID ={0}", investorId), CommandSpecies.Text);
+        public decimal GetGradeMaxScore(int investorId, Grade grade, int ruleType) {
+            var index = Library.Instance.DB.ExecuteScalar<I_Index>("I_GetGradeMaxScore", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("TypeID", (int)ruleType));
             switch (grade) {
                 case Grade.A: return index.GradeAMaxScore;
                 case Grade.B: return index.GradeBMaxScore;
@@ -46,27 +47,32 @@
         }
 
         public double GetInvestorTotalMonthlyDeposits(int investorId) {
-            return Library.Instance.DB.ExecuteScalar<double>(string.Format("SELECT SUM(iibat.TransactionAmount) AS TSum FROM I_InvestorBankAccountTransaction iibat JOIN I_InvestorBankAccount iiba ON iiba.InvestorBankAccountID = iibat.InvestorBankAccountID WHERE iibat.TransactionAmount > 0 AND iiba.InvestorID = {0} AND iibat.Timestamp >= DATEADD(MONTH, -1, GETDATE())", investorId), CommandSpecies.Text);
-        }
-
-        public double GetInvestorBalanceMonthAgo(int investorId) {
-            return Library.Instance.DB.ExecuteScalar<double>(string.Format("SELECT top 1 NewBalance FROM I_InvestorSystemBalance iisb JOIN I_InvestorBankAccount iiba ON iiba.InvestorBankAccountID = iisb.InvestorBankAccountID WHERE iiba.InvestorID = {0} AND iisb.Timestamp <= DATEADD(MONTH, -1, GETDATE())ORDER BY iiba.Timestamp DESC", investorId), CommandSpecies.Text);
+            var myDate = DateTime.Now;
+            var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
+            return Library.Instance.DB.ExecuteScalar<double>("I_GetInvestorTotalMonthlyDeposits", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("FirstOfMonth", firstOfMonth));
         }
 
         public double GetInvestorMonthlyFundingCapital(int investorId) {
-            return Library.Instance.DB.ExecuteScalar<double>(string.Format("SELECT MonthlyFundingCapital FROM I_Investor WHERE InvestorID ={0}", investorId), CommandSpecies.Text);
+            return Library.Instance.DB.ExecuteScalar<double>("I_GetInvestorMonthlyFundingCapital", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId));
         }
 
         public double GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod) {
+            DateTime periodAgo = new DateTime();
             switch (invesmentPeriod) {
                 case InvesmentPeriod.Day:
-                    return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) as invesmentAmount from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.Timestamp  <= DATEADD(day, -1, GETDATE())", investorId), CommandSpecies.Text);
+                    periodAgo = DateTime.Today.AddDays(-1);
+                    break;
                 case InvesmentPeriod.Week:
-                    return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) as invesmentAmount from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.Timestamp  <= DATEADD(week, -1, GETDATE())", investorId), CommandSpecies.Text);
-                case  InvesmentPeriod.Month:
-                    return Library.Instance.DB.ExecuteScalar<double>(string.Format("select sum(l.LoanAmount) as invesmentAmount from I_Portfolio ip  join Loan l on ip.LoanID = l.Id where ip.InvestorID = {0} and ip.Timestamp  <= DATEADD(month, -1, GETDATE())", investorId), CommandSpecies.Text);
+                    periodAgo = DateTime.Today.AddDays(-7);
+                    break;
+                case InvesmentPeriod.Month:
+                    periodAgo = DateTime.Today.AddDays(-30);
+                    break;
             }
-            return 0;
+
+            var fundedAmount = Library.Instance.DB.ExecuteScalar<decimal>("I_GetFundedAmountPeriod", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("PeriodAgo", TimeZoneInfo.ConvertTimeToUtc(periodAgo)));
+            return (double)fundedAmount;
         }
+
     }
 }

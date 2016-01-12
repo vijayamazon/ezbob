@@ -762,3 +762,32 @@ CREATE TABLE [dbo].[I_InvestorRule](
 	)
 END
 GO
+
+IF NOT EXISTS (SELECT * FROM I_Parameter)
+BEGIN
+	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES ('DailyInvestmentAllowed', 'double', 0, null, null)
+	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES('WeeklyInvestmentAllowed', 'double', 0, null , null)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_InvestorParams)
+BEGIN
+	INSERT INTO I_InvestorParams(InvestorID,ParameterID,Value,Type,AllowedForConfig) VALUES(null, 1, 1000000, 1,1)
+	INSERT INTO I_InvestorParams(InvestorID,ParameterID,Value,Type,AllowedForConfig) VALUES(null, 2, 3000000, 1,1)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM I_InvestorRule)
+BEGIN
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES(1,1,null,null,null,null,1,2,1,1)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot)VALUES (1,1,null,null,null,null,3,4,1,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,null,null,5,6,1,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,'ManagerApprovedSum','DailyAvailableAmount',null,null,3,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,'ManagerApprovedSum','WeeklyAvailableAmount',null,null,3,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,'ManagerApprovedSum','Balance',null,null,3,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,'RuleBadgetLevel',null,null,null,null,7,0)
+END
+GO
+
+
+

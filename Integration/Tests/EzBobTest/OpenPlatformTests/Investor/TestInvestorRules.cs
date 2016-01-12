@@ -177,12 +177,10 @@
                 });
 
 
-            investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, Grade.A))
+            investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, Grade.A,1))
                 .Returns((decimal)0.2);
             investorParametersDALMock.Setup(x => x.GetGradeMonthlyInvestedAmount(1, Grade.A))
                 .Returns(100);
-            investorParametersDALMock.Setup(x => x.GetInvestorBalanceMonthAgo(1))
-                .Returns(200);
 
             investorParametersDALMock.Setup(x => x.GetInvestorMonthlyFundingCapital(1))
                 .Returns(5000);

@@ -48,14 +48,10 @@
             var totalFunded = investorGradeInvestedAmount + investorLoanCashRequest.ManagerApprovedSum;
 
             //Calc max score for grade.
-            var gradeMaxScore = (double)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.Grade);
+            var gradeMaxScore = (double)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.Grade, ruleType);
 
             //Calc total sum of positive transctions this month
-            var totalMonthlyDeposits = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
-
-            var balanceOneMonthAgo = InvestorParametersDAL.GetInvestorBalanceMonthAgo(investorId);
-
-            var investorMonthlyBalance = balanceOneMonthAgo + totalMonthlyDeposits;
+             var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
 
             var monthlyFundingCapital = InvestorParametersDAL.GetInvestorMonthlyFundingCapital(investorId);
 
