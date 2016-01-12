@@ -1,8 +1,8 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF OBJECT_ID('NL_SaveLoanOptions') IS NOT NULL
-	DROP PROCEDURE NL_SaveLoanOptions
+IF OBJECT_ID('NL_LoanOptionsSave') IS NOT NULL
+	DROP PROCEDURE NL_LoanOptionsSave
 GO
 
 IF TYPE_ID('NL_LoanOptionsList') IS NOT NULL
@@ -28,7 +28,7 @@ CREATE TYPE NL_LoanOptionsList AS TABLE (
 )
 GO
 
-CREATE PROCEDURE NL_SaveLoanOptions
+CREATE PROCEDURE NL_LoanOptionsSave
 @Tbl NL_LoanOptionsList READONLY,
 @LoanID INT
 AS

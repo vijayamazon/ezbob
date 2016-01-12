@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ezbob.Backend.ModelsWithDB">
-      <HintPath>..\CalculateLoan\Models\bin\Debug\Ezbob.Backend.ModelsWithDB.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
@@ -140,6 +137,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
       <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
       <Name>ValueIntervals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
