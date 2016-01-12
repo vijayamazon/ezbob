@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;

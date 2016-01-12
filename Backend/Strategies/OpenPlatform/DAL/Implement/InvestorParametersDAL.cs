@@ -12,7 +12,7 @@
         private Dictionary<int, double> investorsBalance;
         public Dictionary<int, double> InvestorsBalance {
             get {
-                return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
+                return this.investorsBalance; // TODO  ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
             }
         }
 
