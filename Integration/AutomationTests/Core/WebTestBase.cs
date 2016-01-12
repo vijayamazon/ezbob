@@ -88,7 +88,14 @@
                             }
 
                             actionBot = new ActionBot(Driver);
+
+                            for (int i = Driver.WindowHandles.Count; i < 1; i--) {
+                                Driver.SwitchTo().Window(Driver.WindowHandles[1]);
+                                Driver.Close();
+                            }
+
                             Driver.Manage().Cookies.DeleteAllCookies();
+
                             codeToExecute.Invoke(caseID.ToString() + " - " + TestRailRepository.TestRailCaseName(caseID));
 
                             if (!IsDebugMode) {

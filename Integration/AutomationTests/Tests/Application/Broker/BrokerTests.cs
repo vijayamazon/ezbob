@@ -20,6 +20,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1202")]
         public void TestCase1202() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                 BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -63,7 +64,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -84,6 +85,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2036")]
         public void TestCase2036() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                 //Step 1 - Navigate to broker's sign up page.
@@ -99,7 +101,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.ui-helper-clearfix > div.ui-dialog-buttonset > button"));
                 actionBot.WriteToLog("Positively asserted: Terms and conditions dialog is displayed." + Environment.NewLine);
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -108,6 +110,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("2037")]
         public void TestCase2037() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     //Precondition 3 - Navigate to broker's sign up page.
@@ -134,7 +137,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 actionBot.SwitchToWindow(1, "(back to Ezbob/Everline application window)");
                 actionBot.WriteToLog(Environment.NewLine);
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -146,6 +149,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1351")]
         public void TestCase1351() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -164,7 +168,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -173,6 +177,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1967")]
         public void TestCase1967() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -194,7 +199,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.IsTrue(gmailApi.CheckIncomingMessages(BrandConfig.GetString("Check_Incoming_Messages"), leadMail));
                 actionBot.WriteToLog("Positively asserted: e-mail 'broker lead invitation' was found in inbox." + Environment.NewLine);
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -203,6 +208,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("6032")]
         public void TestCase6032() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -231,7 +237,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("Email")).GetAttribute("value"), leadMail);
                 actionBot.WriteToLog("Positively asserted: e-mail addresses matched." + Environment.NewLine);
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -240,6 +246,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1352")]
         public void TestCase1352() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -255,7 +262,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("Email")).GetAttribute("value"), leadMail);
                 actionBot.WriteToLog("Positively asserted: e-mail addresses matched." + Environment.NewLine);
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -264,6 +271,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("3110")]
         public void TestCase3110() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -293,7 +301,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -302,6 +310,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1353")]
         public void TestCase1353() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -338,7 +347,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -347,6 +356,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("7472")]
         public void TestCase7472() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -383,7 +393,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -392,6 +402,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("7473")]
         public void TestCase7473() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -428,7 +439,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -437,6 +448,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("3109")]
         public void TestCase3109() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -470,7 +482,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 //Log off broker to finish session.
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -504,6 +516,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1354")]
         public void TestCase1354() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -546,7 +559,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 brokerShared.BrokerLogOff(logHeader + "BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
 
             });
             Assert.IsTrue(result);
@@ -556,6 +569,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1355")]
         public void TestCase1355() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -607,7 +621,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 brokerShared.BrokerLogOff(logHeader + "BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -617,6 +631,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1357")]
         public void TestCase1357() {
             bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -649,7 +664,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.IsTrue(decimal.Parse(widgetLinkedAccount.FindElement(By.CssSelector("dd.broker-approved")).Text.Substring(1)) == 0.0m);
                 actionBot.WriteToLog("Positively asserted: Approved ammount  field equals zero." + Environment.NewLine);
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -667,6 +682,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     Assert.IsTrue(false);
                 }
 
+                DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -746,7 +762,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
-                actionBot.WriteToLog("End test: " + logHeader + Environment.NewLine);
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });
             Assert.IsTrue(result);
         }
@@ -817,31 +833,39 @@ namespace UIAutomationTests.Tests.Application.Broker {
         #endregion
         #region Application: Broker / Commission / Fee: Default values
 
-        //[Test]
-        //[Category("1441")]
-        //public void TestCase1441() {
-        //    bool result = this.ExecuteTest((logHeader) => {
-        //        //WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-        //        //string clientMail = "test+client_" + DateTime.Now.Ticks + "@ezbob.com";
-        //        //wizardShared.PerformWizardStepOne(true, "ClientSignup", clientMail, "123123", 2, "asd", "1000");
+        [Test]
+        [Category("1441")]
+        public void TestCase1441() {
+            bool result = this.ExecuteTest((logHeader) => {
+                DateTime testStartTime = DateTime.UtcNow;
+                actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-        //        //wizardShared.PerformWizardStepTwo("ClientSignup", "ClientFname", "ClientLname", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "5", "01111111111", "02222222222", true);
+                WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                string customerMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
 
-        //        //wizardShared.PerformWizardStepThree("Entrepreneur", false, "15", "123");
+                //Precondition 1 - Prepare a registered non broker account with no loan: C4543
+                //Complete customer's Wizard step 1: C3
+                wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "ClientSignup", customerMail, "123123", 2, "asd", "1000");
 
-        //        ////Wizard Step 4 - add EKM account - C788 with EKM instread of file uplaod
-        //        //wizardShared.PerformWizardStepFour("ClientSignup", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");//Precondition 1 - C4543
+                //Complete customer's Wizard step 2: C26
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "ClientSignup", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "01111111111", "02222222222", true);
 
-        //        //SharedServiceClass.WaitForBlockUiOff(Driver);
-        //        //IWebElement logOffCustomer = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("li.login > a"));
-        //        //logOffCustomer.Click();
+                //Complete customer's Wizard step 3: C91
+                wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
-        //        UnderWriterShared newUW = new UnderWriterShared(Driver, EnvironmentConfig, BrandConfig);
-        //        newUW.LogIn("admin", "123456");
-        //        newUW.FindCustomer("test+client_635862269583123148@ezbob.com");
-        //    });
-        //    Assert.IsTrue(result);
-        //}
+                //Complete customer's Wizard step 4: C788 - TODO: replaced by EKM account, file upload problem needs to be resolved.
+                //Wizard Step 4 - add EKM account
+                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "ClientSignup", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");
+
+
+                //UnderWriterShared newUW = new UnderWriterShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //newUW.LogIn("admin", "123456");
+                //newUW.FindCustomer("test+client_635862269583123148@ezbob.com");
+
+                actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
+            });
+            Assert.IsTrue(result);
+        }
 
         [Test]
         [Category("1369")]
