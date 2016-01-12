@@ -32,13 +32,14 @@
 
             return  new InvestorLoanCashRequest() {
                 CashRequestID = cashRequestID,
-                ManagerApprovedSum = cashRequestData.ManagerApprovedSum * investorPrecentage,
-                Grade = (Grade)grade
+                ManagerApprovedSum = cashRequestData.ManagerApprovedSum * (double)investorPrecentage,
+                Grade = (Grade)grade,
+                FundingType = investorPrecentage
             };
             
         }
 
-        private float GetPrecentage(I_FundingTypeEnum fundingType) {
+        private decimal GetPrecentage(I_FundingTypeEnum fundingType) {
             switch (fundingType) {
                 case I_FundingTypeEnum.FullInvestment:
                     return 1;

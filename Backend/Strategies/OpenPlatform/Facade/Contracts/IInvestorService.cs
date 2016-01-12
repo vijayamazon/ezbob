@@ -3,6 +3,6 @@
     using System.Collections.Generic;
 
     public interface IInvestorService {
-        List<int> GetMatchedInvestors(long cashRequestID);
+        KeyValuePair<int, decimal> GetMatchedInvestor(long cashRequestID);
     }
 }

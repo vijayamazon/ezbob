@@ -32,7 +32,7 @@
             var container = InitContainer(typeof(InvestorService));
             var investorService = container.GetInstance<IInvestorService>();
 		    //var filtered = investorsList.Where(x => x.IsActive);
-            var investorParametersList = investorService.GetMatchedInvestors(this.cashRequestID);
+            KeyValuePair<int,decimal> investorParametersList = investorService.GetMatchedInvestor(this.cashRequestID);
                 
                                         //x.InvestorSystemBalance.Max(m => m.InvestorSystemBalanceID) <= cashRequest.ManagerApprovedSum &&
                                         //systemParameters.DailyInvestmentAllowed - (cashRequest.ManagerApprovedSum + x.InvestorSystemBalance.Where(w => w.Timestamp.Date == DateTime.Today).Sum(y => Convert.ToDouble(y.TransactionAmount))) <= cashRequest.ManagerApprovedSum &&
