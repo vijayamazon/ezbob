@@ -1423,7 +1423,7 @@
   <xs:element name="SignupCustomerMultiOrigin">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q142="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="model" nillable="true" type="q142:SignupCustomerMultiOriginModel" />
+        <xs:element xmlns:q142="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="model" nillable="true" type="q142:SignupCustomerMultiOriginModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
