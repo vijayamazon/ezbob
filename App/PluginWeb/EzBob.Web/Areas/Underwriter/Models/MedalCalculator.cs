@@ -119,16 +119,9 @@
 			}
 
 			this.DetailedHistory = details;
-
-			var logicalGlue = serviceClient.Instance.GetLatestKnownInference(context.UserId, customer.Id, DateTime.UtcNow, false);
-			this.LogicalGlue = logicalGlue;
-
-			//TODO retrieve
-			this.LogicalGlueHistory = new List<LogicalGlueResult> {
-				this.LogicalGlue,
-				this.LogicalGlue,
-				this.LogicalGlue
-			};
+			
+			this.LogicalGlue = serviceClient.Instance.LogicalGlueGetLastInference(context.UserId, customer.Id, DateTime.UtcNow, false);
+			this.LogicalGlueHistory = serviceClient.Instance.LogicalGlueGetHistory(context.UserId, customer.Id);
 		}
 
 		public LogicalGlueResult LogicalGlue { get; set; }

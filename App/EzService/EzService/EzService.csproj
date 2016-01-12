@@ -132,6 +132,7 @@
     <Compile Include="ActionResults\ExperianTargetingActionResult.cs" />
     <Compile Include="ActionStatus.cs" />
     <Compile Include="ExecuteArguments.cs" />
+    <Compile Include="EzServiceImplementation\esi_logicalglue.cs" />
     <Compile Include="EzServiceImplementation\esi_investor.cs" />
     <Compile Include="EzServiceImplementation\esi_agreement.cs" />
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceLogicalGlue.cs" />
     <Compile Include="IEzServiceInvestor.cs" />
     <Compile Include="IEzServiceMainStrategy.cs" />
     <Compile Include="IEzServiceNewLoan.cs" />

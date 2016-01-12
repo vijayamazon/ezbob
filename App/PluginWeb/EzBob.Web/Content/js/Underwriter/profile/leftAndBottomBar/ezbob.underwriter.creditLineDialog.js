@@ -7,6 +7,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	initialize: function(options) {
 		this.cloneModel = this.model.clone();
+		this.medalModel = options.medalModel;
+
 		this.cloneModel.set('BrokerSetupFeePercent', options.brokerCommissionDefaultResult.brokerCommission);
 		this.cloneModel.set('ManualSetupFeePercent', options.brokerCommissionDefaultResult.setupFeePercent);
 		this.modelBinder = new Backbone.ModelBinder();
@@ -22,7 +24,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	events: {
 		'click .btnOk': 'save',
-		'click .btnLogicalGlue': 'checkLogicalGlue',
+		'click .btnLogicalGlue': 'logicalGlueTryout',
 		'change #offeredCreditLine': 'onChangeOfferedAmout',
 	}, // events
 
@@ -136,9 +138,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 	}, // save
 
-	checkLogicalGlue: function () {
+	logicalGlueTryout: function () {
 		BlockUi();
-		var action = '' + window.gRootPath + 'Underwriter/ApplicationInfo/CheckLogicalGlue';
+		var action = '' + window.gRootPath + 'Underwriter/ApplicationInfo/LogicalGlueTryout';
 		var m = this.cloneModel.toJSON();
 		
 		var postData = {
@@ -157,6 +159,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 				model: logicalGlueModel
 			});
 			dialog.render();
+			if (self.medalModel) {
+				self.medalModel.fetch();
+			}
 		});
 
 		xhr.always(function() {
@@ -444,7 +449,8 @@ EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 		});
 	},
 
-	jqoptions: function() {
+	jqoptions: function () {
+		var that = this;
 		return {
 			modal: true,
 			resizable: false,

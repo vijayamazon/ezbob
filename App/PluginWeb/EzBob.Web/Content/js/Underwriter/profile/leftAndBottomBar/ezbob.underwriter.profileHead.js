@@ -92,7 +92,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			el: this.ui.editOfferDiv,
 			model: this.loanModel,
 			personalInfo: this.personalModel,
-			parentView: this.parentView
+			parentView: this.parentView,
+			medalModel: this.medalModel
 		});
 		
 		this.loanInfoView.render();

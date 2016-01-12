@@ -469,20 +469,10 @@
 		} // ChangeCreditLine
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonResult CheckLogicalGlue(int customerID, long cashRequestID, decimal amount, int repaymentPeriod) {
+		public JsonResult LogicalGlueTryout(int customerID, long cashRequestID, decimal amount, int repaymentPeriod) {
 			log.Info("CheckLogicalGlue {0} {1} {2} {3}", customerID, cashRequestID, amount, repaymentPeriod);
-			//TODO run lg check service
-			return Json(new LogicalGlueResult{
-				BucketStr = "B",
-				Error = "This is fake data",
-				Date = DateTime.UtcNow,
-				Bucket = Bucket.B,
-				BucketPercent = 0.42M,
-				FLScore = 0.160M,
-				NNScore = 0.160M,
-				MonthlyRepayment = amount / repaymentPeriod,
-				UniqueID = new Guid()
-			}, JsonRequestBehavior.AllowGet);
+			var result = this.serviceClient.Instance.LogicalGlueGetTryout(this.context.UserId, customerID, amount / repaymentPeriod, true);
+			return Json(result, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]

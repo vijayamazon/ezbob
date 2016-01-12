@@ -2076,6 +2076,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Nullable<decimal> FLScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsTryoutField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal MonthlyRepaymentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -2158,6 +2161,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.FLScoreField.Equals(value) != true)) {
                     this.FLScoreField = value;
                     this.RaisePropertyChanged("FLScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsTryout {
+            get {
+                return this.IsTryoutField;
+            }
+            set {
+                if ((this.IsTryoutField.Equals(value) != true)) {
+                    this.IsTryoutField = value;
+                    this.RaisePropertyChanged("IsTryout");
                 }
             }
         }
@@ -4641,11 +4657,23 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.TransactionsDataResult> LoadTransactionsDataAsync(int underwriterID, int investorID, int bankAccountTypeID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInference", ReplyAction="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInferenceResponse")]
-        ServiceClientProxy.EzServiceReference.LogicalGlueResult GetLatestKnownInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInferenceResponse")]
+        ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetLastInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInference", ReplyAction="http://tempuri.org/IEzServiceInvestor/GetLatestKnownInferenceResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> GetLatestKnownInferenceAsync(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInferenceResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetLastInferenceAsync(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistory", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistoryResponse")]
+        ServiceClientProxy.EzServiceReference.LogicalGlueResult[] LogicalGlueGetHistory(int underwriterID, int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistory", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistoryResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult[]> LogicalGlueGetHistoryAsync(int underwriterID, int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse")]
+        ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetTryout(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
@@ -6301,12 +6329,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadTransactionsDataAsync(underwriterID, investorID, bankAccountTypeID);
         }
         
-        public ServiceClientProxy.EzServiceReference.LogicalGlueResult GetLatestKnownInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
-            return base.Channel.GetLatestKnownInference(underwriterID, customerID, date, includeTryouts);
+        public ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetLastInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
+            return base.Channel.LogicalGlueGetLastInference(underwriterID, customerID, date, includeTryouts);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> GetLatestKnownInferenceAsync(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
-            return base.Channel.GetLatestKnownInferenceAsync(underwriterID, customerID, date, includeTryouts);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetLastInferenceAsync(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
+            return base.Channel.LogicalGlueGetLastInferenceAsync(underwriterID, customerID, date, includeTryouts);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.LogicalGlueResult[] LogicalGlueGetHistory(int underwriterID, int customerID) {
+            return base.Channel.LogicalGlueGetHistory(underwriterID, customerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult[]> LogicalGlueGetHistoryAsync(int underwriterID, int customerID) {
+            return base.Channel.LogicalGlueGetHistoryAsync(underwriterID, customerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetTryout(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout) {
+            return base.Channel.LogicalGlueGetTryout(underwriterID, customerID, monthlyRepayment, isTryout);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout) {
+            return base.Channel.LogicalGlueGetTryoutAsync(underwriterID, customerID, monthlyRepayment, isTryout);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {

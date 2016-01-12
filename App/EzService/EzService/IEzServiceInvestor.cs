@@ -24,8 +24,5 @@
 
 		[OperationContract]
 		TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
-
-		[OperationContract]
-		LogicalGlueResult GetLatestKnownInference(int underwriterID, int customerID, DateTime? date, bool includeTryouts);
 	} // interface IEzServiceInvestor
 } // namespace  

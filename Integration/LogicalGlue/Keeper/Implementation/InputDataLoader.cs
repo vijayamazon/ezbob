@@ -31,7 +31,6 @@
 			new LoadInputData(DB, Log) { CustomerID = CustomerID, Now = Now, }.ForEachRowSafe(ProcessInputDataRow);
 
 			Result.MonthlyPayment = (Result.MonthlyPayment ?? 0) + this.openLoanPayments;
-
 			Log.Debug("Executing input data loader({0}, '{1}') complete.", CustomerID, NowStr);
 
 			return this;

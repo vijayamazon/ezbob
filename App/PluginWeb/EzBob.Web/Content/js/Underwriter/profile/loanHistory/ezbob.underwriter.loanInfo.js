@@ -7,7 +7,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		initialize: function(options) {
 			this.bindTo(this.model, "change reset sync", this.render, this);
-
+			this.medalModel = options.medalModel;
 			this.personalInfo = options.personalInfo;
 			this.bindTo(this.personalInfo, "change", this.UpdateNewCreditLineState, this);
 			this.bindTo(this.personalInfo, "change:CreditResult", this.changeCreditResult, this);
@@ -302,7 +302,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 					var dialog = new EzBob.Underwriter.CreditLineDialog({
 						model: self.model,
-						brokerCommissionDefaultResult: result
+						brokerCommissionDefaultResult: result,
+						medalModel: self.medalModel
 					});
 
 					EzBob.App.jqmodal.show(dialog);

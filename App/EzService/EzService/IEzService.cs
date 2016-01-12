@@ -21,7 +21,8 @@
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
 		IEzServiceNewLoan,
-		IEzServiceInvestor
+		IEzServiceInvestor,
+		IEzServiceLogicalGlue
 	{
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);

@@ -115,7 +115,7 @@
 			var result = new Inference {
 				UniqueID = sr["UniqueID"],
 				MonthlyRepayment = sr["MonthlyRepayment"],
-
+				IsTryOut = sr["IsTryOut"],
 				ResponseID = dbResponse.ID,
 				ReceivedTime = dbResponse.ReceivedTime,
 				Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID,

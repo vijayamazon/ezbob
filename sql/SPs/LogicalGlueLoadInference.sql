@@ -81,7 +81,9 @@ BEGIN
 		r.ParsingExceptionType,
 		r.ParsingExceptionMessage,
 		q.UniqueID,
-		q.MonthlyRepayment
+		q.MonthlyRepayment,
+		q.IsTryOut
+		
 	FROM
 		LogicalGlueResponses r
 		INNER JOIN LogicalGlueRequests q ON r.ServiceLogID = q.ServiceLogID

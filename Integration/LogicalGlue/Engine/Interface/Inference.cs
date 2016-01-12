@@ -22,6 +22,9 @@
 		[DataMember]
 		public decimal MonthlyRepayment { get; set; }
 
+		[DataMember]
+		public bool IsTryOut { get; set; }
+
 		public decimal? Score {
 			get {
 				return ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
@@ -57,11 +60,12 @@
 		/// </returns>
 		public override string ToString() {
 			return string.Format(
-				"Response #{0} received at {1}: bucket '{2}' with {3}.",
+				"Response #{0} received at {1}: bucket '{2}' with {3} isTryout {4}. ",
 				ResponseID,
 				ReceivedTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
 				Bucket,
-				Grammar.Number(ModelOutputs.Count, "model")
+				Grammar.Number(ModelOutputs.Count, "model"),
+				IsTryOut
 			);
 		} // ToString
 

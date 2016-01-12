@@ -79,5 +79,14 @@
 			stra.Execute();
 			m_oLog.Debug("Inference is: {0}", stra.Inference);
 		} // TestGetLatestKnownLogicalGlue
+
+		[Test]
+		public void TestGetLogicalGlueHistory() {
+			var stra = new GetHistoryInferences(3406);
+			stra.Execute();
+			foreach (var inference in stra.Inferences) {
+				m_oLog.Debug(inference);
+			}
+		} // TestGetLatestKnownLogicalGlue
 	} // class AlexTestStrategies
 } // namespace
