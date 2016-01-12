@@ -1,14 +1,14 @@
 namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Runtime.Serialization;
-	using Ezbob.Backend.Models;
+	//using Ezbob.Backend.Models; creates circular dependency between backend.models and backend.modelsdb
 
 	[DataContract]
 	public class NLAgreementItem : AStringable {
 		[DataMember]
 		public NL_LoanAgreements Agreement { get; set; }
 
-		[DataMember]
-		public TemplateModel TemplateModel { get; set; }
+		//[DataMember]
+		//public TemplateModel TemplateModel { get; set; }
 
 		[DataMember]
 		public string Path1 { get; set; }

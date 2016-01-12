@@ -44,7 +44,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -257,10 +256,6 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
-      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
-      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
