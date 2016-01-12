@@ -9,6 +9,7 @@
 	using System.Web.Security;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.SalesForce;

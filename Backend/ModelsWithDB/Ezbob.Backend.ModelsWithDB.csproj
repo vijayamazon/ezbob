@@ -187,7 +187,6 @@
     <Compile Include="MultiBrandLoanModel.cs" />
     <Compile Include="MultiBrandLoanSummary.cs" />
     <Compile Include="AStringable.cs" />
-    <Compile Include="NewLoan\NLAgreementItem.cs" />
     <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
     <Compile Include="NewLoan\NL_DiscountPlans.cs" />
     <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />
@@ -226,6 +225,7 @@
     <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EzbobSmsMessage.cs" />
+    <Compile Include="SignupCustomerMultiOriginModel.cs" />
     <Compile Include="WriteToLogPackage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +257,10 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

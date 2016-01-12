@@ -286,14 +286,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
-  <xs:complexType name="TemplateModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />
@@ -540,6 +532,14 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />
+  <xs:complexType name="TemplateModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
   <xs:simpleType name="ConfigTableType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="LoanOfferMultiplier" />

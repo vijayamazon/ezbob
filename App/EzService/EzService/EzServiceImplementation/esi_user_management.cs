@@ -5,6 +5,7 @@
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {

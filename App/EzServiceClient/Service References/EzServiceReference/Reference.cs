@@ -11,9 +11,9 @@
 namespace ServiceClientProxy.EzServiceReference {
     using System.Runtime.Serialization;
     using System;
-    
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    using Ezbob.Backend.ModelsWithDB;
+
+	[System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionMetaData", Namespace="http://schemas.datacontract.org/2004/07/EzService", IsReference=true)]
     [System.SerializableAttribute()]
@@ -4660,10 +4660,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOriginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMultiOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/SignupCustomerMultiOriginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMultiOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMultiOriginAsync(SignupCustomerMultiOriginModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOrigin", ReplyAction="http://tempuri.org/IEzServiceUserManagement/LoginCustomerMutliOriginResponse")]
         ServiceClientProxy.EzServiceReference.UserLoginActionResult LoginCustomerMutliOrigin(Ezbob.Backend.Models.LoginCustomerMultiOriginModel model);
@@ -6347,11 +6347,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ValidateAndUpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMultiOrigin(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model) {
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model) {
             return base.Channel.SignupCustomerMultiOrigin(model);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMultiOriginAsync(Ezbob.Backend.Models.SignupCustomerMultiOriginModel model) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> SignupCustomerMultiOriginAsync(SignupCustomerMultiOriginModel model) {
             return base.Channel.SignupCustomerMultiOriginAsync(model);
         }
         

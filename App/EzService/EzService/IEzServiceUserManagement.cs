@@ -2,6 +2,7 @@
 	using System;
 	using System.ServiceModel;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EZBob.DatabaseLib.Model.Database;
 

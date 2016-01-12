@@ -102,7 +102,6 @@
     <Compile Include="RtiTaxMonthRawData.cs" />
     <Compile Include="IovationCheckModel.cs" />
     <Compile Include="LoginCustomerMultiOriginModel.cs" />
-    <Compile Include="SignupCustomerMultiOriginModel.cs" />
     <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />

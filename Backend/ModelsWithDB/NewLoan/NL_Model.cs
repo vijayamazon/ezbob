@@ -1,9 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Utils.Attributes;
 
 	[DataContract]
 	public class NL_Model : AStringable {
@@ -23,9 +21,9 @@
 		[DataMember]
 		public NL_Loans Loan { get; set; }
 
-		[DataMember]
-		[ExcludeFromToString]
-		public List<NLAgreementItem> Agreements { get; set; }
+		//[DataMember]
+		//[ExcludeFromToString]
+		//public List<NLAgreementItem> Agreements { get; set; }
 
 		[DataMember]
 		public decimal? BrokerComissions { get; set; }

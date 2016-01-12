@@ -1,7 +1,7 @@
-﻿namespace Ezbob.Backend.Models {
+﻿namespace Ezbob.Backend.ModelsWithDB {
 	using System;
 	using System.Runtime.Serialization;
-	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 
 	[DataContract]
