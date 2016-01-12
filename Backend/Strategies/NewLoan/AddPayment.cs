@@ -1,5 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	public class AddPayment : AStrategy {
 

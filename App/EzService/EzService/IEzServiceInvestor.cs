@@ -1,8 +1,7 @@
 ﻿namespace EzService {
-	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
-	using Ezbob.Backend.Models.Investor;
+	using Ezbob.Backend.ModelsWithDB.Investor;
 	using EzService.ActionResults.Investor;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]

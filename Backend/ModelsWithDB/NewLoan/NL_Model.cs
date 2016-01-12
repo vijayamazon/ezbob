@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Models.NewLoan {
+﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;

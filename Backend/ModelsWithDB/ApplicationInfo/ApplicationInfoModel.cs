@@ -1,5 +1,4 @@
-﻿namespace Ezbob.Backend.Models.ApplicationInfo {
-	using System;
+﻿namespace Ezbob.Backend.ModelsWithDB.ApplicationInfo {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;

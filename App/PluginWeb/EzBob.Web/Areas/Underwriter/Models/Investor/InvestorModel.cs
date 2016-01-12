@@ -18,7 +18,7 @@
 	}
 
 	public class InvestorModelBuilder {
-		public InvestorModel Build(Ezbob.Backend.Models.Investor.InvestorModel investor) {
+		public InvestorModel Build(Ezbob.Backend.ModelsWithDB.Investor.InvestorModel investor) {
 			var model = new InvestorModel {
 				InvestorID = investor.InvestorID,
 				IsActive = investor.IsActive,

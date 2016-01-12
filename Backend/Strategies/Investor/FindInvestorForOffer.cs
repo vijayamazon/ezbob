@@ -1,12 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using Ezbob.Backend.Models.Investor;
-    using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;
-    using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using StructureMap;
 
     public class FindInvestorForOffer : AStrategy {

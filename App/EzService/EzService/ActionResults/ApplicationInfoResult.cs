@@ -1,6 +1,6 @@
 ﻿namespace EzService.ActionResults {
 	using System.Runtime.Serialization;
-	using Ezbob.Backend.Models.ApplicationInfo;
+	using Ezbob.Backend.ModelsWithDB.ApplicationInfo;
 
 	[DataContract]
 	public class ApplicationInfoResult : ActionResult {

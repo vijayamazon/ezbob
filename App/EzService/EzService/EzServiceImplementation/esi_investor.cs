@@ -1,6 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Collections.Generic;
-	using Ezbob.Backend.Models.Investor;
+	using Ezbob.Backend.ModelsWithDB.Investor;
 	using Ezbob.Backend.Strategies.Investor;
 	using EzService.ActionResults.Investor;
 

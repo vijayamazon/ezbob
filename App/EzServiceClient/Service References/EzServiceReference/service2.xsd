@@ -10,7 +10,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Investor" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
@@ -1231,7 +1231,7 @@
   <xs:element name="AddLoan">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q104="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q104:NL_Model" />
+        <xs:element xmlns:q104="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q104:NL_Model" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1245,14 +1245,14 @@
   <xs:element name="AddPayment">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q106="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q106:NL_Model" />
+        <xs:element xmlns:q106="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q106:NL_Model" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddPaymentResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q107="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="AddPaymentResult" nillable="true" type="q107:NL_Model" />
+        <xs:element xmlns:q107="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="AddPaymentResult" nillable="true" type="q107:NL_Model" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1276,9 +1276,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="underwriterID" type="xs:int" />
-        <xs:element xmlns:q110="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="investor" nillable="true" type="q110:InvestorModel" />
-        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="investorContacts" nillable="true" type="q111:ArrayOfInvestorContactModel" />
-        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="investorBanks" nillable="true" type="q112:ArrayOfInvestorBankAccountModel" />
+        <xs:element xmlns:q110="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Investor" minOccurs="0" name="investor" nillable="true" type="q110:InvestorModel" />
+        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Investor" minOccurs="0" name="investorContacts" nillable="true" type="q111:ArrayOfInvestorContactModel" />
+        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Investor" minOccurs="0" name="investorBanks" nillable="true" type="q112:ArrayOfInvestorBankAccountModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1308,7 +1308,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="underwriterID" type="xs:int" />
-        <xs:element xmlns:q115="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="investorContact" nillable="true" type="q115:InvestorContactModel" />
+        <xs:element xmlns:q115="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Investor" minOccurs="0" name="investorContact" nillable="true" type="q115:InvestorContactModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1323,7 +1323,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="underwriterID" type="xs:int" />
-        <xs:element xmlns:q117="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="investorBank" nillable="true" type="q117:InvestorBankAccountModel" />
+        <xs:element xmlns:q117="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Investor" minOccurs="0" name="investorBank" nillable="true" type="q117:InvestorBankAccountModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

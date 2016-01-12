@@ -1,4 +1,4 @@
-namespace Ezbob.Backend.Models.ApplicationInfo {
+namespace Ezbob.Backend.ModelsWithDB.ApplicationInfo {
 	using System.Runtime.Serialization;
 
 	[DataContract]

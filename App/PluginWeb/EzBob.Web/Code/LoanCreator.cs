@@ -13,7 +13,6 @@
 	using Areas.Customer.Controllers.Exceptions;
 	using Agreements;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
@@ -27,7 +26,7 @@
 
 	public interface ILoanCreator {
 		//Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
-		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
+		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model nlModel);
 	} // interface ILoanCreator
 
 	public class LoanCreator : ILoanCreator {
@@ -47,7 +46,7 @@
 			this.tranMethodRepo = ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository;
 		} // constructor
 
-		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
+		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model nlModel = null) {
 
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
 			ValidateAmount(loanAmount, cus); // continue (loanAmount > customer.CreditSum)

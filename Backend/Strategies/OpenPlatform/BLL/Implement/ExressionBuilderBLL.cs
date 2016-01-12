@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using Ezbob.Backend.Models.Investor;
+    using Ezbob.Backend.ModelsWithDB.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using StructureMap.Attributes;

@@ -1920,10 +1920,10 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class ApplicationInfoResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel ModelField;
+        private Ezbob.Backend.ModelsWithDB.ApplicationInfo.ApplicationInfoModel ModelField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.ApplicationInfo.ApplicationInfoModel Model {
+        public Ezbob.Backend.ModelsWithDB.ApplicationInfo.ApplicationInfoModel Model {
             get {
                 return this.ModelField;
             }
@@ -1989,10 +1989,10 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class InvestorActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.Investor.InvestorModel InvestorField;
+        private Ezbob.Backend.ModelsWithDB.Investor.InvestorModel InvestorField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.Investor.InvestorModel Investor {
+        public Ezbob.Backend.ModelsWithDB.Investor.InvestorModel Investor {
             get {
                 return this.InvestorField;
             }
@@ -2012,10 +2012,10 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class AccountingDataResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.Investor.AccountingDataModel[] AccountingDataField;
+        private Ezbob.Backend.ModelsWithDB.Investor.AccountingDataModel[] AccountingDataField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.Investor.AccountingDataModel[] AccountingData {
+        public Ezbob.Backend.ModelsWithDB.Investor.AccountingDataModel[] AccountingData {
             get {
                 return this.AccountingDataField;
             }
@@ -2035,10 +2035,10 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class TransactionsDataResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.Investor.TransactionsDataModel[] TransactionsDataField;
+        private Ezbob.Backend.ModelsWithDB.Investor.TransactionsDataModel[] TransactionsDataField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.Investor.TransactionsDataModel[] TransactionsData {
+        public Ezbob.Backend.ModelsWithDB.Investor.TransactionsDataModel[] TransactionsData {
             get {
                 return this.TransactionsDataField;
             }
@@ -4604,16 +4604,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanOptionsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse")]
-        Ezbob.Backend.Models.NewLoan.NL_Model AddPayment(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model AddPayment(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse")]
-        System.Threading.Tasks.Task<Ezbob.Backend.Models.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        System.Threading.Tasks.Task<Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
         ServiceClientProxy.EzServiceReference.ReschedulingActionResult RescheduleLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
@@ -4622,10 +4622,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorModel investor, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel[] investorBanks);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorModel investor, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel[] investorBanks);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorResponse")]
         ServiceClientProxy.EzServiceReference.InvestorActionResult LoadInvestor(int underwriterID, int investorID);
@@ -4634,16 +4634,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.InvestorActionResult> LoadInvestorAsync(int underwriterID, int investorID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorContact", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorContactResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorContact(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact);
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorContact(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel investorContact);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorContact", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorContactResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorContactAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorContactAsync(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel investorContact);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorBankAccount(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank);
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorBankAccount(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel investorBank);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorBankAccountAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorBankAccountAsync(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel investorBank);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse")]
         ServiceClientProxy.EzServiceReference.AccountingDataResult LoadAccountingData(int underwriterID);
@@ -6257,19 +6257,19 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddLoanOptionsAsync(userID, customerID, loanOptions);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {
             return base.Channel.AddLoan(loanModel);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {
             return base.Channel.AddLoanAsync(loanModel);
         }
         
-        public Ezbob.Backend.Models.NewLoan.NL_Model AddPayment(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+        public Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model AddPayment(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {
             return base.Channel.AddPayment(loanModel);
         }
         
-        public System.Threading.Tasks.Task<Ezbob.Backend.Models.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+        public System.Threading.Tasks.Task<Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {
             return base.Channel.AddPaymentAsync(loanModel);
         }
         
@@ -6281,11 +6281,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
+        public ServiceClientProxy.EzServiceReference.IntActionResult CreateInvestor(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorModel investor, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel[] investorBanks) {
             return base.Channel.CreateInvestor(underwriterID, investor, investorContacts, investorBanks);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investor, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> CreateInvestorAsync(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorModel investor, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel[] investorContacts, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel[] investorBanks) {
             return base.Channel.CreateInvestorAsync(underwriterID, investor, investorContacts, investorBanks);
         }
         
@@ -6297,19 +6297,19 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadInvestorAsync(underwriterID, investorID);
         }
         
-        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorContact(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact) {
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorContact(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel investorContact) {
             return base.Channel.ManageInvestorContact(underwriterID, investorContact);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorContactAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorContactModel investorContact) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorContactAsync(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel investorContact) {
             return base.Channel.ManageInvestorContactAsync(underwriterID, investorContact);
         }
         
-        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorBankAccount(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank) {
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorBankAccount(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel investorBank) {
             return base.Channel.ManageInvestorBankAccount(underwriterID, investorBank);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorBankAccountAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel investorBank) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorBankAccountAsync(int underwriterID, Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel investorBank) {
             return base.Channel.ManageInvestorBankAccountAsync(underwriterID, investorBank);
         }
         

@@ -6,6 +6,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database.Loans;

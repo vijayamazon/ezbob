@@ -10,8 +10,8 @@
 	using Ezbob.Backend.Models;
 	using Newtonsoft.Json;
 	using System.IO;
-	using Ezbob.Backend.Models.NewLoan;
-	using ServiceClientProxy;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using ServiceClientProxy;
 
 	public interface IAgreementsGenerator
 	{

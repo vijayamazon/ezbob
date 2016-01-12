@@ -12,7 +12,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Models;
 	using PaymentServices.Calculators;
 	using StructureMap;

@@ -1,10 +1,8 @@
 ﻿namespace ServiceClientProxy {
-	using System;
 	using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
-    using Ezbob.Backend.Models.NewLoan;
     using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
@@ -89,6 +87,7 @@
             return null;
         }
 
+			/*
 		/// <summary>
 		/// 
 		/// </summary>
@@ -100,7 +99,9 @@
 			Console.WriteLine("result====>" + result.Payment.PaymentID);
 			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);
 			return result;
+			return null;
 		}
+			*/
 	
 
 		private readonly ServiceClient m_oServiceClient;

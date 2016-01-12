@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Models.Investor {
+﻿namespace Ezbob.Backend.ModelsWithDB.Investor {
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 
     public class InvestorLoanCashRequest

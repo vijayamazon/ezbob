@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract
 {
-    using Ezbob.Backend.Models.Investor;
+    using Ezbob.Backend.ModelsWithDB.Investor;
 
-    public interface IInvestorCashRequestDAL {
+	public interface IInvestorCashRequestDAL {
        InvestorLoanCashRequest GetInvestorLoanCashRequest(long cashRequestID);
     }
 }

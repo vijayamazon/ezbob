@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ezbob.Backend.ModelsWithDB">
-      <HintPath>..\..\App\PluginWeb\EzBob.Web\Bin\Ezbob.Backend.ModelsWithDB.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -57,6 +54,12 @@
     <Compile Include="Alibaba\AlibabaContractItem.cs" />
     <Compile Include="Alibaba\AlibabaSeller.cs" />
     <Compile Include="Alibaba\AlibabaSellerBank.cs" />
+    <Compile Include="ApplicationInfo\ApplicationInfoModel.cs" />
+    <Compile Include="ApplicationInfo\AutomationOfferModel.cs" />
+    <Compile Include="ApplicationInfo\DiscountPlanModel.cs" />
+    <Compile Include="ApplicationInfo\LoanSourceModel.cs" />
+    <Compile Include="ApplicationInfo\LoanTypeModel.cs" />
+    <Compile Include="ApplicationInfo\SuggestedAmountModel.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
@@ -181,7 +184,15 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
-    <Compile Include="OpenPlatform\I_InvestorBalance.cs" />
+    <Compile Include="Investor\AccountingDataModel.cs" />
+    <Compile Include="Investor\InvestorBankAccountModel.cs" />
+    <Compile Include="Investor\InvestorCashRequest.cs" />
+    <Compile Include="Investor\InvestorContactModel.cs" />
+    <Compile Include="Investor\InvestorModel.cs" />
+    <Compile Include="Investor\TransactionsDataModel.cs" />
+    <Compile Include="NewLoan\NL_Model.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OpenPlatform\I_OpenPlatformOffer.cs" />
     <Compile Include="OpenPlatform\I_GradeOriginMap.cs" />
     <Compile Include="OpenPlatform\I_CashRequestData.cs" />
@@ -253,6 +264,10 @@
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>

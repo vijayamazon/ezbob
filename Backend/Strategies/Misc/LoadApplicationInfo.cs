@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Backend.Models.ApplicationInfo;
+	using Ezbob.Backend.ModelsWithDB.ApplicationInfo;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
