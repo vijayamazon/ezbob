@@ -20,7 +20,7 @@
         [SetterProperty]
         public IProvider<IMatchBLL<InvestorLoanCashRequest, InvestorParameters>> MatchProvider { get; set; }
 
-        public KeyValuePair<int, decimal> GetMatchedInvestor(long cashRequestID) {
+        public KeyValuePair<int, decimal>? GetMatchedInvestor(long cashRequestID) {
             InvestorLoanCashRequest investorLoancCashRequest = IInvestorCashRequestBLL.GetInvestorLoanCashRequest(cashRequestID);
             List<int> investorsList = InvestorParametersBLL.GetInvestorsIds();
 
@@ -28,8 +28,11 @@
             investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.UnderWriter);
             investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.Investor);
 
-            int investorId = investorsList.FirstOrDefault();
 
+            if (investorsList.Count == 0)
+                return null;
+
+            int investorId = investorsList.FirstOrDefault();
             return new KeyValuePair<int, decimal>(investorId, investorLoancCashRequest.FundingType);
         }
 

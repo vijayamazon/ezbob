@@ -92,14 +92,14 @@
 
             var investorService = container.GetInstance<IInvestorService>();
 
-            var ids = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(ids.Count == 1);
+            var investor = investorService.GetMatchedInvestor(1);
+            Assert.IsTrue(investor != null);
 
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1))
             .Returns(false);
 
-            ids = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(ids.Count == 0);
+            investor = investorService.GetMatchedInvestor(1);
+            Assert.IsTrue(investor == nul);
 
         }
 
@@ -130,14 +130,14 @@
 
             var investorService = container.GetInstance<IInvestorService>();
 
-            var ids = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(ids.Count == 1);
+            var investor = investorService.GetMatchedInvestor(1);
+            Assert.IsTrue(investor != null);
 
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1))
             .Returns(false);
 
-            ids = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(ids.Count == 0);
+            investor = investorService.GetMatchedInvestor(1);
+            Assert.IsTrue(investor == null);
 
         }
 
