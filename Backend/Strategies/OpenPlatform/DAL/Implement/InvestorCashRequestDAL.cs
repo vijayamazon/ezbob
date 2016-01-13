@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Implement
 {
     using System;
-    using Ezbob.Backend.ModelsWithDB.Investor;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.LogicalGlue;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;

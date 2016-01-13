@@ -1,6 +1,4 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.Investor {
-    using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-
+﻿namespace Ezbob.Backend.Models.Investor {
     public class InvestorLoanCashRequest
     {
         public long CashRequestID { get; set; }
