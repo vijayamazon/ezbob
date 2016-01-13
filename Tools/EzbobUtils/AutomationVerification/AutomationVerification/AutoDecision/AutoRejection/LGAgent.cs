@@ -38,10 +38,11 @@
 		public LGAgent(
 			AConnection oDB,
 			ASafeLog oLog,
+			string tag,
 			int nCustomerID,
 			DateTime now,
 			long? cashRequestID,
-			RejectionConfigs configs = null
+			RejectionConfigs configs
 		) {
 			this.customerID = nCustomerID;
 			this.now = now;
@@ -49,13 +50,11 @@
 			this.log = oLog;
 			this.db = oDB;
 
-			this.configs = configs; // Can be null (thus should be loaded from DB somehow).
-
 			Trail = new RejectionTrail(nCustomerID, cashRequestID, oLog);
-			Trail.SetTag("AutomationVerificationAutoRejectLGAgent");
+			Trail.SetTag(tag);
 
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent = new RejectionAgent(this.db, this.log, this.customerID, Trail.CashRequestID, this.configs);
+			this.internalAgent = new RejectionAgent(this.db, this.log, this.customerID, Trail.CashRequestID, configs);
 
 			model = null;
 		} // constructor
@@ -64,7 +63,6 @@
 		private readonly AConnection db;
 		private readonly ASafeLog log;
 		private readonly int customerID;
-		private readonly RejectionConfigs configs;
 		private readonly DateTime now;
 		// old auto-reject with medal (run in parallel)
 		private readonly RejectionAgent internalAgent;
@@ -79,13 +77,12 @@
 		/// Makes decision: to reject or not to reject.
 		/// </summary>
 		public void MakeDecision() {
-
 			// old auto-reject with medal (run in parallel)
 			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(this.now));
+			this.internalAgent.Trail.SetTag(Trail.Tag);
 			this.internalAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-
 				this.log.Debug("Secondary LG: checking auto reject for customer {0}...", this.customerID);
 	
 				// get company data at "now" date 
@@ -108,11 +105,9 @@
 				this.log.Debug("Customer {0} has company {1} of type {2}", this.customerID, model.CompanyId, typeOfBusiness);
 
 				if (typeOfBusiness.IsRegulated() || model == null) {
-
-					Trail.AddNote(string.Format("Company for customer {0} for {1:d} not found or not regulated. Auto-reject transmitted to 'old' (internal) autodecision with medal.", this.customerID, this.now));
-
 					// add InternalFlow step 
 					StepNoDecision<InternalFlow>().Init();
+					Trail.AppendOverridingResults(this.internalAgent.Trail);
 					return;
 				}
 
@@ -126,58 +121,39 @@
 
 				// LG data not found
 				if (model == null) {
-					StepNoReject<LogicalGlueFlow>(true);
+					StepNoReject<LGDataFound>(true).Init(false);
 					return;
-				}
-
-				StepNoDecision<LGDataFound>().Init();
+				} else
+					StepNoDecision<LGDataFound>().Init(true);
 
 				// LG data returned error
 				if (!string.IsNullOrEmpty(model.ErrorMessage)) {
-					StepNoReject<LogicalGlueFlow>(true);
+					StepNoReject<LGWithoutError>(true).Init(false);
 					return;
-				}
-
-				StepNoDecision<LGWithoutError>().Init();
+				} else
+					StepNoDecision<LGWithoutError>().Init(true);
 
 				if (model.Message.Equals("Hard reject")) {
-					StepReject<LogicalGlueFlow>(true);
+					StepReject<LGHardReject>(true).Init(true);
 					return;
-				}
-
-				StepNoDecision<LGHardReject>().Init();
+				} else
+					StepNoDecision<LGHardReject>().Init(false);
 
 				if (model.GradeID==0) {
-					StepNoReject<LogicalGlueFlow>(true);
+					StepNoReject<HasBucket>(true).Init(false);
 					return;
-				}
-
-				StepNoDecision<HasBucket>().Init();
+				} else
+					StepNoDecision<HasBucket>().Init(true);
 
 				if (model.GradeOriginID == 0) {
-					StepReject<LogicalGlueFlow>(true);
+					StepReject<BucketSupported>(true).Init(false);
 					return;
-				}
+				} else
+					StepNoDecision<BucketSupported>().Init(true);
 
-				StepNoDecision<BucketSupported>().Init();
-				
-				// chto eto? zachem eto?
-				if (!LogicalGlueFlowFollowed) {
-					Trail.AppendOverridingResults(this.internalAgent.Trail);
-				}
-					
-
-				//if (LogicalGlueFlowFollowed) {
-				//	// TODO Logical Glue flow goes here.
-				//} else
-				//	Trail.AppendOverridingResults(this.internalAgent.Trail);
-			}
-
+				Trail.DecideIfNotDecided();
+			} // using
 		} // MakeDecision
-
-		public bool LogicalGlueFlowFollowed {
-			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
-		} // LogicalGlueFlowFollowed
 
 		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
@@ -190,7 +166,5 @@
 		private T StepNoDecision<T>() where T : ATrace {
 			return Trail.Dunno<T>();
 		} // StepNoDecision
-
-
 	} // class LGAgent
 } // namespace

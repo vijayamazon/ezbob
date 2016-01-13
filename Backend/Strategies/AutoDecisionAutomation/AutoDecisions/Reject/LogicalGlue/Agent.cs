@@ -101,6 +101,7 @@
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoRejection.LGAgent(
 					DB,
 					Log,
+					Trail.Tag,
 					Args.CustomerID,
 					Trail.InputData.DataAsOf,
 					Args.CashRequestID,
