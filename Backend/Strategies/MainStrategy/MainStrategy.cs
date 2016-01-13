@@ -22,6 +22,8 @@
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
+	using Ezbob.Integration.LogicalGlue;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
 	using LandRegistryLib;
@@ -789,8 +791,8 @@
 				.PreventSilentAutomation()
 				.Execute();
 
-			if (preData.TypeOfBusiness != "Entrepreneur") {
-				Library.Instance.DB.ForEachRowSafe(
+			if (preData.TypeOfBusiness != TypeOfBusiness.Entrepreneur) {
+				Strategies.Library.Instance.DB.ForEachRowSafe(
 					sr => {
 						int appDirId = sr["DirId"];
 						string appDirName = sr["DirName"];
@@ -811,7 +813,7 @@
 
 		private void DoCompanyCheck(PreliminaryData preData) {
 			if (preData.LastStartedMainStrategyEndTime.HasValue) {
-				Library.Instance.Log.Info("Performing experian company check");
+				Strategies.Library.Instance.Log.Info("Performing experian company check");
 				new ExperianCompanyCheck(CustomerID, false)
 					.PreventSilentAutomation()
 					.Execute();
@@ -835,13 +837,30 @@
 		} // DoBwaCheck
 
 		private void DoZooplaCheck() {
-			Library.Instance.Log.Info("Getting Zoopla data for customer {0}", CustomerID);
+			Strategies.Library.Instance.Log.Info("Getting Zoopla data for customer {0}", CustomerID);
 			new ZooplaStub(CustomerID).Execute();
 		} // DoZooplaCheck
+
+		private void UpdateLogicalGlue(PreliminaryData preData) {
+			if (preData.TypeOfBusiness.IsRegulated()) {
+				Log.Debug("Not updating Logical Glue data: customer {0} has a regulated company.", CustomerID);
+				return;
+			} // if
+
+			Log.Debug("Updating Logical Glue data: customer {0} has a non-regulated company.", CustomerID);
+
+			try {
+				InjectorStub.GetEngine().GetInference(CustomerID, 0, false, GetInferenceMode.DownloadIfOld);
+				Log.Debug("Updated Logical Glue data for customer {0}.", CustomerID);
+			} catch (Exception e) {
+				Log.Warn(e, "Logical Glue data was not updated for customer {0}.", CustomerID);
+			} // try
+		} // UpdateLogicalGlue
 
 		private void ExecuteAdditionalStrategies() {
 			var preData = new PreliminaryData(CustomerID);
 
+			UpdateLogicalGlue(preData);
 			DoConsumerCheck(preData);
 			DoCompanyCheck(preData);
 			DoAmlCheck(preData);

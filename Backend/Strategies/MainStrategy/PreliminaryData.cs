@@ -2,6 +2,7 @@
 	using System;
 	using ConfigManager;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	internal class PreliminaryData {
 		public PreliminaryData(int customerID) {
@@ -17,7 +18,13 @@
 			LastStartedMainStrategyEndTime = results["LastStartedMainStrategyEndTime"];
 			AppAccountNumber = results["AccountNumber"];
 			AppSortCode = results["SortCode"];
-			TypeOfBusiness = results["TypeOfBusiness"];
+
+			TypeOfBusiness typeOfBusiness;
+			
+			if (Enum.TryParse(results["TypeOfBusiness"], out typeOfBusiness))
+				TypeOfBusiness = typeOfBusiness;
+			else
+				TypeOfBusiness = TypeOfBusiness.Entrepreneur;
 		} // constructor
 
 		public string BwaBusinessCheck { get; private set; }
@@ -25,6 +32,6 @@
 		public string AppAccountNumber { get; private set; }
 		public string AppSortCode { get; private set; }
 		public DateTime? LastStartedMainStrategyEndTime { get; private set; }
-		public string TypeOfBusiness { get; private set; }
+		public TypeOfBusiness TypeOfBusiness { get; private set; }
 	} // class PreliminaryData
 } // namespace
