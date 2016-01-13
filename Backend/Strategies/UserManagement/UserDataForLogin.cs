@@ -17,7 +17,6 @@
 		public string Email { get; set; }
 
 		public class Result : AResultRow {
-
 			public int UserID { get; set; }
 			public string Email { get; set; }
 			public string Password { get; set; }
@@ -34,12 +33,16 @@
 			public int? LoginFailedCount { get; set; }
 
 			public int FailCount {
-				get { return LoginFailedCount.HasValue ? LoginFailedCount.Value : 0; }
+				get { return LoginFailedCount ?? 0; }
 			} // FailCount
 
 			public bool IsOldPasswordStyle {
 				get { return string.IsNullOrWhiteSpace(EzPassword); } // get
 			} // IsOldPasswordStyle
+
+			public bool MatchesEnteredEmail(string enteredEmail) {
+				return Normalize(Email).Equals(Normalize(enteredEmail));
+			} // MatchesEnteredEmail
 
 			public bool IsPasswordValid(string sPassword) {
 				if (IsOldPasswordStyle) {
@@ -66,27 +69,29 @@
 				return "(\n" + os + ")";
 			} // ToString
 
+			private static string Normalize(string s) {
+				return (s ?? string.Empty).Trim().ToLowerInvariant();
+			} // Normalize
+
 			// This is an old password encryption method that we got from S c o r t o.
 			// It can be removed once we are not using Password field in Security_User.
 
 			private static string HashPassword(string password, string userName, DateTime creationDate) {
-				var hMacsha = new HMACSHA1 { Key = ms_oKey };
+				var hMacsha = new HMACSHA1 { Key = hashKey };
 				string combined = userName.ToUpperInvariant() + password + creationDate.ToString("dd-MM-yyyy HH:mm:ss");
 				return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(combined)));
 			} // HashPassword
 
 			private static string HashPassword(string password) {
-				var hMacsha = new HMACSHA1 { Key = ms_oKey };
+				var hMacsha = new HMACSHA1 { Key = hashKey };
 				return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(password)));
 			} // HashPassword
 
-			private static readonly byte[] ms_oKey = new byte[] {
-				217, 197, 36, 73, 245, 170, 52, 86, 16, 196, 190, 197, 158, 222, 60, 108, 212, 45, 234, 232, 27, 169, 165, 13, 12,
-				242, 30, 203, 10, 229, 81, 42, 201, 35, 31, 194, 112, 159, 161, 77, 44, 125, 4, 25, 109, 92, 211, 39, 80, 117, 230,
-				173, 106, 87, 105, 195, 62, 171, 89, 189, 230, 39, 60, 148
+			private static readonly byte[] hashKey = {
+				217, 197, 36, 73, 245, 170, 52, 86, 16, 196, 190, 197, 158, 222, 60, 108, 212, 45, 234, 232, 27,
+				169, 165, 13, 12, 242, 30, 203, 10, 229, 81, 42, 201, 35, 31, 194, 112, 159, 161, 77, 44, 125, 4,
+				25, 109, 92, 211, 39, 80, 117, 230, 173, 106, 87, 105, 195, 62, 171, 89, 189, 230, 39, 60, 148
 			};
-
 		} // class Result
-
 	} // class UserDataForLogin
 } // namespace Ezbob.Backend.Strategies.UserManagement

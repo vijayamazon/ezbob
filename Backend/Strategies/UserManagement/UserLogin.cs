@@ -47,7 +47,7 @@
 
 			Log.Debug("User '{0}': data for check is {1}.", m_oData.Email, oUser);
 
-			if (oUser.Email != m_oData.Email) {
+			if (!oUser.MatchesEnteredEmail(m_oData.Email)) {
 				Log.Debug("User '{0}' not found.", m_oData.Email);
 				m_oResult = MembershipCreateStatus.InvalidUserName;
 				return;
