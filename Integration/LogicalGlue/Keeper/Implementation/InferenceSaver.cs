@@ -56,28 +56,32 @@
 				if (this.response.Parsed.HasInference()) {
 					var map = new SortedDictionary<ModelNames, long>();
 
-					new SaveModelOutput(ResponseID, this.response, DB, Log).ForEachRowSafe(con, sr => {
-						long id = sr["ModelOutputID"];
-						ModelNames name = (ModelNames)(int)(long)sr["ModelID"];
+					var saveMo = new SaveModelOutput(ResponseID, this.response, DB, Log);
 
-						map[name] = id;
-					});
+					if (saveMo.HasValidParameters()) {
+						saveMo.ForEachRowSafe(con, sr => {
+							long id = sr["ModelOutputID"];
+							ModelNames name = (ModelNames)(int)(long)sr["ModelID"];
 
-					var saveEf = new SaveEncodingFailure(map, this.response, DB, Log);
-					if (saveEf.HasValidParameters()) // invalid if e.g. no failures
-						saveEf.ExecuteNonQuery(con);
+							map[name] = id;
+						});
 
-					var saveMi = new SaveMissingColumn(map, this.response, DB, Log);
-					if (saveMi.HasValidParameters()) // invalid if e.g. no missing columns
-						saveMi.ExecuteNonQuery(con);
+						var saveEf = new SaveEncodingFailure(map, this.response, DB, Log);
+						if (saveEf.HasValidParameters()) // invalid if e.g. no failures
+							saveEf.ExecuteNonQuery(con);
 
-					var saveOr = new SaveOutputRatio(map, this.response, DB, Log);
-					if (saveOr.HasValidParameters()) // invalid if e.g. no output ratio
-						saveOr.ExecuteNonQuery(con);
+						var saveMi = new SaveMissingColumn(map, this.response, DB, Log);
+						if (saveMi.HasValidParameters()) // invalid if e.g. no missing columns
+							saveMi.ExecuteNonQuery(con);
 
-					var saveW = new SaveWarning(map, this.response, DB, Log);
-					if (saveW.HasValidParameters()) // invalid if e.g. no output ratio
-						saveW.ExecuteNonQuery(con);
+						var saveOr = new SaveOutputRatio(map, this.response, DB, Log);
+						if (saveOr.HasValidParameters()) // invalid if e.g. no output ratio
+							saveOr.ExecuteNonQuery(con);
+
+						var saveW = new SaveWarning(map, this.response, DB, Log);
+						if (saveW.HasValidParameters()) // invalid if e.g. no output ratio
+							saveW.ExecuteNonQuery(con);
+					} // if
 				} // if
 
 				var saveEtl = new SaveEtlData(ResponseID, this.response, DB, Log);

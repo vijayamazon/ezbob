@@ -22,8 +22,8 @@
 
 			Tbl = new List<DbWarning>();
 
-			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.Inference.FuzzyLogic.Warnings));
-			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.Inference.NeuralNetwork.Warnings));
+			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic.Warnings));
+			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork.Warnings));
 		} // constructor
 
 		public override bool HasValidParameters() {

@@ -19,7 +19,9 @@ CREATE TYPE LogicalGlueResponseList AS TABLE (
 	[GradeID] BIGINT NULL,
 	[HasEquifaxData] BIT NOT NULL,
 	[ParsingExceptionType] NVARCHAR(MAX) NULL,
-	[ParsingExceptionMessage] NVARCHAR(MAX) NULL
+	[ParsingExceptionMessage] NVARCHAR(MAX) NULL,
+	[Reason] NVARCHAR(MAX) NULL,
+	[Outcome] NVARCHAR(MAX) NULL
 )
 GO
 
@@ -39,7 +41,9 @@ BEGIN
 		[GradeID],
 		[HasEquifaxData],
 		[ParsingExceptionType],
-		[ParsingExceptionMessage]
+		[ParsingExceptionMessage],
+		[Reason],
+		[Outcome]
 	) SELECT
 		[ServiceLogID],
 		[ReceivedTime],
@@ -50,7 +54,9 @@ BEGIN
 		[GradeID],
 		[HasEquifaxData],
 		[ParsingExceptionType],
-		[ParsingExceptionMessage]
+		[ParsingExceptionMessage],
+		[Reason],
+		[Outcome]
 	FROM
 		@Tbl
 

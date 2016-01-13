@@ -24,7 +24,7 @@
 						ResponseStatus = response.Parsed.Exists() ? (int)response.Parsed.Status : 0,
 						TimeoutSourceID = response.Parsed.Exists() ? (int?)response.Parsed.Timeout : null,
 						ErrorMessage = response.Parsed.Exists() ? response.Parsed.Error : null,
-						BucketID = response.Parsed.HasBucket() ? (int)response.Parsed.Inference.Bucket.Value : (int?)null,
+						BucketID = response.Parsed.Bucket.HasValue ? (int)response.Parsed.Bucket.Value : (int?)null,
 						HasEquifaxData = response.Parsed.HasEquifaxData(),
 						ReceivedTime = DateTime.UtcNow,
 						ParsingExceptionType = response.ParsingException == null
@@ -33,6 +33,8 @@
 						ParsingExceptionMessage = response.ParsingException == null
 							? null
 							: response.ParsingException.Message,
+						Reason = response.Parsed.Reason,
+						Outcome = response.Parsed.Outcome,
 					}
 				};
 			} // if

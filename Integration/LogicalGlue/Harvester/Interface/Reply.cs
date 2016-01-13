@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
+	using System;
 	using System.Net;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils.Extensions;
@@ -72,6 +73,39 @@
 		public override int GetHashCode() {
 			return string.Join("_", Status).GetHashCode();
 		} // GetHashCode
+
+		public ModelOutput FuzzyLogic {
+			get {
+				return this.HasModels()
+					? JsonConvert.DeserializeObject<ModelOutput>(Inference.Decision.Models.FuzzyLogicResponse)
+					: null;
+			} // get
+		} // FuzzyLogic
+
+		public ModelOutput NeuralNetwork {
+			get {
+				return this.HasModels()
+					? JsonConvert.DeserializeObject<ModelOutput>(Inference.Decision.Models.NeuralNetworkResponse)
+					: null;
+			} // get
+		} // NeuralNetwork
+
+		public Bucket? Bucket {
+			get {
+				if (!this.HasBucket())
+					return null;
+
+				Bucket bucket;
+
+				if (!Enum.TryParse(Inference.Decision.Bucket, out bucket))
+					return null;
+
+				return bucket;
+			} // get
+		} // Bucket
+
+		public string Reason { get { return this.HasDecision() ? Inference.Decision.Reason : null; } }
+		public string Outcome { get { return this.HasDecision() ? Inference.Decision.Outcome : null; } }
 	} // class Reply
 
 	public static class ReplyExt {
@@ -83,8 +117,16 @@
 			return reply.Exists() && (reply.Inference != null);
 		} // HasInference
 
+		public static bool HasDecision(this Reply reply) {
+			return reply.HasInference() && (reply.Inference.Decision != null);
+		} // HasDecision
+
+		public static bool HasModels(this Reply reply) {
+			return reply.HasDecision() && (reply.Inference.Decision.Models != null);
+		} // HasModels
+
 		public static bool HasBucket(this Reply reply) {
-			return reply.HasInference() && (reply.Inference.Bucket != null);
+			return reply.HasDecision() && (reply.Inference.Decision.Bucket != null);
 		} // HasBucket
 
 		public static bool HasEquifaxData(this Reply reply) {

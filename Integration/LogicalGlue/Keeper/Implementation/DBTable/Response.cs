@@ -27,5 +27,11 @@
 
 		[Length(LengthType.MAX)]
 		public string ParsingExceptionMessage { get; set; }
+
+		[Length(LengthType.MAX)]
+		public string Reason { get; set; }
+
+		[Length(LengthType.MAX)]
+		public string Outcome { get; set; }
 	} // class Response
 } // namespace

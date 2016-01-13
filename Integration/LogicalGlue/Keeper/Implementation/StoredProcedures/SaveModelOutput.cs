@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
@@ -21,9 +22,11 @@
 				return;
 
 			Tbl = new List<DbModelOutput> {
-				Create(responseID, ModelNames.FuzzyLogic, response.Parsed.Inference.FuzzyLogic),
-				Create(responseID, ModelNames.NeuralNetwork, response.Parsed.Inference.NeuralNetwork),
-			};
+				Create(responseID, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic),
+				Create(responseID, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork),
+			}
+				.Where(m => m != null)
+				.ToList();
 		} // constructor
 
 		public override bool HasValidParameters() {
@@ -33,7 +36,7 @@
 		public List<DbModelOutput> Tbl { get; set; }
 
 		private static DbModelOutput Create(long responseID, ModelNames name, HarvesterModelOutput mo) {
-			return new DbModelOutput {
+			return (mo == null) ? null : new DbModelOutput {
 				ErrorCode = mo.ErrorCode,
 				Exception = mo.Exception,
 				InferenceResultDecoded = mo.DecodedResult,

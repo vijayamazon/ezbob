@@ -76,6 +76,8 @@
     <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
     <Compile Include="Harvester\Interface\IConvertableToShortString.cs" />
     <Compile Include="Harvester\Interface\InferenceInputPackage.cs" />
+    <Compile Include="Harvester\Interface\InferenceOutputDecision.cs" />
+    <Compile Include="Harvester\Interface\InferenceOutputDecisionModels.cs" />
     <Compile Include="Keeper\Implementation\ACustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
@@ -149,10 +151,10 @@
     <Compile Include="Tests\ABaseTest.cs" />
     <Compile Include="Tests\BasicFlow.cs" />
     <Compile Include="Tests\CreateStoredProcs.cs" />
+    <Compile Include="Tests\LGReply.cs" />
     <Compile Include="Tests\InputSerialization.cs" />
     <Compile Include="Tests\KeeperTests.cs" />
     <Compile Include="Tests\ModelOutputSerialization.cs" />
-    <Compile Include="Tests\HarvesterReplySerialization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

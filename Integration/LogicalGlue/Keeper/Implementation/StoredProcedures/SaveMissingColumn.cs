@@ -21,8 +21,8 @@
 
 			Tbl = new List<DbMissingColumn>();
 
-			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.Inference.FuzzyLogic.MissingColumns));
-			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.Inference.NeuralNetwork.MissingColumns));
+			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic.MissingColumns));
+			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork.MissingColumns));
 		} // constructor
 
 		public override bool HasValidParameters() {

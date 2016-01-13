@@ -22,8 +22,8 @@
 
 			Tbl = new List<DbEncodingFailure>();
 
-			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.Inference.FuzzyLogic.EncodingFailures));
-			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.Inference.NeuralNetwork.EncodingFailures));
+			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic.EncodingFailures));
+			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork.EncodingFailures));
 		} // constructor
 
 		public override bool HasValidParameters() {

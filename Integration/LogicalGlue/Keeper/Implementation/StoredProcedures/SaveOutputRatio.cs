@@ -21,8 +21,8 @@
 
 			Tbl = new List<DbOutputRatio>();
 
-			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.Inference.FuzzyLogic.OutputRatios));
-			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.Inference.NeuralNetwork.OutputRatios));
+			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic.OutputRatios));
+			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork.OutputRatios));
 		} // constructor
 
 		public override bool HasValidParameters() {
