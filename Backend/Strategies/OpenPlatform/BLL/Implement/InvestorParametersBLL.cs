@@ -18,37 +18,38 @@
         }
 
         public InvestorParameters GetInvestorParameters(int investorId, RuleType ruleType) {
-            var iInvestorParameters = InvestorParametersDAL.GetInvestorParametersDB(investorId, ruleType);
+            var iInvestorParameters = InvestorParametersDAL.GetInvestorParametersDB(investorId, ruleType);            
             var investorParameters = new InvestorParameters();
-
             investorParameters.InvestorID = investorId;
             investorParameters.Balance = InvestorParametersDAL.InvestorsBalance[investorId];
-            
-            if (iInvestorParameters == null) {
+            if (iInvestorParameters == null)
                 return investorParameters;
-            }
-
-            var firstOrDefault = iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == 1);
-            if (firstOrDefault != null) {
-                investorParameters.DailyAvailableAmount = (double)firstOrDefault.Value - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Day);
-            }
-            var investorParams = iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == 2);
-            if (investorParams != null) {
-                investorParameters.WeeklyAvailableAmount = (double)investorParams.Value - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Week);
-            }
+            var dailyInvestmentAllowed = GetParameterValue("DailyInvestmentAllowed", iInvestorParameters);
+            var weeklyInvestmentAllowed = GetParameterValue("WeeklyInvestmentAllowed", iInvestorParameters);
+            investorParameters.DailyAvailableAmount = dailyInvestmentAllowed == null ? investorParameters.Balance : (decimal)dailyInvestmentAllowed - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Day);
+            investorParameters.WeeklyAvailableAmount = weeklyInvestmentAllowed == null ? investorParameters.Balance : (decimal)weeklyInvestmentAllowed - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Week);
             return investorParameters;
         }
 
-        public double GetGradeAvailableAmount(int investorId, InvestorLoanCashRequest investorLoanCashRequest, int ruleType) {
+        private object GetParameterValue(string parameterName, List<I_InvestorParams> iInvestorParameters) {
+            var parameterId = InvestorParametersDAL.InvestorsParameters.FirstOrDefault(x => x.Value.Name == parameterName).Key;
+            var param = iInvestorParameters.FirstOrDefault(x => x.InvestorParamsID == parameterId);
+            if (InvestorParametersDAL.InvestorsParameters.ContainsKey(parameterId))
+                if (param != null)
+                    return Convert.ChangeType(param.Value, Type.GetType("System." + InvestorParametersDAL.InvestorsParameters[parameterId].ValueType));
+            return null;
+        }
+
+        public decimal GetGradeAvailableAmount(int investorId, InvestorLoanCashRequest investorLoanCashRequest, int ruleType) {
 
             //The amount that investor invest on grade this month.                                   
-            double investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, investorLoanCashRequest.GradeID);
+            decimal investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, investorLoanCashRequest.Grade);
 
             //Sum of already funded this month + current
             var totalFunded = investorGradeInvestedAmount + investorLoanCashRequest.ManagerApprovedSum;
 
             //Calc max score for grade.
-            var gradeMaxScore = (double)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.GradeID, ruleType);
+            var gradeMaxScore = (decimal)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.Grade, ruleType);
 
             //Calc total sum of positive transctions this month
              var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
@@ -58,6 +59,10 @@
             var monthlyMax = Math.Max(investorMonthlyBalance, monthlyFundingCapital);
 
             return gradeMaxScore * monthlyMax - totalFunded;
+        }
+
+        public int GetInvestorWithLatestLoanDate(List<int> investorsList) {
+           return InvestorParametersDAL.GetInvestorWithLatestLoanDate(investorsList);
         }
     }
 }

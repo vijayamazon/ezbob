@@ -688,7 +688,7 @@ BEGIN
 		InvestorParamsID INT NOT NULL IDENTITY(1,1),
 		InvestorID INT NULL,
 		ParameterID INT NOT NULL,		
-		Value DECIMAL(18,6) NOT NULL,	
+		Value NVARCHAR(255) NOT NULL,	
 		Type INT NOT NULL,	
 		AllowedForConfig BIT NOT NULL,
 		TimestampCounter ROWVERSION,
@@ -698,6 +698,7 @@ BEGIN
 	)
 END
 GO
+
 
 IF object_id('I_RuleType') IS NULL
 BEGIN
@@ -763,10 +764,12 @@ CREATE TABLE [dbo].[I_InvestorRule](
 END
 GO
 
+ALTER TABLE I_InvestorParams ALTER COLUMN Value  varchar(256);
+
 IF NOT EXISTS (SELECT * FROM I_Parameter)
 BEGIN
-	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES ('DailyInvestmentAllowed', 'double', 0, null, null)
-	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES('WeeklyInvestmentAllowed', 'double', 0, null , null)
+	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES ('DailyInvestmentAllowed', 'Decimal', 0, null, null)
+	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES('WeeklyInvestmentAllowed', 'Decimal', 0, null , null)
 END
 GO
 
@@ -788,6 +791,3 @@ BEGIN
 	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,'RuleBadgetLevel',null,null,null,null,7,0)
 END
 GO
-
-
-

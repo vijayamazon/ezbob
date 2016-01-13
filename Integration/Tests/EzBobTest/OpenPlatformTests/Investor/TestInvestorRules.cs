@@ -1,6 +1,6 @@
 ﻿namespace EzBobTest.OpenPlatformTests.Investor {
     using System.Collections.Generic;
-    using Ezbob.Backend.Models.Investor;
+    using Ezbob.Backend.ModelsWithDB.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
@@ -80,9 +80,30 @@
             investorParametersDALMock.Setup(x => x.GetInvestorsIds()).Returns(new List<int>() { 1 });
             investorParametersDALMock.Setup(x => x.GetInvestorParametersDB(1, RuleType.System)).Returns(new List<I_InvestorParams>() {new I_InvestorParams() {InvestorID = 1,Type = 1,ParameterID = 1,Value = 1000,InvestorParamsID = 1}});
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1)).Returns(true);
-            Dictionary<int, double> dict2 = new Dictionary<int, double>();
+            Dictionary<int, decimal> dict2 = new Dictionary<int, decimal>();
             dict2.Add(1, 3000);
             investorParametersDALMock.Setup(x => x.InvestorsBalance).Returns(dict2);
+
+            Dictionary<int, I_Parameter> ip = new Dictionary<int, I_Parameter>();
+            ip.Add(1, new I_Parameter() {
+                ParameterID = 1,
+                Name = "DailyInvestmentAllowed",
+                ValueType = "Decimal",
+                DefaultValue = 0,
+                MaxLimit = null,
+                MinLimit = null
+            });
+
+            ip.Add(2, new I_Parameter() {
+                ParameterID = 2,
+                Name = "WeeklyInvestmentAllowed",
+                ValueType = "Decimal",
+                DefaultValue = 0,
+                MaxLimit = null,
+                MinLimit = null
+            });
+
+            investorParametersDALMock.Setup(x => x.InvestorsParameters).Returns(ip);
 
 
             container.Configure(r => r.ForSingletonOf<IInvestorCashRequestDAL>().Use(() => investorCashRequestDALMock.Object));
@@ -160,7 +181,7 @@
             investorCashRequestDALMock.Setup(x => x.GetInvestorLoanCashRequest(1))
                 .Returns(GetInvestorLoanCashRequest());
 
-            Dictionary<int, double> dict2 = new Dictionary<int, double>();
+            Dictionary<int, decimal> dict2 = new Dictionary<int, decimal>();
             dict2.Add(1, 3000);
 
             investorParametersDALMock.Setup(x => x.InvestorsBalance)
@@ -176,6 +197,29 @@
                 .Returns(new List<int>() {
                     1
                 });
+
+
+            Dictionary<int, I_Parameter> ip = new Dictionary<int, I_Parameter>();
+            ip.Add(1, new I_Parameter() {
+                ParameterID = 1,
+                Name = "DailyInvestmentAllowed",
+                ValueType = "Decimal",
+                DefaultValue = 0,
+                MaxLimit = null,
+                MinLimit = null
+            });
+
+            ip.Add(2, new I_Parameter() {
+                ParameterID = 2,
+                Name = "WeeklyInvestmentAllowed",
+                ValueType = "Decimal",
+                DefaultValue = 0,
+                MaxLimit = null,
+                MinLimit = null
+            });
+
+            investorParametersDALMock.Setup(x => x.InvestorsParameters).Returns(ip);
+            
 
 
             investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, (int)Grade.A,1))

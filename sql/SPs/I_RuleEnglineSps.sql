@@ -35,6 +35,15 @@ IF OBJECT_ID('I_GetInvestorRules') IS NULL
 	EXECUTE('CREATE PROCEDURE I_GetInvestorRules AS SELECT 1')
 GO
 
+IF OBJECT_ID('I_GetInvestorWithLatestLoanDate') IS NULL
+	EXECUTE('CREATE PROCEDURE I_GetInvestorWithLatestLoanDate AS SELECT 1')
+GO
+
+IF OBJECT_ID('I_GetInvestorParameters') IS NULL
+	EXECUTE('CREATE PROCEDURE I_GetInvestorParameters AS SELECT 1')
+GO
+
+
 ALTER PROCEDURE I_GetInvestorRules
 @RuleType INT,
 @InvestorId INT = NULL
@@ -155,15 +164,42 @@ GO
 
 
 ALTER PROCEDURE I_GetGradeMaxScore 
-@InvestorID int,
-@TypeID int
+@InvestorID int = NULL
 AS
 BEGIN
 	
   SELECT
-    *
+    IndexID
+    ,InvestorID
+    ,ProductTypeID
+    ,IsActive
+    ,GradeAPercent
+    ,GradeAMinScore
+    ,GradeAMaxScore
+    ,GradeBPercent
+    ,GradeBMinScore
+    ,GradeBMaxScore
+    ,GradeCPercent
+    ,GradeCMinScore
+    ,GradeCMaxScore
+    ,GradeDPercent
+    ,GradeDMinScore
+    ,GradeDMaxScore
+    ,GradeEPercent
+    ,GradeEMinScore
+    ,GradeEMaxScore
+    ,GradeFPercent
+    ,GradeFMinScore
+    ,GradeFMaxScore
+    ,GradeGPercent
+    ,GradeGMinScore
+    ,GradeGMaxScore
+    ,GradeHPercent
+    ,GradeHMinScore
+    ,GradeHMaxScore
+    ,Timestamp
   FROM I_Index
-  WHERE ((InvestorID = @InvestorID) or @TypeID = 1) 
+  WHERE (InvestorID = @InvestorID OR ISNULL(@InvestorID, 0) = 0) 
   AND IsActive=1
 END
 GO
@@ -226,3 +262,31 @@ END
 GO
 
 
+ALTER PROCEDURE I_GetInvestorWithLatestLoanDate 
+@InvestorIDs IntList READONLY
+AS
+BEGIN
+		;WITH latestLoans as 
+		(
+			SELECT ip.InvestorID, MAX(ip.Timestamp) as TakenDate From I_Portfolio ip
+			join @InvestorIDs ids ON ip.InvestorID = ids.Value
+			GROUP BY ip.InvestorID
+		)
+	SELECT top 1 ll.InvestorID from latestLoans ll order by ll.TakenDate ASC
+END
+GO
+
+
+ALTER PROCEDURE I_GetInvestorParameters 
+AS
+BEGIN
+SELECT ParameterID
+	   ,Name
+	   ,ValueType
+	   ,DefaultValue
+	   ,MaxLimit
+	   ,MinLimit
+	   ,TimestampCounter
+  FROM dbo.I_Parameter
+END
+GO

@@ -9,7 +9,7 @@
 
         public bool RuleBadgetLevel(int InvestorId, long CashRequestId, int ruleType) {
             var investorLoanCashRequest = InvestorCashRequestBLL.GetInvestorLoanCashRequest(CashRequestId);
-            double gradeAvailableAmount = InvestorParametersBLL.GetGradeAvailableAmount(InvestorId, investorLoanCashRequest, ruleType);
+            decimal gradeAvailableAmount = InvestorParametersBLL.GetGradeAvailableAmount(InvestorId, investorLoanCashRequest, ruleType);
             return gradeAvailableAmount >= investorLoanCashRequest.ManagerApprovedSum;
         }
     }

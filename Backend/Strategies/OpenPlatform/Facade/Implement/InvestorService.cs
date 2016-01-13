@@ -28,12 +28,11 @@
             investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.UnderWriter);
             investorsList = FilterInvestors(investorLoancCashRequest, investorsList, RuleType.Investor);
 
-
             if (investorsList.Count == 0)
                 return null;
 
-            int investorId = investorsList.FirstOrDefault();
-            return new KeyValuePair<int, decimal>(investorId, investorLoancCashRequest.FundingType);
+            int finalInvestor = InvestorParametersBLL.GetInvestorWithLatestLoanDate(investorsList);
+            return new KeyValuePair<int, decimal>(finalInvestor, investorLoancCashRequest.FundingType);
         }
 
 

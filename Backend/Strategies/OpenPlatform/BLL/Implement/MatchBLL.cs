@@ -21,7 +21,7 @@
         public void BuildFunc(int investorID, long cashRequestID, RuleType ruleType)
         {
             Dictionary<int, InvestorRule> Rules = RulesDAL.GetRules(investorID, ruleType);
-            if (Rules == null) {
+            if ((Rules == null) || Rules.Count ==0) {
                 Func = delegate { return true; };
                 return;
             }

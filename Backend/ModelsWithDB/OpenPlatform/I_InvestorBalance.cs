@@ -5,6 +5,6 @@
         [DataMember]
         public int InvestorID  { get; set; }
         [DataMember]
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
     }//class I_InvestorBalance
 }//ns

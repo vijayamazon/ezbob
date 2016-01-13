@@ -9,10 +9,16 @@
 
     public class InvestorParametersDAL : IInvestorParametersDAL {
 
-        private Dictionary<int, double> investorsBalance;
-        public Dictionary<int, double> InvestorsBalance {
+        private Dictionary<int, decimal> investorsBalance;
+        private Dictionary<int, I_Parameter> investorsParameters;
+        public Dictionary<int, decimal> InvestorsBalance {
             get {
                 return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
+            }
+        }
+        public Dictionary<int, I_Parameter> InvestorsParameters {
+            get {
+                return this.investorsParameters ?? (this.investorsParameters = Library.Instance.DB.Fill<I_Parameter>("I_GetInvestorParameters", CommandSpecies.StoredProcedure).ToDictionary(x => x.ParameterID, x => x));
             }
         }
 
@@ -26,15 +32,20 @@
             return Library.Instance.DB.Fill<I_InvestorParams>("I_GetInvestorParametersDB", CommandSpecies.StoredProcedure, queryParameters);
         }
 
-        public double GetGradeMonthlyInvestedAmount(int investorId, int grade) {
+        public int GetInvestorWithLatestLoanDate(List<int> investorsList) {
+            return Library.Instance.DB.ExecuteScalar<int>("I_GetInvestorWithLatestLoanDate", CommandSpecies.StoredProcedure,  Library.Instance.DB.CreateTableParameter("InvestorIDs", (IEnumerable<int>)investorsList));
+        }
+
+        public decimal GetGradeMonthlyInvestedAmount(int investorId, Grade grade) {
             var myDate = DateTime.Now;
             var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
             var result = Library.Instance.DB.ExecuteScalar<decimal>("I_GetGradeMonthlyInvestedAmount", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("GradeID", (int)grade), new QueryParameter("FirstOfMonth", TimeZoneInfo.ConvertTimeToUtc(firstOfMonth)));
-            return (double)result;
+            return (decimal)result;
         }
 
         public decimal GetGradeMaxScore(int investorId, int grade, int ruleType) {
-            var index = Library.Instance.DB.ExecuteScalar<I_Index>("I_GetGradeMaxScore", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("TypeID", (int)ruleType));
+            var queryParameters = ruleType == 1 ? new QueryParameter[0] : new[] {new QueryParameter("InvestorId", investorId) };
+            var index = Library.Instance.DB.FillFirst<I_Index>("I_GetGradeMaxScore", CommandSpecies.StoredProcedure, queryParameters);
             switch (grade) {
                 case (int)Grade.A: return index.GradeAMaxScore;
 				case (int)Grade.B: return index.GradeBMaxScore;
@@ -46,17 +57,17 @@
             return 0;
         }
 
-        public double GetInvestorTotalMonthlyDeposits(int investorId) {
+        public decimal GetInvestorTotalMonthlyDeposits(int investorId) {
             var myDate = DateTime.Now;
             var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
-            return Library.Instance.DB.ExecuteScalar<double>("I_GetInvestorTotalMonthlyDeposits", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("FirstOfMonth", firstOfMonth));
+            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorTotalMonthlyDeposits", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("FirstOfMonth", firstOfMonth));
         }
 
-        public double GetInvestorMonthlyFundingCapital(int investorId) {
-            return Library.Instance.DB.ExecuteScalar<double>("I_GetInvestorMonthlyFundingCapital", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId));
+        public decimal GetInvestorMonthlyFundingCapital(int investorId) {
+            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorMonthlyFundingCapital", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId));
         }
 
-        public double GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod) {
+        public decimal GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod) {
             DateTime periodAgo = new DateTime();
             switch (invesmentPeriod) {
                 case InvesmentPeriod.Day:
@@ -71,7 +82,7 @@
             }
 
             var fundedAmount = Library.Instance.DB.ExecuteScalar<decimal>("I_GetFundedAmountPeriod", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("PeriodAgo", TimeZoneInfo.ConvertTimeToUtc(periodAgo)));
-            return (double)fundedAmount;
+            return fundedAmount;
         }
 
     }

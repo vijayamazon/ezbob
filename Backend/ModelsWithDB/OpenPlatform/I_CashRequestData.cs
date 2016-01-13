@@ -13,7 +13,7 @@
         public int FundingTypeID { get; set; }
 
 		[DataMember]
-        public double ManagerApprovedSum { get; set; }
+        public decimal ManagerApprovedSum { get; set; }
 
     }//class I_CashRequestData
 }//ns
