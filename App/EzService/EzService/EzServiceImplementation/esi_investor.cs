@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.Strategies.Investor;
@@ -60,6 +61,15 @@
 				TransactionsData = strategy.Result
 			};
 		}
+		public BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
+			AddManualTransaction strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);
+			return new BoolActionResult {
+				MetaData = metadata,
+				Value = strategy.Result
+			};
+		}
+
 	}
 }
 

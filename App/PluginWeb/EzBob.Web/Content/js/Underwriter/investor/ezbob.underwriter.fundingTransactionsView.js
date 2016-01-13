@@ -1,24 +1,27 @@
 ﻿var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
+
+
 EzBob.Underwriter.FundingTransactionsView = Backbone.Marionette.ItemView.extend({
 	template: '#funding-transactions-template',
 	initialize: function(options) {
 		this.investorID = options.investorID;
-		console.log('investor', this.investorID);
-		//this.model.set('InvestorID', this.invetorID);
+		this.investorAccountID = options.investorAccountID;
 		this.isRangeSubmitted = false;
 		this.model.on("change", this.render, this);
 	},
 
 	serializeData: function() {
 		return {
-			accountingData: this.applyRange()
+			accountingData: this.applyRange(),
+			InvestorID: this.investorID
 		};
 	},
 
 	events: {
-		"click #funding-transactions-range-submit-btn": "submitRange"
+		"click #funding-transactions-range-submit-btn": "submitRange",
+		"click .add-funding-transaction-btn": "addTransaction"
 	},
 
 	onRender: function() {
@@ -30,6 +33,20 @@ EzBob.Underwriter.FundingTransactionsView = Backbone.Marionette.ItemView.extend(
 	
 	setUpView: function() {
 		this.$el.find('#funding-transactions-from,#funding-transactions-to').datepicker({ format: 'dd/mm/yyyy' });
+	},
+
+	addTransaction: function(el) {
+		var button = $(el.currentTarget);
+		var investorID = button.hide().data('id');
+		var addTransactionEl = button.parent().find('.add-transaction-wrapper');		
+		this.transctionView = new EzBob.Underwriter.AddTransactionView({
+			el: addTransactionEl,
+			investorID: investorID,
+			investorAccountID: this.investorAccountID,
+			bankAccountType: 'Funding'
+		});
+
+		this.transctionView.render();
 	},
 
 	submitRange: function() {

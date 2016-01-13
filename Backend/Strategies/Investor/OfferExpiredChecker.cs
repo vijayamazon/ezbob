@@ -97,7 +97,7 @@
 				var systemBalanceID = DB.ExecuteScalar<int>("I_SystemBalanceAdd",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("BankAccountID", fundingBankAccountID),
-					new QueryParameter("Now", this.now),
+					new QueryParameter("Date", this.now),
 					new QueryParameter("TransactionAmount", creditSum * investmentPercent),
 					new QueryParameter("ServicingFeeAmount", null),
 					new QueryParameter("LoanTransactionID", null));

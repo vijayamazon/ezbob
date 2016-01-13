@@ -169,7 +169,20 @@
 			return Json(new { TransactionsList = result.TransactionsData }, JsonRequestBehavior.AllowGet);
 		}
 
+		[Ajax]
+		[HttpPost]
+		public JsonResult AddTransaction(int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment) {
 
+/*			I_InvestorAccountTypeEnum accountTypeEnum;
+			if (!Enum.TryParse(bankAccountType, out accountTypeEnum)) {
+				throw new Exception("Wrong account type");
+			}
+
+			var result = this.serviceClient.Instance.AddManualTransaction(this.context.UserId, investorAccountID, transactionAmount, transactionDate, (int)accountTypeEnum, transactionComment);
+
+			return Json(new { transactionDate, success = result.Value }, JsonRequestBehavior.AllowGet);*/
+			return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+		}
 
 		[Ajax]
 		[HttpPost]

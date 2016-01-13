@@ -7,7 +7,7 @@ GO
 
 ALTER PROCEDURE I_SystemBalanceAdd
 	@BankAccountID INT,
-	@Now DATETIME,
+	@Date DATETIME,
 	@TransactionAmount DECIMAL(18,6),
 	@ServicingFeeAmount DECIMAL(18,6),
 	@LoanTransactionID INT
@@ -35,7 +35,7 @@ BEGIN
 		LoanTransactionID
 	)
 	VALUES (
-		@Now, 
+		@Date, 
 		@TransactionAmount, 
 		@PreviousBalance + @TransactionAmount, 
 		@PreviousBalance, 

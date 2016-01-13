@@ -71,6 +71,8 @@
 									</table>
 								</div>
 							</div>
+							
+							
 						</div>
 					</form>
 				</div>
@@ -85,7 +87,8 @@
 			<div class="row">					
 
 				<div class="add-transaction">
-					<button class="btn btn-primary add-transaction-btn">Add Transaction</button>
+					<button class="btn btn-primary add-funding-transaction-btn" data-id="<%-InvestorID%>">Add Transaction</button>
+					<div class="add-transaction-wrapper"></div>
 				</div>
 
 				<h3 class="panel-title" style="display: inline-block">Funding Transactions</h3>
@@ -109,7 +112,7 @@
 							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
 						</div>
 					</span>
-					<button class="btn btn-primary pull-left" id="funding-transactions-range-submit-btn" style="margin-right: 10px;">Submit</button>
+					<button class="btn btn-primary pull-left" id="funding-transactions-range-submit-btn" style="margin-right: 10px;">Select</button>
 				</div>				
 				
 
@@ -149,6 +152,7 @@
 					</div>
 				</div>					
 			</div>
+			
 		</div>
 	</div>
 </script>
@@ -184,7 +188,7 @@
 							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
 						</div>
 					</span>
-					<button class="btn btn-primary pull-left" id="repayments-transactions-range-submit-btn" style="margin-right: 10px;">Submit</button>
+					<button class="btn btn-primary pull-left" id="repayments-transactions-range-submit-btn" style="margin-right: 10px;">Select</button>
 				</div>
 
 
@@ -229,3 +233,56 @@
 </script>
 
 
+<script type="text/template" id="add-transaction-template">
+	 
+			<div class="row">
+				<h3 class="panel-title">Add Transaction</h3>
+				<div class="tab-pane" id="add-transaction-tbl">
+					<div class="table-responsive table-ezbig">
+						<table class="table grid-data">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Transaction Date</th>
+									<th>Transaction Amount</th>
+									<th>Comment</th>
+									<th>Btns</th>
+								</tr>
+
+								<tr>
+									<td>+</td>									
+									<td>
+										<span class="float_left">
+											<div class="input-group">
+												<input class="form-control input-width" type="text" id="add-transaction-date">
+												<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+											</div>
+										</span>
+									</td>
+									<td>
+										<span class="float_left">gbp</span>
+											<span>
+												<div class="input-group">
+													<input class="form-control input-width" type="text" id="add-transaction-amount">
+												</div>
+											</span>
+										
+									</td>
+									<td>
+										<div class="comment-div">
+											<input class="form-control" type="text" id="add-transaction-comment">
+										</div>
+									</td>
+									<td>
+										<button class="btn btn-primary pull-left" id="add-transaction-cancel-btn" style="margin-right: 10px;">Cancel</button>
+										<button class="btn btn-primary pull-left" id="add-transaction-submit-btn" style="margin-right: 10px;">Submit</button>
+									</td>
+								<tr>
+									
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+ 
+</script>

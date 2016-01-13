@@ -5,8 +5,7 @@ EzBob.Underwriter.RepaymentsTransactionsView = Backbone.Marionette.ItemView.exte
 	template: '#repayments-transactions-template',
 	initialize: function(options) {
 		this.investorID = options.investorID;
-		console.log('investor', this.investorID);
-		//this.model.set('InvestorID', this.invetorID);
+		this.investorAccountID = options.investorAccountID;
 		this.isRangeSubmitted = false;
 		this.model.on("change", this.render, this);
 	},

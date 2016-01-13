@@ -75,12 +75,21 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 			var tr = $(el.currentTarget).closest('tr');
 			tr.after(newRow);
 			var transactionsEl = this.$el.find('tr.funding-acc-transactions td');
+
+			var investorData = _.find(this.model.get("AccountingList"), function(a) {
+				return a.InvestorID === investorID;
+			});
+
+			if (investorData) 
+				this.investorAccountID = investorData.FundingBankAccountID;
+			
 			this.fundingTransactionsModel = new EzBob.Underwriter.TransactionsModel({ InvestorID: investorID });
 			this.transctionView = new EzBob.Underwriter.FundingTransactionsView({
 				el: transactionsEl,
 				investorID: investorID,
+				investorAccountID: this.investorAccountID,
 				model: this.fundingTransactionsModel
-			});
+		});
 		}
 		
 		this.fundingTransactionsModel.fetch({ data: { bankAccountType: 'Funding'} });
@@ -91,15 +100,24 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 		var investorID = $(el.currentTarget).data('investorid');
 		var investorIDTransactionsOpenNow = this.$el.find('tr.repayments-acc-transactions').data('id');
 		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions').remove();
-		if (investorIDTransactionsOpenNow !== investorID) {
+		if(investorIDTransactionsOpenNow !== investorID) {
 			var newRow = $('<tr class="repayments-acc-transactions" data-id=' + investorID + '><td colspan=8></td></tr>');
 			var tr = $(el.currentTarget).closest('tr');
 			tr.after(newRow);
 			var transactionsEl = this.$el.find('tr.repayments-acc-transactions td');
+
+			var investorData = _.find(this.model.get("AccountingList"), function(a) {
+				return a.InvestorID === investorID;
+			});
+
+			if(investorData) 
+				this.investorAccountID = investorData.RepaymentsBankAccountID;
+			
 			this.repaymentsTransactionsModel = new EzBob.Underwriter.TransactionsModel({ InvestorID: investorID });
 			this.transctionView = new EzBob.Underwriter.RepaymentsTransactionsView({
 				el: transactionsEl,
 				investorID: investorID,
+				investorAccountID: this.investorAccountID,
 				model: this.repaymentsTransactionsModel
 			});
 		}

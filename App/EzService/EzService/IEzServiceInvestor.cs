@@ -1,4 +1,5 @@
 ﻿namespace EzService {
+	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using Ezbob.Backend.Models.Investor;
@@ -23,5 +24,10 @@
 
 		[OperationContract]
 		TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
+
+		[OperationContract]
+		BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment);
+
+		
 	} // interface IEzServiceInvestor
 } // namespace  

@@ -2454,6 +2454,10 @@ input[type="text"].err-field-red {
 	text-align: left;
 }
 
+.tab-pane#add-transaction-tbl td > span {
+	width: initial;
+}
+
 .medal-box .btn-group li{
 	display: inline;
 }

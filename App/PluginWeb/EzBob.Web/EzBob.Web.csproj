@@ -909,7 +909,9 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.salesforce.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.accountingInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.addTransactionView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configSchedulerView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.fundingTransactionsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorDetailsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorBankView.js" />
