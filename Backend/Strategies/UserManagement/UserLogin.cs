@@ -54,7 +54,7 @@
 
 			Log.Debug("User '{0}' with origin '{1}': data for check is {2}.", m_oData.Email, this.originName, oUser);
 
-			if (oUser.Email != m_oData.Email) {
+			if (!oUser.MatchesEnteredEmail(m_oData.Email)) {
 				Log.Debug("User '{0}' with origin {1} not found.", m_oData.Email, this.originName);
 				m_oResult = MembershipCreateStatus.InvalidUserName;
 				return;

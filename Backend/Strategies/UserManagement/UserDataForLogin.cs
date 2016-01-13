@@ -50,6 +50,10 @@
 				get { return string.IsNullOrWhiteSpace(EzPassword); } // get
 			} // IsOldPasswordStyle
 
+			public bool MatchesEnteredEmail(string enteredEmail) {
+				return Normalize(Email).Equals(Normalize(enteredEmail));
+			} // MatchesEnteredEmail
+
 			public bool IsPasswordValid(string sPassword) {
 				var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
 
@@ -89,6 +93,10 @@
 
 				return "(\n" + os + ")";
 			} // ToString
+
+			private static string Normalize(string s) {
+				return (s ?? string.Empty).Trim().ToLowerInvariant();
+			} // Normalize
 
 			// This is an old password encryption method that we got from S c o r t o.
 			// It can be removed once we are not using Password field in Security_User.
