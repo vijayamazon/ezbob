@@ -32,19 +32,21 @@
 
 		private ActionResult HandleOneAssignedToOfferInvestor(SafeReader sr, bool bRowSetStart) {
 			try {
-				int fundingBankAccountID = sr["BankAccountID"];
+				int fundingBankAccountID = sr["InvestorBankAccountID"];
 				decimal approvedSum = sr["ManagerApprovedSum"];
 				decimal investmentPercent = sr["InvestmentPercent"];
 				int investorID = sr["InvestorID"];
 				const int negative = -1;
 
-				var systemBalanceID = DB.ExecuteScalar<int>("I_SystemBalanceAdd",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("BankAccountID", fundingBankAccountID),
-					new QueryParameter("Date", this.now),
-					new QueryParameter("TransactionAmount", approvedSum * investmentPercent * negative),
-					new QueryParameter("ServicingFeeAmount", null),
-					new QueryParameter("LoanTransactionID", null));
+				AddInvestorSystemBalance addSystemBalance = new AddInvestorSystemBalance(fundingBankAccountID, 
+					this.now, 
+					approvedSum * investmentPercent * negative, 
+					null, 
+					this.cashRequestID, 
+					null, 
+					null, 
+					"Offer was approved");
+				addSystemBalance.Execute();
 
 				var notifyInvestor = new NotifyInvestorUtilizedFunds(investorID);
 				notifyInvestor.Execute();

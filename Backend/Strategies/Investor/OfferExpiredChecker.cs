@@ -31,7 +31,7 @@
 				decimal approvedSum = sr["ManagerApprovedSum"];
 				decimal creditSum = sr["CreditSum"];
 				int? investorID = sr["InvestorID"];
-				decimal? investmentPercent = sr["InvestmentPercent"];
+				decimal investmentPercent = sr["InvestmentPercent"];
 				int? fundingBankAccountID = sr["InvestorBankAccountID"];
 				string customerEmail = sr["Email"];
 				string decisionStr = sr["Decision"];
@@ -44,7 +44,7 @@
 				switch (result) {
 					case CreditResultStatus.Approved:
 						MarkOfferAsExpired(cashRequestID);
-						UpdateSystemBalance(investorID, fundingBankAccountID, creditSum, investmentPercent);
+						UpdateSystemBalance(investorID, fundingBankAccountID, creditSum, investmentPercent, cashRequestID);
 						break;
 					case CreditResultStatus.PendingInvestor:
 						MarkOfferAsExpired(cashRequestID);
@@ -92,19 +92,12 @@
 					CommandSpecies.Text);
 		}//MarkOfferAsExpired
 
-		private int UpdateSystemBalance(int? investorID, int? fundingBankAccountID, decimal creditSum, decimal? investmentPercent) {
+		private int UpdateSystemBalance(int? investorID, int? fundingBankAccountID, decimal creditSum, decimal investmentPercent, long cashRequestID) {
 			if (investorID.HasValue && fundingBankAccountID.HasValue) {
-				var systemBalanceID = DB.ExecuteScalar<int>("I_SystemBalanceAdd",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("BankAccountID", fundingBankAccountID),
-					new QueryParameter("Date", this.now),
-					new QueryParameter("TransactionAmount", creditSum * investmentPercent),
-					new QueryParameter("ServicingFeeAmount", null),
-					new QueryParameter("LoanTransactionID", null));
-
-				return systemBalanceID;
+				var addInvestorSystemBalance = new AddInvestorSystemBalance(fundingBankAccountID.Value, this.now, creditSum * investmentPercent,
+					null, cashRequestID, null, null, "Offer expired");
+				return addInvestorSystemBalance.SystemBalanceID;
 			}
-
 			return 0;
 		}//UpdateSystemBalance
 

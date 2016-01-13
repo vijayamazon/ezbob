@@ -10,7 +10,10 @@ ALTER PROCEDURE I_SystemBalanceAdd
 	@Date DATETIME,
 	@TransactionAmount DECIMAL(18,6),
 	@ServicingFeeAmount DECIMAL(18,6),
-	@LoanTransactionID INT
+	@LoanTransactionID INT,
+	@LoanID INT,
+	@CashRequestID BIGINT,
+	@Comment NVARCHAR(500)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -32,7 +35,10 @@ BEGIN
 		PreviousBalance,
 		InvestorBankAccountID,
 		ServicingFeeAmount,
-		LoanTransactionID
+		LoanTransactionID,
+		LoanID, 
+		CashRequestID,
+		Comment
 	)
 	VALUES (
 		@Date, 
@@ -41,10 +47,15 @@ BEGIN
 		@PreviousBalance, 
 		@BankAccountID, 
 		@ServicingFeeAmount, 
-		@LoanTransactionID
+		@LoanTransactionID,
+		@LoanID,
+		@CashRequestID,
+		@Comment
 	)
 	
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO
+
+

@@ -150,5 +150,12 @@
 			var stra = new NotifyInvestorUtilizedFunds(2);
 			stra.Execute();
 		}
+
+		[Test]
+		public void TestLinkOfferToInvestor() {
+			var linkOfferToInvestor = new LinkOfferToInvestor(3406, 42824);
+			linkOfferToInvestor.Execute();
+		}
+
 	}
 }
