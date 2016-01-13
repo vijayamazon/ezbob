@@ -28,6 +28,10 @@
 		[OperationContract]
 		BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment);
 
-		
+		[OperationContract]
+		ActionMetaData LinkLoanToInvestor(int userID, int customerID, int loanID);
+
+		[OperationContract]
+		ActionMetaData LinkLoanRepaymentToInvestor(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, DateTime transactionDate);
 	} // interface IEzServiceInvestor
 } // namespace  

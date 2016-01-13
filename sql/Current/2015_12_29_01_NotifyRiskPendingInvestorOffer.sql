@@ -35,14 +35,20 @@ END
 GO
 
 
-
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='InvestorFundsUtilized90')
 BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('InvestorFundsUtilized90', '0.9', 'percent of utilized funding investor''s balance for notification sending')
 END
 GO
-	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='InvestorFundsUtilized75')
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='InvestorFundsUtilized75')
 BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('InvestorFundsUtilized75', '0.75', 'percent of utilized funding investor''s balance for notification sending')
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='InvestorServicingFeePercent')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('InvestorServicingFeePercent', '0.01', 'percent of each op loan repayment to reduce from investor')
 END
 GO

@@ -21,7 +21,6 @@
 	using PaymentServices.PacNet;
 	using SalesForceLib.Models;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public interface ILoanCreator {
@@ -222,7 +221,9 @@
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
+			
 			HandleSalesForceTopup(cus, now); //EZ-3908
+			this.serviceClient.Instance.LinkLoanToInvestor(this.context.UserId, cus.Id, loan.Id);
 			// verify see above line 45-48
 			// 
 			// ++++++++

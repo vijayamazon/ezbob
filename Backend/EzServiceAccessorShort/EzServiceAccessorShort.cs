@@ -1,4 +1,5 @@
 ﻿namespace EzServiceShortcut {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -7,6 +8,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Utils;
 
@@ -99,7 +101,12 @@
             stra.Execute();
             return stra.Package.Out;
         }
-	
+
+		public void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate) {
+			LinkRepaymentToInvestor stra = new LinkRepaymentToInvestor(loanID, loanTransactionID, amount, transactionDate);
+			stra.Execute();
+		}
+
 		/*
 		/// <summary>
 		/// 

@@ -1,4 +1,5 @@
 ﻿namespace ServiceClientProxy {
+	using System;
 	using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
@@ -87,7 +88,11 @@
             return null;
         }
 
-			/*
+		public void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate) {
+			this.m_oServiceClient.Instance.LinkLoanRepaymentToInvestor(userID, customerID, loanID, loanTransactionID, amount, transactionDate);
+		}
+
+		/*
 		/// <summary>
 		/// 
 		/// </summary>

@@ -158,8 +158,14 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
 	template: '#sliders-template',
 	initialize: function () {
+		this.type = 'take-loan-sliders';
 		return this;
 	},
+
+	serializeData: function () {
+		return { type: this.type };
+	},
+
 	onRender: function () {
 		var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
 		var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');

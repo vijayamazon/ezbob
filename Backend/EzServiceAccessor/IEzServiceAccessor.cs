@@ -1,4 +1,5 @@
 ﻿namespace EzServiceAccessor {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
@@ -52,6 +53,7 @@
 
 		// NL_Model AddPayment(NL_Model nlModel);
 
+		void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate);
 
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

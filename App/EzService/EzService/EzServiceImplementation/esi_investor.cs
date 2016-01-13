@@ -70,6 +70,16 @@
 			};
 		}
 
+		public ActionMetaData LinkLoanToInvestor(int userID, int customerID, int loanID) {
+			var metadata = Execute<LinkLoanToInvestor>(customerID, userID, customerID, loanID);
+			return metadata;
+		}
+
+		public ActionMetaData LinkLoanRepaymentToInvestor(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, DateTime transactionDate) {
+			var metadata = Execute<LinkRepaymentToInvestor>(customerID, userID, loanID, loanTransactionID, transactionAmount, transactionDate);
+			return metadata;
+		}
+
 	}
 }
 

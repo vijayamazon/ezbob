@@ -5,11 +5,13 @@
 	using ConfigManager;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using log4net;
+	using NHibernate;
 	using NHibernate.Linq;
 	using StructureMap;
 
@@ -45,6 +47,10 @@
 			string sManualPaymentMethod = null,
 			NL_Model nlModel = null
 		) {
+			var session = ObjectFactory.GetInstance<ISession>();
+			ITransaction tran = session.Transaction;
+			session.BeginTransaction();
+
 			var paymentTime = term ?? DateTime.UtcNow;
 
 			var oldLoan = loan.Clone();
@@ -64,7 +70,7 @@
 				InterestOnly = interestOnly,
 				LoanTransactionMethod = loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod)
 			};
-
+			
 			loan.AddTransaction(transactionItem);
 
 			// TODO add payment to new payment table
@@ -132,6 +138,11 @@
 					});
 				} // for each delta
 			} // if
+
+			tran.Commit();
+
+			var accessor = ObjectFactory.GetInstance<IEzServiceAccessor>();
+			accessor.LinkPaymentToInvestor(1, transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime);
 
 			return amount;
 		} // PayLoan

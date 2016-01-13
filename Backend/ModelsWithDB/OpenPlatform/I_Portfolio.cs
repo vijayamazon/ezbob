@@ -26,10 +26,10 @@
 
 		[FK("I_Grade", "GradeID")]
         [DataMember]
-        public int GradeId { get; set; }
+        public int? GradeID { get; set; }
 
         [DataMember]
-        public TimeSpan TimeSpan { get; set; }
+        public DateTime TimeSpan { get; set; }
 
 	}//class I_Portfolio
 }//ns
