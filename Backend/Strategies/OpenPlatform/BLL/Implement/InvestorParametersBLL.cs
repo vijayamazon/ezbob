@@ -43,13 +43,13 @@
         public decimal GetGradeAvailableAmount(int investorId, InvestorLoanCashRequest investorLoanCashRequest, int ruleType) {
 
             //The amount that investor invest on grade this month.                                   
-            decimal investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, investorLoanCashRequest.Grade);
+            decimal investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, (Grade)investorLoanCashRequest.GradeID);
 
             //Sum of already funded this month + current
             var totalFunded = investorGradeInvestedAmount + investorLoanCashRequest.ManagerApprovedSum;
 
             //Calc max score for grade.
-            var gradeMaxScore = (decimal)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.Grade, ruleType);
+            var gradeMaxScore = (decimal)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.GradeID, ruleType);
 
             //Calc total sum of positive transctions this month
              var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
