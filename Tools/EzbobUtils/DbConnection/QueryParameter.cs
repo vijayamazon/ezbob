@@ -13,6 +13,7 @@
 		public ParameterDirection Direction { get; set; }
 		public DbParameter UnderlyingParameter { get; set; }
 		public string UnderlyingTypeName { get; set; }
+		public string ObjectPropertyName { get; set; }
 
 		public object Value {
 			get { return this.parameterValue; }
