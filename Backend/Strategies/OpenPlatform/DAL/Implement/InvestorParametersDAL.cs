@@ -26,22 +26,22 @@
             return Library.Instance.DB.Fill<I_InvestorParams>("I_GetInvestorParametersDB", CommandSpecies.StoredProcedure, queryParameters);
         }
 
-        public double GetGradeMonthlyInvestedAmount(int investorId, Grade grade) {
+        public double GetGradeMonthlyInvestedAmount(int investorId, int grade) {
             var myDate = DateTime.Now;
             var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
             var result = Library.Instance.DB.ExecuteScalar<decimal>("I_GetGradeMonthlyInvestedAmount", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("GradeID", (int)grade), new QueryParameter("FirstOfMonth", TimeZoneInfo.ConvertTimeToUtc(firstOfMonth)));
             return (double)result;
         }
 
-        public decimal GetGradeMaxScore(int investorId, Grade grade, int ruleType) {
+        public decimal GetGradeMaxScore(int investorId, int grade, int ruleType) {
             var index = Library.Instance.DB.ExecuteScalar<I_Index>("I_GetGradeMaxScore", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("TypeID", (int)ruleType));
             switch (grade) {
-                case Grade.A: return index.GradeAMaxScore;
-                case Grade.B: return index.GradeBMaxScore;
-                case Grade.C: return index.GradeCMaxScore;
-                case Grade.D: return index.GradeDMaxScore;
-                case Grade.E: return index.GradeEMaxScore;
-                case Grade.F: return index.GradeFMaxScore;
+                case (int)Grade.A: return index.GradeAMaxScore;
+				case (int)Grade.B: return index.GradeBMaxScore;
+				case (int)Grade.C: return index.GradeCMaxScore;
+				case (int)Grade.D: return index.GradeDMaxScore;
+				case (int)Grade.E: return index.GradeEMaxScore;
+				case (int)Grade.F: return index.GradeFMaxScore;
             }
             return 0;
         }

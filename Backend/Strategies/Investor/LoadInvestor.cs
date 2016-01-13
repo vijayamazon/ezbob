@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
 

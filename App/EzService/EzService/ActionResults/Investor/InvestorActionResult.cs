@@ -1,6 +1,6 @@
 ﻿namespace EzService.ActionResults.Investor {
 	using System.Runtime.Serialization;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.Models.Investor;
 
 	[DataContract]
 	public class InvestorActionResult : ActionResult {

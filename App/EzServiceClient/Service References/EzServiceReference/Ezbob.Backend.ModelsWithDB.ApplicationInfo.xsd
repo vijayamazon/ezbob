@@ -16,6 +16,7 @@
       <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="CashRequestId" type="xs:long" />
       <xs:element minOccurs="0" name="CashRequestTimestamp" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="CreditResult" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CurrentFundingTypeID" type="xs:int" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentGradeRange" nillable="true" type="q1:I_GradeRange" />
       <xs:element minOccurs="0" name="CurrentProductID" type="xs:int" />
@@ -32,7 +33,7 @@
       <xs:element minOccurs="0" name="EmployeeCount" type="xs:int" />
       <xs:element minOccurs="0" name="FreeCashFlow" type="xs:decimal" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="FundingTypes" nillable="true" type="q3:ArrayOfI_FundingType" />
-      <xs:element minOccurs="0" name="GradeID" type="xs:int" />
+      <xs:element minOccurs="0" name="GradeID" nillable="true" type="xs:int" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="GradeRanges" nillable="true" type="q4:ArrayOfI_GradeRange" />
       <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="Grades" nillable="true" type="q5:ArrayOfI_Grade" />
       <xs:element minOccurs="0" name="HasYodlee" type="xs:boolean" />
@@ -49,7 +50,7 @@
       <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanTypeId" type="xs:int" />
       <xs:element minOccurs="0" name="LoanTypes" nillable="true" type="tns:ArrayOfLoanTypeModel" />
-      <xs:element minOccurs="0" name="LogicalGlueScore" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LogicalGlueScore" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="ManualSetupFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="NumOfLoans" type="xs:int" />
       <xs:element minOccurs="0" name="OfferExpired" type="xs:boolean" />

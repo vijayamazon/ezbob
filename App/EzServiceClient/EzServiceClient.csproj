@@ -78,6 +78,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.Investor.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.NewLoan1.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -91,9 +94,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Investor.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.NewLoan1.xsd">

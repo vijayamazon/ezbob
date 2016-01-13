@@ -1,6 +1,6 @@
 ﻿namespace EzBobTest.OpenPlatformTests.Investor {
     using System.Collections.Generic;
-    using Ezbob.Backend.ModelsWithDB.Investor;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
@@ -178,9 +178,9 @@
                 });
 
 
-            investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, Grade.A,1))
+            investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, (int)Grade.A,1))
                 .Returns((decimal)0.2);
-            investorParametersDALMock.Setup(x => x.GetGradeMonthlyInvestedAmount(1, Grade.A))
+            investorParametersDALMock.Setup(x => x.GetGradeMonthlyInvestedAmount(1, (int)Grade.A))
                 .Returns(100);
 
             investorParametersDALMock.Setup(x => x.GetInvestorMonthlyFundingCapital(1))
@@ -322,7 +322,7 @@
             return new InvestorLoanCashRequest() {
                 ManagerApprovedSum = 999,
                 CashRequestID = 1,
-                Grade = Grade.A
+                GradeID = (int)Grade.A
             };
         }
 

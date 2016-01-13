@@ -184,12 +184,6 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
-    <Compile Include="Investor\AccountingDataModel.cs" />
-    <Compile Include="Investor\InvestorBankAccountModel.cs" />
-    <Compile Include="Investor\InvestorCashRequest.cs" />
-    <Compile Include="Investor\InvestorContactModel.cs" />
-    <Compile Include="Investor\InvestorModel.cs" />
-    <Compile Include="Investor\TransactionsDataModel.cs" />
     <Compile Include="NewLoan\NL_Model.cs">
       <SubType>Code</SubType>
     </Compile>

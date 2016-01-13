@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.Investor {
+﻿namespace Ezbob.Backend.Models.Investor {
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;

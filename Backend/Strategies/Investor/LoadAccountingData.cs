@@ -2,7 +2,7 @@
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Database;
 
 	public class LoadAccountingData : AStrategy {

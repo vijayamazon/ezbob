@@ -36,7 +36,7 @@
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.NewLoan1.xsd" MetadataType="Schema" ID="6336fe54-3002-45da-93d8-54d20c997e8f" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.NewLoan1.xsd" MetadataType="Schema" ID="e7fb3d6c-077a-49e7-8277-665db90a7636" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="DbConstants1.xsd" MetadataType="Schema" ID="70aa9cbf-7d32-4009-8608-604ba93a2f9a" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Investor.xsd" MetadataType="Schema" ID="2adee419-66b4-4a22-b809-8b8ab2f3db37" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.Investor.xsd" MetadataType="Schema" ID="2504780b-2be0-4c33-bbf6-b1be09cd018b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzService.ActionResults.Investor1.xsd" MetadataType="Schema" ID="99b1a84e-9889-4687-b397-458a09034ca9" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Integration.LogicalGlue.Engine.Interface1.xsd" MetadataType="Schema" ID="bcba8a9b-ad46-4d3e-83f5-7d0a66a4b1d5" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian1.xsd" MetadataType="Schema" ID="507c323a-4239-4d52-9c11-a3a573a4d638" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />

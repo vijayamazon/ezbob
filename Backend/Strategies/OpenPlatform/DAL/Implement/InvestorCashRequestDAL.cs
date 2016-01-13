@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Implement
 {
     using System;
-    using Ezbob.Backend.ModelsWithDB.Investor;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.LogicalGlue;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
@@ -33,7 +33,7 @@
             return  new InvestorLoanCashRequest() {
                 CashRequestID = cashRequestID,
                 ManagerApprovedSum = cashRequestData.ManagerApprovedSum * (double)investorPrecentage,
-                Grade = (Grade)grade,
+                GradeID = grade,
                 FundingType = investorPrecentage
             };
             

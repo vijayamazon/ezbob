@@ -2,7 +2,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Ezbob.Backend.ModelsWithDB.Investor;
+    using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
@@ -42,13 +42,13 @@
         public double GetGradeAvailableAmount(int investorId, InvestorLoanCashRequest investorLoanCashRequest, int ruleType) {
 
             //The amount that investor invest on grade this month.                                   
-            double investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, investorLoanCashRequest.Grade);
+            double investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, investorLoanCashRequest.GradeID);
 
             //Sum of already funded this month + current
             var totalFunded = investorGradeInvestedAmount + investorLoanCashRequest.ManagerApprovedSum;
 
             //Calc max score for grade.
-            var gradeMaxScore = (double)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.Grade, ruleType);
+            var gradeMaxScore = (double)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.GradeID, ruleType);
 
             //Calc total sum of positive transctions this month
              var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);

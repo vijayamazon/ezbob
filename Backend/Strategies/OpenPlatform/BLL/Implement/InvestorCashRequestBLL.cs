@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement
 {
-    using Ezbob.Backend.ModelsWithDB.Investor;
-    using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
+	using Ezbob.Backend.Models.Investor;
+	using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
     using StructureMap.Attributes;
 

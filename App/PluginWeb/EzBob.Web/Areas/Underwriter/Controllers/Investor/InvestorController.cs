@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Ezbob.Backend.ModelsWithDB.Investor;
+	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using EzBob.Web.Areas.Underwriter.Models.Investor;
 	using Infrastructure;
@@ -56,8 +56,8 @@
 			}
 
 			var result = this.serviceClient.Instance.CreateInvestor(this.context.UserId,
-				new Ezbob.Backend.ModelsWithDB.Investor.InvestorModel {
-					InvestorType = new Ezbob.Backend.ModelsWithDB.Investor.InvestorTypeModel { 
+				new Ezbob.Backend.Models.Investor.InvestorModel {
+					InvestorType = new Ezbob.Backend.Models.Investor.InvestorTypeModel { 
 						InvestorTypeID = investor.InvestorType 
 					},
 					Name = investor.CompanyName,
@@ -66,7 +66,7 @@
 					FundsTransferDate = investor.FundsTransferDate
 				},
 				new[] { 
-					new Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel {
+					new Ezbob.Backend.Models.Investor.InvestorContactModel {
 								Comment = investorContact.Comment,
 								Email = investorContact.ContactEmail,
 								IsPrimary = true,
@@ -77,7 +77,7 @@
 								Role = investorContact.Role,
 					}
 				},
-				InvestorBank.Select(x => new Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel {
+				InvestorBank.Select(x => new Ezbob.Backend.Models.Investor.InvestorBankAccountModel {
 					BankAccountName = x.BankAccountName,
 					BankAccountNumber = x.BankAccountNumber,
 					BankCode = x.BankSortCode,
@@ -102,7 +102,7 @@
 		public JsonResult ManageInvestorContact(int InvestorID, FrontInvestorContactModel contact) {
 			
 			var result = this.serviceClient.Instance.ManageInvestorContact(this.context.UserId,
-				new Ezbob.Backend.ModelsWithDB.Investor.InvestorContactModel {
+				new Ezbob.Backend.Models.Investor.InvestorContactModel {
 					InvestorContactID = contact.InvestorContactID,
 					InvestorID = InvestorID,
 					IsActive = contact.IsActive,
@@ -126,7 +126,7 @@
 		public JsonResult ManageInvestorBankAccount(int InvestorID, FrontInvestorBankAccountModel bank) {
 			
 			var result = this.serviceClient.Instance.ManageInvestorBankAccount(this.context.UserId,
-				new Ezbob.Backend.ModelsWithDB.Investor.InvestorBankAccountModel {
+				new Ezbob.Backend.Models.Investor.InvestorBankAccountModel {
 					InvestorBankAccountID = bank.InvestorBankAccountID,
 					InvestorID = InvestorID,
 					IsActive = bank.IsActive,

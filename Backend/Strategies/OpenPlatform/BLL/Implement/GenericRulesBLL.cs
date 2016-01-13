@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.BLL.Implement {
-    using Ezbob.Backend.ModelsWithDB.Investor;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using StructureMap.Attributes;
     public class GenericRulesBLL : IGenericRulesBLL {
