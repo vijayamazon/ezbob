@@ -81,7 +81,7 @@
 		} // LogicalGlueFlowFollowed
 
 		protected virtual void RunPrimary() {
-			this.oldWayAgent.RunPrimaryOnly();
+			this.oldWayAgent.Init().RunPrimaryOnly();
 			this.oldWayAgent.Trail.SetTag(Trail.Tag);
 			this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
 
