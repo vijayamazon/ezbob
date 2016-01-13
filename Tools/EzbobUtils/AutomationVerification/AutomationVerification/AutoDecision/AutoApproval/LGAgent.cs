@@ -23,6 +23,7 @@
 			Now = now;
 
 			Trail = new ApprovalTrail(customerID, cashRequestID, this.log);
+			Trail.SetTag("AutomationVerificationAutoApproveLGAgent");
 
 			this.oldWayAgent = new Agent(
 				customerID,

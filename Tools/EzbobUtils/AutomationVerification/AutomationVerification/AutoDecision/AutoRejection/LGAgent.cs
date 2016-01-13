@@ -1,10 +1,13 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
+	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 
 	/// <summary>
 	/// Detects whether customer should be rejected on specific time using Logical Glue data.
@@ -40,7 +43,7 @@
 			long? cashRequestID,
 			RejectionConfigs configs = null
 		) {
-			this.customerId = nCustomerID;
+			this.customerID = nCustomerID;
 			this.now = now;
 
 			this.log = oLog;
@@ -49,41 +52,132 @@
 			this.configs = configs; // Can be null (thus should be loaded from DB somehow).
 
 			Trail = new RejectionTrail(nCustomerID, cashRequestID, oLog);
+			Trail.SetTag("AutomationVerificationAutoRejectLGAgent");
 
-			this.oldWayAgent = new RejectionAgent(this.db, this.log, this.customerId, Trail.CashRequestID, this.configs);
+			// old auto-reject with medal (run in parallel)
+			this.internalAgent = new RejectionAgent(this.db, this.log, this.customerID, Trail.CashRequestID, this.configs);
+
+			model = null;
 		} // constructor
 
 		public RejectionTrail Trail { get; private set; }
+		private readonly AConnection db;
+		private readonly ASafeLog log;
+		private readonly int customerID;
+		private readonly RejectionConfigs configs;
+		private readonly DateTime now;
+		// old auto-reject with medal (run in parallel)
+		private readonly RejectionAgent internalAgent;
 
-		public RejectionTrail OldWayTrail {
-			get { return this.oldWayAgent.Trail; }
-		} // OldWayTrail
+		public AV_LogicalGlueDataModel model { get; private set; }
+
+		public RejectionTrail InternalTrail {
+			get { return this.internalAgent.Trail; }
+		} // InternalTrail
 
 		/// <summary>
 		/// Makes decision: to reject or not to reject.
 		/// </summary>
 		public void MakeDecision() {
-			this.oldWayAgent.MakeDecision(this.oldWayAgent.GetRejectionInputData(this.now));
-			this.oldWayAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
 
-			ChooseInternalOrLogicalGlueFlow();
+			// old auto-reject with medal (run in parallel)
+			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(this.now));
+			this.internalAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
 
-			if (LogicalGlueFlowFollowed) {
-				// TODO Logical Glue flow goes here.
-			} else
-				Trail.AppendOverridingResults(this.oldWayAgent.Trail);
+			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+
+				this.log.Debug("Secondary LG: checking auto reject for customer {0}...", this.customerID);
+	
+				// get company data at "now" date 
+				model = this.db.FillFirst<AV_LogicalGlueDataModel>(
+					"select top 1 h.CompanyId, co.TypeOfBusiness from [dbo].[CustomerCompanyHistory] h join [dbo].[Company] co on co.Id=h.CompanyId and h.CustomerId=@CustomerID and h.[InsertDate] <= @ProcessingDate order by h.[InsertDate] desc", CommandSpecies.Text,
+					new QueryParameter("CustomerID", this.customerID),
+					new QueryParameter("ProcessingDate", this.now));
+
+				this.log.Debug("Customer {0} has company {1} data at {2:d}", this.customerID, model.CompanyId, this.now);
+
+				// get company data from Customer table 
+				if (model == null) {
+					model = this.db.FillFirst<AV_LogicalGlueDataModel>(
+					"select CompanyId, TypeOfBusiness from Customer where Id=@CustomerID", CommandSpecies.Text, new QueryParameter("CustomerID", this.customerID));
+				}
+
+				TypeOfBusiness typeOfBusiness;
+				Enum.TryParse(model.TypeOfBusiness, out typeOfBusiness);
+
+				this.log.Debug("Customer {0} has company {1} of type {2}", this.customerID, model.CompanyId, typeOfBusiness);
+
+				if (typeOfBusiness.IsRegulated() || model == null) {
+
+					Trail.AddNote(string.Format("Company for customer {0} for {1:d} not found or not regulated. Auto-reject transmitted to 'old' (internal) autodecision with medal.", this.customerID, this.now));
+
+					// add InternalFlow step 
+					StepNoDecision<InternalFlow>().Init();
+					return;
+				}
+
+				// init LogicalGlueFlow  
+				StepNoDecision<LogicalGlueFlow>().Init();
+
+				model = this.db.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", this.customerID),
+					new QueryParameter("CompanyID", model.CompanyId),
+					new QueryParameter("ProcessingDate", this.now));
+
+				// LG data not found
+				if (model == null) {
+					StepNoReject<LogicalGlueFlow>(true);
+					return;
+				}
+
+				StepNoDecision<LGDataFound>().Init();
+
+				// LG data returned error
+				if (!string.IsNullOrEmpty(model.ErrorMessage)) {
+					StepNoReject<LogicalGlueFlow>(true);
+					return;
+				}
+
+				StepNoDecision<LGWithoutError>().Init();
+
+				if (model.Message.Equals("Hard reject")) {
+					StepReject<LogicalGlueFlow>(true);
+					return;
+				}
+
+				StepNoDecision<LGHardReject>().Init();
+
+				if (model.GradeID==0) {
+					StepNoReject<LogicalGlueFlow>(true);
+					return;
+				}
+
+				StepNoDecision<HasBucket>().Init();
+
+				if (model.GradeOriginID == 0) {
+					StepReject<LogicalGlueFlow>(true);
+					return;
+				}
+
+				StepNoDecision<BucketSupported>().Init();
+				
+				// chto eto? zachem eto?
+				if (!LogicalGlueFlowFollowed) {
+					Trail.AppendOverridingResults(this.internalAgent.Trail);
+				}
+					
+
+				//if (LogicalGlueFlowFollowed) {
+				//	// TODO Logical Glue flow goes here.
+				//} else
+				//	Trail.AppendOverridingResults(this.internalAgent.Trail);
+			}
+
 		} // MakeDecision
 
 		public bool LogicalGlueFlowFollowed {
 			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
 		} // LogicalGlueFlowFollowed
-
-		protected virtual void ChooseInternalOrLogicalGlueFlow() {
-			if (false) // TODO choose from company type
-				StepNoDecision<LogicalGlueFlow>().Init();
-			else
-				StepNoDecision<InternalFlow>().Init();
-		} // ChooseInternalOrLogicalGlueFlow
 
 		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
@@ -95,14 +189,8 @@
 
 		private T StepNoDecision<T>() where T : ATrace {
 			return Trail.Dunno<T>();
-		} // StepReject
+		} // StepNoDecision
 
-		private readonly AConnection db;
-		private readonly ASafeLog log;
 
-		private readonly int customerId;
-		private readonly RejectionConfigs configs;
-		private readonly DateTime now;
-		private readonly RejectionAgent oldWayAgent;
 	} // class LGAgent
 } // namespace

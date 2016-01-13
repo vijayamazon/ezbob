@@ -392,7 +392,7 @@
 		public decimal CollectionRate { get; set; }
 		public decimal Cogs { get; set; }
 		public decimal BrokerSetupFee { get; set; }
-        public decimal CosmeCollectionRate { get; set; }
+		public decimal CosmeCollectionRate { get; set; }
 	}
 
 	public class OfferInputModel {
@@ -401,8 +401,8 @@
 		public Medal Medal { get; set; }
 		public bool AspireToMinSetupFee { get; set; }
 		public int CustomerId { get; set; }
-        public int LoanSourceId { get; set; }
-        public int RepaymentPeriod { get; set; }
+		public int LoanSourceId { get; set; }
+		public int RepaymentPeriod { get; set; }
 	}
 
 	public class OfferOutputModel : IEquatable<OfferOutputModel> {
@@ -410,7 +410,7 @@
 		public Medal Medal { get; set; }
 		public DateTime CalculationTime { get; set; }
 
-		public int RepaymentPeriod { get; set; } 
+		public int RepaymentPeriod { get; set; }
 
 		public LoanType LoanType {
 			get { return LoanType.StandardLoanType; }
@@ -420,8 +420,8 @@
 		public int Amount { get; set; }
 		public string ScenarioName { get; set; }
 
-        public int LoanSourceID { get; set; }
-        public bool IsError { get; set; }
+		public int LoanSourceID { get; set; }
+		public bool IsError { get; set; }
 		public bool IsMismatch { get; set; }
 		public bool HasDecision { get; set; }
 		public string Message { get; set; }
@@ -479,5 +479,28 @@
 		public string AccountStatusCodes { get; set; }
 		public int Balance { get; set; }
 		public int CurrentDefBalance { get; set; }
+	}
+
+	public class AV_LogicalGlueDataModel {
+		public int CompanyId { get; set; }
+		public string TypeOfBusiness { get; set; }
+		public long ServiceLogID { get; set; }
+		public long RequestID { get; set; }
+		public decimal MonthlyRepayment { get; set; }
+		public long ResponseID { get; set; }
+		public DateTime ReceivedTime { get; set; }
+		public int HttpStatus { get; set; }
+		public int ResponseStatus { get; set; }
+		public string TimeoutSource { get; set; }
+		public string ErrorMessage { get; set; }
+		public int GradeID { get; set; }
+		public bool HasEquifaxData { get; set; }
+		public string ParsingExceptionType { get; set; }
+		public string ParsingExceptionMessage { get; set; }
+		public long EtlCodeID { get; set; }
+		public long EtlDataID { get; set; }
+		public string Message { get; set; }
+		public string EtlCode { get; set; }
+		public int GradeOriginID { get; set; }
 	}
 }
