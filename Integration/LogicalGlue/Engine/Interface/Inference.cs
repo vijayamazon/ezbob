@@ -25,6 +25,12 @@
 		[DataMember]
 		public bool IsTryOut { get; set; }
 
+		[DataMember]
+		public string Reason { get; set; }
+
+		[DataMember]
+		public string Outcome { get; set; }
+
 		public decimal? Score {
 			get {
 				return ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
@@ -45,6 +51,9 @@
 				this.modelOutputs = value ?? new SortedDictionary<ModelNames, ModelOutput>();
 			} // set
 		} // ModelOutputs
+
+		[DataMember]
+		public EtlData Etl { get; set; }
 
 		[DataMember]
 		public InferenceError Error { get; set; }

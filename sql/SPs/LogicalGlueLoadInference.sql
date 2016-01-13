@@ -162,6 +162,18 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	SELECT
+		RowType = 'ETL',
+		r.EtlDataID,
+		r.ResponseID,
+		r.EtlCodeID,
+		r.Message
+	FROM
+		LogicalGlueEtlData r
+		INNER JOIN #relevant_responses rr ON r.ResponseID = rr.ResponseID
+
+	------------------------------------------------------------------------------
+
 	DROP TABLE #models
 	DROP TABLE #relevant_responses
 END

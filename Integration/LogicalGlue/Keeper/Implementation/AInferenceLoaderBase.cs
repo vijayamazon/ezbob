@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -11,7 +12,10 @@
 	using JetBrains.Annotations;
 
 	using DBResponse = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.Response;
+	using DBEtlData = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.EtlData;
 	using DBModelOutput = Ezbob.Integration.LogicalGlue.Keeper.Implementation.DBTable.ModelOutput;
+
+	using PublicEtlData = Ezbob.Integration.LogicalGlue.Engine.Interface.EtlData;
 	using PublicModelOutput = Ezbob.Integration.LogicalGlue.Engine.Interface.ModelOutput;
 
 	internal abstract class AInferenceLoaderBase : ATimedCustomerActionBase {
@@ -99,6 +103,10 @@
 				ProcessMissingColumn(sr);
 				break;
 
+			case RowTypes.ETL:
+				ProcessEtl(sr);
+				break;
+
 			default:
 				throw OutOfRangeException("Inference loader({1}): unsupported row type '{0}'.", rowTypeName, this.argList);
 			} // switch
@@ -116,9 +124,12 @@
 				UniqueID = sr["UniqueID"],
 				MonthlyRepayment = sr["MonthlyRepayment"],
 				IsTryOut = sr["IsTryOut"],
+
 				ResponseID = dbResponse.ID,
 				ReceivedTime = dbResponse.ReceivedTime,
 				Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID,
+				Reason = dbResponse.Reason,
+				Outcome = dbResponse.Outcome,
 
 				Error = new InferenceError {
 					Message = dbResponse.ErrorMessage,
@@ -141,6 +152,41 @@
 
 			Log.Debug("Inference loader({0}): loaded response (id: {1}).", this.argList, result.ResponseID);
 		} // ProcessResponse
+
+		private void ProcessEtl(SafeReader sr) {
+			DBEtlData dbEtl = sr.Fill<DBEtlData>();
+
+			if (!this.resultSet.ContainsKey(dbEtl.ResponseID)) {
+				throw OutOfRangeException(
+					"Inference loader({0}): ETL '{1}' should belong to unknown response '{2}'.",
+					this.argList,
+					dbEtl.ID,
+					dbEtl.ResponseID
+				);
+			} // if
+
+			EtlCode? code = null;
+
+			if (dbEtl.EtlCodeID != null) {
+				int[] x = (int[])Enum.GetValues(typeof(EtlCode));
+
+				if (!x.Contains((int)dbEtl.EtlCodeID.Value)) {
+					throw OutOfRangeException(
+						"Inference loader({0}): ETL '{1}' has unsupported ETL code value of '{2}'.",
+						this.argList,
+						dbEtl.ID,
+						dbEtl.EtlCodeID.Value
+					);
+				} // if
+
+				code = (EtlCode)(int)dbEtl.EtlCodeID.Value;
+			} // if
+
+			this.resultSet[dbEtl.ResponseID].Etl = new PublicEtlData {
+				Code = code,
+				Message = dbEtl.Message,
+			};
+		} // ProcessEtl
 
 		private void ProcessModelOutput(SafeReader sr) {
 			DBModelOutput dbModel = sr.Fill<DBModelOutput>();
@@ -300,6 +346,7 @@
 			Warning,
 			EncodingFailure,
 			MissingColumn,
+			ETL,
 		} // enum RowTypes
 
 		private readonly SortedDictionary<long, PublicModelOutput> models;

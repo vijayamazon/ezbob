@@ -11,5 +11,13 @@
 		public string ParsingExceptionType { get; set; }
 		[DataMember]
 		public string ParsingExceptionMessage { get; set; }
+
+		public bool HasError() {
+			return
+				(TimeoutSource != null) ||
+				!string.IsNullOrWhiteSpace(Message) ||
+				!string.IsNullOrWhiteSpace(ParsingExceptionMessage) ||
+				!string.IsNullOrWhiteSpace(ParsingExceptionType);
+		} // HasError
 	} // class InferenceError
 } // namespace

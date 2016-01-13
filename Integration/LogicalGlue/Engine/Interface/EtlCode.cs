@@ -1,8 +1,9 @@
-﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
+﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System.Runtime.Serialization;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
+	[DataContract]
 	[JsonConverter(typeof(StringEnumConverter))]
 	public enum EtlCode {
 		[EnumMember(Value = "P")]

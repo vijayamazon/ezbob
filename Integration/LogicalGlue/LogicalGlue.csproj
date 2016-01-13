@@ -51,6 +51,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Engine\Interface\Bucket.cs" />
+    <Compile Include="Engine\Interface\EtlData.cs" />
     <Compile Include="Engine\Interface\GetInferenceMode.cs" />
     <Compile Include="Engine\Interface\InferenceError.cs" />
     <Compile Include="Engine\Interface\InferenceExt.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Exceptions\Keeper\KeeperAlert.cs" />
     <Compile Include="Exceptions\Keeper\KeeperWarning.cs" />
     <Compile Include="Harvester\Interface\Etl.cs" />
-    <Compile Include="Harvester\Interface\EtlCode.cs" />
+    <Compile Include="Engine\Interface\EtlCode.cs" />
     <Compile Include="Harvester\Interface\InferenceInputSerializer.cs" />
     <Compile Include="Harvester\Interface\InferenceInput.cs" />
     <Compile Include="Harvester\Interface\EncodingFailure.cs" />

@@ -25,7 +25,7 @@ BEGIN
 	WHERE
 		c.Id = @CompanyID
 		AND
-		c.TypeOfBusiness IN ('Limited', 'LLP')
+		c.TypeOfBusiness IN ('Limited', 'LLP', 'PShip')
 		AND
 		c.ExperianRefNum IS NOT NULL
 		AND
