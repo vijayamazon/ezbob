@@ -76,10 +76,11 @@
 		}
 
 		public ActionMetaData LinkLoanRepaymentToInvestor(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, DateTime transactionDate) {
-			var metadata = Execute<LinkRepaymentToInvestor>(customerID, userID, loanID, loanTransactionID, transactionAmount, transactionDate);
+			Log.Info("EzServiceInvestor LinkLoanRepaymentToInvestor {0}", loanTransactionID);
+			var metadata = Execute<LinkRepaymentToInvestor>(customerID, userID, 
+				loanID, loanTransactionID, transactionAmount, transactionDate);
 			return metadata;
 		}
-
 	}
 }
 

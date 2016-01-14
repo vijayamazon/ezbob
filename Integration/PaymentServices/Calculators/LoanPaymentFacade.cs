@@ -141,9 +141,9 @@
 
 			tran.Commit();
 
+			Log.InfoFormat("LinkPaymentToInvestor {0} {1} {2} {3} {4} begin", transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime);
 			var accessor = ObjectFactory.GetInstance<IEzServiceAccessor>();
 			accessor.LinkPaymentToInvestor(1, transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime);
-
 			return amount;
 		} // PayLoan
 

@@ -11,10 +11,12 @@ GO
 
 CREATE TYPE I_PortfolioList AS TABLE (
 	[InvestorID] INT NOT NULL,
+	[ProductTypeID] INT NOT NULL,
 	[LoanID] INT NOT NULL,
 	[LoanPercentage] DECIMAL(18, 6) NOT NULL,
 	[InitialTerm] INT NOT NULL,
-	[GradeId] INT NOT NULL
+	[GradeId] INT,
+	[Timestamp] DATETIME NOT NULL
 )
 GO
 
@@ -27,20 +29,22 @@ BEGIN
 	INSERT INTO I_Portfolio (
 		[InvestorID],
 		[LoanID],
+		[ProductTypeID],
 		[LoanPercentage],
 		[InitialTerm],
-		[GradeId]
+		[GradeId],
+		[Timestamp]
 	) SELECT
 		[InvestorID],
 		[LoanID],
+		[ProductTypeID],
 		[LoanPercentage],
 		[InitialTerm],
-		[GradeId]
+		[GradeId],
+		[Timestamp]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO
-
-

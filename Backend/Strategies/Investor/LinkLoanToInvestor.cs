@@ -41,13 +41,15 @@
 				int investorID = sr["InvestorID"];
 				int loanTerm = sr["RepaymentPeriod"];
 				decimal loanAmount = sr["LoanAmount"];
-				 
+				int? productTypeID = sr["ProductTypeID"];
+
 				I_Portfolio portfolio = new I_Portfolio {
 					InitialTerm = loanTerm,
 					InvestorID = investorID,
+					ProductTypeID = productTypeID,
 					LoanID = this.loanID,
 					LoanPercentage = investmentPercent,
-					TimeSpan = this.now,
+					Timestamp = this.now,
 					GradeID = this.bucket.HasValue ? (int)this.bucket.Value : (int?)null
 				};
 

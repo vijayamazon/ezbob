@@ -14,6 +14,10 @@
         [DataMember]
         public int InvestorID { get; set; }
 
+		[FK("I_ProductType", "ProductTypeID")]
+        [DataMember]
+		public int? ProductTypeID { get; set; }
+		
 		[FK("Loan", "Id")]
 		[DataMember]
         public int LoanID { get; set; }
@@ -29,7 +33,7 @@
         public int? GradeID { get; set; }
 
         [DataMember]
-        public DateTime TimeSpan { get; set; }
+		public DateTime Timestamp { get; set; }
 
 	}//class I_Portfolio
 }//ns

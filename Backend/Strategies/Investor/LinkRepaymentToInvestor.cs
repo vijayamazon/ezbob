@@ -26,9 +26,9 @@
 
 			if (IsForOpenPlatform) {
 				DB.ForEachRowSafe(HandleOneAssignedToLoanInvestor,
-					"I_LoadAssigedToOfferInvestors",
+					"I_LoadAssigedToLoanInvestors",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CashRequestID", this.loanID));
+					new QueryParameter("LoanID", this.loanID));
 			}//if
 		}//Execute
 

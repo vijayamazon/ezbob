@@ -427,7 +427,7 @@ BEGIN
 	CREATE TABLE I_Portfolio (
 		PortfolioID INT NOT NULL IDENTITY(1,1),
 		InvestorID INT NOT NULL,
-		ProductTypeID INT NOT NULL,		
+		ProductTypeID INT,		
 		LoanID INT NOT NULL,
 		LoanPercentage DECIMAL(18,6) NOT NULL,
 		InitialTerm INT NOT NULL,

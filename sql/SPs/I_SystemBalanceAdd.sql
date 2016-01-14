@@ -27,7 +27,9 @@ BEGIN
 											  	InvestorBankAccountID=@BankAccountID 
 											  ORDER BY 
 											  	Timestamp DESC)
-	SET NOCOUNT ON;
+	IF(@PreviousBalance IS NULL)
+		SET @PreviousBalance = 0
+	
 	INSERT INTO I_InvestorSystemBalance (
 		Timestamp,
 		TransactionAmount,

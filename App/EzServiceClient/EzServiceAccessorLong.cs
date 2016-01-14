@@ -7,6 +7,7 @@
     using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
+	using log4net;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
 		public EzServiceAccessorLong() {
@@ -89,6 +90,7 @@
         }
 
 		public void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate) {
+			Log.InfoFormat("EzServiceAccessorLong LinkPaymentToInvestor {0} {1} {2} {3} {4} begin", loanTransactionID, loanID, customerID, amount, transactionDate);
 			this.m_oServiceClient.Instance.LinkLoanRepaymentToInvestor(userID, customerID, loanID, loanTransactionID, amount, transactionDate);
 		}
 
@@ -110,5 +112,6 @@
 	
 
 		private readonly ServiceClient m_oServiceClient;
+		private static ILog Log = LogManager.GetLogger(typeof(EzServiceAccessorLong));
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

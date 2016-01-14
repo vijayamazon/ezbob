@@ -157,5 +157,11 @@
 			linkOfferToInvestor.Execute();
 		}
 
+		[Test]
+		public void TestLinkLoanRepaymentToInvestor() {
+			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow);
+			linkOfferToInvestor.Execute();
+		}
+
 	}
 }
