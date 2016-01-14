@@ -24,26 +24,30 @@
     try {
         var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 
-        if (context != null && context.User != null) {
-            var user = context.User;
-            if (user != null) {
-                userName = user.FullName ?? user.Name;
-                userId = user.Id;
-                userEmail = user.EMail;
+	    if (context != null && context.User != null) {
+		    var user = context.User;
+		    if (user != null) {
+			    userName = user.FullName ?? user.Name;
+			    userId = user.Id;
+			    userEmail = user.EMail;
 
-	            var roles = context.UserRoles;
+			    var roles = context.UserRoles;
 
-                if (roles.Any(r => r == "manager")) {
-                    sRoleImageUrl = "manager.png";
-                    sRoleImageTitle = "Manager";
-                } else if (roles.Any(r => r == "Underwriter")) {
-                    sRoleImageUrl = "underwriter.png";
-                    sRoleImageTitle = "Underwriter";
-                }
+			    if (roles.Any(r => r == "manager")) {
+				    sRoleImageUrl = "manager.png";
+				    sRoleImageTitle = "Manager";
+			    } else if (roles.Any(r => r == "Underwriter")) {
+				    sRoleImageUrl = "underwriter.png";
+				    sRoleImageTitle = "Underwriter";
+			    }
 
-	            sRoleImageTitle = roles.Last();
-            }
-        }
+			    sRoleImageTitle = roles.Last();
+		    } else {
+				detectUserRolesError = "user is null";
+		    }
+	    } else {
+			detectUserRolesError = "context is null";
+	    }
     } catch (Exception e) {
 	    detectUserRolesError = e.Message;
     }

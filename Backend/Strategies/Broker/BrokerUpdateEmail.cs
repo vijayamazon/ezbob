@@ -7,7 +7,7 @@
 		public BrokerUpdateEmail(int changedByUserID, int brokerID, string newEmail) {
 			this.changedByUserID = changedByUserID;
 			this.brokerID = brokerID;
-			this.newEmail = newEmail;
+			this.newEmail = (newEmail ?? string.Empty).Trim().ToLowerInvariant();
 			Result = string.Empty;
 		} // constructor
 

@@ -12,15 +12,20 @@ ALTER FUNCTION dbo.udfCheckEmailUniqueness(
 RETURNS NVARCHAR(255)
 AS
 BEGIN
+	DECLARE @EmailToCheck NVARCHAR(255) = LOWER(ISNULL(@ContactEmail, ''))
+
+	IF @EmailToCheck = ''
+		RETURN 'email is already being used'
+
 	IF @CheckUsers = 1
 	BEGIN
-		IF EXISTS (SELECT * FROM Security_User WHERE Email = @ContactEmail AND OriginID = @OriginID)
+		IF EXISTS (SELECT * FROM Security_User WHERE LOWER(Email) = @EmailToCheck AND OriginID = @OriginID)
 			RETURN 'email is already being used'
 	END
 
 	IF @CheckBrokers = 1
 	BEGIN
-		IF EXISTS (SELECT * FROM Broker WHERE ContactEmail = @ContactEmail AND OriginID = @OriginID)
+		IF EXISTS (SELECT * FROM Broker WHERE LOWER(ContactEmail) = @EmailToCheck AND OriginID = @OriginID)
 			RETURN 'email is already being used'
 	END
 
@@ -30,7 +35,7 @@ BEGIN
 			SELECT *
 			FROM BrokerLeads l
 			INNER JOIN Broker b ON l.BrokerID = b.BrokerID AND b.OriginID = @OriginID
-			WHERE l.Email = @ContactEmail
+			WHERE LOWER(l.Email) = @EmailToCheck
 			AND l.BrokerLeadDeletedReasonID IS NULL
 			AND l.DateDeleted IS NULL
 		)

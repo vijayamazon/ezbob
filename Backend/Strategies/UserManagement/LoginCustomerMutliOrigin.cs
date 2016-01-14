@@ -7,6 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.dbutils;
+	using JetBrains.Annotations;
 
 	public class LoginCustomerMutliOrigin : AStrategy {
 		public LoginCustomerMutliOrigin(LoginCustomerMultiOriginModel model) {
@@ -216,27 +217,34 @@
 				return CustomerID > 0;
 			} // HasValidParameters
 
+			[UsedImplicitly]
 			public int CustomerID { get; set; }
 
+			[UsedImplicitly]
 			public DateTime StartSession {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // StartSession
 
+			[UsedImplicitly]
 			public DateTime EndSession {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // EndSession
 
+			[UsedImplicitly]
 			public string Ip { get; set; }
 
+			[UsedImplicitly]
 			public bool IsPasswdOk {
 				get { return false; }
 				set { }
 			} // IsPasswordOk
 
+			[UsedImplicitly]
 			public string ErrorMessage { get; set; }
 
+			[UsedImplicitly]
 			[Direction(ParameterDirection.Output)]
 			public int SessionID { get; set; }
 		} // CreateCustomerSession

@@ -9,10 +9,12 @@ CREATE FUNCTION dbo.udfCheckExternalBrokerEmailCollissions(@ContactEmail NVARCHA
 RETURNS NVARCHAR(255)
 AS
 BEGIN
-	IF EXISTS (SELECT Id FROM Customer WHERE Name = @ContactEmail)
+	DECLARE @EmailToCheck NVARCHAR(255) = LOWER(ISNULL(@ContactEmail, ''))
+
+	IF EXISTS (SELECT Id FROM Customer WHERE LOWER(Name) = @EmailToCheck)
 		RETURN 'email is already being used'
 
-	IF EXISTS (SELECT BrokerLeadID FROM BrokerLeads WHERE Email = @ContactEmail)
+	IF EXISTS (SELECT BrokerLeadID FROM BrokerLeads WHERE LOWER(Email) = @EmailToCheck)
 		RETURN 'email is already being used'
 
 	RETURN ''

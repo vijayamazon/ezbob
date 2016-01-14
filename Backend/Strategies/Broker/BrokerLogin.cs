@@ -70,8 +70,28 @@
 				throw new StrategyWarning(this, "Invalid user name or password.");
 			} // if
 
+			string userName = sr["UserName"];
+			int originID = sr["OriginID"];
+
+			bool mismatch =
+				!Normalize(this.spLoadDataForLoginCheck.Email).Equals(Normalize(userName)) ||
+				(originID != this.spLoadDataForLoginCheck.UiOriginID);
+
+			if (mismatch) {
+				Log.Warn(
+					"User name and origin returned by email '{0}' with origin '{1}' are '{2}', '{3}' " +
+					"and differ from the requested user name and origin.",
+					this.spLoadDataForLoginCheck.Email,
+					this.spLoadDataForLoginCheck.UiOriginID,
+					userName,
+					originID
+				);
+
+				throw new StrategyWarning(this, "Invalid user name or password.");
+			} // if
+
 			var storedPassword = new HashedPassword(
-				this.spLoadDataForLoginCheck.Email,
+				userName,
 				(string)sr["CycleCount"],
 				(string)sr["EzPassword"],
 				(string)sr["Salt"]
@@ -114,6 +134,10 @@
 		private readonly BrokerLoginSucceeded spOnSuccess;
 		private readonly BrokerLoadLoginData spLoadDataForLoginCheck;
 		private readonly string password;
+
+		private static string Normalize(string s) {
+			return (s ?? string.Empty).Trim().ToLowerInvariant();
+		} // Normalize
 
 		private class BrokerLoadLoginData : AStoredProcedure {
 			public BrokerLoadLoginData(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor

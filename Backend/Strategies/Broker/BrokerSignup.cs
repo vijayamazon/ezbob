@@ -38,7 +38,7 @@
 				FirmName = sFirmName,
 				FirmRegNum = sFirmRegNum,
 				ContactName = sContactName,
-				ContactEmail = sContactEmail,
+				ContactEmail = (sContactEmail ?? string.Empty).Trim().ToLowerInvariant(),
 				ContactMobile = sContactMobile,
 				ContactOtherPhone = sContactOtherPhone,
 				EstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount,
@@ -102,7 +102,7 @@
 				FirmName = Validate(FirmName, "Broker name");
 				FirmRegNum = Validate(FirmRegNum, "Broker registration number", false);
 				ContactName = Validate(ContactName, "Contact person full name");
-				ContactEmail = Validate(ContactEmail, "Contact person email");
+				ContactEmail = Validate(ContactEmail, "Contact person email").ToLowerInvariant();
 
 				ContactOtherPhone = Validate(ContactOtherPhone, "Contact person other phone", false);
 

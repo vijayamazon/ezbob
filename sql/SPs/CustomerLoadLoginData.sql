@@ -28,7 +28,7 @@ BEGIN
 			INNER JOIN Security_User u ON c.Id = u.UserId
 			INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
 		WHERE
-			LOWER(u.UserName) = @UserName
+			LOWER(u.UserName) = LOWER(@UserName)
 			AND
 			u.OriginID = @OriginID
 	), o AS (

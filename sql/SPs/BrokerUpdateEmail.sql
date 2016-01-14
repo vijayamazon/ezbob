@@ -14,6 +14,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	SET @NewEmail = LOWER(ISNULL(@NewEmail, ''))
+
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 
 	DECLARE @OriginID INT

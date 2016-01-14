@@ -11,15 +11,19 @@ ALTER PROCEDURE BrokerLoadLoginData
 AS
 BEGIN
 	SELECT
-		BrokerID,
-		EzPassword,
-		Salt,
-		CycleCount
+		b.BrokerID,
+		b.OriginID,
+		u.UserName,
+		u.EzPassword,
+		u.Salt,
+		u.CycleCount
 	FROM
 		Broker b
 		INNER JOIN Security_User u ON b.BrokerID = u.UserId
 	WHERE
-		LOWER(u.UserName) = @Email
+		LOWER(u.UserName) = LOWER(@Email)
+		AND
+		@UiOriginID IS NOT NULL
 		AND
 		u.OriginID = @UiOriginID
 END

@@ -42,9 +42,6 @@
 		public override void Execute() {
 			Log.Debug("Sign up attempt '{0}' started...", this.uniqueID);
 
-			if (this.model != null)
-				this.model.UserName = NormalizeUserName(this.model.UserName);
-
 			string userName = (this.model == null) ? "unknown name" : this.model.UserName;
 
 			try {

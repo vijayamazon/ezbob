@@ -24,7 +24,7 @@ EzBob.Broker.RequestAcceptTermsView = EzBob.Broker.BaseView.extend({
 	validate: function() {
 		this.setSomethingEnabled(
 			this.$el.find('#AcceptTermsButton'),
-			this.$el.find('#ReAgreeToTerms:checked').length
+			!!this.$el.find('#ReAgreeToTerms:checked').length
 		);
 	}, // validate
 

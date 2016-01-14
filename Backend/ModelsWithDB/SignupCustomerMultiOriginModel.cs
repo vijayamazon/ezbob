@@ -7,7 +7,10 @@
 	[DataContract]
 	public class SignupCustomerMultiOriginModel {
 		[DataMember]
-		public string UserName { get; set; }
+		public string UserName {
+			get { return (this.userName ?? string.Empty).Trim().ToLowerInvariant(); }
+			set { this.userName = (value ?? string.Empty).Trim().ToLowerInvariant(); }
+		} // UserName
 
 		[DataMember]
 		public CustomerOriginEnum? Origin { get; set; }
@@ -113,5 +116,7 @@
 		} // BrokerLeadIsSet
 
 		private bool HasSrcRef() { return !BrokerFillsForCustomer && (CampaignSourceRef != null); }
+
+		private string userName;
 	} // class SignupCustomerMultiOriginModel
 } // namespace
