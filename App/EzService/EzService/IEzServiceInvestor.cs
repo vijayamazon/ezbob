@@ -21,12 +21,18 @@
 
 		[OperationContract]
 		AccountingDataResult LoadAccountingData(int underwriterID);
+        [OperationContract]
+        ListInvestorsResult LoadInvestors(int underwriterID);
 
 		[OperationContract]
 		TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
+	    [OperationContract]
+	    IntActionResult SaveInvestorContactList(int underwriterID, int investorID, IEnumerable<InvestorContactModel> investorContacts);
 
 		[OperationContract]
 		BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment);
+	    [OperationContract]
+	    IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, IEnumerable<InvestorBankAccountModel> investorBanks);
 
 		[OperationContract]
 		ActionMetaData LinkLoanToInvestor(int userID, int customerID, int loanID);

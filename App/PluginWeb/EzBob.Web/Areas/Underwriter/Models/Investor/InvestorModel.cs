@@ -37,6 +37,7 @@
 					ContactLastName = x.LastName,
 					ContactMobile = x.Mobile,
 					ContactOfficeNumber = x.OfficePhone,
+                    TimeStamp = x.Timestamp
 				}),
 				Banks = investor.Banks.Select(x => new InvestorBankAccountModel{
 					IsActive = x.IsActive,

@@ -82,6 +82,7 @@
     <Compile Include="Investor\InvestorModel.cs" />
     <Compile Include="Investor\SchedulerDataModel.cs" />
     <Compile Include="Investor\TransactionsDataModel.cs" />
+    <Compile Include="Investor\OneInvestorModel.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MarketplaceTurnoverModel.cs" />

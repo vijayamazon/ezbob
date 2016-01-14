@@ -4,13 +4,18 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 	template: '#manage-investor-bank-template',
 	initialize: function (options) {
-		this.model.on('change reset', this.render, this);
-		this.stateModel = options.stateModel;
+
+	    this.model.on('change reset', this.render, this);
+	    this.model.set('InvestorID', options.InvestorID, { silent: true });
+
+	    this.model.set('Bank', options.Bank, { silent: true });
+	    this.model.set('EditID', options.EditID, { silent: true });
+	
 	},//initialize
 
 	events: {
 		'click #investorBankSubmit': 'submit',
-		'click #investorBankBack': 'back'
+		'click #investorBankBack': 'cancel'
 	},
 
 	ui: {
@@ -28,12 +33,12 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 	onRender: function () {
 		this.ui.numeric.numericOnly(20);
 
-		this.editID = this.stateModel.get('editID');
+		this.editID = this.model.get('editID');
 
 		var self = this;
 		if (this.editID) {
-			var bank = _.find(this.model.get('Banks'), function (bank) { return bank.InvestorBankAccountID == self.editID; });
-			if (bank) {
+		    var bank=this.model.get('Bank');
+		    if (bank) {
 				this.ui.AccountType.val(bank.AccountType).change();
 				this.ui.BankSortCode.val(bank.BankSortCode).change();
 				this.ui.BankAccountNumber.val(bank.BankAccountNumber).change();
@@ -72,8 +77,11 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 		xhr.done(function(res) {
 			if (res.success) {
 				EzBob.ShowMessage('Bank added/updated successfully', 'Done', null, 'Ok');
-				self.model.fetch();
-				self.trigger('back');
+			
+				self.trigger('cancel');
+
+				$("tr[data-id='" + investorID + "']").click();
+		
 			} else {
 				EzBob.ShowMessage(res.error, 'Failed saving investor bank', null, 'Ok');
 			}
@@ -89,8 +97,12 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 
-	back: function () {
-		this.trigger('back');
-		return false;
+	cancel: function () {
+	    this.remove();
+	    this.unbind();
+	    this.model.unbind("change reset", this.modelChanged);
+	 //   $('.add-contact-row').show();
+	    return false;
+		
 	}
 });//EzBob.Underwriter.ManageInvestorBankView

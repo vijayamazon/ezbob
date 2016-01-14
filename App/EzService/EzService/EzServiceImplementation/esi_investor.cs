@@ -7,7 +7,19 @@
 
 	partial class EzServiceImplementation : IEzServiceInvestor {
 		
-		public InvestorActionResult LoadInvestor(int underwriterID, int investorID) {
+     
+       public ListInvestorsResult LoadInvestors(int underwriterID)
+       {
+           LoadInvestors strategy;
+           var metadata = ExecuteSync(out strategy, null, underwriterID);
+           return new ListInvestorsResult
+           {
+               MetaData = metadata,
+               Investors = strategy.Result
+           };
+
+       }
+	    public InvestorActionResult LoadInvestor(int underwriterID, int investorID) {
 			LoadInvestor strategy;
 			var metadata = ExecuteSync(out strategy, null, underwriterID, investorID);
 			return new InvestorActionResult {
@@ -15,7 +27,26 @@
 				Investor = strategy.Result
 			};
 		}
-
+        public IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, IEnumerable<InvestorBankAccountModel> investorBanks)
+        {
+            SaveInvestorBanksList strategy;
+            var metadata = ExecuteSync(out strategy, null, underwriterID, investorID, investorBanks);
+            return new IntActionResult
+            {
+                MetaData = metadata,
+                Value = strategy.InvestorID
+            };
+        }
+        public IntActionResult SaveInvestorContactList(int underwriterID, int investorID, IEnumerable<InvestorContactModel> investorContacts)
+        {
+            SaveInvestorContactList strategy;
+            var metadata = ExecuteSync(out strategy, null, underwriterID, investorID, investorContacts);
+            return new IntActionResult
+            {
+                MetaData = metadata,
+                Value = strategy.InvestorID
+            };
+        }
 		public IntActionResult CreateInvestor(int underwriterID, InvestorModel investor, IEnumerable<InvestorContactModel> investorContacts, IEnumerable<InvestorBankAccountModel> investorBanks) {
 			CreateInvestor strategy;
 			var metadata = ExecuteSync(out strategy, null, underwriterID, investor, investorContacts, investorBanks);

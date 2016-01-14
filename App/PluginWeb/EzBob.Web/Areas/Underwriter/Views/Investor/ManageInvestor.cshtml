@@ -8,113 +8,123 @@
 }
 
 <script type="text/template" id="manage-investor-template">
-	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor)
+
 	<div id="main-content">
 		<div class="col-md-12">
-			<div class="box">
-				<div class="box-content">
-					<h2>Managing investor</h2>
-					<div id="manage-investor-region"></div>
-					<div>
-						<a href="Customers#manageInvestor" class="btn btn-primary">Back to investors</a>
-					</div>
+			<div>
+				<div >
+                    <div class="col-md-12">
+                        <div>
+                            <div>
+                                <div class="row">
+                                    <h3 class="clearfix">Contacts</h3>
+                                    <table class="table  table-hover">
+                                        <thead>
+                                            <tr>
+
+                                                <th>First name</th>
+                                                <th class="hide">Last name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Mobile</th>
+                                                <th>Office</th>
+                                                <th>Comment</th>
+                                                <th>TS</th>
+                                                <th>primary</th>
+                                                <th>active</th>
+                                             
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%if (data.Contacts!=null){
+                                            _.each(data.Contacts, function(c){%>
+                                            <tr data-id="<%-c.InvestorContactID%>" class="contact-investor-row">
+
+                                                <td><%-c.ContactPersonalName+" "+c.ContactLastName %></td>
+                                                <td class="hide"><%-c.ContactLastName%></td>
+                                                <td><%-c.ContactEmail%></td>
+                                                <td><%-c.Role%></td>
+                                                <td><%-c.ContactMobile%></td>
+                                                <td><%-c.ContactOfficeNumber%></td>
+                                                <td><%-c.Comment%></td>
+                                                <td><%-moment(c.TimeStamp).format('L')%></td>
+                                                <td>
+                                                    <div class="Investor-primary-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsPrimary ? 'checked':'')%> />
+                                                    </div>
+
+                                                <td>
+                                                    <div class="Investor-active-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsActive ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+                                              
+                                            </tr>
+                                            <%})};%>
+                                            <tr class="add-contact-row">
+                                                <td colspan="7"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
+                                                <td class="submition-buttons" colspan="2"><button id="CancelContactsEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitContactsEdit" class="btn btn-primary">Submit</button></td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="row">
+                                    <h3>Bank accounts</h3>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                
+                                                <th>Account type</th>
+                                                <th>Account name</th>
+                                                <th>Account number</th>
+                                                <th>Sort code</th>
+                                                <th>TS</th>
+                                                <th>active</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (data.Banks!=null){
+                                            
+                                            _.each(data.Banks, function(b){%>
+                                            <tr class="bank-investor-row" data-id="<%-b.InvestorBankAccountID%>">
+
+                                                <td><%-b.AccountTypeStr%></td>
+                                                <td><%-b.BankAccountNumber%></td>
+                                                <td><%-b.BankAccountName%></td>
+                                                <td><%-b.BankSortCode%></td>
+                                                <td><%-moment(b.TimeStamp).format('L')%></td>
+                                                <td>
+                                                    <div class="Investor-active-bank Investor-active-bank-<%-b.AccountTypeStr%> make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(b.IsActive ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            <%});}%>
+                                            <tr class="add-bank-row">
+                                                <td colspan="4"><button id="addInvestorBank" class="btn btn-primary">Add Bank</button></td>
+                                                <td class="submition-buttons" colspan="2"><button id="CancelBanksEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitBanksEdit" class=" btn btn-primary">Submit</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+				
 				</div>
 			</div>
 		</div>
 	</div>
 </script>
-
+<script type="text/template" id="manage-investor-contact-details-tamplate">
+    
+</script>
 <script type="text/template" id="manage-investor-details-template">
-	<div class="col-md-12">
-		<div class="box">
-			<div class="box-content">
-				<div class="row">
-					<dl class="loan-details col-lg-3 col-md-6 col-sm-12">
-						<dt>#</dt>
-						<dd><%-data.InvestorID%></dd>
-						<dt>Type</dt>
-						<dd><%-data.InvestorTypeStr%></dd>
-						<dt>Company name</dt>
-						<dd><%-data.CompanyName%></dd>
-						<dt>Is active</dt>
-						<dd><%-data.IsActive%></dd>
-					</dl>
-				</div>
-				<div class="row">
-					<h3 class="clearfix">Contacts</h3>
-					<table class="table box table-hover">
-						<thead class="box">
-							<tr class="box-title">
-								<th>#</th>
-								<th>First name</th>
-								<th>Last name</th>
-								<th>Email</th>
-								<th>Role</th>
-								<th>Mobile</th>
-								<th>Office phone</th>
-								<th>Comment</th>
-								<th>Is primary</th>
-								<th>Is active</th>
-								<th>Edit</th>
-							</tr>
-						</thead>
-						<tbody class="box-content">
-							<%_.each(data.Contacts, function(c){%>
-							<tr>
-								<td><%-c.InvestorContactID%></td>
-								<td><%-c.ContactPersonalName%></td>
-								<td><%-c.ContactLastName%></td>
-								<td><%-c.ContactEmail%></td>
-								<td><%-c.Role%></td>
-								<td><%-c.ContactMobile%></td>
-								<td><%-c.ContactOfficeNumber%></td>
-								<td><%-c.Comment%></td>
-								<td><%-c.IsPrimary%></td>
-								<td><%-c.IsActive%></td>
-								<td><button class="btn btn-primary editInvestorContact" data-contactid="<%-c.InvestorContactID%>">Edit</button></td>
-							</tr>
-							<%});%>
-							<tr>
-								<td colspan="11"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="row">
-					<h3>Bank accounts</h3>
-					<table class="table box table-hover">
-						<thead class="box">
-							<tr class="box-title">
-								<th>#</th>
-								<th>Account type</th>
-								<th>Sort code</th>
-								<th>Account number</th>
-								<th>Account name</th>
-								<th>Is active</th>
-								<th>Edit</th>
-							</tr>
-						</thead>
-						<tbody class="box-content">
-							<%_.each(data.Banks, function(b){%>
-							<tr>
-								<td><%-b.InvestorBankAccountID%></td>
-								<td><%-b.AccountTypeStr%></td>
-								<td><%-b.BankSortCode%></td>
-								<td><%-b.BankAccountNumber%></td>
-								<td><%-b.BankAccountName%></td>
-								<td><%-b.IsActive%></td>
-								<td><button class="btn btn-primary editInvestorBank" data-bankid="<%-b.InvestorBankAccountID%>">Edit</button></td>
-							</tr>
-							<%});%>
-							<tr>
-								<td colspan="7"><button id="addInvestorBank" class="btn btn-primary">Add Bank</button></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 </script>
 
 <script type="text/template" id="manage-investor-contact-template">
@@ -124,36 +134,19 @@
 				<form id="addEditInvestorContactForm" class="form-horizontal">
 					<div class="row">
 						<div class="col-md-6">
-							@EzForm.InputTextUnderwriter(this, "ContactPersonalName", "Contact personal name", null)
-							@EzForm.InputTextUnderwriter(this, "ContactLastName", "Contact last name", null)
-							@EzForm.InputTextUnderwriter(this, "ContactEmail", "Contact email", null)
+							@EzForm.InputTextUnderwriter(this, "ContactPersonalName", "personal name", null)
+							@EzForm.InputTextUnderwriter(this, "ContactLastName", "Last name", null)
+							@EzForm.InputTextUnderwriter(this, "ContactEmail", "email", null)
 							@EzForm.InputTextUnderwriter(this, "Role", "Role", null)
-							@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile", null, "phone")
+							@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile number", null, "phone")
 							@EzForm.InputTextUnderwriter(this, "ContactOfficeNumber", "Office number", null, "phone")
 							@EzForm.InputTextUnderwriter(this, "Comment", "Comment", null)
-
-							<div class="control-group">
-								<label class="control-label"></label>
-								<div class="control">
-									<label class="checkbox">
-										<input name="IsPrimary" id="IsPrimary" type="checkbox" value="true" checked="checked" />
-										Is primary
-									</label>
-								</div>
-							</div>
-
-							<div class="control-group">
-								<label class="control-label"></label>
-								<div class="control">
-									<label class="checkbox">
-										<input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
-										Is active
-									</label>
-								</div>
-							</div>
+                                <input name="IsPrimary" id="IsPrimary" type="hidden" value="false" />
+                            <input name="IsActive" id="IsActive" type="hidden" value="true"/>
+						
 							<input type="hidden" id="InvestorContactID" name="InvestorContactID" />
 							<button id="investorContactSubmit" class="btn btn-primary">Submit</button>
-							<button id="investorContactBack" class="btn btn-primary">Back</button>
+							<button id="investorContactCancel" class="btn btn-primary">Cancel</button>
 						</div>
 					</div>
 				</form>

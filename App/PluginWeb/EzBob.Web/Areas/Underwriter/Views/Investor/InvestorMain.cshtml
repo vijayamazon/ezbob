@@ -1,7 +1,8 @@
 ﻿@model dynamic
 
 <div id="add-investor-view" style="display: none;"></div>
-<div id="manage-investor-view" style="display: none;"></div>
+
+<div id="investors-view" style="display: none;"></div>
 <div id="config-investor-view" style="display: none;"></div>
 <div id="accounting-investor-view" style="display: none;"></div>
 <div id="portfolio-investor-view" style="display: none;"></div>
@@ -11,6 +12,7 @@
 
 @{ Html.RenderPartial("~/Areas/Underwriter/Views/Investor/AddInvestor.cshtml"); }
 @{ Html.RenderPartial("~/Areas/Underwriter/Views/Investor/ManageInvestor.cshtml"); }
+@{ Html.RenderPartial("~/Areas/Underwriter/Views/Investor/ManageInvestors.cshtml"); }
 @{ Html.RenderPartial("~/Areas/Underwriter/Views/Investor/ConfigInvestor.cshtml"); }
 @{ Html.RenderPartial("~/Areas/Underwriter/Views/Investor/AccountingInvestor.cshtml"); }
 @{ Html.RenderPartial("~/Areas/Underwriter/Views/Investor/PortfolioInvestor.cshtml"); }

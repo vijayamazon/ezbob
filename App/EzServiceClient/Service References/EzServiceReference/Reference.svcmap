@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="b334a969-978b-4707-8a26-4c61bd0f6823" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="837db4f1-fa09-4b68-9d98-e6c703fbae5b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,34 +19,33 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://dell-pc:7081/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://shlomim-pc:7081/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="858963f7-8381-4ab5-b556-e80de4321ba5" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="5ffc3e3e-a2ee-49b6-bf3b-92f8596a175e" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="aab1752b-e262-45da-9fd3-0884e629252f" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="1122adfd-672d-4288-910d-3f9563206fcd" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="b136b794-fa80-4864-8935-d4c433858e9e" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="2d44fde5-a57d-474d-b7d1-7a9f6f9452ed" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.xsd" MetadataType="Schema" ID="d7e15550-cc30-402e-b05d-d99bc36b67e8" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="1671574d-6f4e-4b19-9302-8b8e366b6521" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="EZBob.DatabaseLib.Model.Database.xsd" MetadataType="Schema" ID="b918321e-3d83-4cf3-b303-0e5ee5e12d89" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="SalesForceLib.Models.xsd" MetadataType="Schema" ID="05eded65-4b72-4883-89c6-b3e0f21dae71" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="8f28c6e8-7412-4583-935d-ba4dc187a2e6" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.NewLoan.xsd" MetadataType="Schema" ID="c8a930e3-8429-4725-9707-ed4cba97fd41" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.NewLoan.xsd" MetadataType="Schema" ID="d2332b29-f803-445a-a1be-313fb3cc8b03" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="ea75bf80-c79f-4d5d-97d0-237c5691031f" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.Investor.xsd" MetadataType="Schema" ID="489273c1-20b4-4f45-b164-ac4572119972" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="EzService.ActionResults.Investor.xsd" MetadataType="Schema" ID="c4b4b275-2ad5-4419-bbb5-5076d3c913d5" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Integration.LogicalGlue.Engine.Interface.xsd" MetadataType="Schema" ID="f52c2c67-cd91-4602-a2b6-8589c88ff26f" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="a8fcc55e-7354-4f6d-905a-f6b6dc7eb9a7" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="acc72769-b241-4bc6-9283-abdae5ee97b9" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="a220f624-40e8-4a64-9126-08353adf559a" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="ff5e4190-013d-46b4-ba07-6302c023462a" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="effb63e7-1c11-4f41-990c-17dc57f7e2f3" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd" MetadataType="Schema" ID="768a3daa-b24a-44f2-b526-7d1c5d31a538" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd" MetadataType="Schema" ID="18ba7eba-cd09-41c5-8e25-795cd0609854" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="5f7ba5c9-8ca4-4e26-ae37-11c22e018d0f" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="5b38ebe2-d091-453e-ac3d-301e8cd66b26" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="8ccd3a7b-ebce-4b1c-b223-5e791cbc1308" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="a72b2acb-e8d6-45c6-855e-e1e44a100e92" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="1c1aae53-2abe-4fc4-a52f-96eb2632badc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="7c2a0a0b-440e-449f-a6b3-e10142d4bbfc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="99d76ec2-770f-4556-b0d8-d382762595c6" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.xsd" MetadataType="Schema" ID="efbbb10f-18c4-4c7f-8fb7-466add43d990" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="db1b88fe-ab2e-4df0-9c5f-6b024d20d0fc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EZBob.DatabaseLib.Model.Database.xsd" MetadataType="Schema" ID="f400a42e-1c08-492d-9d6f-72b5786a017a" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="SalesForceLib.Models.xsd" MetadataType="Schema" ID="d259373b-b88a-4d9f-84eb-6c6e0574e4c5" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="fbaa9d5d-e274-4fac-a2bc-af5c1466b2fc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.NewLoan.xsd" MetadataType="Schema" ID="03356dac-1421-4dc4-b9f3-7d786890a4c3" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.NewLoan.xsd" MetadataType="Schema" ID="dbac2567-7cb3-4307-aa32-1a188fc420f6" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="940760cd-0120-459f-8be2-5e70045053e2" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EzService.ActionResults.Investor.xsd" MetadataType="Schema" ID="1420188a-3bb1-4722-b06a-825159e97ecc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.Investor.xsd" MetadataType="Schema" ID="256cf920-c47d-4118-b717-5cf239d4b50a" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="5e42a891-d9d4-4939-a863-a5abaf586cb9" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="88e45f47-8e1f-47b4-8b53-47129c2da078" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="fdeb3a35-efba-43f2-9e4d-9ff1543f9f14" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="228a13e9-8937-4f58-89c3-3c4b817e276b" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="65d759b6-5b34-4c73-9e4a-458566209429" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.ApplicationInfo.xsd" MetadataType="Schema" ID="efd9251c-ec8e-4475-8d42-cf5049191d01" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd" MetadataType="Schema" ID="27520b2f-6d97-4335-94bc-66a6ec7cfa11" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="891d2f6d-79cf-403e-a002-04ce92c8d2a1" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

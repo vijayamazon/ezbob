@@ -5,12 +5,9 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Banks" nillable="true" type="tns:ArrayOfInvestorBankAccountModel" />
       <xs:element minOccurs="0" name="Contacts" nillable="true" type="tns:ArrayOfInvestorContactModel" />
-      <xs:element minOccurs="0" name="FundingLimitForNotification" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FundsTransferDate" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="tns:InvestorTypeModel" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="MonthlyFundingCapital" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
     </xs:sequence>
@@ -87,61 +84,21 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="InvestorTypeModel" nillable="true" type="tns:InvestorTypeModel" />
-  <xs:complexType name="ArrayOfAccountingDataModel">
+  <xs:complexType name="ArrayOfOneInvestorModel">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountingDataModel" nillable="true" type="tns:AccountingDataModel" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="OneInvestorModel" nillable="true" type="tns:OneInvestorModel" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfAccountingDataModel" nillable="true" type="tns:ArrayOfAccountingDataModel" />
-  <xs:complexType name="AccountingDataModel">
+  <xs:element name="ArrayOfOneInvestorModel" nillable="true" type="tns:ArrayOfOneInvestorModel" />
+  <xs:complexType name="OneInvestorModel">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AccumulatedRepayments" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FundingBankAccountID" type="xs:int" />
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
-      <xs:element minOccurs="0" name="InvestorName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="IsInvestorActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsRepaymentsBankAccountActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="OutstandingFunding" type="xs:decimal" />
-      <xs:element minOccurs="0" name="RepaymentsBankAccountID" type="xs:int" />
-      <xs:element minOccurs="0" name="ServicingFeeDiscount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TotalNonActiveAccumulatedRepayments" type="xs:decimal" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
-  <xs:element name="AccountingDataModel" nillable="true" type="tns:AccountingDataModel" />
-  <xs:complexType name="ArrayOfTransactionsDataModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransactionsDataModel" nillable="true" type="tns:TransactionsDataModel" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfTransactionsDataModel" nillable="true" type="tns:ArrayOfTransactionsDataModel" />
-  <xs:complexType name="TransactionsDataModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BankAccountName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BankAccountNumber" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="IsBankAccountActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="NewAmount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PreviousAmount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TransactionAmount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TransactionDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="TransactionID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="TransactionsDataModel" nillable="true" type="tns:TransactionsDataModel" />
-  <xs:complexType name="SchedulerDataModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="FundsTransferDate" type="xs:int" />
-      <xs:element minOccurs="0" name="FundsTransferSchedule" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MonthlyFundingCapital" type="xs:decimal" />
-      <xs:element minOccurs="0" name="RepaymentsTransferSchedule" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="SchedulerDataModel" nillable="true" type="tns:SchedulerDataModel" />
+  <xs:element name="OneInvestorModel" nillable="true" type="tns:OneInvestorModel" />
 </xs:schema>

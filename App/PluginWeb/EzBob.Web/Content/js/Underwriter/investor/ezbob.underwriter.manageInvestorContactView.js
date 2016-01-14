@@ -4,12 +4,15 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.extend({
 	template: '#manage-investor-contact-template',
 	initialize: function (options) {
-		this.model.on('change reset', this.render, this);
-		this.stateModel = options.stateModel;
+	    this.model.on('change reset', this.render, this);
+	    this.model.set('InvestorID', options.InvestorID, { silent: true });
+	   
+	    this.model.set('Contact', options.Contact, { silent: true });
+	    this.model.set('EditID', options.EditID, { silent: true });
 	},//initialize
 
 	events: {
-		'click #investorContactBack': 'back',
+	    'click #investorContactCancel': 'cancel',
 		'click #investorContactSubmit': 'submit',
 	},
 
@@ -33,25 +36,24 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 		this.ui.phone.mask('0?9999999999', { placeholder: ' ' });
 		this.ui.phone.numericOnly(11);
 		this.ui.numeric.numericOnly(20);
-
-		this.editID = this.stateModel.get('editID');
+	    this.contact = this.model.get('Contact');
+		this.editID = this.model.get('EditID');
 		var self = this;
 		if (this.editID) {
-			var contact = _.find(this.model.get('Contacts'), function (contact) { return contact.InvestorContactID == self.editID; });
-			if (contact) {
-				this.ui.ContactPersonalName.val(contact.ContactPersonalName).change();
-				this.ui.ContactLastName.val(contact.ContactLastName).change();
-				this.ui.ContactEmail.val(contact.ContactEmail).prop('readonly', 'readonly').change();
-				this.ui.Role.val(contact.Role).change();
-				this.ui.ContactMobile.val(contact.ContactMobile).change();
-				this.ui.ContactOfficeNumber.val(contact.ContactOfficeNumber).change();
-				this.ui.Comment.val(contact.Comment).change();
-				this.ui.IsPrimary.prop('checked', contact.IsPrimary).change();
-				this.ui.IsActive.prop('checked', contact.IsActive).change();
-				this.ui.InvestorContactID.val(contact.InvestorContactID).change();
+		
+		    if (this.contact) {
+		        this.ui.ContactPersonalName.val(this.contact.get('ContactPersonalName')).change();
+			    this.ui.ContactLastName.val(this.contact.get('ContactLastName')).change();
+			    this.ui.ContactEmail.val(this.contact.get('ContactEmail')).prop('readonly', 'readonly').change();
+		        this.ui.Role.val(this.contact.get('Role')).change();
+		        this.ui.ContactMobile.val(this.contact.get('ContactMobile')).change();
+		        this.ui.ContactOfficeNumber.val(this.contact.get('ContactOfficeNumber')).change();
+		        this.ui.Comment.val(this.contact.get('Comment')).change();
+		        this.ui.IsPrimary.prop('checked', this.contact.get('IsPrimary')).change();
+		        this.ui.IsActive.prop('checked', this.contact.get('IsActive')).change();
+		        this.ui.InvestorContactID.val(this.contact.get('InvestorContactID')).change();
 			}
 		}
-
 		this.ui.form.validate({
 			rules: {
 				ContactPersonalName: { required: true },
@@ -77,19 +79,22 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 			return false;
 		}
 		BlockUi();
+		var investorID = this.model.get('InvestorID');
 		var data = this.ui.form.serializeArray();
-		data.push({ name: 'InvestorID', value: this.model.get('InvestorID') });
-
+		data.push({ name: 'InvestorID', value: investorID });
+	    
 		var self = this;
 
 		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/ManageInvestorContact', data);
 		xhr.done(function (res) {
 			if (res.success) {
 				EzBob.ShowMessage('Contact added/updated successfully', 'Done', null, 'Ok');
-				self.model.fetch();
-				self.trigger('back');
+				self.trigger('cancel');
+				
+				$("tr[data-id='" + investorID + "']").click();
 			} else {
-				EzBob.ShowMessage(res.error, 'Failed saving investor contact', null, 'Ok');
+			    EzBob.ShowMessage(res.error, 'Failed saving investor contact', null, 'Ok');
+               
 			}
 		});
 
@@ -99,11 +104,15 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 		xhr.always(function () {
 			UnBlockUi();
 		});
+
 		return false;
 	},
 
-	back: function () {
-		this.trigger('back');
+	cancel: function () {
+	    this.remove();
+	    this.unbind();
+	    this.model.unbind("change reset", this.modelChanged);
+	    $('.add-contact-row').show();
 		return false;
 	}
 });//EzBob.Underwriter.ManageInvestorContactView

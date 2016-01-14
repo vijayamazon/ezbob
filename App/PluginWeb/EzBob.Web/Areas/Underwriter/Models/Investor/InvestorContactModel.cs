@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models.Investor {
-	public class InvestorContactModel {
+    using System;
+
+    public class InvestorContactModel {
 		public int InvestorContactID { get; set; }
 		public string ContactPersonalName { get; set; }
 		public string ContactLastName { get; set; }
@@ -10,5 +12,6 @@
 		public string Comment { get; set; }
 		public bool IsActive { get; set; }
 		public bool IsPrimary { get; set; }
+        public DateTime TimeStamp { get; set; }
 	}
 }

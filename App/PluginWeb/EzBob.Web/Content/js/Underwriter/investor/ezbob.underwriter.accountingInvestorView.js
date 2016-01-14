@@ -8,7 +8,7 @@ EzBob.Underwriter.AccountingInvestorModel = Backbone.Model.extend({
 EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	template: "#accounting-investor-template",
 	initialize: function() {
-		this.model = new EzBob.Underwriter.AccountingInvestorModel();
+	    this.model = new EzBob.Underwriter.ManageInvestorsModel();
 		this.model.on("change reset", this.render, this);
 		this.includeNonActiveInvestors = false;
 		EzBob.App.vent.on('investorTransactionAdded', this.transactionAdded, this);

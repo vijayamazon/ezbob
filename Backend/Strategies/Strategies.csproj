@@ -175,6 +175,7 @@
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
     <Compile Include="Investor\AddInvestorBankAccountBalance.cs" />
+    <Compile Include="Investor\LoadInvestors.cs" />
     <Compile Include="Investor\AddInvestorSystemBalance.cs" />
     <Compile Include="Investor\AddManualTransaction.cs" />
     <Compile Include="Investor\ForceInvestorForOffer.cs" />
@@ -193,6 +194,8 @@
     <Compile Include="Investor\LoadInvestor.cs" />
     <Compile Include="Investor\CreateInvestor.cs" />
     <Compile Include="Investor\UpdateSchedulerData.cs" />
+    <Compile Include="Investor\SaveInvestorBanksList.cs" />
+    <Compile Include="Investor\SaveInvestorContactList.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="LogicalGlue\GetTryoutInference.cs" />

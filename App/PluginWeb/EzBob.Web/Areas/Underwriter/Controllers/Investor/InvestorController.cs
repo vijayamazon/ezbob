@@ -22,7 +22,7 @@
 		private readonly IEzbobWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
 		private readonly InvestorModelBuilder investorModelBuilder;
-		
+
 		protected static readonly ILog Log = LogManager.GetLogger(typeof(InvestorController));
 
 		public InvestorController(
@@ -120,10 +120,71 @@
 					Mobile = contact.ContactMobile,
 					OfficePhone = contact.ContactOfficeNumber,
 					Role = contact.Role,
+                   
 				});
 			return Json(new { InvestorID, contact, success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
+        /// <summary>
+        /// Edit all investor Contacts toghether 
+        /// </summary>
+        [Ajax]
+        [HttpPost]
+        public JsonResult SaveInvestorContactList(int InvestorID, string investor)
+        {
 
+            this.Log.Debug("investor string "+investor);
+            var investorModel = Newtonsoft.Json.JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
+           
+            this.Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
+            //call the service
+          var contacts = investorModel.Contacts.Select(x => new Ezbob.Backend.Models.Investor.InvestorContactModel {
+					InvestorContactID = x.InvestorContactID,
+                    InvestorID = InvestorID,
+					IsActive = x.IsActive,
+					Comment = x.Comment,
+					Email = x.ContactEmail,
+					IsPrimary = x.IsPrimary,
+					LastName = x.ContactLastName,
+					PersonalName = x.ContactPersonalName,
+					Mobile = x.ContactMobile,
+					OfficePhone = x.ContactOfficeNumber,
+					Role = x.Role
+				}).ToArray();
+         var result = this.serviceClient.Instance.SaveInvestorContactList(this.context.UserId, InvestorID, contacts);
+          return Json(new { success =  result.Value }, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// Edit all investor Banks toghether 
+        /// </summary>
+        [Ajax]
+        [HttpPost]
+        public JsonResult SaveInvestorBanksList(int InvestorID, string investor)
+        {
+            
+            this.Log.Debug("investor string " + investor);
+            var investorModel = Newtonsoft.Json.JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
+
+            this.Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
+            //call the service
+            var Banks = investorModel.Banks.Select(x => new Ezbob.Backend.Models.Investor.InvestorBankAccountModel
+            {
+                	
+                InvestorBankAccountID = x.InvestorBankAccountID,
+                InvestorID = InvestorID,
+                IsActive = x.IsActive,
+                BankName = x.BankAccountName,
+                BankCode = x.BankSortCode,
+                BankAccountName = x.BankAccountName,
+                BankAccountNumber = x.BankAccountNumber,
+                 AccountType = new InvestorAccountTypeModel {
+                    InvestorAccountTypeID = x.AccountType,
+                    Name = x.AccountTypeStr
+                }
+       
+            }).ToArray();
+            var result = this.serviceClient.Instance.SaveInvestorBanksList(this.context.UserId, InvestorID, Banks);
+            return Json(new { success = result.Value }, JsonRequestBehavior.AllowGet);
+        }
 		/// <summary>
 		/// Add / Update investor bank account
 		/// </summary>
@@ -145,13 +206,15 @@
 			return Json(new { InvestorID, bank, success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
 
-		[Ajax]
-		[HttpGet]
+	
+        [Ajax]
+        [HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult LoadInvestor(int id) {
-			var result = this.serviceClient.Instance.LoadInvestor(this.context.UserId, id);
-			var investor = this.investorModelBuilder.Build(result.Investor);
-			return Json(investor, JsonRequestBehavior.AllowGet);
+        public JsonResult LoadInvestor(int id)
+        {
+            var result = this.serviceClient.Instance.LoadInvestor(this.context.UserId, id);
+            var investor = this.investorModelBuilder.Build(result.Investor);
+            return Json(investor, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -192,7 +255,18 @@
 			var result = this.serviceClient.Instance.AddManualTransaction(this.context.UserId, investorAccountID, transactionAmount, transactionDate, (int)accountTypeEnum, transactionComment);
 
 			return Json(new { investorID, bankAccountType, success = result.Value }, JsonRequestBehavior.AllowGet);
-		}
+        }
+        [Ajax]
+        [HttpGet]
+
+        public JsonResult GetInvestors()
+        {
+
+           ListInvestorsResult result = this.serviceClient.Instance.LoadInvestors(this.context.UserId);
+
+            return Json(new { Investors = result.Investors}, JsonRequestBehavior.AllowGet); 
+          
+        }
 
 		[Ajax]
 		[HttpGet]

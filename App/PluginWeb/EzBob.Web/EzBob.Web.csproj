@@ -913,9 +913,9 @@
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configSchedulerView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.fundingTransactionsView.js" />
-    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorDetailsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorBankView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorContactView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorsView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.addInvestorView.js" />
     <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.portfolioInvestorView.js" />
@@ -1017,6 +1017,9 @@
     <Content Include="Areas\Underwriter\Views\Investor\ConfigInvestor.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\ManualPayment.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_LogicalGlueHistoryTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\ManageInvestors.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

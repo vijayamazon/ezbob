@@ -1,19 +1,63 @@
 var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
+Backbone.Model.prototype.toJSON = function () {
+    var json = _.clone(this.attributes);
+    for (var attr in json) {
+        if ((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
+            json[attr] = json[attr].toJSON();
+        }
+    }
+    return json;
+};
+EzBob.Underwriter.InvestorContactModel = Backbone.Model.extend({
+    
+    defaults: {
+      
+        Comment: '',
+        ContactEmail: '',
+        ContactLastName: '',
+        ContactMobile: '',
+        ContactOfficeNumber: '',
+        ContactPersonalName: '',
+        InvestorContactID: '',
+        IsActive: '',
+        IsPrimary: '',
+        Role: '',
+        TimeStamp: ''
+    }, // defaults
+  
+    idAttribute: 'InvestorContactID'
+});
+EzBob.Underwriter.InvestorBankmodel = Backbone.Model.extend({
+    defaults: {
+        AccountType: '',
+        AccountTypeStr: '',
+        BankAccountName: '',
+        BankAccountNumber: '',
+        BankSortCode: '',
+        InvestorBankAccountID: '',
+       
+        IsActive: ''
+        
+    }, // defaults
 
+  
+});
+EzBob.Underwriter.InvestorContactModels = Backbone.Collection.extend({
+    
+    Contacts: EzBob.InvestorContactModel
+    
+}); // EzBob.AddressModels
+EzBob.Underwriter.InvestorBankModels = Backbone.Collection.extend({
+   
+    Banks: EzBob.InvestorBankmodel
+}); // EzBob.AddressModels
 EzBob.Underwriter.InvestorModel = Backbone.Model.extend({
-	idAttribute: 'InvestorID',
+    idAttribute: 'InvestorID',
+    
 	urlRoot: '' + gRootPath + 'Underwriter/Investor/LoadInvestor'
 });
 
-EzBob.Underwriter.InvestorBankModel = Backbone.Model.extend({
-	defaults: {
-		InvestorBankAccountType: '',
-		BankSortCode: '',
-		BankAccountNumber: '',
-		BankAccountName: ''
-	}, // defaults
-}); // EzBob.InvestorBankModel
 
 EzBob.Underwriter.InvestorBanksModels = Backbone.Collection.extend({
 	model: EzBob.Underwriter.InvestorBanksModels
@@ -100,8 +144,9 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddInvestor', data);
 		xhr.done(function(res) {
 			if (res.success) {
-				self.router.navigate('manageInvestor/' + res.InvestorID);
-				self.router.handleRoute('manageInvestor', res.InvestorID);
+			
+
+                //navigate to manage
 			} else {
 				EzBob.ShowMessage(res.error, "Failed adding investor", null, 'Ok');
 			}

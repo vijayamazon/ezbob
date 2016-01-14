@@ -2,86 +2,287 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
-	template: '#manage-investor-template',
-	initialize: function () {
-		this.model = new EzBob.Underwriter.InvestorModel();
-		this.model.on('change reset', this.render, this);
-		this.stateModel = new Backbone.Model({ state: 'details' });
-		this.stateModel.on('change:state', this.render, this);
-		this.views = {
-			details: { view: this.investorDetailsView },
-			manageBank: { view: this.manageInvestorBankView },
-			manageContact: { view: this.manageInvestorContactView },
-		};
+    template: '#manage-investor-template',
+    initialize: function() {
+        this.model = new EzBob.Underwriter.InvestorModel();
+        this.model.on('change reset', this.render, this);
+        //	this.stateModel = new Backbone.Model({ state: 'details' });
+        //this.stateModel.on('change:state', this.render, this);
+        this.views = {
+            details: { view: this.investorDetailsView },
+            manageBank: { view: this.manageInvestorBankView },
+            manageContact: { view: this.manageInvestorContactView },
+        };
 
-		return this;
-	},//initialize
+        return this;
+    }, //initialize
 
-	ui: {
-		manageRegion: '#manage-investor-region'
+    ui: {
+        manageRegion: '#manage-investor-region'
+
+    },
+    serializeData: function() {
+        return {
+            data: this.model.toJSON() //take the list from the model after fatch
+        };
+    },
+    events: {
+        'click #SubmitContactsEdit': 'SubmitContactsEdit',
+        'click #addInvestorContact': 'manageInvestorContactView',
+        'click #CancelContactsEdit': 'CancelContactsEdit',
+        'click .contact-investor-row': 'ContactInvestorEdit',
+        'click #SubmitBanksEdit': 'SubmitBanksEdit',
+        'click .bank-investor-row': 'BankInvestorEdit',
+
+    },
+    //stas region?
+    onRender: function() {
+  
+        this.initSwitch(".Investor-primary-contact", this.IsContactPrimaryChange);
+        this.initSwitch(".Investor-active-contact", this.IsContactActiveChange);
+        this.initSwitch(".Investor-active-bank", this.IsBankActiveChange);
+        return this;
+    }, //onRender
+
+    show: function(id) {
+        this.model.set('InvestorID', id);
+        //this.stateModel.set({ state: 'details' }, { silent: true });
+        var self = this;
+        this.model.fetch().done(function() {
+            self.model.set('Contacts', new EzBob.Underwriter.InvestorContactModels(self.model.get('Contacts'), 'InvestorContactID'), { silent: true });
+            self.model.set('Banks', new EzBob.Underwriter.InvestorBankModels(self.model.get('Banks')), { silent: true });
+
+            //  console.log(self.model.get('Contacts').pluck("InvestorContactID"));
+            self.$el.show();
+        });
+    }, //show
+
+    hide: function() {
+        return this.$el.hide();
+    },
+
+    initSwitch: function(elemClass, func) {
+        this.$el.find(elemClass).bootstrapSwitch();
+
+    
+
+        var self = this;
+
+        this.$el.find(elemClass).on('switch-change', function(event, innerState) {
+            func.call(self, event, innerState);
+        });
+    }, // initSwitch
+    IsContactPrimaryChange: function(event, state, innerState) {
+        var tr = $(event.currentTarget).closest('tr');
+        var id = tr.data('id');
+
+        var tochange = this.model.get('Contacts').find(function(item) {
+            return Number(item.get('InvestorContactID')) === id;
+        });
+        var found = this.model.get('Contacts').find(function(item) {
+            return Number(item.get('IsPrimary')) === 1 && Number(item.get('InvestorContactID')) !== id;
+        });
+        var ContactsLength = this.model.get('Contacts').length;
+        if ((ContactsLength > 1 && !found) || ContactsLength === 1) {
+
+            $(event.currentTarget).bootstrapSwitch('setState', true, true);
+            tochange.set('IsPrimary', true);
+
+        } else if (ContactsLength > 1) {
+            $('.Investor-primary-contact').bootstrapSwitch('setState', false, true);
+            $(event.currentTarget).bootstrapSwitch('setState', true, true);
+            found.set('IsPrimary', false);
+            tochange.set('IsPrimary', true);
+        }
+
+    },
+
+    IsContactActiveChange: function(event, state, innerState) {
+        var tr = $(event.currentTarget).closest('tr');
+        var id = tr.data('id');
+        var tochange = this.model.get('Contacts').find(function(item) {
+            return Number(item.get('InvestorContactID')) === id;
+        });
+        var found = this.model.get('Contacts').find(function(item) {
+            return Number(item.get('IsActive')) === 1 && Number(item.get('InvestorContactID')) !== id;
+        });
+        if (!found) {
+            $(event.currentTarget).bootstrapSwitch('setState', true, true);
+            tochange.set('IsActive', true);
+        } else {
+            tochange.set('IsActive', state.value);
+        }
+
+    },
+    IsBankActiveChange : function(event, state, innerState) {
+        var tr = $(event.currentTarget).closest('tr');
+        var id = tr.data('id');
+
+        var tochange = this.model.get('Banks').find(function (item) {
+            return Number(item.get('InvestorBankAccountID')) === id;
+        });
+        var tochangeAccountType = tochange.get('AccountType');
+        var tochangeAccountTypeStr = tochange.get('AccountTypeStr');
+
+        var found = this.model.get('Banks').find(function (item) {
+            return Number(item.get('IsActive')) === 1 && Number(item.get('InvestorBankAccountID')) !== id && Number(item.get('AccountType')) === tochangeAccountType;
+        });
+        var ContactsLength = this.model.get('Banks').length;
+        if ((ContactsLength > 1 && !found) || ContactsLength === 1) {
+
+            $(event.currentTarget).bootstrapSwitch('setState', true, true);
+            tochange.set('IsActive', true);
+
+        } else if (ContactsLength > 1) {
+            $('.Investor-active-bank-' + tochangeAccountTypeStr).bootstrapSwitch('setState', false, true);
+            $(event.currentTarget).bootstrapSwitch('setState', true, true);
+            found.set('IsActive', false);
+            tochange.set('IsActive', true);
+        }
+        
+    },
+    SubmitContactsEdit: function() {
+        var Contactlist = this.model.toJSON();
+        var serialized = JSON.stringify(Contactlist);
+
+        var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/SaveInvestorContactList', {
+            'investor': serialized,
+            'InvestorID': this.model.get('InvestorID')
+        });
+        var self = this;
+        xhr.done(function(res) {
+
+            if (res.success) {
+                EzBob.ShowMessage('Contacts Edited successfully', 'Done', null, 'Ok');
+            } else {
+                EzBob.ShowMessage(res.error, "Failed saveing investor contact list", null, 'Ok');
+            }
+        });
+    },
+    SubmitBanksEdit:function() {
+        var Bankslist = this.model.toJSON();
+        var serialized = JSON.stringify(Bankslist);
+
+        var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/SaveInvestorBanksList', {
+            'investor': serialized,
+            'InvestorID': this.model.get('InvestorID')
+        });
+        var self = this;
+        xhr.done(function (res) {
+
+            if (res.success) {
+                EzBob.ShowMessage('Banks Edited successfully', 'Done', null, 'Ok');
+            } else {
+                EzBob.ShowMessage(res.error, "Failed saveing investor contact list", null, 'Ok');
+            }
+        });
+    },
+    CancelContactsEdit: function() {
+        var self = this;
+        this.model.fetch().done(function() {
+            self.model.set('Contacts', new EzBob.Underwriter.InvestorContactModels(self.model.get('Contacts'), 'InvestorContactID'));
+            self.model.set('Banks', new EzBob.Underwriter.InvestorBankModels(self.model.get('Banks')));
+        });
+    },
+ 
+    investorDetailsView: function(self) {
+        var view = new EzBob.Underwriter.ManageInvestorDetailsView({
+            model: self.model,
+        });
+        view.on('manageBank', self.manageBank, self);
+        /*view.on('manageContact', self.manageContact, self);*/
+        view.on('saveContactChanges', self.saveContactChanges, self);
+        view.on('cancelContactChange', self.cancelContactChange, self);
+        return view;
+    }, //investorDetailsView
+
+    manageInvestorBankView: function(self) {
+        var view = new EzBob.Underwriter.ManageInvestorBankView({
+            model: self.model,
+            stateModel: self.stateModel
+        });
+        return view;
+    }, //manageInvestorBankView
+
+    manageInvestorContactView: function(el) {
+        var tr = $(el.currentTarget).closest('tr');
+        this.$el.find('.edit-investor-contact').remove();
+       
+        var newRow = $('<tr class="add-contact-view-area"><td colspan="6"></td></tr>');
+        tr.after(newRow);
+        var newRowEl = this.$el.find('tr.add-contact-view-area td');
+        var addContactView = new EzBob.Underwriter.ManageInvestorContactView({
+            el: newRowEl,
+            model: new EzBob.Underwriter.InvestorContactModel(),
+            InvestorID: this.model.get('InvestorID'),
+            
+         });
+        
+        addContactView.render();
+        $(tr).hide();
+
+    }, //manageInvestorContactView
+    ContactInvestorEdit: function (el) {
+        var tr = $(el.currentTarget).closest('tr');
+        var id = tr.data('id');
+        this.$el.find('.edit-investor-contact').remove();
+        this.$el.find('.add-contact-view-area').remove();
+        $('.add-contact-row').show();
+
+        console.log(id);
+
+        var newRow = $('<tr class="edit-investor-contact"><td colspan="6"></td></tr>');
+        tr.after(newRow);
+        var newRowEl = this.$el.find('tr.edit-investor-contact td');
+        var contact = this.model.get('Contacts').find(function (item) {
+            return Number(item.get('InvestorContactID')) === id;
+        });
+        var editContactView = new EzBob.Underwriter.ManageInvestorContactView({
+            el: newRowEl,
+            model: new EzBob.Underwriter.InvestorContactModel(),
+            InvestorID: this.model.get('InvestorID'),
+            Contact: contact,
+            EditID: id
+        });
+        editContactView.render();
+    },
+    BankInvestorEdit : function(el) {
+           var tr = $(el.currentTarget).closest('tr');
+        var id = tr.data('id');
+        this.$el.find('.edit-investor-bank').remove();
+       // this.$el.find('.add-contact-view-area').remove();
+       // $('.add-contact-row').show();
+
+        console.log(id);
+
+        var newRow = $('<tr class="edit-investor-bank"><td colspan="6"></td></tr>');
+        tr.after(newRow);
+        var newRowEl = this.$el.find('tr.edit-investor-bank td');
+        var bank = this.model.get('Banks').find(function (item) {
+            return Number(item.get('InvestorBankAccountID')) === id;
+        });
+        var editContactView = new EzBob.Underwriter.ManageInvestorBankView({
+            el: newRowEl,
+            model: new EzBob.Underwriter.InvestorBankmodel(),
+            InvestorID: this.model.get('InvestorID'),
+            Bank : bank,
+            EditID: id
+        });
+        editContactView.render();
+    },
+	saveContactChanges: function (id) {
+	    console.log('saveContactChanges');
+		return false;
 	},
-	serializeData: function () {
-		return {
-			
-		};
+	cancelContactChange: function (id) {
+	    console.log('cancelContactChange');
+	    return false;
 	},
-	events: {
-	
-	},
-
-	onRender: function () {
-		var view = this.views[this.stateModel.get('state')].view(this);
-		view.on('back', this.backClicked, this);
-
-		var region = new Backbone.Marionette.Region({
-			el: this.ui.manageRegion
-		});
-		region.show(view);
-		return this;
-	},//onRender
-
-	show: function (id) {
-		this.model.set('InvestorID', id);
-		this.stateModel.set({ state: 'details' }, { silent: true });
-		var self = this;
-		this.model.fetch().done(function() {
-			self.$el.show();
-		});
-	},//show
-
-	hide: function () {
-		return this.$el.hide();
-	},
-
-	investorDetailsView: function(self) {
-		var view = new EzBob.Underwriter.ManageInvestorDetailsView({
-			model: self.model,
-		});
-		view.on('manageBank', self.manageBank, self);
-		view.on('manageContact', self.manageContact, self);
-		return view;
-	},//investorDetailsView
-	
-	manageInvestorBankView: function (self) {
-		var view = new EzBob.Underwriter.ManageInvestorBankView({
-			model: self.model,
-			stateModel: self.stateModel
-		});
-		return view;
-	},//manageInvestorBankView
-
-	manageInvestorContactView: function (self) {
-		var view = new EzBob.Underwriter.ManageInvestorContactView({
-			model: self.model,
-			stateModel: self.stateModel
-		});
-		return view;
-	},//manageInvestorContactView
 
 	manageBank: function (id) {
-		this.stateModel.set('editID', id, { silent: true });
-		this.stateModel.set('state', 'manageBank');
-		return false;
+	    this.stateModel.set('editID', id, { silent: true });
+	    this.stateModel.set('state', 'manageBank');
+	    return false;
 	},
 
 	manageContact: function (id) {

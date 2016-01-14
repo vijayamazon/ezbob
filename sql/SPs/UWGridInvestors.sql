@@ -18,15 +18,15 @@ BEGIN
 		i.InvestorID,
 		t.Name AS InvestorType,
 		i.Name CompanyName,
-		i.Timestamp
+		i.Timestamp,
+		i.IsActive
+
 	FROM
 		I_Investor i INNER JOIN I_InvestorType t ON t.InvestorTypeID = i.InvestorTypeID
-	WHERE 
-		i.IsActive=1	
+
 	ORDER BY
-		i.InvestorID DESC
+		i.InvestorID 
 END
 
 GO
-
 
