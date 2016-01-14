@@ -178,7 +178,12 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 
 		if (!productSubType) {
-			this.ui.errorMessage.text('No product found for such offer');
+			var productType = _.find(this.cloneModel.get('ProductTypes'), function(pt) { return pt.ProductTypeID == self.cloneModel.get('CurrentProductTypeID'); }) || {};
+			var loanSource = _.find(this.cloneModel.get('AllLoanSources'), function (ls) { return ls.Id == self.cloneModel.get('LoanSourceID'); }) || {};  
+			this.ui.errorMessage.text('No product found for such offer origin: ' +
+				this.cloneModel.get('Origin') +
+				', loanSource: ' + (loanSource.Name || '') +
+				', product type: ' + (productType.Name || ''));
 			return null;
 		}else {
 			this.ui.errorMessage.empty();
@@ -303,14 +308,15 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var originID = this.model.get('OriginID');
 		var gradeID = this.model.get('GradeID');
 		var subGradeID = this.model.get('SubGradeID');
-		
+		var grade = _.find(this.cloneModel.get('Grades'), function (g) { return g.GradeID == gradeID; }) || { Name: '' };
+
 		var productSubTypesPerOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function(pst) {
 			return pst.OriginID == originID;
 		});
 
 		if (productSubTypesPerOrigin.length <= 0) {
-			//todo replace ids with names
-			this.ui.errorMessage.text('No products available for origin ' + originID + ' and grade ' + gradeID);
+			
+			this.ui.errorMessage.text('No products available for origin: ' + this.cloneModel.get('Origin') + ', and grade: ' + grade.Name);
 			return;
 		} else {
 			this.ui.errorMessage.empty();
@@ -407,7 +413,15 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 
 		if (!gradeRange) {
-			this.ui.errorMessage.text('No pricing for such product combination found origin ' + originID + ' grade ' + gradeID + ' subGrade ' + subGradeID + ' loan source ' + currentLoanSourceID + ' is first loan ' + isFirstLoan);
+			var subGrade = _.find(this.cloneModel.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { Name: ''};
+			var loanSource = _.find(this.cloneModel.get('AllLoanSources'), function (ls) { return ls.Id == currentLoanSourceID; }) || {Name: ''};
+			this.ui.errorMessage.text('No pricing for such product combination found origin: ' +
+				this.cloneModel.get('Origin') +
+				', grade: ' + grade.Name +
+				', subGrade: ' + subGrade.Name,
+				', loan source: ' + loanSource.Name +
+				', is first loan: ' + isFirstLoan ? 'yes' : 'no');
+
 			gradeRange = {};
 		} else {
 			this.ui.errorMessage.empty();

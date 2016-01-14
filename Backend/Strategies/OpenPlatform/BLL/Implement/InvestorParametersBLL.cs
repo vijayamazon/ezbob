@@ -52,7 +52,7 @@
             //Calc max percent for grade.
             var gradePercent = (decimal)InvestorParametersDAL.GetGradePercent(investorId, investorLoanCashRequest.GradeID, ruleType);
 
-            //Calc total sum of positive transctions this month
+            //Calc total sum of positive transactions this month
              var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
 
             var monthlyFundingCapital = InvestorParametersDAL.GetInvestorMonthlyFundingCapital(investorId);
@@ -60,7 +60,8 @@
             var monthlyMax = Math.Max(investorMonthlyBalance, monthlyFundingCapital);
 
 	        var gradeAvailableAmount = gradePercent * monthlyMax - totalFunded;
-			Log.InfoFormat("GetGradeAvailableAmount investorID {0} grade {1} amount: {2}", investorId, investorLoanCashRequest.GradeID, gradeAvailableAmount);
+			Log.InfoFormat("GetGradeAvailableAmount investorID {0} grade {1} GradeAvailableAmount: {2} Funded amount {3} gradePercent {4} investorMonthlyBalance {5} monthlyFundingCapital {6}", 
+				investorId, investorLoanCashRequest.GradeID, gradeAvailableAmount, totalFunded, gradePercent, investorMonthlyBalance, monthlyFundingCapital);
 			return gradeAvailableAmount;
         }
 
