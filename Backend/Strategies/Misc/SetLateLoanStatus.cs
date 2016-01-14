@@ -61,12 +61,15 @@
 
 			//-----------Change status to enabled for cured loans--------------------------------
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				int customerID = sr["CustomerID"];
-				int loanID = sr["LoanID"];
+				var model = new CollectionDataModel {
+					CustomerID = sr["CustomerID"],
+					LoanID = sr["LoanID"],
+					UpdateCustomerAllowed = true
+				};
 				try {
-					HandleCuredLoan(customerID, loanID, null);
+					HandleCuredLoan(model.CustomerID, model.LoanID, model);
 				} catch (Exception ex) {
-					Log.Error(ex, "Failed to handle cured loan for customer {0}", customerID);
+					Log.Error(ex, "Failed to handle cured loan for customer {0}", sr["CustomerID"]);
 				}
 				return ActionResult.Continue;
 			}, "GetCuredLoansForCollection", CommandSpecies.StoredProcedure);
@@ -374,6 +377,7 @@
 				SmsSendingAllowed = sr["SmsSendingAllowed"],
 				EmailSendingAllowed = sr["EmailSendingAllowed"],
 				ImailSendingAllowed = sr["MailSendingAllowed"],
+				UpdateCustomerAllowed = true
 				//SendNotification = true // always perform action(send notification/changeStatus) for "old" loan
 			};
 
