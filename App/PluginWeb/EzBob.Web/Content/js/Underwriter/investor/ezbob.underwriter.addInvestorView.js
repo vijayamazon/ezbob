@@ -85,7 +85,8 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 	},
 	events: {
 		'click .add-investor': 'addInvestorClicked',
-		'change #SameBank': 'sameBankChanged'
+		'change #SameBank': 'sameBankChanged',
+        'click #CancelAddInvestor':'cancel'
 	},
 
 	onRender: function () {
@@ -145,8 +146,10 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		xhr.done(function(res) {
 			if (res.success) {
 			
-
-                //navigate to manage
+			    self.router.navigate('manageInvestor');
+			    self.router.handleRoute('manageInvestors',null,null,true);
+			    self.render();
+			    //navigate to manage
 			} else {
 				EzBob.ShowMessage(res.error, "Failed adding investor", null, 'Ok');
 			}
@@ -172,7 +175,10 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 	hide: function () {
 		return this.$el.hide();
 	},
-
+    cancel:function() {
+        this.render();
+        return false;
+    }
 	//bindings: {
 	//	CompanyName: {
 	//		selector: 'input[name="CompanyName"]',

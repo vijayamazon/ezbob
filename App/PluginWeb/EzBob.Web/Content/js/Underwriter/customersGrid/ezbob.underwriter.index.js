@@ -127,9 +127,9 @@
 			'*z': 'customers',
 		}, // routes
 
-		handleRoute: function(sViewName, id, type) {
+		handleRoute: function(sViewName, id, type, forceRender) {
 			var oView = this.views[sViewName];
-			if (!oView.isRendered) {
+			if (!oView.isRendered || forceRender) {
 				oView.isRendered = true;
 				oView.view.render();
 				EzBob.handleUserLayoutSetting();

@@ -13,7 +13,11 @@ CREATE TYPE I_InvestorList AS TABLE (
 	[InvestorTypeID] INT NOT NULL,
 	[Name] NVARCHAR(255) NULL,
 	[IsActive] BIT NOT NULL,
-	[Timestamp] DATETIME NOT NULL
+	[Timestamp] DATETIME NOT NULL,
+	[MonthlyFundingCapital] decimal(18, 6) NOT NULL,
+	[FundingLimitForNotification] decimal(18, 6) NOT NULL,
+	[FundsTransferDate] INT NOT NULL
+	
 )
 GO
 
@@ -33,12 +37,18 @@ BEGIN
 		[InvestorTypeID],
 		[Name],
 		[IsActive],
-		[Timestamp]
+		[Timestamp],
+		[MonthlyFundingCapital],
+		[FundingLimitForNotification],
+		[FundsTransferDate]
 	) SELECT
 		[InvestorTypeID],
 		[Name],
 		[IsActive],
-		[Timestamp]
+		[Timestamp],
+		[MonthlyFundingCapital],
+		[FundingLimitForNotification],
+		[FundsTransferDate]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

@@ -48,7 +48,13 @@
         [NonTraversable]
         public List<I_InvestorSystemBalance> InvestorSystemBalance { get; set; }
 
-        
+        [DataMember]
+        public decimal? MonthlyFundingCapital { get; set; }
+        [DataMember]
+        public decimal? FundingLimitForNotification { get; set; }
+
+        [DataMember]
+        public int? FundsTransferDate { get; set; }
 	}//class I_Investor
 
 	/// <summary>

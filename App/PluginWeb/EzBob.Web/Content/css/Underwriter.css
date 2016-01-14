@@ -2550,3 +2550,10 @@ iframe#logical-glue-iframe{
 	margin-left: 0;
 	margin-right: 0;
 }
+
+#add-investor-form .col-md-6{
+    margin-left:50px;
+} 
+#add-investor-title {
+    margin-left:50px;
+}

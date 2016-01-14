@@ -31,6 +31,9 @@
 								InvestorTypeID = this.investor.InvestorType.InvestorTypeID,
 								IsActive = true,
 								Timestamp = now,
+                                MonthlyFundingCapital = this.investor.MonthlyFundingCapital,
+                                FundingLimitForNotification = this.investor.FundingLimitForNotification,
+                                FundsTransferDate = this.investor.FundsTransferDate
 							}
 						})
 					);
