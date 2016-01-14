@@ -7,6 +7,7 @@
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
+    using log4net;
     using StructureMap.Attributes;
 
     public class InvestorParametersBLL : IInvestorParametersBLL {
@@ -46,10 +47,10 @@
             decimal investorGradeInvestedAmount = InvestorParametersDAL.GetGradeMonthlyInvestedAmount(investorId, (Grade)investorLoanCashRequest.GradeID);
 
             //Sum of already funded this month + current
-            var totalFunded = investorGradeInvestedAmount + investorLoanCashRequest.ManagerApprovedSum;
+            var totalFunded = investorGradeInvestedAmount;
 
-            //Calc max score for grade.
-            var gradeMaxScore = (decimal)InvestorParametersDAL.GetGradeMaxScore(investorId, investorLoanCashRequest.GradeID, ruleType);
+            //Calc max percent for grade.
+            var gradePercent = (decimal)InvestorParametersDAL.GetGradePercent(investorId, investorLoanCashRequest.GradeID, ruleType);
 
             //Calc total sum of positive transctions this month
              var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
@@ -58,11 +59,15 @@
 
             var monthlyMax = Math.Max(investorMonthlyBalance, monthlyFundingCapital);
 
-            return gradeMaxScore * monthlyMax - totalFunded;
+	        var gradeAvailableAmount = gradePercent * monthlyMax - totalFunded;
+			Log.InfoFormat("GetGradeAvailableAmount investorID {0} grade {1} amount: {2}", investorId, investorLoanCashRequest.GradeID, gradeAvailableAmount);
+			return gradeAvailableAmount;
         }
 
         public int GetInvestorWithLatestLoanDate(List<int> investorsList) {
            return InvestorParametersDAL.GetInvestorWithLatestLoanDate(investorsList);
         }
+
+		protected static ILog Log = LogManager.GetLogger(typeof(InvestorParametersBLL));
     }
 }

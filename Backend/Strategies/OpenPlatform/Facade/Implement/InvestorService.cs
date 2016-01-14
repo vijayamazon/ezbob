@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement
 {
-    using System.Collections.Generic;
+	using System.Collections.Generic;
     using System.Linq;
     using Ezbob.Backend.Models.Investor;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
@@ -8,7 +8,8 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Contracts;
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using Ezbob.Backend.Strategies.OpenPlatform.Registry;
-    using StructureMap.Attributes;
+	using log4net;
+	using StructureMap.Attributes;
 
     public class InvestorService : IInvestorService
     {
@@ -36,13 +37,16 @@
         }
 
 
-        public List<int> FilterInvestors(InvestorLoanCashRequest investorLoancCashRequest, List<int> InvestorList, RuleType ruleType)
+        public List<int> FilterInvestors(InvestorLoanCashRequest investorLoanCashRequest, List<int> InvestorList, RuleType ruleType)
         {
             
             var matchList = new List<IMatchBLL<InvestorLoanCashRequest, InvestorParameters>>();
             foreach (var investorId in InvestorList) {
-                var investorParameter = InvestorParametersBLL.GetInvestorParameters(investorId, ruleType);
-                var matchInvestor = MatchProvider.GetNew();
+                
+				var investorParameter = InvestorParametersBLL.GetInvestorParameters(investorId, ruleType);
+				Log.InfoFormat("FilterInvestors cr: {0} \ninvestor: {1}", investorLoanCashRequest, investorParameter);
+				var matchInvestor = MatchProvider.GetNew();
+				
                 if (investorParameter == null) {
                     matchInvestor.Target = new InvestorParameters() {
                         InvestorID = investorId,                       
@@ -51,14 +55,16 @@
                     matchList.Add(matchInvestor);
                     continue;                    
                 }
-                matchInvestor.Source = investorLoancCashRequest;
+                matchInvestor.Source = investorLoanCashRequest;
                 matchInvestor.Target = investorParameter;
-                matchInvestor.BuildFunc(investorParameter.InvestorID, investorLoancCashRequest.CashRequestID, ruleType);
+                matchInvestor.BuildFunc(investorParameter.InvestorID, investorLoanCashRequest.CashRequestID, ruleType);
                 matchList.Add(matchInvestor);
             }
             return matchList.Where(x => x.IsMatched())
                 .Select(x => x.Target.InvestorID)
                 .ToList();
         }
+
+		protected static ILog Log = LogManager.GetLogger(typeof(InvestorService));
     }
 }

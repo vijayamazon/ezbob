@@ -7,6 +7,7 @@
     using System.Reflection;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
     using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
+    using log4net;
     using StructureMap.Attributes;
 
     public class ExressionBuilderBLL : IExressionBuilderBLL {
@@ -51,9 +52,9 @@
                                                                     rootRule.Value,
                                                                     expLeft,
                                                                     expRight);
-
+			
             Func<T1, T2, bool> func = Expression.Lambda<Func<T1, T2, bool>>(binaryExpression, expLeft, expRight).Compile();
-
+			Log.InfoFormat("built expression for investorID {0} crID {1} : {2}", investorId, cashRequestID, binaryExpression);
             return func;
         }
 
@@ -96,6 +97,8 @@
             }
             return result;
         }
+
+		protected static ILog Log = LogManager.GetLogger(typeof(InvestorParametersBLL));
 
     }
 }

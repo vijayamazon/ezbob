@@ -13,12 +13,14 @@
         private Dictionary<int, I_Parameter> investorsParameters;
         public Dictionary<int, decimal> InvestorsBalance {
             get {
-                return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
+                return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", 
+					CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
             }
         }
         public Dictionary<int, I_Parameter> InvestorsParameters {
             get {
-                return this.investorsParameters ?? (this.investorsParameters = Library.Instance.DB.Fill<I_Parameter>("I_GetInvestorParameters", CommandSpecies.StoredProcedure).ToDictionary(x => x.ParameterID, x => x));
+                return this.investorsParameters ?? (this.investorsParameters = Library.Instance.DB.Fill<I_Parameter>("I_GetInvestorParameters", 
+					CommandSpecies.StoredProcedure).ToDictionary(x => x.ParameterID, x => x));
             }
         }
 
@@ -28,31 +30,43 @@
         }
 
         public List<I_InvestorParams> GetInvestorParametersDB(int investorId, RuleType ruleType) {
-            var queryParameters = ruleType == RuleType.System ? new[] { new QueryParameter("TypeID", (int)ruleType) } : new[] { new QueryParameter("TypeID", (int)ruleType), new QueryParameter("InvestorId", investorId) };
-            return Library.Instance.DB.Fill<I_InvestorParams>("I_GetInvestorParametersDB", CommandSpecies.StoredProcedure, queryParameters);
+            var queryParameters = ruleType == RuleType.System ? new[] { new QueryParameter("TypeID", (int)ruleType) } : new[] { 
+				new QueryParameter("TypeID", (int)ruleType), new QueryParameter("InvestorId", investorId)
+			};
+
+            return Library.Instance.DB.Fill<I_InvestorParams>("I_GetInvestorParametersDB", 
+				CommandSpecies.StoredProcedure, 
+				queryParameters);
         }
 
         public int GetInvestorWithLatestLoanDate(List<int> investorsList) {
-            return Library.Instance.DB.ExecuteScalar<int>("I_GetInvestorWithLatestLoanDate", CommandSpecies.StoredProcedure,  Library.Instance.DB.CreateTableParameter("InvestorIDs", (IEnumerable<int>)investorsList));
+            return Library.Instance.DB.ExecuteScalar<int>("I_GetInvestorWithLatestLoanDate", 
+				CommandSpecies.StoredProcedure,  
+				Library.Instance.DB.CreateTableParameter("InvestorIDs", (IEnumerable<int>)investorsList));
         }
 
         public decimal GetGradeMonthlyInvestedAmount(int investorId, Grade grade) {
             var myDate = DateTime.Now;
             var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
-            var result = Library.Instance.DB.ExecuteScalar<decimal>("I_GetGradeMonthlyInvestedAmount", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("GradeID", (int)grade), new QueryParameter("FirstOfMonth", TimeZoneInfo.ConvertTimeToUtc(firstOfMonth)));
+            var result = Library.Instance.DB.ExecuteScalar<decimal>("I_GetGradeMonthlyInvestedAmount", 
+				CommandSpecies.StoredProcedure, 
+				new QueryParameter("InvestorID", investorId), 
+				new QueryParameter("GradeID", (int)grade), 
+				new QueryParameter("FirstOfMonth", 
+					TimeZoneInfo.ConvertTimeToUtc(firstOfMonth)));
             return (decimal)result;
         }
 
-        public decimal GetGradeMaxScore(int investorId, int grade, int ruleType) {
+        public decimal GetGradePercent(int investorId, int grade, int ruleType) {
             var queryParameters = ruleType == 1 ? new QueryParameter[0] : new[] {new QueryParameter("InvestorId", investorId) };
-            var index = Library.Instance.DB.FillFirst<I_Index>("I_GetGradeMaxScore", CommandSpecies.StoredProcedure, queryParameters);
+            var index = Library.Instance.DB.FillFirst<I_Index>("I_IndexLoad", CommandSpecies.StoredProcedure, queryParameters);
             switch (grade) {
-                case (int)Grade.A: return index.GradeAMaxScore;
-				case (int)Grade.B: return index.GradeBMaxScore;
-				case (int)Grade.C: return index.GradeCMaxScore;
-				case (int)Grade.D: return index.GradeDMaxScore;
-				case (int)Grade.E: return index.GradeEMaxScore;
-				case (int)Grade.F: return index.GradeFMaxScore;
+                case (int)Grade.A: return index.GradeAPercent;
+				case (int)Grade.B: return index.GradeBPercent;
+				case (int)Grade.C: return index.GradeCPercent;
+				case (int)Grade.D: return index.GradeDPercent;
+				case (int)Grade.E: return index.GradeEPercent;
+				case (int)Grade.F: return index.GradeFPercent;
             }
             return 0;
         }
@@ -60,28 +74,38 @@
         public decimal GetInvestorTotalMonthlyDeposits(int investorId) {
             var myDate = DateTime.Now;
             var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
-            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorTotalMonthlyDeposits", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("FirstOfMonth", firstOfMonth));
+            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorTotalMonthlyDeposits", 
+				CommandSpecies.StoredProcedure, 
+				new QueryParameter("InvestorID", investorId),
+				new QueryParameter("FirstOfMonth", firstOfMonth));
         }
 
         public decimal GetInvestorMonthlyFundingCapital(int investorId) {
-            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorMonthlyFundingCapital", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId));
+            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorMonthlyFundingCapital", 
+				CommandSpecies.StoredProcedure, 
+				new QueryParameter("InvestorID", investorId));
         }
 
         public decimal GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod) {
+	        DateTime now = DateTime.UtcNow;
             DateTime periodAgo = new DateTime();
             switch (invesmentPeriod) {
                 case InvesmentPeriod.Day:
-                    periodAgo = DateTime.Today.AddDays(-1);
+                    periodAgo = now.AddDays(-1);
                     break;
                 case InvesmentPeriod.Week:
-                    periodAgo = DateTime.Today.AddDays(-7);
+					periodAgo = now.AddDays(-7);
                     break;
                 case InvesmentPeriod.Month:
-                    periodAgo = DateTime.Today.AddDays(-30);
+					periodAgo = now.AddMonths(-1);
                     break;
             }
 
-            var fundedAmount = Library.Instance.DB.ExecuteScalar<decimal>("I_GetFundedAmountPeriod", CommandSpecies.StoredProcedure, new QueryParameter("InvestorID", investorId), new QueryParameter("PeriodAgo", TimeZoneInfo.ConvertTimeToUtc(periodAgo)));
+            var fundedAmount = Library.Instance.DB.ExecuteScalar<decimal>("I_GetFundedAmountPeriod", 
+				CommandSpecies.StoredProcedure, 
+				new QueryParameter("InvestorID", investorId), 
+				new QueryParameter("PeriodAgo",periodAgo)
+			);
             return fundedAmount;
         }
 

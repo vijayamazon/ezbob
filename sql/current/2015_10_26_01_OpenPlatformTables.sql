@@ -782,9 +782,9 @@ GO
 
 IF NOT EXISTS (SELECT * FROM I_InvestorRule)
 BEGIN
-	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES(1,1,null,null,null,null,1,2,1,1)
-	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot)VALUES (1,1,null,null,null,null,3,4,1,0)
-	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,null,null,5,6,1,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES(1,1,null,null,null,null,2,3,1,1)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot)VALUES (1,1,null,null,null,null,4,5,1,0)
+	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,null,null,6,7,1,0)
 	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,'ManagerApprovedSum','DailyAvailableAmount',null,null,3,0)
 	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,'ManagerApprovedSum','WeeklyAvailableAmount',null,null,3,0)
 	INSERT INTO I_InvestorRule(UserID,RuleType,InvestorID,FuncName,MemberNameSource,MemberNameTarget,LeftParamID,RightParamID,Operator,IsRoot) VALUES (1,1,null,null,'ManagerApprovedSum','Balance',null,null,3,0)

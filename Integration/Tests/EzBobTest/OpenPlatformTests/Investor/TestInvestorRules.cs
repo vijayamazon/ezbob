@@ -222,7 +222,7 @@
             
 
 
-            investorParametersDALMock.Setup(x => x.GetGradeMaxScore(1, (int)Grade.A,1))
+            investorParametersDALMock.Setup(x => x.GetGradePercent(1, (int)Grade.A,1))
                 .Returns((decimal)0.2);
             investorParametersDALMock.Setup(x => x.GetGradeMonthlyInvestedAmount(1, Grade.A))
                 .Returns(100);

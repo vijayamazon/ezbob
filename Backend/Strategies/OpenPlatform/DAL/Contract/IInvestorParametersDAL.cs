@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract {
-    using System;
     using System.Collections.Generic;
     using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 
@@ -8,7 +7,7 @@
         Dictionary<int, I_Parameter> InvestorsParameters { get; }
         List<int> GetInvestorsIds();
         decimal GetGradeMonthlyInvestedAmount(int investorId, Grade grade);
-        decimal GetGradeMaxScore(int investorId, int grade, int ruleType);
+        decimal GetGradePercent(int investorId, int grade, int ruleType);
         decimal GetInvestorTotalMonthlyDeposits(int investorId);
         decimal GetInvestorMonthlyFundingCapital(int investorId);
         decimal GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod);

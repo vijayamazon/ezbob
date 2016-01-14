@@ -56,10 +56,11 @@
 				DB.ExecuteNonQuery("I_PortfolioSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", portfolio));
 
 				//TODO add transaction date.
+				const int negative = -1;
 				AddInvestorBankAccountBalance addBankAccountBalance = new AddInvestorBankAccountBalance(
 					fundingBankAccountID, 
 					this.now,
-					loanAmount * investmentPercent,
+					loanAmount * investmentPercent * negative,
 					null,
 					"Loan was taken");
 				addBankAccountBalance.Execute();

@@ -16,8 +16,8 @@ GO
 IF OBJECT_ID('I_GetGradeMonthlyInvestedAmount') IS NULL 
 	EXECUTE('CREATE PROCEDURE I_GetGradeMonthlyInvestedAmount AS SELECT 1')
 GO
-IF OBJECT_ID('I_GetGradeMaxScore') IS NULL 
-	EXECUTE('CREATE PROCEDURE I_GetGradeMaxScore AS SELECT 1')
+IF OBJECT_ID('I_IndexLoad') IS NULL 
+	EXECUTE('CREATE PROCEDURE I_IndexLoad AS SELECT 1')
 GO
 IF OBJECT_ID('I_GetInvestorTotalMonthlyDeposits') IS NULL 
 	EXECUTE('CREATE PROCEDURE I_GetInvestorTotalMonthlyDeposits AS SELECT 1')
@@ -82,7 +82,7 @@ BEGIN
     cr.ManagerApprovedSum    
   FROM CashRequests cr
   INNER JOIN I_ProductSubType ipt
-    ON cr.ProductSubTypeID = ipt.ProductTypeID
+    ON cr.ProductSubTypeID = ipt.ProductSubTypeID
   WHERE cr.Id = @CashRequestsId
 END
 GO
@@ -163,7 +163,7 @@ END
 GO
 
 
-ALTER PROCEDURE I_GetGradeMaxScore 
+ALTER PROCEDURE I_IndexLoad 
 @InvestorID int = NULL
 AS
 BEGIN
@@ -221,6 +221,9 @@ BEGIN
 	  AND iisb.Timestamp < @FirstOfMonth
 	  ORDER BY iiba.Timestamp DESC
   )
+  
+  IF @Balance IS NULL
+  	SET @Balance = 0
 
   SELECT
     (SUM(iibat.TransactionAmount) + @Balance) AS Balance
@@ -244,15 +247,13 @@ BEGIN
 END
 GO
 
-
-
 ALTER PROCEDURE I_GetFundedAmountPeriod 
-@InvestorID int,
-@PeriodAgo DateTime
+@InvestorID INT,
+@PeriodAgo DATETIME
 AS
 BEGIN
   SELECT
-    SUM(l.LoanAmount) AS invesmentAmount
+    isnull(SUM(l.LoanAmount), 0) AS InvestmentAmount
   FROM I_Portfolio ip
   INNER JOIN Loan l
     ON ip.LoanID = l.Id
@@ -260,7 +261,6 @@ BEGIN
   AND ip.Timestamp >= @PeriodAgo
 END
 GO
-
 
 ALTER PROCEDURE I_GetInvestorWithLatestLoanDate 
 @InvestorIDs IntList READONLY

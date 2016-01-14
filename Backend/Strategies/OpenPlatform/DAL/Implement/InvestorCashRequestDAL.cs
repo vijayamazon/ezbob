@@ -17,7 +17,7 @@
                 throw new Exception(string.Format("Couldn't resolve data for cash request ID: {0}", cashRequestID));
             }
 
-            GetLatestKnownInference strategy = new GetLatestKnownInference(cashRequestData.CustomerID, DateTime.Now, true);
+            GetLatestKnownInference strategy = new GetLatestKnownInference(cashRequestData.CustomerID, DateTime.Now, false);
             strategy.Execute();
 
             var grade = 0;
