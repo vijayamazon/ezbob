@@ -4,10 +4,20 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.AddTransactionView = Backbone.Marionette.ItemView.extend({
 	template: '#add-transaction-template',
 	initialize: function(options) {
+		this.investorAccountingModel = options.investorAccountingModel;
+		this.transactionsModel = options.transactionsModel;
 		this.investorID = options.investorID;
 		this.bankAccountType = options.bankAccountType;
 		this.investorAccountID = options.investorAccountID;
 	},
+
+	ui: {
+		'form': '#addTransactionForm',
+		'addTransactionAmount': '#AddTransactionAmount',
+		'addTransactionDate': '#AddTransactionDate',
+		'addTransactionComment': '#AddTransactionComment',
+		'money': '.cashInput'
+	},//ui   
 
 	events: {
 		"click #add-transaction-cancel-btn": "cancelAddingTransaction",
@@ -15,39 +25,66 @@ EzBob.Underwriter.AddTransactionView = Backbone.Marionette.ItemView.extend({
 	},
 
 	onRender: function() {
-		this.setUpView();
-		return this;
-	},
+		this.ui.addTransactionDate.datepicker({ format: 'dd/mm/yyyy' });
+		this.ui.money.moneyFormat();
 
-	setUpView: function() {
-		this.$el.find('#add-transaction-date').datepicker({ format: 'dd/mm/yyyy' });
+		this.ui.form.validate({
+			rules: {
+				AddTransactionDate: { required: true, requiredDate: true, dateCheck: true },
+				AddTransactionAmount: { required: true, autonumericMin: 0, autonumericMax: 100000000 },
+				AddTransactionComment: { required: false }
+			},
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlight,
+			ignore: ':not(:visible)'
+		});
+
+
+		return this;
 	},
 
 	cancelAddingTransaction: function() {
 		this.$el.empty();
-		this.$el.parent().find('.add-funding-transaction-btn').show();
+		this.$el.parent().find('.add-transaction-btn').show();
 	},
 
 	submitAddingTransaction: function() {
+
+		if (!this.ui.form.valid()) {
+			return false;
+		}
+		
+		var amount = this.ui.addTransactionAmount.autoNumeric('get');
+
+		BlockUi();
 		var submitParam = {
+			investorID: this.investorID,
 			investorAccountID: this.investorAccountID,
-			transactionAmount: $('#add-transaction-amount').val(),
-			transactionDate: $('#add-transaction-date').val(),
+			transactionAmount: amount,
+			transactionDate: this.ui.addTransactionDate.val(),
 			bankAccountType: this.bankAccountType,
-			transactionComment: $('#add-transaction-comment').val()
+			transactionComment: this.ui.addTransactionComment.val()
 		};
-		var submit = $.post('' + window.gRootPath + 'Underwriter/Investor/AddTransaction', submitParam);
+
 		var self = this;
-		BlockUi('on');
-		submit.done(function() {
-			self.cancelAddingTransaction();
-			this.model = new EzBob.Underwriter.AccountingInvestorModel();
-			this.model.on("change reset", this.render, this);
+		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/AddTransaction', submitParam);
+		
+
+		xhr.done(function(res) {
+			UnBlockUi();
+			if (res.success) {
+				self.investorAccountingModel.fetch();
+				EzBob.ShowMessage('Transfer made successfully', 'Done', null, 'Ok');
+			} else {
+				EzBob.ShowMessage("Failed making transfer", 'Failed', null, 'Ok');
+			}
 		});
-	},
 
-	show: function() {
+		xhr.always(function() {
+			UnBlockUi();
+		});
 
-		return this.$el.show();
-	},
+		return false;
+	}
+
 }); 

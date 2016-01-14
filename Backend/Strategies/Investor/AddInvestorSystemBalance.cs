@@ -11,6 +11,8 @@
 		private readonly int? loanID;
 		private readonly int? loanTransactionID;
 		private readonly string comment;
+		private readonly int? userID;
+		private readonly DateTime? transactionDate;
 
 		public AddInvestorSystemBalance(int bankAccountID, 
 			DateTime date, 
@@ -19,7 +21,9 @@
 			long? cashRequestID, 
 			int? loanID, 
 			int? loanTransactionID, 
-			string comment) {
+			string comment,
+			int? userID,
+			DateTime? transactionDate) {
 			this.bankAccountID = bankAccountID;
 			this.date = date;
 			this.transacionAmount = transacionAmount;
@@ -28,6 +32,8 @@
 			this.loanID = loanID;
 			this.loanTransactionID = loanTransactionID;
 			this.comment = comment;
+			this.userID = userID;
+			this.transactionDate = transactionDate;
 		}
 
 		public override string Name { get { return "Add investor system balance"; } }
@@ -42,7 +48,9 @@
 					new QueryParameter("LoanTransactionID", this.loanTransactionID),
 					new QueryParameter("LoanID", this.loanID),
 					new QueryParameter("CashRequestID", this.cashRequestID),
-					new QueryParameter("Comment", this.comment));
+					new QueryParameter("Comment", this.comment),
+					new QueryParameter("UserID", this.userID),
+					new QueryParameter("TransactionDate", this.transactionDate));
 		}
 
 		public int SystemBalanceID { get; private set; }

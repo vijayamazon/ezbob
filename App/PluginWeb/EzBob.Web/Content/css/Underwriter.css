@@ -352,7 +352,9 @@ table.squeezed tbody tr td {
 .controls.error textarea, 
 .controls select.error, 
 .controls textArea.error, 
-.controls input.error {
+.controls input.error,
+#accounting-tbl input.error
+{
     color: #b94a48;
     border: 2px solid #b94a48;
 }

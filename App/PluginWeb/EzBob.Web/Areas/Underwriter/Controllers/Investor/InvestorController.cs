@@ -171,17 +171,16 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult AddTransaction(int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment) {
+		public JsonResult AddTransaction(int investorID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment) {
 
-/*			I_InvestorAccountTypeEnum accountTypeEnum;
+			I_InvestorAccountTypeEnum accountTypeEnum;
 			if (!Enum.TryParse(bankAccountType, out accountTypeEnum)) {
 				throw new Exception("Wrong account type");
 			}
 
 			var result = this.serviceClient.Instance.AddManualTransaction(this.context.UserId, investorAccountID, transactionAmount, transactionDate, (int)accountTypeEnum, transactionComment);
 
-			return Json(new { transactionDate, success = result.Value }, JsonRequestBehavior.AllowGet);*/
-			return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+			return Json(new { investorID, bankAccountType, success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]

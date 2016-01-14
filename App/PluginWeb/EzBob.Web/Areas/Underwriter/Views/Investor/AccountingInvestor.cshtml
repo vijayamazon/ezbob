@@ -4,77 +4,73 @@
 	<div id="main-content">
 		<div class="col-md-12">
 			<div class="box">
-				<div class="box-content">
-					<form id="accounting-investor-form" class="form-horizontal">
-						<div class="row">
+				<div class="box-content">					
+					<div class="row">
 
-							<h3>Investor Status</h3>								
-								
-							<div>
-								<label class="checkbox">
-									<input type="checkbox" class="includeNonActiveInvestors" />
-									Include non active investors
-								</label>
-							</div>
-						
-								
-							<div class="tab-pane" id="accounting-tbl">
-								<div class="table-responsive table-ezbig">
-									<table class="table grid-data">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th>Type</th>
-												<th>Name</th>
-												<th style="text-align: center">Outstanding funding</th>
-												<th style="text-align: center">Accumulated Repayments <br/> for Investor</th>
-												<th>Servicing fee discount</th>
-												<th>Config Schedulers</th>
-												<th>Is Active</th>
-											</tr>
-											<% data = data || {}; %>
-											<%_.each(data, function(a){ %>
-											<tr>
-												<td><%-a.InvestorID%></td>
-												<td><%-a.InvestorType%></td>
-												<td><%-a.InvestorName%></td>
-												<td>
-													<span>
-														<%-EzBob.formatPoundsNoDecimals(a.OutstandingFunding)%>
-													</span>
-													<span class="accounting-btn">
-														<button class="btn btn-primary fa fa-exchange funding-transactions" data-investorid="<%-a.InvestorID%>"></button>
-													</span>
-												</td>
-												<td>
-													<span>
-														<p><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>
-														<%if(a.TotalNonActiveAccumulatedRepayments) {%>
-														<p><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
-														<%}%>
-													</span>
-													<span class="accounting-btn">
-														<button class="btn btn-primary fa fa-exchange repayments-transactions" data-investorid="<%-a.InvestorID%>"></button>
-													</span>
-												</td>
-												<td><%-EzBob.formatPercents(a.ServicingFeeDiscount)%></td>
-												<td>
-													<span class="accounting-btn">
-														<button class="btn btn-primary fa fa-clock-o investor-scheduler" data-investorid="<%-a.InvestorID%>"></button>
-													</span>
-												</td>
-												<td><img src="/Content/img/<%-a.IsInvestorActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%"/></td>													
-											</tr>
-											<%});%>
+						<h3>Investor Status</h3>
 
-										</thead>
-									</table>
-								</div>
-							</div>
-							
-							
+						<div>
+							<label class="checkbox">
+								<input type="checkbox" class="includeNonActiveInvestors" />
+								Include non active investors
+							</label>
 						</div>
-					</form>
+
+						<div class="tab-pane" id="accounting-tbl">
+							<div class="table-responsive table-ezbig">
+								<table class="table grid-data">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Type</th>
+											<th>Name</th>
+											<th style="text-align: center">Outstanding funding</th>
+											<th style="text-align: center">Accumulated Repayments <br /> for Investor</th>
+											<th>Servicing fee discount</th>
+											<th>Config Schedulers</th>
+											<th>Is Active</th>
+										</tr>
+										<% data = data || {}; %>
+										<%_.each(data, function(a){ %>
+										<tr>
+											<td><%-a.InvestorID%></td>
+											<td><%-a.InvestorType%></td>
+											<td><%-a.InvestorName%></td>
+											<td>
+												<span>
+													<%-EzBob.formatPoundsNoDecimals(a.OutstandingFunding)%>
+												</span>
+												<span class="accounting-btn">
+													<button class="btn btn-primary funding-transactions" data-investorid="<%-a.InvestorID%>"><i class="fa fa-exchange"></i></button>
+												</span>
+											</td>
+											<td>
+												<span>
+													<p><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>
+													<%if(a.TotalNonActiveAccumulatedRepayments) {%>
+													<p><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
+													<%}%>
+												</span>
+												<span class="accounting-btn">
+													<button class="btn btn-primary repayments-transactions" data-investorid="<%-a.InvestorID%>"><i class="fa fa-exchange"></i></button>
+												</span>
+											</td>
+											<td><%-EzBob.formatPercents(a.ServicingFeeDiscount)%></td>
+											<td>
+												<span class="accounting-btn">
+													<button class="btn btn-primary investor-scheduler" data-investorid="<%-a.InvestorID%>"><i class="fa fa-clock-o"></i></button>
+												</span>
+											</td>
+											<td><img src="/Content/img/<%-a.IsInvestorActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+										</tr>
+										<%});%>
+
+									</thead>
+								</table>
+							</div>
+						</div>
+
+					</div>					
 				</div>
 			</div>
 		</div>
@@ -84,21 +80,21 @@
 <script type="text/template" id="funding-transactions-template">
 	<div class="box">
 		<div class="box-content">
-			<div class="row">					
+			<div class="row">
 
 				<div class="add-transaction">
-					<button class="btn btn-primary add-funding-transaction-btn" data-id="<%-InvestorID%>">Add Transaction</button>
+					<button class="btn btn-primary add-transaction-btn" data-id="<%-InvestorID%>">Add Transaction</button>
 					<div class="add-transaction-wrapper"></div>
 				</div>
 
 				<h3 class="panel-title" style="display: inline-block">Funding Transactions</h3>
-				
+
 				<div class="row transactions-range">
 					<span class="float_left">
 						Choose range from
 					</span>
 					<span class="float_left" style="margin-left: 13px;">
-						<div class="input-group">							
+						<div class="input-group">
 							<input class="form-control input-width" type="text" id="funding-transactions-from">
 							<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
 						</div>
@@ -113,8 +109,8 @@
 						</div>
 					</span>
 					<button class="btn btn-primary pull-left" id="funding-transactions-range-submit-btn" style="margin-right: 10px;">Select</button>
-				</div>				
-				
+				</div>
+
 
 				<div class="tab-pane" id="funding-transactions-tbl">
 					<div class="table-responsive table-ezbig">
@@ -146,13 +142,13 @@
 									<td><img src="/Content/img/<%-a.IsBankAccountActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
 									<td><%-a.Comment%></td>
 								<tr>
-								<%});%>
+									<%});%>
 							</thead>
 						</table>
 					</div>
-				</div>					
+				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </script>
@@ -164,7 +160,8 @@
 			<div class="row">
 
 				<div class="add-transaction">
-					<button class="btn btn-primary add-transaction-btn">Add Transaction</button>
+					<button class="btn btn-primary add-transaction-btn" data-id="<%-InvestorID%>">Add Transaction</button>
+					<div class="add-transaction-wrapper"></div>
 				</div>
 
 				<h3 class="panel-title" style="display: inline-block">Repayments Transactions</h3>
@@ -234,55 +231,53 @@
 
 
 <script type="text/template" id="add-transaction-template">
-	 
-			<div class="row">
-				<h3 class="panel-title">Add Transaction</h3>
-				<div class="tab-pane" id="add-transaction-tbl">
-					<div class="table-responsive table-ezbig">
-						<table class="table grid-data">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Transaction Date</th>
-									<th>Transaction Amount</th>
-									<th>Comment</th>
-									<th>Btns</th>
-								</tr>
-
-								<tr>
-									<td>+</td>									
-									<td>
-										<span class="float_left">
-											<div class="input-group">
-												<input class="form-control input-width" type="text" id="add-transaction-date">
-												<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-											</div>
-										</span>
-									</td>
-									<td>
-										<span class="float_left">gbp</span>
-											<span>
-												<div class="input-group">
-													<input class="form-control input-width" type="text" id="add-transaction-amount">
-												</div>
-											</span>
-										
-									</td>
-									<td>
-										<div class="comment-div">
-											<input class="form-control" type="text" id="add-transaction-comment">
+	<form id="addTransactionForm" class="form-horizontal" action="">
+		<div class="row">
+			<h3 class="panel-title">Add Transaction</h3>
+			<div class="tab-pane" id="add-transaction-tbl">
+				<div class="table-responsive table-ezbig">
+					<table class="table grid-data">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Transaction Date</th>
+								<th>Transaction Amount</th>
+								<th>Comment</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>+</td>
+								<td>
+									<span class="float_left">
+										<div class="input-group">
+											<input class="form-control input-width" name="AddTransactionDate" type="text" id="AddTransactionDate">
+											<span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
 										</div>
-									</td>
-									<td>
-										<button class="btn btn-primary pull-left" id="add-transaction-cancel-btn" style="margin-right: 10px;">Cancel</button>
-										<button class="btn btn-primary pull-left" id="add-transaction-submit-btn" style="margin-right: 10px;">Submit</button>
-									</td>
-								<tr>
-									
-							</thead>
-						</table>
-					</div>
+									</span>
+								</td>
+								<td>
+									<span>
+										<div class="input-group">
+											<input class="form-control input-width cashInput" name="AddTransactionAmount" type="text" id="AddTransactionAmount">
+										</div>
+									</span>
+								</td>
+								<td>
+									<div class="comment-div">
+										<input class="form-control" name="AddTransactionComment" type="text" id="AddTransactionComment">
+									</div>
+								</td>
+								<td>
+									<button class="btn btn-primary pull-left" id="add-transaction-cancel-btn" style="margin-right: 10px;">Cancel</button>
+									<button class="btn btn-primary pull-left" id="add-transaction-submit-btn" style="margin-right: 10px;">Submit</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
- 
+		</div>
+	</form>
 </script>

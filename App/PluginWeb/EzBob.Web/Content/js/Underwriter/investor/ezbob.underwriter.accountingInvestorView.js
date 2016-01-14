@@ -5,11 +5,6 @@ EzBob.Underwriter.AccountingInvestorModel = Backbone.Model.extend({
 	url: '' + gRootPath + 'Underwriter/Investor/GetAccountingData'
 });
 
-EzBob.Underwriter.TransactionsModel = Backbone.Model.extend({
-	idAttribute: 'InvestorID',
-	urlRoot: '' + gRootPath + 'Underwriter/Investor/GetTransactionsData'
-});
-
 EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	template: "#accounting-investor-template",
 	initialize: function() {
@@ -33,7 +28,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .includeNonActiveInvestors": "showInvestorsData",
 		"click .funding-transactions": "openFundingTransactions",
-		"click .repayments-transactions": "openRpaymentsTransactions"
+		"click .repayments-transactions": "openRepaymentsTransactions"
 		
 	},
 
@@ -88,15 +83,17 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 				el: transactionsEl,
 				investorID: investorID,
 				investorAccountID: this.investorAccountID,
+				investorAccountingModel: this.model,
 				model: this.fundingTransactionsModel
-		});
+			});
+			this.fundingTransactionsModel.fetch({ data: { bankAccountType: 'Funding'} });
 		}
-		
-		this.fundingTransactionsModel.fetch({ data: { bankAccountType: 'Funding'} });
-		
+
+		return false;
+
 	},
 
-	openRpaymentsTransactions: function(el) {
+	openRepaymentsTransactions: function(el) {
 		var investorID = $(el.currentTarget).data('investorid');
 		var investorIDTransactionsOpenNow = this.$el.find('tr.repayments-acc-transactions').data('id');
 		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions').remove();
@@ -118,12 +115,14 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 				el: transactionsEl,
 				investorID: investorID,
 				investorAccountID: this.investorAccountID,
+				investorAccountingModel: this.model,
 				model: this.repaymentsTransactionsModel
 			});
+
+			this.repaymentsTransactionsModel.fetch({ data: { bankAccountType: 'Repayments' } });
 		}
-
-		this.repaymentsTransactionsModel.fetch({ data: { bankAccountType: 'Repayments' } });
-
+		
+		return false;
 	},
 
 	show: function() {

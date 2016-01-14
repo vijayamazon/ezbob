@@ -4,6 +4,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.RepaymentsTransactionsView = Backbone.Marionette.ItemView.extend({
 	template: '#repayments-transactions-template',
 	initialize: function(options) {
+		this.investorAccountingModel = options.investorAccountingModel;
 		this.investorID = options.investorID;
 		this.investorAccountID = options.investorAccountID;
 		this.isRangeSubmitted = false;
@@ -12,12 +13,14 @@ EzBob.Underwriter.RepaymentsTransactionsView = Backbone.Marionette.ItemView.exte
 
 	serializeData: function() {
 		return {
-			accountingData: this.applyRange()
+			accountingData: this.applyRange(),
+			InvestorID: this.investorID
 		};
 	},
 
 	events: {
-		"click #repayments-transactions-range-submit-btn": "submitRange"
+		"click #repayments-transactions-range-submit-btn": "submitRange",
+		"click .add-transaction-btn": "addTransaction"
 	},
 
 	onRender: function() {
@@ -29,6 +32,24 @@ EzBob.Underwriter.RepaymentsTransactionsView = Backbone.Marionette.ItemView.exte
 
 	setUpView: function() {
 		this.$el.find('#repayments-transactions-from,#repayments-transactions-to').datepicker({ format: 'dd/mm/yyyy' });
+	},
+
+	addTransaction: function(el) {
+		var button = $(el.currentTarget);
+		var investorID = button.hide().data('id');
+		var addTransactionEl = button.parent().find('.add-transaction-wrapper');
+		this.transctionView = new EzBob.Underwriter.AddTransactionView({
+			el: addTransactionEl,
+			investorID: investorID,
+			investorAccountID: this.investorAccountID,
+			investorAccountingModel: this.investorAccountingModel,
+			transactionsModel: this.model,
+			bankAccountType: 'Repayments'
+		});
+
+		this.transctionView.render();
+
+		return false;
 	},
 
 	submitRange: function() {

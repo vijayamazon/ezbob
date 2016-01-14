@@ -15,7 +15,7 @@ BEGIN
 
 	SELECT 
 		ibat.InvestorBankAccountTransactionID AS TransactionID,
-		ibat.Timestamp AS TransactionDate,
+		ibat.TransactionDate AS TransactionDate,
 		ibat.TransactionAmount AS TransactionAmount,
 		ibat.PreviousBalance AS PreviousAmount,
 		ibat.NewBalance AS NewAmount,			

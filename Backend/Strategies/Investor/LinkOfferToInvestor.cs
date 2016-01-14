@@ -45,7 +45,9 @@
 					this.cashRequestID, 
 					null, 
 					null, 
-					"Offer was approved");
+					"Offer was approved",
+					null,
+					null);
 				addSystemBalance.Execute();
 
 				var notifyInvestor = new NotifyInvestorUtilizedFunds(investorID);

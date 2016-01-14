@@ -15,7 +15,7 @@ BEGIN
 
 	SELECT 
 		isb.InvestorSystemBalanceID AS TransactionID,
-		isb.Timestamp AS TransactionDate,
+		isb.TransactionDate AS TransactionDate,
 		isb.TransactionAmount AS TransactionAmount,
 		isb.PreviousBalance AS PreviousAmount,
 		isb.NewBalance AS NewAmount,			
