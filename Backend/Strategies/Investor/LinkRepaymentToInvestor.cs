@@ -45,7 +45,6 @@
 				var servicingFeeAmount = this.amount * investmentPercent * servicingFeePercent;
 				var investorRepaymentPart = this.amount * investmentPercent - servicingFeeAmount;
 
-				//TODO add transaction date.
 				AddInvestorSystemBalance addSystemBalance = new AddInvestorSystemBalance(repaymentBankAccountID,
 					this.now,
 					investorRepaymentPart,
@@ -53,7 +52,10 @@
 					null,
 					this.loanID,
 					this.loanTransactionID,
-					"Repayment");
+					"Repayment",
+					null, //TODO add user id
+					null //TODO add transaction date.
+				);
 				addSystemBalance.Execute();
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to add system balance for repayment {0} of loan {1} for investor {2}",

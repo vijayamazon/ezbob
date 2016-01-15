@@ -55,14 +55,15 @@
 
 				DB.ExecuteNonQuery("I_PortfolioSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", portfolio));
 
-				//TODO add transaction date.
 				const int negative = -1;
 				AddInvestorBankAccountBalance addBankAccountBalance = new AddInvestorBankAccountBalance(
 					fundingBankAccountID, 
 					this.now,
 					loanAmount * investmentPercent * negative,
 					null,
-					"Loan was taken");
+					"Loan was taken",
+					null //TODO add transaction date.
+				);
 				addBankAccountBalance.Execute();
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to link loan {0} to investor {1}",

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue {
 	using System;
 	using System.Data;
+	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -17,7 +18,10 @@
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
+		// TODO: add company id and monthly payment arguments
 		public Agent(int nCustomerID, long? cashRequestID, DateTime? now, AConnection oDB, ASafeLog oLog) {
+			Output = new AutoRejectionOutput();
+
 			DB = oDB;
 			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, cashRequestID, now);
@@ -29,6 +33,8 @@
 				oLog
 			);
 		} // constructor
+
+		public AutoRejectionOutput Output { get; private set; }
 
 		public virtual Agent Init() {
 			Trail = new RejectionTrail(
@@ -55,17 +61,7 @@
 
 				oSecondary = RunSecondary();
 
-				if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
-					Trail.Negative<SameApprovalChance>(false)
-						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-					oSecondary.Trail.Negative<SameApprovalChance>(false)
-						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-				} else {
-					Trail.Affirmative<SameApprovalChance>(false)
-						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-					oSecondary.Trail.Affirmative<SameApprovalChance>(false)
-						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-				} // if
+				ComparePrimaryAndSecondary(oSecondary);
 
 				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
 			} catch (Exception e) {
@@ -88,6 +84,8 @@
 			ChooseInternalOrLogicalGlueFlow();
 
 			if (LogicalGlueFlowFollowed) {
+				Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
+
 				Inference inference = InjectorStub.GetEngine().GetInference(Args.CustomerID, Args.Now, false, 0);
 
 				if (inference == null) {
@@ -118,22 +116,30 @@
 				} else
 					Trail.Dunno<HasBucket>().Init(true);
 
-				var sp = new OriginSupportsGrade(DB, Log) {
-					CustomerID = Args.CustomerID,
-					GradeID = (int)inference.Bucket.Value,
-				};
-
-				sp.ExecuteNonQuery();
-
-				if (sp.GradeOriginID <= 0) {
-					Trail.Affirmative<BucketSupported>(true).Init(false);
+				/* TODO
+				if (less than one configuration found) {
+					StepReject<OfferConfigurationFound>(true).Init(0);
 					return;
-				} else
-					Trail.Dunno<BucketSupported>().Init(true);
+				} else if (more than one configuration found) {
+					StepNoDecision<OfferConfigurationFound>().Init(number of found configurations);
+
+					// TODO: append to the log message: customer ID, score, origin,
+					// company type, loan source, customer is new/old
+					this.log.Alert("Too many configurations found.");
+
+					return;
+				} else {
+					StepNoDecision<OfferConfigurationFound>().Init(1);
+
+					// TODO: Output.GradeRangeID = ID of found offer configuration
+				} // if
+				*/
 
 				Trail.DecideIfNotDecided();
-			} else
+			} else {
+				Output.FlowType = AutoDecisionFlowTypes.Internal;
 				Trail.AppendOverridingResults(this.oldWayAgent.Trail);
+			} // if
 		} // RunPrimary
 
 		protected virtual Configuration InitCfg() {
@@ -181,6 +187,38 @@
 				Trail.Dunno<LogicalGlueFlow>().Init();
 		} // ChooseInternalOrLogicalGlueFlow
 
+		private void ComparePrimaryAndSecondary(AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary) {
+			if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
+				Trail.Negative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				oSecondary.Trail.Negative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+			} else {
+				Trail.Affirmative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				oSecondary.Trail.Affirmative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+			} // if
+
+			if (Output.FlowType == oSecondary.Output.FlowType) {
+				Trail.Dunno<SameFlowChosen>().Init(Output.FlowType, oSecondary.Output.FlowType);
+				oSecondary.Trail.Dunno<SameFlowChosen>().Init(Output.FlowType, oSecondary.Output.FlowType);
+			} else {
+				Trail.Negative<SameFlowChosen>(true).Init(Output.FlowType, oSecondary.Output.FlowType);
+				oSecondary.Trail.Negative<SameFlowChosen>(true).Init(Output.FlowType, oSecondary.Output.FlowType);
+			} // if
+
+			if (Output.GradeRangeID == oSecondary.Output.GradeRangeID) {
+				Trail.Dunno<SameConfigurationChosen>().Init(Output.GradeRangeID, oSecondary.Output.GradeRangeID);
+				oSecondary.Trail.Dunno<SameConfigurationChosen>()
+					.Init(Output.GradeRangeID, oSecondary.Output.GradeRangeID);
+			} else {
+				Trail.Negative<SameConfigurationChosen>(true).Init(Output.GradeRangeID, oSecondary.Output.GradeRangeID);
+				oSecondary.Trail.Negative<SameConfigurationChosen>(true)
+					.Init(Output.GradeRangeID, oSecondary.Output.GradeRangeID);
+			} // if
+		} // ComparePrimaryAndSecondary
+
 		private readonly Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent oldWayAgent;
 
 		private class GetCustomerCompanyType : AStoredProcedure {
@@ -202,23 +240,5 @@
 
 			private static readonly DateTime longAgo = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
 		} // class GetCustomerCompanyType
-
-		private class OriginSupportsGrade : AStoredProcedure {
-			public OriginSupportsGrade(AConnection db, ASafeLog log) : base(db, log) {} 
-
-			public override bool HasValidParameters() {
-				return (CustomerID > 0) && (GradeID > 0);
-			} // HasValidParameters
-
-			[UsedImplicitly]
-			public int CustomerID { get; set; }
-
-			[UsedImplicitly]
-			public int GradeID { get; set; }
-
-			[UsedImplicitly]
-			[Direction(ParameterDirection.Output)]
-			public int GradeOriginID { get; set; }
-		} // class OriginSupportsGrade
 	} // class Agent
 } // namespace

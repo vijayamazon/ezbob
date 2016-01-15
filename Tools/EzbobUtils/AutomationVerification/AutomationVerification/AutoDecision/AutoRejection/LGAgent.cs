@@ -35,6 +35,7 @@
 		/// <param name="cashRequestID">Link to customer's cash request. Can be null.
 		/// DO NOT USE THIS ARGUMENT to deduce inspection time, it is used for logging only.</param>
 		/// <param name="configs">Auto-rejection configuration. Can be null. Should be loaded from DB if null.</param>
+		// TODO: add company id and monthly payment arguments
 		public LGAgent(
 			AConnection oDB,
 			ASafeLog oLog,
@@ -44,6 +45,8 @@
 			long? cashRequestID,
 			RejectionConfigs configs
 		) {
+			Output = new AutoRejectionOutput();
+
 			this.customerID = nCustomerID;
 			this.now = now;
 
@@ -58,6 +61,8 @@
 
 			model = null;
 		} // constructor
+
+		public AutoRejectionOutput Output { get; private set; }
 
 		public RejectionTrail Trail { get; private set; }
 		private readonly AConnection db;
@@ -106,12 +111,14 @@
 
 				if (typeOfBusiness.IsRegulated() || model == null) {
 					// add InternalFlow step 
+					Output.FlowType = AutoDecisionFlowTypes.Internal;
 					StepNoDecision<InternalFlow>().Init();
 					Trail.AppendOverridingResults(this.internalAgent.Trail);
 					return;
 				}
 
 				// init LogicalGlueFlow  
+				Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 				StepNoDecision<LogicalGlueFlow>().Init();
 
 				model = this.db.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
@@ -145,11 +152,24 @@
 				} else
 					StepNoDecision<HasBucket>().Init(true);
 
-				if (model.GradeOriginID == 0) {
-					StepReject<BucketSupported>(true).Init(false);
+				/* TODO
+				if (less than one configuration found) {
+					StepReject<OfferConfigurationFound>(true).Init(0);
 					return;
-				} else
-					StepNoDecision<BucketSupported>().Init(true);
+				} else if (more than one configuration found) {
+					StepNoDecision<OfferConfigurationFound>().Init(number of found configurations);
+
+					// TODO: append to the log message: customer ID, score, origin,
+					// company type, loan source, customer is new/old
+					this.log.Alert("Too many configurations found.");
+
+					return;
+				} else {
+					StepNoDecision<OfferConfigurationFound>().Init(1);
+
+					// TODO: Output.GradeRangeID = ID of found offer configuration
+				} // if
+				*/
 
 				Trail.DecideIfNotDecided();
 			} // using
