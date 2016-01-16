@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoDecision\AutoApproval\LGAgent.cs" />
+    <Compile Include="AutoDecision\AutoRejection\AutoRejectionArguments.cs" />
     <Compile Include="AutoDecision\AutoRejection\LGAgent.cs" />
     <Compile Include="Common\AutoDecisionFlowTypes.cs" />
     <Compile Include="Common\AutoRejectionOutput.cs" />

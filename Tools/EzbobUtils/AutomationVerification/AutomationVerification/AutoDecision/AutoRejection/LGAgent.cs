@@ -9,55 +9,16 @@
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 
-	/// <summary>
-	/// Detects whether customer should be rejected on specific time using Logical Glue data.
-	/// Detection should work for any specified time (i.e. can be run retrospectively).
-	/// Should fill <see cref="Trail"/> properties.
-	/// </summary>
-	/// <remarks>
-	/// For regulated (non-limited) companies old flow should be applied.
-	/// Logical Glue flow applies to non-regulated (limited) companies only;
-	/// old flow should also be executed and results stored in DB for comparison.
-	/// </remarks>
-	/// <example>
-	/// Intended usage:
-	/// var agent = new LGAgent(db, log, customer ID, time, cash request id, configuration);
-	/// agent.MakeDecision();
-	/// </example>
 	public class LGAgent {
-		/// <summary>
-		/// Creates an instance.
-		/// </summary>
-		/// <param name="oDB">Database connection.</param>
-		/// <param name="oLog">Logger.</param>
-		/// <param name="nCustomerID">Customer to inspect.</param>
-		/// <param name="now">Inspection date and time.</param>
-		/// <param name="cashRequestID">Link to customer's cash request. Can be null.
-		/// DO NOT USE THIS ARGUMENT to deduce inspection time, it is used for logging only.</param>
-		/// <param name="configs">Auto-rejection configuration. Can be null. Should be loaded from DB if null.</param>
-		// TODO: add company id and monthly payment arguments
-		public LGAgent(
-			AConnection oDB,
-			ASafeLog oLog,
-			string tag,
-			int nCustomerID,
-			DateTime now,
-			long? cashRequestID,
-			RejectionConfigs configs
-		) {
+		public LGAgent(AutoRejectionArguments args) {
+			this.args = args;
 			Output = new AutoRejectionOutput();
 
-			this.customerID = nCustomerID;
-			this.now = now;
-
-			this.log = oLog;
-			this.db = oDB;
-
-			Trail = new RejectionTrail(nCustomerID, cashRequestID, oLog);
-			Trail.SetTag(tag);
+			Trail = new RejectionTrail(args.CustomerID, args.CashRequestID, args.Log);
+			Trail.SetTag(args.Tag);
 
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent = new RejectionAgent(this.db, this.log, this.customerID, Trail.CashRequestID, configs);
+			this.internalAgent = new RejectionAgent(DB, Log, CustomerID, Trail.CashRequestID, args.Configs);
 
 			model = null;
 		} // constructor
@@ -65,10 +26,14 @@
 		public AutoRejectionOutput Output { get; private set; }
 
 		public RejectionTrail Trail { get; private set; }
-		private readonly AConnection db;
-		private readonly ASafeLog log;
-		private readonly int customerID;
-		private readonly DateTime now;
+
+		private readonly AutoRejectionArguments args;
+
+		private AConnection DB { get { return this.args.DB; } }
+		private ASafeLog Log { get { return this.args.Log; } }
+		private int CustomerID { get { return this.args.CustomerID; } }
+		private DateTime Now { get { return this.args.Now; } }
+
 		// old auto-reject with medal (run in parallel)
 		private readonly RejectionAgent internalAgent;
 
@@ -83,31 +48,31 @@
 		/// </summary>
 		public void MakeDecision() {
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(this.now));
+			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(Now));
 			this.internalAgent.Trail.SetTag(Trail.Tag);
-			this.internalAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
+			this.internalAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldVerification);
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-				this.log.Debug("Secondary LG: checking auto reject for customer {0}...", this.customerID);
+				Log.Debug("Secondary LG: checking auto reject for customer {0}...", CustomerID);
 	
 				// get company data at "now" date 
-				model = this.db.FillFirst<AV_LogicalGlueDataModel>(
+				model = DB.FillFirst<AV_LogicalGlueDataModel>(
 					"select top 1 h.CompanyId, co.TypeOfBusiness from [dbo].[CustomerCompanyHistory] h join [dbo].[Company] co on co.Id=h.CompanyId and h.CustomerId=@CustomerID and h.[InsertDate] <= @ProcessingDate order by h.[InsertDate] desc", CommandSpecies.Text,
-					new QueryParameter("CustomerID", this.customerID),
-					new QueryParameter("ProcessingDate", this.now));
+					new QueryParameter("CustomerID", CustomerID),
+					new QueryParameter("ProcessingDate", Now));
 
-				this.log.Debug("Customer {0} has company {1} data at {2:d}", this.customerID, model.CompanyId, this.now);
+				Log.Debug("Customer {0} has company {1} data at {2:d}", CustomerID, model.CompanyId, Now);
 
 				// get company data from Customer table 
 				if (model == null) {
-					model = this.db.FillFirst<AV_LogicalGlueDataModel>(
-					"select CompanyId, TypeOfBusiness from Customer where Id=@CustomerID", CommandSpecies.Text, new QueryParameter("CustomerID", this.customerID));
+					model = DB.FillFirst<AV_LogicalGlueDataModel>(
+					"select CompanyId, TypeOfBusiness from Customer where Id=@CustomerID", CommandSpecies.Text, new QueryParameter("CustomerID", CustomerID));
 				}
 
 				TypeOfBusiness typeOfBusiness;
 				Enum.TryParse(model.TypeOfBusiness, out typeOfBusiness);
 
-				this.log.Debug("Customer {0} has company {1} of type {2}", this.customerID, model.CompanyId, typeOfBusiness);
+				Log.Debug("Customer {0} has company {1} of type {2}", CustomerID, model.CompanyId, typeOfBusiness);
 
 				if (typeOfBusiness.IsRegulated() || model == null) {
 					// add InternalFlow step 
@@ -121,10 +86,10 @@
 				Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 				StepNoDecision<LogicalGlueFlow>().Init();
 
-				model = this.db.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.customerID),
+				model = DB.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", CustomerID),
 					new QueryParameter("CompanyID", model.CompanyId),
-					new QueryParameter("ProcessingDate", this.now));
+					new QueryParameter("ProcessingDate", Now));
 
 				// LG data not found
 				if (model == null) {

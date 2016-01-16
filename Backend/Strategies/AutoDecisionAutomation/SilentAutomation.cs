@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation {
 	using System;
 	using System.Globalization;
+	using AutomationCalculator.AutoDecision.AutoRejection;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -105,12 +106,18 @@
 			);
 
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
-				this.customerID,
-				this.cashRequestID,
-				DateTime.UtcNow,
-				DB,
-				Log
-			).Init();
+				new AutoRejectionArguments {
+					CustomerID = this.customerID,
+					CashRequestID = this.cashRequestID,
+					Now = DateTime.UtcNow,
+					DB = DB,
+					Log = Log,
+					// TODO CompanyID = ,
+					// TODO MonthlyPayment = ,
+				}
+			);
+
+			throw new NotImplementedException("Company ID and monthly payment arguments should be implemented.");
 
 			rejectAgent.MakeAndVerifyDecision(Tag, true);
 

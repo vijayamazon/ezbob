@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue {
 	using System;
 	using System.Data;
+	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
@@ -16,40 +17,30 @@
 	using JetBrains.Annotations;
 
 	public class Agent : AAutoDecisionBase {
-		public virtual RejectionTrail Trail { get; private set; }
-
-		// TODO: add company id and monthly payment arguments
-		public Agent(int nCustomerID, long? cashRequestID, DateTime? now, AConnection oDB, ASafeLog oLog) {
+		public Agent(AutoRejectionArguments args) {
+			this.args = args;
+			this.args.Log = this.args.Log.Safe();
 			Output = new AutoRejectionOutput();
 
-			DB = oDB;
-			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID, now);
-
 			this.oldWayAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
-				nCustomerID,
-				cashRequestID,
-				oDB,
-				oLog
+				this.args.CustomerID,
+				this.args.CashRequestID,
+				this.args.DB,
+				this.args.Log
 			);
-		} // constructor
 
-		public AutoRejectionOutput Output { get; private set; }
-
-		public virtual Agent Init() {
 			Trail = new RejectionTrail(
-				Args.CustomerID,
-				Args.CashRequestID,
-				Log,
+				this.args.CustomerID,
+				this.args.CashRequestID,
+				this.args.Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+		} // constructor
 
-			Cfg = InitCfg();
-
-			return this;
-		} // Init
+		public virtual AutoRejectionOutput Output { get; private set; }
+		public virtual RejectionTrail Trail { get; private set; }
 
 		public virtual void MakeAndVerifyDecision(string tag, bool quiet = false) {
 			AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary = null;
@@ -86,7 +77,12 @@
 			if (LogicalGlueFlowFollowed) {
 				Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 
-				Inference inference = InjectorStub.GetEngine().GetInference(Args.CustomerID, Args.Now, false, 0);
+				Inference inference = InjectorStub.GetEngine().GetInference(
+					this.args.CustomerID,
+					this.args.Now,
+					false,
+					this.args.MonthlyPayment
+				);
 
 				if (inference == null) {
 					Trail.Negative<LGDataFound>(true).Init(false);
@@ -142,26 +138,11 @@
 			} // if
 		} // RunPrimary
 
-		protected virtual Configuration InitCfg() {
-			return new Configuration(DB, Log);
-		} // InitCfg
-
-		protected virtual AConnection DB { get; private set; }
-		protected virtual ASafeLog Log { get; private set; }
-
-		protected virtual Configuration Cfg { get; private set; }
-		protected virtual Arguments Args { get; private set; }
+		protected virtual AConnection DB { get { return this.args.DB; } }
+		protected virtual ASafeLog Log { get { return this.args.Log; } }
 
 		private AutomationCalculator.AutoDecision.AutoRejection.LGAgent RunSecondary() {
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoRejection.LGAgent(
-					DB,
-					Log,
-					Trail.Tag,
-					Args.CustomerID,
-					Trail.InputData.DataAsOf,
-					Args.CashRequestID,
-					Cfg.Values
-				);
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoRejection.LGAgent(this.args);
 
 			oSecondary.MakeDecision();
 
@@ -169,19 +150,10 @@
 		} // RunSecondary
 
 		protected virtual void ChooseInternalOrLogicalGlueFlow() {
-			var sp = new GetCustomerCompanyType(DB, Log) {
-				CustomerID = Args.CustomerID,
-				Now = Args.Now,
-			};
-
+			var sp = new GetCustomerCompanyType(DB, Log) { CompanyID = this.args.CompanyID, };
 			sp.ExecuteNonQuery();
 
-			TypeOfBusiness typeOfBusiness;
-
-			if (!Enum.TryParse(sp.TypeOfBusiness, out typeOfBusiness))
-				typeOfBusiness = TypeOfBusiness.Entrepreneur;
-
-			if (typeOfBusiness.IsRegulated())
+			if (sp.TypeOfBusiness.IsRegulated())
 				Trail.Dunno<InternalFlow>().Init();
 			else
 				Trail.Dunno<LogicalGlueFlow>().Init();
@@ -220,25 +192,58 @@
 		} // ComparePrimaryAndSecondary
 
 		private readonly Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent oldWayAgent;
+		private readonly AutoRejectionArguments args;
 
 		private class GetCustomerCompanyType : AStoredProcedure {
-			public GetCustomerCompanyType(AConnection db, ASafeLog log) : base(db, log) {}
+			public GetCustomerCompanyType(AConnection db, ASafeLog log) : base(db, log) {
+				TypeOfBusiness = TypeOfBusiness.Entrepreneur;
+			} // constructor
 
 			public override bool HasValidParameters() {
-				return (CustomerID > 0) && (Now > longAgo);
+				return (CompanyID > 0);
 			} // HasValidParameters
 
 			[UsedImplicitly]
-			public int CustomerID { get; set; }
+			public int CompanyID { get; set; }
 
 			[UsedImplicitly]
-			public DateTime Now { get; set; }
-
 			[Direction(ParameterDirection.Output)]
 			[Length(50)]
-			public string TypeOfBusiness { get; [UsedImplicitly] set; }
+			public string TypeOfBusinessName {
+				get { return TypeOfBusiness.ToString(); }
+				set {
+					if (string.IsNullOrWhiteSpace(value)) {
+						TypeOfBusiness = TypeOfBusiness.Entrepreneur;
 
-			private static readonly DateTime longAgo = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+						Log.Warn(
+							"Type of business not found for company {0}, defaulting to {1}.",
+							CompanyID,
+							TypeOfBusiness
+						);
+
+						return;
+					} // if
+
+					TypeOfBusiness tob;
+
+					if (Enum.TryParse(value, false, out tob)) {
+						TypeOfBusiness = tob;
+						Log.Debug("Type of business for company {0} is {1}.", CompanyID, TypeOfBusiness);
+						return;
+					} // if
+
+					TypeOfBusiness = TypeOfBusiness.Entrepreneur;
+
+					Log.Warn(
+						"Failed to parse type of business for company {0} from '{1}', defaulting to {2}.",
+						CompanyID,
+						value,
+						TypeOfBusiness
+					);
+				} // set
+			} // TypeOfBusinessName
+
+			public TypeOfBusiness TypeOfBusiness { get; private set; }
 		} // class GetCustomerCompanyType
 	} // class Agent
 } // namespace

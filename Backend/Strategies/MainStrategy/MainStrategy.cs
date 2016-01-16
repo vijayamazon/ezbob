@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.Threading.Tasks;
 	using System.Web;
+	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
@@ -633,12 +634,17 @@
 			} // if
 
 			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
-				CustomerID,
-				this.cashRequestID,
-				DateTime.UtcNow,
-				DB,
-				Log
-			).Init();
+				new AutoRejectionArguments {
+					CustomerID = CustomerID,
+					CashRequestID = this.cashRequestID,
+					Now = DateTime.UtcNow,
+					DB = DB,
+					Log = Log,
+					// TODO CompanyID =
+					// TODO MonthlyPayment =
+				}
+			);
+			throw new NotImplementedException("Company ID and monthly payment arguments should be implemented.");
 			rAgent.MakeAndVerifyDecision(this.tag);
 
 			if (rAgent.WasMismatch) {
