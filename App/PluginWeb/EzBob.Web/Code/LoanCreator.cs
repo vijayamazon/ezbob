@@ -213,7 +213,7 @@
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
 
-					
+
 			// This is the place where the loan is created and saved to DB
 			log.Info(
 				"Create loan for customer {0} cash request {1} amount {2}",
@@ -225,22 +225,22 @@
 			// actually this is the place where the loan saved to DB
 			this.session.Flush();
 
-			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-			nlModel.Loan.OldLoanID = oldloanID;
+			Loan oldloan = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber));
+			nlModel.Loan.OldLoanID = oldloan.Id;
 			nlModel.Loan.Refnum = loan.RefNumber; // TODO generate another refnum with new algorithm in addloan strategy
+
 			try {
-				//log.Debug(nlModel.FundTransfer.ToString());
-				//log.Debug(nlModel.Loan.ToString());
-
-				//var nlAddLoan = 
-					this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
-				//nlModel.Loan.LoanID = nlAddLoan.Value;
-				//log.Debug(nlAddLoan.Error == "" ? "NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}" : "NewLoan adding: new LoanID {0}, oldLoanID {1}, Error: {2}", nlAddLoan.Value, oldloanID, nlAddLoan.Error);
-
+				// copy newly created agreementtemplateID (for new templeates)
+				foreach (NL_LoanAgreements ag in nlModel.Loan.LastHistory().Agreements) {
+					if (ag.LoanAgreementTemplateID == 0)
+						ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateRef.Id;
+				}
+				this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
 			} // try
+
 
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
