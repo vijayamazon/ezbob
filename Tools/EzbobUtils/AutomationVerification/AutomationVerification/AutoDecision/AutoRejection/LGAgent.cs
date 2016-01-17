@@ -1,10 +1,13 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
@@ -52,7 +55,7 @@
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				Log.Debug("Secondary LG: checking auto reject for customer {0}...", args.CustomerID);
-	
+
 				// get company data at "now" date 
 				model = DB.FillFirst<AV_LogicalGlueDataModel>(
 					"select top 1 co.TypeOfBusiness from CustomerCompanyHistory h join [dbo].[Company] co on co.Id=h.CompanyId where h.CustomerId=@CustomerID and h.CompanyId=@CompanyID and h.InsertDate<=@ProcessingDate order by h.[InsertDate] desc", CommandSpecies.Text,
@@ -88,7 +91,7 @@
 					new QueryParameter("PlannedPayment", args.MonthlyPayment),
 					new QueryParameter("ProcessingDate", args.Now));
 
-				Log.Debug("{0}", model); 
+				Log.Debug("{0}", model);
 
 				// LG data not found
 				if (model == null) {
@@ -113,31 +116,43 @@
 
 				StepNoDecision<LGHardReject>().Init(false);
 
-				if (model.Score == null || model.Score == 0 || model.GradeID==0 || model.GradeID==null) {
+				if (model.Score == null || model.Score == 0 || model.GradeID == 0 || model.GradeID == null) {
 					StepNoReject<HasBucket>(true).Init(false);
 					return;
 				}
 
 				StepNoDecision<HasBucket>().Init(true);
 
-				/* TODO
-				if (less than one configuration found) {
-					StepReject<OfferConfigurationFound>(true).Init(0);
-					return;
-				} else if (more than one configuration found) {
-					StepNoDecision<OfferConfigurationFound>().Init(number of found configurations);
+				List<AutoRejectionOutput> rangesList = DB.Fill<AutoRejectionOutput>(
+				"select distinct r.GradeRangeID from [dbo].[I_GradeRange] r " +
+					"join CustomerOrigin org on r.OriginID=org.CustomerOriginID and org.CustomerOriginID=(select c.OriginID from Customer c where Id=@CustomerID) " +
+					"and r.GradeID=@GradeID and r.IsActive=1 " +
+					"join LoanSource ls on ls.LoanSourceID = r.LoanSourceID and ls.IsDefault=1 " +
+					"join [dbo].[I_ProductSubType] st on st.LoanSourceID=ls.LoanSourceID and st.IsRegulated=@Regulated " +
+					"where r.IsFirstLoan=(CASE WHEN (select COUNT(Id) xx from Loan l where CustomerId=@CustomerID) > 0 THEN 1 ELSE 0 END)", CommandSpecies.Text,
+					new QueryParameter("CustomerID", args.CustomerID),
+					new QueryParameter("GradeID", model.GradeID),
+					new QueryParameter("Regulated", typeOfBusiness.IsRegulated()));
 
-					// TODO: append to the log message: customer ID, score, origin,
+				int reangesCount = rangesList.Count;
+
+				if (reangesCount == 0) {
+					StepReject<OfferconfigurationFound>(true).Init(0);
+					return;
+				}
+
+				if (reangesCount > 1) {
+					StepReject<OfferconfigurationFound>(true).Init(reangesCount);
+
 					// company type, loan source, customer is new/old
-					this.log.Alert("Too many configurations found.");
+					Log.Alert("Too many configurations found. Args: {0}; score: {1}", args, model.Score);
 
 					return;
-				} else {
-					StepNoDecision<OfferConfigurationFound>().Init(1);
+				}
 
-					// TODO: Output.GradeRangeID = ID of found offer configuration
-				} // if
-				*/
+				StepNoDecision<OfferconfigurationFound>().Init(1);
+
+				Output.GradeRangeID = rangesList.First().GradeRangeID;
 
 				Trail.DecideIfNotDecided();
 			} // using

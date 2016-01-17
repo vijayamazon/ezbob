@@ -5,7 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-LTER PROCEDURE [dbo].[AV_LogicalGlueDataForCustomer]
+ALTER PROCEDURE [dbo].[AV_LogicalGlueDataForCustomer]
 	@CustomerID int,
 	@CompanyID int,
 	@PlannedPayment decimal (18,6),
