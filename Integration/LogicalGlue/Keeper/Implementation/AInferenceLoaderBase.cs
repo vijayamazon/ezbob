@@ -33,24 +33,10 @@
 			this.models = new SortedDictionary<long, PublicModelOutput>();
 			Results = new List<Inference>();
 
-			this.sp = new LoadInference(DB, Log) {
-				ResponseID = responseID,
-				CustomerID = CustomerID,
-				Now = Now,
-				HistoryLength = historyLength,
-				IncludeTryOutData = includeTryOutData,
-				MonthlyPayment = monthlyPayment,
-			};
-
-			this.argList = string.Format(
-				"response ID: {0}, customer ID: {1}, now: '{2}', history len: {3}, try outs: '{4}', payment: {5}",
-				this.sp.ResponseID,
-				this.sp.CustomerID,
-				NowStr,
-				this.sp.HistoryLength,
-				this.sp.IncludeTryOutData ? "yes" : "no",
-				this.sp.MonthlyPayment
-			);
+			this.responseID = responseID;
+			this.historyLength = historyLength;
+			this.includeTryOutData = includeTryOutData;
+			this.monthlyPayment = monthlyPayment;
 		} // constructor
 
 		public List<Inference> Results { get; private set; }
@@ -61,14 +47,37 @@
 				return;
 			} // if
 
+			LoadInference sp = CreateLoadInferenceProcedure();
+
+			sp.ResponseID = this.responseID;
+			sp.CustomerID = CustomerID;
+			sp.Now = Now;
+			sp.HistoryLength = this.historyLength;
+			sp.IncludeTryOutData = this.includeTryOutData;
+			sp.MonthlyPayment = this.monthlyPayment;
+
+			this.argList = string.Format(
+				"response ID: {0}, customer ID: {1}, now: '{2}', history len: {3}, try outs: '{4}', payment: {5}",
+				sp.ResponseID,
+				sp.CustomerID,
+				NowStr,
+				sp.HistoryLength,
+				sp.IncludeTryOutData ? "yes" : "no",
+				sp.MonthlyPayment
+			);
+
 			Executed = true;
 
 			Log.Debug("Executing inference loader({0})...", this.argList);
 
-			this.sp.ForEachRowSafe(ProcessInferenceRow);
+			sp.ForEachRowSafe(ProcessInferenceRow);
 
 			Log.Debug("Executing inference loader({0}) complete.", this.argList);
 		} // Load
+
+		protected virtual LoadInference CreateLoadInferenceProcedure() {
+			return new LoadInference(DB, Log);
+		} // CreateLoadInferenceProcedure
 
 		private void ProcessInferenceRow(SafeReader sr) {
 			string rowTypeName = sr["RowType"];
@@ -79,6 +88,10 @@
 				throw new KeeperAlert(Log, "Inference loader({1}): unknown row type '{0}'.", rowTypeName, this.argList);
 
 			switch (rowType) {
+			case RowTypes.Request:
+				ProcessRequest(sr);
+				break;
+
 			case RowTypes.Response:
 				ProcessResponse(sr);
 				break;
@@ -117,37 +130,57 @@
 			return new KeeperAlert(Log, new ArgumentOutOfRangeException(), format, args);
 		} // OutOfRangeException
 
-		private void ProcessResponse(SafeReader sr) {
-			var dbResponse = sr.Fill<DBResponse>();
+		private Inference ProcessRequest(SafeReader sr) {
+			Guid? uniqueID = sr["UniqueID"];
+
+			if (uniqueID == null)
+				return null;
 
 			var result = new Inference {
-				UniqueID = sr["UniqueID"],
+				UniqueID = uniqueID.Value,
 				MonthlyRepayment = sr["MonthlyRepayment"],
 				IsTryOut = sr["IsTryOut"],
-
-				ResponseID = dbResponse.ID,
-				ReceivedTime = dbResponse.ReceivedTime,
-				Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID,
-				Reason = dbResponse.Reason,
-				Outcome = dbResponse.Outcome,
-
-				Error = new InferenceError {
-					Message = dbResponse.ErrorMessage,
-					ParsingExceptionMessage = dbResponse.ParsingExceptionMessage,
-					ParsingExceptionType = dbResponse.ParsingExceptionType,
-					TimeoutSource = dbResponse.TimeoutSourceID == null
-						? (TimeoutSources?)null
-						: (TimeoutSources)dbResponse.TimeoutSourceID.Value,
-				},
-
-				Status = new InferenceStatus {
-					HasEquifaxData = dbResponse.HasEquifaxData,
-					HttpStatus = (HttpStatusCode)dbResponse.HttpStatus,
-					ResponseStatus = (HttpStatusCode)dbResponse.ResponseStatus,
-				},
 			};
 
 			Results.Add(result);
+
+			return result;
+		} // ProcessRequest
+
+		private void ProcessResponse(SafeReader sr) {
+			var dbResponse = sr.Fill<DBResponse>();
+
+			var result = ProcessRequest(sr);
+
+			if (result == null) {
+				throw OutOfRangeException(
+					"Inference loader({0}): response '{1}' has no unique request ID.",
+					this.argList,
+					dbResponse.ID
+				);
+			} // if
+
+			result.ResponseID = dbResponse.ID;
+			result.ReceivedTime = dbResponse.ReceivedTime;
+			result.Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID;
+			result.Reason = dbResponse.Reason;
+			result.Outcome = dbResponse.Outcome;
+
+			result.Error = new InferenceError {
+				Message = dbResponse.ErrorMessage,
+				ParsingExceptionMessage = dbResponse.ParsingExceptionMessage,
+				ParsingExceptionType = dbResponse.ParsingExceptionType,
+				TimeoutSource = dbResponse.TimeoutSourceID == null
+					? (TimeoutSources?)null
+					: (TimeoutSources)dbResponse.TimeoutSourceID.Value,
+			};
+
+			result.Status = new InferenceStatus {
+				HasEquifaxData = dbResponse.HasEquifaxData,
+				HttpStatus = (HttpStatusCode)dbResponse.HttpStatus,
+				ResponseStatus = (HttpStatusCode)dbResponse.ResponseStatus,
+			};
+
 			this.resultSet[result.ResponseID] = result;
 
 			Log.Debug("Inference loader({0}): loaded response (id: {1}).", this.argList, result.ResponseID);
@@ -340,6 +373,7 @@
 		} // ProcessMissingColumn
 
 		private enum RowTypes {
+			Request,
 			Response,
 			ModelOutput,
 			OutputRatio,
@@ -351,7 +385,10 @@
 
 		private readonly SortedDictionary<long, PublicModelOutput> models;
 		private readonly SortedDictionary<long, Inference> resultSet;
-		private readonly LoadInference sp;
-		private readonly string argList;
+		private readonly long responseID;
+		private readonly int historyLength;
+		private readonly bool includeTryOutData;
+		private readonly decimal monthlyPayment;
+		private string argList;
 	} // class InferenceLoader
 } // namespace

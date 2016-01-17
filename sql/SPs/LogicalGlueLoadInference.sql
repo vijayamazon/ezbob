@@ -44,10 +44,15 @@ BEGIN
 				AND l.CustomerId = @CustomerID
 				AND l.InsertDate < @Now
 			INNER JOIN LogicalGlueRequests rr ON l.Id = rr.ServiceLogID
-		WHERE
-			(@IncludeTryOutData = 0 AND rr.IsTryOut = 0)
-			OR
-			(@IncludeTryOutData = 1 AND (@MonthlyPayment < 0.01 OR rr.MonthlyRepayment = @MonthlyPayment))
+		WHERE (
+				(@IncludeTryOutData = 0 AND rr.IsTryOut = 0)
+				OR
+				(@IncludeTryOutData = 1)
+			) AND (
+				@MonthlyPayment < 0.01
+				OR
+				rr.MonthlyRepayment = @MonthlyPayment
+			)
 		ORDER BY
 			l.InsertDate DESC,
 			l.Id DESC

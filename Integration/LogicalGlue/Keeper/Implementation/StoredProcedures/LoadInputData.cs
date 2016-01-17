@@ -5,5 +5,7 @@
 	internal class LoadInputData : ACustomerTimeStoredProc {
 		public LoadInputData(AConnection db, ASafeLog log) : base(db, log) {
 		} // constructor
+
+		public bool MonthlyRepaymentOnly { get; set; }
 	} // class LoadInputData
 } // namespace

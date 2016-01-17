@@ -5,7 +5,7 @@
 	using Ezbob.Logger;
 
 	internal class InferenceLoader : AInferenceLoaderBase {
-		public InferenceLoader(
+		internal InferenceLoader(
 			AConnection db,
 			ASafeLog log,
 			int customerID,
@@ -23,8 +23,8 @@
 		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0) {
 		} // constructor
 
-		public Inference Result {
-			get { return Results.Count > 0 ? Results[0] : new Inference(); }
+		public virtual Inference Result {
+			get { return Results.Count > 0 ? Results[0] : null; }
 		} // Result
 
 		public InferenceLoader Execute() {

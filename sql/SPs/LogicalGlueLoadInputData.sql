@@ -7,46 +7,87 @@ GO
 
 ALTER PROCEDURE LogicalGlueLoadInputData
 @CustomerID INT,
-@Now DATETIME
+@Now DATETIME,
+@MonthlyRepaymentOnly BIT
 AS
 BEGIN
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
+	IF ISNULL(@MonthlyRepaymentOnly, 0) = 0
+	BEGIN
+		-------------------------------------------------------------------------
+		-------------------------------------------------------------------------
 
-	DECLARE @CompanyID INT = dbo.udfGetCustomerCompanyID(@CustomerID, @Now)
+		DECLARE @CompanyID INT = dbo.udfGetCustomerCompanyID(@CustomerID, @Now)
 
-	------------------------------------------------------------------------------
+		-------------------------------------------------------------------------
 
-	SELECT
-		RowType = 'CompanyRegistrationNumber',
-		c.ExperianRefNum AS CompanyNumber
-	FROM
-		Company c
-	WHERE
-		c.Id = @CompanyID
-		AND
-		c.TypeOfBusiness IN ('Limited', 'LLP', 'PShip')
-		AND
-		c.ExperianRefNum IS NOT NULL
-		AND
-		c.ExperianRefNum NOT IN ('exception', 'NotFound')
+		SELECT
+			RowType = 'CompanyRegistrationNumber',
+			c.ExperianRefNum AS CompanyNumber
+		FROM
+			Company c
+		WHERE
+			c.Id = @CompanyID
+			AND
+			c.TypeOfBusiness IN ('Limited', 'LLP', 'PShip')
+			AND
+			c.ExperianRefNum IS NOT NULL
+			AND
+			c.ExperianRefNum NOT IN ('exception', 'NotFound')
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
+		-------------------------------------------------------------------------
+		-------------------------------------------------------------------------
 
-	SELECT TOP 1
-		RowType = 'Address',
-		a.Line1,
-		a.Line2,
-		Postcode = a.Rawpostcode
-	FROM
-		CustomerAddress a
-	WHERE
-		a.CustomerId = @CustomerID
-		AND
-		a.addressType = 1
-		AND
-		LTRIM(RTRIM(ISNULL(a.id, ''))) != ''
+		SELECT TOP 1
+			RowType = 'Address',
+			a.Line1,
+			a.Line2,
+			Postcode = a.Rawpostcode
+		FROM
+			CustomerAddress a
+		WHERE
+			a.CustomerId = @CustomerID
+			AND
+			a.addressType = 1
+			AND
+			LTRIM(RTRIM(ISNULL(a.id, ''))) != ''
+
+		-------------------------------------------------------------------------
+		-------------------------------------------------------------------------
+
+		SELECT
+			RowType = 'DirectorData',
+			c.FirstName,
+			c.Surname,
+			c.DateOfBirth,
+			CompanyID = @CompanyID
+		FROM
+			Customer c
+		WHERE
+			c.Id = @CustomerID
+
+		-------------------------------------------------------------------------
+		-------------------------------------------------------------------------
+
+		SELECT
+			RowType = 'EquifaxData',
+			l.ResponseData
+		FROM
+			LogicalGlueResponses r
+			INNER JOIN MP_ServiceLog l ON r.ServiceLogID = l.Id
+		WHERE
+			r.HasEquifaxData = 1
+			AND
+			l.CustomerId = @CustomerID
+			AND
+			l.CompanyID = @CompanyID
+		ORDER BY
+			r.ReceivedTime DESC,
+			r.ResponseID DESC
+
+		-------------------------------------------------------------------------
+		-------------------------------------------------------------------------
+	
+	END
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -94,38 +135,5 @@ BEGIN
 		l.[Date] < @Now
 		AND
 		(l.DateClosed IS NULL OR l.DateClosed > @Now)
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	SELECT
-		RowType = 'DirectorData',
-		c.FirstName,
-		c.Surname,
-		c.DateOfBirth,
-		CompanyID = @CompanyID
-	FROM
-		Customer c
-	WHERE
-		c.Id = @CustomerID
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	SELECT
-		RowType = 'EquifaxData',
-		l.ResponseData
-	FROM
-		LogicalGlueResponses r
-		INNER JOIN MP_ServiceLog l ON r.ServiceLogID = l.Id
-	WHERE
-		r.HasEquifaxData = 1
-		AND
-		l.CustomerId = @CustomerID
-		AND
-		l.CompanyID = @CompanyID
-	ORDER BY
-		r.ReceivedTime DESC,
-		r.ResponseID DESC
 END
 GO

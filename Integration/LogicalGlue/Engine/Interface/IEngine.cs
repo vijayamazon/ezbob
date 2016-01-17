@@ -9,11 +9,13 @@
 		/// Method behavior depends on <see cref="mode" />.
 		/// </summary>
 		/// <param name="customerID">ID of customer to infer.</param>
-		/// <param name="monthlyPayment">Customer monthly payment. If non-positive just calls
-		/// previous version of the method with requested customerID and GetInferenceMode.DownloadIfOld.
+		/// <param name="monthlyPayment">Customer monthly payment. Ignored if non-positive, i.e. searches for
+		/// any value of monthly payment.
 		/// </param>
-		/// <param name="isTryout">if true marked as tryout</param>
+		/// <param name="isTryout">If true, requests marked as tryout are included into search;
+		/// not included, otherwise.</param>
 		/// <param name="mode">Data retrieve mode, refer to <see cref="GetInferenceMode"/> for details.</param>
+		/// <remarks>This method returns NULL if there is no matched RESPONSE.</remarks>
 		/// <returns>Customer inference results. Can be NULL.</returns>
 		Inference GetInference(int customerID, decimal monthlyPayment, bool isTryout, GetInferenceMode mode);
 
@@ -24,8 +26,9 @@
 		/// <param name="customerID">ID of customer to infer.</param>
 		/// <param name="time">Time of interest.</param>
 		/// <param name="includeTryOuts">Include try out data or not.</param>
-		/// <param name="monthlyPayment">Customer monthly payment.
-		/// Ignored if is non-positive or <see cref="includeTryOuts"/> is false.</param>
+		/// <param name="monthlyPayment">Customer monthly payment. Ignored if is non-positive, i.e. searches for
+		/// any value of monthly payment.</param>
+		/// <remarks>This method returns NULL if there is no matched RESPONSE.</remarks>
 		/// <returns>The latest customer inference results that were available on requested time. Can be NULL.</returns>
 		Inference GetInference(int customerID, DateTime time, bool includeTryOuts, decimal monthlyPayment);
 
@@ -48,5 +51,27 @@
 		/// <param name="isTryOut">New "is try out" status.</param>
 		/// <returns>True, if request was found and updated; false, otherwise.</returns>
 		bool SetRequestIsTryOut(Guid requestID, bool isTryOut);
+
+		/// <summary>
+		/// Loads monthly repayment for customer at specific time (requested loan / requested term + open loans).
+		/// </summary>
+		/// <param name="customerID">Customer to load data for.</param>
+		/// <param name="now">Current (specific time).</param>
+		/// <returns>Customer monthly repayment.</returns>
+		decimal GetMonthlyRepayment(int customerID, DateTime now);
+
+		/// <summary>
+		/// Loads the latest customer inference results that were available on specific time.
+		/// </summary>
+		/// <remarks>This method returns NULL if there is no matched REQUEST.
+		/// If request exists but there is no matching response, this method returns <see cref="Inference "/> instance with
+		/// request data set but response fields remain empty.</remarks>
+		/// <param name="customerID">ID of customer to load inference for.</param>
+		/// <param name="time">Time of inference.</param>
+		/// <param name="includeTryOutData">Include try out data or not.</param>
+		/// <param name="monthlyPayment">Ignored if is non-positive.
+		/// Otherwise only inferences with this amount are included.</param>
+		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
+		Inference GetInferenceIfExists(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
 	} // interface IEngine
 } // namespace

@@ -12,8 +12,15 @@
 	using Newtonsoft.Json;
 
 	class InputDataLoader : ATimedCustomerActionBase {
-		public InputDataLoader(AConnection db, ASafeLog log, int customerID, DateTime now) : base(db, log, customerID, now) {
+		public InputDataLoader(
+			AConnection db,
+			ASafeLog log,
+			int customerID,
+			DateTime now,
+			bool loadMonthlyRepaymentOnly
+		) : base(db, log, customerID, now) {
 			Result = new InferenceInput();
+			this.loadMonthlyRepaymentOnly = loadMonthlyRepaymentOnly;
 		} // constructor
 
 		public InputDataLoader Execute() {
@@ -28,7 +35,11 @@
 
 			this.openLoanPayments = 0;
 
-			new LoadInputData(DB, Log) { CustomerID = CustomerID, Now = Now, }.ForEachRowSafe(ProcessInputDataRow);
+			new LoadInputData(DB, Log) {
+				CustomerID = CustomerID,
+				Now = Now,
+				MonthlyRepaymentOnly = this.loadMonthlyRepaymentOnly,
+			}.ForEachRowSafe(ProcessInputDataRow);
 
 			Result.MonthlyPayment = (Result.MonthlyPayment ?? 0) + this.openLoanPayments;
 			Log.Debug("Executing input data loader({0}, '{1}') complete.", CustomerID, NowStr);
@@ -159,8 +170,6 @@
 			Result.MonthlyPayment = amount / term + amount * maxInterestRate;
 		} // ProcessRequestedLoan
 
-		private decimal openLoanPayments;
-
 		[StringFormatMethod("format")]
 		private KeeperAlert OutOfRangeException(string format, params object[] args) {
 			return new KeeperAlert(Log, new ArgumentOutOfRangeException(), format, args);
@@ -174,6 +183,9 @@
 			DirectorData,
 			EquifaxData,
 		} // enum RowType
+
+		private decimal openLoanPayments;
+		private readonly bool loadMonthlyRepaymentOnly;
 
 		private static readonly CultureInfo enGB = new CultureInfo("en-GB", false);
 	} // class InputDataLoader

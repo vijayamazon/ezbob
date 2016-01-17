@@ -19,9 +19,9 @@
 				throw new NoConnectionKeeperAlert(this.log);
 		} // constructor
 
-		public InferenceInputPackage LoadInputData(int customerID, DateTime now) {
+		public InferenceInputPackage LoadInputData(int customerID, DateTime now, bool loadMonthlyRepaymentOnly) {
 			try {
-				var loader = new InputDataLoader(this.db, this.log, customerID, now).Execute();
+				var loader = new InputDataLoader(this.db, this.log, customerID, now, loadMonthlyRepaymentOnly).Execute();
 				return new InferenceInputPackage(loader.Result, loader.CompanyID);
 			} catch (Exception e) {
 				throw new InputDataLoaderAlert(customerID, now, e, this.log);
@@ -118,6 +118,26 @@
 				throw new SetIsTryOutStatusAlert(requestID, isTryOut, e, this.log);
 			} // try
 		} // SetRequestIsTryOut
+
+		public Inference LoadInferenceIfExists(
+			int customerID,
+			DateTime time,
+			bool includeTryOutData,
+			decimal monthlyPayment
+		) {
+			try {
+				return new InferenceLoadAttempter(
+					this.db,
+					this.log,
+					customerID,
+					time,
+					includeTryOutData,
+					monthlyPayment
+				).Execute().Result;
+			} catch (Exception e) {
+				throw new InferenceLoaderAlert(customerID, time, e, this.log);
+			} // try
+		} // LoadInferenceIfExists
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

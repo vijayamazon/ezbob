@@ -86,6 +86,7 @@
     <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />
     <Compile Include="Keeper\Implementation\InferenceHistoryLoader.cs" />
     <Compile Include="Keeper\Implementation\AInferenceLoaderBase.cs" />
+    <Compile Include="Keeper\Implementation\InferenceLoadAttempter.cs" />
     <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
     <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
     <Compile Include="Exceptions\Keeper\NoConnectionKeeperAlert.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadInferenceIfExists.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveEtlData.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveWarning.cs" />

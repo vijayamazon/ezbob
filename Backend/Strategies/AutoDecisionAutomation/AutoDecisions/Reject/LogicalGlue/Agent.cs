@@ -72,70 +72,18 @@
 			this.oldWayAgent.Trail.SetTag(Trail.Tag);
 			this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
 
-			ChooseInternalOrLogicalGlueFlow();
+			var sp = new GetCustomerCompanyType(DB, Log) { CompanyID = this.args.CompanyID, };
+			sp.ExecuteNonQuery();
 
-			if (LogicalGlueFlowFollowed) {
-				Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
+			if (sp.TypeOfBusiness.IsRegulated())
+				Trail.Dunno<InternalFlow>().Init();
+			else
+				Trail.Dunno<LogicalGlueFlow>().Init();
 
-				Inference inference = InjectorStub.GetEngine().GetInference(
-					this.args.CustomerID,
-					this.args.Now,
-					false,
-					this.args.MonthlyPayment
-				);
-
-				if (inference == null) {
-					Trail.Negative<LGDataFound>(true).Init(false);
-					return;
-				} else
-					Trail.Dunno<LGDataFound>().Init(true);
-
-				bool hasError =
-					(inference.Error == null) || inference.Error.HasError() ||
-					(inference.Etl == null) || (inference.Etl.Code == null);
-
-				if (hasError) {
-					Trail.Negative<LGWithoutError>(true).Init(false);
-					return;
-				} else
-					Trail.Dunno<LGWithoutError>().Init(true);
-
-				if (inference.Etl.Code == EtlCode.HardReject) {
-					Trail.Affirmative<LGHardReject>(true).Init(true);
-					return;
-				} else
-					Trail.Dunno<LGHardReject>().Init(false);
-
-				if (inference.Bucket == null) {
-					Trail.Negative<HasBucket>(true).Init(false);
-					return;
-				} else
-					Trail.Dunno<HasBucket>().Init(true);
-
-				/* TODO
-				if (less than one configuration found) {
-					StepReject<OfferConfigurationFound>(true).Init(0);
-					return;
-				} else if (more than one configuration found) {
-					StepNoDecision<OfferConfigurationFound>().Init(number of found configurations);
-
-					// TODO: append to the log message: customer ID, score, origin,
-					// company type, loan source, customer is new/old
-					this.log.Alert("Too many configurations found.");
-
-					return;
-				} else {
-					StepNoDecision<OfferConfigurationFound>().Init(1);
-
-					// TODO: Output.GradeRangeID = ID of found offer configuration
-				} // if
-				*/
-
-				Trail.DecideIfNotDecided();
-			} else {
-				Output.FlowType = AutoDecisionFlowTypes.Internal;
-				Trail.AppendOverridingResults(this.oldWayAgent.Trail);
-			} // if
+			if (LogicalGlueFlowFollowed)
+				LogicalGlueFlow();
+			else
+				InternalFlow();
 		} // RunPrimary
 
 		protected virtual AConnection DB { get { return this.args.DB; } }
@@ -149,15 +97,72 @@
 			return oSecondary;
 		} // RunSecondary
 
-		protected virtual void ChooseInternalOrLogicalGlueFlow() {
-			var sp = new GetCustomerCompanyType(DB, Log) { CompanyID = this.args.CompanyID, };
-			sp.ExecuteNonQuery();
+		private void LogicalGlueFlow() {
+			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 
-			if (sp.TypeOfBusiness.IsRegulated())
-				Trail.Dunno<InternalFlow>().Init();
-			else
-				Trail.Dunno<LogicalGlueFlow>().Init();
-		} // ChooseInternalOrLogicalGlueFlow
+			Inference inference = InjectorStub.GetEngine().GetInferenceIfExists(
+				this.args.CustomerID,
+				this.args.Now,
+				false,
+				this.args.MonthlyPayment
+			);
+
+			if (inference == null) {
+				Trail.Negative<LGDataFound>(true).Init(false);
+				InternalFlow();
+				return;
+			} else
+				Trail.Dunno<LGDataFound>().Init(true);
+
+			bool hasError =
+				(inference.ResponseID <= 0) ||
+				(inference.Error == null) || inference.Error.HasError() ||
+				(inference.Etl == null) || (inference.Etl.Code == null);
+
+			if (hasError) {
+				Trail.Negative<LGWithoutError>(true).Init(false);
+				return;
+			} else
+				Trail.Dunno<LGWithoutError>().Init(true);
+
+			if (inference.Etl.Code == EtlCode.HardReject) {
+				Trail.Affirmative<LGHardReject>(true).Init(true);
+				return;
+			} else
+				Trail.Dunno<LGHardReject>().Init(false);
+
+			if (inference.Bucket == null) {
+				Trail.Negative<HasBucket>(true).Init(false);
+				return;
+			} else
+				Trail.Dunno<HasBucket>().Init(true);
+
+			/* TODO
+			if (less than one configuration found) {
+				StepReject<OfferConfigurationFound>(true).Init(0);
+				return;
+			} else if (more than one configuration found) {
+				StepNoDecision<OfferConfigurationFound>().Init(number of found configurations);
+
+				// TODO: append to the log message: customer ID, score, origin,
+				// company type, loan source, customer is new/old
+				this.log.Alert("Too many configurations found.");
+
+				return;
+			} else {
+				StepNoDecision<OfferConfigurationFound>().Init(1);
+
+				// TODO: Output.GradeRangeID = ID of found offer configuration
+			} // if
+			*/
+
+			Trail.DecideIfNotDecided();
+		} // LogicalGlueFlow
+
+		private void InternalFlow() {
+			Output.FlowType = AutoDecisionFlowTypes.Internal;
+			Trail.AppendOverridingResults(this.oldWayAgent.Trail);
+		} // InternalFlow
 
 		private void ComparePrimaryAndSecondary(AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary) {
 			if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {

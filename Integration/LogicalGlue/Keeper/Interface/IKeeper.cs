@@ -10,8 +10,9 @@
 		/// </summary>
 		/// <param name="customerID">Customer to load data for.</param>
 		/// <param name="now">Current (specific time).</param>
+		/// <param name="loadMonthlyRepaymentOnly">Load only monthly repayment or full input data.</param>
 		/// <returns>Customer input data for LG API.</returns>
-		InferenceInputPackage LoadInputData(int customerID, DateTime now);
+		InferenceInputPackage LoadInputData(int customerID, DateTime now, bool loadMonthlyRepaymentOnly);
 
 		/// <summary>
 		/// Saves LG request into DB.
@@ -27,10 +28,11 @@
 		/// <summary>
 		/// Loads the latest customer inference results that were available on specific time.
 		/// </summary>
+		/// <remarks>This method returns NULL if there is no matched RESPONSE.</remarks>
 		/// <param name="customerID">ID of customer to load inference for.</param>
 		/// <param name="time">Time of inference.</param>
 		/// <param name="includeTryOutData">Include try out data or not.</param>
-		/// <param name="monthlyPayment">Ignored if is non-positive or <see cref="includeTryOutData"/> is false.
+		/// <param name="monthlyPayment">Ignored if is non-positive.
 		/// Otherwise only inferences with this amount are included.</param>
 		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
 		Inference LoadInference(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
@@ -73,5 +75,19 @@
 		/// <param name="isTryOut">New "is try out" status.</param>
 		/// <returns>True, if request was found and updated; false, otherwise.</returns>
 		bool SetRequestIsTryOut(Guid requestID, bool isTryOut);
+
+		/// <summary>
+		/// Loads the latest customer inference results that were available on specific time.
+		/// </summary>
+		/// <remarks>This method returns NULL if there is no matched REQUEST.
+		/// If request exists but there is no matching response, this method returns <see cref="Inference "/> instance with
+		/// request data set but response fields remain empty.</remarks>
+		/// <param name="customerID">ID of customer to load inference for.</param>
+		/// <param name="time">Time of inference.</param>
+		/// <param name="includeTryOutData">Include try out data or not.</param>
+		/// <param name="monthlyPayment">Ignored if is non-positive.
+		/// Otherwise only inferences with this amount are included.</param>
+		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
+		Inference LoadInferenceIfExists(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
 	} // interface IKeeper
 } // namespace

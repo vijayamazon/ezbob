@@ -36,7 +36,7 @@
 
 			switch (mode) {
 			case GetInferenceMode.CacheOnly:
-				result = GetInference(customerID, Now, isTryout, 0);
+				result = GetInference(customerID, Now, isTryout, monthlyPayment);
 				break;
 
 			case GetInferenceMode.DownloadIfOld:
@@ -141,14 +141,54 @@
 			return result;
 		} // SetRequestIsTryOut
 
+		public decimal GetMonthlyRepayment(int customerID, DateTime now) {
+			string nowStr = now.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
+
+			Log.Debug("Engine.LoadMonthlyRepayment({0}, {1}) started...", customerID, nowStr);
+
+			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now, true);
+
+			Log.Debug("Engine.LoadMonthlyRepayment({0}, {1}) retrieved input package.", customerID, nowStr);
+
+			return inputPkg.InferenceInput.MonthlyPayment ?? 0;
+		} // GetMonthlyRepayment
+
+		public Inference GetInferenceIfExists(
+			int customerID,
+			DateTime time,
+			bool includeTryOutData,
+			decimal monthlyPayment
+		) {
+			Log.Debug(
+				"Engine.GetInferenceIfExists({0}, {1}, {2}, {3}) started...",
+				customerID,
+				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				includeTryOutData,
+				monthlyPayment
+			);
+
+			Inference result = Keeper.LoadInferenceIfExists(customerID, time, includeTryOutData, monthlyPayment);
+
+			Log.Debug(
+				"Engine.GetInference({0}, {1}, {2}, {3}) complete.",
+				customerID,
+				time.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				includeTryOutData,
+				monthlyPayment
+			);
+
+			return result;
+			
+		} // GetInferenceIfExists
+
 		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment, bool isTryOut) {
 			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
 
-			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now);
+			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now, false);
 
 			Log.Debug("Engine.DownloadAndSave({0}) retrieved input package.", customerID);
 
-			if (isTryOut)
+			if (explicitMonthlyPayment > 0)
 				inputPkg.InferenceInput.MonthlyPayment = explicitMonthlyPayment;
 
 			List<string> errors = inputPkg.InferenceInput.Validate();
@@ -172,7 +212,5 @@
 
 			return result;
 		} // DownloadAndSave
-
-		private static readonly CultureInfo enGB = new CultureInfo("en-GB", false);
 	} // class Engine
 } // namespace
