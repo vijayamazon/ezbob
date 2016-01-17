@@ -153,7 +153,7 @@
 
 		[Test]
 		public void TestLinkOfferToInvestor() {
-			var linkOfferToInvestor = new LinkOfferToInvestor(3406, 42824);
+			var linkOfferToInvestor = new LinkOfferToInvestor(3406, 42824, false, null);
 			linkOfferToInvestor.Execute();
 		}
 

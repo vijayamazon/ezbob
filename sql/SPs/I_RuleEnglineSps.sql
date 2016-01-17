@@ -150,8 +150,10 @@ ALTER PROCEDURE I_GetGradeMonthlyInvestedAmount
 @FirstOfMonth DATETIME
 AS
 BEGIN
+  DECLARE @GradeSum DECIMAL = 0
+  
   SELECT
-    SUM(l.LoanAmount) GradeSum
+    @GradeSum = isnull(SUM(l.LoanAmount), 0)
   FROM I_Portfolio ip
   INNER JOIN Loan l
     ON ip.LoanID = l.Id
@@ -159,6 +161,8 @@ BEGIN
   AND ip.GradeID = @GradeID
   AND ip.Timestamp >= @FirstOfMonth
   GROUP BY ip.GradeID
+  
+  SELECT @GradeSum AS GradeSum
 END
 GO
 

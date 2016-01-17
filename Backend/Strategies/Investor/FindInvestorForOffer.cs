@@ -11,7 +11,8 @@
 		public FindInvestorForOffer(int customerID, long cashRequestID) {
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
-		}
+		}//ctor
+
 		public override string Name { get { return "FindInvestorForOffer"; } }
 
 		public override void Execute() {
@@ -32,23 +33,23 @@
 							InvestmentPercent = investorParametersList.Value.Value
 						})
 					);
-			}
-		}
+			}//if
+		}//Execute
 
         protected IContainer InitContainer(Type scanAssemblyOfType) {
             Container container = new Container();
-            container.Configure(c => c.Scan(scanner => {
-                scanner.AssemblyContainingType(scanAssemblyOfType);
-                scanner.LookForRegistries();
-            }));
+	        container.Configure(c => c.Scan(scanner => {
+		        scanner.AssemblyContainingType(scanAssemblyOfType);
+		        scanner.LookForRegistries();
+	        }));
 
             return container;
-        }
+        }//InitContainer
         
 
 		public bool IsFound { get; private set; }
 
 		private readonly int customerID;
 		private readonly long cashRequestID;
-	}
-}
+	}//FindInvestorForOffer
+}//ns

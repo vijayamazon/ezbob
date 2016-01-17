@@ -438,7 +438,7 @@
 		public virtual string EditOffer { get; set; }
 		public virtual string SubmitChosenInvestor { get; set; }
 		public virtual string ManageChosenInvestor { get; set; }
-
+		public virtual long CashRequestID { get; set; }
 		private readonly List<PendingInvestorModel> allinvestors;
 		[NonTraversable]
 		public virtual List<PendingInvestorModel> ChooseInvestor { get; set; }

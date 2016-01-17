@@ -47,11 +47,12 @@
 
         public decimal GetGradeMonthlyInvestedAmount(int investorId, Grade grade) {
             var myDate = DateTime.Now;
-            var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
+	        int? gradeID = grade == null ? (int?)grade : (int)grade;
+			var firstOfMonth = new DateTime(myDate.Year, myDate.Month, 1);
             var result = Library.Instance.DB.ExecuteScalar<decimal>("I_GetGradeMonthlyInvestedAmount", 
 				CommandSpecies.StoredProcedure, 
 				new QueryParameter("InvestorID", investorId), 
-				new QueryParameter("GradeID", (int)grade), 
+				new QueryParameter("GradeID", gradeID), 
 				new QueryParameter("FirstOfMonth", 
 					TimeZoneInfo.ConvertTimeToUtc(firstOfMonth)));
             return (decimal)result;

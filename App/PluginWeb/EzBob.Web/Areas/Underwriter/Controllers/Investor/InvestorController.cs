@@ -3,9 +3,12 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using EzBob.Web.Areas.Underwriter.Models.Investor;
+	using EzBob.Web.Infrastructure.csrf;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using log4net;
@@ -33,12 +36,14 @@
 
 		[Ajax]
 		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult Index() {
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddInvestor(FrontInvestorModel investor, FrontInvestorContactModel investorContact, List<FrontInvestorBankAccountModel> InvestorBank, bool SameBank) {
 
 			if (SameBank) {
@@ -99,6 +104,7 @@
 		/// </summary>
 		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult ManageInvestorContact(int InvestorID, FrontInvestorContactModel contact) {
 			
 			var result = this.serviceClient.Instance.ManageInvestorContact(this.context.UserId,
@@ -123,6 +129,7 @@
 		/// </summary>
 		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult ManageInvestorBankAccount(int InvestorID, FrontInvestorBankAccountModel bank) {
 			
 			var result = this.serviceClient.Instance.ManageInvestorBankAccount(this.context.UserId,
@@ -140,6 +147,7 @@
 
 		[Ajax]
 		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult LoadInvestor(int id) {
 			var result = this.serviceClient.Instance.LoadInvestor(this.context.UserId, id);
 			var investor = this.investorModelBuilder.Build(result.Investor);
@@ -148,6 +156,7 @@
 
 		[Ajax]
 		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult GetAccountingData() {
 
 			AccountingDataResult result = this.serviceClient.Instance.LoadAccountingData(this.context.UserId);
@@ -157,6 +166,7 @@
 
 		[Ajax]
 		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult GetTransactionsData(int id, string bankAccountType) {
 			Log.InfoFormat("GetTransactionsData for InvestorID={0}", id);
 			I_InvestorAccountTypeEnum accountTypeEnum;
@@ -171,6 +181,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddTransaction(int investorID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment) {
 
 			I_InvestorAccountTypeEnum accountTypeEnum;
@@ -185,16 +196,52 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult FindInvestor(int customerId) {
-			//TODO find investor chosen for pending offer
-			return Json(true, JsonRequestBehavior.AllowGet);
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult FindInvestor(int customerId, long cashRequestID) {
+			var aiar = this.serviceClient.Instance.LoadApplicationInfo(
+				this.context.UserId,
+				customerId,
+				cashRequestID,
+				DateTime.UtcNow
+			);
+
+			var result = this.serviceClient.Instance.SetManualDecision(new DecisionModel { 
+				customerID = customerId,
+				status = EZBob.DatabaseLib.Model.Database.CreditResultStatus.Approved,
+				underwriterID = this.context.UserId,
+				attemptID = Guid.NewGuid().ToString("N"),
+				cashRequestID = cashRequestID,
+				cashRequestRowVersion = aiar.Model.CashRequestRowVersion,
+				
+			});
+
+			return Json(result.Map, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult SubmitInvestor(int customerID, int investorID) {
-			//TODO submit investor for pending offer
-			return Json(true, JsonRequestBehavior.AllowGet);
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SubmitInvestor(int customerID, int investorID, long cashRequestID) {
+			var aiar = this.serviceClient.Instance.LoadApplicationInfo(
+				this.context.UserId,
+				customerID,
+				cashRequestID,
+				DateTime.UtcNow
+			);
+
+			var result = this.serviceClient.Instance.SetManualDecision(new DecisionModel {
+				customerID = customerID,
+				status = EZBob.DatabaseLib.Model.Database.CreditResultStatus.Approved,
+				underwriterID = this.context.UserId,
+				attemptID = Guid.NewGuid().ToString("N"),
+				cashRequestID = cashRequestID,
+				cashRequestRowVersion = aiar.Model.CashRequestRowVersion,
+				ForceInvestor = true,
+				InvestorID = investorID
+
+			});
+
+			return Json(result.Map, JsonRequestBehavior.AllowGet);
 		}
 
 

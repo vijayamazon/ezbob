@@ -4,9 +4,11 @@
 
 	public class LinkOfferToInvestor : AStrategy {
 
-		public LinkOfferToInvestor(int customerID, long cashRequestID) {
+		public LinkOfferToInvestor(int customerID, long cashRequestID, bool isForce, int? investorID) {
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
+			this.isForce = isForce;
+			this.investorID = investorID;
 			this.now = DateTime.UtcNow;
 		}//ctor
 
@@ -18,9 +20,16 @@
 				new QueryParameter("CashRequestID", this.cashRequestID));
 
 			if (IsForOpenPlatform) {
-				var findInvestorForOffer = new FindInvestorForOffer(this.customerID, this.cashRequestID);
-				findInvestorForOffer.Execute();
-				FoundInvestor = findInvestorForOffer.IsFound;
+				if (this.isForce && this.investorID.HasValue) {
+					var forceInvestorForOffer = new ForceInvestorForOffer(this.customerID, this.cashRequestID, this.investorID.Value);
+					forceInvestorForOffer.Execute();
+					FoundInvestor = true;
+				} else {
+					var findInvestorForOffer = new FindInvestorForOffer(this.customerID, this.cashRequestID);
+					findInvestorForOffer.Execute();
+					FoundInvestor = findInvestorForOffer.IsFound;
+				}
+
 				if (FoundInvestor) {
 					DB.ForEachRowSafe(HandleOneAssignedToOfferInvestor, 
 						"I_LoadAssigedToOfferInvestors", 
@@ -63,6 +72,8 @@
 		public bool FoundInvestor { get; private set; }
 
 		private readonly long cashRequestID;
+		private readonly bool isForce;
+		private readonly int? investorID;
 		private readonly int customerID;
 		private readonly DateTime now;
 	}//LinkOfferToInvestor

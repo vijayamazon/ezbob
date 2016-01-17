@@ -25,7 +25,11 @@ EzBob.Underwriter.ConfigInvestorView = Backbone.Marionette.ItemView.extend({
 	},
 
 	events: {
+		'click .config-investor': 'submit'
+	},
 
+	submit: function() {
+		return false;
 	},
 
 	onRender: function() {

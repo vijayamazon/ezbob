@@ -304,7 +304,7 @@
 
 
 		private bool ApproveCustomer(NL_Decisions newDecision) {
-			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID);
+			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID, this.decisionModel.ForceInvestor, this.decisionModel.InvestorID);
 			linkOfferToInvestor.Execute();
 
 			Log.Info("ApproveCustomer Decision {0} for Customer {1} cr {2} OP {3} FoundInvestor {4}",
@@ -415,8 +415,8 @@
 			SaveDecision<ManuallySuspend>();
 
 			var notifyRiskPendingInvestorCustomer = new NotifyRiskPendingInvestorOffer(
-				this.decisionToApply.Customer.ID, 
-				this.decisionToApply.CashRequest.ManagerApprovedSum,
+				this.decisionToApply.Customer.ID,
+				this.currentState.OfferedCreditLine,
 				this.currentState.OfferValidUntil
 			);
 			notifyRiskPendingInvestorCustomer.Execute();

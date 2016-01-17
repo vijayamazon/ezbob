@@ -177,6 +177,7 @@
     <Compile Include="Investor\AddInvestorBankAccountBalance.cs" />
     <Compile Include="Investor\AddInvestorSystemBalance.cs" />
     <Compile Include="Investor\AddManualTransaction.cs" />
+    <Compile Include="Investor\ForceInvestorForOffer.cs" />
     <Compile Include="Investor\LinkRepaymentToInvestor.cs" />
     <Compile Include="Investor\LinkLoanToInvestor.cs" />
     <Compile Include="Investor\LinkOfferToInvestor.cs" />
