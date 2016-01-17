@@ -131,6 +131,16 @@
 			return result;
 		} // GetInferenceHistory
 
+		public bool SetRequestIsTryOut(Guid requestID, bool isTryOut) {
+			Log.Debug("Enginge.SetRequestIsTryOut({0}, {1}) started...", requestID, isTryOut);
+
+			bool result = Keeper.SetRequestIsTryOut(requestID, isTryOut);
+
+			Log.Debug("Enginge.SetRequestIsTryOut({0}, {1}) complete with result: {2}.", requestID, isTryOut, result);
+
+			return result;
+		} // SetRequestIsTryOut
+
 		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment, bool isTryOut) {
 			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
 

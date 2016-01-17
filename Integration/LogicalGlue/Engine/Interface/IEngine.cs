@@ -40,5 +40,13 @@
 		/// <param name="maxHistoryLength">Limit returned list by this length. Ignored if null or non-positive.</param>
 		/// <returns>List of customer inferences ordered from the newest to the oldest.</returns>
 		List<Inference> GetInferenceHistory(int customerID, DateTime time, bool includeTryOuts, int? maxHistoryLength);
+
+		/// <summary>
+		/// Changes request "is try out" status.
+		/// </summary>
+		/// <param name="requestID">Request unique id.</param>
+		/// <param name="isTryOut">New "is try out" status.</param>
+		/// <returns>True, if request was found and updated; false, otherwise.</returns>
+		bool SetRequestIsTryOut(Guid requestID, bool isTryOut);
 	} // interface IEngine
 } // namespace

@@ -67,6 +67,7 @@
     <Compile Include="Exceptions\Harvester\BadConfigurationAlert.cs" />
     <Compile Include="Exceptions\Harvester\NoConfigurationAlert.cs" />
     <Compile Include="Exceptions\Harvester\NoInputDataAlert.cs" />
+    <Compile Include="Exceptions\Keeper\SetIsTryOutStatusAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceRequestSaverNoDataAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverWrongRequestIDAlert.cs" />
     <Compile Include="Exceptions\Keeper\InferenceSaverNoDataAlert.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveResponse.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveInferenceRequest.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInputData.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SetRequestIsTryOut.cs" />
     <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
     <Compile Include="Keeper\Interface\IKeeper.cs" />
     <Compile Include="Keeper\Implementation\DBTable\AWithModelOutputID.cs" />

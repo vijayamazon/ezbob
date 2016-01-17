@@ -6,6 +6,7 @@
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Exceptions.Keeper;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
+	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures;
 	using Ezbob.Integration.LogicalGlue.Keeper.Interface;
 	using Ezbob.Logger;
 
@@ -102,6 +103,21 @@
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
 		} // LoadInferenceHistory
+
+		public bool SetRequestIsTryOut(Guid requestID, bool isTryOut) {
+			try {
+				var sp = new SetRequestIsTryOut(this.db, this.log) {
+					RequestUniqueID = requestID,
+					NewIsTryOutStatus = isTryOut,
+				};
+
+				sp.ExecuteNonQuery();
+
+				return sp.RequestID > 0;
+			} catch (Exception e) {
+				throw new SetIsTryOutStatusAlert(requestID, isTryOut, e, this.log);
+			} // try
+		} // SetRequestIsTryOut
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

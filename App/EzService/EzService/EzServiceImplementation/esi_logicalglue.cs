@@ -11,26 +11,32 @@
 			var metadata = ExecuteSync(out strategy, customerID, underwriterID, customerID, date, includeTryouts);
 			var result = LogicalGlueResult.FromInference(strategy.Inference, customerID, Log, DB);
 			return result;
-		}//LoicalGlueGetLastInference
+		} // LoicalGlueGetLastInference
 
 		public IList<LogicalGlueResult> LogicalGlueGetHistory(int underwriterID, int customerID) {
 			GetHistoryInferences strategy;
 			var metadata = ExecuteSync(out strategy, customerID, underwriterID, customerID);
 			var result = strategy.Inferences.Select(x => LogicalGlueResult.FromInference(x, customerID, Log, DB)).ToList();
 			return result;
-		}//LogicalGlueGetHistory
+		} // LogicalGlueGetHistory
 
 		public LogicalGlueResult LogicalGlueGetTryout(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout) {
 			GetTryoutInference strategy;
 			var metadata = ExecuteSync(out strategy, customerID, underwriterID, customerID, monthlyRepayment, isTryout);
 			var result = LogicalGlueResult.FromInference(strategy.Inference, customerID, Log, DB);
 			return result;
-		}//LogicalGlueGetTryout
+		} // LogicalGlueGetTryout
 
 		public BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, Guid uniqueID) {
-			//TODO implement
-			return new BoolActionResult();
-		}//LogicalGlueSetAsCurrent
+			SetRequestIsTryOut instance;
+
+			var amd = ExecuteSync(out instance, customerID, underwriterID, uniqueID, false);
+
+			return new BoolActionResult {
+				MetaData = amd,
+				Value = instance.Success,
+			};
+		} // LogicalGlueSetAsCurrent
 	}//EzServiceImplementation LogicalGlue
 }//ns
 
