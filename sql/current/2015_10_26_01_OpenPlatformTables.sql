@@ -212,8 +212,10 @@ GO
 IF NOT EXISTS (SELECT * FROM I_ProductType)
 BEGIN
 	DECLARE @LoansProductID INT = (SELECT ProductID FROM I_Product WHERE Name='Loans')
+	DECLARE @AlibabaProductID INT = (SELECT ProductID FROM I_Product WHERE Name='Alibaba')
 	INSERT INTO I_ProductType (ProductID, Name, Timestamp) VALUES (@LoansProductID, 'LongTermSMELoans', '2015-12-01')
 	INSERT INTO I_ProductType (ProductID, Name, Timestamp) VALUES (@LoansProductID, 'ShortTermSMELoans', '2015-12-01')
+	INSERT INTO I_ProductType (ProductID, Name, Timestamp) VALUES (@AlibabaProductID, 'Alibaba', '2015-12-01')
 END
 GO
 
@@ -257,7 +259,7 @@ BEGIN
 	)
 END
 GO
-/*
+
 IF NOT EXISTS (SELECT * FROM I_SubGrade)
 BEGIN
 
@@ -272,17 +274,31 @@ BEGIN
 	
 	INSERT INTO I_SubGrade (GradeID,Name,MinScore,MaxScore) 
 	VALUES 
-		(@GradeA,'A1',0,0.155),
-		(@GradeB,'B1',0.155,0.253),
-		(@GradeC,'C1',0.254,0.347),
-		(@GradeD,'D1',0.347,0.452),
-		(@GradeE,'E1',0.452,0.552),
+		(@GradeA,'A1',0.002,0.027),
+		(@GradeA,'A2',0.027,0.071),
+		(@GradeA,'A3',0.071,0.109),
+		(@GradeA,'A4',0.109,0.155),
+		(@GradeB,'B1',0.155,0.199),
+		(@GradeB,'B2',0.199,0.253),
+		(@GradeC,'C1',0.253,0.347),
+		(@GradeD,'D1',0.347,0.410),
+		(@GradeD,'D2',0.410,0.452),
+		(@GradeE,'E1',0.452,0.500),
+		(@GradeE,'E2',0.500,0.552),
 		(@GradeF,'F1',0.552,0.594),
-		(@GradeG,'G1',0.594,0.697),
-		(@GradeH,'H1',0.697,1.000)
+		(@GradeG,'G1',0.594,0.627),
+		(@GradeG,'G2',0.627,0.668),
+		(@GradeG,'G3',0.668,0.697),
+		(@GradeH,'H1',0.697,0.739),
+		(@GradeH,'H2',0.739,0.813),
+		(@GradeH,'H3',0.813,0.900),
+		(@GradeH,'H4',0.900,0.913),
+		(@GradeH,'H5',0.913,0.978),
+		(@GradeH,'H6',0.978,0.994),
+		(@GradeH,'H7',0.994,1.000)
 END
 GO
-*/
+
 
 IF object_id('I_FundingType') IS NULL
 BEGIN
@@ -353,6 +369,7 @@ IF NOT EXISTS (SELECT * FROM I_ProductSubType)
 BEGIN
 	DECLARE @ProductTypeLongTerm INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='LongTermSMELoans')
 	DECLARE @ProductTypeShortTerm INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='ShortTermSMELoans')
+	DECLARE @ProductTypeAlibaba INT = (SELECT ProductTypeID FROM I_ProductType WHERE Name='Alibaba')
 		
 	DECLARE @FundingTypeFull INT = (SELECT FundingTypeID FROM I_FundingType WHERE Name='FullInvestment')
 	
@@ -361,18 +378,31 @@ BEGIN
 	
 	DECLARE @OriginEzbob INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='ezbob')
 	DECLARE @OriginEverline INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='everline')
+	DECLARE @OriginAlibaba INT = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name='alibaba')
 	
 	
 
 	INSERT INTO I_ProductSubType (ProductTypeID, FundingTypeID, OriginID, LoanSourceID, Timestamp, IsRegulated)
-	VALUES (@ProductTypeLongTerm,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01', 0),
+	VALUES
+			-- op everline non regulated
+		   (@ProductTypeLongTerm,@FundingTypeFull,@OriginEverline,@LoanSourceCosme,    '2015-12-01', 0),
 		   (@ProductTypeLongTerm,@FundingTypeFull,@OriginEverline,@LoanSourceStandard, '2015-12-01', 0),
 		   
+		   -- ezbob non regulated
 		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01', 0),
 		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01', 0),
 		   
+		   -- ezbob regulated
 		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceCosme,    '2015-12-01', 1),
-		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01', 1)
+		   (@ProductTypeShortTerm,NULL,@OriginEzbob,@LoanSourceStandard, '2015-12-01', 1),
+		   
+		   -- alibaba regulated
+		   (@ProductTypeAlibaba,NULL,@OriginAlibaba,@LoanSourceCosme,    '2015-12-01', 0),
+		   (@ProductTypeAlibaba,NULL,@OriginAlibaba,@LoanSourceStandard, '2015-12-01', 0),
+		   
+		   --everline regulated
+		   (@ProductTypeShortTerm,NULL,@OriginEverline,@LoanSourceCosme,    '2015-12-01', 1),
+		   (@ProductTypeShortTerm,NULL,@OriginEverline,@LoanSourceStandard, '2015-12-01', 1)
 END
 GO
 
@@ -569,49 +599,217 @@ BEGIN
 	DECLARE @GradeG INT = (SELECT GradeID FROM I_Grade WHERE Name='G')
 	DECLARE @GradeH INT = (SELECT GradeID FROM I_Grade WHERE Name='H')
 	
-	--TODO populate with real data with sub grades.	
-	INSERT INTO I_GradeRange (GradeID, SubGradeID, LoanSourceID, OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, IsActive, Timestamp)
-	VALUES (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.09 ,50000,150000,12,60,1,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.06 ,0.115,40000,120000,12,60,1,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.102,0.14 ,30000, 80000,12,60,1,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 1, 0,0,0.135,0.183,25000, 65000,12,36,1,'2015-12-01'),
+	DECLARE @SubGradeA1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='A1')
+	DECLARE @SubGradeA2 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='A2')
+	DECLARE @SubGradeA3 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='A3')
+	DECLARE @SubGradeA4 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='A4')
+	
+	DECLARE @SubGradeB1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='B1')
+	DECLARE @SubGradeB2 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='B2')
+	
+	DECLARE @SubGradeC1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='C1')
+	
+	DECLARE @SubGradeD1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='D1')
+	DECLARE @SubGradeD2 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='D2')
+	
+	DECLARE @SubGradeE1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='E1')
+	DECLARE @SubGradeE2 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='E2')
+	
+	DECLARE @SubGradeF1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='F1')
+	
+	DECLARE @SubGradeG1 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='G1')
+	DECLARE @SubGradeG2 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='G2')
+	DECLARE @SubGradeG3 INT = (SELECT SubGradeID FROM I_SubGrade WHERE Name='G3')
+		
+	
+	INSERT INTO I_GradeRange 
+	       (GradeID, SubGradeID,  LoanSourceID,      OriginID, IsFirstLoan, MinSetupFee, MaxSetupFee, MinInterestRate, MaxInterestRate, MinLoanAmount, MaxLoanAmount, MinTerm, MaxTerm, IsActive, Timestamp)
+	VALUES
+			-- everline standard new loan
+		   (@GradeA, @SubGradeA1, @StandardSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0100,0.0125,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @StandardSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0104,0.0127,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @StandardSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0112,0.0129,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @StandardSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0114,0.0133,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @StandardSourceID, @EverlineOriginID, 1, 0.020,0.055,0.0142,0.0192,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @StandardSourceID, @EverlineOriginID, 1, 0.020,0.055,0.0150,0.0192,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @StandardSourceID, @EverlineOriginID, 1, 0.025,0.060,0.0167,0.0200,1000,100000,3,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @StandardSourceID, @EverlineOriginID, 1, 0.030,0.065,0.0175,0.0233,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @StandardSourceID, @EverlineOriginID, 1, 0.030,0.065,0.0183,0.0233,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @StandardSourceID, @EverlineOriginID, 1, 0.035,0.070,0.0233,0.0375,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @StandardSourceID, @EverlineOriginID, 1, 0.035,0.070,0.0267,0.0417,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @StandardSourceID, @EverlineOriginID, 1, 0.040,0.075,0.0300,0.0433,1000,35000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @StandardSourceID, @EverlineOriginID, 1, 0.050,0.080,0.0400,0.0542,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @StandardSourceID, @EverlineOriginID, 1, 0.050,0.080,0.0417,0.0558,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @StandardSourceID, @EverlineOriginID, 1, 0.050,0.080,0.0433,0.0583,1000,20000,3,12,1,'2015-12-01'),
+		   --everline standard not new loan
+		   (@GradeA, @SubGradeA1, @StandardSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0095,0.0119,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @StandardSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0099,0.0120,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @StandardSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0106,0.0123,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @StandardSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0108,0.0127,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @StandardSourceID, @EverlineOriginID, 0, 0.020,0.055,0.0135,0.0183,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @StandardSourceID, @EverlineOriginID, 0, 0.020,0.055,0.0143,0.0183,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @StandardSourceID, @EverlineOriginID, 0, 0.025,0.060,0.0158,0.0190,1000,100000,3,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @StandardSourceID, @EverlineOriginID, 0, 0.030,0.065,0.0167,0.0222,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @StandardSourceID, @EverlineOriginID, 0, 0.030,0.065,0.0174,0.0222,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @StandardSourceID, @EverlineOriginID, 0, 0.035,0.070,0.0233,0.0375,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @StandardSourceID, @EverlineOriginID, 0, 0.035,0.070,0.0267,0.0417,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @StandardSourceID, @EverlineOriginID, 0, 0.040,0.075,0.0300,0.0433,1000,35000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @StandardSourceID, @EverlineOriginID, 0, 0.050,0.080,0.0400,0.0542,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @StandardSourceID, @EverlineOriginID, 0, 0.050,0.080,0.0417,0.0558,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @StandardSourceID, @EverlineOriginID, 0, 0.050,0.080,0.0433,0.0583,1000,20000,3,12,1,'2015-12-01'),
+		   	-- ezbob standard new loan
+		   (@GradeA, @SubGradeA1, @StandardSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0100,0.0125,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @StandardSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0104,0.0127,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @StandardSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0112,0.0129,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @StandardSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0114,0.0133,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @StandardSourceID, @EzbobOriginID, 1, 0.020,0.055,0.0142,0.0192,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @StandardSourceID, @EzbobOriginID, 1, 0.020,0.055,0.0150,0.0192,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @StandardSourceID, @EzbobOriginID, 1, 0.025,0.060,0.0167,0.0200,1000,100000,3,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @StandardSourceID, @EzbobOriginID, 1, 0.030,0.065,0.0175,0.0233,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @StandardSourceID, @EzbobOriginID, 1, 0.030,0.065,0.0183,0.0233,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @StandardSourceID, @EzbobOriginID, 1, 0.035,0.070,0.0233,0.0375,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @StandardSourceID, @EzbobOriginID, 1, 0.035,0.070,0.0267,0.0417,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @StandardSourceID, @EzbobOriginID, 1, 0.040,0.075,0.0300,0.0433,1000,35000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @StandardSourceID, @EzbobOriginID, 1, 0.050,0.080,0.0400,0.0542,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @StandardSourceID, @EzbobOriginID, 1, 0.050,0.080,0.0417,0.0558,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @StandardSourceID, @EzbobOriginID, 1, 0.050,0.080,0.0433,0.0583,1000,20000,3,12,1,'2015-12-01'),
+		   --ezbob standard not new loan
+		   (@GradeA, @SubGradeA1, @StandardSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0095,0.0119,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @StandardSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0099,0.0120,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @StandardSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0106,0.0123,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @StandardSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0108,0.0127,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @StandardSourceID, @EzbobOriginID, 0, 0.020,0.055,0.0135,0.0183,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @StandardSourceID, @EzbobOriginID, 0, 0.020,0.055,0.0143,0.0183,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @StandardSourceID, @EzbobOriginID, 0, 0.025,0.060,0.0158,0.0190,1000,100000,3,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @StandardSourceID, @EzbobOriginID, 0, 0.030,0.065,0.0167,0.0222,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @StandardSourceID, @EzbobOriginID, 0, 0.030,0.065,0.0174,0.0222,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @StandardSourceID, @EzbobOriginID, 0, 0.035,0.070,0.0233,0.0375,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @StandardSourceID, @EzbobOriginID, 0, 0.035,0.070,0.0267,0.0417,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @StandardSourceID, @EzbobOriginID, 0, 0.040,0.075,0.0300,0.0433,1000,35000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @StandardSourceID, @EzbobOriginID, 0, 0.050,0.080,0.0400,0.0542,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @StandardSourceID, @EzbobOriginID, 0, 0.050,0.080,0.0417,0.0558,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @StandardSourceID, @EzbobOriginID, 0, 0.050,0.080,0.0433,0.0583,1000,20000,3,12,1,'2015-12-01'),
+		   	-- everline cosme new loan
+		   (@GradeA, @SubGradeA1, @CosmeSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0100,0.0125,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @CosmeSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0104,0.0127,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @CosmeSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0112,0.0129,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @CosmeSourceID, @EverlineOriginID, 1, 0.015,0.050,0.0114,0.0133,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @CosmeSourceID, @EverlineOriginID, 1, 0.020,0.055,0.0142,0.0192,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @CosmeSourceID, @EverlineOriginID, 1, 0.020,0.055,0.0150,0.0192,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @CosmeSourceID, @EverlineOriginID, 1, 0.025,0.060,0.0167,0.0200,1000,100000,15,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @CosmeSourceID, @EverlineOriginID, 1, 0.030,0.065,0.0175,0.0233,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @CosmeSourceID, @EverlineOriginID, 1, 0.030,0.065,0.0183,0.0233,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @CosmeSourceID, @EverlineOriginID, 1, 0.035,0.070,0.0233,0.0375,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @CosmeSourceID, @EverlineOriginID, 1, 0.035,0.070,0.0267,0.0417,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @CosmeSourceID, @EverlineOriginID, 1, 0.040,0.075,0.0300,0.0433,1000,35000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @CosmeSourceID, @EverlineOriginID, 1, 0.050,0.080,0.0400,0.0542,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @CosmeSourceID, @EverlineOriginID, 1, 0.050,0.080,0.0417,0.0558,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @CosmeSourceID, @EverlineOriginID, 1, 0.050,0.080,0.0433,0.0583,1000,20000,15,15,1,'2015-12-01'),
+		   	-- everline cosme not new loan
+		   (@GradeA, @SubGradeA1, @CosmeSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0095,0.0119,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @CosmeSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0099,0.0120,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @CosmeSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0106,0.0123,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @CosmeSourceID, @EverlineOriginID, 0, 0.015,0.050,0.0108,0.0127,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @CosmeSourceID, @EverlineOriginID, 0, 0.020,0.055,0.0135,0.0183,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @CosmeSourceID, @EverlineOriginID, 0, 0.020,0.055,0.0143,0.0183,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @CosmeSourceID, @EverlineOriginID, 0, 0.025,0.060,0.0158,0.0190,1000,100000,15,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @CosmeSourceID, @EverlineOriginID, 0, 0.030,0.065,0.0167,0.0222,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @CosmeSourceID, @EverlineOriginID, 0, 0.030,0.065,0.0174,0.0222,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @CosmeSourceID, @EverlineOriginID, 0, 0.035,0.070,0.0233,0.0375,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @CosmeSourceID, @EverlineOriginID, 0, 0.035,0.070,0.0267,0.0417,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @CosmeSourceID, @EverlineOriginID, 0, 0.040,0.075,0.0300,0.0433,1000,35000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @CosmeSourceID, @EverlineOriginID, 0, 0.050,0.080,0.0400,0.0542,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @CosmeSourceID, @EverlineOriginID, 0, 0.050,0.080,0.0417,0.0558,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @CosmeSourceID, @EverlineOriginID, 0, 0.050,0.080,0.0433,0.0583,1000,20000,15,15,1,'2015-12-01'),
+		   -- ezbob cosme new loan
+		   (@GradeA, @SubGradeA1, @CosmeSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0100,0.0125,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @CosmeSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0104,0.0127,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @CosmeSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0112,0.0129,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @CosmeSourceID, @EzbobOriginID, 1, 0.015,0.050,0.0114,0.0133,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @CosmeSourceID, @EzbobOriginID, 1, 0.020,0.055,0.0142,0.0192,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @CosmeSourceID, @EzbobOriginID, 1, 0.020,0.055,0.0150,0.0192,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @CosmeSourceID, @EzbobOriginID, 1, 0.025,0.060,0.0167,0.0200,1000,100000,15,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @CosmeSourceID, @EzbobOriginID, 1, 0.030,0.065,0.0175,0.0233,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @CosmeSourceID, @EzbobOriginID, 1, 0.030,0.065,0.0183,0.0233,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @CosmeSourceID, @EzbobOriginID, 1, 0.035,0.070,0.0233,0.0375,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @CosmeSourceID, @EzbobOriginID, 1, 0.035,0.070,0.0267,0.0417,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @CosmeSourceID, @EzbobOriginID, 1, 0.040,0.075,0.0300,0.0433,1000,35000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @CosmeSourceID, @EzbobOriginID, 1, 0.050,0.080,0.0400,0.0542,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @CosmeSourceID, @EzbobOriginID, 1, 0.050,0.080,0.0417,0.0558,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @CosmeSourceID, @EzbobOriginID, 1, 0.050,0.080,0.0433,0.0583,1000,20000,15,15,1,'2015-12-01'),
+		   -- ezbob cosme not new loan
+		   (@GradeA, @SubGradeA1, @CosmeSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0095,0.0119,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @CosmeSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0099,0.0120,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @CosmeSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0106,0.0123,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @CosmeSourceID, @EzbobOriginID, 0, 0.015,0.050,0.0108,0.0127,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @CosmeSourceID, @EzbobOriginID, 0, 0.020,0.055,0.0135,0.0183,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @CosmeSourceID, @EzbobOriginID, 0, 0.020,0.055,0.0143,0.0183,1000,118000,15,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @CosmeSourceID, @EzbobOriginID, 0, 0.025,0.060,0.0158,0.0190,1000,100000,15,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @CosmeSourceID, @EzbobOriginID, 0, 0.030,0.065,0.0167,0.0222,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @CosmeSourceID, @EzbobOriginID, 0, 0.030,0.065,0.0174,0.0222,1000,90000,15,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @CosmeSourceID, @EzbobOriginID, 0, 0.035,0.070,0.0233,0.0375,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @CosmeSourceID, @EzbobOriginID, 0, 0.035,0.070,0.0267,0.0417,1000,50000,15,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @CosmeSourceID, @EzbobOriginID, 0, 0.040,0.075,0.0300,0.0433,1000,35000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @CosmeSourceID, @EzbobOriginID, 0, 0.050,0.080,0.0400,0.0542,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @CosmeSourceID, @EzbobOriginID, 0, 0.050,0.080,0.0417,0.0558,1000,20000,15,15,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @CosmeSourceID, @EzbobOriginID, 0, 0.050,0.080,0.0433,0.0583,1000,20000,15,15,1,'2015-12-01'),
+		   -- alibaba standard new loan
+		   (@GradeA, @SubGradeA1, @StandardSourceID, @AlibabaOriginID, 1, 0.015,0.050,0.0100,0.0125,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @StandardSourceID, @AlibabaOriginID, 1, 0.015,0.050,0.0104,0.0127,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @StandardSourceID, @AlibabaOriginID, 1, 0.015,0.050,0.0112,0.0129,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @StandardSourceID, @AlibabaOriginID, 1, 0.015,0.050,0.0114,0.0133,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @StandardSourceID, @AlibabaOriginID, 1, 0.020,0.055,0.0142,0.0192,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @StandardSourceID, @AlibabaOriginID, 1, 0.020,0.055,0.0150,0.0192,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @StandardSourceID, @AlibabaOriginID, 1, 0.025,0.060,0.0167,0.0200,1000,100000,3,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @StandardSourceID, @AlibabaOriginID, 1, 0.030,0.065,0.0175,0.0233,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @StandardSourceID, @AlibabaOriginID, 1, 0.030,0.065,0.0183,0.0233,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @StandardSourceID, @AlibabaOriginID, 1, 0.035,0.070,0.0233,0.0375,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @StandardSourceID, @AlibabaOriginID, 1, 0.035,0.070,0.0267,0.0417,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @StandardSourceID, @AlibabaOriginID, 1, 0.040,0.075,0.0300,0.0433,1000,35000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @StandardSourceID, @AlibabaOriginID, 1, 0.050,0.080,0.0400,0.0542,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @StandardSourceID, @AlibabaOriginID, 1, 0.050,0.080,0.0417,0.0558,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @StandardSourceID, @AlibabaOriginID, 1, 0.050,0.080,0.0433,0.0583,1000,20000,3,12,1,'2015-12-01'),
+		   -- alibaba standard not new loan
+		   (@GradeA, @SubGradeA1, @StandardSourceID, @AlibabaOriginID, 0, 0.015,0.050,0.0095,0.0119,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA2, @StandardSourceID, @AlibabaOriginID, 0, 0.015,0.050,0.0099,0.0120,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA3, @StandardSourceID, @AlibabaOriginID, 0, 0.015,0.050,0.0106,0.0123,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeA, @SubGradeA4, @StandardSourceID, @AlibabaOriginID, 0, 0.015,0.050,0.0108,0.0127,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB1, @StandardSourceID, @AlibabaOriginID, 0, 0.020,0.055,0.0135,0.0183,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeB, @SubGradeB2, @StandardSourceID, @AlibabaOriginID, 0, 0.020,0.055,0.0143,0.0183,1000,120000,3,24,1,'2015-12-01'),
+		   (@GradeC, @SubGradeC1, @StandardSourceID, @AlibabaOriginID, 0, 0.025,0.060,0.0158,0.0190,1000,100000,3,24,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD1, @StandardSourceID, @AlibabaOriginID, 0, 0.030,0.065,0.0167,0.0222,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeD, @SubGradeD2, @StandardSourceID, @AlibabaOriginID, 0, 0.030,0.065,0.0174,0.0222,1000,90000,3,18,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE1, @StandardSourceID, @AlibabaOriginID, 0, 0.035,0.070,0.0233,0.0375,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeE, @SubGradeE2, @StandardSourceID, @AlibabaOriginID, 0, 0.035,0.070,0.0267,0.0417,1000,50000,3,15,1,'2015-12-01'),
+		   (@GradeF, @SubGradeF1, @StandardSourceID, @AlibabaOriginID, 0, 0.040,0.075,0.0300,0.0433,1000,35000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG1, @StandardSourceID, @AlibabaOriginID, 0, 0.050,0.080,0.0400,0.0542,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG2, @StandardSourceID, @AlibabaOriginID, 0, 0.050,0.080,0.0417,0.0558,1000,20000,3,12,1,'2015-12-01'),
+		   (@GradeG, @SubGradeG3, @StandardSourceID, @AlibabaOriginID, 0, 0.050,0.080,0.0433,0.0583,1000,20000,3,12,1,'2015-12-01'),
+		   	-- everline cosme new loan
+		   --no grade standard
+		   (NULL, NULL, @StandardSourceID, @AlibabaOriginID,  0, 0.015,0.080,0.0095,0.0583,1000,120000,3,24,1,'2015-12-01'),
+		   (NULL, NULL, @StandardSourceID, @AlibabaOriginID,  1, 0.015,0.080,0.0095,0.0583,1000,120000,3,24,1,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.057 ,0.09, 50000,150000,12,60,1,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0855,0.115,40000,120000,12,60,1,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,12,60,1,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EverlineOriginID, 0, 0,0,0.1283,0.183,25000, 65000,12,36,1,'2015-12-01'),
+		   (NULL, NULL, @StandardSourceID, @EzbobOriginID,    0, 0.015,0.080,0.0095,0.0583,1000,120000,3,24,1,'2015-12-01'),
+		   (NULL, NULL, @StandardSourceID, @EzbobOriginID,    1, 0.015,0.080,0.0095,0.0583,1000,120000,3,24,1,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.057 ,0.09, 50000,150000,15,  60,1, '2015-12-01'),
-		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,15,  60,1, '2015-12-01'),
-		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,15,  60,1, '2015-12-01'),
-		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,15,  36,1, '2015-12-01'),
-		 --(@GradeE, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
-		 --(@GradeF, NULL, @CosmeSourceID, @EzbobOriginID, 1, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
+		   (NULL, NULL, @StandardSourceID, @EverlineOriginID, 0, 0.015,0.080,0.0095,0.0583,1000,120000,3,24,1,'2015-12-01'),
+		   (NULL, NULL, @StandardSourceID, @EverlineOriginID, 1, 0.015,0.080,0.0095,0.0583,1000,120000,3,24,1,'2015-12-01'),
+		   --no grade cosme
+		   (NULL, NULL, @CosmeSourceID, @AlibabaOriginID,  0, 0.015,0.080,0.0095,0.0583,1000,120000,15,24,1,'2015-12-01'),
+		   (NULL, NULL, @CosmeSourceID, @AlibabaOriginID,  1, 0.015,0.080,0.0095,0.0583,1000,120000,15,24,1,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,15,  60,1, '2015-12-01'),
-		   (@GradeB, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,15,  60,1, '2015-12-01'),
-		   (@GradeC, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,15,  60,1, '2015-12-01'),
-		   (@GradeD, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,15,  36,1, '2015-12-01'),
-		 --(@GradeE, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, 15,  NULL,'2015-12-01'),
-		 --(@GradeF, NULL, @CosmeSourceID, @EzbobOriginID, 0, 0,0,NULL,  NULL, NULL,  NULL, NULL,NULL,'2015-12-01'),
+		   (NULL, NULL, @CosmeSourceID, @EzbobOriginID,    0, 0.015,0.080,0.0095,0.0583,1000,120000,15,24,1,'2015-12-01'),
+		   (NULL, NULL, @CosmeSourceID, @EzbobOriginID,    1, 0.015,0.080,0.0095,0.0583,1000,120000,15,24,1,'2015-12-01'),
 		   
-		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.057, 0.09, 50000,150000,3,60,1, '2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0855,0.115,40000,120000,3,60,1,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.0969,0.14, 30000, 80000,3,60,1,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,0.1283,0.183,25000, 65000,3,36,1,'2015-12-01'),
-		 --(@GradeE, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeF, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeG, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),	
-		 --(@GradeH, NULL, @StandardSourceID, @EzbobOriginID, 1, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
+		   (NULL, NULL, @CosmeSourceID, @EverlineOriginID, 0, 0.015,0.080,0.0095,0.0583,1000,120000,15,24,1,'2015-12-01'),
+		   (NULL, NULL, @CosmeSourceID, @EverlineOriginID, 1, 0.015,0.080,0.0095,0.0583,1000,120000,15,24,1,'2015-12-01')
 		   
-		   (@GradeA, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.057, 0.09, 50000,150000,3,60,1,'2015-12-01'),
-		   (@GradeB, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0855,0.115,40000,120000,3,60,1,'2015-12-01'),
-		   (@GradeC, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.0969,0.14, 30000, 80000,3,60,1,'2015-12-01'),
-		   (@GradeD, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,0.1283,0.183,25000, 65000,3,36,1,'2015-12-01')
-		 --(@GradeE, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeF, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeG, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01'),
-		 --(@GradeH, NULL, @StandardSourceID, @EzbobOriginID, 0, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2015-12-01')
+		   
+		   
+		   
+		   
+		 
 END
 GO
 
@@ -768,15 +966,15 @@ ALTER TABLE I_InvestorParams ALTER COLUMN Value  varchar(256);
 
 IF NOT EXISTS (SELECT * FROM I_Parameter)
 BEGIN
-	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES ('DailyInvestmentAllowed', 'Decimal', 0, null, null)
-	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES('WeeklyInvestmentAllowed', 'Decimal', 0, null , null)
+	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES ('DailyInvestmentAllowed', 'Decimal', 0, NULL, NULL)
+	INSERT INTO I_Parameter(Name,ValueType,DefaultValue,MaxLimit,MinLimit) VALUES('WeeklyInvestmentAllowed', 'Decimal', 0, NULL, NULL)
 END
 GO
 
 IF NOT EXISTS (SELECT * FROM I_InvestorParams)
 BEGIN
-	INSERT INTO I_InvestorParams(InvestorID,ParameterID,Value,Type,AllowedForConfig) VALUES(null, 1, 1000000, 1,1)
-	INSERT INTO I_InvestorParams(InvestorID,ParameterID,Value,Type,AllowedForConfig) VALUES(null, 2, 3000000, 1,1)
+	INSERT INTO I_InvestorParams(InvestorID,ParameterID,Value,Type,AllowedForConfig) VALUES(NULL, 1, 1000000, 1,1)
+	INSERT INTO I_InvestorParams(InvestorID,ParameterID,Value,Type,AllowedForConfig) VALUES(NULL, 2, 3000000, 1,1)
 END
 GO
 
