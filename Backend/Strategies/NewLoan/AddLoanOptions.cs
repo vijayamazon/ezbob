@@ -35,7 +35,7 @@
 				long newLoanId = -1;
 
 				if (oldLoanId != null)
-					newLoanId = DB.ExecuteScalar<long>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
+					newLoanId = DB.ExecuteScalar<long>("NL_LoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("OldLoanID", this.oldLoanId));
 
 				if (newLoanId > -1) {
 					this.nlLoanOptions.LoanID = newLoanId;

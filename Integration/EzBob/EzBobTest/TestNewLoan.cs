@@ -69,7 +69,7 @@
 		[Test]
 		public void TestLoanOptions1() {
 			NL_LoanOptions NL_options = new NL_LoanOptions {
-				LoanID = 123,
+				LoanID = 2,
 				StopAutoChargeDate = DateTime.UtcNow,
 				PartialAutoCharging = true,
 				LatePaymentNotification = true,
@@ -83,7 +83,7 @@
 				IsActive = true,
 				Notes = null
 			};
-			var stra = new AddLoanOptions(NL_options, null);
+			var stra = new AddLoanOptions(NL_options, 5137);
 			stra.Execute();
 		}
 

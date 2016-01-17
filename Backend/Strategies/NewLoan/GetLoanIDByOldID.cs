@@ -32,7 +32,7 @@
 
 			try {
 
-				LoanID = DB.ExecuteScalar<long>("NL_LoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@OldLoanID", this.oldLoanId));
+				LoanID = DB.ExecuteScalar<long>("NL_LoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("OldLoanID", this.oldLoanId));
 
 				if (LoanID <= 0) {
 					NL_ExceptionLoanForOldIDNotFound er = new NL_ExceptionLoanForOldIDNotFound(this.oldLoanId);
