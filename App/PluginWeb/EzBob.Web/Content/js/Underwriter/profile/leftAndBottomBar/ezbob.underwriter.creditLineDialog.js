@@ -156,9 +156,12 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		xhr.done(function (res) {
 			var logicalGlueModel = new Backbone.Model(res);
 			var dialog = new EzBob.Underwriter.LogicalGluePopupView({
-				model: logicalGlueModel
+				model: logicalGlueModel,
+				customerID: m.CustomerId
 			});
 			dialog.render();
+			dialog.on('bucketChanged', self.fetchModels, self);
+
 			if (self.medalModel) {
 				self.medalModel.fetch();
 			}
@@ -168,12 +171,18 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			UnBlockUi();
 		});
 	},
+	fetchModels: function () {
+		this.model.fetch();
+		if (this.medalModel) {
+			this.medalModel.fetch();
+		}
+	},
 
 	getCurrentProductSubType: function () {
 		var self = this;
 		var productSubType = _.find(this.cloneModel.get('ProductSubTypes'), function(pst) {
 			return pst.ProductTypeID == self.cloneModel.get('CurrentProductTypeID') &&
-				   pst.OriginID      == self.cloneModel.get('OriginID')             &&
+				   pst.OriginID      == self.model.get('OriginID')             &&
 				   pst.LoanSourceID  == self.cloneModel.get('LoanSourceID');
 		});
 
@@ -308,7 +317,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var originID = this.model.get('OriginID');
 		var gradeID = this.model.get('GradeID');
 		var subGradeID = this.model.get('SubGradeID');
-		var grade = _.find(this.cloneModel.get('Grades'), function (g) { return g.GradeID == gradeID; }) || { Name: '' };
+		var grade = _.find(this.model.get('Grades'), function (g) { return g.GradeID == gradeID; }) || { Name: '' };
 
 		var productSubTypesPerOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function(pst) {
 			return pst.OriginID == originID;
@@ -316,28 +325,28 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		if (productSubTypesPerOrigin.length <= 0) {
 			
-			this.ui.errorMessage.text('No products available for origin: ' + this.cloneModel.get('Origin') + ', and grade: ' + grade.Name);
+			this.ui.errorMessage.text('No products available for origin: ' + this.model.get('Origin') + ', and grade: ' + grade.Name);
 			return;
 		} else {
 			this.ui.errorMessage.empty();
 		}
 
-		var availableProductTypes = _.filter(this.cloneModel.get('ProductTypes'), function (pt) {
+		var availableProductTypes = _.filter(this.model.get('ProductTypes'), function (pt) {
 			var found = _.find(productSubTypesPerOrigin, function (pst) { return pst.ProductTypeID === pt.ProductTypeID; });
 			return found;
 		});
 
-		var availableProducts = _.filter(this.cloneModel.get('Products'), function (p) {
+		var availableProducts = _.filter(this.model.get('Products'), function (p) {
 			var found = _.find(availableProductTypes, function (pt) { return pt.ProductID === p.ProductID; });
 			return found;
 		});
 
-		var availableLoanSources = _.filter(this.cloneModel.get('AllLoanSources'), function (ls) {
+		var availableLoanSources = _.filter(this.model.get('AllLoanSources'), function (ls) {
 			var found = _.find(productSubTypesPerOrigin, function (pst) { return pst.LoanSourceID === ls.Id; });
 			return found;
 		});
 
-		var currentProduct = self.cloneModel.get('CurrentProduct');
+		var currentProduct = self.model.get('CurrentProduct');
 		this.ui.loanProduct.empty();
 		_.each(availableProducts, function (p) {
 			if (p.IsEnabled) {
@@ -381,7 +390,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		var currentDiscountPlanID = self.cloneModel.get('DiscountPlanId');
 		this.ui.discountPlan.empty();
-		_.each(self.cloneModel.get('DiscountPlans'), function (dp) {
+		_.each(self.model.get('DiscountPlans'), function (dp) {
 			var selected = '';
 			if (dp.Id == currentDiscountPlanID) {
 				selected = ' selected="selected" ';
@@ -389,11 +398,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			self.ui.discountPlan.append($('<option value="' + dp.Id + '"' + selected + '>' + dp.Name + '</option>'));
 		});
 		
-		var isFirstLoan = this.cloneModel.get('NumOfLoans') === 0;
+		var isFirstLoan = this.model.get('NumOfLoans') === 0;
 
 		var productSubType = this.getCurrentProductSubType();
 		if (productSubType && productSubType.FundingTypeID) {
-			var fundingType = _.find(this.cloneModel.get('FundingTypes'), function(ft) {
+			var fundingType = _.find(this.model.get('FundingTypes'), function(ft) {
 				return ft.FundingTypeID == productSubType.FundingTypeID;
 			});
 
@@ -404,7 +413,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			}
 		}
 
-		var gradeRange = _.find(this.cloneModel.get('GradeRanges'), function(gr) {
+		var gradeRange = _.find(this.model.get('GradeRanges'), function(gr) {
 			return gr.OriginID     == originID            &&
 				   gr.LoanSourceID == currentLoanSourceID &&
 				   gr.GradeID      == gradeID             &&
@@ -413,10 +422,10 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 
 		if (!gradeRange) {
-			var subGrade = _.find(this.cloneModel.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { Name: ''};
-			var loanSource = _.find(this.cloneModel.get('AllLoanSources'), function (ls) { return ls.Id == currentLoanSourceID; }) || {Name: ''};
+			var subGrade = _.find(this.model.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { Name: ''};
+			var loanSource = _.find(this.model.get('AllLoanSources'), function (ls) { return ls.Id == currentLoanSourceID; }) || {Name: ''};
 			this.ui.errorMessage.text('No pricing for such product combination found origin: ' +
-				this.cloneModel.get('Origin') +
+				this.model.get('Origin') +
 				', grade: ' + grade.Name +
 				', subGrade: ' + subGrade.Name,
 				', loan source: ' + loanSource.Name +
@@ -452,16 +461,21 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 	template: '#logical-glue-template',
 
-	initialize: function () {
+	initialize: function (options) {
 		this.$el.dialog(this.jqoptions());
-	},
+		this.customerID = options.customerID;
+	},//initialize
+
+	events: {
+		'click #logical-glue-set-current-btn': 'setAsCurrent'
+	},//events
 
 	onRender: function() {
 		this.$el.find('[data-toggle="tooltip"]').tooltip({
 			html: true,
 			'placement': 'bottom'
 		});
-	},
+	},//onRender
 
 	jqoptions: function () {
 		var that = this;
@@ -484,7 +498,34 @@ EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 		return {
 			logicalGlue: this.model.toJSON()
 		}
-	}
+	},//serializeData
+
+	setAsCurrent: function () {
+		BlockUi();
+		var uniqueID = this.model.get('UniqueID');
+		var action = '' + window.gRootPath + 'Underwriter/ApplicationInfo/LogicalGlueSetAsCurrent';
+		
+		var postData = {
+			customerID: this.customerID,
+			uniqueID: uniqueID
+		};
+
+		var xhr = $.post(action, postData);
+		var self = this;
+
+		xhr.done(function (res) {
+			self.trigger('bucketChanged');
+			self.close();
+		});
+
+		xhr.always(function () {
+			UnBlockUi();
+		});
+
+		
+		return false;
+	}//setAsCurrent
+
 });
 
 

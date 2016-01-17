@@ -334,10 +334,13 @@
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "NewCreditLineButton")]
 		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
+
+			log.Debug("RunNewCreditLine({0}, {1}) start", Id, newCreditLineOption);
+
 			NewCreditLineOption typedNewCreditLineOption = (NewCreditLineOption)newCreditLineOption;
 			User underwriter = this.users.GetUserByLogin(User.Identity.Name);
 
-			log.Debug("RunNewCreditLine({0}, {1}) start", Id, typedNewCreditLineOption);
+			
 
 			ActionMetaData amd = ExecuteNewCreditLine(underwriter.Id, Id, typedNewCreditLineOption);
 
@@ -473,6 +476,13 @@
 			log.Info("CheckLogicalGlue {0} {1} {2} {3}", customerID, cashRequestID, amount, repaymentPeriod);
 			var result = this.serviceClient.Instance.LogicalGlueGetTryout(this.context.UserId, customerID, amount / repaymentPeriod, true);
 			return Json(result, JsonRequestBehavior.AllowGet);
+		}
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonResult LogicalGlueSetAsCurrent(int customerID, Guid uniqueID) {
+			log.Info("LogicalGlueSetAsCurrent {0} {1}", customerID, uniqueID);
+			var result = this.serviceClient.Instance.LogicalGlueSetAsCurrent(this.context.UserId, customerID, uniqueID);
+			return Json(new { success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]

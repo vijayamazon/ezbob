@@ -14,5 +14,8 @@
 
 		[OperationContract]
 		LogicalGlueResult LogicalGlueGetTryout(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout);
+
+		[OperationContract]
+		BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, Guid uniqueID);
 	} // interface IEzServiceLogicalGlue
 } // namespace  

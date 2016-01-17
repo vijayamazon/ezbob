@@ -4693,6 +4693,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, System.Guid uniqueID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
@@ -6393,6 +6399,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout) {
             return base.Channel.LogicalGlueGetTryoutAsync(underwriterID, customerID, monthlyRepayment, isTryout);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, System.Guid uniqueID) {
+            return base.Channel.LogicalGlueSetAsCurrent(underwriterID, customerID, uniqueID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID) {
+            return base.Channel.LogicalGlueSetAsCurrentAsync(underwriterID, customerID, uniqueID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {

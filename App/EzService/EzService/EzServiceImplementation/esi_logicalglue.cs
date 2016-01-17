@@ -25,7 +25,12 @@
 			var metadata = ExecuteSync(out strategy, customerID, underwriterID, customerID, monthlyRepayment, isTryout);
 			var result = LogicalGlueResult.FromInference(strategy.Inference, customerID, Log, DB);
 			return result;
-		}//LoicalGlueGetTryout
+		}//LogicalGlueGetTryout
+
+		public BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, Guid uniqueID) {
+			//TODO implement
+			return new BoolActionResult();
+		}//LogicalGlueSetAsCurrent
 	}//EzServiceImplementation LogicalGlue
 }//ns
 
