@@ -482,25 +482,37 @@
 	}
 
 	public class AV_LogicalGlueDataModel {
-		public int CompanyId { get; set; }
 		public string TypeOfBusiness { get; set; }
-		public long ServiceLogID { get; set; }
-		public long RequestID { get; set; }
-		public decimal MonthlyRepayment { get; set; }
-		public long ResponseID { get; set; }
-		public DateTime ReceivedTime { get; set; }
-		public int HttpStatus { get; set; }
-		public int ResponseStatus { get; set; }
-		public string TimeoutSource { get; set; }
+
+		public long? ServiceLogID { get; set; }
+		public long? RequestID { get; set; }
+
+		public long? ResponseID { get; set; }
 		public string ErrorMessage { get; set; }
-		public int GradeID { get; set; }
-		public bool HasEquifaxData { get; set; }
-		public string ParsingExceptionType { get; set; }
-		public string ParsingExceptionMessage { get; set; }
-		public long EtlCodeID { get; set; }
-		public long EtlDataID { get; set; }
+		public int? GradeID { get; set; }
+
+		public long? EtlDataID { get; set; }
 		public string Message { get; set; }
 		public string EtlCode { get; set; }
-		public int GradeOriginID { get; set; }
+
+		public int? ModelID { get; set; }
+		public string ErrorCode { get; set; }
+		public long? ModelOutputID { get; set; }
+		public decimal? Score { get; set; }
+
+		//public int HttpStatus { get; set; }
+		//public int ResponseStatus { get; set; }
+		//public DateTime ReceivedTime { get; set; }
+		//public string TimeoutSource { get; set; }
+		//public bool HasEquifaxData { get; set; }
+		//public string ParsingExceptionType { get; set; }
+		//public string ParsingExceptionMessage { get; set; }
+
+		//public int GradeOriginID { get; set; }
+		//public string Name { get; set; } // grade name
+
+		//public long EtlCodeID { get; set; }
+		//public decimal MonthlyRepayment { get; set; }
+		//public int CompanyId { get; set; }
 	}
 }

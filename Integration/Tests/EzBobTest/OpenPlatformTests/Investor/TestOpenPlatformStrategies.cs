@@ -2,10 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using AutomationCalculator.Common;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Database;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -161,6 +163,22 @@
 		public void TestLinkLoanRepaymentToInvestor() {
 			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow);
 			linkOfferToInvestor.Execute();
+		}
+
+		[Test]
+		public void AVAutoRejectTest() {
+			AV_LogicalGlueDataModel model = m_oDB.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", 390),
+				new QueryParameter("CompanyID", 189),
+				new QueryParameter("PlannedPayment", 2931),
+				new QueryParameter("ProcessingDate", DateTime.UtcNow));
+
+			Console.WriteLine("requestID={0}", model.RequestID);
+			Console.WriteLine(model.ErrorMessage);
+			Console.WriteLine(model.Message);
+			Console.WriteLine(model.EtlCode);
+			Console.WriteLine(model.Score);
+			m_oLog.Debug(model.ToString());
 		}
 
 	}

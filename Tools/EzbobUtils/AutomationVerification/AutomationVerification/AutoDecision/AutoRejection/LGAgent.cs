@@ -10,16 +10,16 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class LGAgent {
-		public LGAgent(AutoRejectionArguments args) {
-			this.args = args;
-			Output = new AutoRejectionOutput();
+		public LGAgent(AutoRejectionArguments argss) {
+			args = argss;
 
 			Trail = new RejectionTrail(args.CustomerID, args.CashRequestID, args.Log);
 			Trail.SetTag(args.Tag);
 
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent = new RejectionAgent(DB, Log, CustomerID, Trail.CashRequestID, args.Configs);
+			this.internalAgent = new RejectionAgent(DB, Log, args.CustomerID, Trail.CashRequestID, args.Configs);
 
+			Output = new AutoRejectionOutput();
 			model = null;
 		} // constructor
 
@@ -27,12 +27,10 @@
 
 		public RejectionTrail Trail { get; private set; }
 
-		private readonly AutoRejectionArguments args;
+		public AutoRejectionArguments args { get; private set; }
 
-		private AConnection DB { get { return this.args.DB; } }
-		private ASafeLog Log { get { return this.args.Log; } }
-		private int CustomerID { get { return this.args.CustomerID; } }
-		private DateTime Now { get { return this.args.Now; } }
+		private AConnection DB { get { return args.DB; } }
+		private ASafeLog Log { get { return args.Log; } }
 
 		// old auto-reject with medal (run in parallel)
 		private readonly RejectionAgent internalAgent;
@@ -48,31 +46,29 @@
 		/// </summary>
 		public void MakeDecision() {
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(Now));
+			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(args.Now));
 			this.internalAgent.Trail.SetTag(Trail.Tag);
 			this.internalAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldVerification);
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-				Log.Debug("Secondary LG: checking auto reject for customer {0}...", CustomerID);
+				Log.Debug("Secondary LG: checking auto reject for customer {0}...", args.CustomerID);
 	
 				// get company data at "now" date 
 				model = DB.FillFirst<AV_LogicalGlueDataModel>(
-					"select top 1 h.CompanyId, co.TypeOfBusiness from [dbo].[CustomerCompanyHistory] h join [dbo].[Company] co on co.Id=h.CompanyId and h.CustomerId=@CustomerID and h.[InsertDate] <= @ProcessingDate order by h.[InsertDate] desc", CommandSpecies.Text,
-					new QueryParameter("CustomerID", CustomerID),
-					new QueryParameter("ProcessingDate", Now));
+					"select top 1 co.TypeOfBusiness from CustomerCompanyHistory h join [dbo].[Company] co on co.Id=h.CompanyId where h.CustomerId=@CustomerID and h.CompanyId=@CompanyID and h.InsertDate<=@ProcessingDate order by h.[InsertDate] desc", CommandSpecies.Text,
+					new QueryParameter("CustomerID", args.CustomerID),
+					new QueryParameter("CompanyID", args.CompanyID),
+					new QueryParameter("ProcessingDate", args.Now));
 
-				Log.Debug("Customer {0} has company {1} data at {2:d}", CustomerID, model.CompanyId, Now);
+				Log.Debug("Customer {0} has company {1} of type {3} data at {2:d}", args.CustomerID, args.CompanyID, args.Now, model.TypeOfBusiness);
 
 				// get company data from Customer table 
 				if (model == null) {
-					model = DB.FillFirst<AV_LogicalGlueDataModel>(
-					"select CompanyId, TypeOfBusiness from Customer where Id=@CustomerID", CommandSpecies.Text, new QueryParameter("CustomerID", CustomerID));
+					model = DB.FillFirst<AV_LogicalGlueDataModel>("select TypeOfBusiness from Customer where Id=@CustomerID", CommandSpecies.Text, new QueryParameter("CustomerID", args.CustomerID));
 				}
 
 				TypeOfBusiness typeOfBusiness;
 				Enum.TryParse(model.TypeOfBusiness, out typeOfBusiness);
-
-				Log.Debug("Customer {0} has company {1} of type {2}", CustomerID, model.CompanyId, typeOfBusiness);
 
 				if (typeOfBusiness.IsRegulated() || model == null) {
 					// add InternalFlow step 
@@ -87,35 +83,42 @@
 				StepNoDecision<LogicalGlueFlow>().Init();
 
 				model = DB.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", CustomerID),
-					new QueryParameter("CompanyID", model.CompanyId),
-					new QueryParameter("ProcessingDate", Now));
+					new QueryParameter("CustomerID", args.CustomerID),
+					new QueryParameter("CompanyID", args.CompanyID),
+					new QueryParameter("PlannedPayment", args.MonthlyPayment),
+					new QueryParameter("ProcessingDate", args.Now));
+
+				Log.Debug("{0}", model); 
 
 				// LG data not found
 				if (model == null) {
-					StepNoReject<LGDataFound>(true).Init(false);
+					StepNoDecision<LGDataFound>().Init(false);
 					return;
-				} else
-					StepNoDecision<LGDataFound>().Init(true);
+				}
+
+				StepNoDecision<LGDataFound>().Init(true);
 
 				// LG data returned error
-				if (!string.IsNullOrEmpty(model.ErrorMessage)) {
+				if (!string.IsNullOrEmpty(model.ErrorMessage) || model.Message.Contains("error")) {
 					StepNoReject<LGWithoutError>(true).Init(false);
 					return;
-				} else
-					StepNoDecision<LGWithoutError>().Init(true);
+				}
 
-				if (model.Message.Equals("Hard reject")) {
+				StepNoDecision<LGWithoutError>().Init(true);
+
+				if (model.EtlCode.Equals("Hard reject")) {
 					StepReject<LGHardReject>(true).Init(true);
 					return;
-				} else
-					StepNoDecision<LGHardReject>().Init(false);
+				}
 
-				if (model.GradeID==0) {
+				StepNoDecision<LGHardReject>().Init(false);
+
+				if (model.Score == null || model.Score == 0 || model.GradeID==0 || model.GradeID==null) {
 					StepNoReject<HasBucket>(true).Init(false);
 					return;
-				} else
-					StepNoDecision<HasBucket>().Init(true);
+				}
+
+				StepNoDecision<HasBucket>().Init(true);
 
 				/* TODO
 				if (less than one configuration found) {
