@@ -6,6 +6,7 @@ namespace EzBobTest {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Security.Cryptography;
 	using System.Text;
@@ -256,5 +257,14 @@ False*/
 			dateList.Add(new DateTime(2015, 12, 20));
 		}
 
+
+		[Test]
+		public void TestEnumByString() {
+			string s = "bank transfer";
+			Console.WriteLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s));
+
+			//NLLoanTransactionMethods e = (NLLoanTransactionMethods)Enum.Parse(typeof(NLLoanTransactionMethods), s);
+			//Console.WriteLine(e);
+		}
 	} // class Misc
 } // namespace

@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
+	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
@@ -274,11 +275,12 @@
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
-				var method = Enum.GetName(typeof(NLLoanTransactionMethods), model.PaymentMethod);
+				string nlMethod = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(model.PaymentMethod).Replace(" ", "").Replace("-", "");
+				NLLoanTransactionMethods nlPaymentMethod = (NLLoanTransactionMethods)Enum.Parse(typeof(NLLoanTransactionMethods), nlMethod);
 				var nlPayment = new NL_Payments() {
 					CreatedByUserID = this._context.UserId,
 					Amount = realAmount,
-					PaymentMethodID = (int)Enum.Parse(typeof(NLLoanTransactionMethods), method),
+					PaymentMethodID = (int)nlPaymentMethod,
 					PaymentSystemType = NLPaymentSystemTypes.None,
 				};
 
@@ -309,11 +311,13 @@
 
 				string requestType = string.Format("UW Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);
-				_logRepository.Log(_context.UserId, date, requestType, "Successful", "");
+
+				Log.InfoFormat("Successful. userID {0} at {1}. requestType: {2}", this._context.UserId, date, requestType);
+
 			} catch (PayPointException ex) {
-				_logRepository.Log(customer.Id, DateTime.UtcNow, "Paypoint Manual Payment", "Failed", ex.ToString());
+				Log.ErrorFormat("Paypoint Manual Payment for customer {0}, at {1} failed with error {2}", customer.Id, DateTime.UtcNow, ex);
 			} catch (Exception exx) {
-				_logRepository.Log(customer.Id, DateTime.UtcNow, "Paypoint Manual Payment", "Failed", exx.ToString());
+				Log.ErrorFormat("Paypoint Manual Payment for customer {0}, at {1} failed with error {2}", customer.Id, DateTime.UtcNow, exx);
 			}
 		}
 
