@@ -604,6 +604,49 @@ GeneratePassword manager 123456
 		} // GeneratePassword
 
 		[Activation]
+		private void GenerateUwPasswords() {
+			var uwList = new List<string> {
+				"se", "vitasd", "tomerg", "sharonep", "farleyk", "alexbo", "rosb", "shirik", "stasd", "ezbobpartners",
+				"travism", "galitg", "clareh", "yarons", "sivanc", "assafb", "sarahd", "gadif", "songulo", "bateli",
+				"everline", "darrenh", "russellb", "lirang", "andrea", "sashaf", "mishas", "elinar", "shlomim", "masha",
+				"russell", "scotth", "sailishr", "hanryc", "marius", "stuartd", "tanyag", "nataliem", "jamiem", "guest",
+				"lauren", "hagayj", "dora", "romanp", "inie", "jackiew", "inas", "sofiad", "normanc", "igaell", "louip",
+				"amiyc",
+			};
+
+			int maxLen = uwList.Select(s => s.Length).Max();
+
+			var output = new List<string>();
+
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
+			foreach (string userName in uwList) {
+				var pwd = new DasKennwort();
+				pwd.GenerateSimplePassword(16);
+
+				var pass = pu.Generate(userName, pwd.Data);
+
+				output.Add(string.Format(
+					"User name: '{0}' Password: '{1}' Query: " +
+					"UPDATE Security_User SET Password = NULL, " +
+						"EzPassword = '{2}', " +
+						"Salt = '{3}', " +
+						"CycleCount = '{4}' " +
+					"WHERE " +
+						"UserName = '{5}'",
+					userName.PadRight(maxLen),
+					pwd.Data,
+					pass.Password,
+					pass.Salt,
+					pass.CycleCount,
+					userName
+				));
+			} // for each user name
+
+			this.log.Debug("\n\n{0}\n\n", string.Join("\n", output));
+		} // GenerateUwPasswords
+
+		[Activation]
 		private void GetCashFailed() {
 			int customerId;
 			if (this.cmdLineArgs.Length != 2 || !int.TryParse(this.cmdLineArgs[1], out customerId)) {
