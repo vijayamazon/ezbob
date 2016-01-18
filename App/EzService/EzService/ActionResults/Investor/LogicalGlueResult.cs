@@ -55,6 +55,7 @@
 
 				}
 			} catch (Exception ex) {
+				inference = inference ?? new Inference();
 				log.Error(ex, "Failed to retrieve min max grade scores for bucket {0}", inference.Bucket);
 			}
 
