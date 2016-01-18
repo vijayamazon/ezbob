@@ -51,6 +51,8 @@
 			this.loansForLsaSms = new RptLoansForLsaSms(db, this.log);
 			this.loansForLsaSnailmails = new RptLoansForLsaSnailmails(db, this.log);
 
+			this.log.Msg("Target path: {0}", TargetPath);
+			this.log.Msg("Dropbox root path: {0}", DropboxRootPath);
 			this.log.Msg("Working mode: {0}", this.workingMode);
 		} // constructor
 
