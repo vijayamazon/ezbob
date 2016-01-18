@@ -332,6 +332,10 @@ namespace ConfigManager {
 			get { return this[Variables.PayPointValidateName]; }
 		}
 
+		public virtual VariableValue PendingInvestorNoficationReciever {
+			get { return this[Variables.PendingInvestorNoficationReciever]; }
+		}
+		
 		public virtual VariableValue PostcodeAnywhereEnabled {
 			get { return this[Variables.PostcodeAnywhereEnabled]; }
 		}

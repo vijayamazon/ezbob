@@ -173,62 +173,56 @@
 	</script>
 
 	<script id="d-getCash-template-apply" type="text/template">
-		<h3>Cash</h3>
-		<dl>
-			<dt>Available credit:</dt>
-			<dd class="dashes">---</dd>
-		</dl>
-		<dl>
-			<dt>Offer valid:</dt>
-			<dd class="dashes">---</dd>
-		</dl>
-		<button href="#" class="button btn-green apply-for-loan refresh-account-help clean-btn" ui-event-control-id="dashboard:request-cash">Request cash</button>
+	<h3>New loan request</h3>
+	<div class="request-cash-sliders">sliders</div>
+	<div class="apply-button-wrapper">
+		<button href="#" class="button btn-green apply-for-loan refresh-account-help clean-btn" ui-event-control-id="dashboard:request-cash">Get funds</button>
+	</div>
+	<div class="hide">
+		<div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
 
-		<div class="hide">
-			<div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
+		<div id="refresh-accounts-dlg" class="help_window">
+			<h2>Please update the following accounts</h2>
 
-			<div id="refresh-accounts-dlg" class="help_window">
-				<h2>Please update the following accounts</h2>
+			<p></p>
 
-				<p></p>
+			<ul class="account-list"></ul>
 
-				<ul class="account-list"></ul>
+			<p></p>
 
-				<p></p>
+			<div class="skip-refresh-accounts-container"><a href="#" class="button btn-green skip-refresh-accounts ev-btn-org" ui-event-control-id="refresh-account:skip">Skip</a></div>
 
-				<div class="skip-refresh-accounts-container"><a href="#" class="button btn-green skip-refresh-accounts ev-btn-org" ui-event-control-id="refresh-account:skip">Skip</a></div>
+			<p></p>
+		</div>
 
-				<p></p>
+		<div id="refresh_yodlee_help" class="help_window">
+			<h2>Refresh bank account</h2>
+			<p>
+				Please click continue button below to refresh your bank account.<br />
+				You will be redirected, this will take around 30 seconds.
+			</p>
+			<br>
+			<div class="dialogue_buttons_container">
+				<a href="#" class="button btn-grey clean-btn" id="cancelYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee-cancel">Cancel</a>
+				<a href="#" target="_blank" class="button btn-green ev-btn-org" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
 			</div>
+			<div class="clear"></div>
+			<hr>
+			<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
+		</div>
 
-			<div id="refresh_yodlee_help" class="help_window">
-				<h2>Refresh bank account</h2>
-				<p>
-					Please click continue button below to refresh your bank account.<br />
-					You will be redirected, this will take around 30 seconds.
-				</p>
-				<br>
-				<div class="dialogue_buttons_container">
-					<a href="#" class="button btn-grey clean-btn" id="cancelYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee-cancel">Cancel</a>
-					<a href="#" target="_blank" class="button btn-green ev-btn-org" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
-				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
-			</div>
+		<div id="refresh_ekm_help" class="help_window">
+			<h2>Update ekmpowershop account credentials</h2>
+			<p>Your credentials changed, please provide new credentials below.</p>
+			<p class="error" style="color: red; min-height: 32px;" id="update-ekm-error"></p>
+			<br />
 
-			<div id="refresh_ekm_help" class="help_window">
-				<h2>Update ekmpowershop account credentials</h2>
-				<p>Your credentials changed, please provide new credentials below.</p>
-				<p class="error" style="color: red; min-height: 32px;" id="update-ekm-error"></p>
-				<br />
-
-				@EzForm.InputTextWizard(new EzInputBuilder(
+			@EzForm.InputTextWizard(new EzInputBuilder(
 					"refresh_ekm_login",
 					"ekm login",
 					name: "refresh_ekm_login",
 					type: "text",
-					isDisabled: true,	
+					isDisabled: true,
 					cls: "form_field",
 					isRequired: true,
 					statusIcon: false,
@@ -236,7 +230,7 @@
 					uiEventControlID: "refresh-account:ekm_login"
 				), origin: origin)
 
-				@EzForm.InputTextWizard(new EzInputBuilder(
+			@EzForm.InputTextWizard(new EzInputBuilder(
 					"refresh_ekm_password",
 					"Password",
 					name: "refresh_ekm_password",
@@ -248,29 +242,29 @@
 					uiEventControlID: "refresh-account:ekm_password"
 				), origin: origin)
 
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<a href="#" class="button btn-green pull-right ev-btn-org" id="refreshEkmBtn" ui-event-control-id="refresh-account:ekm">Continue</a>
-						<a href="#" class="button btn-grey pull-right clean-btn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
-					</div>
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<a href="#" class="button btn-green pull-right ev-btn-org" id="refreshEkmBtn" ui-event-control-id="refresh-account:ekm">Continue</a>
+					<a href="#" class="button btn-grey pull-right clean-btn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
 				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
 			</div>
+			<div class="clear"></div>
+			<hr>
+			<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
+		</div>
 
-			<div id="refresh_hmrc_help" class="help_window">
-				<h2>Update HMRC account credentials</h2>
-				<p>Your credentials changed, please provide new credentials below.</p>
-				<p class="error" style="color: red; min-height: 32px;" id="update-hmrc-error"></p>
-				<br />
+		<div id="refresh_hmrc_help" class="help_window">
+			<h2>Update HMRC account credentials</h2>
+			<p>Your credentials changed, please provide new credentials below.</p>
+			<p class="error" style="color: red; min-height: 32px;" id="update-hmrc-error"></p>
+			<br />
 
-				@EzForm.InputTextWizard(new EzInputBuilder(
+			@EzForm.InputTextWizard(new EzInputBuilder(
 					"refresh_hmrc_login",
 					"User ID",
 					name: "refresh_hmrc_login",
 					type: "text",
-					isDisabled: true,	
+					isDisabled: true,
 					cls: "form_field",
 					isRequired: true,
 					statusIcon: false,
@@ -278,7 +272,7 @@
 					uiEventControlID: "refresh-account:hmrc_login"
 				), origin: origin)
 
-				@EzForm.InputTextWizard(new EzInputBuilder(
+			@EzForm.InputTextWizard(new EzInputBuilder(
 					"refresh_hmrc_password",
 					"Password",
 					name: "refresh_hmrc_password",
@@ -290,46 +284,46 @@
 					uiEventControlID: "refresh-account:hmrc_password"
 				), origin: origin)
 
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<a href="#" class="button btn-green pull-right ev-btn-org" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
-						<a href="#" class="button btn-grey pull-right clean-btn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:hmrc-cancel">Cancel</a>
-					</div>
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<a href="#" class="button btn-green pull-right ev-btn-org" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
+					<a href="#" class="button btn-grey pull-right clean-btn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:hmrc-cancel">Cancel</a>
 				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
 			</div>
+			<div class="clear"></div>
+			<hr>
+			<div class="help_security">@Html.Raw(UiCustomerOrigin.GetSecuritySeals(ViewBag))</div>
 		</div>
+	</div>
 
-		<div class="trustpilot-ezbob">
-			<div class="skip">
-				<h3>Rate us on Trustpilot</h3>
-				<a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
-					<span class="ui-icon ui-icon-closethick">skip</span>
-				</a>
-			</div>
-			<div class="trust-caption">
-				Thank you for requesting cash,<br />
-				your request is been processed.
-			</div>
-			<div class="rate">
-				<div class="text">
-					<div>Help us grow,</div>
-					<div>ezbob will help</div>
-					<div class="strong">your business</div>
-					<div class="strong">grow too!</div>
-				</div>
-
-				<a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image">
-					<img src="../../../../Content/img/trustpilot.png" alt="Rate us!" />
-				</a>
-			</div>
-			<div class="rate">
-				<a class="text-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-text">Write a review</a>
-			</div>
+	<div class="trustpilot-ezbob">
+		<div class="skip">
+			<h3>Rate us on Trustpilot</h3>
+			<a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
+				<span class="ui-icon ui-icon-closethick">skip</span>
+			</a>
 		</div>
-	</script>
+		<div class="trust-caption">
+			Thank you for requesting cash,<br />
+			your request is been processed.
+		</div>
+		<div class="rate">
+			<div class="text">
+				<div>Help us grow,</div>
+				<div>ezbob will help</div>
+				<div class="strong">your business</div>
+				<div class="strong">grow too!</div>
+			</div>
+
+			<a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image">
+				<img src="../../../../Content/img/trustpilot.png" alt="Rate us!" />
+			</a>
+		</div>
+		<div class="rate">
+			<a class="text-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-text">Write a review</a>
+		</div>
+	</div>
+</script>
 
 	<script id="processing-message-template" type="text/template">
 		<h2 class="header-message <%- cls %>"><%= Message %></h2>

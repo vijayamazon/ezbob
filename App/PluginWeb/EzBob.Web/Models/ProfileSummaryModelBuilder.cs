@@ -18,7 +18,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using MoreLinq;
 	using Newtonsoft.Json;
-	using NHibernate;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -26,10 +25,10 @@
 	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
 
 	public class ProfileSummaryModelBuilder {
-		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, CreditBureauModelBuilder creditBureauModelBuilder) {
-			_decisions = decisions;
-			_creditBureauModelBuilder = creditBureauModelBuilder;
-			serviceClient = new ServiceClient();
+		public ProfileSummaryModelBuilder(CreditBureauModelBuilder creditBureauModelBuilder, IEzbobWorkplaceContext context, ServiceClient serviceClient) {
+			this.creditBureauModelBuilder = creditBureauModelBuilder;
+			this.serviceClient = serviceClient;
+			this.context = context;
 		}
 
 		public ProfileSummaryModel CreateProfile(Customer customer, CreditBureauModel creditBureau) {
@@ -71,7 +70,8 @@
 		}
 
 		private void AddDecisionHistory(ProfileSummaryModel summary, Customer customer) {
-			summary.DecisionHistory = _decisions.ByCustomer(customer)
+			var decisionHistories = this.serviceClient.Instance.LoadDecisionHistory(customer.Id, this.context.UserId);
+			summary.DecisionHistory = decisionHistories.Model
 				.Select(DecisionHistoryModel.Create)
 				.OrderBy(x => x.Date)
 				.ToList();
@@ -247,13 +247,12 @@
 				} // if
 			} // if
 
-			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			try {
 				if (customer.PersonalInfo != null) {
 					DateTime? companySeniority =
-						serviceClient.Instance.GetCompanySeniority(customer.Id,
+						this.serviceClient.Instance.GetCompanySeniority(customer.Id,
 							customer.PersonalInfo.TypeOfBusiness.Reduce() ==
-							TypeOfBusinessReduced.Limited, context.UserId)
+							TypeOfBusinessReduced.Limited, this.context.UserId)
 							.Value;
 					if (companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow &&
 						(companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month ||
@@ -273,12 +272,12 @@
 			log.Debug("Just FYI: BuildLandRegistryAlerts() returned {0}", bResult ? "true" : "false");
 
 			BuildDataAlerts(customer, summary);
-			BuildCompanyCaisAlerts(customer, summary, context.UserId);
+			BuildCompanyCaisAlerts(customer, summary, this.context.UserId);
 
 			bool hasMortgage = false;
 			bool isHomeOwner = customer.PropertyStatus != null && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties);
 			try {
-				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortgageData(context.UserId, customer.Id)
+				hasMortgage = this.serviceClient.Instance.LoadExperianConsumerMortgageData(this.context.UserId, customer.Id)
 					.Value.NumMortgages > 0;
 			} catch (Exception e) {
 				log.Debug(e, "Error fetching customer's mortgages.");
@@ -298,10 +297,10 @@
 				});
 			} // if
 
-			_medalCalculationsRepository = ObjectFactory.GetInstance<MedalCalculationsRepository>();
-			MedalCalculations medalCalculationsRecord = _medalCalculationsRepository.GetActiveMedal(customer.Id);
+			this.medalCalculationsRepository = ObjectFactory.GetInstance<MedalCalculationsRepository>();
+			MedalCalculations medalCalculationsRecord = this.medalCalculationsRepository.GetActiveMedal(customer.Id);
 
-			if (customer.Company != null && (customer.Company.TypeOfBusiness == TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2) {
+			if (customer.Company != null && (customer.Company.TypeOfBusiness == EZBob.DatabaseLib.Model.Database.TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2) {
 				// The customer should have medal
 				if (medalCalculationsRecord == null) {
 					summary.Alerts.Errors.Add(new AlertModel {
@@ -316,8 +315,8 @@
 						AlertType = AlertType.Error.DescriptionAttr()
 					});
 				} // if
-			} else if (customer.Company != null && (customer.Company.TypeOfBusiness != TypeOfBusiness.LLP &&
-													customer.Company.TypeOfBusiness != TypeOfBusiness.Limited) ||
+			} else if (customer.Company != null && (customer.Company.TypeOfBusiness != EZBob.DatabaseLib.Model.Database.TypeOfBusiness.LLP &&
+													customer.Company.TypeOfBusiness != EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Limited) ||
 						customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") > 1) {
 				summary.Alerts.Infos.Add(new AlertModel {
 					Abbreviation = "MDL",
@@ -363,7 +362,7 @@
 
 		private void BuildCompanyCaisAlerts(Customer customer, ProfileSummaryModel summary, int userId) {
 			var errors = new StringBuilder();
-			CompanyCaisDataActionResult companyCaisData = serviceClient.Instance.GetCompanyCaisDataForAlerts(userId, customer.Id);
+			CompanyCaisDataActionResult companyCaisData = this.serviceClient.Instance.GetCompanyCaisDataForAlerts(userId, customer.Id);
 
 			if (companyCaisData.NumOfCurrentDefaultAccounts > 0)
 				AppendLi(errors, string.Format("Company has {0} default accounts", companyCaisData.NumOfCurrentDefaultAccounts));
@@ -406,14 +405,14 @@
 			var creditBureau = new CreditBureau();
 
 			if (creditBureauModel == null)
-				creditBureauModel = _creditBureauModelBuilder.Create(customer);
+				creditBureauModel = this.creditBureauModelBuilder.Create(customer);
 
 			if (creditBureauModel.Consumer != null && creditBureauModel.Consumer.ServiceLogId != null) {
 				creditBureau.CreditBureauScore = creditBureauModel.Consumer.Score;
 				creditBureau.TotalDebt = creditBureauModel.Consumer.TotalAccountBalances;
 				creditBureau.TotalMonthlyRepayments = creditBureauModel.Consumer.TotalMonthlyRepayments;
 				creditBureau.CreditCardBalances = creditBureauModel.Consumer.CreditCardBalances;
-				creditBureau.BorrowerType = TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
+				creditBureau.BorrowerType = customer.PersonalInfo.TypeOfBusiness.TypeOfBussinessForWeb();
 				creditBureau.FinancialAccounts = creditBureauModel.Consumer.AccountsInformation.Count();
 				creditBureau.ThinFile = creditBureau.FinancialAccounts == 0 ? "Yes" : "No";
 				// patch to fix crashing underwriter
@@ -719,34 +718,10 @@
 			return LightsState.Passed;
 		}
 
-		private LightsState ObtainMarketPlacesState(List<MP_CustomerMarketPlace> marketplaces) {
-			if (marketplaces.Any(x => (!String.IsNullOrEmpty(x.UpdateError))))
-				return LightsState.Error;
-
-			var session = ObjectFactory.GetInstance<ISession>();
-			foreach (MP_CustomerMarketPlace mp in marketplaces) {
-				string currentState = (string)session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}", mp.Id))
-					.UniqueResult();
-				if (currentState == "In progress" || currentState == "BG launch")
-					return LightsState.InProgress;
-			}
-
-			return LightsState.Passed;
-		}
-
-		private LightsState ObtainPaymentsAccountsState(Customer customer) {
-			if (customer.BWAResult == "Warning")
-				return LightsState.Warning;
-			if (customer.BWAResult == "Rejected")
-				return LightsState.Warning;
-
-			return LightsState.Passed;
-		}
-
 		private static readonly ASafeLog log = new SafeILog(typeof (ProfileSummaryModelBuilder));
-		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
-		private readonly IDecisionHistoryRepository _decisions;
+		private readonly CreditBureauModelBuilder creditBureauModelBuilder;
 		private readonly ServiceClient serviceClient;
-		private MedalCalculationsRepository _medalCalculationsRepository;
+		private MedalCalculationsRepository medalCalculationsRepository;
+		private readonly IEzbobWorkplaceContext context;
 	}
 }

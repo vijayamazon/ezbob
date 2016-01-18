@@ -7,6 +7,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.SalesForce;
@@ -268,7 +269,23 @@
 			return true;
 		} // RejectCustomer
 
+
 		private bool ApproveCustomer(NL_Decisions newDecision) {
+			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID, this.decisionModel.ForceInvestor, this.decisionModel.InvestorID);
+			linkOfferToInvestor.Execute();
+
+			Log.Info("ApproveCustomer Decision {0} for Customer {1} cr {2} OP {3} FoundInvestor {4}",
+				this.decisionToApply.CashRequest.UnderwriterDecision,
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ID,
+				linkOfferToInvestor.IsForOpenPlatform, 
+				linkOfferToInvestor.FoundInvestor);
+
+			if (linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
+				PendingInvestor(newDecision);
+				return false;
+			}
+
 			this.decisionToApply.Customer.DateApproved = this.now;
 			this.decisionToApply.Customer.ApprovedReason = this.decisionModel.reason;
 
@@ -388,7 +405,26 @@
 			});
 
 			return true;
-		} // ApproveCustomer
+		}// ApproveCustomer
+
+		private void PendingInvestor(NL_Decisions newDecision) {
+			Log.Info("Investor not found for customer {0} cr {1}, mark as pending investor",
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ID);
+
+			this.decisionToApply.Customer.CreditResult = CreditResultStatus.PendingInvestor.ToString();
+			this.decisionToApply.CashRequest.UnderwriterDecision = CreditResultStatus.PendingInvestor.ToString();
+			SaveDecision<ManuallySuspend>();
+
+			var notifyRiskPendingInvestorCustomer = new NotifyRiskPendingInvestorOffer(
+				this.decisionToApply.Customer.ID,
+				this.currentState.OfferedCreditLine,
+				this.currentState.OfferValidUntil
+			);
+			notifyRiskPendingInvestorCustomer.Execute();
+
+			//TODO newDecision PendingInvestor status
+		}
 
 		private bool SaveDecision<T>() where T : AApplyManualDecisionBase {
 			string result;

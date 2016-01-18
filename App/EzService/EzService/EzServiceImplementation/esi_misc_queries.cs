@@ -301,6 +301,18 @@
 			};
 		} // BuildMultiBrandLoanSummary
 
+		public DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID) {
+			Ezbob.Backend.Strategies.Misc.LoadDecisionHistory instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, underwriterID, customerID);
+
+			return new DecisionHistoryResult {
+				MetaData = amd,
+				Model = instance.Result,
+			};
+
+		}
+
 		public MessagesListActionResult LoadMessagesSentToUser(int userID) {
 			LoadMessagesSentToUser instance;
 

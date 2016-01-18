@@ -77,10 +77,10 @@
     <None Include="Service References\EzServiceReference\EchoSignLib.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ApplicationInfo.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.Investor.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.NewLoan.xsd">
@@ -92,10 +92,19 @@
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.NewLoan.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.xsd">
@@ -110,7 +119,16 @@
     <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EzService.ActionResults.Investor.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
@@ -128,6 +146,9 @@
     </None>
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AccountingDataResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -207,6 +228,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.DecimalActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.DecisionHistoryResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -238,6 +262,12 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LoanCommissionDefaultsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LogicalGlueResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListInvestorsResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LotteryActionResult.datasource">
@@ -279,6 +309,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SetPasswordActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SchedulerDataResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -288,7 +321,13 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringStringMapActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.TransactionsDataResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.UserLoginActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.UserSignupActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.VatReturnDataActionResult.datasource">

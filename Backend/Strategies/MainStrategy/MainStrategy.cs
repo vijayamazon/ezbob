@@ -3,13 +3,15 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Threading.Tasks;
+	using System.Web;
+	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.Exceptions;
@@ -18,14 +20,18 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
+	using Ezbob.Integration.LogicalGlue;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
 	using LandRegistryLib;
+	using MailApi;
 	using SalesForceLib.Models;
 
-	public class MainStrategy : AStrategy {
+	public class MainStrategy : AMainStrategyBase {
 		public MainStrategy(
 			int underwriterID,
 			int customerID,
@@ -37,7 +43,7 @@
 		) {
 			UnderwriterID = underwriterID;
 			this.newCreditLineOption = newCreditLine;
-			this.avoidAutomaticDecision = avoidAutoDecision;
+			this.avoidAutomaticDecision = (avoidAutoDecision == 1) || newCreditLine.AvoidAutoDecision();
 			this.finishWizardArgs = fwa;
 			this.overrideApprovedRejected = true;
 			this.cashRequestID = new InternalCashRequestID(cashRequestID);
@@ -73,7 +79,7 @@
 
 		public int UnderwriterID { get; private set; }
 
-		public int CustomerID {
+		public override int CustomerID {
 			get { return this.customerDetails.ID; }
 		} // CustomerID
 
@@ -130,7 +136,7 @@
 		} // SkipEverything
 
 		private void StandardFlow() {
-			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
+			if (this.newCreditLineOption.UpdateData()) {
 				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
 				new Staller(CustomerID, this.mailer)
@@ -140,10 +146,8 @@
 				ExecuteAdditionalStrategies();
 			} // if
 
-			if (!this.customerDetails.IsTest) {
-				var fraudChecker = new FraudChecker(CustomerID, FraudMode.FullCheck);
-				fraudChecker.Execute();
-			} // if
+			if (!this.customerDetails.IsTest)
+				new FraudChecker(CustomerID, FraudMode.FullCheck).Execute();
 
 			ForceNhibernateResync.ForCustomer(CustomerID);
 
@@ -306,7 +310,7 @@
 			);
 		} // CapOffer
 
-		private void ProcessApprovals() {
+		private bool ApprovalPreconditions() {
 			bool bContinue = true;
 
 			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -320,12 +324,7 @@
 				bContinue = false;
 			} // if
 
-			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision && bContinue) {
-				Log.Info("Not processing approvals: {0} option selected.", this.newCreditLineOption);
-				bContinue = false;
-			} // if
-
-			if (this.avoidAutomaticDecision == 1 && bContinue) {
+			if (this.avoidAutomaticDecision && bContinue) {
 				Log.Info("Not processing approvals: automatic decisions should be avoided.");
 				bContinue = false;
 			} // if
@@ -349,6 +348,12 @@
 				Log.Info("Not processing approvals: auto rejection is disabled.");
 				bContinue = false;
 			} // if
+
+			return bContinue;
+		} // ApprovalPreconditions
+
+		private void ProcessApprovals() {
+			bool bContinue = ApprovalPreconditions();
 
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (EnableAutomaticReApproval && bContinue) {
@@ -377,33 +382,15 @@
 			} else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
 
-			if (EnableAutomaticApproval && bContinue) {
-				var aAgent = new Approval(
-					CustomerID,
-					this.cashRequestID,
+			if (this.customerDetails.IsAlibaba && bContinue) {
+				Log.Info("Not processing auto-approval: Alibaba customer.");
 					this.nlCashRequestID,
-					this.offeredCreditLine,
-					this.medal.MedalClassification,
-					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
-					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
-					DB,
-					Log
-				).Init();
+				bContinue = false;
+			} // if
 
-				aAgent.MakeDecision(this.autoDecisionResponse, this.tag);
-
-				if (aAgent.WasMismatch) {
-					this.wasMismatch = true;
-					bContinue = false;
-
-					Log.Warn("Mismatch happened while executing approval, automation aborted.");
-				} else {
-					bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
-
-					if (!bContinue)
-						Log.Debug("Auto approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
-				} // if
-			} else {
+			if (EnableAutomaticApproval && bContinue)
+				bContinue = DoAutoApproval();
+			else {
 				Log.Debug(
 					"Not processed auto approval: " +
 					"it is currently disabled in configuration or decision has already been made earlier."
@@ -433,12 +420,192 @@
 			} // if
 		} // ProcessApprovals
 
-		private void ProcessRejections() {
-			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision)
-				return;
+		private bool DoAutoApproval() {
+			bool bContinue;
 
-			if (this.avoidAutomaticDecision == 1)
+			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
+				CustomerID,
+				this.cashRequestID,
+				DateTime.UtcNow,
+				this.offeredCreditLine,
+				this.medal.MedalClassification,
+				(AutomationCalculator.Common.MedalType)this.medal.MedalType,
+				(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
+				DB,
+				Log
+			).Init();
+
+			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Checking auto approve...";
+
+			aAgent.MakeAndVerifyDecision(this.tag);
+
+			if (aAgent.ExceptionWhileDeciding) {
+				bContinue = false;
+
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception - " + aAgent.Trail.UniqueID;
+				this.autoDecisionResponse.AutoApproveAmount = 0;
+
+				Log.Alert(
+					"Switching to manual decision: exception during  Auto Approval for customer {0}, trail id is {1}.",
+					CustomerID,
+					aAgent.Trail.UniqueID.ToString("N")
+				);
+
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.UserStatus = Status.Manual;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
+			} else if (aAgent.WasMismatch) {
+				this.wasMismatch = true;
+				bContinue = false;
+
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Mismatch - " + aAgent.Trail.UniqueID;
+				this.autoDecisionResponse.AutoApproveAmount = 0;
+
+				Log.Alert(
+					"Switching to manual decision: Auto Approval implementations " +
+					"have not reached the same decision for customer {0}, trail id is {1}.",
+					CustomerID,
+					aAgent.Trail.UniqueID.ToString("N")
+				);
+
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.UserStatus = Status.Manual;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
+			}  else {
+				bContinue = !aAgent.Trail.HasDecided;
+
+				this.autoDecisionResponse.LoanOfferUnderwriterComment =
+					aAgent.Trail.GetDecisionName() +
+					" - " +
+					aAgent.Trail.UniqueID;
+				this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+
+				Log.Msg(
+					"Both Auto Approval implementations have reached the same decision: {0}approved",
+					aAgent.Trail.HasDecided ? string.Empty : "not "
+				);
+
+				this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+			} // if
+
+			if (bContinue)
+				return true;
+
+			try {
+				CreateOffer(aAgent);
+			} catch (Exception e) {
+				Log.Alert(e, "Exception during creating an offer for customer {0}.", CustomerID);
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception in offer - " + aAgent.Trail.UniqueID;
+			} // try
+
+			return false;
+		} // DoAutoApproval
+
+		private void CreateOffer(ICreateOfferInputData offerInputData) {
+			ApprovalTrail approvalTrail = offerInputData.Trail;
+
+			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+
+			if (sr.IsEmpty)
+				throw new Exception("Failed to detect default loan source.");
+
+			int loanCount = DB.ExecuteScalar<int>(
+				"GetCustomerLoanCount",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", CustomerID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			int loanSourceID = sr["LoanSourceID"];
+			int repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
+
+			OfferResult offerResult;
+
+			if (offerInputData.LogicalGlueFlowFollowed) {
+				offerResult = null; // TODO create offer for Logical Glue
+			} else {
+				var offerDualCalculator = new OfferDualCalculator(
+					CustomerID,
+					DateTime.UtcNow,
+					this.autoDecisionResponse.AutoApproveAmount,
+					loanCount > 0,
+					this.medal.MedalClassification,
+					loanSourceID,
+					repaymentPeriod
+					);
+
+				offerResult = offerDualCalculator.CalculateOffer();
+			} // if
+
+			if (offerResult == null || offerResult.IsError) {
+				Log.Alert(
+					"Customer {1} - will use manual. Offer result: {0}",
+					offerResult != null ? offerResult.Description : "",
+					CustomerID
+				);
+
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.UserStatus = Status.Manual;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Calculator failure - " + approvalTrail.UniqueID;
 				return;
+			} // if
+
+			if (CurrentValues.Instance.AutoApproveIsSilent) {
+				this.autoDecisionResponse.HasApprovalChance = true;
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.UserStatus = Status.Manual;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Silent Approve - " + approvalTrail.UniqueID;
+
+				NotifyAutoApproveSilentMode(
+					this.autoDecisionResponse.AutoApproveAmount,
+					offerResult.Period,
+					offerResult.InterestRate / 100m,
+					offerResult.SetupFee / 100m,
+					approvalTrail
+				);
+
+				return;
+			} // if
+
+			bool investorFound = true; // TODO look for investor if Open Platform.
+
+			if (!investorFound) {
+				Log.Info("Customer {0} - will use manual because investor was not found.", CustomerID);
+
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.UserStatus = Status.Manual;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Investor not found - " + approvalTrail.UniqueID;
+			} else {
+				this.autoDecisionResponse.HasApprovalChance = true;
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
+				this.autoDecisionResponse.UserStatus = Status.Approved;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Approve;
+				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Approval";
+
+				this.autoDecisionResponse.DecisionName = "Approval";
+				this.autoDecisionResponse.AppValidFor =
+					DateTime.UtcNow.AddDays(approvalTrail.MyInputData.MetaData.OfferLength);
+				this.autoDecisionResponse.Decision = DecisionActions.Approve;
+				this.autoDecisionResponse.LoanOfferEmailSendingBannedNew =
+					approvalTrail.MyInputData.MetaData.IsEmailSendingBanned;
+
+				// Use offer calculated data
+				this.autoDecisionResponse.RepaymentPeriod = offerResult.Period;
+				this.autoDecisionResponse.LoanSourceID = loanSourceID;
+				this.autoDecisionResponse.LoanTypeID = offerResult.LoanTypeId;
+				this.autoDecisionResponse.InterestRate = offerResult.InterestRate / 100;
+				this.autoDecisionResponse.SetupFee = offerResult.SetupFee / 100;
+			} // if
+		} // CreateOffer
+
+		private void ProcessRejections() {
+			if (this.avoidAutomaticDecision) {
+				Log.Debug("Not processing auto-rejections: auto decisions should be avoided.");
+				return;
+			} // if
 
 			if (EnableAutomaticReRejection) {
 				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log);
@@ -451,21 +618,46 @@
 				} // if
 			} // if
 
-			if (this.autoDecisionResponse.IsReRejected)
+			if (this.autoDecisionResponse.IsReRejected) {
+				Log.Debug("Not processing auto-rejection: re-rejected.");
 				return;
+			} // if
 
-			if (!EnableAutomaticRejection)
+			if (!EnableAutomaticRejection) {
+				Log.Debug("Not processing auto-rejection: auto-rejection is disabled.");
 				return;
+			} // if
 
-			if (this.customerDetails.IsAlibaba)
+			if (this.customerDetails.IsAlibaba) {
+				Log.Debug("Not processing auto-rejection: Alibaba customer.");
 				return;
+			} // if
 
-			var rAgent = new Agent(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log).Init();
-			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
+			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
+				new AutoRejectionArguments {
+					CustomerID = CustomerID,
+					CashRequestID = this.cashRequestID,
+					Now = DateTime.UtcNow,
+					DB = DB,
+					Log = Log,
+					CompanyID = CompanyID,
+					MonthlyPayment = MonthlyPayment,
+				}
+			);
+
+			rAgent.MakeAndVerifyDecision(this.tag);
 
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;
 				Log.Warn("Mismatch happened while executing rejection, automation aborted.");
+			} else if (rAgent.Trail.HasDecided) {
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
+				this.autoDecisionResponse.UserStatus = Status.Rejected;
+				this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
+				this.autoDecisionResponse.DecisionName = "Rejection";
+				this.autoDecisionResponse.Decision = DecisionActions.Reject;
 			} // if
 		} // ProcessRejections
 
@@ -527,6 +719,9 @@
 			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
+					NLFeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee
+						? NLFeeTypes.ServicingFee
+						: NLFeeTypes.SetupFee;
 
 				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.autoDecisionResponse.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
 				if (this.autoDecisionResponse.SpreadSetupFee) {
@@ -595,15 +790,13 @@
 			} // switch
 		} // UpdateSalesForceOpportunity
 
-		private void ExecuteAdditionalStrategies() {
-			var preData = new PreliminaryData(CustomerID);
-
+		private void DoConsumerCheck(PreliminaryData preData) {
 			new ExperianConsumerCheck(CustomerID, null, false)
 				.PreventSilentAutomation()
 				.Execute();
 
-			if (preData.TypeOfBusiness != "Entrepreneur") {
-				Library.Instance.DB.ForEachRowSafe(
+			if (preData.TypeOfBusiness != TypeOfBusiness.Entrepreneur) {
+				Strategies.Library.Instance.DB.ForEachRowSafe(
 					sr => {
 						int appDirId = sr["DirId"];
 						string appDirName = sr["DirName"];
@@ -620,17 +813,23 @@
 					new QueryParameter("CustomerId", CustomerID)
 				);
 			} // if
+		} // DoConsumerCheck
 
+		private void DoCompanyCheck(PreliminaryData preData) {
 			if (preData.LastStartedMainStrategyEndTime.HasValue) {
-				Library.Instance.Log.Info("Performing experian company check");
+				Strategies.Library.Instance.Log.Info("Performing experian company check");
 				new ExperianCompanyCheck(CustomerID, false)
 					.PreventSilentAutomation()
 					.Execute();
 			} // if
+		} // DoCompanyCheck
 
+		private void DoAmlCheck(PreliminaryData preData) {
 			if (preData.LastStartedMainStrategyEndTime.HasValue)
 				new AmlChecker(CustomerID).PreventSilentAutomation().Execute();
+		} // DoAmlCheck
 
+		private void DoBwaCheck(PreliminaryData preData) {
 			bool shouldRunBwa =
 				preData.AppBankAccountType == "Personal" &&
 				preData.BwaBusinessCheck == "1" &&
@@ -639,9 +838,38 @@
 
 			if (shouldRunBwa)
 				new BwaChecker(CustomerID).Execute();
+		} // DoBwaCheck
 
-			Library.Instance.Log.Info("Getting Zoopla data for customer {0}", CustomerID);
+		private void DoZooplaCheck() {
+			Strategies.Library.Instance.Log.Info("Getting Zoopla data for customer {0}", CustomerID);
 			new ZooplaStub(CustomerID).Execute();
+		} // DoZooplaCheck
+
+		private void UpdateLogicalGlue(PreliminaryData preData) {
+			if (preData.TypeOfBusiness.IsRegulated()) {
+				Log.Debug("Not updating Logical Glue data: customer {0} has a regulated company.", CustomerID);
+				return;
+			} // if
+
+			Log.Debug("Updating Logical Glue data: customer {0} has a non-regulated company.", CustomerID);
+
+			try {
+				InjectorStub.GetEngine().GetInference(CustomerID, 0, false, GetInferenceMode.DownloadIfOld);
+				Log.Debug("Updated Logical Glue data for customer {0}.", CustomerID);
+			} catch (Exception e) {
+				Log.Warn(e, "Logical Glue data was not updated for customer {0}.", CustomerID);
+			} // try
+		} // UpdateLogicalGlue
+
+		private void ExecuteAdditionalStrategies() {
+			var preData = new PreliminaryData(CustomerID);
+
+			UpdateLogicalGlue(preData);
+			DoConsumerCheck(preData);
+			DoCompanyCheck(preData);
+			DoAmlCheck(preData);
+			DoBwaCheck(preData);
+			DoZooplaCheck();
 		} // ExecuteAdditionalStrategies
 
 		private static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
@@ -806,11 +1034,7 @@
 		} // CreateCashRequest
 
 		private MarketplaceUpdateStatus UpdateMarketplaces() {
-			bool updateEverything =
-				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
-				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
-
-			if (!updateEverything)
+			if (!this.newCreditLineOption.UpdateData())
 				return null;
 
 			Log.Debug("Checking which marketplaces should be updated for customer {0}...", CustomerID);
@@ -818,13 +1042,21 @@
 			DateTime now = DateTime.UtcNow;
 
 			var mpsToUpdate = new List<int>();
+			var mpNamesToUpdate = new List<string>();
 
 			DB.ForEachRowSafe(
 				sr => {
 					DateTime lastUpdateTime = sr["UpdatingEnd"];
 
-					if ((now - lastUpdateTime).Days > CurrentValues.Instance.UpdateOnReapplyLastDays)
-						mpsToUpdate.Add(sr["MpID"]);
+					if ((now - lastUpdateTime).Days <= CurrentValues.Instance.UpdateOnReapplyLastDays)
+						return;
+
+					int mpID = sr["MpID"];
+
+					mpsToUpdate.Add(mpID);
+
+					if (sr["LongUpdateTime"])
+						mpNamesToUpdate.Add(string.Format("{0} marketplace with id {1}", (string)sr["Name"], mpID));
 				},
 				"LoadMarketplacesLastUpdateTime",
 				CommandSpecies.StoredProcedure,
@@ -834,6 +1066,13 @@
 			if (mpsToUpdate.Count < 1) {
 				Log.Debug("No marketplace should be updated for customer {0}.", CustomerID);
 				return null;
+			} // if
+
+			if (mpNamesToUpdate.Count > 0) {
+				Context.Description = string.Format(
+					"This strategy can take long time (updating {0}).",
+					string.Join(", ", mpNamesToUpdate)
+				);
 			} // if
 
 			Log.Debug(
@@ -869,8 +1108,48 @@
 			return mpus;
 		} // UpdateMarketplaces
 
+		private void NotifyAutoApproveSilentMode(
+			decimal autoApprovedAmount,
+			int repaymentPeriod,
+			decimal interestRate,
+			decimal setupFee,
+			ATrail approvalTrail
+		) {
+			try {
+				var message = string.Format(
+					@"<h1><u>Silent auto approve for customer <b style='color:red'>{0}</b></u></h1><br>
+					<h2><b>Offer:</b></h2>
+					<pre><h3>Amount: {1}</h3></pre><br>
+					<pre><h3>Period: {2}</h3></pre><br>
+					<pre><h3>Interest rate: {3}</h3></pre><br>
+					<pre><h3>Setup fee: {4}</h3></pre><br>
+					<h2><b>Decision flow:</b></h2>
+					<pre><h3>{5}</h3></pre><br>
+					<h2><b>Decision data:</b></h2>
+					<pre><h3>{6}</h3></pre>", CustomerID,
+					autoApprovedAmount.ToString("C0", Strategies.Library.Instance.Culture),
+					repaymentPeriod,
+					interestRate.ToString("P2", Strategies.Library.Instance.Culture),
+					setupFee.ToString("P2", Strategies.Library.Instance.Culture),
+					HttpUtility.HtmlEncode(approvalTrail.ToString()),
+					HttpUtility.HtmlEncode(approvalTrail.InputData.Serialize())
+				);
+
+				new Mail().Send(
+					CurrentValues.Instance.AutoApproveSilentToAddress,
+					null,
+					message,
+					CurrentValues.Instance.MailSenderEmail,
+					CurrentValues.Instance.MailSenderName,
+					"#SilentApprove for customer " + CustomerID
+				);
+			} catch (Exception e) {
+				Log.Alert(e, "Failed sending alert mail - silent auto approval.");
+			} // try
+		} // NotifyAutoApproveSilentMode
+
 		private readonly FinishWizardArgs finishWizardArgs;
-		private readonly int avoidAutomaticDecision;
+		private readonly bool avoidAutomaticDecision;
 
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly AutoDecisionResponse autoDecisionResponse;

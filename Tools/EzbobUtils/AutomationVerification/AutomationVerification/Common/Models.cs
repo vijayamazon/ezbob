@@ -480,4 +480,24 @@
 		public int Balance { get; set; }
 		public int CurrentDefBalance { get; set; }
 	}
+
+	public class AV_LogicalGlueDataModel {
+		public string TypeOfBusiness { get; set; }
+
+		public long? ServiceLogID { get; set; }
+		public long? RequestID { get; set; }
+
+		public long? ResponseID { get; set; }
+		public string ErrorMessage { get; set; }
+		public int? GradeID { get; set; }
+
+		public long? EtlDataID { get; set; }
+		public string Message { get; set; }
+		public string EtlCode { get; set; }
+
+		//public int? ModelID { get; set; }
+		public string ErrorCode { get; set; }
+		//public long? ModelOutputID { get; set; }
+		public decimal? Score { get; set; }
+	}
 }

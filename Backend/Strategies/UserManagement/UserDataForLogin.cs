@@ -24,7 +24,6 @@
 			public Result() {
 				RenewStoredPassword = null;
 			} // constructor
-
 			public int UserID { get; set; }
 			public string Email { get; set; }
 			public string Password { get; set; }
@@ -118,6 +117,7 @@
 				112, 159, 161, 77, 44, 125, 4, 25, 109, 92, 211, 39, 80, 117, 230, 173, 106, 87,
 				105, 195, 62, 171, 89, 189, 230, 39, 60, 148
 			};
+
 		} // class Result
 	} // class UserDataForLogin
 } // namespace Ezbob.Backend.Strategies.UserManagement

@@ -2,7 +2,9 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Backend.Models.ApplicationInfo;
+	using Ezbob.Backend.ModelsWithDB.ApplicationInfo;
+	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
+	using Ezbob.Backend.Strategies.LogicalGlue;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
@@ -51,7 +53,84 @@
 
 			// Loan cost must be calculated after set up fee (it uses set up fee output).
 			BuildLoanCost();
-		} // Execute
+
+			Result.Products = DB.Fill<I_Product>("SELECT * FROM I_Product WHERE IsEnabled = 1", CommandSpecies.Text);
+			Result.ProductTypes = DB.Fill<I_ProductType>("SELECT * FROM I_ProductType", CommandSpecies.Text);
+			Result.ProductSubTypes = DB.Fill<I_ProductSubType>("SELECT * FROM I_ProductSubType", CommandSpecies.Text);
+			Result.Grades = DB.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
+			Result.SubGrades = DB.Fill<I_SubGrade>("SELECT * FROM I_SubGrade", CommandSpecies.Text);
+			Result.GradeRanges = DB.Fill<I_GradeRange>("SELECT * FROM I_GradeRange WHERE IsActive = 1", CommandSpecies.Text);
+			Result.FundingTypes = DB.Fill<I_FundingType>("SELECT * FROM I_FundingType", CommandSpecies.Text);
+
+			BuildLogicalGlue();
+			BuildDefaultProduct();
+		}// Execute
+
+		private void BuildLogicalGlue() {
+			var lg = new GetLatestKnownInference(this.customerID, this.now, false);
+			lg.Execute();
+
+			if (lg.Inference == null) { return; }
+
+			Result.LogicalGlueScore = lg.Inference.Score;
+			Result.GradeID = lg.Inference.Bucket.HasValue ? (int)lg.Inference.Bucket : (int?)null;
+
+			if (Result.LogicalGlueScore.HasValue) {
+				var subGrade = Result.SubGrades.FirstOrDefault(x => x.MaxScore > Result.LogicalGlueScore.Value && x.MinScore <= Result.LogicalGlueScore.Value);
+				if (subGrade != null) {
+					Result.SubGradeID = subGrade.SubGradeID;
+				}//if
+			}//if
+		}//BuildLogicalGlue
+
+
+
+		private void BuildDefaultProduct() {
+			var subGrade = Result.SubGrades.FirstOrDefault(x => x.GradeID == Result.GradeID && x.MinScore < Result.LogicalGlueScore && x.MaxScore > Result.LogicalGlueScore);
+			if (subGrade != null) {
+				Result.SubGradeID = subGrade.SubGradeID;
+			}
+
+			
+			Result.IsRegulated = Result.TypeOfBusiness.IsRegulated();
+			Result.IsLimited = Result.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
+
+			CustomerOriginEnum originEnum = (CustomerOriginEnum)Result.OriginID;
+			Result.Origin = originEnum.ToString();
+
+			
+			if (Result.ProductSubTypeID.HasValue) {
+				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => x.ProductSubTypeID == Result.ProductSubTypeID.Value);
+			} else {
+				Result.CurrentProductSubType = Result.ProductSubTypes.FirstOrDefault(x => 
+					x.OriginID == Result.OriginID && 
+					x.LoanSourceID == Result.LoanSourceID &&
+					x.IsRegulated == Result.IsRegulated);
+			}
+			I_ProductType currentProductType = null;
+			if (Result.CurrentProductSubType != null) {
+				Result.ProductSubTypeID = Result.CurrentProductSubType.ProductSubTypeID;
+				 currentProductType = Result.ProductTypes.FirstOrDefault(x => x.ProductTypeID == Result.CurrentProductSubType.ProductTypeID);
+				Result.CurrentProductTypeID = currentProductType != null ? currentProductType.ProductTypeID : 0;
+				if (Result.CurrentProductSubType.FundingTypeID.HasValue) {
+					 var currentFundingType = Result.FundingTypes.FirstOrDefault(x => x.FundingTypeID == Result.CurrentProductSubType.FundingTypeID.Value);
+					Result.CurrentFundingTypeID = currentFundingType != null ? currentFundingType.FundingTypeID : 0;
+				}
+			}
+
+			if (currentProductType != null) {
+				 var currentProduct = Result.Products.FirstOrDefault(x => x.ProductID == currentProductType.ProductID);
+				currentProduct = currentProduct ?? Result.Products.FirstOrDefault(x => x.IsDefault);
+				Result.CurrentProductID = currentProduct != null ? currentProduct.ProductID : 0;
+			}
+			
+			Result.CurrentGradeRange = Result.GradeRanges.FirstOrDefault(x => 
+				x.GradeID.HasValue && x.GradeID.Value == Result.GradeID &&
+				x.SubGradeID == Result.SubGradeID &&
+				x.LoanSourceID == Result.LoanSourceID &&
+				x.OriginID == Result.OriginID &&
+				x.IsFirstLoan == (Result.NumOfLoans == 0));
+		}//BuildDefaultProduct
 
 		public ApplicationInfoModel Result { get; private set; }
 
@@ -82,6 +161,11 @@
 				this.rawOfferStart = sr["RawOfferStart"];
 				this.brokerCardID = sr["BrokerCardID"];
 				this.brokerID = sr["BrokerID"];
+				string typeOfBusinessStr = sr["TypeOfBusiness"];
+				TypeOfBusiness typeOfBusiness;
+				if(Enum.TryParse(typeOfBusinessStr, out typeOfBusiness)) {
+					Result.TypeOfBusiness = typeOfBusiness;
+				}
 				break;
 
 			case RowTypes.OfferCalculation:

@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -56,7 +57,8 @@ BEGIN
 	SELECT
 		RowType = 'DiscountPlan',
 		Id = dp.Id,
-		Name = dp.Name
+		Name = dp.Name,
+		DiscountPlanPercents = CASE WHEN dp.ValuesStr LIKE '%[1-9]%' THEN '(' + dp.ValuesStr + ')' ELSE '' END
 	FROM
 		DiscountPlan dp
 
@@ -65,7 +67,6 @@ BEGIN
 	-- Customer and cash request details - main model content.
 	--
 	------------------------------------------------------------------------------
-
 	;WITH skip_aml AS (
 		SELECT TOP 1
 			CustomerID = a.CustomerId,
@@ -92,10 +93,12 @@ BEGIN
 			CustomerID = crl.CustomerId,
 			ReasonType = ISNULL(cr.ReasonType, -1),
 			Reason = LTRIM(RTRIM(ISNULL(cr.Reason, ''))),
-			OtherReason = LTRIM(RTRIM(ISNULL(crl.OtherReason, '')))
+			OtherReason = LTRIM(RTRIM(ISNULL(crl.OtherReason, ''))),
+			RequestedLoanAmount = crl.Amount,
+			RequestedLoanTerm = crl.Term
 		FROM
 			CustomerRequestedLoan crl
-			INNER JOIN CustomerReason cr ON crl.ReasonId = cr.Id
+			LEFT JOIN CustomerReason cr ON crl.ReasonId = cr.Id
 		WHERE
 			crl.CustomerId = @CustomerID
 		ORDER BY
@@ -127,6 +130,8 @@ BEGIN
 			INNER JOIN Customer cc ON c.Name = cc.Name
 		WHERE
 			cc.Id = @CustomerID
+	), num_of_loans AS (
+		SELECT @CustomerId CustomerID, COUNT(*) NumOfLoans FROM Loan WHERE CustomerId=@CustomerID
 	) SELECT
 		RowType = 'Model',
 		Id = c.Id,
@@ -135,7 +140,6 @@ BEGIN
 		TypeOfBusiness = c.TypeOfBusiness,
 		CustomerRefNum = c.RefNumber,
 		LoanSourceID = ls.LoanSourceID,
-		LoanSource = ls.LoanSourceName,
 		IsTest = c.IsTest,
 		IsOffline = c.IsOffline,
 		HasYodlee = CONVERT(BIT, CASE WHEN ISNULL((
@@ -147,12 +151,11 @@ BEGIN
 		), 0) > 0 THEN 1 ELSE 0 END),
 		IsAvoid = c.AvoidAutomaticDescison,
 		SystemDecision = c.Status,
+		CreditResult = c.CreditResult,
 		AvailableAmount = ISNULL(c.CreditSum, 0),
 		OfferExpired = CONVERT(BIT, CASE WHEN c.ValidFor <= @Now THEN 1 ELSE 0 END),
-		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending') THEN 1 ELSE 0 END),
+		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending', 'PendingInvestor') THEN 1 ELSE 0 END),
 		IsModified = CONVERT(BIT, CASE WHEN r.Id IS NOT NULL AND ISNULL(r.LoanTemplate, '') != '' THEN 1 ELSE 0 END),
-		DiscountPlan = dp.DiscountPlanName,
-		DiscountPlanPercents = CASE WHEN dp.ValuesStr LIKE '%[1-9]%' THEN '(' + dp.ValuesStr + ')' ELSE '' END,
 		DiscountPlanId = dp.DiscountPlanID,
 		OfferValidForHours = CONVERT(INT, CONVERT(DECIMAL(18, 2), cv.Value)),
 		AMLResult = c.AMLResult,
@@ -167,6 +170,8 @@ BEGIN
 				ELSE ''
 			END
 		END,
+		RequestedLoanAmount = rr.RequestedLoanAmount,
+		RequestedLoanTerm = rr.RequestedLoanTerm,
 		CashRequestId = ISNULL(r.Id, 0),
 		CashRequestTimestamp = r.TimestampCounter,
 		InterestRate = ISNULL(r.InterestRate, 0),
@@ -175,7 +180,6 @@ BEGIN
 		BrokerSetupFeePercent = ISNULL(r.BrokerSetupFeePercent, 0),
 		AllowSendingEmail = CASE WHEN r.Id IS NULL THEN CONVERT(BIT, 0) ELSE CONVERT(BIT, 1 - r.EmailSendingBanned) END,
 		LoanTypeId = lt.LoanTypeID,
-		LoanType = lt.LoanTypeName,
 		OfferStart = ISNULL(r.OfferStart, c.ApplyForLoan),
 		RawOfferStart = r.OfferStart,
 		OfferValidUntil = ISNULL(r.OfferValidUntil, c.ValidFor),
@@ -198,11 +202,15 @@ BEGIN
 			WHERE ci.BrokerID = c.BrokerID
 			AND ci.IsDefault = 1
 		),
-		IsMultiBranded = CONVERT(BIT, CASE ISNULL(oc.OriginCount, 0) WHEN 1 THEN 0 ELSE 1 END)
+		IsMultiBranded = CONVERT(BIT, CASE ISNULL(oc.OriginCount, 0) WHEN 1 THEN 0 ELSE 1 END),
+		OriginID = c.OriginID,
+		ProductSubTypeID = r.ProductSubTypeID,
+		NumOfLoans = nol.NumOfLoans
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
 		INNER JOIN ConfigurationVariables cv ON cv.Name = 'OfferValidForHours'
+		INNER JOIN num_of_loans nol ON nol.CustomerID = c.Id
 		LEFT JOIN CashRequests r ON c.Id = r.IdCustomer AND r.Id = @CashRequestID
 		LEFT JOIN skip_aml ON r.IdCustomer = skip_aml.CustomerID
 		LEFT JOIN cec ON c.Id = cec.CustomerID

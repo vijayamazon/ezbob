@@ -44,6 +44,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		var fraudDetection = this.$el.find('#fraudDetection');
 		var properties = this.$el.find('#properties');
 		var affordability = this.$el.find('#affordability');
+		var logicalGlue = this.$el.find('#logical-glue-history');
 
 		this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
 		this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
@@ -109,6 +110,11 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.medalCalculationModel = new EzBob.Underwriter.MedalCalculationModel();
 		this.medalCalculationView = new EzBob.Underwriter.MedalCalculationView({
 			el: medalCalculations,
+			model: this.medalCalculationModel
+		});
+
+		this.logicalGlueView = new EzBob.Underwriter.LogicalGlueHistoryView({
+			el: logicalGlue,
 			model: this.medalCalculationModel
 		});
 

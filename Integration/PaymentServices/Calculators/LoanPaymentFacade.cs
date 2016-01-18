@@ -12,6 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using log4net;
+	using NHibernate;
 	using NHibernate.Linq;
 	using StructureMap;
 
@@ -51,6 +52,10 @@
 
 			int customerID = loan.Customer.Id;
 
+			var session = ObjectFactory.GetInstance<ISession>();
+			ITransaction tran = session.Transaction;
+			session.BeginTransaction();
+
 			var paymentTime = term ?? DateTime.UtcNow;
 
 			var oldLoan = loan.Clone();
@@ -72,7 +77,7 @@
 				InterestOnly = interestOnly,
 				LoanTransactionMethod = loanTransactionMethod
 			};
-
+			
 			loan.AddTransaction(transactionItem);
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
@@ -161,6 +166,11 @@
 					serviceInstance.AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
 				}
 			}
+			tran.Commit();
+
+			Log.InfoFormat("LinkPaymentToInvestor {0} {1} {2} {3} {4} begin", transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime);
+			var accessor = ObjectFactory.GetInstance<IEzServiceAccessor>();
+			accessor.LinkPaymentToInvestor(1, transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime);
 
 			return amount;
 		} // PayLoan

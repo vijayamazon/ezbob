@@ -1,0 +1,30 @@
+﻿@model dynamic
+
+<script type="text/template" id="config-investor-template">
+	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
+	<div id="main-content">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-content">
+					<form id="config-investor-form" class="form-horizontal">
+						<div class="row">
+							<div class="col-md-6">
+
+								<h4>Config (TBD <span id="investorID"></span> )</h4>
+								
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<button class="btn btn-primary config-investor pull-right">Submit</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+

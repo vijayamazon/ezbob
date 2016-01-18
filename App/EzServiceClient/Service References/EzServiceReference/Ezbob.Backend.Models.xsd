@@ -590,6 +590,8 @@
   <xs:element name="CompanyInfo" nillable="true" type="tns:CompanyInfo" />
   <xs:complexType name="DecisionModel">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ForceInvestor" type="xs:boolean" />
+      <xs:element minOccurs="0" name="InvestorID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="attemptID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cashRequestID" type="xs:long" />
       <xs:element minOccurs="0" name="cashRequestRowVersion" nillable="true" type="xs:string" />

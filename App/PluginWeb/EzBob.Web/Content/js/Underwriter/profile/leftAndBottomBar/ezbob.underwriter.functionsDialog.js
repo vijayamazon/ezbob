@@ -297,16 +297,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 	dlgHeight: 900,
 
 	onSaved: function () {
-		var that = this;
-
 		this.renderSchedule();
-
-		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed', {
-			id: this.model.get('CashRequestId'),
-			loanTypeSelection: 2
-		}).done(function () {
-			that.model.fetch();
-		});
 	}, // onSaved
 
 	changeLoanDetails: function () {

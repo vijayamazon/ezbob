@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation {
 	using System;
 	using System.Globalization;
+	using AutomationCalculator.AutoDecision.AutoRejection;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -18,7 +19,7 @@
 	/// <para>After adding new marketplace (and only in this case) if approve decision is "approved"
 	/// Main strategy is executed in "skip all apply auto rules" mode to auto approve customer if possible.</para>
 	/// </summary>
-	public class SilentAutomation : AStrategy {
+	public class SilentAutomation : AMainStrategyBase {
 		public enum Callers {
 			Unknown,
 			AddMarketplace,
@@ -53,6 +54,8 @@
 		} // SetMedal
 
 		public override string Name { get { return "SilentAutomation"; } }
+
+		public override int CustomerID { get { return this.customerID; } }
 
 		public virtual string Tag {
 			get {
@@ -107,13 +110,20 @@
 				this.nlCashRequestID
 			);
 
-			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
-				this.customerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				DB,
-				Log
-			).Init();
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
+			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
+				new AutoRejectionArguments {
+					CustomerID = this.customerID,
+					CashRequestID = this.cashRequestID,
+					NLCashRequestID = this.nlCashRequestID,
+					Now = DateTime.UtcNow,
+					DB = DB,
+					Log = Log,
+					CompanyID = CompanyID,
+					MonthlyPayment = MonthlyPayment,
+				}
+			);
 
 			rejectAgent.MakeAndVerifyDecision(Tag, true);
 
@@ -128,10 +138,11 @@
 				this.nlCashRequestID
 			);
 
-			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
+			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
 				this.customerID,
 				this.cashRequestID,
 				this.nlCashRequestID,
+				DateTime.UtcNow,
 				offeredCreditLine,
 				medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)medal.MedalType,
@@ -144,7 +155,7 @@
 
 			if (this.caller == Callers.AddMarketplace) {
 				bool isRejected = !rejectAgent.WasMismatch && rejectAgent.Trail.HasDecided;
-				bool isApproved = !approveAgent.WasMismatch && (approveAgent.ApprovedAmount > 0);
+				bool isApproved = !approveAgent.WasMismatch && (approveAgent.Trail.RoundedAmount > 0);
 
 				if (!isRejected && isApproved)
 					ExecuteMain();

@@ -6,6 +6,7 @@
 	using Ezbob.Backend.Models;
 	using EzBob.Models.Marketplaces;
 	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -21,8 +22,9 @@
 			CustomerPhoneRepository customerPhoneRepository, 
 			CustomerRelationsRepository customerRelationsRepository, 
 			CompanyFilesMetaDataRepository companyFilesMetaDataRepository, 
-			ExperianHistoryRepository experianHistoryRepository,
-			IUsersRepository userRepo
+			ExperianHistoryRepository experianHistoryRepository, 
+			ServiceClient serviceClient, 
+			IEzbobWorkplaceContext context
 		) {
 			this.customerRepository = customerRepository;
 			this.fraudDetectionLog = fraudDetectionLog;
@@ -30,8 +32,9 @@
 			this.customerRelationsRepository = customerRelationsRepository;
 			this.companyFilesMetaDataRepository = companyFilesMetaDataRepository;
 			this.experianHistoryRepository = experianHistoryRepository;
-			this.userRepo = userRepo;
-		} // constructor
+			this.serviceClient = serviceClient;
+			this.context = context;
+		}
 
 		public ActionResult Main() {
 			return View("SalesForce");
@@ -79,10 +82,10 @@
 			
 			model.FromCustomer(customer);
 
-			var experianConsumer = this.experianHistoryRepository
-				.GetCustomerConsumerHistory(customer.Id)
-				.OrderByDescending(x => x.ServiceLogId)
-				.FirstOrDefault();
+			var decisionHistories = this.serviceClient.Instance.LoadDecisionHistory(customerId, this.context.UserId);
+			model.Decisions = decisionHistories.Model.Select(DecisionHistoryModel.Create)
+				.OrderBy(x => x.Date)
+				.ToList();
 
 			if (experianConsumer != null) {
 				model.PersonalModel.ExperianPersonalScore = experianConsumer.Score;
@@ -158,6 +161,8 @@
 		private readonly CustomerRelationsRepository customerRelationsRepository;
 		private readonly CompanyFilesMetaDataRepository companyFilesMetaDataRepository;
 		private readonly ExperianHistoryRepository experianHistoryRepository;
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
 		protected readonly ILog Log = LogManager.GetLogger(typeof (SalesForceController));
 	} // class SalesForceController
 } // namespace

@@ -12,7 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Newtonsoft.Json;
-	using ServiceClientProxy;
+    using ServiceClientProxy;
 
 	public interface IAgreementsGenerator {
 		void RenderAgreements(Loan loan, bool isRebuld, NL_Model nlModel = null);

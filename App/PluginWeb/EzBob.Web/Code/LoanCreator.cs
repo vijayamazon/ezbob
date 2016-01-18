@@ -49,8 +49,7 @@
 		/// <exception cref="Exception">PacnetSafeGuard stopped money transfer</exception>
 		/// <exception cref="OverflowException"><paramref /> is less than <see cref="F:System.TimeSpan.MinValue" /> or greater than <see cref="F:System.TimeSpan.MaxValue" />.-or-<paramref /> is <see cref="F:System.Double.PositiveInfinity" />.-or-<paramref name="value" /> is <see cref="F:System.Double.NegativeInfinity" />. </exception>
 		/// <exception cref="LoanDelayViolationException">Condition. </exception>
-		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
-
+		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model nlModel = null) {
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
 			ValidateAmount(loanAmount, cus); // continue (loanAmount > customer.CreditSum)
 			ValidateOffer(cus); // check offer validity dates - in AddLoan strategy
@@ -245,7 +244,9 @@
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
+			
 			HandleSalesForceTopup(cus, now); //EZ-3908
+			this.serviceClient.Instance.LinkLoanToInvestor(this.context.UserId, cus.Id, loan.Id);
 			// verify see above line 45-48
 			// 
 			// ++++++++

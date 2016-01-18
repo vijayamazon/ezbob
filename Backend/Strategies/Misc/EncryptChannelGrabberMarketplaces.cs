@@ -4,7 +4,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
-	using Integration.ChannelGrabberConfig;
+	using global::Integration.ChannelGrabberConfig;
 	using JetBrains.Annotations;
 
 	public class EncryptChannelGrabberMarketplaces : AStrategy {
@@ -17,7 +17,7 @@
 
 			m_nEncryptionCounter = 0;
 
-			Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).ForEachVendor(ProcessVendor);
+			global::Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).ForEachVendor(ProcessVendor);
 
 			Log.Debug("{0} accounts have been encrypted.", m_nEncryptionCounter);
 

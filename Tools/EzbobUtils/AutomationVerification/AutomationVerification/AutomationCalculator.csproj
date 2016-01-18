@@ -52,6 +52,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoDecision\AutoApproval\LGAgent.cs" />
+    <Compile Include="AutoDecision\AutoRejection\AutoRejectionArguments.cs" />
+    <Compile Include="AutoDecision\AutoRejection\LGAgent.cs" />
+    <Compile Include="Common\AutoDecisionFlowTypes.cs" />
+    <Compile Include="Common\AutoRejectionOutput.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OnePricingFound.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\LGHardReject.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\OfferconfigurationFound.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\SameConfigurationChosen.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\SameFlowChosen.cs" />
+    <Compile Include="ProcessHistory\Common\HasBucket.cs" />
+    <Compile Include="ProcessHistory\Common\LGWithoutError.cs" />
+    <Compile Include="ProcessHistory\Common\LGDataFound.cs" />
+    <Compile Include="ProcessHistory\Common\LogicalGlueFlow.cs" />
+    <Compile Include="ProcessHistory\Common\InternalFlow.cs" />
+    <Compile Include="ProcessHistory\TrailPrimaryStatus.cs" />
     <Compile Include="TokenIntersection.cs" />
     <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />

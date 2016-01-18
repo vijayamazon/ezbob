@@ -8,6 +8,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 	using EzServiceAccessor;
+	using log4net;
 	using ServiceClientProxy.EzServiceReference;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
@@ -93,10 +94,15 @@
 			this.m_oServiceClient.Instance.AddPayment(customerID, payment, userID);
 		}
 
+		public void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate) {
+			Log.InfoFormat("EzServiceAccessorLong LinkPaymentToInvestor {0} {1} {2} {3} {4} begin", loanTransactionID, loanID, customerID, amount, transactionDate);
+			this.m_oServiceClient.Instance.LinkLoanRepaymentToInvestor(userID, customerID, loanID, loanTransactionID, amount, transactionDate);
+		}
 
 		public List<NL_Loans> GetCustomerLoans(int customerID, int userID) {
 			return this.m_oServiceClient.Instance.GetCustomerLoans(customerID, userID).Value.ToList();
 		}
+
 
 		public NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true) {
 			var nlModel =  this.m_oServiceClient.Instance.GetLoanState(customerID, loanID, utcNow, userID, getCalculatorState).Value;
@@ -105,6 +111,7 @@
 
 		public long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1) {
 			return this.m_oServiceClient.Instance.GetLoanByOldID(loanId, customerID, userID).Value;
+			return null;
 		}
 
 		public void AcceptRollover(int customerID, long loanId) {
@@ -112,5 +119,6 @@
 		}
 
 		private readonly ServiceClient m_oServiceClient;
+		private static ILog Log = LogManager.GetLogger(typeof(EzServiceAccessorLong));
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

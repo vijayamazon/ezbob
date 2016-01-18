@@ -6,17 +6,20 @@
 			bool bShouldRegister = true,
 			int? userID = null,
 			bool isBroker = false,
-			string origin = ""
+			string origin = "",
+			bool addSalesforceActivity = true
 		) {
 			Recipient = sRecipient;
 			CarbonCopy = sCarbonCopy;
 			ShouldRegister = bShouldRegister;
 			UserID = userID;
 			IsBroker = isBroker;
+			AddSalesforceActivity = addSalesforceActivity;
 			Origin = origin;
 		}// constructor
 
 		public bool IsBroker { get; private set; }
+		public bool AddSalesforceActivity { get; private set; }
 
 		public string Origin {
 			get { return m_sOrigin; } // get

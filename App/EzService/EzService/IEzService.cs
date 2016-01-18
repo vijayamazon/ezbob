@@ -20,7 +20,10 @@
 		IEzServiceNewLoan,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceUserManagement
+		IEzServiceUserManagement,
+		IEzServiceNewLoan,
+		IEzServiceInvestor,
+		IEzServiceLogicalGlue
 	{
 		[OperationContract]
 		ActionMetaData AddHistoryDirector(Esigner Edirector);
@@ -506,6 +509,9 @@
 
 		[OperationContract]
 		MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID);
+
+		[OperationContract]
+		DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID);
 
 		[OperationContract]
 		MessagesListActionResult LoadMessagesSentToUser(int userID);

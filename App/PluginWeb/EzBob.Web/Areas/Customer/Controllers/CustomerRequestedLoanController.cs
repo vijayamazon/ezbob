@@ -24,6 +24,15 @@
 		public JsonResult RequestedLoan() {
 			var customer = this.context.Customer;
 			var requestedLoan = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault() ?? new CustomerRequestedLoan();
+
+			if (!requestedLoan.Amount.HasValue) {
+				requestedLoan.Amount = ConfigManager.CurrentValues.Instance.MinLoan;
+			}
+
+			if (!requestedLoan.Term.HasValue) {
+				requestedLoan.Term = 15; //todo make something better than hardcoded
+			}
+
 			Log.Info("Load requested loan for customer " + customer.Id + " " + requestedLoan.Amount + " " + requestedLoan.Term);
 			return Json(requestedLoan, JsonRequestBehavior.AllowGet);
 		} // RequestedLoan Get

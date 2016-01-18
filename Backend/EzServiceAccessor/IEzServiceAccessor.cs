@@ -55,6 +55,7 @@
 		void AddPayment(int customerID, NL_Payments payment, int userID = 1);
 
 		long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1);
+		void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate);
 
 		List<NL_Loans> GetCustomerLoans(int customerID, int userID = 1);
 

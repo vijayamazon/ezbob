@@ -244,7 +244,7 @@
 			CommandSpecies nSpecies = CommandSpecies.StoredProcedure
 		) {
 			m_aryArgs = null;
-			Log = new SafeLog(oLog);
+			Log = oLog.Safe();
 			Species = nSpecies;
 
 			CheckDirection();

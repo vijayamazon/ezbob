@@ -7,6 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Html.Attributes;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
@@ -55,6 +56,7 @@
 			}, JsonRequestBehavior.AllowGet);
 		} // GetCounters
 
+		
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
@@ -101,6 +103,12 @@
 			case GridActions.UwGridApproved:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridApprovedRow());
 
+			case GridActions.UwGridPendingInvestor:
+
+				List<PendingInvestorModel> allInvestorData = this.db.Fill<PendingInvestorModel>("GetInvestorData", CommandSpecies.StoredProcedure);
+
+				return LoadGrid(nAction, includeTestCustomers, () => new GridPendingInvestorRow(allInvestorData));
+
 			case GridActions.UwGridCollection:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridCollectionRow());
 
@@ -121,6 +129,8 @@
 
 			case GridActions.UwGridBrokers:
 				return LoadGrid(nAction, includeTestCustomers, () => new GridBroker());
+			case GridActions.UwGridInvestors:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridInvestor());
 
 			default:
 				string sMsg = string.Format("Cannot load underwriter grid because '{0}' is not implemented.", nAction);
@@ -153,6 +163,7 @@
 		) {
 			TimeCounter tc = new TimeCounter("LoadGrid building time for grid " + nSpName);
 			var oRes = new SortedDictionary<long, AGridRow>();
+			
 
 			var args = new List<QueryParameter> {
 				new QueryParameter("@WithTest", bIncludeTestCustomers),
@@ -166,6 +177,8 @@
 
 			if (oMoreSpArgs != null)
 				args.AddRange(oMoreSpArgs);
+
+
 
 			using (tc.AddStep("retrieving from db and processing")) {
 				this.db.ForEachRowSafe(
@@ -185,6 +198,7 @@
 				); // foreach
 			} // using
 
+			
 			log.Debug("{0}: traversing done.", nSpName);
 
 			var sb = new StringBuilder();
@@ -214,6 +228,7 @@
 			UwGridSignature,
 			UwGridAll,
 			UwGridApproved,
+			UwGridPendingInvestor,
 			UwGridCollection,
 			UwGridEscalated,
 			UwGridLate,
@@ -221,6 +236,7 @@
 			UwGridLogbook,
 			UwGridSales,
 			UwGridBrokers,
+			UwGridInvestors,
 		} // enum GridActions
 
 		private readonly AConnection db;

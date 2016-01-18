@@ -106,8 +106,11 @@
     <Compile Include="Admin\Nop.cs" />
     <Compile Include="ASignupLoginBaseStrategy.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LGAgent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />
+    <Compile Include="AutoDecisionAutomation\ICreateOfferInputData.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\ApproveStatus.cs" />
@@ -176,11 +179,40 @@
     <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
+    <Compile Include="Investor\AddInvestorBankAccountBalance.cs" />
+    <Compile Include="Investor\LoadInvestors.cs" />
+    <Compile Include="Investor\AddInvestorSystemBalance.cs" />
+    <Compile Include="Investor\AddManualTransaction.cs" />
+    <Compile Include="Investor\ForceInvestorForOffer.cs" />
+    <Compile Include="Investor\LinkRepaymentToInvestor.cs" />
+    <Compile Include="Investor\LinkLoanToInvestor.cs" />
+    <Compile Include="Investor\LinkOfferToInvestor.cs" />
+    <Compile Include="Investor\LoadSchedulerData.cs" />
+    <Compile Include="Investor\LoadTransactionsData.cs" />
+    <Compile Include="Investor\ManageInvestorDetails.cs" />
+    <Compile Include="Investor\NotifyInvestorUtilizedFunds.cs" />
+    <Compile Include="Investor\NotifyRiskPendingInvestorOffer.cs" />
+    <Compile Include="Investor\OfferExpiredChecker.cs" />
+    <Compile Include="Investor\FindInvestorForOffer.cs" />
+    <Compile Include="Investor\LoadAccountingData.cs" />
+    <Compile Include="Investor\ManageInvestorBankAccount.cs" />
+    <Compile Include="Investor\ManageInvestorContact.cs" />
+    <Compile Include="Investor\LoadInvestor.cs" />
+    <Compile Include="Investor\CreateInvestor.cs" />
+    <Compile Include="Investor\UpdateSchedulerData.cs" />
+    <Compile Include="Investor\SaveInvestorBanksList.cs" />
+    <Compile Include="Investor\SaveInvestorContactList.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
+    <Compile Include="Library.cs" />
+    <Compile Include="LogicalGlue\GetTryoutInference.cs" />
+    <Compile Include="LogicalGlue\GetHistoryInferences.cs" />
+    <Compile Include="LogicalGlue\GetLatestKnownInference.cs" />
+    <Compile Include="LogicalGlue\SetRequestIsTryOut.cs" />
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="MainStrategy\ABackdoorSimpleDetails.cs" />
+    <Compile Include="MainStrategy\AMainStrategyBase.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleManual.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleReject.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleApprove.cs" />
@@ -209,6 +241,7 @@
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
     <Compile Include="Misc\GetCustomerState.cs" />
+    <Compile Include="Misc\LoadDecisionHistory.cs" />
     <Compile Include="Misc\LoadApplicationInfo.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
@@ -229,6 +262,16 @@
     <Compile Include="NewLoan\CancelFee.cs" />
     <Compile Include="NewLoan\CancelPayment.cs" />
     <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IGenericRulesBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IInvestorCashRequestBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\InvestorCashRequestBLL.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IInvestorCashRequestDAL.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\InvestorCashRequestDAL.cs" />
+    <Compile Include="OpenPlatform\Facade\Contracts\IInvestorService.cs" />
+    <Compile Include="OpenPlatform\Facade\Implement\InvestorService.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\GenericRulesBLL.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IRulesEngineDAL.cs" />
+    <Compile Include="OpenPlatform\Models\InvestorParameters.cs" />
     <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanForOldIDNotFound.cs" />
     <Compile Include="NewLoan\GetLoanIDByOldID.cs" />
     <Compile Include="NewLoan\GetCustomerLoans.cs" />
@@ -245,6 +288,18 @@
     <Compile Include="NewLoan\DAL\ILoanDAL.cs" />
     <Compile Include="NewLoan\DAL\LoanDAL.cs" />
     <Compile Include="Postcode\PostcodeNuts.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IInvestorParametersBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\InvestorParametersBLL.cs" />
+    <Compile Include="OpenPlatform\Registry\InvestorRegistry.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IInvestorParametersDAL.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\InvestorParametersDAL.cs" />
+    <Compile Include="OpenPlatform\Registry\IProvider.cs" />
+    <Compile Include="OpenPlatform\Registry\Provider.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\ExressionBuilderBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\MatchBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IExressionBuilderBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IMatchBLL.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\RulesEngineDAL.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoanOptions.cs" />
@@ -311,7 +366,6 @@
     <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />
     <Compile Include="ExternalAPI\Alibaba\RequalifyCustomer.cs" />
     <Compile Include="ExternalAPI\SaveApiCall.cs" />
-    <Compile Include="Library.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\EnlistLottery.cs" />
     <Compile Include="Lottery\FitConditions\AAmount.cs" />
@@ -694,6 +748,10 @@
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>
       <Name>LandRegistryLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\LogicalGlue\LogicalGlue.csproj">
+      <Project>{8d2c4b94-eb8f-470e-927e-f22b7beec42f}</Project>
+      <Name>LogicalGlue</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
@@ -804,9 +862,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeLtdRequestTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -815,6 +870,7 @@
   <ItemGroup>
     <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeNonLtdSearchTemplate.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

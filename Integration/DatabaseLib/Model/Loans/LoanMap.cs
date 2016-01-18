@@ -110,6 +110,27 @@
 
 			HasMany(x => x.RemovedOnReschedule).AsBag().KeyColumn("LoanId").Cascade.AllDeleteOrphan().Inverse();
 
+			//TODO kill NH to prevent such horrible code
+			Map(x => x.IsOpenPlatform)
+				.Formula(@"(
+						SELECT CASE 
+							WHEN ft.FundingTypeID IS NULL THEN 'No' 
+							ELSE 'Yes' END 
+						FROM
+							Loan 
+						LEFT JOIN 
+							CashRequests cr ON Loan.RequestCashId = cr.Id
+						LEFT JOIN 
+							I_ProductSubType pst ON pst.ProductSubTypeID = cr.ProductSubTypeID
+						LEFT JOIN 
+							I_FundingType ft ON ft.FundingTypeID = pst.FundingTypeID 
+						WHERE 
+							Loan.Id = Id
+				)")
+				.Not.Insert()
+				.Not.Update();
+			//.LazyLoad();
+
 		} // constructor
 	} // class LoanMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

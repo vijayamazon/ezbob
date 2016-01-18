@@ -1,13 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using EZBob.DatabaseLib.Model.Database;
-using System.Globalization;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System;
+	using System.Linq;
+	using System.Collections.Generic;
+	using System.Text.RegularExpressions;
+	using EZBob.DatabaseLib.Model.Database;
+	using System.Globalization;
+	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public class Score
@@ -70,9 +72,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public MedalDetailedHistory DetailedHistory = new MedalDetailedHistory();
 
 		public MedalCalculators(EZBob.DatabaseLib.Model.Database.Customer customer) {
+			var serviceClient = ObjectFactory.GetInstance<ServiceClient>();
 			var newRepo = ObjectFactory.GetInstance<MedalCalculationsRepository>();
 			var oldRepo = ObjectFactory.GetInstance<ScoringResultRepository>();
-
+			var context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
 			var oldMedals = oldRepo.GetAllOldMedals(customer.Id).ToList();
 			var newMedals = newRepo.GetAllNewMedals(customer.Id).ToList();
 
@@ -116,7 +119,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			}
 
 			this.DetailedHistory = details;
+			
+			this.LogicalGlue = serviceClient.Instance.LogicalGlueGetLastInference(context.UserId, customer.Id, DateTime.UtcNow, false);
+			this.LogicalGlueHistory = serviceClient.Instance.LogicalGlueGetHistory(context.UserId, customer.Id);
 		}
+
+		public LogicalGlueResult LogicalGlue { get; set; }
+		public IList<LogicalGlueResult> LogicalGlueHistory { get; set; }
 
 		private Score BuildScore(ScoringResult scoringResult)
 		{

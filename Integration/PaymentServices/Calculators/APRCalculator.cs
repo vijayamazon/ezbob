@@ -13,6 +13,33 @@
 			decimal setupFee = 0M,
 			DateTime? currentDate = null
 		) {
+			bool accuracyAchieved;
+			int iterationCount;
+			double lastHitAccuracy;
+
+			return Calculate(
+				amount,
+				monthlyRepayments,
+				setupFee,
+				currentDate,
+				out accuracyAchieved,
+				out iterationCount,
+				out lastHitAccuracy
+			);
+		} // Calculate
+
+		public double Calculate(
+			decimal amount,
+			IEnumerable<LoanScheduleItem> monthlyRepayments,
+			decimal setupFee,
+			DateTime? currentDate,
+			out bool accuracyAchieved,
+			out int iterationCount,
+			out double lastHitAccuracy
+		) {
+			accuracyAchieved = false;
+			lastHitAccuracy = -1;
+
 			this.date = currentDate ?? DateTime.Today; // TODO: DateTime.UtcNow.Date if schedules have UTC date.
 
 			double x = 1.0;
@@ -24,8 +51,10 @@
 			for (int i = 0; i < 10000; i++) {
 				double f_x = f(x, amount - setupFee, payments);
 
-				if (Math.Abs(f_x) < 1e-6) {
-					accuracyReachedOn = i;
+				lastHitAccuracy = Math.Abs(f_x);
+
+				if (lastHitAccuracy < 1e-6) {
+					accuracyAchieved = true;
 					break;
 				} // if
 

@@ -410,6 +410,8 @@
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Campaign.js")
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.ConfigTables.js")
 				.Add("~/Content/js/underwriter/StrategySettings/Ezbob.underwriter.Settings.PricingModel.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Product.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.OpenPlatform.js")
 
 				//Customer grid
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
@@ -467,6 +469,7 @@
 
 				.Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.medalCalculations.js")
+				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.logicalGlueHistory.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.pricingModelCalculations.js")
                 .Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.automationCalculations.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
@@ -502,8 +505,26 @@
 				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
 
+				//investor
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.addInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorView.js")
+                .Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorsView.js")
+				
+            
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorContactView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorBankView.js")
+                .Add("~/Content/js/Underwriter/investor/ezbob.underwriter.manageInvestorDetailsView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.configInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.accountingInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.portfolioInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.statisticsInvestorView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.fundingTransactionsView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.repaymentsTransactionsView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.addTransactionView.js")
+				.Add("~/Content/js/Underwriter/investor/ezbob.underwriter.configSchedulerView.js")
+
 				.MvcRender("~/Content/js/min/underwriter_#.js");
-		} // RenderUnderwriterJs
+		} // RenderUnderwriterJs    
 
 		public static MvcHtmlString RenderWizardJs() {
 			return Bundle.JavaScript()

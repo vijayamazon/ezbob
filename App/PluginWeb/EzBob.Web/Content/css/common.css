@@ -3379,7 +3379,7 @@ iframe[src^='https://finimpact'] {
     display: block;
     font-size:14px;
     color: #565656;
-    height: 60px;
+    min-height: 60px;
     padding: 0 18px 15px 18px;
     background-color: white;
     margin-bottom: 10px;
@@ -3480,7 +3480,6 @@ iframe[src^='https://finimpact'] {
     border-radius: 5px 5px 0 0;
     background: #cdcdcd;
     box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
-    margin: 0 auto;
     position: relative;
     border-bottom: 1px solid #87847f;
     top: 6px; 
@@ -3490,11 +3489,9 @@ iframe[src^='https://finimpact'] {
     border-radius: 0 0 5px 5px;
     background: #cdcdcd;
     box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
-    margin: 0 auto;
     position: relative;
     border-top: 1px solid #e8e8e8;
     top: 6px;
-   
  }
   .slider-label,.minus ,.plus,.slider-input {
       display:none;

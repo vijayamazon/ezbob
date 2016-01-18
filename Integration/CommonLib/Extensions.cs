@@ -110,6 +110,20 @@ namespace EzBob.CommonLib
 			return list;
 		}
 
+		public static Dictionary<string, string> ToDictionaryInt<T>(this Enum value) where T : struct {
+			var dict = new Dictionary<string, string>();
+			foreach (var element in Enum.GetValues(typeof(T))) {
+				var enumType = element.GetType();
+				var field = enumType.GetField(element.ToString());
+				var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+				var description = attributes.Length == 0 ? element.ToString() : ((DescriptionAttribute)attributes[0]).Description;
+				int elementValue = (int)element;
+				dict.Add(elementValue.ToString(), description);
+			}
+
+			return dict;
+		}
+
 		public static List<Tuple<string, string>> ToTupleInt<T>(this Enum value) where T : struct {
 			List<Tuple<string, string>> list = new List<Tuple<string, string>>();
 			foreach (var element in Enum.GetValues(typeof(T))) {

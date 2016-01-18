@@ -1,0 +1,29 @@
+﻿@model dynamic
+
+<script type="text/template" id="statistics-investor-template">
+	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
+	<div id="main-content">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-content">
+					<form id="statistics-investor-form" class="form-horizontal">
+						<div class="row">
+							<div class="col-md-6">
+
+								<h4>Statistics</h4>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<button class="btn btn-primary statistics-investor pull-right">Submit</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>

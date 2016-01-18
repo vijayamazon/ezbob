@@ -6,6 +6,7 @@
     using Ezbob.Backend.ModelsWithDB;
     using Ezbob.Backend.ModelsWithDB.Experian;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.Investor;
     using Ezbob.Backend.Strategies.Experian;
     using Ezbob.Backend.Strategies.MailStrategies;
     using Ezbob.Backend.Strategies.Misc;
@@ -109,6 +110,10 @@
             stra.Context.UserID = userID;
             stra.Execute();
         }
+		public void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate) {
+			LinkRepaymentToInvestor stra = new LinkRepaymentToInvestor(loanID, loanTransactionID, amount, transactionDate);
+			stra.Execute();
+		}
 
         public List<NL_Loans> GetCustomerLoans(int customerID, int userID) {
             var stra = new GetCustomerLoans(customerID);

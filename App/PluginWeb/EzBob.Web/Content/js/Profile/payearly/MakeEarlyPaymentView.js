@@ -163,7 +163,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 	}, // payFast
 
 	backToProfile: function() {
-		this.customerModel.fetch().render();
+		this.customerModel.fetch();
 		this.trigger("submit");
 		return false;
 	}, // backToProfile

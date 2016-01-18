@@ -1,0 +1,6 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('OriginSupportsGrade') IS NOT NULL
+	DROP PROCEDURE OriginSupportsGrade
+GO

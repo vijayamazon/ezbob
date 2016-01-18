@@ -74,13 +74,6 @@
 				})
 				.ToList();
 
-			Decisions = customer
-				.CashRequests
-				.SelectMany(x => x.DecisionHistories)
-				.Select(DecisionHistoryModel.Create)
-				.OrderBy(x => x.Date)
-				.ToList();
-
 			Loans = customer
 				.Loans
 				.Select(LoanHistoryModel.Create)

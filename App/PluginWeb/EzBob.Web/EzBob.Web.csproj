@@ -195,11 +195,17 @@
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GridsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Investor\InvestorController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LogBookController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\SalesForceController.cs" />
     <Compile Include="Areas\Underwriter\Models\AutoDecisionModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\DecisionHistoryModel.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\IovationDetailsModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Investor\InvestorBankAccountModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Investor\InvestorContactModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Investor\InvestorModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PaypointAddedModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\PendingInvestorModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
@@ -283,7 +289,7 @@
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\FraudDetectionLogController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerRelationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanOptionsController.cs" />
-    <Compile Include="Areas\Customer\Models\CashRequestModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\CashRequestModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EmailVerificationController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FraudController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\grid-rows.cs" />
@@ -307,7 +313,6 @@
     <Compile Include="Areas\Underwriter\Models\CustomersModel.cs" />
     <Compile Include="Areas\Underwriter\Models\IdHubCustomAddressModel.cs" />
     <Compile Include="Areas\Underwriter\Models\LoanOptionsViewModel.cs" />
-    <Compile Include="Areas\Underwriter\Models\LoansAndOffers.cs" />
     <Compile Include="Areas\Underwriter\Models\ManualPaymentModel.cs" />
     <Compile Include="Areas\Underwriter\Models\RolloverModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SupportModel.cs" />
@@ -901,8 +906,22 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.salesforce.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.accountingInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.addTransactionView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.configSchedulerView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.fundingTransactionsView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorBankView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorContactView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorsView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.addInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.portfolioInvestorView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.repaymentsTransactionsView.js" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.statisticsInvestorView.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.logicalGlueHistory.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.changeAddress.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.salesForceActivity.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.MarkAsPending.js" />
@@ -921,6 +940,8 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.journal.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js" />
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.OpenPlatform.js" />
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Product.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrcUpload.js" />
@@ -983,6 +1004,20 @@
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLAlibabaGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLBoardResolution.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaBoardResolution.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\AddInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\InvestorMain.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\ManageInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\ProductSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\OpenPlatformSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\AccountingInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\PortfolioInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\StatisticsInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\ConfigInvestor.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\ManualPayment.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_LogicalGlueHistoryTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Investor\ManageInvestors.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1655,6 +1690,7 @@
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorDetailsView.js" />
     <None Include="Properties\PublishProfiles\TeamCityEzBobWeb.pubxml" />
   </ItemGroup>
   <ItemGroup>

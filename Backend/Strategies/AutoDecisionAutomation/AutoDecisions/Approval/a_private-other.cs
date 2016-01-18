@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Web;
 	using AutomationCalculator;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
@@ -16,49 +15,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using MailApi;
 
 	public partial class Approval {
 		private DateTime Now { get; set; }
-
-		private void NotifyAutoApproveSilentMode(
-			decimal autoApprovedAmount,
-			int repaymentPeriod,
-			decimal interestRate,
-			decimal setupFee
-		) {
-			try {
-				var message = string.Format(
-					@"<h1><u>Silent auto approve for customer <b style='color:red'>{0}</b></u></h1><br>
-					<h2><b>Offer:</b></h2>
-					<pre><h3>Amount: {1}</h3></pre><br>
-					<pre><h3>Period: {2}</h3></pre><br>
-					<pre><h3>Interest rate: {3}</h3></pre><br>
-					<pre><h3>Setup fee: {4}</h3></pre><br>
-					<h2><b>Decision flow:</b></h2>
-					<pre><h3>{5}</h3></pre><br>
-					<h2><b>Decision data:</b></h2>
-					<pre><h3>{6}</h3></pre>", this.trail.CustomerID,
-					autoApprovedAmount.ToString("C0", Strategies.Library.Instance.Culture),
-					repaymentPeriod,
-					interestRate.ToString("P2", Strategies.Library.Instance.Culture),
-					setupFee.ToString("P2", Strategies.Library.Instance.Culture),
-					HttpUtility.HtmlEncode(this.trail.ToString()),
-					HttpUtility.HtmlEncode(this.trail.InputData.Serialize())
-				);
-
-				new Mail().Send(
-					CurrentValues.Instance.AutoApproveSilentToAddress,
-					null,
-					message,
-					CurrentValues.Instance.MailSenderEmail,
-					CurrentValues.Instance.MailSenderName,
-					"#SilentApprove for customer " + this.trail.CustomerID
-				);
-			} catch (Exception e) {
-				this.log.Error(e, "Failed sending alert mail - silent auto approval.");
-			} // try
-		} // NotifyAutoApproveSilentMode
 
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
 			this.trail.MyInputData.SetDataAsOf(Now);
@@ -237,7 +196,6 @@
 		private readonly Customer customer;
 		private readonly AConnection db;
 		private readonly LoanRepository loanRepository;
-        private readonly LoanSourceRepository loanSourceRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ASafeLog log;
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
@@ -251,7 +209,6 @@
 
 		private DateTime? companyDissolutionDate;
 		private List<Name> directors;
-		private bool hasLoans;
 		private List<NameForComparison> hmrcNames;
 		private bool isBrokerCustomer;
 		private ExperianConsumerData experianConsumerData;
