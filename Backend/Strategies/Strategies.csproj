@@ -181,6 +181,7 @@
     <Compile Include="Investor\LinkRepaymentToInvestor.cs" />
     <Compile Include="Investor\LinkLoanToInvestor.cs" />
     <Compile Include="Investor\LinkOfferToInvestor.cs" />
+    <Compile Include="Investor\LoadSchedulerData.cs" />
     <Compile Include="Investor\LoadTransactionsData.cs" />
     <Compile Include="Investor\NotifyInvestorUtilizedFunds.cs" />
     <Compile Include="Investor\NotifyRiskPendingInvestorOffer.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Investor\ManageInvestorContact.cs" />
     <Compile Include="Investor\LoadInvestor.cs" />
     <Compile Include="Investor\CreateInvestor.cs" />
+    <Compile Include="Investor\UpdateSchedulerData.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="LogicalGlue\GetTryoutInference.cs" />

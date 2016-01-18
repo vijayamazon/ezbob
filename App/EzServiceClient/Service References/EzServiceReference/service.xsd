@@ -1418,6 +1418,40 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="LoadSchedulerData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="underwriterID" type="xs:int" />
+        <xs:element minOccurs="0" name="investorID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoadSchedulerDataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q124="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LoadSchedulerDataResult" nillable="true" type="q124:SchedulerDataResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateSchedulerData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="underwriterID" type="xs:int" />
+        <xs:element minOccurs="0" name="investorID" type="xs:int" />
+        <xs:element minOccurs="0" name="monthlyFundingCapital" type="xs:decimal" />
+        <xs:element minOccurs="0" name="fundsTransferDate" type="xs:int" />
+        <xs:element minOccurs="0" name="fundsTransferSchedule" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="repaymentsTransferSchedule" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateSchedulerDataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q125="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="UpdateSchedulerDataResult" nillable="true" type="q125:BoolActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="LogicalGlueGetLastInference">
     <xs:complexType>
       <xs:sequence>
@@ -1431,7 +1465,7 @@
   <xs:element name="LogicalGlueGetLastInferenceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q124="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LogicalGlueGetLastInferenceResult" nillable="true" type="q124:LogicalGlueResult" />
+        <xs:element xmlns:q126="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LogicalGlueGetLastInferenceResult" nillable="true" type="q126:LogicalGlueResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1446,7 +1480,7 @@
   <xs:element name="LogicalGlueGetHistoryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q125="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LogicalGlueGetHistoryResult" nillable="true" type="q125:ArrayOfLogicalGlueResult" />
+        <xs:element xmlns:q127="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LogicalGlueGetHistoryResult" nillable="true" type="q127:ArrayOfLogicalGlueResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1463,7 +1497,7 @@
   <xs:element name="LogicalGlueGetTryoutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q126="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LogicalGlueGetTryoutResult" nillable="true" type="q126:LogicalGlueResult" />
+        <xs:element xmlns:q128="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" minOccurs="0" name="LogicalGlueGetTryoutResult" nillable="true" type="q128:LogicalGlueResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

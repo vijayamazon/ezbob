@@ -11,6 +11,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 		this.model = new EzBob.Underwriter.AccountingInvestorModel();
 		this.model.on("change reset", this.render, this);
 		this.includeNonActiveInvestors = false;
+		EzBob.App.vent.on('investorTransactionAdded', this.transactionAdded, this);
 		return this;
 	},
 
@@ -28,8 +29,8 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .includeNonActiveInvestors": "showInvestorsData",
 		"click .funding-transactions": "openFundingTransactions",
-		"click .repayments-transactions": "openRepaymentsTransactions"
-		
+		"click .repayments-transactions": "openRepaymentsTransactions",
+		"click .investor-scheduler": "openConfigScheduler"
 	},
 
 	showInvestorsData: function() {
@@ -42,8 +43,16 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 		if (this.includeNonActiveInvestors) {
 			this.ui.includeNonActiveInvestorsCheckbox.attr('checked', 'checked');
 		}
-	},
 
+		if (this.currentInvestorID && this.currentBankAccountType) {
+			if (this.currentBankAccountType === 'Funding') {
+				this.$el.find('.funding-transactions[data-investorid="' + this.currentInvestorID + '"]').click();
+			}
+			if (this.currentBankAccountType === 'Repayments') {
+				this.$el.find('.repayments-transactions[data-investorid="' + this.currentInvestorID + '"]').click();
+			}
+		}
+	},
 
 	displayAccountingData: function() {
 		this.model.fetch(); 
@@ -64,7 +73,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	openFundingTransactions: function(el) {
 		var investorID = $(el.currentTarget).data('investorid');
 		var investorIDTransactionsOpenNow = this.$el.find('tr.funding-acc-transactions').data('id');
-		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions').remove();
+		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions,tr.tr-investor-scheduler').remove();
 		if (investorIDTransactionsOpenNow !== investorID) {
 			var newRow = $('<tr class="funding-acc-transactions" data-id=' + investorID + '><td colspan=8></td></tr>');
 			var tr = $(el.currentTarget).closest('tr');
@@ -86,7 +95,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 				investorAccountingModel: this.model,
 				model: this.fundingTransactionsModel
 			});
-			this.fundingTransactionsModel.fetch({ data: { bankAccountType: 'Funding'} });
+			this.fundingTransactionsModel.fetch({ data: { bankAccountType: 'Funding' } });
 		}
 
 		return false;
@@ -96,7 +105,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 	openRepaymentsTransactions: function(el) {
 		var investorID = $(el.currentTarget).data('investorid');
 		var investorIDTransactionsOpenNow = this.$el.find('tr.repayments-acc-transactions').data('id');
-		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions').remove();
+		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions,tr.tr-investor-scheduler').remove();
 		if(investorIDTransactionsOpenNow !== investorID) {
 			var newRow = $('<tr class="repayments-acc-transactions" data-id=' + investorID + '><td colspan=8></td></tr>');
 			var tr = $(el.currentTarget).closest('tr');
@@ -123,6 +132,35 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 		}
 		
 		return false;
+	},
+
+	transactionAdded: function(investorID, banckAccountType) {
+		this.currentInvestorID = investorID;
+		this.currentBankAccountType = banckAccountType;
+	},
+
+
+	openConfigScheduler: function(el) {
+		var investorID = $(el.currentTarget).data('investorid');
+		var investorIDSchedulerOpenNow = this.$el.find('tr.tr-investor-scheduler').data('id');
+		this.$el.find('tr.repayments-acc-transactions,tr.funding-acc-transactions,tr.tr-investor-scheduler').remove();
+		if (investorIDSchedulerOpenNow !== investorID) {
+			var newRow = $('<tr class="tr-investor-scheduler" data-id=' + investorID + '><td colspan=8></td></tr>');
+			var tr = $(el.currentTarget).closest('tr');
+			tr.after(newRow);
+			var schedulerEl = this.$el.find('tr.tr-investor-scheduler td');
+
+			this.configSchedulerModel = new EzBob.Underwriter.ConfigSchedulerModel({ InvestorID: investorID });
+			this.transctionView = new EzBob.Underwriter.ConfigSchedulerView({
+				el: schedulerEl,
+				investorID: investorID,
+				model: this.configSchedulerModel
+			});
+			this.configSchedulerModel.fetch();
+		}
+
+		return false;
+
 	},
 
 	show: function() {

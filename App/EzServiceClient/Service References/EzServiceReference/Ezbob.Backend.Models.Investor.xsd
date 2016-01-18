@@ -133,4 +133,15 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="TransactionsDataModel" nillable="true" type="tns:TransactionsDataModel" />
+  <xs:complexType name="SchedulerDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FundsTransferDate" type="xs:int" />
+      <xs:element minOccurs="0" name="FundsTransferSchedule" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MonthlyFundingCapital" type="xs:decimal" />
+      <xs:element minOccurs="0" name="RepaymentsTransferSchedule" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="SchedulerDataModel" nillable="true" type="tns:SchedulerDataModel" />
 </xs:schema>

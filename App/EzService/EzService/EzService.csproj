@@ -78,6 +78,7 @@
     <Compile Include="ActionResults\Investor\LogicalGlueResult.cs" />
     <Compile Include="ActionResults\Investor\AccountingDataResult.cs" />
     <Compile Include="ActionResults\Investor\InvestorActionResult.cs" />
+    <Compile Include="ActionResults\Investor\SchedulerDataResult.cs" />
     <Compile Include="ActionResults\Investor\TransactionsDataResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
     <Compile Include="ActionResults\NewLoanModelActionResult.cs" />

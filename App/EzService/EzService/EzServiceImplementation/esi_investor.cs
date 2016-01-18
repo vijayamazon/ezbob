@@ -61,6 +61,25 @@
 				TransactionsData = strategy.Result
 			};
 		}
+
+		public SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID) {
+			LoadSchedulerData strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, investorID);
+			return new SchedulerDataResult {
+				MetaData = metadata,
+				SchedulerData = strategy.Result
+			};
+		}
+
+		public BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
+			UpdateSchedulerData strategy;
+			var metadata = ExecuteSync(out strategy, null, underwriterID, underwriterID, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
+			return new BoolActionResult {
+				MetaData = metadata,
+				Value = strategy.Result
+			};
+		}
+
 		public BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
 			AddManualTransaction strategy;
 			var metadata = ExecuteSync(out strategy, null, underwriterID, underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);

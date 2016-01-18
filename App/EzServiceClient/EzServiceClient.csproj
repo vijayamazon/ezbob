@@ -66,77 +66,77 @@
     <None Include="Properties\DataSources\Ezbob.Backend.Models.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers.datasource" />
-    <None Include="Service References\EzServiceReference\Arrays1.xsd">
+    <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\DbConstants1.xsd">
+    <None Include="Service References\EzServiceReference\DbConstants.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EchoSignLib1.xsd">
+    <None Include="Service References\EzServiceReference\EchoSignLib.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.Investor.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.NewLoan1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.NewLoan.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models2.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models21.xsd">
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.NewLoan1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.NewLoan.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.OpenPlatform1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.PricingModel1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.PricingModel.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.UserManagement1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.UserManagement.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database1.xsd">
+    <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Utils1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzService.ActionResults.Investor1.xsd">
+    <None Include="Service References\EzServiceReference\EzService.ActionResults.Investor.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzService.ActionResults1.xsd">
+    <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzService1.xsd">
+    <None Include="Service References\EzServiceReference\EzService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\SalesForceLib.Models1.xsd">
+    <None Include="Service References\EzServiceReference\SalesForceLib.Models.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\service1.wsdl" />
-    <None Include="Service References\EzServiceReference\service2.xsd">
+    <None Include="Service References\EzServiceReference\service.wsdl" />
+    <None Include="Service References\EzServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\service21.xsd">
+    <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AccountingDataResult.datasource">
@@ -281,6 +281,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SchedulerDataResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringActionResult.datasource">

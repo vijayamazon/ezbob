@@ -25,14 +25,22 @@ EzBob.Underwriter.FundingTransactionsView = Backbone.Marionette.ItemView.extend(
 
 	events: {
 		"click #funding-transactions-range-submit-btn": "submitRange",
-		"click .add-transaction-btn": "addTransaction"
+		"click .add-transaction-btn": "addTransaction",
+		"hover td.transaction-comment": "setCommentTooltip",
+		"focus td.transaction-comment": "setCommentTooltip"
 	},
 
 	onRender: function() {
 		this.setUpView();
 		$('#funding-transactions-from').val(this.dateFrom);
 		$('#funding-transactions-to').val(this.dateTo);
+		
 		return this;
+	},
+
+	setCommentTooltip: function(el) {
+		var commentEl = $(el.currentTarget);
+		commentEl.tooltip({ title: commentEl.text(), placement: 'left' });
 	},
 	
 	setUpView: function() {

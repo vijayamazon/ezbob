@@ -34,11 +34,21 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="TransactionsDataResult" nillable="true" type="tns:TransactionsDataResult" />
-  <xs:complexType name="LogicalGlueResult">
+  <xs:complexType name="SchedulerDataResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" base="q7:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" minOccurs="0" name="Bucket" nillable="true" type="q8:Bucket" />
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="SchedulerData" nillable="true" type="q8:SchedulerDataModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SchedulerDataResult" nillable="true" type="tns:SchedulerDataResult" />
+  <xs:complexType name="LogicalGlueResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/EzService" base="q9:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" minOccurs="0" name="Bucket" nillable="true" type="q10:Bucket" />
           <xs:element minOccurs="0" name="BucketPercent" type="xs:decimal" />
           <xs:element minOccurs="0" name="BucketStr" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Date" type="xs:dateTime" />

@@ -74,6 +74,7 @@ EzBob.Underwriter.AddTransactionView = Backbone.Marionette.ItemView.extend({
 			UnBlockUi();
 			if (res.success) {
 				self.investorAccountingModel.fetch();
+				EzBob.App.vent.trigger('investorTransactionAdded', self.investorID, self.bankAccountType);
 				EzBob.ShowMessage('Transfer made successfully', 'Done', null, 'Ok');
 			} else {
 				EzBob.ShowMessage("Failed making transfer", 'Failed', null, 'Ok');

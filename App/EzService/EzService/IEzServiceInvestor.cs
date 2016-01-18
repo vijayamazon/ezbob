@@ -33,5 +33,11 @@
 
 		[OperationContract]
 		ActionMetaData LinkLoanRepaymentToInvestor(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, DateTime transactionDate);
+
+		[OperationContract]
+		SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID);
+
+		[OperationContract]
+		BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule);
 	} // interface IEzServiceInvestor
 } // namespace  

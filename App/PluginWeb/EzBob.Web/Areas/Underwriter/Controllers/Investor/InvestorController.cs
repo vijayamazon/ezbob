@@ -195,6 +195,26 @@
 		}
 
 		[Ajax]
+		[HttpGet]
+		public JsonResult GetSchedulerData(int id) {
+			Log.InfoFormat("Get Scheduler Data for InvestorID={0}", id);
+
+			SchedulerDataResult result = this.serviceClient.Instance.LoadSchedulerData(this.context.UserId, id);
+		
+
+			return Json(new { InvestorID = id, SchedulerObject = result.SchedulerData }, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public JsonResult SubmitSchedulerData(int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
+
+			var result = this.serviceClient.Instance.UpdateSchedulerData(this.context.UserId, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
+
+			return Json(new { investorID, success = result.Value }, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult FindInvestor(int customerId, long cashRequestID) {
