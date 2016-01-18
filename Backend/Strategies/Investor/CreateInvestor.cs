@@ -33,7 +33,8 @@
 								Timestamp = now,
                                 MonthlyFundingCapital = this.investor.MonthlyFundingCapital,
                                 FundingLimitForNotification = this.investor.FundingLimitForNotification,
-                                FundsTransferDate = this.investor.FundsTransferDate
+                                FundsTransferDate = this.investor.FundsTransferDate,
+                               
 							}
 						})
 					);

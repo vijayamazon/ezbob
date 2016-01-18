@@ -1693,6 +1693,7 @@
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Content\js\Underwriter\investor\ezbob.underwriter.manageInvestorDetailsView.js" />
     <None Include="Properties\PublishProfiles\TeamCityEzBobWeb.pubxml" />
   </ItemGroup>
   <ItemGroup>

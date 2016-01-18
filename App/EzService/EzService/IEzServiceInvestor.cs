@@ -42,6 +42,8 @@
 
 		[OperationContract]
 		SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID);
+	    [OperationContract]
+        BoolActionResult ManageInvestorDetails(int underwriterID, InvestorModel investorDetails);
 
 		[OperationContract]
 		BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule);

@@ -184,6 +184,7 @@
     <Compile Include="Investor\LinkOfferToInvestor.cs" />
     <Compile Include="Investor\LoadSchedulerData.cs" />
     <Compile Include="Investor\LoadTransactionsData.cs" />
+    <Compile Include="Investor\ManageInvestorDetails.cs" />
     <Compile Include="Investor\NotifyInvestorUtilizedFunds.cs" />
     <Compile Include="Investor\NotifyRiskPendingInvestorOffer.cs" />
     <Compile Include="Investor\OfferExpiredChecker.cs" />

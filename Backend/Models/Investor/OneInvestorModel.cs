@@ -13,7 +13,10 @@ namespace Ezbob.Backend.Models.Investor
     {
         [DataMember]
         public int InvestorID { get; set; }
-
+       
+        [DataMember]
+        public int InvestorTypeID { get; set; }
+        
         [DataMember]
         public string InvestorType { get; set; }
 

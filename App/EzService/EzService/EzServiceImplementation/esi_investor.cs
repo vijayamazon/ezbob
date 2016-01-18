@@ -64,7 +64,16 @@
 				Value = strategy.Result
 			};
 		}
-
+        public BoolActionResult ManageInvestorDetails(int underwriterID, InvestorModel investorDetails)
+        {
+            ManageInvestorDetails strategy;
+            var metadata = ExecuteSync(out strategy, null, underwriterID, investorDetails);
+            return new BoolActionResult
+            {
+                MetaData = metadata,
+                Value = strategy.Result
+            };
+        }
 		public BoolActionResult ManageInvestorBankAccount(int underwriterID, InvestorBankAccountModel investorBank) {
 			ManageInvestorBankAccount strategy;
 			var metadata = ExecuteSync(out strategy, null, underwriterID, investorBank);

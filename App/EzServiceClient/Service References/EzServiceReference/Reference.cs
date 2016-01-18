@@ -239,7 +239,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountingDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ListInvestorsResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.TransactionsDataResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SchedulerDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LogicalGlueResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -2032,6 +2031,29 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ListInvestorsResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class ListInvestorsResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Investor.OneInvestorModel[] InvestorsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Investor.OneInvestorModel[] Investors {
+            get {
+                return this.InvestorsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.InvestorsField, value) != true)) {
+                    this.InvestorsField = value;
+                    this.RaisePropertyChanged("Investors");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="TransactionsDataResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
     [System.SerializableAttribute()]
     public partial class TransactionsDataResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -2048,29 +2070,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.TransactionsDataField, value) != true)) {
                     this.TransactionsDataField = value;
                     this.RaisePropertyChanged("TransactionsData");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SchedulerDataResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
-    [System.SerializableAttribute()]
-    public partial class SchedulerDataResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.Investor.SchedulerDataModel SchedulerDataField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.Investor.SchedulerDataModel SchedulerData {
-            get {
-                return this.SchedulerDataField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SchedulerDataField, value) != true)) {
-                    this.SchedulerDataField = value;
-                    this.RaisePropertyChanged("SchedulerData");
                 }
             }
         }
@@ -2238,29 +2237,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.UniqueIDField.Equals(value) != true)) {
                     this.UniqueIDField = value;
                     this.RaisePropertyChanged("UniqueID");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ListInvestorsResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
-    [System.SerializableAttribute()]
-    public partial class ListInvestorsResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.Investor.OneInvestorModel[] InvestorsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.Investor.OneInvestorModel[] Investors {
-            get {
-                return this.InvestorsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.InvestorsField, value) != true)) {
-                    this.InvestorsField = value;
-                    this.RaisePropertyChanged("Investors");
                 }
             }
         }
@@ -4695,31 +4671,37 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse")]
         ServiceClientProxy.EzServiceReference.AccountingDataResult LoadAccountingData(int underwriterID);
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestors", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorsResponse")]
-        ServiceClientProxy.EzServiceReference.ListInvestorsResult LoadInvestors(int underwriterID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AccountingDataResult> LoadAccountingDataAsync(int underwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestors", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorsResponse")]
+        ServiceClientProxy.EzServiceReference.ListInvestorsResult LoadInvestors(int underwriterID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadInvestors", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadInvestorsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ListInvestorsResult> LoadInvestorsAsync(int underwriterID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
         ServiceClientProxy.EzServiceReference.TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID);
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactListResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorContactList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.TransactionsDataResult> LoadTransactionsDataAsync(int underwriterID, int investorID, int bankAccountTypeID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactListResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorContactList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactListResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorContactListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/AddManualTransaction", ReplyAction="http://tempuri.org/IEzServiceInvestor/AddManualTransactionResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment);
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksListResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/AddManualTransaction", ReplyAction="http://tempuri.org/IEzServiceInvestor/AddManualTransactionResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> AddManualTransactionAsync(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksListResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksListResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorBanksListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
         
@@ -4735,17 +4717,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestorResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LinkLoanRepaymentToInvestorAsync(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, System.DateTime transactionDate);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadSchedulerDataResponse")]
-        ServiceClientProxy.EzServiceReference.SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetailsResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorDetails(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadSchedulerDataResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SchedulerDataResult> LoadSchedulerDataAsync(int underwriterID, int investorID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerDataResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerDataResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> UpdateSchedulerDataAsync(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetailsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorDetailsAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInferenceResponse")]
         ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetLastInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
@@ -4764,12 +4740,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, System.Guid uniqueID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
@@ -6409,36 +6379,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ManageInvestorBankAccountAsync(underwriterID, investorBank);
         }
         
-        public ServiceClientProxy.EzServiceReference.ListInvestorsResult LoadInvestors(int underwriterID) {
-            return base.Channel.LoadInvestors(underwriterID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ListInvestorsResult> LoadInvestorsAsync(int underwriterID) {
-            return base.Channel.LoadInvestorsAsync(underwriterID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorContactList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts) {
-            return base.Channel.SaveInvestorContactList(underwriterID, investorID, investorContacts);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorContactListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts) {
-            return base.Channel.SaveInvestorContactListAsync(underwriterID, investorID, investorContacts);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
-            return base.Channel.SaveInvestorBanksList(underwriterID, investorID, investorBanks);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorBanksListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
-            return base.Channel.SaveInvestorBanksListAsync(underwriterID, investorID, investorBanks);
-        }
-        
         public ServiceClientProxy.EzServiceReference.AccountingDataResult LoadAccountingData(int underwriterID) {
             return base.Channel.LoadAccountingData(underwriterID);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AccountingDataResult> LoadAccountingDataAsync(int underwriterID) {
             return base.Channel.LoadAccountingDataAsync(underwriterID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ListInvestorsResult LoadInvestors(int underwriterID) {
+            return base.Channel.LoadInvestors(underwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ListInvestorsResult> LoadInvestorsAsync(int underwriterID) {
+            return base.Channel.LoadInvestorsAsync(underwriterID);
         }
         
         public ServiceClientProxy.EzServiceReference.TransactionsDataResult LoadTransactionsData(int underwriterID, int investorID, int bankAccountTypeID) {
@@ -6449,12 +6403,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadTransactionsDataAsync(underwriterID, investorID, bankAccountTypeID);
         }
         
+        public ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorContactList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts) {
+            return base.Channel.SaveInvestorContactList(underwriterID, investorID, investorContacts);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorContactListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts) {
+            return base.Channel.SaveInvestorContactListAsync(underwriterID, investorID, investorContacts);
+        }
+        
         public ServiceClientProxy.EzServiceReference.BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
             return base.Channel.AddManualTransaction(underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> AddManualTransactionAsync(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
             return base.Channel.AddManualTransactionAsync(underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
+            return base.Channel.SaveInvestorBanksList(underwriterID, investorID, investorBanks);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorBanksListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {
+            return base.Channel.SaveInvestorBanksListAsync(underwriterID, investorID, investorBanks);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LinkLoanToInvestor(int userID, int customerID, int loanID) {
@@ -6473,20 +6443,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LinkLoanRepaymentToInvestorAsync(userID, customerID, loanID, loanTransactionID, transactionAmount, transactionDate);
         }
         
-        public ServiceClientProxy.EzServiceReference.SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID) {
-            return base.Channel.LoadSchedulerData(underwriterID, investorID);
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorDetails(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails) {
+            return base.Channel.ManageInvestorDetails(underwriterID, investorDetails);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SchedulerDataResult> LoadSchedulerDataAsync(int underwriterID, int investorID) {
-            return base.Channel.LoadSchedulerDataAsync(underwriterID, investorID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
-            return base.Channel.UpdateSchedulerData(underwriterID, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> UpdateSchedulerDataAsync(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
-            return base.Channel.UpdateSchedulerDataAsync(underwriterID, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorDetailsAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails) {
+            return base.Channel.ManageInvestorDetailsAsync(underwriterID, investorDetails);
         }
         
         public ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetLastInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
@@ -6511,14 +6473,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout) {
             return base.Channel.LogicalGlueGetTryoutAsync(underwriterID, customerID, monthlyRepayment, isTryout);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, System.Guid uniqueID) {
-            return base.Channel.LogicalGlueSetAsCurrent(underwriterID, customerID, uniqueID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID) {
-            return base.Channel.LogicalGlueSetAsCurrentAsync(underwriterID, customerID, uniqueID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {

@@ -49,8 +49,8 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 		        this.ui.ContactMobile.val(this.contact.get('ContactMobile')).change();
 		        this.ui.ContactOfficeNumber.val(this.contact.get('ContactOfficeNumber')).change();
 		        this.ui.Comment.val(this.contact.get('Comment')).change();
-		        this.ui.IsPrimary.prop('checked', this.contact.get('IsPrimary')).change();
-		        this.ui.IsActive.prop('checked', this.contact.get('IsActive')).change();
+		        this.ui.IsPrimary.val(this.contact.get('IsPrimary')).change();
+		        this.ui.IsActive.val(this.contact.get('IsActive')).change();
 		        this.ui.InvestorContactID.val(this.contact.get('InvestorContactID')).change();
 			}
 		}
@@ -91,7 +91,7 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 				EzBob.ShowMessage('Contact added/updated successfully', 'Done', null, 'Ok');
 				self.trigger('cancel');
 				
-				$("tr[data-id='" + investorID + "']").click();
+				$(".manage-investor-row[data-id='" + investorID + "']").click();
 			} else {
 			    EzBob.ShowMessage(res.error, 'Failed saving investor contact', null, 'Ok');
                
@@ -112,6 +112,7 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 	    this.remove();
 	    this.unbind();
 	    this.model.unbind("change reset", this.modelChanged);
+	  
 	    $('.add-contact-row').show();
 		return false;
 	}

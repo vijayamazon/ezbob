@@ -124,6 +124,32 @@
 				});
 			return Json(new { InvestorID, contact, success = result.Value }, JsonRequestBehavior.AllowGet);
 		}
+
+        [Ajax]
+        [HttpPost]
+        public JsonResult ManageInvestorDetails(int InvestorID, FrontInvestorModel investorDetails)
+        {
+            DateTime now = DateTime.UtcNow;
+            var result = this.serviceClient.Instance.ManageInvestorDetails(this.context.UserId,
+                new Ezbob.Backend.Models.Investor.InvestorModel
+                {
+                 
+                    InvestorID = InvestorID,
+                    IsActive = investorDetails.IsActive,
+                    Name = investorDetails.CompanyName,
+                    InvestorType = new Ezbob.Backend.Models.Investor.InvestorTypeModel
+                    {
+                        InvestorTypeID = investorDetails.InvestorType
+                    },
+                    Timestamp = now,
+                    Contacts=null,
+                    Banks = null
+
+                    
+                });
+            return Json(new { InvestorID, investorDetails, success = result.Value }, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Edit all investor Contacts toghether 
         /// </summary>

@@ -81,14 +81,15 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
@@ -579,12 +580,6 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_InvestorLoadTypes_InputMessage">
-    <wsdl:part name="parameters" element="tns:InvestorLoadTypes" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_InvestorLoadTypes_OutputMessage">
-    <wsdl:part name="parameters" element="tns:InvestorLoadTypesResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_CreateInvestor_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateInvestor" />
   </wsdl:message>
@@ -609,11 +604,23 @@
   <wsdl:message name="IEzService_ManageInvestorBankAccount_OutputMessage">
     <wsdl:part name="parameters" element="tns:ManageInvestorBankAccountResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadAccountingData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadAccountingData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadAccountingData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadAccountingDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LoadInvestors_InputMessage">
     <wsdl:part name="parameters" element="tns:LoadInvestors" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoadInvestors_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadInvestorsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadTransactionsData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadTransactionsData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadTransactionsData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadTransactionsDataResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveInvestorContactList_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveInvestorContactList" />
@@ -621,11 +628,59 @@
   <wsdl:message name="IEzService_SaveInvestorContactList_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveInvestorContactListResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_AddManualTransaction_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddManualTransaction" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddManualTransaction_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddManualTransactionResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveInvestorBanksList_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveInvestorBanksList" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveInvestorBanksList_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveInvestorBanksListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LinkLoanToInvestor_InputMessage">
+    <wsdl:part name="parameters" element="tns:LinkLoanToInvestor" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LinkLoanToInvestor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LinkLoanToInvestorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LinkLoanRepaymentToInvestor_InputMessage">
+    <wsdl:part name="parameters" element="tns:LinkLoanRepaymentToInvestor" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LinkLoanRepaymentToInvestor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LinkLoanRepaymentToInvestorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManageInvestorDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:ManageInvestorDetails" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManageInvestorDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ManageInvestorDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueGetLastInference_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueGetLastInference" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueGetLastInference_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueGetLastInferenceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueGetHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueGetHistory" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueGetHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueGetHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueGetTryout_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueGetTryout" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueGetTryout_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueGetTryoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
@@ -1065,11 +1120,23 @@
   <wsdl:message name="IEzService_SetManualDecision_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetManualDecisionResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadDecisionHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadDecisionHistory" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadDecisionHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadDecisionHistoryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddHistoryDirector_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddHistoryDirectorResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_ApprovedUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ApprovedUser" />
@@ -1569,12 +1636,6 @@
   <wsdl:message name="IEzService_LoadManualVatReturnPeriods_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadManualVatReturnPeriodsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1902,10 +1963,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="InvestorLoadTypes">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypes" message="tns:IEzService_InvestorLoadTypes_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypesResponse" message="tns:IEzService_InvestorLoadTypes_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="CreateInvestor">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/CreateInvestor" message="tns:IEzService_CreateInvestor_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/CreateInvestorResponse" message="tns:IEzService_CreateInvestor_OutputMessage" />
@@ -1922,17 +1979,57 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccount" message="tns:IEzService_ManageInvestorBankAccount_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorBankAccountResponse" message="tns:IEzService_ManageInvestorBankAccount_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LoadAccountingData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingData" message="tns:IEzService_LoadAccountingData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadAccountingDataResponse" message="tns:IEzService_LoadAccountingData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LoadInvestors">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadInvestors" message="tns:IEzService_LoadInvestors_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadInvestorsResponse" message="tns:IEzService_LoadInvestors_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadTransactionsData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData" message="tns:IEzService_LoadTransactionsData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadTransactionsDataResponse" message="tns:IEzService_LoadTransactionsData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveInvestorContactList">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactList" message="tns:IEzService_SaveInvestorContactList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorContactListResponse" message="tns:IEzService_SaveInvestorContactList_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AddManualTransaction">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/AddManualTransaction" message="tns:IEzService_AddManualTransaction_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/AddManualTransactionResponse" message="tns:IEzService_AddManualTransaction_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveInvestorBanksList">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksList" message="tns:IEzService_SaveInvestorBanksList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksListResponse" message="tns:IEzService_SaveInvestorBanksList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LinkLoanToInvestor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LinkLoanToInvestor" message="tns:IEzService_LinkLoanToInvestor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LinkLoanToInvestorResponse" message="tns:IEzService_LinkLoanToInvestor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LinkLoanRepaymentToInvestor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestor" message="tns:IEzService_LinkLoanRepaymentToInvestor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestorResponse" message="tns:IEzService_LinkLoanRepaymentToInvestor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageInvestorDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails" message="tns:IEzService_ManageInvestorDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetailsResponse" message="tns:IEzService_ManageInvestorDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueGetLastInference">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference" message="tns:IEzService_LogicalGlueGetLastInference_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInferenceResponse" message="tns:IEzService_LogicalGlueGetLastInference_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueGetHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistory" message="tns:IEzService_LogicalGlueGetHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistoryResponse" message="tns:IEzService_LogicalGlueGetHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueGetTryout">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout" message="tns:IEzService_LogicalGlueGetTryout_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse" message="tns:IEzService_LogicalGlueGetTryout_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoanFullyPaid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
@@ -2226,9 +2323,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetManualDecision" message="tns:IEzService_SetManualDecision_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetManualDecisionResponse" message="tns:IEzService_SetManualDecision_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LoadDecisionHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadDecisionHistory" message="tns:IEzService_LoadDecisionHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadDecisionHistoryResponse" message="tns:IEzService_LoadDecisionHistory_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddHistoryDirector">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirectorResponse" message="tns:IEzService_AddHistoryDirector_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ApprovedUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ApprovedUser" message="tns:IEzService_ApprovedUser_InputMessage" />
@@ -2561,10 +2666,6 @@
     <wsdl:operation name="LoadManualVatReturnPeriods">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriods" message="tns:IEzService_LoadManualVatReturnPeriods_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriodsResponse" message="tns:IEzService_LoadManualVatReturnPeriods_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoanFullyPaid">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -3305,15 +3406,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="InvestorLoadTypes">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/InvestorLoadTypes" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="CreateInvestor">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/CreateInvestor" style="document" />
       <wsdl:input>
@@ -3350,8 +3442,26 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadAccountingData">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadAccountingData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LoadInvestors">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadInvestors" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadTransactionsData">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadTransactionsData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3368,8 +3478,80 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="AddManualTransaction">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/AddManualTransaction" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SaveInvestorBanksList">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LinkLoanToInvestor">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LinkLoanToInvestor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LinkLoanRepaymentToInvestor">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageInvestorDetails">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueGetLastInference">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueGetHistory">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueGetTryout">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoanFullyPaid">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanFullyPaid" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4034,8 +4216,26 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadDecisionHistory">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadDecisionHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddHistoryDirector">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AddHistoryDirector" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4783,15 +4983,6 @@
     </wsdl:operation>
     <wsdl:operation name="LoadManualVatReturnPeriods">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadManualVatReturnPeriods" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LoanFullyPaid">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanFullyPaid" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

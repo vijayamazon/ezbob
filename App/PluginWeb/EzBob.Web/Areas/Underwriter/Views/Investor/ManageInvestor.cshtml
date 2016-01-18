@@ -5,6 +5,7 @@
 
 @{
 	Dictionary<string, string> accountTypes = I_InvestorAccountTypeEnum.Funding.ToDictionaryInt<I_InvestorAccountTypeEnum>();
+    Dictionary<string, string> investorTypes = I_InvestorTypeEnum.Private.ToDictionaryInt<I_InvestorTypeEnum>();
 }
 
 <script type="text/template" id="manage-investor-template">
@@ -120,11 +121,35 @@
 		</div>
 	</div>
 </script>
-<script type="text/template" id="manage-investor-contact-details-tamplate">
-    
-</script>
+
 <script type="text/template" id="manage-investor-details-template">
-	
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-content">
+                <form id="addEditInvestorDetilasForm" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
+                            @EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
+                         
+                            <div class="control-group">
+                                <label class="control-label"></label>
+                                <div class="control">
+                                    <label class="checkbox">
+                                        <input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
+                                        Is active
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="investorDetailsSubmit" class="btn btn-primary">Submit</button>
+                            <button id="investorDetailsCancel" class="btn btn-primary">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+                     
 </script>
 
 <script type="text/template" id="manage-investor-contact-template">
@@ -170,8 +195,8 @@
 								<label class="control-label"></label>
 								<div class="control">
 									<label class="checkbox">
-										<input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
-										Is active
+                                       
+										<input name="IsActive" id="IsActive" type="hidden" value="false"  />
 									</label>
 								</div>
 							</div>

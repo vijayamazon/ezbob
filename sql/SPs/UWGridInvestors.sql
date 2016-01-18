@@ -19,7 +19,8 @@ BEGIN
 		t.Name AS InvestorType,
 		i.Name CompanyName,
 		i.Timestamp,
-		i.IsActive
+		i.IsActive,
+		t.InvestorTypeID 
 
 	FROM
 		I_Investor i INNER JOIN I_InvestorType t ON t.InvestorTypeID = i.InvestorTypeID

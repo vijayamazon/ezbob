@@ -95,6 +95,7 @@
       <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InvestorTypeID" type="xs:int" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />

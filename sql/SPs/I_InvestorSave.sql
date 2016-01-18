@@ -4,12 +4,19 @@ GO
 IF OBJECT_ID('I_InvestorSave') IS NOT NULL
 	DROP PROCEDURE I_InvestorSave
 GO
+IF OBJECT_ID('I_InvestorDetailsSave') IS NOT NULL
+	DROP PROCEDURE I_InvestorDetailsSave
+GO
+IF OBJECT_ID('I_InvestorDetailsUpdate') IS NOT NULL
+	DROP PROCEDURE I_InvestorDetailsUpdate
+GO
 
 IF TYPE_ID('I_InvestorList') IS NOT NULL
 	DROP TYPE I_InvestorList
 GO
 
 CREATE TYPE I_InvestorList AS TABLE (
+	
 	[InvestorTypeID] INT NOT NULL,
 	[Name] NVARCHAR(255) NULL,
 	[IsActive] BIT NOT NULL,
@@ -55,5 +62,33 @@ BEGIN
 	SELECT @ScopeID AS ScopeID
 END
 GO
+
+
+CREATE PROCEDURE I_InvestorDetailsUpdate
+@InvestorTypeID Int,
+@IsActive bit,
+@Name  nvarchar(255),
+@Timestamp datetime,
+@InvestorID Int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE 
+		I_Investor
+	SET 
+		
+		I_Investor.[Name] = @Name ,
+		I_Investor.[InvestorTypeID] = @InvestorTypeID,
+		I_Investor.[IsActive] = @IsActive,
+		I_Investor.[Timestamp] = @Timestamp
+	FROM
+		I_Investor b 
+	where
+		b.InvestorID = @InvestorID
+END
+GO
+
+
 
 
