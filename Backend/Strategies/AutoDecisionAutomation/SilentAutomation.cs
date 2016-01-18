@@ -19,7 +19,7 @@
 	/// <para>After adding new marketplace (and only in this case) if approve decision is "approved"
 	/// Main strategy is executed in "skip all apply auto rules" mode to auto approve customer if possible.</para>
 	/// </summary>
-	public class SilentAutomation : AStrategy {
+	public class SilentAutomation : AMainStrategyBase {
 		public enum Callers {
 			Unknown,
 			AddMarketplace,
@@ -54,6 +54,8 @@
 		} // SetMedal
 
 		public override string Name { get { return "SilentAutomation"; } }
+
+		public override int CustomerID { get { return this.customerID; } }
 
 		public virtual string Tag {
 			get {
@@ -105,6 +107,8 @@
 				this.cashRequestID
 			);
 
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
 				new AutoRejectionArguments {
 					CustomerID = this.customerID,
@@ -112,12 +116,10 @@
 					Now = DateTime.UtcNow,
 					DB = DB,
 					Log = Log,
-					// TODO CompanyID = ,
-					// TODO MonthlyPayment = ,
+					CompanyID = CompanyID,
+					MonthlyPayment = MonthlyPayment,
 				}
 			);
-
-			throw new NotImplementedException("Company ID and monthly payment arguments should be implemented.");
 
 			rejectAgent.MakeAndVerifyDecision(Tag, true);
 

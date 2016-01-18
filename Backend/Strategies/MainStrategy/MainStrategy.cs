@@ -31,7 +31,7 @@
 	using MailApi;
 	using SalesForceLib.Models;
 
-	public class MainStrategy : AStrategy {
+	public class MainStrategy : AMainStrategyBase {
 		public MainStrategy(
 			int underwriterID,
 			int customerID,
@@ -81,7 +81,7 @@
 
 		public int UnderwriterID { get; private set; }
 
-		public int CustomerID {
+		public override int CustomerID {
 			get { return this.customerDetails.ID; }
 		} // CustomerID
 
@@ -633,6 +633,8 @@
 				return;
 			} // if
 
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
 			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
 				new AutoRejectionArguments {
 					CustomerID = CustomerID,
@@ -640,11 +642,11 @@
 					Now = DateTime.UtcNow,
 					DB = DB,
 					Log = Log,
-					// TODO CompanyID =
-					// TODO MonthlyPayment =
+					CompanyID = CompanyID,
+					MonthlyPayment = MonthlyPayment,
 				}
 			);
-			throw new NotImplementedException("Company ID and monthly payment arguments should be implemented.");
+
 			rAgent.MakeAndVerifyDecision(this.tag);
 
 			if (rAgent.WasMismatch) {

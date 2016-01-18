@@ -6,14 +6,11 @@ IF OBJECT_ID('GetCustomerCompanyType') IS NULL
 GO
 
 ALTER PROCEDURE GetCustomerCompanyType
-@CustomerID INT,
-@Now DATETIME,
+@CompanyID INT,
 @TypeOfBusiness NVARCHAR(50) OUTPUT
 AS
 BEGIN
 	SET @TypeOfBusiness = NULL
-
-	DECLARE @CompanyID INT = dbo.udfGetCustomerCompanyID(@CustomerID, @Now)
 
 	SELECT
 		@TypeOfBusiness = c.TypeOfBusiness
