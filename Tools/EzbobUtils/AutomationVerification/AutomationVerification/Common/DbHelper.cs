@@ -237,6 +237,8 @@
 				if (!model.WeightsDict.ContainsKey(Parameter.FreeCashFlow))
 					model.WeightsDict[Parameter.FreeCashFlow] = new Weight();
 
+				nlCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
+
 				_db.ExecuteNonQuery(
 					"AV_StoreNewMedal",
 					CommandSpecies.StoredProcedure,
