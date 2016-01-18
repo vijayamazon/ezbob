@@ -158,10 +158,10 @@
         public JsonResult SaveInvestorContactList(int InvestorID, string investor)
         {
 
-            this.Log.Debug("investor string "+investor);
+            Log.Debug("investor string "+investor);
             var investorModel = Newtonsoft.Json.JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
            
-            this.Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
+            Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
             //call the service
           var contacts = investorModel.Contacts.Select(x => new Ezbob.Backend.Models.Investor.InvestorContactModel {
 					InvestorContactID = x.InvestorContactID,
@@ -187,10 +187,10 @@
         public JsonResult SaveInvestorBanksList(int InvestorID, string investor)
         {
             
-            this.Log.Debug("investor string " + investor);
+            Log.Debug("investor string " + investor);
             var investorModel = Newtonsoft.Json.JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
 
-            this.Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
+            Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
             //call the service
             var Banks = investorModel.Banks.Select(x => new Ezbob.Backend.Models.Investor.InvestorBankAccountModel
             {

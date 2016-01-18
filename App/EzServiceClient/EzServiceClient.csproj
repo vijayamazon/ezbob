@@ -93,6 +93,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -115,6 +118,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
@@ -257,11 +263,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LogicalGlueResult.datasource">
-          <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListInvestorsResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListInvestorsResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LotteryActionResult.datasource">

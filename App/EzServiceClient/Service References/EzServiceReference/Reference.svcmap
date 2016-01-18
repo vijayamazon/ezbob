@@ -36,14 +36,15 @@
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.NewLoan.xsd" MetadataType="Schema" ID="03356dac-1421-4dc4-b9f3-7d786890a4c3" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.NewLoan.xsd" MetadataType="Schema" ID="dbac2567-7cb3-4307-aa32-1a188fc420f6" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="940760cd-0120-459f-8be2-5e70045053e2" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
-    <MetadataFile FileName="EzService.ActionResults.Investor.xsd" MetadataType="Schema" ID="1420188a-3bb1-4722-b06a-825159e97ecc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.Investor.xsd" MetadataType="Schema" ID="256cf920-c47d-4118-b717-5cf239d4b50a" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="EzService.ActionResults.Investor.xsd" MetadataType="Schema" ID="1420188a-3bb1-4722-b06a-825159e97ecc" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Integration.LogicalGlue.Engine.Interface1.xsd" MetadataType="Schema" ID="2e355505-3e7d-4590-9aba-ab93ee50f3d0" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="5e42a891-d9d4-4939-a863-a5abaf586cb9" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="88e45f47-8e1f-47b4-8b53-47129c2da078" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="fdeb3a35-efba-43f2-9e4d-9ff1543f9f14" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="228a13e9-8937-4f58-89c3-3c4b817e276b" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="65d759b6-5b34-4c73-9e4a-458566209429" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.ApplicationInfo.xsd" MetadataType="Schema" ID="efd9251c-ec8e-4475-8d42-cf5049191d01" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.ApplicationInfo1.xsd" MetadataType="Schema" ID="c989bd03-a448-41da-8cfa-bfe4fb28632e" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd" MetadataType="Schema" ID="27520b2f-6d97-4335-94bc-66a6ec7cfa11" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
     <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="891d2f6d-79cf-403e-a002-04ce92c8d2a1" SourceId="1" SourceUrl="net.tcp://shlomim-pc:7081/mex" />
   </Metadata>

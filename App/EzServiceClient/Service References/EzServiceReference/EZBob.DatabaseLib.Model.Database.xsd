@@ -113,6 +113,17 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ExperianServiceType" nillable="true" type="tns:ExperianServiceType" />
+  <xs:simpleType name="TypeOfBusiness">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Entrepreneur" />
+      <xs:enumeration value="LLP" />
+      <xs:enumeration value="PShip3P" />
+      <xs:enumeration value="PShip" />
+      <xs:enumeration value="SoleTrader" />
+      <xs:enumeration value="Limited" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TypeOfBusiness" nillable="true" type="tns:TypeOfBusiness" />
   <xs:simpleType name="CreditResultStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="WaitingForDecision" />
@@ -127,7 +138,7 @@
       <xs:enumeration value="PaidOff" />
       <xs:enumeration value="WrittenOff" />
       <xs:enumeration value="Late" />
-      <xs:enumeration value="PandingInvestor" />
+      <xs:enumeration value="PendingInvestor" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="CreditResultStatus" nillable="true" type="tns:CreditResultStatus" />

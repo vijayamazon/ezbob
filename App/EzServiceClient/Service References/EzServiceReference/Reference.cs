@@ -239,6 +239,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountingDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ListInvestorsResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.TransactionsDataResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SchedulerDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LogicalGlueResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -2070,6 +2071,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.TransactionsDataField, value) != true)) {
                     this.TransactionsDataField = value;
                     this.RaisePropertyChanged("TransactionsData");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SchedulerDataResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class SchedulerDataResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Investor.SchedulerDataModel SchedulerDataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Investor.SchedulerDataModel SchedulerData {
+            get {
+                return this.SchedulerDataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SchedulerDataField, value) != true)) {
+                    this.SchedulerDataField = value;
+                    this.RaisePropertyChanged("SchedulerData");
                 }
             }
         }
@@ -4717,11 +4741,23 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestor", ReplyAction="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestorResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LinkLoanRepaymentToInvestorAsync(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, System.DateTime transactionDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadSchedulerDataResponse")]
+        ServiceClientProxy.EzServiceReference.SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/LoadSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/LoadSchedulerDataResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SchedulerDataResult> LoadSchedulerDataAsync(int underwriterID, int investorID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetailsResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorDetails(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails", ReplyAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorDetailsAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerDataResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerData", ReplyAction="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerDataResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> UpdateSchedulerDataAsync(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInferenceResponse")]
         ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetLastInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts);
@@ -4740,6 +4776,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, System.Guid uniqueID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
@@ -6443,12 +6485,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LinkLoanRepaymentToInvestorAsync(userID, customerID, loanID, loanTransactionID, transactionAmount, transactionDate);
         }
         
+        public ServiceClientProxy.EzServiceReference.SchedulerDataResult LoadSchedulerData(int underwriterID, int investorID) {
+            return base.Channel.LoadSchedulerData(underwriterID, investorID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SchedulerDataResult> LoadSchedulerDataAsync(int underwriterID, int investorID) {
+            return base.Channel.LoadSchedulerDataAsync(underwriterID, investorID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.BoolActionResult ManageInvestorDetails(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails) {
             return base.Channel.ManageInvestorDetails(underwriterID, investorDetails);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManageInvestorDetailsAsync(int underwriterID, Ezbob.Backend.Models.Investor.InvestorModel investorDetails) {
             return base.Channel.ManageInvestorDetailsAsync(underwriterID, investorDetails);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult UpdateSchedulerData(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
+            return base.Channel.UpdateSchedulerData(underwriterID, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> UpdateSchedulerDataAsync(int underwriterID, int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
+            return base.Channel.UpdateSchedulerDataAsync(underwriterID, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
         }
         
         public ServiceClientProxy.EzServiceReference.LogicalGlueResult LogicalGlueGetLastInference(int underwriterID, int customerID, System.Nullable<System.DateTime> date, bool includeTryouts) {
@@ -6473,6 +6531,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LogicalGlueResult> LogicalGlueGetTryoutAsync(int underwriterID, int customerID, decimal monthlyRepayment, bool isTryout) {
             return base.Channel.LogicalGlueGetTryoutAsync(underwriterID, customerID, monthlyRepayment, isTryout);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, System.Guid uniqueID) {
+            return base.Channel.LogicalGlueSetAsCurrent(underwriterID, customerID, uniqueID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID) {
+            return base.Channel.LogicalGlueSetAsCurrentAsync(underwriterID, customerID, uniqueID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {

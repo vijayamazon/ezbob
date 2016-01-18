@@ -652,11 +652,23 @@
   <wsdl:message name="IEzService_LinkLoanRepaymentToInvestor_OutputMessage">
     <wsdl:part name="parameters" element="tns:LinkLoanRepaymentToInvestorResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadSchedulerData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadSchedulerData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadSchedulerData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadSchedulerDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_ManageInvestorDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:ManageInvestorDetails" />
   </wsdl:message>
   <wsdl:message name="IEzService_ManageInvestorDetails_OutputMessage">
     <wsdl:part name="parameters" element="tns:ManageInvestorDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateSchedulerData_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSchedulerData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateSchedulerData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSchedulerDataResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LogicalGlueGetLastInference_InputMessage">
     <wsdl:part name="parameters" element="tns:LogicalGlueGetLastInference" />
@@ -675,6 +687,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_LogicalGlueGetTryout_OutputMessage">
     <wsdl:part name="parameters" element="tns:LogicalGlueGetTryoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueSetAsCurrent_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueSetAsCurrent" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LogicalGlueSetAsCurrent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogicalGlueSetAsCurrentResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
     <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
@@ -2011,9 +2029,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestor" message="tns:IEzService_LinkLoanRepaymentToInvestor_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LinkLoanRepaymentToInvestorResponse" message="tns:IEzService_LinkLoanRepaymentToInvestor_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LoadSchedulerData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadSchedulerData" message="tns:IEzService_LoadSchedulerData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/LoadSchedulerDataResponse" message="tns:IEzService_LoadSchedulerData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ManageInvestorDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails" message="tns:IEzService_ManageInvestorDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetailsResponse" message="tns:IEzService_ManageInvestorDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSchedulerData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerData" message="tns:IEzService_UpdateSchedulerData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerDataResponse" message="tns:IEzService_UpdateSchedulerData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LogicalGlueGetLastInference">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetLastInference" message="tns:IEzService_LogicalGlueGetLastInference_InputMessage" />
@@ -2026,6 +2052,10 @@
     <wsdl:operation name="LogicalGlueGetTryout">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout" message="tns:IEzService_LogicalGlueGetTryout_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryoutResponse" message="tns:IEzService_LogicalGlueGetTryout_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueSetAsCurrent">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent" message="tns:IEzService_LogicalGlueSetAsCurrent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse" message="tns:IEzService_LogicalGlueSetAsCurrent_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoanFullyPaid">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
@@ -3514,8 +3544,26 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadSchedulerData">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/LoadSchedulerData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ManageInvestorDetails">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/ManageInvestorDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSchedulerData">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceInvestor/UpdateSchedulerData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3543,6 +3591,15 @@
     </wsdl:operation>
     <wsdl:operation name="LogicalGlueGetTryout">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueGetTryout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogicalGlueSetAsCurrent">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
