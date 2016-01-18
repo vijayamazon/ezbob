@@ -30,7 +30,6 @@
 		private readonly CustomerRepository customerRepository;
 		private readonly LoanRepository loanRepository;
 		private readonly LoanScheduleRepository loanScheduleRepository;
-		private readonly IPacnetPaypointServiceLogRepository logRepository;
 		private readonly PaymentRolloverRepository rolloverRepository;
 		private readonly PayPointApi paypoint;
 
@@ -38,8 +37,7 @@
 			CustomerRepository customersRepository,
 			PaymentRolloverRepository rolloverRepository,
 			LoanScheduleRepository loanScheduleRepository, 
-
-			IPacnetPaypointServiceLogRepository logRepository, 
+			IEzbobWorkplaceContext context,
 			LoanRepository loanRepository,
 			PayPointApi paypoint, 
 			ServiceClient serviceClient) {
@@ -47,7 +45,6 @@
 			this.rolloverRepository = rolloverRepository;
 			this.loanScheduleRepository = loanScheduleRepository;
 			this.context = context;
-			this.logRepository = logRepository;
 			this.loanRepository = loanRepository;
 			this.paypoint = paypoint;
 			this.serviceClient = serviceClient;
@@ -110,20 +107,20 @@
 		[Ajax]
 		[Transactional]
 		public void RemoveRollover(int rolloverId, long nlRolloverID = 0) {
-			var rollover = this._rolloverRepository.GetById(rolloverId);
+			var rollover = this.rolloverRepository.GetById(rolloverId);
 			rollover.Status = RolloverStatus.Removed;
-			this._rolloverRepository.Update(rollover);
+			this.rolloverRepository.Update(rollover);
 
 			try {
 
 				int loanID = rollover.LoanSchedule.Loan.Id;
 				int customerID = rollover.LoanSchedule.Loan.Customer.Id;
 
-				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loanID, customerID, this._context.UserId).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanID, customerID, this.context.UserId).Value;
 
 				if (nlLoanId > 0) {
 
-					var nlModel = this.m_oServiceClient.Instance.GetLoanState(customerID, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(customerID, nlLoanId, DateTime.UtcNow, this.context.UserId, false).Value;
 
 					NL_LoanRollovers nlRollover = null;
 
@@ -141,10 +138,10 @@
 						return;
 					}
 
-					nlRollover.DeletedByUserID = this._context.UserId;
+					nlRollover.DeletedByUserID = this.context.UserId;
 					nlRollover.DeletionTime = DateTime.UtcNow;
 
-					this.m_oServiceClient.Instance.SaveRollover(this._context.UserId, customerID, nlRollover, nlLoanId);
+					this.serviceClient.Instance.SaveRollover(this.context.UserId, customerID, nlRollover, nlLoanId);
 				}
 
 				// ReSharper disable once CatchAllClause
@@ -158,8 +155,8 @@
 		[Transactional]
 		public void AddRollover(int scheduleId, string experiedDate, bool isEditCurrent, decimal payment, int? rolloverId, int mounthCount, long nlRolloverID = 0) {
 			var expDate = FormattingUtils.ParseDateWithoutTime(experiedDate);
-			var currentLoanSchedule = this._loanScheduleRepository.GetById(scheduleId);
-			var rolloverModel = isEditCurrent && rolloverId.HasValue ? this._rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
+			var currentLoanSchedule = this.loanScheduleRepository.GetById(scheduleId);
+			var rolloverModel = isEditCurrent && rolloverId.HasValue ? this.rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
 			var customer = currentLoanSchedule.Loan.Customer;
 
 			if (expDate <= DateTime.UtcNow) {
@@ -173,7 +170,7 @@
 				if (rolloverModel == null)
 					throw new Exception("Loan schedule #{0} not found for editing");
 			} else {
-				var rollovers = this._rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
+				var rollovers = this.rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
 				if (rollovers.Any(rollover => rollover.Status == RolloverStatus.New && rollover.ExpiryDate > DateTime.UtcNow)) {
 					throw new Exception("The loan has an unpaid rollover. Please close unpaid rollover and try again");
 				}
@@ -186,19 +183,19 @@
 			rolloverModel.MounthCount = mounthCount;
 			rolloverModel.ExpiryDate = expDate;
 			rolloverModel.LoanSchedule = currentLoanSchedule;
-			rolloverModel.CreatorName = this._context.User.Name;
+			rolloverModel.CreatorName = this.context.User.Name;
 			rolloverModel.Created = DateTime.Now;
 			rolloverModel.Payment = CurrentValues.Instance.RolloverCharge;
 			rolloverModel.Status = RolloverStatus.New;
-			this._rolloverRepository.SaveOrUpdate(rolloverModel);
+			this.rolloverRepository.SaveOrUpdate(rolloverModel);
 
 			try {
 
-				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(currentLoanSchedule.Loan.Id, customer.Id, this._context.UserId).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(currentLoanSchedule.Loan.Id, customer.Id, this.context.UserId).Value;
 
 				if (nlLoanId > 0) {
 
-					var nlModel = this.m_oServiceClient.Instance.GetLoanState(customer.Id, nlLoanId, rolloverModel.Created, this._context.UserId, false).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(customer.Id, nlLoanId, rolloverModel.Created, this.context.UserId, false).Value;
 
 					NL_LoanRollovers nlRollover = null;
 
@@ -216,11 +213,11 @@
 						nlRollover.LoanHistoryID = nlModel.Loan.LastHistory().LoanHistoryID;
 					}
 
-					nlRollover.CreatedByUserID = this._context.UserId;
+					nlRollover.CreatedByUserID = this.context.UserId;
 					nlRollover.CreationTime = rolloverModel.Created;
 					nlRollover.ExpirationTime = (DateTime)rolloverModel.ExpiryDate;
 
-					this.m_oServiceClient.Instance.SaveRollover(this._context.UserId, customer.Id, nlRollover, nlLoanId);
+					this.serviceClient.Instance.SaveRollover(this.context.UserId, customer.Id, nlRollover, nlLoanId);
 				}
 
 				// ReSharper disable once CatchAllClause
@@ -228,7 +225,7 @@
 				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
 			}
 
-			this.m_oServiceClient.Instance.EmailRolloverAdded(this._context.UserId, customer.Id, payment);
+			this.serviceClient.Instance.EmailRolloverAdded(this.context.UserId, customer.Id, payment);
 		}
 
 		[Ajax]
@@ -276,7 +273,7 @@
 
 					payPointTransactionId = paypointCard.TransactionId;
 
-					this._paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
+					this.paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
@@ -285,7 +282,7 @@
 				string nlMethod = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(model.PaymentMethod).Replace(" ", "").Replace("-", "");
 				NLLoanTransactionMethods nlPaymentMethod = (NLLoanTransactionMethods)Enum.Parse(typeof(NLLoanTransactionMethods), nlMethod);
 				var nlPayment = new NL_Payments() {
-					CreatedByUserID = this._context.UserId,
+					CreatedByUserID = this.context.UserId,
 					Amount = realAmount,
 					PaymentMethodID = (int)nlPaymentMethod,
 					PaymentSystemType = NLPaymentSystemTypes.None,
@@ -306,7 +303,7 @@
 					this.serviceClient.Instance.PayEarly(customer.Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
 				this.serviceClient.Instance.LoanStatusAfterPayment(
-					this._context.UserId,
+					this.context.UserId,
 					customer.Id,
 					customer.Name,
 					model.LoanId,
@@ -319,7 +316,7 @@
 				string requestType = string.Format("UW Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);
 
-				Log.InfoFormat("Successful. userID {0} at {1}. requestType: {2}", this._context.UserId, date, requestType);
+				Log.InfoFormat("Successful. userID {0} at {1}. requestType: {2}", this.context.UserId, date, requestType);
 
 			} catch (PayPointException ex) {
 				Log.ErrorFormat("Paypoint Manual Payment for customer {0}, at {1} failed with error {2}", customer.Id, DateTime.UtcNow, ex);
@@ -340,9 +337,9 @@
 			var state = payEarlyCalc.GetState();
 
 			try {
-				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this._context.UserId).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.context.UserId).Value;
 				if (nlLoanId > 0) {
-					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, paymentDate, this._context.UserId, true).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, paymentDate, this.context.UserId, true).Value;
 					Log.InfoFormat("<<< NL_Compare: {0}\n================= loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause
@@ -373,8 +370,8 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetRolloverInfo(int loanId, bool isEdit) {
-			var loan = this._loanRepository.Get(loanId);
-			var rollover = this._rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
+			var loan = this.loanRepository.Get(loanId);
+			var rollover = this.rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
@@ -388,9 +385,9 @@
 			};
 
 			try {
-				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this._context.UserId).Value;
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, this.context.UserId).Value;
 				if (nlLoanId > 0) {
-					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, true).Value;
+					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this.context.UserId, true).Value;
 					Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 				}
 				// ReSharper disable once CatchAllClause

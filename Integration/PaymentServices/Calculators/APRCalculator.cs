@@ -48,13 +48,14 @@
 
 			int? accuracyReachedOn = null;
 
-			for (int i = 0; i < 10000; i++) {
+			for (iterationCount = 0; iterationCount < 10000; iterationCount++) {
 				double f_x = f(x, amount - setupFee, payments);
 
 				lastHitAccuracy = Math.Abs(f_x);
 
 				if (lastHitAccuracy < 1e-6) {
 					accuracyAchieved = true;
+					accuracyReachedOn = iterationCount;
 					break;
 				} // if
 

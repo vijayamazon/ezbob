@@ -336,7 +336,7 @@
 				StopAutoChargeDate = MiscUtils.NL_GetStopAutoChargeDate(options.AutoPayment, options.StopAutoChargeDate),
 				StopLateFeeFromDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item1,
 				StopLateFeeToDate = MiscUtils.NL_GetLateFeeDates(options.AutoLateFees, options.StopLateFeeFromDate, options.StopLateFeeToDate).Item2,
-				UserID = this._context.UserId,
+				UserID = this.context.UserId,
 				InsertDate = DateTime.Now,
 				IsActive = true,
 				Notes = "From Application Info",
@@ -348,27 +348,27 @@
 		        "StopLateFeeToDate",
 		    };
 
-			var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customer.Id, nlOptions, options.LoanId, PropertiesUpdateList.ToArray());
+			var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions, options.LoanId, PropertiesUpdateList.ToArray());
 
 		}
 
 
 		private void DeactivateLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId) {
-			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId).Value;
+			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this.context.UserId).Value;
 			if (nlLoanId == 0)
 				return;
 			NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
 				OldID = loanInterestFreeze.Id,
 				DeactivationDate = loanInterestFreeze.DeactivationDate,
 				LoanID = nlLoanId,
-				AssignedByUserID = this._context.UserId,
+				AssignedByUserID = this.context.UserId,
 				DeletedByUserID = null,
 			};
-			var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze).Value;
+			var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this.context.UserId, customerId, nlLoanInterestFreeze).Value;
 		}
 
 		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId) {
-			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this._context.UserId)
+			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this.context.UserId)
 				.Value;
 			if (nlLoanId == 0)
 				return;
@@ -380,10 +380,10 @@
 				EndDate = loanInterestFreeze.EndDate,
 				InterestRate = loanInterestFreeze.InterestRate,
 				LoanID = nlLoanId,
-				AssignedByUserID = this._context.UserId,
+				AssignedByUserID = this.context.UserId,
 				DeletedByUserID = null,
 			};
-			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze);
+			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this.context.UserId, customerId, nlLoanInterestFreeze);
 		}
 
 
@@ -413,7 +413,7 @@
 
 			NewCreditLineOption typedNewCreditLineOption = (NewCreditLineOption)newCreditLineOption;
 
-			User underwriter = this._users.GetUserByLogin(User.Identity.Name, null);
+			User underwriter = this.users.GetUserByLogin(User.Identity.Name, null);
 
 			ActionMetaData amd = ExecuteNewCreditLine(underwriter.Id, Id, typedNewCreditLineOption);
 
@@ -503,9 +503,9 @@
 
 
 
-			var decision = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
-				UserID = this._context.UserId,
-				DecisionTime = now,
+			var decision = this.serviceClient.Instance.AddDecision(this.context.UserId, cr.Customer.Id, new NL_Decisions {
+				UserID = this.context.UserId,
+				DecisionTime = DateTime.UtcNow,
 				DecisionNameID = (int)DecisionActions.Waiting,
 				Notes = "Waiting; oldCashRequest: " + cr.Id
 			}, cr.Id, null);
@@ -525,7 +525,7 @@
 			}
 			NL_OfferFees[] ofeerFees = { offerFee };
 
-			var offer = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
+			var offer = this.serviceClient.Instance.AddOffer(this.context.UserId, cr.Customer.Id, new NL_Offers {
 				DecisionID = decision.Value,
 				LoanTypeID = loanType,
 				RepaymentIntervalTypeID = (int)DbConstants.RepaymentIntervalTypes.Month,
@@ -535,7 +535,7 @@
 				RepaymentCount = repaymentPeriod,
 				Amount = (decimal)amount,
 				MonthlyInterestRate = interestRate,
-				CreatedTime = now,
+				CreatedTime = DateTime.UtcNow,
 				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
 				Notes = "offer from ChangeCreditLine, ApplicationInfoController",
 				DiscountPlanID = discountPlan,

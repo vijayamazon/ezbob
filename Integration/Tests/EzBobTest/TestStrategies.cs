@@ -918,10 +918,10 @@
 			stra.Execute();
 
 			Assert.IsNotNull(stra.Result);
-			Assert.Greater(stra.Result.LoanTypes.Count(), 0);
+			Assert.Greater(stra.Result.LoanTypes.Length, 0);
 			Assert.Greater(stra.Result.FundingTypes.Count, 0);
 			Assert.Greater(stra.Result.GradeRanges.Count, 0);
-			Assert.Greater(stra.Result.AllLoanSources.Count(), 0);
+			Assert.Greater(stra.Result.AllLoanSources.Length, 0);
 			Assert.Greater(stra.Result.Grades.Count, 0);
 			Assert.Greater(stra.Result.SubGrades.Count, 0);
 			Assert.Greater(stra.Result.ProductSubTypes.Count, 0);

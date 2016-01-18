@@ -10,6 +10,8 @@
 		public LGAgent(
 			int customerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
 			DateTime now,
 			decimal systemCalculatedAmount,
 			AutomationCalculator.Common.Medal medal,
@@ -22,12 +24,13 @@
 			this.log = log.Safe();
 			Now = now;
 
-			Trail = new ApprovalTrail(customerID, cashRequestID, this.log);
-			Trail.SetTag("AutomationVerificationAutoApproveLGAgent");
+			Trail = new ApprovalTrail(customerID, cashRequestID, nlCashRequestID, this.log);
+			Trail.SetTag(tag);
 
 			this.oldWayAgent = new Agent(
 				customerID,
 				cashRequestID,
+				nlCashRequestID,
 				systemCalculatedAmount,
 				medal,
 				medalType,

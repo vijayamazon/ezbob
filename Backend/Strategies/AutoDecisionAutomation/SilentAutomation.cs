@@ -142,6 +142,7 @@
 				this.customerID,
 				this.cashRequestID,
 				this.nlCashRequestID,
+				Tag,
 				DateTime.UtcNow,
 				offeredCreditLine,
 				medal.MedalClassification,

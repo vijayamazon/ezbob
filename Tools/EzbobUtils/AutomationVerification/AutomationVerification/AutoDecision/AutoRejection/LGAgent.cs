@@ -7,7 +7,6 @@
 	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
-	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
@@ -16,11 +15,18 @@
 		public LGAgent(AutoRejectionArguments argss) {
 			args = argss;
 
-			Trail = new RejectionTrail(args.CustomerID, args.CashRequestID, args.Log);
+			Trail = new RejectionTrail(args.CustomerID, args.CashRequestID, args.NLCashRequestID, args.Log);
 			Trail.SetTag(args.Tag);
 
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent = new RejectionAgent(DB, Log, args.CustomerID, Trail.CashRequestID, args.Configs);
+			this.internalAgent = new RejectionAgent(
+				DB,
+				Log,
+				args.CustomerID,
+				Trail.CashRequestID,
+				args.NLCashRequestID,
+				args.Configs
+			);
 
 			Output = new AutoRejectionOutput();
 			model = null;

@@ -102,7 +102,7 @@
 					if (!Directory.Exists(loanPath))
 						Directory.CreateDirectory(loanPath);
 
-					FileSystem.CopyDirectory(sourcePath, loanPath, UIOption.AllDialogs);
+					FileSystem.CopyDirectory(sourcePath, loanPath);
 				} // for each loan
 			} // for each customer
 

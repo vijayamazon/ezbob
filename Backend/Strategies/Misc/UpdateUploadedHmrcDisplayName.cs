@@ -6,8 +6,8 @@
 	using Ezbob.Utils.Lingvo;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
-	using Integration.ChannelGrabberConfig;
-	using Integration.ChannelGrabberFrontend;
+	using global::Integration.ChannelGrabberConfig;
+	using global::Integration.ChannelGrabberFrontend;
 
 	public class UpdateUploadedHmrcDisplayName : AStrategy {
 		public UpdateUploadedHmrcDisplayName(int customerID) {
@@ -39,7 +39,7 @@
 				Grammar.Number(lst.Count, "uploaded HMRC marketplace")
 			);
 
-			var vendorInfo = Integration.ChannelGrabberConfig.Configuration.Instance.Hmrc;
+			var vendorInfo = global::Integration.ChannelGrabberConfig.Configuration.Instance.Hmrc;
 
 			int counter = 1;
 

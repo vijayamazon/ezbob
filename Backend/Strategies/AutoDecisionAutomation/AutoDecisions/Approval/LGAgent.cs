@@ -13,6 +13,8 @@
 		public LGAgent(
 			int customerId,
 			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
 			DateTime now,
 			int offeredCreditLine,
 			Medal medalClassification,
@@ -29,6 +31,7 @@
 			this.trail = new ApprovalTrail(
 				customerId,
 				cashRequestID,
+				nlCashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -37,9 +40,12 @@
 				Amount = offeredCreditLine,
 			};
 
+			Trail.SetTag(tag);
+
 			this.oldWayAgent = new Approval(
 				Trail.CustomerID,
 				Trail.CashRequestID,
+				Trail.NLCashRequestID,
 				offeredCreditLine,
 				medalClassification,
 				medalType,
@@ -51,6 +57,8 @@
 			this.secondaryAgent = new AutomationCalculator.AutoDecision.AutoApproval.LGAgent(
 				Trail.CustomerID,
 				Trail.CashRequestID,
+				Trail.NLCashRequestID,
+				Trail.Tag,
 				now,
 				offeredCreditLine,
 				(AutomationCalculator.Common.Medal)medalClassification,

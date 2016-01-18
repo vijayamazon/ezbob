@@ -82,6 +82,11 @@
 			
 			model.FromCustomer(customer);
 
+			var experianConsumer = this.experianHistoryRepository
+				.GetCustomerConsumerHistory(customer.Id)
+				.OrderByDescending(x => x.ServiceLogId)
+				.FirstOrDefault();
+
 			var decisionHistories = this.serviceClient.Instance.LoadDecisionHistory(customerId, this.context.UserId);
 			model.Decisions = decisionHistories.Model.Select(DecisionHistoryModel.Create)
 				.OrderBy(x => x.Date)

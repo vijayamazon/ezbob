@@ -9,6 +9,7 @@
 		public int MonthlyPayment { get; set; }
 
 		public long? CashRequestID { get; set; }
+		public long? NLCashRequestID { get; set; }
 		public string Tag { get; set; }
 		public DateTime Now { get; set; }
 

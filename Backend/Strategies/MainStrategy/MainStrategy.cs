@@ -384,7 +384,7 @@
 
 			if (this.customerDetails.IsAlibaba && bContinue) {
 				Log.Info("Not processing auto-approval: Alibaba customer.");
-					this.nlCashRequestID,
+
 				bContinue = false;
 			} // if
 
@@ -426,6 +426,8 @@
 			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
 				CustomerID,
 				this.cashRequestID,
+				this.nlCashRequestID,
+				this.tag,
 				DateTime.UtcNow,
 				this.offeredCreditLine,
 				this.medal.MedalClassification,
@@ -639,6 +641,7 @@
 				new AutoRejectionArguments {
 					CustomerID = CustomerID,
 					CashRequestID = this.cashRequestID,
+					NLCashRequestID = this.nlCashRequestID,
 					Now = DateTime.UtcNow,
 					DB = DB,
 					Log = Log,

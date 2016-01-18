@@ -16,14 +16,13 @@
 	public interface IEzService : // Add base interfaces in the following lines and in alphabetic order. Please.
 		IEzAutomationVerification,
 		IEzServiceBroker,
+		IEzServiceInvestor,
+		IEzServiceLogicalGlue,
 		IEzServiceMainStrategy,
 		IEzServiceNewLoan,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceUserManagement,
-		IEzServiceNewLoan,
-		IEzServiceInvestor,
-		IEzServiceLogicalGlue
+		IEzServiceUserManagement
 	{
 		[OperationContract]
 		ActionMetaData AddHistoryDirector(Esigner Edirector);

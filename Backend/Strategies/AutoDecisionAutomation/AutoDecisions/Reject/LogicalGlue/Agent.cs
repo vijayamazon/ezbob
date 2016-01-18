@@ -25,6 +25,7 @@
 			this.oldWayAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.args.CustomerID,
 				this.args.CashRequestID,
+				this.args.NLCashRequestID,
 				this.args.DB,
 				this.args.Log
 			);
@@ -32,6 +33,7 @@
 			Trail = new RejectionTrail(
 				this.args.CustomerID,
 				this.args.CashRequestID,
+				this.args.NLCashRequestID,
 				this.args.Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,

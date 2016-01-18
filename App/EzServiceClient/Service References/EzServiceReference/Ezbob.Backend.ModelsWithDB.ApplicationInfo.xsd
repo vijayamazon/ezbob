@@ -44,6 +44,7 @@
       <xs:element minOccurs="0" name="IsLimited" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:int" />
       <xs:element minOccurs="0" name="IsModified" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMultiBranded" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOffline" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsRegulated" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsTest" type="xs:boolean" />

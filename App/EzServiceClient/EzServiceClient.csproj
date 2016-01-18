@@ -95,9 +95,6 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -120,9 +117,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Integration.LogicalGlue.Engine.Interface1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
@@ -258,6 +252,12 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.InvestorActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListInvestorsResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListNewLoanActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -265,9 +265,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LogicalGlueResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ListInvestorsResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LotteryActionResult.datasource">
@@ -306,10 +303,10 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SetPasswordActionResult.datasource">
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SchedulerDataResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SchedulerDataResult.datasource">
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SetPasswordActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringActionResult.datasource">
@@ -325,9 +322,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.UserLoginActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.UserSignupActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.VatReturnDataActionResult.datasource">

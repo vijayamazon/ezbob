@@ -111,7 +111,6 @@
 
 		public long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1) {
 			return this.m_oServiceClient.Instance.GetLoanByOldID(loanId, customerID, userID).Value;
-			return null;
 		}
 
 		public void AcceptRollover(int customerID, long loanId) {

@@ -17,6 +17,13 @@
 		public override string Name { get { return "ManageInvestorContact"; } }
 
 		public override void Execute() {
+				throw new NotImplementedException("Thou shalt create SignupInvestorMultiOrigin strategy.");
+				// TODO:
+				// 1. Create SignupInvestorMultiOrigin
+				// 2. Check current sign up/create lead ones for collissions with investors.
+				// 3. Uncomment the code below.
+
+			/* TODO Uncomment here once SignupInvestorMultiOrigin is ready
 			DateTime now = DateTime.UtcNow;
 			var con = DB.GetPersistent();
 			con.BeginTransaction();
@@ -66,6 +73,7 @@
 			con.Commit();
 			Result = true;
 			Log.Info("Save investor {0} contact data into DB complete.", this.contact.InvestorID);
+			*/
 		}//Execute
 
 		public bool Result { get; set; }

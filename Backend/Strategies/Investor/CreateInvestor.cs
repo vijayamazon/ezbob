@@ -31,10 +31,9 @@
 								InvestorTypeID = this.investor.InvestorType.InvestorTypeID,
 								IsActive = true,
 								Timestamp = now,
-                                MonthlyFundingCapital = this.investor.MonthlyFundingCapital,
-                                FundingLimitForNotification = this.investor.FundingLimitForNotification,
-                                FundsTransferDate = this.investor.FundsTransferDate,
-                               
+								MonthlyFundingCapital = this.investor.MonthlyFundingCapital,
+								FundingLimitForNotification = this.investor.FundingLimitForNotification,
+								FundsTransferDate = this.investor.FundsTransferDate,
 							}
 						})
 					);
@@ -43,7 +42,14 @@
 					throw new StrategyWarning(this, "Failed creating investor");
 				}
 
+				throw new NotImplementedException("Thou shalt create SignupInvestorMultiOrigin strategy.");
+				// TODO:
+				// 1. Create SignupInvestorMultiOrigin
+				// 2. Check current sign up/create lead ones for collissions with investors.
+				// 3. Uncomment the code below.
+
 				foreach (var contact in this.contacts) {
+					/* TODO Uncomment here once SignupInvestorMultiOrigin is ready
 					UserSignup userSingup = new UserSignup(contact.Email, "123456", "InvestorWeb", 2);
 					userSingup.ConnectionWrapper = con;
 					userSingup.Execute();
@@ -73,6 +79,7 @@
 					if (contactsCount != 1) {
 						throw new StrategyWarning(this, "Failed creating investor contact");
 					}
+					*/
 				}
 
 				var dbBanks = new List<I_InvestorBankAccount>();

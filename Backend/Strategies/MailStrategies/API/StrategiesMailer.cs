@@ -77,7 +77,7 @@
 						new QueryParameter("TemplateName", oMeta.TemplateName)
 					);
 
-				    if (addr.AddSalesforceActivity) {
+				    if (addr.AddSalesforceActivity)
 						AddSalesForceActivity(now, oMeta, addr);
 				} // if should register
 			} // foreach
