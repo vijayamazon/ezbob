@@ -23,6 +23,5 @@
 		[FK("NL_Offers", "OfferID")]
 		[DataMember]
 		public long? NLOfferID { get; set; }
-
 	}//class I_OpenPlatformOffer
 }//ns

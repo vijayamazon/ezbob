@@ -1,11 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
 	using System;
 	using System.Collections.Generic;
+	using System.Web.Security;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Exceptions;
-	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
 
 	public class CreateInvestor : AStrategy {

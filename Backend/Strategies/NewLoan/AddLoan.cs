@@ -130,7 +130,7 @@
 
 				if (!string.IsNullOrEmpty(dataForLoan.Error)) {
 					Error = dataForLoan.Error;
-					NL_AddLog(LogType.Error, "Strategy Failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Strategy Failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -166,7 +166,7 @@
 
 				// prevent creation of same loan
 				if (!string.IsNullOrEmpty(Error)) {
-					Log.Alert("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
+					Log.Info("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
 					NL_AddLog(LogType.Error, "Strategy " + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error), this.strategyArgs, null, Error, null);
 					return;
 				}
@@ -183,7 +183,7 @@
 
 				if (nlSchedule.Count == 0) {
 					Error += "Failed to generate Schedule/fees";
-					NL_AddLog(LogType.Error, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Info, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 

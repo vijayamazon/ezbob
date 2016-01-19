@@ -28,9 +28,9 @@
 				if (lastOffer.OfferID > 0) {
 					this.loanLegals.OfferID = lastOffer.OfferID;
 				} else {
-					Log.Alert("Last offer not found");
+					Log.Info("Last offer not found");
 					Error = "Last offer not found";
-					NL_AddLog(LogType.Info, "Strategy Faild - Last offer not found", this.loanLegals, null, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Strategy Faild - Last offer not found", this.loanLegals, null, Error, null);
 					return;
 				}
 

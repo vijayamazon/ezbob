@@ -6,7 +6,7 @@ namespace Ezbob.Backend.Strategies.Investor {
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
 
-	public class SaveInvestorContactList : AStrategy {
+	public class SaveInvestorContactList : AStrategy
 		public SaveInvestorContactList(int investorID, IEnumerable<InvestorContactModel> contacts) {
 			this.investorID = investorID;
 			this.contacts = contacts;
