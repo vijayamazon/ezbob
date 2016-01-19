@@ -404,6 +404,5 @@ EzBob.Underwriter.ProfileHeadMedalView = Backbone.Marionette.ItemView.extend({
 
 			EzBob.drawDonut('medalCanvas', fillColor, resultToUse, false);
 		}
-		var userStatus = this.personalModel.get('UserStatus');
 	}
 });

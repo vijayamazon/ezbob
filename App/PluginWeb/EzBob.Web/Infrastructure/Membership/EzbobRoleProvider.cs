@@ -7,7 +7,8 @@
 		public EzbobRoleProvider() {
 			this.cache = new Cache<string, string[]>(
 				TimeSpan.FromMinutes(25),
-				userName => new ServiceClient().Instance.LoadAllLoginRoles(userName, null, true).Records);
+				userName => new ServiceClient().Instance.LoadAllLoginRoles(userName, null, true).Records
+			);
 		} // constructor
 
 		public override bool IsUserInRole(string username, string roleName) {

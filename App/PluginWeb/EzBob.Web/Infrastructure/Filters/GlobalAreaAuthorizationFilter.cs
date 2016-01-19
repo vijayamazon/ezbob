@@ -4,6 +4,7 @@
 	using System.Web.Mvc;
 	using System.Web.Routing;
 	using Code;
+	using EZBob.DatabaseLib.Model.Database;
 	using StructureMap;
 
 	public class GlobalAreaAuthorizationFilter : AuthorizeAttribute {
@@ -24,7 +25,7 @@
 			if (!routeData.Values.Any())
 				return true;
 
-			var controller = routeData.GetRequiredString("controller");
+			string controller = routeData.GetRequiredString("controller");
 
 			if (this.whiteList.Contains(controller))
 				return true;
@@ -43,15 +44,15 @@
 			if (!IsStrictArea)
 				return true;
 
-			return 1 == this.roleCache.GetRoleCount(
-				httpContext.User.Identity.Name,
-				UiCustomerOrigin.Get(httpContext.Request.Url).GetOrigin()
-			);
+			string userName = httpContext.User.Identity.Name;
+			CustomerOriginEnum origin = UiCustomerOrigin.Get(httpContext.Request.Url).GetOrigin();
+
+			return 1 == this.roleCache.GetRoleCount(userName, origin);
 		} // AuthorizeCore
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext) {
 			if (filterContext.HttpContext.Request.IsAjaxRequest()) {
-				//use code 423 for ajax request to avoid rederection by forms auth module
+				//use code 423 for ajax request to avoid redirection by forms auth module
 				filterContext.Result = new HttpStatusCodeResult(423);
 				return;
 			} // if
