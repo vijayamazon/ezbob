@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
 	using System;
 	using System.Collections.Generic;
-	using System.Web.Security;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Exceptions;
@@ -42,21 +42,12 @@
 					throw new StrategyWarning(this, "Failed creating investor");
 				}
 
-				throw new NotImplementedException("Thou shalt create SignupInvestorMultiOrigin strategy.");
-				// TODO:
-				// 1. Create SignupInvestorMultiOrigin
-				// 2. Check current sign up/create lead ones for collissions with investors.
-				// 3. Uncomment the code below.
-
 				foreach (var contact in this.contacts) {
-					/* TODO Uncomment here once SignupInvestorMultiOrigin is ready
-					UserSignup userSingup = new UserSignup(contact.Email, "123456", "InvestorWeb", 2);
-					userSingup.ConnectionWrapper = con;
+					var userSingup = new SignupInvestorMultiOrigin(contact.Email);
+					userSingup.Transaction = con;
 					userSingup.Execute();
 
-					if (!userSingup.Status.HasValue || userSingup.Status.Value != MembershipCreateStatus.Success || userSingup.UserID <= 0) {
-						throw new StrategyWarning(this, userSingup.Result);
-					}
+					// The .Execute() above completes successfully if and only if no error detected and .UserID > 0.
 
 					var dbContact = new I_InvestorContact {
 						InvestorContactID = userSingup.UserID,
@@ -79,7 +70,6 @@
 					if (contactsCount != 1) {
 						throw new StrategyWarning(this, "Failed creating investor contact");
 					}
-					*/
 				}
 
 				var dbBanks = new List<I_InvestorBankAccount>();

@@ -484,6 +484,7 @@
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
     <Compile Include="UserManagement\SignupCustomerMutliOrigin.cs" />
+    <Compile Include="UserManagement\SignupInvestorMultiOrigin.cs" />
     <Compile Include="UserManagement\UserDisable.cs" />
     <Compile Include="UserManagement\ValidateSecurityAnswer.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
