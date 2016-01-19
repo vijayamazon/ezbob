@@ -1,5 +1,6 @@
 ﻿namespace EzService.ActionResults.Investor {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
@@ -42,6 +43,11 @@
 		public static LogicalGlueResult FromInference(Inference inference, int customerID, ASafeLog log, AConnection db){
 			decimal? minScore = 0;
 			decimal? maxScore = 0;
+			inference = inference ?? new Inference {
+				Error = new InferenceError(),
+				ModelOutputs = new SortedDictionary<ModelNames, ModelOutput>()
+			};
+
 			try {
 				if (inference.Bucket.HasValue) {
 					var grade = db.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
@@ -55,10 +61,9 @@
 
 				}
 			} catch (Exception ex) {
-				inference = inference ?? new Inference();
 				log.Error(ex, "Failed to retrieve min max grade scores for bucket {0}", inference.Bucket);
 			}
-
+			
 			try {
 				var result = new LogicalGlueResult {
 					Error = inference.Error.Message,
