@@ -7,13 +7,13 @@ GO
 
 ALTER PROCEDURE GetCustomerCompanyType
 @CompanyID INT,
-@TypeOfBusiness NVARCHAR(50) OUTPUT
+@TypeOfBusinessName NVARCHAR(50) OUTPUT
 AS
 BEGIN
-	SET @TypeOfBusiness = NULL
+	SET @TypeOfBusinessName = NULL
 
 	SELECT
-		@TypeOfBusiness = c.TypeOfBusiness
+		@TypeOfBusinessName = c.TypeOfBusiness
 	FROM
 		Company c
 	WHERE

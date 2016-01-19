@@ -51,7 +51,7 @@
 		} // Init
 
 		public virtual void MakeDecision() {
-			this.oldWayAgent.MakeDecision();
+			this.oldWayAgent.Init().MakeDecision();
 			this.oldWayAgent.Trail.Save(this.db, null, TrailPrimaryStatus.OldVerification);
 
 			ChooseInternalOrLogicalGlueFlow();
