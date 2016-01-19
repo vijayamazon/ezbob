@@ -22,7 +22,12 @@ BEGIN
 		iba.BankAccountNumber AS BankAccountNumber,
 		iba.BankAccountName AS BankAccountName,		
 		iba.IsActive AS IsBankAccountActive,
-		isb.Comment AS Comment
+		isb.Comment AS Comment,
+		isb.UserID ,
+		isb.TransactionDate ,
+		isb.[NLOfferID] , 
+		isb.[NLLoanID],
+		isb.[NLPaymentID]
 	FROM
 		I_InvestorSystemBalance isb
 	LEFT JOIN 

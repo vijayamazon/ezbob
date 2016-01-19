@@ -12,7 +12,8 @@ GO
 CREATE TYPE I_OpenPlatformOfferList AS TABLE (
 	[InvestorID] INT NOT NULL,
 	[CashRequestID] BIGINT NOT NULL,
-	[InvestmentPercent] DECIMAL(18, 6) NOT NULL
+	[InvestmentPercent] DECIMAL(18, 6) NOT NULL,
+	[NLOfferID] BIGINT NULL
 )
 GO
 
@@ -25,11 +26,13 @@ BEGIN
 	INSERT INTO I_OpenPlatformOffer (
 		[InvestorID],
 		[CashRequestID],
-		[InvestmentPercent]
+		[InvestmentPercent],
+		[NLOfferID]
 	) SELECT
 		[InvestorID],
 		[CashRequestID],
-		[InvestmentPercent]
+		[InvestmentPercent],
+		[NLOfferID]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

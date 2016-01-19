@@ -374,7 +374,9 @@
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\ApplicationInfoController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CrossCheckController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerInfoController.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanHistoryController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanHistoryController.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MedalController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MessagesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PaymentAccountsController.cs" />

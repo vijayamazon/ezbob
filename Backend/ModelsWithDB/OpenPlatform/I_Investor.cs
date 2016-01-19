@@ -31,6 +31,11 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
+
+		[FK("NL_Loans", "LoanID")]
+		[DataMember]
+		public long? NLLoanID { get; set; }
+
 		//////////////////////////////////////////
 		
 		[DataMember]

@@ -14,8 +14,11 @@ ALTER PROCEDURE I_SystemBalanceAdd
 	@LoanID INT,
 	@CashRequestID BIGINT,
 	@Comment NVARCHAR(500),
-	@UserID INT,
-	@TransactionDate DATETIME
+	@UserID INT =NULL,
+	@TransactionDate DATETIME=NULL,
+	@NLOfferID BIGINT =NULL, 
+	@NLLoanID BIGINT =NULL,
+	@NLPaymentID BIGINT =NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -44,7 +47,10 @@ BEGIN
 		CashRequestID,
 		Comment,
 		UserID,
-		TransactionDate
+		TransactionDate,
+		NLOfferID , 
+		NLLoanID ,
+		NLPaymentID
 	)
 	VALUES (
 		@Date, 
@@ -58,7 +64,10 @@ BEGIN
 		@CashRequestID,
 		@Comment,
 		@UserID,
-		@TransactionDate
+		@TransactionDate,
+		@NLOfferID, 
+		@NLLoanID,
+		@NLPaymentID 
 	)
 	
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

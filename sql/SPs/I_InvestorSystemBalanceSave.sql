@@ -19,7 +19,10 @@ CREATE TYPE I_InvestorSystemBalanceList AS TABLE (
 	[CashRequestID] BIGINT NULL,
 	[LoanID] INT NULL,
 	[LoanTransactionID] INT NULL,
-	[Comment] NVARCHAR(500) NULL
+	[Comment] NVARCHAR(500) NULL,
+	[NLOfferID] BIGINT NULL, 
+	[NLLoanID] BIGINT NULL,
+	[NLPaymentID] BIGINT NULL
 )
 GO
 
@@ -39,7 +42,10 @@ BEGIN
 		[CashRequestID],
 		[LoanID],
 		[LoanTransactionID],
-		[Comment]
+		[Comment],
+		[NLOfferID], 
+		[NLLoanID],
+		[NLPaymentID]
 	) SELECT
 		[InvestorBankAccountID],
 		[PreviousBalance],
@@ -50,7 +56,10 @@ BEGIN
 		[CashRequestID],
 		[LoanID],
 		[LoanTransactionID],
-		[Comment]
+		[Comment],
+		[NLOfferID], 
+		[NLLoanID],
+		[NLPaymentID]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

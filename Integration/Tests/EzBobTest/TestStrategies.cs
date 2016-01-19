@@ -772,17 +772,17 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			const int loanID = 5211; //4182; // 1718; // 4439; //3534;
+			const int loanID = 6; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(8); //new DateTime(2015, 10, 02); 
+			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(0); //new DateTime(2015, 10, 02); 
 			//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 0m;
-			reModel.StopFutureInterest = true;
+			reModel.PaymentPerInterval = 180m;
+			reModel.StopFutureInterest = false;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			s1.Context.UserID = 357; //25852;
 			try {
