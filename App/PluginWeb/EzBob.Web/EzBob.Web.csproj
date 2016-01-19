@@ -210,7 +210,6 @@
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />
-    <Compile Include="Code\EverlineLoginLoanChecker.cs" />
     <Compile Include="Code\ForceNhibernateResync.cs" />
     <Compile Include="Code\MainStrategyClient.cs" />
     <Compile Include="Code\MpUniq\BankAccountUniqChecker.cs" />
@@ -960,12 +959,8 @@
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLPreContract.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLRegulatedLoanAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinanceRegulatedLoanAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinanceGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaCreditFacility.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ReviewSignCreditLine.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinancePreContract.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
     <Content Include="App_Code\ChangeAddress.cshtml" />

@@ -236,10 +236,6 @@
 			get { return this[Variables.Environment]; }
 		}
 
-		public virtual VariableValue EverlineRefinanceEmailReciever {
-			get { return this[Variables.EverlineRefinanceEmailReciever]; }
-		}
-
 		public virtual VariableValue EverlineLoanStatusTestMode {
 			get { return this[Variables.EverlineLoanStatusTestMode]; }
 		}

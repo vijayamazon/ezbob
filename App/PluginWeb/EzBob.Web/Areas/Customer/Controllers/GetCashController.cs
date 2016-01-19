@@ -405,7 +405,7 @@
 
 			IAgreementsTemplatesProvider templateProvider = ObjectFactory.GetInstance<IAgreementsTemplatesProvider>();
 
-			var ezbobAlibabaCreditFacilityTemplatePath = templateProvider.GetTemplatePath(LoanAgreementTemplateType.CreditFacility, false, true, false);
+			var ezbobAlibabaCreditFacilityTemplatePath = templateProvider.GetTemplatePath(LoanAgreementTemplateType.CreditFacility, false, true);
 
 			string templateText = templateProvider.GetTemplateByName(ezbobAlibabaCreditFacilityTemplatePath);
 

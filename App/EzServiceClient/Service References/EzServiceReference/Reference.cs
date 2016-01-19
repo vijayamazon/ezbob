@@ -5379,12 +5379,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendPendingMails", ReplyAction="http://tempuri.org/IEzService/SendPendingMailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails", ReplyAction="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails", ReplyAction="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEverlineRefinanceMailsAsync(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendSms", ReplyAction="http://tempuri.org/IEzService/SendSmsResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
         
@@ -7297,14 +7291,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId) {
             return base.Channel.SendPendingMailsAsync(underwriterId, customerId);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount) {
-            return base.Channel.SendEverlineRefinanceMails(customerId, customerName, now, loanAmount, transferedAmount);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEverlineRefinanceMailsAsync(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount) {
-            return base.Channel.SendEverlineRefinanceMailsAsync(customerId, customerName, now, loanAmount, transferedAmount);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content) {

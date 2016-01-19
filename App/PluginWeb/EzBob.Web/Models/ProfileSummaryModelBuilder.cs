@@ -324,40 +324,6 @@
 					AlertType = AlertType.Info.DescriptionAttr()
 				});
 			} // if
-
-			if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()) {
-				EverlineLoginLoanChecker evlLoanChecker = new EverlineLoginLoanChecker();
-				var response = evlLoanChecker.GetLoginStatus(customer.Name);
-				if (response.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan) {
-				    var loanDetails = evlLoanChecker.GetLoanDetails(customer.Name);
-
-				    var openLoan = loanDetails.LoanApplications.FirstOrDefault(x => !x.ClosedOn.HasValue);
-				    string loanRef = "";
-				    DateTime? loanDate = null;
-				    decimal? outsatandingBalance = null;
-				    int? term = null;
-                    if (openLoan != null) {
-                        outsatandingBalance = openLoan.BalanceDetails.TotalOutstandingBalance;
-                        loanRef = openLoan.LoanId.ToString();
-                        loanDate = openLoan.FundedOn;
-                        term = openLoan.Term;
-                    } // if
-					
-                    summary.Alerts.Infos.Add(new AlertModel {
-						Abbreviation = "EVL",
-						Alert = string.Format("Everline customer has open loan ref: {0}, open date {1}, outstanding amount {2}, term {3} ", loanRef, loanDate, outsatandingBalance, term),
-						AlertType = AlertType.Info.DescriptionAttr(),
-					});
-				} // if
-
-				if (response.status == EverlineLoanStatus.Error) {
-					summary.Alerts.Infos.Add(new AlertModel {
-						Abbreviation = "EVL",
-						Alert = "Everline retrieve loan status failed " + response.Message,
-						AlertType = AlertType.Error.DescriptionAttr(),
-					});
-				} // if
-			} // if Everline
 		} // BuildAlerts
 
 		private void BuildCompanyCaisAlerts(Customer customer, ProfileSummaryModel summary, int userId) {

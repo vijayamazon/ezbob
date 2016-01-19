@@ -49,7 +49,7 @@
 
             try {
                 LoanAgreementTemplateType loanAgreementTemplateType = (LoanAgreementTemplateType)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Loans.LoanAgreementTemplateType), viewName);
-                var path = _templates.GetTemplatePath(loanAgreementTemplateType, isEverline, isAlibaba, model.IsEverlineRefinanceLoan);
+                var path = _templates.GetTemplatePath(loanAgreementTemplateType, isEverline, isAlibaba);
                 file = _templates.GetTemplateByName(path);
             } catch (Exception e) {
                 oLog.Debug(e, "Agreement template not found: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);

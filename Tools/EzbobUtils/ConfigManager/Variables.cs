@@ -184,7 +184,6 @@ namespace ConfigManager {
 		EnableAutomaticReRejection,
 		EnableAutomaticRejection,
 		Environment,
-		EverlineRefinanceEmailReciever,
 		EverlineLoanStatusTestMode,
 		ExperianAuthTokenService,
 		ExperianAuthTokenServiceIdHub,

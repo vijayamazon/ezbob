@@ -8,8 +8,7 @@
 		string GetTemplate(LoanAgreementTemplateType templateType);
         string GetTemplatePath(LoanAgreementTemplateType templateType,
 	        bool isEverline,
-	        bool isAlibaba,
-	        bool IsEverlineRefinanceLoan);
+	        bool isAlibaba);
 
 	} // interface IAgreementsTemplatesProvider
 
@@ -29,12 +28,7 @@
 
         public string GetTemplatePath(LoanAgreementTemplateType templateType,
                                         bool isEverline,
-                                        bool isAlibaba,
-                                        bool IsEverlineRefinanceLoan) {
-            if (IsEverlineRefinanceLoan)
-            {
-                return @"NA\EVLRefinance" + templateType.ToString();
-            }
+                                        bool isAlibaba) {
             if (isEverline){
                 return @"Everline\EVL" + templateType.ToString();
             }

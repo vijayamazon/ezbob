@@ -15,10 +15,6 @@ EzBob.Profile.AgreementViewBase = Backbone.Marionette.ItemView.extend({
 	    if (this.options.isEverline) {
 		    type = 'everline';
 	    }
-	    if (this.options.isEverlineRefinance) {
-	    	type = 'everlineRefinance';
-	    }
-	    
 	    return type;
     }, //serializeData
     render: function(data) {

@@ -361,12 +361,6 @@
 
 			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			customerModel.LotteryCode = sr["LotteryCode"];
-
-			if (customerModel.Origin == "everline" && !customerModel.Loans.Any()) {
-				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
-				var status = checker.GetLoginStatus(customerModel.Email);
-				customerModel.IsEverlineRefinance = (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
-			}
 		} // BuildProfileModel
 
 		private QuickOfferModel BuildQuickOfferModel(Customer c) {
