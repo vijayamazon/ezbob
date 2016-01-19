@@ -62,7 +62,9 @@
 				BrokerEmail = "broker@email.com",
 				BrokerFirmName = "Broker Firm Name",
 				BrokerName = "Broker Name",
-				BrokerPhoneNumber = "01234567890"
+				BrokerPhoneNumber = "01234567890",
+				CollectionStatus = "Active",
+				ExternalCollectionStatus = "None"
 			};
 			Log.Debug(model.ToJsonExtension());
 			Log.Debug("call CreateOpportunity/UpdateOpportunity");

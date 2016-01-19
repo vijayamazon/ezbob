@@ -209,6 +209,8 @@
 			if (customer.CollectionStatus.Name == "Disabled" && (collectionStatus.Unsubscribe || collectionStatus.ChangeEmail)) {
 				this.serviceClient.Instance.UserDisable(this.context.UserId, customer.Id, customer.Name, collectionStatus.Unsubscribe, collectionStatus.ChangeEmail);
 			}
+
+			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(this.context.UserId, customer.Name, customerId, false, false);
 			return Json(new { });
 		}
 

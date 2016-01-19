@@ -55,7 +55,9 @@ BEGIN
         b.ContactName AS BrokerName,
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
-        b.ContactMobile AS BrokerPhoneNumber
+        b.ContactMobile AS BrokerPhoneNumber,
+        cs.Name AS CollectionStatus,
+        ecs.Name AS ExternalCollectionStatus
     FROM Customer c 
     LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
     LEFT JOIN Company co ON co.Id = c.CompanyId
@@ -63,6 +65,8 @@ BEGIN
     LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
     LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
     LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
+    LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
+    LEFT JOIN ExternalCollectionStatuses ecs ON ecs.ExternalCollectionStatusID = c.ExternalCollectionStatusID
     WHERE c.Id=@CustomerID
     
     RETURN
