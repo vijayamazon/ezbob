@@ -1,0 +1,11 @@
+<svg id="Repay_error_icon" data-name="Repay error icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ef7b7c;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Payment_issue" data-name="Payment issue" class="cls-1" d="M25.015,255.985l12,20.035h-24l12-20.035h0Zm0,1.7L14.527,275.169H35.5L25.015,257.688h0Zm-0.47,6.411v5.961h0.939V264.1H24.545Zm0.47,7.263a0.716,0.716,0,0,1,.47.175,0.541,0.541,0,0,1,.209.426,0.591,0.591,0,0,1-.209.476,0.718,0.718,0,0,1-.939,0,0.589,0.589,0,0,1-.209-0.476,0.538,0.538,0,0,1,.209-0.426,0.713,0.713,0,0,1,.47-0.175h0Z" transform="translate(-11 -252.016)"/>
+</svg>
