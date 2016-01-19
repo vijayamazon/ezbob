@@ -314,6 +314,8 @@
 			var stra = new Annual77ANotifier();
 			stra.ExecuteTest(54, 1058, 1);
 			stra.ExecuteTest(199, 1057, 2);
+			stra.ExecuteTest(54, 1058, 1, new DateTime(2015, 06, 01));
+			stra.ExecuteTest(199, 1057, 2, new DateTime(2015, 06, 01));
 		}
 
 		[Test]

@@ -4,7 +4,6 @@
 	using System.Linq;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -31,14 +30,14 @@
 			DB.ForEachRowSafe(HandleOneNotification, "LoadLoansForAnnual77ANofication", CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 		} // Execute
 
-		public void ExecuteTest(int customerID, int loanID, int originID) {
+		public void ExecuteTest(int customerID, int loanID, int originID, DateTime? lastSent = null) {
 			LoadImailTemplates();
 			var template = this.templates.FirstOrDefault(x => x.IsActive && x.OriginID == originID);
 			if (template == null) {
 				Log.Debug("No template found for annual 77A notification for originID {2} to customer {0} for loan {1}", customerID, loanID, originID);
 				return;
 			}
-			PrepareAndSendMail(loanID, customerID, template);
+			PrepareAndSendMail(loanID, customerID, template, lastSent);
 		} // Execute
 
 		private ActionResult HandleOneNotification(SafeReader sr, bool bRowSetStart) {
@@ -47,7 +46,7 @@
 			DateTime? lastSent = sr["LastSent"];
 			int originID = sr["OriginID"];
 
-			if (lastSent.HasValue && (this.now - lastSent.Value).TotalDays < 365) {
+			if (lastSent.HasValue && lastSent.Value.AddYears(1) > this.now) {
 				Log.Debug("Already sent annual 77A notification to customer {0} for loan {1} on {2}", customerID, loanID, lastSent);
 				return ActionResult.Continue;
 			}
@@ -68,14 +67,14 @@
 				return ActionResult.Continue;
 			}
 
-			PrepareAndSendMail(loanID, customerID, template);
+			PrepareAndSendMail(loanID, customerID, template, lastSent);
 			return ActionResult.Continue;
 		}//HandleOneNotification
 
-		private void PrepareAndSendMail(int loanID, int customerID, SnailMailTemplate template){
+		private void PrepareAndSendMail(int loanID, int customerID, SnailMailTemplate template, DateTime? lastSent){
 			Address address;
 			TableModel schedule;
-			var variables = PrepareVariables(loanID, customerID, out address, out schedule);
+			var variables = PrepareVariables(loanID, customerID, lastSent, out address, out schedule);
 
 			var metadata = this.collectionIMailer.SendAnual77ANotification(customerID, template, address, variables, schedule, "@ScheduleTable@");
 			var collectionLogID = AddCollectionLog(customerID, loanID, CollectionType.Annual77ANotification, CollectionMethod.Mail);
@@ -97,7 +96,7 @@
 				});
 		}
 
-		private Dictionary<string, string> PrepareVariables(int loanID, int customerID, out Address address, out TableModel scheduleModel) {
+		private Dictionary<string, string> PrepareVariables(int loanID, int customerID, DateTime? lastSent, out Address address, out TableModel scheduleModel) {
 			var loan = this.loanRepository.Get(loanID);
 			if (loan == null) {
 				throw new Exception(string.Format("Loan not found for id {0} customer {1}", loanID, customerID));
@@ -138,20 +137,19 @@
 				.Select(ScheduleRowModel.CreateSchedule)
 				.ToList();
 
-			var lastSchedule = loan.Schedule
-				.OrderByDescending(x => x.Date)
-				.FirstOrDefault();
-			DateTime endPeriod = this.now;
-			if(lastSchedule != null && lastSchedule.Date > this.now) {
-				endPeriod = lastSchedule.Date;
-			}
-			
 			var allRows = pacnet;
 			allRows.AddRange(paypoint);
 			//allRows.AddRange(fees);
 			allRows.AddRange(schedule);
 
-			scheduleModel.Content = CalculateBalance(allRows, endPeriod);
+			DateTime startPeriod = loan.Date;
+			if (lastSent.HasValue) {
+				startPeriod = lastSent.Value;
+			}
+
+			DateTime endPeriod = startPeriod.AddYears(1);
+
+			scheduleModel.Content = CalculateBalance(allRows, startPeriod, endPeriod);
 
 			scheduleModel.Header = new List<string>{
 				{"Date"},
@@ -165,7 +163,7 @@
 				{"CustomerName",customerPersonalInfo.Fullname},
 				{"LoanRefNum",loan.RefNumber},
 				{"Date",this.now.ToLongUKDate()},
-				{"StartPeriod",loan.Date.ToLongUKDate()},
+				{"StartPeriod",startPeriod.ToLongUKDate()},
 				{"EndPeriod",endPeriod.ToLongUKDate()},
 				{"LoanDate",loan.Date.ToLongUKDate()},
 				{"LoanAmount",loan.LoanAmount.ToNumeric2Decimals()},
@@ -176,10 +174,13 @@
 			};
 		}//PrepareVariables
 
-		private List<List<string>> CalculateBalance(List<List<ScheduleRowModel>> allRows, DateTime endPeriod) {
+		private List<List<string>> CalculateBalance(List<List<ScheduleRowModel>> allRows, DateTime startPeriod, DateTime endPeriod) {
 			decimal balance = 0;
 			foreach (var typeRows in allRows) {
 				foreach (var row in typeRows) {
+					if (row.Date > endPeriod) {
+						break;
+					}
 					row.Balance = row.Balance + balance + (row.InterestAndFees ?? 0) - (row.PaymentReceived ?? 0);
 					balance = row.Balance;
 				}
@@ -189,8 +190,22 @@
 				ScheduleRowModel.CreateClosingBalance(endPeriod, balance)
 			});
 
-			var content = allRows
-				.SelectMany(x => x.ToArray())
+			var allRowsInPeriod = allRows.SelectMany(x => x.ToArray())
+				.Where(x => x.Date >= startPeriod && x.Date <= endPeriod).ToList();
+
+			var first = allRowsInPeriod.FirstOrDefault();
+			if (first != null) {
+				if (first.Description != "Opening balance") {
+					ScheduleRowModel openingBalanceRow = new ScheduleRowModel {
+						Balance = first.Balance - (first.InterestAndFees ?? 0) + (first.PaymentReceived ?? 0),
+						Description = "Opening balance",
+						Date = startPeriod
+					};
+					allRowsInPeriod.Insert(0, openingBalanceRow);
+				}
+			}
+
+			var content = allRowsInPeriod
 				.Select(x => new List<string> {
 					{x.Date.ToLongUKDate()},
 					{x.Description},
