@@ -58,7 +58,7 @@
 				return "Sole Trader (not Inc.)";
 
 			case TypeOfBusiness.LLP:
-				return "-";
+				return "Limited liability partnership";
 
 			case TypeOfBusiness.PShip:
 				return "Partnership (More than 3)";
