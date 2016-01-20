@@ -12,6 +12,7 @@
     using EzBobPersistence.Loan;
     using EzBobPersistence.MobilePhone;
     using EzBobPersistence.ThirdParty.Experian;
+    using EzBobPersistence.ThirdParty.Hrmc;
     using EzBobService.Currency;
     using EzBobService.Customer;
     using EzBobService.DependencyResolution;
@@ -34,7 +35,7 @@
             });
 
             For<ILog>()
-                .Add(ctx => LogManager.GetLogger(ctx.ParentType));
+                .Add(ctx => LogManager.GetLogger(ctx.ParentType)).AlwaysUnique();
 
             ForSingletonOf<ConfigManager>()
                 .Use<ConfigManager>()
@@ -42,6 +43,9 @@
 
             //handles configuration objects injection
             Policies.OnMissingFamily<ConfigurationPolicy>();
+
+            For<IHmrcQueries>()
+                .Use<HmrcQueries>();
 
             ForSingletonOf<MobilePhone>()
                 .Use<MobilePhone>();
