@@ -1,5 +1,6 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

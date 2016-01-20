@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System;
 	using System.Data;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue;
 	using Ezbob.Logger;
@@ -27,6 +28,14 @@
 				MonthlyPayment = 0;
 			else
 				MonthlyPayment = (int)monthlyPayment;
+
+			Log.Debug(
+				"Customer {0} at {1}: company ID is {2}, monthly repayment is {3}.",
+				CustomerID,
+				now.MomentStr(),
+				CompanyID,
+				MonthlyPayment.ToString("C0")
+			);
 		} // LoadCompanyAndMonthlyPayment
 
 		protected virtual int CompanyID { get; private set; }

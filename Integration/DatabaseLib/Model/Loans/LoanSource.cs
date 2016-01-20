@@ -5,12 +5,6 @@
 	using Ezbob.Logger;
 	using NHibernate;
 
-	public enum LoanSourceName {
-		Standard = 1,
-		EU = 2,
-		COSME = 3,
-	} // enum LoanSourceName
-
 	public class LoanSource {
 		[FieldName("LoanSourceID")]
 		public virtual int ID { get; set; }

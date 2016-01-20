@@ -136,6 +136,8 @@
 		} // SkipEverything
 
 		private void StandardFlow() {
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
 			if (this.newCreditLineOption.UpdateData()) {
 				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
@@ -249,7 +251,14 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(
+				CustomerID,
+				this.cashRequestID,
+				this.nlCashRequestID,
+				DateTime.UtcNow,
+				false,
+				true
+			) {
 				Tag = this.tag,
 			};
 			instance.Execute();
@@ -635,8 +644,6 @@
 				return;
 			} // if
 
-			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
-
 			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
 				new AutoRejectionArguments {
 					CustomerID = CustomerID,
@@ -722,16 +729,19 @@
 			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
-					NLFeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee
-						? NLFeeTypes.ServicingFee
-						: NLFeeTypes.SetupFee;
+				NL_OfferFees setupFee = new NL_OfferFees {
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+					Percent = this.autoDecisionResponse.SetupFee,
+					OneTimePartPercent = 1,
+					DistributedPartPercent = 0
+				};
 
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.autoDecisionResponse.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
 				if (this.autoDecisionResponse.SpreadSetupFee) {
 					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
 					setupFee.OneTimePartPercent = 0;
 					setupFee.DistributedPartPercent = 1;
-				}
+				} // if
+
 				NL_OfferFees[] ofeerFees = { setupFee };
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
@@ -857,7 +867,7 @@
 			Log.Debug("Updating Logical Glue data: customer {0} has a non-regulated company.", CustomerID);
 
 			try {
-				InjectorStub.GetEngine().GetInference(CustomerID, 0, false, GetInferenceMode.DownloadIfOld);
+				InjectorStub.GetEngine().GetInference(CustomerID, MonthlyPayment, false, GetInferenceMode.DownloadIfOld);
 				Log.Debug("Updated Logical Glue data for customer {0}.", CustomerID);
 			} catch (Exception e) {
 				Log.Warn(e, "Logical Glue data was not updated for customer {0}.", CustomerID);
@@ -867,12 +877,12 @@
 		private void ExecuteAdditionalStrategies() {
 			var preData = new PreliminaryData(CustomerID);
 
-			UpdateLogicalGlue(preData);
 			DoConsumerCheck(preData);
 			DoCompanyCheck(preData);
 			DoAmlCheck(preData);
 			DoBwaCheck(preData);
 			DoZooplaCheck();
+			UpdateLogicalGlue(preData); // Must be after DoCompanyCheck because uses ExperianRefNum.
 		} // ExecuteAdditionalStrategies
 
 		private static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }

@@ -54,7 +54,6 @@
     <Compile Include="AConnection\AConnection_ForEachResult.cs" />
     <Compile Include="AResultRow.cs" />
     <Compile Include="AStoredProcedure.cs" />
-    <Compile Include="ATiedStoredProcedure.cs" />
     <Compile Include="ConnectionWrapper.cs" />
     <Compile Include="DbCommandExt.cs" />
     <Compile Include="DbConnectionGenerator.cs" />

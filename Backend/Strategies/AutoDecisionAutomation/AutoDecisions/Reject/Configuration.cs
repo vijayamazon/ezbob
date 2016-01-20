@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject {
 	using System;
 	using System.Reflection;
-	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

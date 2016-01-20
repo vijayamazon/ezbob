@@ -143,12 +143,12 @@
 				int reangesCount = rangesList.Count;
 
 				if (reangesCount == 0) {
-					StepReject<OfferconfigurationFound>(true).Init(0);
+					StepReject<OfferConfigurationFound>(true).Init(0);
 					return;
 				}
 
 				if (reangesCount > 1) {
-					StepReject<OfferconfigurationFound>(true).Init(reangesCount);
+					StepReject<OfferConfigurationFound>(true).Init(reangesCount);
 
 					// company type, loan source, customer is new/old
 					Log.Alert("Too many configurations found. Args: {0}; score: {1}", args, model.Score);
@@ -156,7 +156,7 @@
 					return;
 				}
 
-				StepNoDecision<OfferconfigurationFound>().Init(1);
+				StepNoDecision<OfferConfigurationFound>().Init(1);
 
 				Output.GradeRangeID = rangesList.First().GradeRangeID;
 
