@@ -271,7 +271,7 @@
 
 
 		private bool ApproveCustomer(NL_Decisions newDecision) {
-			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID, this.decisionModel.ForceInvestor, this.decisionModel.InvestorID);
+			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID, this.decisionModel.ForceInvestor, this.decisionModel.InvestorID, this.decisionModel.underwriterID);
 			linkOfferToInvestor.Execute();
 
 			Log.Info("ApproveCustomer Decision {0} for Customer {1} cr {2} OP {3} FoundInvestor {4}",

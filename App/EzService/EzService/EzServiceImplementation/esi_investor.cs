@@ -34,7 +34,7 @@
             return new IntActionResult
             {
                 MetaData = metadata,
-                Value = strategy.InvestorID
+				Value = investorID
             };
         }
         public IntActionResult SaveInvestorContactList(int underwriterID, int investorID, IEnumerable<InvestorContactModel> investorContacts)
@@ -44,7 +44,7 @@
             return new IntActionResult
             {
                 MetaData = metadata,
-                Value = strategy.InvestorID
+				Value = investorID
             };
         }
 		public IntActionResult CreateInvestor(int underwriterID, InvestorModel investor, IEnumerable<InvestorContactModel> investorContacts, IEnumerable<InvestorBankAccountModel> investorBanks) {
@@ -137,7 +137,7 @@
 		public ActionMetaData LinkLoanRepaymentToInvestor(int userID, int customerID, int loanID, int loanTransactionID, decimal transactionAmount, DateTime transactionDate) {
 			Log.Info("EzServiceInvestor LinkLoanRepaymentToInvestor {0}", loanTransactionID);
 			var metadata = Execute<LinkRepaymentToInvestor>(customerID, userID, 
-				loanID, loanTransactionID, transactionAmount, transactionDate);
+				loanID, loanTransactionID, transactionAmount, transactionDate, userID);
 			return metadata;
 		}
 	}

@@ -1,11 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
 	using System;
 	using System.Collections.Generic;
-	using System.Web.Security;
-	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
 
@@ -39,7 +36,6 @@
 				};
 
 				if (this.contact.InvestorContactID == 0) {
-					// UserSignup userSingup = new UserSignup(this.contact.Email, "123456", "InvestorWeb", 2);
 					var userSingup = new SignupInvestorMultiOrigin(contact.Email);
 					userSingup.Transaction = con;
 					userSingup.Execute();
@@ -55,13 +51,13 @@
 					DB.ExecuteNonQuery(con, "I_InvestorContactUpdate", CommandSpecies.StoredProcedure,
 						DB.CreateTableParameter<I_InvestorContact>("Tbl", new List<I_InvestorContact> { dbContact })
 					);
-				}
+				}//if
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to save investor {0} contact to DB", this.contact.InvestorID);
 				con.Rollback();
 				Result = false;
 				throw;
-			}
+			}//try
 
 			con.Commit();
 			Result = true;
@@ -69,7 +65,6 @@
 		}//Execute
 
 		public bool Result { get; set; }
-
 		private readonly InvestorContactModel contact;
 	}//ManageInvestorContact
 }//ns

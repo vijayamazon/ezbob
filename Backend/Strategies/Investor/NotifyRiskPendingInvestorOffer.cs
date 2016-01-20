@@ -13,7 +13,7 @@
 			this.customerID = customerID;
 			this.offerValidUntil = offerValidUntil;
 			this.approvedAmount = approvedAmount;
-		}
+		}//ctor
 
 		public override string Name { get { return "NotifyRiskPendingInvestorOffer"; } }
 
@@ -21,7 +21,7 @@
 			if (string.IsNullOrEmpty(CurrentValues.Instance.PendingInvestorNoficationReciever.Value)) {
 				Log.Info("Not sending NotifyRiskPendingInvestorOffer the PendingInvestorNoficationReciever config is null or empty");
 				return;
-			}
+			}//if
 
 			var customerData = new CustomerData(this, this.customerID, DB);
 			customerData.Load();
@@ -59,6 +59,6 @@
 					this.offerValidUntil.ToString("dd/MM/yy hh:mm")
 				)
 			);
-		}
-	}
-}
+		}//Execute
+	}//NotifyRiskPendingInvestorOffer
+}//ns

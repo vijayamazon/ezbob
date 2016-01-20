@@ -8,12 +8,14 @@
 			int loanID,
 			int loanTransactionID,
 			decimal amount,
-			DateTime transactionDate) {
+			DateTime transactionDate,
+			int? userID) {
 
 			this.loanID = loanID;
 			this.loanTransactionID = loanTransactionID;
 			this.amount = amount;
 			this.transactionDate = transactionDate;
+			this.userID = userID;
 			this.now = DateTime.UtcNow;
 		}//ctor
 
@@ -53,8 +55,8 @@
 					this.loanID,
 					this.loanTransactionID,
 					"Repayment",
-					null, //TODO add user id
-					null //TODO add transaction date.
+					this.userID, 
+					this.transactionDate
 				);
 				addSystemBalance.Execute();
 			} catch (Exception ex) {
@@ -69,6 +71,7 @@
 		private readonly int loanTransactionID;
 		private readonly decimal amount;
 		private readonly DateTime transactionDate;
+		private readonly int? userID;
 		private readonly DateTime now;
 	}//LinkRepaymentToInvestor
 }//ns

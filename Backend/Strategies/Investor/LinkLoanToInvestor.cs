@@ -31,7 +31,7 @@
 					"I_LoadAssigedToLoanInvestors",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanID", this.loanID));
-			}
+			}//if
 		}//Execute
 
 		private ActionResult HandleOneAssignedToLoanInvestor(SafeReader sr, bool bRowSetStart) {
@@ -60,9 +60,9 @@
 					fundingBankAccountID, 
 					this.now,
 					loanAmount * investmentPercent * negative,
-					null,
+					this.customerID,
 					"Loan was taken",
-					null //TODO add transaction date.
+					this.now
 				);
 				addBankAccountBalance.Execute();
 			} catch (Exception ex) {

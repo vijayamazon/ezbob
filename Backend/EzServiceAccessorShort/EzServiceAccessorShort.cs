@@ -111,7 +111,7 @@
             stra.Execute();
         }
 		public void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate) {
-			LinkRepaymentToInvestor stra = new LinkRepaymentToInvestor(loanID, loanTransactionID, amount, transactionDate);
+			LinkRepaymentToInvestor stra = new LinkRepaymentToInvestor(loanID, loanTransactionID, amount, transactionDate, userID);
 			stra.Execute();
 		}
 

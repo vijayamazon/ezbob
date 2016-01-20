@@ -9,20 +9,30 @@
 	public class NotifyInvestorUtilizedFunds : AStrategy {
 		public NotifyInvestorUtilizedFunds(int investorID) {
 			this.investorID = investorID;
-		}
+		}//ctor
 
 		public override string Name { get { return "NotifyInvestorUtilizedFunds"; } }
 
 		public override void Execute() {
 			try {
-				this.investor = DB.FillFirst<I_Investor>(string.Format("SELECT * FROM I_Investor WHERE InvestorID = {0}", this.investorID), CommandSpecies.Text);
-				this.investorAccountingConfiguration = DB.FillFirst<I_InvestorAccountingConfiguration>(string.Format("SELECT * FROM I_Investor WHERE InvestorID = {0}", this.investorID), CommandSpecies.Text);
-				this.fundingBankAccount = DB.FillFirst<I_InvestorBankAccount>(string.Format("SELECT TOP 1 * FROM I_InvestorBankAccount WHERE InvestorID = {0} AND IsActive = 1 AND InvestorAccountTypeID = {1}",
+				//get investor
+				this.investor = DB.FillFirst<I_Investor>(
+					string.Format("SELECT * FROM I_Investor WHERE InvestorID = {0}", this.investorID), CommandSpecies.Text);
+				
+				//get accounting configuration
+				this.investorAccountingConfiguration = DB.FillFirst<I_InvestorAccountingConfiguration>(
+					string.Format("SELECT * FROM I_Investor WHERE InvestorID = {0}", this.investorID), CommandSpecies.Text);
+
+				//get investor's funding account
+				this.fundingBankAccount = DB.FillFirst<I_InvestorBankAccount>(
+					string.Format("SELECT TOP 1 * FROM I_InvestorBankAccount WHERE InvestorID = {0} AND IsActive = 1 AND InvestorAccountTypeID = {1}",
 					this.investorID,
 					(int)I_InvestorAccountTypeEnum.Funding),
 					CommandSpecies.Text);
 
-				this.systemBalance = DB.FillFirst<I_InvestorSystemBalance>(string.Format("SELECT TOP 1 * FROM I_InvestorSystemBalance WHERE InvestorBankAccountID = {0} ORDER BY InvestorSystemBalanceID DESC",
+				//get investor's system balance
+				this.systemBalance = DB.FillFirst<I_InvestorSystemBalance>(
+					string.Format("SELECT TOP 1 * FROM I_InvestorSystemBalance WHERE InvestorBankAccountID = {0} ORDER BY InvestorSystemBalanceID DESC",
 					this.fundingBankAccount.InvestorBankAccountID));
 
 				if (!this.systemBalance.NewBalance.HasValue) {
@@ -30,7 +40,7 @@
 						this.investorID,
 						this.fundingBankAccount.InvestorBankAccountID);
 					return;
-				}
+				}//if
 
 				if (this.systemBalance.NewBalance.Value < CurrentValues.Instance.MinLoan) {
 					SendFundsUtilized();
@@ -45,25 +55,25 @@
 				} else if (this.investorAccountingConfiguration.FundingLimitForNotification.HasValue &&
 					this.systemBalance.NewBalance.Value < this.investorAccountingConfiguration.FundingLimitForNotification.Value) {
 					SendFundsUtilized();
-				}
+				}//if
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to send funds utilized notification to investor {0}", this.investorID);
-			}
-		}
+			}//try
+		}//Execute
 
 		private void SendFundsUtilized() {
 			if (!this.systemBalance.NewBalance.HasValue) {
 				return;
-			}
+			}//if
 
-			var contacts = DB.Fill<I_InvestorContact>(string.Format("SELECT * FROM I_InvestorContact WHERE InvestorID = {0} AND IsActive = 1", 
+			var contacts = DB.Fill<I_InvestorContact>(string.Format("SELECT * FROM I_InvestorContact WHERE InvestorID = {0} AND IsActive = 1",
 				this.investorID),
 				CommandSpecies.Text);
-			
+
 
 			foreach (var investorContact in contacts) {
 				StrategiesMailer mailer = new StrategiesMailer();
-				
+
 				Dictionary<string, string> parameters = new Dictionary<string, string> {
 					{ "ContactFirstName", investorContact.PersonalName },
 					{ "ContactLastName", investorContact.LastName },
@@ -74,21 +84,21 @@
 					{ "BankAccountNumber", this.fundingBankAccount.BankAccountNumber },
 				};
 
-				mailer.Send("InvestorFundsNotification", 
-					parameters, 
+				mailer.Send("InvestorFundsNotification",
+					parameters,
 					new Addressee(
-						investorContact.Email, 
-						bShouldRegister: true, 
+						investorContact.Email,
+						bShouldRegister: true,
 						userID: investorContact.InvestorContactID,
 						addSalesforceActivity: false)
 				);
-			}
-		}
+			}//foreach
+		}//SendFundsUtilized
 
 		private readonly int investorID;
 		private I_Investor investor;
 		private I_InvestorAccountingConfiguration investorAccountingConfiguration;
 		private I_InvestorBankAccount fundingBankAccount;
 		private I_InvestorSystemBalance systemBalance;
-	}
-}
+	}//NotifyInvestorUtilizedFunds
+}//ns

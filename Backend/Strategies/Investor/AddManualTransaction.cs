@@ -20,19 +20,19 @@
 			try {
 
 				if (this.bankAccountTypeID == (int)I_InvestorAccountTypeEnum.Funding) {
-					this.SystemBalanceTransactionSign = 1;
+					this.systemBalanceTransactionSign = 1;
 					this.bankAccountType = I_InvestorAccountTypeEnum.Funding;
 				}
 
 
 				if (this.bankAccountTypeID == (int)I_InvestorAccountTypeEnum.Repayments) {
-					this.SystemBalanceTransactionSign = -1;
+					this.systemBalanceTransactionSign = -1;
 					this.bankAccountType = I_InvestorAccountTypeEnum.Repayments;
 				}
 
 				AddInvestorSystemBalance changeSystemBalance = new AddInvestorSystemBalance(this.investorAccountID,
 					this.now,
-					this.transactionAmount * this.SystemBalanceTransactionSign,
+					this.transactionAmount * this.systemBalanceTransactionSign,
 					null,
 					null,
 					null,
@@ -44,7 +44,7 @@
 
 				AddInvestorBankAccountBalance addBankAccountBalance = new AddInvestorBankAccountBalance(this.investorAccountID,
 					this.now,
-					this.transactionAmount * this.SystemBalanceTransactionSign,
+					this.transactionAmount * this.systemBalanceTransactionSign,
 					this.underwriterID,
 					this.transactionComment,
 					this.transactionDate);
@@ -68,9 +68,9 @@
 		private readonly decimal transactionAmount;
 		private readonly DateTime transactionDate;
 		private readonly string transactionComment;
-		private int SystemBalanceTransactionSign;
+		private int systemBalanceTransactionSign;
 		private readonly DateTime now;
-	}//ManageInvestorBankAccount   transactionComment
+	}//AddManualTransaction
 }//ns
 
 

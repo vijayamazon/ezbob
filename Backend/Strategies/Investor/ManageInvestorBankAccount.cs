@@ -16,7 +16,7 @@
 			DateTime now = DateTime.UtcNow;
 			var con = DB.GetPersistent();
 			con.BeginTransaction();
-			
+
 			try {
 				var dbBank = new I_InvestorBankAccount {
 					IsActive = this.bank.IsActive,
@@ -34,7 +34,8 @@
 					InvestorID = this.bank.InvestorID,
 				};
 
-				DB.ExecuteNonQuery(con, this.bank.InvestorBankAccountID == 0 ? "I_InvestorBankAccountSave" : "I_InvestorBankAccountUpdate", CommandSpecies.StoredProcedure,
+				DB.ExecuteNonQuery(con, this.bank.InvestorBankAccountID == 0 ? "I_InvestorBankAccountSave" : "I_InvestorBankAccountUpdate", 
+					CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<I_InvestorBankAccount>("Tbl", new List<I_InvestorBankAccount> { dbBank })
 				);
 			} catch (Exception ex) {
@@ -42,7 +43,7 @@
 				con.Rollback();
 				Result = false;
 				throw;
-			}
+			}//try
 
 			con.Commit();
 			Result = true;
@@ -50,7 +51,6 @@
 		}//Execute
 
 		public bool Result { get; set; }
-
 		private readonly InvestorBankAccountModel bank;
 	}//ManageInvestorBankAccount
 }//ns

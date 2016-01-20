@@ -17,9 +17,9 @@
 		public override string Name { get { return "OfferExpiredChecker"; } }
 
 		public override void Execute() {
-			
-			DB.ForEachRowSafe(HandleOneExpired, "I_LoadExpiredOffers", 
-				CommandSpecies.StoredProcedure, 
+
+			DB.ForEachRowSafe(HandleOneExpired, "I_LoadExpiredOffers",
+				CommandSpecies.StoredProcedure,
 				new QueryParameter("Now", this.now)
 				);
 		}//Execute
@@ -56,7 +56,7 @@
 				}
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to add system balance raw when expired offer {0} for investor {1}", sr["CashRequestID"], sr["InvestorID"]);
-			}
+			}//try
 			return ActionResult.Continue;
 		}//HandleOneExpired
 
@@ -80,7 +80,7 @@
 			}).Execute();
 
 			new RejectUser(customerID, true).Execute();
-		}
+		}//RejectCustomer
 
 		private void MarkOfferAsExpired(long cashRequestID) {
 			DB.ExecuteNonQuery(@"UPDATE 
