@@ -1,4 +1,9 @@
 ﻿
+using System;
+using System.Collections.Generic;
+using Ezbob.Backend.ModelsWithDB.OpenPlatform;
+using Ezbob.Database;
+
 namespace Ezbob.Backend.Strategies.Investor {
 	using System;
 	using System.Collections.Generic;

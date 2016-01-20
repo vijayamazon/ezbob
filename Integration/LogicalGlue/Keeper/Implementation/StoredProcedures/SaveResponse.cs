@@ -15,7 +15,8 @@
 			Response<Reply> response,
 			AConnection db,
 			ASafeLog log
-		) : base(db, log) {
+		)
+			: base(db, log) {
 			if (response != null) {
 				Tbl = new List<DbResponse> {
 					new DbResponse {
@@ -24,7 +25,9 @@
 						ResponseStatus = response.Parsed.Exists() ? (int)response.Parsed.Status : 0,
 						TimeoutSourceID = response.Parsed.Exists() ? (int?)response.Parsed.Timeout : null,
 						ErrorMessage = response.Parsed.Exists() ? response.Parsed.Error : null,
-						BucketID = response.Parsed.Bucket.HasValue ? (int)response.Parsed.Bucket.Value : (int?)null,
+						BucketID = response.Parsed.Exists()
+							? (response.Parsed.Bucket.HasValue ? (int)response.Parsed.Bucket.Value : (int?)null)
+							: null,
 						HasEquifaxData = response.Parsed.HasEquifaxData(),
 						ReceivedTime = DateTime.UtcNow,
 						ParsingExceptionType = response.ParsingException == null
@@ -33,8 +36,8 @@
 						ParsingExceptionMessage = response.ParsingException == null
 							? null
 							: response.ParsingException.Message,
-						Reason = response.Parsed.Reason,
-						Outcome = response.Parsed.Outcome,
+						Reason = response.Parsed.Exists() ? response.Parsed.Reason : null,
+						Outcome = response.Parsed.Exists() ? response.Parsed.Outcome : null,
 					}
 				};
 			} // if
