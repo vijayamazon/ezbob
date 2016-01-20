@@ -7,6 +7,7 @@ namespace ConfigManager {
 	} // enum ChannelGrabberRejectPolicy
 
 	public enum Variables {
+		AccountingBrokersEmail,
 		AddSageIntervalMinutes,
 		AdministrationCharge,
 		AgreementPdfConsentPath1,
