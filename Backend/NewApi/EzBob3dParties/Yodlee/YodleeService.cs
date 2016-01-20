@@ -28,7 +28,7 @@
 
 
         //called ones after instance is create
-        //TODO: should be convert to IInstancePolicy when we will upgrade to SructureMap 4
+        //TODO: should be converted to IInstancePolicy when we will upgrade to SructureMap 4
         internal void InitAfterInject() {
             Browser.SetBaseAddress(Config.RestUrl);
         }
@@ -144,7 +144,6 @@
             var infos = JsonConvert.DeserializeObject<IList<SiteInfo>>(json);
             return new YSiteSearchResponse(infos);
         }
-
 
         /// <summary>
         /// Gets the fast link token.

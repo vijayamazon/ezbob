@@ -11,7 +11,7 @@ namespace EzBob3dParties.Experian.Targeting {
     /// <summary>
     /// Handles Experian business targeting command
     /// </summary>
-    public class ExperianTargetBusinessHandler : HandlerBase<ExperianTarget3dPartyBuisnessCommandResponse>, IHandleMessages<ExperianTarget3dPartyBusinessCommand> {
+    public class ExperianTargetBusinessHandler : HandlerBase<ExperianTargetBuisness3dPartyCommandResponse>, IHandleMessages<ExperianTargetBusiness3dPartyCommand> {
 
         [Injected]
         public IExperian Experian { get; set; }
@@ -24,7 +24,7 @@ namespace EzBob3dParties.Experian.Targeting {
         /// This method will be called when a command arrives on the bus and should contain
         ///             the custom logic to execute when the command is received.
         /// </remarks>
-        public void Handle(ExperianTarget3dPartyBusinessCommand command) {
+        public void Handle(ExperianTargetBusiness3dPartyCommand command) {
             ResultInfoAccomulator<IEnumerable<Experian3dPartyCompanyInfo>> info = Experian.TargetBusiness(command.CompanyName, command.PostCode, command.IsLimited, command.RegNumber.HasValue ? command.RegNumber.GetValue() : "");
             if (info.HasErrors) {
                 //TODO : check again

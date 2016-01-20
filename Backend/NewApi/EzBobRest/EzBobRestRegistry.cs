@@ -25,7 +25,7 @@
             //The objects of these classes created automatically (for example validators)
 
             For<ILog>()
-                .Add(ctx => LogManager.GetLogger(ctx.ParentType));
+                .Add(ctx => LogManager.GetLogger(ctx.ParentType.Name)).AlwaysUnique();
 
             RegisterConfiguration();
 

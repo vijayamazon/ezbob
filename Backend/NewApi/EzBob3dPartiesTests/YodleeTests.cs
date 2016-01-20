@@ -20,7 +20,7 @@ namespace EzBob3dPartiesTests {
     [TestFixture]
     public class YodleeTests : TestBase {
         private static readonly string CoBrandUserName = "sbCobromanp";
-        private static readonly string coBrandPassworkd = "01267bdc-7685-477d-a012-b97d3cfb697e";
+        private static readonly string CoBrandPassword = "01267bdc-7685-477d-a012-b97d3cfb697e";
         private static readonly string UserName = "sbMemromanp5";
         private static readonly string UserPassword = "sbMemromanp5#123";
 
@@ -36,7 +36,7 @@ namespace EzBob3dPartiesTests {
             YodleeService yodleeService = container.GetInstance<YodleeService>();
 
             YCobrandLoginRequest cobrandLoginRequest = new YCobrandLoginRequest().SetCobrandUserName(CoBrandUserName)
-                .SetCobrandPassword(coBrandPassworkd);
+                .SetCobrandPassword(CoBrandPassword);
 
             YCobrandLoginResponse yCobrandLoginResponse = await yodleeService.LoginCobrand(cobrandLoginRequest);
 
@@ -75,7 +75,7 @@ namespace EzBob3dPartiesTests {
             YodleeService yodleeService = container.GetInstance<YodleeService>();
 
             YCobrandLoginRequest cobrandLoginRequest = new YCobrandLoginRequest().SetCobrandUserName(CoBrandUserName)
-                .SetCobrandPassword(coBrandPassworkd);
+                .SetCobrandPassword(CoBrandPassword);
 
             YCobrandLoginResponse yCobrandLoginResponse = await yodleeService.LoginCobrand(cobrandLoginRequest);
 
@@ -101,7 +101,7 @@ namespace EzBob3dPartiesTests {
             YodleeService yodleeService = container.GetInstance<YodleeService>();
 
             YCobrandLoginRequest cobrandLoginRequest = new YCobrandLoginRequest().SetCobrandUserName(CoBrandUserName)
-                .SetCobrandPassword(coBrandPassworkd);
+                .SetCobrandPassword(CoBrandPassword);
 
             YCobrandLoginResponse yCobrandLoginResponse = await yodleeService.LoginCobrand(cobrandLoginRequest);
 

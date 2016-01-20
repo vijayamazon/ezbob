@@ -12,7 +12,7 @@
     /// </summary>
     public class ExperianBusinessTargetingHandler : HandlerBase<ExperianBusinessTargetingCommandResponse>,
         IHandleMessages<ExperianBusinessTargetingCommand>,
-        IHandleMessages<ExperianTarget3dPartyBuisnessCommandResponse> {
+        IHandleMessages<ExperianTargetBuisness3dPartyCommandResponse> {
 
         [Injected]
         public ThirdPartyServiceConfig ThirdPartyService { get; set; }
@@ -23,7 +23,7 @@
         /// <param name="handledCommand">The command.</param>
         public void Handle(ExperianBusinessTargetingCommand handledCommand) {
 
-            ExperianTarget3dPartyBusinessCommand cmd = new ExperianTarget3dPartyBusinessCommand
+            ExperianTargetBusiness3dPartyCommand cmd = new ExperianTargetBusiness3dPartyCommand
             {
                 RegNumber = string.IsNullOrEmpty(handledCommand.RegistrationNumber) ? Optional<string>.Empty() : Optional<string>.Of(handledCommand.RegistrationNumber),
                 CompanyName = handledCommand.CompanyName,
@@ -39,7 +39,7 @@
         /// Handles a 3d party response.
         /// </summary>
         /// <param name="handledResponse">The command.</param>
-        public void Handle(ExperianTarget3dPartyBuisnessCommandResponse handledResponse) {
+        public void Handle(ExperianTargetBuisness3dPartyCommandResponse handledResponse) {
             ReplyToOrigin(handledResponse, resp => {
                 if (handledResponse.CompanyInfos != null) {
                     resp.CompanyInfos = handledResponse.CompanyInfos.Select(Transform)

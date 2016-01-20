@@ -823,11 +823,14 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        protected T ExecuteScalarAndLog<T>(SqlCommand command)
-        {
+        protected Optional<T> ExecuteScalarAndLog<T>(SqlCommand command) {
             try {
-                T res = (T)command.ExecuteScalar();
-                return res;
+                object res = command.ExecuteScalar();
+                if (res == DBNull.Value) {
+                    return Optional<T>.Empty();
+                }
+                return Optional<T>.Of((T)res);
+
             } catch (SqlException ex) {
                 Log.Error(ex);
                 throw;

@@ -34,6 +34,7 @@
         "ApiSignature": "AFcWxV21C7fd0v3bYYYRCpSSRl31Aoui-O9-IwfGEuUAgSnmws-LttVZ",
         "ConnectionTimeout": "30000",
         "RequestRetries": "3",
-        "RedirectUrl": "https://www.paypal.com/webscr&cmd="
+        "RedirectUrl": "https://www.paypal.com/webscr&cmd=",
+        "DaysPerTransactionRequest": 30
     }
 }

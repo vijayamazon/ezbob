@@ -145,6 +145,7 @@
     <Compile Include="EzBob3dPartiesRegistry.cs" />
     <Compile Include="HMRC\DLParser.cs" />
     <Compile Include="HMRC\GBPParser.cs" />
+    <Compile Include="HMRC\Handlers\HmrcGetVatReturnsHandler.cs" />
     <Compile Include="HMRC\HmrcService.cs" />
     <Compile Include="HMRC\IHmrcService.cs" />
     <Compile Include="HMRC\LoginDetailsScraper.cs" />
@@ -160,7 +161,10 @@
     <Compile Include="HMRC\VatReturnInfoParser.cs" />
     <Compile Include="HMRC\HmrcVatReturnsInfo.cs" />
     <Compile Include="HMRC\VatReturnsInfoFetcher.cs" />
-    <Compile Include="PayPalService\Handlers\PayPalGetUserDataCommandHandler.cs" />
+    <Compile Include="PayPalService\Soap\Handlers\PayPalGetPermissionsRedirectUrlHandler.cs" />
+    <Compile Include="PayPalService\Soap\Handlers\PayPalGetAccessTokenCommandHandler.cs" />
+    <Compile Include="PayPalService\Soap\Handlers\PayPalGetTransactionCommandHandler.cs" />
+    <Compile Include="PayPalService\Soap\Handlers\PayPalGetUserDataCommandHandler.cs" />
     <Compile Include="PayPalService\Soap\PayPalSoapConfig.cs" />
     <Compile Include="PayPalService\Soap\PayPalSoapService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

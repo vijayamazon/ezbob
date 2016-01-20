@@ -136,6 +136,13 @@
     <Compile Include="ThirdParties\Ebay\EbayGetLoginUrlHandler.cs" />
     <Compile Include="ThirdParties\Ebay\EbayRegisterUserCommandHandler.cs" />
     <Compile Include="ThirdParties\Experian\ExperianBusinessTargetingHandler.cs" />
+    <Compile Include="ThirdParties\Hmrc\HmrcRegisterCustomerHandler.cs" />
+    <Compile Include="ThirdParties\PayPal\PayPalConfig.cs" />
+    <Compile Include="ThirdParties\PayPal\PayPalRegisterCustomerCommandHandler.cs" />
+    <Compile Include="ThirdParties\PayPal\SendRecieve\PayPalGetAccessTokenSendRecieve.cs" />
+    <Compile Include="ThirdParties\PayPal\SendRecieve\PayPalGetCustomerPersonalDataSendRecieve.cs" />
+    <Compile Include="ThirdParties\PayPal\SendRecieve\PayPalGetPermissionsRedirectUrlHandler.cs" />
+    <Compile Include="ThirdParties\PayPal\SendRecieve\PayPalGetTransactionsSendRecieve.cs" />
     <Compile Include="ThirdParties\ThirdPartyServiceConfig.cs" />
     <Compile Include="ThirdParties\Twilio\TwilioSmsAsyncSendReceive.cs" />
     <Compile Include="ThirdParties\Yodlee\YodleeAccountAddedHandler.cs" />

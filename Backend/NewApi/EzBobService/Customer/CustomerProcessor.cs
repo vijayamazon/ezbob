@@ -73,8 +73,8 @@
                 customer.BrokerID = null;
                 
 
-                int? isCustomerSaved = CustomerQueries.UpsertCustomer(customer);
-                if (!isCustomerSaved.HasValue) {
+                var customerId = CustomerQueries.UpsertCustomer(customer);
+                if (!customerId.HasValue || customerId.Value < 1) {
                     info.AddError("could not save customer");
                     return -1;
                 }
@@ -108,8 +108,8 @@
             using (var unitOfWork = new UnitOfWork()) {
                 DateTime now = DateTime.UtcNow;
 
-                int? isCustomerSaved = CustomerQueries.UpsertCustomer(customer);
-                if (!isCustomerSaved.HasValue) {
+                var customerId = CustomerQueries.UpsertCustomer(customer);
+                if (!customerId.HasValue || customerId.Value < 1) {
                     info.AddError("could not save customer");
                     return info;
                 }

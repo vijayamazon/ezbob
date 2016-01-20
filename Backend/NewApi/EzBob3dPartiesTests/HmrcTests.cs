@@ -18,7 +18,7 @@
     public class HmrcTests : TestBase {
         private static readonly string HmrcGovUk = "https://online.hmrc.gov.uk";
 
-        //the suer without VatReturnInfos
+        //the user without VatReturnInfos
         private readonly User user1 = new User {
             UserName = "StartsWith829EndsWith60",
             Password = "NumberMonthYear"

@@ -4,6 +4,7 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using Common.Logging;
+    using eBay.Service.Call;
     using EzBobCommon;
     using EzBobCommon.Utils.Encryption;
     using EzBobCommon.Web;
@@ -40,9 +41,10 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        public async Task<bool> ValidateCredentials(string userName, string password) {
-            if (!IsValidUserNamePassword(userName, password)) {
-                return false;
+        public async Task<InfoAccumulator> ValidateCredentials(string userName, string password) {
+            InfoAccumulator info = ValidateUserNamePassword(userName, password);
+            if (info.HasErrors) {
+                return info;
             }
 
             return await Login(userName, password);
@@ -55,19 +57,20 @@
         /// <param name="password">The password.</param>
         /// <returns></returns>
         public async Task<HmrcVatReturnsInfo> GetVatReturns(string userName, string password) {
-            if (!IsValidUserNamePassword(userName, password)) {
-                return null;
+            InfoAccumulator info = ValidateUserNamePassword(userName, password);
+            if (info.HasErrors) {
+                return ReturnError(info);
             }
 
-            bool isLoggedIn = await Login(userName, password);
-            if (!isLoggedIn) {
-                return null;
+            info = await Login(userName, password);
+            if (info.HasErrors) {
+                return ReturnError(info);
             }
 
             //try to obtain user's VAT id
             var taxOfficeNumberAndVatId = await VatIdAndTaxOfficeNumberFetcher.GetUserVatIdAndTaxOfficeNumber(baseAddress, Browser);
             if (string.IsNullOrEmpty(taxOfficeNumberAndVatId.VatId)) {
-                return null;
+                return ReturnError("could not obtain customer's vat id");
             }
 
             RtiTaxYearInfo yearInfo = null;
@@ -82,7 +85,8 @@
             return new HmrcVatReturnsInfo {
                 TaxOfficeNumber = taxOfficeNumberAndVatId.TaxOfficeNumber,
                 VatReturnInfos = vatReturnInfos,
-                RtiTaxYearInfo = yearInfo
+                RtiTaxYearInfo = yearInfo,
+                Info = info
             };
         }
 
@@ -92,10 +96,12 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        private async Task<bool> Login(string userName, string password) {
-
+        private async Task<InfoAccumulator> Login(string userName, string password) {
+            InfoAccumulator info = new InfoAccumulator();
             if (password.Length > maxPasswordLength) {
-                Log.Warn(string.Format("Supplied password ({0}) is too long, truncating to {1} characters.", EncryptionUtils.Encrypt(password), maxPasswordLength));
+                string warning = string.Format("Supplied password ({0}) is too long, truncating to {1} characters.", EncryptionUtils.Encrypt(password), maxPasswordLength);
+                Log.Warn(warning);
+                info.AddWarning(warning);
                 password = password.Substring(0, maxPasswordLength);
             }
 
@@ -103,7 +109,9 @@
                 //Scrap login details
                 ScrapedLoginRequestDetails scrapedLoginDetails = await LoginDetailsScraper.ScrapLoginDetails(baseAddress, Browser);
                 if (!IsLoginRequestDetailsScrapedAsExpected(scrapedLoginDetails)) {
-                    return false;
+                    info.AddError("login error");
+                    Log.Error("unexpected login page");
+                    return info;
                 }
 
                 Log.InfoFormat("Login URL: {0}", scrapedLoginDetails.LoginPageUrl);
@@ -111,14 +119,14 @@
                 //try to login
                 string loginResponse = await HttpPostLogin(scrapedLoginDetails, userName, password);
                 if (string.IsNullOrEmpty(loginResponse) || !IsLoginSucceeded(loginResponse, userName)) {
-                    return false;
+                    return info;
                 }
             } catch (Exception ex) {
                 Log.Error(ex);
-                return false;
+                throw;
             }
 
-            return true;
+            return info;
         }
 
         /// <summary>
@@ -202,8 +210,7 @@
             }
 
             if (!scrapedLogin.HttpMethod.ToUpperInvariant()
-                   .Equals("POST"))
-            {
+                .Equals("POST")) {
                 Log.Error("Unsupported scrapedLogin method: " + scrapedLogin.HttpMethod);
                 return false;
             }
@@ -217,20 +224,45 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        private bool IsValidUserNamePassword(string userName, string password) {
-            if (string.IsNullOrEmpty(userName))
-            {
-                Log.Error("got empty user name");
-                return false;
+        private InfoAccumulator ValidateUserNamePassword(string userName, string password) {
+            InfoAccumulator info = new InfoAccumulator();
+            if (string.IsNullOrEmpty(userName)) {
+                Log.Error("empty user name");
+                info.AddError("empty user name");
             }
 
-            if (string.IsNullOrEmpty(password))
-            {
-                Log.Error("got empty password");
-                return false;
+            if (string.IsNullOrEmpty(password)) {
+                Log.Error("empty password");
+                info.AddError("empty password");
             }
 
-            return true;
+            return info;
+        }
+
+        /// <summary>
+        /// Returns the error.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <returns></returns>
+        private HmrcVatReturnsInfo ReturnError(InfoAccumulator info) {
+            return new HmrcVatReturnsInfo
+            {
+                Info = info
+            };
+        }
+
+        /// <summary>
+        /// Returns the error.
+        /// </summary>
+        /// <param name="errorMessage">The error message.</param>
+        /// <returns></returns>
+        private HmrcVatReturnsInfo ReturnError(string errorMessage) {
+            InfoAccumulator info = new InfoAccumulator();
+            info.AddError(errorMessage);
+            Log.Error(errorMessage);
+            return new HmrcVatReturnsInfo {
+                Info = info
+            };
         }
     }
 }

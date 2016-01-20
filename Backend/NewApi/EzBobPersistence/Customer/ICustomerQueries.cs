@@ -1,4 +1,5 @@
 ﻿namespace EzBobPersistence.Customer {
+    using EzBobCommon;
     using EzBobModels;
 
     public interface ICustomerQueries {
@@ -23,8 +24,8 @@
         /// Creates or updates the customer.
         /// </summary>
         /// <param name="customer">The customer.</param>
-        /// <returns>int - customer id, null - was nothing to save in db</returns>
-        int? UpsertCustomer(Customer customer);
+        /// <returns>int - customer id, empty - was nothing to save in db</returns>
+        Optional<int> UpsertCustomer(Customer customer);
         /// <summary>
         /// Gets the customer by identifier.
         /// </summary>

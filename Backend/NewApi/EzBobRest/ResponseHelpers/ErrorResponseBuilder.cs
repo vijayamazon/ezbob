@@ -12,8 +12,12 @@
     /// Builder ignores empty and null parameters
     /// </remarks>
     public class ErrorResponseBuilder {
+        private static readonly string CustomerId = "CustomerId";
+        private static readonly string CompanyId = "CompanyId";
+
         private readonly JObject response = new JObject();
         private readonly JArray errors = new JArray();
+
         private ModelBindingException bindingException;
 
         /// <summary>
@@ -22,7 +26,7 @@
         /// <param name="key">The key.</param>
         /// <param name="val">The value.</param>
         /// <returns></returns>
-        public ErrorResponseBuilder AddKeyValue(string key, string val) {
+        public ErrorResponseBuilder WithKeyValue(string key, string val) {
             if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(val)) {
                 this.response[key] = val;
             }
@@ -31,11 +35,46 @@
         }
 
         /// <summary>
+        /// Adds the customer identifier.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns></returns>
+        public ErrorResponseBuilder WithCustomerId(string customerId) {
+            if (!string.IsNullOrEmpty(customerId)) {
+                this.response[CustomerId] = customerId;
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the company identifier.
+        /// </summary>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        public ErrorResponseBuilder WithCompanyId(string companyId) {
+            if (!string.IsNullOrEmpty(companyId)) {
+                this.response[CompanyId] = companyId;
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the key value.
+        /// </summary>
+        /// <param name="keyValue">The key value.</param>
+        /// <returns></returns>
+        public ErrorResponseBuilder WithKeyValue(KeyValuePair<string, string> keyValue) {
+            return WithKeyValue(keyValue.Key, keyValue.Value);
+        }
+
+        /// <summary>
         /// Adds the error message.
         /// </summary>
         /// <param name="errorMessage">The error message.</param>
         /// <returns></returns>
-        public ErrorResponseBuilder AddErrorMessage(string errorMessage) {
+        public ErrorResponseBuilder WithErrorMessage(string errorMessage) {
             AddErrorMessageInternal(errorMessage);
 
             return this;
@@ -46,7 +85,7 @@
         /// </summary>
         /// <param name="messages">The messages.</param>
         /// <returns></returns>
-        public ErrorResponseBuilder AddErrorMessages(params string[] messages) {
+        public ErrorResponseBuilder WithErrorMessages(params string[] messages) {
             if (messages != null) {
                 foreach (var message in messages) {
                     AddErrorMessageInternal(message);
@@ -60,7 +99,7 @@
         /// </summary>
         /// <param name="messages">The messages.</param>
         /// <returns></returns>
-        public ErrorResponseBuilder AddErrorMessages(IEnumerable<string> messages) {
+        public ErrorResponseBuilder WithErrorMessages(IEnumerable<string> messages) {
             if (messages != null) {
                 foreach (var message in messages) {
                     AddErrorMessageInternal(message);
@@ -75,7 +114,7 @@
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <returns></returns>
-        public ErrorResponseBuilder AddModelBindingException(ModelBindingException exception) {
+        public ErrorResponseBuilder WithModelBindingException(ModelBindingException exception) {
             this.bindingException = exception;
             return this;
         }

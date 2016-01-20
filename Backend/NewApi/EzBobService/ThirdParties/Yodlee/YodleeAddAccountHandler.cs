@@ -4,7 +4,7 @@
     using EzBobApi.Commands.Yodlee;
     using EzBobCommon;
     using EzBobCommon.NSB;
-    using EzBobPersistence.Yodlee;
+    using EzBobPersistence.ThirdParty.Yodlee;
     using NServiceBus;
 
     public class YodleeAddAccountHandler : HandlerBase<YodleeAddUserAccountResponse>, IHandleMessages<YodleeAddUserAccountCommand>, IHandleMessages<YodleeGetFastLinkCommandResponse> {
@@ -35,7 +35,7 @@
                 return;
             }
 
-            int? siteId = YodleeQueries.GetSiteIdFromContentServiceId(cmd.ContentServiceId);
+            var siteId = YodleeQueries.GetSiteIdFromContentServiceId(cmd.ContentServiceId);
             if (!siteId.HasValue) {
                 string err = "could not retrieve site id from DB";
                

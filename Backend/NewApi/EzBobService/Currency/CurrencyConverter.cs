@@ -1,5 +1,4 @@
-﻿namespace EzBobService.Currency
-{
+﻿namespace EzBobService.Currency {
     using System;
     using System.Globalization;
     using Common.Logging;
@@ -23,6 +22,11 @@
         /// <param name="purchaseDate">The purchase date.</param>
         /// <returns></returns>
         public Money ConvertToGBP(Money amount, DateTime purchaseDate = default(DateTime)) {
+
+            if (UkRegion.ThreeLetterISORegionName.Equals(amount.Region.ThreeLetterISORegionName)) {
+                return amount;
+            }
+
             Optional<decimal> rate = CurrencyQueries.GetCurrencyHistoricalRate(amount.ISOCurrencySymbol, purchaseDate);
             if (!rate.HasValue) {
                 Log.ErrorFormat("could not retrieve currency rate for '{0}' from DB", amount.ISOCurrencySymbol);

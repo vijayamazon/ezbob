@@ -2,6 +2,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using EzBobCommon;
     using EzBobModels;
 
     /// <summary>
@@ -16,7 +17,7 @@
         /// </summary>
         /// <param name="company">The company.</param>
         /// <returns>company id , or null is there is some problem</returns>
-        public int? SaveCompany(Company company) {
+        public Optional<int> SaveCompany(Company company) {
             using (var sqlConnection = GetOpenedSqlConnection2()) {
                 IEnumerable<KeyValuePair<string, object>> ids = null;
                 if (company.Id.HasValue) {
@@ -26,7 +27,7 @@
 
                 var cmd = GetUpsertCommand(company, sqlConnection.SqlConnection(), Tables.Company, ids, "Id", o => "Id".Equals(o, StringComparison.InvariantCultureIgnoreCase));
                 if (!cmd.HasValue) {
-                    return null;
+                    return Optional<int>.Empty();
                 }
 
                 using (var sqlCommand = cmd.GetValue()) {
@@ -54,7 +55,13 @@
 
                     using (var sqlCommand = cmd.GetValue()) {
                         var res = ExecuteScalarAndLog<int>(sqlCommand);
-                        directorsIds.Add(res);
+                        if (res.HasValue) {
+                            directorsIds.Add(res.GetValue());
+                        } else {
+                            string msg = "could not save director";
+                            Log.Error(msg);
+                            throw new InvalidOperationException(msg);
+                        }
                     }
                 }
             }
@@ -78,7 +85,7 @@
 
                         using (var sqlCommand = cmd.GetValue()) {
                             var res = ExecuteScalarAndLog<int>(sqlCommand);
-                            return res > 0;
+                            return res.HasValue;
                         }
                     }
                 }

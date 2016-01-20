@@ -10,6 +10,27 @@ namespace EzBobCommon.Utils.Encryption {
 
     //TODO: copy pasted implementation, review it.
     public static class EncryptionUtils {
+
+        /// <summary>
+        /// Encrypts the specified value, that should be decrypted by <see cref="Decrypt(byte[])"/>
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static byte[] Encrypt(byte[] value) {
+            string encrypted = Encrypt(Encoding.UTF8.GetString(value));
+            return Encoding.UTF8.GetBytes(encrypted);
+        }
+
+        /// <summary>
+        /// Decrypts the specified value, encrypted by <see cref="Encrypt(byte[])"/>
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static byte[] Decrypt(byte[] value) {
+            string decrypted = Decrypt(Encoding.UTF8.GetString(value));
+            return Encoding.UTF8.GetBytes(decrypted);
+        }
+
         /// <summary>
         /// Encrypts the specified value and returns base64 string.
         /// </summary>
@@ -107,7 +128,7 @@ namespace EzBobCommon.Utils.Encryption {
         }
 
         private static string GetSalt() {
-            return "EzBB0bE";
+            return "EzBB0b";
         }
     }
 }

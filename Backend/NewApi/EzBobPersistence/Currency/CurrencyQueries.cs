@@ -39,7 +39,7 @@
                         sqlCommand.Parameters.AddWithValue("@UpdatedValue", DateTime.UtcNow);
                     }
 
-                    return Optional<decimal>.Of(ExecuteScalarAndLog<decimal>(sqlCommand));
+                    return ExecuteScalarAndLog<decimal>(sqlCommand);
                 }
             }
         }

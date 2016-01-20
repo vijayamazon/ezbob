@@ -10,7 +10,8 @@ namespace EzBobCommon.NSB {
     using NServiceBus;
 
     /// <summary>
-    /// Implements asynchronous sender
+    /// Implements asynchronous sender.
+    /// Instances of this class are created automatically by NSB
     /// </summary>
     /// <typeparam name="TResponse">The type of the response.</typeparam>
     public class SendRecieveAsyncHandler<TResponse> : IHandleMessages<TResponse>
@@ -65,7 +66,7 @@ namespace EzBobCommon.NSB {
         public void Handle(TResponse response) {
             var optional = Cache.Remove(response.MessageId);
             if (optional.HasValue) {
-                var taskSrc = optional.GetValue() as TaskCompletionSource<TResponse>;
+                var taskSrc = optional.Value as TaskCompletionSource<TResponse>;
                 if (taskSrc != null) {
                     taskSrc.SetResult(response);
                 } else {

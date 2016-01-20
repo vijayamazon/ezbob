@@ -1,11 +1,8 @@
 ﻿namespace EzBobPersistence.MarketPlace {
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Dynamic;
     using System.Linq;
     using EzBobCommon;
-    using EzBobCommon.Utils;
     using EzBobModels.MarketPlace;
 
     //TODO: to do something with marketplace identification there are Guid and Integer and there is a need to transform Guid to integer
@@ -15,17 +12,37 @@
         public MarketPlaceQueries(string connectionString)
             : base(connectionString) {}
 
+
+        /// <summary>
+        /// Validates the customer market place.
+        /// </summary>
+        /// <param name="marketPlaceTypeId">The market place type identifier.</param>
+        /// <param name="displayName">The display name.</param>
+        /// <returns></returns>
+        public InfoAccumulator ValidateCustomerMarketPlace(Guid marketPlaceTypeId, string displayName) {
+            InfoAccumulator info = new InfoAccumulator();
+            if (!IsMarketPlaceInWhiteList(marketPlaceTypeId, displayName))
+            {
+                if (IsMarketPlaceExists(marketPlaceTypeId, displayName)) {
+                    string msg = string.Format("the market place with name: '{0}' already exists", displayName);
+                    info.AddError(msg);
+                }
+            }
+
+            return info;
+        }
+
         /// <summary>
         /// Determines whether the market place is in white list
         /// </summary>
         /// <param name="MarketPlaceTypeId">The market place type identifier.</param>
-        /// <param name="token">The token.</param>
+        /// <param name="displayName">The display name.</param>
         /// <returns></returns>
-        public bool IsMarketPlaceInWhiteList(Guid MarketPlaceTypeId, string token) {
+        public bool IsMarketPlaceInWhiteList(Guid MarketPlaceTypeId, string displayName) {
             using (var connection = GetOpenedSqlConnection2()) {
                 Dictionary<string, object> whereValues = new Dictionary<string, object> {
                     {
-                        "Name", token
+                        "Name", displayName
                     }, {
                         "MarketPlaceTypeGuid", MarketPlaceTypeId
                     }
@@ -33,7 +50,7 @@
 
                 using (var whereCommand = GetSelectFirstByWhereCommand(connection.SqlConnection(), whereValues, "MP_WhiteList", "Id")) {
                     var result = ExecuteScalarAndLog<int>(whereCommand);
-                    return result > 0;
+                    return result.HasValue;
                 }
             }
         }
@@ -44,7 +61,7 @@
         /// <param name="marketPlace">The market place.</param>
         /// <param name="marketPlaceTypeId">The market place type identifier.</param>
         /// <returns>marketplace's id</returns>
-        public int UpsertMarketPlace(CustomerMarketPlace marketPlace, Guid marketPlaceTypeId) {
+        public Optional<int> UpsertMarketPlace(CustomerMarketPlace marketPlace, Guid marketPlaceTypeId) {
 
             var marketPlaceId = GetMarketPlaceIdFromTypeId(marketPlaceTypeId);
             if (!marketPlaceId.HasValue) {
@@ -53,7 +70,7 @@
 
             DateTime utcNow = DateTime.UtcNow;
 
-            marketPlace.Id = marketPlaceId.GetValue();
+            marketPlace.MarketPlaceId = marketPlaceId.GetValue();
             marketPlace.Updated = utcNow;
             if (!marketPlace.Created.HasValue) {
                 marketPlace.Created = utcNow;
@@ -65,11 +82,11 @@
             columnValuesToMatch.Add("DisplayName", marketPlace.DisplayName);
 
             var upsert = GetUpsertGenerator(marketPlace);
-            upsert.SetTableName(mpCustomermarketplace)
-                .SetMatchColumnValues(columnValuesToMatch)
-                .AddSkipColumns("Id")
-                .AddUpdateColumnIfNull("Created")
-                .AddOutputColumns("Id");
+            upsert.WithTableName(mpCustomermarketplace)
+                .WithMatchColumnValues(columnValuesToMatch)
+                .WithSkipColumns("Id")
+                .WithUpdateColumnIfNull("Created")
+                .WithOutputColumns("Id");
 
             using (var connection = GetOpenedSqlConnection2()) {
                 using (var sqlCommand = upsert.Verify()
@@ -81,22 +98,22 @@
         }
 
         /// <summary>
-        /// Creates the market place.
+        /// Creates the new market place.
         /// </summary>
-        /// <param name="marketPlace">The market place.</param>
-        /// <returns>market place id</returns>
-        public int CreateMarketPlace(CustomerMarketPlace marketPlace) {
-            using (var connection = GetOpenedSqlConnection2()) {
-                marketPlace.Created = DateTime.UtcNow;
-                var cmd = GetInsertCommand(marketPlace, connection.SqlConnection(), mpCustomermarketplace, null, SkipColumns("Id"));
-                if (!cmd.HasValue) {
-                    return -1;
-                }
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="displayName">The display name.</param>
+        /// <param name="securityData">The security data.</param>
+        /// <param name="marketPlaceInternalId">The market place internal identifier.</param>
+        /// <returns></returns>
+        public Optional<int> CreateNewMarketPlace(int customerId, string displayName, byte[] securityData, Guid marketPlaceInternalId) {
+            CustomerMarketPlace marketPlace = new CustomerMarketPlace
+            {
+                CustomerId = customerId,
+                DisplayName = displayName,
+                SecurityData = securityData
+            };
 
-                using (var sqlCommand = cmd.GetValue()) {
-                    return ExecuteScalarAndLog<int>(sqlCommand);
-                }
-            }
+            return UpsertMarketPlace(marketPlace, marketPlaceInternalId);
         }
 
         /// <summary>
@@ -107,9 +124,8 @@
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">empty display name</exception>
         public bool IsMarketPlaceExists(Guid marketPlaceTypeId, string displayName) {
-
-            int marketPlaceId = GetMarketPlaceId(marketPlaceTypeId, displayName);
-            return marketPlaceId > 0;
+            var  res = GetMarketPlaceId(marketPlaceTypeId, displayName);
+            return res.HasValue;
         }
 
         /// <summary>
@@ -119,9 +135,8 @@
         /// <param name="displayName">The display name.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">empty display name</exception>
-        public int GetMarketPlaceId(Guid marketPlaceTypeId, string displayName) {
-            if (string.IsNullOrEmpty(displayName))
-            {
+        public Optional<int> GetMarketPlaceId(Guid marketPlaceTypeId, string displayName) {
+            if (string.IsNullOrEmpty(displayName)) {
                 throw new ArgumentException("empty display name");
             }
 
@@ -131,12 +146,9 @@
             whereColumns.Add("MarketPlaceId", id.GetValue());
             whereColumns.Add("DisplayName", displayName);
 
-            using (var connection = GetOpenedSqlConnection2())
-            {
-                using (var sqlCommand = GetSelectFirstByWhereCommand(connection.SqlConnection(), whereColumns, "MP_CustomerMarketPlace", "Id"))
-                {
-                    int res = ExecuteScalarAndLog<int>(sqlCommand);
-                    return res;
+            using (var connection = GetOpenedSqlConnection2()) {
+                using (var sqlCommand = GetSelectFirstByWhereCommand(connection.SqlConnection(), whereColumns, "MP_CustomerMarketPlace", "Id")) {
+                    return ExecuteScalarAndLog<int>(sqlCommand);
                 }
             }
         }
@@ -199,12 +211,7 @@
                 using (var command = GetEmptyCommand(sqlConnection)) {
                     string query = "SELECT Id FROM MP_MarketplaceType WHERE InternalId = " + marketPlaceType;
                     command.CommandText = query;
-                    int res = ExecuteScalarAndLog<int>(command);
-                    if (res > 0) {
-                        Optional<int>.Of(res);
-                    }
-
-                    return Optional<int>.Empty();
+                    return ExecuteScalarAndLog<int>(command);
                 }
             }
         }
@@ -214,7 +221,7 @@
         /// </summary>
         /// <param name="updateHistory">The updateHistory.</param>
         /// <returns></returns>
-        public int UpsertMarketPlaceUpdatingHistory(CustomerMarketPlaceUpdateHistory updateHistory) {
+        public Optional<int> UpsertMarketPlaceUpdatingHistory(CustomerMarketPlaceUpdateHistory updateHistory) {
             using (var connection = GetOpenedSqlConnection2()) {
 
                 IDictionary<string, object> matchColumnValues = new Dictionary<string, object>();
@@ -222,11 +229,11 @@
                 matchColumnValues.Add("CustomerMarketPlaceId", updateHistory.CustomerMarketPlaceId);
 
                 var upsert = GetUpsertGenerator(updateHistory)
-                    .SetTableName("MP_CustomerMarketPlaceUpdatingHistory")
-                    .SetMatchColumnValues(matchColumnValues)
-                    .AddConnection(connection.SqlConnection())
-                    .AddUpdateColumnIfNull("UpdatingStart")
-                    .AddOutputColumns("Id");
+                    .WithTableName("MP_CustomerMarketPlaceUpdatingHistory")
+                    .WithMatchColumnValues(matchColumnValues)
+                    .WithConnection(connection.SqlConnection())
+                    .WithUpdateColumnIfNull("UpdatingStart")
+                    .WithOutputColumns("Id");
 
                 using (var sqlCommand = upsert.Verify()
                     .GenerateCommand()) {

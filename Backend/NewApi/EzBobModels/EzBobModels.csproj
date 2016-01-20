@@ -80,6 +80,13 @@
     <Compile Include="Enums\TrustPilotStauses.cs" />
     <Compile Include="Enums\TypeOfBusiness.cs" />
     <Compile Include="Enums\WizardStepType.cs" />
+    <Compile Include="Hmrc\HmrcBusiness.cs" />
+    <Compile Include="Hmrc\AccountModel.cs" />
+    <Compile Include="Hmrc\RtiTaxMonthEntry.cs" />
+    <Compile Include="Hmrc\RtiTaxMonthRecord.cs" />
+    <Compile Include="Hmrc\VatReturnsPerBusiness.cs" />
+    <Compile Include="Hmrc\VatReturnEntry.cs" />
+    <Compile Include="Hmrc\VatReturnRecord.cs" />
     <Compile Include="LandRegistry.cs" />
     <Compile Include="LandRegistryOwner.cs" />
     <Compile Include="LoginInfo.cs" />
@@ -87,6 +94,9 @@
     <Compile Include="MarketPlace\CustomerMarketPlaceUpdateHistory.cs" />
     <Compile Include="MobilePhone\CountInfo.cs" />
     <Compile Include="CustomerPersonalInfo.cs" />
+    <Compile Include="PayPal\PayPalSecurityInfo.cs" />
+    <Compile Include="PayPal\PayPalTransaction.cs" />
+    <Compile Include="PayPal\PayPalTransactionItem.cs" />
     <Compile Include="PayPal\PayPalUserPersonalInfo.cs" />
     <Compile Include="SourceRefEntry.cs" />
     <Compile Include="ThirdParties\Experian\Experian3dPartyCompanyInfo.cs" />

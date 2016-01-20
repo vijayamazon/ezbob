@@ -97,6 +97,7 @@
     <Compile Include="InfoAccumulator.cs" />
     <Compile Include="InfoAccumulatorSerializer.cs" />
     <Compile Include="Injected.cs" />
+    <Compile Include="LinqExtensions.cs" />
     <Compile Include="NSB\CommandBase.cs" />
     <Compile Include="NSB\CommandResponseBase.cs" />
     <Compile Include="NSB\ErrorCache.cs" />

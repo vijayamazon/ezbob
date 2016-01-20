@@ -8,6 +8,24 @@
         IList<CustomerMarketPlace> GetCustomerMarketPlaces(int customerId, Guid marketplaceType);
 
         /// <summary>
+        /// Validates the customer market place.
+        /// </summary>
+        /// <param name="marketPlaceTypeId">The market place type identifier.</param>
+        /// <param name="displayName">The display name.</param>
+        /// <returns></returns>
+        InfoAccumulator ValidateCustomerMarketPlace(Guid marketPlaceTypeId, string displayName);
+
+        /// <summary>
+        /// Creates the new market place.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="displayName">The display name.</param>
+        /// <param name="securityData">The security data.</param>
+        /// <param name="marketPlaceInternalId">The market place internal identifier.</param>
+        /// <returns></returns>
+        Optional<int> CreateNewMarketPlace(int customerId, string displayName, byte[] securityData, Guid marketPlaceInternalId);
+
+        /// <summary>
         /// Determines whether the specified market place is exists
         /// </summary>
         /// <param name="marketPlaceTypeId">The market place type identifier.</param>
@@ -20,14 +38,14 @@
         /// Determines whether the market place is in white list
         /// </summary>
         /// <param name="MarketPlaceTypeId">The market place type identifier.</param>
-        /// <param name="token">The token.</param>
+        /// <param name="displayName">The display name.</param>
         /// <returns></returns>
-        bool IsMarketPlaceInWhiteList(Guid MarketPlaceTypeId, string token);
+        bool IsMarketPlaceInWhiteList(Guid MarketPlaceTypeId, string displayName);
 
         /// <summary>
         /// Gets the market place identifier from marketPlaceType.
         /// </summary>
-        /// <param name="marketPlaceType">Type of the market place.</param>
+        /// <param name="MarketPlaceTypeId">The market place type identifier.</param>
         /// <returns></returns>
         Optional<int> GetMarketPlaceIdFromTypeId(Guid MarketPlaceTypeId);
 
@@ -36,15 +54,14 @@
         /// </summary>
         /// <param name="marketPlace">The market place.</param>
         /// <param name="marketPlaceTypeId">The market place type identifier.</param>
-        /// <returns>marketplace's id</returns>
-        int UpsertMarketPlace(CustomerMarketPlace marketPlace, Guid marketPlaceTypeId);
+        Optional<int> UpsertMarketPlace(CustomerMarketPlace marketPlace, Guid marketPlaceTypeId);
 
         /// <summary>
         /// Upserts the market place updating updateHistory.
         /// </summary>
         /// <param name="updateHistory">The updateHistory.</param>
         /// <returns></returns>
-        int UpsertMarketPlaceUpdatingHistory(CustomerMarketPlaceUpdateHistory updateHistory);
+        Optional<int> UpsertMarketPlaceUpdatingHistory(CustomerMarketPlaceUpdateHistory updateHistory);
 
         /// <summary>
         /// Gets the market place updateHistory by identifier.

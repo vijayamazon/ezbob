@@ -14,7 +14,10 @@
         "CoBrandUserName": "sbCobromanp",
         "CoBrandPassword": "01267bdc-7685-477d-a012-b97d3cfb697e"
     },
-    "ThirdPartyService" :  { 
-        "Address" :  "3dParties"
+    "ThirdPartyService": {
+        "Address": "3dParties"
+    },
+    "PayPal": { 
+        "TransactionSearchMonthsBack": 12
     }
 }

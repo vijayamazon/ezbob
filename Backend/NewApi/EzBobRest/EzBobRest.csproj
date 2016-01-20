@@ -131,12 +131,12 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StructureMap, Version=3.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.3.1.5.154\lib\net40\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.3.1.6.186\lib\net40\StructureMap.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StructureMap.Net4, Version=3.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.3.1.5.154\lib\net40\StructureMap.Net4.dll</HintPath>
+    <Reference Include="StructureMap.Net4, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.3.1.6.186\lib\net40\StructureMap.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -155,14 +155,46 @@
     <Compile Include="Init\IStartup.cs" />
     <Compile Include="Init\NancyBootstrapper.cs" />
     <Compile Include="Init\Startup.cs" />
-    <Compile Include="Modules\CompanyModule.cs" />
-    <Compile Include="Modules\CompanyMetadataModule.cs" />
-    <Compile Include="Modules\CustomerMetadataModule.cs" />
-    <Compile Include="Modules\CustomerModule.cs" />
-    <Compile Include="Modules\CustomerVerificationMetadataModule.cs" />
-    <Compile Include="Modules\CustomerVerificationModule.cs" />
+    <Compile Include="Modules\Company\CompanyMetadataModule.cs" />
+    <Compile Include="Modules\Company\CompanyModule.cs" />
+    <Compile Include="Modules\Company\NSB\TargetCompanySendReceive.cs" />
+    <Compile Include="Modules\Company\NSB\UpdateCompanySendReceive.cs" />
+    <Compile Include="Modules\Company\Validators\AuthorityInfoValidator.cs" />
+    <Compile Include="Modules\Company\Validators\CompanyTargetingValidator.cs" />
+    <Compile Include="Modules\Company\Validators\CompanyUpdateValidator.cs" />
+    <Compile Include="Modules\Company\Validators\ContactDetailsValidator.cs" />
+    <Compile Include="Modules\Customer\CustomerMetadataModule.cs" />
+    <Compile Include="Modules\Customer\CustomerModule.cs" />
+    <Compile Include="Modules\Customer\CustomerVerificationMetadataModule.cs" />
+    <Compile Include="Modules\Customer\CustomerVerificationModule.cs" />
+    <Compile Include="Modules\Customer\NSB\CustomerValidateVerificationCodeSendRecieve.cs" />
+    <Compile Include="Modules\Customer\NSB\CustomerVerificationSmsSendRecieve.cs" />
+    <Compile Include="Modules\Customer\NSB\SignupCommandSendReceive.cs" />
+    <Compile Include="Modules\Customer\NSB\UpdateCustomerSendReceive.cs" />
+    <Compile Include="Modules\Customer\Validators\CustomerSendVerificationSmsValidator.cs" />
+    <Compile Include="Modules\Customer\Validators\CustomerSignupValidator.cs" />
+    <Compile Include="Modules\Customer\Validators\CustomerUpdateValidator.cs" />
+    <Compile Include="Modules\Customer\Validators\CustomerValidateVerificationCodeValidator.cs" />
     <Compile Include="Modules\DocsModule.cs" />
     <Compile Include="Modules\MainModule.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\EbayMetadataModule.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\EBayModule.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayGetRedirectUrlSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayRegisterCustomerSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\Validators\EbayGetRedirectUrlValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\Validators\EbayRegisterCustomerValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\HmrcMetadataModule.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\HmrcModule.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcRegisterCustomerCommandSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\Validators\HmrcCustomerRegistrationValidator.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalGetRedirectionUrlSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalRegisterCustomerSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\PayPalMetadataModule.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\PayPalModule.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\Validators\PayPalGetRedirectUrlValidator.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\Validators\PayPalRegisterCustomerValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Yodlee\YodleeModule.cs" />
+    <Compile Include="Modules\NancyModuleBase.cs" />
     <Compile Include="NancySwagger\Core\SwaggerRouteMetadata.cs" />
     <Compile Include="NancySwagger\Fluent\SwaggerEndpointInfoExtensions.cs" />
     <Compile Include="NancySwagger\Fluent\SwaggerRouteMetadataExtensions.cs" />
@@ -175,12 +207,6 @@
     <Compile Include="NancySwagger\Model\SwaggerSpecification.cs" />
     <Compile Include="NancySwagger\Model\SwaggerTypeDefinition.cs" />
     <Compile Include="NancySwagger\Modules\SwaggerDocsModuleBase.cs" />
-    <Compile Include="NSB\CustomerValidateVerificationCodeSendRecieve.cs" />
-    <Compile Include="NSB\CustomerVerificationSmsSendRecieve.cs" />
-    <Compile Include="NSB\SignupCommandSendReceive.cs" />
-    <Compile Include="NSB\TargetCompanySendReceive.cs" />
-    <Compile Include="NSB\UpdateCompanySendReceive.cs" />
-    <Compile Include="NSB\UpdateCustomerSendReceive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -188,16 +214,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ResponseHelpers\ErrorResponseBuilder.cs" />
+    <Compile Include="ResponseHelpers\OkResponseBuilder.cs" />
     <Compile Include="RestServer.cs" />
     <Compile Include="RestServerConfig.cs" />
-    <Compile Include="Validators\AuthorityInfoValidator.cs" />
-    <Compile Include="Validators\CompanyTargetingValidator.cs" />
-    <Compile Include="Validators\CompanyUpdateValidator.cs" />
-    <Compile Include="Validators\ContactDetailsValidator.cs" />
-    <Compile Include="Validators\CustomerSendVerificationSmsValidator.cs" />
-    <Compile Include="Validators\CustomerSignupValidator.cs" />
-    <Compile Include="Validators\CustomerUpdateValidator.cs" />
-    <Compile Include="Validators\CustomerValidateVerificationCodeValidator.cs" />
+    <Compile Include="ValidatorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzBobApi\EzBobApi.csproj">
@@ -227,7 +247,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Modules\Marketplaces\Yodlee\NSB\" />
+    <Folder Include="Modules\Marketplaces\Yodlee\Validators\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

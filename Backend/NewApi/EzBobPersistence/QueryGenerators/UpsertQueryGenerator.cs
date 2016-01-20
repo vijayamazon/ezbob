@@ -72,7 +72,7 @@
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> SetModel(T model) {
+        public UpsertQueryGenerator<T> WithModel(T model) {
             this.model = model;
             return this;
         }
@@ -82,7 +82,7 @@
         /// </summary>
         /// <param name="sqlConnection">The SQL connection.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> AddConnection(SqlConnection sqlConnection) {
+        public UpsertQueryGenerator<T> WithConnection(SqlConnection sqlConnection) {
             this.connection = sqlConnection;
             return this;
         }
@@ -92,7 +92,7 @@
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> SetTableName(string tableName) {
+        public UpsertQueryGenerator<T> WithTableName(string tableName) {
             this.tableName = tableName;
             return this;
         }
@@ -102,7 +102,7 @@
         /// </summary>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> SetMatchColumnValues(IEnumerable<KeyValuePair<string, object>> items) {
+        public UpsertQueryGenerator<T> WithMatchColumnValues(IEnumerable<KeyValuePair<string, object>> items) {
             this.matchingColumnValues = items;
             return this;
         }
@@ -112,7 +112,7 @@
         /// </summary>
         /// <param name="updateIfNullColumnNames">The update if null column names.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> AddUpdateColumnIfNull(params string[] updateIfNullColumnNames) {
+        public UpsertQueryGenerator<T> WithUpdateColumnIfNull(params string[] updateIfNullColumnNames) {
             if (updateIfNullColumnNames != null && updateIfNullColumnNames.Any()) {
                 this.updateIfNull = updateIfNullColumnNames;
             }
@@ -124,7 +124,7 @@
         /// </summary>
         /// <param name="columns">The columns.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> AddOutputColumns(params string[] columns) {
+        public UpsertQueryGenerator<T> WithOutputColumns(params string[] columns) {
             if (columns == null || !columns.Any()) {
                 this.isOutputAll = true;
             } else {
@@ -139,7 +139,7 @@
         /// </summary>
         /// <param name="columns">The columns.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> AddSkipColumns(params string[] columns) {
+        public UpsertQueryGenerator<T> WithSkipColumns(params string[] columns) {
             if (columns != null && columns.Any()) {
                 this.skipColumn = c => columns.Any(o => c.Equals(o, StringComparison.CurrentCultureIgnoreCase));
             }

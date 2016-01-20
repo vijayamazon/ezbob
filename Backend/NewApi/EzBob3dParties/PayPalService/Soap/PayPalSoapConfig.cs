@@ -16,6 +16,8 @@
 
         public string RedirectUrl { get; set; }
 
+        public int DaysPerTransactionRequest { get; set; }
+
         public Dictionary<string, string> ToDictionary()
         {
             return new Dictionary<string, string>

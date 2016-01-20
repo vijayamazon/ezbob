@@ -11,6 +11,7 @@ namespace EzBobService.ThirdParties.Ebay {
     using EzBobCommon;
     using EzBobCommon.NSB;
     using EzBobCommon.Utils;
+    using EzBobCommon.Utils.Encryption;
     using EzBobModels.EBay;
     using EzBobModels.MarketPlace;
     using EzBobPersistence.MarketPlace;
@@ -20,13 +21,15 @@ namespace EzBobService.ThirdParties.Ebay {
     /// <summary>
     /// Handles e-bay registration
     /// </summary>
-    public class EbayRegisterUserCommandHandler : HandlerBase<EbayRegisterUserCommandResponse>, IHandleMessages<EbayRegisterUserCommand>, IHandleMessages<EbayGetUserData3dPartyCommandResponse>, IHandleMessages<EbayValidationCommandResponse> {
+    public class EbayRegisterUserCommandHandler : HandlerBase<EbayRegisterCustomerCommandResponse>, IHandleMessages<EbayRegisterCustomerCommand>, IHandleMessages<EbayGetUserData3dPartyCommandResponse>, IHandleMessages<EbayValidationCommandResponse> {
         private static readonly string MarketplaceId = "MarketplaceId";
         private static readonly string MarketPlaceUpdatingHistoryId = "MarketPlaceUpdatingHistoryId";
         private static readonly string CustomerId = "CustomerId";
         private static readonly string SessionId = "SessionId";
 
         private static readonly Guid EbayInternalId = Guid.Parse("A7120CB7-4C93-459B-9901-0E95E7281B59");
+        private static readonly string marketplaceUpsertFailed = "marketplace upsert failed";
+        private static readonly string marketplaceHistoryUpsertFailed = "marketplace history upsert failed";
 
         [Injected]
         public ThirdPartyServiceConfig ThirdPartyService { get; set; }
@@ -41,23 +44,19 @@ namespace EzBobService.ThirdParties.Ebay {
         /// Handles the specified command.
         /// </summary>
         /// <param name="command">The command.</param>
-        public void Handle(EbayRegisterUserCommand command) {
-            InfoAccumulator info = new InfoAccumulator();
+        public void Handle(EbayRegisterCustomerCommand command) {
             //validates market place
-            if (!MarketPlaceQueries.IsMarketPlaceInWhiteList(EbayInternalId, command.MarketplaceName)) {
-                if (MarketPlaceQueries.IsMarketPlaceExists(EbayInternalId, command.MarketplaceName)) {
-                    string msg = string.Format("the market place with name: '{0}' already exists", command.MarketplaceName);
-                    info.AddError(msg);
-                    SendReply(info, command);
-                    return;
-                }
+            InfoAccumulator info = MarketPlaceQueries.ValidateCustomerMarketPlace(EbayInternalId, command.MarketplaceName);
+            if (info.HasErrors) {
+                SendReply(info, command);
+                return;
             }
 
             int marketPlaceId = MarketPlaceQueries.GetMarketPlaceIdFromTypeId(EbayInternalId)
                 .GetValue();
 
             CustomerMarketPlace marketPlace = new CustomerMarketPlace {
-                CustomerId = command.CustomerId,
+                CustomerId = int.Parse(EncryptionUtils.SafeDecrypt(command.CustomerId)),
                 DisplayName = command.MarketplaceName,
                 MarketPlaceId = marketPlaceId,
                 SecurityData = SerializationUtils.SerializeToBinaryXml(new EbaySecurityInfo {
@@ -65,14 +64,15 @@ namespace EzBobService.ThirdParties.Ebay {
                 })
             };
 
-            int marketPlaceTableId = MarketPlaceQueries.UpsertMarketPlace(marketPlace, EbayInternalId);
+            int marketPlaceTableId = GetIdIfValidOrThrowException(MarketPlaceQueries.UpsertMarketPlace(marketPlace, EbayInternalId), marketplaceUpsertFailed);
 
             var updateHistory = new CustomerMarketPlaceUpdateHistory() {
                 CustomerMarketPlaceId = marketPlaceTableId,
                 UpdatingStart = DateTime.UtcNow
             };
 
-            int marketPlaceHistoryId = MarketPlaceQueries.UpsertMarketPlaceUpdatingHistory(updateHistory);
+            int marketPlaceHistoryId = GetIdIfValidOrThrowException(MarketPlaceQueries.UpsertMarketPlaceUpdatingHistory(updateHistory)
+                .Value, marketplaceHistoryUpsertFailed);
 
             var validateUserAccountCommand = new EbayValidationCommand();
             validateUserAccountCommand.IsValidateUserAccount = true;
@@ -159,7 +159,7 @@ namespace EzBobService.ThirdParties.Ebay {
 
                 if (isOk) {
                     EbayOrder order = new EbayOrder {
-                        Created = DateTime.Now.ToUniversalTime(), //TODO: check it out
+                        Created = DateTime.UtcNow, //TODO: check it out
                         CustomerMarketPlaceId = marketPlaceId,
                         CustomerMarketPlaceUpdatingHistoryRecordId = marketPlaceUpdatingHistoryId
                     };
@@ -181,6 +181,14 @@ namespace EzBobService.ThirdParties.Ebay {
             var updatingHistory = MarketPlaceQueries.GetMarketPlaceUpdatingHistoryById(marketPlaceUpdatingHistoryId);
             updatingHistory.UpdatingEnd = DateTime.UtcNow;
             MarketPlaceQueries.UpsertMarketPlaceUpdatingHistory(updatingHistory);
+        }
+
+        private int GetIdIfValidOrThrowException(Optional<int> id, string errorMsg) {
+            if (!id.HasValue || id.Value < 1) {
+                throw new ArgumentException(errorMsg);
+            }
+
+            return id.Value;
         }
     }
 }

@@ -45,7 +45,7 @@
         public void Handle(TResponse response) {
             var optional = Cache.Remove(response.MessageId);
             if (optional.HasValue) {
-                var locker = optional.GetValue() as Locker<TResponse>;
+                var locker = optional.Value as Locker<TResponse>;
                 if (locker != null) {
                     locker.Unlock(response);
                 } else {

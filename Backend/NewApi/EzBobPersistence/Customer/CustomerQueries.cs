@@ -145,9 +145,9 @@
         /// </summary>
         /// <param name="customer">The customer.</param>
         /// <returns>
-        /// int - customer id, null - was nothing to save  in db
+        /// int - customer id, empty if it was nothing to save  in db
         /// </returns>
-        public int? UpsertCustomer(Customer customer) {
+        public Optional<int> UpsertCustomer(Customer customer) {
             using (var sqlConnection = GetOpenedSqlConnection2()) {
 //                var id = new Tuple<string, object>("Name", customer.Name);
                 var id = new KeyValuePair<string, object>("Id", customer.Id);

@@ -97,9 +97,13 @@
     <Compile Include="ThirdParty\Ebay\EbayQueries.cs" />
     <Compile Include="ThirdParty\Experian\ExperianQuery.cs" />
     <Compile Include="MobilePhone\MobilePhoneQueries.cs" />
+    <Compile Include="ThirdParty\Hrmc\HmrcQueries.cs" />
+    <Compile Include="ThirdParty\Hrmc\IHmrcQueries.cs" />
+    <Compile Include="ThirdParty\PayPal\IPayPalQueries.cs" />
+    <Compile Include="ThirdParty\PayPal\PayPalQueries.cs" />
+    <Compile Include="ThirdParty\Yodlee\IYodleeQueries.cs" />
+    <Compile Include="ThirdParty\Yodlee\YodleeQueries.cs" />
     <Compile Include="UnitOfWork.cs" />
-    <Compile Include="Yodlee\IYodleeQueries.cs" />
-    <Compile Include="Yodlee\YodleeQueries.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzBobCommon\EzBobCommon.csproj">

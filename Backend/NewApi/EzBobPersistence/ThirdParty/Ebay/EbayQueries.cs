@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EzBobPersistence.ThirdParty.Ebay {
-    using System.Collections;
     using System.Data.SqlClient;
-    using System.Runtime.InteropServices;
-    using System.Web.UI.WebControls;
-    using System.Web.UI.WebControls.WebParts;
     using EzBobCommon;
     using EzBobCommon.Utils;
     using EzBobModels.EBay;
     using EzBobPersistence.MarketPlace;
-    using Microsoft.Practices.EnterpriseLibrary.Data;
 
     public class EbayQueries : QueryBase {
         /// <summary>
@@ -30,8 +23,21 @@ namespace EzBobPersistence.ThirdParty.Ebay {
         [Injected]
         public IMarketPlaceQueries MarketPlaceQueries { get; set; }
 
-        public DateTime GetLastKnownEbayTransactionTime(int marketPlaceId) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Gets the last known ebay transaction time.
+        /// </summary>
+        /// <param name="marketPlaceId">The market place identifier.</param>
+        /// <returns></returns>
+        public Optional<DateTime> GetLastKnownEbayTransactionTime(int marketPlaceId) {
+            //TODO: review
+            using (var connection = GetOpenedSqlConnection2()) {
+                string query = "SELECT Max(Created) FROM MP_EbayOrder WHERE CustomerMarketPlaceId = @MarketPlaceId";
+                using(var sqlCommand = GetEmptyCommand(connection.SqlConnection())) {
+                    sqlCommand.CommandText = query;
+                    sqlCommand.Parameters.AddWithValue("@MarketPlaceId", marketPlaceId);
+                    return ExecuteScalarAndLog<DateTime>(sqlCommand);
+                }
+            }
         }
 
         /// <summary>
@@ -50,10 +56,12 @@ namespace EzBobPersistence.ThirdParty.Ebay {
                 int userAccountId;
 
                 using (var sqlCommand = cmd.GetValue()) {
-                    userAccountId = ExecuteScalarAndLog<int>(sqlCommand);
-                    if (userAccountId < 1) {
+                    var res = ExecuteScalarAndLog<int>(sqlCommand);
+                    if (!res.HasValue || res.GetValue() < 1) {
                         return false;
                     }
+
+                    userAccountId = res.GetValue();
                 }
 
                 return SaveAdditionalUserAccounts(sqlConnection.SqlConnection(), userAccountId, additionalAccounts);
@@ -112,12 +120,7 @@ namespace EzBobPersistence.ThirdParty.Ebay {
                 }
 
                 using (var sqlCommand = cmd.GetValue()) {
-                    int res = ExecuteScalarAndLog<int>(sqlCommand);
-                    if (res > 0) {
-                        return Optional<int>.Of(res);
-                    }
-
-                    return Optional<int>.Empty();
+                    return ExecuteScalarAndLog<int>(sqlCommand);
                 }
             }
         }
@@ -138,10 +141,12 @@ namespace EzBobPersistence.ThirdParty.Ebay {
                 int orderId;
 
                 using (var sqlCommand = cmd.GetValue()) {
-                    orderId = ExecuteScalarAndLog<int>(sqlCommand);
-                    if (orderId < 1) {
+                    var res = ExecuteScalarAndLog<int>(sqlCommand);
+                    if (!res.HasValue || res.GetValue() < 1) {
                         return false;
                     }
+
+                    orderId = res.GetValue();
                 }
 
                 return SaveOrderItems(orderInfos, orderId);
@@ -162,12 +167,14 @@ namespace EzBobPersistence.ThirdParty.Ebay {
                     return false;
                 }
 
-                int feedbackId = -1;
+                int feedbackId;
                 using (var sqlCommand = cmd.GetValue()) {
-                    feedbackId = ExecuteScalarAndLog<int>(sqlCommand);
-                    if (feedbackId < 1) {
+                    var res = ExecuteScalarAndLog<int>(sqlCommand);
+                    if (!res.HasValue || res.GetValue() < 1) {
                         return false;
                     }
+
+                    feedbackId = res.GetValue();
                 }
 
                 if (!SaveFeedbackItems(feedbackItems, feedbackId, connection.SqlConnection())) {
@@ -272,17 +279,21 @@ namespace EzBobPersistence.ThirdParty.Ebay {
             orderInfo.OrderItem.ShippingAddressId = shippingAddress.GetValue();
             orderInfo.OrderItem.OrderId = ebayOrderId;
 
-            int orderItemId = -1;
-
             using (var connection = GetOpenedSqlConnection2()) {
                 var command = GetInsertCommand(orderInfo.OrderItem, connection.SqlConnection(), "MP_EbayOrderItem", "Id", SkipColumns("Id"));
+                int orderItemId;
+                
                 if (command.HasValue) {
                     using (var sqlCommand = command.GetValue()) {
-                        orderItemId = ExecuteScalarAndLog<int>(sqlCommand);
-                        if (orderItemId < 1) {
+                        var res = ExecuteScalarAndLog<int>(sqlCommand);
+                        if (!res.HasValue || res.GetValue() < 1) {
                             return false;
                         }
+
+                        orderItemId = res.GetValue();
                     }
+                } else {
+                    return false;
                 }
 
                 if (CollectionUtils.IsNotEmpty(orderInfo.Transactions)) {

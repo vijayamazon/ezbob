@@ -11,7 +11,9 @@ namespace EzBobCommon {
 
     /// <summary>
     /// Designates optionality.
-    /// Implements IEnumerable to support Linq
+    /// Implements IEnumerable to support Linq.
+    /// Implements implicit casting to Optional.
+    /// Implements explicit casting to T
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [JsonConverter(typeof(OptionalJsonSerializer))]
@@ -29,19 +31,41 @@ namespace EzBobCommon {
             this.hasValue = true;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance has value.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has value; otherwise, <c>false</c>.
+        /// </value>
         public bool HasValue
         {
             get { return this.hasValue; }
         }
 
-        public T GetValue() {
-            if (this.hasValue) {
-                return this.item;
-            }
-
-            return default(T);
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        public T Value
+        {
+            get { return this.item; }
         }
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <returns></returns>
+        public T GetValue() {
+            return this.item;
+        }
+
+        /// <summary>
+        /// Creates optional from the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
         public static Optional<T> Of(T item) {
 
             if (default(T) == null && item == null) {
@@ -51,6 +75,10 @@ namespace EzBobCommon {
             return new Optional<T>(item);
         }
 
+        /// <summary>
+        /// Returns an empty optional.
+        /// </summary>
+        /// <returns></returns>
         public static Optional<T> Empty() {
             return emptyOptional;
         }
@@ -86,6 +114,17 @@ namespace EzBobCommon {
         /// </returns>
         public static implicit operator Optional<T>(T obj) {
             return Of(obj);
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="Optional{T}"/> to <see cref="T"/>.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static explicit operator T(Optional<T> item) {
+            return item.Value;
         }
     }
 }

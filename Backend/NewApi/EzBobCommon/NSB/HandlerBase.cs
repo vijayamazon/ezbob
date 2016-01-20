@@ -5,6 +5,7 @@ namespace EzBobCommon.NSB {
     using System.Runtime.Caching;
     using System.Text;
     using Common.Logging;
+    using EzBobCommon.Utils.Encryption;
     using Newtonsoft.Json;
     using NServiceBus;
     using NServiceBus.Faults;
@@ -216,6 +217,16 @@ namespace EzBobCommon.NSB {
             }
 
             Bus.Send(replyTo, correlatonId, responseToSend);
+        }
+
+        /// <summary>
+        /// Encrypts the specified value.
+        /// </summary>
+        /// <param name="val">The value.</param>
+        /// <returns></returns>
+        protected byte[] Encrypt(string val) {
+            var res = EncryptionUtils.SafeEncrypt(val);
+            return Encoding.UTF8.GetBytes(res);
         }
 
         /// <summary>

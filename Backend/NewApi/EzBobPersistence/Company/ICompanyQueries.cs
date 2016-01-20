@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EzBobPersistence.Company
 {
+    using EzBobCommon;
     using EzBobModels;
 
     public interface ICompanyQueries {
@@ -13,8 +14,8 @@ namespace EzBobPersistence.Company
         /// Saves the company.
         /// </summary>
         /// <param name="company">The company.</param>
-        /// <returns>company id or null if there some problem</returns>
-        int? SaveCompany(Company company);
+        /// <returns>empty optional if there some problem</returns>
+        Optional<int> SaveCompany(Company company);
 
         /// <summary>
         /// Saves the directors.

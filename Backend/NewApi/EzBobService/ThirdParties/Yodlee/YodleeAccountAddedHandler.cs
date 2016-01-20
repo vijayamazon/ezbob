@@ -9,7 +9,7 @@
     using EzBobCommon.Currencies;
     using EzBobCommon.NSB;
     using EzBobModels.Yodlee;
-    using EzBobPersistence.Yodlee;
+    using EzBobPersistence.ThirdParty.Yodlee;
     using EzBobService.Currency;
     using NServiceBus;
 
@@ -141,7 +141,7 @@
         private void SaveAccounts(IList<YodleeContentServiceAccount> accounts, string yodleeUserName, string yodleeUserPassword) {
             foreach (var userAccount in accounts) {
 
-                bool? res = YodleeQueries.UpsertContentServiceAccount(ConvertToOrderItem(userAccount));
+                var res = YodleeQueries.UpsertContentServiceAccount(ConvertToOrderItem(userAccount));
                 if (!res.HasValue || !res.Value) {
                     throw new InvalidOperationException("could not save account");
                 }

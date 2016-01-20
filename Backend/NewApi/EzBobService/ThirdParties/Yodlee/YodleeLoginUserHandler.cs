@@ -4,7 +4,7 @@
     using EzBobCommon;
     using EzBobCommon.NSB;
     using EzBobModels.Yodlee;
-    using EzBobPersistence.Yodlee;
+    using EzBobPersistence.ThirdParty.Yodlee;
     using NServiceBus;
 
     public class YodleeHandler : HandlerBase<YodleeLoginUserCommandResponse>, IHandleMessages<YodleeLoginUserCommand>, IHandleMessages<YodleeLoginUser3dPartyCommandResponse> {

@@ -29,9 +29,9 @@
 
             using (WebApp.Start(Config.ServerAddress, Startup.Configuration)) {
                 Log.Info("started rest server");
-                isStarted = true;
+                this.isStarted = true;
                 this.latch.Wait();
-                isStarted = false;
+                this.isStarted = false;
                 Log.Info("rest server is stopped");
             }
         }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace EzBob3dParties.HMRC
 {
+    using EzBobCommon;
+
     public interface IHmrcService {
         /// <summary>
         /// Validates the credentials.
@@ -13,7 +15,7 @@ namespace EzBob3dParties.HMRC
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        Task<bool> ValidateCredentials(string userName, string password);
+        Task<InfoAccumulator> ValidateCredentials(string userName, string password);
         /// <summary>
         /// Gets the vat returns.
         /// </summary>

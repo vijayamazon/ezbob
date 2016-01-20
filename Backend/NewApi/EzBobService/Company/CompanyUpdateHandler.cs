@@ -48,7 +48,7 @@
                 if (StringUtils.IsNotEmpty(command.CompanyId)) {
                     company.Id = int.Parse(EncryptionUtils.SafeDecrypt(command.CompanyId));
                 }
-                int? companyId = CompanyQueries.SaveCompany(company);
+                var companyId = CompanyQueries.SaveCompany(company);
                 if (!companyId.HasValue) {
                     info.AddError("Some DB error");
                     RegisterError(info, command);
