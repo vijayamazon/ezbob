@@ -228,22 +228,14 @@
                         <td width="65%"><%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%>
                         </td>
                     </tr>
-                    <%if(rl.CustomerReason){%>
-                    <tr>
-                        <td>
-                            <b>Reason:</b>
-                        </td>
-                        <td><%if(rl) {print(rl.CustomerReason); if(rl.OtherReason) {print("(" + rl.OtherReason + ")");}}else{print("-");}%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Source Of Repayment:</b>
-                        </td>
-                        <td><%if(rl) {print(rl.CustomerSourceOfRepayment); if(rl.OtherSourceOfRepayment) {print("(" + rl.OtherSourceOfRepayment + ")");}}else{print("-");}%>
-                        </td>
-                    </tr>
-                    <%}%>
+					<tr>
+						<td>
+							<b>Requested Term:</b>
+						</td>
+						<td width="65%">
+							<%-rl!=null ? rl.Term : "-"%>
+						</td>
+					</tr>
                 </tbody>
             </table>
         </div>

@@ -57,10 +57,7 @@
 			if (requestedLoan != null) {
 				rl.Amount = requestedLoan.Amount;
 				rl.Created = requestedLoan.Created;
-				rl.CustomerReason = requestedLoan.CustomerReason == null ? null : requestedLoan.CustomerReason.Reason;
-				rl.CustomerSourceOfRepayment = requestedLoan.CustomerSourceOfRepayment == null ? null : requestedLoan.CustomerSourceOfRepayment.SourceOfRepayment;
-				rl.OtherReason = requestedLoan.OtherReason;
-				rl.OtherSourceOfRepayment = requestedLoan.OtherSourceOfRepayment;
+				rl.Term = requestedLoan.Term;
 			}
 			summary.RequestedLoan = rl;
 		}
