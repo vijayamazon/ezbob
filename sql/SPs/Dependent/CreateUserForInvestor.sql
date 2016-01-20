@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 ALTER PROCEDURE CreateUserForInvestor
-@Email NVARCHAR(250),
+@UserName NVARCHAR(250),
 @EzPassword VARCHAR(255),
 @Salt VARCHAR(255),
 @CycleCount VARCHAR(255),
@@ -62,7 +62,7 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = @Email)
+	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = @UserName)
 	BEGIN
 		SELECT
 			UserID = @ErrorDuplicateUser
@@ -73,7 +73,7 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	IF EXISTS (SELECT bl.BrokerLeadID FROM BrokerLeads bl WHERE LOWER(bl.Email) = @Email)
+	IF EXISTS (SELECT bl.BrokerLeadID FROM BrokerLeads bl WHERE LOWER(bl.Email) = @UserName)
 	BEGIN
 		SELECT
 			UserID = @ErrorConflictsWithLead
@@ -89,7 +89,7 @@ BEGIN
 			PassSetTime, UserName, FullName, Email, BranchId,
 			EzPassword, Salt, CycleCount
 		) VALUES (
-			@Now, @Email, @Email, @Email, @BranchID,
+			@Now, @UserName, @UserName, @UserName, @BranchID,
 			@EzPassword, @Salt, @CycleCount
 		)
 
