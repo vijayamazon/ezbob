@@ -33,7 +33,8 @@
                                                 <th>TS</th>
                                                 <th>primary</th>
                                                 <th>active</th>
-                                             
+                                                <th>Getting Alerts</th>
+                                                <th>Getting Reports</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -59,11 +60,21 @@
                                                         <input type="checkbox" <%-(c.IsActive ? 'checked':'')%> />
                                                     </div>
                                                 </td>
+                                                <td>
+                                                    <div class="Investor-IsGettingAlerts-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsGettingAlerts ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="Investor-IsGettingReports-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsGettingReports ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
                                               
                                             </tr>
                                             <%})};%>
                                             <tr class="add-contact-row">
-                                                <td colspan="7"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
+                                                <td colspan="9"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
                                                 <td class="submition-buttons" colspan="2"><button id="CancelContactsEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitContactsEdit" class="btn btn-primary">Submit</button></td>
 
                                             </tr>

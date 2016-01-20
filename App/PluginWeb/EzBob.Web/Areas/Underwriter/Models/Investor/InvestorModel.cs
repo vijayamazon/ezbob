@@ -29,6 +29,8 @@
 				Contacts = investor.Contacts.Select(x => new InvestorContactModel{
 					IsActive = x.IsActive,
 					IsPrimary = x.IsPrimary,
+                     IsGettingAlerts = x.IsGettingAlerts,
+                     IsGettingReports = x.IsGettingReports,
 					Role = x.Role,
 					InvestorContactID = x.InvestorContactID,
 					Comment = x.Comment,

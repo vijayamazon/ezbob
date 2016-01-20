@@ -12,6 +12,8 @@
 		public string Comment { get; set; }
 		public bool IsActive { get; set; }
 		public bool IsPrimary { get; set; }
+        public bool IsGettingReports { get; set; }
+        public bool IsGettingAlerts { get; set; }
         public DateTime TimeStamp { get; set; }
 	}
 }

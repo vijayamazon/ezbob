@@ -37,6 +37,12 @@
 		[DataMember]
 		public bool IsActive { get; set; }
 
+        [DataMember]
+        public bool IsGettingAlerts { get; set; }
+     
+        [DataMember]
+        public bool IsGettingReports { get; set; }
+
 		[DataMember]
 		public DateTime Timestamp { get; set; }
 	}

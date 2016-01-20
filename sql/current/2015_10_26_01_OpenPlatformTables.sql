@@ -56,6 +56,8 @@ BEGIN
 		Mobile NVARCHAR(30),
 		OfficePhone NVARCHAR(30),
 		IsActive BIT NOT NULL,
+		IsGettingAlerts BIT NOT NULL  DEFAULT(1),
+		IsGettingReports BIT NOT NULL  DEFAULT(0),
 		Timestamp DATETIME NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorContact PRIMARY KEY (InvestorContactID),

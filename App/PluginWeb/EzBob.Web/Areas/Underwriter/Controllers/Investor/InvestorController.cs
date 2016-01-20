@@ -111,6 +111,8 @@
 				new Ezbob.Backend.Models.Investor.InvestorContactModel {
 					InvestorContactID = contact.InvestorContactID,
 					InvestorID = InvestorID,
+                    IsGettingAlerts  = contact.IsGettingAlerts,
+                    IsGettingReports = contact.IsGettingReports, 
 					IsActive = contact.IsActive,
 					Comment = contact.Comment,
 					Email = contact.ContactEmail,
@@ -170,6 +172,8 @@
 					Comment = x.Comment,
 					Email = x.ContactEmail,
 					IsPrimary = x.IsPrimary,
+                    IsGettingAlerts = x.IsGettingAlerts,
+                    IsGettingReports = x.IsGettingReports,
 					LastName = x.ContactLastName,
 					PersonalName = x.ContactPersonalName,
 					Mobile = x.ContactMobile,

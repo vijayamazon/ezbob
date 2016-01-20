@@ -66,6 +66,8 @@
       <xs:element minOccurs="0" name="InvestorContactID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsGettingAlerts" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsGettingReports" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsPrimary" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Mobile" nillable="true" type="xs:string" />
@@ -96,14 +98,13 @@
   <xs:complexType name="AccountingDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccumulatedRepayments" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FundingBankAccountID" type="xs:int" />
+      <xs:element minOccurs="0" name="FundingBankAccountID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsInvestorActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsRepaymentsBankAccountActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="OutstandingFunding" type="xs:decimal" />
-      <xs:element minOccurs="0" name="RepaymentsBankAccountID" type="xs:int" />
+      <xs:element minOccurs="0" name="RepaymentsBankAccountID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ServicingFeeDiscount" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalNonActiveAccumulatedRepayments" type="xs:decimal" />
     </xs:sequence>
