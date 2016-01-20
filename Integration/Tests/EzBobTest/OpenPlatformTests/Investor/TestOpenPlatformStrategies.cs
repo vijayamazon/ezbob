@@ -160,6 +160,12 @@
 		}
 
 		[Test]
+		public void TestLoadAccountingInvestor() {
+			var loadAccountingData = new LoadAccountingData();
+			loadAccountingData.Execute();
+		}
+
+		[Test]
 		public void TestLinkLoanRepaymentToInvestor() {
 			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow, 1);
 			linkOfferToInvestor.Execute();

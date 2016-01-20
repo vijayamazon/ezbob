@@ -7,14 +7,12 @@
 
 	public class LoadAccountingData : AStrategy {
 
-		public LoadAccountingData() {}//constructor
-
 		public override string Name { get { return "LoadAccountingData"; } }
 
 		public override void Execute() {
 			Result = LoadFromDb();
 			Log.Info("Load accounting data from DB complete.");
-
+			/*
 			var resultFiltered = new List<AccountingDataModel>();
 			this.currentInvestorID = -1;
 
@@ -36,9 +34,9 @@
 
 				this.currentInvestorID = investorDataSet.InvestorID;
 			}//foreach
-
-			Result = resultFiltered;
 			
+			Result = resultFiltered;
+			*/
 		}//Execute
 
 		private List<AccountingDataModel> LoadFromDb() {
