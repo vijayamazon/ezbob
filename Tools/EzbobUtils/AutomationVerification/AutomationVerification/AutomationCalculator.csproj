@@ -112,7 +112,7 @@
     <Compile Include="AutoDecision\AutoApproval\AutoApprovalTurnover.cs" />
     <Compile Include="AutoDecision\AutoReApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
-    <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
+    <Compile Include="AutoDecision\AutoRejection\RejectionAgent.cs" />
     <Compile Include="AutoDecision\AutoRejection\Models\RejectionInputData.cs" />
     <Compile Include="AutoDecision\AutoRejection\CaisStatusesCalculation.cs" />
     <Compile Include="AutoDecision\AutoReRejection\ReRejectInputData.cs" />

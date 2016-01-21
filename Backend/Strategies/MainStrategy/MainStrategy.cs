@@ -645,19 +645,20 @@
 			} // if
 
 			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
-				new AutoRejectionArguments {
-					CustomerID = CustomerID,
-					CashRequestID = this.cashRequestID,
-					NLCashRequestID = this.nlCashRequestID,
-					Now = DateTime.UtcNow,
-					DB = DB,
-					Log = Log,
-					CompanyID = CompanyID,
-					MonthlyPayment = MonthlyPayment,
-				}
+				new AutoRejectionArguments(
+					CustomerID,
+					CompanyID,
+					MonthlyPayment,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					this.tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			);
 
-			rAgent.MakeAndVerifyDecision(this.tag);
+			rAgent.MakeAndVerifyDecision();
 
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;

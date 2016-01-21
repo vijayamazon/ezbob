@@ -113,19 +113,20 @@
 			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
 
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
-				new AutoRejectionArguments {
-					CustomerID = this.customerID,
-					CashRequestID = this.cashRequestID,
-					NLCashRequestID = this.nlCashRequestID,
-					Now = DateTime.UtcNow,
-					DB = DB,
-					Log = Log,
-					CompanyID = CompanyID,
-					MonthlyPayment = MonthlyPayment,
-				}
+				new AutoRejectionArguments(
+					this.customerID,
+					CompanyID,
+					MonthlyPayment,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			);
 
-			rejectAgent.MakeAndVerifyDecision(Tag, true);
+			rejectAgent.MakeAndVerifyDecision(true);
 
 			MedalResult medal = CalculateMedal();
 

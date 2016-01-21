@@ -314,6 +314,8 @@
 
 				return this.m_oUniqueID.Value;
 			} // get
+
+			set { this.m_oUniqueID = value; }
 		} // UniqueID
 
 		public virtual void AppendOverridingResults(ATrail trail) {

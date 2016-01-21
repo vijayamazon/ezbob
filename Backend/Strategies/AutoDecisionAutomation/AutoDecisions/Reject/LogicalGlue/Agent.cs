@@ -25,7 +25,6 @@
 	public class Agent : AAutoDecisionBase {
 		public Agent(AutoRejectionArguments args) {
 			this.args = args;
-			this.args.Log = this.args.Log.Safe();
 			Output = new AutoRejectionOutput();
 
 			this.oldWayAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
@@ -50,12 +49,12 @@
 		public virtual AutoRejectionOutput Output { get; private set; }
 		public virtual LGRejectionTrail Trail { get; private set; }
 
-		public virtual void MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public virtual void MakeAndVerifyDecision(bool quiet = false) {
+			Trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
+
 			AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary = null;
 
 			try {
-				Trail.SetTag(tag);
-
 				RunPrimary();
 
 				oSecondary = RunSecondary();
@@ -75,11 +74,14 @@
 			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
 		} // LogicalGlueFlowFollowed
 
+		protected virtual AConnection DB { get { return this.args.DB; } }
+		protected virtual ASafeLog Log { get { return this.args.Log; } }
+
 		protected virtual void RunPrimary() {
 			using (Trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
 				this.oldWayAgent.Init().RunPrimaryOnly();
-				this.oldWayAgent.Trail.SetTag(Trail.Tag);
-				this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
+				this.oldWayAgent.Trail.UniqueID = this.args.TrailUniqueID;
+				this.oldWayAgent.Trail.SetTag(this.args.Tag).Save(DB, null, TrailPrimaryStatus.OldPrimary);
 			} // old flow step
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
@@ -108,8 +110,13 @@
 			} // make decision step
 		} // RunPrimary
 
-		protected virtual AConnection DB { get { return this.args.DB; } }
-		protected virtual ASafeLog Log { get { return this.args.Log; } }
+		private AutomationCalculator.AutoDecision.AutoRejection.LGAgent RunSecondary() {
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoRejection.LGAgent(this.args);
+
+			oSecondary.MakeDecision();
+
+			return oSecondary;
+		} // RunSecondary
 
 		private void GatherData(LGRejectionInputData inputData) {
 			var sp = new LoadLGAutoRejectData(DB, Log) {
@@ -205,14 +212,6 @@
 					inputData.MatchingGradeRanges = null;
 			} // if
 		} // GatherData
-
-		private AutomationCalculator.AutoDecision.AutoRejection.LGAgent RunSecondary() {
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoRejection.LGAgent(this.args);
-
-			oSecondary.MakeDecision();
-
-			return oSecondary;
-		} // RunSecondary
 
 		private void LogicalGlueFlow() {
 			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;

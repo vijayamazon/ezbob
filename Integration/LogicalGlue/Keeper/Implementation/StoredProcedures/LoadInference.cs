@@ -11,9 +11,9 @@
 			return (ResponseID > 0) || base.HasValidParameters();
 		} // HasValidParameters
 
-		public long ResponseID { get; set; }
+		public virtual long ResponseID { get; set; }
 
-		public int HistoryLength { get; set; }
+		public virtual int HistoryLength { get; set; }
 
 		public bool IncludeTryOutData { get; set; }
 

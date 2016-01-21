@@ -24,14 +24,16 @@
 				this.args.NLCashRequestID,
 				this.args.Log
 			);
-			Trail.SetTag(this.args.Tag);
+			Trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 
-			// old auto-reject with medal (run in parallel)
 			this.oldWayAgent = new RejectionAgent(
 				DB,
-				Log, this.args.CustomerID,
-				Trail.CashRequestID, this.args.NLCashRequestID, this.args.Configs
+				Log,
+				this.args.CustomerID,
+				Trail.CashRequestID,
+				this.args.NLCashRequestID
 			);
+			this.oldWayAgent.Trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 
 			Output = new AutoRejectionOutput();
 		} // constructor
@@ -43,7 +45,6 @@
 		public void MakeDecision() {
 			using (Trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
 				this.oldWayAgent.MakeDecision(this.oldWayAgent.GetRejectionInputData(this.args.Now));
-				this.oldWayAgent.Trail.SetTag(Trail.Tag);
 				this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldVerification);
 			} // old way step
 
@@ -130,7 +131,7 @@
 			);
 
 			var sr = DB.GetFirst(
-				"AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
+				"AV_LogicalGlueDataForAutoReject", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", this.args.CustomerID),
 				new QueryParameter("CompanyID", this.args.CompanyID),
 				new QueryParameter("PlannedPayment", this.args.MonthlyPayment),
@@ -199,13 +200,13 @@
 
 			inputData.MatchingGradeRanges = new List<int>();
 
-			if (inputData.Bucket != null) {
+			if (inputData.Score != null) {
 				DB.ForEachRowSafe(
 					r => inputData.MatchingGradeRanges.Add(r["GradeRangeID"]),
 					"AV_LoadMatchingGradeRanges",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", this.args.CustomerID),
-					new QueryParameter("GradeID", (int)inputData.Bucket.Value),
+					new QueryParameter("Score", inputData.Score.Value),
 					new QueryParameter("Regulated", inputData.CompanyIsRegulated),
 					new QueryParameter("ProcessingDate", this.args.Now)
 				);

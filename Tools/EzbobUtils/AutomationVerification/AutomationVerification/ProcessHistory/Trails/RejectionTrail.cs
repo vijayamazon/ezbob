@@ -33,7 +33,7 @@
 		} // constructor
 
 		public void Init(RejectionInputData data) {
-			MyInputData.InitData(data);
+			MyInputData.Init(data.DataAsOf, data, data);
 		} // Init
 
 		public override string PositiveDecisionName {
