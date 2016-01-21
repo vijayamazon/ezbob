@@ -128,4 +128,14 @@
 		G = 7,
 		H = 8,
 	} // enum Bucket
+
+	public enum LGEtlCode {
+		Success = 1,
+		HardReject = 2,
+	} // enum LGEtlCode
+
+	public enum LGTimeoutSources {
+		Equifax = 1,
+		LogicalGlueInferenceApi = 2,
+	} // enum LGTimeoutSources
 } // namespace

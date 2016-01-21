@@ -49,7 +49,8 @@
 			get {
 				return
 					string.IsNullOrWhiteSpace(ErrorCode) &&
-					(EncodingFailures.Count < 1) &&
+					string.IsNullOrWhiteSpace(Exception) &&
+					((EncodingFailures.Count < 1) || EncodingFailures.All(ef => ef.IsEmpty)) &&
 					(MissingColumns.Count < 1);
 			} // get
 		} // IsEmpty

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
@@ -9,160 +10,224 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class LGAgent {
-		public LGAgent(AutoRejectionArguments argss) {
-			args = argss;
+		public LGAgent(AutoRejectionArguments args) {
+			this.args = args;
 
-			Trail = new RejectionTrail(args.CustomerID, args.CashRequestID, args.NLCashRequestID, args.Log);
-			Trail.SetTag(args.Tag);
+			Trail = new LGRejectionTrail(
+				this.args.CustomerID,
+				this.args.CashRequestID,
+				this.args.NLCashRequestID,
+				this.args.Log
+			);
+			Trail.SetTag(this.args.Tag);
 
 			// old auto-reject with medal (run in parallel)
-			this.internalAgent = new RejectionAgent(
+			this.oldWayAgent = new RejectionAgent(
 				DB,
-				Log,
-				args.CustomerID,
-				Trail.CashRequestID,
-				args.NLCashRequestID,
-				args.Configs
+				Log, this.args.CustomerID,
+				Trail.CashRequestID, this.args.NLCashRequestID, this.args.Configs
 			);
 
 			Output = new AutoRejectionOutput();
-			model = null;
 		} // constructor
 
 		public AutoRejectionOutput Output { get; private set; }
 
-		public RejectionTrail Trail { get; private set; }
+		public LGRejectionTrail Trail { get; private set; }
 
-		public AutoRejectionArguments args { get; private set; }
-
-		private AConnection DB { get { return args.DB; } }
-		private ASafeLog Log { get { return args.Log; } }
-
-		// old auto-reject with medal (run in parallel)
-		private readonly RejectionAgent internalAgent;
-
-		public AV_LogicalGlueDataModel model { get; private set; }
-
-		public RejectionTrail InternalTrail {
-			get { return this.internalAgent.Trail; }
-		} // InternalTrail
-
-		/// <summary>
-		/// Makes decision: to reject or not to reject.
-		/// </summary>
 		public void MakeDecision() {
-			// old auto-reject with medal (run in parallel)
-			this.internalAgent.MakeDecision(this.internalAgent.GetRejectionInputData(args.Now));
-			this.internalAgent.Trail.SetTag(Trail.Tag);
-			this.internalAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldVerification);
+			using (Trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
+				this.oldWayAgent.MakeDecision(this.oldWayAgent.GetRejectionInputData(this.args.Now));
+				this.oldWayAgent.Trail.SetTag(Trail.Tag);
+				this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldVerification);
+			} // old way step
+
+			using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData))
+				GatherData();
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-				Log.Debug("Secondary LG: checking auto reject for customer {0}...", args.CustomerID);
+				Log.Debug("Secondary LG: checking auto reject for customer {0}...", this.args.CustomerID);
 
-				// get company data at "now" date 
-				model = DB.FillFirst<AV_LogicalGlueDataModel>(
-					"select top 1 co.TypeOfBusiness from CustomerCompanyHistory h join [dbo].[Company] co on co.Id=h.CompanyId where h.CustomerId=@CustomerID and h.CompanyId=@CompanyID and h.InsertDate<=@ProcessingDate order by h.[InsertDate] desc", CommandSpecies.Text,
-					new QueryParameter("CustomerID", args.CustomerID),
-					new QueryParameter("CompanyID", args.CompanyID),
-					new QueryParameter("ProcessingDate", args.Now));
-
-				Log.Debug("Customer {0} has company {1} of type {3} data at {2:d}", args.CustomerID, args.CompanyID, args.Now, model.TypeOfBusiness);
-
-				// get company data from Customer table 
-				if (model == null) {
-					model = DB.FillFirst<AV_LogicalGlueDataModel>("select TypeOfBusiness from Customer where Id=@CustomerID", CommandSpecies.Text, new QueryParameter("CustomerID", args.CustomerID));
-				}
-
-				TypeOfBusiness typeOfBusiness;
-				Enum.TryParse(model.TypeOfBusiness, out typeOfBusiness);
-
-				if (typeOfBusiness.IsRegulated() || model == null) {
-					// add InternalFlow step 
+				if (Trail.MyInputData.CompanyIsRegulated) {
 					Output.FlowType = AutoDecisionFlowTypes.Internal;
 					StepNoDecision<InternalFlow>().Init();
-					Trail.AppendOverridingResults(this.internalAgent.Trail);
+					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					return;
-				}
+				} else {
+					Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
+					StepNoDecision<LogicalGlueFlow>().Init();
+				} // if
 
-				// init LogicalGlueFlow  
-				Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
-				StepNoDecision<LogicalGlueFlow>().Init();
-
-				model = DB.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", args.CustomerID),
-					new QueryParameter("CompanyID", args.CompanyID),
-					new QueryParameter("PlannedPayment", args.MonthlyPayment),
-					new QueryParameter("ProcessingDate", args.Now));
-
-				Log.Debug("{0}", model);
-
-				// LG data not found
-				if (model == null) {
+				if (Trail.MyInputData.RequestID == null) {
 					StepNoDecision<LGDataFound>().Init(false);
+					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					return;
-				}
+				} else
+					StepNoDecision<LGDataFound>().Init(true);
 
-				StepNoDecision<LGDataFound>().Init(true);
-
-				// LG data returned error
-				if (!string.IsNullOrEmpty(model.ErrorMessage) || model.Message.Contains("error")) {
+				if (Trail.MyInputData.ResponseErrors.Count > 0) {
+					Output.ErrorInLGData = true;
 					StepNoReject<LGWithoutError>(true).Init(false);
-					return;
-				}
+				} else {
+					Output.ErrorInLGData = false;
+					StepNoDecision<LGWithoutError>().Init(true);
+				} // if
 
-				StepNoDecision<LGWithoutError>().Init(true);
-
-				if (model.EtlCode.Equals("Hard reject")) {
+				if (Trail.MyInputData.HardReject)
 					StepReject<LGHardReject>(true).Init(true);
-					return;
-				}
+				else
+					StepNoDecision<LGHardReject>().Init(false);
 
-				StepNoDecision<LGHardReject>().Init(false);
-
-				if (model.Score == null || model.Score == 0 || model.GradeID == 0 || model.GradeID == null) {
+				if (Trail.MyInputData.Bucket == null)
 					StepNoReject<HasBucket>(true).Init(false);
-					return;
-				}
+				else
+					StepNoDecision<HasBucket>().Init(true);
 
-				StepNoDecision<HasBucket>().Init(true);
+				int rangesCount = Trail.MyInputData.MatchingGradeRanges.Count;
 
-				List<AutoRejectionOutput> rangesList = DB.Fill<AutoRejectionOutput>(
-				"select distinct r.GradeRangeID from [dbo].[I_GradeRange] r " +
-					"join CustomerOrigin org on r.OriginID=org.CustomerOriginID and org.CustomerOriginID=(select c.OriginID from Customer c where Id=@CustomerID) " +
-					"and r.GradeID=@GradeID and r.IsActive=1 " +
-					"join LoanSource ls on ls.LoanSourceID = r.LoanSourceID and ls.IsDefault=1 " +
-					"join [dbo].[I_ProductSubType] st on st.LoanSourceID=ls.LoanSourceID and st.IsRegulated=@Regulated " +
-					"where r.IsFirstLoan=(CASE WHEN (select COUNT(Id) xx from Loan l where CustomerId=@CustomerID) > 0 THEN 1 ELSE 0 END)", CommandSpecies.Text,
-					new QueryParameter("CustomerID", args.CustomerID),
-					new QueryParameter("GradeID", model.GradeID),
-					new QueryParameter("Regulated", typeOfBusiness.IsRegulated()));
-
-				int reangesCount = rangesList.Count;
-
-				if (reangesCount == 0) {
+				if (rangesCount < 1) {
 					StepReject<OfferConfigurationFound>(true).Init(0);
 					return;
-				}
+				} // if
 
-				if (reangesCount > 1) {
-					StepReject<OfferConfigurationFound>(true).Init(reangesCount);
+				if (rangesCount > 1) {
+					StepNoReject<OfferConfigurationFound>(true).Init(rangesCount);
 
-					// company type, loan source, customer is new/old
-					Log.Alert("Too many configurations found. Args: {0}; score: {1}", args, model.Score);
+					Log.Alert(
+						"Too many configurations found for a {0} customer {1}, " +
+						"score {2}, origin {3}, company is {4}regulated, loan source {5}.",
+						Trail.MyInputData.LoanCount > 0 ? "returning" : "new",
+						this.args.CustomerID,
+						Trail.MyInputData.Score == null ? "'N/A'" : Trail.MyInputData.Score.ToString(),
+						Trail.MyInputData.CustomerOrigin == null
+							? "'N/A'"
+							: Trail.MyInputData.CustomerOrigin.Value.ToString(),
+						Trail.MyInputData.CompanyIsRegulated ? string.Empty : "non-",
+						Trail.MyInputData.LoanSource == null ? "'N/A'" : Trail.MyInputData.LoanSource.Value.ToString()
+					);
 
 					return;
-				}
+				} // if
 
 				StepNoDecision<OfferConfigurationFound>().Init(1);
-
-				Output.GradeRangeID = rangesList.First().GradeRangeID;
+				Output.GradeRangeID = Trail.MyInputData.MatchingGradeRanges.First();
 
 				Trail.DecideIfNotDecided();
 			} // using
 		} // MakeDecision
+
+		private void GatherData() {
+			var inputData = new LGRejectionInputData();
+			inputData.Init(
+				this.oldWayAgent.Trail.MyInputData.DataAsOf,
+				this.oldWayAgent.Trail.MyInputData,
+				this.oldWayAgent.Trail.MyInputData
+			);
+
+			var sr = DB.GetFirst(
+				"AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.args.CustomerID),
+				new QueryParameter("CompanyID", this.args.CompanyID),
+				new QueryParameter("PlannedPayment", this.args.MonthlyPayment),
+				new QueryParameter("ProcessingDate", this.args.Now)
+			);
+
+			inputData.CompanyID = this.args.CompanyID;
+
+			TypeOfBusiness typeOfBusiness;
+			inputData.TypeOfBusiness = Enum.TryParse(sr["TypeOfBusiness"], out typeOfBusiness)
+				? typeOfBusiness
+				: EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Entrepreneur;
+			
+			inputData.CompanyIsRegulated = inputData.TypeOfBusiness.IsRegulated();
+			inputData.LoanCount = sr["LoanCount"];
+
+			CustomerOriginEnum coe;
+			inputData.CustomerOrigin = Enum.TryParse(sr["CustomerOrigin"], out coe) ? coe : (CustomerOriginEnum?)null;
+
+			LoanSourceName ls;
+			inputData.LoanSource = Enum.TryParse(sr["LoanSource"], out ls) ? ls : (LoanSourceName?)null;
+
+			inputData.RequestID = sr["RequestID"];
+			inputData.ResponseID = sr["ResponseID"];
+
+			inputData.ResponseErrors = new List<string>();
+
+			if (inputData.ResponseID <= 0)
+				inputData.ResponseErrors.Add("No response received.");
+
+			AddError(inputData.ResponseErrors, sr["ErrorMessage"]);
+			AddError(inputData.ResponseErrors, sr["ParsingExceptionType"]);
+			AddError(inputData.ResponseErrors, sr["ParsingExceptionMessage"]);
+
+			long? timeoutSourceID = sr["TimeoutSourceID"];
+
+			if (timeoutSourceID != null) {
+				AddError(
+					inputData.ResponseErrors,
+					"Timeout: " + Enum.GetNames(typeof(LGTimeoutSources))[timeoutSourceID.Value - 1]
+				);
+			} // if
+
+			if ((long?)sr["ModelOutputID"] == null)
+				inputData.ResponseErrors.Add("Neural network model not found.");
+
+			AddError(inputData.ResponseErrors, sr["ErrorCode"]);
+			AddError(inputData.ResponseErrors, sr["Exception"]);
+
+			int errCount = sr["EncodingFailureCount"];
+
+			if (errCount > 0)
+				inputData.ResponseErrors.Add(Grammar.Number(errCount, "encoding failure") + " detected.");
+
+			errCount = sr["MissingColumnCount"];
+
+			if (errCount > 0)
+				inputData.ResponseErrors.Add(Grammar.Number(errCount, "missing column") + " detected.");
+
+			inputData.HardReject = sr["EtlCodeID"] == (int)LGEtlCode.HardReject;
+
+			Bucket bucket;
+			inputData.Bucket = Enum.TryParse(sr["Grade"], out bucket) ? bucket : (Bucket?)null;
+
+			inputData.Score = sr["Score"];
+
+			inputData.MatchingGradeRanges = new List<int>();
+
+			if (inputData.Bucket != null) {
+				DB.ForEachRowSafe(
+					r => inputData.MatchingGradeRanges.Add(r["GradeRangeID"]),
+					"AV_LoadMatchingGradeRanges",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", this.args.CustomerID),
+					new QueryParameter("GradeID", (int)inputData.Bucket.Value),
+					new QueryParameter("Regulated", inputData.CompanyIsRegulated),
+					new QueryParameter("ProcessingDate", this.args.Now)
+				);
+			} // if
+
+			Trail.MyInputData.Init(inputData.DataAsOf, inputData, inputData);
+
+			Log.Debug(
+				"Customer {0} has company {1} of type {3} data at {2:d}",
+				this.args.CustomerID,
+				this.args.CompanyID,
+				this.args.Now,
+				inputData.TypeOfBusiness
+			);
+		} // GatherData
+
+		private static void AddError(List<string> errList, string errorMsg) {
+			if (string.IsNullOrWhiteSpace(errorMsg))
+				return;
+
+			errList.Add(errorMsg);
+		} // AddError
 
 		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
@@ -175,5 +240,10 @@
 		private T StepNoDecision<T>() where T : ATrace {
 			return Trail.Dunno<T>();
 		} // StepNoDecision
+
+		private readonly AutoRejectionArguments args;
+		private readonly RejectionAgent oldWayAgent;
+		private AConnection DB { get { return this.args.DB; } }
+		private ASafeLog Log { get { return this.args.Log; } }
 	} // class LGAgent
 } // namespace

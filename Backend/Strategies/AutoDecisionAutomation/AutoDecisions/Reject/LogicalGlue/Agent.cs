@@ -76,30 +76,36 @@
 		} // LogicalGlueFlowFollowed
 
 		protected virtual void RunPrimary() {
-			this.oldWayAgent.Init().RunPrimaryOnly();
-			this.oldWayAgent.Trail.SetTag(Trail.Tag);
-			this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
+			using (Trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
+				this.oldWayAgent.Init().RunPrimaryOnly();
+				this.oldWayAgent.Trail.SetTag(Trail.Tag);
+				this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
+			} // old flow step
 
-			var inputData = new LGRejectionInputData();
-			inputData.Init(
-				this.oldWayAgent.Trail.MyInputData.DataAsOf,
-				this.oldWayAgent.Trail.MyInputData,
-				this.oldWayAgent.Trail.MyInputData
-			);
+			using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
+				var inputData = new LGRejectionInputData();
+				inputData.Init(
+					this.oldWayAgent.Trail.MyInputData.DataAsOf,
+					this.oldWayAgent.Trail.MyInputData,
+					this.oldWayAgent.Trail.MyInputData
+				);
 
-			GatherData(inputData);
+				GatherData(inputData);
 
-			Trail.MyInputData.Init(inputData.DataAsOf, inputData, inputData);
+				Trail.MyInputData.Init(inputData.DataAsOf, inputData, inputData);
+			} // gather data step
 
-			if (Trail.MyInputData.CompanyIsRegulated)
-				Trail.Dunno<InternalFlow>().Init();
-			else
-				Trail.Dunno<LogicalGlueFlow>().Init();
+			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+				if (Trail.MyInputData.CompanyIsRegulated)
+					Trail.Dunno<InternalFlow>().Init();
+				else
+					Trail.Dunno<LogicalGlueFlow>().Init();
 
-			if (LogicalGlueFlowFollowed)
-				LogicalGlueFlow();
-			else
-				InternalFlow();
+				if (LogicalGlueFlowFollowed)
+					LogicalGlueFlow();
+				else
+					InternalFlow();
+			} // make decision step
 		} // RunPrimary
 
 		protected virtual AConnection DB { get { return this.args.DB; } }
@@ -158,6 +164,26 @@
 
 					if (inference.Error.TimeoutSource != null)
 						inputData.ResponseErrors.Add("Timeout: " + inference.Error.TimeoutSource.Value);
+
+					ModelOutput model = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
+						? inference.ModelOutputs[ModelNames.NeuralNetwork]
+						: null;
+
+					if (model == null)
+						inputData.ResponseErrors.Add("Neural network model not found.");
+					else if (!model.Error.IsEmpty) {
+						if (!string.IsNullOrWhiteSpace(model.Error.ErrorCode))
+							inputData.ResponseErrors.Add(model.Error.ErrorCode);
+
+						if (!string.IsNullOrWhiteSpace(model.Error.Exception))
+							inputData.ResponseErrors.Add(model.Error.Exception);
+
+						inputData.ResponseErrors.AddRange(
+							model.Error.EncodingFailures.Where(ef => !ef.IsEmpty).Select(ef => ef.ToString())
+						);
+
+						inputData.ResponseErrors.AddRange(model.Error.MissingColumns);
+					} // if
 				} // if
 
 				inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;

@@ -21,6 +21,23 @@
 		public bool IsEmpty {
 			get { return string.IsNullOrWhiteSpace(ColumnName); }
 		} // IsEmpty
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			return string.Format(
+				"Row idx: {0}, column name: '{1}', reason: '{2}', message: '{3}', unencoded value: '{4}'",
+				RowIndex,
+				ColumnName,
+				Reason,
+				Message,
+				UnencodedValue
+			);
+		} // ToString
 	} // class EncodingFailure
 
 	public static class EncodingFailureExt {

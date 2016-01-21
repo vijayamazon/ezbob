@@ -7,17 +7,20 @@ GO
 
 ALTER PROCEDURE LoadMatchingGradeRanges
 @OriginID INT,
-@IsRegulated BIT, -- TODO how this should be used
+@IsRegulated BIT,
 @Score DECIMAL(18, 6),
 @LoanSourceID INT,
 @IsFirstLoan BIT
 AS
 BEGIN
-	SELECT
+	SELECT DISTINCT
 		r.GradeRangeID
 	FROM
 		I_GradeRange r
 		INNER JOIN I_SubGrade s ON r.SubGradeID = s.SubGradeID
+		INNER JOIN I_ProductSubType st
+			ON st.LoanSourceID = r.LoanSourceID
+			AND st.IsRegulated = @IsRegulated
 	WHERE
 		r.OriginID = @OriginID
 		AND
