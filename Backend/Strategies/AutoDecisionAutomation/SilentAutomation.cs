@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation {
 	using System;
 	using System.Globalization;
+	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
@@ -139,18 +140,22 @@
 				this.nlCashRequestID
 			);
 
-			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
-				this.customerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				Tag,
-				DateTime.UtcNow,
-				offeredCreditLine,
-				medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
-				DB,
-				Log
+			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
+				new AutoApprovalArguments(
+					this.customerID,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					offeredCreditLine,
+					(AutomationCalculator.Common.Medal)medal.MedalClassification,
+					(AutomationCalculator.Common.MedalType)medal.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+					rejectAgent.Output.FlowType,
+					rejectAgent.Output.ErrorInLGData,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			).Init();
 
 			approveAgent.MakeAndVerifyDecision(Tag, true);

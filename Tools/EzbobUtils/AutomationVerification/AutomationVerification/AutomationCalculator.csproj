@@ -52,7 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoDecision\AutoApproval\LGAgent.cs" />
+    <Compile Include="AutoDecision\AutoApproval\AutoApprovalArguments.cs" />
+    <Compile Include="AutoDecision\AutoApproval\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecision\AutoRejection\AutoRejectionArguments.cs" />
     <Compile Include="AutoDecision\AutoRejection\LGAgent.cs" />
     <Compile Include="AutoDecision\AutoRejection\Models\AutoRejectionInputDataModelDb.cs" />

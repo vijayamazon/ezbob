@@ -106,7 +106,7 @@
     <Compile Include="Admin\Nop.cs" />
     <Compile Include="ASignupLoginBaseStrategy.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LGAgent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />

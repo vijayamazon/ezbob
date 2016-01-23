@@ -4,7 +4,9 @@
 	using System.Globalization;
 	using System.Threading.Tasks;
 	using System.Web;
+	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
@@ -41,6 +43,8 @@
 			long? cashRequestID, // When old cash request is removed replace this with NLcashRequestID
 			CashRequestOriginator? cashRequestOriginator
 		) {
+			this.autoRejectionOutput = null;
+
 			UnderwriterID = underwriterID;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = (avoidAutoDecision == 1) || newCreditLine.AvoidAutoDecision();
@@ -397,13 +401,20 @@
 				bContinue = false;
 			} // if
 
-			if (EnableAutomaticApproval && bContinue)
-				bContinue = DoAutoApproval();
-			else {
+			if (EnableAutomaticApproval && bContinue) {
+				if (this.autoRejectionOutput == null) {
+					bContinue = false;
+
+					Log.Info(
+						"Not processing auto-approval: no auto-rejection output detected (auto rejection did not run?)."
+					);
+				} else
+					bContinue = DoAutoApproval();
+			} else {
 				Log.Debug(
 					"Not processed auto approval: " +
-					"it is currently disabled in configuration or decision has already been made earlier."
-				);
+						"it is currently disabled in configuration or decision has already been made earlier."
+					);
 			} // if
 
 			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
@@ -432,18 +443,22 @@
 		private bool DoAutoApproval() {
 			bool bContinue;
 
-			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
-				CustomerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				this.tag,
-				DateTime.UtcNow,
-				this.offeredCreditLine,
-				this.medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)this.medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
-				DB,
-				Log
+			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
+				new AutoApprovalArguments(
+					CustomerID,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					this.offeredCreditLine,
+					(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
+					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
+					this.autoRejectionOutput.FlowType,
+					this.autoRejectionOutput.ErrorInLGData,
+					this.tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			).Init();
 
 			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Checking auto approve...";
@@ -663,12 +678,16 @@
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;
 				Log.Warn("Mismatch happened while executing rejection, automation aborted.");
-			} else if (rAgent.Trail.HasDecided) {
-				this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
-				this.autoDecisionResponse.UserStatus = Status.Rejected;
-				this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
-				this.autoDecisionResponse.DecisionName = "Rejection";
-				this.autoDecisionResponse.Decision = DecisionActions.Reject;
+			} else {
+				if (rAgent.Trail.HasDecided) {
+					this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
+					this.autoDecisionResponse.UserStatus = Status.Rejected;
+					this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
+					this.autoDecisionResponse.DecisionName = "Rejection";
+					this.autoDecisionResponse.Decision = DecisionActions.Reject;
+				} // if
+
+				this.autoRejectionOutput = rAgent.Output;
 			} // if
 		} // ProcessRejections
 
@@ -1191,5 +1210,6 @@
 		private readonly string tag;
 		private bool wasMismatch;
 		private ABackdoorSimpleDetails backdoorSimpleDetails;
+		private AutoRejectionOutput autoRejectionOutput;
 	} // class MainStrategy
 } // namespace
