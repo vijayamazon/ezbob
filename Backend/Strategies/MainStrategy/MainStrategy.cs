@@ -558,7 +558,7 @@
 					this.medal.MedalClassification,
 					loanSourceID,
 					repaymentPeriod
-					);
+				);
 
 				offerResult = offerDualCalculator.CalculateOffer();
 			} // if

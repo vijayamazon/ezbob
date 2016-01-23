@@ -1,7 +1,9 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval.LogicalGlue {
 	using System;
+	using System.Collections.Generic;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using Ezbob.Database;
@@ -13,7 +15,7 @@
 		public Agent(AutoApprovalArguments args) {
 			this.args = args;
 
-			Trail = new ApprovalTrail(
+			Trail = new LGApprovalTrail(
 				this.args.CustomerID,
 				this.args.CashRequestID,
 				this.args.NLCashRequestID,
@@ -35,7 +37,7 @@
 
 		public virtual DateTime Now { get { return this.args.Now; } }
 
-		public virtual ApprovalTrail Trail { get; private set; }
+		public virtual LGApprovalTrail Trail { get; private set; }
 
 		public virtual Agent Init() {
 			// Nothing real to do here. This method is here just to be consistent with the old way Agent.
@@ -58,10 +60,37 @@
 			} // gather data step
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-				switch (this.args.FlowType) { // TODO replace with some Trail property usage
+				switch (Trail.MyInputData.FlowType) {
 				case AutoDecisionFlowTypes.LogicalGlue:
 					Trail.Dunno<LogicalGlueFlow>().Init();
-					// TODO partially Trail.AppendOverridingResults(this.oldWayAgent.Trail);
+
+					if (Trail.MyInputData.ErrorInLGData)
+						Trail.Negative<LGWithoutError>(true).Init(false);
+					else {
+						Trail.Affirmative<LGWithoutError>(false).Init(true);
+
+						List<ATrail.StepWithDecision> subtrail = this.oldWayAgent.Trail.FindSubtrail(
+							typeof(FraudSuspect),
+							typeof(IsBrokerCustomer),
+							typeof(TodayApprovalCount),
+							typeof(TodayLoans),
+							typeof(HourlyApprovalCount),
+							typeof(LastHourApprovalCount),
+							typeof(OutstandingOffers),
+							typeof(AmlCheck),
+							typeof(CustomerStatus),
+							typeof(ThreeMonthsTurnover),
+							typeof(DefaultAccounts),
+							typeof(Rollovers),
+							typeof(LatePayment),
+							typeof(OutstandingLoanCount),
+							typeof(OutstandingRepayRatio)
+						);
+
+						foreach (ATrail.StepWithDecision sd in subtrail)
+							Trail.Add(sd, sd.Decision == DecisionStatus.Negative);
+					} // if
+
 					break;
 
 				case AutoDecisionFlowTypes.Internal:
@@ -82,7 +111,7 @@
 		protected virtual ASafeLog Log { get { return this.args.Log; } }
 
 		protected virtual void GatherData() {
-			// TODO
+			Trail.MyInputData.FullInit(this.args.FlowType, this.args.ErrorInLGData, this.oldWayAgent.Trail.MyInputData);
 		} // GatherData
 
 		private readonly OldWayAgent oldWayAgent;

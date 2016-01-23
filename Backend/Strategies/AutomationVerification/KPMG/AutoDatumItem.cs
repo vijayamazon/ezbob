@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
-	using AutomationCalculator.ProcessHistory.Trails;
+	using AutomationCalculator.ProcessHistory.Trails.ApprovalInput;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;

@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator.ProcessHistory.Trails {
+﻿namespace AutomationCalculator.ProcessHistory.Trails.ApprovalInput {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -6,13 +6,7 @@
 	using AutomationCalculator.Common;
 	using Newtonsoft.Json;
 
-	public partial class ApprovalInputData : ITrailInputData {
-		public static ApprovalInputData Deserialize(string json) {
-			var aid = new ApprovalInputData();
-			aid.FromJson(json);
-			return aid;
-		} // Deserialize
-
+	public class ApprovalInputData : ITrailInputData {
 		public int CustomerID { get { return this.m_oArguments.CustomerID; } }
 
 		public long? CashRequestID { get { return this.m_oArguments.CashRequestID; } }
@@ -63,9 +57,24 @@
 			LatePayments.Add(oPayment);
 		} // AddLatePayment
 
-		public void FromJson(string json) {
-			JsonConvert.DeserializeObject<SerializationModel>(json).FlushTo(this);
-		} // FromJson
+		public void FullInit(ApprovalInputData aid) {
+			Clean();
+
+			PartialInit(
+				aid.DataAsOf,
+				aid.Configuration,
+				aid.m_oArguments,
+				aid.MetaData,
+				aid.LatePayments,
+				aid.DirectorNames,
+				aid.HmrcBusinessNames
+			);
+
+			SetSeniority(aid.MarketplaceSeniority);
+			SetAvailableFunds(aid.AvailableFunds, aid.ReservedFunds);
+			SetTurnover(3, aid.GetTurnover(3));
+			SetTurnover(12, aid.GetTurnover(12));
+		} // FullInit
 
 		public void FullInit(
 			DateTime oDataAsOf,
@@ -79,21 +88,10 @@
 			List<Name> oDirectorNames,
 			IEnumerable<NameForComparison> oHmrcBusinessNames
 		) {
-			SetDataAsOf(oDataAsOf);
-			SetConfiguration(oCfg);
-			this.m_oArguments = oArgs;
-			SetMetaData(oMetaData);
-
-			if (oPayments != null)
-				LatePayments.AddRange(oPayments);
+			PartialInit(oDataAsOf, oCfg, oArgs, oMetaData, oPayments, oDirectorNames, oHmrcBusinessNames);
 
 			SetSeniority(oOriginationTime.Seniority);
-
 			SetAvailableFunds(oFunds.Available, oFunds.Reserved);
-
-			SetDirectorNames(oDirectorNames);
-			SetHmrcBusinessNames(oHmrcBusinessNames);
-
 			SetTurnoverData(oTurnover);
 		} // FullInit
 
@@ -101,8 +99,8 @@
 			return GetTurnover(3) * 4 > GetTurnover(12) * Configuration.TurnoverDropQuarterRatio;
 		} // IsTurnoverGood
 
-		public string Serialize() {
-			return JsonConvert.SerializeObject(new SerializationModel().InitFrom(this), Formatting.Indented);
+		public virtual string Serialize() {
+			return JsonConvert.SerializeObject(new ApprovalInputDataSerializationModel(this), Formatting.Indented);
 		} // Serialize
 
 		public void SetArgs(
@@ -164,6 +162,27 @@
 			SetTurnover(3, oTurnover[3]);
 			SetTurnover(12, oTurnover[12]);
 		} // SetTurnoverData
+
+		private void PartialInit(
+			DateTime oDataAsOf,
+			Configuration oCfg,
+			Arguments oArgs,
+			MetaData oMetaData,
+			IEnumerable<Payment> oPayments,
+			List<Name> oDirectorNames,
+			IEnumerable<NameForComparison> oHmrcBusinessNames
+		) {
+			SetDataAsOf(oDataAsOf);
+			SetConfiguration(oCfg);
+			this.m_oArguments = oArgs;
+			SetMetaData(oMetaData);
+
+			if (oPayments != null)
+				LatePayments.AddRange(oPayments);
+
+			SetDirectorNames(oDirectorNames);
+			SetHmrcBusinessNames(oHmrcBusinessNames);
+		} // PartialInit
 
 		private decimal GetTurnover(int nMonthCount) {
 			if (this.turnover == null)

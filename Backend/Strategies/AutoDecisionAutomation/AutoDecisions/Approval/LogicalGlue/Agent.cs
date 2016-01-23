@@ -1,8 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue {
 	using System;
+	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
@@ -16,7 +18,7 @@
 		public Agent(AutoApprovalArguments args) {
 			this.args = args;
 
-			this.trail = new ApprovalTrail(
+			this.trail = new LGApprovalTrail(
 				this.args.CustomerID,
 				this.args.CashRequestID,
 				this.args.NLCashRequestID,
@@ -46,43 +48,43 @@
 		public virtual Agent Init() {
 			// Nothing real to do here. This method is here just to be consistent with the old way Agent.
 
-			using (Trail.AddCheckpoint(ProcessCheckpoints.Initializtion))
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.Initializtion))
 				return this;
 		} // Init
 
 		public void MakeAndVerifyDecision(string tag, bool quiet = false) {
 			try {
-				Trail.SetTag(tag).UniqueID = this.args.TrailUniqueID;
+				this.trail.SetTag(tag).UniqueID = this.args.TrailUniqueID;
 
 				RunPrimary();
 
 				this.secondaryAgent.MakeDecision();
 
-				WasMismatch = !Trail.EqualsTo(this.secondaryAgent.Trail, quiet);
+				WasMismatch = !this.trail.EqualsTo(this.secondaryAgent.Trail, quiet);
 
-				if (!WasMismatch && Trail.HasDecided) {
-					if (Trail.RoundedAmount == this.secondaryAgent.Trail.RoundedAmount) {
-						Trail.Affirmative<SameAmount>(false).Init(Trail.RoundedAmount);
+				if (!WasMismatch && this.trail.HasDecided) {
+					if (this.trail.RoundedAmount == this.secondaryAgent.Trail.RoundedAmount) {
+						this.trail.Affirmative<SameAmount>(false).Init(this.trail.RoundedAmount);
 
 						this.secondaryAgent.Trail.Affirmative<SameAmount>(false).Init(
 							this.secondaryAgent.Trail.RoundedAmount
 						);
 					} else {
-						Trail.Negative<SameAmount>(false).Init(Trail.RoundedAmount);
+						this.trail.Negative<SameAmount>(false).Init(this.trail.RoundedAmount);
 						this.secondaryAgent.Trail.Negative<SameAmount>(false).Init(this.secondaryAgent.Trail.RoundedAmount);
 						WasMismatch = true;
 					} // if
 				} // if
 			} catch (Exception e) {
 				Log.Alert(e, "Exception during auto approval.");
-				Trail.Negative<ExceptionThrown>(true).Init(e);
+				this.trail.Negative<ExceptionThrown>(true).Init(e);
 			} // try
 
-			Trail.Save(DB, this.secondaryAgent.Trail);
+			this.trail.Save(DB, this.secondaryAgent.Trail);
 		} // MakeAndVerifyDecision
 
 		public bool ExceptionWhileDeciding {
-			get { return Trail.FindTrace<ExceptionThrown>() != null; }
+			get { return this.trail.FindTrace<ExceptionThrown>() != null; }
 		} // ExceptionWhileDeciding
 
 		public ApprovalTrail Trail {
@@ -97,25 +99,52 @@
 		protected ASafeLog Log { get { return this.args.Log; } }
 
 		protected virtual void RunPrimary() {
-			using (Trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
 				this.oldWayAgent.Init().RunPrimaryOnly();
 				this.oldWayAgent.Trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 				this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
 			} // old way flow step
 
-			using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData))
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.GatherData))
 				GatherData();
 
-			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-				switch (this.args.FlowType) { // TODO replace with some Trail property usage
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+				switch (this.trail.MyInputData.FlowType) {
 				case AutoDecisionFlowTypes.LogicalGlue:
-					Trail.Dunno<LogicalGlueFlow>().Init();
-					// TODO partially Trail.AppendOverridingResults(this.oldWayAgent.Trail);
+					this.trail.Dunno<LogicalGlueFlow>().Init();
+
+					if (this.trail.MyInputData.ErrorInLGData)
+						this.trail.Negative<LGWithoutError>(true).Init(false);
+					else {
+						this.trail.Affirmative<LGWithoutError>(false).Init(true);
+
+						List<ATrail.StepWithDecision> subtrail = this.oldWayAgent.Trail.FindSubtrail(
+							typeof(FraudSuspect),
+							typeof(IsBrokerCustomer),
+							typeof(TodayApprovalCount),
+							typeof(TodayLoans),
+							typeof(HourlyApprovalCount),
+							typeof(LastHourApprovalCount),
+							typeof(OutstandingOffers),
+							typeof(AmlCheck),
+							typeof(CustomerStatus),
+							typeof(ThreeMonthsTurnover),
+							typeof(DefaultAccounts),
+							typeof(Rollovers),
+							typeof(LatePayment),
+							typeof(OutstandingLoanCount),
+							typeof(OutstandingRepayRatio)
+						);
+
+						foreach (ATrail.StepWithDecision sd in subtrail)
+							this.trail.Add(sd, sd.Decision == DecisionStatus.Negative);
+					} // if
+
 					break;
 
 				case AutoDecisionFlowTypes.Internal:
-					Trail.Dunno<InternalFlow>().Init();
-					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
+					this.trail.Dunno<InternalFlow>().Init();
+					this.trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					break;
 
 				default:
@@ -128,10 +157,10 @@
 		} // RunPrimary
 
 		protected virtual void GatherData() {
-			// TODO
+			this.trail.MyInputData.FullInit(this.args.FlowType, this.args.ErrorInLGData, this.oldWayAgent.Trail.MyInputData);
 		} // GatherData
 
-		private readonly ApprovalTrail trail;
+		private readonly LGApprovalTrail trail;
 		private readonly Approval oldWayAgent;
 		private readonly SecondaryAgent secondaryAgent;
 		private readonly AutoApprovalArguments args;
