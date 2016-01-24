@@ -36,8 +36,10 @@
 			
 			if (CurrentValues.Instance.SalesForceFakeMode) {
 				For<ISalesForceAppClient>().Use<FakeApiClient>();
+				For<ISalesForceService>().Use<FakeSalesForceService>();
 			} else {
 				For<ISalesForceAppClient>().Use<SalesForceApiClient>();
+				For<ISalesForceService>().Use<SalesForceService>();
 			}
 		}
 	}

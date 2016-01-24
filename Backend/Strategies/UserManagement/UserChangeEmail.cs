@@ -4,6 +4,7 @@
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
@@ -60,14 +61,8 @@
 
 			FireToBackground(new EmailChanged(this.spUpdate.UserID, this.spUpdate.RequestID.ToString()));
 
-			ISalesForceAppClient salesForceApiClient = ObjectFactory
-				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
-				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
-				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
-				.With("environment").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceEnvironment.Value)
-				.GetInstance<ISalesForceAppClient>();
+			FireToBackground(new ChangeEmail(customerData.Id, this.securityData.Email, customerData.Mail, customerData.Origin));
 
-			salesForceApiClient.ChangeEmail(new ChangeEmailModel{ currentEmail = customerData.Mail, newEmail = this.securityData.Email, Origin = customerData.Origin});
 			Log.Debug(
 				"User '{0}': request to change email to {1} fully processed.",
 				this.spUpdate.UserID,

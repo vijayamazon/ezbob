@@ -237,6 +237,8 @@
     <Compile Include="Misc\AddHistoryDirector.cs" />
     <Compile Include="Misc\LoadMessagesSentToUser.cs" />
     <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
+    <Compile Include="SalesForce\AddUpdateBrokerAccount.cs" />
+    <Compile Include="SalesForce\ChangeEmail.cs" />
     <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="Tasks\Annual77ANotifier.cs" />
     <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />

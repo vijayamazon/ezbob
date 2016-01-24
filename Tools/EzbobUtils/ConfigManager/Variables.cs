@@ -447,6 +447,8 @@ namespace ConfigManager {
 		SageSalesInvoicesRequest,
 		SalesEmail,
 		SalesForceFakeMode,
+		SalesForceConsumerKey,
+		SalesForceConsumerSecret,
 		SalesForceUserName,
 		SalesForcePassword,
 		SalesForceToken,
