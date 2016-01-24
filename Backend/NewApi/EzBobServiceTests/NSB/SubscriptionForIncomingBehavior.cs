@@ -11,12 +11,12 @@ namespace EzBobServiceTests.NSB
     using global::NServiceBus.Pipeline.Contexts;
     using global::NServiceBus.Unicast.Subscriptions;
 
-    class SubscriptionBehavior : IBehavior<IncomingContext>
+    class SubscriptionForIncomingBehavior : IBehavior<IncomingContext>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public SubscriptionBehavior() {
+        public SubscriptionForIncomingBehavior() {
             int kk = 0;
         }
 
@@ -56,7 +56,7 @@ namespace EzBobServiceTests.NSB
         internal class Registration : RegisterStep
         {
             public Registration()
-                : base("SubscriptionBehavior", typeof(SubscriptionBehavior), "So we can get subscription events")
+                : base("SubscriptionForIncomingBehavior", typeof(SubscriptionForIncomingBehavior), "So we can get subscription events")
             {
                 InsertBefore(WellKnownStep.CreateChildContainer);
             }

@@ -55,7 +55,7 @@ namespace EzBobServiceTests {
         /// <summary>
         /// Gets the random password.
         /// </summary>
-        /// <param name="passwordlLength">Length of the passwordl.</param>
+        /// <param name="passwordlLength">Length of the password.</param>
         /// <returns></returns>
         public string GetRandomPassword(uint passwordlLength = 8) {
             StringBuilder builder = new StringBuilder();
@@ -68,7 +68,7 @@ namespace EzBobServiceTests {
         }
 
         /// <summary>
-        /// Gets the rundom integer.
+        /// Gets the random integer.
         /// </summary>
         /// <param name="minValue">The minimum value.</param>
         /// <param name="maxValue">The maximum value.</param>

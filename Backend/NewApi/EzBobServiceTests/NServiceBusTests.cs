@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EzBobServiceTests {
+    using System.Diagnostics;
     using System.Threading;
     using EzBobApi.Commands;
     using EzBobApi.Commands.Customer;
@@ -38,30 +39,72 @@ namespace EzBobServiceTests {
 
             var info = JsonConvert.DeserializeObject(json, typeof(InfoAccumulator));
 
+            container = new Container(new EzBobServiceRegistry());
 
-            Context ctx = new Context();
 
-            Scenario.Define(ctx)
-                .WithEndpoint<EzBobService>(c => c.CustomConfig(cfg => cfg
-                    .UseContainer(CreateNsbTestContainer(container)) //based on initialized container, creates container suitable for NSB test framework
-                    )
-                    .Given((bus, context) => SubscriptionBehavior.OnEndpointSubscribed(s => {
-                        int kk = 0;
-                    }))
-                    .When(context => true, bus => bus.Send("EzBobService", new CustomerSignupCommand())))
-                .Done(c => true)
+            Context context = new Context();
+
+            Scenario.Define(context)
+                .WithEndpoint<EzBobService>(b => {
+                    b.Given((bus, ctx) => {
+                        bus.Send<CustomerSignupCommand>("EzBobService2", m => {
+                            m.MessageId = Guid.NewGuid();
+                        });
+                        SubscriptionForIncomingBehavior.OnEndpointSubscribed(s => {
+                            int kk = 0;
+                        });
+
+                        OutgoingSubscription.OnEndpointSubscribed(s => {
+                            int kk = 0;
+                        });
+                    })
+                        .When(ctx => ctx.IsServiceReady, bus => bus.Send<CustomerSignupCommand>("EzBobService2", m => {
+                            m.MessageId = Guid.NewGuid();
+                        }));
+                })
+                .Done(IsDone)
                 .Run();
+
+//
+//            Scenario.Define(ctx)
+//                .WithEndpoint<EzBobService>(c => c.CustomConfig(cfg => cfg
+//                    .UseContainer(CreateNsbTestContainer(container)) //based on initialized container, creates container suitable for NSB test framework
+//                    )
+//                    .Given((bus, context) => SubscriptionForIncomingBehavior.OnEndpointSubscribed(s => {
+//                        int kk = 0;
+//                    }))
+//                    .When(context => context.IsMaySignup, bus => bus.Send("EzBobService2", new CustomerSignupCommand())))
+//                .Done(IsDone)
+//                .Run();
+        }
+
+        private bool IsDone(Context ctx) {
+            return ctx.IsFinished;
         }
 
         private class Context : ScenarioContext {
             private int countCompanyUpdate = 0;
             private bool isCustomerUpdated = false;
 
+            private bool isMaySignup = false;
+
+
             public Context() {
                 this.IsMaySignup = false;
             }
 
-            public bool IsMaySignup { get; set; }
+            public bool IsServiceReady { get; set; }
+
+            public bool IsMaySignup
+            {
+                get
+                {
+                    bool b = this.isMaySignup;
+                    return b;
+                }
+                set { this.isMaySignup = value; }
+            }
+
             public bool IsMayUpdateCustomer { get; private set; }
 
             public bool IsMayUpdateCompany
@@ -69,7 +112,8 @@ namespace EzBobServiceTests {
                 get { return this.isCustomerUpdated && this.countCompanyUpdate < 2; }
             }
 
-            public bool IsFinished {
+            public bool IsFinished
+            {
                 get { return this.countCompanyUpdate >= 2; }
             }
 
@@ -94,68 +138,16 @@ namespace EzBobServiceTests {
 
             Scenario.Define(ctx)
                 .WithEndpoint<EzBobService>(c => c
-                    .Given((bus, context) =>
-                        SubscriptionBehavior.OnEndpointSubscribed(s => {
-                            if (s.SubscriberReturnAddress.Queue.Contains("EzBobService2")) {
-                                context.IsMaySignup = true;
-                            }
-                        })))
+                    .Given((bus, context) => context.IsMaySignup = true))
                 .WithEndpoint<RestService>(c => c
-                    .Given((bus, context) => {
-                        SubscriptionBehavior.OnEndpointSubscribed(s => {
-                            if (s.SubscriberReturnAddress.Queue.Contains("EzBobService2")) {
-                                context.IsMaySignup = true;
-                            }
-                        });
-
-                        bus.Send("EzBobService2", new CustomerSignupCommand());
-                    })
                     .When(context => context.IsMaySignup,
                         bus => {
-                            bus.Send("EzBobService", new CustomerSignupCommand());
+                            bus.Send("EzBobService2", new CustomerSignupCommand());
                         }))
                 .Done(context => context.IsFinished)
                 .Run();
 
             Thread.Sleep(1000 * 60 * 60);
-        }
-
-        public class TestPolicy1 : IFamilyPolicy
-        {
-            /// <summary>
-            /// Allows you to create missing registrations for an unknown plugin type
-            ///             at runtime.
-            ///             Return null if this policy does not apply to the given type
-            /// </summary>
-            public PluginFamily Build(Type type)
-            {
-                if (type != typeof(log4net.ILog))
-                {
-                    return null;
-                }
-
-                var family = new PluginFamily(type);
-                var instance = new ObjectInstance(log4net.LogManager.GetLogger(this.GetType()));
-
-                family.SetDefault(instance);
-                return family;
-            }
-
-            /// <summary>
-            /// Should this policy be used to determine whether or not the Container has
-            ///             registrations for a plugin type in the PluginGraph.HasFamily(type) method
-            /// </summary>
-            public bool AppliesToHasFamilyChecks { get; private set; }
-        }
-
-        private string CreateSighnupJson() {
-            CustomerSignupCommand cmd = new CustomerSignupCommand();
-            cmd.Account = new AccountInfo {
-                EmailAddress = "aaa"
-            };
-
-            var res = JsonConvert.ToString(cmd);
-            return res;
         }
     }
 }
