@@ -627,10 +627,28 @@
 
 			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
 
+			int amount = grsp.LoanAmount(MonthlyRepayment.RequestedAmount);
+
+			int maxAmount = CurrentValues.Instance.AutoApproveMaxAmount;
+			int minAmount = CurrentValues.Instance.MinLoan;
+
+			if ((amount < minAmount) || (amount > maxAmount)) {
+				Log.Msg(
+					"Switching to manual: approved amount {0} for customer {1} " +
+					"is out of allowed for auto approve range [{2} , {3}].",
+					amount.ToString("C0"),
+					CustomerID,
+					minAmount.ToString("C0"),
+					maxAmount.ToString("C0")
+				);
+
+				return new Tuple<OfferResult, int>(null, 0);
+			} // if
+
 			var offerResult = new OfferResult {
 				CustomerId = CustomerID,
 				CalculationTime = DateTime.UtcNow,
-				Amount = grsp.LoanAmount(MonthlyRepayment.RequestedAmount),
+				Amount = amount,
 				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
 
 				ScenarioName = "Logical Glue",
