@@ -49,7 +49,7 @@
 			};
 
 			try {
-				if (inference.Bucket.HasValue) {
+                if (inference != null && inference.Bucket.HasValue) {
 					var grade = db.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
 					int gradeID = (int)inference.Bucket.Value;
 					maxScore = grade.First(x => x.GradeID == gradeID)

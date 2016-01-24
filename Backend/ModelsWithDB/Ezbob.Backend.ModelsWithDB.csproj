@@ -191,6 +191,7 @@
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
     <Compile Include="MultiBrandLoanModel.cs" />
+    <Compile Include="LegalDocs\LoanAgreementTemplate.cs" />
     <Compile Include="MultiBrandLoanSummary.cs" />
     <Compile Include="AStringable.cs" />
     <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />

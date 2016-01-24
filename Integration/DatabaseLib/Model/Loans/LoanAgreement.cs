@@ -16,12 +16,12 @@ namespace EZBob.DatabaseLib.Model.Loans
 		}
 
 		//public LoanAgreement(string name, string template, Database.Loans.Loan loan, int templateId)
-		public LoanAgreement(string name, Database.Loans.Loan loan, LoanAgreementTemplate template)
+		public LoanAgreement(string name, Database.Loans.Loan loan, int templateID)
 		{
 			Name = name;
 			Loan = loan;
 			FilePath = LongFilenameWithDir();
-			TemplateRef = template;
+			TemplateID = templateID;
 		}
 
 		public virtual int Id { get; set; }
@@ -29,7 +29,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 
 		public virtual Database.Loans.Loan Loan { get; set; }
 		public virtual string FilePath { get; set; }
-		public virtual LoanAgreementTemplate TemplateRef { get; set; }
+		public virtual int TemplateID { get; set; }
 
 		public virtual string ShortFilename()
 		{
@@ -86,9 +86,9 @@ namespace EZBob.DatabaseLib.Model.Loans
 			Table("LoanAgreement");
 			Id(x => x.Id).GeneratedBy.HiLo("100");
 			Map(x => x.Name).Length(200);
-			Map(x => x.FilePath).Length(400);
-			References(x => x.Loan, "LoanId");
-			References(x => x.TemplateRef, "TemplateId").Cascade.SaveUpdate();
+            Map(x => x.FilePath).Length(400);
+            Map(x => x.TemplateID, "TemplateId");
+            References(x => x.Loan, "LoanId");		    
 		}
 	}
 }

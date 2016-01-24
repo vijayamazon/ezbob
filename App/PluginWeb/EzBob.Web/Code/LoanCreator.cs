@@ -9,7 +9,6 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
-	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Customer.Controllers;
 	using EzBob.Web.Areas.Customer.Controllers.Exceptions;
 	using EzBob.Web.Infrastructure;
@@ -219,8 +218,9 @@
 				// copy newly created agreementtemplateID (for new templeates)
 				foreach (NL_LoanAgreements ag in nlModel.Loan.LastHistory().Agreements) {
 					if (ag.LoanAgreementTemplateID == 0)
-						ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateRef.Id;
+						ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateID;
 				}
+
 				this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

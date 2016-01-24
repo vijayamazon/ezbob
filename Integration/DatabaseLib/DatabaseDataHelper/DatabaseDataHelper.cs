@@ -98,7 +98,6 @@
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
-			_loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
 			_wizardStepSequenceRepository = new WizardStepSequenceRepository(session);
 
 			this.yodleeBanksRepository = new YodleeBanksRepository(session);
@@ -480,25 +479,6 @@
 
 			return historyItem;
 		}
-
-		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template, LoanAgreementTemplateType type) {
-			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template && x.TemplateType == (int)type) ?? new LoanAgreementTemplate { Template = template, TemplateType = (int)type };
-			return loanAgreementTemplate;
-		}
-
-		public LoanAgreementTemplate LoadOrCreateLoanAgreementTemplate(string template, LoanAgreementTemplateType type) {
-			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll()
-				.FirstOrDefault(x => x.Template == template && x.TemplateType == (int)type);
-
-			if (loanAgreementTemplate != null)
-				return loanAgreementTemplate;
-			
-			loanAgreementTemplate = new LoanAgreementTemplate { Template = template, TemplateType = (int)type };
-
-			_loanAgreementTemplateRepository.SaveOrUpdate(loanAgreementTemplate);
-
-			return loanAgreementTemplate;
-		} // LoadOrCreateLoanAgreementTemplate
 
 		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -917,7 +897,6 @@
 						ContactId = dataItem.contact,
 						SourceId = dataItem.source,
 						DestinationId = dataItem.destination,
-						//PaymentMethodId = dataItem.payment_method,
 						voided = dataItem.voided,
 						lock_version = dataItem.lock_version
 					};
@@ -942,7 +921,6 @@
 						ContactId = dataItem.contact,
 						SourceId = dataItem.source,
 						DestinationId = dataItem.destination,
-						//PaymentMethodId = dataItem.payment_method,
 						voided = dataItem.voided,
 						lock_version = dataItem.lock_version
 					};
@@ -1075,7 +1053,6 @@
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
-		private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly ILoanTypeRepository _LoanTypeRepository;
 		private readonly MarketPlaceRepository _MarketPlaceRepository;

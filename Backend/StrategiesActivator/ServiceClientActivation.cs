@@ -1590,6 +1590,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		//	);
 		//}
 
+        [Activation]
+        private void ManualLegalDocsSyncTemplatesFiles() {
+            this.serviceClient.ManualLegalDocsSyncTemplatesFiles(1,1);
+        } // RecalculateAutoRejectOnFirstDecision
+
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;
 		private readonly ASafeLog log;

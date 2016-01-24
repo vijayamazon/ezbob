@@ -225,7 +225,6 @@ namespace EzBob.Models {
 
 		public int LastApprovedAmount { get; set; }
 
-		public string AlibabaCreditFacilityTemplate { get; set; }
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel {

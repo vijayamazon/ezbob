@@ -445,6 +445,7 @@ string formFieldID = "")
 {
     var val = new HtmlString(inputProp.Value);
     var name = new HtmlString(inputProp.Name);
+    var uiEvent = new HtmlString(inputProp.UiEventControlID);
     <input type="@inputProp.Type"
            @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) { @: name="@name"
                                                        } else { if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name="@identificator"
@@ -467,7 +468,7 @@ string formFieldID = "")
                                                                                                                                                                                                                     }
            @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
                                                                                                                                                                                                                     }
-           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
                                                                                                                                                                                                                     }
            @if (inputProp.SpecialAttributes != null)  { 
                foreach (KeyValuePair<string, string> pair in inputProp.SpecialAttributes) {

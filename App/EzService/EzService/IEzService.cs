@@ -22,7 +22,8 @@
 		IEzServiceNewLoan,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceUserManagement
+		IEzServiceUserManagement,
+        IEzServiceLegalDocs
 	{
 		[OperationContract]
 		ActionMetaData AddHistoryDirector(Esigner Edirector);

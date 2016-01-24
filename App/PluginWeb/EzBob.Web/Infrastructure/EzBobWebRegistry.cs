@@ -2,7 +2,6 @@ namespace EzBob.Web.Infrastructure
 {
     using ConfigManager;
     using EzBob.CommonLib;
-    using EzBob.Models.Agreements;
     using EzBob.PayPalServiceLib.Common;
     using EzBob.Web.Areas.Customer.Controllers;
     using EzBob.Web.Areas.Customer.Models;
@@ -15,38 +14,15 @@ namespace EzBob.Web.Infrastructure
     using EZBob.DatabaseLib.Model.Database;
     using EZBob.DatabaseLib.Model.Database.Loans;
     using EZBob.DatabaseLib.Model.Database.Repository;
-    using EZBob.DatabaseLib.Model.Database.Request;
     using EZBob.DatabaseLib.Model.Database.UserManagement;
     using EZBob.DatabaseLib.Model.Experian;
     using EZBob.DatabaseLib.Model.Loans;
     using EZBob.DatabaseLib.Repository;
+    using PostcodeAnywhere;
     using ServiceClientProxy;
     using StructureMap.Configuration.DSL;
-	using Code.Bank;
-	using CommonLib;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EZBob.DatabaseLib.Model.Experian;
-	using EZBob.DatabaseLib.Model.Loans;
-	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models.Agreements;
-	using EzServiceAccessor;
-	using PayPalServiceLib.Common;
-	using Areas.Customer.Controllers;
-	using Areas.Customer.Models;
-	using Code;	
-	using Code.MpUniq;
-	using Models.Repository;
-	using ServiceClientProxy;
-	using StructureMap.Configuration.DSL;
-	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database.Request;
-	using PostcodeAnywhere;
 
-	public class PluginWebRegistry : Registry
+    public class PluginWebRegistry : Registry
 	{
 		public PluginWebRegistry()
 		{
@@ -74,7 +50,6 @@ namespace EzBob.Web.Infrastructure
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanTransactionRepository>().Use<LoanTransactionRepository>();
 			For<ILoanAgreementRepository>().Use<LoanAgreementRepository>();
-			For<ILoanAgreementTemplateRepository>().Use<LoanAgreementTemplateRepository>();
 
 			For<ILoanRepository>().Use<LoanRepository>();
 			For<IAgreementsGenerator>().Use<AgreementsGenerator>();
@@ -104,7 +79,6 @@ namespace EzBob.Web.Infrastructure
 			For<IYodleeAccountChecker>().Use<YodleeAccountChecker>();
 
 			For<ILoanCreator>().Use<LoanCreator>();
-			For<IAgreementsTemplatesProvider>().Use<AgreementsTemplatesProvider>();
 			For<ILoanTypeRepository>().Use<LoanTypeRepository>();
 			For<IPaypointTransactionRepository>().Use<PaypointTransactionRepository>();
 			For<IExperianConsentAgreementRepository>().Use<ExperianConsentAgreementRepository>();

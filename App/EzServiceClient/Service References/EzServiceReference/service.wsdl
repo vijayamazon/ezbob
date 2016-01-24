@@ -85,6 +85,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
@@ -861,6 +862,24 @@
   </wsdl:message>
   <wsdl:message name="IEzService_ValidateSecurityAnswer_OutputMessage">
     <wsdl:part name="parameters" element="tns:ValidateSecurityAnswerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocs" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocById" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManualLegalDocsSyncTemplatesFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:ManualLegalDocsSyncTemplatesFiles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManualLegalDocsSyncTemplatesFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ManualLegalDocsSyncTemplatesFilesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_ParseExperianLtd_InputMessage">
     <wsdl:part name="parameters" element="tns:ParseExperianLtd" />
@@ -2228,6 +2247,18 @@
     <wsdl:operation name="ValidateSecurityAnswer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer" message="tns:IEzService_ValidateSecurityAnswer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswerResponse" message="tns:IEzService_ValidateSecurityAnswer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLegalDocs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocs" message="tns:IEzService_GetLegalDocs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocsResponse" message="tns:IEzService_GetLegalDocs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLegalDocById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocById" message="tns:IEzService_GetLegalDocById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocByIdResponse" message="tns:IEzService_GetLegalDocById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ManualLegalDocsSyncTemplatesFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles" message="tns:IEzService_ManualLegalDocsSyncTemplatesFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFilesResponse" message="tns:IEzService_ManualLegalDocsSyncTemplatesFiles_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ParseExperianLtd">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtd" message="tns:IEzService_ParseExperianLtd_InputMessage" />
@@ -3959,6 +3990,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetLegalDocs">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLegalDocById">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocById" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManualLegalDocsSyncTemplatesFiles">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ParseExperianLtd">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianLtd" style="document" />
       <wsdl:input>
@@ -5240,20 +5298,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dora:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dora:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>DORA\Dor</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dora:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dora:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>DORA\Dor</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

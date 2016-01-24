@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Models
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using Backend.Models;
@@ -8,8 +9,9 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.LegalDocs;
 
-	[DataContract]
+    [DataContract]
     public class LoanOfferDetails
     {
 		[DataMember]
@@ -63,6 +65,9 @@
 
 		[DataMember]
 		public AgreementModel Agreement { get; set; } // agreement model
+        
+        [DataMember]
+        public List<LoanAgreementTemplate> Templates { get; set; }
 
 		[DataMember]
 		public LoanOfferDetails Details { get; set; } // offer model

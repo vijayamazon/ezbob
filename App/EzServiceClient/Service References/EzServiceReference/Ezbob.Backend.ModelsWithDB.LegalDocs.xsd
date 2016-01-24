@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfLoanAgreementTemplate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanAgreementTemplate" nillable="true" type="tns:LoanAgreementTemplate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLoanAgreementTemplate" nillable="true" type="tns:ArrayOfLoanAgreementTemplate" />
+  <xs:complexType name="LoanAgreementTemplate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsApproved" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRegulated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsReviewed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsUpdate" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
+      <xs:element minOccurs="0" name="ProductID" type="xs:int" />
+      <xs:element minOccurs="0" name="ReleaseDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TemplateTypeID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="LoanAgreementTemplate" nillable="true" type="tns:LoanAgreementTemplate" />
+</xs:schema>

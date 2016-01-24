@@ -241,12 +241,7 @@
 
 				customerModel.SignedLegalID = (lastll == null) ? 0 : lastll.Id;
 
-				customerModel.AlibabaCreditFacilityTemplate =
-					((lastll != null) && (lastll.AlibabaCreditFacilityTemplate != null))
-						? lastll.AlibabaCreditFacilityTemplate.Template
-						: string.Empty;
-
-				customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+			    customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
 			} // if
 
 			customerModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";

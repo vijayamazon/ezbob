@@ -22,6 +22,7 @@
       <xs:element minOccurs="0" name="InterestRatePerDayFormatted" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InterestRatePerYearFormatted" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsBrokerFee" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsEverlineRefinanceLoan" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsManualSetupFee" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ManualSetupFee" nillable="true" type="xs:string" />

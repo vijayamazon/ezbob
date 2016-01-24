@@ -624,6 +624,7 @@
 				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanView.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ezbob.accounts.bank.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanTopView.js")
+                .Add("~/Content/js/Profile/ezbob.Profile.AgreementsDynamicCheckboxes.js")
 				.Add("~/Content/js/Profile/ezbob.profile.profileView.js")
 				.Add("~/Content/js/Profile/ezbob.profile.profileRouter.js")
 				.Add("~/Content/js/Profile/PayEarly/makeEarlyPaymentModel.js")

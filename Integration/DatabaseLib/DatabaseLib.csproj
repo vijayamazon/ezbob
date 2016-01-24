@@ -162,13 +162,13 @@
     <Compile Include="Model\Fraud\FraudIovation.cs" />
     <Compile Include="Model\Fraud\FraudRequest.cs" />
     <Compile Include="Model\Loans\BrokerSetupFeeMap.cs" />
+    <Compile Include="Model\Loans\LoanAgreement.cs" />
     <Compile Include="Model\Loans\LoanBrokerCommission.cs" />
     <Compile Include="Model\Loans\LoanLegal.cs" />
     <Compile Include="Model\Loans\LoanMap.cs" />
     <Compile Include="Model\Loans\LoanScheduleDeleted.cs" />
     <Compile Include="Model\Loans\LoanSource.cs" />
     <Compile Include="Model\Loans\LoanInterestFreeze.cs" />
-    <Compile Include="Model\Loans\LoanAgreementTemplate.cs" />
     <Compile Include="Model\Loans\LoanStatusType.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethod.cs" />
     <Compile Include="Model\Loans\InstallmentDelta.cs" />
@@ -340,7 +340,6 @@
     <Compile Include="Model\Fraud\FraudPhone.cs" />
     <Compile Include="Model\Fraud\FraudShop.cs" />
     <Compile Include="Model\Fraud\FraudUser.cs" />
-    <Compile Include="Model\Loans\LoanAgreement.cs" />
     <Compile Include="Model\Loans\LoanChangesHistory.cs" />
     <Compile Include="Model\Loans\LoanCharge.cs" />
     <Compile Include="Model\Loans\LoanChargesRepository.cs" />
@@ -600,7 +599,7 @@
       <Name>CommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\DbConstants\DbConstants.csproj">
-      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\LandRegistryLib\LandRegistryLib.csproj">
