@@ -52,9 +52,9 @@
 				return this;
 		} // Init
 
-		public void MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public void MakeAndVerifyDecision(bool quiet = false) {
 			try {
-				this.trail.SetTag(tag).UniqueID = this.args.TrailUniqueID;
+				this.trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 
 				RunPrimary();
 

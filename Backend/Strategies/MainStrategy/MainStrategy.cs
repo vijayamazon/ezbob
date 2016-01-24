@@ -464,7 +464,7 @@
 
 			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Checking auto approve...";
 
-			aAgent.MakeAndVerifyDecision(this.tag);
+			aAgent.MakeAndVerifyDecision();
 
 			if (aAgent.ExceptionWhileDeciding) {
 				bContinue = false;

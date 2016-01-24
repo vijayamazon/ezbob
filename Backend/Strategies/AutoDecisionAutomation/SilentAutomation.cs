@@ -3,6 +3,7 @@
 	using System.Globalization;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Common;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -158,17 +159,26 @@
 				)
 			).Init();
 
-			approveAgent.MakeAndVerifyDecision(Tag, true);
+			approveAgent.MakeAndVerifyDecision(true);
 
 			if (this.caller == Callers.AddMarketplace) {
 				bool isRejected = !rejectAgent.WasMismatch && rejectAgent.Trail.HasDecided;
-				bool isApproved = !approveAgent.WasMismatch && (approveAgent.Trail.RoundedAmount > 0);
+				bool isApproved = !approveAgent.WasMismatch && (
+					(
+						(rejectAgent.Output.FlowType == AutoDecisionFlowTypes.LogicalGlue) &&
+						approveAgent.Trail.HasDecided
+					) || (
+						(rejectAgent.Output.FlowType != AutoDecisionFlowTypes.LogicalGlue) &&
+						(approveAgent.Trail.RoundedAmount > 0)
+					)
+				);
 
 				if (!isRejected && isApproved)
 					ExecuteMain();
 				else {
 					Log.Debug(
-						"Not running auto decision for customer {0} using cash request 'o {3}/n {4}': no potential ({1} and {2}).",
+						"Not running auto decision for customer {0} using cash request 'o {3}/n {4}': " +
+						"no potential ({1} and {2}).",
 						this.customerID,
 						isRejected ? "rejected" : "not rejected",
 						isApproved ? "approved" : "not approved",

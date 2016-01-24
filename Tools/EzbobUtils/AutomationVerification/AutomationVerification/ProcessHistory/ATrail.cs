@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 	using System.Text;
 	using System.Web;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -122,7 +121,7 @@
 			if (traceTypes.Length < 1)
 				return result;
 
-			var tt = new SortedSet<Type>();
+			var tt = new SortedSet<Type>(new CompareTypes());
 
 			foreach (Type t in traceTypes)
 				if (t != null)
@@ -771,5 +770,27 @@
 		private string m_sFromEmailAddress;
 		private string m_sFromEmailName;
 		private readonly TimeCounter timer;
+
+		private class CompareTypes : IComparer<Type> {
+			/// <summary>
+			/// Compares two objects and returns a value indicating whether one is less than,
+			/// equal to, or greater than the other.
+			/// </summary>
+			/// <returns>
+			/// A signed integer that indicates the relative values of <paramref name="x"/> and
+			/// <paramref name="y"/>, as shown in the following table.
+			/// Value Meaning
+			/// Less than zero: <paramref name="x"/> is /// less than <paramref name="y"/>.
+			/// Zero: <paramref name="x"/> equals <paramref name="y"/>.
+			/// Greater than zero: <paramref name="x"/> is greater than <paramref name="y"/>.
+			/// </returns>
+			/// <param name="x">The first object to compare.</param><param name="y">The second object to compare.</param>
+			public int Compare(Type x, Type y) {
+				if (y == null)
+					return x == null ? 0 : 1;
+
+				return (x == null) ? -1 : String.Compare(x.FullName, y.FullName, StringComparison.InvariantCulture);
+			} // Compare
+		} // CompareTypes
 	} // class Trail
 } // namespace
