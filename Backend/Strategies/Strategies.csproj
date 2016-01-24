@@ -217,6 +217,7 @@
     <Compile Include="MainStrategy\BackdoorSimpleReject.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleApprove.cs" />
     <Compile Include="MainStrategy\ForceNhibernateResync.cs" />
+    <Compile Include="MainStrategy\GradeRangeSubproduct.cs" />
     <Compile Include="MainStrategy\InternalCashRequestID.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />

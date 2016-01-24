@@ -13,14 +13,24 @@ ALTER PROCEDURE LoadMatchingGradeRanges
 @IsFirstLoan BIT
 AS
 BEGIN
-	SELECT DISTINCT
-		r.GradeRangeID
+	;WITH subtypes AS (
+		SELECT
+			st.ProductSubTypeID
+		FROM
+			I_ProductSubType st
+		WHERE
+			st.OriginID = @OriginID
+			AND
+			st.LoanSourceID = @LoanSourceID
+			AND
+			st.IsRegulated = @IsRegulated
+	) SELECT DISTINCT
+		r.GradeRangeID,
+		st.ProductSubTypeID
 	FROM
 		I_GradeRange r
 		INNER JOIN I_SubGrade s ON r.SubGradeID = s.SubGradeID
-		INNER JOIN I_ProductSubType st
-			ON st.LoanSourceID = r.LoanSourceID
-			AND st.IsRegulated = @IsRegulated
+		INNER JOIN subtypes st ON 1 = 1
 	WHERE
 		r.OriginID = @OriginID
 		AND

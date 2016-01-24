@@ -41,17 +41,17 @@
 		public virtual Bucket? Bucket { get; set; }
 		public virtual decimal? Score { get; set; }
 
-		public virtual List<int> MatchingGradeRanges {
+		public virtual MatchingGradeRanges MatchingGradeRanges {
 			get {
 				if (this.matchingGradeRanges == null)
-					this.matchingGradeRanges = new List<int>();
+					this.matchingGradeRanges = new MatchingGradeRanges();
 
 				return this.matchingGradeRanges;
 			} // get
 
 			set {
 				if (this.matchingGradeRanges == null)
-					this.matchingGradeRanges = new List<int>();
+					this.matchingGradeRanges = new MatchingGradeRanges();
 
 				this.matchingGradeRanges.Clear();
 
@@ -86,7 +86,7 @@
 			MatchingGradeRanges = lgData.MatchingGradeRanges;
 		} // InitData
 
-		private List<int> matchingGradeRanges;
+		private MatchingGradeRanges matchingGradeRanges;
 		private List<string> responseErrors;
 	} // class LGRejectionInputData
 } // namespace

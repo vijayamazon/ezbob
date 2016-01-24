@@ -4,7 +4,9 @@
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Lingvo;
 	using JetBrains.Annotations;
 
 	public abstract class AMainStrategyBase : AStrategy {
@@ -20,26 +22,21 @@
 
 			CompanyID = sp.CompanyID;
 
-			decimal monthlyPayment = Math.Truncate(InjectorStub.GetEngine().GetMonthlyRepayment(CustomerID, now));
-
-			if (monthlyPayment > Int32.MaxValue)
-				MonthlyPayment = Int32.MaxValue;
-			else if (monthlyPayment <= 0)
-				MonthlyPayment = 0;
-			else
-				MonthlyPayment = (int)monthlyPayment;
+			MonthlyRepayment = InjectorStub.GetEngine().GetMonthlyRepaymentData(CustomerID, now);
 
 			Log.Debug(
-				"Customer {0} at {1}: company ID is {2}, monthly repayment is {3}.",
+				"Customer {0} at {1}: company ID is {2}, monthly repayment is {3} (requested {4} for {5}).",
 				CustomerID,
 				now.MomentStr(),
 				CompanyID,
-				MonthlyPayment.ToString("C0")
+				MonthlyRepayment.MonthlyPayment.ToString("C0"),
+				MonthlyRepayment.RequestedAmount.ToString("C0"),
+				Grammar.Number(MonthlyRepayment.RequestedTerm, "month")
 			);
 		} // LoadCompanyAndMonthlyPayment
 
 		protected virtual int CompanyID { get; private set; }
-		protected virtual int MonthlyPayment { get; private set; }
+		protected virtual MonthlyRepaymentData MonthlyRepayment { get; private set; }
 
 		private class GetCustomerCompanyID : AStoredProcedure {
 			public GetCustomerCompanyID(AConnection db, ASafeLog log) : base(db, log) { } // constructor

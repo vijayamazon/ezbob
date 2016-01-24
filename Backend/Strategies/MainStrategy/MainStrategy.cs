@@ -18,6 +18,7 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -530,38 +531,12 @@
 		private void CreateOffer(ICreateOfferInputData offerInputData) {
 			ApprovalTrail approvalTrail = offerInputData.Trail;
 
-			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+			Tuple<OfferResult, int> offer = offerInputData.LogicalGlueFlowFollowed
+				? CreateLogicalOffer()
+				: CreateUnlogicalOffer();
 
-			if (sr.IsEmpty)
-				throw new Exception("Failed to detect default loan source.");
-
-			int loanCount = DB.ExecuteScalar<int>(
-				"GetCustomerLoanCount",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", CustomerID),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
-
-			int loanSourceID = sr["LoanSourceID"];
-			int repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
-
-			OfferResult offerResult;
-
-			if (offerInputData.LogicalGlueFlowFollowed) {
-				offerResult = null; // TODO create offer for Logical Glue
-			} else {
-				var offerDualCalculator = new OfferDualCalculator(
-					CustomerID,
-					DateTime.UtcNow,
-					this.autoDecisionResponse.AutoApproveAmount,
-					loanCount > 0,
-					this.medal.MedalClassification,
-					loanSourceID,
-					repaymentPeriod
-				);
-
-				offerResult = offerDualCalculator.CalculateOffer();
-			} // if
+			OfferResult offerResult = offer.Item1;
+			int loanSourceID = offer.Item2;
 
 			if (offerResult == null || offerResult.IsError) {
 				Log.Alert(
@@ -595,12 +570,17 @@
 				return;
 			} // if
 
-			bool investorFound = true; // TODO look for investor if Open Platform.
+			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddDays(approvalTrail.MyInputData.MetaData.OfferLength);
+
+			var loti = new LinkOfferToInvestor(CustomerID, this.cashRequestID, false, null, UnderwriterID);
+			loti.Execute();
+
+			bool investorFound = !loti.IsForOpenPlatform || loti.FoundInvestor;
 
 			if (!investorFound) {
 				Log.Info("Customer {0} - will use manual because investor was not found.", CustomerID);
 
-				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.PendingInvestor;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Investor not found - " + approvalTrail.UniqueID;
@@ -612,8 +592,6 @@
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Approval";
 
 				this.autoDecisionResponse.DecisionName = "Approval";
-				this.autoDecisionResponse.AppValidFor =
-					DateTime.UtcNow.AddDays(approvalTrail.MyInputData.MetaData.OfferLength);
 				this.autoDecisionResponse.Decision = DecisionActions.Approve;
 				this.autoDecisionResponse.LoanOfferEmailSendingBannedNew =
 					approvalTrail.MyInputData.MetaData.IsEmailSendingBanned;
@@ -622,10 +600,84 @@
 				this.autoDecisionResponse.RepaymentPeriod = offerResult.Period;
 				this.autoDecisionResponse.LoanSourceID = loanSourceID;
 				this.autoDecisionResponse.LoanTypeID = offerResult.LoanTypeId;
-				this.autoDecisionResponse.InterestRate = offerResult.InterestRate / 100;
-				this.autoDecisionResponse.SetupFee = offerResult.SetupFee / 100;
+				this.autoDecisionResponse.InterestRate = offerResult.InterestRate / 100M;
+				this.autoDecisionResponse.SetupFee = offerResult.SetupFee / 100M;
 			} // if
 		} // CreateOffer
+
+		private Tuple<OfferResult, int> CreateLogicalOffer() {
+			this.autoDecisionResponse.ProductSubTypeID = this.autoRejectionOutput.ProductSubTypeID;
+
+			SafeReader sr = DB.GetFirst(
+				"LoadGradeRangeAndSubproduct",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@GradeRangeID", this.autoRejectionOutput.GradeRangeID),
+				new QueryParameter("@ProductSubTypeID", this.autoRejectionOutput.ProductSubTypeID)
+			);
+
+			if (sr.IsEmpty) {
+				Log.Alert(
+					"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
+					this.autoRejectionOutput.GradeRangeID,
+					this.autoRejectionOutput.ProductSubTypeID
+				);
+
+				return new Tuple<OfferResult, int>(null, 0);
+			} // if
+
+			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
+
+			var offerResult = new OfferResult {
+				CustomerId = CustomerID,
+				CalculationTime = DateTime.UtcNow,
+				Amount = grsp.LoanAmount(MonthlyRepayment.RequestedAmount),
+				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+
+				ScenarioName = "Logical Glue",
+				Period = grsp.Term(MonthlyRepayment.RequestedTerm),
+				LoanTypeId = grsp.LoanTypeID,
+				LoanSourceId = grsp.LoanSourceID,
+				InterestRate = grsp.InterestRate * 100M,
+				SetupFee = grsp.SetupFee * 100M,
+				Message = null,
+				IsError = false,
+				IsMismatch = false,
+				HasDecision = true,
+			};
+
+			return new Tuple<OfferResult, int>(offerResult, grsp.LoanSourceID);
+		} // CreateLogicalOffer
+
+		private Tuple<OfferResult, int> CreateUnlogicalOffer() {
+			this.autoDecisionResponse.ProductSubTypeID = null;
+
+			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+
+			if (sr.IsEmpty)
+				throw new Exception("Failed to detect default loan source.");
+
+			int loanCount = DB.ExecuteScalar<int>(
+				"GetCustomerLoanCount",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", CustomerID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			int loanSourceID = sr["LoanSourceID"];
+			int repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
+
+			var offerDualCalculator = new OfferDualCalculator(
+				CustomerID,
+				DateTime.UtcNow,
+				this.autoDecisionResponse.AutoApproveAmount,
+				loanCount > 0,
+				this.medal.MedalClassification,
+				loanSourceID,
+				repaymentPeriod
+			);
+
+			return new Tuple<OfferResult, int>(offerDualCalculator.CalculateOffer(), loanSourceID);
+		} // CreateUnlogicalOffer
 
 		private void ProcessRejections() {
 			if (this.avoidAutomaticDecision) {
@@ -663,7 +715,7 @@
 				new AutoRejectionArguments(
 					CustomerID,
 					CompanyID,
-					MonthlyPayment,
+					MonthlyRepayment.MonthlyPayment,
 					this.cashRequestID,
 					this.nlCashRequestID,
 					this.tag,
@@ -887,7 +939,12 @@
 			Log.Debug("Updating Logical Glue data: customer {0} has a non-regulated company.", CustomerID);
 
 			try {
-				InjectorStub.GetEngine().GetInference(CustomerID, MonthlyPayment, false, GetInferenceMode.DownloadIfOld);
+				InjectorStub.GetEngine().GetInference(
+					CustomerID,
+					MonthlyRepayment.MonthlyPayment,
+					false,
+					GetInferenceMode.DownloadIfOld
+				);
 				Log.Debug("Updated Logical Glue data for customer {0}.", CustomerID);
 			} catch (Exception e) {
 				Log.Warn(e, "Logical Glue data was not updated for customer {0}.", CustomerID);

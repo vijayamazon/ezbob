@@ -7,6 +7,8 @@
 
 	public class AutoDecisionResponse {
 		public AutoDecisionResponse() {
+			ProductSubTypeID = null;
+
 			// Currently (July 2015) it is always false. It was true/false in the past and may be such in the future.
 			IsLoanTypeSelectionAllowed = false;
 
@@ -38,6 +40,7 @@
 			HasApprovalChance = false;
 		} // constructor
 
+		public int? ProductSubTypeID { get; set; }
 		public bool IsLoanTypeSelectionAllowed { get; set; }
 
 		public bool IsAutoBankBasedApproval { get; set; }

@@ -193,6 +193,11 @@
 			set { }
 		} // HasApprovalChance
 
+		public int? ProductSubTypeID {
+			get { return this.autoDecisionResponse.ProductSubTypeID; }
+			set { }
+		} // ProductSubTypeID
+
 		// Stored procedure arguments - end
 
 		private readonly DateTime now;

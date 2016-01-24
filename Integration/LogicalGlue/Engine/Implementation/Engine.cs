@@ -142,16 +142,24 @@
 		} // SetRequestIsTryOut
 
 		public decimal GetMonthlyRepayment(int customerID, DateTime now) {
+			return GetMonthlyRepaymentData(customerID, now).MonthlyRepayment;
+		} // GetMonthlyRepayment
+
+		public MonthlyRepaymentData GetMonthlyRepaymentData(int customerID, DateTime now) {
 			string nowStr = now.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
 
-			Log.Debug("Engine.LoadMonthlyRepayment({0}, {1}) started...", customerID, nowStr);
+			Log.Debug("Engine.GetMonthlyRepaymentData({0}, {1}) started...", customerID, nowStr);
 
 			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now, true);
 
-			Log.Debug("Engine.LoadMonthlyRepayment({0}, {1}) retrieved input package.", customerID, nowStr);
+			Log.Debug("Engine.GetMonthlyRepaymentData({0}, {1}) retrieved input package.", customerID, nowStr);
 
-			return inputPkg.InferenceInput.MonthlyPayment ?? 0;
-		} // GetMonthlyRepayment
+			return new MonthlyRepaymentData {
+				RequestedAmount = inputPkg.InferenceInput.RequestedAmount,
+				RequestedTerm = inputPkg.InferenceInput.RequestedTerm,
+				MonthlyRepayment = inputPkg.InferenceInput.MonthlyPayment ?? 0,
+			};
+		} // GetMonthlyRepaymentData
 
 		public Inference GetInferenceIfExists(
 			int customerID,

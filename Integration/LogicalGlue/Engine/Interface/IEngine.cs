@@ -73,5 +73,13 @@
 		/// Otherwise only inferences with this amount are included.</param>
 		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
 		Inference GetInferenceIfExists(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
+
+		/// <summary>
+		/// Loads monthly repayment for customer at specific time (requested loan / requested term + open loans).
+		/// </summary>
+		/// <param name="customerID">Customer to load data for.</param>
+		/// <param name="now">Current (specific time).</param>
+		/// <returns>Customer monthly repayment.</returns>
+		MonthlyRepaymentData GetMonthlyRepaymentData(int customerID, DateTime now);
 	} // interface IEngine
 } // namespace

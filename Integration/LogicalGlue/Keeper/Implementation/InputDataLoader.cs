@@ -167,6 +167,9 @@
 			// Max interest = amount * interest rate.
 			// TODO: define default fees.
 
+			Result.RequestedAmount = amount;
+			Result.RequestedTerm = term;
+
 			Result.MonthlyPayment = amount / term + amount * maxInterestRate;
 		} // ProcessRequestedLoan
 

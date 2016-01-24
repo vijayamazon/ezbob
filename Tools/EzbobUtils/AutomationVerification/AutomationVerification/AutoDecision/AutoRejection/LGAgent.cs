@@ -116,7 +116,11 @@
 				} // if
 
 				StepNoDecision<OfferConfigurationFound>().Init(1);
-				Output.GradeRangeID = Trail.MyInputData.MatchingGradeRanges.First();
+
+				MatchingGradeRanges.SubproductGradeRange spgr = Trail.MyInputData.MatchingGradeRanges.First();
+
+				Output.GradeRangeID = spgr.GradeRangeID;
+				Output.ProductSubTypeID = spgr.ProductSubTypeID;
 
 				Trail.DecideIfNotDecided();
 			} // using
@@ -198,11 +202,14 @@
 
 			inputData.Score = sr["Score"];
 
-			inputData.MatchingGradeRanges = new List<int>();
+			inputData.MatchingGradeRanges = new MatchingGradeRanges();
 
 			if (inputData.Score != null) {
 				DB.ForEachRowSafe(
-					r => inputData.MatchingGradeRanges.Add(r["GradeRangeID"]),
+					r => inputData.MatchingGradeRanges.Add(new MatchingGradeRanges.SubproductGradeRange {
+						ProductSubTypeID = sr["ProductSubTypeID"],
+						GradeRangeID = r["GradeRangeID"],
+					}),
 					"AV_LoadMatchingGradeRanges",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", this.args.CustomerID),

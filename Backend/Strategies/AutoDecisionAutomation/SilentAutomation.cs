@@ -117,7 +117,7 @@
 				new AutoRejectionArguments(
 					this.customerID,
 					CompanyID,
-					MonthlyPayment,
+					MonthlyRepayment.MonthlyPayment,
 					this.cashRequestID,
 					this.nlCashRequestID,
 					Tag,

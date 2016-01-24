@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue {
 	using System;
-	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoRejection;
@@ -197,6 +196,8 @@
 				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
 				inputData.Score = inference.Score;
 
+				inputData.MatchingGradeRanges = new MatchingGradeRanges();
+
 				if (inputData.Score.HasValue && inputData.CustomerOrigin.HasValue && inputData.LoanSource.HasValue) {
 					var spRanges = new LoadMatchingGradeRanges(DB, Log) {
 						IsFirstLoan = inputData.LoanCount < 1,
@@ -205,11 +206,8 @@
 						OriginID = (int)inputData.CustomerOrigin.Value,
 						Score = inputData.Score.Value,
 					};
-					spRanges.Execute();
-
-					inputData.MatchingGradeRanges = spRanges.Ranges;
-				} else
-					inputData.MatchingGradeRanges = null;
+					spRanges.Execute(inputData.MatchingGradeRanges);
+				} // if
 			} // if
 		} // GatherData
 
@@ -247,7 +245,7 @@
 				Trail.Negative<OfferConfigurationFound>(true).Init(Trail.MyInputData.MatchingGradeRanges.Count);
 
 				Log.Alert(
-					"Too many configurations found for a {0} customer {1}, " +
+					"Too many grade range + product subtype pairs found for a {0} customer {1}, " +
 					"score {2}, origin {3}, company is {4}regulated, loan source {5}.",
 					Trail.MyInputData.LoanCount > 0 ? "returning" : "new",
 					this.args.CustomerID,
@@ -258,7 +256,11 @@
 				);
 			} else {
 				Trail.Dunno<OfferConfigurationFound>().Init(1);
-				Output.GradeRangeID = Trail.MyInputData.MatchingGradeRanges[0];
+
+				MatchingGradeRanges.SubproductGradeRange spgr = Trail.MyInputData.MatchingGradeRanges[0];
+
+				Output.GradeRangeID = spgr.GradeRangeID;
+				Output.ProductSubTypeID = spgr.ProductSubTypeID;
 			} // if
 
 			Trail.DecideIfNotDecided();
@@ -376,7 +378,6 @@
 
 		private class LoadMatchingGradeRanges : AStoredProcedure {
 			public LoadMatchingGradeRanges(AConnection db, ASafeLog log) : base(db, log) {
-				Ranges = new List<int>();
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -398,11 +399,13 @@
 			[UsedImplicitly]
 			public bool IsFirstLoan { get; set; }
 
-			public List<int> Ranges { get; private set; }
+			public void Execute(MatchingGradeRanges target) {
+				target.Clear();
 
-			public void Execute() {
-				Ranges.Clear();
-				ForEachRowSafe(sr => Ranges.Add(sr["GradeRangeID"]));
+				ForEachRowSafe(sr => target.Add(new MatchingGradeRanges.SubproductGradeRange {
+					ProductSubTypeID = sr["ProductSubTypeID"],
+					GradeRangeID = sr["GradeRangeID"],
+				}));
 			} // Execute
 		} // class LoadMatchingGradeRanges
 

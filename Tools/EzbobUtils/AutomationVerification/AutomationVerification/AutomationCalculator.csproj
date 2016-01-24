@@ -58,6 +58,7 @@
     <Compile Include="AutoDecision\AutoRejection\LGAgent.cs" />
     <Compile Include="AutoDecision\AutoRejection\Models\AutoRejectionInputDataModelDb.cs" />
     <Compile Include="AutoDecision\AutoRejection\Models\LGRejectionInputData.cs" />
+    <Compile Include="AutoDecision\AutoRejection\Models\MatchingGradeRanges.cs" />
     <Compile Include="AutoDecision\AutoRejection\Models\RejectionConfigs.cs" />
     <Compile Include="Common\AutoDecisionFlowTypes.cs" />
     <Compile Include="Common\AutoRejectionOutput.cs" />

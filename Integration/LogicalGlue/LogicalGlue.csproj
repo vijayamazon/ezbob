@@ -56,6 +56,7 @@
     <Compile Include="Engine\Interface\InferenceError.cs" />
     <Compile Include="Engine\Interface\InferenceExt.cs" />
     <Compile Include="Engine\Interface\InferenceStatus.cs" />
+    <Compile Include="Engine\Interface\MonthlyRepaymentData.cs" />
     <Compile Include="Exceptions\Engine\EngineAlert.cs" />
     <Compile Include="Exceptions\Engine\EngineWarning.cs" />
     <Compile Include="Exceptions\Engine\FailedToLoadInputDataAlert.cs" />
