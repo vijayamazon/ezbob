@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Runtime.CompilerServices;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -628,6 +629,9 @@
 			foreach (LoanEvent e in this.events.Where(e => e.ScheduleItem != null).OrderBy(e => e.EventTime)) {
 
 				e.ScheduleItem.FeesAssigned = 0;
+				e.ScheduleItem.FeesPaid = 0;
+				e.ScheduleItem.PrincipalPaid = 0;
+				e.ScheduleItem.InterestPaid = 0;
 
 				// 1. f - distributed fees planned for this schedule date (assigned-paid)
 				var dFee = this.distributedFeesList.FirstOrDefault(f => f.AssignTime.Date.Equals(e.ScheduleItem.PlannedDate.Date));
@@ -640,15 +644,15 @@
 
 					e.ScheduleItem.Fees = dFee.Amount - dFee.PaidAmount;
 
-					e.ScheduleItem.FeesPaid = dFee.PaidAmount;
+					e.ScheduleItem.FeesPaid += dFee.PaidAmount;
 				}
 
 				foreach (NL_Payments p in WorkingModel.Loan.Payments.Where(p => p.PaymentStatusID == (int)NLPaymentStatuses.Active)) {
 					// paid for item principal
-					e.ScheduleItem.PrincipalPaid = p.SchedulePayments.Where(sp => sp.LoanScheduleID == e.ScheduleItem.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
+					e.ScheduleItem.PrincipalPaid += p.SchedulePayments.Where(sp => sp.LoanScheduleID == e.ScheduleItem.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
 
 					// paid for item interest
-					e.ScheduleItem.InterestPaid = p.SchedulePayments.Where(sp => sp.LoanScheduleID == e.ScheduleItem.LoanScheduleID).Sum(sp => sp.InterestPaid); // poschitat' Interest ??? na kakom balance?
+					e.ScheduleItem.InterestPaid += p.SchedulePayments.Where(sp => sp.LoanScheduleID == e.ScheduleItem.LoanScheduleID).Sum(sp => sp.InterestPaid); // poschitat' Interest ??? na kakom balance?
 				}
 
 				//	2. i - schedule interest - schedule paid interest	
@@ -916,7 +920,7 @@
 				earnedInterestForCalculationDate = currentEarnedInterest;
 
 				// distributed fees not paid in time
-				decimal tDistributedFees = this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date).Sum(f => f.Amount);
+				decimal tDistributedFees = this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date && f.DisabledTime == null && f.DeletedByUserID == null).Sum(f => f.Amount);
 
 				Fees = totalLateFees + tDistributedFees - currentPaidFees;	// outstanding fees
 				Interest = currentEarnedInterest - currentPaidInterest;		// outstanding interest 
@@ -1005,10 +1009,11 @@
 			WorkingModel.NextEarlyPaymentSavedAmount = NextEarlyPaymentSavedAmount;
 
 			bool loanPaid = false;
-			this.schedule.ForEach(s => loanPaid = ((s.Principal - s.PrincipalPaid) == 0 && (s.Interest - s.InterestPaid) == 0 && s.Fees == 0));
+			this.schedule.ForEach(s => loanPaid = ((s.Principal - s.PrincipalPaid) == 0 && (s.Interest - s.InterestPaid) == 0 && (s.FeesAssigned - s.FeesPaid) == 0));
 
 			// All previous installments are paid? i.e. check late
 			if (HasLatesTillCalculationDate()) {
+				loanPaid = false;
 				return;
 			}
 
@@ -1050,9 +1055,9 @@
 			if (this.schedule == null)
 				throw new NoScheduleException();
 
-			return WorkingModel.Loan.LastHistory().Schedule.FirstOrDefault(s => s.PlannedDate.Date <= CalculationDate.Date && s.LoanScheduleStatusID == (int)NLScheduleStatuses.Late) == null;
+			return this.schedule.FirstOrDefault(s => s.PlannedDate.Date <= CalculationDate.Date && s.LoanScheduleStatusID == (int)NLScheduleStatuses.Late) != null;
 		}
-		
+
 		/// <summary>
 		/// Returns true if CalculationDate set to one of schedule items PlannedDate. Overwise false.
 		/// </summary>
@@ -1065,7 +1070,7 @@
 
 			return this.schedule.FirstOrDefault(s => CalculationDate.Date == s.PlannedDate.Date) == null;
 		}
-		
+
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder().Append("Calculator data:").Append(Environment.NewLine);
 			var props = AStringable.FilterPrintable(typeof(ALoanCalculator));
