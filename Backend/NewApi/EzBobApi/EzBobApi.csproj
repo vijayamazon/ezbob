@@ -78,8 +78,10 @@
     <Compile Include="Commands\Experian\ExperianBusinessTargetingCommand.cs" />
     <Compile Include="Commands\Experian\ExperianBusinessTargetingCommandResponse.cs" />
     <Compile Include="Commands\Experian\ExperianCompanyInfo.cs" />
+    <Compile Include="Commands\Hmrc\HmrcProcessUploadedFilesCommand.cs" />
+    <Compile Include="Commands\Hmrc\HmrcProcessUploadedFilesCommandResponse.cs" />
     <Compile Include="Commands\Hmrc\HmrcRegisterCustomerCommand.cs" />
-    <Compile Include="Commands\Hmrc\HtmrRegisterCustomerCommandResponse.cs" />
+    <Compile Include="Commands\Hmrc\HmrcRegisterCustomerCommandResponse.cs" />
     <Compile Include="Commands\PayPal\PayPalGetPermissionsRedirectUrlCommand.cs" />
     <Compile Include="Commands\PayPal\PayPalGetPermissionsRedirectUrlCommandResponse.cs" />
     <Compile Include="Commands\PayPal\PayPalRegisterCustomerCommand.cs" />

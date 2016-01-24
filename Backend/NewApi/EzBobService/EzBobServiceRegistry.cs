@@ -19,6 +19,7 @@
     using EzBobService.Misc;
     using EzBobService.Mobile;
     using EzBobService.Properties;
+    using EzBobService.ThirdParties.Hmrc.Upload;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
 
@@ -46,6 +47,9 @@
 
             For<IHmrcQueries>()
                 .Use<HmrcQueries>();
+
+            For<IHmrcUploadedFileParser>()
+                .Use<IHmrcUploadedFileParser>();
 
             ForSingletonOf<MobilePhone>()
                 .Use<MobilePhone>();

@@ -2,6 +2,7 @@ namespace EzBobCommon.Web {
     using System;
     using System.IO;
     using System.Net.Http;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
 
@@ -89,6 +90,23 @@ namespace EzBobCommon.Web {
             } 
             finally
             {
+                CallDispose(client);
+            }
+        }
+
+        /// <summary>
+        /// Gets json response and converts it to specified T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        public async Task<T> GetAsyncJsonResponseAs<T>(string url) where T : class, new() {
+            HttpClient client = null;
+            try {
+                client = GetHttpClient();
+                var stream = await client.GetStreamAsync(url);
+                return CreateResponse<T>(stream);
+            } finally {
                 CallDispose(client);
             }
         }

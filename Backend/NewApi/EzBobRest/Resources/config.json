@@ -3,5 +3,8 @@
         "ServerAddress": "http://localhost:12345",
         "ServiceAddress": "EzBobService2",
         "SendRecieveTaskTimeoutMilis": 300000 //5 min
+    },
+    "Hmrc": { 
+        "SharedFolder" :  "C:\\Users\\Roman\\Downloads\\SharedFolder"
     }
 } 

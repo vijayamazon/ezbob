@@ -1,5 +1,4 @@
 namespace EzBobCommon.Web {
-    using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -35,5 +34,12 @@ namespace EzBobCommon.Web {
         /// <returns></returns>
         Task<T> PostAsyncAndGetJsonReponseAs<T>(string url, HttpContent httpContent) where T : new();
 
+        /// <summary>
+        /// Gets json response and converts it to specified T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        Task<T> GetAsyncJsonResponseAs<T>(string url) where T : class, new();
     }
 }

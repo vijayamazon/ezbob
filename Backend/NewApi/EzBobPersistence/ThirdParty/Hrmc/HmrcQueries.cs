@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using EzBobCommon;
+    using EzBobCommon.Utils;
     using EzBobModels.Hmrc;
 
     /// <summary>
@@ -30,9 +31,13 @@
                         return false;
                     }
 
-                    res = SaveRtiTaxMonthsEntries(rtiMonthEntries, connection.SqlConnection(), marketPlaceId, marketPlaceHistoryId);
-                    if (!res) {
-                        return false;
+                    if (CollectionUtils.IsNotEmpty(rtiMonthEntries)) {
+                        res = SaveRtiTaxMonthsEntries(rtiMonthEntries, connection.SqlConnection(), marketPlaceId, marketPlaceHistoryId);
+                        if (!res) {
+                            return false;
+                        }
+                    } else {
+                        Log.Warn("no month entries");
                     }
                 }
 

@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -121,6 +122,7 @@
     <Compile Include="Customer\Requests\SignupRequest.cs" />
     <Compile Include="Infra\DefaultServer.cs" />
     <Compile Include="Infra\EzBobService.cs" />
+    <Compile Include="Infra\FirstHandler.cs" />
     <Compile Include="Infra\TestsInterceptionPolicy.cs" />
     <Compile Include="Infra\IEzScenarioContext.cs" />
     <Compile Include="Infra\RestClient.cs" />

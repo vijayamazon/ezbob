@@ -26,10 +26,8 @@
         [Injected]
         public ILog Log { get; set; }
 
-
-        //called ones after instance is create
-        //TODO: should be converted to IInstancePolicy when we will upgrade to SructureMap 4
-        internal void InitAfterInject() {
+        [PostInject]
+        private void Init() {
             Browser.SetBaseAddress(Config.RestUrl);
         }
 

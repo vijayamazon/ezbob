@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EzBobCommon {
+    using System;
     using System.Collections;
-    using System.Reflection;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
 
     /// <summary>
-    /// Designates optionality.
-    /// Implements IEnumerable to support Linq.
-    /// Implements implicit casting to Optional.
-    /// Implements explicit casting to T
+    /// Designates optionality.<br/>
+    /// Implements IEnumerable to support Linq.<br/>
+    /// Implements implicit casting to Optional.<br/>
+    /// Implements explicit casting to T.<br/>
+    /// Look also on <see cref="IfNotEmpty"/> and <see cref="IfEmpty"/>.<br/>
+    /// There is an extension method <code>AsOptional()</code> to convert anything to optional
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [JsonConverter(typeof(OptionalJsonSerializer))]
@@ -93,6 +91,32 @@ namespace EzBobCommon {
             if (this.hasValue) {
                 yield return this.item;
             }
+        }
+
+        /// <summary>
+        /// If not empty calls specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        public Optional<T> IfNotEmpty(Action<T> action) {
+            if (this.hasValue) {
+                action(this.item);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// If empty calls specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        public Optional<T> IfEmpty(Action action) {
+            if (!this.hasValue) {
+                action();
+            }
+
+            return this;
         }
 
         /// <summary>

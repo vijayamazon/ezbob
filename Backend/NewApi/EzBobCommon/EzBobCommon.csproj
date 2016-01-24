@@ -97,6 +97,9 @@
     <Compile Include="InfoAccumulator.cs" />
     <Compile Include="InfoAccumulatorSerializer.cs" />
     <Compile Include="Injected.cs" />
+    <Compile Include="Injection\EzRegistryBase.cs" />
+    <Compile Include="Injection\PostInjectInterceptor.cs" />
+    <Compile Include="Injection\PostInjectInterceptorPolicy.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="NSB\CommandBase.cs" />
     <Compile Include="NSB\CommandResponseBase.cs" />
@@ -112,6 +115,7 @@
     <Compile Include="NSB\SendRecieveHandler.cs" />
     <Compile Include="Optional.cs" />
     <Compile Include="OptionalJsonSerializer.cs" />
+    <Compile Include="PostInject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultInfoAccomulator.cs" />
     <Compile Include="Utils\CollectionUtils.cs" />

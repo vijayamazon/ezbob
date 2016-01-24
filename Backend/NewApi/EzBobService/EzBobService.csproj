@@ -47,6 +47,10 @@
       <HintPath>..\packages\FluentValidation.5.6.2.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.8\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -136,7 +140,10 @@
     <Compile Include="ThirdParties\Ebay\EbayGetLoginUrlHandler.cs" />
     <Compile Include="ThirdParties\Ebay\EbayRegisterUserCommandHandler.cs" />
     <Compile Include="ThirdParties\Experian\ExperianBusinessTargetingHandler.cs" />
+    <Compile Include="ThirdParties\Hmrc\HmrcProcessUploadedFilesHandler.cs" />
     <Compile Include="ThirdParties\Hmrc\HmrcRegisterCustomerHandler.cs" />
+    <Compile Include="ThirdParties\Hmrc\Upload\HmrcUploadedFileParser.cs" />
+    <Compile Include="ThirdParties\Hmrc\Upload\IHmrcUploadedFileParser.cs" />
     <Compile Include="ThirdParties\PayPal\PayPalConfig.cs" />
     <Compile Include="ThirdParties\PayPal\PayPalRegisterCustomerCommandHandler.cs" />
     <Compile Include="ThirdParties\PayPal\SendRecieve\PayPalGetAccessTokenSendRecieve.cs" />
@@ -206,7 +213,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Resources\config.json" />
+    <EmbeddedResource Include="Resources\config.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

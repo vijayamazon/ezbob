@@ -4,7 +4,6 @@ namespace EzBobRest.Modules {
     using System;
     using Common.Logging;
     using EzBobCommon;
-    using EzBobCommon.NSB;
     using EzBobRest.ResponseHelpers;
     using FluentValidation;
     using FluentValidation.Results;
@@ -35,7 +34,7 @@ namespace EzBobRest.Modules {
         /// <param name="command">The command.</param>
         /// <param name="validator">The validator.</param>
         /// <returns></returns>
-        protected InfoAccumulator Validate<T>(T command, AbstractValidator<T> validator) where T : CommandBase {
+        protected InfoAccumulator Validate<T>(T command, AbstractValidator<T> validator) where T : class {
             var validationResult = validator.Validate(command);
             if (validationResult.IsValid) {
                 return new InfoAccumulator();

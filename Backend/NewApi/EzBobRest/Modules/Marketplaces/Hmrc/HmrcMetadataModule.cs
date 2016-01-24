@@ -11,6 +11,7 @@
         public HmrcMetadataModule() {
             string tag = "03. Marketplace API"; //swagger groups descriptions by tags
             DescribeHrmcRegistration(tag);
+            DescribePdfUpload(tag);
         }
 
         private void DescribeHrmcRegistration(string tag) {
@@ -30,6 +31,21 @@
                     UserName = string.Empty,
                     Password = string.Empty
                 }.GetType(), "body"));
+        }
+
+        private void DescribePdfUpload(string tag) {
+            string implementationNotes = "Upload HMRC pdf files";
+
+            Describe["UploadHmrcPdf"] = desc => new SwaggerRouteMetadata(desc)
+                .With(i => i.WithDescription(implementationNotes, tags: tag))
+                .With(i => i.WithResponseModel(HttpStatusCode.BadRequest, new {
+                    CustomerId = string.Empty,
+                    Errors = new string[] {}
+                }.GetType(), "Invalid request format"))
+                .With(i => i.WithResponseModel(HttpStatusCode.OK, new {
+                    CustomerId = string.Empty
+                }.GetType(), "some description"))
+                .With(i => i.WithRequestParameter("customerId", "customer id given at sign-up"));
         }
     }
 }

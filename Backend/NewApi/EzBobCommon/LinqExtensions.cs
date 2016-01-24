@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EzBobCommon {
+    using System.Runtime.Caching;
+
     public static class LinqExtensions {
         /// <summary>
         /// Divides enumerable into batches of same size.
@@ -44,14 +46,16 @@ namespace EzBobCommon {
         /// <typeparam name="T"></typeparam>
         /// <param name="enumeration">The enumeration.</param>
         /// <param name="action">The action.</param>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
-        {
-            foreach (T item in enumeration)
-            {
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumeration, Action<T> action) {
+            foreach (T item in enumeration) {
                 action(item);
             }
 
             return enumeration;
+        }
+
+        public static Optional<T> AsOptional<T>(this T item) {
+            return item;
         }
     }
 }

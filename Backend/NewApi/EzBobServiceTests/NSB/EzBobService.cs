@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobServiceTests.NSB {
-    using EzBobApi.Commands;
-    using EzBobApi.Commands.Customer.Sections;
+﻿namespace EzBobServiceTests.NSB {
+    using EzBobApi.Commands.Customer;
     using global::EzBobService;
-    using global::NServiceBus.AcceptanceTesting;
+    using NServiceBus.AcceptanceTesting;
 
+    /// <summary>
+    /// using <see cref="DefaultServer"/> to setup EzBobService endpoint
+    /// </summary>
     public class EzBobService : EndpointConfigurationBuilder {
         public EzBobService() {
             EndpointSetup<DefaultServer<EzBobServiceRegistry>>()
-                .CustomEndpointName("EzBobService2");
-
-//                .AddMapping<CustomerInfo>(typeof(EzBobService));
+                .CustomEndpointName("EzBobService2")
+                .IncludeType<CustomerSignupCommand>();
         }
     }
 }

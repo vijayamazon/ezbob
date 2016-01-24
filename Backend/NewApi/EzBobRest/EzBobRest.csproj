@@ -183,10 +183,14 @@
     <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayRegisterCustomerSendRecieve.cs" />
     <Compile Include="Modules\Marketplaces\Ebay\Validators\EbayGetRedirectUrlValidator.cs" />
     <Compile Include="Modules\Marketplaces\Ebay\Validators\EbayRegisterCustomerValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\HmrcConfig.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\HmrcMetadataModule.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\HmrcModule.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcProcessUploadedFilesSendRecieve.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcRegisterCustomerCommandSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\PdfUploadModel.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\Validators\HmrcCustomerRegistrationValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\Validators\HmrcUploadPdfValidator.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalGetRedirectionUrlSendRecieve.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalRegisterCustomerSendRecieve.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\PayPalMetadataModule.cs" />
@@ -239,7 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
-    <None Include="Resources\config.json" />
+    <EmbeddedResource Include="Resources\config.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
