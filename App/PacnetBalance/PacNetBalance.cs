@@ -27,27 +27,48 @@ namespace PacnetBalance
 		/// <param name="debits">Debits</param>
 		/// <param name="fasterPayment">FasterPayment</param>
 		/// <param name="fees">Fees</param>
-		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees)
+		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<PacNetBalanceRow> rows)
 		{
-			decimal currenBalance = openingBalance + credits;
-
-			if (credits > 0)
-				AddRowToList(currenBalance, date, fees, credits, true);
-
-			foreach (decimal payment in fasterPayment)
-			{
-				currenBalance = currenBalance - (payment + fees);
-				AddRowToList(currenBalance, date, fees, payment);
+			decimal currenBalance = openingBalance;
+			
+			foreach (var row in rows) {
+				currenBalance = currenBalance - (row.Amount + row.Fees);
+				AddRowToList(currenBalance, date, row.Fees, row.Amount, row.IsCredit);
 			} // foreach
 
-			VerifyCalculatedValues(openingBalance, closingBalance, credits, debits, fasterPayment, fees);
+			VerifyCalculatedValues(openingBalance, closingBalance, credits, debits, pacNetBalanceList);
 		} // PopulateList
 
-		private static void VerifyCalculatedValues(decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees)
+		private static void VerifyCalculatedValues(decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<PacNetBalanceRow> rows)
 		{
-			decimal sumOfFasterPayment = fasterPayment.Sum();
-			decimal calculatedBalance = openingBalance + credits - sumOfFasterPayment - fees * fasterPayment.Count;
 			var sb = new System.Text.StringBuilder();
+
+			decimal calculatedDebits = rows.Where(x => x.IsCredit == false)
+				.Sum(x => x.Amount + x.Fees);
+			decimal calculatedCredits = rows.Where(x => x.IsCredit == true)
+				.Sum(x => x.Amount + x.Fees);
+
+
+			if (calculatedDebits == debits) {
+				Logger.Info("Debits is equal to calculated debits and is:{0}", debits);
+			} else {
+				Logger.Error("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits, calculatedDebits);
+				sb.AppendLine(string.Format("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits,
+										 calculatedDebits));
+			}
+
+			if (calculatedCredits == credits) {
+				Logger.Info("Credits is equal to calculated credits and is:{0}", credits);
+			} else {
+				Logger.Error("Credits is not equal to calculated credits. Credits:{0} CalculatedCredits:{1}", credits, calculatedCredits);
+				sb.AppendLine(string.Format("Credits is not equal to calculated credits. Credits:{0} CalculatedCredits:{1}", credits,
+										 calculatedCredits));
+			}
+
+			decimal calculatedBalance = openingBalance 
+				+ rows.Where(x => x.IsCredit == true).Sum(x => x.Amount + x.Fees) 
+				- rows.Where(x => x.IsCredit == false).Sum(x => x.Amount + x.Fees);
+			
 			if (calculatedBalance == closingBalance)
 			{
 				Logger.Info("Closing balance is equal to calculated balance and is:{0}", closingBalance);
@@ -58,19 +79,6 @@ namespace PacnetBalance
 							 closingBalance, calculatedBalance);
 				sb.AppendLine(string.Format("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
 							 closingBalance, calculatedBalance));
-			}
-
-			decimal calculatedDebits = sumOfFasterPayment + fees * fasterPayment.Count;
-
-			if (calculatedDebits == debits)
-			{
-				Logger.Info("Debits is equal to calculated debits and is:{0}", debits);
-			}
-			else
-			{
-				Logger.Error("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits, calculatedDebits);
-				sb.AppendLine(string.Format("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits,
-										 calculatedDebits));
 			}
 
 			if (sb.Length > 0)
@@ -85,8 +93,8 @@ namespace PacnetBalance
 			{
 				CurrentBalance = currenBalance,
 				Date = date,
-				Fees = fees,
-				Amount = amount,
+				Fees = Math.Abs(fees),
+				Amount = Math.Abs(amount),
 				IsCredit = isCredit
 			});
 		} // AddRowToList

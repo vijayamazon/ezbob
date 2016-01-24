@@ -12,9 +12,7 @@ namespace PacnetBalance {
 		private static decimal credits;
 		private static decimal debits;
 		private static DateTime date;
-
-		static List<decimal> fasterPayment = new List<decimal>();
-		static List<decimal> fee = new List<decimal>();
+		static List<PacNetBalanceRow> pacNetBalanceRows = new List<PacNetBalanceRow>();
 
 		static ParsePacNetText() {
 			Logger = new SafeLog();
@@ -27,8 +25,7 @@ namespace PacnetBalance {
 		/// </summary>
 		/// <param name="data">pdf data stream</param>
 		public static void ParsePdf(byte[] data) {
-			fasterPayment = new List<decimal>();
-			fee = new List<decimal>();
+			pacNetBalanceRows = new List<PacNetBalanceRow>();
 			var reader = new PdfReader(data);
 
 			for (int page = 1; page <= reader.NumberOfPages; page++) {
@@ -41,9 +38,8 @@ namespace PacnetBalance {
 
 			reader.Close();
 
-			Logger.Info("PaymentSum: {0}", fasterPayment.Sum() + fee.Sum());
 
-			PacNetBalance.PopulateList(date, openingBalance, closingBalance, credits, debits, fasterPayment, GetFee());
+			PacNetBalance.PopulateList(date, openingBalance, closingBalance, credits, debits, pacNetBalanceRows);
 		} // ParsePdf
 
 		/// <summary>
@@ -120,7 +116,12 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing FasterPayment: {0}", text)); 
 				} // if
 
-				fasterPayment.Add(value);
+				pacNetBalanceRows.Add(new PacNetBalanceRow {
+					Amount = value,
+					Date = date,
+					IsCredit = value < 0
+				});
+				
 				Logger.Info("FasterPayment: {0}", value);
 				return;
 			} // if
@@ -134,7 +135,11 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing Fee: {0}", text)); 
 				} // if
 
-				fee.Add(value);
+				pacNetBalanceRows.Add(new PacNetBalanceRow {
+					Fees = value,
+					Date = date,
+					IsCredit = value < 0
+				});
 				Logger.Info("Fee: {0}", value);
 			} // if
 
@@ -147,7 +152,28 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing Commission: {0}", text));
 				} // if
 
-				fee.Add(value);
+				pacNetBalanceRows.Add(new PacNetBalanceRow {
+					Fees = value,
+					Date = date,
+					IsCredit = value < 0
+				});
+				Logger.Info("Fee: {0}", value);
+			} // if
+
+			if (line.Contains("Wire in") || line.Contains("Transfer in")) {
+				string text = GetValue(line.Split(' '), "GBP");
+				decimal value;
+
+				if (!decimal.TryParse(text, out value)) {
+					Logger.Error("Error parsing Wire in: {0}", text);
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing Wire in: {0}", text));
+				} // if
+
+				pacNetBalanceRows.Add(new PacNetBalanceRow {
+					Amount = value,
+					Date = date,
+					IsCredit = value > 0
+				});
 				Logger.Info("Fee: {0}", value);
 			} // if
 		} // HandleLine
@@ -160,21 +186,11 @@ namespace PacnetBalance {
 		/// <returns></returns>
 		private static string GetValue(string[] strList, string name) {
 			for (int i = 0; i < strList.Length; ++i)
-				if (strList[i] == name)
+				if (strList[i].EndsWith(name))
 					return strList[i + 1].Replace(",", "");
 
 			return string.Empty;
 		} // GetValue
 
-		/// <summary>
-		/// Returns calculated fee per transaction
-		/// </summary>
-		/// <returns> Fee per transfer </returns>
-		private static decimal GetFee() {
-			decimal feeSum = fee.Sum();
-			decimal feePerTransfer = feeSum / fasterPayment.Count;
-			Logger.Info("FeeSum: {0} Fee for each transfer: {1}", feeSum, feePerTransfer);
-			return feePerTransfer;
-		} // GetFee
 	} // class ParsePacNetText
 } // namespace

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reconciliation", "Reconciliation.csproj", "{6BD00C8A-71E0-477D-BAAD-5310E1563D84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationBase", "..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj", "{E31F233F-09AA-47C8-A2E0-8E33A87F868D}"
@@ -18,6 +20,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacnetBalance", "..\PacnetBalance\PacnetBalance.csproj", "{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPointBalance", "..\PayPointBalance\PayPointBalance.csproj", "{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barrymore", "..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj", "{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigManager", "..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj", "{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniResharper", "..\..\Tools\EzbobUtils\MiniResharper\MiniResharper.csproj", "{805F29C1-D575-49C5-A95D-4D393E65481F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConstants", "..\..\Integration\DbConstants\DbConstants.csproj", "{0527009D-A650-4505-9385-49FACA6991CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +71,22 @@ Global
 		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0527009D-A650-4505-9385-49FACA6991CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0527009D-A650-4505-9385-49FACA6991CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0527009D-A650-4505-9385-49FACA6991CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0527009D-A650-4505-9385-49FACA6991CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,7 @@
 ﻿namespace PacnetBalance
 {
 	using System;
+	using Ezbob.Logger;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -25,8 +26,9 @@
 
 		[Test]
 		public void TestParsing() {
-			string path = @"c:\ezbob\test-data\pacnet\pacnet20150825.pdf";
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20150908.pdf";
 			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText.Logger = new ConsoleLog();
 			ParsePacNetText.ParsePdf(data);
 			PacNetBalance.SavePacNetBalanceToDb();
 		}
