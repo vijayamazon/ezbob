@@ -474,8 +474,8 @@
 		public void GetLoanStateTest() {
 			DateTime calcTime = DateTime.UtcNow;
 			/*const long loanID = 21; const int customerID = 351;*/
-			const long loanID = 20023;
-			const int customerID = 362;
+			const long loanID = 4;
+			const int customerID = 1394;
 			GetLoanState state = new GetLoanState(customerID, loanID, calcTime, 357);
 			try {
 				state.Execute();
@@ -708,8 +708,8 @@
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		[Test]
 		public void UpdateLoanDBStateTest() {
-			const long loanID = 15;
-			const int customerID = 390;
+			const long loanID = 4;
+			const int customerID = 1394;
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(customerID, loanID, 357);
 			reloadLoanDBState.Context.UserID = 357;
 			try {

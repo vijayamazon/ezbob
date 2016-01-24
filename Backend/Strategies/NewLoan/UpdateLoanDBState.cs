@@ -8,6 +8,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
+	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using NHibernate.Linq;
 
@@ -105,11 +106,11 @@
 			// no changes, exit
 			var stateAfter = JObject.FromObject(RecalculatedModel.Loan);
 			if (JToken.DeepEquals(stateBefore, stateAfter)) {
-				NL_AddLog(LogType.Info, "End - no diff btwn DB state and recalculated state", this.strategyArgs, RecalculatedModel, Error, null);
+				NL_AddLog(LogType.Info, "End - no diff btwn DB state and recalculated state", stateBefore, stateAfter, Error, null);
 				return;
 			}
 
-			NL_AddLog(LogType.Info, "recalculated loan state", this.strategyArgs, RecalculatedModel, Error, null);
+			NL_AddLog(LogType.Info, "recalculated loan state", stateBefore, stateAfter, Error, null);
 
 			List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
 			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
@@ -132,7 +133,7 @@
 				RecalculatedModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
 
 				// save new schedules - on rescheduling/rollover
-				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, 
+				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedules.Where(s => s.LoanScheduleID == 0)));
 
 				// update schedules - closed time and statuses
@@ -142,9 +143,9 @@
 							new QueryParameter("LoanScheduleStatusID", s.LoanScheduleStatusID),
 							new QueryParameter("ClosedTime", s.ClosedTime));
 				}
-				
+
 				// disable fees
-				foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID!=null && f.DisabledTime!=null)) {
+				foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeeDisable", CommandSpecies.StoredProcedure,
 							new QueryParameter("LoanFeeID", f.LoanFeeID),
 							new QueryParameter("DeletedByUserID", f.DeletedByUserID),
@@ -153,9 +154,9 @@
 				}
 
 				// insert fees
-				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, 
+				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<NL_LoanFees>("Tbl", RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID == 0)));
-				
+
 				// assign payment to loan
 				foreach (NL_Payments p in RecalculatedModel.Loan.Payments) {
 
@@ -179,7 +180,7 @@
 							new QueryParameter("Amount", fp.Amount))
 						);
 				}
-			
+
 				// save new schedule payment
 				if (schedulePayments.Count > 0) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanSchedulePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedulePayments>("Tbl", schedulePayments));
@@ -189,9 +190,9 @@
 				if (feePayments.Count > 0) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));
 				}
-
-				// update loan status
-				if (RecalculatedModel.Loan.LoanStatusID != state.Result.Loan.LoanStatusID) {
+	
+				// update loan status				
+				if (stateBefore["LoanStatusID"] != stateAfter["LoanStatusID"]) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanUpdate", CommandSpecies.StoredProcedure,
 						new QueryParameter("LoanID", RecalculatedModel.Loan.LoanID),
 						new QueryParameter("LoanStatusID", RecalculatedModel.Loan.LoanStatusID),
@@ -201,7 +202,7 @@
 
 				pconn.Commit();
 
-                NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, RecalculatedModel, Error, null);
+				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, RecalculatedModel, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
