@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web;
+	using Ezbob.Logger;
 	// using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -30,7 +31,7 @@
 				log.Add(string.Format("Cached user is {0}", user == null ? "-- null --" : user.Id.ToString()));
 
 				if (user != null) {
-					FlushLog(log);
+					// FlushLog(log);
 					return user;
 				} // if
 
@@ -43,32 +44,30 @@
 				if (originHolder == null) {
 					const string uwArea = "/underwriter/";
 
-					string path = HttpContext.Current.Request.Url.AbsolutePath;
+					if (UrlStartsWith(HttpContext.Current, uwArea)) {
+						SetSessionOrigin(null);
+						originHolder = InternalGetSessionOrigin();
 
-					if (path.Length >= uwArea.Length) {
-						string prefix = path.Length == uwArea.Length ? path : path.Substring(0, uwArea.Length);
-
-						if (prefix.ToLowerInvariant().StartsWith(uwArea)) {
-							SetSessionOrigin(null);
-							originHolder = InternalGetSessionOrigin();
-
-							log.Add(string.Format(
-								"Underwriter origin holder is '{0}'",
-								originHolder == null ? "-- null --" : originHolder.ToString()
-							));
-						} // if
+						log.Add(string.Format(
+							"Underwriter origin holder is '{0}'",
+							originHolder == null ? "-- null --" : originHolder.ToString()
+						));
 					} // if
 				} // if
 
 				if (originHolder == null) {
-					SetSessionOrigin(UiCustomerOrigin.Get(HttpContext.Current.Request.Url).GetOrigin());
+					const string hearbeat = "/heartbeat";
 
-					originHolder = InternalGetSessionOrigin();
+					if (!UrlStartsWith(HttpContext.Current, hearbeat)) {
+						SetSessionOrigin(UiCustomerOrigin.Get(HttpContext.Current.Request.Url).GetOrigin());
 
-					log.Add(string.Format(
-						"Detected origin holder is '{0}'",
-						originHolder == null ? "-- null --" : originHolder.ToString()
-					));
+						originHolder = InternalGetSessionOrigin();
+
+						log.Add(string.Format(
+							"Detected origin holder is '{0}'",
+							originHolder == null ? "-- null --" : originHolder.ToString()
+						));
+					} // if
 				} // if
 
 				if (originHolder == null) {
@@ -82,7 +81,8 @@
 
 				SetCachedUser(user);
 
-				FlushLog(log);
+				if (user == null)
+					FlushLog(log);
 
 				return user;
 			} // get
@@ -153,10 +153,11 @@
 		} // InternalGetSessionOrigin
 
 		private void FlushLog(List<string> lst) {
-			//new SafeILog(this).Debug(
-			//	"\n\nEzbobContext.get_User - begin:\n\n{0}\n\nEzbobContext.get_User - end.\n",
-			//	string.Join("\n", lst)
-			//);
+			new SafeILog(this).Debug(
+				"\n\nEzbobContext.get_User - result is null - begin:\n\n{0}" +
+				"\n\nEzbobContext.get_User - result is null - end.\n",
+				string.Join("\n", lst)
+			);
 		} // FlushLog
 
 		private static User GetCachedUser() {
@@ -164,8 +165,24 @@
 		} // GetCachedUser
 
 		private static void SetCachedUser(User u) {
-			HttpContext.Current.Items[RequestUserItemName] = u;
+			if (u == null)
+				HttpContext.Current.Items.Remove(RequestUserItemName);
+			else
+				HttpContext.Current.Items[RequestUserItemName] = u;
 		} // SetCachedUser
+
+		private static bool UrlStartsWith(HttpContext httpContext, string withWhat) {
+			string path = httpContext.Request.Url.AbsolutePath;
+
+			if (path.Length >= withWhat.Length) {
+				string prefix = path.Length == withWhat.Length ? path : path.Substring(0, withWhat.Length);
+
+				if (prefix.ToLowerInvariant().StartsWith(withWhat))
+					return true;
+			} // if
+
+			return false;
+		} // UrlStartsWith
 
 		private class OriginHolder {
 			public OriginHolder(CustomerOriginEnum? originID) {
