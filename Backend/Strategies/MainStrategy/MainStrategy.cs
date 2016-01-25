@@ -44,6 +44,7 @@
 			long? cashRequestID, // When old cash request is removed replace this with NLcashRequestID
 			CashRequestOriginator? cashRequestOriginator
 		) {
+			this.offeredCreditLine = 0;
 			this.autoRejectionOutput = null;
 
 			UnderwriterID = underwriterID;
@@ -292,14 +293,10 @@
 		} // SendEmails
 
 		private void AdjustOfferredCreditLine() {
-			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
-				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.AutoApproveAmount);
-			else if (this.autoDecisionResponse.IsAutoBankBasedApproval) {
-				this.offeredCreditLine = MedalResult.RoundOfferedAmount(
-					this.autoDecisionResponse.BankBasedAutoApproveAmount
-				);
-			} else if (this.autoDecisionResponse.DecidedToReject)
+			if (this.autoDecisionResponse.DecidedToReject)
 				this.offeredCreditLine = 0;
+			else if (this.autoDecisionResponse.DecidedToApprove)
+				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.AutoApproveAmount);
 		} // AdjustOfferredCreditLine
 
 		private void CapOffer() {
