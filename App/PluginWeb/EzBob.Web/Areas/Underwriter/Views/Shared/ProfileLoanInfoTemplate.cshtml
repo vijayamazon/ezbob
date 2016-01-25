@@ -467,7 +467,8 @@
         <% } %>
 
 		<% if(m.CashRequestId) { %>
-			<a id="downloadOfferButton" class="btn btn-dashboard">Download offer</a>
+			<a class="btn btn-dashboard downloadOfferButton" data-type="pdf">Download offer pdf</a>
+			<a class="btn btn-dashboard downloadOfferButton" data-type="excel">Download offer excel</a>
 		<% } %>
 
         <button id="newCreditLineButtonId" class="btn btn-dashboard" name="newCreditLineBtn">New Credit Line</button>

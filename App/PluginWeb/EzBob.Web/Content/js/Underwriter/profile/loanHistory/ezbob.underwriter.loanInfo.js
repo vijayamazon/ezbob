@@ -21,7 +21,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
 			'click #create-loan-hidden-btn': 'createLoanHidden',
 			'click #editOfferButton': 'showCreditLineDialog',
-			'click #downloadOfferButton': 'downloadOffer'
+			'click .downloadOfferButton': 'downloadOffer'
 		},
 
 		toggleCreateLoanHidden: function(event) {
@@ -106,7 +106,14 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		downloadOffer: function(e) {
 			var $el = $(e.currentTarget);
-			return $el.attr('href', window.gRootPath + 'Underwriter/Schedule/Export?id=' + this.model.get('CashRequestId') + '&isExcel=false&isShowDetails=false&customerId=' + this.model.get('CustomerId'));
+			var isExcel = false;
+			if ($el.data('type') == 'excel') {
+				isExcel = true;
+			}
+			return $el.attr('href', window.gRootPath + 'Underwriter/Schedule/Export?id=' +
+				this.model.get('CashRequestId') +
+				'&isExcel=' + isExcel +
+				'&isShowDetails=false&customerId=' + this.model.get('CustomerId'));
 		},//downloadOffer
 
 		createNewCreditLine: function(newCreditLineOption) {
