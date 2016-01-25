@@ -494,10 +494,10 @@
 				aAgent.Trail.HasDecided ? string.Empty : "not "
 			);
 
-			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
-
 			if (!aAgent.Trail.HasDecided)
 				return;
+
+			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
 
 			try {
 				CreateOffer(aAgent);
