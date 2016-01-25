@@ -190,11 +190,26 @@
 		} // GetInferenceIfExists
 
 		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment, bool isTryOut) {
-			Log.Debug("Engine.DownloadAndSave({0}) started...", customerID);
+			if (!Keeper.RemoteRequestsEnabled()) {
+				Log.Debug(
+					"Engine.DownloadAndSave({0}, {1}, {2}): not calling remote API - calls are disabled.",
+					customerID,
+					explicitMonthlyPayment,
+					isTryOut
+				);
+				return null;
+			} // if
+
+			Log.Debug("Engine.DownloadAndSave({0}, {1}, {2}) started...", customerID, explicitMonthlyPayment, isTryOut);
 
 			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now, false);
 
-			Log.Debug("Engine.DownloadAndSave({0}) retrieved input package.", customerID);
+			Log.Debug(
+				"Engine.DownloadAndSave({0}, {1}, {2}) retrieved input package.",
+				customerID,
+				explicitMonthlyPayment,
+				isTryOut
+			);
 
 			if (explicitMonthlyPayment > 0)
 				inputPkg.InferenceInput.MonthlyPayment = explicitMonthlyPayment;
@@ -204,19 +219,39 @@
 			if (errors != null)
 				throw new FailedToLoadInputDataAlert(Log, customerID, Now, errors);
 
-			Log.Debug("Engine.DownloadAndSave({0}) input package is valid.", customerID);
+			Log.Debug(
+				"Engine.DownloadAndSave({0}, {1}, {2}) input package is valid.",
+				customerID,
+				explicitMonthlyPayment,
+				isTryOut
+			);
 
 			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, isTryOut, inputPkg.InferenceInput);
 
-			Log.Debug("Engine.DownloadAndSave({0}) input package is persisted.", customerID);
+			Log.Debug(
+				"Engine.DownloadAndSave({0}, {1}, {2}) input package has been stored.",
+				customerID,
+				explicitMonthlyPayment,
+				isTryOut
+			);
 
 			Response<Reply> reply = Harvester.Infer(inputPkg.InferenceInput, Keeper.LoadHarvesterConfiguration());
 
-			Log.Debug("Engine.DownloadAndSave({0}) reply received.", customerID);
+			Log.Debug(
+				"Engine.DownloadAndSave({0}, {1}, {2}) reply received.",
+				customerID,
+				explicitMonthlyPayment,
+				isTryOut
+			);
 
 			Inference result = Keeper.SaveInference(customerID, requestID, reply);
 
-			Log.Debug("Engine.DownloadAndSave({0}) complete.", customerID);
+			Log.Debug(
+				"Engine.DownloadAndSave({0}, {1}, {2}) complete.",
+				customerID,
+				explicitMonthlyPayment,
+				isTryOut
+			);
 
 			return result;
 		} // DownloadAndSave

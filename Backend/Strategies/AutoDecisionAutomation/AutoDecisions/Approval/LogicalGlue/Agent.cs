@@ -62,19 +62,7 @@
 
 				WasMismatch = !this.trail.EqualsTo(this.secondaryAgent.Trail, quiet);
 
-				if (!WasMismatch && this.trail.HasDecided) {
-					if (this.trail.RoundedAmount == this.secondaryAgent.Trail.RoundedAmount) {
-						this.trail.Affirmative<SameAmount>(false).Init(this.trail.RoundedAmount);
-
-						this.secondaryAgent.Trail.Affirmative<SameAmount>(false).Init(
-							this.secondaryAgent.Trail.RoundedAmount
-						);
-					} else {
-						this.trail.Negative<SameAmount>(false).Init(this.trail.RoundedAmount);
-						this.secondaryAgent.Trail.Negative<SameAmount>(false).Init(this.secondaryAgent.Trail.RoundedAmount);
-						WasMismatch = true;
-					} // if
-				} // if
+				CheckSameAmount();
 			} catch (Exception e) {
 				Log.Alert(e, "Exception during auto approval.");
 				this.trail.Negative<ExceptionThrown>(true).Init(e);
@@ -159,6 +147,45 @@
 		protected virtual void GatherData() {
 			this.trail.MyInputData.FullInit(this.args.FlowType, this.args.ErrorInLGData, this.oldWayAgent.Trail.MyInputData);
 		} // GatherData
+
+		private void CheckSameAmount() {
+			if (WasMismatch) {
+				Log.Debug("Not checking same amount for trail '{0}': mismatch.", this.trail.ToString().ToUpperInvariant());
+				return;
+			} // if
+
+			if (!this.trail.HasDecided) {
+				Log.Debug(
+					"Not checking same amount for trail '{0}': not approved.",
+					this.trail.ToString().ToUpperInvariant()
+				);
+				return;
+			} // if
+
+			if (LogicalGlueFlowFollowed) {
+				Log.Debug(
+					"Not checking same amount for trail '{0}': Logical Glue flow.",
+					this.trail.ToString().ToUpperInvariant()
+				);
+				return;
+			} // if
+
+			if (this.trail.RoundedAmount == this.secondaryAgent.Trail.RoundedAmount) {
+				this.trail.Affirmative<SameAmount>(false).Init(this.trail.RoundedAmount);
+
+				this.secondaryAgent.Trail.Affirmative<SameAmount>(false).Init(
+					this.secondaryAgent.Trail.RoundedAmount
+				);
+
+				Log.Debug("Same amount detected for trail '{0}'.", this.trail.ToString().ToUpperInvariant());
+			} else {
+				this.trail.Negative<SameAmount>(false).Init(this.trail.RoundedAmount);
+				this.secondaryAgent.Trail.Negative<SameAmount>(false).Init(this.secondaryAgent.Trail.RoundedAmount);
+				WasMismatch = true;
+
+				Log.Debug("Different amounts detected for trail '{0}'.", this.trail.ToString().ToUpperInvariant());
+			} // if
+		} // CheckSameAmount
 
 		private readonly LGApprovalTrail trail;
 		private readonly Approval oldWayAgent;

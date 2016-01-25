@@ -139,6 +139,15 @@
 			} // try
 		} // LoadInferenceIfExists
 
+		public bool RemoteRequestsEnabled() {
+			try {
+				return new RemoteRequestsAreEnabled(this.db, this.log).Execute();
+			} catch (Exception e) {
+				this.log.Alert(e, "Failed to load whether remote requests are allowed, defaulting to false.");
+				return false;
+			} // try
+		} // RemoteRequestsEnabled
+
 		private readonly AConnection db;
 		private readonly ASafeLog log;
 	} // class Keeper

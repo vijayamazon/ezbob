@@ -298,6 +298,7 @@ namespace ConfigManager {
 		LogOffMode,
 		LogicalGlueAuthorizationScheme,
 		LogicalGlueCacheAcceptanceDays,
+		LogicalGlueEnabled,
 		LogicalGlueHostName,
 		LogicalGlueNewCustomerRequestPath,
 		LogicalGlueOldCustomerRequestPath,

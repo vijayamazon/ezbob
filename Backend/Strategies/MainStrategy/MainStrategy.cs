@@ -70,7 +70,7 @@
 			this.tag = string.Format(
 				"#MainStrategy_{0}_{1}",
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
-				Guid.NewGuid().ToString("N")
+				Guid.NewGuid().ToString().ToUpperInvariant()
 			);
 
 			this.customerDetails = new CustomerDetails(customerID);
@@ -475,7 +475,7 @@
 				Log.Alert(
 					"Switching to manual decision: exception during  Auto Approval for customer {0}, trail id is {1}.",
 					CustomerID,
-					aAgent.Trail.UniqueID.ToString("N")
+					aAgent.Trail.UniqueID.ToString().ToUpperInvariant()
 				);
 
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
@@ -492,7 +492,7 @@
 					"Switching to manual decision: Auto Approval implementations " +
 					"have not reached the same decision for customer {0}, trail id is {1}.",
 					CustomerID,
-					aAgent.Trail.UniqueID.ToString("N")
+					aAgent.Trail.UniqueID.ToString().ToUpperInvariant()
 				);
 
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
