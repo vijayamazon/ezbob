@@ -8,21 +8,15 @@
 	public class LoadTransactionsData : AStrategy {
 
 		public LoadTransactionsData(int investorID, int bankAccountTypeID) {
-
 			this.investorID = investorID;
 			this.bankAccountTypeID = bankAccountTypeID;
-
 		}//constructor
 
 		public override string Name { get { return "LoadTransactionsData"; } }
 
 		public override void Execute() {
-
-
-
 			Result = LoadFromDb(this.investorID, this.bankAccountTypeID);
 			Log.Info("Load transactions data from DB complete.");
-
 		}//Execute
 
 		private List<TransactionsDataModel> LoadFromDb(int investorId, int bankAccountTypeId) {
@@ -40,15 +34,14 @@
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to load transactions data from DB");
 				throw;
-			}
-
+			}//try
 		}//LoadFromDb
 
 		public List<TransactionsDataModel> Result { get; set; }
 		private readonly int investorID;
 		private readonly int bankAccountTypeID;
 		private string spName;
-	}
-}
+	}//LoadTransactionsData
+}//ns
 
 

@@ -31,6 +31,7 @@
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }
+
 		//////////////////////////////////////////
 		
 		[DataMember]

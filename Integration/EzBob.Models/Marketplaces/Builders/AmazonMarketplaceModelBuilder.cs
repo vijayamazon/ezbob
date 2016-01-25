@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using AmazonServiceLib;
+	using Ezbob.Utils;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
@@ -50,16 +51,22 @@
 			MarketPlaceModel model,
 			DateTime? history
 		) {
-			var askville = ObjectFactory.GetInstance<AskvilleRepository>();
-			var askvilleTmp = askville.GetAskvilleByMarketplace(mp);
+			TimeCounter tc = new TimeCounter("MarketplaceModelBuilder Amazon InitializeSpecificData building time for mp " + mp.Id);
+			using (tc.AddStep("AskvilleStatus Time taken")) {
+				var askville = ObjectFactory.GetInstance<AskvilleRepository>();
+				var askvilleTmp = askville.GetAskvilleByMarketplace(mp);
 
-			model.AskvilleStatus = askvilleTmp != null
-				? askvilleTmp.Status.ToString()
-				: AskvilleStatus.NotPerformed.ToString();
+				model.AskvilleStatus = askvilleTmp != null
+					? askvilleTmp.Status.ToString()
+					: AskvilleStatus.NotPerformed.ToString();
 
-			model.AskvilleGuid = askvilleTmp != null ? askvilleTmp.Guid : "";
+				model.AskvilleGuid = askvilleTmp != null ? askvilleTmp.Guid : "";
+			}
+			using (tc.AddStep("GetAmazonCategories Time taken")) {
+				model.Categories = GetAmazonCategories(mp);
+			}
 
-			model.Categories = GetAmazonCategories(mp);
+			Log.Info(tc.ToString());
 		} // InitializeSpecificData
 
 		protected override MarketPlaceFeedbackModel GetFeedbackData(List<IAnalysisDataParameterInfo> aggregations) {
@@ -101,11 +108,9 @@
 			return model;
 		} // GetFeedbackDAta
 
-		private static List<string> GetAmazonCategories(MP_CustomerMarketPlace marketplace) {
-			return marketplace.AmazonOrders
-				.SelectMany(o => o.OrderItems)
-				.SelectMany(oi => oi.OrderItemDetails)
-				.SelectMany(d => d.OrderItemCategories)
+		private List<string> GetAmazonCategories(MP_CustomerMarketPlace marketplace) {
+			return _session.Query<MP_AmazonOrderItemDetailCatgory>()
+				.Where(x => x.OrderItemDetail.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
 				.Select(x => x.Category.Name)
 				.Distinct()
 				.ToList();

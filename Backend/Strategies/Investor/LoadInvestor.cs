@@ -69,7 +69,7 @@
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to load investor {0} from DB", this.investorID);
 				throw;
-			}
+			}//try
 		}//LoadFromDb
 
 		private InvestorModel ContvertToModel(I_Investor dbInvestor) {

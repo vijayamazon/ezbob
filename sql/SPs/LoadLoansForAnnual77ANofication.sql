@@ -32,6 +32,8 @@ BEGIN
 		l.Status<>'PaidOff' 
 	AND 
 		l.[Date]<dateadd(year,-1,@Now)
+	AND 
+		l.[Date] > '2015-01-01'	--skip all old loans
 
 END
 GO

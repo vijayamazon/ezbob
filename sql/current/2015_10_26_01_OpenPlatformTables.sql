@@ -143,13 +143,21 @@ BEGIN
 		CashRequestID BIGINT,
 		LoanID INT,
 		LoanTransactionID INT,
-		Comment NVARCHAR(500),
+		[Comment] NVARCHAR(500),
+		UserID INT NULL,
+		TransactionDate DATETIME NULL,
+		NLOfferID BIGINT NULL, 
+		NLLoanID BIGINT NULL,
+		NLPaymentID BIGINT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_InvestorSystemBalance PRIMARY KEY (InvestorSystemBalanceID),
 		CONSTRAINT FK_I_InvestorSystemBalance_I_InvestorBankAccount FOREIGN KEY (InvestorBankAccountID) REFERENCES I_InvestorBankAccount(InvestorBankAccountID),
 		CONSTRAINT FK_I_InvestorSystemBalance_CashRequest FOREIGN KEY (CashRequestID) REFERENCES CashRequests(Id),
 		CONSTRAINT FK_I_InvestorSystemBalance_Loan FOREIGN KEY (LoanID) REFERENCES Loan(Id),
-		CONSTRAINT FK_I_InvestorSystemBalance_LoanTransaction FOREIGN KEY (LoanTransactionID) REFERENCES LoanTransaction(Id)
+		CONSTRAINT FK_I_InvestorSystemBalance_LoanTransaction FOREIGN KEY (LoanTransactionID) REFERENCES LoanTransaction(Id),
+		CONSTRAINT FK_I_InvestorSystemBalance_NL_Offers FOREIGN KEY (NLOfferID) REFERENCES NL_Offers(OfferID),
+		CONSTRAINT FK_I_InvestorSystemBalance_NL_Loans FOREIGN KEY (NLLoanID) REFERENCES NL_Loans(LoanID),
+		CONSTRAINT FK_I_InvestorSystemBalance_NL_Payments FOREIGN KEY (NLPaymentID) REFERENCES NL_Payments(PaymentID)
 	)
 END
 GO
@@ -462,13 +470,15 @@ BEGIN
 		LoanPercentage DECIMAL(18,6) NOT NULL,
 		InitialTerm INT NOT NULL,
 		GradeID INT NOT NULL,
-		Timestamp DATETIME NOT NULL,
+		[Timestamp] DATETIME NOT NULL,
+		NLLoanID BIGINT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_Portfolio PRIMARY KEY (PortfolioID),
 		CONSTRAINT FK_I_Portfolio_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
 		CONSTRAINT FK_I_Portfolio_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID),
 		CONSTRAINT FK_I_Portfolio_I_Loan FOREIGN KEY (LoanID) REFERENCES Loan(Id),
-		CONSTRAINT FK_I_Portfolio_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeId)
+		CONSTRAINT FK_I_Portfolio_I_Grade FOREIGN KEY (GradeID) REFERENCES I_Grade(GradeId),
+		CONSTRAINT FK_I_Portfolio_I_NL_Loans FOREIGN KEY (NLLoanID) REFERENCES NL_Loans(LoanID)
 	)
 END
 GO
@@ -850,10 +860,12 @@ BEGIN
 		CashRequestID BIGINT NOT NULL,
 		InvestorID INT NOT NULL,
 		InvestmentPercent DECIMAL(18,6) NOT NULL,
+		NLOfferID BIGINT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_OpenPlatformOffer PRIMARY KEY (OpenPlatformOfferID),
 		CONSTRAINT FK_I_OpenPlatformOffer_CashRequest FOREIGN KEY (CashRequestID) REFERENCES CashRequests(Id),
-		CONSTRAINT FK_I_OpenPlatformOffer_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID)
+		CONSTRAINT FK_I_OpenPlatformOffer_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_OpenPlatformOffer_NL_Offers FOREIGN KEY (NLOfferID) REFERENCES NL_Offers(OfferID)
 	)
 END
 GO

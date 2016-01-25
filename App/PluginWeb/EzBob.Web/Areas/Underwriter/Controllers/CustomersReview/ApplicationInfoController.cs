@@ -470,6 +470,11 @@
 		) {
 			CashRequest cr = this.cashRequestsRepository.Get(id);
 
+			if (cr.Id <=0) {
+				log.Error("No cash request found");
+				return Json(true);
+			}
+
 			new Transactional(() => {
 
 				LoanType loanT = this.loanTypes.Get(loanType);

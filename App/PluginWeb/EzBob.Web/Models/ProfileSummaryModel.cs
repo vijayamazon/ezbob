@@ -114,12 +114,9 @@
 
 	public class CustomerRequestedLoanModel {
 		public double? Amount { get; set; }
-
+		public int? Term { get; set; }
 		public DateTime Created { get; set; }
-		public string CustomerReason { get; set; }
-		public string CustomerSourceOfRepayment { get; set; }
-		public string OtherReason { get; set; }
-		public string OtherSourceOfRepayment { get; set; }
+		
 	}
 
 	public class DecisionsModel {

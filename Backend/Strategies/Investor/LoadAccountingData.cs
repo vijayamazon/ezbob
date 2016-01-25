@@ -7,19 +7,17 @@
 
 	public class LoadAccountingData : AStrategy {
 
-		public LoadAccountingData() {}//constructor
-
 		public override string Name { get { return "LoadAccountingData"; } }
 
 		public override void Execute() {
 			Result = LoadFromDb();
 			Log.Info("Load accounting data from DB complete.");
-
+			/*
 			var resultFiltered = new List<AccountingDataModel>();
-			currentInvestorID = -1;
+			this.currentInvestorID = -1;
 
 			foreach (var investorDataSet in Result) {
-				if (currentInvestorID < 0 || resultFiltered.All(x => x.InvestorID != investorDataSet.InvestorID)) {
+				if (this.currentInvestorID < 0 || resultFiltered.All(x => x.InvestorID != investorDataSet.InvestorID)) {
 					if (!investorDataSet.IsRepaymentsBankAccountActive) 
 						investorDataSet.AccumulatedRepayments = 0;
 					
@@ -31,14 +29,14 @@
 							Log.Info("Multiple active repayments bank accounts for InvestorID=" + investorDataSet.InvestorID);
 						resultFiltered.Remove(anotherDataSetOfTheSameInvestor);
 						resultFiltered.Add(investorDataSet);
-					}
-				}
+					}//if
+				}//if
 
-				currentInvestorID = investorDataSet.InvestorID;
-			}
-
-			Result = resultFiltered;
+				this.currentInvestorID = investorDataSet.InvestorID;
+			}//foreach
 			
+			Result = resultFiltered;
+			*/
 		}//Execute
 
 		private List<AccountingDataModel> LoadFromDb() {
@@ -49,7 +47,6 @@
 				Log.Warn(ex, "Failed to load accounting data from DB");
 				throw;
 			}
-
 		}//LoadFromDb
 
 		public List<AccountingDataModel> Result { get; set; }

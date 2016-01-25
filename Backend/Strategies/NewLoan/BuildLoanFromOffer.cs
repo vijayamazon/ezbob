@@ -45,7 +45,7 @@
 				if (Result.CustomerID == 0) {
 					Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 					Log.Error(Error);
-					NL_AddLog(LogType.Info, "Strategy Failed", this.strategyArgs, Result, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Strategy Failed", this.strategyArgs, Result, Error, null);
 					return;
 				}
 
@@ -60,15 +60,15 @@
 
 				if (!string.IsNullOrEmpty(DataForLoan.Error)) {
 					Error = DataForLoan.Error;
-					Log.Error(Error);
-					NL_AddLog(LogType.Info, "Strategy Failed", this.strategyArgs, Result, Error, null);
+					Log.Info(Error);
+					NL_AddLog(LogType.DataExsistense, "Strategy Failed", this.strategyArgs, Result, Error, null);
 					return;
 				}
 
 				if (DataForLoan.OfferID == 0) {
 					Error = NL_ExceptionOfferNotValid.DefaultMessage;
-					Log.Error(Error);
-					NL_AddLog(LogType.Info, "Strategy Failed", this.strategyArgs, Result, Error, null);
+					Log.Info(Error);
+					NL_AddLog(LogType.DataExsistense, "Strategy Failed", this.strategyArgs, Result, Error, null);
 					return;
 				}
 
@@ -76,7 +76,7 @@
 
 				if (DataForLoan.AvailableAmount < DataForLoan.LoanLegalAmount) {
 					Error = string.Format("No available credit for current offer. New loan is not allowed. dataForLoan: {0} ", Result); // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
-					Log.Error(Error);
+					Log.Info(Error);
 					NL_AddLog(LogType.Info, "Strategy Failed - No available credit for current offer. New loan is not allowed", this.strategyArgs, Result, Error, null);
 					return;
 				}

@@ -4,18 +4,44 @@
 	using Ezbob.Logger;
 
 	public class AutoRejectionArguments {
-		public int CustomerID { get; set; }
-		public int CompanyID { get; set; }
-		public int MonthlyPayment { get; set; }
+		public AutoRejectionArguments(
+			int customerID,
+			int companyID,
+			int monthlPayment,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			DateTime now,
+			AConnection db,
+			ASafeLog log
+		) {
+			CustomerID = customerID;
+			CompanyID = companyID;
+			MonthlyPayment = monthlPayment;
 
-		public long? CashRequestID { get; set; }
-		public long? NLCashRequestID { get; set; }
-		public string Tag { get; set; }
-		public DateTime Now { get; set; }
+			CashRequestID = cashRequestID;
+			NLCashRequestID = nlCashRequestID;
+			Tag = tag;
+			Now = now;
 
-		public RejectionConfigs Configs { get; set; }
+			DB = db;
+			Log = log.Safe();
 
-		public AConnection DB { get; set; }
-		public ASafeLog Log { get; set; }
+			TrailUniqueID = Guid.NewGuid();
+		} // constructor
+
+		public int CustomerID { get; private set; }
+		public int CompanyID { get; private set; }
+		public int MonthlyPayment { get; private set; }
+
+		public long? CashRequestID { get; private set; }
+		public long? NLCashRequestID { get; private set; }
+		public string Tag { get; private set; }
+		public DateTime Now { get; private set; }
+
+		public AConnection DB { get; private set; }
+		public ASafeLog Log { get; private set; }
+
+		public Guid TrailUniqueID { get; private set; }
 	} // class AutoRejectionArguments
 } // namespace

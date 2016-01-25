@@ -291,6 +291,10 @@
 			get { return this[Variables.LogicalGlueCacheAcceptanceDays]; }
 		} // LogicalGlueCacheAcceptanceDays
 
+		public virtual VariableValue LogicalGlueEnabled {
+			get { return this[Variables.LogicalGlueEnabled]; }
+		} // LogicalGlueEnabled
+
 		public virtual VariableValue LogicalGlueHostName {
 			get { return this[Variables.LogicalGlueHostName]; }
 		} // LogicalGlueHostName

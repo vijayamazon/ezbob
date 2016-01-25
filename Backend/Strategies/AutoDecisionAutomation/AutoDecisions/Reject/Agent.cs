@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Text;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
@@ -12,7 +13,6 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;

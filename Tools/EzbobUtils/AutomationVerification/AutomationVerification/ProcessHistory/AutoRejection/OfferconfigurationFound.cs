@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoRejection {
-	public class OfferconfigurationFound : ANumericTrace {
-		public OfferconfigurationFound(DecisionStatus status) : base(status) {
+	public class OfferConfigurationFound : ANumericTrace {
+		public OfferConfigurationFound(DecisionStatus status) : base(status) {
 		} // constructor
 
 		protected override string ValueStr {
@@ -16,5 +16,5 @@
 				return "one matched offer configuration";
 			} // get
 		} // ValueStr
-	} // class OfferconfigurationFound
+	} // class OfferConfigurationFound
 } // namespace

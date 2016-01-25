@@ -231,8 +231,6 @@
 			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
-			
-			HandleSalesForceTopup(cus, now); //EZ-3908
 			this.serviceClient.Instance.LinkLoanToInvestor(this.context.UserId, cus.Id, loan.Id);
 			// verify see above line 45-48
 			// 
@@ -277,6 +275,7 @@
 			);
 
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans
+			HandleSalesForceTopup(cus, now); //EZ-3908
 
 			return loan;
 		}// CreateLoan

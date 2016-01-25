@@ -4,11 +4,12 @@
 
 	public class LinkOfferToInvestor : AStrategy {
 
-		public LinkOfferToInvestor(int customerID, long cashRequestID, bool isForce, int? investorID) {
+		public LinkOfferToInvestor(int customerID, long cashRequestID, bool isForce, int? investorID, int? userID) {
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
 			this.isForce = isForce;
 			this.investorID = investorID;
+			this.userID = userID;
 			this.now = DateTime.UtcNow;
 		}//ctor
 
@@ -44,22 +45,22 @@
 				int fundingBankAccountID = sr["InvestorBankAccountID"];
 				decimal approvedSum = sr["ManagerApprovedSum"];
 				decimal investmentPercent = sr["InvestmentPercent"];
-				int investorID = sr["InvestorID"];
+				int currentInvestorID = sr["InvestorID"];
 				const int negative = -1;
 
 				AddInvestorSystemBalance addSystemBalance = new AddInvestorSystemBalance(fundingBankAccountID, 
 					this.now, 
-					approvedSum * investmentPercent * negative, 
+					approvedSum * investmentPercent * negative,
 					null, 
 					this.cashRequestID, 
 					null, 
 					null, 
 					"Offer was approved",
-					null,
-					null);
+					this.userID,
+					this.now);
 				addSystemBalance.Execute();
 
-				var notifyInvestor = new NotifyInvestorUtilizedFunds(investorID);
+				var notifyInvestor = new NotifyInvestorUtilizedFunds(currentInvestorID);
 				notifyInvestor.Execute();
 
 			} catch (Exception ex) {
@@ -68,12 +69,14 @@
 			}
 			return ActionResult.Continue;
 		}//HandleOneAssignedToOfferInvestor
+
 		public bool IsForOpenPlatform { get; private set; }
 		public bool FoundInvestor { get; private set; }
 
 		private readonly long cashRequestID;
 		private readonly bool isForce;
 		private readonly int? investorID;
+		private readonly int? userID;
 		private readonly int customerID;
 		private readonly DateTime now;
 	}//LinkOfferToInvestor

@@ -6,5 +6,6 @@
 		GatherData    = 3,
 		RunCheck      = 4,
 		MakeDecision  = 5,
+		OldWayFlow    = 6,
 	} // enum ProcessCheckpoints
 } // namespace

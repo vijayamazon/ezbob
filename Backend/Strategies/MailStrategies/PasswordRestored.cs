@@ -1,12 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using Exceptions;
-	using Ezbob.Database;
 	using StoredProcs;
 	using UserManagement;
-	using UserManagement.EmailConfirmation;
 
 	public class PasswordRestored : AMailStrategyBase {
 		public PasswordRestored(int customerId) : base(customerId, true) {

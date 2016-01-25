@@ -173,20 +173,7 @@
 			try {
 				this.trail.SetTag(tag);
 
-				using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-					GetAvailableFunds availFunds;
-
-					using (this.trail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
-						availFunds = new GetAvailableFunds();
-						GetAvailableFunds.LoadFromDB();
-						availFunds.Execute();
-
-						SaveTrailInputData(availFunds);
-					} // using timer step
-
-					using (this.trail.AddCheckpoint(ProcessCheckpoints.RunCheck))
-						CheckAutoApprovalConformance(availFunds.ReservedAmount);
-				} // using timer step
+				RunPrimaryOnly();
 
 				this.m_oSecondaryImplementation.MakeDecision();
 
@@ -213,6 +200,23 @@
 
 			this.trail.SetTag(tag).Save(this.db, this.m_oSecondaryImplementation.Trail);
 		} // MakeAndVerifyDecision
+
+		public void RunPrimaryOnly() {
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+				GetAvailableFunds availFunds;
+
+				using (this.trail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
+					availFunds = new GetAvailableFunds();
+					GetAvailableFunds.LoadFromDB();
+					availFunds.Execute();
+
+					SaveTrailInputData(availFunds);
+				} // using timer step
+
+				using (this.trail.AddCheckpoint(ProcessCheckpoints.RunCheck))
+					CheckAutoApprovalConformance(availFunds.ReservedAmount);
+			} // using timer step
+		} // RunPrimaryOnly
 
 		public bool ExceptionWhileDeciding {
 			get {

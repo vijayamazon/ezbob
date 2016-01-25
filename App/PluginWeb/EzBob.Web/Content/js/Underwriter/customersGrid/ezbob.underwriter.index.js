@@ -81,7 +81,7 @@
 				},
 
 				accountingInvestor: {
-					view: new EzBob.Underwriter.AccountingInvestorView({ el: $('#accounting-investor-view'), }),
+					view: new EzBob.Underwriter.AccountingInvestorView({ el: $('#accounting-investor-view'), model: new EzBob.Underwriter.AccountingInvestorModel() }),
 					isRendered: false,
 				},
 

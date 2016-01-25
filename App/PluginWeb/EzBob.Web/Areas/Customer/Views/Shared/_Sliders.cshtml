@@ -20,11 +20,8 @@
 					</p>
 				</div>
 				<div id="calc-slider" class="slider-wrapper clearfix"></div>
+
 				<%if(type == 'wizardRequestLoan') { %>
-				<div class="request-summary">
-					<div class="request-summary-title">Total repayment <i class="fa fa-info-circle total-repayment-tooltip"></i></div>
-					<div class="request-summary-value"><span class="total"></span></div>
-				</div>
 				<div class="wizard-request-loan-section">
 					<div class="form-markup-wrapper clearfix summary-wrap">
 						<div class="c_col c_spn_16 summary">
@@ -46,8 +43,6 @@
 					</div>
 					<div class="c_col c_spn_16 overview clearfix">
 						<div class="payments-wrap">
-
-
 							<div class="form-markup-wrapper">
 								<div class="c_col c_spn_10 pad_1"><p><span class="total-repay">total repayment*:</span> <span class="org"><span class="total"></span></span></p></div>
 							</div>
@@ -69,6 +64,10 @@
 				</div>
 				<% } %>
 				<%if(type == 'dashboardRequestLoan') { %>
+				<div class="total-wrapper">
+					<div class="total-caption">Total amount <i class="fa fa-info-circle total-repayment-tooltip" data-toggle="tooltip"></i></div>
+					<div><span class="total"></span></div>
+				</div>
 				<div class="dashboard-request-loan-section">
 					<div class="form-markup-wrapper clearfix summary-wrap">
 						<div class="c_col c_spn_16 summary">

@@ -6,8 +6,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE I_InvestorLoadAccountingData
-
-
 AS
 DECLARE @FundsAccountTypeID DECIMAL = (SELECT InvestorAccountTypeID FROM I_InvestorAccountType WHERE Name = 'Funding')
 DECLARE @RepaymentsAccountTypeID DECIMAL = (SELECT InvestorAccountTypeID FROM I_InvestorAccountType WHERE Name = 'Repayments')
@@ -16,59 +14,66 @@ BEGIN
 	SET NOCOUNT ON
 
 	;WITH
-
-	 last_funding_bat_newbalances AS(
-	 SELECT 
-	 MAX(InvestorBankAccountTransactionID) AS maxid
-	 FROM 
-	 I_InvestorBankAccountTransaction 
-	 GROUP BY InvestorBankAccountID
-	 ),
-     active_funding_account_data AS (
-	 SELECT 
-	 ibat.NewBalance AS NewBalance,
-	 ibat.InvestorBankAccountID AS InvestorBankAccountID,
-	 iba.InvestorID AS InvestorID    
-	 FROM 
-	 I_InvestorBankAccountTransaction ibat
-	 INNER JOIN last_funding_bat_newbalances libat ON libat.maxid = ibat.InvestorBankAccountTransactionID
-	 LEFT JOIN I_InvestorBankAccount iba ON ibat.InvestorBankAccountID = iba.InvestorBankAccountID
-	 WHERE iba.IsActive=1 AND iba.InvestorAccountTypeID=@FundsAccountTypeID	   		
+	 funding_account AS (
+		 SELECT 
+			 iba.InvestorBankAccountID AS InvestorBankAccountID,
+			 iba.InvestorID AS InvestorID    
+		 FROM 
+		 	I_InvestorBankAccount iba
+		 WHERE 
+		 	iba.IsActive=1 
+		 AND 
+		 	iba.InvestorAccountTypeID=@FundsAccountTypeID	   		
      ),
-
+     repayment_account AS (
+		 SELECT 
+			 iba.InvestorBankAccountID AS InvestorBankAccountID,
+			 iba.InvestorID AS InvestorID  
+		 FROM 
+		 	 I_InvestorBankAccount iba
+		 WHERE 
+		 	iba.IsActive=1
+		 AND 
+		 	iba.InvestorAccountTypeID=@RepaymentsAccountTypeID
+     ),     
+	 last_funding_bat_newbalances AS(
+		 SELECT 
+		 	MAX(ibat.InvestorBankAccountTransactionID) AS maxid, fa.InvestorID
+		 FROM 
+		 	funding_account fa 
+		 LEFT JOIN 
+		 	I_InvestorBankAccountTransaction ibat ON fa.InvestorBankAccountID = ibat.InvestorBankAccountID
+		 GROUP BY 
+		 	fa.InvestorID
+	 ),
    	 last_repayments_sb_newbalances AS(
 	 SELECT 
-	 MAX(InvestorSystemBalanceID) AS maxid
+	 	MAX(isb.InvestorSystemBalanceID) AS maxid,ra.InvestorID
 	 FROM 
-	 I_InvestorSystemBalance 
-	 GROUP BY InvestorBankAccountID
-	 ),
-     active_repayments_account_data AS (
-	 SELECT 
-	 isb.NewBalance AS NewBalance,
-	 isb.InvestorBankAccountID AS InvestorBankAccountID,
-	 iba.IsActive AS IsBankAccountActive,
-	 iba.InvestorID AS InvestorID  
-	 FROM 
-	 I_InvestorSystemBalance isb
-	 INNER JOIN last_repayments_sb_newbalances lisb ON lisb.maxid = isb.InvestorSystemBalanceID	 
-	 LEFT JOIN I_InvestorBankAccount iba ON isb.InvestorBankAccountID = iba.InvestorBankAccountID
-	 WHERE (iba.IsActive=1 OR (iba.IsActive=0 AND isb.NewBalance > 0)) AND iba.InvestorAccountTypeID=@RepaymentsAccountTypeID
-     )
-
+	 	repayment_account ra 
+	 LEFT JOIN 
+	 	I_InvestorSystemBalance isb ON ra.InvestorBankAccountID = isb.InvestorBankAccountID
+	 GROUP BY 
+	 	ra.InvestorID
+	 )
+	
 	SELECT 
-		
-	i.InvestorID AS InvestorID,
-	it.Name AS InvestorType,
-	i.Name AS InvestorName,
-	ibatf.NewBalance AS OutstandingFunding,
-
-
-	isbr.NewBalance AS AccumulatedRepayments,
-
-	(SELECT sum(sb.NewBalance) FROM I_InvestorSystemBalance sb
-		INNER JOIN I_InvestorBankAccount ba ON i.InvestorID = ba.InvestorID AND sb.InvestorBankAccountID = ba.InvestorBankAccountID
-		WHERE ba.InvestorAccountTypeID=@RepaymentsAccountTypeID AND ba.IsActive=0 AND
+		i.InvestorID AS InvestorID,
+		it.Name AS InvestorType,
+		i.Name AS InvestorName,
+		isnull(ibat.NewBalance,0) AS OutstandingFunding,
+		isnull(isb.NewBalance,0) AS AccumulatedRepayments,
+		(SELECT 
+			sum(sb.NewBalance) 
+		 FROM 
+		 	I_InvestorSystemBalance sb
+		 INNER JOIN 
+			I_InvestorBankAccount ba ON i.InvestorID = ba.InvestorID AND sb.InvestorBankAccountID = ba.InvestorBankAccountID
+		WHERE 
+			ba.InvestorAccountTypeID=@RepaymentsAccountTypeID 
+		AND 
+			ba.IsActive=0 
+		AND
 		 	sb.InvestorSystemBalanceID =
 			(	
 				SELECT 
@@ -79,19 +84,28 @@ BEGIN
 					sb.InvestorBankAccountID = sb1.InvestorBankAccountID 
 			)) AS TotalNonActiveAccumulatedRepayments,
 		
-	i.DiscountServicingFeePercent AS ServicingFeeDiscount,
-	i.IsActive AS IsInvestorActive,		
-	isbr.IsBankAccountActive AS IsRepaymentsBankAccountActive,
-	ibatf.InvestorBankAccountID AS FundingBankAccountID,
-	isbr.InvestorBankAccountID AS RepaymentsBankAccountID
+		i.DiscountServicingFeePercent AS ServicingFeeDiscount,
+		i.IsActive AS IsInvestorActive,		
+		fa.InvestorBankAccountID AS FundingBankAccountID,
+		ra.InvestorBankAccountID AS RepaymentsBankAccountID
 	FROM
 		I_Investor i
-		LEFT JOIN I_InvestorType it ON it.InvestorTypeID = i.InvestorTypeID
-		LEFT JOIN active_funding_account_data ibatf ON ibatf.InvestorID = i.InvestorID
-		LEFT JOIN active_repayments_account_data isbr ON isbr.InvestorID = i.InvestorID
-
+		LEFT JOIN 
+			I_InvestorType it ON it.InvestorTypeID = i.InvestorTypeID
+		LEFT JOIN	
+			last_funding_bat_newbalances ibatf ON ibatf.InvestorID = i.InvestorID
+		LEFT JOIN 
+			last_repayments_sb_newbalances isbr ON isbr.InvestorID = i.InvestorID
+		LEFT JOIN 
+			funding_account fa ON fa.InvestorID = i.InvestorID
+		LEFT JOIN 
+			repayment_account ra ON ra.InvestorID = i.InvestorID
+		LEFT JOIN 
+			I_InvestorSystemBalance isb ON isb.InvestorSystemBalanceID = isbr.maxid
+		LEFT JOIN 
+			I_InvestorBankAccountTransaction ibat ON ibat.InvestorBankAccountTransactionID = ibatf.maxid	
 	ORDER BY
-	i.Name
+		i.Name
 END
-GO
 
+GO

@@ -46,7 +46,6 @@
             return container;
         }//InitContainer
         
-
 		public bool IsFound { get; private set; }
 
 		private readonly int customerID;

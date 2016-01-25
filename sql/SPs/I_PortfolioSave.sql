@@ -16,7 +16,8 @@ CREATE TYPE I_PortfolioList AS TABLE (
 	[LoanPercentage] DECIMAL(18, 6) NOT NULL,
 	[InitialTerm] INT NOT NULL,
 	[GradeId] INT,
-	[Timestamp] DATETIME NOT NULL
+	[Timestamp] DATETIME NOT NULL,
+	[NLLoanID] BIGINT NULL
 )
 GO
 
@@ -33,7 +34,8 @@ BEGIN
 		[LoanPercentage],
 		[InitialTerm],
 		[GradeId],
-		[Timestamp]
+		[Timestamp],
+		[NLLoanID] 
 	) SELECT
 		[InvestorID],
 		[LoanID],
@@ -41,7 +43,8 @@ BEGIN
 		[LoanPercentage],
 		[InitialTerm],
 		[GradeId],
-		[Timestamp]
+		[Timestamp],
+		[NLLoanID] 
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

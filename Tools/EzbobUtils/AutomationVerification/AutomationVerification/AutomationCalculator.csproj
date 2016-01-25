@@ -52,14 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoDecision\AutoApproval\LGAgent.cs" />
+    <Compile Include="AutoDecision\AutoApproval\AutoApprovalArguments.cs" />
+    <Compile Include="AutoDecision\AutoApproval\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecision\AutoRejection\AutoRejectionArguments.cs" />
     <Compile Include="AutoDecision\AutoRejection\LGAgent.cs" />
+    <Compile Include="AutoDecision\AutoRejection\Models\AutoRejectionInputDataModelDb.cs" />
+    <Compile Include="AutoDecision\AutoRejection\Models\LGRejectionInputData.cs" />
+    <Compile Include="AutoDecision\AutoRejection\Models\MatchingGradeRanges.cs" />
+    <Compile Include="AutoDecision\AutoRejection\Models\RejectionConfigs.cs" />
     <Compile Include="Common\AutoDecisionFlowTypes.cs" />
     <Compile Include="Common\AutoRejectionOutput.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OnePricingFound.cs" />
     <Compile Include="ProcessHistory\AutoRejection\LGHardReject.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\OfferconfigurationFound.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\OfferConfigurationFound.cs" />
     <Compile Include="ProcessHistory\AutoRejection\SameConfigurationChosen.cs" />
     <Compile Include="ProcessHistory\AutoRejection\SameFlowChosen.cs" />
     <Compile Include="ProcessHistory\Common\HasBucket.cs" />
@@ -68,6 +73,10 @@
     <Compile Include="ProcessHistory\Common\LogicalGlueFlow.cs" />
     <Compile Include="ProcessHistory\Common\InternalFlow.cs" />
     <Compile Include="ProcessHistory\TrailPrimaryStatus.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInput\LGApprovalInputDataSerializationModel.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInput\LGApprovalInputData.cs" />
+    <Compile Include="ProcessHistory\Trails\LGApprovalTrail.cs" />
+    <Compile Include="ProcessHistory\Trails\LGRejectionTrail.cs" />
     <Compile Include="TokenIntersection.cs" />
     <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />
@@ -108,8 +117,8 @@
     <Compile Include="AutoDecision\AutoApproval\AutoApprovalTurnover.cs" />
     <Compile Include="AutoDecision\AutoReApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
-    <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
-    <Compile Include="AutoDecision\AutoRejection\AutoRejectModels.cs" />
+    <Compile Include="AutoDecision\AutoRejection\RejectionAgent.cs" />
+    <Compile Include="AutoDecision\AutoRejection\Models\RejectionInputData.cs" />
     <Compile Include="AutoDecision\AutoRejection\CaisStatusesCalculation.cs" />
     <Compile Include="AutoDecision\AutoReRejection\ReRejectInputData.cs" />
     <Compile Include="Common\Constants.cs" />
@@ -199,8 +208,8 @@
     <Compile Include="ProcessHistory\ANumericTrace.cs" />
     <Compile Include="ProcessHistory\ATrail.cs" />
     <Compile Include="ProcessHistory\ATrace.cs" />
-    <Compile Include="ProcessHistory\Trails\ApprovalInputData\aid_serialization_model.cs" />
-    <Compile Include="ProcessHistory\Trails\ApprovalInputData\ApprovalInputData.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInput\ApprovalInputDataSerializationModel.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInput\ApprovalInputData.cs" />
     <Compile Include="ProcessHistory\Trails\ApprovalTrail.cs" />
     <Compile Include="ProcessHistory\Trails\ReRejectionTrail.cs" />
     <Compile Include="ProcessHistory\Trails\ReapprovalTrail .cs" />

@@ -164,14 +164,14 @@
 
 		[Test]
 		public void TestLinkOfferToInvestor() {
-			var linkOfferToInvestor = new LinkOfferToInvestor(3406, 42824, false, null);
+			var linkOfferToInvestor = new LinkOfferToInvestor(3406, 42824, false, null, 1);
 			linkOfferToInvestor.Execute();
 		}
 
 		[Test]
-		public void TestLinkLoanRepaymentToInvestor() {
-			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow);
-			linkOfferToInvestor.Execute();
+		public void TestLoadAccountingInvestor() {
+			var loadAccountingData = new LoadAccountingData();
+			loadAccountingData.Execute();
 		}
 
 
@@ -182,20 +182,9 @@
         }
 
 		[Test]
-		public void AVAutoRejectTest() {
-			AV_LogicalGlueDataModel model = m_oDB.FillFirst<AV_LogicalGlueDataModel>("AV_LogicalGlueDataForCustomer", CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", 390),
-				new QueryParameter("CompanyID", 189),
-				new QueryParameter("PlannedPayment", 2931),
-				new QueryParameter("ProcessingDate", DateTime.UtcNow));
-
-			Console.WriteLine("requestID={0}", model.RequestID);
-			Console.WriteLine(model.ErrorMessage);
-			Console.WriteLine(model.Message);
-			Console.WriteLine(model.EtlCode);
-			Console.WriteLine(model.Score);
-			m_oLog.Debug(model.ToString());
+		public void TestLinkLoanRepaymentToInvestor() {
+			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow, 1);
+			linkOfferToInvestor.Execute();
 		}
-
 	}
 }

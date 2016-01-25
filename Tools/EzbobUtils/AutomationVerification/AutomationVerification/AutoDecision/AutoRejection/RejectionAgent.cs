@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
 	using System.Collections.Generic;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;

@@ -30,8 +30,9 @@
 			NL_AddLog(LogType.Info, "Strategy Start", this.offer, null, null, null);
 
 			if (this.offer.DecisionID == 0) {
-				Log.Error("DecisionID is 0");
-				Error = "DecisionID is 0";
+				Error = "input DecisionID is 0";
+				Log.Info(Error);
+				NL_AddLog(LogType.Info, "Strategy end", this.offer, null, Error, null);
 				return;
 			}
 

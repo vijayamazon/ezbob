@@ -25,6 +25,16 @@
 		} // UniqueID
 
 		/// <summary>
+		/// Amount that customer requested. Not sent to Logical Glue, used in main strategy.
+		/// </summary>
+		public decimal RequestedAmount { get; set; }
+
+		/// <summary>
+		/// Term that customer requested. Not sent to Logical Glue, used in main strategy.
+		/// </summary>
+		public int RequestedTerm { get; set; }
+
+		/// <summary>
 		/// Data received from Equifax (via LG) on this company and director.
 		/// </summary>
 		/// <remarks>Can be empty (if no data was ever received).

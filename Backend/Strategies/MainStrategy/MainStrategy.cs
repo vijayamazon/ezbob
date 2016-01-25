@@ -4,7 +4,9 @@
 	using System.Globalization;
 	using System.Threading.Tasks;
 	using System.Web;
+	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
@@ -16,6 +18,7 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -41,6 +44,8 @@
 			long? cashRequestID, // When old cash request is removed replace this with NLcashRequestID
 			CashRequestOriginator? cashRequestOriginator
 		) {
+			this.autoRejectionOutput = null;
+
 			UnderwriterID = underwriterID;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = (avoidAutoDecision == 1) || newCreditLine.AvoidAutoDecision();
@@ -65,7 +70,7 @@
 			this.tag = string.Format(
 				"#MainStrategy_{0}_{1}",
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
-				Guid.NewGuid().ToString("N")
+				Guid.NewGuid().ToString().ToUpperInvariant()
 			);
 
 			this.customerDetails = new CustomerDetails(customerID);
@@ -136,6 +141,8 @@
 		} // SkipEverything
 
 		private void StandardFlow() {
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
 			if (this.newCreditLineOption.UpdateData()) {
 				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
@@ -249,7 +256,14 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(
+				CustomerID,
+				this.cashRequestID,
+				this.nlCashRequestID,
+				DateTime.UtcNow,
+				false,
+				true
+			) {
 				Tag = this.tag,
 			};
 			instance.Execute();
@@ -388,27 +402,18 @@
 				bContinue = false;
 			} // if
 
-			if (EnableAutomaticApproval && bContinue)
-				bContinue = DoAutoApproval();
-			else {
-				Log.Debug(
-					"Not processed auto approval: " +
-					"it is currently disabled in configuration or decision has already been made earlier."
-				);
-			} // if
-
-			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
-				new BankBasedApproval(CustomerID).MakeDecision(this.autoDecisionResponse);
-
-				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
-
-				if (!bContinue)
-					Log.Debug("Bank based approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
+			if (EnableAutomaticApproval && bContinue) {
+				if (this.autoRejectionOutput == null) {
+					Log.Info(
+						"Not processing auto-approval: no auto-rejection output detected (auto rejection did not run?)."
+					);
+				} else
+					DoAutoApproval();
 			} else {
 				Log.Debug(
-					"Not processed bank based approval: " +
-					"it is currently disabled in configuration or decision has already been made earlier."
-				);
+					"Not processed auto approval: " +
+						"it is currently disabled in configuration or decision has already been made earlier."
+					);
 			} // if
 
 			if (!this.autoDecisionResponse.SystemDecision.HasValue) { // No decision is made so far
@@ -420,45 +425,47 @@
 			} // if
 		} // ProcessApprovals
 
-		private bool DoAutoApproval() {
-			bool bContinue;
-
-			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
-				CustomerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				this.tag,
-				DateTime.UtcNow,
-				this.offeredCreditLine,
-				this.medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)this.medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
-				DB,
-				Log
+		private void DoAutoApproval() {
+			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
+				new AutoApprovalArguments(
+					CustomerID,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					this.offeredCreditLine,
+					(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
+					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
+					this.autoRejectionOutput.FlowType,
+					this.autoRejectionOutput.ErrorInLGData,
+					this.tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			).Init();
 
 			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Checking auto approve...";
 
-			aAgent.MakeAndVerifyDecision(this.tag);
+			aAgent.MakeAndVerifyDecision();
 
 			if (aAgent.ExceptionWhileDeciding) {
-				bContinue = false;
-
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception - " + aAgent.Trail.UniqueID;
 				this.autoDecisionResponse.AutoApproveAmount = 0;
 
 				Log.Alert(
 					"Switching to manual decision: exception during  Auto Approval for customer {0}, trail id is {1}.",
 					CustomerID,
-					aAgent.Trail.UniqueID.ToString("N")
+					aAgent.Trail.UniqueID.ToString().ToUpperInvariant()
 				);
 
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-			} else if (aAgent.WasMismatch) {
+				return;
+			} // if
+			
+			if (aAgent.WasMismatch) {
 				this.wasMismatch = true;
-				bContinue = false;
 
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Mismatch - " + aAgent.Trail.UniqueID;
 				this.autoDecisionResponse.AutoApproveAmount = 0;
@@ -467,31 +474,30 @@
 					"Switching to manual decision: Auto Approval implementations " +
 					"have not reached the same decision for customer {0}, trail id is {1}.",
 					CustomerID,
-					aAgent.Trail.UniqueID.ToString("N")
+					aAgent.Trail.UniqueID.ToString().ToUpperInvariant()
 				);
 
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-			}  else {
-				bContinue = !aAgent.Trail.HasDecided;
-
-				this.autoDecisionResponse.LoanOfferUnderwriterComment =
-					aAgent.Trail.GetDecisionName() +
-					" - " +
-					aAgent.Trail.UniqueID;
-				this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
-
-				Log.Msg(
-					"Both Auto Approval implementations have reached the same decision: {0}approved",
-					aAgent.Trail.HasDecided ? string.Empty : "not "
-				);
-
-				this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+				return;
 			} // if
 
-			if (bContinue)
-				return true;
+			this.autoDecisionResponse.LoanOfferUnderwriterComment =
+				aAgent.Trail.GetDecisionName() +
+				" - " +
+				aAgent.Trail.UniqueID;
+			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+
+			Log.Msg(
+				"Both Auto Approval implementations have reached the same decision: {0}approved",
+				aAgent.Trail.HasDecided ? string.Empty : "not "
+			);
+
+			if (!aAgent.Trail.HasDecided)
+				return;
+
+			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
 
 			try {
 				CreateOffer(aAgent);
@@ -499,45 +505,17 @@
 				Log.Alert(e, "Exception during creating an offer for customer {0}.", CustomerID);
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception in offer - " + aAgent.Trail.UniqueID;
 			} // try
-
-			return false;
 		} // DoAutoApproval
 
 		private void CreateOffer(ICreateOfferInputData offerInputData) {
 			ApprovalTrail approvalTrail = offerInputData.Trail;
 
-			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+			Tuple<OfferResult, int> offer = offerInputData.LogicalGlueFlowFollowed
+				? CreateLogicalOffer()
+				: CreateUnlogicalOffer();
 
-			if (sr.IsEmpty)
-				throw new Exception("Failed to detect default loan source.");
-
-			int loanCount = DB.ExecuteScalar<int>(
-				"GetCustomerLoanCount",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", CustomerID),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
-
-			int loanSourceID = sr["LoanSourceID"];
-			int repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
-
-			OfferResult offerResult;
-
-			if (offerInputData.LogicalGlueFlowFollowed) {
-				offerResult = null; // TODO create offer for Logical Glue
-			} else {
-				var offerDualCalculator = new OfferDualCalculator(
-					CustomerID,
-					DateTime.UtcNow,
-					this.autoDecisionResponse.AutoApproveAmount,
-					loanCount > 0,
-					this.medal.MedalClassification,
-					loanSourceID,
-					repaymentPeriod
-					);
-
-				offerResult = offerDualCalculator.CalculateOffer();
-			} // if
+			OfferResult offerResult = offer.Item1;
+			int loanSourceID = offer.Item2;
 
 			if (offerResult == null || offerResult.IsError) {
 				Log.Alert(
@@ -571,12 +549,17 @@
 				return;
 			} // if
 
-			bool investorFound = true; // TODO look for investor if Open Platform.
+			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddDays(approvalTrail.MyInputData.MetaData.OfferLength);
+
+			var loti = new LinkOfferToInvestor(CustomerID, this.cashRequestID, false, null, UnderwriterID);
+			loti.Execute();
+
+			bool investorFound = !loti.IsForOpenPlatform || loti.FoundInvestor;
 
 			if (!investorFound) {
 				Log.Info("Customer {0} - will use manual because investor was not found.", CustomerID);
 
-				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				this.autoDecisionResponse.CreditResult = CreditResultStatus.PendingInvestor;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Investor not found - " + approvalTrail.UniqueID;
@@ -588,8 +571,6 @@
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Approval";
 
 				this.autoDecisionResponse.DecisionName = "Approval";
-				this.autoDecisionResponse.AppValidFor =
-					DateTime.UtcNow.AddDays(approvalTrail.MyInputData.MetaData.OfferLength);
 				this.autoDecisionResponse.Decision = DecisionActions.Approve;
 				this.autoDecisionResponse.LoanOfferEmailSendingBannedNew =
 					approvalTrail.MyInputData.MetaData.IsEmailSendingBanned;
@@ -598,10 +579,102 @@
 				this.autoDecisionResponse.RepaymentPeriod = offerResult.Period;
 				this.autoDecisionResponse.LoanSourceID = loanSourceID;
 				this.autoDecisionResponse.LoanTypeID = offerResult.LoanTypeId;
-				this.autoDecisionResponse.InterestRate = offerResult.InterestRate / 100;
-				this.autoDecisionResponse.SetupFee = offerResult.SetupFee / 100;
+				this.autoDecisionResponse.InterestRate = offerResult.InterestRate / 100M;
+				this.autoDecisionResponse.SetupFee = offerResult.SetupFee / 100M;
 			} // if
 		} // CreateOffer
+
+		private Tuple<OfferResult, int> CreateLogicalOffer() {
+			this.autoDecisionResponse.ProductSubTypeID = this.autoRejectionOutput.ProductSubTypeID;
+
+			SafeReader sr = DB.GetFirst(
+				"LoadGradeRangeAndSubproduct",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@GradeRangeID", this.autoRejectionOutput.GradeRangeID),
+				new QueryParameter("@ProductSubTypeID", this.autoRejectionOutput.ProductSubTypeID)
+			);
+
+			if (sr.IsEmpty) {
+				Log.Alert(
+					"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
+					this.autoRejectionOutput.GradeRangeID,
+					this.autoRejectionOutput.ProductSubTypeID
+				);
+
+				return new Tuple<OfferResult, int>(null, 0);
+			} // if
+
+			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
+
+			int amount = grsp.LoanAmount(MonthlyRepayment.RequestedAmount);
+
+			int maxAmount = CurrentValues.Instance.AutoApproveMaxAmount;
+			int minAmount = CurrentValues.Instance.MinLoan;
+
+			if ((amount < minAmount) || (amount > maxAmount)) {
+				Log.Msg(
+					"Switching to manual: approved amount {0} for customer {1} " +
+					"is out of allowed for auto approve range [{2} , {3}].",
+					amount.ToString("C0"),
+					CustomerID,
+					minAmount.ToString("C0"),
+					maxAmount.ToString("C0")
+				);
+
+				return new Tuple<OfferResult, int>(null, 0);
+			} // if
+
+			var offerResult = new OfferResult {
+				CustomerId = CustomerID,
+				CalculationTime = DateTime.UtcNow,
+				Amount = amount,
+				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+
+				ScenarioName = "Logical Glue",
+				Period = grsp.Term(MonthlyRepayment.RequestedTerm),
+				LoanTypeId = grsp.LoanTypeID,
+				LoanSourceId = grsp.LoanSourceID,
+				InterestRate = grsp.InterestRate * 100M,
+				SetupFee = grsp.SetupFee * 100M,
+				Message = null,
+				IsError = false,
+				IsMismatch = false,
+				HasDecision = true,
+			};
+
+			return new Tuple<OfferResult, int>(offerResult, grsp.LoanSourceID);
+		} // CreateLogicalOffer
+
+		private Tuple<OfferResult, int> CreateUnlogicalOffer() {
+			this.autoDecisionResponse.ProductSubTypeID = null;
+
+			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+
+			if (sr.IsEmpty)
+				throw new Exception("Failed to detect default loan source.");
+
+			int loanCount = DB.ExecuteScalar<int>(
+				"GetCustomerLoanCount",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", CustomerID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			int loanSourceID = sr["LoanSourceID"];
+			int repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
+
+			var offerDualCalculator = new OfferDualCalculator(
+				CustomerID,
+				DateTime.UtcNow,
+				this.autoDecisionResponse.AutoApproveAmount,
+				loanCount > 0,
+				this.medal.MedalClassification,
+				loanSourceID,
+				repaymentPeriod
+			);
+
+			return new Tuple<OfferResult, int>(offerDualCalculator.CalculateOffer(), loanSourceID);
+		} // CreateUnlogicalOffer
 
 		private void ProcessRejections() {
 			if (this.avoidAutomaticDecision) {
@@ -635,32 +708,35 @@
 				return;
 			} // if
 
-			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
-
 			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
-				new AutoRejectionArguments {
-					CustomerID = CustomerID,
-					CashRequestID = this.cashRequestID,
-					NLCashRequestID = this.nlCashRequestID,
-					Now = DateTime.UtcNow,
-					DB = DB,
-					Log = Log,
-					CompanyID = CompanyID,
-					MonthlyPayment = MonthlyPayment,
-				}
+				new AutoRejectionArguments(
+					CustomerID,
+					CompanyID,
+					MonthlyRepayment.MonthlyPayment,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					this.tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			);
 
-			rAgent.MakeAndVerifyDecision(this.tag);
+			rAgent.MakeAndVerifyDecision();
 
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;
 				Log.Warn("Mismatch happened while executing rejection, automation aborted.");
-			} else if (rAgent.Trail.HasDecided) {
-				this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
-				this.autoDecisionResponse.UserStatus = Status.Rejected;
-				this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
-				this.autoDecisionResponse.DecisionName = "Rejection";
-				this.autoDecisionResponse.Decision = DecisionActions.Reject;
+			} else {
+				if (rAgent.Trail.HasDecided) {
+					this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
+					this.autoDecisionResponse.UserStatus = Status.Rejected;
+					this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
+					this.autoDecisionResponse.DecisionName = "Rejection";
+					this.autoDecisionResponse.Decision = DecisionActions.Reject;
+				} // if
+
+				this.autoRejectionOutput = rAgent.Output;
 			} // if
 		} // ProcessRejections
 
@@ -722,16 +798,19 @@
 			Log.Debug("Added NL decision: {0}", decisionID);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
-					NLFeeTypes feeType = this.autoDecisionResponse.SpreadSetupFee
-						? NLFeeTypes.ServicingFee
-						: NLFeeTypes.SetupFee;
+				NL_OfferFees setupFee = new NL_OfferFees {
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+					Percent = this.autoDecisionResponse.SetupFee,
+					OneTimePartPercent = 1,
+					DistributedPartPercent = 0
+				};
 
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = this.autoDecisionResponse.SetupFee, OneTimePartPercent = 1, DistributedPartPercent = 0 };
 				if (this.autoDecisionResponse.SpreadSetupFee) {
 					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
 					setupFee.OneTimePartPercent = 0;
 					setupFee.DistributedPartPercent = 1;
-				}
+				} // if
+
 				NL_OfferFees[] ofeerFees = { setupFee };
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
@@ -857,7 +936,12 @@
 			Log.Debug("Updating Logical Glue data: customer {0} has a non-regulated company.", CustomerID);
 
 			try {
-				InjectorStub.GetEngine().GetInference(CustomerID, 0, false, GetInferenceMode.DownloadIfOld);
+				InjectorStub.GetEngine().GetInference(
+					CustomerID,
+					MonthlyRepayment.MonthlyPayment,
+					false,
+					GetInferenceMode.DownloadIfOld
+				);
 				Log.Debug("Updated Logical Glue data for customer {0}.", CustomerID);
 			} catch (Exception e) {
 				Log.Warn(e, "Logical Glue data was not updated for customer {0}.", CustomerID);
@@ -867,12 +951,12 @@
 		private void ExecuteAdditionalStrategies() {
 			var preData = new PreliminaryData(CustomerID);
 
-			UpdateLogicalGlue(preData);
 			DoConsumerCheck(preData);
 			DoCompanyCheck(preData);
 			DoAmlCheck(preData);
 			DoBwaCheck(preData);
 			DoZooplaCheck();
+			UpdateLogicalGlue(preData); // Must be after DoCompanyCheck because uses ExperianRefNum.
 		} // ExecuteAdditionalStrategies
 
 		private static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
@@ -1180,5 +1264,6 @@
 		private readonly string tag;
 		private bool wasMismatch;
 		private ABackdoorSimpleDetails backdoorSimpleDetails;
+		private AutoRejectionOutput autoRejectionOutput;
 	} // class MainStrategy
 } // namespace

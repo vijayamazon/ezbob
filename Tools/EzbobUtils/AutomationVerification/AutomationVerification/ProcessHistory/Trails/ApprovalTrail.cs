@@ -1,4 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Trails {
+	using AutomationCalculator.ProcessHistory.Trails.ApprovalInput;
 	using DbConstants;
 	using Ezbob.Logger;
 
@@ -21,7 +22,6 @@
 			fromEmailAddress,
 			fromEmailName
 		) {
-			MyInputData = new ApprovalInputData();
 			HasApprovalChance = true;
 		} // constructor
 
@@ -43,11 +43,24 @@
 			get { return MyInputData; }
 		} // InputData
 
-		public virtual ApprovalInputData MyInputData { get; private set; }
+		public virtual ApprovalInputData MyInputData {
+			get {
+				if (this.inputData == null)
+					this.inputData = CreateInputData();
+
+					return this.inputData;
+			} // get
+		} // MyInputData
+
+		protected virtual ApprovalInputData CreateInputData() {
+			return new ApprovalInputData();
+		} // CreateInputData
 
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus) {
 			if (nDecisionStatus != DecisionStatus.Affirmative)
 				DecisionStatus = DecisionStatus.Negative;
 		} // UpdateDecision
+
+		private ApprovalInputData inputData;
 	} // class ApprovalTrail
 } // namespace

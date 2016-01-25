@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Models.Investor {
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
 
 	[DataContract(IsReference = true)]
 	public class AccountingDataModel {
@@ -27,13 +28,13 @@
 		[DataMember]
 		public bool IsInvestorActive { get; set; }
 
-		[DataMember]
-		public bool IsRepaymentsBankAccountActive { get; set; }
+		[NonTraversable]
+		public bool IsRepaymentsBankAccountActive { get { return RepaymentsBankAccountID.HasValue;} }
 
 		[DataMember]
-		public int FundingBankAccountID { get; set; }
+		public int? FundingBankAccountID { get; set; }
 
 		[DataMember]
-		public int RepaymentsBankAccountID { get; set; }
+		public int? RepaymentsBankAccountID { get; set; }
 	}
 }

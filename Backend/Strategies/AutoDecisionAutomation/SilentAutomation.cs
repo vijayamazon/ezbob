@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation {
 	using System;
 	using System.Globalization;
+	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Common;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -113,19 +115,20 @@
 			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
 
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
-				new AutoRejectionArguments {
-					CustomerID = this.customerID,
-					CashRequestID = this.cashRequestID,
-					NLCashRequestID = this.nlCashRequestID,
-					Now = DateTime.UtcNow,
-					DB = DB,
-					Log = Log,
-					CompanyID = CompanyID,
-					MonthlyPayment = MonthlyPayment,
-				}
+				new AutoRejectionArguments(
+					this.customerID,
+					CompanyID,
+					MonthlyRepayment.MonthlyPayment,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			);
 
-			rejectAgent.MakeAndVerifyDecision(Tag, true);
+			rejectAgent.MakeAndVerifyDecision(true);
 
 			MedalResult medal = CalculateMedal();
 
@@ -138,31 +141,44 @@
 				this.nlCashRequestID
 			);
 
-			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LGAgent(
-				this.customerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				Tag,
-				DateTime.UtcNow,
-				offeredCreditLine,
-				medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
-				DB,
-				Log
+			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
+				new AutoApprovalArguments(
+					this.customerID,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					offeredCreditLine,
+					(AutomationCalculator.Common.Medal)medal.MedalClassification,
+					(AutomationCalculator.Common.MedalType)medal.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+					rejectAgent.Output.FlowType,
+					rejectAgent.Output.ErrorInLGData,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
 			).Init();
 
-			approveAgent.MakeAndVerifyDecision(Tag, true);
+			approveAgent.MakeAndVerifyDecision(true);
 
 			if (this.caller == Callers.AddMarketplace) {
 				bool isRejected = !rejectAgent.WasMismatch && rejectAgent.Trail.HasDecided;
-				bool isApproved = !approveAgent.WasMismatch && (approveAgent.Trail.RoundedAmount > 0);
+				bool isApproved = !approveAgent.WasMismatch && (
+					(
+						(rejectAgent.Output.FlowType == AutoDecisionFlowTypes.LogicalGlue) &&
+						approveAgent.Trail.HasDecided
+					) || (
+						(rejectAgent.Output.FlowType != AutoDecisionFlowTypes.LogicalGlue) &&
+						(approveAgent.Trail.RoundedAmount > 0)
+					)
+				);
 
 				if (!isRejected && isApproved)
 					ExecuteMain();
 				else {
 					Log.Debug(
-						"Not running auto decision for customer {0} using cash request 'o {3}/n {4}': no potential ({1} and {2}).",
+						"Not running auto decision for customer {0} using cash request 'o {3}/n {4}': " +
+						"no potential ({1} and {2}).",
 						this.customerID,
 						isRejected ? "rejected" : "not rejected",
 						isApproved ? "approved" : "not approved",

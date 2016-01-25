@@ -36,8 +36,9 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     	'interest': '.interest',
     	'total': '.total',
     	'interestRate': '.interest-rate',
-    	'dashboardRequestSummary': '.request-summary',
+    	'dashboardRequestSummary': '.total-wrapper',
     	'sliderWrapper': '.slider-wrapper',
+    	'calcSlider': '#calc-slider',
     	'totalTooltip': '.total-repayment-tooltip'
     },
     serializeData: function () {
@@ -48,7 +49,7 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
         var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
         var self = this;
         InitAmountPeriodSliders({
-        	container: $('#calc-slider'),
+        	container: this.ui.calcSlider,
         	el: this.$el,
             amount: {
                 min: 1000,

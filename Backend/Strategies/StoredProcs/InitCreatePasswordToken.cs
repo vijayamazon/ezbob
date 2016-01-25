@@ -3,31 +3,24 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	internal class InitCreatePasswordTokenByUserID : ATiedStoredProcedure {
+	internal class InitCreatePasswordTokenByUserID : AStoredProcedure {
 		public InitCreatePasswordTokenByUserID(int userID, AConnection db, ASafeLog log) : base(db, log) {
-			this.userID = userID;
+			UserID = userID;
 			Token = Guid.NewGuid();
 		} // constructor
 
 		public override bool HasValidParameters() {
-			return this.userID > 0;
+			return UserID > 0;
 		} // HasValidParameters
 
-		protected override void TiedAction() {
+		public void Execute() {
 			ConnectionWrapper cw = null;
 			try {
 				cw = DB.GetPersistent();
 
 				cw.BeginTransaction();
 
-				DB.ExecuteNonQuery(
-					cw,
-					GetName(),
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("TokenID", Token),
-					new QueryParameter("UserID", this.userID),
-					new QueryParameter("Now", DateTime.UtcNow)
-				);
+				ExecuteNonQuery(cw);
 
 				cw.Commit();
 			} catch (Exception e) {
@@ -36,12 +29,18 @@
 				if (cw != null)
 					cw.Rollback();
 
-				Log.Alert(e, "Failed to initialize password change token for user {0}.", this.userID);
+				Log.Alert(e, "Failed to initialize password change token for user {0}.", UserID);
 			} // try
-		} // TiedAction
+		} // Execute
 
-		public Guid Token { get; private set; }
+		public Guid Token { get; set; }
 
-		private readonly int userID;
+		public int UserID { get; set; }
+
+		public DateTime Now {
+			get { return DateTime.UtcNow; }
+			// ReSharper disable once ValueParameterNotUsed
+			set { }
+		} // Now
 	} // class InitCreatePasswordToken
 } // namespace

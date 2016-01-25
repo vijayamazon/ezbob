@@ -180,14 +180,13 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return lst.Count > 0 ? lst.Max() : (DateTime?)null;
 		} // GetLastTransaction
 
-		private static List<string> GetEbayCategories(MP_CustomerMarketPlace marketplace) {
+		private List<string> GetEbayCategories(MP_CustomerMarketPlace marketplace) {
 			IEnumerable<string> terapeak;
 			IEnumerable<string> native;
 
 			if (marketplace.TeraPeakOrders != null) {
-				List<string> cats = marketplace.TeraPeakOrders
-					.SelectMany(o => o.OrderItems)
-					.SelectMany(t => t.CategoryStatistics)
+				List<string> cats = this._session.Query <MP_TeraPeakCategoryStatistics>()
+					.Where(x => x.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
 					.Select(c => c.Category.FullName)
 					.ToList();
 
@@ -196,17 +195,14 @@ namespace EzBob.Models.Marketplaces.Builders {
 				terapeak = new List<string>();
 
 			if (marketplace.EbayOrders != null) {
-				List<string> cats = marketplace.EbayOrders
-					.SelectMany(o => o.OrderItems)
-					.SelectMany(oi => oi.Transactions)
-					.Where(x => (x.OrderItemDetail != null) && (x.OrderItemDetail.PrimaryCategory != null))
+				native = this._session.Query<MP_EbayTransaction>()
+					.Where(x => x.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
+					.Where(x => x.OrderItemDetail.PrimaryCategory != null)
 					.Select(x => x.OrderItemDetail.PrimaryCategory.Name)
+					.Distinct()
 					.ToList();
-
-				native = cats.Count > 0 ? cats.Distinct().ToList() : cats;
 			} else
 				native = new List<string>();
-
 			return terapeak.Union(native).Distinct().ToList();
 		} // GetEbayCategories
 	} // class EBayMarketplaceModelBuilder

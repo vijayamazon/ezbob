@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoReApproval;
-	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

@@ -19,5 +19,9 @@
 
         [DataMember]
 		public decimal InvestmentPercent { get; set; }
+
+		[FK("NL_Offers", "OfferID")]
+		[DataMember]
+		public long? NLOfferID { get; set; }
 	}//class I_OpenPlatformOffer
 }//ns

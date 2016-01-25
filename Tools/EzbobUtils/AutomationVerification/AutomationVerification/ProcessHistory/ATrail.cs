@@ -13,6 +13,24 @@
 	using MailApi;
 
 	public abstract class ATrail {
+		public class StepWithDecision {
+			public ATrace Step { get; private set; }
+			public DecisionStatus Decision { get; private set; }
+
+			public bool Is<T>() where T : ATrace {
+				return (Step != null) && (Step.GetType() == typeof(T));
+			} // Is
+
+			public Type StepType {
+				get { return Step == null ? null : Step.GetType(); }
+			} // StepType
+
+			internal StepWithDecision(ATrace step, DecisionStatus decision) {
+				Step = step;
+				Decision = decision;
+			} // constructor
+		} // class StepWithDecision
+
 		public virtual string GetDecisionName(DecisionStatus? nStatus = null) {
 			if (nStatus == null)
 				nStatus = DecisionStatus;
@@ -82,6 +100,47 @@
 			return null;
 		} // FindTrace
 
+		public StepWithDecision FindStep<T>() where T : ATrace {
+			foreach (StepWithDecision sd in this.stepsWithDecision) {
+				if (sd == null)
+					continue;
+
+				if (sd.Is<T>())
+					return sd;
+			} // if
+
+			return null;
+		} // FindStep
+
+		public List<StepWithDecision> FindSubtrail(params Type[] traceTypes) {
+			var result = new List<StepWithDecision>();
+
+			if (traceTypes == null)
+				return result;
+
+			if (traceTypes.Length < 1)
+				return result;
+
+			var tt = new SortedSet<Type>(new CompareTypes());
+
+			foreach (Type t in traceTypes)
+				if (t != null)
+					tt.Add(t);
+
+			if (tt.Count < 1)
+				return result;
+
+			foreach (StepWithDecision sd in this.stepsWithDecision) {
+				if (!tt.Contains(sd.StepType))
+					continue;
+
+				result.Add(sd);
+				tt.Remove(sd.StepType);
+			} // for each step
+
+			return result;
+		} // FindSubtrail
+
 		public virtual int Length {
 			get { return this.m_oSteps.Count; } // get
 		} // Length
@@ -89,6 +148,21 @@
 		public virtual void LockDecision() {
 			IsDecisionLocked = true;
 		} // LockDecision
+
+		public virtual void Add(StepWithDecision sd, bool bLockDecisionAfterAddingAStep) {
+			if ((sd == null) || (sd.Step == null))
+				return;
+
+			this.m_oSteps.Add(sd.Step);
+
+			this.stepsWithDecision.Add(new StepWithDecision(sd.Step, sd.Decision));
+
+			if (!IsDecisionLocked)
+				UpdateDecision(sd.Decision);
+
+			if (bLockDecisionAfterAddingAStep)
+				LockDecision();
+		} // Add
 
 		public virtual T Affirmative<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Add<T>(DecisionStatus.Affirmative, bLockDecisionAfterAddingAStep);
@@ -314,6 +388,8 @@
 
 				return this.m_oUniqueID.Value;
 			} // get
+
+			set { this.m_oUniqueID = value; }
 		} // UniqueID
 
 		public virtual void AppendOverridingResults(ATrail trail) {
@@ -322,7 +398,9 @@
 				return;
 			} // if
 
-			if (trail.GetType() != GetType()) {
+			bool isAssignable = TypeUtils.IsSubclassOf(GetType(), trail.GetType(), this.m_oLog);
+
+			if (!isAssignable) {
 				this.m_oLog.Alert("Cannot append {0} trail to {1} trail.", trail.GetType().Name, GetType().Name);
 				return;
 			} // if
@@ -341,6 +419,15 @@
 				return;
 			} // if
 
+			if (trail.NLCashRequestID != NLCashRequestID) {
+				this.m_oLog.Alert(
+					"Cannot append NL cash request {0} trail to NL cash request {1} trail.",
+					trail.NLCashRequestID,
+					NLCashRequestID
+				);
+				return;
+			} // if
+
 			HasApprovalChance = trail.HasApprovalChance;
 			Amount = trail.Amount;
 			DecisionStatus = trail.DecisionStatus;
@@ -348,6 +435,7 @@
 			this.m_oUniqueID = trail.UniqueID;
 			this.m_oDiffNotes.AddRange(trail.m_oDiffNotes);
 			this.m_oSteps.AddRange(trail.m_oSteps);
+			this.stepsWithDecision.AddRange(trail.stepsWithDecision);
 			this.m_sToExplanationEmailAddress = trail.m_sToExplanationEmailAddress;
 			this.m_sFromEmailAddress = trail.m_sFromEmailAddress;
 			this.m_sFromEmailName = trail.m_sFromEmailName;
@@ -434,6 +522,7 @@
 			this.m_bIsDecisionLocked = false;
 			this.m_oDiffNotes = new List<string>();
 			this.m_oSteps = new List<ATrace>();
+			this.stepsWithDecision = new List<StepWithDecision>();
 
 			CustomerID = nCustomerID;
 			CashRequestID = cashRequestID;
@@ -612,6 +701,8 @@
 
 			this.m_oSteps.Add(oTrace);
 
+			this.stepsWithDecision.Add(new StepWithDecision(oTrace, nDecisionStatus));
+
 			if (!IsDecisionLocked)
 				UpdateDecision(nDecisionStatus);
 
@@ -673,10 +764,33 @@
 		private DecisionStatus m_nDecisionStatus;
 		private readonly List<string> m_oDiffNotes;
 		private readonly List<ATrace> m_oSteps;
+		private readonly List<StepWithDecision> stepsWithDecision; 
 		private readonly ASafeLog m_oLog;
 		private string m_sToExplanationEmailAddress;
 		private string m_sFromEmailAddress;
 		private string m_sFromEmailName;
 		private readonly TimeCounter timer;
+
+		private class CompareTypes : IComparer<Type> {
+			/// <summary>
+			/// Compares two objects and returns a value indicating whether one is less than,
+			/// equal to, or greater than the other.
+			/// </summary>
+			/// <returns>
+			/// A signed integer that indicates the relative values of <paramref name="x"/> and
+			/// <paramref name="y"/>, as shown in the following table.
+			/// Value Meaning
+			/// Less than zero: <paramref name="x"/> is /// less than <paramref name="y"/>.
+			/// Zero: <paramref name="x"/> equals <paramref name="y"/>.
+			/// Greater than zero: <paramref name="x"/> is greater than <paramref name="y"/>.
+			/// </returns>
+			/// <param name="x">The first object to compare.</param><param name="y">The second object to compare.</param>
+			public int Compare(Type x, Type y) {
+				if (y == null)
+					return x == null ? 0 : 1;
+
+				return (x == null) ? -1 : String.Compare(x.FullName, y.FullName, StringComparison.InvariantCulture);
+			} // Compare
+		} // CompareTypes
 	} // class Trail
 } // namespace

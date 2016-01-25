@@ -73,7 +73,7 @@
 		public string Description {
 			get {
 				if (!IsError && !IsMismatch)
-                    return (Message ?? string.Empty).Trim();
+					return (Message ?? string.Empty).Trim();
 
 				string description = string.Format(
 					"{0}. {1}. {2} has been found in the requested range. {3}",

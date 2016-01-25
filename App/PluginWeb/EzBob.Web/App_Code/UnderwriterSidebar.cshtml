@@ -27,7 +27,7 @@
     try {
         var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 
-	    if (context != null && context.User != null) {
+	    if (context != null) {
 		    var user = context.User;
 		    if (user != null) {
 			    userName = user.FullName ?? user.Name;
@@ -60,7 +60,6 @@
     <div id="sidebar" class="bg">
 		@if (!string.IsNullOrWhiteSpace(detectUserRolesError)) {
 			<div class="hide exception-while-fetching-user-roles">@detectUserRolesError</div>
-			<script> console.error($('.exception-while-fetching-user-roles').text()); </script>
 		}
 
         <a href="#" id="reload-button-template" class="hide">Reload</a>

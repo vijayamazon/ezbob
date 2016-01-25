@@ -44,7 +44,7 @@
 					Log.Info("cashRequestID: {0}", this.decision.CashRequestID);
 
 					if (this.decision.CashRequestID == 0) {
-						Log.Error("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
+						Log.Info("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
 						Error = string.Format("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
 						NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, this.decision, Error, null);
 						return;

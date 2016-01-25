@@ -45,6 +45,7 @@
     <Compile Include="CustomerOriginEnum.cs" />
     <Compile Include="customer_enums.cs" />
     <Compile Include="DecisionActions.cs" />
+    <Compile Include="LoanSourceName.cs" />
     <Compile Include="NewLoanEnums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">

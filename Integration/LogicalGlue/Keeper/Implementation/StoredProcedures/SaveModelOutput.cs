@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
+	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
@@ -21,12 +22,16 @@
 			if ((response == null) || !response.Parsed.HasInference())
 				return;
 
-			Tbl = new List<DbModelOutput> {
-				Create(responseID, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic),
-				Create(responseID, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork),
-			}
-				.Where(m => m != null)
-				.ToList();
+			Tbl = new List<DbModelOutput>();
+
+			ModelNames[] allModelNames = (ModelNames[])Enum.GetValues(typeof(ModelNames));
+
+			foreach (ModelNames name in allModelNames) {
+				var model = response.Parsed.GetParsedModel(name);
+
+				if (model != null)
+					Tbl.Add(Create(responseID, name, model));
+			} // for each model name
 		} // constructor
 
 		public override bool HasValidParameters() {
@@ -36,7 +41,7 @@
 		public List<DbModelOutput> Tbl { get; set; }
 
 		private static DbModelOutput Create(long responseID, ModelNames name, HarvesterModelOutput mo) {
-			return (mo == null) ? null : new DbModelOutput {
+			return new DbModelOutput {
 				ErrorCode = mo.ErrorCode,
 				Exception = mo.Exception,
 				InferenceResultDecoded = mo.DecodedResult,

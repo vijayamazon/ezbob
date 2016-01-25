@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
+	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Database;
@@ -21,8 +22,14 @@
 
 			Tbl = new List<DbOutputRatio>();
 
-			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic.OutputRatios));
-			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork.OutputRatios));
+			ModelNames[] allModelNames = (ModelNames[])Enum.GetValues(typeof(ModelNames));
+
+			foreach (ModelNames name in allModelNames) {
+				var model = response.Parsed.GetParsedModel(name);
+
+				if (model != null)
+					Tbl.AddRange(Create(map, name, model.OutputRatios));
+			} // for each model name
 		} // constructor
 
 		public override bool HasValidParameters() {

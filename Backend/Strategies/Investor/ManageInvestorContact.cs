@@ -1,10 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
 	using System;
 	using System.Collections.Generic;
-	using System.Web.Security;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
-	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
 
@@ -17,13 +15,6 @@
 		public override string Name { get { return "ManageInvestorContact"; } }
 
 		public override void Execute() {
-				throw new NotImplementedException("Thou shalt create SignupInvestorMultiOrigin strategy.");
-				// TODO:
-				// 1. Create SignupInvestorMultiOrigin
-				// 2. Check current sign up/create lead ones for collissions with investors.
-				// 3. Uncomment the code below.
-
-			/* TODO Uncomment here once SignupInvestorMultiOrigin is ready
 			DateTime now = DateTime.UtcNow;
 			var con = DB.GetPersistent();
 			con.BeginTransaction();
@@ -45,13 +36,11 @@
 				};
 
 				if (this.contact.InvestorContactID == 0) {
-					UserSignup userSingup = new UserSignup(this.contact.Email, "123456", "InvestorWeb", 2);
-					userSingup.ConnectionWrapper = con;
+					var userSingup = new SignupInvestorMultiOrigin(contact.Email);
+					userSingup.Transaction = con;
 					userSingup.Execute();
 
-					if (!userSingup.Status.HasValue || userSingup.Status.Value != MembershipCreateStatus.Success || userSingup.UserID <= 0) {
-						throw new StrategyWarning(this, userSingup.Result);
-					}
+					// The .Execute() above completes successfully if and only if no error detected and .UserID > 0.
 
 					dbContact.InvestorContactID = userSingup.UserID;
 
@@ -62,22 +51,20 @@
 					DB.ExecuteNonQuery(con, "I_InvestorContactUpdate", CommandSpecies.StoredProcedure,
 						DB.CreateTableParameter<I_InvestorContact>("Tbl", new List<I_InvestorContact> { dbContact })
 					);
-				}
+				}//if
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to save investor {0} contact to DB", this.contact.InvestorID);
 				con.Rollback();
 				Result = false;
 				throw;
-			}
+			}//try
 
 			con.Commit();
 			Result = true;
 			Log.Info("Save investor {0} contact data into DB complete.", this.contact.InvestorID);
-			*/
 		}//Execute
 
 		public bool Result { get; set; }
-
 		private readonly InvestorContactModel contact;
 	}//ManageInvestorContact
 }//ns

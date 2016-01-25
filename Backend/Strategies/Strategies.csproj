@@ -106,7 +106,7 @@
     <Compile Include="Admin\Nop.cs" />
     <Compile Include="ASignupLoginBaseStrategy.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LGAgent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />
@@ -220,6 +220,7 @@
     <Compile Include="MainStrategy\BackdoorSimpleReject.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleApprove.cs" />
     <Compile Include="MainStrategy\ForceNhibernateResync.cs" />
+    <Compile Include="MainStrategy\GradeRangeSubproduct.cs" />
     <Compile Include="MainStrategy\InternalCashRequestID.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
@@ -488,6 +489,7 @@
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
     <Compile Include="UserManagement\SignupCustomerMutliOrigin.cs" />
+    <Compile Include="UserManagement\SignupInvestorMultiOrigin.cs" />
     <Compile Include="UserManagement\UserDisable.cs" />
     <Compile Include="UserManagement\ValidateSecurityAnswer.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
@@ -495,7 +497,6 @@
     <Compile Include="Misc\AmlChecker.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_public.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AutoDecisionResponse.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\BankBasedApproval.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />

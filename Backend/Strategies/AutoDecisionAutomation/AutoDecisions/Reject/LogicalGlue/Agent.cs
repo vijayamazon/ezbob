@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue {
 	using System;
 	using System.Data;
+	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
@@ -14,12 +16,14 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.dbutils;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using JetBrains.Annotations;
+
+	using LocalBucket = AutomationCalculator.Common.Bucket;
 
 	public class Agent : AAutoDecisionBase {
 		public Agent(AutoRejectionArguments args) {
 			this.args = args;
-			this.args.Log = this.args.Log.Safe();
 			Output = new AutoRejectionOutput();
 
 			this.oldWayAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
@@ -30,7 +34,7 @@
 				this.args.Log
 			);
 
-			Trail = new RejectionTrail(
+			Trail = new LGRejectionTrail(
 				this.args.CustomerID,
 				this.args.CashRequestID,
 				this.args.NLCashRequestID,
@@ -42,14 +46,14 @@
 		} // constructor
 
 		public virtual AutoRejectionOutput Output { get; private set; }
-		public virtual RejectionTrail Trail { get; private set; }
+		public virtual LGRejectionTrail Trail { get; private set; }
 
-		public virtual void MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public virtual void MakeAndVerifyDecision(bool quiet = false) {
+			Trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
+
 			AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary = null;
 
 			try {
-				Trail.SetTag(tag);
-
 				RunPrimary();
 
 				oSecondary = RunSecondary();
@@ -69,27 +73,41 @@
 			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
 		} // LogicalGlueFlowFollowed
 
-		protected virtual void RunPrimary() {
-			this.oldWayAgent.Init().RunPrimaryOnly();
-			this.oldWayAgent.Trail.SetTag(Trail.Tag);
-			this.oldWayAgent.Trail.Save(DB, null, TrailPrimaryStatus.OldPrimary);
-
-			var sp = new GetCustomerCompanyType(DB, Log) { CompanyID = this.args.CompanyID, };
-			sp.ExecuteNonQuery();
-
-			if (sp.TypeOfBusiness.IsRegulated())
-				Trail.Dunno<InternalFlow>().Init();
-			else
-				Trail.Dunno<LogicalGlueFlow>().Init();
-
-			if (LogicalGlueFlowFollowed)
-				LogicalGlueFlow();
-			else
-				InternalFlow();
-		} // RunPrimary
-
 		protected virtual AConnection DB { get { return this.args.DB; } }
 		protected virtual ASafeLog Log { get { return this.args.Log; } }
+
+		protected virtual void RunPrimary() {
+			using (Trail.AddCheckpoint(ProcessCheckpoints.OldWayFlow)) {
+				this.oldWayAgent.Init().RunPrimaryOnly();
+				this.oldWayAgent.Trail.UniqueID = this.args.TrailUniqueID;
+				this.oldWayAgent.Trail.SetTag(this.args.Tag).Save(DB, null, TrailPrimaryStatus.OldPrimary);
+			} // old flow step
+
+			using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
+				var inputData = new LGRejectionInputData();
+				inputData.Init(
+					this.oldWayAgent.Trail.MyInputData.DataAsOf,
+					this.oldWayAgent.Trail.MyInputData,
+					this.oldWayAgent.Trail.MyInputData
+				);
+
+				GatherData(inputData);
+
+				Trail.MyInputData.Init(inputData.DataAsOf, inputData, inputData);
+			} // gather data step
+
+			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+				if (Trail.MyInputData.CompanyIsRegulated)
+					Trail.Dunno<InternalFlow>().Init();
+				else
+					Trail.Dunno<LogicalGlueFlow>().Init();
+
+				if (LogicalGlueFlowFollowed)
+					LogicalGlueFlow();
+				else
+					InternalFlow();
+			} // make decision step
+		} // RunPrimary
 
 		private AutomationCalculator.AutoDecision.AutoRejection.LGAgent RunSecondary() {
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoRejection.LGAgent(this.args);
@@ -99,8 +117,25 @@
 			return oSecondary;
 		} // RunSecondary
 
-		private void LogicalGlueFlow() {
-			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
+		private void GatherData(LGRejectionInputData inputData) {
+			var sp = new LoadLGAutoRejectData(DB, Log) {
+				CustomerID = this.args.CustomerID,
+				CompanyID = this.args.CompanyID,
+				Now = this.args.Now,
+			};
+			sp.ExecuteNonQuery();
+
+			inputData.CompanyID = this.args.CompanyID;
+			inputData.TypeOfBusiness = sp.TypeOfBusiness;
+			inputData.CompanyIsRegulated = sp.TypeOfBusiness.IsRegulated();
+
+			inputData.CustomerOrigin = customerOrigins.Contains(sp.OriginID)
+				? (CustomerOriginEnum)sp.OriginID
+				: (CustomerOriginEnum?)null;
+
+			inputData.LoanSource = loanSources.Contains(sp.LoanSourceID)
+				? (LoanSourceName)sp.LoanSourceID
+				: (LoanSourceName?)null;
 
 			Inference inference = InjectorStub.GetEngine().GetInferenceIfExists(
 				this.args.CustomerID,
@@ -110,53 +145,123 @@
 			);
 
 			if (inference == null) {
+				inputData.RequestID = null;
+				inputData.ResponseID = null;
+				inputData.ResponseErrors = null;
+				inputData.HardReject = false;
+				inputData.Bucket = null;
+				inputData.Score = null;
+				inputData.MatchingGradeRanges = null;
+			} else {
+				inputData.RequestID = inference.UniqueID;
+				inputData.ResponseID = inference.ResponseID;
+
+				if (inference.ResponseID <= 0)
+					inputData.ResponseErrors.Add("No response received.");
+
+				if (inference.Error.HasError()) {
+					inputData.ResponseErrors.AddRange(
+						new [] {
+							inference.Error.Message,
+							inference.Error.ParsingExceptionType,
+							inference.Error.ParsingExceptionMessage,
+						}.Where(s => !string.IsNullOrWhiteSpace(s))
+					);
+
+					if (inference.Error.TimeoutSource != null)
+						inputData.ResponseErrors.Add("Timeout: " + inference.Error.TimeoutSource.Value);
+
+					ModelOutput model = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
+						? inference.ModelOutputs[ModelNames.NeuralNetwork]
+						: null;
+
+					if (model == null)
+						inputData.ResponseErrors.Add("Neural network model not found.");
+					else if (!model.Error.IsEmpty) {
+						if (!string.IsNullOrWhiteSpace(model.Error.ErrorCode))
+							inputData.ResponseErrors.Add(model.Error.ErrorCode);
+
+						if (!string.IsNullOrWhiteSpace(model.Error.Exception))
+							inputData.ResponseErrors.Add(model.Error.Exception);
+
+						inputData.ResponseErrors.AddRange(
+							model.Error.EncodingFailures.Where(ef => !ef.IsEmpty).Select(ef => ef.ToString())
+						);
+
+						inputData.ResponseErrors.AddRange(model.Error.MissingColumns);
+					} // if
+				} // if
+
+				inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
+				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
+				inputData.Score = inference.Score;
+
+				inputData.MatchingGradeRanges = new MatchingGradeRanges();
+
+				if (inputData.Score.HasValue && inputData.CustomerOrigin.HasValue && inputData.LoanSource.HasValue) {
+					var spRanges = new LoadMatchingGradeRanges(DB, Log) {
+						IsFirstLoan = inputData.LoanCount < 1,
+						IsRegulated = inputData.CompanyIsRegulated,
+						LoanSourceID = (int)inputData.LoanSource.Value,
+						OriginID = (int)inputData.CustomerOrigin.Value,
+						Score = inputData.Score.Value,
+					};
+					spRanges.Execute(inputData.MatchingGradeRanges);
+				} // if
+			} // if
+		} // GatherData
+
+		private void LogicalGlueFlow() {
+			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
+
+			if (Trail.MyInputData.RequestID == null) {
 				Trail.Negative<LGDataFound>(true).Init(false);
 				InternalFlow();
 				return;
 			} else
 				Trail.Dunno<LGDataFound>().Init(true);
 
-			bool hasError =
-				(inference.ResponseID <= 0) ||
-				(inference.Error == null) || inference.Error.HasError() ||
-				(inference.Etl == null) || (inference.Etl.Code == null);
-
-			if (hasError) {
+			if (Trail.MyInputData.ResponseErrors.Count > 0) {
+				Output.ErrorInLGData = true;
 				Trail.Negative<LGWithoutError>(true).Init(false);
-				return;
-			} else
+			} else {
+				Output.ErrorInLGData = false;
 				Trail.Dunno<LGWithoutError>().Init(true);
+			} // if
 
-			if (inference.Etl.Code == EtlCode.HardReject) {
+			if (Trail.MyInputData.HardReject)
 				Trail.Affirmative<LGHardReject>(true).Init(true);
-				return;
-			} else
+			else
 				Trail.Dunno<LGHardReject>().Init(false);
 
-			if (inference.Bucket == null) {
+			if (Trail.MyInputData.Bucket == null)
 				Trail.Negative<HasBucket>(true).Init(false);
-				return;
-			} else
+			else
 				Trail.Dunno<HasBucket>().Init(true);
 
-			/* TODO
-			if (less than one configuration found) {
-				StepReject<OfferConfigurationFound>(true).Init(0);
-				return;
-			} else if (more than one configuration found) {
-				StepNoDecision<OfferConfigurationFound>().Init(number of found configurations);
+			if (Trail.MyInputData.MatchingGradeRanges.Count < 1)
+				Trail.Affirmative<OfferConfigurationFound>(true).Init(0);
+			else if (Trail.MyInputData.MatchingGradeRanges.Count > 1) {
+				Trail.Negative<OfferConfigurationFound>(true).Init(Trail.MyInputData.MatchingGradeRanges.Count);
 
-				// TODO: append to the log message: customer ID, score, origin,
-				// company type, loan source, customer is new/old
-				this.log.Alert("Too many configurations found.");
-
-				return;
+				Log.Alert(
+					"Too many grade range + product subtype pairs found for a {0} customer {1}, " +
+					"score {2}, origin {3}, company is {4}regulated, loan source {5}.",
+					Trail.MyInputData.LoanCount > 0 ? "returning" : "new",
+					this.args.CustomerID,
+					Trail.MyInputData.Score == null ? "'N/A'" : Trail.MyInputData.Score.ToString(),
+					Trail.MyInputData.CustomerOrigin == null ? "'N/A'" : Trail.MyInputData.CustomerOrigin.Value.ToString(),
+					Trail.MyInputData.CompanyIsRegulated ? string.Empty : "non-",
+					Trail.MyInputData.LoanSource == null ? "'N/A'" : Trail.MyInputData.LoanSource.Value.ToString()
+				);
 			} else {
-				StepNoDecision<OfferConfigurationFound>().Init(1);
+				Trail.Dunno<OfferConfigurationFound>().Init(1);
 
-				// TODO: Output.GradeRangeID = ID of found offer configuration
+				MatchingGradeRanges.SubproductGradeRange spgr = Trail.MyInputData.MatchingGradeRanges[0];
+
+				Output.GradeRangeID = spgr.GradeRangeID;
+				Output.ProductSubTypeID = spgr.ProductSubTypeID;
 			} // if
-			*/
 
 			Trail.DecideIfNotDecided();
 		} // LogicalGlueFlow
@@ -201,17 +306,35 @@
 		private readonly Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent oldWayAgent;
 		private readonly AutoRejectionArguments args;
 
-		private class GetCustomerCompanyType : AStoredProcedure {
-			public GetCustomerCompanyType(AConnection db, ASafeLog log) : base(db, log) {
+		private class LoadLGAutoRejectData : AStoredProcedure {
+			public LoadLGAutoRejectData(AConnection db, ASafeLog log) : base(db, log) {
 				TypeOfBusiness = TypeOfBusiness.Entrepreneur;
 			} // constructor
 
 			public override bool HasValidParameters() {
-				return (CompanyID > 0);
+				return (CustomerID > 0) && (CompanyID > 0) && (Now >= longAgo);
 			} // HasValidParameters
 
 			[UsedImplicitly]
+			public DateTime Now { get; set; }
+
+			[UsedImplicitly]
+			public int CustomerID { get; set; }
+
+			[UsedImplicitly]
 			public int CompanyID { get; set; }
+
+			[UsedImplicitly]
+			[Direction(ParameterDirection.Output)]
+			public int OriginID { get; set; }
+
+			[UsedImplicitly]
+			[Direction(ParameterDirection.Output)]
+			public int LoanSourceID { get; set; }
+
+			[UsedImplicitly]
+			[Direction(ParameterDirection.Output)]
+			public int LoanCount { get; set; }
 
 			[UsedImplicitly]
 			[Direction(ParameterDirection.Output)]
@@ -251,6 +374,47 @@
 			} // TypeOfBusinessName
 
 			public TypeOfBusiness TypeOfBusiness { get; private set; }
-		} // class GetCustomerCompanyType
+		} // class LoadLGAutoRejectData
+
+		private class LoadMatchingGradeRanges : AStoredProcedure {
+			public LoadMatchingGradeRanges(AConnection db, ASafeLog log) : base(db, log) {
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return (OriginID > 0) && (LoanSourceID > 0) && (Score > 0);
+			} // HasValidParameters
+
+			[UsedImplicitly]
+			public int OriginID { get; set; }
+
+			[UsedImplicitly]
+			public bool IsRegulated { get; set; }
+
+			[UsedImplicitly]
+			public decimal Score { get; set; }
+
+			[UsedImplicitly]
+			public int LoanSourceID { get; set; }
+
+			[UsedImplicitly]
+			public bool IsFirstLoan { get; set; }
+
+			public void Execute(MatchingGradeRanges target) {
+				target.Clear();
+
+				ForEachRowSafe(sr => target.Add(new MatchingGradeRanges.SubproductGradeRange {
+					ProductSubTypeID = sr["ProductSubTypeID"],
+					GradeRangeID = sr["GradeRangeID"],
+				}));
+			} // Execute
+		} // class LoadMatchingGradeRanges
+
+		private static readonly int[] customerOrigins =
+			((CustomerOriginEnum[])Enum.GetValues(typeof(CustomerOriginEnum))).Select(x => (int)x).ToArray();
+
+		private static readonly int[] loanSources =
+			((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
+
+		private static readonly DateTime longAgo = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
 	} // class Agent
 } // namespace

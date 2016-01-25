@@ -1,6 +1,4 @@
 using FluentNHibernate.Mapping;
-using System.Collections.Generic;
-using System.Linq;
 using ApplicationMng.Repository;
 using NHibernate;
 
@@ -10,7 +8,6 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		public virtual int Id { get; set; }
 		public virtual string SourceOfRepayment { get; set; }
-
 	}
 }
 

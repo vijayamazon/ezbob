@@ -37,7 +37,8 @@ ALTER PROCEDURE MainStrategyUpdateCrC
 @IsCustomerRepaymentPeriodSelectionAllowed BIT,
 @EmailSendingBanned BIT,
 @DiscountPlanID INT,
-@HasApprovalChance BIT
+@HasApprovalChance BIT,
+@ProductSubTypeID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -94,7 +95,8 @@ BEGIN
 		EmailSendingBanned = @EmailSendingBanned,
 		DiscountPlanId = @DiscountPlanID,
 		HasApprovalChance = @HasApprovalChance,
-		SpreadSetupFee = @SpreadSetupFee
+		SpreadSetupFee = @SpreadSetupFee,
+		ProductSubTypeID = @ProductSubTypeID
 	WHERE
 		Id = @CashRequestID
 
