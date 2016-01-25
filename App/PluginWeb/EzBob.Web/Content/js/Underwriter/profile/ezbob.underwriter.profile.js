@@ -203,7 +203,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.profileHeadView = new EzBob.Underwriter.ProfileHeadView({
 			el: profileHead,
 			model: this.summaryInfoModel,
-			personalModel: this.personalInfoModel,
 			loanModel: this.loanInfoModel,
 			medalModel: this.medalCalculationModel,
 			parentView: this

@@ -228,6 +228,9 @@
 
 		[DataMember]
 		public int NumOfLoans { get; set; }
+
+		[DataMember]
+		public bool IsCustomerInEnabledStatus { get; set; }
 		//-----------------------------OP ---------------------\\
 		[DataMember]
 		public int? ProductSubTypeID { get; set; }

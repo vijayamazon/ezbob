@@ -6,14 +6,13 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
 	initialize: function(options) {
 		this.loanModel = options.loanModel;
-		this.personalModel = options.personalModel;
 		this.medalModel = options.medalModel;
 		this.parentView = options.parentView;
 
 		this.bindTo(this.model, 'change sync', this.render, this);
 		this.bindTo(this.loanModel, 'change sync', this.render, this);
 		this.bindTo(this.medalModel, 'change sync', this.renderMedal, this);
-		this.bindTo(this.personalModel, 'change sync', this.personalModelChanged, this);
+		
 	},
 
 	serializeData: function() {
@@ -64,17 +63,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 
-	personalModelChanged: function(e, a) {
-		if (e && a && this.medalModel) {
-			this.medalModel.fetch();
-		}
-
-		if (e && a && this.model) {
-			this.model.fetch();
-		}
-	},
-
-	onRender: function() {
+	onRender: function () {
+		console.log('profile head render');
+		/*
 		if (this.loanInfoView) {
 			this.loanInfoView.undelegateEvents();
 
@@ -86,12 +77,11 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			Backbone.Marionette.ItemView.prototype.remove.call(this.loanInfoView);
 
 			el.empty();
-		}
+		}*/
 
 		this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
 			el: this.ui.editOfferDiv,
 			model: this.loanModel,
-			personalInfo: this.personalModel,
 			parentView: this.parentView,
 			medalModel: this.medalModel
 		});
@@ -111,9 +101,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		if (this.loanModel && this.loanModel.get('AutomationOfferModel') && this.loanModel.get('AutomationOfferModel').Amount === 0) {
 		    this.ui.automationOffer.hide();
 		}
-
-		if (this.personalModel) {
-			this.changeDecisionButtonsState(this.personalModel.get('Editable'));
+		if (this.loanModel) {
+			this.changeDecisionButtonsState(this.loanModel.get('Editable'));
 		}
 
 		if (this.model.get('Alerts') !== void 0) {
@@ -156,9 +145,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		this.profileHeadMedalView.render();
 	},
 	changeDecisionButtonsState: function(isHideAll) {
-		var creditResult = this.personalModel.get('CreditResult');
-		var isWizardComplete = this.personalModel.get('IsWizardComplete');
-
+		var creditResult = this.loanModel.get('CreditResult');
+		var isWizardComplete = this.loanModel.get('SystemDecision') !== 'Registered';
+		var isEnabled = this.loanModel.get('IsCustomerInEnabledStatus');
 		if (isHideAll)
 			this.$el.find('#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn').hide();
 
@@ -218,7 +207,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			break;
 		} // switch
 
-		if (this.personalModel.get('UserStatus') === 'Registered') {
+		if (!isWizardComplete) {
 			this.$el.find('#ReturnBtn').hide();
 			this.$el.find('#RejectBtn').hide();
 			this.$el.find('#ApproveBtn').hide();
@@ -227,7 +216,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			this.$el.find('#EscalateBtn').hide();
 		} // if
 
-		if (!this.personalModel.get('IsCustomerInEnabledStatus')) {
+		if (!isEnabled) {
 			this.$el.find(
 				'#SuspendBtn, #SignatureBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn, #newCreditLineButtonId'
 			).addClass('disabled');
