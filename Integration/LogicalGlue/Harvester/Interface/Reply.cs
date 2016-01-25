@@ -1,11 +1,16 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
 	using System;
+	using System.Collections.Generic;
 	using System.Net;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils.Extensions;
 	using Newtonsoft.Json;
 
 	public class Reply : IConvertableToShortString {
+		public Reply() {
+			this.parsedModels = new SortedDictionary<ModelNames, ModelOutput>();
+		} // constructor
+
 		[JsonProperty(PropertyName = "status")]
 		public HttpStatusCode Status { get; set; }
 
@@ -74,22 +79,6 @@
 			return string.Join("_", Status).GetHashCode();
 		} // GetHashCode
 
-		public ModelOutput FuzzyLogic {
-			get {
-				return this.HasModels()
-					? JsonConvert.DeserializeObject<ModelOutput>(Inference.Decision.Models.FuzzyLogicResponse)
-					: null;
-			} // get
-		} // FuzzyLogic
-
-		public ModelOutput NeuralNetwork {
-			get {
-				return this.HasModels()
-					? JsonConvert.DeserializeObject<ModelOutput>(Inference.Decision.Models.NeuralNetworkResponse)
-					: null;
-			} // get
-		} // NeuralNetwork
-
 		public Bucket? Bucket {
 			get {
 				if (!this.HasBucket())
@@ -106,6 +95,19 @@
 
 		public string Reason { get { return this.HasDecision() ? Inference.Decision.Reason : null; } }
 		public string Outcome { get { return this.HasDecision() ? Inference.Decision.Outcome : null; } }
+
+		public ModelOutput GetParsedModel(ModelNames name) {
+			if (this.parsedModels.ContainsKey(name))
+				return this.parsedModels[name];
+
+			this.parsedModels[name] = this.HasModels()
+				? JsonConvert.DeserializeObject<ModelOutput>(Inference.Decision.Models[name])
+				: null;
+
+			return this.parsedModels[name];
+		} // GetParsedModel
+
+		private readonly SortedDictionary<ModelNames, ModelOutput> parsedModels;
 	} // class Reply
 
 	public static class ReplyExt {

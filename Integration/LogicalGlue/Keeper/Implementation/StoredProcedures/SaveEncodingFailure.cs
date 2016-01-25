@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
+	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Database;
@@ -22,8 +23,14 @@
 
 			Tbl = new List<DbEncodingFailure>();
 
-			Tbl.AddRange(Create(map, ModelNames.FuzzyLogic, response.Parsed.FuzzyLogic.EncodingFailures));
-			Tbl.AddRange(Create(map, ModelNames.NeuralNetwork, response.Parsed.NeuralNetwork.EncodingFailures));
+			ModelNames[] allModelNames = (ModelNames[])Enum.GetValues(typeof(ModelNames));
+
+			foreach (ModelNames name in allModelNames) {
+				var model = response.Parsed.GetParsedModel(name);
+
+				if (model != null)
+					Tbl.AddRange(Create(map, name, model.EncodingFailures));
+			} // for each model name
 		} // constructor
 
 		public override bool HasValidParameters() {

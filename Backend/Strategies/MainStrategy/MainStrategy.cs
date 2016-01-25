@@ -404,32 +404,16 @@
 
 			if (EnableAutomaticApproval && bContinue) {
 				if (this.autoRejectionOutput == null) {
-					bContinue = false;
-
 					Log.Info(
 						"Not processing auto-approval: no auto-rejection output detected (auto rejection did not run?)."
 					);
 				} else
-					bContinue = DoAutoApproval();
+					DoAutoApproval();
 			} else {
 				Log.Debug(
 					"Not processed auto approval: " +
 						"it is currently disabled in configuration or decision has already been made earlier."
 					);
-			} // if
-
-			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
-				new BankBasedApproval(CustomerID).MakeDecision(this.autoDecisionResponse);
-
-				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
-
-				if (!bContinue)
-					Log.Debug("Bank based approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
-			} else {
-				Log.Debug(
-					"Not processed bank based approval: " +
-					"it is currently disabled in configuration or decision has already been made earlier."
-				);
 			} // if
 
 			if (!this.autoDecisionResponse.SystemDecision.HasValue) { // No decision is made so far
@@ -441,9 +425,7 @@
 			} // if
 		} // ProcessApprovals
 
-		private bool DoAutoApproval() {
-			bool bContinue;
-
+		private void DoAutoApproval() {
 			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
 				new AutoApprovalArguments(
 					CustomerID,
@@ -467,8 +449,6 @@
 			aAgent.MakeAndVerifyDecision();
 
 			if (aAgent.ExceptionWhileDeciding) {
-				bContinue = false;
-
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception - " + aAgent.Trail.UniqueID;
 				this.autoDecisionResponse.AutoApproveAmount = 0;
 
@@ -481,9 +461,11 @@
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-			} else if (aAgent.WasMismatch) {
+				return;
+			} // if
+			
+			if (aAgent.WasMismatch) {
 				this.wasMismatch = true;
-				bContinue = false;
 
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Mismatch - " + aAgent.Trail.UniqueID;
 				this.autoDecisionResponse.AutoApproveAmount = 0;
@@ -498,25 +480,24 @@
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-			}  else {
-				bContinue = !aAgent.Trail.HasDecided;
-
-				this.autoDecisionResponse.LoanOfferUnderwriterComment =
-					aAgent.Trail.GetDecisionName() +
-					" - " +
-					aAgent.Trail.UniqueID;
-				this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
-
-				Log.Msg(
-					"Both Auto Approval implementations have reached the same decision: {0}approved",
-					aAgent.Trail.HasDecided ? string.Empty : "not "
-				);
-
-				this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+				return;
 			} // if
 
-			if (bContinue)
-				return true;
+			this.autoDecisionResponse.LoanOfferUnderwriterComment =
+				aAgent.Trail.GetDecisionName() +
+				" - " +
+				aAgent.Trail.UniqueID;
+			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+
+			Log.Msg(
+				"Both Auto Approval implementations have reached the same decision: {0}approved",
+				aAgent.Trail.HasDecided ? string.Empty : "not "
+			);
+
+			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+
+			if (!aAgent.Trail.HasDecided)
+				return;
 
 			try {
 				CreateOffer(aAgent);
@@ -524,8 +505,6 @@
 				Log.Alert(e, "Exception during creating an offer for customer {0}.", CustomerID);
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception in offer - " + aAgent.Trail.UniqueID;
 			} // try
-
-			return false;
 		} // DoAutoApproval
 
 		private void CreateOffer(ICreateOfferInputData offerInputData) {

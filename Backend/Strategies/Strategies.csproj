@@ -493,7 +493,6 @@
     <Compile Include="Misc\AmlChecker.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_public.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AutoDecisionResponse.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\BankBasedApproval.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />

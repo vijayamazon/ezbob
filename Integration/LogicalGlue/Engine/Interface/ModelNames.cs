@@ -11,5 +11,9 @@
 		[EnumMember]
 		[Description("Neural network")]
 		NeuralNetwork = 2,
+
+		[EnumMember]
+		[Description("Logistic regression")]
+		LogisticRegression = 3,
 	} // enum ModelNames
 } // namespace
