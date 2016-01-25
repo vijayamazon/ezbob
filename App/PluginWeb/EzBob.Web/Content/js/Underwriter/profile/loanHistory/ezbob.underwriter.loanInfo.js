@@ -220,7 +220,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		},
 
 		UpdateNewCreditLineState: function () {
-			console.log('UpdateNewCreditLineState');
 			var waiting = this.model.get("CreditResult") === "WaitingForDecision";
 			var disabled = waiting || !this.model.get('IsCustomerInEnabledStatus');
 			$("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
@@ -249,7 +248,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		},
 
 		onRender: function () {
-			console.log('loan info render');
 			this.$el.find(".tltp").tooltip();
 			this.$el.find(".tltp-left").tooltip({
 				placement: "left"
