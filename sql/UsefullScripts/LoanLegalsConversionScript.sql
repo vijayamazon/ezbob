@@ -1,4 +1,7 @@
-Drop table LoanAgreementTemplateTypes
+
+IF EXISTS (SELECT * FROM LoanAgreementTemplateTypes WHERE TemplateType LIKE 'Alibaba%' )
+	DROP TABLE LoanAgreementTemplateTypes
+GO
 
 IF object_id('LoanAgreementTemplateTypes') IS NULL
 BEGIN
@@ -32,6 +35,7 @@ ALTER TABLE LoanAgreementTemplate ADD ProductID INT
 ALTER TABLE LoanAgreementTemplate ADD IsApproved BIT
 ALTER TABLE LoanAgreementTemplate ADD IsReviewed BIT
 ALTER TABLE LoanAgreementTemplate ADD ReleaseDate DATETIME
+GO
 
 
 update LoanAgreementTemplate set ProductID = 1
@@ -54,3 +58,4 @@ update LoanAgreementTemplate set IsApproved = 0
 
 ALTER TABLE LoanLegal ADD SignedLegalDocs varchar(max)
 ALTER TABLE NL_LoanLegals ADD SignedLegalDocs varchar(max)
+GO

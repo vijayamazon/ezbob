@@ -177,7 +177,7 @@
 
         [Test]
         public void TestManualLegalDocsSyncTemplatesFiles() {
-            var stra = new ManualLegalDocsSyncTemplatesFiles();
+			var stra = new ManualLegalDocsSyncTemplatesFiles(@"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement");
             stra.Execute();
         }
 

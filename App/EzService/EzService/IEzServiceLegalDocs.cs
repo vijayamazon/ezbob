@@ -9,6 +9,6 @@
         [OperationContract]
         LegalDocActionResult GetLegalDocById(int customerID, int userID, int loanAgreementTemplateId);
         [OperationContract]
-        BoolActionResult ManualLegalDocsSyncTemplatesFiles(int customerID, int userID);
+        BoolActionResult ManualLegalDocsSyncTemplatesFiles(string agreementsPath);
     } // interface IEzServiceLegalDocs
 } // namespace  

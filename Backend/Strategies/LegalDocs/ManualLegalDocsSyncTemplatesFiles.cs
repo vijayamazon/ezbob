@@ -3,12 +3,18 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Net;
+    using Ezbob.Backend.Models.LegalDocs;
     using Ezbob.Backend.ModelsWithDB.LegalDocs;
     using Ezbob.Database;
+    using EZBob.DatabaseLib.Model.Database;
 
-    public class ManualLegalDocsSyncTemplatesFiles : AStrategy {
-       
+	public class ManualLegalDocsSyncTemplatesFiles : AStrategy {
+		private readonly string agreementsPath;
+
+		public ManualLegalDocsSyncTemplatesFiles(string agreementsPath) {
+			this.agreementsPath = agreementsPath;
+		}
+
 		public override string Name {
             get { return "ManualLegalDocsSyncTemplatesFiles"; }
 		} // Name
@@ -18,7 +24,9 @@
         public override void Execute() {
 		    try {
                 var docs = GetDocs();
-                foreach (var doc in docs) {
+			    Log.Info("ManualLegalDocsSyncTemplatesFiles Execute num of docs to populate : {0}", docs.Count);
+				foreach (var doc in docs) {
+					Log.Info("ManualLegalDocsSyncTemplatesFiles Inserting template: {0} {1} {2} {3}", doc.TemplateTypeName, doc.TemplateTypeID, doc.OriginID, doc.IsRegulated);
                     DB.ExecuteNonQuery("I_InsertLegalDocTemplate", CommandSpecies.StoredProcedure,
                       new QueryParameter("Template", doc.Template),
                       new QueryParameter("TemplateTypeID", doc.TemplateTypeID),
@@ -32,8 +40,8 @@
                     );
                 }
 		        Result = true;
-		    } catch (Exception) {
-
+		    } catch (Exception ex) {
+			    Log.Error(ex, "Failed to populate docs");
 		        Result = false;
 		    }
 
@@ -42,7 +50,7 @@
 
         private List<LoanAgreementTemplate> GetDocs() {
             List<LoanAgreementTemplate> legalDocs = new List<LoanAgreementTemplate>();
-            var path = System.AppDomain.CurrentDomain.BaseDirectory.Substring(0, System.AppDomain.CurrentDomain.BaseDirectory.IndexOf("ezbob", StringComparison.Ordinal) +5) + @"\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement";
+			var path = this.agreementsPath;
             var files = Directory.GetFiles(path, "*.cshtml", SearchOption.AllDirectories).ToList();
             int i = 1;
             foreach (string fileName in files) {
@@ -71,27 +79,27 @@
 
         private int GetTemplateTypeID(string name) {
             if (name.Contains("GuarantyAgreement"))
-                return 1;
+				return (int)LegalDocsEnums.LoanAgreementTemplateType.GuarantyAgreement;
             if (name.Contains("PreContract"))
-                return 2;
+				return (int)LegalDocsEnums.LoanAgreementTemplateType.PreContract;
             if (name.Contains("RegulatedLoanAgreement"))
-                return 3;
+				return (int)LegalDocsEnums.LoanAgreementTemplateType.RegulatedLoanAgreement;
             if (name.Contains("PrivateCompanyLoanAgreement"))
-                return 4;
+				return (int)LegalDocsEnums.LoanAgreementTemplateType.PrivateCompanyLoanAgreement;
             if (name.Contains("CreditFacility"))
-                return 5;
+				return (int)LegalDocsEnums.LoanAgreementTemplateType.CreditFacility;
             if (name.Contains("BoardResolution"))
-                return 6;
+				return (int)LegalDocsEnums.LoanAgreementTemplateType.BoardResolution;
             return 0;
         }
 
         private int GetBrandID(string name) {
             if (name.Contains("Alibaba"))
-                return 3;
+                return (int)CustomerOriginEnum.alibaba;
             if (name.Contains("Ezbob"))
-                return 1;
+				return (int)CustomerOriginEnum.ezbob;
             if (name.Contains("EVL"))
-                return 2;
+				return (int)CustomerOriginEnum.everline;
             return 0;
         }
 

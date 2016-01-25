@@ -21,10 +21,10 @@
             };
         }
 
-        public BoolActionResult ManualLegalDocsSyncTemplatesFiles(int customerID, int userID) {
+        public BoolActionResult ManualLegalDocsSyncTemplatesFiles(string ageementsPath) {
             ManualLegalDocsSyncTemplatesFiles strategy;
-            var metadata = ExecuteSync(out strategy, customerID, userID);
-            return new BoolActionResult() {
+			var metadata = ExecuteSync(out strategy, null, null, ageementsPath);
+            return new BoolActionResult {
                 MetaData = metadata,
                 Value = strategy.Result
             };

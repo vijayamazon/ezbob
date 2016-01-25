@@ -5326,10 +5326,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LegalDocActionResult> GetLegalDocByIdAsync(int customerID, int userID, int loanAgreementTemplateId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFilesResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult ManualLegalDocsSyncTemplatesFiles(int customerID, int userID);
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManualLegalDocsSyncTemplatesFiles(string agreementsPath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFilesResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManualLegalDocsSyncTemplatesFilesAsync(int customerID, int userID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManualLegalDocsSyncTemplatesFilesAsync(string agreementsPath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianLtd", ReplyAction="http://tempuri.org/IEzService/ParseExperianLtdResponse")]
         ServiceClientProxy.EzServiceReference.ExperianLtdActionResult ParseExperianLtd(long nServiceLogID);
@@ -7223,12 +7223,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetLegalDocByIdAsync(customerID, userID, loanAgreementTemplateId);
         }
         
-        public ServiceClientProxy.EzServiceReference.BoolActionResult ManualLegalDocsSyncTemplatesFiles(int customerID, int userID) {
-            return base.Channel.ManualLegalDocsSyncTemplatesFiles(customerID, userID);
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManualLegalDocsSyncTemplatesFiles(string agreementsPath) {
+            return base.Channel.ManualLegalDocsSyncTemplatesFiles(agreementsPath);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManualLegalDocsSyncTemplatesFilesAsync(int customerID, int userID) {
-            return base.Channel.ManualLegalDocsSyncTemplatesFilesAsync(customerID, userID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManualLegalDocsSyncTemplatesFilesAsync(string agreementsPath) {
+            return base.Channel.ManualLegalDocsSyncTemplatesFilesAsync(agreementsPath);
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult ParseExperianLtd(long nServiceLogID) {

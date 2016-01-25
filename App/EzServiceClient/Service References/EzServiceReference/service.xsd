@@ -2084,8 +2084,7 @@
   <xs:element name="ManualLegalDocsSyncTemplatesFiles">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="agreementsPath" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
