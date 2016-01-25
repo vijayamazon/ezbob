@@ -44,7 +44,6 @@
 			long? cashRequestID, // When old cash request is removed replace this with NLcashRequestID
 			CashRequestOriginator? cashRequestOriginator
 		) {
-			this.offeredCreditLine = 0;
 			this.autoRejectionOutput = null;
 
 			UnderwriterID = underwriterID;
@@ -181,8 +180,6 @@
 			CapOffer();
 
 			ProcessApprovals();
-
-			AdjustOfferredCreditLine();
 		} // StandardFlow
 
 		/// <summary>
@@ -208,8 +205,6 @@
 
 			if (bsa == null) // Should never happen because of the "if" condition.
 				return false;
-
-			this.offeredCreditLine = bsa.ApprovedAmount;
 
 			this.medal.MedalClassification = bsa.MedalClassification;
 			this.medal.OfferedLoanAmount = bsa.ApprovedAmount;
@@ -282,7 +277,7 @@
 			var postMaster = new MainStrategyMails(
 				this.mailer,
 				CustomerID,
-				this.offeredCreditLine,
+				this.autoDecisionResponse.ApprovedAmount,
 				this.medal,
 				this.customerDetails,
 				this.autoDecisionResponse,
@@ -292,13 +287,6 @@
 			postMaster.SendEmails();
 		} // SendEmails
 
-		private void AdjustOfferredCreditLine() {
-			if (this.autoDecisionResponse.DecidedToReject)
-				this.offeredCreditLine = 0;
-			else if (this.autoDecisionResponse.DecidedToApprove)
-				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.AutoApproveAmount);
-		} // AdjustOfferredCreditLine
-
 		private void CapOffer() {
 			bool isHomeOwner = DB.ExecuteScalar<bool>(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
@@ -306,7 +294,7 @@
 				new QueryParameter("CustomerId", CustomerID)
 			);
 
-			this.offeredCreditLine = Math.Min(
+			this.autoDecisionResponse.ApprovedAmount = Math.Min(
 				this.medal.RoundOfferedAmount(),
 				isHomeOwner ? MaxCapHomeOwner : MaxCapNotHomeOwner
 			);
@@ -315,103 +303,64 @@
 				"Capped for {0}home owner according to land registry: " +
 				"capped amount {1} for customer {2} and underwriter {3}.",
 				isHomeOwner ? string.Empty : "not ",
-				this.offeredCreditLine,
+				this.autoDecisionResponse.ApprovedAmount,
 				CustomerID,
 				UnderwriterID
 			);
 		} // CapOffer
 
 		private bool ApprovalPreconditions() {
-			bool bContinue = true;
-
-			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
-			if (this.wasMismatch && bContinue) {
+			if (this.wasMismatch) {
 				Log.Info("Not processing approvals: there was a mismatch during rejection.");
-				bContinue = false;
+				return false;
 			} // if
 
-			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
+			if (this.autoDecisionResponse.DecidedToReject) {
 				Log.Info("Not processing approvals: reject decision has been made.");
-				bContinue = false;
+				return false;
 			} // if
 
-			if (this.avoidAutomaticDecision && bContinue) {
+			if (this.avoidAutomaticDecision) {
 				Log.Info("Not processing approvals: automatic decisions should be avoided.");
-				bContinue = false;
+				return false;
 			} // if
 
-			if (!this.customerDetails.CustomerStatusIsEnabled && bContinue) {
+			if (!this.customerDetails.CustomerStatusIsEnabled) {
 				Log.Info("Not processing approvals: customer status is not enabled.");
-				bContinue = false;
+				return false;
 			} // if
 
-			if (this.customerDetails.CustomerStatusIsWarning && bContinue) {
+			if (this.customerDetails.CustomerStatusIsWarning) {
 				Log.Info("Not processing approvals: customer status is 'warning'.");
-				bContinue = false;
+				return false;
 			} // if
 
-			if (!EnableAutomaticReRejection && bContinue) {
+			if (!EnableAutomaticReRejection) {
 				Log.Info("Not processing approvals: auto re-rejection is disabled.");
-				bContinue = false;
+				return false;
 			} // if
 
-			if (!EnableAutomaticRejection && bContinue) {
+			if (!EnableAutomaticRejection) {
 				Log.Info("Not processing approvals: auto rejection is disabled.");
-				bContinue = false;
+				return false;
 			} // if
 
-			return bContinue;
+			return true;
 		} // ApprovalPreconditions
 
 		private void ProcessApprovals() {
-			bool bContinue = ApprovalPreconditions();
+			if (!ApprovalPreconditions())
+				return;
 
-			// ReSharper disable ConditionIsAlwaysTrueOrFalse
-			if (EnableAutomaticReApproval && bContinue) {
-				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
-					CustomerID,
-					this.cashRequestID,
-					this.nlCashRequestID,
-					DB,
-					Log
-				).Init();
+			if (DoAutoReapproval())
+				return;
 
-				raAgent.MakeDecision(this.autoDecisionResponse, this.tag);
-
-				if (raAgent.WasMismatch) {
-					this.wasMismatch = true;
-					bContinue = false;
-
-					Log.Warn("Mismatch happened while executing re-approval, automation aborted.");
-				} else {
-					bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
-
-					if (!bContinue)
-						Log.Debug("Auto re-approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
-				} // if
-			} else
-				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
-
-			if (this.customerDetails.IsAlibaba && bContinue) {
+			if (this.customerDetails.IsAlibaba) {
 				Log.Info("Not processing auto-approval: Alibaba customer.");
-
-				bContinue = false;
+				return;
 			} // if
 
-			if (EnableAutomaticApproval && bContinue) {
-				if (this.autoRejectionOutput == null) {
-					Log.Info(
-						"Not processing auto-approval: no auto-rejection output detected (auto rejection did not run?)."
-					);
-				} else
-					DoAutoApproval();
-			} else {
-				Log.Debug(
-					"Not processed auto approval: " +
-						"it is currently disabled in configuration or decision has already been made earlier."
-					);
-			} // if
+			DoAutoApproval();
 
 			if (!this.autoDecisionResponse.SystemDecision.HasValue) { // No decision is made so far
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
@@ -422,13 +371,96 @@
 			} // if
 		} // ProcessApprovals
 
+		/// <summary>
+		/// Executes auto re-approval.
+		/// </summary>
+		/// <returns>True, if auto re-approval reached some decision (approval or mismatch); false, otherwise.</returns>
+		private bool DoAutoReapproval() {
+			if (EnableAutomaticReApproval) {
+				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
+				return false;
+			} // if
+
+			var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
+				CustomerID,
+				this.cashRequestID,
+				this.nlCashRequestID,
+				DB,
+				Log
+			).Init();
+
+			raAgent.MakeAndVerifyDecision(this.tag);
+
+			if (raAgent.ExceptionWhileDeciding) {
+				Log.Warn("Exception happened while executing re-approval, auto-decision process aborted.");
+				return true;
+			} // if exception
+
+			if (raAgent.WasMismatch) {
+				this.wasMismatch = true;
+				Log.Warn("Mismatch happened while executing re-approval, auto-decision process aborted.");
+				return true;
+			} // if mismatch
+
+			if (!raAgent.Trail.HasDecided) {
+				Log.Debug("Auto re-approval has not reached 'approved' decision, auto-decision process continues.");
+				return false;
+			} // if
+
+			this.autoDecisionResponse.HasApprovalChance = true;
+			this.autoDecisionResponse.ApprovedAmount = raAgent.ApprovedAmount;
+			this.autoDecisionResponse.Decision = DecisionActions.ReApprove;
+			this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
+			this.autoDecisionResponse.UserStatus = Status.Approved;
+			this.autoDecisionResponse.SystemDecision = SystemDecision.Approve;
+			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Re-Approval";
+			this.autoDecisionResponse.DecisionName = "Re-Approval";
+			this.autoDecisionResponse.AppValidFor = raAgent.AppValidFor;
+			this.autoDecisionResponse.LoanOfferEmailSendingBannedNew = raAgent.IsEmailSendingBanned;
+
+			var sr = DB.GetFirst(
+				"RapprovalGetLastApproveTerms",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("LacrID", raAgent.LastApprovedCashRequestID)
+			);
+
+			this.autoDecisionResponse.InterestRate = sr["InterestRate"];
+			this.autoDecisionResponse.RepaymentPeriod = sr["RepaymentPeriod"];
+			this.autoDecisionResponse.SetupFee = sr["ManualSetupFeePercent"];
+			this.autoDecisionResponse.LoanTypeID = sr["LoanTypeID"];
+			this.autoDecisionResponse.LoanSourceID = sr["LoanSourceID"];
+			this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed =
+				sr["IsCustomerRepaymentPeriodSelectionAllowed"];
+			this.autoDecisionResponse.BrokerSetupFeePercent = sr["BrokerSetupFeePercent"];
+			this.autoDecisionResponse.SpreadSetupFee = sr["SpreadSetupFee"];
+
+			return true;
+		} // DoAutoReapproval
+
 		private void DoAutoApproval() {
+			if (!EnableAutomaticApproval) {
+				Log.Debug(
+					"Not processed auto approval: " +
+						"it is currently disabled in configuration or decision has already been made earlier."
+				);
+
+				return;
+			} // if
+
+			if (this.autoRejectionOutput == null) {
+				Log.Info(
+					"Not processing auto-approval: no auto-rejection output detected (auto rejection did not run?)."
+				);
+
+				return;
+			} // if
+
 			var aAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
 				new AutoApprovalArguments(
 					CustomerID,
 					this.cashRequestID,
 					this.nlCashRequestID,
-					this.offeredCreditLine,
+					this.autoDecisionResponse.ApprovedAmount,
 					(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
 					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
 					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
@@ -447,7 +479,6 @@
 
 			if (aAgent.ExceptionWhileDeciding) {
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception - " + aAgent.Trail.UniqueID;
-				this.autoDecisionResponse.AutoApproveAmount = 0;
 
 				Log.Alert(
 					"Switching to manual decision: exception during  Auto Approval for customer {0}, trail id is {1}.",
@@ -459,13 +490,12 @@
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 				return;
-			} // if
+			} // if exception
 			
 			if (aAgent.WasMismatch) {
 				this.wasMismatch = true;
 
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Mismatch - " + aAgent.Trail.UniqueID;
-				this.autoDecisionResponse.AutoApproveAmount = 0;
 
 				Log.Alert(
 					"Switching to manual decision: Auto Approval implementations " +
@@ -478,13 +508,12 @@
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 				return;
-			} // if
+			} // if mismatch
 
 			this.autoDecisionResponse.LoanOfferUnderwriterComment =
 				aAgent.Trail.GetDecisionName() +
 				" - " +
 				aAgent.Trail.UniqueID;
-			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
 
 			Log.Msg(
 				"Both Auto Approval implementations have reached the same decision: {0}approved",
@@ -494,7 +523,7 @@
 			if (!aAgent.Trail.HasDecided)
 				return;
 
-			this.autoDecisionResponse.AutoApproveAmount = aAgent.Trail.RoundedAmount;
+			this.autoDecisionResponse.ApprovedAmount = aAgent.Trail.RoundedAmount;
 
 			try {
 				CreateOffer(aAgent);
@@ -536,7 +565,7 @@
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Silent Approve - " + approvalTrail.UniqueID;
 
 				NotifyAutoApproveSilentMode(
-					this.autoDecisionResponse.AutoApproveAmount,
+					this.autoDecisionResponse.ApprovedAmount,
 					offerResult.Period,
 					offerResult.InterestRate / 100m,
 					offerResult.SetupFee / 100m,
@@ -663,7 +692,7 @@
 			var offerDualCalculator = new OfferDualCalculator(
 				CustomerID,
 				DateTime.UtcNow,
-				this.autoDecisionResponse.AutoApproveAmount,
+				this.autoDecisionResponse.ApprovedAmount,
 				loanCount > 0,
 				this.medal.MedalClassification,
 				loanSourceID,
@@ -685,7 +714,7 @@
 
 				if (rrAgent.WasMismatch) {
 					this.wasMismatch = true;
-					Log.Warn("Mismatch happened while executing re-rejection, automation aborted.");
+					Log.Warn("Mismatch happened while executing re-rejection, auto-decision process aborted.");
 					return;
 				} // if
 			} // if
@@ -723,7 +752,7 @@
 
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;
-				Log.Warn("Mismatch happened while executing rejection, automation aborted.");
+				Log.Warn("Mismatch happened while executing rejection, auto-decision process aborted.");
 			} else {
 				if (rAgent.Trail.HasDecided) {
 					this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
@@ -764,7 +793,7 @@
 			) {
 				OverrideApprovedRejected = this.overrideApprovedRejected,
 				MedalClassification = this.medal.MedalClassification.ToString(),
-				OfferedCreditLine = this.offeredCreditLine,
+				OfferedCreditLine = this.autoDecisionResponse.ApprovedAmount,
 				SystemCalculatedSum = this.medal.RoundOfferedAmount(),
 				TotalScoreNormalized = this.medal.TotalScoreNormalized,
 				ExperianConsumerScore = this.customerDetails.ExperianConsumerScore,
@@ -775,7 +804,6 @@
 		} // AddOldDecisionOffer
 
 		private void AddNLDecisionOffer(DateTime now) {
-
 			if (!this.autoDecisionResponse.HasAutoDecided)
 				return;
 
@@ -812,7 +840,7 @@
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
 					DecisionID = decisionID,
-					Amount = this.offeredCreditLine,
+					Amount = this.autoDecisionResponse.ApprovedAmount,
 					StartTime = now,
 					EndTime = now.AddHours(CurrentValues.Instance.OfferValidForHours),
 					CreatedTime = now,
@@ -850,7 +878,7 @@
 				new UpdateOpportunity(CustomerID, new OpportunityModel {
 					Email = customerEmail,
 					Origin = this.customerDetails.Origin,
-					ApprovedAmount = this.autoDecisionResponse.AutoApproveAmount,
+					ApprovedAmount = this.autoDecisionResponse.ApprovedAmount,
 					ExpectedEndDate = this.autoDecisionResponse.AppValidFor,
 					Stage = OpportunityStage.s90.DescriptionAttr(),
 				}).Execute();
@@ -925,6 +953,11 @@
 		} // DoZooplaCheck
 
 		private void UpdateLogicalGlue(PreliminaryData preData) {
+			if (!CurrentValues.Instance.LogicalGlueEnabled) {
+				Log.Debug("Not updating Logical Glue data: updating disabled.");
+				return;
+			} // if
+
 			if (preData.TypeOfBusiness.IsRegulated()) {
 				Log.Debug("Not updating Logical Glue data: customer {0} has a regulated company.", CustomerID);
 				return;
@@ -1241,8 +1274,6 @@
 		private readonly CustomerDetails customerDetails;
 
 		private MedalResult medal;
-
-		private int offeredCreditLine;
 
 		private readonly InternalCashRequestID cashRequestID;
 		private long nlCashRequestID;

@@ -55,7 +55,7 @@
 		public override bool SetResult(AutoDecisionResponse response) {
 			Log.Debug("Back door simple flow: approving...");
 
-			response.AutoApproveAmount = ApprovedAmount;
+			response.ApprovedAmount = ApprovedAmount;
 
 			SafeReader sr = Library.Instance.DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
 

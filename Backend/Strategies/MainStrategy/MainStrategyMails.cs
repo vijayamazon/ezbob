@@ -47,7 +47,7 @@
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
 				{ "MedalType", this.medal.MedalClassification.ToString() },
 				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
-				{ "ApprovalAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "ApprovalAmount", this.autoDecisionResponse.ApprovedAmount.ToString(Library.Instance.Culture) },
 				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
 				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
 				{
@@ -59,7 +59,7 @@
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "LoanAmount", this.autoDecisionResponse.ApprovedAmount.ToString(Library.Instance.Culture) },
 				{
 					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
 						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
@@ -99,7 +99,7 @@
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "LoanAmount", this.autoDecisionResponse.ApprovedAmount.ToString(Library.Instance.Culture) },
 				{
 					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
 						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)

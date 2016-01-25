@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions {
 	using System;
 	using DbConstants;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -20,7 +21,7 @@
 			SystemDecision = null;
 			LoanOfferUnderwriterComment = null;
 
-			AutoApproveAmount = 0;
+			ApprovedAmount = 0;
 			RepaymentPeriod = 0;
 			DecisionName = "Manual";
 
@@ -59,7 +60,11 @@
 		public SystemDecision? SystemDecision { get; set; } // Approve / Manual / Reject
 		public string LoanOfferUnderwriterComment { get; set; }
 
-		public int AutoApproveAmount { get; set; }
+		public int ApprovedAmount {
+			get { return this.approvedAmount; }
+			set { this.approvedAmount = (value <= 0) ? 0 : MedalResult.RoundOfferedAmount(value); }
+		} // ApprovedAmount
+
 		public int RepaymentPeriod { get; set; }
 		public string DecisionName { get; set; } // Manual/Approval/Re-Approval/Bank Based Approval/Rejection/Re-Rejection
 
@@ -179,5 +184,6 @@
 		private int? discountPlanID;
 
 		private LoanSource loanSource;
+		private int approvedAmount;
 	} // class AutoDecisionResponse
 } // namespace
