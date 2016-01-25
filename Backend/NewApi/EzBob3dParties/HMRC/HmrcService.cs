@@ -1,10 +1,9 @@
-﻿namespace EzBob3dParties.HMRC {
+﻿namespace EzBob3dParties.Hmrc {
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
     using Common.Logging;
-    using eBay.Service.Call;
     using EzBobCommon;
     using EzBobCommon.Utils.Encryption;
     using EzBobCommon.Web;

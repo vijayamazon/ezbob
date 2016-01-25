@@ -1,4 +1,4 @@
-﻿namespace EzBob3dParties.HMRC.Handlers {
+﻿namespace EzBob3dParties.Hmrc.Handlers {
     using System.Collections.Generic;
     using System.Linq;
     using EzBob3dPartiesApi.Hmrc;

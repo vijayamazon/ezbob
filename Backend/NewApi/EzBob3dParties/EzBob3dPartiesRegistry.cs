@@ -1,6 +1,6 @@
 ﻿namespace EzBob3dParties {
     using EzBob3dParties.EBay;
-    using EzBob3dParties.HMRC;
+    using EzBob3dParties.Hmrc;
     using EzBob3dParties.Yodlee;
     using EzBobCommon.Injection;
     using EzBobCommon.NSB;

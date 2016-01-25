@@ -1,4 +1,4 @@
-﻿namespace EzBob3dParties.HMRC
+﻿namespace EzBob3dParties.Hmrc
 {
     using EzBobCommon.Currencies;
 

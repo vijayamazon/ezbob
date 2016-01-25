@@ -5,7 +5,7 @@
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using EzBob3dParties.HMRC;
+    using EzBob3dParties.Hmrc;
     using EzBob3dPartiesTests.Properties;
     using EzBobCommon.Web;
     using Moq;
