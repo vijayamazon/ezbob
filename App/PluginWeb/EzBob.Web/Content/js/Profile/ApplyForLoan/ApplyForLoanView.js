@@ -318,12 +318,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			isEverlineRefinance: this.isEverlineRefinance
 		};
 
-		var typeOfBusinessReduced = this.customer.get('CustomerPersonalInfo').TypeOfBusinessReduced;
-	    if (typeOfBusinessReduced === 1)
-	        this.agreementView = new EzBob.Profile.CompaniesAgreementView(oViewArgs);
-	    else
+		if (this.customer.get('CustomerPersonalInfo').IsRegulated) {
 			this.agreementView = new EzBob.Profile.ConsumersAgreementView(oViewArgs);
-
+		} else {
+			this.agreementView = new EzBob.Profile.CompaniesAgreementView(oViewArgs);
+		}
 		this.agreementView.render(agreementdata);
 
 		this.showSubmit();
