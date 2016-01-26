@@ -17,19 +17,100 @@
 			m_oConf = pacnetcfg;
 		}
 
+		//[Test]
+		//[Ignore]
+		//public void testSendEmail()
+		//{
+		//	Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", (new Exception("Test Exception")).ToString(), "alexbo@ezbob.com");
+		//}
+
 		[Test]
-		[Ignore]
-		public void testSendEmail()
-		{
-			Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", (new Exception("Test Exception")).ToString(), "alexbo@ezbob.com");
+		public void TestParsing1() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20150113.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
 		}
 
 		[Test]
-		public void TestParsing() {
+		public void TestParsing2() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20150825.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing3() {
 			string path = @"c:\ezbob\test-data\pacnet\pacnet20150908.pdf";
 			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
 			ParsePacNetText.Logger = new ConsoleLog();
-			ParsePacNetText.ParsePdf(data);
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing4() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20150908.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing5() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20160120.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing6() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20160121.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing7() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20160122.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing8() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20160123.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
+
+		[Test]
+		public void TestParsing9() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20160125.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
 			PacNetBalance.SavePacNetBalanceToDb();
 		}
 	}

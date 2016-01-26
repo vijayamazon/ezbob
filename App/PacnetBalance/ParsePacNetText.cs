@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using Ezbob.Logger;
 
 namespace PacnetBalance {
-	public static class ParsePacNetText {
+	public class ParsePacNetText {
 		private static decimal openingBalance;
 		private static decimal closingBalance;
 		private static decimal credits;
 		private static decimal debits;
 		private static DateTime date;
-		static List<PacNetBalanceRow> pacNetBalanceRows = new List<PacNetBalanceRow>();
+		private List<PacNetBalanceRow> pacNetBalanceRows;
 
-		static ParsePacNetText() {
+		public ParsePacNetText() {
 			Logger = new SafeLog();
 		} // static constructor
 
@@ -24,8 +23,8 @@ namespace PacnetBalance {
 		/// Parse pdf to text string
 		/// </summary>
 		/// <param name="data">pdf data stream</param>
-		public static void ParsePdf(byte[] data) {
-			pacNetBalanceRows = new List<PacNetBalanceRow>();
+		public void ParsePdf(byte[] data) {
+			this.pacNetBalanceRows = new List<PacNetBalanceRow>();
 			var reader = new PdfReader(data);
 
 			for (int page = 1; page <= reader.NumberOfPages; page++) {
@@ -39,14 +38,14 @@ namespace PacnetBalance {
 			reader.Close();
 
 
-			PacNetBalance.PopulateList(date, openingBalance, closingBalance, credits, debits, pacNetBalanceRows);
+			PacNetBalance.PopulateList(date, openingBalance, closingBalance, credits, debits, this.pacNetBalanceRows);
 		} // ParsePdf
 
 		/// <summary>
 		/// Parse each line of report text and populate the fields they represent 
 		/// </summary>
 		/// <param name="line">string line of report</param>
-		public static void HandleLine(string line) {
+		public void HandleLine(string line) {
 			if (line.Contains("Transaction Detail Report:")) {
 				string text = GetValue(line.Replace("Transaction Detail Report:", "TransactionDetailReport:").Split(' '), "TransactionDetailReport:");
 
@@ -116,7 +115,7 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing FasterPayment: {0}", text)); 
 				} // if
 
-				pacNetBalanceRows.Add(new PacNetBalanceRow {
+				this.pacNetBalanceRows.Add(new PacNetBalanceRow {
 					Amount = value,
 					Date = date,
 					IsCredit = value < 0
@@ -135,7 +134,7 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing Fee: {0}", text)); 
 				} // if
 
-				pacNetBalanceRows.Add(new PacNetBalanceRow {
+				this.pacNetBalanceRows.Add(new PacNetBalanceRow {
 					Fees = value,
 					Date = date,
 					IsCredit = value < 0
@@ -152,7 +151,7 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing Commission: {0}", text));
 				} // if
 
-				pacNetBalanceRows.Add(new PacNetBalanceRow {
+				this.pacNetBalanceRows.Add(new PacNetBalanceRow {
 					Fees = value,
 					Date = date,
 					IsCredit = value < 0
@@ -169,7 +168,7 @@ namespace PacnetBalance {
 					throw new PacNetBalanceException(string.Format("PacNet Error parsing Wire in: {0}", text));
 				} // if
 
-				pacNetBalanceRows.Add(new PacNetBalanceRow {
+				this.pacNetBalanceRows.Add(new PacNetBalanceRow {
 					Amount = value,
 					Date = date,
 					IsCredit = value > 0
@@ -184,13 +183,12 @@ namespace PacnetBalance {
 		/// <param name="strList">line separated by spaces</param>
 		/// <param name="name">Name of before value</param>
 		/// <returns></returns>
-		private static string GetValue(string[] strList, string name) {
+		private string GetValue(string[] strList, string name) {
 			for (int i = 0; i < strList.Length; ++i)
 				if (strList[i].EndsWith(name))
 					return strList[i + 1].Replace(",", "");
 
 			return string.Empty;
 		} // GetValue
-
 	} // class ParsePacNetText
 } // namespace

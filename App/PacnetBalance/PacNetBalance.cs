@@ -6,9 +6,8 @@ using System.Linq;
 
 namespace PacnetBalance
 {
-	public static class PacNetBalance
-	{
-		private static readonly List<PacNetBalanceRow> pacNetBalanceList = new List<PacNetBalanceRow>();
+	public static class PacNetBalance {
+		private static List<PacNetBalanceRow> pacNetBalanceList;
 
 		static PacNetBalance()
 		{
@@ -29,10 +28,15 @@ namespace PacnetBalance
 		/// <param name="fees">Fees</param>
 		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<PacNetBalanceRow> rows)
 		{
+			pacNetBalanceList = new List<PacNetBalanceRow>();
 			decimal currenBalance = openingBalance;
 			
 			foreach (var row in rows) {
-				currenBalance = currenBalance - (row.Amount + row.Fees);
+				if (row.IsCredit) {
+					currenBalance = currenBalance + (Math.Abs(row.Amount) + Math.Abs(row.Fees));
+				} else {
+					currenBalance = currenBalance - (Math.Abs(row.Amount) + Math.Abs(row.Fees));
+				}
 				AddRowToList(currenBalance, date, row.Fees, row.Amount, row.IsCredit);
 			} // foreach
 
@@ -65,20 +69,34 @@ namespace PacnetBalance
 										 calculatedCredits));
 			}
 
-			decimal calculatedBalance = openingBalance 
+			decimal calculatedClosingBalance = openingBalance 
 				+ rows.Where(x => x.IsCredit == true).Sum(x => x.Amount + x.Fees) 
 				- rows.Where(x => x.IsCredit == false).Sum(x => x.Amount + x.Fees);
-			
-			if (calculatedBalance == closingBalance)
+
+			if (calculatedClosingBalance == closingBalance)
 			{
 				Logger.Info("Closing balance is equal to calculated balance and is:{0}", closingBalance);
 			}
 			else
 			{
 				Logger.Error("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
-							 closingBalance, calculatedBalance);
+							 closingBalance, calculatedClosingBalance);
 				sb.AppendLine(string.Format("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
-							 closingBalance, calculatedBalance));
+							 closingBalance, calculatedClosingBalance));
+			}
+
+			if (rows.Any()) {
+				decimal lastRowBalance = rows.Last()
+					.CurrentBalance;
+
+				if (lastRowBalance == closingBalance) {
+					Logger.Info("Closing balance is equal to last row balance and is:{0}", closingBalance);
+				} else {
+					Logger.Error("Closing balance is not equal to last row balance. ClosingBalance:{0} LastRowBalance:{1}",
+							 closingBalance, lastRowBalance);
+					sb.AppendLine(string.Format("Closing balance is not equal to last row balance. ClosingBalance:{0} LastRowBalance:{1}",
+							 closingBalance, lastRowBalance));
+				}
 			}
 
 			if (sb.Length > 0)
