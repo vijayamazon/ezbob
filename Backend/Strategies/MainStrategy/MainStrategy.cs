@@ -1076,6 +1076,8 @@
 		} // ValidateInput
 
 		private void CreateCashRequest() {
+			DateTime now = DateTime.UtcNow;
+
 			if (this.cashRequestID.HasValue) {
 				DB.ExecuteNonQuery(
 					"MainStrategySetCustomerIsBeingProcessed",
@@ -1089,10 +1091,12 @@
 					new QueryParameter("@OldCashRequestID", this.cashRequestID.Value)
 				);
 
+				if (this.nlCashRequestID == 0L) {
+					NLCashRequestAdd(this.cashRequestID.Value, now);
+				}
+
 				return;
 			} // if
-
-			DateTime now = DateTime.UtcNow;
 
 			SafeReader sr = DB.GetFirst(
 				"MainStrategyCreateCashRequest",
@@ -1111,17 +1115,19 @@
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 
-			AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
-				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-				CustomerID = CustomerID,
-				OldCashRequestID = this.cashRequestID,
-				RequestTime = now,
-				UserID = UnderwriterID,
-			});
-			nlAddCashRequest.Context.CustomerID = CustomerID;
-			nlAddCashRequest.Context.UserID = UnderwriterID;
-			nlAddCashRequest.Execute();
-			this.nlCashRequestID = nlAddCashRequest.CashRequestID;
+			NLCashRequestAdd(this.cashRequestID.Value, now);
+
+			//AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
+			//	CashRequestOriginID = (int)this.cashRequestOriginator.Value,
+			//	CustomerID = CustomerID,
+			//	OldCashRequestID = this.cashRequestID,
+			//	RequestTime = now,
+			//	UserID = UnderwriterID,
+			//});
+			//nlAddCashRequest.Context.CustomerID = CustomerID;
+			//nlAddCashRequest.Context.UserID = UnderwriterID;
+			//nlAddCashRequest.Execute();
+			//this.nlCashRequestID = nlAddCashRequest.CashRequestID;
 
 			int cashRequestCount = sr["CashRequestCount"];
 
@@ -1264,6 +1270,20 @@
 				Log.Alert(e, "Failed sending alert mail - silent auto approval.");
 			} // try
 		} // NotifyAutoApproveSilentMode
+
+		private void NLCashRequestAdd(long crID, DateTime now) {
+			AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
+				CashRequestOriginID = (int)(this.cashRequestOriginator ?? CashRequestOriginator.Other),
+				CustomerID = CustomerID,
+				OldCashRequestID = crID,
+				RequestTime = now,
+				UserID = UnderwriterID,
+			});
+			nlAddCashRequest.Context.CustomerID = CustomerID;
+			nlAddCashRequest.Context.UserID = UnderwriterID;
+			nlAddCashRequest.Execute();
+			this.nlCashRequestID = nlAddCashRequest.CashRequestID;
+		}
 
 		private readonly FinishWizardArgs finishWizardArgs;
 		private readonly bool avoidAutomaticDecision;
