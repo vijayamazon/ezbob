@@ -14,7 +14,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.Experian;
@@ -103,9 +102,9 @@
 				if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
 					StandardFlow();
 
-			UpdateCustomerAndCashRequest();
+			SaveDecision();
 
-			SendEmails();
+			DispatchNotifications();
 		} // Execute
 
 		private bool SkipEverything() {
@@ -270,22 +269,22 @@
 			this.medal = instance.Result;
 		} // CalculateMedal
 
-		private void SendEmails() {
+		private void DispatchNotifications() {
 			bool sendToCustomer =
 				!this.customerDetails.FilledByBroker || (this.customerDetails.NumOfPreviousApprovals != 0);
 
-			var postMaster = new MainStrategyMails(
+			var notifier = new ExternalNotifier(
 				this.mailer,
 				CustomerID,
-				this.autoDecisionResponse.ApprovedAmount,
 				this.medal,
 				this.customerDetails,
 				this.autoDecisionResponse,
-				sendToCustomer
+				sendToCustomer,
+				Log
 			);
 
-			postMaster.SendEmails();
-		} // SendEmails
+			notifier.Execute();
+		} // DispatchNotifications
 
 		private void CapOffer() {
 			bool isHomeOwner = DB.ExecuteScalar<bool>(
@@ -294,7 +293,7 @@
 				new QueryParameter("CustomerId", CustomerID)
 			);
 
-			this.autoDecisionResponse.ApprovedAmount = Math.Min(
+			this.autoDecisionResponse.ProposedAmount = Math.Min(
 				this.medal.RoundOfferedAmount(),
 				isHomeOwner ? MaxCapHomeOwner : MaxCapNotHomeOwner
 			);
@@ -303,7 +302,7 @@
 				"Capped for {0}home owner according to land registry: " +
 				"capped amount {1} for customer {2} and underwriter {3}.",
 				isHomeOwner ? string.Empty : "not ",
-				this.autoDecisionResponse.ApprovedAmount,
+				this.autoDecisionResponse.ProposedAmount,
 				CustomerID,
 				UnderwriterID
 			);
@@ -460,7 +459,7 @@
 					CustomerID,
 					this.cashRequestID,
 					this.nlCashRequestID,
-					this.autoDecisionResponse.ApprovedAmount,
+					this.autoDecisionResponse.ProposedAmount,
 					(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
 					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
 					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
@@ -692,7 +691,7 @@
 			var offerDualCalculator = new OfferDualCalculator(
 				CustomerID,
 				DateTime.UtcNow,
-				this.autoDecisionResponse.ApprovedAmount,
+				this.autoDecisionResponse.ProposedAmount,
 				loanCount > 0,
 				this.medal.MedalClassification,
 				loanSourceID,
@@ -766,21 +765,13 @@
 			} // if
 		} // ProcessRejections
 
-		/// <summary>
-		/// Last stage of auto-decision process
-		/// </summary>
-		private void UpdateCustomerAndCashRequest() {
+		private void SaveDecision() {
 			DateTime now = DateTime.UtcNow;
 
 			AddOldDecisionOffer(now);
 
 			AddNLDecisionOffer(now);
-
-			UpdateSalesForceOpportunity();
-
-			if (this.customerDetails.IsAlibaba)
-				UpdatePartnerAlibaba();
-		} // UpdateCustomerAndCashRequest
+		} // SaveDecision
 
 		private void AddOldDecisionOffer(DateTime now) {
 			var sp = new MainStrategyUpdateCrC(
@@ -863,39 +854,6 @@
 				Log.Debug("Added NL offer: {0}", addOfferStrategy.OfferID);
 			} // if
 		} // AddNLDecisionOffer
-
-		private void UpdateSalesForceOpportunity() {
-			string customerEmail = this.customerDetails.AppEmail;
-
-			new AddUpdateLeadAccount(customerEmail, CustomerID, false, false).Execute();
-
-			if (!this.autoDecisionResponse.Decision.HasValue)
-				return;
-
-			switch (this.autoDecisionResponse.Decision.Value) {
-			case DecisionActions.Approve:
-			case DecisionActions.ReApprove:
-				new UpdateOpportunity(CustomerID, new OpportunityModel {
-					Email = customerEmail,
-					Origin = this.customerDetails.Origin,
-					ApprovedAmount = this.autoDecisionResponse.ApprovedAmount,
-					ExpectedEndDate = this.autoDecisionResponse.AppValidFor,
-					Stage = OpportunityStage.s90.DescriptionAttr(),
-				}).Execute();
-				break;
-
-			case DecisionActions.Reject:
-			case DecisionActions.ReReject:
-				new UpdateOpportunity(CustomerID, new OpportunityModel {
-					Email = customerEmail,
-					Origin = this.customerDetails.Origin,
-					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
-					DealLostReason = "Auto " + this.autoDecisionResponse.Decision.Value.ToString(),
-					CloseDate = DateTime.UtcNow,
-				}).Execute();
-				break;
-			} // switch
-		} // UpdateSalesForceOpportunity
 
 		private void DoConsumerCheck(PreliminaryData preData) {
 			new ExperianConsumerCheck(CustomerID, null, false)
@@ -995,45 +953,6 @@
 		private static bool EnableAutomaticReRejection { get { return CurrentValues.Instance.EnableAutomaticReRejection; } }
 		private static int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private static int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
-
-		/// <summary>
-		/// In case of auto decision occurred (RR, R, RA, A), 002 sent immediately.
-		/// Otherwise, i.e. in the case of Waiting/Manual, 002 will be transmitted
-		/// when underwriter makes manual decision from
-		/// CustomersController SetDecision method.
-		/// </summary>
-		private void UpdatePartnerAlibaba() {
-			DecisionActions autoDecision = this.autoDecisionResponse.Decision ?? DecisionActions.Waiting;
-
-			Log.Debug(
-				"UpdatePartnerAlibaba ******************************************************{0}, {1}",
-				CustomerID,
-				autoDecision
-			);
-
-			//	Reject, Re-Reject, Re-Approve, Approve: 0001 + 0002 (auto decision is a final also)
-			// other: 0001 
-			switch (autoDecision) {
-			case DecisionActions.ReReject:
-			case DecisionActions.Reject:
-			case DecisionActions.ReApprove:
-			case DecisionActions.Approve:
-				new DataSharing(CustomerID, AlibabaBusinessType.APPLICATION).Execute();
-				new DataSharing(CustomerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
-				break;
-
-			// auto not final
-			case DecisionActions.Waiting:
-				new DataSharing(CustomerID, AlibabaBusinessType.APPLICATION).Execute();
-				break;
-
-			default: // unknown auto decision status
-				throw new StrategyAlert(
-					this,
-					string.Format("Auto decision invalid value {0} for customer {1}", autoDecision, CustomerID)
-				);
-			} // switch
-		} // UpdatePartnerAlibaba
 
 		private void ValidateInput() {
 			if (!this.customerDetails.IsValid) {

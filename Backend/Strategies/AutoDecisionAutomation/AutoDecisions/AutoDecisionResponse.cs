@@ -22,6 +22,7 @@
 			LoanOfferUnderwriterComment = null;
 
 			ApprovedAmount = 0;
+			ProposedAmount = 0;
 			RepaymentPeriod = 0;
 			DecisionName = "Manual";
 
@@ -64,6 +65,11 @@
 			get { return this.approvedAmount; }
 			set { this.approvedAmount = (value <= 0) ? 0 : MedalResult.RoundOfferedAmount(value); }
 		} // ApprovedAmount
+
+		public int ProposedAmount {
+			get { return this.proposedAmount; }
+			set { this.proposedAmount = (value <= 0) ? 0 : MedalResult.RoundOfferedAmount(value); }
+		} // ProposedAmount
 
 		public int RepaymentPeriod { get; set; }
 		public string DecisionName { get; set; } // Manual/Approval/Re-Approval/Bank Based Approval/Rejection/Re-Rejection
@@ -185,5 +191,6 @@
 
 		private LoanSource loanSource;
 		private int approvedAmount;
+		private int proposedAmount;
 	} // class AutoDecisionResponse
 } // namespace
