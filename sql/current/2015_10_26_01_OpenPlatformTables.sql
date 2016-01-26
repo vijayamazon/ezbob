@@ -121,6 +121,7 @@ BEGIN
 		PreviousBalance DECIMAL(18,6),
 		NewBalance DECIMAL(18,6),
 		TransactionAmount DECIMAL(18,6),
+		BankTransactionRef NVARCHAR(255),
 		Timestamp DATETIME NOT NULL,
 		UserID INT,
 		Comment NVARCHAR(500),
@@ -490,6 +491,7 @@ BEGIN
 	CREATE TABLE I_Index (
 		IndexID INT NOT NULL IDENTITY(1,1),
 		InvestorID INT NULL,
+		ProductID INT NULL,
 		ProductTypeID INT NULL,
 		IsActive BIT NOT NULL,
 		GradeAPercent DECIMAL(18,6) NOT NULL,
@@ -520,6 +522,7 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_I_Index PRIMARY KEY (IndexID),
 		CONSTRAINT FK_I_Index_I_Investor FOREIGN KEY (InvestorID) REFERENCES I_Investor(InvestorID),
+		CONSTRAINT FK_I_Index_I_Product FOREIGN KEY (ProductID) REFERENCES I_Product(ProductID),
 		CONSTRAINT FK_I_Index_I_ProductType FOREIGN KEY (ProductTypeID) REFERENCES I_ProductType(ProductTypeID)
 	)
 END
