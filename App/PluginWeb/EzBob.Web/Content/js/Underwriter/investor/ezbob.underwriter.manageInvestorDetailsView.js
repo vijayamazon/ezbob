@@ -2,36 +2,43 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.ManageInvestorDetails = Backbone.Marionette.ItemView.extend({
-	template: '#manage-investor-details-template',
+    template: '#manage-investor-details-template',
     initialize: function(options) {
 
         this.model.on('change reset', this.render, this);
         this.model.set('InvestorID', options.InvestorID, { silent: true });
 
         this.model.set('Details', options.Details, { silent: true });
-       // this.model.on("closeDetails", this.cancel);
+        // this.model.on("closeDetails", this.cancel);
 
     }, //initialize
 
     events: {
         'click #investorDetailsSubmit': 'submit',
-    	'click #investorDetailsCancel': 'cancel'
-            
-	}, //events
+        'click #investorDetailsCancel': 'cancel'
 
-	ui: {
-		'form': '#addEditInvestorDetilasForm',
-		'phone': '.phone',
-		'numeric': '.numeric',
-		'CompanyName': '#CompanyName',
-		'InvestorType': '#InvestorType',
-		'IsActive': '#IsActive',
+    }, //events
+
+    ui: {
+        'form': '#addEditInvestorDetilasForm',
+        'phone': '.phone',
+
+        'numeric': '.numeric',
+        'CompanyName': '#CompanyName',
+        'InvestorType': '#InvestorType',
+        'IsActive': '#IsActive',
+        'money': '.cashInput',
+        'FundingLimitForNotification': '#FundingLimitForNotification',
+
+      
+        
 		
 	},//ui
 
 	onRender: function () {
 		this.ui.numeric.numericOnly(20);
 		this.editID = this.model.get('InvestorID');
+		this.ui.money.moneyFormat();
 		var self = this;
 		if (this.editID) {
 			var details = this.model.get('Details');
@@ -39,9 +46,10 @@ EzBob.Underwriter.ManageInvestorDetails = Backbone.Marionette.ItemView.extend({
 				this.ui.CompanyName.val(details['CompanyName']).change();
 				this.ui.InvestorType.val(details['InvestorTypeID']).change();
 				this.ui.IsActive.prop('checked', details['IsActive']).change();
+				this.ui.FundingLimitForNotification.val(details['FundingLimitForNotification']).blur();
 			}
 		}
-
+	
 		this.ui.form.validate({
 			rules: {
 				CompanyName: { required: true },
@@ -65,8 +73,11 @@ EzBob.Underwriter.ManageInvestorDetails = Backbone.Marionette.ItemView.extend({
 		var investorID = this.model.get('InvestorID');
 		var data = this.ui.form.serializeArray();
 		data.push({ name: 'InvestorID', value: this.model.get('InvestorID') });
-
 		var self = this;
+		_.find(data, function(d) {
+		    return d.name === 'FundingLimitForNotification';
+		}).value = self.$el.find('#FundingLimitForNotification').autoNumeric('get');
+		
 
 		var xhr = $.post('' + window.gRootPath + 'Underwriter/Investor/ManageInvestorDetails', data);
 		xhr.done(function(res) {

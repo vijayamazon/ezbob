@@ -1,7 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.OpenPlatform {
 	using System;
 	using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using Ezbob.Utils;
+	using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
 	public class I_InvestorContact {
@@ -46,6 +47,12 @@
 
 		[DataMember]
 		public bool IsActive { get; set; }
+       
+        [DataMember]
+        public bool IsGettingAlerts { get; set; }
+           
+        [DataMember]
+        public bool IsGettingReports { get; set; }
 
 		[DataMember]
 		public DateTime Timestamp { get; set; }

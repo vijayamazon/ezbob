@@ -36,6 +36,8 @@ namespace Ezbob.Backend.Strategies.Investor {
 						Mobile = contact.Mobile,
 						OfficePhone = contact.OfficePhone,
 						IsActive = contact.IsActive,
+                        IsGettingAlerts = contact.IsGettingAlerts,
+                        IsGettingReports = contact.IsGettingReports,
 						Timestamp = now,
 					});
 				}

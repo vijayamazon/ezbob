@@ -30,8 +30,6 @@
 				new RejectUser(this.customerId, this.sendToCustomer).Execute();
 			else if (this.autoDecisionResponse.IsAutoApproval)
 				SendApprovalMails();
-			else if (this.autoDecisionResponse.IsAutoBankBasedApproval)
-				SendBankBasedApprovalMails();
 			else if (this.autoDecisionResponse.IsAutoReApproval)
 				SendReApprovalMails();
 			else if (!this.autoDecisionResponse.HasAutoDecided)
@@ -49,7 +47,7 @@
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
 				{ "MedalType", this.medal.MedalClassification.ToString() },
 				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
-				{ "ApprovalAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "ApprovalAmount", this.autoDecisionResponse.ApprovedAmount.ToString(Library.Instance.Culture) },
 				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
 				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
 				{
@@ -61,7 +59,7 @@
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "LoanAmount", this.autoDecisionResponse.ApprovedAmount.ToString(Library.Instance.Culture) },
 				{
 					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
 						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
@@ -77,49 +75,6 @@
 			);
 			automationDecsionMails.Execute();
 		} // SendApprovalMails
-
-		private void SendBankBasedApprovalMails() {
-			this.mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
-				{ "ApprovedReApproved", "Approved" },
-				{ "RegistrationDate", this.customerDetails.AppRegistrationDate.ToString(Library.Instance.Culture) },
-				{ "userID", this.customerId.ToString(Library.Instance.Culture) },
-				{ "Name", this.customerDetails.AppEmail },
-				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "Surname", this.customerDetails.AppSurname },
-				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
-				{ "MedalType", this.medal.MedalClassification.ToString() },
-				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
-				{
-					"ApprovalAmount", this.autoDecisionResponse.BankBasedAutoApproveAmount.ToString(Library.Instance.Culture)
-				},
-				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
-				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
-				{
-					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
-						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
-						: string.Empty
-				}
-			});
-
-			var customerMailVariables = new Dictionary<string, string> {
-				{ "FirstName", this.customerDetails.AppFirstName },
-				{
-					"LoanAmount", this.autoDecisionResponse.BankBasedAutoApproveAmount.ToString(Library.Instance.Culture)
-				},
-				{ "ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
-					? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
-					: string.Empty
-				}
-			};
-
-			var isFirstLoan = this.customerDetails.NumOfLoans == 0;
-
-			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(this.customerId,
-				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
-				customerMailVariables
-			);
-			automationDecsionMails.Execute();
-		} // SendBankBasedApprovalMails
 
 		private void SendReApprovalMails() {
 			this.mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
@@ -144,7 +99,7 @@
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "LoanAmount", this.autoDecisionResponse.ApprovedAmount.ToString(Library.Instance.Culture) },
 				{
 					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
 						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)

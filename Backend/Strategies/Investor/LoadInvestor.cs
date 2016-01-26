@@ -90,6 +90,8 @@
 				model.Contacts.Add(new InvestorContactModel {
 					InvestorID = contact.InvestorID,
 					IsActive = contact.IsActive,
+                    IsGettingAlerts = contact.IsGettingAlerts,
+                    IsGettingReports = contact.IsGettingReports,
 					Timestamp = contact.Timestamp,
 					IsPrimary = contact.IsPrimary,
 					Email = contact.Email,

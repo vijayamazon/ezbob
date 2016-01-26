@@ -41,6 +41,12 @@
 		public bool IsTryout { get; set; }
 
 		public static LogicalGlueResult FromInference(Inference inference, int customerID, ASafeLog log, AConnection db){
+			if (inference == null) {
+				return new LogicalGlueResult {
+					Error = "No Logical Glue data found.",
+				};
+			} // if
+
 			decimal? minScore = 0;
 			decimal? maxScore = 0;
 			inference = inference ?? new Inference {
@@ -50,19 +56,18 @@
 
 			try {
                 if (inference != null && inference.Bucket.HasValue) {
-					var grade = db.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
-					int gradeID = (int)inference.Bucket.Value;
-					maxScore = grade.First(x => x.GradeID == gradeID)
-						.UpperBound;
-					if (gradeID > 1) {
-						minScore = grade.First(x => x.GradeID == (gradeID - 1))
-							.UpperBound;
-					}
+					List<I_Grade> allGrades = db.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
 
-				}
+					int gradeID = (int)inference.Bucket.Value;
+
+					maxScore = allGrades.First(x => x.GradeID == gradeID).UpperBound;
+
+					if (gradeID > 1)
+						minScore = allGrades.First(x => x.GradeID == (gradeID - 1)).UpperBound;
+				} // if
 			} catch (Exception ex) {
 				log.Error(ex, "Failed to retrieve min max grade scores for bucket {0}", inference.Bucket);
-			}
+			} // try
 			
 			try {
 				var result = new LogicalGlueResult {
@@ -72,20 +77,26 @@
 					BucketStr = inference.Bucket.HasValue ? inference.Bucket.ToString() : string.Empty,
 					MonthlyRepayment = inference.MonthlyRepayment,
 					UniqueID = inference.UniqueID,
-					FLScore = inference.ModelOutputs.ContainsKey(ModelNames.FuzzyLogic) ? inference.ModelOutputs[ModelNames.FuzzyLogic].Grade.Score : null,
-					NNScore = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) ? inference.ModelOutputs[ModelNames.NeuralNetwork].Grade.Score : null,
-					IsTryout = inference.IsTryOut
+					FLScore = inference.ModelOutputs.ContainsKey(ModelNames.FuzzyLogic)
+						? inference.ModelOutputs[ModelNames.FuzzyLogic].Grade.Score
+						: null,
+					NNScore = inference.Score,
+					IsTryout = inference.IsTryOut,
 				};
+
 				var b = (maxScore - minScore) ?? 0;
 				var a = (result.NNScore - minScore) ?? 0;
+
 				result.BucketPercent = b == 0 ? 0 : a / b;
+
 				return result;
 			} catch (Exception ex) {
 				log.Warn(ex, "Failed loading lg data for customer {0}", customerID);
+
 				return new LogicalGlueResult {
-					Error = "Failed loading logical glue data"
+					Error = "Failed loading logical glue data",
 				};
-			}
-		}
-	}
-}
+			} // try
+		} // FromInference
+	} // class LogicalGlueResult
+} // namespace

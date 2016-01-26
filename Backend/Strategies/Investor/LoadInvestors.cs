@@ -30,6 +30,7 @@ namespace Ezbob.Backend.Strategies.Investor {
 				InvestorID = sr["InvestorID"],
 				InvestorType = sr["InvestorType"],
 				InvestorTypeID = sr["InvestorTypeID"],
+                FundingLimitForNotification = sr["FundingLimitForNotification"],
 				CompanyName = sr["CompanyName"],
 				IsActive = sr["IsActive"]
 			});

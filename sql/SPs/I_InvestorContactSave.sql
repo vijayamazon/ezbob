@@ -25,6 +25,8 @@ CREATE TYPE I_InvestorContactList AS TABLE (
 	[Mobile] NVARCHAR(30) NULL,
 	[OfficePhone] NVARCHAR(30) NULL,
 	[IsActive] BIT NOT NULL,
+	[IsGettingAlerts] BIT NOT NULL,
+	[IsGettingReports] BIT NOT NULL,
 	[Timestamp] DATETIME NOT NULL
 )
 GO

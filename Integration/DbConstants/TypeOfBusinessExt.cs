@@ -1,8 +1,8 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database {
 	public enum TypeOfBusinessReduced {
-		Personal,
-		Limited,
-		NonLimited,
+		Personal = 0,
+		Limited = 1,
+		NonLimited = 2,
 	} // enum TypeOfBusinessReduced
 
 	public enum TypeOfBusinessAgreementReduced {

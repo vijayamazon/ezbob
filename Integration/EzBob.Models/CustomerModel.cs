@@ -34,6 +34,7 @@ namespace EzBob.Models {
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 
 		public TypeOfBusinessReduced TypeOfBusinessReduced { get; set; }
+		public bool IsRegulated { get { return TypeOfBusiness.IsRegulated(); } }
 
 		public VatReporting? VatReporting { get; set; }
 		public bool VatRegistered { get; set; }

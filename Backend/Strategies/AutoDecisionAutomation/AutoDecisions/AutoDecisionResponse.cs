@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions {
 	using System;
 	using DbConstants;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -12,8 +13,6 @@
 			// Currently (July 2015) it is always false. It was true/false in the past and may be such in the future.
 			IsLoanTypeSelectionAllowed = false;
 
-			IsAutoBankBasedApproval = false;
-
 			Decision = null;
 
 			AutoRejectReason = null;
@@ -22,9 +21,8 @@
 			SystemDecision = null;
 			LoanOfferUnderwriterComment = null;
 
-			AutoApproveAmount = 0;
+			ApprovedAmount = 0;
 			RepaymentPeriod = 0;
-			BankBasedAutoApproveAmount = 0;
 			DecisionName = "Manual";
 
 			AppValidFor = null;
@@ -43,8 +41,6 @@
 		public int? ProductSubTypeID { get; set; }
 		public bool IsLoanTypeSelectionAllowed { get; set; }
 
-		public bool IsAutoBankBasedApproval { get; set; }
-
 		public DecisionActions? Decision { get; set; }
 
 		public int? DecisionCode { get { return Decision == null ? (int?)null : (int)Decision; } }
@@ -55,7 +51,7 @@
 		public bool IsRejected { get { return Decision == DecisionActions.Reject; } }
 
 		public bool DecidedToReject { get { return IsReRejected || IsRejected; } }
-		public bool DecidedToApprove { get { return IsAutoApproval || IsAutoBankBasedApproval || IsAutoReApproval; } }
+		public bool DecidedToApprove { get { return IsAutoApproval || IsAutoReApproval; } }
 		public bool HasAutoDecided { get { return DecidedToApprove || DecidedToReject; } }
 
 		public string AutoRejectReason { get; set; }
@@ -64,9 +60,12 @@
 		public SystemDecision? SystemDecision { get; set; } // Approve / Manual / Reject
 		public string LoanOfferUnderwriterComment { get; set; }
 
-		public int AutoApproveAmount { get; set; }
+		public int ApprovedAmount {
+			get { return this.approvedAmount; }
+			set { this.approvedAmount = (value <= 0) ? 0 : MedalResult.RoundOfferedAmount(value); }
+		} // ApprovedAmount
+
 		public int RepaymentPeriod { get; set; }
-		public int BankBasedAutoApproveAmount { get; set; }
 		public string DecisionName { get; set; } // Manual/Approval/Re-Approval/Bank Based Approval/Rejection/Re-Rejection
 
 		public DateTime? AppValidFor { get; set; }
@@ -185,5 +184,6 @@
 		private int? discountPlanID;
 
 		private LoanSource loanSource;
+		private int approvedAmount;
 	} // class AutoDecisionResponse
 } // namespace

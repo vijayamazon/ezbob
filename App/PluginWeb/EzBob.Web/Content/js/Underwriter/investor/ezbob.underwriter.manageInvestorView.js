@@ -40,7 +40,9 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
     },
     //stas region?
     onRender: function() {
-
+       
+        this.initSwitch(".Investor-IsGettingAlerts-contact", this.IsContactGettingAlertsChange);
+        this.initSwitch(".Investor-IsGettingReports-contact", this.IsContactGettingReportsChange);
         this.initSwitch(".Investor-primary-contact", this.IsContactPrimaryChange);
         this.initSwitch(".Investor-active-contact", this.IsContactActiveChange);
         this.initSwitch(".Investor-active-bank", this.IsBankActiveChange);
@@ -73,6 +75,24 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
             func.call(self, event, innerState);
         });
     }, // initSwitch
+    IsContactGettingReportsChange :function(event, state, innerState) {
+        var tr = $(event.currentTarget).closest('tr');
+        var id = tr.data('id');
+       
+        var tochange = this.model.get('Contacts').find(function (item) {
+            return Number(item.get('InvestorContactID')) === id;
+        }); //get the model that need to get changed
+        tochange.set('IsGettingReports', state.value);
+    },
+    IsContactGettingAlertsChange :function(event, state, innerState) {
+        var tr = $(event.currentTarget).closest('tr');
+        var id = tr.data('id');
+
+        var tochange = this.model.get('Contacts').find(function (item) {
+            return Number(item.get('InvestorContactID')) === id;
+        }); //get the model that need to get changed
+        tochange.set('IsGettingAlerts', state.value);
+    },
     IsContactPrimaryChange: function(event, state, innerState) {
         var tr = $(event.currentTarget).closest('tr');
         var id = tr.data('id');

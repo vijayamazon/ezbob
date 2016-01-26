@@ -221,6 +221,9 @@
 		}
 
 		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID, long? nlCashRequestID) {
+
+			nlCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
+
 			if (model.WeightsDict != null) {
 				if (!model.WeightsDict.ContainsKey(Parameter.BusinessScore))
 					model.WeightsDict[Parameter.BusinessScore] = new Weight();
@@ -236,8 +239,6 @@
 
 				if (!model.WeightsDict.ContainsKey(Parameter.FreeCashFlow))
 					model.WeightsDict[Parameter.FreeCashFlow] = new Weight();
-
-				nlCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
 
 				_db.ExecuteNonQuery(
 					"AV_StoreNewMedal",

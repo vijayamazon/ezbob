@@ -118,6 +118,7 @@
 		public virtual string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
 		public virtual string TypeOfBusinessDescription { get { return TypeOfBusiness.DescriptionAttr(); } }
         public virtual TypeOfBusinessReduced TypeOfBusinessReduced { get { return TypeOfBusiness.Reduce(); } }
+		public virtual bool IsRegulated { get { return TypeOfBusiness.IsRegulated(); } }
 		public virtual IndustryType? IndustryType { get; set; }
 		public virtual string IndustryTypeDescription { get { return IndustryType == null ? null : IndustryType.Value.ToString(); }}
 		public virtual string DaytimePhone { get; set; }

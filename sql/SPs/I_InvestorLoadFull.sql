@@ -52,6 +52,8 @@ BEGIN
 		Mobile, 
 		OfficePhone,
 		IsActive,
+		IsGettingAlerts,
+		IsGettingReports
 		Timestamp
 	FROM 
 		I_InvestorContact

@@ -6,6 +6,14 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_InvestorBankAccountTransaction') AND name='BankTransactionRef')
+BEGIN
+	ALTER TABLE I_InvestorBankAccountTransaction DROP COLUMN TimestampCounter 
+	ALTER TABLE I_InvestorBankAccountTransaction ADD BankTransactionRef DATETIME NULL
+	ALTER TABLE I_InvestorBankAccountTransaction ADD TimestampCounter ROWVERSION
+END
+GO
+
 IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_InvestorSystemBalance') AND name='TransactionDate') 
 BEGIN
 	ALTER TABLE I_InvestorSystemBalance DROP COLUMN TimestampCounter 
@@ -70,4 +78,34 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_Index') AND name='ProductID') 
+BEGIN
+	ALTER TABLE I_Index DROP COLUMN TimestampCounter
+	ALTER TABLE I_Index ADD ProductID INT NULL
+	ALTER TABLE I_Index ADD TimestampCounter ROWVERSION
+END
+GO
 
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_InvestorContact') AND name='IsGettingAlerts') 
+BEGIN
+	ALTER TABLE I_InvestorContact DROP COLUMN TimestampCounter
+	ALTER TABLE I_InvestorContact ADD IsGettingAlerts  BIT  NOT NULL DEFAULT(1)
+	ALTER TABLE I_InvestorContact ADD TimestampCounter ROWVERSION
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_InvestorContact') AND name='IsGettingReports') 
+BEGIN
+	ALTER TABLE I_InvestorContact DROP COLUMN TimestampCounter
+	ALTER TABLE I_InvestorContact ADD IsGettingReports BIT   NOT NULL DEFAULT(0)
+	ALTER TABLE I_InvestorContact ADD TimestampCounter ROWVERSION
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_Index') AND name='ProductID') 
+BEGIN
+	ALTER TABLE I_Index DROP COLUMN TimestampCounter
+	ALTER TABLE I_Index ADD ProductID INT NULL
+	ALTER TABLE I_Index ADD TimestampCounter ROWVERSION
+END
+GO

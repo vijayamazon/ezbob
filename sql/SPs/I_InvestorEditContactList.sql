@@ -24,6 +24,8 @@ CREATE TYPE I_InvestorContactsList AS TABLE (
 	[Mobile] NVARCHAR(30) NULL,
 	[OfficePhone] NVARCHAR(30) NULL,
 	[IsActive] BIT NOT NULL,
+	[IsGettingAlerts] BIT NOT NULL,
+	[IsGettingReports] BIT NOT NULL,
 	[Timestamp] DATETIME NOT NULL
 )
 GO
@@ -42,7 +44,10 @@ BEGIN
 		I_InvestorContact.[InvestorID] = tbl.[InvestorID],
 		I_InvestorContact.[IsActive] = tbl.[IsActive],
 		I_InvestorContact.[IsPrimary] = tbl.[IsPrimary],
+		I_InvestorContact.[IsGettingAlerts] = tbl.[IsGettingAlerts],
+		I_InvestorContact.[IsGettingReports] = tbl.[IsGettingReports],
 			I_InvestorContact.[Timestamp] = tbl.[Timestamp]
+
 	FROM
 		I_InvestorContact b 
 	INNER JOIN 

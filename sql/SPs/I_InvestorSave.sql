@@ -69,6 +69,7 @@ CREATE PROCEDURE I_InvestorDetailsUpdate
 @IsActive bit,
 @Name  nvarchar(255),
 @Timestamp datetime,
+@FundingLimitForNotification  decimal(18, 6),
 @InvestorID Int
 AS
 BEGIN
@@ -81,7 +82,8 @@ BEGIN
 		I_Investor.[Name] = @Name ,
 		I_Investor.[InvestorTypeID] = @InvestorTypeID,
 		I_Investor.[IsActive] = @IsActive,
-		I_Investor.[Timestamp] = @Timestamp
+		I_Investor.[Timestamp] = @Timestamp,
+		I_Investor.[FundingLimitForNotification] = @FundingLimitForNotification
 	FROM
 		I_Investor b 
 	where

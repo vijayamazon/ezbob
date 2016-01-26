@@ -321,6 +321,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		};
 
 		this.agreementView = new EzBob.Profile.AgreementView(oViewArgs);
+
+		
 		this.agreementView.render(agreementdata);
 
 		this.showSubmit();

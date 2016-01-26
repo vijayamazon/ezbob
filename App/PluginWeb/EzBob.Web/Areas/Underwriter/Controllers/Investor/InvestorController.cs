@@ -111,6 +111,8 @@
 				new Ezbob.Backend.Models.Investor.InvestorContactModel {
 					InvestorContactID = contact.InvestorContactID,
 					InvestorID = InvestorID,
+                    IsGettingAlerts  = contact.IsGettingAlerts,
+                    IsGettingReports = contact.IsGettingReports, 
 					IsActive = contact.IsActive,
 					Comment = contact.Comment,
 					Email = contact.ContactEmail,
@@ -130,6 +132,7 @@
         public JsonResult ManageInvestorDetails(int InvestorID, FrontInvestorModel investorDetails)
         {
             DateTime now = DateTime.UtcNow;
+            Log.Debug("investor funding limit string " + investorDetails.FundingLimitForNotification);
             var result = this.serviceClient.Instance.ManageInvestorDetails(this.context.UserId,
                 new Ezbob.Backend.Models.Investor.InvestorModel
                 {
@@ -137,6 +140,7 @@
                     InvestorID = InvestorID,
                     IsActive = investorDetails.IsActive,
                     Name = investorDetails.CompanyName,
+                    FundingLimitForNotification = investorDetails.FundingLimitForNotification,
                     InvestorType = new Ezbob.Backend.Models.Investor.InvestorTypeModel
                     {
                         InvestorTypeID = investorDetails.InvestorType
@@ -170,6 +174,8 @@
 					Comment = x.Comment,
 					Email = x.ContactEmail,
 					IsPrimary = x.IsPrimary,
+                    IsGettingAlerts = x.IsGettingAlerts,
+                    IsGettingReports = x.IsGettingReports,
 					LastName = x.ContactLastName,
 					PersonalName = x.ContactPersonalName,
 					Mobile = x.ContactMobile,
