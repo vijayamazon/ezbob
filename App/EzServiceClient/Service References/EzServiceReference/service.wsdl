@@ -1223,6 +1223,12 @@
   <wsdl:message name="IEzService_LoadMessagesSentToUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadMessagesSentToUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetSlidersData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSlidersData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSlidersData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSlidersDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
     <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
   </wsdl:message>
@@ -2487,6 +2493,10 @@
     <wsdl:operation name="LoadMessagesSentToUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadMessagesSentToUser" message="tns:IEzService_LoadMessagesSentToUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadMessagesSentToUserResponse" message="tns:IEzService_LoadMessagesSentToUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSlidersData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSlidersData" message="tns:IEzService_GetSlidersData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSlidersDataResponse" message="tns:IEzService_GetSlidersData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddHistoryDirector">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
@@ -4530,6 +4540,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetSlidersData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSlidersData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddHistoryDirector">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddHistoryDirector" style="document" />
       <wsdl:input>
@@ -5298,20 +5317,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

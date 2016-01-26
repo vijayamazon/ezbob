@@ -619,6 +619,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MessagesModel" nillable="true" type="tns:MessagesModel" />
+  <xs:complexType name="SlidersDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MaxLoanAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MaxTerm" type="xs:int" />
+      <xs:element minOccurs="0" name="MinLoanAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MinTerm" type="xs:int" />
+      <xs:element minOccurs="0" name="Term" nillable="true" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="SlidersDataModel" nillable="true" type="tns:SlidersDataModel" />
   <xs:complexType name="MpModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Affordability" nillable="true" type="tns:ArrayOfAffordabilityData" />

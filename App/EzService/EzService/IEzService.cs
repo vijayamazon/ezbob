@@ -512,5 +512,8 @@
 
 		[OperationContract]
 		MessagesListActionResult LoadMessagesSentToUser(int userID);
+
+		[OperationContract]
+		SlidersDataActionResults GetSlidersData(int customerID);
 	} // interface IEzService
 } // namespace EzService

@@ -48,22 +48,25 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
         var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
         var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
         var self = this;
-        InitAmountPeriodSliders({
+		
+	    var startValues = this.adjustValues();
+
+	    InitAmountPeriodSliders({
         	container: this.ui.calcSlider,
         	el: this.$el,
             amount: {
-                min: 1000,
-                max: 120000,
-                start: this.model.get('Amount'),
+            	min: this.model.get('MinLoanAmount'),
+            	max: this.model.get('MaxLoanAmount'),
+            	start: startValues.startAmount,
                 step: 1000,
                 caption: amountCaption,
                 hasbutton: true,
                 uiEvent: 'requested-loan:'
             },
             period: {
-                min: 3,
-                max: 24,
-                start: this.model.get('Term'),
+            	min: this.model.get('MinTerm'),
+            	max: this.model.get('MaxTerm'),
+            	start: startValues.startTerm,
                 step: 1,
                 hide: false,
                 caption: periodCaption,
@@ -108,11 +111,28 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 			});
     },
 
-    closeClicked: function () {
-    	this.trigger('requested-amount-changed');
-    	this.model.off('change', this.render, this);
-    	this.close();
-    },
+	adjustValues: function(){
+		var startAmount;
+		if (this.model.get('Amount')) {
+			startAmount = this.model.get('Amount') > this.model.get('MinLoanAmount') ? this.model.get('Amount') : this.model.get('MinLoanAmount');
+			startAmount = startAmount > this.model.get('MaxLoanAmount') ? this.model.get('MaxLoanAmount') : startAmount;
+		} else
+			startAmount = this.model.get('MinLoanAmount');
+
+		var startTerm;
+		if (this.model.get('Term')) {
+			startTerm = this.model.get('Term') > this.model.get('MinTerm') ? this.model.get('Term') : this.model.get('MinTerm');
+			startTerm = startTerm > this.model.get('MaxTerm') ? this.model.get('MaxTerm') : startTerm;
+		} else
+			startTerm = this.model.get('MinTerm');
+		return { startTerm: startTerm, startAmount: startAmount };
+	},
+
+	closeClicked: function () {
+    		this.trigger('requested-amount-changed');
+    		this.model.off('change', this.render, this);
+    		this.close();
+		},
 
     loanSelectionChanged: function() {
     	var currentTerm = $('#calc-slider .period-slider').slider('value');

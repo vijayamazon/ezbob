@@ -323,5 +323,16 @@
 				Messages = instance.Result,
 			};
 		} // LoadMessagesSentToUser
+
+		public SlidersDataActionResults GetSlidersData(int customerID) {
+			GetSlidersData instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID);
+
+			return new SlidersDataActionResults {
+				MetaData = amd,
+				SlidersData = instance.Result,
+			};
+		} // GetSlidersBoundaries
 	} // class EzServiceImplementation
 } // namespace EzService

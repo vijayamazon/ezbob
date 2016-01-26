@@ -236,6 +236,7 @@
     <Compile Include="ManualDecision\ManuallyReject.cs" />
     <Compile Include="ManualDecision\ManuallyApprove.cs" />
     <Compile Include="Misc\AddHistoryDirector.cs" />
+    <Compile Include="Misc\GetSlidersData.cs" />
     <Compile Include="Misc\LoadMessagesSentToUser.cs" />
     <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
     <Compile Include="SalesForce\AddUpdateBrokerAccount.cs" />

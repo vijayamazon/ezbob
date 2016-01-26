@@ -188,6 +188,7 @@
     <Compile Include="Areas\Customer\Controllers\CustomerStatusController.cs" />
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
+    <Compile Include="Areas\Customer\Models\RequestedLoanModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomerNavigatorController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AutomationController.cs" />
