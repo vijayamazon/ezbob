@@ -13,6 +13,7 @@
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
+	using Ezbob.Backend.Strategies.CompaniesHouse;
 	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Backend.Strategies.Esign;
 	using Ezbob.Backend.Strategies.Experian;
@@ -50,13 +51,13 @@
 	[TestFixture]
 	public class TestStrategies : BaseTestFixtue {
 
-        [Test]
-        public void FindInvestorForOffer() {
-            var s = new FindInvestorForOffer(1,1);
-            s.Execute();
-        }
-        
-        [Test]
+		[Test]
+		public void FindInvestorForOffer() {
+			var s = new FindInvestorForOffer(1, 1);
+			s.Execute();
+		}
+
+		[Test]
 		public void ApprovedUser() {
 			var s = new ApprovedUser(182, 1000, 24, true);
 			s.Execute();
@@ -572,7 +573,7 @@
 			stra.Execute();
 		}
 
-		
+
 
 		[Test]
 		public void ThreeInvalidAttempts() {
@@ -768,7 +769,7 @@
 			new LoanStatusAfterPayment(54, "", 27, 1000, true, 500, false).Execute();
 		}
 
-	
+
 
 		[Test]
 		public void TestRescheduleOUT() {
@@ -911,10 +912,10 @@
 				this.m_oLog.Info("Exists in cash");
 			}
 		}
-		
+
 		[Test]
 		public void TestLoadApplicationInfo() {
-			var stra = new LoadApplicationInfo(2357,42825, DateTime.Now);
+			var stra = new LoadApplicationInfo(2357, 42825, DateTime.Now);
 			stra.Execute();
 
 			Assert.IsNotNull(stra.Result);
@@ -929,39 +930,44 @@
 			Assert.Greater(stra.Result.Products.Count, 0);
 		}
 
-          [Test]
-        public void TestLoadEsigner() {
+		[Test]
+		public void TestLoadEsigner() {
+			var s = new LoadEsignatures(22, true);
+			s.Execute();
+		}
 
-              var s = new LoadEsignatures(22, true);
-            s.Execute();
+		[Test]
+		public void TestCompaniesHouse() {
+			var s = new GetCompaniesHouseData(null, "06173420", false);
+			s.Execute();
+		}
 
-        }
-          [Test]
-          public void TestEditdirector() {
-              Esigner edirector = new Esigner {
-                  DirectorID = 69,
-                  CustomerID = 1418,
-                  FirstName = "shlomi",
-                  LastName = "lastname",
-                  MiddleName ="midname",
-                  BirthDate =  new DateTime(2011, 6, 10),
-                  Gender = "M",
-                  Email = "meinershlomi@gmail.com",
-                  CompanyId = 1220,
-                  MobilePhone = "0547998484",
-                  IsDirector = true,
-                  IsShareholder = false,
-                  UserId = 22
-              };
+		[Test]
+		public void TestEditdirector() {
+			Esigner edirector = new Esigner {
+				DirectorID = 69,
+				CustomerID = 1418,
+				FirstName = "shlomi",
+				LastName = "lastname",
+				MiddleName = "midname",
+				BirthDate = new DateTime(2011, 6, 10),
+				Gender = "M",
+				Email = "meinershlomi@gmail.com",
+				CompanyId = 1220,
+				MobilePhone = "0547998484",
+				IsDirector = true,
+				IsShareholder = false,
+				UserId = 22
+			};
 
-              var s = new AddHistoryDirector(edirector);
-              s.Execute();
+			var s = new AddHistoryDirector(edirector);
+			s.Execute();
 
-              //this.m_oDB.ExecuteNonQuery("AddHistoryDirector2", CommandSpecies.StoredProcedure,
-              //new QueryParameter("@DirectorID", 1),
-              //new QueryParameter("@Name", "asdgfa"));
-              
+			//this.m_oDB.ExecuteNonQuery("AddHistoryDirector2", CommandSpecies.StoredProcedure,
+			//new QueryParameter("@DirectorID", 1),
+			//new QueryParameter("@Name", "asdgfa"));
 
-          }
+
+		}
 	}
 }

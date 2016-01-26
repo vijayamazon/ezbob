@@ -141,6 +141,7 @@ namespace ConfigManager {
 		CollectionPeriod2,
 		CollectionPeriod3,
 		CollectionToAddress,
+		CompaniesHouseApiKey,
 		CompanyCaisLateAlertLongMonths,
 		CompanyCaisLateAlertShortMonths,
 		CompanyCaisLateAlertShortPeriodThreshold,

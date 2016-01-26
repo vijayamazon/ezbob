@@ -23,6 +23,8 @@ namespace CompaniesHouseTest {
 			var officerRefNum = "1t13BKJFE1XYSoeCqJVckOnnSwk";
 			var result2 = httpClient.GetAsync(string.Format("/officers/{0}/appointments", officerRefNum)).Result.Content.ReadAsStringAsync().Result;
 			var result2Model = JsonConvert.DeserializeObject<AppointmentListResult>(result2);
+
+			Console.WriteLine("{0} {1}", result, result2);
 		}
 	}
 }

@@ -117,6 +117,10 @@
     <Compile Include="CollectionSnailMailMetadataModel.cs" />
     <Compile Include="CollectionSnailMailTemplate.cs" />
     <Compile Include="CollectionSmsTemplate.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerAppointmentOrder.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerAppointmentOrderItem.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerOrderItem.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerOrder.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
     <Compile Include="CreditSafe\CreditSafeBaseData.cs" />

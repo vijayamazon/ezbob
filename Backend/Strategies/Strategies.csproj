@@ -89,6 +89,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -164,6 +165,12 @@
     <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="Broker\BrokerUpdateEmail.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
+    <Compile Include="CompaniesHouse\AppointmentListResult.cs" />
+    <Compile Include="CompaniesHouse\DictionariesTypes.cs" />
+    <Compile Include="CompaniesHouse\ErrorResult.cs" />
+    <Compile Include="CompaniesHouse\GetCompaniesHouseData.cs" />
+    <Compile Include="CompaniesHouse\JsonConverters.cs" />
+    <Compile Include="CompaniesHouse\OfficersListResult.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
     <Compile Include="CreditSafe\ServiceLogCreditSafeLtd.cs" />

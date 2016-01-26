@@ -69,7 +69,10 @@
         public virtual VariableValue CollectionToAddress {
             get { return this[Variables.CollectionToAddress]; }
 		}
-        
+
+		public virtual VariableValue CompaniesHouseApiKey {
+			get { return this[Variables.CompaniesHouseApiKey]; }
+		}
 		public virtual VariableValue CompanyCaisLateAlertLongMonths {
 			get { return this[Variables.CompanyCaisLateAlertLongMonths]; }
 		}
