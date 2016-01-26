@@ -389,7 +389,7 @@
     <Compile Include="MailStrategies\Collection\CollectionMails.cs" />
     <Compile Include="MailStrategies\EmailEnlistedLottery.cs" />
     <Compile Include="AutoDecisionAutomation\SilentAutomation.cs" />
-    <Compile Include="MainStrategy\MainStrategyMails.cs" />
+    <Compile Include="MainStrategy\ExternalNotifier.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_private_calc-n-find.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_private-check.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_private-other.cs" />

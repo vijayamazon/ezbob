@@ -1010,9 +1010,8 @@
 					new QueryParameter("@OldCashRequestID", this.cashRequestID.Value)
 				);
 
-				if (this.nlCashRequestID == 0L) {
+				if (this.nlCashRequestID == 0L)
 					NLCashRequestAdd(this.cashRequestID.Value, now);
-				}
 
 				return;
 			} // if
@@ -1035,18 +1034,6 @@
 			this.cashRequestID.Value = sr["CashRequestID"];
 
 			NLCashRequestAdd(this.cashRequestID.Value, now);
-
-			//AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
-			//	CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-			//	CustomerID = CustomerID,
-			//	OldCashRequestID = this.cashRequestID,
-			//	RequestTime = now,
-			//	UserID = UnderwriterID,
-			//});
-			//nlAddCashRequest.Context.CustomerID = CustomerID;
-			//nlAddCashRequest.Context.UserID = UnderwriterID;
-			//nlAddCashRequest.Execute();
-			//this.nlCashRequestID = nlAddCashRequest.CashRequestID;
 
 			int cashRequestCount = sr["CashRequestCount"];
 
@@ -1202,7 +1189,7 @@
 			nlAddCashRequest.Context.UserID = UnderwriterID;
 			nlAddCashRequest.Execute();
 			this.nlCashRequestID = nlAddCashRequest.CashRequestID;
-		}
+		} // NLCashRequestAdd
 
 		private readonly FinishWizardArgs finishWizardArgs;
 		private readonly bool avoidAutomaticDecision;
