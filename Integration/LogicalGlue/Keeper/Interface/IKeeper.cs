@@ -89,11 +89,5 @@
 		/// Otherwise only inferences with this amount are included.</param>
 		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
 		Inference LoadInferenceIfExists(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
-
-		/// <summary>
-		/// Gets whether requests to Logical Glue API are enabled or not.
-		/// </summary>
-		/// <returns>Remote requests are enabled or not.</returns>
-		bool RemoteRequestsEnabled();
 	} // interface IKeeper
 } // namespace

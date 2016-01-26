@@ -73,6 +73,7 @@
 			);
 
 			this.customerDetails = new CustomerDetails(customerID);
+			this.customerDetails.Load();
 
 			this.mailer = new StrategiesMailer();
 		} // constructor

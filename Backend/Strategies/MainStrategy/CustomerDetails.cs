@@ -7,16 +7,21 @@
 		public CustomerDetails(int customerID) {
 			RequestedID = customerID;
 			ID = 0;
+		} // constructor
 
-			if (customerID <= 0)
+		public void Load() {
+			if (RequestedID <= 0)
 				return;
 
-			Library.Instance.Log.Debug("Getting personal info for customer {0}...", customerID);
+			if (RequestedID == ID)
+				return;
+
+			Library.Instance.Log.Debug("Getting personal info for customer {0}...", RequestedID);
 
 			SafeReader results = Library.Instance.DB.GetFirst(
 				"GetPersonalInfo",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerID)
+				new QueryParameter("CustomerId", RequestedID)
 			);
 
 			if (results.IsEmpty)
@@ -24,14 +29,14 @@
 
 			results.Fill(this);
 
-			var scoreStrat = new GetExperianConsumerScore(customerID);
+			var scoreStrat = new GetExperianConsumerScore(RequestedID);
 			scoreStrat.Execute();
 			ExperianConsumerScore = scoreStrat.Score;
 
-			ID = customerID;
+			ID = RequestedID;
 
-			Library.Instance.Log.Debug("Getting personal info for customer {0} complete.", customerID);
-		} // constructor
+			Library.Instance.Log.Debug("Getting personal info for customer {0} complete.", RequestedID);
+		} // Load
 
 		public int ID { get; private set; }
 		public int RequestedID { get; private set; }

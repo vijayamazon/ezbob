@@ -190,7 +190,9 @@
 		} // GetInferenceIfExists
 
 		private Inference DownloadAndSave(int customerID, decimal explicitMonthlyPayment, bool isTryOut) {
-			if (!Keeper.RemoteRequestsEnabled()) {
+			ModuleConfiguration cfg = Keeper.LoadModuleConfiguration();
+
+			if (!cfg.RemoteRequestsEnabled) {
 				Log.Debug(
 					"Engine.DownloadAndSave({0}, {1}, {2}): not calling remote API - calls are disabled.",
 					customerID,

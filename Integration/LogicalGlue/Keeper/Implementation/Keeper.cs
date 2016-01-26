@@ -70,6 +70,7 @@
 		public ModuleConfiguration LoadModuleConfiguration() {
 			return new ModuleConfiguration {
 				CacheAcceptanceDays = CurrentValues.Instance.LogicalGlueCacheAcceptanceDays,
+				RemoteRequestsEnabled = CurrentValues.Instance.LogicalGlueEnabled,
 			};
 		} // LoadModuleConfiguration
 
@@ -138,15 +139,6 @@
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
 		} // LoadInferenceIfExists
-
-		public bool RemoteRequestsEnabled() {
-			try {
-				return new RemoteRequestsAreEnabled(this.db, this.log).Execute();
-			} catch (Exception e) {
-				this.log.Alert(e, "Failed to load whether remote requests are allowed, defaulting to false.");
-				return false;
-			} // try
-		} // RemoteRequestsEnabled
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;
