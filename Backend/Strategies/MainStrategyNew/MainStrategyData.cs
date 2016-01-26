@@ -41,6 +41,21 @@
 			CustomerDetails = new Strategies.MainStrategy.CustomerDetails(this.arguments.CustomerID);
 		} // constructor
 
+		public string Description {
+			get {
+				return string.Format(
+					"customer {0} by UW {1} ({2} from {3} with cash request {4} / {5}, tag {6})",
+					CustomerID,
+					UnderwriterID,
+					NewCreditLineOption,
+					CashRequestOriginator.HasValue ? CashRequestOriginator.ToString() : "'UNKNOWN ORIGINATOR'",
+					CashRequestID,
+					NLCashRequestID,
+					Tag
+				);
+			} // get
+		} // Description
+
 		public AutoRejectionOutput AutoRejectionOutput { get; set; }
 
 		public NewCreditLineOption NewCreditLineOption {

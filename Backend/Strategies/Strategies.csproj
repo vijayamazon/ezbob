@@ -211,6 +211,8 @@
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
+    <Compile Include="MainStrategyNew\AMainStrategyStep.cs" />
+    <Compile Include="MainStrategyNew\MainStrategy.cs" />
     <Compile Include="MainStrategyNew\MainStrategyArguments.cs" />
     <Compile Include="MainStrategyNew\MainStrategyData.cs" />
     <Compile Include="MainStrategy\ABackdoorSimpleDetails.cs" />
