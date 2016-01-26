@@ -19,6 +19,7 @@
 				QueryParameter[] queryParameters = {
                     new QueryParameter("InvestorID", this.Investor.InvestorID),
 					new QueryParameter("Name", this.Investor.Name), 
+                    new QueryParameter("FundingLimitForNotification", this.Investor.FundingLimitForNotification), 
 					new QueryParameter("IsActive", this.Investor.IsActive),
 					new QueryParameter("InvestorTypeID", this.Investor.InvestorType.InvestorTypeID),
 					new QueryParameter("Timestamp", now)

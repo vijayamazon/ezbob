@@ -22,6 +22,9 @@ namespace Ezbob.Backend.Models.Investor
 
         [DataMember]
         public string CompanyName { get; set; }
+     
+        [DataMember]
+        public decimal FundingLimitForNotification { get; set; }
 
         [DataMember]
         public bool IsActive { get; set; }

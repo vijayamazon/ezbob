@@ -132,6 +132,7 @@
         public JsonResult ManageInvestorDetails(int InvestorID, FrontInvestorModel investorDetails)
         {
             DateTime now = DateTime.UtcNow;
+            Log.Debug("investor funding limit string " + investorDetails.FundingLimitForNotification);
             var result = this.serviceClient.Instance.ManageInvestorDetails(this.context.UserId,
                 new Ezbob.Backend.Models.Investor.InvestorModel
                 {
@@ -139,6 +140,7 @@
                     InvestorID = InvestorID,
                     IsActive = investorDetails.IsActive,
                     Name = investorDetails.CompanyName,
+                    FundingLimitForNotification = investorDetails.FundingLimitForNotification,
                     InvestorType = new Ezbob.Backend.Models.Investor.InvestorTypeModel
                     {
                         InvestorTypeID = investorDetails.InvestorType

@@ -18,6 +18,7 @@ BEGIN
 		i.InvestorID,
 		t.Name AS InvestorType,
 		i.Name CompanyName,
+		i.FundingLimitForNotification, 
 		i.Timestamp,
 		i.IsActive,
 		t.InvestorTypeID 
