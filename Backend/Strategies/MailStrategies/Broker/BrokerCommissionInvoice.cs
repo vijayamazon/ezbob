@@ -55,8 +55,10 @@
 
 			if (!string.IsNullOrWhiteSpace(BrokerData.Email)) {
 				aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, isBroker: true, origin: BrokerData.Origin, addSalesforceActivity: false));
-				if (!string.IsNullOrWhiteSpace(ConfigManager.CurrentValues.Instance.AccountingBrokersEmail))
-					aryAddresses.Add(new Addressee(ConfigManager.CurrentValues.Instance.AccountingBrokersEmail, userID: BrokerData.BrokerID, isBroker: true, origin: BrokerData.Origin, addSalesforceActivity: false));
+			}
+
+			if (!string.IsNullOrWhiteSpace(ConfigManager.CurrentValues.Instance.AccountingBrokersEmail)) {
+				aryAddresses.Add(new Addressee(ConfigManager.CurrentValues.Instance.AccountingBrokersEmail, userID: BrokerData.BrokerID, isBroker: true, origin: BrokerData.Origin, addSalesforceActivity: false));
 			}
 
 			return aryAddresses.ToArray();
