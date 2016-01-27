@@ -10,8 +10,8 @@
 
 	using CashRequestOriginatorType = EZBob.DatabaseLib.Model.Database.CashRequestOriginator;
 
-	internal class MainStrategyData {
-		public MainStrategyData(MainStrategyArguments args) {
+	internal class MainStrategyContextData {
+		public MainStrategyContextData(MainStrategyArguments args) {
 			this.arguments = args;
 
 			AutoRejectionOutput = null;
@@ -112,5 +112,5 @@
 		public static int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
 		private readonly MainStrategyArguments arguments;
-	} // class MainStrategyData
+	} // class MainStrategyContextData
 } // namespace

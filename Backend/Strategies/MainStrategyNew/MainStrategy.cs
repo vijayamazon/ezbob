@@ -6,7 +6,7 @@
 			if (args == null)
 				throw new StrategyAlert(this, "No arguments specified for the main strategy.");
 
-			this.data = new MainStrategyData(args);
+			this.context = new MainStrategyContextData(args);
 		} // constructor
 
 		public override string Name {
@@ -16,7 +16,7 @@
 		public override void Execute() {
 		} // Execute
 
-		private readonly MainStrategyData data;
+		private readonly MainStrategyContextData context;
 	} // class MainStrategy
 } // namespace
 
