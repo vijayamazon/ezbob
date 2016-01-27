@@ -38,7 +38,7 @@
 	public class Appointment {
 		public OfficerAddress address { get; set; }
 		public DateTime? appointed_before { get; set; }
-		public DateTime appointed_on { get; set; }
+		public DateTime? appointed_on { get; set; }
 		public AppointmentCompany appointed_to { get; set; }
 		public string country_of_residence { get; set; }
 		public IList<FormerName> former_names { get; set; } //TODO is necessary

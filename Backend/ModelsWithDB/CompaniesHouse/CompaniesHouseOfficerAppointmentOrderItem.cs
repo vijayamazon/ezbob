@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.CompaniesHouse {
 	using System;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract]
@@ -35,7 +36,7 @@
 		[DataMember]
 		public DateTime? AppointedBefore { get; set; }
 		[DataMember]
-		public DateTime AppointedOn { get; set; }
+		public DateTime? AppointedOn { get; set; }
 
 		//Company
 		[DataMember]
@@ -87,6 +88,10 @@
 		[DataMember]
 		public DateTime? ResignedOn { get; set; }
 
+		//--------------------//
+		[DataMember]
+		[NonTraversable]
+		public bool IsCustomer { get; set; }
 		
 	}//CompaniesHouseOfficerAppointmentOrderItem
 }//ns

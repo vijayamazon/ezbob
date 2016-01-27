@@ -92,7 +92,7 @@ BEGIN
 		[Premises] NVARCHAR(255) NULL,
 		[Region] NVARCHAR(255) NULL,
 		[AppointedBefore] DATETIME NULL,
-		[AppointedOn] DATETIME NOT NULL,
+		[AppointedOn] DATETIME NULL,
 		[CompanyName] NVARCHAR(255) NULL,
 		[CompanyNumber] NVARCHAR(255) NULL,
 		[CompanyStatus] NVARCHAR(255) NULL,
@@ -120,6 +120,10 @@ BEGIN
 	)
 END
 GO
+
+ALTER TABLE CompaniesHouseOfficerAppointmentOrderItem ALTER COLUMN AppointedOn DATETIME NULL
+GO
+
 
 
 

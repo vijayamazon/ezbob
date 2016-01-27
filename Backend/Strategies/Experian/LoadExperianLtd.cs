@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.CompaniesHouse;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.Strategies.CompaniesHouse;
 	using Ezbob.Database;
 
 	public class LoadExperianLtd : AStrategy {
@@ -43,8 +45,15 @@
 
 				History = scoreHistory;
 			}
-		} // Execute
 
+			//Load companies house data
+			var companyRef = string.IsNullOrEmpty(this.m_sCompanyRefNum) && Result != null ? Result.RegisteredNumber : this.m_sCompanyRefNum;
+			GetCompaniesHouseData getCompaniesHouseData = new GetCompaniesHouseData(null, companyRef, false);
+			getCompaniesHouseData.Execute();
+			CompaniesHouseResult = getCompaniesHouseData.Result;
+		}// Execute
+
+		public CompaniesHouseOfficerOrder CompaniesHouseResult { get; set; }
 		public ExperianLtd Result { get; private set; }
 		public List<ScoreAtDate> History { get; private set; }
 

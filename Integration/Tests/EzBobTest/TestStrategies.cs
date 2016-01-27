@@ -938,7 +938,7 @@
 
 		[Test]
 		public void TestCompaniesHouse() {
-			var s = new GetCompaniesHouseData(null, "06173420", false);
+			var s = new GetCompaniesHouseData(null, "SC123456", true);
 			s.Execute();
 		}
 

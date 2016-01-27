@@ -150,6 +150,7 @@
 			foreach (var officer in model.Officers) {
 				officer.CompaniesHouseOfficerOrderID = companiesHouseOfficerOrderID;
 				int companiesHouseOfficerOrderItemID = DB.ExecuteScalar<int>("CompaniesHouseOfficerOrderItemSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("@Tbl", officer));
+				officer.CompaniesHouseOfficerOrderItemID = companiesHouseOfficerOrderItemID;
 				officer.AppointmentOrder.CompaniesHouseOfficerOrderItemID = companiesHouseOfficerOrderItemID;
 				int companiesHouseOfficerAppointmentOrderID = DB.ExecuteScalar<int>("CompaniesHouseOfficerAppointmentOrderSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("@Tbl", officer.AppointmentOrder));
 				foreach (var appointment in officer.AppointmentOrder.Appointments) {

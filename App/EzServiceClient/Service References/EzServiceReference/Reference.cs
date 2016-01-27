@@ -1135,10 +1135,26 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class ExperianLtdActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.CompaniesHouse.CompaniesHouseOfficerOrder CompaniesHouseField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.ScoreAtDate[] HistoryField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.ModelsWithDB.Experian.ExperianLtd ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.CompaniesHouse.CompaniesHouseOfficerOrder CompaniesHouse {
+            get {
+                return this.CompaniesHouseField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CompaniesHouseField, value) != true)) {
+                    this.CompaniesHouseField = value;
+                    this.RaisePropertyChanged("CompaniesHouse");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.ScoreAtDate[] History {

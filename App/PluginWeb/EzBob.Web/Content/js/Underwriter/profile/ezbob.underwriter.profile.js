@@ -134,10 +134,10 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
 		this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
-			el: self.$el.find('#company-score-list'),
+			el: this.$el.find('#company-score-list'),
 			model: this.companyScoreModel
 		});
-
+		
 		this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
 			el: this.$el.find('#customer-info')
 		});

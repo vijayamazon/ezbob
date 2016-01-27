@@ -59,5 +59,9 @@
 		[DataMember]
 		[NonTraversable]
 		public CompaniesHouseOfficerAppointmentOrder AppointmentOrder { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public bool IsCustomer { get; set; }
 	}//CompaniesHouseOfficerOrderItem
 }//ns
