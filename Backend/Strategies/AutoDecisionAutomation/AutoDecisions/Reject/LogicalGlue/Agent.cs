@@ -190,11 +190,11 @@
 
 						inputData.ResponseErrors.AddRange(model.Error.MissingColumns);
 					} // if
-				} // if
 
-				inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
-				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
-				inputData.Score = inference.Score;
+					inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
+					inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
+					inputData.Score = inference.Score;
+				} // if inference is null
 
 				inputData.MatchingGradeRanges = new MatchingGradeRanges();
 

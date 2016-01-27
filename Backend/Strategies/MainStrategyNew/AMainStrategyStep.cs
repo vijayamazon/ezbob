@@ -1,90 +1,59 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew {
 	using System;
-	using System.Collections.Generic;
 	using Ezbob.Logger;
 
 	internal abstract class AMainStrategyStep {
 		public AMainStrategyStep Execute() {
 			try {
-				Log.Debug("Executing step {0} for {1}...", Name, ContextDescription);
+				Log.Debug("Executing step {0} for {1}...", Name, OuterContextDescription);
 
-				StepOutcome outcome = Run();
+				AMainStrategyStep nextStep = Run();
 
 				Log.Debug(
 					"Completed step {0} with result '{1}' for {2}.",
 					Name,
-					GetStepOutcomeName(outcome),
-					ContextDescription
+					Outcome,
+					OuterContextDescription
 				);
 
-				if (!NextSteps.ContainsKey(outcome)) {
-					throw new Exception(string.Format(
-						"No next step specified for outcome {0}.",
-						GetStepOutcomeName(outcome)
-					));
-				} // if
+				if (nextStep == null)
+					throw new Exception(string.Format("No next step specified for outcome {0}.", Outcome));
 
-				return NextSteps[outcome];
+				return nextStep;
 			} catch (Exception e) {
 				Log.Alert(
 					e,
 					"Exception during step '{0}' while executing for {1}.",
 					Name,
-					ContextDescription
+					OuterContextDescription
 				);
 
-				return NextSteps[StepOutcome.Exception];
+				return this.onException;
 			} // try
 		} // Execute
 
-		protected AMainStrategyStep(string contextDescription, AMainStrategyStep onException) {
-			if (string.IsNullOrWhiteSpace(contextDescription))
-				throw new ArgumentNullException("contextDescription", "Context description not specified.");
+		protected AMainStrategyStep(string outerContextDescription, AMainStrategyStep onException) {
+			if (string.IsNullOrWhiteSpace(outerContextDescription))
+				throw new ArgumentNullException("outerContextDescription", "Context description not specified.");
 
 			if (onException == null)
 				throw new ArgumentNullException("onException", "OnException handler cannot be NULL.");
 
-			ContextDescription = contextDescription;
+			OuterContextDescription = outerContextDescription;
 
-			NextSteps = new SortedDictionary<StepOutcome, AMainStrategyStep> {
-				{ StepOutcome.Exception, onException },
-			};
+			this.onException = onException;
 		} // constructor
-
-		protected enum StepOutcome {
-			Exception,
-			One,
-			Two,
-			Three,
-			Four,
-		} // enum StepOutcome
-
-		protected virtual string GetStepOutcomeName(StepOutcome outcome) {
-			switch (outcome) {
-			case StepOutcome.Exception:
-				return "'exception'";
-
-			case StepOutcome.One:
-			case StepOutcome.Two:
-			case StepOutcome.Three:
-			case StepOutcome.Four:
-				return string.Format("'not implemented ({0})'", outcome);
-
-			default:
-				throw new ArgumentOutOfRangeException("outcome");
-			} // switch
-		} // GetStepOutcomeName
 
 		protected virtual string Name { get { return string.Format("'{0}'", GetType().Name); } }
 
-		protected virtual ASafeLog Log {
-			get { return Library.Instance.Log; }
-		} // Log
+		protected virtual ASafeLog Log { get { return Library.Instance.Log; } }
 
-		protected abstract StepOutcome Run();
+		protected abstract string Outcome { get; }
 
-		protected string ContextDescription { get; private set; }
+		protected abstract AMainStrategyStep Run();
 
-		protected SortedDictionary<StepOutcome, AMainStrategyStep> NextSteps { get; private set; }
+		protected string OuterContextDescription { get; private set; }
+
+		private readonly AMainStrategyStep onException;
 	} // class AMainStrategyStep
 } // namespace
