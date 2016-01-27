@@ -15,6 +15,7 @@ EzBob.Underwriter.AddTransactionView = Backbone.Marionette.ItemView.extend({
 		'form': '#addTransactionForm',
 		'addTransactionAmount': '#AddTransactionAmount',
 		'addTransactionDate': '#AddTransactionDate',
+		'addBankTransactionRef': '#AddBankTransactionRef',
 		'addTransactionComment': '#AddTransactionComment',
 		'money': '.cashInput'
 	},//ui   
@@ -32,6 +33,7 @@ EzBob.Underwriter.AddTransactionView = Backbone.Marionette.ItemView.extend({
 			rules: {
 				AddTransactionDate: { required: true, requiredDate: true, dateCheck: true },
 				AddTransactionAmount: { required: true, autonumericMin: 0, autonumericMax: 100000000 },
+				AddBankTransactionRef: { required: false },
 				AddTransactionComment: { required: false }
 			},
 			errorPlacement: EzBob.Validation.errorPlacement,
@@ -63,7 +65,8 @@ EzBob.Underwriter.AddTransactionView = Backbone.Marionette.ItemView.extend({
 			transactionAmount: amount,
 			transactionDate: this.ui.addTransactionDate.val(),
 			bankAccountType: this.bankAccountType,
-			transactionComment: this.ui.addTransactionComment.val()
+			transactionComment: this.ui.addTransactionComment.val(),
+			bankTransactionRef: this.ui.addBankTransactionRef.val()
 		};
 
 		var self = this;

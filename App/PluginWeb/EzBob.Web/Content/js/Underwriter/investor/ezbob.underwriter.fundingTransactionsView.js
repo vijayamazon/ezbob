@@ -16,6 +16,11 @@ EzBob.Underwriter.FundingTransactionsView = Backbone.Marionette.ItemView.extend(
 		this.model.on("change", this.render, this);
 	},
 
+	ui: {
+		repaymentsTransactionsFrom: '#repayments-transactions-from',
+		repaymentsTransactionsTo: '#repayments-transactions-to'
+	},
+
 	serializeData: function() {
 		return {
 			accountingData: this.applyRange(),
@@ -25,22 +30,17 @@ EzBob.Underwriter.FundingTransactionsView = Backbone.Marionette.ItemView.extend(
 
 	events: {
 		"click #funding-transactions-range-submit-btn": "submitRange",
-		"click .add-transaction-btn": "addTransaction",
-		"hover td.transaction-comment": "setCommentTooltip",
-		"focus td.transaction-comment": "setCommentTooltip"
+		"click .add-transaction-btn": "addTransaction"
 	},
 
 	onRender: function() {
 		this.setUpView();
-		$('#funding-transactions-from').val(this.dateFrom);
-		$('#funding-transactions-to').val(this.dateTo);
-		
+		this.ui.repaymentsTransactionsFrom.val(this.dateFrom);
+		this.ui.repaymentsTransactionsTo.val(this.dateTo);
+		this.$el.find('[data-toggle="tooltip"]').tooltip({
+			placement: 'left', viewport: 'body'
+		});
 		return this;
-	},
-
-	setCommentTooltip: function(el) {
-		var commentEl = $(el.currentTarget);
-		commentEl.tooltip({ title: commentEl.text(), placement: 'left' });
 	},
 	
 	setUpView: function() {
@@ -68,16 +68,16 @@ EzBob.Underwriter.FundingTransactionsView = Backbone.Marionette.ItemView.extend(
 	submitRange: function() {
 		this.isRangeSubmitted = true;
 
-		this.dateFrom = $('#funding-transactions-from').val();
-		this.dateTo = $('#funding-transactions-to').val();
+		this.dateFrom = this.ui.repaymentsTransactionsFrom.val();
+		this.dateTo = this.ui.repaymentsTransactionsTo.val();
 
 		this.render();
 	},
 
 	applyRange: function() {
 		
-		var transactionsFrom = $('#funding-transactions-from').val();
-		var transactionsTo = $('#funding-transactions-to').val();
+		var transactionsFrom = this.$el.find('#repayments-transactions-from').val();
+		var transactionsTo = this.$el.find('#repayments-transactions-to').val();
 
 		if (!this.isRangeSubmitted) {
 			return this.model.get("TransactionsList");

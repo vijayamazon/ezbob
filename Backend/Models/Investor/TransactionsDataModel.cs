@@ -15,10 +15,13 @@
 		public decimal TransactionAmount { get; set; }
 
 		[DataMember]
-		public decimal PreviousAmount { get; set; }
+		public decimal? PreviousAmount { get; set; }
 
 		[DataMember]
-		public decimal NewAmount { get; set; }
+		public decimal? NewAmount { get; set; }
+
+		[DataMember]
+		public string BankTransactionRef { get; set; }
 
 		[DataMember]
 		public decimal BankAccountNumber { get; set; }
@@ -31,6 +34,9 @@
 
 		[DataMember]
 		public string Comment { get; set; }
+
+		[DataMember]
+		public DateTime Timestamp { get; set; }
 	}
 }
 

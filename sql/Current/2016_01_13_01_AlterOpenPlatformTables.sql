@@ -9,7 +9,7 @@ GO
 IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('I_InvestorBankAccountTransaction') AND name='BankTransactionRef')
 BEGIN
 	ALTER TABLE I_InvestorBankAccountTransaction DROP COLUMN TimestampCounter 
-	ALTER TABLE I_InvestorBankAccountTransaction ADD BankTransactionRef DATETIME NULL
+	ALTER TABLE I_InvestorBankAccountTransaction ADD BankTransactionRef NVARCHAR(50) NULL 
 	ALTER TABLE I_InvestorBankAccountTransaction ADD TimestampCounter ROWVERSION
 END
 GO

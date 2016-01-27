@@ -62,7 +62,8 @@
 					loanAmount * investmentPercent * negative,
 					this.customerID,
 					"Loan was taken",
-					this.now
+					this.now,
+					""
 				);
 				addBankAccountBalance.Execute();
 			} catch (Exception ex) {

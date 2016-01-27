@@ -11,7 +11,8 @@ ALTER PROCEDURE I_InvestorBankAccountTransactionAdd
 	@TransactionAmount DECIMAL(18,6),
 	@UserID INT,
 	@Comment NVARCHAR(500),
-	@TransactionDate DATETIME
+	@TransactionDate DATETIME,
+	@BankTransactionRef NVARCHAR(50)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -37,7 +38,8 @@ BEGIN
 		InvestorBankAccountID,
 		UserID,
 		Comment,
-		TransactionDate
+		TransactionDate,
+		BankTransactionRef
 	)
 	VALUES (
 		@Date, 
@@ -47,7 +49,8 @@ BEGIN
 		@BankAccountID, 
 		@UserID,
 		@Comment,
-		@TransactionDate
+		@TransactionDate,
+		@BankTransactionRef
 	)
 	
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

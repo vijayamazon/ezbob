@@ -963,6 +963,7 @@
         <xs:element minOccurs="0" name="transactionDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="bankAccountTypeID" type="xs:int" />
         <xs:element minOccurs="0" name="transactionComment" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="bankTransactionRef" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
