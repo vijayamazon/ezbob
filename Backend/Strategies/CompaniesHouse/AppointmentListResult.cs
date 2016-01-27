@@ -25,7 +25,9 @@
 			model.Link = links != null ? links.self : null;
 			model.StartIndex = start_index;
 			model.TotalResults = total_results;
-			model.Appointments = new List<CompaniesHouseOfficerAppointmentOrderItem>();
+			if (model.Appointments == null) {
+				model.Appointments = new List<CompaniesHouseOfficerAppointmentOrderItem>();
+			}
 
 			foreach (var item in items) {
 				var appointmentModel = new CompaniesHouseOfficerAppointmentOrderItem();

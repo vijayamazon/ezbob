@@ -24,7 +24,10 @@
 			model.ResignedCount = resigned_count;
 			model.StartIndex = start_index;
 			model.TotalResults = total_results;
-			model.Officers = new List<CompaniesHouseOfficerOrderItem>();
+
+			if (model.Officers == null) {
+				model.Officers = new List<CompaniesHouseOfficerOrderItem>();
+			}
 		}//Fill
 	}//class OfficersListResult
 

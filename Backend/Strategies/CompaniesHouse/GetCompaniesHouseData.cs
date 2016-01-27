@@ -39,10 +39,10 @@
 
 			if (!string.IsNullOrEmpty(companyRef)) {
 				if (this.forceCheck) {
-					RetrieveDataFromCompaniesData(companyRef);
+					RetrieveDataFromCompaniesApi(companyRef);
 				} else {
 					if (!CheckCache(companyRef)) {
-						RetrieveDataFromCompaniesData(companyRef);
+						RetrieveDataFromCompaniesApi(companyRef);
 					}
 				}
 			}
@@ -104,38 +104,61 @@
 			return result.CompaniesHouseOfficerOrderID != 0;
 		}//CheckCache
 
-		private void RetrieveDataFromCompaniesData(string companyRef) {
+		private void RetrieveDataFromCompaniesApi(string companyRef) {
 			var model = new CompaniesHouseOfficerOrder {
 				CompanyRefNum = companyRef,
-				Timestamp = DateTime.UtcNow
+				Timestamp = DateTime.UtcNow,
+				Officers = new List<CompaniesHouseOfficerOrderItem>()
 			};
 			try {
 				HttpClient httpClient = new HttpClient();
 				httpClient.BaseAddress = new Uri("https://api.companieshouse.gov.uk/");
 				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(ConfigManager.CurrentValues.Instance.CompaniesHouseApiKey)));
 
-				//Get officers of company by ref num
-				var result = httpClient.GetAsync(string.Format("company/{0}/officers", companyRef))
-					.Result.Content.ReadAsStringAsync()
-					.Result;
-				var officersList = JsonConvert.DeserializeObject<OfficersListResult>(result);
+				const int itemsPerPage = 35; //default
+				int startIndexOfficers = 0;
+				bool shouldRetrieveOfficers = true;
+				do {
+					//Get officers of company by ref num
+					var result = httpClient.GetAsync(string.Format("company/{0}/officers/?items_per_page={1}&start_index={2}", companyRef, itemsPerPage, startIndexOfficers))
+						.Result.Content.ReadAsStringAsync()
+						.Result;
+					var officersList = JsonConvert.DeserializeObject<OfficersListResult>(result);
 
-				if (officersList != null) {
-					officersList.Fill(model);
-					foreach (var officer in officersList.items) {
-						var officerModel = new CompaniesHouseOfficerOrderItem();
-						officer.Fill(officerModel);
-						if (officer.links != null && officer.links.officer != null && !string.IsNullOrEmpty(officer.links.officer.appointments)) {
-							//Get appointments by officer ref num
-							var appointmentsResult = httpClient.GetAsync(string.Format("{0}", officer.links.officer.appointments))
-								.Result.Content.ReadAsStringAsync()
-								.Result;
-							var appointment = JsonConvert.DeserializeObject<AppointmentListResult>(appointmentsResult);
-							appointment.Fill(officerModel.AppointmentOrder);
-						} //if
-						model.Officers.Add(officerModel);
-					} //foreach
-				}//if
+					if (officersList != null) {
+						officersList.Fill(model);
+						foreach (var officer in officersList.items) {
+							var officerModel = new CompaniesHouseOfficerOrderItem();
+							officer.Fill(officerModel);
+							if (officer.links != null && officer.links.officer != null && !string.IsNullOrEmpty(officer.links.officer.appointments)) {
+								int startIndexAppointments = 0;
+								bool shouldRetrieveAppointments = true;
+								do {
+									//Get appointments by officer ref num
+									var appointmentsResult = httpClient.GetAsync(string.Format("{0}/?items_per_page={1}&start_index={2}", officer.links.officer.appointments, itemsPerPage, startIndexAppointments))
+										.Result.Content.ReadAsStringAsync()
+										.Result;
+									var appointment = JsonConvert.DeserializeObject<AppointmentListResult>(appointmentsResult);
+									if (appointment != null) {
+										appointment.Fill(officerModel.AppointmentOrder);
+									}
+									if (appointment != null && appointment.total_results > (startIndexAppointments + itemsPerPage)) {
+										startIndexAppointments += itemsPerPage;
+									} else {
+										shouldRetrieveAppointments = false;
+									}
+								} while (shouldRetrieveAppointments);
+							} //if
+							model.Officers.Add(officerModel);
+						} //foreach
+					} //if
+
+					if (officersList != null && officersList.total_results > (startIndexOfficers + itemsPerPage)) {
+						startIndexOfficers += itemsPerPage;
+					} else {
+						shouldRetrieveOfficers = false;
+					}
+				} while (shouldRetrieveOfficers);
 			} catch (Exception ex) {
 				Log.Error(ex, "Failed to retrieve data from companies house for company {0}", companyRef);
 			}
