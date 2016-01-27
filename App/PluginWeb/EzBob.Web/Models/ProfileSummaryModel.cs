@@ -67,11 +67,10 @@
 
 	public class AlertModel {
 		public string Abbreviation { get; set; }
-
 		public string Alert { get; set; }
-
 		public string AlertType { get; set; }
 		public string Tooltip { get; set; }
+		public string Tab { get; set; }
 	}
 
 	public class AlertsModel {

@@ -1113,6 +1113,12 @@ textarea.BusinessAddress {
     color: #000000;
 }
 
+.alert a:hover,
+.alert a:visited,
+.alert a:active {
+    color: inherit;
+}
+
 .table-finaccount .alert {
     border-radius: 0!important;
 }

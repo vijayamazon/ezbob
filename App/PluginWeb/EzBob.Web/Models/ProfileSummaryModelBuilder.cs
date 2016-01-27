@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Models {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
@@ -22,8 +23,6 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
-	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
-
 	public class ProfileSummaryModelBuilder {
 		public ProfileSummaryModelBuilder(CreditBureauModelBuilder creditBureauModelBuilder, IEzbobWorkplaceContext context, ServiceClient serviceClient) {
 			this.creditBureauModelBuilder = creditBureauModelBuilder;
@@ -31,13 +30,14 @@
 			this.context = context;
 		}
 
-		public ProfileSummaryModel CreateProfile(Customer customer, CreditBureauModel creditBureau) {
+		public ProfileSummaryModel CreateProfile(Customer customer, CreditBureauModel creditBureau, CompanyScoreModel companyScore) {
 			var summary = new ProfileSummaryModel();
 			BuildCustomerSummary(summary, customer);
 			BuildCreditBureau(customer, summary, creditBureau);
 			AddDecisionHistory(summary, customer);
 			BuildRequestedLoan(summary, customer);
 			BuildAlerts(summary, customer);
+			BuildCompaniesHouseAlerts(summary, companyScore);
 			return summary;
 		}
 
@@ -105,6 +105,7 @@
 					Alert = (isMulti ? "Multi-" : "Single ") + "branded customer",
 					AlertType = (isMulti ? AlertType.Error : AlertType.Info).DescriptionAttr(),
 					Tooltip = "<br>" + string.Join("<br>", ar.Summary.Loans),
+					Tab = ProfileTab.Dashboard.DescriptionAttr() 
 				});
 			} catch (Exception e) {
 				log.Alert(e, "Failed to build multi brand alert.");
@@ -124,7 +125,8 @@
 				summary.Alerts.Infos.Add(new AlertModel {
 					Abbreviation = "Test",
 					Alert = "Is test",
-					AlertType = AlertType.Info.DescriptionAttr()
+					AlertType = AlertType.Info.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} // if
 
@@ -132,7 +134,8 @@
 				summary.Alerts.Infos.Add(new AlertModel {
 					Abbreviation = "Ali",
 					Alert = "Is alibaba customer",
-					AlertType = AlertType.Info.DescriptionAttr()
+					AlertType = AlertType.Info.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} // if
 
@@ -140,7 +143,8 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "CCI",
 					Alert = "CCI Mark",
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} // if
 
@@ -148,13 +152,15 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "Bad",
 					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} else if (customer.CollectionStatus.Name == "Risky") {
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "Risky",
 					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} // if
 
@@ -162,7 +168,8 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "F",
 					Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()),
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.FraudDetection.DescriptionAttr()
 				});
 			} // if
 
@@ -179,7 +186,8 @@
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "AML",
 					Alert = string.Format("AML Status : {0}", customer.AMLResult),
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.CreditBureau.DescriptionAttr()
 				});
 				break;
 			} // switch
@@ -189,14 +197,16 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "TF",
 					Alert = "Thin file",
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.CreditBureau.DescriptionAttr()
 				});
 				break;
 			case "N/A":
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "N/A",
 					Alert = "Couldn't get financial accounts",
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 				break;
 			} // switch
@@ -207,7 +217,8 @@
 					Alert =
 						string.Format("{0} director{1} with thin file", summary.CreditBureau.NumDirectorThinFiles,
 							summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} // if
 
@@ -217,7 +228,8 @@
 					Alert =
 						string.Format("{0} director{1} with no experian data available", summary.CreditBureau.NumDirectorNA,
 							summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} // if
 
@@ -227,7 +239,8 @@
 						summary.Alerts.Errors.Add(new AlertModel {
 							Abbreviation = "A",
 							Alert = "Age of applicant under 18",
-							AlertType = AlertType.Error.DescriptionAttr()
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.Dashboard.DescriptionAttr()
 						});
 					} // if
 				} // for each
@@ -239,7 +252,8 @@
 					summary.Alerts.Errors.Add(new AlertModel {
 						Abbreviation = "Follow",
 						Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"),
-						AlertType = AlertType.Error.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.CustomerRelations.DescriptionAttr()
 					});
 				} // if
 			} // if
@@ -257,7 +271,8 @@
 						summary.Alerts.Errors.Add(new AlertModel {
 							Abbreviation = "YC",
 							Alert = "Young company. Incorporation date: " + companySeniority.Value.ToString("dd/MM/yyyy"),
-							AlertType = AlertType.Error.DescriptionAttr()
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.CompanyScore.DescriptionAttr()
 						});
 					}
 				}
@@ -284,13 +299,15 @@
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "MTG",
 					Alert = "Home owner and no mortgages",
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Properties.DescriptionAttr()
 				});
 			} else if (!isHomeOwner && hasMortgage) {
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "MTG",
 					Alert = "Has mortgages but not a home owner",
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Properties.DescriptionAttr()
 				});
 			} // if
 
@@ -303,13 +320,15 @@
 					summary.Alerts.Errors.Add(new AlertModel {
 						Abbreviation = "MDL",
 						Alert = "New medal was not calculated",
-						AlertType = AlertType.Error.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.Calculator.DescriptionAttr()
 					});
 				} else if (!string.IsNullOrEmpty(medalCalculationsRecord.Error)) {
 					summary.Alerts.Errors.Add(new AlertModel {
 						Abbreviation = "MDL",
 						Alert = string.Format("Error while calculating new medal: {0}", medalCalculationsRecord.Error),
-						AlertType = AlertType.Error.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.Calculator.DescriptionAttr()
 					});
 				} // if
 			} else if (customer.Company != null && (customer.Company.TypeOfBusiness != EZBob.DatabaseLib.Model.Database.TypeOfBusiness.LLP &&
@@ -318,10 +337,99 @@
 				summary.Alerts.Infos.Add(new AlertModel {
 					Abbreviation = "MDL",
 					Alert = "This customer shouldn't have new medal",
-					AlertType = AlertType.Info.DescriptionAttr()
+					AlertType = AlertType.Info.DescriptionAttr(),
+					Tab = ProfileTab.Calculator.DescriptionAttr()
 				});
 			} // if
 		} // BuildAlerts
+
+		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary) {
+			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var errors = new StringBuilder();
+
+			if (currAddr != null && !currAddr.Zoopla.Any() && currAddr.IsOwnerAccordingToLandRegistry)
+				AppendLi(errors, "No zoopla for current address");
+
+			var otherProperties = customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry && !x.Zoopla.Any());
+			if (otherProperties.Any())
+				AppendLi(errors, "No zoopla for owned property");
+
+			if (customer.CustomerMarketPlaces.Any(x => !string.IsNullOrEmpty(x.UpdateError))) {
+				var mpErrors =
+					customer.CustomerMarketPlaces.Where(x => !string.IsNullOrEmpty(x.UpdateError))
+						.Select(x => string.Format("MP {0} : {1}", x.DisplayName, x.UpdateError));
+				foreach (var mpError in mpErrors)
+					AppendLi(errors, mpError);
+			}
+
+			if (!customer.ExperianConsumerScore.HasValue || customer.ExperianConsumerScore.Value == 0)
+				AppendLi(errors, "No consumer score");
+
+			if (customer.Company != null &&
+				!customer.Company.Directors.Any(x => !x.ExperianConsumerScore.HasValue || x.ExperianConsumerScore.Value == 0)) {
+				var dirErrors = customer.Company.Directors.Where(
+					x => !x.ExperianConsumerScore.HasValue || x.ExperianConsumerScore.Value == 0)
+					.Select(x => string.Format("Director {0} {1} don't have consumer score", x.Name, x.Surname));
+				foreach (var dirError in dirErrors)
+					AppendLi(errors, dirError);
+			}
+
+			string errorStr = errors.ToString();
+			if (!string.IsNullOrEmpty(errorStr)) {
+				summary.Alerts.Errors.Add(new AlertModel {
+					Abbreviation = "DATA",
+					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
+				});
+			}
+		}
+
+		private bool BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary) {
+			var lrs = customer.LandRegistries.Where(x =>
+				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
+				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success)
+				.ToList();
+
+			if (customer.PropertyStatus != null && !lrs.Any() && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties)) {
+				summary.Alerts.Warnings.Add(new AlertModel {
+					Abbreviation = "LR",
+					Alert = "No land registries retrieved",
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Properties.DescriptionAttr()
+				});
+				return true;
+			}
+
+			if (lrs.Any()) {
+				var owners = lrs.SelectMany(x => x.Owners)
+					.Select(x => new {
+						firstName = x.FirstName ?? string.Empty,
+						lastName = x.LastName ?? string.Empty,
+						company = x.CompanyName ?? string.Empty
+					})
+					.ToList();
+				if (owners.Any() && !owners.Any(owner =>
+					owner.firstName.ToLowerInvariant()
+						.Contains(customer.PersonalInfo.FirstName.Trim()
+							.ToLowerInvariant()) &&
+					owner.lastName.ToLowerInvariant()
+						.Contains(customer.PersonalInfo.Surname.Trim()
+							.ToLowerInvariant()))) {
+					var ownerNames = owners.Select(x => string.Format("{0} {1} {2}", x.firstName, x.lastName, x.company))
+						.Aggregate((a, b) => a + ", " + b);
+					summary.Alerts.Errors.Add(new AlertModel {
+						Abbreviation = "LR",
+						Alert = "Not a land registry owner",
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tooltip = string.Format("Owners list: {0}", ownerNames),
+						Tab = ProfileTab.Properties.DescriptionAttr()
+					});
+				}
+			}
+
+			return false;
+		}
 
 		private void BuildCompanyCaisAlerts(Customer customer, ProfileSummaryModel summary, int userId) {
 			var errors = new StringBuilder();
@@ -334,7 +442,8 @@
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "BUS",
 					Alert = string.Format("Company has {0} settled default accounts", companyCaisData.NumOfSettledDefaultAccounts),
-					AlertType = AlertType.Warning.DescriptionAttr()
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.CompanyScore.DescriptionAttr()
 				});
 			}
 
@@ -359,7 +468,46 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "BUS",
 					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.CompanyScore.DescriptionAttr()
+				});
+			}
+		}
+
+		private void BuildCompaniesHouseAlerts(ProfileSummaryModel summary, CompanyScoreModel companyScore) {
+			if (companyScore.CompaniesHouseModel == null || companyScore.CompaniesHouseModel.Officers == null) {
+				return;
+			}
+
+			var customerOfficer = companyScore.CompaniesHouseModel.Officers.FirstOrDefault(x => x.IsCustomer);
+
+			if(customerOfficer != null && 
+				customerOfficer.AppointmentOrder != null && 
+				customerOfficer.AppointmentOrder.Appointments != null &&
+				customerOfficer.AppointmentOrder.Appointments.Count >= 5) {
+				summary.Alerts.Warnings.Add(new AlertModel {
+					Abbreviation = "MDC",
+					Alert = string.Format("Applicant has appointments in {0} companies", customerOfficer.AppointmentOrder.Appointments.Count),
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.CompanyScore.DescriptionAttr()
+				});
+			}
+
+			if (customerOfficer != null &&
+			customerOfficer.AppointmentOrder != null &&
+			customerOfficer.AppointmentOrder.Appointments != null &&
+			customerOfficer.AppointmentOrder.Appointments.Any(x => x.CompanyStatus != "Active")) {
+				summary.Alerts.Errors.Add(new AlertModel {
+					Abbreviation = "DSL",
+					Alert = string.Format("Applicant has appointments in companies with status {0}", 
+						customerOfficer
+						.AppointmentOrder
+						.Appointments
+						.Where(x => x.CompanyStatus != "Active")
+						.Select(x => x.CompanyStatus)
+						.Aggregate((a, b) => a + ", " + b)),
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.CompanyScore.DescriptionAttr()
 				});
 			}
 		}
@@ -426,90 +574,7 @@
 			summary.IsOffline = customer.IsOffline;
 		}
 
-		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary) {
-			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-			var errors = new StringBuilder();
-
-			if (currAddr != null && !currAddr.Zoopla.Any() && currAddr.IsOwnerAccordingToLandRegistry)
-				AppendLi(errors, "No zoopla for current address");
-
-			var otherProperties = customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry && !x.Zoopla.Any());
-			if (otherProperties.Any())
-				AppendLi(errors, "No zoopla for owned property");
-
-			if (customer.CustomerMarketPlaces.Any(x => !string.IsNullOrEmpty(x.UpdateError))) {
-				var mpErrors =
-					customer.CustomerMarketPlaces.Where(x => !string.IsNullOrEmpty(x.UpdateError))
-						.Select(x => string.Format("MP {0} : {1}", x.DisplayName, x.UpdateError));
-				foreach (var mpError in mpErrors)
-					AppendLi(errors, mpError);
-			}
-
-			if (!customer.ExperianConsumerScore.HasValue || customer.ExperianConsumerScore.Value == 0)
-				AppendLi(errors, "No consumer score");
-
-			if (customer.Company != null &&
-				!customer.Company.Directors.Any(x => !x.ExperianConsumerScore.HasValue || x.ExperianConsumerScore.Value == 0)) {
-				var dirErrors = customer.Company.Directors.Where(
-					x => !x.ExperianConsumerScore.HasValue || x.ExperianConsumerScore.Value == 0)
-					.Select(x => string.Format("Director {0} {1} don't have consumer score", x.Name, x.Surname));
-				foreach (var dirError in dirErrors)
-					AppendLi(errors, dirError);
-			}
-
-			string errorStr = errors.ToString();
-			if (!string.IsNullOrEmpty(errorStr)) {
-				summary.Alerts.Errors.Add(new AlertModel {
-					Abbreviation = "DATA",
-					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
-					AlertType = AlertType.Error.DescriptionAttr()
-				});
-			}
-		}
-
-		private bool BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary) {
-			var lrs = customer.LandRegistries.Where(x =>
-				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
-				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success)
-				.ToList();
-
-			if (customer.PropertyStatus != null && !lrs.Any() && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties)) {
-				summary.Alerts.Warnings.Add(new AlertModel {
-					Abbreviation = "LR",
-					Alert = "No land registries retrieved",
-					AlertType = AlertType.Warning.DescriptionAttr()
-				});
-				return true;
-			}
-
-			if (lrs.Any()) {
-				var owners = lrs.SelectMany(x => x.Owners)
-					.Select(x => new {
-						firstName = x.FirstName ?? string.Empty,
-						lastName = x.LastName ?? string.Empty,
-						company = x.CompanyName ?? string.Empty
-					})
-					.ToList();
-				if (owners.Any() && !owners.Any(owner =>
-					owner.firstName.ToLowerInvariant()
-						.Contains(customer.PersonalInfo.FirstName.Trim()
-							.ToLowerInvariant()) &&
-					owner.lastName.ToLowerInvariant()
-						.Contains(customer.PersonalInfo.Surname.Trim()
-							.ToLowerInvariant()))) {
-					var ownerNames = owners.Select(x => string.Format("{0} {1} {2}", x.firstName, x.lastName, x.company))
-						.Aggregate((a, b) => a + ", " + b);
-					summary.Alerts.Errors.Add(new AlertModel {
-						Abbreviation = "LR",
-						Alert = "Not a land registry owner",
-						AlertType = AlertType.Error.DescriptionAttr(),
-						Tooltip = string.Format("Owners list: {0}", ownerNames)
-					});
-				}
-			}
-
-			return false;
-		}
+		
 
 		private LoanActivity CreateLoanActivity(Customer customer) {
 			var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
@@ -686,5 +751,38 @@
 		private readonly ServiceClient serviceClient;
 		private MedalCalculationsRepository medalCalculationsRepository;
 		private readonly IEzbobWorkplaceContext context;
+
+		public enum ProfileTab {
+			[Description("dashboard")]
+			Dashboard,
+			[Description("profile-summary")]
+			ProfileSummary,
+			[Description("marketplaces")]
+			Marketplaces,
+			[Description("payment-accounts")]
+			PaymentAccounts,
+			[Description("credit-bureau")]
+			CreditBureau,
+			[Description("calculator")]
+			Calculator,
+			[Description("logical-glue-history")]
+			LogicalGlueHistory,
+			[Description("loanhistorys")]
+			LoanHistories,
+			[Description("customer-info")]
+			CustomerInfo,
+			[Description("company-score")]
+			CompanyScore,
+			[Description("messages-tab")]
+			MessagesTab,
+			[Description("apiChecks")]
+			ApiChecks,
+			[Description("customerRelations")]
+			CustomerRelations,
+			[Description("fraudDetection")]
+			FraudDetection,
+			[Description("properties")]
+			Properties
+		}//ProfileTab
 	}
 }
