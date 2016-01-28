@@ -11,7 +11,7 @@
 	using MedalClass = EZBob.DatabaseLib.Model.Database.Medal;
 
 	class BackdoorSimpleApprove : ABackdoorSimpleDetails {
-		public static BackdoorSimpleApprove Create(int customerID, string backdoorCode, bool ownsProperty) {
+		public static BackdoorSimpleApprove Create(string backdoorCode, int customerID, bool ownsProperty) {
 			var match = regex.Match(backdoorCode);
 
 			if (!match.Success) {

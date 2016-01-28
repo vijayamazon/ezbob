@@ -1,11 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew.Steps {
 	using System;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	internal abstract class AMainStrategyStepBase {
 		public abstract AMainStrategyStepBase Execute();
-
-		public abstract bool IsTheLastOne { get; }
 
 		protected AMainStrategyStepBase(string outerContextDescription) {
 			if (string.IsNullOrWhiteSpace(outerContextDescription))
@@ -17,6 +16,8 @@
 		protected virtual string Name { get { return string.Format("'{0}'", GetType().Name); } }
 
 		protected virtual ASafeLog Log { get { return Library.Instance.Log; } }
+
+		protected virtual AConnection DB { get { return Library.Instance.DB; } }
 
 		protected string OuterContextDescription { get; private set; }
 	} // class AMainStrategyStep

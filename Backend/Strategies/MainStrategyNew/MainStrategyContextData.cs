@@ -7,7 +7,7 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using CashRequestOriginatorType = EZBob.DatabaseLib.Model.Database.CashRequestOriginator;
 
 	internal class MainStrategyContextData {
@@ -27,8 +27,6 @@
 			} // if
 
 			WasMismatch = false;
-
-			BackdoorSimpleDetails = null;
 
 			AutoDecisionResponse = new AutoDecisionResponse();
 
@@ -102,14 +100,16 @@
 
 		public bool WasMismatch { get; set; }
 
-		public ABackdoorSimpleDetails BackdoorSimpleDetails { get; set; }
+		public int CompanyID { get; set; }
+		public MonthlyRepaymentData MonthlyRepayment { get; set; }
 
-		public static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
-		public static bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
-		public static bool EnableAutomaticRejection { get { return CurrentValues.Instance.EnableAutomaticRejection; } }
-		public static bool EnableAutomaticReRejection { get { return CurrentValues.Instance.EnableAutomaticReRejection; } }
-		public static int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
-		public static int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
+		public bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
+		public bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
+		public bool EnableAutomaticRejection { get { return CurrentValues.Instance.EnableAutomaticRejection; } }
+		public bool EnableAutomaticReRejection { get { return CurrentValues.Instance.EnableAutomaticReRejection; } }
+		public int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
+		public int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
+		public bool BackdoorEnabled { get { return CurrentValues.Instance.BackdoorSimpleAutoDecisionEnabled; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

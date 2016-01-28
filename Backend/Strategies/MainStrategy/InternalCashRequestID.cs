@@ -7,6 +7,16 @@ namespace Ezbob.Backend.Strategies.MainStrategy {
 			return cr == null ? 0 : cr.Value;
 		} // operator long
 
+		public static implicit operator long?(InternalCashRequestID cr) {
+			if (cr == null)
+				return null;
+
+			if (cr.LacksValue)
+				return null;
+
+			return cr.Value;
+		} // operator long
+
 		public InternalCashRequestID(long? cashRequestID) {
 			this.cashRequestID = cashRequestID;
 		} // constructor

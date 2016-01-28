@@ -12,5 +12,12 @@
 		protected override string Outcome { get { return "'completed'"; } }
 
 		protected AMainStrategyStep NextStep { get; private set; }
+
+		protected override AMainStrategyStepBase Run() {
+			ExecuteStep();
+			return NextStep;
+		} // Run
+
+		protected abstract void ExecuteStep();
 	} // class AOneExitStep
 } // namespace

@@ -3,6 +3,7 @@
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
+	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
@@ -144,6 +145,10 @@
 		} // DiscountPlanIDToUse
 
 		public bool HasApprovalChance { get; set; }
+
+		public void CopyFrom(AutoDecisionResponse adr) {
+			this.Traverse((instance, pi) => pi.SetValue(this, pi.GetValue(adr)));
+		} // CopyFrom
 
 		private int GetLoanType() {
 			SafeReader ltsr = Library.Instance.DB.GetFirst(

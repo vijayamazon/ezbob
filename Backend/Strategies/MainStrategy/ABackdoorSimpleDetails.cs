@@ -13,12 +13,14 @@
 				return null;
 			} // if
 
-			string email = customer.AppEmail;
+			return Create(customer.ID, customer.AppEmail, customer.OwnsProperty);
+		} // Create
 
+		public static ABackdoorSimpleDetails Create(int customerID, string email, bool ownsProperty) {
 			if (string.IsNullOrWhiteSpace(email)) {
 				Log.Alert(
 					"Not using back door simple for customer '{0}': customer email not specified.",
-					customer.ID
+					customerID
 				);
 
 				return null;
@@ -29,7 +31,7 @@
 			if (atPos < 0) {
 				Log.Alert(
 					"Not using back door simple for customer '{0}': customer email '{1}' contains no '@'.",
-					customer.ID,
+					customerID,
 					email
 				);
 
@@ -41,7 +43,7 @@
 			if (plusPos < 0) {
 				Log.Debug(
 					"Not using back door simple for customer '{0}': customer email '{1}' contains no '+'.",
-					customer.ID,
+					customerID,
 					email
 				);
 
@@ -52,18 +54,18 @@
 
 			ABackdoorSimpleDetails result =
 				(ABackdoorSimpleDetails)BackdoorSimpleReject.Create(backdoorCode) ??
-				(ABackdoorSimpleDetails)BackdoorSimpleApprove.Create(customer.ID, backdoorCode, customer.OwnsProperty) ??
+				(ABackdoorSimpleDetails)BackdoorSimpleApprove.Create(backdoorCode, customerID, ownsProperty) ??
 				(ABackdoorSimpleDetails)BackdoorSimpleManual.Create(backdoorCode);
 
 			if (result != null) {
-				Log.Debug("Using back door simple for customer '{0}' as: {1}.", customer.ID, result);
+				Log.Debug("Using back door simple for customer '{0}' as: {1}.", customerID, result);
 				return result;
 			} // if
 
 			Log.Debug(
 				"Not using back door simple for customer '{0}': back door code '{1}' from customer email '{2}' " +
 				"ain't no matches any existing back door regex.",
-				customer.ID,
+				customerID,
 				backdoorCode,
 				email
 			);
