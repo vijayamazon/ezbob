@@ -110,6 +110,8 @@
 		public int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		public int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 		public bool BackdoorEnabled { get { return CurrentValues.Instance.BackdoorSimpleAutoDecisionEnabled; } }
+		public int MarketplaceUpdateValidityDays { get { return CurrentValues.Instance.UpdateOnReapplyLastDays; } }
+		public bool LogicalGlueEnabled { get { return CurrentValues.Instance.LogicalGlueEnabled; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

@@ -158,7 +158,8 @@
 
 			ForceNhibernateResync.ForCustomer(CustomerID);
 
-			ProcessRejections();
+			if (!ProcessRejections())
+				return;
 
 			// Gather LR data - must be done after rejection decisions
 			new MainStrategyUpdateLandRegistryData(
@@ -702,36 +703,54 @@
 			return new Tuple<OfferResult, int>(offerDualCalculator.CalculateOffer(), loanSourceID);
 		} // CreateUnlogicalOffer
 
-		private void ProcessRejections() {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns>True, if everything is ok (mismatch is ok for this matter); false, otherwise.</returns>
+		private bool ProcessRejections() {
 			if (this.avoidAutomaticDecision) {
 				Log.Debug("Not processing auto-rejections: auto decisions should be avoided.");
-				return;
+				return true;
 			} // if
 
 			if (EnableAutomaticReRejection) {
 				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log);
-				rrAgent.MakeDecision(this.autoDecisionResponse, this.tag);
+				rrAgent.MakeAndVerifyDecision(this.tag);
+
+				if (rrAgent.ExceptionDuringRerejection) {
+					Log.Warn("Exception happened while executing re-rejection, auto-decision process aborted.");
+					return false;
+				} // if
 
 				if (rrAgent.WasMismatch) {
 					this.wasMismatch = true;
 					Log.Warn("Mismatch happened while executing re-rejection, auto-decision process aborted.");
-					return;
+					return true;
+				} // if
+
+				if (rrAgent.Trail.HasDecided) {
+					this.autoDecisionResponse.Decision = DecisionActions.ReReject;
+					this.autoDecisionResponse.AutoRejectReason = "Auto Re-Reject";
+					this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
+					this.autoDecisionResponse.UserStatus = Status.Rejected;
+					this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
+					this.autoDecisionResponse.DecisionName = "Re-rejection";
 				} // if
 			} // if
 
 			if (this.autoDecisionResponse.IsReRejected) {
 				Log.Debug("Not processing auto-rejection: re-rejected.");
-				return;
+				return true;
 			} // if
 
 			if (!EnableAutomaticRejection) {
 				Log.Debug("Not processing auto-rejection: auto-rejection is disabled.");
-				return;
+				return true;
 			} // if
 
 			if (this.customerDetails.IsAlibaba) {
 				Log.Debug("Not processing auto-rejection: Alibaba customer.");
-				return;
+				return true;
 			} // if
 
 			var rAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
@@ -750,6 +769,11 @@
 
 			rAgent.MakeAndVerifyDecision();
 
+			if (rAgent.ExceptionDuringRejection) {
+				Log.Warn("Exception happened while executing rejection, auto-decision process aborted.");
+				return false;
+			} // if
+
 			if (rAgent.WasMismatch) {
 				this.wasMismatch = true;
 				Log.Warn("Mismatch happened while executing rejection, auto-decision process aborted.");
@@ -764,6 +788,8 @@
 
 				this.autoRejectionOutput = rAgent.Output;
 			} // if
+
+			return true;
 		} // ProcessRejections
 
 		private void SaveDecision() {

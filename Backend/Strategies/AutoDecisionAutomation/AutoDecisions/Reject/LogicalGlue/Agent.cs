@@ -69,6 +69,10 @@
 			Trail.Save(DB, oSecondary == null ? null : oSecondary.Trail);
 		} // MakeAndVerifyDecision
 
+		public bool ExceptionDuringRejection {
+			get { return Trail.FindTrace<ExceptionThrown>() != null; }
+		} // ExceptionDuringRejection
+
 		public bool LogicalGlueFlowFollowed {
 			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
 		} // LogicalGlueFlowFollowed

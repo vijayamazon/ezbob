@@ -6,10 +6,8 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EZBob.DatabaseLib.Model.Database;
 
 	public class ReRejection : AAutoDecisionBase {
 		public ReRejection(int customerId, long? cashRequestID, long? nlCashRequestID, AConnection db, ASafeLog log) {
@@ -27,35 +25,30 @@
 			);
 		} // constructor
 
-		public bool MakeAndVerifyDecision(string tag) {
-			this.trail.SetTag(tag);
+		public void MakeAndVerifyDecision(string tag) {
+			Agent oSecondary = null;
 
-			RunPrimary();
-
-			Agent oSecondary = RunSecondary();
-
-			WasMismatch = !this.trail.EqualsTo(oSecondary.Trail);
-
-			this.trail.Save(this.db, oSecondary.Trail);
-
-			return !WasMismatch;
-		} // MakeAndVerifyDecision
-
-		public void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
-				if (MakeAndVerifyDecision(tag) && this.trail.HasDecided) {
-					response.Decision = DecisionActions.ReReject;
-					response.AutoRejectReason = "Auto Re-Reject";
-					response.CreditResult = CreditResultStatus.Rejected;
-					response.UserStatus = Status.Rejected;
-					response.SystemDecision = SystemDecision.Reject;
-					response.DecisionName = "Re-rejection";
-				} // if
+				this.trail.SetTag(tag);
+
+				RunPrimary();
+
+				oSecondary = RunSecondary();
+
+				WasMismatch = !this.trail.EqualsTo(oSecondary.Trail);
 			} catch (Exception ex) {
 				StepNoReReject<ExceptionThrown>().Init(ex);
 				this.log.Error(ex, "Exception during re-rejection {0}", this.trail);
 			} // try
-		} // MakeDecision
+
+			this.trail.Save(this.db, oSecondary == null ? null : oSecondary.Trail);
+		} // MakeAndVerifyDecision
+
+		public bool ExceptionDuringRerejection {
+			get { return this.trail.FindTrace<ExceptionThrown>() != null; }
+		} // ExceptionDuringRerejection
+
+		public ReRejectionTrail Trail { get { return this.trail; } }
 
 		private void RunPrimary() {
 			this.log.Debug("Primary: checking if auto re-reject should take place for customer {0}...", this.trail.CustomerID);

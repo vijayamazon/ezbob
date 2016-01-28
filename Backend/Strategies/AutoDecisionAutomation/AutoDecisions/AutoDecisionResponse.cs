@@ -14,6 +14,7 @@
 			// Currently (July 2015) it is always false. It was true/false in the past and may be such in the future.
 			IsLoanTypeSelectionAllowed = false;
 
+			DecisionIsLocked = false;
 			Decision = null;
 
 			AutoRejectReason = null;
@@ -43,6 +44,7 @@
 		public int? ProductSubTypeID { get; set; }
 		public bool IsLoanTypeSelectionAllowed { get; set; }
 
+		public bool DecisionIsLocked { get; set; }
 		public DecisionActions? Decision { get; set; }
 
 		public int? DecisionCode { get { return Decision == null ? (int?)null : (int)Decision; } }
