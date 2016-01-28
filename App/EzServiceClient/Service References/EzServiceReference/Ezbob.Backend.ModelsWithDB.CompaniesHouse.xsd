@@ -38,6 +38,7 @@
       <xs:element minOccurs="0" name="DobDay" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="DobMonth" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="DobYear" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsCustomer" type="xs:boolean" />
       <xs:element minOccurs="0" name="Link" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Locality" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
@@ -82,7 +83,7 @@
       <xs:element minOccurs="0" name="AddressLine1" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="AppointedBefore" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="AppointedOn" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="AppointedOn" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="CareOf" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CompaniesHouseOfficerAppointmentOrderID" type="xs:int" />
       <xs:element minOccurs="0" name="CompaniesHouseOfficerAppointmetOrderItemID" type="xs:int" />
@@ -94,6 +95,7 @@
       <xs:element minOccurs="0" name="Forename" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Honours" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IdentificationType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsCustomer" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsPre1992Appointment" type="xs:boolean" />
       <xs:element minOccurs="0" name="LegalAuthority" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LegalForm" nillable="true" type="xs:string" />
