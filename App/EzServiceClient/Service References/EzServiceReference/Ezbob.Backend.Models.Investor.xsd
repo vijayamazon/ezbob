@@ -141,10 +141,12 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="BankAccountName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BankAccountNumber" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BankTransactionRef" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsBankAccountActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="NewAmount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PreviousAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="NewAmount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PreviousAmount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TransactionAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="TransactionDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TransactionID" type="xs:int" />

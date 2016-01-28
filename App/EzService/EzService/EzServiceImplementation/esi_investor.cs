@@ -120,9 +120,9 @@
 			};
 		}
 
-		public BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
+		public BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef) {
 			AddManualTransaction strategy;
-			var metadata = ExecuteSync(out strategy, null, underwriterID, underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);
+			var metadata = ExecuteSync(out strategy, null, underwriterID, underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment, bankTransactionRef);
 			return new BoolActionResult {
 				MetaData = metadata,
 				Value = strategy.Result

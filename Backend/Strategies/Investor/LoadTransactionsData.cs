@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Database;
@@ -24,13 +25,24 @@
 				if (this.bankAccountTypeID == (int)I_InvestorAccountTypeEnum.Funding)
 					this.spName = "I_InvestorLoadFundingTransactionsData";
 
-				if (this.bankAccountTypeID == (int)I_InvestorAccountTypeEnum.Repayments)
+				if (this.bankAccountTypeID == (int)I_InvestorAccountTypeEnum.Repayments) {
 					this.spName = "I_InvestorLoadRepaymentsTransactionsData";
+					this.bankTransactionsData = DB.Fill<TransactionsDataModel>("I_InvestorLoadRepaymentsBankTransactionsData", CommandSpecies.StoredProcedure,
+					new QueryParameter("InvestorID", investorId),
+					new QueryParameter("BankAccountTypeID", bankAccountTypeId));
+				}
 
 				List<TransactionsDataModel> data = DB.Fill<TransactionsDataModel>(this.spName, CommandSpecies.StoredProcedure,
 				new QueryParameter("InvestorID", investorId),
 				new QueryParameter("BankAccountTypeID", bankAccountTypeId));
+
+				if (this.bankAccountTypeID == (int)I_InvestorAccountTypeEnum.Repayments) {
+					data.AddRange(this.bankTransactionsData);
+					data = data.OrderByDescending(t => t.Timestamp).ToList();
+				}
+
 				return data;
+
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to load transactions data from DB");
 				throw;
@@ -38,6 +50,7 @@
 		}//LoadFromDb
 
 		public List<TransactionsDataModel> Result { get; set; }
+		public List<TransactionsDataModel> bankTransactionsData; 
 		private readonly int investorID;
 		private readonly int bankAccountTypeID;
 		private string spName;

@@ -2458,8 +2458,16 @@ input[type="text"].err-field-red {
 	display: inline-block;
 	padding-left: 10px;
 	vertical-align: top;
-	text-align:
+	text-align: right;
 }
+
+.tab-pane#accounting-tbl td > p {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* manage investor */
    .table > thead > tr > td.edit-investor {
     text-align: right;

@@ -17,7 +17,8 @@ BEGIN
 	 funding_account AS (
 		 SELECT 
 			 iba.InvestorBankAccountID AS InvestorBankAccountID,
-			 iba.InvestorID AS InvestorID    
+			 iba.InvestorID AS InvestorID,
+			 iba.BankAccountNumber AS BankAccountNumber     
 		 FROM 
 		 	I_InvestorBankAccount iba
 		 WHERE 
@@ -28,7 +29,8 @@ BEGIN
      repayment_account AS (
 		 SELECT 
 			 iba.InvestorBankAccountID AS InvestorBankAccountID,
-			 iba.InvestorID AS InvestorID  
+			 iba.InvestorID AS InvestorID,
+			 iba.BankAccountNumber AS BankAccountNumber   
 		 FROM 
 		 	 I_InvestorBankAccount iba
 		 WHERE 
@@ -87,7 +89,9 @@ BEGIN
 		i.DiscountServicingFeePercent AS ServicingFeeDiscount,
 		i.IsActive AS IsInvestorActive,		
 		fa.InvestorBankAccountID AS FundingBankAccountID,
-		ra.InvestorBankAccountID AS RepaymentsBankAccountID
+		ra.InvestorBankAccountID AS RepaymentsBankAccountID,
+		fa.BankAccountNumber AS FundingBankAccountNumber,
+		ra.BankAccountNumber AS RepaymentsBankAccountNumber
 	FROM
 		I_Investor i
 		LEFT JOIN 

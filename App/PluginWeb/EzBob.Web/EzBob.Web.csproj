@@ -751,6 +751,8 @@
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\checkbox-checked.svg" />
     <Content Include="Content\img\checkbox-default.svg" />
+    <Content Include="Content\img\check_icon.svg" />
+    <Content Include="Content\img\close_icon.svg" />
     <Content Include="Content\img\customer-sidebar\award.png" />
     <Content Include="Content\img\customer-sidebar\call.png" />
     <Content Include="Content\img\customer-sidebar\chat.png" />

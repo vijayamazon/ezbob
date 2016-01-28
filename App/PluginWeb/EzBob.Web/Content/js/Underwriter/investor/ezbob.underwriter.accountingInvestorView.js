@@ -51,6 +51,10 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 				this.$el.find('.repayments-transactions[data-investorid="' + this.currentInvestorID + '"]').click();
 			}
 		}
+
+		this.$el.find('[data-toggle="tooltip"]').tooltip({
+			placement: 'right', viewport: 'body'
+		});
 	},
 
 	displayAccountingData: function() {
@@ -109,7 +113,7 @@ EzBob.Underwriter.AccountingInvestorView = Backbone.Marionette.ItemView.extend({
 			var newRow = $('<tr class="repayments-acc-transactions" data-id=' + investorID + '><td colspan=8></td></tr>');
 			var tr = $(el.currentTarget).closest('tr');
 			tr.after(newRow);
-			var transactionsEl = this.$el.find('tr.repayments-acc-transactions td');
+			var transactionsEl = this.$el.find('tr.repayments-acc-transactions > td');
 
 			var investorData = _.find(this.model.get("AccountingList"), function(a) {
 				return a.InvestorID === investorID;

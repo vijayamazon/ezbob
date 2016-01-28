@@ -3,7 +3,7 @@
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 
 	public class AddManualTransaction : AStrategy {
-		public AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
+		public AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef) {
 		this.underwriterID = underwriterID;
 			this.investorAccountID = investorAccountID;
 			this.transactionAmount = transactionAmount;
@@ -11,6 +11,7 @@
 			this.bankAccountTypeID = bankAccountTypeID;
 			this.transactionComment = transactionComment;
 			this.now = DateTime.UtcNow;
+			this.bankTransactionRef = bankTransactionRef;
 		}//ctor
 
 		public override string Name { get { return "AddManualTransaction"; } }
@@ -44,10 +45,11 @@
 
 				AddInvestorBankAccountBalance addBankAccountBalance = new AddInvestorBankAccountBalance(this.investorAccountID,
 					this.now,
-					this.transactionAmount * this.systemBalanceTransactionSign,
+					this.transactionAmount,
 					this.underwriterID,
 					this.transactionComment,
-					this.transactionDate);
+					this.transactionDate,
+					this.bankTransactionRef);
 				addBankAccountBalance.Execute();
 
 			} catch (Exception ex) {
@@ -70,6 +72,7 @@
 		private readonly string transactionComment;
 		private int systemBalanceTransactionSign;
 		private readonly DateTime now;
+		private readonly string bankTransactionRef;
 	}//AddManualTransaction
 }//ns
 

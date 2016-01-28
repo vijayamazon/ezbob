@@ -9,14 +9,16 @@
 		private readonly int? userID;
 		private readonly string comment;
 		private readonly DateTime? transactionDate;
+		private readonly string bankTransactionRef;
 
-		public AddInvestorBankAccountBalance(int bankAccountID, DateTime date, decimal transacionAmount, int? userID, string comment, DateTime? transactionDate) {
+		public AddInvestorBankAccountBalance(int bankAccountID, DateTime date, decimal transacionAmount, int? userID, string comment, DateTime? transactionDate, string bankTransactionRef) {
 			this.bankAccountID = bankAccountID;
 			this.date = date;
 			this.transacionAmount = transacionAmount;
 			this.userID = userID;
 			this.comment = comment;
 			this.transactionDate = transactionDate;
+			this.bankTransactionRef = bankTransactionRef;
 		}
 
 		public override string Name { get { return "Add bank account balance"; } }
@@ -29,8 +31,8 @@
 					new QueryParameter("TransactionAmount", this.transacionAmount),
 					new QueryParameter("UserID", this.userID),
 					new QueryParameter("Comment", this.comment),
-					new QueryParameter("TransactionDate", this.transactionDate));
-
+					new QueryParameter("TransactionDate", this.transactionDate),
+					new QueryParameter("BankTransactionRef", this.bankTransactionRef));
 		}
 
 		public int BankAccountTransactionID { get; private set; }

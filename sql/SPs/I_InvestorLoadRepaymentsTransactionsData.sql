@@ -18,13 +18,14 @@ BEGIN
 		isb.TransactionDate AS TransactionDate,
 		isb.TransactionAmount AS TransactionAmount,
 		isb.PreviousBalance AS PreviousAmount,
-		isb.NewBalance AS NewAmount,			
+		isb.NewBalance AS NewAmount,
+		'' AS BankTransactionRef,			
 		iba.BankAccountNumber AS BankAccountNumber,
 		iba.BankAccountName AS BankAccountName,		
 		iba.IsActive AS IsBankAccountActive,
 		isb.Comment AS Comment,
 		isb.UserID ,
-		isb.TransactionDate ,
+		isb.Timestamp AS Timestamp,
 		isb.[NLOfferID] , 
 		isb.[NLLoanID],
 		isb.[NLPaymentID]
@@ -35,8 +36,6 @@ BEGIN
 	LEFT JOIN 
 		I_Investor i ON i.InvestorID = iba.InvestorID	
 	WHERE 
-		i.InvestorID = @InvestorID
-	ORDER BY
-		isb.Timestamp 	DESC
+		i.InvestorID = @InvestorID AND isb.NewBalance > isb.PreviousBalance
 END
 GO

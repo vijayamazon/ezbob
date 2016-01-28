@@ -30,7 +30,7 @@
 	    IntActionResult SaveInvestorContactList(int underwriterID, int investorID, IEnumerable<InvestorContactModel> investorContacts);
 
 		[OperationContract]
-		BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment);
+		BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef);
 	    [OperationContract]
 	    IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, IEnumerable<InvestorBankAccountModel> investorBanks);
 
