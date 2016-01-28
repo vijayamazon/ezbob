@@ -71,6 +71,8 @@ BEGIN
 		WHERE 
 			ba.InvestorAccountTypeID=@RepaymentsAccountTypeID 
 		AND 
+			sb.NewBalance > 0
+		AND 
 			ba.IsActive=0 
 		AND
 		 	sb.InvestorSystemBalanceID =
