@@ -51,7 +51,7 @@
 												<span>
 													<p data-toggle="tooltip" data-title="<%-a.RepaymentsBankAccountNumber%>"><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>
 													<%if(a.TotalNonActiveAccumulatedRepayments) {%>
-													<p><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
+													<p data-toggle="tooltip" data-title="<%-a.InactiveRepaymentsAccountsNumbers%>"><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
 													<%}%>
 												</span>
 												<span class="accounting-btn">

@@ -42,5 +42,8 @@
 
 		[DataMember]
 		public string RepaymentsBankAccountNumber { get; set; }
+
+		[DataMember]
+		public string InactiveRepaymentsAccountsNumbers { get; set; }
 	}
 }
