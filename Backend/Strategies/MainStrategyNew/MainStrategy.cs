@@ -20,8 +20,8 @@
 
 			this.steps = new SortedDictionary<string, AMainStrategyStepBase>();
 
-			this.algorithm = new SortedDictionary<StepResult, Func<AMainStrategyStepBase>>();
-			InitFSM();
+			this.transitions = new SortedDictionary<StepResult, Func<AMainStrategyStepBase>>();
+			InitMachineTransitions();
 		} // constructor
 
 		public override string Name {
@@ -39,12 +39,12 @@
 
 				var nextStepKey = new StepResult(currentStep.GetType(), stepResult);
 
-				if (!this.algorithm.ContainsKey(nextStepKey)) {
+				if (!this.transitions.ContainsKey(nextStepKey)) {
 					Log.Alert("Aborted: next step not specified for result {0}.", nextStepKey);
 					break;
 				} // if
 
-				var nextStepCreator = this.algorithm[nextStepKey];
+				var nextStepCreator = this.transitions[nextStepKey];
 
 				if (nextStepCreator == null) {
 					Log.Alert("Aborted: next step creator is NULL for result {0}.", nextStepKey);
@@ -313,7 +313,7 @@
 			));
 		} // LockManualAfterOffer
 
-		private void InitFSM() {
+		private void InitMachineTransitions() {
 			InitTransition<TheFirstOne>(ValidateInput);
 			InitTransition<ValidateInput>(FinishWizard);
 			InitTransition<FinishWizardIfRequested>(GatherData);
@@ -346,7 +346,7 @@
 
 			InitTransition<CalculateOfferIfPossible>(StepResults.Success, null); // TODO Reapprove);
 			InitTransition<CalculateOfferIfPossible>(StepResults.Failed, LockManualAfterOffer);
-		} // InitFSM
+		} // InitMachineTransitions
 
 		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {
 			InitTransition<T>(StepResults.Success, createStepFunc);
@@ -356,13 +356,13 @@
 			StepResults result,
 			Func<AMainStrategyStepBase> createStepFunc
 		) where T : AMainStrategyStepBase {
-			this.algorithm.Add(new StepResult(typeof(T), result), createStepFunc);
+			this.transitions.Add(new StepResult(typeof(T), result), createStepFunc);
 		} // InitTransition
 
 		private readonly MainStrategyContextData context;
 		private readonly StrategiesMailer mailer;
 
-		private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> algorithm;
+		private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> transitions;
 		private readonly SortedDictionary<string, AMainStrategyStepBase> steps;
 	} // class MainStrategy
 } // namespace
