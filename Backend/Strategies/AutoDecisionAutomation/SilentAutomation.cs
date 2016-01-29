@@ -126,9 +126,9 @@
 					DB,
 					Log
 				)
-			);
+			) { CompareTrailsQuietly = true, };
 
-			rejectAgent.MakeAndVerifyDecision(true);
+			rejectAgent.MakeAndVerifyDecision();
 
 			MedalResult medal = CalculateMedal();
 
@@ -157,9 +157,9 @@
 					DB,
 					Log
 				)
-			).Init();
+			) { CompareTrailsQuietly = true, }.Init();
 
-			approveAgent.MakeAndVerifyDecision(true);
+			approveAgent.MakeAndVerifyDecision();
 
 			if (this.caller == Callers.AddMarketplace) {
 				bool isRejected = !rejectAgent.WasMismatch && rejectAgent.Trail.HasDecided;

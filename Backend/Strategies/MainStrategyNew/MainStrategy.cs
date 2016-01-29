@@ -257,9 +257,9 @@
 				if (this.rereject == null) {
 					this.rereject = new Rereject(
 						this.context.Description,
-						null, // TODO lock re-rejected
-						null, // TODO reject
-						LockManual(null), // TODO reject
+						LockRerejected,
+						Reject,
+						LockManual(Reject),
 						this.context.AvoidAutoDecision,
 						this.context.EnableAutomaticReRejection,
 						this.context.CustomerID,
@@ -272,6 +272,43 @@
 				return this.rereject;
 			} // get
 		} // Rereject
+
+		private LockRerejected LockRerejected {
+			get {
+				if (this.lockRerejected == null) {
+					this.lockRerejected = new LockRerejected(
+						this.context.Description,
+						Reject,
+						this.context.AutoDecisionResponse
+					);
+				} // if
+
+				return this.lockRerejected;
+			} // get
+		} // LockRerejected
+
+		private Reject Reject {
+			get {
+				if (this.reject == null) {
+					this.reject = new Reject(
+						this.context.Description,
+						null, // TODO lock rejected
+						null, // TODO land registry
+						LockManual(null), // TODO land registry
+						this.context.AvoidAutoDecision,
+						this.context.EnableAutomaticRejection,
+						this.context.CustomerID,
+						this.context.CashRequestID,
+						this.context.NLCashRequestID,
+						this.context.Tag,
+						this.context.CompanyID,
+						this.context.MonthlyRepayment.MonthlyPayment
+					);
+				} // if
+
+				return this.reject;
+			} // get
+		} // Reject
 
 		private readonly MainStrategyContextData context;
 		private readonly StrategiesMailer mailer;
@@ -289,6 +326,8 @@
 		private CheckAutoRulesRequested checkAutoRulesRequested;
 		private LockManual preventAutoDecision;
 		private Rereject rereject;
+		private LockRerejected lockRerejected;
+		private Reject reject;
 	} // class MainStrategy
 } // namespace
 

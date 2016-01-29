@@ -17,11 +17,12 @@
 				oRow.CustomerId,
 				null,
 				null,
+				Tag,
 				DB,
 				Log
 			);
 			
-			agent.MakeAndVerifyDecision(Tag);
+			agent.MakeAndVerifyDecision();
 
 			return !agent.WasMismatch;
 		} // MakeAndVerifyDecision

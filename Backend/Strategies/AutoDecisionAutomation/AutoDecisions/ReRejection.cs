@@ -10,7 +10,14 @@
 	using Ezbob.Logger;
 
 	public class ReRejection : AAutoDecisionBase {
-		public ReRejection(int customerId, long? cashRequestID, long? nlCashRequestID, AConnection db, ASafeLog log) {
+		public ReRejection(
+			int customerId,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection db,
+			ASafeLog log
+		) {
 			this.db = db;
 			this.log = log.Safe();
 
@@ -23,14 +30,14 @@
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+
+			this.trail.SetTag(tag);
 		} // constructor
 
-		public void MakeAndVerifyDecision(string tag) {
+		public override void MakeAndVerifyDecision() {
 			Agent oSecondary = null;
 
 			try {
-				this.trail.SetTag(tag);
-
 				RunPrimary();
 
 				oSecondary = RunSecondary();
@@ -44,9 +51,20 @@
 			this.trail.Save(this.db, oSecondary == null ? null : oSecondary.Trail);
 		} // MakeAndVerifyDecision
 
-		public bool ExceptionDuringRerejection {
-			get { return this.trail.FindTrace<ExceptionThrown>() != null; }
-		} // ExceptionDuringRerejection
+		public override bool WasException {
+			get {
+				if (this.trail == null)
+					return false;
+
+				return this.trail.FindTrace<ExceptionThrown>() != null;
+			} // get
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get {
+				return (this.trail != null) && this.trail.HasDecided;
+			} // get
+		} // AffirmativeDecisionMade
 
 		public ReRejectionTrail Trail { get { return this.trail; } }
 

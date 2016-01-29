@@ -386,13 +386,14 @@
 				CustomerID,
 				this.cashRequestID,
 				this.nlCashRequestID,
+				this.tag,
 				DB,
 				Log
 			).Init();
 
-			raAgent.MakeAndVerifyDecision(this.tag);
+			raAgent.MakeAndVerifyDecision();
 
-			if (raAgent.ExceptionWhileDeciding) {
+			if (raAgent.WasException) {
 				Log.Warn("Exception happened while executing re-approval, auto-decision process aborted.");
 				return true;
 			} // if exception
@@ -403,7 +404,7 @@
 				return true;
 			} // if mismatch
 
-			if (!raAgent.Trail.HasDecided) {
+			if (!raAgent.AffirmativeDecisionMade) {
 				Log.Debug("Auto re-approval has not reached 'approved' decision, auto-decision process continues.");
 				return false;
 			} // if
@@ -478,7 +479,7 @@
 
 			aAgent.MakeAndVerifyDecision();
 
-			if (aAgent.ExceptionWhileDeciding) {
+			if (aAgent.WasException) {
 				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception - " + aAgent.Trail.UniqueID;
 
 				Log.Alert(
@@ -518,10 +519,10 @@
 
 			Log.Msg(
 				"Both Auto Approval implementations have reached the same decision: {0}approved",
-				aAgent.Trail.HasDecided ? string.Empty : "not "
+				aAgent.AffirmativeDecisionMade ? string.Empty : "not "
 			);
 
-			if (!aAgent.Trail.HasDecided)
+			if (!aAgent.AffirmativeDecisionMade)
 				return;
 
 			this.autoDecisionResponse.ApprovedAmount = aAgent.Trail.RoundedAmount;
@@ -714,10 +715,10 @@
 			} // if
 
 			if (EnableAutomaticReRejection) {
-				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, this.nlCashRequestID, DB, Log);
-				rrAgent.MakeAndVerifyDecision(this.tag);
+				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, this.nlCashRequestID, this.tag, DB, Log);
+				rrAgent.MakeAndVerifyDecision();
 
-				if (rrAgent.ExceptionDuringRerejection) {
+				if (rrAgent.WasException) {
 					Log.Warn("Exception happened while executing re-rejection, auto-decision process aborted.");
 					return false;
 				} // if
@@ -728,7 +729,7 @@
 					return true;
 				} // if
 
-				if (rrAgent.Trail.HasDecided) {
+				if (rrAgent.AffirmativeDecisionMade) {
 					this.autoDecisionResponse.Decision = DecisionActions.ReReject;
 					this.autoDecisionResponse.AutoRejectReason = "Auto Re-Reject";
 					this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
@@ -769,7 +770,7 @@
 
 			rAgent.MakeAndVerifyDecision();
 
-			if (rAgent.ExceptionDuringRejection) {
+			if (rAgent.WasException) {
 				Log.Warn("Exception happened while executing rejection, auto-decision process aborted.");
 				return false;
 			} // if
@@ -778,7 +779,7 @@
 				this.wasMismatch = true;
 				Log.Warn("Mismatch happened while executing rejection, auto-decision process aborted.");
 			} else {
-				if (rAgent.Trail.HasDecided) {
+				if (rAgent.AffirmativeDecisionMade) {
 					this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
 					this.autoDecisionResponse.UserStatus = Status.Rejected;
 					this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;

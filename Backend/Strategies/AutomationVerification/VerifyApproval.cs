@@ -17,11 +17,12 @@
 				oRow.GetMedal(),
 				oRow.GetMedalType(),
 				oRow.GetTurnoverType(),
+				Tag,
 				DB,
 				Log
 			).Init();
 			
-			a.MakeAndVerifyDecision(Tag);
+			a.MakeAndVerifyDecision();
 
 			return !a.WasMismatch;
 		} // MakeAndVerifyDecision

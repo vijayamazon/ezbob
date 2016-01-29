@@ -1,9 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew.Steps {
+	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using EZBob.DatabaseLib.Model.Database;
 
-	internal class LockManual : AOneExitStep {
-		public LockManual(
+	internal class LockRerejected : AOneExitStep {
+		public LockRerejected(
 			string outerContextDescription,
 			AMainStrategyStep nextStep,
 			AutoDecisionResponse response
@@ -17,11 +18,14 @@
 
 			this.autoDecisionResponse.DecisionIsLocked = true;
 
-			this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
-			this.autoDecisionResponse.UserStatus = Status.Manual;
-			this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
+			this.autoDecisionResponse.Decision = DecisionActions.ReReject;
+			this.autoDecisionResponse.AutoRejectReason = "Auto Re-Reject";
+			this.autoDecisionResponse.CreditResult = CreditResultStatus.Rejected;
+			this.autoDecisionResponse.UserStatus = Status.Rejected;
+			this.autoDecisionResponse.SystemDecision = SystemDecision.Reject;
+			this.autoDecisionResponse.DecisionName = "Re-rejection";
 		} // ExecuteStep
 
 		private readonly AutoDecisionResponse autoDecisionResponse;
-	} // class LockManual
+	} // class LockRerejected
 } // namespace

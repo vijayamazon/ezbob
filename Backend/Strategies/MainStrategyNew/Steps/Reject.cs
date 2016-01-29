@@ -1,23 +1,26 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew.Steps {
 	using System;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
+	using AutomationCalculator.AutoDecision.AutoRejection;
+	using RejectAgent = Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent;
 
-	internal class Rereject : ADecisionBaseStep {
-		public Rereject(
+	internal class Reject : ADecisionBaseStep {
+		public Reject(
 			string outerContextDescription,
-			AMainStrategyStep onRejected,
-			AMainStrategyStep onNotRejected,
+			AMainStrategyStep onDecided,
+			AMainStrategyStep onNotDecided,
 			AMainStrategyStep onFailure,
 			bool avoidAutomaticDecision,
 			bool enabled,
 			int customerID,
 			long cashRequestID,
 			long nlCashRequestID,
-			string tag
+			string tag,
+			int companyID,
+			int monthlyPayment
 		) : base(
 			outerContextDescription,
-			onRejected,
-			onNotRejected,
+			onDecided,
+			onNotDecided,
 			onFailure,
 			avoidAutomaticDecision,
 			enabled,
@@ -26,6 +29,8 @@
 			nlCashRequestID,
 			tag
 		) {
+			this.companyID = companyID;
+			this.monthlyPayment = monthlyPayment;
 		} // constructor
 
 		protected override AMainStrategyStepBase Run() {
@@ -41,7 +46,7 @@
 
 			if (!Enabled) {
 				Log.Msg(
-					"Not processing auto-rejections for {0}: auto re-rejection is disabled.",
+					"Not processing auto-rejections for {0}: auto rejection is disabled.",
 					OuterContextDescription
 				);
 
@@ -49,15 +54,28 @@
 				return OnNotDecided;
 			} // if
 
-			ReRejection rrAgent;
+			RejectAgent rAgent;
 
 			try {
-				rrAgent = new ReRejection(CustomerID, CashRequestID, NLCashRequestID, Tag, DB, Log);
-				rrAgent.MakeAndVerifyDecision();
+				rAgent = new RejectAgent(
+					new AutoRejectionArguments(
+						CustomerID,
+						this.companyID,
+						this.monthlyPayment,
+						CashRequestID,
+						NLCashRequestID,
+						Tag,
+						DateTime.UtcNow,
+						DB,
+						Log
+					)
+				);
+
+				rAgent.MakeAndVerifyDecision();
 			} catch (Exception e) {
 				Log.Alert(
 					e,
-					"Uncaught exception during re-rejection for {0}, auto-decision process aborted.",
+					"Uncaught exception during rejection for {0}, auto-decision process aborted.",
 					OuterContextDescription
 				);
 
@@ -65,9 +83,9 @@
 				return OnFailure;
 			} // try
 
-			if (rrAgent.WasException) {
+			if (rAgent.WasException) {
 				Log.Warn(
-					"Exception happened while executing re-rejection for {0}, auto-decision process aborted.",
+					"Exception happened while executing rejection for {0}, auto-decision process aborted.",
 					OuterContextDescription
 				);
 
@@ -75,9 +93,9 @@
 				return OnFailure;
 			} // if
 
-			if (rrAgent.WasMismatch) {
+			if (rAgent.WasMismatch) {
 				Log.Warn(
-					"Mismatch happened while executing re-rejection for {0}, auto-decision process aborted.",
+					"Mismatch happened while executing rejection for {0}, auto-decision process aborted.",
 					OuterContextDescription
 				);
 
@@ -85,17 +103,20 @@
 				return OnFailure;
 			} // if
 
-			if (rrAgent.AffirmativeDecisionMade) {
-				Log.Warn("Re-rejection for {0} decided to reject.", OuterContextDescription);
+			if (rAgent.AffirmativeDecisionMade) {
+				Log.Warn("Rejection for {0} decided to reject.", OuterContextDescription);
 
 				this.outcome = "'rejected'";
 				return OnDecided;
 			} // if
 
-			Log.Warn("Re-rejection for {0} decided not to reject.", OuterContextDescription);
+			Log.Warn("Rejection for {0} decided not to reject.", OuterContextDescription);
 
 			this.outcome = "'not rejected'";
 			return OnNotDecided;
 		} // Run
-	} // class Rereject
+
+		private readonly int companyID;
+		private readonly int monthlyPayment;
+	} // class Reject
 } // namespace

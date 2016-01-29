@@ -18,10 +18,18 @@
 
 		public virtual int ApprovedAmount { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, long? nlCashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(
+			int nCustomerID,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection oDB,
+			ASafeLog oLog
+		) {
 			DB = oDB;
 			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
+			this.tag = tag;
 		} // constructor
 
 		public virtual Agent Init() {
@@ -42,6 +50,8 @@
 				CurrentValues.Instance.MailSenderName
 			);
 
+			Trail.SetTag(this.tag);
+
 			Funds = new AvailableFunds();
 
 			Cfg = InitCfg();
@@ -49,10 +59,8 @@
 			return this;
 		} // Init
 
-		public virtual void MakeAndVerifyDecision(string tag) {
+		public override void MakeAndVerifyDecision() {
 			try {
-				Trail.SetTag(tag);
-
 				RunPrimary();
 
 				AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
@@ -90,9 +98,13 @@
 			} // try
 		} // MakeAndVerifyDecision
 
-		public bool ExceptionWhileDeciding {
+		public override bool WasException {
 			get { return Trail.FindTrace<ExceptionThrown>() != null; }
-		} // ExceptionWhileDeciding
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return Trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public virtual DateTime Now { get; protected set; }
 
@@ -355,5 +367,7 @@
 		private T StepDone<T>() where T : ATrace {
 			return Trail.Affirmative<T>(false);
 		} // StepFailed
+
+		private readonly string tag;
 	} // class Agent
 } // namespace

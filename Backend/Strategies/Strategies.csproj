@@ -107,6 +107,7 @@
     <Compile Include="ASignupLoginBaseStrategy.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LogicalGlue\Agent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\IDecisionCheckFlow.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />
@@ -228,8 +229,10 @@
     <Compile Include="MainStrategyNew\Steps\FinishWizardIfRequested.cs" />
     <Compile Include="MainStrategyNew\Steps\FraudCheck.cs" />
     <Compile Include="MainStrategyNew\Steps\GatherData.cs" />
+    <Compile Include="MainStrategyNew\Steps\LockRerejected.cs" />
     <Compile Include="MainStrategyNew\Steps\LockManual.cs" />
     <Compile Include="MainStrategyNew\Steps\ADecisionBaseStep.cs" />
+    <Compile Include="MainStrategyNew\Steps\Reject.cs" />
     <Compile Include="MainStrategyNew\Steps\Rereject.cs" />
     <Compile Include="MainStrategyNew\Steps\StepOutputAttribute.cs" />
     <Compile Include="MainStrategyNew\Steps\TheFirstOne.cs" />
