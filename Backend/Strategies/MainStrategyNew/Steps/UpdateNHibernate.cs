@@ -4,9 +4,8 @@
 	internal class UpdateNHibernate : AOneExitStep {
 		public UpdateNHibernate(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			int customerID
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.customerID = customerID;
 		} // constructor
 

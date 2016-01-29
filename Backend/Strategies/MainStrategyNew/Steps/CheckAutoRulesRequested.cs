@@ -1,13 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew.Steps {
 	using Ezbob.Backend.Models;
 
-	internal class CheckAutoRulesRequested : ATwoExitStep {
+	internal class CheckAutoRulesRequested : AMainStrategyStep {
 		public CheckAutoRulesRequested(
 			string outerContextDescription,
-			AMainStrategyStep onRequested,
-			AMainStrategyStep onNotRequested,
 			NewCreditLineOption newCreditLineOption
-		) : base(outerContextDescription, onRequested, onNotRequested) {
+		) : base(outerContextDescription) {
 			this.newCreditLineOption = newCreditLineOption;
 		} // constructor
 
@@ -19,14 +17,11 @@
 			} // get
 		} // Outcome
 
-		protected override AMainStrategyStepBase Run() {
+		protected override StepResults Run() {
 			return this.newCreditLineOption.AvoidAutoDecision()
-				? OnNotRequestedWithAutoRules
-				: OnRequested;
+				? StepResults.NotRequested
+				: StepResults.Requested;
 		} // Run
-
-		private AMainStrategyStep OnRequested { get { return FirstExit; } }
-		private AMainStrategyStep OnNotRequestedWithAutoRules { get { return SecondExit; } }
 
 		private readonly NewCreditLineOption newCreditLineOption;
 	} // class CheckAutoRulesRequested

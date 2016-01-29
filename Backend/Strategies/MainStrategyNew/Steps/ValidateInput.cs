@@ -7,11 +7,10 @@
 	internal class ValidateInput : AOneExitStep {
 		public ValidateInput(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			CustomerDetails customerDetails,
 			InternalCashRequestID cashRequestID,
 			CashRequestOriginator? cashRequestOriginator
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.customerDetails = customerDetails;
 			this.cashRequestID = cashRequestID;
 			this.cashRequestOriginator = cashRequestOriginator;

@@ -5,10 +5,9 @@
 	internal class FraudCheck : AOneExitStep {
 		public FraudCheck(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			int customerID,
 			bool customerIsTest
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.customerID = customerID;
 			this.customerIsTest = customerIsTest;
 		} // constructor

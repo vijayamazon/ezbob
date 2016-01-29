@@ -2,12 +2,11 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using EZBob.DatabaseLib.Model.Database;
 
-	internal class LockManual : AOneExitStep {
-		public LockManual(
+	internal abstract class ALockManual : AOneExitStep {
+		protected ALockManual(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			AutoDecisionResponse response
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.autoDecisionResponse = response;
 		} // constructor
 
@@ -23,5 +22,5 @@
 		} // ExecuteStep
 
 		private readonly AutoDecisionResponse autoDecisionResponse;
-	} // class LockManual
+	} // class ALockManual
 } // namespace

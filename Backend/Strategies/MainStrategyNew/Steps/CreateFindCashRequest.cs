@@ -13,7 +13,6 @@
 	internal class CreateFindCashRequest : AOneExitStep {
 		public CreateFindCashRequest(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			InternalCashRequestID cashRequestID,
 			CashRequestOriginator? cashRequestOriginator,
 			int customerID,
@@ -22,7 +21,7 @@
 			string customerOrigin,
 			int customerNumOfLoans,
 			int underwriterID
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			CashRequestID = cashRequestID;
 			NLCashRequestID = 0;
 

@@ -1,9 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew.Steps {
 	internal class TheFirstOne : AOneExitStep {
-		public TheFirstOne(
-			string outerContextDescription,
-			AMainStrategyStep nextStep
-		) : base(outerContextDescription, nextStep) {
+		public TheFirstOne(string outerContextDescription) : base(outerContextDescription) {
 		} // constructor
 
 		protected override void ExecuteStep() {

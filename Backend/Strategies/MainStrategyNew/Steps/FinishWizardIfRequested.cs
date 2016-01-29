@@ -5,9 +5,8 @@
 	internal class FinishWizardIfRequested : AOneExitStep {
 		public FinishWizardIfRequested(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			FinishWizardArgs args
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.args = args;
 		} // constructor
 

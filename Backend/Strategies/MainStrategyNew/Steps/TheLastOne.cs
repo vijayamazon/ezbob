@@ -3,9 +3,9 @@
 		public TheLastOne(string outerContextDescription) : base(outerContextDescription) {
 		} // constructor
 
-		public override AMainStrategyStepBase Execute() {
+		public override StepResults Execute() {
 			Log.Msg("Main strategy is complete for {0}.", OuterContextDescription);
-			return null;
+			return StepResults.StopMachine;
 		} // Execute
 	} // class TheLastOne
 } // namespace

@@ -8,9 +8,6 @@
 	internal class Reject : ADecisionBaseStep {
 		public Reject(
 			string outerContextDescription,
-			AMainStrategyStep onDecided,
-			AMainStrategyStep onNotDecided,
-			AMainStrategyStep onFailure,
 			bool avoidAutomaticDecision,
 			bool enabled,
 			int customerID,
@@ -22,9 +19,6 @@
 			bool customerIsAlibaba
 		) : base(
 			outerContextDescription,
-			onDecided,
-			onNotDecided,
-			onFailure,
 			avoidAutomaticDecision,
 			enabled,
 			customerID,
@@ -64,12 +58,12 @@
 			return this.rejectAgent;
 		} // CreateDecisionCheckAgent
 
-		protected override AMainStrategyStepBase Run() {
-			AMainStrategyStepBase result = base.Run();
+		protected override StepResults Run() {
+			StepResults result = base.Run();
 
-			if (this.customerIsAlibaba && (result == OnDecided)) {
+			if (this.customerIsAlibaba && (result == StepResults.Affirmative)) {
 				this.outcome = string.Format("'not {0}'", DecisionName);
-				result = OnNotDecided;
+				result = StepResults.Negative;
 
 				Log.Msg(
 					"Process of {1} for {0} decision changed to {2} because this is an Alibaba customer.",

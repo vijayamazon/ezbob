@@ -15,13 +15,12 @@
 	internal class UpdateData : AOneExitStep {
 		public UpdateData(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			int customerID,
 			int marketplaceUpdateValidityDays,
 			StrategiesMailer mailer,
 			bool logicalGlueEnabled,
 			int monthlyPayment
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.customerID = customerID;
 			this.marketplaceUpdateValidityDays = marketplaceUpdateValidityDays;
 			this.mailer = mailer;

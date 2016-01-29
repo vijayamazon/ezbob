@@ -7,11 +7,11 @@
 
 		public event CollectOutputValueDelegate CollectOutputValue;
 
-		public override AMainStrategyStepBase Execute() {
+		public override StepResults Execute() {
 			try {
 				Log.Debug("Executing step {0} for {1}...", Name, OuterContextDescription);
 
-				AMainStrategyStepBase nextStep = Run();
+				StepResults nextStep = Run();
 
 				Log.Debug(
 					"Completed step {0} with result '{1}' for {2}.",
@@ -22,9 +22,6 @@
 
 				CollectOutputValues();
 
-				if (nextStep == null)
-					throw new Exception(string.Format("No next step specified for outcome {0}.", Outcome));
-
 				return nextStep;
 			} catch (Exception e) {
 				Log.Alert(
@@ -34,7 +31,7 @@
 					OuterContextDescription
 				);
 
-				return new TheLastOne(OuterContextDescription);
+				return StepResults.StopMachine;
 			} // try
 		} // Execute
 
@@ -43,7 +40,7 @@
 
 		protected abstract string Outcome { get; }
 
-		protected abstract AMainStrategyStepBase Run();
+		protected abstract StepResults Run();
 
 		protected virtual bool ShouldCollectOutput { get { return true; } }
 

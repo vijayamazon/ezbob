@@ -2,19 +2,16 @@
 	using System;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 
-	internal abstract class ADecisionBaseStep : AThreeExitStep {
+	internal abstract class ADecisionBaseStep : AMainStrategyStep {
 		protected ADecisionBaseStep(
 			string outerContextDescription,
-			AMainStrategyStep onDecided,
-			AMainStrategyStep onNotDecided,
-			AMainStrategyStep onFailure,
 			bool avoidAutomaticDecision,
 			bool enabled,
 			int customerID,
 			long cashRequestID,
 			long nlCashRequestID,
 			string tag
-		) : base(outerContextDescription, onDecided, onNotDecided, onFailure) {
+		) : base(outerContextDescription) {
 			AvoidAutomaticDecision = avoidAutomaticDecision;
 			Enabled = enabled;
 			CustomerID = customerID;
@@ -25,10 +22,6 @@
 		} // constructor
 
 		protected override string Outcome { get { return this.outcome; } }
-
-		protected AMainStrategyStep OnDecided { get { return FirstExit; } }
-		protected AMainStrategyStep OnNotDecided { get { return SecondExit; } }
-		protected AMainStrategyStep OnFailure { get { return ThirdExit; } }
 
 		protected bool AvoidAutomaticDecision { get; private set; }
 		protected bool Enabled { get; private set; }
@@ -43,11 +36,11 @@
 
 		protected abstract IDecisionCheckAgent CreateDecisionCheckAgent();
 
-		protected virtual AMainStrategyStep CheckCustomPreventers() {
+		protected virtual StepResults? CheckCustomPreventers() {
 			return null;
 		} // CheckCustomPreventers
 
-		protected override AMainStrategyStepBase Run() {
+		protected override StepResults Run() {
 			if (AvoidAutomaticDecision) {
 				Log.Msg(
 					"Not processing {1} for {0}: auto decisions should be avoided.",
@@ -56,7 +49,7 @@
 				);
 
 				this.outcome = string.Format("'not {0}'", DecisionName);
-				return OnNotDecided;
+				return StepResults.Negative;
 			} // if
 
 			if (!Enabled) {
@@ -67,13 +60,13 @@
 				);
 
 				this.outcome = string.Format("'not {0}'", DecisionName);
-				return OnNotDecided;
+				return StepResults.Negative;
 			} // if
 
-			AMainStrategyStep customPreventerExit = CheckCustomPreventers();
+			StepResults? customPreventerExit = CheckCustomPreventers();
 
 			if (customPreventerExit != null)
-				return customPreventerExit;
+				return customPreventerExit.Value;
 
 			IDecisionCheckAgent agent;
 
@@ -89,7 +82,7 @@
 				);
 
 				this.outcome = "'uncaught exception'";
-				return OnFailure;
+				return StepResults.Failed;
 			} // try
 
 			if (agent.WasException) {
@@ -100,7 +93,7 @@
 				);
 
 				this.outcome = "'exception'";
-				return OnFailure;
+				return StepResults.Failed;
 			} // if
 
 			if (agent.WasMismatch) {
@@ -111,17 +104,17 @@
 				);
 
 				this.outcome = "'mismatch'";
-				return OnFailure;
+				return StepResults.Failed;
 			} // if
 
-			AMainStrategyStep result;
+			StepResults result;
 
 			if (agent.AffirmativeDecisionMade) {
 				this.outcome = string.Format("'{0}'", DecisionName);
-				result = OnDecided;
+				result = StepResults.Affirmative;
 			} else {
 				this.outcome = string.Format("'not {0}'", DecisionName);
-				result = OnNotDecided;
+				result = StepResults.Negative;
 			} // if
 
 			Log.Msg("Process of {1} for {0} decided {2}.", OuterContextDescription, ProcessName, Outcome);

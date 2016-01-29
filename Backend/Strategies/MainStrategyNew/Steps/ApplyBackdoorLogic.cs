@@ -7,11 +7,9 @@
 	using Ezbob.Backend.Strategies.Misc;
 	using EZBob.DatabaseLib.Model.Database;
 
-	internal class ApplyBackdoorLogic : ATwoExitStep {
+	internal class ApplyBackdoorLogic : AMainStrategyStep {
 		public ApplyBackdoorLogic(
 			string outerContextDescription,
-			AMainStrategyStep onApplied,
-			AMainStrategyStep onNotApplied,
 			bool backdoorEnabled,
 			int customerID,
 			string customerEmail,
@@ -21,7 +19,7 @@
 			long cashRequestID,
 			long nlCashRequestID,
 			string tag
-		) : base(outerContextDescription, onApplied, onNotApplied) {
+		) : base(outerContextDescription) {
 			this.backdoorEnabled = backdoorEnabled;
 			this.customerID = customerID;
 			this.customerEmail = customerEmail;
@@ -44,7 +42,7 @@
 			get { return this.applied ? "'applied'" : "'not applied'"; }
 		} // Outcome
 
-		protected override AMainStrategyStepBase Run() {
+		protected override StepResults Run() {
 			ABackdoorSimpleDetails backdoorSimpleDetails = CreateBackdoor();
 
 			if (backdoorSimpleDetails == null) {
@@ -55,7 +53,7 @@
 					this.customerEmail
 				);
 
-				return OnNotApplied;
+				return StepResults.NotApplied;
 			} // if
 
 			Log.Debug("Using back door simple for {0} as: {1}.", OuterContextDescription, backdoorSimpleDetails);
@@ -63,20 +61,20 @@
 			bool success = backdoorSimpleDetails.SetResult(Response);
 
 			if (!success)
-				return OnNotApplied;
+				return StepResults.NotApplied;
 
 			var medal = CalculateMedal();
 
 			this.applied = true;
 
 			if (backdoorSimpleDetails.Decision != DecisionActions.Approve)
-				return OnApplied;
+				return StepResults.Applied;
 
 			BackdoorSimpleApprove bsa = backdoorSimpleDetails as BackdoorSimpleApprove;
 
 			if (bsa == null) { // Should never happen because of the "if" condition.
 				this.applied = false;
-				return OnNotApplied;
+				return StepResults.NotApplied;
 			} // if
 
 			medal.MedalClassification = bsa.MedalClassification;
@@ -88,12 +86,12 @@
 			glcd.Execute();
 
 			if (!glcd.IsBrokerCustomer)
-				return OnApplied;
+				return StepResults.Applied;
 
 			Response.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
 			Response.SetupFee = glcd.Result.ManualSetupFee;
 
-			return OnApplied;
+			return StepResults.Applied;
 		} // Run
 
 		protected override bool ShouldCollectOutput { get { return this.applied; } }
@@ -150,9 +148,6 @@
 
 			return instance.Result;
 		} // CalculateMedal
-
-		private AMainStrategyStep OnApplied { get { return FirstExit; } }
-		private AMainStrategyStep OnNotApplied { get { return SecondExit; } }
 
 		private readonly bool backdoorEnabled;
 		private readonly int customerID;

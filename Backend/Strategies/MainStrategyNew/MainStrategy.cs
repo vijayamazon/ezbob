@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew {
+	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
@@ -16,6 +17,11 @@
 
 			this.context = new MainStrategyContextData(args);
 			this.mailer = new StrategiesMailer();
+
+			this.steps = new SortedDictionary<string, AMainStrategyStepBase>();
+
+			this.algorithm = new SortedDictionary<StepResult, Func<AMainStrategyStepBase>>();
+			InitFSM();
 		} // constructor
 
 		public override string Name {
@@ -23,10 +29,35 @@
 		} // Name
 
 		public override void Execute() {
-			AMainStrategyStepBase currentStep = TheFirstOne;
+			AMainStrategyStepBase currentStep = TheFirstOne();
 
-			while (currentStep != null)
-				currentStep = currentStep.Execute();
+			for ( ; ; ) {
+				StepResults stepResult = currentStep.Execute();
+
+				if (stepResult == StepResults.StopMachine)
+					break;
+
+				var nextStepKey = new StepResult(currentStep.GetType(), stepResult);
+
+				if (!this.algorithm.ContainsKey(nextStepKey)) {
+					Log.Alert("Aborted: next step not specified for result {0}.", nextStepKey);
+					break;
+				} // if
+
+				var nextStepCreator = this.algorithm[nextStepKey];
+
+				if (nextStepCreator == null) {
+					Log.Alert("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					break;
+				} // if
+
+				currentStep = nextStepCreator();
+
+				if (currentStep == null) {
+					Log.Alert("Aborted: failed to create next step for result {0}.", nextStepKey);
+					break;
+				} // if
+			} // while
 		} // Execute
 
 		private void UpdateStrategyContext(string propertyName, object propertyValue) {
@@ -54,297 +85,242 @@
 				pi.SetValue(this.context, propertyValue);
 		} // CollectStepOutputValue
 
-		private TheFirstOne TheFirstOne {
-			get {
-				if (this.theFirstOne == null)
-					this.theFirstOne = new TheFirstOne(this.context.Description, ValidateInput);
+		private AMainStrategyStepBase FindOrCreateStep<T>(Func<T> creator) where T : AMainStrategyStepBase {
+			string key = typeof(T).FullName;
 
-				return this.theFirstOne;
-			} // get
+			if (this.steps.ContainsKey(key))
+				return this.steps[key];
+
+			T step = creator();
+
+			this.steps[key] = step;
+
+			return step;
+		} // FindOrCreateStep
+
+		private AMainStrategyStepBase TheFirstOne() {
+			return FindOrCreateStep(() => new TheFirstOne(this.context.Description));
 		} // TheFirstOne
 
-		private ValidateInput ValidateInput {
-			get {
-				if (this.validateInput == null) {
-					this.validateInput = new ValidateInput(
-						this.context.Description,
-						FinishWizard,
-						this.context.CustomerDetails,
-						this.context.CashRequestID,
-						this.context.CashRequestOriginator
-					);
-				} // if
-
-				return this.validateInput;
-			} // get
+		private AMainStrategyStepBase ValidateInput() {
+			return FindOrCreateStep(() => new ValidateInput(
+				this.context.Description,
+				this.context.CustomerDetails,
+				this.context.CashRequestID,
+				this.context.CashRequestOriginator
+			));
 		} // ValidateInput
 
-		private FinishWizardIfRequested FinishWizard {
-			get {
-				if (this.finishWizard == null) {
-					this.finishWizard = new FinishWizardIfRequested(
-						this.context.Description,
-						GatherData,
-						this.context.FinishWizardArgs
-					);
-				} // if
-
-				return this.finishWizard;
-			} // get
+		private AMainStrategyStepBase FinishWizard() {
+			return FindOrCreateStep(() => new FinishWizardIfRequested(
+				this.context.Description,
+				this.context.FinishWizardArgs
+			));
 		} // FinishWizard
 
-		private GatherData GatherData {
-			get {
-				if (this.gatherData == null) {
-					this.gatherData = new GatherData(
-						this.context.Description,
-						CreateFindCashRequest,
-						this.context.CustomerID
-					);
-
-					this.gatherData.CollectOutputValue += CollectStepOutputValue;
-				} // if
-
-				return this.gatherData;
-			} // get
+		private AMainStrategyStepBase GatherData() {
+			return FindOrCreateStep(() => {
+				var gatherData = new GatherData(this.context.Description, this.context.CustomerID);
+				gatherData.CollectOutputValue += CollectStepOutputValue;
+				return gatherData;
+			});
 		} // GatherData
 
-		private CreateFindCashRequest CreateFindCashRequest {
-			get {
-				if (this.createFindCashRequest == null) {
-					this.createFindCashRequest = new CreateFindCashRequest(
-						this.context.Description,
-						ApplyBackdoorLogic,
-						this.context.CashRequestID,
-						this.context.CashRequestOriginator,
-						this.context.CustomerID,
-						this.context.CustomerDetails.FullName,
-						this.context.CustomerDetails.AppEmail,
-						this.context.CustomerDetails.Origin,
-						this.context.CustomerDetails.NumOfLoans,
-						this.context.UnderwriterID
-					);
-
-					this.createFindCashRequest.CollectOutputValue += CollectStepOutputValue;
-				} // if
-
-				return this.createFindCashRequest;
-			} // get
+		private AMainStrategyStepBase CreateFindCashRequest() {
+			return FindOrCreateStep(() => {
+				var createFindCashRequest = new CreateFindCashRequest(
+					this.context.Description,
+					this.context.CashRequestID,
+					this.context.CashRequestOriginator,
+					this.context.CustomerID,
+					this.context.CustomerDetails.FullName,
+					this.context.CustomerDetails.AppEmail,
+					this.context.CustomerDetails.Origin,
+					this.context.CustomerDetails.NumOfLoans,
+					this.context.UnderwriterID
+				);
+				createFindCashRequest.CollectOutputValue += CollectStepOutputValue;
+				return createFindCashRequest;
+			});
 		} // CreateFindCashRequest
 
-		private ApplyBackdoorLogic ApplyBackdoorLogic {
-			get {
-				if (this.applyBackdoorLogic == null) {
-					this.applyBackdoorLogic = new ApplyBackdoorLogic(
-						this.context.Description,
-						null, // TODO Save decision
-						CheckUpdateDataRequested,
-						this.context.BackdoorEnabled,
-						this.context.CustomerID,
-						this.context.CustomerDetails.AppEmail,
-						this.context.CustomerDetails.OwnsProperty,
-						this.context.CustomerDetails.IsTest,
-						this.context.CashRequestOriginator,
-						this.context.CashRequestID,
-						this.context.NLCashRequestID,
-						this.context.Tag
-					);
-
-					this.applyBackdoorLogic.CollectOutputValue += CollectStepOutputValue;
-				} // if
-
-				return this.applyBackdoorLogic;
-			} // get
+		private AMainStrategyStepBase ApplyBackdoorLogic() {
+			return FindOrCreateStep(() => {
+				var applyBackdoorLogic = new ApplyBackdoorLogic(
+					this.context.Description,
+					this.context.BackdoorEnabled,
+					this.context.CustomerID,
+					this.context.CustomerDetails.AppEmail,
+					this.context.CustomerDetails.OwnsProperty,
+					this.context.CustomerDetails.IsTest,
+					this.context.CashRequestOriginator,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.Tag
+				);
+				applyBackdoorLogic.CollectOutputValue += CollectStepOutputValue;
+				return applyBackdoorLogic;
+			});
 		} // ApplyBackdoorLogic
 
-		private CheckUpdateDataRequested CheckUpdateDataRequested {
-			get {
-				if (this.checkUpdateDataRequested == null) {
-					this.checkUpdateDataRequested = new CheckUpdateDataRequested(
-						this.context.Description,
-						UpdateData,
-						FraudCheck,
-						PreventAutoDecision,
-						this.context.NewCreditLineOption,
-						this.context.CustomerID,
-						this.context.MarketplaceUpdateValidityDays
-					);
-
-					this.checkUpdateDataRequested.CollectOutputValue += UpdateStrategyContext;
-				} // if
-
-				return this.checkUpdateDataRequested;
-			} // get
+		private AMainStrategyStepBase CheckUpdateDataRequested() {
+			return FindOrCreateStep(() => {
+				var checkUpdateDataRequested = new CheckUpdateDataRequested(
+					this.context.Description,
+					this.context.NewCreditLineOption,
+					this.context.CustomerID,
+					this.context.MarketplaceUpdateValidityDays
+				);
+				checkUpdateDataRequested.CollectOutputValue += UpdateStrategyContext;
+				return checkUpdateDataRequested;
+			});
 		} // CheckUpdateDataRequested
 
-		private UpdateData UpdateData {
-			get {
-				if (this.updateData == null) {
-					this.updateData = new UpdateData(
-						this.context.Description,
-						FraudCheck,
-						this.context.CustomerID,
-						this.context.MarketplaceUpdateValidityDays,
-						this.mailer,
-						this.context.LogicalGlueEnabled,
-						this.context.MonthlyRepayment.MonthlyPayment
-					);
-				} // if
-
-				return this.updateData;
-			} // get
+		private AMainStrategyStepBase UpdateData() {
+			return FindOrCreateStep(() => new UpdateData(
+				this.context.Description,
+				this.context.CustomerID,
+				this.context.MarketplaceUpdateValidityDays,
+				this.mailer,
+				this.context.LogicalGlueEnabled,
+				this.context.MonthlyRepayment.MonthlyPayment
+			));
 		} // UpdateData
 
-		private FraudCheck FraudCheck {
-			get {
-				if (this.fraudCheck == null) {
-					this.fraudCheck = new FraudCheck(
-						this.context.Description,
-						UpdateNHibernate,
-						this.context.CustomerID,
-						this.context.CustomerDetails.IsTest
-					);
-				} // if
-
-				return this.fraudCheck;
-			} // get
+		private AMainStrategyStepBase FraudCheck() {
+			return FindOrCreateStep(() => new FraudCheck(
+				this.context.Description,
+				this.context.CustomerID,
+				this.context.CustomerDetails.IsTest
+			));
 		} // FraudCheck
 
-		private UpdateNHibernate UpdateNHibernate {
-			get {
-				if (this.updateNHibernate == null) {
-					this.updateNHibernate = new UpdateNHibernate(
-						this.context.Description,
-						CheckAutoRulesRequested,
-						this.context.CustomerID
-					);
-				} // if
-
-				return this.updateNHibernate;
-			} // get
+		private AMainStrategyStepBase UpdateNHibernate() {
+			return FindOrCreateStep(() => new UpdateNHibernate(
+				this.context.Description,
+				this.context.CustomerID
+			));
 		} // UpdateNHibernate
 
-		private CheckAutoRulesRequested CheckAutoRulesRequested {
-			get {
-				if (this.checkAutoRulesRequested == null) {
-					this.checkAutoRulesRequested = new CheckAutoRulesRequested(
-						this.context.Description,
-						Rereject,
-						PreventAutoDecision,
-						this.context.NewCreditLineOption
-					);
-				} // if
-
-				return this.checkAutoRulesRequested;
-			} // get
+		private AMainStrategyStepBase CheckAutoRulesRequested() {
+			return FindOrCreateStep(() => new CheckAutoRulesRequested(
+				this.context.Description,
+				this.context.NewCreditLineOption
+			));
 		} // CheckAutoRulesRequested
 
-		private LockManual LockManual(AMainStrategyStep nextStep) {
-			return new LockManual(this.context.Description, nextStep, this.context.AutoDecisionResponse);
-		} // LockManual
-
-		private LockManual PreventAutoDecision {
-			get {
-				if (this.preventAutoDecision == null)
-					this.preventAutoDecision = LockManual(Rereject);
-
-				return this.preventAutoDecision;
-			} // get
+		private AMainStrategyStepBase PreventAutoDecision() {
+			return FindOrCreateStep(() => new PreventAutoDecision(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
 		} // PreventAutoDecision
 
-		private Rereject Rereject {
-			get {
-				if (this.rereject == null) {
-					this.rereject = new Rereject(
-						this.context.Description,
-						LockRerejected,
-						Reject,
-						LockManual(Reject),
-						this.context.AvoidAutoDecision,
-						this.context.EnableAutomaticReRejection,
-						this.context.CustomerID,
-						this.context.CashRequestID,
-						this.context.NLCashRequestID,
-						this.context.Tag
-					);
-				} // if
-
-				return this.rereject;
-			} // get
+		private AMainStrategyStepBase Rereject() {
+			return FindOrCreateStep(() => new Rereject(
+				this.context.Description,
+				this.context.AvoidAutoDecision,
+				this.context.EnableAutomaticReRejection,
+				this.context.CustomerID,
+				this.context.CashRequestID,
+				this.context.NLCashRequestID,
+				this.context.Tag
+			));
 		} // Rereject
 
-		private LockRerejected LockRerejected {
-			get {
-				if (this.lockRerejected == null) {
-					this.lockRerejected = new LockRerejected(
-						this.context.Description,
-						Reject,
-						this.context.AutoDecisionResponse
-					);
-				} // if
-
-				return this.lockRerejected;
-			} // get
+		private AMainStrategyStepBase LockRerejected() {
+			return this.FindOrCreateStep(() => new LockRerejected(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
 		} // LockRerejected
 
-		private Reject Reject {
-			get {
-				if (this.reject == null) {
-					this.reject = new Reject(
-						this.context.Description,
-						LockRejected,
-						null, // TODO land registry
-						LockManual(null), // TODO land registry
-						this.context.AvoidAutoDecision,
-						this.context.EnableAutomaticRejection,
-						this.context.CustomerID,
-						this.context.CashRequestID,
-						this.context.NLCashRequestID,
-						this.context.Tag,
-						this.context.CompanyID,
-						this.context.MonthlyRepayment.MonthlyPayment,
-						this.context.CustomerDetails.IsAlibaba
-					);
+		private AMainStrategyStepBase LockManualAfterRereject() {
+			return FindOrCreateStep(() => new LockManualAfterRereject(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // LockManualAfterRereject
 
-					this.reject.CollectOutputValue += CollectStepOutputValue;
-				} // if
-
-				return this.reject;
-			} // get
+		private AMainStrategyStepBase Reject() {
+			return FindOrCreateStep(() => {
+				var reject = new Reject(
+					this.context.Description,
+					this.context.AvoidAutoDecision,
+					this.context.EnableAutomaticRejection,
+					this.context.CustomerID,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.Tag,
+					this.context.CompanyID,
+					this.context.MonthlyRepayment.MonthlyPayment,
+					this.context.CustomerDetails.IsAlibaba
+				);
+				reject.CollectOutputValue += CollectStepOutputValue;
+				return reject;
+			});
 		} // Reject
 
-		private LockRejected LockRejected {
-			get {
-				if (this.lockRejected == null) {
-					this.lockRejected = new LockRejected(
-						this.context.Description,
-						null, // TODO land registry
-						this.context.AutoDecisionResponse
-					);
-				} // if
-
-				return this.lockRejected; } // get
+		private AMainStrategyStepBase LockRejected() {
+			return FindOrCreateStep(() => new LockRejected(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
 		} // LockRejected
+
+		private AMainStrategyStepBase LockManualAfterReject() {
+			return FindOrCreateStep(() => new LockManualAfterReject(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // LockManualAfterReject
+
+		private void InitFSM() {
+			InitTransition<TheFirstOne>(ValidateInput);
+			InitTransition<ValidateInput>(FinishWizard);
+			InitTransition<FinishWizardIfRequested>(GatherData);
+			InitTransition<GatherData>(CreateFindCashRequest);
+			InitTransition<CreateFindCashRequest>(ApplyBackdoorLogic);
+
+			InitTransition<ApplyBackdoorLogic>(StepResults.Applied, null); // TODO save decision
+			InitTransition<ApplyBackdoorLogic>(StepResults.NotApplied, CheckUpdateDataRequested);
+
+			InitTransition<CheckUpdateDataRequested>(StepResults.Requested, UpdateData);
+			InitTransition<CheckUpdateDataRequested>(StepResults.NotRequestedWithAutoRules, FraudCheck);
+			InitTransition<CheckUpdateDataRequested>(StepResults.NotRequestedWithoutAutoRules, PreventAutoDecision);
+
+			InitTransition<UpdateData>(FraudCheck);
+			InitTransition<FraudCheck>(UpdateNHibernate);
+			InitTransition<UpdateNHibernate>(CheckAutoRulesRequested);
+
+			InitTransition<CheckAutoRulesRequested>(StepResults.Requested, Rereject);
+			InitTransition<CheckAutoRulesRequested>(StepResults.NotRequested, PreventAutoDecision);
+
+			InitTransition<Rereject>(StepResults.Affirmative, LockRerejected);
+			InitTransition<Rereject>(StepResults.Negative, Reject);
+			InitTransition<Rereject>(StepResults.Negative, LockManualAfterRereject);
+
+			InitTransition<Reject>(StepResults.Affirmative, LockRejected);
+			InitTransition<Reject>(StepResults.Negative, null); // TODO land registry
+			InitTransition<Reject>(StepResults.Negative, LockManualAfterReject);
+		} // InitFSM
+
+		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {
+			InitTransition<T>(StepResults.Completed, createStepFunc);
+		} // InitTransition
+
+		private void InitTransition<T>(
+			StepResults result,
+			Func<AMainStrategyStepBase> createStepFunc
+		) where T : AMainStrategyStepBase {
+			this.algorithm.Add(new StepResult(typeof(T), result), createStepFunc);
+		} // InitTransition
 
 		private readonly MainStrategyContextData context;
 		private readonly StrategiesMailer mailer;
 
-		private TheFirstOne theFirstOne;
-		private ValidateInput validateInput;
-		private FinishWizardIfRequested finishWizard;
-		private GatherData gatherData;
-		private CreateFindCashRequest createFindCashRequest;
-		private ApplyBackdoorLogic applyBackdoorLogic;
-		private CheckUpdateDataRequested checkUpdateDataRequested;
-		private UpdateData updateData;
-		private FraudCheck fraudCheck;
-		private UpdateNHibernate updateNHibernate;
-		private CheckAutoRulesRequested checkAutoRulesRequested;
-		private LockManual preventAutoDecision;
-		private Rereject rereject;
-		private LockRerejected lockRerejected;
-		private Reject reject;
-		private LockRejected lockRejected;
+		private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> algorithm;
+		private readonly SortedDictionary<string, AMainStrategyStepBase> steps;
 	} // class MainStrategy
 } // namespace
 

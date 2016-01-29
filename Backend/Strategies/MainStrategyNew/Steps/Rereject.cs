@@ -4,9 +4,6 @@
 	internal class Rereject : ADecisionBaseStep {
 		public Rereject(
 			string outerContextDescription,
-			AMainStrategyStep onRejected,
-			AMainStrategyStep onNotRejected,
-			AMainStrategyStep onFailure,
 			bool avoidAutomaticDecision,
 			bool enabled,
 			int customerID,
@@ -15,9 +12,6 @@
 			string tag
 		) : base(
 			outerContextDescription,
-			onRejected,
-			onNotRejected,
-			onFailure,
 			avoidAutomaticDecision,
 			enabled,
 			customerID,

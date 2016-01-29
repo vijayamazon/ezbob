@@ -7,11 +7,7 @@
 	using Ezbob.Utils.Lingvo;
 
 	internal class GatherData : AOneExitStep {
-		public GatherData(
-			string outerContextDescription,
-			AMainStrategyStep nextStep,
-			int customerID
-		) : base(outerContextDescription, nextStep) {
+		public GatherData(string outerContextDescription, int customerID) : base(outerContextDescription) {
 			this.customerID = customerID;
 		} // constructor
 

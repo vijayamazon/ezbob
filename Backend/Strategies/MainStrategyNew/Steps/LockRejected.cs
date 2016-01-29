@@ -6,9 +6,8 @@
 	internal class LockRejected : AOneExitStep {
 		public LockRejected(
 			string outerContextDescription,
-			AMainStrategyStep nextStep,
 			AutoDecisionResponse response
-		) : base(outerContextDescription, nextStep) {
+		) : base(outerContextDescription) {
 			this.autoDecisionResponse = response;
 		} // constructor
 

@@ -4,16 +4,13 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 
-	internal class CheckUpdateDataRequested : AThreeExitStep {
+	internal class CheckUpdateDataRequested : AMainStrategyStep {
 		public CheckUpdateDataRequested(
 			string outerContextDescription,
-			AMainStrategyStep onRequested,
-			AMainStrategyStep onNotRequestedWithAutoRules,
-			AMainStrategyStep onNotRequestedWithoutAutoRules,
 			NewCreditLineOption newCreditLineOption,
 			int customerID,
 			int marketplaceUpdateValidityDays
-		) : base(outerContextDescription, onRequested, onNotRequestedWithAutoRules, onNotRequestedWithoutAutoRules) {
+		) : base(outerContextDescription) {
 			this.newCreditLineOption = newCreditLineOption;
 			this.customerID = customerID;
 			this.marketplaceUpdateValidityDays = marketplaceUpdateValidityDays;
@@ -35,11 +32,11 @@
 			} // get
 		} // Outcome
 
-		protected override AMainStrategyStepBase Run() {
+		protected override StepResults Run() {
 			if (!this.newCreditLineOption.UpdateData()) {
 				return this.newCreditLineOption.AvoidAutoDecision()
-					? OnNotRequestedWithoutAutoRules
-					: OnNotRequestedWithAutoRules;
+					? StepResults.NotRequestedWithoutAutoRules
+					: StepResults.NotRequestedWithAutoRules;
 			} // if
 
 			var now = DateTime.UtcNow;
@@ -61,12 +58,8 @@
 				new QueryParameter("@CustomerID", this.customerID)
 			);
 
-			return OnRequested;
+			return StepResults.Requested;
 		} // Run
-
-		private AMainStrategyStep OnRequested { get { return FirstExit; } }
-		private AMainStrategyStep OnNotRequestedWithAutoRules { get { return SecondExit; } }
-		private AMainStrategyStep OnNotRequestedWithoutAutoRules { get { return ThirdExit; } }
 
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly int customerID;

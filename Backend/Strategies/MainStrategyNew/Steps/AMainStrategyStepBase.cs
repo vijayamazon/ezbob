@@ -3,8 +3,25 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	internal abstract class AMainStrategyStepBase {
-		public abstract AMainStrategyStepBase Execute();
+	internal abstract class AMainStrategyStepBase : IComparable<AMainStrategyStepBase> {
+		public abstract StepResults Execute();
+
+		/// <summary>
+		/// Compares the current object with another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// A value that indicates the relative order of the objects being compared.
+		/// The return value has the following meanings:
+		/// Less than zero: this object is less than the <paramref name="other"/> parameter.
+		/// Zero: this object is equal to <paramref name="other"/>.
+		/// Greater than zero: this object is greater than <paramref name="other"/>. 
+		/// </returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public int CompareTo(AMainStrategyStepBase other) {
+			return other == null
+				? 1
+				: string.Compare(GetType().FullName, other.GetType().FullName, StringComparison.InvariantCulture);
+		} // CompareTo
 
 		protected AMainStrategyStepBase(string outerContextDescription) {
 			if (string.IsNullOrWhiteSpace(outerContextDescription))
