@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategyNew.Steps {
 	using System;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Common;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using RejectAgent = Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent;
 
 	internal class Reject : ADecisionBaseStep {
@@ -16,7 +18,8 @@
 			long nlCashRequestID,
 			string tag,
 			int companyID,
-			int monthlyPayment
+			int monthlyPayment,
+			bool customerIsAlibaba
 		) : base(
 			outerContextDescription,
 			onDecided,
@@ -31,92 +34,57 @@
 		) {
 			this.companyID = companyID;
 			this.monthlyPayment = monthlyPayment;
+			this.customerIsAlibaba = customerIsAlibaba;
 		} // constructor
 
+		[StepOutput]
+		public AutoRejectionOutput AutoRejectionOutput {
+			get { return this.rejectAgent == null ? null : this.rejectAgent.Output; }
+		} // AutoRejectionOutput
+
+		protected override string ProcessName { get { return "auto rejection"; } }
+
+		protected override string DecisionName { get { return "rejected"; } }
+
+		protected override IDecisionCheckAgent CreateDecisionCheckAgent() {
+			this.rejectAgent = new RejectAgent(
+				new AutoRejectionArguments(
+					CustomerID,
+					this.companyID,
+					this.monthlyPayment,
+					CashRequestID,
+					NLCashRequestID,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
+			);
+
+			return this.rejectAgent;
+		} // CreateDecisionCheckAgent
+
 		protected override AMainStrategyStepBase Run() {
-			if (AvoidAutomaticDecision) {
+			AMainStrategyStepBase result = base.Run();
+
+			if (this.customerIsAlibaba && (result == OnDecided)) {
+				this.outcome = string.Format("'not {0}'", DecisionName);
+				result = OnNotDecided;
+
 				Log.Msg(
-					"Not processing auto-rejections for {0}: auto decisions should be avoided.",
-					OuterContextDescription
+					"Process of {1} for {0} decision changed to {2} because this is an Alibaba customer.",
+					OuterContextDescription,
+					ProcessName,
+					Outcome
 				);
-
-				this.outcome = "'not rejected'";
-				return OnNotDecided;
 			} // if
 
-			if (!Enabled) {
-				Log.Msg(
-					"Not processing auto-rejections for {0}: auto rejection is disabled.",
-					OuterContextDescription
-				);
-
-				this.outcome = "'not rejected'";
-				return OnNotDecided;
-			} // if
-
-			RejectAgent rAgent;
-
-			try {
-				rAgent = new RejectAgent(
-					new AutoRejectionArguments(
-						CustomerID,
-						this.companyID,
-						this.monthlyPayment,
-						CashRequestID,
-						NLCashRequestID,
-						Tag,
-						DateTime.UtcNow,
-						DB,
-						Log
-					)
-				);
-
-				rAgent.MakeAndVerifyDecision();
-			} catch (Exception e) {
-				Log.Alert(
-					e,
-					"Uncaught exception during rejection for {0}, auto-decision process aborted.",
-					OuterContextDescription
-				);
-
-				this.outcome = "'uncaught exception'";
-				return OnFailure;
-			} // try
-
-			if (rAgent.WasException) {
-				Log.Warn(
-					"Exception happened while executing rejection for {0}, auto-decision process aborted.",
-					OuterContextDescription
-				);
-
-				this.outcome = "'exception'";
-				return OnFailure;
-			} // if
-
-			if (rAgent.WasMismatch) {
-				Log.Warn(
-					"Mismatch happened while executing rejection for {0}, auto-decision process aborted.",
-					OuterContextDescription
-				);
-
-				this.outcome = "'mismatch'";
-				return OnFailure;
-			} // if
-
-			if (rAgent.AffirmativeDecisionMade) {
-				Log.Warn("Rejection for {0} decided to reject.", OuterContextDescription);
-
-				this.outcome = "'rejected'";
-				return OnDecided;
-			} // if
-
-			Log.Warn("Rejection for {0} decided not to reject.", OuterContextDescription);
-
-			this.outcome = "'not rejected'";
-			return OnNotDecided;
+			return result;
 		} // Run
 
+		private RejectAgent rejectAgent;
 		private readonly int companyID;
 		private readonly int monthlyPayment;
+		private readonly bool customerIsAlibaba;
 	} // class Reject
 } // namespace

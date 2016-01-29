@@ -292,7 +292,7 @@
 				if (this.reject == null) {
 					this.reject = new Reject(
 						this.context.Description,
-						null, // TODO lock rejected
+						LockRejected,
 						null, // TODO land registry
 						LockManual(null), // TODO land registry
 						this.context.AvoidAutoDecision,
@@ -302,13 +302,29 @@
 						this.context.NLCashRequestID,
 						this.context.Tag,
 						this.context.CompanyID,
-						this.context.MonthlyRepayment.MonthlyPayment
+						this.context.MonthlyRepayment.MonthlyPayment,
+						this.context.CustomerDetails.IsAlibaba
 					);
+
+					this.reject.CollectOutputValue += CollectStepOutputValue;
 				} // if
 
 				return this.reject;
 			} // get
 		} // Reject
+
+		private LockRejected LockRejected {
+			get {
+				if (this.lockRejected == null) {
+					this.lockRejected = new LockRejected(
+						this.context.Description,
+						null, // TODO land registry
+						this.context.AutoDecisionResponse
+					);
+				} // if
+
+				return this.lockRejected; } // get
+		} // LockRejected
 
 		private readonly MainStrategyContextData context;
 		private readonly StrategiesMailer mailer;
@@ -328,6 +344,7 @@
 		private Rereject rereject;
 		private LockRerejected lockRerejected;
 		private Reject reject;
+		private LockRejected lockRejected;
 	} // class MainStrategy
 } // namespace
 

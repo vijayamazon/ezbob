@@ -1,5 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions {
-	public abstract class AAutoDecisionBase : IDecisionCheckFlow {
+	public abstract class AAutoDecisionBase : IDecisionCheckAgent {
 		public virtual bool WasMismatch {
 			get { return this.wasMismatch; }
 			protected set { this.wasMismatch = value; }

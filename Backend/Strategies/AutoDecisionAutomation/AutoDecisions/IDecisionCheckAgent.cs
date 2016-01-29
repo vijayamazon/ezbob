@@ -1,8 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions {
-	internal interface IDecisionCheckFlow {
+	internal interface IDecisionCheckAgent {
 		bool WasMismatch { get; }
 		bool WasException { get; }
 		bool AffirmativeDecisionMade { get; }
 		void MakeAndVerifyDecision();
-	} // interface IDecisionCheckFlow
+	} // interface IDecisionCheckAgent
 } // namespace
