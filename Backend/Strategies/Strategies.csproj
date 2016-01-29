@@ -240,6 +240,7 @@
     <Compile Include="MainStrategyNew\Steps\TheFirstOne.cs" />
     <Compile Include="MainStrategyNew\Steps\TheLastOne.cs" />
     <Compile Include="MainStrategyNew\Steps\UpdateData.cs" />
+    <Compile Include="MainStrategyNew\Steps\UpdateLandRegistryData.cs" />
     <Compile Include="MainStrategyNew\Steps\UpdateNHibernate.cs" />
     <Compile Include="MainStrategyNew\Steps\ValidateInput.cs" />
     <Compile Include="MainStrategy\ABackdoorSimpleDetails.cs" />

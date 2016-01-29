@@ -275,6 +275,19 @@
 			));
 		} // LockManualAfterReject
 
+		private AMainStrategyStepBase UpdateLandRegistryData() {
+			return FindOrCreateStep(() => new UpdateLandRegistryData(
+				this.context.Description,
+				this.context.CustomerID,
+				this.context.CustomerDetails.FullName,
+				this.context.AutoDecisionResponse.DecidedToReject,
+				this.context.CustomerDetails.PropertyStatusDescription,
+				this.context.CustomerDetails.IsOwnerOfMainAddress,
+				this.context.CustomerDetails.IsOwnerOfOtherProperties,
+				this.context.NewCreditLineOption
+			));
+		} // UpdateLandRegistryData
+
 		private void InitFSM() {
 			InitTransition<TheFirstOne>(ValidateInput);
 			InitTransition<ValidateInput>(FinishWizard);
@@ -301,8 +314,10 @@
 			InitTransition<Rereject>(StepResults.Negative, LockManualAfterRereject);
 
 			InitTransition<Reject>(StepResults.Affirmative, LockRejected);
-			InitTransition<Reject>(StepResults.Negative, null); // TODO land registry
+			InitTransition<Reject>(StepResults.Negative, UpdateLandRegistryData);
 			InitTransition<Reject>(StepResults.Negative, LockManualAfterReject);
+
+			InitTransition<UpdateLandRegistryData>(null); // TODO calculate offer
 		} // InitFSM
 
 		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {

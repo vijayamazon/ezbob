@@ -14,26 +14,46 @@
 			NewCreditLineOption newCreditLineOption,
 			AutoDecisionResponse autoDecisionResponse
 		) {
-			this.customerDetails = customerDetails;
-			this.newCreditLineOption = newCreditLineOption;
-			this.autoDecisionResponse = autoDecisionResponse;
+			this.customerID = customerDetails.ID;
+			this.customerFullName = customerDetails.FullName;
+			this.customerIsAutoRejected = autoDecisionResponse.DecidedToReject;
+			this.customerPropertyStatusDescription = customerDetails.PropertyStatusDescription;
+			this.isOwnerOfMainAddress = customerDetails.IsOwnerOfMainAddress;
+			this.isOwnerOfOtherProperties = customerDetails.IsOwnerOfOtherProperties;
+			this.skipCheck = !newCreditLineOption.UpdateData();
+		} // constructor
+
+		public MainStrategyUpdateLandRegistryData(
+			int customerID,
+			string customerFullName,
+			bool customerIsAutoRejected,
+			string customerPropertyStatusDescription,
+			bool isOwnerOfMainAddress,
+			bool isOwnerOfOtherProperties,
+			NewCreditLineOption newCreditLineOption
+		) {
+			this.customerID = customerID;
+			this.customerFullName = customerFullName;
+			this.customerIsAutoRejected = customerIsAutoRejected;
+			this.customerPropertyStatusDescription = customerPropertyStatusDescription;
+			this.isOwnerOfMainAddress = isOwnerOfMainAddress;
+			this.isOwnerOfOtherProperties = isOwnerOfOtherProperties;
+			this.skipCheck = !newCreditLineOption.UpdateData();
 		} // constructor
 
 		public void Execute() {
-			bool bSkip =
-				this.newCreditLineOption == NewCreditLineOption.SkipEverything ||
-				this.newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
-
-			if (bSkip)
+			if (this.skipCheck)
 				return;
 
-			var isHomeOwner = this.customerDetails.IsOwnerOfMainAddress || this.customerDetails.IsOwnerOfOtherProperties;
+			var isHomeOwner = this.isOwnerOfMainAddress || this.isOwnerOfOtherProperties;
 
-			if (!this.autoDecisionResponse.DecidedToReject && isHomeOwner) {
+			string decisionName = this.customerIsAutoRejected ? "already rejected" : "not auto rejected";
+
+			if (!this.customerIsAutoRejected && isHomeOwner) {
 				Log.Debug(
 					"Retrieving LandRegistry system decision: {0} residential status: {1}",
-					this.autoDecisionResponse.DecisionName,
-					this.customerDetails.PropertyStatusDescription
+					decisionName,
+					this.customerPropertyStatusDescription
 				);
 
 				try {
@@ -44,14 +64,14 @@
 			} else {
 				Log.Info(
 					"Not retrieving LandRegistry system decision: {0} residential status: {1}",
-					this.autoDecisionResponse.DecisionName,
-					this.customerDetails.PropertyStatusDescription
+					decisionName,
+					this.customerPropertyStatusDescription
 				);
 			} // if
 		} // Execute
 
 		private void UpdateLandRegistryData() {
-			var customerAddressesHelper = new CustomerAddressHelper(CustomerID);
+			var customerAddressesHelper = new CustomerAddressHelper(this.customerID);
 			customerAddressesHelper.Execute();
 
 			foreach (CustomerAddressModel address in customerAddressesHelper.OwnedAddresses) {
@@ -59,7 +79,7 @@
 
 				if (!string.IsNullOrEmpty(address.HouseName)) {
 					model = LandRegistryEnquiry.Get(
-						CustomerID,
+						this.customerID,
 						null,
 						address.HouseName,
 						null,
@@ -68,7 +88,7 @@
 					);
 				} else if (!string.IsNullOrEmpty(address.HouseNumber)) {
 					model = LandRegistryEnquiry.Get(
-						CustomerID,
+						this.customerID,
 						address.HouseNumber,
 						null,
 						null,
@@ -80,7 +100,7 @@
 					string.IsNullOrEmpty(address.HouseNumber)
 				) {
 					model = LandRegistryEnquiry.Get(
-						CustomerID,
+						this.customerID,
 						address.FlatOrApartmentNumber,
 						null,
 						null,
@@ -97,7 +117,7 @@
 					(model.Enquery.Titles.Count == 1);
 
 				if (doLandRegistry) {
-					var lrr = new LandRegistryRes(CustomerID, model.Enquery.Titles[0].TitleNumber);
+					var lrr = new LandRegistryRes(this.customerID, model.Enquery.Titles[0].TitleNumber);
 					lrr.PartialExecute();
 
 					LandRegistry dbLandRegistry = lrr.LandRegistry;
@@ -106,8 +126,8 @@
 
 					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success) {
 						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(
-							CustomerID,
-							this.customerDetails.FullName,
+							this.customerID,
+							this.customerFullName,
 							landRegistryDataModel.Response,
 							landRegistryDataModel.Res.TitleNumber
 						);
@@ -134,15 +154,11 @@
 						address.FlatOrApartmentNumber,
 						address.PostCode,
 						num,
-						CustomerID
+						this.customerID
 					);
 				} // if
 			} // for each
 		} // UpdateLandRegistryData
-
-		private int CustomerID {
-			get { return this.customerDetails.ID; }
-		} // CustomerID
 
 		private static AConnection DB {
 			get { return Library.Instance.DB; }
@@ -152,8 +168,12 @@
 			get { return Library.Instance.Log; }
 		} // Log
 
-		private readonly CustomerDetails customerDetails;
-		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly AutoDecisionResponse autoDecisionResponse;
+		private readonly int customerID;
+		private readonly string customerFullName;
+		private readonly bool customerIsAutoRejected;
+		private readonly string customerPropertyStatusDescription;
+		private readonly bool isOwnerOfMainAddress;
+		private readonly bool isOwnerOfOtherProperties;
+		private readonly bool skipCheck;
 	} // class MainStrategyUpdateLandRegistryData
 } // namespace
