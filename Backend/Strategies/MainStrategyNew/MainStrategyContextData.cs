@@ -7,7 +7,9 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
+
 	using CashRequestOriginatorType = EZBob.DatabaseLib.Model.Database.CashRequestOriginator;
 
 	internal class MainStrategyContextData {
@@ -103,6 +105,9 @@
 		public int CompanyID { get; set; }
 		public MonthlyRepaymentData MonthlyRepayment { get; set; }
 
+		public OfferResult OfferResult { get; set; }
+		public int LoanSourceID { get; set; }
+
 		public bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
 		public bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
 		public bool EnableAutomaticRejection { get { return CurrentValues.Instance.EnableAutomaticRejection; } }
@@ -112,6 +117,8 @@
 		public bool BackdoorEnabled { get { return CurrentValues.Instance.BackdoorSimpleAutoDecisionEnabled; } }
 		public int MarketplaceUpdateValidityDays { get { return CurrentValues.Instance.UpdateOnReapplyLastDays; } }
 		public bool LogicalGlueEnabled { get { return CurrentValues.Instance.LogicalGlueEnabled; } }
+		public int MaxLoanAmount { get { return CurrentValues.Instance.AutoApproveMaxAmount; } }
+		public int MinLoanAmount { get { return CurrentValues.Instance.MinLoan; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

@@ -186,6 +186,7 @@
 
 				Result = new MedalResult(this.customerId, Log) {
 					Error = "Exception thrown: " + e.Message,
+					ExceptionDuringCalculation = e,
 				};
 			} // try
 		} // Execute

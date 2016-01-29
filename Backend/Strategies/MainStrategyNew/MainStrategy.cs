@@ -288,6 +288,31 @@
 			));
 		} // UpdateLandRegistryData
 
+		private AMainStrategyStepBase CalculateOfferIfPossible() {
+			return FindOrCreateStep(() => {
+				var step = new CalculateOfferIfPossible(
+					this.context.Description,
+					this.context.CustomerID,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.Tag,
+					this.context.AutoRejectionOutput,
+					this.context.MonthlyRepayment,
+					this.context.MaxCapHomeOwner,
+					this.context.MaxCapNotHomeOwner
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
+		} // CalculateOfferIfPossible
+
+		private AMainStrategyStepBase LockManualAfterOffer() {
+			return FindOrCreateStep(() => new LockManualAfterOffer(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // LockManualAfterOffer
+
 		private void InitFSM() {
 			InitTransition<TheFirstOne>(ValidateInput);
 			InitTransition<ValidateInput>(FinishWizard);
@@ -317,11 +342,14 @@
 			InitTransition<Reject>(StepResults.Negative, UpdateLandRegistryData);
 			InitTransition<Reject>(StepResults.Negative, LockManualAfterReject);
 
-			InitTransition<UpdateLandRegistryData>(null); // TODO calculate offer
+			InitTransition<UpdateLandRegistryData>(CalculateOfferIfPossible);
+
+			InitTransition<CalculateOfferIfPossible>(StepResults.Success, null); // TODO Reapprove);
+			InitTransition<CalculateOfferIfPossible>(StepResults.Failed, LockManualAfterOffer);
 		} // InitFSM
 
 		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {
-			InitTransition<T>(StepResults.Completed, createStepFunc);
+			InitTransition<T>(StepResults.Success, createStepFunc);
 		} // InitTransition
 
 		private void InitTransition<T>(

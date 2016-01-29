@@ -217,6 +217,7 @@
     <Compile Include="MainStrategyNew\StepResult.cs" />
     <Compile Include="MainStrategyNew\Steps\AMainStrategyStepBase.cs" />
     <Compile Include="MainStrategyNew\Steps\AMainStrategyStep.cs" />
+    <Compile Include="MainStrategyNew\Steps\CalculateOfferIfPossible.cs" />
     <Compile Include="MainStrategyNew\Steps\CheckAutoRulesRequested.cs" />
     <Compile Include="MainStrategyNew\Steps\CheckUpdateDataRequested.cs" />
     <Compile Include="MainStrategyNew\Steps\ApplyBackdoorLogic.cs" />

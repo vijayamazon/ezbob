@@ -7,7 +7,7 @@
 
 		protected override StepResults Run() {
 			ExecuteStep();
-			return StepResults.Completed;
+			return StepResults.Success;
 		} // Run
 
 		protected abstract void ExecuteStep();
