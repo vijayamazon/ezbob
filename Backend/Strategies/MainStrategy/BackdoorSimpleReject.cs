@@ -28,7 +28,6 @@
 			response.SystemDecision = SystemDecision.Reject;
 			response.DecisionName = "Rejection";
 			response.Decision = DecisionActions.Reject;
-			response.LoanOfferUnderwriterComment = "Auto rejection - back door simple";
 
 			response.HasApprovalChance = this.hasApprovalChance;
 

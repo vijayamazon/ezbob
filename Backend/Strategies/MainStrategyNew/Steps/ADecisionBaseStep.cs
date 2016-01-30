@@ -115,6 +115,6 @@
 			return result;
 		} // Run
 
-		private string outcome;
+		protected string outcome;
 	} // class ADecisionBaseStep
 } // namespace

@@ -20,7 +20,7 @@
 
 		protected override StepResults Run() {
 			if (this.autoDecisionResponse.DecisionIsLocked) {
-				this.outcome = "'success'";
+				this.outcome = "'already locked'";
 				return StepResults.Success;
 			} // if
 
@@ -66,7 +66,6 @@
 			this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
 			this.autoDecisionResponse.UserStatus = Status.Approved;
 			this.autoDecisionResponse.SystemDecision = SystemDecision.Approve;
-			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Re-Approval";
 			this.autoDecisionResponse.DecisionName = "Re-Approval";
 			this.autoDecisionResponse.AppValidFor = this.output.AppValidFor;
 			this.autoDecisionResponse.LoanOfferEmailSendingBannedNew = this.output.IsEmailSendingBanned;

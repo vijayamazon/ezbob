@@ -96,7 +96,6 @@
 			response.CreditResult = CreditResultStatus.Approved;
 			response.UserStatus = Status.Approved;
 			response.SystemDecision = SystemDecision.Approve;
-			response.LoanOfferUnderwriterComment = "Auto Approval - back door simple";
 
 			response.DecisionName = "Approval";
 			response.AppValidFor = DateTime.UtcNow.AddHours(CurrentValues.Instance.OfferValidForHours);

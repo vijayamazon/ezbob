@@ -17,7 +17,12 @@
 		public MainStrategyContextData(MainStrategyArguments args) {
 			this.arguments = args;
 
+			IsSilentlyApproved = false;
+			LoanOfferEmailSendingBannedNew = false;
+
 			AutoRejectionOutput = null;
+			AutoReapprovalOutput = null;
+			AutoApprovalTrailUniqueID = null;
 
 			OverrideApprovedRejected = true;
 			CashRequestID = new InternalCashRequestID(this.arguments.CashRequestID);
@@ -59,6 +64,10 @@
 
 		public AutoRejectionOutput AutoRejectionOutput { get; set; }
 		public AutoReapprovalOutput AutoReapprovalOutput { get; set; }
+		public Guid? AutoApprovalTrailUniqueID { get; set; }
+
+		public bool IsSilentlyApproved { get; set; }
+		public bool LoanOfferEmailSendingBannedNew { get; set; }
 
 		public NewCreditLineOption NewCreditLineOption {
 			get { return this.arguments.NewCreditLine; }
@@ -121,6 +130,7 @@
 		public bool LogicalGlueEnabled { get { return CurrentValues.Instance.LogicalGlueEnabled; } }
 		public int MaxLoanAmount { get { return CurrentValues.Instance.AutoApproveMaxAmount; } }
 		public int MinLoanAmount { get { return CurrentValues.Instance.MinLoan; } }
+		public bool AutoApproveIsSilent { get { return CurrentValues.Instance.AutoApproveIsSilent; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

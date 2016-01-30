@@ -415,7 +415,6 @@
 			this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
 			this.autoDecisionResponse.UserStatus = Status.Approved;
 			this.autoDecisionResponse.SystemDecision = SystemDecision.Approve;
-			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Re-Approval";
 			this.autoDecisionResponse.DecisionName = "Re-Approval";
 			this.autoDecisionResponse.AppValidFor = raAgent.Output.AppValidFor;
 			this.autoDecisionResponse.LoanOfferEmailSendingBannedNew = raAgent.Output.IsEmailSendingBanned;
@@ -475,13 +474,9 @@
 				)
 			).Init();
 
-			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Checking auto approve...";
-
 			aAgent.MakeAndVerifyDecision();
 
 			if (aAgent.WasException) {
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception - " + aAgent.Trail.UniqueID;
-
 				Log.Alert(
 					"Switching to manual decision: exception during  Auto Approval for customer {0}, trail id is {1}.",
 					CustomerID,
@@ -497,8 +492,6 @@
 			if (aAgent.WasMismatch) {
 				this.wasMismatch = true;
 
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Mismatch - " + aAgent.Trail.UniqueID;
-
 				Log.Alert(
 					"Switching to manual decision: Auto Approval implementations " +
 					"have not reached the same decision for customer {0}, trail id is {1}.",
@@ -511,11 +504,6 @@
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 				return;
 			} // if mismatch
-
-			this.autoDecisionResponse.LoanOfferUnderwriterComment =
-				aAgent.Trail.GetDecisionName() +
-				" - " +
-				aAgent.Trail.UniqueID;
 
 			Log.Msg(
 				"Both Auto Approval implementations have reached the same decision: {0}approved",
@@ -531,7 +519,6 @@
 				CreateOffer(aAgent);
 			} catch (Exception e) {
 				Log.Alert(e, "Exception during creating an offer for customer {0}.", CustomerID);
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Exception in offer - " + aAgent.Trail.UniqueID;
 			} // try
 		} // DoAutoApproval
 
@@ -555,7 +542,6 @@
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Calculator failure - " + approvalTrail.UniqueID;
 				return;
 			} // if
 
@@ -564,7 +550,6 @@
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Silent Approve - " + approvalTrail.UniqueID;
 
 				NotifyAutoApproveSilentMode(
 					this.autoDecisionResponse.ApprovedAmount,
@@ -590,13 +575,11 @@
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.PendingInvestor;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Investor not found - " + approvalTrail.UniqueID;
 			} else {
 				this.autoDecisionResponse.HasApprovalChance = true;
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
 				this.autoDecisionResponse.UserStatus = Status.Approved;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Approve;
-				this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Approval";
 
 				this.autoDecisionResponse.DecisionName = "Approval";
 				this.autoDecisionResponse.Decision = DecisionActions.Approve;

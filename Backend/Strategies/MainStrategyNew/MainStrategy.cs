@@ -348,6 +348,48 @@
 			));
 		} // LockReapproved
 
+		private AMainStrategyStepBase Approval() {
+			return FindOrCreateStep(() => {
+				var step = new Approval(
+					this.context.Description,
+					this.context.AvoidAutoDecision,
+					this.context.EnableAutomaticApproval,
+					this.context.CustomerID,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.Tag,
+					this.context.CustomerDetails.CustomerStatusIsEnabled,
+					this.context.CustomerDetails.CustomerStatusIsWarning,
+					this.context.EnableAutomaticRejection,
+					this.context.EnableAutomaticReRejection,
+					this.context.AutoDecisionResponse.ProposedAmount,
+					this.context.Medal,
+					this.context.AutoRejectionOutput,
+					this.context.CustomerDetails.IsAlibaba
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
+		} // Approval
+
+		private AMainStrategyStepBase LockManualAfterApproval() {
+			return FindOrCreateStep(() => new LockManualAfterApproval(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // LockManualAfterApproval
+
+		private AMainStrategyStepBase LockApproved() {
+			return FindOrCreateStep(() => new LockApproved(
+				this.context.Description,
+				this.context.AutoDecisionResponse,
+				this.context.AutoApproveIsSilent,
+				this.context.OfferResult,
+				this.context.LoanSourceID,
+				this.context.LoanOfferEmailSendingBannedNew
+			));
+		} // LockManualAfterApproval
+
 		private void InitMachineTransitions() {
 			InitTransition<TheFirstOne>(ValidateInput);
 			InitTransition<ValidateInput>(FinishWizard);
@@ -388,13 +430,20 @@
 			InitTransition<CalculateOfferIfPossible>(StepResults.Failed, LockManualAfterOffer);
 
 			InitTransition<Reapproval>(StepResults.Affirmative, LockReapproved);
-			InitTransition<Reapproval>(StepResults.Negative, null); // TODO Approval);
+			InitTransition<Reapproval>(StepResults.Negative, Approval);
 			InitTransition<Reapproval>(StepResults.Failed, LockManualAfterReapproval);
 
-			InitTransition<LockReapproved>(StepResults.Success, null); // TODO Approval);
+			InitTransition<LockReapproved>(StepResults.Success, Approval);
 			InitTransition<LockReapproved>(StepResults.Failed, LockManualAfterReapproval);
 
-			InitTransition<LockManualAfterReapproval>(null); // TODO Approval
+			InitTransition<LockManualAfterReapproval>(Approval);
+
+			InitTransition<Approval>(StepResults.Affirmative, LockApproved);
+			InitTransition<Approval>(StepResults.Negative, LockManualAfterApproval);
+			InitTransition<Approval>(StepResults.Failed, LockManualAfterApproval);
+
+			InitTransition<LockApproved>(StepResults.Success, null); // TODO look for investor
+			InitTransition<LockApproved>(StepResults.Failed, LockManualAfterApproval);
 		} // InitMachineTransitions
 
 		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {
