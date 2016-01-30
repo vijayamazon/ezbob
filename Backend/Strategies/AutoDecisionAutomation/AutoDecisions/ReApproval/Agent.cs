@@ -91,10 +91,13 @@
 					} // if
 				} // if
 
+				Output.ApprovedAmount = ApprovedAmount;
+
 				Trail.Save(DB, oSecondary.Trail);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during re-approval.");
 				StepFailed<ExceptionThrown>().Init(e);
+				Output.ApprovedAmount = 0;
 			} // try
 		} // MakeAndVerifyDecision
 
@@ -108,11 +111,7 @@
 
 		public virtual DateTime Now { get; protected set; }
 
-		public virtual DateTime AppValidFor { get { return Now.AddDays(MetaData.OfferLength); } }
-
-		public bool IsEmailSendingBanned { get { return MetaData.IsEmailSendingBanned; } }
-
-		public long LastApprovedCashRequestID { get { return MetaData.LacrID; } }
+		public AutoReapprovalOutput Output { get; private set; }
 
 		protected virtual Configuration InitCfg() {
 			return new Configuration(DB, Log);
@@ -164,6 +163,12 @@
 			Trail.MyInputData.AutoReApproveMaxLatePayment = Cfg.MaxLatePayment;
 			Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans = Cfg.MaxNumOfOutstandingLoans;
 			Trail.MyInputData.MinLoan = ConfigManager.CurrentValues.Instance.MinLoan;
+
+			Output = new AutoReapprovalOutput {
+				AppValidFor = Now.AddDays(MetaData.OfferLength),
+				IsEmailSendingBanned = MetaData.IsEmailSendingBanned,
+				LastApprovedCashRequestID = MetaData.LacrID,
+			};
 		} // GatherData
 
 		protected virtual AvailableFunds Funds { get; set; }

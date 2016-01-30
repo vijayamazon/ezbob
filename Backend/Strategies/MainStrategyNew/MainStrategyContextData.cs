@@ -5,6 +5,7 @@
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
@@ -57,6 +58,7 @@
 		} // Description
 
 		public AutoRejectionOutput AutoRejectionOutput { get; set; }
+		public AutoReapprovalOutput AutoReapprovalOutput { get; set; }
 
 		public NewCreditLineOption NewCreditLineOption {
 			get { return this.arguments.NewCreditLine; }

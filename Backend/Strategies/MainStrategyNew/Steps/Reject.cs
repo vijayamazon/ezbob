@@ -58,23 +58,16 @@
 			return this.rejectAgent;
 		} // CreateDecisionCheckAgent
 
-		protected override StepResults Run() {
-			StepResults result = base.Run();
+		protected override bool PreventAffirmativeDecision() {
+			if (base.PreventAffirmativeDecision())
+				return true;
 
-			if (this.customerIsAlibaba && (result == StepResults.Affirmative)) {
-				this.outcome = string.Format("'not {0}'", DecisionName);
-				result = StepResults.Negative;
+			if (!this.customerIsAlibaba)
+				return false;
 
-				Log.Msg(
-					"Process of {1} for {0} decision changed to {2} because this is an Alibaba customer.",
-					OuterContextDescription,
-					ProcessName,
-					Outcome
-				);
-			} // if
-
-			return result;
-		} // Run
+			Log.Msg("Prevented {1} decision for {0}: Alibaba customer.", OuterContextDescription, ProcessName);
+			return true;
+		} // PreventAffirmativeDecision
 
 		private RejectAgent rejectAgent;
 		private readonly int companyID;

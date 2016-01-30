@@ -417,13 +417,13 @@
 			this.autoDecisionResponse.SystemDecision = SystemDecision.Approve;
 			this.autoDecisionResponse.LoanOfferUnderwriterComment = "Auto Re-Approval";
 			this.autoDecisionResponse.DecisionName = "Re-Approval";
-			this.autoDecisionResponse.AppValidFor = raAgent.AppValidFor;
-			this.autoDecisionResponse.LoanOfferEmailSendingBannedNew = raAgent.IsEmailSendingBanned;
+			this.autoDecisionResponse.AppValidFor = raAgent.Output.AppValidFor;
+			this.autoDecisionResponse.LoanOfferEmailSendingBannedNew = raAgent.Output.IsEmailSendingBanned;
 
 			var sr = DB.GetFirst(
 				"RapprovalGetLastApproveTerms",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("LacrID", raAgent.LastApprovedCashRequestID)
+				new QueryParameter("LacrID", raAgent.Output.LastApprovedCashRequestID)
 			);
 
 			this.autoDecisionResponse.InterestRate = sr["InterestRate"];

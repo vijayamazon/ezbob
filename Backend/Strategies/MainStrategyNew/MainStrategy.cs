@@ -313,6 +313,41 @@
 			));
 		} // LockManualAfterOffer
 
+		private AMainStrategyStepBase Reapproval() {
+			return FindOrCreateStep(() => {
+				var step = new Reapproval(
+					this.context.Description,
+					this.context.AvoidAutoDecision,
+					this.context.EnableAutomaticReApproval,
+					this.context.CustomerID,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.Tag,
+					this.context.CustomerDetails.CustomerStatusIsEnabled,
+					this.context.CustomerDetails.CustomerStatusIsWarning,
+					this.context.EnableAutomaticRejection,
+					this.context.EnableAutomaticReRejection
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
+		} // Reapproval
+
+		private AMainStrategyStepBase LockManualAfterReapproval() {
+			return FindOrCreateStep(() => new LockManualAfterReapproval(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // LockManualAfterReapproval
+
+		private AMainStrategyStepBase LockReapproved() {
+			return FindOrCreateStep(() => new LockReapproved(
+				this.context.Description,
+				this.context.AutoDecisionResponse,
+				this.context.AutoReapprovalOutput
+			));
+		} // LockReapproved
+
 		private void InitMachineTransitions() {
 			InitTransition<TheFirstOne>(ValidateInput);
 			InitTransition<ValidateInput>(FinishWizard);
@@ -336,16 +371,30 @@
 
 			InitTransition<Rereject>(StepResults.Affirmative, LockRerejected);
 			InitTransition<Rereject>(StepResults.Negative, Reject);
-			InitTransition<Rereject>(StepResults.Negative, LockManualAfterRereject);
+			InitTransition<Rereject>(StepResults.Failed, LockManualAfterRereject);
+
+			InitTransition<LockRerejected>(Reject);
+			InitTransition<LockManualAfterRereject>(Reject);
 
 			InitTransition<Reject>(StepResults.Affirmative, LockRejected);
 			InitTransition<Reject>(StepResults.Negative, UpdateLandRegistryData);
-			InitTransition<Reject>(StepResults.Negative, LockManualAfterReject);
+			InitTransition<Reject>(StepResults.Failed, LockManualAfterReject);
 
+			InitTransition<LockRejected>(CalculateOfferIfPossible);
 			InitTransition<UpdateLandRegistryData>(CalculateOfferIfPossible);
+			InitTransition<LockManualAfterReject>(CalculateOfferIfPossible);
 
-			InitTransition<CalculateOfferIfPossible>(StepResults.Success, null); // TODO Reapprove);
+			InitTransition<CalculateOfferIfPossible>(StepResults.Success, Reapproval);
 			InitTransition<CalculateOfferIfPossible>(StepResults.Failed, LockManualAfterOffer);
+
+			InitTransition<Reapproval>(StepResults.Affirmative, LockReapproved);
+			InitTransition<Reapproval>(StepResults.Negative, null); // TODO Approval);
+			InitTransition<Reapproval>(StepResults.Failed, LockManualAfterReapproval);
+
+			InitTransition<LockReapproved>(StepResults.Success, null); // TODO Approval);
+			InitTransition<LockReapproved>(StepResults.Failed, LockManualAfterReapproval);
+
+			InitTransition<LockManualAfterReapproval>(null); // TODO Approval
 		} // InitMachineTransitions
 
 		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {

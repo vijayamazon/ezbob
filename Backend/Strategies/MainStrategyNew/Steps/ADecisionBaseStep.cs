@@ -36,38 +36,31 @@
 
 		protected abstract IDecisionCheckAgent CreateDecisionCheckAgent();
 
-		protected virtual StepResults? CheckCustomPreventers() {
-			return null;
-		} // CheckCustomPreventers
-
-		protected override StepResults Run() {
+		protected virtual bool PreventAffirmativeDecision() {
 			if (AvoidAutomaticDecision) {
 				Log.Msg(
-					"Not processing {1} for {0}: auto decisions should be avoided.",
+					"Preventing {1} decision for {0}: auto decisions should be avoided.",
 					OuterContextDescription,
 					ProcessName
 				);
 
-				this.outcome = string.Format("'not {0}'", DecisionName);
-				return StepResults.Negative;
+				return true;
 			} // if
 
 			if (!Enabled) {
 				Log.Msg(
-					"Not processing {1} for {0}: {1} is disabled.",
+					"Preventing {1} decision for {0}: {1} is disabled.",
 					OuterContextDescription,
 					ProcessName
 				);
 
-				this.outcome = string.Format("'not {0}'", DecisionName);
-				return StepResults.Negative;
+				return true;
 			} // if
 
-			StepResults? customPreventerExit = CheckCustomPreventers();
+			return false;
+		} // PreventAffirmativeDecision
 
-			if (customPreventerExit != null)
-				return customPreventerExit.Value;
-
+		protected override StepResults Run() {
 			IDecisionCheckAgent agent;
 
 			try {
@@ -109,7 +102,7 @@
 
 			StepResults result;
 
-			if (agent.AffirmativeDecisionMade) {
+			if (agent.AffirmativeDecisionMade && !PreventAffirmativeDecision()) {
 				this.outcome = string.Format("'{0}'", DecisionName);
 				result = StepResults.Affirmative;
 			} else {
@@ -122,6 +115,6 @@
 			return result;
 		} // Run
 
-		protected string outcome;
+		private string outcome;
 	} // class ADecisionBaseStep
 } // namespace

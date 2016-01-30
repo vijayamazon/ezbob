@@ -108,6 +108,7 @@
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\IDecisionCheckAgent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\AutoReapprovalOutput.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />
@@ -229,12 +230,14 @@
     <Compile Include="MainStrategyNew\Steps\FinishWizardIfRequested.cs" />
     <Compile Include="MainStrategyNew\Steps\FraudCheck.cs" />
     <Compile Include="MainStrategyNew\Steps\GatherData.cs" />
+    <Compile Include="MainStrategyNew\Steps\LockReapproved.cs" />
     <Compile Include="MainStrategyNew\Steps\LockRejected.cs" />
     <Compile Include="MainStrategyNew\Steps\LockRerejected.cs" />
     <Compile Include="MainStrategyNew\Steps\ALockManual.cs" />
     <Compile Include="MainStrategyNew\Steps\ADecisionBaseStep.cs" />
     <Compile Include="MainStrategyNew\Steps\lock_manual_steps.cs" />
     <Compile Include="MainStrategyNew\Steps\Reject.cs" />
+    <Compile Include="MainStrategyNew\Steps\Reapproval.cs" />
     <Compile Include="MainStrategyNew\Steps\Rereject.cs" />
     <Compile Include="MainStrategyNew\Steps\StepOutputAttribute.cs" />
     <Compile Include="MainStrategyNew\Steps\StepResults.cs" />
