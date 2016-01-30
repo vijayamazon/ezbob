@@ -131,6 +131,10 @@
 		public int MaxLoanAmount { get { return CurrentValues.Instance.AutoApproveMaxAmount; } }
 		public int MinLoanAmount { get { return CurrentValues.Instance.MinLoan; } }
 		public bool AutoApproveIsSilent { get { return CurrentValues.Instance.AutoApproveIsSilent; } }
+		public int OfferValidForHours { get { return CurrentValues.Instance.OfferValidForHours; } }
+		public string SilentEmailRecipient { get { return CurrentValues.Instance.AutoApproveSilentToAddress; } }
+		public string SilentEmailSenderAddress { get { return CurrentValues.Instance.MailSenderEmail; } }
+		public string SilentEmailSenderName { get { return CurrentValues.Instance.MailSenderName; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

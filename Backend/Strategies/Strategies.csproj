@@ -227,6 +227,7 @@
     <Compile Include="MainStrategyNew\MainStrategyArguments.cs" />
     <Compile Include="MainStrategyNew\MainStrategyContextData.cs" />
     <Compile Include="MainStrategyNew\Steps\CreateFindCashRequest.cs" />
+    <Compile Include="MainStrategyNew\Steps\DispatchNotifications.cs" />
     <Compile Include="MainStrategyNew\Steps\FinishWizardIfRequested.cs" />
     <Compile Include="MainStrategyNew\Steps\FraudCheck.cs" />
     <Compile Include="MainStrategyNew\Steps\GatherData.cs" />
@@ -239,9 +240,13 @@
     <Compile Include="MainStrategyNew\Steps\lock_manual_steps.cs" />
     <Compile Include="MainStrategyNew\Steps\AApprovalBaseStep.cs" />
     <Compile Include="MainStrategyNew\Steps\Approval.cs" />
+    <Compile Include="MainStrategyNew\Steps\LookForInvestor.cs" />
+    <Compile Include="MainStrategyNew\Steps\ManualIfNotDecided.cs" />
     <Compile Include="MainStrategyNew\Steps\Reject.cs" />
     <Compile Include="MainStrategyNew\Steps\Reapproval.cs" />
     <Compile Include="MainStrategyNew\Steps\Rereject.cs" />
+    <Compile Include="MainStrategyNew\Steps\SaveDecision.cs" />
+    <Compile Include="MainStrategyNew\Steps\SetPendingInvestor.cs" />
     <Compile Include="MainStrategyNew\Steps\StepOutputAttribute.cs" />
     <Compile Include="MainStrategyNew\Steps\StepResults.cs" />
     <Compile Include="MainStrategyNew\Steps\TheFirstOne.cs" />

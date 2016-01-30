@@ -386,9 +386,71 @@
 				this.context.AutoApproveIsSilent,
 				this.context.OfferResult,
 				this.context.LoanSourceID,
-				this.context.LoanOfferEmailSendingBannedNew
+				this.context.LoanOfferEmailSendingBannedNew,
+				this.context.OfferValidForHours,
+				this.context.MinLoanAmount,
+				this.context.MaxLoanAmount
 			));
 		} // LockManualAfterApproval
+
+		private AMainStrategyStepBase ManualIfNotDecided() {
+			return FindOrCreateStep(() => new ManualIfNotDecided(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // ManualIfNotDecided
+
+		private AMainStrategyStepBase LookForInvestor() {
+			return FindOrCreateStep(() => new LookForInvestor(
+				this.context.Description,
+				this.context.AutoDecisionResponse.Decision,
+				this.context.CustomerID,
+				this.context.CashRequestID,
+				this.context.UnderwriterID
+			));
+		} // LookForInvestor
+
+		private AMainStrategyStepBase SetPendingInvestor() {
+			return FindOrCreateStep(() => new SetPendingInvestor(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // SetPendingInvestor
+
+		private AMainStrategyStepBase SaveDecision() {
+			return FindOrCreateStep(() => new SaveDecision(
+				this.context.Description,
+				this.context.UnderwriterID,
+				this.context.CustomerID,
+				this.context.CashRequestID,
+				this.context.NLCashRequestID,
+				this.context.OfferValidForHours,
+				this.context.AutoDecisionResponse,
+				this.context.Medal,
+				this.context.OverrideApprovedRejected,
+				this.context.CustomerDetails.ExperianConsumerScore
+			));
+		} // SaveDecision
+
+		private AMainStrategyStepBase DispatchNotifications() {
+			return FindOrCreateStep(() => new DispatchNotifications(
+				this.context.Description,
+				this.context.IsSilentlyApproved,
+				this.mailer,
+				this.context.Medal,
+				this.context.CustomerDetails,
+				this.context.AutoDecisionResponse,
+				this.context.OfferResult,
+				this.context.AutoApprovalTrailUniqueID,
+				this.context.SilentEmailRecipient,
+				this.context.SilentEmailSenderName,
+				this.context.SilentEmailSenderAddress
+			));
+		} // DispatchNotifications
+
+		private AMainStrategyStepBase TheLastOne() {
+			return FindOrCreateStep(() => new TheLastOne(this.context.Description));
+		} // SaveDecision
 
 		private void InitMachineTransitions() {
 			InitTransition<TheFirstOne>(ValidateInput);
@@ -397,7 +459,7 @@
 			InitTransition<GatherData>(CreateFindCashRequest);
 			InitTransition<CreateFindCashRequest>(ApplyBackdoorLogic);
 
-			InitTransition<ApplyBackdoorLogic>(StepResults.Applied, null); // TODO save decision
+			InitTransition<ApplyBackdoorLogic>(StepResults.Applied, SaveDecision);
 			InitTransition<ApplyBackdoorLogic>(StepResults.NotApplied, CheckUpdateDataRequested);
 
 			InitTransition<CheckUpdateDataRequested>(StepResults.Requested, UpdateData);
@@ -442,8 +504,19 @@
 			InitTransition<Approval>(StepResults.Negative, LockManualAfterApproval);
 			InitTransition<Approval>(StepResults.Failed, LockManualAfterApproval);
 
-			InitTransition<LockApproved>(StepResults.Success, null); // TODO look for investor
+			InitTransition<LockApproved>(StepResults.Success, LookForInvestor);
 			InitTransition<LockApproved>(StepResults.Failed, LockManualAfterApproval);
+
+			InitTransition<LockManualAfterApproval>(ManualIfNotDecided);
+
+			InitTransition<LookForInvestor>(StepResults.Found, ManualIfNotDecided);
+			InitTransition<LookForInvestor>(StepResults.NotFound, SetPendingInvestor);
+			InitTransition<LookForInvestor>(StepResults.NotExecuted, ManualIfNotDecided);
+
+			InitTransition<SetPendingInvestor>(ManualIfNotDecided);
+			InitTransition<ManualIfNotDecided>(SaveDecision);
+			InitTransition<SaveDecision>(DispatchNotifications);
+			InitTransition<DispatchNotifications>(TheLastOne);
 		} // InitMachineTransitions
 
 		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {

@@ -11,5 +11,8 @@
 		NotRequested,
 		Applied,
 		NotApplied,
+		Found,
+		NotFound,
+		NotExecuted,
 	} // enum StepResults
 } // namespace
