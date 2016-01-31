@@ -498,7 +498,6 @@
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\ZooplaStub.cs" />
-    <Compile Include="OfferCalculation\CalculateOffer.cs" />
     <Compile Include="OfferCalculation\OfferCalculator1.cs" />
     <Compile Include="OfferCalculation\OfferDualCalculator.cs" />
     <Compile Include="OfferCalculation\OfferResult.cs" />

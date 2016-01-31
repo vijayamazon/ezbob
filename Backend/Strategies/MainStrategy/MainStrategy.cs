@@ -15,8 +15,6 @@
 			if (args == null)
 				throw new StrategyAlert(this, "No arguments specified for the main strategy.");
 
-			UpdateStrategyContext();
-
 			this.context = new MainStrategyContextData(args);
 			this.mailer = new StrategiesMailer();
 
@@ -24,6 +22,8 @@
 
 			this.transitions = new SortedDictionary<StepResult, Func<AMainStrategyStepBase>>();
 			InitMachineTransitions();
+
+			UpdateStrategyContext();
 		} // constructor
 
 		public override string Name {
