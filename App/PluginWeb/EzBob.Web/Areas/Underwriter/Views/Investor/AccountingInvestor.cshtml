@@ -44,7 +44,7 @@
                                                     <%-EzBob.formatPoundsNoDecimals(a.OutstandingFunding)%>
                                                 </span>
                                                 <span class="accounting-btn">
-                                                    <button class="btn btn-primary funding-transactions" data-investorid="<%-a.InvestorID%>"><i class="fa fa-exchange"></i></button>
+													<button class="btn btn-primary funding-transactions" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show finding transactions"><i class="fa fa-exchange"></i></button>
                                                 </span>
                                             </td>
                                             <td>
@@ -55,13 +55,13 @@
                                                     <%}%>
                                                 </span>
                                                 <span class="accounting-btn">
-                                                    <button class="btn btn-primary repayments-transactions" data-investorid="<%-a.InvestorID%>"><i class="fa fa-exchange"></i></button>
+													<button class="btn btn-primary repayments-transactions" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show repayments transactions"><i class="fa fa-exchange"></i></button>
                                                 </span>
                                             </td>
                                             <td><%-EzBob.formatPercents(a.ServicingFeeDiscount)%></td>
                                             <td>
                                                 <span class="accounting-btn">
-                                                    <button class="btn btn-primary investor-scheduler" data-investorid="<%-a.InvestorID%>"><i class="fa fa-clock-o"></i></button>
+													<button class="btn btn-primary investor-scheduler" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show config scheduler"><i class="fa fa-clock-o"></i></button>
                                                 </span>
                                             </td>
                                             <td><img src="/Content/img/<%-a.IsInvestorActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
