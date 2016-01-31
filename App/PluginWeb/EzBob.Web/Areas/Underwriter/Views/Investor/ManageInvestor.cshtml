@@ -18,8 +18,8 @@
                         <div>
                             <div>
                                 <div class="row">
-                                    <h3 class="clearfix">Contacts</h3>
-                                    <table class="table  table-hover">
+                                    <h4 class="clearfix">Contacts</h4>
+                                    <table class="table  table-hover sub-investor-table">
                                         <thead>
                                             <tr>
 
@@ -51,26 +51,26 @@
                                                 <td><%-c.Comment%></td>
                                                 <td><%-moment(c.TimeStamp).format('L')%></td>
                                                 <td>
-                                                    <div class="Investor-primary-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                    <div class="Investor-primary-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(c.IsPrimary ? 'checked':'')%> />
                                                     </div>
 
                                                 <td>
-                                                    <div class="Investor-active-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                    <div class="Investor-active-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(c.IsActive ? 'checked':'')%> />
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="Investor-IsGettingAlerts-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                    <div class="Investor-IsGettingAlerts-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(c.IsGettingAlerts ? 'checked':'')%> />
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="Investor-IsGettingReports-contact make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                    <div class="Investor-IsGettingReports-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(c.IsGettingReports ? 'checked':'')%> />
                                                     </div>
                                                 </td>
-                                              
+
                                             </tr>
                                             <%})};%>
                                             <tr class="add-contact-row">
@@ -83,8 +83,8 @@
                                 </div>
 
                                 <div class="row">
-                                    <h3>Bank accounts</h3>
-                                    <table class="table table-hover">
+                                    <h4>Bank accounts</h4>
+                                    <table class="table table-hover sub-investor-table">
                                         <thead>
                                             <tr>
                                                 
@@ -103,12 +103,13 @@
                                             <tr class="bank-investor-row" data-id="<%-b.InvestorBankAccountID%>">
 
                                                 <td><%-b.AccountTypeStr%></td>
+
                                                 <td><%-b.BankAccountNumber%></td>
                                                 <td><%-b.BankAccountName%></td>
                                                 <td><%-b.BankSortCode%></td>
                                                 <td><%-moment(b.TimeStamp).format('L')%></td>
                                                 <td>
-                                                    <div class="Investor-active-bank Investor-active-bank-<%-b.AccountTypeStr%> make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                    <div class="Investor-active-bank Investor-active-bank-<%-b.AccountTypeStr%> make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(b.IsActive ? 'checked':'')%> />
                                                     </div>
                                                 </td>
@@ -135,24 +136,24 @@
 
 <script type="text/template" id="manage-investor-details-template">
     <div class="col-md-12">
-        <div class="box">
-            <div class="box-content">
+        <div class="investor-box investor-box-borders">
+            <div class="">
                 <form id="addEditInvestorDetilasForm" class="form-horizontal">
                     <div class="row">
                         <div class="col-md-6">
                             @EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
                             @EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
                             @EzForm.InputTextUnderwriter(this, "FundingLimitForNotification", "Funding limit for notification", "", "cashInput")
-                            <div class="control-group">
-                                <label class="control-label"></label>
-                                <div class="control">
+                            <div class="form-group control-group">
+                                <label class=" control-label"></label>
+                                <div class="controls">
                                     <label class="checkbox">
                                         <input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
                                         Is active
                                     </label>
                                 </div>
                             </div>
-                            <button id="investorDetailsSubmit" class="btn btn-primary">Submit</button>
+                            <button id="investorDetailsSubmit" class="btn btn-primary btn-investor-submit">Submit</button>
                             <button id="investorDetailsCancel" class="btn btn-primary">Cancel</button>
                         </div>
                     </div>
@@ -165,8 +166,8 @@
 
 <script type="text/template" id="manage-investor-contact-template">
 	<div class="col-md-12">
-		<div class="box">
-			<div class="box-content">
+		<div class="investor-box">
+			<div>
 				<form id="addEditInvestorContactForm" class="form-horizontal">
 					<div class="row">
 						<div class="col-md-6">
@@ -181,7 +182,7 @@
                             <input name="IsActive" id="IsActive" type="hidden" value="true"/>
 						
 							<input type="hidden" id="InvestorContactID" name="InvestorContactID" />
-							<button id="investorContactSubmit" class="btn btn-primary">Submit</button>
+							<button id="investorContactSubmit" class="btn btn-primary btn-investor-submit">Submit</button>
 							<button id="investorContactCancel" class="btn btn-primary">Cancel</button>
 						</div>
 					</div>
@@ -193,32 +194,25 @@
 
 <script type="text/template" id="manage-investor-bank-template">
 	<div class="col-md-12">
-		<div class="box">
-			<div class="box-content">
-				<form id="addEditInvestorBankAccountForm" class="form-horizontal">
-					<div class="row">
-						<div class="col-md-6">
-							@EzForm.SelectUnderwriter("AccountType", "Bank account type", accountTypes, "Bank account type")
-							@EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null, "numeric")
-							@EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null, "numeric")
-							@EzForm.InputTextUnderwriter(this, "BankAccountName", "Bank account name", null)
-							<div class="control-group">
-								<label class="control-label"></label>
-								<div class="control">
-									<label class="checkbox">
-                                       
-										<input name="IsActive" id="IsActive" type="hidden" value="false"  />
-									</label>
-								</div>
-							</div>
-							<input type="hidden" id="InvestorBankAccountID" name="InvestorBankAccountID" />
-							<button id="investorBankSubmit" class="btn btn-primary">Submit</button>
-							<button id="investorBankBack" class="btn btn-primary">Back</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+        <div class="investor-box">
+            <div >
+                <form id="addEditInvestorBankAccountForm" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @EzForm.SelectUnderwriter("AccountType", "Bank account type", accountTypes, "Bank account type")
+                            @EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null, "numeric")
+                            @EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null, "numeric")
+                            @EzForm.InputTextUnderwriter(this, "BankAccountName", "Bank account name", null)
+                            <input name="IsActive" id="IsActive" type="hidden" value="false" />
+                         
+                            <input type="hidden" id="InvestorBankAccountID" name="InvestorBankAccountID" />
+                            <button id="investorBankSubmit" class="btn btn-primary btn-investor-submit">Submit</button>
+                            <button id="investorBankBack" class="btn btn-primary">Back</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 	</div>
 </script>
 
