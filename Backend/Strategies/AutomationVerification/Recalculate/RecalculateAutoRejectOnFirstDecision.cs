@@ -43,7 +43,7 @@
 			DateTime decisionTime = sr["DecisionTime"];
 
 			try {
-				var agent = new SameDataAgent(customerID, cashRequestID, nlCashRequestID, decisionTime, DB, Log);
+				var agent = new SameDataAgent(customerID, cashRequestID, nlCashRequestID, decisionTime, this.tag, DB, Log);
 				agent.Decide(this.tag);
 
 				BrokerClientPreventer brokerClient = agent.Trail.FindTrace<BrokerClientPreventer>();

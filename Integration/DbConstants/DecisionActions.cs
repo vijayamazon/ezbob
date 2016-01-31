@@ -10,6 +10,10 @@
 	} // enum DecisionActions
 
 	public static class DecisionActionsExt {
+		public static bool In(this DecisionActions? da, params DecisionActions[] set) {
+			return (da != null) && da.Value.In(set);
+		} // In
+
 		public static bool In(this DecisionActions da, params DecisionActions[] set) {
 			foreach (var item in set)
 				if (da == item)

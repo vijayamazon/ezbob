@@ -277,16 +277,17 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult AddTransaction(int investorID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment) {
+		public JsonResult AddTransaction(int investorID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment, string bankTransactionRef) {
 
 			I_InvestorAccountTypeEnum accountTypeEnum;
 			if (!Enum.TryParse(bankAccountType, out accountTypeEnum)) {
 				throw new Exception("Wrong account type");
 			}
 
-			var result = this.serviceClient.Instance.AddManualTransaction(this.context.UserId, investorAccountID, transactionAmount, transactionDate, (int)accountTypeEnum, transactionComment);
+			var result = this.serviceClient.Instance.AddManualTransaction(this.context.UserId, investorAccountID, transactionAmount, transactionDate, (int)accountTypeEnum, transactionComment, bankTransactionRef);
 
 			return Json(new { investorID, bankAccountType, success = result.Value }, JsonRequestBehavior.AllowGet);
+			
         }
         [Ajax]
         [HttpGet]

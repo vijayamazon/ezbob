@@ -49,25 +49,26 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
     manageInvestorClick: function(el, before) {
         var tr = $(el.currentTarget).closest('tr');
         var id = tr.data('id');
+        $('.manage-investor-row').removeClass("active");
         this.$el.find('.manage-investor-view').remove();
         this.$el.find('.edit-details-view-area').remove();
         if (this.view && this.view.$el.data('id') === id) {
             this.details = null;
             this.view = null;
-
+            $(tr).removeClass("active");
         } else {
 
 
-            var newRow = $('<tr class="manage-investor-view"><td class="manage-investor-column" data-id="' + id + '"colspan="6"></td></tr>');
+            var newRow = $('<tr class="manage-investor-view"><td class="manage-investor-column" data-id="' + id + '"colspan="12"></td></tr>');
 
             tr.after(newRow);
 
             var rowel = this.$el.find('tr.manage-investor-view td');
             this.view = new EzBob.Underwriter.ManageInvestorView({ el: rowel, });
             this.view.show(id);
-
+            $(tr).addClass("active");
         }
-
+       
     }, //manageInvestorClick
     EditInvestorDetails: function(el) {
 
@@ -77,17 +78,19 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
         if (!this.view || this.view.$el.data('id') !== id) {
             tr.click();
             this.OpenInvestorDetails(tr, id);
+        
         } else if (this.view && this.details && this.view.$el.data('id') === id) {
             this.details = null;
         } else {
             this.OpenInvestorDetails(tr, id);
 
         }
+       
         return false;
 
     }, //EditInvestorDetails
     OpenInvestorDetails: function(tr, id) {
-        var newRow = $('<tr class="edit-details-view-area"><td colspan="6"></td></tr>');
+        var newRow = $('<tr class="edit-details-view-area"><td  colspan="12"></td></tr>');
 
         var toSave = this.model.get('Investors').find(function (item) {
             return Number(item['InvestorID']) === id;
@@ -100,7 +103,7 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
             InvestorID: id,
             Details: toSave
         });
-
+       
         this.details.render();
         this.details.on('submitDetails', this.submitDetails, this);
     },

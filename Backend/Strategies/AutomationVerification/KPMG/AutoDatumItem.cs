@@ -192,15 +192,22 @@
 		} // RunAutoRerejection
 
 		private void RunAutoReapproval() {
-			var agent = new
-				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
-				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, CashRequestID, NLCashRequestID, DecisionTime, this.db, Log);
+			var agent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.ManAgainstAMachine.
+				SameDataAgent(
+					CustomerID,
+					CashRequestID,
+					NLCashRequestID,
+					DecisionTime,
+					Tag,
+					this.db,
+					Log
+				);
 
 			agent.Init();
 
-			agent.Decide(Tag);
+			agent.Decide();
 
-			IsAutoReApproved = agent.Trail.HasDecided;
+			IsAutoReApproved = agent.AffirmativeDecisionMade;
 		} // RunAutoReapproval
 
 		private void RunAutoReject(AutomationTrails atra) {

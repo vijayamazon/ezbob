@@ -3,7 +3,7 @@
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;

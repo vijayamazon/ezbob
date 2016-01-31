@@ -4850,10 +4850,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SaveInvestorContactListAsync(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorContactModel[] investorContacts);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/AddManualTransaction", ReplyAction="http://tempuri.org/IEzServiceInvestor/AddManualTransactionResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment);
+        ServiceClientProxy.EzServiceReference.BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/AddManualTransaction", ReplyAction="http://tempuri.org/IEzServiceInvestor/AddManualTransactionResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> AddManualTransactionAsync(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> AddManualTransactionAsync(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksList", ReplyAction="http://tempuri.org/IEzServiceInvestor/SaveInvestorBanksListResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks);
@@ -6615,12 +6615,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SaveInvestorContactListAsync(underwriterID, investorID, investorContacts);
         }
         
-        public ServiceClientProxy.EzServiceReference.BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
-            return base.Channel.AddManualTransaction(underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);
+        public ServiceClientProxy.EzServiceReference.BoolActionResult AddManualTransaction(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef) {
+            return base.Channel.AddManualTransaction(underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment, bankTransactionRef);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> AddManualTransactionAsync(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment) {
-            return base.Channel.AddManualTransactionAsync(underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> AddManualTransactionAsync(int underwriterID, int investorAccountID, decimal transactionAmount, System.DateTime transactionDate, int bankAccountTypeID, string transactionComment, string bankTransactionRef) {
+            return base.Channel.AddManualTransactionAsync(underwriterID, investorAccountID, transactionAmount, transactionDate, bankAccountTypeID, transactionComment, bankTransactionRef);
         }
         
         public ServiceClientProxy.EzServiceReference.IntActionResult SaveInvestorBanksList(int underwriterID, int investorID, Ezbob.Backend.Models.Investor.InvestorBankAccountModel[] investorBanks) {

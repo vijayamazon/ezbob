@@ -18,11 +18,13 @@ BEGIN
 		ibat.TransactionDate AS TransactionDate,
 		ibat.TransactionAmount AS TransactionAmount,
 		ibat.PreviousBalance AS PreviousAmount,
-		ibat.NewBalance AS NewAmount,			
+		ibat.NewBalance AS NewAmount,
+		ibat.BankTransactionRef AS BankTransactionRef,			
 		iba.BankAccountNumber AS BankAccountNumber,
 		iba.BankAccountName AS BankAccountName,		
 		iba.IsActive AS IsBankAccountActive,
-		ibat.Comment AS Comment
+		ibat.Comment AS Comment,
+		ibat.Timestamp AS Timestamp
 	FROM
 		I_InvestorBankAccountTransaction ibat
 	LEFT JOIN 

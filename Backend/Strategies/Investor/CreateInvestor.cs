@@ -8,7 +8,9 @@
 	using Ezbob.Database;
 
 	public class CreateInvestor : AStrategy {
-		public CreateInvestor(InvestorModel investor, IEnumerable<InvestorContactModel> contacts, IEnumerable<InvestorBankAccountModel> banks) {
+        public CreateInvestor(int underwriterID, InvestorModel investor, IEnumerable<InvestorContactModel> contacts, IEnumerable<InvestorBankAccountModel> banks)
+        {
+              this.underwriterID = underwriterID;
 			this.investor = investor;
 			this.contacts = contacts;
 			this.banks = banks;
@@ -86,6 +88,7 @@
 						InvestorAccountTypeID = bank.AccountType.InvestorAccountTypeID,
 						InvestorBankAccountID = bank.InvestorBankAccountID,
 						RepaymentKey = bank.RepaymentKey,
+                        UserID = this.underwriterID,
 						InvestorID = InvestorID
 					});
 				}
@@ -107,7 +110,7 @@
 
 		public bool Result { get; set; }
 		public int InvestorID { get; private set; }
-
+        private readonly int underwriterID;
 		private readonly InvestorModel investor;
 		private readonly IEnumerable<InvestorContactModel> contacts;
 		private readonly IEnumerable<InvestorBankAccountModel> banks;

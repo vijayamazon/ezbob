@@ -323,8 +323,17 @@
 		}//GetServiceOutput
 
 		private void GetCallCreditData(InputLocationDetailsUKLocation ukLocation, string firstName, string surname, DateTime? birthDate, string postcode, int customerId, int? directorId) {
+			if (!CurrentValues.Instance.CallCreditEnabled) {
+				Log.InfoFormat(
+					"Not retrieving CallCredit data for customer {0} director {1}: CallCredit is disabled.",
+					customerId,
+					directorId
+				);
+				return;
+			} // if
+
 			try {
-				Log.InfoFormat("Retrieving CallCredit data fro customer {0} director {1}", customerId, directorId);
+				Log.InfoFormat("Retrieving CallCredit data for customer {0} director {1}", customerId, directorId);
 				var searchRequest = new CT_searchapplicant {
 					dob = birthDate ?? DateTime.UtcNow,
 					dobSpecified = birthDate.HasValue,
@@ -351,9 +360,26 @@
 				};
 
 				CallCreditLib.CallCreditGetData callCreditGetData = new CallCreditGetData(searchRequest);
+
 				CT_SearchResult searchResponse = callCreditGetData.GetSearch07a();
-				Log.InfoFormat("Saving to ServiceLog CallCredit data fro customer {0} director {1}", customerId, directorId);
-				Utils.WriteLog(searchRequest, searchResponse, ExperianServiceType.CallCredit, customerId, directorId, firstName, surname, birthDate, postcode);
+
+				Log.InfoFormat(
+					"Saving to ServiceLog CallCredit data fro customer {0} director {1}",
+					customerId,
+					directorId
+				);
+
+				Utils.WriteLog(
+					searchRequest,
+					searchResponse,
+					ExperianServiceType.CallCredit,
+					customerId,
+					directorId,
+					firstName,
+					surname,
+					birthDate,
+					postcode
+				);
 			} catch (Exception ex) {
 				Log.Error("Failed retrieve from data CallCredit", ex);
 			}//try

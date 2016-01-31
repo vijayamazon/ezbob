@@ -99,12 +99,14 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AccumulatedRepayments" type="xs:decimal" />
       <xs:element minOccurs="0" name="FundingBankAccountID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="FundingBankAccountNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsInvestorActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="OutstandingFunding" type="xs:decimal" />
       <xs:element minOccurs="0" name="RepaymentsBankAccountID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="RepaymentsBankAccountNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ServicingFeeDiscount" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalNonActiveAccumulatedRepayments" type="xs:decimal" />
     </xs:sequence>
@@ -141,10 +143,12 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="BankAccountName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BankAccountNumber" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BankTransactionRef" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsBankAccountActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="NewAmount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PreviousAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="NewAmount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PreviousAmount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TransactionAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="TransactionDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TransactionID" type="xs:int" />

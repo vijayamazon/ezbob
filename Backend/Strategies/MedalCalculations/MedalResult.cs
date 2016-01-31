@@ -177,6 +177,7 @@
 		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 		public int MaxOfferedLoanAmount { get; set; }
+		public Exception ExceptionDuringCalculation { get; set; }
 
 		public MedalResult(int customerID, ASafeLog log) {
 			MedalClassification = Medal.NoClassification;
@@ -184,6 +185,7 @@
 			TotalScoreNormalized = 0;
 			CustomerId = customerID;
 			this.log = log;
+			ExceptionDuringCalculation = null;
 		} // constructor
 
 		public static int RoundOfferedAmount(decimal amount) {

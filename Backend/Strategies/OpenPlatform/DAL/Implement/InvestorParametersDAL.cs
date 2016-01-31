@@ -6,8 +6,9 @@
     using Ezbob.Backend.ModelsWithDB.Wrappers;
     using Ezbob.Backend.Strategies.OpenPlatform.DAL.Contract;
     using Ezbob.Database;
+    using log4net;
 
-    public class InvestorParametersDAL : IInvestorParametersDAL {
+	public class InvestorParametersDAL : IInvestorParametersDAL {
 
         private Dictionary<int, decimal> investorsBalance;
         private Dictionary<int, I_Parameter> investorsParameters;
@@ -82,9 +83,14 @@
         }
 
         public decimal GetInvestorMonthlyFundingCapital(int investorId) {
-            return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorMonthlyFundingCapital", 
-				CommandSpecies.StoredProcedure, 
-				new QueryParameter("InvestorID", investorId));
+	        try {
+		        return Library.Instance.DB.ExecuteScalar<decimal>("I_GetInvestorMonthlyFundingCapital",
+			        CommandSpecies.StoredProcedure,
+			        new QueryParameter("InvestorID", investorId));
+			} catch (Exception ex) {
+				Log.WarnFormat("Failed to retrieve GetInvestorMonthlyFundingCapital for investor {0} \n {1}", investorId, ex);
+				return 0;
+			}
         }
 
         public decimal GetFundedAmountPeriod(int investorId, InvesmentPeriod invesmentPeriod) {
@@ -110,5 +116,6 @@
             return fundedAmount;
         }
 
-    }
+		protected static ILog Log = LogManager.GetLogger(typeof(InvestorParametersDAL));
+	}
 }

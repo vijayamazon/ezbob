@@ -19,6 +19,7 @@ BEGIN
 
 	SELECT
 		MpID = m.Id,
+		m.UpdatingStart,
 		m.UpdatingEnd,
 		mt.Name,
 		LongUpdateTime = CONVERT(BIT, CASE -- eBay, Amazon, Pay Pal
@@ -33,6 +34,6 @@ BEGIN
 	WHERE
 		m.CustomerId = @CustomerID
 		AND
-		m.UpdatingEnd IS NOT NULL
+		m.Disabled = 0
 END
 GO

@@ -30,6 +30,7 @@
 				this.args.CustomerID,
 				this.args.CashRequestID,
 				this.args.NLCashRequestID,
+				this.args.Tag,
 				this.args.DB,
 				this.args.Log
 			);
@@ -43,12 +44,16 @@
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+
+			CompareTrailsQuietly = false;
 		} // constructor
 
 		public virtual AutoRejectionOutput Output { get; private set; }
 		public virtual LGRejectionTrail Trail { get; private set; }
 
-		public virtual void MakeAndVerifyDecision(bool quiet = false) {
+		public bool CompareTrailsQuietly { get; set; }
+
+		public override void MakeAndVerifyDecision() {
 			Trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 
 			AutomationCalculator.AutoDecision.AutoRejection.LGAgent oSecondary = null;
@@ -60,7 +65,7 @@
 
 				ComparePrimaryAndSecondary(oSecondary);
 
-				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
+				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, CompareTrailsQuietly);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				Trail.Negative<ExceptionThrown>(true).Init(e);
@@ -68,6 +73,14 @@
 
 			Trail.Save(DB, oSecondary == null ? null : oSecondary.Trail);
 		} // MakeAndVerifyDecision
+
+		public override bool WasException {
+			get { return Trail.FindTrace<ExceptionThrown>() != null; }
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return Trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public bool LogicalGlueFlowFollowed {
 			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
@@ -190,11 +203,11 @@
 
 						inputData.ResponseErrors.AddRange(model.Error.MissingColumns);
 					} // if
-				} // if
 
-				inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
-				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
-				inputData.Score = inference.Score;
+					inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
+					inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
+					inputData.Score = inference.Score;
+				} // if inference is null
 
 				inputData.MatchingGradeRanges = new MatchingGradeRanges();
 

@@ -53,7 +53,7 @@ BEGIN
 		OfficePhone,
 		IsActive,
 		IsGettingAlerts,
-		IsGettingReports
+		IsGettingReports,
 		Timestamp
 	FROM 
 		I_InvestorContact
@@ -88,6 +88,7 @@ BEGIN
 		BankAccountNumber,
 		RepaymentKey,
 		IsActive, 
+		UserID,
 		Timestamp
 	FROM 
 		I_InvestorBankAccount

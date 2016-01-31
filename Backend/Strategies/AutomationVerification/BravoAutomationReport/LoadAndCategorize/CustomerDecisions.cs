@@ -211,7 +211,7 @@
 		} // IsRerejected
 
 		private bool IsRejected(DateTime decisionTime, long? cashRequestID, long? nlCashRequestID) {
-			var agent = new RejectAgent(CustomerID, cashRequestID, nlCashRequestID, decisionTime, DB, Log);
+			var agent = new RejectAgent(CustomerID, cashRequestID, nlCashRequestID, decisionTime, this.tag, DB, Log);
 
 			return agent.Decide(this.tag);
 		} // IsRejected
@@ -239,11 +239,11 @@
 		} // CapOffer
 
 		private bool IsReapproved(DateTime decisionTime, long? cashRequestID, long? nlCashRequestID) {
-			var agent = new ReapproveAgent(CustomerID, cashRequestID, nlCashRequestID, decisionTime, DB, Log);
+			var agent = new ReapproveAgent(CustomerID, cashRequestID, nlCashRequestID, decisionTime, this.tag, DB, Log);
 
 			agent.Init();
 
-			agent.Decide(this.tag);
+			agent.Decide();
 
 			return agent.Trail.HasDecided;
 		} // IsReapproved

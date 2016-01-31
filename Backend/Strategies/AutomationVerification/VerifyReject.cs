@@ -17,13 +17,14 @@
 				oRow.CustomerId,
 				null,
 				null,
+				Tag,
 				DB,
 				Log
 			).Init();
 			
-			a.MakeAndVerifyDecision(Tag);
+			a.MakeAndVerifyDecision();
 
-			return !a.WasMismatch;
+			return !a.WasException && !a.WasMismatch;
 		} // MakeAndVerifyDecision
 	} // class VerifyReject
 } // namespace

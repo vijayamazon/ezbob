@@ -106,7 +106,7 @@
 		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			object oRes = Run(oConnectionToUse, ExecMode.Scalar, nSpecies, sQuery, aryParams);
 
-			if (oRes is DBNull)
+			if ((oRes == null) || (oRes is DBNull))
 				return default(T);
 
 			return (T)oRes;

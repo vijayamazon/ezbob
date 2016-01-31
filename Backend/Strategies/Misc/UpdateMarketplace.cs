@@ -10,7 +10,7 @@
 	using System.Globalization;
 	using EKM;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
-	using Ezbob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Database;
 	using FreeAgent;
 	using global::Integration.ChannelGrabberFrontend;

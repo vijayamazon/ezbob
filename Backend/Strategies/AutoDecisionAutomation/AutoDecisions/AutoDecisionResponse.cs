@@ -3,6 +3,7 @@
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
+	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
@@ -13,13 +14,13 @@
 			// Currently (July 2015) it is always false. It was true/false in the past and may be such in the future.
 			IsLoanTypeSelectionAllowed = false;
 
+			DecisionIsLocked = false;
 			Decision = null;
 
 			AutoRejectReason = null;
 			CreditResult = null;
 			UserStatus = null;
 			SystemDecision = null;
-			LoanOfferUnderwriterComment = null;
 
 			ApprovedAmount = 0;
 			ProposedAmount = 0;
@@ -42,6 +43,7 @@
 		public int? ProductSubTypeID { get; set; }
 		public bool IsLoanTypeSelectionAllowed { get; set; }
 
+		public bool DecisionIsLocked { get; set; }
 		public DecisionActions? Decision { get; set; }
 
 		public int? DecisionCode { get { return Decision == null ? (int?)null : (int)Decision; } }
@@ -59,7 +61,6 @@
 		public CreditResultStatus? CreditResult { get; set; } // Rejected / Approved / WaitingForDecision
 		public Status? UserStatus { get; set; } // Approved / Manual / Rejected
 		public SystemDecision? SystemDecision { get; set; } // Approve / Manual / Reject
-		public string LoanOfferUnderwriterComment { get; set; }
 
 		public int ApprovedAmount {
 			get { return this.approvedAmount; }
@@ -144,6 +145,10 @@
 		} // DiscountPlanIDToUse
 
 		public bool HasApprovalChance { get; set; }
+
+		public void CopyFrom(AutoDecisionResponse adr) {
+			this.Traverse((instance, pi) => pi.SetValue(this, pi.GetValue(adr)));
+		} // CopyFrom
 
 		private int GetLoanType() {
 			SafeReader ltsr = Library.Instance.DB.GetFirst(

@@ -1,13 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System;
-	using System.Data;
 	using Ezbob.Backend.Extensions;
-	using Ezbob.Database;
+	using Ezbob.Backend.Strategies.StoredProcs;
 	using Ezbob.Integration.LogicalGlue;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
-	using JetBrains.Annotations;
 
 	public abstract class AMainStrategyBase : AStrategy {
 		public abstract int CustomerID { get; }
@@ -37,25 +34,5 @@
 
 		protected virtual int CompanyID { get; private set; }
 		protected virtual MonthlyRepaymentData MonthlyRepayment { get; private set; }
-
-		private class GetCustomerCompanyID : AStoredProcedure {
-			public GetCustomerCompanyID(AConnection db, ASafeLog log) : base(db, log) { } // constructor
-
-			public override bool HasValidParameters() {
-				return (CustomerID > 0) && (Now > longAgo);
-			} // HasValidParameters
-
-			[UsedImplicitly]
-			public int CustomerID { get; set; }
-
-			[UsedImplicitly]
-			public DateTime Now { get; set; }
-
-			[UsedImplicitly]
-			[Direction(ParameterDirection.Output)]
-			public int CompanyID { get; set; }
-
-			private static readonly DateTime longAgo = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
-		} // class GetCustomerCompanyID
 	} // class AMainStrategyBase
 } // namespace

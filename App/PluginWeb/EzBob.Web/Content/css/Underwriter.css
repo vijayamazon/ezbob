@@ -2438,23 +2438,75 @@ input[type="text"].err-field-red {
 	padding-right: 2%;
 }
 
-.tab-pane#accounting-tbl tr {
+/*
+.tab-pane#accounting-tbl tr,.investors-tables .main-investors-table{
 	border: 1px solid #dddddd;
 	border-right: 2px solid #dddddd;
 }
+*/
 
-.tab-pane#accounting-tbl tr:last-child {
-	border-bottom: 2px solid #dddddd;
-}
 
 .tab-pane#accounting-tbl td > span {
 	width: 45%;
 	display: inline-block;
 	padding-left: 10px;
-	vertical-align: top;
-	text-align:
+	vertical-align: middle;
+	text-align: right;
 }
+
+.tab-pane#accounting-tbl td > p {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/*investors tables rules*/
+.investors-tables .table td {
+    vertical-align:middle;
+}
+.investors-tables  .form-horizontal .form-group {
+    margin-left:0;
+    margin-right:0;
+}
+.investors-tables  .form-horizontal .btn-primary{
+    float:right;
+}
+  
+    .investor-box {
+        background:white;
+        padding:20px;
+    }
+    .table > tbody > tr > td.td-no-padding,.table > thead > tr > td.td-no-padding {
+        padding:0;
+        border-right:1px solid #dddddd;
+        border-left:1px solid #dddddd;
+    }
+    .investor-box.investor-box-borders{
+        border:1px solid #dddddd;
+    }
+    tr.edit-details-view-area td{
+        padding-top:30px !important;
+        
+    }
+      .investors-tables table tr.activeHover:hover td,.investors-tables table tr.active:hover td , .investors-tables table tr.active td ,tr.manage-investor-row.active td,.table tbody tr.bank-investor-row.active td,.table tbody tr.contact-investor-row.active  td {
+       background:#eaf0f4 !important ;
+       color:#4d4d4d;
+   }
+       .investor-sub-content-box,.edit-details-view-area,.manage-investor-view,.table.sub-investor-table {
+        background:#fafbfc;
+    }
 /* manage investor */
+
+.tab-pane#accounting-tbl tr:last-child {
+	border-bottom: 2px solid #dddddd;
+}
+table.sub-investor-table > tbody > tr > td{
+    padding:10px;
+}
+.btn-investor-submit {
+    margin-left:20px;
+}
+
    .table > thead > tr > td.edit-investor {
     text-align: right;
     padding-right: 2%;
@@ -2473,7 +2525,20 @@ input[type="text"].err-field-red {
        margin-right:20px;
    }
 	
-
+ 
+   .table tbody tr.bank-investor-row.active:hover,.table tbody tr.contact-investor-row.active:hover {
+       background:#eaf0f4;
+       color:#4d4d4d;
+   }
+   .table > thead > tr > td.manage-investor-column {
+       border:0;
+   }
+    .tab-pane.investors-tables tr.manage-investor-view {
+       border-top:0;
+   }
+    .tab-pane.investors-tables tr.edit-details-view-area {
+        border-bottom:0;
+    }
 
 .tab-pane#accounting-tbl td > span.accounting-btn {
 	padding-top: 4px;
@@ -2483,7 +2548,18 @@ input[type="text"].err-field-red {
 .tab-pane#add-transaction-tbl td > span {
 	width: initial;
 }
-
+.tab-pane#add-transaction-tbl td.accounting-sign,.tab-pane#funding-transactions-tbl td.accounting-sign,div#repayments-transactions-tbl  td.accounting-sign{
+    font-weight: bold;
+    vertical-align: top;
+    padding: 14px 0 0 7px;
+    font-size: 16px;
+}
+div#funding-transactions-tbl td,div#repayments-transactions-tbl  td{
+    vertical-align: middle;
+}
+.tab-pane#funding-transactions-tbl td.accounting-sign,.tab-pane#repayments-transactions-tbl td.accounting-sign  {
+    padding:12px 0 0 7px;
+}
 .medal-box .btn-group li{
 	display: inline;
 }
@@ -2547,8 +2623,7 @@ iframe#logical-glue-iframe{
 }
 
  #configSchedulerForm .control-label {
-	width: 25%;
-	
+	width: 40%;
 }
 
  #configSchedulerForm.form-horizontal .form-group {
@@ -2559,6 +2634,21 @@ iframe#logical-glue-iframe{
 #add-investor-form .col-md-6{
     margin-left:50px;
 } 
+#add-investor-form .col-md-6 .form-group {
+    margin-left:0;
+}
 #add-investor-title {
     margin-left:50px;
+}
+
+.config-scheduler-fields {
+	display: inline-block;
+	width: 60%;
+	vertical-align: top;
+}
+
+.config-scheduler-labels {
+	display: inline-block;
+	margin-top: 7px;
+	margin-right: 240px;
 }
