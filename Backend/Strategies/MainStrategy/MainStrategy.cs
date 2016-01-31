@@ -545,6 +545,8 @@
 				.OnResults(Reapproval, StepResults.Success)
 				.OnResults(LockManualAfterOffer, StepResults.Failed);
 
+			InitTransition<LockManualAfterOffer>().Always(Reapproval);
+
 			InitTransition<Reapproval>()
 				.OnResults(LockReapproved, StepResults.Affirmative)
 				.OnResults(Approval, StepResults.Negative)

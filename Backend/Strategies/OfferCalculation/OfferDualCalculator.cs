@@ -36,7 +36,6 @@
 
 			Primary = null;
 			VerifySeek = null;
-			//VerifyBoundaries = null;
 		} // constructor
 
 		public int CustomerID { get; private set; }
@@ -47,7 +46,6 @@
 
 		public OfferResult Primary { get; private set; }
 		public OfferOutputModel VerifySeek { get; private set; }
-		//public OfferOutputModel VerifyBoundaries { get; private set; }
 
 		public OfferResult CalculateOffer() {
 			try {
@@ -73,20 +71,9 @@
 				};
 
 				VerifySeek = this.offerCalculator2.GetCosmeOffer(input);
-				//VerifyBoundaries = this.offerCalculator2.GetOfferByBoundaries(input);
 
-				if (this.saveToDB) {
+				if (this.saveToDB)
 					VerifySeek.SaveToDb(this.log, this.db, OfferCalculationType.Seek);
-					//  VerifyBoundaries.SaveToDb(this.log, this.db, OfferCalculationType.Boundaries);
-				} // if
-
-				//if (!VerifySeek.Equals(VerifyBoundaries)) {
-				//    this.log.Info(
-				//        "the two verification implementations mismatch \nby seek:\n {0}\nby boundaries\n {1}",
-				//        VerifySeek,
-				//        VerifyBoundaries
-				//    );
-				//} // if
 
 				if (Primary.Equals(VerifySeek)) {
 					this.log.Debug("Main implementation of offer calculation result: \n{0}", Primary);
