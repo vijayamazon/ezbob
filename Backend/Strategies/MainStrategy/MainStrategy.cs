@@ -522,6 +522,8 @@
 				.OnResults(Rereject, StepResults.Requested)
 				.OnResults(PreventAutoDecision, StepResults.NotRequested);
 
+			InitTransition<PreventAutoDecision>().Always(Rereject);
+
 			InitTransition<Rereject>()
 				.OnResults(LockRerejected, StepResults.Affirmative)
 				.OnResults(Reject, StepResults.Negative)
