@@ -264,7 +264,7 @@
     <Compile Include="MainStrategy\Helpers\BackdoorSimpleApprove.cs" />
     <Compile Include="MainStrategy\Helpers\ForceNhibernateResync.cs" />
     <Compile Include="MainStrategy\Helpers\GradeRangeSubproduct.cs" />
-    <Compile Include="MainStrategy\Helpers\InternalCashRequestID.cs" />
+    <Compile Include="MainStrategy\Helpers\CashRequestIDExt.cs" />
     <Compile Include="MainStrategy\Helpers\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\Helpers\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\Helpers\MarketplaceUpdateStatus.cs" />

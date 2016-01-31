@@ -15,5 +15,5 @@ namespace Ezbob.Backend.Strategies.MainStrategy.Helpers {
 		public static bool LacksValue(this long cashRequestID) {
 			return !cashRequestID.HasValue();
 		} // LacksValue
-	} // class InternalCashRequestID
+	} // class CashRequestIDExt
 } // namespace
