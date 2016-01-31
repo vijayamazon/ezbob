@@ -453,81 +453,83 @@
 		} // SaveDecision
 
 		private void InitMachineTransitions() {
-			InitTransition<TheFirstOne>(ValidateInput);
-			InitTransition<ValidateInput>(FinishWizard);
-			InitTransition<FinishWizardIfRequested>(GatherData);
-			InitTransition<GatherData>(CreateFindCashRequest);
-			InitTransition<CreateFindCashRequest>(ApplyBackdoorLogic);
+			InitTransition<TheFirstOne>().Always(ValidateInput);
+			InitTransition<ValidateInput>().Always(FinishWizard);
+			InitTransition<FinishWizardIfRequested>().Always(GatherData);
+			InitTransition<GatherData>().Always(CreateFindCashRequest);
+			InitTransition<CreateFindCashRequest>().Always(ApplyBackdoorLogic);
 
-			InitTransition<ApplyBackdoorLogic>(StepResults.Applied, SaveDecision);
-			InitTransition<ApplyBackdoorLogic>(StepResults.NotApplied, CheckUpdateDataRequested);
+			InitTransition<ApplyBackdoorLogic>()
+				.OnResults(SaveDecision, StepResults.Applied)
+				.OnResults(CheckUpdateDataRequested, StepResults.NotApplied);
 
-			InitTransition<CheckUpdateDataRequested>(StepResults.Requested, UpdateData);
-			InitTransition<CheckUpdateDataRequested>(StepResults.NotRequestedWithAutoRules, FraudCheck);
-			InitTransition<CheckUpdateDataRequested>(StepResults.NotRequestedWithoutAutoRules, PreventAutoDecision);
+			InitTransition<CheckUpdateDataRequested>()
+				.OnResults(UpdateData, StepResults.Requested)
+				.OnResults(FraudCheck, StepResults.NotRequestedWithAutoRules)
+				.OnResults(PreventAutoDecision, StepResults.NotRequestedWithoutAutoRules);
 
-			InitTransition<UpdateData>(FraudCheck);
-			InitTransition<FraudCheck>(UpdateNHibernate);
-			InitTransition<UpdateNHibernate>(CheckAutoRulesRequested);
+			InitTransition<UpdateData>().Always(FraudCheck);
+			InitTransition<FraudCheck>().Always(UpdateNHibernate);
+			InitTransition<UpdateNHibernate>().Always(CheckAutoRulesRequested);
 
-			InitTransition<CheckAutoRulesRequested>(StepResults.Requested, Rereject);
-			InitTransition<CheckAutoRulesRequested>(StepResults.NotRequested, PreventAutoDecision);
+			InitTransition<CheckAutoRulesRequested>()
+				.OnResults(Rereject, StepResults.Requested)
+				.OnResults(PreventAutoDecision, StepResults.NotRequested);
 
-			InitTransition<Rereject>(StepResults.Affirmative, LockRerejected);
-			InitTransition<Rereject>(StepResults.Negative, Reject);
-			InitTransition<Rereject>(StepResults.Failed, LockManualAfterRereject);
+			InitTransition<Rereject>()
+				.OnResults(LockRerejected, StepResults.Affirmative)
+				.OnResults(Reject, StepResults.Negative)
+				.OnResults(LockManualAfterRereject, StepResults.Failed);
 
-			InitTransition<LockRerejected>(Reject);
-			InitTransition<LockManualAfterRereject>(Reject);
+			InitTransition<LockRerejected>().Always(Reject);
+			InitTransition<LockManualAfterRereject>().Always(Reject);
 
-			InitTransition<Reject>(StepResults.Affirmative, LockRejected);
-			InitTransition<Reject>(StepResults.Negative, UpdateLandRegistryData);
-			InitTransition<Reject>(StepResults.Failed, LockManualAfterReject);
+			InitTransition<Reject>()
+				.OnResults(LockRejected, StepResults.Affirmative)
+				.OnResults(UpdateLandRegistryData, StepResults.Negative)
+				.OnResults(LockManualAfterReject, StepResults.Failed);
 
-			InitTransition<LockRejected>(CalculateOfferIfPossible);
-			InitTransition<UpdateLandRegistryData>(CalculateOfferIfPossible);
-			InitTransition<LockManualAfterReject>(CalculateOfferIfPossible);
+			InitTransition<LockRejected>().Always(CalculateOfferIfPossible);
+			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
+			InitTransition<LockManualAfterReject>().Always(CalculateOfferIfPossible);
 
-			InitTransition<CalculateOfferIfPossible>(StepResults.Success, Reapproval);
-			InitTransition<CalculateOfferIfPossible>(StepResults.Failed, LockManualAfterOffer);
+			InitTransition<CalculateOfferIfPossible>()
+				.OnResults(Reapproval, StepResults.Success)
+				.OnResults(LockManualAfterOffer, StepResults.Failed);
 
-			InitTransition<Reapproval>(StepResults.Affirmative, LockReapproved);
-			InitTransition<Reapproval>(StepResults.Negative, Approval);
-			InitTransition<Reapproval>(StepResults.Failed, LockManualAfterReapproval);
+			InitTransition<Reapproval>()
+				.OnResults(LockReapproved, StepResults.Affirmative)
+				.OnResults(Approval, StepResults.Negative)
+				.OnResults(LockManualAfterReapproval, StepResults.Failed);
 
-			InitTransition<LockReapproved>(StepResults.Success, Approval);
-			InitTransition<LockReapproved>(StepResults.Failed, LockManualAfterReapproval);
+			InitTransition<LockReapproved>()
+				.OnResults(Approval, StepResults.Success)
+				.OnResults(LockManualAfterReapproval, StepResults.Failed);
 
-			InitTransition<LockManualAfterReapproval>(Approval);
+			InitTransition<LockManualAfterReapproval>().Always(Approval);
 
-			InitTransition<Approval>(StepResults.Affirmative, LockApproved);
-			InitTransition<Approval>(StepResults.Negative, LockManualAfterApproval);
-			InitTransition<Approval>(StepResults.Failed, LockManualAfterApproval);
+			InitTransition<Approval>()
+				.OnResults(LockApproved, StepResults.Affirmative)
+				.OnResults(LockManualAfterApproval, StepResults.Negative, StepResults.Failed);
 
-			InitTransition<LockApproved>(StepResults.Success, LookForInvestor);
-			InitTransition<LockApproved>(StepResults.Failed, LockManualAfterApproval);
+			InitTransition<LockApproved>()
+				.OnResults(LookForInvestor, StepResults.Success)
+				.OnResults(LockManualAfterApproval, StepResults.Failed);
 
-			InitTransition<LockManualAfterApproval>(ManualIfNotDecided);
+			InitTransition<LockManualAfterApproval>().Always(ManualIfNotDecided);
 
-			InitTransition<LookForInvestor>(StepResults.Found, ManualIfNotDecided);
-			InitTransition<LookForInvestor>(StepResults.NotFound, SetPendingInvestor);
-			InitTransition<LookForInvestor>(StepResults.NotExecuted, ManualIfNotDecided);
+			InitTransition<LookForInvestor>()
+				.OnResults(ManualIfNotDecided, StepResults.Found, StepResults.NotExecuted)
+				.OnResults(SetPendingInvestor, StepResults.NotFound);
 
-			InitTransition<SetPendingInvestor>(ManualIfNotDecided);
-			InitTransition<ManualIfNotDecided>(SaveDecision);
-			InitTransition<SaveDecision>(DispatchNotifications);
-			InitTransition<DispatchNotifications>(TheLastOne);
+			InitTransition<SetPendingInvestor>().Always(ManualIfNotDecided);
+			InitTransition<ManualIfNotDecided>().Always(SaveDecision);
+			InitTransition<SaveDecision>().Always(DispatchNotifications);
+			InitTransition<DispatchNotifications>().Always(TheLastOne);
 		} // InitMachineTransitions
 
-		private void InitTransition<T>(Func<AMainStrategyStepBase> createStepFunc) where T : AMainStrategyStepBase {
-			InitTransition<T>(StepResults.Success, createStepFunc);
-		} // InitTransition
-
-		private void InitTransition<T>(
-			StepResults result,
-			Func<AMainStrategyStepBase> createStepFunc
-		) where T : AMainStrategyStepBase {
-			this.transitions.Add(new StepResult(typeof(T), result), createStepFunc);
+		private MachineTransition<T> InitTransition<T>() where T : AMainStrategyStepBase {
+			return new MachineTransition<T>(this.transitions);
 		} // InitTransition
 
 		private readonly MainStrategyContextData context;
@@ -535,6 +537,25 @@
 
 		private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> transitions;
 		private readonly SortedDictionary<string, AMainStrategyStepBase> steps;
+
+		private class MachineTransition<T> where T : AMainStrategyStepBase {
+			public MachineTransition(SortedDictionary<StepResult, Func<AMainStrategyStepBase>> transitions) {
+				this.transitions = transitions;
+			} // constructor
+
+			public void Always(Func<AMainStrategyStepBase> createStepFunc) {
+				OnResults(createStepFunc, StepResults.Success);
+			} // Always
+
+			public MachineTransition<T> OnResults(Func<AMainStrategyStepBase> createStepFunc, params StepResults[] results) {
+				foreach (StepResults result in results)
+					this.transitions.Add(new StepResult(typeof(T), result), createStepFunc);
+
+				return this;
+			} // OnResults
+
+			private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> transitions;
+		} // class MachineTransition
 	} // class MainStrategy
 } // namespace
 
