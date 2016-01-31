@@ -43,9 +43,15 @@
 
 			DB.ForEachRowSafe(
 				sr => {
-					DateTime lastUpdateTime = sr["UpdatingEnd"];
+					DateTime? lastUpdateStart = sr["UpdatingStart"];
+					DateTime? lastUpdateEnd = sr["UpdatingEnd"];
 
-					if ((now - lastUpdateTime).Days <= this.marketplaceUpdateValidityDays)
+					bool shouldUpdate = (lastUpdateStart == null) || ((
+						(lastUpdateEnd != null) &&
+						(lastUpdateEnd.Value.AddDays(this.marketplaceUpdateValidityDays) <= now)
+					));
+
+					if (!shouldUpdate)
 						return;
 
 					int mpID = sr["MpID"];

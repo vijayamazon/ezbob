@@ -15,6 +15,11 @@
 			if (args == null)
 				throw new StrategyAlert(this, "No arguments specified for the main strategy.");
 
+			this.delayReason = string.Empty;
+			this.currentStepName = "not started";
+
+			UpdateStrategyContext();
+
 			this.context = new MainStrategyContextData(args);
 			this.mailer = new StrategiesMailer();
 
@@ -32,6 +37,9 @@
 			AMainStrategyStepBase currentStep = TheFirstOne();
 
 			for ( ; ; ) {
+				this.currentStepName = currentStep.Name;
+				UpdateStrategyContext();
+
 				StepResults stepResult = currentStep.Execute();
 
 				if (stepResult == StepResults.StopMachine)
@@ -60,17 +68,23 @@
 			} // while
 		} // Execute
 
-		private void UpdateStrategyContext(string propertyName, object propertyValue) {
+		private void UpdateStrategyContext() {
+			Context.Description = string.Format("Current step is {0}.{1}", this.currentStepName, this.delayReason);
+		} // UpdateStrategyContext
+
+		private void UpdateDelayReason(string propertyName, object propertyValue) {
 			var mpNamesToUpdate = propertyValue as List<string>;
 
 			if ((mpNamesToUpdate == null) || (mpNamesToUpdate.Count < 1))
 				return;
 
-			Context.Description = string.Format(
-				"This strategy can take long time (updating {0}).",
+			this.delayReason = string.Format(
+				" This strategy can take long time (updating {0}).",
 				string.Join(", ", mpNamesToUpdate)
 			);
-		} // UpdateStrategyContext
+
+			UpdateStrategyContext();
+		} // UpdateDelayReason
 
 		private void CollectStepOutputValue(string propertyName, object propertyValue) {
 			PropertyInfo pi = this.context.GetType().GetProperty(propertyName);
@@ -171,7 +185,7 @@
 					this.context.CustomerID,
 					this.context.MarketplaceUpdateValidityDays
 				);
-				checkUpdateDataRequested.CollectOutputValue += UpdateStrategyContext;
+				checkUpdateDataRequested.CollectOutputValue += UpdateDelayReason;
 				return checkUpdateDataRequested;
 			});
 		} // CheckUpdateDataRequested
@@ -556,6 +570,9 @@
 
 			private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> transitions;
 		} // class MachineTransition
+
+		private string currentStepName;
+		private string delayReason;
 	} // class MainStrategy
 } // namespace
 

@@ -55,7 +55,7 @@
 					UnderwriterID,
 					NewCreditLineOption,
 					CashRequestOriginator.HasValue ? CashRequestOriginator.ToString() : "'UNKNOWN ORIGINATOR'",
-					CashRequestID,
+					(long)CashRequestID,
 					NLCashRequestID,
 					Tag
 				);
@@ -82,6 +82,11 @@
 		} // UpdateData
 
 		public AutoDecisionResponse AutoDecisionResponse { get; private set; }
+
+		public int ProposedAmount {
+			get { return AutoDecisionResponse.ProposedAmount; }
+			set { AutoDecisionResponse.ProposedAmount = value; }
+		} // ProposedAmount
 
 		public int UnderwriterID { get { return this.arguments.UnderwriterID; } }
 

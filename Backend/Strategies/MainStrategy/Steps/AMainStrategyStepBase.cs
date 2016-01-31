@@ -23,14 +23,14 @@
 				: string.Compare(GetType().FullName, other.GetType().FullName, StringComparison.InvariantCulture);
 		} // CompareTo
 
+		public virtual string Name { get { return string.Format("'{0}'", GetType().Name); } }
+
 		protected AMainStrategyStepBase(string outerContextDescription) {
 			if (string.IsNullOrWhiteSpace(outerContextDescription))
 				throw new ArgumentNullException("outerContextDescription", "Context description not specified.");
 
 			OuterContextDescription = outerContextDescription;
 		} // constructor
-
-		protected virtual string Name { get { return string.Format("'{0}'", GetType().Name); } }
 
 		protected virtual ASafeLog Log { get { return Library.Instance.Log; } }
 
