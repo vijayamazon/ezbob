@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
+	using ConfigManager;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.CreditSafe;
@@ -107,19 +108,17 @@
 					} else
 						experianError = oExperianData.Error;
 
-				    if (!oExperianData.CacheHit) {
-				        try {
-				            if (this.isLimited) {
-				                ServiceLogCreditSafeLtd LtdStra = new ServiceLogCreditSafeLtd(this.experianRefNum, this.customerId);
-				                LtdStra.Execute();
-				            } else {
-				                ServiceLogCreditSafeNonLtd NonLtdStra = new ServiceLogCreditSafeNonLtd(this.customerId);
-				                NonLtdStra.Execute();
-				            }
-				        } catch (Exception e) {
-				            Log.Error(e, "CreditSafeLtd/NonLtd NonCachHit failed for unexpected reason");
-				        }
-				    }
+					if (!oExperianData.CacheHit && CurrentValues.Instance.CreditSafeEnabled) {
+						try {
+							AStrategy stra = this.isLimited
+								? (AStrategy)new ServiceLogCreditSafeLtd(this.experianRefNum, this.customerId)
+								: (AStrategy)new ServiceLogCreditSafeNonLtd(this.customerId);
+
+							stra.Execute();
+						} catch (Exception e) {
+							Log.Error(e, "CreditSafeLtd/NonLtd NonCachHit failed for unexpected reason");
+						} // try
+					} // if
 				} // if
 			} // if
 
