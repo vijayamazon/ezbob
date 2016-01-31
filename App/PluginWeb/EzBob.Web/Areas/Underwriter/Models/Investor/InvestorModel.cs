@@ -48,7 +48,8 @@
 					BankAccountName = x.BankAccountName,
 					AccountType = x.AccountType.InvestorAccountTypeID,
 					AccountTypeStr = x.AccountType.Name,
-					BankSortCode = x.BankCode
+					BankSortCode = x.BankCode,
+                     TimeStamp = x.Timestamp
 				})
 			};
 

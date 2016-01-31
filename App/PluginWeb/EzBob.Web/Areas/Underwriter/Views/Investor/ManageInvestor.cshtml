@@ -49,7 +49,7 @@
                                                 <td><%-c.ContactMobile%></td>
                                                 <td><%-c.ContactOfficeNumber%></td>
                                                 <td><%-c.Comment%></td>
-                                                <td><%-moment(c.TimeStamp).format('L')%></td>
+                                                <td><%-EzBob.formatDateUK(c.TimeStamp)%></td>
                                                 <td>
                                                     <div class="Investor-primary-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(c.IsPrimary ? 'checked':'')%> />
@@ -107,7 +107,7 @@
                                                 <td><%-b.BankAccountNumber%></td>
                                                 <td><%-b.BankAccountName%></td>
                                                 <td><%-b.BankSortCode%></td>
-                                                <td><%-moment(b.TimeStamp).format('L')%></td>
+                                                <td><%-EzBob.formatDateUK(b.TimeStamp)%></td>
                                                 <td>
                                                     <div class="Investor-active-bank Investor-active-bank-<%-b.AccountTypeStr%> make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
                                                         <input type="checkbox" <%-(b.IsActive ? 'checked':'')%> />
