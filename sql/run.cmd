@@ -2,4 +2,4 @@
 
 set MY_PATH=%~dp0
 
-%MY_PATH%_inctool\Dabinuto.exe --force %*
+%MY_PATH%_inctool\Dabinuto.exe %*
