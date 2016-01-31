@@ -7,6 +7,7 @@
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
@@ -265,15 +266,15 @@
 				uwDecision
 			);
 
-			new MainStrategy(
-				1, // this is an underwriter ID that is used for auto decisions
-				this.customerID,
-				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
-				0,
-				null,
-				this.cashRequestID,
-				null
-			).Execute();
+			new MainStrategy(new MainStrategyArguments{
+				UnderwriterID = 1, // this is an underwriter ID that is used for auto decisions
+				CustomerID = this.customerID,
+				NewCreditLine = NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+				AvoidAutoDecision = 0,
+				FinishWizardArgs = null,
+				CashRequestID = this.cashRequestID,
+				CashRequestOriginator = null
+			}).Execute();
 
 			Log.Debug(
 				"Running auto decision for customer {0}, last cash request (id: {1}) complete.",
