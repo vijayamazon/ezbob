@@ -13,7 +13,7 @@
 	internal class CreateFindCashRequest : AOneExitStep {
 		public CreateFindCashRequest(
 			string outerContextDescription,
-			InternalCashRequestID cashRequestID,
+			long cashRequestID,
 			CashRequestOriginator? cashRequestOriginator,
 			int customerID,
 			string customerFullName,
@@ -23,7 +23,7 @@
 			int underwriterID
 		) : base(outerContextDescription) {
 			CashRequestID = cashRequestID;
-			NLCashRequestID = new InternalCashRequestID(0);
+			NLCashRequestID = 0;
 
 			this.customerID = customerID;
 			this.customerFullName = customerFullName;
@@ -37,21 +37,21 @@
 		} // constructor
 
 		[StepOutput]
-		public InternalCashRequestID CashRequestID { get; private set; }
+		public long CashRequestID { get; private set; }
 
 		[StepOutput]
-		public InternalCashRequestID NLCashRequestID { get; private set; }
+		public long NLCashRequestID { get; private set; }
 
 		[StepOutput]
 		public bool HasCashRequest { get { return true; } }
 
 		protected override void ExecuteStep() {
-			if (CashRequestID.HasValue)
+			if (CashRequestID.HasValue())
 				Find();
 			else
 				Create();
 
-			if (CashRequestID.LacksValue || NLCashRequestID.LacksValue) {
+			if (CashRequestID.LacksValue() || NLCashRequestID.LacksValue()) {
 				throw new CreateFindCashRequestException(
 					"No cash request to update (neither specified nor created) for {0}.",
 					OuterContextDescription
@@ -73,7 +73,7 @@
 				);
 
 				if (!sr.IsEmpty) {
-					CashRequestID.Value = sr["CashRequestID"];
+					CashRequestID = sr["CashRequestID"];
 
 					NLCashRequestAdd();
 
@@ -90,8 +90,8 @@
 					this.transaction.Rollback();
 
 				Log.Alert(e, "Failed to create cash request.");
-				CashRequestID.Value = 0;
-				NLCashRequestID.Value = 0;
+				CashRequestID = 0;
+				NLCashRequestID = 0;
 			} // try
 		} // Create
 
@@ -130,14 +130,14 @@
 					new QueryParameter("@CustomerID", this.customerID)
 				);
 
-				NLCashRequestID.Value = DB.ExecuteScalar<long>(
+				NLCashRequestID = DB.ExecuteScalar<long>(
 					this.transaction,
 					"NL_CashRequestGetByOldID",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@OldCashRequestID", CashRequestID.Value)
+					new QueryParameter("@OldCashRequestID", CashRequestID)
 				);
 
-				if (NLCashRequestID.LacksValue)
+				if (NLCashRequestID.LacksValue())
 					NLCashRequestAdd();
 
 				this.transaction.Commit();
@@ -146,8 +146,8 @@
 					this.transaction.Rollback();
 
 				Log.Alert(e, "Failed to find cash request.");
-				CashRequestID.Value = 0;
-				NLCashRequestID.Value = 0;
+				CashRequestID = 0;
+				NLCashRequestID = 0;
 			} // try
 		} // Find
 
@@ -165,7 +165,7 @@
 			nlAddCashRequest.Context.UserID = this.underwriterID;
 			nlAddCashRequest.Execute();
 
-			NLCashRequestID.Value = nlAddCashRequest.CashRequestID;
+			NLCashRequestID = nlAddCashRequest.CashRequestID;
 		} // NLCashRequestAdd
 
 		private readonly int customerID;

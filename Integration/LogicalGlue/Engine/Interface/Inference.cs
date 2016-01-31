@@ -53,7 +53,24 @@
 		} // ModelOutputs
 
 		[DataMember]
-		public EtlData Etl { get; set; }
+		public EtlData Etl {
+			get {
+				if (this.etl == null)
+					this.etl = new EtlData();
+
+				return this.etl;
+			} // get
+
+			set {
+				if ((this.etl == null) || (value == null))
+					this.etl = new EtlData();
+
+				if (value != null) {
+					this.etl.Code = value.Code;
+					this.etl.Message = value.Message;
+				} // if
+			} // set
+		} // Etl
 
 		[DataMember]
 		public InferenceError Error { get; set; }
@@ -79,5 +96,6 @@
 		} // ToString
 
 		private SortedDictionary<ModelNames, ModelOutput> modelOutputs;
+		private EtlData etl;
 	} // class Inference
 } // namespace

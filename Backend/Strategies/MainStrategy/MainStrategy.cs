@@ -114,13 +114,9 @@
 		private void CollectStepOutputValue(string propertyName, object propertyValue) {
 			PropertyInfo pi = this.context.GetType().GetProperty(propertyName);
 
-			if (pi.PropertyType == typeof(InternalCashRequestID)) {
-				InternalCashRequestID dst = (InternalCashRequestID)pi.GetValue(this.context);
-				InternalCashRequestID src = (InternalCashRequestID)propertyValue;
-				dst.Value = src.Value;
-			} else if (pi.PropertyType == typeof(AutoDecisionResponse)) {
+			if (pi.PropertyType == typeof(AutoDecisionResponse))
 				this.context.AutoDecisionResponse.CopyFrom((AutoDecisionResponse)propertyValue);
-			} else
+			else
 				pi.SetValue(this.context, propertyValue);
 		} // CollectStepOutputValue
 

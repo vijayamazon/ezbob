@@ -8,7 +8,7 @@
 		public ValidateInput(
 			string outerContextDescription,
 			CustomerDetails customerDetails,
-			InternalCashRequestID cashRequestID,
+			long cashRequestID,
 			CashRequestOriginator? cashRequestOriginator
 		) : base(outerContextDescription) {
 			this.customerDetails = customerDetails;
@@ -26,7 +26,7 @@
 				);
 			} // if
 
-			if (this.cashRequestID.LacksValue) {
+			if (this.cashRequestID.LacksValue()) {
 				if (this.cashRequestOriginator == null) { // Should never happen but just in case...
 					throw new InvalidInputException(
 						"Neither cash request id nor cash request originator specified for customer {0} " +
@@ -39,13 +39,13 @@
 					"ValidateCustomerAndCashRequest",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@CustomerID", this.customerDetails.RequestedID),
-					new QueryParameter("@CashRequestID", this.cashRequestID.Value)
+					new QueryParameter("@CashRequestID", this.cashRequestID)
 				);
 
 				if (!isMatch) {
 					throw new InvalidInputException(
 						"Cash request id {0} does not belong to customer {1}.",
-						this.cashRequestID.Value,
+						this.cashRequestID,
 						this.customerDetails.RequestedID
 					);
 				} // if
@@ -53,7 +53,7 @@
 		} // ExecuteStep
 
 		private readonly CustomerDetails customerDetails;
-		private readonly InternalCashRequestID cashRequestID;
+		private readonly long cashRequestID;
 		private readonly CashRequestOriginator? cashRequestOriginator;
 	} // class ValidateInput
 } // namespace
