@@ -15,7 +15,7 @@
 		public virtual string Description { get; set; }
 
 		public override string ToString() {
-			return string.Format("Amount: {0}, Date: {1}, Amount paid: {2}, State: {3}", Amount, Date, AmountPaid, State);
+			return string.Format("Amount: {0}, Date: {1}, Amount paid: {2}, State: {3} Type: {4}", Amount, Date, AmountPaid, State, ChargesType.Name);
 		} // ToString
 
 		public virtual string GetDescription() {

@@ -238,5 +238,25 @@
 			};
 		} // AcceptRollover
 
+		public StringActionResult SaveFee(int userID, int customerID, NL_LoanFees fee) {
+			SaveFee s = new SaveFee(fee);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, fee);
+			return new StringActionResult {
+				Value = s.Error
+			};
+		} // SaveFee
+
+		public StringActionResult CancelFee(int userID, int customerID, NL_LoanFees fee) {
+			CancelFee s = new CancelFee(fee);
+			s.Context.UserID = userID;
+			s.Context.CustomerID = customerID;
+			var amd = ExecuteSync(out s, customerID, userID, fee);
+			return new StringActionResult {
+				Value = s.Error
+			};
+		} // CancelFee
+
 	} // class EzServiceImplementation
 } // namespace

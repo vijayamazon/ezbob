@@ -319,6 +319,9 @@
 				// OK
 				SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements);
 
+				// copy LoanCharges Ids into OldFeeID, NL_LoanFees
+				DB.ExecuteNonQuery(pconn, "NL_LoanFeesOldIDUpdate", CommandSpecies.StoredProcedure);
+
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, LoanID, Error, null);
 
 				// ReSharper disable once CatchAllClause

@@ -85,7 +85,7 @@
 
 				// loan fees
 				Result.Loan.Fees.Clear();
-				Result.Loan.Fees.AddRange(DB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).ToList());
+				Result.Loan.Fees.AddRange(DB.Fill<NL_LoanFees>("NL_LoanFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).ToList());
 
 				// filter cnacelled/deleted fees on GetLoanDBState strategy
 				// filter in Calculator according to CalculationDate
@@ -170,7 +170,7 @@
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				Error = ex.Message;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 				Log.Alert(ex, "Failed to load loan state.");
 			} // try
 		} // Execute

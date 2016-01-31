@@ -12,9 +12,11 @@ namespace EzBobTest {
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.Models.Alibaba;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.ValueIntervals;
+	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using NHibernate.Util;
 	using NUnit.Framework;
@@ -262,9 +264,15 @@ False*/
 		public void TestEnumByString() {
 			string s = "bank transfer";
 			Console.WriteLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s));
-
 			//NLLoanTransactionMethods e = (NLLoanTransactionMethods)Enum.Parse(typeof(NLLoanTransactionMethods), s);
 			//Console.WriteLine(e);
 		}
+
+		[Test]
+		public void IsInTest() {
+			NL_LoanFees f = new NL_LoanFees() {LoanFeeTypeID = 8};
+			Console.WriteLine(Array.Exists<NLFeeTypes>(NL_Model.NLFeeTypesEditable, element => element == (NLFeeTypes)f.LoanFeeTypeID));
+		}
+
 	} // class Misc
 } // namespace

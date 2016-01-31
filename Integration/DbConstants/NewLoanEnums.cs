@@ -34,9 +34,11 @@
 		RolloverFee = 4,
 		AdminFee = 5,
 		LatePaymentFee = 6,
-		PartialPaymentFee = 7
+		PartialPaymentFee = 7,
+		OtherCharge = 8
 	} // enum FeeTypes
 
+	
 	public enum NLScheduleStatuses {
 		[Description("Open")]
 		StillToPay = 1, // db ID

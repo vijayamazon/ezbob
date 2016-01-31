@@ -398,10 +398,11 @@
 			currentPaidInterest = 0;
 			currentPaidPrincipal = 0;
 
+			// TODO remove those from processing, not from model
 			// remove future histories, payments, late fees
-			WorkingModel.Loan.Histories.RemoveAll(h => h.EventTime.Date > CalculationDate.Date);
-			WorkingModel.Loan.Payments.RemoveAll(p => p.PaymentTime.Date > CalculationDate.Date);
-			WorkingModel.Loan.Fees.RemoveAll(f => f.LoanFeeTypeID != (int)NLFeeTypes.ArrangementFee && f.LoanFeeTypeID != (int)NLFeeTypes.ServicingFee && f.AssignTime.Date > CalculationDate.Date);
+			//WorkingModel.Loan.Histories.RemoveAll(h => h.EventTime.Date > CalculationDate.Date);
+			//WorkingModel.Loan.Payments.RemoveAll(p => p.PaymentTime.Date > CalculationDate.Date);
+			//WorkingModel.Loan.Fees.RemoveAll(f => f.LoanFeeTypeID != (int)NLFeeTypes.ArrangementFee && f.LoanFeeTypeID != (int)NLFeeTypes.ServicingFee && f.AssignTime.Date > CalculationDate.Date);
 
 			// histories => schedules
 			foreach (var h in WorkingModel.Loan.Histories) {

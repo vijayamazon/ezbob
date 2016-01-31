@@ -145,13 +145,13 @@
 				}
 
 				// disable fees
-				foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
-					DB.ExecuteNonQuery(pconn, "NL_LoanFeeDisable", CommandSpecies.StoredProcedure,
-							new QueryParameter("LoanFeeID", f.LoanFeeID),
-							new QueryParameter("DeletedByUserID", f.DeletedByUserID),
-							new QueryParameter("DisabledTime", f.DisabledTime),
-							new QueryParameter("Notes", f.Notes));
-				}
+				//foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
+				//	DB.ExecuteNonQuery(pconn, "NL_LoanFeeCancel", CommandSpecies.StoredProcedure,
+				//			new QueryParameter("LoanFeeID", f.LoanFeeID),
+				//			new QueryParameter("DeletedByUserID", f.DeletedByUserID),
+				//			new QueryParameter("DisabledTime", f.DisabledTime),
+				//			new QueryParameter("Notes", f.Notes));
+				//}
 
 				// insert fees
 				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure,

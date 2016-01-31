@@ -121,6 +121,7 @@
   <xs:complexType name="OneInvestorModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FundingLimitForNotification" type="xs:decimal" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorTypeID" type="xs:int" />

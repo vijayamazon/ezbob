@@ -62,6 +62,12 @@
 		[OperationContract]
 		StringActionResult AcceptRollover(int customerID, long loanID);
 
+		[OperationContract]
+		StringActionResult SaveFee(int userID, int customerID, NL_LoanFees fee);
+
+		[OperationContract]
+		StringActionResult CancelFee(int userID, int customerID, NL_LoanFees fee);
+
 	} // interface IEzServiceNewLoan
 
 } // namespace EzService

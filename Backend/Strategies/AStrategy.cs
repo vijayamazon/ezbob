@@ -196,7 +196,8 @@
             Error,
 			Warn,
             Info,
-            Debug
+            Debug,
+			InputInvalid
 	    }
 
     } // class AStrategy

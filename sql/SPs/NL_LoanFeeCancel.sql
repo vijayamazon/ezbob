@@ -1,9 +1,9 @@
-IF OBJECT_ID('NL_LoanFeeDisable') IS NULL
-	EXECUTE('CREATE PROCEDURE NL_LoanFeeDisable AS SELECT 1')
+IF OBJECT_ID('NL_LoanFeeCancel') IS NULL
+	EXECUTE('CREATE PROCEDURE NL_LoanFeeCancel AS SELECT 1')
 GO
 
 
-ALTER PROCEDURE NL_LoanFeeDisable
+ALTER PROCEDURE NL_LoanFeeCancel
 	@LoanFeeID BIGINT,	
 	@DeletedByUserID INT,	
 	@DisabledTime DATE,
