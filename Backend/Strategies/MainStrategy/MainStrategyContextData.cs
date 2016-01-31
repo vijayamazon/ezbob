@@ -88,6 +88,11 @@
 			set { AutoDecisionResponse.ProposedAmount = value; }
 		} // ProposedAmount
 
+		public int ApprovedAmount {
+			get { return AutoDecisionResponse.ApprovedAmount; }
+			set { AutoDecisionResponse.ApprovedAmount = value; }
+		} // ApprovedAmount
+
 		public int UnderwriterID { get { return this.arguments.UnderwriterID; } }
 
 		public int CustomerID {
