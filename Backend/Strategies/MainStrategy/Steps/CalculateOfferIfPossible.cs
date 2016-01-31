@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using AutomationCalculator.Common;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
@@ -186,8 +187,30 @@
 
 			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
 
-			if (sr.IsEmpty)
-				throw new Exception("Failed to detect default loan source.");
+			if (sr.IsEmpty || (ProposedAmount <= 0)) {
+				OfferResult = new OfferResult {
+					CustomerId = this.customerID,
+					CalculationTime = DateTime.UtcNow,
+					Amount = ProposedAmount,
+					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+
+					ScenarioName = "Internal - error occurred",
+					Period = 0,
+					LoanTypeId = 0,
+					LoanSourceId = 0,
+					InterestRate = 0,
+					SetupFee = 0,
+					Message = string.Join(" ", new List<string> {
+						sr.IsEmpty ? "Failed to detect default loan source ID." : null,
+						ProposedAmount <= 0 ? "Proposed amount is not positive." : null,
+					}.Where(s => !string.IsNullOrWhiteSpace(s))),
+					IsError = true,
+					IsMismatch = false,
+					HasDecision = false,
+				};
+
+				return;
+			} // if
 
 			int loanCount = DB.ExecuteScalar<int>(
 				"GetCustomerLoanCount",
