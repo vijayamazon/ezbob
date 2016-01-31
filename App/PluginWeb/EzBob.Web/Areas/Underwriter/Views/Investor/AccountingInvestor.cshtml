@@ -308,7 +308,7 @@
 </script>
 
 <script type="text/template" id="config-scheduler-template">
-    <div class="investor-box investor-box-borders">
+    <div class="">
         <div class="">
 
             <form id="configSchedulerForm" class="form-horizontal" action="">
@@ -316,21 +316,35 @@
 
                     <h3 class="panel-title" style="display: inline-block">Config Scheduler</h3>
 
-                    <div class="">
-                        <div class="">
-                            <div class="row">
+					<div class="investor-box investor-box-borders">
+						<div class="">
+							<div class="row">
 
-                                @EzForm.InputTextUnderwriter(this, "monthlyFundingCapital", "Periodic Tranfer of Funds for Investment in Amount of", null, "cashInput")
-                                @EzForm.InputTextUnderwriter(this, "fundsTransferSchedule", "Bank Will be transfered every", null)
-                                @EzForm.InputTextUnderwriter(this, "fundsTransferDate", "On", null)
-                                @EzForm.InputTextUnderwriter(this, "repaymentsTransferSchedule", "Repayments to be cleared", null)
+								<div style="margin-bottom: 15px">
+									<label class="config-scheduler-labels">Repayments</label>
+									<div class="config-scheduler-fields">
+										@EzForm.InputTextUnderwriter(this, "monthlyFundingCapital", "Periodic Tranfer of Funds for Investment in Amount of", null, "cashInput")
+										@EzForm.InputTextUnderwriter(this, "fundsTransferSchedule", "Bank Will be transfered every", null)
+										@EzForm.InputTextUnderwriter(this, "fundsTransferDate", "On", null)
+									</div>
+								</div>
 
-                                <button class="btn btn-primary pull-right" id="config-scheduler-cancel-btn" style="margin-right: 10px;">Cancel</button>
-                                <button class="btn btn-primary pull-right" id="config-scheduler-submit-btn" style="margin-right: 10px;">Submit</button>
+								<div style="border-bottom: 1px solid #DDDDDD; width: 58.6%"></div>
 
-                            </div>
-                        </div>
-                    </div>
+								<div style="margin-top: 30px">
+									<label class=" config-scheduler-labels">
+										Repayments
+									</label>
+									<div class="config-scheduler-fields">
+										@EzForm.InputTextUnderwriter(this, "repaymentsTransferSchedule", "Repayments to be cleared", null)
+									</div>
+								</div>
+								<button class="btn btn-primary pull-right" id="config-scheduler-submit-btn" style="margin-right: 10px;">Submit</button>
+								<button class="btn btn-primary pull-right" id="config-scheduler-cancel-btn" style="margin-right: 10px;">Cancel</button>
+
+							</div>
+						</div>
+					</div>
                 </div>
             </form>
         </div>
