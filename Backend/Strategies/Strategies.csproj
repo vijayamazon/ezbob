@@ -216,6 +216,8 @@
     <Compile Include="MainStrategy\Exceptions\CreateFindCashRequestException.cs" />
     <Compile Include="MainStrategy\Exceptions\InvalidInputException.cs" />
     <Compile Include="MainStrategy\StepResult.cs" />
+    <Compile Include="MainStrategy\Steps\AbnormalShutdownAfterHavingCashRequest.cs" />
+    <Compile Include="MainStrategy\Steps\AbnormalShutdownBeforeHavingCashRequest.cs" />
     <Compile Include="MainStrategy\Steps\AMainStrategyStepBase.cs" />
     <Compile Include="MainStrategy\Steps\AMainStrategyStep.cs" />
     <Compile Include="MainStrategy\Steps\CalculateOfferIfPossible.cs" />

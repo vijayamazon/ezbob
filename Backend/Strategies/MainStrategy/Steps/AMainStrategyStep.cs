@@ -31,7 +31,7 @@
 					OuterContextDescription
 				);
 
-				return StepResults.StopMachine;
+				return StepResults.AbnormalShutdown;
 			} // try
 		} // Execute
 

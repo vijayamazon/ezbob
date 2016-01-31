@@ -23,7 +23,7 @@
 			int underwriterID
 		) : base(outerContextDescription) {
 			CashRequestID = cashRequestID;
-			NLCashRequestID = 0;
+			NLCashRequestID = new InternalCashRequestID(0);
 
 			this.customerID = customerID;
 			this.customerFullName = customerFullName;
@@ -32,82 +32,124 @@
 			this.customerNumOfLoans = customerNumOfLoans;
 			this.underwriterID = underwriterID;
 			this.cashRequestOriginator = cashRequestOriginator ?? CashRequestOriginator.Other;
+
+			this.transaction = null;
 		} // constructor
 
 		[StepOutput]
 		public InternalCashRequestID CashRequestID { get; private set; }
 
 		[StepOutput]
-		public long NLCashRequestID { get; private set; }
+		public InternalCashRequestID NLCashRequestID { get; private set; }
+
+		[StepOutput]
+		public bool HasCashRequest { get { return true; } }
 
 		protected override void ExecuteStep() {
-			if (CashRequestID.HasValue) {
-				DB.ExecuteNonQuery(
-					"MainStrategySetCustomerIsBeingProcessed",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerID", this.customerID)
-				);
+			if (CashRequestID.HasValue)
+				Find();
+			else
+				Create();
 
-				NLCashRequestID = DB.ExecuteScalar<long>(
-					"NL_CashRequestGetByOldID",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@OldCashRequestID", CashRequestID.Value)
-				);
-
-				if (NLCashRequestID == 0L)
-					NLCashRequestAdd();
-
-				return;
-			} // if
-
-			SafeReader sr = DB.GetFirst(
-				"MainStrategyCreateCashRequest",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", this.customerID),
-				new QueryParameter("@Now", DateTime.UtcNow),
-				new QueryParameter("@Originator", this.cashRequestOriginator.ToString())
-			);
-
-			if (sr.IsEmpty)
-				throw new CreateFindCashRequestException("Cash request was not created for customer {0}.", this.customerID);
-
-			CashRequestID.Value = sr["CashRequestID"];
-
-			NLCashRequestAdd();
-
-			int cashRequestCount = sr["CashRequestCount"];
-
-			bool addOpportunity = 
-				(this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) &&
-				(this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion) &&
-				(cashRequestCount > 1);
-
-			if (addOpportunity) {
-				decimal? lastLoanAmount = sr["LastLoanAmount"];
-
-				new AddOpportunity(this.customerID,
-					new OpportunityModel {
-						Email = this.customerEmail,
-						Origin = this.customerOrigin,
-						CreateDate = DateTime.UtcNow,
-						ExpectedEndDate = DateTime.UtcNow.AddDays(7),
-						RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
-						Type = this.customerNumOfLoans == 0
-							? OpportunityType.New.DescriptionAttr()
-							: OpportunityType.Resell.DescriptionAttr(),
-						Stage = OpportunityStage.s5.DescriptionAttr(),
-						Name = this.customerFullName + cashRequestCount
-					}
-				).Execute();
-			} // if
-
-			if (CashRequestID.LacksValue) {
+			if (CashRequestID.LacksValue || NLCashRequestID.LacksValue) {
 				throw new CreateFindCashRequestException(
 					"No cash request to update (neither specified nor created) for {0}.",
 					OuterContextDescription
 				);
 			} // if
 		} // ExecuteStep
+
+		private void Create() {
+			try {
+				this.transaction = DB.GetPersistentTransaction();
+
+				SafeReader sr = DB.GetFirst(
+					this.transaction,
+					"MainStrategyCreateCashRequest",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", this.customerID),
+					new QueryParameter("@Now", DateTime.UtcNow),
+					new QueryParameter("@Originator", this.cashRequestOriginator.ToString())
+				);
+
+				if (!sr.IsEmpty) {
+					CashRequestID.Value = sr["CashRequestID"];
+
+					NLCashRequestAdd();
+
+					int cashRequestCount = sr["CashRequestCount"];
+					decimal? lastLoanAmount = sr["LastLoanAmount"];
+
+					this.transaction.Commit();
+
+					AddOpportunity(cashRequestCount, lastLoanAmount);
+				} else
+					this.transaction.Rollback();
+			} catch (Exception e) {
+				if (this.transaction != null)
+					this.transaction.Rollback();
+
+				Log.Alert(e, "Failed to create cash request.");
+				CashRequestID.Value = 0;
+				NLCashRequestID.Value = 0;
+			} // try
+		} // Create
+
+		private void AddOpportunity(int cashRequestCount, decimal? lastLoanAmount) {
+			bool addOpportunity = 
+				(this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) &&
+				(this.cashRequestOriginator != CashRequestOriginator.ForcedWizardCompletion) &&
+				(cashRequestCount > 1);
+
+			if (!addOpportunity)
+				return;
+
+			new AddOpportunity(this.customerID,
+				new OpportunityModel {
+					Email = this.customerEmail,
+					Origin = this.customerOrigin,
+					CreateDate = DateTime.UtcNow,
+					ExpectedEndDate = DateTime.UtcNow.AddDays(7),
+					RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
+					Type =
+						(this.customerNumOfLoans == 0 ? OpportunityType.New : OpportunityType.Resell).DescriptionAttr(),
+					Stage = OpportunityStage.s5.DescriptionAttr(),
+					Name = this.customerFullName + cashRequestCount
+				}
+			).Execute();
+		} // AddOpportunity
+
+		private void Find() {
+			try {
+				this.transaction = DB.GetPersistentTransaction();
+
+				DB.ExecuteNonQuery(
+					this.transaction,
+					"MainStrategySetCustomerIsBeingProcessed",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", this.customerID)
+				);
+
+				NLCashRequestID.Value = DB.ExecuteScalar<long>(
+					this.transaction,
+					"NL_CashRequestGetByOldID",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@OldCashRequestID", CashRequestID.Value)
+				);
+
+				if (NLCashRequestID.LacksValue)
+					NLCashRequestAdd();
+
+				this.transaction.Commit();
+			} catch (Exception e) {
+				if (this.transaction != null)
+					this.transaction.Rollback();
+
+				Log.Alert(e, "Failed to find cash request.");
+				CashRequestID.Value = 0;
+				NLCashRequestID.Value = 0;
+			} // try
+		} // Find
 
 		private void NLCashRequestAdd() {
 			AddCashRequest nlAddCashRequest = new AddCashRequest(new NL_CashRequests {
@@ -116,12 +158,14 @@
 				OldCashRequestID = CashRequestID,
 				RequestTime = DateTime.UtcNow,
 				UserID = this.underwriterID,
-			});
+			}) {
+				Transaction = this.transaction,
+			};
 			nlAddCashRequest.Context.CustomerID = this.customerID;
 			nlAddCashRequest.Context.UserID = this.underwriterID;
 			nlAddCashRequest.Execute();
 
-			NLCashRequestID = nlAddCashRequest.CashRequestID;
+			NLCashRequestID.Value = nlAddCashRequest.CashRequestID;
 		} // NLCashRequestAdd
 
 		private readonly int customerID;
@@ -131,5 +175,7 @@
 		private readonly string customerOrigin;
 		private readonly int customerNumOfLoans;
 		private readonly CashRequestOriginator cashRequestOriginator;
+
+		private ConnectionWrapper transaction;
 	} // class CreateFindCashRequest
 } // namespace

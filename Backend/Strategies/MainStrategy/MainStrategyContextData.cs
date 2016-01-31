@@ -45,6 +45,11 @@
 			);
 
 			CustomerDetails = new Helpers.CustomerDetails(this.arguments.CustomerID);
+
+			HasCashRequest = false;
+			ShuttingDownUbnormally = false;
+			DelayReason = string.Empty;
+			CurrentStepName = "not started";
 		} // constructor
 
 		public string Description {
@@ -128,6 +133,11 @@
 
 		public OfferResult OfferResult { get; set; }
 		public int LoanSourceID { get; set; }
+
+		public string CurrentStepName { get; set; }
+		public string DelayReason { get; set; }
+		public bool ShuttingDownUbnormally { get; set; }
+		public bool HasCashRequest { get; set; }
 
 		public bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
 		public bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }

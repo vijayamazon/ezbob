@@ -48,4 +48,16 @@
 		) : base(outerContextDescription, autoDecisionResponse) {
 		} // constructor
 	} // class LockManualAfterApproval
+
+	internal class ForceManual : ALockManual {
+		public ForceManual(
+			string outerContextDescription,
+			AutoDecisionResponse autoDecisionResponse
+		) : base(outerContextDescription, autoDecisionResponse) {
+		} // constructor
+
+		protected override void ExecuteStep() {
+			LockManual();
+		} // ExecuteStep
+	} // class ForceManual
 } // namespace

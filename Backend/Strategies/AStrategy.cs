@@ -1,19 +1,19 @@
 ﻿namespace Ezbob.Backend.Strategies {
-    using System;
+	using System;
 	using System.Threading.Tasks;
-    using ConfigManager;
-    using Ezbob.Backend.Strategies.Exceptions;
-    using Ezbob.Backend.Strategies.NewLoan;
-    using Ezbob.Database;
-    using Ezbob.Utils;
-    using EzBob.Models.Marketplaces.Builders;
-    using EZBob.DatabaseLib;
-    using EZBob.DatabaseLib.Model.Database;
+	using ConfigManager;
+	using Ezbob.Backend.Strategies.Exceptions;
+	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Database;
+	using Ezbob.Utils;
+	using EzBob.Models.Marketplaces.Builders;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Extensions;
-    using StructureMap;
-    using Newtonsoft.Json;
+	using StructureMap;
+	using Newtonsoft.Json;
 
-    public abstract class AStrategy {
+	public abstract class AStrategy {
 		static AStrategy() {
 			ms_oLock = new object();
 			ms_bDefaultsAreReady = false;
@@ -136,6 +136,42 @@
 			} // get
 		} // UnderwriterSite
 
+		protected enum LogType {
+			DataExsistense,
+			Error,
+			Warn,
+			Info,
+			Debug,
+		} // LogType
+
+		protected virtual void NL_AddLog(
+			LogType logType,
+			string description,
+			object args,
+			object result,
+			string exception,
+			string stacktrace
+		) {
+			var nlLog = new NL_Log {
+				Exception = exception,
+				Description = description,
+				Referrer = Name,
+				TimeStamp = DateTime.Now,
+				Result = JsonConvert.SerializeObject(result, MiscUtils.GetJsonDBFormat()),
+				Sevirity = logType.ToString(),
+				Stacktrace = stacktrace,
+				Args = JsonConvert.SerializeObject(args, MiscUtils.GetJsonDBFormat()),
+				UserID = Context.UserID,
+				CustomerID = Context.CustomerID,
+			};
+
+			DB.ExecuteScalar<long>(
+				"NL_AddLog",
+				CommandSpecies.StoredProcedure,
+				DB.CreateTableParameter("Tbl", nlLog)
+			);
+		} // NL_AddLog
+
 		private string RemoveLastSlash(string sResult) {
 			while (sResult.EndsWith("/"))
 				sResult = sResult.Substring(0, sResult.Length - 1);
@@ -161,43 +197,5 @@
 
 		private static readonly object ms_oLock;
 		private static bool ms_bDefaultsAreReady;
-
-        public void NL_AddLog(LogType logType,
-                                string description,
-                                object args,
-                                object result,
-                                string exception,
-                                string stacktrace) 
-        {
-            var sevirity = GetLogSection(logType);
-
-            var nlLog = new NL_Log() {
-                Exception = exception,
-                Description = description,
-                Referrer = this.Name,
-                TimeStamp = DateTime.Now,
-                Result = JsonConvert.SerializeObject(result, MiscUtils.GetJsonDBFormat()),                
-                Sevirity = sevirity,
-                Stacktrace = stacktrace,
-                Args = JsonConvert.SerializeObject(args, MiscUtils.GetJsonDBFormat()),
-                UserID = this.Context.UserID,
-                CustomerID = this.Context.CustomerID,                
-            };
-
-            var logId = DB.ExecuteScalar<long>("NL_AddLog", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Log>("Tbl", nlLog));
-        }
-
-	    public static string GetLogSection(LogType logType) {
-	        return logType.ToString();
-	    }
-
-	    public enum LogType {
-	        DataExsistense,
-            Error,
-			Warn,
-            Info,
-            Debug
-	    }
-
-    } // class AStrategy
+	} // class AStrategy
 } // namespace Ezbob.Backend.Strategies

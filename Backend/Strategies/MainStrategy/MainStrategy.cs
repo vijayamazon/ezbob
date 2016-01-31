@@ -15,9 +15,6 @@
 			if (args == null)
 				throw new StrategyAlert(this, "No arguments specified for the main strategy.");
 
-			this.delayReason = string.Empty;
-			this.currentStepName = "not started";
-
 			UpdateStrategyContext();
 
 			this.context = new MainStrategyContextData(args);
@@ -37,15 +34,31 @@
 			AMainStrategyStepBase currentStep = TheFirstOne();
 
 			for ( ; ; ) {
-				this.currentStepName = currentStep.Name;
+				this.context.CurrentStepName = currentStep.Name;
 				UpdateStrategyContext();
 
 				StepResults stepResult = currentStep.Execute();
 
-				if (stepResult == StepResults.StopMachine)
+				if (stepResult == StepResults.NormalShutdown)
 					break;
 
-				var nextStepKey = new StepResult(currentStep.GetType(), stepResult);
+				StepResult nextStepKey;
+
+				if (stepResult == StepResults.AbnormalShutdown) {
+					if (this.context.ShuttingDownUbnormally) {
+						Log.Alert(
+							"Something went terribly wrong: " +
+							"abnormal shutdown request while handling previous abnormal shutdown."
+						);
+
+						break;
+					} // if
+
+					this.context.ShuttingDownUbnormally = true;
+
+					nextStepKey = OnAbnormalShutdown();
+				} else
+					nextStepKey = new StepResult(currentStep.GetType(), stepResult);
 
 				if (!this.transitions.ContainsKey(nextStepKey)) {
 					Log.Alert("Aborted: next step not specified for result {0}.", nextStepKey);
@@ -68,8 +81,20 @@
 			} // while
 		} // Execute
 
+		private StepResult OnAbnormalShutdown() {
+			Type handlerStepType = this.context.HasCashRequest
+				? typeof(AbnormalShutdownAfterHavingCashRequest)
+				: typeof(AbnormalShutdownBeforeHavingCashRequest);
+
+			return new StepResult(handlerStepType, StepResults.Success);
+		} // OnAbnormalShutdown
+
 		private void UpdateStrategyContext() {
-			Context.Description = string.Format("Current step is {0}.{1}", this.currentStepName, this.delayReason);
+			Context.Description = string.Format(
+				"Current step is {0}.{1}",
+				this.context.CurrentStepName,
+				this.context.DelayReason
+			);
 		} // UpdateStrategyContext
 
 		private void UpdateDelayReason(string propertyName, object propertyValue) {
@@ -78,7 +103,7 @@
 			if ((mpNamesToUpdate == null) || (mpNamesToUpdate.Count < 1))
 				return;
 
-			this.delayReason = string.Format(
+			this.context.DelayReason = string.Format(
 				" This strategy can take long time (updating {0}).",
 				string.Join(", ", mpNamesToUpdate)
 			);
@@ -464,7 +489,14 @@
 
 		private AMainStrategyStepBase TheLastOne() {
 			return FindOrCreateStep(() => new TheLastOne(this.context.Description));
-		} // SaveDecision
+		} // TheLastOne
+
+		private AMainStrategyStepBase ForceManual() {
+			return FindOrCreateStep(() => new ForceManual(
+				this.context.Description,
+				this.context.AutoDecisionResponse
+			));
+		} // ForceManual
 
 		private void InitMachineTransitions() {
 			InitTransition<TheFirstOne>().Always(ValidateInput);
@@ -530,7 +562,7 @@
 				.OnResults(LookForInvestor, StepResults.Success)
 				.OnResults(LockManualAfterApproval, StepResults.Failed);
 
-			InitTransition<LockManualAfterApproval>().Always(ManualIfNotDecided);
+			InitTransition<LockManualAfterApproval>().Always(LookForInvestor);
 
 			InitTransition<LookForInvestor>()
 				.OnResults(ManualIfNotDecided, StepResults.Found, StepResults.NotExecuted)
@@ -540,6 +572,10 @@
 			InitTransition<ManualIfNotDecided>().Always(SaveDecision);
 			InitTransition<SaveDecision>().Always(DispatchNotifications);
 			InitTransition<DispatchNotifications>().Always(TheLastOne);
+
+			InitTransition<AbnormalShutdownBeforeHavingCashRequest>().Always(TheLastOne);
+			InitTransition<AbnormalShutdownAfterHavingCashRequest>().Always(ForceManual);
+			InitTransition<ForceManual>().Always(SaveDecision);
 		} // InitMachineTransitions
 
 		private MachineTransition<T> InitTransition<T>() where T : AMainStrategyStepBase {
@@ -570,9 +606,6 @@
 
 			private readonly SortedDictionary<StepResult, Func<AMainStrategyStepBase>> transitions;
 		} // class MachineTransition
-
-		private string currentStepName;
-		private string delayReason;
 	} // class MainStrategy
 } // namespace
 

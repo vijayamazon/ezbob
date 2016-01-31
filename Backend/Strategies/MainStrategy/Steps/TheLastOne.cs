@@ -5,7 +5,7 @@
 
 		public override StepResults Execute() {
 			Log.Msg("Main strategy is complete for {0}.", OuterContextDescription);
-			return StepResults.StopMachine;
+			return StepResults.NormalShutdown;
 		} // Execute
 	} // class TheLastOne
 } // namespace

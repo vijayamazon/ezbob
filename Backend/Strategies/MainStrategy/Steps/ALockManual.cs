@@ -14,12 +14,16 @@
 			if (this.autoDecisionResponse.DecisionIsLocked)
 				return;
 
+			LockManual();
+		} // ExecuteStep
+
+		protected virtual void LockManual() {
 			this.autoDecisionResponse.DecisionIsLocked = true;
 
 			this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 			this.autoDecisionResponse.UserStatus = Status.Manual;
 			this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
-		} // ExecuteStep
+		} // LockManual
 
 		private readonly AutoDecisionResponse autoDecisionResponse;
 	} // class ALockManual

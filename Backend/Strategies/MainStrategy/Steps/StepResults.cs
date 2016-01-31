@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
 	internal enum StepResults {
-		StopMachine,
+		NormalShutdown,
+		AbnormalShutdown,
 		Affirmative,
 		Negative,
 		Failed,
