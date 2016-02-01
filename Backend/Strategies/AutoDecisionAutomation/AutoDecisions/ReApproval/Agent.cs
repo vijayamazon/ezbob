@@ -18,10 +18,18 @@
 
 		public virtual int ApprovedAmount { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, long? nlCashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(
+			int nCustomerID,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection oDB,
+			ASafeLog oLog
+		) {
 			DB = oDB;
 			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
+			this.tag = tag;
 		} // constructor
 
 		public virtual Agent Init() {
@@ -42,6 +50,8 @@
 				CurrentValues.Instance.MailSenderName
 			);
 
+			Trail.SetTag(this.tag);
+
 			Funds = new AvailableFunds();
 
 			Cfg = InitCfg();
@@ -49,10 +59,8 @@
 			return this;
 		} // Init
 
-		public virtual void MakeAndVerifyDecision(string tag) {
+		public override void MakeAndVerifyDecision() {
 			try {
-				Trail.SetTag(tag);
-
 				RunPrimary();
 
 				AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
@@ -83,24 +91,27 @@
 					} // if
 				} // if
 
+				Output.ApprovedAmount = ApprovedAmount;
+
 				Trail.Save(DB, oSecondary.Trail);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during re-approval.");
 				StepFailed<ExceptionThrown>().Init(e);
+				Output.ApprovedAmount = 0;
 			} // try
 		} // MakeAndVerifyDecision
 
-		public bool ExceptionWhileDeciding {
+		public override bool WasException {
 			get { return Trail.FindTrace<ExceptionThrown>() != null; }
-		} // ExceptionWhileDeciding
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return Trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public virtual DateTime Now { get; protected set; }
 
-		public virtual DateTime AppValidFor { get { return Now.AddDays(MetaData.OfferLength); } }
-
-		public bool IsEmailSendingBanned { get { return MetaData.IsEmailSendingBanned; } }
-
-		public long LastApprovedCashRequestID { get { return MetaData.LacrID; } }
+		public AutoReapprovalOutput Output { get; private set; }
 
 		protected virtual Configuration InitCfg() {
 			return new Configuration(DB, Log);
@@ -152,6 +163,12 @@
 			Trail.MyInputData.AutoReApproveMaxLatePayment = Cfg.MaxLatePayment;
 			Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans = Cfg.MaxNumOfOutstandingLoans;
 			Trail.MyInputData.MinLoan = ConfigManager.CurrentValues.Instance.MinLoan;
+
+			Output = new AutoReapprovalOutput {
+				AppValidFor = Now.AddDays(MetaData.OfferLength),
+				IsEmailSendingBanned = MetaData.IsEmailSendingBanned,
+				LastApprovedCashRequestID = MetaData.LacrID,
+			};
 		} // GatherData
 
 		protected virtual AvailableFunds Funds { get; set; }
@@ -355,5 +372,7 @@
 		private T StepDone<T>() where T : ATrace {
 			return Trail.Affirmative<T>(false);
 		} // StepFailed
+
+		private readonly string tag;
 	} // class Agent
 } // namespace

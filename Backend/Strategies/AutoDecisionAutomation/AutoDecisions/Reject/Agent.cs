@@ -27,11 +27,19 @@
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, long? nlCashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(
+			int nCustomerID,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection oDB,
+			ASafeLog oLog
+		) {
 			DB = oDB;
 			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
 			HasApprovalChance = false;
+			this.tag = tag;
 		} // constructor
 
 		public virtual Agent Init() {
@@ -44,6 +52,7 @@
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+			Trail.SetTag(this.tag);
 
 			Now = DateTime.UtcNow;
 			Cfg = InitCfg();
@@ -59,11 +68,9 @@
 
 		public bool HasApprovalChance { get; private set; }
 
-		public virtual void MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public override void MakeAndVerifyDecision() {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = null;
 			try {
-				Trail.SetTag(tag);
-
 				RunPrimary();
 
 				oSecondary = RunSecondary();
@@ -80,8 +87,7 @@
 						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
 				} // if
 
-				WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
-
+				WasMismatch = !Trail.EqualsTo(oSecondary.Trail);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
@@ -89,6 +95,19 @@
 
 			Trail.Save(DB, oSecondary == null ? null : oSecondary.Trail);
 		} // MakeAndVerifyDecision
+
+		public override bool WasException {
+			get {
+				if (Trail == null)
+					return false;
+
+				return Trail.FindTrace<ExceptionThrown>() != null;
+			} // get
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return Trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public virtual void RunPrimaryOnly() {
 			RunPrimary();
@@ -751,5 +770,6 @@
 
 		private decimal quarterTurnover;
 		private decimal annualTurnover;
+		private readonly string tag;
 	} // class Agent
 } // namespace

@@ -38,11 +38,14 @@
 				(EZBob.DatabaseLib.Model.Database.Medal)this.args.Medal,
 				this.args.MedalType,
 				this.args.TurnoverType,
+				this.args.Tag,
 				this.args.DB,
 				this.args.Log
 			);
 
 			this.secondaryAgent = new SecondaryAgent(this.args);
+
+			CompareTrailsQuietly = false;
 		} // constructor
 
 		public virtual Agent Init() {
@@ -52,15 +55,17 @@
 				return this;
 		} // Init
 
-		public void MakeAndVerifyDecision(bool quiet = false) {
+		public bool CompareTrailsQuietly { get; set; }
+
+		public override void MakeAndVerifyDecision() {
 			try {
-				this.trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
+				this.trail.UniqueID = this.args.TrailUniqueID;
 
 				RunPrimary();
 
 				this.secondaryAgent.MakeDecision();
 
-				WasMismatch = !this.trail.EqualsTo(this.secondaryAgent.Trail, quiet);
+				WasMismatch = !this.trail.EqualsTo(this.secondaryAgent.Trail, CompareTrailsQuietly);
 
 				CheckSameAmount();
 			} catch (Exception e) {
@@ -71,9 +76,13 @@
 			this.trail.Save(DB, this.secondaryAgent.Trail);
 		} // MakeAndVerifyDecision
 
-		public bool ExceptionWhileDeciding {
+		public override bool WasException {
 			get { return this.trail.FindTrace<ExceptionThrown>() != null; }
-		} // ExceptionWhileDeciding
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return this.trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public ApprovalTrail Trail {
 			get { return this.trail; }

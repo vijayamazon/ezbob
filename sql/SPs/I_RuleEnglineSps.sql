@@ -244,10 +244,16 @@ ALTER PROCEDURE I_GetInvestorMonthlyFundingCapital
  @InvestorID int
 AS
 BEGIN
-  SELECT
-    MonthlyFundingCapital
-  FROM I_Investor
-  WHERE InvestorID = @InvestorID
+	DECLARE @MonthlyFundingCapital DECIMAL(18,6)
+	SELECT
+		@MonthlyFundingCapital = isnull(MonthlyFundingCapital,0)
+	FROM 
+		I_Investor
+	WHERE 
+		InvestorID = @InvestorID
+	-------------------------------------------
+	SELECT 
+		isnull(@MonthlyFundingCapital, 0) MonthlyFundingCapital
 END
 GO
 

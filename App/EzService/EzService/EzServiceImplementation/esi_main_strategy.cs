@@ -59,15 +59,17 @@
 				)
 			);
 
-			return new ExecuteArguments(
-				underwriterId,
-				customerId,
-				newCreditLine,
-				avoidAutoDescison,
-				null,
-				cashRequestID,
-				cashRequestOriginator
-			) {
+			var mainStrategyArgs = new MainStrategyArguments {
+				UnderwriterID = underwriterId,
+				CustomerID = customerId,
+				NewCreditLine = newCreditLine,
+				AvoidAutoDecision = avoidAutoDescison,
+				FinishWizardArgs = null,
+				CashRequestID = cashRequestID,
+				CashRequestOriginator = cashRequestOriginator,
+			};
+
+			return new ExecuteArguments(mainStrategyArgs) {
 				CustomerID = customerId,
 				UserID = underwriterId,
 				StrategyType = typeof(MainStrategy),

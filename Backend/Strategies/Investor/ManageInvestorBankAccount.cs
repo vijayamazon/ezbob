@@ -6,8 +6,9 @@
 	using Ezbob.Database;
 
 	public class ManageInvestorBankAccount : AStrategy {
-		public ManageInvestorBankAccount(InvestorBankAccountModel bank) {
+		public ManageInvestorBankAccount(int underwriterID,InvestorBankAccountModel bank) {
 			this.bank = bank;
+            this.underwriterID = underwriterID;
 		}//ctor
 
 		public override string Name { get { return "ManageInvestorBankAccount"; } }
@@ -32,6 +33,7 @@
 					InvestorBankAccountID = this.bank.InvestorBankAccountID,
 					RepaymentKey = this.bank.RepaymentKey,
 					InvestorID = this.bank.InvestorID,
+                    UserID=this.underwriterID        
 				};
 
 				DB.ExecuteNonQuery(con, this.bank.InvestorBankAccountID == 0 ? "I_InvestorBankAccountSave" : "I_InvestorBankAccountUpdate", 
@@ -50,6 +52,7 @@
 			Log.Info("Manage investor {0} bank data into DB complete.", this.bank.InvestorID);
 		}//Execute
 
+        private readonly int underwriterID;
 		public bool Result { get; set; }
 		private readonly InvestorBankAccountModel bank;
 	}//ManageInvestorBankAccount

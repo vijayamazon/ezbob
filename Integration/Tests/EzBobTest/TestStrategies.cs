@@ -26,7 +26,6 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
-	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.Postcode;
 	using Ezbob.Backend.Strategies.Reports;
@@ -203,15 +202,15 @@
 
 		[Test]
 		public void test_mainstrat() {
-			var ms = new MainStrategy(
-				1,
-				14036,
-				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
-				0,
-				null,
-				null,
-				CashRequestOriginator.Other
-			);
+			var ms = new MainStrategy(new MainStrategyArguments{
+				UnderwriterID = 1,
+				CustomerID = 14036,
+				NewCreditLine = NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+				AvoidAutoDecision = 0,
+				FinishWizardArgs = null,
+				CashRequestID = null,
+				CashRequestOriginator = CashRequestOriginator.Other
+			});
 			ms.Execute();
 		}
 

@@ -28,10 +28,10 @@
 			Medal medalClassification,
 			AutomationCalculator.Common.MedalType medalType,
 			AutomationCalculator.Common.TurnoverType? turnoverType,
+			string tag,
 			AConnection db,
 			ASafeLog log
-			) {
-
+		) {
 			this.incorporationDate = null;
 
 			this.trail = new ApprovalTrail(
@@ -46,6 +46,8 @@
 			};
 
 			using (this.trail.AddCheckpoint(ProcessCheckpoints.Creation)) {
+				this.trail.SetTag(tag);
+
 				Now = DateTime.UtcNow;
 
 				this.db = db;
@@ -169,15 +171,13 @@
 			return this;
 		} // Init
 
-		public void MakeAndVerifyDecision(string tag, bool quiet = false) {
+		public override void MakeAndVerifyDecision() {
 			try {
-				this.trail.SetTag(tag);
-
 				RunPrimaryOnly();
 
 				this.m_oSecondaryImplementation.MakeDecision();
 
-				WasMismatch = !this.trail.EqualsTo(this.m_oSecondaryImplementation.Trail, quiet);
+				WasMismatch = !this.trail.EqualsTo(this.m_oSecondaryImplementation.Trail);
 
 				if (!WasMismatch && this.trail.HasDecided) {
 					if (this.trail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
@@ -198,7 +198,7 @@
 				this.trail.Negative<ExceptionThrown>(true).Init(e);
 			} // try
 
-			this.trail.SetTag(tag).Save(this.db, this.m_oSecondaryImplementation.Trail);
+			this.trail.Save(this.db, this.m_oSecondaryImplementation.Trail);
 		} // MakeAndVerifyDecision
 
 		public void RunPrimaryOnly() {
@@ -218,14 +218,18 @@
 			} // using timer step
 		} // RunPrimaryOnly
 
-		public bool ExceptionWhileDeciding {
+		public override bool WasException {
 			get {
 				if (this.trail == null)
 					return false;
 
 				return this.trail.FindTrace<ExceptionThrown>() != null;
 			} // get
-		} // ExceptionWhileDeciding
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return this.trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public int ApprovedAmount {
 			get { return this.trail.RoundedAmount; }

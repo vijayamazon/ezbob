@@ -57,22 +57,21 @@ BEGIN
 	 	I_InvestorSystemBalance isb ON ra.InvestorBankAccountID = isb.InvestorBankAccountID
 	 GROUP BY 
 	 	ra.InvestorID
-	 )
-	
-	SELECT 
-		i.InvestorID AS InvestorID,
-		it.Name AS InvestorType,
-		i.Name AS InvestorName,
-		isnull(ibat.NewBalance,0) AS OutstandingFunding,
-		isnull(isb.NewBalance,0) AS AccumulatedRepayments,
-		(SELECT 
-			sum(sb.NewBalance) 
+	 ),
+
+	 inactive_repayments_acc_data AS (
+	 SELECT 
+			sb.NewBalance,
+			ba.BankAccountNumber,
+			ba.InvestorID
 		 FROM 
 		 	I_InvestorSystemBalance sb
 		 INNER JOIN 
-			I_InvestorBankAccount ba ON i.InvestorID = ba.InvestorID AND sb.InvestorBankAccountID = ba.InvestorBankAccountID
+			I_InvestorBankAccount ba ON sb.InvestorBankAccountID = ba.InvestorBankAccountID
 		WHERE 
 			ba.InvestorAccountTypeID=@RepaymentsAccountTypeID 
+		AND 
+			sb.NewBalance > 0
 		AND 
 			ba.IsActive=0 
 		AND
@@ -84,14 +83,29 @@ BEGIN
 					I_InvestorSystemBalance sb1
 				WHERE 
 					sb.InvestorBankAccountID = sb1.InvestorBankAccountID 
-			)) AS TotalNonActiveAccumulatedRepayments,
+			))
+	
+	SELECT 
+		i.InvestorID AS InvestorID,
+		it.Name AS InvestorType,
+		i.Name AS InvestorName,
+		isnull(ibat.NewBalance,0) AS OutstandingFunding,
+		isnull(isb.NewBalance,0) AS AccumulatedRepayments,
+		(SELECT 
+			sum(ir.NewBalance) 
+		 FROM 
+		 	inactive_repayments_acc_data ir
+		 WHERE i.InvestorID = ir.InvestorID) AS TotalNonActiveAccumulatedRepayments,
 		
 		i.DiscountServicingFeePercent AS ServicingFeeDiscount,
 		i.IsActive AS IsInvestorActive,		
 		fa.InvestorBankAccountID AS FundingBankAccountID,
 		ra.InvestorBankAccountID AS RepaymentsBankAccountID,
 		fa.BankAccountNumber AS FundingBankAccountNumber,
-		ra.BankAccountNumber AS RepaymentsBankAccountNumber
+		ra.BankAccountNumber AS RepaymentsBankAccountNumber,
+		(SELECT STUFF((SELECT ',' + ir.BankAccountNumber 
+            FROM inactive_repayments_acc_data ir WHERE i.InvestorID = ir.InvestorID
+            FOR XML PATH('')) ,1,1,'')) AS InactiveRepaymentsAccountsNumbers
 	FROM
 		I_Investor i
 		LEFT JOIN 

@@ -10,6 +10,10 @@
 			get { return this[Variables.CAISPath2]; }
 		}
 
+		public virtual VariableValue CallCreditEnabled {
+			get { return this[Variables.CallCreditEnabled]; }
+		} // CallCreditEnabled
+
 		public virtual VariableValue CallCreditUrl {
 			get { return this[Variables.CallCreditUrl]; }
 		}
@@ -66,8 +70,8 @@
 			get { return this[Variables.CollectionPeriod3]; }
 		}
 
-        public virtual VariableValue CollectionToAddress {
-            get { return this[Variables.CollectionToAddress]; }
+		public virtual VariableValue CollectionToAddress {
+			get { return this[Variables.CollectionToAddress]; }
 		}
 
 		public virtual VariableValue CompaniesHouseApiKey {
@@ -105,15 +109,17 @@
 			get { return this[Variables.ConnectionPoolReuseCount]; }
 		}
 
-        public virtual VariableValue CreditSafeUserName
-        {
-            get { return this[Variables.CreditSafeUserName]; }
-        }
+		public virtual VariableValue CreditSafeEnabled {
+			get { return this[Variables.CreditSafeEnabled]; }
+		} // CreditSafeEnabled
 
-        public virtual VariableValue CreditSafePassword
-        {
-            get { return this[Variables.CreditSafePassword]; }
-        }
+		public virtual VariableValue CreditSafeUserName {
+			get { return this[Variables.CreditSafeUserName]; }
+		}
+
+		public virtual VariableValue CreditSafePassword {
+			get { return this[Variables.CreditSafePassword]; }
+		}
 
 		public virtual VariableValue CustomerAnalyticsDefaultHistoryYears {
 			get { return this[Variables.CustomerAnalyticsDefaultHistoryYears]; }
@@ -187,10 +193,10 @@
 			get { return this[Variables.EbayRuNameEverline]; }
 		}
 
-        public virtual VariableValue EbayRuNameAlibaba {
-            get { return this[Variables.EbayRuNameAlibaba]; }
+		public virtual VariableValue EbayRuNameAlibaba {
+			get { return this[Variables.EbayRuNameAlibaba]; }
 		}
-        
+
 		public virtual VariableValue EbayServiceType {
 			get { return this[Variables.EbayServiceType]; }
 		}
@@ -242,7 +248,7 @@
 		public virtual VariableValue EverlineLoanStatusTestMode {
 			get { return this[Variables.EverlineLoanStatusTestMode]; }
 		}
-		
+
 		public virtual VariableValue ExperianAuthTokenService {
 			get { return this[Variables.ExperianAuthTokenService]; }
 		}

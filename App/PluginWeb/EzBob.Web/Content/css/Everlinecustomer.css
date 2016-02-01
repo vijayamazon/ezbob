@@ -2181,7 +2181,11 @@ ul.targets li[selected="selected"],ul.matchingAddressList li[selected="selected"
      -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
      box-sizing: border-box;
+
  }
+  .broker-finish-inner-text {
+      max-width:68%;
+  }
  
  
 .broker-finish-inner {

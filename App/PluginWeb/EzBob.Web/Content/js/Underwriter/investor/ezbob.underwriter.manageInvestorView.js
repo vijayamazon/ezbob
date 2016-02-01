@@ -227,8 +227,9 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
     manageInvestorBankView: function(el) {
         var tr = $(el.currentTarget).closest('tr');
         this.$el.find('.edit-investor-bank').remove();
+        this.$el.find('.bank-investor-row').removeClass('active');
         this.editBankView = null;
-        var newRow = $('<tr class="add-bank-view-area"><td colspan="6"></td></tr>');
+        var newRow = $('<tr class="add-bank-view-area"><td colspan="12"  class="td-no-padding"></td></tr>');
         tr.after(newRow);
         var newRowEl = this.$el.find('tr.add-bank-view-area td');
         var addBankView = new EzBob.Underwriter.ManageInvestorBankView({
@@ -245,9 +246,10 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
 
     manageInvestorContactView: function(el) {
         var tr = $(el.currentTarget).closest('tr');
+        this.$el.find('.contact-investor-row').removeClass('active');
         this.$el.find('.edit-investor-contact').remove();
         this.editContactView = null;
-        var newRow = $('<tr class="add-contact-view-area"><td colspan="6"></td></tr>');
+        var newRow = $('<tr class="add-contact-view-area"><td colspan="12"  class="td-no-padding"></td></tr>');
         tr.after(newRow);
         var newRowEl = this.$el.find('tr.add-contact-view-area td');
         var addContactView = new EzBob.Underwriter.ManageInvestorContactView({
@@ -266,13 +268,15 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
         var id = tr.data('id');
         this.$el.find('.edit-investor-contact').remove();
         this.$el.find('.add-contact-view-area').remove();
+        this.$el.find('.contact-investor-row').removeClass('active');
         $('.add-contact-row').show();
         if (this.editContactView && this.editContactView.$el.data('id') === id) {
             this.editContactView = null;
+            tr.removeClass('active');
         }
         else {
 
-            var newRow = $('<tr class="edit-investor-contact"><td data-id="'+id+'" colspan="6"></td></tr>');
+            var newRow = $('<tr class="edit-investor-contact"><td   class="td-no-padding" data-id="' + id + '" colspan="12"></td></tr>');
             tr.after(newRow);
             var newRowEl = this.$el.find('tr.edit-investor-contact td');
             var contact = this.model.get('Contacts').find(function (item) {
@@ -286,7 +290,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
                 EditID: id
 
             });
-
+            tr.addClass('active');
             this.editContactView.render();
 
         }
@@ -299,12 +303,13 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
         this.$el.find('.edit-investor-bank').remove();
        this.$el.find('.add-bank-view-area').remove();
         $('.add-bank-row').show();
- 
+        this.$el.find('.bank-investor-row').removeClass('active');
         if (this.editBankView && this.editBankView.$el.data('id') === id) {
-                this.editBankView = null;
+            this.editBankView = null;
+            tr.removeClass('active');
             } else {
-               
-                var newRow = $('<tr class="edit-investor-bank"><td data-id="'+id+'" colspan="6"></td></tr>');
+            tr.addClass('active');
+                var newRow = $('<tr class="edit-investor-bank"><td data-id="'+id+'"  class="td-no-padding"colspan="12"></td></tr>');
                 tr.after(newRow);
                 var newRowEl = this.$el.find('tr.edit-investor-bank td');
                 var bank = this.model.get('Banks').find(function (item) {

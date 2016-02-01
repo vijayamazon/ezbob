@@ -127,6 +127,7 @@ namespace ConfigManager {
 
 		CAISPath,
 		CAISPath2,
+		CallCreditEnabled,
 		CallCreditUrl,
 		CallCreditUserCompany,
 		CallCreditUserName,
@@ -150,6 +151,7 @@ namespace ConfigManager {
 		CompanyScoreParserConfiguration,
 		ConnectionPoolMaxSize,
 		ConnectionPoolReuseCount,
+		CreditSafeEnabled,
 		CreditSafeUserName,
 		CreditSafePassword,
 		CustomerAnalyticsDefaultHistoryYears,

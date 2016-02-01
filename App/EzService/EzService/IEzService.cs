@@ -83,15 +83,6 @@
 		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
 
 		[OperationContract]
-		ActionMetaData CalculateOffer(
-			int underwriterId,
-			int customerId,
-			int amount,
-			bool hasLoans,
-			Medal medalClassification
-		);
-
-		[OperationContract]
 		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst);
 
 		[OperationContract]
