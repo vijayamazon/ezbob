@@ -440,9 +440,9 @@
 				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSourceID, Description);
 		}
 
-		public void SaveToDb(ASafeLog log, AConnection db, OfferCalculationType type) {
+		public void SaveToDb(ASafeLog log, AConnection db) {
 			var dbHelper = new DbHelper(db, log);
-			dbHelper.SaveOffer(this, type);
+			dbHelper.SaveOffer(this);
 		}
 
 		public string Description {

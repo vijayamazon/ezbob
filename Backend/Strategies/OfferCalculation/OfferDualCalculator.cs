@@ -52,34 +52,28 @@
 				DoPrimary();
 				DoVerification();
 
-				if (this.saveToDB)
-					VerificationResult.SaveToDb(this.log, this.db, OfferCalculationType.Seek);
+				bool equal = PrimaryResult.Equals(VerificationResult);
 
-				if (PrimaryResult.Equals(VerificationResult)) {
-					this.log.Debug("Main implementation of offer calculation result: \n{0}", PrimaryResult);
+				if (this.saveToDB) {
+					PrimaryResult.SaveToDb(this.db);
+					VerificationResult.SaveToDb(this.log, this.db);
+				} // if
 
-					if (this.saveToDB)
-						PrimaryResult.SaveToDb(this.db);
-
+				if (equal) {
+					this.log.Debug("Match found in offer calculations of customer {0}:\n\t{1}", CustomerID, PrimaryResult);
 					return PrimaryResult;
 				} // if
 
-				// Difference in offer calculations
 				SendExplanationMail();
 
-				if (this.saveToDB)
-					PrimaryResult.SaveToDb(this.db);
-
-				this.log.Error(
-					"Mismatch found in the 2 offer calculations of customer: {0} \n Primary: {1} \n Verification: {2} ",
+				this.log.Alert(
+					"Mismatch found in offer calculations of customer {0}:\n\tPrimary: {1}\n\tVerification: {2}",
 					CustomerID,
 					PrimaryResult,
 					VerificationResult
 				);
-
-				return null;
 			} catch (Exception e) {
-				this.log.Warn(e, "Offer calculation for customer {0} failed with exception.", CustomerID);
+				this.log.Warn(e, "Offer calculation for customer {0} failed.", CustomerID);
 			} // try
 
 			return null;
@@ -104,9 +98,7 @@
 		} // ResultSummary
 
 		private void DoPrimary() {
-			var primaryCalculator = new PrimaryCalculator();
-
-			PrimaryResult = primaryCalculator.CalculateOffer(
+			PrimaryResult = new PrimaryCalculator().CalculateOffer(
 				CustomerID,
 				CalculationTime,
 				Amount,
@@ -117,8 +109,6 @@
 		} // DoPrimary
 
 		private void DoVerification() {
-			var verificationCalculator = new VerificationCalculator(this.db, this.log);
-
 			var medal = (Medal)Enum.Parse(typeof(Medal), MedalClassification.ToString());
 
 			var input = new OfferInputModel {
@@ -131,7 +121,7 @@
 				RepaymentPeriod = this.repaymentPeriod
 			};
 
-			VerificationResult = verificationCalculator.GetCosmeOffer(input);
+			VerificationResult = new VerificationCalculator(this.db, this.log).GetCosmeOffer(input);
 		} // DoVerification
 
 		private static CultureInfo Culture {
