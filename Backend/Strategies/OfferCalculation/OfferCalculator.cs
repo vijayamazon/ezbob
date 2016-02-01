@@ -169,9 +169,7 @@
 			decimal totalCost = model.Cogs + model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
 			decimal profit = totalCost / (1 - model.ProfitMarkup);
 			decimal setupFeePounds = profit - interestRevenue;
-			decimal setupFee = setupFeePounds / model.LoanAmount;
-
-			return setupFee;
+			return setupFeePounds / model.LoanAmount;
 		} // GetSetupFeeForCOSME
 
 		private static Loan CreateLoan(PricingModelModel model) {

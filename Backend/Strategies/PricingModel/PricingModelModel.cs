@@ -13,8 +13,9 @@
 		public decimal DefaultRateCompanyShare { get; set; }
 		[DataMember]
 		public decimal DefaultRateCustomerShare { get; set; }
-		[DataMember]
-		public decimal SetupFeePounds { get; set; }
+
+		public decimal SetupFeePounds { get { return SetupFeePercents * LoanAmount; } }
+
 		[DataMember]
 		public decimal SetupFeePercents { get; set; }
 		[DataMember]
@@ -85,7 +86,6 @@
 
 		public void SetLoanAmount(decimal newLoanAmount) {
 			LoanAmount = newLoanAmount;
-			SetupFeePounds = SetupFeePercents * newLoanAmount;
 			BrokerSetupFeePounds = BrokerSetupFeePercents * newLoanAmount;
 		} // SetLoanAmount
 
@@ -111,7 +111,6 @@
 				DefaultRate = DefaultRate,
 				DefaultRateCompanyShare = DefaultRateCompanyShare,
 				DefaultRateCustomerShare = DefaultRateCustomerShare,
-				SetupFeePounds = SetupFeePounds,
 				SetupFeePercents = SetupFeePercents,
 				BrokerSetupFeePounds = BrokerSetupFeePounds,
 				BrokerSetupFeePercents = BrokerSetupFeePercents,

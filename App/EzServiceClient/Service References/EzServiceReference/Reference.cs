@@ -2641,9 +2641,6 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal SetupFeePercentsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal SetupFeePoundsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal TenureMonthsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -3061,19 +3058,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.SetupFeePercentsField.Equals(value) != true)) {
                     this.SetupFeePercentsField = value;
                     this.RaisePropertyChanged("SetupFeePercents");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal SetupFeePounds {
-            get {
-                return this.SetupFeePoundsField;
-            }
-            set {
-                if ((this.SetupFeePoundsField.Equals(value) != true)) {
-                    this.SetupFeePoundsField = value;
-                    this.RaisePropertyChanged("SetupFeePounds");
                 }
             }
         }
