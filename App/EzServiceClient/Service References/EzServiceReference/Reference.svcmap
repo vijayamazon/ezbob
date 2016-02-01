@@ -40,11 +40,13 @@
     <MetadataFile FileName="SalesForceLib.Models.xsd" MetadataType="Schema" ID="8eb1240a-3c95-4d7b-89c0-9d6979fac7f9" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="c67740f0-2a0c-4a41-838e-71a61ea1860e" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="7a3edc1e-e30a-44e8-b764-10535361d5b2" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.LegalDocs.xsd" MetadataType="Schema" ID="28b09866-5a43-4fb5-9644-9fda76532d36" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="a1ceb5b1-afac-4e88-bfd9-4704bf6e2f52" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="5736feaf-3cd0-4258-9ed3-057eb00b5cc8" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="6f5cd554-3526-4c4f-b127-d7bb5639d2b2" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd" MetadataType="Schema" ID="bb32cd57-fe17-4855-98b9-f8c6109c3a99" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd" MetadataType="Schema" ID="7bf76be2-4e6b-4590-9396-6485ab812be9" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.CompaniesHouse.xsd" MetadataType="Schema" ID="f79b6d90-2f9a-430a-8c7b-95aebc5f19ff" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="ca564eda-5b20-4244-a244-b16d0b3bcf9e" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="63f0d164-9a7d-4afd-b310-2e263bf14ee2" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>

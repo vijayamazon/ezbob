@@ -239,6 +239,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ApplicationInfoResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecisionHistoryResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SlidersDataActionResults))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountingDataResult))]
@@ -246,6 +247,8 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.TransactionsDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SchedulerDataResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LogicalGlueResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LegalDocsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LegalDocActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -1440,10 +1443,26 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class ExperianLtdActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.CompaniesHouse.CompaniesHouseOfficerOrder CompaniesHouseField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.ScoreAtDate[] HistoryField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.ModelsWithDB.Experian.ExperianLtd ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.CompaniesHouse.CompaniesHouseOfficerOrder CompaniesHouse {
+            get {
+                return this.CompaniesHouseField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CompaniesHouseField, value) != true)) {
+                    this.CompaniesHouseField = value;
+                    this.RaisePropertyChanged("CompaniesHouse");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.ScoreAtDate[] History {
@@ -2195,6 +2214,29 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SlidersDataActionResults", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class SlidersDataActionResults : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.SlidersDataModel SlidersDataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.SlidersDataModel SlidersData {
+            get {
+                return this.SlidersDataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SlidersDataField, value) != true)) {
+                    this.SlidersDataField = value;
+                    this.RaisePropertyChanged("SlidersData");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CollectionSnailMailActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
     [System.SerializableAttribute()]
     public partial class CollectionSnailMailActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -2493,6 +2535,52 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.UniqueIDField.Equals(value) != true)) {
                     this.UniqueIDField = value;
                     this.RaisePropertyChanged("UniqueID");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LegalDocsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class LegalDocsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.LegalDocs.LoanAgreementTemplate[] LoanAgreementTemplatesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.LegalDocs.LoanAgreementTemplate[] LoanAgreementTemplates {
+            get {
+                return this.LoanAgreementTemplatesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LoanAgreementTemplatesField, value) != true)) {
+                    this.LoanAgreementTemplatesField = value;
+                    this.RaisePropertyChanged("LoanAgreementTemplates");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LegalDocActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor")]
+    [System.SerializableAttribute()]
+    public partial class LegalDocActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.LegalDocs.LoanAgreementTemplate LoanAgreementTemplateField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.LegalDocs.LoanAgreementTemplate LoanAgreementTemplate {
+            get {
+                return this.LoanAgreementTemplateField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LoanAgreementTemplateField, value) != true)) {
+                    this.LoanAgreementTemplateField = value;
+                    this.RaisePropertyChanged("LoanAgreementTemplate");
                 }
             }
         }
@@ -5245,6 +5333,24 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer", ReplyAction="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswerResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateSecurityAnswerAsync(string email, ServiceClientProxy.EzServiceReference.CustomerOriginEnum origin, string answer);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocs", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocsResponse")]
+        ServiceClientProxy.EzServiceReference.LegalDocsActionResult GetLegalDocs(int customerID, int userID, int originID, bool isRegulated, int productSubTypeID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocs", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LegalDocsActionResult> GetLegalDocsAsync(int customerID, int userID, int originID, bool isRegulated, int productSubTypeID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocById", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocByIdResponse")]
+        ServiceClientProxy.EzServiceReference.LegalDocActionResult GetLegalDocById(int customerID, int userID, int loanAgreementTemplateId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocById", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocByIdResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LegalDocActionResult> GetLegalDocByIdAsync(int customerID, int userID, int loanAgreementTemplateId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFilesResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult ManualLegalDocsSyncTemplatesFiles(string agreementsPath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles", ReplyAction="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFilesResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManualLegalDocsSyncTemplatesFilesAsync(string agreementsPath);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordRestored", ReplyAction="http://tempuri.org/IEzService/PasswordRestoredResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData PasswordRestored(int customerId);
         
@@ -5352,12 +5458,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendPendingMails", ReplyAction="http://tempuri.org/IEzService/SendPendingMailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails", ReplyAction="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails", ReplyAction="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEverlineRefinanceMailsAsync(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendSms", ReplyAction="http://tempuri.org/IEzService/SendSmsResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
@@ -5586,6 +5686,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadMessagesSentToUser", ReplyAction="http://tempuri.org/IEzService/LoadMessagesSentToUserResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MessagesListActionResult> LoadMessagesSentToUserAsync(int userID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetSlidersData", ReplyAction="http://tempuri.org/IEzService/GetSlidersDataResponse")]
+        ServiceClientProxy.EzServiceReference.SlidersDataActionResults GetSlidersData(int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetSlidersData", ReplyAction="http://tempuri.org/IEzService/GetSlidersDataResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SlidersDataActionResults> GetSlidersDataAsync(int customerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddHistoryDirector", ReplyAction="http://tempuri.org/IEzService/AddHistoryDirectorResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector);
@@ -7121,6 +7227,30 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ValidateSecurityAnswerAsync(email, origin, answer);
         }
         
+        public ServiceClientProxy.EzServiceReference.LegalDocsActionResult GetLegalDocs(int customerID, int userID, int originID, bool isRegulated, int productSubTypeID) {
+            return base.Channel.GetLegalDocs(customerID, userID, originID, isRegulated, productSubTypeID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LegalDocsActionResult> GetLegalDocsAsync(int customerID, int userID, int originID, bool isRegulated, int productSubTypeID) {
+            return base.Channel.GetLegalDocsAsync(customerID, userID, originID, isRegulated, productSubTypeID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.LegalDocActionResult GetLegalDocById(int customerID, int userID, int loanAgreementTemplateId) {
+            return base.Channel.GetLegalDocById(customerID, userID, loanAgreementTemplateId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LegalDocActionResult> GetLegalDocByIdAsync(int customerID, int userID, int loanAgreementTemplateId) {
+            return base.Channel.GetLegalDocByIdAsync(customerID, userID, loanAgreementTemplateId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ManualLegalDocsSyncTemplatesFiles(string agreementsPath) {
+            return base.Channel.ManualLegalDocsSyncTemplatesFiles(agreementsPath);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ManualLegalDocsSyncTemplatesFilesAsync(string agreementsPath) {
+            return base.Channel.ManualLegalDocsSyncTemplatesFilesAsync(agreementsPath);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData PasswordRestored(int customerId) {
             return base.Channel.PasswordRestored(customerId);
         }
@@ -7263,14 +7393,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId) {
             return base.Channel.SendPendingMailsAsync(underwriterId, customerId);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount) {
-            return base.Channel.SendEverlineRefinanceMails(customerId, customerName, now, loanAmount, transferedAmount);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEverlineRefinanceMailsAsync(int customerId, string customerName, System.DateTime now, decimal loanAmount, decimal transferedAmount) {
-            return base.Channel.SendEverlineRefinanceMailsAsync(customerId, customerName, now, loanAmount, transferedAmount);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content) {
@@ -7575,6 +7697,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MessagesListActionResult> LoadMessagesSentToUserAsync(int userID) {
             return base.Channel.LoadMessagesSentToUserAsync(userID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.SlidersDataActionResults GetSlidersData(int customerID) {
+            return base.Channel.GetSlidersData(customerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SlidersDataActionResults> GetSlidersDataAsync(int customerID) {
+            return base.Channel.GetSlidersDataAsync(customerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddHistoryDirector(Ezbob.Backend.Models.Esigner Edirector) {
