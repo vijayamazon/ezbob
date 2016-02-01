@@ -5,43 +5,43 @@
 	using Ezbob.Logger;
 
 	public class OfferCalculator {
-		public OfferCalculator(AConnection db, ASafeLog log) {
+		public OfferCalculator(OfferInputModel input, AConnection db, ASafeLog log) {
 			DB = db;
 			Log = log;
 			this.dbHelper = new DbHelper(DB, Log);
+			this.input = input;
 		} // constructor
 
 		/// <summary>
 		/// Get Offer For COSME loan source using hard coded interest selection and calculated setup fee
 		/// </summary>
-		public OfferOutputModel GetCosmeOffer(OfferInputModel input) {
-			PricingScenarioModel pricingScenario = this.dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
+		public OfferOutputModel GetCosmeOffer() {
+			PricingScenarioModel pricingScenario = this.dbHelper.GetPricingScenario(this.input.Amount, this.input.HasLoans);
 
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,
-				Amount = input.Amount,
-				CustomerId = input.CustomerId,
-				Medal = input.Medal,
+				Amount = this.input.Amount,
+				CustomerId = this.input.CustomerId,
+				Medal = this.input.Medal,
 				CalculationTime = DateTime.UtcNow,
-				LoanSourceID = input.LoanSourceId,
-				RepaymentPeriod = input.RepaymentPeriod
+				LoanSourceID = this.input.LoanSourceId,
+				RepaymentPeriod = this.input.RepaymentPeriod
 			};
 
 			var pricingCalculator = new PricingCalculator(
-				input.CustomerId,
-				pricingScenario,
-				input.Amount,
+				this.input.CustomerId,
+				pricingScenario, this.input.Amount,
 				outModel.RepaymentPeriod,
 				DB,
 				Log
 			);
 
 			decimal interestRate = GetCOSMEInterestRate(pricingCalculator.ConsumerScore, pricingCalculator.CompanyScore);
-			decimal setupFee = pricingCalculator.GetSetupfee(interestRate, input.LoanSourceId == CosmeLoanSourceId);
+			decimal setupFee = pricingCalculator.GetSetupfee(interestRate, this.input.LoanSourceId == CosmeLoanSourceId);
 
 			outModel.InterestRate = interestRate * 100;
 
-			setupFee = AdjustMinMaxSetupFee(input.Amount, !input.HasLoans, setupFee);
+			setupFee = AdjustMinMaxSetupFee(this.input.Amount, !this.input.HasLoans, setupFee);
 
 			outModel.SetupFee = RoundSetupFee(setupFee);
 			Log.Info("Verification Rounding setup fee {0:P2} -> {1:N2}%.", setupFee, outModel.SetupFee);
@@ -113,5 +113,6 @@
 		} // RoundSetupFee
 
 		private readonly DbHelper dbHelper;
+		private readonly OfferInputModel input;
 	} // class OfferCalculator
 } // namespace

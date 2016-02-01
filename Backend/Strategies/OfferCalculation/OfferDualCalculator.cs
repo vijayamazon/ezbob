@@ -98,30 +98,28 @@
 		} // ResultSummary
 
 		private void DoPrimary() {
-			PrimaryResult = new PrimaryCalculator().CalculateOffer(
+			PrimaryResult = new PrimaryCalculator(
 				CustomerID,
 				CalculationTime,
 				Amount,
 				HasLoans,
 				MedalClassification,
 				this.repaymentPeriod
-			);
+			).CalculateOffer();
 		} // DoPrimary
 
 		private void DoVerification() {
-			var medal = (Medal)Enum.Parse(typeof(Medal), MedalClassification.ToString());
-
 			var input = new OfferInputModel {
 				Amount = Amount,
 				AspireToMinSetupFee = ConfigManager.CurrentValues.Instance.AspireToMinSetupFee,
 				HasLoans = HasLoans,
-				Medal = medal,
+				Medal = (Medal)Enum.Parse(typeof(Medal), MedalClassification.ToString()),
 				CustomerId = CustomerID,
 				LoanSourceId = this.loanScourceID,
 				RepaymentPeriod = this.repaymentPeriod
 			};
 
-			VerificationResult = new VerificationCalculator(this.db, this.log).GetCosmeOffer(input);
+			VerificationResult = new VerificationCalculator(input, this.db, this.log).GetCosmeOffer();
 		} // DoVerification
 
 		private static CultureInfo Culture {

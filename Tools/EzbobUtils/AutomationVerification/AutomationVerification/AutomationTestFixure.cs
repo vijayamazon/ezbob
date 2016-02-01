@@ -1,7 +1,6 @@
 ﻿namespace AutomationVerification {
 	using System;
 	using System.Collections.Generic;
-	using AutomationCalculator.AutoDecision;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
@@ -41,7 +40,7 @@
 
 			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
-        
+
 		[Test]
 		public void TestMedalChooser() {
 			var medalChooser = new MedalChooser(_db, Log);
@@ -74,22 +73,21 @@
 		[Test]
 		public void TestOfferCalculator() {
 			var db = _db;
-			var offerCalculator = new OfferCalculator(db, Log);
 			var input = new OfferInputModel {
 				Amount = 17000,
 				HasLoans = false,
 				AspireToMinSetupFee = true,
 				Medal = Medal.Gold,
 				CustomerId = 18263,
-                RepaymentPeriod = 15,
-                LoanSourceId = 3,
+				RepaymentPeriod = 15,
+				LoanSourceId = 3,
 			};
 
-			var offer1 = offerCalculator.GetCosmeOffer(input);
+			var offer1 = new OfferCalculator(input, db, Log).GetCosmeOffer();
 
 			Log.Debug("Offer1 is: {0}", offer1);
-		//	Assert.AreEqual(offer1.InterestRate, offer2.InterestRate);
-		//	Assert.AreEqual(offer1.SetupFee, offer2.SetupFee);
+			//	Assert.AreEqual(offer1.InterestRate, offer2.InterestRate);
+			//	Assert.AreEqual(offer1.SetupFee, offer2.SetupFee);
 			offer1.SaveToDb(Log, db);
 		}
 
