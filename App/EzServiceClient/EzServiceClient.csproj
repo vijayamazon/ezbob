@@ -98,16 +98,10 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.CompaniesHouse.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.CompaniesHouse1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.LegalDocs.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.LegalDocs1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.NewLoan.xsd">
