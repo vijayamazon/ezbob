@@ -32,11 +32,11 @@
 
 			this.applied = false;
 
-			Response = new AutoDecisionResponse();
+			AutoDecisionResponse = new AutoDecisionResponse();
 		} // constructor
 
 		[StepOutput]
-		public AutoDecisionResponse Response { get; private set; }
+		public AutoDecisionResponse AutoDecisionResponse { get; private set; }
 
 		protected override string Outcome {
 			get { return this.applied ? "'applied'" : "'not applied'"; }
@@ -58,7 +58,7 @@
 
 			Log.Debug("Using back door simple for {0} as: {1}.", OuterContextDescription, backdoorSimpleDetails);
 
-			bool success = backdoorSimpleDetails.SetResult(Response);
+			bool success = backdoorSimpleDetails.SetResult(AutoDecisionResponse);
 
 			if (!success)
 				return StepResults.NotApplied;
@@ -88,8 +88,8 @@
 			if (!glcd.IsBrokerCustomer)
 				return StepResults.Applied;
 
-			Response.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
-			Response.SetupFee = glcd.Result.ManualSetupFee;
+			AutoDecisionResponse.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
+			AutoDecisionResponse.SetupFee = glcd.Result.ManualSetupFee;
 
 			return StepResults.Applied;
 		} // Run

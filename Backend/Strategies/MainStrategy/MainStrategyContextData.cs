@@ -6,7 +6,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
-	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
