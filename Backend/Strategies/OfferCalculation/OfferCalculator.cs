@@ -11,8 +11,8 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
 
-	public class OfferCalculator1 {
-		public OfferCalculator1() {
+	public class OfferCalculator {
+		public OfferCalculator() {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
 		} // constructor
@@ -227,5 +227,5 @@
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;
-	} // class OfferCalculator1
+	} // class OfferCalculator
 } // namespace

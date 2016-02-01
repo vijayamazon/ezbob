@@ -38,6 +38,9 @@
 		[StepOutput]
 		public AutoDecisionResponse AutoDecisionResponse { get; private set; }
 
+		[StepOutput]
+		public MedalResult Medal { get; private set; }
+
 		protected override string Outcome {
 			get { return this.applied ? "'applied'" : "'not applied'"; }
 		} // Outcome
@@ -63,7 +66,7 @@
 			if (!success)
 				return StepResults.NotApplied;
 
-			var medal = CalculateMedal();
+			Medal = CalculateMedal();
 
 			this.applied = true;
 
@@ -77,10 +80,10 @@
 				return StepResults.NotApplied;
 			} // if
 
-			medal.MedalClassification = bsa.MedalClassification;
-			medal.OfferedLoanAmount = bsa.ApprovedAmount;
-			medal.TotalScoreNormalized = 1m;
-			medal.AnnualTurnover = bsa.ApprovedAmount;
+			Medal.MedalClassification = bsa.MedalClassification;
+			Medal.OfferedLoanAmount = bsa.ApprovedAmount;
+			Medal.TotalScoreNormalized = 1m;
+			Medal.AnnualTurnover = bsa.ApprovedAmount;
 
 			var glcd = new GetLoanCommissionDefaults(this.cashRequestID, bsa.ApprovedAmount);
 			glcd.Execute();
