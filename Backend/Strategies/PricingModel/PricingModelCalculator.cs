@@ -5,7 +5,6 @@
 	using System.Linq;
 	using System.Text;
 	using ConfigManager;
-	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;

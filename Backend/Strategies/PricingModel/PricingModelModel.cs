@@ -78,10 +78,10 @@
 		[DataMember]
 		public List<PricingSourceModel> PricingSourceModels { get; set; }
 
-        [DataMember]
-        public int ConsumerScore { get; set; }
-        [DataMember]
-        public int CompanyScore { get; set; }
+		[DataMember]
+		public int ConsumerScore { get; set; }
+		[DataMember]
+		public int CompanyScore { get; set; }
 
 		public void SetLoanAmount(decimal newLoanAmount) {
 			LoanAmount = newLoanAmount;
@@ -138,8 +138,8 @@
 				CostOfDebtOutput = CostOfDebtOutput,
 				TotalCost = TotalCost,
 				ProfitMarkupOutput = ProfitMarkupOutput,
-                ConsumerScore = ConsumerScore,
-                CompanyScore = CompanyScore
+				ConsumerScore = ConsumerScore,
+				CompanyScore = CompanyScore,
 			};
 		} // Clone
 	} // class PricingModelModel

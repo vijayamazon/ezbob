@@ -155,7 +155,7 @@
 		} // GetCOSMELoanMonthlyInterest
 
 		private static decimal GetSetupFeeForCOSME(PricingModelModel model) {
-			Loan loan = CreateLoan(model.LoanAmount, model.MonthlyInterestRate, model.FeesRevenue, (int)model.TenureMonths);
+			Loan loan = CreateLoan(model);
 
 			decimal costOfDebtEu = GetCostOfDebt(
 				model.LoanAmount,
@@ -164,8 +164,7 @@
 				loan.Schedule
 			);
 
-			decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest);
-			interestRevenue *= 1 - model.DefaultRate;
+			decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest) * (1 - model.DefaultRate);
 			decimal netLossFromDefaults = (1 - model.CosmeCollectionRate) * model.LoanAmount * model.DefaultRate;
 			decimal totalCost = model.Cogs + model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
 			decimal profit = totalCost / (1 - model.ProfitMarkup);
@@ -175,21 +174,24 @@
 			return setupFee;
 		} // GetSetupFeeForCOSME
 
-		private static Loan CreateLoan(decimal loanAmount, decimal interestRate, decimal setupFee, int tenureMonths) {
-			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = tenureMonths };
+		private static Loan CreateLoan(PricingModelModel model) {
+			var calculator = new LoanScheduleCalculator {
+				Interest = model.MonthlyInterestRate,
+				Term = (int)model.TenureMonths,
+			};
 
 			LoanType lt = new StandardLoanType();
 
 			var loan = new Loan {
-				LoanAmount = loanAmount,
+				LoanAmount = model.LoanAmount,
 				Date = DateTime.UtcNow,
 				LoanType = lt,
 				CashRequest = null,
-				SetupFee = setupFee,
+				SetupFee = model.FeesRevenue,
 				LoanLegalId = 1
 			};
 
-			calculator.Calculate(loanAmount, loan, loan.Date);
+			calculator.Calculate(model.LoanAmount, loan, loan.Date);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
