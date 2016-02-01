@@ -56,7 +56,14 @@
                     <td><%-val.GoodUsers%></td>
                     <td><%-val.OfItems - val.GoodUsers%></td>
                     <td><%-val.Defaults%></td>
-                    <td><%-val.CaisUploadStatus%></td>
+                    <td>
+	                    <%-val.CaisUploadStatus%>
+						<%if(val.CaisUploadStatus != 'Uploaded') {%>
+							<button class="btn btn-primary set-cais-uploaded-status" data-id="<%-val.Id%>">
+								<i class="fa fa-upload"></i>
+							</button>
+						<%}%>
+                    </td>
                 </tr>
                 <%})%>
             </tbody>
