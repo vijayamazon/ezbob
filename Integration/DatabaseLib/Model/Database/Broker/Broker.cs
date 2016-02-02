@@ -18,8 +18,9 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 		public virtual string SourceRef { get; set; }
 		public virtual decimal EstimatedMonthlyClientAmount { get; set; }
 		public virtual WhiteLabelProvider WhiteLabel { get; set; }
-        
-        private Iesi.Collections.Generic.ISet<CardInfo> bankAccounts;
+		public virtual bool FCARegistered { get; set; }
+
+	    private Iesi.Collections.Generic.ISet<CardInfo> bankAccounts;
         public virtual Iesi.Collections.Generic.ISet<CardInfo> BankAccounts {
             get { return this.bankAccounts; }
             set { this.bankAccounts = value; }

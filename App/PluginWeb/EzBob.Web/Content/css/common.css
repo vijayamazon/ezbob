@@ -3282,7 +3282,10 @@ table.payment-schedule-table {
 
 .bank-account .for-radio { display: inline !important; }
 .bank-account { width: 70%; }
-input#baBusiness { margin-left: 20px; }
+input#baBusiness,
+input#NonFCARegistered {
+	 margin-left: 20px;
+}
 .bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }
 
 .narrow-as-possible {

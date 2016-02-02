@@ -590,6 +590,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		var showBecauseOfAml = (this.loanInfoModel.get('AMLResult') !== 'Passed') && !skipPopupForApprovalWithoutAml;
 		var showBecauseOfMultiBrand = this.loanInfoModel.get('IsMultiBranded');
+		var showBecauseOfFCAIncompliance = !this.personalInfoModel.get('IsBrokerRegulated') && this.personalInfoModel.get('IsRegulated') && this.personalInfoModel.get('IsWizardComplete');
 
 		if (showBecauseOfAml || showBecauseOfMultiBrand) {
 			var approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML({
@@ -597,6 +598,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 				parent: this,
 				showBecauseOfAml: showBecauseOfAml,
 				showBecauseOfMultiBrand: showBecauseOfMultiBrand,
+				showBecauseOfFCAIncompliance: showBecauseOfFCAIncompliance
 			});
 
 			EzBob.App.jqmodal.show(approveLoanWithoutAMLDialog);

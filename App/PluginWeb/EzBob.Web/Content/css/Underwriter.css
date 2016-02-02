@@ -2658,3 +2658,7 @@ iframe#logical-glue-iframe{
 	margin-top: 7px;
 	margin-right: 240px;
 }
+
+.fca-incompliance-area .modal-header {
+	margin-bottom: 10px;
+}

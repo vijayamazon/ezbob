@@ -120,6 +120,18 @@
 			};
 
 			BuildMultiBrandAlert(customer.Id, summary.Alerts);
+			
+			var isBrokerRegulated = (customer.Broker != null) && customer.Broker.FCARegistered;
+			var IsWizardComplete = (customer.WizardStep != null) && customer.WizardStep.TheLastOne;
+
+			if (!isBrokerRegulated && customer.PersonalInfo.IsRegulated && IsWizardComplete) {
+				summary.Alerts.Infos.Add(new AlertModel {
+					Abbreviation = "NRB",
+					Alert = "Regulated customer for a Non-Regulated broker",
+					AlertType = AlertType.Warning.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
+				});
+			} // if
 
 			if (customer.IsTest) {
 				summary.Alerts.Infos.Add(new AlertModel {

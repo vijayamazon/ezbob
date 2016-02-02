@@ -158,30 +158,37 @@
 
 					<div class="control-group form_read_and_accept">
 						<div class="controls">
+					@{
+					EzInputBuilder radio1 = new EzInputBuilder("FCARegistered", "FCA Registered",
+						value: "true",
+						type: "radio",
+						wrapperCls: "fca-radio",
+						labelClass: "for-radio",
+						isRequired: true,
+						statusIcon: true,
+						name: "FCARegistered",
+						uiEventControlID: "broker:fca-registered");
 
-							@{ EzInputBuilder checkbox1 = new EzInputBuilder(
-								"FCARegistered",
-								"FCA Registered",
-								value: "false",
-								type: "checkbox",
-								tabIndex: nSignupTabIdx++,
-								name: "FCARegistered",
-								uiEventControlID: "broker:fca-registered");
+					EzInputBuilder radio2 = new EzInputBuilder("NonFCARegistered", "Non FCA Registered",
+						value: "false",
+						type: "radio",
+						wrapperCls: "fca-radio",
+						labelClass: "for-radio",
+						isRequired: true,
+						statusIcon: true,
+						name: "FCARegistered",
+						uiEventControlID: "broker:non-fca-registered",
+						specialAttributes: new Dictionary<string, string> { { "checked", "checked" } });
 
-							 List<EzInputBuilder> checkboxesList1 = new List<EzInputBuilder> {checkbox1};
+					List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1, radio2 };
+					var buttonsmodel = new EzClickInputModel(
+						name: "FCARegistered",
+						inputWrapperClass: "FormRadioCtrl",
+						inputButtons: radios);
 
-							 var checkboxes1 = new EzClickInputModel(
-												name: "FCARegistered",
-												caption: "",
-												errorImgClass: "",
-												inputWrapperClass: "controls",
-												containerClass: "form_read_and_accept",
-												isRequired: false,
-												statusIcon: false,
-												inputButtons: checkboxesList1);
-												
-							@EzForm.ClickableInputWizard(checkboxes1, origin: origin)
-							}
+					@EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+					}
+
 						</div>
 					</div>
 

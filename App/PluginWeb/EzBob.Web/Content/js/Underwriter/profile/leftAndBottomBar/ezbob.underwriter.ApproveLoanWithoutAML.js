@@ -10,6 +10,7 @@ EzBob.Underwriter.ApproveLoanWithoutAML = EzBob.BoundItemView.extend({
 		this.parent = options.parent;
 		this.showBecauseOfAml = options.showBecauseOfAml;
 		this.showBecauseOfMultiBrand = options.showBecauseOfMultiBrand;
+		this.showBecauseOfFCAIncompliance = options.showBecauseOfFCAIncompliance;
 
 		EzBob.Underwriter.ApproveLoanWithoutAML.__super__.initialize.apply(this, arguments);
 	}, // initialize
@@ -29,6 +30,7 @@ EzBob.Underwriter.ApproveLoanWithoutAML = EzBob.BoundItemView.extend({
 	onRender: function() {
 		this.$el.find('.aml-area').toggleClass('hide', !this.showBecauseOfAml);
 		this.$el.find('.multi-brand-area').toggleClass('hide', !this.showBecauseOfMultiBrand);
+		this.$el.find('.fca-incompliance-area').toggleClass('hide', !this.showBecauseOfFCAIncompliance);
 	}, // onRender
 
 	onSave: function () {
