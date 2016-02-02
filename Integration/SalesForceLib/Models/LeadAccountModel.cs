@@ -81,5 +81,7 @@
 		public string BrokerPhoneNumber { get; set; }
 		[DataMember]
 		public string BrokerEmail { get; set; }
+		[DataMember]
+		public int? BrokerID { get; set; }
 	}
 }

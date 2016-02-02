@@ -22,6 +22,7 @@
 				x.For<ISalesForceService>().Use<SalesForceService>();
 			});
 
+			this.client = GetSb1Client();
 			//this.client = GetSandboxDevClient();
 			//this.client = GetSandboxClient();
 			//this.client = GetProdClient();
@@ -183,6 +184,15 @@
 				.GetInstance<ISalesForceAppClient>();
 		}
 
+		private ISalesForceAppClient GetSb1Client() {
+			return ObjectFactory
+				.With("userName").EqualTo("techapi@ezbob.com.sb1")
+				.With("password").EqualTo("yaron13572")
+				.With("token").EqualTo("5jY4oEpTcYpgjM1MpjDC5Slu1")
+				.With("environment").EqualTo("Sb1")
+				.GetInstance<ISalesForceAppClient>();
+		}
+
 		private ISalesForceAppClient GetProdClient() {
 			//Production
 			return ObjectFactory
@@ -221,7 +231,7 @@
 		[Test]
 		public void TestLead() {
 			LeadAccountModel model = new LeadAccountModel {
-				Email = "testdev10@b.c",
+				Email = "testdev_withbroker1@b.c",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -238,7 +248,7 @@
 				EzbobStatus = "Wizard complete",
 				Gender = "M",
 				Industry = "Building",
-				IsBroker = false,
+				
 				LeadSource = "LeadSource",
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
@@ -247,7 +257,13 @@
 				CustomerID = 2222.ToString(),
 				IsTest = true,
 				NumOfLoans = 2,
-				Promocode = "promotest"
+				Promocode = "promotest",
+				IsBroker = true,
+				BrokerID = 115,
+				BrokerEmail = "alexbo+broker3@ezbob.com",
+				BrokerName = "Broker Name",
+				BrokerFirmName = "Jada Coldfusion",
+				BrokerPhoneNumber = "01000000115"
 			};
 
 			this.client.CreateUpdateLeadAccount(model);
@@ -365,7 +381,7 @@
 
 		//---------------------Rest Service tests---------------------------------------------------------------
 
-		public SalesForceService GetSb1Service() {
+		public ISalesForceService GetSb1Service() {
 			return new SalesForceService(
 				consumerKey: "3MVG954MqIw6FnnPNMtQquUEWgFTeZVdS_G43_vBVQFTsidIuZJQgJ17SJv3PwyxSXgBWUjva9Zyq1pBALdmO",
 				consumerSecret: "1496232326147934946",
@@ -373,6 +389,19 @@
 				password: "yaron13572",
 				token: "5jY4oEpTcYpgjM1MpjDC5Slu1",
 				environment: "Sandbox");
+		}
+
+		[Test]
+		public void TestSb1Sandbox() {
+			var sb1Client = GetSb1Client();
+			var activity = sb1Client.GetActivity(new GetActivityModel {
+				Email = "alexbo+broker3@ezbob.com",
+				Origin = "ezbob"
+			});
+
+			Assert.IsNotNull(activity);
+			Assert.IsNullOrEmpty(activity.Error);
+			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
 		[Test]
