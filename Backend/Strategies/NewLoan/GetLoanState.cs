@@ -16,19 +16,7 @@
 
 		public GetLoanState(int customerID, long loanID, DateTime? stateDate, int? userID = null, bool getCalculatorState = true) {
 
-			this.strategyArgs = new object[] { customerID, loanID, stateDate, userID, getCalculatorState };
-
-			if (customerID == 0) {
-				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, Error, null);
-				return;
-			}
-
-			if (loanID == 0) {
-				Error = NL_ExceptionLoanNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, Error, null);
-				return;
-			}
+			//this.strategyArgs = new object[] { customerID, loanID, stateDate, userID, getCalculatorState };
 
 			this.StateDate = stateDate ?? DateTime.UtcNow;
 
@@ -56,15 +44,23 @@
 		//[SetterProperty]
 		public ILoanDAL LoanDAL { get; set; }
 
-		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
+		
 		public override void Execute() {
 			if (!CurrentValues.Instance.NewLoanRun) {
 				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;
 			}
 
-			if (!string.IsNullOrEmpty(Error)) {
-				throw new NL_ExceptionInputDataInvalid(Error);
+			if (Result.CustomerID == 0) {
+				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, Error, null);
+				return;
+			}
+
+			if (Result.Loan.LoanID == 0) {
+				Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, Error, null);
+				return;
 			}
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, Result, Error, null);

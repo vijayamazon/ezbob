@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
-	using System.Runtime.CompilerServices;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -437,8 +436,8 @@
 				}
 			}
 
-			// payments - by PaymentTime, only non-deleted
-			foreach (NL_Payments p in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime)) {
+			// payments - by PaymentTime, PaymentID, only non-deleted
+			foreach (NL_Payments p in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime).OrderBy(p=>p.PaymentID)) {
 
 				var item = GetScheduleItemForDate(p.PaymentTime);
 				bool itemDeleted = false;

@@ -136,8 +136,14 @@
 			// http://www.hughcalc.org/formula.php
 			// Finding the Number of Periods given a Payment, Interest and Loan Amount
 			/*
-			 * This formula previously was not explicit enough!! The 1/q factor in there was to convert the number of periods into years. For number of payments this must actually be left out.
-			Many people have asked me how to find N (number of payments) given the payment, interest and loan amount. I didn't know the answer and in my calculators I find it by doing a binary search over the payment formula above. However, Gary R. Walo ( nenonen5@southeast.net) found the answer to the actual formula in the book: The Vest Pocket Real Estate Advisor by Martin Miles (Prentice Hall). Here is the corrected formula:
+			 * This formula previously was not explicit enough!! The 1/q factor in there was to convert the number of periods into years. 
+			 * For number of payments this must actually be left out.
+			 * Many people have asked me how to find N (number of payments) given the payment, interest and loan amount. 
+			 * I didn't know the answer and in my calculators I find it by doing a binary search over the payment formula above. 
+			 * However, Gary R. Walo ( nenonen5@southeast.net) found the answer to the actual formula in the book: The Vest Pocket Real Estate Advisor by Martin Miles (Prentice Hall). 
+			 * Here is the corrected formula:
+			 * 
+			 * 
 			n = - (LN(1-(B/m)*(r/q)))/LN(1+(r/q))
 			# years = - 1/q * (LN(1-(B/m)*(r/q)))/LN(1+(r/q))
 

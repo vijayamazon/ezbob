@@ -344,7 +344,7 @@
 					CreatedByUserID = 1,
 					CreationTime = setupFee.CreatedTime,
 					Notes = "setup fee offsetting",
-					PaymentTime = nowTime,
+					PaymentTime = nowTime.Date,
 					PaymentStatusID = (int)NLPaymentStatuses.Active,
 					LoanID = LoanID
 				};
@@ -385,7 +385,7 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
 				CreationTime = nowTime,
-				PaymentTime = nowTime.AddMilliseconds(30), // workaround: guarantee that "setup offset" payment (with PaymentTime=nowTime) will be recorded before rebate //rebateTransaction.PostDate,
+				PaymentTime = nowTime.AddMilliseconds(60), // workaround: guarantee that "setup offset" payment (with PaymentTime=nowTime) will be recorded before rebate //rebateTransaction.PostDate,
 				Notes = "rebate"
 			};
 			rebatePayment.PaypointTransactions.Add(new NL_PaypointTransactions() {

@@ -8,7 +8,6 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using NHibernate.Linq;
 
@@ -34,7 +33,6 @@
 
 		private object[] strategyArgs;
 
-		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
