@@ -30,7 +30,7 @@ IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlue
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGluePassword',
-		'nexahbaey8ei',
+		'nexahbaey8ei', -- 'At5quijohghu'
 		'String. Password used to make Logical Glue requests.',
 		0
 	)
@@ -52,7 +52,7 @@ IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlue
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGlueHostName',
-		'etl-dev.live.logicalglue.net',
+		'etl-dev.live.logicalglue.net', -- 'etl.live.logicalglue.net',
 		'String. Host name of the Logical Glue API URL.',
 		0
 	)

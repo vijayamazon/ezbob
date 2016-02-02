@@ -42,7 +42,8 @@ BEGIN
 			mo.ErrorCode,
 			mo.Exception,
 			EncodingFailureCount = (SELECT COUNT(*) FROM LogicalGlueModelEncodingFailures WHERE ModelOutputID = mo.ModelOutputID),
-			MissingColumnCount = (SELECT COUNT(*) FROM LogicalGlueModelMissingColumns WHERE ModelOutputID = mo.ModelOutputID)
+			MissingColumnCount = (SELECT COUNT(*) FROM LogicalGlueModelMissingColumns WHERE ModelOutputID = mo.ModelOutputID),
+			WarningCount = (SELECT COUNT(*) FROM LogicalGlueModelWarnings WHERE ModelOutputID = mo.ModelOutputID)
 		FROM
 			MP_ServiceLog l
 			INNER JOIN LogicalGlueRequests r

@@ -195,6 +195,11 @@
 			if (errCount > 0)
 				inputData.ResponseErrors.Add(Grammar.Number(errCount, "missing column") + " detected.");
 
+			errCount = sr["WarningCount"];
+
+			if (errCount > 0)
+				inputData.ResponseErrors.Add(Grammar.Number(errCount, "warning") + " detected.");
+
 			inputData.HardReject = sr["EtlCodeID"] == (int)LGEtlCode.HardReject;
 
 			Bucket bucket;

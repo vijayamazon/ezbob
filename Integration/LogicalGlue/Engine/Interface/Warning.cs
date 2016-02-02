@@ -2,7 +2,7 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class Warning : ICanBeEmpty {
+	public class Warning : ICanBeEmpty<Warning> {
 		[DataMember]
 		public string Value { get; set; }
 
@@ -18,21 +18,24 @@
 		public bool IsEmpty {
 			get { return string.IsNullOrWhiteSpace(FeatureName); }
 		} // IsEmpty
-	} // class Warning
 
-	public static class WarningExt {
-		public static Warning CloneFrom(this Warning target, Warning source) {
-			if (source == null)
-				return new Warning();
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			return string.Format("{0}: '{1}' (allowed: '{2}', '{3}')", FeatureName, Value, MinValue, MaxValue);
+		} // ToString
 
-			target = target ?? new Warning();
-
-			target.Value = source.Value;
-			target.FeatureName = source.FeatureName;
-			target.MaxValue = source.MinValue;
-			target.MaxValue = source.MaxValue;
-
-			return target;
+		public Warning CloneTo() {
+			return new Warning {
+				Value = Value,
+				FeatureName = FeatureName,
+				MinValue = MinValue,
+				MaxValue = MaxValue,
+			};
 		} // CloneFrom
-	} // class WarningExt
+	} // class Warning
 } // namespace

@@ -88,6 +88,8 @@
 				if (saveEtl.HasValidParameters()) // invalid if e.g. no ETL data
 					saveEtl.ExecuteNonQuery(con);
 
+				new SaveCustomerHistory(ResponseID, DB, Log).ExecuteNonQuery(con);
+
 				con.Commit();
 			} catch (Exception e) {
 				con.Rollback();

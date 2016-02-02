@@ -29,13 +29,13 @@
 					EncodedResult = -1,
 					DecodedResult = "Goooooooooooood",
 					OutputRatios = new Dictionary<string, decimal>(),
+				},
+				Error = new ModelError {
 					Warnings = new List<Warning> {
 						new Warning { FeatureName = "feature", MaxValue = "100", MinValue = "0", Value = "ab", },
 						new Warning { FeatureName = null, MaxValue = null, MinValue = null, Value = null, },
 						new Warning { FeatureName = "FEATURE", MaxValue = "900", MinValue = "1", Value = "-1", },
 					},
-				},
-				Error = new ModelError {
 					ErrorCode = "error code",
 					Exception = "some exception",
 					Uuid = uuid,
