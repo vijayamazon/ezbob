@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures {
+	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -12,5 +13,11 @@
 		} // HasValidParameters
 
 		public long ResponseID { get; set; }
+
+		public DateTime Now {
+			get { return DateTime.UtcNow; }
+			// ReSharper disable once ValueParameterNotUsed
+			set { }
+		} // Now
 	} // class SaveCustomerHistory
 } // namespace

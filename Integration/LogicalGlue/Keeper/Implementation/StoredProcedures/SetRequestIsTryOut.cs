@@ -20,6 +20,13 @@
 		public bool NewIsTryOutStatus { get; set; }
 
 		[UsedImplicitly]
+		public DateTime Now {
+			get { return DateTime.UtcNow; }
+			// ReSharper disable once ValueParameterNotUsed
+			set { }
+		} // Now
+
+		[UsedImplicitly]
 		[Direction(ParameterDirection.Output)]
 		public long RequestID { get; set; }
 	} // class SetRequestIsTryOut

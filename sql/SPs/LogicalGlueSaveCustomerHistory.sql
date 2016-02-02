@@ -9,7 +9,8 @@ IF OBJECT_ID('LogicalGlueSaveCustomerHistory') IS NULL
 GO
 
 ALTER PROCEDURE LogicalGlueSaveCustomerHistory
-@ResponseID BIGINT
+@ResponseID BIGINT,
+@Now DATETIME
 AS
 BEGIN
 	DECLARE @ModelID BIGINT = (SELECT m.ModelID FROM LogicalGlueModels m WHERE m.ModelName = 'Neural network')
@@ -105,10 +106,10 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO CustomerLogicalGlueHistory (
-		CustomerID, CompanyID, ResponseID, IsActive,
+		CustomerID, CompanyID, ResponseID, IsActive, SetTime,
 		GradeID, Score, IsHardReject, ScoreIsReliable, ErrorInResponse
 	) SELECT
-		CustomerID, CompanyID, ResponseID, 1,
+		CustomerID, CompanyID, ResponseID, 1, @Now,
 		GradeID, Score, IsHardReject, ScoreIsReliable, ErrorInResponse
 	FROM
 		#lg
