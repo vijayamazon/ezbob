@@ -83,7 +83,12 @@
 		} // AffirmativeDecisionMade
 
 		public bool LogicalGlueFlowFollowed {
-			get { return Trail.FindTrace<LogicalGlueFlow>() != null; }
+			get {
+				return
+					(Trail.FindTrace<LogicalGlueFlow>() != null)
+					&&
+					(Trail.FindTrace<InternalFlow>() == null);
+			} // get
 		} // LogicalGlueFlowFollowed
 
 		protected virtual AConnection DB { get { return this.args.DB; } }
@@ -228,7 +233,8 @@
 			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 
 			if (Trail.MyInputData.RequestID == null) {
-				Trail.Negative<LGDataFound>(true).Init(false);
+				Trail.Dunno<LGDataFound>().Init(false);
+				Trail.Dunno<InternalFlow>().Init();
 				InternalFlow();
 				return;
 			} else

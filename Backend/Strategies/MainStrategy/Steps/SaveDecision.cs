@@ -33,6 +33,21 @@
 		} // constructor
 
 		protected override void ExecuteStep() {
+			bool goodToGo = true;
+
+			if (this.autoDecisionResponse == null) {
+				Log.Alert("Cannot save decision for {0}: decision response is NULL.", OuterContextDescription);
+				goodToGo = false;
+			} // if
+
+			if (this.medal == null) {
+				Log.Alert("Cannot save decision for {0}: medal is NULL.", OuterContextDescription);
+				goodToGo = false;
+			} // if
+
+			if (!goodToGo)
+				return;
+
 			DateTime now = DateTime.UtcNow;
 
 			AddOldDecisionOffer(now);

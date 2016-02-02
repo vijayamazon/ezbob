@@ -66,6 +66,7 @@
 
 				if (Trail.MyInputData.RequestID == null) {
 					StepNoDecision<LGDataFound>().Init(false);
+					StepNoDecision<InternalFlow>().Init();
 					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					return;
 				} else

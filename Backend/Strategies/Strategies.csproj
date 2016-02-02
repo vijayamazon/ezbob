@@ -264,7 +264,7 @@
     <Compile Include="MainStrategy\Helpers\BackdoorSimpleApprove.cs" />
     <Compile Include="MainStrategy\Helpers\ForceNhibernateResync.cs" />
     <Compile Include="MainStrategy\Helpers\GradeRangeSubproduct.cs" />
-    <Compile Include="MainStrategy\Helpers\InternalCashRequestID.cs" />
+    <Compile Include="MainStrategy\Helpers\CashRequestIDExt.cs" />
     <Compile Include="MainStrategy\Helpers\MainStrategyUpdateCrC.cs" />
     <Compile Include="MainStrategy\Helpers\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\Helpers\MarketplaceUpdateStatus.cs" />
@@ -501,8 +501,7 @@
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\ZooplaStub.cs" />
-    <Compile Include="OfferCalculation\CalculateOffer.cs" />
-    <Compile Include="OfferCalculation\OfferCalculator1.cs" />
+    <Compile Include="OfferCalculation\OfferCalculator.cs" />
     <Compile Include="OfferCalculation\OfferDualCalculator.cs" />
     <Compile Include="OfferCalculation\OfferResult.cs" />
     <Compile Include="PricingModel\PricingModelCalculator.cs" />

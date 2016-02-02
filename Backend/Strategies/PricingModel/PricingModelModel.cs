@@ -13,8 +13,9 @@
 		public decimal DefaultRateCompanyShare { get; set; }
 		[DataMember]
 		public decimal DefaultRateCustomerShare { get; set; }
-		[DataMember]
-		public decimal SetupFeePounds { get; set; }
+
+		public decimal SetupFeePounds { get { return SetupFeePercents * LoanAmount; } }
+
 		[DataMember]
 		public decimal SetupFeePercents { get; set; }
 		[DataMember]
@@ -78,14 +79,13 @@
 		[DataMember]
 		public List<PricingSourceModel> PricingSourceModels { get; set; }
 
-        [DataMember]
-        public int ConsumerScore { get; set; }
-        [DataMember]
-        public int CompanyScore { get; set; }
+		[DataMember]
+		public int ConsumerScore { get; set; }
+		[DataMember]
+		public int CompanyScore { get; set; }
 
 		public void SetLoanAmount(decimal newLoanAmount) {
 			LoanAmount = newLoanAmount;
-			SetupFeePounds = SetupFeePercents * newLoanAmount;
 			BrokerSetupFeePounds = BrokerSetupFeePercents * newLoanAmount;
 		} // SetLoanAmount
 
@@ -111,7 +111,6 @@
 				DefaultRate = DefaultRate,
 				DefaultRateCompanyShare = DefaultRateCompanyShare,
 				DefaultRateCustomerShare = DefaultRateCustomerShare,
-				SetupFeePounds = SetupFeePounds,
 				SetupFeePercents = SetupFeePercents,
 				BrokerSetupFeePounds = BrokerSetupFeePounds,
 				BrokerSetupFeePercents = BrokerSetupFeePercents,
@@ -138,8 +137,8 @@
 				CostOfDebtOutput = CostOfDebtOutput,
 				TotalCost = TotalCost,
 				ProfitMarkupOutput = ProfitMarkupOutput,
-                ConsumerScore = ConsumerScore,
-                CompanyScore = CompanyScore
+				ConsumerScore = ConsumerScore,
+				CompanyScore = CompanyScore,
 			};
 		} // Clone
 	} // class PricingModelModel

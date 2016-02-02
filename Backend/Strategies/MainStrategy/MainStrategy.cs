@@ -15,8 +15,6 @@
 			if (args == null)
 				throw new StrategyAlert(this, "No arguments specified for the main strategy.");
 
-			UpdateStrategyContext();
-
 			this.context = new MainStrategyContextData(args);
 			this.mailer = new StrategiesMailer();
 
@@ -24,6 +22,8 @@
 
 			this.transitions = new SortedDictionary<StepResult, Func<AMainStrategyStepBase>>();
 			InitMachineTransitions();
+
+			UpdateStrategyContext();
 		} // constructor
 
 		public override string Name {
@@ -114,13 +114,9 @@
 		private void CollectStepOutputValue(string propertyName, object propertyValue) {
 			PropertyInfo pi = this.context.GetType().GetProperty(propertyName);
 
-			if (pi.PropertyType == typeof(InternalCashRequestID)) {
-				InternalCashRequestID dst = (InternalCashRequestID)pi.GetValue(this.context);
-				InternalCashRequestID src = (InternalCashRequestID)propertyValue;
-				dst.Value = src.Value;
-			} else if (pi.PropertyType == typeof(AutoDecisionResponse)) {
+			if (pi.PropertyType == typeof(AutoDecisionResponse))
 				this.context.AutoDecisionResponse.CopyFrom((AutoDecisionResponse)propertyValue);
-			} else
+			else
 				pi.SetValue(this.context, propertyValue);
 		} // CollectStepOutputValue
 
@@ -522,6 +518,8 @@
 				.OnResults(Rereject, StepResults.Requested)
 				.OnResults(PreventAutoDecision, StepResults.NotRequested);
 
+			InitTransition<PreventAutoDecision>().Always(Rereject);
+
 			InitTransition<Rereject>()
 				.OnResults(LockRerejected, StepResults.Affirmative)
 				.OnResults(Reject, StepResults.Negative)
@@ -542,6 +540,8 @@
 			InitTransition<CalculateOfferIfPossible>()
 				.OnResults(Reapproval, StepResults.Success)
 				.OnResults(LockManualAfterOffer, StepResults.Failed);
+
+			InitTransition<LockManualAfterOffer>().Always(Reapproval);
 
 			InitTransition<Reapproval>()
 				.OnResults(LockReapproved, StepResults.Affirmative)

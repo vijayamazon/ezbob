@@ -14,7 +14,7 @@
 		public string ScenarioName { get; set; }
 		public int Period { get; set; }
 		public int LoanTypeId { get; set; }
-        public int LoanSourceId { get; set; }
+		public int LoanSourceId { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
 		public string Message { get; set; }

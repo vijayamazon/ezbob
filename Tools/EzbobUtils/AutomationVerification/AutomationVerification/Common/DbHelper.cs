@@ -204,7 +204,7 @@
 				new QueryParameter("CustomerId", customerId));
 		}
 
-		public void SaveOffer(OfferOutputModel offerOutputModel, OfferCalculationType type) {
+		public void SaveOffer(OfferOutputModel offerOutputModel) {
 			_db.ExecuteNonQuery("AV_StoreOffer", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", offerOutputModel.CustomerId),
 				new QueryParameter("CalculationTime", offerOutputModel.CalculationTime),
@@ -217,7 +217,7 @@
 				new QueryParameter("InterestRate", offerOutputModel.InterestRate),
 				new QueryParameter("SetupFee", offerOutputModel.SetupFee),
 				new QueryParameter("Error", offerOutputModel.Description),
-				new QueryParameter("Type", type.ToString()));
+				new QueryParameter("Type", "Verification"));
 		}
 
 		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID, long? nlCashRequestID) {

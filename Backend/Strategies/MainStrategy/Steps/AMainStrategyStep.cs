@@ -9,12 +9,12 @@
 
 		public override StepResults Execute() {
 			try {
-				Log.Debug("Executing step {0} for {1}...", Name, OuterContextDescription);
+				Log.Debug("Start of step {0} for {1}...", Name, OuterContextDescription);
 
 				StepResults nextStep = Run();
 
 				Log.Debug(
-					"Completed step {0} with result '{1}' for {2}.",
+					"End of step {0} with result {1} for {2}.",
 					Name,
 					Outcome,
 					OuterContextDescription
@@ -26,7 +26,7 @@
 			} catch (Exception e) {
 				Log.Alert(
 					e,
-					"Exception during step '{0}' while executing for {1}.",
+					"Exception during step {0} while executing for {1}.",
 					Name,
 					OuterContextDescription
 				);
@@ -51,7 +51,7 @@
 			if (CollectOutputValue == null)
 				return;
 
-			Log.Debug("Collecting output values of step {0} for {1}...", Name, OuterContextDescription);
+			Log.Debug("Start of collecting output values of step {0} for {1}...", Name, OuterContextDescription);
 
 			this.TraverseReadable((instance, pi) => {
 				object[] oAttrList = pi.GetCustomAttributes(typeof(StepOutputAttribute), false);
@@ -63,7 +63,7 @@
 				CollectOutputValue(pi.Name, pi.GetValue(instance));
 			});
 
-			Log.Debug("Completed collecting output values of step {0} for {1}.", Name, OuterContextDescription);
+			Log.Debug("End of collecting output values of step {0} for {1}.", Name, OuterContextDescription);
 		} // CollectOutputValues
 	} // class AMainStrategyStep
 } // namespace

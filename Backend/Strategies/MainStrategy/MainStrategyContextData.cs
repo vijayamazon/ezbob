@@ -6,7 +6,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
-	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -25,7 +24,8 @@
 			AutoApprovalTrailUniqueID = null;
 
 			OverrideApprovedRejected = true;
-			CashRequestID = new InternalCashRequestID(this.arguments.CashRequestID);
+			CashRequestID = this.arguments.CashRequestID ?? 0;
+			NLCashRequestID = 0;
 			CashRequestOriginator = this.arguments.CashRequestOriginator;
 
 			if (FinishWizardArgs != null) {
@@ -60,7 +60,7 @@
 					UnderwriterID,
 					NewCreditLineOption,
 					CashRequestOriginator.HasValue ? CashRequestOriginator.ToString() : "'UNKNOWN ORIGINATOR'",
-					(long)CashRequestID,
+					CashRequestID,
 					NLCashRequestID,
 					Tag
 				);
@@ -123,7 +123,7 @@
 
 		public MedalResult Medal { get; set; }
 
-		public InternalCashRequestID CashRequestID { get; private set; }
+		public long CashRequestID { get; private set; }
 		public long NLCashRequestID { get; set; }
 
 		public bool WasMismatch { get; set; }

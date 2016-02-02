@@ -18,28 +18,28 @@
 			var defaultRateModel = GetDefaultRate(out defaultRateCustomerShare);
 			int loanAmount, loanTerm;
 			GetDataFromCashRequest(out loanAmount, out loanTerm);
-			decimal tenureMonths = tenurePercents * loanTerm;
+			decimal tenureMonths = this.tenurePercents * loanTerm;
 
 			Model = new PricingModelModel {
-                DefaultRate = defaultRateModel.DefaultRate,
-				DefaultRateCompanyShare = defaultRateCompanyShare,
+				DefaultRate = defaultRateModel.DefaultRate,
+				DefaultRateCompanyShare = this.defaultRateCompanyShare,
 				DefaultRateCustomerShare = defaultRateCustomerShare,
-				SetupFeePercents = setupFee,
-				BrokerSetupFeePercents = brokerSetupFee,
+				SetupFeePercents = this.setupFee,
+				BrokerSetupFeePercents = this.brokerSetupFee,
 				LoanTerm = loanTerm,
-				InterestOnlyPeriod = interestOnlyPeriod,
-				TenurePercents = tenurePercents,
+				InterestOnlyPeriod = this.interestOnlyPeriod,
+				TenurePercents = this.tenurePercents,
 				TenureMonths = tenureMonths,
-				CollectionRate = collectionRate,
-				EuCollectionRate = euCollectionRate,
-				CosmeCollectionRate = cosmeCollectionRate,
-				Cogs = cogs,
-				DebtPercentOfCapital = debtPercentOfCapital,
-				CostOfDebt = costOfDebtPA,
-				OpexAndCapex = opexAndCapex,
-				ProfitMarkup = profitMarkupPercentsOfRevenue,
-                ConsumerScore = defaultRateModel.ConsumerScore,
-                CompanyScore = defaultRateModel.BusinessScore
+				CollectionRate = this.collectionRate,
+				EuCollectionRate = this.euCollectionRate,
+				CosmeCollectionRate = this.cosmeCollectionRate,
+				Cogs = this.cogs,
+				DebtPercentOfCapital = this.debtPercentOfCapital,
+				CostOfDebt = this.costOfDebtPA,
+				OpexAndCapex = this.opexAndCapex,
+				ProfitMarkup = this.profitMarkupPercentsOfRevenue,
+				ConsumerScore = defaultRateModel.ConsumerScore,
+				CompanyScore = defaultRateModel.BusinessScore,
 			};
 
 			Model.SetLoanAmount(loanAmount);
@@ -53,19 +53,19 @@
 			);
 
 			if (!sr.IsEmpty) {
-				tenurePercents = sr["TenurePercents"];
-				setupFee = sr["SetupFee"];
-				profitMarkupPercentsOfRevenue = sr["ProfitMarkupPercentsOfRevenue"];
-				opexAndCapex = sr["OpexAndCapex"];
-				interestOnlyPeriod = sr["InterestOnlyPeriod"];
-				euCollectionRate = sr["EuCollectionRate"];
-				cosmeCollectionRate = sr["COSMECollectionRate"];
-				defaultRateCompanyShare = sr["DefaultRateCompanyShare"];
-				debtPercentOfCapital = sr["DebtPercentOfCapital"];
-				costOfDebtPA = sr["CostOfDebtPA"];
-				collectionRate = sr["CollectionRate"];
-				cogs = sr["Cogs"];
-				brokerSetupFee = sr["BrokerSetupFee"];
+				this.tenurePercents = sr["TenurePercents"];
+				this.setupFee = sr["SetupFee"];
+				this.profitMarkupPercentsOfRevenue = sr["ProfitMarkupPercentsOfRevenue"];
+				this.opexAndCapex = sr["OpexAndCapex"];
+				this.interestOnlyPeriod = sr["InterestOnlyPeriod"];
+				this.euCollectionRate = sr["EuCollectionRate"];
+				this.cosmeCollectionRate = sr["COSMECollectionRate"];
+				this.defaultRateCompanyShare = sr["DefaultRateCompanyShare"];
+				this.debtPercentOfCapital = sr["DebtPercentOfCapital"];
+				this.costOfDebtPA = sr["CostOfDebtPA"];
+				this.collectionRate = sr["CollectionRate"];
+				this.cogs = sr["Cogs"];
+				this.brokerSetupFee = sr["BrokerSetupFee"];
 			} // if
 		} // ReadConfigurations
 
@@ -76,7 +76,7 @@
 			SafeReader sr = DB.GetFirst(
 				"GetLastCashRequestForPricingModel",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", this.customerId)
 			);
 
 			if (!sr.IsEmpty) {
@@ -85,10 +85,10 @@
 			} // if
 		} // GetDataFromCashRequest
 
-        private GetPricingModelDefaultRate GetDefaultRate(out decimal defaultRateCustomerShare) {
-			defaultRateCustomerShare = 1 - defaultRateCompanyShare;
+		private GetPricingModelDefaultRate GetDefaultRate(out decimal defaultRateCustomerShare) {
+			defaultRateCustomerShare = 1 - this.defaultRateCompanyShare;
 
-			var instance = new GetPricingModelDefaultRate(customerId, defaultRateCompanyShare);
+			var instance = new GetPricingModelDefaultRate(this.customerId, this.defaultRateCompanyShare);
 			instance.Execute();
 			return instance;
 		} // GetDefaultRate

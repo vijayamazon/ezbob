@@ -35,7 +35,7 @@ EzBob.Underwriter.ConfigSchedulerView = Backbone.Marionette.ItemView.extend({
 			rules: {
 				fundsTransferSchedule: { required: true },
 				monthlyFundingCapital: { required: true, autonumericMin: 0, autonumericMax: 100000000 },
-				fundsTransferDate: { required: true },
+				fundsTransferDate: { required: true, digits: true, min: 1, max: 31 },
 				repaymentsTransferSchedule: { required: true }
 			},
 			errorPlacement: EzBob.Validation.errorPlacement,
@@ -43,7 +43,7 @@ EzBob.Underwriter.ConfigSchedulerView = Backbone.Marionette.ItemView.extend({
 			ignore: ':not(:visible)'
 		});
 
-
+		this.ui.fundsTransferDate.numericOnly(2);
 
 		return this;
 	},

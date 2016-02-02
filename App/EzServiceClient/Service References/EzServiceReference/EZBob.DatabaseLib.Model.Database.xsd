@@ -168,14 +168,4 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="CreditResultStatus" nillable="true" type="tns:CreditResultStatus" />
-  <xs:simpleType name="Medal">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="NoClassification" />
-      <xs:enumeration value="Silver" />
-      <xs:enumeration value="Gold" />
-      <xs:enumeration value="Platinum" />
-      <xs:enumeration value="Diamond" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="Medal" nillable="true" type="tns:Medal" />
 </xs:schema>

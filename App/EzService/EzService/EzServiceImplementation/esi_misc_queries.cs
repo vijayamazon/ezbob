@@ -7,7 +7,6 @@
 	using Ezbob.Backend.Strategies.ManualDecision;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
@@ -48,11 +47,6 @@
 		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID) {
 			CalculateMedal instance;
 			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, nlCashRequestID, DateTime.UtcNow, false, true);
-		}
-
-		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification) {
-			CalculateOffer instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, hasLoans, medalClassification);
 		}
 
 		public NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
