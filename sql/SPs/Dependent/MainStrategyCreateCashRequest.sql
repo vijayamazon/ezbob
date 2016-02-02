@@ -31,6 +31,7 @@ BEGIN
 	DECLARE @LsIsCustomerRepaymentPeriodSelectionAllowed BIT
 
 	DECLARE @IsAlibaba BIT
+	DECLARE @OriginID INT
 	DECLARE @LtType NVARCHAR(50)
 	DECLARE @RepaymentPeriod INT
 
@@ -39,9 +40,15 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT @IsAlibaba = ISNULL((
-		SELECT IsAlibaba FROM Customer WHERE Id = @CustomerID
-	), 0)
+	SELECT
+		@IsAlibaba = IsAlibaba,
+		@OriginID = OriginID
+	FROM
+		Customer
+	WHERE
+		Id = @CustomerID
+
+	SELECT @IsAlibaba = ISNULL(@IsAlibaba, 0)
 
 	------------------------------------------------------------------------------
 
@@ -63,7 +70,7 @@ BEGIN
 		@LsDefaultRepaymentPeriod = DefaultRepaymentPeriod,
 		@LsIsCustomerRepaymentPeriodSelectionAllowed = IsCustomerRepaymentPeriodSelectionAllowed
 	FROM
-		dbo.udfGetLoanSource(NULL)
+		dbo.udfGetLoanSource(NULL, @OriginID)
 
 	------------------------------------------------------------------------------
 

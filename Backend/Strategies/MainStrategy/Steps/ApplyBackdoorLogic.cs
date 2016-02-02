@@ -32,7 +32,7 @@
 
 			this.applied = false;
 
-			AutoDecisionResponse = new AutoDecisionResponse();
+			AutoDecisionResponse = new AutoDecisionResponse(this.customerID);
 		} // constructor
 
 		[StepOutput]

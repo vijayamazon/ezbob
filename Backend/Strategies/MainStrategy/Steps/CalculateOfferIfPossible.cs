@@ -185,7 +185,11 @@
 				this.isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
 			);
 
-			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+			SafeReader sr = DB.GetFirst(
+				"GetDefaultLoanSource",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customerID)
+			);
 
 			if (sr.IsEmpty || (ProposedAmount <= 0)) {
 				OfferResult = new OfferResult {

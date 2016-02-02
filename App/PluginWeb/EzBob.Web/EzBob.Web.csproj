@@ -296,7 +296,6 @@
     <Compile Include="Areas\Underwriter\Models\ApiCheckLogBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\CampaignModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomerRelationsModelBuilder.cs" />
-    <Compile Include="Areas\Underwriter\Models\LoanSourceModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CreditBureauModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\FraudStatusModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />

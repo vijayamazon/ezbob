@@ -36,7 +36,7 @@
 
 			WasMismatch = false;
 
-			AutoDecisionResponse = new AutoDecisionResponse();
+			AutoDecisionResponse = new AutoDecisionResponse(this.arguments.CustomerID);
 
 			Tag = string.Format(
 				"#MainStrategy_{0}_{1}",

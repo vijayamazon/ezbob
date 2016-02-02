@@ -159,7 +159,7 @@
 				this.args.CustomerID,
 				this.args.Now,
 				false,
-				this.args.MonthlyPayment
+				0
 			);
 
 			if (inference == null) {

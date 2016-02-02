@@ -42,7 +42,7 @@ BEGIN
 	SELECT
 		@LoanSourceID = LoanSourceID
 	FROM
-		dbo.udfGetLoanSource(0)
+		dbo.udfGetLoanSource(0, @OriginID)
 
 	------------------------------------------------------------------------------
 

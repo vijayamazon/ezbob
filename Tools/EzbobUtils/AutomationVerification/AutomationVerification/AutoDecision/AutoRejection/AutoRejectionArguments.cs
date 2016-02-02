@@ -7,7 +7,6 @@
 		public AutoRejectionArguments(
 			int customerID,
 			int companyID,
-			int monthlPayment,
 			long? cashRequestID,
 			long? nlCashRequestID,
 			string tag,
@@ -17,7 +16,6 @@
 		) {
 			CustomerID = customerID;
 			CompanyID = companyID;
-			MonthlyPayment = monthlPayment;
 
 			CashRequestID = cashRequestID;
 			NLCashRequestID = nlCashRequestID;
@@ -32,7 +30,6 @@
 
 		public int CustomerID { get; private set; }
 		public int CompanyID { get; private set; }
-		public int MonthlyPayment { get; private set; }
 
 		public long? CashRequestID { get; private set; }
 		public long? NLCashRequestID { get; private set; }

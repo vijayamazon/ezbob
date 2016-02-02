@@ -9,10 +9,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 -- Returns loan source by id. If could not find loan source by id returns
--- any of loan sources which are marked as default. If none is marked as
--- default returns loan source with id = 1.
+-- default loan source for requested origin. If none is marked as
+-- default returns loan source with the minimal existing loan source.
 
-CREATE FUNCTION dbo.udfGetLoanSource(@LoanSourceID INT)
+CREATE FUNCTION dbo.udfGetLoanSource(@LoanSourceID INT, @OriginID INT)
 RETURNS @output TABLE (
 	LoanSourceID INT,
 	LoanSourceName NVARCHAR(50),
@@ -21,12 +21,41 @@ RETURNS @output TABLE (
 	IsCustomerRepaymentPeriodSelectionAllowed BIT,
 	MaxEmployeeCount INT,
 	MaxAnnualTurnover DECIMAL(18, 2),
-	IsDefault BIT,
 	AlertOnCustomerReasonType INT,
 	IsDisabled BIT
 )
 AS
 BEGIN
+	DECLARE @id INT = NULL
+
+	IF @LoanSourceID IS NOT NULL
+	BEGIN
+		SELECT TOP 1
+			@id = LoanSourceID
+		FROM
+			LoanSource
+		WHERE
+			LoanSourceID = @LoanSourceID
+	END
+
+	IF @id IS NULL
+	BEGIN
+		SELECT
+			@id = LoanSourceID
+		FROM
+			DefaultLoanSources
+		WHERE
+			OriginID = @OriginID
+	END
+
+	IF @id IS NULL
+	BEGIN
+		SELECT
+			@id = MIN(LoanSourceID)
+		FROM
+			LoanSource
+	END
+
 	INSERT INTO @output(
 		LoanSourceID,
 		LoanSourceName,
@@ -35,7 +64,6 @@ BEGIN
 		IsCustomerRepaymentPeriodSelectionAllowed,
 		MaxEmployeeCount,
 		MaxAnnualTurnover,
-		IsDefault,
 		AlertOnCustomerReasonType--,
 	--	IsDisabled
 	)
@@ -47,33 +75,12 @@ BEGIN
 		ls.IsCustomerRepaymentPeriodSelectionAllowed,
 		ls.MaxEmployeeCount,
 		ls.MaxAnnualTurnover,
-		ls.IsDefault,
 		ls.AlertOnCustomerReasonType--,
 	--	ls.IsDisabled
 	FROM
 		LoanSource ls
-	WHERE (
-			@LoanSourceID IS NOT NULL AND (
-				ls.LoanSourceID = @LoanSourceID
-				OR
-				ls.IsDefault = 1
-				OR
-				ls.LoanSourceID = 1
-			)
-		)
-		OR (
-			@LoanSourceID IS NULL AND (
-				ls.IsDefault = 1
-				OR
-				ls.LoanSourceID = 1
-			)
-		)
-	ORDER BY
-		CASE WHEN @LoanSourceID IS NOT NULL
-			THEN CASE WHEN @LoanSourceID = LoanSourceID THEN 0 ELSE 1 END
-			ELSE 1
-		END,		
-		ls.IsDefault DESC
+	WHERE
+		ls.LoanSourceID = @id
 
 	RETURN
 END
