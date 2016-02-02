@@ -190,7 +190,7 @@
 				}
 	
 				// update loan status				
-				if (stateBefore["LoanStatusID"] != stateAfter["LoanStatusID"]) {
+				if (!stateAfter["LoanStatusID"].Equals(stateBefore["LoanStatusID"])) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanUpdate", CommandSpecies.StoredProcedure,
 						new QueryParameter("LoanID", RecalculatedModel.Loan.LoanID),
 						new QueryParameter("LoanStatusID", RecalculatedModel.Loan.LoanStatusID),

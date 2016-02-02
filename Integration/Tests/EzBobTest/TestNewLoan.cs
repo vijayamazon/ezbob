@@ -91,7 +91,7 @@
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(365) {
+			NL_Model model = new NL_Model(59) {
 				UserID = 357,
 				Loan = new NL_Loans()
 			};
@@ -441,8 +441,8 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 14;
-			const int customerID = 389;
+			const long loanID = 10007;
+			const int customerID = 59;
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
@@ -619,7 +619,7 @@
 		}
 
 		[Test]
-		public void AddPAymentTest() {
+		public void AddPaymentTest() {
 			const int customerid = 390;
 			const long loanID = 15;
 			/*NL_Payments nlpayment = new NL_Payments() {
@@ -709,8 +709,8 @@
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		[Test]
 		public void UpdateLoanDBStateTest() {
-			const long loanID = 4;
-			const int customerID = 1394;
+			const long loanID = 10009;
+			const int customerID = 59;
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(customerID, loanID, 357);
 			reloadLoanDBState.Context.UserID = 357;
 			try {
