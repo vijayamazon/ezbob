@@ -111,8 +111,8 @@
     <Compile Include="NSB\IHandlersProvider.cs" />
     <Compile Include="NSB\Locker.cs" />
     <Compile Include="NSB\SendReceiveCache.cs" />
-    <Compile Include="NSB\SendRecieveAsyncHandler.cs" />
-    <Compile Include="NSB\SendRecieveHandler.cs" />
+    <Compile Include="NSB\SendReceiveAsyncHandler.cs" />
+    <Compile Include="NSB\SendReceiveHandler.cs" />
     <Compile Include="Optional.cs" />
     <Compile Include="OptionalJsonSerializer.cs" />
     <Compile Include="PostInject.cs" />
@@ -127,8 +127,8 @@
     <Compile Include="Utils\SerializationUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Web\EzBobWebBrowser.cs" />
-    <Compile Include="Web\IEzBobHtmlClient.cs" />
-    <Compile Include="Web\EzBobHtmlClient.cs" />
+    <Compile Include="Web\IEzBobHttpClient.cs" />
+    <Compile Include="Web\EzBobHttpClient.cs" />
     <Compile Include="Web\IEzBobWebBrowser.cs" />
   </ItemGroup>
   <ItemGroup>

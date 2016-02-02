@@ -6,7 +6,7 @@
     /// <summary>
     /// This class automatically created and registered in container by NSB
     /// </summary>
-    public class TwilioSmsAsyncSendReceive : SendRecieveAsyncHandler<TwilioSendSmsCommandResponse>
+    public class TwilioSmsAsyncSendReceive : SendReceiveAsyncHandler<TwilioSendSmsCommandResponse>
     {
     }
 }

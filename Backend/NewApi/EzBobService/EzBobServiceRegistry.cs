@@ -1,9 +1,5 @@
 ﻿namespace EzBobService {
-    using System.IO;
-    using System.Text;
-    using Common.Logging;
-    using EzBobCommon.Configuration;
-    using EzBobCommon.NSB;
+    using EzBobCommon.Injection;
     using EzBobPersistence;
     using EzBobPersistence.Alibaba;
     using EzBobPersistence.Company;
@@ -15,37 +11,23 @@
     using EzBobPersistence.ThirdParty.Hrmc;
     using EzBobService.Currency;
     using EzBobService.Customer;
-    using EzBobService.DependencyResolution;
     using EzBobService.Misc;
     using EzBobService.Mobile;
-    using EzBobService.Properties;
     using EzBobService.ThirdParties.Hmrc.Upload;
-    using StructureMap.Configuration.DSL;
-    using StructureMap.Graph;
 
-    public class EzBobServiceRegistry : Registry {
+    public class EzBobServiceRegistry : EzRegistryBase {
         //TODO: read from configuration
         private static readonly string TheConnectionString = "Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true";
         private static readonly string ConnectionString = "connectionString";
 
         public EzBobServiceRegistry() {
-            Scan(scan => {
-                scan.TheCallingAssembly();
-                scan.WithDefaultConventions();
-                scan.With(new CommandHandlerConvention());
-            });
+//            Scan(scan => {
+//                scan.TheCallingAssembly();
+//                scan.WithDefaultConventions();
+//                scan.With(new CommandHandlerConvention());
+//            });
 
-            For<ILog>()
-                .Add(ctx => LogManager.GetLogger(ctx.ParentType)).AlwaysUnique();
-
-            ForSingletonOf<ConfigManager>()
-                .Use<ConfigManager>()
-                .OnCreation(cnfg => InitConfigurationManger(cnfg));
-
-            //handles configuration objects injection
-            Policies.OnMissingFamily<ConfigurationPolicy>();
-
-            For<IHmrcQueries>()
+           For<IHmrcQueries>()
                 .Use<HmrcQueries>();
 
             For<IHmrcUploadedFileParser>()
@@ -92,24 +74,11 @@
             ForSingletonOf<CustomerProcessor>()
                 .Use<CustomerProcessor>();
 
-            ForSingletonOf<IHandlersProvider>()
-                .Use<HandlersProvider>();
-
-            ForSingletonOf<ErrorCache>()
-                .Use<ErrorCache>();
-
             ForSingletonOf<RefNumberGenerator>()
                 .Use<RefNumberGenerator>();
 
             ForSingletonOf<ICurrencyConverter>()
                 .Use<CurrencyConverter>();
-        }
-
-        private void InitConfigurationManger(ConfigManager configManager) {
-            configManager.AddConfigJsonString(Encoding.UTF8.GetString(Resources.config));
-            if (File.Exists("config.json")) {
-                configManager.AddConfigFilePaths("config.json");
-            }
         }
     }
 }

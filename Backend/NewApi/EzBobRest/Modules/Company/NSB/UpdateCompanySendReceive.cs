@@ -6,6 +6,6 @@
     /// <summary>
     /// This class is created automatically by NSB<br/>
     /// </summary>
-    public class UpdateCompanySendReceive : SendRecieveAsyncHandler<UpdateCompanyCommandResponse> {
+    public class UpdateCompanySendReceive : SendReceiveAsyncHandler<UpdateCompanyCommandResponse> {
     }
 }

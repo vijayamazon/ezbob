@@ -61,7 +61,7 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 ExperianBusinessTargetingCommandResponse response;
                 try {
                     response = await TargetCompanySendReceive.SendAsync(Config.ServerAddress, command, cts);
@@ -109,7 +109,7 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 try {
                     var response = await UpdateCompanySendReceive.SendAsync(Config.ServerAddress, updateCommand, cts);
                     if (response.HasErrors) {

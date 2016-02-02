@@ -3,7 +3,7 @@
     using EzBobCommon.NSB;
 
     /// <summary>
-    /// response to  GetEbayLoginUrl3dPartyCommand
+    /// response to <see cref="EbayGetLoginUrl3dPartyCommand"/>
     /// </summary>
     public class EbayGetLoginUrl3dPartyCommandResponse : CommandResponseBase {
         /// <summary>

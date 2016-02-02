@@ -1,9 +1,16 @@
 ﻿namespace EzBob3dParties {
+    using EzBob3dParties.Amazon;
+    using EzBob3dParties.Amazon.RatingScraper;
+    using EzBob3dParties.Amazon.Src.CustomerApi;
+    using EzBob3dParties.Amazon.Src.OrdersApi;
+    using EzBob3dParties.Amazon.Src.ProductsApi;
     using EzBob3dParties.EBay;
     using EzBob3dParties.Hmrc;
+    using EzBob3dParties.PayPalService.Soap;
+    using EzBob3dParties.SimplyPostcode;
+    using EzBob3dParties.Twilio;
     using EzBob3dParties.Yodlee;
     using EzBobCommon.Injection;
-    using EzBobCommon.NSB;
     using EzBobCommon.Web;
 
     /// <summary>
@@ -12,20 +19,28 @@
     public class EzBob3dPartiesRegistry : EzRegistryBase {
         public EzBob3dPartiesRegistry() {
 
-            ForSingletonOf<IEzBobHtmlClient>()
-                .Use<EzBobHtmlClient>();
+            ForSingletonOf<IEzBobHttpClient>()
+                .Use<EzBobHttpClient>();
 
             For<IEzBobWebBrowser>()
                 .Use<EzBobWebBrowser>();
 
-            ForSingletonOf<IHandlersProvider>()
-                .Use<HandlersProvider>();
+            For<ITwilio>()
+                .Use<TwilioService>();
+
+            For<PayPalSoapService>()
+                .Use<PayPalSoapService>();
+
+            For<ISimplyPostcodeService>()
+                .Use<SimplyPostcodeService>();
 
             InitYodleeRelated();
 
             InitHMRCRelated();
 
             InitEbayRelated();
+
+            InitAmazonRelated();
         }
 
         /// <summary>
@@ -72,6 +87,27 @@
 
             For<RtiTaxYearsFetcher>()
                 .Use<RtiTaxYearsFetcher>();
+        }
+
+        /// <summary>
+        /// Initializes the amazon related.
+        /// </summary>
+        private void InitAmazonRelated() {
+
+            For<IAmazonService>()
+                .Use<AmazonService>();
+
+            For<ICustomerRating>()
+                .Use<CustomerRatingScraper>();
+
+            For<IMwsCustomerService>()
+                .Use<MWSCustomerServiceClient>();
+
+            For<IMwsOrdersService>()
+                .Use<ImwssOrdersServiceClient>();
+
+            For<IMwsProductsService>()
+                .Use<ImwsProductsServiceClient>();
         }
     }
 }

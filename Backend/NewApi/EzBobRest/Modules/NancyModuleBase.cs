@@ -10,6 +10,11 @@ namespace EzBobRest.Modules {
     using Nancy;
     using Nancy.Security;
 
+    /// <summary>
+    /// Provides basic functionality:
+    /// Automatic module security (not functional in debug mode).
+    /// Methods to create responses, Log, RestServerConfig.
+    /// </summary>
     public abstract class NancyModuleBase : NancyModule {
 
         [Injected]
@@ -53,6 +58,11 @@ namespace EzBobRest.Modules {
             return res;
         }
 
+        /// <summary>
+        /// Creates the error response.
+        /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <returns></returns>
         protected Response CreateErrorResponse(HttpStatusCode statusCode) {
             return Response.AsJson("{}")
                 .WithStatusCode(statusCode);

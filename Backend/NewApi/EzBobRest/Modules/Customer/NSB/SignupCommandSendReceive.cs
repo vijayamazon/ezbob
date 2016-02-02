@@ -6,5 +6,5 @@
     /// <summary>
     /// This class is created automatically by NSB<br/>
     /// </summary>
-    public class SignupCommandSendReceive : SendRecieveAsyncHandler<CustomerSignupCommandResponse> { }
+    public class SignupCommandSendReceive : SendReceiveAsyncHandler<CustomerSignupCommandResponse> { }
 }

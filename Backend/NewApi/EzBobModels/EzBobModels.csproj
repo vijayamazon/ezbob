@@ -42,6 +42,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlibabaBuyer.cs" />
+    <Compile Include="Amazon\AmazonCategory.cs" />
+    <Compile Include="Amazon\AmazonFeedback.cs" />
+    <Compile Include="Amazon\AmazonFeedbackItem.cs" />
+    <Compile Include="Amazon\AmazonMarketplaceType.cs" />
+    <Compile Include="Amazon\AmazonOrder.cs" />
+    <Compile Include="Amazon\AmazonOrderItem.cs" />
+    <Compile Include="Amazon\AmazonOrderItemDetail.cs" />
+    <Compile Include="Amazon\AmazonOrderItemDetailsCategory.cs" />
+    <Compile Include="Amazon\AmazonOrderItemPayment.cs" />
+    <Compile Include="Amazon\AmazonProductCategory.cs" />
+    <Compile Include="Amazon\Helpers\AmazonOrderItemAndPayments.cs" />
     <Compile Include="AutoDecisionResponse.cs" />
     <Compile Include="CampaignSourceRef.cs" />
     <Compile Include="Company.cs" />
@@ -98,6 +109,10 @@
     <Compile Include="PayPal\PayPalTransaction.cs" />
     <Compile Include="PayPal\PayPalTransactionItem.cs" />
     <Compile Include="PayPal\PayPalUserPersonalInfo.cs" />
+    <Compile Include="Postcode\PostcodesAddress.cs" />
+    <Compile Include="Postcode\PostCodeResultCodes.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostcodeAddress.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostcodeDatailedAddress.cs" />
     <Compile Include="SourceRefEntry.cs" />
     <Compile Include="ThirdParties\Experian\Experian3dPartyCompanyInfo.cs" />
     <Compile Include="ThirdParties\Twilio\TwilioSms.cs" />
@@ -130,6 +145,7 @@
       <Name>EzBobCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

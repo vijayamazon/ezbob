@@ -4,6 +4,10 @@
     using System.Reflection;
     using FluentValidation;
 
+    /// <summary>
+    /// Provides common functionality
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ValidatorBase<T> : AbstractValidator<T> {
 
         public ValidatorBase() {

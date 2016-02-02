@@ -47,6 +47,14 @@
       <HintPath>..\packages\eBay.3.939.0\lib\net40\eBay.Service.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Fizzler">
+      <HintPath>..\packages\Fizzler.1.0.0\lib\net35\Fizzler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fizzler.Systems.HtmlAgilityPack, Version=0.1.15619.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fizzler.Systems.HtmlAgilityPack.1.0.0\lib\net35\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
@@ -127,6 +135,198 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Amazon\AmazonConfig.cs" />
+    <Compile Include="Amazon\AmazonGetOrdersDetailsHandler.cs" />
+    <Compile Include="Amazon\AmazonGetOrdersHandler.cs" />
+    <Compile Include="Amazon\AmazonGetProductCategoriesHandler.cs" />
+    <Compile Include="Amazon\AmazonService.cs" />
+    <Compile Include="Amazon\IAmazonService.cs" />
+    <Compile Include="Amazon\RatingScraper\CustomerRatingScraper.cs" />
+    <Compile Include="Amazon\RatingScraper\Feedback\FeedbackInfo.cs" />
+    <Compile Include="Amazon\RatingScraper\Feedback\FeedbackPeriod.cs" />
+    <Compile Include="Amazon\RatingScraper\Feedback\FeedbackType.cs" />
+    <Compile Include="Amazon\RatingScraper\ICustomerRating.cs" />
+    <Compile Include="Amazon\RatingScraper\AmazonRatingInfo.cs" />
+    <Compile Include="Amazon\Src\Common\AbstractMwsObject.cs" />
+    <Compile Include="Amazon\Src\Common\IMwsCall.cs" />
+    <Compile Include="Amazon\Src\Common\IMwsObject.cs" />
+    <Compile Include="Amazon\Src\Common\IMwsReader.cs" />
+    <Compile Include="Amazon\Src\Common\IMwsRequestType.cs" />
+    <Compile Include="Amazon\Src\Common\IMwsWriter.cs" />
+    <Compile Include="Amazon\Src\Common\MwsAQCall.cs" />
+    <Compile Include="Amazon\Src\Common\MwsConnection.cs" />
+    <Compile Include="Amazon\Src\Common\MwsException.cs" />
+    <Compile Include="Amazon\Src\Common\MwsResponseHeaderMetadata.cs" />
+    <Compile Include="Amazon\Src\Common\MwsResponseMetadata.cs" />
+    <Compile Include="Amazon\Src\Common\MwsUtil.cs" />
+    <Compile Include="Amazon\Src\Common\MwsXmlBuilder.cs" />
+    <Compile Include="Amazon\Src\Common\MwsXmlReader.cs" />
+    <Compile Include="Amazon\Src\Common\MwsXmlWriter.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Mock\MWSCustomerServiceMock.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\Address.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\Customer.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\CustomerPrimaryContactInfo.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetCustomersByCustomerIdRequest.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetCustomersByCustomerIdResponse.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetCustomersByCustomerIdResult.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetCustomersForCustomerIdRequest.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetCustomersForCustomerIdResponse.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetCustomersForCustomerIdResult.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetServiceStatusRequest.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetServiceStatusResponse.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\GetServiceStatusResult.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\IMWSResponse.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ListCustomersByNextTokenRequest.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ListCustomersByNextTokenResponse.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ListCustomersByNextTokenResult.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ListCustomersRequest.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ListCustomersResponse.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ListCustomersResult.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\MarketplaceDomain.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ResponseHeaderMetadata.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\Model\ResponseMetadata.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\IMWSCustomerService.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\MWSCustomerServiceClient.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\MWSCustomerServiceConfig.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\MWSCustomerServiceException.cs" />
+    <Compile Include="Amazon\Src\CustomerApi\MWSCustomerServiceSample.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\IMwsProductsService.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\ImwsProductsServiceClient.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\MarketplaceWebServiceProductsConfig.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\MarketplaceWebServiceProductsException.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\MarketplaceWebServiceProductsSample.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Mock\ImwsProductsServiceMock.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ASINIdentifier.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ASINListType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ASINOfferDetail.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ASINOfferDetailList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\AttributeSetList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\BuyBoxEligibleOffers.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\BuyBoxPrices.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\BuyBoxPriceType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\Categories.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\CompetitivePriceList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\CompetitivePriceType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\CompetitivePricingType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\DetailedShippingTimeType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\Error.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ErrorDetail.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetCompetitivePricingForASINRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetCompetitivePricingForASINResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetCompetitivePricingForASINResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetCompetitivePricingForSKURequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetCompetitivePricingForSKUResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetCompetitivePricingForSKUResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestOfferListingsForASINRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestOfferListingsForASINResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestOfferListingsForASINResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestOfferListingsForSKURequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestOfferListingsForSKUResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestOfferListingsForSKUResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersAsinIdentifier.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersForASINRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersForASINResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersForASINResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersForSKURequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersForSKUResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersForSKUResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetLowestPricedOffersSkuIdentifier.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMatchingProductForIdRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMatchingProductForIdResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMatchingProductForIdResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMatchingProductRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMatchingProductResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMatchingProductResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMyPriceForASINRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMyPriceForASINResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMyPriceForASINResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMyPriceForSKURequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMyPriceForSKUResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetMyPriceForSKUResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetProductCategoriesForASINRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetProductCategoriesForASINResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetProductCategoriesForASINResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetProductCategoriesForSKURequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetProductCategoriesForSKUResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetProductCategoriesForSKUResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetServiceStatusRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetServiceStatusResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\GetServiceStatusResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\IdentifierType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\IdListType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\IMWSResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ListMatchingProductsRequest.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ListMatchingProductsResponse.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ListMatchingProductsResult.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\LowestOfferListingList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\LowestOfferListingType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\LowestPrices.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\LowestPriceType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\Message.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\MessageList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\MoneyType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\NumberOfOfferListingsList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\NumberOfOffers.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\OfferCountType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\OfferListingCountType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\OffersList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\OfferType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\Points.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\PriceType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\Product.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ProductList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ProductsUtil.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\QualifiersType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\RelationshipList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ResponseHeaderMetadata.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ResponseMetadata.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SalesRankList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SalesRankType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SellerFeedbackType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SellerSKUIdentifier.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SellerSKUListType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ServiceStatusEnum.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ShippingTimeType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\ShipsFromType.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SKUOfferDetail.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\SKUOfferDetailList.cs" />
+    <Compile Include="Amazon\Src\ProductsApi\Model\Summary.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\IMwsOrdersService.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\ImwssOrdersServiceClient.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\MarketplaceWebServiceOrdersConfig.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\MarketplaceWebServiceOrdersException.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\MarketplaceWebServiceOrdersSample.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Mock\ImwssOrdersServiceMock.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\Address.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\BuyerCustomizedInfoDetail.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\GetOrderRequest.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\GetOrderResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\GetOrderResult.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\GetServiceStatusRequest.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\GetServiceStatusResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\GetServiceStatusResult.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\IMWSResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\InvoiceData.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrderItemsByNextTokenRequest.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrderItemsByNextTokenResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrderItemsByNextTokenResult.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrderItemsRequest.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrderItemsResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrderItemsResult.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrdersByNextTokenRequest.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrdersByNextTokenResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrdersByNextTokenResult.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrdersRequest.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrdersResponse.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ListOrdersResult.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\Message.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\Money.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\Order.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\OrderItem.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\PaymentExecutionDetailItem.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\PointsGrantedDetail.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ResponseHeaderMetadata.cs" />
+    <Compile Include="Amazon\Src\OrdersApi\Model\ResponseMetadata.cs" />
     <Compile Include="EBay\EBayConfig.cs" />
     <Compile Include="EBay\EBayService.cs" />
     <Compile Include="EBay\EBaySignInCommandHandler.cs" />
@@ -143,36 +343,43 @@
       <DependentUpon>Targeting.tt</DependentUpon>
     </Compile>
     <Compile Include="EzBob3dPartiesRegistry.cs" />
-    <Compile Include="HMRC\DLParser.cs" />
-    <Compile Include="HMRC\GBPParser.cs" />
-    <Compile Include="HMRC\Handlers\HmrcGetVatReturnsHandler.cs" />
-    <Compile Include="HMRC\HmrcService.cs" />
-    <Compile Include="HMRC\IHmrcService.cs" />
-    <Compile Include="HMRC\LoginDetailsScraper.cs" />
-    <Compile Include="HMRC\RtiTaxMonthInfo.cs" />
-    <Compile Include="HMRC\RtiTaxYearInfo.cs" />
-    <Compile Include="HMRC\RtiTaxMonthSection.cs" />
-    <Compile Include="HMRC\RtiTaxYearsFetcher.cs" />
-    <Compile Include="HMRC\RtiTaxYearParser.cs" />
-    <Compile Include="HMRC\ScrapedLoginRequestDetails.cs" />
-    <Compile Include="HMRC\TaxOfficeNumberAndVatId.cs" />
-    <Compile Include="HMRC\UserVatIdAndTaxOfficeNumberFetcher.cs" />
-    <Compile Include="HMRC\VatReturnInfo.cs" />
-    <Compile Include="HMRC\VatReturnInfoParser.cs" />
-    <Compile Include="HMRC\HmrcVatReturnsInfo.cs" />
-    <Compile Include="HMRC\VatReturnsInfoFetcher.cs" />
+    <Compile Include="Hmrc\DLParser.cs" />
+    <Compile Include="Hmrc\GBPParser.cs" />
+    <Compile Include="Hmrc\Handlers\HmrcGetVatReturnsHandler.cs" />
+    <Compile Include="Hmrc\HmrcService.cs" />
+    <Compile Include="Hmrc\IHmrcService.cs" />
+    <Compile Include="Hmrc\LoginDetailsScraper.cs" />
+    <Compile Include="Hmrc\RtiTaxMonthInfo.cs" />
+    <Compile Include="Hmrc\RtiTaxYearInfo.cs" />
+    <Compile Include="Hmrc\RtiTaxMonthSection.cs" />
+    <Compile Include="Hmrc\RtiTaxYearsFetcher.cs" />
+    <Compile Include="Hmrc\RtiTaxYearParser.cs" />
+    <Compile Include="Hmrc\ScrapedLoginRequestDetails.cs" />
+    <Compile Include="Hmrc\TaxOfficeNumberAndVatId.cs" />
+    <Compile Include="Hmrc\UserVatIdAndTaxOfficeNumberFetcher.cs" />
+    <Compile Include="Hmrc\VatReturnInfo.cs" />
+    <Compile Include="Hmrc\VatReturnInfoParser.cs" />
+    <Compile Include="Hmrc\HmrcVatReturnsInfo.cs" />
+    <Compile Include="Hmrc\VatReturnsInfoFetcher.cs" />
     <Compile Include="PayPalService\Soap\Handlers\PayPalGetPermissionsRedirectUrlHandler.cs" />
     <Compile Include="PayPalService\Soap\Handlers\PayPalGetAccessTokenCommandHandler.cs" />
     <Compile Include="PayPalService\Soap\Handlers\PayPalGetTransactionCommandHandler.cs" />
     <Compile Include="PayPalService\Soap\Handlers\PayPalGetUserDataCommandHandler.cs" />
     <Compile Include="PayPalService\Soap\PayPalSoapConfig.cs" />
     <Compile Include="PayPalService\Soap\PayPalSoapService.cs" />
+    <Compile Include="Postcodes\PostcodesService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SimplyPostcode\ISimplyPostcodeService.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostCodeAddressSearchResponse.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostcodeConfig.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostcodeGetAddressDetails3dPartyCommandHandler.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostcodeGetAddresses3dPartyCommandHandler.cs" />
+    <Compile Include="SimplyPostcode\SimplyPostcodeService.cs" />
     <Compile Include="Twilio\ITwilio.cs" />
     <Compile Include="Twilio\TwilioService.cs" />
     <Compile Include="Twilio\TwilioConfig.cs" />
@@ -251,8 +458,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>Targeting.cs</LastGenOutput>
     </None>
-    <None Include="HMRC\DL-parser.gv" />
-    <None Include="packages.config" />
+    <None Include="Hmrc\DL-parser.gv" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzBob3dPartiesApi\EzBob3dPartiesApi.csproj">
@@ -273,8 +482,34 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="HMRC\DL-parser.png" />
-    <None Include="Resources\config.json" />
+    <Content Include="Amazon\Readme.txt" />
+    <Content Include="Amazon\Src\CustomerApi\Mock\MWSCustomerService.Model.GetCustomersByCustomerIdResponse.xml" />
+    <Content Include="Amazon\Src\CustomerApi\Mock\MWSCustomerService.Model.GetCustomersForCustomerIdResponse.xml" />
+    <Content Include="Amazon\Src\CustomerApi\Mock\MWSCustomerService.Model.GetServiceStatusResponse.xml" />
+    <Content Include="Amazon\Src\CustomerApi\Mock\MWSCustomerService.Model.ListCustomersByNextTokenResponse.xml" />
+    <Content Include="Amazon\Src\CustomerApi\Mock\MWSCustomerService.Model.ListCustomersResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetCompetitivePricingForASINResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetCompetitivePricingForSKUResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetLowestOfferListingsForASINResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetLowestOfferListingsForSKUResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetLowestPricedOffersForASINResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetLowestPricedOffersForSKUResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetMatchingProductForIdResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetMatchingProductResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetMyPriceForASINResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetMyPriceForSKUResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetProductCategoriesForASINResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetProductCategoriesForSKUResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.GetServiceStatusResponse.xml" />
+    <Content Include="Amazon\Src\ProductsApi\Mock\MarketplaceWebServiceProducts.Model.ListMatchingProductsResponse.xml" />
+    <Content Include="Amazon\Src\OrdersApi\Mock\MarketplaceWebServiceOrders.Model.GetOrderResponse.xml" />
+    <Content Include="Amazon\Src\OrdersApi\Mock\MarketplaceWebServiceOrders.Model.GetServiceStatusResponse.xml" />
+    <Content Include="Amazon\Src\OrdersApi\Mock\MarketplaceWebServiceOrders.Model.ListOrderItemsByNextTokenResponse.xml" />
+    <Content Include="Amazon\Src\OrdersApi\Mock\MarketplaceWebServiceOrders.Model.ListOrderItemsResponse.xml" />
+    <Content Include="Amazon\Src\OrdersApi\Mock\MarketplaceWebServiceOrders.Model.ListOrdersByNextTokenResponse.xml" />
+    <Content Include="Amazon\Src\OrdersApi\Mock\MarketplaceWebServiceOrders.Model.ListOrdersResponse.xml" />
+    <Content Include="Hmrc\DL-parser.png" />
+    <EmbeddedResource Include="Resources\config.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

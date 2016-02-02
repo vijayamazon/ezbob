@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Address.cs" />
+    <Compile Include="Commands\Amazon\AmazonRegisterCustomerCommand.cs" />
+    <Compile Include="Commands\Amazon\AmazonRegisterCustomerCommandResponse.cs" />
     <Compile Include="Commands\Company\AuthorityInfo.cs" />
     <Compile Include="Commands\Company\CompanyDetailsInfo.cs" />
     <Compile Include="Commands\Company\UpdateCompanyCommand.cs" />
@@ -86,8 +88,12 @@
     <Compile Include="Commands\PayPal\PayPalGetPermissionsRedirectUrlCommandResponse.cs" />
     <Compile Include="Commands\PayPal\PayPalRegisterCustomerCommand.cs" />
     <Compile Include="Commands\PayPal\PayPalRegisterCustomerCommandResponse.cs" />
+    <Compile Include="Commands\SimplyPostcode\SimplyPostcodeGetAddressDetailsCommand.cs" />
+    <Compile Include="Commands\SimplyPostcode\SimplyPostcodeGetAddressDetailsCommandResponse.cs" />
+    <Compile Include="Commands\SimplyPostcode\SimplyPostcodeGetAddressesCommand.cs" />
+    <Compile Include="Commands\SimplyPostcode\SimplyPostcodeGetAddressesCommandResponse.cs" />
     <Compile Include="Commands\Yodlee\YodleeAddUserAccountCommand.cs" />
-    <Compile Include="Commands\Yodlee\YodleeAddUserAccountResponse.cs" />
+    <Compile Include="Commands\Yodlee\YodleeAddUserAccountCommandResponse.cs" />
     <Compile Include="Commands\Yodlee\YodleeLoginUserCommand.cs" />
     <Compile Include="Commands\Yodlee\YodleeLoginUserCommandResponse.cs" />
     <Compile Include="Commands\Yodlee\YodleeUserAddedAccountCommand.cs" />

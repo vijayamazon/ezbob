@@ -4,7 +4,7 @@ namespace EzBobCommon.NSB {
     using StructureMap;
 
     /// <summary>
-    /// Provides NSB handlers
+    /// Provides NSB handlers, based on message type
     /// </summary>
     public class HandlersProvider : IHandlersProvider {
         private IContainer container;

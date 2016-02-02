@@ -7,7 +7,7 @@ namespace EzBobCommon.Injection {
     using StructureMap.Building.Interception;
 
     /// <summary>
-    /// Calls method marked with <see cref="PostInject"/>
+    /// Calls method marked with <see cref="PostInject"/>.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     internal class PostInjectInterceptor<T> : ActivatorInterceptor<T> {
@@ -25,9 +25,9 @@ namespace EzBobCommon.Injection {
         }
 
         /// <summary>
-        /// Calls the method marked decorated with <see cref="PostInject"/>
+        /// Calls the method marked decorated with <see cref="PostInject"/>.
         /// </summary>
-        /// <param name="ctx">The CTX.</param>
+        /// <param name="ctx">The context.</param>
         /// <param name="instance">The instance.</param>
         /// <param name="methodInfo">The method information.</param>
         private static void CallPostInject(IContext ctx, T instance, MethodInfo methodInfo) {

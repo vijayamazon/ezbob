@@ -1,0 +1,1 @@
+﻿The 'Src' folder contains very slightly modified code downloaded from Amazon website.

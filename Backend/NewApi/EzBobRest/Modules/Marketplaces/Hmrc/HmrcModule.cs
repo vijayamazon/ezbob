@@ -20,10 +20,10 @@
         public HmrcUploadPdfValidator PdfValidator { get; set; }
 
         [Injected]
-        public HmrcRegisterCustomerCommandSendRecieve RegisterCustomerCommandSendRecieve { get; set; }
+        public HmrcRegisterCustomerCommandSendReceive RegisterCustomerCommandSendReceive { get; set; }
 
         [Injected]
-        public HmrcProcessUploadedFilesSendRecieve ProcessUploadedFilesSendRecieve { get; set; }
+        public HmrcProcessUploadedFilesSendReceive ProcessUploadedFilesSendReceive { get; set; }
 
         [Injected]
         public HmrcConfig HmrcConfig { get; set; }
@@ -59,10 +59,10 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 HmrcRegisterCustomerCommandResponse response;
                 try {
-                    response = await RegisterCustomerCommandSendRecieve.SendAsync(Config.ServiceAddress, command, cts);
+                    response = await RegisterCustomerCommandSendReceive.SendAsync(Config.ServiceAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b
                             .WithCustomerId(customerId)
@@ -112,8 +112,8 @@
                         CustomerId = model.CustomerId,
                         Files = paths
                     };
-                    var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
-                    var response = await ProcessUploadedFilesSendRecieve.SendAsync(Config.ServiceAddress, command, cts);
+                    var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
+                    var response = await ProcessUploadedFilesSendReceive.SendAsync(Config.ServiceAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b
                             .WithCustomerId(customerId)

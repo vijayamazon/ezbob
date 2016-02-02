@@ -5,5 +5,5 @@
     /// <summary>
     /// This class is created automatically by NSB<br/>
     /// </summary>
-    public class UpdateCustomerSendReceive : SendRecieveAsyncHandler<CustomerUpdateCommandResponse> { }
+    public class UpdateCustomerSendReceive : SendReceiveAsyncHandler<CustomerUpdateCommandResponse> { }
 }

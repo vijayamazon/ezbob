@@ -75,8 +75,11 @@
     <Compile Include="Company\CompanyQueries.cs" />
     <Compile Include="Company\ICompanyQueries.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="QueryGenerators\MultiInsertCommandGenerator.cs" />
     <Compile Include="QueryGenerators\ISqlCommandGenerator.cs" />
-    <Compile Include="QueryGenerators\UpsertQueryGenerator.cs" />
+    <Compile Include="QueryGenerators\ISqlCommandsGenerator.cs" />
+    <Compile Include="QueryGenerators\UpsertCommandGenerator.cs" />
     <Compile Include="SqlConnectionWrapper.cs" />
     <Compile Include="Currency\CurrencyQueries.cs" />
     <Compile Include="Currency\ICurrencyQueries.cs" />
@@ -94,6 +97,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBase.cs" />
     <Compile Include="Tables.cs" />
+    <Compile Include="ThirdParty\Amazon\AmazonCategoriesQueriesQuery.cs" />
+    <Compile Include="ThirdParty\Amazon\AmazonCategoryToOrderDetailsMap.cs" />
+    <Compile Include="ThirdParty\Amazon\AmazonOrderDetailsQueries.cs" />
+    <Compile Include="ThirdParty\Amazon\AmazonOrdersQueries.cs" />
+    <Compile Include="ThirdParty\Amazon\IAmazonCategoriesQueries.cs" />
+    <Compile Include="ThirdParty\Amazon\IAmazonOrderDetailsQueries.cs" />
+    <Compile Include="ThirdParty\Amazon\IAmazonOrdersQueries.cs" />
+    <Compile Include="ThirdParty\Amazon\QueryBuilders\AmazonTopNOrderItemsCommandBuilder.cs" />
+    <Compile Include="ThirdParty\Amazon\QueryBuilders\CategoriesBySkuCommandBuilder.cs" />
     <Compile Include="ThirdParty\Ebay\EbayQueries.cs" />
     <Compile Include="ThirdParty\Experian\ExperianQuery.cs" />
     <Compile Include="MobilePhone\MobilePhoneQueries.cs" />
@@ -118,7 +130,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

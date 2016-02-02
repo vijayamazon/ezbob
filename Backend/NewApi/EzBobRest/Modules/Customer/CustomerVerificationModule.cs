@@ -18,10 +18,10 @@
         public CustomerValidateVerificationCodeValidator VerificationCodeValidator { get; set; }
 
         [Injected]
-        public CustomerVerificationSmsSendRecieve VerificationSmsSendRecieve { get; set; }
+        public CustomerVerificationSmsSendReceive VerificationSmsSendReceive { get; set; }
 
         [Injected]
-        public CustomerValidateVerificationCodeSendRecieve ValidateVerificationCodeSendRecieve { get; set; }
+        public CustomerValidateVerificationCodeSendReceive ValidateVerificationCodeSendReceive { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Nancy.NancyModule"/> class.
@@ -55,9 +55,9 @@
                 }
 
                 //specifying cancellation token makes asynchronous sender to cancel a task after specified timeout
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 try {
-                    var response = await VerificationSmsSendRecieve.SendAsync(Config.ServerAddress, command, cts);
+                    var response = await VerificationSmsSendReceive.SendAsync(Config.ServerAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b
                             .WithCustomerId(customerId)
@@ -100,9 +100,9 @@
 
                 //Send Command
                 //specifying cancellation token makes asynchronous sender to cancel a task after specified timeout
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 try {
-                    var response = await ValidateVerificationCodeSendRecieve.SendAsync(Config.ServerAddress, command, cts);
+                    var response = await ValidateVerificationCodeSendReceive.SendAsync(Config.ServerAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b
                             .WithCustomerId(customerId)

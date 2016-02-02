@@ -200,8 +200,7 @@ namespace EzBobCommon.NSB {
         /// </summary>
         /// <param name="handledResponse">The handled response.</param>
         /// <param name="beforeReply">The before reply.</param>
-        protected void ReplyToOrigin(CommandResponseBase handledResponse, Action<T> beforeReply = null)
-        {
+        protected void ReplyToOrigin(CommandResponseBase handledResponse, Action<T> beforeReply = null) {
             T responseToSend = new T();
 
             string replyTo = (string)handledResponse.EzBobHeaders[Headers.ReplyToAddress];

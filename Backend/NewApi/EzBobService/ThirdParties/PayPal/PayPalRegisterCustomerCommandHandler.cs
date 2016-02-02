@@ -13,7 +13,7 @@
     using EzBobPersistence.MarketPlace;
     using EzBobPersistence.ThirdParty.PayPal;
     using EzBobService.Currency;
-    using EzBobService.ThirdParties.PayPal.SendRecieve;
+    using EzBobService.ThirdParties.PayPal.SendReceive;
     using NServiceBus;
 
     public class PayPalRegisterCustomerCommandHandler : HandlerBase<PayPalRegisterCustomerCommandResponse>, IHandleMessages<PayPalRegisterCustomerCommand> {
@@ -24,13 +24,13 @@
         public ThirdPartyServiceConfig ThirdPartyServiceConfig { get; set; }
 
         [Injected]
-        public PayPalGetAccessTokenSendRecieve GetAccessTokenSendRecieve { get; set; }
+        public PayPalGetAccessTokenSendReceive GetAccessTokenSendReceive { get; set; }
 
         [Injected]
-        public PayPalGetCustomerPersonalDataSendRecieve GetCustomerPersonalDataSendRecieve { get; set; }
+        public PayPalGetCustomerPersonalDataSendReceive GetCustomerPersonalDataSendReceive { get; set; }
 
         [Injected]
-        public PayPalGetTransactionsSendRecieve GetTransactionsSendRecieve { get; set; }
+        public PayPalGetTransactionsSendReceive GetTransactionsSendReceive { get; set; }
 
         [Injected]
         public IMarketPlaceQueries MarketPlaceQueries { get; set; }
@@ -55,7 +55,7 @@
             };
 
             //get access token
-            var accessTokenResponse = await GetAccessTokenSendRecieve.SendAsync(ThirdPartyServiceConfig.Address, getAccessTokenCommand);
+            var accessTokenResponse = await GetAccessTokenSendReceive.SendAsync(ThirdPartyServiceConfig.Address, getAccessTokenCommand);
 
             var getPersonalDataCommand = new PayPalGetCustomerPersonalData3dPartyCommand {
                 TokenSecret = accessTokenResponse.TokenSecret,
@@ -63,7 +63,7 @@
             };
 
             //get account info
-            var personalDataResponse = await GetCustomerPersonalDataSendRecieve.SendAsync(ThirdPartyServiceConfig.Address, getPersonalDataCommand);
+            var personalDataResponse = await GetCustomerPersonalDataSendReceive.SendAsync(ThirdPartyServiceConfig.Address, getPersonalDataCommand);
 
             InfoAccumulator info = new InfoAccumulator();
 
@@ -120,7 +120,7 @@
                 UtcDateTo = DateTime.UtcNow
             };
 
-            var response = await GetTransactionsSendRecieve.SendAsync(ThirdPartyServiceConfig.Address, getTransactionsCommand);
+            var response = await GetTransactionsSendReceive.SendAsync(ThirdPartyServiceConfig.Address, getTransactionsCommand);
             SaveTransactions(response.Transactions, marketPlaceTableId, marketPlaceHistoryId);
 
             updateHistory = new CustomerMarketPlaceUpdateHistory

@@ -29,10 +29,8 @@
                     CustomerId = string.Empty,
                     RedirectUrl = string.Empty
                 }.GetType(), "some description"))
-                .With(i => i.WithRequestParameter("customerId", "customer id given at sign-up"))
-                .With(i => i.WithRequestModel(new {
-                    Callback = string.Empty
-                }.GetType()));
+                .With(i => i.WithRequestParameter("customerId", "customer id given at sign-up")
+                            .WithRequestParameter("callback", "the paypal's callback"));
         }
 
         private void DescribeRegisterCustomer(string tag) {

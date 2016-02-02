@@ -6,6 +6,7 @@ namespace EzBobCommon.Injection {
     using System.Reflection;
     using Common.Logging;
     using EzBobCommon.Configuration;
+    using EzBobCommon.NSB;
     using EzBobCommon.Utils;
     using StructureMap.Configuration.DSL;
 
@@ -24,6 +25,15 @@ namespace EzBobCommon.Injection {
             ForSingletonOf<ConfigManager>()
                 .Use<ConfigManager>()
                 .OnCreation(cnfg => InitConfigurationManger(cnfg));
+
+            ForSingletonOf<SendReceiveCache>()
+                .Use<SendReceiveCache>();
+
+            ForSingletonOf<IHandlersProvider>()
+                .Use<HandlersProvider>();
+
+            ForSingletonOf<ErrorCache>()
+                .Use<ErrorCache>();
 
             //handles configuration objects injection
             Policies.OnMissingFamily<ConfigurationPolicy>();

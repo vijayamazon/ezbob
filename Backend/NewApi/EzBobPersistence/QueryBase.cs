@@ -15,6 +15,10 @@
     using Microsoft.Practices.EnterpriseLibrary.Data;
     using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 
+    /// <summary>
+    /// Base class for all queries.
+    /// Contains methods helping to work with database
+    /// </summary>
     public abstract class QueryBase {
 
         private readonly string connectionString;
@@ -178,6 +182,29 @@
         {
             while (dataReader.Read()) {
                 yield return CreateSingleModel<T>(dataReader);
+            }
+        }
+
+        /// <summary>
+        /// Creates the primitives collection.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataReader">The data reader.</param>
+        /// <returns></returns>
+        protected IEnumerable<T> CreatePrimitivesCollection<T>(DbDataReader dataReader) where T : struct {
+            while (dataReader.Read()) {
+                yield return (T)dataReader.GetValue(0);
+            }
+        }
+
+        /// <summary>
+        /// Creates the strings collection.
+        /// </summary>
+        /// <param name="dataReader">The data reader.</param>
+        /// <returns></returns>
+        protected IEnumerable<string> CreateStringsCollection(DbDataReader dataReader) {
+            while (dataReader.Read()) {
+                yield return (string)dataReader.GetValue(0);
             }
         }
 
@@ -413,8 +440,8 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public UpsertQueryGenerator<T> GetUpsertGenerator<T>(T model) where T : class {
-            return new UpsertQueryGenerator<T>(model);
+        public UpsertCommandGenerator<T> GetUpsertGenerator<T>(T model) where T : class {
+            return new UpsertCommandGenerator<T>(model);
         }
 
         /// <summary>
@@ -442,7 +469,7 @@
             VALUES ( SOURCE.LastName,@Id,@Name)
             OUTPUT TARGET.Id
          */
-        [Obsolete("all places that using this command should instead use UpsertQueryGenerator")]
+        [Obsolete("all places that using this command should instead use UpsertCommandGenerator")]
         protected Optional<SqlCommand> GetUpsertCommand<T>(T model, SqlConnection connection, string tableName, IEnumerable<KeyValuePair<string, object>> ids, string outputColumnName = null, Predicate<string> skipColumn = null) where T : class
         {
 

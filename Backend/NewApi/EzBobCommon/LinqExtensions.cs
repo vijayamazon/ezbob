@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EzBobCommon {
     using System.Runtime.Caching;
+    using EzBobCommon.Utils;
 
     public static class LinqExtensions {
         /// <summary>
@@ -57,5 +58,35 @@ namespace EzBobCommon {
         public static Optional<T> AsOptional<T>(this T item) {
             return item;
         }
+
+        /// <summary>
+        /// Determines whether the collection is empty.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <returns></returns>
+        public static bool IsEmpty<T>(this IEnumerable<T> collection) {
+            return CollectionUtils.IsEmpty(collection);
+        }
+
+        /// <summary>
+        ///Determines whether the collection is not empty.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <returns></returns>
+        public static bool IsNotEmpty<T>(this IEnumerable<T> collection) {
+            return CollectionUtils.IsNotEmpty(collection);
+        }
+
+        /// <summary>
+        /// Returns enumerable consisting of a single item.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> ToEnumerable<T>(this T item) {
+            return Enumerable.Repeat(item, 1);
+        } 
     }
 }

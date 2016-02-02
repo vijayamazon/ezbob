@@ -167,8 +167,8 @@
     <Compile Include="Modules\Customer\CustomerModule.cs" />
     <Compile Include="Modules\Customer\CustomerVerificationMetadataModule.cs" />
     <Compile Include="Modules\Customer\CustomerVerificationModule.cs" />
-    <Compile Include="Modules\Customer\NSB\CustomerValidateVerificationCodeSendRecieve.cs" />
-    <Compile Include="Modules\Customer\NSB\CustomerVerificationSmsSendRecieve.cs" />
+    <Compile Include="Modules\Customer\NSB\CustomerValidateVerificationCodeSendReceive.cs" />
+    <Compile Include="Modules\Customer\NSB\CustomerVerificationSmsSendReceive.cs" />
     <Compile Include="Modules\Customer\NSB\SignupCommandSendReceive.cs" />
     <Compile Include="Modules\Customer\NSB\UpdateCustomerSendReceive.cs" />
     <Compile Include="Modules\Customer\Validators\CustomerSendVerificationSmsValidator.cs" />
@@ -177,28 +177,43 @@
     <Compile Include="Modules\Customer\Validators\CustomerValidateVerificationCodeValidator.cs" />
     <Compile Include="Modules\DocsModule.cs" />
     <Compile Include="Modules\MainModule.cs" />
+    <Compile Include="Modules\Marketplaces\Amazon\AmazonMetadataModule.cs" />
+    <Compile Include="Modules\Marketplaces\Amazon\AmazonModule.cs" />
+    <Compile Include="Modules\Marketplaces\Amazon\NSB\AmazonRegisterCustomerSendReceive.cs" />
+    <Compile Include="Modules\Marketplaces\Amazon\Validators\AmazonRegisterCustomerCommandValidator.cs" />
     <Compile Include="Modules\Marketplaces\Ebay\EbayMetadataModule.cs" />
     <Compile Include="Modules\Marketplaces\Ebay\EBayModule.cs" />
-    <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayGetRedirectUrlSendRecieve.cs" />
-    <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayRegisterCustomerSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayGetRedirectUrlSendReceive.cs" />
+    <Compile Include="Modules\Marketplaces\Ebay\NSB\EbayRegisterCustomerSendReceive.cs" />
     <Compile Include="Modules\Marketplaces\Ebay\Validators\EbayGetRedirectUrlValidator.cs" />
     <Compile Include="Modules\Marketplaces\Ebay\Validators\EbayRegisterCustomerValidator.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\HmrcConfig.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\HmrcMetadataModule.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\HmrcModule.cs" />
-    <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcProcessUploadedFilesSendRecieve.cs" />
-    <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcRegisterCustomerCommandSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcProcessUploadedFilesSendReceive.cs" />
+    <Compile Include="Modules\Marketplaces\Hmrc\NSB\HmrcRegisterCustomerCommandSendReceive.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\PdfUploadModel.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\Validators\HmrcCustomerRegistrationValidator.cs" />
     <Compile Include="Modules\Marketplaces\Hmrc\Validators\HmrcUploadPdfValidator.cs" />
-    <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalGetRedirectionUrlSendRecieve.cs" />
-    <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalRegisterCustomerSendRecieve.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalGetRedirectionUrlSendReceive.cs" />
+    <Compile Include="Modules\Marketplaces\PayPal\NSB\PayPalRegisterCustomerSendReceive.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\PayPalMetadataModule.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\PayPalModule.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\Validators\PayPalGetRedirectUrlValidator.cs" />
     <Compile Include="Modules\Marketplaces\PayPal\Validators\PayPalRegisterCustomerValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Yodlee\NSB\YodleeAddUserAccountCommandSendReceive.cs" />
+    <Compile Include="Modules\Marketplaces\Yodlee\NSB\YodleeUserAddedAccountCommandSendReceive.cs" />
+    <Compile Include="Modules\Marketplaces\Yodlee\Validators\YodleeAddUserAccountCommandValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Yodlee\Validators\YodleeUserAddedAccountCommandValidator.cs" />
+    <Compile Include="Modules\Marketplaces\Yodlee\YodleeMetadataModule.cs" />
     <Compile Include="Modules\Marketplaces\Yodlee\YodleeModule.cs" />
     <Compile Include="Modules\NancyModuleBase.cs" />
+    <Compile Include="Modules\PostCode\NSB\GetAddressDetailsSendReceive.cs" />
+    <Compile Include="Modules\PostCode\NSB\GetAddressesByPostcodeSendReceive.cs" />
+    <Compile Include="Modules\PostCode\PostCodeMetadataModule.cs" />
+    <Compile Include="Modules\PostCode\PostCodeModule.cs" />
+    <Compile Include="Modules\PostCode\Validators\GetAddressDetailsValidator.cs" />
+    <Compile Include="Modules\PostCode\Validators\GetAddressesByPostCodeValidator.cs" />
     <Compile Include="NancySwagger\Core\SwaggerRouteMetadata.cs" />
     <Compile Include="NancySwagger\Fluent\SwaggerEndpointInfoExtensions.cs" />
     <Compile Include="NancySwagger\Fluent\SwaggerRouteMetadataExtensions.cs" />
@@ -251,10 +266,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\Marketplaces\Yodlee\NSB\" />
-    <Folder Include="Modules\Marketplaces\Yodlee\Validators\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,7 +7,7 @@
     using EzBobPersistence.ThirdParty.Yodlee;
     using NServiceBus;
 
-    public class YodleeAddAccountHandler : HandlerBase<YodleeAddUserAccountResponse>, IHandleMessages<YodleeAddUserAccountCommand>, IHandleMessages<YodleeGetFastLinkCommandResponse> {
+    public class YodleeAddAccountHandler : HandlerBase<YodleeAddUserAccountCommandResponse>, IHandleMessages<YodleeAddUserAccountCommand>, IHandleMessages<YodleeGetFastLinkCommandResponse> {
 
         [Injected]
         public IYodleeQueries YodleeQueries { get; set; }
@@ -80,7 +80,7 @@
             }
 
             ReplyToOrigin(response, reply => {
-                reply.FastLinkUrl = response.FastLinkUrl;
+                reply.FastlinkUrl = response.FastLinkUrl;
             });
         }
     }

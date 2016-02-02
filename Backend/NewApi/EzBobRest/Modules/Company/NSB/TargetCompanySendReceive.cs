@@ -6,6 +6,6 @@
     /// <summary>
     /// This class is created automatically by NSB<br/>
     /// </summary>
-    public class TargetCompanySendReceive : SendRecieveAsyncHandler<ExperianBusinessTargetingCommandResponse> {
+    public class TargetCompanySendReceive : SendReceiveAsyncHandler<ExperianBusinessTargetingCommandResponse> {
     }
 }

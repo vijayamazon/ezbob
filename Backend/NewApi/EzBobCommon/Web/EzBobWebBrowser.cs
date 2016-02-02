@@ -5,7 +5,7 @@
     /// <summary>
     /// Uses the same HttpClient instance for all requests
     /// </summary>
-    public class EzBobWebBrowser : EzBobHtmlClient, IEzBobWebBrowser {
+    public class EzBobWebBrowser : EzBobHttpClient, IEzBobWebBrowser {
         private readonly HttpClient client = new HttpClient();
 
         /// <summary>

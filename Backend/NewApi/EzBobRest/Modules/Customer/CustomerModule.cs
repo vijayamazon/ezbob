@@ -52,7 +52,7 @@
 
                 signupCommand.Account.RemoteIp = Context.Request.UserHostAddress;
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 CustomerSignupCommandResponse response;
                 try {
                     response = await SignupSendReceive.SendAsync(Config.ServiceAddress, signupCommand, cts);
@@ -95,7 +95,7 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 try {
                     var response = await UpdateSendReceive.SendAsync(Config.ServiceAddress, updateCommand, cts);
                     if (response.HasErrors) {

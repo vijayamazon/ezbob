@@ -12,10 +12,10 @@
     public class PayPalModule : NancyModuleBase {
 
         [Injected]
-        public PayPalGetRedirectionUrlSendRecieve GetRedirectionUrlSendRecieve { get; set; }
+        public PayPalGetRedirectionUrlSendReceive GetRedirectionUrlSendReceive { get; set; }
 
         [Injected]
-        public PayPalRegisterCustomerSendRecieve RegisterCustomerSendRecieve { get; set; }
+        public PayPalRegisterCustomerSendReceive RegisterCustomerSendReceive { get; set; }
 
         [Injected]
         public PayPalGetRedirectUrlValidator PayPalGetRedirectUrlValidator { get; set; }
@@ -55,10 +55,10 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 PayPalRegisterCustomerCommandResponse response;
                 try {
-                    response = await RegisterCustomerSendRecieve.SendAsync(Config.ServiceAddress, command, cts);
+                    response = await RegisterCustomerSendReceive.SendAsync(Config.ServiceAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b
                             .WithCustomerId(customerId)
@@ -78,7 +78,7 @@
         /// Pay-pal redirect URL.
         /// </summary>
         private void PayPalRedirectUrl() {
-            Post["PayPalRirectUrl", "api/v1/marketplace/paypal/redirectUrl/{customerId}", runAsync: true] = async (o, ct) => {
+            Get["PayPalRirectUrl", "api/v1/marketplace/paypal/redirectUrl/{customerId}/{callback}", runAsync: true] = async (o, ct) => {
                 string customerId = o.customerId;
                 PayPalGetPermissionsRedirectUrlCommand command;
                 //Bind
@@ -100,10 +100,10 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 PayPalGetPermissionsRedirectUrlCommandResponse response;
                 try {
-                    response = await GetRedirectionUrlSendRecieve.SendAsync(Config.ServiceAddress, command, cts);
+                    response = await GetRedirectionUrlSendReceive.SendAsync(Config.ServiceAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b.WithCustomerId(customerId)
                             .WithErrorMessages(response.Errors));

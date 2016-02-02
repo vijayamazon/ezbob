@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
 namespace EzBobRest.ResponseHelpers {
+    using System;
+    using System.Linq.Expressions;
     using EzBobCommon.Utils;
     using Newtonsoft.Json.Linq;
 
@@ -92,8 +94,80 @@ namespace EzBobRest.ResponseHelpers {
             return this;
         }
 
+        /// <summary>
+        /// Adds the key value, deduced from provided property access expression.
+        /// </summary>
+        /// <remarks>
+        /// For example: () => o.Age will deduce key to be 'Age' and value will be result of expression's invocation converted to <see cref="JToken"/>.
+        /// </remarks>
+        /// <param name="propertyAccessExpression">The property access expression like: '() => o.Age'.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// expected lambda like o => o.Age
+        /// or
+        /// got null value when invoked expression
+        /// </exception>
+        public OkResponseBuilder WithKeyValue(Expression<Func<object>> propertyAccessExpression) {
+
+            var keyValue = this.ExtractMemberNameAndValue(propertyAccessExpression);
+            this.response[keyValue.Key] = keyValue.Value;
+
+            return this;
+        }
+
         public JObject BuildResponse() {
             return this.response;
+        }
+
+        /// <summary>
+        /// Extracts the name of the member.
+        /// </summary>
+        /// <param name="propertyAccessExpression">The property access expression.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// expected lambda like o => o.Age
+        /// or
+        /// got null value when invoked expression
+        /// </exception>
+        private KeyValuePair<string, JToken> ExtractMemberNameAndValue(Expression<Func<object>> propertyAccessExpression) {
+            MemberExpression memberExpression = propertyAccessExpression.Body as MemberExpression;
+
+            if (memberExpression == null) {
+                //it could be a Convert expression, for example, if property type is struct
+                UnaryExpression u = propertyAccessExpression.Body as UnaryExpression;
+                if (u != null) {
+                    memberExpression = u.Operand as MemberExpression;
+                }
+            }
+
+            if (memberExpression == null) {
+                throw new ArgumentException("expected lambda like o => o.Age");
+            }
+
+            string key = memberExpression.Member.Name;
+            object val = propertyAccessExpression
+                .Compile()
+                .Invoke();
+
+            if (val == null) {
+                throw new ArgumentException(string.Format("invocation of {0} got null", key));
+            }
+
+            if (IsSimpleType(val.GetType())) {
+                return new KeyValuePair<string, JToken>(key, val.ToString());
+            }
+
+            JObject json = JObject.FromObject(val);
+            return new KeyValuePair<string, JToken>(key, json);
+        }
+
+        /// <summary>
+        /// Determines whether specified type is simple type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        private bool IsSimpleType(Type type) {
+            return Type.GetTypeCode(type) != TypeCode.Object;
         }
     }
 }

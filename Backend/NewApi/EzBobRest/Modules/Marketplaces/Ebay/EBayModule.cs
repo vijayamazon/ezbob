@@ -17,10 +17,10 @@
         public EbayRegisterCustomerValidator RegisterCustomerValidator { get; set; }
 
         [Injected]
-        public EbayRegisterCustomerSendRecieve RegisterCustomerSendRecieve { get; set; }
+        public EbayRegisterCustomerSendReceive RegisterCustomerSendReceive { get; set; }
 
         [Injected]
-        public EbayGetRedirectUrlSendRecieve GetRedirectUrlSendRecieve { get; set; }
+        public EbayGetRedirectUrlSendReceive GetRedirectUrlSendReceive { get; set; }
 
 
         public EbayModule() {
@@ -28,8 +28,11 @@
             RegisterCustomer();
         }
 
+        /// <summary>
+        /// Gets the redirect URL.
+        /// </summary>
         private void GetRedirectUrl() {
-            Post["EbayRirectUrl", "api/v1/marketplace/ebay/redirectUrl/{customerId}", runAsync: true] = async (o, ct) => {
+            Get["EbayRirectUrl", "api/v1/marketplace/ebay/redirectUrl/{customerId}", runAsync: true] = async (o, ct) => {
                 string customerId = o.customerId;
                 EbayGetLoginUrlCommand command;
                 //Bind
@@ -51,10 +54,10 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 EbayGetLoginUrlCommandResponse response;
                 try {
-                    response = await GetRedirectUrlSendRecieve.SendAsync(Config.ServiceAddress, command, cts);
+                    response = await GetRedirectUrlSendReceive.SendAsync(Config.ServiceAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b.WithCustomerId(customerId)
                             .WithErrorMessages(response.Errors));
@@ -71,6 +74,9 @@
             };
         }
 
+        /// <summary>
+        /// Registers the customer.
+        /// </summary>
         private void RegisterCustomer() {
             Post["EbayRegisterCustomer", "api/v1/marketplace/ebay/register/{customerId}/{sessionId}", runAsync: true] = async (o, ct) => {
                 string customerId = o.customerId;
@@ -95,10 +101,10 @@
                 }
 
                 //Send Command
-                var cts = new CancellationTokenSource(Config.SendRecieveTaskTimeoutMilis);
+                var cts = new CancellationTokenSource(Config.SendReceiveTaskTimeoutMilis);
                 EbayRegisterCustomerCommandResponse response;
                 try {
-                    response = await RegisterCustomerSendRecieve.SendAsync(Config.ServiceAddress, command, cts);
+                    response = await RegisterCustomerSendReceive.SendAsync(Config.ServiceAddress, command, cts);
                     if (response.HasErrors) {
                         return CreateErrorResponse(b => b
                             .WithCustomerId(customerId)
