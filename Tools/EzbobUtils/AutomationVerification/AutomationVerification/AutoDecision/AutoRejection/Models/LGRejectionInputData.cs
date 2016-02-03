@@ -15,6 +15,7 @@
 
 		public virtual Guid? RequestID { get; set; }
 		public virtual long? ResponseID { get; set; }
+		public virtual int? ResponseHttpStatus { get; set; }
 
 		public virtual List<string> ResponseErrors {
 			get {
@@ -79,6 +80,7 @@
 
 			RequestID = lgData.RequestID;
 			ResponseID = lgData.ResponseID;
+			ResponseHttpStatus = lgData.ResponseHttpStatus;
 			ResponseErrors = lgData.ResponseErrors;
 			HardReject = lgData.HardReject;
 			Bucket = lgData.Bucket;
