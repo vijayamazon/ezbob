@@ -180,10 +180,17 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	getCurrentProductSubType: function () {
 		var self = this;
-		var productSubType = _.find(this.cloneModel.get('ProductSubTypes'), function(pst) {
-			return pst.ProductTypeID == self.cloneModel.get('CurrentProductTypeID') &&
-				   pst.OriginID      == self.model.get('OriginID')             &&
-				   pst.LoanSourceID  == self.cloneModel.get('LoanSourceID');
+		var originID = this.model.get('OriginID');
+		var gradeID = this.model.get('GradeID');
+		
+		var productSubTypesPerOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function (pst) {
+			return (pst.OriginID == originID && (pst.FundingTypeID == null || gradeID != null));
+		});
+
+		var productSubType = _.find(productSubTypesPerOrigin, function (pst) {
+			return pst.ProductTypeID == self.ui.loanProductType.val() &&
+				   pst.OriginID == originID &&
+				   pst.LoanSourceID  == self.ui.loanSource.val();
 		});
 
 		if (!productSubType) {
@@ -229,65 +236,75 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		};
 	}, // getPostData
 
-	bindings: {
-		OfferedCreditLine: {
-			selector: '#offeredCreditLine',
-			converter: EzBob.BindingConverters.moneyFormat,
-		},
-		InterestRate: {
-			selector: 'input[name="interestRate"]',
-			converter: EzBob.BindingConverters.percentsFormat,
-		},
-		RepaymentPeriod: {
-			selector: 'input[name="repaymentPeriod"]',
-			converter: EzBob.BindingConverters.notNull,
-		},
-		StartingFromDate: {
-			selector: 'input[name="startingFromDate"]',
-		},
-		OfferValidateUntil: {
-			selector: 'input[name="offerValidUntil"]',
-		},
-		AllowSendingEmail: {
-			selector: 'input[name="allowSendingEmail"]',
-		},
-		DiscountPlanId: 'select[name="discount-plan"]',
-		ProductID: 'select[name="product"]',
-		ProductTypeID: 'select[name="product-type"]',
-		LoanTypeId: 'select[name="loan-type"]',
-		LoanSourceID: 'select[name="loan-source"]',
-		ManualSetupFeePercent: {
-			selector: 'input[name="manualSetupFeePercent"]',
-			converter: EzBob.BindingConverters.percentsFormat,
-		},
-		BrokerSetupFeePercent: {
-			selector: 'input[name="brokerSetupFeePercent"]',
-			converter: EzBob.BindingConverters.percentsFormat,
-		},
-		IsLoanTypeSelectionAllowed: {
-			selector: 'input[name="loanTypeSelection"]',
-			converter: EzBob.BindingConverters.boolFormat,
-		},
-		SpreadSetupFee: {
-			selector: 'input[name="spreadSetupFee"]'
-		},
-		IsCustomerRepaymentPeriodSelectionAllowed: {
-			selector: 'input[name="repaymentPeriodSelection"]',
-		},
-		RequestedLoanAmount: {
-			selector: 'span[name="requestedLoanAmount"]',
-			converter: EzBob.BindingConverters.moneyFormat,
-		},
-		RequestedLoanTerm: {
-			selector: 'span[name="requestedLoanTerm"]'
-		},
-		Origin: {
-			selector: 'span[name="origin"]'
-		},
-	}, // bindings
+	
 
-	onRender: function() {
-		this.modelBinder.bind(this.cloneModel, this.el, this.bindings);
+	onRender: function () {
+		var bindings = {
+			OfferedCreditLine: {
+				selector: '#offeredCreditLine',
+				converter: EzBob.BindingConverters.moneyFormat,
+			},
+			InterestRate: {
+				selector: 'input[name="interestRate"]',
+				converter: EzBob.BindingConverters.percentsFormat,
+			},
+			RepaymentPeriod: {
+				selector: 'input[name="repaymentPeriod"]',
+				converter: EzBob.BindingConverters.notNull,
+			},
+			StartingFromDate: {
+				selector: 'input[name="startingFromDate"]',
+			},
+			OfferValidateUntil: {
+				selector: 'input[name="offerValidUntil"]',
+			},
+			AllowSendingEmail: {
+				selector: 'input[name="allowSendingEmail"]',
+			},
+			DiscountPlanId: 'select[name="discount-plan"]',
+			ProductID: 'select[name="product"]',
+			ProductTypeID: 'select[name="product-type"]',
+			LoanTypeId: 'select[name="loan-type"]',
+			LoanSourceID: 'select[name="loan-source"]',
+			ManualSetupFeePercent: {
+				selector: 'input[name="manualSetupFeePercent"]',
+				converter: EzBob.BindingConverters.percentsFormat,
+			},
+			BrokerSetupFeePercent: {
+				selector: 'input[name="brokerSetupFeePercent"]',
+				converter: EzBob.BindingConverters.percentsFormat,
+			},
+			IsLoanTypeSelectionAllowed: {
+				selector: 'input[name="loanTypeSelection"]',
+				converter: EzBob.BindingConverters.boolFormat,
+			},
+			SpreadSetupFee: {
+				selector: 'input[name="spreadSetupFee"]'
+			},
+			IsCustomerRepaymentPeriodSelectionAllowed: {
+				selector: 'input[name="repaymentPeriodSelection"]',
+			},
+			RequestedLoanAmount: {
+				selector: 'span[name="requestedLoanAmount"]',
+				converter: EzBob.BindingConverters.moneyFormat,
+			},
+			RequestedLoanTerm: {
+				selector: 'span[name="requestedLoanTerm"]'
+			},
+			Origin: {
+				selector: 'span[name="origin"]'
+			},
+			Grade: {
+				selector: 'span[name="gradeValue"]',
+				converter: this.currentGrade
+			},
+			SubGrade: {
+				selector: 'span[name="subGradeValue"]',
+				converter: this.currentSubGrade
+			}
+		};
+
+		this.modelBinder.bind(this.cloneModel, this.el, bindings);
 		console.log('cloneModel', this.cloneModel);
 		this.$el.find('#startingFromDate, #offerValidUntil').mask('99/99/9999').datepicker({
 			autoclose: true,
@@ -312,6 +329,20 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		this.onChangeLoanSource(null);
 	}, // onRender
 
+	currentGrade: function (direction, value, attribute, model) {
+		var gradeID = model.get('GradeID');
+		if (!gradeID) { return ''; }
+		var grade = _.find(model.get('Grades'), function(gr) { return gr.GradeID == gradeID; }) || { name: gradeID };
+		return grade.Name;
+	},
+
+	currentSubGrade: function (direction, value, attribute, model) {
+		var subGradeID = model.get('SubGradeID');
+		if (!subGradeID) { return ''; }
+		var subGrade = _.find(model.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { name: subGradeID };
+		return subGrade.Name;
+	},
+
 	populateDropDowns: function() {
 		var self = this;
 		var originID = this.model.get('OriginID');
@@ -320,9 +351,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var grade = _.find(this.model.get('Grades'), function (g) { return g.GradeID == gradeID; }) || { Name: '' };
 
 		var productSubTypesPerOrigin = _.filter(this.cloneModel.get('ProductSubTypes'), function(pst) {
-			return pst.OriginID == originID;
+			return (pst.OriginID == originID && (pst.FundingTypeID == null || gradeID != null));
 		});
-
 		if (productSubTypesPerOrigin.length <= 0) {
 			
 			this.ui.errorMessage.text('No products available for origin: ' + this.model.get('Origin') + ', and grade: ' + grade.Name);
@@ -346,7 +376,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			return found;
 		});
 
-		var currentProduct = self.model.get('CurrentProduct');
+		var currentProduct = this.ui.loanProduct.val();
 		this.ui.loanProduct.empty();
 		_.each(availableProducts, function (p) {
 			if (p.IsEnabled) {
@@ -358,7 +388,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			}
 		});
 
-		var currentProductType = self.cloneModel.get('CurrentProductType');
+		var currentProductType = this.ui.loanProductType.val();
 		this.ui.loanProductType.empty();
 		_.each(availableProductTypes, function (pt) {
 			var selected = '';
@@ -368,7 +398,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			self.ui.loanProductType.append($('<option value="' + pt.ProductTypeID + '"' + selected + '>' + pt.Name + '</option>'));
 		});
 
-		var currentLoanTypeID = self.cloneModel.get('LoanTypeId');
+		var currentLoanTypeID = this.ui.loanType.val();
 		this.ui.loanType.empty();
 		_.each(this.cloneModel.get('LoanTypes'), function (lt) {
 			var selected = '';
@@ -378,7 +408,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			self.ui.loanType.append($('<option value="' + lt.Id + '"' + selected + '>' + lt.Name + '</option>'));
 		});
 
-		var currentLoanSourceID = self.cloneModel.get('LoanSourceID');
+		var currentLoanSourceID = this.ui.loanSource.val();
 		this.ui.loanSource.empty();
 		_.each(availableLoanSources, function (ls) {
 			var selected = '';
@@ -387,8 +417,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			}
 			self.ui.loanSource.append($('<option value="' + ls.Id + '"' + selected + '>' + ls.Name + '</option>'));
 		});
+		if (!currentLoanSourceID) {
+			currentLoanSourceID = this.ui.loanSource.val();
+		}
 
-		var currentDiscountPlanID = self.cloneModel.get('DiscountPlanId');
+		var currentDiscountPlanID = this.ui.discountPlan.val();
 		this.ui.discountPlan.empty();
 		_.each(self.model.get('DiscountPlans'), function (dp) {
 			var selected = '';
@@ -413,6 +446,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			}
 		}
 
+		
+
 		var gradeRange = _.find(this.model.get('GradeRanges'), function(gr) {
 			return gr.OriginID     == originID            &&
 				   gr.LoanSourceID == currentLoanSourceID &&
@@ -422,15 +457,15 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 
 		if (!gradeRange) {
-			var subGrade = _.find(this.model.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { Name: ''};
-			var loanSource = _.find(this.model.get('AllLoanSources'), function (ls) { return ls.Id == currentLoanSourceID; }) || {Name: ''};
+			var subGrade = _.find(this.model.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { Name: subGradeID };
+			var loanSource = _.find(this.model.get('AllLoanSources'), function (ls) { return ls.Id == currentLoanSourceID; }) || { Name: currentLoanSourceID };
 			this.ui.errorMessage.text('No pricing for such product combination found origin: ' +
 				this.model.get('Origin') +
 				', grade: ' + grade.Name +
 				', subGrade: ' + subGrade.Name,
 				', loan source: ' + loanSource.Name +
 				', is first loan: ' + isFirstLoan ? 'yes' : 'no');
-
+			console.log(originID, currentLoanSourceID, gradeID, subGradeID, isFirstLoan, this.model.get('GradeRanges'));
 			gradeRange = {};
 		} else {
 			this.ui.errorMessage.empty();
