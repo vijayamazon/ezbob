@@ -2551,9 +2551,6 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal BrokerSetupFeePercentsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal BrokerSetupFeePoundsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal CogsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -2668,19 +2665,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.BrokerSetupFeePercentsField.Equals(value) != true)) {
                     this.BrokerSetupFeePercentsField = value;
                     this.RaisePropertyChanged("BrokerSetupFeePercents");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal BrokerSetupFeePounds {
-            get {
-                return this.BrokerSetupFeePoundsField;
-            }
-            set {
-                if ((this.BrokerSetupFeePoundsField.Equals(value) != true)) {
-                    this.BrokerSetupFeePoundsField = value;
-                    this.RaisePropertyChanged("BrokerSetupFeePounds");
                 }
             }
         }

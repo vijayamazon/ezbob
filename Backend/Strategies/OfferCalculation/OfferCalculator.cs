@@ -58,7 +58,7 @@
 			getPricingModelModelInstance.Execute();
 
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
-			templateModel.SetLoanAmount(this.result.Amount);
+			templateModel.LoanAmount = this.result.Amount;
 			templateModel.LoanTerm = this.result.Period;
 			templateModel.TenureMonths = this.result.Period * templateModel.TenurePercents;
 
