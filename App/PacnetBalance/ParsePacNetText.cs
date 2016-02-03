@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-using Ezbob.Logger;
-
+﻿
 namespace PacnetBalance {
+	using System;
+	using System.Collections.Generic;
+	using iTextSharp.text.pdf;
+	using iTextSharp.text.pdf.parser;
+	using Ezbob.Logger;
+
 	public class ParsePacNetText {
+		private readonly string loginAddress;
+		private readonly string loginPassword;
 		private static decimal openingBalance;
 		private static decimal closingBalance;
 		private static decimal credits;
@@ -15,7 +18,13 @@ namespace PacnetBalance {
 
 		public ParsePacNetText() {
 			Logger = new SafeLog();
-		} // static constructor
+		}
+
+		public ParsePacNetText(string loginAddress, string loginPassword) {
+			this.loginAddress = loginAddress;
+			this.loginPassword = loginPassword;
+			Logger = new SafeLog();
+		}
 
 		public static ASafeLog Logger { get; set; }
 
@@ -38,7 +47,7 @@ namespace PacnetBalance {
 			reader.Close();
 
 
-			PacNetBalance.PopulateList(date, openingBalance, closingBalance, credits, debits, this.pacNetBalanceRows);
+			PacNetBalance.PopulateList(date, openingBalance, closingBalance, credits, debits, this.pacNetBalanceRows, this.loginAddress, this.loginPassword);
 		} // ParsePdf
 
 		/// <summary>

@@ -113,5 +113,15 @@
 			p.ParsePdf(data);
 			PacNetBalance.SavePacNetBalanceToDb();
 		}
+
+		[Test]
+		public void TestParsing10() {
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20160202.pdf";
+			byte[] data = System.IO.File.ReadAllBytes(path);
+			ParsePacNetText p = new ParsePacNetText();
+			ParsePacNetText.Logger = new ConsoleLog();
+			p.ParsePdf(data);
+			PacNetBalance.SavePacNetBalanceToDb();
+		}
 	}
 }
