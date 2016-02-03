@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
+	using AutomationCalculator.Common;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 
@@ -8,6 +9,7 @@
 			int customerID,
 			string customerFullName,
 			bool customerIsAutoRejected,
+			AutoDecisionFlowTypes flowType,
 			string customerPropertyStatusDescription,
 			bool isOwnerOfMainAddress,
 			bool isOwnerOfOtherProperties,
@@ -16,6 +18,7 @@
 			this.customerID = customerID;
 			this.customerFullName = customerFullName;
 			this.customerIsAutoRejected = customerIsAutoRejected;
+			this.flowType = flowType;
 			this.customerPropertyStatusDescription = customerPropertyStatusDescription;
 			this.isOwnerOfMainAddress = isOwnerOfMainAddress;
 			this.isOwnerOfOtherProperties = isOwnerOfOtherProperties;
@@ -27,6 +30,7 @@
 				this.customerID,
 				this.customerFullName,
 				this.customerIsAutoRejected,
+				this.flowType,
 				this.customerPropertyStatusDescription,
 				this.isOwnerOfMainAddress,
 				this.isOwnerOfOtherProperties,
@@ -37,6 +41,7 @@
 		private readonly int customerID;
 		private readonly string customerFullName;
 		private readonly bool customerIsAutoRejected;
+		private readonly AutoDecisionFlowTypes flowType;
 		private readonly string customerPropertyStatusDescription;
 		private readonly bool isOwnerOfMainAddress;
 		private readonly bool isOwnerOfOtherProperties;

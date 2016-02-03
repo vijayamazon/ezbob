@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
+	using AutomationCalculator.Common;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
@@ -314,6 +315,9 @@
 				this.context.CustomerID,
 				this.context.CustomerDetails.FullName,
 				this.context.AutoDecisionResponse.DecidedToReject,
+				this.context.AutoRejectionOutput == null
+					? AutoDecisionFlowTypes.Unknown
+					: this.context.AutoRejectionOutput.FlowType,
 				this.context.CustomerDetails.PropertyStatusDescription,
 				this.context.CustomerDetails.IsOwnerOfMainAddress,
 				this.context.CustomerDetails.IsOwnerOfOtherProperties,
@@ -531,9 +535,10 @@
 				.OnResults(UpdateLandRegistryData, StepResults.Negative)
 				.OnResults(LockManualAfterReject, StepResults.Failed);
 
-			InitTransition<LockRejected>().Always(CalculateOfferIfPossible);
+			InitTransition<LockRejected>().Always(UpdateLandRegistryData);
+			InitTransition<LockManualAfterReject>().Always(UpdateLandRegistryData);
+
 			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
-			InitTransition<LockManualAfterReject>().Always(CalculateOfferIfPossible);
 
 			InitTransition<CalculateOfferIfPossible>()
 				.OnResults(Reapproval, StepResults.Success)

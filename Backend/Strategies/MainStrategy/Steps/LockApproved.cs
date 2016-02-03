@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
 	using System;
+	using AutomationCalculator.Common;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.OfferCalculation;
@@ -56,10 +57,24 @@
 				return StepResults.Failed;
 			} // if
 
+			if (this.offerResult.FlowType == AutoDecisionFlowTypes.Unknown) {
+				Log.Alert("Unknown flow type detected for approved {0}, switching to manual.", OuterContextDescription);
+
+				this.outcome = "'error in flow type'";
+				return StepResults.Failed;
+			} // if
+
 			if (this.loanSourceID <= 0) {
 				Log.Alert("No loan source found for approved {0}, switching to manual.", OuterContextDescription);
 
 				this.outcome = "'no loan source'";
+				return StepResults.Failed;
+			} // if
+
+			if (this.autoDecisionResponse.ProposedAmount <= 0) {
+				Log.Msg("Proposed amount is not positive for approved {0}, switching to manual.", OuterContextDescription);
+
+				this.outcome = "'no proposed amount'";
 				return StepResults.Failed;
 			} // if
 
@@ -75,7 +90,7 @@
 				(this.autoDecisionResponse.ProposedAmount <= this.maxLoanAmount);
 
 			Log.Msg(
-				"Auto approved amount {0} for {1} is {2} allowed range [{3}, {4}], {5}.",
+				"Auto approved amount {0} for {1} is {2} (allowed for auto approval range is [{3}, {4}]), {5}.",
 				this.autoDecisionResponse.ProposedAmount.ToString("C0"),
 				OuterContextDescription,
 				approved ? "in" : "out of",

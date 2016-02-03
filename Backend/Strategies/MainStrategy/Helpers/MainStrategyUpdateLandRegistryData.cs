@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Helpers {
 	using System;
+	using AutomationCalculator.Common;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -10,23 +10,10 @@
 
 	class MainStrategyUpdateLandRegistryData {
 		public MainStrategyUpdateLandRegistryData(
-			CustomerDetails customerDetails,
-			NewCreditLineOption newCreditLineOption,
-			AutoDecisionResponse autoDecisionResponse
-		) {
-			this.customerID = customerDetails.ID;
-			this.customerFullName = customerDetails.FullName;
-			this.customerIsAutoRejected = autoDecisionResponse.DecidedToReject;
-			this.customerPropertyStatusDescription = customerDetails.PropertyStatusDescription;
-			this.isOwnerOfMainAddress = customerDetails.IsOwnerOfMainAddress;
-			this.isOwnerOfOtherProperties = customerDetails.IsOwnerOfOtherProperties;
-			this.skipCheck = !newCreditLineOption.UpdateData();
-		} // constructor
-
-		public MainStrategyUpdateLandRegistryData(
 			int customerID,
 			string customerFullName,
 			bool customerIsAutoRejected,
+			AutoDecisionFlowTypes flowType,
 			string customerPropertyStatusDescription,
 			bool isOwnerOfMainAddress,
 			bool isOwnerOfOtherProperties,
@@ -35,6 +22,7 @@
 			this.customerID = customerID;
 			this.customerFullName = customerFullName;
 			this.customerIsAutoRejected = customerIsAutoRejected;
+			this.flowType = flowType;
 			this.customerPropertyStatusDescription = customerPropertyStatusDescription;
 			this.isOwnerOfMainAddress = isOwnerOfMainAddress;
 			this.isOwnerOfOtherProperties = isOwnerOfOtherProperties;
@@ -49,23 +37,25 @@
 
 			string decisionName = this.customerIsAutoRejected ? "already rejected" : "not auto rejected";
 
-			if (!this.customerIsAutoRejected && isHomeOwner) {
+			if (!this.customerIsAutoRejected && (this.flowType == AutoDecisionFlowTypes.Internal) && isHomeOwner) {
 				Log.Debug(
-					"Retrieving LandRegistry system decision: {0} residential status: {1}",
+					"Retrieving LandRegistry system decision: {0}, residential status: {1}, flow type: {2}.",
 					decisionName,
-					this.customerPropertyStatusDescription
+					this.customerPropertyStatusDescription,
+					this.flowType
 				);
 
 				try {
 					UpdateLandRegistryData();
 				} catch (Exception e) {
-					Log.Error("Error while getting land registry data: {0}", e);
+					Log.Alert(e, "Error while getting land registry data for customer {0}.", this.customerID);
 				} // try
 			} else {
 				Log.Info(
-					"Not retrieving LandRegistry system decision: {0} residential status: {1}",
+					"Not retrieving LandRegistry system decision: {0} residential status: {1}, flow type {2}.",
 					decisionName,
-					this.customerPropertyStatusDescription
+					this.customerPropertyStatusDescription,
+					this.flowType
 				);
 			} // if
 		} // Execute
@@ -171,6 +161,7 @@
 		private readonly int customerID;
 		private readonly string customerFullName;
 		private readonly bool customerIsAutoRejected;
+		private readonly AutoDecisionFlowTypes flowType;
 		private readonly string customerPropertyStatusDescription;
 		private readonly bool isOwnerOfMainAddress;
 		private readonly bool isOwnerOfOtherProperties;

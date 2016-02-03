@@ -48,11 +48,19 @@
 		public int ProposedAmount { get; private set; }
 
 		protected override StepResults Run() {
-			this.logicalGlueFlowFailed = false;
+			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
+				Log.Alert("No auto rejection output specified for {0}, auto decision is aborted.", OuterContextDescription);
+
+				this.outcome = "'failure - no auto rejection executed'";
+				return StepResults.Failed;
+			} // if
 
 			CalculateMedal();
 
-			bool rejectWasExecuted = ValidateFlowType();
+			if ((this.medalAgent == null) || this.medalAgent.HasError) {
+				this.outcome = "'failure - medal calculation failed'";
+				return StepResults.Failed;
+			} // if
 
 			switch (this.autoRejectionOutput.FlowType) {
 			case AutoDecisionFlowTypes.LogicalGlue:
@@ -67,13 +75,7 @@
 				throw new ArgumentOutOfRangeException();
 			} // switch
 
-			bool failure =
-				!rejectWasExecuted ||
-				(this.medalAgent == null) ||
-				this.medalAgent.HasError ||
-				this.logicalGlueFlowFailed;
-
-			if (failure) {
+			if ((OfferResult == null) || OfferResult.IsError || OfferResult.IsMismatch || (LoanSourceID <= 0)) {
 				this.outcome = "'failure'";
 				return StepResults.Failed;
 			} // if
@@ -83,17 +85,6 @@
 		} // Run
 
 		protected override string Outcome { get { return this.outcome; } }
-
-		private bool ValidateFlowType() {
-			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
-				Log.Alert("No auto rejection output specified for {0} - defaulting to old flow.", OuterContextDescription);
-
-				this.autoRejectionOutput.FlowType = AutoDecisionFlowTypes.Internal;
-				return false;
-			} // if
-
-			return true;
-		} // ValidateFlowType
 
 		private void CalculateMedal() {
 			this.medalAgent = new CalculateMedal(
@@ -140,8 +131,6 @@
 			);
 
 			if (sr.IsEmpty) {
-				this.logicalGlueFlowFailed = true;
-
 				Log.Warn(
 					"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
 					this.autoRejectionOutput.GradeRangeID,
@@ -164,6 +153,7 @@
 				CalculationTime = DateTime.UtcNow,
 				Amount = ProposedAmount,
 				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+				FlowType = AutoDecisionFlowTypes.LogicalGlue,
 
 				ScenarioName = "Logical Glue",
 				Period = term,
@@ -204,6 +194,7 @@
 					CalculationTime = DateTime.UtcNow,
 					Amount = ProposedAmount,
 					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+					FlowType = AutoDecisionFlowTypes.Internal,
 
 					ScenarioName = "Internal - error occurred",
 					Period = 0,
@@ -244,6 +235,9 @@
 			);
 
 			OfferResult = offerDualCalculator.CalculateOffer();
+
+			if (OfferResult != null)
+				OfferResult.FlowType = AutoDecisionFlowTypes.Internal;
 		} // CreateUnlogicalOffer
 
 		private readonly int customerID;
@@ -256,7 +250,6 @@
 		private readonly int notHomeOwnerCap;
 
 		private CalculateMedal medalAgent;
-		private bool logicalGlueFlowFailed;
 		private string outcome;
 	} // class CalculateOfferIfPossible
 } // namespace
