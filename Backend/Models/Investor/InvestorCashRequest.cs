@@ -13,7 +13,11 @@
 	    /// A string that represents the current object.
 	    /// </returns>
 	    public override string ToString() {
-			return string.Format("CashRequestID {0} ManagerApprovedSum {1} GradeID {2} FundingType {3}", CashRequestID, ManagerApprovedSum, GradeID, FundingType);
+			return string.Format(
+@"CashRequestID: {0}
+ManagerApprovedSum: {1}
+GradeID: {2}
+FundingType: {3}", CashRequestID, ManagerApprovedSum, GradeID, FundingType);
 	    }
     }//class InvestorCashRequest
 

@@ -30,6 +30,7 @@
 			var weeklyInvestmentAllowed = GetParameterValue("WeeklyInvestmentAllowed", iInvestorParameters);
 			investorParameters.DailyAvailableAmount = dailyInvestmentAllowed == null ? investorParameters.Balance : (decimal)dailyInvestmentAllowed - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Day);
 			investorParameters.WeeklyAvailableAmount = weeklyInvestmentAllowed == null ? investorParameters.Balance : (decimal)weeklyInvestmentAllowed - InvestorParametersDAL.GetFundedAmountPeriod(investorId, InvesmentPeriod.Week);
+			investorParameters.InvestorID = investorId;
 			return investorParameters;
 		}
 

@@ -11,7 +11,7 @@
 
 		[FK("I_Investor", "InvestorID")]
         [DataMember]
-        public int InvestorID { get; set; }
+        public int? InvestorID { get; set; }
 
 		[FK("I_Parameter", "ParameterID")]
 		[DataMember]

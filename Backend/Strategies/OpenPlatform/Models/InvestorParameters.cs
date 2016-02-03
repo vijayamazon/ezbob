@@ -12,7 +12,12 @@
 	    /// A string that represents the current object.
 	    /// </returns>
 	    public override string ToString() {
-			return string.Format("InvestorID {0} Balance {1} DailyAvailableAmount {2} WeeklyAvailableAmount {3}", 
+			return string.Format(
+@"
+InvestorID {0}
+Balance {1}
+DailyAvailableAmount {2}
+WeeklyAvailableAmount {3}", 
 				InvestorID, 
 				Balance, 
 				DailyAvailableAmount, 
