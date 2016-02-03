@@ -8,7 +8,9 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class AutoDecisionResponse {
-		public AutoDecisionResponse() {
+		public AutoDecisionResponse(int customerID) {
+			CustomerID = customerID;
+
 			ProductSubTypeID = null;
 
 			// Currently (July 2015) it is always false. It was true/false in the past and may be such in the future.
@@ -39,6 +41,8 @@
 			DiscountPlanID = null;
 			HasApprovalChance = false;
 		} // constructor
+
+		public int CustomerID { get; set; }
 
 		public int? ProductSubTypeID { get; set; }
 		public bool IsLoanTypeSelectionAllowed { get; set; }
@@ -179,10 +183,9 @@
 			SafeReader lssr = Library.Instance.DB.GetFirst(
 				"GetLoanSource",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter( // Get specific for re-approval or default otherwise
-					"@LoanSourceID",
-					IsAutoReApproval ? LoanSourceID : (int?)null
-				)
+				// Get specific for re-approval or default otherwise
+				new QueryParameter("@LoanSourceID", IsAutoReApproval ? LoanSourceID : (int?)null),
+				new QueryParameter("@CustomerID", CustomerID)
 			);
 
 			return lssr.Fill<LoanSource>();

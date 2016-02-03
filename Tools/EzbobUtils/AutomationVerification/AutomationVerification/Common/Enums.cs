@@ -72,11 +72,6 @@
 		Online,
 	}
 
-	public enum OfferCalculationType {
-		Seek,
-		Boundaries
-	}
-
 	public enum Parameter {
 		BusinessScore,
 		TangibleEquity,

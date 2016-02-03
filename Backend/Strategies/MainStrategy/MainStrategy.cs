@@ -6,7 +6,6 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
-	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MainStrategy.Steps;
 
 	[SuppressMessage("ReSharper", "ConvertIfStatementToNullCoalescingExpression")]
@@ -288,7 +287,6 @@
 					this.context.NLCashRequestID,
 					this.context.Tag,
 					this.context.CompanyID,
-					this.context.MonthlyRepayment.MonthlyPayment,
 					this.context.CustomerDetails.IsAlibaba
 				);
 				reject.CollectOutputValue += CollectStepOutputValue;

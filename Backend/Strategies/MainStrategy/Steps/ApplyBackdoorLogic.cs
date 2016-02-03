@@ -32,11 +32,14 @@
 
 			this.applied = false;
 
-			Response = new AutoDecisionResponse();
+			AutoDecisionResponse = new AutoDecisionResponse(this.customerID);
 		} // constructor
 
 		[StepOutput]
-		public AutoDecisionResponse Response { get; private set; }
+		public AutoDecisionResponse AutoDecisionResponse { get; private set; }
+
+		[StepOutput]
+		public MedalResult Medal { get; private set; }
 
 		protected override string Outcome {
 			get { return this.applied ? "'applied'" : "'not applied'"; }
@@ -58,12 +61,12 @@
 
 			Log.Debug("Using back door simple for {0} as: {1}.", OuterContextDescription, backdoorSimpleDetails);
 
-			bool success = backdoorSimpleDetails.SetResult(Response);
+			bool success = backdoorSimpleDetails.SetResult(AutoDecisionResponse);
 
 			if (!success)
 				return StepResults.NotApplied;
 
-			var medal = CalculateMedal();
+			Medal = CalculateMedal();
 
 			this.applied = true;
 
@@ -77,10 +80,10 @@
 				return StepResults.NotApplied;
 			} // if
 
-			medal.MedalClassification = bsa.MedalClassification;
-			medal.OfferedLoanAmount = bsa.ApprovedAmount;
-			medal.TotalScoreNormalized = 1m;
-			medal.AnnualTurnover = bsa.ApprovedAmount;
+			Medal.MedalClassification = bsa.MedalClassification;
+			Medal.OfferedLoanAmount = bsa.ApprovedAmount;
+			Medal.TotalScoreNormalized = 1m;
+			Medal.AnnualTurnover = bsa.ApprovedAmount;
 
 			var glcd = new GetLoanCommissionDefaults(this.cashRequestID, bsa.ApprovedAmount);
 			glcd.Execute();
@@ -88,8 +91,8 @@
 			if (!glcd.IsBrokerCustomer)
 				return StepResults.Applied;
 
-			Response.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
-			Response.SetupFee = glcd.Result.ManualSetupFee;
+			AutoDecisionResponse.BrokerSetupFeePercent = glcd.Result.BrokerCommission;
+			AutoDecisionResponse.SetupFee = glcd.Result.ManualSetupFee;
 
 			return StepResults.Applied;
 		} // Run

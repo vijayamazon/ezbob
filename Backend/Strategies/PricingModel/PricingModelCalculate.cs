@@ -2,27 +2,24 @@
 	using Exceptions;
 
 	public class PricingModelCalculate : AStrategy {
-		private readonly PricingModelCalculator pricingModelCalculator;
-
 		public PricingModelCalculate(int customerId, PricingModelModel model) {
 			Model = model;
-			pricingModelCalculator = new PricingModelCalculator(customerId, model);
-		}
+			this.pricingModelCalculator = new PricingModelCalculator(customerId, model);
+		} // constructor
 
-		public override string Name {
-			get { return "Pricing model calculate"; }
-		}
+		public override string Name { get { return "Pricing model calculate"; } }
 
 		public PricingModelModel Model { get; private set; }
 
 		public override void Execute() {
-			pricingModelCalculator.Execute();
+			this.pricingModelCalculator.Execute();
 
-			if (!string.IsNullOrEmpty(pricingModelCalculator.Error))
-				throw new StrategyWarning(this, pricingModelCalculator.Error);
+			if (!string.IsNullOrEmpty(this.pricingModelCalculator.Error))
+				throw new StrategyWarning(this, this.pricingModelCalculator.Error);
 
-			Model = pricingModelCalculator.Model;
+			Model = this.pricingModelCalculator.Model;
+		} // Execute
 
-		}
-	}
-}
+		private readonly PricingModelCalculator pricingModelCalculator;
+	} // class PricingModelCalculate
+} // namespace

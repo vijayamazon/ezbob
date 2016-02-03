@@ -159,7 +159,7 @@
 				this.args.CustomerID,
 				this.args.Now,
 				false,
-				this.args.MonthlyPayment
+				0
 			);
 
 			if (inference == null) {
@@ -207,12 +207,16 @@
 						);
 
 						inputData.ResponseErrors.AddRange(model.Error.MissingColumns);
-					} // if
 
-					inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
-					inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
-					inputData.Score = inference.Score;
-				} // if inference is null
+						inputData.ResponseErrors.AddRange(
+							model.Error.Warnings.Where(w => !w.IsEmpty).Select(w => w.ToString())
+						);
+					} // if
+				} // if inference has error
+
+				inputData.HardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
+				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
+				inputData.Score = inference.Score;
 
 				inputData.MatchingGradeRanges = new MatchingGradeRanges();
 
@@ -226,7 +230,7 @@
 					};
 					spRanges.Execute(inputData.MatchingGradeRanges);
 				} // if
-			} // if
+			} // if inference is null
 		} // GatherData
 
 		private void LogicalGlueFlow() {

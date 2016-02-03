@@ -2656,7 +2656,7 @@ iframe#logical-glue-iframe{
 .config-scheduler-labels {
 	display: inline-block;
 	margin-top: 7px;
-	margin-right: 240px;
+	width: 20%;
 }
 
 .fca-incompliance-area .modal-header {

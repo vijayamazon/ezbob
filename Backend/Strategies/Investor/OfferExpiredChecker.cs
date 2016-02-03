@@ -61,14 +61,21 @@
 		}//HandleOneExpired
 
 		private void RejectCustomer(int customerID, long cashRequestID, string customerEmail) {
-			MainStrategyUpdateCrC sp = new MainStrategyUpdateCrC(this.now, customerID, cashRequestID, new AutoDecisionResponse {
-				AutoRejectReason = "Pending investor offer expired",
-				CreditResult = CreditResultStatus.Rejected,
-				Decision = DecisionActions.Reject,
-				SystemDecision = SystemDecision.Reject,
-				UserStatus = Status.Rejected,
-				DecisionName = "Rejection"
-			}, DB, Log);
+			MainStrategyUpdateCrC sp = new MainStrategyUpdateCrC(
+				this.now,
+				customerID,
+				cashRequestID,
+				new AutoDecisionResponse(customerID) {
+					AutoRejectReason = "Pending investor offer expired",
+					CreditResult = CreditResultStatus.Rejected,
+					Decision = DecisionActions.Reject,
+					SystemDecision = SystemDecision.Reject,
+					UserStatus = Status.Rejected,
+					DecisionName = "Rejection",
+				},
+				DB,
+				Log
+			);
 
 			sp.ExecuteNonQuery();
 

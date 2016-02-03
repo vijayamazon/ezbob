@@ -11,13 +11,8 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
 
-	public class OfferCalculator1 {
-		public OfferCalculator1() {
-			this.log = Library.Instance.Log;
-			this.db = Library.Instance.DB;
-		} // constructor
-
-		public OfferResult CalculateOffer(
+	public class OfferCalculator {
+		public OfferCalculator(
 			int customerId,
 			DateTime calculationTime,
 			int amount,
@@ -25,7 +20,10 @@
 			Medal medalClassification,
 			int period
 		) {
-			var result = new OfferResult {
+			this.log = Library.Instance.Log;
+			this.db = Library.Instance.DB;
+
+			this.result = new OfferResult {
 				CustomerId = customerId,
 				CalculationTime = calculationTime,
 				Amount = amount,
@@ -33,32 +31,36 @@
 				Period = period,
 			};
 
+			this.hasLoans = hasLoans;
+		} // constructor
+
+		public OfferResult CalculateOffer() {
 			// We always use standard loan type
 			SafeReader sr = this.db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
 
 			if (sr.IsEmpty) {
-				result.IsError = true;
-				result.Message = "Can't load standard loan type";
-				return result;
+				this.result.IsError = true;
+				this.result.Message = "Can't load standard loan type";
+				return this.result;
 			} // if
 
-			result.LoanTypeId = sr["Id"];
+			this.result.LoanTypeId = sr["Id"];
 
 			// Choose scenario
-			if (amount <= CurrentValues.Instance.SmallLoanScenarioLimit)
-				result.ScenarioName = "Small Loan";
-			else if (!hasLoans)
-				result.ScenarioName = "Basic New";
+			if (this.result.Amount <= CurrentValues.Instance.SmallLoanScenarioLimit)
+				this.result.ScenarioName = "Small Loan";
+			else if (!this.hasLoans)
+				this.result.ScenarioName = "Basic New";
 			else
-				result.ScenarioName = "Basic Repeating";
+				this.result.ScenarioName = "Basic Repeating";
 
-			var getPricingModelModelInstance = new GetPricingModelModel(customerId, result.ScenarioName);
+			var getPricingModelModelInstance = new GetPricingModelModel(this.result.CustomerId, this.result.ScenarioName);
 			getPricingModelModelInstance.Execute();
 
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
-			templateModel.SetLoanAmount(amount);
-			templateModel.LoanTerm = result.Period;
-			templateModel.TenureMonths = result.Period * templateModel.TenurePercents;
+			templateModel.SetLoanAmount(this.result.Amount);
+			templateModel.LoanTerm = this.result.Period;
+			templateModel.TenureMonths = this.result.Period * templateModel.TenurePercents;
 
 			templateModel.MonthlyInterestRate = GetCOSMELoanMonthlyInterest(
 				templateModel.ConsumerScore,
@@ -67,31 +69,31 @@
 
 			decimal calculatedSetupFee = GetSetupFeeForCOSME(templateModel);
 
-			decimal adjustedSetupFee = AdjustToMinMaxSetupFee(templateModel.LoanAmount, !hasLoans, calculatedSetupFee);
+			decimal adjustedSetupFee = AdjustToMinMaxSetupFee(templateModel.LoanAmount, calculatedSetupFee);
 
-			SetRounded(result, templateModel.MonthlyInterestRate, adjustedSetupFee);
+			SetRounded(templateModel.MonthlyInterestRate, adjustedSetupFee);
 
 			if (adjustedSetupFee != calculatedSetupFee) {
-				result.Message = string.Format(
+				this.result.Message = string.Format(
 					"Calculated setup fee of {0:P2} was adjusted to {1:P2}.",
 					calculatedSetupFee,
 					adjustedSetupFee
 				);
 			} // if
 
-			return result;
+			return this.result;
 		} // CalculateOffer
 
 		/// <summary>
 		/// Checks if the calculated setup fee is in range; adjusts to the closest edge if needed.
 		/// </summary>
 		/// <returns>true if setup fee was adjusted</returns>
-		private decimal AdjustToMinMaxSetupFee(decimal amount, bool isNewLoan, decimal originalSetupFee) {
+		private decimal AdjustToMinMaxSetupFee(decimal amount, decimal originalSetupFee) {
 			SafeReader sr = this.db.GetFirst(
 				"LoadOfferRanges",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@Amount", amount),
-				new QueryParameter("@IsNewLoan", isNewLoan)
+				new QueryParameter("@IsNewLoan", !this.hasLoans)
 			);
 
 			decimal minSetupFee = sr["MinSetupFee"];
@@ -100,7 +102,7 @@
 			this.log.Debug(
 				"Primary set up fee range({0:C2}, {1} loan) = {2} [{3:P2}, {4:P2}].",
 				amount,
-				isNewLoan ? "new" : "repeating",
+				this.hasLoans ? "repeating" : "new",
 				(string)sr["LoanSizeName"],
 				minSetupFee,
 				maxSetupFee
@@ -135,7 +137,7 @@
 		/// TODO make configurable in DB
 		/// </summary>
 		/// <returns>preferable interest rate</returns>
-		private decimal GetCOSMELoanMonthlyInterest(int consumerScore, int companyScore) {
+		private static decimal GetCOSMELoanMonthlyInterest(int consumerScore, int companyScore) {
 			if (consumerScore < 1040 && companyScore == 0)
 				return 0.0225M;
 
@@ -152,8 +154,8 @@
 			return 0.0225M;
 		} // GetCOSMELoanMonthlyInterest
 
-		private decimal GetSetupFeeForCOSME(PricingModelModel model) {
-			Loan loan = CreateLoan(model.LoanAmount, model.MonthlyInterestRate, model.FeesRevenue, (int)model.TenureMonths);
+		private static decimal GetSetupFeeForCOSME(PricingModelModel model) {
+			Loan loan = CreateLoan(model);
 
 			decimal costOfDebtEu = GetCostOfDebt(
 				model.LoanAmount,
@@ -162,32 +164,32 @@
 				loan.Schedule
 			);
 
-			decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest);
-			interestRevenue *= 1 - model.DefaultRate;
+			decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest) * (1 - model.DefaultRate);
 			decimal netLossFromDefaults = (1 - model.CosmeCollectionRate) * model.LoanAmount * model.DefaultRate;
 			decimal totalCost = model.Cogs + model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
 			decimal profit = totalCost / (1 - model.ProfitMarkup);
 			decimal setupFeePounds = profit - interestRevenue;
-			decimal setupFee = setupFeePounds / model.LoanAmount;
-
-			return setupFee;
+			return setupFeePounds / model.LoanAmount;
 		} // GetSetupFeeForCOSME
 
-		private Loan CreateLoan(decimal loanAmount, decimal interestRate, decimal setupFee, int tenureMonths) {
-			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = tenureMonths };
+		private static Loan CreateLoan(PricingModelModel model) {
+			var calculator = new LoanScheduleCalculator {
+				Interest = model.MonthlyInterestRate,
+				Term = (int)model.TenureMonths,
+			};
 
 			LoanType lt = new StandardLoanType();
 
 			var loan = new Loan {
-				LoanAmount = loanAmount,
+				LoanAmount = model.LoanAmount,
 				Date = DateTime.UtcNow,
 				LoanType = lt,
 				CashRequest = null,
-				SetupFee = setupFee,
+				SetupFee = model.FeesRevenue,
 				LoanLegalId = 1
 			};
 
-			calculator.Calculate(loanAmount, loan, loan.Date);
+			calculator.Calculate(model.LoanAmount, loan, loan.Date);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
@@ -195,7 +197,7 @@
 			return loan;
 		} // CreateLoan
 
-		private decimal GetCostOfDebt(
+		private static decimal GetCostOfDebt(
 			decimal loanAmount,
 			decimal debtPercentOfCapital,
 			decimal costOfDebt,
@@ -212,20 +214,22 @@
 			return costOfDebtOutput;
 		} // GetCostOfDebt
 
-		private void SetRounded(OfferResult result, decimal interestRate, decimal setupFee) {
-			result.InterestRate = Math.Ceiling(interestRate * 2000) / 20;
-			result.SetupFee = Math.Ceiling(setupFee * 200) / 2;
+		private void SetRounded(decimal interestRate, decimal setupFee) {
+			this.result.InterestRate = Math.Ceiling(interestRate * 2000) / 20;
+			this.result.SetupFee = Math.Ceiling(setupFee * 200) / 2;
 
 			this.log.Info(
 				"Rounding setup fee {0:P2} -> {1:N2}%, interest rate {2:P2} - > {3:N2}%.",
 				setupFee,
-				result.SetupFee,
+				this.result.SetupFee,
 				interestRate,
-				result.InterestRate
+				this.result.InterestRate
 			);
 		} // SetRounded
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;
-	} // class OfferCalculator1
+		private readonly OfferResult result;
+		private readonly bool hasLoans;
+	} // class OfferCalculator
 } // namespace

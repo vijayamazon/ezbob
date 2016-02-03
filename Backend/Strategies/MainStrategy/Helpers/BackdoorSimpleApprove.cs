@@ -58,7 +58,11 @@
 			response.ProposedAmount = ApprovedAmount;
 			response.ApprovedAmount = ApprovedAmount;
 
-			SafeReader sr = Library.Instance.DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+			SafeReader sr = Library.Instance.DB.GetFirst(
+				"GetDefaultLoanSource",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customerID)
+			);
 
 			if (sr.IsEmpty) {
 				Log.Warn(

@@ -139,7 +139,6 @@
 				"AV_LogicalGlueDataForAutoReject", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", this.args.CustomerID),
 				new QueryParameter("CompanyID", this.args.CompanyID),
-				new QueryParameter("PlannedPayment", this.args.MonthlyPayment),
 				new QueryParameter("ProcessingDate", this.args.Now)
 			);
 
@@ -195,6 +194,11 @@
 
 			if (errCount > 0)
 				inputData.ResponseErrors.Add(Grammar.Number(errCount, "missing column") + " detected.");
+
+			errCount = sr["WarningCount"];
+
+			if (errCount > 0)
+				inputData.ResponseErrors.Add(Grammar.Number(errCount, "warning") + " detected.");
 
 			inputData.HardReject = sr["EtlCodeID"] == (int)LGEtlCode.HardReject;
 

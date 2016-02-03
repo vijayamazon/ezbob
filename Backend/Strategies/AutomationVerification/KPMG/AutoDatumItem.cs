@@ -336,11 +336,11 @@
 			odc.CalculateOffer();
 
 			var res = new OfferResult {
-				ScenarioName = odc.VerifySeek.ScenarioName,
+				ScenarioName = odc.VerificationResult.ScenarioName,
 				ApprovedAmount = (int)approvedAmount,
-				RepaymentPeriod = odc.VerifySeek.RepaymentPeriod,
-				InterestRate = odc.VerifySeek.InterestRate / 100.0m,
-				SetupFeePct = odc.VerifySeek.SetupFee / 100.0m,
+				RepaymentPeriod = odc.VerificationResult.RepaymentPeriod,
+				InterestRate = odc.VerificationResult.InterestRate / 100.0m,
+				SetupFeePct = odc.VerificationResult.SetupFee / 100.0m,
 			};
 
 			res.SetupFeeAmount = res.ApprovedAmount * res.SetupFeePct;

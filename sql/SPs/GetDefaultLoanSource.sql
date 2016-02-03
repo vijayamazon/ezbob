@@ -9,9 +9,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetDefaultLoanSource
+@CustomerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	DECLARE @OriginID INT = (SELECT OriginID FROM Customer WHERE Id = @CustomerID)
 
 	DECLARE
 		@DefaultLoanTypeID INT,
@@ -19,34 +22,22 @@ BEGIN
 		@RepaymentPeriod INT,
 		@IsCustomerRepaymentPeriodSelectionAllowed BIT
 
-	SELECT TOP 1
+	SELECT
 		@LoanSourceID = LoanSourceID,
 		@RepaymentPeriod = DefaultRepaymentPeriod,
 		@IsCustomerRepaymentPeriodSelectionAllowed = IsCustomerRepaymentPeriodSelectionAllowed
 	FROM
-		LoanSource
-	WHERE
-		IsDefault = 1
+		dbo.udfGetLoanSource(NULL, @OriginID)
 
-	IF @LoanSourceID IS NULL
+	IF @RepaymentPeriod IS NULL
 	BEGIN
 		SELECT
 			@DefaultLoanTypeID = DefaultLoanTypeID
 		FROM
 			dbo.udfGetLoanTypeAndDefault(NULL)
 
-		SELECT TOP 1
-			@LoanSourceID = LoanSourceID,
-			@RepaymentPeriod = DefaultRepaymentPeriod,
-			@IsCustomerRepaymentPeriodSelectionAllowed = IsCustomerRepaymentPeriodSelectionAllowed
-		FROM
-			LoanSource
-		WHERE
-			LoanSourceID = 1
-	END
-
-	IF @RepaymentPeriod IS NULL
 		SELECT @RepaymentPeriod = RepaymentPeriod FROM LoanType WHERE Id = @DefaultLoanTypeID
+	END
 
 	SELECT
 		LoanSourceID = @LoanSourceID,

@@ -79,8 +79,8 @@ namespace EzBobTest {
 			            customer,
 			            res.MedalClassification,
 			            res.Amount,
-			            offerCalc.Primary,
-			            offerCalc.VerifySeek,
+			            offerCalc.PrimaryResult,
+			            offerCalc.VerificationResult,
 			            res.IsError
 			            );
                 } else {

@@ -8,7 +8,6 @@ GO
 ALTER PROCEDURE AV_LogicalGlueDataForAutoReject
 @CustomerID INT,
 @CompanyID INT,
-@PlannedPayment DECIMAL(18,6),
 @ProcessingDate DATETIME
 AS
 BEGIN
@@ -21,7 +20,12 @@ BEGIN
 			CustomerOrigin = (SELECT o.Name FROM Customer c INNER JOIN CustomerOrigin o ON c.OriginID = o.CustomerOriginID WHERE Id = @CustomerID),
 			TypeOfBusiness = (SELECT TypeOfBusiness FROM Company WHERE Id = @CompanyID),
 			LoanCount = (SELECT COUNT(DISTINCT Id) FROM Loan l WHERE l.CustomerId = @CustomerID AND l.[Date] <= @ProcessingDate),
-			LoanSource = (SELECT LoanSourceName FROM LoanSource ls WHERE ls.IsDefault = 1)
+			LoanSource = (
+				SELECT ls.LoanSourceName
+				FROM LoanSource ls
+				INNER JOIN DefaultLoanSources dls ON ls.LoanSourceID = dls.LoanSourceID
+				INNER JOIN Customer c ON dls.OriginID = c.OriginID AND c.Id = @CustomerID
+			)
 	), lg AS (
 		SELECT
 			l.Id as ServiceLogID,
@@ -38,7 +42,8 @@ BEGIN
 			mo.ErrorCode,
 			mo.Exception,
 			EncodingFailureCount = (SELECT COUNT(*) FROM LogicalGlueModelEncodingFailures WHERE ModelOutputID = mo.ModelOutputID),
-			MissingColumnCount = (SELECT COUNT(*) FROM LogicalGlueModelMissingColumns WHERE ModelOutputID = mo.ModelOutputID)
+			MissingColumnCount = (SELECT COUNT(*) FROM LogicalGlueModelMissingColumns WHERE ModelOutputID = mo.ModelOutputID),
+			WarningCount = (SELECT COUNT(*) FROM LogicalGlueModelWarnings WHERE ModelOutputID = mo.ModelOutputID)
 		FROM
 			MP_ServiceLog l
 			INNER JOIN LogicalGlueRequests r
@@ -52,7 +57,6 @@ BEGIN
 						AND l1.CustomerId = @CustomerID
 						AND l1.CompanyID = @CompanyID 
 						AND l1.ServiceType = 'LogicalGlue'
-						AND r1.MonthlyRepayment = @PlannedPayment 
 						AND r1.IsTryOut = 0
 						AND l1.InsertDate <= @ProcessingDate
 					ORDER BY
