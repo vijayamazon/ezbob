@@ -156,8 +156,6 @@
 							uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
 						origin: origin)
 
-					<div class="control-group form_read_and_accept">
-						<div class="controls">
 					@{
 					EzInputBuilder radio1 = new EzInputBuilder("FCARegistered", "FCA Registered",
 						value: "true",
@@ -184,13 +182,11 @@
 					var buttonsmodel = new EzClickInputModel(
 						name: "FCARegistered",
 						inputWrapperClass: "FormRadioCtrl",
+						containerClass: "form_fca",
 						inputButtons: radios);
 
 					@EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
 					}
-
-						</div>
-					</div>
 
 					@EzForm.InputTextWizard(
 						new EzInputBuilder(
