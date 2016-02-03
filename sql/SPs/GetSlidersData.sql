@@ -8,9 +8,9 @@ GO
 ALTER PROCEDURE [dbo].[GetSlidersData]
 	@CustomerID INT
 AS
-BEGIN
-	DECLARE @DefaultLoanSourceID DECIMAL = (SELECT LoanSourceID FROM LoanSource WHERE IsDefault = 1)
+BEGIN	
 	DECLARE @OriginID INT = (SELECT OriginID FROM Customer WHERE Id=@CustomerID)
+	DECLARE @DefaultLoanSourceID DECIMAL = (SELECT LoanSourceID FROM DefaultLoanSources WHERE OriginID = @OriginID)
 	DECLARE @Amount DECIMAL
 	DECLARE @Term INT
 	DECLARE @HasLoan BIT = (SELECT count(*) FROM Loan WHERE CustomerId = @CustomerID) 
