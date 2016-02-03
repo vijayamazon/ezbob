@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Text;
 	using AutomationCalculator.Common;
@@ -16,9 +17,29 @@
 		HMRC,
 		Bank,
 		Online,
-	}
+	} // enum TurnoverType
 
 	public class MedalResult {
+		public MedalResult(int customerID, ASafeLog log) {
+			MedalClassification = Medal.NoClassification;
+			MedalType = MedalType.NoMedal;
+			OfferedLoanAmount = 0;
+			TotalScoreNormalized = 0;
+			CustomerId = customerID;
+			this.log = log;
+			ExceptionDuringCalculation = null;
+			this.wasMismatch = false;
+			this.errors = new List<string>();
+		} // constructor
+
+		public MedalResult(int customerID, ASafeLog log, Exception ex) : this(customerID, log) {
+			ExceptionDuringCalculation = ex;
+		} // constructor
+
+		public MedalResult(int customerID, ASafeLog log, string errorMsg) : this(customerID, log) {
+			AddError(errorMsg);
+		} // constructor
+
 		// Inputs
 		public int CustomerId { get; set; }
 		public DateTime CalculationTime { get; set; }
@@ -174,19 +195,15 @@
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
 		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
-		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 		public int MaxOfferedLoanAmount { get; set; }
 		public Exception ExceptionDuringCalculation { get; set; }
 
-		public MedalResult(int customerID, ASafeLog log) {
-			MedalClassification = Medal.NoClassification;
-			OfferedLoanAmount = 0;
-			TotalScoreNormalized = 0;
-			CustomerId = customerID;
-			this.log = log;
-			ExceptionDuringCalculation = null;
-		} // constructor
+		public string Error { get { return string.Join(" ", FullErrorList); } }
+
+		public bool HasError {
+			get { return (ExceptionDuringCalculation != null) || (this.errors.Count > 0) || this.wasMismatch; }
+		} // HasError
 
 		public static int RoundOfferedAmount(decimal amount) {
 			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
@@ -213,28 +230,34 @@
 			return (NumOfHmrcMps > 0) && (TurnoverType == Ezbob.Backend.Strategies.MedalCalculations.TurnoverType.HMRC);
 		} // UseHmrc
 
-		public bool IsLike(MedalOutputModel other) {
-			return other == null || IsIdentical(other);
-		} // IsLike
+		public void CheckForMatch(MedalOutputModel other) {
+			// Other is null, i.e. it was not calculated, so it is a match.
+			if (other == null) {
+				this.wasMismatch = false;
+				return;
+			} // if
 
-		public bool IsIdentical(MedalOutputModel other) {
-			if (other == null)
-				return false;
+			if (!string.IsNullOrWhiteSpace(other.Error)) {
+				AddError("Error in verification calculation: " + other.Error);
+				return;
+			} // if
 
-			// if NoMedal no need to compare any other field
-			if (MedalType == MedalType.NoMedal && other.MedalType == AutomationCalculator.Common.MedalType.NoMedal)
-				return true;
+			// At this point both are not null and no error reported.
 
-			bool notIdentical =
+			// if NoMedal in both, no need to compare any other field.
+			if ((MedalType == MedalType.NoMedal) && (other.MedalType == AutomationCalculator.Common.MedalType.NoMedal)) {
+				this.wasMismatch = false;
+				return;
+			} // if
+
+			this.wasMismatch =
 				MedalType.ToString() != other.MedalType.ToString() ||
 				Math.Abs(ValueAdded - other.ValueAdded) > 0.001M ||
 				Math.Abs(TotalScore - other.Score * 100) > 0.001M ||
 				Math.Abs(TotalScoreNormalized - other.NormalizedScore) > 0.001M ||
 				MedalClassification.ToString() != other.Medal.ToString() ||
 				Math.Abs(OfferedLoanAmount - other.OfferedLoanAmount) > 100; // TODO understand the difference in yodlee calculation and change the allowed diff to 0.01M
-
-			return !notIdentical;
-		} // IsIdentical
+		} // CheckForMatch
 
 		public void SaveToDb(long? cashRequestID, long? nlCashRequestID, string tag, AConnection db) {
 			try {
@@ -264,7 +287,10 @@
 					new QueryParameter("TangibleEquityWeight", TangibleEquityWeight),
 					new QueryParameter("TangibleEquityGrade", TangibleEquityGrade),
 					new QueryParameter("TangibleEquityScore", TangibleEquityScore),
-					new QueryParameter("BusinessSeniority", BusinessSeniority.HasValue && BusinessSeniority.Value.Year > 1800 ? BusinessSeniority : null),
+					new QueryParameter(
+						"BusinessSeniority",
+						BusinessSeniority.HasValue && BusinessSeniority.Value.Year > 1800 ? BusinessSeniority : null
+					),
 					new QueryParameter("BusinessSeniorityWeight", BusinessSeniorityWeight),
 					new QueryParameter("BusinessSeniorityGrade", BusinessSeniorityGrade),
 					new QueryParameter("BusinessSeniorityScore", BusinessSeniorityScore),
@@ -320,7 +346,10 @@
 					new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
 					new QueryParameter("MortgageBalance", MortgageBalance),
 					new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
-					new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.SafeToFormattedString()),
+					new QueryParameter(
+						"CapOfferByCustomerScoresTable",
+						CapOfferByCustomerScoresTable.SafeToFormattedString()
+					),
 					new QueryParameter("Tag", tag),
 					new QueryParameter("MaxOfferedLoanAmount", MaxOfferedLoanAmount),
 					new QueryParameter("CashRequestID", cashRequestID),
@@ -511,7 +540,27 @@
 			return sb.ToString();
 		} // ToString
 
+		private void AddError(string errorMsg) {
+			if (!string.IsNullOrWhiteSpace(errorMsg))
+				this.errors.Add(errorMsg.Trim());
+		} // AddError
+
+		private IEnumerable<string> FullErrorList {
+			get {
+				if (ExceptionDuringCalculation != null)
+					yield return "Exception during calculation: " + ExceptionDuringCalculation.Message;
+
+				if (this.wasMismatch)
+					yield return "Mismatch detected.";
+
+				foreach (string s in this.errors)
+					yield return s;
+			} // get
+		} // FullErrorList
+
 		private readonly ASafeLog log;
+		private readonly List<string> errors;
+		private bool wasMismatch;
 	} // class MedalResult
 
 	internal static class StringBuilderExtention {

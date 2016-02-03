@@ -49,22 +49,10 @@
 
 		protected override StepResults Run() {
 			this.logicalGlueFlowFailed = false;
-			bool rejectWasExecuted = true;
 
 			CalculateMedal();
 
-			this.isHomeOwner = DB.ExecuteScalar<bool>(
-				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerID)
-			);
-
-			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
-				Log.Alert("No auto rejection output specified for {0} - defaulting to old flow.", OuterContextDescription);
-
-				rejectWasExecuted = false;
-				this.autoRejectionOutput.FlowType = AutoDecisionFlowTypes.Internal;
-			} // if
+			bool rejectWasExecuted = ValidateFlowType();
 
 			switch (this.autoRejectionOutput.FlowType) {
 			case AutoDecisionFlowTypes.LogicalGlue:
@@ -82,9 +70,7 @@
 			bool failure =
 				!rejectWasExecuted ||
 				(this.medalAgent == null) ||
-				this.medalAgent.WasMismatch ||
-				(Medal == null) ||
-				(Medal.ExceptionDuringCalculation != null) ||
+				this.medalAgent.HasError ||
 				this.logicalGlueFlowFailed;
 
 			if (failure) {
@@ -97,6 +83,17 @@
 		} // Run
 
 		protected override string Outcome { get { return this.outcome; } }
+
+		private bool ValidateFlowType() {
+			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
+				Log.Alert("No auto rejection output specified for {0} - defaulting to old flow.", OuterContextDescription);
+
+				this.autoRejectionOutput.FlowType = AutoDecisionFlowTypes.Internal;
+				return false;
+			} // if
+
+			return true;
+		} // ValidateFlowType
 
 		private void CalculateMedal() {
 			this.medalAgent = new CalculateMedal(
@@ -158,6 +155,10 @@
 
 			ProposedAmount = grsp.LoanAmount(this.requestedLoan.RequestedAmount);
 
+			int term = grsp.Term(this.requestedLoan.RequestedTerm);
+
+			// TODO: execute offer calculator
+
 			OfferResult = new OfferResult {
 				CustomerId = this.customerID,
 				CalculationTime = DateTime.UtcNow,
@@ -165,11 +166,11 @@
 				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
 
 				ScenarioName = "Logical Glue",
-				Period = grsp.Term(this.requestedLoan.RequestedTerm),
+				Period = term,
 				LoanTypeId = grsp.LoanTypeID,
 				LoanSourceId = grsp.LoanSourceID,
-				InterestRate = grsp.InterestRate * 100M,
-				SetupFee = grsp.SetupFee * 100M,
+				// TODO InterestRate = should be between 0% and 100%
+				// TODO SetupFee = should be between 0% and 100%
 				Message = null,
 				IsError = false,
 				IsMismatch = false,
@@ -180,9 +181,15 @@
 		} // CreateLogicalOffer
 
 		private void CreateUnlogicalOffer() {
+			bool isHomeOwner = DB.ExecuteScalar<bool>(
+				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerID)
+			);
+
 			ProposedAmount = Math.Min(
 				Medal.RoundOfferedAmount(),
-				this.isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
+				isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
 			);
 
 			SafeReader sr = DB.GetFirst(
@@ -239,8 +246,6 @@
 			OfferResult = offerDualCalculator.CalculateOffer();
 		} // CreateUnlogicalOffer
 
-		private string outcome;
-
 		private readonly int customerID;
 		private readonly long cashRequestID;
 		private readonly long nlCashRequestID;
@@ -251,7 +256,7 @@
 		private readonly int notHomeOwnerCap;
 
 		private CalculateMedal medalAgent;
-		private bool isHomeOwner;
 		private bool logicalGlueFlowFailed;
+		private string outcome;
 	} // class CalculateOfferIfPossible
 } // namespace

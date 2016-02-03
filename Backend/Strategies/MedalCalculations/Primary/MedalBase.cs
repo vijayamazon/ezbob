@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations.Primary {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -19,7 +19,7 @@
 	/// Medal type: https://drive.draw.io/?#G0B1Io_qu9i44SVzVqV19nbnMxRW8
 	/// Medal type and medal value: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
 	/// </summary>
-	public abstract class MedalCalculatorBase {
+	public abstract class MedalBase {
 		public abstract void SetInitialWeights();
 
 		public MedalResult Results { get; set; }
@@ -180,8 +180,9 @@
 					e,
 					"Failed calculating medal of type: {0} for customer: {1}",
 					Results.MedalType,
-					Results.CustomerId);
-				Results.Error = e.Message;
+					Results.CustomerId
+				);
+				Results.ExceptionDuringCalculation = e;
 			} // try
 
 			return Results;
@@ -190,7 +191,7 @@
 		protected readonly AConnection db;
 		protected readonly ASafeLog log;
 
-		protected MedalCalculatorBase() {
+		protected MedalBase() {
 			this.isInitialized = false;
 			this.isCalculated = false;
 
@@ -537,7 +538,13 @@
 		} // CalculateNumOfLoansGrade
 
 		private void CalculateOffer() {
-			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == MedalType.NoMedal)
+			if (Results == null)
+				return;
+
+			if (!string.IsNullOrEmpty(Results.Error))
+				return;
+
+			if (Results.MedalType == Ezbob.Backend.Strategies.MedalCalculations.MedalType.NoMedal)
 				return;
 
 			SafeReader sr = this.db.GetFirst(
@@ -1241,5 +1248,5 @@
 
 		private bool isInitialized;
 		private bool isCalculated;
-	} // class MedalCalculatorBase
+	} // class MedalBase
 } // namespace
