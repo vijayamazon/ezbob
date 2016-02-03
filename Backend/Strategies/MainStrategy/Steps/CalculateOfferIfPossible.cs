@@ -146,6 +146,31 @@
 
 			int term = grsp.Term(this.requestedLoan.RequestedTerm);
 
+			if (ProposedAmount <= 0) {
+				OfferResult = new OfferResult {
+					CustomerId = this.customerID,
+					CalculationTime = DateTime.UtcNow,
+					Amount = ProposedAmount,
+					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+					FlowType = AutoDecisionFlowTypes.LogicalGlue,
+
+					ScenarioName = "Logical Glue - no offer",
+					Period = term,
+					LoanTypeId = grsp.LoanTypeID,
+					LoanSourceId = grsp.LoanSourceID,
+					InterestRate = 0,
+					SetupFee = 0,
+					Message = "Proposed amount is not positive.",
+					IsError = true,
+					IsMismatch = false,
+					HasDecision = true,
+				};
+
+				return;
+			} // if
+
+			LoanSourceID = grsp.LoanSourceID;
+
 			// TODO: execute offer calculator
 
 			OfferResult = new OfferResult {
@@ -166,8 +191,6 @@
 				IsMismatch = false,
 				HasDecision = true,
 			};
-
-			LoanSourceID = grsp.LoanSourceID;
 		} // CreateLogicalOffer
 
 		private int GetProposedAmount(GradeRangeSubproduct grsp) {

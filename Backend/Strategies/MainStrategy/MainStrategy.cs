@@ -318,10 +318,11 @@
 				this.context.AutoRejectionOutput == null
 					? AutoDecisionFlowTypes.Unknown
 					: this.context.AutoRejectionOutput.FlowType,
-				this.context.CustomerDetails.PropertyStatusDescription,
 				this.context.CustomerDetails.IsOwnerOfMainAddress,
 				this.context.CustomerDetails.IsOwnerOfOtherProperties,
-				this.context.NewCreditLineOption
+				this.context.NewCreditLineOption,
+				this.context.CustomerDetails.IsTest,
+				this.context.AvoidAutoDecision
 			));
 		} // UpdateLandRegistryData
 

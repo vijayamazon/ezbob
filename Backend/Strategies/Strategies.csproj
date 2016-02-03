@@ -266,7 +266,6 @@
     <Compile Include="MainStrategy\Helpers\GradeRangeSubproduct.cs" />
     <Compile Include="MainStrategy\Helpers\CashRequestIDExt.cs" />
     <Compile Include="MainStrategy\Helpers\MainStrategyUpdateCrC.cs" />
-    <Compile Include="MainStrategy\Helpers\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\Helpers\MarketplaceUpdateStatus.cs" />
     <Compile Include="ManualDecision\ChangeDecisionOption.cs" />
     <Compile Include="ManualDecision\CurrentCustomerDecisionState.cs" />
