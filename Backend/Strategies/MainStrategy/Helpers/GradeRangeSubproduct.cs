@@ -12,6 +12,9 @@
 		public int MaxTerm { get; set; }
 		public int LoanSourceID { get; set; }
 		public int LoanTypeID { get; set; }
+		public decimal? TurnoverShare { get; set; }
+		public decimal? ValueAddedShare { get; set; }
+		public decimal? FreeCashFlowShare { get; set; }
 
 		public int LoanAmount(decimal requestedAmount) {
 			decimal result;

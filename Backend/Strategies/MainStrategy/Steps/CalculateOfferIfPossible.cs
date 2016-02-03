@@ -142,7 +142,7 @@
 
 			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
 
-			ProposedAmount = grsp.LoanAmount(this.requestedLoan.RequestedAmount);
+			ProposedAmount = GetProposedAmount(grsp);
 
 			int term = grsp.Term(this.requestedLoan.RequestedTerm);
 
@@ -169,6 +169,32 @@
 
 			LoanSourceID = grsp.LoanSourceID;
 		} // CreateLogicalOffer
+
+		private int GetProposedAmount(GradeRangeSubproduct grsp) {
+			decimal[] allOffers = {
+				Medal.AnnualTurnover * (grsp.TurnoverShare ?? 0),
+				Medal.UseHmrc() ? Medal.FreeCashFlowValue * (grsp.FreeCashFlowShare ?? 0) : 0,
+				Medal.UseHmrc() ? Medal.ValueAdded * (grsp.ValueAddedShare ?? 0) : 0
+			};
+
+			List<int> validOffers = allOffers.Where(v => v > 0).Select(grsp.LoanAmount).Where(v => v > 0).ToList();
+
+			Log.Debug(
+				"Proposed amounts for {0}:\n\tAll   offer amounts: {1}\n\tValid offer amounts: {2}",
+				OuterContextDescription,
+				string.Join(", ", allOffers),
+				string.Join(", ", validOffers)
+			);
+
+			if (validOffers.Count > 0) {
+				int minOffer = validOffers.Min();
+				Log.Debug("Proposed offer amount for {0} is {1}.", OuterContextDescription, minOffer);
+				return minOffer;
+			} // if
+
+			Log.Debug("No valid offers found for {0}.", OuterContextDescription);
+			return 0;
+		} // GetProposedAmount
 
 		private void CreateUnlogicalOffer() {
 			bool isHomeOwner = DB.ExecuteScalar<bool>(
