@@ -12,25 +12,19 @@
 		public int MaxTerm { get; set; }
 		public int LoanSourceID { get; set; }
 		public int LoanTypeID { get; set; }
-
-		public decimal SetupFee {
-			get { return (MaxSetupFee + MinSetupFee) / 2M; }
-		} // SetupFee
-
-		public decimal InterestRate {
-			get { return (MaxInterestRate + MinInterestRate) / 2M; }
-		} // SetupFee
+		public decimal? TurnoverShare { get; set; }
+		public decimal? ValueAddedShare { get; set; }
+		public decimal? FreeCashFlowShare { get; set; }
 
 		public int LoanAmount(decimal requestedAmount) {
 			decimal result;
 
 			if (requestedAmount < MinLoanAmount)
-				result = MinLoanAmount;
+				result = 0;
 			else if (requestedAmount > MaxLoanAmount)
 				result = MaxLoanAmount;
 			else
 				result = requestedAmount;
-
 
 			if (result > Int32.MaxValue)
 				return Int32.MaxValue;

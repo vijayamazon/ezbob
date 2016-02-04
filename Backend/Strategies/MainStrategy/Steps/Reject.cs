@@ -15,7 +15,6 @@
 			long nlCashRequestID,
 			string tag,
 			int companyID,
-			int monthlyPayment,
 			bool customerIsAlibaba
 		) : base(
 			outerContextDescription,
@@ -27,7 +26,6 @@
 			tag
 		) {
 			this.companyID = companyID;
-			this.monthlyPayment = monthlyPayment;
 			this.customerIsAlibaba = customerIsAlibaba;
 		} // constructor
 
@@ -45,7 +43,6 @@
 				new AutoRejectionArguments(
 					CustomerID,
 					this.companyID,
-					this.monthlyPayment,
 					CashRequestID,
 					NLCashRequestID,
 					Tag,
@@ -71,7 +68,6 @@
 
 		private RejectAgent rejectAgent;
 		private readonly int companyID;
-		private readonly int monthlyPayment;
 		private readonly bool customerIsAlibaba;
 	} // class Reject
 } // namespace

@@ -21,6 +21,7 @@
 			decimal tenureMonths = this.tenurePercents * loanTerm;
 
 			Model = new PricingModelModel {
+				LoanAmount = loanAmount,
 				DefaultRate = defaultRateModel.DefaultRate,
 				DefaultRateCompanyShare = this.defaultRateCompanyShare,
 				DefaultRateCustomerShare = defaultRateCustomerShare,
@@ -41,8 +42,6 @@
 				ConsumerScore = defaultRateModel.ConsumerScore,
 				CompanyScore = defaultRateModel.BusinessScore,
 			};
-
-			Model.SetLoanAmount(loanAmount);
 		} // Execute
 
 		private void ReadConfigurations(string scenarioName) {

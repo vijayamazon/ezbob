@@ -48,22 +48,18 @@
 		public int ProposedAmount { get; private set; }
 
 		protected override StepResults Run() {
-			this.logicalGlueFlowFailed = false;
-			bool rejectWasExecuted = true;
+			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
+				Log.Alert("No auto rejection output specified for {0}, auto decision is aborted.", OuterContextDescription);
+
+				this.outcome = "'failure - no auto rejection executed'";
+				return StepResults.Failed;
+			} // if
 
 			CalculateMedal();
 
-			this.isHomeOwner = DB.ExecuteScalar<bool>(
-				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerID)
-			);
-
-			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
-				Log.Alert("No auto rejection output specified for {0} - defaulting to old flow.", OuterContextDescription);
-
-				rejectWasExecuted = false;
-				this.autoRejectionOutput.FlowType = AutoDecisionFlowTypes.Internal;
+			if ((this.medalAgent == null) || this.medalAgent.HasError) {
+				this.outcome = "'failure - medal calculation failed'";
+				return StepResults.Failed;
 			} // if
 
 			switch (this.autoRejectionOutput.FlowType) {
@@ -79,15 +75,7 @@
 				throw new ArgumentOutOfRangeException();
 			} // switch
 
-			bool failure =
-				!rejectWasExecuted ||
-				(this.medalAgent == null) ||
-				this.medalAgent.WasMismatch ||
-				(Medal == null) ||
-				(Medal.ExceptionDuringCalculation != null) ||
-				this.logicalGlueFlowFailed;
-
-			if (failure) {
+			if ((OfferResult == null) || OfferResult.IsError || OfferResult.IsMismatch || (LoanSourceID <= 0)) {
 				this.outcome = "'failure'";
 				return StepResults.Failed;
 			} // if
@@ -143,8 +131,6 @@
 			);
 
 			if (sr.IsEmpty) {
-				this.logicalGlueFlowFailed = true;
-
 				Log.Warn(
 					"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
 					this.autoRejectionOutput.GradeRangeID,
@@ -156,36 +142,100 @@
 
 			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
 
-			ProposedAmount = grsp.LoanAmount(this.requestedLoan.RequestedAmount);
+			ProposedAmount = GetProposedAmount(grsp);
+
+			int term = grsp.Term(this.requestedLoan.RequestedTerm);
+
+			if (ProposedAmount <= 0) {
+				OfferResult = new OfferResult {
+					CustomerId = this.customerID,
+					CalculationTime = DateTime.UtcNow,
+					Amount = ProposedAmount,
+					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+					FlowType = AutoDecisionFlowTypes.LogicalGlue,
+
+					ScenarioName = "Logical Glue - no offer",
+					Period = term,
+					LoanTypeId = grsp.LoanTypeID,
+					LoanSourceId = grsp.LoanSourceID,
+					InterestRate = 0,
+					SetupFee = 0,
+					Message = "Proposed amount is not positive.",
+					IsError = true,
+					IsMismatch = false,
+					HasDecision = true,
+				};
+
+				return;
+			} // if
+
+			LoanSourceID = grsp.LoanSourceID;
+
+			// TODO: execute offer calculator
 
 			OfferResult = new OfferResult {
 				CustomerId = this.customerID,
 				CalculationTime = DateTime.UtcNow,
 				Amount = ProposedAmount,
 				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+				FlowType = AutoDecisionFlowTypes.LogicalGlue,
 
 				ScenarioName = "Logical Glue",
-				Period = grsp.Term(this.requestedLoan.RequestedTerm),
+				Period = term,
 				LoanTypeId = grsp.LoanTypeID,
 				LoanSourceId = grsp.LoanSourceID,
-				InterestRate = grsp.InterestRate * 100M,
-				SetupFee = grsp.SetupFee * 100M,
+				// TODO InterestRate = should be between 0% and 100%
+				// TODO SetupFee = should be between 0% and 100%
 				Message = null,
 				IsError = false,
 				IsMismatch = false,
 				HasDecision = true,
 			};
-
-			LoanSourceID = grsp.LoanSourceID;
 		} // CreateLogicalOffer
 
-		private void CreateUnlogicalOffer() {
-			ProposedAmount = Math.Min(
-				Medal.RoundOfferedAmount(),
-				this.isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
+		private int GetProposedAmount(GradeRangeSubproduct grsp) {
+			decimal[] allOffers = {
+				Medal.AnnualTurnover * (grsp.TurnoverShare ?? 0),
+				Medal.UseHmrc() ? Medal.FreeCashFlowValue * (grsp.FreeCashFlowShare ?? 0) : 0,
+				Medal.UseHmrc() ? Medal.ValueAdded * (grsp.ValueAddedShare ?? 0) : 0
+			};
+
+			List<int> validOffers = allOffers.Where(v => v > 0).Select(grsp.LoanAmount).Where(v => v > 0).ToList();
+
+			Log.Debug(
+				"Proposed amounts for {0}:\n\tAll   offer amounts: {1}\n\tValid offer amounts: {2}",
+				OuterContextDescription,
+				string.Join(", ", allOffers),
+				string.Join(", ", validOffers)
 			);
 
-			SafeReader sr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+			if (validOffers.Count > 0) {
+				int minOffer = validOffers.Min();
+				Log.Debug("Proposed offer amount for {0} is {1}.", OuterContextDescription, minOffer);
+				return minOffer;
+			} // if
+
+			Log.Debug("No valid offers found for {0}.", OuterContextDescription);
+			return 0;
+		} // GetProposedAmount
+
+		private void CreateUnlogicalOffer() {
+			bool isHomeOwner = DB.ExecuteScalar<bool>(
+				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerID)
+			);
+
+			ProposedAmount = Math.Min(
+				Medal.RoundOfferedAmount(),
+				isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
+			);
+
+			SafeReader sr = DB.GetFirst(
+				"GetDefaultLoanSource",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customerID)
+			);
 
 			if (sr.IsEmpty || (ProposedAmount <= 0)) {
 				OfferResult = new OfferResult {
@@ -193,6 +243,7 @@
 					CalculationTime = DateTime.UtcNow,
 					Amount = ProposedAmount,
 					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+					FlowType = AutoDecisionFlowTypes.Internal,
 
 					ScenarioName = "Internal - error occurred",
 					Period = 0,
@@ -233,9 +284,10 @@
 			);
 
 			OfferResult = offerDualCalculator.CalculateOffer();
-		} // CreateUnlogicalOffer
 
-		private string outcome;
+			if (OfferResult != null)
+				OfferResult.FlowType = AutoDecisionFlowTypes.Internal;
+		} // CreateUnlogicalOffer
 
 		private readonly int customerID;
 		private readonly long cashRequestID;
@@ -247,7 +299,6 @@
 		private readonly int notHomeOwnerCap;
 
 		private CalculateMedal medalAgent;
-		private bool isHomeOwner;
-		private bool logicalGlueFlowFailed;
+		private string outcome;
 	} // class CalculateOfferIfPossible
 } // namespace

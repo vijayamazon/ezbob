@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Net;
 	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
@@ -64,7 +65,11 @@
 					StepNoDecision<LogicalGlueFlow>().Init();
 				} // if
 
-				if (Trail.MyInputData.RequestID == null) {
+				bool noLgData =
+					(Trail.MyInputData.RequestID == null) ||
+					(Trail.MyInputData.ResponseHttpStatus != (int)HttpStatusCode.OK);
+
+				if (noLgData) {
 					StepNoDecision<LGDataFound>().Init(false);
 					StepNoDecision<InternalFlow>().Init();
 					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
@@ -139,7 +144,6 @@
 				"AV_LogicalGlueDataForAutoReject", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", this.args.CustomerID),
 				new QueryParameter("CompanyID", this.args.CompanyID),
-				new QueryParameter("PlannedPayment", this.args.MonthlyPayment),
 				new QueryParameter("ProcessingDate", this.args.Now)
 			);
 
@@ -166,6 +170,8 @@
 
 			if (inputData.ResponseID <= 0)
 				inputData.ResponseErrors.Add("No response received.");
+
+			inputData.ResponseHttpStatus = sr["HttpStatus"];
 
 			AddError(inputData.ResponseErrors, sr["ErrorMessage"]);
 			AddError(inputData.ResponseErrors, sr["ParsingExceptionType"]);
@@ -195,6 +201,11 @@
 
 			if (errCount > 0)
 				inputData.ResponseErrors.Add(Grammar.Number(errCount, "missing column") + " detected.");
+
+			errCount = sr["WarningCount"];
+
+			if (errCount > 0)
+				inputData.ResponseErrors.Add(Grammar.Number(errCount, "warning") + " detected.");
 
 			inputData.HardReject = sr["EtlCodeID"] == (int)LGEtlCode.HardReject;
 

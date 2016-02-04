@@ -3,7 +3,7 @@
 	using System.Linq;
 
 	internal static class Utility {
-		internal static List<T> SetList<T>(List<T> target, IEnumerable<T> source) where T : class, ICanBeEmpty {
+		internal static List<T> SetList<T>(List<T> target, IEnumerable<T> source) where T : class, ICanBeEmpty<T> {
 			if (ReferenceEquals(source, target))
 				return target;
 
@@ -15,7 +15,7 @@
 			if (source == null)
 				return target;
 
-			target.AddRange(source.Where(w => (w != null) && !w.IsEmpty));
+			target.AddRange(source.Where(w => (w != null) && !w.IsEmpty).Select(w => w.CloneTo()));
 
 			return target;
 		} // SetList

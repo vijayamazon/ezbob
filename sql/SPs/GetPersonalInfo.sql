@@ -140,7 +140,8 @@ BEGIN
 		c.FilledByBroker,
 		ISNULL(@NumOfPreviousApprovals, 0) AS NumOfPreviousApprovals,
 		c.Fullname AS FullName,
-		o.Name AS Origin
+		o.Name AS Origin,
+		c.OriginID
 	FROM
 		Customer c
 		LEFT JOIN CustomerPropertyStatuses ps ON c.PropertyStatusId = ps.Id
@@ -151,5 +152,4 @@ BEGIN
 
 	------------------------------------------------------------------------------
 END
-
 GO

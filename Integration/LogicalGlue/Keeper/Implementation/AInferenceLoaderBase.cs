@@ -294,7 +294,7 @@
 			DBTable.Warning warning = sr.Fill<DBTable.Warning>();
 
 			if (this.models.ContainsKey(warning.ModelOutputID)) {
-				this.models[warning.ModelOutputID].Grade.Warnings.Add(new Engine.Interface.Warning {
+				this.models[warning.ModelOutputID].Error.Warnings.Add(new Engine.Interface.Warning {
 					FeatureName = warning.FeatureName,
 					MaxValue = warning.MaxValue,
 					MinValue = warning.MinValue,

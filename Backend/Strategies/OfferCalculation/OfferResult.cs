@@ -11,6 +11,7 @@
 		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
 
 		// Outputs
+		public AutoDecisionFlowTypes FlowType { get; set; }
 		public string ScenarioName { get; set; }
 		public int Period { get; set; }
 		public int LoanTypeId { get; set; }

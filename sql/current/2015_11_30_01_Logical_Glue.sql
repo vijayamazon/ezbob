@@ -26,11 +26,14 @@ BEGIN
 END
 GO
 
+DECLARE @Environment NVARCHAR(256)
+SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environment'
+
 IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGluePassword')
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGluePassword',
-		'nexahbaey8ei',
+		CASE @Environment WHEN 'Prod' THEN 'At5quijohghu' ELSE 'nexahbaey8ei' END,
 		'String. Password used to make Logical Glue requests.',
 		0
 	)
@@ -48,11 +51,14 @@ BEGIN
 END
 GO
 
+DECLARE @Environment NVARCHAR(256)
+SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environment'
+
 IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name LIKE 'LogicalGlueHostName')
 BEGIN
 	INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted) VALUES (
 		'LogicalGlueHostName',
-		'etl-dev.live.logicalglue.net',
+		CASE @Environment WHEN 'Prod' THEN 'etl.live.logicalglue.net' ELSE 'etl-dev.live.logicalglue.net' END,
 		'String. Host name of the Logical Glue API URL.',
 		0
 	)

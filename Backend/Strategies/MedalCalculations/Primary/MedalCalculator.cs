@@ -1,10 +1,10 @@
-﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations.Primary {
 	using System;
 	using System.Globalization;
 	using ConfigManager;
 
-	public class MedalCalculator1 {
-		public MedalCalculator1(
+	public class MedalCalculator {
+		public MedalCalculator(
 			int customerId,
 			DateTime calculationTime,
 			string typeOfBusiness,
@@ -87,7 +87,7 @@
 				return SetNoMedal("Customer doesn't fit any of the existing medals");
 
 			// choose medal type
-			MedalCalculatorBase calculator = Activator.CreateInstance(calculatorType) as MedalCalculatorBase;
+			MedalBase calculator = Activator.CreateInstance(calculatorType) as MedalBase;
 
 			if (calculator == null)
 				return SetNoMedal("Failed to create medal calculator of type " + calculatorType);
@@ -118,35 +118,29 @@
 				return ChooseNonLimitedCalculatorWithScore();
 
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return typeof(OnlineNonLimitedNoBusinessScoreMedalCalculator1);
+				return typeof(Online.NonLimited.NoBusinessScore);
 
 			if ((this.consumerScore > 0) && ((this.numOfHmrcMps > 0) || (this.numOfYodleeMps > 0)))
-				return typeof(SoleTraderMedalCalculator1);
+				return typeof(Offline.SoleTrader);
 
 			return null;
 		} // ChooseCalculator
 
 		private Type ChooseLimitedCalculator() {
-			if (this.numOfEbayAmazonPayPalMps > 0)
-				return typeof(OnlineLimitedMedalCalculator1);
-
-			return typeof(LimitedMedalCalculator1);
+			return this.numOfEbayAmazonPayPalMps > 0 ? typeof(Online.Limited) : typeof(Offline.Limited);
 		} // ChooseLimitedCalculator
 
 		private Type ChooseNonLimitedCalculatorWithScore() {
-			if (this.numOfEbayAmazonPayPalMps > 0)
-				return typeof(OnlineNonLimitedWithBusinessScoreMedalCalculator1);
-
-			return typeof(NonLimitedMedalCalculator1);
+			return this.numOfEbayAmazonPayPalMps > 0
+				? typeof(Online.NonLimited.WithBusinessScore)
+				: typeof(Offline.NonLimited);
 		} // ChooseNonLimitedCalculatorWithScore
 
 		private MedalResult SetNoMedal(string errorMessageFormat, params object[] args) {
 			Library.Instance.Log.Warn("No medal was calculated for customer {0}.", this.customerId);
 
-			return new MedalResult(this.customerId, Library.Instance.Log) {
+			return new MedalResult(this.customerId, Library.Instance.Log, string.Format(errorMessageFormat, args)) {
 				CalculationTime = this.calculationTime,
-				MedalType = MedalType.NoMedal,
-				Error = string.Format(errorMessageFormat, args),
 			};
 		} // SetNoMedal
 
@@ -160,5 +154,5 @@
 		private readonly int numOfEbayAmazonPayPalMps;
 		private readonly DateTime? earliestHmrcLastUpdateDate;
 		private readonly DateTime? earliestYodleeLastUpdateDate;
-	} // class MedalCalculator1
+	} // class MedalCalculator
 } // namespace

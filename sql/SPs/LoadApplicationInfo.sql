@@ -1,4 +1,3 @@
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -18,6 +17,14 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
+	DECLARE @DefaultLoanSourceID INT = (
+		SELECT
+			LoanSourceID
+		FROM
+			DefaultLoanSources dls
+			INNER JOIN Customer c ON dls.OriginID = c.OriginID AND c.Id = @CustomerID
+	)
+
 	SELECT
 		RowType = 'LoanSource',
 		Id = ls.LoanSourceID,
@@ -27,7 +34,7 @@ BEGIN
 		IsCustomerRepaymentPeriodSelectionAllowed = ISNULL(ls.IsCustomerRepaymentPeriodSelectionAllowed, -1),
 		MaxEmployeeCount = ISNULL(ls.MaxEmployeeCount, -1),
 		MaxAnnualTurnover = ISNULL(ls.MaxAnnualTurnover, -1),
-		IsDefault = ls.IsDefault,
+		IsDefault = CONVERT(BIT, CASE WHEN ls.LoanSourceID = @DefaultLoanSourceID THEN 1 ELSE 0 END),
 		AlertOnCustomerReasonType = ISNULL(ls.AlertOnCustomerReasonType, -1)
 	FROM
 		LoanSource ls
@@ -217,7 +224,7 @@ BEGIN
 		LEFT JOIN request_reason rr ON c.Id = rr.CustomerID
 		LEFT JOIN value_added_fcf vf ON vf.CustomerID = r.IdCustomer
 		LEFT JOIN origin_count oc ON oc.CustomerID = @CustomerID
-		OUTER APPLY dbo.udfGetLoanSource(r.LoanSourceID) ls
+		OUTER APPLY dbo.udfGetLoanSource(r.LoanSourceID, c.OriginID) ls
 		OUTER APPLY dbo.udfGetDiscountPlan(r.DiscountPlanID) dp
 		OUTER APPLY dbo.udfGetLoanType(r.LoanTypeId) lt
 	WHERE

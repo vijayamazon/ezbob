@@ -130,6 +130,7 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInferenceIfExists.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveCustomerHistory.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveEtlData.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveWarning.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveOutputRatio.cs" />

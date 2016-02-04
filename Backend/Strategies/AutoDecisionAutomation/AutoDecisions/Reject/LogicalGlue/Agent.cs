@@ -2,6 +2,7 @@
 	using System;
 	using System.Data;
 	using System.Linq;
+	using System.Net;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
@@ -159,7 +160,7 @@
 				this.args.CustomerID,
 				this.args.Now,
 				false,
-				this.args.MonthlyPayment
+				0
 			);
 
 			if (inference == null) {
@@ -176,6 +177,8 @@
 
 				if (inference.ResponseID <= 0)
 					inputData.ResponseErrors.Add("No response received.");
+
+				inputData.ResponseHttpStatus = (inference.Status == null) ? (int?)null : (int)inference.Status.HttpStatus;
 
 				if (inference.Error.HasError()) {
 					inputData.ResponseErrors.AddRange(
@@ -207,12 +210,16 @@
 						);
 
 						inputData.ResponseErrors.AddRange(model.Error.MissingColumns);
-					} // if
 
-					inputData.HardReject = inference.Etl.Code == EtlCode.HardReject;
-					inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
-					inputData.Score = inference.Score;
-				} // if inference is null
+						inputData.ResponseErrors.AddRange(
+							model.Error.Warnings.Where(w => !w.IsEmpty).Select(w => w.ToString())
+						);
+					} // if
+				} // if inference has error
+
+				inputData.HardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
+				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
+				inputData.Score = inference.Score;
 
 				inputData.MatchingGradeRanges = new MatchingGradeRanges();
 
@@ -226,13 +233,13 @@
 					};
 					spRanges.Execute(inputData.MatchingGradeRanges);
 				} // if
-			} // if
+			} // if inference is null
 		} // GatherData
 
 		private void LogicalGlueFlow() {
 			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 
-			if (Trail.MyInputData.RequestID == null) {
+			if ((Trail.MyInputData.RequestID == null) || (Trail.MyInputData.ResponseHttpStatus != (int)HttpStatusCode.OK)) {
 				Trail.Dunno<LGDataFound>().Init(false);
 				Trail.Dunno<InternalFlow>().Init();
 				InternalFlow();

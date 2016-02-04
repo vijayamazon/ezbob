@@ -45,18 +45,32 @@
 			} // set
 		} // MissingColumns
 
+		[DataMember]
+		public List<Warning> Warnings {
+			get {
+				if (this.warnings == null)
+					this.warnings = new List<Warning>();
+
+				return this.warnings;
+			} // get
+			set { this.warnings = Utility.SetList(this.warnings, value); }
+		} // EncodingFailures
+
 		public bool IsEmpty {
 			get {
 				return
 					string.IsNullOrWhiteSpace(ErrorCode) &&
 					string.IsNullOrWhiteSpace(Exception) &&
 					((EncodingFailures.Count < 1) || EncodingFailures.All(ef => ef.IsEmpty)) &&
-					(MissingColumns.Count < 1);
+					(MissingColumns.Count < 1) &&
+					((Warnings.Count < 1) || Warnings.All(ef => ef.IsEmpty))
+					;
 			} // get
 		} // IsEmpty
 
 		private List<EncodingFailure> encodingFailures;
 		private List<string> missingColumns;
+		private List<Warning> warnings;
 	} // class ModelError
 
 	public static class ModelErrorExt {
@@ -71,6 +85,7 @@
 			target.Uuid = source.Uuid;
 			target.EncodingFailures = Utility.SetList(target.EncodingFailures, source.EncodingFailures);
 			target.MissingColumns = source.MissingColumns;
+			target.Warnings = Utility.SetList(target.Warnings, source.Warnings);
 
 			return target;
 		} // CloneFrom

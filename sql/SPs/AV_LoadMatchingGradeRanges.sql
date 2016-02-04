@@ -14,16 +14,19 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @OriginID INT = (SELECT c.OriginID FROM Customer c WHERE Id = @CustomerID)
+
 	;WITH subtypes AS (
 		SELECT DISTINCT
 			st.ProductSubtypeID
 		FROM
 			I_ProductSubType st
-			INNER JOIN LoanSource ls
-				ON st.LoanSourceID = ls.LoanSourceID
-				AND ls.IsDefault = 1
+			INNER JOIN LoanSource ls ON st.LoanSourceID = ls.LoanSourceID
+			INNER JOIN DefaultLoanSources dls
+				ON dls.LoanSourceID = ls.LoanSourceID
+				AND dls.OriginID = @OriginID
 		WHERE
-			st.OriginID = (SELECT c.OriginID FROM Customer c WHERE Id = @CustomerID)
+			st.OriginID = @OriginID
 			AND
 			st.IsRegulated = @Regulated
 	)
@@ -32,15 +35,15 @@ BEGIN
 		r.GradeRangeID
 	FROM
 		I_GradeRange r
-		INNER JOIN LoanSource ls
-			ON ls.LoanSourceID = r.LoanSourceID
-			AND ls.IsDefault = 1
+		INNER JOIN DefaultLoanSources dls
+			ON r.LoanSourceID = dls.LoanSourceID
+			AND dls.OriginID = @OriginID
 		INNER JOIN I_SubGrade s
 			ON r.SubGradeID = s.SubGradeID
 			AND s.MinScore <= @Score AND @Score <= s.MaxScore
 		INNER JOIN subtypes st ON 1 = 1
 	WHERE
-		r.OriginID = (SELECT c.OriginID FROM Customer c WHERE Id = @CustomerID)
+		r.OriginID = @OriginID
 		AND
 		r.IsFirstLoan = (CASE WHEN (SELECT COUNT(DISTINCT Id) FROM Loan l WHERE l.CustomerId = @CustomerID AND l.[Date] <= @ProcessingDate) > 0 THEN 1 ELSE 0 END)
 		AND

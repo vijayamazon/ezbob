@@ -3,10 +3,10 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
+	using AutomationCalculator.Common;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
-	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MainStrategy.Steps;
 
 	[SuppressMessage("ReSharper", "ConvertIfStatementToNullCoalescingExpression")]
@@ -288,7 +288,6 @@
 					this.context.NLCashRequestID,
 					this.context.Tag,
 					this.context.CompanyID,
-					this.context.MonthlyRepayment.MonthlyPayment,
 					this.context.CustomerDetails.IsAlibaba
 				);
 				reject.CollectOutputValue += CollectStepOutputValue;
@@ -316,10 +315,14 @@
 				this.context.CustomerID,
 				this.context.CustomerDetails.FullName,
 				this.context.AutoDecisionResponse.DecidedToReject,
-				this.context.CustomerDetails.PropertyStatusDescription,
+				this.context.AutoRejectionOutput == null
+					? AutoDecisionFlowTypes.Unknown
+					: this.context.AutoRejectionOutput.FlowType,
 				this.context.CustomerDetails.IsOwnerOfMainAddress,
 				this.context.CustomerDetails.IsOwnerOfOtherProperties,
-				this.context.NewCreditLineOption
+				this.context.NewCreditLineOption,
+				this.context.CustomerDetails.IsTest,
+				this.context.AvoidAutoDecision
 			));
 		} // UpdateLandRegistryData
 
@@ -533,9 +536,10 @@
 				.OnResults(UpdateLandRegistryData, StepResults.Negative)
 				.OnResults(LockManualAfterReject, StepResults.Failed);
 
-			InitTransition<LockRejected>().Always(CalculateOfferIfPossible);
+			InitTransition<LockRejected>().Always(UpdateLandRegistryData);
+			InitTransition<LockManualAfterReject>().Always(UpdateLandRegistryData);
+
 			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
-			InitTransition<LockManualAfterReject>().Always(CalculateOfferIfPossible);
 
 			InitTransition<CalculateOfferIfPossible>()
 				.OnResults(Reapproval, StepResults.Success)

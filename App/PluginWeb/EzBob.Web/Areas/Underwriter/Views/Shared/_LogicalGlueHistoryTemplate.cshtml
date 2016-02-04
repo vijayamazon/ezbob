@@ -21,6 +21,8 @@
 								<th>Neural network score</th>
 								<th>Fuzzy logic score</th>
 								<th>Is tryout</th>
+								<th>Is hard reject</th>
+								<th>Is score reliable</th>
 								<th>Error</th>
 							</tr>
 						</thead>
@@ -41,6 +43,8 @@
 								<td><%-lg.NNScore%></td>
 								<td><%-lg.FLScore%></td>
 								<td><img src="/Content/img/<%- lg.IsTryout ? 'check_icon.svg' : 'close_icon.svg' %>" style="height:100%" /></td>
+								<td><span class="<%- lg.IsHardReject ? 'red_cell' : '' %>"><%- lg.IsHardReject ? 'Yes' : 'No' %></span></td>
+								<td><img src="/Content/img/<%- lg.ScoreIsReliable ? 'check_icon.svg' : 'close_icon.svg' %>" style="height:100%" /></td>
 								<td><%-lg.Error%></td>
 							</tr>
 							<%}); %>

@@ -33,7 +33,7 @@
 
 		public CashRequest CreateQuickOfferCashRequest(Customer customer, int userID ) {
 			var loanType = _loanTypes.GetDefault();
-			var loanSource = _loanSources.GetDefault();
+			var loanSource = _loanSources.GetDefault(customer.Id);
 			var now = DateTime.UtcNow;
 			var discountPlan = _discounts.GetDefault();
 			const string sReason = "Quick offer taken.";

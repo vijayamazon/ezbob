@@ -14,17 +14,6 @@
 		public string DecodedResult { get; set; }
 
 		[DataMember]
-		public List<Warning> Warnings{
-			get {
-				if (this.warnings == null)
-					this.warnings = new List<Warning>();
-
-				return this.warnings;
-			} // get
-			set { this.warnings = Utility.SetList(this.warnings, value); }
-		} // Warnings
-
-		[DataMember]
 		public Dictionary<string, decimal> OutputRatios {
 			get {
 				if (this.outputRatios == null)
@@ -44,7 +33,6 @@
 			} // set
 		} // OutputRatios
 
-		private List<Warning> warnings;
 		private Dictionary<string, decimal> outputRatios;
 	} // class Grade
 
@@ -59,7 +47,6 @@
 			target.EncodedResult = source.EncodedResult;
 			target.DecodedResult = source.DecodedResult;
 			target.OutputRatios = source.OutputRatios;
-			target.Warnings = Utility.SetList(target.Warnings, source.Warnings);
 
 			return target;
 		} // CloneFrom

@@ -11,6 +11,8 @@ ALTER PROCEDURE LogicalGlueLoadInputData
 @MonthlyRepaymentOnly BIT
 AS
 BEGIN
+	DECLARE @OriginID INT = (SELECT c.OriginID FROM Customer c WHERE c.Id = @CustomerID)
+
 	IF ISNULL(@MonthlyRepaymentOnly, 0) = 0
 	BEGIN
 		-------------------------------------------------------------------------
@@ -114,7 +116,7 @@ BEGIN
 		DefaultTerm = ISNULL(ls.DefaultRepaymentPeriod, 12),
 		MaxInterestRate = ISNULL(ls.MaxInterest, 0.0225)
 	FROM
-		dbo.udfGetLoanSource(0) ls
+		dbo.udfGetLoanSource(0, @OriginID) ls
 		OUTER APPLY rq
 
 	------------------------------------------------------------------------------

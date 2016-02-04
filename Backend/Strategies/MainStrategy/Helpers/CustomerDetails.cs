@@ -72,6 +72,7 @@
 		public int NumOfPreviousApprovals { get; set; }
 		public string FullName { get; set; }
 		public string Origin { get; set; }
+		public int OriginID { get; set; }
 		public int ExperianConsumerScore { get; private set; }
 
 		public bool OwnsProperty {

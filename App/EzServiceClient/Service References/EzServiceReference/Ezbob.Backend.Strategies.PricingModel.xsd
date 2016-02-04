@@ -3,7 +3,6 @@
   <xs:complexType name="PricingModelModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="BrokerSetupFeePercents" type="xs:decimal" />
-      <xs:element minOccurs="0" name="BrokerSetupFeePounds" type="xs:decimal" />
       <xs:element minOccurs="0" name="Cogs" type="xs:decimal" />
       <xs:element minOccurs="0" name="CogsOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="CollectionRate" type="xs:decimal" />

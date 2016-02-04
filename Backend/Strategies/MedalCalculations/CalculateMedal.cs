@@ -6,8 +6,11 @@
 	using AutomationCalculator.MedalCalculation;
 	using ConfigManager;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using MailApi;
+
+	using PrimaryCalculator = Ezbob.Backend.Strategies.MedalCalculations.Primary.MedalCalculator;
 
 	public class CalculateMedal : AStrategy {
 		public override string Name {
@@ -24,17 +27,14 @@
 			bool primaryOnly,
 			bool doStoreMedal
 		) {
-
 			this.doStoreMedal = doStoreMedal;
 			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
 			this.quietMode = false;
-			WasMismatch = true;
 
 			CashRequestID = cashRequestID;
 			NLCashRequestID = nlCashRequestID;
-
 		} // constructor
 
 		public virtual string Tag { get; set; }
@@ -48,7 +48,7 @@
 			set { this.quietMode = value; }
 		} // QuietMode
 
-		public bool WasMismatch { get; private set; }
+		public bool HasError { get { return (Result == null) || Result.HasError; } }
 
 		public override void Execute() {
 			try {
@@ -59,162 +59,157 @@
 					Tag
 				);
 
-				SafeReader sr = DB.GetFirst(
-					"GetCustomerDataForMedalCalculation",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", this.customerId),
-					new QueryParameter("Now", this.calculationTime)
-				);
+				LoadCustomerData();
 
-				if (!sr.IsEmpty) {
-					this.typeOfBusiness = sr["TypeOfBusiness"];
-					this.consumerScore = sr["ConsumerScore"];
-					this.companyScore = sr["CompanyScore"];
-					this.numOfHmrcMps = sr["NumOfHmrcMps"];
-					this.numOfYodleeMps = sr["NumOfYodleeMps"];
-					this.numOfEbayAmazonPayPalMps = sr["NumOfEbayAmazonPayPalMps"];
-					this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
-					this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+				Result = CalculatePrimary()
+					?? new MedalResult(this.customerId, Log, "Failed to calculate primary medal.");
 
-					if (CashRequestID == null)
-						CashRequestID = sr["LastCashRequestID"];
+				MedalOutputModel verificationResult = CalculateVerification();
 
-					// get nl cash request
-					if (NLCashRequestID == null)
-						NLCashRequestID = sr["NLLastCashRequestID"];
-					
+				Result.CheckForMatch(verificationResult);
+
+				if (this.doStoreMedal) {
+					Result.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
+
+					if (verificationResult != null)
+						verificationResult.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
 				} // if
 
-				Log.Debug(
-					"customer id = {0}, " +
-					"cash request id = {12}, " +
-					"NLcash request id = {13}, " +
-					"calc time = {1}, " +
-					"sr.IsEmpty = {2}, " +
-					"type of business = {3}, " +
-					"consumer score = {4}, " +
-					"company score = {5}, " +
-					"HMRC count = {6}, " +
-					"Yodlee count = {7}, " +
-					"Online count = {8}, " +
-					"earliest HMRC update = '{9}', " +
-					"earliest Yodlee update = '{10}'." +
-					"tag = '{11}'",
-					this.customerId,
-					this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture),
-					sr.IsEmpty,
-					this.typeOfBusiness,
-					this.consumerScore,
-					this.companyScore,
-					this.numOfHmrcMps,
-					this.numOfYodleeMps,
-					this.numOfEbayAmazonPayPalMps,
-					this.earliestHmrcLastUpdateDate,
-					this.earliestYodleeLastUpdateDate,
-					Tag,
-					CashRequestID,
-					NLCashRequestID
-				);
+				if (Result.HasError) {
+					SendExplanationMail(verificationResult);
 
-				// The first scenario (1) for checking medal type and getting medal value
-				// namespace Ezbob.Backend.Strategies.MainStrategy 
-				MedalResult result1 = new MedalCalculator1(
-					this.customerId,
-					this.calculationTime,
-					this.typeOfBusiness,
-					this.consumerScore,
-					this.companyScore,
-					this.numOfHmrcMps,
-					this.numOfYodleeMps,
-					this.numOfEbayAmazonPayPalMps,
-					this.earliestHmrcLastUpdateDate,
-					this.earliestYodleeLastUpdateDate
-				).CalculateMedal();
-
-				Log.Debug("\n\nPrimary medal:\n{0}", result1);
-
-				MedalOutputModel result2 = null;
-
-				if (!this.primaryOnly) {
-					// Alternative scenario (2) for checking medal type and getting medal value
-					// namespace AutomationCalculator.MedalCalculation
-					var verification = new MedalChooser(DB, Log);
-					result2 = verification.GetMedal(this.customerId, this.calculationTime);
-
-					Log.Debug("\n\nSecondary medal:\n{0}", result2.ToString());
-
-					if (this.doStoreMedal)
-						result2.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
-				} // if
-
-				if ((result1 != null) && result1.IsLike(result2)) {
-					if (this.doStoreMedal)
-						result1.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
-
-					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
-
-					Result = result1;
-					WasMismatch = false;
-					return;
-				} // if
-
-				// Mismatch in medal calculations
-				WasMismatch = true;
-
-				if (result1 == null)
-					result1 = new MedalResult(this.customerId, Log);
-
-				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
-				result1.Error = (result1.Error ?? string.Empty) + " Mismatch found in the 2 medal calculations";
-
-				if (this.doStoreMedal)
-					result1.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
-
-				SendExplanationMail(result1, result2);
-
-				if (QuietMode)
-					Log.Warn("Mismatch found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
-				else
-					Log.Error("Mismatch found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
-
-				Result = result1;
+					Log.Say(
+						QuietMode ? Severity.Warn : Severity.Alert,
+						"Mismatch/Error found in medal calculations of customer {0}. {1}",
+						this.customerId,
+						Tag
+					);
+				} else
+					Log.Debug("O6a-Ha! Match found in medal calculations of customer {0}. {1}", this.customerId, Tag);
 			} catch (Exception e) {
-				if (QuietMode)
-					Log.Warn(e, "Medal calculation for customer {0} failed with exception. {1}", this.customerId, Tag);
-				else
-					Log.Error(e, "Medal calculation for customer {0} failed with exception. {1}", this.customerId, Tag);
+				Log.Say(
+					QuietMode ? Severity.Warn : Severity.Alert,
+					e,
+					"Medal calculation for customer {0} failed with exception. {1}",
+					this.customerId,
+					Tag
+				);
 
-				Result = new MedalResult(this.customerId, Log) {
-					Error = "Exception thrown: " + e.Message,
-					ExceptionDuringCalculation = e,
-				};
+				Result = new MedalResult(this.customerId, Log, e);
 			} // try
 		} // Execute
 
-		private void SendExplanationMail(MedalResult result1, MedalOutputModel result2) {
+		private MedalOutputModel CalculateVerification() {
+			if (this.primaryOnly)
+				return null;
+
+			var result = new MedalChooser(DB, Log).GetMedal(this.customerId, this.calculationTime);
+
+			Log.Debug("\n\nSecondary medal:\n{0}", result);
+
+			return result;
+		} // CalculateVerification
+
+		private MedalResult CalculatePrimary() {
+			MedalResult result = new PrimaryCalculator(
+				this.customerId,
+				this.calculationTime,
+				this.typeOfBusiness,
+				this.consumerScore,
+				this.companyScore,
+				this.numOfHmrcMps,
+				this.numOfYodleeMps,
+				this.numOfEbayAmazonPayPalMps,
+				this.earliestHmrcLastUpdateDate,
+				this.earliestYodleeLastUpdateDate
+			).CalculateMedal();
+
+			Log.Debug("\n\nPrimary medal:\n{0}", result);
+
+			return result;
+		} // CalculatePrimary
+
+		private void LoadCustomerData() {
+			SafeReader sr = DB.GetFirst(
+				"GetCustomerDataForMedalCalculation",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("Now", this.calculationTime)
+			);
+
+			if (!sr.IsEmpty) {
+				this.typeOfBusiness = sr["TypeOfBusiness"];
+				this.consumerScore = sr["ConsumerScore"];
+				this.companyScore = sr["CompanyScore"];
+				this.numOfHmrcMps = sr["NumOfHmrcMps"];
+				this.numOfYodleeMps = sr["NumOfYodleeMps"];
+				this.numOfEbayAmazonPayPalMps = sr["NumOfEbayAmazonPayPalMps"];
+				this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+				this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+
+				if (CashRequestID == null)
+					CashRequestID = sr["LastCashRequestID"];
+
+				if (NLCashRequestID == null)
+					NLCashRequestID = sr["NLLastCashRequestID"];
+			} // if
+
+			Log.Debug(
+				"customer id = {0}, " +
+				"cash request id = {12}, " +
+				"NLcash request id = {13}, " +
+				"calc time = {1}, " +
+				"sr.IsEmpty = {2}, " +
+				"type of business = {3}, " +
+				"consumer score = {4}, " +
+				"company score = {5}, " +
+				"HMRC count = {6}, " +
+				"Yodlee count = {7}, " +
+				"Online count = {8}, " +
+				"earliest HMRC update = '{9}', " +
+				"earliest Yodlee update = '{10}'." +
+				"tag = '{11}'",
+				this.customerId,
+				this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				sr.IsEmpty,
+				this.typeOfBusiness,
+				this.consumerScore,
+				this.companyScore,
+				this.numOfHmrcMps,
+				this.numOfYodleeMps,
+				this.numOfEbayAmazonPayPalMps,
+				this.earliestHmrcLastUpdateDate,
+				this.earliestYodleeLastUpdateDate,
+				Tag,
+				CashRequestID,
+				NLCashRequestID
+			);
+		} // LoadCustomerData
+
+		private void SendExplanationMail(MedalOutputModel verification) {
 			if (QuietMode) {
 				Log.Debug("Not sending explanation email: quiet mode.");
 				return;
 			} // if
 
-			string medal2 = result2 == null ? string.Empty : result2.Medal.Stringify();
-			string medalType2 = result2 == null ? string.Empty : result2.MedalType.ToString();
-			string score2 = result2 == null ? string.Empty : (result2.Score * 100).ToString("N2");
-			string normalizedScore2 = result2 == null ? string.Empty : result2.NormalizedScore.ToString("P2");
-			string offeredLoanAmount2 = result2 == null ? string.Empty : result2.OfferedLoanAmount.ToString("N2");
-			string error2 = result2 == null ? string.Empty : result2.Error;
+			string medal2 = verification == null ? string.Empty : verification.Medal.Stringify();
+			string medalType2 = verification == null ? string.Empty : verification.MedalType.ToString();
+			string score2 = verification == null ? string.Empty : (verification.Score * 100).ToString("N2");
+			string normalizedScore2 = verification == null ? string.Empty : verification.NormalizedScore.ToString("P2");
+			string offeredLoanAmount2 = verification == null ? string.Empty : verification.OfferedLoanAmount.ToString("N2");
+			string error2 = verification == null ? string.Empty : verification.Error;
 
 			string msg = string.Format(
 				"calculation time (UTC): {12}\n\n" +
 				"main:         medal:{0} medal type:{1} score:{2} normalized score:{3} offered amount:£{4} error:{5} \n" +
 				"verification: medal:{6} medal type:{7} score:{8} normalized score:{9} offered amount:£{10} error:{11}",
 
-				result1.MedalClassification.Stringify(10),
-				result1.MedalType.ToString().PadRight(30),
-				result1.TotalScore.ToString("N2").PadRight(10),
-				result1.TotalScoreNormalized.ToString("P2").PadRight(10),
-				result1.OfferedLoanAmount.ToString("N2").PadRight(15),
-				result1.Error,
+				Result.MedalClassification.Stringify(10),
+				Result.MedalType.ToString().PadRight(30),
+				Result.TotalScore.ToString("N2").PadRight(10),
+				Result.TotalScoreNormalized.ToString("P2").PadRight(10),
+				Result.OfferedLoanAmount.ToString("N2").PadRight(15),
+				Result.Error,
 
 				medal2.PadRight(10),
 				medalType2.PadRight(30),
@@ -223,7 +218,7 @@
 				offeredLoanAmount2.PadRight(15),
 				error2,
 
-				result1.CalculationTime.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				Result.CalculationTime.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
 			);
 
 			var message = string.Format(
@@ -238,8 +233,8 @@
 				"<pre><h3>{3}</h3></pre><br>",
 				this.customerId,
 				HttpUtility.HtmlEncode(msg),
-				HttpUtility.HtmlEncode(result1.ToString()),
-				HttpUtility.HtmlEncode(result2 == null ? string.Empty : result2.ToString()),
+				HttpUtility.HtmlEncode(Result.ToString()),
+				HttpUtility.HtmlEncode(verification == null ? string.Empty : verification.ToString()),
 				Tag
 			);
 

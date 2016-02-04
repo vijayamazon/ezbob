@@ -18,8 +18,9 @@
 
 		[DataMember]
 		public decimal SetupFeePercents { get; set; }
-		[DataMember]
-		public decimal BrokerSetupFeePounds { get; set; }
+
+		public decimal BrokerSetupFeePounds { get { return BrokerSetupFeePercents * LoanAmount; } }
+
 		[DataMember]
 		public decimal BrokerSetupFeePercents { get; set; }
 		[DataMember]
@@ -84,11 +85,6 @@
 		[DataMember]
 		public int CompanyScore { get; set; }
 
-		public void SetLoanAmount(decimal newLoanAmount) {
-			LoanAmount = newLoanAmount;
-			BrokerSetupFeePounds = BrokerSetupFeePercents * newLoanAmount;
-		} // SetLoanAmount
-
 		public PricingModelModel Clone() {
 			List<PricingSourceModel> pricingSourceModels = new List<PricingSourceModel>();
 
@@ -112,7 +108,6 @@
 				DefaultRateCompanyShare = DefaultRateCompanyShare,
 				DefaultRateCustomerShare = DefaultRateCustomerShare,
 				SetupFeePercents = SetupFeePercents,
-				BrokerSetupFeePounds = BrokerSetupFeePounds,
 				BrokerSetupFeePercents = BrokerSetupFeePercents,
 				LoanTerm = LoanTerm,
 				InterestOnlyPeriod = InterestOnlyPeriod,

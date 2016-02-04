@@ -23,7 +23,7 @@
 		public void TestEndToEndFlow() {
 			IEngine engine = InjectorStub.GetEngine();
 
-			Inference inference = engine.GetInference(1393, 0, false, GetInferenceMode.ForceDownload);
+			Inference inference = engine.GetInference(1437, 0, false, GetInferenceMode.ForceDownload);
 
 			Log.Info("Inference read: {0}", inference);
 		} // TestEndToEndFlow

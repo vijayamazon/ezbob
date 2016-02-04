@@ -64,9 +64,11 @@
           <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="FLScore" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IsHardReject" type="xs:boolean" />
           <xs:element minOccurs="0" name="IsTryout" type="xs:boolean" />
           <xs:element minOccurs="0" name="MonthlyRepayment" type="xs:decimal" />
           <xs:element minOccurs="0" name="NNScore" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ScoreIsReliable" type="xs:boolean" />
           <xs:element minOccurs="0" name="UniqueID" type="ser:guid" />
         </xs:sequence>
       </xs:extension>

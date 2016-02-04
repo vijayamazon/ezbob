@@ -2,7 +2,7 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class EncodingFailure : ICanBeEmpty {
+	public class EncodingFailure : ICanBeEmpty<EncodingFailure> {
 		[DataMember]
 		public int RowIndex { get; set; }
 
@@ -38,22 +38,15 @@
 				UnencodedValue
 			);
 		} // ToString
-	} // class EncodingFailure
 
-	public static class EncodingFailureExt {
-		public static EncodingFailure CloneFrom(this EncodingFailure target, EncodingFailure source) {
-			if (source == null)
-				return new EncodingFailure();
-
-			target = target ?? new EncodingFailure();
-
-			target.RowIndex = source.RowIndex;
-			target.ColumnName = source.ColumnName;
-			target.UnencodedValue = source.UnencodedValue;
-			target.Reason = source.Reason;
-			target.Message = source.Message;
-
-			return target;
+		public EncodingFailure CloneTo() {
+			return new EncodingFailure {
+				RowIndex = RowIndex,
+				ColumnName = ColumnName,
+				UnencodedValue = UnencodedValue,
+				Reason = Reason,
+				Message = Message,
+			};
 		} // CloneFrom
-	} // class EncodingFailureExt
+	} // class EncodingFailure
 } // namespace

@@ -129,7 +129,7 @@
 
 		[Test]
 		public void TestFindInvestor() {
-			var stra = new FindInvestorForOffer(3406, 42824);
+			var stra = new FindInvestorForOffer(3406, 42828);
 			stra.Execute();
 			Assert.IsTrue(stra.IsFound);
 		}

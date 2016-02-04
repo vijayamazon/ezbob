@@ -19,14 +19,16 @@
 		public override string Name { get { return "Pricing Model Calculator"; } }
 
 		public override void Execute() {
-			Calculate();
+			if (CalculateInterestRate())
+				CalculateFullModelAfterInterestRate();
+
 			LogInputs();
 		} // Execute
 
 		public PricingModelModel Model { get; private set; }
 		public string Error { get; private set; }
 
-		public bool CalculateInterestRate() {
+		private bool CalculateInterestRate() {
 			if (Model == null) {
 				Error = "Model can't be empty";
 				return false;
@@ -55,11 +57,6 @@
 
 			return true;
 		} // CalculateInterestRate
-
-		public void Calculate() {
-			if (CalculateInterestRate())
-				CalculateFullModelAfterInterestRate();
-		} // Calculate
 
 		private void CalculateFullModelAfterInterestRate() {
 			Loan loan = CreateLoan(Model.MonthlyInterestRate, Model.FeesRevenue + Model.BrokerSetupFeePounds);
