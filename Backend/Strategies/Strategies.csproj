@@ -574,7 +574,6 @@
     <Compile Include="VatReturn\LoadVatReturnSummary.cs" />
     <Compile Include="Misc\MarketplaceInstantUpdate.cs" />
     <Compile Include="PricingModel\GetPricingModelDefaultRate.cs" />
-    <Compile Include="PricingModel\PricingModelCalculate.cs" />
     <Compile Include="PricingModel\GetPricingModelModel.cs" />
     <Compile Include="PricingModel\PricingModelModel.cs" />
     <Compile Include="Experian\GetExperianAccountsCurrentBalance.cs" />

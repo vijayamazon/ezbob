@@ -29,7 +29,7 @@
 			int underwriterId,
 			PricingModelModel model
 		) {
-			PricingModelCalculate instance;
+			PricingModelCalculator instance;
 
 			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, model);
 

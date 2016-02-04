@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.Serialization;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	[DataContract]
 	public class PricingModelModel {
@@ -94,20 +96,9 @@
 		public int OriginID { get; set; }
 
 		public PricingModelModel Clone() {
-			List<PricingSourceModel> pricingSourceModels = new List<PricingSourceModel>();
-
-			if (PricingSourceModels != null) {
-				foreach (var pricingSourceModel in PricingSourceModels) {
-					pricingSourceModels.Add(new PricingSourceModel {
-						AIR = pricingSourceModel.AIR,
-						APR = pricingSourceModel.APR,
-						InterestRate = pricingSourceModel.InterestRate,
-						IsPreferable = pricingSourceModel.IsPreferable,
-						SetupFee = pricingSourceModel.SetupFee,
-						Source = pricingSourceModel.Source,
-					});
-				} // for
-			} // if
+			List<PricingSourceModel> pricingSourceModels = (PricingSourceModels == null)
+				? null
+				: PricingSourceModels.Select(pricingSourceModel => pricingSourceModel.Clone()).ToList();
 
 			return new PricingModelModel {
 				PricingSourceModels = pricingSourceModels,
@@ -150,16 +141,36 @@
 	[DataContract]
 	public class PricingSourceModel {
 		[DataMember]
+		public LoanSourceName LoanSource { get; set; }
+
+		[DataMember]
 		public string Source { get; set; }
+
 		[DataMember]
 		public decimal InterestRate { get; set; }
+
 		[DataMember]
 		public decimal SetupFee { get; set; }
+
 		[DataMember]
 		public decimal AIR { get; set; }
+
 		[DataMember]
 		public decimal APR { get; set; }
+
 		[DataMember]
 		public bool IsPreferable { get; set; }
+
+		public PricingSourceModel Clone() {
+			return new PricingSourceModel {
+				LoanSource = LoanSource,
+				AIR = AIR,
+				APR = APR,
+				InterestRate = InterestRate,
+				IsPreferable = IsPreferable,
+				SetupFee = SetupFee,
+				Source = Source,
+			};
+		} // Clone
 	} // class PricingSourceModel
 } // namespace

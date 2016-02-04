@@ -24,6 +24,10 @@
 			return (Left <= p) && (p <= Right);
 		} // Contains
 
+		public virtual bool Contains(TFinite p) {
+			return (Left <= p) && (p <= Right);
+		} // Contains
+
 		public virtual bool Contains(TInterval<TFinite> other) {
 			return (Left <= other.Left) && (other.Right <= Right);
 		} // Contains

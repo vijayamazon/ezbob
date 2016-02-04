@@ -54,6 +54,8 @@
 			PricingModelModelActionResult pricingModelCalculateResponse =
 				this.serviceClient.Instance.PricingModelCalculate(customerId, this.context.UserId, inputModel);
 
+			oLog.Debug("Calculated model: {0}", JsonConvert.SerializeObject(pricingModelCalculateResponse.Value));
+
 			return Json(pricingModelCalculateResponse.Value, JsonRequestBehavior.AllowGet);
 		} // Calculate
 
