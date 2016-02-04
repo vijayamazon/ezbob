@@ -278,14 +278,20 @@ AS
 BEGIN
 		;WITH latestLoans as 
 		(
-			SELECT ip.InvestorID, MAX(ip.Timestamp) as TakenDate From I_Portfolio ip
-			join @InvestorIDs ids ON ip.InvestorID = ids.Value
-			GROUP BY ip.InvestorID
+			SELECT 
+				ids.Value AS InvestorID, 
+				MAX(ip.Timestamp) AS TakenDate 
+			FROM
+				@InvestorIDs ids 
+			LEFT JOIN 
+				I_Portfolio ip ON ip.InvestorID = ids.Value
+			GROUP BY 
+				ids.Value
 		)
 	SELECT top 1 ll.InvestorID from latestLoans ll order by ll.TakenDate ASC
 END
-GO
 
+GO
 
 ALTER PROCEDURE I_GetInvestorParameters 
 AS
