@@ -95,6 +95,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Authentication.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.CompaniesHouse.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -316,6 +319,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SchedulerDataResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SecurityUserActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.SetPasswordActionResult.datasource">

@@ -106,6 +106,7 @@
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
     <Compile Include="ASignupLoginBaseStrategy.cs" />
+    <Compile Include="Authentication\GetSecurityUserById.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LogicalGlue\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\IDecisionCheckAgent.cs" />
@@ -212,6 +213,14 @@
     <Compile Include="Investor\SaveInvestorBanksList.cs" />
     <Compile Include="Investor\SaveInvestorContactList.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
+    <Compile Include="LegalDocs\CMS\SaveLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\DeleteLegalDocById.cs" />
+    <Compile Include="LegalDocs\CMS\ReviewLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\GetLegalDocsPendingApproval.cs" />
+    <Compile Include="LegalDocs\CMS\AddLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\SyncLegalDocsEnviorments.cs" />
+    <Compile Include="LegalDocs\CMS\ApproveLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\GetLatestLegalDocs.cs" />
     <Compile Include="LegalDocs\GetLegalDocById.cs" />
     <Compile Include="LegalDocs\ManualLegalDocsSyncTemplatesFiles.cs" />
     <Compile Include="LegalDocs\GetLegalDocs.cs" />

@@ -76,6 +76,7 @@
     <Compile Include="ActionResults\DecisionHistoryResult.cs" />
     <Compile Include="ActionResults\ApplicationInfoResult.cs" />
     <Compile Include="ActionResults\Investor\LegalDocActionResult.cs" />
+    <Compile Include="ActionResults\SecurityUserActionResult.cs" />
     <Compile Include="ActionResults\MessagesListActionResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\Investor\LegalDocsActionResult.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="ActionResults\ExperianTargetingActionResult.cs" />
     <Compile Include="ActionStatus.cs" />
+    <Compile Include="EzServiceImplementation\esi_security.cs" />
     <Compile Include="EzServiceImplementation\esi_legal_docs.cs" />
     <Compile Include="ExecuteArguments.cs" />
     <Compile Include="EzServiceImplementation\esi_logicalglue.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceSecurity.cs" />
     <Compile Include="IEzServiceUserManagement.cs" />
     <Compile Include="IEzServiceInvestor.cs" />
     <Compile Include="IEzServiceLogicalGlue.cs" />
