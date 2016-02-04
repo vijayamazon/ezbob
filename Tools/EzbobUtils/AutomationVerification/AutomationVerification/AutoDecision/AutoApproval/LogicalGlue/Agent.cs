@@ -20,7 +20,9 @@
 				this.args.CashRequestID,
 				this.args.NLCashRequestID,
 				this.args.Log
-			);
+			) {
+				Amount = this.args.SystemCalculatedAmount,
+			};
 
 			this.oldWayAgent = new OldWayAgent(
 				this.args.CustomerID,
