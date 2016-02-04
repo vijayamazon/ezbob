@@ -41,13 +41,13 @@
     <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="5555ce69-e434-4548-b76f-4913f1abaae5" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="b81ed10c-ff5d-4c91-8c39-8bacdbb35291" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.LegalDocs.xsd" MetadataType="Schema" ID="8730b1f3-a457-4b3f-a44c-19a80d5758b4" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.CompaniesHouse.xsd" MetadataType="Schema" ID="776f3719-1e2a-4bbc-b0f2-e35b1ecf6abe" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="df88bae0-f414-4699-8d98-1ddf5b6bc1e2" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="adc74494-e913-41aa-bcb9-f45ee07004b8" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="79dc3ba5-616d-4501-973a-050f1511ef76" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="49f08a55-9462-4631-b23a-85717c48a82c" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd" MetadataType="Schema" ID="405b3aec-8a13-4e79-a193-223f2bd8c2c8" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.OpenPlatform.xsd" MetadataType="Schema" ID="8e4d3df7-6880-4150-b641-8c03bc53e316" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.CompaniesHouse.xsd" MetadataType="Schema" ID="776f3719-1e2a-4bbc-b0f2-e35b1ecf6abe" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="df88bae0-f414-4699-8d98-1ddf5b6bc1e2" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
     <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="592c92d9-f625-4740-8632-34f254ecbd14" SourceId="1" SourceUrl="net.tcp://dell-pc:7081/mex" />
   </Metadata>
   <Extensions>

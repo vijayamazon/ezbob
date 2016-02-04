@@ -131,31 +131,6 @@
 							uiEventControlID: "broker:signup-contact-other-phone"),
 						origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyAppCount",
-							"Number of applications per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 6,
-							uiEventControlID: "broker:signup-esitmated-monthly-application-count"),
-						origin: origin)
-
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyClientAmount",
-							"Value of credit per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
-						origin: origin)
-
 					@{
 					EzInputBuilder radio1 = new EzInputBuilder("FCARegistered", "FCA Registered",
 						value: "true",

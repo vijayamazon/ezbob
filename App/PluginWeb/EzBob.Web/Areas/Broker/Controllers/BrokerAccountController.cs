@@ -40,15 +40,13 @@
 				"\n\tContact person mobile: {4}" +
 				"\n\tMobile code: {5}" +
 				"\n\tContact person other phone: {6}" +
-				"\n\tEstimated monthly amount: {7}" +
-				"\n\tFirm web site URL: {8}" +
-				"\n\tEstimated monthly application count: {9}" +
-				"\n\tCaptcha enabled: {10}" +
-				"\n\tTerms ID: {11}" +
-				"\n\tReferred by (source ref): {12}" +
-				"\n\tFCARegistered: {13}" +
-				"\n\tLicense Number: {14}" +
-				"\n\tUI origin: {15}",
+				"\n\tFirm web site URL: {7}" +
+				"\n\tCaptcha enabled: {8}" +
+				"\n\tTerms ID: {9}" +
+				"\n\tReferred by (source ref): {10}" +
+				"\n\tFCARegistered: {11}" +
+				"\n\tLicense Number: {12}" +
+				"\n\tUI origin: {13}",
 				model.FirmName,
 				model.FirmRegNum,
 				model.ContactName,
@@ -56,9 +54,7 @@
 				model.ContactMobile,
 				model.MobileCode,
 				model.ContactOtherPhone,
-				model.EstimatedMonthlyClientAmount,
 				model.FirmWebSite,
-				model.EstimatedMonthlyAppCount,
 				model.IsCaptchaEnabled == 0 ? "no" : "yes",
 				model.TermsID,
 				sReferredBy,
@@ -94,11 +90,9 @@
 					model.ContactMobile,
 					model.MobileCode,
 					model.ContactOtherPhone,
-					model.EstimatedMonthlyClientAmount,
 					new DasKennwort(model.Password), 
 					new DasKennwort(model.Password2), 
 					model.FirmWebSite,
-					model.EstimatedMonthlyAppCount,
 					model.IsCaptchaEnabled != 0,
 					model.TermsID,
 					sReferredBy,

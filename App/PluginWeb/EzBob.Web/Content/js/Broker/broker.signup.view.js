@@ -58,8 +58,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 		this.$el.find(
 			'#FirmName, #FirmRegNum, #FirmWebSite, ' +
-			'#ContactName, #ContactEmail, #ContactOtherPhone, #EstimatedMonthlyAppCount, ' +
-			'#EstimatedMonthlyClientAmount, #Password, #Password2, ' +
+			'#ContactName, #ContactEmail, #ContactOtherPhone, ' +
+			'#Password, #Password2, ' +
 			'#AgreeToTerms, #AgreeToPrivacyPolicy,#LicenseNumber'
 		).val('').blur();
 
@@ -70,10 +70,6 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		var sEmail = this.$el.find('#ContactEmail').val();
 
 		var oData = this.$el.find('form').serializeArray();
-
-		var amt = _.find(oData, function (d) { return d.name === 'EstimatedMonthlyClientAmount'; });
-		if (amt)
-			amt.value = this.$el.find('#EstimatedMonthlyClientAmount').autoNumeric('get');
 
 		var fws = _.find(oData, function (d) { return d.name === 'FirmWebSite'; });
 		if (fws && !/^https?:\/\//.test(fws.value))
@@ -119,10 +115,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		EzBob.Broker.SignupView.__super__.onRender.apply(this, arguments);
 		$('body').removeClass('broker-dashboard');
 
-		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
-
 		this.$el.find('.phonenumber').numericOnly(11);
-		this.$el.find('.phonenumbercode, #EstimatedMonthlyAppCount').numericOnly(6);
 
 		this.passwordStrengthView.render();
 
@@ -146,7 +139,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 				$('body').addClass('stop-scroll');
 			},
 			close: function() {
-				$('body').removeClass('stop-scroll')
+				$('body').removeClass('stop-scroll');
 			},
 			width: 800,
 			height: 600,
@@ -187,10 +180,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 				ContactName: { required: true, maxlength: 255, },
 				ContactEmail: { required: true, email: true, maxlength: 255, },
 				ContactOtherPhone: { required: false, regex: '^0[0-9]{10}$', },
-				EstimatedMonthlyClientAmount: { required: true, defaultInvalidPounds: true, regex: '^(?!£ 0.00$)', },
 				Password: $.extend({}, passPolicy),
 				Password2: passPolicy2,
-				EstimatedMonthlyAppCount: { required: true, maxlength: 6, regex: '^[1-9]\\d*', },
 				AgreeToTerms: { required: true, },
 				AgreeToPrivacyPolicy: { required: true, },
 				LicenseNumber: { required: true, maxlength: 50 }

@@ -750,11 +750,9 @@
         <xs:element minOccurs="0" name="sContactMobile" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sMobileCode" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactOtherPhone" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="nEstimatedMonthlyClientAmount" type="xs:decimal" />
         <xs:element xmlns:q67="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="password" nillable="true" type="q67:DasKennwort" />
         <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="passwordAgain" nillable="true" type="q68:DasKennwort" />
         <xs:element minOccurs="0" name="sFirmWebSiteUrl" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="nEstimatedMonthlyApplicationCount" type="xs:int" />
         <xs:element minOccurs="0" name="bIsCaptchEnabled" type="xs:boolean" />
         <xs:element minOccurs="0" name="nBrokerTermsID" type="xs:int" />
         <xs:element minOccurs="0" name="sReferredBy" nillable="true" type="xs:string" />

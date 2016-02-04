@@ -4796,11 +4796,9 @@ namespace ServiceClientProxy.EzServiceReference {
                     string sContactMobile, 
                     string sMobileCode, 
                     string sContactOtherPhone, 
-                    decimal nEstimatedMonthlyClientAmount, 
                     Ezbob.Backend.Models.DasKennwort password, 
                     Ezbob.Backend.Models.DasKennwort passwordAgain, 
                     string sFirmWebSiteUrl, 
-                    int nEstimatedMonthlyApplicationCount, 
                     bool bIsCaptchEnabled, 
                     int nBrokerTermsID, 
                     string sReferredBy, 
@@ -4817,11 +4815,9 @@ namespace ServiceClientProxy.EzServiceReference {
                     string sContactMobile, 
                     string sMobileCode, 
                     string sContactOtherPhone, 
-                    decimal nEstimatedMonthlyClientAmount, 
                     Ezbob.Backend.Models.DasKennwort password, 
                     Ezbob.Backend.Models.DasKennwort passwordAgain, 
                     string sFirmWebSiteUrl, 
-                    int nEstimatedMonthlyApplicationCount, 
                     bool bIsCaptchEnabled, 
                     int nBrokerTermsID, 
                     string sReferredBy, 
@@ -6535,18 +6531,16 @@ namespace ServiceClientProxy.EzServiceReference {
                     string sContactMobile, 
                     string sMobileCode, 
                     string sContactOtherPhone, 
-                    decimal nEstimatedMonthlyClientAmount, 
                     Ezbob.Backend.Models.DasKennwort password, 
                     Ezbob.Backend.Models.DasKennwort passwordAgain, 
                     string sFirmWebSiteUrl, 
-                    int nEstimatedMonthlyApplicationCount, 
                     bool bIsCaptchEnabled, 
                     int nBrokerTermsID, 
                     string sReferredBy, 
                     bool bFCARegistered, 
                     string sLicenseNumber, 
                     int uiOriginID) {
-            return base.Channel.BrokerSignup(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, password, passwordAgain, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy, bFCARegistered, sLicenseNumber, uiOriginID);
+            return base.Channel.BrokerSignup(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, password, passwordAgain, sFirmWebSiteUrl, bIsCaptchEnabled, nBrokerTermsID, sReferredBy, bFCARegistered, sLicenseNumber, uiOriginID);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(
@@ -6557,18 +6551,16 @@ namespace ServiceClientProxy.EzServiceReference {
                     string sContactMobile, 
                     string sMobileCode, 
                     string sContactOtherPhone, 
-                    decimal nEstimatedMonthlyClientAmount, 
                     Ezbob.Backend.Models.DasKennwort password, 
                     Ezbob.Backend.Models.DasKennwort passwordAgain, 
                     string sFirmWebSiteUrl, 
-                    int nEstimatedMonthlyApplicationCount, 
                     bool bIsCaptchEnabled, 
                     int nBrokerTermsID, 
                     string sReferredBy, 
                     bool bFCARegistered, 
                     string sLicenseNumber, 
                     int uiOriginID) {
-            return base.Channel.BrokerSignupAsync(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, password, passwordAgain, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy, bFCARegistered, sLicenseNumber, uiOriginID);
+            return base.Channel.BrokerSignupAsync(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, password, passwordAgain, sFirmWebSiteUrl, bIsCaptchEnabled, nBrokerTermsID, sReferredBy, bFCARegistered, sLicenseNumber, uiOriginID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerTransferCommission() {
