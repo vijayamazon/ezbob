@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
+	using System.Linq;
 	using System.Reflection;
 	using Ezbob.Utils;
 	using Ezbob.Utils.ParsedValue;
@@ -177,15 +179,92 @@
 			return null;
 		} // GetName
 
+		/// <summary>
+		/// Creates and fills new object instance.
+		/// The instance is filled by traversing through all its properties and filling them with
+		/// either value found in the recordset (if found by property name/FieldName attribute)
+		/// or with the default (for property type) value (otherwise).
+		/// </summary>
+		/// <typeparam name="T">Type of instance to create and fill.</typeparam>
+		/// <returns>New filled instance.</returns>
 		public T Fill<T>() where T : new() {
 			var oInstance = new T();
 			Fill(oInstance);
 			return oInstance;
 		} // Fill
 
+		/// <summary>
+		/// Fills existing object instance.
+		/// The instance is filled by traversing through all its properties and filling them with
+		/// either value found in the recordset (if found by property name/FieldName attribute)
+		/// or with the default (for property type) value (otherwise).
+		/// </summary>
+		/// <param name="oInstance">Instance to fill.</param>
 		public void Fill(object oInstance) {
+			if (IsEmpty)
+				return;
+
 			oInstance.Traverse(FillProperty);
 		} // Fill
+
+		/// <summary>
+		/// Creates and fills new object instance.
+		/// The instance is filled by traversing through all the fields of the recordset
+		/// and filling instance's property with the same name and also all the properties
+		/// having corresponding FieldName attribute. Other properties are left not changed.
+		/// </summary>
+		/// <typeparam name="T">Type of instance to create and fill.</typeparam>
+		/// <returns>New filled instance.</returns>
+		public T Stuff<T>() where T : new() {
+			var instance = new T();
+			Stuff(instance);
+			return instance;
+		} // Stuff
+
+		/// <summary>
+		/// Fills existing instance.
+		/// The instance is filled by traversing through all the fields of the recordset
+		/// and filling instance's property with the same name and also all the properties
+		/// having corresponding FieldName attribute. Other properties are left not changed.
+		/// </summary>
+		/// <param name="instance">Instance to fill.</param>
+		public void Stuff(object instance) {
+			if (instance == null)
+				throw new ArgumentNullException("instance", "Instance to stuff not specified.");
+
+			if (IsEmpty)
+				return;
+
+			int fieldCount = Count;
+
+			Type instanceType = instance.GetType();
+
+			List<Tuple<string, PropertyInfo>> byAttribute = instanceType
+				.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				.Where(p => (p.GetSetMethod() != null) && p.IsDefined(typeof(FieldNameAttribute), false))
+				.Select(p => new Tuple<string, PropertyInfo>(
+					((FieldNameAttribute)p.GetCustomAttributes(typeof(FieldNameAttribute)).First()).Name,
+					p
+				))
+				.ToList();
+
+			for (int i = 0; i < fieldCount; i++) {
+				string name = GetName(i);
+
+				if (string.IsNullOrWhiteSpace(name))
+					continue;
+
+				ParsedValue val = this[i];
+
+				PropertyInfo byName = instanceType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public);
+
+				if ((byName != null) && (byName.GetSetMethod() != null))
+					byName.SetValue(instance, val.ToType(byName.PropertyType));
+
+				foreach (var tpl in byAttribute.Where(t => t.Item1 == name))
+					tpl.Item2.SetValue(instance, val.ToType(tpl.Item2.PropertyType));
+			} // for
+		} // Stuff
 
 		public int Count {
 			get {

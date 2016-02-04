@@ -58,7 +58,7 @@ BEGIN
 
 		SELECT
 			RowType = 'DirectorData',
-			c.FirstName,
+			FirstName = c.FirstName + CASE WHEN LTRIM(RTRIM(ISNULL(MiddleInitial, ''))) = '' THEN '' ELSE ' ' + MiddleInitial END,
 			c.Surname,
 			c.DateOfBirth,
 			CompanyID = @CompanyID

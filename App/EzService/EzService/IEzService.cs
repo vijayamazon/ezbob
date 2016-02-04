@@ -7,7 +7,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Backend.Strategies.PricingModel;
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
 
@@ -19,6 +18,7 @@
 		IEzServiceLogicalGlue,
 		IEzServiceMainStrategy,
 		IEzServiceNewLoan,
+		IEzServicePricing,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
 		IEzServiceUserManagement
@@ -224,15 +224,6 @@
 		IntActionResult GetExperianConsumerScore(int customerId);
 
 		[OperationContract]
-		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
-
-		[OperationContract]
-		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
-
-		[OperationContract]
-		PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId);
-
-		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();
 
 		[OperationContract]
@@ -341,9 +332,6 @@
 		ActionMetaData PostcodeNuts(int nUserID, string postcode);
 
 		[OperationContract]
-		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
-
-		[OperationContract]
 		QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
 
 		[OperationContract]
@@ -374,9 +362,6 @@
 
 		[OperationContract]
 		BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType);
-
-		[OperationContract]
-		ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model);
 
 		[OperationContract]
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);

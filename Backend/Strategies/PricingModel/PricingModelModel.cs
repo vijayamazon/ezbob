@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using Ezbob.Database;
 
 	[DataContract]
 	public class PricingModelModel {
@@ -17,11 +18,13 @@
 		public decimal SetupFeePounds { get { return SetupFeePercents * LoanAmount; } }
 
 		[DataMember]
+		[FieldName("SetupFee")]
 		public decimal SetupFeePercents { get; set; }
 
 		public decimal BrokerSetupFeePounds { get { return BrokerSetupFeePercents * LoanAmount; } }
 
 		[DataMember]
+		[FieldName("BrokerSetupFee")]
 		public decimal BrokerSetupFeePercents { get; set; }
 		[DataMember]
 		public int LoanTerm { get; set; }
@@ -38,16 +41,19 @@
 		[DataMember]
 		public decimal EuCollectionRate { get; set; }
 		[DataMember]
+		[FieldName("COSMECollectionRate")]
 		public decimal CosmeCollectionRate { get; set; }
 		[DataMember]
 		public decimal Cogs { get; set; }
 		[DataMember]
 		public decimal DebtPercentOfCapital { get; set; }
 		[DataMember]
+		[FieldName("CostOfDebtPA")]
 		public decimal CostOfDebt { get; set; }
 		[DataMember]
 		public decimal OpexAndCapex { get; set; }
 		[DataMember]
+		[FieldName("ProfitMarkupPercentsOfRevenue")]
 		public decimal ProfitMarkup { get; set; }
 
 		// Main output fields

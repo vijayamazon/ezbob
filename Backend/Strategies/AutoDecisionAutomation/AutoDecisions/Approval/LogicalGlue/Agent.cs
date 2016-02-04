@@ -110,9 +110,10 @@
 				case AutoDecisionFlowTypes.LogicalGlue:
 					this.trail.Dunno<LogicalGlueFlow>().Init();
 
-					if (this.trail.MyInputData.ErrorInLGData)
+					if (this.trail.MyInputData.ErrorInLGData) {
 						this.trail.Negative<LGWithoutError>(true).Init(false);
-					else {
+						this.trail.Amount = 0;
+					} else {
 						this.trail.Affirmative<LGWithoutError>(false).Init(true);
 
 						List<ATrail.StepWithDecision> subtrail = this.oldWayAgent.Trail.FindSubtrail(
@@ -133,8 +134,17 @@
 							typeof(OutstandingRepayRatio)
 						);
 
-						foreach (ATrail.StepWithDecision sd in subtrail)
+						bool dropToZero = false;
+
+						foreach (ATrail.StepWithDecision sd in subtrail) {
 							this.trail.Add(sd, sd.Decision == DecisionStatus.Negative);
+
+							if (sd.Decision == DecisionStatus.Negative)
+								dropToZero = true;
+						} // for each
+
+						if (dropToZero)
+							this.trail.Amount = 0;
 					} // if
 
 					break;

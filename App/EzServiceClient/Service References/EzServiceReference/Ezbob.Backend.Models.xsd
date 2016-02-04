@@ -285,6 +285,21 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
+  <xs:complexType name="ArrayOfPricingScenarioName">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PricingScenarioName" nillable="true" type="tns:PricingScenarioName" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPricingScenarioName" nillable="true" type="tns:ArrayOfPricingScenarioName" />
+  <xs:complexType name="PricingScenarioName">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
+      <xs:element minOccurs="0" name="ScenarioID" type="xs:long" />
+      <xs:element minOccurs="0" name="ScenarioName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PricingScenarioName" nillable="true" type="tns:PricingScenarioName" />
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />
@@ -949,20 +964,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CompanyDataForCreditBureau" nillable="true" type="tns:CompanyDataForCreditBureau" />
-  <xs:complexType name="ArrayOfPricingScenarioName">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PricingScenarioName" nillable="true" type="tns:PricingScenarioName" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPricingScenarioName" nillable="true" type="tns:ArrayOfPricingScenarioName" />
-  <xs:complexType name="PricingScenarioName">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
-      <xs:element minOccurs="0" name="ScenarioName" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PricingScenarioName" nillable="true" type="tns:PricingScenarioName" />
   <xs:complexType name="ArrayOfPropertyStatusGroupModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusGroupModel" nillable="true" type="tns:PropertyStatusGroupModel" />

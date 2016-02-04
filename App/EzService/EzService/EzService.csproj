@@ -183,6 +183,7 @@
     <Compile Include="IEzServiceSalesForce.cs" />
     <Compile Include="IEzServiceBroker.cs" />
     <Compile Include="IEzServiceVatReturn.cs" />
+    <Compile Include="IEzServicePricing.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />

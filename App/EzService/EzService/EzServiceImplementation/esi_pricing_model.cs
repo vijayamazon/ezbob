@@ -49,9 +49,19 @@
 			};
 		} // GetPricingModelDefaultRate
 
-		public ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model) {
+		public ActionMetaData SavePricingModelSettings(int underwriterId, long scenarioID, PricingModelModel model) {
 			SavePricingModelSettings instance;
-			return ExecuteSync(out instance, 0, underwriterId, scenarioName, model);
+			return ExecuteSync(out instance, null, underwriterId, scenarioID, model);
 		} // SavePricingModelSettings
+
+		public PricingModelModelActionResult GetPricingScenarioDetails(int underwriterId, long scenarioID) {
+			GetPricingScenarioDetails instance;
+			ActionMetaData result = ExecuteSync(out instance, null, underwriterId, scenarioID);
+
+			return new PricingModelModelActionResult {
+				MetaData = result,
+				Value = instance.Model,
+			};
+		} // GetPricingScenarioDetails
 	} // class EzServiceImplementation
 } // namespace EzService

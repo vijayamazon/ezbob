@@ -12,6 +12,7 @@ ALTER PROCEDURE GetPricingModelScenarios
 AS
 BEGIN
 	SELECT DISTINCT
+		p.ScenarioID,
 		p.ScenarioName,
 		p.OriginID,
 		Origin = o.Name

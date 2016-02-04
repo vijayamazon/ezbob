@@ -2,23 +2,18 @@
 	using Ezbob.Database;
 
 	public class SavePricingModelSettings : AStrategy {
-		private readonly string scenarioName;
-		private readonly PricingModelModel model;
-
-		public SavePricingModelSettings(string scenarioName, PricingModelModel model) {
-			this.scenarioName = scenarioName;
+		public SavePricingModelSettings(long scenarioID, PricingModelModel model) {
+			this.scenarioID = scenarioID;
 			this.model = model;
-		}
+		} // constructor
 
-		public override string Name {
-			get { return "Save pricing model configs"; }
-		}
+		public override string Name { get { return "Save pricing model configs"; } }
 
 		public override void Execute() {
 			DB.ExecuteNonQuery(
 				"SavePricingModelConfigsForScenario",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("ScenarioName", scenarioName),
+				new QueryParameter("ScenarioID", scenarioID),
 				new QueryParameter("TenurePercents", model.TenurePercents),
 				new QueryParameter("SetupFee", model.SetupFeePercents),
 				new QueryParameter("ProfitMarkupPercentsOfRevenue", model.ProfitMarkup),
@@ -33,6 +28,9 @@
 				new QueryParameter("Cogs", model.Cogs),
 				new QueryParameter("BrokerSetupFee", model.BrokerSetupFeePercents)
 			);
-		}
-	}
-}
+		} // Execute
+
+		private readonly long scenarioID;
+		private readonly PricingModelModel model;
+	} // class SavePricingModelSettings
+} // namespace

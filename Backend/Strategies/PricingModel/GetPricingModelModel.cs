@@ -16,37 +16,20 @@
 		public PricingModelModel Model { get; private set; }
 
 		public override void Execute() {
-			ReadConfigurations();
-			AppendDataFromCashRequest();
-			AppendDefaultRate();
-			SetCustomerOriginID();
-		} // Execute
-
-		private void ReadConfigurations() {
-			SafeReader sr = DB.GetFirst(
+			var sr = DB.GetFirst(
 				"GetPricingModelConfigsForScenario",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("ScenarioName", this.scenarioName),
 				new QueryParameter("CustomerID", this.customerId)
 			);
 
-			if (sr.IsEmpty)
-				return;
+			if (!sr.IsEmpty)
+				sr.Stuff(Model);
 
-			Model.DefaultRateCompanyShare = sr["DefaultRateCompanyShare"];
-			Model.SetupFeePercents = sr["SetupFee"];
-			Model.BrokerSetupFeePercents = sr["BrokerSetupFee"];
-			Model.InterestOnlyPeriod = sr["InterestOnlyPeriod"];
-			Model.TenurePercents = sr["TenurePercents"];
-			Model.CollectionRate = sr["CollectionRate"];
-			Model.EuCollectionRate = sr["EuCollectionRate"];
-			Model.CosmeCollectionRate = sr["COSMECollectionRate"];
-			Model.Cogs = sr["Cogs"];
-			Model.DebtPercentOfCapital = sr["DebtPercentOfCapital"];
-			Model.CostOfDebt = sr["CostOfDebtPA"];
-			Model.OpexAndCapex = sr["OpexAndCapex"];
-			Model.ProfitMarkup = sr["ProfitMarkupPercentsOfRevenue"];
-		} // ReadConfigurations
+			AppendDataFromCashRequest();
+			AppendDefaultRate();
+			SetCustomerOriginID();
+		} // Execute
 
 		private void AppendDataFromCashRequest() {
 			int loanAmount = 0;

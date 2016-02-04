@@ -4,6 +4,9 @@
 	[DataContract]
 	public class PricingScenarioName {
 		[DataMember]
+		public long ScenarioID { get; set; }
+
+		[DataMember]
 		public string ScenarioName { get; set; }
 
 		[DataMember]

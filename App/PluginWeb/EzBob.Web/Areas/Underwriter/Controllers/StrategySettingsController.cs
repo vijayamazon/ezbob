@@ -32,11 +32,11 @@
 			CustomerRepository customerRepository,
 			IWorkplaceContext context
 		) {
-			_campaignRepository = campaignRepository;
-			_campaignTypeRepository = campaignTypeRepository;
-			_customerRepository = customerRepository;
-			_context = context;
-			serviceClient = new ServiceClient();
+			this._campaignRepository = campaignRepository;
+			this._campaignTypeRepository = campaignTypeRepository;
+			this._customerRepository = customerRepository;
+			this._context = context;
+			this.serviceClient = new ServiceClient();
 		}
 
 		[Ajax]
@@ -72,26 +72,27 @@
 		[HttpGet]
 		public JsonResult SettingsPricingModel() {
 			PricingModelModelActionResult getPricingModelModelResponse =
-				serviceClient.Instance.GetPricingModelModel(0, _context.UserId, "Basic New");
+				this.serviceClient.Instance.GetPricingModelModel(0, this._context.UserId, "Basic New");
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult SettingsPricingModelForScenario(string scenarioName) {
+		public JsonResult SettingsPricingModelForScenario(long scenarioID) {
 			PricingModelModelActionResult getPricingModelModelResponse =
-				serviceClient.Instance.GetPricingModelModel(0, _context.UserId, scenarioName);
+				this.serviceClient.Instance.GetPricingScenarioDetails(this._context.UserId, scenarioID);
+
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
-		}
+		} // SettingsPricingModelForScenario
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult SettingsSavePricingModelScenario(string scenarioName, string model) {
+		public JsonResult SettingsSavePricingModelScenario(long scenarioID, string model) {
 			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(model);
-			serviceClient.Instance.SavePricingModelSettings(_context.UserId, scenarioName, inputModel);
-			return SettingsPricingModelForScenario(scenarioName);
+			this.serviceClient.Instance.SavePricingModelSettings(this._context.UserId, scenarioID, inputModel);
+			return SettingsPricingModelForScenario(scenarioID);
 		}
 
 		[Ajax]
@@ -509,7 +510,7 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult SettingsCampaign() {
-			var campaignsList = _campaignRepository
+			var campaignsList = this._campaignRepository
 				.GetAll().ToList();
 
 			var campaigns = campaignsList
@@ -530,7 +531,7 @@
 				})
 				.ToList();
 
-			var campaignTypes = _campaignTypeRepository
+			var campaignTypes = this._campaignTypeRepository
 				.GetAll()
 				.Select(ct => new {
 					Type = ct.Type,
@@ -546,7 +547,8 @@
 		[HttpGet]
 		[Transactional]
 		public JsonResult SettingsConfigTable(string tableName) {
-			ConfigTable[] deserializedArray = serviceClient.Instance.GetConfigTable(_context.UserId, tableName).Table;
+			ConfigTable[] deserializedArray =
+				this.serviceClient.Instance.GetConfigTable(this._context.UserId, tableName).Table;
 
 			if (deserializedArray != null)
 				foreach (ConfigTable entry in deserializedArray)
@@ -579,7 +581,7 @@
 			}
 			var deserializedModels = JsonConvert.DeserializeObject<List<ConfigTable>>(serializedModels);
 
-			BoolActionResult result = serviceClient.Instance.SaveConfigTable(deserializedModels.ToArray(), c);
+			BoolActionResult result = this.serviceClient.Instance.SaveConfigTable(deserializedModels.ToArray(), c);
 			return Json(new { error = result.Value ? "Error occurred during save" : null }, JsonRequestBehavior.AllowGet);
 		}
 
@@ -614,10 +616,10 @@
 				);
 			}
 
-			Campaign campaign = campaignId.HasValue ? _campaignRepository.Get(campaignId) : new Campaign();
+			Campaign campaign = campaignId.HasValue ? this._campaignRepository.Get(campaignId) : new Campaign();
 
 			campaign.Name = campaignName;
-			campaign.CampaignType = _campaignTypeRepository.Get(campaignType.Value);
+			campaign.CampaignType = this._campaignTypeRepository.Get(campaignType.Value);
 			campaign.StartDate = startDate;
 			campaign.EndDate = endDate;
 			campaign.Description = campaignDescription;
@@ -627,7 +629,7 @@
 				campaign.Clients.Remove(client);
 			}
 
-			_campaignRepository.SaveOrUpdate(campaign);
+			this._campaignRepository.SaveOrUpdate(campaign);
 
 			if (string.IsNullOrEmpty(campaignCustomers)) {
 				return Json(new { success = true, errorText = "" }, JsonRequestBehavior.AllowGet);
@@ -641,7 +643,7 @@
 				int customerId;
 				if (int.TryParse(client, out customerId)) {
 					try {
-						var customer = _customerRepository.ReallyTryGet(customerId);
+						var customer = this._customerRepository.ReallyTryGet(customerId);
 						if (customer != null && campaign.Clients.All(cc => cc.Customer != customer)) {
 							campaign.Clients.Add(new CampaignClients { Campaign = campaign, Customer = customer });
 						} else {
@@ -667,7 +669,7 @@
 		} // AddCampaign
 
 		private void UpdateConfigVars() {
-			new ServiceClient().Instance.UpdateConfigurationVariables(_context.UserId);
+			new ServiceClient().Instance.UpdateConfigurationVariables(this._context.UserId);
 		} // UpdateConfigVars
 	} // class StrategySettingsController
 } // namespace

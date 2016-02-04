@@ -373,9 +373,6 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 			opt.attr('value', scenario.ScenarioName);
 			opt.text(scenario.ScenarioName);
 
-			console.log('selected scenario:', self.selectedScenario);
-			console.log('scenario name:', scenario.ScenarioName);
-
 			if (self.selectedScenario && (scenario.ScenarioName === self.selectedScenario))
 				opt.attr('selected', 'selected');
 		});
