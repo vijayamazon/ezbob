@@ -87,12 +87,13 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Authentication" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.CompaniesHouse" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
   </wsdl:types>
@@ -930,12 +931,6 @@
   <wsdl:message name="IEzService_GetSecurityUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSecurityUserResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianLtd_InputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianLtd" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianLtd_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianLtdResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_PasswordRestored_InputMessage">
     <wsdl:part name="parameters" element="tns:PasswordRestored" />
   </wsdl:message>
@@ -1272,6 +1267,12 @@
   <wsdl:message name="IEzService_LoadMessagesSentToUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadMessagesSentToUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetSlidersData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSlidersData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSlidersData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSlidersDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
     <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
   </wsdl:message>
@@ -1385,12 +1386,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_CalculateModelsAndAffordability_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateModelsAndAffordabilityResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateOffer_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateOffer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateOffer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateOfferResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CashTransferred_InputMessage">
     <wsdl:part name="parameters" element="tns:CashTransferred" />
@@ -1781,6 +1776,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_ParseExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:ParseExperianConsumerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianLtd_InputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianLtd" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianLtd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianLtdResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -2341,10 +2342,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSecurity/GetSecurityUser" message="tns:IEzService_GetSecurityUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSecurity/GetSecurityUserResponse" message="tns:IEzService_GetSecurityUser_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ParseExperianLtd">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtd" message="tns:IEzService_ParseExperianLtd_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtdResponse" message="tns:IEzService_ParseExperianLtd_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="PasswordRestored">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PasswordRestored" message="tns:IEzService_PasswordRestored_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PasswordRestoredResponse" message="tns:IEzService_PasswordRestored_OutputMessage" />
@@ -2569,6 +2566,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadMessagesSentToUser" message="tns:IEzService_LoadMessagesSentToUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadMessagesSentToUserResponse" message="tns:IEzService_LoadMessagesSentToUser_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetSlidersData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSlidersData" message="tns:IEzService_GetSlidersData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSlidersDataResponse" message="tns:IEzService_GetSlidersData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="AddHistoryDirector">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirectorResponse" message="tns:IEzService_AddHistoryDirector_OutputMessage" />
@@ -2644,10 +2645,6 @@
     <wsdl:operation name="CalculateModelsAndAffordability">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateModelsAndAffordability" message="tns:IEzService_CalculateModelsAndAffordability_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateModelsAndAffordabilityResponse" message="tns:IEzService_CalculateModelsAndAffordability_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CalculateOffer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateOffer" message="tns:IEzService_CalculateOffer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateOfferResponse" message="tns:IEzService_CalculateOffer_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CashTransferred">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CashTransferred" message="tns:IEzService_CashTransferred_InputMessage" />
@@ -2908,6 +2905,10 @@
     <wsdl:operation name="ParseExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ParseExperianLtd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtd" message="tns:IEzService_ParseExperianLtd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianLtdResponse" message="tns:IEzService_ParseExperianLtd_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -4170,15 +4171,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ParseExperianLtd">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianLtd" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="PasswordRestored">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PasswordRestored" style="document" />
       <wsdl:input>
@@ -4683,6 +4675,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetSlidersData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSlidersData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddHistoryDirector">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddHistoryDirector" style="document" />
       <wsdl:input>
@@ -4847,15 +4848,6 @@
     </wsdl:operation>
     <wsdl:operation name="CalculateModelsAndAffordability">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateModelsAndAffordability" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CalculateOffer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateOffer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -5441,6 +5433,15 @@
     </wsdl:operation>
     <wsdl:operation name="ParseExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParseExperianLtd">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianLtd" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
