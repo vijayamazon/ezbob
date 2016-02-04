@@ -8,7 +8,6 @@ EzBob.setLegalDocsEvents = function () {
 };
 
 EzBob.setLegalDocView = function (ev) {
-    debugger;
     var selectedValue = ev.selectedOptions[0].value;
     $.ajax({
         type: "GET",
@@ -23,7 +22,6 @@ EzBob.setLegalDocView = function (ev) {
 }
 
 EzBob.SaveDoc = function () {
-    debugger;
     var obj = {
         id: $('#LegalDocsDDL').find('option:selected').val(),
         name: $('#LegalDocsDDL').find('option:selected').text(),

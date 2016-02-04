@@ -1,9 +1,5 @@
 ﻿@{
-    Layout = "~/Areas/Work/Views/LegalDocs/_LayoutLegalDocs.cshtml";
-}
-
-@{
-    Html.RenderPartial("~/Areas/Work/Views/LegalDocs/nvbar.cshtml");
+    Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/nvbar.cshtml");
 }
 <div ng-app="app-legalDocs" class="row" style="margin-top: 20px;">
     <div ng-controller="legalDocsController" class="col-md-10 col-md-offset-1" style="margin-top: 20px;">
@@ -11,7 +7,7 @@
             <div id="ApproveLegalDocsWrapper">
                 <div class="tabContentApproveLegalDocs" style="width:100%">
                     @{
-                        Html.RenderPartial("~/Areas/Work/Views/LegalDocs/ApproveLegalDocs.cshtml");
+                        Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/ApproveLegalDocs.cshtml");
                     }
                     
                 </div>
@@ -19,7 +15,7 @@
             <div id="ReviewLegalDocsWrapper">
                 <div class="tabContentReviewLegalDocs" style="width:100%">
                     @{
-                        Html.RenderPartial("~/Areas/Work/Views/LegalDocs/ReviewLegalDocs.cshtml");
+                        Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/ReviewLegalDocs.cshtml");
                     }
                 </div>
             </div>
@@ -53,6 +49,17 @@
                 $("#ApproveLegalDocsWrapper").show();
             }
             $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $(".diffButton").click(function () {
+            $("#wrapper tr").prettyTextDiff({
+                cleanup: $("#cleanup").is(":checked")
+            });
+        });
+        $('[data-toggle="popover"]').popover();
+        tinymce.init({
+            selector: 'textarea',
+            plugins: "table"
         });
     });
 </script>

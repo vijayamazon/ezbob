@@ -105,7 +105,6 @@
             }
 
             $scope.OnSave = function (event) {
-                debugger;
                 var $btn = $(event.target);
                 $btn.text('loading...');
 
@@ -186,7 +185,6 @@
             }
 
             $scope.OnEdit = function (clicked) {
-                debugger;
                 var id = parseInt($(clicked.target).attr('data-id'));
 
                 if ($scope.GetTemplateStatus(id) === "original") {
@@ -205,7 +203,6 @@
                 var template = selected[0].Template;
 
                 tinyMCE.activeEditor.setContent(template);
-                debugger;
                 $(tinyMCE.activeEditor.getBody()).animate({ scrollTop: 0 }, { duration: 'medium', easing: 'swing' });
             }
             $scope.OnPreview = function (clicked) {

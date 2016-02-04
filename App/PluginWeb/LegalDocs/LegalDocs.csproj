@@ -99,16 +99,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="connection-strings.xml" />
-    <Content Include="Content\css\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\css\Permission.css" />
-    <Content Include="Areas\Work\Views\LegalDocs\nvbar.cshtml" />
+    <Content Include="Areas\Work\Views\LegalDocs\Partials\nvbar.cshtml" />
     <Content Include="Areas\Work\Views\LegalDocs\LegalDocs.cshtml" />
+    <Content Include="Content\js\skins\lightgray\content.min.css" />
+    <Content Include="Content\js\skins\lightgray\skin.min.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\css\legalDocs.css" />
-    <Content Include="Scripts\js\app-legalDocs.js" />
-    <Content Include="Scripts\js\moment.js" />
-    <Content Include="Scripts\js\legalDocsController.js" />
-    <Content Include="Scripts\LegalDocs\LegalDocs.js" />
+    <Content Include="Content\css\bootstrap-theme.min.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\legalDocs.css" />
+    <Content Include="Content\js\angular.min.js" />
+    <Content Include="Content\js\app-legalDocs.js" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\diff_match_patch.js" />
+    <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\js\jquery.pretty-text-diff.js" />
+    <Content Include="Content\js\moment.js" />
+    <Content Include="Content\js\legalDocsController.js" />
+    <Content Include="Content\js\tinymce.min.js" />
+    <Content Include="Content\js\LegalDocs.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -137,19 +148,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Areas\Work\Views\LegalDocs\ApproveLegalDocs.cshtml" />
-    <Content Include="Areas\Work\Views\LegalDocs\ReviewLegalDocs.cshtml" />
-    <Content Include="Areas\Work\Views\LegalDocs\_LayoutLegalDocs.cshtml" />
+    <Content Include="Areas\Work\Views\LegalDocs\Partials\ApproveLegalDocs.cshtml" />
+    <Content Include="Areas\Work\Views\LegalDocs\Partials\ReviewLegalDocs.cshtml" />
+    <Content Include="Areas\Work\Views\Shared\_LayoutLegalDocs.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\_LayoutLogin.cshtml" />
     <Content Include="Areas\Work\Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Areas\Work\Views\LegalDocs\Index.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Content\css\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\css\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\css\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\css\fonts\FontAwesome.otf" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Areas\Work\Views\_ViewStart.cshtml" />
+    <Content Include="Content\js\skins\lightgray\fonts\tinymce.ttf" />
+    <Content Include="Content\js\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -224,6 +239,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
