@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Web.Mvc;
 	using Ezbob.Logger;
 	using Infrastructure;
@@ -10,46 +9,40 @@
 	using ServiceClientProxy.EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
-	public class PricingModelCalculationsController : Controller
-	{
-		private readonly ServiceClient serviceClient;
-		private readonly IWorkplaceContext context;
-
-		public PricingModelCalculationsController(IWorkplaceContext context)
-		{
+	public class PricingModelCalculationsController : Controller {
+		public PricingModelCalculationsController(IWorkplaceContext context) {
 			this.context = context;
-			serviceClient = new ServiceClient();
-		}
+			this.serviceClient = new ServiceClient();
+		} // constructor
 
 		[Ajax]
 		[HttpPost]
-		public ActionResult GetScenarioConfigs(int customerId, string scenarioName)
-		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId, scenarioName);
+		public ActionResult GetScenarioConfigs(int customerId, string scenarioName) {
+			PricingModelModelActionResult getPricingModelModelResponse =
+				this.serviceClient.Instance.GetPricingModelModel(customerId, this.context.UserId, scenarioName);
+
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
-		}
+		} // GetScenarioConfigs
 
 		[Ajax]
 		[HttpGet]
-		public ActionResult Index(int id)
-		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(id, context.UserId, "Basic New");
-			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
-		}
+		public ActionResult Index(int id) {
+			return GetScenarioConfigs(id, "Basic New");
+		} // Index
 
 		[Ajax]
 		[HttpGet]
-		public ActionResult GetScenarios()
-		{
-			StringListActionResult getPricingModelScenariosResponse = serviceClient.Instance.GetPricingModelScenarios(context.UserId);
-			return Json(new {scenarios = getPricingModelScenariosResponse.Records}, JsonRequestBehavior.AllowGet);
-		}
+		public ActionResult GetScenarios() {
+			PricingScenarioNameListActionResult getPricingModelScenariosResponse =
+				this.serviceClient.Instance.GetPricingModelScenarios(this.context.UserId);
+
+			return Json(new { scenarios = getPricingModelScenariosResponse.Names }, JsonRequestBehavior.AllowGet);
+		} // GetScenarios
 
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Calculate(int customerId, string pricingModelModel)
-		{
+		public JsonResult Calculate(int customerId, string pricingModelModel) {
 			var oLog = new SafeILog(this);
 
 			oLog.Debug("Model received: {0}", pricingModelModel);
@@ -58,23 +51,24 @@
 
 			oLog.Debug("Parsed model: {0}", JsonConvert.SerializeObject(inputModel));
 
-			PricingModelModelActionResult pricingModelCalculateResponse = serviceClient.Instance.PricingModelCalculate(
-				customerId, context.UserId, inputModel
-			);
+			PricingModelModelActionResult pricingModelCalculateResponse =
+				this.serviceClient.Instance.PricingModelCalculate(customerId, this.context.UserId, inputModel);
 
 			return Json(pricingModelCalculateResponse.Value, JsonRequestBehavior.AllowGet);
-		}
+		} // Calculate
 
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetDefaultRate(int customerId, decimal companyShare)
-		{
-			DecimalActionResult getDefaultRateResponse = serviceClient.Instance.GetPricingModelDefaultRate(
-				customerId, context.UserId, companyShare
+		public JsonResult GetDefaultRate(int customerId, decimal companyShare) {
+			DecimalActionResult getDefaultRateResponse = this.serviceClient.Instance.GetPricingModelDefaultRate(
+				customerId, this.context.UserId, companyShare
 			);
 
 			return Json(getDefaultRateResponse.Value, JsonRequestBehavior.AllowGet);
-		}
-	}
-}
+		} // GetDefaultRate
+
+		private readonly ServiceClient serviceClient;
+		private readonly IWorkplaceContext context;
+	} // class PricingModelCalculationsController
+} // namespace

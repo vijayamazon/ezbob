@@ -84,6 +84,8 @@
 		public int ConsumerScore { get; set; }
 		[DataMember]
 		public int CompanyScore { get; set; }
+		[DataMember]
+		public int OriginID { get; set; }
 
 		public PricingModelModel Clone() {
 			List<PricingSourceModel> pricingSourceModels = new List<PricingSourceModel>();
@@ -134,6 +136,7 @@
 				ProfitMarkupOutput = ProfitMarkupOutput,
 				ConsumerScore = ConsumerScore,
 				CompanyScore = CompanyScore,
+				OriginID = OriginID,
 			};
 		} // Clone
 	} // class PricingModelModel

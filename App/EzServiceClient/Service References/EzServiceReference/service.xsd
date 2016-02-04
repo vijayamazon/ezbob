@@ -3799,7 +3799,7 @@
   <xs:element name="GetPricingModelScenariosResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q347="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetPricingModelScenariosResult" nillable="true" type="q347:StringListActionResult" />
+        <xs:element xmlns:q347="http://schemas.datacontract.org/2004/07/EzService.ActionResults" minOccurs="0" name="GetPricingModelScenariosResult" nillable="true" type="q347:PricingScenarioNameListActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

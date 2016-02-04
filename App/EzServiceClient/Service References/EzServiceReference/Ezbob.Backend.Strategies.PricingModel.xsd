@@ -27,6 +27,7 @@
       <xs:element minOccurs="0" name="NetLossFromDefaults" type="xs:decimal" />
       <xs:element minOccurs="0" name="OpexAndCapex" type="xs:decimal" />
       <xs:element minOccurs="0" name="OpexAndCapexOutput" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
       <xs:element minOccurs="0" name="PricingSourceModels" nillable="true" type="tns:ArrayOfPricingSourceModel" />
       <xs:element minOccurs="0" name="ProfitMarkup" type="xs:decimal" />
       <xs:element minOccurs="0" name="ProfitMarkupOutput" type="xs:decimal" />

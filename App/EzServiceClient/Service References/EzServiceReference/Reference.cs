@@ -239,6 +239,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SalesForceActivityActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ApplicationInfoResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecisionHistoryResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CollectionSnailMailActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.InvestorActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountingDataResult))]
@@ -2195,6 +2196,29 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PricingScenarioNameListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class PricingScenarioNameListActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.PricingScenarioName[] NamesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.PricingScenarioName[] Names {
+            get {
+                return this.NamesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NamesField, value) != true)) {
+                    this.NamesField = value;
+                    this.RaisePropertyChanged("Names");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CollectionSnailMailActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
     [System.SerializableAttribute()]
     public partial class CollectionSnailMailActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -2655,6 +2679,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal OpexAndCapexOutputField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int OriginIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ServiceClientProxy.EzServiceReference.PricingSourceModel[] PricingSourceModelsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -3009,6 +3036,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.OpexAndCapexOutputField.Equals(value) != true)) {
                     this.OpexAndCapexOutputField = value;
                     this.RaisePropertyChanged("OpexAndCapexOutput");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int OriginID {
+            get {
+                return this.OriginIDField;
+            }
+            set {
+                if ((this.OriginIDField.Equals(value) != true)) {
+                    this.OriginIDField = value;
+                    this.RaisePropertyChanged("OriginID");
                 }
             }
         }
@@ -5948,10 +5988,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingModelModelActionResult> GetPricingModelModelAsync(int customerId, int underwriterId, string scenarioName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelScenarios", ReplyAction="http://tempuri.org/IEzService/GetPricingModelScenariosResponse")]
-        ServiceClientProxy.EzServiceReference.StringListActionResult GetPricingModelScenarios(int underwriterId);
+        ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelScenarios", ReplyAction="http://tempuri.org/IEzService/GetPricingModelScenariosResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> GetPricingModelScenariosAsync(int underwriterId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult> GetPricingModelScenariosAsync(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPropertyStatuses", ReplyAction="http://tempuri.org/IEzService/GetPropertyStatusesResponse")]
         ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult GetPropertyStatuses();
@@ -8057,11 +8097,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetPricingModelModelAsync(customerId, underwriterId, scenarioName);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringListActionResult GetPricingModelScenarios(int underwriterId) {
+        public ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId) {
             return base.Channel.GetPricingModelScenarios(underwriterId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> GetPricingModelScenariosAsync(int underwriterId) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult> GetPricingModelScenariosAsync(int underwriterId) {
             return base.Channel.GetPricingModelScenariosAsync(underwriterId);
         }
         

@@ -4,7 +4,9 @@
 	public class GetPricingModelModel : AStrategy {
 		public GetPricingModelModel(int customerId, string scenarioName) {
 			this.customerId = customerId;
-			ReadConfigurations(scenarioName);
+			this.scenarioName = scenarioName;
+
+			Model = new PricingModelModel();
 		} // constructor
 
 		public override string Name {
@@ -14,63 +16,41 @@
 		public PricingModelModel Model { get; private set; }
 
 		public override void Execute() {
-			decimal defaultRateCustomerShare;
-			var defaultRateModel = GetDefaultRate(out defaultRateCustomerShare);
-			int loanAmount, loanTerm;
-			GetDataFromCashRequest(out loanAmount, out loanTerm);
-			decimal tenureMonths = this.tenurePercents * loanTerm;
-
-			Model = new PricingModelModel {
-				LoanAmount = loanAmount,
-				DefaultRate = defaultRateModel.DefaultRate,
-				DefaultRateCompanyShare = this.defaultRateCompanyShare,
-				DefaultRateCustomerShare = defaultRateCustomerShare,
-				SetupFeePercents = this.setupFee,
-				BrokerSetupFeePercents = this.brokerSetupFee,
-				LoanTerm = loanTerm,
-				InterestOnlyPeriod = this.interestOnlyPeriod,
-				TenurePercents = this.tenurePercents,
-				TenureMonths = tenureMonths,
-				CollectionRate = this.collectionRate,
-				EuCollectionRate = this.euCollectionRate,
-				CosmeCollectionRate = this.cosmeCollectionRate,
-				Cogs = this.cogs,
-				DebtPercentOfCapital = this.debtPercentOfCapital,
-				CostOfDebt = this.costOfDebtPA,
-				OpexAndCapex = this.opexAndCapex,
-				ProfitMarkup = this.profitMarkupPercentsOfRevenue,
-				ConsumerScore = defaultRateModel.ConsumerScore,
-				CompanyScore = defaultRateModel.BusinessScore,
-			};
+			ReadConfigurations();
+			AppendDataFromCashRequest();
+			AppendDefaultRate();
+			SetCustomerOriginID();
 		} // Execute
 
-		private void ReadConfigurations(string scenarioName) {
+		private void ReadConfigurations() {
 			SafeReader sr = DB.GetFirst(
 				"GetPricingModelConfigsForScenario",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("ScenarioName", scenarioName)
+				new QueryParameter("ScenarioName", this.scenarioName),
+				new QueryParameter("CustomerID", this.customerId)
 			);
 
-			if (!sr.IsEmpty) {
-				this.tenurePercents = sr["TenurePercents"];
-				this.setupFee = sr["SetupFee"];
-				this.profitMarkupPercentsOfRevenue = sr["ProfitMarkupPercentsOfRevenue"];
-				this.opexAndCapex = sr["OpexAndCapex"];
-				this.interestOnlyPeriod = sr["InterestOnlyPeriod"];
-				this.euCollectionRate = sr["EuCollectionRate"];
-				this.cosmeCollectionRate = sr["COSMECollectionRate"];
-				this.defaultRateCompanyShare = sr["DefaultRateCompanyShare"];
-				this.debtPercentOfCapital = sr["DebtPercentOfCapital"];
-				this.costOfDebtPA = sr["CostOfDebtPA"];
-				this.collectionRate = sr["CollectionRate"];
-				this.cogs = sr["Cogs"];
-				this.brokerSetupFee = sr["BrokerSetupFee"];
-			} // if
+			if (sr.IsEmpty)
+				return;
+
+			Model.DefaultRateCompanyShare = sr["DefaultRateCompanyShare"];
+			Model.SetupFeePercents = sr["SetupFee"];
+			Model.BrokerSetupFeePercents = sr["BrokerSetupFee"];
+			Model.InterestOnlyPeriod = sr["InterestOnlyPeriod"];
+			Model.TenurePercents = sr["TenurePercents"];
+			Model.CollectionRate = sr["CollectionRate"];
+			Model.EuCollectionRate = sr["EuCollectionRate"];
+			Model.CosmeCollectionRate = sr["COSMECollectionRate"];
+			Model.Cogs = sr["Cogs"];
+			Model.DebtPercentOfCapital = sr["DebtPercentOfCapital"];
+			Model.CostOfDebt = sr["CostOfDebtPA"];
+			Model.OpexAndCapex = sr["OpexAndCapex"];
+			Model.ProfitMarkup = sr["ProfitMarkupPercentsOfRevenue"];
 		} // ReadConfigurations
 
-		private void GetDataFromCashRequest(out int loanAmount, out int loanTerm) {
-			loanAmount = 0;
-			loanTerm = 12;
+		private void AppendDataFromCashRequest() {
+			int loanAmount = 0;
+			int loanTerm = 12;
 
 			SafeReader sr = DB.GetFirst(
 				"GetLastCashRequestForPricingModel",
@@ -82,29 +62,31 @@
 				loanAmount = sr["ApprovedAmount"];
 				loanTerm = sr["RepaymentPeriod"];
 			} // if
-		} // GetDataFromCashRequest
 
-		private GetPricingModelDefaultRate GetDefaultRate(out decimal defaultRateCustomerShare) {
-			defaultRateCustomerShare = 1 - this.defaultRateCompanyShare;
+			Model.LoanAmount = loanAmount;
+			Model.LoanTerm = loanTerm;
+			Model.TenureMonths = Model.TenurePercents * loanTerm;
+		} // AppendDataFromCashRequest
 
-			var instance = new GetPricingModelDefaultRate(this.customerId, this.defaultRateCompanyShare);
+		private void AppendDefaultRate() {
+			var instance = new GetPricingModelDefaultRate(this.customerId, Model.DefaultRateCompanyShare);
 			instance.Execute();
-			return instance;
-		} // GetDefaultRate
+
+			Model.DefaultRateCustomerShare = 1 - Model.DefaultRateCompanyShare;
+			Model.DefaultRate = instance.DefaultRate;
+			Model.ConsumerScore = instance.ConsumerScore;
+			Model.CompanyScore = instance.BusinessScore;
+		} // AppendDefaultRate
+
+		private void SetCustomerOriginID() {
+			Model.OriginID = DB.ExecuteScalar<int>(
+				"GetCustomerOrigin",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId)
+			);
+		} // SetCustomerOriginID
 
 		private readonly int customerId;
-		private decimal tenurePercents;
-		private decimal setupFee;
-		private decimal profitMarkupPercentsOfRevenue;
-		private decimal opexAndCapex;
-		private int interestOnlyPeriod;
-		private decimal euCollectionRate;
-		private decimal cosmeCollectionRate;
-		private decimal defaultRateCompanyShare;
-		private decimal debtPercentOfCapital;
-		private decimal costOfDebtPA;
-		private decimal collectionRate;
-		private decimal cogs;
-		private decimal brokerSetupFee;
+		private readonly string scenarioName;
 	} // class GetPricingModelModel
 } // namespace

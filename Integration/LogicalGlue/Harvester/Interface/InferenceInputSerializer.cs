@@ -39,7 +39,6 @@
 			else {
 				WriteIfNotEmpty(writer, serializer, RegNum, input.CompanyRegistrationNumber);
 				WriteIfNotEmpty(writer, serializer, Postcode, hasDirector ? input.Director.Postcode : null);
-				WriteIfNotEmpty(writer, serializer, HouseName, hasDirector ? input.Director.HouseName : null);
 				WriteIfNotEmpty(writer, serializer, HouseNumber, hasDirector ? input.Director.HouseNumber : null);
 			} // if
 
@@ -78,7 +77,6 @@
 						DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal
 					),
 					Postcode = jo[Postcode].Value<string>(),
-					HouseName = jo[HouseName].Value<string>(),
 					HouseNumber = jo[HouseNumber].Value<string>(),
 				},
 			};
@@ -110,7 +108,6 @@
 		private const string LastName    = "directorLastName";
 		private const string BirthDate   = "dob";
 		private const string Postcode    = "postcode";
-		private const string HouseName   = "houseName";
 		private const string HouseNumber = "houseNumber";
 
 		private const string BirthDateFormat = "yyyy-MM-dd";

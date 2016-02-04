@@ -89,6 +89,7 @@
     <Compile Include="MarketplaceTurnoverModel.cs" />
     <Compile Include="MessagesModel.cs" />
     <Compile Include="MpModel.cs" />
+    <Compile Include="PricingScenarioName.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />
     <Compile Include="DasKennwort.cs" />

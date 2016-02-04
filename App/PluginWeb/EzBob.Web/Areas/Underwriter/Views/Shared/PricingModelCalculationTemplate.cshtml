@@ -13,11 +13,7 @@
                 <div class="box-content">
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
-                            <select id="PricingModelScenario" class="selectheight">
-                                <% _.each(scenarios, function(scenario) { %>
-                    <option value="<%- scenario%>"><%- scenario%></option>
-                                <%});%>
-                            </select>
+                            <select id="PricingModelScenario" class="selectheight"></select>
                             <button class="btn btn-primary pull-right" id="pricingModelCalculateButton">Calculate</button>
                             <button class="btn btn-primary pull-right reset-button-margin" id="pricingModelResetButton">Reset</button>
                             <table class="table">

@@ -3,10 +3,8 @@
 	using Ezbob.Backend.Strategies.PricingModel;
 
 	[DataContract]
-	public class PricingModelModelActionResult : ActionResult
-	{
+	public class PricingModelModelActionResult : ActionResult {
 		[DataMember]
 		public PricingModelModel Value { get; set; }
 	} // class PricingModelModelActionResult
-
 } // namespace EzService

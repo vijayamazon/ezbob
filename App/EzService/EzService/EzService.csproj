@@ -78,6 +78,7 @@
     <Compile Include="ActionResults\MessagesListActionResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\MultiBrandLoanSummaryActionResult.cs" />
+    <Compile Include="ActionResults\PricingScenarioNameListActionResult.cs" />
     <Compile Include="ActionResults\SetPasswordActionResult.cs" />
     <Compile Include="ActionResults\Investor\LogicalGlueResult.cs" />
     <Compile Include="ActionResults\Investor\AccountingDataResult.cs" />

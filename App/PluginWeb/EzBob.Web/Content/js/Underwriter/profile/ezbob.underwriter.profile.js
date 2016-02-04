@@ -124,12 +124,10 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		    model: this.automationCalculationModel
 		});
 
-		this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
 		this.pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel();
 		this.pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView({
 			el: this.$el.find('#pricing-calc'),
 			model: this.pricingModelCalculationsModel,
-			scenarios: this.pricingModelScenarios
 		});
 
 		this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
@@ -290,7 +288,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					});
 
 				    self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
-					self.pricingModelScenarios.fetch();
 					self.pricingModelCalculationsModel.fetch().done(function () {
 						self.pricingModelCalculationsModel.trigger('fetch');
 						BlockUi('off', self.pricingModelCalculationsView.$el);

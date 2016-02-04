@@ -291,6 +291,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.PricingModelModelActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

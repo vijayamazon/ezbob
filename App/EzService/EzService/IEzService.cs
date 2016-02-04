@@ -10,7 +10,6 @@
 	using Ezbob.Backend.Strategies.PricingModel;
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
-	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService : // Add base interfaces in the following lines and in alphabetic order. Please.
@@ -231,7 +230,7 @@
 		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
 
 		[OperationContract]
-		StringListActionResult GetPricingModelScenarios(int underwriterId);
+		PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId);
 
 		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();
