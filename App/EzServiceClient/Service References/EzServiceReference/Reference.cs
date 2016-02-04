@@ -2356,6 +2356,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Nullable<decimal> FLScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsHardRejectField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsTryoutField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -2363,6 +2366,9 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<decimal> NNScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ScoreIsReliableField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid UniqueIDField;
@@ -2446,6 +2452,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsHardReject {
+            get {
+                return this.IsHardRejectField;
+            }
+            set {
+                if ((this.IsHardRejectField.Equals(value) != true)) {
+                    this.IsHardRejectField = value;
+                    this.RaisePropertyChanged("IsHardReject");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public bool IsTryout {
             get {
                 return this.IsTryoutField;
@@ -2480,6 +2499,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.NNScoreField.Equals(value) != true)) {
                     this.NNScoreField = value;
                     this.RaisePropertyChanged("NNScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool ScoreIsReliable {
+            get {
+                return this.ScoreIsReliableField;
+            }
+            set {
+                if ((this.ScoreIsReliableField.Equals(value) != true)) {
+                    this.ScoreIsReliableField = value;
+                    this.RaisePropertyChanged("ScoreIsReliable");
                 }
             }
         }
