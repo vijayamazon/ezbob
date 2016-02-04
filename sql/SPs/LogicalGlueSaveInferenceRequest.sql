@@ -19,7 +19,6 @@ ALTER PROCEDURE LogicalGlueSaveInferenceRequest
 @LastName NVARCHAR(250),
 @DateOfBirth DATETIME,
 @Postcode NVARCHAR(255),
-@HouseName NVARCHAR(255),
 @HouseNumber NVARCHAR(255)
 AS
 BEGIN
@@ -47,8 +46,8 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO LogicalGlueRequests (ServiceLogID, IsTryOut, UniqueID, MonthlyRepayment, EquifaxData, HouseName, HouseNumber)
-		VALUES (@ServiceLogID, @IsTryOut, @UniqueID, @MonthlyPayment, @EquifaxData, @HouseName, @HouseNumber)
+	INSERT INTO LogicalGlueRequests (ServiceLogID, IsTryOut, UniqueID, MonthlyRepayment, EquifaxData, HouseNumber)
+		VALUES (@ServiceLogID, @IsTryOut, @UniqueID, @MonthlyPayment, @EquifaxData, @HouseNumber)
 
 	------------------------------------------------------------------------------
 
