@@ -1,6 +1,6 @@
 ﻿namespace EzService {
 	using System.ServiceModel;
-	using Ezbob.Backend.Strategies.PricingModel;
+	using Ezbob.Backend.ModelsWithDB;
 	using EzService.ActionResults;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -13,9 +13,6 @@
 
 		[OperationContract]
 		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
-
-		[OperationContract]
-		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
 
 		[OperationContract]
 		ActionMetaData SavePricingModelSettings(int underwriterId, long scenarioID, PricingModelModel model);

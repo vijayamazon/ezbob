@@ -575,7 +575,6 @@
     <Compile Include="Misc\MarketplaceInstantUpdate.cs" />
     <Compile Include="PricingModel\GetPricingModelDefaultRate.cs" />
     <Compile Include="PricingModel\GetPricingModelModel.cs" />
-    <Compile Include="PricingModel\PricingModelModel.cs" />
     <Compile Include="Experian\GetExperianAccountsCurrentBalance.cs" />
     <Compile Include="MailStrategies\VipRequest.cs" />
     <Compile Include="Misc\UpdateConfigurationVariables.cs" />

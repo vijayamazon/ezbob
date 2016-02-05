@@ -4,12 +4,12 @@
 	[DataContract]
 	public enum AutoDecisionFlowTypes {
 		[EnumMember]
-		Unknown,
+		Unknown = 0,
 
 		[EnumMember]
-		LogicalGlue,
+		Internal = 1,
 
 		[EnumMember]
-		Internal,
+		LogicalGlue = 2,
 	} // class AutoDecisionFlowTypes
 } // namespace

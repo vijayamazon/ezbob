@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 
 	public class GetPricingModelModel : AStrategy {

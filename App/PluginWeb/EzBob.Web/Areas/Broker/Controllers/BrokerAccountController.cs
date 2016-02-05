@@ -12,8 +12,6 @@
 	using EzBob.Web.Infrastructure.Filters;
 	using ServiceClientProxy.EzServiceReference;
 
-	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
-
 	public class BrokerAccountController : ABrokerBaseController {
 		[HttpPost]
 		[Ajax]
@@ -262,7 +260,7 @@
 			try {
 				oResult = this.m_oServiceClient.Instance.BrokerUpdatePassword(
 					ContactEmail,
-					UiOrigin.AsRemote(),
+					UiOrigin,
 					new DasKennwort(OldPassword),
 					new DasKennwort(NewPassword),
 					new DasKennwort(NewPassword2)

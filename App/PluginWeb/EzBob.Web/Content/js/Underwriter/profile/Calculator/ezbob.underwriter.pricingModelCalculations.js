@@ -11,7 +11,7 @@ EzBob.Underwriter.PricingModelScenarios = Backbone.Model.extend({
 });
 
 EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.extend({
-	template: "#pricing-model-calculation-template",
+	template: '#pricing-model-calculation-template',
 
 	initialize: function () {
 		this.scenarios = new EzBob.Underwriter.PricingModelScenarios();
@@ -23,73 +23,73 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
 	bindings: {
 		LoanAmount: {
-			selector: "#loanAmount",
+			selector: '#loanAmount',
 			converter: EzBob.BindingConverters.moneyFormat
 		},
 		SetupFeePounds: {
-			selector: "#setupFeePounds",
+			selector: '#setupFeePounds',
 			converter: EzBob.BindingConverters.moneyFormat
 		},
 		BrokerSetupFeePounds: {
-			selector: "#brokerSetupFeePounds",
+			selector: '#brokerSetupFeePounds',
 			converter: EzBob.BindingConverters.moneyFormat
 		},
 		Cogs: {
-			selector: "#cogs",
+			selector: '#cogs',
 			converter: EzBob.BindingConverters.moneyFormat
 		},
 		OpexAndCapex: {
-			selector: "#opexAndCapex",
+			selector: '#opexAndCapex',
 			converter: EzBob.BindingConverters.moneyFormat
 		},
 
 		ProfitMarkup: {
-			selector: "#profitMarkup",
+			selector: '#profitMarkup',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		SetupFeePercents: {
-			selector: "#setupFeePercents",
+			selector: '#setupFeePercents',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		BrokerSetupFeePercents: {
-			selector: "#brokerSetupFeePercents",
+			selector: '#brokerSetupFeePercents',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		DefaultRateCompanyShare: {
-			selector: "#defaultRateCompanyShare",
+			selector: '#defaultRateCompanyShare',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		DefaultRateCustomerShare: {
-			selector: "#defaultRateCustomerShare",
+			selector: '#defaultRateCustomerShare',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		TenurePercents: {
-			selector: "#tenurePercents",
+			selector: '#tenurePercents',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		CollectionRate: {
-			selector: "#collectionRate",
+			selector: '#collectionRate',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		DebtPercentOfCapital: {
-			selector: "#debtPercentOfCapital",
+			selector: '#debtPercentOfCapital',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 		CostOfDebt: {
-			selector: "#costOfDebt",
+			selector: '#costOfDebt',
 			converter: EzBob.BindingConverters.percentsFormat
 		},
 
 		LoanTerm: {
-			selector: "#loanTerm",
+			selector: '#loanTerm',
 			converter: EzBob.BindingConverters.monthsFormatNoDecimals
 		},
 		InterestOnlyPeriod: {
-			selector: "#interestOnlyPeriod",
+			selector: '#interestOnlyPeriod',
 			converter: EzBob.BindingConverters.monthsFormatNoDecimals
 		},
 		TenureMonths: {
-			selector: "#tenureMonths",
+			selector: '#tenureMonths',
 			converter: EzBob.BindingConverters.monthsFormat
 		}
 	},
@@ -108,12 +108,20 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 		'click #pricingModelResetButton': 'resetClicked',
 		'click #pricingModelCalculateButton': 'calculateClicked',
 		'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
-		'change #PricingModelScenario': 'scenarioChanged'
+		'change #PricingModelScenario': 'scenarioChanged',
+		'click .pricing-model-flow-type': 'flowTypeChanged',
 	},
+
+	flowTypeChanged: function() {
+		var newFlowType = parseInt(this.$el.find('.pricing-model-flow-type:checked').data('flow-type'), 10);
+
+		this.model.set('FlowType', newFlowType);
+
+		this.$el.find('.default-rate-customer-company').toggleClass('hide', newFlowType !== 1);
+	}, // flowTypeChanged
 
 	scenarioChanged: function () {
 		this.selectedScenario = this.$el.find('#PricingModelScenario').val();
-		console.log('new selected scenario:', this.selectedScenario);
 
 		var that = this;
 
@@ -156,7 +164,8 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 			window.gRootPath + 'Underwriter/PricingModelCalculations/GetDefaultRate',
 			{
 				customerId: this.model.get('Id'),
-				companyShare: this.model.get('DefaultRateCompanyShare')
+				companyShare: this.model.get('DefaultRateCompanyShare'),
+				flowTypeID: this.model.get('FlowType'),
 			}
 		);
 
@@ -341,11 +350,35 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
 		EzBob.handleUserLayoutSetting();
 
+		this.renderFlowType();
+
 		var self = this;
 		this.scenarios.fetch().done(function() { self.refillScenarioNames(); });
 
 		return this;
 	}, // onRender
+
+	renderFlowType: function() {
+		var currentFlowType = this.model.get('FlowType');
+
+		if (!currentFlowType) {
+			this.flowTypeChanged(); // Read value from UI into model.
+			currentFlowType = this.model.get('FlowType');
+		} // if
+
+		this.$el.find('.pricing-model-flow-type').each(function() {
+			var chk = $(this);
+
+			if (parseInt(chk.data('flow-type'), 10) === currentFlowType)
+				chk.attr('checked', 'checked');
+			else
+				chk.removeAttr('checked');
+		});
+
+		this.flowTypeChanged(); // Adjust UI with current flow type.
+
+		// this.getDefaultRateFromServer();
+	}, // renderFlowType
 
 	refillScenarioNames: function() {
 		var originID = this.model.get('OriginID');

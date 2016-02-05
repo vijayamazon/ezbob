@@ -2,7 +2,6 @@
 	using System;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using EzBob.Web.Areas.Broker.Controllers;
 	using EZBob.DatabaseLib.Model.Database;
 	using ServiceClientProxy;
 
@@ -24,7 +23,7 @@
 		private static string[] UpdateUserRoles(UserIDForRole userID) {
 			return new ServiceClient()
 				.Instance
-				.LoadAllLoginRoles(userID.UserName, userID.OriginID.AsRemote(), false)
+				.LoadAllLoginRoles(userID.UserName, userID.OriginID, false)
 				.Records;
 		} // UpdateUserRoles
 	} // class RoleCacheBase

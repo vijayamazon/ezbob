@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using EzService.ActionResults;
 
@@ -38,18 +39,6 @@
 				Value = instance.Model,
 			};
 		} // PricingModelCalculate
-
-		// TODO: add flow type here
-		public DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare) {
-			PricingModelModel model = new PricingModelModel { DefaultRateCompanyShare = companyShare, };
-
-			ActionMetaData result = ExecuteSync<GetPricingModelDefaultRate>(customerId, underwriterId, customerId, model);
-
-			return new DecimalActionResult {
-				MetaData = result,
-				Value = model.DefaultRate,
-			};
-		} // GetPricingModelDefaultRate
 
 		public ActionMetaData SavePricingModelSettings(int underwriterId, long scenarioID, PricingModelModel model) {
 			SavePricingModelSettings instance;

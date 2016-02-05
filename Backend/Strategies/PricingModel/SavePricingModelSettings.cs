@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 
 	public class SavePricingModelSettings : AStrategy {
@@ -13,20 +14,20 @@
 			DB.ExecuteNonQuery(
 				"SavePricingModelConfigsForScenario",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("ScenarioID", scenarioID),
-				new QueryParameter("TenurePercents", model.TenurePercents),
-				new QueryParameter("SetupFee", model.SetupFeePercents),
-				new QueryParameter("ProfitMarkupPercentsOfRevenue", model.ProfitMarkup),
-				new QueryParameter("OpexAndCapex", model.OpexAndCapex),
-				new QueryParameter("InterestOnlyPeriod", model.InterestOnlyPeriod),
-				new QueryParameter("EuCollectionRate", model.EuCollectionRate),
-				new QueryParameter("COSMECollectionRate", model.CosmeCollectionRate),
-				new QueryParameter("DefaultRateCompanyShare", model.DefaultRateCompanyShare),
-				new QueryParameter("DebtPercentOfCapital", model.DebtPercentOfCapital),
-				new QueryParameter("CostOfDebtPA", model.CostOfDebt),
-				new QueryParameter("CollectionRate", model.CollectionRate),
-				new QueryParameter("Cogs", model.Cogs),
-				new QueryParameter("BrokerSetupFee", model.BrokerSetupFeePercents)
+				new QueryParameter("ScenarioID", this.scenarioID),
+				new QueryParameter("TenurePercents", this.model.TenurePercents),
+				new QueryParameter("SetupFee", this.model.SetupFeePercents),
+				new QueryParameter("ProfitMarkupPercentsOfRevenue", this.model.ProfitMarkup),
+				new QueryParameter("OpexAndCapex", this.model.OpexAndCapex),
+				new QueryParameter("InterestOnlyPeriod", this.model.InterestOnlyPeriod),
+				new QueryParameter("EuCollectionRate", this.model.EuCollectionRate),
+				new QueryParameter("COSMECollectionRate", this.model.CosmeCollectionRate),
+				new QueryParameter("DefaultRateCompanyShare", this.model.DefaultRateCompanyShare),
+				new QueryParameter("DebtPercentOfCapital", this.model.DebtPercentOfCapital),
+				new QueryParameter("CostOfDebtPA", this.model.CostOfDebt),
+				new QueryParameter("CollectionRate", this.model.CollectionRate),
+				new QueryParameter("Cogs", this.model.Cogs),
+				new QueryParameter("BrokerSetupFee", this.model.BrokerSetupFeePercents)
 			);
 		} // Execute
 

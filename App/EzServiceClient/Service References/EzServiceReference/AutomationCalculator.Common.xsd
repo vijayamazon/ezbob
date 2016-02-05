@@ -3,8 +3,8 @@
   <xs:simpleType name="AutoDecisionFlowTypes">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Unknown" />
-      <xs:enumeration value="LogicalGlue" />
       <xs:enumeration value="Internal" />
+      <xs:enumeration value="LogicalGlue" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AutoDecisionFlowTypes" nillable="true" type="tns:AutoDecisionFlowTypes" />

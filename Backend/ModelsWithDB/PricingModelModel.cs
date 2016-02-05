@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.PricingModel {
+﻿namespace Ezbob.Backend.ModelsWithDB {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -7,7 +7,7 @@
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class PricingModelModel {
 		//*********************************************************************
 		//

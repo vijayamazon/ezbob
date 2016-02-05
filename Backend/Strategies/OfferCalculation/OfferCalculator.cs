@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Database;
 	using Ezbob.Logger;

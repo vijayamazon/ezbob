@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Text;
 	using ConfigManager;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.ValueIntervals;

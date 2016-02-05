@@ -25,14 +25,27 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td class="pricing-model-left-td">Flow type</td>
+										<td>
+											<div>
+												<input type="radio" class="pricing-model-flow-type" name="pricing-model-flow-type" id="pricing-model-flow-type-internal" data-flow-type="1" checked />
+												<label for="pricing-model-flow-type-internal">Internal flow</label>
+											</div>
+											<div>
+												<input type="radio" class="pricing-model-flow-type" name="pricing-model-flow-type" id="pricing-model-flow-type-logicalglue" data-flow-type="2" />
+												<label for="pricing-model-flow-type-logicalglue">Logical Glue flow</label>
+											</div>
+										</td>
+                                    </tr>
+                                    <tr>
                                         <td class="pricing-model-left-td">Loan Amount</td>
                                         <td>
                                             <input type="text" id="loanAmount" /></td>
                                     </tr>
-                                    <tr>
-                                        <td class="pricing-model-left-td">Default Rate</td>
-                                        <td><%-EzBob.formatPercents(model.DefaultRate)%>&nbsp;Company:<input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width" />
-                                            Applicant:<input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width" /></td>
+                                    <tr class="default-rate-customer-company">
+                                        <td class="pricing-model-left-td">Default Rate Shares</td>
+                                        <td>Company: <input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width" />
+                                            &nbsp;&nbsp;&nbsp;Applicant: <input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width" /></td>
                                     </tr>
                                     <tr>
                                         <td class="pricing-model-left-td">Total Fee</td>
@@ -139,6 +152,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Default Rate</td>
+                                        <td><%-EzBob.formatPercents(model.DefaultRate)%></td>
+                                    </tr>
                                     <tr>
                                         <td class="pricing-model-left-td pricing-model-bold">Revenue</td>
                                         <td class="pricing-model-bold"><%-GBPValues(model.Revenue, true)%></td>

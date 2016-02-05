@@ -10,7 +10,6 @@
 	using DbConstants;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
@@ -243,7 +242,7 @@
 
             // Data Sharing with Alibaba 0001 - end of step 3
 		    if (customer.IsAlibaba) {
-		        this.serviceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_WS_3, null);
+		        this.serviceClient.Instance.DataSharing(customer.Id, AlibabaBusinessType.APPLICATION_WS_3, null);
 		    }
 
 		    return Json(new { });

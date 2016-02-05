@@ -13,6 +13,7 @@
 	using Newtonsoft.Json;
 	using System;
 	using System.Linq;
+	using Ezbob.Backend.ModelsWithDB;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;

@@ -4,10 +4,9 @@
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
   <xs:complexType name="ActionMetaData">
@@ -240,23 +239,12 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" minOccurs="0" name="Value" nillable="true" type="q11:PricingModelModel" />
+          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="Value" nillable="true" type="q11:PricingModelModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="PricingModelModelActionResult" nillable="true" type="tns:PricingModelModelActionResult" />
-  <xs:complexType name="DecimalActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element minOccurs="0" name="Value" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DecimalActionResult" nillable="true" type="tns:DecimalActionResult" />
   <xs:complexType name="VatReturnDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -538,6 +526,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ConfigTableActionResult" nillable="true" type="tns:ConfigTableActionResult" />
+  <xs:complexType name="DecimalActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Value" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DecimalActionResult" nillable="true" type="tns:DecimalActionResult" />
   <xs:complexType name="DateTimeActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

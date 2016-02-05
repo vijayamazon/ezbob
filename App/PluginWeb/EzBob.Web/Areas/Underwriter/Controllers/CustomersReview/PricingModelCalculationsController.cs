@@ -5,6 +5,7 @@
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Newtonsoft.Json;
+	using Ezbob.Backend.ModelsWithDB;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
@@ -58,17 +59,6 @@
 
 			return Json(pricingModelCalculateResponse.Value, JsonRequestBehavior.AllowGet);
 		} // Calculate
-
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetDefaultRate(int customerId, decimal companyShare) {
-			DecimalActionResult getDefaultRateResponse = this.serviceClient.Instance.GetPricingModelDefaultRate(
-				customerId, this.context.UserId, companyShare
-			);
-
-			return Json(getDefaultRateResponse.Value, JsonRequestBehavior.AllowGet);
-		} // GetDefaultRate
 
 		private readonly ServiceClient serviceClient;
 		private readonly IWorkplaceContext context;

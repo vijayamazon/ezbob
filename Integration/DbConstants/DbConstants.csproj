@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlibabaBusinessTypes.cs" />
+    <Compile Include="AutoDecisionFlowTypes.cs" />
+    <Compile Include="Bucket.cs" />
     <Compile Include="CollectionStatusNames.cs" />
     <Compile Include="CustomerOriginEnum.cs" />
     <Compile Include="customer_enums.cs" />

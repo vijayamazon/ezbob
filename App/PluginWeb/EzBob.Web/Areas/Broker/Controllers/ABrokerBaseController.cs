@@ -3,6 +3,7 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -10,22 +11,6 @@
 	using EzBob.Web.Infrastructure;
 	using ServiceClientProxy;
 	using StructureMap;
-
-	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
-	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
-
-	internal static class CustomerOriginEnumExtForBroker {
-		public static RemoteCustomerOriginEnum? AsRemote(this CustomerOriginEnum? origin) {
-			if (origin == null)
-				return null;
-
-			return origin.Value.AsRemote();
-		} // AsRemote
-
-		public static RemoteCustomerOriginEnum AsRemote(this CustomerOriginEnum origin) {
-			return (RemoteCustomerOriginEnum)(int)origin;
-		} // AsRemote
-	} // class CustomerOriginEnumExtForBroker
 
 	public abstract class ABrokerBaseController : Controller {
 		static ABrokerBaseController() {
