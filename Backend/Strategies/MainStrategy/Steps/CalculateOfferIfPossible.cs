@@ -42,6 +42,9 @@
 			ProposedAmount = 0;
 			this.loanSource = null;
 
+			this.gradeID = null;
+			this.subGradeID = null;
+
 			this.allLoanSources = ((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
 		} // constructor
 
@@ -93,11 +96,18 @@
 			} // switch
 
 			if (OfferResult != null) {
-				Log.Msg("Offer created for {0}:\n{1}.", OuterContextDescription, OfferResult);
+				Log.Msg("Offer proposed for {0}:\n{1}.", OuterContextDescription, OfferResult);
 				OfferResult.SaveToDb(DB);
 			} // if
 
-			if ((OfferResult == null) || OfferResult.IsError || OfferResult.IsMismatch || (LoanSourceID <= 0)) {
+			bool failure =
+				(OfferResult == null) ||
+				OfferResult.IsError ||
+				OfferResult.IsMismatch ||
+				!OfferResult.HasDecision ||
+				(LoanSourceID <= 0);
+
+			if (failure) {
 				this.outcome = "'failure'";
 				return StepResults.Failed;
 			} // if
@@ -153,7 +163,7 @@
 			);
 
 			if (sr.IsEmpty) {
-				Log.Warn(
+				CreateErrorResult(
 					"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
 					this.autoRejectionOutput.GradeRangeID,
 					this.autoRejectionOutput.ProductSubTypeID
@@ -164,10 +174,13 @@
 
 			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
 
+			this.gradeID = grsp.GradeID;
+			this.subGradeID = grsp.SubGradeID;
+
 			ProposedAmount = GetProposedAmount(grsp);
 
 			if (ProposedAmount <= 0) {
-				Log.Warn("Proposed amount is not positive for {0}, no offer created.", OuterContextDescription);
+				CreateErrorResult("Proposed amount is not positive for {0}, no offer.", OuterContextDescription);
 				return;
 			} // if
 
@@ -176,7 +189,7 @@
 				: (LoanSourceName?)null;
 
 			if (this.loanSource == null) {
-				Log.Warn("Failed to detected default loan source for {0}, no offer created.", OuterContextDescription);
+				CreateErrorResult("Failed to detect default loan source for {0}, no offer.", OuterContextDescription);
 				return;
 			} // if
 
@@ -261,7 +274,7 @@
 					}.Where(s => !string.IsNullOrWhiteSpace(s))
 				);
 
-				Log.Warn("'{0}' for {1}, no offer.", errorMsg, OuterContextDescription);
+				CreateErrorResult("'{0}' for {1}, no offer.", errorMsg, OuterContextDescription);
 				return;
 			} // if
 
@@ -272,7 +285,7 @@
 			this.loanTypeID = sr.IsEmpty ? 0 : sr["DefaultLoanTypeID"];
 
 			if (this.loanTypeID <= 0) {
-				Log.Warn("Default loan type not detected for {0}, no offer.", OuterContextDescription);
+				CreateErrorResult("Default loan type not detected for {0}, no offer.", OuterContextDescription);
 				return;
 			} // if
 
@@ -283,7 +296,7 @@
 			);
 
 			if (sr.IsEmpty) {
-				Log.Warn(
+				CreateErrorResult(
 					"Failed to load medal {0} interest rate range for {1}.",
 					Medal.MedalClassification,
 					OuterContextDescription
@@ -302,7 +315,7 @@
 			);
 
 			if (sr.IsEmpty) {
-				Log.Warn(
+				CreateErrorResult(
 					"Failed to load {0} amount of {1} set up fee range for {2}.",
 					Medal.NumOfLoans > 0 ? "repeating" : "new",
 					ProposedAmount,
@@ -331,7 +344,7 @@
 			calculator.Execute();
 
 			if (!string.IsNullOrWhiteSpace(calculator.Error)) {
-				Log.Warn("Calculator error '{0}' for {1}, no offer.", calculator.Error, OuterContextDescription);
+				CreateErrorResult("Calculator error '{0}' for {1}, no offer.", calculator.Error, OuterContextDescription);
 				return;
 			} // if
 
@@ -342,7 +355,7 @@
 				);
 
 			if (calculatorOutput == null) {
-				Log.Warn(
+				CreateErrorResult(
 					"Calculator output not found for loan source '{0}' for {1}, no offer.",
 					LoanSourceID,
 					OuterContextDescription
@@ -350,24 +363,9 @@
 				return;
 			} // if
 
-			OfferResult = new OfferResult {
-				CustomerId = this.customerID,
-				CalculationTime = DateTime.UtcNow,
-				Amount = ProposedAmount,
-				MedalClassification = Medal.MedalClassification,
-				FlowType = this.autoRejectionOutput.FlowType,
-
-				ScenarioName = this.autoRejectionOutput.FlowType.ToString(),
-				Period = calculatorModel.LoanTerm,
-				LoanTypeId = this.loanTypeID,
-				LoanSourceId = LoanSourceID,
-				InterestRate = calculatorOutput.InterestRate,
-				SetupFee = calculatorOutput.SetupFee * 100.0M,
-				Message = null,
-				IsError = false,
-				IsMismatch = false,
-				HasDecision = true,
-			};
+			CreateOfferResult();
+			OfferResult.InterestRate = calculatorOutput.InterestRate;
+			OfferResult.SetupFee = calculatorOutput.SetupFee * 100.0M;
 
 			if ((this.minInterestRate <= OfferResult.InterestRate) && (OfferResult.InterestRate <= this.maxInterestRate)) {
 				OfferResult.InterestRate *= 100.0M;
@@ -396,7 +394,11 @@
 			generator.Execute();
 
 			if (!string.IsNullOrWhiteSpace(generator.Error)) {
-				Log.Warn("Init calculator model error '{0}' for {1}, no offer.", generator.Error, OuterContextDescription);
+				CreateErrorResult(
+					"Init calculator model error '{0}' for {1}, no offer.",
+					generator.Error,
+					OuterContextDescription
+				);
 				return null;
 			} // if
 
@@ -406,6 +408,38 @@
 
 			return generator.Model;
 		} // InitCalculatorModel
+
+		private void CreateErrorResult(string format, params object[] args) {
+			CreateOfferResult(string.Format(format, args));
+		} // CreateErrorResult
+
+		private void CreateOfferResult(string errorMsg = null) {
+			bool hasError = !string.IsNullOrWhiteSpace(errorMsg);
+
+			if (hasError)
+				Log.Warn("{0}", errorMsg);
+
+			OfferResult = new OfferResult {
+				CustomerId = this.customerID,
+				CalculationTime = DateTime.UtcNow,
+				Amount = ProposedAmount,
+				MedalClassification = Medal.MedalClassification,
+				FlowType = this.autoRejectionOutput.FlowType,
+				GradeID = this.gradeID,
+				SubGradeID = this.subGradeID,
+				CashRequestID = this.cashRequestID,
+				NLCashRequestID = this.nlCashRequestID,
+
+				ScenarioName = this.autoRejectionOutput.FlowType.ToString(),
+				Period = this.repaymentPeriod,
+				LoanTypeId = this.loanTypeID,
+				LoanSourceId = LoanSourceID,
+				Message = hasError ? errorMsg.Trim() : null,
+				IsError = hasError,
+				IsMismatch = false,
+				HasDecision = !hasError,
+			};
+		} // CreateOfferResult
 
 		// Input parameters.
 		private readonly int customerID;
@@ -431,6 +465,8 @@
 		private int repaymentPeriod;
 		private LoanSourceName? loanSource;
 		private int loanTypeID;
+		private int? gradeID;
+		private int? subGradeID;
 
 		// Output.
 		private string outcome;

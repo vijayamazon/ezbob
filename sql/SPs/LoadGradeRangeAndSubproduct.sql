@@ -23,7 +23,9 @@ BEGIN
 		lt.LoanTypeID,
 		r.TurnoverShare,
 		r.ValueAddedShare,
-		r.FreeCashFlowShare
+		r.FreeCashFlowShare,
+		r.GradeID,
+		r.SubGradeID
 	FROM
 		I_GradeRange r
 		INNER JOIN I_ProductSubType st ON st.ProductSubTypeID = @ProductSubTypeID
