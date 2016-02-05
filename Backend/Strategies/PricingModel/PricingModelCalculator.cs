@@ -80,7 +80,7 @@
 
 			if (!FindUpperBoundary(out upperBoundary, out balanceForUpperBoundary)) {
 				Error = string.Format(
-					"Monthly interest rate should be over {0}, calculation aborted.",
+					"Monthly interest rate should be over {0}%, calculation aborted.",
 					InterestRateUpperWatermark
 				);
 				return false;
@@ -305,20 +305,36 @@
 			return setupFee;
 		} // GetSetupFeeForNonStandardLoan
 
+		/// <summary>
+		/// Finds "first" interest rate for which loan has positive balance.
+		/// </summary>
+		/// <remarks>
+		/// <para>"Loan has positive balance" means we should have profit from the loan.</para>
+		/// <para>"First" means "first that we discover". It is not "the lowest possible", it is just "any that fits".</para>
+		/// <para>Search process: try interest rates 100%, 1000%, etc. (multiplying by 10 every time) until positive
+		/// loan balance is found. If interest rate reaches <see cref="InterestRateUpperWaterMark"/>, give up
+		/// and raise an alert.</para>
+		/// </remarks>
+		/// <param name="boundary">"First" interest rate with positive loan balance or -1 if not found.</param>
+		/// <param name="balance">That positive loan balance.</param>
+		/// <returns>True, if completed successfully (i.e. found upper boundary); false, otherwise.</returns>
 		private bool FindUpperBoundary(out decimal boundary, out decimal balance) {
-			balance = -1;
 			decimal monthlyInterestRate = 1;
+			balance = CalculateBalance(monthlyInterestRate);
 
 			while (balance < 0) {
+				Log.Debug("Find upper boundary: monthly interest rate = {0}, balance = {1}", monthlyInterestRate, balance);
+
 				if (monthlyInterestRate > InterestRateUpperWatermark) {
 					boundary = -1;
 					return false;
 				} // if
 
 				monthlyInterestRate *= 10;
-
 				balance = CalculateBalance(monthlyInterestRate);
 			} // while
+
+			Log.Debug("Found upper boundary: monthly interest rate = {0}, balance = {1}", monthlyInterestRate, balance);
 
 			boundary = monthlyInterestRate;
 			return true;
@@ -331,13 +347,23 @@
 
 			decimal balanceForLowerBoundary = CalculateBalance(lowerBoundary);
 
-			var calculations = new Dictionary<decimal, decimal> {
-				{ upperBoundary, balanceForUpperBoundary },
-				{ lowerBoundary, balanceForLowerBoundary }
-			};
+			Log.Debug(
+				"GetMonthlyInterestRate: initial lower boundary is {0}, balance is {1}.",
+				lowerBoundary,
+				balanceForLowerBoundary
+			);
+			Log.Debug(
+				"GetMonthlyInterestRate: initial upper boundary is {0}, balance is {1}",
+				upperBoundary,
+				balanceForUpperBoundary
+			);
 
-			if (Math.Abs(balanceForUpperBoundary) < Math.Abs(balanceForLowerBoundary)) {
-				minBalanceAbsValue = Math.Abs(balanceForUpperBoundary);
+			// Balance for upper boundary is always positive.
+			// When it is negative this function is not even called (and actually
+			// entire process has completed with an error).
+
+			if (balanceForUpperBoundary < Math.Abs(balanceForLowerBoundary)) {
+				minBalanceAbsValue = balanceForUpperBoundary;
 				interestRateForMinBalanceAbs = upperBoundary;
 			} else {
 				minBalanceAbsValue = Math.Abs(balanceForLowerBoundary);
@@ -349,6 +375,8 @@
 			while (minBalanceAbsValue != 0) {
 				decimal balance = CalculateBalance(monthlyInterestRate);
 
+				Log.Debug("GetMonthlyInterestRate: rate is {0}, balance is {1}", monthlyInterestRate, balance);
+
 				if (Math.Abs(balance) < minBalanceAbsValue) {
 					minBalanceAbsValue = Math.Abs(balance);
 					interestRateForMinBalanceAbs = monthlyInterestRate;
@@ -356,10 +384,6 @@
 
 				if (lowerBoundary + 0.0001m == upperBoundary)
 					return interestRateForMinBalanceAbs;
-
-				// Can be optimized and avoid calculating balances that were already calculated
-				if (!calculations.ContainsKey(monthlyInterestRate))
-					calculations.Add(monthlyInterestRate, balance);
 
 				if (balance < 0) {
 					lowerBoundary = monthlyInterestRate;

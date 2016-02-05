@@ -637,7 +637,6 @@
     <Compile Include="Misc\PayPointCharger.cs" />
     <Compile Include="Misc\FraudChecker.cs" />
     <Compile Include="Exceptions\StrategyException.cs" />
-    <Compile Include="StrategyLog.cs" />
     <Compile Include="Misc\LateBy14Days.cs" />
     <Compile Include="Misc\FirstOfMonthStatusNotifier.cs" />
     <Compile Include="Misc\XDaysDue.cs" />
