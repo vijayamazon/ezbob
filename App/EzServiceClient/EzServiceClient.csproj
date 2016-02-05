@@ -71,6 +71,9 @@
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\AutomationCalculator.Common.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\DbConstants.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -111,6 +114,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.UserManagement.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.Loans.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">

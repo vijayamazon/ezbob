@@ -39,13 +39,15 @@
 			};
 		} // PricingModelCalculate
 
+		// TODO: add flow type here
 		public DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare) {
-			GetPricingModelDefaultRate instance;
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, companyShare);
+			PricingModelModel model = new PricingModelModel { DefaultRateCompanyShare = companyShare, };
+
+			ActionMetaData result = ExecuteSync<GetPricingModelDefaultRate>(customerId, underwriterId, customerId, model);
 
 			return new DecimalActionResult {
 				MetaData = result,
-				Value = instance.DefaultRate
+				Value = model.DefaultRate,
 			};
 		} // GetPricingModelDefaultRate
 

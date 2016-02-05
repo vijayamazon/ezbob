@@ -52,13 +52,8 @@
 		} // AppendDataFromCashRequest
 
 		private void AppendDefaultRate() {
-			var instance = new GetPricingModelDefaultRate(this.customerId, Model.DefaultRateCompanyShare);
+			var instance = new GetPricingModelDefaultRate(this.customerId, Model);
 			instance.Execute();
-
-			Model.DefaultRateCustomerShare = 1 - Model.DefaultRateCompanyShare;
-			Model.DefaultRate = instance.DefaultRate;
-			Model.ConsumerScore = instance.ConsumerScore;
-			Model.CompanyScore = instance.BusinessScore;
 		} // AppendDefaultRate
 
 		private void SetCustomerOriginID() {

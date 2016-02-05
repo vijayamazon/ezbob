@@ -83,6 +83,8 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/AutomationCalculator.Common" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database.Loans" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />

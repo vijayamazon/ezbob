@@ -2616,7 +2616,13 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal CollectionRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal CompanyDefaultRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int CompanyScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ConsumerDefaultRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int ConsumerScoreField;
@@ -2634,13 +2640,7 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal DebtPercentOfCapitalField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal DefaultRateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal DefaultRateCompanyShareField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal DefaultRateCustomerShareField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal EbitdaField;
@@ -2650,6 +2650,15 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal FeesRevenueField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ServiceClientProxy.EzServiceReference.AutoDecisionFlowTypes FlowTypeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> GradeIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> GradeScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal GrossProfitField;
@@ -2683,6 +2692,9 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ServiceClientProxy.EzServiceReference.PricingSourceModel[] PricingSourceModelsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> ProbabilityOfDefaultField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal ProfitMarkupField;
@@ -2768,6 +2780,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal CompanyDefaultRate {
+            get {
+                return this.CompanyDefaultRateField;
+            }
+            set {
+                if ((this.CompanyDefaultRateField.Equals(value) != true)) {
+                    this.CompanyDefaultRateField = value;
+                    this.RaisePropertyChanged("CompanyDefaultRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public int CompanyScore {
             get {
                 return this.CompanyScoreField;
@@ -2776,6 +2801,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.CompanyScoreField.Equals(value) != true)) {
                     this.CompanyScoreField = value;
                     this.RaisePropertyChanged("CompanyScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ConsumerDefaultRate {
+            get {
+                return this.ConsumerDefaultRateField;
+            }
+            set {
+                if ((this.ConsumerDefaultRateField.Equals(value) != true)) {
+                    this.ConsumerDefaultRateField = value;
+                    this.RaisePropertyChanged("ConsumerDefaultRate");
                 }
             }
         }
@@ -2846,19 +2884,6 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal DefaultRate {
-            get {
-                return this.DefaultRateField;
-            }
-            set {
-                if ((this.DefaultRateField.Equals(value) != true)) {
-                    this.DefaultRateField = value;
-                    this.RaisePropertyChanged("DefaultRate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal DefaultRateCompanyShare {
             get {
                 return this.DefaultRateCompanyShareField;
@@ -2867,19 +2892,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.DefaultRateCompanyShareField.Equals(value) != true)) {
                     this.DefaultRateCompanyShareField = value;
                     this.RaisePropertyChanged("DefaultRateCompanyShare");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal DefaultRateCustomerShare {
-            get {
-                return this.DefaultRateCustomerShareField;
-            }
-            set {
-                if ((this.DefaultRateCustomerShareField.Equals(value) != true)) {
-                    this.DefaultRateCustomerShareField = value;
-                    this.RaisePropertyChanged("DefaultRateCustomerShare");
                 }
             }
         }
@@ -2919,6 +2931,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.FeesRevenueField.Equals(value) != true)) {
                     this.FeesRevenueField = value;
                     this.RaisePropertyChanged("FeesRevenue");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ServiceClientProxy.EzServiceReference.AutoDecisionFlowTypes FlowType {
+            get {
+                return this.FlowTypeField;
+            }
+            set {
+                if ((this.FlowTypeField.Equals(value) != true)) {
+                    this.FlowTypeField = value;
+                    this.RaisePropertyChanged("FlowType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> GradeID {
+            get {
+                return this.GradeIDField;
+            }
+            set {
+                if ((this.GradeIDField.Equals(value) != true)) {
+                    this.GradeIDField = value;
+                    this.RaisePropertyChanged("GradeID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> GradeScore {
+            get {
+                return this.GradeScoreField;
+            }
+            set {
+                if ((this.GradeScoreField.Equals(value) != true)) {
+                    this.GradeScoreField = value;
+                    this.RaisePropertyChanged("GradeScore");
                 }
             }
         }
@@ -3067,6 +3118,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> ProbabilityOfDefault {
+            get {
+                return this.ProbabilityOfDefaultField;
+            }
+            set {
+                if ((this.ProbabilityOfDefaultField.Equals(value) != true)) {
+                    this.ProbabilityOfDefaultField = value;
+                    this.RaisePropertyChanged("ProbabilityOfDefault");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal ProfitMarkup {
             get {
                 return this.ProfitMarkupField;
@@ -3167,6 +3231,20 @@ namespace ServiceClientProxy.EzServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AutoDecisionFlowTypes", Namespace="http://schemas.datacontract.org/2004/07/AutomationCalculator.Common")]
+    public enum AutoDecisionFlowTypes : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Unknown = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LogicalGlue = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Internal = 2,
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PricingSourceModel", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel")]
@@ -3187,6 +3265,9 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsPreferableField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ServiceClientProxy.EzServiceReference.LoanSourceName LoanSourceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal SetupFeeField;
@@ -3257,6 +3338,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public ServiceClientProxy.EzServiceReference.LoanSourceName LoanSource {
+            get {
+                return this.LoanSourceField;
+            }
+            set {
+                if ((this.LoanSourceField.Equals(value) != true)) {
+                    this.LoanSourceField = value;
+                    this.RaisePropertyChanged("LoanSource");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal SetupFee {
             get {
                 return this.SetupFeeField;
@@ -3290,6 +3384,20 @@ namespace ServiceClientProxy.EzServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoanSourceName", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database.Loans")]
+    public enum LoanSourceName : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Standard = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EU = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        COSME = 3,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]

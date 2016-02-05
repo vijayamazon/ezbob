@@ -1,37 +1,33 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using AutomationCalculator.Common;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	[DataContract]
 	public class PricingModelModel {
-		// Main input fields
+		//*********************************************************************
+		//
+		// Input fields
+		//
+		//*********************************************************************
+		[DataMember]
+		public AutoDecisionFlowTypes FlowType { get; set; }
 		[DataMember]
 		public decimal LoanAmount { get; set; }
 		[DataMember]
-		public decimal DefaultRate { get; set; }
-		[DataMember]
 		public decimal DefaultRateCompanyShare { get; set; }
-		[DataMember]
-		public decimal DefaultRateCustomerShare { get; set; }
-
-		public decimal SetupFeePounds { get { return SetupFeePercents * LoanAmount; } }
-
 		[DataMember]
 		[FieldName("SetupFee")]
 		public decimal SetupFeePercents { get; set; }
-
-		public decimal BrokerSetupFeePounds { get { return BrokerSetupFeePercents * LoanAmount; } }
-
 		[DataMember]
 		[FieldName("BrokerSetupFee")]
 		public decimal BrokerSetupFeePercents { get; set; }
 		[DataMember]
 		public int LoanTerm { get; set; }
-
-		// Other input fields
 		[DataMember]
 		public int InterestOnlyPeriod { get; set; }
 		[DataMember]
@@ -58,11 +54,17 @@
 		[FieldName("ProfitMarkupPercentsOfRevenue")]
 		public decimal ProfitMarkup { get; set; }
 
-		// Main output fields
+		public decimal SetupFeePounds { get { return SetupFeePercents * LoanAmount; } }
+		public decimal BrokerSetupFeePounds { get { return BrokerSetupFeePercents * LoanAmount; } }
+		public decimal DefaultRateCustomerShare { get { return 1 - DefaultRateCompanyShare; } }
+
+		//*********************************************************************
+		//
+		// Output fields
+		//
+		//*********************************************************************
 		[DataMember]
 		public decimal MonthlyInterestRate { get; set; }
-
-		// Other output fields
 		[DataMember]
 		public decimal Revenue { get; set; }
 		[DataMember]
@@ -91,9 +93,52 @@
 		[DataMember]
 		public int ConsumerScore { get; set; }
 		[DataMember]
+		public decimal ConsumerDefaultRate { get; set; }
+		[DataMember]
+		[FieldName("BusinessScore")]
 		public int CompanyScore { get; set; }
 		[DataMember]
+		[FieldName("BusinessDefaultRate")]
+		public decimal CompanyDefaultRate { get; set; }
+
+		[DataMember]
+		public int? GradeID { get; set; }
+		[DataMember]
+		public decimal? GradeScore { get; set; }
+		[DataMember]
+		public decimal? ProbabilityOfDefault { get; set; }
+
+		[DataMember]
 		public int OriginID { get; set; }
+
+		public Bucket? Grade {
+			get {
+				if (GradeID == null)
+					return null;
+
+				return buckets.Contains(GradeID.Value) ? (Bucket)GradeID.Value : (Bucket?)null;
+			} // get
+		} // Grade
+
+		public decimal DefaultRate {
+			get {
+				return (FlowType == AutoDecisionFlowTypes.LogicalGlue)
+					? (ProbabilityOfDefault ?? 1)
+					: ConsumerDefaultRate * DefaultRateCustomerShare + CompanyDefaultRate * DefaultRateCompanyShare;
+			} // get
+		} // DefaultRate
+
+		//*********************************************************************
+		//
+		// Helpers.
+		//
+		//*********************************************************************
+
+		public PricingModelModel ClearOutput() {
+			PricingSourceModels = null;
+			// TODO
+			return this;
+		} // ClearOutput
 
 		public PricingModelModel Clone() {
 			List<PricingSourceModel> pricingSourceModels = (PricingSourceModels == null)
@@ -102,10 +147,9 @@
 
 			return new PricingModelModel {
 				PricingSourceModels = pricingSourceModels,
+				FlowType = FlowType,
 				LoanAmount = LoanAmount,
-				DefaultRate = DefaultRate,
 				DefaultRateCompanyShare = DefaultRateCompanyShare,
-				DefaultRateCustomerShare = DefaultRateCustomerShare,
 				SetupFeePercents = SetupFeePercents,
 				BrokerSetupFeePercents = BrokerSetupFeePercents,
 				LoanTerm = LoanTerm,
@@ -132,10 +176,17 @@
 				TotalCost = TotalCost,
 				ProfitMarkupOutput = ProfitMarkupOutput,
 				ConsumerScore = ConsumerScore,
+				ConsumerDefaultRate = ConsumerDefaultRate,
 				CompanyScore = CompanyScore,
+				CompanyDefaultRate = CompanyDefaultRate,
+				GradeID = GradeID,
+				GradeScore = GradeScore,
+				ProbabilityOfDefault = ProbabilityOfDefault,
 				OriginID = OriginID,
 			};
 		} // Clone
+
+		private static readonly int[] buckets = (int[])Enum.GetValues(typeof(Bucket));
 	} // class PricingModelModel
 
 	[DataContract]
@@ -164,12 +215,12 @@
 		public PricingSourceModel Clone() {
 			return new PricingSourceModel {
 				LoanSource = LoanSource,
+				Source = Source,
+				InterestRate = InterestRate,
+				SetupFee = SetupFee,
 				AIR = AIR,
 				APR = APR,
-				InterestRate = InterestRate,
 				IsPreferable = IsPreferable,
-				SetupFee = SetupFee,
-				Source = Source,
 			};
 		} // Clone
 	} // class PricingSourceModel

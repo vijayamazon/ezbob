@@ -35,6 +35,12 @@
 		public override string Name { get { return "Pricing Model Calculator"; } }
 
 		public override void Execute() {
+			new GetPricingModelDefaultRate(this.customerId, Model).Execute();
+
+			LogModel("with updated default rate");
+
+			Model.PricingSourceModels = new List<PricingSourceModel>();
+
 			if (CalculateInterestRate())
 				CalculateFullModelAfterInterestRate();
 
@@ -105,8 +111,6 @@
 			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
 
-			Model.PricingSourceModels = new List<PricingSourceModel>();
-
 			if ((TargetLoanSource == null) || (TargetLoanSource == LoanSourceName.Standard)) {
 				CreateStandardOffer(loan);
 
@@ -114,28 +118,26 @@
 					return;
 			} // if
 
-			GetPricingModelDefaultRate defaultRate = new GetPricingModelDefaultRate(
-				this.customerId,
-				Model.DefaultRateCompanyShare
-			);
-			defaultRate.Execute();
 
-			decimal preferableEUInterest = CreateEUOffers(defaultRate);
+			decimal preferableEUInterest = CreateEUOffers();
 
 			if (preferableEUInterest <= 0)
 				return;
 
 			if ((TargetLoanSource == null) || (TargetLoanSource == LoanSourceName.COSME))
-				CreateCosmeOffers(defaultRate, preferableEUInterest);
+				CreateCosmeOffers(preferableEUInterest);
 		} // CalculateFullModelAfterInterestRate
 
 		private void CreateStandardOffer(Loan loan) {
 			decimal air = 0;
+			decimal apr = 0;
 
 			if (CalculateApr) {
 				air = Model.TenureMonths != 0
 					? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths)
 					: 0;
+
+				apr = GetApr(loan);
 			} // if
 
 			Model.PricingSourceModels.Add(new PricingSourceModel {
@@ -144,12 +146,12 @@
 				InterestRate = Model.MonthlyInterestRate,
 				SetupFee = Model.SetupFeePercents,
 				AIR = air,
-				APR = CalculateApr ? GetApr(loan) : 0,
+				APR = apr,
 				IsPreferable = true,
 			});
 		} // CreateStandardOffer
 
-		private decimal CreateEUOffers(GetPricingModelDefaultRate defaultRate) {
+		private decimal CreateEUOffers() {
 			this.preferableEuInterestRates = new List<Tuple<IntInterval, decimal>>();
 
 			DB.ForEachRowSafe(
@@ -162,12 +164,12 @@
 				CommandSpecies.StoredProcedure
 			);
 
-			decimal preferableEUInterest = GetEuLoanMonthlyInterest(defaultRate.ConsumerScore);
+			decimal preferableEUInterest = GetEuLoanMonthlyInterest();
 
 			if (preferableEUInterest <= 0) {
 				Error = string.Format(
 					"Could not find preferable EU loan interest rate for consumer score {0}.",
-					defaultRate.ConsumerScore
+					Model.ConsumerScore
 				);
 
 				return preferableEUInterest;
@@ -188,21 +190,18 @@
 			return preferableEUInterest;
 		} // CreateEUOffers
 
-		private void CreateCosmeOffers(GetPricingModelDefaultRate defaultRate, decimal preferableEUInterest) {
+		private void CreateCosmeOffers(decimal preferableEUInterest) {
 			if (preferableEUInterest <= 0)
 				return;
 
-			decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest(
-				defaultRate.ConsumerScore,
-				defaultRate.BusinessScore
-			);
+			decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest();
 
 			Log.Info(
 				"Pricing calculator: Customer {0} Consumer score: {1} Company Score: {2} " +
 				"preferable COSME interest {3} preferable EU interest {4}",
 				this.customerId,
-				defaultRate.ConsumerScore,
-				defaultRate.BusinessScore,
+				Model.ConsumerScore,
+				Model.CompanyScore,
 				preferableCOSMEInterest,
 				preferableEUInterest
 			);
@@ -253,19 +252,19 @@
 		} // GetApr
 
 		private Loan CreateLoan(decimal interestRate, decimal setupFee) {
-			LoanType lt = new StandardLoanType();
-
-			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = (int)Model.TenureMonths };
-
 			var loan = new Loan {
 				LoanAmount = Model.LoanAmount,
 				Date = DateTime.UtcNow,
-				LoanType = lt,
+				LoanType = new StandardLoanType(),
 				CashRequest = null,
 				SetupFee = setupFee,
 				LoanLegalId = 1
 			};
-			calculator.Calculate(Model.LoanAmount, loan, loan.Date, Model.InterestOnlyPeriod);
+
+			new LoanScheduleCalculator {
+				Interest = interestRate,
+				Term = (int)Model.TenureMonths,
+			}.Calculate(Model.LoanAmount, loan, loan.Date, Model.InterestOnlyPeriod);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
@@ -289,10 +288,8 @@
 			decimal setupFeePounds = profit - interestRevenue;
 			decimal setupFee = setupFeePounds / Model.LoanAmount;
 
-			loan = CreateLoan(monthlyInterestRate, setupFeePounds + Model.BrokerSetupFeePounds);
-
 			if (CalculateApr) {
-				apr = GetApr(loan);
+				apr = GetApr(CreateLoan(monthlyInterestRate, setupFeePounds + Model.BrokerSetupFeePounds));
 
 				annualizedInterestRate = Model.TenureMonths != 0
 					? (monthlyInterestRate * 12) + (setupFee * 12 / Model.TenureMonths)
@@ -312,7 +309,7 @@
 		/// <para>"Loan has positive balance" means we should have profit from the loan.</para>
 		/// <para>"First" means "first that we discover". It is not "the lowest possible", it is just "any that fits".</para>
 		/// <para>Search process: try interest rates 100%, 1000%, etc. (multiplying by 10 every time) until positive
-		/// loan balance is found. If interest rate reaches <see cref="InterestRateUpperWaterMark"/>, give up
+		/// loan balance is found. If interest rate reaches InterestRateUpperWaterMark, give up
 		/// and raise an alert.</para>
 		/// </remarks>
 		/// <param name="boundary">"First" interest rate with positive loan balance or -1 if not found.</param>
@@ -434,13 +431,25 @@
 		} // LogModel
 
 		private readonly string[] modelFieldsToLog = {
-			"LoanAmount", "DefaultRate", "DefaultRateCompanyShare", "DefaultRateCustomerShare", "SetupFeePounds",
+			"FlowType", "LoanAmount", "DefaultRate", "DefaultRateCompanyShare", "DefaultRateCustomerShare", "SetupFeePounds",
 			"SetupFeePercents", "BrokerSetupFeePounds", "BrokerSetupFeePercents", "LoanTerm", "InterestOnlyPeriod",
 			"TenurePercents", "TenureMonths", "CollectionRate", "EuCollectionRate", "CosmeCollectionRate", "Cogs",
 			"DebtPercentOfCapital", "CostOfDebt", "OpexAndCapex", "ProfitMarkup",
+			"ConsumerScore", "ConsumerDefaultRate", "CompanyScore", "CompanyDefaultRate",
+			"Grade", "GradeScore", "ProbabilityOfDefault",
 		};
 
 		private readonly string[] sourceFieldsToLog = { "InterestRate", "SetupFee", "AIR", "APR", "IsPreferable", };
+
+		private decimal CalculateBalance(decimal interestRate) {
+			Loan loan = CreateLoan(interestRate, Model.FeesRevenue);
+			decimal costOfDebtOutput = GetCostOfDebt(loan.Schedule);
+			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
+			decimal revenue = Model.FeesRevenue + interestRevenue;
+			decimal netLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
+			decimal profitMarkupOutput = Model.ProfitMarkup * revenue;
+			return revenue - Model.Cogs - Model.OpexAndCapex - netLossFromDefaults - costOfDebtOutput - profitMarkupOutput;
+		} // CalculateBalance
 
 		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule) {
 			decimal costOfDebtOutput = 0;
@@ -458,19 +467,9 @@
 			return schedule.Sum(scheuldeItem => scheuldeItem.Interest) * (1 - Model.DefaultRate);
 		} // GetInterestRevenue
 
-		private decimal CalculateBalance(decimal interestRate) {
-			Loan loan = CreateLoan(interestRate, Model.FeesRevenue);
-			decimal costOfDebtOutput = GetCostOfDebt(loan.Schedule);
-			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
-			decimal revenue = Model.FeesRevenue + interestRevenue;
-			decimal netLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
-			decimal profitMarkupOutput = Model.ProfitMarkup * revenue;
-			return revenue - Model.Cogs - Model.OpexAndCapex - netLossFromDefaults - costOfDebtOutput - profitMarkupOutput;
-		} // CalculateBalance
-
-		private decimal GetEuLoanMonthlyInterest(int consumerScore) {
+		private decimal GetEuLoanMonthlyInterest() {
 			foreach (var tpl in this.preferableEuInterestRates)
-				if (tpl.Item1.Contains(consumerScore))
+				if (tpl.Item1.Contains(Model.ConsumerScore))
 					return tpl.Item2;
 
 			return 0;
@@ -481,22 +480,28 @@
 		/// TODO make configurable in DB
 		/// </summary>
 		/// <returns>preferable interest rate</returns>
-		private static decimal GetCOSMELoanMonthlyInterest(int consumerScore, int companyScore) {
-			if (consumerScore < 1040 && companyScore == 0)
+		private decimal GetCOSMELoanMonthlyInterest() {
+			if (Model.ConsumerScore < 1040 && Model.CompanyScore == 0)
 				return 0.0225M;
 
-			if (consumerScore >= 1040 && companyScore == 0)
+			if (Model.ConsumerScore >= 1040 && Model.CompanyScore == 0)
 				return 0.0175M;
 
-			if (consumerScore < 1040 && companyScore >= 50)
+			if (Model.ConsumerScore < 1040 && Model.CompanyScore >= 50)
 				return 0.02M;
 
-			if (consumerScore >= 1040 && companyScore >= 50)
+			if (Model.ConsumerScore >= 1040 && Model.CompanyScore >= 50)
 				return 0.0175M;
 
-			//if companyScore < 50
+			// if company score < 50
 			return 0.0225M;
 		} // GetCOSMELoanMonthlyInterest
+
+		private PricingModelModel JustCalculateForComparison() {
+			var result = Model.Clone().ClearOutput();
+			//TODO
+			return result;
+		} // JustCalculateForComparison
 
 		private readonly int customerId;
 		private readonly string tag;
