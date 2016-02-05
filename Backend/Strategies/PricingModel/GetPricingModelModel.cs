@@ -1,13 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
+	using System;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
+	using Ezbob.Utils.Extensions;
 
 	public class GetPricingModelModel : AStrategy {
-		public GetPricingModelModel(int customerId, string scenarioName) {
+		public GetPricingModelModel(int customerId, PricingCalcuatorScenarioNames name) {
 			this.customerId = customerId;
-			this.scenarioName = scenarioName;
+			this.scenarioName = name.DescriptionAttr();
+			LoadFromLastCashRequest = true;
 
 			Model = new PricingModelModel();
+			Error = null;
 		} // constructor
 
 		public override string Name {
@@ -16,23 +21,43 @@
 
 		public PricingModelModel Model { get; private set; }
 
+		public string Error { get; private set; }
+
+		public bool LoadFromLastCashRequest { get; set; }
+
 		public override void Execute() {
-			var sr = DB.GetFirst(
-				"GetPricingModelConfigsForScenario",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("ScenarioName", this.scenarioName),
-				new QueryParameter("CustomerID", this.customerId)
-			);
+			try {
+				var sr = DB.GetFirst(
+					"GetPricingModelConfigsForScenario",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("ScenarioName", this.scenarioName),
+					new QueryParameter("CustomerID", this.customerId)
+				);
 
-			if (!sr.IsEmpty)
-				sr.Stuff(Model);
+				if (!sr.IsEmpty)
+					sr.Stuff(Model);
+				else {
+					Error = string.Format(
+						"Failed to load configuration for scenario '{0}' and origin of the customer {1}.",
+						this.scenarioName,
+						this.customerId
+					);
+					return;
+				} // if
 
-			AppendDataFromCashRequest();
-			AppendDefaultRate();
-			SetCustomerOriginID();
+				AppendDataFromCashRequest();
+				AppendDefaultRate();
+				SetCustomerOriginID();
+			} catch (Exception e) {
+				Error = e.Message;
+				Log.Alert(e, "Exception during creating pricing calculator model.");
+			} // try
 		} // Execute
 
 		private void AppendDataFromCashRequest() {
+			if (!LoadFromLastCashRequest)
+				return;
+
 			int loanAmount = 0;
 			int loanTerm = 12;
 
@@ -49,7 +74,6 @@
 
 			Model.LoanAmount = loanAmount;
 			Model.LoanTerm = loanTerm;
-			Model.TenureMonths = Model.TenurePercents * loanTerm;
 		} // AppendDataFromCashRequest
 
 		private void AppendDefaultRate() {

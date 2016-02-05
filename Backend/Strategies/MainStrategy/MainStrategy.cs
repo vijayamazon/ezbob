@@ -337,7 +337,9 @@
 					this.context.AutoRejectionOutput,
 					this.context.MonthlyRepayment,
 					this.context.MaxCapHomeOwner,
-					this.context.MaxCapNotHomeOwner
+					this.context.MaxCapNotHomeOwner,
+					this.context.SmallLoanScenarioLimit,
+					this.context.AspireToMinSetupFee
 				);
 				step.CollectOutputValue += CollectStepOutputValue;
 				return step;

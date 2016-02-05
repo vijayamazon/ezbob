@@ -1,12 +1,17 @@
 ﻿namespace EzService {
 	using System.ServiceModel;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using EzService.ActionResults;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServicePricing {
 		[OperationContract]
-		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
+		PricingModelModelActionResult GetPricingModelModel(
+			int customerId,
+			int underwriterId,
+			PricingCalcuatorScenarioNames scenarioName
+		);
 
 		[OperationContract]
 		PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId);

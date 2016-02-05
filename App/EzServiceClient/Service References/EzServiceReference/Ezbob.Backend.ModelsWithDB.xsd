@@ -85,7 +85,6 @@
       <xs:element minOccurs="0" name="ProfitMarkupOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="Revenue" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeePercents" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TenureMonths" type="xs:decimal" />
       <xs:element minOccurs="0" name="TenurePercents" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalCost" type="xs:decimal" />
     </xs:sequence>

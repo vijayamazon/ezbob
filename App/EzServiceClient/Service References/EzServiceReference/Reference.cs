@@ -4179,10 +4179,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> AcceptRolloverAsync(int customerID, long loanID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServicePricing/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzServicePricing/GetPricingModelModelResponse")]
-        ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
+        ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, DbConstants.PricingCalcuatorScenarioNames scenarioName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServicePricing/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzServicePricing/GetPricingModelModelResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingModelModelActionResult> GetPricingModelModelAsync(int customerId, int underwriterId, string scenarioName);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingModelModelActionResult> GetPricingModelModelAsync(int customerId, int underwriterId, DbConstants.PricingCalcuatorScenarioNames scenarioName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServicePricing/GetPricingModelScenarios", ReplyAction="http://tempuri.org/IEzServicePricing/GetPricingModelScenariosResponse")]
         ServiceClientProxy.EzServiceReference.PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId);
@@ -5988,11 +5988,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AcceptRolloverAsync(customerID, loanID);
         }
         
-        public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {
+        public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, DbConstants.PricingCalcuatorScenarioNames scenarioName) {
             return base.Channel.GetPricingModelModel(customerId, underwriterId, scenarioName);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingModelModelActionResult> GetPricingModelModelAsync(int customerId, int underwriterId, string scenarioName) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PricingModelModelActionResult> GetPricingModelModelAsync(int customerId, int underwriterId, DbConstants.PricingCalcuatorScenarioNames scenarioName) {
             return base.Channel.GetPricingModelModelAsync(customerId, underwriterId, scenarioName);
         }
         

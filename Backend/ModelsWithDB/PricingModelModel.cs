@@ -33,8 +33,6 @@
 		[DataMember]
 		public decimal TenurePercents { get; set; }
 		[DataMember]
-		public decimal TenureMonths { get; set; }
-		[DataMember]
 		public decimal CollectionRate { get; set; }
 		[DataMember]
 		public decimal EuCollectionRate { get; set; }
@@ -57,6 +55,7 @@
 		public decimal SetupFeePounds { get { return SetupFeePercents * LoanAmount; } }
 		public decimal BrokerSetupFeePounds { get { return BrokerSetupFeePercents * LoanAmount; } }
 		public decimal DefaultRateCustomerShare { get { return 1 - DefaultRateCompanyShare; } }
+		public decimal TenureMonths { get { return TenurePercents * LoanTerm;} }
 
 		//*********************************************************************
 		//
@@ -155,7 +154,6 @@
 				LoanTerm = LoanTerm,
 				InterestOnlyPeriod = InterestOnlyPeriod,
 				TenurePercents = TenurePercents,
-				TenureMonths = TenureMonths,
 				CollectionRate = CollectionRate,
 				EuCollectionRate = EuCollectionRate,
 				CosmeCollectionRate = CosmeCollectionRate,

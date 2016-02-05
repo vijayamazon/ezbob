@@ -3,10 +3,12 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -47,21 +49,24 @@
 
 			this.result.LoanTypeId = sr["Id"];
 
+			PricingCalcuatorScenarioNames scenarioName;
+
 			// Choose scenario
 			if (this.result.Amount <= CurrentValues.Instance.SmallLoanScenarioLimit)
-				this.result.ScenarioName = "Small Loan";
+				scenarioName = PricingCalcuatorScenarioNames.SmallLoan;
 			else if (!this.hasLoans)
-				this.result.ScenarioName = "Basic New";
+				scenarioName = PricingCalcuatorScenarioNames.BasicNew;
 			else
-				this.result.ScenarioName = "Basic Repeating";
+				scenarioName = PricingCalcuatorScenarioNames.BasicRepeating;
 
-			var getPricingModelModelInstance = new GetPricingModelModel(this.result.CustomerId, this.result.ScenarioName);
+			this.result.ScenarioName = scenarioName.DescriptionAttr();
+
+			var getPricingModelModelInstance = new GetPricingModelModel(this.result.CustomerId, scenarioName);
 			getPricingModelModelInstance.Execute();
 
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
 			templateModel.LoanAmount = this.result.Amount;
 			templateModel.LoanTerm = this.result.Period;
-			templateModel.TenureMonths = this.result.Period * templateModel.TenurePercents;
 
 			templateModel.MonthlyInterestRate = GetCOSMELoanMonthlyInterest(
 				templateModel.ConsumerScore,

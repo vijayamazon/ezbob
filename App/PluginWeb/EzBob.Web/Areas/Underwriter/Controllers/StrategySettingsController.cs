@@ -13,6 +13,7 @@
 	using Newtonsoft.Json;
 	using System;
 	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
@@ -72,8 +73,11 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		public JsonResult SettingsPricingModel() {
-			PricingModelModelActionResult getPricingModelModelResponse =
-				this.serviceClient.Instance.GetPricingModelModel(0, this._context.UserId, "Basic New");
+			PricingModelModelActionResult getPricingModelModelResponse = this.serviceClient.Instance.GetPricingModelModel(
+				0,
+				this._context.UserId,
+				PricingCalcuatorScenarioNames.BasicNew
+			);
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 

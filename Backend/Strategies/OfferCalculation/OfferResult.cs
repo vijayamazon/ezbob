@@ -66,8 +66,8 @@
 
 		public override string ToString() {
 			return string.Format(
-				"InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, {4}",
-				InterestRate, SetupFee, Period, LoanTypeId, Description
+				"Amount: {5}, InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, {4}",
+				InterestRate, SetupFee, Period, LoanTypeId, Description, Amount
 			);
 		} // ToString
 

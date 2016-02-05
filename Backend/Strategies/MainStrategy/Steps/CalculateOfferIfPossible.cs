@@ -3,11 +3,15 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using AutomationCalculator.Common;
+	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	internal class CalculateOfferIfPossible : AMainStrategyStep {
 		public CalculateOfferIfPossible(
@@ -19,7 +23,9 @@
 			AutoRejectionOutput autoRejectionOutput,
 			MonthlyRepaymentData requestedLoan,
 			int homeOwnerCap,
-			int notHomeOwnerCap
+			int notHomeOwnerCap,
+			int smallLoanScenarioLimit,
+			bool aspireToMinSetupFee
 		) : base(outerContextDescription) {
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
@@ -29,10 +35,14 @@
 			this.requestedLoan = requestedLoan;
 			this.homeOwnerCap = homeOwnerCap;
 			this.notHomeOwnerCap = notHomeOwnerCap;
+			this.smallLoanScenarioLimit = smallLoanScenarioLimit;
+			this.aspireToMinSetupFee = aspireToMinSetupFee;
 
 			OfferResult = null;
-			LoanSourceID = 0;
 			ProposedAmount = 0;
+			this.loanSource = null;
+
+			this.allLoanSources = ((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
 		} // constructor
 
 		[StepOutput]
@@ -42,22 +52,29 @@
 		public OfferResult OfferResult { get; private set; }
 
 		[StepOutput]
-		public int LoanSourceID { get; private set; }
+		public int LoanSourceID { get { return this.loanSource == null ? 0 : (int)this.loanSource.Value; } }
 
 		[StepOutput]
 		public int ProposedAmount { get; private set; }
 
 		protected override StepResults Run() {
-			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
+			if (this.autoRejectionOutput == null) {
 				Log.Alert("No auto rejection output specified for {0}, auto decision is aborted.", OuterContextDescription);
 
 				this.outcome = "'failure - no auto rejection executed'";
 				return StepResults.Failed;
 			} // if
 
+			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
+				Log.Alert("Illegal flow type specified for {0}, auto decision is aborted.", OuterContextDescription);
+
+				this.outcome = "'failure - illegal flow type'";
+				return StepResults.Failed;
+			} // if
+
 			CalculateMedal();
 
-			if ((this.medalAgent == null) || this.medalAgent.HasError) {
+			if ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null)) {
 				this.outcome = "'failure - medal calculation failed'";
 				return StepResults.Failed;
 			} // if
@@ -74,6 +91,11 @@
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
+
+			if (OfferResult != null) {
+				Log.Msg("Offer created for {0}:\n{1}.", OuterContextDescription, OfferResult);
+				OfferResult.SaveToDb(DB);
+			} // if
 
 			if ((OfferResult == null) || OfferResult.IsError || OfferResult.IsMismatch || (LoanSourceID <= 0)) {
 				this.outcome = "'failure'";
@@ -144,53 +166,31 @@
 
 			ProposedAmount = GetProposedAmount(grsp);
 
-			int term = grsp.Term(this.requestedLoan.RequestedTerm);
-
 			if (ProposedAmount <= 0) {
-				OfferResult = new OfferResult {
-					CustomerId = this.customerID,
-					CalculationTime = DateTime.UtcNow,
-					Amount = ProposedAmount,
-					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
-					FlowType = AutoDecisionFlowTypes.LogicalGlue,
-
-					ScenarioName = "Logical Glue - no offer",
-					Period = term,
-					LoanTypeId = grsp.LoanTypeID,
-					LoanSourceId = grsp.LoanSourceID,
-					InterestRate = 0,
-					SetupFee = 0,
-					Message = "Proposed amount is not positive.",
-					IsError = true,
-					IsMismatch = false,
-					HasDecision = true,
-				};
-
+				Log.Warn("Proposed amount is not positive for {0}, no offer created.", OuterContextDescription);
 				return;
 			} // if
 
-			LoanSourceID = grsp.LoanSourceID;
+			this.loanSource = this.allLoanSources.Contains(grsp.LoanSourceID)
+				? (LoanSourceName)grsp.LoanSourceID
+				: (LoanSourceName?)null;
 
-			// TODO: execute offer calculator
+			if (this.loanSource == null) {
+				Log.Warn("Failed to detected default loan source for {0}, no offer created.", OuterContextDescription);
+				return;
+			} // if
 
-			OfferResult = new OfferResult {
-				CustomerId = this.customerID,
-				CalculationTime = DateTime.UtcNow,
-				Amount = ProposedAmount,
-				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
-				FlowType = AutoDecisionFlowTypes.LogicalGlue,
+			this.repaymentPeriod = grsp.Term(this.requestedLoan.RequestedTerm);
 
-				ScenarioName = "Logical Glue",
-				Period = term,
-				LoanTypeId = grsp.LoanTypeID,
-				LoanSourceId = grsp.LoanSourceID,
-				// TODO InterestRate = should be between 0% and 100%
-				// TODO SetupFee = should be between 0% and 100%
-				Message = null,
-				IsError = false,
-				IsMismatch = false,
-				HasDecision = true,
-			};
+			this.loanTypeID = grsp.LoanTypeID;
+
+			this.minInterestRate = grsp.MinInterestRate;
+			this.maxInterestRate = grsp.MaxInterestRate;
+
+			this.minSetupFee = grsp.MinSetupFee;
+			this.maxSetupFee = grsp.MaxSetupFee;
+
+			Calculate();
 		} // CreateLogicalOffer
 
 		private int GetProposedAmount(GradeRangeSubproduct grsp) {
@@ -237,58 +237,177 @@
 				new QueryParameter("CustomerID", this.customerID)
 			);
 
-			if (sr.IsEmpty || (ProposedAmount <= 0)) {
-				OfferResult = new OfferResult {
-					CustomerId = this.customerID,
-					CalculationTime = DateTime.UtcNow,
-					Amount = ProposedAmount,
-					MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
-					FlowType = AutoDecisionFlowTypes.Internal,
+			int loanSourceID = sr.IsEmpty ? 0 : sr["LoanSourceID"];
 
-					ScenarioName = "Internal - error occurred",
-					Period = 0,
-					LoanTypeId = 0,
-					LoanSourceId = 0,
-					InterestRate = 0,
-					SetupFee = 0,
-					Message = string.Join(" ", new List<string> {
-						sr.IsEmpty ? "Failed to detect default loan source ID." : null,
+			this.loanSource = this.allLoanSources.Contains(loanSourceID)
+				? (LoanSourceName)loanSourceID
+				: (LoanSourceName?)null;
+
+			bool noGo =
+				sr.IsEmpty ||
+				(ProposedAmount <= 0) ||
+				(LoanSourceID <= 0) ||
+				(Medal.MedalClassification == EZBob.DatabaseLib.Model.Database.Medal.NoClassification);
+
+			if (noGo) {
+				string errorMsg = string.Join(
+					" ",
+					new List<string> {
+						(sr.IsEmpty || (LoanSourceID <= 0)) ? "Failed to detect default loan source ID." : null,
 						ProposedAmount <= 0 ? "Proposed amount is not positive." : null,
-					}.Where(s => !string.IsNullOrWhiteSpace(s))),
-					IsError = true,
-					IsMismatch = false,
-					HasDecision = false,
-				};
+						(Medal.MedalClassification == EZBob.DatabaseLib.Model.Database.Medal.NoClassification)
+							? "No medal calculated."
+							: null,
+					}.Where(s => !string.IsNullOrWhiteSpace(s))
+				);
 
+				Log.Warn("'{0}' for {1}, no offer.", errorMsg, OuterContextDescription);
 				return;
 			} // if
 
-			int loanCount = DB.ExecuteScalar<int>(
-				"GetCustomerLoanCount",
+			this.repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
+
+			sr = DB.GetFirst("GetLoanTypeAndDefault", CommandSpecies.StoredProcedure, new QueryParameter("@LoanTypeID"));
+
+			this.loanTypeID = sr.IsEmpty ? 0 : sr["DefaultLoanTypeID"];
+
+			if (this.loanTypeID <= 0) {
+				Log.Warn("Default loan type not detected for {0}, no offer.", OuterContextDescription);
+				return;
+			} // if
+
+			sr = DB.GetFirst(
+				"AV_OfferInterestRateRange",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerID),
-				new QueryParameter("Now", DateTime.UtcNow)
+				new QueryParameter("@Medal", Medal.MedalClassification.ToString())
 			);
 
-			LoanSourceID = sr["LoanSourceID"];
-			int repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
+			if (sr.IsEmpty) {
+				Log.Warn(
+					"Failed to load medal {0} interest rate range for {1}.",
+					Medal.MedalClassification,
+					OuterContextDescription
+				);
+				return;
+			} // if
 
-			var offerDualCalculator = new OfferDualCalculator(
-				this.customerID,
-				DateTime.UtcNow,
-				ProposedAmount,
-				loanCount > 0,
-				Medal.MedalClassification,
-				LoanSourceID,
-				repaymentPeriod
+			this.minInterestRate = sr["MinInterestRate"] / 100.0M;
+			this.maxInterestRate = sr["MaxInterestRate"] / 100.0M;
+
+			sr = DB.GetFirst(
+				"LoadOfferRanges",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@Amount", ProposedAmount),
+				new QueryParameter("@IsNewLoan", Medal.NumOfLoans < 1)
 			);
 
-			OfferResult = offerDualCalculator.CalculateOffer();
+			if (sr.IsEmpty) {
+				Log.Warn(
+					"Failed to load {0} amount of {1} set up fee range for {2}.",
+					Medal.NumOfLoans > 0 ? "repeating" : "new",
+					ProposedAmount,
+					OuterContextDescription
+				);
+				return;
+			} // if
 
-			if (OfferResult != null)
-				OfferResult.FlowType = AutoDecisionFlowTypes.Internal;
+			this.minSetupFee = sr["MinSetupFee"];
+			this.maxSetupFee = sr["MaxSetupFee"];
+
+			Calculate();
 		} // CreateUnlogicalOffer
 
+		private void Calculate() {
+			var calculatorModel = InitCalcualtorModel();
+
+			if (calculatorModel == null)
+				return;
+
+			var calculator = new PricingModelCalculator(this.customerID, calculatorModel) {
+				ThrowExceptionOnError = false,
+				CalculateApr = false,
+				TargetLoanSource = (LoanSourceName)LoanSourceID
+			};
+			calculator.Execute();
+
+			if (!string.IsNullOrWhiteSpace(calculator.Error)) {
+				Log.Warn("Calculator error '{0}' for {1}, no offer.", calculator.Error, OuterContextDescription);
+				return;
+			} // if
+
+			PricingSourceModel calculatorOutput = (calculatorModel.PricingSourceModels == null)
+				? null
+				: calculatorModel.PricingSourceModels.FirstOrDefault(
+					r => r.IsPreferable && ((int)r.LoanSource == LoanSourceID)
+				);
+
+			if (calculatorOutput == null) {
+				Log.Warn(
+					"Calculator output not found for loan source '{0}' for {1}, no offer.",
+					LoanSourceID,
+					OuterContextDescription
+				);
+				return;
+			} // if
+
+			OfferResult = new OfferResult {
+				CustomerId = this.customerID,
+				CalculationTime = DateTime.UtcNow,
+				Amount = ProposedAmount,
+				MedalClassification = Medal.MedalClassification,
+				FlowType = this.autoRejectionOutput.FlowType,
+
+				ScenarioName = this.autoRejectionOutput.FlowType.ToString(),
+				Period = calculatorModel.LoanTerm,
+				LoanTypeId = this.loanTypeID,
+				LoanSourceId = LoanSourceID,
+				InterestRate = calculatorOutput.InterestRate,
+				SetupFee = calculatorOutput.SetupFee * 100.0M,
+				Message = null,
+				IsError = false,
+				IsMismatch = false,
+				HasDecision = true,
+			};
+
+			if ((this.minInterestRate <= OfferResult.InterestRate) && (OfferResult.InterestRate <= this.maxInterestRate)) {
+				OfferResult.InterestRate *= 100.0M;
+				return;
+			} // if
+
+			// TODO: check this point with Product Owners.
+
+			if ((this.minSetupFee == this.maxSetupFee) || !this.aspireToMinSetupFee)
+				OfferResult.InterestRate = this.minInterestRate * 100.0M;
+			else
+				OfferResult.InterestRate = this.maxInterestRate * 100.0M;
+		} // Calculate
+
+		private PricingModelModel InitCalcualtorModel() {
+			PricingCalcuatorScenarioNames scenarioName;
+
+			if (ProposedAmount <= this.smallLoanScenarioLimit)
+				scenarioName = PricingCalcuatorScenarioNames.SmallLoan;
+			else if (Medal.NumOfLoans < 1)
+				scenarioName = PricingCalcuatorScenarioNames.BasicNew;
+			else
+				scenarioName = PricingCalcuatorScenarioNames.BasicRepeating;
+
+			var generator = new GetPricingModelModel(this.customerID, scenarioName) { LoadFromLastCashRequest = false, };
+			generator.Execute();
+
+			if (!string.IsNullOrWhiteSpace(generator.Error)) {
+				Log.Warn("Init calculator model error '{0}' for {1}, no offer.", generator.Error, OuterContextDescription);
+				return null;
+			} // if
+
+			generator.Model.LoanAmount = ProposedAmount;
+			generator.Model.SetupFeePercents = this.aspireToMinSetupFee ? this.minSetupFee : this.maxSetupFee;
+			generator.Model.LoanTerm = this.repaymentPeriod;
+
+			return generator.Model;
+		} // InitCalculatorModel
+
+		// Input parameters.
 		private readonly int customerID;
 		private readonly long cashRequestID;
 		private readonly long nlCashRequestID;
@@ -297,8 +416,26 @@
 		private readonly MonthlyRepaymentData requestedLoan;
 		private readonly int homeOwnerCap;
 		private readonly int notHomeOwnerCap;
+		private readonly int smallLoanScenarioLimit;
+		private readonly bool aspireToMinSetupFee;
 
+		// Intermediate data + holds medal result (output).
 		private CalculateMedal medalAgent;
+
+		// Intermediate data filled differently by Logical Glue/Internal flows.
+		// Used as pricing calculator input (and some of them - as output).
+		private decimal minInterestRate;
+		private decimal maxInterestRate;
+		private decimal minSetupFee;
+		private decimal maxSetupFee;
+		private int repaymentPeriod;
+		private LoanSourceName? loanSource;
+		private int loanTypeID;
+
+		// Output.
 		private string outcome;
+
+		// Internal "constant".
+		private readonly int[] allLoanSources;
 	} // class CalculateOfferIfPossible
 } // namespace

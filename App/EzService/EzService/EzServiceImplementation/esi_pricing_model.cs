@@ -1,10 +1,15 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using EzService.ActionResults;
 
 	partial class EzServiceImplementation {
-		public PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {
+		public PricingModelModelActionResult GetPricingModelModel(
+			int customerId,
+			int underwriterId,
+			PricingCalcuatorScenarioNames scenarioName
+		) {
 			GetPricingModelModel instance;
 			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, scenarioName);
 
