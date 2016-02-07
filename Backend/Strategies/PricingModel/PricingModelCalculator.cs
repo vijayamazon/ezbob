@@ -509,37 +509,104 @@
 			if ((TargetLoanSource != null) && (TargetLoanSource != LoanSourceName.Standard))
 				return;
 
-			int interestOnlyMonths = (int)Math.Ceiling(Model.InterestOnlyPeriod * Model.TenurePercents);
-			int loanTerm = (int)Math.Floor(Model.TenureMonths);
+			int interestOnlyMonths = (int)Math.Ceiling(
+				VerificationModel.InterestOnlyPeriod * VerificationModel.TenurePercents
+			);
+			int loanTerm = (int)Math.Floor(VerificationModel.TenureMonths);
 			int repaymentMonths = loanTerm - interestOnlyMonths;
 
 			int monthFormula = 2 * interestOnlyMonths + repaymentMonths + 1;
 
+			decimal netLossFromDefault =
+				VerificationModel.LoanAmount *
+				VerificationModel.DefaultRate *
+				(1 - VerificationModel.CollectionRate);
+
 			VerificationModel.TotalCost =
-				Model.LoanAmount * Model.DebtPercentOfCapital * Model.CostOfDebt * monthFormula / 24 +
-				Model.LoanAmount * Model.DefaultRate * (1 - Model.CollectionRate) + Model.OpexAndCapex + Model.Cogs;
+				VerificationModel.LoanAmount *
+				VerificationModel.DebtPercentOfCapital *
+				VerificationModel.CostOfDebt *
+				monthFormula /
+				24 +
+				netLossFromDefault +
+				VerificationModel.OpexAndCapex +
+				VerificationModel.Cogs;
 
 			decimal monthlyInterestRateDenominator =
-				Model.LoanAmount * (1 - Model.DefaultRate) * monthFormula;
+				VerificationModel.LoanAmount * (1 - VerificationModel.DefaultRate) * monthFormula;
 
-			if (monthlyInterestRateDenominator == 0) {
+			if (monthlyInterestRateDenominator == 0)
 				VerificationModel.MonthlyInterestRate = 0;
-				return;
-			} //if
-			
-			VerificationModel.MonthlyInterestRate =
-				2 *
-				(Model.TotalCost / (1 - Model.ProfitMarkup) - Model.SetupFeePounds) /
-				monthlyInterestRateDenominator;
+			else {
+				VerificationModel.MonthlyInterestRate =
+					2 *
+					(VerificationModel.TotalCost / (1 - VerificationModel.ProfitMarkup) - VerificationModel.SetupFeePounds) /
+					monthlyInterestRateDenominator;
 
-			VerificationModel.PricingSourceModels.Add(new PricingSourceModel {
-				LoanSource = LoanSourceName.Standard,
-				Source = "Ezbob loan",
-				InterestRate = Model.MonthlyInterestRate,
-				SetupFee = Model.SetupFeePercents,
-				IsPreferable = true,
-			});
+				VerificationModel.PricingSourceModels.Add(new PricingSourceModel {
+					LoanSource = LoanSourceName.Standard,
+					Source = "Ezbob loan",
+					InterestRate = VerificationModel.MonthlyInterestRate,
+					SetupFee = VerificationModel.SetupFeePercents,
+					IsPreferable = true,
+				});
+			} // if
+
+			Log.Debug(@"
+Total cost formulae are:
+     Aδγ(2õ + ḿ + 1)
+Δ = -----------------
+           24
+
+N = Ad(1 - ρ)
+
+C = Δ + N + Ω + ξ   <-- this is total loan cost
+Terms in the above formulae are:\n\t{0}\n", string.Join("\n\t",
+				DisplayFormulaTerm(VerificationModel.LoanAmount, "A", "loan amount"),
+				DisplayFormulaTerm(VerificationModel.LoanTerm, "n", "repayment months"),
+				DisplayFormulaTerm(VerificationModel.InterestOnlyPeriod, "o", "interest only months"),
+				DisplayFormulaTerm(VerificationModel.TenurePercents, "t", "tenure rate"),
+				DisplayFormulaTerm(VerificationModel.TenureMonths, "ñ", "repayment months after tenure"),
+				DisplayFormulaTerm(interestOnlyMonths, "õ", "interest only months after tenure"),
+				DisplayFormulaTerm(repaymentMonths, "ḿ", "ñ - õ"),
+				DisplayFormulaTerm(VerificationModel.DebtPercentOfCapital, "δ", "debt/total capital"),
+				DisplayFormulaTerm(VerificationModel.CostOfDebt, "γ", "cost of debt"),
+				DisplayFormulaTerm(VerificationModel.DefaultRate, "d", "default rate"),
+				DisplayFormulaTerm(VerificationModel.CollectionRate, "ρ", "collection rate"),
+				DisplayFormulaTerm(VerificationModel.OpexAndCapex, "Ω", "OPEX/CAPEX"),
+				DisplayFormulaTerm(VerificationModel.Cogs, "ξ", "COGS"),
+				DisplayFormulaTerm(VerificationModel.CostOfDebt, "Δ", "debt cost"),
+				DisplayFormulaTerm(netLossFromDefault, "N", "net loss"),
+				DisplayFormulaTerm(VerificationModel.TotalCost, "C", "total loan cost")
+			));
+
+			Log.Debug(@"
+Interest rate formula is:
+           C
+      2(------- - f)
+         1 - p
+r = ----------------------
+     A(1 - d)(2õ + ḿ + 1)
+Terms in the above formula are:\n\t{0}\n", string.Join("\n\t",
+				DisplayFormulaTerm(VerificationModel.SetupFeePounds, "f", "setup fee"),
+				DisplayFormulaTerm(VerificationModel.TenureMonths, "ñ", "repayment months after tenure"),
+				DisplayFormulaTerm(interestOnlyMonths, "õ", "interest only months after tenure"),
+				DisplayFormulaTerm(repaymentMonths, "ḿ", "ñ - õ"),
+				DisplayFormulaTerm(VerificationModel.TotalCost, "C", "total loan cost"),
+				DisplayFormulaTerm(VerificationModel.ProfitMarkup, "p", "profit rate"),
+				DisplayFormulaTerm(VerificationModel.DefaultRate, "d", "default rate"),
+				DisplayFormulaTerm(VerificationModel.LoanAmount, "A", "loan amount"),
+				DisplayFormulaTerm(VerificationModel.MonthlyInterestRate, "r", "interest rate")
+			));
 		} // CalculateVerificationModel
+
+		private string DisplayFormulaTerm(int v, string name, string fullName) {
+			return string.Format("{0} = {1} ({2})", name, v, fullName);
+		} // DisplayFormulaTerm
+
+		private string DisplayFormulaTerm(decimal v, string name, string fullName) {
+			return string.Format("{0} = {1} ({2})", name, v, fullName);
+		} // DisplayFormulaTerm
 
 		private void CompareResults() {
 			PricingSourceModel primary = Model.PricingSourceModels
@@ -574,7 +641,7 @@
 				Log.Warn(
 					"Mismatch in offer calculation: " +
 					"primary flow has produced interest rate {0}, " +
-					"verification flows produced interest rate {1}.",
+					"verification flow produced interest rate {1}.",
 					primary.InterestRate.ToString("P3"),
 					verification.InterestRate.ToString("P3")
 				);
