@@ -61,6 +61,7 @@
     <Compile Include="AutoDecision\AutoRejection\Models\MatchingGradeRanges.cs" />
     <Compile Include="AutoDecision\AutoRejection\Models\RejectionConfigs.cs" />
     <Compile Include="Common\AutoRejectionOutput.cs" />
+    <Compile Include="MedalCalculation\TurnoverCalculator.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OnePricingFound.cs" />
     <Compile Include="ProcessHistory\AutoRejection\LGHardReject.cs" />
     <Compile Include="ProcessHistory\AutoRejection\OfferConfigurationFound.cs" />

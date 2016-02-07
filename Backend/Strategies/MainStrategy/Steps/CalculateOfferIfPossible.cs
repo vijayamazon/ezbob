@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using AutomationCalculator.Common;
+	using AutomationCalculator.MedalCalculation;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
@@ -45,6 +46,11 @@
 			this.gradeID = null;
 			this.subGradeID = null;
 
+			this.annualTurnover = null;
+			this.freeCashFlow = null;
+			this.valueAdded = null;
+			this.loanCount = null;
+
 			this.allLoanSources = ((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
 		} // constructor
 
@@ -76,11 +82,6 @@
 			} // if
 
 			CalculateMedal();
-
-			if ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null)) {
-				this.outcome = "'failure - medal calculation failed'";
-				return StepResults.Failed;
-			} // if
 
 			switch (this.autoRejectionOutput.FlowType) {
 			case AutoDecisionFlowTypes.LogicalGlue:
@@ -131,6 +132,13 @@
 			};
 
 			this.medalAgent.Execute();
+
+			if (!this.medalAgent.HasError && (Medal != null)) {
+				this.annualTurnover = Medal.AnnualTurnover;
+				this.freeCashFlow = Medal.UseHmrc() ? Medal.FreeCashFlowValue : 0;
+				this.valueAdded = Medal.UseHmrc() ? Medal.ValueAdded : 0;
+				this.loanCount = Medal.NumOfLoans;
+			} // if
 		} // CalculateMedal
 
 		private void CreateLogicalOffer() {
@@ -177,7 +185,7 @@
 			this.gradeID = grsp.GradeID;
 			this.subGradeID = grsp.SubGradeID;
 
-			ProposedAmount = GetProposedAmount(grsp);
+			ProposedAmount = GetLogicalProposedAmount(grsp);
 
 			if (ProposedAmount <= 0) {
 				CreateErrorResult("Proposed amount is not positive for {0}, no offer.", OuterContextDescription);
@@ -206,12 +214,18 @@
 			Calculate();
 		} // CreateLogicalOffer
 
-		private int GetProposedAmount(GradeRangeSubproduct grsp) {
+		private int GetLogicalProposedAmount(GradeRangeSubproduct grsp) {
+			if ((this.annualTurnover == null) || (this.freeCashFlow == null) || (this.valueAdded == null))
+				LoadTurnover();
+
+			// ReSharper disable PossibleInvalidOperationException
+			// Annual turnover, free cash flow, and value added are set, if needed, in load turnover.
 			decimal[] allOffers = {
-				Medal.AnnualTurnover * (grsp.TurnoverShare ?? 0),
-				Medal.UseHmrc() ? Medal.FreeCashFlowValue * (grsp.FreeCashFlowShare ?? 0) : 0,
-				Medal.UseHmrc() ? Medal.ValueAdded * (grsp.ValueAddedShare ?? 0) : 0
+				this.annualTurnover.Value * (grsp.TurnoverShare ?? 0),
+				this.freeCashFlow.Value * (grsp.FreeCashFlowShare ?? 0),
+				this.valueAdded.Value * (grsp.ValueAddedShare ?? 0),
 			};
+			// ReSharper restore PossibleInvalidOperationException
 
 			List<int> validOffers = allOffers.Where(v => v > 0).Select(grsp.LoanAmount).Where(v => v > 0).ToList();
 
@@ -230,9 +244,60 @@
 
 			Log.Debug("No valid offers found for {0}.", OuterContextDescription);
 			return 0;
-		} // GetProposedAmount
+		} // GetLogicalProposedAmount
+
+		private void LoadTurnover() {
+			this.annualTurnover = 0;
+			this.freeCashFlow = 0;
+			this.valueAdded = 0;
+
+			try {
+				var turnoverCalc = new TurnoverCalculator(this.customerID, DateTime.UtcNow, DB, Log);
+
+				string errorMsg;
+
+				var type = turnoverCalc.GetMedalType(out errorMsg);
+
+				if (!string.IsNullOrWhiteSpace(errorMsg)) {
+					Log.Warn(
+						"Cannot determine whether the customer is online or not for {0}: {1}.",
+						OuterContextDescription,
+						errorMsg
+					);
+					return;
+				} // if
+
+				if (type == AutomationCalculator.Common.MedalType.NoMedal) {
+					Log.Warn("Cannot determine medal type for {0}.", OuterContextDescription);
+					return;
+				} // if
+
+				turnoverCalc.Execute();
+
+				if (type.IsOnline())
+					turnoverCalc.ExecuteOnline();
+
+				this.annualTurnover = turnoverCalc.Model.AnnualTurnover;
+				this.freeCashFlow = turnoverCalc.Model.UseHmrc ? turnoverCalc.Model.FreeCashFlowValue : 0;
+				this.valueAdded = turnoverCalc.Model.UseHmrc ? turnoverCalc.Model.ValueAdded : 0;
+			} catch (Exception e) {
+				Log.Alert(e, "Failed to load turnover for {0}.", OuterContextDescription);
+			} // try
+		} // LoadTurnover
 
 		private void CreateUnlogicalOffer() {
+			if ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null)) {
+				CreateErrorResult("Medal calculation failed.");
+				return;
+			} // if
+
+			this.medalAgent.Notify();
+
+			if (Medal.HasError) {
+				CreateErrorResult("Error calculating medal.");
+				return;
+			} // if
+
 			bool isHomeOwner = DB.ExecuteScalar<bool>(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
 				CommandSpecies.StoredProcedure,
@@ -381,9 +446,12 @@
 		private PricingModelModel InitCalcualtorModel() {
 			PricingCalcuatorScenarioNames scenarioName;
 
+			if (this.loanCount == null)
+				this.loanCount = LoadLoanCount();
+
 			if (ProposedAmount <= this.smallLoanScenarioLimit)
 				scenarioName = PricingCalcuatorScenarioNames.SmallLoan;
-			else if (Medal.NumOfLoans < 1)
+			else if (this.loanCount.Value < 1)
 				scenarioName = PricingCalcuatorScenarioNames.BasicNew;
 			else
 				scenarioName = PricingCalcuatorScenarioNames.BasicRepeating;
@@ -407,6 +475,20 @@
 			return generator.Model;
 		} // InitCalculatorModel
 
+		private int LoadLoanCount() {
+			try {
+				return DB.ExecuteScalar<int>(
+					"GetCustomerLoanCount",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", this.customerID),
+					new QueryParameter("@Now", DateTime.UtcNow)
+				);
+			} catch (Exception e) {
+				Log.Alert(e, "Failed to load loan count for {0}.", OuterContextDescription);
+				return 0;
+			} // try
+		} // LoadLoanCount
+
 		private void CreateErrorResult(string format, params object[] args) {
 			CreateOfferResult(string.Format(format, args));
 		} // CreateErrorResult
@@ -421,7 +503,9 @@
 				CustomerId = this.customerID,
 				CalculationTime = DateTime.UtcNow,
 				Amount = ProposedAmount,
-				MedalClassification = Medal.MedalClassification,
+				MedalClassification = Medal == null
+					? EZBob.DatabaseLib.Model.Database.Medal.NoClassification
+					: Medal.MedalClassification,
 				FlowType = this.autoRejectionOutput.FlowType,
 				GradeID = this.gradeID,
 				SubGradeID = this.subGradeID,
@@ -465,6 +549,11 @@
 		private int loanTypeID;
 		private int? gradeID;
 		private int? subGradeID;
+
+		private decimal? annualTurnover;
+		private decimal? freeCashFlow;
+		private decimal? valueAdded;
+		private int? loanCount;
 
 		// Output.
 		private string outcome;

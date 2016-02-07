@@ -32,61 +32,20 @@
 		/// </param>
 		/// <returns>Calculated medal model.</returns>
 		public MedalOutputModel GetMedal(int customerId, DateTime calculationDate) {
-			var medalChooserData = DB.FillFirst<MedalChooserInputModelDb>(
-				"AV_GetMedalChooserInputParams",
-				new QueryParameter("@CustomerId", customerId),
-				new QueryParameter("@Now", calculationDate)
-			);
+			var turnoverCalc = new TurnoverCalculator(customerId, calculationDate, DB, Log);
 
-			bool hmrcTooOld = AccountIsTooOld(
-				calculationDate,
-				medalChooserData.HasHmrc,
-				medalChooserData.LastHmrcUpdateDate,
-				medalChooserData.MedalDaysOfMpRelevancy
-			);
+			string errorMsg;
+			var type = turnoverCalc.GetMedalType(out errorMsg);
 
-			if (hmrcTooOld) {
+			if (!string.IsNullOrWhiteSpace(errorMsg)) {
 				return new MedalOutputModel {
 					MedalType = MedalType.NoMedal,
 					Medal = Medal.NoClassification,
 					TurnoverType = null,
-					Error = "Hmrc data is too old",
+					Error = errorMsg,
 					CustomerId = customerId,
 				};
 			} // if
-
-			bool bankTooOld = AccountIsTooOld(
-				calculationDate,
-				medalChooserData.HasBank,
-				medalChooserData.LastBankUpdateDate,
-				medalChooserData.MedalDaysOfMpRelevancy
-			);
-
-			if (bankTooOld) {
-				return new MedalOutputModel {
-					MedalType = MedalType.NoMedal,
-					Medal = Medal.NoClassification,
-					TurnoverType = null,
-					Error = "Bank data is too old",
-					CustomerId = customerId,
-				};
-			} // if
-
-			var type = MedalType.NoMedal;
-
-			if (medalChooserData.IsLimited)
-				type = medalChooserData.HasOnline ? MedalType.OnlineLimited : MedalType.Limited;
-			else if (medalChooserData.HasCompanyScore)
-				type = medalChooserData.HasOnline ? MedalType.OnlineNonLimitedWithBusinessScore : MedalType.NonLimited;
-			else if (medalChooserData.HasOnline)
-				type = MedalType.OnlineNonLimitedNoBusinessScore;
-
-			bool isSoleTrader = type == MedalType.NoMedal &&
-				medalChooserData.HasPersonalScore &&
-				(medalChooserData.HasBank || medalChooserData.HasHmrc);
-
-			if (isSoleTrader)
-				type = MedalType.SoleTrader;
 
 			IMedalCalulator medalCalulator;
 
@@ -131,7 +90,7 @@
 
 			SetOfferedAmount(
 				medal,
-				medalChooserData.MinApprovalAmount
+				turnoverCalc.MinApprovalAmount
 			);
 
 			return medal;
@@ -197,15 +156,5 @@
 			} else
 				Log.Debug("Secondary medal - all the offer amounts are not valid.");
 		} // GetOfferedAmount
-
-		private static bool AccountIsTooOld(DateTime today, bool hasAccounts, DateTime? lastUpdated, int threshold) {
-			if (!hasAccounts)
-				return false;
-
-			if (lastUpdated == null)
-				return true;
-
-			return (today - lastUpdated.Value).TotalDays > threshold;
-		} // AccountIsTooOld
 	} // class MedalChooser
 } // namespace
