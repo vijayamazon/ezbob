@@ -15,6 +15,10 @@
         public List<User> Users { get; set; }
 
         public User GetUser(string userName, int? OriginID) {
+
+            if (string.IsNullOrEmpty(userName))
+                return null;
+
             if (Users == null)
                 Users = new List<User>();
 

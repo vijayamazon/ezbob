@@ -98,11 +98,15 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="angularApp\LegalDocs\app.js" />
+    <Content Include="angularApp\LegalDocs\approveCtrl.js" />
+    <Content Include="angularApp\LegalDocs\ErrorPage.html" />
     <Content Include="connection-strings.xml" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\css\Permission.css" />
     <Content Include="Areas\Work\Views\LegalDocs\Partials\nvbar.cshtml" />
     <Content Include="Areas\Work\Views\LegalDocs\LegalDocs.cshtml" />
+    <Content Include="Content\js\angular-route.js" />
     <Content Include="Content\js\skins\lightgray\content.min.css" />
     <Content Include="Content\js\skins\lightgray\skin.min.css" />
     <Content Include="Global.asax" />
@@ -111,15 +115,13 @@
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\legalDocs.css" />
     <Content Include="Content\js\angular.min.js" />
-    <Content Include="Content\js\app-legalDocs.js" />
+    <Content Include="angularApp\LegalDocs\reviewCtrl.js" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\diff_match_patch.js" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="Content\js\jquery.pretty-text-diff.js" />
     <Content Include="Content\js\moment.js" />
-    <Content Include="Content\js\legalDocsController.js" />
     <Content Include="Content\js\tinymce.min.js" />
-    <Content Include="Content\js\LegalDocs.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -148,8 +150,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Areas\Work\Views\LegalDocs\Partials\ApproveLegalDocs.cshtml" />
-    <Content Include="Areas\Work\Views\LegalDocs\Partials\ReviewLegalDocs.cshtml" />
+    <Content Include="angularApp\LegalDocs\ApproveLegalDocs.html" />
+    <Content Include="angularApp\LegalDocs\ReviewLegalDocs.html" />
     <Content Include="Areas\Work\Views\Shared\_LayoutLegalDocs.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\_LayoutLogin.cshtml" />

@@ -1,5 +1,4 @@
-﻿<div id="ReviewLegalDocs">
-
+﻿<div id="ReviewLegalDocs" style="margin-top: 20px;">
     <table class="table table-responsive table-bordered table-striped table-hover">
         <td class="col-md-1">Id</td>
         <td class="col-md-3">Template Name</td>
@@ -34,12 +33,12 @@
                     <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnReview($event)" data-toggle="tooltip" data-title="Review" style="margin-left:10px;" class="LegalDocsIcon cursor-pointer fa fa-eye"></span>
                 </div>
             </td>
-            <td><a data-toggle="tooltip" data-title="Download" class="fa fa-download" data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDownload($event)" href='@Url.Action("Download", "LegalDocs")'></a></td>
+            <td><a data-toggle="tooltip" data-title="Download" class="fa fa-download" data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDownload($event)" ng-href="{{GetDownloadURl()}}"></a></td>
     </table>
-    <textarea style="height: 500px">Easy! You should check out MoxieManager!</textarea>
-    <div style="margin-top: 10px;">
-        <span><button ng-click="OnAdd($event)" class="btn btn-primary AddTemplate disabled">Add Draft</button></span>
-        <span><button data-trigger="focus"  data-toggle="popover" data-content="Draft Changes Saved..." ng-click="OnSave($event)" class="btn btn-primary SaveTemplate disabled">Save</button></span>
+    <div style="margin-top: 20px;margin-bottom: 20px;">
+        <span><button ng-click="OnAddDraft($event)" class="btn btn-primary AddTemplate disabled">Add Draft</button></span>
+        <span><button data-trigger="focus" data-toggle="popover" data-content="Draft Changes Saved..." ng-click="OnSave($event)" class="btn btn-primary SaveTemplate disabled">Save</button></span>
     </div>
+    <textarea style="height: 500px; margin-top: 20px;"></textarea>
 </div>
 

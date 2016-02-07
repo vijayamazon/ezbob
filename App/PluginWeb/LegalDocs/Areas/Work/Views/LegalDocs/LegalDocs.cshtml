@@ -1,27 +1,10 @@
 ﻿@{
     Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/nvbar.cshtml");
 }
-<div ng-app="app-legalDocs" class="row" style="margin-top: 20px;">
-    <div ng-controller="legalDocsController" class="col-md-10 col-md-offset-1" style="margin-top: 20px;">
-        <div id="tabContentWrapper">
-            <div id="ApproveLegalDocsWrapper">
-                <div class="tabContentApproveLegalDocs" style="width:100%">
-                    @{
-                        Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/ApproveLegalDocs.cshtml");
-                    }
-                    
-                </div>
-            </div>
-            <div id="ReviewLegalDocsWrapper">
-                <div class="tabContentReviewLegalDocs" style="width:100%">
-                    @{
-                        Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/ReviewLegalDocs.cshtml");
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+<div ng-app="legalDocsApp" class="col-md-9 col-md-offset-1" style="margin-top: 20px;">
+    <div ng-view></div>
 </div>
+
 <script>
     var urlGetLatestLegalDocs = '@Url.Action("GetLatestLegalDocs", "LegalDocs", new { Area = "Work" })';
     var urlAddLegalDoc = '@Url.Action("AddLegalDoc", "LegalDocs", new { Area = "Work" })';
@@ -30,36 +13,5 @@
     var urlDeleteLegalDoc = '@Url.Action("DeleteLegalDoc", "LegalDocs", new { Area = "Work" })';
     var urlSaveLegalDoc = '@Url.Action("SaveLegalDoc", "LegalDocs", new { Area = "Work" })';
     var urlUpdateCurrentTemplate = '@Url.Action("UpdateCurrentTemplate", "LegalDocs", new { Area = "Work" })';
-    $(document).ready(function () {
-        
-        $("#ReviewLegalDocsWrapper").hide();
-        $("#ApproveLegalDocsWrapper").hide();
-        $(".LegalDocsTab").click(function (e) {
-            var id = $(e.target).parent().attr("id");
-            if (id === "ReviewLegalDocsTab") {
-                $("#ReviewLegalDocsTab").addClass("active");
-                $("#ApproveLegalDocsTab").removeClass("active");
-                $("#ReviewLegalDocsWrapper").show();
-                $("#ApproveLegalDocsWrapper").hide();
-            }
-            if (id === "ApproveLegalDocsTab") {
-                $("#ApproveLegalDocsTab").addClass("active");
-                $("#ReviewLegalDocsTab").removeClass("active");
-                $("#ReviewLegalDocsWrapper").hide();
-                $("#ApproveLegalDocsWrapper").show();
-            }
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-
-        $(".diffButton").click(function () {
-            $("#wrapper tr").prettyTextDiff({
-                cleanup: $("#cleanup").is(":checked")
-            });
-        });
-        $('[data-toggle="popover"]').popover();
-        tinymce.init({
-            selector: 'textarea',
-            plugins: "table"
-        });
-    });
+    var urlDownloadUrl = '@Url.Action("Download", "LegalDocs")';
 </script>

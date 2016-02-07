@@ -32,7 +32,7 @@
                     <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnPreview($event)" data-toggle="tooltip" data-title="Preview" class="LegalDocsIcon cursor-pointer fa fa-search"></span>
                 </div>
             </td>
-            <td><a data-toggle="tooltip" data-title="Download" class="fa fa-download" data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDownload($event)" href='@Url.Action("Download", "LegalDocs")'></a></td>
+            <td><a data-toggle="tooltip" data-title="Download" class="fa fa-download" data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDownload($event)" ng-href="{{GetDownloadURl()}}"></a></td>
     </table>
 </div>
 <div id="wrapper">
