@@ -6,32 +6,41 @@ GO
 
 IF OBJECT_ID('PricingCalculatorScenarios') IS NULL
 BEGIN
+	CREATE TABLE PricingCalculatorScenarios (
+		ScenarioID BIGINT IDENTITY(1, 1) NOT NULL,
+		ScenarioName NVARCHAR(50) NOT NULL,
+		OriginID INT NOT NULL,
+		BrokerSetupFee DECIMAL(18, 6) NOT NULL,
+		Cogs DECIMAL(18, 6) NOT NULL,
+		CollectionRate DECIMAL(18, 6) NOT NULL,
+		COSMECollectionRate DECIMAL(18, 6) NOT NULL,
+		CostOfDebtPA DECIMAL(18, 6) NOT NULL,
+		DebtPercentOfCapital DECIMAL(18, 6) NOT NULL,
+		DefaultRateCompanyShare DECIMAL(18, 6) NOT NULL,
+		EuCollectionRate DECIMAL(18, 6) NOT NULL,
+		InterestOnlyPeriod DECIMAL(18, 6) NOT NULL,
+		OpexAndCapex DECIMAL(18, 6) NOT NULL,
+		ProfitMarkupPercentsOfRevenue DECIMAL(18, 6) NOT NULL,
+		SetupFee DECIMAL(18, 6) NOT NULL,
+		TenurePercents DECIMAL(18, 6) NOT NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_PricingCalculatorScenarios PRIMARY KEY (ScenarioID),
+		CONSTRAINT UC_PricingCalculatorScenarios UNIQUE (ScenarioName, OriginID),
+		CONSTRAINT CHK_PricingCalculatorScenarios CHECK(LTRIM(RTRIM(ScenarioName)) != ''),
+		CONSTRAINT FK_PricingCalculatorScenarios_Origin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin (CustomerOriginID)
+	)
+
+	PRINT 'created'
+END
+GO
+
+CREATE TABLE #res (val INT)
+GO
+
+IF NOT EXISTS (SELECT * FROM PricingCalculatorScenarios)
+BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-
-		CREATE TABLE PricingCalculatorScenarios (
-			ScenarioID BIGINT IDENTITY(1, 1) NOT NULL,
-			ScenarioName NVARCHAR(50) NOT NULL,
-			OriginID INT NOT NULL,
-			BrokerSetupFee DECIMAL(18, 6) NOT NULL,
-			Cogs DECIMAL(18, 6) NOT NULL,
-			CollectionRate DECIMAL(18, 6) NOT NULL,
-			COSMECollectionRate DECIMAL(18, 6) NOT NULL,
-			CostOfDebtPA DECIMAL(18, 6) NOT NULL,
-			DebtPercentOfCapital DECIMAL(18, 6) NOT NULL,
-			DefaultRateCompanyShare DECIMAL(18, 6) NOT NULL,
-			EuCollectionRate DECIMAL(18, 6) NOT NULL,
-			InterestOnlyPeriod DECIMAL(18, 6) NOT NULL,
-			OpexAndCapex DECIMAL(18, 6) NOT NULL,
-			ProfitMarkupPercentsOfRevenue DECIMAL(18, 6) NOT NULL,
-			SetupFee DECIMAL(18, 6) NOT NULL,
-			TenurePercents DECIMAL(18, 6) NOT NULL,
-			TimestampCounter ROWVERSION,
-			CONSTRAINT PK_PricingCalculatorScenarios PRIMARY KEY (ScenarioID),
-			CONSTRAINT UC_PricingCalculatorScenarios UNIQUE (ScenarioName, OriginID),
-			CONSTRAINT CHK_PricingCalculatorScenarios CHECK(LTRIM(RTRIM(ScenarioName)) != ''),
-			CONSTRAINT FK_PricingCalculatorScenarios_Origin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin (CustomerOriginID)
-		)
 
 		;WITH ids AS (
 			SELECT DISTINCT ScenarioId FROM PricingModelScenarios
@@ -80,12 +89,25 @@ BEGIN
 			pcs p
 			INNER JOIN CustomerOrigin o ON 1 = 1
 
-		DROP TABLE PricingModelScenarios
+		PRINT 'inserted'
 
 		COMMIT TRANSACTION
+
+		INSERT INTO #res (val) VALUES (1)
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRANSACTION
+		PRINT 'rollback'
 	END CATCH
 END
+GO
+
+IF EXISTS (SELECT * FROM #res WHERE val = 1)
+BEGIN
+	DROP TABLE PricingModelScenarios
+	PRINT 'dropped'
+END
+GO
+
+DROP TABLE #res
 GO
