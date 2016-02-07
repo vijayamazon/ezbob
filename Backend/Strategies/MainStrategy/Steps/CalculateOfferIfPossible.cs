@@ -372,8 +372,6 @@
 				return;
 			} // if
 
-			// TODO: check this point with Product Owners.
-
 			if ((this.minSetupFee == this.maxSetupFee) || !this.aspireToMinSetupFee)
 				OfferResult.InterestRate = this.minInterestRate * 100.0M;
 			else
