@@ -1,6 +1,6 @@
-﻿legalDocsControllers.controller("approveCtrl", ['$scope', '$http',function ($scope, $http) {
+﻿legalDocsControllers.controller("approveCtrl", ['$scope', '$http', function ($scope, $http) {
     $(document).ready(function () {
-        
+
         $(".LegalDocsTab").click(function (e) {
             var id = $(e.target).parent().attr("id");
             if (id === "ReviewLegalDocsTab") {
@@ -23,6 +23,13 @@
 
     $scope.loanAgreementTemplatesRepository = null;
     $scope.currentTemplateId = 0;
+    $scope.excludeDrafts = false;
+
+    $scope.ExcludeDrafts = function () {
+        $scope.excludeDrafts = !$scope.excludeDrafts;
+    }
+
+
 
     if ($scope.loanAgreementTemplatesRepository == null) {
         $http.get(urlGetLatestLegalDocs)
@@ -113,6 +120,9 @@
     }
 
     $scope.GetRepository = function () {
+        if ($scope.excludeDrafts) {
+            return $.grep($scope.loanAgreementTemplatesRepository, function (t) { return !(t.IsApproved === false && t.IsReviewed === false) });
+        }
         return $scope.loanAgreementTemplatesRepository;
     }
 
