@@ -560,8 +560,9 @@ Total cost formulae are:
 
 N = Ad(1 - ρ)
 
-C = Δ + N + Ω + ξ   <-- this is total loan cost
-Terms in the above formulae are:\n\t{0}\n", string.Join("\n\t",
+C = Δ + N + Ω + ξ <-- this is total loan cost
+Terms in the above formulae are:
+	{0}", string.Join("\n\t",
 				DisplayFormulaTerm(VerificationModel.LoanAmount, "A", "loan amount"),
 				DisplayFormulaTerm(VerificationModel.LoanTerm, "n", "repayment months"),
 				DisplayFormulaTerm(VerificationModel.InterestOnlyPeriod, "o", "interest only months"),
@@ -587,7 +588,8 @@ Interest rate formula is:
          1 - p
 r = ----------------------
      A(1 - d)(2õ + ḿ + 1)
-Terms in the above formula are:\n\t{0}\n", string.Join("\n\t",
+Terms in the above formula are:
+	{0}", string.Join("\n\t",
 				DisplayFormulaTerm(VerificationModel.SetupFeePounds, "f", "setup fee"),
 				DisplayFormulaTerm(VerificationModel.TenureMonths, "ñ", "repayment months after tenure"),
 				DisplayFormulaTerm(interestOnlyMonths, "õ", "interest only months after tenure"),
