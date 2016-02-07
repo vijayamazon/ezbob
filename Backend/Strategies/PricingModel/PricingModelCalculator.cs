@@ -35,10 +35,19 @@
 
 		public override string Name { get { return "Pricing Model Calculator"; } }
 
+		public PricingModelModel Model { get; private set; }
+		public PricingModelModel VerificationModel { get; private set; }
+
+		public string Error { get; private set; }
+
 		public override void Execute() {
 			new GetPricingModelDefaultRate(this.customerId, Model).Execute();
 
+			VerificationModel = Model.Clone().ClearOutput();
+
 			LogModel("with updated default rate");
+
+			CalculateVerificationModel();
 
 			Model.PricingSourceModels = new List<PricingSourceModel>();
 
@@ -49,13 +58,11 @@
 
 			SetCustomerOriginID();
 
+			CompareResults();
+
 			if (!string.IsNullOrEmpty(Error) && ThrowExceptionOnError)
 				throw new StrategyWarning(this, Error);
 		} // Execute
-
-		public PricingModelModel Model { get; private set; }
-
-		public string Error { get; private set; }
 
 		private void SetCustomerOriginID() {
 			Model.OriginID = DB.ExecuteScalar<int>(
@@ -498,11 +505,81 @@
 			return 0.0225M;
 		} // GetCOSMELoanMonthlyInterest
 
-		private PricingModelModel JustCalculateForComparison() {
-			var result = Model.Clone().ClearOutput();
-			//TODO
-			return result;
-		} // JustCalculateForComparison
+		private void CalculateVerificationModel() {
+			if ((TargetLoanSource != null) && (TargetLoanSource != LoanSourceName.Standard))
+				return;
+
+			int interestOnlyMonths = (int)Math.Ceiling(Model.InterestOnlyPeriod * Model.TenurePercents);
+			int loanTerm = (int)Math.Floor(Model.TenureMonths);
+			int repaymentMonths = loanTerm - interestOnlyMonths;
+
+			int monthFormula = 2 * interestOnlyMonths + repaymentMonths + 1;
+
+			VerificationModel.TotalCost =
+				Model.LoanAmount * Model.DebtPercentOfCapital * Model.CostOfDebt * monthFormula / 24 +
+				Model.LoanAmount * Model.DefaultRate * (1 - Model.CollectionRate) + Model.OpexAndCapex + Model.Cogs;
+
+			decimal monthlyInterestRateDenominator =
+				Model.LoanAmount * (1 - Model.DefaultRate) * monthFormula;
+
+			if (monthlyInterestRateDenominator == 0) {
+				VerificationModel.MonthlyInterestRate = 0;
+				return;
+			} //if
+			
+			VerificationModel.MonthlyInterestRate =
+				2 *
+				(Model.TotalCost / (1 - Model.ProfitMarkup) - Model.SetupFeePounds) /
+				monthlyInterestRateDenominator;
+
+			VerificationModel.PricingSourceModels.Add(new PricingSourceModel {
+				LoanSource = LoanSourceName.Standard,
+				Source = "Ezbob loan",
+				InterestRate = Model.MonthlyInterestRate,
+				SetupFee = Model.SetupFeePercents,
+				IsPreferable = true,
+			});
+		} // CalculateVerificationModel
+
+		private void CompareResults() {
+			PricingSourceModel primary = Model.PricingSourceModels
+				.FirstOrDefault(m => m.LoanSource == LoanSourceName.Standard && m.IsPreferable);
+
+			PricingSourceModel verification = VerificationModel.PricingSourceModels
+				.FirstOrDefault(m => m.LoanSource == LoanSourceName.Standard && m.IsPreferable);
+
+			if ((primary == null) && (verification == null)) {
+				Log.Msg("Match in offer calculation: both primary & verification flows did not produce any model.");
+				return;
+			} // if
+
+			if ((primary != null) && (verification == null)) {
+				Log.Warn("Mismatch in offer calculation: primary flow has produced an output while verification has not.");
+				Log.Debug("Primary output: interest rate = {0}.", primary.InterestRate.ToString("P3"));
+				return;
+			} // if
+
+			if ((primary == null)) {
+				Log.Warn("Mismatch in offer calculation: verification flow has produced an output while primary has not.");
+				Log.Debug("Verification output: interest rate = {0}.", verification.InterestRate.ToString("P3"));
+				return;
+			} // if
+
+			if (Math.Abs(primary.InterestRate - verification.InterestRate) < 0.001M) {
+				Log.Msg(
+					"Match in offer calculation: both primary & verification flows produced interest rate {0}.",
+					primary.InterestRate.ToString("P3")
+				);
+			} else {
+				Log.Warn(
+					"Mismatch in offer calculation: " +
+					"primary flow has produced interest rate {0}, " +
+					"verification flows produced interest rate {1}.",
+					primary.InterestRate.ToString("P3"),
+					verification.InterestRate.ToString("P3")
+				);
+			} // if
+		} // CompareResults
 
 		private readonly int customerId;
 		private readonly string tag;

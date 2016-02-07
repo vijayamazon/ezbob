@@ -134,8 +134,7 @@
 		//*********************************************************************
 
 		public PricingModelModel ClearOutput() {
-			PricingSourceModels = null;
-			// TODO
+			PricingSourceModels = new List<PricingSourceModel>();
 			return this;
 		} // ClearOutput
 
