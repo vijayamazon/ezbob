@@ -409,17 +409,19 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		});
 
 		var currentLoanSourceID = this.ui.loanSource.val();
+		if (currentLoanSourceID)
+			currentLoanSourceID = parseInt(currentLoanSourceID, 10);
 		this.ui.loanSource.empty();
 		_.each(availableLoanSources, function (ls) {
-			var selected = '';
-			if (ls.Id === currentLoanSourceID) {
-				selected = ' selected="selected" ';
-			}
-			self.ui.loanSource.append($('<option value="' + ls.Id + '"' + selected + '>' + ls.Name + '</option>'));
+			var opt = $('<option></option>').text(ls.Name).val(ls.Id);
+
+			if (ls.Id === currentLoanSourceID)
+				opt.attr('selected', 'selected');
+
+			self.ui.loanSource.append(opt);
 		});
-		if (!currentLoanSourceID) {
+		if (!currentLoanSourceID)
 			currentLoanSourceID = this.ui.loanSource.val();
-		}
 
 		var currentDiscountPlanID = this.ui.discountPlan.val();
 		this.ui.discountPlan.empty();
