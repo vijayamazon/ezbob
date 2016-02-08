@@ -34,7 +34,7 @@
 			this.verificationResult = null;
 
 			CashRequestID = cashRequestID;
-			NLCashRequestID = nlCashRequestID;
+			NLCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
 		} // constructor
 
 		public virtual string Tag { get; set; }
