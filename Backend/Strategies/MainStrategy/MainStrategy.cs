@@ -4,6 +4,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
 	using AutomationCalculator.Common;
+	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
@@ -322,7 +323,8 @@
 				this.context.CustomerDetails.IsOwnerOfOtherProperties,
 				this.context.NewCreditLineOption,
 				this.context.CustomerDetails.IsTest,
-				this.context.AvoidAutoDecision
+				this.context.AvoidAutoDecision,
+				this.context.AutoDecisionResponse.Decision == DecisionActions.ReApprove
 			));
 		} // UpdateLandRegistryData
 
@@ -535,30 +537,30 @@
 
 			InitTransition<Reject>()
 				.OnResults(LockRejected, StepResults.Affirmative)
-				.OnResults(UpdateLandRegistryData, StepResults.Negative)
+				.OnResults(Reapproval, StepResults.Negative)
 				.OnResults(LockManualAfterReject, StepResults.Failed);
 
-			InitTransition<LockRejected>().Always(UpdateLandRegistryData);
-			InitTransition<LockManualAfterReject>().Always(UpdateLandRegistryData);
+			InitTransition<LockRejected>().Always(Reapproval);
+			InitTransition<LockManualAfterReject>().Always(Reapproval);
+
+			InitTransition<Reapproval>()
+				.OnResults(LockReapproved, StepResults.Affirmative)
+				.OnResults(UpdateLandRegistryData, StepResults.Negative)
+				.OnResults(LockManualAfterReapproval, StepResults.Failed);
+
+			InitTransition<LockReapproved>()
+				.OnResults(UpdateLandRegistryData, StepResults.Success)
+				.OnResults(LockManualAfterReapproval, StepResults.Failed);
+
+			InitTransition<LockManualAfterReapproval>().Always(UpdateLandRegistryData);
 
 			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
 
 			InitTransition<CalculateOfferIfPossible>()
-				.OnResults(Reapproval, StepResults.Success)
+				.OnResults(Approval, StepResults.Success)
 				.OnResults(LockManualAfterOffer, StepResults.Failed);
 
-			InitTransition<LockManualAfterOffer>().Always(Reapproval);
-
-			InitTransition<Reapproval>()
-				.OnResults(LockReapproved, StepResults.Affirmative)
-				.OnResults(Approval, StepResults.Negative)
-				.OnResults(LockManualAfterReapproval, StepResults.Failed);
-
-			InitTransition<LockReapproved>()
-				.OnResults(Approval, StepResults.Success)
-				.OnResults(LockManualAfterReapproval, StepResults.Failed);
-
-			InitTransition<LockManualAfterReapproval>().Always(Approval);
+			InitTransition<LockManualAfterOffer>().Always(Approval);
 
 			InitTransition<Approval>()
 				.OnResults(LockApproved, StepResults.Affirmative)
