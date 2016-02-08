@@ -73,7 +73,15 @@
 		} // Now
 
 		public DateTime OfferValidUntil {
-			get { return Now.AddHours(CurrentValues.Instance.OfferValidForHours); }
+			get {
+				bool hasGoodValidFor =
+					this.autoDecisionResponse.AppValidFor.HasValue &&
+					(this.autoDecisionResponse.AppValidFor.Value > Now);
+
+				return hasGoodValidFor
+					? this.autoDecisionResponse.AppValidFor.Value
+					: Now.AddHours(CurrentValues.Instance.OfferValidForHours);
+			} // get
 			set { }
 		} // OfferValidUntil
 
