@@ -46,11 +46,6 @@
 			this.gradeID = null;
 			this.subGradeID = null;
 
-			this.annualTurnover = null;
-			this.freeCashFlow = null;
-			this.valueAdded = null;
-			this.loanCount = null;
-
 			this.allLoanSources = ((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
 		} // constructor
 
@@ -132,13 +127,6 @@
 			};
 
 			this.medalAgent.Execute();
-
-			if (!this.medalAgent.HasError && (Medal != null)) {
-				this.annualTurnover = Medal.AnnualTurnover;
-				this.freeCashFlow = Medal.UseHmrc() ? Medal.FreeCashFlowValue : 0;
-				this.valueAdded = Medal.UseHmrc() ? Medal.ValueAdded : 0;
-				this.loanCount = Medal.NumOfLoans;
-			} // if
 		} // CalculateMedal
 
 		private void CreateLogicalOffer() {
@@ -215,17 +203,45 @@
 		} // CreateLogicalOffer
 
 		private int GetLogicalProposedAmount(GradeRangeSubproduct grsp) {
-			if ((this.annualTurnover == null) || (this.freeCashFlow == null) || (this.valueAdded == null))
-				LoadTurnover();
+			decimal annualTurnover = 0;
+			decimal freeCashFlow = 0;
+			decimal valueAdded = 0;
 
-			// ReSharper disable PossibleInvalidOperationException
-			// Annual turnover, free cash flow, and value added are set, if needed, in load turnover.
+			try {
+				var turnoverCalc = new TurnoverCalculator(this.customerID, DateTime.UtcNow, DB, Log).LoadInputData();
+
+				if (turnoverCalc.OutOfDate)
+					Log.Debug("Out of date marketplaces detected for {0}.", OuterContextDescription);
+				else {
+					turnoverCalc.Execute();
+
+					if (turnoverCalc.HasOnline) {
+						Log.Debug("Online turnover for {0}.", OuterContextDescription);
+						turnoverCalc.ExecuteOnline();
+					} else
+						Log.Debug("Offline turnover for {0}.", OuterContextDescription);
+
+					annualTurnover = turnoverCalc.Model.AnnualTurnover;
+					freeCashFlow = turnoverCalc.Model.UseHmrc ? turnoverCalc.Model.FreeCashFlowValue : 0;
+					valueAdded = turnoverCalc.Model.UseHmrc ? turnoverCalc.Model.ValueAdded : 0;
+				} // if
+			} catch (Exception e) {
+				Log.Alert(e, "Failed to load turnover for {0}.", OuterContextDescription);
+			} // try
+
+			Log.Debug(
+				"Turnover = {0}, FCF = {1}, VA = {2} for {3}.",
+				annualTurnover,
+				freeCashFlow,
+				valueAdded,
+				OuterContextDescription
+			);
+
 			decimal[] allOffers = {
-				this.annualTurnover.Value * (grsp.TurnoverShare ?? 0),
-				this.freeCashFlow.Value * (grsp.FreeCashFlowShare ?? 0),
-				this.valueAdded.Value * (grsp.ValueAddedShare ?? 0),
+				annualTurnover * (grsp.TurnoverShare ?? 0),
+				freeCashFlow * (grsp.FreeCashFlowShare ?? 0),
+				valueAdded * (grsp.ValueAddedShare ?? 0),
 			};
-			// ReSharper restore PossibleInvalidOperationException
 
 			List<int> validOffers = allOffers.Where(v => v > 0).Select(grsp.LoanAmount).Where(v => v > 0).ToList();
 
@@ -245,45 +261,6 @@
 			Log.Debug("No valid offers found for {0}.", OuterContextDescription);
 			return 0;
 		} // GetLogicalProposedAmount
-
-		private void LoadTurnover() {
-			this.annualTurnover = 0;
-			this.freeCashFlow = 0;
-			this.valueAdded = 0;
-
-			try {
-				var turnoverCalc = new TurnoverCalculator(this.customerID, DateTime.UtcNow, DB, Log);
-
-				string errorMsg;
-
-				var type = turnoverCalc.GetMedalType(out errorMsg);
-
-				if (!string.IsNullOrWhiteSpace(errorMsg)) {
-					Log.Warn(
-						"Cannot determine whether the customer is online or not for {0}: {1}.",
-						OuterContextDescription,
-						errorMsg
-					);
-					return;
-				} // if
-
-				if (type == AutomationCalculator.Common.MedalType.NoMedal) {
-					Log.Warn("Cannot determine medal type for {0}.", OuterContextDescription);
-					return;
-				} // if
-
-				turnoverCalc.Execute();
-
-				if (type.IsOnline())
-					turnoverCalc.ExecuteOnline();
-
-				this.annualTurnover = turnoverCalc.Model.AnnualTurnover;
-				this.freeCashFlow = turnoverCalc.Model.UseHmrc ? turnoverCalc.Model.FreeCashFlowValue : 0;
-				this.valueAdded = turnoverCalc.Model.UseHmrc ? turnoverCalc.Model.ValueAdded : 0;
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to load turnover for {0}.", OuterContextDescription);
-			} // try
-		} // LoadTurnover
 
 		private void CreateUnlogicalOffer() {
 			if ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null)) {
@@ -446,12 +423,11 @@
 		private PricingModelModel InitCalcualtorModel() {
 			PricingCalcuatorScenarioNames scenarioName;
 
-			if (this.loanCount == null)
-				this.loanCount = LoadLoanCount();
+			int loanCount = LoadLoanCount();
 
 			if (ProposedAmount <= this.smallLoanScenarioLimit)
 				scenarioName = PricingCalcuatorScenarioNames.SmallLoan;
-			else if (this.loanCount.Value < 1)
+			else if (loanCount < 1)
 				scenarioName = PricingCalcuatorScenarioNames.BasicNew;
 			else
 				scenarioName = PricingCalcuatorScenarioNames.BasicRepeating;
@@ -476,17 +452,23 @@
 		} // InitCalculatorModel
 
 		private int LoadLoanCount() {
-			try {
-				return DB.ExecuteScalar<int>(
-					"GetCustomerLoanCount",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerID", this.customerID),
-					new QueryParameter("@Now", DateTime.UtcNow)
-				);
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to load loan count for {0}.", OuterContextDescription);
-				return 0;
-			} // try
+			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.LogicalGlue) {
+				try {
+					return DB.ExecuteScalar<int>(
+						"GetCustomerLoanCount",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@CustomerID", this.customerID),
+						new QueryParameter("@Now", DateTime.UtcNow)
+					);
+				} catch (Exception e) {
+					Log.Alert(e, "Failed to load loan count for {0}.", OuterContextDescription);
+					return 0;
+				} // try
+			} // if
+
+			return ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null) || Medal.HasError)
+				? 0
+				: Medal.NumOfLoans;
 		} // LoadLoanCount
 
 		private void CreateErrorResult(string format, params object[] args) {
@@ -549,11 +531,6 @@
 		private int loanTypeID;
 		private int? gradeID;
 		private int? subGradeID;
-
-		private decimal? annualTurnover;
-		private decimal? freeCashFlow;
-		private decimal? valueAdded;
-		private int? loanCount;
 
 		// Output.
 		private string outcome;

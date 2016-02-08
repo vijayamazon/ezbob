@@ -11,16 +11,54 @@
 		public TurnoverCalculator(int customerID, DateTime calculationDate, AConnection db, ASafeLog log) {
 			this.db = db;
 			this.log = log.Safe();
+			this.medalChooserData = null;
 
 			Model = new MedalInputModel {
 				CustomerId = customerID,
 				CalculationDate = calculationDate,
 			};
+
+			HasOnline = false;
+			MinApprovalAmount = 0;
 		} // constructor
 
 		public MedalInputModel Model { get; private set; }
 
 		public int MinApprovalAmount { get; private set; }
+
+		public bool HasOnline { get; private set; }
+
+		public bool OutOfDate { get { return this.hmrcTooOld || this.bankTooOld; } }
+
+		public TurnoverCalculator LoadInputData() {
+			if (this.medalChooserData != null)
+				return this;
+
+			this.medalChooserData = this.db.FillFirst<MedalChooserInputModelDb>(
+				"AV_GetMedalChooserInputParams",
+				new QueryParameter("@CustomerId", Model.CustomerId),
+				new QueryParameter("@Now", Model.CalculationDate)
+			);
+
+			HasOnline = this.medalChooserData.HasOnline;
+			MinApprovalAmount = this.medalChooserData.MinApprovalAmount;
+
+			this.hmrcTooOld = AccountIsTooOld(
+				Model.CalculationDate,
+				this.medalChooserData.HasHmrc,
+				this.medalChooserData.LastHmrcUpdateDate,
+				this.medalChooserData.MedalDaysOfMpRelevancy
+			);
+
+			this.bankTooOld = AccountIsTooOld(
+				Model.CalculationDate,
+				this.medalChooserData.HasBank,
+				this.medalChooserData.LastBankUpdateDate,
+				this.medalChooserData.MedalDaysOfMpRelevancy
+			);
+
+			return this;
+		} // LoadInputData
 
 		/// <summary>
 		/// Determines which medal to calculate and calculates it.
@@ -31,54 +69,32 @@
 		public MedalType GetMedalType(out string errorMsg) {
 			errorMsg = null;
 
-			var medalChooserData = this.db.FillFirst<MedalChooserInputModelDb>(
-				"AV_GetMedalChooserInputParams",
-				new QueryParameter("@CustomerId", Model.CustomerId),
-				new QueryParameter("@Now", Model.CalculationDate)
-			);
+			LoadInputData();
 
-			bool hmrcTooOld = AccountIsTooOld(
-				Model.CalculationDate,
-				medalChooserData.HasHmrc,
-				medalChooserData.LastHmrcUpdateDate,
-				medalChooserData.MedalDaysOfMpRelevancy
-			);
-
-			if (hmrcTooOld) {
-				errorMsg =  "Hmrc data is too old";
+			if (this.hmrcTooOld) {
+				errorMsg = "HMRC data is too old";
 				return MedalType.NoMedal;
-
 			} // if
 
-			bool bankTooOld = AccountIsTooOld(
-				Model.CalculationDate,
-				medalChooserData.HasBank,
-				medalChooserData.LastBankUpdateDate,
-				medalChooserData.MedalDaysOfMpRelevancy
-			);
-
-			if (bankTooOld) {
+			if (this.bankTooOld) {
 				errorMsg = "Bank data is too old";
 				return MedalType.NoMedal;
 			} // if
 
 			var type = MedalType.NoMedal;
 
-			if (medalChooserData.IsLimited)
-				type = medalChooserData.HasOnline ? MedalType.OnlineLimited : MedalType.Limited;
-			else if (medalChooserData.HasCompanyScore)
-				type = medalChooserData.HasOnline ? MedalType.OnlineNonLimitedWithBusinessScore : MedalType.NonLimited;
-			else if (medalChooserData.HasOnline)
+			if (this.medalChooserData.IsLimited)
+				type = this.medalChooserData.HasOnline ? MedalType.OnlineLimited : MedalType.Limited;
+			else if (this.medalChooserData.HasCompanyScore)
+				type = this.medalChooserData.HasOnline ? MedalType.OnlineNonLimitedWithBusinessScore : MedalType.NonLimited;
+			else if (this.medalChooserData.HasOnline)
 				type = MedalType.OnlineNonLimitedNoBusinessScore;
 
-			bool isSoleTrader = type == MedalType.NoMedal &&
-				medalChooserData.HasPersonalScore &&
-				(medalChooserData.HasBank || medalChooserData.HasHmrc);
+			bool isSoleTrader = type == MedalType.NoMedal && this.medalChooserData.HasPersonalScore &&
+				(this.medalChooserData.HasBank || this.medalChooserData.HasHmrc);
 
 			if (isSoleTrader)
 				type = MedalType.SoleTrader;
-
-			MinApprovalAmount = medalChooserData.MinApprovalAmount;
 
 			return type;
 		} // GetMedal
@@ -307,6 +323,9 @@
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;
+		private MedalChooserInputModelDb medalChooserData;
+		private bool hmrcTooOld;
+		private bool bankTooOld;
 
 		private static bool AccountIsTooOld(DateTime today, bool hasAccounts, DateTime? lastUpdated, int threshold) {
 			if (!hasAccounts)
