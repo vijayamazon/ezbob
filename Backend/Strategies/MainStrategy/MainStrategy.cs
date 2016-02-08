@@ -34,11 +34,18 @@
 		public override void Execute() {
 			AMainStrategyStepBase currentStep = TheFirstOne();
 
+			var stepHistory = new List<StepHistoryItem>();
+
 			for ( ; ; ) {
+				var historyItem = new StepHistoryItem(currentStep.Name);
+				stepHistory.Add(historyItem);
+
 				this.context.CurrentStepName = currentStep.Name;
 				UpdateStrategyContext();
 
 				StepResults stepResult = currentStep.Execute();
+
+				historyItem.SetResult(stepResult, currentStep.Outcome);
 
 				if (stepResult == StepResults.NormalShutdown)
 					break;
@@ -47,10 +54,11 @@
 
 				if (stepResult == StepResults.AbnormalShutdown) {
 					if (this.context.ShuttingDownUbnormally) {
-						Log.Alert(
+						historyItem.Message =
 							"Something went terribly wrong: " +
-							"abnormal shutdown request while handling previous abnormal shutdown."
-						);
+							"abnormal shutdown request while handling previous abnormal shutdown.";
+
+						Log.Alert("{0}", historyItem.Message);
 
 						break;
 					} // if
@@ -61,25 +69,34 @@
 				} else
 					nextStepKey = new StepResult(currentStep.GetType(), stepResult);
 
+				historyItem.NextStepKey = nextStepKey;
+
 				if (!this.transitions.ContainsKey(nextStepKey)) {
-					Log.Alert("Aborted: next step not specified for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: next step not specified for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
 
 				var nextStepCreator = this.transitions[nextStepKey];
 
 				if (nextStepCreator == null) {
-					Log.Alert("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
 
 				currentStep = nextStepCreator();
 
 				if (currentStep == null) {
-					Log.Alert("Aborted: failed to create next step for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: failed to create next step for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
+
+				historyItem.NextStepName = currentStep.Name;
 			} // while
+
+			Log.Debug("Trace for {0}:\n\t{1}\n", this.context.Description, string.Join("\n\t", stepHistory));
 		} // Execute
 
 		private StepResult OnAbnormalShutdown() {

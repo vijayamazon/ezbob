@@ -61,6 +61,8 @@
 		[StepOutput]
 		public int ProposedAmount { get; private set; }
 
+		public override string Outcome { get { return this.outcome; } }
+
 		protected override StepResults Run() {
 			if (this.autoRejectionOutput == null) {
 				Log.Alert("No auto rejection output specified for {0}, auto decision is aborted.", OuterContextDescription);
@@ -111,8 +113,6 @@
 			this.outcome = "'success'";
 			return StepResults.Success;
 		} // Run
-
-		protected override string Outcome { get { return this.outcome; } }
 
 		private void CalculateMedal() {
 			this.medalAgent = new CalculateMedal(

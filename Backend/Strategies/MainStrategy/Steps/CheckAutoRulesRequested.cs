@@ -9,7 +9,7 @@
 			this.newCreditLineOption = newCreditLineOption;
 		} // constructor
 
-		protected override string Outcome {
+		public override string Outcome {
 			get {
 				return this.newCreditLineOption.AvoidAutoDecision()
 					? "'not requested auto rules'"

@@ -165,7 +165,7 @@
 			Trail.MyInputData.MinLoan = ConfigManager.CurrentValues.Instance.MinLoan;
 
 			Output = new AutoReapprovalOutput {
-				AppValidFor = Now.AddDays(MetaData.OfferLength),
+				AppValidFor = Now.AddHours(MetaData.OfferLength),
 				IsEmailSendingBanned = MetaData.IsEmailSendingBanned,
 				LastApprovedCashRequestID = MetaData.LacrID,
 			};
