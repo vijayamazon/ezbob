@@ -282,6 +282,7 @@
     <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
     <Compile Include="NewLoan\DAL\ILoanFees.cs" />
     <Compile Include="NewLoan\DAL\LoanFees.cs" />
+    <Compile Include="NewLoan\Migration\MigrateLoans.cs" />
     <Compile Include="NewLoan\SaveFee.cs" />
     <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="StoredProcs\GetCustomerCompanyID.cs" />

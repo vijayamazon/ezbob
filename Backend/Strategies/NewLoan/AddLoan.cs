@@ -223,7 +223,7 @@
 					model.Loan.Fees.Clear();
 					model.Loan.Fees.AddRange(nlFees);
 
-	
+
 					// 7. history
 					history.LoanID = LoanID;
 					history.Description = "adding loan. oldID: " + model.Loan.OldLoanID;
@@ -408,7 +408,7 @@
 			string emailFromName = CurrentValues.Instance.MailSenderName;
 			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
-			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, LoanID, string.IsNullOrEmpty(Error)?"No error":Error);
+			string sMsg = string.Format("{0}. cust {1} user {2}, oldloan {3}, LoanID {4} error: {5}", subject, model.CustomerID, model.UserID, model.Loan.OldLoanID, LoanID, string.IsNullOrEmpty(Error) ? "No error" : Error);
 
 			history.Schedule.Clear();
 			history.Schedule = schedule;

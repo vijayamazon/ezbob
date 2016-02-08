@@ -17,12 +17,10 @@
 	using PaymentServices.Calculators;
 	using StructureMap;
 
-	public class RescheduleLoan<T> : AStrategy {
+	public class RescheduleLoan9Feb2016<T> : AStrategy {
 
-		public RescheduleLoan(T t, ReschedulingArgument reschedulingArgument) {
+		public RescheduleLoan9Feb2016(T t, ReschedulingArgument reschedulingArgument) {
 			this.ReschedulingArguments = reschedulingArgument;
-
-			useNL = false;
 
 			if (t.GetType() == typeof(Loan)) {
 				this.tLoan = t as Loan;
@@ -32,7 +30,6 @@
 			} else if (t.GetType() == typeof(NL_Model)) {
 				this.tNLLoan = t as NL_Model;
 				this.tLoan = null;
-				useNL = true;
 			}
 
 			this.Result = new ReschedulingResult();
@@ -57,18 +54,11 @@
 
 			this.sendDebugMail = CurrentValues.Instance.ReschedulingDebugMail;
 			this.toAddressDebugMail = CurrentValues.Instance.ReschedulingDebugMailAddress;
-
-			this.strategyArgs = new object[] {
-				this.ReschedulingArguments, this.Result
-			};
 		}
 
-		public override string Name {
-			get { return "RescheduleLoan"; }
-		}
-
-		public ReschedulingArgument ReschedulingArguments; // input
-		public ReschedulingResult Result; // output
+		public override string Name { get { return "RescheduleLoan"; } }
+		public ReschedulingArgument ReschedulingArguments;	// input
+		public ReschedulingResult Result;	// output
 
 		public override void Execute() {
 
@@ -148,8 +138,7 @@
 					Log.Info("LoanRepaymentScheduleCalculator NextEarlyPayment EXCEPTION: {0}", calcEx.Message);
 				}
 
-				var lastPaidSchedule = this.tLoan.Schedule.OrderBy(s => s.Date)
-					.LastOrDefault(s => (s.Status == LoanScheduleStatus.Paid || s.Status == LoanScheduleStatus.PaidOnTime || s.Status == LoanScheduleStatus.PaidEarly));
+				var lastPaidSchedule = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault(s => (s.Status == LoanScheduleStatus.Paid || s.Status == LoanScheduleStatus.PaidOnTime || s.Status == LoanScheduleStatus.PaidEarly));
 
 				// if StopFutureInterest checked - add active "freeze inteval" from FirstItemDate untill NoLimitDate
 				if (this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest) {
@@ -170,9 +159,9 @@
 
 				decimal totalEarlyPayment = calc.TotalEarlyPayment();
 				decimal P = this.Result.OpenPrincipal;
-				decimal F = calc.FeesToPay; // unpaid fees
+				decimal F = calc.FeesToPay;	// unpaid fees
 				//decimal I = lastPaidSchedule != null ? (calc.GetInterestRate(lastPaidSchedule.Date.AddDays(1), this.Result.FirstItemDate) *P) : (calc.GetInterestRate(this.tLoan.Date.Date.AddDays(1), this.Result.FirstItemDate) * P); // unpaid interest till rescheduling start date
-				decimal I = (totalEarlyPayment - P - F); // unpaid interest till first rescheduled item
+				decimal I = (totalEarlyPayment - P - F);	// unpaid interest till first rescheduled item
 				I = I < 0 ? 0 : I; // bugfix EZ-4236
 				decimal r = ((this.ReschedulingArguments.RescheduleIn == false && this.ReschedulingArguments.StopFutureInterest)) ? 0 : this.tLoan.InterestRate;
 
@@ -293,7 +282,7 @@
 				//check "first iPrincipal negative" case: if first iPrincipal <= 0, remove this and reduce this.Result.IntervalsNum
 				if (firstPrincipal < 0) {
 					Log.Debug("AAA Periods: {0}, newInstalment: {1}, close date: {2}, balance: {3}, firstItemDate: {4}, firstPrincipal: {5}, " +
-						"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, this.Result.FirstItemDate, firstPrincipal, P, I, F, r);
+									"P: {6}, I: {7}, F: {8}, r: {9}", this.Result.IntervalsNum, iPrincipal, this.Result.LoanCloseDate, this.Result.ReschedulingBalance, this.Result.FirstItemDate, firstPrincipal, P, I, F, r);
 					this.Result.IntervalsNum -= 1;
 					firstPrincipal = iPrincipal;
 					if ((iPrincipal * (this.Result.IntervalsNum - 1) + firstPrincipal) != balance) {
@@ -464,8 +453,7 @@
 					return;
 
 				this.Result.LoanInterestRate = this.tLoan.InterestRate;
-				LoanScheduleItem lastScheduleItem = this.tLoan.Schedule.OrderBy(s => s.Date)
-					.LastOrDefault();
+				LoanScheduleItem lastScheduleItem = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
 				if (lastScheduleItem != null) {
 					this.Result.LoanCloseDate = lastScheduleItem.Date; // 'maturity date'
 				}
@@ -474,8 +462,7 @@
 
 				// hold LoanChangesHistory (loan state before changes) before re-schedule
 				this.loanHistory = new LoanChangesHistory {
-					Data = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan)
-						.ToJSON(),
+					Data = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan).ToJSON(),
 					Date = this.ReschedulingArguments.ReschedulingDate,
 					Loan = this.tLoan
 				};
@@ -483,34 +470,9 @@
 				this.sbBeforeLoanState.Append(this.tLoan);
 			}
 
-			// load NL state
 			if (this.tNLLoan != null) {
-
-				GetLoanState state = new GetLoanState(this.tNLLoan.CustomerID, this.tNLLoan.Loan.LoanID, DateTime.Now);
-				state.Execute();
-
-				// failed to load loan from DB
-				if (!string.IsNullOrEmpty(state.Error)) {
-					this.Result.Error = state.Error;
-					NL_AddLog(LogType.Error, "NL Loan get state failed", this.strategyArgs, state.Error, this.Result.Error, null);
-					return;
-				}
-
-				this.tNLLoan = state.Result;
-
-				this.Result.LoanInterestRate = this.tNLLoan.Loan.LastHistory()
-					.InterestRate;
-				NL_LoanSchedules lastScheduleItem = new NL_LoanSchedules();
-				this.tNLLoan.Loan.Histories.ForEach(h => lastScheduleItem = h.Schedule.OrderBy(s => s.PlannedDate)
-					.LastOrDefault(s => s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule));
-				if (lastScheduleItem != null) {
-					this.Result.LoanCloseDate = lastScheduleItem.PlannedDate.Date; // 'maturity date'
-				}
-
-				this.sbBeforeLoanState.Append(this.tNLLoan);
-
 				// new loan structure TODO
-				//Log.Debug("NEW LOAN STRUCTURE NOT IMPLEMENTED YET");
+				Log.Debug("NEW LOAN STRUCTURE NOT IMPLEMENTED YET");
 			}
 
 			// if sent "default" value (0), replace by default calculated
@@ -531,10 +493,8 @@
 				try {
 
 					//save LoanChangesHistory (loan state before changes) before re-schedule
-					this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>()
-						.Get(Context.UserID);
-					ObjectFactory.GetInstance<LoanChangesHistoryRepository>()
-						.Save(this.loanHistory);
+					this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>().Get(Context.UserID);
+					ObjectFactory.GetInstance<LoanChangesHistoryRepository>().Save(this.loanHistory);
 
 					Log.Debug("==========================Saving rescheduled loan: {0}", this.tLoan);
 					this.tLoan.Status = this.ReschedulingArguments.RescheduleIn ? LoanStatus.Live : LoanStatus.Late;
@@ -580,28 +540,22 @@
 
 			subject = subject + " for customerID: " + this.tLoan.Customer.Id + ", by userID: " + Context.UserID + ", Loan ref: " + this.tLoan.RefNumber;
 
-			var stateBefore = JsonConvert.DeserializeObject<EditLoanDetailsModel>(this.loanHistory.Data)
-				.Items;
+			var stateBefore = JsonConvert.DeserializeObject<EditLoanDetailsModel>(this.loanHistory.Data).Items;
 			StringBuilder sb = new StringBuilder();
 			if (stateBefore != null) {
 				foreach (var i in stateBefore) {
-					sb.Append("<p>")
-						.Append(i)
-						.Append("</p>");
+					sb.Append("<p>").Append(i).Append("</p>");
 				}
 			}
 
 			this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
 			var calc = new LoanRepaymentScheduleCalculator(this.tLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
-			var currentState = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan)
-				.Items;
+			var currentState = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan).Items;
 			StringBuilder currentStateStr = new StringBuilder();
 			if (currentState != null) {
 				foreach (var ii in currentState) {
-					currentStateStr.Append("<p>")
-						.Append(ii)
-						.Append("</p>");
+					currentStateStr.Append("<p>").Append(ii).Append("</p>");
 				}
 			}
 
@@ -610,14 +564,14 @@
 
 			this.message = string.Format(
 				"<h3>CustomerID: {0}; UserID: {1}</h3>"
-					+ "<h5>Arguments</h5>  <pre>{2}</pre>"
-					+ "<h5>Result</h5>  <pre>{3}</pre>"
-					+ "<h5>Error</h5> {4}"
-					+ "<h5>Loan state before action</h5> <pre>{5}</pre>"
-					+ "<h5>Current schedule - after action</h5> <pre>{6}</pre>"
+				 + "<h5>Arguments</h5>  <pre>{2}</pre>"
+				 + "<h5>Result</h5>  <pre>{3}</pre>"
+				 + "<h5>Error</h5> {4}"
+				 + "<h5>Loan state before action</h5> <pre>{5}</pre>"
+				 + "<h5>Current schedule - after action</h5> <pre>{6}</pre>"
 
-					+ "<br/><br/><br/>===================================<h5>Loan state before in view model</h5> {7}"
-					+ "<h5>Current schedule after action  in view model</h5> {8}",
+				 + "<br/><br/><br/>===================================<h5>Loan state before in view model</h5> {7}"
+				 + "<h5>Current schedule after action  in view model</h5> {8}",
 
 				this.tLoan.Customer.Id, Context.UserID
 				, (this.ReschedulingArguments)
@@ -625,23 +579,21 @@
 				, (transactionEx == null ? "NO errors" : transactionEx.ToString())
 				, (beforeStateString.Length > 0) ? beforeStateString : "not found"
 				, (currentStateString.Length > 0) ? currentStateString : "not found"
-				, (sb.ToString()
-					.Length > 0) ? sb.ToString() : "not found"
-				, (currentStateStr.ToString()
-					.Length > 0) ? currentStateStr.ToString() : "not found"
-				);
+				, (sb.ToString().Length > 0) ? sb.ToString() : "not found"
+				, (currentStateStr.ToString().Length > 0) ? currentStateStr.ToString() : "not found"
+			);
 			new Mail().Send(
 				toAddress,
-				null, // message text
-				this.message, // html
-				this.emailFromAddress, // fromEmail
-				this.emailFromName, // fromName
-				subject // subject
-				);
+				null,					// message text
+				this.message,			// html
+				this.emailFromAddress,	// fromEmail
+				this.emailFromName,		// fromName
+				subject					// subject
+			);
 		} // SendMail
 
 		private Loan tLoan;
-		private NL_Model tNLLoan;
+		private readonly NL_Model tNLLoan;
 		private string message;
 		private readonly LoanRepository loanRep;
 		private readonly CultureInfo cultureInfo;
@@ -656,9 +608,5 @@
 		private readonly StringBuilder sbBeforeLoanState = new StringBuilder();
 		private readonly bool sendDebugMail;
 		private readonly string toAddressDebugMail;
-
-		private object[] strategyArgs;
-
-		public bool useNL { get; set; }
 	}
 }
