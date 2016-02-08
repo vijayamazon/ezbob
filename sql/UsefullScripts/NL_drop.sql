@@ -299,6 +299,26 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 	ALTER TABLE CollectionLog DROP CONSTRAINT FK_CollectionLog_NL_LoanHistory
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_InvestorSystemBalance_NL_Loans')
+	ALTER TABLE [dbo].[I_InvestorSystemBalance] DROP CONSTRAINT FK_I_InvestorSystemBalance_NL_Loans
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_InvestorSystemBalance_NL_Offers')
+	ALTER TABLE [dbo].[I_InvestorSystemBalance] DROP CONSTRAINT FK_I_InvestorSystemBalance_NL_Offers
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_InvestorSystemBalance_NL_Payments')
+	ALTER TABLE [dbo].[I_InvestorSystemBalance] DROP CONSTRAINT FK_I_InvestorSystemBalance_NL_Payments
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_OpenPlatformOffer_NL_Offers')
+	ALTER TABLE [dbo].[I_OpenPlatformOffer] DROP CONSTRAINT FK_I_OpenPlatformOffer_NL_Offers
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_Portfolio_I_NL_Loans')
+	ALTER TABLE [dbo].[I_Portfolio] DROP CONSTRAINT [FK_I_Portfolio_I_NL_Loans]
+GO
+
 IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('DecisionTrail') AND name = 'NLCashRequestID')
 	ALTER TABLE DecisionTrail DROP COLUMN NLCashRequestID
 GO
@@ -512,3 +532,5 @@ END;
 IF OBJECT_ID('NL_PaidSchedulesLoad') IS NOT NULL BEGIN
 	DROP PROCEDURE [dbo].[NL_PaidSchedulesLoad];
 END;
+
+

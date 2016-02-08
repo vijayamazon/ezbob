@@ -127,7 +127,7 @@
 			decimal amount
 			) {
 
-			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
+			LoanScheduleRepository installments = (LoanScheduleRepository)ObjectFactory.GetInstance<ILoanScheduleRepository>();
 			var loanPaymentFacade = new LoanPaymentFacade();
 
 			PayPointReturnData payPointReturnData = null;
@@ -220,7 +220,9 @@
 				}
 				if (payPointReturnData == null)
 					payPointReturnData = new PayPointReturnData { Error = e.Message };
-				installments.Dispose();
+
+				// modified by elinar at 9/02/2016 EZ-4678 bugfix
+				//installments.Dispose();  // you can't use a session after an exception was thrown 
 			}
 
 			return payPointReturnData;
