@@ -90,8 +90,8 @@ EzBob.Underwriter.ManageInvestorContactView = Backbone.Marionette.ItemView.exten
 			if (res.success) {
 				EzBob.ShowMessage('Contact added/updated successfully', 'Done', null, 'Ok');
 				self.trigger('cancel');
+				$(".manage-investor-row[data-id='" + investorID + "']").trigger('click', true);
 				
-				$(".manage-investor-row[data-id='" + investorID + "']").click();
 			} else {
 			    EzBob.ShowMessage(res.error, 'Failed saving investor contact', null, 'Ok');
                
