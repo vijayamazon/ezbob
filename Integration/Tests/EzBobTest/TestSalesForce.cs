@@ -231,7 +231,7 @@
 		[Test]
 		public void TestLead() {
 			LeadAccountModel model = new LeadAccountModel {
-				Email = "testdev_withbroker1@b.c",
+				Email = "testdev_withbroker2@b.c",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -248,7 +248,6 @@
 				EzbobStatus = "Wizard complete",
 				Gender = "M",
 				Industry = "Building",
-				
 				LeadSource = "LeadSource",
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
@@ -382,6 +381,15 @@
 		//---------------------Rest Service tests---------------------------------------------------------------
 
 		public ISalesForceService GetSb1Service() {
+			return ObjectFactory
+				.With("consumerKey").EqualTo("3MVG954MqIw6FnnPNMtQquUEWgFTeZVdS_G43_vBVQFTsidIuZJQgJ17SJv3PwyxSXgBWUjva9Zyq1pBALdmO")
+				.With("consumerSecret").EqualTo("1496232326147934946")
+				.With("userName").EqualTo("techapi@ezbob.com.sb1")
+				.With("password").EqualTo("yaron13572")
+				.With("token").EqualTo("5jY4oEpTcYpgjM1MpjDC5Slu1")
+				.With("environment").EqualTo("Sandbox")
+				.GetInstance<ISalesForceService>();
+			/*
 			return new SalesForceService(
 				consumerKey: "3MVG954MqIw6FnnPNMtQquUEWgFTeZVdS_G43_vBVQFTsidIuZJQgJ17SJv3PwyxSXgBWUjva9Zyq1pBALdmO",
 				consumerSecret: "1496232326147934946",
@@ -389,6 +397,7 @@
 				password: "yaron13572",
 				token: "5jY4oEpTcYpgjM1MpjDC5Slu1",
 				environment: "Sandbox");
+			 */
 		}
 
 		[Test]
