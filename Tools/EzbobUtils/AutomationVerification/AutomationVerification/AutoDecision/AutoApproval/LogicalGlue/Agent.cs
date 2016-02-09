@@ -64,7 +64,7 @@
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				switch (Trail.MyInputData.FlowType) {
 				case AutoDecisionFlowTypes.LogicalGlue:
-					Trail.Dunno<LogicalGlueFlow>().Init();
+					Trail.Affirmative<LogicalGlueFlow>(false).Init();
 
 					if (Trail.MyInputData.ErrorInLGData) {
 						Trail.Negative<LGWithoutError>(true).Init(false);
@@ -106,7 +106,7 @@
 					break;
 
 				case AutoDecisionFlowTypes.Internal:
-					Trail.Dunno<InternalFlow>().Init();
+					Trail.Affirmative<InternalFlow>(false).Init();
 					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					break;
 
