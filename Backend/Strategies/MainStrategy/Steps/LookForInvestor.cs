@@ -19,7 +19,7 @@
 		public override string Outcome { get { return this.outcome; } }
 
 		protected override StepResults Run() {
-			if (this.systemDecision.In(DecisionActions.Approve, DecisionActions.ReApprove)) {
+			if (!this.systemDecision.In(DecisionActions.Approve, DecisionActions.ReApprove)) {
 				this.outcome = "'not executed (not approved)'";
 				return StepResults.NotExecuted;
 			} // if
