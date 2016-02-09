@@ -210,9 +210,10 @@
 
 					return ex.PaypointData;
 				}
+				installments.CommitTransaction();
 
 				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, nlPayment);
-				installments.CommitTransaction();
+				
 
 			} catch (Exception e) {
 				if (!(e is PayPointException)) {
@@ -220,9 +221,7 @@
 				}
 				if (payPointReturnData == null)
 					payPointReturnData = new PayPointReturnData { Error = e.Message };
-
-				// modified by elinar at 9/02/2016 EZ-4678 bugfix
-				//installments.Dispose();  // you can't use a session after an exception was thrown 
+				installments.RollbackTransaction();
 			}
 
 			return payPointReturnData;

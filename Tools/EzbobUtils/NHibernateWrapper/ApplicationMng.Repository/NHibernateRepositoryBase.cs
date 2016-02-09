@@ -1,4 +1,5 @@
 namespace ApplicationMng.Repository {
+	using System;
 	using NHibernate;
 	using NHibernate.Linq;
 
@@ -50,8 +51,11 @@ namespace ApplicationMng.Repository {
 		} // CommitTransaction
 
 		public virtual void RollbackTransaction() {
-			this.transaction.Rollback();
-			this.transaction = null;
+			try {
+				this.transaction.Rollback();
+			} finally {
+				this.transaction = null;	
+			}
 		} // RollbackTransaction
 
 		public virtual void EvictAll() {
@@ -119,15 +123,17 @@ namespace ApplicationMng.Repository {
 		} // EnsureTransaction
 
 		public void Dispose() {
-			if (this.transaction != null) {
-				this.transaction.Rollback();
-				this.transaction.Dispose();
+			try {
+				if (this.transaction != null) {
+					this.transaction.Rollback();
+					this.transaction.Dispose();
+				} // if
+			} finally {
 				this.transaction = null;
-			} // if
+			}
 		} // Dispose
 
 		protected ISession Session { get; private set; }
-
 		private ITransaction transaction;
 	} // class NHibernateRepositoryBase
 } // namespace
