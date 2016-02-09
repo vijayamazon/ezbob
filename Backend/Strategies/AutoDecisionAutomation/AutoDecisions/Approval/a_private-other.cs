@@ -140,16 +140,14 @@
 
 			FindOutstandingLoans();
 
-			SafeReader sr = this.db.GetFirst(
+			this.trail.MyInputData.MetaData.EmailSendingBanned = this.db.ExecuteScalar<bool>(
 				"GetLastOfferDataForApproval",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.trail.CustomerID),
-				new QueryParameter("Now", Now)
+				new QueryParameter("CustomerId", this.trail.CustomerID)
 			);
 
-			this.trail.MyInputData.MetaData.EmailSendingBanned = sr["EmailSendingBanned"];
-			this.trail.MyInputData.MetaData.OfferStart = sr["OfferStart"];
-			this.trail.MyInputData.MetaData.OfferValidUntil = sr["OfferValidUntil"];
+			this.trail.MyInputData.MetaData.OfferStart = Now;
+			this.trail.MyInputData.MetaData.OfferValidUntil = Now.AddHours((int)CurrentValues.Instance.OfferValidForHours);
 
 			this.trail.MyInputData.SetDirectorNames(this.directors);
 			this.trail.MyInputData.SetHmrcBusinessNames(this.hmrcNames);

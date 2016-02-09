@@ -113,7 +113,7 @@
 			this.autoDecisionResponse.DecisionIsLocked = true;
 			this.autoDecisionResponse.HasApprovalChance = true;
 			this.autoDecisionResponse.ApprovedAmount = this.autoDecisionResponse.ProposedAmount;
-			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddDays(this.offerValidForHours);
+			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddHours(this.offerValidForHours);
 
 			this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
 			this.autoDecisionResponse.UserStatus = Status.Approved;
