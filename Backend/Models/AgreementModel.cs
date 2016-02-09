@@ -126,6 +126,8 @@
         [DataMember]
         public string LatePaymentCharge { get; set; }
         [DataMember]
+        public string AdministrationCharge { get; set; }
+        [DataMember]
         public bool IsEverlineRefinanceLoan { get; set; }
         [DataMember]
         public string EverlineRefinanceLoanRef { get; set; }
