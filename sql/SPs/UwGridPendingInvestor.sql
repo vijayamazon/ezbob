@@ -8,7 +8,6 @@ GO
 ALTER PROCEDURE UwGridPendingInvestor
 @WithTest BIT
 
-
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -57,8 +56,11 @@ BEGIN
 		c.CreditResult = 'PendingInvestor' 
 	AND 
 		r.UnderwriterDecision = 'PendingInvestor'
+	AND
+		(@WithTest = 1 OR c.IsTest = 0)
 	ORDER BY
 		c.Id DESC
 END
+
 
 GO
