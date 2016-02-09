@@ -59,7 +59,7 @@
 
 		public override void MakeAndVerifyDecision() {
 			try {
-				this.trail.UniqueID = this.args.TrailUniqueID;
+				this.trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 
 				RunPrimary();
 
