@@ -134,8 +134,15 @@
 
 			if (pi.PropertyType == typeof(AutoDecisionResponse))
 				this.context.AutoDecisionResponse.CopyFrom((AutoDecisionResponse)propertyValue);
-			else
+			else {
 				pi.SetValue(this.context, propertyValue);
+
+				Log.Debug(
+					"Collected value of {0} is {1}",
+					propertyName,
+					propertyValue == null ? "null" : propertyValue.ToString()
+				);
+			} // if
 		} // CollectStepOutputValue
 
 		private AMainStrategyStepBase FindOrCreateStep<T>(Func<T> creator) where T : AMainStrategyStepBase {

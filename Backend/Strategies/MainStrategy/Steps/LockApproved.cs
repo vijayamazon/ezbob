@@ -26,9 +26,13 @@
 			this.offerValidForHours = offerValidForHours;
 			this.minLoanAmount = minLoanAmount;
 			this.maxLoanAmount = maxLoanAmount;
+			IsSilentlyApproved = false;
 		} // constructor
 
 		public override string Outcome { get { return this.outcome; } }
+
+		[StepOutput]
+		public bool IsSilentlyApproved { get; private set; }
 
 		protected override StepResults Run() {
 			if (this.autoDecisionResponse.DecisionIsLocked) {
@@ -79,6 +83,8 @@
 			} // if
 
 			if (this.autoApproveIsSilent) {
+				IsSilentlyApproved = true;
+
 				Log.Msg("Approve is silent for {0}, switching to manual.", OuterContextDescription);
 
 				this.outcome = "'silent approve'";
