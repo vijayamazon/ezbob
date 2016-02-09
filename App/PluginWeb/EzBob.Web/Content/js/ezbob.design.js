@@ -1197,22 +1197,21 @@ EzBob.formatTimeFromNow = function(val) {
 	var registered = moment.utc(val, 'DD/MM/YYYY HH:mm:ss');
 
 	if (!registered.isValid()) {
-		console.log.apply(console, 'Invalid UW decision date');
+		console.log.apply(console, 'Invalid offer expiration date');
 		return "";
 	}
-
-	registered = registered.add(1, 'days');
 
 	var hours = registered.diff(moment().utc(), 'hours');
 	var minutes = registered.diff(moment().utc(), 'minutes');
 	
 	minutes = minutes - hours * 60;
-	return (hours > 9 ? "" : "0") + hours + ":" + (minutes > 9 ? "" : "0") + minutes;
+	
+	return (hours > 9 ? '' : '0') + hours + ':' + (minutes > 9 ? '' : '0') + minutes;
 };
 
 EzBob.formatMonths = function(num) {
-	if (!num) return "";
-	return num + " month" + (num>1 ? 's' : '');
+	if (!num) return '';
+	return num + ' month' + (num>1 ? 's' : '');
 };
 
 EzBob.isDarkColor = function(c) {
