@@ -16,7 +16,8 @@
 			bool isEmailSendingBanned,
 			int offerValidForHours,
 			int minLoanAmount,
-			int maxLoanAmount
+			int maxLoanAmount,
+			int? productSubTypeID
 		) : base(outerContextDescription) {
 			this.autoDecisionResponse = autoDecisionResponse;
 			this.autoApproveIsSilent = autoApproveIsSilent;
@@ -26,6 +27,7 @@
 			this.offerValidForHours = offerValidForHours;
 			this.minLoanAmount = minLoanAmount;
 			this.maxLoanAmount = maxLoanAmount;
+			this.productSubTypeID = productSubTypeID;
 			IsSilentlyApproved = false;
 		} // constructor
 
@@ -129,6 +131,8 @@
 			this.autoDecisionResponse.InterestRate = this.offerResult.InterestRate / 100M;
 			this.autoDecisionResponse.SetupFee = this.offerResult.SetupFee / 100M;
 
+			this.autoDecisionResponse.ProductSubTypeID = this.productSubTypeID;
+
 			this.outcome = "'approved'";
 
 			return StepResults.Success;
@@ -142,6 +146,7 @@
 		private readonly int offerValidForHours;
 		private readonly int minLoanAmount;
 		private readonly int maxLoanAmount;
+		private readonly int? productSubTypeID;
 
 		private string outcome;
 	} // class LockReapproved

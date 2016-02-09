@@ -456,7 +456,10 @@
 					this.context.LoanOfferEmailSendingBannedNew,
 					this.context.OfferValidForHours,
 					this.context.MinLoanAmount,
-					this.context.MaxLoanAmount
+					this.context.MaxLoanAmount,
+					(this.context.AutoRejectionOutput == null) || (this.context.AutoRejectionOutput.ProductSubTypeID <= 0)
+						? (int?)null
+						: this.context.AutoRejectionOutput.ProductSubTypeID
 				);
 				step.CollectOutputValue += CollectStepOutputValue;
 				return step;
