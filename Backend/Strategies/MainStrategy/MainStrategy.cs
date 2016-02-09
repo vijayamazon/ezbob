@@ -446,17 +446,21 @@
 		} // LockManualAfterApproval
 
 		private AMainStrategyStepBase LockApproved() {
-			return FindOrCreateStep(() => new LockApproved(
-				this.context.Description,
-				this.context.AutoDecisionResponse,
-				this.context.AutoApproveIsSilent,
-				this.context.OfferResult,
-				this.context.LoanSourceID,
-				this.context.LoanOfferEmailSendingBannedNew,
-				this.context.OfferValidForHours,
-				this.context.MinLoanAmount,
-				this.context.MaxLoanAmount
-			));
+			return FindOrCreateStep(() => {
+				var step = new LockApproved(
+					this.context.Description,
+					this.context.AutoDecisionResponse,
+					this.context.AutoApproveIsSilent,
+					this.context.OfferResult,
+					this.context.LoanSourceID,
+					this.context.LoanOfferEmailSendingBannedNew,
+					this.context.OfferValidForHours,
+					this.context.MinLoanAmount,
+					this.context.MaxLoanAmount
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
 		} // LockManualAfterApproval
 
 		private AMainStrategyStepBase ManualIfNotDecided() {
