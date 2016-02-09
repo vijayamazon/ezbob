@@ -123,7 +123,8 @@
 		public int CountRepayment { get; set; }
 		[DataMember]
 		public string TotalPrincipalWithSetupFee { get; set; }
-
+        [DataMember]
+        public string LatePaymentCharge { get; set; }
         [DataMember]
         public bool IsEverlineRefinanceLoan { get; set; }
         [DataMember]
