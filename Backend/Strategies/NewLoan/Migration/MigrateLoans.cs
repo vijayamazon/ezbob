@@ -87,13 +87,14 @@
 
 					// NL_Decisions
 					if (crModel.DesicionID == 0L) {
-						AddDecision sDesicion = new AddDecision(new NL_Decisions( {
+						AddDecision sDesicion = new AddDecision(new NL_Decisions() {
 							CashRequestID = crModel.CashRequestID,
 							UserID = oldLoan.CashRequest.IdUnderwriter ?? 1,
-							DecisionNameID = (int)(oldLoan.CashRequest.UnderwriterDecision??CreditResultStatus.Approved),  
-							DecisionTime = oldLoan.CashRequest.UnderwriterDecisionDate ?? nowTime, 
+							DecisionNameID = (int)(oldLoan.CashRequest.UnderwriterDecision ?? CreditResultStatus.Approved),
+							DecisionTime = oldLoan.CashRequest.UnderwriterDecisionDate ?? nowTime,
 							Notes = string.Format("migrated from old crID {0}. {1}", oldLoanID, oldLoan.CashRequest.UnderwriterComment)
-						});
+						}, oldLoan.CashRequest.Id, null);
+
 						sDesicion.Execute();
 						crModel.DesicionID = sDesicion.DecisionID;
 					}
@@ -109,14 +110,13 @@
 					if (crModel.offerID == 0L) {
 						NL_Offers offer = new NL_Offers() {
 							DecisionID = crModel.DesicionID,
-							LoanTypeID = NLLoanTypes.  oldLoan.CashRequest.LoanType.Name,
+							//LoanTypeID = NLLoanTypes.  oldLoan.CashRequest.LoanType.Name,
 							Amount = (decimal)oldLoan.CashRequest.ManagerApprovedSum,
 							StartTime = oldLoan.CashRequest.OfferStart.HasValue ?  oldLoan.CashRequest.OfferStart.Value: nowTime,
 							EndTime = oldLoan.CashRequest.OfferValidUntil.HasValue?oldLoan.CashRequest.OfferValidUntil.Value:nowTime,
 							CreatedTime = oldLoan.CashRequest.UnderwriterDecisionDate??nowTime, 
 							//DiscountPlanID = oldLoan.CashRequest.DiscountPlan.Id, // todo convert to 
 							LoanSourceID = oldLoan.CashRequest.LoanSource.ID, // (int)NLLoanSources.COSME,
-							
 							RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
 							MonthlyInterestRate = oldLoan.CashRequest.InterestRate,
 							RepaymentCount = oldLoan.CashRequest.RepaymentPeriod,

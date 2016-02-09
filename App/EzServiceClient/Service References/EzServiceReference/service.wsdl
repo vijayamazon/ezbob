@@ -653,6 +653,18 @@
   <wsdl:message name="IEzService_CancelFee_OutputMessage">
     <wsdl:part name="parameters" element="tns:CancelFeeResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelModel_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelModel" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelModel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelModelResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelScenarios_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelScenarios" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelScenarios_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelScenariosResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_PricingModelCalculate_InputMessage">
     <wsdl:part name="parameters" element="tns:PricingModelCalculate" />
   </wsdl:message>
@@ -2089,6 +2101,14 @@
     <wsdl:operation name="CancelFee">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelFee" message="tns:IEzService_CancelFee_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelFeeResponse" message="tns:IEzService_CancelFee_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelModel">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServicePricing/GetPricingModelModel" message="tns:IEzService_GetPricingModelModel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServicePricing/GetPricingModelModelResponse" message="tns:IEzService_GetPricingModelModel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelScenarios">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServicePricing/GetPricingModelScenarios" message="tns:IEzService_GetPricingModelScenarios_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServicePricing/GetPricingModelScenariosResponse" message="tns:IEzService_GetPricingModelScenarios_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PricingModelCalculate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServicePricing/PricingModelCalculate" message="tns:IEzService_PricingModelCalculate_InputMessage" />
@@ -3638,6 +3658,24 @@
     </wsdl:operation>
     <wsdl:operation name="CancelFee">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CancelFee" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelModel">
+      <soap12:operation soapAction="http://tempuri.org/IEzServicePricing/GetPricingModelModel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelScenarios">
+      <soap12:operation soapAction="http://tempuri.org/IEzServicePricing/GetPricingModelScenarios" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

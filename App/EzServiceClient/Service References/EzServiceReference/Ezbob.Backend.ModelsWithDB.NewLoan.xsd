@@ -294,8 +294,8 @@
           <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="OldFeeID" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="PaidAmount" type="xs:decimal" />
-          <xs:element minOccurs="0" name="UpdateTime" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="UpdatedByUserID" type="xs:int" />
+          <xs:element minOccurs="0" name="UpdateTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="UpdatedByUserID" nillable="true" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

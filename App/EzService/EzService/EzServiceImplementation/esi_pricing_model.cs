@@ -51,12 +51,12 @@
 		} // SavePricingModelSettings
 
 		public PricingModelModelActionResult GetPricingScenarioDetails(int underwriterId, long scenarioID) {
-			GetPricingScenarioDetails instance;
+			GetPricingModelScenarios instance;
 			ActionMetaData result = ExecuteSync(out instance, null, underwriterId, scenarioID);
 
 			return new PricingModelModelActionResult {
 				MetaData = result,
-				Value = instance.Model,
+				//Value = instance.Model,
 			};
 		} // GetPricingScenarioDetails
 	} // class EzServiceImplementation
