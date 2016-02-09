@@ -78,6 +78,7 @@
     <Compile Include="ActionResults\MessagesListActionResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
     <Compile Include="ActionResults\MultiBrandLoanSummaryActionResult.cs" />
+    <Compile Include="ActionResults\PricingScenarioNameListActionResult.cs" />
     <Compile Include="ActionResults\SetPasswordActionResult.cs" />
     <Compile Include="ActionResults\Investor\LogicalGlueResult.cs" />
     <Compile Include="ActionResults\Investor\AccountingDataResult.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="IEzServiceSalesForce.cs" />
     <Compile Include="IEzServiceBroker.cs" />
     <Compile Include="IEzServiceVatReturn.cs" />
+    <Compile Include="IEzServicePricing.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />
@@ -243,6 +245,10 @@
     <ProjectReference Include="..\..\..\Integration\SalesForceLib\SalesForceLib.csproj">
       <Project>{198579CB-CD05-46F6-AFAC-75A982B3216A}</Project>
       <Name>SalesForceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
+      <Project>{D7B3530E-4038-446D-A25A-45D6DF5B6D45}</Project>
+      <Name>AutomationCalculator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>

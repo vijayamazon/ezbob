@@ -30,7 +30,7 @@
 							new I_Investor {
 								Name = this.investor.Name,
 								InvestorTypeID = this.investor.InvestorType.InvestorTypeID,
-								IsActive = true,
+								IsActive = false,
 								Timestamp = now,
 								MonthlyFundingCapital = this.investor.MonthlyFundingCapital,
 								FundingLimitForNotification = this.investor.FundingLimitForNotification,

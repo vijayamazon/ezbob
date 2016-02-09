@@ -1,109 +1,104 @@
 ﻿@model dynamic
 
 <script type="text/template" id="pricing-model-settings-template">
-    @PricingModelSettings()
+	@PricingModelSettings()
 </script>
 
-@helper PricingModelSettings()
-{
-    <h3>Pricing model settings</h3>
-    <div class="alert-block">
-        <select id="PricingModelScenarioSettings" class="selectheight form-control">
-            <% _.each(scenarios, function(scenario) { %>
-            <option value="<%- scenario%>"><%- scenario%></option>
-            <%});%>
-        </select>
-        <br/>
-        <table class="table squeezed">
-            <thead class="box">
-                <tr class="box-title">
-                    <th colspan="2">Pricing Model Settings</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>TenurePercents: </td>
-                    <td>
-                        <input type="text" name="TenurePercents" class="form-control" value="<%-model.TenurePercents%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>DefaultRateCompanyShare: </td>
-                    <td>
-                        <input type="text" name="DefaultRateCompanyShare" class="form-control" value="<%-model.DefaultRateCompanyShare%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>InterestOnlyPeriod: </td>
-                    <td>
-                        <input type="text" name="InterestOnlyPeriod" class="form-control" value="<%-model.InterestOnlyPeriod%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>CollectionRate: </td>
-                    <td>
-                        <input type="text" name="CollectionRate" class="form-control" value="<%-model.CollectionRate%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>EuCollectionRate: </td>
-                    <td>
-                        <input type="text" name="EuCollectionRate" class="form-control" value="<%-model.EuCollectionRate%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>COSMECollectionRate: </td>
-                    <td>
-                        <input type="text" name="CosmeCollectionRate" class="form-control" value="<%-model.CosmeCollectionRate%>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Cogs: </td>
-                    <td>
-                        <input type="text" name="Cogs" class="form-control" value="<%-model.Cogs%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>DebtPercentOfCapital: </td>
-                    <td>
-                        <input type="text" name="DebtPercentOfCapital" class="form-control" value="<%-model.DebtPercentOfCapital%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>CostOfDebt: </td>
-                    <td>
-                        <input type="text" name="CostOfDebt" class="form-control" value="<%-model.CostOfDebt%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>OpexAndCapex: </td>
-                    <td>
-                        <input type="text" name="OpexAndCapex" class="form-control" value="<%-model.OpexAndCapex%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>ProfitMarkup: </td>
-                    <td>
-                        <input type="text" name="ProfitMarkup" class="form-control" value="<%-model.ProfitMarkup%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>SetupFeePercents: </td>
-                    <td>
-                        <input type="text" name="SetupFeePercents" class="form-control" value="<%-model.SetupFeePercents%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>BrokerSetupFeePercents: </td>
-                    <td>
-                        <input type="text" name="BrokerSetupFeePercents" class="form-control" value="<%-model.BrokerSetupFeePercents%>"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="buttons_container">
-            <button class="btn btn-primary" name="SavePricingModelSettings" ><i class="fa fa-check-circle" />Save</button> 
-            <button class="btn btn-primary" name="CancelPricingModelSettings" ><i class="fa fa-refresh" />Reset</button> 
-        </div>
-    </div>
+@helper PricingModelSettings() {
+	<h3>Pricing model settings</h3>
+	<div class="alert-block">
+		<select id="PricingModelScenarioSettings" class="selectheight form-control"></select>
+		<br />
+		<table class="table squeezed">
+			<thead class="box">
+				<tr class="box-title">
+					<th colspan="2">Pricing Model Settings</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>TenurePercents: </td>
+					<td>
+						<input type="text" name="TenurePercents" class="form-control" value="<%-model.TenurePercents%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>DefaultRateCompanyShare: </td>
+					<td>
+						<input type="text" name="DefaultRateCompanyShare" class="form-control" value="<%-model.DefaultRateCompanyShare%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>InterestOnlyPeriod: </td>
+					<td>
+						<input type="text" name="InterestOnlyPeriod" class="form-control" value="<%-model.InterestOnlyPeriod%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>CollectionRate: </td>
+					<td>
+						<input type="text" name="CollectionRate" class="form-control" value="<%-model.CollectionRate%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>EuCollectionRate: </td>
+					<td>
+						<input type="text" name="EuCollectionRate" class="form-control" value="<%-model.EuCollectionRate%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>COSMECollectionRate: </td>
+					<td>
+						<input type="text" name="CosmeCollectionRate" class="form-control" value="<%-model.CosmeCollectionRate%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Cogs: </td>
+					<td>
+						<input type="text" name="Cogs" class="form-control" value="<%-model.Cogs%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>DebtPercentOfCapital: </td>
+					<td>
+						<input type="text" name="DebtPercentOfCapital" class="form-control" value="<%-model.DebtPercentOfCapital%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>CostOfDebt: </td>
+					<td>
+						<input type="text" name="CostOfDebt" class="form-control" value="<%-model.CostOfDebt%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>OpexAndCapex: </td>
+					<td>
+						<input type="text" name="OpexAndCapex" class="form-control" value="<%-model.OpexAndCapex%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>ProfitMarkup: </td>
+					<td>
+						<input type="text" name="ProfitMarkup" class="form-control" value="<%-model.ProfitMarkup%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>SetupFeePercents: </td>
+					<td>
+						<input type="text" name="SetupFeePercents" class="form-control" value="<%-model.SetupFeePercents%>" />
+					</td>
+				</tr>
+				<tr>
+					<td>BrokerSetupFeePercents: </td>
+					<td>
+						<input type="text" name="BrokerSetupFeePercents" class="form-control" value="<%-model.BrokerSetupFeePercents%>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="buttons_container">
+			<button class="btn btn-primary" name="SavePricingModelSettings"><i class="fa fa-check-circle" />Save</button>
+			<button class="btn btn-primary" name="CancelPricingModelSettings"><i class="fa fa-refresh" />Reset</button>
+		</div>
+	</div>
 }

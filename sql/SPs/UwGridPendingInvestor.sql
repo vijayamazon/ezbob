@@ -39,7 +39,7 @@ BEGIN
 		'Edit Offer' AS EditOffer,
 		'ChooseInvestorCombo' AS ChooseInvestor,
 	    'Submit' AS SubmitChosenInvestor,
-		'Manage' AS ManageChosenInvestor,
+		'Config' AS ManageChosenInvestor,
 		r.Id AS CashRequestID
 	FROM
 		CashRequests r

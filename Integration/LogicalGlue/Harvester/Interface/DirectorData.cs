@@ -40,19 +40,6 @@
 		} // Postcode
 
 		/// <summary>
-		/// Director address house name.
-		/// </summary>
-		public string HouseName {
-			get {
-				if (string.IsNullOrWhiteSpace(this.houseName))
-					this.houseName = string.Empty;
-
-				return this.houseName;
-			} // get
-			set { this.houseName = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim(); }
-		} // HouseName
-
-		/// <summary>
 		/// Director address house number.
 		/// </summary>
 		public string HouseNumber {
@@ -77,7 +64,7 @@
 			if (IsApartment(line1))
 				SetHouseNumber(line2);
 			else
-				HouseName = line2;
+				HouseNumber = line2;
 		} // SetAddress
 
 		/// <summary>
@@ -102,7 +89,6 @@
 				(LastName == d.LastName) &&
 				(DateOfBirth == d.DateOfBirth) &&
 				(Postcode == d.Postcode) &&
-				(HouseName == d.HouseName) &&
 				(HouseNumber == d.HouseNumber);
 		} // Equals
 
@@ -134,7 +120,7 @@
 			if (string.IsNullOrWhiteSpace(Postcode))
 				result.Add(string.Format("{0} and no director postcode specified.", errorPrefix));
 
-			if (string.IsNullOrWhiteSpace(HouseName) && string.IsNullOrWhiteSpace(HouseNumber))
+			if (string.IsNullOrWhiteSpace(HouseNumber))
 				result.Add(string.Format("{0} and no director house name/number specified.", errorPrefix));
 		} // Validate
 
@@ -146,13 +132,12 @@
 		/// </returns>
 		public override string ToString() {
 			return string.Format(
-				"{0} {1} {2} at {3} ({4}/{5})",
+				"{0} {1} {2} at {3} ({4})",
 				FirstName,
 				LastName,
 				DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
 				Postcode,
-				string.IsNullOrWhiteSpace(HouseNumber) ? "unnumbered" : HouseNumber,
-				string.IsNullOrWhiteSpace(HouseName) ? "unnamed" : HouseName
+				string.IsNullOrWhiteSpace(HouseNumber) ? "unnumbered" : HouseNumber
 			);
 		} // ToString
 
@@ -178,7 +163,6 @@
 		} // IsApartment
 
 		private string postcode;
-		private string houseName;
 		private string houseNumber;
 
 		private const string Space = " ";

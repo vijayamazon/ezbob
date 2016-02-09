@@ -21,7 +21,7 @@
 		[StepOutput]
 		public List<string> MarketplacesToUpdate { get; private set; }
 
-		protected override string Outcome {
+		public override string Outcome {
 			get {
 				if (this.newCreditLineOption.UpdateData())
 					return "'requested data update'";

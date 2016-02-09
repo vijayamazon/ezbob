@@ -32,8 +32,6 @@
 	using StructureMap;
 
 	using ActionResult = System.Web.Mvc.ActionResult;
-	using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum;
-	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
 
 	public class AccountController : Controller {
 		public AccountController() {
@@ -425,7 +423,7 @@
 			try {
 				StringActionResult sar = this.serviceClient.Instance.GetCustomerSecurityQuestion(
 					email,
-					(RemoteCustomerOriginEnum)(int)uiOrigin.GetOrigin()
+					uiOrigin.GetOrigin()
 				);
 
 				if (string.IsNullOrWhiteSpace(sar.Value)) {
@@ -459,7 +457,7 @@
 			try {
 				StringActionResult sar = this.serviceClient.Instance.ValidateSecurityAnswer(
 					email,
-					(RemoteCustomerOriginEnum)(int)uiOrigin.GetOrigin(),
+					uiOrigin.GetOrigin(),
 					answer
 				);
 
@@ -643,7 +641,7 @@
 			try {
 				spar = this.serviceClient.Instance.SetCustomerPasswordByToken(
 					model.Token,
-					(RemoteCustomerOriginEnum)(int)origin,
+					origin,
 					new DasKennwort(model.Password),
 					new DasKennwort(model.signupPass2),
 					model.IsBrokerLead,
@@ -822,14 +820,9 @@
 			MembershipCreateStatus nStatus;
 			error = null;
 
-			ServiceClientProxy.EzServiceReference.CustomerOriginEnum? remoteOriginID = null;
-
-			if (originID != null)
-				remoteOriginID = (ServiceClientProxy.EzServiceReference.CustomerOriginEnum)(int)originID.Value;
-
 			try {
 				UserLoginActionResult ular = this.serviceClient.Instance.UserLogin(
-					remoteOriginID,
+					originID,
 					username,
 					new DasKennwort(password),
 					RemoteIp(),

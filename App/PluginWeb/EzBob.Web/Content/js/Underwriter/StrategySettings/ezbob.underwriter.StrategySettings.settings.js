@@ -3,7 +3,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.StrategySettingsView = Backbone.View.extend({
   initialize: function() {
-    return this.template = _.template($("#strategy-detail-settings").html());
+    this.template = _.template($("#strategy-detail-settings").html());
   },
   render: function() {
     var basicInterestRates, campaign, charges, defaultRateCompany, defaultRateCustomer, euLoanMonthlyInterest, experian, general, loanOfferMultipliers, pricingModel, product, openPlatform;
@@ -78,13 +78,8 @@ EzBob.Underwriter.StrategySettingsView = Backbone.View.extend({
     	model: this.openPlatformModel
     });
 
-    this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
-    this.pricingModelScenarios.fetch();
-    this.pricingModelModel = new EzBob.Underwriter.SettingsPricingModelModel();
     this.pricingModelView = new EzBob.Underwriter.SettingsPricingModelView({
       el: pricingModel,
-      model: this.pricingModelModel,
-      scenarios: this.pricingModelScenarios
     });
     
     return EzBob.handleUserLayoutSetting();

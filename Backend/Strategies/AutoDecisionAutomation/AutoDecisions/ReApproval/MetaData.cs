@@ -34,12 +34,12 @@
 			get { return !EmailSendingBanned.HasValue || EmailSendingBanned.Value; } // get
 		} // IsEmailSendingBanned
 
-		public double OfferLength {
+		public int OfferLength {
 			get {
 				if (!OfferStart.HasValue || !OfferValidUntil.HasValue)
 					return 0;
 
-				return (OfferValidUntil.Value - OfferStart.Value).TotalDays;
+				return (int)(OfferValidUntil.Value - OfferStart.Value).TotalHours;
 			} // get
 		} // OfferLength
 

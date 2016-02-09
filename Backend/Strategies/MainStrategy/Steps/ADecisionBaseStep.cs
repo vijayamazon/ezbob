@@ -21,7 +21,7 @@
 			this.outcome = "'not done'";
 		} // constructor
 
-		protected override string Outcome { get { return this.outcome; } }
+		public override string Outcome { get { return this.outcome; } }
 
 		protected bool AvoidAutomaticDecision { get; private set; }
 		protected bool Enabled { get; private set; }

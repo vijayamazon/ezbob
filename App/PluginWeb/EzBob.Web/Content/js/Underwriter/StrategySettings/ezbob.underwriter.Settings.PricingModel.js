@@ -2,18 +2,24 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.SettingsPricingModelModel = Backbone.Model.extend({
-	url: window.gRootPath + "Underwriter/StrategySettings/SettingsPricingModel"
+	url: window.gRootPath + 'Underwriter/StrategySettings/SettingsPricingModel'
 });
 
 EzBob.Underwriter.SettingsPricingModelView = Backbone.Marionette.ItemView.extend({
-	template: "#pricing-model-settings-template",
-	initialize: function (options) {
-		this.scenarios = options.scenarios;
+	template: '#pricing-model-settings-template',
+
+	initialize: function() {
+		this.scenarios = new EzBob.Underwriter.PricingModelScenarios();
+		this.model = new EzBob.Underwriter.SettingsPricingModelModel();
 		this.modelBinder = new Backbone.ModelBinder();
-		this.model.on("reset update change", this.render, this);
-		this.update();
-		return this;
-	},
+
+		var self = this;
+
+		this.scenarios.fetch().done(function() {
+			self.render();
+		});
+	}, // initialize
+
 	bindings: {
 		TenurePercents: {
 			selector: "input[name='TenurePercents']",
@@ -63,50 +69,67 @@ EzBob.Underwriter.SettingsPricingModelView = Backbone.Marionette.ItemView.extend
 		},
 		InterestOnlyPeriod: {
 			selector: "input[name='InterestOnlyPeriod']"
-		}
-	},
+		},
+	}, // bindings
+
 	events: {
-		"click button[name='SavePricingModelSettings']": "saveSettings",
-		"click button[name='CancelPricingModelSettings']": "cancelSettings",
-		"change #PricingModelScenarioSettings": "scenarioChanged"
-	},
+		'click button[name="SavePricingModelSettings"]': 'saveSettings',
+		'click button[name="CancelPricingModelSettings"]': 'cancelSettings',
+		'change #PricingModelScenarioSettings': 'scenarioChanged'
+	}, // events
+
 	scenarioChanged: function () {
-		var that, xhr;
-		this.selectedScenario = this.$el.find('#PricingModelScenarioSettings').val();
+		this.selectedScenario = parseInt(this.$el.find('#PricingModelScenarioSettings').val(), 10);
+		this.reload();
+	}, // scenarioChanged
+
+	reload: function() {
 		BlockUi();
-		that = this;
-		xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SettingsPricingModelForScenario", {
-			scenarioName: this.selectedScenario
+
+		var that = this;
+
+		var xhr = $.post('' + window.gRootPath + 'Underwriter/StrategySettings/SettingsPricingModelForScenario', {
+			scenarioID: this.selectedScenario
 		});
-		return xhr.done(function (res) {
+
+		xhr.done(function (res) {
+			console.log('new model', res);
 			that.model.set(res);
+			that.render();
 			UnBlockUi();
-			return that.render();
 		});
-	},
+	}, // reload
+
 	saveSettings: function () {
-		var xhr;
-		BlockUi("on");
-		xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SettingsSavePricingModelScenario", {
-			scenarioName: this.$el.find('#PricingModelScenarioSettings').val(),
+		BlockUi('on');
+
+		var xhr = $.post('' + window.gRootPath + 'Underwriter/StrategySettings/SettingsSavePricingModelScenario', {
+			scenarioID: this.$el.find('#PricingModelScenarioSettings').val(),
 			model: JSON.stringify(this.model.toJSON())
 		});
+
 		xhr.done(function () {
-			return EzBob.ShowMessage("Saved successfully", "Successful");
+			EzBob.ShowMessage('Saved successfully', 'Successful');
 		});
+
 		xhr.complete(function () {
-			return BlockUi("off");
+			UnBlockUi();
 		});
+
 		return false;
-	},
-	update: function () {
-		this.model.fetch({ reset: true });
-	},
+	}, // saveSettings
+
 	cancelSettings: function () {
-		this.update();
-	},
+		this.reload();
+	}, // cancelSettings
+
 	onRender: function () {
+		var firstTime = !!!this.selectedScenario;
+
+		this.refillScenarioNames();
+
 		this.modelBinder.bind(this.model, this.el, this.bindings);
+
 		this.$el.find("input[name='TenurePercents']").percentFormat();
 		this.$el.find("input[name='DefaultRateCompanyShare']").percentFormat();
 		this.$el.find("input[name='CollectionRate']").percentFormat();
@@ -118,30 +141,58 @@ EzBob.Underwriter.SettingsPricingModelView = Backbone.Marionette.ItemView.extend
 		this.$el.find("input[name='OpexAndCapex']").numericOnlyWithDecimal();
 		this.$el.find("input[name='Cogs']").numericOnlyWithDecimal();
 		this.$el.find("input[name='InterestOnlyPeriod']").numericOnly(2);
-		if (!$("body").hasClass("role-manager")) {
-			this.$el.find("input").addClass("disabled").attr({
-				readonly: "readonly",
-				disabled: "disabled"
+
+		if (!$('body').hasClass('role-manager')) {
+			this.$el.find('input').addClass('disabled').attr({
+				readonly: 'readonly',
+				disabled: 'disabled'
 			});
-			this.$el.find("button").hide();
-		}
-		if (this.selectedScenario) {
-			this.$el.find('#PricingModelScenarioSettings').val(this.selectedScenario);
-		}
-	},
-	show: function (type) {
+
+			this.$el.find('button').hide();
+		} // if
+
+		if (firstTime)
+			this.reload();
+	}, // onRender
+
+	refillScenarioNames: function() {
+		var namesBox = this.$el.find('#PricingModelScenarioSettings').empty();
+
+		var lst = this.scenarios.get('scenarios');
+
+		var self = this;
+
+		_.each(lst, function(scenario) {
+			var opt = $('<option />');
+
+			namesBox.append(opt);
+
+			opt.attr('value', scenario.ScenarioID);
+			opt.text(scenario.Origin + ': ' + scenario.ScenarioName);
+
+			if (self.selectedScenario) {
+				if (self.selectedScenario === scenario.ScenarioID)
+					opt.attr('selected', 'selected');
+			} else {
+				self.selectedScenario = scenario.ScenarioID;
+				opt.attr('selected', 'selected');
+			} // if
+		});
+	}, // refillScenarioNames
+
+	show: function () {
 		this.$el.show();
-	},
+	}, // show
+
 	hide: function () {
 		this.$el.hide();
-	},
+	}, // hide
+
 	onClose: function () {
 		this.modelBinder.unbind();
-	},
+	}, // onClose
+
 	serializeData: function () {
-		return {
-			model: this.model.toJSON(),
-			scenarios: this.scenarios.get('scenarios')
-		};
-	}
-});
+		return { model: this.model.toJSON(), };
+	}, // serializeData
+}); // EzBob.Underwriter.SettingsPricingModelView

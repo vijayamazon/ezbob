@@ -15,6 +15,8 @@
 		public decimal? TurnoverShare { get; set; }
 		public decimal? ValueAddedShare { get; set; }
 		public decimal? FreeCashFlowShare { get; set; }
+		public int? GradeID { get; set; }
+		public int? SubGradeID { get; set; }
 
 		public int LoanAmount(decimal requestedAmount) {
 			decimal result;

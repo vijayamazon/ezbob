@@ -16,7 +16,7 @@
 			this.underwriterID = underwriterID;
 		} // constructor
 
-		protected override string Outcome { get { return this.outcome; } }
+		public override string Outcome { get { return this.outcome; } }
 
 		protected override StepResults Run() {
 			if (this.systemDecision.In(DecisionActions.Approve, DecisionActions.ReApprove)) {

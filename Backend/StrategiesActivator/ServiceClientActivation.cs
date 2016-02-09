@@ -7,6 +7,7 @@
 	using System.Reflection;
 	using System.ServiceModel;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Database;
@@ -14,6 +15,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using EzServiceConfigurationLoader;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using log4net;
 	using Newtonsoft.Json;

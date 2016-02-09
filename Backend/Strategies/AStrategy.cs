@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Extensions;
+	using Ezbob.Logger;
 	using StructureMap;
 	using Newtonsoft.Json;
 
@@ -65,14 +66,14 @@
 		public StrategyContext Context { get; private set; }
 
 		public AConnection DB { get; private set; }
-		public StrategyLog Log { get; private set; }
+		public ASafeLog Log { get; private set; }
 
 		protected AStrategy() {
 			if (ReferenceEquals(Library.Instance.DB, null))
 				throw new FailedToInitStrategyException(this, new Exception("DB connection is not specified for strategy."));
 
 			DB = Library.Instance.DB;
-			Log = new StrategyLog(this, Library.Instance.Log);
+			Log = Library.Instance.Log.Safe();
 			Context = new StrategyContext();
 
 			InitDefaults(); // should not be moved to static constructor
@@ -92,7 +93,7 @@
 			string taskID = Guid.NewGuid()
 				.ToString("N");
 
-			StrategyLog log = Log;
+			ASafeLog log = Log;
 
 			log.Debug("Starting background task '{1}' with id '{0}'...", taskID, description);
 

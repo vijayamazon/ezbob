@@ -9,6 +9,10 @@
 		public DateTime CalculationTime { get; set; }
 		public int Amount { get; set; }
 		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
+		public int? GradeID { get; set; }
+		public int? SubGradeID { get; set; }
+		public long? CashRequestID { get; set; }
+		public long? NLCashRequestID { get; set; }
 
 		// Outputs
 		public AutoDecisionFlowTypes FlowType { get; set; }
@@ -60,14 +64,18 @@
 				new QueryParameter("LoanTypeId", LoanTypeId),
 				new QueryParameter("InterestRate", InterestRate),
 				new QueryParameter("SetupFee", SetupFee),
-				new QueryParameter("Error", Description)
+				new QueryParameter("Error", Description),
+				new QueryParameter("GradeID", GradeID),
+				new QueryParameter("SubGradeID", SubGradeID),
+				new QueryParameter("CashRequestID", CashRequestID),
+				new QueryParameter("NLCashRequestID", NLCashRequestID)
 			);
 		} // SaveToDb
 
 		public override string ToString() {
 			return string.Format(
-				"InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, {4}",
-				InterestRate, SetupFee, Period, LoanTypeId, Description
+				"Amount: {5}, InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, {4}",
+				InterestRate, SetupFee, Period, LoanTypeId, Description, Amount
 			);
 		} // ToString
 

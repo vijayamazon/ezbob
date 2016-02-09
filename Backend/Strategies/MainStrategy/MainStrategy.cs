@@ -4,6 +4,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
 	using AutomationCalculator.Common;
+	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
@@ -33,11 +34,18 @@
 		public override void Execute() {
 			AMainStrategyStepBase currentStep = TheFirstOne();
 
+			var stepHistory = new List<StepHistoryItem>();
+
 			for ( ; ; ) {
+				var historyItem = new StepHistoryItem(currentStep.Name);
+				stepHistory.Add(historyItem);
+
 				this.context.CurrentStepName = currentStep.Name;
 				UpdateStrategyContext();
 
 				StepResults stepResult = currentStep.Execute();
+
+				historyItem.SetResult(stepResult, currentStep.Outcome);
 
 				if (stepResult == StepResults.NormalShutdown)
 					break;
@@ -46,10 +54,11 @@
 
 				if (stepResult == StepResults.AbnormalShutdown) {
 					if (this.context.ShuttingDownUbnormally) {
-						Log.Alert(
+						historyItem.Message =
 							"Something went terribly wrong: " +
-							"abnormal shutdown request while handling previous abnormal shutdown."
-						);
+							"abnormal shutdown request while handling previous abnormal shutdown.";
+
+						Log.Alert("{0}", historyItem.Message);
 
 						break;
 					} // if
@@ -60,25 +69,34 @@
 				} else
 					nextStepKey = new StepResult(currentStep.GetType(), stepResult);
 
+				historyItem.NextStepKey = nextStepKey;
+
 				if (!this.transitions.ContainsKey(nextStepKey)) {
-					Log.Alert("Aborted: next step not specified for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: next step not specified for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
 
 				var nextStepCreator = this.transitions[nextStepKey];
 
 				if (nextStepCreator == null) {
-					Log.Alert("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
 
 				currentStep = nextStepCreator();
 
 				if (currentStep == null) {
-					Log.Alert("Aborted: failed to create next step for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: failed to create next step for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
+
+				historyItem.NextStepName = currentStep.Name;
 			} // while
+
+			Log.Debug("Trace for {0}:\n\t{1}\n", this.context.Description, string.Join("\n\t", stepHistory));
 		} // Execute
 
 		private StepResult OnAbnormalShutdown() {
@@ -322,7 +340,8 @@
 				this.context.CustomerDetails.IsOwnerOfOtherProperties,
 				this.context.NewCreditLineOption,
 				this.context.CustomerDetails.IsTest,
-				this.context.AvoidAutoDecision
+				this.context.AvoidAutoDecision,
+				this.context.AutoDecisionResponse.Decision == DecisionActions.ReApprove
 			));
 		} // UpdateLandRegistryData
 
@@ -337,7 +356,9 @@
 					this.context.AutoRejectionOutput,
 					this.context.MonthlyRepayment,
 					this.context.MaxCapHomeOwner,
-					this.context.MaxCapNotHomeOwner
+					this.context.MaxCapNotHomeOwner,
+					this.context.SmallLoanScenarioLimit,
+					this.context.AspireToMinSetupFee
 				);
 				step.CollectOutputValue += CollectStepOutputValue;
 				return step;
@@ -533,30 +554,30 @@
 
 			InitTransition<Reject>()
 				.OnResults(LockRejected, StepResults.Affirmative)
-				.OnResults(UpdateLandRegistryData, StepResults.Negative)
+				.OnResults(Reapproval, StepResults.Negative)
 				.OnResults(LockManualAfterReject, StepResults.Failed);
 
-			InitTransition<LockRejected>().Always(UpdateLandRegistryData);
-			InitTransition<LockManualAfterReject>().Always(UpdateLandRegistryData);
+			InitTransition<LockRejected>().Always(Reapproval);
+			InitTransition<LockManualAfterReject>().Always(Reapproval);
+
+			InitTransition<Reapproval>()
+				.OnResults(LockReapproved, StepResults.Affirmative)
+				.OnResults(UpdateLandRegistryData, StepResults.Negative)
+				.OnResults(LockManualAfterReapproval, StepResults.Failed);
+
+			InitTransition<LockReapproved>()
+				.OnResults(UpdateLandRegistryData, StepResults.Success)
+				.OnResults(LockManualAfterReapproval, StepResults.Failed);
+
+			InitTransition<LockManualAfterReapproval>().Always(UpdateLandRegistryData);
 
 			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
 
 			InitTransition<CalculateOfferIfPossible>()
-				.OnResults(Reapproval, StepResults.Success)
+				.OnResults(Approval, StepResults.Success)
 				.OnResults(LockManualAfterOffer, StepResults.Failed);
 
-			InitTransition<LockManualAfterOffer>().Always(Reapproval);
-
-			InitTransition<Reapproval>()
-				.OnResults(LockReapproved, StepResults.Affirmative)
-				.OnResults(Approval, StepResults.Negative)
-				.OnResults(LockManualAfterReapproval, StepResults.Failed);
-
-			InitTransition<LockReapproved>()
-				.OnResults(Approval, StepResults.Success)
-				.OnResults(LockManualAfterReapproval, StepResults.Failed);
-
-			InitTransition<LockManualAfterReapproval>().Always(Approval);
+			InitTransition<LockManualAfterOffer>().Always(Approval);
 
 			InitTransition<Approval>()
 				.OnResults(LockApproved, StepResults.Affirmative)

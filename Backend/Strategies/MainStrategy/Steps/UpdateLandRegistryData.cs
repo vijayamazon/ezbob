@@ -18,7 +18,8 @@
 			bool isOwnerOfOtherProperties,
 			NewCreditLineOption newCreditLineOption,
 			bool customerIsTest,
-			bool avoidAutoDecision
+			bool avoidAutoDecision,
+			bool customerIsAutoReapproved
 		) : base(outerContextDescription) {
 			this.customerID = customerID;
 			this.customerFullName = customerFullName;
@@ -29,6 +30,7 @@
 			this.newCreditLineOption = newCreditLineOption;
 			this.customerIsTest = customerIsTest;
 			this.avoidAutoDecision = avoidAutoDecision;
+			this.customerIsAutoReapproved = customerIsAutoReapproved;
 		} // constructor
 
 		protected override void ExecuteStep() {
@@ -41,9 +43,11 @@
 				this.customerIsTest ||
 				!isHomeOwner ||
 				this.customerIsAutoRejected ||
-				(this.flowType != AutoDecisionFlowTypes.Internal);
+				(this.flowType != AutoDecisionFlowTypes.Internal) ||
+				this.customerIsAutoReapproved;
 
-			string decisionName = this.customerIsAutoRejected ? "already rejected" : "not auto rejected";
+			string rejectDecisionName = this.customerIsAutoRejected ? "already rejected" : "not auto rejected";
+			string approveDecisionName = this.customerIsAutoReapproved ? "already approved" : "not auto re-approved";
 
 			Log.Msg(
 				"{0}etrieving Land Registry data for {1}: "+
@@ -52,8 +56,9 @@
 				"\n\tTest customer: {4}" +
 				"\n\tOwner of the main address: {5}" +
 				"\n\tOwner of other properties: {6}" +
-				"\n\tSystem decision: {7}" +
-				"\n\tFlow type: {8}",
+				"\n\tReject decision: {7}" +
+				"\n\tFlow type: {8}" +
+				"\n\tRe-approve decision: {9}",
 				skipCheck ? "Not r" : "R",
 				OuterContextDescription,
 				this.newCreditLineOption,
@@ -61,8 +66,9 @@
 				this.customerIsTest ? "yes" : "no",
 				this.isOwnerOfMainAddress ? "yes" : "no",
 				this.isOwnerOfOtherProperties ? "yes" : "no",
-				decisionName,
-				this.flowType
+				rejectDecisionName,
+				this.flowType,
+				approveDecisionName
 			);
 
 			if (skipCheck)
@@ -174,5 +180,6 @@
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly bool customerIsTest;
 		private readonly bool avoidAutoDecision;
+		private readonly bool customerIsAutoReapproved;
 	} // class UpdateLandRegistryData
 } // namespace

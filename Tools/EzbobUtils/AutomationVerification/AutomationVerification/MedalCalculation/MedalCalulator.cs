@@ -176,20 +176,12 @@
 		}
 
 		public virtual MedalInputModel GetInputParameters(int customerId, DateTime calculationDate) {
-			MedalInputModelDb dbData = this.DB.FillFirst<MedalInputModelDb>(
-				"AV_GetMedalInputParams",
-				new QueryParameter("@CustomerId", customerId),
-				new QueryParameter("@Now", calculationDate)
-			);
+			TurnoverCalculator = new TurnoverCalculator(customerId, calculationDate, this.DB, this.Log);
+			TurnoverCalculator.Execute();
 
-			var model = new MedalInputModel {
-				MedalInputModelDb = dbData
-			};
+			var model = TurnoverCalculator.Model;
+			var dbData = TurnoverCalculator.Model.MedalInputModelDb;
 
-			model.CalculationDate = calculationDate;
-
-			model.HasHmrc = dbData.HasHmrc;
-			model.UseHmrc = dbData.HasHmrc;
 			model.BusinessScore = dbData.BusinessScore;
 
 			model.BusinessSeniority = dbData.IncorporationDate.HasValue
@@ -206,102 +198,13 @@
 			model.NumOfLatePayments = dbData.NumOfLatePayments;
 			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
 
-			model.MaritalStatus = (string.IsNullOrEmpty(dbData.MaritalStatus)) ? MaritalStatus.Other : (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
-			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
+			model.MaritalStatus = (string.IsNullOrEmpty(dbData.MaritalStatus))
+				? MaritalStatus.Other
+				: (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
 
-			// --------start new turnover calculation for medal ----------------//
-			//	Flow: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
-			model.TurnoverType = null;
-			model.Turnovers = new List<TurnoverDbRow>();
-
-			this.DB.ForEachResult<TurnoverDbRow>(
-				r => {
-					model.Turnovers.Add(r);
-					r.WriteToLog(Log);
-				},
-				"GetCustomerTurnoverForAutoDecision",
-				new QueryParameter("IsForApprove", true),
-				new QueryParameter("CustomerID", customerId),
-				new QueryParameter("Now", model.CalculationDate)
-			);
-
-			if (model.HasHmrc) {
-				var hmrcList = (
-					from TurnoverDbRow r in model.Turnovers
-					where r.MpTypeID.Equals(MpType.Hmrc)
-					select r
-				).AsQueryable();
-
-				decimal hmrcTurnover = hmrcList.Sum(t => t.Turnover);
-				model.HmrcAnnualTurnover = (hmrcTurnover < 0) ? 0 : hmrcTurnover;
-
-				model.AnnualTurnover = model.HmrcAnnualTurnover;
-				model.TurnoverType = TurnoverType.HMRC;
-			} // if has HMRC
-			
-			if (dbData.NumOfBanks > 0) {
-				var yodleeList = (
-					from TurnoverDbRow r in model.Turnovers
-					where r.MpTypeID.Equals(MpType.Yodlee)
-					select r
-				).AsQueryable();
-
-				decimal yoodleeTurnover = yodleeList.Sum(t => t.Turnover);
-				model.YodleeAnnualTurnover = (yoodleeTurnover < 0) ? 0 : yoodleeTurnover;
-
-				if (model.TurnoverType.Equals(null)) {
-					model.AnnualTurnover = model.YodleeAnnualTurnover;
-					model.TurnoverType = TurnoverType.Bank;
-				} // if
-			} // if has bank
-
-			// --------end new turnover calculation for medal----------------//
-
-			model.FreeCashFlowValue = 0;
-			model.ValueAdded = 0;
-
-			decimal newActualLoansRepayment = 0;
-
-			this.DB.ForEachRowSafe(
-				srfv => {
-					RowType rt;
-
-					if (!Enum.TryParse(srfv["RowType"], out rt)) {
-						Log.Alert("MedalCalculator.GetInputParameters: Cannot parse row type from {0}", srfv["RowType"]);
-						return;
-					} // if
-
-					switch (rt) {
-					case RowType.FcfValueAdded:
-						model.FreeCashFlowValue += srfv["FreeCashFlow"];
-						model.ValueAdded += srfv["ValueAdded"];
-						break;
-
-					case RowType.NewActualLoansRepayment:
-						newActualLoansRepayment = srfv["NewActualLoansRepayment"];
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException();
-					} // switch
-				},
-				"GetCustomerAnnualFcfValueAdded",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerId),
-				new QueryParameter("Now", calculationDate)
-			);
-
-			model.FreeCashFlowValue -= newActualLoansRepayment;
-
-			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc
+			model.NetWorth = dbData.ZooplaValue == 0
 				? 0
-				: model.FreeCashFlowValue / model.AnnualTurnover;
-
-			model.TangibleEquity = model.AnnualTurnover == 0
-				? 0
-				: model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
-
-			model.CustomerId = customerId;
+				: (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
 
 			model.CapOfferByCustomerScoresTable = new CapOfferByCustomerScoreMatrix(customerId, this.DB);
 			model.CapOfferByCustomerScoresTable.Load();
@@ -309,17 +212,14 @@
 			return model;
 		} // GetInputParameters
 
-		private enum RowType {
-			NewActualLoansRepayment,
-			FcfValueAdded,
-		} // enum RowType
-
 		public abstract MedalOutputModel CalculateMedal(MedalInputModel model);
 
 		protected MedalCalculator(AConnection db, ASafeLog log) {
 			this.DB = db;
 			this.Log = log;
 		} // constructor
+
+		protected virtual TurnoverCalculator TurnoverCalculator { get; private set; }
 
 		/// <summary>
 		/// 

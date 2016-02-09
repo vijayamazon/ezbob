@@ -6,6 +6,8 @@
 	internal abstract class AMainStrategyStepBase : IComparable<AMainStrategyStepBase> {
 		public abstract StepResults Execute();
 
+		public abstract string Outcome { get; }
+
 		/// <summary>
 		/// Compares the current object with another object of the same type.
 		/// </summary>

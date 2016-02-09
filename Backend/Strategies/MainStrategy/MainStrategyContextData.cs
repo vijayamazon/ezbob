@@ -155,6 +155,8 @@
 		public string SilentEmailRecipient { get { return CurrentValues.Instance.AutoApproveSilentToAddress; } }
 		public string SilentEmailSenderAddress { get { return CurrentValues.Instance.MailSenderEmail; } }
 		public string SilentEmailSenderName { get { return CurrentValues.Instance.MailSenderName; } }
+		public int SmallLoanScenarioLimit { get { return CurrentValues.Instance.SmallLoanScenarioLimit; } }
+		public bool AspireToMinSetupFee { get { return CurrentValues.Instance.AspireToMinSetupFee; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

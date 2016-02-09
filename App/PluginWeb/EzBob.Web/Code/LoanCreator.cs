@@ -362,7 +362,7 @@
 			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.IsEnabled || cus.BlockTakingLoan) {
 				log.Warn("ValidateCustomer Invalid customer state !cus.CreditSum.HasValue {0} || !cus.CollectionStatus.IsEnabled {1} || cus.BlockTakingLoan {2} customerid: {3}",
 					 cus.CreditSum.HasValue, cus.CollectionStatus.IsEnabled, cus.BlockTakingLoan, cus.Id);
-                throw new Exception("Funding is not available please contact support " + cus.CustomerOrigin.PhoneNumber);
+                throw new Exception("Funding is not available. <br>Please contact support " + cus.CustomerOrigin.PhoneNumber);
 			}
 		} // ValidateCustomer
 

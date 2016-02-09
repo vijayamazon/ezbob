@@ -10,8 +10,6 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
-	using RemoteCustomerOriginEnum = ServiceClientProxy.EzServiceReference.CustomerOriginEnum;
-
 	public class AccountSettingsController : Controller {
 		public AccountSettingsController(IWorkplaceContext context) {
 			this.context = context;
@@ -28,7 +26,7 @@
 			try {
 				StringActionResult sar = this.serviceClient.Instance.CustomerChangePassword(
 					this.context.User.Name,
-					(RemoteCustomerOriginEnum)(int)UiCustomerOrigin.Get().GetOrigin(),
+					UiCustomerOrigin.Get().GetOrigin(),
 					new DasKennwort(oldPassword),
 					new DasKennwort(newPassword)
 				);
@@ -55,7 +53,7 @@
 			try {
 				StringActionResult sar = this.serviceClient.Instance.UserUpdateSecurityQuestion(
 					this.context.User.Name,
-					(RemoteCustomerOriginEnum)(int)UiCustomerOrigin.Get().GetOrigin(),
+					UiCustomerOrigin.Get().GetOrigin(),
 					new DasKennwort(password),
 					model.Question,
 					model.Answer

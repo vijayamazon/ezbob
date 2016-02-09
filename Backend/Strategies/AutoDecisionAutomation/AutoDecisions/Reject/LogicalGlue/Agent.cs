@@ -196,9 +196,7 @@
 						? inference.ModelOutputs[ModelNames.NeuralNetwork]
 						: null;
 
-					if (model == null)
-						inputData.ResponseErrors.Add("Neural network model not found.");
-					else if (!model.Error.IsEmpty) {
+					if ((model != null) && !model.Error.IsEmpty) {
 						if (!string.IsNullOrWhiteSpace(model.Error.ErrorCode))
 							inputData.ResponseErrors.Add(model.Error.ErrorCode);
 

@@ -333,7 +333,6 @@
 
 			var instance = new CalculateMedal(this.customerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true ) {
 				Tag = Tag,
-				QuietMode = true,
 			};
 			instance.Execute();
 

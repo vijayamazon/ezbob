@@ -38,8 +38,6 @@
 		protected AMainStrategyStep(string outerContextDescription) : base(outerContextDescription) {
 		} // constructor
 
-		protected abstract string Outcome { get; }
-
 		protected abstract StepResults Run();
 
 		protected virtual bool ShouldCollectOutput { get { return true; } }

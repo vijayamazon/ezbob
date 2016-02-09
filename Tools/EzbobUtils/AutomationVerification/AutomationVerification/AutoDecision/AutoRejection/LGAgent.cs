@@ -186,9 +186,6 @@
 				);
 			} // if
 
-			if ((long?)sr["ModelOutputID"] == null)
-				inputData.ResponseErrors.Add("Neural network model not found.");
-
 			AddError(inputData.ResponseErrors, sr["ErrorCode"]);
 			AddError(inputData.ResponseErrors, sr["Exception"]);
 

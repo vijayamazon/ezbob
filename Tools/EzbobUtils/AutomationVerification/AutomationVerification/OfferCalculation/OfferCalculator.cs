@@ -16,7 +16,11 @@
 		/// Get Offer For COSME loan source using hard coded interest selection and calculated setup fee
 		/// </summary>
 		public OfferOutputModel GetCosmeOffer() {
-			PricingScenarioModel pricingScenario = this.dbHelper.GetPricingScenario(this.input.Amount, this.input.HasLoans);
+			PricingScenarioModel pricingScenario = this.dbHelper.GetPricingScenario(
+				this.input.Amount,
+				this.input.HasLoans,
+				this.input.CustomerId
+			);
 
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,

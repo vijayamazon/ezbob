@@ -47,7 +47,7 @@
 
 		public bool IsValid { get; private set; } // IsValid
 
-		public QuickOfferModel GetOffer(bool bSaveOfferToDB, AConnection oDB, StrategyLog oLog) {
+		public QuickOfferModel GetOffer(bool bSaveOfferToDB, AConnection oDB, ASafeLog oLog) {
 			if (RequestedAmount < Cfg.MinOfferAmount) {
 				oLog.Debug("Requested amount (£{0}) is less than minimal offer amount (£{1}), not offering.", RequestedAmount, Cfg.MinOfferAmount);
 				return null;

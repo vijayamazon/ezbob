@@ -1,23 +1,19 @@
 ﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using System.Collections.Generic;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 
 	public class GetPricingModelScenarios : AStrategy {
 		public GetPricingModelScenarios() {
-			Scenarios = new List<string>();
-		}
+			Scenarios = new List<PricingScenarioName>();
+		} // constructor
 
-		public override string Name {
-			get { return "Get pricing model scenarios"; }
-		}
+		public override string Name { get { return "Get pricing scenarios names"; } }
 
-		public List<string> Scenarios { get; private set; }
+		public List<PricingScenarioName> Scenarios { get; private set; }
 
 		public override void Execute() {
-			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				Scenarios.Add(sr["ScenarioName"]);
-				return ActionResult.Continue;
-			}, "GetPricingModelScenarios", CommandSpecies.StoredProcedure);
-		}
-	}
-}
+			Scenarios = DB.Fill<PricingScenarioName>("GetPricingModelScenarios", CommandSpecies.StoredProcedure);
+		} // Execute
+	} // class GetPricingModelScenarios
+} // namespace

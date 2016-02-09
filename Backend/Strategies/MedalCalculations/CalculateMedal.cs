@@ -31,10 +31,10 @@
 			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
-			this.quietMode = false;
+			this.verificationResult = null;
 
 			CashRequestID = cashRequestID;
-			NLCashRequestID = nlCashRequestID;
+			NLCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
 		} // constructor
 
 		public virtual string Tag { get; set; }
@@ -42,11 +42,6 @@
 		public virtual long? CashRequestID { get; private set; }
 
 		public virtual long? NLCashRequestID { get; private set; }
-
-		public virtual bool QuietMode {
-			get { return this.quietMode; }
-			set { this.quietMode = value; }
-		} // QuietMode
 
 		public bool HasError { get { return (Result == null) || Result.HasError; } }
 
@@ -64,31 +59,19 @@
 				Result = CalculatePrimary()
 					?? new MedalResult(this.customerId, Log, "Failed to calculate primary medal.");
 
-				MedalOutputModel verificationResult = CalculateVerification();
+				this.verificationResult = CalculateVerification();
 
-				Result.CheckForMatch(verificationResult);
+				Result.CheckForMatch(this.verificationResult);
 
 				if (this.doStoreMedal) {
 					Result.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
 
-					if (verificationResult != null)
-						verificationResult.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
+					if (this.verificationResult != null)
+						this.verificationResult.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
 				} // if
-
-				if (Result.HasError) {
-					SendExplanationMail(verificationResult);
-
-					Log.Say(
-						QuietMode ? Severity.Warn : Severity.Alert,
-						"Mismatch/Error found in medal calculations of customer {0}. {1}",
-						this.customerId,
-						Tag
-					);
-				} else
-					Log.Debug("O6a-Ha! Match found in medal calculations of customer {0}. {1}", this.customerId, Tag);
 			} catch (Exception e) {
 				Log.Say(
-					QuietMode ? Severity.Warn : Severity.Alert,
+					Severity.Alert,
 					e,
 					"Medal calculation for customer {0} failed with exception. {1}",
 					this.customerId,
@@ -98,6 +81,27 @@
 				Result = new MedalResult(this.customerId, Log, e);
 			} // try
 		} // Execute
+
+		public void Notify() {
+			if (Result.HasError) {
+				SendExplanationMail();
+
+				var bothHaveNoMedal =
+					(Result.MedalType == MedalType.NoMedal) &&
+					(this.verificationResult.MedalType == AutomationCalculator.Common.MedalType.NoMedal);
+
+				if (bothHaveNoMedal)
+					Log.Msg("Both medal calculators produced 'No medal' for customer {0}. {1}", this.customerId, Tag);
+				else {
+					Log.Warn(
+						"Mismatch/Error found in medal calculations of customer {0}. {1}",
+						this.customerId,
+						Tag
+					);
+				} // if
+			} else
+				Log.Debug("O6a-Ha! Match found in medal calculations of customer {0}. {1}", this.customerId, Tag);
+		} // Notify
 
 		private MedalOutputModel CalculateVerification() {
 			if (this.primaryOnly)
@@ -186,18 +190,21 @@
 			);
 		} // LoadCustomerData
 
-		private void SendExplanationMail(MedalOutputModel verification) {
-			if (QuietMode) {
-				Log.Debug("Not sending explanation email: quiet mode.");
-				return;
-			} // if
-
-			string medal2 = verification == null ? string.Empty : verification.Medal.Stringify();
-			string medalType2 = verification == null ? string.Empty : verification.MedalType.ToString();
-			string score2 = verification == null ? string.Empty : (verification.Score * 100).ToString("N2");
-			string normalizedScore2 = verification == null ? string.Empty : verification.NormalizedScore.ToString("P2");
-			string offeredLoanAmount2 = verification == null ? string.Empty : verification.OfferedLoanAmount.ToString("N2");
-			string error2 = verification == null ? string.Empty : verification.Error;
+		private void SendExplanationMail() {
+			string medal2 = this.verificationResult == null ? string.Empty : this.verificationResult.Medal.Stringify();
+			string medalType2 = this.verificationResult == null
+				? string.Empty
+				: this.verificationResult.MedalType.ToString();
+			string score2 = this.verificationResult == null
+				? string.Empty
+				: (this.verificationResult.Score * 100).ToString("N2");
+			string normalizedScore2 = this.verificationResult == null
+				? string.Empty
+				: this.verificationResult.NormalizedScore.ToString("P2");
+			string offeredLoanAmount2 = this.verificationResult == null
+				? string.Empty
+				: this.verificationResult.OfferedLoanAmount.ToString("N2");
+			string error2 = this.verificationResult == null ? string.Empty : this.verificationResult.Error;
 
 			string msg = string.Format(
 				"calculation time (UTC): {12}\n\n" +
@@ -234,7 +241,7 @@
 				this.customerId,
 				HttpUtility.HtmlEncode(msg),
 				HttpUtility.HtmlEncode(Result.ToString()),
-				HttpUtility.HtmlEncode(verification == null ? string.Empty : verification.ToString()),
+				HttpUtility.HtmlEncode(this.verificationResult == null ? string.Empty : this.verificationResult.ToString()),
 				Tag
 			);
 
@@ -261,6 +268,6 @@
 		private int numOfEbayAmazonPayPalMps;
 		private DateTime? earliestHmrcLastUpdateDate;
 		private DateTime? earliestYodleeLastUpdateDate;
-		private bool quietMode;
+		private MedalOutputModel verificationResult;
 	} // class CalculateMedal
 } // namespace
