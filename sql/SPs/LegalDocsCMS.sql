@@ -155,45 +155,53 @@ BEGIN
 	join maxTemplates mt
 	on mt.maxVersion = lat.Id
 END
-
+GO
 
 AlTER PROCEDURE I_GetLegalDocById
 @LoanAgreementTemplateId INT
 AS
 BEGIN
-		select 
-		 lat.Id
-		,lat.Template
-		,lat.IsUpdate
-		,lat.TemplateTypeID
-		,lat.OriginID
-		,lat.IsRegulated
-		,lat.ProductID
-		,lat.IsApproved
-		,lat.IsReviewed
-		,lat.ReleaseDate
-		 from  LoanAgreementTemplate lat
-where lat.id = @LoanAgreementTemplateId
+		SELECT  
+			 lat.Id
+			,lat.Template
+			,lat.IsUpdate
+			,lat.TemplateTypeID
+			,lat.OriginID
+			,lat.IsRegulated
+			,lat.ProductID
+			,lat.IsApproved
+			,lat.IsReviewed
+			,lat.ReleaseDate
+		FROM 
+			LoanAgreementTemplate lat
+		WHERE 
+			lat.id = @LoanAgreementTemplateId
 END
+GO
 
 ALTER PROCEDURE I_DeleteLegalDocById
 @LoanAgreementTemplateId INT
 AS
 BEGIN
-IF EXISTS (select * from LoanAgreementTemplate where IsApproved = 1 and IsReviewed = 1 and @LoanAgreementTemplateId = Id)
-BEGIN
-	Return (select 'Can not delete production template');
-End;
-DELETE from LoanAgreementTemplate
-where Id = @LoanAgreementTemplateId
+	IF EXISTS (SELECT * from LoanAgreementTemplate WHERE IsApproved = 1 AND IsReviewed = 1 AND @LoanAgreementTemplateId = Id)
+	BEGIN
+		RETURN (SELECT 'Can not delete production template');
+	END;
+	DELETE FROM LoanAgreementTemplate
+	WHERE Id = @LoanAgreementTemplateId
 END
-
+GO
 
 ALTER PROCEDURE I_SaveLegalDoc
 @LoanAgreementTemplateId INT,
 @Template VARCHAR(max)
 AS
 BEGIN
-	update LoanAgreementTemplate set Template = @Template
-	where Id = @LoanAgreementTemplateId
+	UPDATE
+		LoanAgreementTemplate 
+	SET 
+		Template = @Template
+	WHERE 
+		Id = @LoanAgreementTemplateId
 END
+GO
