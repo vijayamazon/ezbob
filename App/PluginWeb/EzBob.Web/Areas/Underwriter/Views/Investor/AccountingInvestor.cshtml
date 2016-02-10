@@ -220,11 +220,14 @@
                                     <%_.each(accountingData, function(a){ %>
                                     <tr class="activeHover">
                                         <td class="accounting-sign"><%- ((a.PreviousAmount > a.NewAmount) || (a.TransactionAmount < 0)) ? '-':'+'%></td>
-                                        <td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>"><%-a.TransactionID%></td>
+                                        <td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>">
+											<i class="<%-a.TransactionAmount<0 ? 'fa fa-bank' : 'fa fa-cog' %>" data-toggle="tooltip" data-title="<%-a.TransactionAmount<0 ? 'BankAccountTransactions data' : 'SystemBalance data' %>"></i>
+												<%-a.TransactionID%>
+										</td>
                                         <td><%-EzBob.formatDateUK(a.TransactionDate)%></td>
                                         <td><%-EzBob.formatPoundsNoDecimals(Math.abs(a.TransactionAmount))%></td>
-                                        <td><%- (a.PreviousAmount==null) ? '' : EzBob.formatPoundsNoDecimals(a.PreviousAmount)%></td>
-                                        <td><%- (a.NewAmount==null) ? '' : EzBob.formatPoundsNoDecimals(a.NewAmount)%></td>
+										<td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>"><%-EzBob.formatPoundsNoDecimals(a.PreviousAmount)%></td>
+										<td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>"><%-EzBob.formatPoundsNoDecimals(a.NewAmount)%></td>
                                         <td class="bank-transaction-ref"><p data-toggle="tooltip" data-title="<%-a.BankTransactionRef%>"><%-a.BankTransactionRef%></p></td>
                                         <td><%-a.BankAccountNumber%></td>
                                         <td><%-a.BankAccountName%></td>
