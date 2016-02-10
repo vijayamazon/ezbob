@@ -115,7 +115,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 					$.each(oData.ChooseInvestor, function(idx, investorData) {
 						oSelect.append(
-							$('<option></option>').val(investorData.InvestorID).text(investorData.InvestorName + ' (£' + investorData.InvestorFunds + ')').attr('funds', investorData.InvestorFunds)
+							$('<option></option>').val(investorData.InvestorID).text(investorData.InvestorName + ' (' + EzBob.formatPoundsNoDecimals(investorData.InvestorFunds) + ')').attr('funds', investorData.InvestorFunds)
 						);
 					}); // for each
 					
