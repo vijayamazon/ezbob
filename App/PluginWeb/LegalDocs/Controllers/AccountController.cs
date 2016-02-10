@@ -9,6 +9,7 @@
     using Ezbob.Backend.ModelsWithDB.Authentication;
     using Ezbob.Logger;
     using EzBob.Web.Infrastructure;
+    using EZBob.DatabaseLib.Model.Database;
     using LegalDocs.Models;
     using ServiceClientProxy;
     using ServiceClientProxy.EzServiceReference;
