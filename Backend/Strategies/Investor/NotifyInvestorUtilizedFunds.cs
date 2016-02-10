@@ -72,8 +72,8 @@
 						this.investorAccountingConfiguration.FundingLimitForNotification);
 					SendFundsUtilized();
 				} else {
-					Log.Info("NotifyInvestorUtilizedFunds investor {0} balance is more than all the rules, not sending notification",
-						this.investorID);
+					Log.Info("NotifyInvestorUtilizedFunds investor {0} balance {1} pounds is more than all the rules, not sending notification",
+						this.investorID, this.systemBalance.NewBalance);
 				} //if
 
 			} catch (Exception ex) {
