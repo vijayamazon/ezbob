@@ -22,6 +22,7 @@
 			this._historyRepository = ObjectFactory.GetInstance<LoanHistoryRepository>();
 			this.amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
 			serviceInstance = ObjectFactory.GetInstance<IEzServiceAccessor>();
+			this.session = ObjectFactory.GetInstance<ISession>();
 		} // constructor
 
 		public LoanPaymentFacade(
@@ -60,6 +61,7 @@
 			string otherMethod = transId == Manual ? "Manual" : "Auto";
 
 			var loanTransactionMethod = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod);
+			var transaction = this.session.BeginTransaction();
 
 			var transactionItem = new PaypointTransaction {
 				Amount = amount,
@@ -73,96 +75,103 @@
 				InterestOnly = interestOnly,
 				LoanTransactionMethod = loanTransactionMethod
 			};
-			
-			loan.AddTransaction(transactionItem);
 
-			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
+			try {
+				loan.AddTransaction(transactionItem);
 
-			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
-			calculator.RecalculateSchedule();
+				List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst))
+					.ToList();
 
-			if (this._historyRepository != null) {
-				var historyRecord = new LoanHistory(loan, paymentTime);
-				this._historyRepository.SaveOrUpdate(historyRecord);
-			} // if
+				var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
+				calculator.RecalculateSchedule();
 
-			loan.UpdateStatus(paymentTime);
+				if (this._historyRepository != null) {
+					var historyRecord = new LoanHistory(loan, paymentTime);
+					this._historyRepository.SaveOrUpdate(historyRecord);
+				} // if
 
-			if (loan.Customer != null)
-				loan.Customer.UpdateCreditResultStatus();
-			if (loan.Id > 0) {
-				foreach (InstallmentDelta dlt in deltas) {
-					dlt.SetEndValues();
+				loan.UpdateStatus(paymentTime);
 
-					if (dlt.IsZero)
-						continue;
+				if (loan.Customer != null)
+					loan.Customer.UpdateCreditResultStatus();
+				if (loan.Id > 0) {
+					foreach (InstallmentDelta dlt in deltas) {
+						dlt.SetEndValues();
 
-					loan.ScheduleTransactions.Add(new LoanScheduleTransaction {
-						Date = DateTime.UtcNow,
-						FeesDelta = dlt.Fees.EndValue - dlt.Fees.StartValue,
-						InterestDelta = dlt.Interest.EndValue - dlt.Interest.StartValue,
-						Loan = loan,
-						PrincipalDelta = dlt.Principal.EndValue - dlt.Principal.StartValue,
-						Schedule = dlt.Installment,
-						StatusAfter = dlt.Status.EndValue,
-						StatusBefore = dlt.Status.StartValue,
-						Transaction = transactionItem
-					});
-				} // for each delta
-			} // if
+						if (dlt.IsZero)
+							continue;
+
+						loan.ScheduleTransactions.Add(new LoanScheduleTransaction {
+							Date = DateTime.UtcNow,
+							FeesDelta = dlt.Fees.EndValue - dlt.Fees.StartValue,
+							InterestDelta = dlt.Interest.EndValue - dlt.Interest.StartValue,
+							Loan = loan,
+							PrincipalDelta = dlt.Principal.EndValue - dlt.Principal.StartValue,
+							Schedule = dlt.Installment,
+							StatusAfter = dlt.Status.EndValue,
+							StatusBefore = dlt.Status.StartValue,
+							Transaction = transactionItem
+						});
+					} // for each delta
+				} // if
 
 
-			if (nlPayment != null) {
+				if (nlPayment != null) {
 
-				Log.InfoFormat("PayLoan: oldLoanID: {0} customer: {1} nlpayment {2}", loan.Id, customerID, nlPayment);
+					Log.InfoFormat("PayLoan: oldLoanID: {0} customer: {1} nlpayment {2}", loan.Id, customerID, nlPayment);
 
-				// override those for backword compatibility
-				nlPayment.PaymentMethodID = loanTransactionMethod.Id;
-				nlPayment.Notes = description;
-				nlPayment.CreationTime = DateTime.UtcNow;
-				nlPayment.PaymentTime = paymentTime;
-				nlPayment.Amount = amount;
-				nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
+					// override those for backword compatibility
+					nlPayment.PaymentMethodID = loanTransactionMethod.Id;
+					nlPayment.Notes = description;
+					nlPayment.CreationTime = DateTime.UtcNow;
+					nlPayment.PaymentTime = paymentTime;
+					nlPayment.Amount = amount;
+					nlPayment.PaymentStatusID = (int)NLPaymentStatuses.Active;
 
-				Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
+					Log.InfoFormat("PayLoan: overriden nlpayment {0}", nlPayment);
 
-				long nlLoanId = serviceInstance.GetLoanByOldID(loan.Id, customerID);
+					long nlLoanId = serviceInstance.GetLoanByOldID(loan.Id, customerID);
 
-				if (nlLoanId == 0) {
-					Log.InfoFormat("Failed to find nl loan for oldLoanID {0}, customer {1}", loan.Id, customerID);
-				} else {
+					if (nlLoanId == 0) {
+						Log.InfoFormat("Failed to find nl loan for oldLoanID {0}, customer {1}", loan.Id, customerID);
+					} else {
 
-					nlPayment.LoanID = nlLoanId;
+						nlPayment.LoanID = nlLoanId;
 
-					// use argument's nlPayment data: CreatedByUserID 
+						// use argument's nlPayment data: CreatedByUserID 
 
-					if (nlPayment.PaymentSystemType == NLPaymentSystemTypes.Paypoint) {
+						if (nlPayment.PaymentSystemType == NLPaymentSystemTypes.Paypoint) {
 
-						// workaround - from MakeAutomaticPayment sent transactionid with timestamp concated
+							// workaround - from MakeAutomaticPayment sent transactionid with timestamp concated
 
-						var card = loan.Customer.PayPointCards.FirstOrDefault(x => transId.StartsWith(x.TransactionId));
+							var card = loan.Customer.PayPointCards.FirstOrDefault(x => transId.StartsWith(x.TransactionId));
 
-						if (card == null) {
-							Log.ErrorFormat("PayPointCard for customer {0}, transId={1}, oldLoanID={2}, nl loanID={3} not found. Can't to write NL_PaypointTransactions for nl payment\n {4}{5}",
-								customerID, transId, loan.Id, nlPayment.LoanID, AStringable.PrintHeadersLine(typeof(NL_Payments)), nlPayment.ToStringAsTable());
-						} else {
-							nlPayment.PaypointTransactions.Clear();
-							nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
-								TransactionTime = paymentTime,
-								Amount = amount,
-								Notes = description,
-								PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
-								PaypointUniqueID = transId,
-								PaypointCardID = card.Id,
-								IP = ip
-							});
+							if (card == null) {
+								Log.ErrorFormat("PayPointCard for customer {0}, transId={1}, oldLoanID={2}, nl loanID={3} not found. Can't to write NL_PaypointTransactions for nl payment\n {4}{5}",
+									customerID, transId, loan.Id, nlPayment.LoanID, AStringable.PrintHeadersLine(typeof(NL_Payments)), nlPayment.ToStringAsTable());
+							} else {
+								nlPayment.PaypointTransactions.Clear();
+								nlPayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+									TransactionTime = paymentTime,
+									Amount = amount,
+									Notes = description,
+									PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
+									PaypointUniqueID = transId,
+									PaypointCardID = card.Id,
+									IP = ip
+								});
+							}
 						}
-					}
 
-					serviceInstance.AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
+						serviceInstance.AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
+					}
 				}
+				transaction.Commit();
+			} catch (Exception ex) {
+				Log.ErrorFormat("Failed to pay {1} pounds for loan {0}, rollbacking \n {2}", loan.Id, amount, ex);
+				transaction.Rollback();
 			}
-	
+
 			Log.InfoFormat("LinkPaymentToInvestor {0} {1} {2} {3} {4} begin", transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime);
 			serviceInstance.LinkPaymentToInvestor(1, transactionItem.Id, loan.Id, loan.Customer.Id, amount, paymentTime); // modified by elinar at 9/02/2016 EZ-4678 bugfix
 
@@ -518,7 +527,7 @@
 			var savedPounds = oldInterest - newInterest + savedSetupFee;
 
 			var transactionRefNumbers =
-                from l in customer.Loans
+				from l in customer.Loans
 				from t in l.TransactionsWithPaypoint
 				where t.Id == 0
 				select t.RefNumber;
@@ -581,6 +590,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanPaymentFacade));
 		private readonly ILoanTransactionMethodRepository loanTransactionMethodRepository;
 		private readonly int amountToChargeFrom;
+		private ISession session;
 
 		public IEzServiceAccessor serviceInstance { get; private set; }
 	} // class LoanPaymentFacade

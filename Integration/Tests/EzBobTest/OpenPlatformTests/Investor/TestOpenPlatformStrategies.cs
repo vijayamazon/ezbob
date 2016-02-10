@@ -6,6 +6,7 @@
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Investor;
+	using Ezbob.Backend.Strategies.LogicalGlue;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EzServiceAccessor;
@@ -169,6 +170,17 @@
 		public void TestLinkLoanRepaymentToInvestor() {
 			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow, 1);
 			linkOfferToInvestor.Execute();
+		}
+
+		[Test]
+		public void TestLogicalGlueCache() {
+			GetLatestKnownInference inference = new GetLatestKnownInference(3406, DateTime.UtcNow, false);
+			inference.Execute();
+			if (inference.Inference != null) {
+				var bucket = inference.Inference.Bucket;
+				Assert.IsNotNull(bucket);
+
+			}
 		}
 	}
 }
