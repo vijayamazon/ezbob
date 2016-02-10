@@ -87,10 +87,12 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.CompaniesHouse" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
@@ -893,6 +895,24 @@
   <wsdl:message name="IEzService_ValidateSecurityAnswer_OutputMessage">
     <wsdl:part name="parameters" element="tns:ValidateSecurityAnswerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocs" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocById" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLegalDocById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLegalDocByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManualLegalDocsSyncTemplatesFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:ManualLegalDocsSyncTemplatesFiles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ManualLegalDocsSyncTemplatesFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ManualLegalDocsSyncTemplatesFilesResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_PayPointCharger_InputMessage">
     <wsdl:part name="parameters" element="tns:PayPointCharger" />
   </wsdl:message>
@@ -970,12 +990,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_SendPendingMails_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendPendingMailsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SendEverlineRefinanceMails_InputMessage">
-    <wsdl:part name="parameters" element="tns:SendEverlineRefinanceMails" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SendEverlineRefinanceMails_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SendEverlineRefinanceMailsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SendSms_InputMessage">
     <wsdl:part name="parameters" element="tns:SendSms" />
@@ -1204,6 +1218,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_LoadMessagesSentToUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadMessagesSentToUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSlidersData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSlidersData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSlidersData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSlidersDataResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddHistoryDirector_InputMessage">
     <wsdl:part name="parameters" element="tns:AddHistoryDirector" />
@@ -2250,6 +2270,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswer" message="tns:IEzService_ValidateSecurityAnswer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceUserManagement/ValidateSecurityAnswerResponse" message="tns:IEzService_ValidateSecurityAnswer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetLegalDocs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocs" message="tns:IEzService_GetLegalDocs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocsResponse" message="tns:IEzService_GetLegalDocs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLegalDocById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocById" message="tns:IEzService_GetLegalDocById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocByIdResponse" message="tns:IEzService_GetLegalDocById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ManualLegalDocsSyncTemplatesFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles" message="tns:IEzService_ManualLegalDocsSyncTemplatesFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFilesResponse" message="tns:IEzService_ManualLegalDocsSyncTemplatesFiles_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PayPointCharger">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
@@ -2301,10 +2333,6 @@
     <wsdl:operation name="SendPendingMails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendPendingMails" message="tns:IEzService_SendPendingMails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendPendingMailsResponse" message="tns:IEzService_SendPendingMails_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SendEverlineRefinanceMails">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails" message="tns:IEzService_SendEverlineRefinanceMails_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse" message="tns:IEzService_SendEverlineRefinanceMails_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SendSms">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendSms" message="tns:IEzService_SendSms_InputMessage" />
@@ -2457,6 +2485,10 @@
     <wsdl:operation name="LoadMessagesSentToUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadMessagesSentToUser" message="tns:IEzService_LoadMessagesSentToUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadMessagesSentToUserResponse" message="tns:IEzService_LoadMessagesSentToUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSlidersData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSlidersData" message="tns:IEzService_GetSlidersData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSlidersDataResponse" message="tns:IEzService_GetSlidersData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddHistoryDirector">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddHistoryDirector" message="tns:IEzService_AddHistoryDirector_InputMessage" />
@@ -4005,6 +4037,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetLegalDocs">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLegalDocById">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLegalDocs/GetLegalDocById" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManualLegalDocsSyncTemplatesFiles">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLegalDocs/ManualLegalDocsSyncTemplatesFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="PayPointCharger">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
       <wsdl:input>
@@ -4115,15 +4174,6 @@
     </wsdl:operation>
     <wsdl:operation name="SendPendingMails">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SendPendingMails" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SendEverlineRefinanceMails">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SendEverlineRefinanceMails" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4466,6 +4516,15 @@
     </wsdl:operation>
     <wsdl:operation name="LoadMessagesSentToUser">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadMessagesSentToUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSlidersData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSlidersData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -5241,20 +5300,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

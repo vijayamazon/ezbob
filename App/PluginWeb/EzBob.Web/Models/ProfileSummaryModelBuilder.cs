@@ -13,7 +13,6 @@
 	using EzBob.Backend.Models;
 	using EzBob.Models;
 	using EzBob.Web.Areas.Underwriter.Models;
-	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -49,7 +48,7 @@
 			using (tc.AddStep("BuildAlerts Time taken")) {
 				BuildAlerts(summary, customer);
 			}
-			using (tc.AddStep("BuildCompaniesHouseAlerts Time taken){
+			using (tc.AddStep("BuildCompaniesHouseAlerts Time taken")) {
 				BuildCompaniesHouseAlerts(summary, companyScore);
 			}
 			log.Info(tc.ToString());
@@ -132,7 +131,7 @@
 					Alert = (isMulti ? "Multi-" : "Single ") + "branded customer",
 					AlertType = (isMulti ? AlertType.Error : AlertType.Info).DescriptionAttr(),
 					Tooltip = "<br>" + string.Join("<br>", ar.Summary.Loans),
-					Tab = ProfileTab.Dashboard.DescriptionAttr() 
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			} catch (Exception e) {
 				log.Alert(e, "Failed to build multi brand alert.");
@@ -151,27 +150,27 @@
 			using (tc.AddStep("BuildMultiBrandAlert Time taken")) {
 				BuildMultiBrandAlert(customer.Id, summary.Alerts);
 			}
-			
+
 			using (tc.AddStep("CustomerAlerts Time taken")) {
 				var isBrokerRegulated = (customer.Broker != null) && customer.Broker.FCARegistered;
 
 				var IsWizardComplete = (customer.WizardStep != null) && customer.WizardStep.TheLastOne;
 
-			if (!isBrokerRegulated && customer.PersonalInfo.IsRegulated && IsWizardComplete) {
-				summary.Alerts.Infos.Add(new AlertModel {
-					Abbreviation = "NRB",
-					Alert = "Regulated customer for a Non-Regulated broker",
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
-				});
-			} // if
+				if (!isBrokerRegulated && customer.PersonalInfo.IsRegulated && IsWizardComplete) {
+					summary.Alerts.Infos.Add(new AlertModel {
+						Abbreviation = "NRB",
+						Alert = "Regulated customer for a Non-Regulated broker",
+						AlertType = AlertType.Warning.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
+					});
+				} // if
 
 				if (customer.IsTest) {
 					summary.Alerts.Infos.Add(new AlertModel {
 						Abbreviation = "Test",
 						Alert = "Is test",
-					AlertType = AlertType.Info.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Info.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} // if
 
@@ -179,8 +178,8 @@
 					summary.Alerts.Infos.Add(new AlertModel {
 						Abbreviation = "Ali",
 						Alert = "Is alibaba customer",
-					AlertType = AlertType.Info.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Info.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} // if
 
@@ -188,8 +187,8 @@
 					summary.Alerts.Errors.Add(new AlertModel {
 						Abbreviation = "CCI",
 						Alert = "CCI Mark",
-					AlertType = AlertType.Error.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} // if
 
@@ -197,15 +196,15 @@
 					summary.Alerts.Errors.Add(new AlertModel {
 						Abbreviation = "Bad",
 						Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
-					AlertType = AlertType.Error.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} else if (customer.CollectionStatus.Name == "Risky") {
 					summary.Alerts.Warnings.Add(new AlertModel {
 						Abbreviation = "Risky",
 						Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Warning.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} // if
 
@@ -213,47 +212,47 @@
 					summary.Alerts.Errors.Add(new AlertModel {
 						Abbreviation = "F",
 						Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()),
-					AlertType = AlertType.Error.DescriptionAttr(),
-					Tab = ProfileTab.FraudDetection.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.FraudDetection.DescriptionAttr()
 					});
 				} // if
 
 				switch (customer.AMLResult) {
-				case "Rejected":
-					summary.Alerts.Errors.Add(new AlertModel {
-						Abbreviation = "AML",
-						Alert = string.Format("AML Status : {0}", customer.AMLResult),
-						AlertType = AlertType.Error.DescriptionAttr()
-					});
-					break;
-				case "Not performed":
-				case "Warning":
-					summary.Alerts.Warnings.Add(new AlertModel {
-						Abbreviation = "AML",
-						Alert = string.Format("AML Status : {0}", customer.AMLResult),
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.CreditBureau.DescriptionAttr()
-					});
-					break;
+					case "Rejected":
+						summary.Alerts.Errors.Add(new AlertModel {
+							Abbreviation = "AML",
+							Alert = string.Format("AML Status : {0}", customer.AMLResult),
+							AlertType = AlertType.Error.DescriptionAttr()
+						});
+						break;
+					case "Not performed":
+					case "Warning":
+						summary.Alerts.Warnings.Add(new AlertModel {
+							Abbreviation = "AML",
+							Alert = string.Format("AML Status : {0}", customer.AMLResult),
+							AlertType = AlertType.Warning.DescriptionAttr(),
+							Tab = ProfileTab.CreditBureau.DescriptionAttr()
+						});
+						break;
 				} // switch
 
 				switch (summary.CreditBureau.ThinFile) {
-				case "Yes":
-					summary.Alerts.Errors.Add(new AlertModel {
-						Abbreviation = "TF",
-						Alert = "Thin file",
-					AlertType = AlertType.Error.DescriptionAttr(),
-					Tab = ProfileTab.CreditBureau.DescriptionAttr()
-					});
-					break;
-				case "N/A":
-					summary.Alerts.Warnings.Add(new AlertModel {
-						Abbreviation = "N/A",
-						Alert = "Couldn't get financial accounts",
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
-					});
-					break;
+					case "Yes":
+						summary.Alerts.Errors.Add(new AlertModel {
+							Abbreviation = "TF",
+							Alert = "Thin file",
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.CreditBureau.DescriptionAttr()
+						});
+						break;
+					case "N/A":
+						summary.Alerts.Warnings.Add(new AlertModel {
+							Abbreviation = "N/A",
+							Alert = "Couldn't get financial accounts",
+							AlertType = AlertType.Warning.DescriptionAttr(),
+							Tab = ProfileTab.Dashboard.DescriptionAttr()
+						});
+						break;
 				} // switch
 
 				if (summary.CreditBureau.NumDirectorThinFiles > 0) {
@@ -262,8 +261,8 @@
 						Alert =
 							string.Format("{0} director{1} with thin file", summary.CreditBureau.NumDirectorThinFiles,
 								summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
-					AlertType = AlertType.Error.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} // if
 
@@ -273,8 +272,8 @@
 						Alert =
 							string.Format("{0} director{1} with no experian data available", summary.CreditBureau.NumDirectorNA,
 								summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+						AlertType = AlertType.Warning.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
 					});
 				} // if
 
@@ -284,8 +283,8 @@
 							summary.Alerts.Errors.Add(new AlertModel {
 								Abbreviation = "A",
 								Alert = "Age of applicant under 18",
-							AlertType = AlertType.Error.DescriptionAttr(),
-							Tab = ProfileTab.Dashboard.DescriptionAttr()
+								AlertType = AlertType.Error.DescriptionAttr(),
+								Tab = ProfileTab.Dashboard.DescriptionAttr()
 							});
 						} // if
 					} // for each
@@ -297,8 +296,8 @@
 						summary.Alerts.Errors.Add(new AlertModel {
 							Abbreviation = "Follow",
 							Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"),
-						AlertType = AlertType.Error.DescriptionAttr(),
-						Tab = ProfileTab.CustomerRelations.DescriptionAttr()
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.CustomerRelations.DescriptionAttr()
 						});
 					} // if
 				} // if
@@ -318,8 +317,8 @@
 							summary.Alerts.Errors.Add(new AlertModel {
 								Abbreviation = "YC",
 								Alert = "Young company. Incorporation date: " + companySeniority.Value.ToString("dd/MM/yyyy"),
-							AlertType = AlertType.Error.DescriptionAttr(),
-							Tab = ProfileTab.CompanyScore.DescriptionAttr()
+								AlertType = AlertType.Error.DescriptionAttr(),
+								Tab = ProfileTab.CompanyScore.DescriptionAttr()
 							});
 						}
 					}
@@ -351,15 +350,15 @@
 					summary.Alerts.Warnings.Add(new AlertModel {
 						Abbreviation = "MTG",
 						Alert = "Home owner and no mortgages",
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.Properties.DescriptionAttr()
+						AlertType = AlertType.Warning.DescriptionAttr(),
+						Tab = ProfileTab.Properties.DescriptionAttr()
 					});
 				} else if (!isHomeOwner && hasMortgage) {
 					summary.Alerts.Warnings.Add(new AlertModel {
 						Abbreviation = "MTG",
 						Alert = "Has mortgages but not a home owner",
-					AlertType = AlertType.Warning.DescriptionAttr(),
-					Tab = ProfileTab.Properties.DescriptionAttr()
+						AlertType = AlertType.Warning.DescriptionAttr(),
+						Tab = ProfileTab.Properties.DescriptionAttr()
 					});
 				} // if
 			}
@@ -373,15 +372,15 @@
 						summary.Alerts.Errors.Add(new AlertModel {
 							Abbreviation = "MDL",
 							Alert = "New medal was not calculated",
-						AlertType = AlertType.Error.DescriptionAttr(),
-						Tab = ProfileTab.Calculator.DescriptionAttr()
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.Calculator.DescriptionAttr()
 						});
 					} else if (!string.IsNullOrEmpty(medalCalculationsRecord.Error)) {
 						summary.Alerts.Errors.Add(new AlertModel {
 							Abbreviation = "MDL",
 							Alert = string.Format("Error while calculating new medal: {0}", medalCalculationsRecord.Error),
-						AlertType = AlertType.Error.DescriptionAttr(),
-						Tab = ProfileTab.Calculator.DescriptionAttr()
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.Calculator.DescriptionAttr()
 						});
 					} // if
 				} else if (customer.Company != null && (customer.Company.TypeOfBusiness != EZBob.DatabaseLib.Model.Database.TypeOfBusiness.LLP &&
@@ -390,12 +389,25 @@
 					summary.Alerts.Infos.Add(new AlertModel {
 						Abbreviation = "MDL",
 						Alert = "This customer shouldn't have new medal",
-					AlertType = AlertType.Info.DescriptionAttr(),
-					Tab = ProfileTab.Calculator.DescriptionAttr()
+						AlertType = AlertType.Info.DescriptionAttr(),
+						Tab = ProfileTab.Calculator.DescriptionAttr()
 					});
 				} // if
-		} // BuildAlerts
+			}//MedalAlerts
 			log.Info(tc.ToString());
+		}// BuildAlerts
+
+		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary) {
+			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var errors = new StringBuilder();
+
+			if (currAddr != null && !currAddr.Zoopla.Any() && currAddr.IsOwnerAccordingToLandRegistry)
+				AppendLi(errors, "No zoopla for current address");
+
+			var otherProperties = customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry && !x.Zoopla.Any());
+			if (otherProperties.Any())
+				AppendLi(errors, "No zoopla for owned property");
+
 			if (customer.CustomerMarketPlaces.Any(x => !string.IsNullOrEmpty(x.UpdateError))) {
 				var mpErrors =
 					customer.CustomerMarketPlaces.Where(x => !string.IsNullOrEmpty(x.UpdateError))
@@ -421,11 +433,11 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "DATA",
 					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
-					AlertType = AlertType.Error.DescriptionAttr(),
-					Tab = ProfileTab.Dashboard.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr()
 				});
 			}
-		}
+		}//BuildDataAlerts
+
 		private bool BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary) {
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
@@ -464,6 +476,7 @@
 						Alert = "Not a land registry owner",
 						Tooltip = string.Format("Owners list: {0}", ownerNames),
 						Tab = ProfileTab.Properties.DescriptionAttr()
+					});
 				}
 			}
 
@@ -520,8 +533,8 @@
 
 			var customerOfficer = companyScore.CompaniesHouseModel.Officers.FirstOrDefault(x => x.IsCustomer);
 
-			if(customerOfficer != null && 
-				customerOfficer.AppointmentOrder != null && 
+			if (customerOfficer != null &&
+				customerOfficer.AppointmentOrder != null &&
 				customerOfficer.AppointmentOrder.Appointments != null &&
 				customerOfficer.AppointmentOrder.Appointments.Count >= 5) {
 				summary.Alerts.Warnings.Add(new AlertModel {
@@ -538,7 +551,7 @@
 			customerOfficer.AppointmentOrder.Appointments.Any(x => x.CompanyStatus != "Active")) {
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "DSL",
-					Alert = string.Format("Applicant has appointments in companies with status {0}", 
+					Alert = string.Format("Applicant has appointments in companies with status {0}",
 						customerOfficer
 						.AppointmentOrder
 						.Appointments
@@ -613,8 +626,6 @@
 			summary.IsOffline = customer.IsOffline;
 		}
 
-		
-
 		private LoanActivity CreateLoanActivity(Customer customer) {
 			var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
 			var currentBalance = customer.Loans.Sum(x => x.Balance);
@@ -638,20 +649,20 @@
 
 			var totalFees =
 				(from l in customer.Loans
-					from c in l.Charges
-					where c.State != "Expired"
-					where c.Amount > 0
-					select c.Amount).Sum();
+				 from c in l.Charges
+				 where c.State != "Expired"
+				 where c.Amount > 0
+				 select c.Amount).Sum();
 			var feesCount =
 				(from l in customer.Loans
-					from c in l.Charges
-					where c.State != "Expired"
-					where c.Amount > 0
-					select c.Amount).Count();
+				 from c in l.Charges
+				 where c.State != "Expired"
+				 where c.Amount > 0
+				 select c.Amount).Count();
 
 			//Dashboard
 			var totalIssues = customer.Loans.Sum(l => l.LoanAmount);
-			var totalIssuesCount = customer.Loans.Count();
+			var totalIssuesCount = customer.Loans.Count;
 			var repaid = customer.Loans.Sum(l => l.Repayments);
 			var repaidCount = customer.Loans.Count(l => l.DateClosed.HasValue);
 			var active = customer.Loans.Sum(l => l.Balance);
@@ -688,8 +699,7 @@
 								? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value : 0,
 							BalancePercent = loan.LoanAmount > 0 ? loan.Principal / loan.LoanAmount : 0,
 							Term = term > 0 ? term : loan.CashRequest.RepaymentPeriod,
-							TermApproved = loan.CashRequest.ApprovedRepaymentPeriod.HasValue
-								? loan.CashRequest.ApprovedRepaymentPeriod.Value : loan.CashRequest.RepaymentPeriod,
+							TermApproved = loan.CashRequest.ApprovedRepaymentPeriod ?? loan.CashRequest.RepaymentPeriod,
 							TotalFee = loan.SetupFee,
 							LoanNumber = i,
 							Comment = loan.CashRequest.UnderwriterComment
@@ -761,7 +771,7 @@
 				.ToList();
 
 			var monthlyRepaymentSum = customerSchedule.Sum(x => x.Sum(y => y.AmountDue));
-			var count = customerSchedule.Count();
+			var count = customerSchedule.Count;
 			var repaymentAmount = count != 0 ? monthlyRepaymentSum / count : 0;
 			return repaymentAmount;
 		}
@@ -785,7 +795,7 @@
 			return LightsState.Passed;
 		}
 
-		private static readonly ASafeLog log = new SafeILog(typeof (ProfileSummaryModelBuilder));
+		private static readonly ASafeLog log = new SafeILog(typeof(ProfileSummaryModelBuilder));
 		private readonly CreditBureauModelBuilder creditBureauModelBuilder;
 		private readonly ServiceClient serviceClient;
 		private MedalCalculationsRepository medalCalculationsRepository;
