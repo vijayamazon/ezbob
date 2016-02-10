@@ -1,18 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using Ezbob.Database;
-using Ezbob.Logger;
-using log4net;
-using SalesForceLib;
-using SalesForceLib.Models;
-
-namespace SalesForceMigrationTool {
-	using System.Collections.Generic;
+﻿namespace SalesForceMigrationTool {
+	using System;
+	using System.IO;
+	using System.Threading;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using log4net;
+	using SalesForceLib;
+	using SalesForceLib.Models;
 
 	class Program {
         public static ISalesForceAppClient SfClient = new SalesForceApiClient("techapi@ezbob.com", "Ezca$h123", "qCgy7jIz8PwQtIn3bwxuBv9h", "Production");
-        private static ILog Log = LogManager.GetLogger(typeof (Program));
+        protected static ILog Log = LogManager.GetLogger(typeof (Program));
         public static AConnection DB = new SqlConnection(new SafeILog(Log));
         //public static ISalesForceAppClient SfClient = new FakeApiClient("", "", "", "");
         static void Main(string[] args) {
@@ -24,7 +22,7 @@ namespace SalesForceMigrationTool {
             //MigrateLeadsFromDb();
             //MigrateContact(1189);
             //MigrateContact(1227);
-
+	        MigrateBrokerLeadsFromDb();
 			//SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
 			//sfReruner.Rerun();
 
@@ -34,8 +32,8 @@ namespace SalesForceMigrationTool {
 			//	Thread.Sleep(200);
 			//}
 
-			SalesReport salesReport = new SalesReport(DB, SfClient);
-			salesReport.Execute(new DateTime(2015, 07, 01), new DateTime(2015, 08, 01));
+			//SalesReport salesReport = new SalesReport(DB, SfClient);
+			//salesReport.Execute(new DateTime(2015, 07, 01), new DateTime(2015, 08, 01));
 			Log.Info("End SF Migration tool");
         }
 
@@ -62,6 +60,32 @@ namespace SalesForceMigrationTool {
                 Thread.Sleep(3000);
             }
         }
+
+		private static void MigrateBrokerLeadsFromDb() {
+			string[] leadEmails = {
+				"tallmpc@hotmail.com",
+			};
+
+			foreach (var leadEmail in leadEmails) {
+				Log.InfoFormat("migrating lead {0}", leadEmail);
+				LeadAccountModel model = DB.FillFirst<LeadAccountModel>("SF_LoadAccountLead", CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", null),
+				new QueryParameter("@Email", leadEmail),
+				new QueryParameter("@IsBrokerLead", true),
+				new QueryParameter("@IsVipLead", false));
+
+				if (string.IsNullOrEmpty(model.Email)) {
+					Log.ErrorFormat("Email is null for lead {0}, skipping", leadEmail);
+					continue;
+				}
+				try {
+					SfClient.CreateUpdateLeadAccount(model);
+					Thread.Sleep(1000);
+				} catch (Exception ex) {
+					Log.ErrorFormat("ERROR executing for lead {0}\n{1}", leadEmail, ex);
+				}
+			}
+		}
 
         private static void MigrateLeadsFromCsv() {
             LeadsMigration migration = new LeadsMigration();
