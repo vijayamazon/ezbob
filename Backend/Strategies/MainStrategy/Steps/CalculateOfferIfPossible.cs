@@ -8,7 +8,6 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;

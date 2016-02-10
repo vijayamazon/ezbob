@@ -5,17 +5,49 @@
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using MedalClass = EZBob.DatabaseLib.Model.Database.Medal;
 
 	class BackdoorSimpleApprove : ABackdoorSimpleDetails {
 		public static BackdoorSimpleApprove Create(string backdoorCode, int customerID, bool ownsProperty) {
-			var match = regex.Match(backdoorCode);
+			return
+				CreateWithGrade(backdoorCode, customerID, ownsProperty) ??
+				CreateWithMedal(backdoorCode, customerID, ownsProperty);
+		} // Create
+
+		private static BackdoorSimpleApprove CreateWithGrade(string backdoorCode, int customerID, bool ownsProperty) {
+			var match = regexGrade.Match(backdoorCode);
 
 			if (!match.Success) {
-				Log.Debug("Back door code '{0}' ain't no matches approval regex /{1}/.", backdoorCode, regex);
+				Log.Debug(
+					"Back door code '{0}' ain't no matches approval regex-with-grade /{1}/.",
+					backdoorCode,
+					regexGrade
+				);
+				return null;
+			} // if
+
+			return new BackdoorSimpleApprove(
+				customerID,
+				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0,
+				MedalClass.NoClassification,
+				match.Groups[3].Value,
+				ownsProperty,
+				match.Groups[2].Value,
+				match.Groups[4].Value
+			);
+		} // CreateWithGrade
+
+		private static BackdoorSimpleApprove CreateWithMedal(string backdoorCode, int customerID, bool ownsProperty) {
+			var match = regexMedal.Match(backdoorCode);
+
+			if (!match.Success) {
+				Log.Debug(
+					"Back door code '{0}' ain't no matches approval regex-with-medal /{1}/.",
+					backdoorCode,
+					regexMedal
+				);
 				return null;
 			} // if
 
@@ -44,13 +76,18 @@
 				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0,
 				medal,
 				match.Groups[3].Value,
-				ownsProperty
+				ownsProperty,
+				null,
+				null
 			);
-		} // Create
+		} // CreateWithMedal
 
 		public MedalClass MedalClassification { get; private set; }
 
 		public int ApprovedAmount { get; private set; }
+
+		public decimal? GradeScore { get; private set; }
+		public int? InvestorID { get; private set; }
 
 		public override bool SetResult(AutoDecisionResponse response) {
 			Log.Debug("Back door simple flow: approving...");
@@ -75,17 +112,7 @@
 			int sourceID = sr["LoanSourceID"];
 			int repaymentPeriod = sr["RepaymentPeriod"];
 
-			var offerDualCalculator = new OfferDualCalculator(
-				this.customerID,
-				DateTime.UtcNow,
-				ApprovedAmount,
-				false,
-				MedalClassification,
-				sourceID,
-				repaymentPeriod
-			);
-
-			OfferResult offerResult = offerDualCalculator.CalculateOffer();
+			OfferResult offerResult = null; // TODO
 
 			if (offerResult == null || offerResult.IsError) {
 				Log.Warn(
@@ -140,19 +167,31 @@
 			int delay,
 			MedalClass medalClass,
 			string approvedAmount,
-			bool ownsProperty
+			bool ownsProperty,
+			string gradeScore,
+			string investorID
 		) : base(DecisionActions.Approve, delay) {
 			this.customerID = customerID;
 			MedalClassification = medalClass;
 			this.ownsProperty = ownsProperty;
 
+			bool gradeMode = !string.IsNullOrWhiteSpace(gradeScore);
+
 			int appAmount;
 
 			if (int.TryParse(approvedAmount, out appAmount))
-				ApprovedAmount = MedalResult.RoundOfferedAmount(Cap(appAmount * 1000));
+				ApprovedAmount = MedalResult.RoundOfferedAmount(gradeMode ? appAmount * 1000 : Cap(appAmount * 1000));
 			else {
 				var rnd = new Random();
 				ApprovedAmount = MedalResult.RoundOfferedAmount(Cap(rnd.Next(CurrentValues.Instance.MinLoan, Pac)));
+			} // if
+
+			if (gradeMode) {
+				GradeScore = decimal.Parse("0." + gradeScore);
+				InvestorID = string.IsNullOrWhiteSpace(investorID) ? (int?)null : int.Parse(investorID.Substring(1));
+			} else {
+				GradeScore = null;
+				InvestorID = null;
 			} // if
 		} // constructor
 
@@ -174,6 +213,7 @@
 
 		private readonly int customerID;
 		private readonly bool ownsProperty;
-		private static readonly Regex regex = new Regex(@"^bds-a([fs])([sgpd])(\d{0,3})$");
+		private static readonly Regex regexMedal = new Regex(@"^bds-a([fs])([sgpd])(\d{0,3})$");
+		private static readonly Regex regexGrade = new Regex(@"^bds-a([fs])(\d{3})o(\d{0,3})(i\d+)?$");
 	} // class BackdoorSimpleApprove
 } // namespace

@@ -3,7 +3,7 @@
 	using AutomationCalculator.Common;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using EZBob.DatabaseLib.Model.Database;
 
 	internal class LockApproved : AMainStrategyStep {
