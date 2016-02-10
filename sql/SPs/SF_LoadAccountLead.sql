@@ -104,7 +104,7 @@ BEGIN
         b.ContactEmail AS BrokerEmail,
         b.ContactMobile AS BrokerPhoneNumber,
         o.Name AS Origin,
-        b.IsTest AS IsTest,
+        b.IsTest AS IsTest
     FROM BrokerLeads l 
     INNER JOIN Broker b ON b.BrokerID = l.BrokerID
     INNER JOIN CustomerOrigin o ON o.CustomerOriginID = b.OriginID
