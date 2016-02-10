@@ -222,7 +222,14 @@
 					this.context.CashRequestOriginator,
 					this.context.CashRequestID,
 					this.context.NLCashRequestID,
-					this.context.Tag
+					this.context.Tag,
+					this.context.MaxCapHomeOwner,
+					this.context.MaxCapNotHomeOwner,
+					this.context.SmallLoanScenarioLimit,
+					this.context.AspireToMinSetupFee,
+					this.context.TypeOfBusiness,
+					this.context.CustomerDetails.OriginID,
+					this.context.MonthlyRepayment
 				);
 				applyBackdoorLogic.CollectOutputValue += CollectStepOutputValue;
 				return applyBackdoorLogic;

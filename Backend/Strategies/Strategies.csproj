@@ -288,6 +288,7 @@
     <Compile Include="PricingModel\GetPricingScenarioDetails.cs" />
     <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="StoredProcs\GetCustomerCompanyID.cs" />
+    <Compile Include="StoredProcs\LoadMatchingGradeRanges.cs" />
     <Compile Include="Tasks\Annual77ANotifier.cs" />
     <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />

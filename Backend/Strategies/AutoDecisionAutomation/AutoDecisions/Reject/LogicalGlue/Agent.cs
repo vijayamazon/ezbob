@@ -11,6 +11,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.StoredProcs;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -399,39 +400,6 @@
 
 			public TypeOfBusiness TypeOfBusiness { get; private set; }
 		} // class LoadLGAutoRejectData
-
-		private class LoadMatchingGradeRanges : AStoredProcedure {
-			public LoadMatchingGradeRanges(AConnection db, ASafeLog log) : base(db, log) {
-			} // constructor
-
-			public override bool HasValidParameters() {
-				return (OriginID > 0) && (LoanSourceID > 0) && (Score > 0);
-			} // HasValidParameters
-
-			[UsedImplicitly]
-			public int OriginID { get; set; }
-
-			[UsedImplicitly]
-			public bool IsRegulated { get; set; }
-
-			[UsedImplicitly]
-			public decimal Score { get; set; }
-
-			[UsedImplicitly]
-			public int LoanSourceID { get; set; }
-
-			[UsedImplicitly]
-			public bool IsFirstLoan { get; set; }
-
-			public void Execute(MatchingGradeRanges target) {
-				target.Clear();
-
-				ForEachRowSafe(sr => target.Add(new MatchingGradeRanges.SubproductGradeRange {
-					ProductSubTypeID = sr["ProductSubTypeID"],
-					GradeRangeID = sr["GradeRangeID"],
-				}));
-			} // Execute
-		} // class LoadMatchingGradeRanges
 
 		private static readonly int[] customerOrigins =
 			((CustomerOriginEnum[])Enum.GetValues(typeof(CustomerOriginEnum))).Select(x => (int)x).ToArray();

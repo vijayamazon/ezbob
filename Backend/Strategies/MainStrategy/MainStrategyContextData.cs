@@ -9,7 +9,7 @@
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
-
+	using EZBob.DatabaseLib.Model.Database;
 	using CashRequestOriginatorType = EZBob.DatabaseLib.Model.Database.CashRequestOriginator;
 
 	internal class MainStrategyContextData {
@@ -132,6 +132,7 @@
 		public bool WasMismatch { get; set; }
 
 		public int CompanyID { get; set; }
+		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public MonthlyRepaymentData MonthlyRepayment { get; set; }
 
 		public OfferResult OfferResult { get; set; }

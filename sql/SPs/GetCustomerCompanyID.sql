@@ -8,9 +8,12 @@ GO
 ALTER PROCEDURE GetCustomerCompanyID
 @CustomerID INT,
 @Now DATETIME,
-@CompanyID INT OUTPUT
+@CompanyID INT OUTPUT,
+@TypeOfBusiness NVARCHAR(50) OUTPUT
 AS
 BEGIN
 	SET @CompanyID = dbo.udfGetCustomerCompanyID(@CustomerID, @Now)
+
+	SELECT @TypeOfBusiness = TypeOfBusiness FROM Company WHERE Id = @CompanyID
 END
 GO

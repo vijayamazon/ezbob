@@ -5,6 +5,7 @@
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using EZBob.DatabaseLib.Model.Database;
 
 	internal class ApplyBackdoorLogic : AMainStrategyStep {
@@ -18,7 +19,14 @@
 			CashRequestOriginator? cashRequestOriginator,
 			long cashRequestID,
 			long nlCashRequestID,
-			string tag
+			string tag,
+			int homeOwnerCap,
+			int notHomeOwnerCap,
+			int smallLoanScenarioLimit,
+			bool aspireToMinSetupFee,
+			TypeOfBusiness typeOfBusiness,
+			int customerOriginID,
+			MonthlyRepaymentData requestedLoan
 		) : base(outerContextDescription) {
 			this.backdoorEnabled = backdoorEnabled;
 			this.customerID = customerID;
@@ -29,20 +37,36 @@
 			this.cashRequestID = cashRequestID;
 			this.nlCashRequestID = nlCashRequestID;
 			this.tag = tag;
+			this.homeOwnerCap = homeOwnerCap;
+			this.notHomeOwnerCap = notHomeOwnerCap;
+			this.smallLoanScenarioLimit = smallLoanScenarioLimit;
+			this.aspireToMinSetupFee = aspireToMinSetupFee;
+			this.typeOfBusiness = typeOfBusiness;
+			this.customerOriginID = customerOriginID;
+			this.requestedLoan = requestedLoan;
 
-			this.applied = false;
+			BackdoorLogicApplied = false;
 
 			AutoDecisionResponse = new AutoDecisionResponse(this.customerID);
+
+			Medal = null;
+			OfferResult = null;
 		} // constructor
 
 		[StepOutput]
 		public AutoDecisionResponse AutoDecisionResponse { get; private set; }
 
 		[StepOutput]
+		public OfferResult OfferResult { get; private set; }
+
+		[StepOutput]
 		public MedalResult Medal { get; private set; }
 
+		[StepOutput]
+		public bool BackdoorLogicApplied { get; private set; }
+
 		public override string Outcome {
-			get { return this.applied ? "'applied'" : "'not applied'"; }
+			get { return BackdoorLogicApplied ? "'applied'" : "'not applied'"; }
 		} // Outcome
 
 		protected override StepResults Run() {
@@ -61,24 +85,43 @@
 
 			Log.Debug("Using back door simple for {0} as: {1}.", OuterContextDescription, backdoorSimpleDetails);
 
+			BackdoorSimpleApprove bsa = backdoorSimpleDetails as BackdoorSimpleApprove;
+
+			if (bsa != null) {
+				bsa.SetAdditionalCustomerData(
+					OuterContextDescription,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					this.tag,
+					this.homeOwnerCap,
+					this.notHomeOwnerCap,
+					this.smallLoanScenarioLimit,
+					this.aspireToMinSetupFee,
+					this.typeOfBusiness,
+					this.customerOriginID,
+					this.requestedLoan
+				);
+			} // if
+
 			bool success = backdoorSimpleDetails.SetResult(AutoDecisionResponse);
 
 			if (!success)
 				return StepResults.NotApplied;
 
-			Medal = CalculateMedal();
+			BackdoorLogicApplied = true;
 
-			this.applied = true;
-
-			if (backdoorSimpleDetails.Decision != DecisionActions.Approve)
+			if (backdoorSimpleDetails.Decision != DecisionActions.Approve) {
+				Medal = CalculateMedal();
 				return StepResults.Applied;
-
-			BackdoorSimpleApprove bsa = backdoorSimpleDetails as BackdoorSimpleApprove;
+			} // if
 
 			if (bsa == null) { // Should never happen because of the "if" condition.
-				this.applied = false;
+				BackdoorLogicApplied = false;
 				return StepResults.NotApplied;
 			} // if
+
+			Medal = bsa.Medal;
+			OfferResult = bsa.OfferResult;
 
 			Medal.MedalClassification = bsa.MedalClassification;
 			Medal.OfferedLoanAmount = bsa.ApprovedAmount;
@@ -97,7 +140,7 @@
 			return StepResults.Applied;
 		} // Run
 
-		protected override bool ShouldCollectOutput { get { return this.applied; } }
+		protected override bool ShouldCollectOutput { get { return BackdoorLogicApplied; } }
 
 		private ABackdoorSimpleDetails CreateBackdoor() {
 			if (!this.backdoorEnabled) {
@@ -161,7 +204,12 @@
 		private readonly long cashRequestID;
 		private readonly long nlCashRequestID;
 		private readonly string tag;
-
-		private bool applied;
+		private readonly int homeOwnerCap;
+		private readonly int notHomeOwnerCap;
+		private readonly int smallLoanScenarioLimit;
+		private readonly bool aspireToMinSetupFee;
+		private readonly TypeOfBusiness typeOfBusiness;
+		private readonly int customerOriginID;
+		private readonly MonthlyRepaymentData requestedLoan;
 	} // class ApplyBackdoorLogic
 } // namespace
