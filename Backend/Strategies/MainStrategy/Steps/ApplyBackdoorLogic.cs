@@ -65,11 +65,16 @@
 		[StepOutput]
 		public bool BackdoorLogicApplied { get; private set; }
 
+		[StepOutput]
+		public int? BackdoorInvestorID { get; set; }
+
 		public override string Outcome {
 			get { return BackdoorLogicApplied ? "'applied'" : "'not applied'"; }
 		} // Outcome
 
 		protected override StepResults Run() {
+			BackdoorInvestorID = null;
+
 			ABackdoorSimpleDetails backdoorSimpleDetails = CreateBackdoor();
 
 			if (backdoorSimpleDetails == null) {
@@ -119,6 +124,8 @@
 				BackdoorLogicApplied = false;
 				return StepResults.NotApplied;
 			} // if
+
+			BackdoorInvestorID = bsa.InvestorID;
 
 			Medal = bsa.Medal;
 			OfferResult = bsa.OfferResult;

@@ -53,6 +53,9 @@
 			CurrentStepName = "not started";
 
 			WriteDecisionOutput = null;
+
+			BackdoorLogicApplied = false;
+			BackdoorInvestorID = null;
 		} // constructor
 
 		public string Description {
@@ -130,6 +133,9 @@
 		public long NLCashRequestID { get; set; }
 
 		public bool WasMismatch { get; set; }
+
+		public bool BackdoorLogicApplied { get; set; }
+		public int? BackdoorInvestorID { get; set; }
 
 		public int CompanyID { get; set; }
 		public TypeOfBusiness TypeOfBusiness { get; set; }

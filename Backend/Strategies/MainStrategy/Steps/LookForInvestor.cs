@@ -6,18 +6,42 @@
 			string outerContextDescription,
 			int customerID,
 			long cashRequestID,
-			int underwriterID
+			int underwriterID,
+			bool backdoorLogicApplied,
+			int? backdoorInvestorID
 		) : base(outerContextDescription) {
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
 			this.underwriterID = underwriterID;
+			this.backdoorLogicApplied = backdoorLogicApplied;
+			this.backdoorInvestorID = backdoorInvestorID;
 		} // constructor
 
 		public override string Outcome { get { return this.outcome; } }
 
 		protected override StepResults Run() {
-			// TODO add backdoor logic
-			var loti = new LinkOfferToInvestor(this.customerID, this.cashRequestID, false, null, this.underwriterID);
+			LinkOfferToInvestor loti = null;
+
+			if (this.backdoorLogicApplied) {
+				if (this.backdoorInvestorID == null)
+					Log.Debug("Back door investor for {0}: look for investor as usual.", OuterContextDescription);
+				else if (this.backdoorInvestorID <= 0) {
+					this.outcome = string.Format("'back door investor not found'");
+					return StepResults.NotFound;
+				} else {
+					loti = new LinkOfferToInvestor(
+						this.customerID,
+						this.cashRequestID,
+						true,
+						this.backdoorInvestorID,
+						this.underwriterID
+					);
+				} // if
+			} // if back door logic
+
+			if (loti == null)
+				loti = new LinkOfferToInvestor(this.customerID, this.cashRequestID, false, null, this.underwriterID);
+
 			loti.Execute();
 
 			bool investorFound = !loti.IsForOpenPlatform || loti.FoundInvestor;
@@ -35,6 +59,8 @@
 		private readonly int customerID;
 		private readonly long cashRequestID;
 		private readonly int underwriterID;
+		private readonly bool backdoorLogicApplied;
+		private readonly int? backdoorInvestorID;
 
 		private string outcome;
 	} // class LookForInvestor

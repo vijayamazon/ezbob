@@ -491,7 +491,9 @@
 				this.context.Description,
 				this.context.CustomerID,
 				this.context.CashRequestID,
-				this.context.UnderwriterID
+				this.context.UnderwriterID,
+				this.context.BackdoorLogicApplied,
+				this.context.BackdoorInvestorID
 			));
 		} // LookForInvestor
 
