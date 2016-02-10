@@ -66,6 +66,11 @@
     <Compile Include="ApplicationInfo\LoanSourceModel.cs" />
     <Compile Include="ApplicationInfo\LoanTypeModel.cs" />
     <Compile Include="ApplicationInfo\SuggestedAmountModel.cs" />
+    <Compile Include="Authentication\RolePermissionRelation.cs" />
+    <Compile Include="Authentication\User.cs" />
+    <Compile Include="Authentication\UserRoleRelation.cs" />
+    <Compile Include="Authentication\Role.cs" />
+    <Compile Include="Authentication\Permission.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
@@ -311,6 +316,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

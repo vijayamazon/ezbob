@@ -11,6 +11,7 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Alibaba;
+	using Ezbob.Backend.Strategies.Authentication;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CompaniesHouse;
@@ -851,6 +852,13 @@
 			var s = new GetCompaniesHouseData(null, "SC123456", true);
 			s.Execute();
 		}
+
+
+	    [Test]
+	    public void TestGetUsers() {
+            GetSecurityUser strategy = new GetSecurityUser("dora443322+@ezbob.com", 1);
+	        strategy.Execute();
+	    }
 
 		[Test]
 		public void TestEditdirector() {

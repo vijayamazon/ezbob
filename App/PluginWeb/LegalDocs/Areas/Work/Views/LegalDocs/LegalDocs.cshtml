@@ -1,0 +1,17 @@
+﻿@{
+    Html.RenderPartial("~/Areas/Work/Views/LegalDocs/Partials/nvbar.cshtml");
+}
+<div ng-app="legalDocsApp" class="col-md-9 col-md-offset-1" style="margin-top: 20px;">
+    <div ng-view></div>
+</div>
+
+<script>
+    var urlGetLatestLegalDocs = '@Url.Action("GetLatestLegalDocs", "LegalDocs", new { Area = "Work" })';
+    var urlAddLegalDoc = '@Url.Action("AddLegalDoc", "LegalDocs", new { Area = "Work" })';
+    var urlReviewLegalDoc = '@Url.Action("ReviewLegalDoc", "LegalDocs", new { Area = "Work" })';
+    var urlApproveLegalDoc = '@Url.Action("ApproveLegalDoc", "LegalDocs", new { Area = "Work"})';
+    var urlDeleteLegalDoc = '@Url.Action("DeleteLegalDoc", "LegalDocs", new { Area = "Work" })';
+    var urlSaveLegalDoc = '@Url.Action("SaveLegalDoc", "LegalDocs", new { Area = "Work" })';
+    var urlUpdateCurrentTemplate = '@Url.Action("UpdateCurrentTemplate", "LegalDocs", new { Area = "Work" })';
+    var urlDownloadUrl = '@Url.Action("Download", "LegalDocs")';
+</script>

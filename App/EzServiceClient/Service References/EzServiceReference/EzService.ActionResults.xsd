@@ -5,6 +5,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Authentication" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" />
   <xs:complexType name="BrokerInstantOfferResponseActionResult">
     <xs:complexContent mixed="false">
@@ -58,6 +59,16 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
+  <xs:complexType name="SecurityUserActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/EzService" base="q11:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" minOccurs="0" name="Model" nillable="true" type="q12:ApplicationInfoModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SecurityUserActionResult" nillable="true" type="tns:SecurityUserActionResult" />
   <xs:complexType name="ApplicationInfoResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/EzService" base="q11:ActionResult">

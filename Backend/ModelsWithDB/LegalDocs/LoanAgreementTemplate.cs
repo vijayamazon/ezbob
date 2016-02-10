@@ -18,9 +18,6 @@
         public bool IsUpdate { get; set; }
 
         [DataMember]
-        public int TemplateTypeID { get; set; }
-
-        [DataMember]
         public int OriginID { get; set; }
 
         [DataMember]
@@ -37,6 +34,9 @@
 
         [DataMember]
         public DateTime ReleaseDate { get; set; }
+
+        [DataMember]
+        public int TemplateTypeID { get; set; }
 
         public String Name
         {

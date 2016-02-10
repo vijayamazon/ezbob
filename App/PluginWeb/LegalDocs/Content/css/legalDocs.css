@@ -1,0 +1,39 @@
+﻿
+
+.previewLegalDocsDiff > table th {
+    width: 33%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.highlight {
+    background-color: #2f96b4 !important;
+}
+
+td {
+    text-align: center;
+}
+
+.templatenametd {
+    text-align: left;
+}
+
+
+ins {
+    background-color: #c6ffc6;
+    text-decoration: none;
+}
+
+del {
+    background-color: #ffc6c6;
+}
+
+
+
+.nvbarwrapper {
+    padding-left: 0;
+    padding-right: 0;
+}
