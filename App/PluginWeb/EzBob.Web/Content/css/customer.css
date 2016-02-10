@@ -824,3 +824,10 @@ blockquote {
  .broker-finish-wizard-later .broker-finish-inner {
      width:80%;
  }
+
+
+ /*confirmation dialog*/
+ .confirmationDialog.ui-dialog .ui-dialog-content {
+     padding:20px;
+     font-size:16px;
+ }

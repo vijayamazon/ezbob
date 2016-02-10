@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/AutomationCalculator.Common" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database.Loans" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
@@ -46,6 +48,68 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="AStringable" nillable="true" type="tns:AStringable" />
+  <xs:complexType name="PricingModelModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BrokerSetupFeePercents" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Cogs" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CogsOutput" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CollectionRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CompanyDefaultRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CompanyScore" type="xs:int" />
+      <xs:element minOccurs="0" name="ConsumerDefaultRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ConsumerScore" type="xs:int" />
+      <xs:element minOccurs="0" name="CosmeCollectionRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CostOfDebt" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CostOfDebtOutput" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DebtPercentOfCapital" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DefaultRateCompanyShare" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Ebitda" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EuCollectionRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FeesRevenue" type="xs:decimal" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/AutomationCalculator.Common" minOccurs="0" name="FlowType" type="q1:AutoDecisionFlowTypes" />
+      <xs:element minOccurs="0" name="GradeID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="GradeScore" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="GrossProfit" type="xs:decimal" />
+      <xs:element minOccurs="0" name="InterestOnlyPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="InterestRevenue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LoanAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LoanTerm" type="xs:int" />
+      <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="NetLossFromDefaults" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OpexAndCapex" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OpexAndCapexOutput" type="xs:decimal" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
+      <xs:element minOccurs="0" name="PricingSourceModels" nillable="true" type="tns:ArrayOfPricingSourceModel" />
+      <xs:element minOccurs="0" name="ProbabilityOfDefault" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ProfitMarkup" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ProfitMarkupOutput" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Revenue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SetupFeePercents" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TenurePercents" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TotalCost" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="PricingModelModel" nillable="true" type="tns:PricingModelModel" />
+  <xs:complexType name="ArrayOfPricingSourceModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PricingSourceModel" nillable="true" type="tns:PricingSourceModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPricingSourceModel" nillable="true" type="tns:ArrayOfPricingSourceModel" />
+  <xs:complexType name="PricingSourceModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AIR" type="xs:decimal" />
+      <xs:element minOccurs="0" name="APR" type="xs:decimal" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="IsPreferable" type="xs:boolean" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database.Loans" minOccurs="0" name="LoanSource" type="q2:LoanSourceName" />
+      <xs:element minOccurs="0" name="SetupFee" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PricingSourceModel" nillable="true" type="tns:PricingSourceModel" />
   <xs:complexType name="SignupCustomerMultiOriginModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ABTesting" nillable="true" type="xs:string" />
@@ -63,11 +127,11 @@
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MobilePhone" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MobileVerificationCode" nillable="true" type="xs:string" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="Origin" nillable="true" type="q1:CustomerOriginEnum" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="Origin" nillable="true" type="q3:CustomerOriginEnum" />
       <xs:element minOccurs="0" name="PasswordAnswer" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PasswordQuestion" nillable="true" type="xs:int" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RawPassword" nillable="true" type="q2:DasKennwort" />
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RawPasswordAgain" nillable="true" type="q3:DasKennwort" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RawPassword" nillable="true" type="q4:DasKennwort" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RawPasswordAgain" nillable="true" type="q5:DasKennwort" />
       <xs:element minOccurs="0" name="ReferenceSource" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RemoteIp" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RequestedLoanAmount" nillable="true" type="xs:string" />
@@ -107,14 +171,14 @@
       <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Request" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Response" nillable="true" type="xs:string" />
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="ServiceType" type="q4:ExperianServiceType" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="ServiceType" type="q6:ExperianServiceType" />
       <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="WriteToLogPackage.InputData" nillable="true" type="tns:WriteToLogPackage.InputData" />
   <xs:complexType name="MultiBrandLoanSummary">
     <xs:sequence>
-      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Loans" nillable="true" type="q5:ArrayOfstring" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Loans" nillable="true" type="q7:ArrayOfstring" />
       <xs:element minOccurs="0" name="OriginCount" type="xs:int" />
     </xs:sequence>
   </xs:complexType>

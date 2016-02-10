@@ -4,7 +4,6 @@
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
-	using AutomationCalculator.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using NUnit.Framework;
@@ -68,27 +67,6 @@
 		public void TestMedal() {
 			var medalChooser = new MedalChooser(_db, Log);
 			medalChooser.GetMedal(18626, DateTime.UtcNow);
-		}
-
-		[Test]
-		public void TestOfferCalculator() {
-			var db = _db;
-			var input = new OfferInputModel {
-				Amount = 17000,
-				HasLoans = false,
-				AspireToMinSetupFee = true,
-				Medal = Medal.Gold,
-				CustomerId = 18263,
-				RepaymentPeriod = 15,
-				LoanSourceId = 3,
-			};
-
-			var offer1 = new OfferCalculator(input, db, Log).GetCosmeOffer();
-
-			Log.Debug("Offer1 is: {0}", offer1);
-			//	Assert.AreEqual(offer1.InterestRate, offer2.InterestRate);
-			//	Assert.AreEqual(offer1.SetupFee, offer2.SetupFee);
-			offer1.SaveToDb(Log, db);
 		}
 
 		[Test]

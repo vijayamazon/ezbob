@@ -46,13 +46,15 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
     hide: function() {
         return this.$el.hide();
     }, //hide
-    manageInvestorClick: function(el, before) {
+    manageInvestorClick: function (el, preventClosingRow) {
+
+        
         var tr = $(el.currentTarget).closest('tr');
         var id = tr.data('id');
         $('.manage-investor-row').removeClass("active");
         this.$el.find('.manage-investor-view').remove();
         this.$el.find('.edit-details-view-area').remove();
-        if (this.view && this.view.$el.data('id') === id) {
+        if (this.view && this.view.$el.data('id') === id && !preventClosingRow) {
             this.details = null;
             this.view = null;
             $(tr).removeClass("active");
@@ -71,7 +73,7 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
        
     }, //manageInvestorClick
     EditInvestorDetails: function(el) {
-
+        
         var tr = $(el.currentTarget).closest('tr');
         var id = tr.data('id');
         this.$el.find('.edit-details-view-area').remove();

@@ -16,7 +16,7 @@
 			this.output = output;
 		} // constructor
 
-		protected override string Outcome { get { return this.outcome; } }
+		public override string Outcome { get { return this.outcome; } }
 
 		protected override StepResults Run() {
 			if (this.autoDecisionResponse.DecisionIsLocked) {
@@ -25,6 +25,8 @@
 			} // if
 
 			if (!this.output.IsValid()) {
+				Log.Debug("Cannot lock re-approval for {0}: {1}.", OuterContextDescription, this.output.Stringify());
+
 				this.outcome = "'failure'";
 				return StepResults.Failed;
 			} // if
@@ -79,6 +81,7 @@
 				sr["IsCustomerRepaymentPeriodSelectionAllowed"];
 			this.autoDecisionResponse.BrokerSetupFeePercent = sr["BrokerSetupFeePercent"];
 			this.autoDecisionResponse.SpreadSetupFee = sr["SpreadSetupFee"];
+			this.autoDecisionResponse.ProductSubTypeID = sr["ProductSubTypeID"];
 
 			this.outcome = "'success'";
 			return StepResults.Success;

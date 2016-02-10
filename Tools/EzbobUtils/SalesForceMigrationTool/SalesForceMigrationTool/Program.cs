@@ -10,7 +10,7 @@
 
 	class Program {
         public static ISalesForceAppClient SfClient = new SalesForceApiClient("techapi@ezbob.com", "Ezca$h123", "qCgy7jIz8PwQtIn3bwxuBv9h", "Production");
-        private static ILog Log = LogManager.GetLogger(typeof (Program));
+        protected static ILog Log = LogManager.GetLogger(typeof (Program));
         public static AConnection DB = new SqlConnection(new SafeILog(Log));
         //public static ISalesForceAppClient SfClient = new FakeApiClient("", "", "", "");
         static void Main(string[] args) {
@@ -22,7 +22,7 @@
             MigrateLeadsFromDb();
             //MigrateContact(1189);
             //MigrateContact(1227);
-
+	        MigrateBrokerLeadsFromDb();
 			//SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
 			//sfReruner.Rerun();
 
@@ -322,6 +322,32 @@
 	            Thread.Sleep(1000);
             }
         }
+
+		private static void MigrateBrokerLeadsFromDb() {
+			string[] leadEmails = {
+				"tallmpc@hotmail.com",
+			};
+
+			foreach (var leadEmail in leadEmails) {
+				Log.InfoFormat("migrating lead {0}", leadEmail);
+				LeadAccountModel model = DB.FillFirst<LeadAccountModel>("SF_LoadAccountLead", CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", null),
+				new QueryParameter("@Email", leadEmail),
+				new QueryParameter("@IsBrokerLead", true),
+				new QueryParameter("@IsVipLead", false));
+
+				if (string.IsNullOrEmpty(model.Email)) {
+					Log.ErrorFormat("Email is null for lead {0}, skipping", leadEmail);
+					continue;
+				}
+				try {
+					SfClient.CreateUpdateLeadAccount(model);
+					Thread.Sleep(1000);
+				} catch (Exception ex) {
+					Log.ErrorFormat("ERROR executing for lead {0}\n{1}", leadEmail, ex);
+				}
+			}
+		}
 
         private static void MigrateLeadsFromCsv() {
             LeadsMigration migration = new LeadsMigration();

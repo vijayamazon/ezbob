@@ -28,7 +28,11 @@ namespace SalesForceLib {
 				model.Loan.ActiveLoans = this.db.ExecuteScalar<int>("SalesLoansActiveCount", new QueryParameter("@CustomerID", loan.Id));
 				model.Sales = new List<ActivityResultModel>();
 				try {
-					var activity = this.sfClient.GetActivity(new GetActivityModel{ Email = loan.Email, Origin = loan.Origin});
+					var activity = this.sfClient.GetActivity(new GetActivityModel {
+						Email = loan.Email,
+						Origin = loan.Origin
+					});
+
 					if (activity != null && string.IsNullOrEmpty(activity.Error) && activity.Activities.Any()) {
 						model.Sales = activity.Activities.Where(x => x.Originator != "System");
 					} else {

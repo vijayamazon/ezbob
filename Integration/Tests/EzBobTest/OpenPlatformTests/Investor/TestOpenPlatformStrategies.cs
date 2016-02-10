@@ -7,6 +7,7 @@
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.LegalDocs;
+	using Ezbob.Backend.Strategies.LogicalGlue;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EzServiceAccessor;
@@ -131,7 +132,7 @@
 
 		[Test]
 		public void TestFindInvestor() {
-			var stra = new FindInvestorForOffer(3406, 42824);
+			var stra = new FindInvestorForOffer(3406, 42828);
 			stra.Execute();
 			Assert.IsTrue(stra.IsFound);
 		}
@@ -185,6 +186,17 @@
 		public void TestLinkLoanRepaymentToInvestor() {
 			var linkOfferToInvestor = new LinkRepaymentToInvestor(1062, 1845, 32, DateTime.UtcNow, 1);
 			linkOfferToInvestor.Execute();
+		}
+
+		[Test]
+		public void TestLogicalGlueCache() {
+			GetLatestKnownInference inference = new GetLatestKnownInference(3406, DateTime.UtcNow, false);
+			inference.Execute();
+			if (inference.Inference != null) {
+				var bucket = inference.Inference.Bucket;
+				Assert.IsNotNull(bucket);
+
+			}
 		}
 	}
 }

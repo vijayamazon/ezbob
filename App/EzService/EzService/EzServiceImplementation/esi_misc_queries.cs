@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Backfill;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ManualDecision;
@@ -46,8 +47,24 @@
 
 		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID) {
 			CalculateMedal instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, nlCashRequestID, DateTime.UtcNow, false, true);
-		}
+
+			var args = new ExecuteArguments(customerId, cashRequestID, nlCashRequestID, DateTime.UtcNow, false, true) {
+				CustomerID = customerId,
+				UserID = underwriterId,
+				OnSuccess = (stra, amd) => {
+					try {
+						var calcMedalStra = stra as CalculateMedal;
+
+						if (calcMedalStra != null)
+							calcMedalStra.Notify();
+					} catch (Exception e) {
+						Log.Alert(e, "Failed to send notifications from CalculateMedal strategy.");
+					} // try
+				},
+			};
+
+			return ExecuteSync(out instance, args);
+		} // CalculateMedal
 
 		public NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
 			GetCompanySeniority instance;

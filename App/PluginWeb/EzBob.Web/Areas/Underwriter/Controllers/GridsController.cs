@@ -26,7 +26,7 @@
 			int nRegistered = 0;
 			int nEscalated = 0;
 			int nSignature = 0;
-
+			int nPendingInvestor = 0;
 			this.db.ForEachRowSafe(
 				sr => {
 					string sCustomerType = sr["CustomerType"];
@@ -41,6 +41,8 @@
 						nPending = sr["CustomerCount"];
 					else if (sCustomerType == CreditResultStatus.WaitingForDecision.ToString())
 						nWaiting = sr["CustomerCount"];
+					else if (sCustomerType == CreditResultStatus.PendingInvestor.ToString())
+						nPendingInvestor = sr["CustomerCount"];
 				},
 				"UwGetCounters",
 				CommandSpecies.StoredProcedure,
@@ -53,6 +55,7 @@
 				new CustomersCountersModel { Count = nRegistered, Name = "RegisteredCustomers" },
 				new CustomersCountersModel { Count = nEscalated,  Name = "escalated" },
 				new CustomersCountersModel { Count = nSignature,  Name = "signature" },
+				new CustomersCountersModel { Count = nPendingInvestor,  Name = "pendinginvestor" },
 			}, JsonRequestBehavior.AllowGet);
 		} // GetCounters
 

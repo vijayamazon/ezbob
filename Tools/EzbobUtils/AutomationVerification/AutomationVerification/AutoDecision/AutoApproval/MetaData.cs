@@ -59,7 +59,7 @@
 
 		public DateTime? OfferValidUntil { get; set; }
 		public DateTime? OfferStart { get; set; }
-		public bool? EmailSendingBanned { get; set; }
+		public bool EmailSendingBanned { get; set; }
 
 		public string ExperianCompanyName { get; set; }
 
@@ -76,17 +76,12 @@
 		public List<string> ValidationErrors { get; private set; }
 
 		[JsonIgnore]
-		public bool IsEmailSendingBanned {
-			get { return !EmailSendingBanned.HasValue || EmailSendingBanned.Value; } // get
-		} // IsEmailSendingBanned
-
-		[JsonIgnore]
-		public double OfferLength {
+		public int OfferLength {
 			get {
 				if (!OfferStart.HasValue || !OfferValidUntil.HasValue)
 					return 0;
 
-				return (OfferValidUntil.Value - OfferStart.Value).TotalDays;
+				return (int)(OfferValidUntil.Value - OfferStart.Value).TotalDays;
 			} // get
 		} // OfferLength
 

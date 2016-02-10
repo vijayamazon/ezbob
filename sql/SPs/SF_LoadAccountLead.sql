@@ -56,7 +56,7 @@ BEGIN
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
         b.ContactMobile AS BrokerPhoneNumber,
-		b.BrokerID AS BrokerID,
+	b.BrokerID AS BrokerID,
         cs.Name AS CollectionStatus,
         ecs.Name AS ExternalCollectionStatus
     FROM Customer c 
@@ -104,8 +104,9 @@ BEGIN
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
         b.ContactMobile AS BrokerPhoneNumber,
-		b.BrokerID AS BrokerID,
+	b.BrokerID AS BrokerID,
         o.Name AS Origin
+        b.IsTest AS IsTest
     FROM BrokerLeads l 
     INNER JOIN Broker b ON b.BrokerID = l.BrokerID
     INNER JOIN CustomerOrigin o ON o.CustomerOriginID = b.OriginID
@@ -118,6 +119,5 @@ SELECT @Email AS Email,
        'Unknown' AS EzbobSource
 
 END
-
 GO
 

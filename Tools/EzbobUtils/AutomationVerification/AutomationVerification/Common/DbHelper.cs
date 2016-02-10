@@ -176,8 +176,13 @@
 				new QueryParameter("Medal", medal.ToString()));
 		}
 
-		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans) {
-			var model = _db.FillFirst<PricingScenarioModel>("AV_PricingScenario", new QueryParameter("Amount", amount), new QueryParameter("HasLoans", hasLoans));
+		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans, int customerID) {
+			var model = _db.FillFirst<PricingScenarioModel>(
+				"AV_PricingScenario",
+				new QueryParameter("Amount", amount),
+				new QueryParameter("HasLoans", hasLoans),
+				new QueryParameter("CustomerID", customerID)
+			);
 			return model;
 		}
 

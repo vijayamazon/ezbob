@@ -8,14 +8,14 @@
     using Ezbob.Backend.Strategies.OpenPlatform.Facade.Implement;
     using Ezbob.Backend.Strategies.OpenPlatform.Models;
     using EzBobTest.OpenPlatformTests.Core;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TestInvestorRules : TestBase {
 
 
-        [TestMethod]
+        [Test]
         public void TestGetMatchedInvestorsWithComplexRule() {
 
             var container = this.InitContainer(typeof(InvestorService));
@@ -78,7 +78,7 @@
             ruleEngineDalMock.Setup(x => x.GetRules(1, RuleType.System)).Returns(rulesDict1);
             investorCashRequestDALMock.Setup(x => x.GetInvestorLoanCashRequest(1)).Returns(new InvestorLoanCashRequest() { ManagerApprovedSum = 20, CashRequestID = 1 });
             investorParametersDALMock.Setup(x => x.GetInvestorsIds()).Returns(new List<int>() { 1 });
-            investorParametersDALMock.Setup(x => x.GetInvestorParametersDB(1, RuleType.System)).Returns(new List<I_InvestorParams>() {new I_InvestorParams() {InvestorID = 1,Type = 1,ParameterID = 1,Value = 1000,InvestorParamsID = 1}});
+            investorParametersDALMock.Setup(x => x.GetInvestorParametersDB(1, RuleType.System)).Returns(new List<I_InvestorParams>() { new I_InvestorParams() { InvestorID = 1, Type = 1, ParameterID = 1, Value = 1000, InvestorParamsID = 1 } });
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1)).Returns(true);
             Dictionary<int, decimal> dict2 = new Dictionary<int, decimal>();
             dict2.Add(1, 3000);
@@ -126,12 +126,12 @@
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestGetMatchedInvestorsWithSystemRules() {
 
             var container = this.InitContainer(typeof(InvestorService));
 
-            
+
 
             var ruleEngineDalMock = new Mock<IRulesEngineDAL>();
             var investorParametersDALMock = new Mock<IInvestorParametersDAL>();
@@ -153,31 +153,30 @@
             var investorService = container.GetInstance<IInvestorService>();
 
             var investor = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(investor != null);
+          Assert.IsTrue(investor != null);
 
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1))
             .Returns(false);
 
             investor = investorService.GetMatchedInvestor(1);
-            Assert.IsTrue(investor == null);
+           Assert.IsTrue(investor == null);
 
         }
 
 
-        private void SetSetups(Mock<IRulesEngineDAL> ruleEngineDalMock, 
+        private void SetSetups(Mock<IRulesEngineDAL> ruleEngineDalMock,
             Mock<IInvestorCashRequestDAL> investorCashRequestDALMock,
             Mock<IInvestorParametersDAL> investorParametersDALMock,
-            Mock<IGenericRulesBLL> genericRulesMock) 
-        {
+            Mock<IGenericRulesBLL> genericRulesMock) {
             var rulesDict1 = GetRules();
-            
+
             ruleEngineDalMock.Setup(x => x.GetRules(1, RuleType.System))
             .Returns(rulesDict1);
 
 
             genericRulesMock.Setup(x => x.RuleBadgetLevel(1, 1, 1))
                 .Returns(true);
-            
+
             investorCashRequestDALMock.Setup(x => x.GetInvestorLoanCashRequest(1))
                 .Returns(GetInvestorLoanCashRequest());
 
@@ -219,10 +218,10 @@
             });
 
             investorParametersDALMock.Setup(x => x.InvestorsParameters).Returns(ip);
-            
 
 
-            investorParametersDALMock.Setup(x => x.GetGradePercent(1, (int)Grade.A,1))
+
+            investorParametersDALMock.Setup(x => x.GetGradePercent(1, (int)Grade.A, 1))
                 .Returns((decimal)0.2);
             investorParametersDALMock.Setup(x => x.GetGradeMonthlyInvestedAmount(1, Grade.A))
                 .Returns(100);

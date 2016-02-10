@@ -42,6 +42,17 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RepaymentIntervalTypes" nillable="true" type="tns:RepaymentIntervalTypes" />
+  <xs:simpleType name="PricingCalcuatorScenarioNames">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BasicNew" />
+      <xs:enumeration value="BasicRepeating" />
+      <xs:enumeration value="Broker" />
+      <xs:enumeration value="NonLimited" />
+      <xs:enumeration value="SmallLoan" />
+      <xs:enumeration value="SoleTraders" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PricingCalcuatorScenarioNames" nillable="true" type="tns:PricingCalcuatorScenarioNames" />
   <xs:simpleType name="AlibabaBusinessType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="APPLICATION_WS_3" />

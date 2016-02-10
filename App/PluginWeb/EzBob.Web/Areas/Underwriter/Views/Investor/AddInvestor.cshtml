@@ -22,7 +22,7 @@
 								@EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
 								@EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
 								@EzForm.InputTextUnderwriter(this, "MonthlyFundingCapital", "Monthly funding capital", null, "cashInput")
-								@EzForm.InputTextUnderwriter(this, "FundsTransferDate", "Funds transfer day in month", "1")
+								@EzForm.InputTextUnderwriter(this, "FundsTransferDate", "Date to transfer funds each month", "1")
 								@EzForm.InputTextUnderwriter(this, "FundingLimitForNotification", "Funding limit for notification", "250000", "cashInput")
 
 								<h4>Investor primary contact</h4>
@@ -45,7 +45,7 @@
 									<div class="control">
 										<label class="checkbox">
 											<input name="SameBank" id="SameBank" type="checkbox" value="true" checked="checked" />
-											Is repayments account identical to funding
+                                            Repayment account is the same as Funding account
 										</label>
 									</div>
 								</div>

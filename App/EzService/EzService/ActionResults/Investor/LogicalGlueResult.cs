@@ -7,6 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Logger;
+	using Ezbob.Utils.ParsedValue;
 
 	[DataContract]
 	public class LogicalGlueResult : EzService.ActionResult {
@@ -23,7 +24,7 @@
 		public string Error { get; set; }
 
 		[DataMember]
-		public decimal? NNScore  { get; set; }
+		public decimal? NNScore { get; set; }
 
 		[DataMember]
 		public decimal? FLScore { get; set; }
@@ -40,7 +41,13 @@
 		[DataMember]
 		public bool IsTryout { get; set; }
 
-		public static LogicalGlueResult FromInference(Inference inference, int customerID, ASafeLog log, AConnection db){
+		[DataMember]
+		public bool IsHardReject { get; set; }
+
+		[DataMember]
+		public bool ScoreIsReliable { get; set; }
+
+		public static LogicalGlueResult FromInference(Inference inference, int customerID, ASafeLog log, AConnection db) {
 			if (inference == null) {
 				return new LogicalGlueResult {
 					Error = "No Logical Glue data found.",
@@ -89,10 +96,12 @@
 
 				result.BucketPercent = b == 0 ? 0 : a / b;
 
+				result.IsHardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
+				result.ScoreIsReliable = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) &&
+					inference.ModelOutputs[ModelNames.NeuralNetwork].Error.IsEmpty;
 				return result;
 			} catch (Exception ex) {
 				log.Warn(ex, "Failed loading lg data for customer {0}", customerID);
-
 				return new LogicalGlueResult {
 					Error = "Failed loading logical glue data",
 				};

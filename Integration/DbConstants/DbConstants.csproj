@@ -41,12 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlibabaBusinessTypes.cs" />
+    <Compile Include="AutoDecisionFlowTypes.cs" />
+    <Compile Include="Bucket.cs" />
     <Compile Include="CollectionStatusNames.cs" />
     <Compile Include="CustomerOriginEnum.cs" />
     <Compile Include="customer_enums.cs" />
     <Compile Include="DecisionActions.cs" />
     <Compile Include="LoanSourceName.cs" />
     <Compile Include="NewLoanEnums.cs" />
+    <Compile Include="PricingCalcuatorScenarioNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>

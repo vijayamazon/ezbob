@@ -6,59 +6,51 @@ IF OBJECT_ID('AV_PricingScenario') IS NULL
 GO
 
 ALTER PROCEDURE AV_PricingScenario
-@Amount INT, @HasLoans BIT
+@Amount INT,
+@HasLoans BIT,
+@CustomerID INT
 AS
 BEGIN
+	DECLARE @SmallLoan INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'SmallLoanScenarioLimit')
 
-DECLARE @SmallLoan INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='SmallLoanScenarioLimit')
+	DECLARE @ScenarioName NVARCHAR(50)
 
-
-DECLARE @ScenarioName NVARCHAR(30)
-
-IF @Amount <= @SmallLoan
-BEGIN
-	SET @ScenarioName = 'Small Loan'		
-END
-ELSE
-BEGIN
-	IF @HasLoans = 1
+	IF @Amount <= @SmallLoan
 	BEGIN
-		SET @ScenarioName = 'Basic Repeating'
+		SET @ScenarioName = 'Small Loan'		
 	END
 	ELSE
 	BEGIN
-		SET @ScenarioName = 'Basic New'
+		IF @HasLoans = 1
+		BEGIN
+			SET @ScenarioName = 'Basic Repeating'
+		END
+		ELSE
+		BEGIN
+			SET @ScenarioName = 'Basic New'
+		END
 	END
+
+	SELECT
+		p.ScenarioName,
+		p.TenurePercents,
+		p.ProfitMarkupPercentsOfRevenue,
+		p.OpexAndCapex,
+		p.InterestOnlyPeriod,
+		p.EuCollectionRate,
+		p.DefaultRateCompanyShare,
+		p.DebtPercentOfCapital,
+		p.CostOfDebtPA,
+		p.CollectionRate,
+		p.Cogs,
+		p.BrokerSetupFee,
+		p.CosmeCollectionRate
+	FROM
+		PricingCalculatorScenarios p
+		INNER JOIN Customer c
+			ON p.OriginID = c.OriginID
+			AND c.Id = @CustomerID	
+	WHERE
+		p.ScenarioName = @ScenarioName
 END
-
-DECLARE @TenurePercents DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='TenurePercents')
-DECLARE @ProfitMarkupPercentsOfRevenue DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='ProfitMarkupPercentsOfRevenue')
-DECLARE @OpexAndCapex DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='OpexAndCapex')
-DECLARE @InterestOnlyPeriod DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='InterestOnlyPeriod')
-DECLARE @EuCollectionRate DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='EuCollectionRate')
-DECLARE @DefaultRateCompanyShare DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='DefaultRateCompanyShare')
-DECLARE @DebtPercentOfCapital DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='DebtPercentOfCapital')
-DECLARE @CostOfDebtPA DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='CostOfDebtPA')
-DECLARE @CollectionRate DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='CollectionRate')
-DECLARE @Cogs DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='Cogs')
-DECLARE @BrokerSetupFee DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='BrokerSetupFee')
-DECLARE @CosmeCollectionRate DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='CosmeCollectionRate')
-
-
-SELECT
-	@ScenarioName AS ScenarioName,
-	@TenurePercents AS TenurePercents,
-	@ProfitMarkupPercentsOfRevenue AS ProfitMarkupPercentsOfRevenue,
-	@OpexAndCapex AS OpexAndCapex,
-	@InterestOnlyPeriod AS InterestOnlyPeriod,
-	@EuCollectionRate AS EuCollectionRate,
-	@DefaultRateCompanyShare AS DefaultRateCompanyShare,
-	@DebtPercentOfCapital AS DebtPercentOfCapital,
-	@CostOfDebtPA AS CostOfDebtPA,
-	@CollectionRate AS CollectionRate,
-	@Cogs AS Cogs,
-	@BrokerSetupFee AS BrokerSetupFee,
-	@CosmeCollectionRate AS CosmeCollectionRate
-END
-
 GO

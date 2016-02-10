@@ -290,6 +290,7 @@ namespace ConfigManager {
 		IovationUrl,
 		IovationCheckPeriod,
 		IsSmsValidationActive,
+        InvestorBudgetAmplitude,
 
 		LandRegistryFilePath,
 		LandRegistryPassword,

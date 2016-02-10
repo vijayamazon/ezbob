@@ -2,6 +2,7 @@
 	using System;
 	using System.Data;
 	using System.Linq;
+	using System.Net;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
@@ -177,6 +178,8 @@
 				if (inference.ResponseID <= 0)
 					inputData.ResponseErrors.Add("No response received.");
 
+				inputData.ResponseHttpStatus = (inference.Status == null) ? (int?)null : (int)inference.Status.HttpStatus;
+
 				if (inference.Error.HasError()) {
 					inputData.ResponseErrors.AddRange(
 						new [] {
@@ -193,9 +196,7 @@
 						? inference.ModelOutputs[ModelNames.NeuralNetwork]
 						: null;
 
-					if (model == null)
-						inputData.ResponseErrors.Add("Neural network model not found.");
-					else if (!model.Error.IsEmpty) {
+					if ((model != null) && !model.Error.IsEmpty) {
 						if (!string.IsNullOrWhiteSpace(model.Error.ErrorCode))
 							inputData.ResponseErrors.Add(model.Error.ErrorCode);
 
@@ -236,7 +237,7 @@
 		private void LogicalGlueFlow() {
 			Output.FlowType = AutoDecisionFlowTypes.LogicalGlue;
 
-			if (Trail.MyInputData.RequestID == null) {
+			if ((Trail.MyInputData.RequestID == null) || (Trail.MyInputData.ResponseHttpStatus != (int)HttpStatusCode.OK)) {
 				Trail.Dunno<LGDataFound>().Init(false);
 				Trail.Dunno<InternalFlow>().Init();
 				InternalFlow();

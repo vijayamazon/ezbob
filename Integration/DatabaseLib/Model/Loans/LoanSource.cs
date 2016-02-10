@@ -1,5 +1,4 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
-	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using Ezbob.Database;

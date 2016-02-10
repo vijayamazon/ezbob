@@ -101,6 +101,8 @@
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
+            model.LatePaymentCharge = String.Format("{0:0.00}", Convert.ToInt32(ConfigManager.CurrentValues.Instance.LatePaymentCharge.Value));
+            model.AdministrationCharge = String.Format("{0:0.00}", Convert.ToInt32(ConfigManager.CurrentValues.Instance.AdministrationCharge.Value)); 
 
 			// According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
 

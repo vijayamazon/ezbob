@@ -20,7 +20,9 @@
 				this.args.CashRequestID,
 				this.args.NLCashRequestID,
 				this.args.Log
-			);
+			) {
+				Amount = this.args.SystemCalculatedAmount,
+			};
 
 			this.oldWayAgent = new OldWayAgent(
 				this.args.CustomerID,
@@ -62,11 +64,12 @@
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				switch (Trail.MyInputData.FlowType) {
 				case AutoDecisionFlowTypes.LogicalGlue:
-					Trail.Dunno<LogicalGlueFlow>().Init();
+					Trail.Affirmative<LogicalGlueFlow>(false).Init();
 
-					if (Trail.MyInputData.ErrorInLGData)
+					if (Trail.MyInputData.ErrorInLGData) {
 						Trail.Negative<LGWithoutError>(true).Init(false);
-					else {
+						Trail.Amount = 0;
+					} else {
 						Trail.Affirmative<LGWithoutError>(false).Init(true);
 
 						List<ATrail.StepWithDecision> subtrail = this.oldWayAgent.Trail.FindSubtrail(
@@ -87,14 +90,23 @@
 							typeof(OutstandingRepayRatio)
 						);
 
-						foreach (ATrail.StepWithDecision sd in subtrail)
+						bool dropToZero = false;
+
+						foreach (ATrail.StepWithDecision sd in subtrail) {
 							Trail.Add(sd, sd.Decision == DecisionStatus.Negative);
+
+							if (sd.Decision == DecisionStatus.Negative)
+								dropToZero = true;
+						} // for each
+
+						if (dropToZero)
+							Trail.Amount = 0;
 					} // if
 
 					break;
 
 				case AutoDecisionFlowTypes.Internal:
-					Trail.Dunno<InternalFlow>().Init();
+					Trail.Affirmative<InternalFlow>(false).Init();
 					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					break;
 

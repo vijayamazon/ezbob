@@ -6,8 +6,8 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 
 	using CashRequestOriginatorType = EZBob.DatabaseLib.Model.Database.CashRequestOriginator;
@@ -47,9 +47,12 @@
 			CustomerDetails = new Helpers.CustomerDetails(this.arguments.CustomerID);
 
 			HasCashRequest = false;
+			CashRequestWasWritten = false;
 			ShuttingDownUbnormally = false;
 			DelayReason = string.Empty;
 			CurrentStepName = "not started";
+
+			WriteDecisionOutput = null;
 		} // constructor
 
 		public string Description {
@@ -138,6 +141,8 @@
 		public string DelayReason { get; set; }
 		public bool ShuttingDownUbnormally { get; set; }
 		public bool HasCashRequest { get; set; }
+		public bool CashRequestWasWritten { get; set; }
+		public WriteDecisionOutput WriteDecisionOutput { get; set; }
 
 		public bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
 		public bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
@@ -155,6 +160,8 @@
 		public string SilentEmailRecipient { get { return CurrentValues.Instance.AutoApproveSilentToAddress; } }
 		public string SilentEmailSenderAddress { get { return CurrentValues.Instance.MailSenderEmail; } }
 		public string SilentEmailSenderName { get { return CurrentValues.Instance.MailSenderName; } }
+		public int SmallLoanScenarioLimit { get { return CurrentValues.Instance.SmallLoanScenarioLimit; } }
+		public bool AspireToMinSetupFee { get { return CurrentValues.Instance.AspireToMinSetupFee; } }
 
 		private readonly MainStrategyArguments arguments;
 	} // class MainStrategyContextData

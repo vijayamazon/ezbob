@@ -261,6 +261,7 @@
     <Compile Include="OpenPlatform\I_InvestorContact.cs" />
     <Compile Include="OpenPlatform\I_InvestorType.cs" />
     <Compile Include="OpenPlatform\I_Investor.cs" />
+    <Compile Include="PricingModelModel.cs" />
     <Compile Include="ServiceLog.cs" />
     <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -41,7 +41,7 @@
 		[StepOutput]
 		public MedalResult Medal { get; private set; }
 
-		protected override string Outcome {
+		public override string Outcome {
 			get { return this.applied ? "'applied'" : "'not applied'"; }
 		} // Outcome
 

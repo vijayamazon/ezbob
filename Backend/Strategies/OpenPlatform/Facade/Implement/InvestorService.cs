@@ -44,7 +44,7 @@
             foreach (var investorId in InvestorList) {
                 
 				var investorParameter = InvestorParametersBLL.GetInvestorParameters(investorId, ruleType);
-				Log.InfoFormat("FilterInvestors cr: {0} \ninvestor: {1}", investorLoanCashRequest, investorParameter);
+				
 				var matchInvestor = MatchProvider.GetNew();
 				
                 if (investorParameter == null) {
@@ -57,7 +57,14 @@
                 }
                 matchInvestor.Source = investorLoanCashRequest;
                 matchInvestor.Target = investorParameter;
+
+				Log.InfoFormat("\n\n\n\nFilterInvestors cr: \n{0}\ninvestor:\n{1}", investorLoanCashRequest, investorParameter);
                 matchInvestor.BuildFunc(investorParameter.InvestorID, investorLoanCashRequest.CashRequestID, ruleType);
+				Log.InfoFormat(string.Format("{0}\n {1} < {2}\n {3} < {4}\n {5} < {6}\n ",matchInvestor.Func.ToString(), 
+					investorLoanCashRequest.ManagerApprovedSum, investorParameter.DailyAvailableAmount, 
+					investorLoanCashRequest.ManagerApprovedSum, investorParameter.WeeklyAvailableAmount, 
+					investorLoanCashRequest.ManagerApprovedSum, investorParameter.Balance));
+
                 matchList.Add(matchInvestor);
             }
             return matchList.Where(x => x.IsMatched())

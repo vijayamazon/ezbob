@@ -127,7 +127,7 @@
 			decimal amount
 			) {
 
-			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
+			LoanScheduleRepository installments = (LoanScheduleRepository)ObjectFactory.GetInstance<ILoanScheduleRepository>();
 			var loanPaymentFacade = new LoanPaymentFacade();
 
 			PayPointReturnData payPointReturnData = null;
@@ -210,9 +210,10 @@
 
 					return ex.PaypointData;
 				}
+				installments.CommitTransaction();
 
 				loanPaymentFacade.PayLoan(loan, payPointReturnData.NewTransId, amount, null, now, "auto-charge", false, null, nlPayment);
-				installments.CommitTransaction();
+				
 
 			} catch (Exception e) {
 				if (!(e is PayPointException)) {
@@ -220,7 +221,7 @@
 				}
 				if (payPointReturnData == null)
 					payPointReturnData = new PayPointReturnData { Error = e.Message };
-				installments.Dispose();
+				installments.RollbackTransaction();
 			}
 
 			return payPointReturnData;

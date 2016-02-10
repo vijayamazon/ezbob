@@ -1,8 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
 	using System;
+	using AutomationCalculator.Common;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using EZBob.DatabaseLib.Model.Database;
 
 	internal class LockApproved : AMainStrategyStep {
@@ -15,7 +16,8 @@
 			bool isEmailSendingBanned,
 			int offerValidForHours,
 			int minLoanAmount,
-			int maxLoanAmount
+			int maxLoanAmount,
+			int? productSubTypeID
 		) : base(outerContextDescription) {
 			this.autoDecisionResponse = autoDecisionResponse;
 			this.autoApproveIsSilent = autoApproveIsSilent;
@@ -25,9 +27,14 @@
 			this.offerValidForHours = offerValidForHours;
 			this.minLoanAmount = minLoanAmount;
 			this.maxLoanAmount = maxLoanAmount;
+			this.productSubTypeID = productSubTypeID;
+			IsSilentlyApproved = false;
 		} // constructor
 
-		protected override string Outcome { get { return this.outcome; } }
+		public override string Outcome { get { return this.outcome; } }
+
+		[StepOutput]
+		public bool IsSilentlyApproved { get; private set; }
 
 		protected override StepResults Run() {
 			if (this.autoDecisionResponse.DecisionIsLocked) {
@@ -56,6 +63,13 @@
 				return StepResults.Failed;
 			} // if
 
+			if (this.offerResult.FlowType == AutoDecisionFlowTypes.Unknown) {
+				Log.Alert("Unknown flow type detected for approved {0}, switching to manual.", OuterContextDescription);
+
+				this.outcome = "'error in flow type'";
+				return StepResults.Failed;
+			} // if
+
 			if (this.loanSourceID <= 0) {
 				Log.Alert("No loan source found for approved {0}, switching to manual.", OuterContextDescription);
 
@@ -63,7 +77,16 @@
 				return StepResults.Failed;
 			} // if
 
+			if (this.autoDecisionResponse.ProposedAmount <= 0) {
+				Log.Msg("Proposed amount is not positive for approved {0}, switching to manual.", OuterContextDescription);
+
+				this.outcome = "'no proposed amount'";
+				return StepResults.Failed;
+			} // if
+
 			if (this.autoApproveIsSilent) {
+				IsSilentlyApproved = true;
+
 				Log.Msg("Approve is silent for {0}, switching to manual.", OuterContextDescription);
 
 				this.outcome = "'silent approve'";
@@ -75,7 +98,7 @@
 				(this.autoDecisionResponse.ProposedAmount <= this.maxLoanAmount);
 
 			Log.Msg(
-				"Auto approved amount {0} for {1} is {2} allowed range [{3}, {4}], {5}.",
+				"Auto approved amount {0} for {1} is {2} (allowed for auto approval range is [{3}, {4}]), {5}.",
 				this.autoDecisionResponse.ProposedAmount.ToString("C0"),
 				OuterContextDescription,
 				approved ? "in" : "out of",
@@ -92,7 +115,7 @@
 			this.autoDecisionResponse.DecisionIsLocked = true;
 			this.autoDecisionResponse.HasApprovalChance = true;
 			this.autoDecisionResponse.ApprovedAmount = this.autoDecisionResponse.ProposedAmount;
-			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddDays(this.offerValidForHours);
+			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddHours(this.offerValidForHours);
 
 			this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
 			this.autoDecisionResponse.UserStatus = Status.Approved;
@@ -108,6 +131,8 @@
 			this.autoDecisionResponse.InterestRate = this.offerResult.InterestRate / 100M;
 			this.autoDecisionResponse.SetupFee = this.offerResult.SetupFee / 100M;
 
+			this.autoDecisionResponse.ProductSubTypeID = this.productSubTypeID;
+
 			this.outcome = "'approved'";
 
 			return StepResults.Success;
@@ -121,6 +146,7 @@
 		private readonly int offerValidForHours;
 		private readonly int minLoanAmount;
 		private readonly int maxLoanAmount;
+		private readonly int? productSubTypeID;
 
 		private string outcome;
 	} // class LockReapproved

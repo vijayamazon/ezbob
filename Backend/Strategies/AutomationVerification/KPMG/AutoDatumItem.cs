@@ -4,7 +4,6 @@
 	using AutomationCalculator.ProcessHistory.Trails.ApprovalInput;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
@@ -325,6 +324,9 @@
 				approvedAmount / roundTo, 0, MidpointRounding.AwayFromZero
 			);
 
+			return null;
+
+			/* TODO: use standard calculator (if and when)...
 			var odc = new OfferDualCalculator(
 				CustomerID,
 				DecisionTime,
@@ -346,6 +348,7 @@
 			res.SetupFeeAmount = res.ApprovedAmount * res.SetupFeePct;
 
 			return res;
+			*/
 		} // CalculateOffer
 
 		private LoanCount AdjustLoanCount(

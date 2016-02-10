@@ -35,7 +35,7 @@
 				}
 
 
-				DB.ExecuteNonQuery("I_InvestorBankAccountUpdate", CommandSpecies.StoredProcedure,
+				DB.ExecuteNonQuery("I_InvestorBankAccountUpdateActive", CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<I_InvestorBankAccount>("Tbl", dbBanks)
 					);
 			} catch (Exception ex) {

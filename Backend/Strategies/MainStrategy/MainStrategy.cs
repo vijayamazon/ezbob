@@ -3,6 +3,8 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
+	using AutomationCalculator.Common;
+	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
@@ -32,11 +34,18 @@
 		public override void Execute() {
 			AMainStrategyStepBase currentStep = TheFirstOne();
 
+			var stepHistory = new List<StepHistoryItem>();
+
 			for ( ; ; ) {
+				var historyItem = new StepHistoryItem(currentStep.Name);
+				stepHistory.Add(historyItem);
+
 				this.context.CurrentStepName = currentStep.Name;
 				UpdateStrategyContext();
 
 				StepResults stepResult = currentStep.Execute();
+
+				historyItem.SetResult(stepResult, currentStep.Outcome);
 
 				if (stepResult == StepResults.NormalShutdown)
 					break;
@@ -45,10 +54,11 @@
 
 				if (stepResult == StepResults.AbnormalShutdown) {
 					if (this.context.ShuttingDownUbnormally) {
-						Log.Alert(
+						historyItem.Message =
 							"Something went terribly wrong: " +
-							"abnormal shutdown request while handling previous abnormal shutdown."
-						);
+							"abnormal shutdown request while handling previous abnormal shutdown.";
+
+						Log.Alert("{0}", historyItem.Message);
 
 						break;
 					} // if
@@ -59,31 +69,46 @@
 				} else
 					nextStepKey = new StepResult(currentStep.GetType(), stepResult);
 
+				historyItem.NextStepKey = nextStepKey;
+
 				if (!this.transitions.ContainsKey(nextStepKey)) {
-					Log.Alert("Aborted: next step not specified for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: next step not specified for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
 
 				var nextStepCreator = this.transitions[nextStepKey];
 
 				if (nextStepCreator == null) {
-					Log.Alert("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: next step creator is NULL for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
 
 				currentStep = nextStepCreator();
 
 				if (currentStep == null) {
-					Log.Alert("Aborted: failed to create next step for result {0}.", nextStepKey);
+					historyItem.Message = string.Format("Aborted: failed to create next step for result {0}.", nextStepKey);
+					Log.Alert("{0}", historyItem.Message);
 					break;
 				} // if
+
+				historyItem.NextStepName = currentStep.Name;
 			} // while
+
+			Log.Debug("Trace for {0}:\n\t{1}\n", this.context.Description, string.Join("\n\t", stepHistory));
 		} // Execute
 
 		private StepResult OnAbnormalShutdown() {
-			Type handlerStepType = this.context.HasCashRequest
-				? typeof(AbnormalShutdownAfterHavingCashRequest)
-				: typeof(AbnormalShutdownBeforeHavingCashRequest);
+			Type handlerStepType;
+
+			if (this.context.CashRequestWasWritten)
+				handlerStepType = typeof(AbnormalShutdownAfterCashRequestWasWritten);
+			else {
+				handlerStepType = this.context.HasCashRequest
+					? typeof(AbnormalShutdownAfterHavingCashRequest)
+					: typeof(AbnormalShutdownBeforeHavingCashRequest);
+			} // if
 
 			return new StepResult(handlerStepType, StepResults.Success);
 		} // OnAbnormalShutdown
@@ -115,8 +140,15 @@
 
 			if (pi.PropertyType == typeof(AutoDecisionResponse))
 				this.context.AutoDecisionResponse.CopyFrom((AutoDecisionResponse)propertyValue);
-			else
+			else {
 				pi.SetValue(this.context, propertyValue);
+
+				Log.Debug(
+					"Collected value of {0} is {1}",
+					propertyName,
+					propertyValue == null ? "null" : propertyValue.ToString()
+				);
+			} // if
 		} // CollectStepOutputValue
 
 		private AMainStrategyStepBase FindOrCreateStep<T>(Func<T> creator) where T : AMainStrategyStepBase {
@@ -314,10 +346,15 @@
 				this.context.CustomerID,
 				this.context.CustomerDetails.FullName,
 				this.context.AutoDecisionResponse.DecidedToReject,
-				this.context.CustomerDetails.PropertyStatusDescription,
+				this.context.AutoRejectionOutput == null
+					? AutoDecisionFlowTypes.Unknown
+					: this.context.AutoRejectionOutput.FlowType,
 				this.context.CustomerDetails.IsOwnerOfMainAddress,
 				this.context.CustomerDetails.IsOwnerOfOtherProperties,
-				this.context.NewCreditLineOption
+				this.context.NewCreditLineOption,
+				this.context.CustomerDetails.IsTest,
+				this.context.AvoidAutoDecision,
+				this.context.AutoDecisionResponse.Decision == DecisionActions.ReApprove
 			));
 		} // UpdateLandRegistryData
 
@@ -332,7 +369,9 @@
 					this.context.AutoRejectionOutput,
 					this.context.MonthlyRepayment,
 					this.context.MaxCapHomeOwner,
-					this.context.MaxCapNotHomeOwner
+					this.context.MaxCapNotHomeOwner,
+					this.context.SmallLoanScenarioLimit,
+					this.context.AspireToMinSetupFee
 				);
 				step.CollectOutputValue += CollectStepOutputValue;
 				return step;
@@ -413,17 +452,24 @@
 		} // LockManualAfterApproval
 
 		private AMainStrategyStepBase LockApproved() {
-			return FindOrCreateStep(() => new LockApproved(
-				this.context.Description,
-				this.context.AutoDecisionResponse,
-				this.context.AutoApproveIsSilent,
-				this.context.OfferResult,
-				this.context.LoanSourceID,
-				this.context.LoanOfferEmailSendingBannedNew,
-				this.context.OfferValidForHours,
-				this.context.MinLoanAmount,
-				this.context.MaxLoanAmount
-			));
+			return FindOrCreateStep(() => {
+				var step = new LockApproved(
+					this.context.Description,
+					this.context.AutoDecisionResponse,
+					this.context.AutoApproveIsSilent,
+					this.context.OfferResult,
+					this.context.LoanSourceID,
+					this.context.LoanOfferEmailSendingBannedNew,
+					this.context.OfferValidForHours,
+					this.context.MinLoanAmount,
+					this.context.MaxLoanAmount,
+					(this.context.AutoRejectionOutput == null) || (this.context.AutoRejectionOutput.ProductSubTypeID <= 0)
+						? (int?)null
+						: this.context.AutoRejectionOutput.ProductSubTypeID
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
 		} // LockManualAfterApproval
 
 		private AMainStrategyStepBase ManualIfNotDecided() {
@@ -436,34 +482,44 @@
 		private AMainStrategyStepBase LookForInvestor() {
 			return FindOrCreateStep(() => new LookForInvestor(
 				this.context.Description,
-				this.context.AutoDecisionResponse.Decision,
 				this.context.CustomerID,
 				this.context.CashRequestID,
 				this.context.UnderwriterID
 			));
 		} // LookForInvestor
 
-		private AMainStrategyStepBase SetPendingInvestor() {
-			return FindOrCreateStep(() => new SetPendingInvestor(
-				this.context.Description,
-				this.context.AutoDecisionResponse
-			));
-		} // SetPendingInvestor
-
-		private AMainStrategyStepBase SaveDecision() {
-			return FindOrCreateStep(() => new SaveDecision(
+		private AMainStrategyStepBase RestoreAndSaveApproved() {
+			return FindOrCreateStep(() => new RestoreAndSaveApproved(
 				this.context.Description,
 				this.context.UnderwriterID,
 				this.context.CustomerID,
 				this.context.CashRequestID,
 				this.context.NLCashRequestID,
+				this.context.OverrideApprovedRejected,
 				this.context.OfferValidForHours,
 				this.context.AutoDecisionResponse,
-				this.context.Medal,
-				this.context.OverrideApprovedRejected,
-				this.context.CustomerDetails.ExperianConsumerScore
+				this.context.WriteDecisionOutput
 			));
-		} // SaveDecision
+		} // RestoreAndSaveApproved
+
+		private AMainStrategyStepBase WriteDecisionDown() {
+			return FindOrCreateStep(() => {
+				var step = new WriteDecisionDown(
+					this.context.Description,
+					this.context.UnderwriterID,
+					this.context.CustomerID,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.OfferValidForHours,
+					this.context.AutoDecisionResponse,
+					this.context.Medal,
+					this.context.OverrideApprovedRejected,
+					this.context.CustomerDetails.ExperianConsumerScore
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
+		} // WriteDecisionDown
 
 		private AMainStrategyStepBase DispatchNotifications() {
 			return FindOrCreateStep(() => new DispatchNotifications(
@@ -500,7 +556,7 @@
 			InitTransition<CreateFindCashRequest>().Always(ApplyBackdoorLogic);
 
 			InitTransition<ApplyBackdoorLogic>()
-				.OnResults(SaveDecision, StepResults.Applied)
+				.OnResults(WriteDecisionDown, StepResults.Applied)
 				.OnResults(CheckUpdateDataRequested, StepResults.NotApplied);
 
 			InitTransition<CheckUpdateDataRequested>()
@@ -528,52 +584,60 @@
 
 			InitTransition<Reject>()
 				.OnResults(LockRejected, StepResults.Affirmative)
-				.OnResults(UpdateLandRegistryData, StepResults.Negative)
+				.OnResults(Reapproval, StepResults.Negative)
 				.OnResults(LockManualAfterReject, StepResults.Failed);
 
-			InitTransition<LockRejected>().Always(CalculateOfferIfPossible);
-			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
-			InitTransition<LockManualAfterReject>().Always(CalculateOfferIfPossible);
-
-			InitTransition<CalculateOfferIfPossible>()
-				.OnResults(Reapproval, StepResults.Success)
-				.OnResults(LockManualAfterOffer, StepResults.Failed);
-
-			InitTransition<LockManualAfterOffer>().Always(Reapproval);
+			InitTransition<LockRejected>().Always(Reapproval);
+			InitTransition<LockManualAfterReject>().Always(Reapproval);
 
 			InitTransition<Reapproval>()
 				.OnResults(LockReapproved, StepResults.Affirmative)
-				.OnResults(Approval, StepResults.Negative)
+				.OnResults(UpdateLandRegistryData, StepResults.Negative)
 				.OnResults(LockManualAfterReapproval, StepResults.Failed);
 
 			InitTransition<LockReapproved>()
-				.OnResults(Approval, StepResults.Success)
+				.OnResults(UpdateLandRegistryData, StepResults.Success)
 				.OnResults(LockManualAfterReapproval, StepResults.Failed);
 
-			InitTransition<LockManualAfterReapproval>().Always(Approval);
+			InitTransition<LockManualAfterReapproval>().Always(UpdateLandRegistryData);
+
+			InitTransition<UpdateLandRegistryData>().Always(CalculateOfferIfPossible);
+
+			InitTransition<CalculateOfferIfPossible>()
+				.OnResults(Approval, StepResults.Success)
+				.OnResults(LockManualAfterOffer, StepResults.Failed);
+
+			InitTransition<LockManualAfterOffer>().Always(Approval);
 
 			InitTransition<Approval>()
 				.OnResults(LockApproved, StepResults.Affirmative)
 				.OnResults(LockManualAfterApproval, StepResults.Negative, StepResults.Failed);
 
 			InitTransition<LockApproved>()
-				.OnResults(LookForInvestor, StepResults.Success)
+				.OnResults(ManualIfNotDecided, StepResults.Success)
 				.OnResults(LockManualAfterApproval, StepResults.Failed);
 
-			InitTransition<LockManualAfterApproval>().Always(LookForInvestor);
+			InitTransition<LockManualAfterApproval>().Always(ManualIfNotDecided);
+
+			InitTransition<ManualIfNotDecided>().Always(WriteDecisionDown);
+
+			InitTransition<WriteDecisionDown>()
+				.OnResults(TheLastOne, StepResults.Failed)
+				.OnResults(DispatchNotifications, StepResults.RejectedManual)
+				.OnResults(LookForInvestor, StepResults.Approved);
 
 			InitTransition<LookForInvestor>()
-				.OnResults(ManualIfNotDecided, StepResults.Found, StepResults.NotExecuted)
-				.OnResults(SetPendingInvestor, StepResults.NotFound);
+				.OnResults(RestoreAndSaveApproved, StepResults.Found)
+				.OnResults(DispatchNotifications, StepResults.NotFound);
 
-			InitTransition<SetPendingInvestor>().Always(ManualIfNotDecided);
-			InitTransition<ManualIfNotDecided>().Always(SaveDecision);
-			InitTransition<SaveDecision>().Always(DispatchNotifications);
+			InitTransition<RestoreAndSaveApproved>().Always(DispatchNotifications);
+
 			InitTransition<DispatchNotifications>().Always(TheLastOne);
 
 			InitTransition<AbnormalShutdownBeforeHavingCashRequest>().Always(TheLastOne);
 			InitTransition<AbnormalShutdownAfterHavingCashRequest>().Always(ForceManual);
-			InitTransition<ForceManual>().Always(SaveDecision);
+			InitTransition<AbnormalShutdownAfterCashRequestWasWritten>().Always(DispatchNotifications);
+			InitTransition<ForceManual>().Always(WriteDecisionDown);
 		} // InitMachineTransitions
 
 		private MachineTransition<T> InitTransition<T>() where T : AMainStrategyStepBase {
