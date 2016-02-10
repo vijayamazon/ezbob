@@ -15,5 +15,7 @@
 		Found,
 		NotFound,
 		NotExecuted,
+		Approved,
+		RejectedManual,
 	} // enum StepResults
 } // namespace

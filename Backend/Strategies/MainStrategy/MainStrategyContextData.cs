@@ -6,6 +6,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -47,9 +48,12 @@
 			CustomerDetails = new Helpers.CustomerDetails(this.arguments.CustomerID);
 
 			HasCashRequest = false;
+			CashRequestWasWritten = false;
 			ShuttingDownUbnormally = false;
 			DelayReason = string.Empty;
 			CurrentStepName = "not started";
+
+			WriteDecisionOutput = null;
 		} // constructor
 
 		public string Description {
@@ -138,6 +142,8 @@
 		public string DelayReason { get; set; }
 		public bool ShuttingDownUbnormally { get; set; }
 		public bool HasCashRequest { get; set; }
+		public bool CashRequestWasWritten { get; set; }
+		public WriteDecisionOutput WriteDecisionOutput { get; set; }
 
 		public bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
 		public bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }

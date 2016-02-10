@@ -100,9 +100,15 @@
 		} // Execute
 
 		private StepResult OnAbnormalShutdown() {
-			Type handlerStepType = this.context.HasCashRequest
-				? typeof(AbnormalShutdownAfterHavingCashRequest)
-				: typeof(AbnormalShutdownBeforeHavingCashRequest);
+			Type handlerStepType;
+
+			if (this.context.CashRequestWasWritten)
+				handlerStepType = typeof(AbnormalShutdownAfterCashRequestWasWritten);
+			else {
+				handlerStepType = this.context.HasCashRequest
+					? typeof(AbnormalShutdownAfterHavingCashRequest)
+					: typeof(AbnormalShutdownBeforeHavingCashRequest);
+			} // if
 
 			return new StepResult(handlerStepType, StepResults.Success);
 		} // OnAbnormalShutdown
@@ -476,34 +482,44 @@
 		private AMainStrategyStepBase LookForInvestor() {
 			return FindOrCreateStep(() => new LookForInvestor(
 				this.context.Description,
-				this.context.AutoDecisionResponse.Decision,
 				this.context.CustomerID,
 				this.context.CashRequestID,
 				this.context.UnderwriterID
 			));
 		} // LookForInvestor
 
-		private AMainStrategyStepBase SetPendingInvestor() {
-			return FindOrCreateStep(() => new SetPendingInvestor(
-				this.context.Description,
-				this.context.AutoDecisionResponse
-			));
-		} // SetPendingInvestor
-
-		private AMainStrategyStepBase SaveDecision() {
-			return FindOrCreateStep(() => new SaveDecision(
+		private AMainStrategyStepBase RestoreAndSaveApproved() {
+			return FindOrCreateStep(() => new RestoreAndSaveApproved(
 				this.context.Description,
 				this.context.UnderwriterID,
 				this.context.CustomerID,
 				this.context.CashRequestID,
 				this.context.NLCashRequestID,
+				this.context.OverrideApprovedRejected,
 				this.context.OfferValidForHours,
 				this.context.AutoDecisionResponse,
-				this.context.Medal,
-				this.context.OverrideApprovedRejected,
-				this.context.CustomerDetails.ExperianConsumerScore
+				this.context.WriteDecisionOutput
 			));
-		} // SaveDecision
+		} // RestoreAndSaveApproved
+
+		private AMainStrategyStepBase WriteDecisionDown() {
+			return FindOrCreateStep(() => {
+				var step = new WriteDecisionDown(
+					this.context.Description,
+					this.context.UnderwriterID,
+					this.context.CustomerID,
+					this.context.CashRequestID,
+					this.context.NLCashRequestID,
+					this.context.OfferValidForHours,
+					this.context.AutoDecisionResponse,
+					this.context.Medal,
+					this.context.OverrideApprovedRejected,
+					this.context.CustomerDetails.ExperianConsumerScore
+				);
+				step.CollectOutputValue += CollectStepOutputValue;
+				return step;
+			});
+		} // WriteDecisionDown
 
 		private AMainStrategyStepBase DispatchNotifications() {
 			return FindOrCreateStep(() => new DispatchNotifications(
@@ -540,7 +556,7 @@
 			InitTransition<CreateFindCashRequest>().Always(ApplyBackdoorLogic);
 
 			InitTransition<ApplyBackdoorLogic>()
-				.OnResults(SaveDecision, StepResults.Applied)
+				.OnResults(WriteDecisionDown, StepResults.Applied)
 				.OnResults(CheckUpdateDataRequested, StepResults.NotApplied);
 
 			InitTransition<CheckUpdateDataRequested>()
@@ -598,23 +614,30 @@
 				.OnResults(LockManualAfterApproval, StepResults.Negative, StepResults.Failed);
 
 			InitTransition<LockApproved>()
-				.OnResults(LookForInvestor, StepResults.Success)
+				.OnResults(ManualIfNotDecided, StepResults.Success)
 				.OnResults(LockManualAfterApproval, StepResults.Failed);
 
-			InitTransition<LockManualAfterApproval>().Always(LookForInvestor);
+			InitTransition<LockManualAfterApproval>().Always(ManualIfNotDecided);
+
+			InitTransition<ManualIfNotDecided>().Always(WriteDecisionDown);
+
+			InitTransition<WriteDecisionDown>()
+				.OnResults(TheLastOne, StepResults.Failed)
+				.OnResults(DispatchNotifications, StepResults.RejectedManual)
+				.OnResults(LookForInvestor, StepResults.Approved);
 
 			InitTransition<LookForInvestor>()
-				.OnResults(ManualIfNotDecided, StepResults.Found, StepResults.NotExecuted)
-				.OnResults(SetPendingInvestor, StepResults.NotFound);
+				.OnResults(RestoreAndSaveApproved, StepResults.Found)
+				.OnResults(DispatchNotifications, StepResults.NotFound);
 
-			InitTransition<SetPendingInvestor>().Always(ManualIfNotDecided);
-			InitTransition<ManualIfNotDecided>().Always(SaveDecision);
-			InitTransition<SaveDecision>().Always(DispatchNotifications);
+			InitTransition<RestoreAndSaveApproved>().Always(DispatchNotifications);
+
 			InitTransition<DispatchNotifications>().Always(TheLastOne);
 
 			InitTransition<AbnormalShutdownBeforeHavingCashRequest>().Always(TheLastOne);
 			InitTransition<AbnormalShutdownAfterHavingCashRequest>().Always(ForceManual);
-			InitTransition<ForceManual>().Always(SaveDecision);
+			InitTransition<AbnormalShutdownAfterCashRequestWasWritten>().Always(DispatchNotifications);
+			InitTransition<ForceManual>().Always(WriteDecisionDown);
 		} // InitMachineTransitions
 
 		private MachineTransition<T> InitTransition<T>() where T : AMainStrategyStepBase {
