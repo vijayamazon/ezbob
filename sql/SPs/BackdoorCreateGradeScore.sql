@@ -94,7 +94,6 @@ BEGIN
 
 		INSERT INTO LogicalGlueRequests (ServiceLogID, IsTryOut, UniqueID, MonthlyRepayment, EquifaxData, HouseNumber)
 			VALUES (@ServiceLogID, 0, @UniqueID, @MonthlyRepayment, NULL, '0')
-	
 
 		-------------------------------------------------------------------------
 
