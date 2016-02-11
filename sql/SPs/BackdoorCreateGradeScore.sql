@@ -179,6 +179,18 @@ BEGIN
 			RAISERROR('Failed to create history entry', 11, 9)
 
 		-------------------------------------------------------------------------
+
+		UPDATE CustomerLogicalGlueHistory SET
+			IsActive = 0
+		FROM
+			CustomerLogicalGlueHistory h
+			INNER JOIN Customer c
+				ON h.CustomerID = c.Id
+				AND h.CompanyID = c.CompanyID
+				AND h.CustomerID = @CustomerID
+				AND h.EntryID != @HistoryEntryID
+
+		-------------------------------------------------------------------------
 		-------------------------------------------------------------------------
 	END TRY
 	BEGIN CATCH
