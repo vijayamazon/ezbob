@@ -1,4 +1,5 @@
 ﻿namespace CodeToDbTool {
+	using CodeToDbTool.Model;
 	using Ezbob.Backend.ModelsWithDB.CompaniesHouse;
 	using Ezbob.Utils.dbutils;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -13,7 +14,14 @@
 		  //  CreateNewLoanTablesSps();
 
 			//CreateInvestorTableSps();
-			CreateCompaniesHouseSqls();
+			//CreateCompaniesHouseSqls();
+			CreateLRSps();
+		}
+
+		private static void CreateLRSps() {
+			CodeToFile.Folder = @"c:\temp\";
+			CodeToFile.SaveSp<LandRegistryDB>();
+			CodeToFile.SaveSp<LandRegistryOwnerDB>();
 		}
 
 		private static void CreateCompaniesHouseSqls() {

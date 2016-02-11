@@ -89,6 +89,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Authentication" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.LandRegistry" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" />
@@ -962,35 +963,41 @@
   <wsdl:message name="IEzService_GetSecurityUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSecurityUserResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PayPointCharger_InputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointCharger" />
+  <wsdl:message name="IEzService_LandRegistryLoad_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryLoad" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PayPointCharger_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointChargerResponse" />
+  <wsdl:message name="IEzService_LandRegistryLoad_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryLoadResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PayPointNameValidationFailed_InputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointNameValidationFailed" />
+  <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLink" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PayPointNameValidationFailed_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointNameValidationFailedResponse" />
+  <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLinkResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
+  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
+  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeNuts_InputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeNuts" />
+  <wsdl:message name="IEzService_LandRegistryRes_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryRes" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeNuts_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeNutsResponse" />
+  <wsdl:message name="IEzService_LandRegistryRes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryResResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_QuickOffer_InputMessage">
-    <wsdl:part name="parameters" element="tns:QuickOffer" />
+  <wsdl:message name="IEzService_GetZooplaData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetZooplaData" />
   </wsdl:message>
-  <wsdl:message name="IEzService_QuickOffer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:QuickOfferResponse" />
+  <wsdl:message name="IEzService_GetZooplaData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetZooplaDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPropertyStatuses_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPropertyStatuses" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPropertyStatuses_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPropertyStatusesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_QuickOfferWithPrerequisites_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOfferWithPrerequisites" />
@@ -1328,12 +1335,6 @@
   <wsdl:message name="IEzService_BackfillHmrcBusinessRelevance_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillHmrcBusinessRelevanceResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_InputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLink" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLinkResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_BackfillMedalForAll_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillMedalForAll" />
   </wsdl:message>
@@ -1622,12 +1623,6 @@
   <wsdl:message name="IEzService_GetExperianConsumerScore_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerScoreResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetPropertyStatuses_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPropertyStatuses" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetPropertyStatuses_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPropertyStatusesResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
     <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
   </wsdl:message>
@@ -1640,29 +1635,11 @@
   <wsdl:message name="IEzService_GetCollectionSnailMail_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCollectionSnailMailResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetZooplaData_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetZooplaData" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetZooplaData_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetZooplaDataResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_IovationCheck_InputMessage">
     <wsdl:part name="parameters" element="tns:IovationCheck" />
   </wsdl:message>
   <wsdl:message name="IEzService_IovationCheck_OutputMessage">
     <wsdl:part name="parameters" element="tns:IovationCheckResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryRes_InputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryRes" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryRes_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryResResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LateBy14Days_InputMessage">
     <wsdl:part name="parameters" element="tns:LateBy14Days" />
@@ -1783,6 +1760,36 @@
   </wsdl:message>
   <wsdl:message name="IEzService_PayPointAddedByUnderwriter_OutputMessage">
     <wsdl:part name="parameters" element="tns:PayPointAddedByUnderwriterResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointCharger_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointCharger" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointCharger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointChargerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointNameValidationFailed_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointNameValidationFailed" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointNameValidationFailed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointNameValidationFailedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeNuts_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeNuts" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeNuts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeNutsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_QuickOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:QuickOffer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_QuickOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:QuickOfferResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -2363,25 +2370,29 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSecurity/GetSecurityUser" message="tns:IEzService_GetSecurityUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSecurity/GetSecurityUserResponse" message="tns:IEzService_GetSecurityUser_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PayPointCharger">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
+    <wsdl:operation name="LandRegistryLoad">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/LandRegistryLoad" message="tns:IEzService_LandRegistryLoad_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/LandRegistryLoadResponse" message="tns:IEzService_LandRegistryLoad_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PayPointNameValidationFailed">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointNameValidationFailed" message="tns:IEzService_PayPointNameValidationFailed_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse" message="tns:IEzService_PayPointNameValidationFailed_OutputMessage" />
+    <wsdl:operation name="BackfillLandRegistry2PropertyLink">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/BackfillLandRegistry2PropertyLink" message="tns:IEzService_BackfillLandRegistry2PropertyLink_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/BackfillLandRegistry2PropertyLinkResponse" message="tns:IEzService_BackfillLandRegistry2PropertyLink_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PostcodeSaveLog">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
+    <wsdl:operation name="LandRegistryEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PostcodeNuts">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeNuts" message="tns:IEzService_PostcodeNuts_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeNutsResponse" message="tns:IEzService_PostcodeNuts_OutputMessage" />
+    <wsdl:operation name="LandRegistryRes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="QuickOffer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
+    <wsdl:operation name="GetZooplaData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/GetZooplaData" message="tns:IEzService_GetZooplaData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/GetZooplaDataResponse" message="tns:IEzService_GetZooplaData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyStatuses">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/GetPropertyStatuses" message="tns:IEzService_GetPropertyStatuses_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLandRegistry/GetPropertyStatusesResponse" message="tns:IEzService_GetPropertyStatuses_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" message="tns:IEzService_QuickOfferWithPrerequisites_InputMessage" />
@@ -2607,10 +2618,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevance" message="tns:IEzService_BackfillHmrcBusinessRelevance_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevanceResponse" message="tns:IEzService_BackfillHmrcBusinessRelevance_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="BackfillLandRegistry2PropertyLink">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" message="tns:IEzService_BackfillLandRegistry2PropertyLink_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLinkResponse" message="tns:IEzService_BackfillLandRegistry2PropertyLink_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="BackfillMedalForAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillMedalForAll" message="tns:IEzService_BackfillMedalForAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillMedalForAllResponse" message="tns:IEzService_BackfillMedalForAll_OutputMessage" />
@@ -2803,10 +2810,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse" message="tns:IEzService_GetExperianConsumerScore_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetPropertyStatuses">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatuses" message="tns:IEzService_GetPropertyStatuses_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatusesResponse" message="tns:IEzService_GetPropertyStatuses_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetWizardConfigs">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
@@ -2815,21 +2818,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCollectionSnailMail" message="tns:IEzService_GetCollectionSnailMail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCollectionSnailMailResponse" message="tns:IEzService_GetCollectionSnailMail_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetZooplaData">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetZooplaData" message="tns:IEzService_GetZooplaData_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetZooplaDataResponse" message="tns:IEzService_GetZooplaData_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="IovationCheck">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IovationCheck" message="tns:IEzService_IovationCheck_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IovationCheckResponse" message="tns:IEzService_IovationCheck_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryEnquiry">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryRes">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LateBy14Days">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
@@ -2910,6 +2901,26 @@
     <wsdl:operation name="PayPointAddedByUnderwriter">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter" message="tns:IEzService_PayPointAddedByUnderwriter_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse" message="tns:IEzService_PayPointAddedByUnderwriter_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointCharger">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointNameValidationFailed">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointNameValidationFailed" message="tns:IEzService_PayPointNameValidationFailed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse" message="tns:IEzService_PayPointNameValidationFailed_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeSaveLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeNuts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeNuts" message="tns:IEzService_PostcodeNuts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeNutsResponse" message="tns:IEzService_PostcodeNuts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="QuickOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -4217,8 +4228,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PayPointCharger">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
+    <wsdl:operation name="LandRegistryLoad">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLandRegistry/LandRegistryLoad" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4226,8 +4237,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PayPointNameValidationFailed">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointNameValidationFailed" style="document" />
+    <wsdl:operation name="BackfillLandRegistry2PropertyLink">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLandRegistry/BackfillLandRegistry2PropertyLink" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4235,8 +4246,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PostcodeSaveLog">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
+    <wsdl:operation name="LandRegistryEnquiry">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLandRegistry/LandRegistryEnquiry" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4244,8 +4255,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PostcodeNuts">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeNuts" style="document" />
+    <wsdl:operation name="LandRegistryRes">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLandRegistry/LandRegistryRes" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4253,8 +4264,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="QuickOffer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
+    <wsdl:operation name="GetZooplaData">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLandRegistry/GetZooplaData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyStatuses">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLandRegistry/GetPropertyStatuses" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4766,15 +4786,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="BackfillLandRegistry2PropertyLink">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="BackfillMedalForAll">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillMedalForAll" style="document" />
       <wsdl:input>
@@ -5207,15 +5218,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetPropertyStatuses">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPropertyStatuses" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetWizardConfigs">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetWizardConfigs" style="document" />
       <wsdl:input>
@@ -5234,35 +5236,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetZooplaData">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetZooplaData" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="IovationCheck">
       <soap12:operation soapAction="http://tempuri.org/IEzService/IovationCheck" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryEnquiry">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryRes">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryRes" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -5443,6 +5418,51 @@
     </wsdl:operation>
     <wsdl:operation name="PayPointAddedByUnderwriter">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointCharger">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointNameValidationFailed">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointNameValidationFailed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeSaveLog">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeNuts">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeNuts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QuickOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

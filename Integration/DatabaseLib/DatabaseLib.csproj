@@ -117,7 +117,6 @@
     <Compile Include="Model\Database\WhatsNewExcludeCustomerOrigin.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\MedalCalculations.cs" />
-    <Compile Include="Model\Database\LandRegistryOwner.cs" />
     <Compile Include="Model\Database\Report\ReportArgumentsNames.cs" />
     <Compile Include="Model\Database\Report\ReportArguments.cs" />
     <Compile Include="Model\Database\Report\ReportUserMap.cs" />
@@ -126,7 +125,6 @@
     <Compile Include="Model\Database\Request\RejectReason.cs" />
     <Compile Include="Model\Database\SuggestedAmount.cs" />
     <Compile Include="Model\Database\Customer\VipRequest.cs" />
-    <Compile Include="Model\Database\LandRegistry.cs" />
     <Compile Include="Model\Database\CustomerAddressType.cs" />
     <Compile Include="Model\Database\QuickOffer.cs" />
     <Compile Include="Model\Database\TrustPilotStatus.cs" />

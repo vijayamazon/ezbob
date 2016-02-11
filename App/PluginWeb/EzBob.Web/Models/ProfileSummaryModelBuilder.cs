@@ -222,7 +222,8 @@
 						summary.Alerts.Errors.Add(new AlertModel {
 							Abbreviation = "AML",
 							Alert = string.Format("AML Status : {0}", customer.AMLResult),
-							AlertType = AlertType.Error.DescriptionAttr()
+							AlertType = AlertType.Error.DescriptionAttr(),
+							Tab = ProfileTab.CreditBureau.DescriptionAttr()
 						});
 						break;
 					case "Not performed":
@@ -433,15 +434,17 @@
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "DATA",
 					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
-					AlertType = AlertType.Error.DescriptionAttr()
+					AlertType = AlertType.Error.DescriptionAttr(),
+					Tab = ProfileTab.Dashboard.DescriptionAttr()
 				});
 			}
 		}//BuildDataAlerts
 
 		private bool BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary) {
-			var lrs = customer.LandRegistries.Where(x =>
-				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
-				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success)
+			var customersLrs = this.serviceClient.Instance.LandRegistryLoad(customer.Id, this.context.UserId).Value;
+			var lrs = customersLrs.Where(x =>
+				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res.ToString() &&
+				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success.ToString())
 				.ToList();
 
 			if (customer.PropertyStatus != null && !lrs.Any() && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties)) {
@@ -475,6 +478,7 @@
 						Abbreviation = "LR",
 						Alert = "Not a land registry owner",
 						Tooltip = string.Format("Owners list: {0}", ownerNames),
+						AlertType = AlertType.Error.DescriptionAttr(),
 						Tab = ProfileTab.Properties.DescriptionAttr()
 					});
 				}
@@ -625,7 +629,7 @@
 			summary.CompanyInfo = CompanyInfoMap.FromCompany(customer.Company);
 			summary.IsOffline = customer.IsOffline;
 		}
-
+	
 		private LoanActivity CreateLoanActivity(Customer customer) {
 			var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
 			var currentBalance = customer.Loans.Sum(x => x.Balance);

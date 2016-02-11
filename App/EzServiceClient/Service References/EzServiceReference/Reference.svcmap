@@ -44,6 +44,7 @@
     <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="5eae8cde-d27c-4808-9ca1-acb56624525c" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.LegalDocs.xsd" MetadataType="Schema" ID="0ed310df-bf8a-4ef4-895f-c2cb419e22ed" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Authentication.xsd" MetadataType="Schema" ID="1599b039-f7cd-4258-bbff-1e3b52ee9605" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Strategies.LandRegistry.xsd" MetadataType="Schema" ID="4a83dccf-b024-49be-acd4-1db7746966b5" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="a8c3798d-14fa-45b5-b3ba-ec188fb00ffa" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="53614295-baf3-42af-ad35-d000b50b6179" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.ApplicationInfo.xsd" MetadataType="Schema" ID="6061539a-e4f4-488f-9d19-7e87370c8433" SourceId="1" SourceUrl="net.tcp://stasd-pc:7081/mex" />

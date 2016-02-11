@@ -2,6 +2,7 @@
 	using System;
 	using AutomationCalculator.Common;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.LandRegistry;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
@@ -131,7 +132,7 @@
 					var lrr = new LandRegistryRes(this.customerID, model.Enquery.Titles[0].TitleNumber);
 					lrr.PartialExecute();
 
-					LandRegistry dbLandRegistry = lrr.LandRegistry;
+					LandRegistryDB dbLandRegistry = lrr.LandRegistry;
 
 					LandRegistryDataModel landRegistryDataModel = lrr.RawResult;
 

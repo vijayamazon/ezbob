@@ -21,6 +21,7 @@
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Investor;
+	using Ezbob.Backend.Strategies.LandRegistry;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -202,7 +203,7 @@
 
 		[Test]
 		public void test_mainstrat() {
-			var ms = new MainStrategy(new MainStrategyArguments{
+			var ms = new MainStrategy(new MainStrategyArguments {
 				UnderwriterID = 1,
 				CustomerID = 14036,
 				NewCreditLine = NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
@@ -310,14 +311,14 @@
 			foreach (FraudDetection fd in lst) {
 				m_oLog.Debug(
 					"\n\nCollision:" +
-					"\n\tCurrent customer: {0}" +
-					"\n\tOther customer: {1}" +
-					"\n\tExternal user: {2}" +
-					"\n\tCurrent field: {3}" +
-					"\n\tCompare field: {4}" +
-					"\n\tValue: {5}" +
-					"\n\tConcurrence: {6}" +
-					"\n",
+						"\n\tCurrent customer: {0}" +
+						"\n\tOther customer: {1}" +
+						"\n\tExternal user: {2}" +
+						"\n\tCurrent field: {3}" +
+						"\n\tCompare field: {4}" +
+						"\n\tValue: {5}" +
+						"\n\tConcurrence: {6}" +
+						"\n",
 					fd.CurrentCustomer.Id,
 					fd.InternalCustomer == null ? "null" : fd.InternalCustomer.Id.ToString(),
 					fd.ExternalUser == null ? "null" : fd.ExternalUser.FirstName,
@@ -325,7 +326,7 @@
 					fd.CompareField,
 					fd.Value,
 					fd.Concurrence
-				);
+					);
 			} // for each
 		}
 
@@ -394,7 +395,7 @@
 		// TestCalculateModelsAndAffordability
 		[Test]
 		public void TestLRRes() {
-			var s = new LandRegistryRes(21378, "SK310937");
+			var s = new LandRegistryRes(29, "SK310937");
 			s.Execute();
 			Assert.IsNotNullOrEmpty(s.Result);
 		}
@@ -568,8 +569,8 @@
 		[Test]
 		public void TestGetSmsDetails() {
 			//In case we need to retrieve the status of sms need to invoke this method and update sms message table
-			string m_sAccountSid = "ACcc682df6341371ee27ada6858025490b";//CurrentValues.Instance.TwilioAccountSid;
-			string m_sAuthToken = "fab0b8bd342443ff44497273b4ba2aa1";//CurrentValues.Instance.TwilioAuthToken;
+			string m_sAccountSid = "ACcc682df6341371ee27ada6858025490b"; //CurrentValues.Instance.TwilioAccountSid;
+			string m_sAuthToken = "fab0b8bd342443ff44497273b4ba2aa1"; //CurrentValues.Instance.TwilioAuthToken;
 
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
 			var smsDetails = twilio.GetSmsMessage("SM6b5974acc0054605ab0443c9f38d2349");
@@ -647,6 +648,7 @@
 			ServiceLogCreditSafeLtd saveTest = new ServiceLogCreditSafeLtd("X999999", 1);
 			saveTest.Execute();
 		}
+
 		[Test]
 		public void TestPPNoLoan() {
 			PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
@@ -687,7 +689,8 @@
 			const int loanID = 6; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanType = loan.GetType()
+				.AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(0); //new DateTime(2015, 10, 02); 
 			//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
@@ -711,7 +714,8 @@
 			const int loanID = 11;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanType = loan.GetType()
+				.AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow.Date.AddDays(5);
 			//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
@@ -782,7 +786,8 @@
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
 					Loan loan1 = new Loan();
 					reModel1.LoanID = loanid;
-					reModel1.LoanType = loan1.GetType().AssemblyQualifiedName;
+					reModel1.LoanType = loan1.GetType()
+						.AssemblyQualifiedName;
 					reModel1.RescheduleIn = false;
 					reModel1.SaveToDB = false;
 					reModel1.ReschedulingDate = DateTime.UtcNow.Date.AddDays(44);
@@ -798,9 +803,9 @@
 					Console.WriteLine(e);
 				}
 			},
-			"select top 100 l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and DateClosed is null", // order by l.Id desc", 
+				"select top 100 l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and DateClosed is null", // order by l.Id desc", 
 				//	"select top 10 * from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL and l.Status <> 'PaidOff' and YEAR(l.Date) = 2015 and DateClosed is null order ",
-			CommandSpecies.Text); //top 100 
+				CommandSpecies.Text); //top 100 
 		}
 
 
@@ -854,11 +859,18 @@
 		}
 
 
-	    [Test]
-	    public void TestGetUsers() {
-            GetSecurityUser strategy = new GetSecurityUser("dora443322+@ezbob.com", 1);
-	        strategy.Execute();
-	    }
+		[Test]
+		public void TestGetUsers() {
+			GetSecurityUser strategy = new GetSecurityUser("dora443322+@ezbob.com", 1);
+			strategy.Execute();
+		}
+
+		[Test]
+		public void TestLandRegistryLoad() {
+			LandRegistryLoad stra = new LandRegistryLoad(339);
+			stra.Execute();
+			Assert.IsNotNull(stra.Result);
+		}
 
 		[Test]
 		public void TestEditdirector() {

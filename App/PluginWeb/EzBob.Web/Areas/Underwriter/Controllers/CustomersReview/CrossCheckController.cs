@@ -116,31 +116,6 @@
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 
-		// TODO: method should be removed after testing
-		[Ajax]
-		[HttpPost]
-		public JsonResult LandRegistryEnquiries(int customerId) {
-			var customer = this._customerRepository.Get(customerId);
-			var b = new LandRegistryModelBuilder();
-			var landRegistryEnquiries = new List<LandRegistryEnquiryTitle>();
-			var lrEnqs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Enquiry)
-				.Select(x => x.Response);
-			foreach (var lr in lrEnqs) {
-				try {
-					var lrModel = b.BuildEnquiryModel(lr);
-
-					landRegistryEnquiries.AddRange(lrModel.Titles);
-				} catch (Exception ex) {
-					ms_oLog.Info(ex, "Exception during building enquiry model.");
-				}
-			}
-
-			landRegistryEnquiries = landRegistryEnquiries.DistinctBy(x => x.TitleNumber)
-				.ToList();
-			return Json(new {
-				titles = landRegistryEnquiries
-			});
-		}
 
 		[Ajax]
 		[HttpPost]

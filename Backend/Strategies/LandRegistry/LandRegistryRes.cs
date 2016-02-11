@@ -1,15 +1,15 @@
-﻿namespace Ezbob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.LandRegistry {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository;
 	using LandRegistryLib;
 	using StructureMap;
 
@@ -30,8 +30,8 @@
 
 		public string Result { get; set; }
 
-		public LandRegistry LandRegistry { get; private set; }
 		public LandRegistryDataModel RawResult { get; private set; }
+		public LandRegistryDB LandRegistry { get; private set; }
 
 		public bool DoLinkWithAddress { get; private set; }
 
@@ -41,12 +41,12 @@
 		} // PartialExecute
 
 		public override void Execute() {
-			LandRegistry landRegistry;
+			LandRegistryDB landRegistry;
 			RawResult = GetLandRegistryData(out landRegistry);
 			LandRegistry = landRegistry;
 
 			if (DoLinkWithAddress)
-				LinkLandRegistryAndAddress(this.customerID, landRegistry.Response, this.titleNumber, landRegistry.Id);
+				LinkLandRegistryAndAddress(this.customerID, landRegistry.Response, landRegistry.Id);
 
 			Result = new Serialized(RawResult);
 
@@ -54,18 +54,17 @@
 				new SilentAutomation(this.customerID).SetTag(SilentAutomation.Callers.LandRegistry).Execute();
 		} // Execute
 
-		public static void LinkLandRegistryAndAddress(int customerId, string response, string titleNumber, int landRegistryId) {
+		public void LinkLandRegistryAndAddress(int customerId, string response, int landRegistryId) {
 			var customers = ObjectFactory.GetInstance<CustomerRepository>();
 			var customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
-			var landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
-
+			
 			var customer = customers.Get(customerId);
 
 			var bb = new LandRegistryModelBuilder();
 
 			LandRegistryResModel landRegistryResModel = bb.BuildResModel(response);
 
-			bool isOwnerAccordingToLandRegistry = IsOwner(customer, response, titleNumber);
+			bool isOwnerAccordingToLandRegistry = IsOwner(customer, response, this.titleNumber);
 
 			if (isOwnerAccordingToLandRegistry) {
 				var ownedProperties = new List<CustomerAddress>(customer.AddressInfo.OtherPropertiesAddresses);
@@ -88,8 +87,7 @@
 						ownedProperty.IsOwnerAccordingToLandRegistry = true;
 						customerAddressRepository.SaveOrUpdate(ownedProperty);
 
-						LandRegistry dbLandRegistry = landRegistryRepository.Get(landRegistryId);
-						dbLandRegistry.CustomerAddress = ownedProperty;
+						DB.ExecuteNonQuery(string.Format("UPDATE LandRegistry SET AddressId = {0} WHERE Id = {1}", ownedProperty.AddressId, landRegistryId), CommandSpecies.Text);
 						break;
 					}
 				} // for each
@@ -155,37 +153,45 @@
 			return false;
 		} // IsOwner
 
-		private LandRegistryDataModel GetLandRegistryData(out LandRegistry landRegistry) {
-			Log.Debug("GetLandRegistryData begin cId {0} titleNumber {1}", customerID, titleNumber);
-			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
+		private LandRegistryDataModel GetLandRegistryData(out LandRegistryDB landRegistry) {
+			Log.Debug("GetLandRegistryData begin cId {0} titleNumber {1}", this.customerID, this.titleNumber);
 
 			//check cash
-			var cache = lrRepo.GetRes(customerID, titleNumber);
+			var landRegistryLoad = new LandRegistryLoad(this.customerID);
+			landRegistryLoad.Execute();
+			var customersLrs = landRegistryLoad.Result;
+			var cache = customersLrs.Where(x =>
+				x.TitleNumber == this.titleNumber &&
+					((x.RequestTypeEnum == LandRegistryRequestType.Res) || (x.RequestTypeEnum == LandRegistryRequestType.ResPoll)) &&
+					x.ResponseTypeEnum == LandRegistryResponseType.Success)
+				.OrderByDescending(x => x.InsertDate)
+				.FirstOrDefault();
+
 			if (cache != null) {
 				var b = new LandRegistryModelBuilder();
 				var cacheModel = new LandRegistryDataModel {
 					Request = cache.Request,
 					Response = cache.Response,
 					Res = b.BuildResModel(cache.Response),
-					RequestType = cache.RequestType,
-					ResponseType = cache.ResponseType,
+					RequestType = cache.RequestTypeEnum,
+					ResponseType = cache.ResponseTypeEnum,
 					DataSource = LandRegistryDataSource.Cache
 				};
 
 				if (!cache.Owners.Any()) {
-					var owners = new List<LandRegistryOwner>();
+					var owners = new List<LandRegistryOwnerDB>();
 					foreach (var owner in cacheModel.Res.Proprietorship.ProprietorshipParties) {
-						owners.Add(new LandRegistryOwner {
-							LandRegistry = cache,
+						var ownerDB = new LandRegistryOwnerDB {
+							LandRegistryId = cache.Id,
 							FirstName = owner.PrivateIndividualForename,
 							LastName = owner.PrivateIndividualSurname,
 							CompanyName = owner.CompanyName,
 							CompanyRegistrationNumber = owner.CompanyRegistrationNumber,
-						});
+						};
+						owners.Add(ownerDB);
+						DB.ExecuteNonQuery("LandRegistryOwnerDBSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", ownerDB));
 					}
 					cache.Owners = owners;
-
-					lrRepo.SaveOrUpdate(cache);
 				}
 
 				landRegistry = cache;
@@ -204,37 +210,44 @@
 				lr = new LandRegistryTestApi();
 
 			LandRegistryDataModel model;
-			if (titleNumber != null) {
-				model = lr.Res(titleNumber, customerID);
+			if (this.titleNumber != null) {
+				model = lr.Res(this.titleNumber, this.customerID);
 
-				var customer = ObjectFactory.GetInstance<CustomerRepository>().Get(customerID);
+				var customer = ObjectFactory.GetInstance<CustomerRepository>().Get(this.customerID);
 
-				var dbLr = new LandRegistry {
-					Customer = customer,
+				var lrDB = new LandRegistryDB {
+					CustomerId = this.customerID,
 					InsertDate = DateTime.UtcNow,
-					TitleNumber = titleNumber,
+					TitleNumber = this.titleNumber,
 					Request = model.Request,
 					Response = model.Response,
-					RequestType = model.RequestType,
-					ResponseType = model.ResponseType,
+					RequestType = model.RequestType.ToString(),
+					ResponseType = model.ResponseType.ToString(),
+					AttachmentPath = model.Attachment != null ? model.Attachment.FilePath : null
 				};
 
-				var owners = new List<LandRegistryOwner>();
+				int lrID = DB.ExecuteScalar<int>("LandRegistryDBSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", lrDB));
+
+				var owners = new List<LandRegistryOwnerDB>();
 
 				if (model.ResponseType == LandRegistryResponseType.Success && model.Res != null && model.Res.Proprietorship != null && model.Res.Proprietorship.ProprietorshipParties != null) {
 					foreach (var owner in model.Res.Proprietorship.ProprietorshipParties) {
-						owners.Add(new LandRegistryOwner {
-							LandRegistry = dbLr,
+						var ownerDB = new LandRegistryOwnerDB {
+							LandRegistryId = lrID,
 							FirstName = owner.PrivateIndividualForename,
 							LastName = owner.PrivateIndividualSurname,
 							CompanyName = owner.CompanyName,
 							CompanyRegistrationNumber = owner.CompanyRegistrationNumber,
-						});
+						};
+						owners.Add(ownerDB);
+						DB.ExecuteNonQuery("LandRegistryOwnerDBSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", ownerDB));
 					}
-					dbLr.Owners = owners;
+
+					
+					lrDB.Owners = owners;
 				}
-				lrRepo.Save(dbLr);
-				landRegistry = dbLr;
+
+				landRegistry = lrDB;
 
 				if (model.Attachment != null) {
 					var fileRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_AlertDocument>>();

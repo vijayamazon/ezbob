@@ -1,16 +1,13 @@
-﻿namespace Ezbob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.LandRegistry {
 	using System;
 	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.Extensions;
+	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository;
 	using LandRegistryLib;
 	using LandRegistryLib.LREnquiryServiceNS;
-	using StructureMap;
 
 	public class LandRegistryEnquiry : AStrategy {
 		public static LandRegistryDataModel Get(
@@ -64,26 +61,26 @@
 		} // Execute
 
 		private LandRegistryDataModel GetLandRegistryEnquiryData() {
-			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
-
 			try {
 				//check cache
-				var cache = lrRepo.GetAll()
-					.Where(x => x.Customer.Id == customerID && x.RequestType == LandRegistryRequestType.Enquiry);
+				var landRegistryLoad = new LandRegistryLoad(this.customerID);
+				landRegistryLoad.Execute();
+				var customersLrs = landRegistryLoad.Result;
+				var cache = customersLrs.Where(x => x.RequestTypeEnum == LandRegistryRequestType.Enquiry).ToList();
 
 				if (cache.Any()) {
 					foreach (var landRegistry in cache) {
 						var lrReq = Serialized.Deserialize<LandRegistryLib.LREnquiryServiceNS.RequestSearchByPropertyDescriptionV2_0Type>(landRegistry.Request);
 						Q1AddressType lrAddress = lrReq.Product.SubjectProperty.Address;
 
-						if (lrAddress.IsA(buildingNumber, buildingName, streetName, cityName, postCode)) {
+						if (lrAddress.IsA(this.buildingNumber, this.buildingName, this.streetName, this.cityName, this.postCode)) {
 							var b = new LandRegistryModelBuilder();
 							var cacheModel = new LandRegistryDataModel {
 								Request = landRegistry.Request,
 								Response = landRegistry.Response,
 								Enquery = b.BuildEnquiryModel(landRegistry.Response),
-								RequestType = landRegistry.RequestType,
-								ResponseType = landRegistry.ResponseType,
+								RequestType = landRegistry.RequestTypeEnum,
+								ResponseType = landRegistry.ResponseTypeEnum,
 								DataSource = LandRegistryDataSource.Cache,
 							};
 							return cacheModel;
@@ -105,18 +102,20 @@
 			} else
 				lr = new LandRegistryTestApi();
 
-			var model = lr.EnquiryByPropertyDescription(buildingNumber, buildingName, streetName, cityName, postCode, customerID);
+			var model = lr.EnquiryByPropertyDescription(this.buildingNumber, this.buildingName, this.streetName, this.cityName, this.postCode, this.customerID);
 
-			lrRepo.Save(new LandRegistry {
-				Customer = ObjectFactory.GetInstance<CustomerRepository>().Get(customerID),
+
+			var lrDB = new LandRegistryDB {
+				CustomerId = this.customerID,
 				InsertDate = DateTime.UtcNow,
-				Postcode = string.IsNullOrEmpty(postCode) ? string.Format("{3}{0},{1},{2}", buildingNumber, streetName, cityName, buildingName) : postCode,
+				Postcode = string.IsNullOrEmpty(this.postCode) ? string.Format("{3}{0},{1},{2}", this.buildingNumber, this.streetName, this.cityName, this.buildingName) : this.postCode,
 				Request = model.Request,
 				Response = model.Response,
-				RequestType = model.RequestType,
-				ResponseType = model.ResponseType
-			});
-
+				RequestType = model.RequestType.ToString(),
+				ResponseType = model.ResponseType.ToString()
+			};
+			int lrID = DB.ExecuteScalar<int>("LandRegistryDBSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", lrDB));
+			Log.Info("LandRegistryDBSave {0}", lrID);
 			model.DataSource = LandRegistryDataSource.Api;
 
 			return model;

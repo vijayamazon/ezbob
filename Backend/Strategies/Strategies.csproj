@@ -213,6 +213,9 @@
     <Compile Include="Investor\SaveInvestorBanksList.cs" />
     <Compile Include="Investor\SaveInvestorContactList.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
+    <Compile Include="LandRegistry\LandRegistryDB.cs" />
+    <Compile Include="LandRegistry\LandRegistryOwnersDB.cs" />
+    <Compile Include="LandRegistry\LandRegistryLoad.cs" />
     <Compile Include="LegalDocs\CMS\SaveLegalDoc.cs" />
     <Compile Include="LegalDocs\CMS\DeleteLegalDocById.cs" />
     <Compile Include="LegalDocs\CMS\ReviewLegalDoc.cs" />
@@ -508,12 +511,12 @@
     <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Misc\GetCurrentCustomerAnnualTurnover.cs" />
-    <Compile Include="Misc\LandRegistryRes.cs" />
+    <Compile Include="LandRegistry\LandRegistryRes.cs" />
     <Compile Include="Misc\SendPendingMails.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\LoadCustomerLeadFieldNames.cs" />
     <Compile Include="Misc\SendSms.cs" />
-    <Compile Include="Misc\GetPropertyStatuses.cs" />
+    <Compile Include="LandRegistry\GetPropertyStatuses.cs" />
     <Compile Include="Experian\GetCompanyDataForCreditBureau.cs" />
     <Compile Include="Experian\GetCompanyDataForCompanyScore.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
@@ -618,7 +621,7 @@
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
     <Compile Include="Misc\CrmLoadLookups.cs" />
-    <Compile Include="Misc\LandRegistryEnquiry.cs" />
+    <Compile Include="LandRegistry\LandRegistryEnquiry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />

@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.Misc 
+﻿namespace Ezbob.Backend.Strategies.LandRegistry 
 {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
@@ -27,7 +27,12 @@
 				bool isOwnerOfMainAddress = sr["IsOwnerOfMainAddress"];
 				bool isOwnerOfOtherProperties = sr["IsOwnerOfOtherProperties"];
 				int id = sr["Id"];
-				groups[title].Statuses.Add(new PropertyStatusModel { Description = description, IsOwnerOfMainAddress = isOwnerOfMainAddress, IsOwnerOfOtherProperties = isOwnerOfOtherProperties, Id = id });
+				groups[title].Statuses.Add(new PropertyStatusModel {
+					Description = description,
+					IsOwnerOfMainAddress = isOwnerOfMainAddress,
+					IsOwnerOfOtherProperties = isOwnerOfOtherProperties,
+					Id = id
+				});
 
 				return ActionResult.Continue;
 			}, "GetActivePropertyStatuses", CommandSpecies.StoredProcedure);

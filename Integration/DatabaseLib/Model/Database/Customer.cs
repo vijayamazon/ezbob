@@ -550,8 +550,7 @@
 		public virtual bool DefaultCardSelectionAllowed { get; set; }
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
-		public virtual IList<LandRegistry> LandRegistries { get; set; }
-
+		
 		public virtual IList<MP_CompanyFilesMetaData> CompanyFiles { get; set; }
 
 		public virtual string FirstVisitTime { get; set; }

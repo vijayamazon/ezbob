@@ -18,10 +18,6 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData BackfillLandRegistry2PropertyLink() {
-			BackfillLandRegistry2PropertyLink instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
 
 		public ActionMetaData BackfillMedalForAll() {
 			return Execute<BackfillMedalForAll>(null, null);
@@ -117,21 +113,6 @@
 				MetaData = result,
 				Value = instance.CurrentBalance
 			};
-		}
-
-		public PropertyStatusesActionResult GetPropertyStatuses() {
-			GetPropertyStatuses instance;
-
-			ActionMetaData result = ExecuteSync(out instance, 0, 0);
-
-			return new PropertyStatusesActionResult {
-				MetaData = result,
-				Groups = instance.Groups
-			};
-		}
-
-		public ActionMetaData GetZooplaData(int customerId, bool reCheck) {
-			return ExecuteSync<ZooplaStub>(customerId, null, customerId, reCheck);
 		}
 
 		public BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType) {
