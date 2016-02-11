@@ -102,7 +102,8 @@
 		private int UpdateSystemBalance(int? investorID, int? fundingBankAccountID, decimal creditSum, decimal investmentPercent, long cashRequestID) {
 			if (investorID.HasValue && fundingBankAccountID.HasValue) {
 				var addInvestorSystemBalance = new AddInvestorSystemBalance(fundingBankAccountID.Value, this.now, creditSum * investmentPercent,
-					null, cashRequestID, null, null, "Offer expired", null, null);
+					null, cashRequestID, null, null, "Offer expired", 1, this.now);
+				addInvestorSystemBalance.Execute();
 				return addInvestorSystemBalance.SystemBalanceID;
 			}
 			return 0;
