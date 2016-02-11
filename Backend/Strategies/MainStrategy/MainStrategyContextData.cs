@@ -6,10 +6,10 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
-
+	using EZBob.DatabaseLib.Model.Database;
 	using CashRequestOriginatorType = EZBob.DatabaseLib.Model.Database.CashRequestOriginator;
 
 	internal class MainStrategyContextData {
@@ -47,9 +47,15 @@
 			CustomerDetails = new Helpers.CustomerDetails(this.arguments.CustomerID);
 
 			HasCashRequest = false;
+			CashRequestWasWritten = false;
 			ShuttingDownUbnormally = false;
 			DelayReason = string.Empty;
 			CurrentStepName = "not started";
+
+			WriteDecisionOutput = null;
+
+			BackdoorLogicApplied = false;
+			BackdoorInvestorID = null;
 		} // constructor
 
 		public string Description {
@@ -128,7 +134,11 @@
 
 		public bool WasMismatch { get; set; }
 
+		public bool BackdoorLogicApplied { get; set; }
+		public int? BackdoorInvestorID { get; set; }
+
 		public int CompanyID { get; set; }
+		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public MonthlyRepaymentData MonthlyRepayment { get; set; }
 
 		public OfferResult OfferResult { get; set; }
@@ -138,6 +148,8 @@
 		public string DelayReason { get; set; }
 		public bool ShuttingDownUbnormally { get; set; }
 		public bool HasCashRequest { get; set; }
+		public bool CashRequestWasWritten { get; set; }
+		public WriteDecisionOutput WriteDecisionOutput { get; set; }
 
 		public bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
 		public bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }

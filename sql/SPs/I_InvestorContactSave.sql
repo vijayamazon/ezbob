@@ -85,10 +85,8 @@ BEGIN
 		I_InvestorContact.[Email] = tbl.[Email],
 		I_InvestorContact.[Role] = tbl.[Role],
 		I_InvestorContact.[Comment] = tbl.[Comment],
-		I_InvestorContact.[IsPrimary] = tbl.[IsPrimary],
 		I_InvestorContact.[Mobile] = tbl.[Mobile],
 		I_InvestorContact.[OfficePhone] = tbl.[OfficePhone],
-		I_InvestorContact.[IsActive] = tbl.[IsActive],
 		I_InvestorContact.[Timestamp] = tbl.[Timestamp]
 	FROM
 		I_InvestorContact c 

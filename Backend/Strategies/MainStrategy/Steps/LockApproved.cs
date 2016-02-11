@@ -3,7 +3,7 @@
 	using AutomationCalculator.Common;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using EZBob.DatabaseLib.Model.Database;
 
 	internal class LockApproved : AMainStrategyStep {
@@ -16,7 +16,8 @@
 			bool isEmailSendingBanned,
 			int offerValidForHours,
 			int minLoanAmount,
-			int maxLoanAmount
+			int maxLoanAmount,
+			int? productSubTypeID
 		) : base(outerContextDescription) {
 			this.autoDecisionResponse = autoDecisionResponse;
 			this.autoApproveIsSilent = autoApproveIsSilent;
@@ -26,9 +27,14 @@
 			this.offerValidForHours = offerValidForHours;
 			this.minLoanAmount = minLoanAmount;
 			this.maxLoanAmount = maxLoanAmount;
+			this.productSubTypeID = productSubTypeID;
+			IsSilentlyApproved = false;
 		} // constructor
 
 		public override string Outcome { get { return this.outcome; } }
+
+		[StepOutput]
+		public bool IsSilentlyApproved { get; private set; }
 
 		protected override StepResults Run() {
 			if (this.autoDecisionResponse.DecisionIsLocked) {
@@ -79,6 +85,8 @@
 			} // if
 
 			if (this.autoApproveIsSilent) {
+				IsSilentlyApproved = true;
+
 				Log.Msg("Approve is silent for {0}, switching to manual.", OuterContextDescription);
 
 				this.outcome = "'silent approve'";
@@ -107,7 +115,7 @@
 			this.autoDecisionResponse.DecisionIsLocked = true;
 			this.autoDecisionResponse.HasApprovalChance = true;
 			this.autoDecisionResponse.ApprovedAmount = this.autoDecisionResponse.ProposedAmount;
-			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddDays(this.offerValidForHours);
+			this.autoDecisionResponse.AppValidFor = DateTime.UtcNow.AddHours(this.offerValidForHours);
 
 			this.autoDecisionResponse.CreditResult = CreditResultStatus.Approved;
 			this.autoDecisionResponse.UserStatus = Status.Approved;
@@ -123,6 +131,8 @@
 			this.autoDecisionResponse.InterestRate = this.offerResult.InterestRate / 100M;
 			this.autoDecisionResponse.SetupFee = this.offerResult.SetupFee / 100M;
 
+			this.autoDecisionResponse.ProductSubTypeID = this.productSubTypeID;
+
 			this.outcome = "'approved'";
 
 			return StepResults.Success;
@@ -136,6 +146,7 @@
 		private readonly int offerValidForHours;
 		private readonly int minLoanAmount;
 		private readonly int maxLoanAmount;
+		private readonly int? productSubTypeID;
 
 		private string outcome;
 	} // class LockReapproved

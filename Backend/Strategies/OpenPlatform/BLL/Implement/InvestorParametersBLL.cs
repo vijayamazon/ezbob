@@ -2,6 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using AutomationCalculator.AutoDecision.AutoApproval;
+	using ConfigManager;
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.OpenPlatform.BLL.Contracts;
@@ -51,8 +53,10 @@
 			//Sum of already funded this month + current
 			var totalFunded = investorGradeInvestedAmount;
 
+		    var amplitude = Convert.ToDecimal(CurrentValues.Instance.InvestorBudgetAmplitude.Value);
+
 			//Calc max percent for grade.
-			var gradePercent = (decimal)InvestorParametersDAL.GetGradePercent(investorId, investorLoanCashRequest.GradeID, ruleType);
+			var gradePercent = InvestorParametersDAL.GetGradePercent(investorId, investorLoanCashRequest.GradeID, ruleType) + amplitude;
 
 			//Calc total sum of positive transactions this month
 			var investorMonthlyBalance = InvestorParametersDAL.GetInvestorTotalMonthlyDeposits(investorId);
@@ -64,7 +68,8 @@
 			var gradeAvailableAmount = gradePercent * monthlyMax - totalFunded;
 			Log.InfoFormat("GetGradeAvailableAmount investorID {0} grade {1} GradeAvailableAmount: {2} Funded amount {3} gradePercent {4} investorMonthlyBalance {5} monthlyFundingCapital {6}",
 				investorId, investorLoanCashRequest.GradeID, gradeAvailableAmount, totalFunded, gradePercent, investorMonthlyBalance, monthlyFundingCapital);
-			return gradeAvailableAmount;
+			
+            return gradeAvailableAmount;
 		}
 
 		public int GetInvestorWithLatestLoanDate(List<int> investorsList) {

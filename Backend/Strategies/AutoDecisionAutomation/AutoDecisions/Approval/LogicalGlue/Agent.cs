@@ -59,7 +59,7 @@
 
 		public override void MakeAndVerifyDecision() {
 			try {
-				this.trail.UniqueID = this.args.TrailUniqueID;
+				this.trail.SetTag(this.args.Tag).UniqueID = this.args.TrailUniqueID;
 
 				RunPrimary();
 
@@ -108,7 +108,7 @@
 			using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				switch (this.trail.MyInputData.FlowType) {
 				case AutoDecisionFlowTypes.LogicalGlue:
-					this.trail.Dunno<LogicalGlueFlow>().Init();
+					this.trail.Affirmative<LogicalGlueFlow>(false).Init();
 
 					if (this.trail.MyInputData.ErrorInLGData) {
 						this.trail.Negative<LGWithoutError>(true).Init(false);
@@ -150,7 +150,7 @@
 					break;
 
 				case AutoDecisionFlowTypes.Internal:
-					this.trail.Dunno<InternalFlow>().Init();
+					this.trail.Affirmative<InternalFlow>(false).Init();
 					this.trail.AppendOverridingResults(this.oldWayAgent.Trail);
 					break;
 

@@ -8,7 +8,6 @@ GO
 ALTER PROCEDURE UwGridPendingInvestor
 @WithTest BIT
 
-
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -34,7 +33,7 @@ BEGIN
 		r.ManagerApprovedSum AS ApprovedAmount,
 		r.RepaymentPeriod AS Term,
 		r.UnderwriterDecisionDate AS RequestApprovedAt,
-		r.UnderwriterDecisionDate AS TimeLimitUntilAutoreject,
+		r.OfferValidUntil AS TimeLimitUntilAutoreject,
 		'Find Investor' AS FindInvestor,
 		'Edit Offer' AS EditOffer,
 		'ChooseInvestorCombo' AS ChooseInvestor,
@@ -57,8 +56,11 @@ BEGIN
 		c.CreditResult = 'PendingInvestor' 
 	AND 
 		r.UnderwriterDecision = 'PendingInvestor'
+	AND
+		(@WithTest = 1 OR c.IsTest = 0)
 	ORDER BY
 		c.Id DESC
 END
+
 
 GO

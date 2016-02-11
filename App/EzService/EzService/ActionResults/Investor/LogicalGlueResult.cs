@@ -92,9 +92,9 @@
 
 				result.BucketPercent = b == 0 ? 0 : a / b;
 
-				var sr = db.GetFirst(string.Format("SELECT * FROM CustomerLogicalGlueHistory WHERE ResponseID={0}", inference.ResponseID), CommandSpecies.Text);
-				result.IsHardReject = sr["IsHardReject"];
-				result.ScoreIsReliable = sr["ScoreIsReliable"];
+				result.IsHardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
+				result.ScoreIsReliable = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) &&
+					inference.ModelOutputs[ModelNames.NeuralNetwork].Error.IsEmpty;
 				return result;
 			} catch (Exception ex) {
 				log.Warn(ex, "Failed loading lg data for customer {0}", customerID);

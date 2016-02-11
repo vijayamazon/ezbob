@@ -3,6 +3,7 @@
 	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.dbutils;
 	using JetBrains.Annotations;
 
 	internal class GetCustomerCompanyID : AStoredProcedure {
@@ -21,6 +22,11 @@
 		[UsedImplicitly]
 		[Direction(ParameterDirection.Output)]
 		public int CompanyID { get; set; }
+
+		[UsedImplicitly]
+		[Direction(ParameterDirection.Output)]
+		[Length(50)]
+		public string TypeOfBusiness { get; set; }
 
 		private static readonly DateTime longAgo = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
 	} // class GetCustomerCompanyID

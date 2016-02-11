@@ -136,7 +136,6 @@
     <Compile Include="TestIovation.cs" />
     <Compile Include="TestCallCredit.cs" />
     <Compile Include="TestMedal.cs" />
-    <Compile Include="TestOffer.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="TestClassToDb.cs" />
     <Compile Include="TestDbConnection.cs" />

@@ -101,8 +101,8 @@
 					logMsg = string.Format(
 						"Approved amount {0} for {1}, email banned: {2}",
 						Trail.RoundedAmount,
-						Grammar.Number((int)MetaData.OfferLength, "day"),
-						MetaData.IsEmailSendingBanned ? "yes" : "no"
+						Grammar.Number(MetaData.OfferLength, "day"),
+						MetaData.EmailSendingBanned ? "yes" : "no"
 					);
 				} // if
 

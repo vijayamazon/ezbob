@@ -7,12 +7,11 @@
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using EzBob.Web.Areas.Underwriter.Models.Investor;
-	using EzBob.Web.Infrastructure;
-	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
-	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using Infrastructure;
+	using Infrastructure.Attributes;
 	using log4net;
-	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using FrontInvestorModel = EzBob.Web.Areas.Underwriter.Models.Investor.InvestorModel;
@@ -63,7 +62,7 @@
 
 			var result = this.serviceClient.Instance.CreateInvestor(this.context.UserId,
 				new Ezbob.Backend.Models.Investor.InvestorModel {
-					InvestorType = new InvestorTypeModel {
+					InvestorType = new Ezbob.Backend.Models.Investor.InvestorTypeModel {
 						InvestorTypeID = investor.InvestorType
 					},
 					Name = investor.CompanyName,
@@ -140,7 +139,7 @@
 					IsActive = investorDetails.IsActive,
 					Name = investorDetails.CompanyName,
 					FundingLimitForNotification = investorDetails.FundingLimitForNotification,
-					InvestorType = new InvestorTypeModel {
+					InvestorType = new Ezbob.Backend.Models.Investor.InvestorTypeModel {
 						InvestorTypeID = investorDetails.InvestorType
 					},
 					Timestamp = now,
@@ -160,7 +159,7 @@
 		public JsonResult SaveInvestorContactList(int InvestorID, string investor) {
 
 			Log.Debug("investor string " + investor);
-			var investorModel = JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
+			var investorModel = Newtonsoft.Json.JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
 
 			Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
 			//call the service
@@ -190,7 +189,7 @@
 		public JsonResult SaveInvestorBanksList(int InvestorID, string investor) {
 
 			Log.Debug("investor string " + investor);
-			var investorModel = JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
+			var investorModel = Newtonsoft.Json.JsonConvert.DeserializeObject<FrontInvestorModel>(investor);
 
 			Log.DebugFormat("investor string {0} {1}", investorModel.Contacts.Count(), investorModel.Contacts.First().ContactEmail);
 			//call the service
@@ -327,11 +326,12 @@
 
 			var result = this.serviceClient.Instance.SetManualDecision(new DecisionModel {
 				customerID = customerId,
-				status = CreditResultStatus.PendingInvestor,
+				status = EZBob.DatabaseLib.Model.Database.CreditResultStatus.Approved,
 				underwriterID = this.context.UserId,
 				attemptID = Guid.NewGuid().ToString("N"),
 				cashRequestID = cashRequestID,
-				cashRequestRowVersion = aiar.Model.CashRequestRowVersion
+				cashRequestRowVersion = aiar.Model.CashRequestRowVersion,
+
 			});
 
 			return Json(result.Map, JsonRequestBehavior.AllowGet);
@@ -350,7 +350,7 @@
 
 			var result = this.serviceClient.Instance.SetManualDecision(new DecisionModel {
 				customerID = customerID,
-				status = CreditResultStatus.Approved,
+				status = EZBob.DatabaseLib.Model.Database.CreditResultStatus.Approved,
 				underwriterID = this.context.UserId,
 				attemptID = Guid.NewGuid().ToString("N"),
 				cashRequestID = cashRequestID,

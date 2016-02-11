@@ -81,6 +81,7 @@
 				sr["IsCustomerRepaymentPeriodSelectionAllowed"];
 			this.autoDecisionResponse.BrokerSetupFeePercent = sr["BrokerSetupFeePercent"];
 			this.autoDecisionResponse.SpreadSetupFee = sr["SpreadSetupFee"];
+			this.autoDecisionResponse.ProductSubTypeID = sr["ProductSubTypeID"];
 
 			this.outcome = "'success'";
 			return StepResults.Success;

@@ -80,7 +80,8 @@ EzBob.Underwriter.ManageInvestorBankView = Backbone.Marionette.ItemView.extend({
 			if (res.success) {
 				EzBob.ShowMessage('Bank added/updated successfully', 'Done', null, 'Ok');
 				self.trigger('cancel');
-				$(".manage-investor-row[data-id='" + investorID + "']").click();
+				$(".manage-investor-row[data-id='" + investorID + "']").trigger('click', true);
+			
 			} else {
 				EzBob.ShowMessage(res.error, 'Failed saving investor bank', null, 'Ok');
 			}

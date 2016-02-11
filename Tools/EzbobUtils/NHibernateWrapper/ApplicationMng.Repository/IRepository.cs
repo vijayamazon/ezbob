@@ -11,6 +11,7 @@ namespace ApplicationMng.Repository {
 		void Delete(T val);
 		void BeginTransaction();
 		void CommitTransaction();
+		void RollbackTransaction();
 		void EnsureTransaction(System.Action<ITransaction> action);
 		void EnsureTransaction(System.Action action);
 		void Clear();

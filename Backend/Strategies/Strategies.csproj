@@ -215,12 +215,16 @@
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="MainStrategy\Exceptions\CreateFindCashRequestException.cs" />
     <Compile Include="MainStrategy\Exceptions\InvalidInputException.cs" />
+    <Compile Include="MainStrategy\Helpers\MainStrategySetApproved.cs" />
+    <Compile Include="MainStrategy\Helpers\WriteDecisionOutput.cs" />
     <Compile Include="MainStrategy\StepHistoryItem.cs" />
     <Compile Include="MainStrategy\StepResult.cs" />
+    <Compile Include="MainStrategy\Steps\AbnormalShutdownAfterCashRequestWasWritten.cs" />
     <Compile Include="MainStrategy\Steps\AbnormalShutdownAfterHavingCashRequest.cs" />
     <Compile Include="MainStrategy\Steps\AbnormalShutdownBeforeHavingCashRequest.cs" />
     <Compile Include="MainStrategy\Steps\AMainStrategyStepBase.cs" />
     <Compile Include="MainStrategy\Steps\AMainStrategyStep.cs" />
+    <Compile Include="MainStrategy\Steps\ASaveDecisionBase.cs" />
     <Compile Include="MainStrategy\Steps\CalculateOfferIfPossible.cs" />
     <Compile Include="MainStrategy\Steps\CheckAutoRulesRequested.cs" />
     <Compile Include="MainStrategy\Steps\CheckUpdateDataRequested.cs" />
@@ -248,8 +252,8 @@
     <Compile Include="MainStrategy\Steps\Reject.cs" />
     <Compile Include="MainStrategy\Steps\Reapproval.cs" />
     <Compile Include="MainStrategy\Steps\Rereject.cs" />
-    <Compile Include="MainStrategy\Steps\SaveDecision.cs" />
-    <Compile Include="MainStrategy\Steps\SetPendingInvestor.cs" />
+    <Compile Include="MainStrategy\Steps\WriteDecisionDown.cs" />
+    <Compile Include="MainStrategy\Steps\RestoreAndSaveApproved.cs" />
     <Compile Include="MainStrategy\Steps\StepOutputAttribute.cs" />
     <Compile Include="MainStrategy\Steps\StepResults.cs" />
     <Compile Include="MainStrategy\Steps\TheFirstOne.cs" />
@@ -288,6 +292,7 @@
     <Compile Include="NewLoan\SaveLoanStateToDB.cs" />
     <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="StoredProcs\GetCustomerCompanyID.cs" />
+    <Compile Include="StoredProcs\LoadMatchingGradeRanges.cs" />
     <Compile Include="Tasks\Annual77ANotifier.cs" />
     <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
@@ -503,9 +508,7 @@
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\ZooplaStub.cs" />
-    <Compile Include="OfferCalculation\OfferCalculator.cs" />
-    <Compile Include="OfferCalculation\OfferDualCalculator.cs" />
-    <Compile Include="OfferCalculation\OfferResult.cs" />
+    <Compile Include="MainStrategy\Helpers\OfferResult.cs" />
     <Compile Include="PricingModel\PricingModelCalculator.cs" />
     <Compile Include="Reports\Alibaba.cs" />
     <Compile Include="SalesForce\AddOpportunity.cs" />

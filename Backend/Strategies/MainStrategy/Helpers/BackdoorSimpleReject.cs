@@ -6,7 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	class BackdoorSimpleReject : ABackdoorSimpleDetails {
-		public static BackdoorSimpleReject Create(string backdoorCode) {
+		public static BackdoorSimpleReject Create(string backdoorCode, int customerID) {
 			var match = regex.Match(backdoorCode);
 
 			if (!match.Success) {
@@ -15,13 +15,16 @@
 			} // if
 
 			return new BackdoorSimpleReject(
+				customerID,
 				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0,
 				match.Groups[2].Value == "a"
 			);
 		} // Create
 
 		public override bool SetResult(AutoDecisionResponse response) {
-			Log.Debug("Back door simple flow: rejecting..."); 
+			Log.Debug("Back door simple flow: rejecting...");
+
+			CalculateMedalAndOffer(null, 0);
 
 			response.CreditResult = CreditResultStatus.Rejected;
 			response.UserStatus = Status.Rejected;
@@ -53,7 +56,11 @@
 			);
 		} // ToString
 
-		private BackdoorSimpleReject(int delay, bool hasApprovalChance) : base(DecisionActions.Reject, delay) {
+		private BackdoorSimpleReject(
+			int customerID,
+			int delay,
+			bool hasApprovalChance
+		) : base(customerID, DecisionActions.Reject, delay) {
 			this.hasApprovalChance = hasApprovalChance;
 		} // constructor
 

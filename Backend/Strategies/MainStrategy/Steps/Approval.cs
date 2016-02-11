@@ -50,7 +50,7 @@
 
 		[StepOutput]
 		public bool LoanOfferEmailSendingBannedNew {
-			get { return this.agent != null && this.agent.Trail.MyInputData.MetaData.IsEmailSendingBanned; }
+			get { return this.agent != null && this.agent.Trail.MyInputData.MetaData.EmailSendingBanned; }
 		} // LoanOfferEmailSendingBannedNew
 
 		protected override string ProcessName { get { return "auto approval"; } }

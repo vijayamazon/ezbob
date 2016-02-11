@@ -76,7 +76,8 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 		numeric: '.numeric',
 		money: '.cashInput',
 		sameBank: '#SameBank',
-		secondBank: '.second-bank'
+		secondBank: '.second-bank',
+		fundsTransferDate: '#FundsTransferDate'
 	},
 	serializeData: function () {
 		return {
@@ -89,7 +90,8 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
         'click #CancelAddInvestor':'cancel'
 	},
 
-	onRender: function () {
+	onRender: function() {
+		this.ui.fundsTransferDate.numericOnly(2);
 		this.ui.phone.mask('0?9999999999', { placeholder: ' ' });
 		this.ui.phone.numericOnly(11);
 		this.ui.numeric.numericOnly(20);
@@ -98,6 +100,7 @@ EzBob.Underwriter.AddInvestorView = Backbone.Marionette.ItemView.extend({
 			rules: {
 				CompanyName: { required: true },
 				InvestorType: { required: true },
+				FundsTransferDate: { required: false, digits: true, min: 1, max: 31 },
 				ContactPersonalName: { required: true },
 				ContactLastName: { required: true },
 				ContactEmail: { required: true, email: true, },

@@ -5,11 +5,15 @@
 	using Ezbob.Integration.LogicalGlue;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Utils.Lingvo;
+	using EZBob.DatabaseLib.Model.Database;
 
 	internal class GatherData : AOneExitStep {
 		public GatherData(string outerContextDescription, int customerID) : base(outerContextDescription) {
 			this.customerID = customerID;
 		} // constructor
+
+		[StepOutput]
+		public TypeOfBusiness TypeOfBusiness { get; private set; }
 
 		[StepOutput]
 		public int CompanyID { get; private set; }
@@ -28,6 +32,10 @@
 			sp.ExecuteNonQuery();
 
 			CompanyID = sp.CompanyID;
+
+			TypeOfBusiness tob;
+
+			TypeOfBusiness = Enum.TryParse(sp.TypeOfBusiness, true, out tob) ? tob : TypeOfBusiness.Entrepreneur;
 
 			MonthlyRepayment = InjectorStub.GetEngine().GetMonthlyRepaymentData(this.customerID, now);
 

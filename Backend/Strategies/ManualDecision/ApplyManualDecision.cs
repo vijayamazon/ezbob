@@ -100,12 +100,6 @@
 				} // if
 				break;
 
-			case CreditResultStatus.PendingInvestor:
-				if (ApproveCustomer(newDecision)) {
-					notifyAlibaba = this.currentState.IsAlibaba;
-				} // if
-				break;
-
 			case CreditResultStatus.Rejected:
 				if (RejectCustomer(newDecision)) {
 					silentAutomationCaller = SilentAutomation.Callers.ManuallyRejected;
@@ -282,26 +276,15 @@
 
 			Log.Info("ApproveCustomer Decision {0} for Customer {1} cr {2} OP {3} FoundInvestor {4}",
 				this.decisionToApply.CashRequest.UnderwriterDecision,
-				this.decisionToApply.Customer.ID,
+				this.decisionToApply.Customer.ID, 
 				this.decisionToApply.CashRequest.ID,
-				linkOfferToInvestor.IsForOpenPlatform,
+				linkOfferToInvestor.IsForOpenPlatform, 
 				linkOfferToInvestor.FoundInvestor);
 
-			// "open paltform" case; was approved and investor not found 
-			if (this.decisionModel.status == CreditResultStatus.Approved && linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
+			if (linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
 				PendingInvestor(newDecision);
 				return false;
 			}
-
-			// "open paltform" case; investor not found again
-			if (this.decisionModel.status == CreditResultStatus.PendingInvestor && linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
-				Log.Info("Investor not found for customer {0} cr {1}, the underwriter decision / credit result are not changed",
-					this.decisionToApply.Customer.ID,
-					this.decisionToApply.CashRequest.ID);
-				return false;
-			}
-
-			this.decisionToApply.CashRequest.UnderwriterDecision = CreditResultStatus.Approved.ToString();
 
 			this.decisionToApply.Customer.DateApproved = this.now;
 			this.decisionToApply.Customer.ApprovedReason = this.decisionModel.reason;
@@ -384,12 +367,12 @@
 				};
 
 				Log.Debug("Adding nl offer: {0}", nlOffer);
-
-				NL_OfferFees setupFee = new NL_OfferFees() {
-					LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
-					Percent = this.currentState.ManualSetupFeePercent,
-					OneTimePartPercent = 1,
-					DistributedPartPercent = 0
+					
+				NL_OfferFees setupFee = new NL_OfferFees() { 
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee, 
+					Percent = this.currentState.ManualSetupFeePercent, 
+					OneTimePartPercent = 1, 
+					DistributedPartPercent = 0 
 				};
 
 				if (this.currentState.SpreadSetupFee) {
@@ -399,7 +382,7 @@
 				}
 				NL_OfferFees[] ofeerFees = { setupFee };
 
-				AddOffer sAddOffer = new AddOffer(nlOffer, ofeerFees);
+				AddOffer sAddOffer = new AddOffer(nlOffer, ofeerFees); 
 				sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
 				sAddOffer.Context.UserID = this.decisionModel.underwriterID;
 
@@ -426,7 +409,7 @@
 
 		private void PendingInvestor(NL_Decisions newDecision) {
 			Log.Info("Investor not found for customer {0} cr {1}, mark as pending investor",
-				this.decisionToApply.Customer.ID,
+				this.decisionToApply.Customer.ID, 
 				this.decisionToApply.CashRequest.ID);
 
 			this.decisionToApply.Customer.CreditResult = CreditResultStatus.PendingInvestor.ToString();
@@ -489,7 +472,6 @@
 
 		private DecisionToApply decisionToApply;
 		private CurrentCustomerDecisionState currentState;
-
 
 		private readonly DecisionModel decisionModel;
 		private readonly DateTime now;

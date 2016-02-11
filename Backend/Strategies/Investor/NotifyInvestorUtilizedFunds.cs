@@ -43,19 +43,39 @@
 				}//if
 
 				if (this.systemBalance.NewBalance.Value < CurrentValues.Instance.MinLoan) {
+					Log.Info("NotifyInvestorUtilizedFunds investor {0} balance less then min loan {1} {2}",
+							this.investorID,
+							this.systemBalance.NewBalance,
+							CurrentValues.Instance.MinLoan);
 					SendFundsUtilized();
 				} else if (this.investorAccountingConfiguration.MonthlyFundingCapital.HasValue &&
 					this.investorAccountingConfiguration.MonthlyFundingCapital.Value > 0 &&
 					this.systemBalance.NewBalance.Value / this.investorAccountingConfiguration.MonthlyFundingCapital.Value < CurrentValues.Instance.InvestorFundsUtilized75) {
+						Log.Info("NotifyInvestorUtilizedFunds investor {0} balance less then 75% {1} {2}",
+							this.investorID,
+							this.systemBalance.NewBalance,
+							this.systemBalance.NewBalance.Value / this.investorAccountingConfiguration.MonthlyFundingCapital.Value);
 					SendFundsUtilized();
 				} else if (this.investorAccountingConfiguration.MonthlyFundingCapital.HasValue &&
 					this.investorAccountingConfiguration.MonthlyFundingCapital.Value > 0 &&
 					this.systemBalance.NewBalance.Value / this.investorAccountingConfiguration.MonthlyFundingCapital.Value < CurrentValues.Instance.InvestorFundsUtilized90) {
+						Log.Info("NotifyInvestorUtilizedFunds investor {0} balance less then 90% {1} {2}",
+							this.investorID,
+							this.systemBalance.NewBalance,
+							this.systemBalance.NewBalance.Value / this.investorAccountingConfiguration.MonthlyFundingCapital.Value);
 					SendFundsUtilized();
 				} else if (this.investorAccountingConfiguration.FundingLimitForNotification.HasValue &&
 					this.systemBalance.NewBalance.Value < this.investorAccountingConfiguration.FundingLimitForNotification.Value) {
+					Log.Info("NotifyInvestorUtilizedFunds investor {0} balance less then FundingLimitForNotification {1} {2}",
+						this.investorID,
+						this.systemBalance.NewBalance,
+						this.investorAccountingConfiguration.FundingLimitForNotification);
 					SendFundsUtilized();
-				}//if
+				} else {
+					Log.Info("NotifyInvestorUtilizedFunds investor {0} balance {1} pounds is more than all the rules, not sending notification",
+						this.investorID, this.systemBalance.NewBalance);
+				} //if
+
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to send funds utilized notification to investor {0}", this.investorID);
 			}//try
@@ -83,7 +103,7 @@
 					{ "BankAccountName", this.fundingBankAccount.BankAccountName },
 					{ "BankAccountNumber", this.fundingBankAccount.BankAccountNumber },
 				};
-
+				Log.Info("NotifyInvestorUtilizedFunds sending funds utilized notification to investor {0} contact {1} {2}", this.investorID, investorContact.InvestorContactID, investorContact.Email);
 				mailer.Send("InvestorFundsNotification",
 					parameters,
 					new Addressee(
@@ -92,6 +112,7 @@
 						userID: investorContact.InvestorContactID,
 						addSalesforceActivity: false)
 				);
+
 			}//foreach
 		}//SendFundsUtilized
 

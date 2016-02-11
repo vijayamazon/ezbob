@@ -8,7 +8,6 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -47,7 +46,11 @@
 			this.subGradeID = null;
 
 			this.allLoanSources = ((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
+
+			ForcedProposedAmount = 0;
 		} // constructor
+
+		public int ForcedProposedAmount { get; set; }
 
 		[StepOutput]
 		public MedalResult Medal { get { return this.medalAgent == null ? null : this.medalAgent.Result; } }
@@ -64,13 +67,6 @@
 		public override string Outcome { get { return this.outcome; } }
 
 		protected override StepResults Run() {
-			if (this.autoRejectionOutput == null) {
-				Log.Alert("No auto rejection output specified for {0}, auto decision is aborted.", OuterContextDescription);
-
-				this.outcome = "'failure - no auto rejection executed'";
-				return StepResults.Failed;
-			} // if
-
 			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.Unknown) {
 				Log.Alert("Illegal flow type specified for {0}, auto decision is aborted.", OuterContextDescription);
 
@@ -173,7 +169,7 @@
 			this.gradeID = grsp.GradeID;
 			this.subGradeID = grsp.SubGradeID;
 
-			ProposedAmount = GetLogicalProposedAmount(grsp);
+			ProposedAmount = ForcedProposedAmount > 0 ? ForcedProposedAmount : GetLogicalProposedAmount(grsp);
 
 			if (ProposedAmount <= 0) {
 				CreateErrorResult("Proposed amount is not positive for {0}, no offer.", OuterContextDescription);
@@ -281,7 +277,7 @@
 				new QueryParameter("CustomerId", this.customerID)
 			);
 
-			ProposedAmount = Math.Min(
+			ProposedAmount = ForcedProposedAmount > 0 ? ForcedProposedAmount : Math.Min(
 				Medal.RoundOfferedAmount(),
 				isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
 			);

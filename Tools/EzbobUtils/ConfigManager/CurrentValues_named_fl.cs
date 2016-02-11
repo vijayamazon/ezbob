@@ -202,6 +202,10 @@
 		public virtual VariableValue InvestorServicingFeePercent {
 			get { return this[Variables.InvestorServicingFeePercent]; }
 		}
+
+        public virtual VariableValue InvestorBudgetAmplitude {
+            get { return this[Variables.InvestorBudgetAmplitude]; }
+        }
 		
 		public virtual VariableValue InvestorFundsUtilized75 {
 			get { return this[Variables.InvestorFundsUtilized75]; }
