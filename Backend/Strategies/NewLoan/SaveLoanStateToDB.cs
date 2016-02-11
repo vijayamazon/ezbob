@@ -3,35 +3,27 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
-	using Newtonsoft.Json.Linq;
 	using NHibernate.Linq;
 
-	/// <summary>
-	/// triggered on payment adding/cancellation, rollover, re-scheduling.
-	/// Save recalculated loan state differenced to DB
-	/// </summary>
-	public class UpdateLoanDBState : AStrategy {
+	internal class SaveLoanStateToDB : AStrategy {
 
-		public UpdateLoanDBState(int customerID, long loanID, int userID) {
-			CustomerID = customerID;
-			LoanID = loanID;
-			UserID = userID;
-			this.strategyArgs = new object[] { customerID, loanID, userID };
+		public SaveLoanStateToDB(NL_Model nlmodel, bool loanClose = false, bool loanStatusChange = false) {
+			model = nlmodel;
+			runClose = loanClose;
+			runStatusChenge = loanStatusChange;
+			this.strategyArgs = new object[] { model };
 		} // ctor
 
-		public override string Name { get { return "UpdateLoanDBState"; } }
+		public override string Name { get { return "SaveLoanStateToDB"; } }
 
+		public bool runClose { get; private set; }
+		public bool runStatusChenge { get; private set; }
+		public NL_Model model { get; private set; }
+		private readonly object[] strategyArgs;
 		public string Error { get; private set; }
-		public int CustomerID { get; private set; }
-		public int UserID { get; private set; }
-		public long LoanID { get; private set; }
-
-		private object[] strategyArgs;
 
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
@@ -44,85 +36,21 @@
 
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, null, Error, null);
 
-			if (CustomerID == 0) {
+			if (model.CustomerID == 0) {
 				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
 				throw new NL_ExceptionCustomerNotFound(Error);
 			}
 
-			if (LoanID == 0) {
+			if (model.Loan.LoanID == 0) {
 				Error = NL_ExceptionLoanNotFound.DefaultMessage;
 				NL_AddLog(LogType.Error, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
 				throw new NL_ExceptionLoanNotFound(Error);
 			}
 
-			// get raw DB state of the loan - without calc
-			GetLoanState state = new GetLoanState(CustomerID, LoanID, DateTime.UtcNow, Context.UserID, false);
-			state.Execute();
+			NL_AddLog(LogType.Info, "recalculated loan state", model, null, Error, null);
 
-			// failed to load loan from DB
-			if (!string.IsNullOrEmpty(state.Error)) {
-				Error = state.Error;
-				NL_AddLog(LogType.Error, "Loan get state failed", this.strategyArgs, state.Error, Error, null);
-				return;
-			}
-
-			this.strategyArgs = new object[] { CustomerID, LoanID, UserID };
-
-			var stateBefore = JObject.FromObject(state.Result.Loan);
-
-			NL_Model RecalculatedModel = new NL_Model(state.Result.CustomerID);
-			RecalculatedModel.Loan = state.Result.Loan;
-
-			// get loan state updated by calculator
-			try {
-				ALoanCalculator calc = new LegacyLoanCalculator(RecalculatedModel);
-				calc.GetState();
-			} catch (NoInitialDataException noInitialDataException) {
-				Error = noInitialDataException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
-			} catch (InvalidInitialInterestRateException invalidInitialInterestRateException) {
-				Error = invalidInitialInterestRateException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
-			} catch (NoLoanHistoryException noLoanHistoryException) {
-				Error = noLoanHistoryException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
-			} catch (InvalidInitialAmountException invalidInitialAmountException) {
-				Error = invalidInitialAmountException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
-			} catch (OverflowException overflowException) {
-				Error = overflowException.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
-
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				Error = ex.Message;
-				NL_AddLog(LogType.Error, "Calculator exception", this.strategyArgs, RecalculatedModel, Error, null);
-				return;
-			}
-
-			// no changes, exit
-			var stateAfter = JObject.FromObject(RecalculatedModel.Loan);
-			if (JToken.DeepEquals(stateBefore, stateAfter)) {
-				NL_AddLog(LogType.Info, "End - no diff btwn DB state and recalculated state", stateBefore, stateAfter, Error, null);
-				return;
-			}
-
-			NL_AddLog(LogType.Info, "recalculated loan state", stateBefore, stateAfter, Error, null);
-
-			try {
-				bool loanClose = !stateAfter["LoanStatusID"].Equals(stateBefore["LoanStatusID"]);
-				SaveLoanStateToDB saveLoan = new SaveLoanStateToDB(RecalculatedModel, loanClose);
-				saveLoan.Execute();
-
-			} catch (Exception ex) {
-				Error = ex.Message;
-				Log.Error("Failed to save updated loan DB dbState. err: {0}", Error);
-
-				NL_AddLog(LogType.Error, "Failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
-			}
-
-			/*List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
+			List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
 			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
 			List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
 
@@ -133,14 +61,14 @@
 				pconn.BeginTransaction();
 
 				// save new history - on rescheduling/rollover
-				foreach (NL_LoanHistory h in RecalculatedModel.Loan.Histories.Where(h => h.LoanHistoryID == 0)) {
+				foreach (NL_LoanHistory h in model.Loan.Histories.Where(h => h.LoanHistoryID == 0)) {
 					h.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", h));
 					// set for newly created scheduled it historyID
 					h.Schedule.ForEach(s => s.LoanHistoryID = h.LoanHistoryID);
 				}
 
 				// collect all schedules into one list
-				RecalculatedModel.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
+				model.Loan.Histories.ForEach(h => h.Schedule.ForEach(s => schedules.Add(s)));
 
 				// save new schedules - on rescheduling/rollover
 				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure,
@@ -155,7 +83,7 @@
 				}
 
 				// disable fees
-				//foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
+				//foreach (NL_LoanFees f in model.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
 				//	DB.ExecuteNonQuery(pconn, "NL_LoanFeeCancel", CommandSpecies.StoredProcedure,
 				//			new QueryParameter("LoanFeeID", f.LoanFeeID),
 				//			new QueryParameter("DeletedByUserID", f.DeletedByUserID),
@@ -165,10 +93,10 @@
 
 				// insert fees
 				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter<NL_LoanFees>("Tbl", RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID == 0)));
+					DB.CreateTableParameter<NL_LoanFees>("Tbl", model.Loan.Fees.Where(f => f.LoanFeeID == 0)));
 
 				// assign payment to loan
-				foreach (NL_Payments p in RecalculatedModel.Loan.Payments) {
+				foreach (NL_Payments p in model.Loan.Payments) {
 
 					// new SchedulePayments
 					p.SchedulePayments.Where(sp => sp.NewEntry).ForEach(sp => schedulePayments.Add(sp));
@@ -201,18 +129,18 @@
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeePaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFeePayments>("Tbl", feePayments));
 				}
 	
-				// update loan status				
-				if (!stateAfter["LoanStatusID"].Equals(stateBefore["LoanStatusID"])) {
+				// update loan status	
+				if (runClose) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanUpdate", CommandSpecies.StoredProcedure,
-						new QueryParameter("LoanID", RecalculatedModel.Loan.LoanID),
-						new QueryParameter("LoanStatusID", RecalculatedModel.Loan.LoanStatusID),
-						new QueryParameter("DateClosed", RecalculatedModel.Loan.DateClosed)
+						new QueryParameter("LoanID", model.Loan.LoanID),
+						new QueryParameter("LoanStatusID", model.Loan.LoanStatusID),
+						new QueryParameter("DateClosed", model.Loan.DateClosed)
 						);
 				}
 
 				pconn.Commit();
 
-				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, RecalculatedModel, Error, null);
+				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, model, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -223,11 +151,7 @@
 				Log.Error("Failed to update loan DB dbState. err: {0}", Error);
 
 				NL_AddLog(LogType.Error, "Failed - Rollback", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
-			}*/
+			}
 		}
-	}
-
-	public class BigintList {
-		public long Item { get; set; }
 	}
 }

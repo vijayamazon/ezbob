@@ -63,7 +63,21 @@
 			if (DeactivationDate == null && p.DeactivationDate != null)
 				return false;
 
-			return (LoanID == p.LoanID) && (StartDate == p.StartDate) && (EndDate == p.EndDate);
+			if (StartDate == null && p.StartDate != null)
+				return false;
+			if (StartDate != null && p.StartDate == null)
+				return false;
+			if (StartDate.HasValue && p.StartDate.HasValue && !StartDate.Value.Date.Equals(p.StartDate.Value.Date))
+				return false;
+
+			if (EndDate == null && p.EndDate != null)
+				return false;
+			if (EndDate != null && p.EndDate == null)
+				return false;
+			if (EndDate.HasValue && p.EndDate.HasValue && !EndDate.Value.Date.Equals(p.EndDate.Value.Date))
+				return false;
+
+			return (LoanID == p.LoanID);// && (StartDate == p.StartDate) && (EndDate == p.EndDate);
 		}
 
 		/// <summary>
@@ -75,21 +89,6 @@
 		public override int GetHashCode() {
 			return LoanID.GetHashCode() ^ StartDate.GetHashCode() ^ EndDate.GetHashCode() ^ ActivationDate.GetHashCode() ^ DeactivationDate.GetHashCode();
 		}
-
-		/*/// <summary>
-		/// prints data only
-		/// to print headers line call base static PrintHeadersLine 
-		/// </summary>
-		/// <returns></returns>
-		public override string ToString() {
-			try {
-				return ToStringTable();
-			} catch (InvalidCastException invalidCastException) {
-				Console.WriteLine(invalidCastException);
-			}
-			return string.Empty;
-		}*/
-		
 		
 	} // class NL_LoanInterestFreeze
 } // ns

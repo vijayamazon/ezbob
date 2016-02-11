@@ -60,10 +60,10 @@
 				throw new NoScheduleException();
 			}
 
-			AddFeesToScheduleItems();
+			AttachFees();
 
-			//WorkingModel.Loan.Histories.Insert(0, Calculator.currentHistory);
-
+			int index = WorkingModel.Loan.Histories.IndexOf(Calculator.currentHistory);
+			WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
 		    var index = WorkingModel.Loan.Histories.FindIndex(x => x.LoanHistoryID == Calculator.currentHistory.LoanHistoryID);
 		    WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
 
@@ -165,7 +165,7 @@
 		/// <summary>
 		/// calculate setup/servicing (arrangement) fees and attach it to schedule items PlannedDate
 		/// </summary>
-		private void AddFeesToScheduleItems() {
+		private void AttachFees() {
 
 			// no fees defined
 			if (WorkingModel.Offer.OfferFees == null || WorkingModel.Offer.OfferFees.Count == 0) {
@@ -216,27 +216,30 @@
 
 				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 
-				decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
-				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
+				Calculator.AttachDistributedFeesToLoanBySchedule(WorkingModel, servicingFeeAmount, Calculator.NowTime);
 
-				foreach (NL_LoanSchedules s in Calculator.currentHistory.Schedule) {
-					decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
-					WorkingModel.Loan.Fees.Add(
-						new NL_LoanFees() {
-							Amount = feeAmount,
-							AssignTime = s.PlannedDate,
-							Notes = "spread (servicing) fee",
-							LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
-							CreatedTime = Calculator.NowTime,
-							AssignedByUserID = 1
-						});
+				//decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
+				//decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
-					s.Fees += feeAmount;
-					s.AmountDue += s.Fees;
+				//foreach (NL_LoanSchedules s in Calculator.currentHistory.Schedule) {
+				//	decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
+				//	WorkingModel.Loan.Fees.Add(
+				//		new NL_LoanFees() {
+				//			Amount = feeAmount,
+				//			AssignTime = s.PlannedDate,
+				//			Notes = "spread (servicing) fee",
+				//			LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
+				//			CreatedTime = Calculator.NowTime,
+				//			AssignedByUserID = 1
+				//		});
 
-					schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
-				}
+				//	s.Fees += feeAmount;
+				//	s.AmountDue += s.Fees;
+
+				//	schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
+				//}
 			}
 		}
+		
 	} // class CreateScheduleMethod
 } // namespace

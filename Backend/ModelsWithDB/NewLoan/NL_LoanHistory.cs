@@ -84,7 +84,9 @@
 
 		// helpers
 		public List<NL_LoanSchedules> ActiveSchedule() {
-			return this._schedule.Where(s => (s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)).ToList();
+			return this._schedule.Where(s => !s.IsDeleted()
+				//(s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)
+				).ToList();
 		}
 
 		//set default to 3? \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 11-14, 143 -TODO should be from LoanSource

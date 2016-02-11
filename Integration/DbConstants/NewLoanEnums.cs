@@ -49,7 +49,9 @@
 		[Description("Deleted on reschedule (nothing was repaid before reschedule)")]
 		DeletedOnReschedule = 4,
 		[Description("Closed on reschedule (was partially repaid before reschedule)")]
-		ClosedOnReschedule = 5
+		ClosedOnReschedule = 5,
+		[Description("Was late on reschedule")]
+		LateDeletedOnReschedule = 6
 	} // enum NLScheduleStatuses
 
 	public enum NLLoanTypes {
@@ -146,6 +148,8 @@
 		[Description("0")] // 
 		FixedPayment = 2 // used for "out of loan agreement" rescheduling, not supported yet (15 October 2015)
 	}
+
+
 
 
 } // namespace

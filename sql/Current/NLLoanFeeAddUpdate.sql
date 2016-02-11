@@ -37,3 +37,9 @@ BEGIN
 	drop procedure NL_LoanFeeDisable;
 END
 
+IF NOT EXISTS (SELECT [LoanScheduleStatusID] FROM [dbo].[NL_LoanScheduleStatuses] WHERE [LoanScheduleStatus] = 'LateDeletedOnReschedule') BEGIN 	
+	insert into [dbo].[NL_LoanScheduleStatuses] ( [LoanScheduleStatusID], [LoanScheduleStatus], [Description]) values (6, 'LateDeletedOnReschedule', 'Was late on reschedule') ;
+END
+
+alter table [dbo].[NL_LoanInterestFreeze] alter column [StartDate] date;
+alter table [dbo].[NL_LoanInterestFreeze] alter column [EndDate] date;

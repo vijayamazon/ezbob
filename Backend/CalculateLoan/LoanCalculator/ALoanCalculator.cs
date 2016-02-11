@@ -260,6 +260,41 @@
 		[ExcludeFromToString]
 		public abstract decimal AverageDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null);
 
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="servicingFeeAmount"></param>
+		/// <param name="createTime"></param>
+		/// <param name="notes"></param>
+		[ExcludeFromToString]
+		public virtual void AttachDistributedFeesToLoanBySchedule(NL_Model model, decimal servicingFeeAmount, DateTime createTime, string notes = "spread (servicing) fee") {
+			int schedulesCount = model.Loan.LastHistory().Schedule.Count;
+			decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
+			decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
+
+			foreach (NL_LoanSchedules s in model.Loan.LastHistory().Schedule) {
+				decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
+				model.Loan.Fees.Add(
+					new NL_LoanFees() {
+						LoanID = model.Loan.LoanID,
+						LoanFeeID = 0,
+						Amount = feeAmount,
+						AssignTime = s.PlannedDate,
+						Notes = notes,
+						LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
+						CreatedTime = createTime, 
+						AssignedByUserID = model.UserID ?? 1
+					});
+
+				s.Fees += feeAmount;
+				s.AmountDue += s.Fees;
+
+				schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
+			}
+		}
+
 		/// <summary>
 		/// Calculates interest rate for specific day based on loan data: 
 		/// 1. Check freeze intervals
@@ -411,7 +446,7 @@
 				decimal initAmount = h.Amount;
 				decimal plannedPrincipal = 0;
 
-				foreach (NL_LoanSchedules s in h.Schedule.Where(s => s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule)) {
+				foreach (NL_LoanSchedules s in h.Schedule.Where(s => !s.IsDeleted())) {
 
 					s.Balance = initAmount - plannedPrincipal;
 					plannedPrincipal += s.Principal;
@@ -446,7 +481,7 @@
 				foreach (NL_LoanSchedulePayments sp in p.SchedulePayments) {
 
 					if (item != null) {
-						itemDeleted = (item.LoanScheduleStatusID == (int)NLScheduleStatuses.DeletedOnReschedule || item.LoanScheduleStatusID == (int)NLScheduleStatuses.ClosedOnReschedule);
+						itemDeleted = item.IsDeleted();
 					}
 
 					if (itemDeleted) {
@@ -487,17 +522,17 @@
 			}
 
 			// add event for accepted and non processed rollovers
-			NL_LoanRollovers aRollover = WorkingModel.Loan.Rollovers.LastOrDefault(r => r.IsAccepted && r.CustomerActionTime.HasValue && r.DeletionTime == null && r.DeletedByUserID == null);
+			NL_LoanRollovers pendingRollover = WorkingModel.Loan.Rollovers.LastOrDefault(r => r.IsAccepted && r.CustomerActionTime.HasValue && r.DeletionTime == null && r.DeletedByUserID == null);
 
-			if (aRollover != null) {
+			if (pendingRollover != null) {
 
-				DateTime acDate = aRollover.CustomerActionTime.Value;
+				DateTime acDate = pendingRollover.CustomerActionTime.Value;
 				var historyEvent = WorkingModel.Loan.Histories.FirstOrDefault(h => h.EventTime.Date.Equals(acDate.Date));
 				this.acceptedRolloverProcessed = true;
 
 				if (historyEvent == null) {
 					acceptedRolloverEvents.Add(new LoanEvent(
-						new DateTime(aRollover.CustomerActionTime.Value.Year, aRollover.CustomerActionTime.Value.Month, aRollover.CustomerActionTime.Value.Day), aRollover));
+						new DateTime(pendingRollover.CustomerActionTime.Value.Year, pendingRollover.CustomerActionTime.Value.Month, pendingRollover.CustomerActionTime.Value.Day), pendingRollover));
 					this.acceptedRollover = acceptedRolloverEvents.LastOrDefault();
 					this.acceptedRolloverProcessed = false;
 				}

@@ -1,9 +1,9 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using PaymentServices.Calculators;
 
 	internal class RolloverReschedulingMethod : AMethod {
 
@@ -43,6 +43,7 @@
 
 			NL_LoanHistory lastHistory = WorkingModel.Loan.LastHistory();
 
+			// 1. create new history
 			NL_LoanHistory newHistory = new NL_LoanHistory {
 				LoanID = lastHistory.LoanID,
 				LoanLegalID = lastHistory.LoanLegalID,
@@ -61,10 +62,10 @@
 			int removedItems = 0;
 			newHistory.RepaymentDate = DateTime.MinValue;
 
-			// mark removed schedules + add new schedules
+			// 2. mark removed schedules + add new schedules
 			foreach (NL_LoanSchedules s in Calculator.schedule.Where(s => s.PlannedDate >= acceptionTime)) {
 
-				s.LoanScheduleStatusID = ((s.Principal - s.PrincipalPaid + s.Interest - s.InterestPaid + s.FeesAssigned - s.FeesPaid) == 0) ? (int)NLScheduleStatuses.DeletedOnReschedule : (int)NLScheduleStatuses.ClosedOnReschedule;
+				s.SetStatusOnRescheduling();
 				s.ClosedTime = acceptionTime;
 
 				removedItems++;
@@ -81,10 +82,10 @@
 					LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 					Position = s.Position,
 					PlannedDate = plannedDate,
-					Principal = (s.Principal - s.PrincipalPaid),
+					Principal = s.Principal, // (s.Principal - s.PrincipalPaid),
 					InterestRate = s.InterestRate,
-					TwoDaysDueMailSent = s.TwoDaysDueMailSent,
-					FiveDaysDueMailSent = s.FiveDaysDueMailSent
+					TwoDaysDueMailSent = false, //s.TwoDaysDueMailSent,
+					FiveDaysDueMailSent = false, //s.FiveDaysDueMailSent
 				};
 
 				Log.Debug("schedule {0} replaced by {1}", s, newSchedule);
@@ -96,39 +97,64 @@
 
 			WorkingModel.Loan.Histories.Add(newHistory);
 
-			List<NL_LoanFees> replacedDistributedFees = new List<NL_LoanFees>();
+			//List<NL_LoanFees> replacedDistributedFees = new List<NL_LoanFees>();
 
-			// mark removed distributed fees + add new distributed fees
+			bool distributedFees = false;
+
+			// 3. mark removed distributed fees + add new distributed fees
 			foreach (NL_LoanFees fee in Calculator.distributedFeesList.Where(f => f.AssignTime.Date >= acceptionTime)) {
 				fee.DisabledTime = acceptionTime;
 				fee.Notes = "disabled on rollover";
-				fee.DeletedByUserID = 1;
+				fee.DeletedByUserID = WorkingModel.UserID ?? 1;
 
-				NL_LoanFees newFee = new NL_LoanFees() {
-					LoanFeeID = 0,
-					Amount = fee.Amount,
-					AssignTime = Calculator.AddRepaymentIntervals(1, fee.AssignTime, intervalType),
-					LoanID = WorkingModel.Loan.LoanID,
-					LoanFeeTypeID = fee.LoanFeeTypeID,
-					AssignedByUserID = fee.AssignedByUserID,
-					CreatedTime = acceptionTime,
-					Notes = fee.Notes
-				};
+				distributedFees = true;
 
-				Log.Debug("fee {0} replaced by {1}", fee, newFee);
+				//NL_LoanFees newFee = new NL_LoanFees() {
+				//	LoanFeeID = 0,
+				//	Amount = fee.Amount,
+				//	AssignTime = Calculator.AddRepaymentIntervals(1, fee.AssignTime, intervalType),
+				//	LoanID = WorkingModel.Loan.LoanID,
+				//	LoanFeeTypeID = fee.LoanFeeTypeID,
+				//	AssignedByUserID = fee.AssignedByUserID,
+				//	CreatedTime = acceptionTime,
+				//	Notes = fee.Notes
+				//};
 
-				replacedDistributedFees.Add(newFee);
+				//Log.Debug("fee {0} replaced by {1}", fee, newFee);
+
+				//replacedDistributedFees.Add(newFee);
 			}
 
-			Calculator.distributedFeesList.AddRange(replacedDistributedFees);
-			WorkingModel.Loan.Fees.AddRange(replacedDistributedFees);
+			//Calculator.distributedFeesList.AddRange(replacedDistributedFees);
+			//WorkingModel.Loan.Fees.AddRange(replacedDistributedFees);
 
+			if (distributedFees) {
+
+				// offer-fees
+				NL_OfferFees offerFees = WorkingModel.Offer.OfferFees.FirstOrDefault();
+
+				if (offerFees != null && offerFees.DistributedPartPercent != null && (decimal)offerFees.DistributedPartPercent == 1) {
+
+					var feeCalculator = new SetupFeeCalculator(offerFees.Percent, null);
+					decimal servicingFeeAmount = feeCalculator.Calculate(newHistory.Amount);
+					decimal servicingFeePaidAmount = WorkingModel.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).Sum(f => f.PaidAmount);
+
+					Log.Debug("servicingFeeAmount: {0}, servicingFeePaidAmount: {1}", servicingFeeAmount, servicingFeePaidAmount); // new "spreaded" amount
+
+					Calculator.AttachDistributedFeesToLoanBySchedule(WorkingModel, (servicingFeeAmount - servicingFeePaidAmount), acceptionTime);
+				}
+			}
+
+			// TODO could be reseted at all??????????????
 			// reset paid amount for deleted/closed schedules and disabled distributed fees 
 			foreach (NL_Payments p in WorkingModel.Loan.Payments) {
 
 				foreach (NL_LoanSchedulePayments sp in p.SchedulePayments) {
-					foreach (NL_LoanSchedules s in Calculator.schedule.Where(s => s.LoanScheduleStatusID == (int)NLScheduleStatuses.DeletedOnReschedule || s.LoanScheduleStatusID == (int)NLScheduleStatuses.ClosedOnReschedule)) {
+					foreach (NL_LoanSchedules s in Calculator.schedule.Where(s => s.IsDeleted())) {
 						if (s.LoanScheduleID == sp.LoanScheduleID) {
+							sp.ResetInterestPaid = sp.PrincipalPaid;
+							sp.ResetPrincipalPaid = sp.PrincipalPaid;
+
 							sp.PrincipalPaid = 0;
 							sp.InterestPaid = 0;
 						}
@@ -138,8 +164,10 @@
 				foreach (NL_LoanFeePayments fp in p.FeePayments) {
 					foreach (NL_LoanFees f in Calculator.distributedFeesList.Where(f => f.DisabledTime.Equals(acceptionTime))) {
 						if (f.LoanFeeID == fp.LoanFeeID) {
+							fp.ResetAmount = fp.Amount;
 							fp.Amount = 0;
-							fp.ResetAmount = 0;
+
+							f.PaidAmount -= (decimal)fp.ResetAmount;
 						}
 					}
 				}

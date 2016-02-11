@@ -11,8 +11,8 @@ GO
 
 CREATE TYPE NL_LoanInterestFreezeList AS TABLE (	
 	[LoanID] BIGINT NOT NULL,
-	[StartDate] DATETIME NULL,
-	[EndDate] DATETIME NULL,
+	[StartDate] DATE NULL,
+	[EndDate] DATE NULL,
 	[InterestRate] DECIMAL(18, 6) NOT NULL,
 	[ActivationDate] DATETIME NULL,
 	[DeactivationDate] DATETIME NULL,

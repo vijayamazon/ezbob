@@ -12,7 +12,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using log4net;
-	using NHibernate;
 	using NHibernate.Linq;
 	using StructureMap;
 
@@ -548,12 +547,12 @@
 				long nlLoanId = serviceInstance.GetLoanByOldID(loan.Id, loan.Customer.Id);
 				if (nlLoanId > 0) {
 					var nlModel = serviceInstance.GetLoanState(loan.Customer.Id, nlLoanId, dateTime, 1);
-					Log.InfoFormat("<<<GetStateAt NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", System.Environment.StackTrace, nlModel, loan);
+					Log.InfoFormat("<<<GetStateAt NL_Compare at : {0} ;  nlModel : {1} loan: {2} >>>", Environment.StackTrace, nlModel, loan);
 				} else {
 					Log.InfoFormat("<<<GetStateAt NL loan for oldid {0} not found >>>", loan.Id);
 				}
 			} catch (Exception) {
-				Log.InfoFormat("<<<GetStateAt NL_Compare Fail at : {0}", System.Environment.StackTrace);
+				Log.InfoFormat("<<<GetStateAt NL_Compare Fail at : {0}", Environment.StackTrace);
 			}
 
 			return result;
@@ -572,7 +571,7 @@
 					Log.InfoFormat("<<<Recalculate NL loan for oldid {0} not found >>>", loan.Id);
 				}
 			} catch (Exception) {
-				Log.InfoFormat("<<< NL_Compare Fail at: {0}", System.Environment.StackTrace);
+				Log.InfoFormat("<<< NL_Compare Fail at: {0}", Environment.StackTrace);
 			}
 
 		} // Recalculate

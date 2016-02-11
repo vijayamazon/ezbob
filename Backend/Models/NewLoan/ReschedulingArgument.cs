@@ -30,6 +30,12 @@
 
 		[DataMember]
 		public bool StopFutureInterest { get; set; } // freeze interest for "outside", starts from ReschedulingDate
+		
+		//[DataMember]
+		//public long NLLoanID { get; set; }  // nl loan ID to re-schedule
+
+		[DataMember]
+		public int? UserID { get; set; } 
 	
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");

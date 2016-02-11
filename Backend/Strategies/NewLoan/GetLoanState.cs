@@ -69,6 +69,9 @@
 
 				// loan
 				Result.Loan = LoanDAL.GetLoan(Result.Loan.LoanID);
+				
+				// offer-fees
+				Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("OfferID", Result.Loan.OfferID));
 
 				// histories
 				Result.Loan.Histories.Clear();
@@ -76,12 +79,12 @@
 
 				// schedules of each history
 				foreach (NL_LoanHistory h in Result.Loan.Histories) {
-					h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure,new QueryParameter("@LoanID", Result.Loan.LoanID));
+					h.Schedule = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure,new QueryParameter("LoanID", Result.Loan.LoanID));
 				}
 
 				// loan fees
 				Result.Loan.Fees.Clear();
-				Result.Loan.Fees.AddRange(DB.Fill<NL_LoanFees>("NL_LoanFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).ToList());
+				Result.Loan.Fees.AddRange(DB.Fill<NL_LoanFees>("NL_LoanFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID)).ToList());
 
 				// filter cnacelled/deleted fees on GetLoanDBState strategy
 				// filter in Calculator according to CalculationDate
@@ -89,7 +92,7 @@
 
 				// interest freezes
 				Result.Loan.FreezeInterestIntervals.Clear();
-				Result.Loan.FreezeInterestIntervals.AddRange(DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)).ToList());
+				Result.Loan.FreezeInterestIntervals.AddRange(DB.Fill<NL_LoanInterestFreeze>("NL_LoanInterestFreezeGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID)).ToList());
 
 				// filter cancelled (deactivated) periods
 				// TODO: take in consideration stateDate
@@ -97,16 +100,16 @@
 				//freezes.ForEach(fr => Result.Loan.FreezeInterestIntervals.Add(fr));
 
 				// loan options
-				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+				Result.Loan.LoanOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID));
 
 				// TODO combine all payments + transactions to one SP kogda nibud'
 
 				// payments
 				Result.Loan.Payments.Clear();
-				Result.Loan.Payments.AddRange(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)));
+				Result.Loan.Payments.AddRange(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID)));
 
-				var schp = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
-				var fps = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID));
+				var schp = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID));
+				var fps = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID));
 
 				foreach (NL_Payments p in Result.Loan.Payments) {
 					p.SchedulePayments.Clear();
@@ -116,8 +119,21 @@
 					p.FeePayments.AddRange(fps.Where(fp=>fp.PaymentID == p.PaymentID).ToList());
 				}
 
+				// set paid amount for each fee
+				foreach (NL_LoanFees fee in Result.Loan.Fees) {
+					fee.PaidAmount = fps.Where(fp => fp.LoanFeeID == fee.LoanFeeID).Sum(fp => fp.Amount);
+				}
+
+				// set paid amount for each fee
+				foreach (NL_LoanHistory h in Result.Loan.Histories) {
+					foreach (NL_LoanSchedules s in h.Schedule) {
+						s.InterestPaid = schp.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.InterestPaid);
+						s.PrincipalPaid = schp.Where(sp => sp.LoanScheduleID == s.LoanScheduleID).Sum(sp => sp.PrincipalPaid);
+					}
+				}
+
 				Result.Loan.Rollovers.Clear();
-				Result.Loan.Rollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", Result.Loan.LoanID)));
+				Result.Loan.Rollovers.AddRange(DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID)));
 
 				// accepted rollover
 				Result.Loan.AcceptedRollovers.AddRange(Result.Loan.Rollovers.Where(r => r.IsAccepted && r.CustomerActionTime.HasValue &&r.DeletionTime==null && r.DeletedByUserID==null));

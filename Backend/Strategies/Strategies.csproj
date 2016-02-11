@@ -285,6 +285,7 @@
     <Compile Include="NewLoan\DAL\LoanFees.cs" />
     <Compile Include="NewLoan\Migration\MigrateLoans.cs" />
     <Compile Include="NewLoan\SaveFee.cs" />
+    <Compile Include="NewLoan\SaveLoanStateToDB.cs" />
     <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="StoredProcs\GetCustomerCompanyID.cs" />
     <Compile Include="Tasks\Annual77ANotifier.cs" />

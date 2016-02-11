@@ -112,7 +112,26 @@
 		//[DataMember]
 		//[NonTraversable]
 		//public bool LateFeesAttached { get; set; }
+			
+		public bool IsDeleted() {
+			if (LoanScheduleStatusID.Equals((int)NLScheduleStatuses.ClosedOnReschedule) 
+				|| LoanScheduleStatusID.Equals((int)NLScheduleStatuses.DeletedOnReschedule)
+				|| LoanScheduleStatusID.Equals((int)NLScheduleStatuses.LateDeletedOnReschedule)) 
+				return true;
 
+			return false;
+		}
+		
+		public void SetStatusOnRescheduling() {
+			if ((Principal - PrincipalPaid + Interest - InterestPaid + FeesAssigned - FeesPaid) == 0) {
+				LoanScheduleStatusID = (int)NLScheduleStatuses.DeletedOnReschedule;
+			} else if ((Principal - PrincipalPaid) > 0 || (Interest - InterestPaid) > 0) {
+				LoanScheduleStatusID = (int)NLScheduleStatuses.ClosedOnReschedule;
+			} else if (LoanScheduleStatusID.Equals((int)NLScheduleStatuses.Late)) {
+				LoanScheduleStatusID = (int)NLScheduleStatuses.LateDeletedOnReschedule;
+			}
+		}
+		
 		public NL_LoanSchedules ShallowCopy() {
 			NL_LoanSchedules cloned = (NL_LoanSchedules)MemberwiseClone();
 			return cloned;

@@ -57,7 +57,6 @@
 				}
 
 				try {
-
 					CashReqModel crModel = DB.FillFirst<CashReqModel>("select cr.CashRequestID, dd.lastDesicionID DecisionID, o.lastOffer OfferID " +
 						"from  NL_CashRequests cr join " +
 						"(select MAX([DecisionID]) as lastDesicionID, d.CashRequestID as CRID from [dbo].[NL_Decisions] d join [dbo].[NL_CashRequests] cr1 " +
