@@ -71,7 +71,7 @@
 
 		internal LoanEvent calculationDateEventEnd;
 
-		protected static ASafeLog Log { get { return Library.Instance.Log; } }
+		public ASafeLog Log { get { return Library.Instance.Log ?? new ConsoleLog(); }}
 
 		public bool WriteToLog { get; set; }
 

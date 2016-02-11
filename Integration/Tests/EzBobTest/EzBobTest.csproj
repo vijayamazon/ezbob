@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\CallCredit\Callcredit.CRBSB.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\ExcelLibrary\ExcelLibrary.dll</HintPath>
@@ -101,6 +105,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Extensions" />
@@ -118,6 +123,7 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="Calculator\ExcelCalculator.cs" />
     <Compile Include="OpenPlatformTests\Core\TestBase.cs" />
     <Compile Include="OpenPlatformTests\Investor\TestInvestorRules.cs" />
     <Compile Include="OpenPlatformTests\Investor\TestOpenPlatformStrategies.cs" />
@@ -151,6 +157,7 @@
     <Compile Include="TestUpdateDailyLoanStats.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
+    <Compile Include="Calculator\TestLoanCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\App\EzReporting\Reports\Reports.csproj">
@@ -373,6 +380,9 @@
       <Link>connection-strings.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

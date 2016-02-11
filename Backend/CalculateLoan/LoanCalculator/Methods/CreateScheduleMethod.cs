@@ -62,7 +62,11 @@
 
 			AddFeesToScheduleItems();
 
-			WorkingModel.Loan.Histories.Insert(0, Calculator.currentHistory);
+			//WorkingModel.Loan.Histories.Insert(0, Calculator.currentHistory);
+
+		    var index = WorkingModel.Loan.Histories.FindIndex(x => x.LoanHistoryID == Calculator.currentHistory.LoanHistoryID);
+		    WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
+
 		}
 
 		/// <summary>

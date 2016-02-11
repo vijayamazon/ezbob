@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 
-	interface ILoanCalculator {
+    public interface ILoanCalculator {
 
 		void CreateSchedule();  // result in model updated
 
