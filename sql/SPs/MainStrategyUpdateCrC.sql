@@ -68,9 +68,11 @@ BEGIN
 	WHERE
 		Id = @CustomerID
 
-	UPDATE CashRequests SET
-		OfferStart = CASE WHEN @DecidedToApprove = 1 THEN @Now ELSE NULL END,
-		OfferValidUntil = CASE WHEN @DecidedToApprove = 1 THEN @OfferValidUntil ELSE NULL END,
+	UPDATE CashRequests SET		
+		--OfferStart = CASE WHEN @DecidedToApprove = 1 THEN @Now ELSE NULL END,
+		--OfferValidUntil = CASE WHEN @DecidedToApprove = 1 THEN @OfferValidUntil ELSE NULL END,	
+		OfferStart = @Now,	
+		OfferValidUntil = @OfferValidUntil,		
 		SystemDecision = @SystemDecision,
 		SystemCalculatedSum = @SystemCalculatedSum,
 		SystemDecisionDate = @Now,
