@@ -61,7 +61,7 @@
 						continue;
 					} // if
 
-					this.serviceClient.Instance.CompanyFilesUpload(this.customer.Id, file.FileName, content, sMimeType, false);
+					this.serviceClient.Instance.CompanyFilesUpload(this.customer.Id, OneUploadLimitation.FixFileName(file.FileName), content, sMimeType, false);
 				} // if
 			} // for
 
@@ -94,7 +94,7 @@
 						continue;
 					} // if
 
-					this.serviceClient.Instance.CompanyFilesUpload(this.customer.Id, file.FileName, content, sMimeType, true);
+					this.serviceClient.Instance.CompanyFilesUpload(this.customer.Id, OneUploadLimitation.FixFileName(file.FileName), content, sMimeType, true);
 				} // if
 			} // for
 

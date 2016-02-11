@@ -165,5 +165,10 @@
 			return false;
 		} // Contains
 
+
+		public static string FixFileName(string filename) {
+			// Replace invalid characters with "_" char.
+			return System.Text.RegularExpressions.Regex.Replace(filename, @"[^\w\.-]", "_");
+		}
 	} // class OneUploadLimitation
 } // namespace
