@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.ManualDecision {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 	using DbConstants;
@@ -234,7 +235,11 @@
 			this.decisionToApply.Customer.NumRejects = 1 + this.currentState.NumOfPrevRejections;
 
 			this.decisionToApply.CashRequest.RejectionReasons.Clear();
-			this.decisionToApply.CashRequest.RejectionReasons.AddRange(this.decisionModel.rejectionReasons);
+			List<NL_DecisionRejectReasons> nlRejectReasonsList = new List<NL_DecisionRejectReasons>();
+			if (this.decisionModel.rejectionReasons != null && this.decisionModel.rejectionReasons.Any()) {
+				this.decisionToApply.CashRequest.RejectionReasons.AddRange(this.decisionModel.rejectionReasons);
+				nlRejectReasonsList = this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToList();
+			}
 
 			if (!SaveDecision<ManuallyReject>())
 				return false;
@@ -250,7 +255,7 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Reject;
 
-			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToList());
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, nlRejectReasonsList);
 			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
 			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
 			try {

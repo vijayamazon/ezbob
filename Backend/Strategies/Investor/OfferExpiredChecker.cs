@@ -1,13 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.Investor {
 	using System;
-	using DbConstants;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
-	using Ezbob.Backend.Strategies.SalesForce;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.ManualDecision;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
-	using SalesForceLib.Models;
 
 	public class OfferExpiredChecker : AStrategy {
 		public OfferExpiredChecker() {
@@ -33,7 +30,6 @@
 				int? investorID = sr["InvestorID"];
 				decimal investmentPercent = sr["InvestmentPercent"];
 				int? fundingBankAccountID = sr["InvestorBankAccountID"];
-				string customerEmail = sr["Email"];
 				string decisionStr = sr["Decision"];
 				CreditResultStatus result;
 				if (!Enum.TryParse(decisionStr, out result)) {
@@ -48,7 +44,7 @@
 						break;
 					case CreditResultStatus.PendingInvestor:
 						MarkOfferAsExpired(cashRequestID);
-						RejectCustomer(customerID, cashRequestID, customerEmail);
+						RejectCustomer(customerID, cashRequestID);
 						break;
 					default:
 						Log.Error("Unsupported decision {0} for request {1} customer {2} ", decisionStr, cashRequestID, customerID);
@@ -60,33 +56,21 @@
 			return ActionResult.Continue;
 		}//HandleOneExpired
 
-		private void RejectCustomer(int customerID, long cashRequestID, string customerEmail) {
-			MainStrategyUpdateCrC sp = new MainStrategyUpdateCrC(
-				this.now,
-				customerID,
-				cashRequestID,
-				new AutoDecisionResponse(customerID) {
-					AutoRejectReason = "Pending investor offer expired",
-					CreditResult = CreditResultStatus.Rejected,
-					Decision = DecisionActions.Reject,
-					SystemDecision = SystemDecision.Reject,
-					UserStatus = Status.Rejected,
-					DecisionName = "Rejection",
-				},
-				DB,
-				Log
-			);
+		private void RejectCustomer(int customerID, long cashRequestID) {
+			var aiar = new LoadApplicationInfo(customerID, cashRequestID, DateTime.UtcNow);
+			aiar.Execute();
 
-			sp.ExecuteNonQuery();
+			var stra = new ApplyManualDecision(new DecisionModel {
+				customerID = customerID,
+				status = EZBob.DatabaseLib.Model.Database.CreditResultStatus.Rejected,
+				underwriterID = 1,
+				attemptID = Guid.NewGuid().ToString("N"),
+				cashRequestID = cashRequestID,
+				cashRequestRowVersion = aiar.Result.CashRequestRowVersion,
+				reason = "Open platform offer expired",
+			});
 
-			new UpdateOpportunity(customerID, new OpportunityModel {
-				Email = customerEmail,
-				DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
-				DealLostReason = "Auto Reject",
-				CloseDate = DateTime.UtcNow,
-			}).Execute();
-
-			new RejectUser(customerID, true).Execute();
+			stra.Execute();
 		}//RejectCustomer
 
 		private void MarkOfferAsExpired(long cashRequestID) {
