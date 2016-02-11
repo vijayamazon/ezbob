@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
-	using System;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
@@ -19,14 +18,16 @@
 			CashRequestOriginator? cashRequestOriginator,
 			long cashRequestID,
 			long nlCashRequestID,
-			string tag,
 			int homeOwnerCap,
 			int notHomeOwnerCap,
 			int smallLoanScenarioLimit,
 			bool aspireToMinSetupFee,
 			TypeOfBusiness typeOfBusiness,
 			int customerOriginID,
-			MonthlyRepaymentData requestedLoan
+			MonthlyRepaymentData requestedLoan,
+			int delay,
+			int offerValidHours,
+			string tag
 		) : base(outerContextDescription) {
 			this.backdoorEnabled = backdoorEnabled;
 			this.customerID = customerID;
@@ -36,7 +37,6 @@
 			this.cashRequestOriginator = cashRequestOriginator ?? CashRequestOriginator.Other;
 			this.cashRequestID = cashRequestID;
 			this.nlCashRequestID = nlCashRequestID;
-			this.tag = tag;
 			this.homeOwnerCap = homeOwnerCap;
 			this.notHomeOwnerCap = notHomeOwnerCap;
 			this.smallLoanScenarioLimit = smallLoanScenarioLimit;
@@ -44,6 +44,9 @@
 			this.typeOfBusiness = typeOfBusiness;
 			this.customerOriginID = customerOriginID;
 			this.requestedLoan = requestedLoan;
+			this.delay = delay;
+			this.offerValidHours = offerValidHours;
+			this.tag = tag;
 
 			BackdoorLogicApplied = false;
 
@@ -90,35 +93,33 @@
 
 			Log.Debug("Using back door simple for {0} as: {1}.", OuterContextDescription, backdoorSimpleDetails);
 
-			BackdoorSimpleApprove bsa = backdoorSimpleDetails as BackdoorSimpleApprove;
+			backdoorSimpleDetails.SetAdditionalCustomerData(
+				this.cashRequestID,
+				this.nlCashRequestID,
+				this.smallLoanScenarioLimit,
+				this.aspireToMinSetupFee,
+				this.typeOfBusiness,
+				this.customerOriginID,
+				this.requestedLoan,
+				this.offerValidHours
+			);
 
-			if (bsa != null) {
-				bsa.SetAdditionalCustomerData(
-					OuterContextDescription,
-					this.cashRequestID,
-					this.nlCashRequestID,
-					this.tag,
-					this.homeOwnerCap,
-					this.notHomeOwnerCap,
-					this.smallLoanScenarioLimit,
-					this.aspireToMinSetupFee,
-					this.typeOfBusiness,
-					this.customerOriginID,
-					this.requestedLoan
-				);
-			} // if
-
-			bool success = backdoorSimpleDetails.SetResult(AutoDecisionResponse);
-
-			if (!success)
+			if (!backdoorSimpleDetails.SetResult(AutoDecisionResponse))
 				return StepResults.NotApplied;
+
+			Medal = backdoorSimpleDetails.Medal;
+			OfferResult = backdoorSimpleDetails.OfferResult;
+
+			Medal.SaveToDb(this.cashRequestID, this.nlCashRequestID, this.tag, DB);
+
+			OfferResult.SaveToDb(DB);
 
 			BackdoorLogicApplied = true;
 
-			if (backdoorSimpleDetails.Decision != DecisionActions.Approve) {
-				Medal = CalculateMedal();
+			if (backdoorSimpleDetails.Decision != DecisionActions.Approve)
 				return StepResults.Applied;
-			} // if
+
+			BackdoorSimpleApprove bsa = backdoorSimpleDetails as BackdoorSimpleApprove;
 
 			if (bsa == null) { // Should never happen because of the "if" condition.
 				BackdoorLogicApplied = false;
@@ -126,9 +127,6 @@
 			} // if
 
 			BackdoorInvestorID = bsa.InvestorID;
-
-			Medal = bsa.Medal;
-			OfferResult = bsa.OfferResult;
 
 			Medal.MedalClassification = bsa.MedalClassification;
 			Medal.OfferedLoanAmount = bsa.ApprovedAmount;
@@ -182,25 +180,13 @@
 			return ABackdoorSimpleDetails.Create(
 				this.customerID,
 				this.customerEmail,
-				this.customerOwnsProperty
+				this.customerOwnsProperty,
+				this.requestedLoan.RequestedAmount,
+				this.homeOwnerCap,
+				this.notHomeOwnerCap,
+				this.delay
 			);
 		} // CreateBackdoor
-
-		private MedalResult CalculateMedal() {
-			var instance = new CalculateMedal(
-				this.customerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				DateTime.UtcNow,
-				false,
-				true
-			) {
-				Tag = this.tag,
-			};
-			instance.Execute();
-
-			return instance.Result;
-		} // CalculateMedal
 
 		private readonly bool backdoorEnabled;
 		private readonly int customerID;
@@ -210,7 +196,6 @@
 		private readonly CashRequestOriginator cashRequestOriginator;
 		private readonly long cashRequestID;
 		private readonly long nlCashRequestID;
-		private readonly string tag;
 		private readonly int homeOwnerCap;
 		private readonly int notHomeOwnerCap;
 		private readonly int smallLoanScenarioLimit;
@@ -218,5 +203,8 @@
 		private readonly TypeOfBusiness typeOfBusiness;
 		private readonly int customerOriginID;
 		private readonly MonthlyRepaymentData requestedLoan;
+		private readonly int delay;
+		private readonly int offerValidHours;
+		private readonly string tag;
 	} // class ApplyBackdoorLogic
 } // namespace

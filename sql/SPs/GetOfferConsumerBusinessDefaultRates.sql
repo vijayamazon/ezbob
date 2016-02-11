@@ -36,7 +36,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DECLARE @GradeID INT
-	DECLARE @GradeScore DECIMAL(18, 6)
+	DECLARE @GradeScore DECIMAL(18, 3)
 	DECLARE @ProbabilityOfDefault DECIMAL(18, 6)
 
 	------------------------------------------------------------------------------

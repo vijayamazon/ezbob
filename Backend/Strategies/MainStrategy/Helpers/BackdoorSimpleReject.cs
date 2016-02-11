@@ -1,12 +1,19 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Helpers {
 	using System.Text.RegularExpressions;
-	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using EZBob.DatabaseLib.Model.Database;
 
 	class BackdoorSimpleReject : ABackdoorSimpleDetails {
-		public static BackdoorSimpleReject Create(string backdoorCode, int customerID) {
+		public static BackdoorSimpleReject Create(
+			string backdoorCode,
+			int customerID,
+			bool ownsProperty,
+			decimal requestedAmount,
+			int homeOwnerCap,
+			int notHomeOwnerCap,
+			int delay
+		) {
 			var match = regex.Match(backdoorCode);
 
 			if (!match.Success) {
@@ -15,16 +22,23 @@
 			} // if
 
 			return new BackdoorSimpleReject(
+				homeOwnerCap,
+				notHomeOwnerCap,
 				customerID,
-				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0,
-				match.Groups[2].Value == "a"
+				match.Groups[1].Value == "s" ? delay : 0,
+				match.Groups[2].Value == "a",
+				ownsProperty,
+				requestedAmount
 			);
 		} // Create
 
 		public override bool SetResult(AutoDecisionResponse response) {
-			Log.Debug("Back door simple flow: rejecting...");
+			Log.Debug("Back door simple flow: rejecting customer {0}...", this.customerID);
 
-			CalculateMedalAndOffer(null, 0);
+			if (!CalculateMedalAndOffer()) {
+				Log.Debug("Back door simple flow: failed to rejected customer {0} because of medal/offer.", this.customerID);
+				return false;
+			} // if
 
 			response.CreditResult = CreditResultStatus.Rejected;
 			response.UserStatus = Status.Rejected;
@@ -36,7 +50,7 @@
 
 			DoDelay();
 
-			Log.Debug("Back door simple flow: rejected.");
+			Log.Debug("Back door simple flow: rejected customer {0}.", this.customerID);
 
 			return true;
 		} // SetResults
@@ -57,10 +71,14 @@
 		} // ToString
 
 		private BackdoorSimpleReject(
+			int homeOwnerCap,
+			int notHomeOwnerCap,
 			int customerID,
 			int delay,
-			bool hasApprovalChance
-		) : base(customerID, DecisionActions.Reject, delay) {
+			bool hasApprovalChance,
+			bool ownsProperty,
+			decimal requestedAmount
+		) : base(homeOwnerCap, notHomeOwnerCap, customerID, DecisionActions.Reject, delay, ownsProperty, requestedAmount) {
 			this.hasApprovalChance = hasApprovalChance;
 		} // constructor
 

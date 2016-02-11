@@ -4,11 +4,8 @@
 	using System.Linq;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
-	using DbConstants;
-	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -30,7 +27,6 @@
 			this.customerID = customerID;
 			this.cashRequestID = cashRequestID;
 			this.nlCashRequestID = nlCashRequestID;
-			this.tag = tag;
 			this.autoRejectionOutput = autoRejectionOutput ?? new AutoRejectionOutput();
 			this.requestedLoan = requestedLoan;
 			this.homeOwnerCap = homeOwnerCap;
@@ -47,13 +43,18 @@
 
 			this.allLoanSources = ((LoanSourceName[])Enum.GetValues(typeof(LoanSourceName))).Select(x => (int)x).ToArray();
 
-			ForcedProposedAmount = 0;
+			this.medalAgent = new CalculateMedal(
+				this.customerID,
+				this.cashRequestID,
+				this.nlCashRequestID,
+				DateTime.UtcNow,
+				false,
+				true
+			) { Tag = tag, };
 		} // constructor
 
-		public int ForcedProposedAmount { get; set; }
-
 		[StepOutput]
-		public MedalResult Medal { get { return this.medalAgent == null ? null : this.medalAgent.Result; } }
+		public MedalResult Medal { get { return this.medalAgent.Result; } }
 
 		[StepOutput]
 		public OfferResult OfferResult { get; private set; }
@@ -74,7 +75,7 @@
 				return StepResults.Failed;
 			} // if
 
-			CalculateMedal();
+			this.medalAgent.Execute();
 
 			switch (this.autoRejectionOutput.FlowType) {
 			case AutoDecisionFlowTypes.LogicalGlue:
@@ -109,21 +110,6 @@
 			this.outcome = "'success'";
 			return StepResults.Success;
 		} // Run
-
-		private void CalculateMedal() {
-			this.medalAgent = new CalculateMedal(
-				this.customerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				DateTime.UtcNow,
-				false,
-				true
-			) {
-				Tag = this.tag,
-			};
-
-			this.medalAgent.Execute();
-		} // CalculateMedal
 
 		private void CreateLogicalOffer() {
 			var offerIsImpossibleReasons = new List<string>();
@@ -169,7 +155,7 @@
 			this.gradeID = grsp.GradeID;
 			this.subGradeID = grsp.SubGradeID;
 
-			ProposedAmount = ForcedProposedAmount > 0 ? ForcedProposedAmount : GetLogicalProposedAmount(grsp);
+			ProposedAmount = GetLogicalProposedAmount(grsp);
 
 			if (ProposedAmount <= 0) {
 				CreateErrorResult("Proposed amount is not positive for {0}, no offer.", OuterContextDescription);
@@ -259,15 +245,10 @@
 		} // GetLogicalProposedAmount
 
 		private void CreateUnlogicalOffer() {
-			if ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null)) {
-				CreateErrorResult("Medal calculation failed.");
-				return;
-			} // if
-
 			this.medalAgent.Notify();
 
 			if (Medal.HasError) {
-				CreateErrorResult("Error calculating medal.");
+				CreateErrorResult("Error calculating medal for {0}.", OuterContextDescription);
 				return;
 			} // if
 
@@ -277,7 +258,7 @@
 				new QueryParameter("CustomerId", this.customerID)
 			);
 
-			ProposedAmount = ForcedProposedAmount > 0 ? ForcedProposedAmount : Math.Min(
+			ProposedAmount = Math.Min(
 				Medal.RoundOfferedAmount(),
 				isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
 			);
@@ -318,134 +299,57 @@
 
 			this.repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
 
-			sr = DB.GetFirst("GetLoanTypeAndDefault", CommandSpecies.StoredProcedure, new QueryParameter("@LoanTypeID"));
+			var loader = new LoadOfferRanges(
+				ProposedAmount,
+				Medal.NumOfLoans > 0,
+				Medal.MedalClassification,
+				DB,
+				Log
+			).Execute();
 
-			this.loanTypeID = sr.IsEmpty ? 0 : sr["DefaultLoanTypeID"];
-
-			if (this.loanTypeID <= 0) {
-				CreateErrorResult("Default loan type not detected for {0}, no offer.", OuterContextDescription);
-				return;
-			} // if
-
-			sr = DB.GetFirst(
-				"AV_OfferInterestRateRange",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Medal", Medal.MedalClassification.ToString())
-			);
-
-			if (sr.IsEmpty) {
+			if (!loader.Success) {
 				CreateErrorResult(
-					"Failed to load medal {0} interest rate range for {1}.",
-					Medal.MedalClassification,
+					"Failed to load default loan type or loan parameters ranges {0}, no offer.",
 					OuterContextDescription
 				);
 				return;
 			} // if
 
-			this.minInterestRate = sr["MinInterestRate"] / 100.0M;
-			this.maxInterestRate = sr["MaxInterestRate"] / 100.0M;
-
-			sr = DB.GetFirst(
-				"LoadOfferRanges",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Amount", ProposedAmount),
-				new QueryParameter("@IsNewLoan", Medal.NumOfLoans < 1)
-			);
-
-			if (sr.IsEmpty) {
-				CreateErrorResult(
-					"Failed to load {0} amount of {1} set up fee range for {2}.",
-					Medal.NumOfLoans > 0 ? "repeating" : "new",
-					ProposedAmount,
-					OuterContextDescription
-				);
-				return;
-			} // if
-
-			this.minSetupFee = sr["MinSetupFee"];
-			this.maxSetupFee = sr["MaxSetupFee"];
+			this.loanTypeID = loader.LoanTypeID;
+			this.minInterestRate = loader.InterestRate.Min;
+			this.maxInterestRate = loader.InterestRate.Max;
+			this.minSetupFee = loader.SetupFee.Min;
+			this.maxSetupFee = loader.SetupFee.Max;
 
 			Calculate();
 		} // CreateUnlogicalOffer
 
 		private void Calculate() {
-			var calculatorModel = InitCalcualtorModel();
+			var calc = new OfferCalculator(
+				this.autoRejectionOutput.FlowType,
+				this.customerID,
+				LoanSourceID,
+				ProposedAmount,
+				this.repaymentPeriod,
+				LoadLoanCount() > 0,
+				this.aspireToMinSetupFee,
+				this.smallLoanScenarioLimit,
+				this.minInterestRate,
+				this.maxInterestRate,
+				this.minSetupFee,
+				this.maxSetupFee,
+				Log
+			).Calculate();
 
-			if (calculatorModel == null)
-				return;
-
-			var calculator = new PricingModelCalculator(this.customerID, calculatorModel) {
-				ThrowExceptionOnError = false,
-				CalculateApr = false,
-				TargetLoanSource = (LoanSourceName)LoanSourceID
-			};
-			calculator.Execute();
-
-			if (!string.IsNullOrWhiteSpace(calculator.Error)) {
-				CreateErrorResult("Calculator error '{0}' for {1}, no offer.", calculator.Error, OuterContextDescription);
-				return;
-			} // if
-
-			PricingSourceModel calculatorOutput = (calculatorModel.PricingSourceModels == null)
-				? null
-				: calculatorModel.PricingSourceModels.FirstOrDefault(
-					r => r.IsPreferable && ((int)r.LoanSource == LoanSourceID)
-				);
-
-			if (calculatorOutput == null) {
-				CreateErrorResult(
-					"Calculator output not found for loan source '{0}' for {1}, no offer.",
-					LoanSourceID,
-					OuterContextDescription
-				);
+			if (!calc.Success) {
+				CreateErrorResult("Calculator error for {0}, no offer.", OuterContextDescription);
 				return;
 			} // if
 
 			CreateOfferResult();
-			OfferResult.InterestRate = calculatorOutput.InterestRate;
-			OfferResult.SetupFee = calculatorOutput.SetupFee * 100.0M;
-
-			if ((this.minInterestRate <= OfferResult.InterestRate) && (OfferResult.InterestRate <= this.maxInterestRate)) {
-				OfferResult.InterestRate *= 100.0M;
-				return;
-			} // if
-
-			if ((this.minSetupFee == this.maxSetupFee) || !this.aspireToMinSetupFee)
-				OfferResult.InterestRate = this.minInterestRate * 100.0M;
-			else
-				OfferResult.InterestRate = this.maxInterestRate * 100.0M;
+			OfferResult.InterestRate = calc.InterestRate * 100.0M;
+			OfferResult.SetupFee = calc.SetupFee * 100.0M;
 		} // Calculate
-
-		private PricingModelModel InitCalcualtorModel() {
-			PricingCalcuatorScenarioNames scenarioName;
-
-			int loanCount = LoadLoanCount();
-
-			if (ProposedAmount <= this.smallLoanScenarioLimit)
-				scenarioName = PricingCalcuatorScenarioNames.SmallLoan;
-			else if (loanCount < 1)
-				scenarioName = PricingCalcuatorScenarioNames.BasicNew;
-			else
-				scenarioName = PricingCalcuatorScenarioNames.BasicRepeating;
-
-			var generator = new GetPricingModelModel(this.customerID, scenarioName) { LoadFromLastCashRequest = false, };
-			generator.Execute();
-
-			if (!string.IsNullOrWhiteSpace(generator.Error)) {
-				CreateErrorResult(
-					"Init calculator model error '{0}' for {1}, no offer.",
-					generator.Error,
-					OuterContextDescription
-				);
-				return null;
-			} // if
-
-			generator.Model.LoanAmount = ProposedAmount;
-			generator.Model.SetupFeePercents = this.aspireToMinSetupFee ? this.minSetupFee : this.maxSetupFee;
-			generator.Model.LoanTerm = this.repaymentPeriod;
-
-			return generator.Model;
-		} // InitCalculatorModel
 
 		private int LoadLoanCount() {
 			if (this.autoRejectionOutput.FlowType == AutoDecisionFlowTypes.LogicalGlue) {
@@ -462,9 +366,7 @@
 				} // try
 			} // if
 
-			return ((this.medalAgent == null) || this.medalAgent.HasError || (Medal == null) || Medal.HasError)
-				? 0
-				: Medal.NumOfLoans;
+			return Medal.HasError ? 0 : Medal.NumOfLoans;
 		} // LoadLoanCount
 
 		private void CreateErrorResult(string format, params object[] args) {
@@ -505,7 +407,6 @@
 		private readonly int customerID;
 		private readonly long cashRequestID;
 		private readonly long nlCashRequestID;
-		private readonly string tag;
 		private readonly AutoRejectionOutput autoRejectionOutput;
 		private readonly MonthlyRepaymentData requestedLoan;
 		private readonly int homeOwnerCap;
@@ -514,7 +415,7 @@
 		private readonly bool aspireToMinSetupFee;
 
 		// Intermediate data + holds medal result (output).
-		private CalculateMedal medalAgent;
+		private readonly CalculateMedal medalAgent;
 
 		// Intermediate data filled differently by Logical Glue/Internal flows.
 		// Used as pricing calculator input (and some of them - as output).

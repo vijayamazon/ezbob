@@ -30,8 +30,8 @@
 			sr.Stuff(this.model);
 
 			Log.Msg(
-				"Consumer: score {0}, default rate {1}. Business: score {2}, default rate {3}. " +
-				"Grade: {4} by score {5} with probability of default {6}",
+				"Pricing model default rates. Consumer: score {0}, default rate {1}. " +
+				"Business: score {2}, default rate {3}. Grade: {4} by score {5} with probability of default {6}",
 				this.model.ConsumerScore,
 				this.model.ConsumerDefaultRate.ToString("P4"),
 				this.model.CompanyScore,
