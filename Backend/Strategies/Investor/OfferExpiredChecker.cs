@@ -73,7 +73,7 @@
 			stra.Execute();
 		}//RejectCustomer
 
-		private void MarkOfferAsExpired(long cashRequestID) {
+		public void MarkOfferAsExpired(long cashRequestID) {
 			DB.ExecuteNonQuery(@"UPDATE 
 										CashRequests 
 									 SET 
@@ -83,7 +83,7 @@
 					CommandSpecies.Text);
 		}//MarkOfferAsExpired
 
-		private int UpdateSystemBalance(int? investorID, int? fundingBankAccountID, decimal creditSum, decimal investmentPercent, long cashRequestID) {
+		public int UpdateSystemBalance(int? investorID, int? fundingBankAccountID, decimal creditSum, decimal investmentPercent, long cashRequestID) {
 			if (investorID.HasValue && fundingBankAccountID.HasValue) {
 				var addInvestorSystemBalance = new AddInvestorSystemBalance(fundingBankAccountID.Value, this.now, creditSum * investmentPercent,
 					null, cashRequestID, null, null, "Offer expired", 1, this.now);

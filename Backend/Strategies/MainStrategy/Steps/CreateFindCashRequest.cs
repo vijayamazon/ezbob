@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Steps {
 	using System;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.MainStrategy.Exceptions;
 	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.NewLoan;
@@ -60,6 +61,8 @@
 		} // ExecuteStep
 
 		private void Create() {
+			ReleaseOpenPlatfromOffer();
+
 			try {
 				this.transaction = DB.GetPersistentTransaction();
 
@@ -93,8 +96,45 @@
 				CashRequestID = 0;
 				NLCashRequestID = 0;
 			} // try
-		} // Create
+		}// Create
 
+		private void ReleaseOpenPlatfromOffer() {
+			try {
+				switch (this.cashRequestOriginator) {
+					case CashRequestOriginator.NewCreditLineBtn:
+					case CashRequestOriginator.NewCreditLineSkipAll:
+					case CashRequestOriginator.NewCreditLineSkipAndGoAuto:
+					case CashRequestOriginator.NewCreditLineUpdateAndGoAuto:
+					case CashRequestOriginator.NewCreditLineUpdateAndGoManual:
+						DB.ForEachRowSafe(HandleOneExpired, "I_GetLastCashRequestExpired", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID));
+						
+						break;
+				default:
+						return;
+				}//switch
+			} catch (Exception ex) {
+				Log.Error(ex, "Failed to release the open platform previous offer for customer {0}", this.customerID);
+			}//try
+		}//ReleaseOpenPlatfromOffer
+
+		private ActionResult HandleOneExpired(SafeReader sr, bool arg2) {
+			bool isOP = sr["IsOpenPlatform"];
+			bool isApproved = sr["IsApproved"];
+			if (isApproved && isOP) {
+				OfferExpiredChecker checker = new OfferExpiredChecker();
+				long cashRequestID = sr["CashRequestID"];
+				checker.MarkOfferAsExpired(cashRequestID);
+				checker.UpdateSystemBalance(sr["InvestorID"], 
+					sr["FundingBankAccountID"], 
+					sr["CreditSum"], 
+					sr["InvestmentPercent"], 
+					cashRequestID);
+			}
+			return ActionResult.Continue;
+		}//HandleOneExpired
+
+
+		
 		private void AddOpportunity(int cashRequestCount, decimal? lastLoanAmount) {
 			bool addOpportunity = 
 				(this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) &&
