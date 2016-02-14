@@ -12,6 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using log4net;
+	using NHibernate;
 	using NHibernate.Linq;
 	using StructureMap;
 
@@ -38,7 +39,6 @@
 		/// Заплатить за кредит. Платёж может быть произвольный. Early, On time, Late.
 		/// Perform loan payment. Payment can be manual. Early, On time, Late.
 		/// </summary>
-		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		public virtual decimal PayLoan(
 			Loan loan,
 			string transId,

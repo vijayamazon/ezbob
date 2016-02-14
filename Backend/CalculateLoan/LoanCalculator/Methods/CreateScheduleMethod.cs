@@ -64,9 +64,6 @@
 
 			int index = WorkingModel.Loan.Histories.IndexOf(Calculator.currentHistory);
 			WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
-		    var index = WorkingModel.Loan.Histories.FindIndex(x => x.LoanHistoryID == Calculator.currentHistory.LoanHistoryID);
-		    WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
-
 		}
 
 		/// <summary>
