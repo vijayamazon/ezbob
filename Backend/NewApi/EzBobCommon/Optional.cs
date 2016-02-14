@@ -10,7 +10,7 @@ namespace EzBobCommon {
     /// Implements IEnumerable to support Linq.<br/>
     /// Implements implicit casting to Optional.<br/>
     /// Implements explicit casting to T.<br/>
-    /// Look also on <see cref="IfNotEmpty"/> and <see cref="IfEmpty"/>.<br/>
+    /// Look also on <see cref="IfNotEmpty"/>, <see cref="IfEmpty"/> and <see cref="Map{V}"/>.<br/>
     /// There is an extension method <code>AsOptional()</code> to convert anything to optional
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -117,6 +117,29 @@ namespace EzBobCommon {
             }
 
             return this;
+        }
+
+        /// <summary>
+        /// Maps optional of T to optional of V by calling map method.
+        /// <remarks>
+        /// Empty optional of type T maps to empty optional of type V. (Without calling 'map' method)
+        /// </remarks>
+        /// </summary>
+        /// <typeparam name="V">Type to map 'T' to</typeparam>
+        /// <param name="map">The mapping method.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">got null map method.</exception>
+        public Optional<V> Map<V>(Func<T, V> map) {
+
+            if (map == null) {
+                throw new ArgumentException("got null map method.");
+            }
+
+            if (this.hasValue) {
+                return map(this.item);
+            }
+
+            return Optional<V>.Empty();
         }
 
         /// <summary>

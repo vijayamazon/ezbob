@@ -16,10 +16,10 @@
             //general rule for customerId
             RuleFor(o => GetCustomerId(o, out id))
                 .NotEmpty()
-                .WithMessage("empty customer id")
+                .WithMessage("Empty customer id.")
                 .DependentRules(d => d.RuleFor(c => id.ToLowerInvariant())
                     .NotEqual("{customerid}") //when url parameter is not provided Nancy puts default string
-                    .WithMessage("customer id is mandatory"));
+                    .WithMessage("Customer id is mandatory."));
         }
 
         /// <summary>

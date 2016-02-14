@@ -76,17 +76,12 @@
                 marketPlace.Created = utcNow;
             }
 
-            Dictionary<string, object> columnValuesToMatch = new Dictionary<string, object>();
-            columnValuesToMatch.Add("CustomerId", marketPlace.CustomerId);
-            columnValuesToMatch.Add("MarketPlaceId", marketPlaceTypeId);
-            columnValuesToMatch.Add("DisplayName", marketPlace.DisplayName);
-
             var upsert = GetUpsertGenerator(marketPlace);
             upsert.WithTableName(mpCustomermarketplace)
-                .WithMatchColumnValues(columnValuesToMatch)
-                .WithSkipColumns("Id")
-                .WithUpdateColumnIfNull("Created")
-                .WithOutputColumns("Id");
+                .WithMatchColumns(o => o.CustomerId, o => o.MarketPlaceId, o => o.DisplayName)
+                .WithSkipColumns(o => o.Id)
+                .WithUpdateColumnIfNull(o => o.Created)
+                .WithOutputColumns(o => o.Id);
 
             using (var connection = GetOpenedSqlConnection2()) {
                 using (var sqlCommand = upsert.Verify()
@@ -224,16 +219,12 @@
         public Optional<int> UpsertMarketPlaceUpdatingHistory(CustomerMarketPlaceUpdateHistory updateHistory) {
             using (var connection = GetOpenedSqlConnection2()) {
 
-                IDictionary<string, object> matchColumnValues = new Dictionary<string, object>();
-                matchColumnValues.Add("UpdatingStart", updateHistory.UpdatingStart);
-                matchColumnValues.Add("CustomerMarketPlaceId", updateHistory.CustomerMarketPlaceId);
-
                 var upsert = GetUpsertGenerator(updateHistory)
                     .WithTableName("MP_CustomerMarketPlaceUpdatingHistory")
-                    .WithMatchColumnValues(matchColumnValues)
+                    .WithMatchColumns(o => o.UpdatingStart, o => o.CustomerMarketPlaceId)
                     .WithConnection(connection.SqlConnection())
-                    .WithUpdateColumnIfNull("UpdatingStart")
-                    .WithOutputColumns("Id");
+                    .WithUpdateColumnIfNull(o => o.UpdatingStart)
+                    .WithOutputColumns(o => o.Id);
 
                 using (var sqlCommand = upsert.Verify()
                     .GenerateCommand()) {

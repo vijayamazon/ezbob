@@ -1,19 +1,14 @@
 ﻿namespace EzBobRest.Modules.Company.Validators {
     using EzBobApi.Commands.Company;
+    using EzBobCommon;
     using EzBobCommon.Utils;
     using FluentValidation;
 
     /// <summary>
     /// Validates company update command
     /// </summary>
-    public class CompanyUpdateValidator : AbstractValidator<UpdateCompanyCommand> {
+    public class CompanyUpdateValidator : ValidatorBase<UpdateCompanyCommand> {
         public CompanyUpdateValidator() {
-            RuleFor(o => o.CustomerId)
-                .NotEmpty()
-                .WithMessage("customer id is mandatory")
-                .DependentRules(d => d.RuleFor(c => c.CustomerId.ToLowerInvariant())
-                    .NotEqual("{customerid}")//if url parameter is not specified Nancy put default string
-                    .WithMessage("customer id is mandatory"));
 
             When(o => o.CompanyDetails != null, () => {
                 When(o => CollectionUtils.IsNotEmpty(o.CompanyDetails.Authorities), () => {
@@ -21,6 +16,11 @@
                         .SetValidator(new AuthorityInfoValidator());
                 });
             });
+
+            RuleFor(o => o.CompanyDetails.TypeOfBusiness)
+                .NotEmpty()
+                .WithMessage("type of business is mandatory when creating company")
+                .When(o => o.CompanyId.IsEmpty());
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobPersistence
+﻿namespace EzBobPersistence
 {
     public static class Tables {
         public static readonly string CustomerAddress = "CustomerAddress";
@@ -16,5 +10,9 @@ namespace EzBobPersistence
         public static readonly string CustomerPhones = "CustomerPhones";
         public static readonly string AlibabaBuyer = "AlibabaBuyer";
         public static readonly string CustomerRequestedLoan = "CustomerRequestedLoan";
+        public static readonly string CompanyEmployeeCount = "CompanyEmployeeCount";
+        public static readonly string SecurityUser = "Security_User";
+        public static readonly string Broker = "Broker";
+        public static readonly string CompanyFilesMetaData = "MP_CompanyFilesMetaData";
     }
 }

@@ -84,10 +84,10 @@
             Post["UploadHmrcPdf", "api/v1/marketplace/hmrc/upload/vat/{customerId}", runAsync: true] = async (o, ct) => {
                 string customerId = o.customerId;
 
-                PdfUploadModel model;
+                FilesUploadModel model;
                 //Bind
                 try {
-                    model = this.Bind<PdfUploadModel>();
+                    model = this.Bind<FilesUploadModel>();
                     model.Files = this.Request.Files;
                 } catch (ModelBindingException ex) {
                     Log.Warn("binding error on hmrc registration request: " + customerId, ex);

@@ -1,20 +1,23 @@
 ﻿namespace EzBobService.Company {
     using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
     using System.Linq;
     using EzBobApi.Commands.Company;
     using EzBobCommon;
     using EzBobCommon.NSB;
     using EzBobCommon.Utils;
-    using EzBobCommon.Utils.Encryption;
     using EzBobModels;
+    using EzBobModels.Company;
+    using EzBobModels.Customer;
     using EzBobModels.Enums;
     using EzBobPersistence;
     using EzBobPersistence.Company;
     using EzBobPersistence.Customer;
+    using EzBobService.Encryption;
     using NServiceBus;
 
+    /// <summary>
+    /// Handles <see cref="UpdateCompanyCommand"/>.
+    /// </summary>
     public class CompanyUpdateHandler : HandlerBase<UpdateCompanyCommandResponse>, IHandleMessages<UpdateCompanyCommand> {
 
         [Injected]
@@ -33,6 +36,13 @@
         /// </remarks>
         public void Handle(UpdateCompanyCommand command) {
             InfoAccumulator info = new InfoAccumulator();
+
+            int customerId, companyId;
+            if (!GetIds(command, info, out customerId, out companyId)) {
+                SendReply(info, command);
+                return;
+            }
+
             using (UnitOfWork unitOfWork = new UnitOfWork()) {
                 if (!this.ValidateCommand(command, info) &&
                     !base.ValidateModel(command.CompanyDetails, info) &&
@@ -42,53 +52,38 @@
                     return;
                 }
 
-                int customerId = int.Parse(EncryptionUtils.SafeDecrypt(command.CustomerId));
-
                 Company company = this.CreateCompany(command);
                 if (StringUtils.IsNotEmpty(command.CompanyId)) {
-                    company.Id = int.Parse(EncryptionUtils.SafeDecrypt(command.CompanyId));
+                    company.Id = companyId;
                 }
-                var companyId = CompanyQueries.SaveCompany(company);
-                if (!companyId.HasValue) {
+
+                companyId = (int)CompanyQueries.UpsertCompany(company);
+                if (companyId < 1) {
                     info.AddError("Some DB error");
                     RegisterError(info, command);
                     return;
                 }
 
-                if (CollectionUtils.IsNotEmpty(command.CompanyDetails.Authorities)) {
-                    IEnumerable<Tuple<Director, CustomerAddress>> directors = this.CreateDirectors(command, companyId.Value)
-                        .ToArray();
-                    IEnumerable<int> directorsIds = CompanyQueries.SaveDirectors(directors.Select(o => o.Item1), companyId.Value);
-                    if (directorsIds.Count() != directors.Count()) {
-                        info.AddError("Could not save directors");
-                        RegisterError(info, command);
-                        return;
-                    }
+                int countId = (int)CompanyQueries.UpsertCompanyEmployeeCount(new CompanyEmployeeCount {
+                    Created = DateTime.UtcNow,
+                    CustomerId = customerId,
+                    CompanyId = companyId,
+                    EmployeeCount = command.CompanyDetails.NumberOfEmployees
+                });
 
-
-                    IEnumerable<CustomerAddress> directorAddresses = directors.Zip(directorsIds, (tuple, id) => {
-                        if (tuple.Item2 != null) {
-                            tuple.Item2.DirectorId = id;
-                            tuple.Item2.CustomerId = customerId;
-                        }
-
-                        return tuple.Item2;
-                    });
-
-                    if (!CompanyQueries.SaveDirectorAddresses(directorAddresses)) {
-                        info.AddError("could not save director address");
-                        RegisterError(info, command);
-                        return;
-                    }
+                if (countId < 1) {
+                    string error = string.Format("Could not save CompanyEmployeeCount. CustomerId: {0}, CompanyId {1}", command.CustomerId, command.CompanyId);
+                    info.AddError(error);
+                    RegisterError(info, command);
+                    return;
                 }
 
                 Customer customer = this.CreateCustomer(command);
                 customer.Id = customerId;
-                customer.CompanyId = companyId.Value;
+                customer.CompanyId = companyId;
 
                 var customerIdFromQuery = CustomerQueries.UpsertCustomer(customer);
-                if (!customerIdFromQuery.HasValue)
-                {
+                if (!customerIdFromQuery.HasValue) {
                     info.AddError("Some DB error");
                     RegisterError(info, command);
                     return;
@@ -96,7 +91,7 @@
 
                 if (command.ExperianCompanyInfo != null) {
                     CustomerAddress address = this.CreateExperianAddress(command, customerId);
-                    var res = CustomerQueries.SaveCustomerAddress(address);
+                    var res = CustomerQueries.UpsertCustomerAddress(address);
                     if (!res.HasValue || !res.Value) {
                         info.AddError("could not save customer address");
                         RegisterError(info, command);
@@ -105,19 +100,44 @@
 
                 unitOfWork.Commit();
 
-                SendReply(info, command, response =>
-                {
+                SendReply(info, command, response => {
                     response.CustomerId = command.CustomerId;
-                    if (StringUtils.IsNotEmpty(command.CompanyId))
-                    {
-                        response.CompanyId = command.CompanyId;
-                    }
-                    else
-                    {
-                        response.CompanyId = EncryptionUtils.SafeEncrypt(companyId.Value.ToString());
-                    }
+                    response.CompanyId = command.CompanyId;
                 });
             }
+        }
+
+        /// <summary>
+        /// Gets the ids.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="info">The information.</param>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        private bool GetIds(UpdateCompanyCommand command, InfoAccumulator info, out int customerId, out int companyId) {
+            DateTime date;
+            try {
+                customerId = CustomerIdEncryptor.DecryptCustomerId(command.CustomerId, command.RequestOrigin, out date);
+            } catch (Exception ex) {
+                Log.Error(ex.Message);
+                info.AddError("Invalid customer id.");
+                customerId = -1;
+                companyId = -1;
+                return false;
+            }
+
+            try {
+                companyId = CompanyIdEncryptor.DecryptCompanyId(command.CustomerId, command.RequestOrigin, out date);
+            } catch (Exception ex) {
+                Log.Error(ex.Message);
+                info.AddError("Invalid company id.");
+                customerId = -1;
+                companyId = -1;
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -137,55 +157,6 @@
                 Town = command.ExperianCompanyInfo.AddrLine4,
                 Postcode = command.ExperianCompanyInfo.PostCode
             };
-        }
-
-        /// <summary>
-        /// Creates the directors.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="companyId">The company identifier.</param>
-        /// <returns></returns>
-        private IEnumerable<Tuple<Director, CustomerAddress>> CreateDirectors(UpdateCompanyCommand command, int companyId) {
-            foreach (var authorityInfo in command.CompanyDetails.Authorities) {
-                var director = new Director {
-                    Gender = authorityInfo.PersonalDetails.Gender,
-                    CompanyId = companyId,
-                    CustomerId = null, //TODO: review
-                    DateOfBirth = authorityInfo.PersonalDetails.DateOfBirth,
-                    Email = authorityInfo.ContactDetails.EmailAddress,
-                    Phone = authorityInfo.ContactDetails.PhoneNumber,
-                    IsDirector = authorityInfo.IsDirector,
-                    IsShareholder = authorityInfo.IsShareHolder,
-                    Surname = authorityInfo.PersonalDetails.SurName,
-                    Middle = authorityInfo.PersonalDetails.MiddleName,
-                    Name = authorityInfo.PersonalDetails.FirstName,
-                    ExperianConsumerScore = null //TODO: review
-                };
-
-                CustomerAddress address = null;
-                if (authorityInfo.AddressInfo != null) {
-                    address = new CustomerAddress {
-                        CompanyId = companyId,
-                        Country = authorityInfo.AddressInfo.Country,
-                        County = authorityInfo.AddressInfo.County,
-                        Deliverypointsuffix = authorityInfo.AddressInfo.Deliverypointsuffix,
-                        Line1 = authorityInfo.AddressInfo.Line1,
-                        Line2 = authorityInfo.AddressInfo.Line2,
-                        Line3 = authorityInfo.AddressInfo.Line3,
-                        Organisation = authorityInfo.AddressInfo.Organisation,
-                        Pobox = authorityInfo.AddressInfo.Pobox,
-                        Postcode = authorityInfo.AddressInfo.Postcode,
-                        Mailsortcode = authorityInfo.AddressInfo.Mailsortcode,
-                        Town = authorityInfo.AddressInfo.Town,
-                        Udprn = authorityInfo.AddressInfo.Udprn,
-                        Nohouseholds = authorityInfo.AddressInfo.Nohouseholds,
-                        addressType = authorityInfo.AddressInfo.addressType,
-                        Smallorg = authorityInfo.AddressInfo.Smallorg
-                    };
-                }
-
-                yield return new Tuple<Director, CustomerAddress>(director, address);
-            }
         }
 
         /// <summary>
@@ -245,9 +216,7 @@
                     IndustryType = cmd.CompanyDetails.IndustryType,
                     OverallTurnOver = cmd.CompanyDetails.TotalAnnualRevenue
                 },
-                IsOffline = (cmd.CompanyDetails.IndustryType == IndustryType.Retail ||
-                    cmd.CompanyDetails.IndustryType == IndustryType.Online ||
-                    cmd.CompanyDetails.IndustryType == IndustryType.Online),
+                IsOffline = (cmd.CompanyDetails.IndustryType == IndustryType.Retail || cmd.CompanyDetails.IndustryType == IndustryType.Online || cmd.CompanyDetails.IndustryType == IndustryType.Online),
                 IsDirector = cmd.IsDirectorChecked //TODO: review
             };
 

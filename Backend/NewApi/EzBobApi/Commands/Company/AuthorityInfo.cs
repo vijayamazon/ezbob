@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobApi.Commands.Company
+﻿namespace EzBobApi.Commands.Company
 {
     using EzBobApi.Commands.Customer.Sections;
 
@@ -13,7 +7,7 @@ namespace EzBobApi.Commands.Company
     /// </summary>
     public class AuthorityInfo
     {
-        public int Position { get; set; }
+//        public int Position { get; set; }
         public bool IsShareHolder { get; set; }
         public bool IsDirector { get; set; }
         public PersonalDetailsInfo PersonalDetails { get; set; }

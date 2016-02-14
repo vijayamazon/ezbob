@@ -6,7 +6,7 @@ namespace EzBobRest.Modules.Marketplaces.Hmrc.Validators
     using FluentValidation;
     using Nancy;
 
-    public class HmrcUploadPdfValidator : ValidatorBase<PdfUploadModel>
+    public class HmrcUploadPdfValidator : ValidatorBase<FilesUploadModel>
     {
         public HmrcUploadPdfValidator() {
             RuleFor(model => HasValidContentType(model.Files))

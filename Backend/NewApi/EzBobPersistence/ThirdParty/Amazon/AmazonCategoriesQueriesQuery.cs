@@ -69,10 +69,10 @@ namespace EzBobPersistence.ThirdParty.Amazon {
 
                 var upsertCommand = GetUpsertGenerator(cat)
                     .WithConnection(connection.SqlConnection())
-                    .WithSkipColumns("Id")
-                    .WithOutputColumns("Id")
+                    .WithSkipColumns(o => o.Id)
+                    .WithOutputColumns(o => o.Id)
                     .WithTableName("MP_EbayAmazonCategory")
-                    .WithMatchColumnValues(new KeyValuePair<string, object>("Name", category.CategoryName).ToEnumerable())
+                    .WithMatchColumns(o => o.Name)
                     .Verify()
                     .GenerateCommand();
 

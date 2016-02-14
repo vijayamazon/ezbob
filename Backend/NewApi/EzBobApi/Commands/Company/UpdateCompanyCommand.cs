@@ -1,5 +1,4 @@
 ﻿namespace EzBobApi.Commands.Company {
-    using EzBobApi.Commands.Customer;
     using EzBobApi.Commands.Experian;
     using EzBobCommon.NSB;
 
@@ -12,5 +11,6 @@
         public int? Company { get; set; }
         public bool? IsDirectorChecked { get; set; }//TODO: review
         public bool? OwnsProperty { get; set; }
+        public string RequestOrigin { get; set; }
     }
 }

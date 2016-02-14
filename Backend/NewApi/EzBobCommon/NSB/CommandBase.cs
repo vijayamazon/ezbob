@@ -1,8 +1,8 @@
 namespace EzBobCommon.NSB {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Security.Policy;
 
     /// <summary>
     /// Base class for commands
@@ -35,5 +35,22 @@ namespace EzBobCommon.NSB {
         public bool IsFailed { get; set; }
 
         public Guid MessageId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command originator.
+        /// </summary>
+        /// <value>
+        /// The request originator.
+        /// </value>
+        public string CommandOriginator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command originator ip.
+        /// </summary>
+        /// <value>
+        /// The command originator ip.
+        /// </value>
+        public string CommandOriginatorIP { get; set; }
+        public Url CommandOriginatorUrl { get; set; }
     }
 }

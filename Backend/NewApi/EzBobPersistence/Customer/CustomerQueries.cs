@@ -5,13 +5,15 @@
     using System.Data.SqlClient;
     using System.Globalization;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Web;
-    using System.Web.ModelBinding;
     using EzBobCommon;
     using EzBobModels;
+    using EzBobModels.Customer;
     using EzBobPersistence;
     using EzBobPersistence.Customer.Commands;
     using EzBobPersistence.Loan;
+    using EzBobPersistence.QueryGenerators;
     using EzBobPersistence.ThirdParty.Experian;
 
     /// <summary>
@@ -59,11 +61,10 @@
         /// <param name="passwordAnswer">The password answer.</param>
         /// <param name="remoteIp">The remote ip.</param>
         /// <returns></returns>
-        public User CreateUser(string email, string password, int passwordQuestion, string passwordAnswer, string remoteIp) {
-            var connection = GetOpenedSqlConnection2();
-            User user;
-            using (var sqlConnection = connection) {
-
+        public SecurityUser CreateSecurityUser(string email, string password, int passwordQuestion, string passwordAnswer, string remoteIp) {
+            SecurityUser user;
+            using (var sqlConnection = GetOpenedSqlConnection2())
+            {
                 var createCustomerCommand = new CreateUser()
                     .SetEmailAndPassword(email, password)
                     .SetSecurityQuestionId(passwordQuestion)
@@ -72,15 +73,79 @@
                     .SetRemoteIp(remoteIp);
 
                 using (SqlCommand sqlCommand = createCustomerCommand.Get(sqlConnection.SqlConnection())) {
-                     SqlDataReader reader = sqlCommand.ExecuteReader();
-                    user = CreateModel<User>(reader);
-                    user.RoleName = roleName; //TODO: look again (may be it could be possible to remove those lines by getting them from DB)
-                    user.EmailAddress = email; //TODO: look again
-
+                    user = CreateModel<SecurityUser>(sqlCommand.ExecuteReader());
                 }
             }
 
             return user;
+        }
+
+        /// <summary>
+        /// Determines whether the user exists.
+        /// </summary>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
+        public bool IsUserExists(string emailAddress, string password) {
+            using (var connection = GetOpenedSqlConnection2()) {
+                var cmd = new SelectWhereGenerator<SecurityUser>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.SecurityUser)
+                    .WithSelect(o => o.UserId)
+                    .WithWhere(o => o.EMail, emailAddress)
+                    .WithWhere(o => o.EzPassword, password)
+                    .Verify()
+                    .GenerateCommand();
+                using (var sqlCommand = cmd) {
+                    int id = (int)ExecuteScalarAndLog<int>(sqlCommand);
+                    return id > 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the customer partially by identifier.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="selectProperties">The selectProperties.</param>
+        /// <returns></returns>
+        public Customer GetCustomerPartiallyById(int customerId, params Expression<Func<Customer, object>>[] selectProperties) {
+            using (var connection = GetOpenedSqlConnection2()) {
+                var cmd = new SelectWhereGenerator<Customer>()
+                    .WithTableName(Tables.Customer)
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithSelect(selectProperties)
+                    .WithWhere(o => o.Id, customerId)
+                    .Verify()
+                    .GenerateCommand();
+                using (var sqlCommand = cmd) {
+                    return CreateModel<Customer>(sqlCommand.ExecuteReader());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the customer partially by property.
+        /// </summary>
+        /// <param name="wherePropertyAccess">The property access.</param>
+        /// <param name="wherePropertyValue">The property value.</param>
+        /// <param name="selectProperties">The selectProperties.</param>
+        /// <returns></returns>
+        public Customer GetCustomerPartiallyByProperty(Expression<Func<Customer, object>> wherePropertyAccess, object wherePropertyValue, params Expression<Func<Customer, object>>[] selectProperties) {
+            using (var connection = GetOpenedSqlConnection2())
+            {
+                var cmd = new SelectWhereGenerator<Customer>()
+                    .WithTableName(Tables.Customer)
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithSelect(selectProperties)
+                    .WithWhere(wherePropertyAccess, wherePropertyValue)
+                    .Verify()
+                    .GenerateCommand();
+                using (var sqlCommand = cmd)
+                {
+                    return CreateModel<Customer>(sqlCommand.ExecuteReader());
+                }
+            }
         }
 
         /// <summary>
@@ -111,31 +176,20 @@
         /// </summary>
         /// <param name="userName">Name of the user.</param>
         /// <returns></returns>
-        public long? GetUserIdByUserName(string userName) {
-            using (var sqlConnection = GetOpenedSqlConnection2()) {
+        public Optional<int> GetUserIdByUserName(string userName) {
+            using (var connection = GetOpenedSqlConnection2()) {
 
-                GetUserIdByUserName command = new GetUserIdByUserName()
-                    .SetUserName(userName.ToLowerInvariant());
+                var cmd = new SelectWhereGenerator<SecurityUser>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.SecurityUser)
+                    .WithSelect(o => o.UserId)
+                    .WithWhere(o => o.UserName, userName)
+                    .WithWhere(o => o.IsDeleted, false)
+                    .Verify()
+                    .GenerateCommand();
 
-                using (SqlCommand sqlCommand = command.Get(sqlConnection.SqlConnection())) {
-
-                    object result = sqlCommand.ExecuteScalar();
-
-                    try {
-                        if (!(result is DBNull)) {
-                            return Convert.ToInt64(result);
-                        }
-
-                        return -1;
-                    } catch (FormatException ex) {
-                        Log.Error("could not obtain user id by email address", ex);
-                    } catch (InvalidCastException ex) {
-                        Log.Error("could not obtain user id by email address", ex);
-                    } catch (OverflowException ex) {
-                        Log.Error("could not obtain user id by email address", ex);
-                    }
-
-                    return null;
+                using (SqlCommand sqlCommand = cmd) {
+                    return ExecuteScalarAndLog<int>(sqlCommand);
                 }
             }
         }
@@ -196,13 +250,13 @@
         }
 
         /// <summary>
-        /// Saves the customer address.
+        /// Upserts the customer address.
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns>
         /// true - success, false - failure, null - was nothing to save in db
         /// </returns>
-        public bool? SaveCustomerAddress(CustomerAddress address) {
+        public bool? UpsertCustomerAddress(CustomerAddress address) {
             using (var sqlConnection = GetOpenedSqlConnection2()) {
                 var id = new KeyValuePair<string, object>("CustomerId", address.CustomerId);
                 
@@ -217,6 +271,22 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the customer addresses.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<CustomerAddress> GetCustomerAddresses(int customerId) {
+            using (var sqlConnection = GetOpenedSqlConnection2()) {
+                using (var sqlCommand = GetEmptyCommand(sqlConnection.SqlConnection())) {
+                    sqlCommand.CommandText = "SELECT * FROM CustomerAddress WHERE CustomerId = @Id";
+                    sqlCommand.Parameters.AddWithValue("@Id", customerId);
+
+                    return CreateModels<CustomerAddress>(sqlCommand.ExecuteReader());
+                }
+            }
+        } 
 
         /// <summary>
         /// Determines whether [customer exists by reference number] [the specified reference number].
@@ -292,8 +362,8 @@
         /// </summary>
         /// <param name="requestedLoan">The requested loan.</param>
         /// <returns></returns>
-        public bool? SaveCustomerRequestedLoan(CustomerRequestedLoan requestedLoan) {
-            return LoanQueries.SaveCustomerRequestedLoan(requestedLoan);
+        public Optional<int> SaveCustomerRequestedLoan(CustomerRequestedLoan requestedLoan) {
+            return LoanQueries.UpsertCustomerRequestedLoan(requestedLoan);
         }
 
         /// <summary>
@@ -394,6 +464,22 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the customer phones.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<CustomerPhone> GetCustomerPhones(int customerId) {
+            using (var sqlConnection = GetOpenedSqlConnection2()) {
+                using(var sqlCommand = GetEmptyCommand(sqlConnection.SqlConnection())) {
+                    sqlCommand.CommandText = "SELECT * FROM CustomerPhones WHERE CustomerId = @Id";
+                    sqlCommand.Parameters.AddWithValue("@Id", customerId);
+
+                    return CreateModels<CustomerPhone>(sqlCommand.ExecuteReader());
+                }
+            }
+        } 
       
         /// <summary>
         /// Prepares the source reference history.

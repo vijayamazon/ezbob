@@ -1,35 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzBobPersistence.Company
+﻿namespace EzBobPersistence.Company
 {
+    using System.Collections.Generic;
     using EzBobCommon;
-    using EzBobModels;
+    using EzBobModels.Company;
+    using EzBobModels.Customer;
+    using EzBobModels.Enums;
 
     public interface ICompanyQueries {
         /// <summary>
-        /// Saves the company.
+        /// Upserts the company.
         /// </summary>
         /// <param name="company">The company.</param>
         /// <returns>empty optional if there some problem</returns>
-        Optional<int> SaveCompany(Company company);
+        Optional<int> UpsertCompany(Company company);
 
         /// <summary>
-        /// Saves the directors.
+        /// Upserts the director.
         /// </summary>
-        /// <param name="directors">The directors.</param>
-        /// <param name="companyId">The company identifier.</param>
-        /// <returns>list of ids, or nothing in case of failure</returns>
-        IEnumerable<int> SaveDirectors(IEnumerable<Director> directors, int companyId);
-
-        /// <summary>
-        /// Saves the director addresses.
-        /// </summary>
-        /// <param name="addresses">The addresses.</param>
+        /// <param name="director">The director.</param>
         /// <returns></returns>
-        bool SaveDirectorAddresses(IEnumerable<CustomerAddress> addresses);
+        Optional<int> UpsertDirector(Director director);
+
+        /// <summary>
+        /// Upserts the director address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
+        Optional<int> UpsertDirectorAddress(CustomerAddress address);
+
+        /// <summary>
+        /// Gets the type of the company business.
+        /// </summary>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        Optional<TypeOfBusiness> GetCompanyBusinessType(int companyId);
+
+        /// <summary>
+        /// Gets the company by identifier.
+        /// </summary>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        Optional<Company> GetCompanyById(int companyId);
+
+        /// <summary>
+        /// Gets the directors.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        Optional<IEnumerable<Director>> GetDirectors(int customerId, int companyId);
+
+        /// <summary>
+        /// Gets the directors addresses.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        Optional<IEnumerable<CustomerAddress>> GetDirectorsAddresses(int customerId, int companyId);
+
+        /// <summary>
+        /// Upserts the company employee count.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
+        Optional<int> UpsertCompanyEmployeeCount(CompanyEmployeeCount count);
+
+        /// <summary>
+        /// Gets the company employee count.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <param name="companyId">The company identifier.</param>
+        /// <returns></returns>
+        Optional<CompanyEmployeeCount> GetCompanyEmployeeCount(int customerId, int companyId);
     }
 }

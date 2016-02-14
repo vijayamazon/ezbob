@@ -9,7 +9,7 @@
     /// This class does not validate parameters. It assumes that parameters were validated by caller
     /// </summary>
     internal class CreateUser {
-        private static readonly string StoredProcedureName = "CreateWebUser";
+        private static readonly string CreateWebUserProcedure = "CreateWebUser";
 
         #region Stored procedure parameters
 
@@ -90,7 +90,7 @@
         /// <param name="connection">The connection.</param>
         /// <returns></returns>
         internal SqlCommand Get(SqlConnection connection) {
-            var sqlCommand = new SqlCommand(StoredProcedureName, connection);
+            var sqlCommand = new SqlCommand(CreateWebUserProcedure, connection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             sqlCommand.Parameters.Add(new SqlParameter(emailParam, SqlDbType.NVarChar));

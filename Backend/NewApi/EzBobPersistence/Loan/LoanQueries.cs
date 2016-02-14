@@ -1,10 +1,12 @@
 ﻿namespace EzBobPersistence.Loan {
     using System.Data;
     using System.Data.SqlClient;
-    using EzBobModels;
+    using EzBobCommon;
+    using EzBobModels.Customer;
     using EzBobModels.Loan;
     using EzBobModels.Loan.Enums;
     using EzBobPersistence;
+    using EzBobPersistence.QueryGenerators;
 
     /// <summary>
     /// Container of loan related queries
@@ -17,6 +19,11 @@
         public LoanQueries(string connectionString)
             : base(connectionString) {}
 
+        /// <summary>
+        /// Gets the loan source.
+        /// </summary>
+        /// <param name="loanKind">Kind of the loan.</param>
+        /// <returns></returns>
         public LoanSource GetLoanSource(LoanKind loanKind) {
             using (var sqlConnection = GetOpenedSqlConnection()) {
                 using (SqlCommand sqlCommand = new SqlCommand("GetLoanSource", sqlConnection)) {
@@ -34,19 +41,45 @@
         }
 
         /// <summary>
-        /// Saves the customer requested loan.
+        /// Upserts the customer requested loan.
         /// </summary>
         /// <param name="requestedLoan">The requested loan.</param>
-        /// <returns>true - success, false - failure, null - was nothing to save in db</returns>
-        public bool? SaveCustomerRequestedLoan(CustomerRequestedLoan requestedLoan) {
-            using (var sqlConnection = GetOpenedSqlConnection()) {
-                var cmd = GetInsertCommand(requestedLoan, sqlConnection, Tables.CustomerRequestedLoan);
-                if (!cmd.HasValue) {
-                    return null;
-                }
+        public Optional<int> UpsertCustomerRequestedLoan(CustomerRequestedLoan requestedLoan) {
+            using (var connection = GetOpenedSqlConnection2()) {
 
-                using (var sqlCommand = cmd.GetValue()) {
-                    return ExecuteNonQueryAndLog(sqlCommand);
+                var cmd = GetUpsertGenerator(requestedLoan)
+                    .WithConnection(connection.SqlConnection())
+                    .WithSkipColumns(o => o.Id)
+                    .WithMatchColumns(o => o.CustomerId)
+                    .WithOutputColumns(o => o.Id)
+                    .WithTableName(Tables.CustomerRequestedLoan)
+                    .Verify()
+                    .GenerateCommand();
+
+                using (var sqlCommand = cmd) {
+                    return ExecuteScalarAndLog<int>(sqlCommand);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the customer's requested loan.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns></returns>
+        public Optional<CustomerRequestedLoan> GetCustomerRequestedLoan(int customerId) {
+            using (var connection = GetOpenedSqlConnection2()) {
+
+                var cmd = new SelectWhereGenerator<CustomerRequestedLoan>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.CustomerRequestedLoan)
+                    .WithSelect() //select *
+                    .WithWhere(o => o.CustomerId, customerId)
+                    .Verify()
+                    .GenerateCommand();
+
+                using (var sqlCommand = cmd) {
+                    return CreateModel<CustomerRequestedLoan>(sqlCommand.ExecuteReader());
                 }
             }
         }

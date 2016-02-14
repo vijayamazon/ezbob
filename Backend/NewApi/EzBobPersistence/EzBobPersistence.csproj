@@ -72,13 +72,19 @@
   <ItemGroup>
     <Compile Include="Alibaba\AlibabaQueries.cs" />
     <Compile Include="Alibaba\IAlibabaQueries.cs" />
+    <Compile Include="Broker\BrokerQueries.cs" />
+    <Compile Include="Broker\IBrokerQueries.cs" />
     <Compile Include="Company\CompanyQueries.cs" />
     <Compile Include="Company\ICompanyQueries.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="DocsUpload\DocsUploadQueries.cs" />
+    <Compile Include="DocsUpload\IDocsUploadQueries.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="QueryGenerators\SelectWhereGenerator.cs" />
     <Compile Include="QueryGenerators\MultiInsertCommandGenerator.cs" />
     <Compile Include="QueryGenerators\ISqlCommandGenerator.cs" />
     <Compile Include="QueryGenerators\ISqlCommandsGenerator.cs" />
+    <Compile Include="QueryGenerators\CommandGeneratorBase.cs" />
     <Compile Include="QueryGenerators\UpsertCommandGenerator.cs" />
     <Compile Include="SqlConnectionWrapper.cs" />
     <Compile Include="Currency\CurrencyQueries.cs" />

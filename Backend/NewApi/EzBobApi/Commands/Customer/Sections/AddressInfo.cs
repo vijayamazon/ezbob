@@ -5,7 +5,6 @@
     public class AddressInfo {
         public CustomerAddressType? addressType { get; set; }//not begins from upper case because in DB it's not upper case.
 
-        public string id { get; set; } //not begins from upper case because in DB it's not upper case.
         public string Organisation { get; set; }
         public string Line1 { get; set; }
         public string Line2 { get; set; }

@@ -1,6 +1,7 @@
 ﻿namespace EzBobPersistence.Loan
 {
-    using EzBobModels;
+    using EzBobCommon;
+    using EzBobModels.Customer;
     using EzBobModels.Loan;
     using EzBobModels.Loan.Enums;
 
@@ -13,10 +14,17 @@
         LoanSource GetLoanSource(LoanKind loanKind);
 
         /// <summary>
-        /// Saves the customer requested loan.
+        /// Upserts the customer requested loan.
         /// </summary>
         /// <param name="requestedLoan">The requested loan.</param>
         /// <returns>true - success, false - failure, null - was nothing to save in db</returns>
-        bool? SaveCustomerRequestedLoan(CustomerRequestedLoan requestedLoan);
+        Optional<int> UpsertCustomerRequestedLoan(CustomerRequestedLoan requestedLoan);
+
+        /// <summary>
+        /// Gets the customer's requested loan.
+        /// </summary>
+        /// <param name="customerId">The customer identifier.</param>
+        /// <returns></returns>
+        Optional<CustomerRequestedLoan> GetCustomerRequestedLoan(int customerId);
     }
 }

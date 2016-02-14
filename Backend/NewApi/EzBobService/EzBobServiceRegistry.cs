@@ -2,9 +2,11 @@
     using EzBobCommon.Injection;
     using EzBobPersistence;
     using EzBobPersistence.Alibaba;
+    using EzBobPersistence.Broker;
     using EzBobPersistence.Company;
     using EzBobPersistence.Currency;
     using EzBobPersistence.Customer;
+    using EzBobPersistence.DocsUpload;
     using EzBobPersistence.Loan;
     using EzBobPersistence.MobilePhone;
     using EzBobPersistence.ThirdParty.Experian;
@@ -68,6 +70,16 @@
 
             ForSingletonOf<ICurrencyQueries>()
                 .Use<CurrencyQueries>()
+                .Ctor<string>(ConnectionString)
+                .Is(TheConnectionString);
+
+            ForSingletonOf<IBrokerQueries>()
+                .Use<BrokerQueries>()
+                .Ctor<string>(ConnectionString)
+                .Is(TheConnectionString);
+
+            ForSingletonOf<IDocsUploadQueries>()
+                .Use<DocsUploadQueries>()
                 .Ctor<string>(ConnectionString)
                 .Is(TheConnectionString);
 

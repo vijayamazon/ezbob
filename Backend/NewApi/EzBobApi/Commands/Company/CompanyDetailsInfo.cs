@@ -6,10 +6,9 @@
     /// Contains company related data
     /// </summary>
     public class CompanyDetailsInfo {
-        public IndustryType IndustryType { get; set; }
+        public IndustryType? IndustryType { get; set; }
         public TypeOfBusiness TypeOfBusiness { get; set; }
         public string BusinessName { get; set; }
-        public string PostCode { get; set; }
         public string MainPhoneNumber { get; set; }
         public string RegistrationNumber { get; set; }
         public decimal TotalAnnualRevenue { get; set; }

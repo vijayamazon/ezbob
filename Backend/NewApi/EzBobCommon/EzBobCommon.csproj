@@ -123,7 +123,6 @@
     <Compile Include="Utils\Encryption\Encrypted.cs" />
     <Compile Include="Utils\Encryption\EncryptionUtils.cs" />
     <Compile Include="Utils\HashingUtils.cs" />
-    <Compile Include="Utils\NullableUtils.cs" />
     <Compile Include="Utils\SerializationUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Web\EzBobWebBrowser.cs" />

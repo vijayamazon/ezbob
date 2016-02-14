@@ -103,6 +103,7 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -114,15 +115,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Company\CompanyGetDetailsCommandHandler.cs" />
     <Compile Include="Company\CompanyUpdateHandler.cs" />
+    <Compile Include="Company\CompanyUpsertAuthorityCommandHandler.cs" />
     <Compile Include="Currency\CurrencyConverter.cs" />
     <Compile Include="Currency\ICurrencyConverter.cs" />
+    <Compile Include="Customer\CustomerLoginCommandHandler.cs" />
     <Compile Include="Customer\CustomerProcessor.cs" />
     <Compile Include="Customer\CustomerVerificationCodelValidationHandler.cs" />
     <Compile Include="Customer\CustomerVerificationSmsHandler.cs" />
-    <Compile Include="Customer\SignupCustomerHandler.cs" />
-    <Compile Include="Customer\UpdateCustomerHandler.cs" />
+    <Compile Include="Customer\GetCustomerDetailsCommandHandler.cs" />
+    <Compile Include="Customer\CustomerSignupCommandHandler.cs" />
+    <Compile Include="Customer\CustomerUpdateHandler.cs" />
     <Compile Include="DependencyResolution\CommandHandlerConvention.cs" />
+    <Compile Include="DocsUpload\DocsUploadCommandHandler.cs" />
+    <Compile Include="Encryption\AuthorityIdEncryptor.cs" />
+    <Compile Include="Encryption\CompanyIdEncryptor.cs" />
+    <Compile Include="Encryption\CustomerIdEncryptor.cs" />
     <Compile Include="EndpointConfig.cs" />
     <Compile Include="EzBobServiceRegistry.cs" />
     <Compile Include="Misc\RefNumberGenerator.cs" />

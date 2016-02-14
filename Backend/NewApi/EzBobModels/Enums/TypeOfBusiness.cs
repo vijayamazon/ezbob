@@ -18,8 +18,6 @@ namespace EzBobModels.Enums
         PShip3P = 2,      //consumer
         [Description("Partnership (more than three)")]
         PShip = 3,        //company
-        [Description("Sole trader (Inc.)")]
-        SoleTrader = 4,   //consumer
         [Description("Limited company")]
         Limited = 5       //company
     }

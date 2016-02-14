@@ -2,8 +2,10 @@
 
 namespace EzBobRest.Modules {
     using System;
+    using System.Net;
     using Common.Logging;
     using EzBobCommon;
+    using EzBobRest.Init;
     using EzBobRest.ResponseHelpers;
     using FluentValidation;
     using FluentValidation.Results;
@@ -14,6 +16,7 @@ namespace EzBobRest.Modules {
     /// Provides basic functionality:
     /// Automatic module security (not functional in debug mode).
     /// Methods to create responses, Log, RestServerConfig.
+    /// Automatically treats the 'CommandOriginator' and 'CommandOriginatorIp'
     /// </summary>
     public abstract class NancyModuleBase : NancyModule {
 
@@ -27,9 +30,36 @@ namespace EzBobRest.Modules {
         /// Initializes a new instance of the <see cref="T:Nancy.NancyModule"/> class.
         /// </summary>
         protected NancyModuleBase() {
-            if (!System.Diagnostics.Debugger.IsAttached) {
+            if (!System.Diagnostics.Debugger.IsAttached) 
+            {
+//                this.RequiresHttps();
                 this.RequiresMSOwinAuthentication();
             }
+            Before += ctx => {
+                //adds 'CommandOriginator' to context parameters in order to get automatically correct value with Binding. 
+                ctx.Parameters.CommandOriginator = GetOrigin();
+                ctx.Parameters.CommandOriginatorIP = this.Request.UserHostAddress;
+                ctx.Parameters.CommandOriginatorUrl = Dns.GetHostEntry(this.Request.UserHostAddress).HostName;
+                return null;//continue to route
+            };
+        }
+
+        /// <summary>
+        /// Gets the origin.<see cref="EzBobOAuth2AuthorizationProvider"/>.
+        /// </summary>
+        /// <returns></returns>
+        private string GetOrigin() {
+            string origin;
+
+            if (!System.Diagnostics.Debugger.IsAttached) {
+                var user = this.Context.GetMSOwinUser();
+                var claim = user.Claims.First(c => "Origin".Equals(c.Type, StringComparison.InvariantCultureIgnoreCase));
+                origin = claim.Value;
+            } else {
+                origin = "testOrigin";
+            }
+
+            return origin;
         }
 
         /// <summary>
@@ -63,7 +93,7 @@ namespace EzBobRest.Modules {
         /// </summary>
         /// <param name="statusCode">The status code.</param>
         /// <returns></returns>
-        protected Response CreateErrorResponse(HttpStatusCode statusCode) {
+        protected Response CreateErrorResponse(Nancy.HttpStatusCode statusCode) {
             return Response.AsJson("{}")
                 .WithStatusCode(statusCode);
         }
@@ -75,7 +105,7 @@ namespace EzBobRest.Modules {
         /// <param name="statusCode">The status code.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">setParameters could not be null</exception>
-        protected Response CreateErrorResponse(Action<ErrorResponseBuilder> setParameters, HttpStatusCode statusCode = HttpStatusCode.BadRequest) {
+        protected Response CreateErrorResponse(Action<ErrorResponseBuilder> setParameters, Nancy.HttpStatusCode statusCode = Nancy.HttpStatusCode.BadRequest) {
             if (setParameters == null) {
                 throw new ArgumentException("setParameters could not be null");
             }
@@ -98,7 +128,7 @@ namespace EzBobRest.Modules {
                 setParameters(builder);
             }
             return Response.AsJson(builder.BuildResponse())
-                .WithStatusCode(HttpStatusCode.OK);
+                .WithStatusCode(Nancy.HttpStatusCode.OK);
         }
     }
 }

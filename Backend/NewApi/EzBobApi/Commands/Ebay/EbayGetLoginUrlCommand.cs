@@ -4,5 +4,7 @@
     /// <summary>
     /// Request ebay login url
     /// </summary>
-    public class EbayGetLoginUrlCommand : CommandBase {}
+    public class EbayGetLoginUrlCommand : CommandBase {
+        
+    }
 }

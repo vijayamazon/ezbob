@@ -4,6 +4,7 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
 
@@ -16,15 +17,15 @@
     /// </remarks>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class UpsertCommandGenerator<T>
+    public class UpsertCommandGenerator<T> : CommandGeneratorBase
         where T : class {
         private static readonly string comma = ",";
         private static readonly string strudel = "@";
         private static readonly string and = " AND ";
 
-        private T model;
+        private readonly T model;
         private string tableName;
-        private IEnumerable<KeyValuePair<string, object>> matchingColumnValues;
+        private IEnumerable<string> matchingColumnNames;
         private IEnumerable<string> updateIfNull = Enumerable.Empty<string>();
         private IEnumerable<string> outputColumns = Enumerable.Empty<string>();
         private Predicate<string> skipColumn = o => false;
@@ -33,48 +34,11 @@
         private SqlConnection connection;
 
         /// <summary>
-        /// Helps with fluent interface<br></br> 
-        /// provides indirect access to builder's GenerateCommand() method (which is not public)
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public class Genertor<T> : ISqlCommandGenerator
-            where T : class {
-            private readonly UpsertCommandGenerator<T> upsertGenerator;
-
-            public Genertor(UpsertCommandGenerator<T> upsert) {
-                this.upsertGenerator = upsert;
-            }
-
-            /// <summary>
-            /// Generates the command.
-            /// </summary>
-            /// <returns></returns>
-            public SqlCommand GenerateCommand() {
-                return this.upsertGenerator.Generate();
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UpsertCommandGenerator{T}"/> class.
-        /// </summary>
-        public UpsertCommandGenerator() {}
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UpsertCommandGenerator{T}"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
         public UpsertCommandGenerator(T model) {
             this.model = model;
-        }
-
-        /// <summary>
-        /// Sets the model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        public UpsertCommandGenerator<T> WithModel(T model) {
-            this.model = model;
-            return this;
         }
 
         /// <summary>
@@ -98,34 +62,37 @@
         }
 
         /// <summary>
-        /// Sets the match column values.
+        /// Sets matching column names
         /// </summary>
-        /// <param name="items">The items.</param>
+        /// <param name="propertyAccessExpressions">The property access expressions.</param>
         /// <returns></returns>
-        public UpsertCommandGenerator<T> WithMatchColumnValues(IEnumerable<KeyValuePair<string, object>> items) {
-            this.matchingColumnValues = items;
+        public UpsertCommandGenerator<T> WithMatchColumns(params Expression<Func<T, object>>[] propertyAccessExpressions) {
+            this.matchingColumnNames = propertyAccessExpressions.Select(ExtractMemberName);
             return this;
         }
 
         /// <summary>
         /// Adds the update column if null.
         /// </summary>
-        /// <param name="updateIfNullColumnNames">The update if null column names.</param>
+        /// <param name="propertyAccessExpressions">The property access expressions.</param>
         /// <returns></returns>
-        public UpsertCommandGenerator<T> WithUpdateColumnIfNull(params string[] updateIfNullColumnNames) {
-            if (updateIfNullColumnNames != null && updateIfNullColumnNames.Any()) {
-                this.updateIfNull = updateIfNullColumnNames;
-            }
+        public UpsertCommandGenerator<T> WithUpdateColumnIfNull(params Expression<Func<T, object>>[] propertyAccessExpressions) {
+            this.updateIfNull = propertyAccessExpressions.Select(ExtractMemberName)
+                .ToArray();
+
             return this;
         }
 
         /// <summary>
         /// Adds the output columns.
         /// </summary>
-        /// <param name="columns">The columns.</param>
+        /// <param name="propertyAccessExpressions">The property access expressions.</param>
         /// <returns></returns>
-        public UpsertCommandGenerator<T> WithOutputColumns(params string[] columns) {
-            if (columns == null || !columns.Any()) {
+        public UpsertCommandGenerator<T> WithOutputColumns(params Expression<Func<T, object>>[] propertyAccessExpressions) {
+            var columns = propertyAccessExpressions.Select(ExtractMemberName)
+                .ToArray();
+
+            if (!columns.Any()) {
                 this.isOutputAll = true;
             } else {
                 this.isOutputAll = false;
@@ -137,11 +104,17 @@
         /// <summary>
         /// Adds the skip columns.
         /// </summary>
-        /// <param name="columns">The columns.</param>
+        /// <param name="propertyAccessExpressions">The property access expressions.</param>
         /// <returns></returns>
-        public UpsertCommandGenerator<T> WithSkipColumns(params string[] columns) {
-            if (columns != null && columns.Any()) {
+        public UpsertCommandGenerator<T> WithSkipColumns(params Expression<Func<T, object>>[] propertyAccessExpressions) {
+
+            var columns = propertyAccessExpressions.Select(ExtractMemberName)
+                .ToArray();
+
+            if (columns.Any()) {
                 this.skipColumn = c => columns.Any(o => c.Equals(o, StringComparison.CurrentCultureIgnoreCase));
+            } else {
+                this.skipColumn = o => false;
             }
 
             return this;
@@ -158,7 +131,7 @@
         /// or
         /// empty matching column values
         /// </exception>
-        public ISqlCommandGenerator Verify() {
+        public override ISqlCommandGenerator Verify() {
             if (string.IsNullOrEmpty(this.tableName)) {
                 throw new ArgumentException("empty table name");
             }
@@ -167,25 +140,21 @@
                 throw new ArgumentException("empty model");
             }
 
-            if (this.matchingColumnValues == null || !this.matchingColumnValues.Any()) {
-                throw new ArgumentException("empty matching column values");
+            if (this.matchingColumnNames == null || !this.matchingColumnNames.Any()) {
+                throw new ArgumentException("empty matching column names");
             }
 
-            return new Genertor<T>(this);
+            return base.GetGenerator();
         }
 
         /// <summary>
-        /// Generates sql command.
+        /// Generates the command.
         /// </summary>
         /// <returns></returns>
-        private SqlCommand Generate() {
+        protected override SqlCommand GenerateCommand() {
             return GetUpsertCommand();
         }
 
-        /// <summary>
-        /// Gets the upsertGenerator command.
-        /// </summary>
-        /// <returns></returns>
         protected SqlCommand GetUpsertCommand() {
             SqlCommand sqlCommand = new SqlCommand();
             if (this.connection != null) {
@@ -217,30 +186,32 @@
 
             //we assume that properties of a model that are stored in DB should be writable and readable
             foreach (var propertyInfo in properties.Where(prop => prop.CanWrite && prop.CanRead)) {
-                if (this.skipColumn(propertyInfo.Name)) {
-                    continue;
-                }
+
 
                 //this works also with nullable. GetValue gets null if nullable is empty
                 object propertyValue = propertyInfo.GetValue(this.model);
                 if (propertyValue != null) {
 
                     if (propertyInfo.PropertyType.IsEnum) {
-                        propertyValue = Convert.ChangeType(propertyValue, Enum.GetUnderlyingType(propertyValue.GetType()));
+                        propertyValue = Convert.ChangeType(propertyValue,
+                            Enum.GetUnderlyingType(propertyValue.GetType()));
                     }
 
                     isDirty = true;
 
                     string param = strudel + propertyInfo.Name;
+                    sqlCommand.Parameters.AddWithValue(param, propertyValue);
+
                     this.HandleMergeValues(values, param);
                     this.HandleMergeSource(source, propertyInfo.Name);
-
+                    
+                    if (this.skipColumn(propertyInfo.Name)) {
+                        continue;
+                    }
+                    
                     this.HandleUpdate(update, propertyInfo.Name);
-
                     this.HandleWhenNotMatchThenInsertToColumns(insert, propertyInfo.Name);
                     this.HandleWhenNotMatchThenInsertValues(insertValues, propertyInfo.Name);
-
-                    sqlCommand.Parameters.AddWithValue(param, propertyValue);
                 }
             }
 
@@ -313,13 +284,13 @@
         /// </summary>
         /// <param name="builder">The builder.</param>
         private void HandleOnTarget(StringBuilder builder) {
-            foreach (var id in this.matchingColumnValues) {
+            foreach (var colName in this.matchingColumnNames.Distinct()) {
 
                 builder.Append("TARGET.")
-                    .Append(id.Key)
+                    .Append(colName)
                     .Append(" = ")
                     .Append(strudel)
-                    .Append(id.Key)
+                    .Append(colName)
                     .Append(and);
             }
         }
@@ -397,15 +368,6 @@
                     .Append(comma)
                     .AppendLine();
             }
-        }
-
-        /// <summary>
-        /// Obtains all properties of specified type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        private PropertyInfo[] ObtainAllTypeProperties<T>() {
-            return typeof(T).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         }
     }
 }

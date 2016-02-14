@@ -3,7 +3,7 @@
     using FluentValidation;
 
     /// <summary>
-    /// Validates authority info
+    /// Validates <see cref="AuthorityInfo"/>.
     /// </summary>
     public class AuthorityInfoValidator : AbstractValidator<AuthorityInfo> {
 
@@ -12,8 +12,23 @@
         /// </summary>
         public AuthorityInfoValidator() {
             RuleFor(o => o.ContactDetails)
+                .NotNull()
+                .WithMessage("Empty contact details");
+
+            RuleFor(o => o.ContactDetails)
                 .SetValidator(new ContactDetailsValidator())
                 .When(o => o.ContactDetails != null);
+            
+            When(o => o.AddressInfo != null, () => {
+                RuleFor(o => o.AddressInfo.Line1)
+                    .Cascade(CascadeMode.Continue)
+                    .NotEmpty()
+                    .WithMessage("Empty line1");
+                RuleFor(o => o.AddressInfo.Postcode)
+                    .Cascade(CascadeMode.Continue)
+                    .NotEmpty()
+                    .WithMessage("Empty postcode.");
+            });
         }
     }
 }

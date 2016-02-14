@@ -4,15 +4,6 @@
     using EzBobModels;
 
     public class CustomerUpdateCommand : CommandBase {
-        public AccountInfo Account { get; set; }
-        /// <summary>
-        /// Gets or sets the address.
-        /// </summary>
-        /// <value>
-        /// The address.
-        /// </value>
-        public AddressInfo Address { get; set; }
-
         /// <summary>
         /// Gets or sets the contact details.
         /// </summary>
@@ -22,28 +13,36 @@
         public ContactDetailsInfo ContactDetails { get; set; }
 
         /// <summary>
+        /// Gets or sets the current living address.
+        /// </summary>
+        /// <value>
+        /// The current living address.
+        /// </value>
+        public LivingAddressInfo CurrentLivingAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the previous living address.
+        /// </summary>
+        /// <value>
+        /// The previous living address.
+        /// </value>
+        public LivingAddressInfo PreviousLivingAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional owned properties.
+        /// </summary>
+        /// <value>
+        /// The additional owned properties.
+        /// </value>
+        public LivingAddressInfo[] AdditionalOwnedProperties { get; set; }
+
+        /// <summary>
         /// Gets or sets the personal details.
         /// </summary>
         /// <value>
         /// The personal details.
         /// </value>
         public PersonalDetailsInfo PersonalDetails { get; set; }
-
-        /// <summary>
-        /// Gets or sets the owned properties.
-        /// </summary>
-        /// <value>
-        /// The owned properties.
-        /// </value>
-        public OwnedPropertyAddressInfo[] OwnedProperties { get; set; }
-
-        /// <summary>
-        /// Gets or sets the living accommodations.
-        /// </summary>
-        /// <value>
-        /// The living accommodations.
-        /// </value>
-        public LivingAccommodationInfo[] LivingAccommodations { get; set; }
 
         /// <summary>
         /// Gets or sets the alibaba information.
@@ -93,13 +92,5 @@
         /// The customer identifier.
         /// </value>
         public string CustomerId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the customer origin.
-        /// </summary>
-        /// <value>
-        /// The customer origin.
-        /// </value>
-        public string CustomerOrigin { get; set; }
     }
 }

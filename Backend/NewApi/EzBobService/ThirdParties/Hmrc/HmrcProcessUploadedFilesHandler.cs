@@ -8,6 +8,7 @@ namespace EzBobService.ThirdParties.Hmrc {
     using EzBobCommon.Utils;
     using EzBobCommon.Utils.Encryption;
     using EzBobModels;
+    using EzBobModels.Customer;
     using EzBobModels.Hmrc;
     using EzBobModels.MarketPlace;
     using EzBobPersistence.Customer;

@@ -8,8 +8,9 @@ namespace EzBobApi.Commands.Customer
 {
     public enum HousingType
     {
+        Renting = 1,
         Social,
         LivingWithParents,
-        Renting
+        OwnProperty
     }
 }
