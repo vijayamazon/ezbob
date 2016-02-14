@@ -853,7 +853,7 @@
         protected Optional<T> ExecuteScalarAndLog<T>(SqlCommand command) {
             try {
                 object res = command.ExecuteScalar();
-                if (res == DBNull.Value) {
+                if (res == DBNull.Value || res == null) {
                     return Optional<T>.Empty();
                 }
                 return Optional<T>.Of((T)res);
