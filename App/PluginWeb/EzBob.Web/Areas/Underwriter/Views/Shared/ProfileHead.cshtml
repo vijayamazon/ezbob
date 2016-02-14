@@ -50,10 +50,10 @@
 			Bucket
 			<span class="logical-glue-bucket-value"><%-logicalGlue.BucketStr%></span>
 			<%if(!logicalGlue.ScoreIsReliable){%>
-			<span class="logical-glue-error red_cell">&nbsp;The score is not reliable&nbsp;</span>
+			<span class="logical-glue-error red_cell">The score is not reliable</span>
 			<%}%>
 			<%if(logicalGlue.IsHardReject){%>
-			<span class="logical-glue-error red_cell">&nbsp;Hard reject&nbsp;</span>
+			<span class="logical-glue-error red_cell">Hard reject</span>
 			<%}%>
 			<%if(logicalGlue.Error){%>
 			<span class="logical-glue-error" data-toggle="tooltip" data-title="<%-logicalGlue.Error%>"><i class="fa fa-info-circle"></i></span>
