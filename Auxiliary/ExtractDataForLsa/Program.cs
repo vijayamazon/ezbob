@@ -80,7 +80,7 @@
 			File.WriteAllLines(
 				Path.Combine(TargetPath, "loans.csv"),
 				this.loans.Values.Select(ld => string.Format("{0},{1}", ld.LoanID, ld.LoanInternalID)),
-				System.Text.Encoding.UTF8
+				System.Text.Encoding.ASCII
 			);
 		} // Run
 
