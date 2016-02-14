@@ -33,7 +33,7 @@
                 .Use<HmrcQueries>();
 
             For<IHmrcUploadedFileParser>()
-                .Use<IHmrcUploadedFileParser>();
+                .Use<HmrcUploadedFileParser>();
 
             ForSingletonOf<MobilePhone>()
                 .Use<MobilePhone>();
