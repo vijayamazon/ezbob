@@ -60,6 +60,7 @@
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -69,7 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfiguredEnvironment.cs" />
     <Compile Include="CRMData.cs" />
+    <Compile Include="CustomConfiguration.cs" />
     <Compile Include="RptLoansForLsaSnailmails.cs" />
     <Compile Include="SmsData.cs" />
     <Compile Include="EmailData.cs" />
@@ -92,9 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="names-to-loans.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\connection-strings.xml">

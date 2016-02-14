@@ -19,8 +19,8 @@ BEGIN
 		es.SignedDocument
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN Esignatures es ON es.CustomerID = lsa.CustomerID AND l.[Date] > es.SendDate
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN Esignatures es ON es.CustomerID = l.CustomerID AND l.[Date] > es.SendDate
 		INNER JOIN EsignAgreementStatus ess ON es.StatusID = ess.StatusID
 		INNER JOIN EsignTemplates est ON es.EsignTemplateID = est.EsignTemplateID
 		INNER JOIN EsignTemplateTypes estt ON est.EsignTemplateTypeID = estt.EsignTemplateTypeID

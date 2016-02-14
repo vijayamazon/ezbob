@@ -15,8 +15,8 @@ BEGIN
 		clm.Path
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN CollectionLog cl ON lsa.CustomerID = cl.CustomerID AND lsa.LoanID = cl.LoanID
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN CollectionLog cl ON l.CustomerID = cl.CustomerID AND lsa.LoanID = cl.LoanID
 		INNER JOIN CollectionSnailMailMetadata clm ON cl.CollectionLogID = clm.CollectionLogID
 END
 GO

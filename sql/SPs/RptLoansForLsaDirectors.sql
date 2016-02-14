@@ -11,7 +11,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		LoanID     = l.RefNum,
+		LoanID = l.RefNum,
+		LoanInternalID = l.Id,
 		FirstName = d.Name,
 		MiddleName = d.Middle,
 		LastName = d.Surname,
@@ -30,8 +31,8 @@ BEGIN
 		Address_Country      = a.Country
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN Customer c ON lsa.CustomerID = c.Id
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN Customer c ON l.CustomerID = c.Id
 		INNER JOIN Director d ON c.Id = d.CustomerId
 		LEFT JOIN CustomerAddress a ON d.id = a.DirectorId
 	WHERE

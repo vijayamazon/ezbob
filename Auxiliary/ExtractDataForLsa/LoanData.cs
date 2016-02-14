@@ -5,13 +5,15 @@
 	using OfficeOpenXml;
 
 	class LoanData {
-		public LoanData(string loanID) {
+		public LoanData(string loanID, string internalID) {
 			LoanID = loanID;
+			LoanInternalID = internalID;
 			Directors = new List<DirectorData>();
 			Crm = new List<CRMData>();
 		} // constructor
 
 		public string LoanID { get; private set; }
+		public string LoanInternalID { get; private set; }
 
 		public CustomerData CustomerData { get; set; }
 

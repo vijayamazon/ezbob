@@ -13,7 +13,7 @@ BEGIN
 		FilePath
 	FROM
 		LoanAgreement a
-		INNER JOIN loans_for_lsa l ON a.LoanId = l.LoanID
+		INNER JOIN PollenLoans l ON a.LoanId = l.LoanID
 		INNER JOIN Loan ll ON l.LoanID = ll.Id
 END
 GO
