@@ -91,25 +91,34 @@ ALTER PROCEDURE I_GetInvestorsBalance
 AS
 BEGIN
 
-		;WITH last_balance as 
-		(
-			SELECT
-			    MAX(iisb.Timestamp) AS LastTimeStamp,
-				iiba.InvestorID
-			FROM I_InvestorSystemBalance iisb
-			INNER JOIN I_InvestorBankAccount iiba
-			ON iiba.InvestorBankAccountID = iisb.InvestorBankAccountID and iiba.IsActive =1
-			WHERE iiba.InvestorAccountTypeID = 1
-			GROUP BY InvestorID
-		)
-  SELECT
-    iiba.InvestorID,
-    iisb.NewBalance AS Balance
-  FROM I_InvestorSystemBalance iisb INNER JOIN I_InvestorBankAccount iiba
-      ON iiba.InvestorBankAccountID = iisb.InvestorBankAccountID and iiba.IsActive =1
-	INNER JOIN last_balance lb ON lb.InvestorID = iiba.InvestorID
-  WHERE lb.LastTimeStamp = iisb.Timestamp 
+	;WITH last_balance as 
+	(
+		SELECT
+			MAX(iisb.InvestorSystemBalanceID) AS LastSystemBalanceID,
+			iiba.InvestorID
+		FROM 
+			I_InvestorSystemBalance iisb
+		INNER JOIN 
+			I_InvestorBankAccount iiba ON iiba.InvestorBankAccountID = iisb.InvestorBankAccountID AND iiba.IsActive =1
+		WHERE 
+			iiba.InvestorAccountTypeID = 1
+		GROUP BY 
+			InvestorID
+	)
+	SELECT
+		iiba.InvestorID,
+		iisb.NewBalance AS Balance,
+		iisb.InvestorBankAccountID
+	FROM 
+		I_InvestorSystemBalance iisb 
+	INNER JOIN 
+		I_InvestorBankAccount iiba ON iiba.InvestorBankAccountID = iisb.InvestorBankAccountID AND iiba.IsActive =1
+	INNER JOIN 
+		last_balance lb ON lb.InvestorID = iiba.InvestorID
+	WHERE 
+		lb.LastSystemBalanceID = iisb.InvestorSystemBalanceID 
 END
+
 GO
 
 ALTER PROCEDURE I_GetInvestorsIds

@@ -14,14 +14,26 @@
         private Dictionary<int, I_Parameter> investorsParameters;
         public Dictionary<int, decimal> InvestorsBalance {
             get {
-                return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance", 
-					CommandSpecies.StoredProcedure).ToDictionary(x => x.InvestorID, x => x.Balance));
+	            try {
+		            return this.investorsBalance ?? (this.investorsBalance = Library.Instance.DB.Fill<I_InvestorBalance>("I_GetInvestorsBalance",
+			            CommandSpecies.StoredProcedure)
+			            .ToDictionary(x => x.InvestorID, x => x.Balance));
+				} catch (Exception ex) {
+					Log.ErrorFormat("Failed to retrieve I_GetInvestorsBalance \n{0} ", ex);
+					return new Dictionary<int, decimal>();
+				}
             }
         }
         public Dictionary<int, I_Parameter> InvestorsParameters {
             get {
-                return this.investorsParameters ?? (this.investorsParameters = Library.Instance.DB.Fill<I_Parameter>("I_GetInvestorParameters", 
-					CommandSpecies.StoredProcedure).ToDictionary(x => x.ParameterID, x => x));
+	            try {
+		            return this.investorsParameters ?? (this.investorsParameters = Library.Instance.DB.Fill<I_Parameter>("I_GetInvestorParameters",
+			            CommandSpecies.StoredProcedure)
+			            .ToDictionary(x => x.ParameterID, x => x));
+				} catch (Exception ex) {
+					Log.ErrorFormat("Failed to retrieve I_GetInvestorParameters \n{0} ", ex);
+					return new Dictionary<int, I_Parameter>();
+				}
             }
         }
 

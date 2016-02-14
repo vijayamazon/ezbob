@@ -21,19 +21,23 @@
 
             var container = InitContainer(typeof(InvestorService));
             var investorService = container.GetInstance<IInvestorService>();
-		    
-            KeyValuePair<int,decimal>? investorParametersList = investorService.GetMatchedInvestor(this.cashRequestID);
+			try {
+				KeyValuePair<int, decimal>? investorParametersList = investorService.GetMatchedInvestor(this.cashRequestID);
 
-			if (investorParametersList.HasValue) {
-				IsFound = true;
-				DB.ExecuteNonQuery("I_OpenPlatformOfferSave", CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter("Tbl", new I_OpenPlatformOffer {
+				if (investorParametersList.HasValue) {
+					IsFound = true;
+					DB.ExecuteNonQuery("I_OpenPlatformOfferSave", CommandSpecies.StoredProcedure,
+						DB.CreateTableParameter("Tbl", new I_OpenPlatformOffer {
 							CashRequestID = this.cashRequestID,
 							InvestorID = investorParametersList.Value.Key,
 							InvestmentPercent = investorParametersList.Value.Value
 						})
-					);
-			}//if
+						);
+				} //if
+			} catch (Exception ex) {
+				Log.Error(ex, "Failed to find investor for offer {0} for customer {1}", this.cashRequestID, this.customerID);
+				IsFound = false;
+			}
 		}//Execute
 
         protected IContainer InitContainer(Type scanAssemblyOfType) {
