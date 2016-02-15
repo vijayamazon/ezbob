@@ -10,9 +10,14 @@ GO
 
 ALTER PROCEDURE LogicalGlueSaveCustomerHistory
 @ResponseID BIGINT,
-@Now DATETIME
+@Now DATETIME,
+@ForceUpdate BIT = 0
 AS
 BEGIN
+	SET @ForceUpdate = ISNULL(@ForceUpdate, 0)
+
+	------------------------------------------------------------------------------
+
 	DECLARE @ModelID BIGINT = (SELECT m.ModelID FROM LogicalGlueModels m WHERE m.ModelName = 'Neural network')
 
 	------------------------------------------------------------------------------
@@ -39,6 +44,9 @@ BEGIN
 		FROM
 			LogicalGlueResponses rs
 			INNER JOIN MP_ServiceLog l ON l.Id = rs.ServiceLogID
+			INNER JOIN LogicalGlueRequests rq
+				ON rs.ServiceLogID = rq.ServiceLogID
+				AND (@ForceUpdate = 1 OR rq.IsTryOut = 0)
 			LEFT JOIN LogicalGlueEtlData etl ON etl.ResponseID = rs.ResponseID
 			LEFT JOIN LogicalGlueModelOutputs mo ON rs.ResponseID = mo.ResponseID AND mo.ModelID = @ModelID
 			LEFT JOIN LogicalGlueEtlCodes etlc ON etl.EtlCodeID = etlc.EtlCodeID

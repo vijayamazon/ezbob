@@ -60,9 +60,9 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @OldIsTryOutStatus = 0 AND @NewIsTryOutStatus = 1
+	IF @OldIsTryOutStatus = 1 AND @NewIsTryOutStatus = 0
 	BEGIN
-		EXECUTE LogicalGlueSaveCustomerHistory @ResponseID, @Now
+		EXECUTE LogicalGlueSaveCustomerHistory @ResponseID, @Now, 1
 		RETURN
 	END
 
