@@ -82,5 +82,9 @@
 		public bool IsValid {
 			get { return (ID > 0) && (ID == RequestedID); }
 		} // IsValid
+
+		public bool IsBroker {
+			get { return BrokerId.HasValue && (BrokerId.Value > 0); }
+		} // IsBroker
 	} // class CustomerDetails
 } // namespace
