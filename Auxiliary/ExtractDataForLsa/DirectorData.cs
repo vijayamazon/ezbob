@@ -9,6 +9,7 @@
 
 	class DirectorData : AResultRow {
 		public string LoanID { get; set; }
+		public string LoanInternalID { get; set; }
 		public string FirstName { get; set; }
 		public string MiddleName { get; set; }
 		public string LastName { get; set; }

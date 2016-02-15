@@ -1,12 +1,19 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Helpers {
 	using System.Text.RegularExpressions;
-	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using EZBob.DatabaseLib.Model.Database;
 
 	class BackdoorSimpleManual : ABackdoorSimpleDetails {
-		public static BackdoorSimpleManual Create(string backdoorCode, int customerID) {
+		public static ABackdoorSimpleDetails Create(
+			string backdoorCode,
+			int customerID,
+			bool ownsProperty,
+			decimal requestedAmount,
+			int homeOwnerCap,
+			int notHomeOwnerCap,
+			int delay
+		) {
 			var match = regex.Match(backdoorCode);
 
 			if (!match.Success) {
@@ -15,15 +22,25 @@
 			} // if
 
 			return new BackdoorSimpleManual(
+				homeOwnerCap,
+				notHomeOwnerCap,
 				customerID,
-				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0
+				match.Groups[1].Value == "s" ? delay : 0,
+				ownsProperty,
+				requestedAmount
 			);
 		} // Create
 
 		public override bool SetResult(AutoDecisionResponse response) {
 			Log.Debug("Back door simple flow: using manual decision...");
 
-			CalculateMedalAndOffer(null, 0);
+			if (!CalculateMedalAndOffer()) {
+				Log.Debug(
+					"Back door simple flow: failed to set manual for customer {0} because of medal/offer.",
+					this.customerID
+				);
+				return false;
+			} // if
 
 			response.CreditResult = CreditResultStatus.WaitingForDecision;
 			response.UserStatus = Status.Manual;
@@ -48,7 +65,14 @@
 			return string.Format("back door decision '{0}' after '{1}' seconds.", Decision, Delay);
 		} // ToString
 
-		private BackdoorSimpleManual(int customerID, int delay) : base(customerID, DecisionActions.Waiting, delay) {
+		private BackdoorSimpleManual(
+			int homeOwnerCap,
+			int notHomeOwnerCap,
+			int customerID,
+			int delay,
+			bool ownsProperty,
+			decimal requestedAmount
+		) : base(homeOwnerCap, notHomeOwnerCap, customerID, DecisionActions.Waiting, delay, ownsProperty, requestedAmount) {
 		} // constructor
 
 		private static readonly Regex regex = new Regex(@"^bds-m([fs])$");

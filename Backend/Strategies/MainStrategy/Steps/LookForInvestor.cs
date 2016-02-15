@@ -29,11 +29,17 @@
 					this.outcome = string.Format("'back door investor not found'");
 					return StepResults.NotFound;
 				} else {
+					Log.Debug(
+						"Back door investor for {0}: try to set investor with id {1}.",
+						OuterContextDescription,
+						this.backdoorInvestorID.Value
+					);
+
 					loti = new LinkOfferToInvestor(
 						this.customerID,
 						this.cashRequestID,
 						true,
-						this.backdoorInvestorID,
+						this.backdoorInvestorID.Value,
 						this.underwriterID
 					);
 				} // if

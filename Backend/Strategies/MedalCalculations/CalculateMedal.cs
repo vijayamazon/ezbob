@@ -35,6 +35,8 @@
 
 			CashRequestID = cashRequestID;
 			NLCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
+
+			Result = new MedalResult(this.customerId, Log, "Medal calculator has not been executed yet.");
 		} // constructor
 
 		public virtual string Tag { get; set; }
@@ -42,8 +44,6 @@
 		public virtual long? CashRequestID { get; private set; }
 
 		public virtual long? NLCashRequestID { get; private set; }
-
-		public bool HasError { get { return (Result == null) || Result.HasError; } }
 
 		public override void Execute() {
 			try {
@@ -62,13 +62,6 @@
 				this.verificationResult = CalculateVerification();
 
 				Result.CheckForMatch(this.verificationResult);
-
-				if (this.doStoreMedal) {
-					Result.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
-
-					if (this.verificationResult != null)
-						this.verificationResult.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
-				} // if
 			} catch (Exception e) {
 				Log.Say(
 					Severity.Alert,
@@ -79,6 +72,24 @@
 				);
 
 				Result = new MedalResult(this.customerId, Log, e);
+			} // try
+
+			if (!this.doStoreMedal)
+				return;
+
+			try {
+				Result.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB);
+
+				if (this.verificationResult != null)
+					this.verificationResult.SaveToDb(CashRequestID, NLCashRequestID, Tag, DB, Log);
+			} catch (Exception e) {
+				Log.Say(
+					Severity.Alert,
+					e,
+					"Failed to save medal for customer {0}. {1}",
+					this.customerId,
+					Tag
+				);
 			} // try
 		} // Execute
 

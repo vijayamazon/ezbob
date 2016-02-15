@@ -37,11 +37,11 @@
 			var stepHistory = new List<StepHistoryItem>();
 
 			for ( ; ; ) {
-				var historyItem = new StepHistoryItem(currentStep.Name);
-				stepHistory.Add(historyItem);
-
 				this.context.CurrentStepName = currentStep.Name;
 				UpdateStrategyContext();
+
+				var historyItem = new StepHistoryItem(currentStep.Name);
+				stepHistory.Add(historyItem);
 
 				StepResults stepResult = currentStep.Execute();
 
@@ -222,14 +222,16 @@
 					this.context.CashRequestOriginator,
 					this.context.CashRequestID,
 					this.context.NLCashRequestID,
-					this.context.Tag,
 					this.context.MaxCapHomeOwner,
 					this.context.MaxCapNotHomeOwner,
 					this.context.SmallLoanScenarioLimit,
 					this.context.AspireToMinSetupFee,
 					this.context.TypeOfBusiness,
 					this.context.CustomerDetails.OriginID,
-					this.context.MonthlyRepayment
+					this.context.MonthlyRepayment,
+					this.context.WizardAutomationTimeout,
+					this.context.OfferValidForHours,
+					this.context.Tag
 				);
 				applyBackdoorLogic.CollectOutputValue += CollectStepOutputValue;
 				return applyBackdoorLogic;

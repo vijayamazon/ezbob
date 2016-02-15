@@ -24,8 +24,8 @@ BEGIN
 		ExperianRawData = sl.ResponseData
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN coc ON lsa.CustomerID = coc.CustomerID
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN coc ON l.CustomerID = coc.CustomerID
 		INNER JOIN MP_ServiceLog sl ON
 			(sl.ServiceType IN ('AML A check','Consumer Request') AND sl.CustomerId = coc.CustomerID)
 			OR

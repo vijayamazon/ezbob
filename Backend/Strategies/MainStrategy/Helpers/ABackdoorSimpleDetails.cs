@@ -1,12 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Helpers {
+	using System;
 	using System.Threading;
-	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.MainStrategy.Steps;
 	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Backend.Strategies.StoredProcs;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Logger;
@@ -14,7 +12,15 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	internal abstract class ABackdoorSimpleDetails {
-		public static ABackdoorSimpleDetails Create(int customerID, string email, bool ownsProperty) {
+		public static ABackdoorSimpleDetails Create(
+			int customerID,
+			string email,
+			bool ownsProperty,
+			decimal requestedAmount,
+			int homeOwnerCap,
+			int notHomeOwnerCap,
+			int delay
+		) {
 			if (string.IsNullOrWhiteSpace(email)) {
 				Log.Alert(
 					"Not using back door simple for customer '{0}': customer email not specified.",
@@ -51,9 +57,9 @@
 			string backdoorCode = email.Substring(plusPos + 1, atPos - plusPos - 1);
 
 			ABackdoorSimpleDetails result =
-				(ABackdoorSimpleDetails)BackdoorSimpleReject.Create(backdoorCode, customerID) ??
-				(ABackdoorSimpleDetails)BackdoorSimpleApprove.Create(backdoorCode, customerID, ownsProperty) ??
-				(ABackdoorSimpleDetails)BackdoorSimpleManual.Create(backdoorCode, customerID);
+				BackdoorSimpleReject.Create(backdoorCode, customerID, ownsProperty, requestedAmount, homeOwnerCap, notHomeOwnerCap, delay) ??
+				BackdoorSimpleApprove.Create(backdoorCode, customerID, ownsProperty, requestedAmount, homeOwnerCap, notHomeOwnerCap, delay) ??
+				BackdoorSimpleManual.Create(backdoorCode, customerID, ownsProperty, requestedAmount, homeOwnerCap, notHomeOwnerCap, delay);
 
 			if (result != null) {
 				Log.Debug("Using back door simple for customer '{0}' as: {1}.", customerID, result);
@@ -78,48 +84,60 @@
 
 		public int Delay { get; private set; }
 
+		public int ApprovedAmount { get; private set; }
+
 		public abstract bool SetResult(AutoDecisionResponse response);
 
 		public void SetAdditionalCustomerData(
-			string aouterContextDescription,
 			long acashRequestID,
 			long anlCashRequestID,
-			string atag,
-			int ahomeOwnerCap,
-			int anotHomeOwnerCap,
 			int asmallLoanScenarioLimit,
 			bool aaspireToMinSetupFee,
 			TypeOfBusiness atypeOfBusiness,
 			int acustomerOriginID,
-			MonthlyRepaymentData arequestedLoan
+			MonthlyRepaymentData arequestedLoan,
+			int aofferValidHours
 		) {
-			this.outerContextDescription = aouterContextDescription;
 			this.cashRequestID = acashRequestID;
 			this.nlCashRequestID = anlCashRequestID;
-			this.tag = atag;
-			this.homeOwnerCap = ahomeOwnerCap;
-			this.notHomeOwnerCap = anotHomeOwnerCap;
 			this.smallLoanScenarioLimit = asmallLoanScenarioLimit;
 			this.aspireToMinSetupFee = aaspireToMinSetupFee;
 			this.typeOfBusiness = atypeOfBusiness;
 			this.customerOriginID = acustomerOriginID;
 			this.requestedLoan = arequestedLoan;
+			this.offerValidHours = aofferValidHours;
 		} // SetAdditionalCustomerData
 
-		protected ABackdoorSimpleDetails(int customerID, DecisionActions decision, int delay) {
+		protected ABackdoorSimpleDetails(
+			int homeOwnerCap,
+			int notHomeOwnerCap,
+			int customerID,
+			DecisionActions decision,
+			int delay,
+			bool ownsProperty,
+			decimal requestedAmount,
+			bool gradeMode = false
+		) {
 			this.customerID = customerID;
 			Decision = decision;
 			Delay = delay;
+			this.ownsProperty = ownsProperty;
+			this.homeOwnerCap = homeOwnerCap;
+			this.notHomeOwnerCap = notHomeOwnerCap;
 
 			Medal = null;
 			OfferResult = null;
+
+			int appAmount = (int)(requestedAmount / 1000m);
+
+			ApprovedAmount = MedalResult.RoundOfferedAmount(gradeMode ? appAmount * 1000 : Cap(appAmount * 1000));
 		} // constructor
 
 		protected static ASafeLog Log {
 			get { return Library.Instance.Log; }
 		} // Log
 
-		private static AConnection DB {
+		protected static AConnection DB {
 			get { return Library.Instance.DB; }
 		} // DB
 
@@ -127,10 +145,10 @@
 			if (Delay < 1)
 				return;
 
-			//fix for too small delay configuration
-			if (Delay < 20) {
+			// fix for too small delay configuration
+			if (Delay < 20)
 				Delay = 20;
-			}
+
 			Log.Debug(
 				"Back door simple flow: delaying for {0}...",
 				Grammar.Number(Delay, "second")
@@ -152,7 +170,15 @@
 			);
 		} // DoDelay
 
-		protected virtual bool CalculateMedalAndOffer(decimal? gradeScore, int proposedAmount) {
+		protected readonly int customerID;
+		protected int offerValidHours;
+		protected MonthlyRepaymentData requestedLoan;
+		protected int smallLoanScenarioLimit;
+		protected bool aspireToMinSetupFee;
+		protected TypeOfBusiness typeOfBusiness;
+		protected int customerOriginID;
+
+		protected virtual bool CalculateMedalAndOffer() {
 			SafeReader sr = Library.Instance.DB.GetFirst(
 				"GetDefaultLoanSource",
 				CommandSpecies.StoredProcedure,
@@ -161,97 +187,74 @@
 
 			if (sr.IsEmpty) {
 				Log.Warn(
-					"Back door simple approval failed for customer '{0}': could not load default loan source.",
+					"Back door simple failed for customer '{0}': could not load default loan source.",
 					this.customerID
 				);
 				return false;
 			} // if
 
-			int sourceID = sr["LoanSourceID"];
+			int period = sr["RepaymentPeriod"];
+			int loanSourceID = sr["LoanSourceID"];
 
-			var matchingGradeRanges = new MatchingGradeRanges();
+			sr = DB.GetFirst("GetLoanTypeAndDefault", CommandSpecies.StoredProcedure, new QueryParameter("@LoanTypeID"));
 
-			if (gradeScore != null) {
-				var spRanges = new LoadMatchingGradeRanges(DB, Log) {
-					IsFirstLoan = true,
-					IsRegulated = this.typeOfBusiness.IsRegulated(),
-					LoanSourceID = sourceID,
-					OriginID = this.customerOriginID,
-					Score = gradeScore.Value,
-				};
-				spRanges.Execute(matchingGradeRanges);
-
-				if (matchingGradeRanges.Count != 1) {
-					Log.Warn(
-						"Back door simple approval failed for customer '{0}': {1} found.",
-						this.customerID,
-						Grammar.Number(matchingGradeRanges.Count, "matching grade range")
-					);
-					return false;
-				} // if
-
-				// TODO: create corresponding fake fetch LG score entries.
+			if (sr.IsEmpty) {
+				Log.Warn(
+					"Back door simple failed for customer '{0}': could not load default loan type.",
+					this.customerID
+				);
+				return false;
 			} // if
 
-			var autoRejectionOutput = new AutoRejectionOutput {
-				ErrorInLGData = false,
-				FlowType = gradeScore == null ? AutoDecisionFlowTypes.Internal : AutoDecisionFlowTypes.LogicalGlue,
-				GradeRangeID = gradeScore == null ? 0 : matchingGradeRanges[0].GradeRangeID,
-				ProductSubTypeID = gradeScore == null ? 0 : matchingGradeRanges[0].ProductSubTypeID,
+			int loanTypeID = sr["DefaultLoanTypeID"];
+
+			Medal = new MedalResult(this.customerID, null) {
+				CalculationTime = DateTime.UtcNow,
+				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+				MedalType = Strategies.MedalCalculations.MedalType.NoMedal,
+				OfferedLoanAmount = ApprovedAmount,
+				AnnualTurnover = ApprovedAmount,
+				TotalScoreNormalized = 0,
 			};
 
-			var calc = new CalculateOfferIfPossible(
-				this.outerContextDescription,
-				this.customerID,
-				this.cashRequestID,
-				this.nlCashRequestID,
-				this.tag,
-				autoRejectionOutput,
-				this.requestedLoan,
-				this.homeOwnerCap,
-				this.notHomeOwnerCap,
-				this.smallLoanScenarioLimit,
-				this.aspireToMinSetupFee
-			) { ForcedProposedAmount = proposedAmount, };
+			OfferResult = new OfferResult {
+				CustomerId = this.customerID,
+				CalculationTime = DateTime.UtcNow,
+				Amount = ApprovedAmount,
+				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
+				FlowType = AutoDecisionFlowTypes.Internal,
+				GradeID = null,
+				SubGradeID = null,
+				CashRequestID = this.cashRequestID,
+				NLCashRequestID = this.nlCashRequestID,
 
-			StepResults calcResult = calc.Execute();
-
-			if (calcResult != StepResults.Success) {
-				Log.Warn(
-					"Back door simple approval failed for customer '{0}': offer calculation failed.",
-					this.customerID
-				);
-
-				return false;
-			} // if
-
-			if (calc.OfferResult == null || calc.OfferResult.IsError) {
-				Log.Warn(
-					"Back door simple for customer '{0}' - approval failed. Offer result: '{1}'.",
-					this.customerID,
-					calc.OfferResult != null ? calc.OfferResult.Description : string.Empty
-				);
-				return false;
-			} // if
-
-			Medal = calc.Medal;
-			OfferResult = calc.OfferResult;
+				ScenarioName = "Back door - no offer",
+				Period = period,
+				LoanTypeId = loanTypeID,
+				LoanSourceId = loanSourceID,
+				InterestRate = 0,
+				SetupFee = 0,
+				Message = null,
+				IsError = false,
+				IsMismatch = false,
+				HasDecision = false,
+			};
 
 			return true;
-		} // CalcualteMedalAndOffer
+		} // CalculateMedalAndOffer
 
-		protected readonly int customerID;
+		private int Cap(int val) {
+			return Math.Min(
+				val,
+				this.ownsProperty ? this.homeOwnerCap : this.notHomeOwnerCap
+			);
+		} // Cap
 
-		private string outerContextDescription;
+		private readonly bool ownsProperty;
+		private readonly int homeOwnerCap;
+		private readonly int notHomeOwnerCap;
+
 		private long cashRequestID;
 		private long nlCashRequestID;
-		private string tag;
-		private MonthlyRepaymentData requestedLoan;
-		private int homeOwnerCap;
-		private int notHomeOwnerCap;
-		private int smallLoanScenarioLimit;
-		private bool aspireToMinSetupFee;
-		private TypeOfBusiness typeOfBusiness;
-		private int customerOriginID;
 	} // class ABackdoorSimpleDetails
 } // namespace

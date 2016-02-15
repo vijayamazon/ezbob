@@ -86,7 +86,8 @@ BEGIN
 			t.AddressType
 	)
 	SELECT
-		LoanID     = l.RefNum,
+		LoanID         = l.RefNum,
+		LoanInternalID = l.Id,
 		--
 		--
 		CustomerRefnum      = c.RefNumber,
@@ -154,8 +155,8 @@ BEGIN
 		--
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN Customer c ON lsa.CustomerID = c.Id
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN Customer c ON l.CustomerID = c.Id
 		LEFT JOIN crl
 			ON c.Id = crl.CustomerId
 		LEFT JOIN CustomerRequestedLoan crl_data

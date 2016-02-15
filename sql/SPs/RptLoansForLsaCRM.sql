@@ -21,8 +21,8 @@ BEGIN
 		crm.Comment
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN CustomerRelations crm ON lsa.CustomerID = crm.CustomerID
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN CustomerRelations crm ON l.CustomerID = crm.CustomerID
 		INNER JOIN CRMActions a ON crm.ActionId = a.Id
 		INNER JOIN CRMStatuses s ON crm.StatusId = s.Id
 		LEFT JOIN CRMRanks r ON crm.RankId = r.Id

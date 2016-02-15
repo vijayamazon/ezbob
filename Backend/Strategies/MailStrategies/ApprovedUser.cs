@@ -8,6 +8,7 @@
 	using Ezbob.Backend.Strategies.StoredProcs;
 	using Ezbob.Database;
 	using Ezbob.Utils;
+	using PaymentServices.Calculators;
 
 	public class ApprovedUser : ABrokerMailToo {
 		public ApprovedUser(int customerId, decimal loanAmount, int validHours, bool isFirst) : base(customerId, true) {
@@ -28,7 +29,8 @@
 
 		public class CashRequestRelevantData : AResultRow {
 			public decimal InterestRate { get; set; }
-			public int ManualSetupFeeAmount { get; set; }
+			public decimal ManualSetupFeePercent { get; set; }
+			public decimal BrokerSetupFeePercent { get; set; }
 			public int SystemCalculatedSum { get; set; }
 			public int ManagerApprovedSum { get; set; }
 		} // class CashRequestRelevantData
@@ -38,22 +40,11 @@
 				"GetCashRequestData",
 				new QueryParameter("@CustomerId", CustomerData.Id)
 			);
-			
-			if (cashRequestRelevantData.ManagerApprovedSum != 0) {
-				this.setupFeePercents =
-					(decimal)cashRequestRelevantData.ManualSetupFeeAmount *
-					100 /
-					cashRequestRelevantData.ManagerApprovedSum;
-			}
-			else if (cashRequestRelevantData.SystemCalculatedSum != 0) {
-				this.setupFeePercents =
-					(decimal)cashRequestRelevantData.ManualSetupFeeAmount *
-					100 /
-					cashRequestRelevantData.SystemCalculatedSum;
-			}
-			else
-				this.setupFeePercents = 0;
 
+
+			SetupFeeCalculator sfCalculator = new SetupFeeCalculator(cashRequestRelevantData.ManualSetupFeePercent, cashRequestRelevantData.BrokerSetupFeePercent);
+			var setupFeeAmount = sfCalculator.Calculate(cashRequestRelevantData.ManagerApprovedSum);
+			this.setupFeePercents = (cashRequestRelevantData.ManualSetupFeePercent + cashRequestRelevantData.BrokerSetupFeePercent) * 100;
 			this.interestRatePercents = cashRequestRelevantData.InterestRate * 100;
 			this.setupFeePercents = MathUtils.Round2DecimalDown(this.setupFeePercents);
 			decimal remainingPercentsAfterSetupFee = 100 - this.setupFeePercents;

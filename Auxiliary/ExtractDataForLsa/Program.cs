@@ -2,11 +2,10 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using Ezbob.Context;
+	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Microsoft.VisualBasic.FileIO;
-	using Newtonsoft.Json;
 
 	class Program {
 		static void Main(string[] args) {
@@ -34,8 +33,19 @@
 				Enum.TryParse(args[0], true, out this.workingMode);
 
 			this.log = new FileLog("ExtractDataForLsa");
-			var env = new Ezbob.Context.Environment(Name.Production, "alexbo", this.log);
-			var db = new SqlConnection(env, log);
+
+			this.cfg = CustomConfiguration.Load();
+
+			var env = new Ezbob.Context.Environment(this.cfg.Environment.Name, this.cfg.Environment.Variant, this.log);
+
+			this.log.Msg("Target path: {0}", TargetPath);
+			this.log.Msg("Dropbox root path: {0}", DropboxRootPath);
+			this.log.Msg("Working mode: {0}", this.workingMode);
+
+			if (this.workingMode == WorkingMode.None)
+				return;
+
+			var db = new SqlConnection(env, this.log);
 
 			this.loans = new SortedDictionary<string, LoanData>();
 			this.nameToLoan = new SortedDictionary<string, SortedSet<string>>();
@@ -50,13 +60,14 @@
 			this.loansForLsaEmails = new RptLoansForLsaEmails(db, this.log);
 			this.loansForLsaSms = new RptLoansForLsaSms(db, this.log);
 			this.loansForLsaSnailmails = new RptLoansForLsaSnailmails(db, this.log);
-
-			this.log.Msg("Target path: {0}", TargetPath);
-			this.log.Msg("Dropbox root path: {0}", DropboxRootPath);
-			this.log.Msg("Working mode: {0}", this.workingMode);
 		} // constructor
 
 		private void Run() {
+			if (this.workingMode == WorkingMode.None) {
+				this.log.Msg("Working mode is {0} - nothing to do.", this.workingMode);
+				return;
+			} // if
+
 			ProcessCustomerData();
 			ProcessExperianData();
 			ProcessAgreements();
@@ -65,27 +76,36 @@
 			ProcessSms();
 			ProcessSnailmails();
 			ProcessDropbox();
+
+			File.WriteAllLines(
+				Path.Combine(TargetPath, "loans.csv"),
+				this.loans.Values.Select(ld => string.Format("{0},{1}", ld.LoanID, ld.LoanInternalID)),
+				System.Text.Encoding.ASCII
+			);
 		} // Run
 
 		private bool Do(WorkingMode mode) {
-			if (mode == WorkingMode.Dropbox)
-				return (this.workingMode == WorkingMode.All) || (this.workingMode == mode);
+			bool result;
 
-			return
-				(this.workingMode == WorkingMode.All) ||
-				(this.workingMode == WorkingMode.ExceptDropbox) ||
-				(this.workingMode == mode);
+			if (mode == WorkingMode.Dropbox)
+				result = (this.workingMode == WorkingMode.All) || (this.workingMode == mode);
+			else {
+				result =
+					(this.workingMode == WorkingMode.All) ||
+					(this.workingMode == WorkingMode.ExceptDropbox) ||
+					(this.workingMode == mode);
+			} // if
+
+			this.log.Msg("Step {0}: {1}processing.", mode, result ? string.Empty : "not ");
+
+			return result;
 		} // Do
 
 		private void ProcessDropbox() {
 			if (!Do(WorkingMode.Dropbox))
 				return;
 
-			var namesToLoans = JsonConvert.DeserializeObject<SortedDictionary<string, SortedSet<string>>>(
-				File.ReadAllText(NamesToLoansFileName)
-			);
-
-			foreach (KeyValuePair<string, SortedSet<string>> pair in namesToLoans) {
+			foreach (KeyValuePair<string, SortedSet<string>> pair in this.nameToLoan) {
 				string customerName = pair.Key;
 				SortedSet<string> loanList = pair.Value;
 
@@ -103,9 +123,9 @@
 						Directory.CreateDirectory(loanPath);
 
 					FileSystem.CopyDirectory(sourcePath, loanPath);
+					this.log.Debug("Loan #{0} has attached directory {1}.", loanID, loanPath);
 				} // for each loan
 			} // for each customer
-
 		} // ProcessDropbox
 
 		private void ProcessSnailmails() {
@@ -116,13 +136,20 @@
 				string loanID = sr["LoanID"];
 				string path = sr["Path"];
 
+				if (path == null)
+					path = string.Empty;
+
 				string loanPath = Path.Combine(TargetPath, loanID, "snail-mails");
 
 				if (!Directory.Exists(loanPath))
 					Directory.CreateDirectory(loanPath);
 
-				if (File.Exists(path))
-					File.Copy(path, Path.Combine(loanPath, Path.GetFileName(path)), true);
+				string fileName = Path.GetFileName(path);
+
+				if (File.Exists(path)) {
+					File.Copy(path, Path.Combine(loanPath, fileName), true);
+					this.log.Debug("Loan #{0} has agreement {1}.", loanID, fileName);
+				} // if
 			});
 		} // ProcessSnailmails
 
@@ -132,6 +159,7 @@
 
 			this.loansForLsaSms.ForEachResult<SmsData>(ed => {
 				ed.SaveTo(TargetPath);
+				this.log.Debug("Loan #{0} has SMS '{1}'.", ed.LoanID, ed.Body);
 				return ActionResult.Continue;
 			});
 		} // ProcessSms
@@ -142,6 +170,7 @@
 
 			this.loansForLsaEmails.ForEachResult<EmailData>(ed => {
 				ed.SaveTo(TargetPath);
+				this.log.Debug("Loan #{0} has email file {1}.", ed.LoanID, ed.FileName);
 				return ActionResult.Continue;
 			});
 		} // ProcessEmails
@@ -152,6 +181,9 @@
 
 			this.loansForLsaEchoSign.ForEachResult<EchoSignData>(esd => {
 				esd.SaveTo(TargetPath);
+
+				this.log.Debug("Loan #{0} has EchoSign file {1}.", esd.LoanID, esd.FileNameBase);
+
 				return ActionResult.Continue;
 			});
 		} // ProcessEchoSign
@@ -181,7 +213,12 @@
 					if (!File.Exists(fullSourcePath))
 						continue;
 
-					File.Copy(fullSourcePath, Path.Combine(loanPath, Path.GetFileName(fullSourcePath)), true);
+					string fileName = Path.GetFileName(fullSourcePath);
+
+					File.Copy(fullSourcePath, Path.Combine(loanPath, fileName), true);
+
+					this.log.Debug("Loan #{0} has agreement {1}.", loanID, fileName);
+
 					break;
 				} // for each base path
 			});
@@ -193,17 +230,15 @@
 
 			this.loansForLsaExperian.ForEachResult<ExperianData>(cd => {
 				cd.SaveTo(TargetPath);
+				this.log.Debug("Loan #{0} has Experian request {1} at {2}.", cd.LoanID, cd.ServiceType, cd.FetchTime);
 				return ActionResult.Continue;
 			});
 		} // ProcessExperianData
 
 		private void ProcessCustomerData() {
-			if (!Do(WorkingMode.Customer))
-				return;
-
 			this.loansForLsa.ForEachResult<CustomerData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID))
-					this.loans[cd.LoanID] = new LoanData(cd.LoanID);
+					this.loans[cd.LoanID] = new LoanData(cd.LoanID, cd.LoanInternalID);
 
 				this.loans[cd.LoanID].CustomerData = cd;
 
@@ -212,40 +247,48 @@
 
 				this.nameToLoan[cd.FullName].Add(cd.LoanID);
 
+				this.log.Debug("{0} has loan #{1}.", cd.FullName, cd.LoanID);
+
 				return ActionResult.Continue;
 			});
 
+			if (!Do(WorkingMode.Customer))
+				return;
+
 			this.loansForLsaDirectors.ForEachResult<DirectorData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID)) {
-					this.loans[cd.LoanID] = new LoanData(cd.LoanID);
+					this.loans[cd.LoanID] = new LoanData(cd.LoanID, cd.LoanInternalID);
 					this.log.Alert("Loan {0} not found for director.", cd.LoanID);
 				} // if
 
 				this.loans[cd.LoanID].Directors.Add(cd);
+
+				this.log.Debug("Loan #{0} has director {1}.", cd.LoanID, cd.FullName);
 
 				return ActionResult.Continue;
 			});
 
 			this.loansForLsaCrm.ForEachResult<CRMData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID)) {
-					this.loans[cd.LoanID] = new LoanData(cd.LoanID);
+					this.loans[cd.LoanID] = new LoanData(cd.LoanID, cd.LoanInternalID);
 					this.log.Alert("Loan {0} not found for CRM.", cd.LoanID);
 				} // if
 
 				this.loans[cd.LoanID].Crm.Add(cd);
+
+				this.log.Debug("Loan #{0} has CRM message {1}.", cd.LoanID, cd.Action);
 
 				return ActionResult.Continue;
 			});
 
 			foreach (LoanData ld in this.loans.Values)
 				ld.SaveTo(TargetPath);
-
-			File.WriteAllText(
-				Path.Combine(TargetPath, NamesToLoansFileName),
-				JsonConvert.SerializeObject(this.nameToLoan),
-				System.Text.Encoding.UTF8
-			);
 		} // ProcessCustomerData
+
+		private string TargetPath { get { return this.cfg.TargetPath; } }
+		private string DropboxRootPath { get { return this.cfg.DropboxRootPath; } }
+
+		private readonly CustomConfiguration cfg;
 
 		private readonly ASafeLog log;
 
@@ -265,10 +308,6 @@
 		private readonly SortedDictionary<string, LoanData> loans;
 
 		private readonly WorkingMode workingMode;
-
-		private const string TargetPath = "c:\\temp\\_lsa";
-		private const string DropboxRootPath = @"d:\Dropbox (Orange Money Ltd)\Underwriters\2_Clients Documents";
-		private const string NamesToLoansFileName = "names-to-loans.json";
 	} // class Program
 } // namespace
 

@@ -568,7 +568,6 @@ EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 
 EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
 	var e = el || $('form');
-
 	return e.validate({
 		rules: {
 			offeredCreditLine: {
@@ -577,10 +576,10 @@ EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
 				autonumericMax: _.min([EzBob.Config.MaxLoan, gradeRange.MaxLoanAmount]),
 			},
 			repaymentPeriod: { required: true, min: gradeRange.MinTerm, max: gradeRange.MaxTerm },
-			interestRate: { required: true, autonumericMin: gradeRange.MinInterestRate * 100, autonumericMax: gradeRange.MaxInterestRate * 100, },
+			interestRate: { required: true, autonumericMin: (gradeRange.MinInterestRate * 100).toFixed(2), autonumericMax: (gradeRange.MaxInterestRate * 100).toFixed(2), },
 			startingFromDate: { required: true, dateCheck: true, },
 			offerValidUntil: { required: true, dateCheck: true, },
-			manualSetupFeePercent: { autonumericMin: gradeRange.MinSetupFee * 100, autonumericMax: gradeRange.MaxSetupFee * 100, required: true, },
+			manualSetupFeePercent: { autonumericMin: (gradeRange.MinSetupFee * 100).toFixed(2), autonumericMax: (gradeRange.MaxSetupFee * 100).toFixed(2), required: true, },
 			brokerSetupFeePercent: { autonumericMin: 0, required: false, },
 		},
 		messages: {

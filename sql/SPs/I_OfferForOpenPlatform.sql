@@ -10,16 +10,16 @@ ALTER PROCEDURE I_OfferForOpenPlatform
 @CashRequestID BIGINT
 AS
 BEGIN
-	DECLARE @Result BIT = 0
+	DECLARE @IsForOpenPlatform BIT = 0
 
 	SELECT
-		@Result = CAST((CASE WHEN pst.FundingTypeID IS NULL THEN 0 ELSE 1 END) AS BIT)
+		@IsForOpenPlatform = CAST((CASE WHEN pst.FundingTypeID IS NULL THEN 0 ELSE 1 END) AS BIT)
 	FROM 
 		CashRequests cr 
 		INNER JOIN I_ProductSubType pst ON pst.ProductSubTypeID = cr.ProductSubTypeID
 	WHERE
 		cr.Id = @CashRequestID
 
-	SELECT ISNULL(@Result, 0) AS IsForOpenPlatform
+	SELECT ISNULL(@IsForOpenPlatform, 0) AS IsForOpenPlatform
 END
 GO

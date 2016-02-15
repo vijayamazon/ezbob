@@ -215,7 +215,9 @@
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="MainStrategy\Exceptions\CreateFindCashRequestException.cs" />
     <Compile Include="MainStrategy\Exceptions\InvalidInputException.cs" />
+    <Compile Include="MainStrategy\Helpers\LoadOfferRanges.cs" />
     <Compile Include="MainStrategy\Helpers\MainStrategySetApproved.cs" />
+    <Compile Include="MainStrategy\Helpers\OfferCalculator.cs" />
     <Compile Include="MainStrategy\Helpers\WriteDecisionOutput.cs" />
     <Compile Include="MainStrategy\StepHistoryItem.cs" />
     <Compile Include="MainStrategy\StepResult.cs" />

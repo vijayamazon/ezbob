@@ -44,22 +44,15 @@
 		public WriteDecisionOutput WriteDecisionOutput { get; private set; }
 
 		protected override StepResults Run() {
-			bool goodToGo = true;
-
 			if (this.autoDecisionResponse == null) {
 				Log.Alert("Cannot save decision for {0}: decision response is NULL.", OuterContextDescription);
-				this.outcome = "decision response is NULL";
-				goodToGo = false;
+				this.outcome = "'failed - decision response is NULL'";
+				return StepResults.Failed;
 			} // if
 
 			if (this.medal == null) {
 				Log.Alert("Cannot save decision for {0}: medal is NULL.", OuterContextDescription);
-				this.outcome = "medal is NULL";
-				goodToGo = false;
-			} // if
-
-			if (!goodToGo) {
-				this.outcome = string.Format("'failed - {0}'", this.outcome);
+				this.outcome = "'failed - medal is NULL'";
 				return StepResults.Failed;
 			} // if
 

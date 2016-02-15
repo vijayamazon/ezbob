@@ -18,8 +18,8 @@ BEGIN
 		r.CreationDate
 	FROM
 		Loan l
-		INNER JOIN loans_for_lsa lsa ON l.Id = lsa.LoanID
-		INNER JOIN EzbobMailNodeAttachRelation e ON lsa.CustomerID = e.UserID
+		INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
+		INNER JOIN EzbobMailNodeAttachRelation e ON l.CustomerID = e.UserID
 		INNER JOIN Export_Results r ON e.ExportId = r.Id
 	WHERE
 		LTRIM(RTRIM(ISNULL(r.FileName, ''))) != ''
