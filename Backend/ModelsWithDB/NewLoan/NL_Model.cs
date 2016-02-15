@@ -140,11 +140,9 @@
 
 
 		public static VariableValue NLFeeTypeToConfVar(NLFeeTypes fType) {
-
 			VariableValue result = null;
 
 			switch (fType) {
-
 			case NLFeeTypes.AdminFee:
 				result = CurrentValues.Instance.AdministrationCharge;
 				break;
@@ -179,7 +177,6 @@
 		}
 
 		public static NLFeeTypes ConfVarToNLFeeType(ConfigurationVariable confVar) {
-
 			if( confVar.Name == CurrentValues.Instance.AdministrationCharge)
 				return NLFeeTypes.AdminFee;
 			
@@ -200,6 +197,44 @@
 
 			return NLFeeTypes.OtherCharge;
 		}
+
+
+		public static NLLoanTypes LoanTypeNameToNLLoanType(string lType) {
+			if (lType.Contains("Alibaba"))
+				return NLLoanTypes.AlibabaLoanType;
+			if (lType.Contains("HalfWay"))
+				return NLLoanTypes.HalfWayLoanType;
+
+			return NLLoanTypes.StandardLoanType;
+		}
+
+		public static DecisionActions DecisionToDecisionActions(string decision) {
+			DecisionActions result = DecisionActions.Waiting;
+			switch (decision) {
+			case "Approved":
+				result = DecisionActions.Approve;
+				break;
+			case "Reject":
+				result = DecisionActions.Reject;
+				break;
+			case "Escalate":
+				result = DecisionActions.Escalate;
+				break;
+			case "Pending":
+				result = DecisionActions.Pending;
+				break;
+			case "Waiting":
+				result = DecisionActions.Waiting;
+				break;
+			case "ReApprove":
+				result = DecisionActions.ReApprove;
+				break;
+			case "ReReject":
+				result = DecisionActions.ReReject;
+				break;
+			}
+			return result;
+		} 
 
 	} // class NL_Model
 } // namespace

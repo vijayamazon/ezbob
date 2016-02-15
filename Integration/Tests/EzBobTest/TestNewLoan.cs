@@ -1123,5 +1123,16 @@
 			}
 		}
 
+		[Test]
+		public void MigrationTest() {
+			MigrateLoans s = new MigrateLoans();
+			try {
+				s.Execute();
+			} catch (Exception ex) {
+				m_oLog.Error(ex);
+			}
+		}
+
+
 	} // class TestNewLoan
 } // namespace

@@ -43,3 +43,13 @@ END
 
 alter table [dbo].[NL_LoanInterestFreeze] alter column [StartDate] date;
 alter table [dbo].[NL_LoanInterestFreeze] alter column [EndDate] date;
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_CRDecisionTime')
+BEGIN
+	alter table [dbo].[NL_Decisions] add CONSTRAINT UC_CRDecisionTime UNIQUE ([CashRequestID],[DecisionNameID],[DecisionTime]);
+END
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_OldCR')
+BEGIN
+	alter table [dbo].[NL_CashRequests] add CONSTRAINT UC_OldCR UNIQUE ([OldCashRequestID]);
+END
