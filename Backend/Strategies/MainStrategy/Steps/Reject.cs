@@ -15,7 +15,8 @@
 			long nlCashRequestID,
 			string tag,
 			int companyID,
-			bool customerIsAlibaba
+			bool customerIsAlibaba,
+			bool customerIsBroker
 		) : base(
 			outerContextDescription,
 			avoidAutomaticDecision,
@@ -27,6 +28,7 @@
 		) {
 			this.companyID = companyID;
 			this.customerIsAlibaba = customerIsAlibaba;
+			this.customerIsBroker = customerIsBroker;
 		} // constructor
 
 		[StepOutput]
@@ -59,15 +61,23 @@
 			if (base.PreventAffirmativeDecision())
 				return true;
 
-			if (!this.customerIsAlibaba)
+			if (!this.customerIsAlibaba && !this.customerIsBroker)
 				return false;
 
-			Log.Msg("Prevented {1} decision for {0}: Alibaba customer.", OuterContextDescription, ProcessName);
+			Log.Msg(
+				"Prevented {1} decision for {0}: {2}broker {3}Alibaba customer.",
+				OuterContextDescription,
+				ProcessName,
+				this.customerIsBroker ? string.Empty : "non-",
+				this.customerIsAlibaba ? string.Empty : "non-"
+			);
+
 			return true;
 		} // PreventAffirmativeDecision
 
 		private RejectAgent rejectAgent;
 		private readonly int companyID;
 		private readonly bool customerIsAlibaba;
+		private readonly bool customerIsBroker;
 	} // class Reject
 } // namespace

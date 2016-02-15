@@ -328,7 +328,8 @@
 					this.context.NLCashRequestID,
 					this.context.Tag,
 					this.context.CompanyID,
-					this.context.CustomerDetails.IsAlibaba
+					this.context.CustomerDetails.IsAlibaba,
+					this.context.CustomerDetails.IsBroker
 				);
 				reject.CollectOutputValue += CollectStepOutputValue;
 				return reject;
