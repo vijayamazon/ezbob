@@ -8,7 +8,7 @@
 
 	class CRMData : AResultRow {
 		public string LoanID { get; set; }
-		public string LoanInternalID { get; set; }
+		public int LoanInternalID { get; set; }
 		public string Type { get; set; }
 		public DateTime EventTime { get; set; }
 		public string Action { get; set; }

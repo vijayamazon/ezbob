@@ -76,12 +76,6 @@
 			ProcessSms();
 			ProcessSnailmails();
 			ProcessDropbox();
-
-			File.WriteAllLines(
-				Path.Combine(TargetPath, "loans.csv"),
-				this.loans.Values.Select(ld => string.Format("{0},{1}", ld.LoanID, ld.LoanInternalID)),
-				System.Text.Encoding.ASCII
-			);
 		} // Run
 
 		private bool Do(WorkingMode mode) {
@@ -252,9 +246,6 @@
 				return ActionResult.Continue;
 			});
 
-			if (!Do(WorkingMode.Customer))
-				return;
-
 			this.loansForLsaDirectors.ForEachResult<DirectorData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID)) {
 					this.loans[cd.LoanID] = new LoanData(cd.LoanID, cd.LoanInternalID);
@@ -281,8 +272,15 @@
 				return ActionResult.Continue;
 			});
 
-			foreach (LoanData ld in this.loans.Values)
-				ld.SaveTo(TargetPath);
+			if (Do(WorkingMode.Customer))
+				foreach (LoanData ld in this.loans.Values)
+					ld.SaveTo(TargetPath);
+
+			File.WriteAllLines(
+				Path.Combine(TargetPath, "loans.csv"),
+				this.loans.Values.Select(ld => string.Format("{0},{1}", ld.LoanID, ld.LoanInternalID)),
+				System.Text.Encoding.ASCII
+			);
 		} // ProcessCustomerData
 
 		private string TargetPath { get { return this.cfg.TargetPath; } }

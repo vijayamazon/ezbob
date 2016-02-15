@@ -12,6 +12,7 @@ BEGIN
 
 	SELECT
 		LoanID = l.RefNum,
+		LoanInternalID = l.Id,
 		crm.Type,
 		EventTime = crm.Timestamp,
 		Action = a.Name,
