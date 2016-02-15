@@ -211,6 +211,7 @@
 		public static DecisionActions DecisionToDecisionActions(string decision) {
 			DecisionActions result = DecisionActions.Waiting;
 			switch (decision) {
+			case "Approve":
 			case "Approved":
 				result = DecisionActions.Approve;
 				break;

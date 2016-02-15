@@ -72,7 +72,10 @@
 
 		[DataMember]
 		public bool IsAmountSelectionAllowed { get; set; }
-		
+
+		[FK("I_ProductSubType", "ProductSubTypeID")]
+		[DataMember]
+		public int? ProductSubTypeID { get; set; }
 
 		// additions 
 		private List<NL_OfferFees> _offerFees = new List<NL_OfferFees>();
@@ -95,7 +98,6 @@
 		[DataMember]
 		[NonTraversable]
 		public long LoanLegalID { get; set; }
-
 	
 	} // class NL_Offers
 } // ns

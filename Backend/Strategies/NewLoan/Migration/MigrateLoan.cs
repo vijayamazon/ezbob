@@ -1,11 +1,12 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan {
+﻿namespace Ezbob.Backend.Strategies.NewLoan.Migration {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using NHibernate.Linq;
 	using StructureMap;
 
 	public class MigrateLoans : AStrategy {
@@ -28,12 +29,11 @@
 
 		public class CashReqModel {
 			public long CashRequestID { get; set; }
-			public long DesicionID { get; set; }
-			public long offerID { get; set; }
+			public long DecisionID { get; set; }
+			public long OfferID { get; set; }
 		}
-
-
-		private class OldLoanIds {
+	
+		public class OldLoanIds {
 			public int Id { get; set; }
 		}
 
@@ -43,7 +43,7 @@
 
 			NL_AddLog(LogType.Info, "Strategy start", this.strategyArgs, null, null, null);
 
-			string query = "select top 10 Id from Loan l left join NL_Loans nl on nl.OldLoanID=l.Id and l.Id=null and l.Modified=0";
+			string query = "select top 20 Id from Loan l left join NL_Loans nl on nl.OldLoanID=l.Id and l.Id=null and l.Modified=0";
 
 			List<OldLoanIds> loansList = DB.Fill<OldLoanIds>(query, CommandSpecies.Text);
 
@@ -73,6 +73,7 @@
 				}
 
 				Context.CustomerID = oldLoan.Customer.Id;
+				Context.UserID = oldLoan.CashRequest.IdUnderwriter;
 
 				try {
 
@@ -98,6 +99,8 @@
 							OldCashRequestID = oldLoan.CashRequest.Id
 						});
 						sCashRequest.Execute();
+						sCashRequest.Context.CustomerID = Context.CustomerID;
+						sCashRequest.Context.UserID = Context.UserID;
 						crModel.CashRequestID = sCashRequest.CashRequestID;
 					}
 
@@ -108,62 +111,74 @@
 						continue;
 					}
 
-					// NL_Decisions
-					if (crModel.DesicionID == 0L) {
-						//Debug.Assert(oldLoan.CashRequest.UnderwriterDecisionDate != null, "oldLoan.CashRequest.UnderwriterDecisionDate != null");
-						AddDecision sDesicion = new AddDecision(new NL_Decisions {
-							CashRequestID = crModel.CashRequestID,
-							UserID = oldLoan.CashRequest.IdUnderwriter ?? 1,
-							DecisionNameID = (int)NL_Model.DecisionToDecisionActions(Convert.ToString(oldLoan.CashRequest.UnderwriterDecision)),
-							DecisionTime = (DateTime)oldLoan.CashRequest.UnderwriterDecisionDate,
-							Notes = string.Format("{0}. (migrated: old crID {1}, loan {2})", oldLoan.CashRequest.UnderwriterComment, oldLoan.CashRequest.Id, l.Id)
-						}, oldLoan.CashRequest.Id, null);
-						sDesicion.Execute();
-						crModel.DesicionID = sDesicion.DecisionID;
-					}
+					// copy decisions history
+					foreach (DecisionHistory dh in oldLoan.CashRequest.DecisionHistories) {
 
-					if (crModel.DesicionID == 0L) {
-						Error = string.Format("Failed to add/find nl DesicionID, old loanID {0}, old crID {1}", l.Id, oldLoan.CashRequest.Id);
-						Log.Debug(Error);
-						NL_AddLog(LogType.Info, Error, this.strategyArgs, null, Error, null);
-						continue;
-					}
-					/*
-					// NL_Offers
-					if (crModel.offerID == 0L) {
-						NL_OfferFees offerFee = new NL_OfferFees {
-							LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
-							Percent = oldLoan.CashRequest.ManualSetupFeePercent ?? 0,
-							OneTimePartPercent = 1,
-							DistributedPartPercent = 0
-						};
-						if (oldLoan.CashRequest.SpreadSetupFee != null && oldLoan.CashRequest.SpreadSetupFee == true) {
-							offerFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
-							offerFee.OneTimePartPercent = 0;
-							offerFee.DistributedPartPercent = 1;
+						List<NL_DecisionRejectReasons> rejectReasons = new List<NL_DecisionRejectReasons>();
+						if (dh.RejectReasons.Count > 0) {
+							dh.RejectReasons.ForEach(x => rejectReasons.Add(new NL_DecisionRejectReasons() { RejectReasonID = x.RejectReason.Id }));
 						}
-						NL_OfferFees[] fees = { offerFee };
-						AddOffer sOffer = new AddOffer(new NL_Offers {
-							DecisionID = crModel.DesicionID,
-							LoanTypeID = (int)NL_Model.LoanTypeNameToNLLoanType(oldLoan.CashRequest.LoanType.Name),
-							LoanSourceID = oldLoan.CashRequest.LoanSource.ID, 
-							RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
-							Amount = (decimal)oldLoan.CashRequest.ManagerApprovedSum,
-							StartTime = (DateTime)oldLoan.CashRequest.OfferStart,
-							EndTime = (DateTime)oldLoan.CashRequest.OfferValidUntil,
-							CreatedTime = (DateTime)oldLoan.CashRequest.UnderwriterDecisionDate, // TODO ????
-							DiscountPlanID = oldLoan.CashRequest.DiscountPlan.Id, // supposed discounts transformed right 
-							MonthlyInterestRate = oldLoan.CashRequest.InterestRate,
-							RepaymentCount = oldLoan.CashRequest.ApprovedRepaymentPeriod ?? oldLoan.CashRequest.RepaymentPeriod,
-							BrokerSetupFeePercent = oldLoan.CashRequest.BrokerSetupFeePercent,
-							IsLoanTypeSelectionAllowed = oldLoan.CashRequest.IsCustomerRepaymentPeriodSelectionAllowed,
-							IsRepaymentPeriodSelectionAllowed = oldLoan.CashRequest.IsCustomerRepaymentPeriodSelectionAllowed,
-							SendEmailNotification = !oldLoan.CashRequest.EmailSendingBanned,
-							Notes = string.Format("{0}. (migrated: old crID {1}, loan {2})", oldLoan.CashRequest.UnderwriterComment, oldLoan.CashRequest.Id, l.Id)
-						}, fees);
-						sOffer.Execute();
-						crModel.offerID = sOffer.OfferID;
-					}*/
+
+						AddDecision sDesicion = new AddDecision(new NL_Decisions {
+							CashRequestID = dh.CashRequest.Id,
+							UserID = dh.Underwriter.Id,
+							DecisionNameID = (int)NL_Model.DecisionToDecisionActions(Convert.ToString(dh.Action)),
+							DecisionTime = dh.Date,
+							Notes = string.Format("{0}. (migrated: old crID {1}, loan {2})", dh.Comment, oldLoan.CashRequest.Id, l.Id)
+						}, oldLoan.CashRequest.Id, rejectReasons);
+						
+						sDesicion.Context.CustomerID = dh.Customer.Id;
+						sDesicion.Context.UserID = dh.Underwriter.Id;
+
+						sDesicion.Execute();
+
+						crModel.DecisionID = sDesicion.DecisionID;
+
+						// NL_Offers for approve decision
+						if (dh.Action.Equals(DecisionActions.Approve)) {
+							NL_OfferFees offerFee = new NL_OfferFees {
+								LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+								Percent = oldLoan.CashRequest.ManualSetupFeePercent ?? 0,
+								OneTimePartPercent = 1,
+								DistributedPartPercent = 0
+							};
+
+							if (oldLoan.CashRequest.SpreadSetupFee != null && oldLoan.CashRequest.SpreadSetupFee == true) {
+								offerFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+								offerFee.OneTimePartPercent = 0;
+								offerFee.DistributedPartPercent = 1;
+							}
+
+							NL_OfferFees[] fees = { offerFee };
+
+							AddOffer sOffer = new AddOffer(new NL_Offers {
+								DecisionID = crModel.DecisionID,
+								LoanTypeID = (int)NL_Model.LoanTypeNameToNLLoanType(oldLoan.CashRequest.LoanType.Name),
+								LoanSourceID = oldLoan.CashRequest.LoanSource.ID,
+								RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
+								Amount = oldLoan.CashRequest.ApprovedSum(),
+								StartTime = (DateTime)oldLoan.CashRequest.OfferStart,
+								EndTime = (DateTime)oldLoan.CashRequest.OfferValidUntil,
+								CreatedTime = (DateTime)oldLoan.CashRequest.UnderwriterDecisionDate, // TODO ????
+								DiscountPlanID = oldLoan.CashRequest.DiscountPlan.Id, // supposed discounts transformed right 
+								MonthlyInterestRate = oldLoan.CashRequest.InterestRate,
+								RepaymentCount = oldLoan.CashRequest.ApprovedRepaymentPeriod ?? oldLoan.CashRequest.RepaymentPeriod,
+								BrokerSetupFeePercent = oldLoan.CashRequest.BrokerSetupFeePercent,
+								IsLoanTypeSelectionAllowed = oldLoan.CashRequest.IsCustomerRepaymentPeriodSelectionAllowed,
+								IsRepaymentPeriodSelectionAllowed = oldLoan.CashRequest.IsCustomerRepaymentPeriodSelectionAllowed,
+								SendEmailNotification = !oldLoan.CashRequest.EmailSendingBanned,
+								Notes = string.Format("{0}. (migrated: old crID {1}, loan {2})", oldLoan.CashRequest.UnderwriterComment, oldLoan.CashRequest.Id, l.Id),
+								ProductSubTypeID = oldLoan.CashRequest.ProductSubTypeID ?? null
+							}, fees);
+
+							sDesicion.Context.CustomerID = dh.Customer.Id;
+							sDesicion.Context.UserID = dh.Underwriter.Id;
+
+							sOffer.Execute();
+
+							crModel.OfferID = sOffer.OfferID;
+						}
+					}
 
 					//ConnectionWrapper pconn = DB.GetPersistent();
 					//try {
@@ -176,16 +191,10 @@
 					//	Log.Error("Failed to add new loan: {0}", Error);
 					//}
 
-
-
 					// ReSharper disable once CatchAllClause
 				} catch (Exception exc) {
 
-
-
-
-
-					//NL_AddLog(LogType.Error, "Strategy Failed - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, Error, exc.ToString(), exc.StackTrace);
 					return;
 				}
 			}

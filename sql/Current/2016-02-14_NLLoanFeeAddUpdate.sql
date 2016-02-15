@@ -26,6 +26,15 @@ BEGIN
 	ALTER TABLE [dbo].[NL_LoanFees] ADD TimestampCounter timestamp not null; 
 END
 
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('NL_Offers') AND name='ProductSubTypeID')
+BEGIN
+	ALTER TABLE [dbo].[NL_Offers] ADD ProductSubTypeID INT ;
+	ALTER TABLE [dbo].[NL_Offers] ADD CONSTRAINT FK_NL_Offers_I_ProductSubType FOREIGN KEY (ProductSubTypeID) REFERENCES I_ProductSubType (ProductSubTypeID);
+	ALTER TABLE [dbo].[NL_Offers] drop column [TimestampCounter];
+	ALTER TABLE [dbo].[NL_Offers] ADD TimestampCounter timestamp not null; 
+END
+GO
+
 IF EXISTS (select id from sysobjects where name='NL_LoansFeesGet') and NOT EXISTS (select id from sysobjects where name='NL_LoanFeesGet')
 BEGIN
 	EXEC sp_rename 'NL_LoansFeesGet', 'NL_LoanFeesGet';
@@ -52,4 +61,9 @@ END
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_OldCR')
 BEGIN
 	alter table [dbo].[NL_CashRequests] add CONSTRAINT UC_OldCR UNIQUE ([OldCashRequestID]);
+END
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_Desicion')
+BEGIN
+	alter table [dbo].[NL_Offers] add CONSTRAINT UC_Desicion UNIQUE ([DecisionID]);
 END

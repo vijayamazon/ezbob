@@ -13,6 +13,7 @@
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
+	using Ezbob.Backend.Strategies.NewLoan.Migration;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using EzBob.Models;
@@ -1124,8 +1125,8 @@
 		}
 
 		[Test]
-		public void MigrationTest() {
-			MigrateLoans s = new MigrateLoans();
+		public void MigrateCRDecisionOfferTest() {
+			MigrateCRDecisionOffer s = new MigrateCRDecisionOffer();
 			try {
 				s.Execute();
 			} catch (Exception ex) {

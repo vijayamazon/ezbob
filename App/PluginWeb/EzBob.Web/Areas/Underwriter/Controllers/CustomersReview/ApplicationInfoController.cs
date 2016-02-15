@@ -506,8 +506,6 @@
 				this.customerRepository.SaveOrUpdate(c);
 			}).Execute();
 
-
-
 			var decision = this.serviceClient.Instance.AddDecision(this.context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this.context.UserId,
 				DecisionTime = DateTime.UtcNow,
@@ -547,6 +545,7 @@
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				SendEmailNotification = allowSendingEmail,
+				ProductSubTypeID = productSubTypeID
 				// SetupFeeAddedToLoan = 0 // default 0 TODO EZ-3515
 				// InterestOnlyRepaymentCount = 
 				//IsAmountSelectionAllowed = 1 default 1 always allowed

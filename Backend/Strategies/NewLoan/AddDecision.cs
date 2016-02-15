@@ -62,16 +62,25 @@
 
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, new object[] { this.decision, DecisionID }, Error, null);
 
+			} catch (DbException dbException) {
+				
+				if(dbException.Message.Contains("Violation of UNIQUE KEY constraint"))
+					NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, new object[] { this.decision, DecisionID }, Error, null);
+				else 
+					LogAndExit(dbException);
+
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				Error = ex.Message;
-				Log.Alert("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex);
-				Error = string.Format("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex.Message);
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.decision, Error, ex.StackTrace);
+				LogAndExit(ex);
 			}
+		}
 
-		}//Execute
-
+		private void LogAndExit(Exception ex) {
+			Error = ex.Message;
+			Log.Alert("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex);
+			Error = string.Format("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex.Message);
+			NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, this.decision, Error, ex.StackTrace);
+		}
 
 	}//class AddDecision
 }//ns
