@@ -25,6 +25,7 @@
 		} // constructor
 
 		[HttpPost]
+		[Permission(Name = "EnterHMRC")]
 		public JsonResult SaveFile() {
 			int nCustomerID;
 
@@ -35,6 +36,7 @@
 		} // SaveFile
 
 		[HttpPost]
+		[Permission(Name="EnterHMRC")]
 		public JsonResult SaveNewManuallyEntered(string sData) {
 			return this.vatAccountManager.SaveNewManuallyEntered(sData);
 		} // SaveNewManuallyEntered
@@ -45,6 +47,7 @@
 		} // LoadPeriods
 
 		[HttpPost]
+		[Permission(Name = "EnterHMRC")]
 		public JsonResult RemovePeriod(string period) {
 			return this.vatAccountManager.RemovePeriod(period);
 		} // RemovePeriod

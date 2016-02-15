@@ -167,6 +167,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "CCIMark")]
 		public JsonResult ToggleCciMark(int id) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -188,6 +189,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name="BlockTakingLoan")]
 		public JsonResult ToggleBlockTakingLoan(int id) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -207,6 +209,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "TestUser")]
 		public JsonResult ToggleIsTest(int id) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -226,6 +229,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "TrustPilot")]
 		public JsonResult UpdateTrustPilotStatus(int id, string status) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -259,6 +263,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "CustomerStatus")]
 		public JsonResult ChangeExternalCollectionStatus(int id, int? externalStatusID) {
 			Customer oCustomer = this.customerRepository.Get(id);
 			if (oCustomer == null) {
@@ -398,7 +403,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		[Permission(Name = "CreditLineFields")]
+		[Permission(Name = "AvoidAutomaticDecision")]
 		public JsonResult AvoidAutomaticDecision(int id, bool enabled) {
 			var cust = this.customerRepository.Get(id);
 			cust.IsAvoid = enabled;
@@ -448,6 +453,7 @@
 		[Transactional]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name="CreditLineFields")]
 		public JsonResult ChangeCreditLine(
 			long id,
 			int productID,
@@ -604,6 +610,7 @@
 		} // ActivateMainStrategy
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "FinishWizard")]
 		public JsonResult ActivateFinishWizard(int customerId) {
 			int underwriterId = this.context.User.Id;
 
@@ -620,6 +627,7 @@
 		} // ActivateFinishWizard
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "CreateLoan")]
 		public JsonResult CreateLoanHidden(int nCustomerID, decimal nAmount, string sDate) {
 			try {
 				var lc = new LoanCreatorNoChecks(
@@ -644,6 +652,7 @@
 		}
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ResetPassword")]
 		public JsonResult ResetPassword123456(int nCustomerID) {
 			new ServiceClient().Instance.ResetPassword123456(this.context.User.Id, nCustomerID, PasswordResetTarget.Customer);
 			return Json(true);

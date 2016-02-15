@@ -1,85 +1,90 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
-    using System.Linq;
-    using System.Web.Mvc;
-    using EZBob.DatabaseLib.Model.Database.UserManagement;
-    using EZBob.DatabaseLib.Repository;
-    using Models;
-    using System;
-    using System.Collections.Generic;
-    using Aspose.Words.Lists;
-    using Ezbob.Backend.Models;
-    using Ezbob.Utils.Extensions;
-    using EzBob.Web.Areas.Underwriter.Models.Fraud;
-    using EZBob.DatabaseLib.Model.Fraud;
-    using Infrastructure.Attributes;
-    using Newtonsoft.Json;
-    using ServiceClientProxy;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Repository;
+	using Models;
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.Backend.Models;
+	using Ezbob.Utils.Extensions;
+	using EzBob.Web.Areas.Underwriter.Models.Fraud;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Fraud;
+	using Newtonsoft.Json;
+	using ServiceClientProxy;
 
-    public class FraudDetectionLogController : Controller {
-        private readonly FraudDetectionRepository _fraudDetectionLog;
-        private readonly ServiceClient m_oServiceClient;
-        private readonly IUsersRepository _usersRepository;
-        private readonly FraudIovationRepository iovationRepository;
-        public FraudDetectionLogController(FraudDetectionRepository fraudDetectionLog, IUsersRepository usersRepository, FraudIovationRepository iovationRepository) {
-            _fraudDetectionLog = fraudDetectionLog;
-            m_oServiceClient = new ServiceClient();
-            _usersRepository = usersRepository;
-            this.iovationRepository = iovationRepository;
-        }
+	public class FraudDetectionLogController : Controller {
+		private readonly FraudDetectionRepository fraudDetectionLog;
+		private readonly ServiceClient serviceClient;
+		private readonly FraudIovationRepository iovationRepository;
+		private readonly ICustomerRepository customerRepository;
+		public FraudDetectionLogController(
+			FraudDetectionRepository fraudDetectionLog,
+			FraudIovationRepository iovationRepository, 
+			ICustomerRepository customerRepository) {
 
-        [Ajax]
-        [HttpGet]
-        public JsonResult Index(int id) {
-            DateTime? lastCheckDate;
-            string customerRefNum;
-            var rows = _fraudDetectionLog
-                .GetLastDetections(id, out lastCheckDate, out customerRefNum)
-                .Select(x => new FraudDetectionLogRowModel(x))
-                .OrderByDescending(x => x.Id)
-                .ToList();
+			this.fraudDetectionLog = fraudDetectionLog;
+			this.serviceClient = new ServiceClient();
+			this.iovationRepository = iovationRepository;
+			this.customerRepository = customerRepository;
+		}//ctor
 
-            var model = new FraudDetectionLogModel {
-                FraudDetectionLogRows = rows,
-                LastCheckDate = lastCheckDate,
-                CustomerRefNumber = customerRefNum
-            };
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+		[Ajax]
+		[HttpGet]
+		public JsonResult Index(int id) {
+			DateTime? lastCheckDate;
+			string customerRefNum;
+			var rows = this.fraudDetectionLog
+				.GetLastDetections(id, out lastCheckDate, out customerRefNum)
+				.Select(x => new FraudDetectionLogRowModel(x))
+				.OrderByDescending(x => x.Id)
+				.ToList();
 
-        [Ajax]
-        [HttpPost]
-        public JsonResult Recheck(int customerId) {
-            var user = _usersRepository.Get(customerId);
-            m_oServiceClient.Instance.FraudChecker(user.Id, FraudMode.FullCheck);
-            return Json(new { success = true });
-        }
+			var model = new FraudDetectionLogModel {
+				FraudDetectionLogRows = rows,
+				LastCheckDate = lastCheckDate,
+				CustomerRefNumber = customerRefNum
+			};
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}//Index
 
-        [Ajax]
-        [HttpGet]
-        public JsonResult IovationDetails(int id) {
-            var iovation = this.iovationRepository.Get(id);
-            if (iovation == null) {
-                throw new Exception("Not found");
-            }
+		[Ajax]
+		[HttpPost]
+		[Permission(Name = "RecheckFraud")]
+		public JsonResult Recheck(int customerId) {
+			var user = this.customerRepository.Get(customerId);
+			this.serviceClient.Instance.FraudChecker(user.Id, FraudMode.FullCheck);
+			return Json(new { success = true });
+		}//Recheck
 
-            IovationDetailsModel model = new IovationDetailsModel {
-                Id = iovation.FraudIovationID,
-                Created = iovation.Created,
-                Origin = iovation.Origin,
-                Result = iovation.Result.DescriptionAttr(),
-                Reason = iovation.Reason,
-                TrackingNumber = iovation.TrackingNumber,
-            };
-            if (!string.IsNullOrEmpty(iovation.Details)) {
-                try {
-                    model.Details = JsonConvert.DeserializeObject<List<IovationDetailModel>>(iovation.Details);
-                    model.DetailsNamesToDescription(model.Details);
-                } catch (Exception ex) {
-                    //log
-                }
-            }
+		[Ajax]
+		[HttpGet]
+		public JsonResult IovationDetails(int id) {
+			var iovation = this.iovationRepository.Get(id);
+			if (iovation == null) {
+				throw new Exception("Not found");
+			}//if
 
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
-    }
-}
+			var model = new IovationDetailsModel {
+				Id = iovation.FraudIovationID,
+				Created = iovation.Created,
+				Origin = iovation.Origin,
+				Result = iovation.Result.DescriptionAttr(),
+				Reason = iovation.Reason,
+				TrackingNumber = iovation.TrackingNumber,
+			};
+			if (!string.IsNullOrEmpty(iovation.Details)) {
+				try {
+					model.Details = JsonConvert.DeserializeObject<List<IovationDetailModel>>(iovation.Details);
+					model.DetailsNamesToDescription(model.Details);
+				} catch (Exception) {
+					//log
+				}//try
+			}//if
+
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}//IovationDetails
+	}//class FraudDetectionLogController
+}//ns

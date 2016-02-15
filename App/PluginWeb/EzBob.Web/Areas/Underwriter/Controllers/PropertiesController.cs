@@ -25,6 +25,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "AddProperty")]
 		public void AddAddress(int customerId, string addressId, string organisation, string line1, string line2, string line3, string town, string county, string postcode,
 			string country, string rawpostcode, string deliverypointsuffix, string nohouseholds, string smallorg, string pobox, string mailsortcode, string udprn) {
 			var customer = this.customerRepository.Get(customerId);
@@ -65,6 +66,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "LandRegistry")]
 		public JsonResult LandRegistryEnquiries(int customerId) {
 			var b = new LandRegistryModelBuilder();
 			var landRegistryEnquiries = new List<LandRegistryEnquiryTitle>();
@@ -91,6 +93,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "AddProperty")]
 		public void RemoveAddress(int addressId) {
 			CustomerAddress noLongerOwnedAddress = this.customerAddressRepository.Get(addressId);
 			noLongerOwnedAddress.AddressType = CustomerAddressType.OtherPropertyAddressRemoved;
@@ -99,6 +102,7 @@
 
 		[Ajax]
 		[HttpGet]
+		[Permission(Name = "ZooplaRecheck")]
 		public JsonResult Zoopla(int customerId, bool recheck) {
 			this.serviceClient.Instance.GetZooplaData(customerId, true);
 			return Json(new {}, JsonRequestBehavior.AllowGet);

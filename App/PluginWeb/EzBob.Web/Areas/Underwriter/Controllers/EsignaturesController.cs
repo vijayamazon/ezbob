@@ -64,6 +64,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "SendDocuments")]
 		public JsonResult Send(string sPackage) {
 			EchoSignEnvelope[] oPackage = JsonConvert.DeserializeObject<EchoSignEnvelope[]>(sPackage);
 
@@ -122,6 +123,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "AddEditDirector")]
 		public JsonResult SaveExperianDirector(
 			int directorID,
 			string email,
@@ -176,6 +178,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "AddEditDirector")]
 		public JsonResult DeleteExperianDirector(int nDirectorID) {
 			Log.Debug("Deleting Experian director (E-signatures controller): {0}", nDirectorID);
 
@@ -196,6 +199,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "AddEditDirector")]
 		public JsonResult DeleteDirector(int nDirectorID) {
 			Log.Debug("Deleting director (E-signatures controller): {0}", nDirectorID);
 

@@ -69,12 +69,14 @@
 
 		[Transactional]
 		[Ajax]
+		[Permission(Name="YodleeSearchWords")]
 		public void AddSearchWord(string word) {
 			_yodleeSearchWordsRepository.AddWord(word);
 		} // AddSearchWord
 
 		[Transactional]
 		[Ajax]
+		[Permission(Name = "YodleeRules")]
 		public void AddYodleeRule(int group, int rule, string literal) {
 			Log.Debug("{0} {1} {2}", group, rule, literal);
 			var oGroup = _yodleeGroupRepository.Get(group);
@@ -115,6 +117,7 @@
 
 		[Transactional]
 		[Ajax]
+		[Permission(Name = "YodleeSearchWords")]
 		public void DeleteSearchWord(string word) {
 			_yodleeSearchWordsRepository.DeleteWord(word);
 		} // DeleteSearchWord
@@ -135,6 +138,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "DisableShop")]
 		public JsonResult Disable(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = true;
@@ -171,6 +175,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "DisableShop")]
 		public JsonResult Enable(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = false;
@@ -268,6 +273,7 @@
 		} // Index
 
 		[Ajax]
+		[Permission(Name = "ParseBankTransactions")]
 		public JsonResult ParseYodlee(int customerId, int fileId) {
 			var file = m_oServiceClient.Instance.GetCompanyFile(_context.UserId, fileId);
 			var fileMetaData = _companyFiles.Get(fileId);
@@ -313,6 +319,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "RecheckMarketPlaces")]
 		public void ReCheckMarketplaces(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 
@@ -342,6 +349,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "RecheckMarketPlaces")]
 		public void RenewEbayToken(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 
@@ -394,6 +402,7 @@
 		} // SetCustomerManualAnnualRevenue
 
 		[Transactional]
+		[Permission(Name = "RecheckMarketPlaces")]
 		public ActionResult TryRecheckYodlee(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 			var yodleeMain = new YodleeMain();

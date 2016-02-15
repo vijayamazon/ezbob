@@ -4,6 +4,7 @@
 	using Infrastructure.Attributes;
 	using Models.Fraud;
 	using System.Web.Mvc;
+	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 
@@ -31,6 +32,7 @@
 		[HttpPost]
 		[Transactional]
 		[Ajax]
+		[Permission(Name = "FraudStatus")]
 		public JsonResult Save(int customerId, int currentStatus)
 		{
 			var customer = _customerRepository.Get(customerId);

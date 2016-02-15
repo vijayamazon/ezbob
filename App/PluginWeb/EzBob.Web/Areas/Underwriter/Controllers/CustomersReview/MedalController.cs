@@ -32,6 +32,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "RecalculateMedal")]
 		public void RecalculateMedal(int customerId) {
 			// TODO: insert actual values of cashRequestID and nlCashRequestID (if they exist).
 			// I.e. if customer is e.g. "waiting for decision", then insert actual values.

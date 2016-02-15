@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
@@ -39,6 +38,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
+		[Permission(Name = "AddEditDirector")]
 		public JsonResult AddDirector(int nCustomerID, int nDirectorID, DirectorModel director) {
 
 			ms_oLog.Info("Adding director to customer " + nCustomerID);
@@ -59,6 +59,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
+		[Permission(Name = "AddEditDirector")]
 		public JsonResult EditDirector(int nCustomerID, int nDirectorID, DirectorModel directorModel) {
 			ms_oLog.Debug("updating director");
 			Director director = this._directorRepository.Get(nDirectorID);
@@ -218,6 +219,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name="ChangeAddress")]
 		public JsonResult ChangeAddress(string addressInput, List<CustomerAddress> customerAddress, int customerId) {
 			ms_oLog.Info("ChangeAddress was called {0} {1} {2}", customerId, customerAddress.Count, customerAddress[0].Line1);
 

@@ -84,6 +84,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name="AutomationAndSettings")]
 		public JsonResult SettingsPricingModelForScenario(long scenarioID) {
 			PricingModelModelActionResult getPricingModelModelResponse =
 				this.serviceClient.Instance.GetPricingScenarioDetails(this._context.UserId, scenarioID);
@@ -94,6 +95,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult SettingsSavePricingModelScenario(long scenarioID, string model) {
 			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(model);
 			this.serviceClient.Instance.SavePricingModelSettings(this._context.UserId, scenarioID, inputModel);
@@ -103,6 +105,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult SettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor) {
 			UpdateSettingsGeneral(BWABusinessCheck, HmrcSalariesMultiplier, fcfFactor);
 
@@ -155,6 +158,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult SettingsCharges(string administrationCharge,
 			string latePaymentCharge,
 			string otherCharge,
@@ -221,6 +225,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult AutomationGeneral(string[] newSettings) {
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
@@ -250,6 +255,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult AutomationApproval(
 			string EnableAutomaticApproval,
 			string EnableAutomaticReApproval,
@@ -381,6 +387,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult AutomationRejection(
 			string EnableAutomaticRejection,
 			string LowCreditScore,
@@ -468,6 +475,7 @@
 		// ReSharper disable  InconsistentNaming
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult SettingsExperian(
 
 			string FinancialAccounts_MainApplicant,
@@ -565,6 +573,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "AutomationAndSettings")]
 		public JsonResult SaveConfigTable(string serializedModels, string configTableType) {
 			ConfigTableType c;
 			switch (configTableType) {
