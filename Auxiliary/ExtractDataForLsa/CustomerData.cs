@@ -9,7 +9,7 @@
 
 	class CustomerData : AResultRow {
 		public string LoanID { get; set; }
-		public string LoanInternalID { get; set; }
+		public int LoanInternalID { get; set; }
 		public string CustomerRefnum { get; set; }
 		public string Email { get; set; }
 		public string PromoCode { get; set; }

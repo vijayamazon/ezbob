@@ -1,0 +1,22 @@
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+    var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
+<script id="dynamic-agreements-checkboxes-template" type="text/template">
+    <div>
+        <%var templatesLength = templates.length - 1;%>
+        <%_.each(templates, function(t, i){%>
+            @EzForm.ClickableInputTag(
+            new EzInputBuilder(
+            "<%-t.TemplateTypeName%>TermsRead", "<span class=\"\">I have read and agree to the <%-t.TemplateTypeName%> terms</span><span style=\"display: none\" class=\"<%-t.TemplateTypeName%>\">I have read and agree to the <%-t.TemplateTypeName%> terms</span>",
+            value: "true",
+            type: "checkbox",
+            cls: "DynamicAgreementTermsRead",
+            isRequired: true,
+            uiEventControlID: "loan-legal:apply-for-<%-t.TemplateTypeName%>"),
+            origin: origin)
+            <%});%>
+    </div>
+</script>

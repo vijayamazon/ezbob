@@ -90,7 +90,8 @@
 									{
 										Info("Has pdf attachment {0}", attachment.Filename);
 										byte[] data = attachment.GetData();
-										ParsePacNetText.ParsePdf(data);
+										ParsePacNetText parsePacNetText = new ParsePacNetText(m_oConf.LoginAddress, m_oConf.LoginPassword);
+										parsePacNetText.ParsePdf(data);
 										handledMail = true;
 									} // if appropriate attachment type
 								} // foreach attachment

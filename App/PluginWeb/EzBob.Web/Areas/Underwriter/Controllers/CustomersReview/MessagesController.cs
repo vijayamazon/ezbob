@@ -110,6 +110,7 @@
 		[Transactional]
 		[HttpPost]
 		[Ajax]
+		[Permission(Name = "SendingMessagesToClients")]
 		public void MoreAMLInformation(int id) {
 			var customer = _customersRepository.Get(id);
 			m_oServiceClient.Instance.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
@@ -121,6 +122,7 @@
 		[Transactional]
 		[HttpPost]
 		[Ajax]
+		[Permission(Name = "SendingMessagesToClients")]
 		public void MoreAMLandBWAInformation(int id) {
 			var customer = _customersRepository.Get(id);
 			m_oServiceClient.Instance.MoreAmlAndBwaInformation(_workplaceContext.User.Id, customer.Id);
@@ -132,6 +134,7 @@
 		[Transactional]
 		[HttpPost]
 		[Ajax]
+		[Permission(Name = "SendingMessagesToClients")]
 		public void MoreBWAInformation(int id) {
 			var customer = _customersRepository.Get(id);
 			m_oServiceClient.Instance.MoreBwaInformation(_workplaceContext.User.Id, customer.Id);

@@ -34,6 +34,7 @@
         }
 
         //-----------------------------------------------------------------------------------
+		[Permission(Name = "DeleteFile")]
         public void DeleteDocs(int[] docIds)
         {
             foreach (var d in docIds.Select(docId => _docRepo.Load(docId)))
@@ -43,6 +44,7 @@
         }
 
         //-----------------------------------------------------------------------------------
+		[Permission(Name = "UploadFile")]
         public void UploadDoc(string description, int customerId) {
             var files = Request.Files;
 

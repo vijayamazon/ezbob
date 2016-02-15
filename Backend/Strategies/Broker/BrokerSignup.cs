@@ -19,11 +19,9 @@
 			string sContactMobile,
 			string sMobileCode,
 			string sContactOtherPhone,
-			decimal nEstimatedMonthlyClientAmount,
 			DasKennwort password,
 			DasKennwort passwordAgain,
 			string sFirmWebSiteUrl,
-			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
 			int nBrokerTermsID,
 			string sReferredBy,
@@ -41,9 +39,9 @@
 				ContactEmail = (sContactEmail ?? string.Empty).Trim().ToLowerInvariant(),
 				ContactMobile = sContactMobile,
 				ContactOtherPhone = sContactOtherPhone,
-				EstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount,
+				EstimatedMonthlyClientAmount = 0,
 				FirmWebSiteUrl = sFirmWebSiteUrl,
-				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
+				EstimatedMonthlyApplicationCount = 0,
 				BrokerTermsID = nBrokerTermsID,
 				ReferredBy = sReferredBy,
 				Strategy = this,
@@ -105,10 +103,7 @@
 				ContactEmail = Validate(ContactEmail, "Contact person email").ToLowerInvariant();
 
 				ContactOtherPhone = Validate(ContactOtherPhone, "Contact person other phone", false);
-
-				if (EstimatedMonthlyClientAmount <= 0)
-					throw new StrategyWarning(Strategy, "Estimated monthly amount is out of range.");
-
+				
 				this.rawPassword = Validate(this.rawPassword, "Password");
 
 				if (this.rawPassword != this.rawPasswordAgain)

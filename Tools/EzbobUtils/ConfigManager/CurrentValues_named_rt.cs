@@ -159,6 +159,14 @@
 		public virtual VariableValue SalesForceFakeMode {
 			get { return this[Variables.SalesForceFakeMode]; }
 		}
+
+		public virtual VariableValue SalesForceConsumerKey {
+			get { return this[Variables.SalesForceConsumerKey]; }
+		}
+
+		public virtual VariableValue SalesForceConsumerSecret {
+			get { return this[Variables.SalesForceConsumerSecret]; }
+		}
 		
 		public virtual VariableValue SalesForceUserName {
 			get { return this[Variables.SalesForceUserName]; }

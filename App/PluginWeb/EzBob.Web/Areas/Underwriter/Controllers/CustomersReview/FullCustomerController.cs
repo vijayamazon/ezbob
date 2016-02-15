@@ -80,32 +80,6 @@
 				using (tc.AddStep("CreditBureauModel Time taken"))
 					model.CreditBureauModel = this.creditBureauModelBuilder.Create(customer);
 
-				using (tc.AddStep("SummaryModel Time taken"))
-					model.SummaryModel = this.summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
-
-				using (tc.AddStep("MedalCalculations Time taken"))
-					model.MedalCalculations = new MedalCalculators(customer);
-
-				using (tc.AddStep("PropertiesModel Time taken"))
-					model.Properties = this.propertiesModelBuilder.Create(customer);
-
-				using (tc.AddStep("CustomerRelations Time taken")) {
-					var crm = new CustomerRelationsModelBuilder(
-						this.loanRepo,
-						this.customerRelationsRepo,
-						this.session
-					);
-					model.CustomerRelations = crm.Create(customer.Id);
-				} // using
-
-				using (tc.AddStep("Bugs Time taken")) {
-					model.Bugs = this.bugRepo
-						.GetAll()
-						.Where(x => x.Customer.Id == customer.Id)
-						.Select(x => BugModel.ToModel(x))
-						.ToList();
-				} // using
-
 				using (tc.AddStep("CompanyScore Time taken")) {
 					var builder = new CompanyScoreModelBuilder();
 					model.CompanyScore = builder.Create(customer);
@@ -134,6 +108,34 @@
 							companySeniority.Value.Day != DateTime.UtcNow.Day
 						);
 				} // using
+
+				using (tc.AddStep("SummaryModel Time taken"))
+					model.SummaryModel = this.summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel, model.CompanyScore);
+
+				using (tc.AddStep("MedalCalculations Time taken"))
+					model.MedalCalculations = new MedalCalculators(customer);
+
+				using (tc.AddStep("PropertiesModel Time taken"))
+					model.Properties = this.propertiesModelBuilder.Create(customer);
+
+				using (tc.AddStep("CustomerRelations Time taken")) {
+					var crm = new CustomerRelationsModelBuilder(
+						this.loanRepo,
+						this.customerRelationsRepo,
+						this.session
+					);
+					model.CustomerRelations = crm.Create(customer.Id);
+				} // using
+
+				using (tc.AddStep("Bugs Time taken")) {
+					model.Bugs = this.bugRepo
+						.GetAll()
+						.Where(x => x.Customer.Id == customer.Id)
+						.Select(x => BugModel.ToModel(x))
+						.ToList();
+				} // using
+
+
 
 				using (tc.AddStep("ExperianDirectors Time taken")) {
 					var expDirModel = CrossCheckModel.GetExperianDirectors(customer);

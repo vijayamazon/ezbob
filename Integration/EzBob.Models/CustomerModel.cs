@@ -219,15 +219,13 @@ namespace EzBob.Models {
 		public string LotteryCode { get; set; }
 		public string Origin { get; set; }
 		public bool IsEverline { get; set; } //used to show popup in wizard
-		public bool IsEverlineRefinance { get; set; }
-
+		
 		public string FirstName { get; set; }
 		public string MiddleName { get; set; }
 		public string LastName { get; set; }
 
 		public int LastApprovedAmount { get; set; }
 
-		public string AlibabaCreditFacilityTemplate { get; set; }
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel {

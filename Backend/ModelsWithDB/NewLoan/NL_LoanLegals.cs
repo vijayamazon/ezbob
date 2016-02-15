@@ -46,5 +46,9 @@
 		[Length(128)]
 		[DataMember]
 		public string SignedName { get; set; }
+
+        [DataMember]
+        public string SignedLegalDocs { get; set; }
+
 	} // class NL_LoanLegals
 } // ns

@@ -21,7 +21,10 @@
 		IEzServicePricing,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceUserManagement
+		IEzServiceUserManagement,
+        IEzServiceLegalDocs,
+        IEzServiceSecurity,
+		IEzServiceLandRegistry
 	{
 		[OperationContract]
 		ActionMetaData AddHistoryDirector(Esigner Edirector);
@@ -49,9 +52,6 @@
 
 		[OperationContract]
 		ActionMetaData BackfillHmrcBusinessRelevance();
-
-		[OperationContract]
-		ActionMetaData BackfillLandRegistry2PropertyLink();
 
 		[OperationContract]
 		ActionMetaData BackfillMedalForAll();
@@ -224,34 +224,14 @@
 		IntActionResult GetExperianConsumerScore(int customerId);
 
 		[OperationContract]
-		PropertyStatusesActionResult GetPropertyStatuses();
-
-		[OperationContract]
 		WizardConfigsActionResult GetWizardConfigs();
 
 		[OperationContract]
 		CollectionSnailMailActionResult GetCollectionSnailMail(int userID, int collectionSnailMailID);
 
 		[OperationContract]
-		ActionMetaData GetZooplaData(int customerId, bool reCheck);
-
-		[OperationContract]
 		ActionMetaData IovationCheck(IovationCheckModel model);
-
-		[OperationContract]
-		string LandRegistryEnquiry(
-			int userId,
-			int customerId,
-			string buildingNumber,
-			string buildingName,
-			string streetName,
-			string cityName,
-			string postCode
-		);
-
-		[OperationContract]
-		string LandRegistryRes(int userId, int customerId, string titleNumber);
-
+		
 		[OperationContract]
 		ActionMetaData LateBy14Days();
 
@@ -365,10 +345,7 @@
 
 		[OperationContract]
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
-
-		[OperationContract]
-		ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount);
-
+		
 		[OperationContract]
 		BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
 
@@ -489,5 +466,8 @@
 
 		[OperationContract]
 		MessagesListActionResult LoadMessagesSentToUser(int userID);
+
+		[OperationContract]
+		SlidersDataActionResults GetSlidersData(int customerID);
 	} // interface IEzService
 } // namespace EzService

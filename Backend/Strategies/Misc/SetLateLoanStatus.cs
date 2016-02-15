@@ -165,6 +165,9 @@
 					new QueryParameter("Now", this.now));
 				if (!wasChanged) {
 					Log.Info("ChangeStatus to customer {0} loan {1} status {2} was not changed - customer already in this status", customerID, loanID, status);
+				} else {
+					var salesForce = new SalesForce.AddUpdateLeadAccount(null, customerID, false, false);
+					salesForce.Execute();
 				}
 			}
 

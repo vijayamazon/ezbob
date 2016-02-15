@@ -8,9 +8,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		initialize: function(options) {
 			this.bindTo(this.model, "change reset sync", this.render, this);
 			this.medalModel = options.medalModel;
-			this.personalInfo = options.personalInfo;
-			this.bindTo(this.personalInfo, "change", this.UpdateNewCreditLineState, this);
-			this.bindTo(this.personalInfo, "change:CreditResult", this.changeCreditResult, this);
 
 			EzBob.App.vent.on('newCreditLine:done', this.showCreditLineDialog, this);
 			EzBob.App.vent.on('newCreditLine:error', this.showErrorDialog, this);
@@ -23,7 +20,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			'click [name="newCreditLineBtn"]': 'runNewCreditLine',
 			'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
 			'click #create-loan-hidden-btn': 'createLoanHidden',
-			'click #editOfferButton': 'showCreditLineDialog'
+			'click #editOfferButton': 'showCreditLineDialog',
+			'click .downloadOfferButton': 'downloadOffer'
 		},
 
 		toggleCreateLoanHidden: function(event) {
@@ -105,6 +103,18 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			return false;
 		}, // runNewCreditLine
+
+		downloadOffer: function(e) {
+			var $el = $(e.currentTarget);
+			var isExcel = false;
+			if ($el.data('type') == 'excel') {
+				isExcel = true;
+			}
+			return $el.attr('href', window.gRootPath + 'Underwriter/Schedule/Export?id=' +
+				this.model.get('CashRequestId') +
+				'&isExcel=' + isExcel +
+				'&isShowDetails=false&customerId=' + this.model.get('CustomerId'));
+		},//downloadOffer
 
 		createNewCreditLine: function(newCreditLineOption) {
 			BlockUi();
@@ -209,9 +219,9 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			return _results;
 		},
 
-		UpdateNewCreditLineState: function() {
-			var waiting = this.personalInfo.get("CreditResult") === "WaitingForDecision";
-			var disabled = waiting || !this.personalInfo.get("IsCustomerInEnabledStatus");
+		UpdateNewCreditLineState: function () {
+			var waiting = this.model.get("CreditResult") === "WaitingForDecision";
+			var disabled = waiting || !this.model.get('IsCustomerInEnabledStatus');
 			$("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
 			$("#newCreditLineLnkId").toggleClass("disabled", disabled);
 		},
@@ -237,7 +247,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			};
 		},
 
-		onRender: function() {
+		onRender: function () {
 			this.$el.find(".tltp").tooltip();
 			this.$el.find(".tltp-left").tooltip({
 				placement: "left"
@@ -279,12 +289,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				UnBlockUi();
 			});
 		},
-
-		changeCreditResult: function() {
-			this.model.fetch();
-			this.personalInfo.fetch();
-		},
-
+		
 		showCreditLineDialog: function() {
 			var self = this;
 

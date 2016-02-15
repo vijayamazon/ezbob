@@ -45,11 +45,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		[Newtonsoft.Json.JsonIgnore]
 		[ScriptIgnore]
 		public virtual ISet<Zoopla> Zoopla { get; set; }
-
-		[Newtonsoft.Json.JsonIgnore]
-		[ScriptIgnore]
-		public virtual ISet<LandRegistry> LandRegistry { get; set; }
-
+		
 		public virtual string ZooplaEstimate { get; set; }
 		public virtual int ZooplaEstimateValue { get; set; }
 		public virtual string ZooplaAverage { get; set; }
@@ -138,11 +134,6 @@ namespace EZBob.DatabaseLib.Model.Database.Mappings
 				.KeyColumn("CustomerAddressId")
 				.Cascade.AllDeleteOrphan();
 
-			HasMany(x => x.LandRegistry)
-				.AsSet()
-				.Inverse()
-				.KeyColumn("AddressId")
-				.Cascade.All();
 		}
 	}
 }

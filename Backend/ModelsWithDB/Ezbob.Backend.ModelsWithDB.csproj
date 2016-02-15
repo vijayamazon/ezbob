@@ -66,6 +66,11 @@
     <Compile Include="ApplicationInfo\LoanSourceModel.cs" />
     <Compile Include="ApplicationInfo\LoanTypeModel.cs" />
     <Compile Include="ApplicationInfo\SuggestedAmountModel.cs" />
+    <Compile Include="Authentication\RolePermissionRelation.cs" />
+    <Compile Include="Authentication\User.cs" />
+    <Compile Include="Authentication\UserRoleRelation.cs" />
+    <Compile Include="Authentication\Role.cs" />
+    <Compile Include="Authentication\Permission.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
@@ -117,6 +122,10 @@
     <Compile Include="CollectionSnailMailMetadataModel.cs" />
     <Compile Include="CollectionSnailMailTemplate.cs" />
     <Compile Include="CollectionSmsTemplate.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerAppointmentOrder.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerAppointmentOrderItem.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerOrderItem.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerOrder.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
     <Compile Include="CreditSafe\CreditSafeBaseData.cs" />
@@ -191,6 +200,7 @@
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
     <Compile Include="MultiBrandLoanModel.cs" />
+    <Compile Include="LegalDocs\LoanAgreementTemplate.cs" />
     <Compile Include="MultiBrandLoanSummary.cs" />
     <Compile Include="AStringable.cs" />
     <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
@@ -306,6 +316,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

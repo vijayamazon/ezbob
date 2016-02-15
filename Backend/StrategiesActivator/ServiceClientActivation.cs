@@ -1571,6 +1571,22 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.serviceClient.GetIncomeSms(date, false);
 		} // GetIncomeSms
 
+		[Activation]
+		private void ManualLegalDocsSyncTemplatesFiles() {
+
+			const string pathExample = @"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement";
+				string agreementsPath = null;
+
+			if (this.cmdLineArgs.Length == 2) {
+				agreementsPath = this.cmdLineArgs[1];
+			} else {
+				this.log.Msg("Usage: ManualLegalDocsSyncTemplatesFiles path to agreements folder like: {0}", pathExample);
+				return;
+			} // if
+			this.serviceClient.ManualLegalDocsSyncTemplatesFiles(agreementsPath);
+		} // ManualLegalDocsSyncTemplatesFiles
+
+
 		//[Activation]
 		//private void ExampleMethod() {
 		//	int customerID;
@@ -1592,6 +1608,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		//	);
 		//}
 
+        
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;
 		private readonly ASafeLog log;

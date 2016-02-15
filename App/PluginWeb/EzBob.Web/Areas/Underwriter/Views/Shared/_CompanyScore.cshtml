@@ -12,6 +12,7 @@
 			</div>
 		</div>
 		<%}%>
+		<div id="companies-house-data"></div>
 		<div class="company-score-data">
 
 <% (function(response, onAfterRender, caption) {
@@ -1222,4 +1223,90 @@
 		</div>
 	</div>
 
+</script>
+
+<script id="companies-house-template" type="text/template">
+	<div>
+		<%if(data) {%>
+		<div class="box">
+			<div class="box-content">
+				<div class="accordion-heading">
+					<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseCompaniesHouse">Companies house data</a>
+				</div>
+				<div class="accordion-body collapse" id="collapseCompaniesHouse" style="height: 0px;">
+					<% if(data.error){ %>
+					<div class="red_cell">Failed to retrieve companies house data for company <%-data.CompanyRefNum%> on <%-EzBob.formatDate(data.Timestamp)%> error: <%-data.Error%></div>
+					<%} else {%>
+					<div>Companies house data as of <%-EzBob.formatDateUK(data.Timestamp)%> for company <%-data.CompanyRefNum%> has <%-data.TotalResults%> officers, <span class="<%-data.ResignedCount > 0 ? 'red_cell' : ''%>"><%-data.ResignedCount%></span> resigned</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Officer role</th>
+								<th>Appointed on</th>
+								<th>Resigned on</th>
+								<th>Nationality</th>
+								<th>Country of residence</th>
+								<th>Address</th>
+								<th>Date of birth</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%_.each(data.Officers, function(officer) {%>
+							<tr>
+								<td>
+									<%if(officer.IsCustomer) {%> <i class="fa fa-user"></i> <%}%>
+									<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseOfficer<%-officer.CompaniesHouseOfficerOrderItemID%>"><%-officer.Name%></a> 
+								</td>
+								<td class="<%-officer.OfficerRole != 'Director' ? 'red_cell' : ''%>"><%-officer.OfficerRole%></td>
+								<td><%-EzBob.formatDateUK(officer.AppointedOn)%></td>
+								<td class="<%-officer.ResignedOn ? 'red_cell' : ''%>"><%-EzBob.formatDateUK(officer.ResignedOn)%></td>
+								<td><%-officer.Nationality%></td>
+								<td><%-officer.CountryOfResidence%></td>
+								<td><%-officer.Premises%> <%-officer.AddressLine1%> <%-officer.AddressLine2%> <%-officer.Locality%> <%-officer.Region%> <%-officer.Country%> <%-officer.Postcode%></td>
+								<td><%-officer.DobDay%> <%-officer.DobMonth%> <%-officer.DobYear%></td>
+							</tr>
+							<tr class="accordion-body collapse" id="collapseOfficer<%-officer.CompaniesHouseOfficerOrderItemID%>" style="height: 0px;">
+								<td colspan="8">
+									<%if(officer.AppointmentOrder){%>
+									<div>Officer <%-officer.AppointmentOrder.Name%> has <%-officer.AppointmentOrder.TotalResults%> appointments</div>
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th>Company name</th>
+												<th>Company number</th>
+												<th>Company status</th>
+												<th>Officer role</th>
+												<th>Appointed on</th>
+												<th>Resigned on</th>
+											</tr>
+										</thead>
+										<tbody>
+											<%_.each(officer.AppointmentOrder.Appointments, function(appointment){%>
+											<tr>
+												<td>
+													<%if(appointment.IsCustomer) {%> <i class="fa fa-user"></i> <%}%> 
+													<%-appointment.CompanyName%>
+												</td>
+												<td><%-appointment.CompanyNumber%></td>
+												<td class="<%-appointment.CompanyStatus != 'Active' ? 'red_cell' : ''%>"><%-appointment.CompanyStatus%></td>
+												<td class="<%-appointment.OfficerRole != 'Director' ? 'red_cell' : ''%>"><%-appointment.OfficerRole%></td>
+												<td><%-EzBob.formatDateUK(appointment.AppointedOn)%></td>
+												<td class="<%-appointment.ResignedOn ? 'red_cell' : ''%>"><%-EzBob.formatDateUK(appointment.ResignedOn)%></td>
+											</tr>
+											<%});%>
+										</tbody>
+									</table>
+									<%}%>
+								</td>
+							</tr>
+							<%});%>
+						</tbody>
+					</table>
+					<% } %>
+				</div>
+			</div>
+		</div>
+		<% } %>
+	</div>
 </script>

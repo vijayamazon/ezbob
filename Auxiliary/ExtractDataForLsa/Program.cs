@@ -1,5 +1,6 @@
 ﻿namespace ExtractDataForLsa {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
@@ -76,12 +77,6 @@
 			ProcessSms();
 			ProcessSnailmails();
 			ProcessDropbox();
-
-			File.WriteAllLines(
-				Path.Combine(TargetPath, "loans.csv"),
-				this.loans.Values.Select(ld => string.Format("{0},{1}", ld.LoanID, ld.LoanInternalID)),
-				System.Text.Encoding.ASCII
-			);
 		} // Run
 
 		private bool Do(WorkingMode mode) {
@@ -112,7 +107,7 @@
 				string sourcePath = Path.Combine(DropboxRootPath, customerName);
 
 				if (!Directory.Exists(sourcePath)) {
-					this.log.Alert("Customer directory not found in the dropbox: {0}", customerName);
+					this.log.Warn("Customer directory not found in the dropbox: {0}", customerName);
 					continue;
 				} // if
 
@@ -122,8 +117,46 @@
 					if (!Directory.Exists(loanPath))
 						Directory.CreateDirectory(loanPath);
 
-					FileSystem.CopyDirectory(sourcePath, loanPath);
-					this.log.Debug("Loan #{0} has attached directory {1}.", loanID, loanPath);
+					this.log.Debug(
+						"For loan #{0} copying dropbox directory {1} to {2}...",
+						loanID,
+						sourcePath,
+						loanPath
+					);
+
+					try {
+						FileSystem.CopyDirectory(sourcePath, loanPath, true);
+						this.log.Debug("Loan #{0} has attached directory {1}.", loanID, loanPath);
+					} catch (IOException io) {
+						var lst = new List<string>();
+
+						foreach (DictionaryEntry kv in io.Data)
+							lst.Add(string.Format("{0}: {1}", kv.Key, kv.Value));
+
+						this.log.Alert(
+							io,
+							"For loan #{0} failed to dropbox directory {1} to {2}.\n" +
+							"Exception was thrown of type {3} with message: {4}.\n" +
+							"More details:\n\t{5}",
+							loanID,
+							sourcePath,
+							loanPath,
+							io.GetType().FullName,
+							io.Message,
+							string.Join("\n\t", lst)
+						);
+					} catch (Exception e) {
+						this.log.Alert(
+							e,
+							"For loan #{0} failed to dropbox directory {1} to {2}.\n" +
+							"Exception was thrown of type {3} with message: {4}",
+							loanID,
+							sourcePath,
+							loanPath,
+							e.GetType().FullName,
+							e.Message
+						);
+					} // try
 				} // for each loan
 			} // for each customer
 		} // ProcessDropbox
@@ -252,9 +285,6 @@
 				return ActionResult.Continue;
 			});
 
-			if (!Do(WorkingMode.Customer))
-				return;
-
 			this.loansForLsaDirectors.ForEachResult<DirectorData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID)) {
 					this.loans[cd.LoanID] = new LoanData(cd.LoanID, cd.LoanInternalID);
@@ -281,8 +311,15 @@
 				return ActionResult.Continue;
 			});
 
-			foreach (LoanData ld in this.loans.Values)
-				ld.SaveTo(TargetPath);
+			if (Do(WorkingMode.Customer))
+				foreach (LoanData ld in this.loans.Values)
+					ld.SaveTo(TargetPath);
+
+			File.WriteAllLines(
+				Path.Combine(TargetPath, "loans.csv"),
+				this.loans.Values.Select(ld => string.Format("{0},{1}", ld.LoanID, ld.LoanInternalID)),
+				System.Text.Encoding.ASCII
+			);
 		} // ProcessCustomerData
 
 		private string TargetPath { get { return this.cfg.TargetPath; } }

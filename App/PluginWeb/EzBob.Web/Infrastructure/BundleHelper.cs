@@ -241,7 +241,7 @@
 				// custom css
 				.Add("~/Content/css/Everlinecustomer.css")
 				.Add("~/Content/css/everline.css")
-                .Add("~/Content/css/everline-mobile.css")
+               // .Add("~/Content/css/everline-mobile.css")
 				.Add("~/Content/css/EverlineBroker.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.Add("~/Content/css/profile-ny2015scratch.css")
@@ -624,6 +624,7 @@
 				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanView.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ezbob.accounts.bank.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanTopView.js")
+                .Add("~/Content/js/Profile/ezbob.Profile.AgreementsDynamicCheckboxes.js")
 				.Add("~/Content/js/Profile/ezbob.profile.profileView.js")
 				.Add("~/Content/js/Profile/ezbob.profile.profileRouter.js")
 				.Add("~/Content/js/Profile/PayEarly/makeEarlyPaymentModel.js")

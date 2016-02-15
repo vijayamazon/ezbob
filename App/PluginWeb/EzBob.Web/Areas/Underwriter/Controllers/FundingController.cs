@@ -34,6 +34,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "AddFunds")]
 		public JsonResult SavePacnetManual(int amount, int limit) // remove limit from here and from call
 		{
 			serviceClient.Instance.RecordManualPacnetDeposit(context.UserId, User.Identity.Name, amount);
@@ -43,6 +44,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "AddFunds")]
 		public JsonResult DisableCurrentManualPacnetDeposits(bool isSure)
 		{
 			if (isSure)
@@ -56,6 +58,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "PacnetRequests")]
 		public JsonResult TopUpRequest(decimal amount) {
 
 			serviceClient.Instance.TopUpDelivery(context.UserId, amount, 1); 
@@ -66,6 +69,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "PacnetRequests")]
 		public JsonResult SendForPacnetConfirm(decimal amount) {
 
 			serviceClient.Instance.PacnetDelivery(context.UserId, amount); 

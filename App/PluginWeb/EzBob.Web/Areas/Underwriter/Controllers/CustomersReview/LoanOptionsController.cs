@@ -59,6 +59,7 @@
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
+		[Permission(Name = "LoanOptions")]
         public JsonResult Save(LoanOptions options)
         {
             if (options.ManualCaisFlag == "T")

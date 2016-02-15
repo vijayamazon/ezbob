@@ -46,6 +46,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "AddLogbookEntry")]
 		public JsonResult Add(int type, string content) {
 			bool bSuccess;
 			string sMsg = string.Empty;

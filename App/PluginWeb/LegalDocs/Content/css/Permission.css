@@ -1,0 +1,18 @@
+﻿/* Permissions */
+.tabContentApproveLegalDocs,
+.tabContentReviewLegalDocs
+{
+    display: none;
+    visibility: hidden;
+}
+
+.permission-LegalDocsReview .tabContentReviewLegalDocs {
+     display: inline-block;
+     visibility: visible;
+}
+
+.permission-LegalDocsApprove .tabContentApproveLegalDocs 
+{
+     display: inline-block;
+     visibility: visible;
+}

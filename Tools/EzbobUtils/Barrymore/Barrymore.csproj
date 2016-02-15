@@ -36,9 +36,6 @@
     <Reference Include="CryptSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\CryptSharp\CryptSharp.dll</HintPath>
-     </Reference><Reference Include="ConfigManager">
-      <HintPath>..\..\..\Backend\CalculateLoan\Models\bin\Debug\ConfigManager.dll</HintPath>
-   
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>

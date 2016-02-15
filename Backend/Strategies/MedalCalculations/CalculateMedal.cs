@@ -95,8 +95,6 @@
 
 		public void Notify() {
 			if (Result.HasError) {
-				SendExplanationMail();
-
 				var bothHaveNoMedal =
 					(Result.MedalType == MedalType.NoMedal) &&
 					(this.verificationResult.MedalType == AutomationCalculator.Common.MedalType.NoMedal);
@@ -104,6 +102,8 @@
 				if (bothHaveNoMedal)
 					Log.Msg("Both medal calculators produced 'No medal' for customer {0}. {1}", this.customerId, Tag);
 				else {
+					SendExplanationMail();
+
 					Log.Warn(
 						"Mismatch/Error found in medal calculations of customer {0}. {1}",
 						this.customerId,

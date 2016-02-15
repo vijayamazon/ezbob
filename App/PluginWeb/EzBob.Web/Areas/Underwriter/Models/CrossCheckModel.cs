@@ -37,7 +37,7 @@
 		public int ExperianMortgage { get; set; }
 		public int ExperianMortgageCount { get; set; }
 		public int AssetWorth { get; set; }
-		public List<LandRegistryResModel> LandRegistries { get; set; }
+		
 
 		static CrossCheckModel() {
 			Mapper.CreateMap<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>();
@@ -157,16 +157,6 @@
 
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);
-
-			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res)
-				.Select(x => new {
-					Response = x.Response,
-					Title = x.TitleNumber
-				});
-			var b = new LandRegistryModelBuilder();
-			LandRegistries = new List<LandRegistryResModel>();
-			foreach (var lr in lrs)
-				LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
 		} // constructor
 
 		public static void GetZooplaData(Customer customer, int zooplaEstimate, int zoopla1YearAvg, out int zooplaValue) {

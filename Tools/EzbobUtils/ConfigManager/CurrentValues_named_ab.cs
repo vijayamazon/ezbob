@@ -1,5 +1,11 @@
 ﻿namespace ConfigManager {
 	public partial class CurrentValues {
+
+		public virtual VariableValue AccountingBrokersEmail {
+			get { return this[Variables.AccountingBrokersEmail]; }
+		}
+
+
 		public virtual VariableValue AddSageIntervalMinutes {
 			get { return this[Variables.AddSageIntervalMinutes]; }
 		}

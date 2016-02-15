@@ -161,21 +161,21 @@
 						<div class="row">
 							<%_.each(m.Alerts.Errors, function(item) {%>
 							<div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
-								<span><%-item.Abbreviation%></span>
+								<span><a href="#" data-toggle="tab" class="alert-<%-item.AlertType%>" onclick="$('a[href=#<%- item.Tab%>]').click()"><%-item.Abbreviation%></a></span>
 							</div>
 							<%});%>
 						</div>
 						<div class="row">
 							<%_.each(m.Alerts.Warnings, function(item) {%>
 							<div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
-								<span><%-item.Abbreviation%></span>
+								<span><a href="#" data-toggle="tab" class="alert-<%-item.AlertType%>" onclick="$('a[href=#<%- item.Tab%>]').click()"><%-item.Abbreviation%></a></span>
 							</div>
 							<%});%>
 						</div>
 						<div class="row">
 							<%_.each(m.Alerts.Infos, function(item) {%>
 							<div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
-								<span><%-item.Abbreviation%></span>
+								<span><a href="#" data-toggle="tab" class="alert-<%-item.AlertType%>" onclick="$('a[href=#<%- item.Tab%>]').click()"><%-item.Abbreviation%></a></span>
 							</div>
 							<%});%>
 						</div>

@@ -43,6 +43,11 @@
 		public DateTime? RegistrationDate { get; set; }
         [DataMember]
         public bool IsTest { get; set; }
+		[DataMember]
+		public string CollectionStatus { get; set; }
+		[DataMember]
+		public string ExternalCollectionStatus { get; set; }
+
 		//Company data
 		[DataMember]
 		public string CompanyName { get; set; }
@@ -76,5 +81,7 @@
 		public string BrokerPhoneNumber { get; set; }
 		[DataMember]
 		public string BrokerEmail { get; set; }
+		[DataMember]
+		public int? BrokerID { get; set; }
 	}
 }

@@ -14,15 +14,39 @@ namespace CompaniesHouseTest {
 			httpClient.BaseAddress = new Uri("https://api.companieshouse.gov.uk/");
 			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(apiKey)));
 
-			//Get officers of company by ref num
-			string companyRefNum = "06173420";
-			var result = httpClient.GetAsync(string.Format("company/{0}/officers", companyRefNum)).Result.Content.ReadAsStringAsync().Result;
-			var resultModel = JsonConvert.DeserializeObject<OfficersListResult>(result);
+			int startIndex = 0;
+			const int itemsPerPage = 5;
+			bool retrieve = true;
+			do {
 
-			//Get appointments by officer ref num
-			var officerRefNum = "1t13BKJFE1XYSoeCqJVckOnnSwk";
-			var result2 = httpClient.GetAsync(string.Format("/officers/{0}/appointments", officerRefNum)).Result.Content.ReadAsStringAsync().Result;
-			var result2Model = JsonConvert.DeserializeObject<AppointmentListResult>(result2);
+				//Get officers of company by ref num
+				string companyRefNum = "03972564";
+				var result = httpClient.GetAsync(string.Format("company/{0}/officers/?items_per_page={1}&start_index={2}", companyRefNum, itemsPerPage, startIndex)).Result.Content.ReadAsStringAsync().Result;
+				var resultModel = JsonConvert.DeserializeObject<OfficersListResult>(result);
+				if (resultModel.total_results > (startIndex + itemsPerPage)) {
+					startIndex += itemsPerPage;
+				} else {
+					retrieve = false;
+				}
+			} while (retrieve);
+
+
+			startIndex = 0;
+			retrieve = true;
+			do {
+				//Get appointments by officer ref num
+				var officerRefNum = "/officers/2Z5vDM3ulIo2gYa7M8sgl_FBd6o/appointments";
+				var result2 = httpClient.GetAsync(string.Format("{0}/?items_per_page={1}&start_index={2}", officerRefNum, itemsPerPage, startIndex))
+					.Result.Content.ReadAsStringAsync()
+					.Result;
+				var result2Model = JsonConvert.DeserializeObject<AppointmentListResult>(result2);
+
+				if (result2Model.total_results > (startIndex + itemsPerPage)) {
+					startIndex += itemsPerPage;
+				} else {
+					retrieve = false;
+				}
+			} while (retrieve);
 		}
 	}
 }

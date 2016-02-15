@@ -18,10 +18,6 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData BackfillLandRegistry2PropertyLink() {
-			BackfillLandRegistry2PropertyLink instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
 
 		public ActionMetaData BackfillMedalForAll() {
 			return Execute<BackfillMedalForAll>(null, null);
@@ -117,21 +113,6 @@
 				MetaData = result,
 				Value = instance.CurrentBalance
 			};
-		}
-
-		public PropertyStatusesActionResult GetPropertyStatuses() {
-			GetPropertyStatuses instance;
-
-			ActionMetaData result = ExecuteSync(out instance, 0, 0);
-
-			return new PropertyStatusesActionResult {
-				MetaData = result,
-				Groups = instance.Groups
-			};
-		}
-
-		public ActionMetaData GetZooplaData(int customerId, bool reCheck) {
-			return ExecuteSync<ZooplaStub>(customerId, null, customerId, reCheck);
 		}
 
 		public BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType) {
@@ -334,5 +315,16 @@
 				Messages = instance.Result,
 			};
 		} // LoadMessagesSentToUser
+
+		public SlidersDataActionResults GetSlidersData(int customerID) {
+			GetSlidersData instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID);
+
+			return new SlidersDataActionResults {
+				MetaData = amd,
+				SlidersData = instance.Result,
+			};
+		} // GetSlidersBoundaries
 	} // class EzServiceImplementation
 } // namespace EzService

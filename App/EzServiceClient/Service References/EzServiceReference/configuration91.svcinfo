@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="ZRVsgEl2N7paH0KOeFwTV0+dki4=">
+=======
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="CE9ilvud36ARgoa7cL4HB2JjFAA=">
+>>>>>>> master
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IEzServiceAdmin7">
       <properties>
@@ -233,10 +237,17 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
+<<<<<<< HEAD
     <endpoint name="NetTcpBinding_IEzServiceAdmin6" contract="EzServiceReference.IEzServiceAdmin" bindingType="netTcpBinding" address="net.tcp://elinar-pc:7081/" bindingConfiguration="NetTcpBinding_IEzServiceAdmin7">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://elinar-pc:7081/</serializedValue>
+=======
+    <endpoint name="NetTcpBinding_IEzServiceAdmin1" contract="EzServiceReference.IEzServiceAdmin" bindingType="netTcpBinding" address="net.tcp://stasd-pc:7081/" bindingConfiguration="NetTcpBinding_IEzServiceAdmin7">
+      <properties>
+        <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <serializedValue>net.tcp://stasd-pc:7081/</serializedValue>
+>>>>>>> master
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -263,7 +274,11 @@
           <serializedValue>System.ServiceModel.Configuration.UserPrincipalNameElement</serializedValue>
         </property>
         <property path="/identity/userPrincipalName/value" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+<<<<<<< HEAD
           <serializedValue>ELINAR-PC\elinar</serializedValue>
+=======
+          <serializedValue>STASD-PC\stasd</serializedValue>
+>>>>>>> master
         </property>
         <property path="/identity/servicePrincipalName" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.ServicePrincipalNameElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.ServicePrincipalNameElement</serializedValue>
@@ -308,7 +323,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>NetTcpBinding_IEzServiceAdmin6</serializedValue>
+          <serializedValue>NetTcpBinding_IEzServiceAdmin1</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -318,10 +333,17 @@
         </property>
       </properties>
     </endpoint>
+<<<<<<< HEAD
     <endpoint name="NetTcpBinding_IEzService6" contract="EzServiceReference.IEzService" bindingType="netTcpBinding" address="net.tcp://elinar-pc:7081/" bindingConfiguration="NetTcpBinding_IEzService7">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://elinar-pc:7081/</serializedValue>
+=======
+    <endpoint name="NetTcpBinding_IEzService1" contract="EzServiceReference.IEzService" bindingType="netTcpBinding" address="net.tcp://stasd-pc:7081/" bindingConfiguration="NetTcpBinding_IEzService7">
+      <properties>
+        <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <serializedValue>net.tcp://stasd-pc:7081/</serializedValue>
+>>>>>>> master
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -348,7 +370,11 @@
           <serializedValue>System.ServiceModel.Configuration.UserPrincipalNameElement</serializedValue>
         </property>
         <property path="/identity/userPrincipalName/value" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+<<<<<<< HEAD
           <serializedValue>ELINAR-PC\elinar</serializedValue>
+=======
+          <serializedValue>STASD-PC\stasd</serializedValue>
+>>>>>>> master
         </property>
         <property path="/identity/servicePrincipalName" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.ServicePrincipalNameElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.ServicePrincipalNameElement</serializedValue>
@@ -393,7 +419,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>NetTcpBinding_IEzService6</serializedValue>
+          <serializedValue>NetTcpBinding_IEzService1</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

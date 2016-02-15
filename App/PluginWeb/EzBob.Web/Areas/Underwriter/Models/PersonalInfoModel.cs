@@ -76,6 +76,8 @@
 		public bool IsAlibaba { get; set; }
 		public int BoardResolutionTemplateID { get; set; }
 		public int PersonalGuaranteeTemplateID { get; set; }
+		public bool IsRegulated { get; set; }
+		public bool IsBrokerRegulated { get; set; }
 
 		public PersonalInfoModel() {
 			CompanyEmployeeCountInfo = null;
@@ -84,7 +86,8 @@
 		public void InitFromCustomer(Customer customer) {
 			if (customer == null)
 				return;
-
+			
+			IsBrokerRegulated = (customer.Broker != null) && customer.Broker.FCARegistered;
 			IsWizardComplete = (customer.WizardStep != null) && customer.WizardStep.TheLastOne;
 
 			Id = customer.Id;
@@ -99,6 +102,7 @@
 
 			if (customer.PersonalInfo != null)
 			{
+				IsRegulated = customer.PersonalInfo.IsRegulated;
 				if (customer.PersonalInfo.DateOfBirth.HasValue) {
 					DateOfBirth = customer.PersonalInfo.DateOfBirth.Value;
 					Age = MiscUtils.GetFullYears(customer.PersonalInfo.DateOfBirth.Value);

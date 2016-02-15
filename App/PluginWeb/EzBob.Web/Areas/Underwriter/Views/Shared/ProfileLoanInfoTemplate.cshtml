@@ -359,6 +359,8 @@
 
 <script id="profile-loan-info-template" type="text/template">
     <% (function(m) { %>
+	
+	<%if(m.CashRequestId) { %>
     <div class="col-md-6 col-lg-6 col-sm-12">
         <table class="table squeezed rright">
         <thead class="box">
@@ -429,8 +431,7 @@
             </tr>
         </tbody>
     </table>
-
-        <table class="table squeezed rright">
+		<table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
                 <th colspan="2">Other Properties</th>
@@ -457,10 +458,19 @@
         </tbody>
     </table>
     </div>
+	<% } else {%>
+		<div>Customer status : <%- m.SystemDecision %></div>
+	<% } %>
     <div class="control-group">
-        <%if(m.Editable){%>
+        <% if(m.Editable) { %>
             <button id="editOfferButton" class="btn btn-dashboard" name="editOfferButton">Edit offer</button>
-        <%}%>
+        <% } %>
+
+		<% if(m.CashRequestId) { %>
+			<a class="btn btn-dashboard downloadOfferButton" data-type="pdf">Download offer pdf</a>
+			<a class="btn btn-dashboard downloadOfferButton" data-type="excel">Download offer excel</a>
+		<% } %>
+
         <button id="newCreditLineButtonId" class="btn btn-dashboard" name="newCreditLineBtn">New Credit Line</button>
     </div>
     <% })(m); %>

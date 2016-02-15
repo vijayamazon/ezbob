@@ -613,6 +613,14 @@
 	.header-info-right {
 		background: none;
 	}
+
+	.input-tag-wrap.fca-radio {
+		display: inline-block;
+	}
+
+	input#NonFCARegistered {
+		margin-left: 0;
+	}
 }
 
 @media screen and (max-width: 650px) {

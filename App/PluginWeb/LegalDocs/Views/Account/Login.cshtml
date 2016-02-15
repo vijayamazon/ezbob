@@ -1,0 +1,31 @@
+﻿@model LegalDocs.Models.LoginModel
+@{
+    Layout = "~/Views/Account/_LayoutLogin.cshtml";
+}
+<div class="login-page">
+    <div class="login-wrapper col-md-offset-5 col-md-2">
+        @using (Html.BeginForm("Login", "Account", new { Area = "" }, FormMethod.Post, new { @class = "form-login" })) {
+            <div class="notifications">@Html.ValidationMessage("LoginError")</div>
+            <h3>Login to Legal Docs</h3>
+            <hr />
+            <div class="form-group">
+                <div class="controls">
+                    @Html.TextBox("UserName", "", new { @class = "form-control", placeholder = "user name", tabindex = "11", autofocus = "autofocus" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="controls">
+                    @Html.Password("Password", "", new { @class = "form-control", placeholder = "password", tabindex = "12", autocomplete = "off" })
+                </div>
+            </div>
+
+            @Html.Hidden("returnUrl", Model.ReturnUrl)
+            <br />
+            <div class="form-group">
+                <div class="controls">
+                    <button class="btn btn-primary form-control" type="submit" tabindex="13" id="loginSubmitBtn">Login</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -10,7 +10,6 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using EzBob.Models.Agreements;
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.Attributes;
@@ -57,7 +56,7 @@
 			CustomerPhoneRepository customerPhoneRepository,
 			IExternalCollectionStatusesRepository externalCollectionStatusesRepository,
 			LoanOptionsRepository loanOptionsRepository,
-			ILoanRepository loanRepository, 
+			ILoanRepository loanRepository,
 			ServiceClient serviceClient) {
 			this.customerRepository = customerRepository;
 			this.cashRequestsRepository = cashRequestsRepository;
@@ -102,7 +101,7 @@
 
 			try {
 				LoanCommissionDefaultsActionResult lcdar = this.serviceClient.Instance.GetLoanCommissionDefaults(
-					this.context.User.Id,
+					this.context.UserId,
 					id,
 					amount
 				);
@@ -168,6 +167,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "CCIMark")]
 		public JsonResult ToggleCciMark(int id) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -189,6 +189,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name="BlockTakingLoan")]
 		public JsonResult ToggleBlockTakingLoan(int id) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -208,6 +209,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "TestUser")]
 		public JsonResult ToggleIsTest(int id) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -227,6 +229,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "TrustPilot")]
 		public JsonResult UpdateTrustPilotStatus(int id, string status) {
 			Customer oCustomer = this.customerRepository.Get(id);
 
@@ -258,15 +261,18 @@
 		} // UpdateTrustPilotStatus
 
 		[HttpPost]
-		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
+		[Permission(Name = "CustomerStatus")]
 		public JsonResult ChangeExternalCollectionStatus(int id, int? externalStatusID) {
 			Customer oCustomer = this.customerRepository.Get(id);
-
 			if (oCustomer == null) {
 				log.Debug("Customer({0}) not found", id);
-				return Json(new { error = "Customer not found.", id = id, status = externalStatusID });
+				return Json(new {
+					error = "Customer not found.",
+					id = id,
+					status = externalStatusID
+				});
 			} // if
 
 			var prevExternalCollectionStatus = oCustomer.ExternalCollectionStatus;
@@ -275,49 +281,55 @@
 
 			if (newExternalCollectionStatus == null && externalStatusID != null) {
 				log.Debug("Status({0}) not found in the DB repository.", externalStatusID);
-				return Json(new { error = "Status not found in the DB repository.", id = id, status = externalStatusID });
+				return Json(new {
+					error = "Status not found in the DB repository.",
+					id = id,
+					status = externalStatusID
+				});
 			} // if
+			new Transactional(() => {
+				oCustomer.ExternalCollectionStatus = newExternalCollectionStatus;
+				log.Debug("Customer({0}).ExternalCollectionStatus set to {1}", id, externalStatusID);
 
-			oCustomer.ExternalCollectionStatus = newExternalCollectionStatus;
-			log.Debug("Customer({0}).ExternalCollectionStatus set to {1}", id, externalStatusID);
+				DateTime now = DateTime.UtcNow;
 
-			DateTime now = DateTime.UtcNow;
+				if (newExternalCollectionStatus != prevExternalCollectionStatus && (newExternalCollectionStatus == null || prevExternalCollectionStatus == null)) {
+					foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
+						bool customerInGoodStatus = newExternalCollectionStatus == null && oCustomer.CollectionStatus.IsEnabled;
+						LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+						options.AutoLateFees = customerInGoodStatus;
 
-			if (newExternalCollectionStatus != prevExternalCollectionStatus && (newExternalCollectionStatus == null || prevExternalCollectionStatus == null)) {
-				foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
-					bool customerInGoodStatus = newExternalCollectionStatus == null && oCustomer.CollectionStatus.IsEnabled;
-					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
-					options.AutoLateFees = customerInGoodStatus;
+						options.AutoPayment = customerInGoodStatus;
+						options.StopAutoChargeDate = customerInGoodStatus ? (DateTime?)null : now;
 
-					options.AutoPayment = customerInGoodStatus;
-					options.StopAutoChargeDate = customerInGoodStatus ? (DateTime?)null : now;
+						this.loanOptionsRepository.SaveOrUpdate(options);
+						NL_SaveLoanOptions(oCustomer, options);
 
-					this.loanOptionsRepository.SaveOrUpdate(options);
-					NL_SaveLoanOptions(oCustomer, options);
+						if (!customerInGoodStatus) {
+							loan.InterestFreeze.Add(new LoanInterestFreeze {
+								Loan = loan,
+								StartDate = now.Date,
+								EndDate = (DateTime?)null,
+								InterestRate = 0,
+								ActivationDate = now,
+								DeactivationDate = null
+							});
 
-					if (!customerInGoodStatus) {
-						loan.InterestFreeze.Add(new LoanInterestFreeze {
-							Loan = loan,
-							StartDate = now.Date,
-							EndDate = (DateTime?)null,
-							InterestRate = 0,
-							ActivationDate = now,
-							DeactivationDate = null
-						});
+							SaveLoanInterestFreeze(loan.InterestFreeze.Last(), oCustomer.Id);
 
-						SaveLoanInterestFreeze(loan.InterestFreeze.Last(), oCustomer.Id);
-
-					} else if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
-						foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
-							interestFreeze.DeactivationDate = now;
-							DeactivateLoanInterestFreeze(interestFreeze, oCustomer.Id);
+						} else if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
+							foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
+								interestFreeze.DeactivationDate = now;
+								DeactivateLoanInterestFreeze(interestFreeze, oCustomer.Id);
+							}
 						}
+
+						this.loanRepository.SaveOrUpdate(loan);
 					}
-
-					this.loanRepository.SaveOrUpdate(loan);
 				}
-			}
+			}).Execute();
 
+			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(this.context.UserId, oCustomer.Name, id, false, false);
 			return Json(new { error = (string)null, id = id, status = externalStatusID });
 		} // ChangeExternalCollectionStatus
 
@@ -391,7 +403,7 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		[Permission(Name = "CreditLineFields")]
+		[Permission(Name = "AvoidAutomaticDecision")]
 		public JsonResult AvoidAutomaticDecision(int id, bool enabled) {
 			var cust = this.customerRepository.Get(id);
 			cust.IsAvoid = enabled;
@@ -402,7 +414,7 @@
 
 			return Json(new { error = (string)null, id = id, status = cust.IsAvoid });
 		}
-	
+
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -441,6 +453,7 @@
 		[Transactional]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name="CreditLineFields")]
 		public JsonResult ChangeCreditLine(
 			long id,
 			int productID,
@@ -501,7 +514,7 @@
 				c.OfferStart = cr.OfferStart;
 				c.OfferValidUntil = cr.OfferValidUntil;
 				c.ManagerApprovedSum = sum;
-				
+
 				this.cashRequestsRepository.SaveOrUpdate(cr);
 				this.customerRepository.SaveOrUpdate(c);
 			}).Execute();
@@ -596,6 +609,7 @@
 		} // ActivateMainStrategy
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "FinishWizard")]
 		public JsonResult ActivateFinishWizard(int customerId) {
 			int underwriterId = this.context.User.Id;
 
@@ -612,6 +626,7 @@
 		} // ActivateFinishWizard
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "CreateLoan")]
 		public JsonResult CreateLoanHidden(int nCustomerID, decimal nAmount, string sDate) {
 			try {
 				var lc = new LoanCreatorNoChecks(
@@ -636,6 +651,7 @@
 		}
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ResetPassword")]
 		public JsonResult ResetPassword123456(int nCustomerID) {
 			new ServiceClient().Instance.ResetPassword123456(this.context.User.Id, nCustomerID, PasswordResetTarget.Customer);
 			return Json(true);
@@ -651,30 +667,30 @@
 			EZBob.DatabaseLib.Model.Database.CashRequestOriginator originator;
 
 			switch (newCreditLineOption) {
-			case NewCreditLineOption.SkipEverything:
-				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineSkipAll;
-				break;
+				case NewCreditLineOption.SkipEverything:
+					originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineSkipAll;
+					break;
 
-			case NewCreditLineOption.SkipEverythingAndApplyAutoRules:
-				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineSkipAndGoAuto;
-				break;
+				case NewCreditLineOption.SkipEverythingAndApplyAutoRules:
+					originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineSkipAndGoAuto;
+					break;
 
-			case NewCreditLineOption.UpdateEverythingAndApplyAutoRules:
-				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineUpdateAndGoAuto;
-				break;
+				case NewCreditLineOption.UpdateEverythingAndApplyAutoRules:
+					originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineUpdateAndGoAuto;
+					break;
 
-			case NewCreditLineOption.UpdateEverythingAndGoToManualDecision:
-				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineUpdateAndGoManual;
-				break;
+				case NewCreditLineOption.UpdateEverythingAndGoToManualDecision:
+					originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineUpdateAndGoManual;
+					break;
 
-			default:
-				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineBtn;
-				log.Alert(
-					"New credit line option not specified for customer {0}, underwriter {1} - defaulting to obsolete value.",
-					customerID,
-					underwriterID
-				);
-				break;
+				default:
+					originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineBtn;
+					log.Alert(
+						"New credit line option not specified for customer {0}, underwriter {1} - defaulting to obsolete value.",
+						customerID,
+						underwriterID
+					);
+					break;
 			} // switch
 
 			ActionMetaData amd = new MainStrategyClient(

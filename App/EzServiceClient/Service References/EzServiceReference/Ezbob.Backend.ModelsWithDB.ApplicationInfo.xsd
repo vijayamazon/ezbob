@@ -40,6 +40,7 @@
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="IsAvoid" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsCustomerInEnabledStatus" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCustomerRepaymentPeriodSelectionAllowed" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsLimited" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:int" />

@@ -145,6 +145,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name="OldEditLoanDetails")]
 		public JsonResult Loan(EditLoanDetailsModel model) {
 			var loan = this._loans.Get(model.Id);
 
@@ -287,6 +288,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "LoanOptions")]
 		public JsonResult SaveLateFeeOption(int id) {
 			DateTime? lateFeeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeStartDate"]);
 
@@ -328,6 +330,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "LoanOptions")]
 		public JsonResult RemoveLateFeeOption(int id) {
 			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
@@ -355,6 +358,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "LoanOptions")]
 		public JsonResult SaveAutoChargesOption(int id, int schedultItemId) {
 			DateTime now = DateTime.UtcNow;
 			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
@@ -388,6 +392,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "LoanOptions")]
 		public JsonResult RemoveAutoChargesOption(int id) {
 			LoanOptions options = this.loanOptionsRepository.GetByLoanId(id);
 

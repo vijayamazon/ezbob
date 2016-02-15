@@ -90,6 +90,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "CRM")]
 		public JsonResult SaveEntry(string type, int action, int status, int? rank, string comment, int customerId, bool isBroker, string phoneNumber) {
 			try {
 				var actionItem = this._crmActionsRepository.Get(action);
@@ -135,6 +136,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "CRM")]
 		public JsonResult SaveFollowUp(DateTime followUpDate, string comment, int customerId, bool isBroker) {
 			try {
 				var lastCrm = this._customerRelationsRepository.GetLastCrm(customerId);
@@ -160,6 +162,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "CRM")]
 		public JsonResult ChangeRank(int customerId, int rankId) {
 			try {
 				var crm = new CustomerRelations {
@@ -182,6 +185,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "CRM")]
 		public JsonResult CloseFollowUp(int customerId, int? followUpId = null) {
 			try {
 				var lastCrm = this._customerRelationsRepository.GetLastCrm(customerId);
@@ -206,6 +210,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "SendSms")]
 		public JsonResult SendSms(int customerId, string phone, string content, bool isBroker) {
 			try {
 				var sendSmsResult = this._serviceClient.Instance.SendSms(customerId, this._context.UserId, phone, content);
@@ -231,6 +236,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "CRM")]
 		public void MarkAsPending(int customerId, string actionItems, string costumeActionItemValue) {
 			DateTime now = DateTime.UtcNow;
 			List<int> checkedIds = GetCheckedActionItemIds(actionItems);

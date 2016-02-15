@@ -9,7 +9,6 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
-	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Customer.Controllers;
 	using EzBob.Web.Areas.Customer.Controllers.Exceptions;
 	using EzBob.Web.Infrastructure;
@@ -57,7 +56,6 @@
 			ValidateRepaymentPeriodAndInterestRate(cus);
 
 			bool isFakeLoanCreate = (card == null);
-			bool isEverlineRefinance = ValidateEverlineRefinance(cus); // NL should also treat it???
 			var cr = cus.LastCashRequest;
 
 			Loan loan = this.loanBuilder.CreateLoan(cr, loanAmount, now);
@@ -67,32 +65,21 @@
 			PacnetReturnData ret;
 
 			if (PacnetSafeGuard(cus, transfered)) {
-				if (!isFakeLoanCreate && !cus.IsAlibaba && !isEverlineRefinance) {
+				if (!isFakeLoanCreate && !cus.IsAlibaba) {
 					ret = SendMoney(cus, transfered);
 					VerifyAvailableFunds(transfered);
 
 				} else {
 					log.Debug(
-						"Not sending money via Pacnet. isFake: {0}, isAlibaba: {1}, isEverlineRefinance: {2}.",
+						"Not sending money via Pacnet. isFake: {0}, isAlibaba: {1}",
 						isFakeLoanCreate,
-						cus.IsAlibaba,
-						isEverlineRefinance
+						cus.IsAlibaba
 					);
 
 					ret = new PacnetReturnData {
 						Status = "Done",
 						TrackingNumber = "fake"
 					};
-
-					if (isEverlineRefinance) {
-						this.serviceClient.Instance.SendEverlineRefinanceMails(
-							cus.Id,
-							cus.Name,
-							now,
-							loanAmount,
-							transfered
-						);
-					} // if
 				} // if
 			} else {
 				log.Error("PacnetSafeGuard stopped money transfer");
@@ -130,7 +117,7 @@
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
-					Status = (isFakeLoanCreate || isEverlineRefinance) ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
+					Status = (isFakeLoanCreate) ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
 					TrackingNumber = ret.TrackingNumber,
 					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
@@ -144,7 +131,7 @@
 					Notes = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now) + " Status: " + ret.Status + " Err:" + ret.Error,
 					StatusUpdatedTime = DateTime.UtcNow,
 					TrackingNumber = ret.TrackingNumber,
-					PacnetTransactionStatusID = (isFakeLoanCreate || isEverlineRefinance) ? (int)NLPacnetTransactionStatuses.Done : (int)NLPacnetTransactionStatuses.InProgress,
+					PacnetTransactionStatusID = (isFakeLoanCreate) ? (int)NLPacnetTransactionStatuses.Done : (int)NLPacnetTransactionStatuses.InProgress,
 				});
 
 			} else {
@@ -169,12 +156,11 @@
 
 			//  This is the place where the funds transferred to customer saved to DB
 			log.Info(
-				"Save transferred funds to customer {0} amount {1}, isFake {2} , isAlibaba {3}, isEverlineRefinance {4}",
+				"Save transferred funds to customer {0} amount {1}, isFake {2} , isAlibaba {3}",
 				cus.Id,
 				transfered,
 				isFakeLoanCreate,
-				cus.IsAlibaba,
-				isEverlineRefinance
+				cus.IsAlibaba
 			);
 
 			loan.AddTransaction(loanTransaction);
@@ -232,8 +218,9 @@
 				// copy newly created agreementtemplateID (for new templeates)
 				foreach (NL_LoanAgreements ag in nlModel.Loan.LastHistory().Agreements) {
 					if (ag.LoanAgreementTemplateID == 0)
-						ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateRef.Id;
+						ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateID;
 				}
+
 				this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -389,15 +376,6 @@
 
 			return name;
 		} // GetCustomerNameForPacNet
-
-		private bool ValidateEverlineRefinance(Customer cus) {
-			if (cus.CustomerOrigin.Name == "everline" && !cus.Loans.Any()) {
-				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
-				var status = checker.GetLoginStatus(cus.Name);
-				return (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
-			} // if
-			return false;
-		} // ValidateEverlineRefinance
 
 		/// <summary>
 		/// not yet implemented function that is

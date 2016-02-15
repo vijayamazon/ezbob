@@ -287,8 +287,8 @@
 			Console.WriteLine(preContract);
 			// 2
 			// specific LoanAgreementTemplate for current type: 
-			var preContractTemplate = _helper.GetOrCreateLoanAgreementTemplate(preContract, false ? LoanAgreementTemplateType.EzbobAlibabaPreContract : LoanAgreementTemplateType.PreContract);
-			Console.WriteLine(preContractTemplate.TemplateType);
+            //var preContractTemplate = _helper.GetOrCreateLoanAgreementTemplate(preContract, false ? LoanAgreementTemplateType.EzbobAlibabaPreContract : LoanAgreementTemplateType.PreContract);
+            //Console.WriteLine(preContractTemplate.TemplateType);
 			// 3
 			//var preContractAgreement = new LoanAgreement("precontract", new Loan(), preContractTemplate);
 			//Console.WriteLine(preContractAgreement.ToString());

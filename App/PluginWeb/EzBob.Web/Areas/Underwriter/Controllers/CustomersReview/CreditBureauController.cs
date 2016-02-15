@@ -36,6 +36,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "RunCreditBureauChecks")]
 		public JsonResult RunConsumerCheck(int customerId, int? directorId, bool forceCheck)
 		{
 			m_oServiceClient.Instance.ExperianConsumerCheck(_context.UserId, customerId, directorId, forceCheck);
@@ -44,6 +45,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "RunCreditBureauChecks")]
 		public JsonResult RunCompanyCheck(int id, bool forceCheck)
 		{
 			m_oServiceClient.Instance.ExperianCompanyCheck(_context.UserId, id, forceCheck);
@@ -130,6 +132,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "RunCreditBureauChecks")]
 		public JsonResult RunAmlbwaCheck(int id, int checkType, string houseNumber, string houseName, string street,
 											string district, string town, string county, string postcode, string bankAccount, string sortCode)
 		{

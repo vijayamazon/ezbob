@@ -32,6 +32,7 @@
 
         [Ajax]
         [HttpPost]
+		[Permission(Name = "ChangePhone")]
         public JsonResult ChangePhone(int customerID, string phoneType, string newPhone) {
             Log.InfoFormat("Change phone for customer {0} type {1} new phone {2}", customerID, phoneType, newPhone);
             DateTime now = DateTime.UtcNow;

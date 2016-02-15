@@ -44,6 +44,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "CreateInvestor")]
 		public JsonResult AddInvestor(FrontInvestorModel investor, FrontInvestorContactModel investorContact, List<FrontInvestorBankAccountModel> InvestorBank, bool SameBank) {
 
 			if (SameBank) {
@@ -105,6 +106,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ManageInvestor")]
 		public JsonResult ManageInvestorContact(int InvestorID, FrontInvestorContactModel contact) {
 
 			var result = this.serviceClient.Instance.ManageInvestorContact(this.context.UserId,
@@ -129,6 +131,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "ManageInvestor")]
 		public JsonResult ManageInvestorDetails(int InvestorID, FrontInvestorModel investorDetails) {
 			DateTime now = DateTime.UtcNow;
 			Log.Debug("investor funding limit string " + investorDetails.FundingLimitForNotification);
@@ -156,6 +159,7 @@
 		/// </summary>
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "ManageInvestor")]
 		public JsonResult SaveInvestorContactList(int InvestorID, string investor) {
 
 			Log.Debug("investor string " + investor);
@@ -186,6 +190,7 @@
 		/// </summary>
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "ManageInvestor")]
 		public JsonResult SaveInvestorBanksList(int InvestorID, string investor) {
 
 			Log.Debug("investor string " + investor);
@@ -217,6 +222,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ManageInvestor")]
 		public JsonResult ManageInvestorBankAccount(int InvestorID, FrontInvestorBankAccountModel bank) {
 
 			var result = this.serviceClient.Instance.ManageInvestorBankAccount(this.context.UserId,
@@ -270,6 +276,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "InvestorAccounting")]
 		public JsonResult AddTransaction(int investorID, int investorAccountID, decimal transactionAmount, DateTime transactionDate, string bankAccountType, string transactionComment, string bankTransactionRef) {
 
 			I_InvestorAccountTypeEnum accountTypeEnum;
@@ -284,7 +291,6 @@
 		}
 		[Ajax]
 		[HttpGet]
-
 		public JsonResult GetInvestors() {
 
 			ListInvestorsResult result = this.serviceClient.Instance.LoadInvestors(this.context.UserId);
@@ -306,6 +312,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "InvestorAccounting")]
 		public JsonResult SubmitSchedulerData(int investorID, decimal monthlyFundingCapital, int fundsTransferDate, string fundsTransferSchedule, string repaymentsTransferSchedule) {
 
 			var result = this.serviceClient.Instance.UpdateSchedulerData(this.context.UserId, investorID, monthlyFundingCapital, fundsTransferDate, fundsTransferSchedule, repaymentsTransferSchedule);
@@ -316,6 +323,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "FindInvestor")]
 		public JsonResult FindInvestor(int customerId, long cashRequestID) {
 			var aiar = this.serviceClient.Instance.LoadApplicationInfo(
 				this.context.UserId,
@@ -340,6 +348,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ForceInvestor")]
 		public JsonResult SubmitInvestor(int customerID, int investorID, long cashRequestID) {
 			var aiar = this.serviceClient.Instance.LoadApplicationInfo(
 				this.context.UserId,
@@ -362,7 +371,5 @@
 
 			return Json(result.Map, JsonRequestBehavior.AllowGet);
 		}
-
-
 	}
 }

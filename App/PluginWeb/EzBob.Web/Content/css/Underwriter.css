@@ -1113,6 +1113,12 @@ textarea.BusinessAddress {
     color: #000000;
 }
 
+.alert a:hover,
+.alert a:visited,
+.alert a:active {
+    color: inherit;
+}
+
 .table-finaccount .alert {
     border-radius: 0!important;
 }
@@ -2651,4 +2657,8 @@ iframe#logical-glue-iframe{
 	display: inline-block;
 	margin-top: 7px;
 	width: 20%;
+}
+
+.fca-incompliance-area .modal-header {
+	margin-bottom: 10px;
 }

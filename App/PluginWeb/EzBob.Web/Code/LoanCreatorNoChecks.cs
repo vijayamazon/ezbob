@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Code {
     using System;
-    using EzBob.Models.Agreements;
     using EzBob.Web.Infrastructure;
     using EZBob.DatabaseLib.Model.Database;
     using NHibernate;
