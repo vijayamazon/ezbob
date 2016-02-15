@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE InitCreatePasswordTokenByUserID
-@TokenID UNIQUEIDENTIFIER,
+@Token UNIQUEIDENTIFIER,
 @UserID INT,
 @Now DATETIME
 AS
@@ -41,6 +41,6 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO CreatePasswordTokens(TokenID, CustomerID, DateCreated, DateAccessed, DateDeleted)
-		VALUES (@TokenID, @UserID, @Now, NULL, NULL)
+		VALUES (@Token, @UserID, @Now, NULL, NULL)
 END
 GO
