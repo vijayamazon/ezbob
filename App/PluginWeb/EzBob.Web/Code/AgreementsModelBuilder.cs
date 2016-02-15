@@ -151,31 +151,7 @@
 			model.Term = _repaymentCalculator.CalculateCountRepayment(loan);
 
 			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(loan.Schedule.Sum(a => a.LoanRepayment) - loan.SetupFee);
-
-			if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()) {
-				CreateEverlineRefinance(model, customer.Name);
-			}
 			return model;
-		}
-
-		/// <summary>
-		/// TODO This method should be removed after refinansing of everline customers will be complete
-		/// executes everline api each time the agreement is generated
-		/// </summary>
-		private void CreateEverlineRefinance(AgreementModel model, string email) {
-			try {
-				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
-				var details = checker.GetLoanDetails(email);
-				var evlOpenLoan = details.LoanApplications.FirstOrDefault(x => !x.ClosedOn.HasValue && x.BalanceDetails.TotalOutstandingBalance.HasValue && x.BalanceDetails.TotalOutstandingBalance > 0);
-				if (evlOpenLoan != null) {
-					model.IsEverlineRefinanceLoan = true;
-					model.EverlineRefinanceLoanRef = evlOpenLoan.LoanId.ToString();
-					model.EverlineRefinanceLoanDate = FormattingUtils.FormatDateToString(evlOpenLoan.FundedOn);
-					model.EverlineRefinanceLoanOutstandingAmount = FormattingUtils.NumericFormats(evlOpenLoan.BalanceDetails.TotalOutstandingBalance.Value);
-				}
-			} catch {
-				//failed to build everline refinance 
-			}
 		}
 
 		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule) {

@@ -83,6 +83,7 @@
     <Compile Include="Investor\InvestorModel.cs" />
     <Compile Include="Investor\SchedulerDataModel.cs" />
     <Compile Include="Investor\TransactionsDataModel.cs" />
+    <Compile Include="LegalDocs\LegalDocsEnums.cs" />
     <Compile Include="Investor\OneInvestorModel.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="RtiTaxMonthRawData.cs" />
     <Compile Include="IovationCheckModel.cs" />
     <Compile Include="LoginCustomerMultiOriginModel.cs" />
+    <Compile Include="SlidersDataModel.cs" />
     <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />

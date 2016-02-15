@@ -306,6 +306,10 @@ div.form_read_and_accept label {
     white-space: inherit;
 }
 
+div.FormRadioCtrl label {
+	width: initial;
+}
+
 .broker-dashboard {
     min-width: 1000px !important;
 }

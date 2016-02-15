@@ -241,12 +241,7 @@
 
 				customerModel.SignedLegalID = (lastll == null) ? 0 : lastll.Id;
 
-				customerModel.AlibabaCreditFacilityTemplate =
-					((lastll != null) && (lastll.AlibabaCreditFacilityTemplate != null))
-						? lastll.AlibabaCreditFacilityTemplate.Template
-						: string.Empty;
-
-				customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+			    customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
 			} // if
 
 			customerModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
@@ -361,12 +356,6 @@
 
 			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			customerModel.LotteryCode = sr["LotteryCode"];
-
-			if (customerModel.Origin == "everline" && !customerModel.Loans.Any()) {
-				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
-				var status = checker.GetLoginStatus(customerModel.Email);
-				customerModel.IsEverlineRefinance = (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
-			}
 		} // BuildProfileModel
 
 		private QuickOfferModel BuildQuickOfferModel(Customer c) {

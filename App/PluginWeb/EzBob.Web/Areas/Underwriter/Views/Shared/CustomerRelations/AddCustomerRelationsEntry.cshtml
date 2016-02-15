@@ -1,9 +1,11 @@
-﻿@using EzBob.Web.Infrastructure.Html
+﻿@using System
+@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
 	var origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
-	var crmEmptyOptionsList = new List<Tuple<string, string>> {};
+	var crmEmptyOptionsList = new List<Tuple<string, string>>();
 }
 
 @* This file is used in Underwriter and Broker. *@
@@ -105,7 +107,7 @@
            
 @if (origin != CustomerOriginEnum.everline) {
 	<label>Comment</label>
-	<textarea id="Comment" class="add-customer-entry-comment-size"/>
+	<textarea id="Comment" class="add-customer-entry-comment-size"></textarea>
 } else {
 	<div class="form_field_container control-group">
 		<label for="Comment" class="input-title">Comment</label>

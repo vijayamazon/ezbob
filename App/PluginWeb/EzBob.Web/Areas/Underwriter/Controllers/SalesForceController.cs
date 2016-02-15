@@ -24,8 +24,8 @@
 			CompanyFilesMetaDataRepository companyFilesMetaDataRepository, 
 			ExperianHistoryRepository experianHistoryRepository, 
 			ServiceClient serviceClient, 
-			IEzbobWorkplaceContext context
-		) {
+			IEzbobWorkplaceContext context, 
+			IUsersRepository userRepo) {
 			this.customerRepository = customerRepository;
 			this.fraudDetectionLog = fraudDetectionLog;
 			this.customerPhoneRepository = customerPhoneRepository;
@@ -34,6 +34,7 @@
 			this.experianHistoryRepository = experianHistoryRepository;
 			this.serviceClient = serviceClient;
 			this.context = context;
+			this.userRepo = userRepo;
 		}
 
 		public ActionResult Main() {

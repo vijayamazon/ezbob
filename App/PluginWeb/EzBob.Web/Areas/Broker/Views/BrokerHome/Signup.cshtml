@@ -131,59 +131,37 @@
 							uiEventControlID: "broker:signup-contact-other-phone"),
 						origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyAppCount",
-							"Number of applications per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 6,
-							uiEventControlID: "broker:signup-esitmated-monthly-application-count"),
-						origin: origin)
+					@{
+					EzInputBuilder radio1 = new EzInputBuilder("FCARegistered", "FCA Registered",
+						value: "true",
+						type: "radio",
+						wrapperCls: "fca-radio",
+						labelClass: "for-radio",
+						isRequired: true,
+						statusIcon: true,
+						name: "FCARegistered",
+						uiEventControlID: "broker:fca-registered");
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyClientAmount",
-							"Value of credit per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
-						origin: origin)
+					EzInputBuilder radio2 = new EzInputBuilder("NonFCARegistered", "Non FCA Registered",
+						value: "false",
+						type: "radio",
+						wrapperCls: "fca-radio",
+						labelClass: "for-radio",
+						isRequired: true,
+						statusIcon: true,
+						name: "FCARegistered",
+						uiEventControlID: "broker:non-fca-registered",
+						specialAttributes: new Dictionary<string, string> { { "checked", "checked" } });
 
-					<div class="control-group form_read_and_accept">
-						<div class="controls">
+					List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1, radio2 };
+					var buttonsmodel = new EzClickInputModel(
+						name: "FCARegistered",
+						inputWrapperClass: "FormRadioCtrl",
+						containerClass: "form_fca",
+						inputButtons: radios);
 
-							@{ EzInputBuilder checkbox1 = new EzInputBuilder(
-								"FCARegistered",
-								"FCA Registered",
-								value: "false",
-								type: "checkbox",
-								tabIndex: nSignupTabIdx++,
-								name: "FCARegistered",
-								uiEventControlID: "broker:fca-registered");
-
-							 List<EzInputBuilder> checkboxesList1 = new List<EzInputBuilder> {checkbox1};
-
-							 var checkboxes1 = new EzClickInputModel(
-												name: "FCARegistered",
-												caption: "",
-												errorImgClass: "",
-												inputWrapperClass: "controls",
-												containerClass: "form_read_and_accept",
-												isRequired: false,
-												statusIcon: false,
-												inputButtons: checkboxesList1);
-												
-							@EzForm.ClickableInputWizard(checkboxes1, origin: origin)
-							}
-						</div>
-					</div>
+					@EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+					}
 
 					@EzForm.InputTextWizard(
 						new EzInputBuilder(
@@ -208,6 +186,7 @@
 							cls: "form_field",
 							isRequired: true,
 							statusIcon: true,
+							formFieldID: "strength-password-view",
 							tabIndex: nSignupTabIdx++,
 							uiEventControlID: "broker:signup-password"),
 						origin: origin)

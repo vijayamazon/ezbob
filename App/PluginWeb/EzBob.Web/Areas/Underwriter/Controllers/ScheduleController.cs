@@ -4,6 +4,7 @@
 	using ConfigManager;
 	using EzBob.Web.Code;
 	using EzBob.Web.Code.ReportGenerator;
+	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Models;
 	using EZBob.DatabaseLib.Model.Database;
@@ -34,6 +35,7 @@
 			return Json(loanOffer, JsonRequestBehavior.AllowGet);
 		}
 
+		[Permission(Name = "DownloadOffer")]
 		public ActionResult Export(long id, bool isExcel, bool isShowDetails, int customerId) {
 			var loanOffer = GetLoanOffer(id);
 			var customer = _customerRepository.Get(customerId);

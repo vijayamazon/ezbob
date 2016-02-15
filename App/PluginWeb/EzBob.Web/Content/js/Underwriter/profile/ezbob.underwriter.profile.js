@@ -132,10 +132,10 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
 		this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
-			el: self.$el.find('#company-score-list'),
+			el: this.$el.find('#company-score-list'),
 			model: this.companyScoreModel
 		});
-
+		
 		this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
 			el: this.$el.find('#customer-info')
 		});
@@ -201,7 +201,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.profileHeadView = new EzBob.Underwriter.ProfileHeadView({
 			el: profileHead,
 			model: this.summaryInfoModel,
-			personalModel: this.personalInfoModel,
 			loanModel: this.loanInfoModel,
 			medalModel: this.medalCalculationModel,
 			parentView: this
@@ -588,6 +587,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		var showBecauseOfAml = (this.loanInfoModel.get('AMLResult') !== 'Passed') && !skipPopupForApprovalWithoutAml;
 		var showBecauseOfMultiBrand = this.loanInfoModel.get('IsMultiBranded');
+		var showBecauseOfFCAIncompliance = !this.personalInfoModel.get('IsBrokerRegulated') && this.personalInfoModel.get('IsRegulated') && this.personalInfoModel.get('IsWizardComplete');
 
 		if (showBecauseOfAml || showBecauseOfMultiBrand) {
 			var approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML({
@@ -595,6 +595,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 				parent: this,
 				showBecauseOfAml: showBecauseOfAml,
 				showBecauseOfMultiBrand: showBecauseOfMultiBrand,
+				showBecauseOfFCAIncompliance: showBecauseOfFCAIncompliance
 			});
 
 			EzBob.App.jqmodal.show(approveLoanWithoutAMLDialog);

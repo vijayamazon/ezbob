@@ -6,11 +6,13 @@
 	using Ezbob.Backend.Models.Investor;
 	using Ezbob.Backend.ModelsWithDB.OpenPlatform;
 	using Ezbob.Backend.Strategies.Investor;
+	using Ezbob.Backend.Strategies.LegalDocs;
 	using Ezbob.Backend.Strategies.LogicalGlue;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using NUnit.Framework;
@@ -135,6 +137,13 @@
 			Assert.IsTrue(stra.IsFound);
 		}
 
+        [Test]
+        public void TestGetLegalDocs() {
+            var stra = new GetLegalDocs(1,true,1);
+            stra.Execute();
+            Assert.IsTrue(stra.LoanAgreementTemplate.Count > 0);
+        }
+
 		[Test]
 		public void TestLoadDecisionHistory() {
 			var stra = new LoadDecisionHistory(3477);
@@ -165,6 +174,13 @@
 			var loadAccountingData = new LoadAccountingData();
 			loadAccountingData.Execute();
 		}
+
+
+        [Test]
+        public void TestManualLegalDocsSyncTemplatesFiles() {
+			var stra = new ManualLegalDocsSyncTemplatesFiles(@"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement");
+            stra.Execute();
+        }
 
 		[Test]
 		public void TestLinkLoanRepaymentToInvestor() {

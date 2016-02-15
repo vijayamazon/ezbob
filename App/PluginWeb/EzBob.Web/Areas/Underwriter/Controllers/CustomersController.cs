@@ -55,6 +55,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permissions(Names = new [] {"ApproveReject" ,"Escalate", "SuspendBtn", "ReturnBtn"})]
 		public JsonResult SetDecision(DecisionModel model) {
 			model.attemptID = Guid.NewGuid().ToString("N");
 			model.underwriterID = this.context.UserId;

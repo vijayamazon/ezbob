@@ -56,9 +56,13 @@
 
 			decimal? minScore = 0;
 			decimal? maxScore = 0;
+			inference = inference ?? new Inference {
+				Error = new InferenceError(),
+				ModelOutputs = new SortedDictionary<ModelNames, ModelOutput>()
+			};
 
 			try {
-				if (inference.Bucket.HasValue) {
+                if (inference != null && inference.Bucket.HasValue) {
 					List<I_Grade> allGrades = db.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
 
 					int gradeID = (int)inference.Bucket.Value;
@@ -71,7 +75,7 @@
 			} catch (Exception ex) {
 				log.Error(ex, "Failed to retrieve min max grade scores for bucket {0}", inference.Bucket);
 			} // try
-
+			
 			try {
 				var result = new LogicalGlueResult {
 					Error = inference.Error.Message,

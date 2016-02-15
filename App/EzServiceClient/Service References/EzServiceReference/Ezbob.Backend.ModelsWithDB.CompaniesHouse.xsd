@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.CompaniesHouse" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.CompaniesHouse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="CompaniesHouseOfficerOrder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActiveCount" type="xs:int" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerOrderID" type="xs:int" />
+      <xs:element minOccurs="0" name="CompanyRefNum" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Etag" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ItemsPerPage" type="xs:int" />
+      <xs:element minOccurs="0" name="Kind" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Link" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Officers" nillable="true" type="tns:ArrayOfCompaniesHouseOfficerOrderItem" />
+      <xs:element minOccurs="0" name="ResignedCount" type="xs:int" />
+      <xs:element minOccurs="0" name="StartIndex" type="xs:int" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TotalResults" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompaniesHouseOfficerOrder" nillable="true" type="tns:CompaniesHouseOfficerOrder" />
+  <xs:complexType name="ArrayOfCompaniesHouseOfficerOrderItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompaniesHouseOfficerOrderItem" nillable="true" type="tns:CompaniesHouseOfficerOrderItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompaniesHouseOfficerOrderItem" nillable="true" type="tns:ArrayOfCompaniesHouseOfficerOrderItem" />
+  <xs:complexType name="CompaniesHouseOfficerOrderItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AddressLine1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AppointedOn" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="AppointmentOrder" nillable="true" type="tns:CompaniesHouseOfficerAppointmentOrder" />
+      <xs:element minOccurs="0" name="CareOf" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerOrderID" type="xs:int" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerOrderItemID" type="xs:int" />
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CountryOfResidence" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DobDay" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DobMonth" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DobYear" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsCustomer" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Link" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Locality" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nationality" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Occupation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OfficerRole" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PoBox" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Premises" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Region" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResignedOn" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompaniesHouseOfficerOrderItem" nillable="true" type="tns:CompaniesHouseOfficerOrderItem" />
+  <xs:complexType name="CompaniesHouseOfficerAppointmentOrder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Appointments" nillable="true" type="tns:ArrayOfCompaniesHouseOfficerAppointmentOrderItem" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerAppointmentOrderID" type="xs:int" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerOrderItemID" type="xs:int" />
+      <xs:element minOccurs="0" name="DobDay" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DobMonth" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DobYear" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Etag" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsCorporateOfficer" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ItemsPerPage" type="xs:int" />
+      <xs:element minOccurs="0" name="Kind" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Link" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartIndex" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalResults" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompaniesHouseOfficerAppointmentOrder" nillable="true" type="tns:CompaniesHouseOfficerAppointmentOrder" />
+  <xs:complexType name="ArrayOfCompaniesHouseOfficerAppointmentOrderItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompaniesHouseOfficerAppointmentOrderItem" nillable="true" type="tns:CompaniesHouseOfficerAppointmentOrderItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompaniesHouseOfficerAppointmentOrderItem" nillable="true" type="tns:ArrayOfCompaniesHouseOfficerAppointmentOrderItem" />
+  <xs:complexType name="CompaniesHouseOfficerAppointmentOrderItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AddressLine1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AppointedBefore" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="AppointedOn" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CareOf" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerAppointmentOrderID" type="xs:int" />
+      <xs:element minOccurs="0" name="CompaniesHouseOfficerAppointmetOrderItemID" type="xs:int" />
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompanyNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompanyStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CountryOfResidence" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Forename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Honours" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdentificationType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsCustomer" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsPre1992Appointment" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LegalAuthority" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LegalForm" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Link" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Locality" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nationality" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Occupation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OfficerRole" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OtherForenames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PlaceRegistered" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PoBox" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Premises" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Region" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RegistrationNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResignedOn" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompaniesHouseOfficerAppointmentOrderItem" nillable="true" type="tns:CompaniesHouseOfficerAppointmentOrderItem" />
+</xs:schema>

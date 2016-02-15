@@ -94,31 +94,16 @@
 		</h2>
 		
 		<div class="controls agreements-checkboxes">
-			@EzForm.ClickableInputTag(new EzInputBuilder("preAgreementTermsRead", 
-				"<span class=\"company-preAgreement\">I have read and agree to the agreement terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the pre-contract terms</span>",
+
+            <div class="dynamic-agreements-checkboxes"></div>            
+          
+			@EzForm.ClickableInputTag(new EzInputBuilder("euAgreementTermsRead", "I agree to the EU program terms",
 				value: "true",
 				type: "checkbox",
-				cls: "preAgreementTermsRead",
-				isRequired: true,
-				uiEventControlID: "loan-legal:apply-for-loan-pre-agreement"), 
-				origin: origin)
-			
-			@EzForm.ClickableInputTag(new EzInputBuilder("agreementTermsRead", 
-				"<span class=\"company-preAgreement\">I have read and agree to the guarantee terms</span><span style=\"display: none\" class=\"consumer-preAgreement\">I have read and agree to the contract terms</span>",
-				value: "true",
-				type: "checkbox",
-				cls: "agreementTermsRead",
-				isRequired: true,
-				uiEventControlID: "loan-legal:apply-for-loan-agreement"),
-				origin: origin)
-			
-			@EzForm.ClickableInputTag(new EzInputBuilder("euAgreementTermsRead", "I agree to the EU program terms", 
-				value: "true", 
-				type: "checkbox", 
-				cls: "euAgreementTermsRead", 
+				cls: "euAgreementTermsRead",
 				wrapperCls: "eu-agreement-section",
 				labelClass: "eu-agreement-section",
-				isRequired: true, 
+				isRequired: true,
 				uiEventControlID: "loan-legal:apply-for-loan-eu-agreement"), origin: origin)
 
 			@EzForm.ClickableInputTag(new EzInputBuilder("cosmeAgreementTermsRead", "I agree to the EU COSME program terms",
@@ -130,7 +115,7 @@
 				isRequired: true,
 				uiEventControlID: "loan-legal:apply-for-loan-cosme-agreement"),
 				origin: origin)
-			
+
 			@EzForm.ClickableInputTag(new EzInputBuilder("notInBankruptcy", "I have read and confirm the solvency representations and warranties",
 				value: "true",
 				type: "checkbox",
@@ -140,20 +125,20 @@
 				isRequired: true, specialAttributes: new Dictionary<string, string>{ {
 					"readonly", "readonly"
 				} },
-				uiEventControlID: "loan-legal:not-in-bankruptcy"), 
+				uiEventControlID: "loan-legal:not-in-bankruptcy"),
 				origin: origin)
-			
+
 			<!-- label class="checkbox quick-offer-section">
 				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-director" />
 				I have read and agree to the directors' consent declaration
 			</label -->
 
 			<div class="loan-disclosure-text1 hide">
-				<h3>Disclosure for Borrowers under Consumer Credit Act regulated Loan Agreements:</h3>				
+				<h3>Disclosure for Borrowers under Consumer Credit Act regulated Loan Agreements:</h3>
 				You hereby represent and warranty that at the date of applying for and accepting this loan, you are not: (i) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (ii) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (iii) bankrupt or considering filing for bankruptcy in the coming 12 month period.
 			</div>
 			<div class="loan-disclosure-text2 hide">
-				<h3>Disclosure for Borrowers under non-regulated Loan Agreements:</h3>	    
+				<h3>Disclosure for Borrowers under non-regulated Loan Agreements:</h3>
 				You hereby represent and warranty that at the date of applying for and accepting this loan that with respect to the Borrower: (i) no resolution has been passed, petition presented, proceedings commenced or other procedure or step for its liquidation; (ii) no procedure has been used against the Borrower to attach or take possession of any property for payment of a debt; (iii) no receiver or other similar official has been appointed in respect of any of the property of the Borrower;  (iv) no application or petition for an administration order has been made; and none of the foregoing is pending or contemplated; and (v) no director of the Company or proposed guarantor of the loan is: (A) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (B) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (C) bankrupt or considering filing for bankruptcy in the coming 12 month period.
             </div>
 
@@ -188,98 +173,29 @@
 	}
 </script>
 
-<script id="consumers-agreement-template" type="text/template">
-	<div class="simple-well clearfix">
-		<div class="tabbable">
-			<ul class="nav nav-tabs">
-				<li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="PreContract">Pre-Contract</a></li>
-				<li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="RegulatedLoanAgreement">Contract</a></li>
-			</ul>
-			<div class="tab-content">
-				<div class="tab-pane active" id="tab3">
-					<div class="overview loan-agreement" id="PreContract">
-                        <%if(agreementType == 'ezbob') {%>
-						    @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobPreContract.cshtml");} 
-                        <%}%>
-                        <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobAlibabaPreContract.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLPreContract.cshtml");}
-                        <%}%>						
-                        <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinancePreContract.cshtml");}
-                        <%}%>						
-					</div>
-					@PrintDownload()
-				</div>
-				<div class="tab-pane" id="tab4">
-					<div class="overview loan-agreement" id="RegulatedLoanAgreement">
-                        <%if(agreementType == 'ezbob') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobRegulatedLoanAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/AlibabaCreditActAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLRegulatedLoanAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinanceRegulatedLoanAgreement.cshtml");}
-                        <%}%>						
-					</div>
-					@PrintDownload()
-				</div>
-			</div>
-		</div>
-	</div>
-</script>
 
-<script id="companies-agreement-template" type="text/template">
-	<div style="padding-right: 15px;" class="simple-well clearfix">
-		<div class="tabbable">
-			<ul class="nav nav-tabs">
-				<li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
-				<li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guarantee</a></li>
-			</ul>
-			<div class="tab-content">
-				<div class="tab-pane active" id="tab1">
-					<div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
-                        <%if(agreementType == 'ezbob') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobPrivateCompanyLoanAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/AlibabaPrivateCompanyLoanAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLPrivateCompanyLoanAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinancePrivateCompanyLoanAgreement.cshtml");}
-                        <%}%>						
-					</div>
-					@PrintDownload()
-				</div>
-				<div class="tab-pane" id="tab2">
-					<div class="overview loan-agreement" id="GuarantyAgreement">
-                        <%if(agreementType == 'ezbob') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobGuarantyAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'alibaba') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EZbob/EzbobAlibabaGuarantyAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everline') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Everline/EVLGuarantyAgreement.cshtml");}
-                        <%}%>
-                        <%if(agreementType == 'everlineRefinance') {%>
-                            @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/NA/EVLRefinanceGuarantyAgreement.cshtml");}
-                        <%}%>
-					</div>
-					@PrintDownload()
-				</div>
-			</div>
-		</div>		
-	</div>
+<script id="agreement-template" type="text/template">
+    <div class="simple-well clearfix">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <%_.each(templates, function (t, i){ console.log('templates', t,i);
+                var active = ((i == 0) ? 'active' : '');%>
+                <li class=" agreement-tab <%- active %>"><a href="#tab<%- i %>" data-toggle="tab" page-name="<%- t.TemplateTypeName %>"><%- t.Name %></a></li>
+                <%});%>
+            </ul>
+            <div class="tab-content">
+                <%_.each(templates, function (t, i){ %>
+                
+                <div class="tab-pane  <%-(i == 0) ? ' active': ''%>" id="tab<%- i %>">
+                    <div class="overview loan-agreement" id="<%= t.TemplateTypeName %>">
+                        <%= t.Template %>
+                    </div>
+                    @PrintDownload()
+                </div>
+                <%});%>
+            </div>
+        </div>
+    </div>
 </script>
 
 @helper PrintDownload() {

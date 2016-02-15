@@ -16,7 +16,6 @@
 	using EzBob.Web.Code.MpUniq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using log4net;
 	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
 	using PaymentServices.Calculators;
@@ -54,6 +53,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "DebitCardCustomerSelection")]
 		public JsonResult SetDefaultCard(int customerId, int cardId) {
 			var customer = this.customersRepository.Get(customerId);
 			var card = customer.BankAccounts.SingleOrDefault(c => c.Id == cardId);
@@ -63,6 +63,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "CheckBankAccount")]
 		public JsonResult PerformCheckBankAccount(int id, int cardid) {
 			var customer = this.customersRepository.Get(id);
 			var card = customer.BankAccounts.Single(b => b.Id == cardid);
@@ -71,6 +72,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "CheckBankAccount")]
 		public JsonResult CheckBankAccount(string bankAccount, string sortCode) {
 			var card = new CardInfo(bankAccount, sortCode);
 			return CheckBankAccount(card);
@@ -98,6 +100,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "AddBankAccount")]
 		public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType) {
 			var customer = this.customersRepository.Get(customerId);
 
@@ -125,6 +128,7 @@
 			return Json(new { status = this.customerMarketplacesReporsitory.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
 		}
 
+		[Permission(Name="AddDebitCard")]
 		public RedirectResult AddPayPoint(int id) {
 			var oCustomer = this.customersRepository.Get(id);
 			PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
@@ -168,6 +172,7 @@
 
 		[Transactional]
 		[HttpPost]
+		[Permission(Name = "AddDebitCard")]
 		public JsonResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate) {
 			var customer = this.customersRepository.GetChecked(customerId);
 			var expiry = expiredate.ToString("MMyy");
@@ -216,6 +221,7 @@
 		[Ajax]
 		[Transactional]
 		[HttpPost]
+		[Permission(Name = "DebitCardCustomerSelection")]
 		public void SetPaypointDefaultCard(string transactionid, int customerId, string cardNo) {
 			var customer = this.customersRepository.GetChecked(customerId);
 			var defaultCard = customer.PayPointCards.FirstOrDefault(x => x.TransactionId == transactionid);
@@ -232,6 +238,7 @@
 		[Ajax]
 		[Transactional]
 		[HttpPost]
+		[Permission(Name = "DebitCardCustomerSelection")]
 		public void ChangeCustomerDefaultCardSelection(int customerId, bool state) {
 			var customer = this.customersRepository.GetChecked(customerId);
 			customer.DefaultCardSelectionAllowed = state;

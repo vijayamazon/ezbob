@@ -825,3 +825,18 @@ header.everline_header_broker nav .for-brokers {
 .files-group .col-md-6 {
 	padding: 0 13px;
 }
+
+.subfooter, .footer-eif, .footer-eif-inner, .footer-text>p {
+	min-width: 1000px;
+    margin: 0 auto;
+}
+
+.footer-navigator-inner {
+	min-width: 940px;
+    margin: 0 auto;
+}
+
+.footer-eif-inner {
+	padding-left: 30px;
+    padding-right: 30px;
+}

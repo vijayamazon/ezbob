@@ -106,6 +106,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name="Rollover")]
 		public void RemoveRollover(int rolloverId, long nlRolloverID = 0) {
 			var rollover = this.rolloverRepository.GetById(rolloverId);
 			rollover.Status = RolloverStatus.Removed;
@@ -153,6 +154,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "Rollover")]
 		public void AddRollover(int scheduleId, string experiedDate, bool isEditCurrent, decimal payment, int? rolloverId, int mounthCount, long nlRolloverID = 0) {
 			var expDate = FormattingUtils.ParseDateWithoutTime(experiedDate);
 			var currentLoanSchedule = this.loanScheduleRepository.GetById(scheduleId);
@@ -237,6 +239,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "MakePayment")]
 		public void ManualPayment(ManualPaymentModel model) {
 			var realAmount = model.TotalSumPaid;
 			var customer = this.customerRepository.Get(model.CustomerId);

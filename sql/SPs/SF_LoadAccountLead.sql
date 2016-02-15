@@ -56,6 +56,7 @@ BEGIN
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
         b.ContactMobile AS BrokerPhoneNumber,
+		b.BrokerID AS BrokerID,
         cs.Name AS CollectionStatus,
         ecs.Name AS ExternalCollectionStatus
     FROM Customer c 
@@ -103,6 +104,7 @@ BEGIN
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
         b.ContactMobile AS BrokerPhoneNumber,
+		b.BrokerID AS BrokerID,
         o.Name AS Origin,
         b.IsTest AS IsTest
     FROM BrokerLeads l 

@@ -2,6 +2,7 @@
 {
 	using System.Linq;
 	using System.Web.Mvc;
+	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Fraud;
 	using EZBob.DatabaseLib.Repository;
@@ -30,6 +31,7 @@
 		[HttpPost]
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "AddFraudUser")]
 		public void AddNewUser(FraudModel user)
 		{
 			var fraudUser = new FraudUser

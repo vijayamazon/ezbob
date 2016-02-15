@@ -75,8 +75,12 @@
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\DecisionHistoryResult.cs" />
     <Compile Include="ActionResults\ApplicationInfoResult.cs" />
+    <Compile Include="ActionResults\Investor\LegalDocActionResult.cs" />
+    <Compile Include="ActionResults\LandRegistryActionResult.cs" />
+    <Compile Include="ActionResults\SecurityUserActionResult.cs" />
     <Compile Include="ActionResults\MessagesListActionResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
+    <Compile Include="ActionResults\Investor\LegalDocsActionResult.cs" />
     <Compile Include="ActionResults\MultiBrandLoanSummaryActionResult.cs" />
     <Compile Include="ActionResults\PricingScenarioNameListActionResult.cs" />
     <Compile Include="ActionResults\SetPasswordActionResult.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="ActionResults\EsignatureListActionResult.cs" />
     <Compile Include="ActionResults\MarketplacesActionResult.cs" />
     <Compile Include="ActionResults\ElapsedTimeInfoActionResult.cs" />
+    <Compile Include="ActionResults\SlidersDataActionResults.cs" />
     <Compile Include="ActionResults\StringStringMapActionResult.cs" />
     <Compile Include="ActionResults\UserSignupActionResult.cs" />
     <Compile Include="ActionResults\VatReturnDataActionResult.cs" />
@@ -141,6 +146,8 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="ActionResults\ExperianTargetingActionResult.cs" />
     <Compile Include="ActionStatus.cs" />
+    <Compile Include="EzServiceImplementation\esi_security.cs" />
+    <Compile Include="EzServiceImplementation\esi_legal_docs.cs" />
     <Compile Include="ExecuteArguments.cs" />
     <Compile Include="EzServiceImplementation\esi_logicalglue.cs" />
     <Compile Include="EzServiceImplementation\esi_investor.cs" />
@@ -175,9 +182,12 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceLandRegistry.cs" />
+    <Compile Include="IEzServiceSecurity.cs" />
     <Compile Include="IEzServiceUserManagement.cs" />
-    <Compile Include="IEzServiceLogicalGlue.cs" />
     <Compile Include="IEzServiceInvestor.cs" />
+    <Compile Include="IEzServiceLogicalGlue.cs" />
+    <Compile Include="IEzServiceLegalDocs.cs" />
     <Compile Include="IEzServiceMainStrategy.cs" />
     <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />

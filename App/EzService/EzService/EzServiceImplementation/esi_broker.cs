@@ -8,6 +8,7 @@
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
@@ -89,11 +90,9 @@
 			string sContactMobile,
 			string sMobileCode,
 			string sContactOtherPhone,
-			decimal nEstimatedMonthlyClientAmount,
 			DasKennwort password,
 			DasKennwort passwordAgain,
 			string sFirmWebSiteUrl,
-			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled,
 			int nBrokerTermsID,
 			string sReferredBy,
@@ -111,11 +110,9 @@
 				sContactMobile,
 				sMobileCode,
 				sContactOtherPhone,
-				nEstimatedMonthlyClientAmount,
 				password,
 				passwordAgain,
 				sFirmWebSiteUrl,
-				nEstimatedMonthlyApplicationCount,
 				bIsCaptchEnabled,
 				nBrokerTermsID,
 				sReferredBy,
@@ -125,9 +122,10 @@
 			);
 
 			if (oInstance != null) {
-				if (oInstance.Properties.BrokerID > 0)
+				if (oInstance.Properties.BrokerID > 0) {
 					Execute<BrokerGreeting>(null, oInstance.Properties.BrokerID, oInstance.Properties.BrokerID);
-
+					Execute<AddUpdateBrokerAccount>(null, oInstance.Properties.BrokerID, oInstance.Properties.BrokerID);
+				}
 				return new BrokerPropertiesActionResult {
 					MetaData = oMetaData,
 					Properties = oInstance.Properties,

@@ -83,7 +83,8 @@ EzBob.Underwriter.CAIS.CaisManageView = Backbone.Marionette.ItemView.extend({
 		'click .generate': 'generateClicked',
 		'click .download ': 'downloadFile',
 		'dblclick [data-id]': 'fileSelected',
-		'click [data-id]': 'fileChecked'
+		'click [data-id]': 'fileChecked',
+		'click .set-cais-uploaded-status': 'fileUploaded'
 	}, // events
 
 	downloadFile: function() {

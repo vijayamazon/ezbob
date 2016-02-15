@@ -162,6 +162,7 @@ BEGIN
 		AvailableAmount = ISNULL(c.CreditSum, 0),
 		OfferExpired = CONVERT(BIT, CASE WHEN c.ValidFor <= @Now THEN 1 ELSE 0 END),
 		Editable = CONVERT(BIT, CASE WHEN s.IsEnabled = 1 AND c.CreditResult IN ('WaitingForDecision', 'Escalated', 'ApprovedPending', 'PendingInvestor') THEN 1 ELSE 0 END),
+		IsCustomerInEnabledStatus = s.IsEnabled,
 		IsModified = CONVERT(BIT, CASE WHEN r.Id IS NOT NULL AND ISNULL(r.LoanTemplate, '') != '' THEN 1 ELSE 0 END),
 		DiscountPlanId = dp.DiscountPlanID,
 		OfferValidForHours = CONVERT(INT, CONVERT(DECIMAL(18, 2), cv.Value)),

@@ -7,6 +7,7 @@ namespace ConfigManager {
 	} // enum ChannelGrabberRejectPolicy
 
 	public enum Variables {
+		AccountingBrokersEmail,
 		AddSageIntervalMinutes,
 		AdministrationCharge,
 		AgreementPdfConsentPath1,
@@ -141,6 +142,7 @@ namespace ConfigManager {
 		CollectionPeriod2,
 		CollectionPeriod3,
 		CollectionToAddress,
+		CompaniesHouseApiKey,
 		CompanyCaisLateAlertLongMonths,
 		CompanyCaisLateAlertShortMonths,
 		CompanyCaisLateAlertShortPeriodThreshold,
@@ -186,7 +188,6 @@ namespace ConfigManager {
 		EnableAutomaticReRejection,
 		EnableAutomaticRejection,
 		Environment,
-		EverlineRefinanceEmailReciever,
 		EverlineLoanStatusTestMode,
 		ExperianAuthTokenService,
 		ExperianAuthTokenServiceIdHub,
@@ -451,6 +452,8 @@ namespace ConfigManager {
 		SageSalesInvoicesRequest,
 		SalesEmail,
 		SalesForceFakeMode,
+		SalesForceConsumerKey,
+		SalesForceConsumerSecret,
 		SalesForceUserName,
 		SalesForcePassword,
 		SalesForceToken,

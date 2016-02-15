@@ -188,6 +188,7 @@
     <Compile Include="Areas\Customer\Controllers\CustomerStatusController.cs" />
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
+    <Compile Include="Areas\Customer\Models\RequestedLoanModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomerNavigatorController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AutomationController.cs" />
@@ -210,7 +211,6 @@
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />
-    <Compile Include="Code\EverlineLoginLoanChecker.cs" />
     <Compile Include="Code\ForceNhibernateResync.cs" />
     <Compile Include="Code\MainStrategyClient.cs" />
     <Compile Include="Code\MpUniq\BankAccountUniqChecker.cs" />
@@ -235,7 +235,6 @@
     <Compile Include="Areas\Underwriter\Models\Reports\ReportModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SuggestedAmountModel.cs" />
     <Compile Include="Code\AgreementRenderer.cs" />
-    <Compile Include="Code\AgreementsTemplatesProvider.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
@@ -893,6 +892,7 @@
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.AgreementsDynamicCheckboxes.js" />
     <Content Include="Content\js\Profile\ezbob.profile.processingAutomationPopupView.js" />
     <Content Include="Content\js\Profile\ezbob.profile.reviewSignCreditLine.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.selectcard.js" />
@@ -963,12 +963,8 @@
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLPreContract.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Everline\EVLRegulatedLoanAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinanceRegulatedLoanAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinanceGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\Ezbob\EzbobAlibabaCreditFacility.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ReviewSignCreditLine.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinancePreContract.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\NA\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
     <Content Include="App_Code\ChangeAddress.cshtml" />
@@ -1021,6 +1017,7 @@
     <Content Include="Areas\Underwriter\Views\Investor\ManageInvestors.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Areas\Customer\Views\Profile\DynamicAgreementsCheckboxes.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

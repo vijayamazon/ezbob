@@ -90,7 +90,8 @@
 			return new ExperianLtdActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Result,
-				History = oInstance.History
+				History = oInstance.History,
+				CompaniesHouse = oInstance.CompaniesHouseResult
 			};
 		} // CheckLtdCompanyCache
 

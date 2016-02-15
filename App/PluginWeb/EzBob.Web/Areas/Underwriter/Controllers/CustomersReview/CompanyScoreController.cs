@@ -2,15 +2,14 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Ezbob.Logger;
+	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
 	using EzBob.Web.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Iesi.Collections.Generic;
-	using ServiceClientProxy;
-
+	
 	public class CompanyScoreController : Controller {
 		public CompanyScoreController(ICustomerRepository customerRepository,
 			CustomerCompanyHistoryRepository customerCompanyHistoryRepository) {
@@ -31,6 +30,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
+		[Permission(Name="ChangeCompany")]
 		public JsonResult ChangeCompany(CompanyDetails details) {
 			var customer = this.m_oCustomerRepository.Get(details.CustomerId);
 			if (customer == null) {

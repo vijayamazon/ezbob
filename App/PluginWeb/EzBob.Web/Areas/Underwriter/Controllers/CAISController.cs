@@ -36,6 +36,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "GenerateCAIS")]
 		public JsonResult Generate()
 		{
 			try
@@ -85,6 +86,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "EditCAISFile")]
 		public void SaveFileChange(string fileContent, int id)
 		{
 			_caisReportsHistoryRepository.UpdateFile(ZipString.Zip(fileContent), id);
@@ -94,6 +96,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "EditCAISFile")]
 		public void UpdateStatus(int id)
 		{
 			_caisReportsHistoryRepository.Get(id).UploadStatus = CaisUploadStatus.Uploaded;

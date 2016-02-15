@@ -74,9 +74,10 @@
 				Log.DebugFormat("Something changed, building model customer:{0}, cash request:{1}, loan:{2}, loan transaction:{3}, broker:{4}",
 						  isCustomerChanged, isCashRequestChanged, isLoanChanged, isLoanTransactionChanged, isBrokerChanged);
 				DashboardModel = BuildModel();
+				return true;
 			}
 
-			return true;
+			return false;
 		}
 
 		public DashboardModel GetModel() {

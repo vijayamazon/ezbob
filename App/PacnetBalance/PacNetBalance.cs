@@ -6,9 +6,8 @@ using System.Linq;
 
 namespace PacnetBalance
 {
-	public static class PacNetBalance
-	{
-		private static readonly List<PacNetBalanceRow> pacNetBalanceList = new List<PacNetBalanceRow>();
+	public static class PacNetBalance {
+		private static List<PacNetBalanceRow> pacNetBalanceList;
 
 		static PacNetBalance()
 		{
@@ -25,57 +24,82 @@ namespace PacnetBalance
 		/// <param name="closingBalance">ClosingBalance</param>
 		/// <param name="credits">Credits</param>
 		/// <param name="debits">Debits</param>
-		/// <param name="fasterPayment">FasterPayment</param>
-		/// <param name="fees">Fees</param>
-		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees)
+		/// <param name="rows"></param>
+		/// <param name="loginAddress"></param>
+		/// <param name="loginPassword"></param>
+		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<PacNetBalanceRow> rows, string loginAddress, string loginPassword)
 		{
-			decimal currenBalance = openingBalance + credits;
-
-			if (credits > 0)
-				AddRowToList(currenBalance, date, fees, credits, true);
-
-			foreach (decimal payment in fasterPayment)
-			{
-				currenBalance = currenBalance - (payment + fees);
-				AddRowToList(currenBalance, date, fees, payment);
+			pacNetBalanceList = new List<PacNetBalanceRow>();
+			decimal currenBalance = openingBalance;
+			
+			foreach (var row in rows) {
+				if (row.IsCredit) {
+					currenBalance = currenBalance + (Math.Abs(row.Amount) + Math.Abs(row.Fees));
+				} else {
+					currenBalance = currenBalance - (Math.Abs(row.Amount) + Math.Abs(row.Fees));
+				}
+				AddRowToList(currenBalance, date, row.Fees, row.Amount, row.IsCredit);
 			} // foreach
 
-			VerifyCalculatedValues(openingBalance, closingBalance, credits, debits, fasterPayment, fees);
+			VerifyCalculatedValues(openingBalance, closingBalance, credits, debits, pacNetBalanceList, loginAddress, loginPassword);
 		} // PopulateList
 
-		private static void VerifyCalculatedValues(decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees)
+		private static void VerifyCalculatedValues(decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<PacNetBalanceRow> rows, string loginAddress, string loginPassword)
 		{
-			decimal sumOfFasterPayment = fasterPayment.Sum();
-			decimal calculatedBalance = openingBalance + credits - sumOfFasterPayment - fees * fasterPayment.Count;
 			var sb = new System.Text.StringBuilder();
-			if (calculatedBalance == closingBalance)
+
+			decimal calculatedDebits = rows.Where(x => x.IsCredit == false)
+				.Sum(x => x.Amount + x.Fees);
+			decimal calculatedCredits = rows.Where(x => x.IsCredit)
+				.Sum(x => x.Amount + x.Fees);
+
+
+			if (calculatedDebits == debits) {
+				Logger.Info("Debits is equal to calculated debits and is:{0}", debits);
+			} else {
+				var error = string.Format("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits, calculatedDebits);
+				sb.AppendLine(error);
+			}
+
+			if (calculatedCredits == credits) {
+				Logger.Info("Credits is equal to calculated credits and is:{0}", credits);
+			} else {
+				var error = string.Format("Credits is not equal to calculated credits. Credits:{0} CalculatedCredits:{1}", credits, calculatedCredits);
+				sb.AppendLine(error);
+			}
+
+			decimal calculatedClosingBalance = openingBalance 
+				+ rows.Where(x => x.IsCredit).Sum(x => x.Amount + x.Fees) 
+				- rows.Where(x => x.IsCredit == false).Sum(x => x.Amount + x.Fees);
+
+			if (calculatedClosingBalance == closingBalance)
 			{
 				Logger.Info("Closing balance is equal to calculated balance and is:{0}", closingBalance);
 			}
-			else
-			{
-				Logger.Error("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
-							 closingBalance, calculatedBalance);
-				sb.AppendLine(string.Format("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
-							 closingBalance, calculatedBalance));
+			else {
+				var error = string.Format("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}", closingBalance, calculatedClosingBalance);
+				sb.AppendLine(error);
 			}
 
-			decimal calculatedDebits = sumOfFasterPayment + fees * fasterPayment.Count;
-
-			if (calculatedDebits == debits)
-			{
-				Logger.Info("Debits is equal to calculated debits and is:{0}", debits);
+			if (rows.Any()) {
+				var lastRow = rows.Last();
+				
+				if (lastRow.CurrentBalance == closingBalance) {
+					Logger.Info("Closing balance is equal to last row balance and is:{0}", closingBalance);
+				} else {
+					var error = string.Format("Closing balance is not equal to last row balance. ClosingBalance:{0} LastRowBalance:{1}", closingBalance, lastRow.CurrentBalance);
+					sb.AppendLine(error);
+					lastRow.CurrentBalance = closingBalance;
+				}
 			}
-			else
-			{
-				Logger.Error("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits, calculatedDebits);
-				sb.AppendLine(string.Format("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits,
-										 calculatedDebits));
-			}
 
-			if (sb.Length > 0)
-			{
-				throw new PacNetBalanceException(sb.ToString());
+			if (sb.Length > 0) {
+				Logger.Error(sb.ToString());
+				if (!string.IsNullOrEmpty(loginAddress) && !string.IsNullOrEmpty(loginPassword)) {
+					Mailer.Mailer.SendMail(loginAddress, loginPassword, "PacNet Balance Report Error", sb.ToString(),
+						"dev@ezbob.com");
+				}
+				//throw new PacNetBalanceException(sb.ToString());
 			}
 		} // VerifyCalculatedValues
 
@@ -85,8 +109,8 @@ namespace PacnetBalance
 			{
 				CurrentBalance = currenBalance,
 				Date = date,
-				Fees = fees,
-				Amount = amount,
+				Fees = Math.Abs(fees),
+				Amount = Math.Abs(amount),
 				IsCredit = isCredit
 			});
 		} // AddRowToList

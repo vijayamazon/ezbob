@@ -448,6 +448,34 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="CustomerDetails" nillable="true" type="tns:CustomerDetails" />
+  <xs:complexType name="ArrayOfPropertyStatusGroupModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusGroupModel" nillable="true" type="tns:PropertyStatusGroupModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPropertyStatusGroupModel" nillable="true" type="tns:ArrayOfPropertyStatusGroupModel" />
+  <xs:complexType name="PropertyStatusGroupModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfPropertyStatusModel" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PropertyStatusGroupModel" nillable="true" type="tns:PropertyStatusGroupModel" />
+  <xs:complexType name="ArrayOfPropertyStatusModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPropertyStatusModel" nillable="true" type="tns:ArrayOfPropertyStatusModel" />
+  <xs:complexType name="PropertyStatusModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsOwnerOfMainAddress" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsOwnerOfOtherProperties" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />
   <xs:complexType name="QuickOfferModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Aml" type="xs:int" />
@@ -619,6 +647,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MessagesModel" nillable="true" type="tns:MessagesModel" />
+  <xs:complexType name="SlidersDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MaxLoanAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MaxTerm" type="xs:int" />
+      <xs:element minOccurs="0" name="MinLoanAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MinTerm" type="xs:int" />
+      <xs:element minOccurs="0" name="Term" nillable="true" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="SlidersDataModel" nillable="true" type="tns:SlidersDataModel" />
   <xs:complexType name="MpModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Affordability" nillable="true" type="tns:ArrayOfAffordabilityData" />
@@ -964,34 +1005,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CompanyDataForCreditBureau" nillable="true" type="tns:CompanyDataForCreditBureau" />
-  <xs:complexType name="ArrayOfPropertyStatusGroupModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusGroupModel" nillable="true" type="tns:PropertyStatusGroupModel" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPropertyStatusGroupModel" nillable="true" type="tns:ArrayOfPropertyStatusGroupModel" />
-  <xs:complexType name="PropertyStatusGroupModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfPropertyStatusModel" />
-      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PropertyStatusGroupModel" nillable="true" type="tns:PropertyStatusGroupModel" />
-  <xs:complexType name="ArrayOfPropertyStatusModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPropertyStatusModel" nillable="true" type="tns:ArrayOfPropertyStatusModel" />
-  <xs:complexType name="PropertyStatusModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="IsOwnerOfMainAddress" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsOwnerOfOtherProperties" type="xs:boolean" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />
   <xs:complexType name="IovationCheckModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccountCode" nillable="true" type="xs:string" />

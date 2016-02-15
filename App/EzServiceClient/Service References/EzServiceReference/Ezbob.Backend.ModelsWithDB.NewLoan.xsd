@@ -121,6 +121,7 @@
           <xs:element minOccurs="0" name="PrivateCompanyLoanAgreementAgreed" nillable="true" type="xs:boolean" />
           <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
           <xs:element minOccurs="0" name="SignatureTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="SignedLegalDocs" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="SignedName" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>

@@ -5,7 +5,6 @@
     using System.Web.Mvc;
     using Ezbob.Backend.CalculateLoan.LoanCalculator;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using EzBob.Models.Agreements;
     using EzBob.Web.Code;
     using EzBob.Web.Infrastructure;
     using EzBob.Web.Infrastructure.Attributes;

@@ -74,6 +74,9 @@
 			get { return this[Variables.CollectionToAddress]; }
 		}
 
+		public virtual VariableValue CompaniesHouseApiKey {
+			get { return this[Variables.CompaniesHouseApiKey]; }
+		}
 		public virtual VariableValue CompanyCaisLateAlertLongMonths {
 			get { return this[Variables.CompanyCaisLateAlertLongMonths]; }
 		}
@@ -240,10 +243,6 @@
 
 		public virtual VariableValue Environment {
 			get { return this[Variables.Environment]; }
-		}
-
-		public virtual VariableValue EverlineRefinanceEmailReciever {
-			get { return this[Variables.EverlineRefinanceEmailReciever]; }
 		}
 
 		public virtual VariableValue EverlineLoanStatusTestMode {
