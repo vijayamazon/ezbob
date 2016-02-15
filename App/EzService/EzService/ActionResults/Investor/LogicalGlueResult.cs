@@ -97,7 +97,8 @@
 				result.BucketPercent = b == 0 ? 0 : a / b;
 
 				result.IsHardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
-				result.ScoreIsReliable = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) &&
+				result.ScoreIsReliable =
+					!inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) ||
 					inference.ModelOutputs[ModelNames.NeuralNetwork].Error.IsEmpty;
 				return result;
 			} catch (Exception ex) {
