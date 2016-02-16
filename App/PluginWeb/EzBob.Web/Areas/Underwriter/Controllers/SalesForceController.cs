@@ -46,36 +46,40 @@
 
 			this.Log.InfoFormat("Loading sales force iframe for customer {0}, origin '{1}'.", id, origin);
 
-			int customerId;
 			Customer customer = null;
-
-			if (int.TryParse(id, out customerId))
-				customer = this.customerRepository.ReallyTryGet(customerId);
-			else if (!string.IsNullOrWhiteSpace(origin)) {
-				CustomerOriginEnum coe;
-
-				if (Enum.TryParse(origin, true, out coe)) {
-					User user = this.userRepo.GetUserByLogin(id, coe);
-
-					if (user != null)
-						customer = this.customerRepository.ReallyTryGet(user.Id);
-				} // if
-			} else if (string.IsNullOrWhiteSpace(origin) && !string.IsNullOrWhiteSpace(id)) {
-				int numOfUsersWithEmail = this.userRepo.GetAll().Count(x => x.Name == id);
-				if (numOfUsersWithEmail == 1) {
-					User user = this.userRepo.GetAll().FirstOrDefault(x => x.Name == id);
-					if (user != null) {
-						customer = this.customerRepository.ReallyTryGet(user.Id);
-					}//if
-				}//if
-
-				if (numOfUsersWithEmail > 1) {
-					this.Log.WarnFormat("{0} customers found for email {1} returning empty result", numOfUsersWithEmail, id);
-				}//if
-			} // if
-
 			var model = new SalesForceModel();
 
+			try {
+				int customerId;
+				if (int.TryParse(id, out customerId))
+					customer = this.customerRepository.ReallyTryGet(customerId);
+				else if (!string.IsNullOrWhiteSpace(origin)) {
+					CustomerOriginEnum coe;
+
+					if (Enum.TryParse(origin, true, out coe)) {
+						User user = this.userRepo.GetUserByLogin(id, coe);
+
+						if (user != null)
+							customer = this.customerRepository.ReallyTryGet(user.Id);
+					} // if
+				} else if (string.IsNullOrWhiteSpace(origin) && !string.IsNullOrWhiteSpace(id)) {
+					int numOfUsersWithEmail = this.userRepo.GetAll()
+						.Count(x => x.Name == id);
+					if (numOfUsersWithEmail == 1) {
+						User user = this.userRepo.GetAll()
+							.FirstOrDefault(x => x.Name == id);
+						if (user != null) {
+							customer = this.customerRepository.ReallyTryGet(user.Id);
+						} //if
+					} //if
+
+					if (numOfUsersWithEmail > 1) {
+						this.Log.WarnFormat("{0} customers found for email {1} returning empty result", numOfUsersWithEmail, id);
+					} //if
+				} // if
+			} catch (Exception ex) {
+				this.Log.WarnFormat("Failed to loan sales force iframe for customer {0}and origin '{1}' returning empty result", id, origin, ex);
+			}
 			if (customer == null) {
 				this.Log.WarnFormat("customer not found for email {0} and origin '{1}' returning empty result", id, origin);
 				return View(model);
@@ -88,7 +92,7 @@
 				.OrderByDescending(x => x.ServiceLogId)
 				.FirstOrDefault();
 
-			var decisionHistories = this.serviceClient.Instance.LoadDecisionHistory(customerId, this.context.UserId);
+			var decisionHistories = this.serviceClient.Instance.LoadDecisionHistory(customer.Id, this.context.UserId);
 			model.Decisions = decisionHistories.Model.Select(DecisionHistoryModel.Create)
 				.OrderBy(x => x.Date)
 				.ToList();
