@@ -40,11 +40,9 @@ a[data-bug-type],
 .rollover,
 .make-payment,
 #btn-options,
-.recheck-mp,
 .reCheckMP,
 [name="discountPlan"],
 [name="avoidAutomaticDecisionButton"],
-#recheck-main-strat,
 .renew-token,
 .set-paypoint-default,
 #recheck-askville,
@@ -57,8 +55,6 @@ a[data-bug-type],
 .btn-bug,
 .downloadOfferButton,
 #RecalculateMedalBtn,
-.blockTakingLoanSwitch,
-.cciMarkSwitch,
 [name="changeFraudStatusManualy"]
 {
     display: none;
@@ -169,13 +165,6 @@ a[data-bug-type],
     visibility: visible;
 }
 
-/*Recheck PayPal*/
-
-.permission-RecheckPayPal .reCheckMP.paypal {
-    display: inline-block;
-    visibility: visible;
-}
-
 /*Run credit bureau checks - Consumer+Company+AML+BWA*/
 .permission-RunCreditBureauChecks #RunConsumerCheckBtn,
 .permission-RunCreditBureauChecks #RunCompanyCheckBtn,
@@ -206,23 +195,11 @@ a[data-bug-type],
 	display: inline-block;
     visibility: visible;
 }
-/*Rerunning MPs - Registered tab*/
-
-.permission-RerunningMarketplaces .recheck-mp {
-    display: inline-block;
-    visibility: visible;
-}
-
-/*Rerunning a Customer - Registered tab*/
-
-.permission-RerunningCreditCheck #recheck-main-strat {
-    display: inline-block;
-    visibility: visible;
-}
 
 /*Opening a bug*/
 
-.permission-OpenBug a[data-bug-type] {
+.permission-OpenBug a[data-bug-type],
+.permission-OpenBug .btn-bug {
     display: inline-block;
     visibility: visible;
 }
@@ -248,3 +225,39 @@ a[data-bug-type],
     display: inline-block;
     visibility: visible;
 }
+
+/*Add crm notes*/
+
+.permission-CRM .addNewCustomerRelationsEntry {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Edit offer button*/
+
+.permission-CreditLineFields [name="editOfferButton"] {
+	display: inline-block;
+    visibility: visible;
+}
+
+/*Download offer button*/
+
+.permission-DownloadOffer .downloadOfferButton {
+	display: inline-block;
+    visibility: visible;
+}
+
+/*Recalculate medal button*/
+
+.permission-RecalculateMedal #RecalculateMedalBtn {
+	display: inline-block;
+    visibility: visible;
+}
+
+/*Change fraud status*/
+
+.permission-FraudStatus [name="changeFraudStatusManualy"] {
+	display: inline-block;
+    visibility: visible;
+}
+
