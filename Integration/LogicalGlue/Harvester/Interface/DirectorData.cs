@@ -64,7 +64,7 @@
 			if (IsApartment(line1))
 				SetHouseNumber(line2);
 			else
-				HouseNumber = line2;
+				HouseNumber = line1;
 		} // SetAddress
 
 		/// <summary>
