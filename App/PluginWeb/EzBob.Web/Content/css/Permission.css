@@ -52,6 +52,14 @@ a[data-bug-type],
 #ReturnBtn,
 .disable-shop,
 .permission-HideBrokerClientDetails .broker-client-detail
+.addNewCustomerRelationsEntry,
+[name="editOfferButton"],
+.btn-bug,
+.downloadOfferButton,
+#RecalculateMedalBtn,
+.blockTakingLoanSwitch,
+.cciMarkSwitch,
+[name="changeFraudStatusManualy"]
 {
     display: none;
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
