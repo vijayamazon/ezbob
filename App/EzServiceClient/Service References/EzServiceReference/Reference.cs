@@ -2973,10 +2973,10 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string AttachmentPathField;
+        private System.Nullable<int> AddressIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<int> CustomerAddressIDField;
+        private string AttachmentPathField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int CustomerIdField;
@@ -3019,6 +3019,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> AddressID {
+            get {
+                return this.AddressIDField;
+            }
+            set {
+                if ((this.AddressIDField.Equals(value) != true)) {
+                    this.AddressIDField = value;
+                    this.RaisePropertyChanged("AddressID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string AttachmentPath {
             get {
                 return this.AttachmentPathField;
@@ -3027,19 +3040,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.AttachmentPathField, value) != true)) {
                     this.AttachmentPathField = value;
                     this.RaisePropertyChanged("AttachmentPath");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<int> CustomerAddressID {
-            get {
-                return this.CustomerAddressIDField;
-            }
-            set {
-                if ((this.CustomerAddressIDField.Equals(value) != true)) {
-                    this.CustomerAddressIDField = value;
-                    this.RaisePropertyChanged("CustomerAddressID");
                 }
             }
         }
