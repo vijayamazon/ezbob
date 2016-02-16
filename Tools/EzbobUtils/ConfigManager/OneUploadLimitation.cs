@@ -6,6 +6,10 @@
 	using Ezbob.Utils.MimeTypes;
 
 	public class OneUploadLimitation {
+		public static string FixFileName(string filename) {
+			// Replace invalid characters with "_" char.
+			return System.Text.RegularExpressions.Regex.Replace(filename, @"[^\w\.-]", "_");
+		} // FixFileName
 
 		public OneUploadLimitation() : this(0, "") {} // constructor
 
@@ -164,11 +168,5 @@
 
 			return false;
 		} // Contains
-
-
-		public static string FixFileName(string filename) {
-			// Replace invalid characters with "_" char.
-			return System.Text.RegularExpressions.Regex.Replace(filename, @"[^\w\.-]", "_");
-		}
 	} // class OneUploadLimitation
 } // namespace
