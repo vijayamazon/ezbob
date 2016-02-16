@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Infrastructure {
-	using System.Collections.Generic;
 	using StructureMap;
 	using System.Web.Mvc;
 	using System.Linq;
@@ -14,8 +13,9 @@
 				return;
 
 			if (ObjectFactory.GetInstance<IWorkplaceContext>().UserPermissions.All(p => p.Name != Name))
-				filterContext.Result = new HttpUnauthorizedResult();
+				filterContext.Result = new HttpStatusCodeResult(423);
 		} // OnAuthorization
+		
 	} // class PermissionAttribute
 
 	public class PermissionsAttribute : AuthorizeAttribute {
@@ -28,7 +28,7 @@
 				return;
 
 			if (!ObjectFactory.GetInstance<IWorkplaceContext>().UserPermissions.Select(x => x.Name).Intersect(Names).Any())
-				filterContext.Result = new HttpUnauthorizedResult();
+				filterContext.Result = new HttpStatusCodeResult(423);
 		} // OnAuthorization
 	} // class PermissionAttribute
 } // namespace

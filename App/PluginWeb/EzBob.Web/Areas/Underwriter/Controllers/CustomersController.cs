@@ -14,9 +14,7 @@
 	using Code;
 	using Infrastructure.csrf;
 
-	// In order to block sales from UW dashboard uncomment and add this permission to all relevant roles:
-	// [Permission(Name = "Underwriter")]
-
+	[Permission(Name = "UnderwriterDashboard")]
 	public class CustomersController : Controller {
 		public CustomersController(
 			CustomerStatusesRepository customerStatusesRepo,

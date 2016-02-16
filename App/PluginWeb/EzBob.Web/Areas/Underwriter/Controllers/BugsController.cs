@@ -42,7 +42,7 @@
 
 		[Ajax]
 		[Transactional]
-		[Permission(Name = "OpenBug")]
+		[Permission(Name = "CloseEditBug")]
 		public JsonResult UpdateBug(BugModel bugModel)
 		{
 			var bug = _bugs.Get(bugModel.Id);
@@ -65,7 +65,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		[Permission(Name = "OpenBug")]
+		[Permission(Name = "CloseEditBug")]
 		public JsonResult Close(BugModel bugm)
 		{
 			var bug = _bugs.Get(bugm.Id);

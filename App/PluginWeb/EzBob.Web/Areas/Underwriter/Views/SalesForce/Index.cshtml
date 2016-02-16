@@ -11,6 +11,7 @@
 	<div>customer not found</div>
 } else {
 	try {
+		
 		<div role="tabpanel">
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs nav-pills" role="tablist" id="salesforce_tabs">
@@ -21,6 +22,8 @@
 				<li role="presentation"><a href="#fraud" aria-controls="fraud" role="tab" data-toggle="tab"><i class="fa fa-exclamation-triangle"></i> Fraud</a></li>
 				<li role="presentation"><a href="#crm" aria-controls="crm" role="tab" data-toggle="tab"><i class="fa fa-users"></i> Old CRM</a></li>
 				<li role="presentation"><a href="#echosign" aria-controls="echosign" role="tab" data-toggle="tab"><i class="fa fa-file-text"></i> Documents</a></li>
+				<li role="presentation"><a href="@Url.Action("LogOffUnderwriter","Account", new { Area = ""})"><i class="fa fa-female"></i>Log off</a></li>
+				
 			</ul>
 
 			<!-- Tab panes -->

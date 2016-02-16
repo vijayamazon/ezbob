@@ -7,7 +7,9 @@
 
 <div class="login-page">
 	<div class="login-wrapper">
+		
 		@using (Html.BeginForm("Index", "SalesForce", new { Area = "Underwriter" })) {
+			<a href="@Url.Action("LogOffUnderwriter", "Account", new { Area = "" })">Log off</a>
 			<div class="pager">
 				<h3>Enter customer's email or id</h3>
 			</div>
@@ -18,7 +20,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="controls">TODO make it normal list <!-- TODO -->
+				<div class="controls"><!-- TODO -->
 					@Html.TextBox("origin", "", new { placeholder = "origin", tabindex = "2", autofocus = "autofocus" })
 				</div>
 			</div>

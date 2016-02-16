@@ -70,7 +70,8 @@ GO
 					  YodleeSearchWords,YodleeRules,DebitCardCustomerSelection,ChangeAddress,ChangeCompany,SendDocuments,AddEditDirector,UploadFile,DeleteFile,
 					  SendSMS,RecheckFraud,AddProperty,LandRegistry,ZooplaRecheck,AddFraudUser,GenerateCAIS,EditCAISFile,AutomationAndSettings,AddFunds,PacnetRequests,
 					  ResetPassword,ResetBrokerPassword,FinishWizard,CreateLoan,ChangeBrokerEmail,ChangeBroker,BrokerWhiteLabel,CreateInvestor,ManageInvestor,
-					  InvestorAccounting,InvestorConfig,FindInvestor,ForceInvestor,AddLogbookEntry,LegalAddEditReview,LegalConfirm,EditPermissions*/
+					  InvestorAccounting,InvestorConfig,FindInvestor,ForceInvestor,AddLogbookEntry,LegalAddEditReview,LegalConfirm,EditPermissions,UnderwriterDashboard,CloseEditBug
+*/
 
 
 --------------------------------------------existing permissions-----------------------------------
@@ -596,6 +597,20 @@ BEGIN
 END    
 GO
 
+IF NOT EXISTS (SELECT * FROM Security_Permission WHERE Name = 'UnderwriterDashboard')
+BEGIN 
+	DECLARE @id INT = (SELECT max(Id) FROM Security_Permission) + 1
+    INSERT INTO Security_Permission (Id, Name, Description) VALUES (@id,'UnderwriterDashboard','access to UW dashboard')
+END    
+GO
+
+IF NOT EXISTS (SELECT * FROM Security_Permission WHERE Name = 'CloseEditBug')
+BEGIN 
+	DECLARE @id INT = (SELECT max(Id) FROM Security_Permission) + 1
+    INSERT INTO Security_Permission (Id, Name, Description) VALUES (@id,'CloseEditBug','close or edit bug')
+END    
+GO
+
 ------------------------------------------------------Roles------------------------------------------------------------
 
 --removing crm,CollectorRO role
@@ -711,6 +726,10 @@ BEGIN
 	INSERT INTO Security_UserRoleRelation(UserId, RoleId) 
 	SELECT u.UserId, @roleId FROM Security_User u
 	WHERE u.UserName IN ('gadif','hagayj','inas','lauren','marius','masha','paulj','sharonep','shirik','sivanc','tomerg','amiyc','darrenh','vitasd')
+	
+	INSERT INTO Security_RolePermissionRel (RoleId, PermissionId) 
+	SELECT @roleId, p.Id FROM Security_Permission p
+	WHERE p.Name IN ('UnderwriterDashboard')
 END 
 GO
 
@@ -722,7 +741,7 @@ BEGIN
 	INSERT INTO Security_RolePermissionRel (RoleId, PermissionId) 
 	SELECT @roleId, p.Id FROM Security_Permission p
 	WHERE p.Name IN ('CheckBankAccount','OpenBug','AddBankAccount','ChangeBankAccount','AddDebitCard','MakePayment',
-	'UploadFile','CRM','ManageInvestor','InvestorAccounting','AddFunds','PacnetRequests')
+	'UploadFile','CRM','ManageInvestor','InvestorAccounting','AddFunds','PacnetRequests','UnderwriterDashboard')
 END 
 GO
 
@@ -734,7 +753,7 @@ BEGIN
 	INSERT INTO Security_RolePermissionRel (RoleId, PermissionId) 
 	SELECT @roleId, p.Id FROM Security_Permission p
 	WHERE p.Name IN ('EmailConfirmationButton','CustomerStatus','CRM','RecheckMarketplaces','OpenBug','AddBankAccount','ChangeBankAccount','AddDebitCard',
-	'DisableShop','ChangePhone','DownloadOffer','TrustPilot','ChangeAddress','SendDocuments','AddEditDirector','UploadFile','SendSMS','ResetPassword')
+	'DisableShop','ChangePhone','DownloadOffer','TrustPilot','ChangeAddress','SendDocuments','AddEditDirector','UploadFile','SendSMS','ResetPassword','UnderwriterDashboard')
 END 
 GO
 
@@ -770,7 +789,7 @@ INSERT INTO Security_RolePermissionRel (RoleId, PermissionId)
 SELECT @BrokerSales, p.Id  FROM Security_Permission p WHERE 
 p.Name IN ('ChangePhone','EmailConfirmationButton','CRM','CheckBankAccount','OpenBug','SuspendBtn','ReturnBtn',
 'ChangeBrokerEmail','ChangeBroker','BrokerWhiteLabel','DownloadOffer','TrustPilot','ChangeAddress','SendDocuments',
-'AddEditDirector','UploadFile','SendSMS','ResetBrokerPassword','ChangeBrokerEmail','ChangeBroker')
+'AddEditDirector','UploadFile','SendSMS','ResetBrokerPassword','ChangeBrokerEmail','ChangeBroker','UnderwriterDashboard')
 AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE RoleId=@BrokerSales)
 
 /* adding Collector role relations
@@ -780,7 +799,7 @@ AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE
 INSERT INTO Security_RolePermissionRel (RoleId, PermissionId)
 SELECT @Collector, p.Id  FROM Security_Permission p WHERE 
 p.Name IN ('ChangePhone','RescheduleOutOfLoanButton','Rollover','MakePayment','LoanOptions','CRM','CheckBankAccount','OpenBug','AddBankAccount','ChangeBankAccount','AddDebitCard','CustomerStatus','EditLoanDetails',
-'LoanOptions','DownloadOffer','CCIMark','DebitCardCustomerSelection','UploadFile','SendSMS')
+'LoanOptions','DownloadOffer','CCIMark','DebitCardCustomerSelection','UploadFile','SendSMS','UnderwriterDashboard')
 AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE RoleId=@Collector)
 
 /* adding manager role relations 
@@ -802,7 +821,7 @@ p.Name IN ('EmailConfirmationButton','CustomerStatus','TestUser','CRM','NewCredi
 'ChangeCompany','SendDocuments','AddEditDirector','UploadFile','DeleteFile','SendSMS','RecheckFraud','AddProperty',
 'LandRegistry','ZooplaRecheck','AddFraudUser','GenerateCAIS','EditCAISFile','AutomationAndSettings','AddFunds','PacnetRequests',
 'ResetPassword','ResetBrokerPassword','FinishWizard','ChangeBrokerEmail','ChangeBroker','BrokerWhiteLabel','CreateInvestor',
-'ManageInvestor','InvestorAccounting','InvestorConfig','FindInvestor','ForceInvestor','AddLogbookEntry','LegalAddEditReview','LegalConfirm')
+'ManageInvestor','InvestorAccounting','InvestorConfig','FindInvestor','ForceInvestor','AddLogbookEntry','LegalAddEditReview','LegalConfirm','UnderwriterDashboard','CloseEditBug')
 AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE RoleId=@manager)
 
 /* adding CollectorManager role existing relation with RescheduleOutOfLoanButton permission*/
@@ -827,7 +846,7 @@ INSERT INTO Security_RolePermissionRel (RoleId, PermissionId)
 SELECT @JuniorUnderwriter, p.Id  FROM Security_Permission p WHERE 
 p.Name IN ('RunCreditBureauChecks','CRM','NewCreditLineButton','Escalate','RecheckMarketplaces','OpenBug','SuspendBtn','ReturnBtn','CreditLineFields','ApproveReject',
 'DiscountPlan','DisableShop','ChangePhone','DownloadOffer','RecalculateMedal','ParseBankTransactions','EnterHMRC','YodleeSearchWords','ChangeAddress','ChangeCompany',
-'SendDocuments','AddEditDirector','UploadFile','SendSMS','RecheckFraud','AddProperty','LandRegistry','ZooplaRecheck','AddFunds','PacnetRequests')
+'SendDocuments','AddEditDirector','UploadFile','SendSMS','RecheckFraud','AddProperty','LandRegistry','ZooplaRecheck','AddFunds','PacnetRequests','UnderwriterDashboard')
 AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE RoleId=@JuniorUnderwriter)
 
 /* adding Sales role relations 
@@ -835,7 +854,7 @@ AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE
 						 new:	with DownloadOffer,TrustPilot,UploadFile,SendSMS permissions*/
 INSERT INTO Security_RolePermissionRel (RoleId, PermissionId)
 SELECT @Sales, p.Id  FROM Security_Permission p WHERE 
-p.Name IN ('ChangePhone','CRM','OpenBug','SuspendBtn','HideBrokerClientDetails','ReturnBtn','DownloadOffer','TrustPilot','UploadFile','SendSMS')
+p.Name IN ('ChangePhone','CRM','OpenBug','SuspendBtn','HideBrokerClientDetails','ReturnBtn','DownloadOffer','TrustPilot','UploadFile','SendSMS','UnderwriterDashboard')
 AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE RoleId=@Sales)
 
 /* adding SuperUser role existing relation with OldEditLoanDetails,EditLoanDetails permission*/
@@ -860,7 +879,7 @@ p.Name IN ('EmailConfirmationButton','CustomerStatus','TestUser','CRM','NewCredi
 'MakePayment','LoanOptions','AvoidAutomaticDecision','SuspendBtn','ReturnBtn','DiscountPlan','DisableShop',
 'DownloadOffer','RecalculateMedal','BlockTakingLoan','CCIMark','FraudStatus','TrustPilot','ParseBankTransactions','EnterHMRC',
 'YodleeSearchWords','YodleeRules','DebitCardCustomerSelection','ChangeAddress','ChangeCompany','SendDocuments','AddEditDirector','UploadFile',
-'DeleteFile','SendSMS','RecheckFraud','AddProperty','LandRegistry','ZooplaRecheck','AddFraudUser','AddFunds','PacnetRequests')
+'DeleteFile','SendSMS','RecheckFraud','AddProperty','LandRegistry','ZooplaRecheck','AddFraudUser','AddFunds','PacnetRequests','UnderwriterDashboard')
 AND p.Id NOT IN (SELECT rp.PermissionId FROM Security_RolePermissionRel rp WHERE RoleId=@Underwriter)
 
 --removing BrokerSales role relations to CustomerStatus,RunCreditBureauChecks,MakePayment,TestUser,SendingMessagesToClients,AddBankAccount,ChangeBankAccount,AddDebitCard permission

@@ -838,7 +838,7 @@ EzBob.ShowMessageEx = function(args) {
 	} // if
 
 	var isUW = document.location.href.indexOf("Underwriter") > -1;
-	modalpopup.dialog({
+	var dialog = modalpopup.dialog({
 		title: args.title,
 		width: args.dialogWidth || 350,
 		modal: true,
@@ -862,7 +862,7 @@ EzBob.ShowMessageEx = function(args) {
 	} else {
 		modalpopup.parents('.ui-dialog').find("button").addClass('button btn-green ev-btn-org');
 	}
-	return modalpopup;
+	return dialog;
 }; // EzBob.ShowMessageEx
 
 EzBob.formatIntWithCommas = function(val) {

@@ -90,7 +90,11 @@
 					if (bRedirectToUrl)
 						return Redirect(model.ReturnUrl);
 
-					return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+					if (this.context.UserPermissions.Any(x => x.Name == "UnderwriterDashboard")) {
+						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+					} else {
+						return RedirectToAction("Main", "SalesForce", new { Area = "Underwriter" });
+					}
 				} // if
 
 				loginError = string.IsNullOrEmpty(loginError) ? "Wrong user name/password." : loginError;
@@ -220,7 +224,7 @@
 			EndSession("LogOff UW", false);
 			this.context.RemoveSessionOrigin();
 
-			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+			return RedirectToAction("AdminLogOn", "Account");
 		} // LogOffUnderwriter
 
 		[HttpPost]

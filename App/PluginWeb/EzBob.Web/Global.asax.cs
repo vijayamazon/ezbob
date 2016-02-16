@@ -142,6 +142,20 @@
 			Log.NotifyStop();
 		} // Application_End
 
+		protected void Application_EndRequest() {
+			// Any AJAX request that ends in a redirect should get mapped to an unauthorized request
+			// since it should only happen when the request is not authorized and gets automatically
+			// redirected to the login page.
+			var context = new HttpContextWrapper(Context);
+			if (context.Response.StatusCode != 200 && context.Request.IsAjaxRequest()) {
+				Log.Warn("Request: {0}  response status code: {1}", context.Request.Path, context.Response.StatusCode);
+			}
+			if (context.Response.StatusCode == 423 && context.Request.IsAjaxRequest()) {
+				context.Response.Clear();
+				Context.Response.StatusCode = 423;
+			}
+		} // Application_EndRequest
+
 		protected void Application_Start() {
 			MvcHandler.DisableMvcResponseHeader = true;
 
