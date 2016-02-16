@@ -124,7 +124,7 @@
                 <td class="customer-personal-status-alignment"><span class="pull-right red_cell">Alibaba Customer</span></td>
             </tr>
             <%}%>
-            <tr>
+            <tr class="reset-password-tr">
                 <td class="customer-personal-status-alignment"><a href="#" class="reset-password-123456">Reset password to 123456</a></td>
             </tr>
         </tbody>
@@ -267,7 +267,7 @@
 			@RowCell("Mobile", "<%- data.BrokerContactMobile %>", "ez-green")
         </tbody>
         <tbody class="box-content">
-            <tr>
+            <tr class="change-broker-tr">
                 <td class="customer-personal-status-alignment"><a href="#" class="change-broker">Update broker</a></td>
             </tr>
         </tbody>
@@ -347,9 +347,9 @@
             @RowCell("User status", "<%- data.UserStatus %>")
         </tbody>
         <tfoot>
-            <tr>
-                <th><button id="ForceFinishWizard" class="btn btn-mini btn-primary">Finish wizard</button></th>
-            </tr>
+			<tr class="finish-wizard-tr">
+				<th><button id="ForceFinishWizard" class="btn btn-mini btn-primary">Finish wizard</button></th>
+			</tr>
         </tfoot>
     </table>
      <div class="lightDarkThemeSwitch make-switch switch-mini" data-on="info" data-off="default" data-animated="true" data-off-label="dark" data-on-label="light" style="width: 100%">

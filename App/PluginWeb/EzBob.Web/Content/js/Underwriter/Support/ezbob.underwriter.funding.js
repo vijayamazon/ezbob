@@ -112,8 +112,7 @@ EzBob.Underwriter.FundingView = Backbone.Marionette.ItemView.extend({
 	},
 
 	onRender: function() {
-		if (!$("body").hasClass("role-manager"))
-			this.$el.find('#addFundsBtn, #cancelManuallyAddedFundsBtn, #pacnetTopUpRequestBtn, #pacnetConfMailBtn').hide();
+
 	},
 
 	hide: function() {

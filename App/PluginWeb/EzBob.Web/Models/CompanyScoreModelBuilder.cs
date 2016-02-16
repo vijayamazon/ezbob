@@ -152,8 +152,8 @@
 
 			if (customer.PersonalInfo != null) {
 				details.TypeOfBusiness = customer.PersonalInfo.TypeOfBusiness.ToString();
-				details.CustomerFirstName = customer.PersonalInfo.FirstName.ToLowerInvariant();
-				details.CustomerSurname = customer.PersonalInfo.Surname.ToLowerInvariant();
+				details.CustomerFirstName = string.IsNullOrEmpty(customer.PersonalInfo.FirstName) ? "" : customer.PersonalInfo.FirstName.ToLowerInvariant();
+				details.CustomerSurname = string.IsNullOrEmpty(customer.PersonalInfo.Surname) ? "" : customer.PersonalInfo.Surname.ToLowerInvariant();
 			}
 
 			if (customer.Company != null) {

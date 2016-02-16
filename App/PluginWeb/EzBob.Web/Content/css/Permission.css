@@ -55,7 +55,63 @@ a[data-bug-type],
 .btn-bug,
 .downloadOfferButton,
 #RecalculateMedalBtn,
-[name="changeFraudStatusManualy"]
+[name="changeFraudStatusManualy"],
+.parseYodleeMp,
+.enterHmrcMp,
+.yodleeSearchWordsDelete,
+.yodleeSearchWordsAdd,
+.yodleeRuleAdd,
+.btn-change-address,
+.change-company,
+.do-send,
+.add-director,
+.btn-edit-director,
+.btn-delete-director,
+#deleteDocs,
+#addNewDoc,
+#sendSms,
+#recheckFraud,
+.add-property-margin,
+.btnEnquiry,
+.zooplaRecheck,
+#fraud-area .add,
+.cais-manage-controls .generate,
+.save-change,
+#basic-interest-rate-settings .save,
+#loan-offer-multiplier-settings .save,
+#eu-loan-monthly-interest-settings .save,
+#default-rate-company-settings .save,
+#default-rate-customer-settings .save,
+[name="SaveAutomationSettings"],
+[name="SaveApprovalSettings"],
+[name="SaveRejectionSettings"],
+[name="SaveChargesSettings"],
+#SaveExperianSettings,
+[name="SavePricingModelSettings"],
+[name="SaveProductSettings"],
+[name="SaveOpenPlatformSettings"],
+[name="SaveGeneralSettings"],
+#addFundsBtn,
+#cancelManuallyAddedFundsBtn,
+#pacnetTopUpRequestBtn,
+#pacnetConfMailBtn,
+.reset-password-tr,
+.reset-broker-password,
+.finish-wizard-tfoot,
+#create-loan-hidden-btn,
+#logbook-show-new-entry-form,
+.find-investor,
+.submit-choosen-investor,
+.config-investor,
+.add-transaction-btn,
+#config-scheduler-submit-btn,
+#SubmitContactsEdit,
+#SubmitBanksEdit,
+#investorDetailsSubmit,
+.add-investor,
+.save-new-email,
+.saveWhiteLabel,
+.change-broker-tr
 {
     display: none;
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
@@ -73,9 +129,70 @@ a[data-bug-type],
 .permission-ReturnBtn #ReturnBtn, /*status change to waiting for decision*/
 
 .permission-DiscountPlan [name="discountPlan"],
-.permission-DisableShop .disable-shop
+.permission-DisableShop .disable-shop,
+.permission-ParseBankTransactions .parseYodleeMp,
+.permission-EnterHMRC .enterHmrcMp,
+.permission-YodleeSearchWords .yodleeSearchWordsDelete,
+.permission-YodleeSearchWords .yodleeSearchWordsAdd,
+.permission-YodleeRules .yodleeRuleAdd,
+.permission-ChangeAddress .btn-change-address,
+.permission-ChangeCompany .change-company,
+.permission-SendDocuments .do-send,
+.permission-AddEditDirector .add-director,
+.permission-AddEditDirector .btn-edit-director
+.permission-AddEditDirector .btn-delete-director
+.permission-UploadFile #addNewDoc,
+.permission-DeleteFile #deleteDocs,
+.permission-SendSMS #sendSms,
+.permission-RecheckFraud #recheckFraud, 
+.permission-AddProperty .add-property-margin,
+.permission-LandRegistry .btnEnquiry,
+.permission-ZooplaRecheck .zooplaRecheck,
+.permission-AddFraudUser #fraud-area .add,
+.permission-GenerateCAIS .cais-manage-controls .generate,
+.permission-EditCAISFile .save-change,
+.permission-AddFunds #addFundsBtn,
+.permission-AddFunds #cancelManuallyAddedFundsBtn,
+.permission-PacnetRequests #pacnetTopUpRequestBtn,
+.permission-PacnetRequests #pacnetConfMailBtn,
+.permission-ResetBrokerPassword .reset-broker-password,
+.permission-CreateLoan #create-loan-hidden-btn,
+.permission-ChangeBrokerEmail .save-new-email,
+.permission-BrokerWhiteLabel .saveWhiteLabel,
+.permission-CreateInvestor .add-investor,
+.permission-ManageInvestor #investorDetailsSubmit,
+.permission-ManageInvestor #SubmitContactsEdit,
+.permission-ManageInvestor #SubmitBanksEdit,
+.permission-InvestorAccounting #config-scheduler-submit-btn,
+.permission-InvestorAccounting .add-transaction-btn,
+.permission-InvestorConfig .config-investor,
+.permission-FindInvestor .find-investor,
+.permission-ForceInvestor .submit-choosen-investor,
+.permission-AddLogbookEntry #logbook-show-new-entry-form
 {
      display: inline-block;
+     visibility: visible;
+}
+
+
+/*Automation and settings*/
+
+.permission-AutomationAndSettings [name="SaveAutomationSettings"],
+.permission-AutomationAndSettings [name="SaveApprovalSettings"],
+.permission-AutomationAndSettings [name="SaveRejectionSettings"],
+.permission-AutomationAndSettings [name="SaveChargesSettings"],
+.permission-AutomationAndSettings #SaveExperianSettings,
+.permission-AutomationAndSettings [name="SavePricingModelSettings"],
+.permission-AutomationAndSettings [name="SaveProductSettings"],
+.permission-AutomationAndSettings [name="SaveOpenPlatformSettings"],
+.permission-AutomationAndSettings [name="SaveGeneralSettings"],
+.permission-AutomationAndSettings #basic-interest-rate-settings .save,
+.permission-AutomationAndSettings #loan-offer-multiplier-settings .save,
+.permission-AutomationAndSettings #eu-loan-monthly-interest-settings .save,
+.permission-AutomationAndSettings #default-rate-company-settings .save,
+.permission-AutomationAndSettings #default-rate-customer-settings .save
+{
+	 display: inline-block;
      visibility: visible;
 }
 
@@ -117,21 +234,13 @@ a[data-bug-type],
     visibility: visible;
 }
 
-/*Credit line fields*/
-
-.permission-CreditLineFields [name="loanType"],
-.permission-CreditLineFields [name="allowSendingEmail"],
-.permission-CreditLineFields [name="openCreditLineChangeButton"],
-.permission-CreditLineFields [name="repaymentPeriodChangeButton"],
-.permission-CreditLineFields [name="startingDateChangeButton"],
-.permission-CreditLineFields [name="offerValidUntilDateChangeButton"],
-.permission-CreditLineFields [name="interestRateChangeButton"],
-.permission-CreditLineFields [name="setupFeeEditButton"],
-.permission-CreditLineFields [name="brokerSetupFeeEditButton"],
-.permission-CreditLineFields [name="isLoanTypeSelectionAllowed"],
-.permission-CreditLineFields .couple_buttons {
-    display: inline-block;
-    visibility: visible;
+/*Table rows*/
+.permission-ResetPassword .reset-password-tr,
+.permission-ChangeBroker .change-broker-tr,
+.permission-FinishWizard .finish-wizard-tr
+ {
+	visibility: visible;
+	display: table-row;
 }
 
 /*Approve, Reject*/
@@ -212,7 +321,6 @@ a[data-bug-type],
 }
 
 /*Change bank account (set default)*/
-
 .permission-ChangeBankAccount .setDefault,
 .permission-ChangeBankAccount .set-paypoint-default {
     display: inline-block;
