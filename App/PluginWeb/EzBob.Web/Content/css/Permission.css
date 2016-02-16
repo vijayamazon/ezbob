@@ -117,6 +117,16 @@ a[data-bug-type],
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
 }
 
+.block-taking-loan-td,
+.cciMarkSwitch,
+.is-test-td,
+.manualDecisionSwitch,
+.debitCardCustomerSelection
+{
+	pointer-events: none;
+	opacity: 0.5;
+}
+
 /*Loan editing options, rollover,manual payment etc*/
 .permission-Rollover .rollover,
 .permission-MakePayment .make-payment,
@@ -241,6 +251,18 @@ a[data-bug-type],
  {
 	visibility: visible;
 	display: table-row;
+}
+
+/*Switchs*/
+
+.permission-BlockTakingLoan .block-taking-loan-td,
+.permission-CCIMark .cciMarkSwitch,
+.permission-TestUser .is-test-td,
+.permission-AvoidAutomaticDecision .manualDecisionSwitch,
+.permission-DebitCardCustomerSelection .debitCardCustomerSelection
+{
+	pointer-events: initial;
+	opacity: initial;
 }
 
 /*Approve, Reject*/

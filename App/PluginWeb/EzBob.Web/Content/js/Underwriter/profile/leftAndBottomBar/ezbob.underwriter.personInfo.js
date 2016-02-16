@@ -130,9 +130,9 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	toggleTheme: function (event, state) {
 	    $("#main-container").toggleClass("sidebar-light", state.value);
 	    if (state.value) {
-	        $.cookie('sidebar-color', 'light');
+	    	$.cookie('sidebar-color', 'light', { expires: moment().add(3, 'y').toDate() });
 	    } else {
-	        $.cookie('sidebar-color', 'dark');
+	    	$.cookie('sidebar-color', 'dark', { expires: moment().add(3, 'y').toDate() });
 	    }
 	},
 	setAlertStatus: function(isAlert, td) {
