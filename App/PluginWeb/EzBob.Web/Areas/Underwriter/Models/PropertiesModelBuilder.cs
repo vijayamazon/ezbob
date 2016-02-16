@@ -47,7 +47,7 @@
 
 
 
-			var unmappedLrs = customersLrs.Where(x => x.RequestType == LandRegistryRequestType.Res.ToString() && !x.CustomerAddressID.HasValue);
+			var unmappedLrs = customersLrs.Where(x => x.RequestType == LandRegistryRequestType.Res.ToString() && !x.AddressID.HasValue);
 
 			foreach (var unmappedLr in unmappedLrs) {
 				LandRegistryResModel lrModel = this.landRegistryModelBuilder.BuildResModel(unmappedLr.Response, unmappedLr.TitleNumber);
@@ -114,7 +114,7 @@
 				};
 
 				var lrs = customerLrs
-								 .Where(x => x.CustomerAddressID == address.AddressId)
+								 .Where(x => x.AddressID == address.AddressId)
 								 .OrderByDescending(x => x.InsertDate)
 								 .Where(x => x.RequestType == LandRegistryRequestType.Res.ToString())
 								 .ToList();
