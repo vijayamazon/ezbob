@@ -78,7 +78,7 @@
 					} //if
 				} // if
 			} catch (Exception ex) {
-				this.Log.WarnFormat("Failed to loan sales force iframe for customer {0}and origin '{1}' returning empty result", id, origin, ex);
+				this.Log.WarnFormat("Failed to load sales force iframe for customer {0}and origin '{1}' returning empty result \n{2}", id, origin, ex);
 			}
 			if (customer == null) {
 				this.Log.WarnFormat("customer not found for email {0} and origin '{1}' returning empty result", id, origin);
