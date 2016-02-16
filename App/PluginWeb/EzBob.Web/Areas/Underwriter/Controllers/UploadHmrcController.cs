@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System.Collections.Generic;
-	using System.Web;
 	using System.Web.Mvc;
 	using Customer.Controllers;
 	using Ezbob.Logger;
@@ -36,8 +35,8 @@
 			if (Request.Files.Count > 0) {
 				var lst = new List<string>();
 
-				foreach (HttpPostedFileBase f in Request.Files)
-					lst.Add(f.FileName);
+				foreach (string f in Request.Files)
+					lst.Add(f);
 
 				log.Debug("File name{0}:\n\t{1}", Request.Files.Count == 1 ? " is" : "s are", string.Join("\n\t", lst));
 			} // if
