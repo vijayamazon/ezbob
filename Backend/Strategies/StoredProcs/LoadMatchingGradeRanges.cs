@@ -1,39 +1,39 @@
 ﻿namespace Ezbob.Backend.Strategies.StoredProcs {
+	using System;
 	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
 	internal class LoadMatchingGradeRanges : AStoredProcedure {
-			public LoadMatchingGradeRanges(AConnection db, ASafeLog log) : base(db, log) {
-			} // constructor
+		public LoadMatchingGradeRanges(AConnection db, ASafeLog log) : base(db, log) {
+		} // constructor
 
-			public override bool HasValidParameters() {
-				return (OriginID > 0) && (LoanSourceID > 0) && (Score > 0);
-			} // HasValidParameters
+		public override bool HasValidParameters() {
+			return (CustomerID > 0) && (Now > longTimeAgo);
+		} // HasValidParameters
 
-			[UsedImplicitly]
-			public int OriginID { get; set; }
+		[UsedImplicitly]
+		public int CustomerID { get; set; }
 
-			[UsedImplicitly]
-			public bool IsRegulated { get; set; }
+		[UsedImplicitly]
+		public int? CompanyID { get; set; }
 
-			[UsedImplicitly]
-			public decimal Score { get; set; }
+		[UsedImplicitly]
+		public DateTime Now { get; set; }
 
-			[UsedImplicitly]
-			public int LoanSourceID { get; set; }
+		public void Execute(MatchingGradeRanges target) {
+			if (target == null)
+				throw new ArgumentNullException("target", "Target list of grade ranges is NULL.");
 
-			[UsedImplicitly]
-			public bool IsFirstLoan { get; set; }
+			target.Clear();
 
-			public void Execute(MatchingGradeRanges target) {
-				target.Clear();
+			ForEachRowSafe(sr => target.Add(new MatchingGradeRanges.SubproductGradeRange {
+				ProductSubTypeID = sr["ProductSubTypeID"],
+				GradeRangeID = sr["GradeRangeID"],
+			}));
+		} // Execute
 
-				ForEachRowSafe(sr => target.Add(new MatchingGradeRanges.SubproductGradeRange {
-					ProductSubTypeID = sr["ProductSubTypeID"],
-					GradeRangeID = sr["GradeRangeID"],
-				}));
-			} // Execute
-		} // class LoadMatchingGradeRanges
+		private static readonly DateTime longTimeAgo = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
+	} // class LoadMatchingGradeRanges
 } // namespace

@@ -133,27 +133,10 @@
 				return;
 			} // if
 
-			SafeReader sr = DB.GetFirst(
-				"LoadGradeRangeAndSubproduct",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@GradeRangeID", this.autoRejectionOutput.GradeRangeID),
-				new QueryParameter("@ProductSubTypeID", this.autoRejectionOutput.ProductSubTypeID)
-			);
+			GradeRangeSubproduct grsp = LoadOfferRanges(true);
 
-			if (sr.IsEmpty) {
-				CreateErrorResult(
-					"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
-					this.autoRejectionOutput.GradeRangeID,
-					this.autoRejectionOutput.ProductSubTypeID
-				);
-
+			if (grsp == null)
 				return;
-			} // if
-
-			GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
-
-			this.gradeID = grsp.GradeID;
-			this.subGradeID = grsp.SubGradeID;
 
 			ProposedAmount = GetLogicalProposedAmount(grsp);
 
@@ -161,25 +144,6 @@
 				CreateErrorResult("Proposed amount is not positive for {0}, no offer.", OuterContextDescription);
 				return;
 			} // if
-
-			this.loanSource = this.allLoanSources.Contains(grsp.LoanSourceID)
-				? (LoanSourceName)grsp.LoanSourceID
-				: (LoanSourceName?)null;
-
-			if (this.loanSource == null) {
-				CreateErrorResult("Failed to detect default loan source for {0}, no offer.", OuterContextDescription);
-				return;
-			} // if
-
-			this.repaymentPeriod = grsp.Term(this.requestedLoan.RequestedTerm);
-
-			this.loanTypeID = grsp.LoanTypeID;
-
-			this.minInterestRate = grsp.MinInterestRate;
-			this.maxInterestRate = grsp.MaxInterestRate;
-
-			this.minSetupFee = grsp.MinSetupFee;
-			this.maxSetupFee = grsp.MaxSetupFee;
 
 			Calculate();
 		} // CreateLogicalOffer
@@ -263,29 +227,14 @@
 				isHomeOwner ? this.homeOwnerCap : this.notHomeOwnerCap
 			);
 
-			SafeReader sr = DB.GetFirst(
-				"GetDefaultLoanSource",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerID)
-			);
-
-			int loanSourceID = sr.IsEmpty ? 0 : sr["LoanSourceID"];
-
-			this.loanSource = this.allLoanSources.Contains(loanSourceID)
-				? (LoanSourceName)loanSourceID
-				: (LoanSourceName?)null;
-
 			bool noGo =
-				sr.IsEmpty ||
 				(ProposedAmount <= 0) ||
-				(LoanSourceID <= 0) ||
 				(Medal.MedalClassification == EZBob.DatabaseLib.Model.Database.Medal.NoClassification);
 
 			if (noGo) {
 				string errorMsg = string.Join(
 					" ",
 					new List<string> {
-						(sr.IsEmpty || (LoanSourceID <= 0)) ? "Failed to detect default loan source ID." : null,
 						ProposedAmount <= 0 ? "Proposed amount is not positive." : null,
 						(Medal.MedalClassification == EZBob.DatabaseLib.Model.Database.Medal.NoClassification)
 							? "No medal calculated."
@@ -297,32 +246,54 @@
 				return;
 			} // if
 
-			this.repaymentPeriod = sr["RepaymentPeriod"] ?? 15;
+			GradeRangeSubproduct grsp = LoadOfferRanges(false);
 
-			var loader = new LoadOfferRanges(
-				ProposedAmount,
-				Medal.NumOfLoans > 0,
-				Medal.MedalClassification,
-				DB,
-				Log
-			).Execute();
+			if (grsp == null)
+				return;
+
+			Calculate();
+		} // CreateUnlogicalOffer
+
+		private GradeRangeSubproduct LoadOfferRanges(bool isLogicalOffer) {
+			var loader = isLogicalOffer
+				? new LoadOfferRanges(
+					this.autoRejectionOutput.GradeRangeID,
+					this.autoRejectionOutput.ProductSubTypeID,
+					DB,
+					Log
+				)
+				: new LoadOfferRanges(this.customerID, null, DateTime.UtcNow, DB, Log);
+			
+			loader.Execute();
 
 			if (!loader.Success) {
 				CreateErrorResult(
 					"Failed to load default loan type or loan parameters ranges {0}, no offer.",
 					OuterContextDescription
 				);
-				return;
+				return null;
 			} // if
 
-			this.loanTypeID = loader.LoanTypeID;
-			this.minInterestRate = loader.InterestRate.Min;
-			this.maxInterestRate = loader.InterestRate.Max;
-			this.minSetupFee = loader.SetupFee.Min;
-			this.maxSetupFee = loader.SetupFee.Max;
+			this.repaymentPeriod = loader.GradeRangeSubproduct.Term(this.requestedLoan.RequestedTerm);
+			this.gradeID = loader.GradeRangeSubproduct.GradeID;
+			this.subGradeID = loader.GradeRangeSubproduct.SubGradeID;
+			this.loanTypeID = loader.GradeRangeSubproduct.LoanTypeID;
+			this.minInterestRate = loader.GradeRangeSubproduct.MinInterestRate;
+			this.maxInterestRate = loader.GradeRangeSubproduct.MinInterestRate;
+			this.minSetupFee = loader.GradeRangeSubproduct.MinSetupFee;
+			this.maxSetupFee = loader.GradeRangeSubproduct.MaxSetupFee;
 
-			Calculate();
-		} // CreateUnlogicalOffer
+			this.loanSource = this.allLoanSources.Contains(loader.GradeRangeSubproduct.LoanSourceID)
+				? (LoanSourceName)loader.GradeRangeSubproduct.LoanSourceID
+				: (LoanSourceName?)null;
+
+			if (this.loanSource == null) {
+				CreateErrorResult("Failed to detect default loan source for {0}, no offer.", OuterContextDescription);
+				return null;
+			} // if
+
+			return loader.GradeRangeSubproduct;
+		} // LoadOfferRanges
 
 		private void Calculate() {
 			var calc = new OfferCalculator(

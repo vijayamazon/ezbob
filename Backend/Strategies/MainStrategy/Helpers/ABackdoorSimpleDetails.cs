@@ -178,37 +178,18 @@
 		protected TypeOfBusiness typeOfBusiness;
 		protected int customerOriginID;
 
+		protected GradeRangeSubproduct Grsp { get; private set; }
+
 		protected virtual bool CalculateMedalAndOffer() {
-			SafeReader sr = Library.Instance.DB.GetFirst(
-				"GetDefaultLoanSource",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerID)
-			);
+			Grsp = null;
 
-			if (sr.IsEmpty) {
-				Log.Warn(
-					"Back door simple failed for customer '{0}': could not load default loan source.",
-					this.customerID
-				);
-				return false;
-			} // if
+			var loader = new LoadOfferRanges(this.customerID, null, DateTime.UtcNow, DB, Log).Execute();
 
-			int period = sr["RepaymentPeriod"];
-			int loanSourceID = sr["LoanSourceID"];
-
-			sr = DB.GetFirst("GetLoanTypeAndDefault", CommandSpecies.StoredProcedure, new QueryParameter("@LoanTypeID"));
-
-			if (sr.IsEmpty) {
-				Log.Warn(
-					"Back door simple failed for customer '{0}': could not load default loan type.",
-					this.customerID
-				);
-				return false;
-			} // if
-
-			int loanTypeID = sr["DefaultLoanTypeID"];
-
-			Medal = new MedalResult(this.customerID, null) {
+			Medal = new MedalResult(
+				this.customerID,
+				null,
+				loader.Success ? null : "Failed to load grade range + sub-product."
+			) {
 				CalculationTime = DateTime.UtcNow,
 				MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification,
 				MedalType = Strategies.MedalCalculations.MedalType.NoMedal,
@@ -216,6 +197,9 @@
 				AnnualTurnover = ApprovedAmount,
 				TotalScoreNormalized = 0,
 			};
+
+			if (loader.Success)
+				Grsp = loader.GradeRangeSubproduct;
 
 			OfferResult = new OfferResult {
 				CustomerId = this.customerID,
@@ -229,18 +213,18 @@
 				NLCashRequestID = this.nlCashRequestID,
 
 				ScenarioName = "Back door - no offer",
-				Period = period,
-				LoanTypeId = loanTypeID,
-				LoanSourceId = loanSourceID,
+				Period = (Grsp != null) ? Grsp.Term(this.requestedLoan.RequestedTerm) : 15,
+				LoanTypeId = (Grsp != null) ? Grsp.LoanTypeID : 1,
+				LoanSourceId = (Grsp != null) ? Grsp.LoanSourceID : 1,
 				InterestRate = 0,
 				SetupFee = 0,
-				Message = null,
-				IsError = false,
+				Message = (Grsp != null) ? "Failed to load grade range + sub-product." : null,
+				IsError = Grsp == null,
 				IsMismatch = false,
 				HasDecision = false,
 			};
 
-			return true;
+			return loader.Success;
 		} // CalculateMedalAndOffer
 
 		private int Cap(int val) {
