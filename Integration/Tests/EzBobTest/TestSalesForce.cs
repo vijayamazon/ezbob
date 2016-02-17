@@ -15,6 +15,8 @@
 
 		private ISalesForceAppClient client;
 		private ISalesForceService newClient;
+		private int millisecond;
+
 		[SetUp]
 		public void Init() {
 			log4net.Config.XmlConfigurator.Configure();
@@ -25,6 +27,7 @@
 
 //			this.client = GetSb1Client();
 			this.newClient = GetSb1Service();
+			this.millisecond = DateTime.UtcNow.Millisecond;
 			//this.client = GetSandboxDevClient();
 			//this.client = GetSandboxClient();
 			//this.client = GetProdClient();
@@ -427,8 +430,8 @@
 		public void TestCreateBroker() {
 			//Create broker
 			var createBrokerRequest = new CreateBrokerRequest {
-				BrokerID = 115,
-				ContactEmail = "alexbo+broker4@ezbob.com",
+				BrokerID = this.millisecond,
+				ContactEmail = string.Format("testbroker{0}@ezbob.com", this.millisecond),
 				Origin = "ezbob",
 				ContactMobile = "01000000115",
 				ContactName = "Another Good Broker",
@@ -436,17 +439,15 @@
 				EstimatedMonthlyApplicationCount = 3,
 				EstimatedMonthlyClientAmount = 1000,
 				FCARegistered = false,
-				FirmName = "Jada Coldfusion",
+				FirmName = "Jada Coldfusion" + this.millisecond,
 				FirmRegNum = "2340984",
 				FirmWebSiteUrl = "http://www.ezbob.com",
 				IsTest = true,
 				LicenseNumber = null,
-				SourceRef = "brk-assbx5"
+				SourceRef = "brk-assbx" + this.millisecond
 			};
 
-			var service = GetSb1Service();
-			var result = service.CreateBrokerAccount(createBrokerRequest).Result;
-
+			var result = this.newClient.CreateBrokerAccount(createBrokerRequest).Result;
 			Assert.IsNotNull(result);
 			Assert.IsTrue(result.success);
 		}
@@ -455,12 +456,11 @@
 		public void TestGetByID() {
 			//Get accountID
 			var getAccountByIDRequest = new GetAccountByIDRequest {
-				Email_in = "alexbo+broker4@ezbob.com",
+				Email_in = string.Format("testbroker{0}@ezbob.com",this.millisecond),
 				Brand = "ezbob"
 			};
 
-			var service = GetSb1Service();
-			var result = service.GetAccountByID(getAccountByIDRequest).Result;
+			var result = this.newClient.GetAccountByID(getAccountByIDRequest).Result;
 
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.attributes);
@@ -471,10 +471,9 @@
 
 		[Test]
 		public void TestRestLead() {
-			DateTime date = DateTime.UtcNow;
 			
 			var model = new LeadAccountModel {
-				Email = string.Format("testdev_withbroker{0}@b.c",date.Millisecond),
+				Email = string.Format("testcustomer{0}@b.c",this.millisecond),
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -482,8 +481,8 @@
 				AddressLine3 = "Line3",
 				AddressPostcode = "Postcode",
 				AddressTown = "Town",
-				CompanyName = "Company" + date.Millisecond,
-				Name = "Customer" + date.Millisecond,
+				CompanyName = "Company" + this.millisecond,
+				Name = "Customer" + this.millisecond,
 				TypeOfBusiness = "Limited",
 				CompanyNumber = "056456446",
 				DateOfBirth = new DateTime(1966, 12, 11),
@@ -496,15 +495,15 @@
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
 				Origin = "ezbob",
-				CustomerID = date.Millisecond.ToString(),
+				CustomerID = (this.millisecond + 100000).ToString(),
 				IsTest = true,
 				NumOfLoans = 2,
 				Promocode = "promotest",
 				IsBroker = true,
 				BrokerID = 115,
-				BrokerEmail = "alexbo+broker3@ezbob.com",
+				BrokerEmail = string.Format("testbroker{0}@ezbob.com", this.millisecond),
 				BrokerName = "Broker Name",
-				BrokerFirmName = "Jada Coldfusion",
+				BrokerFirmName = "Jada Coldfusion" + this.millisecond,
 				BrokerPhoneNumber = "01000000115",
 				ExternalCollectionStatus = "",
 				CollectionStatus = "Active",
@@ -522,7 +521,7 @@
 			var now = DateTime.UtcNow;
 			var model = new TaskModel {
 
-				Email = "testdev1@b.c",
+				Email = string.Format("testcustomer{0}@b.c", this.millisecond),
 				CreateDate = now,
 				DueDate = now.AddDays(3),
 				Originator = "Originator",
@@ -542,7 +541,7 @@
 		public void TestRestActivity() {
 			var now = DateTime.UtcNow;
 			var model = new ActivityModel {
-				Email = "testdev1@b.c",
+				Email = string.Format("testcustomer{0}@b.c", this.millisecond),
 				Origin = "ezbob",
 				Description = "Description",
 				Type = "Mail",
@@ -576,11 +575,35 @@
 
 			//var activity = client.GetActivity("alexbo+073@ezbob.com_Frozen");
 			//client.GetActivity("stasdes@ezbob.com");
-			var activity = this.newClient.GetActivity(new GetActivityModel { Email = "testdev1@b.c", Origin = "ezbob" }).Result;
+			var request = new GetActivityModel {
+				Email = string.Format("testcustomer{0}@b.c", this.millisecond),
+				Origin = "ezbob"
+			};
+			var activity = this.newClient.GetActivity(request).Result;
 			Assert.IsNotNull(activity);
 			Assert.IsNullOrEmpty(this.client.Error);
 			Assert.IsNullOrEmpty(activity.Error);
 			Assert.Greater(activity.Activities.Count(), 0);
+		}
+
+		[Test]
+		public void TestRestCreateOpportunity() {
+			var now = DateTime.UtcNow;
+			var model = new OpportunityModel {
+				Name = "NewOpportunity",
+				Email = string.Format("testcustomer{0}@b.c", this.millisecond),
+				Origin = "ezbob",
+				CreateDate = now,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s5.DescriptionAttr(),
+				Type = OpportunityType.New.DescriptionAttr()
+			};
+			var result = this.newClient.CreateOpportunity(model).Result;
+
+			Log.InfoFormat("request\n {0}\nresponse\n{1}",
+				JsonConvert.SerializeObject(model, Formatting.Indented), JsonConvert.SerializeObject(result, Formatting.Indented));
+			Assert.IsTrue(result.success);
 		}
 
 		[Test]
@@ -596,7 +619,7 @@
 			});
 			*/
 			var model = new OpportunityModel {
-				Email = "testdev1@b.c",
+				Email = string.Format("testcustomer{0}@b.c", this.millisecond),
 				ExpectedEndDate = now.AddDays(7),
 				RequestedAmount = 1000,
 				DealCloseType = OpportunityDealCloseReason.Lost.DescriptionAttr(),
@@ -612,25 +635,7 @@
 			Assert.IsTrue(result.success);
 		}
 
-		[Test]
-		public void TestRestCreateOpportunity() {
-			var now = DateTime.UtcNow;
-			var model = new OpportunityModel {
-				Name = "NewOpportunity",
-				Email = "testpdf@ezbob.com",
-				Origin = "ezbob",
-				CreateDate = now,
-				ExpectedEndDate = now.AddDays(7),
-				RequestedAmount = 1000,
-				Stage = OpportunityStage.s5.DescriptionAttr(),
-				Type = OpportunityType.New.DescriptionAttr()
-			};
-			var result = this.newClient.CreateOpportunity(model).Result;
-
-			Log.InfoFormat("request\n {0}\nresponse\n{1}",
-				JsonConvert.SerializeObject(model, Formatting.Indented), JsonConvert.SerializeObject(result, Formatting.Indented));
-			Assert.IsTrue(result.success);
-		}
+		
 
 		#endregion new rest api service
 	}
