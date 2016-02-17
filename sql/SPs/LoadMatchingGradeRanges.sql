@@ -20,7 +20,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE @LoanSourceID INT = dbo.udfGetLoanSource(0, @OriginID)
+	DECLARE @LoanSourceID INT = (SELECT LoanSourceID FROM dbo.udfGetLoanSource(0, @OriginID))
 
 	------------------------------------------------------------------------------
 
@@ -37,7 +37,9 @@ BEGIN
 	DECLARE @IsRegulated BIT = ISNULL((
 		SELECT t.IsRegulated
 		FROM TypeOfBusiness t
-		INNER JOIN Company c ON t.Name = c.TypeOfBusiness
+		INNER JOIN Company c
+			ON t.Name = c.TypeOfBusiness
+			AND c.Id = @CompanyID
 	), 1)
 
 	------------------------------------------------------------------------------
