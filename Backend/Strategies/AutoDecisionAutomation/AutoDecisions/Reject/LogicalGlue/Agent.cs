@@ -11,7 +11,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
-	using Ezbob.Backend.Strategies.StoredProcs;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -223,14 +223,15 @@
 				inputData.MatchingGradeRanges = new MatchingGradeRanges();
 
 				if (inputData.Score.HasValue && inputData.CustomerOrigin.HasValue && inputData.LoanSource.HasValue) {
-					var spRanges = new LoadMatchingGradeRanges(DB, Log) {
-						IsFirstLoan = inputData.LoanCount < 1,
-						IsRegulated = inputData.CompanyIsRegulated,
-						LoanSourceID = (int)inputData.LoanSource.Value,
-						OriginID = (int)inputData.CustomerOrigin.Value,
-						Score = inputData.Score.Value,
-					};
-					spRanges.Execute(inputData.MatchingGradeRanges);
+					var loader = new LoadOfferRanges(
+						this.args.CustomerID,
+						this.args.CompanyID,
+						this.args.Now,
+						DB,
+						Log
+					).Execute();
+
+					loader.ExportMatchingGradeRanges(inputData.MatchingGradeRanges);
 				} // if
 			} // if inference is null
 		} // GatherData

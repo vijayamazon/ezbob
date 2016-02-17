@@ -1,13 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.Helpers {
 	using System;
 	using System.Text.RegularExpressions;
-	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.StoredProcs;
 	using Ezbob.Database;
-	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
 	using MedalClass = EZBob.DatabaseLib.Model.Database.Medal;
 
@@ -121,97 +118,32 @@
 				);
 			} // if
 
-			if (!base.CalculateMedalAndOffer())
+			if (!base.CalculateMedalAndOffer() || (Grsp == null))
 				return false;
 
 			OfferResult.IsError = true;
 
-			decimal minInterestRate;
-			decimal maxInterestRate;
-			decimal minSetupFee;
-			decimal maxSetupFee;
-			int term;
+			OfferResult.Amount = Grsp.LoanAmount(ApprovedAmount);
+
+			if (OfferResult.Amount <= 0) {
+				OfferResult.Message = "Approved amount is not positive.";
+				return false;
+			} // if
 
 			Medal.TotalScoreNormalized = 1;
 			Medal.MedalClassification = MedalClassification;
 			OfferResult.MedalClassification = MedalClassification;
 
-			if (GradeScore == null) {
-				OfferResult.FlowType = AutoDecisionFlowTypes.Internal;
+			OfferResult.FlowType = GradeScore == null ? AutoDecisionFlowTypes.Internal : AutoDecisionFlowTypes.LogicalGlue;
 
-				var loader = new LoadOfferRanges(ApprovedAmount, false, Medal.MedalClassification, DB, Log) {
-					LoadLoanTypeID = false,
-				}.Execute();
+			OfferResult.GradeID = Grsp.GradeID;
+			OfferResult.SubGradeID = Grsp.SubGradeID;
 
-				if (!loader.Success) {
-					Log.Warn(
-						"Back door simple failed for customer '{0}': failed to load loan parameters ranges.",
-						this.customerID
-					);
-					return false;
-				} // if
-
-				term = OfferResult.Period;
-				minInterestRate = loader.InterestRate.Min;
-				maxInterestRate = loader.InterestRate.Max;
-				minSetupFee = loader.SetupFee.Min;
-				maxSetupFee = loader.SetupFee.Max;
-			} else {
-				OfferResult.FlowType = AutoDecisionFlowTypes.LogicalGlue;
-
-				var matchingGradeRanges = new MatchingGradeRanges();
-
-				var spRanges = new LoadMatchingGradeRanges(DB, Log) {
-					IsFirstLoan = true,
-					IsRegulated = this.typeOfBusiness.IsRegulated(),
-					LoanSourceID = OfferResult.LoanSourceId,
-					OriginID = this.customerOriginID,
-					Score = GradeScore.Value,
-				};
-				spRanges.Execute(matchingGradeRanges);
-
-				if (matchingGradeRanges.Count != 1) {
-					Log.Warn(
-						"Back door simple failed for customer '{0}': {1} found.",
-						this.customerID,
-						Grammar.Number(matchingGradeRanges.Count, "matching grade range")
-					);
-					return false;
-				} // if
-
-				var gradeRangeID = matchingGradeRanges[0].GradeRangeID;
-				this.productSubTypeID = matchingGradeRanges[0].ProductSubTypeID;
-
-				SafeReader sr = DB.GetFirst(
-					"LoadGradeRangeAndSubproduct",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@GradeRangeID", gradeRangeID),
-					new QueryParameter("@ProductSubTypeID", this.productSubTypeID)
-				);
-
-				if (sr.IsEmpty) {
-					Log.Warn(
-						"Failed to load grade range and product subtype by grade range id {0} and product sub type id {1}.",
-						gradeRangeID,
-						this.productSubTypeID
-					);
-
-					return false;
-				} // if
-
-				GradeRangeSubproduct grsp = sr.Fill<GradeRangeSubproduct>();
-
-				OfferResult.GradeID = grsp.GradeID;
-				OfferResult.SubGradeID = grsp.SubGradeID;
-
-				OfferResult.Amount = grsp.LoanAmount(ApprovedAmount);
-
-				term = grsp.Term(this.requestedLoan.RequestedTerm);
-				minInterestRate = grsp.MinInterestRate;
-				maxInterestRate = grsp.MaxInterestRate;
-				minSetupFee = grsp.MinSetupFee;
-				maxSetupFee = grsp.MaxInterestRate;
-			} // if
+			int term = Grsp.Term(this.requestedLoan.RequestedTerm);
+			decimal minInterestRate = Grsp.MinInterestRate;
+			decimal maxInterestRate = Grsp.MaxInterestRate;
+			decimal minSetupFee = Grsp.MinSetupFee;
+			decimal maxSetupFee = Grsp.MaxInterestRate;
 
 			var calc = new OfferCalculator(
 				OfferResult.FlowType,
@@ -241,6 +173,7 @@
 			OfferResult.Period = term;
 			OfferResult.InterestRate = calc.InterestRate * 100.0M;
 			OfferResult.SetupFee = calc.SetupFee * 100.0M;
+
 			OfferResult.IsError = false;
 			OfferResult.HasDecision = true;
 

@@ -171,21 +171,6 @@
 			return customers;
 		}
 
-		public OfferInterestRateRangeModelDb GetOfferIneterestRateRange(Medal medal) {
-			return _db.FillFirst<OfferInterestRateRangeModelDb>("AV_OfferInterestRateRange", CommandSpecies.StoredProcedure,
-				new QueryParameter("Medal", medal.ToString()));
-		}
-
-		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans, int customerID) {
-			var model = _db.FillFirst<PricingScenarioModel>(
-				"AV_PricingScenario",
-				new QueryParameter("Amount", amount),
-				new QueryParameter("HasLoans", hasLoans),
-				new QueryParameter("CustomerID", customerID)
-			);
-			return model;
-		}
-
 		public AvailableFunds GetAvailableFunds() {
 			var availableFunds = new AvailableFunds();
 			_db.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure)
