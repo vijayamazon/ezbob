@@ -1,7 +1,11 @@
 ﻿namespace UIAutomationTests.Core {
+    using System.Linq;
+    using System.Threading;
+    using System.Windows.Forms;
     using log4net;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Interactions;
+    using OpenQA.Selenium.Support.UI;
     using UIAutomationTests.Tests.Shared;
     public class ActionBot : WebTestBase {
         private static readonly ILog log = LogManager.GetLogger(typeof(ActionBot));
@@ -9,9 +13,15 @@
             this.Driver = Driver;
         }
 
+        //Sleeps for predefined time period.
+        public void Sleep(int millisecondsTimeout) {
+            Thread.Sleep(millisecondsTimeout);
+            log.Info("Sleep for: " + millisecondsTimeout/1000 + "seconds");
+        }
+
         //Awaits an element to be clickable By locator, then clicks the element.
         public void Click(By locator, string description, int waitTime = 120) {
-            SharedServiceClass.ElementToBeClickable(Driver, locator, waitTime).Click();
+            SharedServiceClass.ElementIsClickable(Driver, locator, waitTime).Click();
             log.Info(description + " - '" + locator.ToString() + "' - Click.");
         }
 
@@ -35,19 +45,19 @@
 
         //Awaits a select element to be visible By locator, then selects by index.
         public void SelectByIndex(By locator, int index, string description, int waitTime = 120) {
-            SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByIndex(index);
+            new SelectElement(SharedServiceClass.ElementIsVisible(Driver, locator, waitTime)).SelectByIndex(index);
             log.Info(description + " - '" + locator.ToString() + "' - SelectByIndex: '" + index + "'.");
         }
 
         //Awaits a select element to be visible By locator, then selects by value.
         public void SelectByValue(By locator, string value, string description, int waitTime = 120) {
-            SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByValue(value);
+            new SelectElement(SharedServiceClass.ElementIsVisible(Driver, locator, waitTime)).SelectByValue(value);
             log.Info(description + " - '" + locator.ToString() + "' - SelectByValue: '" + value + "'.");
         }
 
         //Awaits a select element to be visible By locator, then selects by text.
         public void SelectByText(By locator, string text, string description, int waitTime = 120) {
-            SharedServiceClass.SelectIsVisible(Driver, locator, waitTime).SelectByText(text);
+            new SelectElement(SharedServiceClass.ElementIsVisible(Driver, locator, waitTime)).SelectByText(text);
             log.Info(description + " - '" + locator.ToString() + "' - SelectByText: '" + text + "'.");
         }
 

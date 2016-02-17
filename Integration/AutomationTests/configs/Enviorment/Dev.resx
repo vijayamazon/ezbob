@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DBConnectionString" xml:space="preserve">
-    <value>Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true</value>
+    <value>Server=localhost;Database=ezbob;User Id=Sa;Password=Or@nge123;MultipleActiveResultSets=true</value>
   </data>
   <data name="ENV_address" xml:space="preserve">
-    <value>https://qa3</value>
+    <value>https://dev</value>
   </data>
   <data name="ENV_name" xml:space="preserve">
-    <value>qa3</value>
+    <value>dev</value>
   </data>
 </root>

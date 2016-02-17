@@ -27,9 +27,7 @@
             string iMobileCode,
             string iEstimatedMonthlyAppCount,
             string iEstimatedMonthlyClientAmount,
-            string iPassword,
-            bool iAgreeToTerms,
-            bool iAgreeToPrivacyPolicy
+            string iPassword
             ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
 
@@ -58,10 +56,13 @@
             actionBot.SendKeys(By.Id("MobileCode"), iMobileCode, "(valid mobile code)");
 
             //Step 9 - Insert any amount to the number of applications per month field and focus out.
-            actionBot.SendKeys(By.Id("EstimatedMonthlyAppCount"), iEstimatedMonthlyAppCount, "(number of applications per month)");
+            //actionBot.SendKeys(By.Id("EstimatedMonthlyAppCount"), iEstimatedMonthlyAppCount, "(number of applications per month)");
 
             //Step 10 - Insert any amount to the value of credit per month field and focus out.
-            actionBot.SendKeys(By.Id("EstimatedMonthlyClientAmount"), iEstimatedMonthlyClientAmount, "(value of credit per month)");
+            //actionBot.SendKeys(By.Id("EstimatedMonthlyClientAmount"), iEstimatedMonthlyClientAmount, "(value of credit per month)");
+
+            //Check the FCA Registered check box.
+            //actionBot.Click(By.XPath("//label[@for='FCARegistered']"), "(Click on the FCS Registered checkbox)");
 
             //Step 11 - Insert a valid password to the password field and focus out.
             actionBot.SendKeys(By.Id("Password"), iPassword, "(password field)");
@@ -69,12 +70,27 @@
             //Step 12 - Insert the same password to the confirm password field and focus out.
             actionBot.SendKeys(By.Id("Password2"), iPassword, "(confirm password)");
 
-            //Step 14 - Check all required checkboxe's.
-            if (iAgreeToTerms)
-                actionBot.Click(By.XPath("//label[@for='AgreeToTerms']"), "(agree to terms checkBox)");
+            By terms;
+            By privacy;
+            switch (BrandConfig.BaseName) {
+                case "UIAutomationTests.configs.Brand.Ezbob":
+                    terms = By.Id("AgreeToTerms");
+                    privacy = By.Id("AgreeToPrivacyPolicy");
+                    break;
+                case "UIAutomationTests.configs.Brand.Everline":
+                    terms = By.XPath("//label[@for='AgreeToTerms']");
+                    privacy = By.XPath("//label[@for='AgreeToPrivacyPolicy']");
+                    break;
+                default:
+                    terms = By.Id("");
+                    privacy = By.Id("");
+                    break;
+            }
 
-            if (iAgreeToPrivacyPolicy)
-                actionBot.Click(By.XPath("//label[@for='AgreeToPrivacyPolicy']"), "(agree to privacy policy checkBox)");
+            //Step 14 - Check all required checkboxe's.
+            actionBot.Click(terms, "(agree to terms checkBox)");
+
+            actionBot.Click(privacy, "(agree to privacy policy checkBox)");
 
             //Step 15 - Click sign up.
             actionBot.Click(By.Id("SignupBrokerButton"), "(sign up button)");

@@ -7,9 +7,10 @@ IF OBJECT_ID('UIAT_InitiatePacnetPaymentViaContrab') IS NULL
 	EXECUTE('CREATE PROCEDURE UIAT_InitiatePacnetPaymentViaContrab AS SELECT 1')
 GO
 
-ALTER PROCEDURE [dbo].[UIAT_InitiatePacnetPaymentViaContrab]
+ALTER PROCEDURE UIAT_InitiatePacnetPaymentViaContrab
 AS
 BEGIN
-	UPDATE [ezbob].[dbo].[EzServiceCrontab] SET RepetitionTime=DATEADD(minute,1,GETDATE()) 
-	WHERE JobID=(SELECT TOP 1 JobID FROM [ezbob].[dbo].[EzServiceCrontab] WHERE ActionNameID=221 ORDER BY JobID)
+	UPDATE EzServiceCrontab SET RepetitionTime=DATEADD(minute,1,GETDATE()) 
+	WHERE ActionNameID=(SELECT TOP 1 ActionNameID FROM EzServiceActionName WHERE ActionName LIKE '%BrokerTransferCommission' ORDER BY JobID)
 END
+GO

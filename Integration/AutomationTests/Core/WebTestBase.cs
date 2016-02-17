@@ -96,7 +96,7 @@
 
                             Driver.Manage().Cookies.DeleteAllCookies();
 
-                            codeToExecute.Invoke(caseID.ToString() + " - " + TestRailRepository.TestRailCaseName(caseID));
+                            codeToExecute.Invoke(caseID.ToString() + (isDebugMode == false ? " - " + TestRailRepository.TestRailCaseName(caseID) : ""));
 
                             if (!IsDebugMode) {
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");

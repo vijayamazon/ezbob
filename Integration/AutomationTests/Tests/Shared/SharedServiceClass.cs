@@ -3,6 +3,7 @@
     using OpenQA.Selenium.Support.UI;
     using System;
     using System.Linq;
+    using System.Web.WebPages;
     using log4net;
 
     static class SharedServiceClass {
@@ -15,23 +16,14 @@
         }
 
         //Awaits untill element is clickable By locator, returns the element.
-        public static IWebElement ElementToBeClickable(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
-            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<IWebElement>(ExpectedConditionsExtention.ElementToBeClickable(locator));
+        public static IWebElement ElementIsClickable(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
+            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<IWebElement>(ExpectedConditionsExtention.ElementIsClickable(locator));
         }
-
-        //public static bool TryElementClick(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
-        //    return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.TryElementClick(locator));
-        //}
 
         //Awaits an element to be clickable By locator,
         //clicks the element and than asserts By a following locator that the click action was initiated and performed correctly.
         public static bool ClickAssert(IWebDriver Driver, By locator, By assertElement, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.ClickAssert(locator, assertElement));
-        }
-
-        //Awaits untill select element is visible By locator, returns the element.
-        public static SelectElement SelectIsVisible(IWebDriver Driver, By locator, int waitTime = MAX_WAIT_TIME) {
-            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<SelectElement>(ExpectedConditionsExtention.SelectIsVisible(locator));
         }
 
         //Switches Driver's focus to the windowCount's opened browser instance.
@@ -46,29 +38,41 @@
 
         //Waits untill Jquery.Active==0, then returns True.
         public static bool WaitForAjaxReady(IWebDriver Driver, int waitTime = MAX_WAIT_TIME) {
-            IJavaScriptExecutor jsExe = Driver as IJavaScriptExecutor;
-            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForAjaxReady(jsExe));
+            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForAjaxReady(Driver as IJavaScriptExecutor));
         }
 
         //Waits untill count of elements containing the class name ".blockUI" is 0, then returns True.
         public static bool WaitForBlockUiOff(IWebDriver Driver, int waitTime = MAX_WAIT_TIME) {
             return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForBlockUiOff());
         }
+
+        public static bool WaitForJSElementReady(IWebDriver Driver, string locator, int waitTime = MAX_WAIT_TIME) {
+            if (locator.IsEmpty()) {
+                log.Debug("Selector is not supported fror Jquery validation.");
+                return true;
+            }
+            IJavaScriptExecutor jsExe = Driver as IJavaScriptExecutor;
+            return new WebDriverWait(Driver, TimeSpan.FromSeconds(waitTime)).Until<bool>(ExpectedConditionsExtention.WaitForJSElementReady(jsExe, locator));
+        }
+
+        //public static string JQueryLocatorConverter(By locator) {
+        //    string[] locComp = locator.ToString().Split(':').Select(s => s.Trim()).ToArray();
+
+        //    switch (locComp[0]) {
+        //        case "By.Id":
+        //            return "#" + locComp[1];
+        //            break;
+        //        case "By.CssSelector":
+        //            return locComp[1];
+        //            break;
+        //        default:
+        //            return "";
+        //    }
+        //}
     }
 
     public static class ExpectedConditionsExtention {
         private static readonly ILog log = LogManager.GetLogger(typeof(ExpectedConditionsExtention));
-
-        //public static Func<IWebDriver, bool> TryElementClick(By locator) {
-        //    return (driver) => {
-        //        try {
-        //            IWebElement element = ExpectedConditions.ElementToBeClickable(locator).Invoke(driver);
-        //            element.Click();
-        //            return true;
-        //        } catch { }
-        //        return false;
-        //    };
-        //}
 
         //public static Func<IWebDriver, bool> WaitForAjaxReady2() {
         //    return (driver) => driver.FindElements(By.CssSelector(".waiting, .tb-loading")).Count == 0;
@@ -122,10 +126,26 @@
             });
         }
 
+        public static Func<IWebDriver, bool> WaitForJSElementReady(IJavaScriptExecutor jsExe, string locator) {
+            return (Func<IWebDriver, bool>)(driver => {
+                try {
+                    if ((bool)jsExe.ExecuteScript("var el=$('" + locator + "').get(0); if( $.css(el,'visibility') !== 'hidden' && $.css(el,'display') !== 'none' && $.css(el,'opacity') !== 0 && el.offsetWidth !== 0 && el.offsetHeight !== 0 ) {return true;} else {return false;}") == true) {
+                        log.Debug("jQuery element ready.");
+                        return true;
+                    }
+                    log.Debug("jQuery element is not ready.");
+                    return false;
+                } catch (Exception ex) {
+                    log.Debug("jQuery element is not ready.");
+                    return false;
+                }
+            });
+        }
+
         public static Func<IWebDriver, bool> WaitForBlockUiOff() {
             return (Func<IWebDriver, bool>)(driver => {
                 try {
-                    if (driver.FindElements(By.CssSelector(".blockUI")).Count==0) {
+                    if (driver.FindElements(By.CssSelector(".blockUI")).Count == 0) {
                         log.Debug("blockUI finished execution.");
                         return true;
                     }
@@ -138,46 +158,9 @@
             });
         }
 
-        public static Func<IWebDriver, IWebElement> ElementToBeClickable(By locator) {
-            return (Func<IWebDriver, IWebElement>)(driver => {
-                try {
-                    IWebElement element = driver.FindElement(locator);
-                    if (element.Enabled && element.Displayed && (!element.Size.IsEmpty || !element.Location.IsEmpty)) {
-                        log.Debug("Element: '" + locator.ToString() + "' is clickable.");
-                        return element;
-                    }
-                    log.Debug("Element: '" + locator.ToString() + "' is not found.");
-                    return null;
-                } catch (Exception ex) {//StaleElementReferenceException ex , NoSuchElementException ex
-                    log.Debug("Element: '" + locator.ToString() + "' is not found.");
-                    return null;
-                }
-            });
-        }
-
-        public static Func<IWebDriver, bool> ClickAssert(By locator,By assertLocator) {
-            return (Func<IWebDriver, bool>)(driver => {
-                try {
-                    IWebElement element = driver.FindElement(locator);
-                    if (element.Enabled && element.Displayed && (!element.Size.IsEmpty || !element.Location.IsEmpty)) {
-                        log.Debug("Element: '" + locator.ToString() + "' is clickable.");
-                        element.Click();
-                        IWebElement assertElement = SharedServiceClass.ElementIsVisible(driver,assertLocator,30);
-                        if (assertElement.Displayed && (!assertElement.Size.IsEmpty || !assertElement.Location.IsEmpty)) {
-                            log.Debug("Element: '" + locator.ToString() + "' has been clicked and asserted: '" + assertLocator.ToString() + "'.");
-                            return true;
-                        }
-                        log.Debug("Assert failed for: '" + assertLocator.ToString() + "'.");
-                        return false;
-                    }
-                    log.Debug("Element: '" + locator.ToString() + "' is not found/clickable.");
-                    return false;
-                } catch (Exception ex) {
-                    log.Debug("Assert failed for: '" + assertLocator.ToString() + "'.");
-                    return false;
-                }
-            });
-        }
+       //if (JQlocator.IsEmpty() || (bool)jsExe.ExecuteScript("var el=$('" + JQlocator + "').get(0); if( $.css(el,'visibility') !== 'hidden' && $.css(el,'display') !== 'none' && $.css(el,'opacity') !== 0 && el.offsetWidth !== 0 && el.offsetHeight !== 0 ) {return true;} else {return false;}") == true) {
+       // if (!JQlocator.IsEmpty())
+       //     log.Debug("JQuery element: '" + locator.ToString() + "' found.");
 
         public static Func<IWebDriver, IWebElement> ElementIsVisible(By locator) {
             return (Func<IWebDriver, IWebElement>)(driver => {
@@ -195,20 +178,43 @@
                 }
             });
         }
-
-        public static Func<IWebDriver, SelectElement> SelectIsVisible(By locator) {
-            return (Func<IWebDriver, SelectElement>)(driver => {
+        public static Func<IWebDriver, IWebElement> ElementIsClickable(By locator) {
+            return (Func<IWebDriver, IWebElement>)(driver => {
                 try {
                     IWebElement element = driver.FindElement(locator);
-                    if (element.Displayed && (!element.Size.IsEmpty || !element.Location.IsEmpty)) {
-                        log.Debug("SelectElement: '" + locator.ToString() + "' is visible.");
-                        return new SelectElement(element);
+                    if (element.Enabled && element.Displayed && (!element.Size.IsEmpty || !element.Location.IsEmpty)) {
+                        log.Debug("Element: '" + locator.ToString() + "' is clickable.");
+                        return element;
                     }
-                    log.Debug("SelectElement: '" + locator.ToString() + "' is not found.");
+                    log.Debug("Element: '" + locator.ToString() + "' is not found.");
                     return null;
                 } catch (Exception ex) {
-                    log.Debug("SelectElement: '" + locator.ToString() + "' is not found.");
+                    log.Debug("Element: '" + locator.ToString() + "' is not found.");
                     return null;
+                }
+            });
+        }
+
+        public static Func<IWebDriver, bool> ClickAssert(By locator, By assertLocator) {
+            return (Func<IWebDriver, bool>)(driver => {
+                try {
+                    IWebElement element = driver.FindElement(locator);
+                    if (element.Enabled && element.Displayed && (!element.Size.IsEmpty || !element.Location.IsEmpty)) {
+                        log.Debug("Element: '" + locator.ToString() + "' is clickable.");
+                        element.Click();
+                        IWebElement assertElement = SharedServiceClass.ElementIsVisible(driver, assertLocator, 30);
+                        if (assertElement.Displayed && (!assertElement.Size.IsEmpty || !assertElement.Location.IsEmpty)) {
+                            log.Debug("Element: '" + locator.ToString() + "' has been clicked and asserted: '" + assertLocator.ToString() + "'.");
+                            return true;
+                        }
+                        log.Debug("Assert failed for: '" + assertLocator.ToString() + "'.");
+                        return false;
+                    }
+                    log.Debug("Element: '" + locator.ToString() + "' is not found/clickable.");
+                    return false;
+                } catch (Exception ex) {
+                    log.Debug("Assert failed for: '" + assertLocator.ToString() + "'.");
+                    return false;
                 }
             });
         }

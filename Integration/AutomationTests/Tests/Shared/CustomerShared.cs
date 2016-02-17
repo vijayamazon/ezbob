@@ -35,7 +35,7 @@ namespace UIAutomationTests.Tests.Shared {
             actionBot.Click(By.Id("loginSubmit"), "(login button)");
 
             if (isFirstTime)
-                actionBot.Click(By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button"), "(automation - accept terms button)");
+                actionBot.Click(By.CssSelector("div.automation-popup-content > div.alignright > button.button"), "(automation - accept terms button)");
 
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
@@ -62,11 +62,12 @@ namespace UIAutomationTests.Tests.Shared {
             SharedServiceClass.WaitForAjaxReady(Driver);
 
             //Click on the take loan button.
-            actionBot.ClickAssert(By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"), By.XPath("//label[@for='preAgreementTermsRead']"), "(take loan button)");
+            //actionBot.ClickAssert(By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"), By.XPath("//label[@for='preAgreementTermsRead']"), "(take loan button)");
+            actionBot.Click(By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"), "(take loan button)");
 
             if (loanFraction != null) {
                 //Click on slider to vary the loan ammount.
-                IWebElement rangeSelector = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min"));//Driver.FindElement(By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min")));
+                IWebElement rangeSelector = SharedServiceClass.ElementIsClickable(Driver, By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min"));//Driver.FindElement(By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min")));
                 int clickCoordinate = (int)(rangeSelector.Size.Width * loanFraction);
                 Actions moveAction = new Actions(Driver);
                 moveAction.MoveToElement(rangeSelector, clickCoordinate, 0).Click().Build().Perform();
@@ -74,10 +75,10 @@ namespace UIAutomationTests.Tests.Shared {
             }
 
             //Click on the accept pre-agreement terms button.
-            actionBot.Click(By.XPath("//label[@for='preAgreementTermsRead']"), "(pre-agreement terms button)");
+            //actionBot.Click(By.XPath("//label[@for='preAgreementTermsRead']"), "(pre-agreement terms button)");
 
             //Click on the contract terms read check box.
-            actionBot.Click(By.XPath("//label[@for='agreementTermsRead']"), "(contract terms read checkBox)");
+            //actionBot.Click(By.XPath("//label[@for='agreementTermsRead']"), "(contract terms read checkBox)");
 
             //Click on confirm the solvency representations and warranties.
             actionBot.Click(By.XPath("//label[@for='notInBankruptcy']"), "(solvency representations and warranties checkBox)");

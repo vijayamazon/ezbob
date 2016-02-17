@@ -184,6 +184,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefaultEnviorment.resx</DependentUpon>
     </Compile>
+    <Compile Include="configs\Enviorment\Dev.Designer.cs">
+      <DependentUpon>Dev.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="configs\Enviorment\QA.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -303,6 +308,10 @@
     <EmbeddedResource Include="configs\Enviorment\DefaultEnviorment.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DefaultEnviorment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Enviorment\Dev.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dev.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="configs\Enviorment\QA.resx">
       <Generator>ResXFileCodeGenerator</Generator>

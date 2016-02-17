@@ -25,9 +25,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                 string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-
                 //Steps 1-15
-                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Verification agains DB.
                 SharedDBClass dbAccess = new SharedDBClass(EnvironmentConfig);
@@ -98,7 +97,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 actionBot.WriteToLog(Environment.NewLine);
 
                 actionBot.WriteToLog("Begin assert: Terms and conditions dialog shuld be displayed.");
-                SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.ui-helper-clearfix > div.ui-dialog-buttonset > button"));
+                SharedServiceClass.ElementIsClickable(Driver, By.CssSelector("div.ui-helper-clearfix > div.ui-dialog-buttonset > button"));
                 actionBot.WriteToLog("Positively asserted: Terms and conditions dialog is displayed." + Environment.NewLine);
 
                 actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
@@ -155,7 +154,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker and click 'Send'.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -183,7 +182,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker and click 'Send'.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -214,7 +213,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker and click 'Send'.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -252,7 +251,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -277,7 +276,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition - Prepare a registered broker account.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                     //Precondition 1 - Prepare a registered broker account with at least one lead: C1352
                     string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -288,7 +287,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 actionBot.WriteToLog("Positively asserted: e-mail addresses matched." + Environment.NewLine);
 
                 //Step 1 - Click "Finish later" button.
-                actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
+                //actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
+                actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
                
                 SharedServiceClass.WaitForAjaxReady(Driver);
@@ -316,7 +316,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 3-7 - Add a new client: Fill.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -328,14 +328,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                 //Step 9 - Complete customer's Wizard step 2: C1380
-                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "01111111111", "02222222222", true);
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
 
                 //Step 10 - Complete customer's Wizard step 3: C91
                 wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                 //Step 11 - Complete customer's Wizard step 4: C788 - TODO: replaced by EKM account, file upload problem needs to be resolved.
                 //Wizard Step 4 - add EKM account
-                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");
+                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", By.CssSelector("a.marketplace-button-account-EKM"), By.Id("ekm_login"), "ezbob", By.Id("ekm_password"), "ezekmshop2013", By.Id("ekm_link_account_button"));
 
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
@@ -362,10 +362,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 3-7 - Add a new client: Fill, e-mail according to format: C4520
-                string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-afD10@ezbob.com";
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
                 brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                 WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -374,14 +374,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                 //Step 9 - Complete customer's Wizard step 2: C26
-                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "01111111111", "02222222222", true);
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "1111111111", "2222222222", true);
 
                 //Step 10 - Complete customer's Wizard step 3: C91
                 wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                 //Step 11-12 - Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
                 //Wizard Step 4 - add paypal account
-                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");
+                wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead","liat@ibai.co.il", "1q2w3e4r");
 
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
@@ -408,10 +408,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 3-7 - Add a new client: Fill, e-mail according to format: C4544
-                string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-af@ezbob.com";
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
                 brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                 WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -420,14 +420,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                 //Step 9 - Complete customer's Wizard step 2: C1380
-                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "01111111111", "02222222222", true);
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
 
                 //Step 10 - Complete customer's Wizard step 3: C91
                 wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                 //Step 11-12 - Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
                 //Wizard Step 4 - add paypal account
-                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");
+                wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
 
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
@@ -454,7 +454,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                     //Precondition 2 - Add a new client: Fill: C1352.
                     string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -466,13 +466,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                 //Step 2 - Complete customer's Wizard step 2: C1380
-                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "01111111111", "02222222222", true);
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
                 
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
 
                 //Step 3 - Click "Finish later" button.
-                actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"),By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
+                //actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"),By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
+                actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
 
                 actionBot.WriteToLog("Begin assert: New client is added to the client list with status 'Personal details'.");
@@ -522,12 +523,12 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 1 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                     //Precondition 2 - Broker account is linked to approved customer: C7473.
 
                     //Insert email according to manual decision backdoor format: C4544.
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-af@ezbob.com";
+                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
                     brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                     WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -536,14 +537,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                     //Complete customer's Wizard step 2: C1380
-                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "01111111111", "02222222222", true);
+                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
 
                     //Complete customer's Wizard step 3: C91
                     wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                     //Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
                     //Wizard Step 4 - add paypal account
-                    wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");
+                    wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
 
                 //Step 2 - Commission widget display the following as disabled.
                 //Step 2.1 - Commission: Unlinked.
@@ -575,12 +576,12 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 2 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                     //Precondition 3 - Broker account is linked to approved customer: C7472.
 
                     //Step 3-7 - Add a new client: Fill, mail according to format: C4520
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "_bds-afD10@ezbob.com";
+                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
                     brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                     WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -588,14 +589,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                     //Complete customer's Wizard step 2: C26
-                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "01111111111", "02222222222", true);
+                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "1111111111", "2222222222", true);
 
                     //Complete customer's Wizard step 3: C91
                     wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                     //Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
                     //Wizard Step 4 - add paypal account
-                    wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-paypal", "login_email", "liat@ibai.co.il", "login_password", "1q2w3e4r", "login.x");
+                    wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
 
                     //Log off broker, log into customer, take loan and log off customer.
                     brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
@@ -637,7 +638,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 2 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 2 - Commission widget display the following as disabled.
                 //Step 2.1 - Commission: Unlinked.
@@ -648,7 +649,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 2.2 - Button: Link bank account (Enabled).
                 actionBot.WriteToLog("Begin assert: Link bank account button is enabled.");
-                SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.button.btn-green.pull-right.btn-wide.add-bank.ev-btn-org"));
+                SharedServiceClass.ElementIsClickable(Driver, By.CssSelector("button.button.btn-green.pull-right.btn-wide.add-bank.ev-btn-org"));
                 actionBot.WriteToLog("Positively asserted: Link bank account button is enabled." + Environment.NewLine);
 
                 //Step 3 - Prepare a valid bank account number and sort code.
@@ -677,8 +678,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
         [Category("1359")]
         public void TestCase1359() {
             bool result = this.ExecuteTest((logHeader) => {
-                if (EnvironmentConfig.BaseName != "UIAutomationTests.configs.Enviorment.QA") {
-                    log.Error(logHeader + " -  This test can only run in QA enviorment due to changes it makes to configuration tables in DB.");
+                if (!EnvironmentConfig.BaseName.Equals("UIAutomationTests.configs.Enviorment.QA") && !EnvironmentConfig.BaseName.Equals("UIAutomationTests.configs.Enviorment.Dev")) {
+                    log.Error(logHeader + " -  This test can only run in QA or Dev enviorment due to changes it makes to configuration tables in DB.");
                     Assert.IsTrue(false);
                 }
 
@@ -688,10 +689,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
                     //Precondition 2 - Prepare a registered broker account: C1202.
                     string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456", true, true);
+                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                     //Precondition 3 - Broker account is linked to customer: C1353.
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
+                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
                     brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                     WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
@@ -700,14 +701,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                     wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
                     //Complete customer's Wizard step 2: C1380
-                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "01111111111", "02222222222", true);
+                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
 
                     //Complete customer's Wizard step 3: C91
                     wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                     //Complete customer's Wizard step 4: C788 - TODO: replaced by EKM account, file upload problem needs to be resolved.
                     //Wizard Step 4 - add EKM account
-                    wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");
+                    wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", By.CssSelector("a.marketplace-button-account-EKM"), By.Id("ekm_login"), "ezbob", By.Id("ekm_password"), "ezekmshop2013", By.Id("ekm_link_account_button"));
 
                     //Bank account linked: C1357
                     brokerShared.BrokerAddBankAccount(logHeader + " - BrokerAddBankAccount", "20115636", "62", "10", "00", 'P');
@@ -723,11 +724,13 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 brokerShared.BrokerLogIn(logHeader + " - BrokerLogIn", brokerMail);
 
                 //Log into DB. Execute query to run Pacnet, and then query to extract Pacnet validation status.
+                actionBot.WriteToLog("(Begin DB query)");
                 SharedDBClass dbAccess = new SharedDBClass(EnvironmentConfig);
                 dbAccess.oDB.ExecuteNonQuery("UIAT_InitiatePacnetPaymentViaContrab", CommandSpecies.StoredProcedure);
                 //Thread.Sleep awaits for DB SP to finish execution.
-                Thread.Sleep(75000);
+                actionBot.Sleep(75000);
                 SafeReader SR = dbAccess.oDB.GetFirst("UIAT_PacnetStatusValidation", CommandSpecies.StoredProcedure, new QueryParameter[] { new QueryParameter("brokerMail", brokerMail) });
+                actionBot.WriteToLog("(End DB query)");
 
                 //Step 2 - Commission widget display the following as disabled.
                 //Step 2.1 - Commission: Linked.
@@ -848,14 +851,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "ClientSignup", customerMail, "123123", 2, "asd", "1000");
 
                 //Complete customer's Wizard step 2: C26
-                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "ClientSignup", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "01111111111", "02222222222", true);
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "ClientSignup", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "1111111111", "2222222222", true);
 
                 //Complete customer's Wizard step 3: C91
                 wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
                 //Complete customer's Wizard step 4: C788 - TODO: replaced by EKM account, file upload problem needs to be resolved.
                 //Wizard Step 4 - add EKM account
-                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "ClientSignup", "a.marketplace-button-account-EKM", "ekm_login", "ezbob", "ekm_password", "ezekmshop2013", "ekm_link_account_button");
+                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", By.CssSelector("a.marketplace-button-account-EKM"), By.Id("ekm_login"), "ezbob", By.Id("ekm_password"), "ezekmshop2013", By.Id("ekm_link_account_button"));
 
 
                 //UnderWriterShared newUW = new UnderWriterShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
