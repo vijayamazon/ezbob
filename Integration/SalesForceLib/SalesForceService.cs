@@ -31,6 +31,7 @@
 					baseUrl = "https://login.salesforce.com";
 					break;
 				case "Sandbox":
+				case "Sb1":
 					baseUrl = "https://test.salesforce.com";
 					break;
 				default:
@@ -57,6 +58,64 @@
 		}//Login
 
 		public async Task<RestApiResponse> CreateBrokerAccount(CreateBrokerRequest requestModel) {
+			var requestJson = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
+			return await RunService("CreateBrokerAccount", requestJson);
+		}//CreateBrokerAccount
+
+		public async Task<GetAccountByIDResponse> GetAccountByID(GetAccountByIDRequest requestModel) {
+			var requestJson = JsonConvert.SerializeObject(requestModel);
+			var response = await RunService("GetAccountByEmail", requestJson);
+			if (response != null && !string.IsNullOrEmpty(response.message) && response.success)
+				return JsonConvert.DeserializeObject<GetAccountByIDResponse>(response.message);
+			return null;
+		}//GetAccountByID
+
+		public async Task<RestApiResponse> CreateUpdateLeadAccount(LeadAccountModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/LeadAccountService", requestJson);
+		}//CreateUpdateLeadAccount
+
+		public async Task<RestApiResponse> CreateOpportunity(OpportunityModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/CreateOpportunityService", requestJson);
+		}//CreateOpportunity
+
+		public async Task<RestApiResponse> UpdateOpportunity(OpportunityModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/UpdateCloseOpportunityService", requestJson);
+		}//UpdateOpportunity
+
+		public async Task<RestApiResponse> CreateUpdateContact(ContactModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/ContactService", requestJson);
+		}//CreateUpdateContact
+
+		public async Task<RestApiResponse> CreateTask(TaskModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/CreateTask", requestJson);
+		}//CreateTask
+
+		public async Task<RestApiResponse> CreateActivity(ActivityModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/CreateActivity", requestJson);
+		}//CreateActivity
+
+		public async Task<RestApiResponse> ChangeEmail(ChangeEmailModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			return await RunService("EzbobWebServicesNew/ChangeEmail", requestJson);
+		}//ChangeEmail
+
+		public async Task<GetActivityResultModel> GetActivity(GetActivityModel model) {
+			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
+			var response = await RunService("SearchLeadAndAccountByEmail", requestJson);
+			GetActivityResultModel resultModel = new GetActivityResultModel { Error = response.errorCode };
+			if (response.success) {
+				resultModel.Activities = JsonConvert.DeserializeObject<IEnumerable<ActivityResultModel>>(response.message);
+			}
+			return resultModel;
+		}//GetActivity
+
+		private async Task<RestApiResponse> RunService(string service, string requestJson) {
 			if (this.loginResult == null) {
 				this.loginResult = await Login();
 			}
@@ -64,43 +123,28 @@
 			var httpClient = new HttpClient();
 			httpClient.BaseAddress = new Uri(this.loginResult.instance_url);
 
-			var requestJson = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
-			Log.InfoFormat("CreateBrokerAccount request json: {0}", requestJson);
+			Log.InfoFormat("{0} request json: {1}", service, requestJson);
 			HttpContent content = new StringContent(requestJson);
 
-			var request = new HttpRequestMessage(HttpMethod.Post, "/services/apexrest/CreateBrokerAccount");
+			var request = new HttpRequestMessage(HttpMethod.Post, string.Format("/services/apexrest/{0}", service));
 			request.Content = content;
 			request.Headers.Add("Authorization", string.Format("{0} {1}", this.loginResult.token_type, this.loginResult.access_token));
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			
-			var result = await httpClient.SendAsync(request).Result.Content.ReadAsStringAsync();
-			var restApiResponse = JsonConvert.DeserializeObject<RestApiResponse>(result);
-			Log.InfoFormat("CreateBrokerAccount response {0}", result);
-			return restApiResponse;
-		}//CreateBrokerAccount
 
-		public async Task<GetAccountByIDResponse> GetAccountByID(GetAccountByIDRequest requestModel) {
-			if (this.loginResult == null) {
-				this.loginResult = await Login();
+			var response = await httpClient.SendAsync(request);
+			var result = await response.Content.ReadAsStringAsync();
+			Log.InfoFormat("{0} response {1}", service, result);
+			try {
+				var restApiResponse = JsonConvert.DeserializeObject<RestApiResponse>(result);
+				return restApiResponse;
+			} catch (Exception ex) {
+				return new RestApiResponse {
+					success = false,
+					message = ex.Message,
+					errorCode = "Failed Deserialize Response"
+				};
 			}
-
-			var httpClient = new HttpClient {
-				BaseAddress = new Uri(this.loginResult.instance_url)
-			};
-
-			var requestJson = JsonConvert.SerializeObject(requestModel);
-			Log.InfoFormat("GetAccountByID request json: {0}", requestJson);
-			var request = new HttpRequestMessage(HttpMethod.Post, "/services/apexrest/GetAccountByEmail");
-			request.Content = new StringContent(requestJson);
-			request.Headers.Add("Authorization", string.Format("{0} {1}", this.loginResult.token_type, this.loginResult.access_token));
-			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var result = await httpClient.SendAsync(request).Result.Content.ReadAsStringAsync();
-			var response = JsonConvert.DeserializeObject<RestApiResponse>(result);
-			Log.InfoFormat("GetAccountByID res {0}", result);
-			if(response != null && !string.IsNullOrEmpty(response.message) && response.success)
-				return JsonConvert.DeserializeObject < GetAccountByIDResponse>(response.message);
-			return null;
-		}//GetAccountByID
+		}
 
 		private readonly string consumerKey;
 		private readonly string consumerSecret;
