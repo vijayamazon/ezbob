@@ -48,6 +48,16 @@ BEGIN
 		 GROUP BY 
 		 	fa.InvestorID
 	 ),
+	 last_funding_sb_newbalances AS(
+		 SELECT 
+		 	MAX(isb.InvestorSystemBalanceID) AS maxid, fa.InvestorID
+		 FROM 
+		 	funding_account fa 
+		 LEFT JOIN 
+		 	I_InvestorSystemBalance isb ON fa.InvestorBankAccountID = isb.InvestorBankAccountID
+		 GROUP BY 
+		 	fa.InvestorID
+	 ),
    	 last_repayments_sb_newbalances AS(
 	 SELECT 
 	 	MAX(isb.InvestorSystemBalanceID) AS maxid,ra.InvestorID
@@ -89,8 +99,9 @@ BEGIN
 		i.InvestorID AS InvestorID,
 		it.Name AS InvestorType,
 		i.Name AS InvestorName,
-		isnull(ibat.NewBalance,0) AS OutstandingFunding,
-		isnull(isb.NewBalance,0) AS AccumulatedRepayments,
+		isnull(ibat.NewBalance,0) AS FundsStatus,
+		isnull(isbfund.NewBalance,0) AS ObligationsStatus,
+		isnull(isbrep.NewBalance,0) AS AccumulatedRepayments,
 		(SELECT 
 			sum(ir.NewBalance) 
 		 FROM 
@@ -112,6 +123,8 @@ BEGIN
 			I_InvestorType it ON it.InvestorTypeID = i.InvestorTypeID
 		LEFT JOIN	
 			last_funding_bat_newbalances ibatf ON ibatf.InvestorID = i.InvestorID
+		LEFT JOIN	
+			last_funding_sb_newbalances isbf ON isbf.InvestorID = i.InvestorID
 		LEFT JOIN 
 			last_repayments_sb_newbalances isbr ON isbr.InvestorID = i.InvestorID
 		LEFT JOIN 
@@ -119,7 +132,9 @@ BEGIN
 		LEFT JOIN 
 			repayment_account ra ON ra.InvestorID = i.InvestorID
 		LEFT JOIN 
-			I_InvestorSystemBalance isb ON isb.InvestorSystemBalanceID = isbr.maxid
+			I_InvestorSystemBalance isbrep ON isbrep.InvestorSystemBalanceID = isbr.maxid
+		LEFT JOIN 
+			I_InvestorSystemBalance isbfund ON isbfund.InvestorSystemBalanceID = isbf.maxid
 		LEFT JOIN 
 			I_InvestorBankAccountTransaction ibat ON ibat.InvestorBankAccountTransactionID = ibatf.maxid	
 	ORDER BY

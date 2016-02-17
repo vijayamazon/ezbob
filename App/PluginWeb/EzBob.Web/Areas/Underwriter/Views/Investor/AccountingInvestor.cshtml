@@ -18,7 +18,8 @@
                                             <th>#</th>
                                             <th>Type</th>
                                             <th>Name</th>
-                                            <th style="text-align: center">Funds status</th>
+                                            <th style="text-align: center">Funds Status</th>
+											<th>Obligations Status</th>
                                             <th style="text-align: center">Accumulated Repayments <br /> for Investor</th>
                                             <th>Servicing fee discount</th>
                                             <th>Config Schedulers</th>
@@ -33,13 +34,18 @@
                                             <td><%-a.InvestorType%></td>
                                             <td><%-a.InvestorName%></td>
                                             <td>
-                                                <span data-toggle="tooltip" data-title="<%-a.FundingBankAccountNumber%>">
-                                                    <%-EzBob.formatPoundsNoDecimals(a.OutstandingFunding)%>
-                                                </span>
+												<span data-toggle="tooltip" data-title="Bank account number <%-a.FundingBankAccountNumber%>">
+													<%-EzBob.formatPoundsNoDecimals(a.FundsStatus)%>
+												</span>
                                                 <span class="accounting-btn">
 													<button class="btn btn-primary funding-transactions" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show finding transactions"><i class="fa fa-exchange"></i></button>
                                                 </span>
                                             </td>
+											<td>
+												<span data-toggle="tooltip" data-title="<%-a.FundingBankAccountNumber%>">
+													<%-EzBob.formatPoundsNoDecimals(a.ObligationsStatus)%>
+												</span>
+											</td>
                                             <td>
                                                 <span>
                                                     <p data-toggle="tooltip" data-title="<%-a.RepaymentsBankAccountNumber%>"><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>

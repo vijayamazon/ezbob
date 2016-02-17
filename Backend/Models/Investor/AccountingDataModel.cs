@@ -14,7 +14,10 @@
 		public string InvestorName { get; set; }
 
 		[DataMember]
-		public decimal OutstandingFunding { get; set; }
+		public decimal FundsStatus { get; set; }
+
+		[DataMember]
+		public decimal ObligationsStatus { get; set; }
 
 		[DataMember]
 		public decimal AccumulatedRepayments { get; set; }

@@ -100,12 +100,13 @@
       <xs:element minOccurs="0" name="AccumulatedRepayments" type="xs:decimal" />
       <xs:element minOccurs="0" name="FundingBankAccountID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="FundingBankAccountNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FundsStatus" type="xs:decimal" />
       <xs:element minOccurs="0" name="InactiveRepaymentsAccountsNumbers" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorID" type="xs:int" />
       <xs:element minOccurs="0" name="InvestorName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InvestorType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsInvestorActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="OutstandingFunding" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ObligationsStatus" type="xs:decimal" />
       <xs:element minOccurs="0" name="RepaymentsBankAccountID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="RepaymentsBankAccountNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ServicingFeeDiscount" type="xs:decimal" />
