@@ -8,7 +8,9 @@
     using EzBobPersistence.Customer;
     using EzBobPersistence.DocsUpload;
     using EzBobPersistence.Loan;
+    using EzBobPersistence.MarketPlace;
     using EzBobPersistence.MobilePhone;
+    using EzBobPersistence.ThirdParty.Amazon;
     using EzBobPersistence.ThirdParty.Experian;
     using EzBobPersistence.ThirdParty.Hrmc;
     using EzBobService.Currency;
@@ -82,6 +84,22 @@
                 .Use<DocsUploadQueries>()
                 .Ctor<string>(ConnectionString)
                 .Is(TheConnectionString);
+
+            ForSingletonOf<IMarketPlaceQueries>()
+                .Use<MarketPlaceQueries>()
+                .Ctor<string>(ConnectionString)
+                .Is(TheConnectionString);
+
+            ForSingletonOf<IAmazonOrdersQueries>()
+                .Use<AmazonOrdersQueries>()
+                .Ctor<string>(ConnectionString)
+                .Is(TheConnectionString);
+
+            ForSingletonOf<IAmazonCategoriesQueries>()
+                .Use<AmazonCategoriesQueries>()
+                .Ctor<string>(ConnectionString)
+                .Is(TheConnectionString);
+
 
             ForSingletonOf<CustomerProcessor>()
                 .Use<CustomerProcessor>();

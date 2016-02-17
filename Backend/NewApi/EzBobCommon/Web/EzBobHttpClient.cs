@@ -1,4 +1,5 @@
 namespace EzBobCommon.Web {
+    using System;
     using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace EzBobCommon.Web {
             HttpClient client = null;
             try {
                 client = GetHttpClient();
-                using (HttpResponseMessage response = await client.GetAsync(pageAddress)) {
+                using (HttpResponseMessage response = await client.GetAsync(new Uri(pageAddress))) {
                     using (HttpContent content = response.Content) {
                         return await content.ReadAsStringAsync();
                     }
@@ -125,7 +126,12 @@ namespace EzBobCommon.Web {
         /// </summary>
         /// <returns></returns>
         protected virtual HttpClient GetHttpClient() {
-            return new HttpClient();
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml");
+//            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Charset", "utf-8");
+            return httpClient;
         }
 
         /// <summary>

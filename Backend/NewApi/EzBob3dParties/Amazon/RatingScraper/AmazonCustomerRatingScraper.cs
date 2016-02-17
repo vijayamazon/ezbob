@@ -13,22 +13,22 @@
     /// <summary>
     /// Scraps customer rating from HTML.
     /// </summary>
-    internal class CustomerRatingScraper : ICustomerRating {
+    internal class AmazonCustomerRatingScraper : IAmazonCustomerRating {
         [Injected]
-        public IEzBobWebBrowser Browser { get; set; }
+        public IEzBobHttpClient Browser { get; set; }
 
         /// <summary>
         /// Gets the rating.
         /// </summary>
         /// <param name="merchantId">The merchant identifier.</param>
         /// <returns></returns>
-        public async Task<AmazonRatingInfo> GetRating(string merchantId) {
+        public async Task<AmazonCustomerRatingInfo> GetRating(string merchantId) {
             HtmlNode html = await DownloadCustomerPage(merchantId);
             double rating = ExtractRating(html);
             string name = ExtractName(html);
             IEnumerable<FeedbackInfo> feedbacks = ExtractFeedbacks(html);
 
-            return new AmazonRatingInfo {
+            return new AmazonCustomerRatingInfo {
                 Rating = rating,
                 Name = name,
                 Feedbacks = feedbacks,
@@ -44,8 +44,11 @@
         private async Task<HtmlNode> DownloadCustomerPage(string merchantId) {
             string url = string.Format(@"http://www.amazon.co.uk/gp/aag/main?ie=UTF8&seller={0}", merchantId);
             string html = await Browser.DownloadPageAsyncAsString(url);
+            html = html.Trim();
+
+
             HtmlDocument doc = new HtmlDocument();
-            doc.Load(html);
+            doc.LoadHtml(html);
             return doc.DocumentNode;
         }
 
@@ -119,7 +122,6 @@
         /// <returns></returns>
         private double ExtractRating(HtmlNode node) {
             double stars = 0.0;
-            node.SelectNodes("div.feedbackMeanRating b");
             var extract = node.QuerySelectorAll("div.feedbackMeanRating b")
                 .ToArray();
             if (extract.Length == 0) {

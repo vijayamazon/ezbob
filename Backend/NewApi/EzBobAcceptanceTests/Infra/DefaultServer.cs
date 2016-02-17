@@ -1,6 +1,7 @@
 ﻿namespace EzBobAcceptanceTests.Infra {
     using System;
     using System.Linq;
+    using EzBobCommon.NSB;
     using NServiceBus;
     using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTesting.Support;
@@ -31,7 +32,7 @@
             IEzScenarioContext ctx;
             ctx = runDescriptor.ScenarioContext as IEzScenarioContext;
             if (ctx != null) {
-                ctx.SetContainer(container);
+                ctx.SetContainer(endpointConfiguration.EndpointName, container);
                 container.Model.Pipeline.Policies.Interceptors.Add(new TestsInterceptionPolicy(ctx));
             }
 
@@ -52,6 +53,8 @@
             config.EnableInstallers();
             config.EnableFeature<AutoSubscribe>();
 
+            config.RegisterComponents(c => c.ConfigureComponent<AsyncHandlerSupport>(DependencyLifecycle.SingleInstance));
+
 //            // Plug-in a behavior that listens for subscription messages
 //            config.Pipeline.Register<SubscriptionForIncomingBehavior.Registration>();
 //            config.Pipeline.Register<OutgoingSubscription.Registration>();
@@ -65,7 +68,8 @@
             });
 
             config.Conventions()
-                .DefiningCommandsAs(t => t.Namespace != null && t.Namespace.StartsWith("EzBobApi.Commands"));
+                .DefiningCommandsAs(t => (t.Namespace != null && t.Namespace.StartsWith("EzBobApi.Commands")) ||
+                    typeof(CommandBase).IsAssignableFrom(t));
 
             // Call extra custom action if provided
             if (configurationBuilderCustomization != null) {

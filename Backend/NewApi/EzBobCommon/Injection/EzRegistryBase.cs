@@ -12,6 +12,14 @@ namespace EzBobCommon.Injection {
 
     public abstract class EzRegistryBase : Registry {
         protected EzRegistryBase() {
+
+
+            //handles configuration objects injection
+            Policies.OnMissingFamily<ConfigurationPolicy>();
+
+            //enables [PostInject]
+            Policies.Interceptors(new PostInjectInterceptorPolicy());
+
             Scan(scan => {
                 scan.Assembly(GetType()
                     .Assembly);
@@ -35,11 +43,6 @@ namespace EzBobCommon.Injection {
             ForSingletonOf<ErrorCache>()
                 .Use<ErrorCache>();
 
-            //handles configuration objects injection
-            Policies.OnMissingFamily<ConfigurationPolicy>();
-
-            //enables [PostInject]
-            Policies.Interceptors(new PostInjectInterceptorPolicy());
         }
 
         /// <summary>

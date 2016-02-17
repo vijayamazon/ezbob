@@ -20,6 +20,11 @@ namespace EzBobPersistence.ThirdParty.Amazon {
         [Injected]
         public IAmazonOrderDetailsQueries OrderDetails { get; set; }
 
+        /// <summary>
+        /// Saves the order details.
+        /// </summary>
+        /// <param name="details">The details.</param>
+        /// <returns></returns>
         public IEnumerable<int> SaveOrderDetails(IEnumerable<AmazonOrderItemDetail> details) {
             List<int> ids = new List<int>(details.Count());
             using (var connection = GetOpenedSqlConnection2()) {
@@ -27,9 +32,9 @@ namespace EzBobPersistence.ThirdParty.Amazon {
                 var commands = new MultiInsertCommandGenerator<AmazonOrderItemDetail>()
                     .WithModels(details)
                     .WithOptionalConnection(connection.SqlConnection())
-                    .WithSkipColumns("Id")
-                    .WithOutputColumns("Id")
-                    .WithTableName("MP_AmazonOrderItemDetail")
+                    .WithSkipColumns(o => o.Id)
+                    .WithOutputColumns(o => o.Id)
+                    .WithTableName(Tables.AmazonOrderItemDetail)
                     .Verify()
                     .GenerateCommands();
 
@@ -94,14 +99,19 @@ namespace EzBobPersistence.ThirdParty.Amazon {
         /// <returns></returns>
         public bool SaveOrderItemPayments(IEnumerable<AmazonOrderItemPayment> payments) {
             using (var connection = GetOpenedSqlConnection2()) {
-                var cmd = GetMultiInsertCommand(payments, connection.SqlConnection(), "MP_AmazonOrderItemPayment", SkipColumns("Id"));
-                if (!cmd.HasValue) {
-                    return false;
-                }
 
-                using (var sqlCommand = (SqlCommand)cmd) {
-                    return ExecuteNonQueryAndLog(sqlCommand);
-                }
+                bool res = new MultiInsertCommandGenerator<AmazonOrderItemPayment>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.AmazonOrderItemPayment)
+                    .WithSkipColumns(o => o.Id)
+                    .WithModels(payments)
+                    .Verify()
+                    .GenerateCommands()
+                    .MapNonqueryExecuteToBool()
+                    .All(o => o);
+
+
+                return res;
             }
         }
 
@@ -112,12 +122,18 @@ namespace EzBobPersistence.ThirdParty.Amazon {
         /// <returns></returns>
         public Optional<int> SaveOrderItem(AmazonOrderItem orderItem) {
             using (var connection = GetOpenedSqlConnection2()) {
-                var cmd = GetInsertCommand(orderItem, connection.SqlConnection(), "MP_AmazonOrderItem", "Id", SkipColumns("Id"));
-                if (!cmd.HasValue) {
-                    return Optional<int>.Empty();
-                }
 
-                using (var sqlCommand = (SqlCommand)cmd) {
+                var cmd = new MultiInsertCommandGenerator<AmazonOrderItem>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.AmazonOrderItem)
+                    .WithModels(orderItem.ToEnumerable())
+                    .WithSkipColumns(o => o.Id)
+                    .WithOutputColumns(o => o.Id)
+                    .Verify()
+                    .GenerateCommands()
+                    .First();
+
+                using (var sqlCommand = cmd) {
                     return ExecuteScalarAndLog<int>(sqlCommand);
                 }
             }
@@ -130,12 +146,16 @@ namespace EzBobPersistence.ThirdParty.Amazon {
         /// <returns></returns>
         public Optional<int> SaveOrder(AmazonOrder order) {
             using (var connection = GetOpenedSqlConnection2()) {
-                var cmd = GetInsertCommand(order, connection.SqlConnection(), "MP_AmazonOrder", "Id", SkipColumns("Id"));
-                if (!cmd.HasValue) {
-                    return Optional<int>.Empty();
-                }
 
-                using (var sqlCommand = (SqlCommand)cmd) {
+                var cmd = new MultiInsertCommandGenerator<AmazonOrder>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.AmazonOrder)
+                    .WithModels(order.ToEnumerable())
+                    .WithSkipColumns(o => o.Id)
+                    .WithOutputColumns(o => o.Id)
+                    .Verify().GenerateCommands().First();
+
+                using (var sqlCommand = cmd) {
                     return ExecuteScalarAndLog<int>(sqlCommand);
                 }
             }
@@ -163,7 +183,7 @@ namespace EzBobPersistence.ThirdParty.Amazon {
         public Optional<DateTime> GetLastOrderDate(int marketPlaceId) {
             //TODO: review
             using (var connection = GetOpenedSqlConnection2()) {
-                string query = "SELECT Max(Created) FROM MP_AmazonOrder WHERE CustomerMarketPlaceId = @MarketPlaceId";
+                string query = string.Format("SELECT Max(Created) FROM {0} WHERE CustomerMarketPlaceId = @MarketPlaceId", Tables.AmazonOrder);
                 using (var sqlCommand = GetEmptyCommand(connection.SqlConnection())) {
                     sqlCommand.CommandText = query;
                     sqlCommand.Parameters.AddWithValue("@MarketPlaceId", marketPlaceId);

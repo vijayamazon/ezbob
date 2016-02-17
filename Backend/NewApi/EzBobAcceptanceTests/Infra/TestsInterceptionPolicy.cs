@@ -41,7 +41,7 @@ namespace EzBobAcceptanceTests.Infra {
                     Thread.Sleep(TimeSpan.FromSeconds(2));
                 }
 
-                this.Context.SetRestIdStarted();
+                this.Context.SetRestServerStarted();
             });
 
             return restServer;

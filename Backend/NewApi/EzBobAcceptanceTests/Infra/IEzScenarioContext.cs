@@ -9,7 +9,7 @@ namespace EzBobAcceptanceTests.Infra
     using StructureMap;
 
     public interface IEzScenarioContext {
-        void SetContainer(IContainer container);
-        void SetRestIdStarted();
+        void SetContainer(string endpointName, IContainer container);
+        void SetRestServerStarted();
     }
 }

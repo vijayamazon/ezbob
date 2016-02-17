@@ -136,17 +136,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Amazon\AmazonConfig.cs" />
+    <Compile Include="Amazon\AmazonGetCustomerInfoHandler.cs" />
     <Compile Include="Amazon\AmazonGetOrdersDetailsHandler.cs" />
     <Compile Include="Amazon\AmazonGetOrdersHandler.cs" />
     <Compile Include="Amazon\AmazonGetProductCategoriesHandler.cs" />
     <Compile Include="Amazon\AmazonService.cs" />
     <Compile Include="Amazon\IAmazonService.cs" />
-    <Compile Include="Amazon\RatingScraper\CustomerRatingScraper.cs" />
+    <Compile Include="Amazon\RatingScraper\AmazonCustomerRatingScraper.cs" />
     <Compile Include="Amazon\RatingScraper\Feedback\FeedbackInfo.cs" />
     <Compile Include="Amazon\RatingScraper\Feedback\FeedbackPeriod.cs" />
     <Compile Include="Amazon\RatingScraper\Feedback\FeedbackType.cs" />
-    <Compile Include="Amazon\RatingScraper\ICustomerRating.cs" />
-    <Compile Include="Amazon\RatingScraper\AmazonRatingInfo.cs" />
+    <Compile Include="Amazon\RatingScraper\IAmazonCustomerRating.cs" />
+    <Compile Include="Amazon\RatingScraper\AmazonCustomerRatingInfo.cs" />
     <Compile Include="Amazon\Src\Common\AbstractMwsObject.cs" />
     <Compile Include="Amazon\Src\Common\IMwsCall.cs" />
     <Compile Include="Amazon\Src\Common\IMwsObject.cs" />

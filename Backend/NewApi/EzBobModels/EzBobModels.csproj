@@ -52,6 +52,7 @@
     <Compile Include="Amazon\AmazonOrderItemDetailsCategory.cs" />
     <Compile Include="Amazon\AmazonOrderItemPayment.cs" />
     <Compile Include="Amazon\AmazonProductCategory.cs" />
+    <Compile Include="Amazon\AmazonSecurityInfo.cs" />
     <Compile Include="Amazon\Helpers\AmazonOrderItemAndPayments.cs" />
     <Compile Include="AutoDecisionResponse.cs" />
     <Compile Include="Broker\Broker.cs" />
@@ -151,7 +152,9 @@
       <Name>EzBobCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

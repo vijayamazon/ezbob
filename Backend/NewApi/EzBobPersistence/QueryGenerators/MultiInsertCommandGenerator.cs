@@ -146,6 +146,7 @@ namespace EzBobPersistence.QueryGenerators {
         /// </summary>
         /// <returns></returns>
         public MultiInsertCommandGenerator<T> WithOutputAll() {
+            this.isOutputAll = true;
             return this;
         }
 

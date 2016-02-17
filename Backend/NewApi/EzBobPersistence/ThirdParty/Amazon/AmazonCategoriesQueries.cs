@@ -2,15 +2,14 @@
 
 namespace EzBobPersistence.ThirdParty.Amazon {
     using System.Linq;
-    using EzBobCommon;
     using EzBobModels.Amazon;
     using EzBobPersistence.QueryGenerators;
 
-    public class AmazonCategoriesQueriesQuery : QueryBase, IAmazonCategoriesQueries {
+    public class AmazonCategoriesQueries : QueryBase, IAmazonCategoriesQueries {
         //look at MP_MarketplaceType
         private static readonly int AmazonMarketplaceTypeId = 2;
 
-        public AmazonCategoriesQueriesQuery(string connectionString)
+        public AmazonCategoriesQueries(string connectionString)
             : base(connectionString) {}
 
         /// <summary>

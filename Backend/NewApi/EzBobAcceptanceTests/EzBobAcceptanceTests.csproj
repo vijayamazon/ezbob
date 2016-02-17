@@ -116,18 +116,25 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Amazon\AmazonGetCustomerInfoSendRecieve.cs" />
+    <Compile Include="Amazon\AmazonGetOrdersSendRecieve.cs" />
+    <Compile Include="Amazon\AmazonTests.cs" />
     <Compile Include="Customer\Responses\CustomerSignupResponse.cs" />
     <Compile Include="Customer\CustomerTests.cs" />
     <Compile Include="Customer\Requests\Account.cs" />
     <Compile Include="Customer\Requests\SignupRequest.cs" />
+    <Compile Include="Customer\SignupSender.cs" />
     <Compile Include="Infra\DefaultServer.cs" />
     <Compile Include="Infra\EzBobService.cs" />
     <Compile Include="Infra\FirstHandler.cs" />
+    <Compile Include="Infra\TestBase.cs" />
+    <Compile Include="Infra\TestContextBase.cs" />
     <Compile Include="Infra\TestsInterceptionPolicy.cs" />
     <Compile Include="Infra\IEzScenarioContext.cs" />
     <Compile Include="Infra\RestClient.cs" />
     <Compile Include="Infra\RestService.cs" />
     <Compile Include="Infra\ServiceInspector.cs" />
+    <Compile Include="Infra\ThirdPartiesService.cs" />
     <Compile Include="Infra\Utils\Generator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -145,6 +152,10 @@
       <Project>{8028dfb6-8501-4979-8b08-5e57619cc257}</Project>
       <Name>EzBob3dPartiesApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EzBob3dParties\EzBob3dParties.csproj">
+      <Project>{91441436-A618-4098-820A-65AD3EA4A2DB}</Project>
+      <Name>EzBob3dParties</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EzBobApi\EzBobApi.csproj">
       <Project>{a114fda6-b321-43bd-a903-20872111b100}</Project>
       <Name>EzBobApi</Name>
@@ -156,6 +167,10 @@
     <ProjectReference Include="..\EzBobModels\EzBobModels.csproj">
       <Project>{cad2d79b-6513-4101-9a76-53ab90f5c50d}</Project>
       <Name>EzBobModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBobPersistence\EzBobPersistence.csproj">
+      <Project>{aa6eb5fb-1ae9-495d-8456-8e159d766cd8}</Project>
+      <Name>EzBobPersistence</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBobRest\EzBobRest.csproj">
       <Project>{12f4fa7a-d7ca-4861-a38e-d8c33529133c}</Project>
@@ -173,9 +188,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\AmazonOrdersPayments.json" />
     <None Include="Resources\tlds-alpha-by-domain.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

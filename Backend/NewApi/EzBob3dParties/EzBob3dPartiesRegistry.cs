@@ -97,17 +97,20 @@
             For<IAmazonService>()
                 .Use<AmazonService>();
 
-            For<ICustomerRating>()
-                .Use<CustomerRatingScraper>();
+            For<IAmazonCustomerRating>()
+                .Use<AmazonCustomerRatingScraper>();
 
             For<IMwsCustomerService>()
-                .Use<MWSCustomerServiceClient>();
+                .Use<MWSCustomerServiceClient>()
+                .SelectConstructor(() => new MWSCustomerServiceClient());
 
             For<IMwsOrdersService>()
-                .Use<ImwssOrdersServiceClient>();
+                .Use<ImwssOrdersServiceClient>()
+                .SelectConstructor(() => new ImwssOrdersServiceClient());
 
             For<IMwsProductsService>()
-                .Use<ImwsProductsServiceClient>();
+                .Use<ImwsProductsServiceClient>()
+                .SelectConstructor(() => new ImwsProductsServiceClient());
         }
     }
 }

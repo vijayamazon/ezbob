@@ -364,6 +364,7 @@
         /// INSERT INTO Table ( Column1, Column2 ) VALUES ( Value1, Value2 ), ( Value1, Value2 )
         /// </example>
         /// <returns></returns>
+        [Obsolete("use MultiInsertCommandGenerator")]
         protected Optional<SqlCommand> GetMultiInsertCommand<T>(IEnumerable<T> models, SqlConnection connection, string tableName, Predicate<string> isSkipColumn = null) where T : class {
             if (isSkipColumn == null)
             {

@@ -203,9 +203,11 @@
         /// <returns></returns>
         public Optional<int> GetMarketPlaceIdFromTypeId(Guid marketPlaceType) {
             using (var sqlConnection = GetOpenedSqlConnection()) {
+
                 using (var command = GetEmptyCommand(sqlConnection)) {
-                    string query = "SELECT Id FROM MP_MarketplaceType WHERE InternalId = " + marketPlaceType;
+                    string query = "SELECT Id FROM MP_MarketplaceType WHERE InternalId = @id";
                     command.CommandText = query;
+                    command.Parameters.AddWithValue("@id", marketPlaceType);
                     return ExecuteScalarAndLog<int>(command);
                 }
             }
@@ -223,6 +225,7 @@
                     .WithTableName("MP_CustomerMarketPlaceUpdatingHistory")
                     .WithMatchColumns(o => o.UpdatingStart, o => o.CustomerMarketPlaceId)
                     .WithConnection(connection.SqlConnection())
+                    .WithSkipColumns(o => o.Id, o => o.UpdatingTimePassInSeconds)
                     .WithUpdateColumnIfNull(o => o.UpdatingStart)
                     .WithOutputColumns(o => o.Id);
 

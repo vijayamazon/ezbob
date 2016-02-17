@@ -23,7 +23,8 @@ namespace EzBobCommon.Injection {
         /// <param name="instance">The instance.</param>
         /// <returns></returns>
         public IEnumerable<IInterceptor> DetermineInterceptors(Type pluginType, Instance instance) {
-            var methodInfo = pluginType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+
+            var methodInfo = instance.ReturnedType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .FirstOrDefault(m => m.GetCustomAttributes(typeof(PostInject), false)
                     .Length > 0);
 

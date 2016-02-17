@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EzBobCommon.Utils
-{
+namespace EzBobCommon.Utils {
     using System.IO;
     using System.Xml.Serialization;
+    using Newtonsoft.Json;
 
-    public static class SerializationUtils
-    {
+    public static class SerializationUtils {
         /// <summary>
         /// Serializes to binary XML.
         /// </summary>
@@ -44,6 +43,20 @@ namespace EzBobCommon.Utils
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
             using (var memory = new MemoryStream(data)) {
                 return (T)xmlSerializer.Deserialize(memory);
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the binary json to {T}.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        public static T DeserializeBinaryJson<T>(byte[] data) where T : class {
+            using (var stream = new MemoryStream(data)) {
+                using (var reader = new StreamReader(stream))
+                    return JsonSerializer.Create()
+                        .Deserialize(reader, typeof(T)) as T;
             }
         }
     }

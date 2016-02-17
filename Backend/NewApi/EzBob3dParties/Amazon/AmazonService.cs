@@ -5,7 +5,7 @@
     using EzBob3dParties.Amazon.Src.ProductsApi;
     using EzBobCommon;
 
-    internal class AmazonService : IAmazonService {
+    class AmazonService : IAmazonService {
         [Injected]
         public AmazonConfig Config { get; set; }
 
@@ -19,7 +19,7 @@
         public IMwsProductsService Products { get; set; }
 
         [Injected]
-        public ICustomerRating Rating { get; set; }
+        public IAmazonCustomerRating Rating { get; set; }
 
         [PostInject]
         private void Init() {

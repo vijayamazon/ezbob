@@ -15,7 +15,7 @@
     /// </summary>
     public class AmazonGetOrdersHandler : HandlerBase<AmazonGetOrders3dPartyCommandResponse>, IHandleMessages<AmazonGetOrders3dPartyCommand> {
         [Injected]
-        internal IAmazonService AmazonService { get; set; }
+        public IAmazonService AmazonService { get; set; }
 
         /// <summary>
         /// Handles the specified command.
@@ -62,7 +62,7 @@
                 }
             }
             
-            SendReply(info, command, resp => resp.OrderPayments = results.SelectMany(o => o));
+            SendReply(info, command, resp => resp.OrderPayments = results.SelectMany(o => o).ToArray());
         }
 
         /// <summary>
@@ -88,7 +88,7 @@
             var item = new AmazonOrderItem();
 
             if (order.IsSetAmazonOrderId()) {
-                item.AmazonOrderId = int.Parse(order.AmazonOrderId);
+                item.OrderId = order.AmazonOrderId;
             }
             if (order.IsSetSellerOrderId()) {
                 item.SellerOrderId = order.SellerOrderId;

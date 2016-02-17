@@ -37,7 +37,13 @@
         "RedirectUrl": "https://www.paypal.com/webscr&cmd=",
         "DaysPerTransactionRequest": 30
     },
-    "SimplyPostcode" :  { 
-        "DataKey" :  "W_AD4D9278AEF24B4FA8E581A493A2C1"
+    "Amazon": {
+        "AccessKey": "AKIAJXUDX6A3XIMZLWFA",
+        "SecretKey": "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",
+        "ApplicationName": "C#",
+        "ApplicationVersion": "4.0"
+    },
+    "SimplyPostcode": {
+        "DataKey": "W_AD4D9278AEF24B4FA8E581A493A2C1"
     }
 }

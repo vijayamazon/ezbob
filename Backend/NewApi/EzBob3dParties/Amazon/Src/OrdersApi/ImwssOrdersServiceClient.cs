@@ -25,11 +25,14 @@ namespace EzBob3dParties.Amazon.Src.OrdersApi {
     /// </summary>
     public class ImwssOrdersServiceClient : IMwsOrdersService {
 
-        private const string libraryVersion = "2015-09-24";
+//        private const string libraryVersion = "2015-09-24";
+        private const string libraryVersion = "2013-09-01";
 
         private string servicePath;
 
         private MwsConnection connection;
+
+        public ImwssOrdersServiceClient() { }
 
         /// <summary>
         /// Create client.
@@ -100,6 +103,7 @@ namespace EzBob3dParties.Amazon.Src.OrdersApi {
         /// <param name="applicationVersion">The application version.</param>
         public void Init(string accessKey, string secretKey, string applicationName, string applicationVersion) {
             var config = new MarketplaceWebServiceOrdersConfig();
+            config.ServiceURL = "https://mws.amazonservices.co.uk/Orders/2013-09-01";
             this.connection = config.CopyConnection();
             this.connection.AwsAccessKeyId = accessKey;
             this.connection.AwsSecretKeyId = secretKey;

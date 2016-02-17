@@ -32,7 +32,7 @@
 
             Customer customer = CustomerQueries.GetCustomerPartiallyByProperty(where => where.Name, command.EmailAddress, select => select.Id);
             if (customer == null) {
-                Log.FatalFormat("We have a security user with email: {0}, but do not have a customer with this email");
+                Log.ErrorFormat("We have a security user with email: {0}, but do not have a customer with this email");
                 info.AddError("Server error");
                 RegisterError(info, command);
                 SendReply(info, command);

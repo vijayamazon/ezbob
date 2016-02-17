@@ -17,6 +17,15 @@
 
     [TestFixture]
     public class CustomerTests {
+
+        private class Context : TestContextBase, IEzScenarioContext
+        {
+            public bool IsMaySignup { get; set; }
+            public bool IsDone { get; set; }
+
+            public bool IsSignupSent { get; set; }
+        }
+
         [Test]
         public void SignupCustomerTest() {
             Context ctx = new Context();
@@ -64,36 +73,13 @@
         }
 
         private string SendSignupRequest(HttpClient client, string emailAddress) {
-            SignupRequest request = new SignupRequest(emailAddress);
-            string json = JsonConvert.SerializeObject(request);
+            SignupRequest request = new SignupRequest().WithEmailAddress(emailAddress);
+            string json = request.ToString();
             HttpResponseMessage responseMessage = client.PostAsync("http://localhost:12345/api/v1/customer/signup", new JsonContent(json))
                 .Result;
             string response = responseMessage.Content.ReadAsStringAsync()
                 .Result;
             return response;
-        }
-    }
-
-    internal class Context : ScenarioContext, IEzScenarioContext {
-        public bool IsMaySignup { get; set; }
-        public bool IsDone { get; set; }
-        public bool IsRestServerStarted { get; private set; }
-
-        private IContainer container;
-
-        public IContainer Container
-        {
-            get { return this.container; }
-        }
-
-        public bool IsSignupSent { get; set; }
-
-        public void SetContainer(IContainer container) {
-            this.container = container;
-        }
-
-        public void SetRestIdStarted() {
-            this.IsRestServerStarted = true;
         }
     }
 }

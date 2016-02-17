@@ -1,18 +1,22 @@
-﻿namespace EzBobPersistence
-{
+﻿namespace EzBobPersistence {
     public static class Tables {
-        public static readonly string CustomerAddress = "CustomerAddress";
-        public static readonly string Director = "Director";
-        public static readonly string Company = "Company";
-        public static readonly string Customer = "CUSTOMER";
-        public static readonly string VipRequest = "VipRequest";
-        public static readonly string CustomerSession = "CustomerSession";
-        public static readonly string CustomerPhones = "CustomerPhones";
-        public static readonly string AlibabaBuyer = "AlibabaBuyer";
-        public static readonly string CustomerRequestedLoan = "CustomerRequestedLoan";
-        public static readonly string CompanyEmployeeCount = "CompanyEmployeeCount";
-        public static readonly string SecurityUser = "Security_User";
-        public static readonly string Broker = "Broker";
-        public static readonly string CompanyFilesMetaData = "MP_CompanyFilesMetaData";
+        public const string CustomerAddress = "CustomerAddress";
+        public const string Director = "Director";
+        public const string Company = "Company";
+        public const string Customer = "CUSTOMER";
+        public const string VipRequest = "VipRequest";
+        public const string CustomerSession = "CustomerSession";
+        public const string CustomerPhones = "CustomerPhones";
+        public const string AlibabaBuyer = "AlibabaBuyer";
+        public const string CustomerRequestedLoan = "CustomerRequestedLoan";
+        public const string CompanyEmployeeCount = "CompanyEmployeeCount";
+        public const string SecurityUser = "Security_User";
+        public const string Broker = "Broker";
+        public const string CompanyFilesMetaData = "MP_CompanyFilesMetaData";
+
+        public const string AmazonOrderItemDetail = "MP_AmazonOrderItemDetail";
+        public const string AmazonOrderItemPayment = "MP_AmazonOrderItemPayment";
+        public const string AmazonOrderItem = "MP_AmazonOrderItem";
+        public const string AmazonOrder = "MP_AmazonOrder";
     }
 }

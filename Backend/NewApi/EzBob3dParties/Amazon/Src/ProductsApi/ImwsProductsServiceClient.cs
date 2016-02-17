@@ -32,7 +32,7 @@ namespace EzBob3dParties.Amazon.Src.ProductsApi {
         private MwsConnection connection;
 
 
-
+        public ImwsProductsServiceClient() { }
         /// <summary>
         /// Added to initialize service without too much changes in original code .
         /// </summary>
@@ -46,6 +46,7 @@ namespace EzBob3dParties.Amazon.Src.ProductsApi {
             string applicationVersion) {
 
             var config = new MarketplaceWebServiceProductsConfig();
+            config.ServiceURL = "https://mws.amazonservices.co.uk/Products/2013-09-01";
             this.connection = config.CopyConnection();
             this.connection.AwsAccessKeyId = accessKey;
             this.connection.AwsSecretKeyId = secretKey;

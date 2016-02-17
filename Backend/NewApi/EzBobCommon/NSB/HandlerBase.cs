@@ -164,8 +164,10 @@ namespace EzBobCommon.NSB {
             foreach (var header in cmd.EzBobHeaders) {
                 response.EzBobHeaders.Add(header);
             }
-
-            Bus.Send(Bus.CurrentMessageContext.ReplyToAddress, response);
+//            ************** The line below does not work when using async handler ********** 
+//            Bus.Send(Bus.CurrentMessageContext.ReplyToAddress, response);
+            //look at 'AsyncHandlerSupport'
+            Bus.Send(cmd.ReplyToAddress, response);
 //            Bus.Reply(response);
         }
 

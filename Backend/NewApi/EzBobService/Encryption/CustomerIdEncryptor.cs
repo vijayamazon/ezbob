@@ -38,6 +38,7 @@ namespace EzBobService.Encryption {
             return DecryptCustomerId(customerId, origin, out dt);
         }
 
+
         /// <summary>
         /// Decrypts the customer identifier.
         /// </summary>

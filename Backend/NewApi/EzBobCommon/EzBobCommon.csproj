@@ -47,8 +47,16 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NServiceBus.CommonLogging, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.CommonLogging.2.1.0\lib\net45\NServiceBus.CommonLogging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NServiceBus.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.5.2.10\lib\net45\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.StructureMap.5.0.1\lib\net45\NServiceBus.ObjectBuilder.StructureMap.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
@@ -101,8 +109,10 @@
     <Compile Include="Injection\PostInjectInterceptor.cs" />
     <Compile Include="Injection\PostInjectInterceptorPolicy.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="NSB\AsyncHandlerSupport.cs" />
     <Compile Include="NSB\CommandBase.cs" />
     <Compile Include="NSB\CommandResponseBase.cs" />
+    <Compile Include="NSB\EndpointConfigBase.cs" />
     <Compile Include="NSB\ErrorCache.cs" />
     <Compile Include="NSB\ErrorsNotification.cs" />
     <Compile Include="NSB\HandlerBase.cs" />
@@ -131,6 +141,7 @@
     <Compile Include="Web\IEzBobWebBrowser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

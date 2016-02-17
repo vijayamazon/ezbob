@@ -61,6 +61,16 @@ namespace EzBobAcceptanceTests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] AmazonOrdersPayments {
+            get {
+                object obj = ResourceManager.GetObject("AmazonOrdersPayments", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AAA
         ///ABB
         ///ABBOTT

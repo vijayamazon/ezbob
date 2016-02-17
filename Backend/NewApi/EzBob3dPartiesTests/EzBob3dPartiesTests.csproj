@@ -76,6 +76,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AmazonTests.cs" />
     <Compile Include="EbayTests.cs" />
     <Compile Include="HmrcTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,9 @@
     using EzBobCommon;
     using EzBobCommon.NSB;
     using EzBobModels.Amazon;
+    using EzBobPersistence.MarketPlace;
     using EzBobPersistence.ThirdParty.Amazon;
+    using EzBobService.Encryption;
     using NServiceBus;
 
     /// <summary>
@@ -30,6 +32,9 @@
         [Injected]
         public IAmazonOrdersQueries AmazonOrdersQueries { get; set; }
 
+        [Injected]
+        public IMarketPlaceQueries MarketPlaceQueries { get; set; }
+
         /// <summary>
         /// Handles the specified command.
         /// </summary>
@@ -41,10 +46,21 @@
                 SellerId = command.SellerId,
                 AuthorizationToken = command.AuthorizationToken,
                 MarketplaceId = command.MarketplaceId,
-                DateFrom = DateTime.UtcNow //TODO
+                DateFrom = DateTime.UtcNow.AddYears(-1) //TODO
             };
 
             var response = await GetOrdersSendReceive.SendAsync(Config.Address, request);
+
+            int customerId;
+            try {
+                customerId = CustomerIdEncryptor.DecryptCustomerId(command.CustomerId, command.CommandOriginator);
+            } catch (Exception ex) {
+                Log.Error(ex.Message);
+                info.AddError("Invalid request");
+                SendReply(info, command, resp => resp.CustomerId = command.CustomerId);
+                return;
+            }
+
 
             int customerMarketPlaceId = 0; //TODO
             int marketPlaceHistoryId = 0; //TODO

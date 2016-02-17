@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Amazon\AmazonComandBase.cs" />
+    <Compile Include="Amazon\AmazonGetCustomerInfo3dPartyCommand.cs" />
+    <Compile Include="Amazon\AmazonGetCustomerInfo3dPartyCommandResponse.cs" />
     <Compile Include="Amazon\AmazonGetOrdersDetails3PartyCommand.cs" />
     <Compile Include="Amazon\AmazonGetOrdersDetails3PartyCommandResponse.cs" />
     <Compile Include="Amazon\AmazonGetOrders3dPartyCommand.cs" />
@@ -83,7 +85,9 @@
     <Compile Include="Yodlee\YodleeGetUserAccountsCommandResponse.cs" />
     <Compile Include="Yodlee\YodleeContentServiceAccount.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzBobCommon\EzBobCommon.csproj">
       <Project>{a15304a2-ee4b-40c1-9585-1ac3cf7f5205}</Project>

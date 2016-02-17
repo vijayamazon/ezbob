@@ -1,22 +1,19 @@
 ﻿namespace EzBobAcceptanceTests.Infra {
+    using EzBob3dParties;
     using EzBob3dPartiesApi.Amazon;
     using EzBobApi.Commands.Customer;
-    using global::EzBobService;
     using NServiceBus.AcceptanceTesting;
 
-    /// <summary>
-    /// using <see cref="DefaultServer{T}"/> to setup EzBobService endpoint
-    /// </summary>
-    public class EzBobService : EndpointConfigurationBuilder {
+    internal class ThirdPartiesService : EndpointConfigurationBuilder {
 
         public static string EndpointName { get; private set; }
 
-        static EzBobService() {
-            EndpointName = "EzBobService2";
+        static ThirdPartiesService() {
+            EndpointName = "EzBob3dParties";
         }
 
-        public EzBobService() {
-            EndpointSetup<DefaultServer<EzBobServiceRegistry>>()
+        public ThirdPartiesService() {
+            EndpointSetup<DefaultServer<EzBob3dPartiesRegistry>>()
                 .CustomEndpointName(EndpointName)
                 .IncludeType<AmazonGetOrders3dPartyCommand>()
                 .IncludeType<CustomerSignupCommand>();

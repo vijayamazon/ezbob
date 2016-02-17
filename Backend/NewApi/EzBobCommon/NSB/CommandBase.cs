@@ -3,6 +3,7 @@ namespace EzBobCommon.NSB {
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Security.Policy;
+    using NServiceBus;
 
     /// <summary>
     /// Base class for commands
@@ -35,6 +36,14 @@ namespace EzBobCommon.NSB {
         public bool IsFailed { get; set; }
 
         public Guid MessageId { get; set; }
+
+        /// <summary>
+        /// Exists to support async handlers. <see cref="AsyncHandlerSupport"/>
+        /// </summary>
+        /// <value>
+        /// The reply to address.
+        /// </value>
+        public Address ReplyToAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the command originator.

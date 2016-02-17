@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EzBobAcceptanceTests.Infra {
     using System.Net.Http;
@@ -12,7 +8,7 @@ namespace EzBobAcceptanceTests.Infra {
         private OAuth2Client auth2Client = new OAuth2Client(new Uri("http://localhost:12345/token"));
         private TokenResponse tokenResponse;
 
-        public HttpClient GetClient() {
+        public HttpClient GetClient(string userName = "test", string password = "test") {
             if (this.tokenResponse == null) {
                 try {
                     this.tokenResponse = this.auth2Client.RequestResourceOwnerPasswordAsync("test", "test")
@@ -27,6 +23,5 @@ namespace EzBobAcceptanceTests.Infra {
             client.SetBearerToken(tokenResponse.AccessToken);
             return client;
         }
-
     }
 }
