@@ -288,6 +288,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 1 - Click "Finish later" button.
                 //actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
+                actionBot.MoveToElement(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"));
                 actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
                
@@ -473,6 +474,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 3 - Click "Finish later" button.
                 //actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"),By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
+                actionBot.MoveToElement(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"));
                 actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
 

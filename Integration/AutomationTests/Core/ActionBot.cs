@@ -21,9 +21,9 @@
 
         //Moves focus to element selected by locator.
         public void MoveToElement(By locator) {
-            actionBot.WriteToLog("Moving focus to element "+locator.ToString());
+            log.Debug("Moving focus to element " + locator.ToString());
             new Actions(Driver).MoveToElement(SharedServiceClass.ElementIsVisible(Driver, locator)).Build().Perform();
-            actionBot.WriteToLog("Focus to element was set.");
+            log.Debug("Focus to element was set.");
         }
 
         //Awaits an element to be clickable By locator, then clicks the element.
