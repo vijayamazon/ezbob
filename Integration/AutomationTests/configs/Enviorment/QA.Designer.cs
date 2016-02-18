@@ -61,7 +61,7 @@ namespace UIAutomationTests.configs.Enviorment {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=192.168.120.9;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true.
+        ///   Looks up a localized string similar to Server=192.168.120.6;Database=ezbob;User Id=Sa;Password=Ezbobqadb1;MultipleActiveResultSets=true.
         /// </summary>
         internal static string DBConnectionString {
             get {
