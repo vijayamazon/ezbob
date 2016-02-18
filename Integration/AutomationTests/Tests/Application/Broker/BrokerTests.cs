@@ -48,13 +48,13 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.AreEqual("01111111111", (string)SR["ContactMobile"]);
                 actionBot.WriteToLog("Positively asserted." + Environment.NewLine);
 
-                actionBot.WriteToLog("Begin assert: Monthly application count in DB match inserted value.");
-                Assert.AreEqual(123, (int)SR["EstimatedMonthlyApplicationCount"]);
-                actionBot.WriteToLog("Positively asserted." + Environment.NewLine);
+                //actionBot.WriteToLog("Begin assert: Monthly application count in DB match inserted value.");
+                //Assert.AreEqual(123, (int)SR["EstimatedMonthlyApplicationCount"]);
+                //actionBot.WriteToLog("Positively asserted." + Environment.NewLine);
 
-                actionBot.WriteToLog("Begin assert: Monthly client amount in DB match inserted value.");
-                Assert.AreEqual(123.0m, (decimal)SR["EstimatedMonthlyClientAmount"]);
-                actionBot.WriteToLog("Positively asserted." + Environment.NewLine);
+                //actionBot.WriteToLog("Begin assert: Monthly client amount in DB match inserted value.");
+                //Assert.AreEqual(123.0m, (decimal)SR["EstimatedMonthlyClientAmount"]);
+                //actionBot.WriteToLog("Positively asserted." + Environment.NewLine);
 
                 actionBot.WriteToLog("Begin assert: Customer origin match value inserted to DB.");
                 Assert.AreEqual(BrandConfig.GetString("Brand_url").Split('.')[1], (string)SR["OriginName"]);
