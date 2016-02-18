@@ -3,8 +3,6 @@ namespace EzBobTest {
 	using System;
 	using AutomationCalculator.MedalCalculation;
 	using Ezbob.Backend.Strategies;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
-	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -27,12 +25,6 @@ namespace EzBobTest {
 		public void TestOneMedal() {
 			new CalculateMedal(24195, null, null, DateTime.UtcNow, false, true).Execute();
 		} // TestOneMedal
-
-		[Test]
-		public void TestMaamMedalAndPricing() {
-			var stra = new MaamMedalAndPricing();
-			stra.Execute();
-		} // TestMaamMedalAndPricing
 
 		[Test]
 		public void Test_TurnoverForMedalTest_NH_AV() {

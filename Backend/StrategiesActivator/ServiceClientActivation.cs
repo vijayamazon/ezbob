@@ -1396,16 +1396,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		}
 
 		[Activation]
-		private void MaamMedalAndPricing() {
-			var i = new VerificationInput("MaamMedalAndPricing", this.cmdLineArgs, this.log);
-
-			i.Init();
-
-			if (i.IsGood)
-				this.serviceClient.MaamMedalAndPricing(i.CustomerCount, i.LastCheckedCustomerID);
-		} // MaamMedalAndPricing
-
-		[Activation]
 		private void VerifyMedal() {
 			var i = new MedalVerificationInput("VerifyMedal", this.cmdLineArgs, this.log);
 
@@ -1437,16 +1427,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			this.serviceClient.XDaysDue();
 		}
-
-		[Activation]
-		private void TotalMaamMedalAndPricing() {
-			bool testMode = false;
-
-			if (this.cmdLineArgs.Length > 1)
-				testMode = this.cmdLineArgs[1].Equals("test", StringComparison.CurrentCultureIgnoreCase);
-
-			this.serviceClient.TotalMaamMedalAndPricing(testMode);
-		} // TotalMaamMedalAndPricing
 
 		/*
 		[Activation]
@@ -1494,19 +1474,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
 
-		[Activation]
-		private void BravoAutomationReport() {
-			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
-
-			this.log.Debug(
-				"Start date is {0}, end date is {1}", 
-				dates.Item1.HasValue ? dates.Item1.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty,
-				dates.Item2.HasValue ? dates.Item2.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty
-			);
-
-			this.serviceClient.BravoAutomationReport(dates.Item1, dates.Item2);
-		} // BravoAutomationReport
-
 		private Tuple<DateTime?, DateTime?> GetDatesForAutomationReports() {
 			bool hasStart = false;
 			DateTime startTime = new DateTime(2015, 5, 11, 0, 0, 0, DateTimeKind.Utc);
@@ -1548,11 +1515,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void BackfillDailyLoanStats() {
 			this.serviceClient.BackfillDailyLoanStats();
 		} // BackfillDailyLoanStats
-
-		[Activation]
-		private void RecalculateAutoRejectOnFirstDecision() {
-			this.serviceClient.RecalculateAutoRejectOnFirstDecision();
-		} // RecalculateAutoRejectOnFirstDecision
 
 		[Activation]
 		private void GetIncomeSms() {

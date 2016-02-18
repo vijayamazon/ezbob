@@ -159,7 +159,6 @@
     <Compile Include="Model\ExternalAPI\ExternalApiLog.cs" />
     <Compile Include="Model\Fraud\FraudIovation.cs" />
     <Compile Include="Model\Fraud\FraudRequest.cs" />
-    <Compile Include="Model\Loans\BrokerSetupFeeMap.cs" />
     <Compile Include="Model\Loans\LoanAgreement.cs" />
     <Compile Include="Model\Loans\LoanBrokerCommission.cs" />
     <Compile Include="Model\Loans\LoanLegal.cs" />

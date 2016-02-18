@@ -147,12 +147,6 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MaamMedalAndPricing_InputMessage">
-    <wsdl:part name="parameters" element="tns:MaamMedalAndPricing" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MaamMedalAndPricing_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MaamMedalAndPricingResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_VerifyMedal_InputMessage">
     <wsdl:part name="parameters" element="tns:VerifyMedal" />
   </wsdl:message>
@@ -188,24 +182,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_SilentAutomation_OutputMessage">
     <wsdl:part name="parameters" element="tns:SilentAutomationResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_TotalMaamMedalAndPricing_InputMessage">
-    <wsdl:part name="parameters" element="tns:TotalMaamMedalAndPricing" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_TotalMaamMedalAndPricing_OutputMessage">
-    <wsdl:part name="parameters" element="tns:TotalMaamMedalAndPricingResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BravoAutomationReport_InputMessage">
-    <wsdl:part name="parameters" element="tns:BravoAutomationReport" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BravoAutomationReport_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BravoAutomationReportResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_RecalculateAutoRejectOnFirstDecision_InputMessage">
-    <wsdl:part name="parameters" element="tns:RecalculateAutoRejectOnFirstDecision" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_RecalculateAutoRejectOnFirstDecision_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RecalculateAutoRejectOnFirstDecisionResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerAcceptTerms_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerAcceptTerms" />
@@ -1826,10 +1802,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="MaamMedalAndPricing">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricing" message="tns:IEzService_MaamMedalAndPricing_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricingResponse" message="tns:IEzService_MaamMedalAndPricing_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="VerifyMedal">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/VerifyMedal" message="tns:IEzService_VerifyMedal_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/VerifyMedalResponse" message="tns:IEzService_VerifyMedal_OutputMessage" />
@@ -1853,18 +1825,6 @@
     <wsdl:operation name="SilentAutomation">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/SilentAutomation" message="tns:IEzService_SilentAutomation_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/SilentAutomationResponse" message="tns:IEzService_SilentAutomation_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="TotalMaamMedalAndPricing">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricing" message="tns:IEzService_TotalMaamMedalAndPricing_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricingResponse" message="tns:IEzService_TotalMaamMedalAndPricing_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BravoAutomationReport">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport" message="tns:IEzService_BravoAutomationReport_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse" message="tns:IEzService_BravoAutomationReport_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="RecalculateAutoRejectOnFirstDecision">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" message="tns:IEzService_RecalculateAutoRejectOnFirstDecision_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecisionResponse" message="tns:IEzService_RecalculateAutoRejectOnFirstDecision_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BrokerAcceptTerms">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms" message="tns:IEzService_BrokerAcceptTerms_InputMessage" />
@@ -3004,15 +2964,6 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="MaamMedalAndPricing">
-      <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricing" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="VerifyMedal">
       <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/VerifyMedal" style="document" />
       <wsdl:input>
@@ -3060,33 +3011,6 @@
     </wsdl:operation>
     <wsdl:operation name="SilentAutomation">
       <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/SilentAutomation" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="TotalMaamMedalAndPricing">
-      <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricing" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BravoAutomationReport">
-      <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="RecalculateAutoRejectOnFirstDecision">
-      <soap12:operation soapAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -5473,20 +5397,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://dell-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>Dell-PC\sashaf</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://dell-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>Dell-PC\sashaf</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

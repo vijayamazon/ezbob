@@ -4120,12 +4120,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricingResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricingResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyMedal", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyMedalResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
         
@@ -4161,28 +4155,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/SilentAutomation", ReplyAction="http://tempuri.org/IEzAutomationVerification/SilentAutomationResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricingResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricingResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BravoAutomationReport(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
-            "", ReplyAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
-            "Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData RecalculateAutoRejectOnFirstDecision();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
-            "", ReplyAction="http://tempuri.org/IEzAutomationVerification/RecalculateAutoRejectOnFirstDecision" +
-            "Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RecalculateAutoRejectOnFirstDecisionAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerAcceptTermsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail, EZBob.DatabaseLib.Model.Database.CustomerOriginEnum origin);
@@ -5840,14 +5812,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {
-            return base.Channel.MaamMedalAndPricing(nCustomerCount, nLastCheckedCashRequestID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID) {
-            return base.Channel.MaamMedalAndPricingAsync(nCustomerCount, nLastCheckedCashRequestID);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
             return base.Channel.VerifyMedal(topCount, lastCheckedID, includeTest, calculationTime);
         }
@@ -5894,30 +5858,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID) {
             return base.Channel.SilentAutomationAsync(customerID, underwriterID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
-            return base.Channel.TotalMaamMedalAndPricing(testMode);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode) {
-            return base.Channel.TotalMaamMedalAndPricingAsync(testMode);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BravoAutomationReport(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
-            return base.Channel.BravoAutomationReport(startTime, endTime);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
-            return base.Channel.BravoAutomationReportAsync(startTime, endTime);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData RecalculateAutoRejectOnFirstDecision() {
-            return base.Channel.RecalculateAutoRejectOnFirstDecision();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RecalculateAutoRejectOnFirstDecisionAsync() {
-            return base.Channel.RecalculateAutoRejectOnFirstDecisionAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail, EZBob.DatabaseLib.Model.Database.CustomerOriginEnum origin) {

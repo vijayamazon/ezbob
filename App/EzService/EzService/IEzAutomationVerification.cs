@@ -5,9 +5,6 @@
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzAutomationVerification {
 		[OperationContract]
-		ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
-
-		[OperationContract]
 		ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, DateTime? calculationTime);
 
 		[OperationContract]
@@ -24,14 +21,5 @@
 
 		[OperationContract]
 		ActionMetaData SilentAutomation(int customerID, int underwriterID);
-
-		[OperationContract]
-		ActionMetaData TotalMaamMedalAndPricing(bool testMode);
-
-		[OperationContract]
-		ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime);
-
-		[OperationContract]
-		ActionMetaData RecalculateAutoRejectOnFirstDecision();
 	} // interface IEzAutomationVerification
 } // namespace

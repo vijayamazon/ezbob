@@ -74,7 +74,6 @@
     <Compile Include="Calculators\LoanRepaymentScheduleCalculatorEvent.cs" />
     <Compile Include="Calculators\PaymentResult.cs" />
     <Compile Include="Calculators\BrokerCommissionDefaultCalculator.cs" />
-    <Compile Include="Calculators\SetupFeeCalculatorLegacy.cs" />
     <Compile Include="Calculators\SetupFeeCalculator.cs" />
     <Compile Include="ILoanRepaymentScheduleCalculator.cs" />
     <Compile Include="PacNet\IPacnetService.cs" />
