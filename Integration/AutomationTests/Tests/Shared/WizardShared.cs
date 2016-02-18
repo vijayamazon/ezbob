@@ -102,6 +102,7 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             SharedServiceClass.WaitForAjaxReady(Driver);
+            SharedServiceClass.WaitForBlockUiOff(Driver);
 
             //TODO: remove a-sync locks. must be a workaround this problem.
             if (string.Equals("ClientSignup", origin)) {
@@ -133,9 +134,11 @@
                     formRadioCtrl = By.XPath("//label[@for='FormRadioCtrl_M']");
                     break;
             }
+            actionBot.MoveToElement(formRadioCtrl);
             actionBot.Click(formRadioCtrl, "(gender select button)");
 
             //Step 4 - 	Select date of birth and focus out.
+            actionBot.MoveToElement(By.Id("DateOfBirthDay"));
             actionBot.SelectByValue(By.Id("DateOfBirthDay"), dobDay, "(date of birth - day select)");
 
             actionBot.SelectByText(By.Id("DateOfBirthMonth"), dobMonth, "(date of birth - month select)");
@@ -200,6 +203,7 @@
             //Step 3 - Insert any amount to the Total annual revenue field and focus out.
             actionBot.SendKeys(By.Id("OverallTurnOver"), revenue, "(total annual revenue field)");
 
+            actionBot.MoveToElement(By.Id("companyContinueBtn"));
             //Step 4 - Click continue.
             actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
 
@@ -232,10 +236,7 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
-
-            actionBot.WriteToLog("Adjusting screen location before clicking button.");
-            new Actions(Driver).MoveToElement(SharedServiceClass.ElementIsVisible(Driver, By.Id("link_account_see_more_less"))).Build().Perform();
-            actionBot.WriteToLog("Screen location was adjusted.");
+            
             actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
 
             //Step 1 - Click on relevant data source.

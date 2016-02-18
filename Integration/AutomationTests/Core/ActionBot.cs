@@ -19,6 +19,13 @@
             log.Info("Sleep for: " + millisecondsTimeout/1000 + "seconds");
         }
 
+        //Moves focus to element selected by locator.
+        public void MoveToElement(By locator) {
+            actionBot.WriteToLog("Moving focus to element "+locator.ToString());
+            new Actions(Driver).MoveToElement(SharedServiceClass.ElementIsVisible(Driver, locator)).Build().Perform();
+            actionBot.WriteToLog("Focus to element was set.");
+        }
+
         //Awaits an element to be clickable By locator, then clicks the element.
         public void Click(By locator, string description, int waitTime = 120) {
             SharedServiceClass.ElementIsClickable(Driver, locator, waitTime).Click();
