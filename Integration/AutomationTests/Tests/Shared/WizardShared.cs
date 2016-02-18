@@ -293,6 +293,8 @@
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
+            actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
+
             //Step 1 - Click on relevant data source.
             actionBot.Click(By.CssSelector("a.marketplace-button-account-paypal"), "(data source button)");
 
