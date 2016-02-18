@@ -226,9 +226,11 @@
 		} // BuildSuggestedAmountModel
 
 		private void BuildSetupFee() {
-			var calc = new SetupFeeCalculator(Result.ManualSetupFeePercent, Result.BrokerSetupFeePercent);
-			Result.TotalSetupFee = calc.Calculate(Result.OfferedCreditLine);
-			Result.BrokerSetupFee = calc.CalculateBrokerFee(Result.OfferedCreditLine);
+			var fees = new SetupFeeCalculator(Result.ManualSetupFeePercent, Result.BrokerSetupFeePercent)
+				.CalculateTotalAndBroker(Result.OfferedCreditLine);
+
+			Result.TotalSetupFee = fees.Total;
+			Result.BrokerSetupFee = fees.Broker;
 		} // BuildSetupFee
 
 		private void BuildLoanCost() {

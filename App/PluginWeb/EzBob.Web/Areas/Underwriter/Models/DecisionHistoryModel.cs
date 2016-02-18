@@ -24,12 +24,15 @@
 		public string IsOpenPlatform { get; set; }
 
 		public static DecisionHistoryModel Create(DecisionHistoryDBModel item) {
-			var setupFeeCalculator = new SetupFeeCalculator(item.ManualSetupFeePercent, item.BrokerSetupFeePercent);
 			CashRequestOriginator originator;
 			string originatorStr = item.Originator;
-			if (Enum.TryParse(item.Originator, out originator)) {
+
+			if (Enum.TryParse(item.Originator, out originator))
 				originatorStr = originator.DescriptionAttr();
-			}
+
+			var fees = new SetupFeeCalculator(item.ManualSetupFeePercent, item.BrokerSetupFeePercent)
+				.CalculateTotalAndBroker(item.ApprovedSum);
+
 			return new DecisionHistoryModel {
 				Id = item.DecisionHistoryID,
 				Action = item.Action,
@@ -44,10 +47,10 @@
 				ApprovedSum = item.ApprovedSum,
 				IsLoanTypeSelectionAllowed = item.IsLoanTypeSelectionAllowed,
 				Originator = originatorStr,
-				TotalSetupFee = setupFeeCalculator.Calculate(item.ApprovedSum),
-				BrokerSetupFee = setupFeeCalculator.CalculateBrokerFee(item.ApprovedSum),
+				TotalSetupFee = fees.Total,
+				BrokerSetupFee = fees.Broker,
 				IsOpenPlatform = string.IsNullOrEmpty(item.FundingType) ? "No" : "Yes"
 			};
-		}
-	}
-}
+		} // Create
+	} // class DecisionHistoryModel
+} // namespace

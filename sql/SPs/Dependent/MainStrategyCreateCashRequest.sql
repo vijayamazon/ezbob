@@ -83,13 +83,13 @@ BEGIN
 		UseSetupFee, LoanTypeId,
 		RepaymentPeriod, ApprovedRepaymentPeriod,
 		LoanSourceID, IsCustomerRepaymentPeriodSelectionAllowed,
-		Originator
+		Originator, UwUpdatedFees
 	) VALUES (
 		@CustomerID, @Now, ISNULL(@LsMaxInterestRate, 0.0225),
 		0, @LtID,
 		@RepaymentPeriod, @RepaymentPeriod,
 		@LsID, @LsIsCustomerRepaymentPeriodSelectionAllowed,
-		@Originator
+		@Originator, 0
 	)
 
 	------------------------------------------------------------------------------

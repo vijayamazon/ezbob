@@ -56,6 +56,7 @@
 			Map(x => x.SpreadSetupFee);
 			Map(x => x.ProductSubTypeID);
 			Map(x => x.HasApprovalChance);
+			Map(x => x.UwUpdatedFees);
 		} // constructor
 	} // class CashRequestMap
 } // namespace

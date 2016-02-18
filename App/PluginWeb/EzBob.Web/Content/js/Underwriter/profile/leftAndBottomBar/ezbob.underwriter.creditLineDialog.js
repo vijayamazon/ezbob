@@ -9,8 +9,19 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		this.cloneModel = this.model.clone();
 		this.medalModel = options.medalModel;
 
-		this.cloneModel.set('BrokerSetupFeePercent', options.brokerCommissionDefaultResult.brokerCommission);
-		this.cloneModel.set('ManualSetupFeePercent', options.brokerCommissionDefaultResult.setupFeePercent);
+		this.feesManuallyUpdated = !!this.model.get('UwUpdatedFees');
+
+		if (!this.feesManuallyUpdated) {
+			this.cloneModel.set('BrokerSetupFeePercent', options.brokerCommissionDefaultResult.brokerCommission);
+			this.cloneModel.set('ManualSetupFeePercent', options.brokerCommissionDefaultResult.setupFeePercent);
+		} // if
+
+		this.resetFees(
+			options.brokerCommissionDefaultResult.brokerCommission,
+			options.brokerCommissionDefaultResult.setupFeePercent,
+			this.feesManuallyUpdated
+		);
+
 		this.modelBinder = new Backbone.ModelBinder();
 		this.bindTo(this.cloneModel, 'change:StartingFromDate', this.onChangeStartingDate, this);
 
@@ -26,7 +37,18 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		'click .btnOk': 'save',
 		'click .btnLogicalGlue': 'logicalGlueTryout',
 		'change #offeredCreditLine': 'onChangeOfferedAmout',
+
+		'change #manualSetupFeePercent' : 'setupFeeUpdatedManually',
+		'change #brokerSetupFeePercent' : 'brokerFeeUpdatedManually',
 	}, // events
+
+	setupFeeUpdatedManually: function() {
+		this.updateFees(this.brokerFee, this.$el.find('#manualSetupFeePercent').autoNumeric('get'));
+	}, // setupFeeUpdatedManually
+
+	brokerFeeUpdatedManually: function() {
+		this.updateFees(this.$el.find('#brokerSetupFeePercent').autoNumeric('get'), this.setupFee);
+	}, // brokerFeeUpdatedManually
 
 	ui: {
 		form: 'form',
@@ -84,20 +106,53 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		}).done(function(result) {
 			self.cloneModel.set('BrokerSetupFeePercent', result.brokerCommission);
 			self.cloneModel.set('ManualSetupFeePercent', result.setupFeePercent);
+			self.resetFees(result.brokerCommission, result.setupFeePercent);
 		}).always(function() {
 			// UnBlockUi();
 			btnOk.show();
 		});
 	}, // onChangeOfferedAmout
+
+	resetFees: function(brokerFee, setupFee, manuallyUpdated) {
+		this.brokerFee = brokerFee;
+		this.setupFee = setupFee;
+
+		this.feesManuallyUpdated = (manuallyUpdated === undefined) ? false : manuallyUpdated;
+		console.log('loaded fees', this.brokerFee, this.setupFee, this.feesManuallyUpdated);
+	}, // resetFees
+
+	updateFees: function(brokerFee, setupFee) {
+		var oldBrokerFee = this.brokerFee;
+		var oldSetupFee = this.setupFee;
+
+		this.brokerFee = brokerFee;
+		this.setupFee = setupFee;
+
+		var brokerChanged = (oldBrokerFee !== brokerFee);
+		var setupChanged = (oldSetupFee !== setupFee);
+
+		this.feesManuallyUpdated = this.feesManuallyUpdated || brokerChanged || setupChanged;
+
+		console.log(
+			'fees updated from', oldBrokerFee, oldSetupFee,
+			'to', this.brokerFee, this.setupFee,
+			'changed', (brokerChanged ? 'broker' : ''), (setupChanged ? 'setup' : ''),
+			(this.feesManuallyUpdated ? 'manually updated' : '')
+		);
+	}, // updateFees
+
 	onChangeProduct: function () {
 		this.populateDropDowns();
 	},
+
 	onChangeProductType: function () {
 		this.populateDropDowns();
 	},
+
 	onChangeLoanType: function () {
 		this.populateDropDowns();
 	}, // onChangeLoanType
+
 	onChangeLoanSource: function (that) {
 		if (that !== null) {
 			this.populateDropDowns();
@@ -124,9 +179,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		var postData = this.getPostData();
 
-		if (!postData) {
+		if (!postData)
 			return;
-		}
 
 		var action = '' + window.gRootPath + 'Underwriter/ApplicationInfo/ChangeCreditLine';
 		var post = $.post(action, postData);
@@ -171,6 +225,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			UnBlockUi();
 		});
 	},
+
 	fetchModels: function () {
 		this.model.fetch();
 		if (this.medalModel) {
@@ -210,9 +265,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	getPostData: function() {
 		var m = this.cloneModel.toJSON();
 		var productSubType = this.getCurrentProductSubType();
-		if (!productSubType) {
+
+		if (!productSubType)
 			return null;
-		}
 
 		return {
 			id: m.CashRequestId,
@@ -232,11 +287,10 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			allowSendingEmail: m.AllowSendingEmail,
 			isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed,
 			isCustomerRepaymentPeriodSelectionAllowed: m.IsCustomerRepaymentPeriodSelectionAllowed,
-			spreadSetupFee: m.SpreadSetupFee
+			spreadSetupFee: m.SpreadSetupFee,
+			feesManuallyUpdated: this.feesManuallyUpdated,
 		};
 	}, // getPostData
-
-	
 
 	onRender: function () {
 		var bindings = {
@@ -448,8 +502,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			}
 		}
 
-		
-
 		var gradeRange = _.find(this.model.get('GradeRanges'), function(gr) {
 			return gr.OriginID     == originID            &&
 				   gr.LoanSourceID == currentLoanSourceID &&
@@ -561,10 +613,8 @@ EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 
 		
 		return false;
-	}//setAsCurrent
-
+	}, // setAsCurrent
 });
-
 
 EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
 	var e = el || $('form');

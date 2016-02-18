@@ -88,8 +88,13 @@
 				DateTime.UtcNow
 			);
 
-			return Json(aiar.Model, JsonRequestBehavior.AllowGet);
+			log.Debug(
+				"Just loaded broker fee {0}, set up fee {1}",
+				aiar.Model.BrokerSetupFeePercent == null ? "NULL" : aiar.Model.BrokerSetupFeePercent.Value.ToString("P4"),
+				aiar.Model.ManualSetupFeePercent == null ? "NULL" : aiar.Model.ManualSetupFeePercent.Value.ToString("P4")
+			);
 
+			return Json(aiar.Model, JsonRequestBehavior.AllowGet);
 		} // Index
 
 		[Ajax]
@@ -472,17 +477,17 @@
 			decimal? manualSetupFeePercent,
 			bool isCustomerRepaymentPeriodSelectionAllowed,
 			int isLoanTypeSelectionAllowed,
-			bool spreadSetupFee
+			bool spreadSetupFee,
+			bool feesManuallyUpdated
 		) {
 			CashRequest cr = this.cashRequestsRepository.Get(id);
 
 			if (cr.Id <=0) {
 				log.Error("No cash request found");
 				return Json(true);
-			}
+			} // if
 
 			new Transactional(() => {
-
 				LoanType loanT = this.loanTypes.Get(loanType);
 				LoanSource source = this.loanSources.Get(loanSource);
 
@@ -500,6 +505,7 @@
 
 				cr.BrokerSetupFeePercent = brokerSetupFeePercent;
 				cr.ManualSetupFeePercent = manualSetupFeePercent;
+				cr.UwUpdatedFees = feesManuallyUpdated;
 
 				cr.EmailSendingBanned = !allowSendingEmail;
 				cr.LoanTemplate = null;
@@ -519,14 +525,14 @@
 				this.customerRepository.SaveOrUpdate(c);
 			}).Execute();
 
-
-
 			var decision = this.serviceClient.Instance.AddDecision(this.context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this.context.UserId,
 				DecisionTime = DateTime.UtcNow,
 				DecisionNameID = (int)DecisionActions.Waiting,
 				Notes = "Waiting; oldCashRequest: " + cr.Id
 			}, cr.Id, null);
+
+			// TODO: save feesManuallyUpdated in new loan structure (EZ-4829)
 
 			log.Info("NL decisionID: {0}, oldCashRequestID: {1}, Error: {2}", decision.Value, cr.Id, decision.Error);
 

@@ -81,6 +81,7 @@
       <xs:element minOccurs="0" name="TotalSetupFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="Turnover" type="xs:decimal" />
       <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="TypeOfBusiness" type="q10:TypeOfBusiness" />
+      <xs:element minOccurs="0" name="UwUpdatedFees" type="xs:boolean" />
       <xs:element minOccurs="0" name="ValueAdded" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>

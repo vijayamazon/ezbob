@@ -178,10 +178,11 @@
 
 			// setup fee - add one NL_LoanFees entry 
 			if (setupFee != null) {
-				var feeCalculator = new SetupFeeCalculator(setupFee.Percent, brokerFeePercent);
+				var fees = new SetupFeeCalculator(setupFee.Percent, brokerFeePercent)
+					.CalculateTotalAndBroker(Calculator.currentHistory.Amount);
 
-				decimal setupFeeAmount = feeCalculator.Calculate(Calculator.currentHistory.Amount);
-				WorkingModel.BrokerComissions = feeCalculator.CalculateBrokerFee(Calculator.currentHistory.Amount);
+				decimal setupFeeAmount = fees.Total;
+				WorkingModel.BrokerComissions = fees.Broker;
 
 				//Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
 				Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
@@ -199,10 +200,11 @@
 
 			// servicing fees - distribute according to timing of schedule items
 			if (servicingFee != null) {
-				var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, brokerFeePercent);
+				var fees = new SetupFeeCalculator(servicingFee.Percent, brokerFeePercent)
+					.CalculateTotalAndBroker(Calculator.currentHistory.Amount);
 
-				decimal servicingFeeAmount = feeCalculator.Calculate(Calculator.currentHistory.Amount);
-				WorkingModel.BrokerComissions = feeCalculator.CalculateBrokerFee(Calculator.currentHistory.Amount);
+				decimal servicingFeeAmount = fees.Total;
+				WorkingModel.BrokerComissions = fees.Broker;
 
 				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 

@@ -235,6 +235,9 @@
 		[DataMember]
 		public int? ProductSubTypeID { get; set; }
 
+		[DataMember]
+		public bool UwUpdatedFees { get; set; }
+
 		[NonTraversable]
 		[DataMember]
 		public decimal? LogicalGlueScore { get; set; }

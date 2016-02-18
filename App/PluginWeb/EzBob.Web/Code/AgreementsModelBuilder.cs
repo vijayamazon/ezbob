@@ -25,21 +25,16 @@
 	using StructureMap;
 
 	public class AgreementsModelBuilder {
-		private readonly APRCalculator _aprCalc;
-		private readonly RepaymentCalculator _repaymentCalculator;
-		protected readonly ServiceClient serviceClient;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly SafeILog oLog;
-
-		public AgreementsModelBuilder(IEzbobWorkplaceContext context = null) {
-			this._aprCalc = new APRCalculator();
+		public AgreementsModelBuilder(ILoanLegalRepository llrepo, IEzbobWorkplaceContext context = null) {
+			this.loanLegalRepo = llrepo;
+			this.aprCalc = new APRCalculator();
 
 			this.serviceClient = new ServiceClient();
-			this._repaymentCalculator = new RepaymentCalculator();
-			this._context = context;
+			this.repaymentCalculator = new RepaymentCalculator();
+			this.context = context;
 
-			this.oLog = new SafeILog(LogManager.GetLogger(GetType()));
-		}
+			this.log = new SafeILog(LogManager.GetLogger(GetType()));
+		} // constructor
 
 		/// <summary>
 		/// Either customer.LastCashRequest or Loan should be available
@@ -54,13 +49,13 @@
 			if (customer.LastCashRequest == null && loan == null)
 				throw new ArgumentException("LastCashRequest or Loan is required");
 
-			var apr = _aprCalc.Calculate(amount, loan.Schedule, loan.SetupFee, loan.Date);
+			var apr = this.aprCalc.Calculate(amount, loan.Schedule, loan.SetupFee, loan.Date);
 			return GenerateAgreementModel(customer, loan, now, apr);
-		}
+		} // Build
 
 		public virtual AgreementModel ReBuild(Customer customer, Loan loan) {
 			return GenerateAgreementModel(customer, loan, loan.Date, (double)loan.APR);
-		}
+		} // ReBuild
 
 		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr) {
 			var model = new AgreementModel();
@@ -101,22 +96,22 @@
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
-            model.LatePaymentCharge = String.Format("{0:0.00}", Convert.ToInt32(ConfigManager.CurrentValues.Instance.LatePaymentCharge.Value));
-            model.AdministrationCharge = String.Format("{0:0.00}", Convert.ToInt32(ConfigManager.CurrentValues.Instance.AdministrationCharge.Value)); 
+			model.LatePaymentCharge = String.Format("{0:0.00}", Convert.ToInt32(ConfigManager.CurrentValues.Instance.LatePaymentCharge.Value));
+			model.AdministrationCharge = String.Format("{0:0.00}", Convert.ToInt32(ConfigManager.CurrentValues.Instance.AdministrationCharge.Value)); 
 
 			// According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
 
+			decimal manualSetupFeePct;
+			decimal brokerSetupFeePct;
+
+			GetSetupFees(loan, out manualSetupFeePct, out brokerSetupFeePct);
+
 			bool shouldHaveSetupFee =
-				(!loan.CashRequest.SpreadSetupFee.HasValue || !loan.CashRequest.SpreadSetupFee.Value)
-				&& (
-					(loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) ||
-					(loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0)
-				);
+				(!loan.CashRequest.SpreadSetupFee.HasValue || !loan.CashRequest.SpreadSetupFee.Value) &&
+				((manualSetupFeePct > 0) || (brokerSetupFeePct > 0));
 
 			if (shouldHaveSetupFee) {
-				decimal setupFeePercent =
-					(loan.CashRequest.ManualSetupFeePercent ?? 0M) +
-					(loan.CashRequest.BrokerSetupFeePercent ?? 0M);
+				decimal setupFeePercent = manualSetupFeePct + brokerSetupFeePct;
 
 				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
 				model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
@@ -130,10 +125,9 @@
 
 			model.APR = apr;
 
-			var start = loan.Schedule.First().Date.AddMonths(-1);
-			var end = loan.Schedule.Last().Date;
-			var days = (end - start).TotalDays;
-
+			// var start = loan.Schedule.First().Date.AddMonths(-1);
+			// var end = loan.Schedule.Last().Date;
+			// var days = (end - start).TotalDays;
 			//model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
 			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
 			model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
@@ -147,12 +141,28 @@
 			model.TermInterestAndPrincipal = loan.Schedule.Count(s => s.LoanRepayment != 0 && s.Interest != 0);
 			model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
 			model.isHalwayLoan = loanType.IsHalwayLoan;
-			model.CountRepayment = _repaymentCalculator.CalculateCountRepayment(loan);
-			model.Term = _repaymentCalculator.CalculateCountRepayment(loan);
+			model.CountRepayment = this.repaymentCalculator.CalculateCountRepayment(loan);
+			model.Term = this.repaymentCalculator.CalculateCountRepayment(loan);
 
 			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(loan.Schedule.Sum(a => a.LoanRepayment) - loan.SetupFee);
 			return model;
-		}
+		} // GenerateAgreementModel
+
+		private void GetSetupFees(Loan loan, out decimal manualSetupFeePct, out decimal brokerSetupFeePct) {
+			manualSetupFeePct = 0;
+			brokerSetupFeePct = 0;
+
+			if (loan.LoanLegalId == null)
+				return;
+
+			var loanLegal = this.loanLegalRepo.GetAll().FirstOrDefault(ll => ll.Id == loan.LoanLegalId.Value);
+
+			if (loanLegal == null)
+				return;
+
+			manualSetupFeePct = loanLegal.ManualSetupFeePercent ?? 0;
+			brokerSetupFeePct = loanLegal.BrokerSetupFeePercent ?? 0;
+		} // GetSetupFees
 
 		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule) {
 			return schedule.Select((installment, i) => new FormattedSchedule {
@@ -165,11 +175,8 @@
 				InterestRate = string.Format("{0:0.00}", installment.InterestRate * 100),
 				Iterration = i + 1,
 			}).ToList();
-		}
+		} // CreateSchedule
 
-		/// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref /> is null.</exception>
-		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
-		/// <exception cref="NullReferenceException"><paramref name="name" /> is null. </exception>
 		public void CalculateTotal(decimal fee, List<LoanScheduleItem> schedule, AgreementModel model) {
 			model.TotalAmount = FormattingUtils.NumericFormats(schedule.Sum(a => a.AmountDue));
 			model.TotalPrincipal = FormattingUtils.NumericFormats(schedule.Sum(a => a.LoanRepayment));
@@ -182,15 +189,14 @@
 			decimal currencyRate = GetUSDCurrencyRate();
 			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate *
 									   schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
-		}
+		} // CalculateTotal
 
 		/// <exception cref="OverflowException">The number of elements in is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
 		/// <exception cref="NullReferenceException"><paramref /> is null. </exception>
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
-
 			// fill in loan+history with offer data
-			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
+			nlModel = this.serviceClient.Instance.BuildLoanFromOffer(this.context != null ? this.context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
 			ALoanCalculator nlCalculator = null;
 			// 2. get Schedule and Fees
@@ -200,26 +206,26 @@
 				// model should contain Schedule and Fees after this invocation
 				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 			} catch (NoInitialDataException noDataException) {
-				this.oLog.Alert("CreateSchedule failed: {0}", noDataException.Message);
+				this.log.Alert("CreateSchedule failed: {0}", noDataException.Message);
 			} catch (InvalidInitialAmountException amountException) {
-				this.oLog.Alert("CreateSchedule failed: {0}", amountException.Message);
+				this.log.Alert("CreateSchedule failed: {0}", amountException.Message);
 			} catch (InvalidInitialInterestRateException interestRateException) {
-				this.oLog.Alert("CreateSchedule failed: {0}", interestRateException.Message);
+				this.log.Alert("CreateSchedule failed: {0}", interestRateException.Message);
 			} catch (InvalidInitialRepaymentCountException paymentsException) {
-				this.oLog.Alert("CreateSchedule failed: {0}", paymentsException.Message);
+				this.log.Alert("CreateSchedule failed: {0}", paymentsException.Message);
 			} catch (Exception ex) {
-				this.oLog.Alert("Failed to create Schedule for customer {0}, err: {1}", nlModel.CustomerID, ex);
+				this.log.Alert("Failed to create Schedule for customer {0}, err: {1}", nlModel.CustomerID, ex);
 			} finally {
 				if (nlCalculator == null) {
-					this.oLog.Alert("failed to get nlCalculator for customer: {0}", nlModel.CustomerID);
-				}
-			}
+					this.log.Alert("failed to get nlCalculator for customer: {0}", nlModel.CustomerID);
+				} // if
+			} // try
 
 			var history = nlModel.Loan.LastHistory();
 
 			// no Schedule
 			if (history.Schedule.Count == 0) {
-				this.oLog.Alert("No Schedule. Customer: {0}", nlModel.CustomerID);
+				this.log.Alert("No Schedule. Customer: {0}", nlModel.CustomerID);
 				return null;
 			}
 
@@ -242,7 +248,7 @@
 				};
 				item.StatusDescription = item.Status;
 				model.Schedule.Add(item);
-			}
+			} // for each
 
 			model.CustomerEmail = customer.Name;
 			model.FullName = customer.PersonalInfo.Fullname;
@@ -260,8 +266,8 @@
 					model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
 					companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
 					break;
-				}
-			}
+				} // switch
+			} // if
 
 			model.CompanyAdress = companyAddress.GetFormatted();
 			model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
@@ -310,7 +316,7 @@
 			if ((totalFees > 0) || (nlModel.Offer.BrokerSetupFeePercent.HasValue && nlModel.Offer.BrokerSetupFeePercent.Value > 0)) {
 				decimal setupFeePercent = totalFees + nlModel.Offer.BrokerSetupFeePercent ?? 0M;
 				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
-			}
+			} // if
 
 			// TODO was is das?
 			model.IsBrokerFee = false;
@@ -335,13 +341,19 @@
 			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(totalPrincipal - totalFees);
 
 			return model;
-		}
-
-
+		} // NL_BuildAgreementModel
 
 		public decimal GetUSDCurrencyRate() {
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			return (decimal)currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
-		}
-	}
-}
+		} // GetUSDCurrencyRate
+
+		protected readonly ServiceClient serviceClient;
+
+		private readonly ILoanLegalRepository loanLegalRepo;
+		private readonly APRCalculator aprCalc;
+		private readonly RepaymentCalculator repaymentCalculator;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly SafeILog log;
+	} // class AgreementsModelBuilder
+} // namespace

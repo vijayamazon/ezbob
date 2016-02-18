@@ -213,7 +213,8 @@ BEGIN
 		IsMultiBranded = CONVERT(BIT, CASE ISNULL(oc.OriginCount, 0) WHEN 1 THEN 0 ELSE 1 END),
 		OriginID = c.OriginID,
 		ProductSubTypeID = r.ProductSubTypeID,
-		NumOfLoans = nol.NumOfLoans
+		NumOfLoans = nol.NumOfLoans,
+		UwUpdatedFees = r.UwUpdatedFees
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id

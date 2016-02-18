@@ -67,7 +67,8 @@
 				UnderwriterComment = sReason,
 				IdUnderwriter = user.Id,
 				Originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.QuickOffer,
-				ExpirianRating = customer.ExperianConsumerScore
+				ExpirianRating = customer.ExperianConsumerScore,
+				UwUpdatedFees = false,
 			};
 
 			customer.CashRequests.Add(cashRequest);

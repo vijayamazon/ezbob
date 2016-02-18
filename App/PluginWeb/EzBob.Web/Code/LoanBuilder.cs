@@ -26,10 +26,11 @@
 		} // CreateLoan
 
 		public Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0) {
-			var sfc = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent);
+			var fees = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent)
+				.CalculateTotalAndBroker(amount);
 
-			decimal setupFee = sfc.Calculate(amount);
-			decimal brokerFee = sfc.CalculateBrokerFee(amount);
+			decimal setupFee = fees.Total;
+			decimal brokerFee = fees.Broker;
 
 			var calculator = new LoanScheduleCalculator { Interest = cr.InterestRate, Term = term };
 
